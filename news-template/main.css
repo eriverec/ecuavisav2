@@ -1,0 +1,355 @@
+body {
+  background: #d8d8d8;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.containerblanco {
+  width: 90%;
+  margin: 40px auto;
+  background: #fff;
+}
+.tit_nota1 .logoecu {
+  position: absolute;
+  float: right;
+  right: 3%;
+  top: 12%;
+  width: 10%;
+}
+.tit_nota1 .title_principal {
+  text-transform: uppercase;
+  font-size: 5rem;
+  font-weight: bold;
+  padding: 7% 5% 3%;
+  max-width: 68%;
+  line-height: 1;
+}
+.tit_nota1 .text2 {
+  text-transform: uppercase;
+  font-size: 5rem;
+  font-weight: bold;
+  padding: 0 5% 0;
+}
+.tit_nota1 .imgpost {
+  position: relative;
+}
+.tit_nota1 .imgpost .imgn1 {
+  width: 100%;
+}
+.tit_nota1 .imgpost .newpost {
+  width: 290px;
+  height: 40vh;
+  background: #0b109f;
+  position: absolute;
+  top: 68%;
+  left: 4%;
+  color: #fff;
+}
+.tit_nota1 .imgpost .newpost .bloque1 {
+  margin: 70px 35px;
+}
+.tit_nota1 .imgpost .newpost .bloque1 .textnew {
+  font-size: 50px;
+  color: #8190f9;
+  margin: 0;
+  line-height: 0.5;
+  font-weight: 300;
+}
+.tit_nota1 .imgpost .newpost .bloque1 .textpost {
+  font-size: 85px;
+  margin: 0;
+  padding: 0;
+  font-weight: 700;
+}
+.tit_nota1 .imgpost .newpost .url {
+  background: #5386d9;
+  position: absolute;
+  left: -20%;
+  top: 67%;
+  padding: 15px 50px;
+  font-weight: bold;
+  font-size: 23px;
+}
+.tit_nota1 .titulon1 {
+  font-size: 50px;
+  margin: 75px 30px 0px 50px;
+  font-weight: 700;
+  line-height: 1;
+  color: black;
+}
+.tit_nota1 .resumen {
+  margin: 20px 30px 0px 50px;
+  color: black;
+  font-size: 20px;
+  line-height: 1.3;
+}
+.group {
+  padding: 10%;
+}
+.resumen_group {
+  color: black;
+  font-size: 18px;
+  line-height: 1.3;
+}
+.text_par {
+  object-position: top;
+  -webkit-mask-image: linear-gradient(to top, transparent 0, black 80%);
+}
+.btn-center {
+  text-align: center;
+}
+h2.title_principal {
+  margin-top: 0px;
+}
+.btn-nota {
+  background: #0b109f;
+  color: #fff;
+  text-decoration: none;
+  padding: 10px 25px;
+}
+.rows {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  align-content: stretch;
+}
+
+.rows-2 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: stretch;
+  align-content: stretch;
+}
+.w-50 {
+  flex: 50%;
+  margin: 5px;
+}
+.w-50 img {
+  width: 100%;
+}
+.images_s {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  row-gap: 12px;
+}
+.image_small {
+  max-height: 318px;
+  overflow: hidden;
+}
+.image_small img {
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+.w-60 {
+  margin: 5px;
+  flex: 60%;
+}
+.w-40 {
+  margin: 5px;
+  flex: 40%;
+}
+
+.rows .image_big {
+  width: 100%;
+  max-height: 648px;
+  height: 100%;
+    object-fit: cover;
+}
+
+.bg-blue {
+  background: #0b109f;
+  color: #fff;
+  position: relative;
+}
+.pt-0 {
+  padding-top: 0px;
+}
+.resumen_group_blue {
+  font-size: 1.5rem;
+  padding: 5px 30px;
+  position: relative;
+  overflow: hidden;
+}
+.resumen_group_blue:before {
+  content: "";
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: linear-gradient(
+    0deg,
+    rgb(11 16 159) 0%,
+    rgb(11 16 159) 10%,
+    transparent 100%
+  );
+  bottom: 0px;
+  position: absolute;
+  left: 0px;
+}
+.bg-text .btn-nota {
+  background: #fff;
+  color: #000;
+}
+.bg-text {
+  position: absolute;
+  height: 100%;
+  background: #0b109f;
+  top: -100px;
+}
+.bg-text .btn-center {
+  text-align: center;
+  z-index: 80;
+  height: 49px;
+  position: absolute;
+  width: 100%;
+  bottom: 0px;
+}
+
+/*reponsive*/
+@media (max-width: 600px) {
+  .tit_nota1 .logoecu{
+  	width: 17%;
+  	top: 7%;
+  }
+  .tit_nota1 .title_principal {
+    font-size: 1.5rem;
+  }
+  .tit_nota1 .imgpost .newpost .bloque1 {
+    margin: 45px 35px;
+  }
+  .tit_nota1 .imgpost .newpost .bloque1 .textpost {
+    font-size: 40px;
+  }
+  .tit_nota1 .imgpost .newpost .bloque1 .textnew {
+    font-size: 25px;
+  }
+  .tit_nota1 .imgpost .newpost {
+    width: 185px;
+    height: 22vh;
+    top: 44%;
+  }
+  .tit_nota1 .imgpost .newpost .url {
+    font-size: 14px;
+    left: -8%;
+    top: 55%;
+    padding: 15px 20px;
+  }
+}
+
+
+@media (min-width: 360px) and (max-width: 375px) {
+  .tit_nota1 .imgpost .newpost {
+    height: 26vh;
+  }
+  .tit_nota1 .imgpost .newpost .url {
+    top: 52%;
+  }
+  .tit_nota1 .logoecu {
+    top: 9%;
+  }
+}
+
+@media (min-width: 393px) and (max-width: 393px) {
+  .tit_nota1 .imgpost .newpost {
+    height: 20vh;
+  }
+}
+
+
+@media (min-width: 768px) and (max-width: 768px) {
+  .tit_nota1 .imgpost .newpost{
+    height: 27vh;
+    top: 50%;
+  }
+  .tit_nota1 .imgpost .newpost .url{
+    left: -10%;
+    top: 60%;
+    padding: 15px 40px;
+  }
+  .tit_nota1 .logoecu{
+    top: 6%;
+  }
+ 
+}
+
+@media (max-width: 768px) {
+
+  .tit_nota1 .title_principal {
+    font-size: 2rem;
+  }
+  .tit_nota1 .titulon1 {
+    font-size: 1.6rem;
+  }
+ 
+  .bg-text {
+    position: relative;
+  }
+  .group.pt-0 .rows.first {
+    display: block;
+  }
+  .resumen_group_blue {
+    font-size: 1.2rem;
+    padding: 15px 30px;
+    height: 360px;
+  }
+  .bg-text .btn-center {
+    bottom: auto;
+  }
+  .resumen_group.second {
+    display: none;
+  }
+}
+
+/*reponsive*/
+
+@media (min-width: 1024px) and (max-width: 1024px) {
+  .tit_nota1 .logoecu{
+    top: 6%;
+    width: 13%;
+  }
+  .tit_nota1 .imgpost .newpost .url{
+  	    top: 57%;
+   }
+  .tit_nota1 .imgpost .newpost{
+    height: 21vh;
+    top: 63%;
+  }
+  .tit_nota1 .title_principal{
+    font-size: 4rem;
+  }
+ 
+  .group.pt-0 .rows.first {
+    display: block;
+  }
+  .resumen_group_blue {
+    font-size: 1.2rem;
+    padding: 15px 30px;
+    height: 181px;
+  }
+  .bg-text {
+    position: relative;
+  }
+  .bg-text .btn-center{
+    bottom: -73px;
+  }
+}
+
+
+@media (min-width: 1366px) and (max-width: 1366px) {
+  .tit_nota1 .imgpost .newpost {
+    height: 45vh;
+  }
+  .tit_nota1 .imgpost .newpost .url {
+    top: 62%;
+  }
+}
+@media (min-width: 1440px) and (max-width: 1440px) {
+  .tit_nota1 .imgpost .newpost {
+    height: 35vh;
+  }
+  .tit_nota1 .imgpost .newpost .url {
+    top: 60%;
+  }
+}
