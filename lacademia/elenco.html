@@ -18,23 +18,21 @@
 <h2 class="heading2"> LAS ESTRELLAS DE LA ACADEMIA</h2> <a name="Estrellas"></a>
 <div class='section3' id='section3'>
 
-<!--CARD0-->
-<div class='img-card' data-name="Ana Bárbara" data-modal="d-modal1">
+<!--CARD0 Alexander Acha-->
+<div class='img-card' data-modal="d-modal0"><!--## Cambiamos N° data-modal ## -->
 <img src='https://estadisticas.ecuavisa.com/sites/default/files/2022-06/Alexander-Acha-%28tarjeta%29-450x650.webp' alt='properties'>
   <div class="caption">
-    <a class="btn" id="d-modal1" href="#open-modal0"><h3>Alexander  <span class="bolder">Acha </span><br><small>Director</small></h3></a>
-    <table>
-      <!-- <tr>
-        <td><i class='fa fa-instagram'></i> 99K</td><td><i class='fa fa-twitter'></i> 100M</td>
-        <td><i class='fa fa-facebook'></i> 200k</td><td><i class='fa fa-youtube'></i> 100M</td>
-      </tr> -->
-    </table>
+    <a class="btn" id="d-modal0" href="#open-modal0"> <!--## Cambiamos N° id y href ## -->
+      <!-- ## cambiamos nombre, apellido y rol  -->
+      <h3>Alexander <span class="bolder">Acha</span><br><small>Director</small></h3>
+    </a>
   <!--   inicio modal   -->
-  <div id="open-modal0" class="modal-window">
+  <div id="open-modal0" class="modal-window"><!-- ## cambiamos N° Id debe coincidir con href  -->
     <div class="modalpuro">
       <a href="#elenco" title="Close" class="modal-close"><i class="fa fa-times" aria-hidden="true"></i></a>
       <div class="modalflex">
         <div class="modalbody">
+          <!-- cambiamos nombre, apellido biografia y rol  -->
           <center><h2>Alexander  <span class="bolder">Acha </span></h2></center>
           <center><h4>Director </h4></center>
             <p>Lleva la música en la sangre, su preparación como
@@ -56,19 +54,10 @@
                </p>
         </div>
         <div class="modalpic">
+          <!-- ## cambiamos url del modal (en css tambien segun "id" del modal-window )  -->
            <img src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/Alexander-Acha-%28modal%29-550x680.webp" alt="">
         </div>
       </div>
-      <!--<div class="modalfooter">
-           <table>
-            <tr>
-              <td><i class='fa fa-instagram'></i> <span>99K</span></td>
-              <td><i class='fa fa-twitter'></i> <span>100M</span></td>
-              <td><i class='fa fa-facebook'></i> <span>200k</span></td>
-              <td><i class='fa fa-youtube'></i> <span>100M</span></td>
-            </tr>
-          </table> 
-       </div>-->
     </div>
   </div>
   <!--   fin modal   -->
@@ -76,17 +65,15 @@
 </div>
 <!--CARD0ENDS-->
 
-<!--CARD1-->
-<div class='img-card' data-name="Ana Bárbara" data-modal="d-modal1">
+<!--CARD1 Yahir-->
+<div class='img-card' data-modal="d-modal1">
 <img src='https://estadisticas.ecuavisa.com/sites/default/files/2022-06/elenco.png' alt='properties'>
   <div class="caption">
-    <a class="btn" id="d-modal1" href="#open-modal1"><h3>Yahir <span class="bolder"> </span></h3></a>
-    <table>
-      <tr>
-        <td><i class='fa fa-instagram'></i> 99K</td><td><i class='fa fa-twitter'></i> 100M</td>
-        <td><i class='fa fa-facebook'></i> 200k</td><td><i class='fa fa-youtube'></i> 100M</td>
-      </tr>
-    </table>
+    <a class="btn" id="d-modal1" href="#open-modal1"> <!--## Cambiamos N° id y href ## -->
+      <!-- ## cambiamos nombre, apellido y rol  -->
+      <h3><span class="bolder">Yahir</span><br><small>Conductor</small></h3>
+    </a>
+
   <!--   inicio modal   -->
   <div id="open-modal1" class="modal-window">
     <div class="modalpuro">
@@ -104,16 +91,7 @@
            <img src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/modalpic.webp" alt="">
         </div>
       </div>
-      <div class="modalfooter">
-          <table>
-            <tr>
-              <td><i class='fa fa-instagram'></i> <span>99K</span></td>
-              <td><i class='fa fa-twitter'></i> <span>100M</span></td>
-              <td><i class='fa fa-facebook'></i> <span>200k</span></td>
-              <td><i class='fa fa-youtube'></i> <span>100M</span></td>
-            </tr>
-          </table>
-       </div>
+
     </div>
   </div>
   <!--   fin modal   -->
@@ -729,7 +707,7 @@ document.addEventListener("dragover", function(e){ e = e || window.event;
 
 var elements = document.getElementsByClassName("img-card");
 var openModal = function() {
-    var attribute = this.getAttribute("data-name"); //console.log(attribute);
+    // var attribute = this.getAttribute("data-name"); //console.log(attribute);
     var modal = this.getAttribute('data-modal'); document.getElementById(modal).click(); 
 };
 
