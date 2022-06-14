@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amor Like</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+  <style>
+    .title_programa_lacademia {
+      font-size: 1.2rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      width: 100%;
+      max-width: 640px;
+      background: #2b2a2a;
+      font-family: var(--font-1);
+      color: #fff;
+      margin: 10px auto 0;
+      position: relative;
+      text-align: center;
+    }
+
+    .envivo_player_lacademia iframe {
+      max-width: 100%;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="player-envivo"></div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <script>
+    var d = new Date();
+    var day = d.getDay();
+    var hour = d.getHours();
+    var min = d.getMinutes();
+    var t = d.getTime();
+    var name = "";
+    $(".sect-81d0c9805a5bf069ec4be1a657699d8b").hide();
+    console.log("dia " + day, "hora " + hour, "minuto " + min);
+
+    timeOfDay = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
+    console.log(timeOfDay)
+
+
+    function activePlayerLacademia() {
+      let activeEnvivo = `
+      <div class="title_programa">${name}</div>
+      <div id="envivo_player" style="border: 0px;text-align: center;" class="contenedor-envivo">
+        <iframe src="//mdstrm.com/live-stream/6089d0a7f61e11081f8c832a?autoplay=false" width="640" height="360"
+          allow="autoplay; fullscreen; encrypted-media" frameborder="0" allowfullscreen allowscriptaccess="always"
+          scrolling="no"></iframe>
+      </div>
+      `;
+
+      $(".player-envivo").append(activeEnvivo);
+      console.log("player-activo");
+    }
+
+    function disabledPlayerLacademia() {
+      let disabledEnvivo = `
+        <div class="fondito_player" style="background: transparent;">
+          <center><img width="640" src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/la-academia-2022-tv-azteca-estrella-tv.webp"
+              alt="noticiero, en vivo, televistazo en la comunidad, televistazo 13h00, televistazo estelar, en contacto, si se puede">
+          </center>
+        </div>
+      `;
+      $(".player-envivo").append(disabledEnvivo);
+    }
+
+
+    // prueba si timeOfDay está dentro de un marco de tiempo determinado
+    if (day === 1) {
+      //validacion de lunes 
+      console.log("validacion lunes")
+
+      if ("08:30" <= timeOfDay && timeOfDay <= "14:30") {
+        activePlayerLacademia();
+      } else if ("15:30" <= timeOfDay && timeOfDay <= "21:00") {
+        activePlayerLacademia();
+      } else {
+        disabledPlayerLacademia();
+      }
+
+    } else if (day >= 2 && day <= 3) {
+      //validacion de martes y miecoles
+      console.log("validacion martes y miercoles")
+      if ("07:00" <= timeOfDay && timeOfDay <= "15:00") {
+        activePlayerLacademia();
+      } else if ("15:30" <= timeOfDay && timeOfDay <= "22:00") {
+        activePlayerLacademia();
+      } else {
+        disabledPlayerLacademia();
+      }
+
+    } else if (day >= 4 && day <= 5) {
+      console.log("no player");
+      disabledPlayerLacademia();
+
+    } else if (day === 6) {
+      //validacion de sabado 
+      console.log("validacion sabado")
+      if ("07:00" <= timeOfDay && timeOfDay <= "15:00") {
+        disabledPlayerLacademia();
+      } else if ("15:30" <= timeOfDay && timeOfDay <= "22:00") {
+        disabledPlayerLacademia();
+      } else {
+        disabledPlayerLacademia();
+      }
+    } else {
+      //validacion de domingo 
+      console.log("validacion domingo")
+      if ("07:00" <= timeOfDay && timeOfDay <= "15:00") {
+        disabledPlayerLacademia();
+      } else if ("15:30" <= timeOfDay && timeOfDay <= "22:00") {
+        disabledPlayerLacademia();
+      } else {
+        disabledPlayerLacademia();
+      }
+    }
+  </script>
+</body>
+
+
+<div class="bannernundial">
+
+  <img width="100%" class="banner_ampliada"
+    src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/bandera-qatar-banner-publicitario-copa-mundo-qatar-2022-vector-ilustracion-torneo-futbol-copa-futbol-plantilla-diseno-fondo-ilustracion-vectorial-2022_104045-1618.webp"
+    alt="banner">
+
+</div>
+
+
+<style>
+  .bannerlacademia {
+    margin-bottom: 1.5rem;
+  }
+</style>
+
+</html>
+
+
+<iframe
+  src="https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/mundial/pages/es/pronosticador.html"
+  width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>
+
+
+
+
+<div class="bannernundial">
+
+  <img width="100%" class="banner_ampliada"
+    src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/bandera-qatar-banner.png" alt="banner">
+
+</div>
+
+<style>
+  body {
+    margin: 0px;
+  }
+
+  #iter-content-wrapper {
+    padding-top: 0px;
+  }
+
+  .iframe-pro iframe {
+    height: 1200px;
+  }
+</style>
+
+
+<iframe src="https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/mundial/pages/es/pronosticador.html"  width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>
+
+
+<div class="header-simple desktop"> <a class="header-logo" href="/"> </a> </div>
+
+<style>
+  .header-simple {
+    background-color: #f1b014;
+    width: 100%;
+    z-index: 1;
+    top: 0;
+    min-height: 45px;
+    display: flex;
+    align-items: center;
+}
+
+.header-simple .header-logo {
+    background-image: url(https://www.ecuavisa.com/base-portlet/webrsrc/ctxvar/c4dfeea6-9638-4d43-b549-7eca2ab57634.png)!important;
+    background-position: center;
+    display: block;
+    width: 160px;
+    height: 35px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position-y: center;
+    margin: auto !important;
+}
+</style>
