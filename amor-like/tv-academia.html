@@ -35,6 +35,51 @@
 
   <div class="player-envivo"></div>
 
+
+  <style>
+    .menu-estadio-central {
+      display: flex;
+      align-content: center;
+      justify-content: start;
+      align-items: center;
+      flex-direction: row;
+      background: #000;
+      color: #fff;
+      fill: #fff;
+      white-space: nowrap;
+      overflow-y: hidden;
+      overflow-x: auto;
+      padding: 0px;
+    }
+
+    .menu-estadio-central li {
+      list-style: none;
+      padding-top: 5px;
+      padding-bottom: 8px;
+    }
+
+    .menu-estadio-central li:hover {
+      background-color: #a11f00;
+    }
+
+    .menu-estadio-central li a {
+      text-decoration: none;
+      color: white;
+      font-size: .85rem;
+      padding: 0px 10px;
+      font-family: Arial, Helvetica, sans-serif;
+      font-weight: 700;
+    }
+  </style>
+
+  <ul class="menu-estadio-central">
+    <li class="est"> <a href="/estadio">Noticias</a> </li>
+    <li class="pos"><a href="/estadio/posiciones">Posiciones</a> </li>
+    <li class="fix"> <a href="/estadio/fixture">Fixture</a> </li>
+    <li class="gol"> <a href="/estadio/goleadores">Goleadores</a> </li>
+    <li class="plan"> <a href="/estadio/planteles">Planteles</a> </li>
+  </ul>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <script>
@@ -52,13 +97,10 @@
 
 
     function activePlayerLacademia() {
-      let activeEnvivo = `
-      <div class="title_programa">${name}</div>
-      <div id="envivo_player" style="border: 0px;text-align: center;" class="contenedor-envivo">
-        <iframe src="//mdstrm.com/live-stream/6089d0a7f61e11081f8c832a?autoplay=false" width="640" height="360"
-          allow="autoplay; fullscreen; encrypted-media" frameborder="0" allowfullscreen allowscriptaccess="always"
-          scrolling="no"></iframe>
-      </div>
+      let activeEnvivo = ` 
+          <div id="envivo_player" style="border: 0px;text-align: center;" class="contenedor-envivo">          
+          <iframe src='//mdstrm.com/live-stream/6089d0a7f61e11081f8c832a?autoplay=false&type=dvr' width='640' height='360' allow='autoplay; fullscreen; encrypted-media' frameborder='0' allowfullscreen allowscriptaccess='always' scrolling='no'></iframe>
+          </div>
       `;
 
       $(".player-envivo").append(activeEnvivo);
@@ -68,9 +110,9 @@
     function disabledPlayerLacademia() {
       let disabledEnvivo = `
         <div class="fondito_player" style="background: transparent;">
-          <center><img width="640" src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/la-academia-2022-tv-azteca-estrella-tv.webp"
-              alt="noticiero, en vivo, televistazo en la comunidad, televistazo 13h00, televistazo estelar, en contacto, si se puede">
-          </center>
+        <center><img width="640" src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/la-academia-2022-tv-azteca-estrella-tv.webp"
+        alt="noticiero, en vivo, televistazo en la comunidad, televistazo 13h00, televistazo estelar, en contacto, si se puede">
+        </center>
         </div>
       `;
       $(".player-envivo").append(disabledEnvivo);
@@ -78,21 +120,9 @@
 
 
     // prueba si timeOfDay está dentro de un marco de tiempo determinado
-    if (day === 1) {
-      //validacion de lunes 
-      console.log("validacion lunes")
-
-      if ("08:30" <= timeOfDay && timeOfDay <= "14:30") {
-        activePlayerLacademia();
-      } else if ("15:30" <= timeOfDay && timeOfDay <= "21:00") {
-        activePlayerLacademia();
-      } else {
-        disabledPlayerLacademia();
-      }
-
-    } else if (day >= 2 && day <= 3) {
+    if (day > 0 && day <= 5) {
       //validacion de martes y miecoles
-      console.log("validacion martes y miercoles")
+      console.log("lunes a viernes")
       if ("07:00" <= timeOfDay && timeOfDay <= "15:00") {
         activePlayerLacademia();
       } else if ("15:30" <= timeOfDay && timeOfDay <= "22:00") {
@@ -100,18 +130,13 @@
       } else {
         disabledPlayerLacademia();
       }
-
-    } else if (day >= 4 && day <= 5) {
-      console.log("no player");
-      disabledPlayerLacademia();
-
     } else if (day === 6) {
       //validacion de sabado 
       console.log("validacion sabado")
       if ("07:00" <= timeOfDay && timeOfDay <= "15:00") {
-        activePlayerLacademia();
+        disabledPlayerLacademia();
       } else if ("15:30" <= timeOfDay && timeOfDay <= "22:00") {
-        activePlayerLacademia();
+        disabledPlayerLacademia();
       } else {
         disabledPlayerLacademia();
       }
@@ -119,9 +144,9 @@
       //validacion de domingo 
       console.log("validacion domingo")
       if ("07:00" <= timeOfDay && timeOfDay <= "15:00") {
-        activePlayerLacademia();
+        disabledPlayerLacademia();
       } else if ("15:30" <= timeOfDay && timeOfDay <= "22:00") {
-        activePlayerLacademia();
+        disabledPlayerLacademia();
       } else {
         disabledPlayerLacademia();
       }

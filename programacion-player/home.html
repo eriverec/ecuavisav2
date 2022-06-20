@@ -167,32 +167,36 @@
     $(".sect-81d0c9805a5bf069ec4be1a657699d8b").hide();
     console.log("dia " + day, "hora " + hour, "minuto " + min);
 
-
-    timeOfDay = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
-    console.log(timeOfDay)
+    timeOfDay =
+      d.getHours().toString().padStart(2, "0") +
+      ":" +
+      d.getMinutes().toString().padStart(2, "0");
+    console.log(timeOfDay);
 
     function showTelevistazoComunidad() {
-      var btnLives = $('#btnTelcomunidad');
+      var btnLives = $("#btnTelcomunidad");
       if (btnLives.length) {
         btnLives.removeClass("d-none");
       }
-      var titleLives = $('.banner-tecomunidad');
+      var titleLives = $(".banner-tecomunidad");
       if (titleLives.length) {
         titleLives.removeClass("d-none");
       }
-      $('.ly-especial').addClass("fondo-telcomunidad");
-      $('.sect-ce197d41428a962a783e5c4fc28f877f').addClass("fondo-telcomunidad").addClass("pt-4");
+      $(".ly-especial").addClass("fondo-telcomunidad");
+      $(".sect-ce197d41428a962a783e5c4fc28f877f")
+        .addClass("fondo-telcomunidad")
+        .addClass("pt-4");
     }
 
     function activePlayer() {
       let activeEnvivo = `
-      <div class="title_programa">${name}</div>
-      <div id="envivo_player" style="border: 0px;text-align: center;" class="contenedor-envivo">
-        <iframe src="//mdstrm.com/live-stream/603ea23f928cc5255563012c?autoplay=false" width="640" height="360"
-          allow="autoplay; fullscreen; encrypted-media" frameborder="0" allowfullscreen allowscriptaccess="always"
-          scrolling="no"></iframe>
-      </div>
-      `;
+ <div class="title_programa">${name}</div>
+ <div id="envivo_player" style="border: 0px;text-align: center;" class="contenedor-envivo">
+ <iframe src="//mdstrm.com/live-stream/603ea23f928cc5255563012c?autoplay=false&type=dvr" width="640" height="360"
+ allow="autoplay; fullscreen; encrypted-media" frameborder="0" allowfullscreen allowscriptaccess="always"
+ scrolling="no"></iframe>
+ </div>
+ `;
 
       $(".sect-81d0c9805a5bf069ec4be1a657699d8b").show();
       $(".sect-81d0c9805a5bf069ec4be1a657699d8b").addClass("active_envivo");
@@ -202,12 +206,12 @@
 
     function disabledPlayer() {
       let disabledEnvivo = `
-        <div class="fondito_player" style="background: transparent;">
-          <center><img src="https://www.ecuavisa.com/sites/default/files/ecuavisa-en-vivo-noticiero.jpg"
-              alt="noticiero, en vivo, televistazo en la comunidad, televistazo 13h00, televistazo estelar, en contacto, si se puede">
-          </center>
-        </div>
-      `;
+ <div class="fondito_player" style="background: transparent;">
+ <center><img src="https://www.ecuavisa.com/sites/default/files/ecuavisa-en-vivo-noticiero.jpg"
+ alt="noticiero, en vivo, televistazo en la comunidad, televistazo 13h00, televistazo estelar, en contacto, si se puede">
+ </center>
+ </div>
+ `;
       $(".player-envivo").append(disabledEnvivo);
     }
 
@@ -228,60 +232,51 @@
       if ("06:55" <= timeOfDay && timeOfDay <= "07:30") {
         activePlayer();
         $(".title_programa").append("Contacto Directo");
-
       } else if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
         activePlayer();
         showTelevistazoComunidad();
         $(".title_programa").append("Televistazo en la comunidad");
-
       } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {
         activePlayer();
         $(".title_programa").append("En Contacto");
-
       } else if ("13:00" <= timeOfDay && timeOfDay <= "14:00") {
         activePlayer();
         $(".title_programa").append("Televistazo 13h00");
-
       } else if ("14:00" <= timeOfDay && timeOfDay <= "16:00") {
         $(".sect-81d0c9805a5bf069ec4be1a657699d8b").show();
         $(".sect-81d0c9805a5bf069ec4be1a657699d8b").addClass("active_envivo");
-
       } else if ("19:00" <= timeOfDay && timeOfDay <= "19:59") {
         activePlayer();
         stylePublicidad();
         $(".title_programa").append("Televistazo 19h00");
-
       } else if ("20:00" <= timeOfDay && timeOfDay <= "22:30") {
         $(".sect-81d0c9805a5bf069ec4be1a657699d8b").show();
         $(".sect-81d0c9805a5bf069ec4be1a657699d8b").addClass("active_envivo");
-
       } else {
         console.log("player no activo");
       }
-
     } else if (day === 6) {
       //validacion de sabado
       console.log("es sabado");
-      if ("19:00" <= timeOfDay && timeOfDay <= "19:30") {
-        activePlayer();
-        $(".title_programa").append("Televistazo 19h00");
-      } else if ("19:30" <= timeOfDay && timeOfDay <= "21:45") {
+      if ("17:00" <= timeOfDay && timeOfDay <= "19:00") {
         $(".sect-81d0c9805a5bf069ec4be1a657699d8b").show();
         $(".sect-81d0c9805a5bf069ec4be1a657699d8b").addClass("active_envivo");
+      } else if ("19:00" <= timeOfDay && timeOfDay <= "19:30") {
+        activePlayer();
+        $(".title_programa").append("Televistazo 19h00");
       } else {}
     } else {
-
       //validacion de domingo
       console.log("es domingo");
       if ("10:30" <= timeOfDay && timeOfDay <= "11:30") {
         activePlayer();
         $(".title_programa").append("Políticamente Correcto");
+      } else if ("17:00" <= timeOfDay && timeOfDay <= "19:00") {
+        $(".sect-81d0c9805a5bf069ec4be1a657699d8b").show();
+        $(".sect-81d0c9805a5bf069ec4be1a657699d8b").addClass("active_envivo");
       } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
         activePlayer();
         $(".title_programa").append("Televistazo 19h00");
-      } else if ("20:00" <= timeOfDay && timeOfDay <= "22:20") {
-        $(".sect-81d0c9805a5bf069ec4be1a657699d8b").show();
-        $(".sect-81d0c9805a5bf069ec4be1a657699d8b").addClass("active_envivo");
       } else {}
     }
   </script>

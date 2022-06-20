@@ -118,10 +118,13 @@
 
       .banner-tecomunidad img {
         width: 300px;
+        max-width: 100%;
       }
 
 
     }
+
+    
   </style>
 </head>
 
@@ -132,7 +135,7 @@
   </div>
 
 
-  <div class="iter-content-wrapper iter-droppable-zone" id="iter-content-wrapper">
+  <div style="text-align: center;" class="iter-content-wrapper iter-droppable-zone" id="iter-content-wrapper">
     <div id="main-content" class="content ly-especial" role="main">
       <div>
         <div id="btnTelcomunidad" class="bot d-none">
@@ -216,7 +219,7 @@
     if (day > 0 && day <= 5) {
       //validacion de lunes a viernes
       if ("06:55" <= timeOfDay && timeOfDay <= "14:00") {
-        stylePublicidad();
+        // stylePublicidad();
       }
 
       if ("06:55" <= timeOfDay && timeOfDay <= "07:30") {
