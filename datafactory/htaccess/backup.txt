@@ -1,0 +1,29 @@
+AddDefaultCharset UTF-8
+Header set Access-Control-Allow-Origin "*"
+
+# Default cache 30 seconds
+<IfModule mod_expires.c>
+   ExpiresActive On
+   ExpiresDefault A30
+</ifModule>
+
+<filesMatch ".(ico|gif|jpg|jpeg|png|swf|html|htm)$">
+   <IfModule mod_expires.c>
+      # 1 month|css|js
+      ExpiresDefault A2419200
+   </ifModule>
+   <IfModule mod_headers.c>
+      Header append Cache-Control "public"
+   </ifModule>
+</filesMatch>
+
+# No caching
+<filesMatch ".(php|cgi)$">
+   <IfModule mod_expires.c>
+      ExpiresDefault A0
+   </ifModule>
+   <IfModule mod_headers.c>
+      Header set Cache-Control "no-store, no-cache, must-revalidate, max-age=0"
+      Header set Pragma "no-cache"
+   </ifModule>
+</filesMatch>

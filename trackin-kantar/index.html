@@ -1,0 +1,51 @@
+
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test Kantar - prueba</title>
+    
+  </head>
+  <body onunload="unload();">
+
+      <iframe src='//mdstrm.com/live-stream/603ea23f928cc5255563012c?autoplay=false' width='640' height='360' allow='autoplay; fullscreen; encrypted-media' frameborder='0' allowfullscreen allowscriptaccess='always' scrolling='no'></iframe>    
+
+
+    <script src="springstreams.js"></script>
+    <script type="text/javascript">
+      // 2706 = en contacto 
+      // 2708 = dame chocolate
+      var sensors = new SpringStreams("2706");
+      var myAdapter = { 
+       "getMeta" : function(id) { 
+          return { 
+             "pl" :"embed-player", 
+             "plv" :"version1", 
+             "sx" : 640, 
+             "sy" : 360 
+          } 
+        }, 
+        "getDuration" : function(id) { 
+          return streamlength in seconds; 
+        }, 
+        "getPosition" : function(id) { 
+            return new Date().getTime() / 1000; 
+        } 
+      };
+      var desc = { 
+       "stream": "//mdstrm.com/live-stream/603ea23f928cc5255563012c?autoplay=false" 
+      } 
+      sensors.track("someid", desc, myAdapter); 
+      // uncomment for debugging 
+      // sensors.debug = function(v) { 
+      // window.status = v; 
+      // } 
+      function unload() { 
+       sensors.unload(); 
+       // give time for submission 
+       var start= new Date(); var now = null; do now = new Date(); 
+       while(now-start < 100); 
+      } 
+    </script>
+  </body>
+</html>
