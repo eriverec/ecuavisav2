@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick-theme.css" />
+  <style>
+    .presentadores-grid .slick-slide {
+      padding: 0px 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <section id="los-presentadores" class="clean-block about-us" style="background: var(--bs-pink);">
+    <div class="container">
+      <div class="block-heading">
+        <h2 class="text-white">Los Presentadores</h2>
+      </div>
+      <div class=" presentadores-grid">
+        <div class=""><img class="img-fluid"
+            src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/presentador1.webp"
+            style="border-radius: 37px;border-style: none;">
+          <h3 class="text-center text-white my-3 presentador-name">GABRIELA DÍAZ</h3>
+        </div>
+        <div class=""><img class="img-fluid"
+            src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/presentador2.webp"
+            style="border-radius: 37px;border-style: none;">
+          <h3 class="text-center text-white my-3 presentador-name">HENRY<br>BUSTAMANTE</h3>
+        </div>
+        <div class=""><img class="img-fluid"
+            src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/presentador3.webp"
+            style="border-radius: 37px;border-style: none;">
+          <h3 class="text-center text-white my-3 presentador-name">DORA <br>WEST</h3>
+        </div>
+        <div class=""><img class="img-fluid"
+            src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/presentador4.webp"
+            style="border-radius: 37px;border-style: none;">
+          <h3 class="text-center text-white my-3 presentador-name">JOSÉ&nbsp;<br>URRUTIA</h3>
+        </div>
+        <div class=""><img class="img-fluid"
+            src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/presentador5.webp"
+            style="border-radius: 37px;border-style: none;">
+          <h3 class="text-center text-white my-3 presentador-name">VIRGINIA LIMONGI</h3>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.8.1/slick.min.js"></script>
+
+  <script>
+    $(".presentadores-grid").slick({
+      infinite: false,
+      slidesToShow: 5,
+      slidesToScroll: 1,
+      arrows: false,
+      dots: false,
+      responsive: [{
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 5,
+            slidesToScroll: 1,
+            infinite: false,
+            arrows: true,
+          },
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            arrows: true,
+          },
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 2,
+            slidesToScroll: 1,
+            arrows: true,
+          },
+        },
+      ],
+    });
+  </script>
+
+  <script>
+    $(".video-lista-mobile .noticias").slick({
+      infinite: false,
+      slidesToShow: 5,
+      slidesToScroll: 1,
+      arrows: false,
+      dots: false,
+      responsive: [{
+          breakpoint: 1024,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            infinite: false,
+            arrows: true,
+          },
+        },
+        {
+          breakpoint: 600,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: true,
+          },
+        },
+        {
+          breakpoint: 480,
+          settings: {
+            slidesToShow: 1,
+            slidesToScroll: 1,
+            arrows: true,
+          },
+        },
+      ],
+    });
+  </script>
+</body>
+
+</html>

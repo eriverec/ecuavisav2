@@ -123,8 +123,6 @@
 
 
     }
-
-    
   </style>
 </head>
 
@@ -185,9 +183,7 @@
       let activeEnvivo = `
       <div class="title_programa">${name}</div>
       <div id="envivo_player" style="border: 0px;text-align: center;" class="contenedor-envivo">
-        <iframe src="//mdstrm.com/live-stream/603ea23f928cc5255563012c?autoplay=false" width="640" height="360"
-          allow="autoplay; fullscreen; encrypted-media" frameborder="0" allowfullscreen allowscriptaccess="always"
-          scrolling="no"></iframe>
+        <iframe src='//mdstrm.com/live-stream/603ea23f928cc5255563012c?autoplay=false&type=dvr' width='640' height='360' allow='autoplay; fullscreen; encrypted-media' frameborder='0' allowfullscreen allowscriptaccess='always' scrolling='no'></iframe>
       </div>
       `;
 
@@ -218,9 +214,6 @@
     // prueba si timeOfDay está dentro de un marco de tiempo determinado
     if (day > 0 && day <= 5) {
       //validacion de lunes a viernes
-      if ("06:55" <= timeOfDay && timeOfDay <= "14:00") {
-        // stylePublicidad();
-      }
 
       if ("06:55" <= timeOfDay && timeOfDay <= "07:30") {
         activePlayer();
@@ -230,6 +223,11 @@
         activePlayer();
         showTelevistazoComunidad();
         $(".title_programa").append("Televistazo en la comunidad");
+
+      } else if ("09:00" <= timeOfDay && timeOfDay <= "10:30") {
+        activePlayer();
+        $(".title_programa").append("En Vivo");
+        console.log("envivo novelas");
 
       } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {
         activePlayer();
