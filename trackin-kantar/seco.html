@@ -1,0 +1,56 @@
+ <html>
+ <body>
+  <!-- Load the JavaScript library -->
+  <script src="https://platform-static.cdn.mdstrm.com/js/player_api.js"></script>
+
+  <!-- Create the element that will contain the iframe. You will use the #ID later -->
+  <div id="mdstrm-player"></div>
+
+  <!-- Create a new player using the JavaScript API -->
+  <script>
+
+   // Options:
+   var playerOptions = {
+    width: 640, // Width in pixels
+    height: 360, // Height in pixels
+    type: "live", // Video type. Possible values: "media", "live"
+    id: "6089d0a7f61e11081f8c832a", // Video ID
+    autoplay: false, // Enable autoplay. Possible values: true, false
+    events: { // Callbacks to be triggered when certain actions are executed by the player. All optional.
+     onPlayerReady: function() { // Optional callback to be triggered as soon as the player has finished loading
+      console.log("Player is ready");
+     },
+     onPlay: function() { // Optional callback to be triggered as soon as the player starts playing
+      console.log("Playing...");
+     },
+     onVideoEnd: function() { // Optional callback to be triggered when the video ends playing
+      console.log("Video just ended");
+     },
+     onVideoStop: function() { // Optional callback to be triggered when the user stops or pauses the video
+      console.log("User stopped or paused the video");
+     },
+     onVideoError: function() { // Optional callback to be triggered when there's a playback error
+      console.log("There was an error while loading the video");
+     },
+     onVolumeChange: function(volume) { // Optional callback to be triggered when volume is changed (0-100)
+      console.log("Volume was changed to " + volume);
+     },
+     onTimeUpdate: function(time) { // Optional callback to be triggered when time is updated
+       console.log("Current time is " + time);
+     },
+     onFullscreenChange: function(fullscreen) { // Optional callback to be triggered when fullscreen status change
+       console.log("Is fullscreen " + fullscreen);
+     }
+    }
+   };
+
+   // The class MediastreamPlayer is used to create a new player instance
+   // First argument is the #ID of the containing element. Second argument is an Object of options
+   var player = new MediastreamPlayer("mdstrm-player", playerOptions);
+
+   // Player can be controlled using the API's methods
+   player.videoPlay();
+  </script>
+
+ </body>
+ </html>
