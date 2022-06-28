@@ -9,7 +9,7 @@
   <title>Document</title>
   <style>
     .fondo-telcomunidad {
-      background-image: url(https://www.ecuavisa.com/ecuavisa/main/fondo-comunidad.jpg);
+      background-image: url('https://www.ecuavisa.com/ecuavisa/main/fondo-comunidad.jpg');
       background-size: 100%;
       background-repeat: no-repeat;
       background-position: 0 38%;
@@ -211,6 +211,11 @@
       $(".texto_programa").attr("style", "display: none;");
     }
 
+    function menuEnvivo() {
+      $(".sect-81d0c9805a5bf069ec4be1a657699d8b").show();
+      $(".sect-81d0c9805a5bf069ec4be1a657699d8b").addClass("active_envivo");
+    }
+
     // prueba si timeOfDay está dentro de un marco de tiempo determinado
     if (day > 0 && day <= 5) {
       //validacion de lunes a viernes
@@ -224,11 +229,6 @@
         showTelevistazoComunidad();
         $(".title_programa").append("Televistazo en la comunidad");
 
-      } else if ("09:00" <= timeOfDay && timeOfDay <= "10:30") {
-        activePlayer();
-        $(".title_programa").append("En Vivo");
-        console.log("envivo novelas");
-
       } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {
         activePlayer();
         $(".title_programa").append("En Contacto");
@@ -237,18 +237,10 @@
         activePlayer();
         $(".title_programa").append("Televistazo 13h00");
 
-      } else if ("14:00" <= timeOfDay && timeOfDay <= "16:00") {
-        activePlayer();
-        $(".title_programa").append("En Vivo");
-
       } else if ("19:00" <= timeOfDay && timeOfDay <= "19:59") {
         activePlayer();
         stylePublicidad();
         $(".title_programa").append("Televistazo 19h00");
-
-      } else if ("20:00" <= timeOfDay && timeOfDay <= "22:30") {
-        activePlayer();
-        $(".title_programa").append("El Poder Del Amor");
 
       } else {
         disabledPlayer();
@@ -257,10 +249,8 @@
     } else if (day === 6) {
       //validacion de sabado
       console.log("es sabado");
-      if ("17:00" <= timeOfDay && timeOfDay <= "18:59") {
-        activePlayer();
-        $(".title_programa").append("El Poder Del Amor");
-      } else if ("19:00" <= timeOfDay && timeOfDay <= "19:29") {
+
+      if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
         activePlayer();
         $(".title_programa").append("Televistazo 19h00");
       } else {
@@ -270,12 +260,10 @@
     } else {
       //validacion de domingo
       console.log("es domingo");
+
       if ("10:30" <= timeOfDay && timeOfDay <= "11:30") {
         activePlayer();
         $(".title_programa").append("Políticamente Correcto");
-      } else if ("17:00" <= timeOfDay && timeOfDay <= "18:59") {
-        activePlayer();
-        $(".title_programa").append("El Poder Del Amor");
       } else if ("19:00" <= timeOfDay && timeOfDay <= "19:59") {
         activePlayer();
         $(".title_programa").append("Televistazo 19h00");

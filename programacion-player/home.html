@@ -791,51 +791,49 @@
       if ("06:55" <= timeOfDay && timeOfDay <= "07:30") {
         activePlayer();
         $(".title_programa").append("Contacto Directo");
+
       } else if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
         activePlayer();
         showTelevistazoComunidad();
+
         $(".title_programa").append("Televistazo en la comunidad");
       } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {
         activePlayer();
         $(".title_programa").append("En Contacto");
+
       } else if ("13:00" <= timeOfDay && timeOfDay <= "14:00") {
         activePlayer();
         $(".title_programa").append("Televistazo 13h00");
+
       } else if ("19:00" <= timeOfDay && timeOfDay <= "19:59") {
         activePlayer();
         $(".title_programa").append("Televistazo 19h00");
-      } else if ("20:00" <= timeOfDay && timeOfDay <= "22:30") {
-        menuEnvivo();
+
       } else {
         console.log("player no activo");
       }
     } else if (day === 6) {
       //validacion de sabado
       console.log("es sabado");
-      if ("13:00" <= timeOfDay && timeOfDay <= "13:30") {
-        activePlayer();
-        $(".title_programa").append("Televistazo 13h00");
-      } else if ("17:00" <= timeOfDay && timeOfDay <= "19:00") {
-        menuEnvivo();
-      } else if ("19:00" <= timeOfDay && timeOfDay <= "19:30") {
+
+      if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
         activePlayer();
         $(".title_programa").append("Televistazo 19h00");
-      } else {}
+
+      } else {console.log("player no activo");}
     } else {
       //validacion de domingo
       console.log("es domingo");
-      if ("13:00" <= timeOfDay && timeOfDay <= "13:30") {
-        activePlayer();
-        $(".title_programa").append("Televistazo 13h00");
-      } else if ("10:30" <= timeOfDay && timeOfDay <= "11:30") {
+
+      if ("10:30" <= timeOfDay && timeOfDay <= "11:30") {
         activePlayer();
         $(".title_programa").append("Políticamente Correcto");
-      } else if ("17:00" <= timeOfDay && timeOfDay <= "19:00") {
-        menuEnvivo();
+
       } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
         activePlayer();
         $(".title_programa").append("Televistazo 19h00");
-      } else {}
+
+      } else {console.log("player no activo");}
     }
   </script>
 
