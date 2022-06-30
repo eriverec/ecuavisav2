@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    li {
+      list-style: none;
+    }
+
+    
+    ul {
+      padding: 0px;
+    }
+    
+    body {
+      width: 600px;
+      margin: auto;
+    }
+    iframe {
+      width: 100%;
+      display: block;
+      border-left: 40px solid #bbe78d;
+      border-right: 55px solid #bbe78d;
+      border-top: 28px solid #bbe78d;
+      border-bottom: 28px solid #bbe78d;
+      border-radius: 30px;
+    }
+
+    .linea-negra {
+      background: #333;
+      width: 10px;
+      height: 80px;
+      margin-top: -50%;
+      margin-left: 2%;
+    }
+
+    .circulo-negro {
+      background: #333;
+      height: 30px;
+      width: 30px;
+      border-radius: 50%;
+      border: 7px solid #bbe78d;
+      float: right;
+      display: block;
+      z-index: 99999;
+      margin-right: -86px;
+      margin-top: -10%;
+
+    }
+
+    .boton-bloqueo {
+      display: block;
+      background: #d2eab8;
+      height: 5px;
+      margin-top: 0px;
+      border-radius: 0px 0px 2px 2px;
+      width: 19%;
+      margin-left: 75%;
+
+    }
+  </style>
+</head>
+
+<script src="https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenterApp.js"></script>
+
+<body>
+  <div class="media_block_video">
+    <div class="multimedia">
+      <div class="multimediaMacroWrapper">
+        <ul class="bxMultimedia2005671">
+          <li class="contentMedia art-mediastream">
+            <div class="responsive-video">
+              <iframe src="https://mdstrm.com/embed/62abad48227593081c8c5e4e" width="660" height="440"
+                allow="autoplay; fullscreen; encrypted-media" frameborder="0" allowfullscreen=""
+                allowscriptaccess="always" scrolling="no"></iframe>
+              
+
+            </div>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    var tag = document.createElement("div");
+    tag.classList.add('boton-bloqueo'); 
+    var text = document.createTextNode("");
+    tag.appendChild(text);
+    var element = document.getElementsByClassName('responsive-video');
+    element.appendChild(tag);
+
+    var tag2 = document.createElement("div");
+    tag2.classList.add('linea-negra'); 
+    var text2 = document.createTextNode("");
+    tag2.appendChild(text2);
+    var element2 = document.getElementsByClassName('responsive-video');
+    element2.appendChild(tag2);
+
+    var tag3 = document.createElement("div");
+    tag3.classList.add('circulo-negro'); 
+    var text3 = document.createTextNode("");
+    tag3.appendChild(text3);
+    var element3 = document.getElementsByClassName('responsive-video');
+    element3.appendChild(tag3);
+  </script>
+
+</body>
+
+</html>

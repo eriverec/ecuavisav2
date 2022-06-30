@@ -9,7 +9,7 @@
   <title>Document</title>
   <style>
     .fondo-telcomunidad {
-      background-image: url(https://www.ecuavisa.com/ecuavisa/main/fondo-comunidad.jpg);
+      background-image: url('https://estadisticas.ecuavisa.com/sites/default/files/2022-06/fondo-amanecer%202.png');
       background-size: 100%;
       background-repeat: no-repeat;
       background-position: 0 38%;
@@ -75,12 +75,13 @@
       text-align: center;
     }
 
-    .banner-tecomunidad {
+    .banner-tecomunidad,
+    .banner-teamanecer {
       text-align: center;
       margin: 15px;
     }
 
-    .banner-tecomunidad img {
+    .banner-tecomunidad img .banner-teamanecer img {
       width: 350px;
 
     }
@@ -116,7 +117,8 @@
         width: 85%;
       }
 
-      .banner-tecomunidad img {
+      .banner-tecomunidad img,
+      .banner-teamanecer img {
         width: 300px;
       }
 
@@ -131,13 +133,21 @@
     envivo parpadeante
   </div>
 
+  <div class="banner-tecomunidad d-none">
+    <img src="https://ecuavisa.com/ecuavisa/main/banner-tele-comunidad.png" alt="btn" />
+  </div>
+
+  <div class="banner-teamanecer d-none">
+    <img src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/banner-teamanecer.png" alt="btn" />
+  </div>
+
 
   <div class="iter-content-wrapper iter-droppable-zone" id="iter-content-wrapper">
     <div id="main-content" class="content ly-especial" role="main">
       <div>
         <div id="btnTelcomunidad" class="bot d-none">
-          <div id="cont-botones"> <a href="/envivo" class="btn-gye activo"> Ver señal de Guayaquil </a> <a
-              href="/envivo/quito" class="btn-quito"> Ver señal de Quito </a> </div>
+          <div id="cont-botones"> <a href="/envivo" class="btn-gye "> Ver señal de Guayaquil </a> <a
+              href="/envivo/quito" class="btn-quito activo"> Ver señal de Quito </a> </div>
         </div>
       </div>
 
@@ -159,7 +169,7 @@
     var t = d.getTime();
     var name = "";
     $(".sect-81d0c9805a5bf069ec4be1a657699d8b").hide();
-    $(".bot").hide();
+    // $(".bot").hide();
     console.log("dia " + day, "hora " + hour, "minuto " + min);
 
 
@@ -179,13 +189,24 @@
       $('.sect-ce197d41428a962a783e5c4fc28f877f').addClass("fondo-telcomunidad").addClass("pt-4");
     }
 
+    function showTelevistazoAmanecer() {
+      var btnLives = $('#btnTelcomunidad');
+      if (btnLives.length) {
+        btnLives.removeClass("d-none");
+      }
+      var titleLives = $('.banner-teamanecer');
+      if (titleLives.length) {
+        titleLives.removeClass("d-none");
+      }
+      $('.ly-especial').addClass("fondo-telcomunidad");
+      $('.sect-ce197d41428a962a783e5c4fc28f877f').addClass("fondo-telcomunidad").addClass("pt-4");
+    }
+
     function activePlayer() {
       let activeEnvivo = `
       <div class="title_programa">${name}</div>
       <div id="envivo_player" style="border: 0px;text-align: center;" class="contenedor-envivo">
-        <iframe src="//mdstrm.com/live-stream/603ea23f928cc5255563012c?autoplay=false" width="640" height="360"
-          allow="autoplay; fullscreen; encrypted-media" frameborder="0" allowfullscreen allowscriptaccess="always"
-          scrolling="no"></iframe>
+        <iframe src='//mdstrm.com/live-stream/629fb071305b11082bce64e5?autoplay=false&type=dvr' width='640' height='360' allow='autoplay; fullscreen; encrypted-media' frameborder='0' allowfullscreen allowscriptaccess='always' scrolling='no'></iframe>
       </div>
       `;
 
@@ -207,7 +228,11 @@
     }
 
     if (day > 0 && day <= 5) {
-      if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
+      if ("05:55" <= timeOfDay && timeOfDay <= "07:00") {
+        activePlayer();
+        showTelevistazoAmanecer();
+        $(".title_programa").append("Televistazo Al Amanecer");
+      } else if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
         activePlayer();
         showTelevistazoComunidad();
         $(".title_programa").append("Televistazo en la comunidad");
@@ -216,7 +241,7 @@
         console.log("player-quito-disabled");
       }
     } else if (day === 6) {
-      console.log("sabado");
+      console.log("sábado");
     } else {
       console.log("domingo");
     }

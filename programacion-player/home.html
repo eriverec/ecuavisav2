@@ -9,692 +9,123 @@
 
   <title>Home</title>
   <link rel="stylesheet" href="main.css">
+  <style>
+    .fondo-telcomunidad {
+      background-image: url('https://estadisticas.ecuavisa.com/sites/default/files/2022-06/fondo-amanecer%202.png');
+      background-size: 100%;
+      background-repeat: no-repeat;
+      background-position: 0 38%;
+      background-color: silver;
+    }
 
+    #cont-botones img {
+      width: 385px;
+      margin-bottom: 10px;
+    }
+
+    #cont-botones {
+      width: 100%;
+      margin: auto;
+      margin-top: 10px;
+      justify-content: center;
+      display: flex;
+    }
+
+    #cont-botones a {
+      background: #046cdf;
+      color: #fff;
+      /* text-transform: uppercase; */
+      border-radius: 4px;
+      padding: 8px 40px;
+      font-weight: 500;
+      box-shadow: 0px 1px 1px 1px #1969a9;
+      min-width: 260px;
+      text-align: center;
+    }
+
+    #cont-botones .activo {
+      background: #2449d0;
+      box-shadow: 0px 1px 1px 1px #2041b7;
+    }
+
+    #cont-botones a:hover {
+      opacity: 0.8;
+      transition: 0.5s;
+    }
+
+    #cont-botones .btn-gye {
+      margin-right: 5px;
+
+    }
+
+    #cont-botones .btn-quito {
+      margin-left: 5px;
+
+    }
+
+
+
+    .banner-tecomunidad,
+    .banner-teamanecer {
+      text-align: center;
+      margin: 15px;
+    }
+
+    .banner-tecomunidad img .banner-teamanecer img {
+      width: 350px;
+
+    }
+
+
+    @media (max-width: 600px) {
+      .active_envivo {
+        background-position-y: 16px;
+      }
+
+      #cont-botones {
+        display: block;
+        text-align: center;
+      }
+
+      #cont-botones a {
+        display: block;
+        max-width: 230px;
+        margin-right: auto !important;
+        margin-left: auto !important;
+        margin-bottom: 15px;
+      }
+
+      #cont-botones .btn-gye {
+        margin-right: 0px;
+      }
+
+      #cont-botones .btn-quito {
+        margin-left: 0px;
+      }
+
+      #cont-botones img {
+        width: 85%;
+      }
+
+      .banner-tecomunidad img,
+      .banner-teamanecer img {
+        width: 300px;
+      }
+
+
+
+    }
+  </style>
 </head>
 
 <body>
 
-  <div id="ly-header" class="ly-header">
-    <div class="floating-header desktop scroll">
-      <div class="container">
-        <div class="row h-r01">
-          <div class="col portlet-column nopadding" id="h-r01">
-            <div id="" class="portlet-boundary portlet-static-end velocitycontainer-portlet velo-tw"> </div>
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet">
-              <div> </div>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet">
-              <div> </div>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet">
-              <div>
-                <script type="text/javascript">
-                  /*<![CDATA[*/ /*<![CDATA[*/
-                  let bsContainerWidth = $("body").find(".iter-page-frame").width();
-                  if (bsContainerWidth <= 600) {
-                    // console.log("mobile");
-                    // var interstitialSlot, bottomAnchorSlot;
-                    // googletag.cmd.push(function () {
-                    // interstitialSlot = googletag.defineOutOfPageSlot(
-                    // "/49542283/Ecuavisa_Web-ITT-2",
-                    // googletag.enums.OutOfPageFormat.INTERSTITIAL
-                    // );
-                    // googletag.defineOutOfPageSlot("/49542283/Ecuavisa_Web-ITT-2",googletag.enums.OutOfPageFormat.INTERSTITIAL).addService(googletag.pubads());
-                    // interstitialSlot && interstitialSlot.addService(googletag.pubads());
-                    // bottomAnchorSlot = googletag.defineOutOfPageSlot(
-                    // "/49542283/Ecuavisa_Bottom_Anchor",
-                    // googletag.enums.OutOfPageFormat.BOTTOM_ANCHOR
-                    // );
-                    // bottomAnchorSlot && bottomAnchorSlot.addService(googletag.pubads());
-                    // console.log("webitt-movil ecuavisa 2 principal");
-                    // });
+  <div class="banner-tecomunidad d-none">
+    <img src="https://ecuavisa.com/ecuavisa/main/banner-tele-comunidad.png" alt="btn" />
+  </div>
 
-
-                    // googletag.defineOutOfPageSlot("/49542283/Ecuavisa_Web-ITT-2",googletag.enums.OutOfPageFormat.INTERSTITIAL).addService(googletag.pubads());
-
-                    // googletag.defineOutOfPageSlot("/49542283/Ecuavisa_Bottom_Anchor",googletag.enums.OutOfPageFormat.BOTTOM_ANCHOR).addService(googletag.pubads());
-
-                    // googletag.cmd.push(function () {
-                    // interstitialSlot && googletag.display(interstitialSlot);
-                    // bottomAnchorSlot && googletag.display(bottomAnchorSlot);
-                    // });
-                  } else {
-                    // console.log("large");
-                  }
-                  /*]]>*/
-                  /*]]>*/
-                </script>
-              </div>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end adcontainer-portlet div-floating">
-              <div>
-                <div id="Floating" style="width: 0px; height: 0px; padding: 0px; margin: 0px;"
-                  data-google-query-id="COPJw9bFxvgCFYic0QQd6LIKgg">
-                  <script type="text/javascript">
-                    /*<![CDATA[*/
-                    googletag.cmd.push(function () {
-                      googletag.display("Floating")
-                    });
-                    console.log("Floating"); /*]]>*/
-                  </script>
-                  <div id="google_ads_iframe_/49542283/Ecuavisa/Ecuavisa_Floating_0__container__"
-                    style="border: 0pt none;"></div>
-                </div>
-              </div>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end adcontainer-portlet div-parallax">
-              <div>
-                <div id="Parallax" style="width: 0px; height: 0px; padding: 0px; margin: 0px;"
-                  data-google-query-id="COXJw9bFxvgCFYic0QQd6LIKgg">
-                  <script type="text/javascript">
-                    /*<![CDATA[*/
-                    googletag.cmd.push(function () {
-                      googletag.display("Parallax")
-                    });
-                    console.log("Parallax"); /*]]>*/
-                  </script>
-                  <div id="google_ads_iframe_/49542283/Ecuavisa/Ecuavisa_Parallax_0__container__"
-                    style="border: 0pt none;"></div>
-                </div>
-              </div>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet">
-              <div> </div>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end adcontainer-portlet div-zocalo">
-              <div>
-                <div id="Zocalo" style="width: 0px; height: 0px; padding: 0px; margin: 0px;"
-                  data-google-query-id="COTJw9bFxvgCFYic0QQd6LIKgg">
-                  <script type="text/javascript">
-                    /*<![CDATA[*/
-                    googletag.cmd.push(function () {
-                      googletag.display("Zocalo")
-                    });
-                    console.log("Zocalo"); /*]]>*/
-                  </script>
-                  <div id="google_ads_iframe_/49542283/Ecuavisa/Ecuavisa_Zocalo_0__container__"
-                    style="border: 0pt none;"></div>
-                </div>
-              </div>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end velocitycontainer-portlet"> </div>
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet fl">
-              <div> <a class="header-logo" href="/"></a> </div>
-            </div>
-            <div id="1418563219" class="portlet-boundary portlet-static-end menu-portlet menu-desktop">
-              <div id="menu_1418563219" class="menu_secc ">
-                <div class="nav-dropdown nav noSubNav">
-                  <ul class="parent-nav lst cf">
-                    <li class="lst-item tabnav  sect-116 sect-13da438453ea96c3178f6dad2defda33">
-                      <div class="tab-grp"> <a href="/noticias" class="tab-item lnk" title="NOTICIAS"> <span
-                            class="iconBefore"></span> <strong class="sectionName">NOTICIAS</strong> <span
-                            class="iconAfter"></span> </a> <span class="hasChildsIcon"></span>
-                        <div class="child-nav cf">
-                          <ul class="lst-std lst level-2">
-                            <div class="lst-items">
-                              <li class="lst-item   sect-3090 sect-6d424343ee0b3d88901bc450ff03e910"> <a
-                                  href="/noticias-videos" class=" lnk" title="VIDEOS"> <span class="iconBefore"></span>
-                                  <span class="sectionName">VIDEOS</span> <span class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-130 sect-0b950e442fae0527d7e480b0cb717074"> <a
-                                  href="/noticias/ecuador" class=" lnk" title="ECUADOR"> <span
-                                    class="iconBefore"></span> <span class="sectionName">ECUADOR</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-131 sect-0c66c045f61479581d826d89a912f97b"> <a
-                                  href="/noticias/internacional" class=" lnk" title="INTERNACIONAL"> <span
-                                    class="iconBefore"></span> <span class="sectionName">INTERNACIONAL</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-132 sect-fbfa5c1b21a49681715c159bfcc73eb4"> <a
-                                  href="/noticias/economia" class=" lnk" title="ECONOMÍA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">ECONOMÍA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-133 sect-2c23bf8d8287d05b8bf4744a15ee9d10"> <a
-                                  href="/noticias/politica" class=" lnk" title="POLÍTICA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">POLÍTICA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-134 sect-8f03d13487ce5aa52f96b44fc4a51e5b"> <a
-                                  href="/noticias/cronicaroja" class=" lnk" title="CRÓNICA ROJA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">CRÓNICA ROJA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-2675 sect-c5676a52d48e157232a5561669bd9d26"> <a
-                                  href="/contacto-directo" class=" lnk" target="_blank" title="CONTACTO DIRECTO"> <span
-                                    class="iconBefore"></span> <span class="sectionName">CONTACTO DIRECTO</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-2676 sect-500db4e0b2c8f6cd3fff5d0d93279bcb"> <a
-                                  href="/noticieros" class=" lnk" target="_blank" title="NOTICIEROS"> <span
-                                    class="iconBefore"></span> <span class="sectionName">NOTICIEROS</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                            </div>
-                          </ul>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="lst-item tabnav  sect-117 sect-a4306ce1cba409d40f6649f40a27a166">
-                      <div class="tab-grp"> <a href="/estadio" class="tab-item lnk" title="ESTADIO"> <span
-                            class="iconBefore"></span> <strong class="sectionName">ESTADIO</strong> <span
-                            class="iconAfter"></span> </a> <span class="hasChildsIcon"></span>
-                        <div class="child-nav cf">
-                          <ul class="lst-std lst level-2">
-                            <div class="lst-items">
-                              <li class="lst-item   sect-3097 sect-d6188119a826e91d6747b148d883f2cd"> <a
-                                  href="/estadio-videos" class=" lnk" title="VIDEOS"> <span class="iconBefore"></span>
-                                  <span class="sectionName">VIDEOS</span> <span class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-135 sect-581ba54251f0b62cdc2b03bd3c743f61"> <a
-                                  href="/estadio/nacional" class=" lnk" title="NACIONAL"> <span
-                                    class="iconBefore"></span> <span class="sectionName">NACIONAL</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-136 sect-1635b76659c14d94cbfc2b1d49c0ed92"> <a
-                                  href="/estadio/internacional" class=" lnk" title="INTERNACIONAL"> <span
-                                    class="iconBefore"></span> <span class="sectionName">INTERNACIONAL</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-137 sect-391bcd0553388e56bc7b4a7adf39701a"> <a
-                                  href="/estadio/masdeportes" class=" lnk" title="MÁS DEPORTES"> <span
-                                    class="iconBefore"></span> <span class="sectionName">MÁS DEPORTES</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                            </div>
-                          </ul>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="lst-item tabnav  sect-120 sect-577812e358932bfef54807fac3f8cfb6">
-                      <div class="tab-grp"> <a href="/entretenimiento" class="tab-item lnk" title="ENTRETENIMIENTO">
-                          <span class="iconBefore"></span> <strong class="sectionName">ENTRETENIMIENTO</strong> <span
-                            class="iconAfter"></span> </a> <span class="hasChildsIcon"></span>
-                        <div class="child-nav cf">
-                          <ul class="lst-std lst level-2">
-                            <div class="lst-items">
-                              <li class="lst-item   sect-3091 sect-f7a057665ece874b86b7f58ef79b3f87"> <a
-                                  href="/entretenimiento-videos" class=" lnk" title="VIDEOS"> <span
-                                    class="iconBefore"></span> <span class="sectionName">VIDEOS</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-145 sect-c47fe0b3791b4042bef5eab533a08ecc"> <a
-                                  href="/entretenimiento/musica" class=" lnk" title="MÚSICA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">MÚSICA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-146 sect-e31b43503a8c6ff50832e75324e69c30"> <a
-                                  href="/entretenimiento/cineyseries" class=" lnk" title="CINE Y SERIES"> <span
-                                    class="iconBefore"></span> <span class="sectionName">CINE Y SERIES</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-150 sect-53d9fe0067882ec79aa2d88925ee6935">
-                                <div class="tab-grp"> <a href="/nuestros-programas" class=" lnk"
-                                    title="NUESTROS PROGRAMAS"> <span class="iconBefore"></span> <strong
-                                      class="sectionName">NUESTROS PROGRAMAS</strong> <span class="iconAfter"></span>
-                                  </a> <span class="hasChildsIcon"></span>
-                                  <div class="child-nav cf">
-                                    <ul class="lst-std lst level-3">
-                                      <div class="lst-items">
-                                        <li class="lst-item   sect-3302 sect-bd2629eff76d42e1d0fa0e50ef88bc13"> <a
-                                            href="/el-poder-del-amor" class=" lnk" title="EL PODER DEL AMOR 2"> <span
-                                              class="iconBefore"></span> <span class="sectionName">EL PODER DEL AMOR
-                                              2</span> <span class="iconAfter"></span> </a> </li>
-                                        <li class="lst-item   sect-154 sect-7cb0f4f4a6d5d8ece1eb591fe98513c8"> <a
-                                            href="/encontacto" class=" lnk" target="_blank" title="EN CONTACTO"> <span
-                                              class="iconBefore"></span> <span class="sectionName">EN CONTACTO</span>
-                                            <span class="iconAfter"></span> </a> </li>
-                                        <li class="lst-item   sect-151 sect-892f9b3864c5bc91f68b044eddae8d29"> <a
-                                            href="/politicamente-correcto" class=" lnk" title="POLÍTICAMENTE CORRECTO">
-                                            <span class="iconBefore"></span> <span class="sectionName">POLÍTICAMENTE
-                                              CORRECTO</span> <span class="iconAfter"></span> </a> </li>
-                                        <li class="lst-item   sect-152 sect-f1bb22948c7ca1dd16464327ab4b7339"> <a
-                                            href="/contacto-directo" class=" lnk" title="CONTACTO DIRECTO"> <span
-                                              class="iconBefore"></span> <span class="sectionName">CONTACTO
-                                              DIRECTO</span> <span class="iconAfter"></span> </a> </li>
-                                        <li class="lst-item   sect-153 sect-bdbbc5357fe7f86108b882f1f3af695f"> <a
-                                            href="/vision360" class=" lnk" target="_blank" title="VISIÓN 360"> <span
-                                              class="iconBefore"></span> <span class="sectionName">VISIÓN 360</span>
-                                            <span class="iconAfter"></span> </a> </li>
-                                        <li class="lst-item   sect-724 sect-588030440baffcfc9af7111a5bb73344"> <a
-                                            href="/noticieros" class=" lnk" title="NOTICIEROS"> <span
-                                              class="iconBefore"></span> <span class="sectionName">NOTICIEROS</span>
-                                            <span class="iconAfter"></span> </a> </li>
-                                        <li class="lst-item   sect-155 sect-5acd74f56ee8021a7042b976d1f4dd4b"> <a
-                                            href="/3familias" class=" lnk" target="_blank" title="3 FAMILIAS"> <span
-                                              class="iconBefore"></span> <span class="sectionName">3 FAMILIAS</span>
-                                            <span class="iconAfter"></span> </a> </li>
-                                      </div>
-                                    </ul>
-                                  </div>
-                                </div>
-                              </li>
-                            </div>
-                          </ul>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="lst-item tabnav  sect-118 sect-ecec2f3a432d6e4240f6ef449d5e7b61">
-                      <div class="tab-grp"> <a href="/tendencias" class="tab-item lnk" title="TENDENCIAS"> <span
-                            class="iconBefore"></span> <strong class="sectionName">TENDENCIAS</strong> <span
-                            class="iconAfter"></span> </a> <span class="hasChildsIcon"></span>
-                        <div class="child-nav cf">
-                          <ul class="lst-std lst level-2">
-                            <div class="lst-items">
-                              <li class="lst-item   sect-3098 sect-ef1c85e17a7ba5a0cb503385e1eec894"> <a
-                                  href="/tendencias-videos" class=" lnk" title="VIDEOS"> <span
-                                    class="iconBefore"></span> <span class="sectionName">VIDEOS</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-139 sect-f0d6dc3672f423f1b5a26b2d5b416cee"> <a
-                                  href="/tendencias/tecnologia" class=" lnk" title="TECNOLOGÍA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">TECNOLOGÍA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-140 sect-5552f29395f5c67cb32e3bc470725ad3"> <a
-                                  href="/tendencias/ciencia" class=" lnk" title="CIENCIA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">CIENCIA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-141 sect-ab68447fc403db571b6b03f98fdcf37b"> <a
-                                  href="/tendencias/medicina" class=" lnk" title="MEDICINA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">MEDICINA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-142 sect-a3af88621af9df9850e577fdd99fff80"> <a
-                                  href="/tendencias/redes" class=" lnk" title="REDES"> <span class="iconBefore"></span>
-                                  <span class="sectionName">REDES</span> <span class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-143 sect-40936bf8d713571563a533e453d85b9e"> <a
-                                  href="/tendencias/curiosidades" class=" lnk" title="CURIOSIDADES"> <span
-                                    class="iconBefore"></span> <span class="sectionName">CURIOSIDADES</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-144 sect-71e5789b6575cd50075a31a8ea767ace"> <a
-                                  href="/tendencias/medioambiente" class=" lnk" title="MEDIO AMBIENTE"> <span
-                                    class="iconBefore"></span> <span class="sectionName">MEDIO AMBIENTE</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                            </div>
-                          </ul>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="lst-item tabnav  sect-119 sect-81d0c9805a5bf069ec4be1a657699d8b active_envivo"
-                      style="display: list-item;"> <a href="/envivo" class="tab-item lnk" title="EN VIVO"> <span
-                          class="iconBefore"></span> <span class="sectionName">EN VIVO</span> <span
-                          class="iconAfter"></span> </a> </li>
-                  </ul>
-                </div>
-              </div>
-              <script type="text/javascript">
-                /*<![CDATA[*/
-                prepareMenuJs("1418563219"); /*]]>*/
-              </script>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet">
-              <div>
-                <div class="registro registro_desktop"><a class="pw-btn"
-                    href="https://suscripciones.ecuavisa.com/id/login/?continue=https%3A%2F%2Fwww.ecuavisa.com%2F"><img
-                      src="https://suscripciones.ecuavisa.com/img/id/ic-user.svg" width="22" height="22"> Login</a>
-                </div>
-              </div>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet">
-              <div>
-                <div class="sprite search-icon"></div>
-              </div>
-            </div>
-            <div id="310721359" class="portlet-boundary portlet-static-end advanced-search-portlet"> <span
-                class="iter-field iter-field-text"> <span class="iter-field-content"> <span class="iter-field-element">
-                    <input id="_310721359_keywords" type="text" value="" name="keywords" inlinefield="true"
-                      class="iter-field-input iter-field-input-text"
-                      onkeydown="if (!window.__cfRLUnblockHandlers) return false; javascript:_310721359_onKeyEnterSearch(event)">
-                  </span> </span> </span> <span class="iter-button iter-button-submit"> <span
-                  class="iter-button-content"> <input id="_310721359_search" type="submit" name="search"
-                    value="Búsquedas" class="iter-button-input iter-button-input-submit"
-                    onclick="if (!window.__cfRLUnblockHandlers) return false; javascript:_310721359_onClickSearch()">
-                </span> </span>
-              <script type="text/javascript">
-                /*<![CDATA[*/
-                function _310721359_cleanKeywords(i) {
-                  var j = "";
-                  var h = "";
-                  for (var f = 0; f < i.length; f++) {
-                    var g = i[f];
-                    if (!(g == "." || g == "/" || g == "\\" || g == "~" || g == "!" || g == "(" || g == ")")) {
-                      h += g
-                    } else {
-                      h += " "
-                    }
-                  }
-                  h = encodeURIComponent(h);
-                  for (var f = 0; f < h.length; f++) {
-                    var g = h[f];
-                    if (g == "'") {
-                      j += "%27"
-                    } else {
-                      j += g
-                    }
-                  }
-                  return j
-                }
-
-                function _310721359_onClickSearch() {
-                  var e = _310721359_cleanKeywords(jQryIter("#_310721359_keywords").val());
-                  if (e.length > 0) {
-                    var d = "/busquedas/-/search/";
-                    var f = "/false/false/19800624/20220624/date/true/true/0/0/meta/0/0/0/1";
-                    window.location.href = d + e + f
-                  }
-                }
-
-                function _310721359_onKeyEnterSearch(b) {
-                  if (b.keyCode == 13) {
-                    _310721359_onClickSearch()
-                  }
-                }; /*]]>*/
-              </script>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet">
-              <div> </div>
-            </div>
-          </div>
-        </div>
-        <div class="row h-r02">
-          <div class="col portlet-column nopadding" id="h-r02"> </div>
-        </div>
-      </div>
-    </div>
-    <div class="floating-header movil scroll">
-      <div class="container-fluid">
-        <div class="row hm-r01">
-          <div class="col portlet-column nopadding" id="hm-r01">
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet">
-              <div>
-                <div class="container-logo-movil"> <a href="/" aria-label="go home">
-                    <div class="header-logo-movil"></div>
-                  </a> </div>
-              </div>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet registro_movil_container">
-              <div>
-                <div class="registro registro_movil"><a class="pw-btn"
-                    href="https://suscripciones.ecuavisa.com/id/login/?continue=https%3A%2F%2Fwww.ecuavisa.com%2F"><img
-                      src="https://suscripciones.ecuavisa.com/img/id/ic-user.svg" width="22" height="22"> Login</a>
-                </div>
-                <script type="text/javascript">
-                  /*<![CDATA[*/
-                  $(document).ready(function () {
-                    setTimeout(function () {
-                      var a = $(".registro_desktop").html();
-                      var b = $(".registro_movil").html(a)
-                    }, 2000)
-                  }); /*]]>*/
-                </script>
-              </div>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet">
-              <div>
-                <div class="sprite search-icon"></div>
-              </div>
-            </div>
-            <div id="1418462125" class="portlet-boundary portlet-static-end advanced-search-portlet"> <span
-                class="iter-field iter-field-text"> <span class="iter-field-content"> <span class="iter-field-element">
-                    <input id="_1418462125_keywords" type="text" value="" name="keywords" inlinefield="true"
-                      class="iter-field-input iter-field-input-text"
-                      onkeydown="if (!window.__cfRLUnblockHandlers) return false; javascript:_1418462125_onKeyEnterSearch(event)">
-                  </span> </span> </span> <span class="iter-button iter-button-submit"> <span
-                  class="iter-button-content"> <input id="_1418462125_search" type="submit" name="search"
-                    value="Búsquedas" class="iter-button-input iter-button-input-submit"
-                    onclick="if (!window.__cfRLUnblockHandlers) return false; javascript:_1418462125_onClickSearch()">
-                </span> </span>
-              <script type="text/javascript">
-                /*<![CDATA[*/
-                function _1418462125_cleanKeywords(i) {
-                  var j = "";
-                  var h = "";
-                  for (var f = 0; f < i.length; f++) {
-                    var g = i[f];
-                    if (!(g == "." || g == "/" || g == "\\" || g == "~" || g == "!" || g == "(" || g == ")")) {
-                      h += g
-                    } else {
-                      h += " "
-                    }
-                  }
-                  h = encodeURIComponent(h);
-                  for (var f = 0; f < h.length; f++) {
-                    var g = h[f];
-                    if (g == "'") {
-                      j += "%27"
-                    } else {
-                      j += g
-                    }
-                  }
-                  return j
-                }
-
-                function _1418462125_onClickSearch() {
-                  var e = _1418462125_cleanKeywords(jQryIter("#_1418462125_keywords").val());
-                  if (e.length > 0) {
-                    var d = "/busquedas/-/search/";
-                    var f = "/false/false/19800624/20220624/date/true/true/0/0/meta/0/0/0/1";
-                    window.location.href = d + e + f
-                  }
-                }
-
-                function _1418462125_onKeyEnterSearch(b) {
-                  if (b.keyCode == 13) {
-                    _1418462125_onClickSearch()
-                  }
-                }; /*]]>*/
-              </script>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet">
-              <div>
-                <div class="menu-movil-click"> <svg xmlns="http://www.w3.org/2000/svg"
-                    class="icon icon-tabler icon-tabler-menu-2" width="44" height="44" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="#fff" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
-                    <line x1="4" y1="6" x2="20" y2="6"></line>
-                    <line x1="4" y1="12" x2="20" y2="12"></line>
-                    <line x1="4" y1="18" x2="20" y2="18"></line>
-                  </svg> </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="row hm-r02 container-menu">
-          <div class="col portlet-column nopadding" id="hm-r02">
-            <div id="3279731491" class="portlet-boundary portlet-static-end menu-portlet menu-movil">
-              <div id="menu_3279731491" class="menu_secc_unfolded vertical">
-                <div class="nav-dropdown nav noSubNav">
-                  <ul class="parent-nav lst cf">
-                    <li class="lst-item tabnav  sect-116 sect-13da438453ea96c3178f6dad2defda33">
-                      <div class="tab-grp"> <a href="/noticias" class="tab-item lnk" title="NOTICIAS"> <span
-                            class="iconBefore"></span> <strong class="sectionName">NOTICIAS</strong> <span
-                            class="iconAfter"></span> </a> <span class="hasChildsIcon"></span>
-                        <div class="child-nav cf">
-                          <ul class="lst-std lst level-2">
-                            <div class="lst-items">
-                              <li class="lst-item   sect-3090 sect-6d424343ee0b3d88901bc450ff03e910"> <a
-                                  href="/noticias-videos" class=" lnk" title="VIDEOS"> <span class="iconBefore"></span>
-                                  <span class="sectionName">VIDEOS</span> <span class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-130 sect-0b950e442fae0527d7e480b0cb717074"> <a
-                                  href="/noticias/ecuador" class=" lnk" title="ECUADOR"> <span
-                                    class="iconBefore"></span> <span class="sectionName">ECUADOR</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-131 sect-0c66c045f61479581d826d89a912f97b"> <a
-                                  href="/noticias/internacional" class=" lnk" title="INTERNACIONAL"> <span
-                                    class="iconBefore"></span> <span class="sectionName">INTERNACIONAL</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-132 sect-fbfa5c1b21a49681715c159bfcc73eb4"> <a
-                                  href="/noticias/economia" class=" lnk" title="ECONOMÍA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">ECONOMÍA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-133 sect-2c23bf8d8287d05b8bf4744a15ee9d10"> <a
-                                  href="/noticias/politica" class=" lnk" title="POLÍTICA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">POLÍTICA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-134 sect-8f03d13487ce5aa52f96b44fc4a51e5b"> <a
-                                  href="/noticias/cronicaroja" class=" lnk" title="CRÓNICA ROJA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">CRÓNICA ROJA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-2675 sect-c5676a52d48e157232a5561669bd9d26"> <a
-                                  href="/contacto-directo" class=" lnk" target="_blank" title="CONTACTO DIRECTO"> <span
-                                    class="iconBefore"></span> <span class="sectionName">CONTACTO DIRECTO</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-2676 sect-500db4e0b2c8f6cd3fff5d0d93279bcb"> <a
-                                  href="/noticieros" class=" lnk" target="_blank" title="NOTICIEROS"> <span
-                                    class="iconBefore"></span> <span class="sectionName">NOTICIEROS</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                            </div>
-                          </ul>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="lst-item tabnav  sect-117 sect-a4306ce1cba409d40f6649f40a27a166">
-                      <div class="tab-grp"> <a href="/estadio" class="tab-item lnk" title="ESTADIO"> <span
-                            class="iconBefore"></span> <strong class="sectionName">ESTADIO</strong> <span
-                            class="iconAfter"></span> </a> <span class="hasChildsIcon"></span>
-                        <div class="child-nav cf">
-                          <ul class="lst-std lst level-2">
-                            <div class="lst-items">
-                              <li class="lst-item   sect-3097 sect-d6188119a826e91d6747b148d883f2cd"> <a
-                                  href="/estadio-videos" class=" lnk" title="VIDEOS"> <span class="iconBefore"></span>
-                                  <span class="sectionName">VIDEOS</span> <span class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-135 sect-581ba54251f0b62cdc2b03bd3c743f61"> <a
-                                  href="/estadio/nacional" class=" lnk" title="NACIONAL"> <span
-                                    class="iconBefore"></span> <span class="sectionName">NACIONAL</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-136 sect-1635b76659c14d94cbfc2b1d49c0ed92"> <a
-                                  href="/estadio/internacional" class=" lnk" title="INTERNACIONAL"> <span
-                                    class="iconBefore"></span> <span class="sectionName">INTERNACIONAL</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-137 sect-391bcd0553388e56bc7b4a7adf39701a"> <a
-                                  href="/estadio/masdeportes" class=" lnk" title="MÁS DEPORTES"> <span
-                                    class="iconBefore"></span> <span class="sectionName">MÁS DEPORTES</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                            </div>
-                          </ul>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="lst-item tabnav  sect-120 sect-577812e358932bfef54807fac3f8cfb6">
-                      <div class="tab-grp"> <a href="/entretenimiento" class="tab-item lnk" title="ENTRETENIMIENTO">
-                          <span class="iconBefore"></span> <strong class="sectionName">ENTRETENIMIENTO</strong> <span
-                            class="iconAfter"></span> </a> <span class="hasChildsIcon"></span>
-                        <div class="child-nav cf">
-                          <ul class="lst-std lst level-2">
-                            <div class="lst-items">
-                              <li class="lst-item   sect-3091 sect-f7a057665ece874b86b7f58ef79b3f87"> <a
-                                  href="/entretenimiento-videos" class=" lnk" title="VIDEOS"> <span
-                                    class="iconBefore"></span> <span class="sectionName">VIDEOS</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-145 sect-c47fe0b3791b4042bef5eab533a08ecc"> <a
-                                  href="/entretenimiento/musica" class=" lnk" title="MÚSICA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">MÚSICA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-146 sect-e31b43503a8c6ff50832e75324e69c30"> <a
-                                  href="/entretenimiento/cineyseries" class=" lnk" title="CINE Y SERIES"> <span
-                                    class="iconBefore"></span> <span class="sectionName">CINE Y SERIES</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-150 sect-53d9fe0067882ec79aa2d88925ee6935">
-                                <div class="tab-grp"> <a href="/nuestros-programas" class=" lnk"
-                                    title="NUESTROS PROGRAMAS"> <span class="iconBefore"></span> <strong
-                                      class="sectionName">NUESTROS PROGRAMAS</strong> <span class="iconAfter"></span>
-                                  </a> <span class="hasChildsIcon"></span>
-                                  <div class="child-nav cf">
-                                    <ul class="lst-std lst level-3">
-                                      <div class="lst-items">
-                                        <li class="lst-item   sect-3302 sect-bd2629eff76d42e1d0fa0e50ef88bc13"> <a
-                                            href="/el-poder-del-amor" class=" lnk" title="EL PODER DEL AMOR 2"> <span
-                                              class="iconBefore"></span> <span class="sectionName">EL PODER DEL AMOR
-                                              2</span> <span class="iconAfter"></span> </a> </li>
-                                        <li class="lst-item   sect-154 sect-7cb0f4f4a6d5d8ece1eb591fe98513c8"> <a
-                                            href="/encontacto" class=" lnk" target="_blank" title="EN CONTACTO"> <span
-                                              class="iconBefore"></span> <span class="sectionName">EN CONTACTO</span>
-                                            <span class="iconAfter"></span> </a> </li>
-                                        <li class="lst-item   sect-151 sect-892f9b3864c5bc91f68b044eddae8d29"> <a
-                                            href="/politicamente-correcto" class=" lnk" title="POLÍTICAMENTE CORRECTO">
-                                            <span class="iconBefore"></span> <span class="sectionName">POLÍTICAMENTE
-                                              CORRECTO</span> <span class="iconAfter"></span> </a> </li>
-                                        <li class="lst-item   sect-152 sect-f1bb22948c7ca1dd16464327ab4b7339"> <a
-                                            href="/contacto-directo" class=" lnk" title="CONTACTO DIRECTO"> <span
-                                              class="iconBefore"></span> <span class="sectionName">CONTACTO
-                                              DIRECTO</span> <span class="iconAfter"></span> </a> </li>
-                                        <li class="lst-item   sect-153 sect-bdbbc5357fe7f86108b882f1f3af695f"> <a
-                                            href="/vision360" class=" lnk" target="_blank" title="VISIÓN 360"> <span
-                                              class="iconBefore"></span> <span class="sectionName">VISIÓN 360</span>
-                                            <span class="iconAfter"></span> </a> </li>
-                                        <li class="lst-item   sect-724 sect-588030440baffcfc9af7111a5bb73344"> <a
-                                            href="/noticieros" class=" lnk" title="NOTICIEROS"> <span
-                                              class="iconBefore"></span> <span class="sectionName">NOTICIEROS</span>
-                                            <span class="iconAfter"></span> </a> </li>
-                                        <li class="lst-item   sect-155 sect-5acd74f56ee8021a7042b976d1f4dd4b"> <a
-                                            href="/3familias" class=" lnk" target="_blank" title="3 FAMILIAS"> <span
-                                              class="iconBefore"></span> <span class="sectionName">3 FAMILIAS</span>
-                                            <span class="iconAfter"></span> </a> </li>
-                                      </div>
-                                    </ul>
-                                  </div>
-                                </div>
-                              </li>
-                            </div>
-                          </ul>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="lst-item tabnav  sect-118 sect-ecec2f3a432d6e4240f6ef449d5e7b61">
-                      <div class="tab-grp"> <a href="/tendencias" class="tab-item lnk" title="TENDENCIAS"> <span
-                            class="iconBefore"></span> <strong class="sectionName">TENDENCIAS</strong> <span
-                            class="iconAfter"></span> </a> <span class="hasChildsIcon"></span>
-                        <div class="child-nav cf">
-                          <ul class="lst-std lst level-2">
-                            <div class="lst-items">
-                              <li class="lst-item   sect-3098 sect-ef1c85e17a7ba5a0cb503385e1eec894"> <a
-                                  href="/tendencias-videos" class=" lnk" title="VIDEOS"> <span
-                                    class="iconBefore"></span> <span class="sectionName">VIDEOS</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-139 sect-f0d6dc3672f423f1b5a26b2d5b416cee"> <a
-                                  href="/tendencias/tecnologia" class=" lnk" title="TECNOLOGÍA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">TECNOLOGÍA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-140 sect-5552f29395f5c67cb32e3bc470725ad3"> <a
-                                  href="/tendencias/ciencia" class=" lnk" title="CIENCIA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">CIENCIA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-141 sect-ab68447fc403db571b6b03f98fdcf37b"> <a
-                                  href="/tendencias/medicina" class=" lnk" title="MEDICINA"> <span
-                                    class="iconBefore"></span> <span class="sectionName">MEDICINA</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-142 sect-a3af88621af9df9850e577fdd99fff80"> <a
-                                  href="/tendencias/redes" class=" lnk" title="REDES"> <span class="iconBefore"></span>
-                                  <span class="sectionName">REDES</span> <span class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-143 sect-40936bf8d713571563a533e453d85b9e"> <a
-                                  href="/tendencias/curiosidades" class=" lnk" title="CURIOSIDADES"> <span
-                                    class="iconBefore"></span> <span class="sectionName">CURIOSIDADES</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                              <li class="lst-item   sect-144 sect-71e5789b6575cd50075a31a8ea767ace"> <a
-                                  href="/tendencias/medioambiente" class=" lnk" title="MEDIO AMBIENTE"> <span
-                                    class="iconBefore"></span> <span class="sectionName">MEDIO AMBIENTE</span> <span
-                                    class="iconAfter"></span> </a> </li>
-                            </div>
-                          </ul>
-                        </div>
-                      </div>
-                    </li>
-                    <li class="lst-item tabnav  sect-119 sect-81d0c9805a5bf069ec4be1a657699d8b active_envivo"
-                      style="display: list-item;"> <a href="/envivo" class="tab-item lnk" title="EN VIVO"> <span
-                          class="iconBefore"></span> <span class="sectionName">EN VIVO</span> <span
-                          class="iconAfter"></span> </a> </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet">
-              <div>
-                <style>
-                  .sect-81d0c9805a5bf069ec4be1a657699d8b {
-                    display: none;
-                  }
-
-                  @media (min-width: 768px) and (max-width: 960px) {
-                    .ly-header .desktop .header-logo {
-                      width: 120px;
-                      margin: 0 35px;
-                    }
-
-                    .menu-desktop ul.parent-nav {
-                      width: 85%;
-                    }
-                  }
-                </style>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <div class="banner-teamanecer d-none">
+    <img src="https://estadisticas.ecuavisa.com/sites/default/files/2022-06/banner-teamanecer.png" alt="btn" />
   </div>
 
   <div class="sect-81d0c9805a5bf069ec4be1a657699d8b">
@@ -752,6 +183,19 @@
         .addClass("pt-4");
     }
 
+    function showTelevistazoAmanecer() {
+      var btnLives = $('#btnTelcomunidad');
+      if (btnLives.length) {
+        btnLives.removeClass("d-none");
+      }
+      var titleLives = $('.banner-teamanecer');
+      if (titleLives.length) {
+        titleLives.removeClass("d-none");
+      }
+      $('.ly-especial').addClass("fondo-telcomunidad");
+      $('.sect-ce197d41428a962a783e5c4fc28f877f').addClass("fondo-telcomunidad").addClass("pt-4");
+    }
+
     function activePlayer() {
       let activeEnvivo = `
         <div class="title_programa">${name}</div>
@@ -787,16 +231,20 @@
     // prueba si timeOfDay está dentro de un marco de tiempo determinado
     if (day > 0 && day <= 5) {
       //validacion de lunes a viernes
+      if ("05:55" <= timeOfDay && timeOfDay <= "06:55") {
+        activePlayer();
+        showTelevistazoAmanecer();
+        $(".title_programa").append("Televistazo Al Amanecer");
 
-      if ("06:55" <= timeOfDay && timeOfDay <= "07:30") {
+      } else if ("06:55" <= timeOfDay && timeOfDay <= "07:30") {
         activePlayer();
         $(".title_programa").append("Contacto Directo");
 
       } else if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
         activePlayer();
         showTelevistazoComunidad();
-
         $(".title_programa").append("Televistazo en la comunidad");
+
       } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {
         activePlayer();
         $(".title_programa").append("En Contacto");
@@ -820,7 +268,9 @@
         activePlayer();
         $(".title_programa").append("Televistazo 19h00");
 
-      } else {console.log("player no activo");}
+      } else {
+        console.log("player no activo");
+      }
     } else {
       //validacion de domingo
       console.log("es domingo");
@@ -833,7 +283,9 @@
         activePlayer();
         $(".title_programa").append("Televistazo 19h00");
 
-      } else {console.log("player no activo");}
+      } else {
+        console.log("player no activo");
+      }
     }
   </script>
 
