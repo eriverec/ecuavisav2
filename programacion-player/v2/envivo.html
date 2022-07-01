@@ -154,7 +154,14 @@
     </div>
   </div>
 
+  <div id="playerembed" style="display:block; margin:auto; text-align:center;" ></div>
+
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script async src="https://platform-static.cdn.mdstrm.com/js/player_api.js"></script>
+  <script defer src="//redyman.netlify.app/kantar/springstreams.js" ></script>
+  <script defer src="//redyman.netlify.app/kantar/kantar.js" ></script>
+
+
   <script>
     var d = new Date();
     var day = d.getDay();
@@ -162,6 +169,8 @@
     var min = d.getMinutes();
     var t = d.getTime();
     var name = "";
+
+    console.log(playerOptions.id);
     $(".sect-81d0c9805a5bf069ec4be1a657699d8b").hide();
     console.log("dia " + day, "hora " + hour, "minuto " + min);
 
@@ -212,7 +221,8 @@
     function disabledPlayer() {
       let disabledEnvivo = `
         <div class="fondito_player" style="background: transparent;">
-          <center><img src="https://www.ecuavisa.com/sites/default/files/ecuavisa-en-vivo-noticiero.jpg"
+          <center>
+            <img src="https://www.ecuavisa.com/sites/default/files/ecuavisa-en-vivo-noticiero.jpgd"
               alt="noticiero, en vivo, televistazo en la comunidad, televistazo 13h00, televistazo estelar, en contacto, si se puede">
           </center>
         </div>
