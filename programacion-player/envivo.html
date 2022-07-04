@@ -261,6 +261,10 @@
         activePlayer();
         $(".title_programa").append("En Vivo");
 
+      } else if ("18:00" <= timeOfDay && timeOfDay <= "19:00") {
+        activePlayer();
+        $(".title_programa").append("Punto Límite");
+
       } else if ("19:00" <= timeOfDay && timeOfDay <= "19:59") {
         activePlayer();
         stylePublicidad();

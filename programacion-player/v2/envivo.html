@@ -145,16 +145,20 @@
         </div>
       </div>
 
-      <div class="player-envivo"></div>
+      <div class="player-envivo">
+      </div>
       <div class="texto_programa"> Si no tienes una TV cerca, tenemos buenas noticias: Aquí encontrarás una opción para
         acceder a toda la información y el entretenimiento que buscas completamente EN VIVO: Contacto Directo,
         Comunidad, En Contacto, Televistazo (13:00-19:00).
       </div>
-
+      
     </div>
   </div>
 
+  <iframe src="kdahsjas" frameborder="0"></iframe>
+  
   <div id="playerembed" style="display:block; margin:auto; text-align:center;" ></div>
+  
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script async src="https://platform-static.cdn.mdstrm.com/js/player_api.js"></script>
@@ -170,10 +174,11 @@
     var t = d.getTime();
     var name = "";
 
+    $("iframe").addClass("d-none");
+
     console.log(playerOptions.id);
     $(".sect-81d0c9805a5bf069ec4be1a657699d8b").hide();
     console.log("dia " + day, "hora " + hour, "minuto " + min);
-
 
     timeOfDay = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
     console.log(timeOfDay)
