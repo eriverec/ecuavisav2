@@ -52,18 +52,9 @@
       var day = today.getDay();
       console.log(today);
 
-      if (today.getDate() == "27") {
-        tempDate.setDate(today.getDate() + 3);
-      } else if (today.getDate() == "28"){
-        tempDate.setDate(today.getDate() + 2);
-      }
-      else if (today.getDate() == "29"){
+      if (today.getDate() == "15") {
         tempDate.setDate(today.getDate() + 1);
-      }
-      
-      else {
-        tempDate.setDate(today.getDate() + 1);
-      }
+      } 
 
       for (var i = 7; i > 0; i--) {
         tempDate.setDate(tempDate.getDate() - 1);
