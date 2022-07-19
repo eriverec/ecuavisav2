@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+</html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>File Reader</title>
+</head>
+<body>
+    <div>
+        <h1>Read Files In Javscript Using FileReader | File API</h1>
+        Files Type: <small>TXT, CSV</small>
+        <p>Hint: You should save files as encode <q>UTF-8</q></p>
+    </div>
+    <form>
+        <input type="file" name="userFileData" id="usersFileData" accept=".csv,.txt,.docx,.xlsx">
+    </form>
+    <div id="output"></div>
+    <!-- <script src="main.js"></script> -->
+    <script>
+        window.addEventListener('DOMContentLoaded', function (e) {
+    // Get file input
+    const fileInput = document.querySelector('#usersFileData');
+    const output = document.querySelector('#output');
+
+    // Event listeners
+    fileInput.addEventListener('change', handleFiles);
+
+    // change event handler
+    function handleFiles(event) {
+        // Check for the various File API support.
+        if (window.FileReader) {
+            // get first user selected file 
+            const file = event.target.files[0];
+            // if FileReader are supported.
+            getFileData(file);
+
+        } else {
+            alert('FileReader are not supported in this browser.');
+        }
+    }
+
+    // Get file content data based on file extenation and type
+    function getFileData(fileToRead) {
+        const fileType = fileToRead.type.split('.').pop();
+        switch (fileType) {
+            case 'text/plain':
+                getAsText(fileToRead);
+                break;
+            case 'text/csv':
+                getAsCSV(fileToRead);
+                break;
+            default:
+                alert(`Not support this file`);
+                break;
+        }
+    }
+
+    // Read text file data
+    function getAsText(fileToRead) {
+        // init file reader object
+        const reader = new FileReader();
+        // reade text file
+        reader.readAsText(fileToRead, 'UTF-8');
+        reader.onload = function (e) {
+            const txt = e.target.result;
+            drawData(txt);
+        };
+        reader.onerror = errorHandler;
+    }
+
+    // Read CSV sheet file data
+    function getAsCSV(fileToRead) {
+        // init file reader object
+        const reader = new FileReader();
+        // reade text file
+        reader.readAsText(fileToRead, 'UTF-8');
+        reader.onload = function (e) {
+            const csv = e.target.result;
+            drawData(csv);
+        };
+        reader.onerror = errorHandler;
+    }
+
+    // Error handler
+    function errorHandler(e) {
+        if (e.target.error.name == 'NotReadableError') {
+            alert(`Can't read this file`);
+        }
+    }
+
+    // Display file content
+    function drawData(data) {
+        const lines = data.split(`\r\n`);
+        let str = '';
+        lines.forEach(function (line) {
+            str += `${line} <br>`;
+        });
+        output.innerHTML = str;
+    }
+
+});
+/*
+//if your csv file contains the column names as the first line
+function processDataAsObj(csv){
+    var allTextLines = csv.split(/\r\n|\n/);
+    var lines = [];
+    
+    //first line of csv
+    var keys = allTextLines.shift().split(',');
+    
+    while (allTextLines.length) {
+        var arr = allTextLines.shift().split(',');
+        var obj = {};
+        for(var i = 0; i < keys.length; i++){
+            obj[keys[i]] = arr[i];
+    }
+        lines.push(obj);
+    }
+        console.log(lines);
+    drawOutputAsObj(lines);
+}
+*/
+    </script>
+</body>
+</html>

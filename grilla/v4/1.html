@@ -15,11 +15,29 @@
     <table>
 
     </table>
-    <script>
+    <script charset="UTF-8" type="text/javascript">
+ var toUtf8 = function(text) {
+  	var surrogate = encodeURIComponent(text);
+  	var result = '';
+    for (var i = 0; i < surrogate.length;) {
+        var character = surrogate[i];
+		i += 1;
+        if (character == '%') {
+        	var hex = surrogate.substring(i, i += 2);
+			if (hex) {
+				result += String.fromCharCode(parseInt(hex, 16));
+			}
+        } else {
+        	result += character;
+        }
+    }
+    return result;
+};
 //         tutorial link : https://www.youtube.com/watch?v=gnqHNJNc_0A
-        onload = fetch("files/parrilla_ecuavisa.csv").then(res => {
+        onload = fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRtl8w16YHgTv85SN3854uJ0g0scrwrTqKn71wf2SvdVBNY4XlttJeGWyZxiFTdZTjHlWP6mCZk88Jc/pub?gid=1753752166&single=true&output=csv").then(res => {
             return res.text()
         }).then(data => {
+        	console.log(data);
             let result = data.split(/\r?\n|\r/).map(e => {
                 return e.split(",")
             })

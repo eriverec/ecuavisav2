@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>csv file reader</title>
+    <style>
+        td {
+            border: 2px solid maroon;
+        }
+    </style>
+</head>
+<body>
+    <!-- tutorial link : https://www.youtube.com/watch?v=BQfK1QKCHys&t=326s -->
+    <input type="file">
+    <table></table>
+    <script >
+              const x = document.querySelector("input");
+        x.addEventListener("change", () => {
+            const fr = new FileReader();
+            fr.onloadend = e => {
+                let r = fr.result.split("\n").map(e => {
+                    return e.split(",");
+                });
+                r.forEach(e => {
+                    let m = e.map(e => {
+                        return `<td>${e}</td>`;
+                    }).join("");
+                    const ce = document.createElement("tr");
+                    ce.innerHTML = m;
+
+                    if (ce.innerText !== "") {
+                        document.querySelector("table").append(ce);
+
+                    }
+
+
+                });
+
+                // console.log(r)
+            }
+            fr.readAsText(x.files[0]);
+
+        })
+    </script>
+</body>
+</html>
