@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Parrilla de Programación</title>
+	<h1>titulo 1</h1>
+</head>
+<body>
+	<script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+	<script>
+		$(document).ready(function() {
+    $.ajax({
+        type: "GET",
+        url: "parrilla_ecuavisa.txt",
+        dataType: "text",
+        success: function(data) {
+        	processData(data);
+        	console.log(data)
+        }
+     });
+});
+
+function processData(allText) {
+    var record_num = 5;  // or however many elements there are in each row
+    var allTextLines = allText.split(/\r\n|\n/);
+    var entries = allTextLines[0].split(',');
+    var lines = [];
+
+    var headings = entries.splice(0,record_num);
+    while (entries.length>0) {
+        var tarr = [];
+        for (var j=0; j<record_num; j++) {
+            tarr.push(headings[j]+":"+entries.shift());
+        }
+        lines.push(tarr);
+    }
+    console.log(tarr);
+    // alert(lines);
+}
+	</script>
+</body>
+</html>
