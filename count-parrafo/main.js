@@ -1,7 +1,7 @@
 function pubCenter1() {
   // var rel_center1 = jQuery(".adcontainer-portlet.publicidad-center1").html();
   rel_center1 =
-    "<div align='center' class='my-2' data-ad='top-generico' id='center1' ><script type='text/javascript'>googletag.cmd.push(function() { googletag.display('center1'); });console.log('center1');</script></div>";
+    "<div align='center' class='my-4' data-ad='top-generico' id='center1' ><script type='text/javascript'>googletag.cmd.push(function() { googletag.display('center1'); });console.log('center1');</script></div>";
 
   // jQuery(".ly-detail .adcontainer-portlet.publicidad-center1").empty();
 
