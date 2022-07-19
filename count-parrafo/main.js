@@ -10,4 +10,9 @@ function pubCenter1() {
   console.log("pubCenter1-activo-after");
 }
 
-pubCenter1();
+
+
+
+setTimeout(function () {
+  pubCenter1();
+}, 3000);
