@@ -121,11 +121,12 @@
     // var d = new Date();
     // var n = d.getDay();
 
-    // function nextweek(){
-    //     var today = new Date();
-    //     var nextweek = new Date(today.getFullYear(), today.getMonth(), today.getDate()+7);
-    //     return nextweek;
-    // }    
+    function proxSemana(){
+        var today = new Date();
+        var proxSemana = new Date(today.getFullYear(), today.getMonth(), today.getDate()+7);
+        return proxSemana;
+    }  
+    console.log('la proxima semana es '+proxSemana());
     </script>
 </body>
 </html>

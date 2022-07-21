@@ -21,11 +21,26 @@ let weekday = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', '
 document.querySelector("."+weekday).click(); // seteamos por defecto el día actual
 // ##### tab de días de la semana
 
+
+
 // ##### carga de la grilla en dom
-onload = fetch("files/parrilla_ecuavisa2.csv").then(res => {
+onload = fetch("files/parrilla_ecuavisa.csv").then(res => {
     return res.text()
 }).then(data => { //\r?\n|\r
-    let result = data.split(/\r?\n|\r/).map(e => { return e.split(",") })
+    let result1 = data.replace //funcion avanzada de reemplazo de datos
+    (/Eco,|Barriales ,| , |Entretenimiento,|, |os,Su/gi,
+        function (x) {
+      return x.replace(',','..');
+    }) 
+    let result2 = result1.replace //funcion avanzada de acentos
+    (/As�|d�n|en�|A�o|dem�s|r�a/gi,
+        function (x) {
+        r1 = x.replace('As�','Así');        r2 = r1.replace('d�n','dón');
+        r3 = r2.replace('en�','enó');       r4 = r3.replace('A�o','Año');
+        r5 = r4.replace('dem�s','demás');   r6 = r5.replace('r�a','ría');
+      return r6.replace('ue�o','ueño');
+    })     
+    let result = result2.split(/\r?\n|\r/).map(e => { return e.split(",") })
     result.forEach(e => {
         let m = e.map(e => { return `<td>${e}</td>`; }).join("")
         let ce = document.createElement("tr");
