@@ -24,7 +24,7 @@ document.querySelector("."+weekday).click(); // seteamos por defecto el día act
 
 
 // ##### carga de la grilla en dom
-onload = fetch("files/parrilla_ecuavisa.csv").then(res => {
+onload = fetch("files/parrilla_ecuavisa2.csv").then(res => {
     return res.text()
 }).then(data => { //\r?\n|\r
     let result1 = data.replace //funcion avanzada de reemplazo de datos
