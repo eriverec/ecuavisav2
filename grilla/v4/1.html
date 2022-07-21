@@ -4,56 +4,128 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Read CSV files with javascript fetch method</title>
+    <title>Parrilla ecuavisa </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <style>
-        td {
-            border: 2px solid blue;
-        }
+        td { border: 1px solid blue; }
     </style>
 </head>
 <body>
-    <table>
+
+    <!-- Tabs -->
+    <ul id="tabs" class="inline-flex w-full px-1 pt-2 ">
+        <li class="px-4 py-2 -mb-px font-semibold text-gray-800 border-b-2 border-blue-400 rounded-t opacity-50"><a class="Lunes" id="default-tab" href="#lunes">Lunes</a></li>
+        <li class="px-4 py-2 font-semibold text-gray-800 rounded-t opacity-50"><a class="Martes" href="#martes">Martes</a></li>
+        <li class="px-4 py-2 font-semibold text-gray-800 rounded-t opacity-50"><a class="Miercoles" href="#miercoles">Miercoles</a></li>
+        <li class="px-4 py-2 font-semibold text-gray-800 rounded-t opacity-50"><a class="Jueves" href="#jueves">Jueves</a></li>
+        <li class="px-4 py-2 font-semibold text-gray-800 rounded-t opacity-50"><a class="Viernes" href="#viernes">Viernes</a></li>
+        <li class="px-4 py-2 font-semibold text-gray-800 rounded-t opacity-50"><a class="Sábado" href="#sabado">Sábado</a></li>
+        <li class="px-4 py-2 font-semibold text-gray-800 rounded-t opacity-50"><a class="Domingo" href="#domingo">Domingo</a></li>
+    </ul>
+
+    <!-- Tab Contents -->
+    <div id="tab-contents">
+        <div id="lunes" class="p-4">
+        tab lunes
+        </div>
+        <div id="martes" class="hidden p-4">
+        tab martes
+        </div>
+        <div id="miercoles" class="hidden p-4">
+        tab miercoles
+        </div>
+        <div id="jueves" class="hidden p-4">
+        tab jueves
+        </div>
+        <div id="viernes" class="hidden p-4">
+        tab viernes
+        </div>     
+        <div id="sabado" class="hidden p-4">
+        tab sabado
+        </div>    
+        <div id="domingo" class="hidden p-4">
+        tab domingo
+        </div>   
+    </div>
+
+    <table class="puredata">
 
     </table>
-    <script charset="UTF-8" type="text/javascript">
- var toUtf8 = function(text) {
-  	var surrogate = encodeURIComponent(text);
-  	var result = '';
-    for (var i = 0; i < surrogate.length;) {
-        var character = surrogate[i];
-		i += 1;
-        if (character == '%') {
-        	var hex = surrogate.substring(i, i += 2);
-			if (hex) {
-				result += String.fromCharCode(parseInt(hex, 16));
-			}
-        } else {
-        	result += character;
-        }
-    }
-    return result;
-};
-//         tutorial link : https://www.youtube.com/watch?v=gnqHNJNc_0A
-        onload = fetch("https://docs.google.com/spreadsheets/d/e/2PACX-1vRtl8w16YHgTv85SN3854uJ0g0scrwrTqKn71wf2SvdVBNY4XlttJeGWyZxiFTdZTjHlWP6mCZk88Jc/pub?gid=1753752166&single=true&output=csv").then(res => {
-            return res.text()
-        }).then(data => {
-        	console.log(data);
-            let result = data.split(/\r?\n|\r/).map(e => {
-                return e.split(",")
-            })
-            result.forEach(e => {
-                let m = e.map(e => {
-                    return `<td>${e}</td>`;
-                }).join("")
-                let ce = document.createElement("tr");
-                ce.innerHTML = m;
-                if (ce.innerText != "") {
-                    document.querySelector("table").appendChild(ce);
-                }
-                // console.log(m);
+    <script async type="text/javascript" src="renderdata.js"> </script> 
 
-            })
-        })
+    <script defer="defer" type="text/javascript">
+        function getTableData(){
+          var tb = $('.puredata');
+          var size = tb.find("tr").length;
+          // console.log("Number of rows : " + size);
+          tb.find("tr").each(function(index, element) {
+            var colSize = $(element).find('td').length;
+            var tdId = $(element).find('td').text();
+            // console.log(tdId);
+            // console.log("  Number of cols in row " + (index + 1) + " : " + colSize);
+            // $(element).find('td').each(function(index, element) {
+              // var colVal = $(element).text();
+              // console.log("    Value in col " + (index + 1) + " : " + colVal.trim());
+            // });
+          });            
+        }
+
+
+    // ////Grab day of the week from local computer
+    // let date = new Date();
+    // let validarDia = date.getDay();
+    // let nameOfDay;
+    // let quote;
+
+    // switch(validarDia){
+    //     case 0: 
+    //         nameOfDay = 'Domingo';
+    //         quote = 'Time to chillax!';
+    //         console.log('es domingo')
+    //         break;
+    //     case 1:
+    //         nameOfDay = 'Lunes';
+    //         quote = 'Monday morning blues!';
+    //         break;
+    //     case 2:
+    //         nameOfDay = 'Martes';
+    //         quote = 'Taco Time!';
+    //         break;
+    //     case 3:
+    //         nameOfDay = 'Miercoles';
+    //         quote = 'Two more days to the weekend.';
+    //         break;
+    //     case 4:
+    //         nameOfDay = 'Jueves';
+    //         quote = 'The weekend is almost here...';
+    //         console.log('es jueves')
+    //         break;
+    //     case 5:
+    //         nameOfDay = 'Viernes';
+    //         quote = 'Weekend is here!';
+    //         break;
+    //     case 6:
+    //         nameOfDay = 'Sabado';
+    //         quote = 'Time to party!';
+    //         break;
+    // }
+    // ////Display the day of the week
+    // let weekdayDiv = document.getElementById('weekday');
+    // weekdayDiv.innerHTML = `${nameOfDay}`;
+
+    // ////Display quote
+    // let quoteDiv = document.getElementById('phrase');
+    // quoteDiv.innerHTML = `${quote}`
+
+    // var d = new Date();
+    // var n = d.getDay();
+
+    // function nextweek(){
+    //     var today = new Date();
+    //     var nextweek = new Date(today.getFullYear(), today.getMonth(), today.getDate()+7);
+    //     return nextweek;
+    // }    
     </script>
 </body>
 </html>
