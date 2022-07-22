@@ -56,57 +56,7 @@
     <script async type="text/javascript" src="renderdata.js"> </script> 
 
     <script defer="defer" type="text/javascript">
-    function getTableData(){
-        var tb = $('.puredata');
-        var size = tb.find("tr").length;
-        // console.log("Number of rows : " + size);
-        tb.find("tr").each(function(index, element) {
-        var colSize = $(element).find('td').length;
-        var tdId = $(element).find('td').text();
-        // console.log(tdId[-1]);
-        // console.log(tdId);
-        // console.log("  Number of cols in row " + (index + 1) + " : " + colSize);
-        // $(element).find('td').each(function(index, element) {
-          // var colVal = $(element).text();
-          // console.log("    Value in col " + (index + 1) + " : " + colVal.trim());
-        // });
-        });      
 
-
-        // #### build json structure
-        var _table = document.getElementsByClassName("puredata")[0];
-        var _trLength = _table.getElementsByTagName("tr").length;
-        var _jsonProgramas = [];
-        var _obj = {};
-
-        var _htmlToJSON = function(index){
-            var _tr = _table.getElementsByTagName("tr")[index];
-            var _td = _tr.getElementsByTagName("td");
-            var _arr = [].map.call( _td, function( td ) {
-                return td.innerHTML;
-            }).join( ',' );
-            var _data = _arr.split(",");
-            
-            _obj = { //datos de programa y quitamos comillas extras
-                id     : parseInt(_data[23].replace(`\"`,''))
-                ,programa     : _data[1].replace(/['"]+/g, '')
-                ,descripción     : _data[2].replace(/['"]+/g, '')
-                ,día     : _data[8].replace(/['"]+/g, '')
-                ,mes     : _data[9].replace(/['"]+/g, '')
-                ,hora_inicio     : _data[12].replace(/['"]+/g, '')
-                ,hora_fin     : _data[13].replace(/['"]+/g, '')
-                ,fecha     : _data[18].replace(/['"]+/g, '')
-            };
-            
-            _jsonProgramas.push(_obj); //creamos listado de programas en json
-            
-        };
-
-        for(var i = 1; i < _trLength; i++){  _htmlToJSON(i); }
-        console.log("html to JSON",_jsonProgramas);
-        // #### END build json structure
-
-    } // end get table data function
 
 
     // ////Grab day of the week from local computer
