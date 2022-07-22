@@ -63,7 +63,7 @@
         tb.find("tr").each(function(index, element) {
         var colSize = $(element).find('td').length;
         var tdId = $(element).find('td').text();
-        console.log(tdId[-1]);
+        // console.log(tdId[-1]);
         // console.log(tdId);
         // console.log("  Number of cols in row " + (index + 1) + " : " + colSize);
         // $(element).find('td').each(function(index, element) {
@@ -73,30 +73,40 @@
         });      
 
 
-        var myRows = [];
-        var headersText = [];
-        var $headers = $("th");
+        // #### build json structure
+        var _table = document.getElementsByClassName("puredata")[0];
+        var _trLength = _table.getElementsByTagName("tr").length;
+        var _jsonProgramas = [];
+        var _obj = {};
 
-        // Loop through grabbing everything
-        var $rows = $("tbody tr").each(function(index) {
-          $cells = $(this).find("td");
-          myRows[index] = {};
+        var _htmlToJSON = function(index){
+            var _tr = _table.getElementsByTagName("tr")[index];
+            var _td = _tr.getElementsByTagName("td");
+            var _arr = [].map.call( _td, function( td ) {
+                return td.innerHTML;
+            }).join( ',' );
+            var _data = _arr.split(",");
+            
+            _obj = { //datos de programa y quitamos comillas extras
+                id     : parseInt(_data[23].replace(`\"`,''))
+                ,programa     : _data[1].replace(/['"]+/g, '')
+                ,descripción     : _data[2].replace(/['"]+/g, '')
+                ,día     : _data[8].replace(/['"]+/g, '')
+                ,mes     : _data[9].replace(/['"]+/g, '')
+                ,hora_inicio     : _data[12].replace(/['"]+/g, '')
+                ,hora_fin     : _data[13].replace(/['"]+/g, '')
+                ,fecha     : _data[18].replace(/['"]+/g, '')
+            };
+            
+            _jsonProgramas.push(_obj); //creamos listado de programas en json
+            
+        };
 
-          $cells.each(function(cellIndex) {
-            // Set the header text
-            if(headersText[cellIndex] === undefined) {
-              headersText[cellIndex] = $($headers[cellIndex][-1]).text();
-            }
-            myRows[index][headersText[cellIndex]] = $(this).text();
-          });    
-        });
+        for(var i = 1; i < _trLength; i++){  _htmlToJSON(i); }
+        console.log("html to JSON",_jsonProgramas);
+        // #### END build json structure
 
-        var myObj = {
-            "myrows": myRows
-        };      
-        // alert(JSON.stringify(myObj));
-        $("#jsonData").append(JSON.stringify(myObj));
-    }
+    } // end get table data function
 
 
     // ////Grab day of the week from local computer
