@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -52,24 +52,51 @@
     <table class="puredata">
 
     </table>
+    <div class="jsondata" id="jsonData"></div>
     <script async type="text/javascript" src="renderdata.js"> </script> 
 
     <script defer="defer" type="text/javascript">
-        function getTableData(){
-          var tb = $('.puredata');
-          var size = tb.find("tr").length;
-          // console.log("Number of rows : " + size);
-          tb.find("tr").each(function(index, element) {
-            var colSize = $(element).find('td').length;
-            var tdId = $(element).find('td').text();
-            // console.log(tdId);
-            // console.log("  Number of cols in row " + (index + 1) + " : " + colSize);
-            // $(element).find('td').each(function(index, element) {
-              // var colVal = $(element).text();
-              // console.log("    Value in col " + (index + 1) + " : " + colVal.trim());
-            // });
-          });            
-        }
+    function getTableData(){
+        var tb = $('.puredata');
+        var size = tb.find("tr").length;
+        // console.log("Number of rows : " + size);
+        tb.find("tr").each(function(index, element) {
+        var colSize = $(element).find('td').length;
+        var tdId = $(element).find('td').text();
+        console.log(tdId[-1]);
+        // console.log(tdId);
+        // console.log("  Number of cols in row " + (index + 1) + " : " + colSize);
+        // $(element).find('td').each(function(index, element) {
+          // var colVal = $(element).text();
+          // console.log("    Value in col " + (index + 1) + " : " + colVal.trim());
+        // });
+        });      
+
+
+        var myRows = [];
+        var headersText = [];
+        var $headers = $("th");
+
+        // Loop through grabbing everything
+        var $rows = $("tbody tr").each(function(index) {
+          $cells = $(this).find("td");
+          myRows[index] = {};
+
+          $cells.each(function(cellIndex) {
+            // Set the header text
+            if(headersText[cellIndex] === undefined) {
+              headersText[cellIndex] = $($headers[cellIndex][-1]).text();
+            }
+            myRows[index][headersText[cellIndex]] = $(this).text();
+          });    
+        });
+
+        var myObj = {
+            "myrows": myRows
+        };      
+        // alert(JSON.stringify(myObj));
+        $("#jsonData").append(JSON.stringify(myObj));
+    }
 
 
     // ////Grab day of the week from local computer

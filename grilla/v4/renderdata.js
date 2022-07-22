@@ -41,13 +41,39 @@ onload = fetch("files/parrilla_ecuavisa2.csv").then(res => {
       return r6.replace('ue�o','ueño');
     })     
     let result = result2.split(/\r?\n|\r/).map(e => { return e.split(",") })
-    result.forEach(e => {
+    //creamos cabeceras
+    let th = document.createElement("thead");
+    let thc = `<tr>
+    <th></th>
+    <th>programa</th>
+    <th>descripción</th>
+    <th></th><th></th><th></th><th></th><th></th>
+    <th>día</th>
+    <th>mes</th>
+    <th>año</th><th></th>
+    <th>hora inicio</th>
+    <th>hora fin</th>
+    <th></th><th></th><th></th><th></th>
+    <th>fecha</th>
+    <th></th><th></th><th></th><th></th>
+    <th>id</th>
+    </tr>`;
+    th.innerHTML = thc;
+    if (th.innerText != "") { document.querySelector("table").appendChild(th); }
+    // creamos tbody
+    let ctb = document.createElement("tbody");
+    document.querySelector('table').appendChild(ctb);
+    result.forEach(e => { //recorremos cada dato y creamos las filas
         let m = e.map(e => { return `<td>${e}</td>`; }).join("")
+        // let m = m1.replace('""','');
         let ce = document.createElement("tr");
         // ce.id = m.slice(-1)[0]
         ce.innerHTML = m;
-        if (ce.innerText != "") { document.querySelector("table").appendChild(ce); }
-        getTableData();
+        if (ce.innerText != "") { document.querySelector("tbody").appendChild(ce); }
     })
+
+        getTableData();
 })
 // ##### Fin carga de la grilla en dom
+let formul = document.getElementsByClassName("formulario")[0];
+let acordeoncito = ($('.titulo-form').find('li'))[0]; console.log(acordeoncito);
