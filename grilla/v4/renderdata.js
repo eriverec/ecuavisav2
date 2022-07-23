@@ -79,6 +79,8 @@ onload = fetch("files/parrilla_ecuavisa2.csv").then(res => {
 // let acordeoncito = ($('.titulo-form').find('li'))[0]; console.log(acordeoncito);
 
 // ##### Estructurado de Datos obtenidos de la tabla
+
+
 function getTableData(){
     // var tb = $('.puredata');
     // var size = tb.find("tr").length;
@@ -93,15 +95,14 @@ function getTableData(){
     //   // var colVal = $(element).text();
     //   // console.log("    Value in col " + (index + 1) + " : " + colVal.trim());
     // // });
-    // });      
-
+    // });   
 
     // #### Construcción de Json de programas -  build json structure
+
     var _table = document.getElementsByClassName("puredata")[0];
     var _trLength = _table.getElementsByTagName("tr").length;
     var _jsonProgramas = [];
     var _obj = {};
-
     var _htmlToJSON = function(index){
         var _tr = _table.getElementsByTagName("tr")[index];
         var _td = _tr.getElementsByTagName("td");
@@ -124,9 +125,31 @@ function getTableData(){
         _jsonProgramas.push(_obj); //creamos listado de programas en json
         
     };
-
     for(var i = 1; i < _trLength; i++){  _htmlToJSON(i); }
+
     console.log("html to JSON",_jsonProgramas);
+    var testa = document.getElementsByClassName("jsondata")[0];
+    testa.innerHTML = (JSON.stringify(_jsonProgramas))
+    console.log('cargado programas en JSON');
     // #### END Construción de Json de programas-  build json structure
 
+    
+    var programaItems= JSON.length;
+    console.log(programaItems);
+
+    for (programIndex = 0; programIndex < programaItems; programIndex++) {
+
+        var programName= JSON[programIndex].programa;
+        console.log(programName);
+        /* para navegar entre elementos dentro se usa otro for como el ejemplo 
+        for (noteIndex = 0; noteIndex < notesLength; noteIndex++) {
+            console.log(JSON.infos.info[infoIndex].note.notes[noteIndex].title);
+        } */
+    }
+
+
 } // end get table data function
+
+function rederProgramas(){
+    console.log("llamando json de otra funcion",_jsonProgramas);
+}
