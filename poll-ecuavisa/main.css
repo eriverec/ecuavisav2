@@ -1,0 +1,25 @@
+.form-check .form-check-input {
+  float: none !important;
+  margin-left: 0 !important;
+}
+
+.form-check {
+  padding-left: 0 !important;
+  display: grid !important;
+}
+
+.poll-form.form-check span[data-choiceid] {
+  border: 1px solid #0d6efd;
+  padding: 10px;
+}
+
+.poll-form.form-check input[type="radio"]:checked+label {
+  font-weight: bold;
+  border: 2px solid #333;
+}
+
+
+.poll-form.form-check input[type="radio"]:checked,
+input[type="radio"] {
+  visibility: hidden;
+}
