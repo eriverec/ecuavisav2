@@ -14,16 +14,18 @@
 <body>
 
     <!-- Tabs -->
-    <ul id="tabs" class="inline-flex w-full px-1 pt-2 ">
-        <li class="px-4 py-2 -mb-px font-semibold text-gray-800 border-b-2 border-blue-400 rounded-t opacity-50"><a class="Lunes" id="default-tab" href="#lunes">Lunes</a></li>
-        <li class="px-4 py-2 font-semibold text-gray-800 rounded-t opacity-50"><a class="Martes" href="#martes">Martes</a></li>
-        <li class="px-4 py-2 font-semibold text-gray-800 rounded-t opacity-50"><a class="Miercoles" href="#miercoles">Miercoles</a></li>
-        <li class="px-4 py-2 font-semibold text-gray-800 rounded-t opacity-50"><a class="Jueves" href="#jueves">Jueves</a></li>
-        <li class="px-4 py-2 font-semibold text-gray-800 rounded-t opacity-50"><a class="Viernes" href="#viernes">Viernes</a></li>
-        <li class="px-4 py-2 font-semibold text-gray-800 rounded-t opacity-50"><a class="Sábado" href="#sabado">Sábado</a></li>
-        <li class="px-4 py-2 font-semibold text-gray-800 rounded-t opacity-50"><a class="Domingo" href="#domingo">Domingo</a></li>
+    <ul id="tabs" class="inline-flex w-full px-1 py-2 overflow-auto">
+        <li class="px-4 mx-1 py-2 -mb-px font-semibold text-gray-800 border-blue-400 bg-neutral-300 opacity-100"><a class="Lunes" id="default-tab" href="#lunes">Lunes</a></li>
+        <li class="px-4 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="Martes" href="#martes">Martes</a></li>
+        <li class="px-4 mx-1 py-2 font-semibold text-gray-900 bg-neutral-300 opacity-100"><a class="Miercoles" href="#miercoles">Miercoles</a></li>
+        <li class="px-4 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="Jueves" href="#jueves">Jueves</a></li>
+        <li class="px-4 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="Viernes" href="#viernes">Viernes</a></li>
+        <li class="px-4 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="Sábado" href="#sabado">Sábado</a></li>
+        <li class="px-4 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="Domingo" href="#domingo">Domingo</a></li>
     </ul>
+    <table class="puredata hidden">
 
+    </table>
     <!-- Tab Contents -->
     <div id="tab-contents">
         <div id="lunes" class="p-4">
@@ -31,6 +33,51 @@
         </div>
         <div id="martes" class="hidden p-4">
         tab martes
+
+        <div class="bg-white  rounded-md w-full">
+            <table class="min-w-full leading-normal">
+                <tbody id="programlist2" class="programList">
+<!--                     <tr>
+                    <tr>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center">
+                            <img src="" alt="">
+                            <p class="ml-3 text-gray-900 whitespace-no-wrap"> televistazo - 11:00 </p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <span class="bg-green-200">Activo</span>
+                        </td>
+                    </tr>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center">
+                            <img src="" alt="">
+                            <p class="ml-3 text-gray-900 whitespace-no-wrap"> televistazo - 11:00 </p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <span class="bg-green-200">Activo</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center">
+                            <img src="" alt="">
+                            <p class="ml-3 text-gray-900 whitespace-no-wrap"> televistazo - 11:00 </p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <span class="bg-green-200">Activo</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center">
+                            <img src="" alt="">
+                            <p class="ml-3 text-gray-900 whitespace-no-wrap"> televistazo - 11:00 </p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <span class="bg-green-200">Activo</span>
+                        </td>
+                    </tr> -->
+                </tbody>
+            </table>
+        </div>
+
+
         </div>
         <div id="miercoles" class="hidden p-4">
         tab miercoles
@@ -49,9 +96,7 @@
         </div>   
     </div>
 
-    <table class="puredata">
 
-    </table>
     <div class="jsondata" id="jsonData"></div>
     <script async type="text/javascript" src="renderdata.js"> </script> 
     <script async type="text/javascript" src="getdata.js"> </script> 
@@ -60,55 +105,20 @@
     <script defer="defer" type="text/javascript">
 
 
+    function fechahoy(dato){
+        var fecha = new Date();
+        // var hoy = new Date(fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate()); //+7 se suma si quiere setear ayer u hoy
+        var hoy = fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate();
+        var hora = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
+        var fehayHora = hoy+' '+hora;
+        if (dato === 'fecha'){ return hoy; }
+        else if (dato === 'hora'){return hora;}
+        // return fehayHora;
+    }
+    console.log('La fecha actual es: '+fechahoy('fecha'));
+    console.log('La hora actual es: '+fechahoy('hora'));
+    // ##### FIN función para obtener fecha y hora
 
-    // ////Grab day of the week from local computer
-    // let date = new Date();
-    // let validarDia = date.getDay();
-    // let nameOfDay;
-    // let quote;
-
-    // switch(validarDia){
-    //     case 0: 
-    //         nameOfDay = 'Domingo';
-    //         quote = 'Time to chillax!';
-    //         console.log('es domingo')
-    //         break;
-    //     case 1:
-    //         nameOfDay = 'Lunes';
-    //         quote = 'Monday morning blues!';
-    //         break;
-    //     case 2:
-    //         nameOfDay = 'Martes';
-    //         quote = 'Taco Time!';
-    //         break;
-    //     case 3:
-    //         nameOfDay = 'Miercoles';
-    //         quote = 'Two more days to the weekend.';
-    //         break;
-    //     case 4:
-    //         nameOfDay = 'Jueves';
-    //         quote = 'The weekend is almost here...';
-    //         console.log('es jueves')
-    //         break;
-    //     case 5:
-    //         nameOfDay = 'Viernes';
-    //         quote = 'Weekend is here!';
-    //         break;
-    //     case 6:
-    //         nameOfDay = 'Sabado';
-    //         quote = 'Time to party!';
-    //         break;
-    // }
-    // ////Display the day of the week
-    // let weekdayDiv = document.getElementById('weekday');
-    // weekdayDiv.innerHTML = `${nameOfDay}`;
-
-    // ////Display quote
-    // let quoteDiv = document.getElementById('phrase');
-    // quoteDiv.innerHTML = `${quote}`
-
-    // var d = new Date();
-    // var n = d.getDay();
 
     function proxSemana(){
         var today = new Date();

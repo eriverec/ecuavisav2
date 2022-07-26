@@ -2,7 +2,7 @@
 
 function filterData(){
 
-    // #### Construcción de Json de programas -  build json structure
+    // #### Construcción de Json de programas - build json structure
     // var _table = document.getElementsByClassName("puredata")[0];
     var _trLength = _table.getElementsByTagName("tr").length;
     var _jsonProgramas = [];
@@ -31,24 +31,17 @@ function filterData(){
     };
     for(var i = 1; i < _trLength; i++){  _htmlToJSON(i); }
 
-    // console.log("html to JSON",_jsonProgramas);
-    localStorage.setItem('programas', JSON.stringify(_jsonProgramas));
-    // var testa = document.getElementsByClassName("jsondata")[0];
-    // testa.innerHTML = (JSON.stringify(_jsonProgramas))
-    console.log('cargado programas en JSON');
-    // #### END Construción de Json de programas-  build json structure
-
+    localStorage.setItem('programas', JSON.stringify(_jsonProgramas)); //agregamos a localStorage los datos convertidos
+    // mainRender.innerHTML = (JSON.stringify(_jsonProgramas)) // pintamos en un div los datos de _jsonProgramas  (test)
+    console.log('Datos convertidos con exito');
+    // #### Fin Construción de Json de programas - END build json structure
 
     var programaItems= _jsonProgramas.length;
     for (programIndex = 0; programIndex < programaItems; programIndex++) {
-        // testa.write()
-        var programName= _jsonProgramas[programIndex].programa;
+        var programName = _jsonProgramas[programIndex].programa;
         mainRender.innerHTML = (programName+'<br><br>');
-        console.log(programName);
-        /* para navegar entre elementos dentro se usa otro for como el ejemplo 
-        for (noteIndex = 0; noteIndex < notesLength; noteIndex++) {
-            console.log(JSON.infos.info[infoIndex].note.notes[noteIndex].title);
-        } */
+        // console.log(programName);
     }
+ setTimeout(location.reload(), 100);
 } // end filter data function
 // ##### Fin de estructurado de datos obtenidos
