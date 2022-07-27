@@ -69,6 +69,12 @@
   float: right;
 }
 
+@media (min-width:1200px) {
+  .ly-news-form {
+    padding: 50px 400px;
+  }
+}
+
 @media (max-width:1024px) {
   .ly-news-form {
     padding: 50px 250px;
@@ -85,11 +91,8 @@
   .ly-news-form {
     padding: 50px 10px;
   }
-}
 
-
-@media (min-width:1200px) {
-  .ly-news-form {
-    padding: 50px 400px;
+  .titulo-news h1 {
+    font-size: 2.5rem;
   }
 }
