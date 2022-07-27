@@ -3,7 +3,7 @@ else{ //realizar carga de csv
 
     // ##### carga de la grilla en dom
     console.log('cargando parrilla...')
-    onload = fetch("files/parrilla_ecuavisa2.csv").then(res => {
+    onload = fetch("files/parrilla_ecuavisa.csv").then(res => {
         return res.text()
     }).then(data => { //\r?\n|\r
         let result1 = data.replace //funcion avanzada de reemplazo de datos, si descripción trae errores en comas, se las repara aquí
