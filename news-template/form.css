@@ -39,7 +39,7 @@
   display: none;
 }
 
-.newsletter_email_div{
+.newsletter_email_div {
   margin-bottom: 1rem;
 }
 
@@ -60,6 +60,15 @@
   color: white;
 }
 
+.boton-suscrib .btn-trans {
+  background: transparent;
+  border-color: transparent;
+  color: #333;
+  text-transform: uppercase;
+  font-weight: 700;
+  cursor: pointer;
+  float: right;
+}
 
 
 @media (min-width:1200px) {
