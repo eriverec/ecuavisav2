@@ -46,6 +46,7 @@
 .newsletter_email_div .newsletter_email_ctrl {
   border: 2px solid white;
   background: #46b1ff;
+  width: 300px;
 }
 
 .newsletter_email_div .newsletter_email_ctrl:focus-visible {
