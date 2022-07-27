@@ -35,10 +35,23 @@
 .newsletters_cab.newsletters_open,
 .newsletters_title,
 .newsletters_options .newsletters_option_title_desc,
-.newsletters_options .newsletters_option_date  {
+.newsletters_options .newsletters_option_date {
   display: none;
 }
 
+.newsletter_email_div{
+  margin-bottom: 1rem;
+}
+
+.newsletter_email_div .newsletter_email_ctrl {
+  border: 2px solid white;
+  background: #46b1ff;
+}
+
+.newsletter_email_div .newsletter_email_ctrl:focus-visible {
+  border: 2px solid white;
+  background: #46b1ff;
+}
 
 @media (min-width:1200px) {
   .ly-news-form {
