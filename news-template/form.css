@@ -75,6 +75,18 @@
   }
 }
 
+@media (max-width:768px) {
+  .ly-news-form {
+    padding: 50px 120px;
+  }
+}
+
+@media (max-width:576px) {
+  .ly-news-form {
+    padding: 50px 10px;
+  }
+}
+
 
 @media (min-width:1200px) {
   .ly-news-form {
