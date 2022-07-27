@@ -27,13 +27,20 @@
 }
 
 
-.newsletters_options{
+.newsletters_options {
   display: block !important;
 }
 
+.newsletter_chk_subs_div,
+.newsletters_cab.newsletters_open,
+.newsletters_options .newsletters_option_title_desc,
+.newsletters_options .newsletters_option_date  {
+  display: none;
+}
 
-@media (min-width:1200px){
-  .ly-news-form{
+
+@media (min-width:1200px) {
+  .ly-news-form {
     padding: 50px 400px;
   }
 }
