@@ -22,10 +22,16 @@ input[type="radio"] {
   visibility: hidden;
 }
 
-.poll-form.form-check span[data-choiceid] label{
+.poll-form.form-check span[data-choiceid] label {
   font-weight: bold;
   border: 2px solid #0d6efd;
   display: block;
   padding: 10px;
 }
 
+
+.results .choice .bg-bar .bar {
+  background: #0d6efd;
+  height: 24px;
+  border-radius: 3px;
+}
