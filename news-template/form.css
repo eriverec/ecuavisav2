@@ -2,22 +2,22 @@
   background: #46b1ff;
 }
 
-.ly-news-form .titulo-news h1{
+.titulo-news h1 {
   font-size: 4rem;
   font-weight: 700;
 }
 
-.ly-news-form .newsletter_general_title h2{
+.newsletter_general_title h2 {
   color: white;
   text-transform: uppercase;
   margin-bottom: 2rem;
 }
 
-.ly-news-form .newsletter_general_desc{
+.newsletter_general_desc {
   color: #eaeaea;
   margin-bottom: 2rem;
 }
 
-.ly-news-form  .newsletter_email .newsletter_email_label{
+.newsletter_email .newsletter_email_label {
   display: none;
 }
