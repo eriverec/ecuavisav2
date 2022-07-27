@@ -25,3 +25,15 @@
 .img-news-start {
   text-align: end;
 }
+
+
+.newsletters_options{
+  display: none !important;
+}
+
+
+@media (min-width:1200px){
+  .ly-news-form{
+    padding: 50px 400px;
+  }
+}
