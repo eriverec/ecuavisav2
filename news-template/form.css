@@ -46,7 +46,6 @@
 .newsletter_email_div .newsletter_email_ctrl {
   border: 2px solid white;
   background: #46b1ff;
-  width: 300px;
   color: white;
 }
 
@@ -68,6 +67,12 @@
   font-weight: 700;
   cursor: pointer;
   float: right;
+}
+
+@media (max-width:1024px) {
+  .ly-news-form {
+    padding: 50px 250px;
+  }
 }
 
 
