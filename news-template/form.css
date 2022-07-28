@@ -107,8 +107,19 @@
   width: 95px;
 }
 
+@media (min-width:1025px) {
+  .ly-news-form {
+    padding: 50px 250px;
+  }
+}
 
 @media (min-width:1200px) {
+  .ly-news-form {
+    padding: 50px 2500px;
+  }
+}
+
+@media (min-width:1400px) {
   .ly-news-form {
     padding: 50px 400px;
   }
