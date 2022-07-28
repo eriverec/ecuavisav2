@@ -106,6 +106,12 @@
   }
 }
 
+@media (max-width:991px) {
+  .ly-news-form {
+    padding: 50px 120px;
+  }
+}
+
 @media (max-width:768px) {
   .ly-news-form {
     padding: 50px 120px;
