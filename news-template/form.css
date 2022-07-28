@@ -1,14 +1,14 @@
-.ly-news-form {
+.newsletter-styles-form .ly-news-form {
   background: #46b1ff;
 }
 
-.ly-news-form .container .row {
+.newsletter-styles-form .ly-news-form .container .row {
   align-content: center;
   justify-content: center;
   align-items: center;
 }
 
-.ly-news-form .container {
+.newsletter-styles-form .ly-news-form .container {
   animation: fadeIn 5s;
 }
 
@@ -22,64 +22,64 @@
   }
 }
 
-.titulo-news h1 {
+.newsletter-styles-form .titulo-news h1 {
   font-size: 4rem;
   font-weight: 700;
 }
 
-.newsletter_general_title h2 {
+.newsletter-styles-form .newsletter_general_title h2 {
   color: white;
   text-transform: uppercase;
   margin-bottom: 2rem;
 }
 
-.newsletter_general_desc {
+.newsletter-styles-form .newsletter_general_desc {
   color: #eaeaea;
   margin-bottom: 2rem;
 }
 
-.newsletter_email .newsletter_email_label {
+.newsletter-styles-form .newsletter_email .newsletter_email_label {
   display: none;
 }
 
-.img-news-start {
+.newsletter-styles-form .img-news-start {
   text-align: end;
 }
 
 
-.newsletters_options {
+.newsletter-styles-form .newsletters_options {
   display: block !important;
 }
 
-.newsletter_chk_subs_div,
-.newsletters_cab.newsletters_open,
-.newsletters_title,
-.newsletters_options .newsletters_option_title_desc,
-.newsletters_options .newsletters_option_date {
+.newsletter-styles-form .newsletter_chk_subs_div,
+.newsletter-styles-form .newsletters_cab.newsletters_open,
+.newsletter-styles-form .newsletters_title,
+.newsletter-styles-form .newsletters_options .newsletters_option_title_desc,
+.newsletter-styles-form .newsletters_options .newsletters_option_date {
   display: none;
 }
 
-.newsletter_email_div {
+.newsletter-styles-form .newsletter_email_div {
   margin-bottom: 1rem;
 }
 
-.newsletter_email_div .newsletter_email_ctrl {
+.newsletter-styles-form .newsletter_email_div .newsletter_email_ctrl {
   border: 2px solid white;
   background: #46b1ff;
   color: white;
 }
 
-.newsletter_email_div .newsletter_email_ctrl:focus-visible {
+.newsletter-styles-form .newsletter_email_div .newsletter_email_ctrl:focus-visible {
   border: 2px solid white;
   background: #46b1ff;
 }
 
 
-.newsletter_email_ctrl::placeholder {
+.newsletter-styles-form .newsletter_email_ctrl::placeholder {
   color: white;
 }
 
-.boton-suscrib .btn-trans {
+.newsletter-styles-form .boton-suscrib .btn-trans {
   background: transparent;
   border-color: transparent;
   color: #333;
@@ -90,11 +90,11 @@
   transition: 0.3s;
 }
 
-.boton-suscrib .btn-trans:hover {
+.newsletter-styles-form .boton-suscrib .btn-trans:hover {
   color: white;
 }
 
-.boton-suscrib div {
+.newsletter-styles-form .boton-suscrib div {
   display: flex;
   flex-wrap: wrap;
   align-content: flex-end;
@@ -103,7 +103,7 @@
   align-items: center;
 }
 
-.boton-suscrib div img {
+.newsletter-styles-form .boton-suscrib div img {
   width: 95px;
 }
 
