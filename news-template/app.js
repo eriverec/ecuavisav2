@@ -6,3 +6,6 @@ $(".boton-suscrib .btn-trans").after(`<img src="https://ecuavisadev.netlify.app/
 function ClearFields() {
   document.getElementById("newsletter_email_ctrl").value = "";
 }
+
+
+
