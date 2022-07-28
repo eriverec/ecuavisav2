@@ -2,6 +2,12 @@
   background: #46b1ff;
 }
 
+.ly-news-form .container .row {
+  align-content: center;
+  justify-content: center;
+  align-items: center;
+}
+
 .titulo-news h1 {
   font-size: 4rem;
   font-weight: 700;
@@ -67,7 +73,26 @@
   font-weight: 700;
   cursor: pointer;
   float: right;
+  transition: 0.3s;
 }
+
+.boton-suscrib .btn-trans:hover {
+  color: white;
+}
+
+.boton-suscrib div {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-end;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.boton-suscrib div img {
+  width: 95px;
+}
+
 
 @media (min-width:1200px) {
   .ly-news-form {
