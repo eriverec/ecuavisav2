@@ -7,5 +7,13 @@ function ClearFields() {
   document.getElementById("newsletter_email_ctrl").value = "";
 }
 
+function userLoginNews (){
+  let emailPresent = document.getElementById("newsletter_email_ctrl");
+  if(!emailPresent){
+    $(".newsletter-styles-form .boton-suscrib").remove();
+  }
+}
+
+userLoginNews();
 
 
