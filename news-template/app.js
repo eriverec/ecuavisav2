@@ -4,8 +4,15 @@ $(".newsletter-styles-form .newsletter_email_div #newsletter_email_ctrl").attr("
 $(".newsletter-styles-form .boton-suscrib .btn-trans").after(`<img src="https://ecuavisadev.netlify.app/news-template/src-img-btn.png" alt="recurso">`);
 
 function confirmationSuccess() {
-  $("confirmation-success").append(`<div class="success">Te has suscrito con exito!</div>`); 
+  if (!$('#newsletter_email_ctrl').val().length == 0) {
+    console.log("lleno");
+    $("confirmation-success").append(`<div class="success">Te has suscrito con exito!</div>`); 
+  } else {
+    console.log("vacio");
+  }
 }
+
+document.getElementById("newsletter_email_ctrl").value = "";
 
 function userLoginNews (){
   let emailPresent = document.getElementById("newsletter_email_ctrl");
@@ -15,5 +22,3 @@ function userLoginNews (){
 }
 
 userLoginNews();
-
-
