@@ -7,7 +7,7 @@ $(".newsletter-styles-form .boton-suscrib .btn-trans").after(`<img src="https://
 $( ".boton-suscrib .btn-trans" ).click(function() {
   if (!$('#newsletter_email_ctrl').val().length == 0) {
     console.log("lleno");
-    $("confirmation-success").append(`<div class="success">Te has suscrito con exito!</div>`); 
+    $(".confirmation-success").append(`<div class="success">Te has suscrito con exito!</div>`); 
   } else {
     console.log("vacio");
   }
