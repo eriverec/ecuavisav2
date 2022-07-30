@@ -107,6 +107,14 @@
   width: 95px;
 }
 
+.confirmation-success .success {
+  background: white;
+  padding: 30px;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+
 @media (min-width:1025px) {
   .newsletter-styles-form .ly-news-form {
     padding: 50px 250px;
