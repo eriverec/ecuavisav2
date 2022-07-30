@@ -3,8 +3,8 @@ $(".newsletter-styles-form .newsletter_email .newsletter_email_div input").addCl
 $(".newsletter-styles-form .newsletter_email_div #newsletter_email_ctrl").attr("placeholder", "Email");
 $(".newsletter-styles-form .boton-suscrib .btn-trans").after(`<img src="https://ecuavisadev.netlify.app/news-template/src-img-btn.png" alt="recurso">`);
 
-function ClearFields() {
-  document.getElementById("newsletter_email_ctrl").value = "";
+function confirmationSuccess() {
+  $("confirmation-success").append(`<div class="success">Te has suscrito con exito!</div>`); 
 }
 
 function userLoginNews (){
