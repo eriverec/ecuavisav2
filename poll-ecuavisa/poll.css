@@ -36,3 +36,11 @@ input[type="radio"] {
   border-radius: 3px;
 }
 
+
+.results .choice {
+  font-weight: bold;
+  border: 2px solid #0d6efd;
+  display: block;
+  padding: 10px;
+  margin: 10px 0;
+}
