@@ -14,8 +14,8 @@ INICIO - PORTADA - 4 DESTACADAS
   margin: 1rem 0;
 }
 
-.HOME_MENU_RD .articulos_4dest .noticias .article {
-  border-bottom: 2px solid #5f5f5f;
+.HOME_MENU_RD .articulos_4dest {
+  border-bottom: 2px solid #333;
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block {
