@@ -10,17 +10,17 @@ INICIO - PORTADA - 4 DESTACADAS
   margin-top: 1.5rem;
 }
 
-.HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .text{
+.HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .text {
   font-size: 1.7rem;
 }
 
-.HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section{
+.HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section {
   font-size: 1.5rem;
   color: #333;
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h2 {
-color: #333;
+  color: #333;
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
@@ -35,7 +35,7 @@ color: #333;
   /* border-bottom: 2px solid #333; */
 }
 
-.HOME_MENU_RD .notas-2-ap{
+.HOME_MENU_RD .notas-2-ap {
   border-bottom: 2px solid #333;
   border-top: 2px solid #333;
 }
@@ -44,39 +44,45 @@ color: #333;
   border-bottom: 2px solid #333;
 }
 
-.HOME_MENU_RD .notas-1-ap{
+.HOME_MENU_RD .notas-1-ap {
   border-bottom: 2px solid #333;
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block {
   width: 100%;
 }
-.HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA  .media_block .multimedia .multimediaIconMacroWrapper a div {
+
+.HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block .multimedia .multimediaIconMacroWrapper a div {
   position: initial !important;
-  width: 165px !important; 
+  width: 165px !important;
 }
 
-.HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .section{
+.HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .section {
   color: #000;
 }
 
-.HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
+.HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
   font-size: 1.5rem;
   color: #000;
 }
 
 /*NEGRIGA*/
-.HOME_MENU_RD .notas-1-n-ap.articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
+.HOME_MENU_RD .notas-1-n-ap.articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
   font-weight: 800;
 }
 
 
-@media (max-width:991px){
-  .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
+@media (max-width:991px) {
+  .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
     font-size: 1rem;
   }
-  .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA  .media_block .multimedia .multimediaIconMacroWrapper a div {
-    width: 130px !important; 
+
+  .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block .multimedia .multimediaIconMacroWrapper a div {
+    width: 130px !important;
+  }
+
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .text {
+    font-size: 1rem;
   }
 }
 
