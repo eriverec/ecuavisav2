@@ -7,13 +7,9 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .notas-2-ap .noticias .article .SEC_TIT_IMG_4DESTACADA {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-content: center;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
+  display: grid;
+  grid-template: 150px / auto auto auto;
+  grid-gap: 10px;
   margin: 1rem 0;
 }
 
