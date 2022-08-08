@@ -25,7 +25,7 @@ INICIO - PORTADA - 4 DESTACADAS
 .HOME_MENU_RD .notas-2-ap .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block {
   width: 100%;
 }
-.HOME_MENU_RD .notas-2-ap .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block a .crop_78_100_H {
+.HOME_MENU_RD .notas-2-ap .noticias .article .SEC_TIT_IMG_4DESTACADA  .media_block .multimedia .multimediaIconMacroWrapper a div {
   position: initial !important;
   width: 165px !important; 
 }
