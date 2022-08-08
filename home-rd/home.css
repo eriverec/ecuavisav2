@@ -28,6 +28,19 @@ INICIO - PORTADA - 4 DESTACADAS
 .HOME_MENU_RD .notas-2-ap .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
   font-size: 1.5rem;
 }
+.HOME_MENU_RD .notas-2-ap .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block {
+  margin-right: 10px;
+}
+
+
+@media (max-width:991px){
+  .HOME_MENU_RD .notas-2-ap .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
+    font-size: 1rem;
+  }
+  .HOME_MENU_RD .notas-2-ap .noticias .article .SEC_TIT_IMG_4DESTACADA  .media_block .multimedia .multimediaIconMacroWrapper a div {
+    width: 130px !important; 
+  }
+}
 
 
 /* ***************************
