@@ -28,6 +28,12 @@ INICIO - PORTADA - 4 DESTACADAS
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
   font-size: 1.5rem;
+  color: #000;
+}
+
+/*NEGRIGA*/
+.HOME_MENU_RD .notas-1-n-ap.articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
+  font-weight: 800;
 }
 
 
