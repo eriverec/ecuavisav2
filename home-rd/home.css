@@ -34,16 +34,21 @@ INICIO - PORTADA - 4 DESTACADAS
 
 
 .HOME_MENU_RD .notas-2-ap {
-  border-bottom: 2px solid #333;
-  border-top: 2px solid #333;
+  border-bottom: 1px solid #333;
+  border-top: 1px solid #333;
 }
 
 .HOME_MENU_RD .notas-1-n-ap {
-  border-bottom: 2px solid #333;
+  border-bottom: 1px solid #333;
+}
+
+.HOME_MENU_RD .notas-1-p-ap.mobile-ne {
+  border-bottom: 1px solid #333;
+  margin-top: 1rem;
 }
 
 .HOME_MENU_RD .notas-1-ap {
-  border-bottom: 2px solid #333;
+  border-bottom: 1px solid #333;
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block .multimedia .multimediaIconMacroWrapper a div {
