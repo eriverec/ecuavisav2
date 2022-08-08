@@ -122,6 +122,8 @@ INICIO - PORTADA - 4 DESTACADAS
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
     -webkit-mask-image: linear-gradient(to top, transparent 0, black 60%);
+    height: 240px;
+    object-fit: cover;
   }
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper {
