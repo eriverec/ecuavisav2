@@ -31,9 +31,6 @@ INICIO - PORTADA - 4 DESTACADAS
   margin: 1rem 0;
 }
 
-.HOME_MENU_RD .articulos_4dest {
-  /* border-bottom: 2px solid #333; */
-}
 
 .HOME_MENU_RD .notas-2-ap {
   border-bottom: 2px solid #333;
@@ -82,6 +79,24 @@ INICIO - PORTADA - 4 DESTACADAS
   }
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .text {
+    font-size: 1rem;
+  }
+}
+
+@media (max-width:767px) {
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block {
+    position: absolute;
+    bottom: 0;
+    padding: 10px;
+    width: 100%;
+  }
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block{
+    position: relative;
+  }
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h2{
+    font-size: 1.5rem;
+  }
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section{
     font-size: 1rem;
   }
 }
