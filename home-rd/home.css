@@ -10,7 +10,7 @@ INICIO - PORTADA - 4 DESTACADAS
   margin-top: 1.5rem;
 }
 
-.HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .text {
+.HOME_MENU_RD .notas-1-p-ap .noticias .article .text {
   font-size: 1.7rem;
 }
 
@@ -45,10 +45,6 @@ INICIO - PORTADA - 4 DESTACADAS
   border-bottom: 2px solid #333;
 }
 
-.HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block {
-  width: 100%;
-}
-
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block .multimedia .multimediaIconMacroWrapper a div {
   position: initial !important;
   width: 165px !important;
@@ -78,7 +74,7 @@ INICIO - PORTADA - 4 DESTACADAS
     width: 130px !important;
   }
 
-  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .text {
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text {
     font-size: 1rem;
   }
 }
