@@ -16,11 +16,11 @@ INICIO - PORTADA - 4 DESTACADAS
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section {
   font-size: 1.5rem;
-  color: #333;
+  color: #000;
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h2 {
-  color: #333;
+  color: #000;
   font-size: 2rem;
 }
 
@@ -34,26 +34,26 @@ INICIO - PORTADA - 4 DESTACADAS
 
 
 .HOME_MENU_RD .notas-2-ap {
-  border-bottom: 1px solid #333;
-  border-top: 1px solid #333;
+  border-bottom: 1px solid #000;
+  border-top: 1px solid #000;
   margin-top: 3rem;
 }
 
 .HOME_MENU_RD .notas-1-n-ap {
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #000;
 }
 
-.HOME_MENU_RD .notas-1-p-ap{
+.HOME_MENU_RD .notas-1-p-ap {
   margin-top: 3rem;
 }
 
 .HOME_MENU_RD .notas-1-p-ap.mobile-ne {
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #000;
   margin-top: 1rem;
 }
 
 .HOME_MENU_RD .notas-1-ap {
-  border-bottom: 1px solid #333;
+  border-bottom: 1px solid #000;
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block .multimedia .multimediaIconMacroWrapper a div {
@@ -96,6 +96,10 @@ INICIO - PORTADA - 4 DESTACADAS
     bottom: 0;
     padding: 10px;
     width: 100%;
+  }
+
+  .HOME_MENU_RD .notas-2-ap {
+    margin-top: 0;
   }
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text {
