@@ -1,3 +1,44 @@
+:root {
+  --rd-blue: #0d6efd;
+  --rd-indigo: #6610f2;
+  --rd-purple: #6f42c1;
+  --rd-pink: #d63384;
+  --rd-red: #dc3545;
+  --rd-orange: #fd7e14;
+  --rd-yellow: #ffc107;
+  --rd-green: #198754;
+  --rd-teal: #20c997;
+  --rd-cyan: #0dcaf0;
+  --rd-black: #000;
+  --rd-white: #fff;
+  --rd-gray: #6c757d;
+  --rd-gray-dark: #343a40;
+  --rd-gray-100: #f8f9fa;
+  --rd-gray-200: #e9ecef;
+  --rd-gray-300: #dee2e6;
+  --rd-gray-400: #ced4da;
+  --rd-gray-500: #adb5bd;
+  --rd-gray-600: #6c757d;
+  --rd-gray-700: #495057;
+  --rd-gray-800: #343a40;
+  --rd-gray-900: #212529;
+  --rd-primary: #0d6efd;
+  --rd-secondary: #6c757d;
+  --rd-success: #198754;
+  --rd-info: #0dcaf0;
+  --rd-warning: #ffc107;
+  --rd-danger: #dc3545;
+  --rd-light: #f8f9fa;
+  --rd-dark: #212529;
+  --rd-body-color: #212529;
+  --rd-body-bg: #fff;
+  --rd-border-color: #dee2e6;
+  --rd-border-color-translucent: rgba(0, 0, 0, 0.175);
+  --rd-link-color: #0d6efd;
+  --rd-link-hover-color: #0a58ca;
+  --rd-code-color: #d63384;
+  --rd-highlight-bg: #fff3cd;
+}
 /* ***************************
 INICIO - PORTADA - 4 DESTACADAS 
 *************************** */
@@ -16,11 +57,11 @@ INICIO - PORTADA - 4 DESTACADAS
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section {
   font-size: 1.5rem;
-  color: #000;
+  color: var(--rd-black);
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h2 {
-  color: #000;
+  color: var(--rd-black);
   font-size: 2rem;
 }
 
@@ -34,13 +75,13 @@ INICIO - PORTADA - 4 DESTACADAS
 
 
 .HOME_MENU_RD .notas-2-ap {
-  border-bottom: 1px solid #000;
-  border-top: 1px solid #000;
+  border-bottom: 1px solid var(--rd-gray);
+  border-top: 1px solid var(--rd-gray);
   margin-top: 3rem;
 }
 
 .HOME_MENU_RD .notas-1-n-ap {
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid var(--rd-gray);
 }
 
 .HOME_MENU_RD .notas-1-p-ap {
@@ -48,12 +89,12 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .notas-1-p-ap.mobile-ne {
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid var(--rd-gray);
   margin-top: 1rem;
 }
 
 .HOME_MENU_RD .notas-1-ap {
-  border-bottom: 1px solid #000;
+  border-bottom: 1px solid var(--rd-gray);
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block .multimedia .multimediaIconMacroWrapper a div {
@@ -62,13 +103,13 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .section {
-  color: #5a5a5a;
+  color: var(--rd-gray);
   font-weight: 500;
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
   font-size: 1.5rem;
-  color: #000;
+  color: var(--rd-black);
 }
 
 /*NEGRIGA*/
@@ -113,12 +154,12 @@ INICIO - PORTADA - 4 DESTACADAS
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h2 {
     font-size: 1.5rem;
-    color: white;
+    color:var(--rd-white);
   }
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section {
     font-size: 1rem;
-    color: white;
+    color: var(--rd-white);
   }
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
@@ -155,8 +196,8 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .lista-bloque .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  border-bottom: 1px solid;
-  border-top: 1px solid;
+  border-bottom: 1px solid var(--rd-gray);
+  border-top: 1px solid var(--rd-gray);
 }
 
 .HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT {
@@ -164,20 +205,20 @@ INICIO - BLOQUE - ECUADOR
 }
 
 .HOME_MENU_RD .lista-bloque .noticias .article:nth-child(2) {
-  border-right: 1px solid;
-  border-left: 1px solid;
+  border-right: 1px solid var(--rd-gray);
+  border-left: 1px solid var(--rd-gray);
 
 }
 
 .HOME_MENU_RD .lista-bloque .noticias .article .text_block .section {
-  color: #5a5a5a;
+  color: var(--rd-gray);
   font-weight: 500;
   margin-bottom: 0.5rem;
   display: block;
 }
 
 .HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2 {
-  color: #000;
+  color: var(--rd-black);
   font-size: 1.3rem;
 }
 
@@ -196,8 +237,8 @@ INICIO - BLOQUE - ECUADOR
   .HOME_MENU_RD .lista-bloque .noticias .article:nth-child(2) {
     border-right: none;
     border-left: none;
-    border-bottom: 1px solid;
-    border-top: 1px solid;
+    border-bottom: 1px solid var(--rd-gray);
+    border-top: 1px solid var(--rd-gray);
   }
 
   .HOME_MENU_RD .lista-bloque {
@@ -216,7 +257,7 @@ INICIO - BLOQUE - ECUADOR
   }
 
   .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .headline a h2 {
-    color: #000;
+    color: var(--rd-black);
     font-size: 1.3rem;
   }
 
