@@ -151,7 +151,6 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .lista-bloque .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  gap: 20px;
   border-bottom: 1px solid;
   border-top: 1px solid;
 }
