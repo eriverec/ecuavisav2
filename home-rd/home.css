@@ -62,7 +62,8 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .section {
-  color: #000;
+  color: #5a5a5a;
+  font-weight: 500;
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
@@ -141,7 +142,7 @@ FIN - PORTADA - 4 DESTACADAS
 /* ***************************
 INICIO - BLOQUE - ECUADOR 
 *************************** */
-.HOME_MENU_RD .nota-principal-bloque{
+.HOME_MENU_RD .nota-principal-bloque {
   margin: 1.5rem 0;
 }
 
@@ -168,8 +169,9 @@ INICIO - BLOQUE - ECUADOR
 
 }
 
-.HOME_MENU_RD .lista-bloque .noticias .article .text_block .article-section a {
-  color: #000;
+.HOME_MENU_RD .lista-bloque .noticias .article .text_block .section a {
+  color: #5a5a5a;
+  font-weight: 500;
   margin-bottom: 0.5rem;
   display: block;
 }
@@ -186,16 +188,38 @@ INICIO - BLOQUE - ECUADOR
     grid-template-columns: none;
     gap: 20px;
   }
-  .HOME_MENU_RD .lista-bloque .noticias{
+
+  .HOME_MENU_RD .lista-bloque .noticias {
     grid-template-columns: none;
   }
-  .HOME_MENU_RD .lista-bloque .noticias .article:nth-child(2){
+
+  .HOME_MENU_RD .lista-bloque .noticias .article:nth-child(2) {
     border-right: none;
     border-left: none;
+    border-bottom: 1px solid;
+    border-top: 1px solid;
   }
-  .HOME_MENU_RD .lista-bloque{
+
+  .HOME_MENU_RD .lista-bloque {
     margin-top: 20px;
   }
+
+  .HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT {
+    margin: 20px 0;
+  }
+
+  .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .section a {
+    margin-bottom: .5rem;
+    display: block;
+    font-size: 1.8rem;
+    font-weight: bold;
+  }
+
+  .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .headline a h2 {
+    color: #000;
+    font-size: 1.3rem;
+  }
+
 }
 
 /* ***************************
