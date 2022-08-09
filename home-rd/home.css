@@ -138,10 +138,6 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 
-/* ***************************
-FIN - PORTADA - 4 DESTACADAS 
-*************************** */
-
 
 
 /* ***************************
@@ -237,6 +233,12 @@ INICIO - BLOQUE - ECUADOR
 
 }
 
+
+
 /* ***************************
-FIN - BLOQUE - ECUADOR 
+INICIO - BLOQUE - ECUADOR 
 *************************** */
+
+.HOME_MENU_RD .img-header-prog img {
+  width: 100%;
+}
