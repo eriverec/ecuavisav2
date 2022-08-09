@@ -152,12 +152,27 @@ INICIO - BLOQUE - ECUADOR
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 20px;
+  border-bottom: 1px solid;
+  border-top: 1px solid;
+}
+
+.HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT {
+  margin: 20px;
+}
+
+.HOME_MENU_RD .lista-bloque .noticias .article:nth-child(2) {
+  border-right: 1px solid;
+  border-left: 1px solid;
+
 }
 
 .HOME_MENU_RD .lista-bloque .noticias .article .text_block .article-section a {
   color: #000;
+  margin-bottom: 0.5rem;
+  display: block;
 }
-.HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2{
+
+.HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2 {
   color: #000;
   font-size: 1.3rem;
 }
