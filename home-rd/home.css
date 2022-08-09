@@ -148,6 +148,20 @@ INICIO - BLOQUE - ECUADOR
   gap: 20px;
 }
 
+.HOME_MENU_RD .lista-bloque .noticias {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 20px;
+}
+
+.HOME_MENU_RD .lista-bloque .noticias .article .text_block .article-section a {
+  color: #000;
+}
+.HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2{
+  color: #000;
+  font-size: 1.3rem;
+}
+
 
 @media (max-width: 767px) {
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .media_block {
