@@ -141,6 +141,9 @@ FIN - PORTADA - 4 DESTACADAS
 /* ***************************
 INICIO - BLOQUE - ECUADOR 
 *************************** */
+.HOME_MENU_RD .nota-principal-bloque{
+  margin: 1.5rem 0;
+}
 
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .media_block {
   display: grid;
