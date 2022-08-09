@@ -122,8 +122,8 @@ INICIO - PORTADA - 4 DESTACADAS
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
     -webkit-mask-image: linear-gradient(to top, transparent 0, black 60%);
-    height: 240px;
-    object-fit: cover;
+    /* height: 240px;
+    object-fit: cover; */
   }
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper {
@@ -185,6 +185,16 @@ INICIO - BLOQUE - ECUADOR
     display: grid;
     grid-template-columns: none;
     gap: 20px;
+  }
+  .HOME_MENU_RD .lista-bloque .noticias{
+    grid-template-columns: none;
+  }
+  .HOME_MENU_RD .lista-bloque .noticias .article:nth-child(2){
+    border-right: none;
+    border-left: none;
+  }
+  .HOME_MENU_RD .lista-bloque{
+    margin-top: 20px;
   }
 }
 
