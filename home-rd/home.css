@@ -1,4 +1,4 @@
-:root{
+:root {
   --bs-black: #000;
 }
 
@@ -241,4 +241,16 @@ INICIO - BLOQUE - ECUADOR
 
 .HOME_MENU_RD .img-header-prog img {
   width: 100%;
+}
+
+.HOME_MENU_RD .lista-programacion-bloque .noticias {
+  overflow: auto;
+  white-space: nowrap;
+}
+
+.HOME_MENU_RD .lista-programacion-bloque .noticias .article {
+  text-align: center;
+  padding: 14px;
+  text-decoration: none;
+  display: inline-block;
 }
