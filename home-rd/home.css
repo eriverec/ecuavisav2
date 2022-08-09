@@ -183,6 +183,16 @@ INICIO - BLOQUE - ECUADOR
   font-size: 1.3rem;
 }
 
+.HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .headline a h2 {
+  font-size: 1.5rem;
+  color: var(--bs-black);
+}
+
+.HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .section {
+  font-size: 1rem;
+  color: var(--bs-gray);
+}
+
 
 @media (max-width: 767px) {
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .media_block {
