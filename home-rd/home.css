@@ -135,3 +135,28 @@ INICIO - PORTADA - 4 DESTACADAS
 /* ***************************
 FIN - PORTADA - 4 DESTACADAS 
 *************************** */
+
+
+
+/* ***************************
+INICIO - BLOQUE - ECUADOR 
+*************************** */
+
+.HOME_MENU_RD .nota-principal-bloque .noticias .article .media_block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+
+@media (max-width: 767px) {
+  .HOME_MENU_RD .nota-principal-bloque .noticias .article .media_block {
+    display: grid;
+    grid-template-columns: none;
+    gap: 20px;
+  }
+}
+
+/* ***************************
+FIN - BLOQUE - ECUADOR 
+*************************** */
