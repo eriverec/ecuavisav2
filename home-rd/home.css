@@ -169,7 +169,7 @@ INICIO - BLOQUE - ECUADOR
 
 }
 
-.HOME_MENU_RD .lista-bloque .noticias .article .text_block .section a {
+.HOME_MENU_RD .lista-bloque .noticias .article .text_block .section {
   color: #5a5a5a;
   font-weight: 500;
   margin-bottom: 0.5rem;
@@ -208,7 +208,7 @@ INICIO - BLOQUE - ECUADOR
     margin: 20px 0;
   }
 
-  .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .section a {
+  .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .section {
     margin-bottom: .5rem;
     display: block;
     font-size: 1.8rem;
