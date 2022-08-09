@@ -1,3 +1,7 @@
+:root{
+  --bs-black: #000;
+}
+
 /* ***************************
 INICIO - PORTADA - 4 DESTACADAS 
 *************************** */
@@ -165,7 +169,6 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .lista-bloque .noticias .article:nth-child(2) {
   border-right: 1px solid var(--bs-gray);
   border-left: 1px solid var(--bs-gray);
-
 }
 
 .HOME_MENU_RD .lista-bloque .noticias .article .text_block .section {
