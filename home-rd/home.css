@@ -112,7 +112,7 @@ INICIO - PORTADA - 4 DESTACADAS
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h2 {
     font-size: 1.5rem;
-    color:var(--bs-white);
+    color: var(--bs-white);
   }
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section {
