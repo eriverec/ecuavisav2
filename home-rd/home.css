@@ -20,7 +20,9 @@ INICIO - PORTADA - 4 DESTACADAS
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section {
   font-size: 1.5rem;
-  color: var(--bs-black);
+  font-weight: 500;
+  color: var(--bs-gray);
+
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h2 {
@@ -190,6 +192,7 @@ INICIO - BLOQUE - ECUADOR
 
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .section {
   font-size: 1rem;
+  font-weight: 500;
   color: var(--bs-gray);
 }
 
