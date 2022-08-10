@@ -314,3 +314,14 @@ INICIO - BLOQUE - MUNDO
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
 }
+
+
+@media (max-width: 767px) {
+  .HOME_MENU_RD .lista-bloque-1x4 .noticias {
+    grid-template-columns: none;
+  }
+
+  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .BLOQUE_SEC_TIT_IMG {
+    margin: 20px 0;
+  }
+}
