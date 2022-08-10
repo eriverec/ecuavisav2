@@ -378,9 +378,9 @@ INICIO - BLOQUE - MUNDO
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3) {
-    border-bottom: 1px solid var(--bs-gray);
-    border-right: 1px solid var(--bs-gray);
-    border-top: 1px solid var(--bs-gray);
+    border-bottom: none;
+    border-right: none;
+    border-top: none;
   }
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(1){
     border-right: none;
