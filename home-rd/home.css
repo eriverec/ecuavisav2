@@ -147,6 +147,13 @@ INICIO - BLOQUE - ECUADOR
   margin: 1.5rem 0;
 }
 
+.HOME_MENU_RD .cintillo-rd {
+  margin-bottom: .5rem;
+  display: block;
+  font-size: 1.8rem;
+  font-weight: bold;
+}
+
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .media_block {
   display: grid;
   grid-template-columns: 1fr 1fr;
