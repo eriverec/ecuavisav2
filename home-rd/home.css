@@ -283,7 +283,7 @@ INICIO - BLOQUE - MUNDO
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias {
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr;
 }
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
@@ -306,4 +306,11 @@ INICIO - BLOQUE - MUNDO
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .BLOQUE_SEC_TIT_IMG {
   margin: 20px;
+}
+
+
+@media (min-width: 1400px) {
+  .HOME_MENU_RD .lista-bloque-1x4 .noticias {
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+  }
 }
