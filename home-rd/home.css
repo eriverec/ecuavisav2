@@ -29,7 +29,7 @@ INICIO - PORTADA - 4 DESTACADAS
 
 }
 
-.HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h2 {
+.HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h1 {
   color: var(--bs-black);
   font-size: 2rem;
 }
@@ -120,7 +120,7 @@ INICIO - PORTADA - 4 DESTACADAS
     position: relative;
   }
 
-  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h2 {
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h1 {
     font-size: 1.5rem;
     color: var(--bs-white);
   }
