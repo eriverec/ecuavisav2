@@ -254,6 +254,9 @@ INICIO - BLOQUE - ECUADOR
     grid-template-columns: none;
     gap: 20px;
   }
+  .HOME_MENU_RD .cintillo-rd {
+    font-size: var(--rd-size-34);
+  }
 
   .HOME_MENU_RD .lista-bloque .noticias {
     grid-template-columns: none;
@@ -282,9 +285,24 @@ INICIO - BLOQUE - ECUADOR
     display: none;
   }
 
+  .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .text{
+    
+  }
+
   .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .headline a h2 {
     color: var(--bs-black);
-    font-size: 1.3rem;
+    font-size: var(--rd-size-26);
+  }
+
+  .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .text{
+    font-size: var(--rd-size-18);
+    margin-top: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    line-clamp: 5;
+    -webkit-box-orient: vertical;
   }
 
 }
@@ -420,6 +438,10 @@ INICIO - BLOQUE - MUNDO
     border-bottom: none;
     border-right: none;
     border-top: none;
+  }
+
+  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .text_block .headline a h2{
+    font-size: var(--rd-size-20);
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(1) {
