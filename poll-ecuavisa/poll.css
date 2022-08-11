@@ -17,7 +17,6 @@
 }
 .quiz-593 {
   color: #333;
-  padding: 10px;
   box-shadow: 0 5px 5px rgb(0 0 0 / 40%);
   border-radius: 3px;
 }
@@ -29,6 +28,9 @@
 }
 .question-poll h2 {
   font-weight: 700;
+}
+.POLL.template-poll {
+  padding: 10px;
 }
 .poll-form.form-check input[type="radio"]:checked,
 input[type="radio"] {
