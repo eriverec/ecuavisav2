@@ -1,5 +1,20 @@
 :root {
   --bs-black: #000;
+
+  /*DESKTOP*/
+  --rd-size-14: 14px;
+  --rd-size-16: 16px;
+  --rd-size-20: 20px;
+  --rd-size-22: 22px;
+  --rd-size-30: 30px;
+  --rd-size-32: 32px;
+  --rd-size-60: 60px;
+
+
+
+  /*MOBILE*/
+
+
 }
 
 /* ***************************
@@ -19,11 +34,11 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text {
-  font-size: 1.5rem;
+  font-size: var(--rd-size-20);
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section {
-  font-size: 1.5rem;
+  font-size: var(--rd-size-16);
   font-weight: 500;
   color: var(--bs-gray);
 
@@ -31,7 +46,7 @@ INICIO - PORTADA - 4 DESTACADAS
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h1 {
   color: var(--bs-black);
-  font-size: 2rem;
+  font-size: var(--rd-size-32);
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
@@ -76,7 +91,7 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
-  font-size: 1.5rem;
+  font-size: var(--rd-size-22);
   color: var(--bs-black);
 }
 
@@ -121,7 +136,7 @@ INICIO - PORTADA - 4 DESTACADAS
   }
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h1 {
-    font-size: 1.5rem;
+    font-size: 26px;
     color: var(--bs-white);
   }
 
