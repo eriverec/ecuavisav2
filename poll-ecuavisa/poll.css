@@ -15,6 +15,12 @@
   display: block;
   padding: 10px;
 }
+.quiz-593 {
+  color: #333;
+  padding: 10px;
+  box-shadow: 0 5px 5px rgb(0 0 0 / 15%);
+  border-radius: 3px;
+}
 .quiz-593 .teaser-viewer-title h1 {
   background-color: #0067D5;
   padding: 8px;
