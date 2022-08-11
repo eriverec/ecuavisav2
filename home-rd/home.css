@@ -125,7 +125,8 @@ INICIO - PORTADA - 4 DESTACADAS
     padding: 10px;
     width: 100%;
   }
-  .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
+
+  .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
     font-size: var(--rd-size-20);
   }
 
@@ -226,8 +227,14 @@ INICIO - BLOQUE - ECUADOR
   color: var(--bs-gray);
 }
 
-.HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .text{
+.HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .text {
   font-size: var(--rd-size-20);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  line-clamp: 5;
+  -webkit-box-orient: vertical;
 }
 
 @media (max-width: 991px) {
@@ -414,7 +421,8 @@ INICIO - BLOQUE - MUNDO
     border-right: none;
     border-top: none;
   }
-  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(1){
+
+  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(1) {
     border-right: none;
   }
 }
