@@ -54,3 +54,11 @@ input[type="radio"] {
   padding: 10px;
   margin: 10px 0;
 }
+.title-593 h1 {
+  padding-top: 2rem;
+}
+@media (max-width: 600px) {
+  article.article.element.full-access.norestricted {
+    margin: 20px 0 0;
+  }
+}
