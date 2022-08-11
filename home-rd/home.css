@@ -1,5 +1,6 @@
 :root {
   --bs-black: #000;
+  --rd-cintillo: #0067D5;
 
   /*DESKTOP*/
   --rd-size-14: 14px;
@@ -175,7 +176,8 @@ INICIO - BLOQUE - ECUADOR
   margin-bottom: .5rem;
   display: block;
   font-size: var(--rd-size-60);
-  font-weight: 400;
+  font-weight: 500;
+  color: var(--rd-cintillo);
 }
 
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .media_block {
@@ -361,11 +363,12 @@ INICIO - BLOQUE - MUNDO
   font-weight: 500;
   margin-bottom: 0.5rem;
   display: block;
+  font-size: var(--rd-size-16);
 }
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .text_block .headline a h2 {
   color: var(--bs-black);
-  font-size: 1rem;
+  font-size: var(--rd-size-14);
 }
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .BLOQUE_SEC_TIT_IMG {
