@@ -61,4 +61,7 @@ input[type="radio"] {
   article.article.element.full-access.norestricted {
     margin: 20px 0 0;
   }
+  article.article.element.full-access.norestricted {
+    padding-bottom: 0;
+}
 }
