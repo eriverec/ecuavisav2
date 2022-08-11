@@ -12,6 +12,8 @@
   /*MOBILE*/
   --rd-size-18: 18px;
   --rd-size-26: 26px;
+  --rd-size-34: 34px;
+
 
 
 }
@@ -172,8 +174,8 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .cintillo-rd {
   margin-bottom: .5rem;
   display: block;
-  font-size: 1.8rem;
-  font-weight: bold;
+  font-size: var(--rd-size-60);
+  font-weight: 400;
 }
 
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .media_block {
@@ -203,22 +205,27 @@ INICIO - BLOQUE - ECUADOR
   font-weight: 500;
   margin-bottom: 0.5rem;
   display: block;
+  font-size: var(--rd-size-16);
 }
 
 .HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2 {
   color: var(--bs-black);
-  font-size: 1.3rem;
+  font-size: var(--rd-size-20);
 }
 
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .headline a h2 {
-  font-size: 1.5rem;
+  font-size: var(--rd-size-30);
   color: var(--bs-black);
 }
 
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .section {
-  font-size: 1rem;
+  font-size: var(--rd-size-16);
   font-weight: 500;
   color: var(--bs-gray);
+}
+
+.HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .text{
+  font-size: var(--rd-size-20);
 }
 
 @media (max-width: 991px) {
