@@ -232,11 +232,11 @@ INICIO - BLOQUE - ECUADOR
 
 @media (max-width: 991px) {
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .headline a h2 {
-    font-size: 1.1rem;
+    font-size: var(--rd-size-22);
   }
 
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .text {
-    font-size: .8rem;
+    font-size: var(--rd-size-14);
   }
 }
 
