@@ -15,8 +15,21 @@
   display: block;
   padding: 10px;
 }
-
-
+.quiz-593 {
+  color: #333;
+  padding: 10px;
+  box-shadow: 0 5px 5px rgb(0 0 0 / 15%);
+  border-radius: 3px;
+}
+.quiz-593 .teaser-viewer-title h1 {
+  background-color: #0067D5;
+  padding: 8px;
+  color: white;
+  font-weight: 100;
+}
+.question-poll h2 {
+  font-weight: 700;
+}
 .poll-form.form-check input[type="radio"]:checked,
 input[type="radio"] {
   visibility: hidden;
@@ -24,7 +37,7 @@ input[type="radio"] {
 
 .poll-form.form-check span[data-choiceid] label {
   font-weight: bold;
-  border: 2px solid #0d6efd;
+  border: 1px solid #0d6efd;
   display: block;
   padding: 10px;
 }
@@ -42,4 +55,16 @@ input[type="radio"] {
   display: block;
   padding: 10px;
   margin: 10px 0;
+}
+.title-593 h1 {
+  padding-top: 2rem;
+}
+@media (max-width: 600px) {
+  article.article.element.full-access.norestricted {
+    margin: 20px 0 0;
+  }
+  article.article.element.full-access.norestricted {
+    padding-bottom: 0;
+}
+
 }
