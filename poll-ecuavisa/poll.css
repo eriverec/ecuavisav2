@@ -27,7 +27,9 @@
   color: white;
   font-weight: 100;
 }
-
+.question-poll h2 {
+  font-weight: 700;
+}
 .poll-form.form-check input[type="radio"]:checked,
 input[type="radio"] {
   visibility: hidden;
@@ -64,4 +66,5 @@ input[type="radio"] {
   article.article.element.full-access.norestricted {
     padding-bottom: 0;
 }
+
 }
