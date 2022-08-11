@@ -30,7 +30,7 @@
   font-weight: 700;
 }
 .POLL.template-poll {
-  padding: 10px;
+  padding: 0px 15px 2rem 15px;
 }
 .poll-form.form-check input[type="radio"]:checked,
 input[type="radio"] {
