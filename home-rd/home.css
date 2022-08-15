@@ -502,4 +502,5 @@ INICIO - BLOQUE - CULTURA
   font-weight: 500;
   color: var(--bs-gray);
   margin-top: 10px ;
+  display: block;
 }
