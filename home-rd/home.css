@@ -479,3 +479,27 @@ INICIO - BLOQUE - MUNDO
     border-right: none;
   }
 }
+
+
+
+/* ***************************
+INICIO - BLOQUE - CULTURA 
+*************************** */
+
+.HOME_MENU_RD .nota-principal-bloque-cultura .noticias {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
+.HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h2 {
+  font-size: var(--rd-size-30);
+  color: var(--bs-black);
+}
+
+.HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .section {
+  font-size: var(--rd-size-16);
+  font-weight: 500;
+  color: var(--bs-gray);
+  margin-top: 10px ;
+}
