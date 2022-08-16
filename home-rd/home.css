@@ -336,13 +336,13 @@ INICIO - BLOQUE - PROGRAMACION
 }
 
 .HOME_MENU_RD .lista-programacion-bloque .noticias .article .text_block .text .text-wrapper p:nth-child(1) {
-  color: rgba(0, 103, 213, 0.8);
+  color: white;
   font-weight: 600;
   font-size: 16px;
 }
 
 .HOME_MENU_RD .lista-programacion-bloque .noticias .article .text_block .text .text-wrapper p:nth-child(2) {
-  color: rgba(0, 103, 213, 0.8);
+  color: white;
   font-weight: 350;
   font-size: 15px;
 }
