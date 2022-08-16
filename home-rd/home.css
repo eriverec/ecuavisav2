@@ -317,6 +317,7 @@ INICIO - BLOQUE - PROGRAMACION
 .HOME_MENU_RD .lista-programacion-bloque .noticias {
   overflow: auto;
   white-space: nowrap;
+  margin-top: 10px;
 }
 
 .HOME_MENU_RD .lista-programacion-bloque .noticias .article {
