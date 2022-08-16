@@ -332,6 +332,10 @@ INICIO - BLOQUE - PROGRAMACION
   padding: 15px 35px;
 }
 
+.HOME_MENU_RD .lista-programacion-bloque .noticias .article .text_block .text .text-wrapper.activeBG{
+  background: rgba(0, 103, 213, 0.8);
+}
+
 .HOME_MENU_RD .lista-programacion-bloque .noticias .article .text_block .text .text-wrapper p {
   margin: 0;
 }
