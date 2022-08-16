@@ -501,6 +501,30 @@ INICIO - BLOQUE - CULTURA
   font-size: var(--rd-size-16);
   font-weight: 500;
   color: var(--bs-gray);
-  margin-top: 10px ;
+  margin-top: 10px;
   display: block;
+}
+
+
+@media (max-width: 767px) {
+  .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias .article .text_block .section {
+    color: var(--bs-gray);
+    font-weight: 500;
+    margin-top: 8px;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-size: var(--rd-size-16);
+  }
+
+  .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias .article .text_block .headline a h2 {
+    color: var(--bs-black);
+    font-size: var(--rd-size-18);
+  }
+
 }
