@@ -325,6 +325,15 @@ INICIO - BLOQUE - PROGRAMACION
 
 .HOME_MENU_RD .img-header-prog .mediaBlock .multimedia img {
   width: 100%;
+  filter: grayscale(1);
+}
+
+.HOME_MENU_RD .img-header-prog .mediaBlock .senal_active::after{
+  content:url('https://estadisticas.ecuavisa.com/sites/default/files/2022-08/se%C3%B1alecv.png'); /* with class ModalCarrot ??*/
+  position:relative; /*or absolute*/
+  z-index:100000; /*a number that's more than the modal box*/
+  left:-50px;
+  top:10px;
 }
 
 
@@ -333,17 +342,22 @@ INICIO - BLOQUE - PROGRAMACION
   width: 100%;
   margin: auto;
   margin-top: 10px;
-  justify-content: center;
+  justify-content: flex-start;
   display: flex;
+  gap: 20px;
+  position: absolute;
+  bottom: 0;
+  padding: 40px 20px;
+  align-items: center;
 }
 
 .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones a {
   background: white;
   color: #0067D5;
-  border-radius: 4px;
-  padding: 8px 40px;
+  border-radius: 2px;
+  padding: 8px 15px;
   font-weight: 500;
-  min-width: 260px;
+  /* min-width: 260px; */
   text-align: center;
   text-transform: uppercase;
 }
