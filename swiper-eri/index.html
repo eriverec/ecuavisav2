@@ -348,7 +348,7 @@
       </div> -->
     </div>
 
-<!-- <script src="//web.webformscr.com/apps/fc3/build/loader.js" async sp-form-id="278172195d0fbc563f1cccaade68b5730cdc59fb5dfed8701ddb21de3e186423"></script> -->
+    <!-- <script src="//web.webformscr.com/apps/fc3/build/loader.js" async sp-form-id="278172195d0fbc563f1cccaade68b5730cdc59fb5dfed8701ddb21de3e186423"></script> -->
 
 
     <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
@@ -357,21 +357,17 @@
 
     <div id="hello_sendpulse"></div>
     <script>
-      const script = document.createElement('script');
-      script.setAttribute(
-        'src',
-        '//web.webformscr.com/apps/fc3/build/loader.js',
-      );
+      jQryIter(document).bind("widgetCompleteLoad", function (e, widgetElement) {
+        const script = document.createElement('script');
+        script.setAttribute(
+          'src','//web.webformscr.com/apps/fc3/build/loader.js',
+        );  
+        script.setAttribute('async', '');
+        script.setAttribute('p-form-id', '278172195d0fbc563f1cccaade68b5730cdc59fb5dfed8701ddb21de3e186423');  
+        document.querySelector('#hello_sendpulse').appendChild(script);
+      });
 
-      script.setAttribute('async', '');
-      script.setAttribute('p-form-id', '278172195d0fbc563f1cccaade68b5730cdc59fb5dfed8701ddb21de3e186423');
 
-
-      // document.getElementById('hello').innertHTML = script;
-
-      document.querySelector('#hello_sendpulse').appendChild(script);
-
-    
 
       // document.body.script.getElementsByClassName("iter-widget ");
 
