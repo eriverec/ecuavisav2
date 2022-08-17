@@ -1,6 +1,7 @@
 :root {
   --bs-black: #000;
   --rd-cintillo: #0067D5;
+  --rd-gray-border: #D3D4D3;
 
   /*DESKTOP*/
   --rd-size-14: 14px;
@@ -10,6 +11,7 @@
   --rd-size-30: 30px;
   --rd-size-32: 32px;
   --rd-size-60: 60px;
+
   /*MOBILE*/
   --rd-size-18: 18px;
   --rd-size-26: 26px;
@@ -66,13 +68,13 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .notas-2-ap {
-  border-bottom: 1px solid var(--bs-gray);
-  border-top: 1px solid var(--bs-gray);
+  border-bottom: 1px solid var(--rd-gray-border);
+  border-top: 1px solid var(--rd-gray-border);
   margin-top: 3rem;
 }
 
 .HOME_MENU_RD .notas-1-n-ap {
-  border-bottom: 1px solid var(--bs-gray);
+  border-bottom: 1px solid var(--rd-gray-border);
 }
 
 .HOME_MENU_RD .notas-1-p-ap {
@@ -80,12 +82,12 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .notas-1-p-ap.mobile-ne {
-  border-bottom: 1px solid var(--bs-gray);
+  border-bottom: 1px solid var(--rd-gray-border);
   margin-top: 1rem;
 }
 
 .HOME_MENU_RD .notas-1-ap {
-  border-bottom: 1px solid var(--bs-gray);
+  border-bottom: 1px solid var(--rd-gray-border);
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block .multimedia .multimediaIconMacroWrapper a div {
@@ -201,8 +203,8 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .lista-bloque .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  border-bottom: 1px solid var(--bs-gray);
-  border-top: 1px solid var(--bs-gray);
+  border-bottom: 1px solid var(--rd-gray-border);
+  border-top: 1px solid var(--rd-gray-border);
 }
 
 .HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT {
@@ -210,8 +212,8 @@ INICIO - BLOQUE - ECUADOR
 }
 
 .HOME_MENU_RD .lista-bloque .noticias .article:nth-child(2) {
-  border-right: 1px solid var(--bs-gray);
-  border-left: 1px solid var(--bs-gray);
+  border-right: 1px solid var(--rd-gray-border);
+  border-left: 1px solid var(--rd-gray-border);
 }
 
 .HOME_MENU_RD .lista-bloque .noticias .article .text_block .section {
@@ -277,8 +279,8 @@ INICIO - BLOQUE - ECUADOR
   .HOME_MENU_RD .lista-bloque .noticias .article:nth-child(2) {
     border-right: none;
     border-left: none;
-    border-bottom: 1px solid var(--bs-gray);
-    border-top: 1px solid var(--bs-gray);
+    border-bottom: 1px solid var(--rd-gray-border);
+    border-top: 1px solid var(--rd-gray-border);
   }
 
   .HOME_MENU_RD .lista-bloque {
@@ -371,22 +373,22 @@ INICIO - BLOQUE - MUNDO
 .HOME_MENU_RD .lista-bloque-1x4 .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  border-bottom: 1px solid var(--bs-gray);
-  border-top: 1px solid var(--bs-gray);
+  border-bottom: 1px solid var(--rd-gray-border);
+  border-top: 1px solid var(--rd-gray-border);
 }
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(1) {
-  border-right: 1px solid var(--bs-gray);
+  border-right: 1px solid var(--rd-gray-border);
 }
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3) {
-  border-right: 1px solid var(--bs-gray);
-  border-top: 1px solid var(--bs-gray);
+  border-right: 1px solid var(--rd-gray-border);
+  border-top: 1px solid var(--rd-gray-border);
 }
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(4) {
 
-  border-top: 1px solid var(--bs-gray);
+  border-top: 1px solid var(--rd-gray-border);
 }
 
 
@@ -425,7 +427,7 @@ INICIO - BLOQUE - MUNDO
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3) {
     border-top: none;
-    border-left: 1px solid var(--bs-gray);
+    border-left: 1px solid var(--rd-gray-border);
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(4) {
@@ -464,8 +466,8 @@ INICIO - BLOQUE - MUNDO
 @media (max-width: 767px) {
   .HOME_MENU_RD .lista-bloque-1x4 .noticias {
     grid-template-columns: none;
-    border-bottom: 1px solid var(--bs-gray);
-    border-top: 1px solid var(--bs-gray);
+    border-bottom: 1px solid var(--rd-gray-border);
+    border-top: 1px solid var(--rd-gray-border);
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
@@ -477,8 +479,8 @@ INICIO - BLOQUE - MUNDO
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(2) {
-    border-bottom: 1px solid var(--bs-gray);
-    border-top: 1px solid var(--bs-gray);
+    border-bottom: 1px solid var(--rd-gray-border);
+    border-top: 1px solid var(--rd-gray-border);
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3) {
