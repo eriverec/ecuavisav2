@@ -332,11 +332,6 @@ INICIO - BLOQUE - PROGRAMACION
   position: relative;
 }
 
-.HOME_MENU_RD .img-header-prog .mediaBlock .senal_active::after {
-  content: url('https://estadisticas.ecuavisa.com/sites/default/files/2022-08/se%C3%B1alecv.png');
-}
-
-
 .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones {
   width: 100%;
   margin: auto;
