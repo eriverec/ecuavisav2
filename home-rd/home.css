@@ -342,10 +342,6 @@ INICIO - BLOQUE - PROGRAMACION
   text-transform: uppercase;
   font-weight: 600;
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
-  align-content: center;
-  justify-content: center;
   align-items: center;
   gap: 5px;
 }
