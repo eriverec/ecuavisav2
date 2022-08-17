@@ -323,13 +323,13 @@ INICIO - BLOQUE - ECUADOR
 INICIO - BLOQUE - PROGRAMACION 
 *************************** */
 
-.HOME_MENU_RD .img-header-prog img {
+.HOME_MENU_RD .img-header-prog .mediaBlock .multimedia img {
   width: 100%;
 }
 
 
 
-.HOME_MENU_RD .img-header-prog #rd_cont_botones {
+.HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones {
   width: 100%;
   margin: auto;
   margin-top: 10px;
@@ -337,15 +337,15 @@ INICIO - BLOQUE - PROGRAMACION
   display: flex;
 }
 
-.HOME_MENU_RD .img-header-prog #rd_cont_botones a {
-  background: #046cdf;
-  color: #fff;
+.HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones a {
+  background: white;
+  color: #0067D5;
   border-radius: 4px;
   padding: 8px 40px;
   font-weight: 500;
-  box-shadow: 0px 1px 1px 1px #1969a9;
   min-width: 260px;
   text-align: center;
+  text-transform: uppercase;
 }
 
 .HOME_MENU_RD .lista-programacion-bloque .noticias {
