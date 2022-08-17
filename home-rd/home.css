@@ -330,10 +330,6 @@ INICIO - BLOQUE - PROGRAMACION
 
 .HOME_MENU_RD .img-header-prog .mediaBlock .senal_active::after{
   content:url('https://estadisticas.ecuavisa.com/sites/default/files/2022-08/se%C3%B1alecv.png'); /* with class ModalCarrot ??*/
-  position:relative; /*or absolute*/
-  z-index:100000; /*a number that's more than the modal box*/
-  left:-50px;
-  top:10px;
 }
 
 
