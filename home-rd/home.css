@@ -698,3 +698,10 @@ INICIO - BLOQUE - ESTILO
   left: 100%;
   transform: translateX(-100%);
 }
+
+
+@media (max-width: 767px) {
+  .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block {
+    grid-template-columns: none;
+  }
+}
