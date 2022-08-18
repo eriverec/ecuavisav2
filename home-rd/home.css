@@ -28,6 +28,10 @@ INICIO - PORTADA - 4 DESTACADAS
   margin: 2rem 0;
 }
 
+#iter-content-wrapper{
+  padding-top: 0;
+}
+
 .HOME_MENU_RD .rd_grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -70,7 +74,7 @@ INICIO - PORTADA - 4 DESTACADAS
 .HOME_MENU_RD .notas-2-ap {
   border-bottom: 1px solid var(--rd-gray-border);
   border-top: 1px solid var(--rd-gray-border);
-  margin-top: 3rem;
+  /* margin-top: 3rem; */
 }
 
 .HOME_MENU_RD .notas-1-n-ap {
@@ -78,7 +82,7 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .notas-1-p-ap {
-  margin-top: 3rem;
+  /* margin-top: 3rem; */
 }
 
 .HOME_MENU_RD .notas-1-p-ap.mobile-ne {
