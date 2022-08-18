@@ -674,6 +674,11 @@ INICIO - BLOQUE - CULTURA
 /* ***************************
 INICIO - BLOQUE - ESTILO 
 *************************** */
+:root {
+  --animate-duration: 1s;
+  --animate-delay: 1s;
+  --animate-repeat: 1
+}
 
 .animate__fadeIn {
   -webkit-animation-name: fadeIn;
