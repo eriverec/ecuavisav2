@@ -643,6 +643,7 @@ INICIO - BLOQUE - CULTURA
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block {
   display: grid;
+  gap: 20px;
   grid-template-columns: 1fr 2fr;
 }
 
