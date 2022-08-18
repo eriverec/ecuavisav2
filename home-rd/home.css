@@ -615,6 +615,10 @@ INICIO - BLOQUE - CULTURA
     gap: 20px;
   }
 
+  .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h2{
+    font-size: var(--rd-size-18);
+  }
+
   .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias .article .text_block .section {
     color: var(--bs-gray);
     font-weight: 500;

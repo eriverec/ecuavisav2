@@ -13,7 +13,7 @@
   <div id="hello"></div>
   <div id="4263997022" class="portlet-boundary portlet-static-end ranking-viewer-portlet ms-visto-ec">
     <div class="stats-viewer iter-widget iter-component iter-tabview" id="_4263997022_markupTabs">
-      <!-- <div id="_4263997022__aui_div" class="iter-tabview-content">
+      <div id="_4263997022__aui_div" class="iter-tabview-content">
         <ul class="" id="_4263997022_tabsList">
           <li
             class="iter-tab iter-rankingtab-mostviewed-hd iter-widget iter-component iter-state-default iter-state-active iter-tab-active iter-state-hover">
@@ -345,82 +345,82 @@
           </div>
 
         </div>
-      </div> -->
+      </div>
     </div>
 
     <!-- <script src="//web.webformscr.com/apps/fc3/build/loader.js" async sp-form-id="278172195d0fbc563f1cccaade68b5730cdc59fb5dfed8701ddb21de3e186423"></script> -->
 
 
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <!-- <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script> -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 
     <div id="hello_sendpulse"></div>
     <script>
-      jQryIter(document).bind("widgetCompleteLoad", function (e, widgetElement) {
-        const script = document.createElement('script');
-        script.setAttribute(
-          'src','//web.webformscr.com/apps/fc3/build/loader.js',
-        );  
-        script.setAttribute('async', '');
-        script.setAttribute('p-form-id', '278172195d0fbc563f1cccaade68b5730cdc59fb5dfed8701ddb21de3e186423');  
-        document.querySelector('#hello_sendpulse').appendChild(script);
-      });
+      // jQryIter(document).bind("widgetCompleteLoad", function (e, widgetElement) {
+      //   const script = document.createElement('script');
+      //   script.setAttribute(
+      //     'src','//web.webformscr.com/apps/fc3/build/loader.js',
+      //   );  
+      //   script.setAttribute('async', '');
+      //   script.setAttribute('p-form-id', '278172195d0fbc563f1cccaade68b5730cdc59fb5dfed8701ddb21de3e186423');  
+      //   document.querySelector('#hello_sendpulse').appendChild(script);
+      // });
 
 
 
       // document.body.script.getElementsByClassName("iter-widget ");
 
 
-      // setTimeout(function () {
+      setTimeout(function () {
 
 
-      //   var tIterTabviewContent = document.getElementsByClassName("iter-tabview-content")[1].id;
-      //   console.log(tIterTabviewContent);
+        var tIterTabviewContent = document.getElementsByClassName("iter-tabview-content")[1].id;
+        console.log(tIterTabviewContent);
 
-      //   $(`.ms-visto-ec #${tIterTabviewContent}`).addClass('swiper');
-      //   $('.swiper').addClass('ms-visto-ec-Swiper');
-      //   $('.ms-visto-ec-Swiper .iter-tabview-content-item').addClass('swiper-wrapper');
-      //   $('.swiper-wrapper .element').addClass('swiper-slide');
+        $(`.ms-visto-ec #${tIterTabviewContent}`).addClass('swiper');
+        $('.swiper').addClass('ms-visto-ec-Swiper');
+        $('.ms-visto-ec-Swiper .iter-tabview-content-item').addClass('swiper-wrapper');
+        $('.swiper-wrapper .element').addClass('swiper-slide');
 
 
-      //   var dpagination = document.createElement("div");
-      //   dpagination.classList = "swiper-pagination";
-      //   document.querySelector(`#${tIterTabviewContent}`).appendChild(dpagination);
+        var dpagination = document.createElement("div");
+        dpagination.classList = "swiper-pagination";
+        document.querySelector(`#${tIterTabviewContent}`).appendChild(dpagination);
 
-      //   var msvistoecSwiper = new Swiper(".ms-visto-ec-Swiper", {
-      //     slidesPerView: 5,
-      //     slidesPerColumn: 2,
-      //     spaceBetween: 30,
-      //     pagination: {
-      //       el: '.swiper-pagination',
-      //       clickable: true,
-      //     },
+        var msvistoecSwiper = new Swiper(".ms-visto-ec-Swiper", {
+          slidesPerView: 5,
+          slidesPerColumn: 2,
+          spaceBetween: 30,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
 
-      //     breakpoints: {
-      //       360: {
-      //         slidesPerView: 2.5,
-      //         spaceBetween: 20,
-      //       },
-      //       390: {
-      //         slidesPerView: 1.5,
-      //         spaceBetween: 20,
-      //       },
-      //       600: {
-      //         slidesPerView: 3,
-      //         spaceBetween: 20,
-      //       },
-      //       768: {
-      //         slidesPerView: 3,
-      //         spaceBetween: 40,
-      //       },
-      //       1024: {
-      //         slidesPerView: 3,
-      //         spaceBetween: 30,
-      //       },
-      //     },
-      //   });
-      // }, 1300);
+          breakpoints: {
+            360: {
+              slidesPerView: 2.5,
+              spaceBetween: 20,
+            },
+            390: {
+              slidesPerView: 1.5,
+              spaceBetween: 20,
+            },
+            600: {
+              slidesPerView: 3,
+              spaceBetween: 20,
+            },
+            768: {
+              slidesPerView: 3,
+              spaceBetween: 40,
+            },
+            1024: {
+              slidesPerView: 3,
+              spaceBetween: 30,
+            },
+          },
+        });
+      }, 1300);
     </script>
 </body>
 
