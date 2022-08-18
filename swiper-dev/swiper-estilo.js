@@ -23,6 +23,7 @@ $(document).ready(function () {
     spaceBetween: 30,
     pagination: {
       el: ".swiper-pagination",
+      dynamicBullets: true,
       clickable: true,
     },
 
