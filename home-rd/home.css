@@ -409,7 +409,14 @@ INICIO - BLOQUE - PROGRAMACION
 }
 
 
-
+@media (max-width: 767px) {
+  .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones a{
+    font-size: 10px;
+  }
+  .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones{
+    padding: 14px 14px;
+  }
+}
 
 
 /* ***************************
