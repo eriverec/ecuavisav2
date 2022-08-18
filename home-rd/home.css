@@ -18,14 +18,43 @@
   --rd-size-34: 34px;
 
 
+  --animate-duration: 1s;
+  --animate-delay: 1s;
+  --animate-repeat: 1
+}
 
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0
+  }
+
+  to {
+    opacity: 1
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0
+  }
+
+  to {
+    opacity: 1
+  }
 }
 
 /* ***************************
 INICIO - PORTADA - 4 DESTACADAS 
 *************************** */
 .HOME_MENU_RD .ly-apertura-rd {
-  /* margin: 2rem 0; */
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-duration: var(--animate-duration);
+  animation-duration: var(--animate-duration);
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both
 }
 
 .HOME_MENU_RD .rd_grid {
@@ -674,45 +703,7 @@ INICIO - BLOQUE - CULTURA
 /* ***************************
 INICIO - BLOQUE - ESTILO 
 *************************** */
-:root {
-  --animate-duration: 1s;
-  --animate-delay: 1s;
-  --animate-repeat: 1
-}
 
-.animate__fadeIn {
-  -webkit-animation-name: fadeIn;
-  animation-name: fadeIn
-}
-
-.animate__animated {
-  -webkit-animation-duration: 1s;
-  animation-duration: 1s;
-  -webkit-animation-duration: var(--animate-duration);
-  animation-duration: var(--animate-duration);
-  -webkit-animation-fill-mode: both;
-  animation-fill-mode: both
-}
-
-@-webkit-keyframes fadeIn {
-  0% {
-    opacity: 0
-  }
-
-  to {
-    opacity: 1
-  }
-}
-
-@keyframes fadeIn {
-  0% {
-    opacity: 0
-  }
-
-  to {
-    opacity: 1
-  }
-}
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block {
   display: grid;
