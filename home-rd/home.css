@@ -188,7 +188,7 @@ INICIO - BLOQUE - ECUADOR
 
 .HOME_MENU_RD .cintillo-rd {
   margin-bottom: .5rem;
-  display: block;
+  display: inline-block;
   font-size: var(--rd-size-60);
   font-weight: 500;
   color: var(--rd-cintillo);
@@ -690,5 +690,6 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .lista-bloque-estilo .swiper-pagination {
   bottom: initial;
+  text-align: end;
   top: 0;
 }
