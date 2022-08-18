@@ -15,7 +15,9 @@ $(document).ready(function () {
 
   var dpagination = document.createElement("div");
   dpagination.classList = "swiper-pagination";
-  document.querySelector(`.lista-bloque-estilo`).appendChild(dpagination);
+  // document.querySelector(`.lista-bloque-estilo`).insertBefore(dpagination);
+
+  $(".lista-bloque-estilo").prepend(dpagination);
 
   var swiperEstilo = new Swiper(".lista-bloque-estilo", {
     slidesPerView: 2,
