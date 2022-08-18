@@ -26,18 +26,9 @@ $(document).ready(function () {
       dynamicBullets: true,
       clickable: true,
     },
-
     breakpoints: {
-      360: {
-        slidesPerView: 1,
-        spaceBetween: 20,
-      },
-      390: {
-        slidesPerView: 1,
-        spaceBetween: 20,
-      },
       600: {
-        slidesPerView: 1,
+        slidesPerView: 2,
         spaceBetween: 20,
       },
       768: {
