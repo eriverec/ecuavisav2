@@ -404,6 +404,7 @@ INICIO - BLOQUE - PROGRAMACION
   overflow: auto;
   white-space: nowrap;
   margin-top: 10px;
+  text-align: center;
 }
 
 .HOME_MENU_RD .lista-programacion-bloque .noticias .article {
