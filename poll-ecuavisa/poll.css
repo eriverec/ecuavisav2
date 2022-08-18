@@ -11,7 +11,7 @@
 
 .poll-form.form-check input[type="radio"]:checked+label {
   font-weight: bold;
-  border: 2px solid #0a3b84;
+  background: #87c7ff;
   display: block;
   padding: 10px;
 }
