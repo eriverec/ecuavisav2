@@ -28,10 +28,6 @@ INICIO - PORTADA - 4 DESTACADAS
   margin: 2rem 0;
 }
 
-#iter-content-wrapper{
-  padding-top: 0;
-}
-
 .HOME_MENU_RD .rd_grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -467,6 +463,16 @@ INICIO - BLOQUE - PROGRAMACION
   font-size: 15px;
 }
 
+@media (min-width: 1200px ){
+  .HOME_MENU_RD .prog-web-container {
+    max-width: 1280px;
+    width: 70%;
+    margin: auto;
+  }
+
+}
+
+
 
 @media (max-width: 767px) {
   .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones a {
@@ -704,16 +710,18 @@ INICIO - BLOQUE - ESTILO
 }
 
 @media (max-width: 991px) {
-  .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2{
+  .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2 {
     font-size: var(--rd-size-18);
   }
 }
+
 @media (max-width: 767px) {
   .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block {
     grid-template-columns: none;
   }
-  .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2{
+
+  .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2 {
     font-size: var(--rd-size-20);
   }
-  
+
 }
