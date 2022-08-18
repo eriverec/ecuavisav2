@@ -352,28 +352,52 @@ INICIO - BLOQUE - PROGRAMACION
   animation-timing-function: linear;
   animation-iteration-count: infinite;
 
-  -webkit-animation-name:parpadeo;
+  -webkit-animation-name: parpadeo;
   -webkit-animation-duration: 1s;
   -webkit-animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
 }
 
-@-moz-keyframes parpadeo{  
-  0% { opacity: 1.0; }
-  50% { opacity: 0.0; }
-  100% { opacity: 1.0; }
+@-moz-keyframes parpadeo {
+  0% {
+    opacity: 1.0;
+  }
+
+  50% {
+    opacity: 0.0;
+  }
+
+  100% {
+    opacity: 1.0;
+  }
 }
 
-@-webkit-keyframes parpadeo {  
-  0% { opacity: 1.0; }
-  50% { opacity: 0.0; }
-   100% { opacity: 1.0; }
+@-webkit-keyframes parpadeo {
+  0% {
+    opacity: 1.0;
+  }
+
+  50% {
+    opacity: 0.0;
+  }
+
+  100% {
+    opacity: 1.0;
+  }
 }
 
-@keyframes parpadeo {  
-  0% { opacity: 1.0; }
-   50% { opacity: 0.0; }
-  100% { opacity: 1.0; }
+@keyframes parpadeo {
+  0% {
+    opacity: 1.0;
+  }
+
+  50% {
+    opacity: 0.0;
+  }
+
+  100% {
+    opacity: 1.0;
+  }
 }
 
 .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones {
@@ -441,10 +465,11 @@ INICIO - BLOQUE - PROGRAMACION
 
 
 @media (max-width: 767px) {
-  .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones a{
+  .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones a {
     font-size: 10px;
   }
-  .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones{
+
+  .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones {
     padding: 14px 14px;
   }
 }
@@ -615,7 +640,7 @@ INICIO - BLOQUE - CULTURA
     gap: 20px;
   }
 
-  .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h2{
+  .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h2 {
     font-size: var(--rd-size-18);
   }
 
@@ -637,7 +662,7 @@ INICIO - BLOQUE - CULTURA
 
 
 /* ***************************
-INICIO - BLOQUE - CULTURA 
+INICIO - BLOQUE - ESTILO 
 *************************** */
 
 
@@ -654,8 +679,16 @@ INICIO - BLOQUE - CULTURA
   display: block;
 }
 
-
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2 {
   color: var(--bs-black);
   font-size: var(--rd-size-26);
+}
+
+.HOME_MENU_RD .lista-bloque-estilo .noticias {
+  margin-top: 50px;
+}
+
+.HOME_MENU_RD .lista-bloque-estilo .swiper-pagination {
+  bottom: initial;
+  top: 0;
 }
