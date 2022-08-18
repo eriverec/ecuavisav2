@@ -693,3 +693,8 @@ INICIO - BLOQUE - ESTILO
   text-align: end;
   top: 0;
 }
+
+.HOME_MENU_RD .lista-bloque-estilo .swiper-pagination.swiper-pagination-bullets.swiper-pagination-bullets-dynamic {
+  left: 100%;
+  transform: translateX(-100%);
+}
