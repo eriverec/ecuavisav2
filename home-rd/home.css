@@ -647,3 +647,15 @@ INICIO - BLOQUE - CULTURA
   grid-template-columns: 1fr 2fr;
 }
 
+.HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .section {
+  font-size: var(--rd-size-16);
+  font-weight: 500;
+  color: var(--bs-gray);
+  display: block;
+}
+
+
+.HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2 {
+  color: var(--bs-black);
+  font-size: var(--rd-size-26);
+}
