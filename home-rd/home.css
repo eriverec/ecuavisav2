@@ -463,7 +463,7 @@ INICIO - BLOQUE - PROGRAMACION
   font-size: 15px;
 }
 
-@media (min-width: 1200px ){
+@media (min-width: 1200px) {
   .HOME_MENU_RD .prog-web-container {
     max-width: 1200px;
     width: 870px;
@@ -675,6 +675,30 @@ INICIO - BLOQUE - CULTURA
 INICIO - BLOQUE - ESTILO 
 *************************** */
 
+.animate__fadeIn {
+  -webkit-animation-name: fadeIn;
+  animation-name: fadeIn
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0
+  }
+
+  to {
+    opacity: 1
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0
+  }
+
+  to {
+    opacity: 1
+  }
+}
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block {
   display: grid;
