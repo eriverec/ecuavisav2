@@ -453,7 +453,7 @@ INICIO - BLOQUE - PROGRAMACION
   text-transform: uppercase;
 }
 
-.HOME_MENU_RD .lista-programacion-bloque .noticias {
+/* .HOME_MENU_RD .lista-programacion-bloque .noticias {
   overflow: auto;
   white-space: nowrap;
   margin-top: 10px;
@@ -464,7 +464,7 @@ INICIO - BLOQUE - PROGRAMACION
   text-align: center;
   text-decoration: none;
   display: inline-block;
-}
+} */
 
 .HOME_MENU_RD .lista-programacion-bloque .noticias .article .text_block .text .text-wrapper {
   background: #0067d58c;
