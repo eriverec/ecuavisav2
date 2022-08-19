@@ -19,7 +19,7 @@ $(document).ready(function () {
   // document.querySelector(`.lista-bloque-estilo`).insertBefore(dpagination);
 
   var swiperEstilo = new Swiper(".lista-bloque-estilo", {
-    slidesPerView: 2,
+    slidesPerView: 1.5,
     spaceBetween: 30,
     pagination: {
       el: ".swiper-pagination",
