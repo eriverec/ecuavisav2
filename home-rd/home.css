@@ -492,14 +492,14 @@ INICIO - BLOQUE - PROGRAMACION
   font-size: 15px;
 }
 
-@media (min-width: 1200px) {
+/* @media (min-width: 1200px) {
   .HOME_MENU_RD .prog-web-container {
     max-width: 1200px;
     width: 870px;
     margin: auto;
   }
 
-}
+} */
 
 
 
