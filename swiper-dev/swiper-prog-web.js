@@ -19,7 +19,7 @@ $(document).ready(function () {
 
   var swiperProgramacionWeb = new Swiper(".lista-programacion-bloque", {
     slidesPerView: 1.5,
-    spaceBetween: 30,
+    spaceBetween: 10,
     pagination: {
       el: ".swiper-scrollbar",
       hide: true,
@@ -27,15 +27,15 @@ $(document).ready(function () {
     breakpoints: {
       600: {
         slidesPerView: 1.5,
-        spaceBetween: 20,
+        spaceBetween: 10,
       },
       768: {
-        slidesPerView: 3.5,
-        spaceBetween: 40,
+        slidesPerView: 2.5,
+        spaceBetween: 10,
       },
       1024: {
-        slidesPerView: 4.5,
-        spaceBetween: 30,
+        slidesPerView: 3.5,
+        spaceBetween: 10,
       },
     },
   });
