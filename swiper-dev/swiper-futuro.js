@@ -18,7 +18,7 @@ $(document).ready(function () {
   // $(".lista-bloque-futuro").prepend(dpagination);
 
   var swiperfuturo = new Swiper(".lista-bloque-futuro", {
-    slidesPerView: 2.5,
+    slidesPerView: 1.5,
     spaceBetween: 30,
     // pagination: {
     //   el: ".swiper-pagination",
@@ -27,7 +27,7 @@ $(document).ready(function () {
     // },
     breakpoints: {
       600: {
-        slidesPerView: 2.5,
+        slidesPerView: 1.5,
         spaceBetween: 20,
       },
       768: {
