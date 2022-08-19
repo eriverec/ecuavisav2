@@ -357,6 +357,17 @@ INICIO - BLOQUE - PROGRAMACION
   filter: grayscale(1);
 }
 
+.HOME_MENU_RD .img-header-prog .mediaBlock .icon_player_prog img {
+  width: 50px;
+}
+
+.HOME_MENU_RD .img-header-prog .mediaBlock .icon_player_prog{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
 .HOME_MENU_RD .img-header-prog .mediaBlock {
   position: relative;
 }
