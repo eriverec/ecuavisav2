@@ -466,8 +466,17 @@ INICIO - BLOQUE - PROGRAMACION
   display: inline-block;
 } */
 
+.HOME_MENU_RD .lista-programacion-bloque {
+  margin-top: 10px;
+  padding-bottom: 23px;
+}
+
+.HOME_MENU_RD .lista-programacion-bloque .swiper-scrollbar {
+  bottom: 15px;
+}
+
 .HOME_MENU_RD .lista-programacion-bloque .noticias .article .text_block .text .text-wrapper {
-  background: #0067d58c;
+  background: #0067d55c;
   border-radius: 5px;
   padding: 15px 35px;
   height: 80px;
