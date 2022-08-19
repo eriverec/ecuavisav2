@@ -785,5 +785,25 @@ INICIO - BLOQUE - FUTURO
 
 .HOME_MENU_RD .lista-bloque-futuro .noticias .article .media_block .text_block .headline a h2 {
   color: var(--bs-black);
-  font-size: var(--rd-size-18);
+  font-size: var(--rd-size-20);
+}
+
+@media (min-width: 1200px) {
+  .HOME_MENU_RD .lista-bloque-futuro .noticias .article .media_block .text_block .headline a h2 {
+    color: var(--bs-black);
+    font-size: var(--rd-size-26);
+  }
+}
+
+@media (max-width: 991px) {
+  .HOME_MENU_RD .lista-bloque-futuro .noticias .article .media_block .text_block .headline a h2 {
+    font-size: var(--rd-size-18);
+  }
+
+}
+
+@media (max-width: 767px) {
+  .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2 {
+    font-size: var(--rd-size-20);
+  }
 }
