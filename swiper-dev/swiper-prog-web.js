@@ -20,6 +20,7 @@ $(document).ready(function () {
   var swiperProgramacionWeb = new Swiper(".lista-programacion-bloque", {
     slidesPerView: 1.5,
     spaceBetween: 10,
+    slidesPerView: "auto",
     scrollbar: {
       el: ".swiper-scrollbar",
       hide: true,
