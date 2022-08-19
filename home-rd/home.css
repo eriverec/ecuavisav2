@@ -362,6 +362,7 @@ INICIO - BLOQUE - PROGRAMACION
 }
 
 .HOME_MENU_RD .img-header-prog .mediaBlock .icon_player_prog{
+  z-index: 9;
   position: absolute;
   top: 50%;
   left: 50%;
