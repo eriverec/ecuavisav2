@@ -40,7 +40,7 @@ $(document).ready(function () {
         spaceBetween: 30,
       },
       1200: {
-        slidesPerView: 3.5,
+        slidesPerView: 3,
         spaceBetween: 30,
       },
     },
