@@ -33,10 +33,14 @@ $(document).ready(function () {
       },
       768: {
         slidesPerView: 2,
-        spaceBetween: 40,
+        spaceBetween: 30,
       },
       1024: {
         slidesPerView: 2,
+        spaceBetween: 30,
+      },
+      1200: {
+        slidesPerView: 3.5,
         spaceBetween: 30,
       },
     },
