@@ -470,6 +470,11 @@ INICIO - BLOQUE - PROGRAMACION
   background: #0067d58c;
   border-radius: 5px;
   padding: 15px 35px;
+  height: 100px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .HOME_MENU_RD .lista-programacion-bloque .noticias .article .text_block .text .text-wrapper.activeBG {
@@ -490,6 +495,7 @@ INICIO - BLOQUE - PROGRAMACION
   color: white;
   font-weight: 350;
   font-size: 15px;
+  text-align: center;
 }
 
 /* @media (min-width: 1200px) {
