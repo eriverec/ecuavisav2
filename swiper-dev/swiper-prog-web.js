@@ -9,22 +9,20 @@ swiper-button-next
 swiper-scrollbar
 */
 $(document).ready(function () {
-  $(`.lista-bloque-estilo`).addClass("swiper");
-  $(".lista-bloque-estilo .noticias").addClass("swiper-wrapper");
-  $(".lista-bloque-estilo .noticias .article").addClass("swiper-slide");
+  $(".lista-programacion-bloque").addClass("swiper");
+  $(".lista-programacion-bloque .noticias").addClass("swiper-wrapper");
+  $(".lista-programacion-bloque .noticias .article").addClass("swiper-slide");
 
   var dpagination = document.createElement("div");
-  dpagination.classList = "swiper-pagination";
-  $(".lista-bloque-estilo").prepend(dpagination);
-  // document.querySelector(`.lista-bloque-estilo`).insertBefore(dpagination);
+  dpagination.classList = "swiper-scrollbar";
+  $(".lista-programacion-bloque").append(dpagination);
 
-  var swiperEstilo = new Swiper(".lista-bloque-estilo", {
+  var swiperProgramacionWeb = new Swiper(".lista-programacion-bloque", {
     slidesPerView: 1.5,
     spaceBetween: 30,
     pagination: {
-      el: ".swiper-pagination",
-      dynamicBullets: true,
-      clickable: true,
+      el: ".swiper-scrollbar",
+      hide: true,
     },
     breakpoints: {
       600: {
@@ -32,11 +30,11 @@ $(document).ready(function () {
         spaceBetween: 20,
       },
       768: {
-        slidesPerView: 2,
+        slidesPerView: 3,
         spaceBetween: 40,
       },
       1024: {
-        slidesPerView: 2,
+        slidesPerView: 4,
         spaceBetween: 30,
       },
     },
