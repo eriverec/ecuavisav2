@@ -18,7 +18,6 @@ $(document).ready(function () {
   $(".lista-programacion-bloque").append(dpagination);
 
   console.log("recuperar el val: ", val)
-
   var numSlider = val - 1;
   console.log("valor desde swiper: ", numSlider);
 
