@@ -17,7 +17,7 @@ $(document).ready(function () {
   dpagination.classList = "swiper-scrollbar";
   $(".lista-programacion-bloque").append(dpagination);
 
-  var numSlider;
+  var numSlider = 3;
   var swiperProgramacionWeb = new Swiper(".lista-programacion-bloque", {
     slidesPerView: 1.5,
     spaceBetween: 10,
