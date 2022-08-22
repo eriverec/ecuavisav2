@@ -449,6 +449,7 @@ INICIO - BLOQUE - PROGRAMACION
 }
 .HOME_MENU_RD .img-header-prog .mediaBlock .t_prog p{
   margin: 0;
+  font-weight: 500;
 }
 
 .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones {
