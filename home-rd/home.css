@@ -441,6 +441,17 @@ INICIO - BLOQUE - PROGRAMACION
   }
 }
 
+.HOME_MENU_RD .img-header-prog .mediaBlock .t_prog{
+  position: absolute;
+  bottom: 90px;
+  color: white;
+  font-size: var(--rd-size-22);
+  padding: 0 20px;
+}
+.HOME_MENU_RD .img-header-prog .mediaBlock .t_prog p{
+  margin: 0;
+}
+
 .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones {
   width: 100%;
   margin: auto;
@@ -450,7 +461,7 @@ INICIO - BLOQUE - PROGRAMACION
   gap: 20px;
   position: absolute;
   bottom: 0;
-  padding: 40px 20px;
+  padding: 0px 20px 40px;
   align-items: center;
 }
 
@@ -536,7 +547,12 @@ INICIO - BLOQUE - PROGRAMACION
   }
 
   .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones {
-    padding: 14px 14px;
+    padding: 0 14px 14px;
+  }
+  .HOME_MENU_RD .img-header-prog .mediaBlock .t_prog{
+    padding: 0 14px;
+    bottom: 55px;
+    font-size: var(--rd-size-18);
   }
 }
 
