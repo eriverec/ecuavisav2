@@ -40,5 +40,7 @@ $(document).ready(function () {
     },
   });
 
+  swiperProgramacionWeb.slideTo(3, false,false);
+
 
 });
