@@ -17,10 +17,11 @@ $(document).ready(function () {
   dpagination.classList = "swiper-scrollbar";
   $(".lista-programacion-bloque").append(dpagination);
 
+  
   var swiperProgramacionWeb = new Swiper(".lista-programacion-bloque", {
     slidesPerView: 1.5,
     spaceBetween: 10,
-    initialSlide: 2,
+    initialSlide: numSlider,
     scrollbar: {
       el: ".swiper-scrollbar",
       hide: true,
@@ -40,8 +41,5 @@ $(document).ready(function () {
       },
     },
   });
-
-  // swiperProgramacionWeb.slideTo(3, false,false);
-
 
 });
