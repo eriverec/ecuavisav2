@@ -17,7 +17,11 @@ $(document).ready(function () {
   dpagination.classList = "swiper-scrollbar";
   $(".lista-programacion-bloque").append(dpagination);
 
-  var numSlider = 3;
+  console.log("recuperar el val: ", val)
+
+  var numSlider = val - 1;
+  console.log("valor desde swiper: ", numSlider);
+
   var swiperProgramacionWeb = new Swiper(".lista-programacion-bloque", {
     slidesPerView: 1.5,
     spaceBetween: 10,
@@ -41,5 +45,4 @@ $(document).ready(function () {
       },
     },
   });
-
 });
