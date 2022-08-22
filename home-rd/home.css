@@ -287,6 +287,9 @@ INICIO - BLOQUE - ECUADOR
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .text {
     font-size: var(--rd-size-14);
   }
+  .HOME_MENU_RD .cintillo-rd {
+    font-size: var(--rd-size-34);
+  }
 }
 
 
@@ -295,10 +298,6 @@ INICIO - BLOQUE - ECUADOR
     display: grid;
     grid-template-columns: none;
     gap: 20px;
-  }
-
-  .HOME_MENU_RD .cintillo-rd {
-    font-size: var(--rd-size-34);
   }
 
   .HOME_MENU_RD .lista-bloque .noticias {
