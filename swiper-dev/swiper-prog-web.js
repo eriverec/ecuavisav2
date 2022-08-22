@@ -18,9 +18,7 @@ $(document).ready(function () {
   $(".lista-programacion-bloque").append(dpagination);
 
   var getNItem = localStorage.getItem('nItem');
-
-  console.log("numero desde swiper prog: ",getNItem)
-
+  console.log("numero desde swiper prog: ",getNItem);
   var numSlider = getNItem - 1;
   console.log(numSlider);
     
