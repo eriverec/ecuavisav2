@@ -66,17 +66,17 @@ $(document).ready(function () {
     titleProgram.append(secondParagraph);
     localStorage.setItem("nItem", val);
 
-    // var swiperClass = document.querySelector('.lista-programacion-bloque');
-    // var swiperWrapperClass = document.querySelector('.lista-programacion-bloque .noticias');
-    // var swiperSlideClass = document.querySelector('.lista-programacion-bloque .noticias .article');
+    var swiperClass = document.querySelector('.lista-programacion-bloque');
+    swiperClass.classList.add('swiper');
+    var swiperWrapperClass = document.querySelector('.lista-programacion-bloque .noticias');
+    swiperWrapperClass.classList.add('swiper-wrapper');
+    var swiperSlideClass = document.querySelector('.lista-programacion-bloque .noticias .article');
+    swiperSlideClass.classList.add('swiper-slide');
+    
 
-    // swiperClass.classList.add('swiper');
-    // swiperWrapperClass.classList.add('swiper-wrapper');
-    // swiperSlideClass.classList.add('swiper-slide');
-
-    $(".lista-programacion-bloque").addClass("swiper");
-    $(".lista-programacion-bloque .noticias").addClass("swiper-wrapper");
-    $(".lista-programacion-bloque .noticias .article").addClass("swiper-slide");
+    // $(".lista-programacion-bloque").addClass("swiper");
+    // $(".lista-programacion-bloque .noticias").addClass("swiper-wrapper");
+    // $(".lista-programacion-bloque .noticias .article").addClass("swiper-slide");
 
     var dpagination = document.createElement("div");
     dpagination.classList = "swiper-scrollbar";
