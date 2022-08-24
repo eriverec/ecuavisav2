@@ -81,17 +81,18 @@ $(document).ready(function () {
     // $(".lista-programacion-bloque").addClass("swiper");
     // $(".lista-programacion-bloque .noticias").addClass("swiper-wrapper");
     // $(".lista-programacion-bloque .noticias .article").addClass("swiper-slide");
+    // $(".lista-programacion-bloque").append(dpagination);
 
     var dpagination = document.createElement("div");
     dpagination.classList = "swiper-scrollbar";
-    $(".lista-programacion-bloque").append(dpagination);
+    swiperClass.append(dpagination);
 
     var getNItem = localStorage.getItem("nItem");
     // console.log("numero desde swiper prog: ",getNItem);
     var numSlider = getNItem - 1;
     // console.log(numSlider);
 
-    var swiperProgramacionWeb = new Swiper(".lista-programacion-bloque", {
+    var swiperProgramacionWeb = new Swiper(swiperClass, {
       slidesPerView: 1.5,
       spaceBetween: 10,
       initialSlide: numSlider,
@@ -120,17 +121,19 @@ $(document).ready(function () {
     localStorage.setItem("nItem", '');
     var swiperClass = document.querySelector('.lista-programacion-bloque');
     var swiperWrapperClass = document.querySelector('.lista-programacion-bloque .noticias');
-    var swiperSlideClass = document.querySelector('.lista-programacion-bloque .noticias .article');
+    var swiperSlideClass = document.querySelectorAll('.lista-programacion-bloque .noticias article');
 
     swiperClass.classList.add('swiper');
     swiperWrapperClass.classList.add('swiper-wrapper');
-    swiperSlideClass.classList.add('swiper-slide');
+    for (const box of swiperSlideClass) {      
+      box.classList.add('swiper-slide');    
+    }
 
     var dpagination = document.createElement("div");
     dpagination.classList = "swiper-scrollbar";
-    $(".lista-programacion-bloque").append(dpagination);
+    swiperClass.append(dpagination);
 
-    var swiperProgramacionWeb = new Swiper(".lista-programacion-bloque", {
+    var swiperProgramacionWeb = new Swiper(swiperClass, {
       slidesPerView: 1.5,
       spaceBetween: 10,
       initialSlide: 0,
