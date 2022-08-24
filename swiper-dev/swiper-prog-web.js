@@ -67,11 +67,15 @@ $(document).ready(function () {
     localStorage.setItem("nItem", val);
 
     var swiperClass = document.querySelector('.lista-programacion-bloque');
-    swiperClass.classList.add('swiper');
     var swiperWrapperClass = document.querySelector('.lista-programacion-bloque .noticias');
+    var swiperSlideClass = document.querySelectorAll('.lista-programacion-bloque .noticias article');
+
+    swiperClass.classList.add('swiper');
     swiperWrapperClass.classList.add('swiper-wrapper');
-    var swiperSlideClass = document.querySelector('.lista-programacion-bloque .noticias .article');
-    swiperSlideClass.classList.add('swiper-slide');
+    
+    for (const box of swiperSlideClass) {      
+      box.classList.add('swiper-slide');    
+    }
     
 
     // $(".lista-programacion-bloque").addClass("swiper");
