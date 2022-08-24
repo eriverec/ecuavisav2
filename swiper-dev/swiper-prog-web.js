@@ -5,6 +5,8 @@ var min = d.getMinutes();
 var t = d.getTime();
 var name = "";
 
+// ? hoalc omoas 
+
 // Crear variables de los elementos a ocultar
 const hideMenuEnvivo = document.querySelector('.sect-81d0c9805a5bf069ec4be1a657699d8b');
 const liveSignal = document.querySelector('.senal_active');
@@ -74,11 +76,11 @@ function activeBlock(val) {
         spaceBetween: 10,
       },
       768: {
-        slidesPerView: 2.5,
+        slidesPerView: 3.5,
         spaceBetween: 10,
       },
       1024: {
-        slidesPerView: 3.5,
+        slidesPerView: 4.5,
         spaceBetween: 10,
       },
     },
