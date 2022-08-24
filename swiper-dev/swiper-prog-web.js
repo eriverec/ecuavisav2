@@ -84,7 +84,6 @@ $(document).ready(function () {
   }
 
   function desactiveBlock() {
-
     localStorage.setItem("nItem", '');
     $(".lista-programacion-bloque").addClass("swiper");
     $(".lista-programacion-bloque .noticias").addClass("swiper-wrapper");
@@ -93,7 +92,6 @@ $(document).ready(function () {
     var dpagination = document.createElement("div");
     dpagination.classList = "swiper-scrollbar";
     $(".lista-programacion-bloque").append(dpagination);
-
 
     var swiperProgramacionWeb = new Swiper(".lista-programacion-bloque", {
       slidesPerView: 1.5,
@@ -127,62 +125,48 @@ $(document).ready(function () {
     if ("05:55" <= timeOfDay && timeOfDay <= "06:55") {
       activeBlock(1);
       showTelevistazoAmanecerComunidad();
-
     } else if ("06:55" <= timeOfDay && timeOfDay <= "07:30") {
       activeBlock(2);
-
     } else if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
       activeBlock(3);
       showTelevistazoAmanecerComunidad();
-
     } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {
       activeBlock(4);
-
     } else if ("13:00" <= timeOfDay && timeOfDay <= "14:00") {
       activeBlock(5);
-
     } else if ("14:00" <= timeOfDay && timeOfDay <= "15:00") {
       activeBlock(6);
-
     } else if ("15:00" <= timeOfDay && timeOfDay <= "16:00") {
       activeBlock(6);
-
     } else if ("18:00" <= timeOfDay && timeOfDay <= "19:00") {
       activeBlock(7);
     } else if ("19:00" <= timeOfDay && timeOfDay <= "19:59") {
       activeBlock(8);
     } else if ("20:00" <= timeOfDay && timeOfDay <= "21:00") {
       activeBlock(9);
-
     } else if ("21:00" <= timeOfDay && timeOfDay <= "22:00") {
       activeBlock(9);
-
     } else if ("22:00" <= timeOfDay && timeOfDay <= "23:00") {
       activeBlock(9);
-
     } else {
       desactiveBlock();
     }
   } else if (day === 6) {
     //validacion de sabado
     console.log("Sábado");
-
     if ("19:00" <= timeOfDay && timeOfDay <= "19:30") {
-      $(".title_programa").append("Televistazo 19h00");
+      activeBlock(10);
     } else {
-      console.log("player no activo");
       desactiveBlock();
     }
   } else {
     //validacion de domingo
     console.log("Domingo");
-
     if ("10:30" <= timeOfDay && timeOfDay <= "11:30") {
-      $(".title_programa").append("Políticamente Correcto");
+      activeBlock(11);
     } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
-      $(".title_programa").append("Televistazo 19h00");
+      activeBlock(12);
     } else {
-      console.log("player no activo");
       desactiveBlock();
     }
   }
