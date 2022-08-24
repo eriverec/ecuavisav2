@@ -17,12 +17,21 @@ $(document).ready(function () {
   var t = d.getTime();
   var name = "";
 
-  // console.log(playerOptions.id);
-  $(".sect-81d0c9805a5bf069ec4be1a657699d8b").hide();
-  $(".HOME_MENU_RD .img-header-prog .mediaBlock .icon_player_prog").hide();
-  $(".HOME_MENU_RD .img-header-prog .mediaBlock .senal_active").hide();
-  $(".HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones .btn-gye").hide();
-  $('.HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones .btn-quito').hide();
+  // Crear variables de los elementos a ocultar
+  const hideMenuEnvivo = document.querySelector('.sect-81d0c9805a5bf069ec4be1a657699d8b');
+  const liveSignal = document.querySelector('.senal_active');
+  const buttonGye = document.querySelector('.btn-gye');
+  const buttonQuito = document.querySelector('.btn-quito');
+
+  // Ocultar los div si ya no hay transmision
+  hideMenuEnvivo.classList.add("div__hide");
+  liveSignal.classList.add("div__hide");
+  buttonGye.classList.add("div__hide");
+  buttonQuito.classList.add("div__hide");
+
+  // $(".HOME_MENU_RD .img-header-prog .mediaBlock .senal_active").hide();
+  // $(".HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones .btn-gye").hide();
+  // $('.HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones .btn-quito').hide();
 
   console.log("dia " + day, "hora " + hour, "minuto " + min);
 
@@ -30,24 +39,44 @@ $(document).ready(function () {
   console.log(timeOfDay);
 
   function showTelevistazoAmanecerComunidad() {
-    $(".HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones .btn-quito").show();
+    buttonQuito.classList.remove("div__hide");
   }
 
   function activeBlock(val) {
-    $(".sect-81d0c9805a5bf069ec4be1a657699d8b").show();
-    $(".sect-81d0c9805a5bf069ec4be1a657699d8b").addClass("active_envivo");
-    $(`.lista-programacion-bloque .noticias .article .BLOQUE_PROG_TIT_TXT.n${val} .text_block .text .text-wrapper`).addClass("activeBG");
-    var res = $(".text-wrapper.activeBG p:eq(1)").text();
-    $(".t_prog p").append(res);
-    $(".HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones .btn-gye").show();
-    $(".HOME_MENU_RD .img-header-prog .mediaBlock .senal_active").show();
+    hideMenuEnvivo.classList.remove("div__hide");
+    hideMenuEnvivo.classList.add("active_envivo");
+    liveSignal.classList.remove("div__hide");
+    buttonGye.classList.remove("div__hide");
 
+    // $(".sect-81d0c9805a5bf069ec4be1a657699d8b").show();
+    // $(".sect-81d0c9805a5bf069ec4be1a657699d8b").addClass("active_envivo");
+    // var res = $(".text-wrapper.activeBG p:eq(1)").text();
+    // $(".t_prog p").append(res);
+
+    // $(".HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones .btn-gye").show();
+    // $(".HOME_MENU_RD .img-header-prog .mediaBlock .senal_active").show();
+    // $(`.lista-programacion-bloque .noticias .article .BLOQUE_PROG_TIT_TXT.n${val} .text_block .text .text-wrapper`).addClass("activeBG");
+    // console.log(paras)
+    var valDynamic = document.querySelector('.lista-programacion-bloque .noticias .article .BLOQUE_PROG_TIT_TXT.n' + val + ' .text_block .text .text-wrapper');
+    valDynamic.classList.add('activeBG');
+    var dataParrafo = document.querySelector('.text-wrapper.activeBG');
+    var secondParagraph = dataParrafo.getElementsByTagName("p")[1].innerText;
+    var titleProgram = document.querySelector('.t_prog p');
+
+    titleProgram.append(secondParagraph);
     localStorage.setItem("nItem", val);
-    console.log("no es nulo, valor:", val);
 
-    $(".lista-programacion-bloque").addClass("swiper");
-    $(".lista-programacion-bloque .noticias").addClass("swiper-wrapper");
-    $(".lista-programacion-bloque .noticias .article").addClass("swiper-slide");
+    var swiperClass = document.querySelector('.lista-programacion-bloque');
+    var swiperWrapperClass = document.querySelector('.lista-programacion-bloque .noticias');
+    var swiperSlideClass = document.querySelector('.lista-programacion-bloque .noticias .article');
+
+    swiperClass.classList.add('swiper');
+    swiperWrapperClass.classList.add('swiper-wrapper');
+    swiperSlideClass.classList.add('swiper-slide');
+
+    // $(".lista-programacion-bloque").addClass("swiper");
+    // $(".lista-programacion-bloque .noticias").addClass("swiper-wrapper");
+    // $(".lista-programacion-bloque .noticias .article").addClass("swiper-slide");
 
     var dpagination = document.createElement("div");
     dpagination.classList = "swiper-scrollbar";
@@ -85,9 +114,13 @@ $(document).ready(function () {
 
   function desactiveBlock() {
     localStorage.setItem("nItem", '');
-    $(".lista-programacion-bloque").addClass("swiper");
-    $(".lista-programacion-bloque .noticias").addClass("swiper-wrapper");
-    $(".lista-programacion-bloque .noticias .article").addClass("swiper-slide");
+    var swiperClass = document.querySelector('.lista-programacion-bloque');
+    var swiperWrapperClass = document.querySelector('.lista-programacion-bloque .noticias');
+    var swiperSlideClass = document.querySelector('.lista-programacion-bloque .noticias .article');
+
+    swiperClass.classList.add('swiper');
+    swiperWrapperClass.classList.add('swiper-wrapper');
+    swiperSlideClass.classList.add('swiper-slide');
 
     var dpagination = document.createElement("div");
     dpagination.classList = "swiper-scrollbar";

@@ -43,6 +43,10 @@
   }
 }
 
+.div__hide{
+  display: none;
+}
+
 /* ***************************
 INICIO - PORTADA - 4 DESTACADAS 
 *************************** */
