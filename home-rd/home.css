@@ -43,7 +43,7 @@
   }
 }
 
-.div__hide{
+.div__hide {
   display: none !important;
 }
 
@@ -147,9 +147,9 @@ INICIO - PORTADA - 4 DESTACADAS
 
 .HOME_MENU_RD .iconPlay {
   background-image: url('https://estadisticas.ecuavisa.com/sites/default/files/2022-08/icons8-reproducir-en-c%C3%ADrculo-50.png');
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 
 
@@ -299,6 +299,7 @@ INICIO - BLOQUE - ECUADOR
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .text {
     font-size: var(--rd-size-14);
   }
+
   .HOME_MENU_RD .cintillo-rd {
     font-size: var(--rd-size-34);
   }
@@ -372,7 +373,7 @@ INICIO - BLOQUE - PROGRAMACION
   width: 50px;
 }
 
-.HOME_MENU_RD .img-header-prog .mediaBlock .icon_player_prog{
+.HOME_MENU_RD .img-header-prog .mediaBlock .icon_player_prog {
   z-index: 9;
   position: absolute;
   top: 50%;
@@ -452,14 +453,15 @@ INICIO - BLOQUE - PROGRAMACION
   }
 }
 
-.HOME_MENU_RD .img-header-prog .mediaBlock .t_prog{
+.HOME_MENU_RD .img-header-prog .mediaBlock .t_prog {
   position: absolute;
   bottom: 90px;
   color: white;
   font-size: var(--rd-size-22);
   padding: 0 20px;
 }
-.HOME_MENU_RD .img-header-prog .mediaBlock .t_prog p{
+
+.HOME_MENU_RD .img-header-prog .mediaBlock .t_prog p {
   margin: 0;
   font-weight: 500;
 }
@@ -526,7 +528,7 @@ INICIO - BLOQUE - PROGRAMACION
 }
 
 .HOME_MENU_RD .lista-programacion-bloque .noticias .article .text_block .text .text-wrapper.activeBG p:nth-child(1),
-.HOME_MENU_RD .lista-programacion-bloque .noticias .article .text_block .text .text-wrapper.activeBG p:nth-child(2)  {
+.HOME_MENU_RD .lista-programacion-bloque .noticias .article .text_block .text .text-wrapper.activeBG p:nth-child(2) {
   color: white;
 }
 
@@ -563,7 +565,7 @@ INICIO - BLOQUE - PROGRAMACION
     font-size: 10px;
   }
 
-  .HOME_MENU_RD .img-header-prog .mediaBlock .multimedia img{
+  .HOME_MENU_RD .img-header-prog .mediaBlock .multimedia img {
     height: 300px;
     object-fit: cover;
   }
@@ -571,7 +573,8 @@ INICIO - BLOQUE - PROGRAMACION
   .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones {
     padding: 0 14px 14px;
   }
-  .HOME_MENU_RD .img-header-prog .mediaBlock .t_prog{
+
+  .HOME_MENU_RD .img-header-prog .mediaBlock .t_prog {
     padding: 0 14px;
     bottom: 55px;
     font-size: var(--rd-size-18);
@@ -775,6 +778,12 @@ INICIO - BLOQUE - ESTILO
   display: grid;
   gap: 20px;
   grid-template-columns: 1fr 2fr;
+}
+
+.HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .multimedia img {
+  height: 100% !important;
+  width: 100% !important;
+  object-fit: cover ;
 }
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .section {
