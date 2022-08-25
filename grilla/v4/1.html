@@ -10,7 +10,7 @@
     <style>
         td { border: 1px solid blue; }
         .hourtabs {
-/*            display: flex;
+    /*      display: flex;
             flex-wrap: wrap;*/
             display: -webkit-box;
             /* flex-wrap: wrap; */
@@ -55,22 +55,22 @@
 
     <!-- Tabs  -->
     <ul id="tabs" class="inline-flex w-full py-2 overflow-auto">
-        <li class="p-2 mr-1 py-2 -mb-px font-semibold text-gray-800 border-blue-400 bg-neutral-300 opacity-100"><a class="Lunes" id="default-tab" href="#lunes">Lunes</a></li>
+        <li class="p-2 mr-1 py-2 -mb-px font-semibold text-gray-800 border-blue-400 bg-neutral-300 opacity-100"><a class="LunesTab" id="default-tab" href="#lunes">Lunes</a></li>
         <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="MartesTab" href="#martes">Martes</a></li>
         <li class="px-2 mx-1 py-2 font-semibold text-gray-900 bg-neutral-300 opacity-100"><a class="MiercolesTab" href="#miercoles">Miércoles</a></li>
         <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="JuevesTab" href="#jueves">Jueves</a></li>
         <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="ViernesTab" href="#viernes">Viernes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="SábadoTab" href="#sabado">Sábado</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="SabadoTab" href="#sabado">Sábado</a></li>
         <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="DomingoTab" href="#domingo">Domingo</a></li>
     </ul>
-    <table class="puredata hidden">
+    <table class="puredata">
 
     </table>
     <!-- Tab Contents -->
     <div id="tab-contents" class=" ">
         <div id="lunes" class="px-2">
             <table class="bg-white rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList lunes"> </tbody>
+                <tbody id="programlist2" class="programList Lunes"> </tbody>
                 <!--     <tr><td class="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center">
                             <img src="" alt="">
                             <p class="ml-3 text-gray-900 whitespace-no-wrap"> televistazo - 11:00 </p>
@@ -83,13 +83,20 @@
 
         <div id="martes" class="hidden">
             <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList martes">
+                <tbody id="programlist2" class="programList Martes">
                 </tbody>
             </table>
         </div>
 
         <div id="miercoles" class="hidden">
-            <div class="hourtabs pb-2">
+
+            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
+                <tbody id="programlist2" class="programList Miercoles"> </tbody>
+            </table>
+        </div>
+
+        <div id="jueves" class="hidden">
+<!--             <div class="hourtabs pb-2">
                 <input type="radio" name="tabs" id="00-03" checked="checked">
                 <label for="00-03">00-03</label> <div class="tab"> <h1>00-03</h1> </div>
 
@@ -136,31 +143,24 @@
 
                 <input type="radio" name="tabs" id="18-21">
                 <label for="18-21">03:00</label>                     
-            </div>
-
+            </div> -->
             <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList miercoles"> </tbody>
-            </table>
-        </div>
-
-        <div id="jueves" class="hidden">
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList jueves"> </tbody>
+                <tbody id="programlist2" class="programList Jueves"> </tbody>
             </table>
         </div>
         <div id="viernes" class="hidden">
             <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList viernes"> </tbody>
+                <tbody id="programlist2" class="programList Viernes"> </tbody>
             </table>
         </div>     
         <div id="sabado" class="hidden">
             <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList sabado"> </tbody>
+                <tbody id="programlist2" class="programList sabado Sabado"> </tbody>
             </table>
         </div>    
         <div id="domingo" class="hidden">
             <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList domingo"> </tbody>
+                <tbody id="programlist2" class="programList Domingo"> </tbody>
             </table>
         </div>   
     </div>
@@ -177,10 +177,20 @@
     function fechahoy(dato){
         var fecha = new Date();
         // var hoy = new Date(fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate()); //+7 se suma si quiere setear ayer u hoy
-        var hoy = fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate();
+        // var hoy = fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate();
+        var hoy= fecha.getFullYear()+'-'+('0'+(fecha.getMonth()+1)).slice(-2)+'-'+('0'+fecha.getDate()).slice(-2);
         var hora = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
         var fehayHora = hoy+' '+hora;
-        if (dato === 'fecha'){ return hoy; }
+        if (dato === 'fecha'){ 
+        return hoy 
+        /*return hoy.replace //funcion avanzada que filtra ceros en días
+        (/-1-|-2-|-3-|-4-|-5-|-6-|-7-|-8-|-9-/gi,
+            function (x) {
+            r1 = x.replace('-1-','-01-');    r2 = r1.replace('-2-','-02-');   r3 = r2.replace('-3-','-03-');
+            r4 = r3.replace('-4-','-04-');   r5 = r4.replace('-5','-05-');   r6 = r5.replace('-6-','-06-');
+            r7 = r6.replace('-7-','-07-');   r8 = r7.replace('-8','-08-');   r9 = r8.replace('-8-','-08-');
+          return r8.replace('-9-','-09-'); 
+        });*/ }
         else if (dato === 'hora'){return hora;}
         // return fehayHora;
     }
@@ -191,16 +201,29 @@
 
     function proxSemana(){
         var today = new Date();
-        var proxSemana = new Date(today.getFullYear(), today.getMonth(), today.getDate()+7);
+        var proxSemana = new Date(today.getFullYear(), today.getMonth(), today.getDate()+3);
         return proxSemana;
     }  
+    console.log(proxSemana())
 
     function getFecha(dia){
         var today = new Date();
-        var diaObtenido = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+(today.getDate()+dia) ;
-        return diaObtenido;
+        var diaObtenido = today.getFullYear()+'-'+('0'+(today.getMonth()+1)).slice(-2)+'-'+('0'+(today.getDate()+dia)).slice(-2) ;
+        return diaObtenido
+        // return diaObtenido.replace //funcion avanzada que filtra ceros en días
+        // (/-1|-2|-3|-4|-5|-6|-7|-8|-9/gi,
+        //     function (x) {
+        //     r1 = x.replace('-1','-01');    r2 = r1.replace('-2','-02');   r3 = r2.replace('-3','-03');
+        //     r4 = r3.replace('-4','-04');   r5 = r4.replace('-5','-05');   r6 = r5.replace('-6','-06');
+        //     r7 = r6.replace('-7','-07');   r8 = r7.replace('-8','-08');
+        //   return r8.replace('-9','-09');
+        // }) 
     }  
-
+    console.log(getFecha(0)+ ' es el dia')
     </script>
+
+
+
+   
 </body>
 </html>
