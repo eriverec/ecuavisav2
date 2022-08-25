@@ -17,14 +17,18 @@ tabTogglers.forEach(function(toggler) {
     });
 });
 // Obtenemos el día actual
-let tercermenos = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][new Date().getDay()-3]
-let anteayer = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][new Date().getDay()-2]
-let ayer = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][new Date().getDay()-1]
-let actualDay = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][new Date().getDay()]
-let manana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][new Date().getDay()+1]
-let pasadomanana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][new Date().getDay()+2]
-let tercermas = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][new Date().getDay()+3]
+tercer_mas = getFecha(+3);
+var undia = new Date();
+let tercermenos = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][(undia.getDay()-3)]
+let anteayer = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][(undia.getDay()-2)]
+let ayer = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][(undia.getDay()-1)]
+let actualDay = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][(undia.getDay())]
+let manana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][(undia.getDay()+1)]
+let pasadomanana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado'][(undia.getDay()+2)]
+let tercermas = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado','Domingo'][((undia.getDay()+3))]
 // document.write('hoy es '+ actualDay)
+console.log('test dias: '+tercermas);
+console.log('tercer mas es: '+getFecha(+3));
 document.querySelector("."+actualDay+'Tab').click(); // seteamos por defecto el día actual
 
 // ##### FIN tab de días de la semana
@@ -49,7 +53,7 @@ function renderProgramas(){
         // variables de programas
         var horahoy= fechahoy('hora');
         var programName= _jsonProgramas[programIndex].programa;
-        var programDate= _jsonProgramas[programIndex].fecha.replace('-0', '-'); //revisar si presenta problemas en horario
+        var programDate= _jsonProgramas[programIndex].fecha//.replace('-0', '-'); //revisar si presenta problemas en horario
         var programTimeIni= _jsonProgramas[programIndex].hora_inicio.replace(_jsonProgramas[programIndex].fecha, '');
 
         var ActualClass= 'px-4 py-4 text-zinc-50 bg-white text-sm flex items-center'
@@ -67,8 +71,8 @@ function renderProgramas(){
         `);
         // dia de hoy
         if (fechahoy('fecha') === (programDate) ){
-            console.log('La hora del momento es :'+horahoy)
-            console.log('La hora del progra  es :'+programTimeIni);
+            // console.log('La hora del momento es :'+horahoy)
+            // console.log('La hora del progra  es :'+programTimeIni);
 
                 // if(horahoy < programTimeIni){
                 //   console.log("Fecha actual es mayor");
@@ -77,39 +81,45 @@ function renderProgramas(){
                 // }
                 // console.log(horahoy,programTimeIni);
 
-                // var fecha2 = new Date('1/1/1990 06:07');
+                // var fecha2 = new Date('1/1/1990 06:07'); 
                 // var fecha1 = new Date('1/1/1990 05:12');
                  
                 // if(fecha2 <= fecha1) {return [false,'Hora final debe ser mayor a hora inicial']; }
                 //  else {return [true,'']; }
 
-
-        programas.appendTo('.'+actualDay.toLowerCase());
-        }else{ }
+        // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
+        programas.appendTo('.'+actualDay);
+        }else{ /*console.log('la fecha de hoy es '+fechahoy('fecha')+' y no coincide con '+programDate);*/ }
 
         // ayer
         if (getFecha(-1) === (programDate) ){
-        programas.appendTo('.'+ayer.toLowerCase());
-        }else{ }
+             /*console.log( 'Ayer fue: '+ getFecha(-1) +' y coincide con: '+programDate )*/
+        programas.appendTo('.'+ayer);
+        }else{ /*console.log('Ayer fue: '+ getFecha(-1) +' y no coincide con: '+programDate) */}
         // anteayer
         if (getFecha(-2) === (programDate) ){
-        programas.appendTo('.'+anteayer.toLowerCase());
+            programas.appendTo('.'+anteayer);
+        // programas.appendTo('.'+anteayer.toLowerCase());
+        // console.log('Anteayer fue: '+ getFecha(-2) +' coincide con: '+programDate) 
         }else{ }
         // tercermenos
         if (getFecha(-3) === (programDate) ){
-        programas.appendTo('.'+tercermenos.toLowerCase());
+            programas.appendTo('.'+tercermenos);
+        // programas.appendTo('.'+tercermenos.toLowerCase());
         }else{ }
         // manana
         if (getFecha(+1) === (programDate) ){
-        programas.appendTo('.'+manana.toLowerCase());
+        // programas.appendTo('.'+manana.toLowerCase());
+        programas.appendTo('.'+manana);
         }else{ }
         // pasadomanana
         if (getFecha(+2) === (programDate) ){
-        programas.appendTo('.'+pasadomanana.toLowerCase());
+        programas.appendTo('.'+pasadomanana);
         }else{ }
         // tercermas
         if (getFecha(+3) === (programDate) ){
-        programas.appendTo('.'+tercermas.toLowerCase());
+            // console.log('tercer mas es '+pasadomanana)
+        programas.appendTo('.'+tercermas);
         }else{ }
 
     //     /* para navegar entre elementos dentro se usa otro for como el ejemplo 
@@ -118,5 +128,5 @@ function renderProgramas(){
     //     } */
     }
 
-    _table.classList.add('hidden');
+    // _table.classList.add('hidden');
 }
