@@ -2,6 +2,7 @@
   --bs-black: #000;
   --rd-cintillo: #0067D5;
   --rd-gray-border: #D3D4D3;
+  --rd-section: #2927B9;
 
   /*DESKTOP*/
   --rd-size-14: 14px;
@@ -154,7 +155,7 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .section {
-  color: var(--bs-gray);
+  color: var(--rd-section);
   font-weight: 500;
   font-size: var(--rd-size-16);
 }
@@ -164,9 +165,15 @@ INICIO - PORTADA - 4 DESTACADAS
   color: var(--bs-black);
 }
 
-.HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 .text_block .headline a h3{
+.HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 .text_block .headline a h3 {
   font-size: var(--rd-size-22);
   color: var(--bs-black);
+}
+
+.HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 .text_block .section {
+  color: #2927B9;
+  font-weight: 500;
+  font-size: var(--rd-section);
 }
 
 /*NEGRIGA*/
@@ -270,7 +277,7 @@ INICIO - BLOQUE - ECUADOR
 }
 
 .HOME_MENU_RD .lista-bloque .noticias .article .text_block .section {
-  color: var(--bs-gray);
+  color: var(--rd-section);
   font-weight: 500;
   margin-bottom: 0.5rem;
   display: block;
@@ -290,7 +297,7 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .section {
   font-size: var(--rd-size-16);
   font-weight: 500;
-  color: var(--bs-gray);
+  color: var(--rd-section);
 }
 
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .text {
@@ -627,7 +634,7 @@ INICIO - BLOQUE - MUNDO
 }
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .text_block .section {
-  color: var(--bs-gray);
+  color: var(--rd-section);
   font-weight: 500;
   margin-bottom: 0.5rem;
   display: block;
@@ -747,7 +754,7 @@ INICIO - BLOQUE - CULTURA
 .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .section {
   font-size: var(--rd-size-16);
   font-weight: 500;
-  color: var(--bs-gray);
+  color: var(--rd-section);
   margin-top: 10px;
   display: block;
 }
@@ -765,7 +772,7 @@ INICIO - BLOQUE - CULTURA
   }
 
   .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias .article .text_block .section {
-    color: var(--bs-gray);
+    color: var(--rd-section);
     font-weight: 500;
     margin-top: 8px;
     margin-bottom: 0.5rem;
@@ -801,7 +808,7 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .section {
   font-size: var(--rd-size-16);
   font-weight: 500;
-  color: var(--bs-gray);
+  color: var(--rd-section);
   display: block;
 }
 
@@ -850,7 +857,7 @@ INICIO - BLOQUE - FUTURO
 .HOME_MENU_RD .lista-bloque-futuro .noticias .article .media_block .text_block .section {
   font-size: var(--rd-size-16);
   font-weight: 500;
-  color: var(--bs-gray);
+  color: var(--rd-section);
   display: block;
   margin-top: 10px;
 }
