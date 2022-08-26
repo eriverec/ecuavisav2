@@ -75,6 +75,12 @@ INICIO - PORTADA - 4 DESTACADAS
   gap: 30px;
 }
 
+.HOME_MENU_RD .rd_grid .c2__c1 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
   width: 100%;
   height: 100%;
