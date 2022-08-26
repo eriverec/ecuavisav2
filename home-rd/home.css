@@ -164,6 +164,11 @@ INICIO - PORTADA - 4 DESTACADAS
   color: var(--bs-black);
 }
 
+.HOME_MENU_RD .destacada__2 .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
+  font-size: var(--rd-size-22);
+  color: var(--bs-black);
+}
+
 /*NEGRIGA*/
 .HOME_MENU_RD .notas-1-n-ap.articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
   font-weight: 800;
