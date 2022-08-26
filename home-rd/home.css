@@ -69,6 +69,12 @@ INICIO - PORTADA - 4 DESTACADAS
   gap: 30px; */
 }
 
+.HOME_MENU_RD .rd_grid .c2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
   width: 100%;
   height: 100%;
@@ -180,10 +186,10 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block {
-position: relative;
+  position: relative;
 }
 
-.HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .text_block{
+.HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .text_block {
   position: absolute;
   bottom: 0;
 }
