@@ -72,6 +72,10 @@ INICIO - PORTADA - 4 DESTACADAS
   height: 100%;
 }
 
+.HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block {
+  position: relative;
+}
+
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block {
   margin-top: 1.5rem;
   position: absolute;
