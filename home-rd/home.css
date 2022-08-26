@@ -219,11 +219,12 @@ INICIO - PORTADA - 4 DESTACADAS
 
 }
 
-@media (max-width: 576px) {
+@media (max-width: 575px) {
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block {
     margin-top: 0;
     position: initial;
     background: #060127;
+    padding-bottom: 25px;
   }
 }
 
