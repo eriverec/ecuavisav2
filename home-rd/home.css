@@ -127,10 +127,6 @@ INICIO - PORTADA - 4 DESTACADAS
   /* margin-top: 3rem; */
 }
 
-.HOME_MENU_RD .notas-2-ap .noticias .article:nth-child(1) {
-  border-bottom: 1px solid var(--rd-gray-border);
-}
-
 .HOME_MENU_RD .notas-1-n-ap {
   border-bottom: 1px solid var(--rd-gray-border);
 }
@@ -173,7 +169,12 @@ INICIO - PORTADA - 4 DESTACADAS
 .HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 .text_block .section {
   color: #2927B9;
   font-weight: 500;
+  margin-top: 10px;
   font-size: var(--rd-section);
+}
+
+.HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 {
+  margin: 1rem 0;
 }
 
 /*NEGRIGA*/
