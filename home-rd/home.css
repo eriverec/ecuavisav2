@@ -74,6 +74,10 @@ INICIO - PORTADA - 4 DESTACADAS
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block {
   margin-top: 1.5rem;
+  position: absolute;
+  bottom: 0;
+  padding: 10px;
+  width: 100%;
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text {
@@ -177,10 +181,7 @@ INICIO - PORTADA - 4 DESTACADAS
 
 @media (max-width: 767px) {
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block {
-    position: absolute;
-    bottom: 0;
-    padding: 10px;
-    width: 100%;
+   
   }
 
   .HOME_MENU_RD .rd_grid {
