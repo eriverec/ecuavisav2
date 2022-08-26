@@ -48,6 +48,10 @@
   display: none !important;
 }
 
+.HOME_MENU_RD p{
+
+}
+
 
 /* ***************************
 INICIO - PORTADA - 4 DESTACADAS 
@@ -269,6 +273,10 @@ INICIO - PORTADA - 4 DESTACADAS
     grid-template-columns: none;
   }
 
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block{
+    padding-bottom: 0rem;
+  }
+
   .HOME_MENU_RD .rd_grid .c2__c1 {
     grid-template-columns: none;
   }
@@ -297,6 +305,7 @@ INICIO - PORTADA - 4 DESTACADAS
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block {
     margin-top: 0;
     position: initial;
+    padding-bottom: 1rem;
     background: #060127;
   }
 }
