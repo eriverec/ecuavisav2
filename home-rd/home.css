@@ -53,14 +53,14 @@
 INICIO - PORTADA - 4 DESTACADAS 
 *************************** */
 .HOME_MENU_RD .ly-apertura-rd {
-  -webkit-animation-name: fadeIn;
+  /* -webkit-animation-name: fadeIn;
   animation-name: fadeIn;
   -webkit-animation-duration: 1s;
   animation-duration: 1s;
   -webkit-animation-duration: var(--animate-duration);
   animation-duration: var(--animate-duration);
   -webkit-animation-fill-mode: both;
-  animation-fill-mode: both
+  animation-fill-mode: both */
 }
 
 .HOME_MENU_RD .rd_grid {
@@ -205,13 +205,17 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .text_block h3 {
-  font-size: var(--rd-size-22);
+  font-size: var(--rd-size-30);
   color: white;
 }
 
 .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .text_block {
+  text-align: center;
   position: absolute;
-  bottom: 0;
+  padding: 0 2rem;
+  bottom: 20px;
+  left: 0;
+  right: 0;
 }
 
 .HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 {
@@ -236,6 +240,10 @@ INICIO - PORTADA - 4 DESTACADAS
     font-size: 1rem;
   }
 
+  .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .text_block h3 {
+    font-size: var(--rd-size-26);
+  }
+
   .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block .multimedia .multimediaIconMacroWrapper a div {
     width: 130px !important;
   }
@@ -246,7 +254,11 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 @media (max-width: 767px) {
-  .HOME_MENU_RD .rd_grid {
+  .HOME_MENU_RD .rd_grid .c2 {
+    grid-template-columns: none;
+  }
+
+  .HOME_MENU_RD .rd_grid .c2__c1 {
     grid-template-columns: none;
   }
 
