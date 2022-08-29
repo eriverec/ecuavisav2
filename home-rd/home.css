@@ -1,7 +1,7 @@
 :root {
   --bs-black: #000;
   --rd-cintillo: #0067D5;
-  --rd-gray-border: #D3D4D3;
+  --rd-gray-border: #2927B9;
   --rd-section: #2927B9;
 
   /*DESKTOP*/
@@ -100,6 +100,24 @@ INICIO - PORTADA - 4 DESTACADAS
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block {
   position: relative;
+}
+.HOME_MENU_RD .listado_1_4_mobile{
+  border-top: 1px solid var(--rd-gray-border);
+  border-bottom: 1px solid var(--rd-gray-border);
+}
+
+.HOME_MENU_RD .listado_1_4_mobile .noticias .article .BLOQUE_SEC_TIT{
+  margin: 20px 0;
+}
+
+.HOME_MENU_RD .listado_1_4_mobile .noticias .article:nth-child(1){
+  border-bottom: 1px solid var(--rd-gray-border);
+}
+.HOME_MENU_RD .listado_1_4_mobile .noticias .article:nth-child(2){
+  border-bottom: 1px solid var(--rd-gray-border);
+}
+.HOME_MENU_RD .listado_1_4_mobile .noticias .article:nth-child(3){
+  border-bottom: 1px solid var(--rd-gray-border);
 }
 
 .HOME_MENU_RD .listado_1_4_mobile .noticias .article .text_block .section {
