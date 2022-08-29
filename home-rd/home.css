@@ -387,7 +387,6 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .lista-bloque .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  border-bottom: 1px solid var(--rd-gray-border);
   border-top: 1px solid var(--rd-gray-border);
 }
 
@@ -460,6 +459,7 @@ INICIO - BLOQUE - ECUADOR
   .HOME_MENU_RD .lista-bloque .noticias .article:nth-child(2) {
     border-right: none;
     border-left: none;
+    border-bottom: 1px solid var(--rd-gray-border);
     border-top: 1px solid var(--rd-gray-border);
   }
 
