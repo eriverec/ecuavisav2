@@ -365,6 +365,11 @@ INICIO - BLOQUE - ECUADOR
   color: var(--bs-black);
 }
 
+.HOME_MENU_RD .ecuador_list_1x2 .noticias .article{
+  border-top: 1px solid var(--rd-gray-border);
+  padding: 20px 0;
+}
+
 .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .section {
   color: var(--rd-section);
   font-weight: 500;
@@ -390,10 +395,7 @@ INICIO - BLOQUE - ECUADOR
   margin: 20px;
 }
 
-.HOME_MENU_RD .lista-bloque .noticias .article:nth-child(2) {
-  border-right: 1px solid var(--rd-gray-border);
-  border-left: 1px solid var(--rd-gray-border);
-}
+
 
 .HOME_MENU_RD .lista-bloque .noticias .article .text_block .section {
   color: var(--rd-section);
@@ -458,7 +460,6 @@ INICIO - BLOQUE - ECUADOR
   .HOME_MENU_RD .lista-bloque .noticias .article:nth-child(2) {
     border-right: none;
     border-left: none;
-    border-bottom: 1px solid var(--rd-gray-border);
     border-top: 1px solid var(--rd-gray-border);
   }
 
