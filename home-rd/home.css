@@ -354,10 +354,22 @@ INICIO - BLOQUE - ECUADOR
   gap: 30px;
 }
 
-.HOME_MENU_RD .ecuador_list_1x2 .noticias .article .media_block {
+.HOME_MENU_RD .ecuador_list_1x2 {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
+}
+
+.HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .headline a h2 {
+  font-size: var(--rd-size-20);
+}
+
+.HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .section {
+  color: var(--rd-section);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  display: block;
+  font-size: var(--rd-size-16);
 }
 
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .media_block {
