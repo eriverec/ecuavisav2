@@ -354,7 +354,7 @@ INICIO - BLOQUE - ECUADOR
   gap: 30px;
 }
 
-.HOME_MENU_RD .ecuador_list_1x2 {
+.HOME_MENU_RD .ecuador_list_1x2 .noticias{
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 30px;
@@ -362,6 +362,7 @@ INICIO - BLOQUE - ECUADOR
 
 .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .headline a h2 {
   font-size: var(--rd-size-20);
+  color: var(--bs-black);
 }
 
 .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .section {
