@@ -56,7 +56,11 @@ function renderProgramas(){
         var programDate= _jsonProgramas[programIndex].fecha//.replace('-0', '-'); //revisar si presenta problemas en horario
         var programTimeIni= _jsonProgramas[programIndex].hora_inicio.replace(_jsonProgramas[programIndex].fecha, '');
 
-        console.log('programTimeIni: ',programTimeIni);
+        // console.log('programTimeIni: ',programTimeIni);
+
+        if(programTimeIni === '15:30:00' ){
+            console.log("true")
+        }
 
         var ActualClass= 'px-4 py-4 text-zinc-50 bg-white text-sm flex items-center'
         var imgs= 'https://via.placeholder.com/70'
