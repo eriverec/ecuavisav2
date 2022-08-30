@@ -1090,6 +1090,10 @@ INICIO - BLOQUE - MUNDO
 
   .HOME_MENU_RD .cintillo-rd-estadio img {
     width: 100%;
+    padding: 0 20px;
+  }
+  .HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .line_estadio img {
+    padding: 0 20px;
   }
 }
 
