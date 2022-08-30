@@ -935,6 +935,7 @@ INICIO - BLOQUE - MUNDO
   background: linear-gradient(0deg, #060222 0%, #060222 100%);
   border-bottom: 16px solid #00C17C;
   border-top: 16px solid #00C17C;
+  padding: 20px 0;
 }
 
 .HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block {
