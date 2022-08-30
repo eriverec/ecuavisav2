@@ -43,11 +43,83 @@ if(localStorage.getItem('programas')){ jsonProgramas = localStorage.getItem('pro
 else{ /* variable para loader */ console.log('no existen programas'); }
 
 
+
+
+var d = new Date();
+var day = d.getDay();
+var hour = d.getHours();
+var min = d.getMinutes();
+var t = d.getTime();
+var name = "";
+
+// Crear variables de los elementos a ocultar
+const hideMenuEnvivo = document.querySelector('.sect-81d0c9805a5bf069ec4be1a657699d8b');
+const liveSignal = document.querySelector('.senal_active');
+const buttonGye = document.querySelector('.btn-gye');
+const buttonQuito = document.querySelector('.btn-quito');
+
+timeOfDay = d.getHours().toString().padStart(2, "0") + ":" + d.getMinutes().toString().padStart(2, "0");
+console.log(timeOfDay);
+
+// prueba si timeOfDay está dentro de un marco de tiempo determinado
+if (day > 0 && day <= 5) {
+    //validacion de lunes a viernes
+    if ("05:55" <= timeOfDay && timeOfDay <= "06:55") {
+      activeBlock(1);
+      showTelevistazoAmanecerComunidad();
+    } else if ("16:10" <= timeOfDay && timeOfDay <= "17:00") {
+      
+    } else if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
+      activeBlock(3);
+      showTelevistazoAmanecerComunidad();
+    } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {
+      activeBlock(4);
+    } else if ("13:00" <= timeOfDay && timeOfDay <= "14:00") {
+      activeBlock(5);
+    } else if ("14:00" <= timeOfDay && timeOfDay <= "15:00") {
+      activeBlock(6);
+    } else if ("15:00" <= timeOfDay && timeOfDay <= "16:00") {
+      activeBlock(6);
+    } else if ("18:00" <= timeOfDay && timeOfDay <= "19:00") {
+      activeBlock(7);
+    } else if ("19:00" <= timeOfDay && timeOfDay <= "19:59") {
+      activeBlock(8);
+    } else if ("20:00" <= timeOfDay && timeOfDay <= "21:00") {
+      activeBlock(9);
+    } else if ("21:00" <= timeOfDay && timeOfDay <= "22:00") {
+      activeBlock(9);
+    } else if ("22:00" <= timeOfDay && timeOfDay <= "23:00") {
+      activeBlock(9);
+    } else {
+      desactiveBlock();
+    }
+  } else if (day === 6) {
+    //validacion de sabado
+    console.log("Sábado");
+    if ("19:00" <= timeOfDay && timeOfDay <= "19:30") {
+      activeBlock(10);
+    } else {
+      desactiveBlock();
+    }
+  } else {
+    //validacion de domingo
+    console.log("Domingo");
+    if ("10:30" <= timeOfDay && timeOfDay <= "11:30") {
+      activeBlock(11);
+    } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
+      activeBlock(12);
+    } else {
+      desactiveBlock();
+    }
+  }
+
 function renderProgramas(){
     var _jsonProgramas = JSON.parse(jsonProgramas); // convertiomos el json.stringify  de localstorage en json normal
     var programaItems= _jsonProgramas.length;
     // console.log(programaItems);
     // mainRender.innerHTML = (jsonProgramas);
+
+    var lists = [];
 
     for (programIndex = 0; programIndex < programaItems; programIndex++) {
         // variables de programas
@@ -56,11 +128,7 @@ function renderProgramas(){
         var programDate= _jsonProgramas[programIndex].fecha//.replace('-0', '-'); //revisar si presenta problemas en horario
         var programTimeIni= _jsonProgramas[programIndex].hora_inicio.replace(_jsonProgramas[programIndex].fecha, '');
 
-        // console.log('programTimeIni: ',programTimeIni);
-
-        if(programTimeIni === '15:30:00' ){
-            console.log("true")
-        }
+        
 
         var ActualClass= 'px-4 py-4 text-zinc-50 bg-white text-sm flex items-center'
         var imgs= 'https://via.placeholder.com/70'
@@ -68,7 +136,7 @@ function renderProgramas(){
             <tr>
                 <td class="border-b border-gray-100 bg-white text-sm flex items-center">
                     <img src="${imgs}" alt="">
-                    <p class="p-2 ml-3 text-gray-900 whitespace-no-wrap"> ${programName} - ${programTimeIni} </p>
+                    <p class="p-2 ml-3 text-gray-900 whitespace-no-wrap"> ${programName} - ${programTimeIni} ${[programIndex++]} </p>
                 </td>
                 <td class="px-4 py-4 border-b border-gray-100 bg-white text-sm hidden">
                     <span class="bg-green-200">Activo</span>
