@@ -1012,6 +1012,11 @@ INICIO - BLOQUE - MUNDO
   margin: 30px 0;
 }
 
+.HOME_MENU_RD .bloque_estadio_3_m .noticias .article:nth-child(1),
+.HOME_MENU_RD .bloque_estadio_3_m .noticias .article:nth-child(2){
+  border-bottom: 1px solid #00C17C;
+}
+
 .HOME_MENU_RD .bloque_estadio_2_m {
   border-top: 1px solid #00C17C;
   border-bottom: 1px solid #00C17C;
