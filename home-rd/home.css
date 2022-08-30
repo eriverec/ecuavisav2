@@ -334,9 +334,13 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .nota-principal-bloque {
   margin: 1.5rem 0;
 }
+.HOME_MENU_RD .c_rd {
+  border-bottom: 4px solid #74c4ff;
+  margin-bottom: 20px;
+}
 
 .HOME_MENU_RD .cintillo-rd {
-  margin-bottom: .5rem;
+  /* margin-bottom: .5rem; */
   display: inline-block;
   font-size: var(--rd-size-60);
   font-weight: 500;
@@ -854,6 +858,9 @@ INICIO - BLOQUE - MUNDO
 
   .HOME_MENU_RD .nota-principal-bloque-mobile.bloque_mundo_1_m .noticias .article .text_block .text {
     display: none;
+  }
+  .HOME_MENU_RD .nota-principal-bloque-mobile.bloque_mundo_1_m{
+    margin-bottom: 20px;
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
