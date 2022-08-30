@@ -334,8 +334,9 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .nota-principal-bloque {
   margin: 1.5rem 0;
 }
+
 .HOME_MENU_RD .c_rd {
-  border-bottom: 4px solid #74c4ff;
+  border-bottom: 4px solid #23DCD1;
   margin-bottom: 20px;
 }
 
@@ -859,7 +860,8 @@ INICIO - BLOQUE - MUNDO
   .HOME_MENU_RD .nota-principal-bloque-mobile.bloque_mundo_1_m .noticias .article .text_block .text {
     display: none;
   }
-  .HOME_MENU_RD .nota-principal-bloque-mobile.bloque_mundo_1_m{
+
+  .HOME_MENU_RD .nota-principal-bloque-mobile.bloque_mundo_1_m {
     margin-bottom: 20px;
   }
 
@@ -895,7 +897,37 @@ INICIO - BLOQUE - MUNDO
 
 
 /* ***************************
-INICIO - BLOQUE - CULTURA 
+********BLOQUE - ESTADIO*****  
+************************** */
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+
+.HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block {
+  position: relative;
+}
+
+.HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .text_block {
+  position: absolute;
+  bottom: 0;
+  background: #060222;
+  width: 350px;
+  margin: 0 0 10px 10px;
+  padding: 30px 20px;
+}
+
+.HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .text_block .headline a h3 {
+  font-size: 28px;
+  text-transform: uppercase;
+  color: white;
+  font-family: 'Alfa Slab One';
+}
+
+
+
+
+
+
+/* ***************************
+BLOQUE - CULTURA 
 *************************** */
 
 .HOME_MENU_RD .nota-principal-bloque-cultura .noticias {
