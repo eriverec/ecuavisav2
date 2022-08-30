@@ -1086,7 +1086,12 @@ INICIO - BLOQUE - MUNDO
   }
   .HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .text_block{
     margin: 0;
+    width: 250px;
     max-width: 100%;
+  }
+
+  .HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .text_block .headline a h3{
+    font-size: var(--rd-size-18);
   }
 
   .HOME_MENU_RD .cintillo-rd-estadio img {
