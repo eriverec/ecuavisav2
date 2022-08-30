@@ -991,31 +991,45 @@ INICIO - BLOQUE - MUNDO
   font-family: 'Alfa Slab One';
 }
 
-.HOME_MENU_RD .bloque_estadio_3_m .noticias .article .media_block .text_block .headline a h3 {
+.HOME_MENU_RD .bloque_estadio_3_m .noticias .article .text_block .headline a h2 {
   font-size: var(--rd-size-16);
   text-transform: uppercase;
   color: white;
   font-family: 'Alfa Slab One';
 }
 
-.HOME_MENU_RD .bloque_estadio_3_m .noticias .article .media_block .text_block .section {
+.HOME_MENU_RD .bloque_estadio_3_m .noticias .article .text_block .section {
   color: #00C17C;
   font-size: var(--rd-size-16);
   font-weight: 500;
   margin-bottom: 10px;
   display: block;
 }
-
-.HOME_MENU_RD .bloque_estadio_2_m .noticias .article{
+.HOME_MENU_RD .bloque_estadio_3_m .noticias .article .BLOQUE_SEC_TIT.n1 {
+  margin-bottom: 30px;
+}
+.HOME_MENU_RD .bloque_estadio_3_m .noticias .article .BLOQUE_SEC_TIT.n2 {
   margin: 30px 0;
 }
 
-.HOME_MENU_RD .bloque_estadio_2_m .noticias .article .media_block{
+.HOME_MENU_RD .bloque_estadio_2_m {
+  border-top: 1px solid #00C17C;
+  border-bottom: 1px solid #00C17C;
+  margin: 30px 0;
+}
+
+
+.HOME_MENU_RD .bloque_estadio_2_m .noticias .article {
+  margin: 30px 0;
+}
+
+.HOME_MENU_RD .bloque_estadio_2_m .noticias .article .media_block {
   display: grid;
   grid-template-columns: 1fr 2fr;
   align-items: center;
   column-gap: 30px;
 }
+
 .HOME_MENU_RD .bloque_estadio_2_m .noticias .article .media_block .text_block .section {
   color: #00C17C;
   font-size: var(--rd-size-16);
@@ -1024,7 +1038,7 @@ INICIO - BLOQUE - MUNDO
   display: block;
 }
 
-.HOME_MENU_RD .bloque_estadio_2_m .noticias .article .media_block .text_block .headline a h3 {
+.HOME_MENU_RD .bloque_estadio_2_m .noticias .article .media_block .text_block .headline a h2 {
   font-size: var(--rd-size-16);
   text-transform: uppercase;
   color: white;
