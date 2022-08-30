@@ -852,8 +852,8 @@ INICIO - BLOQUE - MUNDO
 
   }
 
-  .HOME_MENU_RD .nota-principal-bloque-mobile.bloque_mundo .noticias .article .text_block .text {
-    display: block;
+  .HOME_MENU_RD .nota-principal-bloque-mobile.bloque_mundo_1_m .noticias .article .text_block .text {
+    display: none;
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
