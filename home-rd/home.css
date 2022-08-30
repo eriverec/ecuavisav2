@@ -835,7 +835,7 @@ INICIO - BLOQUE - MUNDO
     font-size: var(--rd-size-16);
   }
 
-  .HOME_MENU_RD .bloque_mundo_2_m.noticias .article .text_block .headline a h2 {
+  .HOME_MENU_RD .bloque_mundo_2_m .noticias .article .text_block .headline a h2 {
     font-size: var(--rd-size-20);
     color: var(--bs-black);
   }
@@ -848,7 +848,8 @@ INICIO - BLOQUE - MUNDO
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 30px;
-    margin-bottom: 20px;
+    margin: 20px 0;
+
   }
 
   .HOME_MENU_RD .nota-principal-bloque-mobile.bloque_mundo .noticias .article .text_block .text {
