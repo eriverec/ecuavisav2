@@ -202,7 +202,11 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .notas-1-p-ap {
-  border-bottom: 10px solid #2927B9;
+  /* border-bottom: 10px solid #2927B9; */
+}
+
+.HOME_MENU_RD .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
+  border-bottom: 16px solid #2927B9;
 }
 
 
@@ -346,6 +350,10 @@ INICIO - PORTADA - 4 DESTACADAS
     position: initial;
     padding-bottom: 1rem;
     background: #060127;
+    border-bottom: 16px solid #2927B9;
+  }
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
+    border-bottom: none;
   }
 }
 
