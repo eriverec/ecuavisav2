@@ -1088,7 +1088,7 @@ INICIO - BLOQUE - MUNDO
     grid-template-columns: none;
   }
 
-  .HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .text_block:nth-child(4) {
+  .HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .text_block {
     margin: 0;
     width: 250px;
     max-width: 100%;
