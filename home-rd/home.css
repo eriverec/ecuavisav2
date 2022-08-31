@@ -52,7 +52,32 @@
   text-transform: uppercase;
 }
 
+.HOME_MENU_RD .c_rd {
+  border-bottom: 4px solid #23DCD1;
+  margin-bottom: 20px;
+}
 
+.HOME_MENU_RD .cintillo-rd {
+  /* margin-bottom: .5rem; */
+  display: inline-block;
+  font-size: var(--rd-size-60);
+  font-weight: 500;
+  color: var(--rd-cintillo);
+  text-transform: lowercase;
+}
+
+.c_azul_celeste_Mobile{
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .c_azul_celeste_Mobile{
+    display: block;
+  }
+  .c_azul_celeste_Desktop {
+    display: none;
+  }
+}
 
 /* ***************************
 INICIO - PORTADA - 4 DESTACADAS 
@@ -334,19 +359,7 @@ INICIO - BLOQUE - ECUADOR
   margin: 1.5rem 0;
 }
 
-.HOME_MENU_RD .c_rd {
-  border-bottom: 4px solid #23DCD1;
-  margin-bottom: 20px;
-}
 
-.HOME_MENU_RD .cintillo-rd {
-  /* margin-bottom: .5rem; */
-  display: inline-block;
-  font-size: var(--rd-size-60);
-  font-weight: 500;
-  color: var(--rd-cintillo);
-  text-transform: lowercase;
-}
 
 .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .media_block {
   display: grid;
