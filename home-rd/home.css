@@ -1254,9 +1254,7 @@ INICIO - BLOQUE - ESTILO
   color: #23DCD1;
 }
 
-.HOME_MENU_RD .estilo {
-  padding: 0 12px;
-}
+
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block {
   position: absolute;
@@ -1354,6 +1352,10 @@ INICIO - BLOQUE - ESTILO
 @media (max-width: 767px) {
   .HOME_MENU_RD .lista-bloque-estilo {
     padding: 0 60px;
+  }
+
+  .HOME_MENU_RD .estilo {
+    padding: 0 12px;
   }
 
   .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block {
