@@ -1,47 +1,39 @@
-/*
-1.- swipper mySwiper
-2.- swiper-wrapper
-3.- swiper-slide
+// $(`.lista-bloque-informativos`).addClass("swiper");
+// $(".lista-bloque-informativos .noticias").addClass("swiper-wrapper");
+// $(".lista-bloque-informativos .noticias .article").addClass("swiper-slide");
 
-swiper-pagination
-swiper-button-prev
-swiper-button-next
-swiper-scrollbar
-*/
-$(document).ready(function () {
-  $(`.lista-bloque-futuro`).addClass("swiper");
-  $(".lista-bloque-futuro .noticias").addClass("swiper-wrapper");
-  $(".lista-bloque-futuro .noticias .article").addClass("swiper-slide");
+var classListaProgramas = document.querySelectorAll('.lista-bloque-informativos');
+var classListaProgramasNot = document.querySelectorAll('.lista-bloque-informativos .noticias');
+var classListaProgramasNotArt = document.querySelectorAll('.lista-bloque-informativos .noticias article');
 
-  // var dpagination = document.createElement("div");
-  // dpagination.classList = "swiper-pagination";
-  // $(".lista-bloque-futuro").prepend(dpagination);
+classListaProgramas.classList.add('swiper');
+classListaProgramasNot.classList.add('swiper-wrapper');
 
-  var swiperfuturo = new Swiper(".lista-bloque-futuro", {
-    slidesPerView: 1.5,
-    spaceBetween: 30,
-    // pagination: {
-    //   el: ".swiper-pagination",
-    //   dynamicBullets: true,
-    //   clickable: true,
-    // },
-    breakpoints: {
-      600: {
-        slidesPerView: 1.5,
-        spaceBetween: 20,
-      },
-      768: {
-        slidesPerView: 3.5,
-        spaceBetween: 30,
-      },
-      1024: {
-        slidesPerView: 3.5,
-        spaceBetween: 30,
-      },
-      1200: {
-        slidesPerView: 4.5,
-        spaceBetween: 30,
-      },
+for (const swiperSlideProg of classListaProgramasNotArt) {
+  swiperSlideProg.classList.add('swiper-slide');
+}
+
+
+var swiperfuturo = new Swiper(classListaProgramas, {
+  slidesPerView: 1.5,
+  spaceBetween: 30,
+
+  breakpoints: {
+    600: {
+      slidesPerView: 1.5,
+      spaceBetween: 20,
     },
-  });
+    768: {
+      slidesPerView: 3.5,
+      spaceBetween: 30,
+    },
+    1024: {
+      slidesPerView: 3.5,
+      spaceBetween: 30,
+    },
+    1200: {
+      slidesPerView: 4.5,
+      spaceBetween: 30,
+    },
+  },
 });
