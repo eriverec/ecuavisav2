@@ -1287,8 +1287,6 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .multimedia img {
   -webkit-mask-image: linear-gradient(to top, transparent 0, #2927B9 60%);
-  height: 100% !important;
-  object-fit: cover;
 }
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block {
@@ -1304,7 +1302,7 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .multimedia img {
   height: 100% !important;
   width: 100% !important;
-  object-fit: cover;
+  object-fit: contain;
   -webkit-mask-image: linear-gradient(to top, transparent 0, #242424 60%);
 }
 
@@ -1352,6 +1350,10 @@ INICIO - BLOQUE - ESTILO
 @media (max-width: 767px) {
   .HOME_MENU_RD .lista-bloque-estilo {
     padding: 0 60px;
+  }
+  .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .multimedia img {
+    height: 100% !important;
+    object-fit: cover;
   }
 
   .HOME_MENU_RD .estilo {
