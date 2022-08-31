@@ -1171,7 +1171,7 @@ BLOQUE - CULTURA
 
   .HOME_MENU_RD .bloque_cultura_2_m .noticias .article .media_block {
     display: grid;
-    grid-template-columns: 3fr 1fr;
+    grid-template-columns: 2fr 1fr;
     column-gap: 30px;
     align-items: center;
   }
