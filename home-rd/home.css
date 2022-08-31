@@ -1176,6 +1176,20 @@ BLOQUE - CULTURA
     align-items: center;
   }
 
+  .HOME_MENU_RD .bloque_cultura_2_m {
+    border-top: 1px solid var(--rd-gray-border);
+    margin: 20px 0;
+  }
+
+  .HOME_MENU_RD .bloque_cultura_2_m .noticias .article {
+    border-bottom: 1px solid var(--rd-gray-border);
+  }
+
+  .HOME_MENU_RD .bloque_cultura_2_m .noticias .article .BLOQUE_SEC_TIT_IMG {
+    margin: 20px 0;
+  }
+
+
   .HOME_MENU_RD .bloque_cultura_2_m .noticias .article .text_block .headline a h2 {
     font-size: var(--rd-size-18);
     color: var(--bs-black);
