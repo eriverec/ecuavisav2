@@ -13,9 +13,9 @@ $(document).ready(function () {
   // $(".lista-bloque-estilo .noticias").addClass("swiper-wrapper");
   // $(".lista-bloque-estilo .noticias .article").addClass("swiper-slide");
 
-  var classListaEstilo = document.querySelector('.lista-programacion-bloque');
-  var classListaEstiloNot = document.querySelector('.lista-programacion-bloque .noticias');
-  var classListaEstiloNotArt = document.querySelectorAll('.lista-programacion-bloque .noticias article');
+  var classListaEstilo = document.querySelector('.lista-bloque-estilo');
+  var classListaEstiloNot = document.querySelector('.lista-bloque-estilo .noticias');
+  var classListaEstiloNotArt = document.querySelectorAll('.lista-bloque-estilo .noticias article');
 
   classListaEstilo.classList.add('swiper');
   classListaEstiloNot.classList.add('swiper-wrapper');
