@@ -1,7 +1,3 @@
-// $(`.lista-bloque-informativos`).addClass("swiper");
-// $(".lista-bloque-informativos .noticias").addClass("swiper-wrapper");
-// $(".lista-bloque-informativos .noticias .article").addClass("swiper-slide");
-
 var classListaProgramas = document.querySelector('.lista-bloque-informativos');
 var classListaProgramasNot = document.querySelector('.lista-bloque-informativos .noticias');
 var classListaProgramasNotArt = document.querySelectorAll('.lista-bloque-informativos .noticias article');
@@ -9,12 +5,11 @@ var classListaProgramasNotArt = document.querySelectorAll('.lista-bloque-informa
 classListaProgramas.classList.add('swiper');
 classListaProgramasNot.classList.add('swiper-wrapper');
 
-for (const swiperSlideProg of classListaProgramasNotArt) {
-  swiperSlideProg.classList.add('swiper-slide');
+for (const SlideProg of classListaProgramasNotArt) {
+  SlideProg.classList.add('swiper-slide');
 }
 
-
-var swiperfuturo = new Swiper(classListaProgramas, {
+var swiperProg = new Swiper(classListaProgramas, {
   slidesPerView: 1.5,
   spaceBetween: 30,
 
