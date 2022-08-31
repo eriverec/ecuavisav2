@@ -13,12 +13,18 @@ $(document).ready(function () {
   // $(".lista-bloque-estilo .noticias").addClass("swiper-wrapper");
   // $(".lista-bloque-estilo .noticias .article").addClass("swiper-slide");
 
-  var classListaEstilo = document.querySelector('.lista-bloque-estilo');
-  var classListaEstiloNot = document.querySelector('.lista-bloque-estilo .noticias');
+  var classListaEstilo = document.querySelectorAll('.lista-bloque-estilo');
+  var classListaEstiloNot = document.querySelectorAll('.lista-bloque-estilo .noticias');
   var classListaEstiloNotArt = document.querySelectorAll('.lista-bloque-estilo .noticias article');
 
-  classListaEstilo.classList.add('swiper');
-  classListaEstiloNot.classList.add('swiper-wrapper');
+  
+  for (const swiper of classListaEstilo) {
+    swiper.classList.add('swiper');
+  }
+  
+  for (const swiperWa of classListaEstiloNot) {
+    swiperWa.classList.add('swiper-wrapper');
+  }
 
   for (const swiperSlideClas of classListaEstiloNotArt) {
     swiperSlideClas.classList.add('swiper-slide');
