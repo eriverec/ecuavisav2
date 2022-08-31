@@ -75,7 +75,7 @@
   }
 
   .HOME_MENU_RD .cintillo-rd {
-    font-size: var(--rd-size-60);
+    font-size: 45px;
   }
 }
 
@@ -1345,6 +1345,9 @@ INICIO - BLOQUE - ESTILO
 }
 
 @media (max-width: 767px) {
+  .HOME_MENU_RD .lista-bloque-estilo{
+    padding: 0 25px;
+  }
   .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block{
     padding: 12px 12px;
     width: 430px;
