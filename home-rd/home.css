@@ -1084,7 +1084,7 @@ INICIO - BLOQUE - MUNDO
     -webkit-mask-image: linear-gradient(to bottom, transparent 0, #060127 10%);
   }
 
-  .HOME_MENU_RD .bloque_estadio_2 .noticias{
+  .HOME_MENU_RD .bloque_estadio_2 .noticias {
     grid-template-columns: none;
   }
 
@@ -1144,11 +1144,11 @@ BLOQUE - CULTURA
   column-gap: 30px;
 }
 
-.HOME_MENU_RD .bloque_cultura_2 .noticias .article .BLOQUE_SEC_TIT_IMG{
+.HOME_MENU_RD .bloque_cultura_2 .noticias .article .BLOQUE_SEC_TIT_IMG {
   margin: 20px 0;
 }
 
-.HOME_MENU_RD .bloque_cultura_2 .noticias .article{
+.HOME_MENU_RD .bloque_cultura_2 .noticias .article {
   border-top: 1px solid var(--rd-gray-border);
   border-bottom: 1px solid var(--rd-gray-border);
 }
@@ -1157,7 +1157,8 @@ BLOQUE - CULTURA
   font-size: var(--rd-size-20);
   color: var(--bs-black);
 }
-.HOME_MENU_RD .bloque_cultura_2 .noticias .article .text_block .section{
+
+.HOME_MENU_RD .bloque_cultura_2 .noticias .article .text_block .section {
   font-size: var(--rd-size-16);
   font-weight: 500;
   color: var(--rd-section);
@@ -1166,11 +1167,34 @@ BLOQUE - CULTURA
 
 
 @media (max-width: 767px) {
-  .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias {
-    
+
+
+  .HOME_MENU_RD .bloque_cultura_2_m .noticias .article .media_block {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+    column-gap: 30px;
+    align-items: center;
   }
 
+  .HOME_MENU_RD .bloque_cultura_2_m .noticias .article .text_block .headline a h2 {
+    font-size: var(--rd-size-18);
+    color: var(--bs-black);
+  }
+
+  .HOME_MENU_RD .bloque_cultura_2_m .noticias .article .text_block .section {
+    font-size: var(--rd-size-16);
+    font-weight: 500;
+    color: var(--rd-section);
+    display: block;
+  }
+
+
   .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h2 {
+    font-size: var(--rd-size-18);
+  }
+
+  .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias .article .text_block .headline a h3 {
+    color: var(--bs-black);
     font-size: var(--rd-size-18);
   }
 
@@ -1183,10 +1207,6 @@ BLOQUE - CULTURA
     font-size: var(--rd-size-16);
   }
 
-  .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias .article .text_block .headline a h2 {
-    color: var(--bs-black);
-    font-size: var(--rd-size-18);
-  }
 
 }
 
