@@ -60,8 +60,8 @@
 .HOME_MENU_RD .cintillo-rd {
   /* margin-bottom: .5rem; */
   display: inline-block;
-  font-size: var(--rd-size-60);
-  font-weight: 500;
+  font-size: 80px;
+  font-weight: 700;
   color: var(--rd-cintillo);
   text-transform: lowercase;
 }
@@ -76,6 +76,9 @@
   }
   .c_azul_celeste_Desktop {
     display: none;
+  }
+  .HOME_MENU_RD .cintillo-rd {
+    font-size: var(--rd-size-60);
   }
 }
 
@@ -453,9 +456,7 @@ INICIO - BLOQUE - ECUADOR
     font-size: var(--rd-size-14);
   }
 
-  .HOME_MENU_RD .cintillo-rd {
-    font-size: var(--rd-size-34);
-  }
+  
 }
 
 
