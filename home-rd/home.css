@@ -1285,13 +1285,6 @@ INICIO - BLOQUE - ESTILO
 
 
 
-
-.HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block {
-  display: grid;
-  gap: 20px;
-  grid-template-columns: 1fr 2fr;
-}
-
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .multimedia img {
   height: 100% !important;
   width: 100% !important;
