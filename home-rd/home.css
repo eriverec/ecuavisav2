@@ -1246,6 +1246,10 @@ INICIO - BLOQUE - ESTILO
   border-top: 16px solid #23DCD1;
 }
 
+.HOME_MENU_RD .ly-apertura-rd.bloque_estilo_bg .contenido_general{
+  margin-bottom: 5rem;
+}
+
 .HOME_MENU_RD .estilo .cintillo-rd {
   color: #23DCD1;
 }
