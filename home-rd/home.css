@@ -1286,13 +1286,17 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block {
   position: absolute;
   bottom: 0;
-  padding: 0 0 30px 30px;
+  padding: 10px 10px;
 }
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .multimedia img {
   height: 100% !important;
   width: 100% !important;
   object-fit: cover;
+}
+
+.HOME_MENU_RD .lista-bloque-estilo {
+  padding: 0 40px;
 }
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .section {
@@ -1304,7 +1308,7 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2 {
   color: var(--bs-white);
-  font-size: var(--rd-size-26);
+  font-size: var(--rd-size-16);
 }
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias {
