@@ -52,11 +52,6 @@
   text-transform: uppercase;
 }
 
-.HOME_MENU_RD .c_rd {
-  border-bottom: 4px solid #23DCD1;
-  margin-bottom: 20px;
-}
-
 .HOME_MENU_RD .cintillo-rd {
   /* margin-bottom: .5rem; */
   display: inline-block;
