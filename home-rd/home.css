@@ -1167,9 +1167,7 @@ BLOQUE - CULTURA
 
 @media (max-width: 767px) {
   .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 20px;
+    
   }
 
   .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h2 {
