@@ -1084,7 +1084,7 @@ INICIO - BLOQUE - MUNDO
     object-fit: cover;
     -webkit-mask-image: linear-gradient(to bottom, transparent 0, #060127 10%);
   }
-  .HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .text_block{
+  .HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .text_block:nth-child(4){
     margin: 0;
     width: 250px;
     max-width: 100%;
@@ -1114,7 +1114,7 @@ BLOQUE - CULTURA
   gap: 30px;
 }
 
-.HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h2 {
+.HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h3 {
   font-size: var(--rd-size-30);
   color: var(--bs-black);
 }

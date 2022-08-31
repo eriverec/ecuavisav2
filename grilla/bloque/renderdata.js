@@ -119,7 +119,6 @@ function renderProgramas(){
     // console.log(programaItems);
     // mainRender.innerHTML = (jsonProgramas);
 
-    itemNumber = 2;
 
     for (programIndex = 0; programIndex < programaItems; programIndex++) {
         // variables de programas
@@ -128,7 +127,10 @@ function renderProgramas(){
         var programDate= _jsonProgramas[programIndex].fecha//.replace('-0', '-'); //revisar si presenta problemas en horario
         var programTimeIni= _jsonProgramas[programIndex].hora_inicio.replace(_jsonProgramas[programIndex].fecha, '');
 
-        itemNumber = itemNumber + 1;
+        var dataParrafo = document.querySelector('.programList.Martes');
+        var secondParagraph = dataParrafo.getElementsByTagName("tr")[3];
+        secondParagraph.classList.add("active_envivo");
+        console.log(secondParagraph);
 
         var ActualClass= 'px-4 py-4 text-zinc-50 bg-white text-sm flex items-center'
         var imgs= 'https://via.placeholder.com/70'
@@ -136,7 +138,7 @@ function renderProgramas(){
             <tr>
                 <td class="border-b border-gray-100 bg-white text-sm flex items-center">
                     <img src="${imgs}" alt="">
-                    <p class="p-2 ml-3 text-gray-900 whitespace-no-wrap"> ${programName} - ${programTimeIni} ----- ${itemNumber} </p>
+                    <p class="p-2 ml-3 text-gray-900 whitespace-no-wrap"> ${programName} - ${programTimeIni} ----- ${secondParagraph} </p>
                 </td>
                 <td class="px-4 py-4 border-b border-gray-100 bg-white text-sm hidden">
                     <span class="bg-green-200">Activo</span>
