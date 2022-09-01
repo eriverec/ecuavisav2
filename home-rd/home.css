@@ -1409,6 +1409,8 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div img {
   -webkit-mask-image: linear-gradient(to top, transparent 0, #242424 60%);
   border-radius: 6px;
+  height: 100% !important;
+  object-fit: cover;
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .text_block {
@@ -1460,4 +1462,11 @@ INICIO - BLOQUE - ESTILO
   font-weight: 600;
   color: #2927B9;
   font-size: 22px;
+}
+
+
+@media (max-width: 575px) {
+  .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .top_info .Topheadline .hLine {
+    font-size: 10px;
+  }
 }

@@ -16,12 +16,12 @@ for (const SlideProg of classListaProgramasNotArt) {
 }
 
 var swiperProg = new Swiper(".lista-bloque-programas", {
-  slidesPerView: 2,
-  spaceBetween: 30,
+  slidesPerView: 1.5,
+  spaceBetween: 20,
 
   breakpoints: {
     600: {
-      slidesPerView: 2,
+      slidesPerView: 1.5,
       spaceBetween: 20,
     },
     768: {
