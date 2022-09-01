@@ -64,16 +64,25 @@
 
 
 @media (max-width: 575px) {
-  .newsletter_rd .info-formulario .news-texto-rd h1{
+  .newsletter_rd .info-formulario .news-texto-rd h1 {
     font-size: 50px;
   }
+
   .newsletter_rd .newsContenido .news_line_left.mobile__ {
     display: block;
   }
+
   .newsletter_rd .newsContenido .news_line_left {
     display: none;
   }
-  .newsletter_rd .newsContenido .news-texto-rd{
+
+  .newsletter_rd .newsContenido .news-texto-rd {
     padding-left: 15px;
+  }
+}
+
+@media (max-width: 374px) {
+  .newsletter_rd .newsContenido .news-texto-rd .esendpulse iframe {
+    width: 265px;
   }
 }
