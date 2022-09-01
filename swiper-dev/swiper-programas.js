@@ -1,9 +1,15 @@
-var classListaProgramas = document.querySelector('.lista-bloque-informativos');
-var classListaProgramasNot = document.querySelector('.lista-bloque-informativos .noticias');
-var classListaProgramasNotArt = document.querySelectorAll('.lista-bloque-informativos .noticias article');
+var classListaProgramas = document.querySelectorAll('.lista-bloque-programas');
+var classListaProgramasNot = document.querySelectorAll('.lista-bloque-programas .noticias');
+var classListaProgramasNotArt = document.querySelectorAll('.lista-bloque-programas .noticias article');
 
-classListaProgramas.classList.add('swiper');
-classListaProgramasNot.classList.add('swiper-wrapper');
+
+for (const SlideProgS of classListaProgramas) {
+  SlideProgS.classList.add('swiper');
+}
+
+for (const SlideProgSW of classListaProgramasNot) {
+  SlideProgSW.classList.add('swiper-wrapper');
+}
 
 for (const SlideProg of classListaProgramasNotArt) {
   SlideProg.classList.add('swiper-slide');
