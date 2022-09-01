@@ -1453,3 +1453,11 @@ INICIO - BLOQUE - ESTILO
   color: #23DCD1;
   display: block;
 }
+
+.HOME_MENU_RD .lista-bloque-programas .teaser-viewer-title {
+  text-transform: uppercase;
+  margin: 20px 0;
+  font-weight: 600;
+  color: #2927B9;
+  font-size: 22px;
+}
