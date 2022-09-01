@@ -1396,7 +1396,7 @@ INICIO - BLOQUE - ESTILO
   grid-template-columns: 2fr 1fr;
   column-gap: 5px;
   position: absolute;
-  top: 10;
+  top: 10px;
   z-index: 9;
   align-items: center;
   justify-items: center;
