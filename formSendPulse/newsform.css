@@ -2,6 +2,17 @@
   background: #2927B9;
 }
 
+.newsletter_rd .newsContenido {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+
+.newsletter_rd .newsContenido .news-texto-rd .esendpulse iframe {
+  height: 220px;
+}
+
 .newsletter_rd .info-formulario {
   margin: 5rem 0;
   text-align: -webkit-center;
@@ -9,7 +20,7 @@
   background-position-x: 5rem;
 }
 
-.info-formulario .news-texto-rd h1 {
+.newsletter_rd .info-formulario .news-texto-rd h1 {
   font-family: 'Anek Malayalam';
   font-style: normal;
   font-weight: 600;
@@ -17,10 +28,9 @@
   line-height: 24px;
   letter-spacing: -0.03em;
   color: #23dcd1;
-
 }
 
-.info-formulario .news-texto-rd h2 {
+.newsletter_rd .info-formulario .news-texto-rd h2 {
   font-size: 24px;
   color: #ffff;
   padding-left: 0;
@@ -30,39 +40,13 @@
   text-align: center;
 }
 
-.info-formulario .news-texto-rd p {
-
+.newsletter_rd .info-formulario .news-texto-rd p {
   font-weight: 700;
   font-size: 16px;
   line-height: 26px;
   color: #fff;
   opacity: 0.7;
   width: 350px;
-  margin: 2rem 0;
+  margin-bottom: 2rem;
+  margin-top: 1rem;
 }
-
-.consulta_interes {
-  margin: 7rem 5rem;
-}
-
-.consulta_interes h1 {
-  font-weight: 700;
-  font-size: 36px;
-  line-height: 44px;
-  text-align: center;
-  letter-spacing: -0.025em;
-  color: #2927b9;
-}
-
-.consulta_interes .text_click {
-  font-weight: 600;
-  font-size: 11px;
-  line-height: 12px;
-  align-items: center;
-  text-align: center;
-  text-transform: uppercase;
-  color: #2927b9;
-  margin-top: 4rem;
-}
-
-
