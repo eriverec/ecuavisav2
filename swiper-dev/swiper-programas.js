@@ -10,24 +10,24 @@ for (const SlideProg of classListaProgramasNotArt) {
 }
 
 var swiperProg = new Swiper(classListaProgramas, {
-  slidesPerView: 1.5,
+  slidesPerView: 2,
   spaceBetween: 30,
 
   breakpoints: {
     600: {
-      slidesPerView: 1.5,
+      slidesPerView: 2,
       spaceBetween: 20,
     },
     768: {
-      slidesPerView: 3.5,
+      slidesPerView: 3,
       spaceBetween: 30,
     },
     1024: {
-      slidesPerView: 3.5,
+      slidesPerView: 4,
       spaceBetween: 30,
     },
     1200: {
-      slidesPerView: 4.5,
+      slidesPerView: 4,
       spaceBetween: 30,
     },
   },
