@@ -15,7 +15,7 @@ for (const SlideProg of classListaProgramasNotArt) {
   SlideProg.classList.add('swiper-slide');
 }
 
-var swiperProg = new Swiper(classListaProgramas, {
+var swiperProg = new Swiper(".lista-bloque-programas", {
   slidesPerView: 2,
   spaceBetween: 30,
 
