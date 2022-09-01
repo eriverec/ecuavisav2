@@ -9,12 +9,17 @@
   align-content: center;
 }
 
+.newsletter_rd .newsContenido .news_line_left.mobile__ {
+  display: none;
+}
+
 .newsletter_rd .newsContenido .news_line_left img {
   height: 460px;
 }
 
 .newsletter_rd .newsContenido .news-texto-rd {
   text-align: left;
+  padding-left: 30px;
 }
 
 .newsletter_rd .newsContenido .news-texto-rd .esendpulse iframe {
@@ -45,7 +50,6 @@
   margin: 0;
   line-height: 45px;
   font-weight: 600;
-  text-align: center;
 }
 
 .newsletter_rd .info-formulario .news-texto-rd p {
@@ -62,5 +66,14 @@
 @media (max-width: 575px) {
   .newsletter_rd .info-formulario .news-texto-rd h1{
     font-size: 50px;
+  }
+  .newsletter_rd .newsContenido .news_line_left.mobile__ {
+    display: block;
+  }
+  .newsletter_rd .newsContenido .news_line_left {
+    display: none;
+  }
+  .newsletter_rd .newsContenido .news-texto-rd{
+    padding-left: 15px;
   }
 }
