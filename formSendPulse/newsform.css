@@ -9,6 +9,10 @@
   align-content: center;
 }
 
+.newsletter_rd .newsContenido .news_line_left img {
+  height: 460px;
+}
+
 .newsletter_rd .newsContenido .news-texto-rd .esendpulse iframe {
   height: 260px;
 }
