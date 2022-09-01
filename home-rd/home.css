@@ -1392,15 +1392,13 @@ INICIO - BLOQUE - ESTILO
 ******************************************* */
 
 .HOME_MENU_RD .lista-bloque-informativos .noticias .article .media_block .top_info {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
-  column-gap: 5px;
+  display: flex;
   position: absolute;
   top: 10px;
   z-index: 9;
-  align-items: center;
-  justify-items: center;
   width: 100%;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .HOME_MENU_RD .lista-bloque-informativos .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div {
@@ -1425,6 +1423,11 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .lista-bloque-informativos .noticias .article .media_block .top_info img {
   width: 20px;
+  margin-right: 15px;
+}
+
+.HOME_MENU_RD .lista-bloque-informativos .noticias .article .media_block .top_info .Topheadline {
+  margin-left: 10px;
 }
 
 .HOME_MENU_RD .lista-bloque-informativos .noticias .article .media_block .top_info .Topheadline .hLine {
@@ -1432,6 +1435,7 @@ INICIO - BLOQUE - ESTILO
   font-size: 15px;
   margin: 0;
   padding: 5px;
+  text-transform: uppercase;
 }
 
 .HOME_MENU_RD .lista-bloque-informativos .noticias .article .media_block .top_info .Topheadline .hide {
