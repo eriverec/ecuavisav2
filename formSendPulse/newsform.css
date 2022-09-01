@@ -9,10 +9,6 @@
   background-position-x: 5rem;
 }
 
-.info-formulario .news-texto-rd {
-  padding-top: 4rem;
-}
-
 .info-formulario .news-texto-rd h1 {
   font-family: 'Anek Malayalam';
   font-style: normal;
@@ -67,4 +63,97 @@
   text-transform: uppercase;
   color: #2927b9;
   margin-top: 4rem;
+}
+
+
+.sp-force-hide {
+  display: none;
+}
+
+.sp-form {
+  margin: initial;
+  padding: 0;
+}
+
+.sp-form .sp-field {
+  padding: 8px 0;
+}
+
+.sp-form[sp-id="214915"] {
+  display: block;
+  background: #ffffff;
+  /* padding: 5px;
+  width: 450px; */
+  max-width: 100%;
+  border-radius: 0px;
+  /* font-family: Arial, "Helvetica Neue", sans-serif; */
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: auto;
+}
+
+input:focus-visible {
+  border-color: azure;
+  outline-offset: -2px;
+  outline: 2px solid rgb(224 224 224);
+}
+
+.sp-form[sp-id="214915"] input[type="checkbox"] {
+  display: inline-block;
+  opacity: 1;
+  visibility: visible;
+}
+
+.sp-form[sp-id="214915"] .sp-form-fields-wrapper {
+  /* margin: 0 auto; */
+  width: 440px;
+}
+
+.sp-form[sp-id="214915"] .sp-form-control {
+  background: rgba(9, 19, 33, 0.06);
+  border-color: rgba(255, 255, 255, 1);
+  border-style: solid;
+  border-width: 1px;
+  font-size: 15px;
+  padding-left: 8.75px;
+  padding-right: 8.75px;
+  /* border-radius: 0px; */
+  height: 35px;
+  width: 100%;
+}
+
+.sp-form[sp-id="214915"] .sp-field label {
+  color: #444444;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: bold;
+}
+
+.sp-form[sp-id="214915"] .sp-button-messengers {
+  border-radius: 4px;
+}
+
+.sp-form[sp-id="214915"] .sp-button {
+  border-radius: 2px;
+  background-color: #0065f2;
+  color: #ffffff;
+  width: auto;
+  font-weight: 700;
+  font-style: normal;
+  box-shadow: none;
+  border-color: transparent;
+  padding: 11px 20px;
+  display: block;
+  height: auto;
+}
+
+.sp-form[sp-id="214915"] .sp-button-container {
+  text-align: left;
+  /* width: auto; */
+}
+
+@media (max-width: 767px) {
+  .sp-form[sp-id="214915"] .sp-button {
+    display: initial;
+  }
 }
