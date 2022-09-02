@@ -1536,6 +1536,8 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block {
   display: flex;
   margin: 25px 0;
+  height: 140px;
+
 }
 
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda {
@@ -1571,7 +1573,7 @@ INICIO - BLOQUE - ESTILO
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 0 45px;
+  padding: 30px 45px;
   background: white;
   color: var(--bs-black);
 }
@@ -1580,11 +1582,21 @@ INICIO - BLOQUE - ESTILO
   font-family: 'Anek Malayalam';
   font-weight: 600;
   margin: 0;
-
+  font-size: 28px;
 }
 
 @media (max-width: 991px) {
-  
+  .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2 {
+    font-size: 19px;
+  }
+
+  .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline {
+    padding: 15px 20px;
+  }
+
+  .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda {
+    padding: 25px 30px;
+  }
 }
 
 @media (max-width: 767px) {
