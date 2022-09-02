@@ -300,6 +300,11 @@ INICIO - PORTADA - 4 DESTACADAS
 
 .HOME_MENU_RD .iconPlay {
   background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
+  width: 30px;
+  height: 30px;
+  top: 15px;
+  right: 10px;
+  bottom: initial;
 }
 
 @media (max-width: 991px) {
