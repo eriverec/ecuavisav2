@@ -47,7 +47,7 @@
 .HOME_MENU_RD h1,
 .HOME_MENU_RD h2,
 .HOME_MENU_RD h3,
-.HOME_MENU_RD p{
+.HOME_MENU_RD p {
   font-family: 'Archivo', sans-serif;
 }
 
@@ -159,7 +159,7 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .listado_1_4_mobile .noticias .article .text_block .section {
-  
+
   color: var(--rd-section);
   font-weight: 500;
 }
@@ -235,7 +235,7 @@ INICIO - PORTADA - 4 DESTACADAS
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .section {
   color: var(--rd-section);
   font-weight: 500;
-  
+
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
@@ -448,7 +448,7 @@ INICIO - BLOQUE - ECUADOR
 }
 
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .section {
-  
+
   font-weight: 500;
   color: var(--rd-section);
 }
@@ -1149,7 +1149,7 @@ BLOQUE - CULTURA
 }
 
 .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .section {
- 
+
   font-weight: 500;
   color: var(--rd-section);
   margin-top: 10px;
@@ -1183,7 +1183,7 @@ BLOQUE - CULTURA
 }
 
 .HOME_MENU_RD .bloque_cultura_2 .noticias .article .text_block .section {
- 
+
   font-weight: 500;
   color: var(--rd-section);
   display: block;
@@ -1220,7 +1220,7 @@ BLOQUE - CULTURA
   }
 
   .HOME_MENU_RD .bloque_cultura_2_m .noticias .article .text_block .section {
-   
+
     font-weight: 500;
     color: var(--rd-section);
     display: block;
@@ -1323,7 +1323,7 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .section {
 
-  
+
   font-weight: 500;
   color: #23DCD1;
   display: block;
@@ -1453,7 +1453,7 @@ INICIO - BLOQUE - ESTILO
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .text_block .section {
-  
+
   font-weight: 600;
   color: #23DCD1;
   display: block;
@@ -1505,4 +1505,65 @@ INICIO - BLOQUE - ESTILO
   .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .top_info .Topheadline .hLine {
     font-size: 10px;
   }
+}
+
+
+
+
+/* *******************************************
+ ***********BLOQUE - Agenda***************
+******************************************* */
+
+.portada-agenda .tit_agenda {
+  color: #0067d5;
+  font-size: 3rem;
+}
+
+.portada-agenda .MUL_TIT_INF2 .text_block {
+  display: flex;
+  margin: 25px 0;
+}
+
+.portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda {
+  width: 10%;
+  text-align: center;
+  border: 1px solid #3385dd;
+}
+
+.portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda .agenda_dia {
+  background: black;
+  color: #ffF;
+  padding: 10px 5px;
+}
+
+.portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda .agenda_mes {
+  padding: 10px 5px;
+  background: #fff;
+}
+
+.portada-agenda .MUL_TIT_INF2 .headline {
+  display: flex;
+  align-items: center;
+  border: 1px solid #3385dd;
+  width: 100%;
+  padding: 0 30px;
+  background: #3385dd;
+  color: #fff;
+}
+
+
+
+@media (max-width: 767px) {
+  .portada-agenda .tit_agenda {
+    margin-left: 1rem;
+  }
+
+  .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda {
+    width: 25%;
+    /* margin-left: 1rem; */
+  }
+
+  /* .portada-agenda .MUL_TIT_INF2 .headline {
+    margin-right: 1rem;
+  } */
 }
