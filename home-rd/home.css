@@ -1598,3 +1598,15 @@ INICIO - BLOQUE - ESTILO
     padding: 25px 30px;
   }
 }
+
+@media (max-width: 767px) {
+  .HOME_MENU_RD .portada-agenda.ag_Desktop .noticias {
+    grid-template-columns: none
+  }
+  .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2{
+    font-size: 19px;
+  }
+  .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline{
+    padding: 30px 30px;
+  }
+}
