@@ -1517,6 +1517,9 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .layout_agenda{
   background: #2927B9;
 }
+.HOME_MENU_RD .title_agenda .cintillo-rd {
+  color: white;
+}
 .portada-agenda .tit_agenda {
   color: #0067d5;
   font-size: 3rem;
