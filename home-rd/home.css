@@ -304,6 +304,7 @@ INICIO - PORTADA - 4 DESTACADAS
   height: 30px;
   top: 15px;
   right: 10px;
+  left: initial;
   bottom: initial;
 }
 
