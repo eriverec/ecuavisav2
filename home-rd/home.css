@@ -1566,7 +1566,15 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .portada-agenda .swiper-pagination {
   bottom: 0;
+}
 
+.HOME_MENU_RD .portada-agenda .swiper-pagination .swiper-pagination-bullet-active {
+  background: #23DCD1;
+}
+
+.HOME_MENU_RD .portada-agenda .swiper-pagination .swiper-pagination-bullet {
+  background: #23DCD1;
+  opacity: 0.5;
 }
 
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline {
@@ -1603,10 +1611,12 @@ INICIO - BLOQUE - ESTILO
   .HOME_MENU_RD .portada-agenda.ag_Desktop .noticias {
     grid-template-columns: none
   }
-  .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2{
+
+  .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2 {
     font-size: 19px;
   }
-  .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline{
+
+  .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline {
     padding: 30px 30px;
   }
 }
