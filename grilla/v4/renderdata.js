@@ -27,8 +27,8 @@ let manana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'S
 let pasadomanana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo', 'Lunes'][(undia.getDay()+2)]
 let tercermas = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo', 'Lunes'][((undia.getDay()+3))]
 // document.write('hoy es '+ actualDay)
-console.log('test dias: '+tercermas);
-console.log('tercer mas es: '+getFecha(+3));
+console.log('test dias: '+pasadomanana);
+console.log('tercer mas es: '+getFecha(+2));
 document.querySelector("."+actualDay+'Tab').click(); // seteamos por defecto el día actual
 
 // ##### FIN tab de días de la semana
@@ -101,7 +101,7 @@ function renderProgramas(){
             programas.appendTo('.'+anteayer);
         // programas.appendTo('.'+anteayer.toLowerCase());
         // console.log('Anteayer fue: '+ getFecha(-2) +' coincide con: '+programDate) 
-        }else{ }
+        }else{ /*console.log('Anteayer fue: '+ getFecha(-2) +' y no coincide con: '+programDate) */ }
         // tercermenos
         if (getFecha(-3) === (programDate) ){
             programas.appendTo('.'+tercermenos);
@@ -115,7 +115,8 @@ function renderProgramas(){
         // pasadomanana
         if (getFecha(+2) === (programDate) ){
         programas.appendTo('.'+pasadomanana);
-        }else{ }
+        console.log('Pasadomañana es: '+ getFecha(+2) +' coincide con: '+programDate) 
+        }else{console.log('Pasadomañana es: '+ getFecha(+2) +' y no coincide con: '+programDate)/* */  }
         // tercermas
         if (getFecha(+3) === (programDate) ){
             // console.log('tercer mas es '+pasadomanana)

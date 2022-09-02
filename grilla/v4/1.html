@@ -206,19 +206,33 @@
     }  
     console.log(proxSemana())
 
-    function getFecha(dia){
-        var today = new Date();
-        var diaObtenido = today.getFullYear()+'-'+('0'+(today.getMonth()+1)).slice(-2)+'-'+('0'+(today.getDate()+dia)).slice(-2) ;
+
+/* Función que suma o resta días a una fecha, si el parámetro
+   días es negativo restará los días*/
+function getFecha( dias){
+    var d = new Date();
+  d.setDate(d.getDate() + dias);
+  var diaObtenido = d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+(d.getDate())).slice(-2) ;
         return diaObtenido
-        // return diaObtenido.replace //funcion avanzada que filtra ceros en días
-        // (/-1|-2|-3|-4|-5|-6|-7|-8|-9/gi,
-        //     function (x) {
-        //     r1 = x.replace('-1','-01');    r2 = r1.replace('-2','-02');   r3 = r2.replace('-3','-03');
-        //     r4 = r3.replace('-4','-04');   r5 = r4.replace('-5','-05');   r6 = r5.replace('-6','-06');
-        //     r7 = r6.replace('-7','-07');   r8 = r7.replace('-8','-08');
-        //   return r8.replace('-9','-09');
-        // }) 
-    }  
+
+}
+// console.log('funcionNueva es '+getFecha( -2)); // probar getfecha
+    
+
+    // // funcion de dia vieja 
+    // function getFecha(dia){
+    //     var today = new Date();
+    //     var diaObtenido = today.getFullYear()+'-'+('0'+(today.getMonth()+1)).slice(-2)+'-'+('0'+(today.getDate()+dia)).slice(-2) ;
+    //     return diaObtenido
+    //     // return diaObtenido.replace //funcion avanzada que filtra ceros en días
+    //     // (/-1|-2|-3|-4|-5|-6|-7|-8|-9/gi,
+    //     //     function (x) {
+    //     //     r1 = x.replace('-1','-01');    r2 = r1.replace('-2','-02');   r3 = r2.replace('-3','-03');
+    //     //     r4 = r3.replace('-4','-04');   r5 = r4.replace('-5','-05');   r6 = r5.replace('-6','-06');
+    //     //     r7 = r6.replace('-7','-07');   r8 = r7.replace('-8','-08');
+    //     //   return r8.replace('-9','-09');
+    //     // }) 
+    // }  
     console.log(getFecha(0)+ ' es el dia')
     </script>
 
