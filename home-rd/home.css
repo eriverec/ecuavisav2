@@ -48,7 +48,7 @@
 .HOME_MENU_RD h2,
 .HOME_MENU_RD h3,
 .HOME_MENU_RD p{
-  font-family: Archivo;
+  font-family: 'Archivo', sans-serif;
 }
 
 .div__hide {
