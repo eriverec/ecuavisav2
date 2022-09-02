@@ -184,11 +184,10 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section {
-
   font-weight: 500;
-  color: #208E91;
+  color: #23DCD1;
   text-transform: uppercase;
-
+  font-size: 15px;
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h1 {
@@ -1454,7 +1453,7 @@ INICIO - BLOQUE - ESTILO
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .text_block .section {
-  font-size: var(--rd-size-14);
+  
   font-weight: 600;
   color: #23DCD1;
   display: block;
