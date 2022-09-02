@@ -51,6 +51,10 @@
   font-family: 'Archivo', sans-serif;
 }
 
+.HOME_MENU_RD .section {
+  font-family: 'Mattone 150';
+}
+
 .div__hide {
   display: none !important;
 }
@@ -1470,6 +1474,7 @@ INICIO - BLOQUE - ESTILO
   font-weight: 600;
   color: #2927B9;
   font-size: 22px;
+  font-family: 'Mattone 150';
 }
 
 .HOME_MENU_RD .button_container {
@@ -1496,6 +1501,8 @@ INICIO - BLOQUE - ESTILO
   align-items: center;
   flex-direction: column;
   text-transform: uppercase;
+  font-family: 'Mattone 150';
+  font-size: 14px;
 }
 
 .HOME_MENU_RD .button_container .sp_button:after {
