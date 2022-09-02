@@ -1533,7 +1533,7 @@ INICIO - BLOQUE - ESTILO
 }
 
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda {
-  width: 10%;
+  
   text-align: center;
   background: #1B2692;
   color: white;
@@ -1551,6 +1551,11 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda .agenda_mes {
   text-transform: uppercase;
+}
+
+.HOME_MENU_RD .portada-agenda .swiper-pagination{
+  bottom: 0;
+
 }
 
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline {
