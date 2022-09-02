@@ -1522,6 +1522,12 @@ INICIO - BLOQUE - ESTILO
   color: white;
 }
 
+.HOME_MENU_RD .portada-agenda .noticias {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+}
+
 .HOME_MENU_RD .portada-agenda .tit_agenda {
   color: #0067d5;
   font-size: 3rem;
@@ -1533,7 +1539,7 @@ INICIO - BLOQUE - ESTILO
 }
 
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda {
-  
+
   text-align: center;
   background: #1B2692;
   color: white;
@@ -1553,7 +1559,7 @@ INICIO - BLOQUE - ESTILO
   text-transform: uppercase;
 }
 
-.HOME_MENU_RD .portada-agenda .swiper-pagination{
+.HOME_MENU_RD .portada-agenda .swiper-pagination {
   bottom: 0;
 
 }
@@ -1567,7 +1573,7 @@ INICIO - BLOQUE - ESTILO
   color: var(--bs-black);
 }
 
-.HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2{
+.HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2 {
   font-family: 'Anek Malayalam';
   font-weight: 600;
 
