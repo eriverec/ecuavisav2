@@ -1586,23 +1586,15 @@ INICIO - BLOQUE - ESTILO
 }
 
 @media (max-width: 991px) {
-  .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2 {
+  .HOME_MENU_RD .portada-agenda.ag_Desktop .MUL_TIT_INF2 .headline h2 {
     font-size: 19px;
   }
 
-  .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline {
+  .HOME_MENU_RD .portada-agenda.ag_Desktop .MUL_TIT_INF2 .headline {
     padding: 15px 20px;
   }
 
-  .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda {
+  .HOME_MENU_RD .portada-agenda.ag_Desktop .MUL_TIT_INF2 .text_block .fecha_agenda {
     padding: 25px 30px;
   }
-}
-
-@media (max-width: 767px) {
-  .HOME_MENU_RD .portada-agenda .tit_agenda {
-    margin-left: 1rem;
-  }
-
-
 }
