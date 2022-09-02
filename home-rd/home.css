@@ -299,10 +299,7 @@ INICIO - PORTADA - 4 DESTACADAS
 
 
 .HOME_MENU_RD .iconPlay {
-  background-image: url('https://estadisticas.ecuavisa.com/sites/default/files/2022-08/icons8-reproducir-en-c%C3%ADrculo-50.png');
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
 }
 
 @media (max-width: 991px) {
