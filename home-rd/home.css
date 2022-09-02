@@ -1514,51 +1514,63 @@ INICIO - BLOQUE - ESTILO
  ***********BLOQUE - Agenda***************
 ******************************************* */
 
-.HOME_MENU_RD .layout_agenda{
+.HOME_MENU_RD .layout_agenda {
   background: #2927B9;
 }
+
 .HOME_MENU_RD .title_agenda .cintillo-rd {
   color: white;
 }
-.portada-agenda .tit_agenda {
+
+.HOME_MENU_RD .portada-agenda .tit_agenda {
   color: #0067d5;
   font-size: 3rem;
 }
 
-.portada-agenda .MUL_TIT_INF2 .text_block {
+.HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block {
   display: flex;
   margin: 25px 0;
 }
 
-.portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda {
+.HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda {
   width: 10%;
   text-align: center;
-  border: 1px solid ;
   background: #1B2692;
   color: white;
+  padding: 30px 45px;
 }
 
-.portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda .agenda_dia {
-  padding: 10px 5px;
+.HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda .agenda_dia h2,
+.HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda .agenda_mes h2 {
+  margin: 0;
+  font-size: 27px;
+  font-family: 'Anek Malayalam';
+  font-weight: 700;
 }
 
-.portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda .agenda_mes {
-  padding: 10px 5px;
+
+.HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda .agenda_mes {
+  text-transform: uppercase;
 }
 
-.portada-agenda .MUL_TIT_INF2 .headline {
+.HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline {
   display: flex;
   align-items: center;
   width: 100%;
-  padding: 0 30px;
+  padding: 0 45px;
   background: white;
   color: var(--bs-black);
 }
 
+.HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2{
+  font-family: 'Anek Malayalam';
+  font-weight: 600;
+
+}
 
 
 @media (max-width: 767px) {
-  .portada-agenda .tit_agenda {
+  .HOME_MENU_RD .portada-agenda .tit_agenda {
     margin-left: 1rem;
   }
 
