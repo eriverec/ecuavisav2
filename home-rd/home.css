@@ -1539,7 +1539,10 @@ INICIO - BLOQUE - ESTILO
 }
 
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda {
-
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
   text-align: center;
   background: #1B2692;
   color: white;
@@ -1576,9 +1579,13 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2 {
   font-family: 'Anek Malayalam';
   font-weight: 600;
+  margin: 0;
 
 }
 
+@media (max-width: 991px) {
+  
+}
 
 @media (max-width: 767px) {
   .HOME_MENU_RD .portada-agenda .tit_agenda {
