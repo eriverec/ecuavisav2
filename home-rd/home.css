@@ -1522,10 +1522,10 @@ INICIO - BLOQUE - ESTILO
   color: white;
 }
 
-.HOME_MENU_RD .portada-agenda .noticias {
+.HOME_MENU_RD .portada-agenda.ag_Desktop .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  column-gap: 30px;
 }
 
 .HOME_MENU_RD .portada-agenda .tit_agenda {
