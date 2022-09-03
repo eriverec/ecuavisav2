@@ -59,7 +59,7 @@ function renderProgramas(){
         var ActualClass= 'px-4 py-4 text-zinc-50 bg-white text-sm flex items-center'
         var imgs= 'https://via.placeholder.com/70'
         var programas= $(`
-            <tr>
+            <tr class="programaItem" data-item="${programName}${programTimeIni}">
                 <td class="border-b border-gray-100 bg-white text-sm flex items-center">
                     <img src="${imgs}" alt="">
                     <p class="p-2 ml-3 text-gray-900 whitespace-no-wrap"> ${programName} - ${programTimeIni} </p>
@@ -73,7 +73,8 @@ function renderProgramas(){
         if (fechahoy('fecha') === (programDate) ){
             // console.log('La hora del momento es :'+horahoy)
             // console.log('La hora del progra  es :'+programTimeIni);
-
+            var fixitem = $('.programaItem').data('item');
+            if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).each().remove(); }else{};
                 // if(horahoy < programTimeIni){
                 //   console.log("Fecha actual es mayor");
                 // }else{
@@ -93,32 +94,44 @@ function renderProgramas(){
 
         // ayer
         if (getFecha(-1) === (programDate) ){
+            var fixitem = $('.programaItem').data('item');
+            if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).remove() }else{};
              /*console.log( 'Ayer fue: '+ getFecha(-1) +' y coincide con: '+programDate )*/
         programas.appendTo('.'+ayer);
         }else{ /*console.log('Ayer fue: '+ getFecha(-1) +' y no coincide con: '+programDate) */}
         // anteayer
         if (getFecha(-2) === (programDate) ){
+            var fixitem = $('.programaItem').data('item');
+            if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).remove() }else{};
             programas.appendTo('.'+anteayer);
         // programas.appendTo('.'+anteayer.toLowerCase());
         // console.log('Anteayer fue: '+ getFecha(-2) +' coincide con: '+programDate) 
         }else{ /*console.log('Anteayer fue: '+ getFecha(-2) +' y no coincide con: '+programDate) */ }
         // tercermenos
         if (getFecha(-3) === (programDate) ){
+            var fixitem = $('.programaItem').data('item');
+            if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).remove() }else{};
             programas.appendTo('.'+tercermenos);
         // programas.appendTo('.'+tercermenos.toLowerCase());
         }else{ }
         // manana
         if (getFecha(+1) === (programDate) ){
+            var fixitem = $('.programaItem').data('item');
+            if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).remove() }else{};
         // programas.appendTo('.'+manana.toLowerCase());
         programas.appendTo('.'+manana);
         }else{ }
         // pasadomanana
         if (getFecha(+2) === (programDate) ){
+            var fixitem = $('.programaItem').data('item');
+            if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).remove() }else{};
         programas.appendTo('.'+pasadomanana);
-        console.log('Pasadomañana es: '+ getFecha(+2) +' coincide con: '+programDate) 
-        }else{console.log('Pasadomañana es: '+ getFecha(+2) +' y no coincide con: '+programDate)/* */  }
+        // console.log('Pasadomañana es: '+ getFecha(+2) +' coincide con: '+programDate); 
+        }else{/*console.log('Pasadomañana es: '+ getFecha(+2) +' y no coincide con: '+programDate) */  }
         // tercermas
         if (getFecha(+3) === (programDate) ){
+            var fixitem = $('.programaItem').data('item');
+            if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).remove() }else{};
             // console.log('tercer mas es '+pasadomanana)
         programas.appendTo('.'+tercermas);
         }else{ }
