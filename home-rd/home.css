@@ -887,18 +887,16 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
 
 .sliderVideos .tit-vid h2 {
-  color: var(--rd-cintillo);
-  font-size: var(--rd-size-60);
+  color: #23DCD1;
+  font-size: var(--rd-size-22);
   font-weight: 500;
 }
 
-
-
-@media (max-width: 600px) {
-  .sliderVideos .tit-vid h2 {
-    font-size: var(--rd-size-34);
-  }
+.sliderVideos .tit-vid h2 span {
+  color: white;
 }
+
+
 
 @media (max-width: 575px) {
   .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .top_info .Topheadline .hLine {
