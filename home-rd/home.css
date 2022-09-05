@@ -692,7 +692,7 @@ INICIO - BLOQUE - PROGRAMACION
   text-transform: uppercase;
 }
 
-.HOME_MENU_RD .button_container .sp_button.btn_pr_Web:after{
+.HOME_MENU_RD .button_container .sp_button.btn_pr_Web:after {
   content: url('https://ecuavisadev.netlify.app/home-rd/assets/lineProgWeb.svg');
 }
 
@@ -837,6 +837,8 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 .sliderVideos .multimedia img {
   border-radius: 6px;
   -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 60%);
+  height: 100% !important;
+  object-fit: cover;
 }
 
 
