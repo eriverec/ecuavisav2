@@ -63,14 +63,14 @@ function renderProgramas(){
         var programDate= _jsonProgramas[programIndex].fecha//.replace('-0', '-'); //revisar si presenta problemas en horario
         var programTimeIni= _jsonProgramas[programIndex].hora_inicio.replace(_jsonProgramas[programIndex].fecha, '');
         var programTimeEnd= _jsonProgramas[programIndex].hora_fin.replace(_jsonProgramas[programIndex].fecha, '');
-        
+        var hiddenInactive= 'hidden';
         var ActualClass= 'px-4 py-4 text-zinc-50 bg-white text-sm flex items-center'
         var imgs= 'https://via.placeholder.com/70'
         var programas= $(`
             <tr class="programaItem el-${contador}" data-item="${programName}${programTimeIni}">
                 <td class="border-b border-gray-100 bg-white text-sm flex items-center">
                     <img src="${imgs}" alt="">
-                    <p class="p-2 ml-3 text-gray-900 whitespace-no-wrap"> ${programName} - ${programTimeIni} - -${contador}</p>
+                    <p class="p-2 ml-3 text-gray-900 whitespace-no-wrap"> ${programName} - ${programTimeIni} </p>
                 </td>
                 <td class="px-4 py-4 border-b border-gray-100 bg-white text-sm hidden">
                     <span class="bg-green-200">Activo</span>
@@ -81,7 +81,7 @@ function renderProgramas(){
         if (region === '3' ){ // validamos que sea region costa
         
 
-            // var jsonDiaActual = function(index){
+            // var jsonDiaActual = function(index){ //creacion de objeto de programa por funcion
             //     programaData = { //objeto del programa
             //         "nombrePrograma" : programName,
             //         "HoradeInicio" : programTimeIni,
@@ -89,11 +89,11 @@ function renderProgramas(){
             //         "Region": region}    
             //     _jsonDiaActual.push(programaData); //creamos listado de programas en json
             // };
+            // jsonDiaActual(programIndex); 
 
             // dia de hoy
             if (fechahoy('fecha') === (programDate) ){
-                var contador = (contador)+1;
-                // jsonDiaActual(programIndex); 
+                var contador = (contador)+1; //subimos el valor de contador para la clase unica
                 var programaData = { //objeto del programa
                     "nombrePrograma" : programName,
                     "HoradeFin" : programTimeEnd,
