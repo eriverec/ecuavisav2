@@ -907,6 +907,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   color: #23DCD1;
   font-size: var(--rd-size-22);
   font-weight: 500;
+  text-transform: uppercase;
 }
 
 .sliderVideos .tit-vid h2 span {
