@@ -543,6 +543,15 @@ INICIO - BLOQUE - PROGRAMACION
   background: #060127;
 }
 
+.HOME_MENU_RD .prog-web-container {
+  border-top: 16px solid #2927B9;
+}
+
+.HOME_MENU_RD .sliderVideos {
+  border-bottom: 16px solid #2927B9;
+}
+
+
 .HOME_MENU_RD .titulo_programa_web .cintillo-rd span {
   color: #23DCD1;
 }
@@ -683,6 +692,10 @@ INICIO - BLOQUE - PROGRAMACION
   text-transform: uppercase;
 }
 
+.HOME_MENU_RD .button_container .sp_button.btn_pr_Web:after{
+  content: url('https://ecuavisadev.netlify.app/home-rd/assets/lineProgWeb.svg');
+}
+
 /* .HOME_MENU_RD .lista-programacion-bloque .noticias {
   overflow: auto;
   white-space: nowrap;
@@ -758,7 +771,7 @@ INICIO - BLOQUE - PROGRAMACION
     font-size: 10px;
   }
 
-  .HOME_MENU_RD .titulo_programa_web .cintillo-rd{
+  .HOME_MENU_RD .titulo_programa_web .cintillo-rd {
     font-size: 45px;
   }
 
@@ -829,7 +842,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
 .sliderVideos .multimedia img {
   border-radius: 6px;
-  -webkit-mask-image: linear-gradient(to top, transparent 0, #242424 60%);
+  -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 60%);
 }
 
 
