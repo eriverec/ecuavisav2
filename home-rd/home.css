@@ -758,6 +758,10 @@ INICIO - BLOQUE - PROGRAMACION
     font-size: 10px;
   }
 
+  .HOME_MENU_RD .titulo_programa_web .cintillo-rd{
+    font-size: 45px;
+  }
+
   .HOME_MENU_RD .img-header-prog .mediaBlock .multimedia img {
     height: 300px;
     object-fit: cover;
@@ -895,7 +899,6 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 .sliderVideos .tit-vid h2 span {
   color: white;
 }
-
 
 
 @media (max-width: 575px) {
