@@ -877,6 +877,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   font-size: var(--rd-size-22);
   font-weight: 500;
   text-transform: uppercase;
+  font-family: 'Mattone 150';
 }
 
 .sliderVideos .tit-vid h2 span {
