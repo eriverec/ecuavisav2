@@ -1531,8 +1531,13 @@ INICIO - BLOQUE - ESTILO
   column-gap: 30px;
 }
 
-.HOME_MENU_RD .portada-agenda.ag_Desktop.portada_agenda .noticias {
+.HOME_MENU_RD .portada-agenda.ag_Desktop.apertura_agenda .noticias {
   grid-template-columns: none;
+}
+
+.HOME_MENU_RD .portada-agenda.ag_Desktop.apertura_agenda .MUL_TIT_INF2 .text_block .fecha_agenda {
+  background: #23DCD1;
+  color: #2927B9;
 }
 
 .HOME_MENU_RD .portada-agenda .tit_agenda {
