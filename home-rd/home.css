@@ -74,6 +74,7 @@
   font-family: 'Anek Malayalam';
 }
 
+
 .c_azul_celeste_Mobile {
   display: none;
 }
@@ -542,6 +543,19 @@ INICIO - BLOQUE - PROGRAMACION
   background: #060127;
 }
 
+.HOME_MENU_RD .titulo_programa_web .cintillo-rd span {
+  color: #23DCD1;
+}
+
+.HOME_MENU_RD .titulo_programa_web .cintillo-rd {
+  display: inline-block;
+  font-size: 80px;
+  font-weight: 700;
+  color: white;
+  text-transform: lowercase;
+  font-family: 'Anek Malayalam';
+}
+
 
 .HOME_MENU_RD .img-header-prog .mediaBlock .multimedia img {
   width: 100%;
@@ -872,7 +886,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
 
 
-.sliderVideos .tit-vid h1 {
+.sliderVideos .tit-vid h2 {
   color: var(--rd-cintillo);
   font-size: var(--rd-size-60);
   font-weight: 500;
@@ -881,7 +895,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
 
 @media (max-width: 600px) {
-  .sliderVideos .tit-vid h1 {
+  .sliderVideos .tit-vid h2 {
     font-size: var(--rd-size-34);
   }
 }
