@@ -587,18 +587,17 @@ INICIO - BLOQUE - PROGRAMACION
   position: relative;
 }
 
-.HOME_MENU_RD .img-header-prog .mediaBlock .senal_active {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 9;
+.HOME_MENU_RD .img-header-prog .mediaBlock .senal_active {  
   color: white;
-  padding: 20px;
+  padding: 20px 0;
   text-transform: uppercase;
   font-weight: 600;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   gap: 5px;
+  font-size: 1rem;
+  font-family: 'Mattone 150';
 }
 
 .HOME_MENU_RD .img-header-prog .mediaBlock .senal_active img {
@@ -606,11 +605,11 @@ INICIO - BLOQUE - PROGRAMACION
   animation-duration: 1s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
-
   -webkit-animation-name: parpadeo;
   -webkit-animation-duration: 1s;
   -webkit-animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
+  width: 2rem;
 }
 
 @-moz-keyframes parpadeo {
