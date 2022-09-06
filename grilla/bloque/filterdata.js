@@ -23,6 +23,7 @@ function filterData(){
             ,mes     : _data[9].replace(/['"]+/g, '')
             ,hora_inicio     : _data[12].replace(/['"]+/g, '')
             ,hora_fin     : _data[13].replace(/['"]+/g, '')
+            ,region     : _data[7].replace(/['"]+/g, '')
             ,fecha     : _data[18].replace(/['"]+/g, '')
         };
         
@@ -39,9 +40,9 @@ function filterData(){
     var programaItems= _jsonProgramas.length;
     for (programIndex = 0; programIndex < programaItems; programIndex++) {
         var programName = _jsonProgramas[programIndex].programa;
-        mainRender.innerHTML = (programName+'<br><br>');
+        // mainRender.innerHTML = (programName+'<br><br>');
         // console.log(programName);
     }
- setTimeout(location.reload(), 100);
+  setTimeout(location.reload(), 100);
 } // end filter data function
 // ##### Fin de estructurado de datos obtenidos
