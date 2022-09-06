@@ -43,6 +43,6 @@ function filterData(){
         // mainRender.innerHTML = (programName+'<br><br>');
         // console.log(programName);
     }
- // setTimeout(location.reload(), 100);
+  setTimeout(location.reload(), 100);
 } // end filter data function
 // ##### Fin de estructurado de datos obtenidos
