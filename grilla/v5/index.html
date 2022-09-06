@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parrilla ecuavisa </title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <style>
+        td { border: 1px solid blue; }
+        .hourtabs {
+    /*      display: flex;
+            flex-wrap: wrap;*/
+            display: -webkit-box;
+            /* flex-wrap: wrap; */
+            /* width: fit-content; */
+            overflow: auto;
+        }
+        .hourtabs label {
+            order: 1;
+            display: flex;
+            padding: 0.3rem 1rem;
+            margin-right: 0.2rem;
+            cursor: pointer;
+            background: #d7d7d7;
+            font-weight: 500;
+            transition: background ease 0.2s;
+        }
+        .hourtabs .tab {
+            order: 99;
+            flex-grow: 1;
+            width: 100%;
+            display: none;
+            padding: 1rem;
+            background: #fff;
+        }
+        .hourtabs input[type="radio"] {
+            display: none;
+        }
+        .hourtabs input[type="radio"]:checked + label {
+            background: #0067d5;
+            color: white;
+        }
+        .hourtabs input[type="radio"]:checked + label + .tab {
+            /*display: block;*/
+
+            display: block;
+            position: absolute;
+            top: 20%;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Tabs  -->
+    <ul id="tabs" class="inline-flex w-full py-2 overflow-auto">
+        <li class="p-2 mr-1 py-2 -mb-px font-semibold text-gray-800 border-blue-400 bg-neutral-300 opacity-100"><a class="LunesTab" id="default-tab" href="#lunes">Lunes</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="MartesTab" href="#martes">Martes</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-900 bg-neutral-300 opacity-100"><a class="MiercolesTab" href="#miercoles">Miércoles</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="JuevesTab" href="#jueves">Jueves</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="ViernesTab" href="#viernes">Viernes</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="SabadoTab" href="#sabado">Sábado</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="DomingoTab" href="#domingo">Domingo</a></li>
+    </ul>
+    <table class="puredata hidden">
+
+    </table>
+    <!-- Tab Contents -->
+    <div id="tab-contents" class=" ">
+        <div id="lunes" class="px-2">
+            <table class="bg-white rounded-md w-full min-w-full leading-normal">
+                <tbody id="programlist2" class="programList Lunes"> </tbody>
+                <!--     <tr><td class="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center">
+                            <img src="" alt="">
+                            <p class="ml-3 text-gray-900 whitespace-no-wrap"> televistazo - 11:00 </p>
+                        </td>
+                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <span class="bg-green-200">Activo</span>
+                        </td> </tr> -->
+            </table>
+        </div>
+
+        <div id="martes" class="hidden">
+            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
+                <tbody id="programlist2" class="programList Martes">
+                </tbody>
+            </table>
+        </div>
+
+        <div id="miercoles" class="hidden">
+
+            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
+                <tbody id="programlist2" class="programList Miercoles"> </tbody>
+            </table>
+        </div>
+
+        <div id="jueves" class="hidden">
+<!--             <div class="hourtabs pb-2">
+                <input type="radio" name="tabs" id="00-03" checked="checked">
+                <label for="00-03">00-03</label> <div class="tab"> <h1>00-03</h1> </div>
+
+                <input type="radio" name="tabs" id="03-06">
+                <label for="03-06">03-06</label> <div class="tab">  <h1>03-06</h1> </div>
+
+                <input type="radio" name="tabs" id="06-09">
+                <label for="06-09">06-09</label> <div class="tab"> <h1>06-09</h1> </div>
+
+                <input type="radio" name="tabs" id="09-12">
+                <label for="09-12">09-12</label> <div class="tab"> <h1>09-12</h1> </div>
+
+                <input type="radio" name="tabs" id="12-15">
+                <label for="12-15">12-15</label> <div class="tab"> <h1>12-15</h1> </div>  
+
+                <input type="radio" name="tabs" id="15-18">
+                <label for="15-18">15-18</label> <div class="tab"> <h1>15-18</h1> </div>
+
+                <input type="radio" name="tabs" id="18-21">
+                <label for="18-21">18-21</label> <div class="tab"> <h1>18-21</h1> </div>
+
+                <input type="radio" name="tabs" id="21-00">
+                <label for="21-00">21-00</label> <div class="tab"> <h1>21-00</h1> </div>                         
+            </div>
+
+            <div class="hourtabs my-2">
+                <input type="radio" name="tabs" id="09-12">
+                <label for="09-12">00:00</label> 
+
+                <input type="radio" name="tabs" id="00-03">
+                <label for="00-03">00:30</label> 
+
+                <input type="radio" name="tabs" id="03-06">
+                <label for="03-06">01:00</label> 
+
+                <input type="radio" name="tabs" id="06-09">
+                <label for="06-09">01:30</label> 
+
+                <input type="radio" name="tabs" id="12-15">
+                <label for="12-15">02:00</label>   
+
+                <input type="radio" name="tabs" id="15-18">
+                <label for="15-18">02:30</label> 
+
+                <input type="radio" name="tabs" id="18-21">
+                <label for="18-21">03:00</label>                     
+            </div> -->
+            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
+                <tbody id="programlist2" class="programList Jueves"> </tbody>
+            </table>
+        </div>
+        <div id="viernes" class="hidden">
+            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
+                <tbody id="programlist2" class="programList Viernes"> </tbody>
+            </table>
+        </div>     
+        <div id="sabado" class="hidden">
+            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
+                <tbody id="programlist2" class="programList sabado Sabado"> </tbody>
+            </table>
+        </div>    
+        <div id="domingo" class="hidden">
+            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
+                <tbody id="programlist2" class="programList Domingo"> </tbody>
+            </table>
+        </div>   
+    </div>
+
+
+    <div class="jsondata" id="jsonData"></div>
+    <script async type="text/javascript" src="filterdata.js"> </script> 
+    <script async type="text/javascript" src="renderdata.js"> </script> 
+    <script async type="text/javascript" src="getdata.js"> </script> 
+
+    <script defer="defer" type="text/javascript">
+
+
+    function fechahoy(dato){
+        var fecha = new Date();
+        // var hoy = new Date(fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate()); //+7 se suma si quiere setear ayer u hoy
+        // var hoy = fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate();
+        var hoy= fecha.getFullYear()+'-'+('0'+(fecha.getMonth()+1)).slice(-2)+'-'+('0'+fecha.getDate()).slice(-2);
+        var hora = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
+        var fehayHora = hoy+' '+hora;
+        if (dato === 'fecha'){ 
+        return hoy 
+        /*return hoy.replace //funcion avanzada que filtra ceros en días
+        (/-1-|-2-|-3-|-4-|-5-|-6-|-7-|-8-|-9-/gi,
+            function (x) {
+            r1 = x.replace('-1-','-01-');    r2 = r1.replace('-2-','-02-');   r3 = r2.replace('-3-','-03-');
+            r4 = r3.replace('-4-','-04-');   r5 = r4.replace('-5','-05-');   r6 = r5.replace('-6-','-06-');
+            r7 = r6.replace('-7-','-07-');   r8 = r7.replace('-8','-08-');   r9 = r8.replace('-8-','-08-');
+          return r8.replace('-9-','-09-'); 
+        });*/ }
+        else if (dato === 'hora'){return hora;}
+        // return fehayHora;
+    }
+    console.log('La fecha actual es: '+fechahoy('fecha'));
+    console.log('La hora actual es: '+fechahoy('hora'));
+    // ##### FIN función para obtener fecha y hora
+
+
+    function proxSemana(){
+        var today = new Date();
+        var proxSemana = new Date(today.getFullYear(), today.getMonth(), today.getDate()+3);
+        return proxSemana;
+    }  
+    // console.log(proxSemana())
+
+
+/* Función que suma o resta días a una fecha, si el parámetro
+   días es negativo restará los días*/
+function getFecha( dias){
+    var d = new Date();
+  d.setDate(d.getDate() + dias);
+  var diaObtenido = d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+(d.getDate())).slice(-2) ;
+    return diaObtenido
+}
+// console.log('funcionNueva es '+getFecha( -2)); // probar getfecha
+    
+
+    // // funcion de dia vieja 
+    // function getFecha(dia){
+    //     var today = new Date();
+    //     var diaObtenido = today.getFullYear()+'-'+('0'+(today.getMonth()+1)).slice(-2)+'-'+('0'+(today.getDate()+dia)).slice(-2) ;
+    //     return diaObtenido
+    //     // return diaObtenido.replace //funcion avanzada que filtra ceros en días
+    //     // (/-1|-2|-3|-4|-5|-6|-7|-8|-9/gi,
+    //     //     function (x) {
+    //     //     r1 = x.replace('-1','-01');    r2 = r1.replace('-2','-02');   r3 = r2.replace('-3','-03');
+    //     //     r4 = r3.replace('-4','-04');   r5 = r4.replace('-5','-05');   r6 = r5.replace('-6','-06');
+    //     //     r7 = r6.replace('-7','-07');   r8 = r7.replace('-8','-08');
+    //     //   return r8.replace('-9','-09');
+    //     // }) 
+    // }  
+
+
+    // console.log(getFecha(0)+ ' es el dia')
+    </script>
+
+
+
+   
+</body>
+</html>
