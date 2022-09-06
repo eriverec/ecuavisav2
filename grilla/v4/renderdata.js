@@ -28,7 +28,8 @@ let pasadomanana = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Vierne
 let tercermas = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo', 'Lunes'][((undia.getDay()+3))]
 // document.write('hoy es '+ actualDay)
 if (ayer === 'Domingo') { anteayer = 'Sabado'; tercermenos = 'Viernes';}else{};
-console.log('test dias: '+anteayer);
+if (ayer === 'Lunes') { tercermenos = 'Sabado';}else{};
+console.log('test dias: '+tercermenos);
 //console.log('tercer mas es: '+getFecha(+3));
 document.querySelector("."+actualDay+'Tab').click(); // seteamos por defecto el día actual
 
