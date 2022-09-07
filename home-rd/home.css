@@ -131,6 +131,24 @@ INICIO - PORTADA - 4 DESTACADAS
   -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 60%);
 }
 
+/*Fondo del banner opaco*/
+.HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div:after {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    content: "";
+    left: 0;
+    right: 0;
+    background-image: url(https://redyman.netlify.app/header2022/img/img-fondo.png) !important;
+    background: #3F3F4200;
+    background-position: center 100%;
+    background-repeat: no-repeat;
+    background-size: cover;
+    top: 0;
+    opacity: .7;
+}
+/*Fin fondo del banner opaco*/
+
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper {
   background-image: -webkit-linear-gradient(bottom, #060127 50%, white 65%);
 }
@@ -208,6 +226,8 @@ INICIO - PORTADA - 4 DESTACADAS
     font-style: normal;
     font-weight: 700;
     line-height: 48px;
+    padding-top: 15px;
+    padding-bottom: 18px;
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
@@ -222,6 +242,10 @@ INICIO - PORTADA - 4 DESTACADAS
   border-bottom: 1px solid var(--rd-gray-border);
   border-top: 1px solid var(--rd-gray-border);
   /* margin-top: 3rem; */
+}
+
+.HOME_MENU_RD .articulos_4dest {
+    border-bottom: 0px solid var(--rd-gray-border);
 }
 
 .HOME_MENU_RD .notas-1-n-ap {
@@ -248,9 +272,12 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .section {
-  color: var(--rd-section);
-  font-weight: 500;
-
+    color: var(--rd-section);
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    text-transform: uppercase;
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
