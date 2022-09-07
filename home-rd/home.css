@@ -394,7 +394,7 @@ Cambio de tamaño de imagen grande izq
 /*Fin Banner ancho del título*/
 
 /*Inicio banner publicidad border top*/
-#menu_1658772727 div > div > div.portlet-boundary.portlet-static-end.htmlcontainer-portlet > div > div > a > img {
+#m00-r01 > div.portlet-boundary.portlet-static-end.menu-portlet.menu-bloques.itr-wlod.HOME_MENU_RD > div > div > ul > li.lst-item.tabnav> div > div > div.portlet-boundary.portlet-static-end.htmlcontainer-portlet > div > div > a > img{
     border-bottom: 16px solid #2927B9;
 }
 /*Fin banner publicidad border top*/
@@ -563,10 +563,28 @@ INICIO - BLOQUE - ECUADOR
     font-size: 14px;
     line-height: 17px;
     padding-bottom: 8px;
+    margin-bottom: 0px;
     display: block;
     text-transform: uppercase;
     color: var(--rd-section);
 }
+
+/*SECCION ECUADOR PADDING TOP AND BOTTOM*/
+.portlet-boundary.portlet-static-end.portlet-nested-portlets.ly-apertura-rd {
+    padding: 18px 0 40px 0;
+}
+/*FIN SECCION PADDING*/
+
+/*SECCIÓN TITULO RIGHT*/
+.HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .headline a h2 {
+    color: var(--bs-black);
+    font-style: normal;
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 44px;
+    letter-spacing: -0.025em;
+}
+/*FIN TITULO RIGHT*/
 
 @media (max-width: 991px) {
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .headline a h2 {
