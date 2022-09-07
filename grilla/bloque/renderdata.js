@@ -148,6 +148,9 @@ function renderProgramas() {
                 }
                 // console.log(horahoy)
                 // console.log(programTimeIni)
+                
+                // console.log(programaData.nombrePrograma);
+
                 if (horahoy >= programTimeIni && horahoy <= programTimeEnd) {
                     console.log(programTimeIni)
                 }
