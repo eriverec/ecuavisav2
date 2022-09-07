@@ -31,14 +31,13 @@ if(localStorage.getItem('dHoy')){// evaluamos si la key "dHoy" existe
               return x.replace(',','..');
             }) 
             let result2 = result1.replace //funcion avanzada que filtra y soluciona acentos
-            (/As�|d�n|en�|A�o|Enga�ada|m�ri|dem�s|r�a/gi,
+            (/As�|d�n|en�|ga�ad|A�o|m�ri|dem�s|r�a/gi,
                 function (x) {
                 r1 = x.replace('As�','Así');        r2 = r1.replace('d�n','dón');
                 r3 = r2.replace('en�','enó');       r4 = r3.replace('A�o','Año');
                 r5 = r4.replace('dem�s','demás');   r6 = r5.replace('r�a','ría');
-                r7 = r6.replace('m�ri','méri');     r8 = r7.replace('Enga�ada','Engañada');
+                r7 = r6.replace('m�ri','méri');     r8 = r7.replace('ga�ad','gañad');
               return r8.replace('ue�o','ueño');
-              
             })     
             let result = result2.split(/\r?\n|\r/).map(e => { return e.split(",") })
             //creamos cabeceras
