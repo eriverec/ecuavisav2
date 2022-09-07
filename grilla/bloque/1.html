@@ -7,89 +7,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parrilla ecuavisa </title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="./assets/main.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
-    <script src="https://code.jquery.com/jquery-3.4.1.js"
-        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@100;200;300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
 
-    <style>
-        body {
-            background: #060127;
-        }
-
-        .hourtabs {
-            /*      display: flex;
-            flex-wrap: wrap;*/
-            display: -webkit-box;
-            /* flex-wrap: wrap; */
-            /* width: fit-content; */
-            overflow: auto;
-        }
-
-        .hourtabs label {
-            order: 1;
-            display: flex;
-            padding: 0.3rem 1rem;
-            margin-right: 0.2rem;
-            cursor: pointer;
-            background: #d7d7d7;
-            font-weight: 500;
-            transition: background ease 0.2s;
-        }
-
-
-        #programlist2 {
-            align-items: center;
-        }
-
-        #programlist2 .programaItem {
-            background: #0067D533;
-            border-radius: 5px;
-            padding: 15px 35px;
-            height: 115px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #programlist2 .programaItem p {
-            color: #0067D5CC;
-            font-weight: 700;
-            font-size: 16px;
-            text-align: center;
-        }
-
-
-        .hourtabs .tab {
-            order: 99;
-            flex-grow: 1;
-            width: 100%;
-            display: none;
-            padding: 1rem;
-            background: #fff;
-        }
-
-        .hourtabs input[type="radio"] {
-            display: none;
-        }
-
-        .hourtabs input[type="radio"]:checked+label {
-            background: #0067d5;
-            color: white;
-        }
-
-        .hourtabs input[type="radio"]:checked+label+.tab {
-            /*display: block;*/
-
-            display: block;
-            position: absolute;
-            top: 20%;
-        }
-    </style>
 </head>
 
 <body>
-
     <!-- Tabs  -->
     <ul id="tabs" class="inline-flex w-full py-2 overflow-auto hidden">
         <li class="p-2 mr-1 py-2 -mb-px font-semibold text-gray-800 border-blue-400 bg-neutral-300 opacity-100"><a
@@ -107,11 +38,30 @@
         <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="DomingoTab"
                 href="#domingo">Domingo</a></li>
     </ul>
-    <table class="puredata hidden">
 
-    </table>
+    <!-- IMAGEN - BOTONES - SEÑAL ENVIVO -->
+    <div class="mediaBlock">
+        <div class="senal_active container">
+            <img src="https://ecuavisadev.netlify.app/home-rd/assets/segvector.svg">
+            <span>En Vivo</span>
+        </div>
+        <!-- <div class="icon_player_prog"> <img src="https://estadisticas.ecuavisa.com/sites/default/files/2022-08/icons8-reproducir-en-c%C3%ADrculo-50.png" alt="player-ecv"> </div> -->
+        <div class="multimedia">
+            <img src="https://estadisticas.ecuavisa.com/sites/default/files/2022-08/bannertvenvivo.png">
+        </div>
+        <div class="t_prog container">
+            <p class="nameH"></p>
+            <p class="nameP"></p>
+        </div>
+        <div id="rd_cont_botones" class="container">
+            <a href="/envivo" class="btn-gye activo"> Señal Guayaquil </a>
+            <a href="/envivo/quito" class="btn-quito"> Señal Quito </a>
+        </div>
+    </div>
+    <!-- IMAGEN - BOTONES - SEÑAL ENVIVO -->
+
     <!-- Tab Contents -->
-    <div id="tab-contents" class=" ">
+    <div id="tab-contents" class="container">
         <div id="lunes" class="px-2">
             <div class="componente">
                 <div id="programlist2" class="programList Lunes"> </div>
@@ -161,7 +111,7 @@
         </div>
     </div>
 
-
+    <script src="https://code.jquery.com/jquery-3.4.1.js"></script>
     <div class="jsondata" id="jsonData"></div>
     <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script async type="text/javascript" src="filterdata.js"> </script>

@@ -84,8 +84,12 @@ var swiperProgramacionWeb = new Swiper('.componente', {
         hide: true,
     },
     breakpoints: {
+        412: {
+            slidesPerView: 2.5,
+            spaceBetween: 10,
+        },
         600: {
-            slidesPerView: 1.5,
+            slidesPerView: 2.5,
             spaceBetween: 10,
         },
         768: {
@@ -120,11 +124,13 @@ function renderProgramas() {
         var ActualClass = 'px-4 py-4 text-zinc-50 bg-white text-sm flex items-center'
         var imgs = 'https://via.placeholder.com/70'
 
+        // console.log('inicio:',programTimeIni.slice(0, -3))
+
         var programas = $(`
-            <div class="programaItem el-${contador}" data-name="${programName}" data-item="${programTimeIni} a${programTimeEnd}">
+            <div class="programaItem el-${contador}" data-name="${programName}" data-item="${programTimeIni.slice(0, -3)} -${programTimeEnd.slice(0, -3)}">
                 <div class="">
                     <p>${programName}</p>
-                    <p>${programTimeIni} - ${programTimeEnd}</p>
+                    <p>${programTimeIni.slice(0, -3)} - ${programTimeEnd.slice(0, -3)}</p>
                 </div>
             </div>       
         `);
@@ -249,7 +255,15 @@ function renderProgramas() {
     //dumbDataEri
     getProgramasHoy = localStorage.getItem('programasHoy');
     JsonProgramasHoy = JSON.parse(getProgramasHoy);
-    
+
+    const liveSignal = document.querySelector('.senal_active');
+    const buttonGye = document.querySelector('.btn-gye');
+    const buttonQuito = document.querySelector('.btn-quito');
+
+    liveSignal.classList.add("div__hide");
+    buttonGye.classList.add("div__hide");
+    buttonQuito.classList.add("div__hide");
+
     var d = new Date();
     var day = d.getDay();
     var hour = d.getHours();
@@ -258,22 +272,37 @@ function renderProgramas() {
     timeOfDay = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
     console.log('NUEVA HORA ACTUAL:', timeOfDay);
     const horasWeb = (x) => {
+        liveSignal.classList.remove("div__hide");
+        buttonGye.classList.remove("div__hide");
         localStorage.setItem("nItem", x);
         document.querySelector(`.programaItem.el-${x}`).classList.add('activo');
         var getActivo = document.querySelector('.programaItem.activo');
-        var getAttr = getActivo.getAttribute('data-name');
-        console.log(getAttr);
+        var getAttrNombre = getActivo.getAttribute('data-name');
+        var getAttrHorarios = getActivo.getAttribute('data-item');
+        var titleProgram = document.querySelector('.t_prog .nameP');
+        var titleHorarios = document.querySelector('.t_prog .nameH');
+
+        titleHorarios.append(getAttrHorarios);
+        titleProgram.append(getAttrNombre);
+
+        console.log(getAttrNombre);
     }
+
+    const showBtnQuito = () => {
+        buttonQuito.classList.remove("div__hide");
+    }
+
 
 
     if (day > 0 && day <= 5) {
         //validacion de lunes a viernes
         if ("05:55" <= timeOfDay && timeOfDay <= "06:55") {
-
+            showBtnQuito();
         } else if ("06:55" <= timeOfDay && timeOfDay <= "07:30") {
 
         } else if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
             horasWeb(4);
+            showBtnQuito();
         } else if ("09:00" <= timeOfDay && timeOfDay <= "10:30") {
             horasWeb(5);
         } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {
