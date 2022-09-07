@@ -84,8 +84,8 @@ var swiperProgramacionWeb = new Swiper('.componente', {
         hide: true,
     },
     breakpoints: {
-        412: {
-            slidesPerView: 2.5,
+        425: {
+            slidesPerView: 1.5,
             spaceBetween: 10,
         },
         600: {
