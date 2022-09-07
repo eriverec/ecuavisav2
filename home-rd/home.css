@@ -325,6 +325,20 @@ INICIO - PORTADA - 4 DESTACADAS
   -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 60%);
 }
 
+/*
+FECHA:  2022-09-06
+Cambio de tamaño de imagen grande izq
+*/
+.HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .multimedia img {
+    position: relative!important;
+}
+
+.HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .multimedia a div {
+    height: 695px;
+    padding-top: 0%!important;
+}
+/*FIN Cambio de tamaño de imagen grande izq*/
+
 .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .multimedia .multimediaIconMacroWrapper {
   background-image: -webkit-linear-gradient(bottom, #060127 50%, white 65%);
 }
@@ -346,7 +360,7 @@ INICIO - PORTADA - 4 DESTACADAS
   text-align: center;
   position: absolute;
   padding: 0 2rem;
-  bottom: 20px;
+  bottom: 60px;
   left: 0;
   right: 0;
 }
@@ -376,6 +390,12 @@ INICIO - PORTADA - 4 DESTACADAS
     max-width: 500px;
 }
 /*Fin Banner ancho del título*/
+
+/*Inicio banner publicidad border top*/
+#menu_1658772727 div > div > div.portlet-boundary.portlet-static-end.htmlcontainer-portlet > div > div > a > img {
+    border-bottom: 16px solid #2927B9;
+}
+/*Fin banner publicidad border top*/
 
 @media (max-width: 991px) {
   .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
