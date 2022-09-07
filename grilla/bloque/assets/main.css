@@ -17,7 +17,7 @@
    display: none !important;
  }
 
- .mediaBlock .senal_active img {
+ .mediaBlock__ .senal_active img {
    animation-name: parpadeo;
    animation-duration: 1s;
    animation-timing-function: linear;
@@ -113,15 +113,15 @@
  }
 
 
- .mediaBlock {
+ .mediaBlock__ {
    position: relative;
  }
 
- .mediaBlock .multimedia {
+ .mediaBlock__ .multimedia {
    position: relative;
  }
 
- .mediaBlock .senal_active {
+ .mediaBlock__ .senal_active {
    color: white;
    padding: 20px 0;
    text-transform: uppercase;
@@ -134,15 +134,18 @@
    font-family: 'Mattone 150';
  }
 
- .mediaBlock .senal_active span{
-  margin-top: 4px;
+ .mediaBlock__ .senal_active span {
+   margin-top: 4px;
  }
 
- .mediaBlock .multimedia img {
+ .mediaBlock__ .multimedia img {
    width: 100%;
+   height: 555px;
+   object-fit: cover;
+   object-position: top;
  }
 
- .mediaBlock .multimedia:after {
+ .mediaBlock__ .multimedia:after {
    position: absolute;
    width: 100%;
    height: 100%;
@@ -158,7 +161,7 @@
    opacity: .9;
  }
 
- .mediaBlock .t_prog {
+ .mediaBlock__ .t_prog {
    position: absolute;
    bottom: 0;
    left: 0;
@@ -166,12 +169,12 @@
    bottom: 30px;
  }
 
- .mediaBlock .t_prog .icon_player_prog img {
+ .mediaBlock__ .t_prog .icon_player_prog img {
    width: 72px;
    margin-bottom: 18px;
  }
 
- .mediaBlock .t_prog .nameP {
+ .mediaBlock__ .t_prog .nameP {
    margin: 0;
    color: white;
    font-size: 42px;
@@ -181,7 +184,7 @@
    font-family: 'Archivo';
  }
 
- .mediaBlock .t_prog .nameH {
+ .mediaBlock__ .t_prog .nameH {
    margin: 0;
    color: #23DCD1;
    font-family: 'Anek Malayalam';
@@ -191,7 +194,7 @@
    line-height: 32px;
  }
 
- .mediaBlock #rd_cont_botones {
+ .mediaBlock__ #rd_cont_botones {
    width: 100%;
    margin: auto;
    margin-top: 20px;
@@ -201,7 +204,7 @@
    align-items: center;
  }
 
- .mediaBlock #rd_cont_botones a {
+ .mediaBlock__ #rd_cont_botones a {
    background: transparent;
    color: aliceblue;
    border-radius: 2px;
@@ -217,7 +220,7 @@
    transition: .2s ease;
  }
 
- .mediaBlock #rd_cont_botones a:hover {
+ .mediaBlock__ #rd_cont_botones a:hover {
    background: #23DCD1
  }
 

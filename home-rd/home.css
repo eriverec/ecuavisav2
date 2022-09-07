@@ -66,15 +66,15 @@
 }
 
 .HOME_MENU_RD .cintillo-rd {
-    display: inline-block;
-    color: var(--rd-cintillo);
-    font-family: 'Anek Malayalam';
-    letter-spacing: -0.03em;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 88px;
-    line-height: 96px;
-    text-transform: lowercase;
+  display: inline-block;
+  color: var(--rd-cintillo);
+  font-family: 'Anek Malayalam';
+  letter-spacing: -0.03em;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 88px;
+  line-height: 96px;
+  text-transform: lowercase;
 }
 
 
@@ -135,20 +135,21 @@ INICIO - PORTADA - 4 DESTACADAS
 
 /*Fondo del banner opaco*/
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div:after {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    content: "";
-    left: 0;
-    right: 0;
-    background-image: url(https://redyman.netlify.app/header2022/img/img-fondo.png) !important;
-    background: #3F3F4200;
-    background-position: center 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    top: 0;
-    opacity: .7;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  content: "";
+  left: 0;
+  right: 0;
+  background-image: url(https://redyman.netlify.app/header2022/img/img-fondo.png) !important;
+  background: #3F3F4200;
+  background-position: center 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  top: 0;
+  opacity: .7;
 }
+
 /*Fin fondo del banner opaco*/
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper {
@@ -206,30 +207,30 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text {
-    font-size: var(--rd-size-16);
-    color: #d5d5d5;
-    font-style: normal;
-    font-weight: 300;
-    line-height: 26px;
-    max-width: 500px;
+  font-size: var(--rd-size-16);
+  color: #d5d5d5;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 26px;
+  max-width: 500px;
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section {
-    font-weight: 600;
-    color: #23DCD1;
-    text-transform: uppercase;
-    font-size: 14px;
-    line-height: 17px;
+  font-weight: 600;
+  color: #23DCD1;
+  text-transform: uppercase;
+  font-size: 14px;
+  line-height: 17px;
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h1 {
-    color: var(--bs-white);
-    font-size: var(--rd-size-42);
-    font-style: normal;
-    font-weight: 700;
-    line-height: 48px;
-    padding-top: 15px;
-    padding-bottom: 18px;
+  color: var(--bs-white);
+  font-size: var(--rd-size-42);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 48px;
+  padding-top: 15px;
+  padding-bottom: 18px;
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
@@ -249,7 +250,7 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .articulos_4dest {
-    border-bottom: 0px solid var(--rd-gray-border);
+  border-bottom: 0px solid var(--rd-gray-border);
 }
 
 .HOME_MENU_RD .notas-1-n-ap {
@@ -276,49 +277,49 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .section {
-    color: var(--rd-section);
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 17px;
-    text-transform: uppercase;
+  color: var(--rd-section);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  text-transform: uppercase;
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline {
-    max-width: 350px;
-    padding-top: 10px;
+  max-width: 350px;
+  padding-top: 10px;
 }
 
-.c2__c1 .col-100-top-one-col.col-xs-12.portlet-column.nopadding div > a > div > img {
-    width: 100%!important;
+.c2__c1 .col-100-top-one-col.col-xs-12.portlet-column.nopadding div>a>div>img {
+  width: 100% !important;
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
-    font-size: var(--rd-size-22);
-    font-style: normal;
-    font-weight: 700;
-    line-height: 28px;
-    color: var(--bs-black);
+  font-size: var(--rd-size-22);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px;
+  color: var(--bs-black);
 }
 
 .HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 .text_block .headline a h3 {
-    font-size: var(--rd-size-22);
-    font-style: normal;
-    font-weight: 700;
-    line-height: 28px;
-    color: var(--bs-black);
-    padding-top: 8px;
+  font-size: var(--rd-size-22);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 28px;
+  color: var(--bs-black);
+  padding-top: 8px;
 }
 
 .HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 .text_block .section {
-    margin-top: 25px;
-    display: block;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 17px;
-    text-transform: uppercase;
-    color: var(--rd-section);
+  margin-top: 25px;
+  display: block;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  text-transform: uppercase;
+  color: var(--rd-section);
 }
 
 .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .multimedia img {
@@ -332,13 +333,14 @@ FECHA:  2022-09-06
 Cambio de tamaño de imagen grande izq
 */
 .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .multimedia img {
-    position: relative!important;
+  position: relative !important;
 }
 
 .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .multimedia a div {
-    height: 692px;
-    padding-top: 0%!important;
+  height: 692px;
+  padding-top: 0% !important;
 }
+
 /*FIN Cambio de tamaño de imagen grande izq*/
 
 .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .multimedia .multimediaIconMacroWrapper {
@@ -389,14 +391,16 @@ Cambio de tamaño de imagen grande izq
 
 /*Banner ancho del título*/
 .portlet-boundary.portlet-static-end.teaser-viewer-portlet.notas-1-p-ap .headline {
-    max-width: 500px;
+  max-width: 500px;
 }
+
 /*Fin Banner ancho del título*/
 
 /*Inicio banner publicidad border top*/
-#m00-r01 > div.portlet-boundary.portlet-static-end.menu-portlet.menu-bloques.itr-wlod.HOME_MENU_RD > div > div > ul > li.lst-item.tabnav> div > div > div.portlet-boundary.portlet-static-end.htmlcontainer-portlet > div > div > a > img{
-    border-bottom: 16px solid #2927B9;
+#m00-r01>div.portlet-boundary.portlet-static-end.menu-portlet.menu-bloques.itr-wlod.HOME_MENU_RD>div>div>ul>li.lst-item.tabnav>div>div>div.portlet-boundary.portlet-static-end.htmlcontainer-portlet>div>div>a>img {
+  border-bottom: 16px solid #2927B9;
 }
+
 /*Fin banner publicidad border top*/
 
 @media (max-width: 991px) {
@@ -489,12 +493,12 @@ INICIO - BLOQUE - ECUADOR
 }
 
 .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .headline a h2 {
-    color: var(--bs-black);
-    font-style: normal;
-    font-weight: 700;
-    font-size: 22px;
-    padding-right: 35px;
-    line-height: 28px;
+  color: var(--bs-black);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  padding-right: 35px;
+  line-height: 28px;
 }
 
 .HOME_MENU_RD .ecuador_list_1x2 .noticias .article {
@@ -562,45 +566,47 @@ INICIO - BLOQUE - ECUADOR
 }
 
 #col-100 .noticias .article .text_block .section {
-    font-style: normal;
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 17px;
-    padding-bottom: 8px;
-    margin-bottom: 0px;
-    display: block;
-    text-transform: uppercase;
-    color: var(--rd-section);
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 17px;
+  padding-bottom: 8px;
+  margin-bottom: 0px;
+  display: block;
+  text-transform: uppercase;
+  color: var(--rd-section);
 }
 
 /*SECCION ECUADOR PADDING TOP AND BOTTOM*/
 .portlet-boundary.portlet-static-end.portlet-nested-portlets.ly-apertura-rd {
-    padding: 18px 0 40px 0;
+  padding: 18px 0 40px 0;
 }
+
 /*FIN SECCION PADDING*/
 
 /*SECCIÓN TITULO RIGHT*/
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .headline a h2 {
-    color: var(--bs-black);
-    font-style: normal;
-    font-weight: 700;
-    font-size: 36px;
-    line-height: 44px;
-    letter-spacing: -0.025em;
+  color: var(--bs-black);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 36px;
+  line-height: 44px;
+  letter-spacing: -0.025em;
 }
+
 /*FIN TITULO RIGHT*/
 
 .HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2 {
-    color: var(--bs-black);
-    font-style: normal;
-    font-weight: 700;
-    font-size: 22px;
-    padding-right: 35px;
-    line-height: 28px;
+  color: var(--bs-black);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  padding-right: 35px;
+  line-height: 28px;
 }
 
 .HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT {
-    margin: 30px 0;
+  margin: 30px 0;
 }
 
 @media (max-width: 991px) {
@@ -675,7 +681,7 @@ INICIO - BLOQUE - ECUADOR
 INICIO - BLOQUE - PROGRAMACION 
 *************************** */
 .portlet-boundary.portlet-static-end.velocitycontainer-portlet.titulo_programa_web {
-    margin-top: 60px;
+  margin-top: 60px;
 }
 
 .HOME_MENU_RD .prog-web-container,
@@ -689,6 +695,11 @@ INICIO - BLOQUE - PROGRAMACION
 
 .HOME_MENU_RD .sliderVideos {
   border-bottom: 16px solid #2927B9;
+}
+
+.HOME_MENU_RD .prog-web-container .iframe__ iframe {
+  width: 100%;
+  height: 760px;
 }
 
 
@@ -705,20 +716,20 @@ INICIO - BLOQUE - PROGRAMACION
   font-family: 'Anek Malayalam';
 }
 
-#col-100-top-one-col > div.portlet-boundary.portlet-static-end.htmlcontainer-portlet.img-header-prog > div > div > div.multimedia:after {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    content: "";
-    left: 0;
-    right: 0;
-    background-image: url(https://redyman.netlify.app/header2022/img/img-fondo.png) !important;
-    background: #3F3F4200;
-    background-position: center 100%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    top: 0;
-    opacity: .9;
+#col-100-top-one-col>div.portlet-boundary.portlet-static-end.htmlcontainer-portlet.img-header-prog>div>div>div.multimedia:after {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  content: "";
+  left: 0;
+  right: 0;
+  background-image: url(https://redyman.netlify.app/header2022/img/img-fondo.png) !important;
+  background: #3F3F4200;
+  background-position: center 100%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  top: 0;
+  opacity: .9;
 }
 
 .HOME_MENU_RD .img-header-prog .mediaBlock .multimedia img {
@@ -742,7 +753,7 @@ INICIO - BLOQUE - PROGRAMACION
   position: relative;
 }
 
-.HOME_MENU_RD .img-header-prog .mediaBlock .senal_active {  
+.HOME_MENU_RD .img-header-prog .mediaBlock .senal_active {
   color: white;
   padding: 20px 0;
   text-transform: uppercase;
@@ -810,14 +821,14 @@ INICIO - BLOQUE - PROGRAMACION
 }
 
 .HOME_MENU_RD .img-header-prog .mediaBlock .t_prog {
-    position: absolute;
-    bottom: 90px;
-    color: white;
-    font-size: var(--rd-size-42);
-    font-style: normal;
-    font-weight: 700;
-    line-height: 48px;
-    padding: 0 40px;
+  position: absolute;
+  bottom: 90px;
+  color: white;
+  font-size: var(--rd-size-42);
+  font-style: normal;
+  font-weight: 700;
+  line-height: 48px;
+  padding: 0 40px;
 }
 
 .HOME_MENU_RD .img-header-prog .mediaBlock .t_prog p {
