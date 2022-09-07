@@ -233,9 +233,11 @@ INICIO - PORTADA - 4 DESTACADAS
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  /* align-items: center; */
+  /*  */
+  align-items: baseline;
   grid-gap: 10px;
   margin: 1rem 0;
+  padding-top: 10px;
 }
 
 .HOME_MENU_RD .notas-2-ap {
@@ -262,7 +264,7 @@ INICIO - PORTADA - 4 DESTACADAS
 
 
 .HOME_MENU_RD .notas-1-ap .noticias .article:nth-child(1) {
-  border-bottom: 1px solid var(--rd-gray-border);
+  border-bottom: 0px solid var(--rd-gray-border);
   border-top: 1px solid var(--rd-gray-border);
 }
 
@@ -280,22 +282,41 @@ INICIO - PORTADA - 4 DESTACADAS
     text-transform: uppercase;
 }
 
+.HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline {
+    max-width: 350px;
+    padding-top: 10px;
+}
+
+.c2__c1 .col-100-top-one-col.col-xs-12.portlet-column.nopadding div > a > div > img {
+    width: 100%!important;
+}
+
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
-  font-size: var(--rd-size-22);
-  color: var(--bs-black);
+    font-size: var(--rd-size-22);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 28px;
+    color: var(--bs-black);
 }
 
 .HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 .text_block .headline a h3 {
-  font-size: var(--rd-size-22);
-  color: var(--bs-black);
+    font-size: var(--rd-size-22);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 28px;
+    color: var(--bs-black);
+    padding-top: 8px;
 }
 
 .HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 .text_block .section {
-  color: #2927B9;
-  font-weight: 500;
-  margin-top: 10px;
-  font-size: var(--rd-section);
-  display: block;
+    margin-top: 25px;
+    display: block;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    text-transform: uppercase;
+    color: var(--rd-section);
 }
 
 .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .multimedia img {
