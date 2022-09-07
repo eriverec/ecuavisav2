@@ -137,18 +137,6 @@ function renderProgramas() {
 
         if (region === '3') { // validamos que sea region costa
 
-
-
-            // var jsonDiaActual = function(index){ //creacion de objeto de programa por funcion
-            //     programaData = { //objeto del programa
-            //         "nombrePrograma" : programName,
-            //         "HoradeInicio" : programTimeIni,
-            //         "Fecha" : programDate,
-            //         "Region": region}    
-            //     _jsonDiaActual.push(programaData); //creamos listado de programas en json
-            // };
-            // jsonDiaActual(programIndex); 
-
             // dia de hoy
             if (fechahoy('fecha') === (programDate)) {
                 var contador = (contador) + 1; //subimos el valor de contador para la clase unica
@@ -168,18 +156,6 @@ function renderProgramas() {
                 // console.log('La hora del momento es :'+horahoy)
                 // console.log('La hora del progra  es :'+programTimeIni);
                 var fixitem = $('.programaItem').data('item');
-                // if(horahoy < programTimeIni){
-                //   console.log("Fecha actual es mayor");
-                // }else{
-                //   console.log("Fecha actual es menorrrrrrrrrrrrrrr ######");
-                // }
-                // console.log(horahoy,programTimeIni);
-
-                // var fecha2 = new Date('1/1/1990 06:07'); 
-                // var fecha1 = new Date('1/1/1990 05:12');
-
-                // if(fecha2 <= fecha1) {return [false,'Hora final debe ser mayor a hora inicial']; }
-                //  else {return [true,'']; }
 
                 programas.appendTo('.' + actualDay); //metemos al dom el programa
                 // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
@@ -244,10 +220,7 @@ function renderProgramas() {
             } else {}
 
         } else {};
-        //     /* para navegar entre elementos dentro se usa otro for como el ejemplo 
-        //     for (noteIndex = 0; noteIndex < notesLength; noteIndex++) {
-        //         console.log(JSON.infos.info[infoIndex].note.notes[noteIndex].title);
-        //     } */
+
     }
     //console.log(_jsonDiaActual);
     localStorage.setItem('programasHoy', JSON.stringify(_jsonDiaActual));
@@ -272,8 +245,7 @@ function renderProgramas() {
     timeOfDay = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
     console.log('NUEVA HORA ACTUAL:', timeOfDay);
     const horasWeb = (x) => {
-        liveSignal.classList.remove("div__hide");
-        buttonGye.classList.remove("div__hide");
+        
         localStorage.setItem("nItem", x);
         document.querySelector(`.programaItem.el-${x}`).classList.add('activo');
         var getActivo = document.querySelector('.programaItem.activo');
@@ -292,37 +264,75 @@ function renderProgramas() {
         buttonQuito.classList.remove("div__hide");
     }
 
-
+    const showBtnGye = () => {
+        liveSignal.classList.remove("div__hide");
+        buttonGye.classList.remove("div__hide");
+    }
 
     if (day > 0 && day <= 5) {
         //validacion de lunes a viernes
-        if ("05:55" <= timeOfDay && timeOfDay <= "06:55") {
+        if ("05:00" <= timeOfDay && timeOfDay <= "06:00") {
+            horasWeb(1);
+        } else if ("06:00" <= timeOfDay && timeOfDay <= "07:00") {
+            horasWeb(2);
+            showBtnGye();
             showBtnQuito();
-        } else if ("06:55" <= timeOfDay && timeOfDay <= "07:30") {
-
+        } else if ("07:00" <= timeOfDay && timeOfDay <= "07:30") {
+            horasWeb(3);
+            showBtnGye();
         } else if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
             horasWeb(4);
+            showBtnGye();
             showBtnQuito();
         } else if ("09:00" <= timeOfDay && timeOfDay <= "10:30") {
             horasWeb(5);
         } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {
             horasWeb(6);
+            showBtnGye();
         } else if ("13:00" <= timeOfDay && timeOfDay <= "14:00") {
-
+            horasWeb(7);
+            showBtnGye();
         } else if ("14:00" <= timeOfDay && timeOfDay <= "15:00") {
-
+            horasWeb(8);
+            showBtnGye();
         } else if ("15:00" <= timeOfDay && timeOfDay <= "16:00") {
-
+            horasWeb(9);
+            showBtnGye();
+        } else if ("16:00" <= timeOfDay && timeOfDay <= "17:00") {
+            horasWeb(10);
+        } else if ("17:00" <= timeOfDay && timeOfDay <= "18:00") {
+            horasWeb(11);
         } else if ("18:00" <= timeOfDay && timeOfDay <= "19:00") {
-
-        } else if ("19:00" <= timeOfDay && timeOfDay <= "19:59") {
-
+            horasWeb(12);
+            showBtnGye();
+        } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
+            horasWeb(13);
+            showBtnGye();
         } else if ("20:00" <= timeOfDay && timeOfDay <= "21:00") {
-
+            horasWeb(14);
+            showBtnGye();
         } else if ("21:00" <= timeOfDay && timeOfDay <= "22:00") {
-
+            horasWeb(15);
+            showBtnGye();
         } else if ("22:00" <= timeOfDay && timeOfDay <= "23:00") {
-
+            horasWeb(16);
+            showBtnGye();
+        } else if ("23:00" <= timeOfDay && timeOfDay <= "00:00") {
+            horasWeb(17);
+        } else if ("00:00" <= timeOfDay && timeOfDay <= "00:30") {
+            horasWeb(18);
+        } else if ("00:30" <= timeOfDay && timeOfDay <= "01:00") {
+            horasWeb(19);
+        } else if ("01:00" <= timeOfDay && timeOfDay <= "01:30") {
+            horasWeb(20);
+        } else if ("01:30" <= timeOfDay && timeOfDay <= "02:00") {
+            horasWeb(21);
+        } else if ("02:00" <= timeOfDay && timeOfDay <= "02:30") {
+            horasWeb(22);
+        } else if ("02:30" <= timeOfDay && timeOfDay <= "04:00") {
+            horasWeb(23);
+        } else if ("04:00" <= timeOfDay && timeOfDay <= "05:00") {
+            horasWeb(24);
         } else {
 
         }

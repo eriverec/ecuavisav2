@@ -79,6 +79,11 @@
    background: #2927B9;
  }
 
+ .tab-contents {
+   margin-top: 2rem;
+   margin-bottom: 2rem;
+ }
+
  #programlist2 .programaItem {
    background: #2927b95c;
    border-radius: 5px;
@@ -125,8 +130,12 @@
    align-items: center;
    justify-content: flex-end;
    gap: 5px;
-   font-size: 1rem;
+   font-size: 13px;
    font-family: 'Mattone 150';
+ }
+
+ .mediaBlock .senal_active span{
+  margin-top: 4px;
  }
 
  .mediaBlock .multimedia img {
@@ -154,7 +163,12 @@
    bottom: 0;
    left: 0;
    right: 0;
-   bottom: 110px;
+   bottom: 30px;
+ }
+
+ .mediaBlock .t_prog .icon_player_prog img {
+   width: 72px;
+   margin-bottom: 18px;
  }
 
  .mediaBlock .t_prog .nameP {
@@ -180,14 +194,10 @@
  .mediaBlock #rd_cont_botones {
    width: 100%;
    margin: auto;
-   margin-top: 10px;
+   margin-top: 20px;
    justify-content: flex-start;
    display: flex;
    gap: 20px;
-   position: absolute;
-   left: 0;
-   right: 0;
-   bottom: 35px;
    align-items: center;
  }
 
@@ -212,13 +222,7 @@
  }
 
 
- .container,
- .container-fluid,
- .container-lg,
- .container-md,
- .container-sm,
- .container-xl,
- .container-xxl {
+ .container_ {
    width: 100%;
    padding-right: var(--bs-gutter-x, .75rem);
    padding-left: var(--bs-gutter-x, .75rem);
@@ -228,50 +232,35 @@
 
  @media (min-width:576px) {
 
-   .container,
-   .container-sm {
+   .container_ {
      max-width: 540px;
    }
  }
 
  @media (min-width:768px) {
 
-   .container,
-   .container-md,
-   .container-sm {
+   .container_ {
      max-width: 720px;
    }
  }
 
  @media (min-width:992px) {
 
-   .container,
-   .container-lg,
-   .container-md,
-   .container-sm {
+   .container_ {
      max-width: 960px;
    }
  }
 
  @media (min-width:1200px) {
 
-   .container,
-   .container-lg,
-   .container-md,
-   .container-sm,
-   .container-xl {
+   .container_ {
      max-width: 1140px;
    }
  }
 
  @media (min-width:1400px) {
 
-   .container,
-   .container-lg,
-   .container-md,
-   .container-sm,
-   .container-xl,
-   .container-xxl {
+   .container_ {
      max-width: 1320px;
    }
  }
