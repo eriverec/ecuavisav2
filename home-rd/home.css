@@ -810,11 +810,14 @@ INICIO - BLOQUE - PROGRAMACION
 }
 
 .HOME_MENU_RD .img-header-prog .mediaBlock .t_prog {
-  position: absolute;
-  bottom: 90px;
-  color: white;
-  font-size: var(--rd-size-22);
-  padding: 0 20px;
+    position: absolute;
+    bottom: 90px;
+    color: white;
+    font-size: var(--rd-size-42);
+    font-style: normal;
+    font-weight: 700;
+    line-height: 48px;
+    padding: 0 40px;
 }
 
 .HOME_MENU_RD .img-header-prog .mediaBlock .t_prog p {
@@ -831,7 +834,7 @@ INICIO - BLOQUE - PROGRAMACION
   gap: 20px;
   position: absolute;
   bottom: 0;
-  padding: 0px 20px 40px;
+  padding: 0px 40px 40px;
   align-items: center;
 }
 
