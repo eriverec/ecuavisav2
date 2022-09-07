@@ -139,8 +139,12 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .listado_1_4_mobile {
-  border-top: 1px solid var(--rd-gray-border);
-  border-bottom: 1px solid var(--rd-gray-border);
+  /*
+  @fecha: 2022-09-06;
+  En escritorio se muestra un borde demás, por eso le quito el borde a 0px
+  */
+  border-top: 0px solid var(--rd-gray-border);
+  border-bottom: 0px solid var(--rd-gray-border);
 }
 
 .HOME_MENU_RD .listado_1_4_mobile .noticias .article .BLOQUE_SEC_TIT {
