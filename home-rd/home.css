@@ -66,13 +66,15 @@
 }
 
 .HOME_MENU_RD .cintillo-rd {
-  /* margin-bottom: .5rem; */
-  display: inline-block;
-  font-size: 80px;
-  font-weight: 700;
-  color: var(--rd-cintillo);
-  text-transform: lowercase;
-  font-family: 'Anek Malayalam';
+    display: inline-block;
+    color: var(--rd-cintillo);
+    font-family: 'Anek Malayalam';
+    letter-spacing: -0.03em;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 88px;
+    line-height: 96px;
+    text-transform: lowercase;
 }
 
 
@@ -334,7 +336,7 @@ Cambio de tamaño de imagen grande izq
 }
 
 .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .multimedia a div {
-    height: 695px;
+    height: 692px;
     padding-top: 0%!important;
 }
 /*FIN Cambio de tamaño de imagen grande izq*/
@@ -553,6 +555,17 @@ INICIO - BLOQUE - ECUADOR
   -webkit-line-clamp: 5;
   line-clamp: 5;
   -webkit-box-orient: vertical;
+}
+
+#col-100 .noticias .article .text_block .section {
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 17px;
+    padding-bottom: 8px;
+    display: block;
+    text-transform: uppercase;
+    color: var(--rd-section);
 }
 
 @media (max-width: 991px) {
