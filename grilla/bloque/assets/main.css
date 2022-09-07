@@ -178,8 +178,9 @@
    display: none;
    z-index: 9;
  }
+
  .mediaBlock__ .icon_player_prog.mobile_player img {
-  width: 60px;
+   width: 60px;
  }
 
  .mediaBlock__ .t_prog .icon_player_prog img {
@@ -249,6 +250,15 @@
  @media (max-width: 575px) {
    .mediaBlock__ .icon_player_prog.mobile_player {
      display: block;
+   }
+
+   .mediaBlock__ .t_prog .nameP{
+    font-size: 34px;
+    line-height: 38px;
+   }
+
+   .mediaBlock__ .senal_active {
+     padding-bottom: 20px;
    }
 
    .mediaBlock__ .t_prog .icon_player_prog.desktop_player {
