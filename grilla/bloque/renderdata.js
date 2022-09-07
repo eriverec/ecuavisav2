@@ -236,7 +236,7 @@ function renderProgramas() {
     const buttonGye = document.querySelector('.btn-gye');
     const buttonQuito = document.querySelector('.btn-quito');
 
-    liveSignal.classList.add("div__hide");
+    // liveSignal.classList.add("div__hide");
     buttonGye.classList.add("div__hide");
     buttonQuito.classList.add("div__hide");
 
@@ -268,7 +268,7 @@ function renderProgramas() {
     }
 
     const showBtnGye = () => {
-        liveSignal.classList.remove("div__hide");
+        // liveSignal.classList.remove("div__hide");
         buttonGye.classList.remove("div__hide");
     }
 
