@@ -710,8 +710,9 @@ INICIO - BLOQUE - PROGRAMACION
 .HOME_MENU_RD .titulo_programa_web .cintillo-rd {
   display: inline-block;
   font-size: 80px;
-  font-weight: 700;
+  font-weight: 600;
   color: white;
+  line-height: 45px;
   text-transform: lowercase;
   font-family: 'Anek Malayalam';
 }
@@ -940,7 +941,7 @@ INICIO - BLOQUE - PROGRAMACION
   }
 
   .HOME_MENU_RD .titulo_programa_web .cintillo-rd {
-    font-size: 45px;
+    font-size: 55px;
   }
 
   .HOME_MENU_RD .img-header-prog .mediaBlock .multimedia img {
