@@ -7,11 +7,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parrilla ecuavisa </title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
     <script src="https://code.jquery.com/jquery-3.4.1.js"
         integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+
     <style>
-        td {
-            border: 1px solid blue;
+        body {
+            background: #060127;
         }
 
         .hourtabs {
@@ -33,6 +35,30 @@
             font-weight: 500;
             transition: background ease 0.2s;
         }
+
+
+        #programlist2 {
+            align-items: center;
+        }
+
+        #programlist2 .programaItem {
+            background: #0067D533;
+            border-radius: 5px;
+            padding: 15px 35px;
+            height: 115px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #programlist2 .programaItem p {
+            color: #0067D5CC;
+            font-weight: 700;
+            font-size: 16px;
+            text-align: center;
+        }
+
 
         .hourtabs .tab {
             order: 99;
@@ -87,50 +113,57 @@
     <!-- Tab Contents -->
     <div id="tab-contents" class=" ">
         <div id="lunes" class="px-2">
-            <table class="bg-white rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Lunes"> </tbody>
-            </table>
+            <div class="componente">
+                <div id="programlist2" class="programList Lunes"> </div>
+                <div class="swiper-scrollbar"></div>
+            </div>
         </div>
 
         <div id="martes" class="hidden">
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Martes">
-                </tbody>
-            </table>
+            <div class="componente">
+                <div id="programlist2" class="programList Martes"></div>
+                <div class="swiper-scrollbar"></div>
+            </div>
         </div>
 
         <div id="miercoles" class="hidden">
 
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Miercoles"> </tbody>
-            </table>
+            <div class="componente">
+                <div id="programlist2" class="programList Miercoles"> </div>
+                <div class="swiper-scrollbar"></div>
+            </div>
         </div>
 
         <div id="jueves" class="hidden">
 
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Jueves"> </tbody>
-            </table>
+            <div class="componente">
+                <div id="programlist2" class="programList Jueves"> </div>
+                <div class="swiper-scrollbar"></div>
+            </div>
         </div>
         <div id="viernes" class="hidden">
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Viernes"> </tbody>
-            </table>
+            <div class="componente">
+                <div id="programlist2" class="programList Viernes"> </div>
+                <div class="swiper-scrollbar"></div>
+            </div>
         </div>
         <div id="sabado" class="hidden">
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList sabado Sabado"> </tbody>
-            </table>
+            <div class="componente">
+                <div id="programlist2" class="programList sabado Sabado"> </div>
+                <div class="swiper-scrollbar"></div>
+            </div>
         </div>
         <div id="domingo" class="hidden">
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Domingo"> </tbody>
-            </table>
+            <div class="componente">
+                <div id="programlist2" class="programList Domingo"> </div>
+                <div class="swiper-scrollbar"></div>
+            </div>
         </div>
     </div>
 
 
     <div class="jsondata" id="jsonData"></div>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
     <script async type="text/javascript" src="filterdata.js"> </script>
     <script async type="text/javascript" src="renderdata.js"> </script>
     <script async type="text/javascript" src="getdata.js"> </script>
@@ -141,7 +174,7 @@
             // var hoy = new Date(fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate()); //+7 se suma si quiere setear ayer u hoy
             // var hoy = fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate();
             var hoy = fecha.getFullYear() + '-' + ('0' + (fecha.getMonth() + 1)).slice(-2) + '-' + ('0' + fecha
-            .getDate()).slice(-2);
+                .getDate()).slice(-2);
             var hora = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
             var fehayHora = hoy + ' ' + hora;
             if (dato === 'fecha') {
