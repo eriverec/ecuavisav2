@@ -465,6 +465,18 @@ Cambio de tamaño de imagen grande izq
   }
 }
 
+@media (max-width: 768px) {
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h1 {
+    font-size: var(--rd-size-34);
+    line-height: 38px;
+  }
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img{
+    height: 400px !important;
+  }
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div{
+    height: 400px !important;
+  }
+}
 
 @media (max-width: 767px) {
   .HOME_MENU_RD .rd_grid .c2 {
