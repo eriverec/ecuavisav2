@@ -437,6 +437,16 @@ Cambio de tamaño de imagen grande izq
 
 /*Fin banner publicidad border top*/
 
+@media (min-width: 1400px) {
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
+    height: 100% !important;
+  }
+
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
+    height: 100% !important;
+  }
+}
+
 @media (max-width: 991px) {
   .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
     font-size: 1rem;
