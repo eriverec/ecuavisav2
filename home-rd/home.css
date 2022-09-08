@@ -1482,6 +1482,7 @@ INICIO - BLOQUE - MUNDO
   font-size: var(--rd-size-16);
   text-transform: uppercase;
   color: white;
+  line-height: 20px;
   font-family: 'Alfa Slab One';
 }
 
@@ -1493,11 +1494,11 @@ INICIO - BLOQUE - MUNDO
 }
 
 .HOME_MENU_RD .bloque_estadio_3_m .noticias .article .BLOQUE_SEC_TIT.n1 {
-  margin-bottom: 30px;
+  margin-bottom: 32px;
 }
 
 .HOME_MENU_RD .bloque_estadio_3_m .noticias .article .BLOQUE_SEC_TIT.n2 {
-  margin: 30px 0;
+  margin: 32px 0;
 }
 
 .HOME_MENU_RD .bloque_estadio_3_m .noticias .article:nth-child(1),
@@ -1508,12 +1509,12 @@ INICIO - BLOQUE - MUNDO
 .HOME_MENU_RD .bloque_estadio_2_m {
   border-top: 1px solid #00C17C;
   border-bottom: 1px solid #00C17C;
-  margin: 30px 0;
+  margin: 32px 0;
 }
 
 
 .HOME_MENU_RD .bloque_estadio_2_m .noticias .article {
-  margin: 30px 0;
+  margin: 32px 0;
 }
 
 .HOME_MENU_RD .bloque_estadio_2_m .noticias .article .media_block {
@@ -1535,6 +1536,7 @@ INICIO - BLOQUE - MUNDO
   text-transform: uppercase;
   color: white;
   font-family: 'Alfa Slab One';
+  line-height: 20px;
 }
 
 @media (max-width: 991px) {
