@@ -986,6 +986,13 @@ INICIO - BLOQUE - PROGRAMACION
   }
 }
 
+@media (max-width: 320px) {
+  .HOME_MENU_RD .titulo_programa_web .cintillo-rd{
+    font-size: 45px;
+  }
+}
+
+
 
 
 
