@@ -2051,7 +2051,7 @@ INICIO - BLOQUE - ESTILO
   }
 
   .HOME_MENU_RD .ver_t_prog .button_container {
-    align-items: center;
+    justify-content: center;
   }
 }
 
