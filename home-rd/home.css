@@ -111,6 +111,11 @@ INICIO - BANNER FIJO
   display: none;
 }
 
+.HOME_MENU_RD .banner_fijo .publicidad .banner_desk {
+  margin-top: 88px;
+  margin-bottom: 45px;
+}
+
 @media (max-width: 767px) {
   .HOME_MENU_RD .banner_fijo .publicidad .banner_desk {
     display: none;
