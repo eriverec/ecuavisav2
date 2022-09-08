@@ -1400,6 +1400,8 @@ INICIO - BLOQUE - MUNDO
   text-transform: uppercase;
   color: white;
   font-family: 'Alfa Slab One';
+  padding-bottom: 0;
+  margin: 0;
 }
 
 .HOME_MENU_RD .bloque_estadio_3_m .noticias .article .text_block .headline a h2 {
