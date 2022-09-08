@@ -243,12 +243,8 @@
  }
 
  .mediaBlock__ #rd_cont_botones {
-   width: 100%;
-   margin: auto;
    margin-top: 20px;
-   justify-content: flex-start;
    display: flex;
-   gap: 20px;
    align-items: center;
  }
 
@@ -266,6 +262,10 @@
    line-height: 12px;
    border: 1px solid #23DCD1;
    transition: .2s ease;
+ }
+
+ .mediaBlock__ #rd_cont_botones a:nth-child(1){
+  margin-right: 15px;
  }
 
  .mediaBlock__ #rd_cont_botones a:hover {
