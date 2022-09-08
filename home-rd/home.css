@@ -433,6 +433,13 @@ Cambio de tamaño de imagen grande izq
     grid-template-columns: none;
   }
 
+  .HOME_MENU_RD .ly-apertura-rd.mobile_des_5 .container{
+    padding-right: 0;
+    padding-left: 0;
+  }
+  
+ 
+
   .HOME_MENU_RD .listado_1_4_mobile .noticias .article:nth-child(4) {
     border-bottom: 1px solid var(--rd-gray-border);
   }
@@ -588,12 +595,6 @@ INICIO - BLOQUE - ECUADOR
   line-height: 26px;
 }
 
-
-
-/*SECCION ECUADOR PADDING TOP AND BOTTOM*/
-.portlet-boundary.portlet-static-end.portlet-nested-portlets.ly-apertura-rd {
-  padding: 18px 0 40px 0;
-}
 
 /*FIN SECCION PADDING*/
 
