@@ -1099,6 +1099,15 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 
+@media (max-width: 767px) {
+  .sliderVideos .tit-vid h2 {
+    font-size: 15px;
+    margin: 20px 0;
+  }
+}
+
+
+
 @media (max-width: 575px) {
   .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .top_info .Topheadline .hLine {
     font-size: 10px;
@@ -2005,6 +2014,9 @@ INICIO - BLOQUE - ESTILO
 @media (max-width: 575px) {
   .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .top_info .Topheadline .hLine {
     font-size: 10px;
+  }
+  .HOME_MENU_RD .ver_t_prog .button_container{
+    align-items: center;
   }
 }
 
