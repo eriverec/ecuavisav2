@@ -1530,12 +1530,12 @@ BLOQUE - CULTURA
 }
 
 .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h3 {
-  font-size: var(--rd-size-30);
+  font-size: 36px;
+  line-height: 44px;
   color: var(--bs-black);
   font-style: normal;
   font-weight: 700;
   padding-right: 35px;
-  line-height: 28px;
 }
 
 .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .section {
@@ -1597,6 +1597,11 @@ BLOQUE - CULTURA
 }
 
 @media (max-width: 767px) {
+
+  .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h3{
+    font-size: 22px;
+    line-height: 28px;
+  }
 
   .HOME_MENU_RD .nota-principal-bloque-cultura .noticias,
   .HOME_MENU_RD .bloque_cultura_2 .noticias {
