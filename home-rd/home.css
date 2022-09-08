@@ -626,6 +626,11 @@ INICIO - BLOQUE - ECUADOR
 
 
 @media (max-width: 767px) {
+
+  .HOME_MENU_RD .ecuador_list_1x2 .noticias {
+    display: block;
+  }
+
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .media_block {
     display: grid;
     grid-template-columns: none;
@@ -1577,6 +1582,9 @@ BLOQUE - CULTURA
 
 @media (max-width: 767px) {
 
+  .HOME_MENU_RD .bloque_cultura_2 .noticias {
+    display: block;
+  }
 
   .HOME_MENU_RD .bloque_cultura_2_m .noticias .article .media_block {
     display: grid;
@@ -1614,6 +1622,7 @@ BLOQUE - CULTURA
 
   .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h2 {
     font-size: var(--rd-size-18);
+    display: block;
   }
 
   .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias .article .text_block .headline a h3 {
@@ -1634,6 +1643,7 @@ BLOQUE - CULTURA
 
 .nota-principal-bloque-cultura > section:nth-child(1) > article > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) {
   padding: 30px 0;
+  padding-bottom: 8px;
 }
 
 
@@ -1772,6 +1782,13 @@ INICIO - BLOQUE - ESTILO
 }
 
 @media (max-width: 767px) {
+
+  .bloque_estilo_bg > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) {
+    padding: 0px;
+    margin: 0px;
+  }
+
+
   .HOME_MENU_RD .lista-bloque-estilo {
     padding: 0 60px;
   }
