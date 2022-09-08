@@ -1114,6 +1114,9 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .top_info .Topheadline .hLine {
     font-size: 10px;
   }
+  .portlet-boundary.portlet-static-end.velocitycontainer-portlet.titulo_programa_web {
+    margin-top: 0px;
+}
 }
 
 
