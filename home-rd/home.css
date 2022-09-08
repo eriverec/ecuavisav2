@@ -1450,10 +1450,10 @@ INICIO - BLOQUE - MUNDO
 }
 
 .HOME_MENU_RD .bloque_estadio_2_m .noticias .article .media_block .text_block .section {
-  color: #00C17C;
-  font-weight: 500;
-  margin-bottom: 10px;
-  display: block;
+  color: #00C17C!important;
+  font-weight: 500!important;
+  margin-bottom: 10px!important;
+  display: block!important;
 }
 
 .HOME_MENU_RD .bloque_estadio_2_m .noticias .article .media_block .text_block .headline a h2 {
