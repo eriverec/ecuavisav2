@@ -1564,8 +1564,8 @@ BLOQUE - CULTURA
 }
 
 /*Imagen de bloque cultura 2*/
-.HOME_MENU_RD .bloque_cultura_2 .multimedia .cutlineShow div{
-
+.HOME_MENU_RD .bloque_cultura_2 .multimedia .cutlineShow div {
+  padding-top: 0% !important;
 }
 
 .HOME_MENU_RD .bloque_cultura_2 .multimedia img {
@@ -1758,7 +1758,9 @@ INICIO - BLOQUE - ESTILO
 #col-100-top-one-col-swiper3, #col-100-top-one-col-swiper2, #col-100-top-one-col-swiper {
   padding: 0 40px;
 }
-
+.bloque_estilo_bg > div:nth-child(1) > div:nth-child(3) {
+  overflow-x: hidden;
+}
 @media (max-width: 991px) {
   .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2 {
     font-size: var(--rd-size-14);
@@ -1830,6 +1832,8 @@ INICIO - BLOQUE - ESTILO
   position: absolute;
   bottom: 0;
   padding: 0.5rem 1rem;
+  width: 100%;
+  height: 100px;
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block {
@@ -1860,14 +1864,24 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .text_block .headline a h3 {
   color: var(--bs-white);
   font-size: var(--rd-size-16);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px;
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .text_block .section {
 
-  font-weight: 600;
-  color: #23DCD1;
-  display: block;
+  font-weight: 600 !important;
+  color: #23DCD1 !important;
+  display: block !important;
 }
+
+
 
 .HOME_MENU_RD .lista-bloque-programas .teaser-viewer-title {
   text-transform: uppercase;
@@ -1876,6 +1890,7 @@ INICIO - BLOQUE - ESTILO
   color: #2927B9;
   font-size: 22px;
   font-family: 'Mattone 150';
+  padding-bottom: 15px;
 }
 
 .HOME_MENU_RD .button_container {
