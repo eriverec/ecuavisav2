@@ -2014,16 +2014,17 @@ INICIO - BLOQUE - ESTILO
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .text_block .headline a h3 {
-  color: var(--bs-white);
-  font-size: var(--rd-size-16);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 1;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 22px;
+    color: var(--bs-white);
+    font-size: var(--rd-size-16);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 22px;
+    margin-top: -5px;
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .text_block .section {
