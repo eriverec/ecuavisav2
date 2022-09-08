@@ -102,6 +102,27 @@
 }
 
 /* ***************************
+INICIO - BANNER FIJO 
+*************************** */
+
+
+
+.HOME_MENU_RD .banner_fijo .publicidad .banner_mobile {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .HOME_MENU_RD .banner_fijo .publicidad .banner_desk {
+    display: none;
+  }
+
+  .HOME_MENU_RD .banner_fijo .publicidad .banner_mobile {
+    display: block;
+  }
+}
+
+
+/* ***************************
 INICIO - PORTADA - 4 DESTACADAS 
 *************************** */
 .HOME_MENU_RD .ly-apertura-rd {
@@ -434,12 +455,12 @@ Cambio de tamaño de imagen grande izq
     grid-template-columns: none;
   }
 
-  .HOME_MENU_RD .ly-apertura-rd.mobile_des_5 .container{
+  .HOME_MENU_RD .ly-apertura-rd.mobile_des_5 .container {
     padding-right: 0;
     padding-left: 0;
   }
-  
- 
+
+
 
   .HOME_MENU_RD .listado_1_4_mobile .noticias .article:nth-child(4) {
     border-bottom: 1px solid var(--rd-gray-border);
@@ -973,7 +994,8 @@ INICIO - BLOQUE - PROGRAMACION
   .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones a {
     font-size: 10px;
   }
- /* quitar margin de titulo programacion web
+
+  /* quitar margin de titulo programacion web
   .portlet-boundary.portlet-static-end.velocitycontainer-portlet.titulo_programa_web {
     margin-top: 32px;
   }*/
@@ -1114,9 +1136,10 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .top_info .Topheadline .hLine {
     font-size: 10px;
   }
+
   .portlet-boundary.portlet-static-end.velocitycontainer-portlet.titulo_programa_web {
     margin-top: 0px;
-}
+  }
 }
 
 
@@ -2020,7 +2043,8 @@ INICIO - BLOQUE - ESTILO
   .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .top_info .Topheadline .hLine {
     font-size: 10px;
   }
-  .HOME_MENU_RD .ver_t_prog .button_container{
+
+  .HOME_MENU_RD .ver_t_prog .button_container {
     align-items: center;
   }
 }
