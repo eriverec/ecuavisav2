@@ -563,6 +563,9 @@ INICIO - BLOQUE - ECUADOR
   -webkit-line-clamp: 5;
   line-clamp: 5;
   -webkit-box-orient: vertical;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 26px;
 }
 
 #col-100 .noticias .article .text_block .section {
@@ -672,6 +675,11 @@ INICIO - BLOQUE - ECUADOR
     line-clamp: 5;
     -webkit-box-orient: vertical;
   }
+
+  /*.HOME_MENU_RD .ecuador_list_1x2 .noticias {
+    display: flex;
+    flex-wrap: wrap;
+  }*/
 
 }
 
@@ -1080,8 +1088,6 @@ INICIO - BLOQUE - MUNDO
   column-gap: 30px;
 }
 
-
-
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(1) {
   border-top: 1px solid var(--rd-gray-border);
 }
@@ -1100,7 +1106,6 @@ INICIO - BLOQUE - MUNDO
   border-bottom: 1px solid var(--rd-gray-border);
   border-top: 1px solid var(--rd-gray-border);
 }
-
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
   display: grid;
@@ -1132,6 +1137,14 @@ INICIO - BLOQUE - MUNDO
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .text_block .headline a h2 {
     font-size: var(--rd-size-16);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    font-style: normal;
+      font-weight: 700;
+      line-height: 22px;
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(1) {
@@ -1245,6 +1258,37 @@ INICIO - BLOQUE - MUNDO
 ************************** */
 /* @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap'); */
 
+/*Espacio imagen grande*/
+.bloque_estadio_1 > section:nth-child(1) > article:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(1) > a:nth-child(1) > div:nth-child(1) > img:nth-child(1) {
+  margin: 0px !important;
+  padding: 0px;
+  width: 100%;
+  min-width: 100%;
+  height: 100vh !important;
+  object-fit: cover;
+}
+
+/*Color verde categoría*/
+
+.bloque_estadio_2 .article-section a,
+.bloque_estadio_1 > section:nth-child(1) > article:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(3) > div:nth-child(1) > a:nth-child(1) {
+  color: #00C17C !important;
+  font-weight: 600 !important;
+}
+
+.bloque_estadio_2 .text_block {
+  padding: 30px 0;
+}
+
+/*Imagen de bloque 2*/
+.bloque_estadio_2 .cutlineShow img {
+  padding: 0px;
+  margin: 0px !important;
+  width: 100% !important;
+  height: 500px !important;
+  object-fit: cover;
+}
+
 /* vietnamese */
 @font-face {
   font-family: 'Alfa Slab One';
@@ -1302,7 +1346,7 @@ INICIO - BLOQUE - MUNDO
 }
 
 .HOME_MENU_RD .bloque_estadio_2 {
-  margin: 20px 0;
+  margin: 60px 0;
 }
 
 .HOME_MENU_RD .bloque_estadio_2 .noticias {
@@ -1325,6 +1369,10 @@ INICIO - BLOQUE - MUNDO
   text-transform: uppercase;
   color: white;
   font-family: 'Alfa Slab One';
+  font-style: normal;
+  font-weight: 400;
+  line-height: 28px;
+  
 }
 
 .HOME_MENU_RD .bloque_estadio_2 .noticias .article .media_block .text_block .section {
@@ -1917,6 +1965,25 @@ INICIO - BLOQUE - ESTILO
   font-weight: 600;
   margin: 0;
   font-size: 28px;
+}
+
+/*Espacio agenda*/
+
+.layout_agenda > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) {
+  padding-top: 60px;
+  padding-bottom: 60px;
+}
+/*Espacio de linea*/
+.title_agenda > a:nth-child(1) {
+  padding-bottom: 15px;
+  display: block;
+}
+
+/*Centrar primer título de agenda*/
+div.portada-agenda:nth-child(2) > section:nth-child(1) > article:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > h2:nth-child(1) {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
 }
 
 @media (max-width: 991px) {
