@@ -2034,7 +2034,8 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .title_agenda .cintillo-rd {
   color: white;
-  line-height: 38px;
+  /* line-height: 38px; */
+  margin-bottom: 20px;
 }
 
 .HOME_MENU_RD .portada-agenda.ag_Desktop .noticias {
