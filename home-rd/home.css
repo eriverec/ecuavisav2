@@ -55,15 +55,17 @@
 .HOME_MENU_RD .section {
   font-family: 'Mattone 150';
   font-size: 13px;
+  text-transform: uppercase;
+  font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
 }
 
 .div__hide {
   display: none !important;
 }
 
-.HOME_MENU_RD .section {
-  text-transform: uppercase;
-}
+
 
 .HOME_MENU_RD .cintillo-rd {
   display: inline-block;
@@ -93,6 +95,8 @@
 
   .HOME_MENU_RD .cintillo-rd {
     font-size: 45px;
+    line-height: 24px;
+    margin-bottom: 20px;
   }
 }
 
@@ -573,17 +577,7 @@ INICIO - BLOQUE - ECUADOR
   line-height: 26px;
 }
 
-#col-100 .noticias .article .text_block .section {
-  font-style: normal;
-  font-weight: 600;
-  font-size: 14px;
-  line-height: 17px;
-  padding-bottom: 8px;
-  margin-bottom: 0px;
-  display: block;
-  text-transform: uppercase;
-  /* color: var(--rd-section); */
-}
+
 
 /*SECCION ECUADOR PADDING TOP AND BOTTOM*/
 .portlet-boundary.portlet-static-end.portlet-nested-portlets.ly-apertura-rd {
@@ -662,9 +656,6 @@ INICIO - BLOQUE - ECUADOR
     margin: 20px 0;
   }
 
-  #col-100 .noticias .article .text_block .section{
-    display: none;
-  }
 
   .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .section {
     margin-bottom: .5rem;
@@ -676,7 +667,8 @@ INICIO - BLOQUE - ECUADOR
 
   .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .headline a h2 {
     color: var(--bs-black);
-    font-size: var(--rd-size-26);
+    font-size: var(--rd-size-30);
+    font-weight: 700;
   }
 
   .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .text {
@@ -1224,8 +1216,8 @@ INICIO - BLOQUE - MUNDO
   .HOME_MENU_RD .bloque_mundo_2_m .noticias .article .media_block {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    margin: 20px 0;
+    gap: 17px;
+    margin: 32px 0;
 
   }
 
@@ -1243,7 +1235,7 @@ INICIO - BLOQUE - MUNDO
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .BLOQUE_SEC_TIT_IMG {
-    margin: 20px 0;
+    margin: 32px 0;
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(2) {
