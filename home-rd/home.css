@@ -1372,7 +1372,7 @@ INICIO - BLOQUE - MUNDO
   font-style: normal;
   font-weight: 400;
   line-height: 28px;
-  
+
 }
 
 .HOME_MENU_RD .bloque_estadio_2 .noticias .article .media_block .text_block .section {
@@ -1511,6 +1511,10 @@ BLOQUE - CULTURA
 .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h3 {
   font-size: var(--rd-size-30);
   color: var(--bs-black);
+  font-style: normal;
+  font-weight: 700;
+  padding-right: 35px;
+  line-height: 28px;
 }
 
 .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .section {
@@ -1530,7 +1534,8 @@ BLOQUE - CULTURA
 .HOME_MENU_RD .bloque_cultura_2 .noticias .article .media_block {
   display: grid;
   grid-template-columns: 3fr 1fr;
-  column-gap: 30px;
+  column-gap: 22px;
+  padding: 15px 0;
 }
 
 .HOME_MENU_RD .bloque_cultura_2 .noticias .article .BLOQUE_SEC_TIT_IMG {
@@ -1545,6 +1550,10 @@ BLOQUE - CULTURA
 .HOME_MENU_RD .bloque_cultura_2 .noticias .article .text_block .headline a h2 {
   font-size: var(--rd-size-20);
   color: var(--bs-black);
+  font-style: normal;
+  font-weight: 700;
+  padding-right: 35px;
+  line-height: 25px;
 }
 
 .HOME_MENU_RD .bloque_cultura_2 .noticias .article .text_block .section {
@@ -1554,6 +1563,17 @@ BLOQUE - CULTURA
   display: block;
 }
 
+/*Imagen de bloque cultura 2*/
+.HOME_MENU_RD .bloque_cultura_2 .multimedia .cutlineShow div{
+
+}
+
+.HOME_MENU_RD .bloque_cultura_2 .multimedia img {
+  min-height: 110px;
+  margin-top: -8% !important;
+  width: 100% !important;
+  object-fit: cover;
+}
 
 @media (max-width: 767px) {
 
@@ -1610,6 +1630,10 @@ BLOQUE - CULTURA
   }
 
 
+}
+
+.nota-principal-bloque-cultura > section:nth-child(1) > article > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) {
+  padding: 30px 0;
 }
 
 
