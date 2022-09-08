@@ -1823,6 +1823,11 @@ INICIO - BLOQUE - ESTILO
     margin: 0px;
   }
 
+  .bloque_estilo_bg>div:nth-child(1)>div:nth-child(2) {
+    padding: 0;
+  }
+  
+
 
   .HOME_MENU_RD .lista-bloque-estilo {
     padding: 0 60px;
