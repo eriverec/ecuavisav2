@@ -662,6 +662,10 @@ INICIO - BLOQUE - ECUADOR
     margin: 20px 0;
   }
 
+  #col-100 .noticias .article .text_block .section{
+    display: none;
+  }
+
   .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .section {
     margin-bottom: .5rem;
     display: block;
