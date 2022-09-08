@@ -433,7 +433,7 @@ Cambio de tamaño de imagen grande izq
     grid-template-columns: none;
   }
 
-  .HOME_MENU_RD .listado_1_4_mobile .noticias .article:nth-child(4){
+  .HOME_MENU_RD .listado_1_4_mobile .noticias .article:nth-child(4) {
     border-bottom: 1px solid var(--rd-gray-border);
   }
 
@@ -622,16 +622,16 @@ INICIO - BLOQUE - ECUADOR
     font-size: var(--rd-size-14);
   }
 
-  .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .media_block{
+  .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .media_block {
     grid-template-columns: 2fr 1fr;
     gap: 15px;
   }
 
-  .HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2{
+  .HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2 {
     font-size: 18px;
   }
 
-  .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .headline a h2{
+  .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .headline a h2 {
     font-size: 18px;
   }
 
@@ -731,6 +731,9 @@ INICIO - BLOQUE - PROGRAMACION
   height: 810px;
 }
 
+.HOME_MENU_RD .titulo_programa_web .c_azul_celeste_Desktop {
+  margin-top: 10px;
+}
 
 .HOME_MENU_RD .titulo_programa_web .cintillo-rd span {
   color: #23DCD1;
@@ -995,7 +998,7 @@ INICIO - BLOQUE - PROGRAMACION
 }
 
 @media (max-width: 320px) {
-  .HOME_MENU_RD .titulo_programa_web .cintillo-rd{
+  .HOME_MENU_RD .titulo_programa_web .cintillo-rd {
     font-size: 45px;
   }
 }
@@ -1613,7 +1616,7 @@ BLOQUE - CULTURA
 
 @media (max-width: 767px) {
 
-  .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h3{
+  .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h3 {
     font-size: 22px;
     line-height: 28px;
   }
@@ -1841,7 +1844,7 @@ INICIO - BLOQUE - ESTILO
   .bloque_estilo_bg>div:nth-child(1)>div:nth-child(2) {
     padding: 0;
   }
-  
+
 
 
   .HOME_MENU_RD .lista-bloque-estilo {
