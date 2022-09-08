@@ -1583,7 +1583,7 @@ BLOQUE - CULTURA
 }
 
 @media (max-width: 767px) {
-
+  .HOME_MENU_RD .nota-principal-bloque-cultura .noticias,
   .HOME_MENU_RD .bloque_cultura_2 .noticias {
     display: block;
   }
