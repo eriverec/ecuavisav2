@@ -120,19 +120,18 @@
 
  #programlist2 .programaItem {
    background: #2927b95c;
-   border-radius: 5px;
-   padding: 15px 35px;
+   border-radius: 2px;
+   padding: 15px 33px;
    height: 115px;
    display: flex;
    flex-direction: column;
    justify-content: center;
-   align-items: center;
  }
 
  #programlist2 .programaItem p {
    font-weight: 600;
    font-size: 16px;
-   text-align: center;
+   text-align: start;
    line-height: 20px;
    font-family: 'Anek Malayalam', sans-serif;
  }
@@ -144,6 +143,10 @@
 
  #programlist2 .programaItem p:nth-child(2) {
    color: white;
+ }
+
+ #programlist2 .programaItem[data-name*='Televistazo Comunidad Guayaquil Rr'] {
+   width: 30%;
  }
 
 
@@ -264,8 +267,8 @@
    transition: .2s ease;
  }
 
- .mediaBlock__ #rd_cont_botones a:nth-child(1){
-  margin-right: 15px;
+ .mediaBlock__ #rd_cont_botones a:nth-child(1) {
+   margin-right: 15px;
  }
 
  .mediaBlock__ #rd_cont_botones a:hover {
@@ -280,6 +283,7 @@
    margin-right: auto;
    margin-left: auto;
  }
+
 
  @media (max-width: 575px) {
    .mediaBlock__ .icon_player_prog.mobile_player {
@@ -301,8 +305,6 @@
  }
 
  @media (min-width:576px) {
-
-
 
    .container_ {
      max-width: 540px;

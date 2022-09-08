@@ -93,7 +93,7 @@ var swiperProgramacionWeb = new Swiper('.componente', {
             spaceBetween: 10,
         },
         768: {
-            slidesPerView: 3.5,
+            slidesPerView: 2.5,
             spaceBetween: 10,
         },
         1024: {
@@ -129,8 +129,8 @@ function renderProgramas() {
         var programas = $(`
             <div class="programaItem el-${contador}" data-name="${programName}" data-item="${programTimeIni.slice(0, -3)} -${programTimeEnd.slice(0, -3)}">
                 <div class="">
-                    <p>${programName}</p>
                     <p>${programTimeIni.slice(0, -3)} - ${programTimeEnd.slice(0, -3)}</p>
+                    <p>${programName}</p>
                 </div>
             </div>       
         `);
