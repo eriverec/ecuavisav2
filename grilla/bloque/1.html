@@ -128,8 +128,7 @@
     <script defer="defer" type="text/javascript">
         function fechahoy(dato) {
             var fecha = new Date();
-            // var hoy = new Date(fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate()); //+7 se suma si quiere setear ayer u hoy
-            // var hoy = fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate();
+            
             var hoy = fecha.getFullYear() + '-' + ('0' + (fecha.getMonth() + 1)).slice(-2) + '-' + ('0' + fecha
                 .getDate()).slice(-2);
             var hora = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
@@ -141,10 +140,6 @@
             }
             // return fehayHora;
         }
-        console.log('La fecha actual es: ' + fechahoy('fecha'));
-        console.log('La hora actual es: ' + fechahoy('hora'));
-        // ##### FIN función para obtener fecha y hora
-
 
         function proxSemana() {
             var today = new Date();

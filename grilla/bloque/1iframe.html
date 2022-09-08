@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parrilla ecuavisa </title>
+    <style>
+        .seccion_content {
+            position: relative;
+        }
+
+        .seccion_content #iconloading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            z-index: 99;
+        }
+
+        .seccion_content #iconloading .ring {
+            --uib-size: 40px;
+            --uib-speed: 2s;
+            --uib-color: black;
+
+            height: var(--uib-size);
+            width: var(--uib-size);
+            vertical-align: middle;
+            transform-origin: center;
+            animation: rotate var(--uib-speed) linear infinite;
+        }
+
+        .seccion_content #iconloading .ring circle {
+            fill: none;
+            stroke: var(--uib-color);
+            stroke-dasharray: 1, 200;
+            stroke-dashoffset: 0;
+            stroke-linecap: round;
+            animation: stretch calc(var(--uib-speed) * 0.75) ease-in-out infinite;
+        }
+
+        @keyframes rotate {
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        @keyframes stretch {
+            0% {
+                stroke-dasharray: 1, 200;
+                stroke-dashoffset: 0;
+            }
+
+            50% {
+                stroke-dasharray: 90, 200;
+                stroke-dashoffset: -35px;
+            }
+
+            100% {
+                stroke-dashoffset: -124px;
+            }
+        }
+    </style>
+
+</head>
+
+
+
+<body>
+    <div class="seccion_content">loading...</div>
+    <script>       
+        setTimeout(() => {
+            const embedsend = document.createElement('iframe');
+            embedsend.setAttribute('src', 'https://ecuavisadev.netlify.app/grilla/bloque/1.html');
+            embedsend.setAttribute('frameborder', '0');
+            embedsend.setAttribute('scrolling', 'no');
+            embedsend.setAttribute('allowtransparency', 'true');
+            var selecEmbed = document.querySelector('.seccion_content');
+            selecEmbed.append(embedsend);
+            console.log("embed programacion web ejecutado")
+
+        }, 500);
+    </script>
+
+</body>
+
+</html>

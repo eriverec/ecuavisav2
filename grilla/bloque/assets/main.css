@@ -1,3 +1,29 @@
+ :root {
+   --animate-duration: 2s;
+   --animate-delay: 1s;
+   --animate-repeat: 1
+ }
+
+ @-webkit-keyframes fadeIn {
+   0% {
+     opacity: 0
+   }
+
+   to {
+     opacity: 1
+   }
+ }
+
+ @keyframes fadeIn {
+   0% {
+     opacity: 0
+   }
+
+   to {
+     opacity: 1
+   }
+ }
+
  /*Inicio FONT Mattone 150*/
  @font-face {
    font-family: 'Mattone 150';
@@ -11,6 +37,14 @@
  /*Fin FONT Mattone 150*/
  body {
    background: #060127;
+   -webkit-animation-name: fadeIn;
+   animation-name: fadeIn;
+   -webkit-animation-duration: 1s;
+   animation-duration: 1s;
+   -webkit-animation-duration: var(--animate-duration);
+   animation-duration: var(--animate-duration);
+   -webkit-animation-fill-mode: both;
+   animation-fill-mode: both
  }
 
  .div__hide {
@@ -252,9 +286,9 @@
      display: block;
    }
 
-   .mediaBlock__ .t_prog .nameP{
-    font-size: 34px;
-    line-height: 38px;
+   .mediaBlock__ .t_prog .nameP {
+     font-size: 34px;
+     line-height: 38px;
    }
 
    .mediaBlock__ .senal_active {
