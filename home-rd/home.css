@@ -76,6 +76,7 @@
   font-weight: 600;
   font-size: 88px;
   line-height: 96px;
+  margin-top: 30px;
   text-transform: lowercase;
 }
 
@@ -972,10 +973,10 @@ INICIO - BLOQUE - PROGRAMACION
   .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones a {
     font-size: 10px;
   }
-
+ /* quitar margin de titulo programacion web
   .portlet-boundary.portlet-static-end.velocitycontainer-portlet.titulo_programa_web {
     margin-top: 32px;
-  }
+  }*/
 
   .HOME_MENU_RD .titulo_programa_web .cintillo-rd {
     font-size: 55px;
