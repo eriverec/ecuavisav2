@@ -94,7 +94,7 @@
   }
 
   .HOME_MENU_RD .cintillo-rd {
-    font-size: 45px;
+    font-size: 55px;
     line-height: 24px;
     margin-bottom: 20px;
   }
@@ -1598,7 +1598,7 @@ BLOQUE - CULTURA
   .HOME_MENU_RD .bloque_cultura_2_m .noticias .article .media_block {
     display: grid;
     grid-template-columns: 2fr 1fr;
-    column-gap: 30px;
+    column-gap: 16px;
     align-items: center;
   }
 
@@ -1612,13 +1612,15 @@ BLOQUE - CULTURA
   }
 
   .HOME_MENU_RD .bloque_cultura_2_m .noticias .article .BLOQUE_SEC_TIT_IMG {
-    margin: 20px 0;
+    margin: 33px 0;
   }
 
 
   .HOME_MENU_RD .bloque_cultura_2_m .noticias .article .text_block .headline a h2 {
     font-size: var(--rd-size-18);
     color: var(--bs-black);
+    line-height: 22px;
+    font-weight: 700;
   }
 
   .HOME_MENU_RD .bloque_cultura_2_m .noticias .article .text_block .section {
@@ -1637,6 +1639,12 @@ BLOQUE - CULTURA
   .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias .article .text_block .headline a h3 {
     color: var(--bs-black);
     font-size: var(--rd-size-22);
+    font-weight: 700;
+    line-height: 28px;
+  }
+
+  .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias .article .text_block {
+    margin-top: 24px;
   }
 
   .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias .article .text_block .section {
