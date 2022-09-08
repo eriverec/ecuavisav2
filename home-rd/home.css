@@ -557,7 +557,11 @@ INICIO - BLOQUE - ECUADOR
 
 .HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2 {
   color: var(--bs-black);
-  font-size: var(--rd-size-20);
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  /* padding-right: 35px; */
+  line-height: 28px;
 }
 
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .headline a h2 {
@@ -603,16 +607,7 @@ INICIO - BLOQUE - ECUADOR
   letter-spacing: -0.025em;
 }
 
-/*FIN TITULO RIGHT*/
 
-.HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2 {
-  color: var(--bs-black);
-  font-style: normal;
-  font-weight: 700;
-  font-size: 22px;
-  padding-right: 35px;
-  line-height: 28px;
-}
 
 .HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT {
   margin: 30px 0;
@@ -625,6 +620,19 @@ INICIO - BLOQUE - ECUADOR
 
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .text {
     font-size: var(--rd-size-14);
+  }
+
+  .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .media_block{
+    grid-template-columns: 2fr 1fr;
+    gap: 15px;
+  }
+
+  .HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2{
+    font-size: 18px;
+  }
+
+  .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .headline a h2{
+    font-size: 18px;
   }
 
 
