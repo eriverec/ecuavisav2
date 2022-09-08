@@ -421,7 +421,16 @@ Cambio de tamaño de imagen grande izq
   }
 }
 
-@media (max-width: 767px) {
+@media (max-width: 767px) {.
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h1 {
+    color: var(--bs-white);
+    padding-top: 10px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 38px;
+    padding-bottom: 0px;
+  }
+
   .HOME_MENU_RD .rd_grid .c2 {
     grid-template-columns: none;
   }
@@ -454,13 +463,14 @@ Cambio de tamaño de imagen grande izq
 
 }
 
-@media (max-width: 575px) {
+@media (max-width: 767px) {
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block {
     margin-top: 0;
     position: initial;
     padding-bottom: 1rem;
     background: #060127;
     border-bottom: 16px solid #2927B9;
+    position: absolute;
   }
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
