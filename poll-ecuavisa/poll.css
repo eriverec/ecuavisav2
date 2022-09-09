@@ -15,23 +15,28 @@
   display: block;
   padding: 10px;
 }
+
 .quiz-593 {
   color: #333;
   box-shadow: 0 5px 5px rgb(0 0 0 / 40%);
   border-radius: 3px;
 }
+
 .quiz-593 .teaser-viewer-title h1 {
   background-color: #0067D5;
   padding: 8px;
   color: white;
   font-weight: 100;
 }
+
 .question-poll h2 {
   font-weight: 700;
 }
+
 .POLL.template-poll {
   padding: 0px 15px 2rem 15px;
 }
+
 .poll-form.form-check input[type="radio"]:checked,
 input[type="radio"] {
   visibility: hidden;
@@ -59,9 +64,3 @@ input[type="radio"] {
   margin: 10px 0;
 }
 
-@media (max-width: 600px) {
-  article.article.element.full-access.norestricted {
-    padding-bottom: 0;
-}
-
-}
