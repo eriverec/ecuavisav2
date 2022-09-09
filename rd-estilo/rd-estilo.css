@@ -1,6 +1,6 @@
 /*SWIPER CARDS - TEMAS DESTACADOS*/
 .card_dest_estilo {
-  padding: 0 82px;
+  padding: 0 82px !important;
 }
 
 .card_dest_estilo .noticias .article .media_block .text_block .headline a h3 {
