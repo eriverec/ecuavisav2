@@ -2035,7 +2035,7 @@ INICIO - BLOQUE - ESTILO
 
 
 
-.HOME_MENU_RD .teaser-viewer-title-rd {
+.HOME_MENU_RD .teaser-viewer-title-rd a{
   text-transform: uppercase;
   margin: 20px 0;
   font-weight: 600;
