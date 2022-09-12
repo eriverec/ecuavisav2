@@ -36,6 +36,10 @@
 
 /*Encuesta estilo*/
 
+.quiz-entretenimiento, .encuesta_estadio, .sub_estadio {
+  display: none;
+}
+
 
 .encuesta_estilo .teaser-viewer-title h1 {
   margin-bottom: 0;
