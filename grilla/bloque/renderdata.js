@@ -121,13 +121,14 @@ function renderProgramas() {
         var programTimeIni = _jsonProgramas[programIndex].hora_inicio.replace(_jsonProgramas[programIndex].fecha, '');
         var programTimeEnd = _jsonProgramas[programIndex].hora_fin.replace(_jsonProgramas[programIndex].fecha, '');
         var hiddenInactive = 'hidden';
-        var ActualClass = 'px-4 py-4 text-zinc-50 bg-white text-sm flex items-center'
-        var imgs = 'https://via.placeholder.com/70'
+        // var ActualClass = 'px-4 py-4 text-zinc-50 bg-white text-sm flex items-center';
+        var imgs = 'https://via.placeholder.com/70';
+        var activeState = '';
 
         // console.log('inicio:',programTimeIni.slice(0, -3))
 
         var programas = $(`
-            <div class="programaItem el-${contador}" data-name="${programName}" data-item="${programTimeIni.slice(0, -3)} -${programTimeEnd.slice(0, -3)}">
+            <div class="programaItem el-${contador} ${activeState}" data-inicio="${programTimeIni.slice(0, -3)}" data-name="${programName}" data-item="${programTimeIni.slice(0, -3)} -${programTimeEnd.slice(0, -3)}">
                 <div class="">
                     <p>${programTimeIni.slice(0, -3)} - ${programTimeEnd.slice(0, -3)}</p>
                     <p>${programName}</p>
@@ -148,13 +149,41 @@ function renderProgramas() {
                 }
                 // console.log(horahoy)
                 // console.log(programTimeIni)
-                
-                // console.log(programaData.nombrePrograma);
 
-                if (horahoy >= programTimeIni && horahoy <= programTimeEnd) {
-                    console.log(programTimeIni)
-                }
+                // var div1 = document.querySelectorAll("programaItem");
+
                 _jsonDiaActual.push(programaData);
+
+                var d = new Date();
+                var day = d.getDay();
+                var hour = d.getHours();
+                var min = d.getMinutes();
+                var t = d.getTime();
+                timeOfDay = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
+
+                // console.log('DATA-INICIO', programTimeIni.slice(0, -3));
+                // console.log(timeOfDay);
+
+                /* Convertir la hora del programa en datos */
+                var regExp = /(\d{1,2})\:(\d{1,2})/;
+
+                var hini = parseInt(programTimeIni.slice(0, -3).replace(regExp, "$1$2"));
+                var hfin = parseInt(programTimeEnd.slice(0, -3).replace(regExp, "$1$2"));
+                var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2"));
+
+                /*Validacion del programa de la hora actual */
+                if (timeAc >= hini &&  timeAc <= hfin ) {                    
+                    // var pr = document.querySelector(');
+                    // console.log(pr)
+                    var activeState = 'ACTIVE-VERA';
+                    // pr.classList.add("ACTIVE-VERA");
+                    var cont = contador-1;
+                    $('.programaItem.el-'+cont).addClass(activeState);
+                    // $(`.programaItem.el-6`).addClass(activeState);
+
+                    console.log("El programa actual es:", programName, contador-1);
+                }else{}
+
                 //   console.log(programaData);
                 // console.log('La hora del momento es :'+horahoy)
                 // console.log('La hora del progra  es :'+programTimeIni);
@@ -240,15 +269,18 @@ function renderProgramas() {
     buttonGye.classList.add("div__hide");
     buttonQuito.classList.add("div__hide");
 
+
+
+
     var d = new Date();
     var day = d.getDay();
     var hour = d.getHours();
     var min = d.getMinutes();
     var t = d.getTime();
     timeOfDay = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
-    console.log('NUEVA HORA ACTUAL:', timeOfDay);
+    // console.log('NUEVA HORA ACTUAL:', timeOfDay);
     const horasWeb = (x) => {
-        
+
         localStorage.setItem("nItem", x);
         document.querySelector(`.programaItem.el-${x}`).classList.add('activo');
         var getActivo = document.querySelector('.programaItem.activo');
@@ -260,7 +292,7 @@ function renderProgramas() {
         titleHorarios.append(getAttrHorarios);
         titleProgram.append(getAttrNombre);
 
-        console.log(getAttrNombre);
+        // console.log(getAttrNombre);
     }
 
     const showBtnQuito = () => {
