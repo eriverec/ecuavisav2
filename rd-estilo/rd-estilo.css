@@ -32,3 +32,59 @@
   top: 0;
   opacity: .7;
 }
+
+
+/*Encuesta estilo*/
+
+
+.encuesta_estilo .teaser-viewer-title h1 {
+  margin-bottom: 0;
+}
+
+
+.encuesta_estilo .teaser-viewer-title h1 {
+  background-color: #23dcd1 !important;
+  padding: 25px !important;
+  font-weight: 500 !important;
+  color: #2835bb !important;
+  text-align: center;
+  font-size: 22px;
+}
+
+
+.encuesta_estilo .teaser-viewer-title span {
+  font-weight: 800;
+  font-size: 40px;
+  font-family: 'Anek Malayalam';
+}
+
+
+.encuesta_estilo .question-poll h2 {
+  font-weight: 600;
+  font-size: 20px;
+  color: white;
+  text-align: center;
+  padding-top: 1.2rem;
+}
+
+
+.encuesta_estilo .noticias {
+  background-color: #060127 !important;
+}
+
+
+.encuesta_estilo .poll-form.form-check span[data-choiceid] label {
+  border: 1px solid #23dcd1;
+  border-radius: 5px;
+}
+
+
+.encuesta_estilo .poll-form.form-check span {
+  color: #1fc0bb;
+  font-weight: 100;
+}
+
+
+.cols-2 .iter-tabview-content-item {
+  grid-template-columns: repeat(1, 1fr);
+}
