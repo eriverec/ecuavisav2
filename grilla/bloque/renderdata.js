@@ -42,6 +42,16 @@ document.querySelector("." + actualDay + 'Tab').click(); // seteamos por defecto
 
 // ##### FIN tab de días de la semana
 
+//funcion del dia actual
+function activeDay (clase){
+    // i = document.getElementsByClassName(clase)[0];
+    // i.classList.add('activeRedy');
+    setTimeout(function(){  
+        $('.'+clase).addClass('activeRedy'); 
+    }, 1000);
+    console.log('Se añadio el estilo activo a la siguiente clase: '+clase);
+}
+
 // selectores del dom
 var mainRender = document.getElementsByClassName("jsondata")[0];
 var _table = document.getElementsByClassName("puredata")[0];
@@ -123,7 +133,7 @@ function renderProgramas() {
         var hiddenInactive = 'hidden';
         // var ActualClass = 'px-4 py-4 text-zinc-50 bg-white text-sm flex items-center';
         var imgs = 'https://via.placeholder.com/70';
-        var activeState = '';
+        var activeState = ' ';
 
         // console.log('inicio:',programTimeIni.slice(0, -3))
 
@@ -147,13 +157,13 @@ function renderProgramas() {
                     "HoradeInicio": programTimeIni,
                     "Fecha": programDate
                 }
-                // console.log(horahoy)
-                // console.log(programTimeIni)
-
-                // var div1 = document.querySelectorAll("programaItem");
-
                 _jsonDiaActual.push(programaData);
 
+                // console.log(horahoy)
+                // console.log(programTimeIni)
+                // var div1 = document.querySelectorAll("programaItem");
+
+                //obtenemos formateada la hora actual 
                 var d = new Date();
                 var day = d.getDay();
                 var hour = d.getHours();
@@ -171,17 +181,27 @@ function renderProgramas() {
                 var hfin = parseInt(programTimeEnd.slice(0, -3).replace(regExp, "$1$2"));
                 var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2"));
 
-                /*Validacion del programa de la hora actual */
+                var contador = contador;
+                /* Validacion del programa de la hora actual */
                 if (timeAc >= hini &&  timeAc <= hfin ) {                    
                     // var pr = document.querySelector(');
                     // console.log(pr)
-                    var activeState = 'ACTIVE-VERA';
+                    
+                    activeState = 'ACTIVE-VERA';
                     // pr.classList.add("ACTIVE-VERA");
-                    var cont = contador-1;
-                    $('.programaItem.el-'+cont).addClass(activeState);
+                    // var cont = contador-1;
+                    // $('.programaItem.el-'+cont).addClass(activeState);
                     // $(`.programaItem.el-6`).addClass(activeState);
+                    var elemento = 'el-'+(contador-1);
+                    localStorage.setItem('programaActual',elemento);
 
-                    console.log("El programa actual es:", programName, contador-1);
+                    console.log("El programa actual es:"+programName+" y el item es "+elemento);
+                    
+                    itemtored = localStorage.getItem('programaActual') 
+                    
+                    // $(elemento).addClass('activeRedy'); 
+                    console.log(itemtored);
+                    activeDay(itemtored);
                 }else{}
 
                 //   console.log(programaData);
