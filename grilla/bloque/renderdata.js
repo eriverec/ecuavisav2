@@ -183,24 +183,12 @@ function renderProgramas() {
 
                 var contador = contador;
                 /* Validacion del programa de la hora actual */
-                if (timeAc >= hini &&  timeAc <= hfin ) {                    
-                    // var pr = document.querySelector(');
-                    // console.log(pr)
-                    
-                    activeState = 'ACTIVE-VERA';
-                    // pr.classList.add("ACTIVE-VERA");
-                    // var cont = contador-1;
-                    // $('.programaItem.el-'+cont).addClass(activeState);
-                    // $(`.programaItem.el-6`).addClass(activeState);
+                if (timeAc >= hini &&  timeAc <= hfin ) { 
                     var elemento = 'el-'+(contador-1);
                     localStorage.setItem('programaActual',elemento);
 
                     console.log("El programa actual es:"+programName+" y el item es "+elemento);
-                    
-                    itemtored = localStorage.getItem('programaActual') 
-                    
-                    // $(elemento).addClass('activeRedy'); 
-                    console.log(itemtored);
+                    itemtored = localStorage.getItem('programaActual');
                     activeDay(itemtored);
                 }else{}
 
