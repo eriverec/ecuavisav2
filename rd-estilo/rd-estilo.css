@@ -36,6 +36,72 @@
 
 /*Encuesta estilo*/
 
+.form-check .form-check-input {
+  float: none !important;
+  margin-left: 0 !important;
+}
+
+.form-check {
+  padding-left: 0 !important;
+  display: grid !important;
+}
+
+
+.poll-form.form-check input[type="radio"]:checked+label {
+  font-weight: bold;
+  background: #ffffff42;
+  display: block;
+  padding: 10px;
+}
+
+.quiz-593 {
+  color: #333;
+  box-shadow: 0 5px 5px rgb(0 0 0 / 40%);
+  border-radius: 3px;
+}
+
+.quiz-593 .teaser-viewer-title h1 {
+  background-color: #0067D5;
+  padding: 8px;
+  color: white;
+  font-weight: 100;
+}
+
+.question-poll h2 {
+  font-weight: 700;
+}
+
+.POLL.template-poll {
+  padding: 0px 15px 2rem 15px;
+}
+
+.poll-form.form-check input[type="radio"]:checked,
+input[type="radio"] {
+  visibility: hidden;
+}
+
+.poll-form.form-check span[data-choiceid] label {
+  font-weight: bold;
+  border: 1px solid #0d6efd;
+  display: block;
+  padding: 10px;
+}
+
+
+.results .choice .bg-bar .bar {
+  background: #0d6efd;
+  height: 24px;
+}
+
+
+.results .choice {
+  font-weight: bold;
+  border: 2px solid #0d6efd;
+  display: block;
+  padding: 10px;
+  margin: 10px 0;
+}
+
 
 .encuesta_estilo .teaser-viewer-title h1 {
   margin-bottom: 0;
