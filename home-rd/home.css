@@ -245,7 +245,7 @@ INICIO - PORTADA - 4 DESTACADAS
   font-style: normal;
   font-weight: 300;
   line-height: 26px;
-  max-width: 500px;
+  max-width: 700px;
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section {
@@ -425,7 +425,7 @@ Cambio de tamaño de imagen grande izq
 
 /*Banner ancho del título*/
 .portlet-boundary.portlet-static-end.teaser-viewer-portlet.notas-1-p-ap .headline {
-  max-width: 500px;
+  max-width: 700px;
 }
 
 /*Fin Banner ancho del título*/
@@ -467,7 +467,7 @@ Cambio de tamaño de imagen grande izq
 
 @media (max-width: 768px) {
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h1 {
-    font-size: var(--rd-size-34);
+    font-size: var(--rd-size-30);
     line-height: 38px;
   }
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img{
