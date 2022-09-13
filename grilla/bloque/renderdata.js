@@ -39,17 +39,36 @@ if (ayer === 'Lunes') {
 console.log('test dias: ' + tercermenos);
 //console.log('tercer mas es: '+getFecha(+3));
 document.querySelector("." + actualDay + 'Tab').click(); // seteamos por defecto el día actual
-
+var buttonQuito = document.querySelector('.btn-quito');
+var buttonGye = document.querySelector('.btn-gye');
+buttonGye.classList.add("div__hide");
+buttonQuito.classList.add("div__hide");
 // ##### FIN tab de días de la semana
 
 //funcion del dia actual
-function activeDay (clase){
+function activeDay(clase) {
     // i = document.getElementsByClassName(clase)[0];
     // i.classList.add('activeRedy');
-    setTimeout(function(){  
-        $('.'+clase).addClass('activeRedy'); 
+    var titleProgram = document.querySelector('.t_prog .nameP');
+    var titleHorarios = document.querySelector('.t_prog .nameH');
+    var liveSignal = document.querySelector('.senal_active');
+    
+    var getTitulo = localStorage.getItem('pA');
+    var getHor = localStorage.getItem('hIF');
+
+    setTimeout(function () {
+        $('.' + clase).addClass('activo');
+        titleHorarios.append(getHor);
+        titleProgram.append(getTitulo);
+        buttonGye.classList.remove("div__hide");
+        if (getTitulo == "Televistazo  Al  Amanecer" || getTitulo == "Televistazo En La Comunidad") {
+            console.log("si es tele comunidad");
+            buttonQuito.classList.remove("div__hide");
+        } else {
+            console.log("no es tele comunidad");
+        }
     }, 1000);
-    console.log('Se añadio el estilo activo a la siguiente clase: '+clase);
+    console.log('Se añadio el estilo activo a la siguiente clase: ' + clase);
 }
 
 // selectores del dom
@@ -119,6 +138,8 @@ function renderProgramas() {
     var programaItems = _jsonProgramas.length;
     // console.log(programaItems);
     // mainRender.innerHTML = (jsonProgramas);
+    // liveSignal.classList.add("div__hide");
+
     var _jsonDiaActual = [];
     var contador = 1;
     // Inicio de recorrido de cada elemento 
@@ -183,14 +204,22 @@ function renderProgramas() {
 
                 var contador = contador;
                 /* Validacion del programa de la hora actual */
-                if (timeAc >= hini &&  timeAc <= hfin ) { 
-                    var elemento = 'el-'+(contador-1);
-                    localStorage.setItem('programaActual',elemento);
+                if (timeAc >= hini && timeAc <= hfin) {
+                    var elemento = 'el-' + (contador - 1);
+                    var numeroSwiper = (contador - 1);
+                    var pA = programName;
+                    var hIF = programTimeIni.slice(0, -3) + ' -' + programTimeEnd.slice(0, -3);
 
-                    console.log("El programa actual es:"+programName+" y el item es "+elemento);
+                    // Setiamos los datos al localstorage para despues recuperarlo en el html
+                    localStorage.setItem('programaActual', elemento);
+                    localStorage.setItem('nItem', numeroSwiper);
+                    localStorage.setItem('pA', pA);
+                    localStorage.setItem('hIF', hIF);
+
+                    console.log("El programa actual es:" + programName + " y el item es " + elemento);
                     itemtored = localStorage.getItem('programaActual');
                     activeDay(itemtored);
-                }else{}
+                } else {}
 
                 //   console.log(programaData);
                 // console.log('La hora del momento es :'+horahoy)
@@ -269,136 +298,5 @@ function renderProgramas() {
     getProgramasHoy = localStorage.getItem('programasHoy');
     JsonProgramasHoy = JSON.parse(getProgramasHoy);
 
-    const liveSignal = document.querySelector('.senal_active');
-    const buttonGye = document.querySelector('.btn-gye');
-    const buttonQuito = document.querySelector('.btn-quito');
-
-    // liveSignal.classList.add("div__hide");
-    buttonGye.classList.add("div__hide");
-    buttonQuito.classList.add("div__hide");
-
-
-
-
-    var d = new Date();
-    var day = d.getDay();
-    var hour = d.getHours();
-    var min = d.getMinutes();
-    var t = d.getTime();
-    timeOfDay = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
-    // console.log('NUEVA HORA ACTUAL:', timeOfDay);
-    const horasWeb = (x) => {
-
-        localStorage.setItem("nItem", x);
-        document.querySelector(`.programaItem.el-${x}`).classList.add('activo');
-        var getActivo = document.querySelector('.programaItem.activo');
-        var getAttrNombre = getActivo.getAttribute('data-name');
-        var getAttrHorarios = getActivo.getAttribute('data-item');
-        var titleProgram = document.querySelector('.t_prog .nameP');
-        var titleHorarios = document.querySelector('.t_prog .nameH');
-
-        titleHorarios.append(getAttrHorarios);
-        titleProgram.append(getAttrNombre);
-
-        // console.log(getAttrNombre);
-    }
-
-    const showBtnQuito = () => {
-        buttonQuito.classList.remove("div__hide");
-    }
-
-    const showBtnGye = () => {
-        // liveSignal.classList.remove("div__hide");
-        buttonGye.classList.remove("div__hide");
-    }
-
-    if (day > 0 && day <= 5) {
-        //validacion de lunes a viernes
-        if ("05:00" <= timeOfDay && timeOfDay <= "06:00") {
-            horasWeb(1);
-        } else if ("06:00" <= timeOfDay && timeOfDay <= "07:00") {
-            horasWeb(2);
-            showBtnGye();
-            showBtnQuito();
-        } else if ("07:00" <= timeOfDay && timeOfDay <= "07:30") {
-            horasWeb(3);
-            showBtnGye();
-        } else if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
-            horasWeb(4);
-            showBtnGye();
-            showBtnQuito();
-        } else if ("09:00" <= timeOfDay && timeOfDay <= "10:30") {
-            horasWeb(5);
-        } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {
-            horasWeb(6);
-            showBtnGye();
-        } else if ("13:00" <= timeOfDay && timeOfDay <= "14:00") {
-            horasWeb(7);
-            showBtnGye();
-        } else if ("14:00" <= timeOfDay && timeOfDay <= "15:00") {
-            horasWeb(8);
-            showBtnGye();
-        } else if ("15:00" <= timeOfDay && timeOfDay <= "16:00") {
-            horasWeb(9);
-            showBtnGye();
-        } else if ("16:00" <= timeOfDay && timeOfDay <= "17:00") {
-            horasWeb(10);
-        } else if ("17:00" <= timeOfDay && timeOfDay <= "18:00") {
-            horasWeb(11);
-        } else if ("18:00" <= timeOfDay && timeOfDay <= "19:00") {
-            horasWeb(12);
-            showBtnGye();
-        } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
-            horasWeb(13);
-            showBtnGye();
-        } else if ("20:00" <= timeOfDay && timeOfDay <= "21:00") {
-            horasWeb(14);
-            showBtnGye();
-        } else if ("21:00" <= timeOfDay && timeOfDay <= "22:00") {
-            horasWeb(15);
-            showBtnGye();
-        } else if ("22:00" <= timeOfDay && timeOfDay <= "23:00") {
-            horasWeb(16);
-            showBtnGye();
-        } else if ("23:00" <= timeOfDay && timeOfDay <= "00:00") {
-            horasWeb(17);
-        } else if ("00:00" <= timeOfDay && timeOfDay <= "00:30") {
-            horasWeb(18);
-        } else if ("00:30" <= timeOfDay && timeOfDay <= "01:00") {
-            horasWeb(19);
-        } else if ("01:00" <= timeOfDay && timeOfDay <= "01:30") {
-            horasWeb(20);
-        } else if ("01:30" <= timeOfDay && timeOfDay <= "02:00") {
-            horasWeb(21);
-        } else if ("02:00" <= timeOfDay && timeOfDay <= "02:30") {
-            horasWeb(22);
-        } else if ("02:30" <= timeOfDay && timeOfDay <= "04:00") {
-            horasWeb(23);
-        } else if ("04:00" <= timeOfDay && timeOfDay <= "05:00") {
-            horasWeb(24);
-        } else {
-
-        }
-    } else if (day === 6) {
-        //validacion de sabado
-        console.log("es sábado");
-
-        if ("19:00" <= timeOfDay && timeOfDay <= "19:30") {
-
-        } else {
-
-        }
-    } else {
-        //validacion de domingo
-        console.log("es domingo");
-
-        if ("10:30" <= timeOfDay && timeOfDay <= "11:30") {
-
-        } else if ("19:00" <= timeOfDay && timeOfDay <= "19:59") {
-
-        } else {
-
-        }
-    }
 
 }
