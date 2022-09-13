@@ -36,7 +36,7 @@ if (ayer === 'Domingo') {
 if (ayer === 'Lunes') {
     tercermenos = 'Sabado';
 } else {};
-console.log('test dias: ' + tercermenos);
+// console.log('test dias: ' + tercermenos);
 //console.log('tercer mas es: '+getFecha(+3));
 document.querySelector("." + actualDay + 'Tab').click(); // seteamos por defecto el día actual
 var buttonQuito = document.querySelector('.btn-quito');
@@ -44,7 +44,10 @@ var buttonGye = document.querySelector('.btn-gye');
 buttonGye.classList.add("div__hide");
 buttonQuito.classList.add("div__hide");
 // ##### FIN tab de días de la semana
-
+console.log("Dia actual: ", fechahoy('fecha'));
+var d = new Date();
+timeOfDay = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}:${d.getSeconds().toString().padStart(2, "0")}`;
+console.log("Hora actual: ", timeOfDay)
 //funcion del dia actual
 function activeDay(clase) {
     // i = document.getElementsByClassName(clase)[0];
@@ -77,7 +80,7 @@ function activeDay(clase) {
             // console.log("no es tele comunidad");
         }
     }, 700);
-    console.log('Se añadio el estilo activo a la siguiente clase: ' + clase);
+    // console.log('Se añadio el estilo activo a la siguiente clase: ' + clase);
 }
 
 // selectores del dom
@@ -195,14 +198,7 @@ function renderProgramas() {
 
                 //obtenemos formateada la hora actual 
                 var d = new Date();
-                var day = d.getDay();
-                var hour = d.getHours();
-                var min = d.getMinutes();
-                var seg = d.getSeconds();
-                var t = d.getTime();
                 timeOfDay = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}:${d.getSeconds().toString().padStart(2, "0")}`;
-
-                console.log("Hora actual: ",timeOfDay)
 
                 // console.log('DATA-INICIO', programTimeIni.slice(0, -3));
                 // console.log(timeOfDay);
@@ -228,7 +224,7 @@ function renderProgramas() {
                     localStorage.setItem('pA', pA);
                     localStorage.setItem('hIF', hIF);
 
-                    console.log("El programa actual es:" + programName + " y el item es " + elemento);
+                    console.log("Programa actual: " + programName);
                     itemtored = localStorage.getItem('programaActual');
                     activeDay(itemtored);
                 } else {}
