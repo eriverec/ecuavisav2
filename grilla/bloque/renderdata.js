@@ -52,7 +52,7 @@ function activeDay(clase) {
     var titleProgram = document.querySelector('.t_prog .nameP');
     var titleHorarios = document.querySelector('.t_prog .nameH');
     var liveSignal = document.querySelector('.senal_active');
-    
+
     var getTitulo = localStorage.getItem('pA');
     var getHor = localStorage.getItem('hIF');
 
@@ -61,13 +61,22 @@ function activeDay(clase) {
         titleHorarios.append(getHor);
         titleProgram.append(getTitulo);
         buttonGye.classList.remove("div__hide");
+        if (getTitulo == "Tres Familias" ||
+            getTitulo == "Asi Pasa" ||
+            getTitulo == "Combo Amarillo" ||
+            getTitulo == "Televistazo Comunidad Guayaquil Rr" ||
+            getTitulo == "Televistazo Estelar Rr") {
+            buttonGye.classList.add("div__hide");
+        } else {
+            console.log("no es tele comunidad");
+        }
         if (getTitulo == "Televistazo  Al  Amanecer" || getTitulo == "Televistazo En La Comunidad") {
             console.log("si es tele comunidad");
             buttonQuito.classList.remove("div__hide");
         } else {
             console.log("no es tele comunidad");
         }
-    }, 1000);
+    }, 700);
     console.log('Se añadio el estilo activo a la siguiente clase: ' + clase);
 }
 
