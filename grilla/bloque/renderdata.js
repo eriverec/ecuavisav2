@@ -202,6 +202,8 @@ function renderProgramas() {
                 var t = d.getTime();
                 timeOfDay = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}:${d.getSeconds().toString().padStart(2, "0")}`;
 
+                console.log("Hora actual: ",timeOfDay)
+
                 // console.log('DATA-INICIO', programTimeIni.slice(0, -3));
                 // console.log(timeOfDay);
 
@@ -211,10 +213,6 @@ function renderProgramas() {
                 var hini = parseInt(programTimeIni.replace(regExp, "$1$2$3"));
                 var hfin = parseInt(programTimeEnd.replace(regExp, "$1$2$3"));
                 var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2$3"));
-
-                console.log("hini",hini)
-                console.log("timeAc",timeAc)
-
 
                 var contador = contador;
                 /* Validacion del programa de la hora actual */
