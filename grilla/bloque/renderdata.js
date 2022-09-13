@@ -68,13 +68,13 @@ function activeDay(clase) {
             getTitulo == "Televistazo Estelar Rr") {
             buttonGye.classList.add("div__hide");
         } else {
-            console.log("no es tele comunidad");
+            // console.log("no es tele comunidad");
         }
         if (getTitulo == "Televistazo  Al  Amanecer" || getTitulo == "Televistazo En La Comunidad") {
             console.log("si es tele comunidad");
             buttonQuito.classList.remove("div__hide");
         } else {
-            console.log("no es tele comunidad");
+            // console.log("no es tele comunidad");
         }
     }, 700);
     console.log('Se añadio el estilo activo a la siguiente clase: ' + clase);
@@ -198,22 +198,27 @@ function renderProgramas() {
                 var day = d.getDay();
                 var hour = d.getHours();
                 var min = d.getMinutes();
+                var seg = d.getSeconds();
                 var t = d.getTime();
-                timeOfDay = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}`;
+                timeOfDay = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}:${d.getSeconds().toString().padStart(2, "0")}`;
 
                 // console.log('DATA-INICIO', programTimeIni.slice(0, -3));
                 // console.log(timeOfDay);
 
                 /* Convertir la hora del programa en datos */
-                var regExp = /(\d{1,2})\:(\d{1,2})/;
+                var regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
 
-                var hini = parseInt(programTimeIni.slice(0, -3).replace(regExp, "$1$2"));
-                var hfin = parseInt(programTimeEnd.slice(0, -3).replace(regExp, "$1$2"));
-                var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2"));
+                var hini = parseInt(programTimeIni.replace(regExp, "$1$2$3"));
+                var hfin = parseInt(programTimeEnd.replace(regExp, "$1$2$3"));
+                var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2$3"));
+
+                console.log("hini",hini)
+                console.log("timeAc",timeAc)
+
 
                 var contador = contador;
                 /* Validacion del programa de la hora actual */
-                if (timeAc >= hini && timeAc <= hfin) {
+                if (hini <= timeAc && timeAc <= hfin) {
                     var elemento = 'el-' + (contador - 1);
                     var numeroSwiper = (contador - 1);
                     var pA = programName;
