@@ -532,7 +532,7 @@ Cambio de tamaño de imagen grande izq
 
 @media (max-width: 575px) {
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block {
-    margin-top: 0;
+    margin-top: -1;
     position: initial;
     padding-bottom: 1rem;
     background: #060127;
