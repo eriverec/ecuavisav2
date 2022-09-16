@@ -254,6 +254,7 @@ INICIO - PORTADA - 4 DESTACADAS
   text-transform: uppercase;
   font-size: 14px;
   line-height: 17px;
+  padding-top: 5px;
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h1 {
