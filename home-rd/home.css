@@ -165,21 +165,12 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 /*Fondo del banner opaco*/
-.HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div:after {
+/* .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div:after {
   position: absolute;
   width: 100%;
   height: 100%;
-  content: "";
-  left: 0;
-  right: 0;
-  background-image: url(https://redyman.netlify.app/header2022/img/img-fondo.png) !important;
-  background: #3F3F4200;
-  background-position: center 100%;
-  background-repeat: no-repeat;
-  background-size: cover;
-  top: 0;
-  opacity: .7;
-}
+  
+} */
 
 /*Fin fondo del banner opaco*/
 
