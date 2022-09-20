@@ -32,6 +32,35 @@
   height: 810px;
 }
 
+.prog-web-container .titulo_programa_web .cintillo-rd span {
+  color: #23DCD1;
+}
+
+.prog-web-container .titulo_programa_web .cintillo-rd {
+  display: inline-block;
+  font-size: 80px;
+  font-weight: 600;
+  color: white;
+  line-height: 76px;
+  text-transform: lowercase;
+  font-family: 'Anek Malayalam';
+}
+
+@media (max-width: 767px) {
+ 
+  .prog-web-container .titulo_programa_web .cintillo-rd {
+    font-size: 55px;
+    line-height: 45px;
+  }
+
+}
+
+@media (max-width: 320px) {
+  .prog-web-container .titulo_programa_web .cintillo-rd {
+    font-size: 45px;
+  }
+}
+
 
 
 /* FIN QUITAR MARGENES */
