@@ -75,8 +75,6 @@
 /* TITULAR DE SECCIÓN */
 .cintillo-rd h1 {
   font-size: 70.5px;
-  display: flex;
-  justify-content: flex-start;
   color: #2927b9;
   font-weight: 700;
   font-family: 'Anek Malayalam';
@@ -473,8 +471,6 @@
 
   .cintillo-rd h1 {
     font-size: 47px;
-    display: flex;
-    justify-content: center;
   }
 
   .teaser-viewer-title h2 {
