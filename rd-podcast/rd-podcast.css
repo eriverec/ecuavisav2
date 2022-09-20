@@ -1,5 +1,24 @@
 /*****************
-*****APERTURA*****
+*****CINTILLO*****
 *****************/
 
+.titulo_central .cintillo-rd {
+  display: inline-block;
+  color: var(--rd-cintillo);
+  font-family: 'Anek Malayalam';
+  letter-spacing: -0.03em;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 88px;
+  line-height: 96px;
+  margin-top: 30px;
+  text-transform: lowercase;
+}
 
+@media (max-width: 767px) {
+  .titulo_central .cintillo-rd {
+    font-size: 55px;
+    line-height: 24px;
+    margin-bottom: 20px;
+  }
+}
