@@ -1,3 +1,471 @@
-/*****************
-*****a*****
-*****************/
+/* QUITAR MARGENES */
+#iter-content-wrapper {
+  padding-top: 0;
+}
+
+/* ENCUESTA */
+.container-fluid {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.row>* {
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+/* FIN QUITAR MARGENES */
+
+
+/* TITULAR DE SECCIÓN */
+.cintillo-rd h1 {
+  font-size: 70.5px;
+  display: flex;
+  justify-content: flex-start;
+  color: #2927b9;
+  font-weight: 700;
+  font-family: 'Anek Malayalam';
+  text-transform: lowercase;
+  margin-top: 30px;
+}
+
+/*PORTADA*/
+.destacada-entretenimiento {
+  border-bottom: 12px solid #2927B9;
+  border-top: 12px solid #2927B9;
+}
+
+.destacada-entretenimiento .media_block .text_block .headline h1 {
+  color: white;
+  font-size: 34px;
+  font-family: 'Archivo';
+  font-weight: 700;
+}
+
+.destacada-entretenimiento .noticias .article .text_block {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 3.5rem 1rem 25px;
+  width: 100%;
+  margin-top: -1px;
+  position: initial;
+  background: #060127;
+}
+
+.destacada-entretenimiento .media_block .multimedia img {
+  filter: brightness(80%) !important;
+}
+
+.destacada-entretenimiento .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
+  -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 60%);
+}
+
+.destacada-entretenimiento .IMG_SEC_TIT_TXT_PORTADA .multimediaIconMacroWrapper div {
+  background-image: -webkit-linear-gradient(bottom, #060127 50%, white 65%);
+}
+
+.destacada-entretenimiento .media_block .text_block .headline {
+  padding: 25px 0;
+}
+
+.destacada-entretenimiento .text_block .text {
+  display: none;
+}
+
+.destacada-entretenimiento .media_block .text_block .article-section a {
+  font-size: 14px !important;
+}
+
+.destacada-entretenimiento .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
+  -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 30%);
+  height: 220px !important;
+  object-fit: cover;
+}
+
+.destacada-entretenimiento .noticias .article .multimedia .multimediaIconMacroWrapper a div {
+  border-bottom: none;
+  height: 220px !important;
+}
+
+/* FIN PORTADA */
+
+/* ENCUESTA */
+.results .choice {
+  color: white;
+  border: 2px solid #23dcd1 !important;
+  font-family: 'Archivo';
+}
+
+.results .choice .bg-bar .bar {
+  background: #23dcd1 !important;
+}
+
+.vote-count {
+  color: white !important;
+  font-weight: 700;
+  font-family: 'Archivo';
+  font-size: 22px;
+}
+
+.bg-secondary {
+  background-color: #23dcd1a3 !important;
+}
+
+.badge {
+  font-family: 'Archivo';
+}
+
+/* fin ENCUESTA */
+/*ocultar quiz extras*/
+.micro_593 {
+  display: none;
+}
+
+.encuesta_estadio {
+  display: none;
+}
+
+.encuesta_estilo {
+  display: none;
+}
+
+.sub_estadio {
+  display: none;
+}
+
+/* fin ocultar quiz extras*/
+
+/* TEMAS DESTACADOS */
+.title-destacada {
+  padding: 2.5rem 0rem 0;
+}
+
+.faq_separador {
+  display: flex;
+  margin: 0 auto;
+  width: 310px;
+  padding-bottom: 1rem;
+}
+
+.faq_separador2 {
+  float: left;
+}
+
+.tarjeta-destacada h2 {
+  padding: 0;
+}
+
+.tarjeta-destacada h2 {
+  color: black;
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 1.8rem;
+  font-family: 'Archivo';
+}
+
+.tarjeta-destacada .destacada {
+  color: #2927b9;
+  font-family: 'Archivo';
+  font-weight: 700;
+}
+
+.teaser-viewer-title h2 {
+  color: #2927b9;
+  font-weight: 700;
+  padding-bottom: 1rem;
+  font-family: 'Archivo';
+  font-size: 1.5rem;
+}
+
+/* SOMBREADO DE TARJETA */
+.swiper-3d .swiper-slide-shadow {
+  background: #2927B9;
+}
+
+.tarjetaSwiper a h3 {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 26px;
+  color: #FFFFFF;
+}
+
+.tarjetaSwiper .swiper-wrapper .swiper-slide .text_block {
+  margin-top: -150px;
+  min-height: 110px;
+  padding: 20px;
+}
+
+.tarjetaSwiper .swiper-wrapper .swiper-slide {
+  border-radius: 5px;
+}
+
+.tarjeta-destacada .noticias.swiper-wrapper .swiper-slide-active {
+  border-radius: 5px;
+}
+
+/* FIN TEMAS DESTACADOS */
+
+/*bloque Video Swiper Principal */
+.bloque-programas .swiper-button-next,
+.bloque-programas.swiper-button-prev {
+  top: 60%;
+}
+
+.bloque-programas .media_block .text_block .headline h1 {
+  color: white;
+  font-size: 34px;
+  font-family: 'Archivo';
+  font-weight: 700;
+}
+
+.bloque-programas .media_block {
+  position: relative;
+}
+
+.bloque-programas .text_block {
+  position: absolute;
+  bottom: 0;
+  padding: 3rem 1rem 1rem;
+  background-image: -webkit-linear-gradient(bottom, #060127 50%, #ffffff00 100%);
+  left: 0;
+  right: 0;
+  border-radius: 5px;
+}
+
+.principalSwiper .teaser-viewer-title h2 {
+  padding-bottom: 2rem;
+}
+
+.bloque-programas .Topheadline,
+.carrusel-programas .Topheadline {
+  z-index: 2;
+  position: absolute;
+  color: #2927b9;
+  background-color: #23dcd1;
+  width: 70%;
+  display: flex;
+  margin: 10px;
+  justify-content: center;
+  border-radius: 5px 0px 0 0;
+}
+
+.bloque-programas .Topheadline svg {
+  display: none;
+}
+
+.bloque-programas .Topheadline h2 {
+  text-transform: uppercase;
+  font-family: 'Anek Malayalam';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 13px;
+  padding-top: 8px;
+}
+
+.bloque-programas .media_block .multimedia img {
+  filter: brightness(70%);
+}
+
+.bloque-programas .media_block {
+  position: relative;
+  border-radius: 5px;
+}
+
+/*FIN BLOQUE SWIPER PRINCIPAL */
+
+/*INICIO BLOQUE CARRUSEL PROGRAMAS*/
+.carrusel-programas .media_block .multimedia img {
+  border-radius: 5px;
+}
+
+.carrusel-programas .text_block {
+  border-radius: 5px;
+}
+
+.bloque-programas .media_block .text_block .headline h3,
+.programas-desktop .media_block .text_block .headline h2 {
+  color: white;
+  font-size: var(--rd-size-20);
+  font-family: 'Anek Malayalam';
+  font-weight: 600;
+  padding-top: .5rem;
+}
+
+.bloque-programas .media_block .text_block .article-section a,
+.destacada-entretenimiento .media_block .text_block .article-section a {
+  color: #23dcd1;
+  text-transform: uppercase;
+  font-family: 'mattone 150';
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 12px;
+}
+
+.bloque-programas .media_block .text_block .subheadline {
+  display: none;
+}
+
+/* FIN BLOQUE CARRUSEL PROGRAMAS */
+
+/******* BOTÓN IR A PROGRAMA ********/
+.btn-encontacto,
+.btn-programas {
+  position: relative;
+  z-index: 13;
+}
+
+.btn-encontacto a,
+.btn-programas a {
+  display: inline-block;
+  height: 35px;
+  top: 45px;
+  text-align: left;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.btn-encontacto a:nth-child(1),
+.btn-programas a:nth-child(1) {
+  right: 0;
+  border-radius: 4px;
+  width: auto;
+  font-size: 11px;
+  line-height: 25px;
+  padding: 5px 15px;
+  color: #2927b9;
+  text-decoration: none;
+  position: absolute;
+  border: 1px #23dcd1 solid;
+  font-family: 'Mattone 150';
+}
+
+/******* FIN BTN IR A PROGRAMA ********/
+
+/* INICIO ÍCONO DE VIDEOS*/
+.icono-programas .iconPlay {
+  background-image: url("https://estadisticas.ecuavisa.com/sites/default/files/2022-08/iconplay_1.png");
+  height: 100%;
+  background-position: center;
+  width: 100%;
+  background-size: auto;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+.icono-carrusel .iconPlay {
+  background-image: url("https://estadisticas.ecuavisa.com/sites/default/files/2022-08/iconoplay%201.png");
+  position: absolute;
+  background-position: center;
+  background-size: auto;
+  position: absolute;
+  top: 3%;
+  left: 80%;
+}
+
+/* FIN ÍCONO DE VIDEOS */
+
+/* INICIO CSS MEDIA QUERIES */
+@media (max-width: 768px) {
+
+  /* TARJETAS SWIPER DESTACADAS */
+  .tarjetaSwiper .swiper-android .swiper-slide,
+  .tarjetaSwiper .swiper-wrapper {
+    transform: translate3d(0%, 0, 0) !important;
+    margin: 0px 0px 0px 0px !important;
+  }
+
+  .swiper.tarjetaSwiper {
+    width: 100% !important;
+    padding-right: 55px;
+    padding-left: 55px;
+  }
+
+  .swiper-cards {
+    overflow: hidden;
+  }
+
+  .tarjetaSwiper .swiper-wrapper .swiper-slide .text_block {
+    position: absolute;
+    bottom: 0;
+    padding: 7rem 1rem 1.5rem;
+    background-image: -webkit-linear-gradient(bottom, #060127 50%, #ffffff00 100%);
+    left: 0;
+    right: 0;
+  }
+
+  .tarjetaSwiper .swiper-wrapper {
+    transform: translate3d(15%, 0, 0);
+  }
+}
+
+@media (max-width: 600px) {
+
+  /* ENCUESTA */
+  .container-fluid {
+    padding-left: 0.7rem;
+    padding-right: 0.7rem;
+  }
+
+  .title_seccion {
+    padding: 0rem 1rem 1rem;
+  }
+
+  .cintillo-rd h1 {
+    font-size: 47px;
+    display: flex;
+    justify-content: center;
+  }
+
+  .teaser-viewer-title h2 {
+    font-size: 22px;
+    width: 50%;
+  }
+
+  .faq_separador2 {
+    width: 385px;
+  }
+
+  .faq_separador {
+    width: 310px;
+  }
+
+  .btn-programas a {
+    top: 54px;
+  }
+
+  .btn-encontacto a {
+    top: 45px;
+  }
+
+  .bloque-programas .media_block .text_block .headline h3 {
+    font-size: 16px;
+  }
+
+  /* TARJETAS SWIPER DESTACADAS */
+  .title-destacada {
+    padding: 2.5rem 1rem 0;
+  }
+
+  .tarjetaSwiper .swiper-android .swiper-slide,
+  .tarjetaSwiper .swiper-wrapper {
+    transform: translate3d(0%, 0, 0) !important;
+    margin: 0px 0px 0px 0px !important;
+  }
+
+  .swiper.tarjetaSwiper {
+    width: 100% !important;
+    padding-right: 40px;
+    padding-left: 30px;
+  }
+
+  .swiper-cards {
+    overflow: hidden;
+  }
+
+}
