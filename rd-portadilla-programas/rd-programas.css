@@ -20,6 +20,7 @@
 
 
 .prog-web-container {
+  margin-bottom: 45px;
   background: #060127;
   border-top: 16px solid #2927B9;
   border-bottom: 16px solid #2927B9;
@@ -35,6 +36,9 @@
 .prog-web-container .titulo_programa_web .cintillo-rd span {
   color: #23DCD1;
 }
+.prog-web-container .ver_t_prog .button_container {
+  display: none;
+}
 
 .prog-web-container .titulo_programa_web .cintillo-rd {
   display: inline-block;
@@ -43,6 +47,8 @@
   color: white;
   line-height: 76px;
   text-transform: lowercase;
+  margin-top: 30px;
+  margin-bottom: 20px;
   font-family: 'Anek Malayalam';
 }
 
