@@ -88,7 +88,8 @@
   font-family: 'Mattone 150';
   margin-bottom: 30px;
 }
-.sliderVideos .tit-vid h2 span{
+
+.sliderVideos .tit-vid h2 span {
   display: none;
 }
 
@@ -222,9 +223,9 @@
 /* fin ocultar quiz extras*/
 
 /* TEMAS DESTACADOS */
-.title-destacada {
+/* .title-destacada {
   padding: 2.5rem 0rem 0;
-}
+} */
 
 .faq_separador {
   display: flex;
@@ -445,7 +446,7 @@
 
 .icono-carrusel .iconPlay {
   background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
-  width: 30px px;
+  width: 30px;
   height: 30px;
   top: 15px;
   right: 10px;
@@ -531,9 +532,9 @@
   }
 
   /* TARJETAS SWIPER DESTACADAS */
-  .title-destacada {
+  /* .title-destacada {
     padding: 2.5rem 1rem 0;
-  }
+  } */
 
   .tarjetaSwiper .swiper-android .swiper-slide,
   .tarjetaSwiper .swiper-wrapper {
