@@ -418,7 +418,7 @@
   font-family: 'Archivo';
 }
 
-#navegacion .enlace-programa h2 {
+#navegacion .enlace-programa{
   border-radius: 4px;
   font-size: 11px;
   line-height: 25px;
