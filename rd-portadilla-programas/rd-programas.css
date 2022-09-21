@@ -412,14 +412,13 @@
 }
 
 #navegacion .title h2 {
-
   color: #2927b9;
   font-weight: 700;
-  padding-bottom: 1rem;
+  margin: 0;
   font-family: 'Archivo';
 }
 
-#navegacion .inicio h2 {
+#navegacion .enlace-programa h2 {
   border-radius: 4px;
   font-size: 11px;
   line-height: 25px;
