@@ -93,6 +93,11 @@
   display: none;
 }
 
+.btn_informativo .button_container,
+.btn_entretenimiento .button_container {
+  display: none;
+}
+
 @media (max-width: 767px) {
   .sliderVideos .tit-vid h2 {
     font-size: 15px;
@@ -398,6 +403,39 @@
 /* FIN BLOQUE CARRUSEL PROGRAMAS */
 
 /******* BOTÓN IR A PROGRAMA ********/
+
+
+#navegacion {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+#navegacion .title h2 {
+
+  color: #2927b9;
+  font-weight: 700;
+  padding-bottom: 1rem;
+  font-family: 'Archivo';
+}
+
+#navegacion .inicio h2 {
+  border-radius: 4px;
+  font-size: 11px;
+  line-height: 25px;
+  padding: 5px 15px;
+  color: #2927b9;
+  text-decoration: none;
+  border: 1px #23dcd1 solid;
+  font-family: 'Mattone 150';
+}
+
+
+
+
+
+
+
 .btn-encontacto,
 .btn-programas {
   position: relative;
