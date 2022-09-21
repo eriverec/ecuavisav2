@@ -36,6 +36,7 @@
 .prog-web-container .titulo_programa_web .cintillo-rd span {
   color: #23DCD1;
 }
+
 .prog-web-container .ver_t_prog .button_container {
   display: none;
 }
@@ -53,7 +54,7 @@
 }
 
 @media (max-width: 767px) {
- 
+
   .prog-web-container .titulo_programa_web .cintillo-rd {
     font-size: 55px;
     line-height: 45px;
@@ -64,6 +65,37 @@
 @media (max-width: 320px) {
   .prog-web-container .titulo_programa_web .cintillo-rd {
     font-size: 45px;
+  }
+}
+
+/*VIDEOS MAS VISTOS*/
+
+.sliderVideos .iconPlay {
+  background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
+  width: 30px;
+  height: 30px;
+  top: 15px;
+  right: 10px;
+  left: initial;
+  bottom: initial;
+}
+
+.sliderVideos .tit-vid h2 {
+  color: #2927B9;
+  font-size: 22px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-family: 'Mattone 150';
+  margin-bottom: 30px;
+}
+.sliderVideos .tit-vid h2 span{
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .sliderVideos .tit-vid h2 {
+    font-size: 15px;
+    margin: 20px 0;
   }
 }
 
@@ -412,13 +444,13 @@
 }
 
 .icono-carrusel .iconPlay {
-  background-image: url("https://estadisticas.ecuavisa.com/sites/default/files/2022-08/iconoplay%201.png");
-  position: absolute;
-  background-position: center;
-  background-size: auto;
-  position: absolute;
-  top: 3%;
-  left: 80%;
+  background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
+  width: 30px px;
+  height: 30px;
+  top: 15px;
+  right: 10px;
+  left: initial;
+  bottom: initial;
 }
 
 /* FIN ÍCONO DE VIDEOS */
