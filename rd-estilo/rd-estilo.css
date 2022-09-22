@@ -33,6 +33,12 @@
   opacity: .7;
 }
 
+.carrusel-programas.bloque-programas .media_block .text_block .date, .bloque-programas .media_block .text_block .article-section a {
+    text-transform: uppercase;
+    font-weight: 600 !important;
+    font-size: 11px !important;
+    font-family: 'Mattone 150';
+}
 
 /*Encuesta estilo*/
 
