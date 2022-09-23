@@ -497,9 +497,23 @@
   bottom: initial;
 }
 
+.tarjetaSwiper {
+  padding: 0 50px;
+} 
+
 /* FIN ÍCONO DE VIDEOS */
 
 /* INICIO CSS MEDIA QUERIES */
+
+
+@media (min-width: 991px){
+  .tarjetaSwiper {
+    margin: 0 20%;
+  } 
+}
+
+
+
 @media (max-width: 768px) {
 
   /* TARJETAS SWIPER DESTACADAS */
