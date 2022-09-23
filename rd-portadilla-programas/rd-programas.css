@@ -359,6 +359,7 @@
 
 .bloque-programas .media_block .multimedia img {
   filter: brightness(70%);
+  border-radius: 5px;
 }
 
 .bloque-programas .media_block {
