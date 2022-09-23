@@ -512,6 +512,13 @@
   } 
 }
 
+@media (max-width: 320px){
+  .tarjetaSwiper {
+    padding: 0 30px;
+  } 
+}
+
+
 
 
 @media (max-width: 768px) {
