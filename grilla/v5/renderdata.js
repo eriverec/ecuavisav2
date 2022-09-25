@@ -29,10 +29,11 @@ let tercermas = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes',
 // document.write('hoy es '+ actualDay)
 if (ayer === 'Domingo') { anteayer = 'Sabado'; tercermenos = 'Viernes';}else{};
 if (ayer === 'Lunes') { tercermenos = 'Sabado';}else{};
-console.log('test dias: '+tercermenos);
+if (ayer === 'Viernes') { tercermas = 'Martes';}else{};
+console.log('test dias: '+ayer);
 //console.log('tercer mas es: '+getFecha(+3));
-document.querySelector("."+actualDay+'Tab').click(); // seteamos por defecto el día actual
-
+// document.querySelector("."+actualDay+'Tab').click(); // seteamos por defecto el día actual
+document.querySelector(".Tab4").click();
 // ##### FIN tab de días de la semana
 
 // selectores del dom
@@ -55,6 +56,9 @@ function renderProgramas(){
     // mainRender.innerHTML = (jsonProgramas);
     var _jsonDiaActual = [];
     var contador = 1;
+    var obtenerDia = { weekday: 'long' };
+    var obtenerDiaMes = { month: 'short', day: 'numeric' };
+
     // Inicio de recorrido de cada elemento 
     for (programIndex = 0; programIndex < programaItems; programIndex++) {
         // variables de programas
@@ -92,7 +96,7 @@ function renderProgramas(){
             // };
             // jsonDiaActual(programIndex); 
 
-            // dia de hoy
+            // ################dia de hoy
             if (fechahoy('fecha') === (programDate) ){
                 var contador = (contador)+1; //subimos el valor de contador para la clase unica
                 var programaData = { //objeto del programa
@@ -100,68 +104,68 @@ function renderProgramas(){
                     "HoradeFin" : programTimeEnd,
                     "HoradeInicio" : programTimeIni,
                     "Fecha" : programDate}   
-                    _jsonDiaActual.push(programaData); 
+                    _jsonDiaActual.push(programaData);
                  //   console.log(programaData);
-                // console.log('La hora del momento es :'+horahoy)
-                // console.log('La hora del progra  es :'+programTimeIni);
-                var fixitem = $('.programaItem').data('item');
-                    // if(horahoy < programTimeIni){
-                    //   console.log("Fecha actual es mayor");
-                    // }else{
-                    //   console.log("Fecha actual es menorrrrrrrrrrrrrrr ######");
-                    // }
-                    // console.log(horahoy,programTimeIni);
-
-                    // var fecha2 = new Date('1/1/1990 06:07'); 
-                    // var fecha1 = new Date('1/1/1990 05:12');
-                     
-                    // if(fecha2 <= fecha1) {return [false,'Hora final debe ser mayor a hora inicial']; }
-                    //  else {return [true,'']; }
-
-                    programas.appendTo('.'+actualDay); //metemos al dom el programa
+                    programas.appendTo('.Tab4data');
+            
+                    var todayx  = new Date().toLocaleDateString("es-ES", obtenerDiaMes);
+                    var hoyes  = new Date().toLocaleDateString("es-ES", obtenerDia);
+                    $('.Tab4').html('<h3>HOY</h3><br><h3>'+todayx+'</h3>');
+                     //metemos al dom el programa
             // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
             }else{ /*console.log('la fecha de hoy es '+fechahoy('fecha')+' y no coincide con '+programDate);*/ }
 
-            // ayer
+            // ################### ayer
             if (getFecha(-1) === (programDate) ){
-                    programas.appendTo('.'+ayer); //metemos al dom el programa
-                 /*console.log( 'Ayer fue: '+ getFecha(-1) +' y coincide con: '+programDate )*/
+                var ayer  = new Date(getFecha(-0)).toLocaleDateString("es-ES", obtenerDia);
+                    programas.appendTo('.Tab3data'); //metemos al dom el programa
+                    $('.Tab3').html('<h3>Ayer</h3><br><h3>'+ayer+'</h3>');
+                    $('.Tab3').parent('li').addClass('hidden');
+                /* console.log( 'Ayer fue: '+ getFecha(-1) +' y coincide con: '+ayer )*/
             }else{ /*console.log('Ayer fue: '+ getFecha(-1) +' y no coincide con: '+programDate) */}
-            // anteayer
+            // ################### anteayer
             if (getFecha(-2) === (programDate) ){
                 // var fixitem = $('.programaItem').data('item');
                 // if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).remove() }else{};
-            // programas.appendTo('.'+anteayer.toLowerCase());
-                programas.appendTo('.'+anteayer);
+                // programas.appendTo('.'+anteayer.toLowerCase());
+                var anteayer  = new Date(getFecha(-1)).toLocaleDateString("es-ES", obtenerDia);
+                programas.appendTo('.Tab2data'); //metemos al dom el programa
+                $('.Tab2').html('<h3>'+anteayer+'</h3><br><h3>'+programDate+'</h3>');
+                $('.Tab2').parent('li').addClass('hidden');
+                // programas.appendTo('.Tab2data');
             // console.log('Anteayer fue: '+ getFecha(-2) +' coincide con: '+programDate) 
             }else{ /*console.log('Anteayer fue: '+ getFecha(-2) +' y no coincide con: '+programDate) */ }
-            // tercermenos
+            // ###################  tercermenos
             if (getFecha(-3) === (programDate) ){
-                var fixitem = $('.programaItem').data('item');
-                if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).remove() }else{};
-                programas.appendTo('.'+tercermenos);
-            // programas.appendTo('.'+tercermenos.toLowerCase());
+                var tercermenos  = new Date(getFecha(-2)).toLocaleDateString("es-ES", obtenerDia);
+                programas.appendTo('.Tab1data'); //metemos al dom el programa
+                $('.Tab1').html('<h3>'+tercermenos+'</h3><br><h3>'+programDate+'</h3>');
+                $('.Tab1').parent('li').addClass('hidden');
             }else{ }
-            // manana
+            // ###################  manana
             if (getFecha(+1) === (programDate) ){
-                var fixitem = $('.programaItem').data('item');
-                if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).remove() }else{};
-            // programas.appendTo('.'+manana.toLowerCase());
-            programas.appendTo('.'+manana);
+                var mananaDate  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDiaMes);
+                var manana  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDia);
+                programas.appendTo('.Tab5data'); //metemos al dom el programa
+                $('.Tab5').html('<h3>MAÑANA</h3><br><h3>'+mananaDate+'</h3>');
+                // $('.Tab1').parent('li').addClass('hidden');
+
             }else{ }
-            // pasadomanana
+            // ###################  pasadomanana
             if (getFecha(+2) === (programDate) ){
-                var fixitem = $('.programaItem').data('item');
-                if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).remove() }else{};
-            programas.appendTo('.'+pasadomanana);
-            // console.log('Pasadomañana es: '+ getFecha(+2) +' coincide con: '+programDate); 
+                var pmananaDate  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDiaMes);
+                var pmanana  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDia);
+                programas.appendTo('.Tab6data'); //metemos al dom el programa
+                $('.Tab6').html('<h3>'+pmanana+'</h3><br><h3>'+pmananaDate+'</h3>');
+            
             }else{/*console.log('Pasadomañana es: '+ getFecha(+2) +' y no coincide con: '+programDate) */  }
-            // tercermas
+            // ###################  tercermas
             if (getFecha(+3) === (programDate) ){
-                var fixitem = $('.programaItem').data('item');
-                if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).remove() }else{};
-                // console.log('tercer mas es '+pasadomanana)
-            programas.appendTo('.'+tercermas);
+                var tercermasDate  = new Date(getFecha(+4)).toLocaleDateString("es-ES", obtenerDiaMes);
+                var tercermas  = new Date(getFecha(+4)).toLocaleDateString("es-ES", obtenerDia);
+                programas.appendTo('.Tab7data'); //metemos al dom el programa
+                $('.Tab7').html('<h3>'+tercermas+'</h3><br><h3>'+tercermasDate+'</h3>');
+                $('.Tab7').parent('li').addClass('hidden');
             }else{ }
 
         }else{};

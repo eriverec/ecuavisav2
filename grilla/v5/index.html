@@ -49,19 +49,22 @@
             position: absolute;
             top: 20%;
         }
+        #tabs li {
+            width: inherit;
+        }
     </style>
 </head>
 <body>
 
     <!-- Tabs  -->
     <ul id="tabs" class="inline-flex w-full py-2 overflow-auto">
-        <li class="p-2 mr-1 py-2 -mb-px font-semibold text-gray-800 border-blue-400 bg-neutral-300 opacity-100"><a class="LunesTab" id="default-tab" href="#lunes">Lunes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="MartesTab" href="#martes">Martes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-900 bg-neutral-300 opacity-100"><a class="MiercolesTab" href="#miercoles">Miércoles</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="JuevesTab" href="#jueves">Jueves</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="ViernesTab" href="#viernes">Viernes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="SabadoTab" href="#sabado">Sábado</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100"><a class="DomingoTab" href="#domingo">Domingo</a></li>
+        <li class="p-2 mr-1 py-2 -mb-px font-semibold text-gray-800 border-blue-400 bg-neutral-300 opacity-100 day1"><a class="Tab1" id="default-tab" href="#lunes">Lunes</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100 day2"><a class="Tab2" href="#martes">Martes</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-900 bg-neutral-300 opacity-100 day3"><a class="Tab3" href="#miercoles">Miércoles</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100 day4"><a class="Tab4" href="#jueves">Jueves</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100 day5"><a class="Tab5" href="#viernes">Viernes</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100 day6"><a class="Tab6" href="#sabado">Sábado</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100 day7"><a class="Tab7" href="#domingo">Domingo</a></li>
     </ul>
     <table class="puredata hidden"> </table> <!-- no borrar - core de datos  -->
     
@@ -69,7 +72,7 @@
     <div id="tab-contents" class=" ">
         <div id="lunes" class="px-2">
             <table class="bg-white rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Lunes"> </tbody>
+                <tbody id="programlist2" class="programList lunes Tab1data"> </tbody>
                 <!--     <tr><td class="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center">
                             <img src="" alt="">
                             <p class="ml-3 text-gray-900 whitespace-no-wrap"> televistazo - 11:00 </p>
@@ -82,7 +85,7 @@
 
         <div id="martes" class="hidden">
             <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Martes">
+                <tbody id="programlist2" class="programList martes Tab2data">
                 </tbody>
             </table>
         </div>
@@ -90,76 +93,28 @@
         <div id="miercoles" class="hidden">
 
             <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Miercoles"> </tbody>
+                <tbody id="programlist2" class="programList miercoles Tab3data"> </tbody>
             </table>
         </div>
 
         <div id="jueves" class="hidden">
-<!--             <div class="hourtabs pb-2">
-                <input type="radio" name="tabs" id="00-03" checked="checked">
-                <label for="00-03">00-03</label> <div class="tab"> <h1>00-03</h1> </div>
-
-                <input type="radio" name="tabs" id="03-06">
-                <label for="03-06">03-06</label> <div class="tab">  <h1>03-06</h1> </div>
-
-                <input type="radio" name="tabs" id="06-09">
-                <label for="06-09">06-09</label> <div class="tab"> <h1>06-09</h1> </div>
-
-                <input type="radio" name="tabs" id="09-12">
-                <label for="09-12">09-12</label> <div class="tab"> <h1>09-12</h1> </div>
-
-                <input type="radio" name="tabs" id="12-15">
-                <label for="12-15">12-15</label> <div class="tab"> <h1>12-15</h1> </div>  
-
-                <input type="radio" name="tabs" id="15-18">
-                <label for="15-18">15-18</label> <div class="tab"> <h1>15-18</h1> </div>
-
-                <input type="radio" name="tabs" id="18-21">
-                <label for="18-21">18-21</label> <div class="tab"> <h1>18-21</h1> </div>
-
-                <input type="radio" name="tabs" id="21-00">
-                <label for="21-00">21-00</label> <div class="tab"> <h1>21-00</h1> </div>                         
-            </div>
-
-            <div class="hourtabs my-2">
-                <input type="radio" name="tabs" id="09-12">
-                <label for="09-12">00:00</label> 
-
-                <input type="radio" name="tabs" id="00-03">
-                <label for="00-03">00:30</label> 
-
-                <input type="radio" name="tabs" id="03-06">
-                <label for="03-06">01:00</label> 
-
-                <input type="radio" name="tabs" id="06-09">
-                <label for="06-09">01:30</label> 
-
-                <input type="radio" name="tabs" id="12-15">
-                <label for="12-15">02:00</label>   
-
-                <input type="radio" name="tabs" id="15-18">
-                <label for="15-18">02:30</label> 
-
-                <input type="radio" name="tabs" id="18-21">
-                <label for="18-21">03:00</label>                     
-            </div> -->
             <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Jueves"> </tbody>
+                <tbody id="programlist2" class="programList Jueves Tab4data"> </tbody>
             </table>
         </div>
         <div id="viernes" class="hidden">
             <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Viernes"> </tbody>
+                <tbody id="programlist2" class="programList viernes Tab5data"> </tbody>
             </table>
         </div>     
         <div id="sabado" class="hidden">
             <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList sabado Sabado"> </tbody>
+                <tbody id="programlist2" class="programList sábado Tab6data"> </tbody>
             </table>
         </div>    
         <div id="domingo" class="hidden">
             <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Domingo"> </tbody>
+                <tbody id="programlist2" class="programList domingo Tab7data"> </tbody>
             </table>
         </div>   
     </div>
@@ -214,6 +169,10 @@ function getFecha( dias){
   var diaObtenido = d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+(d.getDate())).slice(-2) ;
     return diaObtenido
 }
+
+
+
+
 // console.log('funcionNueva es '+getFecha( -2)); // probar getfecha
     
 
