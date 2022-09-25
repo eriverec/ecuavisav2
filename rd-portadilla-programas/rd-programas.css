@@ -275,6 +275,10 @@
   background: #2927B9;
 }
 
+.tarjetaSwiper .noticias article .media_block .text_block .article-section {
+  display: none;
+}
+
 .tarjetaSwiper a h3 {
   font-family: 'Archivo';
   font-style: normal;
