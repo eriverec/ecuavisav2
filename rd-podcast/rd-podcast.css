@@ -35,7 +35,7 @@
   position: relative;
 }
 
-.temas_destacados .noticias .article{
+.temas_destacados .noticias .article {
   border-radius: 5px;
 }
 
@@ -48,17 +48,29 @@
   padding: 7rem 1rem 1.5rem;
 }
 
+.temas_destacados .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a span {
+  z-index: 99;
+  background-image: url('https://ecuavisadev.netlify.app/rd-podcast/assets/iconpodcast.svg') !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%);
+}
+
 .temas_destacados .noticias .article .media_block .text_block .headline a h2 {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 500;
   font-size: 18px;
-  line-height: 26px;  
+  line-height: 26px;
   color: #FFFFFF;
 }
 
 .temas_destacados .noticias .article .media_block .text_block .article-section {
   display: none;
+}
+
+.title-destacada {
+  margin: 30px 0;
 }
 
 .title-destacada h2 {
