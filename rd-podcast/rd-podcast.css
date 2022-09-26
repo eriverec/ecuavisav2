@@ -50,6 +50,8 @@
 
 .temas_destacados .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a span {
   z-index: 99;
+  background-size: 45px;
+  height: 55px !important;
   background-image: url('https://ecuavisadev.netlify.app/rd-podcast/assets/iconpodcast.svg') !important;
   top: 50% !important;
   left: 50% !important;
