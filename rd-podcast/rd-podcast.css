@@ -43,3 +43,15 @@
 .temas_destacados .noticias .article .media_block .text_block .article-section {
   display: none;
 }
+
+
+.temas_destacados {
+  padding: 0 50px;
+}
+
+
+@media (min-width: 991px) {
+  .temas_destacados {
+    margin: 0 20%;
+  }
+}
