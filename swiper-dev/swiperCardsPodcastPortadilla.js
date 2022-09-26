@@ -1,6 +1,6 @@
 setTimeout(function () {
-  var classListaPodcastPor = document.querySelectorAll('.temas_destacados');
-  var classListaPodcastPorNot = document.querySelectorAll('.temas_destacados .noticias');
+  var classListaPodcastPor = document.querySelector('.temas_destacados');
+  var classListaPodcastPorNot = document.querySelector('.temas_destacados .noticias');
   var classListaPodcastPorNotArt = document.querySelectorAll('.temas_destacados .noticias article');
 
   classListaPodcastPor.classList.add('swiper');
