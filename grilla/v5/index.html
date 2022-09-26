@@ -5,10 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parrilla ecuavisa </title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
     <style>
+        body{
+            background: #060127;
+            font-family: 'Archivo', sans-serif;
+        }
         td { border: 1px solid blue; }
+        .bg-ecuavisa{
+            background: #060127;
+        }
         .hourtabs {
     /*      display: flex;
             flex-wrap: wrap;*/
@@ -16,6 +26,14 @@
             /* flex-wrap: wrap; */
             /* width: fit-content; */
             overflow: auto;
+        }
+        .datafont{
+            font-family: 'Archivo', sans-serif;
+        }
+        .daround{
+            /*display: flex;*/
+            /*justify-content: space-around;*/
+            /*flex-direction: row-reverse;*/
         }
         .hourtabs label {
             order: 1;
@@ -52,39 +70,54 @@
         #tabs li {
             width: inherit;
         }
+        #tabs li a h3 {
+            text-transform: uppercase;
+        }
     </style>
 </head>
 <body>
 
     <!-- Tabs  -->
-    <ul id="tabs" class="inline-flex w-full py-2 overflow-auto">
-        <li class="p-2 mr-1 py-2 -mb-px font-semibold text-gray-800 border-blue-400 bg-neutral-300 opacity-100 day1"><a class="Tab1" id="default-tab" href="#lunes">Lunes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100 day2"><a class="Tab2" href="#martes">Martes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-900 bg-neutral-300 opacity-100 day3"><a class="Tab3" href="#miercoles">Miércoles</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100 day4"><a class="Tab4" href="#jueves">Jueves</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100 day5"><a class="Tab5" href="#viernes">Viernes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100 day6"><a class="Tab6" href="#sabado">Sábado</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-gray-800 bg-neutral-300 opacity-100 day7"><a class="Tab7" href="#domingo">Domingo</a></li>
+    <ul id="tabs" class="inline-flex w-full pt-2 overflow-auto">
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-900 opacity-100  flex text-center justify-center items-center day1"><a class="Tab1" id="default-tab" href="#lunes">Lunes</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-900 opacity-100  flex text-center justify-center items-center day2"><a class="Tab2" href="#martes">Martes</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-900 opacity-100 flex text-center justify-center items-center day3"><a class="Tab3" href="#miercoles">Miércoles</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-900 opacity-100 flex text-center justify-center items-center day4"><a class="Tab4" href="#jueves">Jueves</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-900 opacity-100 flex text-center justify-center items-center day5"><a class="Tab5" href="#viernes">Viernes</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-900 opacity-100 flex text-center justify-center items-center day6"><a class="Tab6" href="#sabado">Sábado</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-900 opacity-100 flex text-center justify-center items-center day7"><a class="Tab7" href="#domingo">Domingo</a></li>
     </ul>
     <table class="puredata hidden"> </table> <!-- no borrar - core de datos  -->
     
     <!-- Tab Contents -->
     <div id="tab-contents" class=" ">
         <div id="lunes" class="px-2">
-            <table class="bg-white rounded-md w-full min-w-full leading-normal">
+            <table class=" rounded-md w-full min-w-full leading-normal">
+                <!-- cabecera  -->
+                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
+                    <td class="px-5 w-1/4 py-2 border-0 text-zinc-200"><p>Hora</p></td>
+                    <td class="w-3/4 py-2 border-0 text-zinc-200"><p> Programación</p> </td>
+                </tr></tbody>
+                <!-- Fin cabecera  -->
                 <tbody id="programlist2" class="programList lunes Tab1data"> </tbody>
-                <!--     <tr><td class="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center">
+                <!--     <tr><td class="px-5 py-5 border-b border-gray-200  text-sm flex items-center">
                             <img src="" alt="">
                             <p class="ml-3 text-gray-900 whitespace-no-wrap"> televistazo - 11:00 </p>
                         </td>
-                        <td class="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                        <td class="px-5 py-5 border-b border-gray-200  text-sm">
                             <span class="bg-green-200">Activo</span>
                         </td> </tr> -->
             </table>
         </div>
 
         <div id="martes" class="hidden">
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
+            <table class="  rounded-md w-full min-w-full leading-normal">
+                <!-- cabecera  -->
+                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
+                    <td class="px-5 w-1/4 py-2 border-0 text-zinc-200"><p>Hora</p></td>
+                    <td class="w-3/4 py-2 border-0 text-zinc-200"><p> Programación</p> </td>
+                </tr></tbody>
+                <!-- Fin cabecera  -->
                 <tbody id="programlist2" class="programList martes Tab2data">
                 </tbody>
             </table>
@@ -92,28 +125,61 @@
 
         <div id="miercoles" class="hidden">
 
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
+            <table class="  rounded-md w-full min-w-full leading-normal">
+                <!-- cabecera  -->
+                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
+                    <td class="px-5 w-1/4 py-2 border-0 text-zinc-200"><p>Hora</p></td>
+                    <td class="w-3/4 py-2 border-0 text-zinc-200"><p> Programación</p> </td>
+                </tr></tbody>
+                <!-- Fin cabecera  -->
                 <tbody id="programlist2" class="programList miercoles Tab3data"> </tbody>
             </table>
         </div>
 
         <div id="jueves" class="hidden">
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
-                <tbody id="programlist2" class="programList Jueves Tab4data"> </tbody>
+            <table class=" px-3  rounded-md w-full min-w-full leading-normal">
+                <!-- cabecera  -->
+                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
+                <td class="px-5 w-1/4 py-2 border-0 text-zinc-200"><p>Hora</p></td>
+                <td class="w-3/4 py-2 border-0 text-zinc-200"><p> Programación</p> </td>
+                </tr></tbody> 
+                <!-- Fin cabecera  -->
+                <tbody id="programlist2" class=" programList Jueves Tab4data"> </tbody>
             </table>
         </div>
+
         <div id="viernes" class="hidden">
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
+            <table class="  rounded-md w-full min-w-full leading-normal">
+                <!-- cabecera  -->
+                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
+                    <td class="px-5 w-1/4 py-2 border-0 text-zinc-200"><p>Hora</p></td>
+                    <td class="w-3/4 py-2 border-0 text-zinc-200"><p> Programación</p> </td>
+                </tr></tbody>
+                <!-- Fin cabecera  -->
                 <tbody id="programlist2" class="programList viernes Tab5data"> </tbody>
             </table>
-        </div>     
+        </div>
+
         <div id="sabado" class="hidden">
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
+            <table class="  rounded-md w-full min-w-full leading-normal">
+                <!-- cabecera  -->
+                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
+                    <td class="px-5 w-1/4 py-2 border-0 text-zinc-200"><p>Hora</p></td>
+                    <td class="w-3/4 py-2 border-0 text-zinc-200"><p> Programación</p> </td>
+                </tr></tbody>
+                <!-- Fin cabecera  -->
                 <tbody id="programlist2" class="programList sábado Tab6data"> </tbody>
             </table>
-        </div>    
+        </div>   
+
         <div id="domingo" class="hidden">
-            <table class="bg-white  rounded-md w-full min-w-full leading-normal">
+            <table class="  rounded-md w-full min-w-full leading-normal">
+                <!-- cabecera  -->
+                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
+                    <td class="px-5 w-1/4 py-2 border-0 text-zinc-200"><p>Hora</p></td>
+                    <td class="w-3/4 py-2 border-0 text-zinc-200"><p> Programación</p> </td>
+                </tr></tbody>
+                <!-- Fin cabecera  -->
                 <tbody id="programlist2" class="programList domingo Tab7data"> </tbody>
             </table>
         </div>   

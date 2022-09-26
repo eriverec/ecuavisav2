@@ -9,11 +9,11 @@ tabTogglers.forEach(function(toggler) {
         let tabContents = document.querySelector("#tab-contents");
 
         for (let i = 0; i < tabContents.children.length; i++) {
-            tabTogglers[i].parentElement.classList.remove("border-blue-400", "bg-blue-600",  "-mb-px", "text-zinc-50");  tabContents.children[i].classList.remove("hidden");
+            tabTogglers[i].parentElement.classList.remove("border-blue-400", "bg-blue-700", "text-zinc-100");  tabContents.children[i].classList.remove("hidden");
             if ("#" + tabContents.children[i].id === tabName) { continue; }
             tabContents.children[i].classList.add("hidden");
         }
-        e.target.parentElement.classList.add("border-blue-400", "bg-blue-600", "-mb-px", "text-zinc-50");
+        e.target.parentElement.classList.add("border-blue-400", "bg-blue-700", "text-zinc-100");
     });
 });
 // Obtenemos el día actual
@@ -68,18 +68,24 @@ function renderProgramas(){
         var programDate= _jsonProgramas[programIndex].fecha//.replace('-0', '-'); //revisar si presenta problemas en horario
         var programTimeIni= _jsonProgramas[programIndex].hora_inicio.replace(_jsonProgramas[programIndex].fecha, '');
         var programTimeEnd= _jsonProgramas[programIndex].hora_fin.replace(_jsonProgramas[programIndex].fecha, '');
-        var hiddenInactive= 'hidden';
-        var ActualClass= 'px-4 py-4 text-zinc-50 bg-white text-sm flex items-center'
+        var showActive= 'bg-indigo-700';
+        var ActualClass= 'px-4 py-4 text-zinc-50 bg-ecuavisa text-sm flex items-center'
         var imgs= 'https://via.placeholder.com/70'
         var programas= $(`
-            <tr class="programaItem el-${contador}" data-item="${programName}${programTimeIni}">
-                <td class="border-b border-gray-100 bg-white text-sm flex items-center">
-                    <img src="${imgs}" alt="">
-                    <p class="p-2 ml-3 text-gray-900 whitespace-no-wrap"> ${programName} - ${programTimeIni} </p>
+            <tr class=" programaItem el-${contador}" data-item="${programName}${programTimeIni}">
+                
+                <td class="px-0 pl-3 py-3 text-center border-0 bg-ecuavisa text-sm w-1/4 items-center text-zinc-300">
+                    <p class=" border-b-4 border-zinc-500 py-5 text-center whitespace-no-wrap datafont">
+                        <b>${programTimeIni}</b> <br>
+                        mins
+                    </p>
                 </td>
-                <td class="px-4 py-4 border-b border-gray-100 bg-white text-sm hidden">
-                    <span class="bg-green-200">Activo</span>
+                <td class="px-0 pr-3 py-3 border-0 bg-ecuavisa text-sm  w-3/4 items-center">
+                    <p class=" border-b-4 border-zinc-500 py-5 px-3 border-0 text-zinc-300 ${showActive} whitespace-no-wrap datafont">
+                    <b>${programName}</b> <br> ${programTimeIni}
+                    </p>
                 </td>
+                
             </tr>       
         `);
 
@@ -110,7 +116,7 @@ function renderProgramas(){
             
                     var todayx  = new Date().toLocaleDateString("es-ES", obtenerDiaMes);
                     var hoyes  = new Date().toLocaleDateString("es-ES", obtenerDia);
-                    $('.Tab4').html('<h3>HOY</h3><br><h3>'+todayx+'</h3>');
+                    $('.Tab4').html('<h3>HOY</h3><p>'+todayx+'</p>');
                      //metemos al dom el programa
             // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
             }else{ /*console.log('la fecha de hoy es '+fechahoy('fecha')+' y no coincide con '+programDate);*/ }
@@ -119,7 +125,7 @@ function renderProgramas(){
             if (getFecha(-1) === (programDate) ){
                 var ayer  = new Date(getFecha(-0)).toLocaleDateString("es-ES", obtenerDia);
                     programas.appendTo('.Tab3data'); //metemos al dom el programa
-                    $('.Tab3').html('<h3>Ayer</h3><br><h3>'+ayer+'</h3>');
+                    $('.Tab3').html('<h3>Ayer</h3><br><p'+ayer+'</p');
                     $('.Tab3').parent('li').addClass('hidden');
                 /* console.log( 'Ayer fue: '+ getFecha(-1) +' y coincide con: '+ayer )*/
             }else{ /*console.log('Ayer fue: '+ getFecha(-1) +' y no coincide con: '+programDate) */}
@@ -130,7 +136,7 @@ function renderProgramas(){
                 // programas.appendTo('.'+anteayer.toLowerCase());
                 var anteayer  = new Date(getFecha(-1)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab2data'); //metemos al dom el programa
-                $('.Tab2').html('<h3>'+anteayer+'</h3><br><h3>'+programDate+'</h3>');
+                $('.Tab2').html('<h3>'+anteayer+'</h3><p>'+programDate+'</p>');
                 $('.Tab2').parent('li').addClass('hidden');
                 // programas.appendTo('.Tab2data');
             // console.log('Anteayer fue: '+ getFecha(-2) +' coincide con: '+programDate) 
@@ -139,7 +145,7 @@ function renderProgramas(){
             if (getFecha(-3) === (programDate) ){
                 var tercermenos  = new Date(getFecha(-2)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab1data'); //metemos al dom el programa
-                $('.Tab1').html('<h3>'+tercermenos+'</h3><br><h3>'+programDate+'</h3>');
+                $('.Tab1').html('<h3>'+tercermenos+'</h3><h3>'+programDate+'</h3>');
                 $('.Tab1').parent('li').addClass('hidden');
             }else{ }
             // ###################  manana
@@ -147,7 +153,7 @@ function renderProgramas(){
                 var mananaDate  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var manana  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab5data'); //metemos al dom el programa
-                $('.Tab5').html('<h3>MAÑANA</h3><br><h3>'+mananaDate+'</h3>');
+                $('.Tab5').html('<h3>MAÑANA</h3><p>'+mananaDate+'</p>');
                 // $('.Tab1').parent('li').addClass('hidden');
 
             }else{ }
@@ -156,7 +162,7 @@ function renderProgramas(){
                 var pmananaDate  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var pmanana  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab6data'); //metemos al dom el programa
-                $('.Tab6').html('<h3>'+pmanana+'</h3><br><h3>'+pmananaDate+'</h3>');
+                $('.Tab6').html('<h3>'+pmanana+'</h3><p>'+pmananaDate+'</p>');
             
             }else{/*console.log('Pasadomañana es: '+ getFecha(+2) +' y no coincide con: '+programDate) */  }
             // ###################  tercermas
