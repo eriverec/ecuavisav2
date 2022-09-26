@@ -44,7 +44,7 @@
   bottom: 0;
   padding: 0.5rem 1rem;
   width: 100%;
-  background-image: -webkit-linear-gradient(bottom, #060127 50%, #ffffff00 100%);
+  background-image: -webkit-linear-gradient(bottom, #060127 25%, #ffffff00 100%);
   padding: 7rem 1rem 1.5rem;
 }
 
