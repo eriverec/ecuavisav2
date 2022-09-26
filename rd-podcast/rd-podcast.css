@@ -103,3 +103,46 @@
 }
 
 
+/*************************
+*****MAS ESCUCHADOS*****
+*************************/
+
+
+.masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr;
+  justify-items: center;
+  align-items: center;
+}
+
+.masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .multimedia {
+  width: 100%;
+}
+
+.masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .multimedia img {
+  border-radius: 50%;
+}
+
+.masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .multimedia .multimediaIconMacroWrapper a span{
+  display: none;
+}
+
+.masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .pod_icon_play img {
+  width: 37px;
+}
+
+.masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .pod_icon_play {
+  text-align: end;
+  display: block;
+}
+
+.masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .text_block .headline a h2 {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  color: #060127;
+  margin: auto;
+  width: min-content;
+}
