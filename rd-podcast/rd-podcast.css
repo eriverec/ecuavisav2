@@ -44,12 +44,11 @@
   bottom: 0;
   padding: 0.5rem 1rem;
   width: 100%;
-  /* background-image: -webkit-linear-gradient(bottom, #060127 25%, #ffffff00 100%); */
+  background-image: -webkit-linear-gradient(bottom, #060127 25%, #ffffff00 100%);
   padding: 7rem 1rem 1.5rem;
 }
 
 .temas_destacados .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div {
-  /* background-image: -webkit-linear-gradient(bottom, #242424 50%, white 65%); */
   background-image: -webkit-linear-gradient(bottom, #242424 50%, white 100%);
 }
 
@@ -57,7 +56,6 @@
   height: 100% !important;
   width: 100% !important;
   object-fit: contain;
-  /* -webkit-mask-image: linear-gradient(to top, transparent 0, #242424 60%); */
   -webkit-mask-image: linear-gradient(to top, transparent 0, #242424 75%);
 }
 
