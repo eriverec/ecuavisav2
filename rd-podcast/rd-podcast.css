@@ -27,19 +27,19 @@
 *****TEMAS DESTACADOS*****
 *************************/
 
-.temas_destacados {
+.temas_destacados_swiper {
   padding: 0 50px;
 }
 
-.temas_destacados .noticias .article .media_block {
+.temas_destacados_swiper .noticias .article .media_block {
   position: relative;
 }
 
-.temas_destacados .noticias .article {
+.temas_destacados_swiper .noticias .article {
   border-radius: 5px;
 }
 
-.temas_destacados .noticias .article .media_block .text_block {
+.temas_destacados_swiper .noticias .article .media_block .text_block {
   position: absolute;
   bottom: 0;
   padding: 0.5rem 1rem;
@@ -48,18 +48,18 @@
   padding: 7rem 1rem 1.5rem;
 }
 
-.temas_destacados .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div {
+.temas_destacados_swiper .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div {
   background-image: -webkit-linear-gradient(bottom, #242424 50%, white 100%);
 }
 
-.temas_destacados .noticias .article .media_block .multimedia img {
+.temas_destacados_swiper .noticias .article .media_block .multimedia img {
   height: 100% !important;
   width: 100% !important;
   object-fit: contain;
   -webkit-mask-image: linear-gradient(to top, transparent 0, #242424 75%);
 }
 
-.temas_destacados .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a span {
+.temas_destacados_swiper .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a span {
   z-index: 99;
   background-size: 45px;
   height: 55px !important;
@@ -69,7 +69,7 @@
   transform: translate(-50%, -50%);
 }
 
-.temas_destacados .noticias .article .media_block .text_block .headline a h2 {
+.temas_destacados_swiper .noticias .article .media_block .text_block .headline a h2 {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 500;
@@ -78,7 +78,7 @@
   color: #FFFFFF;
 }
 
-.temas_destacados .noticias .article .media_block .text_block .article-section {
+.temas_destacados_swiper .noticias .article .media_block .text_block .article-section {
   display: none;
 }
 
@@ -103,7 +103,7 @@
 
 
 @media (min-width: 991px) {
-  .temas_destacados {
+  .temas_destacados_swiper {
     margin: 0 20%;
   }
 }
