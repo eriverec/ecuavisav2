@@ -116,7 +116,7 @@ function renderProgramas(){
             
                     var todayx  = new Date().toLocaleDateString("es-ES", obtenerDiaMes);
                     var hoyes  = new Date().toLocaleDateString("es-ES", obtenerDia);
-                    $('.Tab4').html('<h3>HOY</h3><p>'+todayx+'</p>');
+                    $('.Tab4').html('HOY<br>'+todayx+' ');
                      //metemos al dom el programa
             // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
             }else{ /*console.log('la fecha de hoy es '+fechahoy('fecha')+' y no coincide con '+programDate);*/ }
@@ -153,7 +153,7 @@ function renderProgramas(){
                 var mananaDate  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var manana  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab5data'); //metemos al dom el programa
-                $('.Tab5').html('<h3>MAÑANA</h3><p>'+mananaDate+'</p>');
+                $('.Tab5').html('MAÑANA<br>'+mananaDate+' ');
                 // $('.Tab1').parent('li').addClass('hidden');
 
             }else{ }
@@ -162,7 +162,7 @@ function renderProgramas(){
                 var pmananaDate  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var pmanana  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab6data'); //metemos al dom el programa
-                $('.Tab6').html('<h3>'+pmanana+'</h3><p>'+pmananaDate+'</p>');
+                $('.Tab6').html(''+pmanana+'<br>'+pmananaDate+'');
             
             }else{/*console.log('Pasadomañana es: '+ getFecha(+2) +' y no coincide con: '+programDate) */  }
             // ###################  tercermas
