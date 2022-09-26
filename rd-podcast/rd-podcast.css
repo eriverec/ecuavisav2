@@ -111,7 +111,7 @@
 .masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block {
   display: grid;
   grid-template-columns: 2fr 2fr 1fr;
-  justify-items: center;
+  justify-items: stretch;
   align-items: center;
 }
 
@@ -121,10 +121,18 @@
 
 .masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .multimedia img {
   border-radius: 50%;
+  border: 5px solid #D9D9D9;
+  padding: 5px;
 }
 
-.masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .multimedia .multimediaIconMacroWrapper a span{
+.masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .multimedia .multimediaIconMacroWrapper a span {
   display: none;
+}
+
+.masEscuchados .iter-tabview-content-item .element {
+  margin-bottom: 25px;
+  padding-bottom: 25px;
+  border-bottom: 2px solid #2927B9;
 }
 
 .masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .pod_icon_play img {
