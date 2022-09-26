@@ -28,7 +28,7 @@
 *************************/
 
 .temas_destacados_swiper {
-  padding: 0 50px;
+  padding: 0 50px !important;
 }
 
 .temas_destacados_swiper .noticias .article .media_block {
@@ -104,6 +104,6 @@
 
 @media (min-width: 991px) {
   .temas_destacados_swiper {
-    margin: 0 20%;
+    margin: 0 20% ;
   }
 }
