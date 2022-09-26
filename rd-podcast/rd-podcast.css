@@ -135,6 +135,10 @@
   border-bottom: 2px solid #2927B9;
 }
 
+.masEscuchados .iter-widget .iter-tabview-content .iter-rankingtab-mostviewed-hd {
+  display: none;
+}
+
 .masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .pod_icon_play img {
   width: 37px;
 }
