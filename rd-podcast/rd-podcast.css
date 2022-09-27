@@ -188,6 +188,7 @@
   text-align: center;
   transform: translate(-50%, 10px);
   left: 50%;
+  padding: 30px 0;
 }
 
 .pod_general .pod_sup .pod_play {
@@ -196,6 +197,10 @@
   transform: translate(-50%, -50%);
   left: 50%;
   top: 50%;
+}
+
+.pod_general .pod_sup .pod_play img {
+  width: 60px;
 }
 
 .pod_general .pod_fondo img {
@@ -208,15 +213,34 @@
   left: 50%;
   transform: translate(-50%, 0px);
   padding: 30px 0;
+  text-align: center;
 }
 
 .pod_general .pod_inf h3 {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  text-align: center;
   color: #FFFFFF;
+  margin: 0;
+}
+
+.pod_general .pod_inf .pod_texto {
+  margin-bottom: 15px;
+}
+
+.pod_general .pod_inf .pod_boton {
+  display: flex;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  gap: 20px;
 }
 
 .pod_general .pod_inf .pod_boton a {
   background: #23DCD1;
-  padding: 10px;
   font-family: 'Mattone 150';
   font-style: normal;
   font-weight: 600;
@@ -225,4 +249,20 @@
   text-align: center;
   text-transform: uppercase;
   color: #2927B9;
+  text-decoration: none;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 20px;
+  gap: 10px;
+  width: 139.85px;
+  height: 32px;
+  background: #23DCD1;
+  border: 1px solid #23DCD1;
+  border-radius: 2px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
 }
