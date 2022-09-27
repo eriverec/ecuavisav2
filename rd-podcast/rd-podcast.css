@@ -213,3 +213,16 @@
 .pod_general .pod_inf h3 {
   color: #FFFFFF;
 }
+
+.pod_general .pod_inf .pod_boton a {
+  background: #23DCD1;
+  padding: 10px;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 12px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #2927B9;
+}
