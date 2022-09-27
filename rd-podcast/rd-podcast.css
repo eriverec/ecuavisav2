@@ -284,6 +284,54 @@
   flex-grow: 0;
 }
 
+/* ITEMS */
+.pod_items .PODCAST_MAS_ESCUCHADOS .media_block {
+  display: grid;
+  grid-template-columns: 2fr 2fr 1fr;
+  justify-items: stretch;
+  align-items: center;
+}
+
+.pod_items .PODCAST_MAS_ESCUCHADOS .media_block .multimedia {
+  width: 100%;
+}
+
+.pod_items .PODCAST_MAS_ESCUCHADOS .media_block .multimedia img {
+  border-radius: 50%;
+  border: 5px solid #D9D9D9;
+  padding: 5px;
+}
+
+.pod_items .PODCAST_MAS_ESCUCHADOS .media_block .multimedia .multimediaIconMacroWrapper a span {
+  display: none;
+}
+
+.pod_items .noticias article {
+  margin-bottom: 25px;
+  padding-bottom: 25px;
+  border-bottom: 2px solid #2927B9;
+}
+
+.pod_items .PODCAST_MAS_ESCUCHADOS .media_block .pod_icon_play img {
+  width: 37px;
+}
+
+.pod_items .PODCAST_MAS_ESCUCHADOS .media_block .pod_icon_play {
+  text-align: end;
+  display: block;
+}
+
+.pod_items .PODCAST_MAS_ESCUCHADOS .media_block .text_block .headline a h2 {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  color: #060127;
+  margin: auto;
+  width: min-content;
+}
+
 
 @media (max-width: 767px) {
   .layout_podcast_portadilla .row.r05 #not-actualidad,
