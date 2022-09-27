@@ -174,8 +174,12 @@
 
 
 /*************************
-*****ACTUALIDAD*****
+*****MINI PORTADA ACTUALIDAD Y ENTRETENIMIENTO*****
 *************************/
+
+.layout_podcast_portadilla .row.r05 {
+  margin: 0;
+}
 
 
 
@@ -278,4 +282,12 @@
   flex: none;
   order: 0;
   flex-grow: 0;
+}
+
+
+@media (max-width: 767px) {
+  .layout_podcast_portadilla .row.r05 #not-actualidad,
+  .layout_podcast_portadilla .row.r05 #nov-entretenimiento {
+    padding: 0;
+  }
 }
