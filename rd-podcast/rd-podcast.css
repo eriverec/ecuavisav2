@@ -186,9 +186,16 @@
 .pod_general .pod_sup .pod_logo {
   position: absolute;
   text-align: center;
-  transform: translate(-50%, 10px);
+  transform: translate(-50%, 0);
   left: 50%;
   padding: 30px 0;
+  background: rgb(6, 2, 34);
+  background: -moz-linear-gradient(180deg, rgba(6, 2, 34, 1) 0%, rgba(0, 0, 0, 0) 100%);
+  background: -webkit-linear-gradient(180deg, rgba(6, 2, 34, 1) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(180deg, rgba(6, 2, 34, 1) 0%, rgba(0, 0, 0, 0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#060222", endColorstr="#000000", GradientType=1);
+  width: 100%;
+
 }
 
 .pod_general .pod_sup .pod_play {
@@ -214,6 +221,12 @@
   transform: translate(-50%, 0px);
   padding: 30px 0;
   text-align: center;
+  background: rgb(6, 2, 34);
+  background: -moz-linear-gradient(0deg, rgba(6, 2, 34, 1) 0%, rgba(0, 0, 0, 0) 100%);
+  background: -webkit-linear-gradient(0deg, rgba(6, 2, 34, 1) 0%, rgba(0, 0, 0, 0) 100%);
+  background: linear-gradient(0deg, rgba(6, 2, 34, 1) 0%, rgba(0, 0, 0, 0) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#060222", endColorstr="#000000", GradientType=1);
+  width: 100%;
 }
 
 .pod_general .pod_inf h3 {
