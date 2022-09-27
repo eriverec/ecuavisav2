@@ -168,3 +168,48 @@
   margin-bottom: 30px;
   line-height: 28px;
 }
+
+
+
+
+
+/*************************
+*****ACTUALIDAD*****
+*************************/
+
+
+
+.pod_general {
+  position: relative;
+}
+
+.pod_general .pod_sup .pod_logo {
+  position: absolute;
+  text-align: center;
+  transform: translate(-50%, 10px);
+  left: 50%;
+}
+
+.pod_general .pod_sup .pod_play {
+  position: absolute;
+  text-align: center;
+  transform: translate(-50%, -50%);
+  left: 50%;
+  top: 50%;
+}
+
+.pod_general .pod_fondo img {
+  width: 100%;
+}
+
+.pod_general .pod_inf {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 0px);
+  padding: 30px 0;
+}
+
+.pod_general .pod_inf h3 {
+  color: #FFFFFF;
+}
