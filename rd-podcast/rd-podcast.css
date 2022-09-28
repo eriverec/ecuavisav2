@@ -362,7 +362,7 @@
   }
 
   .pod_items .noticias {
-    padding-left: 12px;
-    padding-right: 12px;
+    margin-right: 12px;
+    margin-left: 12px;
   }
 }
