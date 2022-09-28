@@ -110,7 +110,7 @@
 
 .masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block {
   display: grid;
-  grid-template-columns: 2fr 2fr 1fr;
+  grid-template-columns: 2fr 4fr 1fr;
   justify-items: stretch;
   align-items: center;
 }
@@ -135,6 +135,12 @@
   border-bottom: 2px solid #2927B9;
 }
 
+.masEscuchados .iter-tabview-content-item {
+  border-top: 2px solid #2927B9;
+  margin-top: 30px;
+  padding-top: 25px;
+}
+
 .masEscuchados .iter-widget .iter-tabview-content .iter-rankingtab-mostviewed-hd {
   display: none;
 }
@@ -155,8 +161,8 @@
   font-size: 18px;
   line-height: 22px;
   color: #060127;
-  margin: auto;
-  width: min-content;
+  margin-left: 20px;
+  margin-bottom: 0;
 }
 
 .tit-vid a h2 {
@@ -185,6 +191,7 @@
 
 .pod_general {
   position: relative;
+  border-bottom: 16px solid #2927B9;
 }
 
 .pod_general .pod_sup .pod_logo {
@@ -287,7 +294,7 @@
 /* ITEMS */
 .pod_items .PODCAST_MAS_ESCUCHADOS .media_block {
   display: grid;
-  grid-template-columns: 2fr 2fr 1fr;
+  grid-template-columns: 2fr 4fr 1fr;
   justify-items: stretch;
   align-items: center;
 }
@@ -312,6 +319,12 @@
   border-bottom: 2px solid #2927B9;
 }
 
+.pod_items .noticias {
+  border-top: 2px solid #2927B9;
+  margin-top: 30px;
+  padding-top: 25px;
+}
+
 .pod_items .PODCAST_MAS_ESCUCHADOS .media_block .pod_icon_play img {
   width: 37px;
 }
@@ -328,12 +341,13 @@
   font-size: 18px;
   line-height: 22px;
   color: #060127;
-  margin: auto;
-  width: min-content;
+  margin-left: 20px;
+  margin-bottom: 0;
 }
 
 
 @media (max-width: 767px) {
+
   .layout_podcast_portadilla .row.r05 #not-actualidad,
   .layout_podcast_portadilla .row.r05 #nov-entretenimiento {
     padding: 0;
