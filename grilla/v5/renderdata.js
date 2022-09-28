@@ -48,6 +48,14 @@ if(localStorage.getItem('programas')){ //evaluamos si se encuentra la key progra
      console.log('existen programas') 
  }else{ /* variable para loader */ console.log('no existen programas'); }
 
+function activeDay(data){
+    // $('div[data-item=' + slide + ']').addClass("selected");
+    setTimeout(function(){
+        el = $('.programaItem.el-'+ data);
+        $(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
+        console.log(el);
+    } , 700);
+}
 
 function renderProgramas(){
     var _jsonProgramas = JSON.parse(jsonProgramas); // convertiomos el json.stringify  de localstorage en json normal
@@ -112,10 +120,50 @@ function renderProgramas(){
                     "Fecha" : programDate}   
                     _jsonDiaActual.push(programaData);
                  //   console.log(programaData);
+
+                //obtenemos formateada la hora actual 
+                var d = new Date();
+                timeOfDay = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}:${d.getSeconds().toString().padStart(2, "0")}`;
+
+                // console.log('DATA-INICIO', programTimeIni.slice(0, -3));
+                // console.log(timeOfDay);
+
+                /* Convertir la hora del programa en datos */
+                var regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
+
+                var hini = parseInt(programTimeIni.replace(regExp, "$1$2$3"));
+                var hfin = parseInt(programTimeEnd.replace(regExp, "$1$2$3"));
+                var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2$3"));
+
+                var contador = contador;
+                /* Validacion del programa de la hora actual */
+                if (hini <= timeAc && timeAc <= hfin) {
+                    var elemento = 'el-' + (contador - 1);
+                    var numeroSwiper = (contador - 1);
+                    var pA = programName;
+                    var hIF = programTimeIni.slice(0, -3) + ' -' + programTimeEnd.slice(0, -3);
+
+                    // Setiamos los datos al localstorage para despues recuperarlo en el html
+                    localStorage.setItem('programaActual', elemento);
+                    localStorage.setItem('nItem', numeroSwiper);
+                    localStorage.setItem('pA', pA);
+                    localStorage.setItem('hIF', hIF);
+
+                    var showActive= 'bg-blue-800';
+                    console.log("Programa actualLLLL: " + programName);
+                    itemtored = localStorage.getItem('programaActual');
+                    activeDay(itemtored);
+                } else {}
+
+
+
+
+
+
                     programas.appendTo('.Tab4data');
             
                     var todayx  = new Date().toLocaleDateString("es-ES", obtenerDiaMes);
-                    var hoyes  = new Date().toLocaleDateString("es-ES", obtenerDia);
+                    // var hoyes  = new Date().toLocaleDateString("es-ES", obtenerDia);
                     $('.Tab4').html('HOY<br>'+todayx+' ');
                      //metemos al dom el programa
             // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
@@ -186,6 +234,6 @@ function renderProgramas(){
     //dumbDataEri
     getProgramasHoy = localStorage.getItem('programasHoy');
     JsonProgramasHoy = JSON.parse(getProgramasHoy);
-    console.log('Su programa elegido es: '+JsonProgramasHoy[1].nombrePrograma);
+    // console.log('Su programa elegido es: '+JsonProgramasHoy[1].nombrePrograma);
     // _table.classList.add('hidden');
 }
