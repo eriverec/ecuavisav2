@@ -29,6 +29,10 @@
   object-fit: cover;
 }
 
+.layout_landing_portadilla .notas-1-p-ap .noticias .article .multimedia{
+  position: relative;
+}
+
 .layout_landing_portadilla .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper {
   background-image: -webkit-linear-gradient(bottom, #060127 50%, white 65%);
 }
