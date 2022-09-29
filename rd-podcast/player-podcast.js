@@ -52,8 +52,7 @@ $('.IMG_TIT_TXT.mult').each(function (i, obj) {
   const mp3url = $(this).find('source').attr('src');
   const title_pd = $(this).find('h2').text();
   // agregamos botones del player
-  $(this).append(`
-
+  $(this).find('.media_block .pod_icon_play').append(`
   <svg class="play-stop-button" data-media="${mp3url}" data-title="${title_pd}" onclick="podcastPlay();" width="38"  height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
   <rect x="0.694336" y="0.975098" width="37" height="37" rx="3" fill="#23DCD1"  /> 
   <path class="play-stop-button__stop" d="M14.2607 13.3086V25.6419M24.1274 13.3086V25.6419" stroke="#2927B9" stroke-width="2" stroke-linecap="round" />
