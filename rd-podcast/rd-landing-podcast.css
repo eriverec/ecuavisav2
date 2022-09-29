@@ -29,7 +29,7 @@
   object-fit: cover;
 }
 
-.layout_landing_portadilla .notas-1-p-ap .noticias .article .multimedia{
+.layout_landing_portadilla .notas-1-p-ap .noticias .article .multimedia {
   position: relative;
 }
 
@@ -48,8 +48,52 @@
   right: 0;
   padding-bottom: 4rem;
   width: 100%;
+  font-family: 'Mattone 150';
+  margin-bottom: 0.5rem;
+  display: block;
 }
 
+.layout_landing_portadilla .notas-1-p-ap .headline {
+  max-width: 700px;
+}
+
+.layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block .headline a h1 {
+  color: #fff;
+  font-size: 42px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 48px;
+  padding-top: 15px;
+  padding-bottom: 18px;
+}
+
+
+.layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block .section {
+  font-weight: 600;
+  color: #23DCD1;
+  text-transform: uppercase;
+  font-size: 14px;
+  line-height: 17px;
+  padding-top: 5px;
+}
+
+
+.layout_landing_portadilla .notas-1-p-ap .noticias .article .text {
+  font-size: var(--rd-size-16);
+  color: #d5d5d5;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 26px;
+  max-width: 700px;
+}
+
+@media (max-width: 991px) {
+
+  .layout_landing_portadilla .notas-1-p-ap .noticias .article .text {
+    font-size: 1rem;
+  }
+
+}
 
 @media (max-width: 768px) {
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
@@ -59,12 +103,31 @@
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
     height: 400px !important;
   }
+
+  .layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block .headline a h1 {
+    font-size: 30px;
+    line-height: 38px;
+  }
 }
 
 
 @media (max-width: 767px) {
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
     height: 370px !important;
+  }
+
+  .layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block {
+    padding-bottom: 2rem;
+}
+
+  .layout_landing_portadilla .notas-1-p-ap .noticias .article .text {
+    margin-top: 1rem;
+    font-size: 18px;
+  }
+
+  .layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block .headline a h1 {
+    font-size: 34px;
+    line-height: 38px;
   }
 
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
@@ -80,6 +143,7 @@
     background: #060127;
     border-bottom: 16px solid #2927B9;
   }
+
 
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .media_block .pod_play {
     position: absolute;
