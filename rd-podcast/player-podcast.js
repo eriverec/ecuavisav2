@@ -54,8 +54,8 @@ $('.IMG_TIT_TXT.mult').each(function (i, obj) {
   // agregamos botones del player
   $(this).find('.media_block .pod_icon_play').append(`
   <svg class="play-stop-button" data-media="${mp3url}" data-title="${title_pd}" onclick="podcastPlay();" width="38"  height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <rect x="0.694336" y="0.975098" width="37" height="37" rx="3" fill="#23DCD1"  /> 
-  <path class="play-stop-button__stop" d="M14.2607 13.3086V25.6419M24.1274 13.3086V25.6419" stroke="#2927B9" stroke-width="2" stroke-linecap="round" />
+  <rect x="0.694336" y="0.975098" width="37" height="37" rx="3" fill="#23DCD1"  />
+  <path  class="play-stop-button__stop" d="M13.4167 13.3333H24.5833V23.6667H13.4167V13.3333ZM13.3611 11.75C12.9396 11.75 12.5319 11.9053 12.2285 12.187C11.9246 12.4692 11.75 12.8562 11.75 13.2639V23.7361C11.75 24.589 12.4895 25.25 13.3611 25.25H24.6389C25.0605 25.25 25.4681 25.0947 25.7715 24.813C26.0754 24.5308 26.25 24.1439 26.25 23.7361V13.2639C26.25 12.8562 26.0754 12.4692 25.7715 12.187C25.4681 11.9053 25.0604 11.75 24.6389 11.75H13.3611Z" fill="#2927B9" stroke="#2927B9" stroke-width="0.5"/>
   <path class="play-stop-button__play" d="M13.0273 23.1822V12.3681C13.0273 11.5599 13.9364 11.0856 14.5993 11.5479L24.7893 18.6537C25.3633 19.0539 25.3593 19.9047 24.7817 20.2995L13.0273 28.335" stroke="#2927B9" stroke-width="2" stroke-linecap="round" />
 </svg>`);
 });
