@@ -107,6 +107,12 @@
 }
 
 
+@media (max-width: 575px) {
+  .title-destacada h2 {
+    font-size: 1.5rem;
+  }
+}
+
 /*************************
 *****MAS ESCUCHADOS*****
 *************************/
@@ -364,6 +370,7 @@
     padding-left: 0;
     padding-right: 0;
   }
+
   #not-actualidad .title-destacada,
   #nov-entretenimiento .title-destacada {
     margin: 30px 12px;
