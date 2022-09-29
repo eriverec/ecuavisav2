@@ -53,10 +53,14 @@ $('.IMG_TIT_TXT.mult').each(function (i, obj) {
   const title_pd = $(this).find('h2').text();
   // agregamos botones del player
   $(this).append(`
-    <svg width="100" data-media="${mp3url}" data-title="${title_pd}" onclick="podcastPlay();" height="100" viewBox="0 0 100 100" class="play-stop-button">
-      <rect x="0" y="0" width="100" height="100" class="play-stop-button__stop" />
-      <path d="M10,0l80,50l-80,50Z" class="play-stop-button__play" />
-    </svg>`);
+
+  <svg class="play-stop-button" data-media="${mp3url}" data-title="${title_pd}" onclick="podcastPlay();" width="38"  height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect x="0.694336" y="0.975098" width="37" height="37" rx="3" fill="#23DCD1"  /> 
+  <path class="play-stop-button__stop" d="M14.2607 13.3086V25.6419M24.1274 13.3086V25.6419" stroke="#2927B9" stroke-width="2" stroke-linecap="round" />
+  <path class="play-stop-button__play" style="display:none;"
+    d="M13.0273 23.1822V12.3681C13.0273 11.5599 13.9364 11.0856 14.5993 11.5479L24.7893 18.6537C25.3633 19.0539 25.3593 19.9047 24.7817 20.2995L13.0273 28.335"
+    stroke="#2927B9" stroke-width="2" stroke-linecap="round" />
+</svg>`);
 });
 // Fin preparador de contenidos reproducibles
 
