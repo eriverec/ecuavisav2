@@ -51,6 +51,7 @@ $('.IMG_TIT_TXT.mult').each(function (i, obj) {
   //obtenemos variables
   const mp3url = $(this).find('source').attr('src');
   const title_pd = $(this).find('h2').text();
+  
   // agregamos botones del player
   $(this).find('.media_block .pod_icon_play').append(`
   <svg class="play-stop-button" data-media="${mp3url}" data-title="${title_pd}" onclick="podcastPlay();" width="38"  height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
