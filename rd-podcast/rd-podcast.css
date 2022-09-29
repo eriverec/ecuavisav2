@@ -15,6 +15,10 @@
   text-transform: lowercase;
 }
 
+.faq_separador2 {
+  max-width: 100%;
+}
+
 @media (max-width: 767px) {
   .titulo_central .cintillo-rd {
     font-size: 55px;
@@ -359,6 +363,10 @@
   .container.miniportadas {
     padding-left: 0;
     padding-right: 0;
+  }
+  #not-actualidad .title-destacada,
+  #nov-entretenimiento .title-destacada {
+    margin: 30px 12px;
   }
 
   .pod_items .noticias {
