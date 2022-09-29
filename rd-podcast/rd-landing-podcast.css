@@ -52,7 +52,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding-bottom: 4rem;
+  padding-bottom: 2rem;
   width: 100%;
   font-family: 'Mattone 150';
   margin-bottom: 0.5rem;
@@ -126,16 +126,19 @@
   align-content: center;
   justify-content: flex-start;
   gap: 20px;
+  padding-bottom: 25px;
 }
 
 
 .layout_landing_portadilla .notas-1-p-ap .noticias .article .text {
-  font-size: var(--rd-size-16);
+  font-size: 16px;
   color: #d5d5d5;
   font-style: normal;
   font-weight: 300;
   line-height: 26px;
   max-width: 700px;
+  border-top: 2px solid #fff;
+  padding-top: 25px;
 }
 
 @media (max-width: 991px) {
@@ -164,11 +167,15 @@
 
 @media (max-width: 767px) {
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
-    height: 370px !important;
+    height: 400px !important;
   }
 
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block {
-    padding-bottom: 2rem;
+    margin-top: -1px;
+    position: initial;
+    padding-bottom: 1rem;
+    background: #060127;
+    border-bottom: 16px solid #2927B9;
   }
 
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .text {
@@ -182,19 +189,9 @@
   }
 
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
-    height: 370px !important;
+    height: 400px !important;
+    border-bottom: none;
   }
-}
-
-@media (max-width: 575px) {
-  .layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block {
-    margin-top: -1px;
-    position: initial;
-    padding-bottom: 1rem;
-    background: #060127;
-    border-bottom: 16px solid #2927B9;
-  }
-
 
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .media_block .pod_play {
     position: absolute;
@@ -205,9 +202,11 @@
     left: 50%;
     transform: translate(-50%, -50%);
   }
+}
+
+@media (max-width: 575px) {
 
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
-    border-bottom: none;
     height: 207px !important;
   }
 
