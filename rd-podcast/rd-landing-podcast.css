@@ -176,6 +176,7 @@
     padding-bottom: 1rem;
     background: #060127;
     border-bottom: 16px solid #2927B9;
+    max-width: 100%;
   }
 
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .text {
