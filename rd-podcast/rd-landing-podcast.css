@@ -2,6 +2,12 @@
 *****APERTURA*****
 *****************/
 
+.layout_landing_portadilla h1,
+.layout_landing_portadilla h2,
+.layout_landing_portadilla h3,
+.layout_landing_portadilla p {
+  font-family: 'Archivo', sans-serif;
+}
 
 .layout_landing_portadilla .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
   -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 60%);
@@ -118,7 +124,7 @@
 
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block {
     padding-bottom: 2rem;
-}
+  }
 
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .text {
     margin-top: 1rem;
