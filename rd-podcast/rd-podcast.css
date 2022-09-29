@@ -339,6 +339,10 @@
   width: 37px;
 }
 
+.pod_items .PODCAST_MAS_ESCUCHADOS .media_block .DETAIL_TXT{
+  display: none;
+}
+
 .pod_items .PODCAST_MAS_ESCUCHADOS .media_block .pod_icon_play {
   text-align: end;
   display: block;
