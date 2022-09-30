@@ -25,7 +25,7 @@
   font-weight: normal;
 }
 
-.mejs__time-total{
+.mejs__time-total {
   background: rgb(21 21 21 / 30%);
 }
 
@@ -33,6 +33,11 @@
   background: #f0f0f0;
   border-radius: 3px;
   padding: 0px;
+}
+
+.mejs__time-current,
+.mejs__time-handle-content {
+  background: #2927B9;
 }
 
 .podcast__episode_title {
@@ -60,7 +65,7 @@
   margin-left: 10px;
 }
 
-.mejs__button > button{
+.mejs__button>button {
   filter: invert(1);
 }
 
