@@ -130,6 +130,10 @@
   align-items: center;
 }
 
+.masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .DETAIL_TXT{
+  display: none;
+}
+
 .masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .multimedia {
   width: 100%;
 }
