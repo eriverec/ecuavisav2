@@ -26,7 +26,7 @@
 }
 
 .mejs__time-total {
-  background: rgb(21 21 21 / 30%);
+  background: rgb(21 21 21 / 30%) !important;
 }
 
 .podcast {
@@ -37,7 +37,7 @@
 
 .mejs__time-current,
 .mejs__time-handle-content {
-  background: #2927B9;
+  background: #2927B9 !important ;
 }
 
 .podcast__episode_title {
