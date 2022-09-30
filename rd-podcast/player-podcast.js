@@ -71,7 +71,6 @@ $('.IMG_TIT_TXT.mult').each(function (i, obj) {
 function podcastPlay() {
   var theMp3 = (event.currentTarget.getAttribute('data-media'));
   var theTitle = (event.currentTarget.getAttribute('data-title'));
-  $('.pod_items .PODCAST_MAS_ESCUCHADOS .media_block .multimedia img').addClass('border_play');
   // detectamos si esta reproduciendo para dar stop o si reproduce otro audio
   if (event.currentTarget.classList.contains('play-stop-button--playing')) {
     setTimeout(function () {
