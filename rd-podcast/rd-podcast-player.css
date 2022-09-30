@@ -1,3 +1,9 @@
+:root {
+  --animate-duration: 1s;
+  --animate-delay: 1s;
+  --animate-repeat: 1;
+}
+
 .menu {
   color: #000;
   background-color: #f2f2f2;
@@ -84,9 +90,15 @@
   border-bottom-right-radius: 3px;
   z-index: 150;
   box-shadow: 0 0 16px rgb(0 0 0 / 25%);
-  transform: translateY(0);
-  transition: transform .3s cubic-bezier(.25, .46, .45, .94);
   align-items: center;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-duration: var(--animate-duration);
+  animation-duration: var(--animate-duration);
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+  -webkit-animation-name: fadeInUpBig;
+  animation-name: fadeInUpBig;
 }
 
 .podcast__meta .artwork {
@@ -169,3 +181,30 @@
   height: 250px;
 }
 
+@-webkit-keyframes fadeInUpBig {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 2000px, 0);
+    transform: translate3d(0, 2000px, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInUpBig {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 2000px, 0);
+    transform: translate3d(0, 2000px, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+  }
+}
