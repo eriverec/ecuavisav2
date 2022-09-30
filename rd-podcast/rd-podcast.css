@@ -34,6 +34,7 @@
 .temas_destacados_swiper {
   padding: 0 50px !important;
   max-width: 400px;
+  position: initial !important;
 }
 
 .temas_destacados_swiper .noticias .article .media_block {
