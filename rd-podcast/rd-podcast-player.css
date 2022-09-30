@@ -69,6 +69,22 @@
   filter: invert(1);
 }
 
+.mejs__time-float {
+  background: #000;
+  border: solid 1px #333;
+  color: #fff;
+}
+
+.mejs__time-float-corner {
+  border-color: #272727 #00000000 #00000000;
+}
+
+.mejs__time-float-current {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 600;
+}
+
 .podcast__meta {
   position: fixed;
   bottom: 0;
