@@ -2,6 +2,10 @@
 *****CINTILLO*****
 *****************/
 
+.border_play{
+  border: 5px solid #23DCD1 !important;
+}
+
 .titulo_central .cintillo-rd {
   display: inline-block;
   color: var(--rd-cintillo);
@@ -275,7 +279,6 @@
 }
 
 .pod_general .pod_inf .pod_boton a {
-  background: #23DCD1;
   font-family: 'Mattone 150';
   font-style: normal;
   font-weight: 600;

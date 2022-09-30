@@ -75,6 +75,7 @@ function podcastPlay() {
   if (event.currentTarget.classList.contains('play-stop-button--playing')) {
     setTimeout(function () {
       $('.mejs__playpause-button').click();
+      $('.pod_items .PODCAST_MAS_ESCUCHADOS .media_block .multimedia img').addclass('border_play');
     }, 100);
   } else {
     playStop();
