@@ -4,13 +4,6 @@
   --animate-repeat: 1;
 }
 
-.menu {
-  color: #000;
-  background-color: #f2f2f2;
-  position: fixed;
-  bottom: 0;
-  width: 100%;
-}
 
 /* .mejs__container {
   margin-top: 10px;
@@ -39,11 +32,6 @@
   background: rgb(21 21 21 / 30%) !important;
 }
 
-.podcast {
-  background: #f0f0f0;
-  border-radius: 3px;
-  padding: 0px;
-}
 
 .mejs__time-current,
 .mejs__time-handle-content {
@@ -82,6 +70,9 @@
 }
 
 .podcast__meta {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
   background: #fff;
   margin: 0px 0px 0px 0px;
   padding: 30px 30px 45px 30px;
