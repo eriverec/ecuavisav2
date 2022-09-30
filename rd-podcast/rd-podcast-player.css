@@ -33,9 +33,15 @@
 }
 
 
-.mejs__time-current,
-.mejs__time-handle-content {
+.mejs__time-current{
   background: #2927B9 !important;
+}
+
+.mejs__time-handle-content{
+  background: #2927B9 !important;
+  width: 20px !important;
+  height: 20px !important;
+  top: -8px !important;
 }
 
 .podcast__episode_title {
@@ -70,19 +76,19 @@
 }
 
 .mejs__time-float {
-  background: #000;
-  border: solid 1px #333;
-  color: #fff;
+  background: #000 !important;
+  border: solid 1px #333 !important;
+  color: #fff !important;
 }
 
 .mejs__time-float-corner {
-  border-color: #272727 #00000000 #00000000;
+  border-color: #272727 #00000000 #00000000 !important; 
 }
 
 .mejs__time-float-current {
-  font-family: 'Archivo';
-  font-style: normal;
-  font-weight: 600;
+  font-family: 'Archivo' !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
 }
 
 .podcast__meta {
