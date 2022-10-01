@@ -215,12 +215,7 @@ h2.temas_estilo {
   padding-right: 0;
 }
 
-/*GRID PARA BLOQUE APERTURA*/
-.layout-estilo-apertura .col-100 .container .row .col-100-top-one-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-}
+
 
 .layout-estilo-apertura .bloque-notas .media_block {
   width: 35%;
@@ -518,11 +513,20 @@ h2.temas_estilo {
 }
 
 .sec-titulo .noticias {
-  border-bottom: 1px solid #2927B9;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 40px;
+}
+
+.sec-titulo .noticias .article {
+  height: 155px;
+  display: flex;
+  align-items: center;
 }
 
 .sec-titulo .noticias .text_block {
   border-top: 1px solid #2927B9;
+  border-bottom: 1px solid #2927B9;
 }
 
 .tarjetaSwiper a h3 {
@@ -556,8 +560,8 @@ h2.temas_estilo {
   padding: 0 25px;
 }
 
-.swiper.card_dest_estilo.TT_mobile{
-    max-width: 400px;
+.swiper.card_dest_estilo.TT_mobile {
+  max-width: 400px;
 }
 
 .card_dest_estilo .swiper-wrapper .swiper-slide .text_block {
