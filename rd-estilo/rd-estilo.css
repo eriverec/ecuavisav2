@@ -555,6 +555,7 @@ h2.temas_estilo {
   width: 100% !important;
   padding-right: 40px;
   padding-left: 30px;
+  max-width: 400px;
 }
 
 .card_dest_estilo .swiper-wrapper .swiper-slide .text_block {
