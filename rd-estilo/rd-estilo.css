@@ -35,13 +35,30 @@
 }
 
 .portada-estilo .headline h1 {
-  font-size: var(--rd-size-30);
-  color: var(--bs-white);
+  color: #ffffff;
+  font-size: 42px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 48px;
+  padding-top: 15px;
+  padding-bottom: 18px;
+}
+
+.portada-estilo .noticias .article .text {
+  font-size: 16px;
+  color: #d5d5d5;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 26px;
 }
 
 .portada-estilo .article-section a {
-  color: white;
   font-weight: 600;
+  color: #23DCD1;
+  text-transform: uppercase;
+  font-size: 14px;
+  line-height: 17px;
+  padding-top: 5px;
 }
 
 .portada-estilo .multimedia img,
@@ -855,6 +872,9 @@ h2.temas_estilo {
 @media (max-width: 768px) {
   .portada-estilo .text_block {
     background: #2927B9;
+    margin-top: -1px;
+    position: initial;
+    padding-bottom: 1rem;
   }
 }
 
