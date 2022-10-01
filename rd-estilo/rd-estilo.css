@@ -33,6 +33,7 @@
   line-height: 48px;
   padding-top: 15px;
   padding-bottom: 18px;
+  max-width: 700px;
 }
 
 .portada-estilo .noticias .article .text {
@@ -41,15 +42,16 @@
   font-style: normal;
   font-weight: 300;
   line-height: 26px;
+  max-width: 700px;
 }
 
 .portada-estilo .article-section a {
+  font-family: 'Mattone 150';
   font-weight: 600;
   color: #23DCD1;
   text-transform: uppercase;
-  font-size: 14px;
+  font-size: 16px;
   line-height: 17px;
-  padding-top: 5px;
 }
 
 .portada-estilo .multimedia img,
@@ -79,7 +81,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding-bottom: 4rem;
+  padding-bottom: 2rem;
   width: 100%;
 }
 
@@ -175,7 +177,6 @@
 }
 
 .portada-estilo .text_block {
-
   margin-top: -1px;
 }
 
@@ -1050,6 +1051,7 @@ h2.temas_estilo {
     border-bottom: none;
     height: 254px !important;
   }
+
   .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
     height: 254px !important;
   }
