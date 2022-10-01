@@ -698,178 +698,6 @@ h2.temas_estilo {
 }
 
 
-@media (max-width: 600px) {
-  .card_dest_estilo {
-    padding: 0 40px !important;
-  }
-
-  .notas-estilo-mobile {
-    /* display: block; */
-    margin-bottom: 40px;
-  }
-
-  .micro_593 .noticias,
-  .quiz-entretenimiento .noticias {
-    margin-bottom: 50px;
-  }
-
-  .notas-estilo-desktop {
-    display: none !important;
-  }
-
-  .ecv_relacionadas_2022 .recomendadas-rd {
-    padding: 30px 0 !important
-  }
-
-  .publicidad {
-    z-index: 2;
-    position: absolute;
-    left: 0;
-    right: 0;
-    padding-top: 2rem;
-  }
-
-  .estilo-notas .IMGTIT.recomendadas-rd.even.n8.last {
-    border-bottom: none;
-  }
-
-  .notas2 .noticias .article:nth-child(1) {
-    border-top: 1px solid #2927B9;
-  }
-
-  img.sep1 {
-    margin-left: 17px;
-    margin-top: -20px;
-  }
-
-  .portlet-boundary.portlet-static-end.htmlcontainer-portlet.titulo1 {
-    background: #2927B9;
-    padding-bottom: 17px;
-  }
-
-  .portada-estilo-mobile .article-section a {
-    color: #23DCD1;
-    text-transform: uppercase;
-    font-family: 'Mattone 150';
-    font-weight: 600;
-    font-size: 14px;
-    line-height: 16px;
-  }
-
-  .notas-estilo-mobile h3 {
-    color: white;
-    font-family: 'Mattone 150';
-  }
-
-  h2.destacados_estilo {
-    margin-top: -41px;
-  }
-
-  img.estilo-separador2 {
-    margin-left: 15px;
-    margin-top: 7px;
-  }
-
-  img.estilo-separador3 {
-    margin-left: 13px;
-    margin-top: 7px;
-  }
-
-  .mov_tit {
-    margin-top: 30px;
-    margin-bottom: 10px;
-    margin-left: -8px;
-  }
-
-  .portada-estilo .multimedia img,
-  .estilo-principal .multimedia img,
-  .estilo-principal-desktop .multimedia img {
-    filter: brightness(40%);
-    -webkit-mask-image: linear-gradient(to top, transparent 0, #2927B9 60%) !important;
-  }
-
-  .portada-estilo .multimediaIconMacroWrapper {
-    position: relative;
-    background-image: -webkit-linear-gradient(bottom, #2927B9 50%, #2927B9 65%) !important;
-
-  }
-
-  .portada-estilo-mobile .headline {
-    font-family: 'Archivo';
-    font-weight: 700;
-    font-size: 34px;
-    margin-top: 11px;
-    margin-bottom: 15px;
-  }
-
-  .portada-estilo-mobile span.priority-content {
-    color: white;
-    font-size: 34px;
-    line-height: 38px;
-  }
-
-  .portada-estilo-mobile .text {
-    font-family: 'Archivo';
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 26px;
-  }
-
-  .tarjeta-destacada .card_dest_estilo {
-    margin-bottom: 30px;
-
-  }
-
-  .swiper-cards .swiper-slide {
-
-    margin-top: 30px;
-  }
-
-  .notas-estilo-mobile .notas2 {
-    margin-top: -20px;
-    padding: 1.5rem 7px 15px;
-  }
-
-  .lmv_estilo {
-
-    margin-left: -7px;
-    margin-bottom: 25px;
-  }
-
-  h3.tit_otvid {
-    margin-top: 25px;
-  }
-
-  h3.tit_ect {
-    margin-top: -10px;
-  }
-
-  .ntp_tit {
-    margin-left: -10px;
-  }
-
-  .tem_dest h2.destacados_estilo {
-    margin-top: -18px;
-  }
-
-  .port3 .article-section a {
-    display: none;
-  }
-
-  .port3 .text {
-    font-family: 'Archivo';
-    font-weight: 300;
-    font-size: 17px;
-    line-height: 26px;
-    display: none;
-  }
-
-  .port3 {
-    border-top: 16px solid #2927B9;
-  }
-}
-
-
 
 /*SWIPER CARDS - TEMAS DESTACADOS*/
 .card_dest_estilo {
@@ -968,4 +796,179 @@ h2.temas_estilo {
 .encuesta_estilo .poll-form.form-check span {
   color: #1fc0bb;
   font-weight: 100;
+}
+
+
+.portada-estilo .multimedia img,
+.estilo-principal .multimedia img,
+.estilo-principal-desktop .multimedia img {
+  filter: brightness(40%);
+  -webkit-mask-image: linear-gradient(to top, transparent 0, #2927B9 60%) !important;
+}
+
+.portada-estilo .multimediaIconMacroWrapper {
+  position: relative;
+  background-image: -webkit-linear-gradient(bottom, #2927B9 50%, #2927B9 65%) !important;
+
+}
+
+
+@media (max-width: 600px) {
+  .card_dest_estilo {
+    padding: 0 40px !important;
+  }
+
+  .notas-estilo-mobile {
+    /* display: block; */
+    margin-bottom: 40px;
+  }
+
+  .micro_593 .noticias,
+  .quiz-entretenimiento .noticias {
+    margin-bottom: 50px;
+  }
+
+  .notas-estilo-desktop {
+    display: none !important;
+  }
+
+  .ecv_relacionadas_2022 .recomendadas-rd {
+    padding: 30px 0 !important
+  }
+
+  .publicidad {
+    z-index: 2;
+    position: absolute;
+    left: 0;
+    right: 0;
+    padding-top: 2rem;
+  }
+
+  .estilo-notas .IMGTIT.recomendadas-rd.even.n8.last {
+    border-bottom: none;
+  }
+
+  .notas2 .noticias .article:nth-child(1) {
+    border-top: 1px solid #2927B9;
+  }
+
+  img.sep1 {
+    margin-left: 17px;
+    margin-top: -20px;
+  }
+
+  .portlet-boundary.portlet-static-end.htmlcontainer-portlet.titulo1 {
+    background: #2927B9;
+    padding-bottom: 17px;
+  }
+
+  .portada-estilo-mobile .article-section a {
+    color: #23DCD1;
+    text-transform: uppercase;
+    font-family: 'Mattone 150';
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 16px;
+  }
+
+  .notas-estilo-mobile h3 {
+    color: white;
+    font-family: 'Mattone 150';
+  }
+
+  h2.destacados_estilo {
+    margin-top: -41px;
+  }
+
+  img.estilo-separador2 {
+    margin-left: 15px;
+    margin-top: 7px;
+  }
+
+  img.estilo-separador3 {
+    margin-left: 13px;
+    margin-top: 7px;
+  }
+
+  .mov_tit {
+    margin-top: 30px;
+    margin-bottom: 10px;
+    margin-left: -8px;
+  }
+
+
+
+  .portada-estilo-mobile .headline {
+    font-family: 'Archivo';
+    font-weight: 700;
+    font-size: 34px;
+    margin-top: 11px;
+    margin-bottom: 15px;
+  }
+
+  .portada-estilo-mobile span.priority-content {
+    color: white;
+    font-size: 34px;
+    line-height: 38px;
+  }
+
+  .portada-estilo-mobile .text {
+    font-family: 'Archivo';
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 26px;
+  }
+
+  .tarjeta-destacada .card_dest_estilo {
+    margin-bottom: 30px;
+
+  }
+
+  .swiper-cards .swiper-slide {
+
+    margin-top: 30px;
+  }
+
+  .notas-estilo-mobile .notas2 {
+    margin-top: -20px;
+    padding: 1.5rem 7px 15px;
+  }
+
+  .lmv_estilo {
+
+    margin-left: -7px;
+    margin-bottom: 25px;
+  }
+
+  h3.tit_otvid {
+    margin-top: 25px;
+  }
+
+  h3.tit_ect {
+    margin-top: -10px;
+  }
+
+  .ntp_tit {
+    margin-left: -10px;
+  }
+
+  .tem_dest h2.destacados_estilo {
+    margin-top: -18px;
+  }
+
+  .port3 .article-section a {
+    display: none;
+  }
+
+  .port3 .text {
+    font-family: 'Archivo';
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 26px;
+    display: none;
+  }
+
+  .port3 {
+    border-top: 16px solid #2927B9;
+  }
 }
