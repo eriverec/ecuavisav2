@@ -553,9 +553,11 @@ h2.temas_estilo {
 
 .swiper.card_dest_estilo {
   width: 100% !important;
-  padding-right: 40px;
-  padding-left: 30px;
-  max-width: 400px;
+  padding: 0 25px;
+}
+
+.swiper.card_dest_estilo.TT_mobile{
+    max-width: 400px;
 }
 
 .card_dest_estilo .swiper-wrapper .swiper-slide .text_block {
@@ -751,11 +753,6 @@ h2.temas_estilo {
 }
 
 
-
-/*SWIPER CARDS - TEMAS DESTACADOS*/
-.card_dest_estilo {
-  padding: 0 82px !important;
-}
 
 .card_dest_estilo .noticias .article .media_block .text_block .headline a h3 {
   font-family: 'Archivo';
