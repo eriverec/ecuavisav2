@@ -38,7 +38,7 @@
 
 .portada-estilo .noticias .article .text {
   font-size: 16px;
-  color: #d5d5d5;
+  color: #ffffff;
   font-style: normal;
   font-weight: 300;
   line-height: 26px;
@@ -200,6 +200,7 @@
 
 .portlet-boundary.portlet-static-end.htmlcontainer-portlet.titulo1 {
   background: #2927B9;
+  padding-bottom: 50px;
 }
 
 h2.temas_estilo {
