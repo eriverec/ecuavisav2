@@ -201,6 +201,7 @@
 .portlet-boundary.portlet-static-end.htmlcontainer-portlet.titulo1 {
   background: #2927B9;
   padding-bottom: 50px;
+  padding-top: 50px;
 }
 
 h2.temas_estilo {
@@ -228,7 +229,6 @@ h2.temas_estilo {
 .titulo1 h1 {
   font-size: 55px;
   color: #23DCD1;
-  padding: 1.5rem 15px 0;
   font-weight: 600;
   font-family: 'Anek Malayalam';
 }
@@ -931,7 +931,8 @@ h2.temas_estilo {
 
   .portlet-boundary.portlet-static-end.htmlcontainer-portlet.titulo1 {
     background: #2927B9;
-    padding-bottom: 17px;
+    padding-bottom: 20px;
+    padding-top: 20px;
   }
 
   .portada-estilo-mobile .article-section a {
