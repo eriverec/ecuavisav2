@@ -883,6 +883,15 @@ h2.temas_estilo {
     height: 370px !important;
   }
 
+  .sec-titulo .noticias{
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .sec-titulo .noticias .article:nth-child(1){
+    border-bottom: none;
+  }
+
 }
 
 
