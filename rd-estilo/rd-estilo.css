@@ -851,6 +851,19 @@ h2.temas_estilo {
   font-weight: 100;
 }
 
+.port3 .article-section a {
+  display: none;
+}
+
+
+.port3 .text {
+  font-family: 'Archivo';
+  font-weight: 300;
+  font-size: 17px;
+  line-height: 26px;
+  display: none;
+}
+
 
 @media (min-width: 1400px) {
   .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
@@ -1039,17 +1052,8 @@ h2.temas_estilo {
     margin-top: -18px;
   }
 
-  .port3 .article-section a {
-    display: none;
-  }
 
-  .port3 .text {
-    font-family: 'Archivo';
-    font-weight: 300;
-    font-size: 17px;
-    line-height: 26px;
-    display: none;
-  }
+ 
 
   .port3 {
     border-top: 16px solid #2927B9;
