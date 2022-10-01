@@ -25,6 +25,88 @@
 }
 
 
+.portada-estilo .noticias .article .text_block {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 4rem;
+  width: 100%;
+}
+
+.portada-estilo .headline h1 {
+  font-size: var(--rd-size-30);
+  color: var(--bs-white);
+}
+
+.portada-estilo .article-section a {
+  color: white;
+  font-weight: 600;
+}
+
+.portada-estilo .multimedia img,
+.note-pierdas .multimedia img,
+.estilo-principal .multimedia img,
+.estilo-principal-desktop .multimedia img {
+  filter: brightness(40%);
+}
+
+.portada-estilo .media_block {
+  position: relative;
+}
+
+.estilo-principal .headline h2 {
+  color: white;
+  font-weight: 700;
+}
+
+.estilo-principal .article-section a {
+  color: white;
+  font-weight: 600;
+}
+
+.portada-estilo .text_block {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding-bottom: 4rem;
+  width: 100%;
+}
+
+.portada-estilo-mobile .headline h2 {
+  color: white;
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 34px;
+  line-height: 38px;
+}
+
+.portada-estilo-mobile .date {
+  padding: 1rem 0 1.5rem;
+}
+
+.portada-estilo-mobile .subheadline h3 {
+  font-size: 18px;
+  font-weight: 100;
+}
+
+
+@media (min-width: 1400px) {
+  .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
+    height: 100% !important;
+  }
+
+  .portada-estilo .noticias .article .multimedia .multimediaIconMacroWrapper a div {
+    height: 100% !important;
+  }
+}
+
+
+
+
+
 
 /*   .row {
     --bs-gutter-x: 0;
@@ -201,61 +283,7 @@ h2.temas_estilo {
 }
 
 /*Portada estilo*/
-.portada-estilo .headline h1 {
-  font-size: var(--rd-size-30);
-  color: var(--bs-white);
-}
 
-.portada-estilo .article-section a {
-  color: white;
-  font-weight: 600;
-}
-
-.portada-estilo .multimedia img,
-.note-pierdas .multimedia img,
-.estilo-principal .multimedia img,
-.estilo-principal-desktop .multimedia img {
-  filter: brightness(40%);
-}
-
-.portada-estilo .media_block {
-  position: relative;
-}
-
-.estilo-principal .headline h2 {
-  color: white;
-  font-weight: 700;
-}
-
-.estilo-principal .article-section a {
-  color: white;
-  font-weight: 600;
-}
-
-.portada-estilo .text_block {
-  padding: 1.5rem 15px 22px;
-  bottom: 0;
-  background: #2927B9;
-  color: white;
-}
-
-.portada-estilo-mobile .headline h2 {
-  color: white;
-  font-family: 'Archivo';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 34px;
-  line-height: 38px;
-}
-
-.portada-estilo-mobile .date {
-  padding: 1rem 0 1.5rem;
-}
-
-.portada-estilo-mobile .subheadline h3 {
-  font-size: 18px;
-  font-weight: 100;
-}
 
 /*Ocultar bloques mobile*/
 /* .notas-estilo-mobile {
@@ -823,6 +851,12 @@ h2.temas_estilo {
   font-weight: 100;
 }
 
+
+@media (max-width: 768px) {
+  .portada-estilo .text_block {
+    background: #2927B9;
+  }
+}
 
 
 
