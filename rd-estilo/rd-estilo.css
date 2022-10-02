@@ -728,11 +728,13 @@ h2.temas_estilo {
 }
 
 .icono-carrusel .iconPlay {
-  background-image: url("https://estadisticas.ecuavisa.com/sites/default/files/2022-08/iconoplay%201.png");
-  height: 170%;
-  background-position: center;
-  width: 160%;
-  background-size: auto;
+  background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
+  width: 30px;
+  height: 30px;
+  top: 15px;
+  right: 10px;
+  left: initial;
+  bottom: initial;
 }
 
 .bloque-programas .media_block .text_block .headline h3 {
