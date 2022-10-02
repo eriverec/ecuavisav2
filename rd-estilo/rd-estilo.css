@@ -939,6 +939,9 @@ img.sep1 {
   margin-top: -20px;
 }
 
+.port3 {
+  border-top: 16px solid #2927B9;
+}
 
 .mas_temas_2_desktop .noticias {
   display: grid;
@@ -1143,9 +1146,7 @@ img.sep1 {
     margin-top: -10px;
   }
 
-  .port3 {
-    border-top: 16px solid #2927B9;
-  }
+  
 }
 
 
