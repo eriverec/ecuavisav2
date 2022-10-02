@@ -935,6 +935,10 @@ h2.temas_estilo {
 
 }
 
+img.sep1 {
+  margin-top: -20px;
+}
+
 
 .mas_temas_2_desktop .noticias {
   display: grid;
@@ -1054,10 +1058,7 @@ h2.temas_estilo {
     border-top: 1px solid #2927B9;
   }
 
-  img.sep1 {
-    margin-left: 17px;
-    margin-top: -20px;
-  }
+
 
   .portlet-boundary.portlet-static-end.htmlcontainer-portlet.titulo1 {
     background: #2927B9;
