@@ -864,6 +864,38 @@ h2.temas_estilo {
   display: none;
 }
 
+.lista_bloque_3_desktop .noticias{
+  display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+}
+
+.lista_bloque_3_desktop .noticias .article .media_block .text_block .article-section a {
+	font-family: 'Mattone 150';
+	font-style: normal;
+	font-weight: 600;
+	font-size: 14px;
+	line-height: 16px;
+	text-transform: uppercase;
+	color: #2927B9;
+	margin-top: 24px;
+	display: block;
+}
+
+.lista_bloque_3_desktop .noticias .article .media_block .text_block .headline h3 {
+	font-family: 'Archivo';
+	font-style: normal;
+	font-weight: 700;
+	font-size: 22px;
+	line-height: 28px;
+	color: #000000;
+	margin: 8px 0;
+}
+
+.lista_bloque_3_desktop img {
+  border-radius: 2px;
+} 
+
 
 @media (min-width: 1400px) {
   .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
