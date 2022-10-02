@@ -521,7 +521,7 @@ h2.temas_estilo {
 }
 
 .sec-titulo .noticias .article {
-  height: 155px;
+  height: 100%;
   display: flex;
   align-items: center;
   border-top: 1px solid #2927B9;
