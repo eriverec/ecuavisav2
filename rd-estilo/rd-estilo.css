@@ -951,6 +951,11 @@ h2.temas_estilo {
 }
 
 
+.notas-estilo-mobile {
+  margin-bottom: 40px;
+}
+
+
 
 @media (min-width: 1400px) {
   .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
@@ -1018,10 +1023,7 @@ h2.temas_estilo {
     padding-left: calc(var(--bs-gutter-x)/ 2);
   }
 
-  .notas-estilo-mobile {
-    /* display: block; */
-    margin-bottom: 40px;
-  }
+  
 
   .micro_593 .noticias,
   .quiz-entretenimiento .noticias {
