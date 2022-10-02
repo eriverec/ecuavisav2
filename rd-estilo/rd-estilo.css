@@ -967,6 +967,10 @@ h2.temas_estilo {
     position: initial;
     padding-bottom: 1rem;
   }
+  .mas_temas_2_desktop .noticias .article .media_block {
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+}
 }
 
 
