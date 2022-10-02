@@ -897,12 +897,14 @@ h2.temas_estilo {
 
 .mas_temas_2_desktop {
   margin-top: 40px;
+  margin-bottom: 70px;
 }
 
 .mas_temas_2_desktop .noticias .article {
   border-top: 1px solid #2927B9;
   border-bottom: 1px solid #2927B9;
-  height: 170px;
+  height: 100%;
+  padding: 34px 0;
   display: flex;
   align-items: center;
 }
@@ -927,6 +929,7 @@ h2.temas_estilo {
   text-transform: uppercase;
   color: #2927B9;
   display: block;
+  
 }
 
 
