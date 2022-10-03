@@ -310,6 +310,11 @@
   right: 0;
 }
 
+.tarjetaSwiper {
+  width: 100% !important;
+  padding: 0 25px;
+}
+
 
 
 .tarjetaSwiper .swiper-wrapper .swiper-slide {
