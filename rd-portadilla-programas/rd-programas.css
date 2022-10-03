@@ -301,7 +301,6 @@
 .tarjetaSwiper .swiper-wrapper .swiper-slide .text_block {
   margin-top: -150px;
   min-height: 110px;
-  padding: 20px;
   position: absolute;
   bottom: 0;
   padding: 7rem 1rem 1.5rem;
@@ -571,6 +570,14 @@
 
 /* INICIO CSS MEDIA QUERIES */
 
+@media (max-width: 1024px) {
+  .programas-desktop .multimedia img {
+    height: 455px !important;
+    max-height: 455px !important;
+  }
+
+}
+
 
 @media (min-width: 991px) {
 
@@ -582,21 +589,20 @@
     transform: initial;
     margin-bottom: 20px;
   }
-}
 
-@media (max-width: 320px) {
-  /* .tarjetaSwiper {
-    padding: 0 30px;
-  }  */
-}
-
-@media (max-width: 1024px) {
-  .programas-desktop .multimedia img {
-    height: 455px !important;
-    max-height: 455px !important;
+  .tarjetaSwiper .swiper-wrapper .swiper-slide .text_block {
+    padding: 20px;
+    min-height: 0;
   }
-
+  .tarjetaSwiper a h3{
+    font-size: 14px;
+    line-height: 18px;
+  }
 }
+
+
+
+
 
 
 @media (max-width: 768px) {
