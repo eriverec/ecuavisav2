@@ -302,7 +302,15 @@
   margin-top: -150px;
   min-height: 110px;
   padding: 20px;
+  position: absolute;
+  bottom: 0;
+  padding: 7rem 1rem 1.5rem;
+  background-image: -webkit-linear-gradient(bottom, #060127 50%, #ffffff00 100%);
+  left: 0;
+  right: 0;
 }
+
+
 
 .tarjetaSwiper .swiper-wrapper .swiper-slide {
   border-radius: 5px;
@@ -554,15 +562,6 @@
 
   .swiper-cards {
     overflow: hidden;
-  }
-
-  .tarjetaSwiper .swiper-wrapper .swiper-slide .text_block {
-    position: absolute;
-    bottom: 0;
-    padding: 7rem 1rem 1.5rem;
-    background-image: -webkit-linear-gradient(bottom, #060127 50%, #ffffff00 100%);
-    left: 0;
-    right: 0;
   }
 
   .tarjetaSwiper .swiper-wrapper {
