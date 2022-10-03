@@ -501,8 +501,9 @@
   bottom: initial;
 }
 
-.tarjetaSwiper {
-  padding: 0 50px;
+.tarjetaSwiper.tarj_mobile  {
+  padding: 0 40px;
+  max-width: 400px;
 } 
 
 /* FIN ÍCONO DE VIDEOS */
