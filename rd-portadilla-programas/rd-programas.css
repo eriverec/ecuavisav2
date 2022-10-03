@@ -343,7 +343,7 @@
   position: absolute;
   bottom: 0;
   padding: 3rem 1rem 1rem;
-  background-image: -webkit-linear-gradient(bottom, #060127 50%, #ffffff00 100%);
+  background-image: -webkit-linear-gradient(bottom, #060127 10%, #ffffff00 100%);
   left: 0;
   right: 0;
   border-radius: 5px;
@@ -394,8 +394,20 @@
   height: 555px !important;
   object-fit: cover;
 }
-.programas-desktop .multimedia div{
-  padding-top: 0!important;
+
+.programas-desktop .multimedia div {
+  padding-top: 0 !important;
+}
+
+.programas-desktop .noticias .article .media_block .text_block .article-section a {
+  font-size: 22px;
+  line-height: 31.52px;
+  font-family: 'Anek Malayalam';
+}
+
+.programas-desktop .noticias .article .media_block .text_block .headline h2 {
+  font-size: 42px;
+  line-height: 48px;
 }
 
 .bloque-programas .media_block {
