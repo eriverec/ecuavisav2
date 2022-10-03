@@ -512,15 +512,15 @@
 
 
 @media (min-width: 991px){
-  .tarjetaSwiper {
+  /* .tarjetaSwiper {
     margin: 0 20%;
-  } 
+  }  */
 }
 
 @media (max-width: 320px){
-  .tarjetaSwiper {
+  /* .tarjetaSwiper {
     padding: 0 30px;
-  } 
+  }  */
 }
 
 
