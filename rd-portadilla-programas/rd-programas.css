@@ -379,9 +379,20 @@
   padding-top: 8px;
 }
 
+.programas-desktop .multimedia img {
+  width: 100% !important;
+  height: 555px !important;
+  max-height: 555px !important;
+  position: relative !important;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
 .bloque-programas .media_block .multimedia img {
   filter: brightness(70%);
   border-radius: 5px;
+  height: 555px !important;
+  object-fit: cover;
 }
 
 .bloque-programas .media_block {
@@ -542,7 +553,12 @@
   }  */
 }
 
-
+@media (max-width: 1024px) {
+  .programas-desktop .multimedia img {
+    height: 455px !important;
+    max-height: 455px !important;
+  }
+}
 
 
 @media (max-width: 768px) {
