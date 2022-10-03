@@ -629,6 +629,18 @@
   }
 }
 
+@media (max-width: 767px) {
+  .tarjetaSwiper .swiper-wrapper .swiper-slide .text_block {
+    padding: 7rem 1rem 1.5rem;
+    min-height: 110px;
+  }
+
+  .tarjetaSwiper a h3 {
+    font-size: 18px;
+    line-height: 26px;
+  }
+}
+
 @media (max-width: 600px) {
 
   /* ENCUESTA */
