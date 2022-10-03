@@ -44,11 +44,10 @@ function cardsTemasDestacados() {
     });
 }
 
-
+var device;
+var b = navigator.userAgent.toLowerCase();
 // Responsive functions
-function movil() {
-
-};
+function movil() {};
 
 function desktop() {
     var dx = $('.programas-desktop .iconPlay')[0];
@@ -57,14 +56,15 @@ function desktop() {
     $('.programas-desktop .IMG_SEC_TIT_PORTADA .multimediaIconMacroWrapper .iconPlay').remove();
 }
 
-var widths = [0, 991];
 
-function resizeFn() {
-    if (window.innerWidth >= widths[0] && window.innerWidth < widths[1]) {
-        movil();
-    } else {
-        desktop();
-    }
+if (/(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/i.test(b)) {
+    console.log("tablet");
+    device = "Tablet";
+} else if (/(mobi|ipod|phone|blackberry|opera mini|fennec|minimo|symbian|psp|nintendo ds|archos|skyfire|puffin|blazer|bolt|gobrowser|iris|maemo|semc|teashark|uzard)/i.test(b)) {
+    console.log("Mobil");
+    device = "Mobile";
+} else {
+    desktop();
+    console.log("desktop");
+    device = "PC";
 }
-window.onresize = resizeFn;
-resizeFn();
