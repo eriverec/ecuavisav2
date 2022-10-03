@@ -181,6 +181,13 @@
   line-height: 22px;
 }
 
+
+.encuesta_estilo .btn {
+  color: white;
+  font-weight: 700;
+  font-family: 'Archivo';
+}
+
 .portada-estilo .text_block {
   margin-top: -1px;
 }
