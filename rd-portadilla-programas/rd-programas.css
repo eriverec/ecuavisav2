@@ -391,6 +391,9 @@
 .bloque-programas .media_block .multimedia img {
   filter: brightness(70%);
   border-radius: 5px;
+}
+
+.programas-desktop .media_block .multimedia img {
   height: 555px !important;
   object-fit: cover;
 }
@@ -405,11 +408,11 @@
   font-family: 'Anek Malayalam';
 }
 
-.programas-desktop .text_block{
+.programas-desktop .text_block {
   padding: 3rem 62px 50px;
 }
 
-.programas-desktop .noticias .article .media_block .text_block .headline{
+.programas-desktop .noticias .article .media_block .text_block .headline {
   max-width: 700px;
 }
 
@@ -565,10 +568,11 @@
 
 
 @media (min-width: 991px) {
+
   /* .tarjetaSwiper {
     margin: 0 20%;
   }  */
-  .icono-programas .iconPlay{
+  .icono-programas .iconPlay {
     position: initial;
     transform: initial;
     margin-bottom: 20px;
@@ -586,7 +590,7 @@
     height: 455px !important;
     max-height: 455px !important;
   }
-  
+
 }
 
 
