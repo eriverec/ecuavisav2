@@ -1,9 +1,9 @@
 setTimeout(function () {
     cardsTemasDestacados();
-    swiperProgramasGlobal ();
+    swiperProgramasGlobal();
 }, 500);
 
-function swiperProgramasGlobal () {
+function swiperProgramasGlobal() {
     $('.notaSwiper .noticias').addClass('swiper-wrapper');
     $('.swiper-wrapper .article').addClass('swiper-slide');
 
@@ -43,3 +43,28 @@ function cardsTemasDestacados() {
         grabCursor: true,
     });
 }
+
+
+// Responsive functions
+function movil() {
+
+};
+
+function desktop() {
+    var dx = $('.programas-desktop .iconPlay')[0];
+    var xd = $('.programas-desktop .IMG_SEC_TIT_PORTADA .text_block');
+    $(dx).prependTo(xd);
+    $('.programas-desktop .IMG_SEC_TIT_PORTADA .multimediaIconMacroWrapper .iconPlay').remove();
+}
+
+var widths = [0, 991];
+
+function resizeFn() {
+    if (window.innerWidth >= widths[0] && window.innerWidth < widths[1]) {
+        movil();
+    } else {
+        desktop();
+    }
+}
+window.onresize = resizeFn;
+resizeFn();

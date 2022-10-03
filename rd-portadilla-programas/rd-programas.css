@@ -568,6 +568,11 @@
   /* .tarjetaSwiper {
     margin: 0 20%;
   }  */
+  .icono-programas .iconPlay{
+    position: initial;
+    transform: initial;
+    margin-bottom: 20px;
+  }
 }
 
 @media (max-width: 320px) {
@@ -581,6 +586,7 @@
     height: 455px !important;
     max-height: 455px !important;
   }
+  
 }
 
 
