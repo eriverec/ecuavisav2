@@ -504,6 +504,7 @@
 .tarjetaSwiper.tarj_mobile  {
   padding: 0 40px;
   max-width: 400px;
+  margin: auto;
 } 
 
 /* FIN ÍCONO DE VIDEOS */
