@@ -581,27 +581,27 @@
 
 @media (min-width: 991px) {
 
-  /* .tarjetaSwiper {
-    margin: 0 20%;
-  }  */
   .icono-programas .iconPlay {
     position: initial;
     transform: initial;
     margin-bottom: 20px;
   }
 
+
+}
+
+
+@media (max-width: 990px) {
   .tarjetaSwiper .swiper-wrapper .swiper-slide .text_block {
     padding: 20px;
     min-height: 0;
   }
-  .tarjetaSwiper a h3{
+
+  .tarjetaSwiper a h3 {
     font-size: 14px;
     line-height: 18px;
   }
 }
-
-
-
 
 
 
