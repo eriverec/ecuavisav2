@@ -394,6 +394,9 @@
   height: 555px !important;
   object-fit: cover;
 }
+.programas-desktop .multimedia div{
+  padding-top: 0!important;
+}
 
 .bloque-programas .media_block {
   position: relative;
