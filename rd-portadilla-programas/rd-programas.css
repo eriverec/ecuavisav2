@@ -243,6 +243,16 @@
   float: left;
 }
 
+.tarjeta-destacada .iconPlay {
+  background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
+  width: 30px;
+  height: 30px;
+  top: 15px;
+  right: 10px;
+  left: initial;
+  bottom: initial;
+}
+
 .tarjeta-destacada h2 {
   padding: 0;
 }
@@ -501,24 +511,24 @@
   bottom: initial;
 }
 
-.tarjetaSwiper.tarj_mobile  {
+.tarjetaSwiper.tarj_mobile {
   padding: 0 40px;
   max-width: 400px;
   margin: auto;
-} 
+}
 
 /* FIN ÍCONO DE VIDEOS */
 
 /* INICIO CSS MEDIA QUERIES */
 
 
-@media (min-width: 991px){
+@media (min-width: 991px) {
   /* .tarjetaSwiper {
     margin: 0 20%;
   }  */
 }
 
-@media (max-width: 320px){
+@media (max-width: 320px) {
   /* .tarjetaSwiper {
     padding: 0 30px;
   }  */
