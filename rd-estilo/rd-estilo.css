@@ -143,6 +143,11 @@
   background-color: #23dcd1a3 !important;
 }
 
+.encuesta_estilo {
+  max-width: 500px;
+  margin: auto;
+}
+
 .encuesta_estilo .teaser-viewer-title h1 {
   color: #2927B9 !important;
   font-weight: 600;
@@ -992,11 +997,11 @@ img.sep1 {
 
 @media (max-width: 767px) {
 
-  .lista_bloque_3_desktop .noticias{
+  .lista_bloque_3_desktop .noticias {
     grid-template-columns: 1fr;
   }
 
-  .mas_temas_2_desktop .noticias{
+  .mas_temas_2_desktop .noticias {
     grid-template-columns: 1fr;
   }
 
@@ -1030,7 +1035,7 @@ img.sep1 {
     padding-left: calc(var(--bs-gutter-x)/ 2);
   }
 
-  
+
 
   .micro_593 .noticias,
   .quiz-entretenimiento .noticias {
@@ -1146,7 +1151,7 @@ img.sep1 {
     margin-top: -10px;
   }
 
-  
+
 }
 
 
