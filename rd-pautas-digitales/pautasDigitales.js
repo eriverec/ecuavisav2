@@ -7,10 +7,9 @@
 // document.head.appendChild(slc);
 
 
-var classListaPauta = document.querySelectorAll('.banner_fijos_rd');
-var classListaPautaNot = document.querySelectorAll('.banner_fijos_rd .noticias');
-var classListaPautaNotArt = document.querySelectorAll('.banner_fijos_rd .noticias article');
-
+var classListaPauta = document.querySelector('.banner_fijos_rd');
+var classListaPautaNot = document.querySelector('.banner_fijos_rd .noticias');
+var classListaPautaNotArt = document.querySelectorAll('.banner_fijos_rd .noticias .article');
 
 classListaPauta.classList.add('swiper');
 classListaPautaNot.classList.add('swiper-wrapper');
