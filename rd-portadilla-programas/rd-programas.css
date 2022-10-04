@@ -662,7 +662,7 @@
   }
 
   .faq_separador2 {
-    width: 385px;
+    max-width: 100%;
   }
 
   .faq_separador {
