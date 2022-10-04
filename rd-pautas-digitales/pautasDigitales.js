@@ -7,3 +7,19 @@
 // document.head.appendChild(slc);
 
 
+var classListaPauta = document.querySelectorAll('.banner_fijos_rd');
+var classListaPautaNot = document.querySelectorAll('.banner_fijos_rd .noticias');
+var classListaPautaNotArt = document.querySelectorAll('.banner_fijos_rd .noticias article');
+
+
+classListaPauta.classList.add('swiper');
+classListaPautaNot.classList.add('swiper-wrapper');
+
+for (const SlideProg of classListaPautaNotArt) {
+  SlideProg.classList.add('swiper-slide');
+}
+
+var swiperPautas = new Swiper(".banner_fijos_rd", {
+  slidesPerView: 1,
+  spaceBetween: 20,
+});
