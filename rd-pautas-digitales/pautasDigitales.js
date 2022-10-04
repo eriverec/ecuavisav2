@@ -8,7 +8,7 @@
 
 setTimeout(function () {
   swiperPautas();
-}, 500);
+}, 300);
 
 function swiperPautas() {
   var classListaPauta = document.querySelector('.banner_fijos_rd');
