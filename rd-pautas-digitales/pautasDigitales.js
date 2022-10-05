@@ -25,6 +25,10 @@ function swiperPautas() {
   var swiperPautas = new Swiper(".banner_fijos_rd", {
     slidesPerView: 1,
     spaceBetween: 20,
+    autoplay: {
+      delay: 2500,
+      disableOnInteraction: false,
+    },
   });
 
 }
