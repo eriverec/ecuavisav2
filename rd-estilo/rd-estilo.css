@@ -951,7 +951,9 @@ img.sepMobile {
   display: none;
 }
 
-
+img.sepDesk {
+  max-width: 100%;
+}
 
 .port3 {
   border-top: 16px solid #2927B9;
@@ -1010,6 +1012,7 @@ img.sepMobile {
   }
   img.sepMobile{
     display: block;
+    max-width: 100%;
   }
 
   .lista_bloque_3_desktop .noticias {
