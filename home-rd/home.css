@@ -45,6 +45,10 @@
   }
 }
 
+.bb-azul{
+  border-bottom: 16px solid #2927B9;
+}
+
 .HOME_MENU_RD h1,
 .HOME_MENU_RD h2,
 .HOME_MENU_RD h3,
