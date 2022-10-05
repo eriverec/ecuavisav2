@@ -992,7 +992,7 @@ img.sepDesk {
   display: none;
 }
 
-.tem_dest .title_bloque {
+.title_bloque {
   display: flex;
   gap: 5px;
 }
