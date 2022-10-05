@@ -1035,6 +1035,11 @@ img.sepDesk {
     max-width: 100%;
   }
 
+  .estilo_separadorDesktop,
+  .estilo_separadorMobile {
+    margin-top: 16px;
+  }
+
   .estilo_separadorMobile {
     display: block;
   }
