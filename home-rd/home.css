@@ -47,6 +47,7 @@
 
 .bb-azul{
   border-bottom: 16px solid #2927B9;
+  margin-top: 80px;
 }
 
 .HOME_MENU_RD h1,
@@ -102,6 +103,9 @@
     font-size: 55px;
     line-height: 24px;
     margin-bottom: 20px;
+  }
+  .bb-azul{
+    margin-top: 0;
   }
 }
 
