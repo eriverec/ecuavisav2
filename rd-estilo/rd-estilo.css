@@ -978,6 +978,19 @@ img.sepDesk {
   margin-bottom: 40px;
 }
 
+.estilo_separadorDesktop,.estilo_separadorMobile{
+  max-width: 100%;
+}
+
+.estilo_separadorMobile{
+  display: none;
+}
+
+.tem_dest .title_bloque {
+  display: flex;
+  gap: 5px;
+}
+
 
 
 @media (min-width: 1400px) {
@@ -1013,6 +1026,14 @@ img.sepDesk {
   img.sepMobile{
     display: block;
     max-width: 100%;
+  }
+
+  .estilo_separadorMobile{
+    display: block;
+  }
+
+  .estilo_separadorDesktop{
+    display: none;
   }
 
   .lista_bloque_3_desktop .noticias {
