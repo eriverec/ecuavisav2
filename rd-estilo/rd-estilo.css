@@ -594,7 +594,7 @@ h2.temas_estilo {
 
 .teaser-viewer-title h2 {
   color: #2927B9;
-  font-size: 24px;
+  font-size: 40px;
   font-weight: 700;
   font-family: 'Archivo';
   line-height: 24px;
@@ -1033,6 +1033,10 @@ img.sepDesk {
   img.sepMobile {
     display: block;
     max-width: 100%;
+  }
+
+  .teaser-viewer-title h2{
+    font-size: 24px;
   }
 
   .estilo_separadorDesktop,
