@@ -980,6 +980,7 @@ img.sepDesk {
 
 .estilo_separadorDesktop,.estilo_separadorMobile{
   max-width: 100%;
+  margin-top: 20px;
 }
 
 .estilo_separadorMobile{
@@ -1034,6 +1035,10 @@ img.sepDesk {
 
   .estilo_separadorDesktop{
     display: none;
+  }
+
+  .tem_dest .title_bloque {
+    display: block;
   }
 
   .lista_bloque_3_desktop .noticias {
