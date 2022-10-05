@@ -947,9 +947,11 @@ h2.temas_estilo {
 
 }
 
-img.sep1 {
-  margin-top: -20px;
+img.sepMobile {
+  display: none;
 }
+
+
 
 .port3 {
   border-top: 16px solid #2927B9;
@@ -1003,6 +1005,12 @@ img.sep1 {
 
 
 @media (max-width: 767px) {
+  img.sepDesk {
+    display: none;
+  }
+  img.sepMobile{
+    display: block;
+  }
 
   .lista_bloque_3_desktop .noticias {
     grid-template-columns: 1fr;
