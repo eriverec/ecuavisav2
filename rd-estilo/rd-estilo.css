@@ -978,12 +978,17 @@ img.sepDesk {
   margin-bottom: 40px;
 }
 
-.estilo_separadorDesktop,.estilo_separadorMobile{
+.estilo_separadorDesktop,
+.estilo_separadorMobile {
   max-width: 100%;
   margin-top: 20px;
 }
 
-.estilo_separadorMobile{
+.estilo_separadorDesktop {
+  width: 100%;
+}
+
+.estilo_separadorMobile {
   display: none;
 }
 
@@ -1024,16 +1029,17 @@ img.sepDesk {
   img.sepDesk {
     display: none;
   }
-  img.sepMobile{
+
+  img.sepMobile {
     display: block;
     max-width: 100%;
   }
 
-  .estilo_separadorMobile{
+  .estilo_separadorMobile {
     display: block;
   }
 
-  .estilo_separadorDesktop{
+  .estilo_separadorDesktop {
     display: none;
   }
 
