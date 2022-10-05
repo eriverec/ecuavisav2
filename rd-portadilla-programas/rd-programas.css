@@ -434,6 +434,8 @@
 .bloque-programas .media_block .multimedia img {
   filter: brightness(70%);
   border-radius: 5px;
+  height: 100% !important;
+  object-fit: cover;
 }
 
 .programas-desktop .media_block .multimedia img {
@@ -514,6 +516,7 @@
   justify-content: space-between;
   margin-top: 35px;
   margin-bottom: 18px;
+  gap: 5px;
 }
 
 #navegacion .title h2 {
@@ -671,6 +674,10 @@
   .tarjetaSwiper .swiper-wrapper .swiper-slide .text_block {
     padding: 7rem 1rem 1.5rem;
     min-height: 110px;
+  }
+
+  #navegacion .title h2 {
+    font-size: 20px;
   }
 
   .tarjetaSwiper a h3 {
