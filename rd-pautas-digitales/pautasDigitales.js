@@ -15,7 +15,6 @@ function swiperPautas() {
   var classListaPautaNot = document.querySelector('.banner_fijos_rd .noticias');
   var classListaPautaNotArt = document.querySelectorAll('.banner_fijos_rd .noticias .article');
 
-  
   classListaPauta.classList.add('swiper');
   classListaPautaNot.classList.add('swiper-wrapper');
 
