@@ -53,12 +53,50 @@
   font-family: 'Anek Malayalam';
 }
 
+.estilo_separadorDesktop,
+.estilo_separadorMobile {
+  max-width: 100%;
+  margin-top: 20px;
+}
+
+.estilo_separadorDesktop {
+  width: 100%;
+}
+
+.estilo_separadorMobile {
+  display: none;
+}
+
+.title_bloque {
+  display: flex;
+  gap: 5px;
+}
+
+
 @media (max-width: 767px) {
 
   .prog-web-container .titulo_programa_web .cintillo-rd {
     font-size: 55px;
     line-height: 45px;
   }
+
+  .estilo_separadorDesktop,
+  .estilo_separadorMobile {
+    margin-top: 16px;
+  }
+
+  .estilo_separadorMobile {
+    display: block;
+  }
+
+  .estilo_separadorDesktop {
+    display: none;
+  }
+
+  .title_bloque {
+    display: block;
+  }
+
 
 }
 
@@ -616,7 +654,7 @@
 
   .swiper.tarjetaSwiper {
     width: 100% !important;
-   
+
   }
 
   .swiper-cards {
