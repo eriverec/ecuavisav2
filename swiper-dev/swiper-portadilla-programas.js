@@ -1,6 +1,7 @@
 setTimeout(function () {
     cardsTemasDestacados();
     swiperProgramasGlobal();
+    changeTitleMasVisto();
 }, 500);
 
 function swiperProgramasGlobal() {
@@ -42,6 +43,13 @@ function cardsTemasDestacados() {
         effect: "cards",
         grabCursor: true,
     });
+}
+
+function changeTitleMasVisto() {
+    var infor = document.querySelector('.title_informativos .tit-vid a h2');
+    var entre = document.querySelector(".title_entretenimiento .tit-vid a h2");
+    infor.textContent = 'ACTUALIDAD';
+    entre.textContent = 'ENTRETENIMIENTO';
 }
 
 var device;
