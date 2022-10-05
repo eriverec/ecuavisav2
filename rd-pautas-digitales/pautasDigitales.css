@@ -1,1 +1,16 @@
 /*INITIAL*/
+
+.pud_mobile {
+  display: none;
+}
+
+
+
+@media (max-width:767px) {
+  .pud_mobile {
+    display: block;
+  }
+  .pud_desktop{
+    display: none;
+  }
+}
