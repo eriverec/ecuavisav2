@@ -48,8 +48,11 @@ function cardsTemasDestacados() {
 function changeTitleMasVisto() {
     var infor = document.querySelector('.title_informativos .tit-vid a h2');
     var entre = document.querySelector(".title_entretenimiento .tit-vid a h2");
+    var deleteClass = document.querySelector('.MENU_M_VISTO .container');
+    deleteClass.classList.remove('container');
     infor.textContent = 'ACTUALIDAD';
     entre.textContent = 'ENTRETENIMIENTO';
+
 }
 
 var device;
