@@ -7,8 +7,6 @@
 @media (max-width:767px) {
   .pud_mobile {
     display: block;
-    height: 124px;
-    object-fit: cover;
   }
   .pud_desktop{
     display: none;
