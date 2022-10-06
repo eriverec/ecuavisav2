@@ -213,16 +213,31 @@ div#r03c01 {
 .author_card .author_box {
   display: flex;
   align-items: center;
-  justify-content: center;
   gap: 20px;
+  max-width: 500px;
+  margin: auto;
 }
-.author_card .author_box .media_block a img{
+
+.author_card .author_text {
+  max-width: 500px;
+  margin: auto;
+}
+
+.author_card .author_box .media_block a img {
   border: 2.48px solid #2927B9;
   border-radius: 50%;
   width: 100%;
   height: auto;
 }
 
+.author_card .author_box .text_block .author_redes_box img {
+  width: 22px;
+}
+
+.author_card .author_box .text_block .author_redes_box {
+  display: flex;
+  gap: 16px;
+}
 
 @media (max-width: 1024px) {
   .ecv_relacionadas_2022 .recomendadas-rd {
