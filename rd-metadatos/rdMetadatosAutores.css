@@ -1,0 +1,285 @@
+div#r03c01 {
+  padding-right: 30px;
+}
+
+/*
+    NOTAS MÁS RECIENTES DESKTOP
+    */
+.cintillo-rd h1.not-rec {
+  margin-left: 20px;
+}
+
+.notas-recientes {
+  display: block;
+}
+
+.c_azul_celeste_Desktop img.line-desk {
+  width: 96%;
+}
+
+.notas-recientes .iter-rankingtab-mostrecent-hd {
+  margin-bottom: 25px;
+  margin-left: 20px;
+  font-family: 'Anek Malayalam';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 55px;
+  line-height: 40px;
+  text-transform: lowercase;
+  width: 100%;
+  border: none;
+}
+
+.ranking-viewer-portlet li a {
+  color: #2927B9 !important;
+}
+
+.notas-recientes .TIT {
+  padding: 30px 0;
+}
+
+.notas-recientes .TIT h3 {
+  margin-bottom: 0;
+  list-style: disc;
+  display: list-item;
+  margin-left: 20px;
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 20px;
+  line-height: 22px;
+  color: #060127;
+}
+
+.notas-recientes .TIT {
+  border-bottom: 1px dotted #2927B9;
+}
+
+/* FIN NOTAS RECIENTES */
+
+/*
+     BLOQUE NOTAS
+    */
+/*
+    .ecv_relacionadas_2022 .noticias .article:nth-child(2) .recomendadas-rd .multimedia,
+    .ecv_relacionadas_2022 .noticias .article:nth-child(3) .recomendadas-rd .multimedia,
+    .ecv_relacionadas_2022 .noticias .article:nth-child(6) .recomendadas-rd .multimedia {
+        display: none;
+
+    }
+    .ecv_relacionadas_2022 .noticias .article:nth-child(2) .recomendadas-rd,
+    .ecv_relacionadas_2022 .noticias .article:nth-child(3) .recomendadas-rd,
+    .ecv_relacionadas_2022 .noticias .article:nth-child(6) .recomendadas-rd {
+        display: grid;
+        grid-template-columns: none;
+        gap: 0;
+    }
+    */
+.ecv_relacionadas_2022 .media_block {
+  width: 100%;
+}
+
+
+.cintillo-rd .tit-single h1 {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 24px;
+  text-transform: uppercase;
+}
+
+.ecv_relacionadas_2022 .recomendadas-rd .headline h3 {
+  line-height: 28px;
+  font-size: 20px;
+}
+
+.ecv_relacionadas_2022 .noticias .article:nth-child(1) {
+  border-top: 1px #2927B9 solid;
+}
+
+.ecv_relacionadas_2022 .noticias .article .multimedia .multimediaIconMacroWrapper div img {
+  border-radius: 3px;
+}
+
+.ecv_relacionadas_2022 .recomendadas-rd {
+  display: grid;
+  grid-template-columns: 4fr 1fr;
+  gap: 15px;
+  padding: 20px 0;
+  border-bottom: 1px solid #2927B9;
+  align-items: center;
+}
+
+.single-tag span.categoryListItemPosition {
+  display: none;
+}
+
+.single-tag .categoryGroup .categoryListItemLink {
+  font-family: 'Anek Malayalam';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 55px;
+  line-height: 40px;
+  display: flex;
+  align-items: flex-end;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: #2927B9;
+}
+
+.cintillo-single h2 {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 26px;
+  color: #060127;
+}
+
+.ecv_relacionadas_2022 .iconPlay {
+  background-image: url('https://ecuavisadev.netlify.app/grilla/bloque/assets/Play.svg');
+  width: 25px;
+  height: 25px;
+  bottom: 7px;
+}
+
+/* 
+    paginador 
+    */
+.ly-especial .aui-button-holder {
+  margin-top: 20px;
+  padding: 0;
+}
+
+.ecv_relacionadas_2022 .prev-button,
+.ecv_relacionadas_2022 .next-button {
+  cursor: pointer;
+  float: left;
+  background-color: transparent;
+  font-weight: bolder;
+  border: none;
+}
+
+.ecv_relacionadas_2022 .prev-button:hover,
+.ecv_relacionadas_2022 .next-button:hover {
+  background-color: white;
+}
+
+.ecv_relacionadas_2022 .carrusel ul {
+  display: inline-flex;
+  margin: 40px;
+  width: 100%;
+  justify-content: center;
+}
+
+.ecv_relacionadas_2022 .carrusel ul .nav-page-selected {
+  color: #fff;
+  padding: 10px 15px;
+  border-radius: 0;
+  background: #2927B9;
+  border-radius: 5px;
+}
+
+.ecv_relacionadas_2022 .carrusel ul li {
+  margin: 3%;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  font-family: 'Archivo';
+  color: #2927B9;
+}
+
+.ecv_relacionadas_2022 .next-button {
+  background-image: url('https://estadisticas.ecuavisa.com/sites/default/files/2022-09/Vector%2013.webp');
+  background-repeat: no-repeat;
+  background-position: center;
+  color: transparent;
+}
+
+.ecv_relacionadas_2022 .prev-button {
+  background-image: url('https://estadisticas.ecuavisa.com/sites/default/files/2022-09/Vector%2012.webp');
+  background-repeat: no-repeat;
+  background-position: center;
+  color: transparent;
+}
+
+@media (max-width: 1024px) {
+  .ecv_relacionadas_2022 .recomendadas-rd {
+    display: grid;
+    grid-template-columns: 3fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .ecv_relacionadas_2022 .recomendadas-rd {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+  }
+}
+
+@media (max-width: 600px) {
+  #iter-content-wrapper {
+    padding-top: 0;
+  }
+
+  div#r03c01 {
+    padding-right: 0px;
+  }
+
+  .notas-recientes {
+    display: none;
+  }
+
+  .cintillo-rd h1.not-rec {
+    display: none;
+  }
+
+  .c_azul_celeste_Desktop img.line-desk {
+    display: none;
+  }
+
+  .bloque-notas-desktop .recomendadas-rd .headline h3 {
+    font-size: 18px;
+  }
+
+  .ecv_relacionadas_2022 .noticias .article .multimedia .multimediaIconMacroWrapper div img {
+    width: 100% !important;
+  }
+
+  .ecv_relacionadas_2022 .recomendadas-rd {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    padding: 30px 0 30px;
+  }
+
+  /*
+    .ecv_relacionadas_2022 .noticias .article:nth-child(9) .recomendadas-rd {
+        grid-template-columns: none;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: flex-start;
+        gap: 25px;
+    }
+    .ecv_relacionadas_2022 .noticias .article:nth-child(9) .iconPlay{
+        background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Play_turquesa.svg);
+        height: 100%;
+        background-position: center;
+        width: 100%;
+        background-size: auto;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+    }
+    */
+  .cintillo-single h2 {
+    font-size: 16px;
+  }
+
+  .ecv_relacionadas_2022 .recomendadas-rd .headline h3 {
+    font-size: 18px;
+    line-height: 22px;
+  }
+}
