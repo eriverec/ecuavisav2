@@ -205,6 +205,25 @@ div#r03c01 {
   color: transparent;
 }
 
+
+/**************************
+*****BLOQUE INFO AUTOR*****
+**************************/
+
+.author_card .author_box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.author_card .author_box .media_block a img{
+  border: 2.48px solid #2927B9;
+  border-radius: 50%;
+  width: 100%;
+  height: auto;
+}
+
+
 @media (max-width: 1024px) {
   .ecv_relacionadas_2022 .recomendadas-rd {
     display: grid;
