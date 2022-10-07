@@ -16,7 +16,7 @@ function getNameTag() {
 
 
 function hideBlock() {
-  if (typeof authorSlug === !'undefined') {
+  if (typeof authorSlug !== 'undefined') {
     console.log(true);
     document.querySelector('.categoryGroup').style.display = "none";
     document.querySelector('.c_azul_global div').style.display = "none";
