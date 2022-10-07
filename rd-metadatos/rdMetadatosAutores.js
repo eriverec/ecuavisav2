@@ -1,5 +1,6 @@
 setTimeout(function () {
   getNameTag();
+  hideBlock();
 }, 300)
 
 function getNameTag() {
@@ -10,4 +11,17 @@ function getNameTag() {
 
   dataAuthor.append(`${metaSelec}`);
   cintillo.append(`Recopilación de todo lo publicado en Ecuavisa sobre ${metaSelec}.`);
+}
+
+
+function hideBlock() {
+  if (authorSlug) {
+    console.log(true);
+    document.querySelector('.categoryGroup').style.display = "none";
+    document.querySelector('.c_azul_global').style.display = "none";
+    document.querySelector('.name_tema').style.display = "none";
+    document.querySelector('.cintillo-single').style.display = "none";
+  } else {
+    console.log(false);
+  }
 }
