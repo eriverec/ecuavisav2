@@ -8,8 +8,9 @@ function getNameTag() {
   var metaSelec = selec.textContent;
   var cintillo = document.querySelector('.cintillo-single h2');
   var dataAuthor = document.querySelector('.author_card .text_block .name_autor');
-
-  dataAuthor.append(`${metaSelec}`);
+  if(dataAuthor){
+    dataAuthor.append(`${metaSelec}`);
+  }
   cintillo.append(`Recopilación de todo lo publicado en Ecuavisa sobre ${metaSelec}.`);
 }
 
