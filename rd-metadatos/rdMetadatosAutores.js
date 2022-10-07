@@ -22,8 +22,11 @@ function hideBlock() {
     document.querySelector('.c_azul_global div').style.display = "none";
     document.querySelector('.name_tema .cintillo-rd').style.display = "none";
     document.querySelector('.cintillo-single').style.display = "none";
-    var removeClass = document.querySelector('.bbc');
-    removeClass.classList.remove('mb-4');
+    var removeClassBBC = document.querySelector('.bbc');
+    var removeClassSingle = document.querySelector('.single-tag');
+    removeClassBBC.classList.remove('mb-4');
+    removeClassSingle.classList.remove('mb-4');
+
   } else {
     console.log(false);
   }
