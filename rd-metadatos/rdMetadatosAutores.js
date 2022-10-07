@@ -18,8 +18,8 @@ function hideBlock() {
   if (authorSlug) {
     console.log(true);
     document.querySelector('.categoryGroup').style.display = "none";
-    document.querySelector('.c_azul_global').style.display = "none";
-    document.querySelector('.name_tema').style.display = "none";
+    document.querySelector('.c_azul_global div').style.display = "none";
+    document.querySelector('.name_tema .cintillo-rd').style.display = "none";
     document.querySelector('.cintillo-single').style.display = "none";
   } else {
     console.log(false);
