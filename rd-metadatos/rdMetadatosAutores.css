@@ -216,6 +216,8 @@ div#r03c01 {
   gap: 20px;
   max-width: 500px;
   margin: auto;
+  margin-top: 35px;
+  margin-bottom: 35px;
 }
 
 .author_card .author_text {
@@ -238,6 +240,64 @@ div#r03c01 {
   display: flex;
   gap: 16px;
 }
+
+.author_card .author_box .text_block .name_autor {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  color: #060127;
+}
+
+.author_card .author_box .text_block .name_cargo {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 26px;
+  display: flex;
+  align-items: center;
+  color: #060127;
+}
+
+.author_card .author_text .author-description p {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 26px;
+  color: #060127;
+}
+
+.author_card .author_box .text_block .pod_boton a {
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 12px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #2927B9;
+  text-decoration: none;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 20px;
+  gap: 10px;
+  width: 139.85px;
+  height: 32px;
+  background: #23DCD1;
+  border: 1px solid #23DCD1;
+  border-radius: 2px;
+  flex: none;
+  order: 0;
+  flex-grow: 0;
+  margin: 10px 0;
+}
+
 
 @media (max-width: 1024px) {
   .ecv_relacionadas_2022 .recomendadas-rd {
