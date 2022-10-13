@@ -16,16 +16,20 @@ function DataEntrada() {
 function DatosPersonales() {
   const getFirstName = localStorage.getItem('wylexFirstName');
   const getLastName = localStorage.getItem('wylexLastName');
-
+  const getEmail = localStorage.getItem('wylexEmail');
+  
   var firstNameUpperCase = getFirstName.charAt(0).toUpperCase() + getFirstName.slice(1);
   var lastNameUpperCase = getLastName.charAt(0).toUpperCase() + getLastName.slice(1);
-
+  
   var nombreApellido = `${firstNameUpperCase} ${lastNameUpperCase}`;
-
+  
   var selectValue = document.querySelector('.outsidetName .insideValue');
-
   selectValue.innerHTML = `${nombreApellido}`;
 
+  var selectValueEmail = document.querySelector('.outsideEmail .insideValue');
+  var emailcorreo = getEmail;
+  selectValueEmail.innerHTML = `${emailcorreo}`;
+  
 }
 
 
