@@ -1,0 +1,47 @@
+
+/*****************
+*****CINTILLO*****
+*****************/
+
+.cintillo-rd-mp {
+  display: inline-block;
+  color: var(--rd-cintillo);
+  font-family: 'Anek Malayalam';
+  letter-spacing: -0.03em;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 88px;
+  line-height: 96px;
+  margin-top: 30px;
+  text-transform: lowercase;
+}
+
+.c_azul_celeste_Mobile_mp {
+  display: none;
+}
+
+
+@media (max-width: 767px) {
+  .cintillo-rd-mp {
+    font-size: 55px;
+    line-height: 24px;
+    margin-bottom: 20px;
+  }
+
+  .c_azul_celeste_Mobile_mp {
+    display: block;
+  }
+
+  .c_azul_celeste_Desktop_mp {
+    display: none;
+  }
+}
+
+
+
+
+
+
+/***********************
+*****NOTIFICACIONES*****
+***********************/
