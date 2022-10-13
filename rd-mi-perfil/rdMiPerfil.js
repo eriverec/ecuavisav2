@@ -7,12 +7,16 @@ setTimeout(function () {
 function DataEntrada () {
   const getFirstName = localStorage.getItem('wylexFirstName');
   var firstNameUpperCase = getFirstName.charAt(0).toUpperCase() + getFirstName.slice(1);
-  const getAvatar = localStorage.getItem('wylexAvatar');
+  var getAvatar = localStorage.getItem('wylexAvatar');
   //Pintar el avatar del usuario
   var selectImg = document.querySelector('.imgAvatar');
   var getAvatarDefault = 'https://redyman.netlify.app/header2022/img/user.png';
 
-  selectImg.innerHTML = `<img src="${typeof(getAvatar) !== 'undefined' ? getAvatar : getAvatarDefault}" alt="${getFirstName}">`;
+  // if (getAvatar){
+
+  // }
+
+  selectImg.innerHTML = `<img src="${getAvatar ? getAvatar : getAvatarDefault}" alt="${getFirstName}">`;
 
   console.log("WYLEX IMAGEN",getAvatar);
 
