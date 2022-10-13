@@ -4,7 +4,7 @@ setTimeout(function () {
 }, 300);
 
 
-function DataEntrada () {
+function DataEntrada() {
   const getFirstName = localStorage.getItem('wylexFirstName');
   var firstNameUpperCase = getFirstName.charAt(0).toUpperCase() + getFirstName.slice(1);
   var getAvatar = localStorage.getItem('wylexAvatar');
@@ -12,20 +12,20 @@ function DataEntrada () {
   var selectImg = document.querySelector('.imgAvatar');
   var getAvatarDefault = 'https://redyman.netlify.app/header2022/img/user.png';
 
-  // if (getAvatar){
+  if (getAvatar !== NULL) {
+    selectImg.innerHTML = `<img src="${getAvatar}" alt="${getFirstName}">`;
+  } else {
+    selectImg.innerHTML = `<img src="${getAvatarDefault}" alt="${getFirstName}">`;
+  }
 
-  // }
-
-  selectImg.innerHTML = `<img src="${getAvatar ? getAvatar : getAvatarDefault}" alt="${getFirstName}">`;
-
-  console.log("WYLEX IMAGEN",getAvatar);
+  console.log("WYLEX IMAGEN", getAvatar);
 
   //Pintar el primer nombre del usuario
   var selectImg = document.querySelector('.infoName');
   selectImg.innerHTML = `Hola, ${firstNameUpperCase}`;
 }
 
-function DatosPersonales () {
+function DatosPersonales() {
   const getFirstName = localStorage.getItem('wylexFirstName');
   const getLastName = localStorage.getItem('wylexLastName');
 
