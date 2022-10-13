@@ -26,6 +26,8 @@ function DatosPersonales () {
 
   var nombreApellido = `${firstNameUpperCase} ${lastNameUpperCase}`;
 
-  console.log(nombreApellido);
+  var selectValue = document.querySelector('.outsidetName .insideValue');
+
+  selectValue.innerHTML = `${nombreApellido}`;
 
 }
