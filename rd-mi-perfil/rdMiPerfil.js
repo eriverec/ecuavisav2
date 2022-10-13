@@ -10,7 +10,9 @@ function DataEntrada () {
   const getAvatar = localStorage.getItem('wylexAvatar');
   //Pintar el avatar del usuario
   var selectImg = document.querySelector('.imgAvatar');
-  selectImg.innerHTML = `<img src="${getAvatar}" alt="${getFirstName}">`;
+  var getAvatarDefault = 'https://redyman.netlify.app/header2022/img/user.png';
+
+  selectImg.innerHTML = `<img src="${getAvatar !== null ? getAvatar : getAvatarDefault}" alt="${getFirstName}">`;
 
   //Pintar el primer nombre del usuario
   var selectImg = document.querySelector('.infoName');
