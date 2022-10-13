@@ -21,7 +21,7 @@ function DataEntrada() {
   console.log("WYLEX IMAGEN", getAvatar);
 
   //Pintar el primer nombre del usuario
-  var selectImg = document.querySelector('.infoName');
+  // var selectName = document.querySelector('.infoName');
   selectImg.innerHTML = `Hola, ${firstNameUpperCase}`;
 }
 
