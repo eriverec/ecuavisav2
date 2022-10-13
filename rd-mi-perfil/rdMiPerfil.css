@@ -1,7 +1,4 @@
-
-/*****************
-*****CINTILLO*****
-*****************/
+/**********************CINTILLO**********************/
 
 .cintillo-rd-mp {
   display: inline-block;
@@ -38,10 +35,47 @@
 }
 
 
+/****************ENTRADA******************/
+
+.entradaGrid {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.entradaGrid .imgAvatar img {
+  border: 2.4px solid #2927B9;
+  border-radius: 50%;
+}
+
+.entradaGrid .infoBox .infoName {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 30px;
+  color: #060127;
+}
+
+.entradaGrid .infoBox .infoName p {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 26px;
+  display: flex;
+  align-items: center;
+  color: #060127;
+  margin: 0;
+}
 
 
+@media (max-width: 767px) {
+  .entradaGrid .infoBox .infoName {
+    font-size: 22px;
+  }
 
-
-/***********************
-*****NOTIFICACIONES*****
-***********************/
+  .entradaGrid .infoBox .infoName p {
+    font-size: 16px;
+  }
+}
