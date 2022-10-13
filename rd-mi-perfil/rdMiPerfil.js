@@ -12,7 +12,9 @@ function DataEntrada () {
   var selectImg = document.querySelector('.imgAvatar');
   var getAvatarDefault = 'https://redyman.netlify.app/header2022/img/user.png';
 
-  selectImg.innerHTML = `<img src="${getAvatar !== null ? getAvatar : getAvatarDefault}" alt="${getFirstName}">`;
+  selectImg.innerHTML = `<img src="${getAvatar === null ? getAvatar : getAvatarDefault}" alt="${getFirstName}">`;
+
+  console.log("WYLEX IMAGEN",getAvatar);
 
   //Pintar el primer nombre del usuario
   var selectImg = document.querySelector('.infoName');
