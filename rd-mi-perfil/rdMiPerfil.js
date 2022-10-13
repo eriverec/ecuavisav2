@@ -1,14 +1,13 @@
 setTimeout(function () {
-  DataInfoUser();
+  DataEntrada();
+  DatosPersonales();
 }, 300);
 
 
-function DataInfoUser () {
+function DataEntrada () {
   const getFirstName = localStorage.getItem('wylexFirstName');
   var firstNameUpperCase = getFirstName.charAt(0).toUpperCase() + getFirstName.slice(1);
-
   const getAvatar = localStorage.getItem('wylexAvatar');
-
   //Pintar el avatar del usuario
   var selectImg = document.querySelector('.imgAvatar');
   selectImg.innerHTML = `<img src="${getAvatar}" alt="${getFirstName}">`;
@@ -16,7 +15,17 @@ function DataInfoUser () {
   //Pintar el primer nombre del usuario
   var selectImg = document.querySelector('.infoName');
   selectImg.innerHTML = `Hola, ${firstNameUpperCase}`;
+}
 
-  // console.log(getFirstName);
+function DatosPersonales () {
+  const getFirstName = localStorage.getItem('wylexFirstName');
+  const getLastName = localStorage.getItem('wylexLastName');
+
+  var firstNameUpperCase = getFirstName.charAt(0).toUpperCase() + getFirstName.slice(1);
+  var lastNameUpperCase = getLastName.charAt(0).toUpperCase() + getLastName.slice(1);
+
+  var nombreApellido = `${firstNameUpperCase} ${lastNameUpperCase}`;
+
+  console.log(nombreApellido);
 
 }
