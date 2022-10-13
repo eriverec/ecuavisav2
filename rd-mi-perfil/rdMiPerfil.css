@@ -46,6 +46,8 @@
 .entradaGrid .imgAvatar img {
   border: 2.4px solid #2927B9;
   border-radius: 50%;
+  width: 120px;
+  height: 100%;
 }
 
 .entradaGrid .infoBox .infoName {
@@ -55,6 +57,7 @@
   font-size: 28px;
   line-height: 30px;
   color: #060127;
+  margin: 0;
 }
 
 .entradaGrid .infoBox .infoName p {
@@ -73,6 +76,10 @@
 @media (max-width: 767px) {
   .entradaGrid .infoBox .infoName {
     font-size: 22px;
+  }
+
+  .entradaGrid .imgAvatar img {
+    width: 100px;
   }
 
   .entradaGrid .infoBox .infoName p {
