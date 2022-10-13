@@ -86,3 +86,47 @@
     font-size: 16px;
   }
 }
+
+
+
+/****************DATOS PERSONALES******************/
+.mp_title {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 30px;
+  line-height: 28px;
+  color: #2927B9;
+}
+
+.insideTitle {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 24px;
+  line-height: 26px;
+  color: #060127;
+}
+
+.insideValue {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 24px;
+  line-height: 26px;
+  color: #060127;
+}
+
+@media (max-width: 767px) {
+  .insideTitle {
+    font-size: 16px;
+  }
+
+  .insideValue {
+    font-size: 16px;
+  }
+
+  .mp_title {
+    font-size: 22px;
+  }
+}
