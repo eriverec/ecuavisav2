@@ -181,6 +181,11 @@
   border: none;
   outline: none;
   background: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  width: -webkit-fill-available;
 }
 
 .insideTitle {
@@ -257,7 +262,6 @@
 
 
 /****************COLLAPSE******************/
-
 
 .active_mp,
 .mp_title:hover {
