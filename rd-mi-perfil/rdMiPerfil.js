@@ -1,4 +1,19 @@
+function collapse () {
+  var coll = document.getElementsByClassName("collapsible_mp");
+  var i;
 
+  for (i = 0; i < coll.length; i++) {
+    coll[i].addEventListener("click", function () {
+      this.classList.toggle("active_mp");
+      var content = this.nextElementSibling;
+      if (content.style.maxHeight) {
+        content.style.maxHeight = null;
+      } else {
+        content.style.maxHeight = content.scrollHeight + "px";
+      }
+    });
+  }
+}
 
 function DataEntrada() {
   const getFirstName = localStorage.getItem('wylexFirstName');
@@ -82,6 +97,7 @@ function swiperNotificaciones() {
 
 
 setTimeout(function () {
+  collapse();
   DataEntrada();
   DatosPersonales();
   swiperNotificaciones();
