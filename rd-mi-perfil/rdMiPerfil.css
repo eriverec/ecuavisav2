@@ -99,8 +99,7 @@
 
 
 .MP_notificaciones .noticias .article {
-  display: grid;
-  grid-template-columns: 2fr 1fr;
+  display: flex;
   column-gap: 20px;
   align-items: center;
   border-top: 1px solid #23DCD1;
@@ -140,6 +139,7 @@
   line-height: 16px;
   text-transform: uppercase;
   color: #23DCD1;
+  margin-bottom: 8px;
 }
 
 .MP_notificaciones .article .text_block h3 {
@@ -152,12 +152,6 @@
 }
 
 
-@media (max-width: 767px) {
-  .MP_notificaciones .noticias .article .multimedia img {
-    width: 100%;
-  }
-
-}
 
 /****************DATOS PERSONALES******************/
 .mp_title {
