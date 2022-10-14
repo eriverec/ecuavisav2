@@ -245,25 +245,6 @@
   margin-top: 50px;
 }
 
-.MP_suscripciones .insideTitle {
-  font-family: 'Archivo';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 22px;
-  line-height: 26px;
-  color: #060127;
-  margin-bottom: 10px;
-}
-
-.MP_suscripciones .insideValue {
-  font-family: 'Archivo';
-  font-style: normal;
-  font-weight: 300;
-  font-size: 22px;
-  line-height: 26px;
-  color: #060127;
-}
-
 .MP_suscripciones .outsideBox {
   padding: 30px 10px;
   height: 100%;
@@ -273,13 +254,31 @@
   justify-content: space-between;
 }
 
+.MP_suscripciones .metaTitle {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 26px;
+  color: #060127;
+  margin-bottom: 10px;
+}
+
+.MP_suscripciones .metaValue {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 26px;
+  color: #060127;
+}
 
 @media (max-width: 767px) {
-  .MP_suscripciones .insideTitle {
+  .MP_suscripciones .metaTitle {
     font-size: 16px;
   }
 
-  .MP_suscripciones .insideValue {
+  .MP_suscripciones .metaValue {
     font-size: 16px;
   }
 }
