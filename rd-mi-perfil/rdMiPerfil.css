@@ -122,6 +122,7 @@
   font-size: 22px;
   line-height: 28px;
   color: #FFFFFF;
+  padding-top: 40px;
 }
 
 .MP_notificaciones .noticias .article .multimedia img {
@@ -148,6 +149,14 @@
   font-size: 18px;
   line-height: 22px;
   color: #FFFFFF;
+}
+
+
+@media (max-width: 767px) {
+  .MP_notificaciones .noticias .article .multimedia img {
+    width: 100%;
+  }
+
 }
 
 /****************DATOS PERSONALES******************/
