@@ -151,6 +151,14 @@
   color: #FFFFFF;
 }
 
+.MP_notificaciones .swiper-pagination-bullet-active{
+  background: #23dcd1;
+}
+
+.MP_notificaciones .swiper-pagination-bullet{
+  opacity: var(--swiper-pagination-bullet-inactive-opacity, .5);
+}
+
 
 
 /****************DATOS PERSONALES******************/
