@@ -96,6 +96,36 @@
 }
 
 
+.MP_notificaciones .noticias .article {
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  column-gap: 20px;
+  align-items: center;
+}
+
+.MP_notificaciones .noticias .article .multimedia img {
+  width: 100%;
+  border-radius: 2px;
+}
+
+.MP_notificaciones .article .text_block .section {
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  text-transform: uppercase;
+  color: #23DCD1;
+}
+
+.MP_notificaciones .article .text_block h3 {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  color: #FFFFFF;
+}
 
 /****************DATOS PERSONALES******************/
 .mp_title {
