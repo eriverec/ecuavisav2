@@ -45,7 +45,7 @@ function swiperNotificaciones() {
   }
 
   var dpagination = document.createElement("div");
-  dpagination.classList = "swiper-scrollbar";
+  dpagination.classList = "swiper-pagination";
   classListaNotification.append(dpagination);
 
   var swiperNoti = new Swiper(".notificationBox", {
