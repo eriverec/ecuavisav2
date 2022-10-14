@@ -151,13 +151,15 @@
   color: #FFFFFF;
 }
 
-.MP_notificaciones .swiper-pagination-bullet-active{
+.MP_notificaciones .swiper-pagination-bullet {
+  background: rgb(35 220 209 / 50%);
+  opacity: inherit;
+}
+
+.MP_notificaciones .swiper-pagination-bullet.swiper-pagination-bullet-active {
   background: #23dcd1;
 }
 
-.MP_notificaciones .swiper-pagination-bullet{
-  opacity: var(--swiper-pagination-bullet-inactive-opacity, .5);
-}
 
 
 
