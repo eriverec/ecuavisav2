@@ -154,6 +154,9 @@
 .MP_notificaciones .swiper-pagination-bullet {
   background: rgb(35 220 209 / 50%);
   opacity: inherit;
+  margin: 0 10px !important;
+  width: 11px;
+  height: 11px;
 }
 
 .MP_notificaciones .swiper-pagination-bullet.swiper-pagination-bullet-active {
