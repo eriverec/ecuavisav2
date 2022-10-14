@@ -44,10 +44,16 @@ function swiperNotificaciones() {
     swiperSlideNotification.classList.add('swiper-slide');
   }
 
+  var dpagination = document.createElement("div");
+  dpagination.classList = "swiper-scrollbar";
+  classListaNotification.append(dpagination);
+
   var swiperNoti = new Swiper(".notificationBox", {
     slidesPerView: 1,
     spaceBetween: 20,
-  
+    pagination: {
+      el: ".swiper-pagination",
+    },
     breakpoints: {
       600: {
         slidesPerView: 1,
