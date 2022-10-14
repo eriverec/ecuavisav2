@@ -171,7 +171,7 @@
 /****************DATOS PERSONALES******************/
 
 
-.insideTitle {
+.MP_datos .insideTitle {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 700;
@@ -181,7 +181,7 @@
   margin-bottom: 10px;
 }
 
-.insideValue {
+.MP_datos .insideValue {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 300;
@@ -190,12 +190,12 @@
   color: #060127;
 }
 
-.insideValue input {
+.MP_datos .insideValue input {
   border: 0;
 }
 
-.changeEmail,
-.changePassword {
+.MP_datos .changeEmail,
+.MP_datos .changePassword {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 300;
@@ -206,9 +206,9 @@
 }
 
 
-.outsidetName,
-.outsideEmail,
-.outsidePassword {
+.MP_datos .outsidetName,
+.MP_datos .outsideEmail,
+.MP_datos .outsidePassword {
   padding: 30px 10px;
   height: 100%;
   border-bottom: 1px solid #CACACA;
@@ -217,29 +217,82 @@
   justify-content: space-between;
 }
 
-.outsidetName {
+.MP_datos .outsidetName {
   border-top: 1px solid #CACACA;
 }
 
 @media (max-width: 767px) {
-  .insideTitle {
+  .MP_datos .insideTitle {
     font-size: 16px;
   }
 
-  .changeEmail,
-  .changePassword {
+  .MP_datos .changeEmail,
+  .MP_datos .changePassword {
     font-size: 16px;
   }
 
-  .insideValue {
+  .MP_datos .insideValue {
     font-size: 16px;
   }
-
 
 }
 
 
 
+/****************SUSCRIPCIONES******************/
+
+.MP_suscripciones {
+  margin-top: 50px;
+}
+
+.MP_suscripciones .insideTitle {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 26px;
+  color: #060127;
+  margin-bottom: 10px;
+}
+
+.MP_suscripciones .insideValue {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 26px;
+  color: #060127;
+}
+
+.MP_suscripciones .outsidetName,
+.MP_suscripciones .outsideEmail,
+.MP_suscripciones .outsidePassword {
+  padding: 30px 10px;
+  height: 100%;
+  border-bottom: 1px solid #CACACA;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.MP_suscripciones .outsidetName {
+  border-top: 1px solid #CACACA;
+}
+
+@media (max-width: 767px) {
+  .MP_suscripciones .insideTitle {
+    font-size: 16px;
+  }
+
+  .MP_suscripciones .changeEmail,
+  .MP_suscripciones .changePassword {
+    font-size: 16px;
+  }
+
+  .MP_suscripciones .insideValue {
+    font-size: 16px;
+  }
+}
 
 
 /****************COLLAPSE SIEMPRE DEBE DE ESTAR AL FINAL******************/
