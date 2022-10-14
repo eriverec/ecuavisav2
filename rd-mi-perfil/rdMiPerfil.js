@@ -1,8 +1,4 @@
-function scriptBS(){
-  var scriptBootstrap = document.createElement('script');
-  scriptBootstrap.src = "https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js";
-  document.head.appendChild(scriptBootstrap);
-}
+
 
 function DataEntrada() {
   const getFirstName = localStorage.getItem('wylexFirstName');
@@ -86,7 +82,6 @@ function swiperNotificaciones() {
 
 
 setTimeout(function () {
-  scriptBS();
   DataEntrada();
   DatosPersonales();
   swiperNotificaciones();
