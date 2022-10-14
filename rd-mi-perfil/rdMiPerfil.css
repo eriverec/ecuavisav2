@@ -94,7 +94,7 @@
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 700;
-  font-size: 30px;
+  font-size: 28px;
   line-height: 28px;
   color: #2927B9;
   margin: 20px 0;
@@ -104,7 +104,7 @@
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 700;
-  font-size: 24px;
+  font-size: 22px;
   line-height: 26px;
   color: #060127;
   margin-bottom: 10px;
@@ -114,9 +114,23 @@
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 300;
-  font-size: 24px;
+  font-size: 22px;
   line-height: 26px;
   color: #060127;
+}
+
+.insideValue input {
+  border: 0;
+}
+
+.changeEmail,.changePassword {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 26px;
+  text-decoration-line: underline;
+  color: #2927B9;
 }
 
 
@@ -126,6 +140,9 @@
   padding: 30px 10px;
   height: 100%;
   border-bottom: 1px solid #CACACA;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .outsidetName {
@@ -134,6 +151,9 @@
 
 @media (max-width: 767px) {
   .insideTitle {
+    font-size: 16px;
+  }
+  .changeEmail,.changePassword{
     font-size: 16px;
   }
 
