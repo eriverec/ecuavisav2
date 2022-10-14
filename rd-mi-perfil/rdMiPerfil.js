@@ -75,4 +75,5 @@ function swiperNotificaciones() {
 setTimeout(function () {
   DataEntrada();
   DatosPersonales();
+  swiperNotificaciones();
 }, 300);
