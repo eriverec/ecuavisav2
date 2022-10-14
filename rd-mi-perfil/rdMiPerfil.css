@@ -273,7 +273,7 @@
   color: #060127;
 }
 
-.MP_suscripciones .metaOutsideBox .button_siguiento .follow {
+.MP_suscripciones .metaOutsideBox .button_siguiendo .follow {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -290,7 +290,7 @@
   flex-grow: 0;
 }
 
-.MP_suscripciones .metaOutsideBox .button_siguiento span {
+.MP_suscripciones .metaOutsideBox .button_siguiendo span {
   font-family: 'Mattone 150';
   font-style: normal;
   font-weight: 600;
