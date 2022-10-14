@@ -290,6 +290,22 @@
   flex-grow: 0;
 }
 
+.MP_suscripciones .metaOutsideBox .button_seguir .follow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 20px;
+  gap: 10px;
+  width: 135.85px;
+  height: 32px;
+  border: 1px solid #23DCD1;
+  border-radius: 2px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
 .MP_suscripciones .metaOutsideBox .button_siguiendo span {
   font-family: 'Mattone 150';
   font-style: normal;
@@ -301,6 +317,7 @@
   text-align: center;
   text-transform: uppercase;
   color: #2927B9;
+  padding-top: 4px;
 }
 
 @media (max-width: 767px) {
