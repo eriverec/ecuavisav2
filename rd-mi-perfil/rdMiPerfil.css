@@ -254,7 +254,7 @@
   justify-content: space-between;
 }
 
-.MP_suscripciones .metaTitle {
+.MP_suscripciones .metaOutsideBox .metaTitle {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 700;
@@ -264,7 +264,7 @@
   margin-bottom: 10px;
 }
 
-.MP_suscripciones .metaValue {
+.MP_suscripciones .metaOutsideBox .metaValue {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 300;
@@ -273,12 +273,42 @@
   color: #060127;
 }
 
+.MP_suscripciones .metaOutsideBox .button_siguiento .follow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 20px;
+  gap: 10px;
+  width: 135.85px;
+  height: 32px;
+  background: #23DCD1;
+  border: 1px solid #23DCD1;
+  border-radius: 2px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.MP_suscripciones .metaOutsideBox .button_siguiento .span {
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 12px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  text-transform: uppercase;
+  color: #2927B9;
+}
+
 @media (max-width: 767px) {
-  .MP_suscripciones .metaTitle {
+  .MP_suscripciones .metaOutsideBox .metaTitle {
     font-size: 16px;
   }
 
-  .MP_suscripciones .metaValue {
+  .MP_suscripciones .metaOutsideBox .metaValue {
     font-size: 16px;
   }
 }
