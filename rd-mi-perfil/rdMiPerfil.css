@@ -34,32 +34,7 @@
   }
 }
 
-/****************COLLAPSE******************/
 
-
-.active_mp,
-.collapsible_mp:hover {
-  color: #2927B9;
-}
-
-.collapsible_mp:after {
-  content: '\002B';
-  color: #2927B9;
-  font-weight: bold;
-  float: right;
-  margin-left: 5px;
-}
-
-.active_mp:after {
-  content: "\2212";
-}
-
-.content_mp {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.2s ease-out;
-  background-color: transparent;
-}
 
 
 /****************ENTRADA******************/
@@ -275,4 +250,35 @@
   .mp_title {
     font-size: 22px;
   }
+}
+
+
+
+
+
+/****************COLLAPSE******************/
+
+
+.active_mp,
+.mp_title:hover {
+  color: #2927B9;
+}
+
+.collapsible_mp:after {
+  content: '\002B';
+  color: #2927B9;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active_mp:after {
+  content: "\2212";
+}
+
+.content_mp {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: transparent;
 }
