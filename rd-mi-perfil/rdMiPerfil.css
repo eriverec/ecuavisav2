@@ -36,26 +36,15 @@
 
 /****************COLLAPSE******************/
 
-.collapsible_mp {
-  background-color: #777;
-  color: white;
-  cursor: pointer;
-  padding: 18px;
-  width: 100%;
-  border: none;
-  text-align: left;
-  outline: none;
-  font-size: 15px;
-}
 
 .active_mp,
 .collapsible_mp:hover {
-  background-color: #555;
+  background-color: #2927B9;
 }
 
 .collapsible_mp:after {
   content: '\002B';
-  color: white;
+  color: #2927B9;
   font-weight: bold;
   float: right;
   margin-left: 5px;
@@ -66,7 +55,6 @@
 }
 
 .content_mp {
-  padding: 0 18px;
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
@@ -212,8 +200,12 @@
   font-weight: 700;
   font-size: 28px;
   line-height: 28px;
-  color: #2927B9;
   margin: 20px 0;
+  color: #777;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: transparent;
 }
 
 .insideTitle {
