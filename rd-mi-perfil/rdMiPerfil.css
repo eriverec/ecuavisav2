@@ -39,7 +39,7 @@
 
 .active_mp,
 .collapsible_mp:hover {
-  background-color: #2927B9;
+  color: #2927B9;
 }
 
 .collapsible_mp:after {
@@ -58,7 +58,7 @@
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.2s ease-out;
-  background-color: #f1f1f1;
+  background-color: transparent;
 }
 
 
