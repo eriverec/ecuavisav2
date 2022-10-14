@@ -87,6 +87,14 @@
   }
 }
 
+/****************NOTIFICACIONES******************/
+
+
+.MP_notificaciones {
+  background: #2927B9;
+  color: #ffffff;
+}
+
 
 
 /****************DATOS PERSONALES******************/
@@ -123,7 +131,8 @@
   border: 0;
 }
 
-.changeEmail,.changePassword {
+.changeEmail,
+.changePassword {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 300;
@@ -153,7 +162,9 @@
   .insideTitle {
     font-size: 16px;
   }
-  .changeEmail,.changePassword{
+
+  .changeEmail,
+  .changePassword {
     font-size: 16px;
   }
 
