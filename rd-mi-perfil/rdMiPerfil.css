@@ -264,9 +264,7 @@
   color: #060127;
 }
 
-.MP_suscripciones .outsidetName,
-.MP_suscripciones .outsideEmail,
-.MP_suscripciones .outsidePassword {
+.MP_suscripciones .outsideBox {
   padding: 30px 10px;
   height: 100%;
   border-bottom: 1px solid #CACACA;
@@ -275,17 +273,9 @@
   justify-content: space-between;
 }
 
-.MP_suscripciones .outsidetName {
-  border-top: 1px solid #CACACA;
-}
 
 @media (max-width: 767px) {
   .MP_suscripciones .insideTitle {
-    font-size: 16px;
-  }
-
-  .MP_suscripciones .changeEmail,
-  .MP_suscripciones .changePassword {
     font-size: 16px;
   }
 
