@@ -169,24 +169,7 @@
 
 
 /****************DATOS PERSONALES******************/
-.mp_title {
-  font-family: 'Archivo';
-  font-style: normal;
-  font-weight: 700;
-  font-size: 28px;
-  line-height: 28px;
-  margin: 20px 0;
-  color: #777;
-  cursor: pointer;
-  border: none;
-  outline: none;
-  background: transparent;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  align-content: center;
-  width: -webkit-fill-available;
-}
+
 
 .insideTitle {
   font-family: 'Archivo';
@@ -238,30 +221,6 @@
   border-top: 1px solid #CACACA;
 }
 
-.active_mp,
-.mp_title:hover {
-  color: #2927B9;
-}
-
-.mp_title:after {
-  content: '\002B';
-  color: #2927B9;
-  font-weight: bold;
-  float: right;
-  margin-left: 5px;
-}
-
-.active_mp:after {
-  content: "\2212";
-}
-
-.content_mp {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.2s ease-out;
-  background-color: transparent;
-}
-
 @media (max-width: 767px) {
   .insideTitle {
     font-size: 16px;
@@ -276,9 +235,60 @@
     font-size: 16px;
   }
 
+
+}
+
+
+
+
+
+/****************COLLAPSE SIEMPRE DEBE DE ESTAR AL FINAL******************/
+
+.mp_title {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 28px;
+  line-height: 28px;
+  margin: 20px 0;
+  color: #060127;
+  cursor: pointer;
+  border: none;
+  outline: none;
+  background: transparent;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  align-content: center;
+  width: -webkit-fill-available;
+}
+
+.active_mp,
+.mp_title:hover {
+  color: #2927B9;
+}
+
+.mp_title:after {
+  content: url('./assets/chevron-down.svg');
+  color: #2927B9;
+  font-weight: bold;
+  float: right;
+  margin-left: 5px;
+}
+
+.active_mp:after {
+  content: url('./assets/chevron-up.svg');
+}
+
+.content_mp {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.2s ease-out;
+  background-color: transparent;
+}
+
+@media (max-width: 767px) {
   .mp_title {
     font-size: 22px;
   }
 }
-
-
