@@ -365,6 +365,10 @@
   border-top: 1px solid #23DCD1;
 }
 
+.MP_noticias_save .noticias .article:nth-last-child(1) {
+  border-bottom: none;
+}
+
 
 .MP_noticias_save .noticias .article .multimedia img {
   width: 100px;
@@ -411,6 +415,9 @@
 
   .MP_noticias_save .noticias .article:nth-child(2) {
     border-top: 1px solid #23DCD1;
+  }
+  .MP_noticias_save .noticias .article:nth-last-child(2) {
+    border-bottom: none;
   }
 }
 
