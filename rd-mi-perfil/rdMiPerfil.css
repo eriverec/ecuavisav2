@@ -338,6 +338,18 @@
   padding-top: 4px;
 }
 
+@media (min-width: 767px) {
+  .MP_suscripciones .content_mp {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 30px;
+  }
+  .MP_suscripciones .metaOutsideBox:nth-child(2) {
+    border-top: 1px solid #CACACA;
+  }
+  
+}
+
 @media (max-width: 767px) {
   .MP_suscripciones .metaOutsideBox .metaTitle {
     font-size: 16px;
@@ -378,7 +390,7 @@
   border-bottom: none;
 }
 
-.MP_noticias_save .noticias .article .multimedia{
+.MP_noticias_save .noticias .article .multimedia {
   position: relative;
 }
 
