@@ -345,6 +345,60 @@
 }
 
 
+
+
+
+/****************NOTICIAS GUARDADAS******************/
+
+
+
+.MP_noticias_save .noticias .article {
+  display: flex;
+  column-gap: 20px;
+  align-items: center;
+  border-top: 1px solid #23DCD1;
+  border-bottom: 1px solid #23DCD1;
+  padding: 30px 0;
+  margin-top: 30px;
+  margin-bottom: 70px;
+  height: auto;
+}
+
+
+.MP_noticias_save .noticias .article .multimedia img {
+  width: 100px;
+  height: 97px;
+  border-radius: 2px;
+  object-fit: cover;
+}
+
+.MP_noticias_save .article .text_block .section {
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  color: #2927B9;
+  margin-bottom: 8px;
+}
+
+.MP_noticias_save .article .text_block h3 {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 22px;
+  display: flex;
+  align-items: flex-end;
+  color: #060127;
+}
+
+
+
+
 /****************COLLAPSE SIEMPRE DEBE DE ESTAR AL FINAL******************/
 
 .mp_title {
