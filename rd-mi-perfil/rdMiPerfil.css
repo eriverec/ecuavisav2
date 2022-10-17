@@ -254,7 +254,7 @@
   justify-content: space-between;
 }
 
-.MP_suscripciones .metaOutsideBox:nth-child(1){
+.MP_suscripciones .metaOutsideBox:nth-child(1) {
   border-top: 1px solid #CACACA;
 }
 
@@ -354,6 +354,11 @@
 
 /****************NOTICIAS GUARDADAS******************/
 
+.MP_noticias_save {
+  margin-top: 50px;
+}
+
+
 
 .MP_noticias_save .noticias .article {
   display: flex;
@@ -373,12 +378,25 @@
   border-bottom: none;
 }
 
+.MP_noticias_save .noticias .article .multimedia{
+  position: relative;
+}
 
 .MP_noticias_save .noticias .article .multimedia img {
   width: 100px;
   height: 97px;
   border-radius: 2px;
   object-fit: cover;
+}
+
+.MP_noticias_save .noticias .article .multimedia::after {
+  content: url('https://ecuavisadev.netlify.app/rd-mi-perfil/assets/saved.svg');
+  position: absolute;
+  z-index: 9999;
+  display: block;
+  bottom: 0;
+  right: 0;
+  padding: 10px;
 }
 
 .MP_noticias_save .article .text_block .section {
@@ -420,6 +438,7 @@
   .MP_noticias_save .noticias .article:nth-child(2) {
     border-top: 1px solid #2927B9;
   }
+
   .MP_noticias_save .noticias .article:nth-last-child(2) {
     border-bottom: none;
   }
