@@ -351,7 +351,6 @@
 /****************NOTICIAS GUARDADAS******************/
 
 
-
 .MP_noticias_save .noticias .article {
   display: flex;
   justify-content: space-between;
@@ -397,7 +396,29 @@
   color: #060127;
 }
 
+@media (min-width: 767px) {
+  .MP_noticias_save .noticias {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 30px;
+  }
 
+  .MP_noticias_save .noticias .article {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+  .MP_noticias_save .noticias .article{
+    border-top: none;
+  }
+
+  .MP_noticias_save .noticias .article:nth-child(1) {
+    border-top: 1px solid #23DCD1;
+  }
+
+  .MP_noticias_save .noticias .article:nth-child(2) {
+    border-top: 1px solid #23DCD1;
+  }
+}
 
 
 /****************COLLAPSE SIEMPRE DEBE DE ESTAR AL FINAL******************/
