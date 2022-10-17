@@ -517,8 +517,15 @@
 
 
 @media (min-width: 991px) {
-  .MP_ayuda .AyudaBox .noticias .article .text_block{
+  .MP_ayuda .AyudaBox .noticias .article .text_block {
     max-width: 500px;
+  }
+
+  .MP_ayuda .AyudaBox .noticias {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 50px;
+    align-items: center;
   }
 }
 
