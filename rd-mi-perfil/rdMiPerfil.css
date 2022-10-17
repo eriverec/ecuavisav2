@@ -545,7 +545,8 @@
   font-weight: 700;
   font-size: 28px;
   line-height: 28px;
-  margin: 20px 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
   color: #060127;
   cursor: pointer;
   border: none;
@@ -556,7 +557,6 @@
   align-items: center;
   align-content: center;
   width: -webkit-fill-available;
-  padding: 0;
 }
 
 .active_mp,
