@@ -516,6 +516,13 @@
 }
 
 
+@media (min-width: 991px) {
+  .MP_ayuda .AyudaBox .noticias .article .text_block{
+    max-width: 500px;
+  }
+}
+
+
 /****************COLLAPSE SIEMPRE DEBE DE ESTAR AL FINAL******************/
 
 .mp_title {
