@@ -449,20 +449,18 @@
   font-weight: 600;
   font-size: 11px;
   line-height: 12px;
-  /* identical to box height, or 109% */
-
   display: flex;
   align-items: center;
   text-align: center;
+  justify-content: center;
+  flex-direction: column;
   text-transform: uppercase;
-
-  /* Azul */
-
   color: #2927B9;
 }
 
 .MP_noticias_save .btn_view_all a:after {
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FbotonNews.svg');
+  transform: scale(0.8);
 }
 
 @media (min-width: 767px) {
@@ -487,6 +485,32 @@
 }
 
 
+
+/****************AYUDA******************/
+
+.MP_ayuda .AyudaBox .noticias .article .text_block {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  column-gap: 30px;
+}
+
+.MP_ayuda .AyudaBox .noticias .article .text_block a {
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 12px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  text-transform: uppercase;
+  color: #2927B9;
+}
+
+
+
+
 /****************COLLAPSE SIEMPRE DEBE DE ESTAR AL FINAL******************/
 
 .mp_title {
@@ -506,6 +530,7 @@
   align-items: center;
   align-content: center;
   width: -webkit-fill-available;
+  padding: 0;
 }
 
 .active_mp,
