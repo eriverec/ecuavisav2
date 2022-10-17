@@ -487,6 +487,15 @@
 
 
 /****************AYUDA******************/
+.MP_ayuda .AyudaBox .noticias .article {
+  padding: 20px 0;
+  height: auto;
+}
+
+.MP_ayuda .AyudaBox .noticias .article:nth-child(1) {
+  border-bottom: 1px solid #CACACA;
+
+}
 
 .MP_ayuda .AyudaBox .noticias .article .text_block {
   display: flex;
@@ -517,9 +526,7 @@
 
 
 @media (min-width: 991px) {
-  .MP_ayuda .AyudaBox .noticias .article .text_block {
-    max-width: 500px;
-  }
+
 
   .MP_ayuda .AyudaBox .noticias {
     display: grid;
