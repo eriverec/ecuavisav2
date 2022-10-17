@@ -487,6 +487,16 @@
 
 
 /****************AYUDA******************/
+
+.MP_ayuda .AyudaBox {
+  background: #F5F5F5;
+}
+
+.MP_ayuda .AyudaBox .noticias {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 .MP_ayuda .AyudaBox .noticias .article {
   padding: 20px 0;
   height: auto;
@@ -526,13 +536,8 @@
 
 
 @media (min-width: 991px) {
-
-
   .MP_ayuda .AyudaBox .noticias {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 50px;
-    align-items: center;
+    max-width: 500px;
   }
 }
 
