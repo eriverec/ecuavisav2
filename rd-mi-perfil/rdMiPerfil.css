@@ -354,6 +354,7 @@
 
 .MP_noticias_save .noticias .article {
   display: flex;
+  justify-content: space-between;
   column-gap: 20px;
   align-items: center;
   border-top: 1px solid #23DCD1;
