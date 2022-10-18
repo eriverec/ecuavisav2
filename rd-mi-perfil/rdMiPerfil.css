@@ -542,6 +542,40 @@
 }
 
 
+
+/****************BOTON CERRAR SESION******************/
+
+
+.MP_cerrar_session .button_cerrar_sesion {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  margin-bottom: 45px;
+}
+
+
+.MP_cerrar_session .button_cerrar_sesion a {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 18px;
+  gap: 10px;
+  width: 152px;
+  height: 32px;
+  border: 1px solid #23DCD1;
+  border-radius: 2px;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 12px;
+  text-align: center;
+  text-transform: uppercase;
+  color: #2927B9;
+}
+
 /****************COLLAPSE SIEMPRE DEBE DE ESTAR AL FINAL******************/
 
 .mp_title {
