@@ -72,6 +72,7 @@ function swiperNotificaciones() {
     pagination: {
       el: ".swiper-pagination",
       clickable: true,
+      dynamicBullets:true
     },
     breakpoints: {
       600: {
