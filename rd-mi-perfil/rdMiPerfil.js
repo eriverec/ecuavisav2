@@ -110,7 +110,7 @@ let perfil = {
           //}
         }
         $article.innerHTML = $articles;
-        initSwiper_Ec();
+        swiperNotificaciones();
       });
     },
     html_:function(data){
@@ -135,17 +135,13 @@ DatosPersonales();
 /*#Notificaciones: iniciar loader*/
 let $article = document.querySelector('.notificationBox .noticias');
 $article.innerHTML = perfil.notificaciones.loader();
-perfil.notificaciones.listar();
 /*#Fin notificaciones: iniciar loader*/
 
-let initSwiper_Ec = function(){
-  var time_jquery = setInterval(function() {
-      //if (window.jQuery) {
-        if(typeof Swiper !== 'undefined'){
-            swiperNotificaciones();
-            clearInterval(time_jquery);
-          }
-      //}
-  }, 500);
-}
-
+var time_jquery = setInterval(function() {
+    if (window.jQuery) {
+      if(typeof Swiper !== 'undefined'){
+          perfil.notificaciones.listar();
+          clearInterval(time_jquery);
+        }
+    }
+}, 500);
