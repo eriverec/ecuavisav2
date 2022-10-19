@@ -99,7 +99,7 @@ let perfil = {
   notificaciones:{
     listar:function(){
       let $article = document.querySelector('.notificationBox .noticias');
-      $article.innerHTML = ``;
+      $article.innerHTML = perfil.notificaciones.loader();
       let $articles = '';
       let $idusuario = localStorage.getItem('wylexUserId') || 0;
       fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/getNotifications/index.php").then(response => {
@@ -123,6 +123,11 @@ let perfil = {
                </div>
                <div class="multimedia"> <img src="${data.img}" alt="${data.title}"> </div>
             </article>`;
+    },
+    loader:function(data){
+      return `<div class="container_loader">
+        <div class="loader">
+      </div>`;
     }
   }
 }
