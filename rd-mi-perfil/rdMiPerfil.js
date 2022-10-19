@@ -1,3 +1,5 @@
+import myJson from './example.json' assert {type: 'json'};
+
 function collapse () {
   var coll = document.getElementsByClassName("collapsible_mp");
   var i;
@@ -96,34 +98,31 @@ let perfil = {
   notificaciones:{
     listar:function(){
       console.log('Entrando leer json');
-      $.ajax({
+      /*$.ajax({
           url: 'https://redyman.netlify.app/servicios/zonaPrivada/notificationsDataExample.json',
-          type: 'GET',
-          data: {
-            'estado': 0
-          },
-          dataType: 'JSON',
+          //type: 'GET',
+          jsonp : 'callback',
+          dataType: 'jsonp',
           beforeSend: function() {}
       }).done(function(data) {
           console.log(data);
           return;
-      }).fail(function() {
-          console.log('Error en json');
-      });
-
-      /*$.ajax({
-        url: "https://redyman.netlify.app/servicios/zonaPrivada/notificationsDataExample.json",
-        //type: "GET",
-        jsonp: "callback",
-        dataType: "jsonp",
-        data : {
-            q : 'select title,abstract,url from search.news where query="cat"',
-            format : 'json'
-        },
-        success: function(respuesta){
-          alert()
-          console.log('Respuesta: '+respuesta);
-        }
+      }).fail(function(jqXHR, textStatus, errorThrown) {
+          if (jqXHR.status === 0) {
+            alert('Not connect: Verify Network.');
+          } else if (jqXHR.status == 404) {
+            alert('Requested page not found [404]');
+          } else if (jqXHR.status == 500) {
+            alert('Internal Server Error [500].');
+          } else if (textStatus === 'parsererror') {
+            alert('Requested JSON parse failed.');
+          } else if (textStatus === 'timeout') {
+            alert('Time out error.');
+          } else if (textStatus === 'abort') {
+            alert('Ajax request aborted.');
+          } else {
+            alert('Uncaught Error: ' + jqXHR.responseText);
+          }
       });*/
     }
   }
