@@ -100,6 +100,10 @@ let perfil = {
         //type: "GET",
         jsonp: "callback",
         dataType: "jsonp",
+        data : {
+            q : 'select title,abstract,url from search.news where query="cat"',
+            format : 'json'
+        },
         success: function(respuesta){
           console.log('Respuesta: '+respuesta);
         }
