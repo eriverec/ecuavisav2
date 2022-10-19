@@ -97,9 +97,12 @@ function swiperNotificaciones() {
 let perfil = {
   notificaciones:{
     listar:function(){
-      console.log('Entrando leer json');
-      /**/
-      $.ajax({
+      fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/getNotifications/index.php").then(response => {
+         return response.json();
+      }).then(jsondata => {
+        console.log(jsondata)
+      });
+      /*$.ajax({
           url: 'https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/getNotifications/index.php',
           type: 'GET',
           dataType: 'JSON',
@@ -123,7 +126,7 @@ let perfil = {
           } else {
             alert('Uncaught Error: ' + jqXHR.responseText);
           }
-      });
+      });*/
     }
   }
 }
