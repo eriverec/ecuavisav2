@@ -98,8 +98,6 @@ function swiperNotificaciones() {
 let perfil = {
   notificaciones:{
     listar:function(){
-      let $article = document.querySelector('.notificationBox .noticias');
-      $article.innerHTML = perfil.notificaciones.loader();
       let $articles = '';
       let $idusuario = localStorage.getItem('wylexUserId') || 0;
       fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/getNotifications/index.php").then(response => {
@@ -134,6 +132,10 @@ let perfil = {
 collapse();
 DataEntrada();
 DatosPersonales();
+/*#Notificaciones: iniciar loader*/
+let $article = document.querySelector('.notificationBox .noticias');
+$article.innerHTML = perfil.notificaciones.loader();
+/*#Fin notificaciones: iniciar loader*/
 
 var time_jquery = setInterval(function() {
     if (window.jQuery) {
