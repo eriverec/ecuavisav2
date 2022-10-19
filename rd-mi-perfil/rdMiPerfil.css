@@ -1,5 +1,9 @@
 /**********************CINTILLO**********************/
 
+#iter-content-wrapper {
+  padding-top: 0px;
+}
+
 .cintillo-rd-mp {
   display: inline-block;
   color: var(--rd-cintillo);
@@ -9,7 +13,6 @@
   font-weight: 600;
   font-size: 88px;
   line-height: 96px;
-  margin-top: 30px;
   text-transform: lowercase;
 }
 
@@ -201,7 +204,6 @@
   font-size: 22px;
   line-height: 26px;
   color: #060127;
-  margin-bottom: 10px;
 }
 
 .MP_datos .insideValue {
