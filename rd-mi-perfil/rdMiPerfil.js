@@ -97,10 +97,11 @@ let perfil = {
     listar:function(){
       $.ajax({
         url: "https://redyman.netlify.app/servicios/zonaPrivada/notificationsDataExample.json",
-        type: "GET",
+        //type: "GET",
+        jsonp: "callback",
         dataType: "jsonp",
         success: function(respuesta){
-          console.log(respuesta);
+          console.log('Respuesta: '+respuesta);
         }
       });
     }
