@@ -105,6 +105,7 @@ let perfil = {
          return response.json();
       }).then(jsondata => {
         console.log(jsondata.usuario.id)
+        console.log($idusuario)
         for(var i in jsondata.usuario.Notificaciones){
           const d = jsondata.usuario.Notificaciones[i];
           //if($idusuario === jsondata.usuario.id){
