@@ -105,13 +105,11 @@ let perfil = {
       fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/getNotifications/index.php").then(response => {
          return response.json();
       }).then(jsondata => {
-        console.log(jsondata.usuario.id)
-        console.log($idusuario)
         for(var i in jsondata.usuario.Notificaciones){
           const d = jsondata.usuario.Notificaciones[i];
-          //if($idusuario === jsondata.usuario.id){
+          if($idusuario == jsondata.usuario.id){
             $articles += perfil.notificaciones.html_(d);
-          //}
+          }
         }
         $article.innerHTML = $articles;
         swiperNotificaciones();
