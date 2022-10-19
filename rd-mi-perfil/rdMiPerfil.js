@@ -109,7 +109,7 @@ let perfil = {
         for(var i in jsondata.usuario.Notificaciones){
           const d = jsondata.usuario.Notificaciones[i];
           //if($idusuario === jsondata.usuario.id){
-            $articles += perfil.notificaciones.html_(d.usuario.Notificaciones);
+            $articles += perfil.notificaciones.html_(d);
           //}
           console.log(d)
         }
