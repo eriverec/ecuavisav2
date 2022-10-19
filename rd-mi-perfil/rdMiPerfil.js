@@ -100,7 +100,7 @@ let perfil = {
         type: "GET",
         dataType: "jsonp",
         success: function(respuesta){
-          console.log(respuesta.usuario);
+          console.log(respuesta);
         }
       });
     }
