@@ -106,7 +106,6 @@ let perfil = {
     }
   }
 }
-
 collapse();
 DataEntrada();
 DatosPersonales();
@@ -116,7 +115,7 @@ var time_jquery = setInterval(function() {
       if(typeof Swiper !== 'undefined'){
           swiperNotificaciones();
           perfil.notificaciones.listar();
-          
+
           clearInterval(time_jquery);
         }
     }
