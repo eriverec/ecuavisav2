@@ -97,11 +97,33 @@ function swiperNotificaciones() {
 let perfil = {
   notificaciones:{
     listar:function(){
+      let $article = document.querySelector('.notificationBox .noticias');
+      $article.innerHTML = ``;
+      let $articles = '';
+      let $idusuario = localStorage.getItem('wylexUserId') || 0;
+
       fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/getNotifications/index.php").then(response => {
          return response.json();
       }).then(jsondata => {
+        for(var i in jsondata.usuario.Notificaciones){
+          const d = jsondata[i];
+          if($idusuario === jsondata.usuario.id){
+            $articles += perfil.notificaciones.html_(d.usuario.Notificaciones);
+          }
+        }
+
+        $article.innerHTML = $articles;
         console.log(jsondata)
       });
+    },
+    html_:function(data){
+      return `<article class="article">
+               <div class="text_block">
+                  <div class="section">${data.category}</div>
+                  <h3>${data.title}</h3>
+               </div>
+               <div class="multimedia"> <img src="${data.img}" alt="${data.title}"> </div>
+            </article>`;
     }
   }
 }
