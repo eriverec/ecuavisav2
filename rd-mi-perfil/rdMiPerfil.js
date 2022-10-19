@@ -95,10 +95,13 @@ function swiperNotificaciones() {
 let perfil = {
   notificaciones:{
     listar:function(){
-      fetch("https://redyman.netlify.app/servicios/zonaPrivada/notificationsDataExample.json").then(response => {
-         return response.json();
-      }).then(jsondata => {
-        console.log(jsondata)
+      $.ajax({
+        url: "https://redyman.netlify.app/servicios/zonaPrivada/notificationsDataExample.json",
+        type: "GET",
+        dataType: "jsonp",
+        success: function(respuesta){
+          console.log(respuesta.usuario);
+        }
       });
     }
   }
