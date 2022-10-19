@@ -100,10 +100,9 @@ let perfil = {
       console.log('Entrando leer json');
       /**/
       $.ajax({
-          url: 'https://ecuavisadev.netlify.app/rd-mi-perfil/assets/notificationsDataExample.json',
-          //type: 'GET',
-          jsonp : 'callback',
-          dataType: 'jsonp',
+          url: 'https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/getNotifications/index.php',
+          type: 'GET',
+          dataType: 'JSON',
           beforeSend: function() {}
       }).done(function(data) {
           console.log(data);
