@@ -46,7 +46,6 @@ function DatosPersonales() {
   var selectValueEmail = document.querySelector('.outsideEmail .insideValue');
   var emailcorreo = getEmail;
   selectValueEmail.innerHTML = `${emailcorreo}`;
-
 }
 
 function swiperNotificaciones() {
@@ -91,14 +90,31 @@ function swiperNotificaciones() {
       },
     },
   });
-
-
 }
 
+let perfil = {
+  notificaciones:{
+    listar:function(){
+      fetch("https://redyman.netlify.app/servicios/zonaPrivada/notificationsDataExample.json").then(response => {
+         return response.json();
+      }).then(jsondata => {
+        console.log(jsondata)
+      });
+    }
+  }
+}
 
-setTimeout(function () {
-  collapse();
-  DataEntrada();
-  DatosPersonales();
-  swiperNotificaciones();
-}, 300);
+collapse();
+DataEntrada();
+DatosPersonales();
+
+perfil.notificaciones.listar();
+
+var time_jquery = setInterval(function() {
+    if (window.jQuery) {
+      if(typeof Swiper !== 'undefined'){
+          swiperNotificaciones();
+          clearInterval(time_jquery);
+        }
+    }
+}, 500);
