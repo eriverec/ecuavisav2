@@ -138,6 +138,6 @@ $article.innerHTML = perfil.notificaciones.loader();
 /*#Fin notificaciones: iniciar loader*/
 
 let init_jQuery_Swiper = function(){
-  return ((window.jQuery && typeof Swiper !== 'undefined') ?perfil.notificaciones.listar():init_jQuery_Swiper());
+  return ((window.jQuery && (typeof Swiper !== 'undefined')) ?perfil.notificaciones.listar():init_jQuery_Swiper());
 }
 init_jQuery_Swiper();
