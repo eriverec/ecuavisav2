@@ -98,8 +98,9 @@ let perfil = {
   notificaciones:{
     listar:function(){
       console.log('Entrando leer json');
-      /*$.ajax({
-          url: 'https://redyman.netlify.app/servicios/zonaPrivada/notificationsDataExample.json',
+      /**/
+      $.ajax({
+          url: 'https://ecuavisadev.netlify.app/rd-mi-perfil/assets/notificationsDataExample.json',
           //type: 'GET',
           jsonp : 'callback',
           dataType: 'jsonp',
@@ -123,7 +124,7 @@ let perfil = {
           } else {
             alert('Uncaught Error: ' + jqXHR.responseText);
           }
-      });*/
+      });
     }
   }
 }
