@@ -102,31 +102,6 @@ let perfil = {
       }).then(jsondata => {
         console.log(jsondata)
       });
-      /*$.ajax({
-          url: 'https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/getNotifications/index.php',
-          type: 'GET',
-          dataType: 'JSON',
-          beforeSend: function() {}
-      }).done(function(data) {
-          console.log(data);
-          return;
-      }).fail(function(jqXHR, textStatus, errorThrown) {
-          if (jqXHR.status === 0) {
-            alert('Not connect: Verify Network.');
-          } else if (jqXHR.status == 404) {
-            alert('Requested page not found [404]');
-          } else if (jqXHR.status == 500) {
-            alert('Internal Server Error [500].');
-          } else if (textStatus === 'parsererror') {
-            alert('Requested JSON parse failed.');
-          } else if (textStatus === 'timeout') {
-            alert('Time out error.');
-          } else if (textStatus === 'abort') {
-            alert('Ajax request aborted.');
-          } else {
-            alert('Uncaught Error: ' + jqXHR.responseText);
-          }
-      });*/
     }
   }
 }
@@ -137,9 +112,8 @@ DatosPersonales();
 var time_jquery = setInterval(function() {
     if (window.jQuery) {
       if(typeof Swiper !== 'undefined'){
-          swiperNotificaciones();
+          //swiperNotificaciones();
           perfil.notificaciones.listar();
-
           clearInterval(time_jquery);
         }
     }
