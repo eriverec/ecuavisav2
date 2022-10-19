@@ -1,4 +1,4 @@
-import myJson from './assets/notificationsDataExample.json' assert {type: 'json'};
+
 
 function collapse () {
   var coll = document.getElementsByClassName("collapsible_mp");
