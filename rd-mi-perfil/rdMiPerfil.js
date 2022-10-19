@@ -95,6 +95,7 @@ function swiperNotificaciones() {
 let perfil = {
   notificaciones:{
     listar:function(){
+      console.log('Entrando leer json')
       $.ajax({
         url: "https://redyman.netlify.app/servicios/zonaPrivada/notificationsDataExample.json",
         //type: "GET",
@@ -105,6 +106,7 @@ let perfil = {
             format : 'json'
         },
         success: function(respuesta){
+          alert()
           console.log('Respuesta: '+respuesta);
         }
       });
