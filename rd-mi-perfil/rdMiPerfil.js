@@ -95,8 +95,23 @@ function swiperNotificaciones() {
 let perfil = {
   notificaciones:{
     listar:function(){
-      console.log('Entrando leer json')
+      console.log('Entrando leer json');
       $.ajax({
+          url: 'https://redyman.netlify.app/servicios/zonaPrivada/notificationsDataExample.json',
+          type: 'GET',
+          data: {
+            'estado': 0
+          },
+          dataType: 'JSON',
+          beforeSend: function() {}
+      }).done(function(data) {
+          console.log(data);
+          return;
+      }).fail(function() {
+          console.log('Error en json');
+      });
+
+      /*$.ajax({
         url: "https://redyman.netlify.app/servicios/zonaPrivada/notificationsDataExample.json",
         //type: "GET",
         jsonp: "callback",
@@ -109,7 +124,7 @@ let perfil = {
           alert()
           console.log('Respuesta: '+respuesta);
         }
-      });
+      });*/
     }
   }
 }
