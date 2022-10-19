@@ -137,11 +137,7 @@ let $article = document.querySelector('.notificationBox .noticias');
 $article.innerHTML = perfil.notificaciones.loader();
 /*#Fin notificaciones: iniciar loader*/
 
-var time_jquery = setInterval(function() {
-    if (window.jQuery) {
-      if(typeof Swiper !== 'undefined'){
-          perfil.notificaciones.listar();
-          clearInterval(time_jquery);
-        }
-    }
-}, 500);
+let init_jQuery_Swiper = function(){
+  return ((window.jQuery && typeof Swiper !== 'undefined') ?perfil.notificaciones.listar():init_jQuery_Swiper());
+}
+init_jQuery_Swiper();
