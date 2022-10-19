@@ -111,12 +111,12 @@ collapse();
 DataEntrada();
 DatosPersonales();
 
-perfil.notificaciones.listar();
-
 var time_jquery = setInterval(function() {
     if (window.jQuery) {
       if(typeof Swiper !== 'undefined'){
           swiperNotificaciones();
+          perfil.notificaciones.listar();
+          
           clearInterval(time_jquery);
         }
     }
