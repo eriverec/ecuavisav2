@@ -215,3 +215,34 @@
     height: 207px !important;
   }
 }
+
+
+
+/**************************
+*****ULTIMOS EPISODIOS*****
+**************************/
+
+.title-destacada {
+  margin: 30px 0;
+}
+
+.title-destacada h2 {
+  color: black;
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 1.8rem;
+  font-family: 'Archivo';
+}
+
+.title-destacada .destacada {
+  color: #2927b9;
+  font-family: 'Archivo';
+  font-weight: 700;
+}
+
+@media (max-width: 575px) {
+  .title-destacada h2 {
+    font-size: 1.5rem;
+  }
+}
