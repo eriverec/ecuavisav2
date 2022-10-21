@@ -309,6 +309,9 @@ INICIO - PORTADA - 4 DESTACADAS
   position: initial !important;
   width: 165px !important;
 }
+.multimediaIconMacroWrapper a div{
+  background-color: #ddd;
+}
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .section {
   color: var(--rd-section);
