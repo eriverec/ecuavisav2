@@ -142,6 +142,8 @@
   border-radius: 50%;
   border: 5px solid #D9D9D9;
   padding: 5px;
+  height: 100% !important;
+  object-fit: cover;
 }
 
 .masEscuchados .PODCAST_MAS_ESCUCHADOS .media_block .multimedia .multimediaIconMacroWrapper a span {
