@@ -309,6 +309,15 @@ INICIO - PORTADA - 4 DESTACADAS
   position: initial !important;
   width: 165px !important;
 }
+
+.bloque_estadio_1 .multimediaIconMacroWrapper a div{
+  background-color: transparent;
+}
+
+.IMG_SEC_TIT_TXT_PORTADA .multimediaIconMacroWrapper a div{
+  background-color: transparent;
+}
+
 .multimediaIconMacroWrapper a div{
   background-color: #ddd;
 }
