@@ -1,6 +1,6 @@
 // podcast player executer 
 "use strict";
-const options = {
+const optionsPodcast = {
   defaultSpeed: "1.00",
   speeds: ["1.25", "1.50", "2.00", "0.75"],
   loop: true,
@@ -17,7 +17,7 @@ const options = {
     "jumpforward"
   ]
 };
-new MediaElementPlayer(document.querySelector(".mainplayer"), options);
+new MediaElementPlayer(document.querySelector(".mainplayer"), optionsPodcast);
 // Separate the audio controls so I can style them better.
 (() => {
   const elementTop = document.createElement("div");
