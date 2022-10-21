@@ -1,5 +1,5 @@
 // podcast player executer 
-"use strict";
+// "use strict";
 const options = {
   defaultSpeed: "1.00",
   speeds: ["1.25", "1.50", "2.00", "0.75"],
