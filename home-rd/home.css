@@ -310,22 +310,6 @@ INICIO - PORTADA - 4 DESTACADAS
   width: 165px !important;
 }
 
-.destacada__5 .multimediaIconMacroWrapper a div{
-  background-color: transparent;
-}
-
-.bloque_estadio_1 .multimediaIconMacroWrapper a div{
-  background-color: transparent;
-}
-
-.IMG_SEC_TIT_TXT_PORTADA .multimediaIconMacroWrapper a div{
-  background-color: transparent;
-}
-
-.HOME_MENU_RD .multimediaIconMacroWrapper a div{
-  background-color: #ddd;
-}
-
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .section {
   color: var(--rd-section);
   font-style: normal;
