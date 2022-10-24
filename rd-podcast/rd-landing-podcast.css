@@ -157,8 +157,11 @@
   align-items: center;
   align-content: center;
   justify-content: flex-start;
-  gap: 20px;
   padding-bottom: 25px;
+}
+
+.layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block .pod_boton a {
+  margin-right:20px ;
 }
 
 
