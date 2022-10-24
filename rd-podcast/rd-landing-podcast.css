@@ -271,9 +271,17 @@
 }
 
 .pod_items .noticias article {
-  margin-bottom: 25px;
   padding-bottom: 25px;
-  border-bottom: 2px solid #2927B9;
+  border-bottom: 1px solid #2927B9;
+  height: 100%;
+}
+
+.pod_items .noticias article:nth-child(1){
+  border-top: 1px solid #2927B9;
+}
+
+.pod_items .noticias article:nth-child(2){
+  border-top: 1px solid #2927B9;
 }
 
 .pod_items .noticias {
