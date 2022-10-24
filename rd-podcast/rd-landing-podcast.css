@@ -280,13 +280,16 @@
   border-top: 2px solid #2927B9;
   margin-top: 30px;
   padding-top: 25px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 30px;
 }
 
 .pod_items .PODCAST_MAS_ESCUCHADOS .media_block .pod_icon_play img {
   width: 37px;
 }
 
-.pod_items .PODCAST_MAS_ESCUCHADOS .media_block .DETAIL_TXT{
+.pod_items .PODCAST_MAS_ESCUCHADOS .media_block .DETAIL_TXT {
   display: none;
 }
 
