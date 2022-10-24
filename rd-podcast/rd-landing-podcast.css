@@ -374,9 +374,19 @@
 
 
 
-.encuesta_estadio,
-.sub_estadio,
-.quiz-entretenimiento,
-.encuesta_estilo {
+.podcast_encuestas .encuesta_estadio,
+.podcast_encuestas .sub_estadio,
+.podcast_encuestas .quiz-entretenimiento,
+.podcast_encuestas .encuesta_estilo {
   display: none;
+}
+
+
+.podcast_encuestas {
+  margin-top: 40px;
+}
+
+.podcast_encuestas .micro_593 {
+  max-width: 700px;
+  margin: auto;
 }
