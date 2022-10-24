@@ -165,7 +165,7 @@
 }
 
 .layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block .pod_boton a {
-  margin-right:20px ;
+  margin-right: 20px;
 }
 
 
@@ -181,10 +181,11 @@
 }
 
 
-@media (min-width: 1400px){
+@media (min-width: 1400px) {
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
     height: 100% !important;
   }
+
   .layout_landing_portadilla .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
     height: 100% !important;
   }
@@ -306,11 +307,11 @@
   height: 100%;
 }
 
-.pod_items .noticias article:nth-child(1){
+.pod_items .noticias article:nth-child(1) {
   border-top: 1px solid #2927B9;
 }
 
-.pod_items .noticias article:nth-child(2){
+.pod_items .noticias article:nth-child(2) {
   border-top: 1px solid #2927B9;
 }
 
@@ -347,10 +348,11 @@
 }
 
 @media (max-width: 767px) {
-  .pod_items .noticias{
+  .pod_items .noticias {
     grid-template-columns: none;
   }
-  .pod_items .noticias article:nth-child(2){
+
+  .pod_items .noticias article:nth-child(2) {
     border-top: none;
   }
 }
@@ -360,4 +362,21 @@
     margin-right: 12px;
     margin-left: 12px;
   }
+}
+
+
+
+
+
+/**************************
+*****ENCUESTA*****
+**************************/
+
+
+
+.encuesta_estadio,
+.sub_estadio,
+.quiz-entretenimiento,
+.encuesta_estilo {
+  display: none;
 }
