@@ -72,8 +72,11 @@ function podcastPlay() {
   var theMp3 = (event.currentTarget.getAttribute('data-media'));
   var theTitle = (event.currentTarget.getAttribute('data-title'));
   var clasRemove = document.querySelector('.menu .podcast');
+  var classAnimation = document.querySelector('.menu .podcast .podcast__meta');
+
   clasRemove.classList.remove('noVisible');
-  clasRemove.classList.add('animationPLayer');
+  classAnimation.classList.add('animationPLayer');
+  
   // detectamos si esta reproduciendo para dar stop o si reproduce otro audio
   if (event.currentTarget.classList.contains('play-stop-button--playing')) {
     setTimeout(function () {
