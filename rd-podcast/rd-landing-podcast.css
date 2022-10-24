@@ -1,3 +1,35 @@
+/**************************
+*****TITLE CON SEPARADOR*****
+**************************/
+
+
+.title-destacada {
+  margin: 30px 0;
+}
+
+.title-destacada h2 {
+  color: black;
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 1.8rem;
+  font-family: 'Archivo';
+}
+
+.title-destacada .destacada {
+  color: #2927b9;
+  font-family: 'Archivo';
+  font-weight: 700;
+}
+
+@media (max-width: 575px) {
+  .title-destacada h2 {
+    font-size: 1.5rem;
+  }
+}
+
+
+
 /*****************
 *****APERTURA*****
 *****************/
@@ -218,35 +250,10 @@
 
 
 
+
 /**************************
 *****ULTIMOS EPISODIOS*****
 **************************/
-
-.title-destacada {
-  margin: 30px 0;
-}
-
-.title-destacada h2 {
-  color: black;
-  font-size: 2rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  line-height: 1.8rem;
-  font-family: 'Archivo';
-}
-
-.title-destacada .destacada {
-  color: #2927b9;
-  font-family: 'Archivo';
-  font-weight: 700;
-}
-
-@media (max-width: 575px) {
-  .title-destacada h2 {
-    font-size: 1.5rem;
-  }
-}
-
 
 /* ITEMS */
 .pod_items .PODCAST_MAS_ESCUCHADOS .media_block {
@@ -315,6 +322,15 @@
   color: #060127;
   margin-left: 20px;
   margin-bottom: 0;
+}
+
+@media (max-width: 767px) {
+  .pod_items .noticias{
+    grid-template-columns: none;
+  }
+  .pod_items .noticias article:nth-child(2){
+    border-top: none;
+  }
 }
 
 @media (max-width: 575px) {
