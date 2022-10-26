@@ -2389,11 +2389,11 @@ INICIO - BLOQUE - ESTILO
   margin-bottom: 20px;
 }
 
-.HOME_MENU_RD .portada-agenda.ag_Desktop .noticias {
+/* .HOME_MENU_RD .portada-agenda.ag_Desktop .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 30px;
-}
+} */
 
 .HOME_MENU_RD .portada-agenda.ag_Desktop.apertura_agenda .noticias {
   grid-template-columns: none;
@@ -2489,11 +2489,9 @@ INICIO - BLOQUE - ESTILO
 }
 
 @media (max-width: 767px) {
-  .HOME_MENU_RD .portada-agenda.ag_Desktop .noticias {
+  /* .HOME_MENU_RD .portada-agenda.ag_Desktop .noticias {
     grid-template-columns: none
-  }
-
-
+  } */
 
   .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2 {
     font-size: 19px;
