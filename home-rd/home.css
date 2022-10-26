@@ -871,7 +871,11 @@ INICIO - BLOQUE - ECUADOR
     margin: 20px 0;
   }
 
-
+  .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
   .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .section {
     margin-bottom: .5rem;
     display: block;
