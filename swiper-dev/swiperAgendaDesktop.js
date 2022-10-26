@@ -4,9 +4,9 @@ function SwiperAgendaDesktop() {
   const agendaDeskWraper = document.querySelector('.agDesktopSwiper .noticias');
   const agendaDeskSlider = document.querySelectorAll('.agDesktopSwiper .noticias .article');
 
-  var divPagDesk = document.createElement('div');
-  divPagDesk.classList.add('swiper-pagination');
-  agendaDeskSwiper.appendChild(divPagDesk);
+  // var divPagDesk = document.createElement('div');
+  // divPagDesk.classList.add('swiper-pagination');
+  // agendaDeskSwiper.appendChild(divPagDesk);
 
   agendaDeskSwiper.classList.add('swiper');
   agendaDeskWraper.classList.add('swiper-wrapper');
@@ -18,10 +18,14 @@ function SwiperAgendaDesktop() {
   var dymanicDesk = new Swiper(agendaDeskSwiper, {
     slidesPerView: 2,
     spaceBetween: 30,
-    pagination: {
-      el: ".swiper-pagination",
-      clickable: true,
+    autoplay: {
+      delay: 2000,
+      disableOnInteraction: false,
     },
+    // pagination: {
+    //   el: ".swiper-pagination",
+    //   clickable: true,
+    // },
   });
 }
 
