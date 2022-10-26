@@ -803,6 +803,8 @@ INICIO - BLOQUE - ECUADOR
 }
 
 @media (max-width: 991px) {
+  
+  
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .headline a h2 {
     font-size: var(--rd-size-22);
     line-height: 30px;
@@ -1528,6 +1530,12 @@ INICIO - BLOQUE - MUNDO
 }
 
 @media (max-width: 991px) {
+  /*Modificado por CR*/
+  .HOME_MENU_RD .lista-bloque-1x4 img, 
+  .HOME_MENU_RD .ecuador_list_1x2 img, 
+  .HOME_MENU_RD .articulos_4dest img {
+    height: 105px !important;
+  }
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
     grid-template-columns: 2fr 1fr;
   }
