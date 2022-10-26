@@ -1369,6 +1369,9 @@ INICIO - BLOQUE - MUNDO
 
 
 @media (min-width: 1400px) {
+  .HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT, .HOME_MENU_RD .ecuador_list_1x2 .noticias .article {
+    padding-top: 20px;
+  }
   .HOME_MENU_RD .lista-bloque-1x4 .noticias {
     grid-template-columns: 1fr 1fr 1fr 1fr;
   }
