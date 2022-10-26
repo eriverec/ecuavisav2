@@ -2478,6 +2478,9 @@ INICIO - BLOQUE - ESTILO
   .HOME_MENU_RD .portada-agenda.ag_Desktop .MUL_TIT_INF2 .headline h2 {
     font-size: 19px;
   }
+  .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .text{
+    -webkit-line-clamp: 3;
+  }
 
   .HOME_MENU_RD .portada-agenda.ag_Desktop .MUL_TIT_INF2 .headline {
     padding: 15px 20px;
