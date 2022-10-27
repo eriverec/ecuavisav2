@@ -14,6 +14,20 @@
   padding-left: 1rem;
 }
 
+.c_azul_celeste_Mobile {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .c_azul_celeste_Mobile {
+    display: block;
+  }
+
+  .c_azul_celeste_Desktop {
+    display: none;
+  }
+}
+
 
 /*PROGRAMACION WEB*/
 
@@ -108,6 +122,100 @@
 
 /*VIDEOS MAS VISTOS*/
 
+/* ***************************
+INICIO - BLOQUE - VIDEOS MAS VISTOS
+*************************** */
+
+.sliderVideos .videos-sem {
+  display: none;
+}
+
+.sliderVideos .ranking-viewer-portlet li a {
+
+  display: none;
+}
+
+.sliderVideos .media_block {
+  position: relative;
+}
+
+.sliderVideos .text_block {
+  position: absolute;
+  bottom: 0;
+  padding: 0.7rem;
+}
+
+.sliderVideos .article-section a {
+  font-weight: 600;
+  color: #23DCD1;
+  display: block;
+}
+
+
+.sliderVideos .headline h3 {
+  color: var(--bs-white);
+  font-size: var(--rd-size-16);
+}
+
+.sliderVideos .multimedia .multimediaIconMacroWrapper a div {
+  background-image: linear-gradient(180deg, rgba(6, 2, 34, 0) 0%, rgba(6, 2, 34, 0.9) 80.47%);
+  border-radius: 6px;
+}
+
+.sliderVideos .multimedia img {
+  border-radius: 6px;
+  -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 60%);
+  height: 100% !important;
+  object-fit: cover;
+}
+
+
+.sliderVideos .swiper-wrapper {
+  padding-bottom: 2rem;
+}
+
+.sliderVideos .ms-visto-ec .swiper .swiper-wrapper .element .media_block .top_info {
+  display: flex;
+  position: absolute;
+  top: 17px;
+  z-index: 9;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sliderVideos .ms-visto-ec .swiper .swiper-wrapper .element .media_block .top_info .Topheadline {
+  margin-left: 1rem;
+}
+
+.sliderVideos .ms-visto-ec .swiper .swiper-wrapper .element .media_block .top_info .Topheadline .hLine {
+  background: #23DCD1;
+  font-size: 12px;
+  margin: 0;
+  padding: 5px;
+  text-transform: uppercase;
+}
+
+.sliderVideos .ms-visto-ec .swiper .swiper-wrapper .element .media_block .top_info .Topheadline .hide {
+  opacity: 0;
+}
+
+.sliderVideos .tit-vid h2 {
+  color: #23DCD1;
+  font-size: var(--rd-size-22);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-family: 'Mattone 150';
+  margin-bottom: 30px;
+}
+
+.sliderVideos .tit-vid h2 span {
+  color: white;
+}
+
+
+
+
 .sliderVideos .iconPlay {
   background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
   width: 30px;
@@ -140,6 +248,16 @@
   .sliderVideos .tit-vid h2 {
     font-size: 15px;
     margin: 20px 0;
+  }
+}
+
+@media (max-width: 575px) {
+  .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .top_info .Topheadline .hLine {
+    font-size: 10px;
+  }
+
+  .portlet-boundary.portlet-static-end.velocitycontainer-portlet.titulo_programa_web {
+    margin-top: 0px;
   }
 }
 
@@ -684,7 +802,8 @@
     font-size: 18px;
     line-height: 26px;
   }
-  .tarjeta-destacada h2{
+
+  .tarjeta-destacada h2 {
     font-size: 24px;
   }
 }
