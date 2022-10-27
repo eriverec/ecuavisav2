@@ -883,6 +883,16 @@ h2.temas_estilo {
   gap: 40px;
 }
 
+.lista_bloque_3_desktop .noticias .iconPlay {
+  background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
+  width: 30px;
+  height: 30px;
+  top: 15px;
+  right: 10px;
+  left: initial;
+  bottom: initial;
+}
+
 .lista_bloque_3_desktop .noticias .article .media_block .text_block .article-section a {
   font-family: 'Mattone 150';
   font-style: normal;
@@ -1035,7 +1045,7 @@ img.sepDesk {
     max-width: 100%;
   }
 
-  .teaser-viewer-title h2{
+  .teaser-viewer-title h2 {
     font-size: 24px;
   }
 
