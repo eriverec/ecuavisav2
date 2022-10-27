@@ -2,6 +2,20 @@ div#r03c01 {
   padding-right: 30px;
 }
 
+.c_azul_celeste_Mobile {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .c_azul_celeste_Mobile {
+    display: block;
+  }
+
+  .c_azul_celeste_Desktop {
+    display: none;
+  }
+}
+
 /*
     NOTAS MÁS RECIENTES DESKTOP
     */
