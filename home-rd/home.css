@@ -2413,8 +2413,9 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block {
   display: flex;
-  margin: 25px 0;
-  height: 140px;
+  margin: 20px 0;
+  /* height: 140px; Cambio solicitado por redacción (menos alto)*/
+  height: 90px;
 
 }
 
