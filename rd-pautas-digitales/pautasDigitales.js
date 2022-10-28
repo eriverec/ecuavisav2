@@ -6,9 +6,9 @@ slc.rel = "stylesheet";
 slc.href = "https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css";
 document.head.appendChild(slc);
 
-setTimeout(function () {
-  swiperPautas();
-}, 300);
+// setTimeout(function () {
+//   swiperPautas();
+// }, 300);
 
 function swiperPautas() {
   var classListaPauta = document.querySelector('.banner_fijos_rd');
@@ -32,3 +32,18 @@ function swiperPautas() {
   });
 
 }
+
+
+function sGoDigital() {
+  setTimeout(function () {
+    if (typeof Swiper === "undefined") {
+      sGoDigital();
+    } else {
+      swiperPautas();
+    }
+  }, 400);
+}
+
+$(document).ready(function () {
+  sGoDigital();
+});
