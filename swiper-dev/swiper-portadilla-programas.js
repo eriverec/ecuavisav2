@@ -1,8 +1,8 @@
-setTimeout(function () {
-    cardsTemasDestacados();
-    swiperProgramasGlobal();
-    changeTitleMasVisto();
-}, 500);
+// setTimeout(function () {
+//     cardsTemasDestacados();
+//     swiperProgramasGlobal();
+//     changeTitleMasVisto();
+// }, 500);
 
 function swiperProgramasGlobal() {
     $('.notaSwiper .noticias').addClass('swiper-wrapper');
@@ -58,7 +58,6 @@ function changeTitleMasVisto() {
 var device;
 var b = navigator.userAgent.toLowerCase();
 // Responsive functions
-function movil() {};
 
 function desktop() {
     var dx = $('.programas-desktop .iconPlay')[0];
@@ -79,3 +78,23 @@ if (/(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|pla
     console.log("desktop");
     device = "PC";
 }
+
+
+
+function swiperGo() {
+    setTimeout(function () {
+      if (typeof Swiper === "undefined") {
+        swiperGo();
+      } else {
+        swiperProgramasGlobal();
+        cardsTemasDestacados();
+        changeTitleMasVisto();
+      }
+    }, 400);
+  }
+  
+  $(document).ready(function () {
+    swiperGo();
+  });
+  //     seguimosSwiper();
+  //     dameSwiper ();
