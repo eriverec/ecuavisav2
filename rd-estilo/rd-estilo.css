@@ -1027,6 +1027,16 @@ img.sepDesk {
   }
 }
 
+@media (min-width: 991px) {
+  .card_dest_estilo .swiper-wrapper .swiper-slide .text_block {
+    padding: 0rem 1rem 1.5rem;
+  }
+  .card_dest_estilo .noticias .article .media_block .text_block .headline a h3{
+    font-size: 14px;
+    line-height: 18px;
+  }
+}
+
 
 @media (max-width: 768px) {
   .portada-estilo .text_block {
