@@ -1027,7 +1027,7 @@ img.sepDesk {
   }
 }
 
-@media (min-width: 991px) {
+@media (max-width: 991px) {
   .card_dest_estilo .swiper-wrapper .swiper-slide .text_block {
     padding: 0rem 1rem 1.5rem;
   }
