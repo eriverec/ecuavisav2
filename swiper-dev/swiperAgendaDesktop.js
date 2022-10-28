@@ -29,6 +29,22 @@ function SwiperAgendaDesktop() {
   });
 }
 
-setTimeout(function () {
-  SwiperAgendaDesktop();
-}, 300);
+// setTimeout(function () {
+//   SwiperAgendaDesktop();
+// }, 300);
+
+
+
+function swiperGoAgendaDesk() {
+  setTimeout(function () {
+    if (typeof Swiper === "undefined") {
+      swiperGoAgendaDesk();
+    } else {
+      SwiperAgendaDesktop();
+    }
+  }, 400);
+}
+
+$(document).ready(function () {
+  swiperGoAgendaDesk();
+});
