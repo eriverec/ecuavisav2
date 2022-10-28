@@ -11,10 +11,11 @@ function noTePierdas() {
   var notepierdas = new Swiper(".note-pierdas", {
     slidesPerView: 1,
     slidesPerColumn: 2,
-    spaceBetween: 30,
+    spaceBetween: 10,
     pagination: {
       el: '.swiper-pagination',
       clickable: true,
+      dynamicBullets: true,
     },
     breakpoints: {
       360: {
@@ -35,9 +36,16 @@ function noTePierdas() {
 }
 
 
-setTimeout(function () {
+function sGoEstiloSect() {
+  setTimeout(function () {
+    if (typeof Swiper === "undefined") {
+      sGoEstiloSect();
+    } else {
+      noTePierdas();
+    }
+  }, 400);
+}
 
-  noTePierdas();
-
-
-}, 500);
+$(document).ready(function () {
+  sGoEstiloSect();
+});
