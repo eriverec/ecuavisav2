@@ -1,5 +1,13 @@
 /*Apertura*/
-
+.portada-estilo .iconPlay{
+  background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
+    width: 30px;
+    height: 30px;
+    top: 15px;
+    right: 10px;
+    left: initial;
+    bottom: initial;
+}
 
 .portada-estilo .multimedia img,
 .estilo-principal .multimedia img,
@@ -1081,6 +1089,8 @@ img.sepDesk {
   .portada-estilo .noticias .article .multimedia .multimediaIconMacroWrapper a div {
     height: 370px !important;
   }
+
+
 
   .sec-titulo .noticias {
     grid-template-columns: 1fr;
