@@ -551,7 +551,10 @@ h2.temas_estilo {
   display: flex;
   align-items: center;
 }
-
+.sec-titulo .noticias .article:nth-child(1), 
+.sec-titulo .noticias .article:nth-child(2) {
+  border-top: 1px solid #292789;
+}
 .tarjetaSwiper a h3 {
   font-family: 'Archivo';
   font-weight: 500;
@@ -1118,9 +1121,8 @@ img.sepDesk {
     gap: 0;
   }
 
-  .sec-titulo .noticias .article:nth-child(1), 
-  .sec-titulo .noticias .article:nth-child(2) {
-    border-top: 1px solid #292789;
+  .sec-titulo .noticias .article:nth-child(1)  {
+    border-top: none
 }
 
 }
