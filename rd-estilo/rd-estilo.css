@@ -1046,7 +1046,11 @@ img.sepDesk {
     height: 100% !important;
   }
 }
-
+@media (max-width: 1024px) {
+  .estilo-notas .recomendadas-rd {
+    grid-template-columns: 4fr 1fr;
+}
+}
 @media (max-width: 991px) {
   .card_dest_estilo .swiper-wrapper .swiper-slide .text_block {
     padding: 0rem 1rem 1.5rem;
@@ -1055,6 +1059,7 @@ img.sepDesk {
     font-size: 14px;
     line-height: 18px;
   }
+  
 }
 
 
