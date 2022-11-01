@@ -18,16 +18,24 @@ function getNameTag() {
 function hideBlock() {
   if (typeof authorSlug !== 'undefined') {
     console.log(true);
+    //oculta lineas de metadatos
     document.querySelector('.categoryGroup').style.display = "none";
     document.querySelector('.c_azul_global div').style.display = "none";
     document.querySelector('.name_tema .cintillo-rd').style.display = "none";
     document.querySelector('.cintillo-single').style.display = "none";
     document.querySelector('.btn_seguimiento.meta').style.display = "none";
+    //remueve clases
     var removeClassBBC = document.querySelector('.bbc');
     var removeClassSingle = document.querySelector('.single-tag');
     removeClassBBC.classList.remove('mb-4');
     removeClassSingle.classList.remove('mb-4');
+    //mejora carga del paginador
     $('.ecv_relacionadas_2022').removeClass('invisible');
+    $('.categoryGroup').removeClass('invisible');
+    $('.c_azul_global div').removeClass('invisible');
+    $('.name_tema .cintillo-rd').removeClass('invisible');
+    $('.cintillo-single').removeClass('invisible');
+    $('.btn_seguimiento.meta').removeClass('invisible');
     
   } else {
     console.log(false);
