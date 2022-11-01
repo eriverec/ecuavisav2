@@ -29,7 +29,7 @@ function hideBlock() {
     var removeClassSingle = document.querySelector('.single-tag');
     removeClassBBC.classList.remove('mb-4');
     removeClassSingle.classList.remove('mb-4');
-    //mejora carga del paginador
+    //mejora carga del paginador y bloques ocultos por js
     $('.ecv_relacionadas_2022').removeClass('invisible');
     $('.categoryGroup').removeClass('invisible');
     $('.c_azul_global div').removeClass('invisible');
