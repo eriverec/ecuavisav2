@@ -588,11 +588,11 @@ h2.temas_estilo {
 }
 .swiper.card_dest_estilo {
   width: 100%!important;
-  padding-right: 80px;
+  /* padding-right: 80px;
   padding-left: 40px;
-  /* margin-right: 1%; */
-  /* width: 100% !important; */
-  /* padding: 0 25px; */
+  margin-right: 1%; 
+  width: 100% !important; */
+  padding: 0 40px;
 }
 
 .swiper.card_dest_estilo.TT_mobile {
@@ -1075,6 +1075,11 @@ img.sepDesk {
   .sec-titulo .noticias .article:nth-child(1), 
   .sec-titulo .noticias .article:nth-child(2) {
     border-top: none;
+  }
+  .swiper.card_dest_estilo {
+    width: 100%!important;
+    padding-right: 80px;
+    padding-left: 40px;
   }
   img.sepDesk {
     display: none;
