@@ -10,6 +10,7 @@ div#r03c01 {
 /*INICIO BOTONES DE SEGUIMIENTO*/
 .btn_seguimiento{
   width: 170px;
+  margin-bottom: 1.5rem;
 }
 .btn_seguimiento span {
   font-family: "Mattone 150";
@@ -21,6 +22,7 @@ div#r03c01 {
   align-items: center;
   text-align: center;
   padding-right: 10px;
+  align-content: center;
 }
 .btn_seguimiento .btn_seguir,
 .btn_seguimiento .btn_siguiendo {
@@ -30,7 +32,8 @@ div#r03c01 {
   display: flex;
   align-items: center;
   flex-wrap: nowrap;
-  color: #2927B9;
+  justify-content: center;
+  color: #2927B9;  
 }
 .btn_seguimiento .btn_seguir{
   border: 2px solid #23dcd1; 

@@ -22,6 +22,7 @@ function hideBlock() {
     document.querySelector('.c_azul_global div').style.display = "none";
     document.querySelector('.name_tema .cintillo-rd').style.display = "none";
     document.querySelector('.cintillo-single').style.display = "none";
+    document.querySelector('.btn_seguimiento.meta').style.display = "none";
     var removeClassBBC = document.querySelector('.bbc');
     var removeClassSingle = document.querySelector('.single-tag');
     removeClassBBC.classList.remove('mb-4');
