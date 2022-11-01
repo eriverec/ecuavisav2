@@ -26,8 +26,21 @@ function hideBlock() {
     var removeClassSingle = document.querySelector('.single-tag');
     removeClassBBC.classList.remove('mb-4');
     removeClassSingle.classList.remove('mb-4');
-
+    $('.ecv_relacionadas_2022').removeClass('invisible');
+    
   } else {
     console.log(false);
   }
 }
+
+// function swiperGo () {
+//   setTimeout(function () {
+//    if (typeof Swiper === "undefined") {
+//      swiperGo();
+   
+//    } else {
+//            episodiosSwiper();
+//            $('.bloque-programas').removeClass('invisible');
+//    }
+//   }, 400) ; 
+//   }
