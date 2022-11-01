@@ -16,6 +16,31 @@ div#r03c01 {
   }
 }
 
+
+/*INICIO BOTONES DE SEGUIMIENTO*/
+.btn_seguimiento {
+  width: 125px;
+  border: 2px solid #2927B9;
+  padding: 5px 20px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+.btn_seguimiento span {
+  font-family: "Mattone 150";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 12px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #2927B9;
+}
+
+/*FIN BOTONES DE SEGUIMIENTO*/
+
+
+
 /*
     NOTAS MÁS RECIENTES DESKTOP
     */
