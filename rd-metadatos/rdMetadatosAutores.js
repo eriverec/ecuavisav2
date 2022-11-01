@@ -35,7 +35,7 @@ function hideBlock() {
     $('.c_azul_global div').removeClass('invisible');
     $('.name_tema .cintillo-rd').removeClass('invisible');
     $('.cintillo-single').removeClass('invisible');
-    $('.btn_seguimiento.meta').removeClass('invisible');
+    $('.btnseguimiento_meta').removeClass('invisible');
     
   } else {
     console.log(false);
