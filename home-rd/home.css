@@ -2502,6 +2502,10 @@ INICIO - BLOQUE - ESTILO
     grid-template-columns: none
   } */
 
+  .HOME_MENU_RD .layout_agenda {
+    margin: 20px 0;
+  }
+
   .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2 {
     font-size: 19px;
   }
