@@ -559,7 +559,9 @@ h2.temas_estilo {
   font-family: 'Archivo';
   font-weight: 500;
 }
-
+.swiper-cards .swiper-slide {
+  border-radius: 5px;
+}
 .sec-titulo .text_block .article-section a {
   color: #2927B9;
   font-weight: 600;
