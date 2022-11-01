@@ -588,7 +588,7 @@ h2.temas_estilo {
 }
 .swiper.card_dest_estilo {
   width: 100%!important;
-  padding-right: 80px;
+  padding-right: 60px;
   padding-left: 40px;
   /* margin-right: 1%; */
   /* width: 100% !important; */
@@ -1133,9 +1133,9 @@ img.sepDesk {
 
 
 @media (max-width: 600px) {
-  .card_dest_estilo {
+  /* .card_dest_estilo {
     padding: 0 40px !important;
-  }
+  } */
 
   #r01c01 {
     padding-right: calc(var(--bs-gutter-x)/ 2);
