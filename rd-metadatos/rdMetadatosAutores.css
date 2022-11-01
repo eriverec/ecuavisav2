@@ -8,6 +8,9 @@ div#r03c01 {
 
 
 /*INICIO BOTONES DE SEGUIMIENTO*/
+.btn_seguimiento{
+  width: 170px;
+}
 .btn_seguimiento span {
   font-family: "Mattone 150";
   font-style: normal;
@@ -30,11 +33,9 @@ div#r03c01 {
   color: #2927B9;
 }
 .btn_seguimiento .btn_seguir{
-  width: 140px;
   border: 2px solid #23dcd1; 
 }
 .btn_seguimiento .btn_siguiendo{
-  width: 170px;
   background: #23dcd1;
   border: 2px solid #23dcd1; 
 }
