@@ -30,7 +30,7 @@ div#r03c01 {
   display: flex;
   align-items: center;
   text-align: center;
-  color: #2927B9;
+  padding-right: 10px;
 }
 .btn_seguimiento .btn_seguir,
 .btn_seguimiento .btn_siguiendo {
@@ -38,6 +38,10 @@ div#r03c01 {
   padding: 5px 20px;
   border-radius: 2px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap;
+  color: #2927B9;
 }
 
 /*FIN BOTONES DE SEGUIMIENTO*/
