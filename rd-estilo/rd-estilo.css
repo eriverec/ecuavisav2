@@ -1245,7 +1245,7 @@ img.sepDesk {
 
   }
   .swiper-cards .swiper-slide {
-    border-radius: 5px;
+    border-radius: 5px!important;
     margin-top: 30px;
   }
 
