@@ -1072,6 +1072,10 @@ img.sepDesk {
 
 
 @media (max-width: 767px) {
+  .sec-titulo .noticias .article:nth-child(1), 
+  .sec-titulo .noticias .article:nth-child(2) {
+    border-top: none;
+  }
   img.sepDesk {
     display: none;
   }
