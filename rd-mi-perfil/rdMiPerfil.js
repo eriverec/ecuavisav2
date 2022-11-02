@@ -109,7 +109,7 @@ function eyesPass(){
       $this.after($("<p/>", {
         html: 'Las constraseñas no coinciden',
         id: `error-${i}`,
-        class:'text-danger error'
+        class:'text-danger error d-none'
       }));
 
       $this.css({

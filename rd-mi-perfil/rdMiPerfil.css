@@ -742,3 +742,11 @@
   font-style: normal;
   font-weight: 300;
 }
+
+.error.d-none{
+  display: none;
+}
+
+.error.d-block{
+  display: block;
+}
