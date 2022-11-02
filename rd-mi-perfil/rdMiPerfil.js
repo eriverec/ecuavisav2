@@ -107,6 +107,7 @@ function eyesPass(){
       }));
 
       $this.after($("<p/>", {
+        html: 'Las constraseñas no coinciden',
         id: `error-${i}`,
         class:'text-danger error'
       }));
@@ -156,6 +157,30 @@ function eyesPass(){
         }
       });
     });
+  
+  $('#pass').on('input',function(){ 
+      var pass = $(this).val();
+      var passrepeat = $('#passrepeat').val();
+      if(passrepeat!=''){
+        perfil.contrasenia.validarPass();
+      }
+  });
+  $('#passrepeat').on('input',function(){ 
+      var passrepeat = $(this).val();
+      var pass = $('#pass').val();
+      if(pass!=''){
+        perfil.contrasenia.validarPass();
+      }
+  });
+  $('#btnSaveM').click(function(e){
+    var pass = $('#pass').val();
+    var passrepeat = $('#passrepeat').val();
+    if(perfil.contrasenia.validarPass() && pass!='' && passrepeat!=''){
+      alert('Enviado')
+    }else{
+      alert('Contraseñas no coinciden o están vacías')
+    }
+  })
 }
 
 let perfil = {
@@ -167,15 +192,14 @@ let perfil = {
       // Verificamos si las constraseñas no coinciden 
       if (pass1.value != pass2.value) {
         // Si las constraseñas no coinciden mostramos un mensaje 
-        document.getElementById("error").classList.add("mostrar");
+        document.getElementById("eye-password-1").classList.add("d-block");
         return false;
       } else {
         // Si las contraseñas coinciden ocultamos el mensaje de error
-        document.getElementById("error").classList.remove("mostrar");
+        document.getElementById("eye-password-1").classList.remove("d-block");
         // Mostramos un mensaje mencionando que las Contraseñas coinciden 
-        document.getElementById("ok").classList.remove("ocultar");
+        document.getElementById("eye-password-1").classList.remove("d-none");
         // Desabilitamos el botón de login 
-        document.getElementById("btnSaveM").disabled = true;
         return true;
       }
     }

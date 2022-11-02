@@ -733,3 +733,12 @@
   padding: 7px 7px;
   color: #2927b9;
 }
+
+.text-danger.error {
+  font-size: 12px;
+  line-height: 17px;
+  padding-top: 5px;
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+}
