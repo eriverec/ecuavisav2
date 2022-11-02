@@ -111,7 +111,7 @@ function eyesPass(){
       });
       $this.after($("<div/>", {
         html: 'Ver',
-        class: 'btn btn-primary btn-sm',
+        class: 'btn btn-primary btn-sm btn-eyes',
         id: 'passeye-toggle-'+i,
       }).css({
           position: 'absolute',
