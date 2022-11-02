@@ -719,3 +719,16 @@
   text-transform: uppercase;
   padding:7px 7px;
 }
+
+.btn-eyes.btn-outline-primary {
+  background-color: transparent;
+  border: 1px solid #2927b9;
+  border-radius: 2px;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 100;
+  font-size: 8px;
+  text-transform: uppercase;
+  padding: 7px 7px;
+  color: #2927b9;
+}
