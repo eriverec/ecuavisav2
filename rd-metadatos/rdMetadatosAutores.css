@@ -13,14 +13,14 @@ div#r03c01 {
 
 /*INICIO BOTONES DE SEGUIMIENTO*/
 .btn_seguimiento{
-  width: 170px;
+  width: 145px;
   margin-bottom: 1.5rem;
 }
 .btn_seguimiento span {
   font-family: "Mattone 150";
   font-style: normal;
   font-weight: 600;
-  font-size: 15px;
+  font-size: 12px;
   line-height: 12px;
   display: flex;
   align-items: center;
