@@ -110,13 +110,13 @@ function eyesPass(){
         paddingRight: 60
       });
       $this.after($("<div/>", {
-        html: 'Show',
+        html: 'Ver',
         class: 'btn btn-primary btn-sm',
         id: 'passeye-toggle-'+i,
       }).css({
           position: 'absolute',
           right: 10,
-          top: ($this.outerHeight() / 2) - 55,
+          top: ($this.outerHeight() / 2) - 15,
           padding: '2px 7px',
           fontSize: 12,
           cursor: 'pointer',
@@ -142,8 +142,8 @@ function eyesPass(){
           $this.removeClass("show");
           $(this).removeClass("btn-outline-primary");
         }else{
-          $this.attr('type', 'text');
-          $this.val($("#passeye-"+i).val());        
+          $this.val($("#passeye-"+i).val());  
+          $this.attr('type', 'text');      
           $this.addClass("show");
           $(this).addClass("btn-outline-primary");
         }
