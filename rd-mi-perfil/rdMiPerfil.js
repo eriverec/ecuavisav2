@@ -106,6 +106,11 @@ function eyesPass(){
         id: id
       }));
 
+      $this.wrap($("<p/>", {
+        id: `error-${i}`,
+        class:'text-danger error'
+      }));
+
       $this.css({
         paddingRight: 60
       });
@@ -157,8 +162,8 @@ let perfil = {
   contrasenia:{
     validarPass:function(){
       // Ontenemos los valores de los campos de contraseñas 
-      pass1 = document.getElementById('pass1');
-      pass2 = document.getElementById('pass2');
+      pass1 = document.getElementById('pass');
+      pass2 = document.getElementById('passrepeat');
       // Verificamos si las constraseñas no coinciden 
       if (pass1.value != pass2.value) {
         // Si las constraseñas no coinciden mostramos un mensaje 
@@ -170,7 +175,7 @@ let perfil = {
         // Mostramos un mensaje mencionando que las Contraseñas coinciden 
         document.getElementById("ok").classList.remove("ocultar");
         // Desabilitamos el botón de login 
-        document.getElementById("login").disabled = true;
+        document.getElementById("btnSaveM").disabled = true;
         return true;
       }
     }
