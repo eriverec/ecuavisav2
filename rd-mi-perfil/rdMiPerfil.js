@@ -116,7 +116,7 @@ function eyesPass(){
       }).css({
           position: 'absolute',
           right: 10,
-          top: ($this.outerHeight() / 2) + 3,
+          //top: ($this.outerHeight() / 2) + 3,
           //padding: '2px 7px',
           //fontSize: 12,
           cursor: 'pointer',
