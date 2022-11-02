@@ -208,9 +208,22 @@ let perfil = {
   notificaciones:{
     listar:function(){
       eyesPass();
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      userId= localStorage.getItem('wylexFirstName');
+      var raw = JSON.stringify({
+        "id": userId
+      });
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
       let $articles = '';
       let $idusuario = localStorage.getItem('wylexUserId') || 0;
-      fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/getNotifications/index.php").then(response => {
+      fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/notificationsget.php", requestOptions).then(response => {
          return response.json();
       }).then(jsondata => {
         for(var i in jsondata.usuario.Notificaciones){
