@@ -192,13 +192,13 @@ let perfil = {
       // Verificamos si las constraseñas no coinciden 
       if (pass1.value != pass2.value) {
         // Si las constraseñas no coinciden mostramos un mensaje 
-        document.getElementById("eye-password-1").classList.add("d-block");
+        document.getElementById("error-1").classList.add("d-block");
         return false;
       } else {
         // Si las contraseñas coinciden ocultamos el mensaje de error
-        document.getElementById("eye-password-1").classList.remove("d-block");
+        document.getElementById("error-1").classList.remove("d-block");
         // Mostramos un mensaje mencionando que las Contraseñas coinciden 
-        document.getElementById("eye-password-1").classList.remove("d-none");
+        document.getElementById("error-1").classList.remove("d-none");
         // Desabilitamos el botón de login 
         return true;
       }
