@@ -19,11 +19,11 @@ function hideBlock() {
   if (typeof authorSlug !== 'undefined') {
     console.log(true);
     //oculta lineas de metadatos
-    document.querySelector('.categoryGroup').style.display = "none";
-    document.querySelector('.c_azul_global div').style.display = "none";
-    document.querySelector('.name_tema .cintillo-rd').style.display = "none";
-    document.querySelector('.cintillo-single').style.display = "none";
-    document.querySelector('.btn_seguimiento.meta').style.display = "none";
+    // document.querySelector('.categoryGroup').style.display = "none";
+    // document.querySelector('.c_azul_global div').style.display = "none";
+    // document.querySelector('.name_tema .cintillo-rd').style.display = "none";
+    // document.querySelector('.cintillo-single').style.display = "none";
+    // document.querySelector('.btn_seguimiento.meta').style.display = "none";
     //remueve clases
     var removeClassBBC = document.querySelector('.bbc');
     var removeClassSingle = document.querySelector('.single-tag');
