@@ -106,7 +106,7 @@ function eyesPass(){
         id: id
       }));
 
-      $this.wrap($("<p/>", {
+      $this.append($("<p/>", {
         id: `error-${i}`,
         class:'text-danger error'
       }));
