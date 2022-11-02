@@ -209,7 +209,6 @@ let perfil = {
     listar:function(){
       eyesPass();
       var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
       userId= localStorage.getItem('wylexUserId');
       var raw = JSON.stringify({
         "id": userId
@@ -217,8 +216,7 @@ let perfil = {
       var requestOptions = {
         method: 'POST',
         headers: myHeaders,
-        body: raw,
-        // redirect: 'follow'
+        body: raw
       };
 
       let $articles = '';
