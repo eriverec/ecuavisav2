@@ -116,7 +116,7 @@ function eyesPass(){
       }).css({
           position: 'absolute',
           right: 10,
-          top: ($this.outerHeight() / 2) - 15,
+          top: ($this.outerHeight() / 2) - 0,
           padding: '2px 7px',
           fontSize: 12,
           cursor: 'pointer',
@@ -141,11 +141,13 @@ function eyesPass(){
           $this.attr('type', 'password');
           $this.removeClass("show");
           $(this).removeClass("btn-outline-primary");
+          $(this).addClass("btn-primary");
         }else{
           $this.val($("#passeye-"+i).val());  
           $this.attr('type', 'text');      
           $this.addClass("show");
           $(this).addClass("btn-outline-primary");
+          $(this).removeClass("btn-primary");
         }
       });
     });
