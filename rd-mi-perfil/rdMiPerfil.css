@@ -652,3 +652,70 @@
     font-size: 22px;
   }
 }
+
+
+/*Estilos modal*/
+#titleModal{
+  color: #2927B9;
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  color: #2927B9;
+  cursor: pointer;
+  width: -webkit-fill-available;
+}
+#modalcambiopass label.form-label{
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 21px;
+  color: #060127;
+}
+
+#modalcambiopass input::placeholder {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 21px;
+  color: #d8d9db;
+}
+
+#modalcambiopass .modal-footer .btn-secondary{
+  border: 1px solid #23DCD1;
+  border-radius: 2px;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #2927B9;
+  background-color: transparent;
+  padding:10px 25px;
+}
+
+#modalcambiopass .modal-footer .btn-primary{
+  background-color: #2927b9;
+  border: 1px solid #2927b9;
+  border-radius: 2px;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  padding:10px 25px;
+}
+.btn-eyes{
+  background-color: #2927b9;
+  border: 1px solid #2927b9;
+  border-radius: 2px;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 100;
+  font-size: 8px;
+  text-transform: uppercase;
+  padding:7px 7px;
+}
