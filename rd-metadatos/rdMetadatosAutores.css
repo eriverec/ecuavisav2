@@ -6,11 +6,6 @@ div#r03c01 {
   display: none;
 }
 
-/*oculta bloques q tengan esta clase*/
-.invisible2 {
-  visibility: hidden!important;
-}
-
 /*INICIO BOTONES DE SEGUIMIENTO*/
 .btn_seguimiento{
   width: 145px;
