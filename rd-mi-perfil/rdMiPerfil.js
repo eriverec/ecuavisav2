@@ -210,7 +210,7 @@ let perfil = {
       eyesPass();
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
-      userId= localStorage.getItem('wylexFirstName');
+      userId= localStorage.getItem('wylexUserId');
       var raw = JSON.stringify({
         "id": userId
       });
@@ -218,7 +218,7 @@ let perfil = {
         method: 'POST',
         headers: myHeaders,
         body: raw,
-        redirect: 'follow'
+        // redirect: 'follow'
       };
 
       let $articles = '';
