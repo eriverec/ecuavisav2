@@ -1,7 +1,3 @@
-setTimeout(function () {
-  getNameTag();
-  hideBlock();
-}, 300)
 
 function getNameTag() {
   var selec = document.querySelector('.categoryListItemLink span');
@@ -35,8 +31,19 @@ function hideBlock() {
     
   } else {
     console.log(false);
+    
   }
 }
+
+
+setTimeout(function () {
+  getNameTag();
+  hideBlock();
+  //remueve la clase en página de metadatos
+  $('.invisible2').removeClass('invisible2');
+}, 300)
+
+
 
 // function swiperGo () {
 //   setTimeout(function () {
