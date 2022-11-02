@@ -106,7 +106,7 @@ function eyesPass(){
         id: id
       }));
 
-      $this.prepend($("<p/>", {
+      $this.after($("<p/>", {
         id: `error-${i}`,
         class:'text-danger error'
       }));
