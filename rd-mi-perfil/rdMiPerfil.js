@@ -191,14 +191,15 @@ let perfil = {
       pass2 = document.getElementById('passrepeat');
       // Verificamos si las constraseñas no coinciden 
       if (pass1.value != pass2.value) {
-        // Si las constraseñas no coinciden mostramos un mensaje 
+        // Si las constraseñas no coinciden mostramos un mensaje  
+        document.getElementById("error-1").classList.remove("d-none");
         document.getElementById("error-1").classList.add("d-block");
         return false;
       } else {
         // Si las contraseñas coinciden ocultamos el mensaje de error
         document.getElementById("error-1").classList.remove("d-block");
         // Mostramos un mensaje mencionando que las Contraseñas coinciden 
-        document.getElementById("error-1").classList.remove("d-none");
+        document.getElementById("error-1").classList.add("d-none");
         // Desabilitamos el botón de login 
         return true;
       }
