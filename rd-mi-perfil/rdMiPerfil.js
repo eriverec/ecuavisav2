@@ -106,6 +106,11 @@ function eyesPass(){
         id: id
       }));
 
+      $this.append($("<p/>", {
+        id: `error-${i}`,
+        class:'text-danger error'
+      }));
+
       $this.css({
         paddingRight: 60
       });
@@ -116,7 +121,7 @@ function eyesPass(){
       }).css({
           position: 'absolute',
           right: 10,
-          top: ($this.outerHeight() / 2) + 4,
+          //top: ($this.outerHeight() / 2) + 3,
           //padding: '2px 7px',
           //fontSize: 12,
           cursor: 'pointer',
@@ -143,7 +148,7 @@ function eyesPass(){
           $(this).removeClass("btn-outline-primary");
           $(this).addClass("btn-primary");
         }else{
-          $this.val($("#passeye-"+i).val());  
+          //$this.val($("#passeye-"+i).val());  
           $this.attr('type', 'text');      
           $this.addClass("show");
           $(this).addClass("btn-outline-primary");
@@ -154,6 +159,27 @@ function eyesPass(){
 }
 
 let perfil = {
+  contrasenia:{
+    validarPass:function(){
+      // Ontenemos los valores de los campos de contraseñas 
+      pass1 = document.getElementById('pass');
+      pass2 = document.getElementById('passrepeat');
+      // Verificamos si las constraseñas no coinciden 
+      if (pass1.value != pass2.value) {
+        // Si las constraseñas no coinciden mostramos un mensaje 
+        document.getElementById("error").classList.add("mostrar");
+        return false;
+      } else {
+        // Si las contraseñas coinciden ocultamos el mensaje de error
+        document.getElementById("error").classList.remove("mostrar");
+        // Mostramos un mensaje mencionando que las Contraseñas coinciden 
+        document.getElementById("ok").classList.remove("ocultar");
+        // Desabilitamos el botón de login 
+        document.getElementById("btnSaveM").disabled = true;
+        return true;
+      }
+    }
+  },
   notificaciones:{
     listar:function(){
       eyesPass();
