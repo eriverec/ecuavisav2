@@ -31,10 +31,9 @@ function hideBlock() {
     removeClassSingle.classList.remove('mb-4');
     //mejora carga del paginador y bloques ocultos por js
     $('.ecv_relacionadas_2022').removeClass('invisible');
-    $('.categoryGroup').removeClass('invisible');
-    $('.c_azul_global div').removeClass('invisible');
-    $('.name_tema .cintillo-rd').removeClass('invisible');
-    $('.cintillo-single').removeClass('invisible');
+    $('.name_tema').removeClass('invisible');
+    $('.single-tag').removeClass('invisible');
+    $('.c_azul_global').removeClass('invisible');
     $('.btnseguimiento_meta').removeClass('invisible');
     
   } else {
