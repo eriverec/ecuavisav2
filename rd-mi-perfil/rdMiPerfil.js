@@ -257,21 +257,10 @@ let perfil = {
     },
     listarUltimas:function(num = 4){
       var myHeaders = new Headers();
-      userId= localStorage.getItem('wylexUserId');
-      var raw = JSON.stringify({
-        "id": userId
-      });
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        body: raw
-      };
-
       let $articles = '';
       let $idusuario = localStorage.getItem('wylexUserId') || 0;
-      fetch("https://www.ecuavisa.com/rss/data-noticia.json", requestOptions).then(response => {
-         return response.json();
-      }).then( jsondata => {
+      fetch("https://www.ecuavisa.com/rss/data-noticia.json").then((response) => response.json())
+      .then( (jsondata) => {
         console.log(jsondata);
         /*for(var i in jsondata.usuario.Notificaciones){
           const d = jsondata.usuario.Notificaciones[i];
