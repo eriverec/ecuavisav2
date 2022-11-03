@@ -271,7 +271,7 @@ let perfil = {
           alert(img.url)
           $articles += perfil.notificaciones.html_({
               "title": item.title,
-              "img": item.content[0].url,
+              "img": img.url,
               "category": item.category[0].__text,
               "autor": item.pubDate,
               "fecha": item.pubDate,
