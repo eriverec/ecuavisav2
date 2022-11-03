@@ -184,6 +184,10 @@ function eyesPass(){
 }
 
 let perfil = {
+  init:()=>{
+      perfil.notificaciones.listar();
+      //perfil.noticias.listar();
+  },
   contrasenia:{
     validarPass:function(){
       // Ontenemos los valores de los campos de contraseñas 
@@ -207,7 +211,6 @@ let perfil = {
   },
   notificaciones:{
     listar:function(){
-      eyesPass();
       var myHeaders = new Headers();
       userId= localStorage.getItem('wylexUserId');
       var raw = JSON.stringify({
@@ -238,14 +241,62 @@ let perfil = {
       return `<article class="article">
                <div class="text_block">
                   <div class="section">${data.category}</div>
-                  <h3>${data.title}</h3>
+                  <a href="${data.url}"><h3>${data.title}</h3></a>
                </div>
-               <div class="multimedia"> <img src="${data.img}" alt="${data.title}"> </div>
+               <div class="multimedia"> <a href="${data.url}"><img src="${data.img}" alt="${data.title}"></a> </div>
             </article>`;
     },
     loader:function(data){
       return `<div class="container_loader">
         <div class="loader">
+      </div>`;
+    }
+  },
+  noticias:{
+    listar:function(){
+      eyesPass();
+      var myHeaders = new Headers();
+      userId= localStorage.getItem('wylexUserId');
+      var raw = JSON.stringify({
+        "id": userId
+      });
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: raw
+      };
+
+      let $articles = '';
+      let $idusuario = localStorage.getItem('wylexUserId') || 0;
+      fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/notificationsget.php", requestOptions).then(response => {
+         return response.json();
+      }).then(jsondata => {
+        for(var i in jsondata.usuario.Notificaciones){
+          const d = jsondata.usuario.Notificaciones[i];
+          //if($idusuario == jsondata.usuario.id){
+            $articles += perfil.noticias.html_(d, i);
+          //}
+        }
+        $article.innerHTML = $articles;
+      });
+    },
+    html_:function(data){
+      return `<article class="article">
+               <div class="text_block">
+                  <div class="section">${data.category}</div>
+                  <a href="${data.url}"><h3>${data.title}</h3></a>
+               </div>
+               <div class="multimedia">
+                  <img src="${data.img}" alt="${data.title}">
+                  <button class="btn-ecuavisa-noticia active" title="Haz clic para quitar la noticia">
+                    <img src="https://ecuavisadev.netlify.app/rd-mi-perfil/assets/saved.svg" width="20" height="20" alt="${data.title}">
+                  </button>
+               </div>
+            </article>`;
+    },
+    loader:function(data){
+      return `<div class="container_loader">
+        <div class="loader blue">
       </div>`;
     }
   }
@@ -256,10 +307,14 @@ DatosPersonales();
 /*#Notificaciones: iniciar loader*/
 let $article = document.querySelector('.notificationBox .noticias');
 $article.innerHTML = perfil.notificaciones.loader();
+
+
+let $articleNoticiasSave = document.querySelector('.NoticiasGuardadasBox .noticias');
+$articleNoticiasSave.innerHTML = perfil.noticias.loader();
 /*#Fin notificaciones: iniciar loader*/
 let init_jQuery_Swiper = function(){
   setTimeout(function () {
-    return ((window.jQuery && (typeof Swiper !== 'undefined')) ?perfil.notificaciones.listar():init_jQuery_Swiper());
+    return ((window.jQuery && (typeof Swiper !== 'undefined')) ?perfil.notificaciones.init():init_jQuery_Swiper());
   }, 400) ;
 }
 init_jQuery_Swiper();
