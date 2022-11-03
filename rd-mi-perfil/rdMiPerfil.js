@@ -314,7 +314,7 @@ $articleNoticiasSave.innerHTML = perfil.noticias.loader();
 /*#Fin notificaciones: iniciar loader*/
 let init_jQuery_Swiper = function(){
   setTimeout(function () {
-    return ((window.jQuery && (typeof Swiper !== 'undefined')) ?perfil.notificaciones.init():init_jQuery_Swiper());
+    return ((window.jQuery && (typeof Swiper !== 'undefined')) ?perfil.init():init_jQuery_Swiper());
   }, 400) ;
 }
 init_jQuery_Swiper();
