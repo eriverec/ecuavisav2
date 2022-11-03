@@ -494,7 +494,18 @@
   transform: scale(0.8);
 }
 
+button.btn-ecuavisa-noticia img {
+  max-width: 100%;
+  height: auto !important;
+}
 
+.btn-ecuavisa-noticia {
+  position: absolute;
+  width: 20%;
+  bottom: 10px;
+  padding: 0px;
+  right: 10px;
+}
 
 @media (min-width: 767px) {
   .MP_noticias_save .noticias {
