@@ -265,7 +265,7 @@ let perfil = {
         let newItems = items.slice(0 , num);
         let json = [];
         newItems.forEach(function(item, index) {
-            var img = item.content[0];
+            var img = Array.isArray(item.content)?item.content[0]:item.content;
             //console.log(JSON.stringify(img))
             var jsonData = {
                 "title": item.title,
