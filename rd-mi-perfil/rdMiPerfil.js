@@ -267,7 +267,10 @@ let perfil = {
         for(var i in newItems){
           const item = newItems[i];
           const img = item.content[0];
-          console.log(JSON.stringify(img))
+          //console.log(JSON.stringify(img))
+          img.forEach(function(comida, index) {
+              console.log(`${index} : ${comida}`);
+          });
           $articles += perfil.notificaciones.html_({
               "title": item.title,
               "img": item.content[0].url,
