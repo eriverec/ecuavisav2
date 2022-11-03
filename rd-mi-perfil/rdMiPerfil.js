@@ -270,12 +270,12 @@ let perfil = {
             var jsonData = {
                 "title": item.title,
                 "img": img.url,
-                "category": item.category[0].__text,
+                "category": item.category[0]['__text'],
                 "autor": item.pubDate,
                 "fecha": item.pubDate,
                 "url": item.link
             };
-            console.log(jsonData);
+            console.log(item.category[0]['__text']);
             $articles += perfil.notificaciones.html_();
         });
         $article.innerHTML = $articles;
