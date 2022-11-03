@@ -263,15 +263,20 @@ let perfil = {
       .then( (jsondata) => {
         let items = jsondata.rss.channel.item;
         let newItems = items.slice(0 , num);
-        console.log(newItems)
-        /*for(var i in jsondata.usuario.Notificaciones){
-          const d = jsondata.usuario.Notificaciones[i];
-          //if($idusuario == jsondata.usuario.id){
-            $articles += perfil.notificaciones.html_(d);
-          //}
+        let json = [];
+        for(var i in newItems){
+          const item = newItems[i];
+          $articles += perfil.notificaciones.html_({
+              "title": item.title,
+              "img": item.content[0].url,
+              "category": item.category[0].__text,
+              "autor": item.pubDate,
+              "fecha": item.pubDate,
+              "url": item.link
+          });
         }
         $article.innerHTML = $articles;
-        swiperNotificaciones();*/
+        swiperNotificaciones();
       });
     },
   },
