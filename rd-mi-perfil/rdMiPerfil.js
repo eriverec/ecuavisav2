@@ -267,7 +267,7 @@ let perfil = {
         for(var i in newItems){
           const item = newItems[i];
           const img = item.content[0];
-          console.log(img['medium'])
+          console.log(JSON.stringify(img))
           $articles += perfil.notificaciones.html_({
               "title": item.title,
               "img": item.content[0].url,
