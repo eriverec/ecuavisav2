@@ -185,6 +185,7 @@ function eyesPass(){
 
 let perfil = {
   init:()=>{
+      eyesPass();
       perfil.notificaciones.listar();
       perfil.noticias.listar();
   },
@@ -254,7 +255,6 @@ let perfil = {
   },
   noticias:{
     listar:function(){
-      eyesPass();
       var myHeaders = new Headers();
       userId= localStorage.getItem('wylexUserId');
       var raw = JSON.stringify({
@@ -277,7 +277,7 @@ let perfil = {
             $articles += perfil.noticias.html_(d, i);
           //}
         }
-        $article.innerHTML = $articles;
+        $articleNoticiasSave.innerHTML = $articles;
       });
     },
     html_:function(data){
