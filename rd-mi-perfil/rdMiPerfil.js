@@ -261,7 +261,9 @@ let perfil = {
       let $idusuario = localStorage.getItem('wylexUserId') || 0;
       fetch("https://www.ecuavisa.com/rss/data-noticia.json").then((response) => response.json())
       .then( (jsondata) => {
-        console.log(jsondata);
+        let items = jsondata.rss.channel.item;
+        let newItems = items.slice(items.length - num);
+        console.log(newItems)
         /*for(var i in jsondata.usuario.Notificaciones){
           const d = jsondata.usuario.Notificaciones[i];
           //if($idusuario == jsondata.usuario.id){
