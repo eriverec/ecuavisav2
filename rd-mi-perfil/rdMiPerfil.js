@@ -275,11 +275,11 @@ let perfil = {
                 "fecha": item.pubDate,
                 "url": item.link
             };
-            console.log(item.category[0]['__text']);
-            $articles += perfil.notificaciones.html_(jsonData);
+            console.log(jsonData);
+            //$articles += perfil.notificaciones.html_(jsonData);
         });
-        $article.innerHTML = $articles;
-        swiperNotificaciones();
+        //$article.innerHTML = $articles;
+        //wiperNotificaciones();
       });
     },
   },
