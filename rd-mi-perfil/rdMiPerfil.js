@@ -186,7 +186,7 @@ function eyesPass(){
 let perfil = {
   init:()=>{
       perfil.notificaciones.listar();
-      //perfil.noticias.listar();
+      perfil.noticias.listar();
   },
   contrasenia:{
     validarPass:function(){
