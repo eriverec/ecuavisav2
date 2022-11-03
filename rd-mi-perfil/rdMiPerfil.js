@@ -288,7 +288,7 @@ let perfil = {
                </div>
                <div class="multimedia">
                   <img src="${data.img}" alt="${data.title}">
-                  <button class="btn-ecuavisa-noticia active" title="Haz clic para quitar la noticia">
+                  <button class="btn btn-ecuavisa-noticia active" title="Haz clic para quitar la noticia">
                     <img src="https://ecuavisadev.netlify.app/rd-mi-perfil/assets/saved.svg" width="20" height="20" alt="${data.title}">
                   </button>
                </div>

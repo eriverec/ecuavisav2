@@ -433,7 +433,7 @@
   object-fit: cover;
 }
 
-.MP_noticias_save .noticias .article .multimedia::after {
+/*.MP_noticias_save .noticias .article .multimedia::after {
   content: url('https://ecuavisadev.netlify.app/rd-mi-perfil/assets/saved.svg');
   position: absolute;
   z-index: 9999;
@@ -441,7 +441,7 @@
   bottom: 0;
   right: 0;
   padding: 5px 10px;
-}
+}*/
 
 .MP_noticias_save .article .text_block .section {
   font-family: 'Mattone 150';
@@ -493,6 +493,8 @@
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FbotonNews.svg');
   transform: scale(0.8);
 }
+
+
 
 @media (min-width: 767px) {
   .MP_noticias_save .noticias {
