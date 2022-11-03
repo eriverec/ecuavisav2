@@ -264,20 +264,20 @@ let perfil = {
         let items = jsondata.rss.channel.item;
         let newItems = items.slice(0 , num);
         let json = [];
-        for(var i in newItems){
-          const item = newItems[i];
-          const img = item.content[0];
-          //console.log(JSON.stringify(img))
-          alert(img.url)
-          $articles += perfil.notificaciones.html_({
-              "title": item.title,
-              "img": img.url,
-              "category": item.category[0].__text,
-              "autor": item.pubDate,
-              "fecha": item.pubDate,
-              "url": item.link
-          });
-        }
+        newItems.forEach(function(item, index) {
+            var img = item.content[0];
+            //console.log(JSON.stringify(img))
+            var jsonData = {
+                "title": item.title,
+                "img": img.url,
+                "category": item.category[0].__text,
+                "autor": item.pubDate,
+                "fecha": item.pubDate,
+                "url": item.link
+            };
+            console.log(jsonData);
+            $articles += perfil.notificaciones.html_();
+        });
         $article.innerHTML = $articles;
         swiperNotificaciones();
       });
