@@ -228,14 +228,17 @@ let perfil = {
       fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/notificationsget.php", requestOptions).then(response => {
          return response.json();
       }).then(jsondata => {
-        for(var i in jsondata.usuario.Notificaciones){
-          const d = jsondata.usuario.Notificaciones[i];
-          //if($idusuario == jsondata.usuario.id){
+        if(jsondata.error){
+          perfil.notificaciones.listarUltimas();
+        }else{
+          for(var i in jsondata.usuario.Notificaciones){
+            const d = jsondata.usuario.Notificaciones[i];
+            const iduser = jsondata.usuario.id;
             $articles += perfil.notificaciones.html_(d);
-          //}
+          }
+          $article.innerHTML = $articles;
+          swiperNotificaciones();
         }
-        $article.innerHTML = $articles;
-        swiperNotificaciones();
       });
     },
     html_:function(data){
@@ -251,7 +254,35 @@ let perfil = {
       return `<div class="container_loader">
         <div class="loader">
       </div>`;
-    }
+    },
+    listarUltimas:function(num = 4){
+      var myHeaders = new Headers();
+      userId= localStorage.getItem('wylexUserId');
+      var raw = JSON.stringify({
+        "id": userId
+      });
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        body: raw
+      };
+
+      let $articles = '';
+      let $idusuario = localStorage.getItem('wylexUserId') || 0;
+      fetch("https://www.ecuavisa.com/rss/data-noticia.json", requestOptions).then(response => {
+         return response.json();
+      }).then( jsondata => {
+        console.log(jsondata);
+        /*for(var i in jsondata.usuario.Notificaciones){
+          const d = jsondata.usuario.Notificaciones[i];
+          //if($idusuario == jsondata.usuario.id){
+            $articles += perfil.notificaciones.html_(d);
+          //}
+        }
+        $article.innerHTML = $articles;
+        swiperNotificaciones();*/
+      });
+    },
   },
   noticias:{
     listar:function(){
@@ -271,13 +302,16 @@ let perfil = {
       fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/notificationsget.php", requestOptions).then(response => {
          return response.json();
       }).then(jsondata => {
-        for(var i in jsondata.usuario.Notificaciones){
-          const d = jsondata.usuario.Notificaciones[i];
-          //if($idusuario == jsondata.usuario.id){
+        if(jsondata.error){
+
+        }else{
+          for(var i in jsondata.usuario.Notificaciones){
+            const d = jsondata.usuario.Notificaciones[i];
+            const iduser = jsondata.usuario.id;
             $articles += perfil.noticias.html_(d, i);
-          //}
+          }
+          $articleNoticiasSave.innerHTML = $articles;
         }
-        $articleNoticiasSave.innerHTML = $articles;
       });
     },
     html_:function(data){
