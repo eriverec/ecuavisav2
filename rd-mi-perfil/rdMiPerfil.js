@@ -262,7 +262,7 @@ let perfil = {
       fetch("https://www.ecuavisa.com/rss/data-noticia.json").then((response) => response.json())
       .then( (jsondata) => {
         let items = jsondata.rss.channel.item;
-        let newItems = items.slice(items.length - num);
+        let newItems = items.slice(0 , num);
         console.log(newItems)
         /*for(var i in jsondata.usuario.Notificaciones){
           const d = jsondata.usuario.Notificaciones[i];
