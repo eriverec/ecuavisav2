@@ -91,7 +91,9 @@
     font-size: 16px;
   }
 }
-
+.outsideEmail > div:last-child {
+  display: none;
+}
 /****************NOTIFICACIONES******************/
 .container_loader {
   height: auto;
