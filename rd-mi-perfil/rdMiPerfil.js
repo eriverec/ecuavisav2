@@ -278,7 +278,7 @@ let perfil = {
             $articles += perfil.notificaciones.html_(jsonData);
         });
         $article.innerHTML = $articles;
-        wiperNotificaciones();
+        swiperNotificaciones();
       });
     },
   },
@@ -301,7 +301,7 @@ let perfil = {
          return response.json();
       }).then(jsondata => {
         if(jsondata.error){
-
+          $articles +='No tienes notas guardadas';
         }else{
           for(var i in jsondata.usuario.Notificaciones){
             const d = jsondata.usuario.Notificaciones[i];
