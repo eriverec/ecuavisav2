@@ -2,6 +2,21 @@
 *****CINTILLO*****
 *****************/
 
+
+.c_azul_celeste_Mobile {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .c_azul_celeste_Mobile {
+    display: block;
+  }
+
+  .c_azul_celeste_Desktop {
+    display: none;
+  }
+}
+
 .border_play{
   border: 5px solid #23DCD1 !important;
 }
