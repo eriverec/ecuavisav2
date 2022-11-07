@@ -276,6 +276,14 @@
   width: 100%;
 }
 
+/*****************
+*****NO VISIBLE*****
+*****************/
+
+.noVisible {
+  visibility: hidden;
+}
+
 .pod_general .pod_inf h3 {
   font-family: 'Archivo';
   font-style: normal;
@@ -422,3 +430,5 @@
     margin-left: 12px;
   }
 }
+
+
