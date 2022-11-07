@@ -242,7 +242,7 @@ h2.temas_estilo {
 }
 
 .titulo1 h1 {
-  font-size: 55px;
+  font-size: 88px;
   color: #23DCD1;
   font-weight: 600;
   font-family: 'Anek Malayalam';
@@ -1082,6 +1082,10 @@ img.sepDesk {
   .sec-titulo .noticias .article:nth-child(1), 
   .sec-titulo .noticias .article:nth-child(2) {
     border-top: none;
+  }
+
+  .titulo1 h1 {
+    font-size: 55px;
   }
   .swiper.card_dest_estilo {
     width: 100%!important;
