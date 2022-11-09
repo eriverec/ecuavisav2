@@ -384,6 +384,9 @@ div#r03c01 {
   max-height: 130px!important;
   height: 130px!important;
 }
+.notas-recientes .iter-rankingtab-mostrecent-hd {
+  font-size: 50px;
+}
 }
 
 @media (max-width: 768px) {
