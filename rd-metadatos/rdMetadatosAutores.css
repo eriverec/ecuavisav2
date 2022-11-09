@@ -411,6 +411,10 @@ div#r03c01 {
 .author_card .author_text {
   max-width: 100%;
 }
+.notas-recientes .iter-rankingtab-mostrecent-hd {
+  font-size: 35px;
+  line-height: 25px;
+}
 }
 
 @media (max-width: 600px) {
