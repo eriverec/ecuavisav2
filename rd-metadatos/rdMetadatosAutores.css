@@ -398,7 +398,16 @@ div#r03c01 {
 .notas-recientes .TIT {
   padding: 15px 0;
 }
-
+.d-md-flex {
+  display: flex!important;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+.author_card .author_text {
+  max-width: 100%;
+}
 }
 
 @media (max-width: 600px) {
