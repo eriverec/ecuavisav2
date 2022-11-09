@@ -159,6 +159,7 @@ div#r03c01 {
   border-radius: 3px;
   max-height: 145px!important;
   height: 145px!important;
+  object-fit: cover!important;
 }
 .ecv_relacionadas_2022 .recomendadas-rd {
   display: grid;
