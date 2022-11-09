@@ -434,6 +434,16 @@ div#r03c01 {
     grid-template-columns: 2fr 1fr;
     padding: 30px 0 30px;
   }
+  .ecv_relacionadas_2022 .noticias .article .multimedia .multimediaIconMacroWrapper div {
+    width: 100% !important;
+    max-height: 130px!important;
+    height: 130px!important;
+  }
+  .ecv_relacionadas_2022 .noticias .article .multimedia .multimediaIconMacroWrapper div img {
+    width: 100% !important;
+    max-height: 130px!important;
+    height: 130px!important;
+  }
 
   /*
     .ecv_relacionadas_2022 .noticias .article:nth-child(9) .recomendadas-rd {
