@@ -151,10 +151,15 @@ div#r03c01 {
   border-top: 1px #2927B9 solid;
 }
 
+.ecv_relacionadas_2022 .noticias .article .multimedia .multimediaIconMacroWrapper div {
+  max-height: 145px!important;
+  height: 145px!important;
+}
 .ecv_relacionadas_2022 .noticias .article .multimedia .multimediaIconMacroWrapper div img {
   border-radius: 3px;
+  max-height: 145px!important;
+  height: 145px!important;
 }
-
 .ecv_relacionadas_2022 .recomendadas-rd {
   display: grid;
   grid-template-columns: 4fr 1fr;
