@@ -1,8 +1,17 @@
-// setTimeout(function () {
-//     cardsTemasDestacados();
-//     swiperProgramasGlobal();
-//     changeTitleMasVisto();
-// }, 500);
+var time_jquery = setInterval(function() {
+    if (window.jQuery) {
+      if(typeof Swiper !== 'undefined'){
+        init_jquery();
+          clearInterval(time_jquery);
+      }
+    }
+}, 500);
+
+let init_jquery = function(){
+    swiperProgramasGlobal();
+    cardsTemasDestacados();
+    changeTitleMasVisto();
+}
 
 function swiperProgramasGlobal() {
     $('.notaSwiper .noticias').addClass('swiper-wrapper');
@@ -81,20 +90,20 @@ if (/(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|pla
 
 
 
-function swiperGo() {
-    setTimeout(function () {
-      if (typeof Swiper === "undefined") {
-        swiperGo();
-      } else {
-        swiperProgramasGlobal();
-        cardsTemasDestacados();
-        changeTitleMasVisto();
-      }
-    }, 400);
-  }
+// function swiperGo() {
+//     setTimeout(function () {
+//       if (typeof Swiper === "undefined") {
+//         swiperGo();
+//       } else {
+//         swiperProgramasGlobal();
+//         cardsTemasDestacados();
+//         changeTitleMasVisto();
+//       }
+//     }, 400);
+//   }
   
-  $(document).ready(function () {
-    swiperGo();
-  });
+//   $(document).ready(function () {
+//     swiperGo();
+//   });
   //     seguimosSwiper();
   //     dameSwiper ();
