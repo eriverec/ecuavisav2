@@ -25,6 +25,11 @@ new MediaElementPlayer(document.querySelector(".mainplayer"), optionsPodcast);
   elementTop.classList.add("mejs-prepended-buttons");
   elementBottom.classList.add("mejs-appended-buttons");
 
+  var selecMVisto = document.querySelectorAll('.masEscuchados .iter-tabview-content-item ');
+  for (let se of selecMVisto) {
+    se.classList.add('pod_items');
+  }
+
   const controls = document.querySelector(".mejs__controls");
   controls.prepend(elementTop);
   controls.append(elementBottom);
@@ -52,7 +57,6 @@ new MediaElementPlayer(document.querySelector(".mainplayer"), optionsPodcast);
 //   }
 // }
 
-$('.masEscuchados .iter-tabview-content-item').addClass('pod_items');
 
 // preparador de contenidos reproducibles
 $('.IMG_TIT_TXT.mult').each(function (i, obj) {
