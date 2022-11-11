@@ -25,11 +25,6 @@ new MediaElementPlayer(document.querySelector(".mainplayer"), optionsPodcast);
   elementTop.classList.add("mejs-prepended-buttons");
   elementBottom.classList.add("mejs-appended-buttons");
 
-  var selecMVisto = document.querySelectorAll('.masEscuchados .iter-tabview-content-item ');
-  for (let se of selecMVisto) {
-    se.classList.add('pod_items');
-  }
-
   const controls = document.querySelector(".mejs__controls");
   controls.prepend(elementTop);
   controls.append(elementBottom);
@@ -50,12 +45,13 @@ new MediaElementPlayer(document.querySelector(".mainplayer"), optionsPodcast);
 
 // ####################################################################
 
-// function addClassMV() {
-//   var selecMVisto = document.querySelectorAll('.masEscuchados .iter-tabview-content-item ');
-//   for (let se of selecMVisto) {
-//     se.classList.add('pod_items');
-//   }
-// }
+function addClassMV() {
+  var selecMVisto = document.querySelectorAll('.iter-tabview-content-item');
+  for (let se of selecMVisto) {
+    se.classList.add('pod_items');
+  }
+  console.log("clase agregada");
+}
 
 
 // preparador de contenidos reproducibles
@@ -115,7 +111,7 @@ function playStop() {
 
 
 setTimeout(function () {
-  // addClassMV();
+  addClassMV();  
 }, 300);
 
 
