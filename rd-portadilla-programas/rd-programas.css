@@ -83,11 +83,11 @@
     font-size: 55px;
     line-height: 45px;
   }
-
+/* 
   .estilo_separadorDesktop,
   .estilo_separadorMobile {
     margin-top: 16px;
-  }
+  } */
 
   .estilo_separadorMobile {
     display: block;
@@ -803,6 +803,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
   .tarjeta-destacada h2 {
     font-size: 24px;
+    line-height: 25px;
   }
 }
 
