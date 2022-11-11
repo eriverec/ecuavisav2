@@ -81,8 +81,6 @@ function dynamicContent() {
   });
 }
 
-dynamicContent();
-
 // Fin preparador de contenidos reproducibles
 
 // ####################################################################
