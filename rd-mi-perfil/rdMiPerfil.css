@@ -590,6 +590,11 @@ button.btn-ecuavisa-noticia img {
 /****************BOTON CERRAR SESION******************/
 
 
+.collapsible_mp.container{
+  padding-right: 18px;
+  padding-left: 18px;
+}
+
 .MP_cerrar_session .button_cerrar_sesion {
   display: flex;
   align-items: center;
