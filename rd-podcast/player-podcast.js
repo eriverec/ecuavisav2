@@ -45,7 +45,7 @@ new MediaElementPlayer(document.querySelector(".mainplayer"), optionsPodcast);
 
 // ####################################################################
 
-var selecMVisto = document.querySelector('.masEscuchados .iter-tabview-content-item ');
+var selecMVisto = document.querySelectorAll('.masEscuchados .iter-tabview-content-item ');
 for(let se of selecMVisto){
   se.classList.add('pod_items');
 }
