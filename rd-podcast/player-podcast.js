@@ -46,10 +46,11 @@ new MediaElementPlayer(document.querySelector(".mainplayer"), optionsPodcast);
 // ####################################################################
 
 function addClassMV() {
-  var selecMVisto = document.querySelectorAll('.iter-tabview-content-item');
-  for (let se of selecMVisto) {
-    se.classList.add('pod_items');
-  }
+  // var selecMVisto = document.querySelectorAll('.iter-tabview-content-item');
+  // for (let se of selecMVisto) {
+  //   se.classList.add('pod_items');
+  // }
+  $('.iter-tabview-content-item').addClass('pod_items');
   console.log("clase agregada");
 }
 
