@@ -45,9 +45,11 @@ new MediaElementPlayer(document.querySelector(".mainplayer"), optionsPodcast);
 
 // ####################################################################
 
-var selecMVisto = document.querySelectorAll('.masEscuchados .iter-tabview-content-item ');
-for(let se of selecMVisto){
-  se.classList.add('pod_items');
+function addClassMV() {
+  var selecMVisto = document.querySelectorAll('.masEscuchados .iter-tabview-content-item ');
+  for (let se of selecMVisto) {
+    se.classList.add('pod_items');
+  }
 }
 
 // preparador de contenidos reproducibles
@@ -81,7 +83,7 @@ function podcastPlay() {
 
   clasRemove.classList.remove('noVisible');
   classAnimation.classList.add('animationPLayer');
-  
+
   // detectamos si esta reproduciendo para dar stop o si reproduce otro audio
   if (event.currentTarget.classList.contains('play-stop-button--playing')) {
     setTimeout(function () {
@@ -104,4 +106,13 @@ function playStop() {
     element.classList.remove('play-stop-button--playing');
   });
 };
+
+
+setTimeout(function () {
+  addClassMV();
+}, 300);
+
+
+
+
 // End Funcion de reproducción
