@@ -45,12 +45,14 @@ new MediaElementPlayer(document.querySelector(".mainplayer"), optionsPodcast);
 
 // ####################################################################
 
-function addClassMV() {
-  var selecMVisto = document.querySelectorAll('.masEscuchados .iter-tabview-content-item ');
-  for (let se of selecMVisto) {
-    se.classList.add('pod_items');
-  }
-}
+// function addClassMV() {
+//   var selecMVisto = document.querySelectorAll('.masEscuchados .iter-tabview-content-item ');
+//   for (let se of selecMVisto) {
+//     se.classList.add('pod_items');
+//   }
+// }
+
+$('.masEscuchados .iter-tabview-content-item').addClass('pod_items');
 
 // preparador de contenidos reproducibles
 $('.IMG_TIT_TXT.mult').each(function (i, obj) {
@@ -109,7 +111,7 @@ function playStop() {
 
 
 setTimeout(function () {
-  addClassMV();
+  // addClassMV();
 }, 300);
 
 
