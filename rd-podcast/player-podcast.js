@@ -122,7 +122,7 @@ function playStop() {
 setTimeout(function () {
   addClassMV();
   dynamicContent();
-}, 600);
+}, 700);
 
 
 
