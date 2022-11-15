@@ -6,6 +6,11 @@
   display: none;
 }
 
+.btn-compartir-podcast .dropdown-menu.show{
+  display: flex!important;
+    padding: 0.5rem 0.5rem;
+}
+
 .title-destacada {
   margin: 45px 0;
 }
@@ -173,7 +178,11 @@
   padding-bottom: 25px;
 }
 
-.layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block .pod_boton a {
+.layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block .pod_boton .microfono {
+  margin-right: 20px;
+}
+
+.layout_landing_portadilla .notas-1-p-ap .noticias .article .text_block .pod_boton .btn-compartir-podcast {
   margin-right: 20px;
 }
 
