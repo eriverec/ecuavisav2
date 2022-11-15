@@ -303,7 +303,9 @@
   align-items: center;
   align-content: center;
   justify-content: center;
-  gap: 20px;
+}
+.pod_general .pod_inf .pod_boton .mic_imagen{
+  margin-left: 20px;
 }
 
 .pod_general .pod_inf .pod_boton a {
