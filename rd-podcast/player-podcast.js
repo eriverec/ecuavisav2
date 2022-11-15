@@ -120,7 +120,7 @@ function playStop() {
 
 
 setTimeout(function () {
-  addClassMV();
+  // addClassMV();
   dynamicContent();
 }, 1000);
 
