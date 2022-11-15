@@ -383,6 +383,18 @@
   word-spacing: 10px;
 }
 
+.iter-tabview-content-item .PODCAST_MAS_ESCUCHADOS .media_block .text_block .durationPodcast{
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  text-transform: uppercase;
+  color: #2927B9;
+  margin-left: 20px;
+  word-spacing: 10px;
+}
+
 .pod_items .PODCAST_MAS_ESCUCHADOS .media_block .DETAIL_TXT{
   display: none;
 }
