@@ -2,6 +2,9 @@
 *****TITLE CON SEPARADOR*****
 **************************/
 
+.btn-compartir-podcast .dropdown-toggle::after{
+  display: none;
+}
 
 .title-destacada {
   margin: 45px 0;
