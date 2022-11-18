@@ -1492,7 +1492,7 @@ INICIO - BLOQUE - MUNDO
     font-style: normal;
     font-weight: 700;
     font-size: 22px;
-    padding-right: 35px;
+    /* padding-right: 35px; */
     line-height: 28px;
   }
 
