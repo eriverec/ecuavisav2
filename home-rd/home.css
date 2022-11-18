@@ -45,6 +45,30 @@
   }
 }
 
+
+.HOME_MENU_RD .iconPlay {
+  background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
+  width: 30px;
+  height: 30px;
+  top: 15px;
+  right: 10px;
+  left: initial;
+  bottom: initial;
+}
+
+.HOME_MENU_RD .mobile_des_5 .iconPlay, 
+.HOME_MENU_RD .layout__mobile .iconPlay{
+  background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlayRedondoCeleste.svg');
+  width: 30px;
+  height: 30px;
+  top: initial;
+  bottom: 0;
+  right: 0;
+  left: initial;
+  margin: 10px;
+}
+
+
 .bb-azul {
   border-bottom: 16px solid #2927B9;
   margin-top: 80px;
