@@ -1034,8 +1034,73 @@ img.sepDesk {
   display: flex;
   gap: 5px;
 }
+/*
+## ESTILOS ENCUESTA
+*/
+.encuesta_espectaculo {
+  display: none;
+}
+.encuesta_estilo .teaser-viewer-title span {
+  padding-top: 8px;
+  display: block;
+  text-transform: initial;
+}
+.menu_encuesta_estilo .noticias {
+  background-color: #060127 !important;
+  border-radius: 0px 0px 2px 2px;
+}
+.encuesta_estilo .teaser-viewer-title h1 {
+  margin-bottom: 0;
+}  
+.encuesta_estilo .question-poll h2 {
+  font-weight: 600;
+  font-size: 20px;
+  color: white;
+  text-align: center;
+  padding-top: 1.7rem;
+}
+.encuesta_estilo .noticias {
+  background-color: #060127 !important;
+  border-radius: 0px 0px 2px 2px;
+}
 
+.encuesta_estilo .poll-form.form-check span[data-choiceid] label {
+  border: 1px solid #23dcd1;
+  border-radius: 5px;
+}
 
+.encuesta_estilo .poll-form.form-check span {
+  color: #1fc0bb;
+  font-weight: 100;
+}
+.encuesta_estilo .teaser-viewer-title .tit-quiz1 {
+  background-color: #23dcd1 !important;
+  padding: 25px 0 5px !important;
+  font-family: 'Mattone 150'!important;
+  font-style: normal;
+  font-weight: 600!important;
+  line-height: 16px;
+  text-align: center;
+  font-size: 14px!important;
+  text-transform: uppercase;
+  color: #2927B9!important;
+}
+.encuesta_estilo .teaser-viewer-title .tit-quiz2 {
+  background-color: #23dcd1 !important;
+  padding: 0 0 25px 0!important;
+  font-family: 'Anek Malayalam';
+  font-style: normal;
+  font-weight: 600!important;
+  font-size: 47px!important;
+  line-height: 21px;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: #2927B9;
+  text-align: center;
+}
+/*
+## FIN ESTILOS ENCUESTA
+*/
 
 @media (min-width: 1400px) {
   .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
