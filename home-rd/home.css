@@ -56,13 +56,14 @@
   bottom: initial;
 }
 
-.HOME_MENU_RD .mobile_des_5 .iconPlay, 
+.HOME_MENU_RD .mobile_des_5 .iconPlay,
 .HOME_MENU_RD .layout__mobile .iconPlay,
 .HOME_MENU_RD .BLOQUE__NOTICIAS .iconPlay,
 .HOME_MENU_RD .BLOQUE__MUNDO .iconPlay,
 .HOME_MENU_RD .BLOQUE__ESPECTACULO .iconPlay,
 .HOME_MENU_RD .bloque_estilo_bg .contenido_general .iconPlay,
-.HOME_MENU_RD .bloque_estadio_bg .bloque_estadio_2_m .iconPlay{
+.HOME_MENU_RD .bloque_estadio_bg .bloque_estadio_2_m .iconPlay,
+.HOME_MENU_RD .bloque_estadio_bg .bloque_estadio_2 .iconPlay {
   background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlayRedondoCeleste.svg');
   width: 30px;
   height: 30px;
@@ -74,7 +75,7 @@
 }
 
 .HOME_MENU_RD .bloque_estilo_bg .bloque_estilo_1 .iconPlay,
-.HOME_MENU_RD .notas-1-p-ap .iconPlay{
+.HOME_MENU_RD .notas-1-p-ap .iconPlay {
   background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlayRedondoCeleste.svg');
   width: 30px;
   height: 30px;
@@ -2043,16 +2044,16 @@ BLOQUE - CULTURA
 }
 
 /*Imagen de bloque cultura 2*/
-.HOME_MENU_RD .bloque_cultura_2 .multimedia .cutlineShow div {
+/* .HOME_MENU_RD .bloque_cultura_2 .multimedia .cutlineShow div {
   padding-top: 0% !important;
-}
+} */
 
-.HOME_MENU_RD .bloque_cultura_2 .multimedia img {
+/* .HOME_MENU_RD .bloque_cultura_2 .multimedia img {
   min-height: 110px;
   margin-top: -8% !important;
   width: 100% !important;
   object-fit: cover;
-}
+} */
 
 @media (max-width: 767px) {
 
