@@ -449,15 +449,6 @@ Cambio de tamaño de imagen grande izq
 }
 
 
-.HOME_MENU_RD .iconPlay {
-  background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
-  width: 30px;
-  height: 30px;
-  top: 15px;
-  right: 10px;
-  left: initial;
-  bottom: initial;
-}
 
 /*Banner ancho del título*/
 .portlet-boundary.portlet-static-end.teaser-viewer-portlet.notas-1-p-ap .headline {
