@@ -1676,11 +1676,11 @@ INICIO - BLOQUE - MUNDO
     border-top: 1px solid var(--rd-gray-border);
   }
 
-  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3) {
+  /* .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3) {
     border-bottom: none;
     border-right: none;
     border-top: none;
-  }
+  } */
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .text_block .headline a h2 {
     font-size: var(--rd-size-18);
