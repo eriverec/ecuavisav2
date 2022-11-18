@@ -537,7 +537,7 @@ h2.temas_estilo {
   grid-template-columns: 1fr 1fr;
   column-gap: 40px;
   margin-top: 10px;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
 }
 
 .sec-titulo .noticias .article {
