@@ -1034,31 +1034,7 @@ img.sepDesk {
   display: flex;
   gap: 5px;
 }
-.encuesta_estilo .teaser-viewer-title .tit-quiz1 {
-  background-color: #23dcd1 !important;
-  padding: 25px 0 5px !important;
-  font-family: 'Mattone 150'!important;
-  font-style: normal;
-  font-weight: 600!important;
-  line-height: 16px;
-  text-align: center;
-  font-size: 14px!important;
-  text-transform: uppercase;
-  color: #2927B9!important;
-}
-.encuesta_estilo .teaser-viewer-title .tit-quiz2 {
-  background-color: #23dcd1 !important;
-  padding: 0 0 25px 0!important;
-  font-family: 'Anek Malayalam';
-  font-style: normal;
-  font-weight: 600!important;
-  font-size: 47px!important;
-  line-height: 21px;
-  letter-spacing: -0.03em;
-  text-transform: lowercase;
-  color: #2927B9;
-  text-align: center;
-}
+
 
 
 @media (min-width: 1400px) {
