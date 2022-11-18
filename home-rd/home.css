@@ -213,7 +213,7 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .listado_1_4_mobile .noticias .article .BLOQUE_SEC_TIT {
-  margin: 35px 0;
+  margin: 34px 0;
 }
 
 .HOME_MENU_RD .listado_1_4_mobile .noticias .article:nth-child(1) {
@@ -237,8 +237,8 @@ INICIO - PORTADA - 4 DESTACADAS
 .HOME_MENU_RD .listado_1_4_mobile .noticias .article .text_block .headline a h2 {
   color: var(--bs-black);
   font-size: 18px;
+  line-height: 22px;
   font-weight: 700;
-  line-height: 28px;
 }
 
 .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block {
@@ -861,6 +861,7 @@ INICIO - BLOQUE - ECUADOR
 
   .HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2 {
     font-size: 18px;
+    line-height: 22px;
   }
 
   .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .headline a h2 {
@@ -900,7 +901,8 @@ INICIO - BLOQUE - ECUADOR
   }
 
   .HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT {
-    margin: 20px 0;
+    margin: 34px 0;
+    padding-top: 0;
   }
 
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block {
