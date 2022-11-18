@@ -61,7 +61,8 @@
 .HOME_MENU_RD .BLOQUE__NOTICIAS .iconPlay,
 .HOME_MENU_RD .BLOQUE__MUNDO .iconPlay,
 .HOME_MENU_RD .BLOQUE__ESPECTACULO .iconPlay,
-.HOME_MENU_RD .bloque_estilo_bg .contenido_general .iconPlay{
+.HOME_MENU_RD .bloque_estilo_bg .contenido_general .iconPlay,
+.HOME_MENU_RD .bloque_estadio_bg .bloque_estadio_2_m .iconPlay{
   background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlayRedondoCeleste.svg');
   width: 30px;
   height: 30px;
