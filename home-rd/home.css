@@ -57,7 +57,11 @@
 }
 
 .HOME_MENU_RD .mobile_des_5 .iconPlay, 
-.HOME_MENU_RD .layout__mobile .iconPlay{
+.HOME_MENU_RD .layout__mobile .iconPlay,
+.HOME_MENU_RD .BLOQUE__NOTICIAS .iconPlay,
+.HOME_MENU_RD .BLOQUE__MUNDO .iconPlay,
+.HOME_MENU_RD .BLOQUE__ESPECTACULO .iconPlay,
+.HOME_MENU_RD .bloque_estilo_bg .contenido_general .iconPlay{
   background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlayRedondoCeleste.svg');
   width: 30px;
   height: 30px;
@@ -67,6 +71,19 @@
   left: initial;
   margin: 10px;
 }
+
+.HOME_MENU_RD .bloque_estilo_bg .bloque_estilo_1 .iconPlay,
+.HOME_MENU_RD .notas-1-p-ap .iconPlay{
+  background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlayRedondoCeleste.svg');
+  width: 30px;
+  height: 30px;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  left: initial;
+  margin: 10px;
+}
+
 
 
 .bb-azul {
