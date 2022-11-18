@@ -1512,7 +1512,7 @@ INICIO - BLOQUE - MUNDO
 
   .HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT .text_block .headline {
     max-width: 330px;
-    padding-top: 10px;
+    /* padding-top: 10px; */
   }
 
   .lista-bloque-1x4 .article-section a.section,
