@@ -1128,6 +1128,10 @@ img.sepDesk {
 
   .mas_temas_2_desktop .noticias {
     grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .mas_temas_2_desktop .noticias .article:nth-child(2) {
+    border-top: 0px solid #2927B9;
   }
 
   .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
