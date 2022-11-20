@@ -53,13 +53,12 @@ if(localStorage.getItem('programas')){ //evaluamos si se encuentra la key progra
 
 function activeDay(data){
     // $('div[data-item=' + slide + ']').addClass("selected");
-    //setTimeout(function(){
-    console.log(data)
-        el = $('.programaItem.'+ data);
-        el.addClass('active-item');
+    setTimeout(function(){
+        console.log(data)
+        var el = $(`tr.programaItem.${data}`).addClass('active-item');
         //$(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
         //console.log(el);
-    //} , 700);
+    } , 700);
 }
 
 function renderProgramas(){
