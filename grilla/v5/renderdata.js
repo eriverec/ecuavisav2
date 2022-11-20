@@ -11,6 +11,7 @@ tabTogglers.forEach(function(toggler) {
         for (let i = 0; i < tabContents.children.length; i++) {
             tabTogglers[i].parentElement.classList.remove("border-blue-400", "bg-blue-700", "text-zinc-100");  
             tabContents.children[i].classList.remove("hidden");
+            tabContents.children[i].classList.add("text-next");
             if ("#" + tabContents.children[i].id === tabName) { continue; }
             tabContents.children[i].classList.add("hidden");
         }
@@ -165,7 +166,7 @@ function renderProgramas(){
             
                     var todayx  = new Date().toLocaleDateString("es-ES", obtenerDiaMes);
                     // var hoyes  = new Date().toLocaleDateString("es-ES", obtenerDia);
-                    $('.Tab4').html('HOY<br>'+todayx+' ');
+                    $('.Tab4').html(`HOY<div class="fecha-hoy">${todayx}</div>`);
                      //metemos al dom el programa
             // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
             }else{ /*console.log('la fecha de hoy es '+fechahoy('fecha')+' y no coincide con '+programDate);*/ }
