@@ -56,6 +56,10 @@ function activeDay(data){
     setTimeout(function(){
         console.log(data)
         var el = $(`tr.programaItem.${data}`).addClass('active-item');
+
+        $('html, body').animate({
+            scrollTop: $(`tr.programaItem.${data}`).offset().top
+        }, 1000);
         //$(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
         //console.log(el);
     } , 700);
