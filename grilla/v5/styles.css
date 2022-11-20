@@ -45,3 +45,13 @@ body {
 }
 */
 
+/*
+#TABS CABECERA
+*/
+#tabs li {
+    transition: 0.5s all;
+}
+
+li.next-days:not(li.active-tabs) {
+    opacity: 40%;
+}
