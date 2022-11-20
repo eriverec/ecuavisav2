@@ -55,6 +55,9 @@ body {
 li.next-days:not(li.active-tabs) {
     opacity: 40%;
 }
+.primer-init {
+    opacity: 1!important;
+}
 
 .fecha-text {
     font-weight: 200;
@@ -70,8 +73,4 @@ tr.programaItem td:not(.text-center) p {
 
 .programList .programaItem:not(:first-child) td:not(.text-center) p {
     opacity: 40%;
-}
-
-.primer-init {
-    opacity: 1;
 }
