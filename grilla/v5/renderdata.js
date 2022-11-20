@@ -262,6 +262,6 @@ $(function(){
         $('#tabs li').removeClass("primer-init");
         $(this).addClass("active-tabs");
 
-        $(this).find('a').trigger('click');
+        console.log($(this).find('a').attr());
     })
 })
