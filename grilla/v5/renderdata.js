@@ -54,6 +54,7 @@ if(localStorage.getItem('programas')){ //evaluamos si se encuentra la key progra
 function activeDay(data){
     // $('div[data-item=' + slide + ']').addClass("selected");
     //setTimeout(function(){
+    console.log(data)
         el = $('.programaItem.'+ data);
         el.addClass('active-item');
         //$(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
