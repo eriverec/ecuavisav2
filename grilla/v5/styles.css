@@ -78,3 +78,11 @@ tr.programaItem td:not(.text-center) p {
 #tabs li a {
     text-transform: capitalize;
 }
+
+#tabs {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background-color: #060126;
+}
