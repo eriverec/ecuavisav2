@@ -240,3 +240,10 @@ function renderProgramas(){
     // console.log('Su programa elegido es: '+JsonProgramasHoy[1].nombrePrograma);
     // _table.classList.add('hidden');
 }
+
+$(function(){
+    $('#tabs li').click(function(){
+        $('#tabs li').removeClass("active-tabs");
+        $(this).addClass("active-tabs");
+    })
+})
