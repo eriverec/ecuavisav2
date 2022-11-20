@@ -1,7 +1,7 @@
 
 // ##### tabs de días de la semana
 let tabsContainer = document.querySelector("#tabs");
-let tabTogglers = tabsContainer.querySelectorAll("#tabs li");
+let tabTogglers = tabsContainer.querySelectorAll("a");
 tabTogglers.forEach(function(toggler) {
     toggler.addEventListener("click", function(e) {
         e.preventDefault();
