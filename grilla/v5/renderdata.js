@@ -51,14 +51,29 @@ if(localStorage.getItem('programas')){ //evaluamos si se encuentra la key progra
      console.log('existen programas') 
  }else{ /* variable para loader */ console.log('no existen programas'); }
 
+
 function activeDay(data){
+    // $('div[data-item=' + slide + ']').addClass("selected");
+    setTimeout(function(){
+        console.log(data)
+        var el = $(`tr.programaItem.${data}`).addClass('active-item');
+
+        $('html, body').animate({
+            scrollTop: $(`tr.programaItem.${data}`).offset().top - 90
+        }, 1000);
+        //$(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
+        //console.log(el);
+    } , 700);
+}
+
+/*function activeDay(data){
     // $('div[data-item=' + slide + ']').addClass("selected");
     setTimeout(function(){
         el = $('.programaItem.el-'+ data);
         $(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
         console.log(el);
     } , 700);
-}
+}*/
 
 function renderProgramas(){
     var _jsonProgramas = JSON.parse(jsonProgramas); // convertiomos el json.stringify  de localstorage en json normal
