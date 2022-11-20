@@ -213,7 +213,7 @@ function renderProgramas(){
                 var pmananaDate  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var pmanana  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab6data'); //metemos al dom el programa
-                $('.Tab6').html(''+pmanana+'<br>'+pmananaDate+'');
+                $('.Tab6').html(`${pmanana} <div class="fecha-text">${pmananaDate}</div>`);
             
             }else{/*console.log('Pasadomañana es: '+ getFecha(+2) +' y no coincide con: '+programDate) */  }
             // ###################  tercermas
