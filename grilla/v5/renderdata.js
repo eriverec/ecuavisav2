@@ -167,7 +167,7 @@ function renderProgramas(){
             
                     var todayx  = new Date().toLocaleDateString("es-ES", obtenerDiaMes);
                     // var hoyes  = new Date().toLocaleDateString("es-ES", obtenerDia);
-                    $('.Tab4').html(`HOY<div class="fecha-hoy">${todayx}</div>`);
+                    $('.Tab4').html(`HOY<div class="fecha-text">${todayx}</div>`);
                      //metemos al dom el programa
             // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
             }else{ /*console.log('la fecha de hoy es '+fechahoy('fecha')+' y no coincide con '+programDate);*/ }
@@ -204,7 +204,7 @@ function renderProgramas(){
                 var mananaDate  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var manana  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab5data'); //metemos al dom el programa
-                $('.Tab5').html('MAÑANA<br>'+mananaDate+' ');
+                $('.Tab5').html(`MAÑANA <div class="fecha-text">${mananaDate}</div>`);
                 // $('.Tab1').parent('li').addClass('hidden');
 
             }else{ }
