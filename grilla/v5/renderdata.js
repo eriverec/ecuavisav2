@@ -16,7 +16,7 @@ tabTogglers.forEach(function(toggler) {
             tabContents.children[i].classList.add("hidden");
         }
 
-        e.target.parentElement.classList.add("border-blue-400", "bg-blue-700", "text-zinc-100");
+        e.target.parentElement.classList.add("border-blue-400", "bg-blue-700", "text-zinc-100", "primer-init");
     });
 });
 // Obtenemos el día actual
