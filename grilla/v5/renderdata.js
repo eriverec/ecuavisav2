@@ -53,11 +53,12 @@ if(localStorage.getItem('programas')){ //evaluamos si se encuentra la key progra
 
 function activeDay(data){
     // $('div[data-item=' + slide + ']').addClass("selected");
-    setTimeout(function(){
+    //setTimeout(function(){
         el = $('.programaItem.el-'+ data);
-        $(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
-        console.log(el);
-    } , 700);
+        el.addClass('active-item');
+        //$(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
+        //console.log(el);
+    //} , 700);
 }
 
 function renderProgramas(){
@@ -83,7 +84,7 @@ function renderProgramas(){
         var ActualClass= 'px-4 py-4 text-zinc-50 bg-ecuavisa text-sm flex items-center'
         var imgs= 'https://via.placeholder.com/70'
         var programas= $(`
-            <tr class=" programaItem el-${contador}" data-item="${programName}${programTimeIni}">
+            <tr class=" programaItem el-${contador}" data-numitem="el-${programIndex}" data-item="${programName}${programTimeIni}">
                 
                 <td class="px-0 pl-3 py-3 text-center border-0 bg-ecuavisa text-sm w-1/4 items-center text-zinc-300">
                     <p class=" border-b-4 border-zinc-500 py-5 text-center whitespace-no-wrap datafont">
@@ -153,15 +154,12 @@ function renderProgramas(){
                     localStorage.setItem('hIF', hIF);
 
                     var showActive= 'bg-blue-800';
-                    console.log("Programa actualLLLL: " + programName);
-                    itemtored = localStorage.getItem('programaActual');
+                    var itemtored = localStorage.getItem('programaActual') || '0';
                     activeDay(itemtored);
+
+                    console.log("Programa actualLLLL2: " + itemtored);
+
                 } else {}
-
-
-
-
-
 
                     programas.appendTo('.Tab4data');
             
@@ -204,7 +202,7 @@ function renderProgramas(){
                 var mananaDate  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var manana  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab5data'); //metemos al dom el programa
-                $('.Tab5').html(`MAÑANA <div class="fecha-text">${mananaDate}</div>`);
+                $('.Tab5').html(`Mañana <div class="fecha-text">${mananaDate}</div>`);
                 // $('.Tab1').parent('li').addClass('hidden');
 
             }else{ }
@@ -246,5 +244,7 @@ $(function(){
         $('#tabs li').removeClass("active-tabs");
         $('#tabs li').removeClass("primer-init");
         $(this).addClass("active-tabs");
-    })
+    });
+
+    
 })
