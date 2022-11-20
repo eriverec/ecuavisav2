@@ -262,6 +262,9 @@ $(function(){
         $('#tabs li').removeClass("primer-init");
         $(this).addClass("active-tabs");
 
-        console.log($(this).find('a').attr('class'));
+        var link = $(this).find('a').attr('href');
+
+        $('#tab-contents > div').addClass('hidden');
+        $(link).removeClass('hidden');
     })
 })
