@@ -71,7 +71,7 @@ tr.programaItem td:not(.text-center) p {
     background-color: #2927B9;
 }
 
-.programList .programaItem:not(:first-child) td:not(.text-center) p {
+.programList .programaItem:not(.active-item) td:not(.text-center) p {
     opacity: 40%;
 }
 
