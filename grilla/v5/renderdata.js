@@ -9,12 +9,12 @@ tabTogglers.forEach(function(toggler) {
         let tabContents = document.querySelector("#tab-contents");
 
         for (let i = 0; i < tabContents.children.length; i++) {
-            tabTogglers[i].parentElement.classList.remove("border-blue-400", "bg-blue-900", "text-zinc-100", "caja-next");  
+            tabTogglers[i].parentElement.classList.remove("border-blue-400", "bg-blue-700", "text-zinc-100");  
             tabContents.children[i].classList.remove("hidden");
             if ("#" + tabContents.children[i].id === tabName) { continue; }
             tabContents.children[i].classList.add("hidden");
         }
-        e.target.parentElement.classList.add("border-blue-400", "bg-blue-900", "text-zinc-100");
+        e.target.parentElement.classList.add("border-blue-400", "bg-blue-700", "text-zinc-100");
     });
 });
 // Obtenemos el día actual
