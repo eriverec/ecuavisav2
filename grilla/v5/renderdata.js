@@ -244,6 +244,7 @@ function renderProgramas(){
 $(function(){
     $('#tabs li').click(function(){
         $('#tabs li').removeClass("active-tabs");
+        $('#tabs li').removeClass("primer-init");
         $(this).addClass("active-tabs");
     })
 })
