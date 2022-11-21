@@ -43,6 +43,21 @@
 #Inicio sección 1: Título
 
 */
+
+.c_azul_celeste_Mobile {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .c_azul_celeste_Mobile {
+    display: block;
+  }
+  .c_azul_celeste_Desktop {
+    display: none;
+  }
+}
+
+
 #iter-content-wrapper {
   padding-top: 0px;
 }
