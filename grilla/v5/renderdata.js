@@ -9,11 +9,14 @@ tabTogglers.forEach(function(toggler) {
         let tabContents = document.querySelector("#tab-contents");
 
         for (let i = 0; i < tabContents.children.length; i++) {
-            tabTogglers[i].parentElement.classList.remove("border-blue-400", "bg-blue-700", "text-zinc-100");  tabContents.children[i].classList.remove("hidden");
+            tabTogglers[i].parentElement.classList.remove("border-blue-400", "text-zinc-100", "bg-blue-700", "active-tabs");  
+            tabTogglers[i].parentElement.classList.add("next-days", "bg-blue-700");
+            tabContents.children[i].classList.remove("hidden");
             if ("#" + tabContents.children[i].id === tabName) { continue; }
             tabContents.children[i].classList.add("hidden");
         }
-        e.target.parentElement.classList.add("border-blue-400", "bg-blue-700", "text-zinc-100");
+
+        e.target.parentElement.classList.add("border-blue-400", "bg-blue-700", "text-zinc-100", "primer-init");
     });
 });
 // Obtenemos el día actual
@@ -48,14 +51,29 @@ if(localStorage.getItem('programas')){ //evaluamos si se encuentra la key progra
      console.log('existen programas') 
  }else{ /* variable para loader */ console.log('no existen programas'); }
 
+
 function activeDay(data){
+    // $('div[data-item=' + slide + ']').addClass("selected");
+    setTimeout(function(){
+        console.log(data)
+        var el = $(`tr.programaItem.${data}`).addClass('active-item');
+
+        $('html, body').animate({
+            scrollTop: $(`tr.programaItem.${data}`).offset().top - 90
+        }, 1000);
+        //$(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
+        //console.log(el);
+    } , 700);
+}
+
+/*function activeDay(data){
     // $('div[data-item=' + slide + ']').addClass("selected");
     setTimeout(function(){
         el = $('.programaItem.el-'+ data);
         $(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
         console.log(el);
     } , 700);
-}
+}*/
 
 function renderProgramas(){
     var _jsonProgramas = JSON.parse(jsonProgramas); // convertiomos el json.stringify  de localstorage en json normal
@@ -164,7 +182,7 @@ function renderProgramas(){
             
                     var todayx  = new Date().toLocaleDateString("es-ES", obtenerDiaMes);
                     // var hoyes  = new Date().toLocaleDateString("es-ES", obtenerDia);
-                    $('.Tab4').html('HOY<br>'+todayx+' ');
+                    $('.Tab4').html(`HOY<div class="fecha-text">${todayx}</div>`);
                      //metemos al dom el programa
             // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
             }else{ /*console.log('la fecha de hoy es '+fechahoy('fecha')+' y no coincide con '+programDate);*/ }
@@ -201,7 +219,7 @@ function renderProgramas(){
                 var mananaDate  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var manana  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab5data'); //metemos al dom el programa
-                $('.Tab5').html('MAÑANA<br>'+mananaDate+' ');
+                $('.Tab5').html(`Mañana <div class="fecha-text">${mananaDate}</div>`);
                 // $('.Tab1').parent('li').addClass('hidden');
 
             }else{ }
@@ -210,7 +228,7 @@ function renderProgramas(){
                 var pmananaDate  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var pmanana  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab6data'); //metemos al dom el programa
-                $('.Tab6').html(''+pmanana+'<br>'+pmananaDate+'');
+                $('.Tab6').html(`${pmanana} <div class="fecha-text">${pmananaDate}</div>`);
             
             }else{/*console.log('Pasadomañana es: '+ getFecha(+2) +' y no coincide con: '+programDate) */  }
             // ###################  tercermas
@@ -237,3 +255,16 @@ function renderProgramas(){
     // console.log('Su programa elegido es: '+JsonProgramasHoy[1].nombrePrograma);
     // _table.classList.add('hidden');
 }
+
+$(function(){
+    $('#tabs li').click(function(){
+        $('#tabs li').removeClass("active-tabs");
+        $('#tabs li').removeClass("primer-init");
+        $(this).addClass("active-tabs");
+
+        var link = $(this).find('a').attr('href');
+
+        $('#tab-contents > div').addClass('hidden');
+        $(link).removeClass('hidden');
+    })
+})
