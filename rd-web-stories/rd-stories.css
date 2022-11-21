@@ -4,6 +4,10 @@
   padding-top: 0px;
 }
 
+#iter-footer-wrapper {
+  margin-top: 0px;
+}
+
 .layout-web-stories .DETAIL_TXT .text .html iframe {
   width: 100% !important;
   height: 100vh !important;
