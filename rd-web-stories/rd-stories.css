@@ -13,3 +13,348 @@
   height: 100vh !important;
 }
 
+
+
+/*SUBSECCION*/
+
+
+
+:root {
+  --color-azul: #2927B9;
+  --color-azul-oscuro: #060127;
+  --espacio-left-mobile: 22px;
+  --espacio-right-mobile: 22px;
+  --espacio-top-mobile: 12px;
+  --espacio-bottom-mobile: 12px;
+}
+
+
+#iter-content-wrapper {
+  padding-top: 0px;
+}
+
+.u-titulo-principal {
+  margin: 30px 0;
+  margin-bottom: 10px;
+}
+
+.u-titulo-principal .ultimos-videos-rd {
+  color: black;
+  font-size: 2rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  line-height: 1.8rem;
+  font-family: 'Archivo';
+  display: flex;
+  gap: 10px;
+}
+
+
+.u-titulo-principal .destacada {
+  color: #2927b9;
+  font-family: 'Archivo';
+  font-weight: 700;
+}
+
+
+#iter-content-wrapper .row {
+  width: 100% !important;
+  padding: 0px !important;
+  margin: 0px;
+}
+
+
+#main-content .u-listado-ultimos-videos.container {
+  padding-left: 20px !important;
+  padding-top: 30px;
+  padding-bottom: 30px;
+}
+
+.u-listado-ultimos-videos ul li a {
+  display: none;
+}
+
+.u-listado-ultimos-videos img {
+  position: relative !important;
+  -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 100%);
+  height: 285px !important;
+  object-fit: cover;
+  width: 100% !important;
+  border-radius: 5.0022px;
+}
+
+.u-listado-ultimos-videos .cutlineShow div {
+  padding-top: 0% !important;
+}
+
+
+.u-listado-ultimos-videos article.article>div,
+.u-listado-ultimos-videos .media_block {
+  position: relative;
+  background-color: var(--color-azul-oscuro);
+  border-radius: 5.0022px;
+}
+
+.u-listado-ultimos-videos .text_block {
+  position: absolute;
+  width: 100%;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  justify-content: end;
+  bottom: 0;
+  padding-bottom: 8px;
+  padding-left: 15px;
+  padding-right: 15px;
+  z-index: 1;
+}
+
+.u-listado-ultimos-videos .article-section a.section {
+  color: #23DCD1;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 12px;
+  text-transform: uppercase;
+}
+
+.u-listado-ultimos-videos .headline h3 {
+  margin-bottom: 5px;
+}
+
+.u-listado-ultimos-videos .headline {
+  margin-top: 2px;
+}
+
+.u-listado-ultimos-videos .headline h3,
+.u-listado-ultimos-videos .headline span {
+  color: #FFFFFF;
+  font-family: 'Anek Malayalam';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  display: block;
+}
+
+.u-listado-ultimos-videos .iconPlay {
+  position: absolute;
+  text-align: center;
+  top: 20px !important;
+  right: 20px !important;
+  left: auto !important;
+  background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos/play-icon-white.svg);
+  border-radius: 3px;
+  transform: initial !important;
+  width: 33px;
+  height: 33px;
+}
+
+
+.u-listado-ultimos-videos .noticias {
+  display: flex !important;
+  width: 100%;
+  flex-wrap: wrap;
+  column-gap: 20px;
+  justify-content: space-between;
+}
+
+.u-listado-ultimos-videos .noticias article.article {
+  width: 18%;
+}
+
+.u-listado-ultimos-videos .noticias article.article {
+  /* padding-right: 30px; */
+  padding-top: 30px;
+}
+
+.u-listado-ultimos-videos .date {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+.u-listado-ultimos-videos {
+  padding-top: 10px !important;
+  padding-bottom: 40px !important;
+}
+
+.u-listado-ultimos-videos .nav-button {
+  display: inline-flex;
+  margin: 40px 0;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  display: inline-flex;
+  padding: 0 100px;
+}
+
+.u-listado-ultimos-videos .nav-button ul {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+  justify-content: center;
+  margin: 0 15px;
+}
+
+.u-listado-ultimos-videos .nav-button ul li {
+  font-family: 'Anek Malayalam';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  display: block;
+  padding: 5px 15px;
+  color: #060127;
+  cursor: pointer;
+}
+
+.u-listado-ultimos-videos .nav-button ul li.nav-page-selected {
+  background: #2927B9;
+  color: #fff;
+  border-radius: 2px;
+}
+
+.u-listado-ultimos-videos .nav-button .next-button,
+.u-listado-ultimos-videos .nav-button .prev-button {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 600;
+  padding: 5px 15px;
+  cursor: pointer;
+}
+
+
+/*Pantallas grandes (desktops de menos de 1200px)*/
+@media only screen and (max-width: 1200px) {
+  .u-listado-ultimos-videos .noticias article.article {
+    width: 22%;
+  }
+
+  .u-listado-ultimos-videos .noticias article.article {
+    /* padding-right: 30px; */
+    padding-top: 30px;
+  }
+}
+
+/*Pantallas medianas (tablets de menos de 992px)*/
+@media only screen and (max-width: 990px) {
+  .u-listado-ultimos-videos .noticias article.article {
+    width: 30%;
+  }
+
+  .u-listado-ultimos-videos .noticias article.article {
+    /* padding-right: 30px; */
+    padding-top: 30px;
+  }
+}
+
+
+
+/*-------------------------------*/
+@media only screen and (max-width: 700px) {
+
+  #iter-content-wrapper {
+    /* padding-top: 30px; */
+  }
+
+  .portlet-boundary.portlet-static-end.teaser-viewer-portlet.swiper.fadeSwiper.swiper-fade.swiper-initialized.swiper-horizontal.swiper-watch-progress.swiper-backface-hidden {
+    display: none !important;
+  }
+
+  .portlet-boundary.portlet-static-end.article-recommendations-portlet.c_002_001,
+  .portlet-boundary.portlet-static-end.htmlcontainer-portlet.c_002_001.title-recommended {
+    display: none !important;
+  }
+
+  .subheadline h5 {
+    display: none !important;
+  }
+
+  .portlet-boundary.portlet-static-end.teaser-viewer-portlet.swiper.fadeSwiper.swiper-fade.swiper-initialized.swiper-horizontal.swiper-pointer-events.swiper-watch-progress.swiper-backface-hidden,
+  .portlet-boundary.portlet-static-end.teaser-viewer-portlet.swiper.fadeSwiper.swiper-fade.swiper-initialized.swiper-horizontal.swiper-ios.swiper-watch-progress.swiper-backface-hidden {
+    display: none;
+  }
+
+  #main-content .container {
+    padding-left: 0px !important;
+    padding-right: 0px !important;
+  }
+
+  #main-content .container .row {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
+
+  #main-content .nopadding {
+    padding-left: 0 !important;
+    padding-right: 0px !important;
+  }
+
+  #bloque-contador.nopadding iframe {
+    overflow: hidden;
+    height: 620px;
+    padding: 0px !important;
+    padding-left: 10px !important;
+    background-color: #060127;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
+
+  .tituloEnvivo {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .u-title .cintillo-rd {
+    font-size: 50px;
+    line-height: 30px;
+    padding-bottom: 14px !important;
+    margin-bottom: 0px;
+    padding-top: 10px;
+  }
+
+  .u-titulo-principal .ultimos-videos-rd {
+    display: initial;
+  }
+
+  .u-titulo-principal {
+    margin-top: 60px;
+    margin-bottom: 0px;
+  }
+
+  .u-listado-ultimos-videos .noticias article.article {
+    width: 100%;
+  }
+
+  .u-listado-ultimos-videos .noticias article.article {
+    padding-right: 0px;
+    padding-top: 30px;
+  }
+
+  #main-content {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+
+  .u-listado-ultimos-videos .iconPlay {
+    position: absolute;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    background-image: url(https://ecuavisadev.netlify.app/grilla/bloque/assets/Play.svg);
+    border-radius: 3px;
+    width: 50px;
+    height: 50px;
+    right: auto !important;
+  }
+
+
+}
+
+/*-------------------------------*/
