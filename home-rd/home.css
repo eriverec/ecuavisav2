@@ -2210,6 +2210,7 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div {
   background-image: -webkit-linear-gradient(bottom, #242424 50%, white 65%);
+  border-radius: 2px;
 }
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .multimedia img {
@@ -2217,6 +2218,7 @@ INICIO - BLOQUE - ESTILO
   width: 100% !important;
   object-fit: contain;
   -webkit-mask-image: linear-gradient(to top, transparent 0, #242424 60%);
+  border-radius: 2px;
 }
 
 .HOME_MENU_RD .lista-bloque-estilo {
