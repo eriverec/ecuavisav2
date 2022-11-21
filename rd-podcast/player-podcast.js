@@ -64,7 +64,7 @@ function showIconPlayPortada() {
     $(this).find('.Multimedia_Text').css('display', 'none'); // ocultamos players
     //obtenemos variables
     const mp3url = $(this).find('source').attr('src');
-    const title_pd = $(this).find('h2').text();
+    const title_pd = $(this).find('h1').text();
 
     // agregamos botones del player
     $(this).find('.media_block .pod_play').append(`
