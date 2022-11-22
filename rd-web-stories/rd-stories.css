@@ -11,6 +11,7 @@
 .layout-web-stories .DETAIL_TXT .text .html iframe {
   width: 100% !important;
   height: 100vh !important;
+  display: block !important;
 }
 
 
