@@ -135,8 +135,9 @@ function renderProgramas(){
                     "nombrePrograma" : programName,
                     "HoradeFin" : programTimeEnd,
                     "HoradeInicio" : programTimeIni,
-                    "Fecha" : programDate}   
-                    _jsonDiaActual.push(programaData);
+                    "Fecha" : programDate
+                }   
+                _jsonDiaActual.push(programaData);
                  //   console.log(programaData);
 
                 //obtenemos formateada la hora actual 
@@ -148,13 +149,14 @@ function renderProgramas(){
 
                 /* Convertir la hora del programa en datos */
                 var regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
-
+                console.log(programTimeIni);
                 var hini = parseInt(programTimeIni.replace(regExp, "$1$2$3"));
                 var hfin = parseInt(programTimeEnd.replace(regExp, "$1$2$3"));
                 var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2$3"));
 
                 var contador = contador;
                 /* Validacion del programa de la hora actual */
+
                 if (hini <= timeAc && timeAc <= hfin) {
                     var elemento = 'el-' + (contador - 1);
                     var numeroSwiper = (contador - 1);
