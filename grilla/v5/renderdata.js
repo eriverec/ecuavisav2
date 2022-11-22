@@ -155,8 +155,8 @@ function renderProgramas(){
 
 
                 var currentTime= moment(timeOfDay, "HH:mm:ss");
-                var startTime = moment(hini, "HH:mm:ss");
-                var endTime = moment(hfin, "HH:mm:ss");
+                var startTime = moment(programTimeIni, "HH:mm:ss");
+                var endTime = moment(programTimeEnd, "HH:mm:ss");
 
                 console.table({
                     'current':currentTime.toString(),
