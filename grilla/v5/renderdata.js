@@ -149,12 +149,16 @@ function renderProgramas(){
 
                 /* Convertir la hora del programa en datos */
                 var regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
-                console.log(programTimeIni);
                 var hini = parseInt(programTimeIni.replace(regExp, "$1$2$3"));
                 var hfin = parseInt(programTimeEnd.replace(regExp, "$1$2$3"));
                 var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2$3"));
 
-                var contador = contador;
+
+                console.log(hini);
+                console.log(hfin);
+                console.log(timeAc);
+
+                //var contador = contador;
                 /* Validacion del programa de la hora actual */
 
                 if (hini <= timeAc && timeAc <= hfin) {
@@ -170,7 +174,7 @@ function renderProgramas(){
                     localStorage.setItem('hIF', hIF);
 
                     var showActive= 'bg-blue-800';
-                    console.log("Programa actualLLLL: " + programName);
+                    //console.log("Programa actualLLLL: " + programName);
                     itemtored = localStorage.getItem('programaActual');
                     activeDay(itemtored);
                 } else {}
