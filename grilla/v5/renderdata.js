@@ -161,7 +161,9 @@ function renderProgramas(){
                 console.table({
                     'current':currentTime.toString(),
                     'init':startTime.toString(),
-                    'fin':endTime.toString()
+                    'fin':endTime.toString(),
+                    'initnormal':programTimeIni,
+                    'finnormal':programTimeEnd
                 });
                 //; //"Fri Oct 28 2016 23:00:00 GMT-0400"
                 //;   // "Fri Oct 28 2016 18:00:00 GMT-0400"
