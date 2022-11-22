@@ -94,6 +94,7 @@ function renderProgramas(){
         var programDate= _jsonProgramas[programIndex].fecha//.replace('-0', '-'); //revisar si presenta problemas en horario
 
         console.log(moment(_jsonProgramas[programIndex].hora_inicio, "DD-MM-YYYY HH:mm:ss").format("HH:mm:ss"))
+        console.log(_jsonProgramas[programIndex].hora_inicio)
         var programTimeIni= _jsonProgramas[programIndex].hora_inicio.replace(_jsonProgramas[programIndex].fecha, '');
         var programTimeEnd= _jsonProgramas[programIndex].hora_fin.replace(_jsonProgramas[programIndex].fecha, '');
         var showActive= 'bg-indigo-700';
