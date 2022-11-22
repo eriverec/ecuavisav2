@@ -176,7 +176,10 @@ function renderProgramas(){
                 //var contador = contador;
                 /* Validacion del programa de la hora actual */
 
-                if ((currentTime.isAfter(endTime) && currentTime.isBefore(startTime))) {
+                var entra = false;
+
+                if ((currentTime.isAfter(endTime) && currentTime.isBefore(startTime)) && !entra) {
+                    var entra = true;
                     var elemento = 'el-' + (contador - 1);
                     var numeroSwiper = (contador - 1);
                     var pA = programName;
