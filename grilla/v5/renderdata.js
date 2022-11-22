@@ -154,9 +154,17 @@ function renderProgramas(){
                 var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2$3"));
 
 
-                console.log(hini);
-                console.log(hfin);
-                console.log(timeAc);
+                var currentTime= moment(timeOfDay, "HH:mm:ss");
+                var startTime = moment(hini, "HH:mm:ss");
+                var endTime = moment(hfin, "HH:mm:ss");
+
+                currentTime.toString(); //"Fri Oct 28 2016 23:00:00 GMT-0400"
+                startTime.toString();   // "Fri Oct 28 2016 18:00:00 GMT-0400"
+                endTime.toString();    // "Fri Oct 28 2016 03:30:00 GMT-0400"
+
+                console.log(currentTime.isAfter(endTime) && currentTime.isBefore(startTime));  // false
+                //currentTime.isAfter(endTime) && currentTime.isBefore(startTime); //false
+                //currentTime.isAfter(startTime) && currentTime.isBefore(endTime); //false
 
                 //var contador = contador;
                 /* Validacion del programa de la hora actual */
