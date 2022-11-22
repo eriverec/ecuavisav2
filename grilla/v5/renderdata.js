@@ -104,7 +104,7 @@ function renderProgramas(){
 
         if((programIndex + 1) != programaItems){
             programTimeEnd  = moment(_jsonProgramas[ programIndex + 1 ].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
-            console.log(programIndex + ' - '+programaItems);
+            //console.log(programIndex + ' - '+programaItems);
         }
 
         var showActive= 'bg-indigo-700';
@@ -167,7 +167,7 @@ function renderProgramas(){
                 //var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2$3"));
 
 
-                var currentTime= moment("13:20:12", "HH:mm:ss");
+                var currentTime= moment("15:20:12", "HH:mm:ss");
                 var startTime = moment(programTimeIni, "HH:mm:ss");
                 var endTime = moment(programTimeEnd, "HH:mm:ss");
 
