@@ -158,18 +158,18 @@ function renderProgramas(){
                 var startTime = moment(hini, "HH:mm:ss");
                 var endTime = moment(hfin, "HH:mm:ss");
 
-                currentTime.toString(); //"Fri Oct 28 2016 23:00:00 GMT-0400"
-                startTime.toString();   // "Fri Oct 28 2016 18:00:00 GMT-0400"
-                endTime.toString();    // "Fri Oct 28 2016 03:30:00 GMT-0400"
+                //currentTime.toString(); //"Fri Oct 28 2016 23:00:00 GMT-0400"
+                //startTime.toString();   // "Fri Oct 28 2016 18:00:00 GMT-0400"
+                //endTime.toString();    // "Fri Oct 28 2016 03:30:00 GMT-0400"
 
-                console.log(currentTime.isAfter(endTime) && currentTime.isBefore(startTime));  // false
+                //console.log(currentTime.isAfter(endTime) && currentTime.isBefore(startTime));  // false
                 //currentTime.isAfter(endTime) && currentTime.isBefore(startTime); //false
                 //currentTime.isAfter(startTime) && currentTime.isBefore(endTime); //false
 
                 //var contador = contador;
                 /* Validacion del programa de la hora actual */
 
-                if (hini <= timeAc && timeAc <= hfin) {
+                if ((currentTime.isAfter(endTime) && currentTime.isBefore(startTime))) {
                     var elemento = 'el-' + (contador - 1);
                     var numeroSwiper = (contador - 1);
                     var pA = programName;
