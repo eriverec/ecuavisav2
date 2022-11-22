@@ -158,9 +158,14 @@ function renderProgramas(){
                 var startTime = moment(hini, "HH:mm:ss");
                 var endTime = moment(hfin, "HH:mm:ss");
 
-                //currentTime.toString(); //"Fri Oct 28 2016 23:00:00 GMT-0400"
-                //startTime.toString();   // "Fri Oct 28 2016 18:00:00 GMT-0400"
-                //endTime.toString();    // "Fri Oct 28 2016 03:30:00 GMT-0400"
+                console.table({
+                    'current':currentTime.toString(),
+                    'init':startTime.toString(),
+                    'fin'endTime.toString():
+                });
+                //; //"Fri Oct 28 2016 23:00:00 GMT-0400"
+                //;   // "Fri Oct 28 2016 18:00:00 GMT-0400"
+                //;    // "Fri Oct 28 2016 03:30:00 GMT-0400"
 
                 //console.log(currentTime.isAfter(endTime) && currentTime.isBefore(startTime));  // false
                 //currentTime.isAfter(endTime) && currentTime.isBefore(startTime); //false
