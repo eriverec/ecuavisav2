@@ -87,7 +87,7 @@ function renderProgramas(){
 
     // Inicio de recorrido de cada elemento 
 
-    for (programIndex = 0; programIndex <= programaItems; programIndex++) {
+    for (programIndex = 0; programIndex < programaItems; programIndex++) {
         // variables de programas
         var horahoy= fechahoy('hora');
         var programName= _jsonProgramas[programIndex].programa;
@@ -161,13 +161,13 @@ function renderProgramas(){
                 // console.log(timeOfDay);
 
                 /* Convertir la hora del programa en datos */
-                var regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
-                var hini = parseInt(programTimeIni.replace(regExp, "$1$2$3"));
-                var hfin = parseInt(programTimeEnd.replace(regExp, "$1$2$3"));
-                var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2$3"));
+                //var regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
+                //var hini = parseInt(programTimeIni.replace(regExp, "$1$2$3"));
+                //var hfin = parseInt(programTimeEnd.replace(regExp, "$1$2$3"));
+                //var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2$3"));
 
 
-                var currentTime= moment("17:20:00", "HH:mm:ss");
+                var currentTime= moment("13:20:12", "HH:mm:ss");
                 var startTime = moment(programTimeIni, "HH:mm:ss");
                 var endTime = moment(programTimeEnd, "HH:mm:ss");
 
