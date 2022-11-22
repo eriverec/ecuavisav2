@@ -1,4 +1,4 @@
-
+moment.locale('es');
 // ##### tabs de días de la semana
 let tabsContainer = document.querySelector("#tabs");
 let tabTogglers = tabsContainer.querySelectorAll("a");
