@@ -154,7 +154,7 @@ function renderProgramas(){
                 var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2$3"));
 
 
-                var currentTime= moment(timeOfDay, "HH:mm:ss");
+                var currentTime= moment("17:20:00", "HH:mm:ss");
                 var startTime = moment(programTimeIni, "HH:mm:ss");
                 var endTime = moment(programTimeEnd, "HH:mm:ss");
 
