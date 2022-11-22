@@ -174,7 +174,7 @@
 
 .u-listado-ultimos-videos .noticias {
   display: grid !important;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 2fr));
+  grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 20px;
 }
 
@@ -262,19 +262,32 @@
 
 
 
+@media (min-width: 1200px) {
+  .u-listado-ultimos-videos .noticias {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+  }
+}
 
 
+@media (min-width: 1400px) {
+  .u-listado-ultimos-videos .noticias {
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  }
+}
+
+
+
+
+@media (max-width: 767px) {
+  .u-listado-ultimos-videos .noticias {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
 
 
 
 /*-------------------------------*/
-@media only screen and (max-width: 700px) {
-
-  /*
-  ####
-  #### Inicio mobile max:700px
-  ####
-*/
+@media (max-width: 700px) {
 
 
   .portlet-boundary.portlet-static-end.teaser-viewer-portlet.swiper.fadeSwiper.swiper-fade.swiper-initialized.swiper-horizontal.swiper-watch-progress.swiper-backface-hidden {
@@ -359,6 +372,13 @@
 
   */
 
+}
+
+
+@media (max-width: 481px) {
+  .u-listado-ultimos-videos .noticias {
+    grid-template-columns: 1fr 1fr;
+  }
 }
 
 /*
