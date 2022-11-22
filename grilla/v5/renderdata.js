@@ -174,9 +174,10 @@ function renderProgramas(){
                     'init':startTime.toString(),
                     'fin':endTime.toString(),
                     'initnormal':programTimeIni,
-                    'finnormal':programTimeEnd
+                    'finnormal':programTimeEnd,
+                    'active':currentTime.isBetween(startTime, endTime)
                 });
-                
+
                 var entra = false;
 
                 if ((currentTime.isBetween(startTime, endTime)) && !entra) {
