@@ -158,13 +158,7 @@ function renderProgramas(){
                 var startTime = moment(programTimeIni, "HH:mm:ss");
                 var endTime = moment(programTimeEnd, "HH:mm:ss");
 
-                console.table({
-                    'current':currentTime.toString(),
-                    'init':startTime.toString(),
-                    'fin':endTime.toString(),
-                    'initnormal':programTimeIni,
-                    'finnormal':programTimeEnd
-                });
+                
                 //; //"Fri Oct 28 2016 23:00:00 GMT-0400"
                 //;   // "Fri Oct 28 2016 18:00:00 GMT-0400"
                 //;    // "Fri Oct 28 2016 03:30:00 GMT-0400"
@@ -179,6 +173,15 @@ function renderProgramas(){
                 var entra = false;
 
                 if ((currentTime.isAfter(endTime) && currentTime.isBefore(startTime)) && !entra) {
+
+                    console.table({
+                        'current':currentTime.toString(),
+                        'init':startTime.toString(),
+                        'fin':endTime.toString(),
+                        'initnormal':programTimeIni,
+                        'finnormal':programTimeEnd
+                    });
+                    
                     var entra = true;
                     var elemento = 'el-' + (contador - 1);
                     var numeroSwiper = (contador - 1);
