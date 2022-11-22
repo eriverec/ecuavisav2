@@ -174,14 +174,14 @@ function renderProgramas(){
 
                 if ((currentTime.isBetween(startTime, endTime)) && !entra) {
 
-                    console.table({
+                    /*console.table({
                         'current':currentTime.toString(),
                         'init':startTime.toString(),
                         'fin':endTime.toString(),
                         'initnormal':programTimeIni,
                         'finnormal':programTimeEnd
-                    });
-                    
+                    });*/
+
                     var entra = true;
                     var elemento = 'el-' + (contador - 1);
                     var numeroSwiper = (contador - 1);
