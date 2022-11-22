@@ -86,6 +86,7 @@ function renderProgramas(){
     var obtenerDiaMes = { month: 'short', day: 'numeric' };
 
     // Inicio de recorrido de cada elemento 
+
     for (programIndex = 0; programIndex < programaItems; programIndex++) {
         // variables de programas
         var horahoy= fechahoy('hora');
@@ -93,10 +94,18 @@ function renderProgramas(){
         var region= _jsonProgramas[programIndex].region; //3 costa - 2 sierra - 5 internacional
         var programDate= _jsonProgramas[programIndex].fecha//.replace('-0', '-'); //revisar si presenta problemas en horario
 
-        console.log(moment(_jsonProgramas[programIndex].hora_inicio, "DD-MM-YYYY HH:mm:ss").format("HH:mm:ss"))
-        console.log(_jsonProgramas[programIndex].hora_inicio)
-        var programTimeIni= _jsonProgramas[programIndex].hora_inicio.replace(_jsonProgramas[programIndex].fecha, '');
-        var programTimeEnd= _jsonProgramas[programIndex].hora_fin.replace(_jsonProgramas[programIndex].fecha, '');
+        //console.log(moment(_jsonProgramas[programIndex].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss"))
+        //console.log(_jsonProgramas[programIndex].hora_inicio)
+        var horai = _jsonProgramas[programIndex].hora_inicio;//moment(_jsonProgramas[programIndex].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
+        var horaf = _jsonProgramas[programIndex].hora_fin;//moment(_jsonProgramas[programIndex].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
+
+        var programTimeIni  = moment(horai, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
+        var programTimeEnd  = moment(horaf, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
+
+        if((programIndex + 1) != programaItems){
+            programTimeEnd  = moment(_jsonProgramas[ programIndex + 1 ].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
+        }
+
         var showActive= 'bg-indigo-700';
         var ActualClass= 'px-4 py-4 text-zinc-50 bg-ecuavisa text-sm flex items-center'
         var imgs= 'https://via.placeholder.com/70'
