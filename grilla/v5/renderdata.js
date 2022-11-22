@@ -169,18 +169,19 @@ function renderProgramas(){
 
                 //var contador = contador;
                 /* Validacion del programa de la hora actual */
-
+                console.table({
+                    'current':currentTime.toString(),
+                    'init':startTime.toString(),
+                    'fin':endTime.toString(),
+                    'initnormal':programTimeIni,
+                    'finnormal':programTimeEnd
+                });
+                
                 var entra = false;
 
                 if ((currentTime.isBetween(startTime, endTime)) && !entra) {
 
-                    /*console.table({
-                        'current':currentTime.toString(),
-                        'init':startTime.toString(),
-                        'fin':endTime.toString(),
-                        'initnormal':programTimeIni,
-                        'finnormal':programTimeEnd
-                    });*/
+                    /**/
 
                     var entra = true;
                     var elemento = 'el-' + (contador - 1);
