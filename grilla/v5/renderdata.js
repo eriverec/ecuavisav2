@@ -172,7 +172,7 @@ function renderProgramas(){
 
                 var entra = false;
 
-                if ((currentTime.isAfter(endTime) && currentTime.isBefore(startTime)) && !entra) {
+                if ((currentTime.isBetween(startTime, endTime)) && !entra) {
 
                     console.table({
                         'current':currentTime.toString(),
