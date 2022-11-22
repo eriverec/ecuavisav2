@@ -48,41 +48,20 @@
   display: none;
 }
 
+.cintillo-rd h1 {
+  color: #2927b9;
+  font-family: 'Archivo';
+  font-weight: 700;
+}
+
 @media (max-width: 767px) {
   .c_azul_celeste_Mobile {
     display: block;
   }
+
   .c_azul_celeste_Desktop {
     display: none;
   }
-}
-
-
-#iter-content-wrapper {
-  padding-top: 0px;
-}
-
-.u-titulo-principal {
-  margin: 30px 0;
-  margin-bottom: 10px;
-}
-
-.u-titulo-principal .ultimos-videos-rd {
-  color: black;
-  font-size: 2rem;
-  text-transform: uppercase;
-  font-weight: 700;
-  line-height: 1.8rem;
-  font-family: 'Archivo';
-  display: flex;
-  gap: 10px;
-}
-
-
-.u-titulo-principal .destacada {
-  color: #2927b9;
-  font-family: 'Archivo';
-  font-weight: 700;
 }
 
 
@@ -104,36 +83,38 @@
 
 */
 
-#main-content .u-listado-ultimos-videos.container{
+#main-content .u-listado-ultimos-videos.container {
   padding-left: 20px !important;
   padding-top: 30px;
   padding-bottom: 30px;
 }
-.u-listado-ultimos-videos ul li a{
+
+.u-listado-ultimos-videos ul li a {
   display: none;
 }
 
 .u-listado-ultimos-videos img {
-  position: relative!important;
+  position: relative !important;
   -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 100%);
   height: 285px !important;
   object-fit: cover;
   width: 100% !important;
   border-radius: 5.0022px;
 }
-.u-listado-ultimos-videos .cutlineShow div{
+
+.u-listado-ultimos-videos .cutlineShow div {
   padding-top: 0% !important;
 }
 
 
-.u-listado-ultimos-videos article.article > div,
-.u-listado-ultimos-videos .media_block{
+.u-listado-ultimos-videos article.article>div,
+.u-listado-ultimos-videos .media_block {
   position: relative;
   background-color: var(--color-azul-oscuro);
   border-radius: 5.0022px;
 }
 
-.u-listado-ultimos-videos .text_block{
+.u-listado-ultimos-videos .text_block {
   position: absolute;
   width: 100%;
   height: 40%;
@@ -148,7 +129,7 @@
   z-index: 1;
 }
 
-.u-listado-ultimos-videos .article-section a.section{
+.u-listado-ultimos-videos .article-section a.section {
   color: #23DCD1;
   font-family: 'Mattone 150';
   font-style: normal;
@@ -158,16 +139,16 @@
   text-transform: uppercase;
 }
 
-.u-listado-ultimos-videos .headline h3{
+.u-listado-ultimos-videos .headline h3 {
   margin-bottom: 5px;
 }
 
-.u-listado-ultimos-videos .headline{
+.u-listado-ultimos-videos .headline {
   margin-top: 2px;
 }
 
 .u-listado-ultimos-videos .headline h3,
-.u-listado-ultimos-videos .headline span{
+.u-listado-ultimos-videos .headline span {
   color: #FFFFFF;
   font-family: 'Anek Malayalam';
   font-style: normal;
@@ -177,7 +158,7 @@
   display: block;
 }
 
-.u-listado-ultimos-videos .iconPlay{
+.u-listado-ultimos-videos .iconPlay {
   position: absolute;
   text-align: center;
   top: 20px !important;
@@ -199,7 +180,7 @@
   justify-content: space-between;
 }
 
-.u-listado-ultimos-videos .noticias article.article{
+.u-listado-ultimos-videos .noticias article.article {
   width: 18%;
 }
 
@@ -223,9 +204,9 @@
 
 #Inicio sección 3: Paginación
 */
-.u-listado-ultimos-videos{
-  padding-top: 10px!important;
-  padding-bottom:40px!important;
+.u-listado-ultimos-videos {
+  padding-top: 10px !important;
+  padding-bottom: 40px !important;
 }
 
 .u-listado-ultimos-videos .nav-button {
@@ -292,9 +273,10 @@
 
 /*Pantallas grandes (desktops de menos de 1200px)*/
 @media only screen and (max-width: 1200px) {
-  .u-listado-ultimos-videos .noticias article.article{
+  .u-listado-ultimos-videos .noticias article.article {
     width: 22%;
   }
+
   .u-listado-ultimos-videos .noticias article.article {
     /* padding-right: 30px; */
     padding-top: 30px;
@@ -302,10 +284,11 @@
 }
 
 /*Pantallas medianas (tablets de menos de 992px)*/
-@media only screen and (max-width: 990px) { 
-  .u-listado-ultimos-videos .noticias article.article{
+@media only screen and (max-width: 990px) {
+  .u-listado-ultimos-videos .noticias article.article {
     width: 30%;
   }
+
   .u-listado-ultimos-videos .noticias article.article {
     /* padding-right: 30px; */
     padding-top: 30px;
@@ -322,10 +305,7 @@
   #### Inicio mobile max:700px
   ####
 */
-  #iter-content-wrapper {
-    /* padding-top: 30px; */
-  }
-  
+
 
   .portlet-boundary.portlet-static-end.teaser-viewer-portlet.swiper.fadeSwiper.swiper-fade.swiper-initialized.swiper-horizontal.swiper-watch-progress.swiper-backface-hidden {
     display: none !important;
@@ -371,70 +351,41 @@
   }
 
 
-  /*
-
-  #Inicio sección 1: Título
-  
-  */
-  .tituloEnvivo {
-    padding-left: 20px;
-    padding-right: 20px;
-  }
-
-  .u-title .cintillo-rd {
-    font-size: 50px;
-    line-height: 30px;
-    padding-bottom: 14px !important;
-    margin-bottom: 0px;
-    padding-top: 10px;
-  }
-  
-  .u-titulo-principal .ultimos-videos-rd {
-    display: initial;
-  }
-  
-  .u-titulo-principal {
-    margin-top: 60px;
-    margin-bottom: 0px;
-  }
-  /*
-  
-  #Fin sección 1: Título
-  
-  */
 
   /*
   
   #Inicio sección 2: Noticias
   
   */
-  .u-listado-ultimos-videos .noticias article.article{
+  .u-listado-ultimos-videos .noticias article.article {
     width: 100%;
   }
+
   .u-listado-ultimos-videos .noticias article.article {
     padding-right: 0px;
     padding-top: 30px;
   }
-  
-  #main-content{
+
+  #main-content {
     padding-left: 20px;
     padding-right: 20px;
   }
 
   .u-listado-ultimos-videos .iconPlay {
-      position: absolute;
-      margin-left: auto!important;
-      margin-right: auto!important;
-      text-align: center;
-      top: 50%!important;
-      left: 50%!important;
-      transform: translate(-50%, -50%)!important;
-      background-image: url(https://ecuavisadev.netlify.app/grilla/bloque/assets/Play.svg);
-      border-radius: 3px;
-      width: 50px;
-      height: 50px;
-      right: auto!important;
+    position: absolute;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    text-align: center;
+    top: 50% !important;
+    left: 50% !important;
+    transform: translate(-50%, -50%) !important;
+    background-image: url(https://ecuavisadev.netlify.app/grilla/bloque/assets/Play.svg);
+    border-radius: 3px;
+    width: 50px;
+    height: 50px;
+    right: auto !important;
   }
+
   /*
   
   #Fin sección 2: Noticias
@@ -461,4 +412,3 @@
   ####
 */
 /*-------------------------------*/
-
