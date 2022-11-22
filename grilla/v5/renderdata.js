@@ -104,6 +104,7 @@ function renderProgramas(){
 
         if((programIndex + 1) != programaItems){
             programTimeEnd  = moment(_jsonProgramas[ programIndex + 1 ].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
+            console.log(programIndex + ' - '+programaItems);
         }
 
         var showActive= 'bg-indigo-700';
