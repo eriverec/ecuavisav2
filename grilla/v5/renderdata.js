@@ -87,7 +87,7 @@ function renderProgramas(){
 
     // Inicio de recorrido de cada elemento 
 
-    for (programIndex = 0; programIndex < programaItems; programIndex++) {
+    for (programIndex = 0; programIndex <= programaItems; programIndex++) {
         // variables de programas
         var horahoy= fechahoy('hora');
         var programName= _jsonProgramas[programIndex].programa;
