@@ -92,6 +92,8 @@ function renderProgramas(){
         var programName= _jsonProgramas[programIndex].programa;
         var region= _jsonProgramas[programIndex].region; //3 costa - 2 sierra - 5 internacional
         var programDate= _jsonProgramas[programIndex].fecha//.replace('-0', '-'); //revisar si presenta problemas en horario
+
+        console.log(_jsonProgramas[programIndex].hora_inicio)
         var programTimeIni= _jsonProgramas[programIndex].hora_inicio.replace(_jsonProgramas[programIndex].fecha, '');
         var programTimeEnd= _jsonProgramas[programIndex].hora_fin.replace(_jsonProgramas[programIndex].fecha, '');
         var showActive= 'bg-indigo-700';
@@ -169,7 +171,7 @@ function renderProgramas(){
 
                 //var contador = contador;
                 /* Validacion del programa de la hora actual */
-                
+
                 /*console.table({
                     'current':currentTime.toString(),
                     'init':startTime.toString(),
