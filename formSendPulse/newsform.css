@@ -70,8 +70,10 @@
   line-height: 26px;
 }
 
+.esendpulse,
 .newsContenido{
   overflow: hidden;
+  width: 100%;
 }
 
 @media (max-width: 575px) {
