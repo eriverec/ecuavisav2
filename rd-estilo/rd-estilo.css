@@ -691,9 +691,11 @@ h2.temas_estilo {
 
 .note-pierdas .text_block .headline h3 {
   font-family: 'Anek Malayalam';
+  font-style: normal;
   font-weight: 600;
   font-size: 16px;
-  color: white;
+  line-height: 20px;
+  color: #FFFFFF;  
 }
 
 .note-pierdas .swiper-wrapper {
@@ -1089,6 +1091,13 @@ img.sepDesk {
     height: 100% !important;
   }
 }
+@media (min-width: 1200px) {
+  .swiper .text_block{
+    width: 340px;
+  }
+}
+
+
 @media (max-width: 1024px) {
   .estilo-notas .recomendadas-rd {
     grid-template-columns: 4fr 1fr;
