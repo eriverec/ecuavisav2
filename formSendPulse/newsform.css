@@ -15,7 +15,8 @@
 }
 
 .newsletter_rd .newsContenido .news_line_left img {
-  height: 460px;
+  /*height: 460px;*/
+  height: 500px;
 }
 
 .newsletter_rd .newsContenido .news-texto-rd {
