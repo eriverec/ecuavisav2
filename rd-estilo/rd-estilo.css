@@ -38,11 +38,11 @@
   font-family: 'Archivo';
   font-style: normal;
   font-size: 42px;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 48px;
   padding-top: 15px;
   padding-bottom: 18px;
-  max-width: 700px;
+  max-width: 500px;
 }
 
 .portada-estilo .noticias .article .text {
@@ -574,10 +574,10 @@ h2.temas_estilo {
 
 .sec-titulo .headline h2 {
   color: black;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 700;
   font-family: 'Archivo';
-  line-height: 22px;
+  line-height: 26px;
 }
 
 /* .sec-titulo .text_block {
@@ -636,7 +636,7 @@ h2.temas_estilo {
   color: #2927B9;
   font-family: 'Mattone 150';
   font-weight: 600;
-  font-size: 15.13px;
+  font-size: 22px;
   margin-bottom: -9px;
   padding: 1.5rem 6px 0px;
 }
@@ -696,7 +696,6 @@ h2.temas_estilo {
 }
 
 .swiper-pagination-bullet {
-
   background: var(--swiper-pagination-bullet-inactive-color, #2927B9) !important;
 }
 
@@ -796,9 +795,6 @@ h2.temas_estilo {
 .bloque-programas .media_block .text_block .subheadline {
   display: none;
 }
-
-
-
 .card_dest_estilo .noticias .article .media_block .text_block .headline a h3 {
   font-family: 'Archivo';
   font-style: normal;
@@ -838,19 +834,14 @@ h2.temas_estilo {
 }
 
 /*Encuesta estilo*/
-
 .quiz-entretenimiento,
 .encuesta_estadio,
 .sub_estadio {
   display: none;
 }
-
-
 .encuesta_estilo .teaser-viewer-title h1 {
   margin-bottom: 0;
 }
-
-
 .encuesta_estilo .teaser-viewer-title h1 {
   background-color: #23dcd1 !important;
   padding: 25px !important;
@@ -859,15 +850,11 @@ h2.temas_estilo {
   text-align: center;
   font-size: 22px !important;
 }
-
-
 .encuesta_estilo .teaser-viewer-title span {
   font-weight: 800;
   font-size: 40px;
   font-family: 'Anek Malayalam';
 }
-
-
 .encuesta_estilo .question-poll h2 {
   font-weight: 600;
   font-size: 20px;
@@ -875,29 +862,20 @@ h2.temas_estilo {
   text-align: center;
   padding-top: 1.2rem;
 }
-
-
 .encuesta_estilo .noticias {
   background-color: #060127 !important;
 }
-
-
 .encuesta_estilo .poll-form.form-check span[data-choiceid] label {
   border: 1px solid #23dcd1;
   border-radius: 5px;
 }
-
-
 .encuesta_estilo .poll-form.form-check span {
   color: #1fc0bb;
   font-weight: 100;
 }
-
 .port3 .article-section a {
   display: none;
 }
-
-
 .port3 .text {
   font-family: 'Archivo';
   font-weight: 300;
@@ -905,7 +883,6 @@ h2.temas_estilo {
   line-height: 26px;
   display: none;
 }
-
 .lista_bloque_3_desktop .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -947,13 +924,10 @@ h2.temas_estilo {
 .lista_bloque_3_desktop img {
   border-radius: 2px;
 }
-
-
 .mas_temas_2_desktop {
   margin-top: 40px;
   margin-bottom: 70px;
 }
-
 .mas_temas_2_desktop .noticias .article {
   border-top: 1px solid #2927B9;
   border-bottom: 1px solid #2927B9;
@@ -997,22 +971,17 @@ img.sepDesk {
 .port3 {
   border-top: 16px solid #2927B9;
 }
-
 .mas_temas_2_desktop .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
 }
-
-
 .mas_temas_2_desktop .noticias .article .media_block {
   display: grid;
   grid-template-columns: 3fr 1fr;
   align-items: center;
   gap: 50px;
 }
-
-
 .notas-estilo-mobile {
   margin-bottom: 40px;
 }
@@ -1022,7 +991,6 @@ img.sepDesk {
   width: 100%;
   margin-top: 20px;
 }
-
 .estilo_separadorDesktop {
   width: 100%;
 }
@@ -1180,6 +1148,7 @@ img.sepDesk {
     margin-top: 16px;
   }
 
+  .title_bloque,
   .estilo_separadorMobile {
     display: block;
   }
@@ -1187,9 +1156,9 @@ img.sepDesk {
   .estilo_separadorDesktop {
     display: none;
   }
-
-  .title_bloque {
-    display: block;
+ 
+  .teaser-viewer-title h3 {
+    font-size: 15.13px;
   }
 
   .lista_bloque_3_desktop .noticias {
