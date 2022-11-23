@@ -30,6 +30,7 @@
 .portada-estilo .noticias .article .multimedia .multimediaIconMacroWrapper a div {
   height: 582px !important;
   object-fit: cover;
+  margin-top: -1px;
 }
 
 
@@ -203,6 +204,12 @@
 
 .note-pierdas .multimedia img {
   border-radius: 5px;
+  position: relative !important;
+  height: 300px !important;
+  min-height: 300px !important;
+  max-height: 300px !important;
+  object-fit: cover;
+  width: 100% !important;
 }
 
 .swiper-pagination-bullet-active {
