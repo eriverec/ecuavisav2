@@ -1216,6 +1216,7 @@ img.sepDesk {
     gap: 0;
   }
 
+  /*QUIZ*/
   .menu_encuesta_estilo .container-fluid{
     padding-right: 0 !important;
     padding-left: 0 !important;
@@ -1246,8 +1247,10 @@ img.sepDesk {
   }
 
   .ecv_relacionadas_2022 .recomendadas-rd {
-    padding: 34px 0 !important
+    padding: 34px 0 !important;
+    grid-template-columns: 2fr 1fr;
   }
+
   .publicidad {
     z-index: 2;
     position: absolute;
