@@ -201,7 +201,9 @@
 .portada-estilo .text_block {
   margin-top: -1px;
 }
-
+.note-pierdas .multimedia .cutlineShow>div {
+  padding-top: 0px !important;
+}
 .note-pierdas .multimedia img {
   border-radius: 5px;
   position: relative !important;
