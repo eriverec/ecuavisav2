@@ -337,7 +337,7 @@ INICIO - PORTADA - 4 DESTACADAS
 }
 
 .HOME_MENU_RD .articulos_4dest {
-  border-bottom: 0px solid var(--rd-gray-border);
+  border-bottom: 1px solid var(--rd-gray-border);
 }
 
 .HOME_MENU_RD .notas-1-n-ap {
@@ -2474,6 +2474,9 @@ INICIO - BLOQUE - ESTILO
 }
 .sliderVideos .headline h3 {
   font-size: var(--rd-size-16);
+}
+.HOME_MENU_RD .articulos_4dest {
+  border-bottom: 0px solid var(--rd-gray-border);
 }
 }
 
