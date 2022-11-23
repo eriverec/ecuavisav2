@@ -2466,6 +2466,9 @@ INICIO - BLOQUE - ESTILO
   .HOME_MENU_RD .teaser-viewer-title-rd a {
     font-size: 15px;
 }
+.HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block .headline a h3 {
+  font-size: 28px;
+}
 }
 
 
