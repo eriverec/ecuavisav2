@@ -20,6 +20,7 @@
 .newsletter_rd .newsContenido .news-texto-rd {
   text-align: left;
   padding-left: 30px;
+  margin-top: 123px;
 }
 
 .newsletter_rd .newsContenido .news-texto-rd .esendpulse iframe {
@@ -83,7 +84,6 @@
 
   .newsletter_rd .newsContenido .news-texto-rd {
     padding-left: 15px;
-    margin-top: 123px;
   }
 }
 
