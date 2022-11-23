@@ -766,7 +766,7 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .ecuador_list_1x2 .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  gap: 40px;
 }
 
 .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .headline a h2 {
@@ -838,7 +838,8 @@ INICIO - BLOQUE - ECUADOR
 }
 
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .text {
-  font-size: var(--rd-size-20);
+  /* font-size: var(--rd-size-20); */
+  font-size: 16px;
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
@@ -2028,7 +2029,8 @@ BLOQUE - CULTURA
 }
 
 .HOME_MENU_RD .bloque_cultura_2 .noticias .article .text_block .headline a h2 {
-  font-size: var(--rd-size-20);
+  /* font-size: var(--rd-size-20); */
+  font-size: 22px;
   color: var(--bs-black);
   font-style: normal;
   font-weight: 700;
@@ -2155,7 +2157,7 @@ INICIO - BLOQUE - ESTILO
 }
 
 .bloque_estilo_bg>div:nth-child(1)>div:nth-child(2) {
-  padding: 55px 0;
+  /* padding: 55px 0; */
 }
 
 .bloque_estilo_1 {
@@ -2174,7 +2176,8 @@ INICIO - BLOQUE - ESTILO
 }
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block .headline a h3 {
-  font-size: 28px;
+  /* font-size: 28px; */
+  font-size: 42px;
   color: white;
   font-weight: 700;
 }
@@ -2234,9 +2237,10 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2 {
   color: var(--bs-white);
-  font-size: var(--rd-size-16);
+  /* font-size: var(--rd-size-16); */
+  font-size: 18px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   /* padding-right: 35px; */
   line-height: 22px;
 }
@@ -2401,14 +2405,12 @@ INICIO - BLOQUE - ESTILO
   display: block !important;
 }
 
-
-
 .HOME_MENU_RD .teaser-viewer-title-rd a {
   text-transform: uppercase;
   margin: 20px 0;
   font-weight: 600;
   color: #2927B9;
-  font-size: 15px;
+  font-size: 22px;
   font-family: 'Mattone 150';
   display: block;
 }
@@ -2461,6 +2463,9 @@ INICIO - BLOQUE - ESTILO
   .HOME_MENU_RD .ver_t_prog .button_container {
     justify-content: center;
   }
+  .HOME_MENU_RD .teaser-viewer-title-rd a {
+    font-size: 15px;
+}
 }
 
 
@@ -2472,7 +2477,7 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .layout_agenda {
   background: #2927B9;
-  margin: 60px 0;
+  /* margin: 60px 0; */
 }
 
 .HOME_MENU_RD .title_agenda .cintillo-rd {
