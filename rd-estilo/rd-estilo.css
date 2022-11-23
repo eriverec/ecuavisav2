@@ -35,8 +35,9 @@
 
 .portada-estilo .headline h1 {
   color: #ffffff;
-  font-size: 42px;
+  font-family: 'Archivo';
   font-style: normal;
+  font-size: 42px;
   font-weight: 700;
   line-height: 48px;
   padding-top: 15px;
@@ -1133,7 +1134,8 @@ img.sepDesk {
     background: #2927B9;
     margin-top: -1px;
     position: initial;
-    padding-bottom: 1rem;
+    /*padding-bottom: 1rem;*/
+    padding: 0 16px 1rem;
   }
 
   .mas_temas_2_desktop .noticias .article .media_block {
@@ -1217,7 +1219,6 @@ img.sepDesk {
   .sec-titulo .noticias .article:nth-child(1)  {
     border-top: none
 }
-
 }
 
 
@@ -1225,27 +1226,26 @@ img.sepDesk {
   /* .card_dest_estilo {
     padding: 0 40px !important;
   } */
-
   #r01c01 {
     padding-right: calc(var(--bs-gutter-x)/ 2);
     padding-left: calc(var(--bs-gutter-x)/ 2);
   }
-
-
-
   .micro_593 .noticias,
   .quiz-entretenimiento .noticias {
     margin-bottom: 50px;
   }
-
   .notas-estilo-desktop {
     display: none !important;
+  }
+
+  .portada-estilo .headline h1{
+    font-size: 32px;
+    line-height: 38px;
   }
 
   .ecv_relacionadas_2022 .recomendadas-rd {
     padding: 34px 0 !important
   }
-
   .publicidad {
     z-index: 2;
     position: absolute;
@@ -1253,17 +1253,12 @@ img.sepDesk {
     right: 0;
     padding-top: 2rem;
   }
-
   .estilo-notas .IMGTIT.recomendadas-rd.even.n8.last {
     border-bottom: none;
   }
-
   .notas2 .noticias .article:nth-child(1) {
     border-top: 1px solid #2927B9;
   }
-
-
-
   .portlet-boundary.portlet-static-end.htmlcontainer-portlet.titulo1 {
     background: #2927B9;
     padding-bottom: 20px;
@@ -1303,7 +1298,7 @@ img.sepDesk {
     font-family: 'Archivo';
     font-weight: 700;
     font-size: 34px;
-    margin-top: 11px;
+    /*margin-top: 11px;*/
     margin-bottom: 15px;
   }
 
