@@ -77,9 +77,9 @@
     display: block;
   }
 
-  /*.newsletter_rd .newsContenido .news_line_left {
+  .newsletter_rd .newsContenido .news_line_left {
     display: none;
-  }*/
+  }
 
   .newsletter_rd .newsContenido .news-texto-rd {
     padding-left: 15px;
