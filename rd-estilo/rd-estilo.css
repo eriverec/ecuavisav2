@@ -1211,12 +1211,14 @@ img.sepDesk {
   .portada-estilo .noticias .article .multimedia .multimediaIconMacroWrapper a div {
     height: 370px !important;
   }
-
-
-
   .sec-titulo .noticias {
     grid-template-columns: 1fr;
     gap: 0;
+  }
+
+  .menu_encuesta_estilo .container-fluid{
+    padding-right: 0 !important;
+    padding-left: 0 !important;
   }
 
 }
