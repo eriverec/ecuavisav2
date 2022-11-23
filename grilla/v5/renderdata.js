@@ -182,15 +182,15 @@ function renderProgramas(){
 
                 //var contador = contador;
                 /* Validacion del programa de la hora actual */
-
-                /*console.table({
+                console.table({
                     'current':currentTime.toString(),
                     'init':startTime.toString(),
                     'fin':endTime.toString(),
                     'initnormal':programTimeIni,
                     'finnormal':programTimeEnd,
                     'active':currentTime.isBetween(startTime, endTime)
-                });*/
+                });
+                /**/
 
                 var entra = false;
 
