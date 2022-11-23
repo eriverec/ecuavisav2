@@ -70,6 +70,9 @@
   line-height: 26px;
 }
 
+.newsContenido{
+  overflow: hidden;
+}
 
 @media (max-width: 575px) {
   .newsletter_rd .info-formulario .news-texto-rd h1 {
