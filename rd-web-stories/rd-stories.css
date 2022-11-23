@@ -276,10 +276,7 @@
   }
 }
 
-
-
-
-@media (max-width: 767px) {
+@media (max-width: 768px) {
   .u-listado-ultimos-videos .noticias {
     grid-template-columns: 1fr 1fr 1fr;
   }
