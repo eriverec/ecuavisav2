@@ -102,7 +102,7 @@ function renderProgramas(){
         var programTimeIni  = moment(horai, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
         var programTimeEnd  = moment(horaf, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
 
-        if((programIndex + 1) != programaItems){
+        if((programIndex + 1) <> programaItems){
             programTimeEnd  = moment(_jsonProgramas[ programIndex + 1 ].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
             //console.log(programIndex + ' - '+programaItems);
         }
