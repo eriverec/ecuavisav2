@@ -1,3 +1,7 @@
+#iter-content-wrapper {
+  padding-top: 0px;
+}
+
 /*CINTILLO*/
 .cintillo-rd {
   display: inline-block;
@@ -9,10 +13,16 @@
   line-height: 81px;
   text-transform: lowercase;
   color: #2927B9;
+  margin-bottom: 24px;
 }
 
 .c_azul_celeste_Mobile {
   display: none;
+  margin-bottom: 35px;
+}
+
+.c_azul_celeste_Desktop {
+  margin-bottom: 35px;
 }
 
 
