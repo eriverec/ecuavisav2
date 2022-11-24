@@ -86,10 +86,14 @@ tr.programaItem td:not(.text-center) p {
     z-index: 999;
     background-color: #060126;
 }
-/*Cambio de color de fondo tabs */
+/*Cambios solicitados por prodigioso volcán */
 .bg-blue-700 {
   background-color: rgb(41 39 185 / var(--tw-bg-opacity))!important;
 } 
 .border-b-4 {
   border-bottom-width: 2px!important;
+}
+.py-5 {
+  padding-top: 1.5rem!important;
+  padding-bottom: 1.5rem!important;
 }
