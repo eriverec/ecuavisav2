@@ -1,7 +1,18 @@
-.tab-content {
+.b-tab {
+  padding: 20px;
+  border: 1px solid #000;
   display: none;
 }
 
-.tab-content.active {
+.b-tab.active {
   display: block;
+}
+
+.b-nav-tab {
+  display: inline-block;
+  padding: 20px;
+}
+
+.b-nav-tab.active {
+  color: #ff4200;
 }
