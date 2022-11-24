@@ -88,5 +88,5 @@ tr.programaItem td:not(.text-center) p {
 }
 /*Cambio de color de fondo tabs */
 .bg-blue-700 {
-  background-color: rgb(41 39 185 / var(--tw-bg-opacity));
+  background-color: rgb(41 39 185 / var(--tw-bg-opacity))!important;
 } 
