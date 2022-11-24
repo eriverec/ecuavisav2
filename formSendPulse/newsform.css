@@ -76,6 +76,16 @@
   width: 100%;
 }
 
+
+@media (max-width: 768px) {
+  .newsletter_rd .info-formulario .news-texto-rd h1{
+    font-size: 55px;
+  }
+  .newsletter_rd .info-formulario .news-texto-rd h2{
+    font-size: 16px;
+  }
+}
+
 @media (max-width: 575px) {
   .newsletter_rd .info-formulario .news-texto-rd h1 {
     font-size: 55px;
