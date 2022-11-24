@@ -77,7 +77,7 @@
 }
 
 
-@media (max-width: 768px) {
+@media (min-width: 768px) and (max-width: 990px) {
   .newsletter_rd .info-formulario .news-texto-rd h1{
     font-size: 55px;
   }
