@@ -1403,11 +1403,17 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 INICIO - BLOQUE - MUNDO 
 *************************** */
 
+.HOME_MENU_RD .lista-bloque-1x4{
+  margin-bottom: 129px;
+}
+
 .HOME_MENU_RD .lista-bloque-1x4 .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
   column-gap: 30px;
 }
+
+
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(1) {
   border-top: 1px solid var(--rd-gray-border);
@@ -1569,10 +1575,10 @@ INICIO - BLOQUE - MUNDO
     /* padding-top: 20px; */
   }
 
-  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(4),
+  /* .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(4),
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3) {
     border-top-width: 0px;
-  }
+  } */
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .BLOQUE_SEC_TIT_IMG {
     margin-bottom: 40px;
