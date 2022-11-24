@@ -6,7 +6,7 @@
   font-style: normal;
   font-weight: 600;
   font-size: 88px;
-  line-height: 96px;
+  line-height: 81px;
   text-transform: lowercase;
   color: #2927B9;
 }
@@ -15,15 +15,7 @@
   display: none;
 }
 
-@media (max-width: 768px) {
-  .c_azul_celeste_Mobile {
-    display: block;
-  }
 
-  .c_azul_celeste_Desktop {
-    display: none;
-  }
-}
 
 /*TABS*/
 .tabs-box {
@@ -64,4 +56,22 @@
 
 .content-box .b-tab.active {
   display: block;
+}
+
+
+
+@media (max-width: 767px) {
+  .c_azul_celeste_Mobile {
+    display: block;
+  }
+
+  .c_azul_celeste_Desktop {
+    display: none;
+  }
+
+  .cintillo-rd {
+    font-weight: 600;
+    font-size: 55px;
+    line-height: 48px;
+  }
 }
