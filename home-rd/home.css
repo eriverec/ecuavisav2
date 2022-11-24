@@ -1403,7 +1403,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 INICIO - BLOQUE - MUNDO 
 *************************** */
 
-.HOME_MENU_RD .lista-bloque-1x4{
+.HOME_MENU_RD .lista-bloque-1x4 {
   margin-bottom: 129px;
 }
 
@@ -1659,9 +1659,13 @@ INICIO - BLOQUE - MUNDO
 
 @media (max-width: 767px) {
 
-  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3){
+  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3) {
     border-top: none;
     border-bottom: none;
+  }
+
+  .HOME_MENU_RD .lista-bloque-1x4 {
+    margin-bottom: 42px;
   }
 
   /*MOdificado por CR*/
