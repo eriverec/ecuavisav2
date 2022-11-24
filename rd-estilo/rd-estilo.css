@@ -21,38 +21,34 @@
   background-image: -webkit-linear-gradient(bottom, #2927B9 50%, #2927B9 65%) !important;
 
 }
-
 .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
   height: 582px !important;
   object-fit: cover;
 }
-
 .portada-estilo .noticias .article .multimedia .multimediaIconMacroWrapper a div {
   height: 582px !important;
   object-fit: cover;
+  margin-top: -1px;
 }
-
-
 .portada-estilo .headline h1 {
   color: #ffffff;
-  font-size: 42px;
+  font-family: 'Archivo';
   font-style: normal;
-  font-weight: 700;
+  font-size: 42px;
+  font-weight: 600;
   line-height: 48px;
   padding-top: 15px;
   padding-bottom: 18px;
-  max-width: 700px;
+  max-width: 500px;
 }
-
 .portada-estilo .noticias .article .text {
   font-size: 16px;
   color: #ffffff;
   font-style: normal;
   font-weight: 300;
   line-height: 26px;
-  max-width: 700px;
+  max-width: 500px;
 }
-
 .portada-estilo .article-section a {
   font-family: 'Mattone 150';
   font-weight: 600;
@@ -61,29 +57,24 @@
   font-size: 16px;
   line-height: 17px;
 }
-
 .portada-estilo .multimedia img,
 .note-pierdas .multimedia img,
 .estilo-principal .multimedia img,
 .estilo-principal-desktop .multimedia img {
   filter: brightness(40%);
 }
-
 .portada-estilo .media_block {
   position: relative;
   background: #2927B9;
 }
-
 .estilo-principal .headline h2 {
   color: white;
   font-weight: 700;
 }
-
 .estilo-principal .article-section a {
   color: white;
   font-weight: 600;
 }
-
 .portada-estilo .text_block {
   position: absolute;
   bottom: 0;
@@ -92,7 +83,6 @@
   padding-bottom: 2rem;
   width: 100%;
 }
-
 .portada-estilo-mobile .headline h2 {
   color: white;
   font-family: 'Archivo';
@@ -101,18 +91,18 @@
   font-size: 34px;
   line-height: 38px;
 }
-
 .portada-estilo-mobile .date {
   padding: 1rem 0 1.5rem;
 }
-
 .portada-estilo-mobile .subheadline h3 {
   font-size: 18px;
   font-weight: 100;
 }
 
 
-
+.mas_temas_2_desktop img {
+  border-radius: 2px;
+}
 
 
 /*   .row {
@@ -199,9 +189,17 @@
 .portada-estilo .text_block {
   margin-top: -1px;
 }
-
+.note-pierdas .multimedia .cutlineShow>div {
+  padding-top: 0px !important;
+}
 .note-pierdas .multimedia img {
   border-radius: 5px;
+  position: relative !important;
+  height: 300px !important;
+  min-height: 300px !important;
+  max-height: 300px !important;
+  object-fit: cover;
+  width: 100% !important;
 }
 
 .swiper-pagination-bullet-active {
@@ -537,7 +535,7 @@ h2.temas_estilo {
   grid-template-columns: 1fr 1fr;
   column-gap: 40px;
   margin-top: 10px;
-  margin-bottom: 50px;
+  /* margin-bottom: 50px; */
 }
 
 .sec-titulo .noticias .article {
@@ -573,10 +571,10 @@ h2.temas_estilo {
 
 .sec-titulo .headline h2 {
   color: black;
-  font-size: 18px;
+  font-size: 22px;
   font-weight: 700;
   font-family: 'Archivo';
-  line-height: 22px;
+  line-height: 26px;
 }
 
 /* .sec-titulo .text_block {
@@ -635,9 +633,9 @@ h2.temas_estilo {
   color: #2927B9;
   font-family: 'Mattone 150';
   font-weight: 600;
-  font-size: 15.13px;
+  font-size: 22px;
   margin-bottom: -9px;
-  padding: 1.5rem 6px 0px;
+  padding: 1.5rem 0 0px;
 }
 
 .bloque-programas .media_block .text_block .date,
@@ -681,9 +679,11 @@ h2.temas_estilo {
 
 .note-pierdas .text_block .headline h3 {
   font-family: 'Anek Malayalam';
+  font-style: normal;
   font-weight: 600;
   font-size: 16px;
-  color: white;
+  line-height: 20px;
+  color: #FFFFFF;  
 }
 
 .note-pierdas .swiper-wrapper {
@@ -695,7 +695,6 @@ h2.temas_estilo {
 }
 
 .swiper-pagination-bullet {
-
   background: var(--swiper-pagination-bullet-inactive-color, #2927B9) !important;
 }
 
@@ -795,9 +794,6 @@ h2.temas_estilo {
 .bloque-programas .media_block .text_block .subheadline {
   display: none;
 }
-
-
-
 .card_dest_estilo .noticias .article .media_block .text_block .headline a h3 {
   font-family: 'Archivo';
   font-style: normal;
@@ -837,19 +833,14 @@ h2.temas_estilo {
 }
 
 /*Encuesta estilo*/
-
 .quiz-entretenimiento,
 .encuesta_estadio,
 .sub_estadio {
   display: none;
 }
-
-
 .encuesta_estilo .teaser-viewer-title h1 {
   margin-bottom: 0;
 }
-
-
 .encuesta_estilo .teaser-viewer-title h1 {
   background-color: #23dcd1 !important;
   padding: 25px !important;
@@ -858,15 +849,11 @@ h2.temas_estilo {
   text-align: center;
   font-size: 22px !important;
 }
-
-
 .encuesta_estilo .teaser-viewer-title span {
   font-weight: 800;
   font-size: 40px;
   font-family: 'Anek Malayalam';
 }
-
-
 .encuesta_estilo .question-poll h2 {
   font-weight: 600;
   font-size: 20px;
@@ -874,29 +861,20 @@ h2.temas_estilo {
   text-align: center;
   padding-top: 1.2rem;
 }
-
-
 .encuesta_estilo .noticias {
   background-color: #060127 !important;
 }
-
-
 .encuesta_estilo .poll-form.form-check span[data-choiceid] label {
   border: 1px solid #23dcd1;
   border-radius: 5px;
 }
-
-
 .encuesta_estilo .poll-form.form-check span {
   color: #1fc0bb;
   font-weight: 100;
 }
-
 .port3 .article-section a {
   display: none;
 }
-
-
 .port3 .text {
   font-family: 'Archivo';
   font-weight: 300;
@@ -904,7 +882,6 @@ h2.temas_estilo {
   line-height: 26px;
   display: none;
 }
-
 .lista_bloque_3_desktop .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -946,13 +923,10 @@ h2.temas_estilo {
 .lista_bloque_3_desktop img {
   border-radius: 2px;
 }
-
-
 .mas_temas_2_desktop {
   margin-top: 40px;
   margin-bottom: 70px;
 }
-
 .mas_temas_2_desktop .noticias .article {
   border-top: 1px solid #2927B9;
   border-bottom: 1px solid #2927B9;
@@ -996,22 +970,17 @@ img.sepDesk {
 .port3 {
   border-top: 16px solid #2927B9;
 }
-
 .mas_temas_2_desktop .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 40px;
 }
-
-
 .mas_temas_2_desktop .noticias .article .media_block {
   display: grid;
   grid-template-columns: 3fr 1fr;
   align-items: center;
   gap: 50px;
 }
-
-
 .notas-estilo-mobile {
   margin-bottom: 40px;
 }
@@ -1021,7 +990,6 @@ img.sepDesk {
   width: 100%;
   margin-top: 20px;
 }
-
 .estilo_separadorDesktop {
   width: 100%;
 }
@@ -1034,8 +1002,73 @@ img.sepDesk {
   display: flex;
   gap: 5px;
 }
+/*
+## ESTILOS ENCUESTA
+*/
+.encuesta_espectaculo {
+  display: none;
+}
+.encuesta_estilo .teaser-viewer-title span {
+  padding-top: 8px;
+  display: block;
+  text-transform: initial;
+}
+.menu_encuesta_estilo .noticias {
+  background-color: #060127 !important;
+  border-radius: 0px 0px 2px 2px;
+}
+.encuesta_estilo .teaser-viewer-title h1 {
+  margin-bottom: 0;
+}  
+.encuesta_estilo .question-poll h2 {
+  font-weight: 600;
+  font-size: 20px;
+  color: white;
+  text-align: center;
+  padding-top: 1.7rem;
+}
+.encuesta_estilo .noticias {
+  background-color: #060127 !important;
+  border-radius: 0px 0px 2px 2px;
+}
 
+.encuesta_estilo .poll-form.form-check span[data-choiceid] label {
+  border: 1px solid #23dcd1;
+  border-radius: 5px;
+}
 
+.encuesta_estilo .poll-form.form-check span {
+  color: #1fc0bb;
+  font-weight: 100;
+}
+.encuesta_estilo .teaser-viewer-title .tit-quiz1 {
+  background-color: #23dcd1 !important;
+  padding: 25px 0 5px !important;
+  font-family: 'Mattone 150'!important;
+  font-style: normal;
+  font-weight: 600!important;
+  line-height: 16px;
+  text-align: center;
+  font-size: 14px!important;
+  text-transform: uppercase;
+  color: #2927B9!important;
+}
+.encuesta_estilo .teaser-viewer-title .tit-quiz2 {
+  background-color: #23dcd1 !important;
+  padding: 0 0 25px 0!important;
+  font-family: 'Anek Malayalam';
+  font-style: normal;
+  font-weight: 600!important;
+  font-size: 47px!important;
+  line-height: 21px;
+  letter-spacing: -0.03em;
+  text-transform: lowercase;
+  color: #2927B9;
+  text-align: center;
+}
+/*
+## FIN ESTILOS ENCUESTA
+*/
 
 @media (min-width: 1400px) {
   .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
@@ -1046,6 +1079,13 @@ img.sepDesk {
     height: 100% !important;
   }
 }
+@media (min-width: 1200px) {
+  .note-pierdas.swiper .text_block{
+    width: 340px;
+  }
+}
+
+
 @media (max-width: 1024px) {
   .estilo-notas .recomendadas-rd {
     grid-template-columns: 4fr 1fr;
@@ -1068,7 +1108,8 @@ img.sepDesk {
     background: #2927B9;
     margin-top: -1px;
     position: initial;
-    padding-bottom: 1rem;
+    /*padding-bottom: 1rem;*/
+    padding: 0 16px 1rem;
   }
 
   .mas_temas_2_desktop .noticias .article .media_block {
@@ -1079,7 +1120,10 @@ img.sepDesk {
 
 
 @media (max-width: 767px) {
-  .sec-titulo .noticias .article:nth-child(1), 
+  
+  .sec-titulo .noticias .article:nth-child(1) {
+    border-top: 1px solid #292789;
+  }
   .sec-titulo .noticias .article:nth-child(2) {
     border-top: none;
   }
@@ -1110,6 +1154,7 @@ img.sepDesk {
     margin-top: 16px;
   }
 
+  .title_bloque,
   .estilo_separadorMobile {
     display: block;
   }
@@ -1117,9 +1162,9 @@ img.sepDesk {
   .estilo_separadorDesktop {
     display: none;
   }
-
-  .title_bloque {
-    display: block;
+ 
+  .teaser-viewer-title h3 {
+    font-size: 15.13px;
   }
 
   .lista_bloque_3_desktop .noticias {
@@ -1141,17 +1186,16 @@ img.sepDesk {
   .portada-estilo .noticias .article .multimedia .multimediaIconMacroWrapper a div {
     height: 370px !important;
   }
-
-
-
   .sec-titulo .noticias {
     grid-template-columns: 1fr;
     gap: 0;
   }
 
-  .sec-titulo .noticias .article:nth-child(1)  {
-    border-top: none
-}
+  /*QUIZ*/
+  .menu_encuesta_estilo .container-fluid{
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
 
 }
 
@@ -1160,25 +1204,26 @@ img.sepDesk {
   /* .card_dest_estilo {
     padding: 0 40px !important;
   } */
-
   #r01c01 {
     padding-right: calc(var(--bs-gutter-x)/ 2);
     padding-left: calc(var(--bs-gutter-x)/ 2);
   }
-
-
-
   .micro_593 .noticias,
   .quiz-entretenimiento .noticias {
     margin-bottom: 50px;
   }
-
   .notas-estilo-desktop {
     display: none !important;
   }
 
+  .portada-estilo .headline h1{
+    font-size: 32px;
+    line-height: 38px;
+  }
+
   .ecv_relacionadas_2022 .recomendadas-rd {
-    padding: 34px 0 !important
+    padding: 34px 0 !important;
+    grid-template-columns: 2fr 1fr;
   }
 
   .publicidad {
@@ -1188,17 +1233,12 @@ img.sepDesk {
     right: 0;
     padding-top: 2rem;
   }
-
   .estilo-notas .IMGTIT.recomendadas-rd.even.n8.last {
     border-bottom: none;
   }
-
   .notas2 .noticias .article:nth-child(1) {
     border-top: 1px solid #2927B9;
   }
-
-
-
   .portlet-boundary.portlet-static-end.htmlcontainer-portlet.titulo1 {
     background: #2927B9;
     padding-bottom: 20px;
@@ -1238,7 +1278,7 @@ img.sepDesk {
     font-family: 'Archivo';
     font-weight: 700;
     font-size: 34px;
-    margin-top: 11px;
+    /*margin-top: 11px;*/
     margin-bottom: 15px;
   }
 

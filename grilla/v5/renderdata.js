@@ -1,4 +1,4 @@
-
+moment.locale('es');
 // ##### tabs de días de la semana
 let tabsContainer = document.querySelector("#tabs");
 let tabTogglers = tabsContainer.querySelectorAll("a");
@@ -9,11 +9,14 @@ tabTogglers.forEach(function(toggler) {
         let tabContents = document.querySelector("#tab-contents");
 
         for (let i = 0; i < tabContents.children.length; i++) {
-            tabTogglers[i].parentElement.classList.remove("border-blue-400", "bg-blue-700", "text-zinc-100");  tabContents.children[i].classList.remove("hidden");
+            tabTogglers[i].parentElement.classList.remove("border-blue-400", "text-zinc-100", "bg-blue-700", "active-tabs");  
+            tabTogglers[i].parentElement.classList.add("next-days", "bg-blue-700");
+            tabContents.children[i].classList.remove("hidden");
             if ("#" + tabContents.children[i].id === tabName) { continue; }
             tabContents.children[i].classList.add("hidden");
         }
-        e.target.parentElement.classList.add("border-blue-400", "bg-blue-700", "text-zinc-100");
+
+        e.target.parentElement.classList.add("border-blue-400", "bg-blue-700", "text-zinc-100", "primer-init");
     });
 });
 // Obtenemos el día actual
@@ -48,14 +51,29 @@ if(localStorage.getItem('programas')){ //evaluamos si se encuentra la key progra
      console.log('existen programas') 
  }else{ /* variable para loader */ console.log('no existen programas'); }
 
+
 function activeDay(data){
+    // $('div[data-item=' + slide + ']').addClass("selected");
+    setTimeout(function(){
+        console.log(data)
+        var el = $(`tr.programaItem.${data}`).addClass('active-item');
+
+        $('html, body').animate({
+            scrollTop: $(`tr.programaItem.${data}`).offset().top - 90
+        }, 1000);
+        //$(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
+        //console.log(el);
+    } , 700);
+}
+
+/*function activeDay(data){
     // $('div[data-item=' + slide + ']').addClass("selected");
     setTimeout(function(){
         el = $('.programaItem.el-'+ data);
         $(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
         console.log(el);
     } , 700);
-}
+}*/
 
 function renderProgramas(){
     var _jsonProgramas = JSON.parse(jsonProgramas); // convertiomos el json.stringify  de localstorage en json normal
@@ -68,14 +86,27 @@ function renderProgramas(){
     var obtenerDiaMes = { month: 'short', day: 'numeric' };
 
     // Inicio de recorrido de cada elemento 
+
     for (programIndex = 0; programIndex < programaItems; programIndex++) {
         // variables de programas
         var horahoy= fechahoy('hora');
         var programName= _jsonProgramas[programIndex].programa;
         var region= _jsonProgramas[programIndex].region; //3 costa - 2 sierra - 5 internacional
         var programDate= _jsonProgramas[programIndex].fecha//.replace('-0', '-'); //revisar si presenta problemas en horario
-        var programTimeIni= _jsonProgramas[programIndex].hora_inicio.replace(_jsonProgramas[programIndex].fecha, '');
-        var programTimeEnd= _jsonProgramas[programIndex].hora_fin.replace(_jsonProgramas[programIndex].fecha, '');
+
+        //console.log(moment(_jsonProgramas[programIndex].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss"))
+        //console.log(_jsonProgramas[programIndex].hora_inicio)
+        var horai = _jsonProgramas[programIndex].hora_inicio;//moment(_jsonProgramas[programIndex].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
+        var horaf = _jsonProgramas[programIndex].hora_fin;//moment(_jsonProgramas[programIndex].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
+
+        var programTimeIni  = moment(horai, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
+        var programTimeEnd  = moment(horaf, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
+
+        if((programIndex + 1) != programaItems){
+            programTimeEnd  = moment(_jsonProgramas[ programIndex + 1 ].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
+            //console.log(programIndex + ' - '+programaItems);
+        }
+
         var showActive= 'bg-indigo-700';
         var ActualClass= 'px-4 py-4 text-zinc-50 bg-ecuavisa text-sm flex items-center'
         var imgs= 'https://via.placeholder.com/70'
@@ -117,8 +148,9 @@ function renderProgramas(){
                     "nombrePrograma" : programName,
                     "HoradeFin" : programTimeEnd,
                     "HoradeInicio" : programTimeIni,
-                    "Fecha" : programDate}   
-                    _jsonDiaActual.push(programaData);
+                    "Fecha" : programDate
+                }   
+                _jsonDiaActual.push(programaData);
                  //   console.log(programaData);
 
                 //obtenemos formateada la hora actual 
@@ -129,15 +161,44 @@ function renderProgramas(){
                 // console.log(timeOfDay);
 
                 /* Convertir la hora del programa en datos */
-                var regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
+                //var regExp = /(\d{1,2})\:(\d{1,2})\:(\d{1,2})/;
+                //var hini = parseInt(programTimeIni.replace(regExp, "$1$2$3"));
+                //var hfin = parseInt(programTimeEnd.replace(regExp, "$1$2$3"));
+                //var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2$3"));
 
-                var hini = parseInt(programTimeIni.replace(regExp, "$1$2$3"));
-                var hfin = parseInt(programTimeEnd.replace(regExp, "$1$2$3"));
-                var timeAc = parseInt(timeOfDay.replace(regExp, "$1$2$3"));
 
-                var contador = contador;
+                var currentTime= moment(timeOfDay, "HH:mm:ss");
+                var startTime = moment(programTimeIni, "HH:mm:ss");
+                var endTime = moment(programTimeEnd, "HH:mm:ss");
+
+                
+                //; //"Fri Oct 28 2016 23:00:00 GMT-0400"
+                //;   // "Fri Oct 28 2016 18:00:00 GMT-0400"
+                //;    // "Fri Oct 28 2016 03:30:00 GMT-0400"
+
+                //console.log(currentTime.isAfter(endTime) && currentTime.isBefore(startTime));  // false
+                //currentTime.isAfter(endTime) && currentTime.isBefore(startTime); //false
+                //currentTime.isAfter(startTime) && currentTime.isBefore(endTime); //false
+
+                //var contador = contador;
                 /* Validacion del programa de la hora actual */
-                if (hini <= timeAc && timeAc <= hfin) {
+                console.table({
+                    'current':currentTime.toString(),
+                    'init':startTime.toString(),
+                    'fin':endTime.toString(),
+                    'initnormal':programTimeIni,
+                    'finnormal':programTimeEnd,
+                    'active':currentTime.isBetween(startTime, endTime)
+                });
+                /**/
+
+                var entra = false;
+
+                if ((currentTime.isBetween(startTime, endTime)) && !entra) {
+
+                    /**/
+
+                    var entra = true;
                     var elemento = 'el-' + (contador - 1);
                     var numeroSwiper = (contador - 1);
                     var pA = programName;
@@ -150,7 +211,7 @@ function renderProgramas(){
                     localStorage.setItem('hIF', hIF);
 
                     var showActive= 'bg-blue-800';
-                    console.log("Programa actualLLLL: " + programName);
+                    //console.log("Programa actualLLLL: " + programName);
                     itemtored = localStorage.getItem('programaActual');
                     activeDay(itemtored);
                 } else {}
@@ -164,7 +225,7 @@ function renderProgramas(){
             
                     var todayx  = new Date().toLocaleDateString("es-ES", obtenerDiaMes);
                     // var hoyes  = new Date().toLocaleDateString("es-ES", obtenerDia);
-                    $('.Tab4').html('HOY<br>'+todayx+' ');
+                    $('.Tab4').html(`HOY<div class="fecha-text">${todayx}</div>`);
                      //metemos al dom el programa
             // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
             }else{ /*console.log('la fecha de hoy es '+fechahoy('fecha')+' y no coincide con '+programDate);*/ }
@@ -201,7 +262,7 @@ function renderProgramas(){
                 var mananaDate  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var manana  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab5data'); //metemos al dom el programa
-                $('.Tab5').html('MAÑANA<br>'+mananaDate+' ');
+                $('.Tab5').html(`Mañana <div class="fecha-text">${mananaDate}</div>`);
                 // $('.Tab1').parent('li').addClass('hidden');
 
             }else{ }
@@ -210,7 +271,7 @@ function renderProgramas(){
                 var pmananaDate  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var pmanana  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab6data'); //metemos al dom el programa
-                $('.Tab6').html(''+pmanana+'<br>'+pmananaDate+'');
+                $('.Tab6').html(`${pmanana} <div class="fecha-text">${pmananaDate}</div>`);
             
             }else{/*console.log('Pasadomañana es: '+ getFecha(+2) +' y no coincide con: '+programDate) */  }
             // ###################  tercermas
@@ -237,3 +298,16 @@ function renderProgramas(){
     // console.log('Su programa elegido es: '+JsonProgramasHoy[1].nombrePrograma);
     // _table.classList.add('hidden');
 }
+
+$(function(){
+    $('#tabs li').click(function(){
+        $('#tabs li').removeClass("active-tabs");
+        $('#tabs li').removeClass("primer-init");
+        $(this).addClass("active-tabs");
+
+        var link = $(this).find('a').attr('href');
+
+        $('#tab-contents > div').addClass('hidden');
+        $(link).removeClass('hidden');
+    })
+})

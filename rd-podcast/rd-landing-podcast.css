@@ -1,7 +1,9 @@
 /**************************
 *****TITLE CON SEPARADOR*****
 **************************/
-
+.encuesta_espectaculo {
+  display: none;
+}
 .btn-compartir-podcast .dropdown-toggle::after{
   display: none;
 }

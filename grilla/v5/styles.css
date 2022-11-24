@@ -1,4 +1,4 @@
-html, body {
+/*html, body {
   height: 100%;
 }
 
@@ -42,4 +42,47 @@ body {
 @media (max-width: 500px) {
   .github-corner:hover .octo-arm { animation: none; }
   .github-corner .octo-arm { animation: octocat-wave 560ms ease-in-out; }
+}
+*/
+
+/*
+#TABS CABECERA
+*/
+#tabs li {
+    transition: 0.5s all;
+}
+
+li.next-days:not(li.active-tabs) {
+    opacity: 40%;
+}
+.primer-init {
+    opacity: 1!important;
+}
+
+.fecha-text {
+    font-weight: 200;
+}
+
+tr.programaItem td:not(.text-center) p > b {
+    color: #23DCD1;
+}
+
+tr.programaItem td:not(.text-center) p {
+    background-color: #2927B9;
+}
+
+.programList .programaItem:not(.active-item) td:not(.text-center) p {
+    opacity: 40%;
+}
+
+#tabs li a {
+    text-transform: capitalize;
+}
+
+#tabs {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background-color: #060126;
 }
