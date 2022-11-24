@@ -1459,27 +1459,28 @@ INICIO - BLOQUE - MUNDO
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias {
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
+    gap: 0px;
+    grid-template-columns: 3fr 1fr;
+    margin: 1rem 0;
+    padding-top: 10px;
+  }
+
+  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .BLOQUE_SEC_TIT_IMG .text_block .headline {
+    max-width: 330px;
+    padding-top: 10px;
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .text_block .headline a h2 {
-    font-size: var(--rd-size-16);
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
+    color: var(--bs-black);
     font-style: normal;
     font-weight: 700;
-    line-height: 22px;
-  }
-
-  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(1) {
-    border-bottom: 1px solid var(--rd-gray-border);
-  }
-
-  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(2) {
-    border-bottom: 1px solid var(--rd-gray-border);
+    font-size: 22px;
+    /* padding-right: 35px; */
+    line-height: 28px;
   }
 
 }
@@ -2454,31 +2455,39 @@ INICIO - BLOQUE - ESTILO
   .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .top_info .Topheadline .hLine {
     font-size: 10px;
   }
+
   .HOME_MENU_RD .btn_informativo .button_container,
   .HOME_MENU_RD .btn_entretenimiento .button_container {
     display: none;
   }
+
   .HOME_MENU_RD .ver_t_prog .button_container {
     justify-content: center;
   }
+
   .HOME_MENU_RD .teaser-viewer-title-rd a {
     font-size: 15px;
-}
-.HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block .headline a h3 {
-  font-size: 28px;
-}
-.HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2 {
-  font-size: var(--rd-size-14);
-}
-.sliderVideos .headline h3 {
-  font-size: var(--rd-size-16);
-}
-.HOME_MENU_RD .articulos_4dest {
-  border-bottom: 0px solid var(--rd-gray-border);
-}
-.HOME_MENU_RD .bloque_cultura_2 .noticias .article .text_block .headline a h2 {
-  font-size: var(--rd-size-20);
-}
+  }
+
+  .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block .headline a h3 {
+    font-size: 28px;
+  }
+
+  .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2 {
+    font-size: var(--rd-size-14);
+  }
+
+  .sliderVideos .headline h3 {
+    font-size: var(--rd-size-16);
+  }
+
+  .HOME_MENU_RD .articulos_4dest {
+    border-bottom: 0px solid var(--rd-gray-border);
+  }
+
+  .HOME_MENU_RD .bloque_cultura_2 .noticias .article .text_block .headline a h2 {
+    font-size: var(--rd-size-20);
+  }
 }
 
 
