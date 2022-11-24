@@ -1770,6 +1770,10 @@ INICIO - BLOQUE - MUNDO
   font-weight: 600 !important;
 }
 
+.HOME_MENU_RD .bloque_estadio_1 .noticias .article .multimedia img {
+  -webkit-mask-image: linear-gradient(to bottom, transparent 0, #060127 13%);
+}
+
 .bloque_estadio_2 .text_block {
   padding: 30px 0;
 }
