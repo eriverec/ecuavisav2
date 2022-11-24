@@ -1080,7 +1080,7 @@ img.sepDesk {
   }
 }
 @media (min-width: 1200px) {
-  .swiper .text_block{
+  .note-pierdas.swiper .text_block{
     width: 340px;
   }
 }
