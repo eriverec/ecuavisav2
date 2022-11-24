@@ -1,18 +1,27 @@
-.b-tab {
+/*TABS*/
+.tabs-box .b-nav-tab {
+  display: inline-block;
+  padding: 20px;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.tabs-box .b-nav-tab.active {
+  color: #ff4200;
+}
+
+
+
+/*CONTENIDOS*/
+.content-box .b-tab {
   padding: 20px;
   border: 1px solid #000;
   display: none;
 }
 
-.b-tab.active {
+.content-box .b-tab.active {
   display: block;
-}
-
-.b-nav-tab {
-  display: inline-block;
-  padding: 20px;
-}
-
-.b-nav-tab.active {
-  color: #ff4200;
 }
