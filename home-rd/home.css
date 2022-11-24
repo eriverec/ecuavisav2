@@ -1659,6 +1659,11 @@ INICIO - BLOQUE - MUNDO
 
 @media (max-width: 767px) {
 
+  .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3){
+    border-top: none;
+    border-bottom: none;
+  }
+
   /*MOdificado por CR*/
   .HOME_MENU_RD .lista-bloque-1x4 img,
   .HOME_MENU_RD .ecuador_list_1x2 img,
