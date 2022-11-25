@@ -5,7 +5,7 @@ function swiperHomeProgramas() {
 
   var dpagination = document.createElement("div");
   dpagination.classList = "swiper-pagination";
-  swiperClass.append(dpagination);
+  classListaProgramas.append(dpagination);
 
   for (const SlideProgS of classListaProgramas) {
     SlideProgS.classList.add('swiper');
