@@ -17,7 +17,6 @@ function collapse() {
 
 
 function suscriptionDymanic() {
-  $(".categoryListItemPosition").css("display", "none");
   $(".categoryListItem").prepend('<div class="metaTitle"> Tema</div>');
   $(".categoryListItemLink").append(`
   <div class="botones__">

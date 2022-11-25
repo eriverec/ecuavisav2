@@ -91,9 +91,11 @@
     font-size: 16px;
   }
 }
-.outsideEmail > div:last-child {
+
+.outsideEmail>div:last-child {
   display: none;
 }
+
 /****************NOTIFICACIONES******************/
 .container_loader {
   height: auto;
@@ -104,6 +106,7 @@
   padding-bottom: 40px;
   padding-top: 20px;
 }
+
 .loader {
   width: 75px;
   height: 75px;
@@ -111,14 +114,17 @@
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
+
 .NoticiasGuardadasBox .container_loader {
   width: 100%;
   display: block;
 }
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -273,6 +279,9 @@
 /****************SUSCRIPCIONES******************/
 
 /*DINAMICO*/
+.temas-hot .categoryGroup .categoryListBlock .categoryListItemPosition {
+  display: none;
+}
 
 .temas-hot .categoryGroup .categoryListBlock .categoryList {
   display: grid;
@@ -641,7 +650,7 @@ button.btn-ecuavisa-noticia img {
 /****************BOTON CERRAR SESION******************/
 
 
-.collapsible_mp.container{
+.collapsible_mp.container {
   padding-right: 18px;
   padding-left: 18px;
 }
@@ -730,7 +739,7 @@ button.btn-ecuavisa-noticia img {
 
 
 /*Estilos modal*/
-#titleModal{
+#titleModal {
   color: #2927B9;
   font-family: 'Archivo';
   font-style: normal;
@@ -741,7 +750,8 @@ button.btn-ecuavisa-noticia img {
   cursor: pointer;
   width: -webkit-fill-available;
 }
-#modalcambiopass label.form-label{
+
+#modalcambiopass label.form-label {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 300;
@@ -759,7 +769,7 @@ button.btn-ecuavisa-noticia img {
   color: #d8d9db;
 }
 
-#modalcambiopass .modal-footer .btn-secondary{
+#modalcambiopass .modal-footer .btn-secondary {
   border: 1px solid #23DCD1;
   border-radius: 2px;
   font-family: 'Mattone 150';
@@ -769,10 +779,10 @@ button.btn-ecuavisa-noticia img {
   text-transform: uppercase;
   color: #2927B9;
   background-color: transparent;
-  padding:10px 25px;
+  padding: 10px 25px;
 }
 
-#modalcambiopass .modal-footer .btn-primary{
+#modalcambiopass .modal-footer .btn-primary {
   background-color: #2927b9;
   border: 1px solid #2927b9;
   border-radius: 2px;
@@ -781,9 +791,10 @@ button.btn-ecuavisa-noticia img {
   font-weight: 600;
   font-size: 12px;
   text-transform: uppercase;
-  padding:10px 25px;
+  padding: 10px 25px;
 }
-.btn-eyes{
+
+.btn-eyes {
   background-color: #2927b9;
   border: 1px solid #2927b9;
   border-radius: 2px;
@@ -792,7 +803,7 @@ button.btn-ecuavisa-noticia img {
   font-weight: 100;
   font-size: 8px;
   text-transform: uppercase;
-  padding:7px 7px;
+  padding: 7px 7px;
   top: 5px;
 }
 
@@ -818,10 +829,10 @@ button.btn-ecuavisa-noticia img {
   font-weight: 300;
 }
 
-.error.d-none{
-  display: none!important;
+.error.d-none {
+  display: none !important;
 }
 
-.error.d-block{
+.error.d-block {
   display: block;
 }
