@@ -5,10 +5,10 @@ function swiperHomeProgramas() {
 
   var dpagination = document.createElement("div");
   dpagination.classList = "swiper-pagination";
-  classListaProgramas.append(dpagination);
-
+  
   for (const SlideProgS of classListaProgramas) {
     SlideProgS.classList.add('swiper');
+    SlideProgS.appendChild(dpagination);
   }
 
   for (const SlideProgSW of classListaProgramasNot) {
