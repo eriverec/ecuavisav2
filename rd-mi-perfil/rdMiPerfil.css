@@ -272,6 +272,57 @@
 
 /****************SUSCRIPCIONES******************/
 
+/*DINAMICO*/
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 30px;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink .botones__ .button_siguiendo .follow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 20px;
+  gap: 10px;
+  width: 135.85px;
+  height: 32px;
+  background: #23DCD1;
+  border: 1px solid #23DCD1;
+  border-radius: 2px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink .botones__ .button_seguir .follow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 20px;
+  gap: 10px;
+  width: 135.85px;
+  height: 32px;
+  border: 1px solid #23DCD1;
+  border-radius: 2px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+/*DINAMICO*/
+
+
 .MP_suscripciones {
   margin-top: 50px;
 }
