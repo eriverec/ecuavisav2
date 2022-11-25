@@ -3,8 +3,6 @@ function swiperHomeProgramas() {
   var classListaProgramasNot = document.querySelectorAll('.lista-bloque-programas .noticias');
   var classListaProgramasNotArt = document.querySelectorAll('.lista-bloque-programas .noticias article');
 
-
-
   for (const SlideProgS of classListaProgramas) {
     var dpagination = document.createElement("div");
     dpagination.classList = "swiper-pagination";
@@ -25,6 +23,7 @@ function swiperHomeProgramas() {
     spaceBetween: 20,
     pagination: {
       el: ".swiper-pagination",
+      dynamicBullets: true,
       clickable: true,
     },
     breakpoints: {
