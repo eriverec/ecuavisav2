@@ -3,6 +3,10 @@ function swiperHomeProgramas() {
   var classListaProgramasNot = document.querySelectorAll('.lista-bloque-programas .noticias');
   var classListaProgramasNotArt = document.querySelectorAll('.lista-bloque-programas .noticias article');
 
+  var dpagination = document.createElement("div");
+  dpagination.classList = "swiper-pagination";
+  swiperClass.append(dpagination);
+
   for (const SlideProgS of classListaProgramas) {
     SlideProgS.classList.add('swiper');
   }
@@ -18,7 +22,10 @@ function swiperHomeProgramas() {
   var swiperProg = new Swiper(".lista-bloque-programas", {
     slidesPerView: 1.5,
     spaceBetween: 20,
-
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
+    },
     breakpoints: {
       600: {
         slidesPerView: 1.5,
