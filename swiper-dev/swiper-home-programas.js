@@ -3,12 +3,13 @@ function swiperHomeProgramas() {
   var classListaProgramasNot = document.querySelectorAll('.lista-bloque-programas .noticias');
   var classListaProgramasNotArt = document.querySelectorAll('.lista-bloque-programas .noticias article');
 
-  var dpagination = document.createElement("div");
-  dpagination.classList = "swiper-pagination";
-  
+
+
   for (const SlideProgS of classListaProgramas) {
+    var dpagination = document.createElement("div");
+    dpagination.classList = "swiper-pagination";
     SlideProgS.classList.add('swiper');
-    SlideProgS.appendChild(dpagination);
+    SlideProgS.append(dpagination);
   }
 
   for (const SlideProgSW of classListaProgramasNot) {
