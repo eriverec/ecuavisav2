@@ -18,28 +18,14 @@ if(localStorage.getItem('dHoy')){// evaluamos si la key "dHoy" existe
 // if(localStorage.getItem('programas')){ console.log('parrilla previamente cargada') }
 // else{ //realizar carga de csv
     function cargaParrilla2(){ console.log('fecha no coincide');}
-    function cargaParrilla(){
+    async function cargaParrilla(){
         // ##### carga de la grilla en dom
         console.log('cargando parrilla...')
         localStorage.setItem('dHoy', dHoy);
-        onload = fetch("files/parrilla_ecuavisa.csv").then(res => {
-            return res.text()
+        onload = await fetch("https://ecuavisa-programacion.onrender.com/").then(res => {
+            return res.json()
         }).then(data => { //\r?\n|\r
-            let result1 = data.replace //funcion avanzada de reemplazo de datos, si descripción trae errores en comas, se las repara aquí
-            (/Eco,|Barriales ,| , |Entretenimiento,|, |os,Su/gi,
-                function (x) {
-              return x.replace(',','..');
-            }) 
-            let result2 = result1.replace //funcion avanzada que filtra y soluciona acentos
-            (/As�|d�n|en�|ga�ad|A�o|m�ri|dem�s|r�a/gi,
-                function (x) {
-                r1 = x.replace('As�','Así');        r2 = r1.replace('d�n','dón');
-                r3 = r2.replace('en�','enó');       r4 = r3.replace('A�o','Año');
-                r5 = r4.replace('dem�s','demás');   r6 = r5.replace('r�a','ría');
-                r7 = r6.replace('m�ri','méri');     r8 = r7.replace('ga�ad','gañad');
-              return r8.replace('ue�o','ueño');
-            })     
-            let result = result2.split(/\r?\n|\r/).map(e => { return e.split(",") })
+           
             //creamos cabeceras
             let th = document.createElement("thead");
             let thc = `<tr>
@@ -63,8 +49,10 @@ if(localStorage.getItem('dHoy')){// evaluamos si la key "dHoy" existe
             // creamos tbody
             let ctb = document.createElement("tbody");
             document.querySelector('table').appendChild(ctb);
-            result.forEach(e => { //recorremos cada dato y creamos las filas
-                let m = e.map(e => { return `<td>${e}</td>`; }).join("")
+            data.forEach(e => { //recorremos cada dato y creamos las filas
+                let m = `<td></td><td>${e.programa}</td><td>${e.descripción}</td><td></td><td></td><td></td><td></td>
+                <td>${e.region}</td><td>${e.día}</td><td>${e.mes}</td><td>${e.año}</td><td></td><td>${e.hora_inicio}</td><td>${e.hora_fin}</td>
+                <td></td><td></td><td></td><td></td><td>${e.fecha}</td><td></td><td></td><td></td><td></td><td>${e.id}</td>`;
                 // let m = m1.replace('""','');
                 let ce = document.createElement("tr");
                 // ce.id = m.slice(-1)[0]
