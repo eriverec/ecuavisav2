@@ -278,7 +278,7 @@
 
 /****************SUSCRIPCIONES******************/
 
-/*DINAMICO*/
+/*INICIO - DINAMICO*/
 .temas-hot .categoryGroup .categoryListBlock .categoryListItemPosition {
   display: none;
 }
@@ -358,7 +358,28 @@
   flex-grow: 0;
 }
 
-/*DINAMICO*/
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 26px;
+  color: #060127;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink .metaTitle{
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 26px;
+  color: #060127;
+  margin-bottom: 10px;
+}
+
+
+
+/*DINAMICO - FIN*/
 
 
 .MP_suscripciones {
