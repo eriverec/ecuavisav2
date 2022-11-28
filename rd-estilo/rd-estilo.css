@@ -201,8 +201,8 @@
   object-fit: cover;
   width: 100% !important;
 }
-
-.note-pierdas .noticias .swiper-pagination-bullets.swiper-pagination-horizontal{
+.note-pierdas .swiper-horizontal>.swiper-pagination-bullets, 
+.note-pierdas .swiper-pagination-bullets.swiper-pagination-horizontal{
   bottom: 30px !important;
 }
 
