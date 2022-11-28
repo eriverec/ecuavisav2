@@ -21,14 +21,14 @@ function suscriptionDymanic() {
   $(".categoryListItem").append(`
   <div class="botones__">
     <div class="button_siguiendo">
-      <a class="follow" href="#">
+      <a class="follow" href="javascript:void(0);">
         <span>Siguiendo</span>
         <img src="https://ecuavisadev.netlify.app/rd-podcast/assets/Vector26.svg" alt="check">
       </a>
     </div>
     
     <div class="button_seguir">
-      <a class="follow" href="#">
+      <a class="follow" href="javascript:void(0);">
         <span>Seguir</span>
         <img src="https://ecuavisadev.netlify.app/rd-mi-perfil/assets/Add.svg" alt="check">
       </a>
