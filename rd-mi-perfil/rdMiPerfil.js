@@ -17,8 +17,8 @@ function collapse() {
 
 
 function suscriptionDymanic() {
-  $(".categoryListItem").prepend('<div class="metaTitle"> Tema</div>');
-  $(".categoryListItemLink").append(`
+  $(".categoryListItemLink").prepend('<div class="metaTitle"> Tema</div>');
+  $(".categoryListItem").append(`
   <div class="botones__">
     <div class="button_siguiendo">
       <a class="follow" href="#">

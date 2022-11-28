@@ -313,6 +313,35 @@
   flex-grow: 0;
 }
 
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink .botones__ .button_siguiendo span {
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  text-transform: uppercase;
+  color: #2927B9;
+  padding-top: 4px;
+}
+
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink .botones__ .button_seguir span {
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  text-transform: uppercase;
+  color: #2927B9;
+  padding-top: 4px;
+}
+
 .temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink .botones__ .button_seguir .follow {
   display: flex;
   flex-direction: row;
@@ -338,8 +367,8 @@
 
 .MP_suscripciones .grid-miperfil {
   display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 30px;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 30px;
 }
 
 .MP_suscripciones .metaOutsideBox {
