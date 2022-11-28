@@ -202,6 +202,15 @@
   width: 100% !important;
 }
 
+.note-pierdas .noticias .swiper-pagination-bullets.swiper-pagination-horizontal{
+  bottom: 30px !important;
+}
+
+.note-pierdas .swiper-pagination-bullet{
+  width: 12px !important;
+  height: 12px !important;
+}
+
 .swiper-pagination-bullet-active {
   background: #2927B9 !important;
 }
