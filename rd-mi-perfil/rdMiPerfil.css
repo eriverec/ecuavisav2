@@ -289,14 +289,14 @@
   column-gap: 30px;
 }
 
-.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink {
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
 
-.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink .botones__ .button_siguiendo .follow {
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .botones__ .button_siguiendo .follow {
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -313,7 +313,7 @@
   flex-grow: 0;
 }
 
-.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink .botones__ .button_siguiendo span {
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .botones__ .button_siguiendo span {
   font-family: 'Mattone 150';
   font-style: normal;
   font-weight: 600;
@@ -328,7 +328,7 @@
 }
 
 
-.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink .botones__ .button_seguir span {
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .botones__ .button_seguir span {
   font-family: 'Mattone 150';
   font-style: normal;
   font-weight: 600;
@@ -342,7 +342,7 @@
   padding-top: 4px;
 }
 
-.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink .botones__ .button_seguir .follow {
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .botones__ .button_seguir .follow {
   display: flex;
   flex-direction: row;
   justify-content: center;
