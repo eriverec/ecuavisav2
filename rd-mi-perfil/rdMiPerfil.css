@@ -294,9 +294,16 @@
   justify-content: space-between;
   align-items: center;
   padding: 30px 10px;
+  border-bottom: 1px solid #CACACA;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem:nth-child(1) {
   border-top: 1px solid #CACACA;
 }
 
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem:nth-child(2) {
+  border-top: 1px solid #CACACA;
+}
 
 .temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .botones__ .button_siguiendo .follow {
   display: flex;
@@ -407,6 +414,10 @@
   border-top: 1px solid #CACACA;
 }
 
+.MP_suscripciones .metaOutsideBox:nth-child(2) {
+  border-top: 1px solid #CACACA;
+}
+
 .MP_suscripciones .metaOutsideBox .metaTitle {
   font-family: 'Archivo';
   font-style: normal;
@@ -496,9 +507,7 @@
 
 
 
-  .MP_suscripciones .metaOutsideBox:nth-child(2) {
-    border-top: 1px solid #CACACA;
-  }
+
 
 }
 
@@ -511,6 +520,14 @@
     grid-template-columns: none;
   }
 
+  .temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem:nth-child(2) {
+    border-top: none;
+  }
+  
+  .MP_suscripciones .metaOutsideBox:nth-child(2) {
+    border-top: none;
+  }
+
   .MP_suscripciones .metaOutsideBox .metaTitle {
     font-size: 16px;
   }
@@ -518,6 +535,7 @@
   .MP_suscripciones .metaOutsideBox .metaValue {
     font-size: 16px;
   }
+
 }
 
 
