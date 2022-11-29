@@ -1344,4 +1344,12 @@ img.sepDesk {
   .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
     height: 254px !important;
   }
+  .note-pierdas {
+    padding-top: 1rem;
+  }
+  .note-pierdas .multimedia img {
+    height: 270px !important;
+    min-height: 270px !important;
+    max-height: 270px !important;
+  }
 }
