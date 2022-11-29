@@ -1348,9 +1348,9 @@ img.sepDesk {
     padding-top: 1rem;
   }
   .note-pierdas .multimedia img {
-    height: 270px !important;
-    min-height: 270px !important;
-    max-height: 270px !important;
+    height: 250px !important;
+    min-height: 250px !important;
+    max-height: 250px !important;
   }
   .estilo-notas .iconPlay {
     position: absolute;
