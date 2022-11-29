@@ -1352,4 +1352,17 @@ img.sepDesk {
     min-height: 270px !important;
     max-height: 270px !important;
   }
+  .estilo-notas .iconPlay {
+    position: absolute;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    top: 80%;
+    left: 80%;
+    transform: translate(-50%, -50%);
+    background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Play_turquesa.svg);
+    border-radius: 3px;
+    width: 30px;
+    height: 30px;
+}
 }
