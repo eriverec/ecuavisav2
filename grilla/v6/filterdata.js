@@ -40,6 +40,7 @@ function filterData(){
     var programaItems= _jsonProgramas.length;
     for (programIndex = 0; programIndex < programaItems; programIndex++) {
         var programName = _jsonProgramas[programIndex].programa;
+        console.log(_jsonProgramas[programIndex])
         // mainRender.innerHTML = (programName+'<br><br>');
         // console.log(programName);
     }
