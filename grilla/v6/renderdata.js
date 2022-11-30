@@ -106,7 +106,7 @@ function renderProgramas(){
             programTimeEnd  = moment(_jsonProgramas[ programIndex + 1 ].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
             //console.log(programIndex + ' - '+programaItems);
         }
-
+        var botonActive= 'hidden';
         var showActive= 'bg-indigo-700';
         var ActualClass= 'px-4 py-4 text-zinc-50 bg-ecuavisa text-sm flex items-center'
         var imgs= 'https://via.placeholder.com/70'
@@ -123,6 +123,9 @@ function renderProgramas(){
                     <p class=" border-b-4 border-zinc-500 py-5 px-3 border-0 text-zinc-300 ${showActive} whitespace-no-wrap datafont">
                     <b>${programName}</b> <br> ${programTimeIni}
                     </p>
+                    <div id="botonEnvivo" class="${botonActive}">
+                      <a href="https://www.ecuavisa.com/envivo" target="_blank" class="btn-gye"> En Vivo </a>
+                    </div>
                 </td>
                 
             </tr>       
@@ -211,6 +214,7 @@ function renderProgramas(){
                     localStorage.setItem('pA', pA);
                     localStorage.setItem('hIF', hIF);
 
+                    var botonActive= '';
                     var showActive= 'bg-blue-800';
                     //console.log("Programa actualLLLL: " + programName);
                     itemtored = localStorage.getItem('programaActual');
@@ -221,7 +225,7 @@ function renderProgramas(){
 
 
 
-
+                    
                     programas.appendTo('.Tab4data');
             
                     var todayx  = new Date().toLocaleDateString("es-ES", obtenerDiaMes);
