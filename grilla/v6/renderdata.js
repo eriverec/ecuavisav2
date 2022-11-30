@@ -57,7 +57,7 @@ function activeDay(data){
     setTimeout(function(){
         console.log(data)
         var el = $(`tr.programaItem.${data}`).addClass('active-item');
-        
+        var vivo = $(`td.btnEnvivo.${data}`).removeClass('hidden');
         $('html, body').animate({
             scrollTop: $(`tr.programaItem.${data}`).offset().top - 90
         }, 1000);
@@ -106,7 +106,7 @@ function renderProgramas(){
             programTimeEnd  = moment(_jsonProgramas[ programIndex + 1 ].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
             //console.log(programIndex + ' - '+programaItems);
         }
-        var botonActive= 'hidden';
+        
         var showActive= 'bg-indigo-700';
         var ActualClass= 'px-4 py-4 text-zinc-50 bg-ecuavisa text-sm flex items-center'
         var imgs= 'https://via.placeholder.com/70'
@@ -122,7 +122,7 @@ function renderProgramas(){
                 <td class="px-0 pr-3 py-3 border-0 bg-ecuavisa text-sm  w-3/4 items-center">
                     <p class=" border-b-4 border-zinc-500 py-5 px-3 border-0 text-zinc-300 ${showActive} whitespace-no-wrap datafont">
                     <b>${programName}</b> <br> ${programTimeIni}
-                        <div id="botonEnvivo" class="${botonActive}">
+                        <div class="btnEnvivo el-${contador} hidden">
                          <a href="https://www.ecuavisa.com/envivo" target="_blank" class="btn-gye"> En Vivo </a>
                         </div>
                     </p>
@@ -201,7 +201,7 @@ function renderProgramas(){
                 if ((currentTime.isBetween(startTime, endTime)) && !entra) {
 
                     /**/
-                    var botonActive= '';
+                   
                     var entra = true;
                     var elemento = 'el-' + (contador - 1);
                     var numeroSwiper = (contador - 1);
@@ -214,7 +214,6 @@ function renderProgramas(){
                     localStorage.setItem('pA', pA);
                     localStorage.setItem('hIF', hIF);
 
-                    
                     var showActive= 'bg-blue-800';
                     //console.log("Programa actualLLLL: " + programName);
                     itemtored = localStorage.getItem('programaActual');
