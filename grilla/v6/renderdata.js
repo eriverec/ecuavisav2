@@ -188,7 +188,8 @@ function renderProgramas(){
                     'fin':endTime.toString(),
                     'initnormal':programTimeIni,
                     'finnormal':programTimeEnd,
-                    'active':currentTime.isBetween(startTime, endTime)
+                    'active':currentTime.isBetween(startTime, endTime),
+                    'region': region
                 });
                 /**/
 
