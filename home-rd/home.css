@@ -2360,6 +2360,15 @@ INICIO - BLOQUE - ESTILO
   align-items: center;
 }
 
+.HOME_MENU_RD .lista-bloque-programas {
+  padding-bottom: 50px;
+}
+
+.HOME_MENU_RD .lista-bloque-programas .swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+}
+
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div {
   background-image: linear-gradient(180deg, rgba(6, 2, 34, 0) 0%, rgba(6, 2, 34, 0.9) 0%);
   border-radius: 6px;

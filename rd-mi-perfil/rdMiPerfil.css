@@ -91,9 +91,11 @@
     font-size: 16px;
   }
 }
-.outsideEmail > div:last-child {
+
+.outsideEmail>div:last-child {
   display: none;
 }
+
 /****************NOTIFICACIONES******************/
 .container_loader {
   height: auto;
@@ -104,6 +106,7 @@
   padding-bottom: 40px;
   padding-top: 20px;
 }
+
 .loader {
   width: 75px;
   height: 75px;
@@ -111,14 +114,17 @@
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
+
 .NoticiasGuardadasBox .container_loader {
   width: 100%;
   display: block;
 }
+
 @keyframes spin {
   0% {
     transform: rotate(0deg);
   }
+
   100% {
     transform: rotate(360deg);
   }
@@ -272,8 +278,127 @@
 
 /****************SUSCRIPCIONES******************/
 
+/*INICIO - DINAMICO*/
+.temas-hot .categoryGroup .categoryListBlock .categoryListItemPosition {
+  display: none;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 30px;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 30px 10px;
+  border-bottom: 1px solid #CACACA;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem:nth-child(1) {
+  border-top: 1px solid #CACACA;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem:nth-child(2) {
+  border-top: 1px solid #CACACA;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .botones__ .button_siguiendo .follow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 20px;
+  gap: 10px;
+  width: 135.85px;
+  height: 32px;
+  background: #23DCD1;
+  border: 1px solid #23DCD1;
+  border-radius: 2px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .botones__ .button_siguiendo span {
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  text-transform: uppercase;
+  color: #2927B9;
+  padding-top: 4px;
+}
+
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .botones__ .button_seguir span {
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  text-transform: uppercase;
+  color: #2927B9;
+  padding-top: 4px;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .botones__ .button_seguir .follow {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  padding: 18px 20px;
+  gap: 10px;
+  width: 135.85px;
+  height: 32px;
+  border: 1px solid #23DCD1;
+  border-radius: 2px;
+  flex: none;
+  order: 1;
+  flex-grow: 0;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 22px;
+  line-height: 26px;
+  color: #060127;
+}
+
+.temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem .categoryListItemLink .metaTitle {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 26px;
+  color: #060127;
+  margin-bottom: 10px;
+}
+
+
+
+/*DINAMICO - FIN*/
+
+
 .MP_suscripciones {
   margin-top: 50px;
+}
+
+.MP_suscripciones .grid-miperfil {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 30px;
 }
 
 .MP_suscripciones .metaOutsideBox {
@@ -286,6 +411,10 @@
 }
 
 .MP_suscripciones .metaOutsideBox:nth-child(1) {
+  border-top: 1px solid #CACACA;
+}
+
+.MP_suscripciones .metaOutsideBox:nth-child(2) {
   border-top: 1px solid #CACACA;
 }
 
@@ -370,19 +499,35 @@
 }
 
 @media (min-width: 767px) {
-  .MP_suscripciones .content_mp {
+  /* .MP_suscripciones .content_mp {
     display: grid;
     grid-template-columns: 1fr 1fr;
     column-gap: 30px;
-  }
+  } */
 
-  .MP_suscripciones .metaOutsideBox:nth-child(2) {
-    border-top: 1px solid #CACACA;
-  }
+
+
+
 
 }
 
 @media (max-width: 767px) {
+  .temas-hot .categoryGroup .categoryListBlock .categoryList {
+    grid-template-columns: none;
+  }
+
+  .MP_suscripciones .grid-miperfil {
+    grid-template-columns: none;
+  }
+
+  .temas-hot .categoryGroup .categoryListBlock .categoryList .categoryListItem:nth-child(2) {
+    border-top: none;
+  }
+  
+  .MP_suscripciones .metaOutsideBox:nth-child(2) {
+    border-top: none;
+  }
+
   .MP_suscripciones .metaOutsideBox .metaTitle {
     font-size: 16px;
   }
@@ -390,6 +535,7 @@
   .MP_suscripciones .metaOutsideBox .metaValue {
     font-size: 16px;
   }
+
 }
 
 
@@ -590,7 +736,7 @@ button.btn-ecuavisa-noticia img {
 /****************BOTON CERRAR SESION******************/
 
 
-.collapsible_mp.container{
+.collapsible_mp.container {
   padding-right: 18px;
   padding-left: 18px;
 }
@@ -679,7 +825,7 @@ button.btn-ecuavisa-noticia img {
 
 
 /*Estilos modal*/
-#titleModal{
+#titleModal {
   color: #2927B9;
   font-family: 'Archivo';
   font-style: normal;
@@ -690,7 +836,8 @@ button.btn-ecuavisa-noticia img {
   cursor: pointer;
   width: -webkit-fill-available;
 }
-#modalcambiopass label.form-label{
+
+#modalcambiopass label.form-label {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 300;
@@ -708,7 +855,7 @@ button.btn-ecuavisa-noticia img {
   color: #d8d9db;
 }
 
-#modalcambiopass .modal-footer .btn-secondary{
+#modalcambiopass .modal-footer .btn-secondary {
   border: 1px solid #23DCD1;
   border-radius: 2px;
   font-family: 'Mattone 150';
@@ -718,10 +865,10 @@ button.btn-ecuavisa-noticia img {
   text-transform: uppercase;
   color: #2927B9;
   background-color: transparent;
-  padding:10px 25px;
+  padding: 10px 25px;
 }
 
-#modalcambiopass .modal-footer .btn-primary{
+#modalcambiopass .modal-footer .btn-primary {
   background-color: #2927b9;
   border: 1px solid #2927b9;
   border-radius: 2px;
@@ -730,9 +877,10 @@ button.btn-ecuavisa-noticia img {
   font-weight: 600;
   font-size: 12px;
   text-transform: uppercase;
-  padding:10px 25px;
+  padding: 10px 25px;
 }
-.btn-eyes{
+
+.btn-eyes {
   background-color: #2927b9;
   border: 1px solid #2927b9;
   border-radius: 2px;
@@ -741,7 +889,7 @@ button.btn-ecuavisa-noticia img {
   font-weight: 100;
   font-size: 8px;
   text-transform: uppercase;
-  padding:7px 7px;
+  padding: 7px 7px;
   top: 5px;
 }
 
@@ -767,10 +915,10 @@ button.btn-ecuavisa-noticia img {
   font-weight: 300;
 }
 
-.error.d-none{
-  display: none!important;
+.error.d-none {
+  display: none !important;
 }
 
-.error.d-block{
+.error.d-block {
   display: block;
 }

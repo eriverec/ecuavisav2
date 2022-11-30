@@ -1,6 +1,4 @@
-
-
-function collapse () {
+function collapse() {
   var coll = document.getElementsByClassName("collapsible_mp");
   var i;
 
@@ -15,6 +13,27 @@ function collapse () {
       }
     });
   }
+}
+
+
+function suscriptionDymanic() {
+  $(".categoryListItemLink").prepend('<div class="metaTitle"> Tema</div>');
+  $(".categoryListItem").append(`
+  <div class="botones__">
+    <div class="button_siguiendo">
+      <a class="follow" href="javascript:void(0);">
+        <span>Siguiendo</span>
+        <img src="https://ecuavisadev.netlify.app/rd-podcast/assets/Vector26.svg" alt="check">
+      </a>
+    </div>
+    
+    <div class="button_seguir">
+      <a class="follow" href="javascript:void(0);">
+        <span>Seguir</span>
+        <img src="https://ecuavisadev.netlify.app/rd-mi-perfil/assets/Add.svg" alt="check">
+      </a>
+    </div>
+  </div>`);
 }
 
 function DataEntrada() {
@@ -72,7 +91,7 @@ function swiperNotificaciones() {
     pagination: {
       el: ".swiper-pagination",
       clickable: true,
-      dynamicBullets:true
+      dynamicBullets: true
     },
     breakpoints: {
       600: {
@@ -95,102 +114,102 @@ function swiperNotificaciones() {
   });
 }
 
-function eyesPass(){
-  $("input[type='password'][data-eye]").each(function(i) {
-      var $this = $(this),
-        id = 'eye-password-' + i,
-        el = $('#' + id);
+function eyesPass() {
+  $("input[type='password'][data-eye]").each(function (i) {
+    var $this = $(this),
+      id = 'eye-password-' + i,
+      el = $('#' + id);
 
-      $this.wrap($("<div/>", {
-        style: 'position:relative',
-        id: id
-      }));
+    $this.wrap($("<div/>", {
+      style: 'position:relative',
+      id: id
+    }));
 
-      $this.after($("<p/>", {
-        html: 'Las constraseñas no coinciden',
-        id: `error-${i}`,
-        class:'text-danger error d-none'
-      }));
+    $this.after($("<p/>", {
+      html: 'Las constraseñas no coinciden',
+      id: `error-${i}`,
+      class: 'text-danger error d-none'
+    }));
 
-      $this.css({
-        paddingRight: 60
-      });
-      $this.after($("<div/>", {
-        html: 'Ver',
-        class: 'btn btn-primary btn-sm btn-eyes',
-        id: 'passeye-toggle-'+i,
-      }).css({
-          position: 'absolute',
-          right: 10,
-          //top: ($this.outerHeight() / 2) + 3,
-          //padding: '2px 7px',
-          //fontSize: 12,
-          cursor: 'pointer',
-      }));
-
-      $this.after($("<input/>", {
-        type: 'hidden',
-        id: 'passeye-' + i
-      }));
-
-      var invalid_feedback = $this.parent().parent().find('.invalid-feedback');
-
-      if(invalid_feedback.length) {
-        $this.after(invalid_feedback.clone());
-      }
-
-      $this.on("keyup paste", function() {
-        $("#passeye-"+i).val($(this).val());
-      });
-      $("#passeye-toggle-"+i).on("click", function() {
-        if($this.hasClass("show")) {
-          $this.attr('type', 'password');
-          $this.removeClass("show");
-          $(this).removeClass("btn-outline-primary");
-          $(this).addClass("btn-primary");
-        }else{
-          //$this.val($("#passeye-"+i).val());  
-          $this.attr('type', 'text');      
-          $this.addClass("show");
-          $(this).addClass("btn-outline-primary");
-          $(this).removeClass("btn-primary");
-        }
-      });
+    $this.css({
+      paddingRight: 60
     });
-  
-  $('#pass').on('input',function(){ 
-      var pass = $(this).val();
-      var passrepeat = $('#passrepeat').val();
-      if(passrepeat!=''){
-        perfil.contrasenia.validarPass();
+    $this.after($("<div/>", {
+      html: 'Ver',
+      class: 'btn btn-primary btn-sm btn-eyes',
+      id: 'passeye-toggle-' + i,
+    }).css({
+      position: 'absolute',
+      right: 10,
+      //top: ($this.outerHeight() / 2) + 3,
+      //padding: '2px 7px',
+      //fontSize: 12,
+      cursor: 'pointer',
+    }));
+
+    $this.after($("<input/>", {
+      type: 'hidden',
+      id: 'passeye-' + i
+    }));
+
+    var invalid_feedback = $this.parent().parent().find('.invalid-feedback');
+
+    if (invalid_feedback.length) {
+      $this.after(invalid_feedback.clone());
+    }
+
+    $this.on("keyup paste", function () {
+      $("#passeye-" + i).val($(this).val());
+    });
+    $("#passeye-toggle-" + i).on("click", function () {
+      if ($this.hasClass("show")) {
+        $this.attr('type', 'password');
+        $this.removeClass("show");
+        $(this).removeClass("btn-outline-primary");
+        $(this).addClass("btn-primary");
+      } else {
+        //$this.val($("#passeye-"+i).val());  
+        $this.attr('type', 'text');
+        $this.addClass("show");
+        $(this).addClass("btn-outline-primary");
+        $(this).removeClass("btn-primary");
       }
+    });
   });
-  $('#passrepeat').on('input',function(){ 
-      var passrepeat = $(this).val();
-      var pass = $('#pass').val();
-      if(pass!=''){
-        perfil.contrasenia.validarPass();
-      }
+
+  $('#pass').on('input', function () {
+    var pass = $(this).val();
+    var passrepeat = $('#passrepeat').val();
+    if (passrepeat != '') {
+      perfil.contrasenia.validarPass();
+    }
   });
-  $('#btnSaveM').click(function(e){
+  $('#passrepeat').on('input', function () {
+    var passrepeat = $(this).val();
+    var pass = $('#pass').val();
+    if (pass != '') {
+      perfil.contrasenia.validarPass();
+    }
+  });
+  $('#btnSaveM').click(function (e) {
     var pass = $('#pass').val();
     var passrepeat = $('#passrepeat').val();
-    if(perfil.contrasenia.validarPass() && pass!='' && passrepeat!=''){
+    if (perfil.contrasenia.validarPass() && pass != '' && passrepeat != '') {
       alert('Enviado')
-    }else{
+    } else {
       alert('Contraseñas no coinciden o están vacías')
     }
   })
 }
 
 let perfil = {
-  init:()=>{
-      eyesPass();
-      perfil.notificaciones.listar();
-      perfil.noticias.listar();
+  init: () => {
+    eyesPass();
+    perfil.notificaciones.listar();
+    perfil.noticias.listar();
   },
-  contrasenia:{
-    validarPass:function(){
+  contrasenia: {
+    validarPass: function () {
       // Ontenemos los valores de los campos de contraseñas 
       pass1 = document.getElementById('pass');
       pass2 = document.getElementById('passrepeat');
@@ -210,10 +229,10 @@ let perfil = {
       }
     }
   },
-  notificaciones:{
-    listar:function(){
+  notificaciones: {
+    listar: function () {
       var myHeaders = new Headers();
-      userId= localStorage.getItem('wylexUserId');
+      userId = localStorage.getItem('wylexUserId');
       var raw = JSON.stringify({
         "id": userId
       });
@@ -226,12 +245,12 @@ let perfil = {
       let $articles = '';
       let $idusuario = localStorage.getItem('wylexUserId') || 0;
       fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/notificationsget.php", requestOptions).then(response => {
-         return response.json();
+        return response.json();
       }).then(jsondata => {
-        if(jsondata.error){
+        if (jsondata.error) {
           perfil.notificaciones.listarUltimas();
-        }else{
-          for(var i in jsondata.usuario.Notificaciones){
+        } else {
+          for (var i in jsondata.usuario.Notificaciones) {
             const d = jsondata.usuario.Notificaciones[i];
             const iduser = jsondata.usuario.id;
             $articles += perfil.notificaciones.html_(d);
@@ -241,7 +260,7 @@ let perfil = {
         }
       });
     },
-    html_:function(data){
+    html_: function (data) {
       return `<article class="article">
                <div class="text_block">
                   <div class="section">${data.category}</div>
@@ -250,42 +269,42 @@ let perfil = {
                <div class="multimedia"> <a href="${data.url}"><img src="${data.img}" alt="${data.title}"></a> </div>
             </article>`;
     },
-    loader:function(data){
+    loader: function (data) {
       return `<div class="container_loader">
         <div class="loader">
       </div>`;
     },
-    listarUltimas:function(num = 4){
+    listarUltimas: function (num = 4) {
       var myHeaders = new Headers();
       let $articles = '';
       let $idusuario = localStorage.getItem('wylexUserId') || 0;
       fetch("https://www.ecuavisa.com/rss/data-noticia.json").then((response) => response.json())
-      .then( (jsondata) => {
-        let items = jsondata.rss.channel.item;
-        let newItems = items.slice(0 , num);
-        let json = [];
-        newItems.forEach(function(item, index) {
-            var img = Array.isArray(item.content)?item.content[0]:item.content;
+        .then((jsondata) => {
+          let items = jsondata.rss.channel.item;
+          let newItems = items.slice(0, num);
+          let json = [];
+          newItems.forEach(function (item, index) {
+            var img = Array.isArray(item.content) ? item.content[0] : item.content;
             //console.log(JSON.stringify(img))
             var jsonData = {
-                "title": item.title,
-                "img": img.url,
-                "category": item.category[0]['__text'],
-                "autor": item.pubDate,
-                "fecha": item.pubDate,
-                "url": item.link
+              "title": item.title,
+              "img": img.url,
+              "category": item.category[0]['__text'],
+              "autor": item.pubDate,
+              "fecha": item.pubDate,
+              "url": item.link
             };
             $articles += perfil.notificaciones.html_(jsonData);
+          });
+          $article.innerHTML = $articles;
+          swiperNotificaciones();
         });
-        $article.innerHTML = $articles;
-        swiperNotificaciones();
-      });
     },
   },
-  noticias:{
-    listar:function(){
+  noticias: {
+    listar: function () {
       var myHeaders = new Headers();
-      userId= localStorage.getItem('wylexUserId');
+      userId = localStorage.getItem('wylexUserId');
       var raw = JSON.stringify({
         "id": userId
       });
@@ -298,12 +317,12 @@ let perfil = {
       let $articles = '';
       let $idusuario = localStorage.getItem('wylexUserId') || 0;
       fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/notificationsget.php", requestOptions).then(response => {
-         return response.json();
+        return response.json();
       }).then(jsondata => {
-        if(jsondata.error){
-          $articles +='No tienes notas guardadas';
-        }else{
-          for(var i in jsondata.usuario.Notificaciones){
+        if (jsondata.error) {
+          $articles += 'No tienes notas guardadas';
+        } else {
+          for (var i in jsondata.usuario.Notificaciones) {
             const d = jsondata.usuario.Notificaciones[i];
             const iduser = jsondata.usuario.id;
             $articles += perfil.noticias.html_(d, i);
@@ -312,7 +331,7 @@ let perfil = {
         $articleNoticiasSave.innerHTML = $articles;
       });
     },
-    html_:function(data){
+    html_: function (data) {
       return `<article class="article">
                <div class="text_block">
                   <div class="section">${data.category}</div>
@@ -326,7 +345,7 @@ let perfil = {
                </div>
             </article>`;
     },
-    loader:function(data){
+    loader: function (data) {
       return `<div class="container_loader">
         <div class="loader blue">
       </div>`;
@@ -336,6 +355,7 @@ let perfil = {
 collapse();
 DataEntrada();
 DatosPersonales();
+suscriptionDymanic();
 /*#Notificaciones: iniciar loader*/
 let $article = document.querySelector('.notificationBox .noticias');
 $article.innerHTML = perfil.notificaciones.loader();
@@ -344,9 +364,9 @@ $article.innerHTML = perfil.notificaciones.loader();
 let $articleNoticiasSave = document.querySelector('.NoticiasGuardadasBox .noticias');
 $articleNoticiasSave.innerHTML = perfil.noticias.loader();
 /*#Fin notificaciones: iniciar loader*/
-let init_jQuery_Swiper = function(){
+let init_jQuery_Swiper = function () {
   setTimeout(function () {
-    return ((window.jQuery && (typeof Swiper !== 'undefined')) ?perfil.init():init_jQuery_Swiper());
-  }, 400) ;
+    return ((window.jQuery && (typeof Swiper !== 'undefined')) ? perfil.init() : init_jQuery_Swiper());
+  }, 400);
 }
 init_jQuery_Swiper();
