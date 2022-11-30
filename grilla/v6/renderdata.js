@@ -57,7 +57,7 @@ function activeDay(data){
     setTimeout(function(){
         console.log(data)
         var el = $(`tr.programaItem.${data}`).addClass('active-item');
-
+        
         $('html, body').animate({
             scrollTop: $(`tr.programaItem.${data}`).offset().top - 90
         }, 1000);
@@ -201,7 +201,7 @@ function renderProgramas(){
                 if ((currentTime.isBetween(startTime, endTime)) && !entra) {
 
                     /**/
-
+                    var botonActive= '';
                     var entra = true;
                     var elemento = 'el-' + (contador - 1);
                     var numeroSwiper = (contador - 1);
@@ -214,7 +214,7 @@ function renderProgramas(){
                     localStorage.setItem('pA', pA);
                     localStorage.setItem('hIF', hIF);
 
-                    var botonActive= '';
+                    
                     var showActive= 'bg-blue-800';
                     //console.log("Programa actualLLLL: " + programName);
                     itemtored = localStorage.getItem('programaActual');
