@@ -230,34 +230,10 @@ function renderProgramas(){
                      //metemos al dom el programa
             // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
             }else{ /*console.log('la fecha de hoy es '+fechahoy('fecha')+' y no coincide con '+programDate);*/ }
-            console.log("ayer",getFecha(-1),programDate)
-            // ################### ayer
-            if (getFecha(-1) === (programDate) ){
-                var ayer  = new Date(getFecha(-0)).toLocaleDateString("es-ES", obtenerDia);
-                    programas.appendTo('.Tab3data'); //metemos al dom el programa
-                    $('.Tab3').html('<h3>Ayer</h3><br><p'+ayer+'</p');
-                    $('.Tab3').parent('li').addClass('hidden');
-                /* console.log( 'Ayer fue: '+ getFecha(-1) +' y coincide con: '+ayer )*/
-            }else{ /*console.log('Ayer fue: '+ getFecha(-1) +' y no coincide con: '+programDate) */}
-            // ################### anteayer
-            if (getFecha(-2) === (programDate) ){
-                // var fixitem = $('.programaItem').data('item');
-                // if (fixitem === (`${programName}${programTimeIni}`) ){ $(fixitem).remove() }else{};
-                // programas.appendTo('.'+anteayer.toLowerCase());
-                var anteayer  = new Date(getFecha(-1)).toLocaleDateString("es-ES", obtenerDia);
-                programas.appendTo('.Tab2data'); //metemos al dom el programa
-                $('.Tab2').html('<h3>'+anteayer+'</h3><p>'+programDate+'</p>');
-                $('.Tab2').parent('li').addClass('hidden');
-                // programas.appendTo('.Tab2data');
-            // console.log('Anteayer fue: '+ getFecha(-2) +' coincide con: '+programDate) 
-            }else{ /*console.log('Anteayer fue: '+ getFecha(-2) +' y no coincide con: '+programDate) */ }
-            // ###################  tercermenos
-            if (getFecha(-3) === (programDate) ){
-                var tercermenos  = new Date(getFecha(-2)).toLocaleDateString("es-ES", obtenerDia);
-                programas.appendTo('.Tab1data'); //metemos al dom el programa
-                $('.Tab1').html('<h3>'+tercermenos+'</h3><h3>'+programDate+'</h3>');
-                $('.Tab1').parent('li').addClass('hidden');
-            }else{ }
+            $('.Tab3').parent('li').addClass('hidden');
+            $('.Tab2').parent('li').addClass('hidden');
+            $('.Tab1').parent('li').addClass('hidden');
+           
             // ###################  manana
             if (getFecha(+1) === (programDate) ){
                 var mananaDate  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDiaMes);
