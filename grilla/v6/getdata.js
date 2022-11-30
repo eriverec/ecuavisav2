@@ -50,7 +50,7 @@ if(localStorage.getItem('dHoy')){// evaluamos si la key "dHoy" existe
             let ctb = document.createElement("tbody");
             document.querySelector('table').appendChild(ctb);
             data.forEach(e => { //recorremos cada dato y creamos las filas
-                let m = `<td></td><td>${e.programa}</td><td>${e.descripción}</td><td></td><td></td><td></td><td></td>
+                let m = `<td></td><td>${e.programa}</td><td> </td><td></td><td></td><td></td><td></td>
                 <td>${e.region}</td><td>${e.día}</td><td>${e.mes}</td><td>${e.año}</td><td></td><td>${e.hora_inicio}</td><td>${e.hora_fin}</td>
                 <td></td><td></td><td></td><td></td><td>${e.fecha}</td><td></td><td></td><td></td><td></td><td>${e.id}</td>`;
                 // let m = m1.replace('""','');
