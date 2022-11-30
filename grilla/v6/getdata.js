@@ -57,6 +57,7 @@ if(localStorage.getItem('dHoy')){// evaluamos si la key "dHoy" existe
                 let ce = document.createElement("tr");
                 // ce.id = m.slice(-1)[0]
                 ce.innerHTML = m;
+                console.log(ce)
                 if (ce.innerText != "") { document.querySelector("tbody").appendChild(ce); }
             })
 
