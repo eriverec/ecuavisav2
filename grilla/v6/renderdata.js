@@ -230,7 +230,7 @@ function renderProgramas(){
                      //metemos al dom el programa
             // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
             }else{ /*console.log('la fecha de hoy es '+fechahoy('fecha')+' y no coincide con '+programDate);*/ }
-
+            console.log("ayer",getFecha(-1),programDate)
             // ################### ayer
             if (getFecha(-1) === (programDate) ){
                 var ayer  = new Date(getFecha(-0)).toLocaleDateString("es-ES", obtenerDia);
