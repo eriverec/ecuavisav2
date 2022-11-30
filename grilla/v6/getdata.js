@@ -50,15 +50,14 @@ if(localStorage.getItem('dHoy')){// evaluamos si la key "dHoy" existe
             let ctb = document.createElement("tbody");
             document.querySelector('table').appendChild(ctb);
             data.forEach(e => { //recorremos cada dato y creamos las filas
-                console.log(e.region)
+                console.log("region",e.region)
                 let m = `<td></td><td>${e.programa}</td><td> </td><td></td><td></td><td></td><td></td>
-                <td>${e.region}</td><td>${e.día}</td><td>${e.mes}</td><td>${e.año}</td><td></td><td>${e.hora_inicio}</td><td>${e.hora_fin}</td>
+                <td>${e.region}</td><td>${e.día}</td><td>${e.mes}</td><td></td><td></td><td>${e.hora_inicio}</td><td>${e.hora_fin}</td>
                 <td></td><td></td><td></td><td></td><td>${e.fecha}</td><td></td><td></td><td></td><td></td><td>${e.id}</td>`;
                 // let m = m1.replace('""','');
                 let ce = document.createElement("tr");
                 // ce.id = m.slice(-1)[0]
                 ce.innerHTML = m;
-                console.log(ce)
                 if (ce.innerText != "") { document.querySelector("tbody").appendChild(ce); }
             })
 
