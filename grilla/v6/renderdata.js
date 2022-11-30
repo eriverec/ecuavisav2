@@ -283,7 +283,7 @@ function renderProgramas(){
                 $('.Tab7').parent('li').addClass('hidden');
             }else{ }
 
-        }else{};
+        }else{ console.log("region diferente a costa")};
     //     /* para navegar entre elementos dentro se usa otro for como el ejemplo 
     //     for (noteIndex = 0; noteIndex < notesLength; noteIndex++) {
     //         console.log(JSON.infos.info[infoIndex].note.notes[noteIndex].title);
