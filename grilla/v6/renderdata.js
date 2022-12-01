@@ -57,7 +57,7 @@ function activeDay(data){
     setTimeout(function(){
         console.log(data)
         var el = $(`tr.programaItem.${data}`).addClass('active-item');
-        var vivo = $(`td.btnEnvivo.${data}`).removeClass('hidden');
+        var vivo = $(`a.btnEnvivo.${data}`).removeClass('hidden');
         $('html, body').animate({
             scrollTop: $(`tr.programaItem.${data}`).offset().top - 90
         }, 1000);
@@ -122,9 +122,7 @@ function renderProgramas(){
                 <td class="px-0 pr-3 py-3 border-0 bg-ecuavisa text-sm  w-3/4 items-center">
                     <p class=" border-b-4 border-zinc-500 py-5 px-3 border-0 text-zinc-300 ${showActive} whitespace-no-wrap datafont">
                     <b>${programName}</b> <br> ${programTimeIni}
-                        <div class="btnEnvivo el-${contador} hidden">
-                         <a href="https://www.ecuavisa.com/envivo" target="_blank" class="btn-gye"> En Vivo </a>
-                        </div>
+                         <a href="https://www.ecuavisa.com/envivo" target="_blank" class="btnEnvivo el-${contador} hidden"> En Vivo </a>  
                     </p>
                 </td>
                 
