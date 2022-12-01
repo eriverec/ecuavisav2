@@ -933,6 +933,9 @@ h2.temas_estilo {
   border-radius: 2px;
 }
 
+.tit_encontacto{
+  margin-top: 1.5rem;
+}
 
 .rankSwiper .swiper-pagination-bullet-active {
   background: #2927b9;
@@ -1366,7 +1369,7 @@ img.sepDesk {
     height: 254px !important;
   }
   .note-pierdas {
-    padding-top: 1rem;
+    padding-top: 2rem;
   }
   .note-pierdas .multimedia img {
     height: 250px !important;
