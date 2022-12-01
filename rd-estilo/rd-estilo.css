@@ -932,6 +932,27 @@ h2.temas_estilo {
 .lista_bloque_3_desktop img {
   border-radius: 2px;
 }
+
+
+.rankSwiper .swiper-pagination-bullet-active {
+  background: #2927b9;
+}
+.rankSwiper .swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+}
+.rankSwiper .swiper-pagination-bullets-dynamic {
+  width: 77px !important;
+}
+.rankSwiper .swiper-wrapper{
+  padding-bottom: 2.5rem;
+}
+
+
+
+
+
+
 .mas_temas_2_desktop {
   margin-top: 40px;
   margin-bottom: 70px;
