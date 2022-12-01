@@ -99,6 +99,17 @@ tr.programaItem td:not(.text-center) p {
 }
 
 .btnEnvivo {
-  background: white;
-  
+  background: transparent;
+  color: aliceblue;
+  border-radius: 2px;
+  padding: 18px 20px;
+  text-align: center;
+  text-transform: uppercase;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 11px;
+  line-height: 12px;
+  border: 1px solid #23DCD1;
+
 }
