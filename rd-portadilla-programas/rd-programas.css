@@ -473,7 +473,8 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
 .tarjetaSwiper {
   width: 100% !important;
-  padding: 0 25px;
+  /*padding: 0 25px;*/
+  padding: 0 40px;
 }
 
 
