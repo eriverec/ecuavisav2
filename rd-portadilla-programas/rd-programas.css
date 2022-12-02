@@ -113,7 +113,19 @@
 /* ***************************
 INICIO - BLOQUE - VIDEOS MAS VISTOS
 *************************** */
-
+.rankSwiper .swiper-pagination-bullet-active {
+  background: #2927b9;
+}
+.rankSwiper .swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+}
+.rankSwiper .swiper-pagination-bullets-dynamic {
+  width: 77px !important;
+}
+.rankSwiper .swiper-wrapper{
+  padding-bottom: 2.5rem;
+}
 .sliderVideos .videos-sem {
   display: none;
 }
@@ -655,12 +667,6 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   border: 1px #23dcd1 solid;
   font-family: 'Mattone 150';
 }
-
-
-
-
-
-
 
 .btn-encontacto,
 .btn-programas {

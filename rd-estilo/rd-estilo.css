@@ -1384,7 +1384,7 @@ img.sepDesk {
     top: 85%;
     left: 85%;
     transform: translate(-50%, -50%);
-    background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Play_turquesa.svg);
+    background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Play_turquesa.svg');
     border-radius: 3px;
     width: 24px;
     height: 24px;
