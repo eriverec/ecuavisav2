@@ -922,11 +922,3 @@ button.btn-ecuavisa-noticia img {
 .error.d-block {
   display: block;
 }
-
-.button_seguir.loading,
-.button_siguiendo.loading {
-    opacity: .5;
-    background-color: #fff;
-    pointer-events: none;
-    cursor: no-drop;
-}
