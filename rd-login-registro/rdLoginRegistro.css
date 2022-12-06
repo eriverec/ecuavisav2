@@ -73,6 +73,7 @@
 
 .section-lr .container-lr .user .formBx .box-input{ 
   display: inline-grid;
+  justify-items: center;
 }
 
 .section-lr .container-lr .user .formBx form h2 {
@@ -118,7 +119,11 @@
 }
 
 
-.section-lr .container-lr .user .formBx form .box-input img{
+.section-lr .container-lr .user .formBx form .box-input img:nth-child(1){
+  width: 75px;
+}
+
+.section-lr .container-lr .user .formBx form .box-input img:nth-child(2){
   width: 85px;
 }
 
@@ -135,7 +140,7 @@
 .section-lr .container-lr .user .formBx form .signup a {
   font-weight: 600;
   text-decoration: none;
-  color: #677eff;
+  color: #2927B9;
 }
 
 .section-lr .container-lr .signupBx {
