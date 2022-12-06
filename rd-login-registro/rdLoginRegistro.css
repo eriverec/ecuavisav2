@@ -71,7 +71,7 @@
   transition: 0.5s;
 }
 
-.section-lr .container-lr .user .formBx .box-input{ 
+.section-lr .container-lr .user .formBx .box-input {
   display: inline-grid;
   justify-items: center;
 }
@@ -104,8 +104,8 @@
 
 .section-lr .container-lr .user .formBx form input[type='submit'] {
   max-width: 100px;
-  background: #677eff;
-  color: #fff;
+  background: transparent;
+  color: #333;
   cursor: pointer;
   font-size: 14px;
   font-weight: 500;
@@ -119,11 +119,11 @@
 }
 
 
-.section-lr .container-lr .user .formBx form .box-input img:nth-child(1){
+.section-lr .container-lr .signinBx .formBx form .box-input img {
   width: 75px;
 }
 
-.section-lr .container-lr .user .formBx form .box-input img:nth-child(2){
+.section-lr .container-lr .signupBx .formBx form .box-input img {
   width: 85px;
 }
 
