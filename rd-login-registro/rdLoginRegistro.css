@@ -1,16 +1,20 @@
-@import url('https://fonts.googleapis.com/css?family=Poppins:100,200,300,400,500,600,700,800,900&display=swap');
 
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Poppins', sans-serif;
+  font-family: 'Archivo';
+}
+
+#iter-content-wrapper {
+  padding-top: 0px;
+}
+
+#iter-footer-wrapper {
+  margin-top: 0px;
 }
 
 .section-lr {
   position: relative;
   min-height: 100vh;
-  background-color: #f8dd30;
+  background-color: #2927B9;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -99,6 +103,7 @@
   font-weight: 500;
   letter-spacing: 1px;
   transition: 0.5s;
+  font-family: 'Mattone 150';
 }
 
 .section-lr .container-lr .user .formBx form .signup {
