@@ -14,5 +14,12 @@ const toggleForm = () => {
 // }
 
 window.handleCredentialResponse = (response) => {
-  console.log(response);
+  const sData = response.credential.split(".");
+  const gData = JSON.parse(atob(sData[1]));
+  //console.log(gData);
+  console.log("Email: " + gData.email);
+  console.log("Email-verified: " + gData.email_verified);
+  console.log("Firstname: " + gData.given_name);
+  console.log("Lastname: " + gData.family_name);
+  console.log("IMG-url: " + gData.picture);
 }
