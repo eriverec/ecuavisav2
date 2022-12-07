@@ -122,7 +122,7 @@ function testAPI() {
   FB.api('/me?fields=id,name,email,picture', function (response) {
     console.log('Successful login ID: ' + response.id);
     console.log('Email: ' + response.email);
-    console.log('Avatar: ' + response.picture);
+    console.log('Avatar: ' + response.picture.data.url);
     console.log('Name: ' + response.name);
     document.getElementById('status').innerHTML =
       'Thanks for logging in, ' + response.name + '!';
