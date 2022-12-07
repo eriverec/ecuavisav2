@@ -22,6 +22,12 @@
   justify-content: center;
   align-items: center;
   padding: 20px;
+  flex-direction: column;
+}
+
+.section-lr .logo-ecuavisa-lr img {
+  width: 150px;
+  margin-bottom: 22px;
 }
 
 .section-lr .container-lr {
