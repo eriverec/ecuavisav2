@@ -15,8 +15,9 @@ const toggleForm = () => {
 
 window.handleCredentialResponse = (response) => {
   const sData = response.credential.split(".");
+  console.log('sData:',sData);
   const gData = JSON.parse(atob(sData[1]));
-  //console.log(gData);
+  console.log('gData:',gData);
   console.log("Email: " + gData.email);
   console.log("Email-verified: " + gData.email_verified);
   console.log("Firstname: " + gData.given_name);
