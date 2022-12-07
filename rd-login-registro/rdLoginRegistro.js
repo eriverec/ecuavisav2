@@ -120,10 +120,10 @@ window.fbAsyncInit = function () {
 function testAPI() {
   console.log('Welcome!  Fetching your information.... ');
   FB.api('/me?fields=id,name,email,picture', function (response) {
-    console.log('Successful login for: ' + response.id);
-    console.log('Successful login for: ' + response.email);
-    console.log('Successful login for: ' + response.picture);
-    console.log('Successful login for: ' + response.name);
+    console.log('Successful login ID: ' + response.id);
+    console.log('Email: ' + response.email);
+    console.log('Avatar: ' + response.picture);
+    console.log('Name: ' + response.name);
     document.getElementById('status').innerHTML =
       'Thanks for logging in, ' + response.name + '!';
   });
