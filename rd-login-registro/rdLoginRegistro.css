@@ -84,16 +84,20 @@
 
 .section-lr .container-lr .user .formBx form .boton-redes-lr {
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.section-lr .container-lr .user .formBx form .boton-redes-lr .br-facebook .facebook{
+.section-lr .container-lr .user .formBx form .boton-redes-lr .br-facebook .facebook {
   background: #2374f2;
   padding: 10px;
   border-radius: 4px;
 }
 
-.section-lr .container-lr .user .formBx form .boton-redes-lr .br-google{
+.section-lr .container-lr .user .formBx form .boton-redes-lr .br-google {
   display: inline-block;
+  margin-right: 10px;
 }
 
 .section-lr .container-lr .user .formBx form h2 {
