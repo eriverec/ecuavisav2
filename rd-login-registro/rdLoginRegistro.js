@@ -138,7 +138,7 @@ function fb_login() {
       access_token = response.authResponse.accessToken; //get access token
       user_id = response.authResponse.userID; //get FB UID
 
-      FB.api('/me', function (response) {
+      FB.api('/me?fields=id,name,email,picture', function (response) {
         user_email = response.email; //get user email
         console.log('Successful login ID: ' + response.id);
         console.log('Email: ' + user_email);
