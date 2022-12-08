@@ -82,7 +82,7 @@
   justify-items: center;
 }
 
-.section-lr .container-lr .user .formBx form .boton-redes-lr{
+.section-lr .container-lr .user .formBx form .boton-redes-lr {
   width: 218px;
 }
 
@@ -192,6 +192,43 @@
 .section-lr .container-lr.active .signinBx .imgBx {
   left: -100%;
 }
+
+.auth-method-separator {
+  font-size: 16px;
+  font-weight: 400;
+  margin: 1em auto;
+  position: relative;
+  text-align: center;
+}
+
+.auth-method-separator:before {
+  left: 0;
+}
+
+.auth-method-separator:after {
+  right: 0;
+}
+
+.auth-method-separator:after,
+.auth-method-separator:before {
+  border-top: 1px solid #333;
+  content: " ";
+  display: inline-block;
+  position: absolute;
+  top: .7em;
+  width: 43%;
+}
+
+.auth-method-separator:after,
+.auth-method-separator:before {
+  border-top: 1px solid #333;
+  content: " ";
+  display: inline-block;
+  position: absolute;
+  top: .7em;
+  width: 43%;
+}
+
 
 @media (max-width: 991px) {
   .section-lr .container-lr {
