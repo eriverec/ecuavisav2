@@ -129,26 +129,30 @@ function testAPI() {
 
 
 
-function fb_login(){
-  FB.login(function(response) {
+function fb_login() {
+  FB.login(function (response) {
 
-      if (response.authResponse) {
-          console.log('Welcome!  Fetching your information.... ');
-          //console.log(response); // dump complete info
-          access_token = response.authResponse.accessToken; //get access token
-          user_id = response.authResponse.userID; //get FB UID
+    if (response.authResponse) {
+      console.log('Welcome!  Fetching your information.... ');
+      //console.log(response); // dump complete info
+      access_token = response.authResponse.accessToken; //get access token
+      user_id = response.authResponse.userID; //get FB UID
 
-          FB.api('/me', function(response) {
-              user_email = response.email; //get user email
+      FB.api('/me', function (response) {
+        user_email = response.email; //get user email
+        console.log('Successful login ID: ' + response.id);
+        console.log('Email: ' + user_email);
+        console.log('Avatar: ' + response.picture.data.url);
+        console.log('Name: ' + response.name);
         // you can store this data into your database             
-          });
+      });
 
-      } else {
-          //user hit cancel button
-          console.log('User cancelled login or did not fully authorize.');
+    } else {
+      //user hit cancel button
+      console.log('User cancelled login or did not fully authorize.');
 
-      }
+    }
   }, {
-      scope: 'public_profile,email'
+    scope: 'public_profile,email'
   });
 }
