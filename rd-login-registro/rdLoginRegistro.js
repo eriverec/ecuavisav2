@@ -64,8 +64,7 @@ function statusChangeCallback(response) {
     testAPI();
   } else {
     // The person is not logged into your app or we are unable to tell.
-    document.getElementById('status').innerHTML = 'Please log ' +
-      'into this app.';
+    // document.getElementById('status').innerHTML = 'Please log ' + 'into this app.';
   }
 }
 
@@ -124,7 +123,6 @@ function testAPI() {
     console.log('Email: ' + response.email);
     console.log('Avatar: ' + response.picture.data.url);
     console.log('Name: ' + response.name);
-    document.getElementById('status').innerHTML =
-      'Thanks for logging in, ' + response.name + '!';
+    // document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!';
   });
 }
