@@ -82,6 +82,10 @@
   justify-items: center;
 }
 
+.section-lr .container-lr .user .formBx form .boton-redes-lr{
+  width: 218px;
+}
+
 .section-lr .container-lr .user .formBx form h2 {
   font-size: 18px;
   font-weight: 600;
