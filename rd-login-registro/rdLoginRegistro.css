@@ -257,3 +257,9 @@
     width: 100%;
   }
 }
+
+@media (max-width: 375px) {
+  .section-lr .container-lr {
+    max-width: 300px;
+  }
+}
