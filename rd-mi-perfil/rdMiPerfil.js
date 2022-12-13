@@ -4,7 +4,6 @@ if (!UserId){
     /*Si no existe sesión lo 
     va a redireccionar a la principal */
     window.location = URL_principal_G;
-    return false;
 }
 
 function collapse() {
