@@ -1,3 +1,5 @@
+console.log(URL_principal_G)
+
 function collapse() {
   var coll = document.getElementsByClassName("collapsible_mp");
   var i;
