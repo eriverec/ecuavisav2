@@ -1,4 +1,11 @@
 var URL_principal_G = 'https://www.ecuavisa.com/';
+var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
+if (!UserId){
+    /*Si no existe sesión lo 
+    va a redireccionar a la principal */
+    window.location = URL_principal_G;
+    return false;
+}
 
 function collapse() {
   var coll = document.getElementsByClassName("collapsible_mp");
