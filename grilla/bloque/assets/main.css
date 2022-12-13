@@ -299,9 +299,9 @@
      padding-bottom: 20px;
    }
 
-   .mediaBlock__ .t_prog .icon_player_prog.desktop_player {
+   /* .mediaBlock__ .t_prog .icon_player_prog.desktop_player {
      display: none;
-   }
+   } */
  }
 
  @media (min-width:576px) {
