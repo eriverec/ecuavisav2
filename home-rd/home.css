@@ -538,7 +538,7 @@ Cambio de tamaño de imagen grande izq
   }
 
   .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
-    align-items: baseline;
+    /* align-items: baseline; */
     margin-top: 1.5rem;
   }
 
