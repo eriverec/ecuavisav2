@@ -1,4 +1,4 @@
-console.log(URL_principal_G)
+var URL_principal_G = 'https://www.ecuavisa.com/';
 
 function collapse() {
   var coll = document.getElementsByClassName("collapsible_mp");
