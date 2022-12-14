@@ -6,7 +6,7 @@ if (!UserId){
     va a redireccionar al login */
     //window.location = URL_login_G;
 }
-$( document ).ready(async function() {
+$( document ).ready( function() {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   var myHeaders = new Headers();
@@ -19,7 +19,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
-await fetch("https://ecuavisa-register.onrender.com/tasks", requestOptions)
+ fetch("https://ecuavisa-register.onrender.com/tasks", requestOptions)
   .then(response => response.json())
   .then(result => {console.log(result); 
     localStorage.wylexUserId=result.userId;
