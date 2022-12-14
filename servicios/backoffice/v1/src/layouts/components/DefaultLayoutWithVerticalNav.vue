@@ -39,7 +39,7 @@ const { width: windowWidth } = useWindowSize()
           />
         </VBtn>
 
-        <VBtn
+        <!-- <VBtn
           icon
           variant="text"
           color="default"
@@ -50,14 +50,14 @@ const { width: windowWidth } = useWindowSize()
             icon="tabler-search"
             size="24"
           />
-        </VBtn>
+        </VBtn> -->
 
         <VSpacer />
 
-        <NavBarI18n />
+        <!-- <NavBarI18n /> -->
         <NavbarThemeSwitcher />
         <NavbarShortcuts />
-        <NavBarNotifications class="me-2" />
+        <!-- <NavBarNotifications class="me-2" /> -->
         <UserProfile />
       </div>
     </template>

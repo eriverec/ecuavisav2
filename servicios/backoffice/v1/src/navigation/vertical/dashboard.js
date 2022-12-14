@@ -4,7 +4,7 @@ export default [
     icon: { icon: 'tabler-smart-home' },
     children: [
       {
-        title: 'Analytics',
+        title: 'Analítica',
         to: 'dashboards-analytics',
       },
       {
