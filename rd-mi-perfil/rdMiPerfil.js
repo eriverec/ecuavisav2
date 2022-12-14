@@ -6,8 +6,8 @@ if (!UserId){
     va a redireccionar al login */
     //window.location = URL_login_G;
 }
-$( document ).ready( function() {
-  const queryString = window.location.search;
+
+const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   var myHeaders = new Headers();
   const tk = urlParams.get('tk')
@@ -37,6 +37,8 @@ if (!UserId){
 }
   })
   .catch(error => {console.log('error', error); window.location = URL_login_G});
+$( document ).ready( function() {
+  
   
 
   
