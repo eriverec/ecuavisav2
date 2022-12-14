@@ -37,13 +37,13 @@ if (!UserId){
 }
   })
   .catch(error => {console.log('error', error); window.location = URL_login_G});
-$( document ).ready( function() {
+/* $( document ).ready( function() {
   
   
 
   
       window.history.replaceState({}, document.title, "?" + "");
-  });
+  }); */
 function collapse() {
   var coll = document.getElementsByClassName("collapsible_mp");
   var i;
