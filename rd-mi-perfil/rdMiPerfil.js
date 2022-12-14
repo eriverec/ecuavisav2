@@ -1,9 +1,10 @@
 var URL_principal_G = 'https://www.ecuavisa.com/';
+var URL_login_G = 'https://www.ecuavisa.com/servicios/rd-login-registro';
 var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
 if (!UserId){
     /*Si no existe sesión lo 
-    va a redireccionar a la principal */
-    window.location = URL_principal_G;
+    va a redireccionar al login */
+    window.location = URL_login_G;
 }
 
 function collapse() {
