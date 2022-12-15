@@ -6,7 +6,8 @@ if (!UserId){
     va a redireccionar al login */
     //window.location = URL_login_G;
 }
-const queryString = window.location.search;
+async function Token(){
+  const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   var myHeaders = new Headers();
   const tk = urlParams.get('tk')
@@ -36,6 +37,8 @@ const queryString = window.location.search;
   // }
     })
     .catch(error => {console.log('error', error); window.location = URL_login_G});
+}
+
 $(document).ready(async function()  {
   
 
