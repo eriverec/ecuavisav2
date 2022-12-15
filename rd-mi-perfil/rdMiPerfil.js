@@ -21,7 +21,7 @@ var requestOptions = {
 
  const register = fetch("https://ecuavisa-register.onrender.com/tasks", requestOptions)
   .then(response => response.json())
-  .then(result => {console.log(result); 
+  .then (async (result) => {console.log(result); 
     localStorage.wylexUserId=result.userId;
     localStorage.wylexFirstName=result.first_name;
     localStorage.wylexLastName=result.last_name;
