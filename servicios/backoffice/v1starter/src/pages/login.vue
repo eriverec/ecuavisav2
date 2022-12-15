@@ -64,7 +64,7 @@ const rememberMe = ref(false)
           />
 
           <h5 class="text-h5 font-weight-semibold mb-1">
-            Welcome to {{ themeConfig.app.title }}! 👋🏻
+            Bienvenido a {{ themeConfig.app.title }}! 👋🏻
           </h5>
           <p class="mb-0">
             Please sign-in to your account and start the adventure
@@ -112,12 +112,12 @@ const rememberMe = ref(false)
                     v-model="rememberMe"
                     label="Remember me"
                   />
-                  <a
+                  <!-- <a
                     class="text-primary ms-2 mb-1"
                     href="#"
                   >
                     Forgot Password?
-                  </a>
+                  </a> -->
                 </div>
 
                 <VBtn
@@ -129,7 +129,7 @@ const rememberMe = ref(false)
               </VCol>
 
               <!-- create account -->
-              <VCol
+              <!-- <VCol
                 cols="12"
                 class="text-center"
               >
@@ -140,23 +140,23 @@ const rememberMe = ref(false)
                 >
                   Create an account
                 </a>
-              </VCol>
-              <VCol
+              </VCol> -->
+              <!-- <VCol
                 cols="12"
                 class="d-flex align-center"
               >
                 <VDivider />
                 <span class="mx-4">or</span>
                 <VDivider />
-              </VCol>
+              </VCol> -->
 
               <!-- auth providers -->
-              <VCol
+              <!-- <VCol
                 cols="12"
                 class="text-center"
               >
                 <AuthProvider />
-              </VCol>
+              </VCol> -->
             </VRow>
           </VForm>
         </VCardText>

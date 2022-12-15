@@ -4,22 +4,22 @@
     <span class="d-flex align-center">
       &copy;
       {{ new Date().getFullYear() }}
-      Made With
+      Hecho con
       <VIcon
         icon="tabler-heart"
         color="error"
         size="1.25rem"
         class="mx-1"
       />
-      By <a
-        href="https://pixinvent.com"
+      Por <a
+        href="https://www.ecuavisa.com"
         target="_blank"
         rel="noopener noreferrer"
         class="text-primary ms-1"
-      >Pixinvent</a>
+      >Ecuavisa</a>
     </span>
     <!-- 👉 Footer: right content -->
-    <span class="d-md-flex gap-x-4 text-primary d-none">
+    <!-- <span class="d-md-flex gap-x-4 text-primary d-none">
       <a
         href="https://themeforest.net/licenses/standard"
         target="noopener noreferrer"
@@ -32,6 +32,6 @@
         href="https://pixinvent.com/demo/vuexy-vuejs-admin-dashboard-template/documentation/"
         target="noopener noreferrer"
       >Documentation</a>
-    </span>
+    </span> -->
   </div>
 </template>

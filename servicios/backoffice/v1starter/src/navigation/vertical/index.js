@@ -1,12 +1,12 @@
 export default [
   {
-    title: 'Home',
+    title: 'Dashboard',
     to: { name: 'index' },
     icon: { icon: 'tabler-smart-home' },
   },
   {
-    title: 'Second page',
-    to: { name: 'second-page' },
-    icon: { icon: 'tabler-file' },
+    title: 'Usuarios',
+    to: { name: 'user-list' },
+    icon: { icon: 'tabler-user' },
   },
 ]
