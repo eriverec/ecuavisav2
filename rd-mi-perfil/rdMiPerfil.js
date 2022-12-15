@@ -20,7 +20,7 @@ async function Token(){
       localStorage.wylexFirstName=result.first_name;
       localStorage.wylexLastName=result.last_name;
       localStorage.wylexEmail=result.email;
-      if(result.wylexAvatar){
+      if(result.avatar){
         localStorage.wylexAvatar=result.avatar;
       }
   //     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
