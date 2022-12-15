@@ -8,7 +8,7 @@ if (!UserId){
 }
 
 
-window.addEventListener('beforeprint', async (event) => {
+$(document).ready(async function()  {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   var myHeaders = new Headers();
@@ -38,7 +38,7 @@ await fetch("https://ecuavisa-register.onrender.com/tasks", requestOptions)
 //     window.location = URL_login_G;
 // }
   })
-  .catch(error => {console.log('error', error)/*; window.location = URL_login_G*/});
+  .catch(error => {console.log('error', error); window.location = URL_login_G});
 });
 /* $( document ).ready( function() {
   
