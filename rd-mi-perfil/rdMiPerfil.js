@@ -19,7 +19,7 @@ var requestOptions = {
   redirect: 'follow'
 };
 
- await fetch("https://ecuavisa-register.onrender.com/tasks", requestOptions)
+ const register = fetch("https://ecuavisa-register.onrender.com/tasks", requestOptions)
   .then(response => response.json())
   .then(result => {console.log(result); 
     localStorage.wylexUserId=result.userId;
