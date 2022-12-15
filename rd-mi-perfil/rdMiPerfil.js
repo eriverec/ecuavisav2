@@ -6,6 +6,7 @@ if (!UserId){
     va a redireccionar al login */
     //window.location = URL_login_G;
 }
+Token()
 async function Token(){
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
