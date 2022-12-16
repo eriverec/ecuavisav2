@@ -152,6 +152,7 @@ function fb_login() {
 }
 
 function login() {
+  var URL_login_G = 'https://www.ecuavisa.com/servicios/rd-login-registro';
   document.getElementById("logEmail").required = true;
   document.getElementById("logPass").required = true;
 
@@ -171,7 +172,10 @@ function login() {
     .then((response) => response.json())
     .then(async (result) => {
       console.log(result);
-      localStorage.wylexToken = result.token;
+      if (result.token) {
+        window.location = URL_login_G + "JWT "+ user.token;
+      }else
+      ;
     })
     .catch((error) => {
       console.log("error", error); /*; window.location = URL_login_G*/
