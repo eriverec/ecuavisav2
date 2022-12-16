@@ -1,8 +1,8 @@
 //Animacion de cambio de tabs
 const toggleForm = () => {
-  const container_lr = document.querySelector('.container-lr');
-  container_lr.classList.toggle('active');
-}
+  const container_lr = document.querySelector(".container-lr");
+  container_lr.classList.toggle("active");
+};
 
 //Google Platform
 // function onSignIn(googleUser) {
@@ -15,17 +15,15 @@ const toggleForm = () => {
 
 window.handleCredentialResponse = (response) => {
   const sData = response.credential.split(".");
-  console.log('sData:', sData);
+  console.log("sData:", sData);
   const gData = JSON.parse(atob(sData[1]));
-  console.log('gData:', gData);
+  console.log("gData:", gData);
   console.log("Email: " + gData.email);
   console.log("Email-verified: " + gData.email_verified);
   console.log("Firstname: " + gData.given_name);
   console.log("Lastname: " + gData.family_name);
   console.log("IMG-url: " + gData.picture);
-}
-
-
+};
 
 //Facebook init
 // window.fbAsyncInit = function () {
@@ -48,18 +46,16 @@ window.handleCredentialResponse = (response) => {
 //   fjs.parentNode.insertBefore(js, fjs);
 // }(document, 'script', 'facebook-jssdk'));
 
-
-
 //Login facebook
 // This is called with the results from from FB.getLoginStatus().
 function statusChangeCallback(response) {
-  console.log('statusChangeCallback');
+  console.log("statusChangeCallback");
   console.log(response);
   // The response object is returned with a status field that lets the
   // app know the current login status of the person.
   // Full docs on the response object can be found in the documentation
   // for FB.getLoginStatus().
-  if (response.status === 'connected') {
+  if (response.status === "connected") {
     // Logged into your app and Facebook.
     testAPI();
   } else {
@@ -79,14 +75,14 @@ function checkLoginState() {
 
 window.fbAsyncInit = function () {
   FB.init({
-    appId: '617025596888772',
-    cookie: true, // enable cookies to allow the server to access 
+    appId: "617025596888772",
+    cookie: true, // enable cookies to allow the server to access
     // the session
     xfbml: true, // parse social plugins on this page
-    version: 'v15.0' // Specify the Graph API version to use
+    version: "v15.0", // Specify the Graph API version to use
   });
 
-  // Now that we've initialized the JavaScript SDK, we call 
+  // Now that we've initialized the JavaScript SDK, we call
   // FB.getLoginStatus().  This function gets the state of the
   // person visiting this page and can return one of three states to
   // the callback you provide.  They can be:
@@ -101,136 +97,121 @@ window.fbAsyncInit = function () {
   FB.getLoginStatus(function (response) {
     statusChangeCallback(response);
   });
-
 };
 
 // Load the SDK asynchronously
 (function (d, s, id) {
-  var js, fjs = d.getElementsByTagName(s)[0];
+  var js,
+    fjs = d.getElementsByTagName(s)[0];
   if (d.getElementById(id)) return;
   js = d.createElement(s);
   js.id = id;
   js.src = "https://connect.facebook.net/es_ES/sdk.js";
   fjs.parentNode.insertBefore(js, fjs);
-}(document, 'script', 'facebook-jssdk'));
+})(document, "script", "facebook-jssdk");
 
 // Here we run a very simple test of the Graph API after login is
 // successful.  See statusChangeCallback() for when this call is made.
 function testAPI() {
-  console.log('Welcome!  Fetching your information.... ');
-  FB.api('/me?fields=id,name,email,picture', function (response) {
-    console.log('Successful login ID: ' + response.id);
-    console.log('Email: ' + response.email);
-    console.log('Avatar: ' + response.picture.data.url);
-    console.log('Name: ' + response.name);
+  console.log("Welcome!  Fetching your information.... ");
+  FB.api("/me?fields=id,name,email,picture", function (response) {
+    console.log("Successful login ID: " + response.id);
+    console.log("Email: " + response.email);
+    console.log("Avatar: " + response.picture.data.url);
+    console.log("Name: " + response.name);
     // document.getElementById('status').innerHTML = 'Thanks for logging in, ' + response.name + '!';
   });
 }
 
-
-
 function fb_login() {
-  FB.login(function (response) {
+  FB.login(
+    function (response) {
+      if (response.authResponse) {
+        console.log("Welcome!  Fetching your information.... ");
+        //console.log(response); // dump complete info
+        access_token = response.authResponse.accessToken; //get access token
+        user_id = response.authResponse.userID; //get FB UID
 
-    if (response.authResponse) {
-      console.log('Welcome!  Fetching your information.... ');
-      //console.log(response); // dump complete info
-      access_token = response.authResponse.accessToken; //get access token
-      user_id = response.authResponse.userID; //get FB UID
-
-      FB.api('/me?fields=id,name,email,picture', function (response) {
-        user_email = response.email; //get user email
-        console.log('Successful login ID: ' + response.id);
-        console.log('Email: ' + user_email);
-        console.log('Avatar: ' + response.picture.data.url);
-        console.log('Name: ' + response.name);
-        // you can store this data into your database             
-      });
-
-    } else {
-      //user hit cancel button
-      console.log('User cancelled login or did not fully authorize.');
-
+        FB.api("/me?fields=id,name,email,picture", function (response) {
+          user_email = response.email; //get user email
+          console.log("Successful login ID: " + response.id);
+          console.log("Email: " + user_email);
+          console.log("Avatar: " + response.picture.data.url);
+          console.log("Name: " + response.name);
+          // you can store this data into your database
+        });
+      } else {
+        //user hit cancel button
+        console.log("User cancelled login or did not fully authorize.");
+      }
+    },
+    {
+      scope: "public_profile,email",
     }
-  }, {
-    scope: 'public_profile,email'
-  });
+  );
 }
 
-function login(){
+function login() {
+  document.getElementById("logEmail").required = true;
+  document.getElementById("logPass").required = true;
 
-document.getElementById("logEmail").required = true;
-document.getElementById("logPass").required = true;
+  let email = document.getElementById("logEmail").value;
+  let password = document.getElementById("logPass").value;
 
-let email = document.getElementById("logEmail").value;
-let password = document.getElementById("logPass").value;
-
-
-
-let myHeaders = new Headers();
-myHeaders.append("email", email, "password", password);
-
-let requestOptions = {
-  method: 'POST',
-  headers: myHeaders,
-  redirect: 'follow'
-};
-
-fetch("https://ecuavisa-register.onrender.com/signIn", requestOptions)
-  .then(response => response.json())
-  .then (async (result) => {console.log(result); 
-    localStorage.wylexToken=result.token; 
+  fetch("https://ecuavisa-register.onrender.com/signIn", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      email: email,
+      password: password
+    }),
   })
-  .catch(error => {console.log('error', error)/*; window.location = URL_login_G*/});
+    .then((response) => response.json())
+    .then(async (result) => {
+      console.log(result);
+      localStorage.wylexToken = result.token;
+    })
+    .catch((error) => {
+      console.log("error", error); /*; window.location = URL_login_G*/
+    });
 }
 
-function register(){
-
+function register() {
   document.getElementById("regName").required = true;
   document.getElementById("regEmail").required = true;
   document.getElementById("regPass").required = true;
   document.getElementById("regConf").required = true;
-  
 
-  let name = document.getElementById("regName").value.trim().split(' ');
+  let name = document.getElementById("regName").value.trim().split(" ");
   let email = document.getElementById("regEmail").value.trim();
   let password = document.getElementById("regPass").value;
-  let passwordConf = document.getElementById("regConf").value; 
-  
-  console.log(email);
+  let passwordConf = document.getElementById("regConf").value;
 
 
   if (password !== passwordConf) {
-    console.log("Las contraseñas no coinciden")
+    console.log("Las contraseñas no coinciden");
   } else {
-    
-    // let myHeaders = new Headers();
-    // myHeaders.append("nombre", name[0], "apellido", name[1],"email", email, "password", password);
-  
-    // let requestOptions = {
-    // method: 'POST',
-    // headers: myHeaders,
-    // redirect: 'follow'
-    // };
-  
-   fetch("https://ecuavisa-register.onrender.com/register",{method: 'POST',
-   headers:{
-     'Content-Type': 'application/x-www-form-urlencoded'
-   },    
-   body: new URLSearchParams({
-       'email': email,
-       'nombre': name[0],
-       'apellido': name[1],
-       'password': password
-   })
-  }
-   )
-    .then(response => response.json())
-    .then (async (result) => {console.log(result); 
+   
+    fetch("https://ecuavisa-register.onrender.com/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        email: email,
+        nombre: name[0],
+        apellido: name[1],
+        password: password,
+      }),
     })
-    .catch(error => {console.log('error', error)/*; window.location = URL_login_G*/});
-
+      .then((response) => response.json())
+      .then(async (result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log("error", error); /*; window.location = URL_login_G*/
+      });
   }
-
-  
-  }
+}
