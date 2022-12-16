@@ -173,7 +173,7 @@ function login() {
     .then(async (result) => {
       console.log(result);
       if (result.token) {
-        window.location = URL_login_G + "JWT "+ result.token;
+        window.location = "https://www.ecuavisa.com/servicios/rd-mi-perfil-dev?tk="+ result.token;
       }else
       ;
     })
