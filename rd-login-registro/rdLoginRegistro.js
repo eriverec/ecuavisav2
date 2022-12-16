@@ -193,7 +193,7 @@ function register(){
   
 
   let name = document.getElementById("regName").value.trim().split(' ');
-  let email = document.getElementById("regEmail").value;
+  let email = document.getElementById("regEmail").value.trim();
   let password = document.getElementById("regPass").value;
   let passwordConf = document.getElementById("regConf").value; 
   
@@ -204,16 +204,27 @@ function register(){
     console.log("Las contraseñas no coinciden")
   } else {
     
-    let myHeaders = new Headers();
-    myHeaders.append("nombre", name[0], "apellido", name[1],"email", email, "password", password);
+    // let myHeaders = new Headers();
+    // myHeaders.append("nombre", name[0], "apellido", name[1],"email", email, "password", password);
   
-    let requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    redirect: 'follow'
-    };
+    // let requestOptions = {
+    // method: 'POST',
+    // headers: myHeaders,
+    // redirect: 'follow'
+    // };
   
-   fetch("https://ecuavisa-register.onrender.com/register", requestOptions)
+   fetch("https://ecuavisa-register.onrender.com/register",{method: 'POST',
+   headers:{
+     'Content-Type': 'application/x-www-form-urlencoded'
+   },    
+   body: new URLSearchParams({
+       'email': email,
+       'nombre': name[0],
+       'apellido': name[1],
+       'password': password
+   })
+  }
+   )
     .then(response => response.json())
     .then (async (result) => {console.log(result); 
     })
