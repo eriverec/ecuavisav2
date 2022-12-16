@@ -156,3 +156,71 @@ function fb_login() {
     scope: 'public_profile,email'
   });
 }
+
+function login(){
+
+document.getElementById("logEmail").required = true;
+document.getElementById("logPass").required = true;
+
+let email = document.getElementById('logEmail').value;
+let password = document.getElementById('logPass').value;
+
+
+
+let myHeaders = new Headers();
+myHeaders.append("email", email, "password", password);
+
+let requestOptions = {
+  method: 'POST',
+  headers: myHeaders,
+  redirect: 'follow'
+};
+
+fetch("https://ecuavisa-register.onrender.com/signIn", requestOptions)
+  .then(response => response.json())
+  .then (async (result) => {console.log(result); 
+    localStorage.wylexToken=result.token; 
+  })
+  .catch(error => {console.log('error', error)/*; window.location = URL_login_G*/});
+}
+
+function register(){
+
+  document.getElementById("regName").required = true;
+  document.getElementById("regEmail").required = true;
+  document.getElementById("regPass").required = true;
+  document.getElementById("regConf").required = true;
+  
+
+  let firstName = document.getElementById('regName').value.trim().split(' ')[0];
+  let lastName = document.getElementById('regName').value.trim().split(' ')[1];
+  let email = document.getElementById('regEmail').value;
+  let password = document.getElementById('regPass').value;
+  let passwordConf = document.getElementById('regConf').value; 
+  
+
+
+
+  if (password !== passwordConf) {
+    console.log("Las contraseñas no coinciden")
+  } else {
+    
+    let myHeaders = new Headers();
+    myHeaders.append("nombre", firstName, "apellido", lastName,"email", email, "password", password);
+  
+    let requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    redirect: 'follow'
+    };
+  
+   fetch("https://ecuavisa-register.onrender.com/register", requestOptions)
+    .then(response => response.json())
+    .then (async (result) => {console.log(result); 
+    })
+    .catch(error => {console.log('error', error)/*; window.location = URL_login_G*/});
+
+  }
+
+  
+  }
