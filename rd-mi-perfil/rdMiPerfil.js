@@ -1,6 +1,9 @@
 
 Token()
 async function Token(){
+  var URL_principal_G = 'https://www.ecuavisa.com/';
+  var URL_login_G = 'https://www.ecuavisa.com/servicios/rd-login-registro';
+    
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   var myHeaders = new Headers();
@@ -29,6 +32,8 @@ async function Token(){
       if(result.avatar){
         localStorage.wylexAvatar=result.avatar;
       }
+
+
   //     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
   // if (!UserId){
   //     /*Si no existe sesión lo 
@@ -41,8 +46,6 @@ async function Token(){
       window.location = URL_login_G
     });
 
-    var URL_principal_G = 'https://www.ecuavisa.com/';
-    var URL_login_G = 'https://www.ecuavisa.com/servicios/rd-login-registro';
     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
     if (!UserId){
         /*Si no existe sesión lo 
