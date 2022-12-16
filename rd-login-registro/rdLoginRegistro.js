@@ -162,8 +162,8 @@ function login(){
 document.getElementById("logEmail").required = true;
 document.getElementById("logPass").required = true;
 
-let email = document.getElementById('logEmail').value;
-let password = document.getElementById('logPass').value;
+let email = document.getElementById("logEmail").value;
+let password = document.getElementById("logPass").value;
 
 
 
@@ -192,13 +192,12 @@ function register(){
   document.getElementById("regConf").required = true;
   
 
-  let firstName = document.getElementById('regName').value.trim().split(' ')[0];
-  let lastName = document.getElementById('regName').value.trim().split(' ')[1];
-  let email = document.getElementById('regEmail').value;
-  let password = document.getElementById('regPass').value;
-  let passwordConf = document.getElementById('regConf').value; 
+  let name = document.getElementById("regName").value.trim().split(' ');
+  let email = document.getElementById("regEmail").value;
+  let password = document.getElementById("regPass").value;
+  let passwordConf = document.getElementById("regConf").value; 
   
-
+  console.log(email);
 
 
   if (password !== passwordConf) {
@@ -206,7 +205,7 @@ function register(){
   } else {
     
     let myHeaders = new Headers();
-    myHeaders.append("nombre", firstName, "apellido", lastName,"email", email, "password", password);
+    myHeaders.append("nombre", name[0], "apellido", name[1],"email", email, "password", password);
   
     let requestOptions = {
     method: 'POST',
