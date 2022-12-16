@@ -173,7 +173,7 @@ function login() {
     .then(async (result) => {
       console.log(result);
       if (result.token) {
-        window.location = URL_login_G + "JWT "+ user.token;
+        window.location = URL_login_G + "JWT "+ result.token;
       }else
       ;
     })
