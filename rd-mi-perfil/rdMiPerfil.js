@@ -15,7 +15,13 @@ async function Token(){
   
   await fetch("https://ecuavisa-register.onrender.com/tasks", requestOptions)
     .then(response => response.json())
-    .then (async (result) => {console.log(result); 
+    .then (async (result) => {
+      console.log(result); 
+      if(result.message=='Usuario No Autorizado'){
+        window.location = URL_login_G;
+        return true;
+      }
+
       localStorage.wylexUserId=result.userId;
       localStorage.wylexFirstName=result.first_name;
       localStorage.wylexLastName=result.last_name;
@@ -30,7 +36,10 @@ async function Token(){
   //     window.location = URL_login_G;
   // }
     })
-    .catch(error => {console.log('error', error); window.location = URL_login_G});
+    .catch(error => {
+      console.log('error', error); 
+      window.location = URL_login_G
+    });
 
     var URL_principal_G = 'https://www.ecuavisa.com/';
     var URL_login_G = 'https://www.ecuavisa.com/servicios/rd-login-registro';
