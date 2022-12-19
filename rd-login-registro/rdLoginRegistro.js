@@ -174,8 +174,7 @@ function login() {
       console.log(result);
       if (result.token) {
         window.location = "https://www.ecuavisa.com/servicios/rd-mi-perfil-dev?tk="+ result.token;
-      }else
-      ;
+      }
     })
     .catch((error) => {
       console.log("error", error); /*; window.location = URL_login_G*/
