@@ -20,11 +20,8 @@ async function Token(){
     .then(response => response.json())
     .then (async (result) => {
       console.log(result);
-      // if(result.message=='Usuario No Autorizado' ){
-      //   //window.location = URL_login_G;
-      //   return true;
-      // }
-
+       if(result.message !=='Usuario No Autorizado' ){
+         //window.location = URL_login_G;
       localStorage.wylexUserId=result.userId;
       localStorage.wylexFirstName=result.first_name;
       localStorage.wylexLastName=result.last_name;
@@ -32,6 +29,10 @@ async function Token(){
       if(result.avatar){
         localStorage.wylexAvatar=result.avatar;
       }
+         return true;
+       }
+
+      
 
 
   //     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
