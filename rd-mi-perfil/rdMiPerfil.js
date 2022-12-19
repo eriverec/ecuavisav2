@@ -22,7 +22,8 @@ async function Token(){
     .then (async (result) => {
       console.log(result); 
       if(result.message=='Usuario No Autorizado' || !UserId ){
-        window.location = URL_login_G;
+        //window.location = URL_login_G;
+        console.log(result.message, UserId);
         return true;
       }
 
