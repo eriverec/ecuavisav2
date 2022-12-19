@@ -15,15 +15,14 @@ async function Token(){
     headers: myHeaders,
     redirect: 'follow'
   };
-  var UserId = localStorage.getItem('wylexUserId');    
-
+  
   await fetch("https://ecuavisa-register.onrender.com/tasks", requestOptions)
     .then(response => response.json())
     .then (async (result) => {
-      console.log(result); 
-      if(!result || !UserId ){
+      console.log(result, response.status);
+      if(result.message=='Usuario No Autorizado' ){
+        console.log("Redireccion 1");
         //window.location = URL_login_G;
-        console.log("Redireccion");
         return true;
       }
 
@@ -48,8 +47,13 @@ async function Token(){
       window.location = URL_login_G
     });
 
-     //variable de id de usuario
-    
+    var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
+    if (!UserId){
+      console.log("Redireccion porque no existe UserId");
+        /*Si no existe sesión lo 
+        va a redireccionar al login */
+        //window.location = URL_login_G;
+    }
 
     function collapse() {
       var coll = document.getElementsByClassName("collapsible_mp");
