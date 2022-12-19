@@ -21,8 +21,9 @@ async function Token(){
     .then(response => response.json())
     .then (async (result) => {
       console.log(result); 
-      if(!result.userId || !UserId ){
-        window.location = URL_login_G;
+      if(!result || !UserId ){
+        //window.location = URL_login_G;
+        console.log("Redireccion");
         return true;
       }
 
