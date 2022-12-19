@@ -19,12 +19,11 @@ async function Token(){
   await fetch("https://ecuavisa-register.onrender.com/tasks", requestOptions)
     .then(response => response.json())
     .then (async (result) => {
-      console.log(result, response.status);
-      if(result.message=='Usuario No Autorizado' ){
-        console.log("Redireccion 1");
-        //window.location = URL_login_G;
-        return true;
-      }
+      console.log(result);
+      // if(result.message=='Usuario No Autorizado' ){
+      //   //window.location = URL_login_G;
+      //   return true;
+      // }
 
       localStorage.wylexUserId=result.userId;
       localStorage.wylexFirstName=result.first_name;
