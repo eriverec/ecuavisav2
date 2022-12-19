@@ -1,12 +1,20 @@
 export default [
   {
-    title: 'Home',
+    title: 'Dashboard',
     to: { name: 'index' },
     icon: { icon: 'tabler-smart-home' },
   },
+  // {
+  //   title: 'Usuarios',
+  //   to: { name: 'usersList' },
+  //   icon: { icon: 'tabler-user' },
+  // },
   {
-    title: 'Second page',
-    to: { name: 'second-page' },
-    icon: { icon: 'tabler-file' },
+    title: 'User',
+    icon: { icon: 'tabler-user' },
+    children: [
+      { title: 'List', to: 'apps-user-list' },
+      { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
+    ],
   },
 ]

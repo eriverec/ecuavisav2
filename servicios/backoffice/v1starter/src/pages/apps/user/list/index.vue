@@ -3,6 +3,16 @@ import AddNewUserDrawer from '@/views/apps/user/list/AddNewUserDrawer.vue'
 import { useUserListStore } from '@/views/apps/user/useUserListStore'
 import { avatarText } from '@core/utils/formatters'
 
+
+import avatar1 from '@/assets/images/avatars/avatar-1.png'
+import avatar2 from '@/assets/images/avatars/avatar-2.png'
+import avatar3 from '@/assets/images/avatars/avatar-3.png'
+import avatar4 from '@/assets/images/avatars/avatar-4.png'
+import avatar5 from '@/assets/images/avatars/avatar-5.png'
+import avatar6 from '@/assets/images/avatars/avatar-6.png'
+import avatar7 from '@/assets/images/avatars/avatar-7.png'
+import avatar8 from '@/assets/images/avatars/avatar-8.png'
+
 const userListStore = useUserListStore()
 const searchQuery = ref('')
 const selectedRole = ref()
@@ -15,24 +25,24 @@ const totalUsers = ref(0)
 const users = ref([])
 
 // 👉 Fetching users
-const fetchUsers = () => {
-  userListStore.fetchUsers({
-    q: searchQuery.value,
-    status: selectedStatus.value,
-    plan: selectedPlan.value,
-    role: selectedRole.value,
-    perPage: rowPerPage.value,
-    currentPage: currentPage.value,
-  }).then(response => {
-    users.value = response.data.users
-    totalPage.value = response.data.totalPage
-    totalUsers.value = response.data.totalUsers
-  }).catch(error => {
-    console.error(error)
-  })
-}
+// const fetchUsers = () => {
+//   userListStore.fetchUsers({
+//     q: searchQuery.value,
+//     status: selectedStatus.value,
+//     plan: selectedPlan.value,
+//     role: selectedRole.value,
+//     perPage: rowPerPage.value,
+//     currentPage: currentPage.value,
+//   }).then(response => {
+//     users.value = response.data.users
+//     totalPage.value = response.data.totalPage
+//     totalUsers.value = response.data.totalUsers
+//   }).catch(error => {
+//     console.error(error)
+//   })
+// }
 
-watchEffect(fetchUsers)
+// watchEffect(fetchUsers)
 
 // 👉 watching current page
 watchEffect(() => {
@@ -200,6 +210,206 @@ const userListMeta = [
     subtitle: 'Last week analytics',
   },
 ]
+
+const usersData = [
+  {
+    id: 1,
+    fullName: 'Galen Slixby',
+    company: 'Yotz PVT LTD',
+    role: 'editor',
+    country: 'El Salvador',
+    contact: '(479) 232-9151',
+    email: 'gslixby0@abc.net.au',
+    currentPlan: 'enterprise',
+    status: 'inactive',
+    billing: 'Auto Debit',
+    avatar: '',
+  },
+  {
+    id: 2,
+    fullName: 'Halsey Redmore',
+    company: 'Skinder PVT LTD',
+    role: 'author',
+    country: 'Albania',
+    contact: '(472) 607-9137',
+    email: 'hredmore1@imgur.com',
+    currentPlan: 'team',
+    status: 'pending',
+    avatar: avatar1,
+    billing: 'Manual - Paypal',
+  },
+  {
+    id: 3,
+    fullName: 'Marjory Sicely',
+    company: 'Oozz PVT LTD',
+    role: 'maintainer',
+    country: 'Russia',
+    contact: '(321) 264-4599',
+    email: 'msicely2@who.int',
+    currentPlan: 'enterprise',
+    status: 'active',
+    avatar: avatar1,
+    billing: 'Manual - Cash',
+  },
+  {
+    id: 4,
+    fullName: 'Cyrill Risby',
+    company: 'Oozz PVT LTD',
+    role: 'maintainer',
+    country: 'China',
+    contact: '(923) 690-6806',
+    email: 'crisby3@wordpress.com',
+    currentPlan: 'team',
+    status: 'inactive',
+    avatar: avatar3,
+    billing: 'Manual - Credit Card',
+  },
+  {
+    id: 5,
+    fullName: 'Maggy Hurran',
+    company: 'Aimbo PVT LTD',
+    role: 'subscriber',
+    country: 'Pakistan',
+    contact: '(669) 914-1078',
+    email: 'mhurran4@yahoo.co.jp',
+    currentPlan: 'enterprise',
+    status: 'pending',
+    avatar: avatar1,
+    billing: 'Auto Debit',
+  },
+  {
+    id: 6,
+    fullName: 'Silvain Halstead',
+    company: 'Jaxbean PVT LTD',
+    role: 'author',
+    country: 'China',
+    contact: '(958) 973-3093',
+    email: 'shalstead5@shinystat.com',
+    currentPlan: 'company',
+    status: 'active',
+    avatar: '',
+    billing: 'Manual - Cash',
+  },
+  {
+    id: 7,
+    fullName: 'Breena Gallemore',
+    company: 'Jazzy PVT LTD',
+    role: 'subscriber',
+    country: 'Canada',
+    contact: '(825) 977-8152',
+    email: 'bgallemore6@boston.com',
+    currentPlan: 'company',
+    status: 'pending',
+    avatar: '',
+    billing: 'Manual - Cash',
+  },
+  {
+    id: 8,
+    fullName: 'Kathryne Liger',
+    company: 'Pixoboo PVT LTD',
+    role: 'author',
+    country: 'France',
+    contact: '(187) 440-0934',
+    email: 'kliger7@vinaora.com',
+    currentPlan: 'enterprise',
+    status: 'pending',
+    avatar: avatar4,
+    billing: 'Manual - Cash',
+  },
+  {
+    id: 9,
+    fullName: 'Franz Scotfurth',
+    company: 'Tekfly PVT LTD',
+    role: 'subscriber',
+    country: 'China',
+    contact: '(978) 146-5443',
+    email: 'fscotfurth8@dailymotion.com',
+    currentPlan: 'team',
+    status: 'pending',
+    avatar: avatar2,
+    billing: 'Manual - Cash',
+  },
+  {
+    id: 10,
+    fullName: 'Jillene Bellany',
+    company: 'Gigashots PVT LTD',
+    role: 'maintainer',
+    country: 'Jamaica',
+    contact: '(589) 284-6732',
+    email: 'jbellany9@kickstarter.com',
+    currentPlan: 'company',
+    status: 'inactive',
+    avatar: avatar5,
+    billing: 'Manual - Cash',
+  },
+  {
+    id: 11,
+    fullName: 'Jonah Wharlton',
+    company: 'Eare PVT LTD',
+    role: 'subscriber',
+    country: 'United States',
+    contact: '(176) 532-6824',
+    email: 'jwharltona@oakley.com',
+    currentPlan: 'team',
+    status: 'inactive',
+    avatar: avatar4,
+    billing: 'Manual - Cash',
+  },
+  {
+    id: 12,
+    fullName: 'Seth Hallam',
+    company: 'Yakitri PVT LTD',
+    role: 'subscriber',
+    country: 'Peru',
+    contact: '(234) 464-0600',
+    email: 'shallamb@hugedomains.com',
+    currentPlan: 'team',
+    status: 'pending',
+    avatar: avatar5,
+    billing: 'Manual - Cash',
+  },
+  {
+    id: 13,
+    fullName: 'Yoko Pottie',
+    company: 'Leenti PVT LTD',
+    role: 'subscriber',
+    country: 'Philippines',
+    contact: '(907) 284-5083',
+    email: 'ypottiec@privacy.gov.au',
+    currentPlan: 'basic',
+    status: 'inactive',
+    avatar: avatar7,
+    billing: 'Manual - Cash',
+  },
+  {
+    id: 14,
+    fullName: 'Maximilianus Krause',
+    company: 'Digitube PVT LTD',
+    role: 'author',
+    country: 'Democratic Republic of the Congo',
+    contact: '(167) 135-7392',
+    email: 'mkraused@stanford.edu',
+    currentPlan: 'team',
+    status: 'active',
+    avatar: avatar6,
+    billing: 'Manual - Cash',
+  },
+  {
+    id: 15,
+    fullName: 'Zsazsa McCleverty',
+    company: 'Kaymbo PVT LTD',
+    role: 'maintainer',
+    country: 'France',
+    contact: '(317) 409-6565',
+    email: 'zmcclevertye@soundcloud.com',
+    currentPlan: 'enterprise',
+    status: 'active',
+    avatar: avatar2,
+    billing: 'Manual - Cash',
+  },
+
+]
+
 </script>
 
 <template>
@@ -234,6 +444,8 @@ const userListMeta = [
           </VCardText>
         </VCard>
       </VCol>
+
+
 
       <VCol cols="12">
         <VCard title="Search Filter">
@@ -357,7 +569,7 @@ const userListMeta = [
             <!-- 👉 table body -->
             <tbody>
               <tr
-                v-for="user in users"
+                v-for="user in usersData"
                 :key="user.id"
                 style="height: 3.75rem;"
               >
