@@ -213,199 +213,70 @@ const userListMeta = [
 
 const usersData = [
   {
-    id: 1,
-    fullName: 'Galen Slixby',
-    company: 'Yotz PVT LTD',
-    role: 'editor',
+    wylexId: 1,
+    first_name: 'Galen Slixby',
+    last_name: 'Silid',
+    provider: 'Google',
     country: 'El Salvador',
-    contact: '(479) 232-9151',
+    phone_number: '(479) 232-9151',
     email: 'gslixby0@abc.net.au',
-    currentPlan: 'enterprise',
-    status: 'inactive',
-    billing: 'Auto Debit',
+    newsletter_opt_in: 'true',
     avatar: '',
+    // role: 'editor',
+    // currentPlan: 'enterprise',
+    // billing: 'Auto Debit',
   },
   {
-    id: 2,
-    fullName: 'Halsey Redmore',
-    company: 'Skinder PVT LTD',
-    role: 'author',
+    wylexId: 2,
+    first_name: 'Halsey Redmore',
+    last_name: 'Silid',
+    provider: 'Facebook',
     country: 'Albania',
-    contact: '(472) 607-9137',
+    phone_number: '(472) 607-9137',
     email: 'hredmore1@imgur.com',
-    currentPlan: 'team',
-    status: 'pending',
+    newsletter_opt_in: 'true',
     avatar: avatar1,
-    billing: 'Manual - Paypal',
+    // role: 'author',
+   
   },
   {
-    id: 3,
-    fullName: 'Marjory Sicely',
-    company: 'Oozz PVT LTD',
-    role: 'maintainer',
-    country: 'Russia',
-    contact: '(321) 264-4599',
-    email: 'msicely2@who.int',
-    currentPlan: 'enterprise',
-    status: 'active',
-    avatar: avatar1,
-    billing: 'Manual - Cash',
-  },
-  {
-    id: 4,
-    fullName: 'Cyrill Risby',
-    company: 'Oozz PVT LTD',
-    role: 'maintainer',
-    country: 'China',
-    contact: '(923) 690-6806',
-    email: 'crisby3@wordpress.com',
-    currentPlan: 'team',
-    status: 'inactive',
-    avatar: avatar3,
-    billing: 'Manual - Credit Card',
-  },
-  {
-    id: 5,
-    fullName: 'Maggy Hurran',
-    company: 'Aimbo PVT LTD',
-    role: 'subscriber',
+    wylexId: 3,
+    first_name: 'Maggy Hurran',
+    last_name: 'Silid',
+    provider: 'Google',
     country: 'Pakistan',
-    contact: '(669) 914-1078',
+    phone_number: '(669) 914-1078',
     email: 'mhurran4@yahoo.co.jp',
-    currentPlan: 'enterprise',
-    status: 'pending',
+    newsletter_opt_in: 'true',
     avatar: avatar1,
-    billing: 'Auto Debit',
+    // currentPlan: 'enterprise',
+    // role: 'subscriber',
   },
   {
-    id: 6,
-    fullName: 'Silvain Halstead',
-    company: 'Jaxbean PVT LTD',
-    role: 'author',
+    wylexId: 4,
+    first_name: 'Marjory Sicely',
+    last_name: 'Silid',
+    provider: 'Facebook',
+    country: 'Russia',
+    phone_number: '(321) 264-4599',
+    email: 'msicely2@who.int',
+    newsletter_opt_in: 'true',
+    avatar: avatar1,
+    // currentPlan: 'enterprise',
+    // role: 'maintainer',
+  },
+  {
+    wylexId: 5,
+    first_name: 'Cyrill Risby',
+    last_name: 'Silid',
+    provider: 'Facebook',
     country: 'China',
-    contact: '(958) 973-3093',
-    email: 'shalstead5@shinystat.com',
-    currentPlan: 'company',
-    status: 'active',
-    avatar: '',
-    billing: 'Manual - Cash',
-  },
-  {
-    id: 7,
-    fullName: 'Breena Gallemore',
-    company: 'Jazzy PVT LTD',
-    role: 'subscriber',
-    country: 'Canada',
-    contact: '(825) 977-8152',
-    email: 'bgallemore6@boston.com',
-    currentPlan: 'company',
-    status: 'pending',
-    avatar: '',
-    billing: 'Manual - Cash',
-  },
-  {
-    id: 8,
-    fullName: 'Kathryne Liger',
-    company: 'Pixoboo PVT LTD',
-    role: 'author',
-    country: 'France',
-    contact: '(187) 440-0934',
-    email: 'kliger7@vinaora.com',
-    currentPlan: 'enterprise',
-    status: 'pending',
-    avatar: avatar4,
-    billing: 'Manual - Cash',
-  },
-  {
-    id: 9,
-    fullName: 'Franz Scotfurth',
-    company: 'Tekfly PVT LTD',
-    role: 'subscriber',
-    country: 'China',
-    contact: '(978) 146-5443',
-    email: 'fscotfurth8@dailymotion.com',
-    currentPlan: 'team',
-    status: 'pending',
-    avatar: avatar2,
-    billing: 'Manual - Cash',
-  },
-  {
-    id: 10,
-    fullName: 'Jillene Bellany',
-    company: 'Gigashots PVT LTD',
-    role: 'maintainer',
-    country: 'Jamaica',
-    contact: '(589) 284-6732',
-    email: 'jbellany9@kickstarter.com',
-    currentPlan: 'company',
-    status: 'inactive',
-    avatar: avatar5,
-    billing: 'Manual - Cash',
-  },
-  {
-    id: 11,
-    fullName: 'Jonah Wharlton',
-    company: 'Eare PVT LTD',
-    role: 'subscriber',
-    country: 'United States',
-    contact: '(176) 532-6824',
-    email: 'jwharltona@oakley.com',
-    currentPlan: 'team',
-    status: 'inactive',
-    avatar: avatar4,
-    billing: 'Manual - Cash',
-  },
-  {
-    id: 12,
-    fullName: 'Seth Hallam',
-    company: 'Yakitri PVT LTD',
-    role: 'subscriber',
-    country: 'Peru',
-    contact: '(234) 464-0600',
-    email: 'shallamb@hugedomains.com',
-    currentPlan: 'team',
-    status: 'pending',
-    avatar: avatar5,
-    billing: 'Manual - Cash',
-  },
-  {
-    id: 13,
-    fullName: 'Yoko Pottie',
-    company: 'Leenti PVT LTD',
-    role: 'subscriber',
-    country: 'Philippines',
-    contact: '(907) 284-5083',
-    email: 'ypottiec@privacy.gov.au',
-    currentPlan: 'basic',
-    status: 'inactive',
-    avatar: avatar7,
-    billing: 'Manual - Cash',
-  },
-  {
-    id: 14,
-    fullName: 'Maximilianus Krause',
-    company: 'Digitube PVT LTD',
-    role: 'author',
-    country: 'Democratic Republic of the Congo',
-    contact: '(167) 135-7392',
-    email: 'mkraused@stanford.edu',
-    currentPlan: 'team',
-    status: 'active',
-    avatar: avatar6,
-    billing: 'Manual - Cash',
-  },
-  {
-    id: 15,
-    fullName: 'Zsazsa McCleverty',
-    company: 'Kaymbo PVT LTD',
-    role: 'maintainer',
-    country: 'France',
-    contact: '(317) 409-6565',
-    email: 'zmcclevertye@soundcloud.com',
-    currentPlan: 'enterprise',
-    status: 'active',
-    avatar: avatar2,
-    billing: 'Manual - Cash',
+    phone_number: '(923) 690-6806',
+    email: 'crisby3@wordpress.com',
+    newsletter_opt_in: 'true',
+    avatar: avatar3,
+    // currentPlan: 'team',
+    // role: 'maintainer',
   },
 
 ]
@@ -547,19 +418,19 @@ const usersData = [
             <thead>
               <tr>
                 <th scope="col">
-                  USER
+                  Nombres
                 </th>
                 <th scope="col">
-                  ROLE
+                  Proveedor
                 </th>
                 <th scope="col">
-                  PLAN
+                  Ciudad
                 </th>
                 <th scope="col">
-                  BILLING
+                  Contacto
                 </th>
                 <th scope="col">
-                  STATUS
+                  Newsletter
                 </th>
                 <th scope="col">
                   ACTIONS
@@ -570,7 +441,7 @@ const usersData = [
             <tbody>
               <tr
                 v-for="user in usersData"
-                :key="user.id"
+                :key="user.wylexId"
                 style="height: 3.75rem;"
               >
                 <!-- 👉 User -->
@@ -586,16 +457,16 @@ const usersData = [
                         v-if="user.avatar"
                         :src="user.avatar"
                       />
-                      <span v-else>{{ avatarText(user.fullName) }}</span>
+                      <span v-else>{{ avatarText(user.first_name) }}</span>
                     </VAvatar>
 
                     <div class="d-flex flex-column">
                       <h6 class="text-base">
                         <RouterLink
-                          :to="{ name: 'apps-user-view-id', params: { id: user.id } }"
+                          :to="{ name: 'apps-user-view-id', params: { id: user.wylexId } }"
                           class="font-weight-medium user-list-name"
                         >
-                          {{ user.fullName }}
+                          {{ user.first_name }} {{ user.last_name }}
                         </RouterLink>
                       </h6>
                       <span class="text-sm text-disabled">@{{ user.email }}</span>
@@ -603,37 +474,30 @@ const usersData = [
                   </div>
                 </td>
 
-                <!-- 👉 Role -->
+                <!-- 👉 Proveedor -->
                 <td>
-                  <VAvatar
-                    :color="resolveUserRoleVariant(user.role).color"
-                    :icon="resolveUserRoleVariant(user.role).icon"
-                    variant="tonal"
-                    size="30"
-                    class="me-4"
-                  />
-                  <span class="text-capitalize text-base">{{ user.role }}</span>
+                  <span class="text-capitalize text-base font-weight-semibold">{{ user.provider }}</span>
+                </td>
+                
+                <!-- 👉 Ciudad -->
+                <td>
+                  <span class="text-sm ">{{ user.country }}</span>
                 </td>
 
-                <!-- 👉 Plan -->
+                <!-- 👉 Telefono -->
                 <td>
-                  <span class="text-capitalize text-base font-weight-semibold">{{ user.currentPlan }}</span>
+                  <span class="text-base">{{ user.phone_number }}</span>
                 </td>
 
-                <!-- 👉 Billing -->
-                <td>
-                  <span class="text-base">{{ user.billing }}</span>
-                </td>
-
-                <!-- 👉 Status -->
+                <!-- 👉 Newsletter -->
                 <td>
                   <VChip
                     label
-                    :color="resolveUserStatusVariant(user.status)"
+                    :color="resolveUserStatusVariant(user.newsletter_opt_in)"
                     size="small"
                     class="text-capitalize"
                   >
-                    {{ user.status }}
+                    {{ user.newsletter_opt_in }}
                   </VChip>
                 </td>
 
