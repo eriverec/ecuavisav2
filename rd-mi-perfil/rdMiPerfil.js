@@ -26,6 +26,7 @@ async function Token(){
       localStorage.wylexFirstName=result.first_name;
       localStorage.wylexLastName=result.last_name;
       localStorage.wylexEmail=result.email;
+      localStorage.wylexAvatar=undefined;
       if(result.avatar){
         localStorage.wylexAvatar=result.avatar;
       }
