@@ -19,17 +19,17 @@ async function Token(){
   await fetch("https://ecuavisa-register.onrender.com/tasks", requestOptions)
     .then(response => response.json())
     .then (async (result) => {
-      console.log(result);
+        console.log(result);
        if(result.message !=='Usuario No Autorizado' ){
          //window.location = URL_login_G;
-      localStorage.wylexUserId=result.userId;
-      localStorage.wylexFirstName=result.first_name;
-      localStorage.wylexLastName=result.last_name;
-      localStorage.wylexEmail=result.email;
-      localStorage.wylexAvatar=undefined;
-      if(result.avatar){
-        localStorage.wylexAvatar=result.avatar;
-      }
+          localStorage.wylexUserId=result.userId;
+          localStorage.wylexFirstName=result.first_name;
+          localStorage.wylexLastName=result.last_name;
+          localStorage.wylexEmail=result.email;
+          localStorage.wylexAvatar=undefined;
+          if(result.avatar){
+            localStorage.wylexAvatar=result.avatar;
+          }
          return true;
        }
 
@@ -377,6 +377,7 @@ async function Token(){
           fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/notificationsget.php", requestOptions).then(response => {
             return response.json();
           }).then(jsondata => {
+            console.log(jsondata)
             if (jsondata.error) {
               $articles += 'No tienes notas guardadas';
             } else {
