@@ -48,9 +48,9 @@ import avatar1 from '@/assets/images/avatars/avatar-1.png'
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              John Doe
+              ecuavisa
             </VListItemTitle>
-            <VListItemSubtitle>Admin</VListItemSubtitle>
+            <VListItemSubtitle>Administrador</VListItemSubtitle>
           </VListItem>
 
           <VDivider class="my-2" />
@@ -65,7 +65,7 @@ import avatar1 from '@/assets/images/avatars/avatar-1.png'
               />
             </template>
 
-            <VListItemTitle>Profile</VListItemTitle>
+            <VListItemTitle>Perfil</VListItemTitle>
           </VListItem>
 
           <!-- 👉 Settings -->
@@ -78,34 +78,38 @@ import avatar1 from '@/assets/images/avatars/avatar-1.png'
               />
             </template>
 
-            <VListItemTitle>Settings</VListItemTitle>
+            <VListItemTitle>Ajustes</VListItemTitle>
           </VListItem>
 
           <!-- 👉 Pricing -->
-          <VListItem link>
+          <!--
+            <VListItem link>
             <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="tabler-currency-dollar"
-                size="22"
-              />
+            <VIcon
+            class="me-2"
+            icon="tabler-currency-dollar"
+            size="22"
+            />
             </template>
 
             <VListItemTitle>Pricing</VListItemTitle>
-          </VListItem>
+            </VListItem> 
+          -->
 
           <!-- 👉 FAQ -->
-          <VListItem link>
+          <!--
+            <VListItem link>
             <template #prepend>
-              <VIcon
-                class="me-2"
-                icon="tabler-help"
-                size="22"
-              />
+            <VIcon
+            class="me-2"
+            icon="tabler-help"
+            size="22"
+            />
             </template>
 
             <VListItemTitle>FAQ</VListItemTitle>
-          </VListItem>
+            </VListItem> 
+          -->
 
           <!-- Divider -->
           <VDivider class="my-2" />
