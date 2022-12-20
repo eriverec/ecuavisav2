@@ -1,3 +1,14 @@
+var URL_principal_G = 'https://www.ecuavisa.com/';
+var URL_login_G = 'https://www.ecuavisa.com/servicios/rd-login-registro';
+var URL_perfil_G = 'https://www.ecuavisa.com/servicios/rd-mi-perfil-dev';
+var UserId = localStorage.getItem('wylexUserId');
+
+if (UserId){
+   /*Si existe sesión lo 
+   va a redireccionar al perfil */
+   window.location = URL_perfil_G;
+}
+
 //Animacion de cambio de tabs
 const toggleForm = () => {
   const container_lr = document.querySelector(".container-lr");
