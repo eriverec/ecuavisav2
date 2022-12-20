@@ -19,24 +19,12 @@ async function Token(){
   await fetch("https://ecuavisa-register.onrender.com/tasks", requestOptions)
     .then(response => response.json())
     .then (async (result) => {
-       console.log(result);
-       if(result.message !=='Usuario No Autorizado' ){
-         //window.location = URL_login_G;
-          localStorage.wylexUserId=result.userId;
-          localStorage.wylexFirstName=result.first_name;
-          localStorage.wylexLastName=result.last_name;
-          localStorage.wylexEmail=result.email;
-          localStorage.wylexAvatar=result.avatar  || 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/usuario.png'//undefined;
-          //if(result.avatar){
-            //localStorage.wylexAvatar=result.avatar;
-          //}
-         return true;
-       }
+      console.log(result); 
+      if(result.message=='Usuario No Autorizado'){
+        window.location = URL_login_G;
+        return true;
+      }
 
-<<<<<<< Updated upstream
-      
-
-=======
       localStorage.wylexUserId=result.userId;
       localStorage.wylexFirstName=result.first_name;
       localStorage.wylexLastName=result.last_name;
@@ -45,7 +33,6 @@ async function Token(){
         localStorage.wylexAvatar=result.avatar;
       }
       window.history.replaceState({}, document.title, "?" + "");
->>>>>>> Stashed changes
 
   //     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
   // if (!UserId){
@@ -61,10 +48,9 @@ async function Token(){
 
     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
     if (!UserId){
-      console.log("Redireccion porque no existe UserId");
         /*Si no existe sesión lo 
         va a redireccionar al login */
-      window.location = URL_login_G;
+        window.location = URL_login_G;
     }
 
     function collapse() {
@@ -388,7 +374,6 @@ async function Token(){
           fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/notificationsget.php", requestOptions).then(response => {
             return response.json();
           }).then(jsondata => {
-            console.log(jsondata)
             if (jsondata.error) {
               $articles += 'No tienes notas guardadas';
             } else {
