@@ -33,8 +33,19 @@ async function Token(){
          return true;
        }
 
+<<<<<<< Updated upstream
       
 
+=======
+      localStorage.wylexUserId=result.userId;
+      localStorage.wylexFirstName=result.first_name;
+      localStorage.wylexLastName=result.last_name;
+      localStorage.wylexEmail=result.email;
+      if(result.avatar){
+        localStorage.wylexAvatar=result.avatar;
+      }
+      window.history.replaceState({}, document.title, "?" + "");
+>>>>>>> Stashed changes
 
   //     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
   // if (!UserId){
