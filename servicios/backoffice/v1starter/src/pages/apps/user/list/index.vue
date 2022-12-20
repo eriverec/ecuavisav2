@@ -207,6 +207,7 @@ const usersData = [
     email: 'gslixby0@abc.net.au',
     newsletter_opt_in: 'true',
     avatar: '',
+
     // role: 'editor',
     // currentPlan: 'enterprise',
     // billing: 'Auto Debit',
@@ -221,6 +222,7 @@ const usersData = [
     email: 'hredmore1@imgur.com',
     newsletter_opt_in: 'true',
     avatar: avatar1,
+
     // role: 'author',
    
   },
@@ -234,6 +236,7 @@ const usersData = [
     email: 'mhurran4@yahoo.co.jp',
     newsletter_opt_in: 'false',
     avatar: avatar1,
+
     // currentPlan: 'enterprise',
     // role: 'subscriber',
   },
@@ -247,6 +250,7 @@ const usersData = [
     email: 'msicely2@who.int',
     newsletter_opt_in: 'true',
     avatar: avatar1,
+
     // currentPlan: 'enterprise',
     // role: 'maintainer',
   },
@@ -260,14 +264,12 @@ const usersData = [
     email: 'crisby3@wordpress.com',
     newsletter_opt_in: 'true',
     avatar: avatar3,
+
     // currentPlan: 'team',
     // role: 'maintainer',
   },
 
 ]
-
-
-
 </script>
 
 <template>
@@ -307,48 +309,50 @@ const usersData = [
       <VCol cols="12">
         <VCard title="Search Filter">
           <!-- 👉 Filters -->
-          <!-- <VCardText>
+          <!--
+            <VCardText>
             <VRow>
        
-              <VCol
-                cols="12"
-                sm="4"
-              >
-                <VSelect
-                  v-model="selectedRole"
-                  label="Select Role"
-                  :items="roles"
-                  clearable
-                  clear-icon="tabler-x"
-                />
-              </VCol>
-              <VCol
-                cols="12"
-                sm="4"
-              >
-                <VSelect
-                  v-model="selectedPlan"
-                  label="Select Plan"
-                  :items="plans"
-                  clearable
-                  clear-icon="tabler-x"
-                />
-              </VCol>
+            <VCol
+            cols="12"
+            sm="4"
+            >
+            <VSelect
+            v-model="selectedRole"
+            label="Select Role"
+            :items="roles"
+            clearable
+            clear-icon="tabler-x"
+            />
+            </VCol>
+            <VCol
+            cols="12"
+            sm="4"
+            >
+            <VSelect
+            v-model="selectedPlan"
+            label="Select Plan"
+            :items="plans"
+            clearable
+            clear-icon="tabler-x"
+            />
+            </VCol>
  
-              <VCol
-                cols="12"
-                sm="4"
-              >
-                <VSelect
-                  v-model="selectedStatus"
-                  label="Select Status"
-                  :items="status"
-                  clearable
-                  clear-icon="tabler-x"
-                />
-              </VCol>
+            <VCol
+            cols="12"
+            sm="4"
+            >
+            <VSelect
+            v-model="selectedStatus"
+            label="Select Status"
+            :items="status"
+            clearable
+            clear-icon="tabler-x"
+            />
+            </VCol>
             </VRow>
-          </VCardText> -->
+            </VCardText> 
+          -->
 
           <VDivider />
 
@@ -461,7 +465,10 @@ const usersData = [
                 <!-- 👉 Provider -->
                 <td>
                   <div class="d-flex align-center">
-                    <span class="me-3" v-html="resolveUserRoleVariant(user.provider).icon"></span>
+                    <span
+                      class="me-3"
+                      v-html="resolveUserRoleVariant(user.provider).icon"
+                    />
                     <div class="d-flex flex-column">
                       <span class="text-capitalize text-base">{{ user.provider }}</span>
                     </div>
@@ -488,7 +495,6 @@ const usersData = [
                   >
                     {{ user.newsletter_opt_in }}
                   </VChip>
-             
                 </td>
 
                 <!-- 👉 Actions -->
@@ -549,16 +555,18 @@ const usersData = [
             </tbody>
 
             <!-- 👉 table footer  -->
-            <!-- <tfoot v-show="!users.length">
+            <!--
+              <tfoot v-show="!users.length">
               <tr>
-                <td
-                  colspan="7"
-                  class="text-center"
-                >
-                  No data available
-                </td>
+              <td
+              colspan="7"
+              class="text-center"
+              >
+              No data available
+              </td>
               </tr>
-            </tfoot> -->
+              </tfoot> 
+            -->
           </VTable>
 
           <VDivider />

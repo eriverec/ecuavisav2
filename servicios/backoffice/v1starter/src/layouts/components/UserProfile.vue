@@ -1,5 +1,8 @@
 <script setup>
 import avatar1 from '@/assets/images/avatars/avatar-1.png'
+import avatar2 from '@/assets/images/avatars/avatar-2.png'
+import avatar3 from '@/assets/images/avatars/avatar-3.png'
+import avatar4 from '@/assets/images/avatars/avatar-4.png'
 </script>
 
 <template>
@@ -16,7 +19,7 @@ import avatar1 from '@/assets/images/avatars/avatar-1.png'
       color="primary"
       variant="tonal"
     >
-      <VImg :src="avatar1" />
+      <VImg :src="avatar2" />
 
       <!-- SECTION Menu -->
       <VMenu
@@ -41,7 +44,7 @@ import avatar1 from '@/assets/images/avatars/avatar-1.png'
                     color="primary"
                     variant="tonal"
                   >
-                    <VImg :src="avatar1" />
+                    <VImg :src="avatar3" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
@@ -124,7 +127,7 @@ import avatar1 from '@/assets/images/avatars/avatar-1.png'
               />
             </template>
 
-            <VListItemTitle>Logout</VListItemTitle>
+            <VListItemTitle>Salir</VListItemTitle>
           </VListItem>
         </VList>
       </VMenu>
