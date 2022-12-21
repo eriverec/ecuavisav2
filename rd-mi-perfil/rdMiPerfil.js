@@ -25,9 +25,12 @@ async function Token(){
       localStorage.wylexFirstName=result.first_name;
       localStorage.wylexLastName=result.last_name;
       localStorage.wylexEmail=result.email;
-      if(result.avatar){
+
+      /*Añade el ícono si no existe con el ||*/
+      localStorage.wylexAvatar=result.avatar  || 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/usuario.png'
+      /*if(result.avatar){
         localStorage.wylexAvatar=result.avatar;
-      }
+      }*/
       window.history.replaceState({}, document.title, "/servicios/rd-mi-perfil-dev");
   
       }
