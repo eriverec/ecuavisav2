@@ -29,6 +29,11 @@
   font-weight: 300;
 }
 
+.alert-danger,
+.alert-success {
+  font-size: 14px;
+}
+
 .section-lr {
   position: relative;
   min-height: 100vh;
