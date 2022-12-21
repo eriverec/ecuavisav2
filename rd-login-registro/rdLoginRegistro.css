@@ -30,8 +30,29 @@
 }
 
 .alert-danger,
-.alert-success {
+.alert-success,
+.forgetPassword {
   font-size: 14px;
+}
+
+.modal-title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  color: #2927B9;
+}
+
+.modal-footer #forgetButton {
+  background-color: #2927b9 !important;
+  border: 1px solid #2927b9 !important;
+  border-radius: 2px;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  padding: 10px 25px;
 }
 
 .section-lr {
