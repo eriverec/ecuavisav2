@@ -266,12 +266,15 @@ async function Token(){
         perfil.notificaciones.listar();
         perfil.noticias.listar();
 
-        $('body').append(`<style>
-          .init-page-js .temas-hot > div, 
-          .init-page-js .temas-quemado > div{
-            display: initial;
-          }
-          </style>`);
+        setTimeout(function () {
+          $('body').append(`<style>
+            .init-page-js .temas-hot .botones__, 
+            .init-page-js .temas-quemado .botones__{
+              display: initial;
+            }
+            </style>`);
+        }, 700);
+        
       },
       contrasenia: {
         validarPass: function () {

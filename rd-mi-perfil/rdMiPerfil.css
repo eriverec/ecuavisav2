@@ -1,4 +1,4 @@
-.temas-hot > div, .temas-quemado > div {
+.temas-hot .botones__, .temas-quemado .botones__ {
     display: none;
 }
 
