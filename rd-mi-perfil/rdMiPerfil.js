@@ -268,8 +268,8 @@ async function Token(){
 
         setTimeout(function () {
           $('body').append(`<style>
-            .init-page-js .temas-hot .botones__, 
-            .init-page-js .temas-quemado .botones__{
+            .init-page-js .content_mp .temas-hot .botones__, 
+            .init-page-js .content_mp .temas-quemado .botones__{
               display: initial;
             }
             </style>`);
