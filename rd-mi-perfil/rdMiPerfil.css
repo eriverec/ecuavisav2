@@ -1,8 +1,8 @@
-.botones__ {
+.MP_suscripciones {
     display: none;
 }
 
-.init-page-js .botones__{
+.init-page-js .MP_suscripciones{
   display: initial;
 }
 
