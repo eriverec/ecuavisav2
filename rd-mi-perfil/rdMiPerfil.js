@@ -46,14 +46,14 @@ async function Token(){
     })
     .catch(error => {
       console.log('error', error); 
-      window.location = URL_login_G
+      // window.location = URL_login_G
     });
 
     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
     if (!UserId){
         /*Si no existe sesión lo 
         va a redireccionar al login */
-        window.location = URL_login_G;
+        // window.location = URL_login_G;
     }
 
     function collapse() {
