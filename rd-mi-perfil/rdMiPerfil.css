@@ -1,3 +1,11 @@
+.botones__ {
+    display: none;
+}
+
+.init-page-js .botones__{
+  display: initial;
+}
+
 /**********************CINTILLO**********************/
 
 #iter-content-wrapper {
