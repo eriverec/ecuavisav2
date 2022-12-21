@@ -1,10 +1,5 @@
-.temas-hot, .temas-quemado {
+.temas-hot > div, .temas-quemado > div {
     display: none;
-}
-
-.init-page-js .temas-hot, 
-.init-page-js .temas-quemado{
-  display: initial;
 }
 
 /**********************CINTILLO**********************/

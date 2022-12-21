@@ -265,6 +265,13 @@ async function Token(){
         eyesPass();
         perfil.notificaciones.listar();
         perfil.noticias.listar();
+
+        $('body').append(`<style>
+          .init-page-js .temas-hot > div, 
+          .init-page-js .temas-quemado > div{
+            display: initial;
+          }
+          </style>`);
       },
       contrasenia: {
         validarPass: function () {
