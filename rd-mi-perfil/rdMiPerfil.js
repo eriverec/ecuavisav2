@@ -28,7 +28,7 @@ async function Token(){
       if(result.avatar){
         localStorage.wylexAvatar=result.avatar;
       }
-      window.history.replaceState({}, document.title, "/");
+      window.history.replaceState({}, document.title, "/servicios/rd-mi-perfil-dev");
   
       }
 
