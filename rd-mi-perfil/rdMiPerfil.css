@@ -1,8 +1,9 @@
-.MP_suscripciones {
+.temas-hot, .temas-quemado {
     display: none;
 }
 
-.init-page-js .MP_suscripciones{
+.init-page-js .temas-hot, 
+.init-page-js .temas-quemado{
   display: initial;
 }
 
