@@ -26,7 +26,7 @@ async function Token(){
       localStorage.wylexLastName=result.last_name;
       localStorage.wylexEmail=result.email;
 
-      /*Añade el ícono si no existe con el ||*/
+      /*Añade el ícono de perfil si no existe con el || CR*/
       localStorage.wylexAvatar=result.avatar  || 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/usuario.png'
       /*if(result.avatar){
         localStorage.wylexAvatar=result.avatar;
