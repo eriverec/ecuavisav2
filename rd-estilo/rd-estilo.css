@@ -30,7 +30,8 @@
   object-fit: cover;
   margin-top: -1px;
 }
-.portada-estilo .headline h1 {
+.portada-estilo .headline h1,
+.portada-estilo .headline h2 {
   color: #ffffff;
   font-family: 'Archivo';
   font-style: normal;
@@ -1249,7 +1250,8 @@ img.sepDesk {
     display: none !important;
   }
 
-  .portada-estilo .headline h1{
+  .portada-estilo .headline h1,
+  .portada-estilo .headline h2{
     font-size: 32px;
     line-height: 38px;
   }
