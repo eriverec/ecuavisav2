@@ -299,7 +299,7 @@
 }
 
 .pod_general .pod_inf .pod_boton {
-  display: flex;
+  display: none;
   align-items: center;
   align-content: center;
   justify-content: center;
