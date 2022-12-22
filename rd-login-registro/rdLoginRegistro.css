@@ -80,6 +80,7 @@
   overflow: hidden;
 }
 
+
 .section-lr .container-lr .user {
   position: absolute;
   top: 0;
@@ -284,6 +285,22 @@
   width: 43%;
 }
 
+
+
+
+/* 👉 CREATE PASSWORD */
+
+.section-lr .container-lr .user .formBx.createPass{
+  width: 100%;
+}
+
+.section-lr .container-lr .user.createPass{
+  display: block;
+}
+
+.section-lr .container-lr.createPass {
+  width: 500px;
+}
 
 @media (max-width: 991px) {
   .section-lr .container-lr {
