@@ -308,6 +308,19 @@ form i {
   position: relative;
 }
 
+.buttons button {
+  background-color: #2927b9 !important;
+  border: 1px solid #2927b9 !important;
+  border-radius: 2px;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  text-transform: uppercase;
+  padding: 10px 25px;
+  color: #fff;
+}
+
 @media (max-width: 991px) {
   .section-lr .container-lr {
     max-width: 400px;
