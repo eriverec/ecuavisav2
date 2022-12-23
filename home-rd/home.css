@@ -311,7 +311,8 @@ INICIO - PORTADA - 4 DESTACADAS
   padding-top: 5px;
 }
 
-.HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h1 {
+.HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h1,
+.HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h2 {
   color: var(--bs-white);
   font-size: var(--rd-size-42);
   font-style: normal;
