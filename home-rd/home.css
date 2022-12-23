@@ -1889,7 +1889,7 @@ INICIO - BLOQUE - MUNDO
   display: block;
 }
 
-.HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .text_block .headline a h3 {
+.HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .text_block .headline a h1 {
   font-size: 28px;
   text-transform: uppercase;
   color: white;
