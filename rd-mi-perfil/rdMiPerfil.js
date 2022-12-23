@@ -77,7 +77,7 @@ async function Token(){
     function suscriptionDymanic() {
       $(".categoryListItemLink").prepend('<div class="metaTitle"> Tema</div>');
       $(".categoryListItem").append(`
-      <div class="botones__">
+      <div class="botones__ pruebassss">
         <div class="button_siguiendo">
           <a class="follow" href="javascript:void(0);">
             <span>Siguiendo</span>
@@ -423,7 +423,7 @@ async function Token(){
     collapse();
     DataEntrada();
     DatosPersonales();
-    //suscriptionDymanic();
+    suscriptionDymanic();
     /*#Notificaciones: iniciar loader*/
     let $article = document.querySelector('.notificationBox .noticias');
     $article.innerHTML = perfil.notificaciones.loader();
