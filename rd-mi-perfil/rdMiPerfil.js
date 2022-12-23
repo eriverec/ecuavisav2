@@ -423,7 +423,7 @@ async function Token(){
     collapse();
     DataEntrada();
     DatosPersonales();
-    suscriptionDymanic();
+    //suscriptionDymanic();
     /*#Notificaciones: iniciar loader*/
     let $article = document.querySelector('.notificationBox .noticias');
     $article.innerHTML = perfil.notificaciones.loader();
