@@ -1610,11 +1610,11 @@ INICIO - BLOQUE - MUNDO
   }
 
   .sliderVideos .ms-visto-ec .multimedia>div::after {
-    background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos/fondo-tarjeta.png);
+    /* background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos/fondo-tarjeta.png); */
     background-position: center;
     background-size: cover;
     content: "";
-    position: absolute;
+    /* position: absolute; */
     width: 100%;
     height: 100%;
     background-color: transparent;
