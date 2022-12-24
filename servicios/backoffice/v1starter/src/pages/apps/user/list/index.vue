@@ -3,7 +3,7 @@ import AddNewUserDrawer from '@/views/apps/user/list/AddNewUserDrawer.vue'
 import { useUserListStore } from '@/views/apps/user/useUserListStore'
 import { avatarText } from '@core/utils/formatters'
 
-
+ 
 import avatar1 from '@/assets/images/avatars/avatar-1.png'
 import avatar2 from '@/assets/images/avatars/avatar-2.png'
 import avatar3 from '@/assets/images/avatars/avatar-3.png'
@@ -42,6 +42,7 @@ const users = ref([])
 //   })
 // }
 
+/*
 const fetchUsers = async () => {
     let Users;
     await fetch("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1")
@@ -58,6 +59,25 @@ const fetchUsers = async () => {
 
 const usersData = await fetchUsers();
 console.log('final',usersData); 
+*/
+
+var usersData;
+
+fetch("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1")
+    .then(response => response.json())
+    .then(data => {usersData = data;});
+    
+console.log('final',usersData);
+  
+    
+
+
+
+
+//const usersData = await fetchUsers();
+//console.log('final',usersData); 
+
+
 
 // watchEffect(fetchUsers)
 
