@@ -41,16 +41,24 @@ const users = ref([])
 //     console.error(error)
 //   })
 // }
-const fetchUsers =  fetch("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1", {method: "GET"})
-  .then(response => response.json())
-  .then(async (data) => {
-  
-  var usersData = data;
-  console.log(usersData);   
-  
 
-  return usersData;
+const fetchUsers = async () => {
+    let Users;
+    await fetch("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1")
+    .then(response => response.json())
+    .then(data => {
+      let a = data;
+      Users = Array.from(a);
+      //Users = data;
+        //console.log('test',Users);
     });
+    //console.log('test2',Users);
+    return Users;
+};
+
+const usersData = await fetchUsers();
+console.log('final',usersData); 
+
 // watchEffect(fetchUsers)
 
 // 👉 watching current page
@@ -280,6 +288,7 @@ const userListMeta = [
   },
 
 ]*/
+
 </script>
 
 <template>
