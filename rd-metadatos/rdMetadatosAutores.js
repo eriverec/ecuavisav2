@@ -41,18 +41,20 @@ setTimeout(function () {
   hideBlock();
   //remueve la clase en página de metadatos
   $('.invisible2').removeClass('invisible2');
+  // remueve bloque duplicadas en autores como bbc etc 
+
 }, 300)
 
 
 
-// function swiperGo () {
-//   setTimeout(function () {
-//    if (typeof Swiper === "undefined") {
-//      swiperGo();
-   
-//    } else {
-//            episodiosSwiper();
-//            $('.bloque-programas').removeClass('invisible');
-//    }
-//   }, 400) ; 
-//   }
+function removeDuplicateInfo () {
+  setTimeout(function () {
+   if (typeof Swiper === "undefined") {
+     removeDuplicateInfo();
+   } else {
+            var duplicateTag = $('.author_card.d-md-flex')[1];
+            duplicateTag.remove();
+   }
+  }, 400) ; 
+}
+removeDuplicateInfo();
