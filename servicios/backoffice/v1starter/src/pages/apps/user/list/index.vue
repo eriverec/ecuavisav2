@@ -3,7 +3,7 @@ import AddNewUserDrawer from '@/views/apps/user/list/AddNewUserDrawer.vue'
 import { useUserListStore } from '@/views/apps/user/useUserListStore'
 import { avatarText } from '@core/utils/formatters'
 
-
+ 
 import avatar1 from '@/assets/images/avatars/avatar-1.png'
 import avatar2 from '@/assets/images/avatars/avatar-2.png'
 import avatar3 from '@/assets/images/avatars/avatar-3.png'
