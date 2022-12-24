@@ -2429,6 +2429,30 @@ INICIO - BLOQUE - ESTILO
   margin-top: -5px;
 }
 
+.HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .rd_date ul li{
+  color: #c7c7c7;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px;
+  margin-top: -5px;
+}
+
+.sliderVideos .rd_date ul li {
+  color: #c7c7c7;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px;
+  margin-top: -5px;
+}
+
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .text_block .section {
 
   font-weight: 600 !important;
