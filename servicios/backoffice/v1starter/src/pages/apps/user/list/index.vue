@@ -41,7 +41,16 @@ const users = ref([])
 //     console.error(error)
 //   })
 // }
+const fetchUsers =  fetch("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1", {method: "GET"})
+  .then(response => response.json())
+  .then(async (data) => {
+  
+  var usersData = data;
+  console.log(usersData);   
+  
 
+  return usersData;
+    });
 // watchEffect(fetchUsers)
 
 // 👉 watching current page
@@ -196,7 +205,8 @@ const userListMeta = [
   },
 ]
 
-const usersData = [
+
+/*const usersData = [
   {
     wylexId: 1,
     first_name: 'Galen Slixby',
@@ -269,7 +279,7 @@ const usersData = [
     // role: 'maintainer',
   },
 
-]
+]*/
 </script>
 
 <template>
