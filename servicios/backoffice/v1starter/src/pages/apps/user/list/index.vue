@@ -63,7 +63,7 @@ console.log('final',usersData);
 
 var usersData;
 
-fetch("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1")
+const fetchUsers = fetch("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1")
     .then(response => response.json())
     .then(data => {usersData = data;});
     
