@@ -597,17 +597,17 @@ Cambio de tamaño de imagen grande izq
 
   .sliderVideos .ms-visto-ec:nth-child(2) .multimedia img {
     border-radius: 6px;
-    -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 90%);
+    -webkit-mask-image: linear-gradient(to top, #00000000 0, #242424 90%);
     height: 100% !important;
     object-fit: cover;
   }
 
   .sliderVideos .ms-visto-ec .multimedia>div::after {
-    background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos/fondo-tarjeta.png);
+    /* background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos/fondo-tarjeta.png); */
     background-position: center;
     background-size: cover;
     content: "";
-    position: absolute;
+    /* position: absolute; */
     width: 100%;
     height: 100%;
     background-color: transparent;
@@ -1604,7 +1604,7 @@ INICIO - BLOQUE - MUNDO
 
   .sliderVideos .ms-visto-ec:nth-child(2) .multimedia img {
     border-radius: 6px;
-    -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 90%);
+    -webkit-mask-image: linear-gradient(to top, #00000000 0, #242424 90%);
     height: 100% !important;
     object-fit: cover;
   }
