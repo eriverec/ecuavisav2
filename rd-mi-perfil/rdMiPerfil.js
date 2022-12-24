@@ -1,3 +1,9 @@
+logoutBtn = document.querySelector('.button_cerrar_sesion a');
+logoutBtn.addEventListener("click", function () {
+  localStorage.clear();
+  window.location('https://www.ecuavisa.com/servicios/rd-login-registro');
+});
+
 
 Token()
 async function Token(){
@@ -34,15 +40,12 @@ async function Token(){
       window.history.replaceState({}, document.title, "/servicios/rd-mi-perfil-dev");
   
       }
-
-      
-
-  //     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
-  // if (!UserId){
-  //     /*Si no existe sesión lo 
-  //     va a redireccionar al login */
-  //     window.location = URL_login_G;
-  // }
+      //     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
+      // if (!UserId){
+      //     /*Si no existe sesión lo 
+      //     va a redireccionar al login */
+      //     window.location = URL_login_G;
+      // }
     })
     .catch(error => {
       console.log('error', error); 
