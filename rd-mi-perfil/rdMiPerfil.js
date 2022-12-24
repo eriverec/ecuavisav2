@@ -1,7 +1,8 @@
 logoutBtn = document.querySelector('.button_cerrar_sesion a');
 logoutBtn.addEventListener("click", function () {
   localStorage.clear();
-  window.location('https://www.ecuavisa.com/servicios/rd-login-registro');
+  window.location.href = "https://www.ecuavisa.com/servicios/rd-login-registro";
+  // window.location('');
 });
 
 
