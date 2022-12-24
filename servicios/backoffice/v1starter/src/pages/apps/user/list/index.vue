@@ -42,6 +42,7 @@ const users = ref([])
 //   })
 // }
 
+/*
 const fetchUsers = async () => {
     let Users;
     await fetch("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1")
@@ -58,6 +59,7 @@ const fetchUsers = async () => {
 
 const usersData = await fetchUsers();
 console.log('final',usersData); 
+*/
 
 // watchEffect(fetchUsers)
 
