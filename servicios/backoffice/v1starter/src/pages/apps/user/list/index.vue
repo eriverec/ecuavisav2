@@ -61,19 +61,15 @@ const usersData = await fetchUsers();
 console.log('final',usersData); 
 */
 
-
-var usersData;
-
-const fetchUsers = () => { 
-   fetch("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1")
-    .then(response => response.json())
-    .then(data => {usersData = data;});
-}
-
-fetchUsers();
-console.log('final',usersData);
+async function fetchUsers() {
   
-    
+  const res = await fetch('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1')
+  return res.json();
+}
+const usersData = await fetchUsers();
+console.log('final', usersData);
+
+  
 
 
 
