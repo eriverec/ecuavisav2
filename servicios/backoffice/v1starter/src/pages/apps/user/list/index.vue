@@ -61,12 +61,19 @@ const usersData = await fetchUsers();
 console.log('final',usersData); 
 */
 
+const usersData = ref([]);
+    onMounted(async () => {
+      const res = await axios.get("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1");
+      usersData.value = res.data;
+      console.log(res);
+    });
 
-
+    
+/*
 const response = await axios('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1');
 const usersData = response.data;
 console.log(usersData);
-
+*/
 
 
 // watchEffect(fetchUsers)
@@ -298,7 +305,9 @@ const userListMeta = [
   },
 
 ]*/
-
+return {
+usersData,
+},
 </script>
 
 <template>
