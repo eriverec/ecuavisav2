@@ -213,8 +213,17 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   color: white;
 }
 
-
-
+.rankSwiper .media_block .rd_date ul li {
+  color: #c7c7c7;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px;
+  margin-top: -5px;
+}
 
 .sliderVideos .iconPlay {
   background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
