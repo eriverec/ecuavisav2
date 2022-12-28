@@ -1,235 +1,202 @@
 <script setup>
-import AddNewUserDrawer from '@/views/apps/user/list/AddNewUserDrawer.vue'
-import { useUserListStore } from '@/views/apps/user/useUserListStore'
-import { avatarText } from '@core/utils/formatters'
-import axios from 'axios';
- 
-import avatar1 from '@/assets/images/avatars/avatar-1.png'
-import avatar2 from '@/assets/images/avatars/avatar-2.png'
-import avatar3 from '@/assets/images/avatars/avatar-3.png'
-import avatar4 from '@/assets/images/avatars/avatar-4.png'
-import avatar5 from '@/assets/images/avatars/avatar-5.png'
-import avatar6 from '@/assets/images/avatars/avatar-6.png'
-import avatar7 from '@/assets/images/avatars/avatar-7.png'
-import avatar8 from '@/assets/images/avatars/avatar-8.png'
+import AddNewUserDrawer from "@/views/apps/user/list/AddNewUserDrawer.vue";
+import { useUserListStore } from "@/views/apps/user/useUserListStore";
+import { avatarText } from "@core/utils/formatters";
+import axios from "axios";
 
-// const userListStore = usersData()
-const searchQuery = ref('')
-const selectedRole = ref()
-const selectedPlan = ref()
-const selectedStatus = ref()
-const rowPerPage = ref(10)
-const currentPage = ref(1)
-const totalPage = ref(1)
-const totalUsers = ref(0)
-const users = ref([])
+import avatar1 from "@/assets/images/avatars/avatar-1.png";
+import avatar2 from "@/assets/images/avatars/avatar-2.png";
+import avatar3 from "@/assets/images/avatars/avatar-3.png";
+import avatar4 from "@/assets/images/avatars/avatar-4.png";
+import avatar5 from "@/assets/images/avatars/avatar-5.png";
+import avatar6 from "@/assets/images/avatars/avatar-6.png";
+import avatar7 from "@/assets/images/avatars/avatar-7.png";
+import avatar8 from "@/assets/images/avatars/avatar-8.png";
+
+const userListStore = useUserListStore()
+const searchQuery = ref("");
+const selectedRole = ref();
+const selectedPlan = ref();
+const selectedStatus = ref();
+const rowPerPage = ref(10);
+const page = ref(1);
+const totalPage = ref(1);
+const totalUsers = ref(0);
+const users = ref([]);
 
 // 👉 Fetching users
-// const fetchUsers = () => {
-//   userListStore.fetchUsers({
-//     q: searchQuery.value,
-//     status: selectedStatus.value,
-//     plan: selectedPlan.value,
-//     role: selectedRole.value,
-//     perPage: rowPerPage.value,
-//     currentPage: currentPage.value,
-//   }).then(response => {
-//     users.value = response.data.users
-//     totalPage.value = response.data.totalPage
-//     totalUsers.value = response.data.totalUsers
-//   }).catch(error => {
-//     console.error(error)
-//   })
-// }
-
-/*
-const fetchUsers = async () => {
-    let Users;
-    await fetch("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1")
-    .then(response => response.json())
-    .then(data => {
-      let a = data;
-      Users = Array.from(a);
-      //Users = data;
-        //console.log('test',Users);
+const fetchUsers = () => {
+  userListStore
+    .fetchUsers({
+      // q: searchQuery.value,
+      // status: selectedStatus.value,
+      //plan: selectedPlan.value,
+      //role: selectedRole.value,
+      pageSize: rowPerPage.value,
+      page: page.value,
+    })
+    .then((response) => {
+      users.value = response.data.users;
+      totalPage.value = response.data.totalPage;
+      totalUsers.value = response.data.totalUsers;
+    })
+    .catch((error) => {
+      console.error(error);
     });
-    //console.log('test2',Users);
-    return Users;
 };
 
-const usersData = await fetchUsers();
-console.log('final',usersData); 
-*/
 
-/*const usersData = ref([]);
-    onMounted(async () => {
-      const res = await axios.get("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1");
-      usersData.value = res.data;
-      console.log(res);
-    });
-*/
-    
-/*
-const response = await axios('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get?pageSize=5&page=1');
-const usersData = response.data;
-console.log(usersData);
-*/
-
-
-// watchEffect(fetchUsers)
+watchEffect(fetchUsers)
 
 // 👉 watching current page
 watchEffect(() => {
-  if (currentPage.value > totalPage.value)
-    currentPage.value = totalPage.value
-})
+  if (page.value > totalPage.value) page.value = totalPage.value;
+});
 
 // 👉 search filters
 const roles = [
   {
-    title: 'Admin',
-    value: 'admin',
+    title: "Admin",
+    value: "admin",
   },
   {
-    title: 'Author',
-    value: 'author',
+    title: "Author",
+    value: "author",
   },
   {
-    title: 'Editor',
-    value: 'editor',
+    title: "Editor",
+    value: "editor",
   },
   {
-    title: 'Maintainer',
-    value: 'maintainer',
+    title: "Maintainer",
+    value: "maintainer",
   },
   {
-    title: 'Subscriber',
-    value: 'subscriber',
+    title: "Subscriber",
+    value: "subscriber",
   },
-]
+];
 
 const plans = [
   {
-    title: 'Basic',
-    value: 'basic',
+    title: "Basic",
+    value: "basic",
   },
   {
-    title: 'Company',
-    value: 'company',
+    title: "Company",
+    value: "company",
   },
   {
-    title: 'Enterprise',
-    value: 'enterprise',
+    title: "Enterprise",
+    value: "enterprise",
   },
   {
-    title: 'Team',
-    value: 'team',
+    title: "Team",
+    value: "team",
   },
-]
+];
 
 const status = [
   {
-    title: 'Pending',
-    value: 'pending',
+    title: "Pending",
+    value: "pending",
   },
   {
-    title: 'Active',
-    value: 'active',
+    title: "Active",
+    value: "active",
   },
   {
-    title: 'Inactive',
-    value: 'inactive',
+    title: "Inactive",
+    value: "inactive",
   },
-]
+];
 
-const resolveUserRoleVariant = provider => {
-  if (provider === 'Google')
+const resolveUserRoleVariant = (provider) => {
+  if (provider === "Google")
     return {
-      color: 'warning',
+      color: "warning",
       icon: '<svg aria-hidden="true" class="native svg-icon iconGoogle" width="18" height="18" viewBox="0 0 18 18"><path d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18Z" fill="#4285F4"></path><path d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17Z" fill="#34A853"></path><path d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07Z" fill="#FBBC05"></path><path d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3Z" fill="#EA4335"></path></svg>',
-    }
-  if (provider === 'Facebook')
+    };
+  if (provider === "Facebook")
     return {
-      color: 'success',
+      color: "success",
       icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.4922 3.29117 17.2155 7.59375 17.8906V11.6016H5.30859V9H7.59375V7.01719C7.59375 4.76156 8.9374 3.51562 10.9932 3.51562C11.9779 3.51562 13.0078 3.69141 13.0078 3.69141V5.90625H11.8729C10.7549 5.90625 10.4062 6.6 10.4062 7.31175V9H12.9023L12.5033 11.6016H10.4062V17.8906C14.7088 17.2155 18 13.4922 18 9Z" fill="#1877F2"/></svg>',
-    }
-  
+    };
+
   return {
-    color: 'primary',
-    icon: 'tabler-user',
-  }
-}
+    color: "primary",
+    icon: "tabler-user",
+  };
+};
 
-const resolveUserStatusVariant = stat => {
-  if (stat === 'false')
-    return 'error'
-  if (stat === 'true')
-    return 'success'
-  if (stat === 'inactive')
-    return 'secondary'
-  
-  return 'primary'
-}
+const resolveUserStatusVariant = (stat) => {
+  if (stat === "false") return "error";
+  if (stat === "true") return "success";
+  if (stat === "inactive") return "secondary";
 
-const isAddNewUserDrawerVisible = ref(false)
+  return "primary";
+};
+
+const isAddNewUserDrawerVisible = ref(false);
 
 // 👉 watching current page
 watchEffect(() => {
-  if (currentPage.value > totalPage.value)
-    currentPage.value = totalPage.value
-})
+  if (page.value > totalPage.value) page.value = totalPage.value;
+});
 
 // 👉 Computing pagination data
 const paginationData = computed(() => {
-  const firstIndex = users.value.length ? (currentPage.value - 1) * rowPerPage.value + 1 : 0
-  const lastIndex = users.value.length + (currentPage.value - 1) * rowPerPage.value
-  
-  return `Showing ${ firstIndex } to ${ lastIndex } of ${ totalUsers.value } entries`
-})
+  const firstIndex = users.value.length
+    ? (page.value - 1) * rowPerPage.value + 1
+    : 0;
+  const lastIndex =
+    users.value.length + (page.value - 1) * rowPerPage.value;
 
-const addNewUser = userData => {
-  userListStore.addUser(userData)
+  return `Showing ${firstIndex} to ${lastIndex} of ${totalUsers.value} entries`;
+});
+
+const addNewUser = (userData) => {
+  userListStore.addUser(userData);
 
   // refetch User
-  fetchUsers()
-}
+  fetchUsers();
+};
 
 // 👉 List
 const userListMeta = [
   {
-    icon: 'tabler-user',
-    color: 'primary',
-    title: 'Session',
-    stats: '21,459',
+    icon: "tabler-user",
+    color: "primary",
+    title: "Session",
+    stats: "21,459",
     percentage: +29,
-    subtitle: 'Total Users',
+    subtitle: "Total Users",
   },
   {
-    icon: 'tabler-user-plus',
-    color: 'error',
-    title: 'Paid Users',
-    stats: '4,567',
+    icon: "tabler-user-plus",
+    color: "error",
+    title: "Paid Users",
+    stats: "4,567",
     percentage: +18,
-    subtitle: 'Last week analytics',
+    subtitle: "Last week analytics",
   },
   {
-    icon: 'tabler-user-check',
-    color: 'success',
-    title: 'Active Users',
-    stats: '19,860',
+    icon: "tabler-user-check",
+    color: "success",
+    title: "Active Users",
+    stats: "19,860",
     percentage: -14,
-    subtitle: 'Last week analytics',
+    subtitle: "Last week analytics",
   },
   {
-    icon: 'tabler-user-exclamation',
-    color: 'warning',
-    title: 'Pending Users',
-    stats: '237',
+    icon: "tabler-user-exclamation",
+    color: "warning",
+    title: "Pending Users",
+    stats: "237",
     percentage: +42,
-    subtitle: 'Last week analytics',
+    subtitle: "Last week analytics",
   },
-]
-
+];
 
 /*const usersData = [
   {
@@ -305,10 +272,7 @@ const userListMeta = [
   },
 
 ]*/
-/*
-return {
-usersData,
-},*/
+
 </script>
 
 <template>
@@ -329,7 +293,10 @@ usersData,
                 <h6 class="text-h6">
                   {{ meta.stats }}
                 </h6>
-                <span :class="meta.percentage > 0 ? 'text-success' : 'text-error'">({{ meta.percentage }}%)</span>
+                <span
+                  :class="meta.percentage > 0 ? 'text-success' : 'text-error'"
+                  >({{ meta.percentage }}%)</span
+                >
               </div>
               <span>{{ meta.subtitle }}</span>
             </div>
@@ -343,7 +310,6 @@ usersData,
           </VCardText>
         </VCard>
       </VCol>
-
 
       <VCol cols="12">
         <VCard title="Search Filter">
@@ -396,10 +362,7 @@ usersData,
           <VDivider />
 
           <VCardText class="d-flex flex-wrap py-4 gap-4">
-            <div
-              class="me-3"
-              style="width: 80px;"
-            >
+            <div class="me-3" style="width: 80px">
               <VSelect
                 v-model="rowPerPage"
                 density="compact"
@@ -410,9 +373,11 @@ usersData,
 
             <VSpacer />
 
-            <div class="app-user-search-filter d-flex align-center flex-wrap gap-4">
+            <div
+              class="app-user-search-filter d-flex align-center flex-wrap gap-4"
+            >
               <!-- 👉 Search  -->
-              <div style="width: 10rem;">
+              <div style="width: 10rem">
                 <VTextField
                   v-model="searchQuery"
                   placeholder="Search"
@@ -445,58 +410,44 @@ usersData,
             <!-- 👉 table head -->
             <thead>
               <tr>
-                <th scope="col">
-                  Nombres
-                </th>
-                <th scope="col">
-                  Proveedor
-                </th>
-                <th scope="col">
-                  Ciudad
-                </th>
-                <th scope="col">
-                  Contacto
-                </th>
-                <th scope="col">
-                  Newsletter
-                </th>
-                <th scope="col">
-                  ACTIONS
-                </th>
+                <th scope="col">Nombres</th>
+                <th scope="col">Proveedor</th>
+                <th scope="col">Ciudad</th>
+                <th scope="col">Contacto</th>
+                <th scope="col">Newsletter</th>
+                <th scope="col">ACTIONS</th>
               </tr>
             </thead>
             <!-- 👉 table body -->
             <tbody>
               <tr
-                v-for="user in usersData"
+                v-for="user in users"
                 :key="user.wylexId"
-                style="height: 3.75rem;"
+                style="height: 3.75rem"
               >
                 <!-- 👉 User -->
                 <td>
                   <div class="d-flex align-center">
-                    <VAvatar
-                      variant="tonal"
-                      class="me-3"
-                      size="38"
-                    >
-                      <VImg
-                        v-if="user.avatar"
-                        :src="user.avatar"
-                      />
+                    <VAvatar variant="tonal" class="me-3" size="38">
+                      <VImg v-if="user.avatar" :src="user.avatar" />
                       <span v-else>{{ avatarText(user.first_name) }}</span>
                     </VAvatar>
 
                     <div class="d-flex flex-column">
                       <h6 class="text-base">
                         <RouterLink
-                          :to="{ name: 'apps-user-view-id', params: { id: user.wylexId } }"
+                          :to="{
+                            name: 'apps-user-view-id',
+                            params: { id: user.wylexId },
+                          }"
                           class="font-weight-medium user-list-name"
                         >
                           {{ user.first_name }} {{ user.last_name }}
                         </RouterLink>
                       </h6>
-                      <span class="text-sm text-disabled">@{{ user.email }}</span>
+                      <span class="text-sm text-disabled"
+                        >@{{ user.email }}</span
+                      >
                     </div>
                   </div>
                 </td>
@@ -509,14 +460,16 @@ usersData,
                       v-html="resolveUserRoleVariant(user.provider).icon"
                     />
                     <div class="d-flex flex-column">
-                      <span class="text-capitalize text-base">{{ user.provider }}</span>
+                      <span class="text-capitalize text-base">{{
+                        user.provider
+                      }}</span>
                     </div>
                   </div>
                 </td>
 
                 <!-- 👉 Ciudad -->
                 <td>
-                  <span class="text-sm ">{{ user.country }}</span>
+                  <span class="text-sm">{{ user.country }}</span>
                 </td>
 
                 <!-- 👉 Telefono -->
@@ -537,55 +490,28 @@ usersData,
                 </td>
 
                 <!-- 👉 Actions -->
-                <td
-                  class="text-center"
-                  style="width: 5rem;"
-                >
-                  <VBtn
-                    icon
-                    size="x-small"
-                    color="default"
-                    variant="text"
-                  >
-                    <VIcon
-                      size="22"
-                      icon="tabler-edit"
-                    />
+                <td class="text-center" style="width: 5rem">
+                  <VBtn icon size="x-small" color="default" variant="text">
+                    <VIcon size="22" icon="tabler-edit" />
                   </VBtn>
 
-                  <VBtn
-                    icon
-                    size="x-small"
-                    color="default"
-                    variant="text"
-                  >
-                    <VIcon
-                      size="22"
-                      icon="tabler-trash"
-                    />
+                  <VBtn icon size="x-small" color="default" variant="text">
+                    <VIcon size="22" icon="tabler-trash" />
                   </VBtn>
 
-                  <VBtn
-                    icon
-                    size="x-small"
-                    color="default"
-                    variant="text"
-                  >
-                    <VIcon
-                      size="22"
-                      icon="tabler-dots-vertical"
-                    />
+                  <VBtn icon size="x-small" color="default" variant="text">
+                    <VIcon size="22" icon="tabler-dots-vertical" />
 
                     <VMenu activator="parent">
                       <VList>
                         <VListItem
                           title="View"
-                          :to="{ name: 'apps-user-view-id', params: { id: user.id } }"
+                          :to="{
+                            name: 'apps-user-view-id',
+                            params: { id: user.id },
+                          }"
                         />
-                        <VListItem
-                          title="Suspend"
-                          href="javascript:void(0)"
-                        />
+                        <VListItem title="Suspend" href="javascript:void(0)" />
                       </VList>
                     </VMenu>
                   </VBtn>
@@ -610,13 +536,15 @@ usersData,
 
           <VDivider />
 
-          <VCardText class="d-flex align-center flex-wrap justify-space-between gap-4 py-3 px-5">
+          <VCardText
+            class="d-flex align-center flex-wrap justify-space-between gap-4 py-3 px-5"
+          >
             <span class="text-sm text-disabled">
               {{ paginationData }}
             </span>
 
             <VPagination
-              v-model="currentPage"
+              v-model="page"
               size="small"
               :total-visible="5"
               :length="totalPage"
