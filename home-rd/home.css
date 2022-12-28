@@ -1994,7 +1994,8 @@ INICIO - BLOQUE - MUNDO
     font-size: var(--rd-size-18);
     color: #fff;
     font-family: 'Alfa Slab One';
-  }
+    text-transform: uppercase;
+}
 
   .HOME_MENU_RD .cintillo-rd-estadio img {
     width: 100%;
@@ -2533,7 +2534,7 @@ INICIO - BLOQUE - ESTILO
   }
 
   .HOME_MENU_RD .lista-bloque-estilo .noticias .article .media_block .text_block .headline a h2 {
-    font-size: var(--rd-size-14);
+    font-size: 18px;
   }
 
   .sliderVideos .headline h3 {
