@@ -320,7 +320,7 @@ INICIO - PORTADA - 4 DESTACADAS
   line-height: 48px;
   padding-top: 15px;
   padding-bottom: 18px;
-  max-width: 500px;
+  /* max-width: 500px; */
 }
 
 .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
