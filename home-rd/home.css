@@ -123,7 +123,8 @@
   font-weight: 600;
   font-size: 88px;
   line-height: 96px;
-  margin-top: 30px;
+  margin-top: 0px;
+  /*margin-top: 30px;*/
   text-transform: lowercase;
 }
 
@@ -2564,8 +2565,9 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .title_agenda .cintillo-rd {
   color: white;
-  /* line-height: 38px; */
-  margin-bottom: 20px;
+  /* line-height: 38px; 
+  margin-bottom: 20px;*/
+  margin-bottom: 10px;
 }
 
 /* .HOME_MENU_RD .portada-agenda.ag_Desktop .noticias {
@@ -2592,10 +2594,12 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block {
   display: flex;
-  margin: 20px 0;
-  /* height: 140px; Cambio solicitado por redacción (menos alto)*/
-  height: 90px;
+  /*margin: 20px 0;
+  height: 90px;*/
 
+  /* height: 140px; Cambio solicitado por redacción (menos alto)*/
+  margin: 15px 0;
+  height: 75px;
 }
 
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda {
