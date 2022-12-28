@@ -1,6 +1,6 @@
 var URL_principal_G = 'https://www.ecuavisa.com/';
-var URL_login_G = 'https://www.ecuavisa.com/servicios/rd-login-registro';
-var URL_perfil_G = 'https://www.ecuavisa.com/servicios/rd-mi-perfil-dev';
+var URL_login_G = 'https://www.ecuavisa.com/servicios/login';
+var URL_perfil_G = 'https://www.ecuavisa.com/servicios/perfil';
 var UserId = localStorage.getItem('wylexUserId');
 
 if (UserId){
@@ -163,7 +163,7 @@ function fb_login() {
 }
 
 function login() {
-  var URL_login_G = 'https://www.ecuavisa.com/servicios/rd-login-registro';
+  var URL_login_G = 'https://www.ecuavisa.com/servicios/login';
   document.getElementById("logEmail").required = true;
   document.getElementById("logPass").required = true;
 
@@ -184,7 +184,7 @@ function login() {
     .then(async (result) => {
       console.log(result);
       if (result.token) {
-        window.location = "https://www.ecuavisa.com/servicios/rd-mi-perfil-dev?tk="+ result.token;
+        window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
       }
     })
     .catch((error) => {
@@ -225,7 +225,7 @@ function register() {
         
         console.log(result);
         if (result.token) {
-          window.location = "https://www.ecuavisa.com/servicios/rd-mi-perfil-dev?tk="+ result.token;
+          window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
         }
       })
       .catch((error) => {
