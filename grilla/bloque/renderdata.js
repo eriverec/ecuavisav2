@@ -63,19 +63,20 @@ function activeDay(clase) {
         $('.' + clase).addClass('activo');
         titleHorarios.append(getHor);
         titleProgram.append(getTitulo);
-        buttonGye.classList.remove("div__hide");
+        // buttonGye.classList.remove("div__hide");
         if (getTitulo == "Tres Familias" ||
             getTitulo == "Asi Pasa" ||
             getTitulo == "Combo Amarillo" ||
             getTitulo == "Televistazo Comunidad Guayaquil Rr" ||
             getTitulo == "Televistazo Estelar Rr") {
-            buttonGye.classList.add("div__hide");
+            // buttonGye.classList.add("div__hide");
         } else {
             // console.log("no es tele comunidad");
         }
         if (getTitulo == "Televistazo  Al  Amanecer" || getTitulo == "Televistazo En La Comunidad") {
             console.log("si es tele comunidad");
             buttonQuito.classList.remove("div__hide");
+            buttonGye.classList.remove("div__hide");
         } else {
             // console.log("no es tele comunidad");
         }

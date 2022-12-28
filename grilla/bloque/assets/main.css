@@ -156,6 +156,7 @@
 
  .mediaBlock__ .multimedia {
    position: relative;
+   display: none;
  }
 
  .mediaBlock__ .senal_active {
@@ -200,7 +201,7 @@
  }
 
  .mediaBlock__ .t_prog {
-   position: absolute;
+   /* position: absolute; */
    bottom: 0;
    left: 0;
    right: 0;
@@ -221,7 +222,7 @@
  }
 
  .mediaBlock__ .t_prog .icon_player_prog img {
-   width: 72px;
+   width: 42px;
    margin-bottom: 18px;
  }
 
