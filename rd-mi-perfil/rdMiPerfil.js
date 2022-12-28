@@ -1,7 +1,7 @@
 logoutBtn = document.querySelector('.button_cerrar_sesion a');
 logoutBtn.addEventListener("click", function () {
   localStorage.clear();
-  window.location.href = "https://www.ecuavisa.com/servicios/rd-login-registro";
+  window.location.href = "https://www.ecuavisa.com/servicios/login";
   // window.location('');
 });
 
@@ -9,7 +9,7 @@ logoutBtn.addEventListener("click", function () {
 Token()
 async function Token(){
   var URL_principal_G = 'https://www.ecuavisa.com/';
-  var URL_login_G = 'https://www.ecuavisa.com/servicios/rd-login-registro';
+  var URL_login_G = 'https://www.ecuavisa.com/servicios/login';
     
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -38,7 +38,7 @@ async function Token(){
       /*if(result.avatar){
         localStorage.wylexAvatar=result.avatar;
       }*/
-      window.history.replaceState({}, document.title, "/servicios/rd-mi-perfil-dev");
+      window.history.replaceState({}, document.title, "/servicios/perfil");
   
       }
       //     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
