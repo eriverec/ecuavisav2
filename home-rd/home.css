@@ -729,6 +729,10 @@ Cambio de tamaño de imagen grande izq
     background: #060127;
     border-bottom: 16px solid #2927B9;
   }
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .headline a h2{
+    font-size: 34px;
+    line-height: 38px;
+  }
 
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
     border-bottom: none;
