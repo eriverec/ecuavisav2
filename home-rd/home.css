@@ -2686,7 +2686,7 @@ INICIO - BLOQUE - ESTILO
   } */
 
   .HOME_MENU_RD .layout_agenda {
-    margin: 20px 0;
+    margin: -1px 0;
   }
 
   .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2 {
@@ -2706,14 +2706,10 @@ INICIO - BLOQUE - ESTILO
   .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline {
     padding: 30px 20px;
   }
-}
-@media (max-width: 600px) {
+  .HOME_MENU_RD .title_agenda .cintillo-rd {
+    color: white;
+    margin-bottom: 10px;
 
-  .HOME_MENU_RD .layout_agenda {
-    margin: -1px 0;
-}
-.HOME_MENU_RD .title_agenda .cintillo-rd {
     padding-top: 25px;
 }
-
 }
