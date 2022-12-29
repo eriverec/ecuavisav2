@@ -74,10 +74,10 @@ const countUsers = () => {
       console.error(error);
     });
 };
-
+countUsers();
 
 watchEffect(fetchUsers)
-watchEffect(countUsers)
+
 // 👉 watching current page
 watchEffect(() => {
   if (page.value > totalPage.value) page.value = totalPage.value;
