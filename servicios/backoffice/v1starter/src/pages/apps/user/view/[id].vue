@@ -11,7 +11,7 @@ const userListStore = useUserListStore()
 const route = useRoute()
 const userData = ref()
 const userTab = ref(null)
-
+/*
 const tabs = [
   {
     icon: 'tabler-user-check',
@@ -34,7 +34,7 @@ const tabs = [
     title: 'Connections',
   },
 ]
-
+*/
 userListStore.fetchUser(Number(route.params.id)).then(response => {
   userData.value = response.data
 })
@@ -55,7 +55,7 @@ userListStore.fetchUser(Number(route.params.id)).then(response => {
       md="7"
       lg="8"
     >
-    <UserTabOverview :v-model="userTab" />
+    <UserTabOverview :user-data="userData" />
     <!--
       <VTabs
         v-model="userTab"

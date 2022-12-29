@@ -128,9 +128,9 @@ const resolveUserRoleVariant = role => {
 
             <div>
               <h6 class="text-base font-weight-semibold">
-                {{ kFormatter(props.userData.taskDone) }}
+                News
               </h6>
-              <span class="text-sm">Task Done</span>
+              <span class="text-sm">{{ kFormatter(props.userData.newsletter_opt_in) }}</span>
             </div>
           </div>
 
