@@ -124,8 +124,12 @@
   font-size: 88px;
   line-height: 96px;
   margin-top: 0px;
-  /*margin-top: 30px;*/
+  margin-top: 30px;
   text-transform: lowercase;
+}
+
+.HOME_MENU_RD .title_agenda .cintillo-rd {
+  margin-top: 0px;
 }
 
 
@@ -1009,7 +1013,7 @@ INICIO - BLOQUE - PROGRAMACION
 
 .HOME_MENU_RD .prog-web-container .iframe__ iframe {
   width: 100%;
-  height: 360px;
+  height: 385px;
 }
 
 .HOME_MENU_RD .titulo_programa_web .c_azul_celeste_Desktop {
@@ -1037,7 +1041,7 @@ INICIO - BLOQUE - PROGRAMACION
   content: "";
   left: 0;
   right: 0;
-  background-image: url(https://redyman.netlify.app/header2022/img/img-fondo.png) !important;
+  background-image: url('https://redyman.netlify.app/header2022/img/img-fondo.png') !important;
   background: #3F3F4200;
   background-position: center 100%;
   background-repeat: no-repeat;
