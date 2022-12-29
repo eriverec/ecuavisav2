@@ -1,11 +1,11 @@
 <script setup>
 import { useUserListStore } from '@/views/apps/user/useUserListStore'
 import UserBioPanel from '@/views/apps/user/view/UserBioPanel.vue'
-import UserTabBillingsPlans from '@/views/apps/user/view/UserTabBillingsPlans.vue'
-import UserTabConnections from '@/views/apps/user/view/UserTabConnections.vue'
-import UserTabNotifications from '@/views/apps/user/view/UserTabNotifications.vue'
+//import UserTabBillingsPlans from '@/views/apps/user/view/UserTabBillingsPlans.vue'
+//import UserTabConnections from '@/views/apps/user/view/UserTabConnections.vue'
+//import UserTabNotifications from '@/views/apps/user/view/UserTabNotifications.vue'
 import UserTabOverview from '@/views/apps/user/view/UserTabOverview.vue'
-import UserTabSecurity from '@/views/apps/user/view/UserTabSecurity.vue'
+//import UserTabSecurity from '@/views/apps/user/view/UserTabSecurity.vue'
 
 const userListStore = useUserListStore()
 const route = useRoute()
@@ -55,6 +55,8 @@ userListStore.fetchUser(Number(route.params.id)).then(response => {
       md="7"
       lg="8"
     >
+    <UserTabOverview :v-model="userTab" />
+    <!--
       <VTabs
         v-model="userTab"
         class="v-tabs-pill"
@@ -71,7 +73,8 @@ userListStore.fetchUser(Number(route.params.id)).then(response => {
           <span>{{ tab.title }}</span>
         </VTab>
       </VTabs>
-
+-->
+<!--
       <VWindow
         v-model="userTab"
         class="mt-6 disable-tab-transition"
@@ -80,6 +83,7 @@ userListStore.fetchUser(Number(route.params.id)).then(response => {
         <VWindowItem>
           <UserTabOverview />
         </VWindowItem>
+      </VWindow>
 
         <VWindowItem>
           <UserTabSecurity />
@@ -97,6 +101,7 @@ userListStore.fetchUser(Number(route.params.id)).then(response => {
           <UserTabConnections />
         </VWindowItem>
       </VWindow>
+    -->
     </VCol>
   </VRow>
 </template>

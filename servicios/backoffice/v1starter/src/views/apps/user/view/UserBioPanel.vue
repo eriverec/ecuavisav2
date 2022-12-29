@@ -90,13 +90,13 @@ const resolveUserRoleVariant = role => {
               v-else
               class="text-5xl font-weight-semibold"
             >
-              {{ avatarText(props.userData.fullName) }}
+              {{ avatarText(props.userData.first_name +' ' + props.userData.last_name ) }}
             </span>
           </VAvatar>
 
           <!-- 👉 User fullName -->
           <h6 class="text-h6 mt-4">
-            {{ props.userData.fullName }}
+            {{ props.userData.first_name +' '+ props.userData.last_name}}
           </h6>
 
           <!-- 👉 Role chip -->
@@ -173,7 +173,7 @@ const resolveUserRoleVariant = role => {
                 <h6 class="text-base font-weight-semibold">
                   Name:
                   <span class="text-body-2">
-                    {{ props.userData.fullName }}
+                    {{  props.userData.first_name +' '+ props.userData.last_name}}
                   </span>
                 </h6>
               </VListItemTitle>
@@ -182,7 +182,7 @@ const resolveUserRoleVariant = role => {
             <VListItem>
               <VListItemTitle>
                 <h6 class="text-base font-weight-semibold">
-                  Billing Email:
+                  Email:
                   <span class="text-body-2">{{ props.userData.email }}</span>
                 </h6>
               </VListItemTitle>
@@ -273,12 +273,13 @@ const resolveUserRoleVariant = role => {
       </VCard>
     </VCol>
     <!-- !SECTION -->
-
+    
     <!-- SECTION Current Plan -->
+     <!--
     <VCol cols="12">
       <VCard>
         <VCardText class="d-flex">
-          <!-- 👉 Standard Chip -->
+         // 👉 Standard Chip 
           <VChip
             label
             color="primary"
@@ -289,7 +290,7 @@ const resolveUserRoleVariant = role => {
 
           <VSpacer />
 
-          <!-- 👉 Current Price  -->
+          // 👉 Current Price  
           <div class="d-flex align-center">
             <sup class="text-primary text-sm font-weight-regular">$</sup>
             <h3 class="text-h3 text-primary font-weight-semibold">
@@ -300,7 +301,7 @@ const resolveUserRoleVariant = role => {
         </VCardText>
 
         <VCardText>
-          <!-- 👉 Price Benefits -->
+         //  👉 Price Benefits 
           <VList class="card-list">
             <VListItem
               v-for="benefit in standardPlan.benefits"
@@ -316,7 +317,7 @@ const resolveUserRoleVariant = role => {
             </VListItem>
           </VList>
 
-          <!-- 👉 Days -->
+         // 👉 Days 
           <div class="my-6">
             <div class="d-flex font-weight-semibold mt-3 mb-2">
               <h6 class="text-base font-weight-semibold">
@@ -328,7 +329,7 @@ const resolveUserRoleVariant = role => {
               </h6>
             </div>
 
-            <!-- 👉 Progress -->
+           // 👉 Progress 
             <VProgressLinear
               rounded
               rounded-bar
@@ -342,7 +343,7 @@ const resolveUserRoleVariant = role => {
             </p>
           </div>
 
-          <!-- 👉 Upgrade Plan -->
+         // 👉 Upgrade Plan 
           <VBtn
             block
             @click="isUpgradePlanDialogVisible = true"
@@ -352,9 +353,10 @@ const resolveUserRoleVariant = role => {
         </VCardText>
       </VCard>
     </VCol>
+        -->
     <!-- !SECTION -->
   </VRow>
-
+  
   <!-- 👉 Edit user info dialog -->
   <UserInfoEditDialog
     v-model:isDialogVisible="isUserInfoEditDialogVisible"

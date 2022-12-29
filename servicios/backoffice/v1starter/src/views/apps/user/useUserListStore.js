@@ -21,7 +21,7 @@ export const useUserListStore = defineStore('UserListStore', {
     // 👉 fetch single user
     fetchUser(id) {
       return new Promise((resolve, reject) => {
-        axios.get(`/apps/users/${id}`).then(response => resolve(response)).catch(error => reject(error))
+        axios.get(`https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id=${id}`).then(response => resolve(response)).catch(error => reject(error))
       })
     },
   },

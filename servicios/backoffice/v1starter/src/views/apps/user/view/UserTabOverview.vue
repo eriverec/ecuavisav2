@@ -1,5 +1,5 @@
 <script setup>
-import UserInvoiceTable from './UserInvoiceTable.vue'
+//import UserInvoiceTable from './UserInvoiceTable.vue'
 import avatar2 from '@/assets/images/avatars/avatar-2.png'
 import figma from '@/assets/images/icons/project-icons/figma.png'
 import html5 from '@/assets/images/icons/project-icons/html5.png'
@@ -84,6 +84,7 @@ const resolveUserProgressVariant = progress => {
 
 <template>
   <VRow>
+    <!--
     <VCol cols="12">
       <VCard title="User's Projects List">
         <VDivider />
@@ -147,7 +148,7 @@ const resolveUserProgressVariant = progress => {
         </VTable>
       </VCard>
     </VCol>
-
+    -->
     <VCol cols="12">
       <!-- 👉 Activity timeline -->
       <VCard title="User Activity Timeline">
@@ -247,9 +248,10 @@ const resolveUserProgressVariant = progress => {
         </VCardText>
       </VCard>
     </VCol>
-
+<!--
     <VCol cols="12">
       <UserInvoiceTable />
     </VCol>
+     -->
   </VRow>
 </template>

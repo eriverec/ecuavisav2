@@ -526,7 +526,17 @@ const userListMeta = [
                 <!-- 👉 Actions -->
                 <td class="text-center" style="width: 5rem">
                   <VBtn icon size="x-small" color="default" variant="text">
+                    <RouterLink
+                          :to="{
+                            name: 'apps-user-view-id',
+                            params: { id: user.wylexId },
+                          }"
+                          class="font-weight-medium user-list-name"
+                        >
                     <VIcon size="22" icon="tabler-eye" />
+                  </RouterLink>
+                          
+                        
                   </VBtn>
 
                   <VBtn icon size="x-small" color="default" variant="text">
