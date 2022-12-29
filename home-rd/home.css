@@ -1015,10 +1015,12 @@ INICIO - BLOQUE - PROGRAMACION
   width: 100%;
   height: 385px;
 }
+
 @media (max-width: 767px) {
   .HOME_MENU_RD .prog-web-container .iframe__ iframe {
     width: 100%;
-    height: 406px;
+    /*height: 406px;*/
+    height: 305px;
   }
 }
 
