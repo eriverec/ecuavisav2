@@ -36,7 +36,7 @@
   text-align: -webkit-center;
 }
 
-.newsletter_rd .info-formulario .news-texto-rd h1 {
+.newsletter_rd .info-formulario .news-texto-rd .newsletterh1 {
   font-family: 'Anek Malayalam';
   font-style: normal;
   font-weight: 600;
@@ -78,20 +78,20 @@
 
 
 @media (min-width: 768px) and (max-width: 993px) {
-  .newsletter_rd .info-formulario .news-texto-rd h1{
+  .newsletter_rd .info-formulario .news-texto-rd .newsletterh1{
     font-size: 55px;
   }
-  .newsletter_rd .info-formulario .news-texto-rd h2{
+  .newsletter_rd .info-formulario .news-tex.newsletterh1-rd h2{
     font-size: 16px;
   }
 }
 
 @media (max-width: 575px) {
-  .newsletter_rd .info-formulario .news-texto-rd h1 {
+  .newsletter_rd .info-formulario .news-texto-rd .newsletterh1 {
     font-size: 55px;
   }
 
-  .newsletter_rd .newsContenido .news_line_left.mobile__ {
+  .newsletter_rd .newsContenido .news_line.newsletterh1eft.mobile__ {
     display: block;
   }
 
