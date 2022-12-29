@@ -54,10 +54,79 @@ if(localStorage.getItem('programas')){ //evaluamos si se encuentra la key progra
 
 function activeDay(data){
     // $('div[data-item=' + slide + ']').addClass("selected");
+
+    
+ var d = new Date();
+ var day = d.getDay();
+ var hour = d.getHours();
+ var min = d.getMinutes();
+ var t = d.getTime();
+ var name = "";
+ let envivo=false;
+ timeOfDay =
+   d.getHours().toString().padStart(2, "0") +
+   ":" +
+   d.getMinutes().toString().padStart(2, "0");
+ if (day > 0 && day <= 5) {
+    //validacion de lunes a viernes
+    if ("05:55" <= timeOfDay && timeOfDay <= "06:55") {
+        envivo=true;
+    } else if ("06:55" <= timeOfDay && timeOfDay <= "07:30") {
+        envivo=true;
+    } else if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
+        envivo=true;
+  
+    } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {//Encontacto
+        envivo=true;
+  
+    } else if ("13:00" <= timeOfDay && timeOfDay <= "14:00") {
+        envivo=true;
+    } else if ("14:00" <= timeOfDay && timeOfDay <= "15:00") {
+        envivo=true;
+    } else if ("15:00" <= timeOfDay && timeOfDay <= "16:00") {
+        envivo=true;
+    }
+    else if ("18:00" <= timeOfDay && timeOfDay <= "19:00") {
+        envivo=true;
+    }
+     else if ("19:00" <= timeOfDay && timeOfDay <= "19:59") {
+        envivo=true;
+    } else if ("20:00" <= timeOfDay && timeOfDay <= "21:00") {
+        envivo=true;
+    } else if ("21:00" <= timeOfDay && timeOfDay <= "22:00") {
+        envivo=true;
+    } else if ("22:00" <= timeOfDay && timeOfDay <= "23:00") {
+        envivo=true;
+    } else {
+      envivo=false;
+    }
+  } else if (day === 6) {
+    
+  
+    if ("19:00" <= timeOfDay && timeOfDay <= "19:30") {
+        envivo=true;
+    } else {
+      envivo=false;
+    }
+  } else {
+    //validacion de domingo
+    console.log("es domingo");
+  
+    if ("10:30" <= timeOfDay && timeOfDay <= "11:30") {
+        envivo=true;
+    } else if ("19:00" <= timeOfDay && timeOfDay <= "19:59") {
+        envivo=true;
+    } else {
+      envivo=false;
+    }
+  }
     setTimeout(function(){
         console.log(data)
         var el = $(`tr.programaItem.${data}`).addClass('active-item');
-        var vivo = $(`a.btnEnvivo.${data}`).removeClass('hidden');
+        if(envivo){
+            var vivo = $(`a.btnEnvivo.${data}`).removeClass('hidden');
+        }
+        
         $('html, body').animate({
             scrollTop: $(`tr.programaItem.${data}`).offset().top - 90
         }, 1000);
