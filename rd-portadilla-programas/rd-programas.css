@@ -439,6 +439,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   line-height: 40px;
   font-family: 'Archivo';
   margin: 0;
+  padding-top: 2rem;
 }
 
 .tarjeta-destacada .destacada {
