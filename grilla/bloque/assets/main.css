@@ -122,8 +122,8 @@
    background: #2927b95c;
    border-radius: 2px;
    padding: 15px 33px;
-   /*height: 115px;*/
-   height: 85px;
+   height: 100px;
+   /*height: 85px;*/
    display: flex;
    flex-direction: column;
    justify-content: center;
