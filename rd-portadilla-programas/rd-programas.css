@@ -42,7 +42,8 @@
 }
 .prog-web-container .iframe__ iframe {
   width: 100%;
-  height: 860px;
+  /*height: 860px;*/
+  height: 385px;
 }
 .prog-web-container .titulo_programa_web .cintillo-rd span {
   color: #23DCD1;
