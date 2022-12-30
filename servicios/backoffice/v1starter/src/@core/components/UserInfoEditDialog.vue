@@ -1,41 +1,77 @@
 <script setup>
+
 const props = defineProps({
-  userData: {
-    type: Object,
-    required: true,
-  },
+  // userData: {
+  //   type: Object,
+  //   required: true,
+  // },
   isDialogVisible: {
     type: Boolean,
     required: true,
   },
 })
+import {
+  emailValidator,
+  requiredValidator,
+} from '@validators'
+
 
 const emit = defineEmits([
   'update:modelValue',
   'submit',
   'update:isDialogVisible',
+  'userData'
 ])
 
-const userData = ref(structuredClone(toRaw(props.userData)))
-const isUseAsBillingAddress = ref(false)
+//const userData = ref(structuredClone(toRaw(props.userData)))
+//const isUseAsBillingAddress = ref(false)
 
-watch(props, () => {
-  userData.value = structuredClone(toRaw(props.userData))
-})
+
+
+// watch(props, () => {
+//   userData.value = structuredClone(toRaw(props.userData))
+// })
+
+const isFormValid = ref(false)
+const refForm = ref()
+const first_name = ref('')
+const last_name = ref('')
+const contraseña = ref('')
+const newsletter_opt_in = ref(true)
+
+
 
 const onFormSubmit = () => {
-  emit('update:modelValue', false)
-  emit('submit', userData.value)
+
+  refForm.value?.validate().then(({ valid }) => {
+    if (valid) {
+      emit('userData', {
+        first_name: first_name.value,
+        last_name: last_name.value,
+        contraseña: contraseña.value,
+        newsletter_opt_in: newsletter_opt_in.value,
+      })
+      emit('update:modelValue', false)
+      nextTick(() => {
+        refForm.value?.reset()
+        refForm.value?.resetValidation()
+      })
+    }
+  })
+  //emit('update:modelValue', false)
+  //emit('submit', userData.value)
 }
 
 const onFormReset = () => {
-  userData.value = structuredClone(toRaw(props.userData))
+  //userData.value = structuredClone(toRaw(props.userData))
   emit('update:isDialogVisible', false)
 }
 
 const dialogModelValueUpdate = val => {
   emit('update:isDialogVisible', val)
 }
+
+
 </script>
 
 <template>
@@ -50,16 +86,20 @@ const dialogModelValueUpdate = val => {
     <VCard class="pa-sm-14 pa-5">
       <VCardItem class="text-center">
         <VCardTitle class="text-h5 mb-3">
-          Edit User Information
+          Editar la información del usuario
         </VCardTitle>
+        <!--
         <p class="mb-0">
           Updating user details will receive a privacy audit.
         </p>
+         -->
       </VCardItem>
 
       <VCardText>
         <!-- 👉 Form -->
         <VForm
+          ref="refForm"
+          v-model="isFormValid"
           class="mt-6"
           @submit.prevent="onFormSubmit"
         >
@@ -70,8 +110,9 @@ const dialogModelValueUpdate = val => {
               md="6"
             >
               <VTextField
-                v-model="userData.fullName.split(' ')[0]"
-                label="first Name"
+                v-model="first_name"
+                :rules="[requiredValidator]"
+                label="Nombres"
               />
             </VCol>
 
@@ -81,23 +122,24 @@ const dialogModelValueUpdate = val => {
               md="6"
             >
               <VTextField
-                v-model="userData.fullName.split(' ')[1]"
-                label="Last Name"
+                v-model="last_name"
+                :rules="[requiredValidator]"
+                label="Apellidos"
               />
             </VCol>
-
-            <!-- 👉 Billing Email -->
+        
+            <!--👉 Contraseña -->
             <VCol
               cols="12"
               md="6"
             >
               <VTextField
-                v-model="userData.email"
-                label="Billing Email"
+                v-model="contraseña"
+                label="Contraseña"
               />
             </VCol>
-
-            <!-- 👉 Status -->
+<!--
+           // 👉 Status 
             <VCol
               cols="12"
               md="6"
@@ -108,7 +150,7 @@ const dialogModelValueUpdate = val => {
               />
             </VCol>
 
-            <!-- 👉 Tax Id -->
+           // 👉 Tax Id 
             <VCol
               cols="12"
               md="6"
@@ -119,7 +161,7 @@ const dialogModelValueUpdate = val => {
               />
             </VCol>
 
-            <!-- 👉 Contact -->
+           // 👉 Contact 
             <VCol
               cols="12"
               md="6"
@@ -130,7 +172,7 @@ const dialogModelValueUpdate = val => {
               />
             </VCol>
 
-            <!-- 👉 Language -->
+           //👉 Language 
             <VCol
               cols="12"
               md="6"
@@ -144,7 +186,7 @@ const dialogModelValueUpdate = val => {
               />
             </VCol>
 
-            <!-- 👉 Country -->
+            //👉 Country 
             <VCol
               cols="12"
               md="6"
@@ -155,13 +197,13 @@ const dialogModelValueUpdate = val => {
                 :items="['USA', 'UK', 'Spain', 'Russia', 'France', 'Germany']"
               />
             </VCol>
-
+          -->
             <!-- 👉 Switch -->
             <VCol cols="12">
               <VSwitch
-                v-model="isUseAsBillingAddress"
+                v-model="newsletter_opt_in"
                 density="compact"
-                label="Use as a billing address?"
+                label="Suscribirse al boletín"
               />
             </VCol>
 
@@ -171,7 +213,7 @@ const dialogModelValueUpdate = val => {
               class="d-flex flex-wrap justify-center gap-4"
             >
               <VBtn type="submit">
-                Submit
+                Enviar
               </VBtn>
 
               <VBtn
@@ -179,7 +221,7 @@ const dialogModelValueUpdate = val => {
                 variant="tonal"
                 @click="onFormReset"
               >
-                Cancel
+                Cancelar
               </VBtn>
             </VCol>
           </VRow>

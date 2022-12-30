@@ -552,7 +552,7 @@ const userListMeta = [
                           title="View"
                           :to="{
                             name: 'apps-user-view-id',
-                            params: { id: user.id },
+                            params: { id: user.wylexId },
                           }"
                         />
                         <VListItem title="Suspend" href="javascript:void(0)" />

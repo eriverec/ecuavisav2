@@ -227,7 +227,7 @@ const resolveUserProgressVariant = (progress) => {
     -->
     <VCol cols="12">
       <!-- 👉 Activity timeline -->
-      <VCard title="Actividad del Usuario">
+      <VCard title="Actividad del usuario">
         <VCardText>
           <VTimeline
             density="compact"
