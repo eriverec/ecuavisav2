@@ -127,4 +127,5 @@ tr.programaItem td:not(.text-center) div {
     display: flex;
     align-items: center;
     column-gap: 5px;
+    justify-content: space-between;
 }
