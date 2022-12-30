@@ -2721,4 +2721,8 @@ INICIO - BLOQUE - ESTILO
     padding-top: 25px;
     padding-bottom: 20px;
 }
+.HOME_MENU_RD .ly-apertura-rd.bloque_estadio_bg{
+  margin-top: 0;
+}
+
 }
