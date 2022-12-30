@@ -189,10 +189,10 @@ function renderProgramas(){
                     </p>
                 </td>
                 <td class="px-0 pr-3 py-3 border-0 bg-ecuavisa text-sm  w-3/4 items-center">
-                    <p class=" border-b-4 border-zinc-500 py-5 px-3 border-0 text-zinc-300 ${showActive} whitespace-no-wrap datafont">
-                        <div class="block-title"><b>${programName}</b> <br> ${programTimeIni}</div>
+                    <div class=" border-b-4 border-zinc-500 py-5 px-3 border-0 text-zinc-300 ${showActive} whitespace-no-wrap datafont">
+                        <p class="block-title"><b>${programName}</b> <br> ${programTimeIni}</p>
                          <a href="https://www.ecuavisa.com/envivo" target="_blank" class="btnEnvivo el-${contador} hidden"> En Vivo </a>  
-                    </p>
+                    </div>
                 </td>
                 
             </tr>       
