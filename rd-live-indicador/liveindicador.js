@@ -45,3 +45,22 @@ else {
       actDIV();
   } else {}
 }
+
+
+
+function getConfigPlayerIndicador(){
+  var xhr = new XMLHttpRequest();
+  // var url = "url?data=" + encodeURIComponent(JSON.stringify({"email": "hey@mail.com", "password": "101010"}));
+  var url = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/getforcedplayer.php";
+  xhr.open("GET", url, true);
+  xhr.setRequestHeader("Content-Type", "application/json");
+  xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+          var datoJson = JSON.parse(xhr.responseText);
+          datoJson.estadoActivo ? actDIV() : console.log('player Inactivo Indicador');
+          // console.log(datoJson.titulo + ", " + datoJson.estadoActivo);
+      }
+  };
+  xhr.send();
+}
+getConfigPlayerIndicador();
