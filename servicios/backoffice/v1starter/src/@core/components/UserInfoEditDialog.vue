@@ -44,6 +44,7 @@ const onFormSubmit = () => {
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
       emit("update:modelValue", false);
+      emit("update:isDialogVisible", false);
       emit("submit", updateData._rawValue);
       // nextTick(() => {
       //   refForm.value?.reset()

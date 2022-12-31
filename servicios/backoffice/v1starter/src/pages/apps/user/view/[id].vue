@@ -47,7 +47,7 @@ watchEffect(fetchId)
 var timeoutID;
 
 const delayed = () =>  {
-  timeoutID = window.setTimeout(fetchId, 300);
+  timeoutID = window.setTimeout(fetchId, 1000);
 }
 
 const reloadP = () =>  {
