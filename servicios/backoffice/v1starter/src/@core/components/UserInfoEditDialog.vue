@@ -1,77 +1,68 @@
 <script setup>
-
 const props = defineProps({
-  // userData: {
-  //   type: Object,
-  //   required: true,
-  // },
+   userData: {
+    type: Object,
+     required: true,
+ },
   isDialogVisible: {
     type: Boolean,
     required: true,
   },
-})
-import {
-  emailValidator,
-  requiredValidator,
-} from '@validators'
-
+});
+import { emailValidator, requiredValidator } from "@validators";
 
 const emit = defineEmits([
-  'update:modelValue',
-  'submit',
-  'update:isDialogVisible',
-  'userData'
-])
+  "update:modelValue",
+  "submit",
+  "update:isDialogVisible",
+  
+]);
 
 //const userData = ref(structuredClone(toRaw(props.userData)))
 //const isUseAsBillingAddress = ref(false)
 
+//  watch(props, () => {
+//    userData.value = structuredClone(toRaw(props.userData))
+//  })
 
-
-// watch(props, () => {
-//   userData.value = structuredClone(toRaw(props.userData))
-// })
-
-const isFormValid = ref(false)
-const refForm = ref()
-const first_name = ref('')
-const last_name = ref('')
-const contraseña = ref('')
-const newsletter_opt_in = ref(true)
-
-
+const isFormValid = ref(false);
+const refForm = ref();
+//const first_name = ref(props.userData.first_name);
+//const last_name = ref(props.userData.last_name);
+//const contraseña = ref("");
+//const newsletter_opt_in = ref(true);
+const updateData = ref({
+  first_name: props.userData.first_name,
+  last_name: props.userData.last_name,
+  contraseña: "",
+  newsletter_opt_in: props.userData.newsletter_opt_in,
+ });
+console.log("sin",updateData)
+console.log("value",updateData._rawValue)
 
 const onFormSubmit = () => {
-
   refForm.value?.validate().then(({ valid }) => {
     if (valid) {
-      emit('userData', {
-        first_name: first_name.value,
-        last_name: last_name.value,
-        contraseña: contraseña.value,
-        newsletter_opt_in: newsletter_opt_in.value,
-      })
-      emit('update:modelValue', false)
-      nextTick(() => {
-        refForm.value?.reset()
-        refForm.value?.resetValidation()
-      })
+      emit("update:modelValue", false);
+      emit("submit", updateData._rawValue);
+      // nextTick(() => {
+      //   refForm.value?.reset()
+      //   refForm.value?.resetValidation()
+      // })
     }
-  })
-  //emit('update:modelValue', false)
-  //emit('submit', userData.value)
-}
+  });
+  
+  
+};
 
 const onFormReset = () => {
   //userData.value = structuredClone(toRaw(props.userData))
-  emit('update:isDialogVisible', false)
-}
+  emit("update:isDialogVisible", false);
+};
 
 const dialogModelValueUpdate = val => {
-  emit('update:isDialogVisible', val)
-}
-
-
+  emit("update:isDialogVisible", val);
+};
 </script>
 
 <template>
@@ -105,40 +96,28 @@ const dialogModelValueUpdate = val => {
         >
           <VRow>
             <!-- 👉 First Name -->
-            <VCol
-              cols="12"
-              md="6"
-            >
+            <VCol cols="12" md="6">
               <VTextField
-                v-model="first_name"
+                v-model="updateData.first_name"
                 :rules="[requiredValidator]"
                 label="Nombres"
               />
             </VCol>
 
             <!-- 👉 Last Name -->
-            <VCol
-              cols="12"
-              md="6"
-            >
+            <VCol cols="12" md="6">
               <VTextField
-                v-model="last_name"
+                v-model="updateData.last_name"
                 :rules="[requiredValidator]"
                 label="Apellidos"
               />
             </VCol>
-        
+
             <!--👉 Contraseña -->
-            <VCol
-              cols="12"
-              md="6"
-            >
-              <VTextField
-                v-model="contraseña"
-                label="Contraseña"
-              />
+            <VCol cols="12" md="6">
+              <VTextField v-model="updateData.contraseña" label="Contraseña" />
             </VCol>
-<!--
+            <!--
            // 👉 Status 
             <VCol
               cols="12"
@@ -201,26 +180,17 @@ const dialogModelValueUpdate = val => {
             <!-- 👉 Switch -->
             <VCol cols="12">
               <VSwitch
-                v-model="newsletter_opt_in"
+                v-model="updateData.newsletter_opt_in"
                 density="compact"
                 label="Suscribirse al boletín"
               />
             </VCol>
 
             <!-- 👉 Submit and Cancel -->
-            <VCol
-              cols="12"
-              class="d-flex flex-wrap justify-center gap-4"
-            >
-              <VBtn type="submit">
-                Enviar
-              </VBtn>
+            <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
+              <VBtn type="submit"> Enviar </VBtn>
 
-              <VBtn
-                color="secondary"
-                variant="tonal"
-                @click="onFormReset"
-              >
+              <VBtn color="secondary" variant="tonal" @click="onFormReset">
                 Cancelar
               </VBtn>
             </VCol>

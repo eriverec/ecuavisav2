@@ -20,9 +20,8 @@ export const useUserListStore = defineStore('UserListStore', {
 
     updateUser(userData, id) {
       return new Promise((resolve, reject) => {
-        axios.put(`https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/update?id=${id}`, {
-          userData,
-        }).then(response => resolve(response))
+      axios.put(`https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/update?id=${id}`,
+          userData,).then(response => resolve(response))
           .catch(error => reject(error))
       })
     },

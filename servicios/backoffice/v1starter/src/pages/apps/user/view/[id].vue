@@ -35,9 +35,27 @@ const tabs = [
   },
 ]
 */
+
+const fetchId = () => {
 userListStore.fetchUser(Number(route.params.id)).then(response => {
   userData.value = response.data
+  
 })
+};
+watchEffect(fetchId)
+
+var timeoutID;
+
+const delayed = () =>  {
+  timeoutID = window.setTimeout(fetchId, 300);
+}
+
+const reloadP = () =>  {
+  window.location.reload();
+  console.log("reload")
+}
+
+
 </script>
 
 <template>
@@ -47,7 +65,8 @@ userListStore.fetchUser(Number(route.params.id)).then(response => {
       md="5"
       lg="4"
     >
-      <UserBioPanel :user-data="userData" />
+      <UserBioPanel :user-data="userData"
+      @reload = "delayed"/>
     </VCol>
 
     <VCol
@@ -55,7 +74,8 @@ userListStore.fetchUser(Number(route.params.id)).then(response => {
       md="7"
       lg="8"
     >
-    <UserTabOverview :user-data="userData" />
+    <UserTabOverview :user-data="userData"
+     />
     <!--
       <VTabs
         v-model="userTab"
