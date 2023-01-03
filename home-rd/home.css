@@ -2587,6 +2587,7 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .layout_agenda {
   background: #2927B9;
   /* margin: 60px 0; */
+  margin-bottom: 30px;
 }
 
 .HOME_MENU_RD .title_agenda .cintillo-rd {
@@ -2709,6 +2710,7 @@ INICIO - BLOQUE - ESTILO
 
   .HOME_MENU_RD .layout_agenda {
     margin: -1px 0;
+    margin-bottom: 0px;
   }
 
   .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2 {
