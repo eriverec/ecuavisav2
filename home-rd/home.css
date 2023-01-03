@@ -885,6 +885,14 @@ INICIO - BLOQUE - ECUADOR
   letter-spacing: -0.025em;
 }
 
+.HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .subheadline .rd-h3{
+  font-size: 20px;
+  color: var(--bs-black);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px;
+  letter-spacing: -0.025em;
+}
 
 
 .HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT {
