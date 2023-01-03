@@ -2148,6 +2148,10 @@ BLOQUE - CULTURA
     font-size: 16px;
   }
 
+  .HOME_MENU_RD .nota-principal-bloque-cultura-mobile .noticias .article:nth-child(1){
+    margin-bottom: 30px;
+  }
+
   .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h3 {
     font-size: 22px;
     line-height: 28px;
