@@ -53,6 +53,13 @@ div#r03c01 {
   .btn_seguimiento span {
     font-size: 11px;
   }
+  .ecv_relacionadas_2022 .iconPlay {
+    bottom: 19px;
+  }
+  .author_card .author_box .media_block a img {
+    width: 160px;
+    height: 150px;
+  }
 }
 
 /*
@@ -157,8 +164,8 @@ div#r03c01 {
 } */
 .ecv_relacionadas_2022 .noticias .article .multimedia .multimediaIconMacroWrapper div img {
   border-radius: 3px;
-  width: 100!important;
-  height: 1005!important;
+  /*width: 100!important;
+  height: 1005!important;*/
 }
 .ecv_relacionadas_2022 .recomendadas-rd {
   display: grid;
@@ -382,8 +389,10 @@ div#r03c01 {
 }
 .ecv_relacionadas_2022 .noticias .article .multimedia .multimediaIconMacroWrapper div img {
   width: 100% !important;
-  max-height: 130px!important;
-  height: 130px!important;
+  /*max-height: 130px!important;
+  height: 130px!important;*/
+  max-height: 110px!important;
+  height: 105px!important;
 }
 .notas-recientes .iter-rankingtab-mostrecent-hd {
   font-size: 50px;
