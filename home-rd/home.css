@@ -1372,9 +1372,8 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   object-fit: cover;
 }
 
-
 .sliderVideos .swiper-wrapper {
-  padding-bottom: 2rem;
+  padding-bottom: 2.5rem;
 }
 
 .sliderVideos .ms-visto-ec .swiper .swiper-wrapper .element .media_block .top_info {
