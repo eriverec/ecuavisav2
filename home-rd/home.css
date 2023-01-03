@@ -2451,13 +2451,18 @@ INICIO - BLOQUE - ESTILO
   padding-bottom: 50px;
 }
 
+.rankSwiper .swiper-pagination-bullet,
 .HOME_MENU_RD .lista-bloque-programas .swiper-pagination-bullet {
   width: 14px !important;
   height: 14px !important;
 }
-
+.rankSwiper .swiper-pagination-bullet-active,
 .HOME_MENU_RD .lista-bloque-programas .swiper-pagination-bullet-active{
   background: #2927b9;
+}
+.rankSwiper .swiper-pagination-bullet-active-prev,
+.rankSwiper .swiper-pagination-bullet-active-next{
+  background: #23DCD1;
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div {
