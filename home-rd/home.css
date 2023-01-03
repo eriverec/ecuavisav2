@@ -2271,6 +2271,7 @@ INICIO - BLOQUE - ESTILO
   font-weight: 700;
 }
 
+
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block .subheadline .rd-h3{
   font-size: 20px;
   color: #fff;
@@ -2380,6 +2381,10 @@ INICIO - BLOQUE - ESTILO
 }
 
 @media (max-width: 767px) {
+
+  .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block .subheadline .rd-h3{
+    font-size: 16px;
+  }
 
   .bloque_estilo_bg>div:nth-child(1)>div:nth-child(2)>div:nth-child(1) {
     padding: 0px;
