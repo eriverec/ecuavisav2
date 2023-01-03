@@ -1445,7 +1445,7 @@ INICIO - BLOQUE - MUNDO
 *************************** */
 
 .HOME_MENU_RD .lista-bloque-1x4 {
-  margin-bottom: 129px;
+  margin-bottom: 20px;
 }
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias {
@@ -2761,7 +2761,6 @@ INICIO - BLOQUE - ESTILO
 
   .HOME_MENU_RD .layout_agenda {
     margin: -1px 0;
-    margin-bottom: 0px;
   }
 
   .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2 {
