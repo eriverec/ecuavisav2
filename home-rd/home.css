@@ -1014,11 +1014,11 @@ INICIO - BLOQUE - PROGRAMACION
 }
 
 .HOME_MENU_RD .prog-web-container {
-  border-top: 16px solid #2927B9;
+  border-bottom: 16px solid #2927B9;
 }
 
 .HOME_MENU_RD .sliderVideos {
-  border-bottom: 16px solid #2927B9;
+  border-top: 16px solid #2927B9;
 }
 
 .HOME_MENU_RD .prog-web-container .iframe__ iframe {
@@ -1485,6 +1485,9 @@ INICIO - BLOQUE - MUNDO
   margin: 30px 0;
 }
 
+.HOME_MENU_RD .ly-apertura-rd{
+  margin-top: 0px;
+}
 
 @media (min-width: 1400px) {
 
@@ -1522,9 +1525,9 @@ INICIO - BLOQUE - MUNDO
 
 
 @media (max-width: 1399px) {
-  .HOME_MENU_RD .ly-apertura-rd {
+  /* .HOME_MENU_RD .ly-apertura-rd {
     margin-top: 20px;
-  }
+  } */
 
   /*Inicio de cambios de noticias*/
   /* Cambio global de las imagenes pequeñas**/
