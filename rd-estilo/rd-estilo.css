@@ -92,6 +92,17 @@
   font-size: 34px;
   line-height: 38px;
 }
+
+.portada-estilo-mobile .subheadline .rd-h3{
+  font-family: 'Archivo';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 26px;
+  max-width: 500px;
+  color: #d5d5d5;
+}
+
 .portada-estilo-mobile .date {
   padding: 1rem 0 1.5rem;
 }
