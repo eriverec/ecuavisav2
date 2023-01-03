@@ -2263,6 +2263,15 @@ INICIO - BLOQUE - ESTILO
   font-weight: 700;
 }
 
+.HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block .subheadline .rd-h3{
+  font-size: 20px;
+  color: #fff;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px;
+  letter-spacing: -0.025em;
+}
+
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block .section {
   color: #23DCD1;
