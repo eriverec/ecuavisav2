@@ -1027,6 +1027,7 @@ INICIO - BLOQUE - PROGRAMACION
 
 .HOME_MENU_RD .prog-web-container {
   border-bottom: 16px solid #2927B9;
+  margin-bottom: 30px;
 }
 
 .HOME_MENU_RD .sliderVideos {
@@ -2638,7 +2639,7 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .layout_agenda {
   background: #2927B9;
   /* margin: 60px 0; */
-  margin-bottom: 30px;
+  margin-bottom: 50px;
 }
 
 .HOME_MENU_RD .title_agenda .cintillo-rd {
@@ -2759,9 +2760,9 @@ INICIO - BLOQUE - ESTILO
     grid-template-columns: none
   } */
 
-  .HOME_MENU_RD .layout_agenda {
+  /* .HOME_MENU_RD .layout_agenda {
     margin: -1px 0;
-  }
+  } */
 
   .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .headline h2 {
     font-size: 19px;
