@@ -52,6 +52,8 @@
     font-weight: 300;
     line-height: 28px;
     max-width: 650px;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
 .HOME_MENU_RD .iconPlay {
