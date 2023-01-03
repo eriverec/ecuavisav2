@@ -606,6 +606,15 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   line-height: 48px;
 }
 
+.programas-desktop .noticias .article .media_block .text_block .inf2 {
+  font-family: 'Archivo';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 26px;
+  color: #d5d5d5;
+}
+
 .bloque-programas .media_block {
   position: relative;
   border-radius: 5px;
