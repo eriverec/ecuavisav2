@@ -2460,7 +2460,8 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .lista-bloque-programas .swiper-pagination-bullet-active{
   background: #2927b9;
 }
-.rankSwiper .swiper-pagination-bullet{
+.rankSwiper .swiper-pagination-bullet-active-prev,
+.rankSwiper .swiper-pagination-bullet-active-next{
   background: #23DCD1;
 }
 
