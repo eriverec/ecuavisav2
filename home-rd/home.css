@@ -2452,8 +2452,12 @@ INICIO - BLOQUE - ESTILO
 }
 
 .HOME_MENU_RD .lista-bloque-programas .swiper-pagination-bullet {
-  width: 12px !important;
-  height: 12px !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.HOME_MENU_RD .lista-bloque-programas .swiper-pagination-bullet-active{
+  background: #2927b9;
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div {
