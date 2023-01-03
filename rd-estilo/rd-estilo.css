@@ -930,6 +930,10 @@ h2.temas_estilo {
   margin: 8px 0;
 }
 
+.lista_bloque_3_desktop .noticias .article .media_block .text_block .subheadline .rd-h3 {
+  display: none;
+}
+
 .lista_bloque_3_desktop img {
   border-radius: 2px;
 }
