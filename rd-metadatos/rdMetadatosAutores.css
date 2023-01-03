@@ -54,7 +54,7 @@ div#r03c01 {
     font-size: 11px;
   }
   .ecv_relacionadas_2022 .iconPlay {
-    bottom: 19px;
+    bottom: 19px !important;
   }
   .author_card .author_box .media_block a img {
     width: 160px !important;
