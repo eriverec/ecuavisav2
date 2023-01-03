@@ -417,6 +417,10 @@ INICIO - PORTADA - 4 DESTACADAS
   padding-top: 8px;
 }
 
+.HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 .text_block .subheadline{
+  display: none;
+}
+
 .HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 .text_block .section {
   margin-top: 25px;
   display: block;
@@ -1913,6 +1917,10 @@ INICIO - BLOQUE - MUNDO
 
 }
 
+.HOME_MENU_RD .bloque_estadio_2 .noticias .article .media_block .text_block .subheadline{
+  display: none;
+}
+
 .HOME_MENU_RD .bloque_estadio_2 .noticias .article .media_block .text_block .section {
   color: #00C17C;
   font-weight: 500;
@@ -2060,6 +2068,15 @@ BLOQUE - CULTURA
   font-style: normal;
   font-weight: 700;
   padding-right: 35px;
+}
+
+.HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .subheadline .rd-h3 {
+  font-size: 20px;
+  color: var(--bs-black);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 27px;
+  letter-spacing: -0.025em;
 }
 
 .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .section {
