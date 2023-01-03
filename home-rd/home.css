@@ -46,11 +46,12 @@
 }
 
 .HOME_MENU_RD .notas-1-p-ap .IMG_SEC_TIT_TXT_PORTADA h3 {
-  color: var(--bs-white);
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 300;
-  line-height: 48px;
+    color: var(--bs-white);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 300;
+    line-height: 28px;
+    max-width: 650px;
 }
 
 .HOME_MENU_RD .iconPlay {
