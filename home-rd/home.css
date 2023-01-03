@@ -1703,6 +1703,10 @@ INICIO - BLOQUE - MUNDO
 
 @media (max-width: 767px) {
 
+  .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .subheadline .rd-h3{
+    font-size: 16px;
+  }
+
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3) {
     border-top: none;
     border-bottom: none;
