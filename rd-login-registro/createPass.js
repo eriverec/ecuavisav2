@@ -7,6 +7,7 @@ window.onload = () => {
  const queryString = window.location.search;
  const urlParams = new URLSearchParams(queryString);
  tk = urlParams.get('tk');
+ localStorage.token = tk;
 };
  
 
@@ -56,7 +57,7 @@ window.onload = () => {
 
  function wrong_pass_alert() {
   // if (document.getElementById('pass').value != "" && document.getElementById('confirm_pass').value != "") {
-
+    let token = localStorage.getItem('token');
     let pass = document.getElementById('pass').value;
     console.log(tk);
 
@@ -67,7 +68,7 @@ window.onload = () => {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
-        token: tk,
+        token: token,
         password: pass
       }),
     })
