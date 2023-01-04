@@ -47,21 +47,22 @@
  }
 
  function wrong_pass_alert() {
-   if (document.getElementById('pass').value != "" && document.getElementById('confirm_pass').value != "") {
+  // if (document.getElementById('pass').value != "" && document.getElementById('confirm_pass').value != "") {
 
     let pass = document.getElementById('pass').value;
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
     const tk = urlParams.get('tk');
 
-    return fetch("https://ecuavisa-register.onrender.com/resetPassword", {
+    
+    fetch("https://ecuavisa-register.onrender.com/resetPassword", {
       method: "PUT",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
         token: tk,
-        contraseña: pass
+        password: pass
       }),
     })
       .then((response) => response.json())
@@ -75,8 +76,8 @@
      
      //console.log('password: ', document.getElementById('pass').value);
     // console.log('confirmación: ', document.getElementById('confirm_pass').value);
-   } else {
+  // } else {
      //  alert("Please fill all the fields");
-     console.log('Por favor llene todos los campos')
-   }
+   //  console.log('Por favor llene todos los campos')
+  // }
  }
