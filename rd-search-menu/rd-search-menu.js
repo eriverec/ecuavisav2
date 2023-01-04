@@ -7,6 +7,7 @@ function addSearchMobile(){
   $(".basic-search-rd-mobile").detach().appendTo('.nav-dropdown.nav.noSubNav .parent-nav .tabnavBuscador');
   $('.basic-search-rd-mobile').removeClass('d-none');
   $('.basic-search-rd-mobile').css('display','flex');
+  $(".basic-search-rd-mobile .iter-field.iter-field-text .iter-field-element input").attr("placeholder", "Buscar...");
 }
 
 var devicesearch;
