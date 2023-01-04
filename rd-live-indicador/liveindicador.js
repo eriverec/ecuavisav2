@@ -4,7 +4,9 @@
 function actDIV() {
   var indicador = document.querySelector('.enVivoRedy .liveIndicator');
   document.querySelector('.enVivoRedy').style.display= 'flex';
+  document.querySelector('.ly-header.ly-header-redy .movil .container-menu.nav-expanded').classList.add('marg-top-force');
   // indicador.classList.add('pard__envivo');
+
 }
 // function comunidadHeight(){ 
 //     $('.HOME_MENU_RD .prog-web-container .iframe__ iframe').css('height', '365px');
