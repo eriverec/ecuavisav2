@@ -233,3 +233,26 @@ function register() {
       });
   }
 }
+
+function sendEmailPassReset() {
+let email = document.getElementById("forgetEmail").value.trim();
+
+  fetch("https://ecuavisa-register.onrender.com/forgotPassword", {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        email: email
+      }),
+    })
+      .then((response) => response.json())
+      .then(async (result) => {
+        
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log("error", error); /*; window.location = URL_login_G*/
+      });
+
+}
