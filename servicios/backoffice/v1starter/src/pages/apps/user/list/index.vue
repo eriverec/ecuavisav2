@@ -29,6 +29,7 @@ const users = ref([]);
 const percentEmail = ref(0);
 const percentFacebook = ref(0);
 const percentGoogle = ref(0);
+const search = ref('');
 
 // 👉 Fetching users
 const fetchUsers = () => {
@@ -36,6 +37,7 @@ const fetchUsers = () => {
     .fetchUsers({
       pageSize: rowPerPage.value,
       page: page.value,
+      query: search.value
     })
     .then((response) => {
       users.value = response.data.users;
@@ -76,7 +78,24 @@ const countUsers = () => {
 };
 countUsers();
 
-watchEffect(fetchUsers)
+const searchUsers = () => {
+  if(searchQuery.value){
+search.value = searchQuery.value;
+}
+};
+
+const reset = () => {
+search.value = ""
+searchQuery.value = ""
+  fetchUsers();
+
+};
+
+
+
+watchEffect(fetchUsers);
+
+
 
 // 👉 watching current page
 watchEffect(() => {
@@ -345,7 +364,7 @@ const userListMeta = [
       <VCol cols="12">
         <VCard title="Search Filter">
           <!-- 👉 Filters -->
-          <!--
+          
             <VCardText>
             <VRow>
        
@@ -355,25 +374,26 @@ const userListMeta = [
             >
             <VSelect
             v-model="selectedRole"
-            label="Select Role"
+            label="Proveedor"
             :items="roles"
             clearable
             clear-icon="tabler-x"
             />
             </VCol>
+
             <VCol
             cols="12"
             sm="4"
             >
             <VSelect
             v-model="selectedPlan"
-            label="Select Plan"
+            label="Boletín"
             :items="plans"
             clearable
             clear-icon="tabler-x"
             />
             </VCol>
- 
+              <!--
             <VCol
             cols="12"
             sm="4"
@@ -386,9 +406,10 @@ const userListMeta = [
             clear-icon="tabler-x"
             />
             </VCol>
+              -->
             </VRow>
             </VCardText> 
-          -->
+        
 
           <VDivider />
 
@@ -405,7 +426,7 @@ const userListMeta = [
             <VSpacer />
 
             <div
-              class="app-user-search-filter d-flex align-center flex-wrap gap-4"
+              class="d-flex align-center flex-wrap gap-2"
             >
               <!-- 👉 Search  -->
               <div style="width: 10rem">
@@ -415,7 +436,20 @@ const userListMeta = [
                   density="compact"
                 />
               </div>
-
+              <!-- 👉 Search button -->
+              <VBtn
+                prepend-icon="tabler-search"
+                @click="searchUsers"
+              >
+                Buscar
+              </VBtn>
+              <!-- 👉 Reset button -->
+              <VBtn
+                color="secondary"
+                @click="reset"
+              >
+                Reset
+              </VBtn>
               <!-- 👉 Export button -->
               <VBtn
                 variant="tonal"
