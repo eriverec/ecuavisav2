@@ -3,8 +3,9 @@
 
 function actDIV() {
   var indicador = document.querySelector('.enVivoRedy .liveIndicator');
+  var menupos = document.querySelector('.ly-header.ly-header-redy .movil .container-menu.nav-expanded');
   document.querySelector('.enVivoRedy').style.display= 'flex';
-  document.querySelector('.ly-header.ly-header-redy .movil .container-menu.nav-expanded').classList.add('marg-top-force');
+  menupos.classList.add('marg-top-force');
   // indicador.classList.add('pard__envivo');
 
 }
