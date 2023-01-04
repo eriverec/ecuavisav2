@@ -4,7 +4,9 @@
 function actDIV() {
   var indicador = document.querySelector('.enVivoRedy .liveIndicator');
   document.querySelector('.enVivoRedy').style.display= 'flex';
-  $('.movil .nav-expanded').addClass('marg-top-force');
+  setTimeout(()=> {
+    $('.movil .nav-expanded').addClass('marg-top-force');
+  },300)
   // indicador.classList.add('pard__envivo');
 
 }
