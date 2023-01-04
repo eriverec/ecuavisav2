@@ -1,5 +1,16 @@
 .tabnavBuscador {
-  padding: 20px 0;
+  padding: 20px 10px;
+}
+
+.tabnavBuscador .iter-field-element .iter-field-input input{
+  height: 35px;
+  font-size: 1rem;
+  color: #333;
+  flex: auto;
+  min-width: 0;
+  border: 0px solid #CACACA;
+  border-radius: 0px;
+  padding: 0 19px;
 }
 
 .basic-search-rd-mobile {
