@@ -54,7 +54,7 @@
     const urlParams = new URLSearchParams(queryString);
     const tk = urlParams.get('tk');
 
-    fetch("https://ecuavisa-register.onrender.com/resetPassword", {
+    return fetch("https://ecuavisa-register.onrender.com/resetPassword", {
       method: "PUT",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -66,15 +66,15 @@
     })
       .then((response) => response.json())
       .then(async (result) => {
-        
+        alert("Su contraseña se ha creado con exito!");
         console.log(result);
       })
       .catch((error) => {
         console.log("error", error); /*; window.location = URL_login_G*/
       });
-     alert("Su contraseña se ha creado con exito!");
-     console.log('password: ', document.getElementById('pass').value);
-     console.log('confirmación: ', document.getElementById('confirm_pass').value);
+     
+     //console.log('password: ', document.getElementById('pass').value);
+    // console.log('confirmación: ', document.getElementById('confirm_pass').value);
    } else {
      //  alert("Please fill all the fields");
      console.log('Por favor llene todos los campos')

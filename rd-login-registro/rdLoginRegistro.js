@@ -235,6 +235,8 @@ function register() {
 }
 
 function sendEmailPassReset() {
+
+document.getElementById("forgetEmail").disabled=false;
 let email = document.getElementById("forgetEmail").value.trim();
 
   fetch("https://ecuavisa-register.onrender.com/forgotPassword", {
