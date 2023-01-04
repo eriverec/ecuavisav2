@@ -7,7 +7,8 @@ window.onload = () => {
  const queryString = window.location.search;
  const urlParams = new URLSearchParams(queryString);
  tk = urlParams.get('tk');
- localStorage.token = tk;
+ document.getElementById("create").className = "";
+ //localStorage.token = tk;
 };
  
 
@@ -56,8 +57,8 @@ window.onload = () => {
  }
 
  function wrong_pass_alert() {
-  // if (document.getElementById('pass').value != "" && document.getElementById('confirm_pass').value != "") {
-    let token = localStorage.getItem('token');
+   if (document.getElementById('pass').value != "" && document.getElementById('confirm_pass').value != "") {
+    //let token = localStorage.getItem('token');
     let pass = document.getElementById('pass').value;
     console.log(tk);
 
@@ -68,7 +69,7 @@ window.onload = () => {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
-        token: token,
+        token: tk,
         password: pass
       }),
     })
@@ -83,8 +84,8 @@ window.onload = () => {
      
      //console.log('password: ', document.getElementById('pass').value);
     // console.log('confirmación: ', document.getElementById('confirm_pass').value);
-  // } else {
+  } else {
      //  alert("Please fill all the fields");
-   //  console.log('Por favor llene todos los campos')
-  // }
+    console.log('Por favor llene todos los campos')
+  }
  }
