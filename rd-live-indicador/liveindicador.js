@@ -3,8 +3,14 @@
 
 function actDIV() {
   var indicador = document.querySelector('.enVivoRedy .liveIndicator');
+  var margtop = document.querySelector('.movil .nav-expanded');
   document.querySelector('.enVivoRedy').style.display= 'flex';
-  document.querySelector('.movil .nav-expanded').style.marginTop= '50px';
+  if(margtop == undefined){
+    console.log('no exite')
+  }else{
+    margtop.style.marginTop= '50px';
+    console.log('exite')
+  }
   // indicador.classList.add('pard__envivo');
 
 }
