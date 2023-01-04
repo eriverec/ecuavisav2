@@ -3,7 +3,7 @@
 }
 
 .basic-search-rd-mobile .iter-field.iter-field-text .iter-field-element input {
-  height: 40px;
+  height: 37px;
   font-size: 1rem;
   color: #333;
   flex: auto;
@@ -37,7 +37,7 @@
   font-family: 'Mattone 150';
   font-style: normal;
   font-weight: 600;
-  font-size: 12px;
+  font-size: 10px;
   text-transform: uppercase;
   padding: 10px 25px;
   color: #fff;
