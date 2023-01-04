@@ -3,7 +3,8 @@
 
 function actDIV() {
   var indicador = document.querySelector('.enVivoRedy .liveIndicator');
-  var margtop = document.querySelector('.movil .nav-expanded');
+  var margtop = document.querySelector('.movil .hm-r02');
+  // indicador.classList.add('pard__envivo');
   document.querySelector('.enVivoRedy').style.display= 'flex';
   if(margtop == undefined){
     console.log('no exite')
@@ -11,8 +12,6 @@ function actDIV() {
     margtop.style.marginTop= '50px';
     console.log('exite')
   }
-  // indicador.classList.add('pard__envivo');
-
 }
 // function comunidadHeight(){ 
 //     $('.HOME_MENU_RD .prog-web-container .iframe__ iframe').css('height', '365px');
