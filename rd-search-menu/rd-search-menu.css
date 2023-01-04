@@ -1,0 +1,14 @@
+.tabnavBuscador {
+  padding: 20px 0;
+}
+
+.basic-search-rd-mobile {
+  /*display: flex !important;*/
+  position: initial !important;
+  float: initial !important;
+}
+
+.basic-search-rd-mobile .iter-button-submit {
+  display: block !important;
+  margin-left: 10px;
+}
