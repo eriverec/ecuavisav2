@@ -6,12 +6,33 @@ function actDIV() {
   var margtop = document.querySelector('.movil .hm-r02');
   // indicador.classList.add('pard__envivo');
   document.querySelector('.enVivoRedy').style.display= 'flex';
-  if(margtop == undefined){
-    console.log('no exite')
-  }else{
-    margtop.style.marginTop= '50px';
-    console.log('exite')
+
+
+
+  var devicesearch;
+  var btest=navigator.userAgent.toLowerCase();
+  
+  if ( /(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|playbook|silk|(puffin(?!.*(IP|AP|WP))))/i.test(btest) ) {
+ 
+    devicesearch = "Tablet";
+  } else if( /(mobi|ipod|phone|blackberry|opera mini|fennec|minimo|symbian|psp|nintendo ds|archos|skyfire|puffin|blazer|bolt|gobrowser|iris|maemo|semc|teashark|uzard)/i.test(btest) ) {
+
+    devicesearch = "Mobile";
+
+    if(margtop == undefined){
+      console.log('no exite')
+    }else{
+      margtop.style.marginTop= '50px';
+      console.log('exite')
+    }
+
+  } else {
+   
+    devicesearch = "PC";
   }
+
+
+
 }
 // function comunidadHeight(){ 
 //     $('.HOME_MENU_RD .prog-web-container .iframe__ iframe').css('height', '365px');
