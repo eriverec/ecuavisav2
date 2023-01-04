@@ -1,6 +1,14 @@
  /* PASSWORD */
  const togglePassword = document.querySelector("#togglePassword");
  const password = document.querySelector("#pass");
+ 
+var tk;
+window.onload = () => {
+ const queryString = window.location.search;
+ const urlParams = new URLSearchParams(queryString);
+ tk = urlParams.get('tk');
+};
+ 
 
  togglePassword.addEventListener("click", function () {
    // toggle the type attribute
@@ -50,9 +58,7 @@
   // if (document.getElementById('pass').value != "" && document.getElementById('confirm_pass').value != "") {
 
     let pass = document.getElementById('pass').value;
-    const queryString = window.location.search;
-    const urlParams = new URLSearchParams(queryString);
-    const tk = urlParams.get('tk');
+    console.log(tk);
 
     
     fetch("https://ecuavisa-register.onrender.com/resetPassword", {
