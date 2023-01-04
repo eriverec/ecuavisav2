@@ -2,7 +2,9 @@ var URL_principal_G = 'https://www.ecuavisa.com/';
 var URL_login_G = 'https://www.ecuavisa.com/servicios/login';
 var URL_perfil_G = 'https://www.ecuavisa.com/servicios/perfil';
 var UserId = localStorage.getItem('wylexUserId');
-
+window.onload = () => {
+document.getElementById("forgetButton").disabled=false;
+}
 if (UserId){
    /*Si existe sesión lo 
    va a redireccionar al perfil */
