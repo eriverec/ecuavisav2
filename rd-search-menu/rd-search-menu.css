@@ -2,7 +2,7 @@
   padding: 20px 10px;
 }
 
-.tabnavBuscador .iter-field-element .iter-field-input input{
+.basic-search-rd-mobile .iter-field.iter-field-text .iter-field-element input {
   height: 35px;
   font-size: 1rem;
   color: #333;
