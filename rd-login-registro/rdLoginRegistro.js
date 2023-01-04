@@ -250,7 +250,10 @@ let email = document.getElementById("forgetEmail").value.trim();
         email: email
       }),
     })
-      .then((response) => response.json())
+      .then((response) => {
+        response.json();
+        alert("Siga las instrucciones enviadas a su email");
+      })
       .then(async (result) => {
         
         console.log(result);

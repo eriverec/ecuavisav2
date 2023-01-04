@@ -7,7 +7,7 @@ window.onload = () => {
  const queryString = window.location.search;
  const urlParams = new URLSearchParams(queryString);
  tk = urlParams.get('tk');
- document.getElementById("create").className = "";
+ document.getElementById("create").removeAttribute('class');
  //localStorage.token = tk;
 };
  
