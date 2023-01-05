@@ -74,8 +74,8 @@ window.onload = () => {
       }),
     })
       .then((response) => response.json())
-      .then(async (result) => {
-        alert("Su contraseña se ha creado con exito!");
+      .then((result) => {
+        //alert("Su contraseña se ha creado con exito!");
         console.log(result);
       })
       .catch((error) => {

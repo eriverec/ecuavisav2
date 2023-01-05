@@ -252,7 +252,7 @@ let email = document.getElementById("forgetEmail").value.trim();
     })
       .then((response) => {
         response.json();
-        alert("Siga las instrucciones enviadas a su email");
+        //alert("Siga las instrucciones enviadas a su email");
       })
       .then(async (result) => {
         
