@@ -253,7 +253,7 @@ let email = document.getElementById("forgetEmail").value.trim();
       .then((response) => response.json())
       .then(async (result) => {
         alert(result.mensaje)
-        if(result.status == 200){
+        if(result.status = 200){
           //$('#exampleModal').modal('hide');
           document.getElementById("exampleModal").setAttribute("style", "display: none;");
           //document.getElementById("exampleModal").setAttribute("style", "display: none;");
