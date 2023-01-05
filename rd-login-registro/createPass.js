@@ -79,7 +79,7 @@ window.onload = () => {
       .then((response) => response.json())
       .then(async (result) => {
         //alert("Su contraseña se ha creado con exito!");
-        alert(result);
+        alert(result.mensaje);
         if(result.status == 200){
         window.setTimeout(window.location = "https://www.ecuavisa.com/servicios/login", 1000);
           //document.getElementById("exampleModal").setAttribute("style", "display: none;");
