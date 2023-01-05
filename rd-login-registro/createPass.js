@@ -21,7 +21,7 @@ const queryString = window.location.search;
       .then(async (result) => {
         //alert("Su contraseña se ha creado con exito!");
         
-        if(result.status != 200){
+        if(result.error){
         window.location = "https://www.ecuavisa.com"; 
         }
       })
@@ -103,7 +103,7 @@ const queryString = window.location.search;
       .then(async (result) => {
         //alert("Su contraseña se ha creado con exito!");
         
-        if(result.status = 200){
+        if(!result.error){
         alert(result.message);
         window.setTimeout(window.location = "https://www.ecuavisa.com/servicios/login", 1000);
          
