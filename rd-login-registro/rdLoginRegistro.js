@@ -252,8 +252,13 @@ let email = document.getElementById("forgetEmail").value.trim();
     })
       .then((response) => response.json())
       .then(async (result) => {
-        
-        console.log(result);
+        alert(result)
+        if(result.status == 200){
+          $('#exampleModal').modal('hide');
+          //document.getElementById("exampleModal").setAttribute("style", "display: none;");
+          //document.getElementById("exampleModal").setAttribute("style", "display: none;");
+        }
+        //console.log(result);
       })
       .catch((error) => {
         console.log("error", error); /*; window.location = URL_login_G*/
