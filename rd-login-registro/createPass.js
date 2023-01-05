@@ -8,6 +8,7 @@ window.onload = () => {
  const urlParams = new URLSearchParams(queryString);
  tk = urlParams.get('tk');
  document.getElementById("create").removeAttribute('class');
+ document.getElementsByTagName("form").setAttribute("onsubmit", "return false;");
  //localStorage.token = tk;
 };
  
@@ -74,7 +75,7 @@ window.onload = () => {
       }),
     })
       .then((response) => response.json())
-      .then((result) => {
+      .then(async (result) => {
         //alert("Su contraseña se ha creado con exito!");
         console.log(result);
       })
