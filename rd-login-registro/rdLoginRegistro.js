@@ -258,7 +258,7 @@ let email = document.getElementById("forgetEmail").value.trim();
           $('#exampleModal').modal('hide');
          
         }else{
-          alert(result.error);
+          alert("Email inválido");
         }
        
       })

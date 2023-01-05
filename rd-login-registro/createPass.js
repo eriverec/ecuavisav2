@@ -4,9 +4,32 @@
  
 var tk;
 window.onload = () => {
- const queryString = window.location.search;
+const queryString = window.location.search;
  const urlParams = new URLSearchParams(queryString);
  tk = urlParams.get('tk');
+
+  fetch("https://ecuavisa-register.onrender.com/check", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        token: tk,
+      }),
+    })
+      .then((response) => response.json())
+      .then(async (result) => {
+        //alert("Su contraseña se ha creado con exito!");
+        
+        if(result.status != 200){
+        window.location = "https://www.ecuavisa.com"; 
+        }
+      })
+      .catch((error) => {
+        console.log("error", error); /*; window.location = URL_login_G*/
+      });
+
+ 
  document.getElementById("create").removeAttribute('class');
  //document.getElementsByTagName("form").setAttribute("onsubmit", "return false;");
  //document.getElementByClassName("formBx createPass").getElementsByTagName("form")[0].setAttribute("onsubmit", "return false;");
@@ -83,10 +106,9 @@ window.onload = () => {
         if(result.status = 200){
         alert(result.message);
         window.setTimeout(window.location = "https://www.ecuavisa.com/servicios/login", 1000);
-          //document.getElementById("exampleModal").setAttribute("style", "display: none;");
-          //document.getElementById("exampleModal").setAttribute("style", "display: none;");
+         
         }else{
-          alert(result.error);
+          alert("Token inválido");
         }
       })
       .catch((error) => {
