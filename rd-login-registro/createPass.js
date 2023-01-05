@@ -79,11 +79,14 @@ window.onload = () => {
       .then((response) => response.json())
       .then(async (result) => {
         //alert("Su contraseña se ha creado con exito!");
-        alert(result.mensaje);
+        
         if(result.status = 200){
+        alert(result.message);
         window.setTimeout(window.location = "https://www.ecuavisa.com/servicios/login", 1000);
           //document.getElementById("exampleModal").setAttribute("style", "display: none;");
           //document.getElementById("exampleModal").setAttribute("style", "display: none;");
+        }else{
+          alert(result.error);
         }
       })
       .catch((error) => {
