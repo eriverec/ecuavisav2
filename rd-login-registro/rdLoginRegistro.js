@@ -252,6 +252,7 @@ let email = document.getElementById("forgetEmail").value.trim();
     })
       .then((response) => response.json())
       .then(async (result) => {
+        console.log("res",result);
         console.log("status",result.status);
         if(result.status = 200){
           alert(result.mensaje);
