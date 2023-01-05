@@ -61,6 +61,7 @@ window.onload = () => {
  function wrong_pass_alert() {
    if (document.getElementById('pass').value != "" && document.getElementById('confirm_pass').value != "") {
     //let token = localStorage.getItem('token');
+    event.preventDefault();
     let pass = document.getElementById('pass').value;
     console.log(tk);
 
@@ -83,7 +84,7 @@ window.onload = () => {
       .catch((error) => {
         console.log("error", error); /*; window.location = URL_login_G*/
       });
-     
+    
      //console.log('password: ', document.getElementById('pass').value);
     // console.log('confirmación: ', document.getElementById('confirm_pass').value);
   } else {
