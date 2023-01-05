@@ -183,7 +183,7 @@ function login() {
     }),
   })
     .then((response) => response.json())
-    .then(async (result) => {
+    .then((result) => {
       console.log(result);
       if (result.token) {
         window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
@@ -223,7 +223,7 @@ function register() {
       }),
     })
       .then((response) => response.json())
-      .then(async (result) => {
+      .then((result) => {
         
         console.log(result);
         if (result.token) {
@@ -254,7 +254,7 @@ let email = document.getElementById("forgetEmail").value.trim();
         response.json();
         //alert("Siga las instrucciones enviadas a su email");
       })
-      .then(async (result) => {
+      .then((result) => {
         
         console.log(result);
       })
