@@ -20,7 +20,7 @@ const queryString = window.location.search;
       .then((response) => response.json())
       .then(async (result) => {
         //alert("Su contraseña se ha creado con exito!");
-        
+        console.log("res",result);
         if(result.error){
         window.location = "https://www.ecuavisa.com"; 
         }
