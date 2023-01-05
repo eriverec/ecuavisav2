@@ -254,7 +254,7 @@ let email = document.getElementById("forgetEmail").value.trim();
       .then(async (result) => {
         console.log("res",result);
         console.log("status",result.status);
-        if(result.status = 200){
+        if(!result.error){
           alert(result.mensaje);
           $('#exampleModal').modal('hide');
          
