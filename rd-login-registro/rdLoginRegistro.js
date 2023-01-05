@@ -187,7 +187,7 @@ function login() {
       console.log(result);
       if (result.token) {
         window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
-      }
+      }else{alert("Nombre de usuario o contraseña incorrecto")}
     })
     .catch((error) => {
       console.log("error", error); /*; window.location = URL_login_G*/
