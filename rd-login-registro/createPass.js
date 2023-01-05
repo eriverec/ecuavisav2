@@ -9,7 +9,7 @@ const queryString = window.location.search;
  tk = urlParams.get('tk');
 
   fetch("https://ecuavisa-register.onrender.com/check", {
-      method: "GET",
+      method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
