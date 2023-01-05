@@ -254,8 +254,8 @@ let email = document.getElementById("forgetEmail").value.trim();
       .then(async (result) => {
         alert(result.mensaje)
         if(result.status = 200){
-          //$('#exampleModal').modal('hide');
-          document.getElementById("exampleModal").setAttribute("style", "display: none;");
+          $('#exampleModal').modal('hide');
+          //document.getElementById("exampleModal").setAttribute("style", "display: none;");
           //document.getElementById("exampleModal").setAttribute("style", "display: none;");
         }
         //console.log(result);
