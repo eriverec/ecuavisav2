@@ -8,7 +8,8 @@ window.onload = () => {
  const urlParams = new URLSearchParams(queryString);
  tk = urlParams.get('tk');
  document.getElementById("create").removeAttribute('class');
- document.getElementsByTagName("form").setAttribute("onsubmit", "return false;");
+ //document.getElementsByTagName("form").setAttribute("onsubmit", "return false;");
+ document.getElementByClassName("formBx createPass").getElementsByTagName("form").setAttribute("onsubmit", "return false;");;
  //localStorage.token = tk;
 };
  
