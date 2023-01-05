@@ -15,9 +15,8 @@ import avatar8 from "@/assets/images/avatars/avatar-8.png";
 
 const userListStore = useUserListStore()
 const searchQuery = ref("");
-const selectedRole = ref();
-const selectedPlan = ref();
-const selectedStatus = ref();
+const selectedProvider = ref("");
+const selectedBoletin = ref();
 const rowPerPage = ref(10);
 const page = ref(1);
 const totalPage = ref(1);
@@ -37,7 +36,9 @@ const fetchUsers = () => {
     .fetchUsers({
       pageSize: rowPerPage.value,
       page: page.value,
-      query: search.value
+      query: search.value,
+      provider: selectedProvider.value,
+      news: selectedBoletin.value
     })
     .then((response) => {
       users.value = response.data.users;
@@ -85,8 +86,12 @@ search.value = searchQuery.value;
 };
 
 const reset = () => {
-search.value = ""
-searchQuery.value = ""
+selectedBoletin.value = undefined;
+selectedProvider.value = undefined;
+search.value = undefined;
+searchQuery.value = undefined;
+
+
   fetchUsers();
 
 };
@@ -103,48 +108,32 @@ watchEffect(() => {
 });
 
 // 👉 search filters
-const roles = [
+const listProvider = [
   {
-    title: "Admin",
-    value: "admin",
+    title: "Facebook",
+    value: "facebook",
   },
   {
-    title: "Author",
-    value: "author",
+    title: "Google",
+    value: "google",
   },
   {
-    title: "Editor",
-    value: "editor",
-  },
-  {
-    title: "Maintainer",
-    value: "maintainer",
-  },
-  {
-    title: "Subscriber",
-    value: "subscriber",
-  },
+    title: "Email",
+    value: "email",
+  }
 ];
 
-const plans = [
+const listBoletin = [
   {
-    title: "Basic",
-    value: "basic",
+    title: "True",
+    value: "true",
   },
   {
-    title: "Company",
-    value: "company",
-  },
-  {
-    title: "Enterprise",
-    value: "enterprise",
-  },
-  {
-    title: "Team",
-    value: "team",
-  },
+    title: "False",
+    value: "false",
+  }
 ];
-
+/*
 const status = [
   {
     title: "Pending",
@@ -159,7 +148,7 @@ const status = [
     value: "inactive",
   },
 ];
-
+*/
 const resolveUserRoleVariant = provider => {
   if (provider === "google")
     return {
@@ -373,9 +362,9 @@ const userListMeta = [
             sm="4"
             >
             <VSelect
-            v-model="selectedRole"
+            v-model="selectedProvider"
             label="Proveedor"
-            :items="roles"
+            :items="listProvider"
             clearable
             clear-icon="tabler-x"
             />
@@ -386,9 +375,9 @@ const userListMeta = [
             sm="4"
             >
             <VSelect
-            v-model="selectedPlan"
+            v-model="selectedBoletin"
             label="Boletín"
-            :items="plans"
+            :items="listBoletin"
             clearable
             clear-icon="tabler-x"
             />
