@@ -54,10 +54,10 @@ const countUsers = () => {
   userListStore
     .countUsers()
     .then((response) => {
-      let pE = ref(0);
-      let pF = ref(0);
-      let pG = ref(0);
-      let total = totalUsers.value;
+      const pE = ref(0);
+      const pF = ref(0);
+      const pG = ref(0);
+      const total = response.data.fullUsers;
       totalEmail.value = response.data.totalEmail;
       totalFacebook.value = response.data.totalFacebook;
       totalGoogle.value = response.data.totalGoogle;
