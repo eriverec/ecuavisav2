@@ -934,7 +934,7 @@ BLOQUE - TE EXPLICO LA NOTICIA
 
 .texplic .teaser-viewer-title-rd,
 .texplic .button_container{
-  display: none;
+  display: none !important;
 }
 
 .HOME_MENU_RD .rd-texplico-la-noticia {
