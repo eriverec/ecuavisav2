@@ -904,7 +904,7 @@ INICIO - BLOQUE - ECUADOR
 
 
 /* ***************************
-INICIO - BLOQUE - TE EXPLICO LA NOTICIA
+BLOQUE - TE EXPLICO LA NOTICIA
 *************************** */
 
 .HOME_MENU_RD .rd-texplico-la-noticia .iconPlay {
@@ -916,7 +916,68 @@ INICIO - BLOQUE - TE EXPLICO LA NOTICIA
   left: initial;
   bottom: initial;
 }
+.HOME_MENU_RD .rd-texplico-la-noticia {
+  padding-bottom: 50px;
+}
 
+.HOME_MENU_RD .rd-texplico-la-noticia .noticias .article .media_block .text_block{
+  position: absolute;
+  bottom: 0;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  min-height: 110px;
+}
+
+.HOME_MENU_RD .rd-texplico-la-noticia .noticias .article .media_block .text_block .section {
+  font-weight: 600 !important;
+  color: #23DCD1 !important;
+  display: block !important;
+}
+
+.HOME_MENU_RD .rd-texplico-la-noticia .noticias .article .media_block .text_block .headline a h3 {
+  color: var(--bs-white);
+  font-size: var(--rd-size-16);
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px;
+  margin-top: -5px;
+}
+
+.HOME_MENU_RD .rd-texplico-la-noticia .noticias .article .media_block .rd_date ul li {
+  color: #c7c7c7;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px;
+  margin-top: -5px;
+}
+
+.HOME_MENU_RD .rd-texplico-la-noticia .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div {
+  background-image: linear-gradient(180deg, rgba(6, 2, 34, 0) 0%, rgba(6, 2, 34, 0.9) 0%);
+  border-radius: 6px;
+}
+
+.HOME_MENU_RD .rd-texplico-la-noticia .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div img {
+  -webkit-mask-image: linear-gradient(to top, transparent 0, rgba(6, 2, 34, 0.9) 85%);
+  border-radius: 6px;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+.HOME_MENU_RD .rd-texplico-la-noticia .swiper-pagination-bullet-active {
+  background: #2927b9;
+}
+
+.HOME_MENU_RD .rd-texplico-la-noticia .swiper-pagination-bullet {
+  width: 14px !important;
+  height: 14px !important;
+}
 
 @media (max-width: 1024px) {
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .headline a h2 {
