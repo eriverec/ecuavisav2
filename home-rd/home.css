@@ -902,6 +902,22 @@ INICIO - BLOQUE - ECUADOR
   margin: 30px 0;
 }
 
+
+/* ***************************
+INICIO - BLOQUE - TE EXPLICO LA NOTICIA
+*************************** */
+
+.rd-texplico-la-noticia .iconPlay {
+  background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
+  width: 30px;
+  height: 30px;
+  top: 15px;
+  right: 10px;
+  left: initial;
+  bottom: initial;
+}
+
+
 @media (max-width: 1024px) {
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .headline a h2 {
     font-size: 26px;
