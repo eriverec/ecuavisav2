@@ -438,7 +438,7 @@ INICIO - PORTADA - 4 DESTACADAS
   left: 0;
   z-index: 99;
   background: black;
-  /* display: none; */
+  display: none;
 }
 
 .HOME_MENU_RD .destacada__5 .noticias .article .media_block .article-section .section{
