@@ -915,6 +915,7 @@ BLOQUE - TE EXPLICO LA NOTICIA
   right: 10px;
   left: initial;
   bottom: initial;
+  margin: 0;
 }
 .HOME_MENU_RD .rd-texplico-la-noticia {
   padding-bottom: 50px;
@@ -940,6 +941,8 @@ BLOQUE - TE EXPLICO LA NOTICIA
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
   font-style: normal;
   font-weight: 700;
   line-height: 22px;
