@@ -2485,7 +2485,7 @@ INICIO - BLOQUE - ESTILO
   bottom: 0;
   padding: 0.5rem 1rem;
   width: 100%;
-  min-height: 110px;
+  min-height: 75px;
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block {
