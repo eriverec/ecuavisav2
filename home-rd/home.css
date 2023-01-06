@@ -2562,7 +2562,7 @@ INICIO - BLOQUE - ESTILO
 
   font-weight: 600 !important;
   color: #23DCD1 !important;
-  display: block !important;
+  /* display: block !important; */
 }
 
 .HOME_MENU_RD .teaser-viewer-title-rd a {
