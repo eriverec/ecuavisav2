@@ -111,12 +111,12 @@
 }
 
 .HOME_MENU_RD .section {
-  font-family: 'Mattone 150';
+  /* font-family: 'Mattone 150';
   font-size: 13px;
   text-transform: uppercase;
   font-weight: 600;
-  margin-bottom: 0.5rem;
-  display: block;
+  margin-bottom: 0.5rem; */
+  display: none;
 }
 
 .div__hide {
@@ -2515,17 +2515,23 @@ INICIO - BLOQUE - ESTILO
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .text_block .headline a h3 {
-  color: var(--bs-white);
+  /* color: var(--bs-white);
   font-size: var(--rd-size-16);
-  /* overflow: hidden; */
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
-  /* -webkit-line-clamp: 2; */
   font-style: normal;
   font-weight: 700;
   line-height: 22px;
-  margin-top: -5px;
+  margin-top: -5px; */
+  font-family: 'Mattone 150';
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+    display: block;
+    font-weight: 600 !important;
+    color: #23DCD1 !important;
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .rd_date ul li{
