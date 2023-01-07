@@ -2927,6 +2927,8 @@ INICIO - BLOQUE - ESTILO
     background-position: center;
     background-repeat: no-repeat;
     background-size: contain;
+
+    display:none;
 }
 
 .swiper-cards.swiper-3d div[frame="crop_134_100_L"]:after {
