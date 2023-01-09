@@ -945,10 +945,10 @@ BLOQUE - TE EXPLICO LA NOTICIA
   margin: 0;
 }
 
-.texplic .teaser-viewer-title-rd,
+/* .texplic .teaser-viewer-title-rd,
 .texplic .button_container{
   display: none !important;
-}
+} */
 
 .HOME_MENU_RD .rd-texplico-la-noticia {
   padding-bottom: 50px;
