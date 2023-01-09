@@ -431,6 +431,20 @@ INICIO - PORTADA - 4 DESTACADAS
   color: var(--rd-section);
 }
 
+.HOME_MENU_RD .destacada__5 .noticias .article .media_block .article-section {
+  position: absolute;
+  padding: 3px 2rem;
+  top: 0;
+  left: 0;
+  z-index: 99;
+  background: black;
+  display: none;
+}
+
+.HOME_MENU_RD .destacada__5 .noticias .article .media_block .article-section .section{
+  color: #fff;
+}
+
 .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .multimedia img {
   height: 100% !important;
   object-fit: cover;
@@ -917,8 +931,15 @@ BLOQUE - TE EXPLICO LA NOTICIA
   bottom: initial;
   margin: 0;
 }
+
+.texplic .teaser-viewer-title-rd,
+.texplic .button_container{
+  display: none !important;
+}
+
 .HOME_MENU_RD .rd-texplico-la-noticia {
   padding-bottom: 50px;
+  display: none;
 }
 
 .HOME_MENU_RD .rd-texplico-la-noticia .noticias .article .media_block .text_block{
@@ -2894,4 +2915,31 @@ INICIO - BLOQUE - ESTILO
   margin-top: 0;
 }
 
+}
+
+/*Manitos Swiper 3D Estilo*/
+.swiper-cards.swiper-3d div[frame="crop_134_100_L"]:before,
+.swiper-cards.swiper-3d div[frame="crop_134_100_L"]:after {
+    content:"";
+    height: 42px;
+    width: 42px;
+    position:absolute;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+
+    display:none;
+}
+
+.swiper-cards.swiper-3d div[frame="crop_134_100_L"]:after {
+    background-image: url("https://estadisticas.ecuavisa.com/sites/gestor/Recursos/deslizar-a-la-izquierda.png");
+    right: 10px;
+    bottom: 20px;
+}
+
+.swiper-cards.swiper-3d div[frame="crop_134_100_L"]:before{
+    background-image: url("https://estadisticas.ecuavisa.com/sites/gestor/Recursos/deslizar-a-la-derecha.png");
+    right: 0px;
+    left:10px;
+    bottom: 20px;
 }

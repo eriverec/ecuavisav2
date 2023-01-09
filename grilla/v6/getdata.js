@@ -1,13 +1,21 @@
-var dHoy = fechahoy('fecha'); //asignamos la fecha de hoy a una variable
-if(localStorage.getItem('dHoy')){// evaluamos si la key "dHoy" existe
+//var dHoy = fechahoy('hora'); //asignamos la fecha de hoy a una variable
 
-    if(dHoy === localStorage.getItem('dHoy')){ //si existe verificamos que sea igual que el dia actual
+var dHoy = new Date();
+
+
+if(localStorage.getItem('dHoy')){// evaluamos si la key "dHoy" existe
+    var otra = localStorage.getItem('dHoy');
+    var difHora = Math.abs( (dHoy - new Date(otra)) / (60*60*1000));
+    console.log("dHoy",new Date(dHoy));
+    console.log("local storage", otra);
+    console.log("Dif hora",difHora);
+    if(difHora < 2){ //si existe verificamos que sea igual que el dia actual
         //si coincide cargamos la parrilla existente en la key "programas"
         console.log('fecha coincide - cargar parrilla precargada');
-        // cargaParrilla();
+        //cargaParrilla();
         // filterData();
     }else{ // si no es igual al día actual cargamos la data de la parrilla actual
-        cargaParrilla();
+       cargaParrilla();
     }
 }else{// si no existe también cargamos la data de la parrilla actual
     cargaParrilla2();

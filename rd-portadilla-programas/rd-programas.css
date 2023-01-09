@@ -831,6 +831,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   .tarjeta-destacada h2 {
     font-size: 24px;
     line-height: 25px;
+    padding-top: 0rem;
   }
 }
 
