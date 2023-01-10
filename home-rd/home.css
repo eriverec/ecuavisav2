@@ -45,6 +45,12 @@
   }
 }
 
+
+.HOME_MENU_RD .prog-web-container{
+  display: none;
+}
+
+
 .HOME_MENU_RD .notas-1-p-ap .IMG_SEC_TIT_TXT_PORTADA h3 {
     color: var(--bs-white);
     font-size: 20px;
