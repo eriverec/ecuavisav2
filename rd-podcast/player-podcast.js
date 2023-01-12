@@ -68,7 +68,7 @@ function showIconPlayPortada() {
 
     // agregamos botones del player
     $(this).find('.media_block .pod_play').append(`
-    <svg class="play-stop-button" data-media="${mp3url}" data-title="${title_pd}" onclick="podcastPlay();" width="38"  height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="play-stop-button" data-media="${mp3url}" data-title="${title_pd}" width="38"  height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="0.694336" y="0.975098" width="37" height="37" rx="3" fill="#23DCD1"  />
   
     <path class="play-stop-button__stop" d="M12.8333 13.75H25.6666V25.75H12.8333V13.75ZM12.8055 12C12.3317 12 11.8743 12.1763 11.5346 12.4948C11.1944 12.8137 11 13.2499 11 13.7083V25.7917C11 26.7497 11.8242 27.5 12.8055 27.5H25.6944C26.1683 27.5 26.6257 27.3237 26.9653 27.0052C27.3055 26.6863 27.5 26.2501 27.5 25.7917V13.7083C27.5 13.2499 27.3055 12.8137 26.9653 12.4948C26.6257 12.1763 26.1683 12 25.6944 12H12.8055Z" fill="#2927B9" stroke="#2927B9" stroke-width="0.5"/>
@@ -93,7 +93,7 @@ function dynamicContent() {
 
     // agregamos botones del player
     $(this).find('.media_block .pod_icon_play').append(`
-    <svg class="play-stop-button" data-media="${mp3url}" data-title="${title_pd}" onclick="podcastPlay();" width="38"  height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg class="play-stop-button" data-media="${mp3url}" data-title="${title_pd}" width="38"  height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
     <rect x="0.694336" y="0.975098" width="37" height="37" rx="3" fill="#23DCD1"  />
   
     <path class="play-stop-button__stop" d="M12.8333 13.75H25.6666V25.75H12.8333V13.75ZM12.8055 12C12.3317 12 11.8743 12.1763 11.5346 12.4948C11.1944 12.8137 11 13.2499 11 13.7083V25.7917C11 26.7497 11.8242 27.5 12.8055 27.5H25.6944C26.1683 27.5 26.6257 27.3237 26.9653 27.0052C27.3055 26.6863 27.5 26.2501 27.5 25.7917V13.7083C27.5 13.2499 27.3055 12.8137 26.9653 12.4948C26.6257 12.1763 26.1683 12 25.6944 12H12.8055Z" fill="#2927B9" stroke="#2927B9" stroke-width="0.5"/>
@@ -109,7 +109,7 @@ function dynamicContent() {
 // ####################################################################
 
 // Funcion de reproducción
-function podcastPlay() {
+// function podcastPlay() {
   var theMp3 = (event.currentTarget.getAttribute('data-media'));
   var theTitle = (event.currentTarget.getAttribute('data-title'));
   var clasRemove = document.querySelector('.menu .podcast');
@@ -132,7 +132,7 @@ function podcastPlay() {
   $('.podcast__episode_title').html(theTitle);
   $('.mejs__playpause-button').click();
   console.log('url:' + theMp3);
-};
+// };
 
 function playStop() {
   var elements = document.querySelectorAll(".play-stop-button");

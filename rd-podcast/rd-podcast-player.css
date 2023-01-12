@@ -104,7 +104,7 @@
 }
 
 .podcast__meta {
-  position: fixed;
+  /* position: fixed; */
   bottom: 0;
   width: 100%;
   background: #fff;
