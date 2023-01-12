@@ -2946,7 +2946,7 @@ INICIO - BLOQUE - ESTILO
     background-repeat: no-repeat;
     background-size: contain;
 
-    display:none;
+/*    display:none;*/
 }
 
 .swiper-cards.swiper-3d div[frame="crop_134_100_L"]:after {
