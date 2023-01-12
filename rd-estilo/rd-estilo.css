@@ -1034,6 +1034,26 @@ img.sepDesk {
   margin-bottom: 40px;
 }
 
+.sec-titulo.notas-estilo-mobile .noticias .article .media_block{
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  align-items: center;
+  gap: 50px;
+}
+
+.sec-titulo.notas-estilo-mobile .iconPlay {
+  background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlayRedondoCeleste.svg');
+  width: 30px;
+  height: 30px;
+  top: initial;
+  bottom: 0;
+  right: 0;
+  left: initial;
+  margin: 10px;
+}
+
+
+
 .estilo_separadorDesktop,
 .estilo_separadorMobile {
   width: 100%;
@@ -1159,6 +1179,10 @@ img.sepDesk {
     position: initial;
     /*padding-bottom: 1rem;*/
     padding: 0 16px 1rem;
+  }
+
+  .sec-titulo.notas-estilo-mobile .noticias .article .media_block{
+    grid-template-columns: 2fr 1fr;
   }
 
   .mas_temas_2_desktop .noticias .article .media_block {
