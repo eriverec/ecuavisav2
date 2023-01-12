@@ -109,7 +109,7 @@ function dynamicContent() {
 // ####################################################################
 
 // Funcion de reproducción
-// function podcastPlay() {
+function podcastPlay() {
   var theMp3 = (event.currentTarget.getAttribute('data-media'));
   var theTitle = (event.currentTarget.getAttribute('data-title'));
   var clasRemove = document.querySelector('.menu .podcast');
@@ -132,7 +132,9 @@ function dynamicContent() {
   $('.podcast__episode_title').html(theTitle);
   $('.mejs__playpause-button').click();
   console.log('url:' + theMp3);
-// };
+};
+
+podcastPlay();
 
 function playStop() {
   var elements = document.querySelectorAll(".play-stop-button");
