@@ -213,9 +213,10 @@
     <script async type="text/javascript" src="filterdata.js"> </script> 
     <script async type="text/javascript" src="renderdata.js"> </script> 
     <script async type="text/javascript" src="getdata.js"> </script> 
-    <script async type="text/javascript">
-     
-document.onload = checkCookie;
+
+    <script defer="defer" type="text/javascript">
+
+checkCookie();
 
 function checkCookie(){
 let cookie_consent = getCookie("user_cookie_consent");
@@ -271,12 +272,7 @@ function acceptCookieConsent(){
 function declineCookieConsent(){
     document.getElementById("cookieNotice").style.display = "none";
     localStorage.setItem('noCookies', true);
-}
-    
-    </script>
-
-    <script defer="defer" type="text/javascript">
-
+}    
    
     function fechahoy(dato){
         var fecha = new Date();
