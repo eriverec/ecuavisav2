@@ -183,7 +183,7 @@ function renderProgramas(){
             <tr class=" programaItem el-${contador}" data-item="${programName}${programTimeIni}">
                 
                 <td class="px-0 pl-3 py-3 text-center border-0 bg-ecuavisa text-sm w-1/4 items-center text-zinc-300">
-                <img src=${programImg} sizes="(max-width: 40) 10%, 10%">
+                <img src=${programImg} class="imgPrograma">
                     <p class=" border-b-4 border-zinc-500 py-5 text-center whitespace-no-wrap datafont">
                         <b>${programTimeIni}</b> <br>
                         mins
