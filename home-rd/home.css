@@ -1047,7 +1047,6 @@ BLOQUE - TE EXPLICO LA NOTICIA
 
   .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .media_block {
     grid-template-columns: 2fr 1fr;
-    gap: 15px;
   }
 
   .HOME_MENU_RD .lista-bloque .noticias .article .text_block .headline a h2 {
