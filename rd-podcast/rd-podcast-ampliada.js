@@ -44,7 +44,7 @@ new MediaElementPlayer(document.querySelector(".mainplayer"), optionsPodcast);
 // Fin podcast player executer
 
 
-var podcastMeta = document.querySelector('.Layout_Ampliada_Podcast .podcast__meta');
+var podcastMeta = document.querySelector('.Layout_Ampliada_Podcast .podcast.col-12');
 // var podcastLoader = document.querySelector('.Layout_Ampliada_Podcast .loader_podcast');
 
 setTimeout(()=>{
