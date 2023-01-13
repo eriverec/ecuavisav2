@@ -161,8 +161,8 @@ function renderProgramas(){
         var horahoy= fechahoy('hora');
         var programName= _jsonProgramas[programIndex].programa;
         var region= _jsonProgramas[programIndex].region; //3 costa - 2 sierra - 5 internacional
-        var programDate= _jsonProgramas[programIndex].fecha//.replace('-0', '-'); //revisar si presenta problemas en horario
-
+        var programDate= _jsonProgramas[programIndex].fecha;//.replace('-0', '-'); //revisar si presenta problemas en horario
+        var programImg= _jsonProgramas[programIndex].imagen;
         //console.log(moment(_jsonProgramas[programIndex].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss"))
         //console.log(_jsonProgramas[programIndex].hora_inicio)
         var horai = _jsonProgramas[programIndex].hora_inicio;//moment(_jsonProgramas[programIndex].hora_inicio, "YYYY-MM-DD HH:mm:ss").format("HH:mm:ss");
@@ -183,6 +183,7 @@ function renderProgramas(){
             <tr class=" programaItem el-${contador}" data-item="${programName}${programTimeIni}">
                 
                 <td class="px-0 pl-3 py-3 text-center border-0 bg-ecuavisa text-sm w-1/4 items-center text-zinc-300">
+                <img src=${programImg} sizes="(max-width: 40) 10%, 10%">
                     <p class=" border-b-4 border-zinc-500 py-5 text-center whitespace-no-wrap datafont">
                         <b>${programTimeIni}</b> <br>
                         mins

@@ -25,6 +25,7 @@ function filterData(){
             ,hora_fin     : _data[13].replace(/['"]+/g, '')
             ,region     : _data[7].replace(/['"]+/g, '')
             ,fecha     : _data[18].replace(/['"]+/g, '')
+            ,imagen    : _data[24]
         };
         
         _jsonProgramas.push(_obj); //creamos listado de programas en json

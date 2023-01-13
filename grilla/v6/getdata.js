@@ -51,6 +51,7 @@ if(localStorage.getItem('dHoy')){// evaluamos si la key "dHoy" existe
             <th>18fecha</th>
             <th>19</th><th>20</th><th>21</th><th>22</th>
             <th>23id</th>
+            <th>24imagen</th>
             </tr>`;
             th.innerHTML = thc;
             if (th.innerText != "") { document.querySelector("table").appendChild(th); }
@@ -61,7 +62,7 @@ if(localStorage.getItem('dHoy')){// evaluamos si la key "dHoy" existe
                 
                 let m = `<td></td><td>${e.programa}</td><td> </td><td></td><td></td><td></td><td></td>
                 <td>${e.region}</td><td>${e.día}</td><td>${e.mes}</td><td></td><td></td><td>${e.hora_inicio}</td><td>${e.hora_fin}</td>
-                <td></td><td></td><td></td><td></td><td>${e.fecha}</td><td></td><td></td><td></td><td></td><td>${e.id}</td>`;
+                <td></td><td></td><td></td><td></td><td>${e.fecha}</td><td></td><td></td><td></td><td></td><td>${e.id}</td><td>${e.imagen}</td>`;
                 // let m = m1.replace('""','');
                 let ce = document.createElement("tr");
                 // ce.id = m.slice(-1)[0]
