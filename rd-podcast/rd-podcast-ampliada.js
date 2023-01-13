@@ -44,6 +44,13 @@ new MediaElementPlayer(document.querySelector(".mainplayer"), optionsPodcast);
 // Fin podcast player executer
 
 
+var podcastMeta = document.querySelector('.Layout_Ampliada_Podcast .podcast__meta');
+var podcastLoader = document.querySelector('.Layout_Ampliada_Podcast .loader_podcast');
+
+setTimeout(()=>{
+  podcastMeta.style.visibility= 'visible';
+  podcastLoader.style.visibility= 'hidden';
+},300);
 
 var ti = document.title;
 var mp3url = $('.Multimedia_Text audio').find('source').attr('src');
