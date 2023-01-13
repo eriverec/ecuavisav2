@@ -1,0 +1,136 @@
+/*html, body {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: Montserrat, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu, Cantarell, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+#handsontable-container.handsontable {
+  height: 100%;
+}
+
+.place-your-ad-here {
+  position: fixed;
+  top: 20px;
+  border: 3px solid #126BCF;
+  border-radius: 5px;
+  color: #126BCF;
+  font-weight: bold;
+  padding: 10px 25px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+.github-corner:hover .octo-arm { animation: octocat-wave 560ms ease-in-out; }
+
+@keyframes octocat-wave {
+  0%,
+  100% { transform: rotate(0); }
+
+  20%,
+  60% { transform: rotate(-25deg); }
+
+  40%,
+  80% { transform: rotate(10deg); }
+}
+
+@media (max-width: 500px) {
+  .github-corner:hover .octo-arm { animation: none; }
+  .github-corner .octo-arm { animation: octocat-wave 560ms ease-in-out; }
+}
+*/
+
+/*
+#TABS CABECERA
+*/
+#tabs li {
+    transition: 0.5s all;
+}
+
+li.next-days:not(li.active-tabs) {
+    opacity: 40%;
+}
+.primer-init {
+    opacity: 1!important;
+}
+
+.fecha-text {
+    font-weight: 200;
+}
+
+tr.programaItem td:not(.text-center) p > b {
+    color: #23DCD1;
+}
+
+tr.programaItem td:not(.text-center) p {
+    background-color: #2927B9;
+}
+
+.programList .programaItem:not(.active-item) td:not(.text-center) p {
+    opacity: 40%;
+}
+
+#tabs li a {
+    text-transform: capitalize;
+}
+
+#tabs {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background-color: #060126;
+}
+/*Cambios solicitados por prodigioso volcán */
+.bg-blue-700 {
+  background-color: rgb(41 39 185 / var(--tw-bg-opacity))!important;
+} 
+.border-b-4 {
+  border-bottom-width: 2px!important;
+}
+.py-5 {
+  padding-top: 1.5rem!important;
+  padding-bottom: 1.5rem!important;
+}
+
+.btnEnvivo {
+  background: #23DCD1;
+  color: #2826b8;
+  border-radius: 2px;
+  padding: 12px 8px;
+  text-align: center;
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  float: right;
+  margin: 0;
+  /*top: 50%;
+  transform: translateY(-50%);*/
+  
+}
+
+tr.programaItem td:not(.text-center) div {
+    background-color: #2927B9;
+}
+
+tr.programaItem td:not(.text-center) p {
+    color: #fff;
+}
+
+tr.programaItem td:not(.text-center) div {
+    display: flex;
+    align-items: center;
+    column-gap: 5px;
+    justify-content: space-between;
+}
+
+.imgPrograma {
+  width: 40%;
+  height: auto;
+}
