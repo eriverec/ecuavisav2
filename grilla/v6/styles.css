@@ -151,3 +151,29 @@ tr.programaItem td:not(.text-center) div {
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
 
 }
+
+.btnRechazar{
+  background: #23DCD1;
+  color: #2826b8;
+  border-radius: 2px;
+  padding: 12px 8px;
+  text-align: center;
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+
+.btnAceptar{
+  background: #2826b8;
+  color: #fff;
+  border-radius: 2px;
+  padding: 12px 8px;
+  text-align: center;
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
