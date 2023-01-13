@@ -704,6 +704,11 @@ Cambio de tamaño de imagen grande izq
     grid-template-columns: none;
   }
 
+  .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA{
+    padding: 10px 0;
+    margin-top: 1rem;
+  }
+
   .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .multimedia img {
     height: 500px !important;
   }
@@ -1059,6 +1064,10 @@ BLOQUE - TE EXPLICO LA NOTICIA
 
 
 @media (max-width: 767px) {
+
+  .HOME_MENU_RD .ecuador_list_1x2 .noticias .article{
+    padding: 5px 0;
+  }
 
   .HOME_MENU_RD .ecuador_list_1x2 .noticias {
     display: block;
