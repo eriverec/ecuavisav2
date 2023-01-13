@@ -191,15 +191,93 @@
         </div>   
     </div>
 
+    <div id="cookieNotice" class="light display-right" style="display: none;">
+        <div id="closeIcon" style="display: none;">
+        </div>
+        <div class="title-wrap">
+            <h4>Consentimiento de cookies</h4>
+        </div>
+        <div class="content-wrap">
+            <div class="msg-wrap">
+                <p>Este sitio web utiliza cookies o tecnologías similares para mejorar su experiencia de navegación y proporcionar recomendaciones personalizadas.
+                    Al hacer clic en el botón "Aceptar" a continuación, acepta nuestra <a style="color:#115cfa;" href="">Política de cookies</a></p>
+                <div class="btn-wrap">
+                    <button class="btn-primary" onclick="acceptCookieConsent();">Aceptar</button>
+                    <button class="btn-warning" onclick="declineCookieConsent();">Rechazar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="jsondata" id="jsonData"></div>
     <script async type="text/javascript" src="filterdata.js"> </script> 
     <script async type="text/javascript" src="renderdata.js"> </script> 
     <script async type="text/javascript" src="getdata.js"> </script> 
+    <script async type="text/javascript">
+     
+document.onload = checkCookie;
+
+function checkCookie(){
+let cookie_consent = getCookie("user_cookie_consent");
+if(cookie_consent != ""){
+    document.getElementById("cookieNotice").style.display = "none";
+}else if(localStorage.getItem('noCookies') == true){
+    document.getElementById("cookieNotice").style.display = "none";
+}else{
+    document.getElementById("cookieNotice").style.display = "block";
+}
+}
+
+// Crear cookie
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+// Borrar cookie
+function deleteCookie(cname) {
+    const d = new Date();
+    d.setTime(d.getTime() + (24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=;" + expires + ";path=/";
+}
+
+// Leer cookie
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+// Set cookie consent
+function acceptCookieConsent(){
+    deleteCookie('user_cookie_consent');
+    setCookie('user_cookie_consent', 1, 30);
+    document.getElementById("cookieNotice").style.display = "none";
+}
+
+function declineCookieConsent(){
+    document.getElementById("cookieNotice").style.display = "none";
+    localStorage.setItem('noCookies', true);
+}
+    
+    </script>
 
     <script defer="defer" type="text/javascript">
 
-
+   
     function fechahoy(dato){
         var fecha = new Date();
         // var hoy = new Date(fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate()); //+7 se suma si quiere setear ayer u hoy
@@ -241,8 +319,6 @@ function getFecha( dias){
   var diaObtenido = d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+(d.getDate())).slice(-2) ;
     return diaObtenido
 }
-
-
 
 
 // console.log('funcionNueva es '+getFecha( -2)); // probar getfecha
