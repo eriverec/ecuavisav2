@@ -131,8 +131,6 @@ tr.programaItem td:not(.text-center) div {
 }
 
 .imgPrograma {
-  width: 5%;
-  height: 5%;
-  float: left;
-  
+  width: 40%;
+  height: auto;
 }
