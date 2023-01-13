@@ -818,7 +818,7 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .media_block {
   /*! display: grid; */
   /*! grid-template-columns: 3fr 1fr; */
-  gap: 0px;
+  grid-gap: 20px;
   display: grid;
   grid-template-columns: 3fr 1fr;
   margin: 1rem 0;
@@ -836,7 +836,7 @@ INICIO - BLOQUE - ECUADOR
   font-style: normal;
   font-weight: 700;
   font-size: 22px;
-  padding-right: 30px;
+  /* padding-right: 30px; */
   line-height: 28px;
 }
 
