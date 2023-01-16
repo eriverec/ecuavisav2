@@ -136,8 +136,15 @@ tr.programaItem td:not(.text-center) div {
   object-fit: cover;
 }
 
+@media only screen and (max-width: 768px) {
+  .imgPrograma {
+      width: 100%;
+      height: 2.8em;
+      object-fit: cover;
+  }
+}
+
 .cookie-overlay {
-  width: 25%;
   position: fixed;
   bottom: 1rem;
   right: 1rem;
