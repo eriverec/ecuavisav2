@@ -19,7 +19,7 @@ function SwiperAgendaDesktop() {
     slidesPerView: 2,
     spaceBetween: 30,
     autoplay: {
-      delay: 2500,
+      delay: 3000,
       disableOnInteraction: false,
     },
     // pagination: {
