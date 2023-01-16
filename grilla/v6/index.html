@@ -193,9 +193,15 @@
 
     <div class="jsondata" id="jsonData"></div>
 
-    <div id="cookieNotice" class="cookie-overlay p-4 d-none" style="display: block;">
-        <div id="closeIcon" style="display: none;">
-        </div>
+    
+    <script async type="text/javascript" src="filterdata.js"> </script> 
+    <script async type="text/javascript" src="renderdata.js"> </script> 
+    <script async type="text/javascript" src="getdata.js"> </script> 
+
+    <script defer="defer" type="text/javascript">
+
+let stringHtml = `
+  <div id="cookieNotice" class="cookie-overlay p-4 d-none" style="display: block;">
         <div class="title-wrap" style="font-weight: bold;">
             <h4>Consentimiento de cookies</h4>
         </div>
@@ -212,12 +218,8 @@
             </div>
         </div>
     </div>
-
-    <script async type="text/javascript" src="filterdata.js"> </script> 
-    <script async type="text/javascript" src="renderdata.js"> </script> 
-    <script async type="text/javascript" src="getdata.js"> </script> 
-
-    <script defer="defer" type="text/javascript">
+`;
+document.body.innerHTML += stringHtml;
 
 setTimeout(checkCookie(),150);
 
