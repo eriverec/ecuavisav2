@@ -131,8 +131,9 @@ tr.programaItem td:not(.text-center) div {
 }
 
 .imgPrograma {
-  width: 40%;
-  height: auto;
+  width: 48%;
+  height: 6.5em;
+  object-fit: cover;
 }
 
 .cookie-overlay {
