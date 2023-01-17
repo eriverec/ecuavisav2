@@ -197,7 +197,11 @@ tr.programaItem td:not(.text-center) div {
 
 @media (max-width: 767px) {
 .cookie-overlay {
-  right: 0rem;
+  /*right: 0rem;*/
+  left: 1rem;
+}
+#cookieNotice{
+  padding: 1rem 2rem;
 }
 }
 
