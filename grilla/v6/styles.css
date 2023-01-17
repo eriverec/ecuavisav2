@@ -164,7 +164,8 @@ tr.programaItem td:not(.text-center) div {
   background: #23DCD1;
   color: #2826b8;
   border-radius: 2px;
-  padding: 12px 8px;
+  /*padding: 12px 8px;*/
+  padding: 12px 20px;
   text-align: center;
   text-transform: uppercase;
   font-style: normal;
@@ -177,7 +178,8 @@ tr.programaItem td:not(.text-center) div {
   background: #2826b8;
   color: #fff;
   border-radius: 2px;
-  padding: 12px 8px;
+  /*padding: 12px 8px;*/
+  padding: 12px 20px;
   text-align: center;
   text-transform: uppercase;
   font-style: normal;
@@ -188,4 +190,10 @@ tr.programaItem td:not(.text-center) div {
 
 .title-wrap{
   margin-bottom: 20px;
+}
+.btn-wrap{
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
 }
