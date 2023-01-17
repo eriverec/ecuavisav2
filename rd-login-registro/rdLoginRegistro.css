@@ -475,6 +475,13 @@ form i {
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-login.svg');
 }
 
+@media (min-width: 576px){
+.modal-dialog {
+    max-width: 425px !important;
+}
+}
+
+
 @media (max-width: 991px) {
   .section-lr .container-lr {
     max-width: 400px;
