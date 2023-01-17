@@ -29,10 +29,18 @@
   font-weight: 300;
 }
 
-.alert-danger,
-.alert-success,
+.alert-danger, 
+.alert-success, 
 .forgetPassword {
-  font-size: 14px;
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 26px;
+  text-decoration-line: underline;
+}
+.forgetPassword a {
+  color: #FFFFFF!important;
 }
 
 .modal-title {
@@ -67,7 +75,7 @@
 }
 
 .section-lr .logo-ecuavisa-lr img {
-  width: 150px;
+  width: 100px;
   margin-bottom: 22px;
 }
 
@@ -154,7 +162,6 @@
   color: #555;
 } */
 .section-lr .container-lr .user .formBx form h2 {
-  text-align: center;
   width: 100%;
   margin-bottom: 10px;
   font-family: 'Anek Malayalam';
@@ -165,6 +172,7 @@
   letter-spacing: -0.03em;
   text-transform: lowercase;
   color: #23DCD1;
+  padding-bottom: 2rem;
 }
 
 .section-lr .container-lr .user .formBx form input {
@@ -182,7 +190,7 @@
   font-weight: 300;
 }
 
-.section-lr .container-lr .user .formBx form input[type='submit'] {
+/* .section-lr .container-lr .user .formBx form input[type='submit'] {
   max-width: 100px;
   background: transparent;
   color: #333;
@@ -196,6 +204,25 @@
   margin-bottom: 0;
   padding-left: 0;
   padding-right: 0;
+} */
+.section-lr .container-lr .user .formBx form input[type='submit'] {
+  max-width: 100px;
+  background: transparent;
+  color: #FFFFFF;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 1px;
+  transition: 0.5s;
+  font-family: 'Mattone 150';
+  padding-bottom: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  padding-right: 0;
+  display: flex;
+  align-items: center;
+  text-align: center;
+  text-transform: uppercase;
 }
 
 
