@@ -439,7 +439,9 @@ form i {
 
 .modal-header{
   background: #23DCD1;
+  padding: 1.5rem;
 }
+
 .modal-content{
   border: none !important;
 }
@@ -481,7 +483,7 @@ form i {
 .btn-close{
   background: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/close-fill.svg') center/1em auto no-repeat !important;
   border: 0;
-  background-size: 40px !important;
+  background-size: 45px !important;
   opacity: 1 !important;
 }
 
