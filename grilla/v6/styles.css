@@ -174,7 +174,7 @@ tr.programaItem td:not(.text-center) div {
   margin: 0;
 }
 .btnRechazar:hover {
-  background: #2826b8;
+  background: #141161;
   color: #fff;
 }
 
@@ -192,8 +192,8 @@ tr.programaItem td:not(.text-center) div {
   margin: 0;
 }
 .btnAceptar:hover {
-  background: #23DCD1;
-  color: #2826b8;
+  background: #141161;
+  color: #fff;
 }
 
 .title-wrap{
