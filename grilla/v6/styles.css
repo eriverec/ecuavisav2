@@ -199,11 +199,14 @@ tr.programaItem td:not(.text-center) div {
 
 @media (max-width: 767px) {
 .cookie-overlay {
-  /*right: 0rem;*/
-  left: 1rem;
+  right: 0.5rem;
+  left: 0.5rem;
 }
-#cookieNotice{
+/*#cookieNotice{
   padding: 1rem 2rem;
+}*/
+.msg-wrap {
+  width: 100%;
 }
 }
 
