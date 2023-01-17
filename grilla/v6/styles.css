@@ -190,6 +190,10 @@ tr.programaItem td:not(.text-center) div {
 .title-wrap{
   margin-bottom: 20px;
 }
+.title-wrap h4{
+  display: flex;
+  gap: 10px;
+}
 .btn-wrap{
   margin-top: 20px;
   display: flex;
