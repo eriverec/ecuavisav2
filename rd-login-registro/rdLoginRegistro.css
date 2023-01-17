@@ -346,7 +346,7 @@
   display: inline-block;
   position: absolute;
   top: .7em;
-  width: 43%;
+  width: 25%;
 }
 
 .auth-method-separator:after,
