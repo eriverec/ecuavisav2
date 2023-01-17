@@ -136,9 +136,15 @@
   transition: 0.5s;
 }
 
-.section-lr .container-lr .user .formBx .box-input {
+/* .section-lr .container-lr .user .formBx .box-input {
   display: inline-grid;
   justify-items: center;
+} */
+.section-lr .container-lr .user .formBx .box-input {
+  display: flex;
+  justify-items: right;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .section-lr .container-lr .user .formBx form .boton-redes-lr {
@@ -253,6 +259,7 @@
   align-items: center;
   text-align: center;
   text-transform: uppercase;
+  justify-content: flex-end;
 }
 
 
