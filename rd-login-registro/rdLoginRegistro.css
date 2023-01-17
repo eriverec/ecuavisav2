@@ -348,16 +348,16 @@
   top: .7em;
   width: 25%;
 }
-
+/* 
 .auth-method-separator:after,
 .auth-method-separator:before {
-  border-top: 1px solid #333;
+  border-top: 1px solid #fff;
   content: " ";
   display: inline-block;
   position: absolute;
   top: .7em;
   width: 43%;
-}
+} */
 
 
 
