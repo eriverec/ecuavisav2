@@ -60,6 +60,8 @@
   border: 1px solid #2927b9 !important;
   border-radius: 2px;
   font-size: 12px;*/
+  display: flex;
+  flex-direction: column;
   background-color: transparent !important;
   border-color: transparent !important;
   font-family: 'Mattone 150';
@@ -470,7 +472,7 @@ form i {
 }
 
 .modal-footer button:after {
-  content: url('https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FbotonNews.svg');
+  content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-login.svg');
 }
 
 @media (max-width: 991px) {
