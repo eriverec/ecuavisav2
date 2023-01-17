@@ -234,7 +234,7 @@
   width: 85px;
 }
 
-.section-lr .container-lr .user .formBx form .signup {
+/* .section-lr .container-lr .user .formBx form .signup {
   position: relative;
   margin-top: 20px;
   font-size: 12px;
@@ -242,12 +242,34 @@
   color: #555;
   text-transform: uppercase;
   font-weight: 300;
+} */
+.section-lr .container-lr .user .formBx form .signup {
+  position: relative;
+  margin-top: 20px;
+  letter-spacing: 1px;
+  color: #fff;
+  text-transform: uppercase;
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 26px;
+  /* left: calc(50% - 272px/2 + 22px); */
 }
-
+/* 
 .section-lr .container-lr .user .formBx form .signup a {
   font-weight: 600;
   text-decoration: none;
   color: #2927B9;
+} */
+.section-lr .container-lr .user .formBx form .signup a {
+  color: #fff;
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 26px;
+  text-decoration-line: underline;
 }
 
 .section-lr .container-lr .signupBx {
@@ -290,12 +312,23 @@
   left: -100%;
 }
 
-.auth-method-separator {
+/* .auth-method-separator {
   font-size: 16px;
   font-weight: 400;
   margin: 1em auto;
   position: relative;
   text-align: center;
+} */
+.auth-method-separator {
+  margin: 1em auto;
+  position: relative;
+  text-align: center;
+  color: white;
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 26px;
 }
 
 .auth-method-separator:before {
@@ -308,7 +341,7 @@
 
 .auth-method-separator:after,
 .auth-method-separator:before {
-  border-top: 1px solid #333;
+  border-top: 1px solid #fff;
   content: " ";
   display: inline-block;
   position: absolute;
