@@ -173,6 +173,9 @@ tr.programaItem td:not(.text-center) div {
   font-size: 14px;
   margin: 0;
 }
+.btnRechazar:hover {
+  background: #2826b8;
+}
 
 .btnAceptar{
   background: #2826b8;
@@ -186,6 +189,9 @@ tr.programaItem td:not(.text-center) div {
   font-weight: 600;
   font-size: 14px;
   margin: 0;
+}
+.btnAceptar:hover {
+  background: #23DCD1;
 }
 
 .title-wrap{
