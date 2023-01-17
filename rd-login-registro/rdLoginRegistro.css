@@ -53,6 +53,7 @@
 }
 .modal-footer{
   border-top: 1px solid transparent !important;
+  padding: 0 0 0.75rem 0 !important;
 }
 
 .modal-footer #forgetButton {
@@ -69,7 +70,7 @@
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
-  padding: 10px 25px;
+  padding: 10px 17px;
   color: #2927b9;
 }
 
@@ -464,7 +465,9 @@ form i {
   border: 1px solid #CACACA !important;
   border-radius: 3px;
 }
-
+.btn {
+  line-height: 1 !important;
+}
 .btn-primary:hover {
   color: #2927b9;
   background-color: transparent !important;
@@ -474,6 +477,17 @@ form i {
 .modal-footer button:after {
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-login.svg');
 }
+
+.btn-close{
+  background: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/close-fill.svg') center/1em auto no-repeat !important;
+  border: 0;
+  background-size: 40px !important;
+  opacity: 0 !important;
+}
+
+
+
+
 
 @media (min-width: 576px){
 .modal-dialog {
