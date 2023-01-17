@@ -52,15 +52,17 @@
 }
 
 .modal-footer #forgetButton {
-  background-color: #2927b9 !important;
+  /*background-color: #2927b9 !important;
   border: 1px solid #2927b9 !important;
   border-radius: 2px;
+  font-size: 12px;*/
   font-family: 'Mattone 150';
   font-style: normal;
+  font-size: 14px;
   font-weight: 600;
-  font-size: 12px;
   text-transform: uppercase;
   padding: 10px 25px;
+  color: #2927b9;
 }
 
 .section-lr {
@@ -415,6 +417,37 @@ form i {
   padding: 10px 25px;
   color: #fff;
 }
+
+
+/* 👉 MODAL PASSWORD */
+
+.modal-header{
+  background: #23DCD1;
+}
+
+.modal-body {
+  padding: 2.5rem 1.5rem 0 !important;
+}
+
+.modal-body label{
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20.4685px;
+  line-height: 33px;
+}
+
+#forgetEmail{
+  font-family: 'Archivo';
+  font-style: normal;
+  font-size: 20.4685px !important;
+  line-height: 33px;
+  background: transparent !important;
+  border: 1px solid #CACACA !important;
+  border-radius: 3px;
+}
+
+
 
 @media (max-width: 991px) {
   .section-lr .container-lr {
