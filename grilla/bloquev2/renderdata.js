@@ -20,7 +20,7 @@ tabTogglers.forEach(function(toggler) {
     });
 });
 // Obtenemos el día actual
-tercer_mas = getFecha(-2);
+// tercer_mas = getFecha(-2);
 var undia = new Date();
 let tercermenos = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo', 'Lunes'][(undia.getDay()-3)]
 let anteayer = ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado', 'Domingo', 'Lunes'][(undia.getDay()-2)]
@@ -182,9 +182,9 @@ function renderProgramas(){
         var programas= $(`
             <tr class=" programaItem el-${contador}" data-item="${programName}${programTimeIni}">
                 
-                <td class="px-0 pl-3 py-3 text-center border-0 bg-ecuavisa text-sm w-1/4 items-center text-zinc-300">
+                <td class="px-0 pl-3 py-3 text-center border-0 bg-ecuavisa text-sm w-1/4 items-center md:w-full md:flex text-zinc-300">
                 <img src=${programImg} class="imgPrograma">
-                    <p class=" border-b-4 border-zinc-500 py-5 text-center whitespace-no-wrap datafont">
+                    <p class=" border-b-4 border-zinc-500 py-1 md:py-6 md:w-60 text-center whitespace-no-wrap datafont">
                         <b>${programTimeIni}</b> <br>
                         mins
                     </p>
@@ -212,6 +212,8 @@ function renderProgramas(){
             // };
             // jsonDiaActual(programIndex); 
 
+           
+
             // ################dia de hoy
             if (fechahoy('fecha') === (programDate) ){
                 var contador = (contador)+1; //subimos el valor de contador para la clase unica
@@ -224,6 +226,7 @@ function renderProgramas(){
                 _jsonDiaActual.push(programaData);
                  //   console.log(programaData);
 
+                 programas.appendTo('.dataProWeb');
                 //obtenemos formateada la hora actual 
                 var d = new Date();
                 timeOfDay = `${d.getHours().toString().padStart(2, "0")}:${d.getMinutes().toString().padStart(2, "0")}:${d.getSeconds().toString().padStart(2, "0")}`;
@@ -253,18 +256,19 @@ function renderProgramas(){
 
                 //var contador = contador;
                 /* Validacion del programa de la hora actual */
-                console.table({
-                    'current':currentTime.toString(),
-                    'init':startTime.toString(),
-                    'fin':endTime.toString(),
-                    'initnormal':programTimeIni,
-                    'finnormal':programTimeEnd,
-                    'active':currentTime.isBetween(startTime, endTime),
-                    'region': region
-                });
+                // console.table({
+                //     'current':currentTime.toString(),
+                //     'init':startTime.toString(),
+                //     'fin':endTime.toString(),
+                //     'initnormal':programTimeIni,
+                //     'finnormal':programTimeEnd,
+                //     'active':currentTime.isBetween(startTime, endTime),
+                //     'region': region
+                // });
                 /**/
 
                 var entra = false;
+
 
                 if ((currentTime.isBetween(startTime, endTime)) && !entra) {
 
@@ -293,7 +297,7 @@ function renderProgramas(){
 
 
                     
-                    programas.appendTo('.Tab4data');
+                    // programas.appendTo('.Tab4data');
             
                     var todayx  = new Date().toLocaleDateString("es-ES", obtenerDiaMes);
                     // var hoyes  = new Date().toLocaleDateString("es-ES", obtenerDia);
@@ -301,35 +305,39 @@ function renderProgramas(){
                      //metemos al dom el programa
             // console.log('la fecha de hoy es '+fechahoy('fecha')+' y coincide con '+programDate);
             }else{ /*console.log('la fecha de hoy es '+fechahoy('fecha')+' y no coincide con '+programDate);*/ }
-            $('.Tab3').parent('li').addClass('hidden');
-            $('.Tab2').parent('li').addClass('hidden');
-            $('.Tab1').parent('li').addClass('hidden');
+            // $('.Tab3').parent('li').addClass('hidden');
+            // $('.Tab2').parent('li').addClass('hidden');
+            // $('.Tab1').parent('li').addClass('hidden');
            
-            // ###################  manana
-            if (getFecha(+1) === (programDate) ){
+            // ###################  comentado eri
+          /*  if (getFecha(+1) === (programDate) ){
                 var mananaDate  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var manana  = new Date(getFecha(+2)).toLocaleDateString("es-ES", obtenerDia);
-                programas.appendTo('.Tab5data'); //metemos al dom el programa
                 $('.Tab5').html(`Mañana <div class="fecha-text">${mananaDate}</div>`);
                 // $('.Tab1').parent('li').addClass('hidden');
 
-            }else{ }
-            // ###################  pasadomanana
-            if (getFecha(+2) === (programDate) ){
+            }else{ }*/
+            // ###################  comentado eri
+
+
+            //comentado eri
+           /* if (getFecha(+2) === (programDate) ){
                 var pmananaDate  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var pmanana  = new Date(getFecha(+3)).toLocaleDateString("es-ES", obtenerDia);
-                programas.appendTo('.Tab6data'); //metemos al dom el programa
                 $('.Tab6').html(`${pmanana} <div class="fecha-text">${pmananaDate}</div>`);
             
-            }else{/*console.log('Pasadomañana es: '+ getFecha(+2) +' y no coincide con: '+programDate) */  }
-            // ###################  tercermas
-            if (getFecha(+3) === (programDate) ){
+            }else{ }*/
+            // ###################  comentado eri
+
+
+            //comentado eri
+         /*   if (getFecha(+3) === (programDate) ){
                 var tercermasDate  = new Date(getFecha(+4)).toLocaleDateString("es-ES", obtenerDiaMes);
                 var tercermas  = new Date(getFecha(+4)).toLocaleDateString("es-ES", obtenerDia);
                 programas.appendTo('.Tab7data'); //metemos al dom el programa
                 $('.Tab7').html('<h3>'+tercermas+'</h3><br><h3>'+tercermasDate+'</h3>');
                 $('.Tab7').parent('li').addClass('hidden');
-            }else{ }
+            }else{ }*/
 
         }else{ console.log("region diferente a costa")};
     //     /* para navegar entre elementos dentro se usa otro for como el ejemplo 

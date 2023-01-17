@@ -131,6 +131,94 @@ tr.programaItem td:not(.text-center) div {
 }
 
 .imgPrograma {
-  width: 40%;
-  height: auto;
+  width: 48%;
+  height: 6.5em;
+  object-fit: cover;
+}
+
+.cookie-overlay {
+  position: fixed;
+  bottom: 1rem;
+  right: 1rem;
+  background: #fff;
+  z-index: 2051;
+  line-height: 20px;
+  font-size: 16px;
+  border-radius: 6px;
+  padding: 0px 20px 20px 20px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+}
+
+.btnRechazar{
+  background: #23DCD1;
+  color: #2826b8;
+  border-radius: 2px;
+  /*padding: 12px 8px;*/
+  padding: 12px 20px;
+  text-align: center;
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+.btnRechazar:hover {
+  background: #141161;
+  color: #fff;
+}
+
+.btnAceptar{
+  background: #2826b8;
+  color: #fff;
+  border-radius: 2px;
+  /*padding: 12px 8px;*/
+  padding: 12px 20px;
+  text-align: center;
+  text-transform: uppercase;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  margin: 0;
+}
+.btnAceptar:hover {
+  background: #141161;
+  color: #fff;
+}
+.msg-wrap{
+  width: 440px;
+}
+.title-wrap{
+  margin-bottom: 20px;
+}
+.title-wrap h4{
+  display: flex;
+  gap: 10px;
+}
+.btn-wrap{
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+@media (max-width: 767px) {
+.cookie-overlay {
+  right: 0.5rem;
+  left: 0.5rem;
+}
+/*#cookieNotice{
+  padding: 1rem 2rem;
+}*/
+.msg-wrap {
+  width: 100%;
+}
+}
+
+
+@media only screen and (max-width: 768px) {
+  .imgPrograma {
+      width: 100%;
+      height: 2.8em;
+      object-fit: cover;
+  }
 }

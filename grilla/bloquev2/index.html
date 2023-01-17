@@ -83,20 +83,24 @@
 </head>
 <body>
 
+    <div>
+        <div class="dataProWeb"></div>
+    </div>
+
     <!-- Tabs  -->
-    <ul id="tabs" class="inline-flex w-full pt-5 overflow-auto">
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day1"><a class="Tab1" id="default-tab" href="#lunes">Lunes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day2"><a class="Tab2" href="#martes">Martes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day3"><a class="Tab3" href="#miercoles">Miércoles</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day4"><a class="Tab4" href="#jueves">Jueves</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day5"><a class="Tab5" href="#viernes">Viernes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day6"><a class="Tab6" href="#sabado">Sábado</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day7"><a class="Tab7" href="#domingo">Domingo</a></li>
+    <ul id="tabs" class="inline-flex w-full pt-5 overflow-auto hidden">
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day1 hidden"><a class="Tab1" id="default-tab" href="#lunes">Lunes</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day2 hidden"><a class="Tab2" href="#martes">Martes</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day3 hidden"><a class="Tab3" href="#miercoles">Miércoles</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day4 hidden"><a class="Tab4" href="#jueves">Jueves</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day5 hidden"><a class="Tab5" href="#viernes">Viernes</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day6 hidden"><a class="Tab6" href="#sabado">Sábado</a></li>
+        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day7 hidden"><a class="Tab7" href="#domingo">Domingo</a></li>
     </ul>
     <table class="puredata hidden"> </table> <!-- no borrar - core de datos  -->
     
     <!-- Tab Contents -->
-    <div id="tab-contents" class=" ">
+    <div id="tab-contents" class="hidden">
         <div id="lunes" class="px-2">
             <table class=" rounded-md w-full min-w-full leading-normal">
                 <!-- cabecera  -->
@@ -191,15 +195,93 @@
         </div>   
     </div>
 
-
     <div class="jsondata" id="jsonData"></div>
-    <script async type="text/javascript" src="filterdata.js"> </script> 
+
+    
+    <!-- <script async type="text/javascript" src="filterdata.js"> </script>  -->
     <script async type="text/javascript" src="renderdata.js"> </script> 
     <script async type="text/javascript" src="getdata.js"> </script> 
 
     <script defer="defer" type="text/javascript">
 
+let stringHtml = `
+  <div id="cookieNotice" class="cookie-overlay p-4 d-none" style="display: block;">
+        <div class="title-wrap" style="font-weight: bold; font-size: 20px;">
+            <h4><img src="https://estadisticas.ecuavisa.com/sites/gestor/Banner/cookies.svg" alt="cookies">Aviso de política de cookies</h4>
+        </div>
+        <div class="content-wrap">
+            <div class="msg-wrap" >
+                <p>Este sitio web utiliza cookies para mejorar su experiencia de navegación y proporcionar recomendaciones personalizadas.</p>
+                <p style="margin-top: 10px;">Al hacer clic en el botón "Aceptar" a continuación, usted acepta nuestra <a style="color:#115cfa;" href="https://www.ecuavisa.com/servicios/politicas-de-privacidad" target="_blank">Política de cookies</a>.</p>
+                
+                <div class="btn-wrap ">
+                    <button class="btnAceptar" onclick="acceptCookieConsent();">Aceptar</button>
+                    <!--button class="btnRechazar" onclick="declineCookieConsent();">Rechazar</button-->
+                </div>
+            </div>
+        </div>
+    </div>
+`;
+document.body.innerHTML += stringHtml;
 
+setTimeout(checkCookie(),150);
+
+function checkCookie(){
+let cookie_consent = getCookie("user_cookie_consent");
+if(cookie_consent != ""){
+    document.getElementById("cookieNotice").style.display = "none";
+}else if(localStorage.getItem('noCookies')){
+    document.getElementById("cookieNotice").style.display = "none";
+}else{
+    document.getElementById("cookieNotice").style.display = "block";
+}
+}
+
+// Crear cookie
+function setCookie(cname, cvalue, exdays) {
+    const d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+}
+
+// Borrar cookie
+function deleteCookie(cname) {
+    const d = new Date();
+    d.setTime(d.getTime() + (24*60*60*1000));
+    let expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=;" + expires + ";path=/";
+}
+
+// Leer cookie
+function getCookie(cname) {
+    let name = cname + "=";
+    let decodedCookie = decodeURIComponent(document.cookie);
+    let ca = decodedCookie.split(';');
+    for(let i = 0; i <ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+// Set cookie consent
+function acceptCookieConsent(){
+    deleteCookie('user_cookie_consent');
+    setCookie('user_cookie_consent', 1, 30);
+    document.getElementById("cookieNotice").style.display = "none";
+}
+
+function declineCookieConsent(){
+    document.getElementById("cookieNotice").style.display = "none";
+    localStorage.setItem('noCookies', true);
+}    
+   
     function fechahoy(dato){
         var fecha = new Date();
         // var hoy = new Date(fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate()); //+7 se suma si quiere setear ayer u hoy
@@ -241,8 +323,6 @@ function getFecha( dias){
   var diaObtenido = d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+(d.getDate())).slice(-2) ;
     return diaObtenido
 }
-
-
 
 
 // console.log('funcionNueva es '+getFecha( -2)); // probar getfecha

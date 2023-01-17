@@ -70,7 +70,7 @@ if(localStorage.getItem('dHoy')){// evaluamos si la key "dHoy" existe
                 if (ce.innerText != "") { document.querySelector("tbody").appendChild(ce); }
             })
 
-                 filterData(); //luego de cargar datos vamos a estructurarlos en esta funcion, se encuentra en filterdata.js
+                //  filterData(); //luego de cargar datos vamos a estructurarlos en esta funcion, se encuentra en filterdata.js
         })
         // ##### Fin carga de la grilla en dom
     }
