@@ -481,8 +481,8 @@ form i {
 .btn-close{
   background: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/close-fill.svg') center/1em auto no-repeat !important;
   border: 0;
-  /*background-size: 40px !important;*/
-  opacity: 0 !important;
+  background-size: 40px !important;
+  opacity: 1 !important;
 }
 
 
