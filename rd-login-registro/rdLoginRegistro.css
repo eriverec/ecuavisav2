@@ -76,7 +76,7 @@
   width: 800px;
   height: 500px;
   background: #fff;
-  box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+  /* box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1); */
   overflow: hidden;
 }
 
@@ -109,9 +109,10 @@
 
 .section-lr .container-lr .user .formBx {
   position: relative;
-  width: 50%;
+  width: 100%;
+  /* width: 50%; */
   height: 100%;
-  background: #fff;
+  background: #2927b9;
   display: flex;
   justify-content: center;
   align-items: center;
