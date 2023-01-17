@@ -184,7 +184,9 @@ tr.programaItem td:not(.text-center) div {
   background: #141161;
   color: #fff;
 }
-
+.msg-wrap{
+  width: 440px;
+}
 .title-wrap{
   margin-bottom: 20px;
 }
