@@ -50,12 +50,17 @@
   line-height: 28px;
   color: #2927B9;
 }
+.modal-footer{
+  border-top: 1px solid transparent !important;
+}
 
 .modal-footer #forgetButton {
   /*background-color: #2927b9 !important;
   border: 1px solid #2927b9 !important;
   border-radius: 2px;
   font-size: 12px;*/
+  background-color: transparent !important;
+  border-color: transparent !important;
   font-family: 'Mattone 150';
   font-style: normal;
   font-size: 14px;
@@ -424,6 +429,9 @@ form i {
 .modal-header{
   background: #23DCD1;
 }
+.modal-content{
+  border: none !important;
+}
 
 .modal-body {
   padding: 2.5rem 1.5rem 0 !important;
@@ -447,6 +455,11 @@ form i {
   border-radius: 3px;
 }
 
+.btn-primary:hover {
+  color: #2927b9;
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
 
 
 @media (max-width: 991px) {
