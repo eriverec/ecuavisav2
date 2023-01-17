@@ -140,6 +140,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 10px;
 }
 
 /* .section-lr .container-lr .user .formBx form .boton-redes-lr .br-facebook .facebook {
@@ -271,13 +272,12 @@
   margin-top: 20px;
   letter-spacing: 1px;
   color: #fff;
-  text-transform: uppercase;
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 300;
   font-size: 16px;
   line-height: 26px;
-  /* left: calc(50% - 272px/2 + 22px); */
+  left: calc(50% - 315px/2 + 22px);
 }
 /* 
 .section-lr .container-lr .user .formBx form .signup a {
