@@ -462,6 +462,9 @@ form i {
   border-color: transparent !important;
 }
 
+.modal-footer button:after {
+  content: url('https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FbotonNews.svg');
+}
 
 @media (max-width: 991px) {
   .section-lr .container-lr {
