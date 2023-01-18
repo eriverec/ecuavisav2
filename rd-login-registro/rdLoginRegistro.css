@@ -131,7 +131,7 @@
   width: 100%;
   /* width: 50%; */
   height: 100%;
-  background: #2927b9;
+  background: transparent;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -590,6 +590,10 @@ form i {
     max-width: 425px !important;
 }
 /*mobile login*/
+.inicio-registro .logo-ecuavisa-lr {
+  top: 10%;
+  position: absolute;
+}
 .section-lr .container-lr .signinBx .formBx {
   left: 10%;
 }
@@ -602,8 +606,8 @@ form i {
   line-height: 48px;
 }
 .inicio-registro .section-lr::before {
-  left: 15%;
-  top: 50%;
+  left: 13%;
+  top: 47%;
 }
 .section-lr .container-lr.active .signupBx .formBx {
   left: -90%;
