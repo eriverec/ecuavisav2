@@ -254,7 +254,13 @@ input#acceder {
   justify-content: flex-end;
   align-items: flex-end;
 }
-
+input#registrar {
+  border: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
 /* .section-lr .container-lr .user .formBx form input[type='submit'] {
   max-width: 100px;
   background: transparent;
