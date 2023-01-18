@@ -624,21 +624,21 @@ form i {
   font-size: 50px;
   line-height: 48px;
 }
-  .section-lr .container-lr .user .formBx form input {
-    width: 280px;
-    height: 48px;
-  }
-  .inicio-registro .section-lr::before {
-    left: 10%;
-    top: 52%;
-  }
-  .auth-method-separator:after, .auth-method-separator:before {
-    width: 20%;
-  }
-  .section-lr .container-lr .user .formBx form h2 {
-    font-size: 50px;
-    margin-top: 15px;
-    letter-spacing: .3px;
+.section-lr .container-lr .user .formBx form input {
+  width: 280px;
+  height: 48px;
+}
+.inicio-registro .section-lr::before {
+  left: 10%;
+  top: 52%;
+}
+.auth-method-separator:after, .auth-method-separator:before {
+  width: 20%;
+}
+.section-lr .container-lr .user .formBx form h2 {
+  font-size: 50px;
+  margin-top: 15px;
+  letter-spacing: .3px;
 }
 .section-lr .container-lr .signinBx .formBx {
   margin: 0 10px;
@@ -654,6 +654,11 @@ form i {
 .section-lr .container-lr .user .formBx form .signup.registro {
   margin-top: 30px;
 }
+.modal-body label,
+#forgetEmail {
+  font-size: 16.4685px !important;
+}
+
 }
 
 
