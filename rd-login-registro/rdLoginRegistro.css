@@ -648,8 +648,8 @@ form i {
   margin: 0 10px;
 }
 .section-lr .container-lr .user .formBx form .signup {
-  margin-top: 10px;
   left: 0;
+  font-size: 14px;
 }
 }
 
