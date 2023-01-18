@@ -186,9 +186,10 @@ body {
   height: 555px;
   object-fit: cover;
   object-position: top;
+  -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 70%);
 }
 
-.mediaBlock__ .multimedia:after {
+/* .mediaBlock__ .multimedia:after {
   position: absolute;
   width: 100%;
   height: 100%;
@@ -202,7 +203,7 @@ body {
   background-size: cover;
   top: 0;
   opacity: .9;
-}
+} */
 
 .mediaBlock__ .t_prog {
   position: absolute;

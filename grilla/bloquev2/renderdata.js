@@ -92,9 +92,6 @@ function activeDay(data) {
   setTimeout(function () {
     console.log(data)
     var el = $(`tr.programaItem.${data}`).addClass('active-item');
-    var contructorIMG = `
-    <div> div activo ${data}</div>
-  `;
   }, 700);
 }
 
@@ -184,7 +181,7 @@ function renderProgramas() {
     var ActualClass = 'px-4 py-4 text-zinc-50 bg-ecuavisa text-sm flex items-center'
     var imgs = 'https://via.placeholder.com/70'
     var programas = $(`
-      <tr class=" programaItem el-${contador}" data-item="${programName}${programTimeIni}">                
+      <tr class=" programaItem el-${contador}" data-item="${programName}">                
           <td class="">
               <div class="">
                   <p>${programTimeIni.slice(0, -3)} - ${programTimeEnd.slice(0, -3)}</p>
