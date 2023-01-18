@@ -530,9 +530,11 @@ form i {
 .section-lr .container-lr .user .formBx form input{
   color: #ffff !important;
 }
-
-.section-lr .box-input input:after {
-  content: url('https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FbotonNews.svg');
+.section-lr input label{
+  line-height: 7px;
+}
+.section-lr .container-lr .user .formBx form .signup.registro{
+  margin-top: 55px;
 }
 
 
