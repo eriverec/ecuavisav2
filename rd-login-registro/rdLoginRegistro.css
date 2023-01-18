@@ -87,7 +87,7 @@
 
 .section-lr .logo-ecuavisa-lr img {
   width: 100px;
-  margin-bottom: 22px;
+  margin-bottom: 3rem;
 }
 
 .section-lr .container-lr {
@@ -211,7 +211,7 @@
   letter-spacing: -0.03em;
   text-transform: lowercase;
   color: #23DCD1;
-  padding-bottom: 2rem;
+  padding: 2rem 0;
 }
 
 /* .section-lr .container-lr .user .formBx form input {
