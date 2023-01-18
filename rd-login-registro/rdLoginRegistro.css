@@ -85,10 +85,10 @@
   flex-direction: column;
 }
 
-.section-lr .logo-ecuavisa-lr img {
+/* .section-lr .logo-ecuavisa-lr img {
   width: 100px;
   margin-bottom: 3rem;
-}
+} */
 
 .section-lr .container-lr {
   position: relative;
@@ -571,12 +571,12 @@ form i {
 }
 
 .inicio-registro .section-lr::before {
-    content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-loginwhite.svg');
-    position: absolute;
-    z-index: 5;
-    left: 21%;
-    top: 58%;
-    transform: translate(-50%,-50%);
+  content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-loginwhite.svg');
+  position: absolute;
+  z-index: 5;
+  left: 21%;
+  top: 52%;
+  transform: translate(-50%,-50%);
 }
 
 .inicio-registro label{
