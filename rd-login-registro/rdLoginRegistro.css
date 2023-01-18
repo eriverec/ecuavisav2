@@ -617,7 +617,7 @@ form i {
 @media (max-width: 600px) {
   /*mobile login*/
 .inicio-registro .logo-ecuavisa-lr {
-  top: 10%;
+  top: 5%;
   position: absolute;
 }
 .section-lr .container-lr .user .formBx form h2 {
@@ -642,6 +642,7 @@ form i {
 }
 .section-lr .container-lr .signinBx .formBx {
   margin: 0 10px;
+  padding-top: 1rem;
 }
 .section-lr .container-lr.active .signupBx .formBx {
   margin: 0 10px;
