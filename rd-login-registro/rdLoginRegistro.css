@@ -659,4 +659,7 @@ form i {
   left: 10%;
   top: 50%;
 }
+.section-lr .container-lr .user .formBx form .signup.registro {
+  margin-top: 20px;
+}
 }
