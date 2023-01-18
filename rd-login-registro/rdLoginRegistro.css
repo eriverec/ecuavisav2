@@ -568,6 +568,12 @@ form i {
   }
 }
 
+@media (max-width: 767px){
+  .section-lr::before {
+    left: 0;
+  }
+}
+
 @media (max-width: 375px) {
   .section-lr .container-lr {
     max-width: 300px;
