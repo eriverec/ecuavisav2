@@ -589,24 +589,6 @@ form i {
 .modal-dialog {
     max-width: 425px !important;
 }
-/*mobile login*/
-.inicio-registro .logo-ecuavisa-lr {
-  top: 10%;
-  position: absolute;
-}
-.section-lr .container-lr .signinBx .formBx {
-  left: 13%;
-}
-
-.section-lr .container-lr .user .formBx form h2 {
-  font-size: 50px;
-  line-height: 48px;
-}
-
-.section-lr .container-lr.active .signupBx .formBx {
-  left: -90%;
-}
-
 }
 
 
@@ -626,10 +608,30 @@ form i {
 @media (max-width: 768px) {
   .section-lr .container-lr .signinBx .formBx {
     left: 0;
+}
+.section-lr .container-lr.active .signupBx .formBx {
+  left: 0%;
 } 
 }
 
 @media (max-width: 600px) {
+  /*mobile login*/
+.inicio-registro .logo-ecuavisa-lr {
+  top: 10%;
+  position: absolute;
+}
+.section-lr .container-lr .signinBx .formBx {
+  left: 13%;
+}
+
+.section-lr .container-lr .user .formBx form h2 {
+  font-size: 50px;
+  line-height: 48px;
+}
+
+.section-lr .container-lr.active .signupBx .formBx {
+  left: -90%;
+}
   .section-lr .container-lr .user .formBx form input {
     width: 280px;
     height: 48px;
