@@ -1,210 +1,110 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Parrilla ecuavisa</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+        <link
+        href="https://fonts.googleapis.com/css2?family=Anek+Malayalam:wght@100;200;300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+        <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.js"
+        integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js" crossorigin="anonymous"
+        referrerpolicy="no-referrer"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <style>
-        body{
-            background: #060127;
-            font-family: 'Archivo', sans-serif;
-            padding: 0 1rem;
-        }
-        td { border: 1px solid blue; }
-        .bg-ecuavisa{
-            background: #060127;
-        }
-        .hourtabs {
-    /*      display: flex;
-            flex-wrap: wrap;*/
-            display: -webkit-box;
-            /* flex-wrap: wrap; */
-            /* width: fit-content; */
-            overflow: auto;
-        }
-        .datafont{
-            font-family: 'Archivo', sans-serif;
-        }
-        .daround{
-            /*display: flex;*/
-            /*justify-content: space-around;*/
-            /*flex-direction: row-reverse;*/
-        }
-        .hourtabs label {
-            order: 1;
-            display: flex;
-            padding: 0.3rem 1rem;
-            margin-right: 0.2rem;
-            cursor: pointer;
-            background: #d7d7d7;
-            font-weight: 500;
-            transition: background ease 0.2s;
-        }
-        .hourtabs .tab {
-            order: 99;
-            flex-grow: 1;
-            width: 100%;
-            display: none;
-            padding: 1rem;
-            background: #fff;
-        }
-        .hourtabs input[type="radio"] {
-            display: none;
-        }
-        .hourtabs input[type="radio"]:checked + label {
-            background: #0067d5;
-            color: white;
-        }
-        .hourtabs input[type="radio"]:checked + label + .tab {
-            /*display: block;*/
-
-            display: block;
-            position: absolute;
-            top: 20%;
-        }
-        #tabs li {
-            width: inherit;
-        }
-        #tabs li a h3 {
-            text-transform: uppercase;
-        }
-    </style>
-    <link rel="stylesheet" type="text/css" href="https://ecuavisadev.netlify.app/grilla/v6/styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+   
 </head>
+
 <body>
 
-    <div>
-        <div class="dataProWeb"></div>
+    <div class="mediaBlock__">
+        <div class="senal_active container_ div__hide">
+            <img src="https://ecuavisadev.netlify.app/home-rd/assets/segvector.svg">
+            <span>En Vivo</span>
+        </div>
+
+        <!-- <div class="icon_player_prog mobile_player____"> 
+            <img src="https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlay.svg" alt="player-ecv"> 
+        </div> -->
+
+        <div class="multimedia">
+            <!-- <img src="https://estadisticas.ecuavisa.com/sites/default/files/2022-12/Desktop%20-%201.webp"> -->
+        </div>
+        <div class="t_prog container_">
+            <div class="icon_player_prog desktop_player">
+                <a href="https://www.ecuavisa.com/envivo" target="_blank">
+                    <img src="https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlay.svg" alt="player-ecv">
+                </a>
+            </div>
+            <p class="nameH"></p>
+            <p class="nameP"></p>
+            <div id="rd_cont_botones" class="">
+                <a href="https://www.ecuavisa.com/envivo" target="_blank" class="btn-gye div__hide"> Señal Guayaquil </a>
+                <a href="https://www.ecuavisa.com/envivo/quito" target="_blank" class="btn-quito div__hide"> Señal Quito </a>
+            </div>
+        </div>
     </div>
+
+    <div id="tab-contents" class="container_">
+        <div class="componente">
+            <div id="programlist2" class="programList dataProg"></div>
+            <div class="swiper-scrollbar"></div>
+        </div>
+    </div>
+
 
     <!-- Tabs  -->
-    <ul id="tabs" class="inline-flex w-full pt-5 overflow-auto hidden">
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day1 hidden"><a class="Tab1" id="default-tab" href="#lunes">Lunes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day2 hidden"><a class="Tab2" href="#martes">Martes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day3 hidden"><a class="Tab3" href="#miercoles">Miércoles</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day4 hidden"><a class="Tab4" href="#jueves">Jueves</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day5 hidden"><a class="Tab5" href="#viernes">Viernes</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day6 hidden"><a class="Tab6" href="#sabado">Sábado</a></li>
-        <li class="px-2 mx-1 py-2 font-semibold text-zinc-50 bg-blue-700 opacity-100 flex text-center justify-center items-center day7 hidden"><a class="Tab7" href="#domingo">Domingo</a></li>
-    </ul>
+
     <table class="puredata hidden"> </table> <!-- no borrar - core de datos  -->
-    
-    <!-- Tab Contents -->
-    <div id="tab-contents" class="hidden">
-        <div id="lunes" class="px-2">
-            <table class=" rounded-md w-full min-w-full leading-normal">
-                <!-- cabecera  -->
-                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
-                    <td class="px-5 w-1/4 py-0 pt-4 border-0 text-zinc-200"><p>Hora</p></td>
-                    <td class="w-3/4 py-0 pt-4 border-0 text-zinc-200"><p> Programación</p> </td>
-                </tr></tbody>
-                <!-- Fin cabecera  -->
-                <tbody id="programlist2" class="programList lunes Tab1data"> </tbody>
-                <!--     <tr><td class="px-5 py-5 border-b border-gray-200  text-sm flex items-center">
-                            <img src="" alt="">
-                            <p class="ml-3 text-gray-900 whitespace-no-wrap"> televistazo - 11:00 </p>
-                        </td>
-                        <td class="px-5 py-5 border-b border-gray-200  text-sm">
-                            <span class="bg-green-200">Activo</span>
-                        </td> </tr> -->
-            </table>
-        </div>
 
-        <div id="martes" class="hidden">
-            <table class="  rounded-md w-full min-w-full leading-normal">
-                <!-- cabecera  -->
-                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
-                    <td class="px-5 w-1/4 py-0 pt-4 border-0 text-zinc-200"><p>Hora</p></td>
-                    <td class="w-3/4 py-0 pt-4 border-0 text-zinc-200"><p> Programación</p> </td>
-                </tr></tbody>
-                <!-- Fin cabecera  -->
-                <tbody id="programlist2" class="programList martes Tab2data">
-                </tbody>
-            </table>
-        </div>
 
-        <div id="miercoles" class="hidden">
-
-            <table class="  rounded-md w-full min-w-full leading-normal">
-                <!-- cabecera  -->
-                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
-                    <td class="px-5 w-1/4 py-0 pt-4 border-0 text-zinc-200"><p>Hora</p></td>
-                    <td class="w-3/4 py-0 pt-4 border-0 text-zinc-200"><p> Programación</p> </td>
-                </tr></tbody>
-                <!-- Fin cabecera  -->
-                <tbody id="programlist2" class="programList miercoles Tab3data"> </tbody>
-            </table>
-        </div>
-
-        <div id="jueves" class="hidden">
-            <table class=" px-3  rounded-md w-full min-w-full leading-normal">
-                <!-- cabecera  -->
-                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
-                <td class="px-5 w-1/4 py-0 pt-4 border-0 text-zinc-200"><p>Hora</p></td>
-                <td class="w-3/4 py-0 pt-4 border-0 text-zinc-200"><p> Programación</p> </td>
-                </tr></tbody> 
-                <!-- Fin cabecera  -->
-                <tbody id="programlist2" class=" programList Jueves Tab4data"> </tbody>
-            </table>
-        </div>
-
-        <div id="viernes" class="hidden">
-            <table class="  rounded-md w-full min-w-full leading-normal">
-                <!-- cabecera  -->
-                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
-                    <td class="px-5 w-1/4 py-0 pt-4 border-0 text-zinc-200"><p>Hora</p></td>
-                    <td class="w-3/4 py-0 pt-4 border-0 text-zinc-200"><p> Programación</p> </td>
-                </tr></tbody>
-                <!-- Fin cabecera  -->
-                <tbody id="programlist2" class="programList viernes Tab5data"> </tbody>
-            </table>
-        </div>
-
-        <div id="sabado" class="hidden">
-            <table class="  rounded-md w-full min-w-full leading-normal">
-                <!-- cabecera  -->
-                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
-                    <td class="px-5 w-1/4 py-0 pt-4 border-0 text-zinc-200"><p>Hora</p></td>
-                    <td class="w-3/4 py-0 pt-4 border-0 text-zinc-200"><p> Programación</p> </td>
-                </tr></tbody>
-                <!-- Fin cabecera  -->
-                <tbody id="programlist2" class="programList sábado Tab6data"> </tbody>
-            </table>
-        </div>   
-
-        <div id="domingo" class="hidden">
-            <table class="  rounded-md w-full min-w-full leading-normal">
-                <!-- cabecera  -->
-                <tbody id="tableHeading1" class="tableHeading"><tr class="daround">
-                    <td class="px-5 w-1/4 py-0 pt-4 border-0 text-zinc-200"><p>Hora</p></td>
-                    <td class="w-3/4 py-0 pt-4 border-0 text-zinc-200"><p> Programación</p> </td>
-                </tr></tbody>
-                <!-- Fin cabecera  -->
-                <tbody id="programlist2" class="programList domingo Tab7data"> </tbody>
-            </table>
-        </div>   
-    </div>
 
     <div class="jsondata" id="jsonData"></div>
 
-    
-    <!-- <script async type="text/javascript" src="filterdata.js"> </script>  -->
-    <script async type="text/javascript" src="renderdata.js"> </script> 
-    <script async type="text/javascript" src="getdata.js"> </script> 
+    <script>
+        function fechahoy(dato) {
+            var fecha = new Date();
+            // var hoy = new Date(fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate()); //+7 se suma si quiere setear ayer u hoy
+            // var hoy = fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate();
+            var hoy = fecha.getFullYear() + '-' + ('0' + (fecha.getMonth() + 1)).slice(-2) + '-' + ('0' + fecha
+                .getDate()).slice(-2);
+            var hora = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
+            var fehayHora = hoy + ' ' + hora;
+            if (dato === 'fecha') {
+                return hoy
+                /*return hoy.replace //funcion avanzada que filtra ceros en días
+                (/-1-|-2-|-3-|-4-|-5-|-6-|-7-|-8-|-9-/gi,
+                    function (x) {
+                    r1 = x.replace('-1-','-01-');    r2 = r1.replace('-2-','-02-');   r3 = r2.replace('-3-','-03-');
+                    r4 = r3.replace('-4-','-04-');   r5 = r4.replace('-5','-05-');   r6 = r5.replace('-6-','-06-');
+                    r7 = r6.replace('-7-','-07-');   r8 = r7.replace('-8','-08-');   r9 = r8.replace('-8-','-08-');
+                    return r8.replace('-9-','-09-'); 
+                });*/
+            } else if (dato === 'hora') {
+                return hora;
+            }
+            // return fehayHora;
+        }
+    </script>
+    <script async type="text/javascript" src="filterdata.js"> </script>
+    <script async type="text/javascript" src="renderdata.js"> </script>
+    <script async type="text/javascript" src="getdata.js"> </script>
 
     <script defer="defer" type="text/javascript">
-
-let stringHtml = `
+        let stringHtml = `
   <div id="cookieNotice" class="cookie-overlay p-4 d-none" style="display: block;">
         <div class="title-wrap" style="font-weight: bold; font-size: 20px;">
             <h4><img src="https://estadisticas.ecuavisa.com/sites/gestor/Banner/cookies.svg" alt="cookies">Aviso de política de cookies</h4>
@@ -222,133 +122,116 @@ let stringHtml = `
         </div>
     </div>
 `;
-document.body.innerHTML += stringHtml;
+        document.body.innerHTML += stringHtml;
 
-setTimeout(checkCookie(),150);
+        setTimeout(checkCookie(), 150);
 
-function checkCookie(){
-let cookie_consent = getCookie("user_cookie_consent");
-if(cookie_consent != ""){
-    document.getElementById("cookieNotice").style.display = "none";
-}else if(localStorage.getItem('noCookies')){
-    document.getElementById("cookieNotice").style.display = "none";
-}else{
-    document.getElementById("cookieNotice").style.display = "block";
-}
-}
-
-// Crear cookie
-function setCookie(cname, cvalue, exdays) {
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    let expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-// Borrar cookie
-function deleteCookie(cname) {
-    const d = new Date();
-    d.setTime(d.getTime() + (24*60*60*1000));
-    let expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=;" + expires + ";path=/";
-}
-
-// Leer cookie
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
+        function checkCookie() {
+            let cookie_consent = getCookie("user_cookie_consent");
+            if (cookie_consent != "") {
+                document.getElementById("cookieNotice").style.display = "none";
+            } else if (localStorage.getItem('noCookies')) {
+                document.getElementById("cookieNotice").style.display = "none";
+            } else {
+                document.getElementById("cookieNotice").style.display = "block";
+            }
         }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
+
+        // Crear cookie
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
         }
-    }
-    return "";
-}
 
-// Set cookie consent
-function acceptCookieConsent(){
-    deleteCookie('user_cookie_consent');
-    setCookie('user_cookie_consent', 1, 30);
-    document.getElementById("cookieNotice").style.display = "none";
-}
+        // Borrar cookie
+        function deleteCookie(cname) {
+            const d = new Date();
+            d.setTime(d.getTime() + (24 * 60 * 60 * 1000));
+            let expires = "expires=" + d.toUTCString();
+            document.cookie = cname + "=;" + expires + ";path=/";
+        }
 
-function declineCookieConsent(){
-    document.getElementById("cookieNotice").style.display = "none";
-    localStorage.setItem('noCookies', true);
-}    
-   
-    function fechahoy(dato){
-        var fecha = new Date();
-        // var hoy = new Date(fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate()); //+7 se suma si quiere setear ayer u hoy
-        // var hoy = fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate();
-        var hoy= fecha.getFullYear()+'-'+('0'+(fecha.getMonth()+1)).slice(-2)+'-'+('0'+fecha.getDate()).slice(-2);
-        var hora = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
-        var fehayHora = hoy+' '+hora;
-        if (dato === 'fecha'){ 
-        return hoy 
-        /*return hoy.replace //funcion avanzada que filtra ceros en días
-        (/-1-|-2-|-3-|-4-|-5-|-6-|-7-|-8-|-9-/gi,
-            function (x) {
-            r1 = x.replace('-1-','-01-');    r2 = r1.replace('-2-','-02-');   r3 = r2.replace('-3-','-03-');
-            r4 = r3.replace('-4-','-04-');   r5 = r4.replace('-5','-05-');   r6 = r5.replace('-6-','-06-');
-            r7 = r6.replace('-7-','-07-');   r8 = r7.replace('-8','-08-');   r9 = r8.replace('-8-','-08-');
-          return r8.replace('-9-','-09-'); 
-        });*/ }
-        else if (dato === 'hora'){return hora;}
-        // return fehayHora;
-    }
-    console.log('La fecha actual es: '+fechahoy('fecha'));
-    console.log('La hora actual es: '+fechahoy('hora'));
-    // ##### FIN función para obtener fecha y hora
+        // Leer cookie
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        // Set cookie consent
+        function acceptCookieConsent() {
+            deleteCookie('user_cookie_consent');
+            setCookie('user_cookie_consent', 1, 30);
+            document.getElementById("cookieNotice").style.display = "none";
+        }
+
+        function declineCookieConsent() {
+            document.getElementById("cookieNotice").style.display = "none";
+            localStorage.setItem('noCookies', true);
+        }
 
 
-    function proxSemana(){
-        var today = new Date();
-        var proxSemana = new Date(today.getFullYear(), today.getMonth(), today.getDate()+3);
-        return proxSemana;
-    }  
-    // console.log(proxSemana())
+        console.log('La fecha actual es: ' + fechahoy('fecha'));
+        console.log('La hora actual es: ' + fechahoy('hora'));
+        // ##### FIN función para obtener fecha y hora
 
 
-/* Función que suma o resta días a una fecha, si el parámetro
-   días es negativo restará los días*/
-function getFecha( dias){
-    var d = new Date();
-  d.setDate(d.getDate() + dias);
-  var diaObtenido = d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+(d.getDate())).slice(-2) ;
-    return diaObtenido
-}
+        function proxSemana() {
+            var today = new Date();
+            var proxSemana = new Date(today.getFullYear(), today.getMonth(), today.getDate() + 3);
+            return proxSemana;
+        }
+        // console.log(proxSemana())
 
 
-// console.log('funcionNueva es '+getFecha( -2)); // probar getfecha
-    
-
-    // // funcion de dia vieja 
-    // function getFecha(dia){
-    //     var today = new Date();
-    //     var diaObtenido = today.getFullYear()+'-'+('0'+(today.getMonth()+1)).slice(-2)+'-'+('0'+(today.getDate()+dia)).slice(-2) ;
-    //     return diaObtenido
-    //     // return diaObtenido.replace //funcion avanzada que filtra ceros en días
-    //     // (/-1|-2|-3|-4|-5|-6|-7|-8|-9/gi,
-    //     //     function (x) {
-    //     //     r1 = x.replace('-1','-01');    r2 = r1.replace('-2','-02');   r3 = r2.replace('-3','-03');
-    //     //     r4 = r3.replace('-4','-04');   r5 = r4.replace('-5','-05');   r6 = r5.replace('-6','-06');
-    //     //     r7 = r6.replace('-7','-07');   r8 = r7.replace('-8','-08');
-    //     //   return r8.replace('-9','-09');
-    //     // }) 
-    // }  
+        /* Función que suma o resta días a una fecha, si el parámetro
+           días es negativo restará los días*/
+        function getFecha(dias) {
+            var d = new Date();
+            d.setDate(d.getDate() + dias);
+            var diaObtenido = d.getFullYear() + '-' + ('0' + (d.getMonth() + 1)).slice(-2) + '-' + ('0' + (d.getDate()))
+                .slice(-2);
+            return diaObtenido
+        }
 
 
-    // console.log(getFecha(0)+ ' es el dia')
+        // console.log('funcionNueva es '+getFecha( -2)); // probar getfecha
+
+
+        // // funcion de dia vieja 
+        // function getFecha(dia){
+        //     var today = new Date();
+        //     var diaObtenido = today.getFullYear()+'-'+('0'+(today.getMonth()+1)).slice(-2)+'-'+('0'+(today.getDate()+dia)).slice(-2) ;
+        //     return diaObtenido
+        //     // return diaObtenido.replace //funcion avanzada que filtra ceros en días
+        //     // (/-1|-2|-3|-4|-5|-6|-7|-8|-9/gi,
+        //     //     function (x) {
+        //     //     r1 = x.replace('-1','-01');    r2 = r1.replace('-2','-02');   r3 = r2.replace('-3','-03');
+        //     //     r4 = r3.replace('-4','-04');   r5 = r4.replace('-5','-05');   r6 = r5.replace('-6','-06');
+        //     //     r7 = r6.replace('-7','-07');   r8 = r7.replace('-8','-08');
+        //     //   return r8.replace('-9','-09');
+        //     // }) 
+        // }  
+
+
+        // console.log(getFecha(0)+ ' es el dia')
     </script>
 
 
 
-   
+
 </body>
+
 </html>
