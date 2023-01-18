@@ -5,11 +5,13 @@ import UserBioPanel from '@/views/apps/user/view/UserBioPanel.vue'
 //import UserTabConnections from '@/views/apps/user/view/UserTabConnections.vue'
 //import UserTabNotifications from '@/views/apps/user/view/UserTabNotifications.vue'
 import UserTabOverview from '@/views/apps/user/view/UserTabOverview.vue'
+import UserTemas from '@/views/apps/user/view/UserTemas.vue'
 //import UserTabSecurity from '@/views/apps/user/view/UserTabSecurity.vue'
 
 const userListStore = useUserListStore()
 const route = useRoute()
 const userData = ref()
+
 const userTab = ref(null)
 /*
 const tabs = [
@@ -38,11 +40,15 @@ const tabs = [
 
 const fetchId = () => {
 userListStore.fetchUser(Number(route.params.id)).then(response => {
-  userData.value = response.data
+  userData.value = response.data;
   
 })
 };
-watchEffect(fetchId)
+watchEffect(fetchId); 
+
+
+
+
 
 var timeoutID;
 
@@ -74,8 +80,10 @@ const reloadP = () =>  {
       md="7"
       lg="8"
     >
-    <UserTabOverview :user-data="userData"
-     />
+    <UserTabOverview :user-data="userData"/>
+    <UserTemas />
+  </VCol>
+ 
     <!--
       <VTabs
         v-model="userTab"
@@ -122,6 +130,6 @@ const reloadP = () =>  {
         </VWindowItem>
       </VWindow>
     -->
-    </VCol>
+   
   </VRow>
 </template>

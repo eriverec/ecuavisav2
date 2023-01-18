@@ -81,18 +81,22 @@ countUsers();
 
 const searchUsers = () => {
   if(searchQuery.value){
+page.value = 1;
+totalPage.value = 1;
 search.value = searchQuery.value;
+fetchUsers();
 }
 };
 
 const reset = () => {
-selectedBoletin.value = undefined;
+page.value = 1;
+totalPage.value = 1;
+selectedBoletin.value = '';
 selectedProvider.value = undefined;
-search.value = undefined;
-searchQuery.value = undefined;
+search.value = '';
+searchQuery.value = '';
 
-
-  fetchUsers();
+fetchUsers();
 
 };
 
@@ -105,6 +109,7 @@ watchEffect(fetchUsers);
 // 👉 watching current page
 watchEffect(() => {
   if (page.value > totalPage.value) page.value = totalPage.value;
+  console.log("watch totalPageValue", totalPage.value);
 });
 
 // 👉 search filters
@@ -189,9 +194,14 @@ const paginationData = computed(() => {
     : 0;
   const lastIndex =
     users.value.length + (page.value - 1) * rowPerPage.value;
-
+    console.log("usersValue ",users.value.length);
+console.log("pageValue ",page.value);
+console.log("rowPerPage ",rowPerPage.value);
+console.log("----------- ");
   return `Showing ${firstIndex} to ${lastIndex} of ${totalUsers.value} entries`;
 });
+
+
 
 const addNewUser = (userData) => {
   userListStore.addUser(userData);
@@ -500,7 +510,7 @@ const userListMeta = [
                         </RouterLink>
                       </h6>
                       <span class="text-sm text-disabled"
-                        >@{{ user.email }}</span
+                        >{{ user.email }}</span
                       >
                     </div>
                   </div>

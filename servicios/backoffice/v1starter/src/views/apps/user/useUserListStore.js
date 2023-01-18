@@ -26,6 +26,18 @@ export const useUserListStore = defineStore('UserListStore', {
       })
     },
 
+    fetchTema(id) {
+      return new Promise((resolve, reject) => {
+        axios.get(`https://ecuavisa-seguimiento-tema.onrender.com/${id}`).then(response => resolve(response)).catch(error => reject(error))
+      })
+    },
+    
+    deleteTema(id, nombres) {
+      return new Promise((resolve, reject) => {
+        axios.delete(`https://ecuavisa-seguimiento-tema.onrender.com/delete`, { data: { idUser: id, nombreTema: nombres } }).then(response => resolve(response)).catch(error => reject(error))
+      })
+    },
+
     // 👉 fetch single user
     fetchUser(id) {
       return new Promise((resolve, reject) => {
