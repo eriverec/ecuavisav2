@@ -19,7 +19,7 @@ if (ayer === 'Lunes') {
 if (ayer === 'Viernes') {
   tercermas = 'Martes';
 } else {};
-console.log('test dias: ' + ayer);
+// console.log('test dias: ' + ayer);
 //console.log('tercer mas es: '+getFecha(+3));
 // document.querySelector("."+actualDay+'Tab').click(); // seteamos por defecto el día actual
 // document.querySelector(".Tab4").click();
@@ -90,7 +90,7 @@ function activeDay(data) {
     d.getMinutes().toString().padStart(2, "0");
 
   setTimeout(function () {
-    console.log(data)
+    // console.log(data);
     var el = $(`tr.programaItem.${data}`).addClass('active-item');
   }, 700);
 }
@@ -178,14 +178,20 @@ function renderProgramas() {
       //console.log(programIndex + ' - '+programaItems);
     }
 
-    var ActualClass = 'px-4 py-4 text-zinc-50 bg-ecuavisa text-sm flex items-center'
-    var imgs = 'https://via.placeholder.com/70'
+    //PREPARAR LOS CARACTERES Y SILBOLOS DE LOS TITULOS
+    var programNameORIGIAL = programName
+    .replace('Far�nd','Faránd')
+    .replace('Pasion','Pasión')
+    .replace('Se�or','Señor')
+    .replace('Limites','Límites')
+    .replace('Corazon','Corazón');
+
     var programas = $(`
-      <tr class=" programaItem el-${contador}" data-item="${programName}">                
+      <tr class=" programaItem el-${contador}" data-item="${programNameORIGIAL}">                
           <td class="">
               <div class="">
                   <p>${programTimeIni.slice(0, -3)} - ${programTimeEnd.slice(0, -3)}</p>
-                  <p class="">${programName}</p>                         
+                  <p class="">${programNameORIGIAL}</p>                         
               </div>
           </td>                
       </tr>       
@@ -198,7 +204,7 @@ function renderProgramas() {
       if (fechahoy('fecha') === (programDate)) {
         var contador = (contador) + 1; //subimos el valor de contador para la clase unica
         var programaData = { //objeto del programa
-          "nombrePrograma": programName,
+          "nombrePrograma": programNameORIGIAL,
           "HoradeFin": programTimeEnd,
           "HoradeInicio": programTimeIni,
           "Fecha": programDate,
@@ -227,7 +233,7 @@ function renderProgramas() {
           var entra = true;
           var elemento = 'el-' + (contador - 1);
           var numeroSwiper = (contador - 1);
-          var pA = programName;
+          var pA = programNameORIGIAL;
           var pIm = programImg;
           var hIF = programTimeIni.slice(0, -3) + ' -' + programTimeEnd.slice(0, -3);
 
@@ -240,7 +246,7 @@ function renderProgramas() {
 
 
           // var showActive = 'bg-blue-800';
-          console.log("Programa actualLLLL: " + programName);
+          console.log("Programa actual: " + programNameORIGIAL);
           itemtored = localStorage.getItem('programaActual');
           activeDay(itemtored);
         } else {}

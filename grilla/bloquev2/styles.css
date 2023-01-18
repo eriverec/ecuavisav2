@@ -229,6 +229,7 @@ body {
 .mediaBlock__ .t_prog .icon_player_prog img {
   width: 42px;
   margin-bottom: 18px;
+  display: initial;
 }
 
 .mediaBlock__ .t_prog .nameP {
