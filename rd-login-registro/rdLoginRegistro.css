@@ -308,6 +308,7 @@ input#registrar {
 
 .section-lr .container-lr .signupBx .formBx form .box-input img {
   width: 85px;
+  width: 90px;
 }
 
 /* .section-lr .container-lr .user .formBx form .signup {
@@ -536,7 +537,9 @@ form i {
 .section-lr .container-lr .user .formBx form .signup.registro{
   margin-top: 55px;
 }
-
+.signupBx:after {
+  content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-loginwhite.svg');
+}
 
 /* FIN REGISTRO */
 
