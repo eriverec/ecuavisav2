@@ -623,6 +623,12 @@ form i {
     width: 100%;
   }
 }
+@media (max-width: 768px) {
+  .section-lr .container-lr .signinBx .formBx {
+    left: 0;
+} 
+}
+
 @media (max-width: 600px) {
   .section-lr .container-lr .user .formBx form input {
     width: 280px;
