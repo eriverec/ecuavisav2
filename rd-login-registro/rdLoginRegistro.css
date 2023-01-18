@@ -298,6 +298,7 @@ input#registrar {
   text-align: center;
   text-transform: uppercase;
   justify-content: flex-end;
+  border-color: transparent;
 }
 
 
@@ -521,10 +522,21 @@ form i {
   background-size: 45px !important;
   opacity: 1 !important;
 }
+/* FIN MODAL PASSWORD */
 
 
+/* 👉 REGISTRO */
+
+.section-lr .container-lr .user .formBx form input{
+  color: #ffff !important;
+}
+
+input:after {
+  content: url('https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FbotonNews.svg');
+}
 
 
+/* FIN REGISTRO */
 
 @media (min-width: 576px){
 .modal-dialog {
