@@ -647,6 +647,10 @@ form i {
 .section-lr .container-lr.active .signupBx .formBx {
   margin: 0 10px;
 }
+.section-lr .container-lr .user .formBx form .signup {
+  margin-top: 10px;
+  left: 0;
+}
 }
 
 
@@ -662,7 +666,7 @@ form i {
   top: 50%;
 }
 .section-lr .container-lr .user .formBx form .signup.registro {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .section-lr .container-lr .user .formBx form h2 {
   font-size: 48px;
