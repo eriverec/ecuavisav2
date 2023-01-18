@@ -572,6 +572,9 @@ form i {
   .section-lr::before {
     left: 0;
   }
+  .section-lr .container-lr {
+    max-width: 300px;
+  }
 }
 
 @media (max-width: 375px) {
