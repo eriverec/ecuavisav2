@@ -44,14 +44,20 @@ if (localStorage.getItem('programas')) { //evaluamos si se encuentra la key prog
 function activeDay(data) {
   var titleProgram = document.querySelector('.t_prog .nameP');
   var titleHorarios = document.querySelector('.t_prog .nameH');
+  var itemImage = document.querySelector('.mediaBlock__ .multimedia');
   var liveSignal = document.querySelector('.senal_active');
 
   var getTitulo = localStorage.getItem('pA');
   var getHor = localStorage.getItem('hIF');
+  var getImagen = localStorage.getItem('pIm');
+  var strim = `<img src="${getImagen}" alt="ecuavisa">`;
+
+
 
   setTimeout(function () {
     titleHorarios.append(getHor);
     titleProgram.append(getTitulo);
+    itemImage.innerHTML= strim;
     // buttonGye.classList.remove("div__hide");
     if (getTitulo == "Tres Familias" ||
       getTitulo == "Asi Pasa" ||
@@ -89,21 +95,6 @@ function activeDay(data) {
     var contructorIMG = `
     <div> div activo ${data}</div>
   `;
-
-    if ($(`tr.programaItem.${data}.active-item`)) {
-      console.log('si', data);
-      $(".active-item .imgPrograma").appendTo(".mediaBlock__ .multimedia");
-    }
-
-    if (envivo) {
-      // var vivo = $(`a.btnEnvivo.${data}`).removeClass('hidden');
-    }
-
-    // $('html, body').animate({
-    //   scrollTop: $(`tr.programaItem.${data}`).offset().top - 90
-    // }, 1000);
-    //$(el).find('p.bg-indigo-700.datafont').addClass("bg-blue-800");
-    //console.log(el);
   }, 700);
 }
 
@@ -193,18 +184,15 @@ function renderProgramas() {
     var ActualClass = 'px-4 py-4 text-zinc-50 bg-ecuavisa text-sm flex items-center'
     var imgs = 'https://via.placeholder.com/70'
     var programas = $(`
-            <tr class=" programaItem el-${contador}" data-item="${programName}${programTimeIni}">                
-                <td class="px-0 pl-3 py-3 text-center border-0 bg-ecuavisa hidden">
-                  <img src=${programImg} class="imgPrograma">
-                </td>
-                <td class="">
-                    <div class=" ">
-                        <p>${programTimeIni.slice(0, -3)} - ${programTimeEnd.slice(0, -3)}</p>
-                        <p class="">${programName}</p>                         
-                    </div>
-                </td>                
-            </tr>       
-        `);
+      <tr class=" programaItem el-${contador}" data-item="${programName}${programTimeIni}">                
+          <td class="">
+              <div class="">
+                  <p>${programTimeIni.slice(0, -3)} - ${programTimeEnd.slice(0, -3)}</p>
+                  <p class="">${programName}</p>                         
+              </div>
+          </td>                
+      </tr>       
+    `);
 
     if (region === '3') { // validamos que sea region costa
 
@@ -216,7 +204,8 @@ function renderProgramas() {
           "nombrePrograma": programName,
           "HoradeFin": programTimeEnd,
           "HoradeInicio": programTimeIni,
-          "Fecha": programDate
+          "Fecha": programDate,
+          "Imagen": programImg
         }
         _jsonDiaActual.push(programaData);
         //   console.log(programaData);
@@ -242,6 +231,7 @@ function renderProgramas() {
           var elemento = 'el-' + (contador - 1);
           var numeroSwiper = (contador - 1);
           var pA = programName;
+          var pIm = programImg;
           var hIF = programTimeIni.slice(0, -3) + ' -' + programTimeEnd.slice(0, -3);
 
           // Setiamos los datos al localstorage para despues recuperarlo en el html
@@ -249,6 +239,8 @@ function renderProgramas() {
           localStorage.setItem('nItem', numeroSwiper);
           localStorage.setItem('pA', pA);
           localStorage.setItem('hIF', hIF);
+          localStorage.setItem('pIm', pIm);
+
 
           // var showActive = 'bg-blue-800';
           console.log("Programa actualLLLL: " + programName);
