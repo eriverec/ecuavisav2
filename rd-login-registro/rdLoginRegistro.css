@@ -558,7 +558,7 @@ form i {
 .section-lr {
   position:relative;
 }
-.section-lr form::before {
+.section-lr::before {
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-loginwhite.svg');
   position: absolute;
   z-index: 5;
