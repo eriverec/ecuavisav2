@@ -651,6 +651,9 @@ form i {
   left: 0;
   font-size: 14px;
 }
+.section-lr .container-lr .user .formBx form .signup.registro {
+  margin-top: 30px;
+}
 }
 
 
