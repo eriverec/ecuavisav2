@@ -35,9 +35,14 @@ const selectAllCheckboxUpdate = () => {
     : [];
 };
 
+const resetTema = () => {
+  selected.value = [];
+  fetchTema();
+}
+
 const delTema = () => {
 userListStore.deleteTema(Number(route.params.id), selected.value);
-window.setTimeout(fetchTema, 900);
+window.setTimeout(resetTema, 900);
 };
 
 </script>
@@ -46,9 +51,9 @@ window.setTimeout(fetchTema, 900);
   <VRow>
     <VCol cols="12">
       <!-- 👉 Activity timeline -->
-      <VCard v-if="userTema.length" title="Temas del usuario"  >
+      <VCard  title="Temas del usuario"  >
         <VCardText>
-          <VTable class="text-no-wrap">
+          <VTable v-if="userTema.length" class="text-no-wrap">
             <!-- 👉 table head -->
             <thead>
               <tr>
@@ -115,6 +120,7 @@ window.setTimeout(fetchTema, 900);
               </tr>
             </tbody>
           </VTable>
+          <div v-if="!userTema.length">No hay temas que mostrar.</div>
         </VCardText>
       </VCard>
     </VCol>
