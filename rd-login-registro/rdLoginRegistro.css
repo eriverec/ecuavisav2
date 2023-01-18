@@ -539,6 +539,10 @@ form i {
 }
 .section-lr::before {
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-loginwhite.svg');
+  position: absolute;
+  left: 33rem;
+  z-index: 5;
+  top: 5rem;
 }
 
 /* FIN REGISTRO */
