@@ -625,11 +625,11 @@ form i {
 }
 @media (max-width: 600px) {
   .section-lr .container-lr .user .formBx form input {
-    width: 295px;
+    width: 300px;
     height: 48px;
   }
   .inicio-registro .section-lr::before {
-    left: 13%;
+    left: 10%;
     top: 52%;
   }
   .auth-method-separator:after, .auth-method-separator:before {
