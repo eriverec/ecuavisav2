@@ -543,18 +543,28 @@ form i {
 .section-lr .container-lr .user .formBx form .signup.registro{
   margin-top: 55px;
 }
-.section-lr form {
+
+/*.section-lr form {
   position:relative;
 }
 .section-lr form::before {
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-loginwhite.svg');
   position: absolute;
-  left: 33rem;
+  z-index: 5;
+  top: 0;
+  left: -72px;
+}*/
+
+.section-lr {
+  position:relative;
+}
+.section-lr form::before {
+  content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-loginwhite.svg');
+  position: absolute;
   z-index: 5;
   top: 0;
   left: -72px;
 }
-
 /* FIN REGISTRO */
 
 @media (min-width: 576px){
