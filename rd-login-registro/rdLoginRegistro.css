@@ -531,7 +531,7 @@ form i {
   color: #ffff !important;
 }
 
-input:after {
+.section-lr .box-input input:after {
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FbotonNews.svg');
 }
 
