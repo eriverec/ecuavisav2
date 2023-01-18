@@ -261,6 +261,9 @@ input#registrar {
   justify-content: flex-end;
   align-items: flex-end;
 }
+::placeholder {
+  color: white;
+}
 /* .section-lr .container-lr .user .formBx form input[type='submit'] {
   max-width: 100px;
   background: transparent;
