@@ -537,12 +537,16 @@ form i {
 .section-lr .container-lr .user .formBx form .signup.registro{
   margin-top: 55px;
 }
-.section-lr::before {
+.section-lr form {
+  position:relative;
+}
+.section-lr form::before {
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-loginwhite.svg');
   position: absolute;
   left: 33rem;
   z-index: 5;
-  top: 5rem;
+  top: 0;
+  left: -72px;
 }
 
 /* FIN REGISTRO */
@@ -568,11 +572,6 @@ form i {
   }
 }
 
-@media (max-width: 767px){
-  .section-lr::before {
-    left: 0;
-  }
-}
 
 @media (max-width: 375px) {
   .section-lr .container-lr {
