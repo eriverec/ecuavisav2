@@ -595,7 +595,7 @@ form i {
   position: absolute;
 }
 .section-lr .container-lr .signinBx .formBx {
-  left: 10%;
+  left: 13%;
 }
 
 .section-lr .container-lr .user .formBx form h2 {
@@ -606,6 +606,7 @@ form i {
 .section-lr .container-lr.active .signupBx .formBx {
   left: -90%;
 }
+
 }
 
 
@@ -629,7 +630,10 @@ form i {
   }
   .inicio-registro .section-lr::before {
     left: 13%;
-    top: 47%;
+    top: 52%;
+  }
+  .auth-method-separator:after, .auth-method-separator:before {
+    width: 20%;
   }
 }
 
