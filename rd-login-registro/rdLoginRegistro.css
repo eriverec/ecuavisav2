@@ -579,6 +579,11 @@ form i {
     transform: translate(-50%,-50%);
 }
 
+.inicio-registro label{
+  line-height: 7px;
+}
+
+
 
 @media (min-width: 576px){
 .modal-dialog {
