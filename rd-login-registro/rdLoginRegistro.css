@@ -598,7 +598,7 @@ form i {
   left: 10%;
 }
 .section-lr .container-lr .user .formBx form input {
-  width: 280px;
+  width: 280px!important;
   height: 48px;
 }
 .section-lr .container-lr .user .formBx form h2 {
