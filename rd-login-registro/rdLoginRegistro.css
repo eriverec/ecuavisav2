@@ -625,7 +625,7 @@ form i {
 }
 @media (max-width: 600px) {
   .section-lr .container-lr .user .formBx form input {
-    width: 280px!important;
+    width: 295px;
     height: 48px;
   }
   .inicio-registro .section-lr::before {
