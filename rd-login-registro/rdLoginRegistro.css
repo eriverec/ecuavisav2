@@ -523,6 +523,12 @@ form i {
   background-size: 45px !important;
   opacity: 1 !important;
 }
+.btn-check:focus+.btn-primary, .btn-primary:focus{
+  box-shadow: 0 0 0 0.25rem rgb(49 132 253 / 0%);
+}
+.btn-close:focus {
+  box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 0%);
+}
 /* FIN MODAL PASSWORD */
 
 
