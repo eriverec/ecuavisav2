@@ -9,7 +9,7 @@ let btnLogGoogle = document.getElementById("aLogGoogle");
   btnLogGoogle.setAttribute("onclick", "validateLogSocials();");
 let btnLogFacebook = document.getElementById("aLogFacebook");
   btnLogFacebook.setAttribute("href", "#");
-  btnLogGoogle.setAttribute("onclick", "validateLogSocials();");
+  btnLogFacebook.setAttribute("onclick", "validateLogSocials();");
 
 }
 if (UserId){
