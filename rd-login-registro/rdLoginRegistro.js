@@ -4,6 +4,13 @@ var URL_perfil_G = 'https://www.ecuavisa.com/servicios/perfil';
 var UserId = localStorage.getItem('wylexUserId');
 window.onload = () => {
 document.getElementById("forgetButton").disabled=false;
+let btnLogGoogle = document.getElementById("aLogGoogle");
+  btnLogGoogle.setAttribute("href", "#");
+  btnLogGoogle.setAttribute("onclick", "validateLogSocials();");
+let btnLogFacebook = document.getElementById("aLogFacebook");
+  btnLogFacebook.setAttribute("href", "#");
+  btnLogGoogle.setAttribute("onclick", "validateLogSocials();");
+
 }
 if (UserId){
    /*Si existe sesión lo 
@@ -164,8 +171,12 @@ function fb_login() {
   );
 }
 
+
 function login() {
-  var URL_login_G = 'https://www.ecuavisa.com/servicios/login';
+let cboxTerm = document.getElementById('checkTerms');
+  if(cboxTerm.checked == true ) {
+     
+    var URL_login_G = 'https://www.ecuavisa.com/servicios/login';
   document.getElementById("logEmail").required = true;
   document.getElementById("logPass").required = true;
 
@@ -192,6 +203,12 @@ function login() {
     .catch((error) => {
       console.log("error", error); /*; window.location = URL_login_G*/
     });
+    
+      }else{
+        alert("Acepte los términos y condiciones antes de continuar");
+        return false;
+      }
+  
 }
 
 function register() {
@@ -267,3 +284,17 @@ let email = document.getElementById("forgetEmail").value.trim();
       });
 
 }
+
+function validateLogSocials(){
+  let check = document.getElementById('checkTerms');
+  if(check.checked == true ) {
+    let btnGoogle = document.getElementById("aLogGoogle");
+    btnGoogle.setAttribute("href", "https://ecuavisa-register.onrender.com/auth/google");
+
+    let btnFacebook = document.getElementById("aLogFacebook");
+    btnFacebook.setAttribute("href", "https://ecuavisa-register.onrender.com/auth/facebook");
+    
+      }else{
+        alert("Acepte los términos y condiciones para continuar"); 
+      }
+  }
