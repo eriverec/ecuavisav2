@@ -212,6 +212,9 @@ let cboxTerm = document.getElementById('checkTerms');
 }
 
 function register() {
+
+  let cboxTermReg = document.getElementById('checkTermsReg');
+  if(cboxTermReg.checked == true ) {
   document.getElementById("regName").required = true;
   document.getElementById("regEmail").required = true;
   document.getElementById("regPass").required = true;
@@ -251,6 +254,10 @@ function register() {
         console.log("error", error); /*; window.location = URL_login_G*/
       });
   }
+}else{
+  alert("Acepte los términos y condiciones antes de continuar");
+  return false;
+}
 }
 
 function sendEmailPassReset() {
