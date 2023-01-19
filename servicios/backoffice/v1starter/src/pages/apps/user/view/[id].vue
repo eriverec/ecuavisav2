@@ -6,6 +6,7 @@ import UserBioPanel from '@/views/apps/user/view/UserBioPanel.vue'
 //import UserTabNotifications from '@/views/apps/user/view/UserTabNotifications.vue'
 import UserTabOverview from '@/views/apps/user/view/UserTabOverview.vue'
 import UserTemas from '@/views/apps/user/view/UserTemas.vue'
+import UserNotifications from '@/views/apps/user/view/UserNotifications.vue'
 //import UserTabSecurity from '@/views/apps/user/view/UserTabSecurity.vue'
 
 const userListStore = useUserListStore()
@@ -82,6 +83,15 @@ const reloadP = () =>  {
     >
     <UserTabOverview :user-data="userData"/>
     <UserTemas />
+  </VCol>
+
+  <VCol
+      cols="12"
+      md="7"
+      lg="12"
+    >
+    <UserNotifications/>
+    
   </VCol>
  
     <!--
