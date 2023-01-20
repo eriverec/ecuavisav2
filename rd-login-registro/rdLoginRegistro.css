@@ -37,7 +37,7 @@
   font-weight: 300;
   font-size: 16px;
   line-height: 26px;
-  text-decoration-line: underline;
+  /*text-decoration-line: underline;*/
 }
 .forgetPassword a {
   color: #FFFFFF!important;
