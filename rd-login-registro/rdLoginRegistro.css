@@ -93,7 +93,8 @@
 .section-lr .container-lr {
   position: relative;
   width: 800px;
-  height: 500px;
+  /*height: 500px;*/
+  height: 555px;
   background: transparent;
   /* box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1); */
   overflow: hidden;
