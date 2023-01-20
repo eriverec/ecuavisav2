@@ -965,6 +965,10 @@ BLOQUE - TE EXPLICO LA NOTICIA
   padding-bottom: 50px;
 }
 
+.HOME_MENU_RD .rd-texplico-la-noticia .noticias .article .media_block {
+  position: relative;
+}
+
 .HOME_MENU_RD .rd-texplico-la-noticia .noticias .article .media_block .text_block{
   position: absolute;
   bottom: 0;
