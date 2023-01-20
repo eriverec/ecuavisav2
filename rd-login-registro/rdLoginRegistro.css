@@ -676,10 +676,6 @@ form i {
   .inicio-registro .logo-ecuavisa-lr {
     padding: 5px 0;
 }
-.inicio-registro .section-lr::before {
-  left: 10%;
-  top: 50%;
-}
 .section-lr .container-lr .user .formBx form .signup.registro {
   margin-top: 10px;
 }
@@ -689,4 +685,9 @@ form i {
 .inicio-registro label{
   margin: 10px 0 20px -10px !important;
 }
+/*
+.inicio-registro .section-lr::before {
+  left: 10%;
+  top: 50%;
+}*/
 }
