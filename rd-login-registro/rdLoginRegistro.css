@@ -665,6 +665,9 @@ form i {
 .section-lr .container-lr{
   height: 600px;
 }
+.inicio-registro label{
+  font-size: 15px;
+}
 
 }
 
