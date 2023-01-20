@@ -662,6 +662,9 @@ form i {
 #forgetEmail {
   font-size: 16.4685px !important;
 }
+.section-lr .container-lr{
+  height: 600px;
+}
 
 }
 
