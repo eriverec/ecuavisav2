@@ -14,7 +14,7 @@ const shortcuts = [
   },
   {
     icon: 'mdi-account-outline',
-    title: 'Users',
+    title: 'Usuarios',
     subtitle: 'Manage Users',
     to: { name: 'apps-user-list' },
   },
@@ -26,7 +26,7 @@ const shortcuts = [
   },
   {
     icon: 'mdi-cog-outline',
-    title: 'Settings',
+    title: 'Ajustes',
     subtitle: 'Account Settings',
     to: {
       name: 'pages-account-settings-tab',

@@ -119,7 +119,7 @@ watch(isVerticalNavMini(windowWidth, isVerticalNavHovered), val => {
         class="nav-item-icon"
       />
       <TransitionGroup name="transition-slide-x">
-        <!-- 👉 Title -->
+        <!-- 👉 usuarios -->
         <Component
           :is=" config.app.enableI18n ? 'i18n-t' : 'span'"
           v-bind="dynamicI18nProps(item.title, 'span')"
