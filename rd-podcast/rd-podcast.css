@@ -51,6 +51,13 @@
 *****APERTURA*****
 *****************/
 
+.notas-1-p-ap h1,
+.notas-1-p-ap h2,
+.notas-1-p-ap h3,
+.notas-1-p-ap p {
+  font-family: 'Archivo', sans-serif;
+}
+
 #iter-content-wrapper {
   padding-top: 0px;
 }
