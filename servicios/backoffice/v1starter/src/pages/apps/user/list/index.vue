@@ -361,7 +361,7 @@ const userListMeta = [
       </VCol>
 
       <VCol cols="12">
-        <VCard title="Search Filter">
+        <VCard title="Filtro de Busqueda">
           <!-- 👉 Filters -->
           
             <VCardText>

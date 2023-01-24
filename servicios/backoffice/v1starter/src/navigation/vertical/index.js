@@ -19,6 +19,24 @@ export default [
   },
 
   {
+    title: 'Modulos',
+    to: { name: 'modulos' },
+    //icon: { icon: 'tabler-smart-home' },
+  },
+
+  {
+    title: 'Periodos',
+    to: { name: 'periodos' },
+    //icon: { icon: 'tabler-smart-home' },
+  },
+
+  {
+    title: 'Paquetes',
+    to: { name: 'paquetes' },
+    //icon: { icon: 'tabler-smart-home' },
+  },
+ 
+  {
     title: 'Cerrar sesión',
     to: { name: 'login' },
     icon: { icon: 'tabler-logout' },
