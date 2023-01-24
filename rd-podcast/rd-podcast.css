@@ -16,6 +16,40 @@
   }
 }
 
+
+.button_container {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+
+.button_container .sp_button {
+  border-radius: 2px;
+  background-color: transparent;
+  color: #2927B9;
+  width: auto;
+  font-weight: 700;
+  font-style: normal;
+  box-shadow: none;
+  border-color: transparent;
+  padding: 11px 0;
+  display: block;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-transform: uppercase;
+  font-family: 'Mattone 150';
+  font-size: 14px;
+}
+
+.button_container .sp_button:after {
+  content: url('https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FbotonNews.svg');
+}
+
 .border_play{
   border: 5px solid #23DCD1 !important;
 }
