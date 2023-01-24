@@ -632,11 +632,6 @@
 }
 
 
-/* .pod_items .noticias {
-  border-top: 2px solid #2927B9;
-  margin-top: 30px;
-  padding-top: 25px;
-} */
 
 .pod_items .PODCAST_MAS_ESCUCHADOS .media_block .pod_icon_play img {
   width: 37px;
@@ -697,6 +692,10 @@
   .masEscuchados .iter-tabview-content-item {
     grid-template-columns: none;
   }
+  
+ .pod_items .noticias {
+  padding-top: 25px;
+} 
 }
 
 
