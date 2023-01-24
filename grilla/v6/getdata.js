@@ -30,7 +30,7 @@ if(localStorage.getItem('dHoy')){// evaluamos si la key "dHoy" existe
         // ##### carga de la grilla en dom
         console.log('cargando parrilla...')
         localStorage.setItem('dHoy', dHoy);
-        onload = await fetch("https://ecuavisa-programacion.vercel.app/").then(res => {
+        onload = await fetch("https://programacion-ecuavisa.vercel.app/").then(res => {
             return res.json()
         }).then(data => { //\r?\n|\r
            

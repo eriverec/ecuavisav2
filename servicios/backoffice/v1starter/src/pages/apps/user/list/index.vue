@@ -361,7 +361,8 @@ const userListMeta = [
       </VCol>
 
       <VCol cols="12">
-        <VCard title="Filtro de Busqueda">
+        
+        <VCard title="Filtro de búsqueda">
           <!-- 👉 Filters -->
           
             <VCardText>
@@ -447,7 +448,7 @@ const userListMeta = [
                 color="secondary"
                 @click="reset"
               >
-                Reset
+              Reiniciar
               </VBtn>
               <!-- 👉 Export button -->
               <VBtn
@@ -455,7 +456,7 @@ const userListMeta = [
                 color="secondary"
                 prepend-icon="tabler-screen-share"
               >
-                Export
+              Exportar
               </VBtn>
 
               <!-- 👉 Add user button -->
@@ -463,7 +464,7 @@ const userListMeta = [
                 prepend-icon="tabler-plus"
                 @click="isAddNewUserDrawerVisible = true"
               >
-                Add New User
+              Agregar usuario
               </VBtn>
             </div>
           </VCardText>
@@ -479,7 +480,7 @@ const userListMeta = [
                 <th scope="col">Ciudad</th>
                 <th scope="col">Contacto</th>
                 <th scope="col">Newsletter</th>
-                <th scope="col">ACTIONS</th>
+                <th scope="col">Acciones</th>
               </tr>
             </thead>
             <!-- 👉 table body -->

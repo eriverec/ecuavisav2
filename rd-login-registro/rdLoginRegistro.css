@@ -37,7 +37,7 @@
   font-weight: 300;
   font-size: 16px;
   line-height: 26px;
-  text-decoration-line: underline;
+  /*text-decoration-line: underline;*/
 }
 .forgetPassword a {
   color: #FFFFFF!important;
@@ -93,7 +93,8 @@
 .section-lr .container-lr {
   position: relative;
   width: 800px;
-  height: 500px;
+  /*height: 500px;*/
+  height: 555px;
   background: transparent;
   /* box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1); */
   overflow: hidden;
@@ -581,6 +582,7 @@ form i {
 
 .inicio-registro label{
   line-height: 7px;
+  margin: 0px 0 20px -5px !important;
 }
 
 
@@ -629,8 +631,10 @@ form i {
   height: 48px;
 }
 .inicio-registro .section-lr::before {
-  left: 10%;
-  top: 52%;
+  /*left: 10%;
+  top: 52%;*/
+  left: 7%;
+  top: 45%;
 }
 .auth-method-separator:after, .auth-method-separator:before {
   width: 20%;
@@ -658,6 +662,12 @@ form i {
 #forgetEmail {
   font-size: 16.4685px !important;
 }
+.section-lr .container-lr{
+  height: 600px;
+}
+.inicio-registro label{
+  font-size: 15px;
+}
 
 }
 
@@ -669,14 +679,15 @@ form i {
   .inicio-registro .logo-ecuavisa-lr {
     padding: 5px 0;
 }
-.inicio-registro .section-lr::before {
-  left: 10%;
-  top: 50%;
-}
 .section-lr .container-lr .user .formBx form .signup.registro {
   margin-top: 10px;
 }
 .section-lr .container-lr .user .formBx form h2 {
   font-size: 48px;
 }
+/*
+.inicio-registro .section-lr::before {
+  left: 10%;
+  top: 50%;
+}*/
 }

@@ -135,7 +135,7 @@ const onSubmit = () => {
               <VCol cols="12">
                 <VTextField
                   v-model="email"
-                  label="Email"
+                  label="Correo cr"
                   type="email"
                   :rules="[requiredValidator, emailValidator]"
                   :error-messages="errors.email"
