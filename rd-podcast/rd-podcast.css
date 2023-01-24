@@ -426,9 +426,12 @@
 }
 
 .masEscuchados .iter-tabview-content-item {
-  border-top: 2px solid #2927B9;
+  /* border-top: 2px solid #2927B9; */
   margin-top: 30px;
   padding-top: 25px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 30px;
 }
 
 .masEscuchados .iter-widget .iter-tabview-content .iter-rankingtab-mostviewed-hd {
@@ -678,6 +681,10 @@
   .layout_podcast_portadilla .row.r05 #not-actualidad,
   .layout_podcast_portadilla .row.r05 #nov-entretenimiento {
     padding: 0;
+  }
+
+  .masEscuchados .iter-tabview-content-item {
+    grid-template-columns: none;
   }
 }
 
