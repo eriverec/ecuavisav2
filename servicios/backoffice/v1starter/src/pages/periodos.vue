@@ -9,13 +9,18 @@ const isPeriodoDeleteVisible = ref(false);
 const periodosListStore = usePeriodosListStore();
 const periodos = ref([]);
 const rowPerPage = ref(10);
-const updatePeriodo = ref({});
+const updatePeriodo = ref({
+  _id: '',
+  periodo: ''
+});
 const nuevoPeriodo = ref({
   periodo: ''
 });
-const periodoId = ref('')
+const periodoId = ref('');
+const periodoString = ref('');
+const tiempoString = ref('');
 
-// 👉 Obtener los modulos
+// 👉 Obtener los periodos
 const fetchPeriodos = () => {
    periodosListStore
     .fetchPeriodos()
@@ -31,10 +36,23 @@ watchEffect(fetchPeriodos);
 
 // Actualizar módulo
 const onFormPeriodoActive = (id) => {
+  tiempoString.value = '';
+  periodoString.value = '';
+
   periodosListStore
     .fetchPeriodo(id)
     .then((response) => {
-      updatePeriodo.value = response.data;
+      updatePeriodo.value._id = response.data._id;
+      let respuesta = response.data.periodo;
+      let array = respuesta.split(' ');
+      periodoString.value = array[0];
+      let tiempo = array[1];
+      if (tiempo == 'año' || tiempo == 'años'){
+      tiempoString.value = 'año(s)';
+    } else { 
+      tiempoString.value = 'mes(es)';
+    }      
+    
     })
     .catch((error) => {
       console.error(error);
@@ -42,8 +60,29 @@ const onFormPeriodoActive = (id) => {
   isPeriodoEditVisible.value = true;
 };
 
+const mergePeriodo = () => {
+  let num = Number(periodoString.value);  
+  
+  if(num == 1 && tiempoString.value == 'año(s)'){
+  nuevoPeriodo.value.periodo = periodoString.value + ' año';
+  updatePeriodo.value.periodo = periodoString.value + ' año';
+  }else if(num !== 1 && tiempoString.value == 'año(s)'){
+    nuevoPeriodo.value.periodo = periodoString.value + ' años';
+    updatePeriodo.value.periodo = periodoString.value + ' años';
+  }else if(num == 1 && tiempoString.value == 'mes(es)'){
+    nuevoPeriodo.value.periodo = periodoString.value + ' mes';
+    updatePeriodo.value.periodo = periodoString.value + ' mes';
+  }else{
+    nuevoPeriodo.value.periodo = periodoString.value + ' meses';
+    updatePeriodo.value.periodo = periodoString.value + ' meses';
+  }
+  periodoString.value='';
+  tiempoString.value='';
+}
 
 const onFormPeriodoSubmit = (id) => {
+  mergePeriodo();
+  
   periodosListStore.updatePeriodo(id, updatePeriodo.value)
     .catch((error) => {
       console.error(error);
@@ -63,8 +102,16 @@ const dialogPeriodoValueUpdate = val => {
 
 // Insertar nuevo módulo
 
+const onFormAddPeriodoActive = ()=>{
+  isPeriodoAddVisible.value = true;
+  periodoString.value='';
+  tiempoString.value='';
+}
+
+
 const onFormAddPeriodoSubmit = () => {
-  console.log("nuevoPeriodo",nuevoPeriodo.value);
+
+  mergePeriodo();
   periodosListStore
     .addPeriodo(nuevoPeriodo.value)
     .catch((error) => {
@@ -76,7 +123,9 @@ const onFormAddPeriodoSubmit = () => {
 };
 
 const onFormAddPeriodoReset = () => {
+  nuevoPeriodo.value.periodo = '';
   isPeriodoAddVisible.value = false;
+  
 };
 
 const dialogAddPeriodoValueUpdate = val => {
@@ -109,10 +158,9 @@ const dialogDeletePeriodoValueUpdate = val => {
 };
 
 
-const itemsTipoDato = [
-  'texto',
-  'boolean',
-  'numerico'
+const itemsTiempo = [
+  'año(s)',
+  'mes(es)'
 ]
 
 </script>
@@ -212,7 +260,7 @@ const itemsTipoDato = [
                 <!-- 👉 Add user button -->
                 <VBtn
                   prepend-icon="tabler-plus"
-                  @click="isPeriodoAddVisible=true"
+                  @click="onFormAddPeriodoActive"
                 >
                   Agregar un Periodo
                 </VBtn>
@@ -326,15 +374,20 @@ const itemsTipoDato = [
           class="mt-6"
           @submit.prevent="onFormPeriodoSubmit(updatePeriodo._id)"
         >
-          <VRow class="d-flex flex-wrap justify-center gap-4">
+          <VRow>
             <!-- 👉 Nombre -->
-            <VCol cols="12" >
+            <VCol cols="12" md="6" >
               <VTextField
-                v-model="updatePeriodo.periodo"
+                v-model="periodoString"
                 label="Periodo"
               />
             </VCol>
-
+            <VCol cols="12" md="6" >
+            <VCombobox
+              v-model="tiempoString"
+             :items="itemsTiempo"
+              />
+            </VCol>
           
             <!-- 👉 Submit and Cancel -->
             <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
@@ -376,12 +429,18 @@ const itemsTipoDato = [
           class="mt-6"
           @submit.prevent="onFormAddPeriodoSubmit"
         >
-          <VRow class="d-flex flex-wrap justify-center gap-4">
+          <VRow >
             <!-- 👉 Nombre -->
-            <VCol cols="12">
+            <VCol cols="12" md="6">
               <VTextField
-                v-model="nuevoPeriodo.periodo"
+                v-model="periodoString"
                 label="Periodo"
+              />
+            </VCol>
+            <VCol cols="12" md="6" >
+            <VCombobox
+              v-model="tiempoString"
+             :items="itemsTiempo"
               />
             </VCol>
           
