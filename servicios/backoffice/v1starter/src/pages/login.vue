@@ -90,7 +90,7 @@ const rememberMe = ref(false)
               <VCol cols="12">
                 <VTextField
                   v-model="email"
-                  label="Email"
+                  label="Correo"
                   type="email"
                   :rules="[requiredValidator, emailValidator]"
                 />
