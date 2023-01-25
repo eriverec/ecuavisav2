@@ -15,7 +15,7 @@ import avatar8 from "@/assets/images/avatars/avatar-8.png";
 
 const userListStore = useUserListStore()
 const searchQuery = ref("");
-const selectedProvider = ref("");
+const selectedProvider = ref('');
 const selectedBoletin = ref();
 const rowPerPage = ref(10);
 const page = ref(1);
@@ -29,9 +29,22 @@ const percentEmail = ref(0);
 const percentFacebook = ref(0);
 const percentGoogle = ref(0);
 const search = ref('');
+const isLoaded = ref(true);
+const isLoading = ref(false);
+
+const sectionLoading= () => {
+  isLoaded.value = false;
+  isLoading.value = true;
+}
+
+const sectionLoaded= () => {
+  isLoaded.value = true;
+  isLoading.value = false;
+}
 
 // 👉 Fetching users
 const fetchUsers = () => {
+  sectionLoading();
   userListStore
     .fetchUsers({
       pageSize: rowPerPage.value,
@@ -44,6 +57,7 @@ const fetchUsers = () => {
       users.value = response.data.users;
       totalPage.value = response.data.totalPage;
       totalUsers.value = response.data.totalUsers;
+      sectionLoaded();
     })
     .catch((error) => {
       console.error(error);
@@ -211,6 +225,7 @@ const addNewUser = (userData) => {
 };
 
 
+
 // 👉 List
 const userListMeta = [
   {
@@ -326,6 +341,7 @@ const userListMeta = [
 
 <template>
   <section>
+    
     <VRow>
       <VCol
         v-for="meta in userListMeta"
@@ -361,13 +377,13 @@ const userListMeta = [
       </VCol>
 
       <VCol cols="12">
-        
+       
         <VCard title="Filtro de búsqueda">
           <!-- 👉 Filters -->
           
             <VCardText>
             <VRow>
-       
+              
             <VCol
             cols="12"
             sm="4"
@@ -410,7 +426,7 @@ const userListMeta = [
             </VRow>
             </VCardText> 
         
-
+            
           <VDivider />
 
           <VCardText class="d-flex flex-wrap py-4 gap-4">
@@ -470,8 +486,14 @@ const userListMeta = [
           </VCardText>
 
           <VDivider />
-
-          <VTable class="text-no-wrap">
+          <div class="loader-section" :class="{ loaded: isLoaded }">
+              <VProgressCircular
+               indeterminate
+              color="primary"
+             />
+             </div>
+          <VTable class="text-no-wrap" :class="{ loaded: isLoading }">
+            
             <!-- 👉 table head -->
             <thead>
               <tr>
@@ -656,4 +678,25 @@ svg {
 .user-list-name:not(:hover) {
   color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
 }
+
+.loader-section{
+  width: 100vw;
+  height: 100vh;
+  max-width: 100%;
+  position: absolute;
+  top: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  //background-color: rgba(114, 111, 116, 0.2);
+  margin-top: -5%;
+  z-index:999;
+  //transition: all 1s 1s ease-out;
+  opacity:1;
+}
+.loaded{
+  opacity:0;
+  z-index:-1;
+}
+  
 </style>

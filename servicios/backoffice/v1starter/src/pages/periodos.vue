@@ -222,6 +222,7 @@ const itemsTiempo = [
             <VDivider />
   
             <VCardText class="d-flex flex-wrap py-4 gap-4">
+              <!--
               <div class="me-3" style="width: 80px">
                 <VSelect
                   v-model="rowPerPage"
@@ -230,7 +231,7 @@ const itemsTiempo = [
                   :items="[10, 20, 30, 50]"
                 />
               </div>
-  
+            -->
               <VSpacer />
   
               <div
