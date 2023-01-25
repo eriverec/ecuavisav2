@@ -197,8 +197,9 @@ tr.programaItem td:not(.text-center) div {
 .btn-wrap{
   margin-top: 20px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
   align-items: center;
+  column-gap: 20px;
 }
 
 @media (max-width: 767px) {

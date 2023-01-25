@@ -10,9 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.4/moment-with-locales.min.js"  crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <style>
         body{
@@ -190,6 +188,268 @@
             </table>
         </div>   
     </div>
+    <style type="text/css">
+        .modal-ecuavisa {
+            display: block;
+            width: 0;
+            height: 0;
+            font-size: 15px;
+            line-height: 160%;
+            text-rendering: optimizeLegibility;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .fondo-modal {
+            background-color: rgba(0,0,0,0.6);
+        }
+
+        .fondo-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: hsl(0deg 0% 0% / 71%);
+            z-index: 2147483642;
+            overflow: auto;
+            display: -webkit-box;
+            display: -moz-box;
+            display: -webkit-flexbox;
+            display: -ms-flexbox;
+            display: -webkit-flex;
+            display: flex;
+            -webkit-box-orient: horizontal;
+            -moz-box-orient: horizontal;
+            -webkit-flex-direction: row;
+            -moz-flex-direction: row;
+            -ms-flex-direction: row;
+            flex-direction: row;
+            align-items: flex-start;
+        }
+
+        .exterior-modal {
+            border-color: rgba(255,255,255,0.3);
+        }
+        .exterior-modal {
+            border-width: 0px;
+            border-color: transparent;
+            border-radius: 0;
+            padding: 0;
+        }
+
+        .exterior-modal {
+            border-style: solid;
+            border-radius: 5px;
+            border-width: 1px;
+            padding: 40px;
+            margin: auto;
+        }
+
+        .container-modal {
+            border-color: rgba(255,255,255,1);
+        }
+
+        .container-modal {
+            background-color: #fff;
+            opacity: 1;
+            max-width: 720px;
+            width: 100%;
+            border-style: solid;
+            border-radius: 3px;
+            border-width: 1px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .preferences-modal {
+            font-family: 'Archivo', sans-serif;
+        }
+
+        .preferences-modal {
+            padding: 20px;
+            color: #060127;
+        }
+
+        .header-modal {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+        }
+
+        .title-text {
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .check-panel input[type=checkbox]{
+            height: 0;
+            width: 0;
+            visibility: hidden;
+        }
+
+        .check-panel label {
+            cursor: pointer;
+            text-indent: -9999px;
+            width: 50px;
+            height: 25px;
+            background: #c8c8c8;
+            display: block;
+            border-radius: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .check-panel label:after {
+            content: '';
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            width: 15px;
+            height: 15px;
+            background: #fff;
+            border-radius: 90px;
+            transition: 0.3s;
+        }
+
+        .check-panel input:checked + label {
+            background: #2826b8;
+        }
+
+        .check-panel input:checked + label:after {
+            left: calc(100% - 5px);
+            transform: translateX(-100%);
+        }
+
+        .check-panel label:active:after {
+            width: 30px;
+        }
+        .content-items {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .content-items {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .title-panel {
+            width: calc(80% - 20px);
+        }
+        .check-panel {
+            width: calc(22% - 20px);
+            display: flex;
+            justify-content: end;
+        }
+        .table-panel-items {
+            border-radius: 3px;
+            border: 1px solid #DFE2EB;
+            padding: 5px 15px;
+            margin-top: 20px;
+            max-height: 250px;
+            overflow: auto;
+            width: 100%;
+        }
+        .content-items {
+            padding: 14px 5px;
+        }
+        .content-items:not(:last-child) {
+            border-bottom: 1px solid #DFE2EB;
+        }
+        .footer-modal {
+            padding-top: 30px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+        }
+        .footer-modal .btnRechazar,
+        .footer-modal .btnAceptar {
+            padding: 10px 15px;
+        }
+
+        .disabled{
+            pointer-events: none;
+            opacity: .5;
+        }
+
+        .hidden-modal{
+            display: none!important;
+        }
+    </style>
+    <div class="modal-ecuavisa hidden-modal" id="modal-ec">
+        <div class="fondo-modal">
+            <div class="exterior-modal">
+                <div class="container-modal">
+                    <div class="preferences-modal">
+                        <div class="header-modal">
+                            <div class="title-text">
+                                Configuración de cookies
+                            </div>
+                            <button type="button" id="btn-cerrar">Cerrar</button>
+                        </div>
+                        <div class="body-modal">
+                            <div class="descripccion-modal">
+                                Al pulsar "Guardar y cerrar" se guardará la selección de cookies que hayas realizado. Si pulsas sobre "Aceptar todas y cerrar" aceptarás todas las cookies. 
+                                Si pulsas sobre "Rechazar todas y cerrar" rechazarás todas las cookies no esenciales. 
+                                La aceptación de algunos grupos de cookies se realiza mediante algunas acciones explicitas que vienen detalladas debajo.
+                            </div>
+                            <div class="table-panel-items">
+                                <div class="content-items">
+                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                    <div class="check-panel">
+                                        <input type="checkbox" id="switch" checked/><label for="switch">Toggle</label>
+                                    </div>
+                                </div>
+                                <div class="content-items">
+                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                    <div class="check-panel">
+                                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                    </div>
+                                </div>
+                                <div class="content-items">
+                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                    <div class="check-panel">
+                                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                    </div>
+                                </div>
+                                <div class="content-items">
+                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                    <div class="check-panel">
+                                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                    </div>
+                                </div>
+                                <div class="content-items">
+                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                    <div class="check-panel">
+                                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                    </div>
+                                </div>
+                                <div class="content-items">
+                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                    <div class="check-panel">
+                                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                    </div>
+                                </div>
+                                <div class="content-items">
+                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                    <div class="check-panel">
+                                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="footer-modal">
+                            <!--<button class="btnRechazar">Rechazar todas y cerrar</button>-->
+                            <button class="btnRechazar">Aceptar todas y cerrar</button>
+                            <button class="btnAceptar disabled">Guardar y cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="jsondata" id="jsonData"></div>
 
@@ -199,127 +459,151 @@
     <script async type="text/javascript" src="getdata.js"> </script> 
 
     <script defer="defer" type="text/javascript">
-
-let stringHtml = `
-  <div id="cookieNotice" class="cookie-overlay p-4 d-none" style="display: block;">
-        <div class="title-wrap" style="font-weight: bold; font-size: 20px;">
-            <h4><img src="https://estadisticas.ecuavisa.com/sites/gestor/Banner/cookies.svg" alt="cookies">Aviso de política de cookies</h4>
-        </div>
-        <div class="content-wrap">
-            <div class="msg-wrap" >
-                <p>Este sitio web utiliza cookies para mejorar su experiencia de navegación y proporcionar recomendaciones personalizadas.</p>
-                <p style="margin-top: 10px;">Al hacer clic en el botón "Aceptar" a continuación, usted acepta nuestra <a style="color:#115cfa;" href="https://www.ecuavisa.com/servicios/politicas-de-privacidad" target="_blank">Política de cookies</a>.</p>
-                
-                <div class="btn-wrap ">
-                    <button class="btnAceptar" onclick="acceptCookieConsent();">Aceptar</button>
-                    <!--button class="btnRechazar" onclick="declineCookieConsent();">Rechazar</button-->
+        let stringHtml = `
+          <div id="cookieNotice" class="cookie-overlay p-4 d-none" style="display: block;">
+                <div class="title-wrap" style="font-weight: bold; font-size: 20px;">
+                    <h4><img src="https://estadisticas.ecuavisa.com/sites/gestor/Banner/cookies.svg" alt="cookies">Aviso de política de cookies</h4>
+                </div>
+                <div class="content-wrap">
+                    <div class="msg-wrap" >
+                        <p>Este sitio web utiliza cookies para mejorar su experiencia de navegación y proporcionar recomendaciones personalizadas.</p>
+                        <p style="margin-top: 10px;">Al hacer clic en el botón "Aceptar" a continuación, usted acepta nuestra <a style="color:#115cfa;" href="https://www.ecuavisa.com/servicios/politicas-de-privacidad" target="_blank">Política de cookies</a>.</p>
+                        
+                        <div class="btn-wrap ">
+                            <button class="btnRechazar" id="configurar">Configurar</button>
+                            <button class="btnAceptar" onclick="acceptCookieConsent();">Aceptar</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-`;
-document.body.innerHTML += stringHtml;
+        `;
+        document.body.innerHTML += stringHtml;
 
-setTimeout(checkCookie(),150);
+        setTimeout(checkCookie(),150);
 
-function checkCookie(){
-let cookie_consent = getCookie("user_cookie_consent");
-if(cookie_consent != ""){
-    document.getElementById("cookieNotice").style.display = "none";
-}else if(localStorage.getItem('noCookies')){
-    document.getElementById("cookieNotice").style.display = "none";
-}else{
-    document.getElementById("cookieNotice").style.display = "block";
-}
-}
-
-// Crear cookie
-function setCookie(cname, cvalue, exdays) {
-    const d = new Date();
-    d.setTime(d.getTime() + (exdays*24*60*60*1000));
-    let expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-// Borrar cookie
-function deleteCookie(cname) {
-    const d = new Date();
-    d.setTime(d.getTime() + (24*60*60*1000));
-    let expires = "expires="+ d.toUTCString();
-    document.cookie = cname + "=;" + expires + ";path=/";
-}
-
-// Leer cookie
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
+        function checkCookie(){
+        let cookie_consent = getCookie("user_cookie_consent");
+        if(cookie_consent != ""){
+            document.getElementById("cookieNotice").style.display = "none";
+        }else if(localStorage.getItem('noCookies')){
+            document.getElementById("cookieNotice").style.display = "none";
+        }else{
+            document.getElementById("cookieNotice").style.display = "block";
         }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
         }
-    }
-    return "";
-}
 
-// Set cookie consent
-function acceptCookieConsent(){
-    deleteCookie('user_cookie_consent');
-    setCookie('user_cookie_consent', 1, 30);
-    document.getElementById("cookieNotice").style.display = "none";
-}
+        // Crear cookie
+        function setCookie(cname, cvalue, exdays) {
+            const d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            let expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
 
-function declineCookieConsent(){
-    document.getElementById("cookieNotice").style.display = "none";
-    localStorage.setItem('noCookies', true);
-}    
-   
-    function fechahoy(dato){
-        var fecha = new Date();
-        // var hoy = new Date(fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate()); //+7 se suma si quiere setear ayer u hoy
-        // var hoy = fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate();
-        var hoy= fecha.getFullYear()+'-'+('0'+(fecha.getMonth()+1)).slice(-2)+'-'+('0'+fecha.getDate()).slice(-2);
-        var hora = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
-        var fehayHora = hoy+' '+hora;
-        if (dato === 'fecha'){ 
-        return hoy 
-        /*return hoy.replace //funcion avanzada que filtra ceros en días
-        (/-1-|-2-|-3-|-4-|-5-|-6-|-7-|-8-|-9-/gi,
-            function (x) {
-            r1 = x.replace('-1-','-01-');    r2 = r1.replace('-2-','-02-');   r3 = r2.replace('-3-','-03-');
-            r4 = r3.replace('-4-','-04-');   r5 = r4.replace('-5','-05-');   r6 = r5.replace('-6-','-06-');
-            r7 = r6.replace('-7-','-07-');   r8 = r7.replace('-8','-08-');   r9 = r8.replace('-8-','-08-');
-          return r8.replace('-9-','-09-'); 
-        });*/ }
-        else if (dato === 'hora'){return hora;}
-        // return fehayHora;
-    }
-    console.log('La fecha actual es: '+fechahoy('fecha'));
-    console.log('La hora actual es: '+fechahoy('hora'));
-    // ##### FIN función para obtener fecha y hora
+        // Borrar cookie
+        function deleteCookie(cname) {
+            const d = new Date();
+            d.setTime(d.getTime() + (24*60*60*1000));
+            let expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=;" + expires + ";path=/";
+        }
+
+        // Leer cookie
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        // Set cookie consent
+        function acceptCookieConsent(){
+            deleteCookie('user_cookie_consent');
+            setCookie('user_cookie_consent', 1, 30);
+            document.getElementById("cookieNotice").style.display = "none";
+        }
+
+        function declineCookieConsent(){
+            document.getElementById("cookieNotice").style.display = "none";
+            localStorage.setItem('noCookies', true);
+        }    
+       
+        function fechahoy(dato){
+            var fecha = new Date();
+            // var hoy = new Date(fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate()); //+7 se suma si quiere setear ayer u hoy
+            // var hoy = fecha.getFullYear()+'-'+(fecha.getMonth()+1)+'-'+fecha.getDate();
+            var hoy= fecha.getFullYear()+'-'+('0'+(fecha.getMonth()+1)).slice(-2)+'-'+('0'+fecha.getDate()).slice(-2);
+            var hora = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
+            var fehayHora = hoy+' '+hora;
+            if (dato === 'fecha'){ 
+            return hoy 
+            /*return hoy.replace //funcion avanzada que filtra ceros en días
+            (/-1-|-2-|-3-|-4-|-5-|-6-|-7-|-8-|-9-/gi,
+                function (x) {
+                r1 = x.replace('-1-','-01-');    r2 = r1.replace('-2-','-02-');   r3 = r2.replace('-3-','-03-');
+                r4 = r3.replace('-4-','-04-');   r5 = r4.replace('-5','-05-');   r6 = r5.replace('-6-','-06-');
+                r7 = r6.replace('-7-','-07-');   r8 = r7.replace('-8','-08-');   r9 = r8.replace('-8-','-08-');
+              return r8.replace('-9-','-09-'); 
+            });*/ }
+            else if (dato === 'hora'){return hora;}
+            // return fehayHora;
+        }
+        console.log('La fecha actual es: '+fechahoy('fecha'));
+        console.log('La hora actual es: '+fechahoy('hora'));
+        // ##### FIN función para obtener fecha y hora
 
 
-    function proxSemana(){
-        var today = new Date();
-        var proxSemana = new Date(today.getFullYear(), today.getMonth(), today.getDate()+3);
-        return proxSemana;
-    }  
-    // console.log(proxSemana())
+        function proxSemana(){
+            var today = new Date();
+            var proxSemana = new Date(today.getFullYear(), today.getMonth(), today.getDate()+3);
+            return proxSemana;
+        }  
+        // console.log(proxSemana())
 
 
-/* Función que suma o resta días a una fecha, si el parámetro
-   días es negativo restará los días*/
-function getFecha( dias){
-    var d = new Date();
-  d.setDate(d.getDate() + dias);
-  var diaObtenido = d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+(d.getDate())).slice(-2) ;
-    return diaObtenido
-}
+        /* Función que suma o resta días a una fecha, si el parámetro
+           días es negativo restará los días*/
+        function getFecha( dias){
+            var d = new Date();
+          d.setDate(d.getDate() + dias);
+          var diaObtenido = d.getFullYear()+'-'+('0'+(d.getMonth()+1)).slice(-2)+'-'+('0'+(d.getDate())).slice(-2) ;
+            return diaObtenido
+        }
 
+        var actionsCofigCookies = {
+            HTMLConfig:function(){
+                return ``;
+            },
+            init:function(){
+                this.HTMLConfig();
+                document.getElementById("btn-cerrar").addEventListener("click", function(){
+                    var modal = document.getElementById("modal-ec");
+                    if(!modal.classList.contains("hidden-modal")){
+                        modal.classList.add("hidden-modal");
+                    }
+                });  
+                document.getElementById("configurar").addEventListener("click", function(){
+                    var modal = document.getElementById("modal-ec");
+                    if(modal.classList.contains("hidden-modal")){
+                        modal.classList.remove("hidden-modal");
+                    }
+                });  
+                return true;
+            }
+        }
+
+        actionsCofigCookies.init();
+
+    </script>
 
 // console.log('funcionNueva es '+getFecha( -2)); // probar getfecha
     
@@ -342,7 +626,6 @@ function getFecha( dias){
 
     // console.log(getFecha(0)+ ' es el dia')
     </script>
-
 
 
    
