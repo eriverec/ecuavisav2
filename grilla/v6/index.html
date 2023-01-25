@@ -525,15 +525,10 @@
                 estado:0,
                 id:3
             }],
-            buscarItems:function(id){
+            buscarItem:function(id){
                 var lista = this.opciones;
-                for(var i in lista){
-                    var ins = lista[i];
-                    if(ins.id == id){
-                        return ins;
-                    }
-                } 
-                return [];
+                var item = lista.find(({ id }) => id === id);
+                return item || [];
             },
             editarItem:function(id, index, value){
                 var lista = this.opciones;
@@ -541,7 +536,6 @@
                     var ins = lista[i];
                     if(ins.id == id){
                         lista[i][index] = value;
-                        //this.listItems();
                         return true;
                     }
                 } 
