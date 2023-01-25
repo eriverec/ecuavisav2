@@ -378,78 +378,7 @@
             display: none!important;
         }
     </style>
-    <div class="modal-ecuavisa hidden-modal" id="modal-ec">
-        <div class="fondo-modal">
-            <div class="exterior-modal">
-                <div class="container-modal">
-                    <div class="preferences-modal">
-                        <div class="header-modal">
-                            <div class="title-text">
-                                Configuración de cookies
-                            </div>
-                            <button type="button" id="btn-cerrar">Cerrar</button>
-                        </div>
-                        <div class="body-modal">
-                            <div class="descripccion-modal">
-                                Al pulsar "Guardar y cerrar" se guardará la selección de cookies que hayas realizado. Si pulsas sobre "Aceptar todas y cerrar" aceptarás todas las cookies. 
-                                Si pulsas sobre "Rechazar todas y cerrar" rechazarás todas las cookies no esenciales. 
-                                La aceptación de algunos grupos de cookies se realiza mediante algunas acciones explicitas que vienen detalladas debajo.
-                            </div>
-                            <div class="table-panel-items">
-                                <div class="content-items">
-                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                    <div class="check-panel">
-                                        <input type="checkbox" id="switch" checked/><label for="switch">Toggle</label>
-                                    </div>
-                                </div>
-                                <div class="content-items">
-                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                    <div class="check-panel">
-                                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
-                                    </div>
-                                </div>
-                                <div class="content-items">
-                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                    <div class="check-panel">
-                                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
-                                    </div>
-                                </div>
-                                <div class="content-items">
-                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                    <div class="check-panel">
-                                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
-                                    </div>
-                                </div>
-                                <div class="content-items">
-                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                    <div class="check-panel">
-                                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
-                                    </div>
-                                </div>
-                                <div class="content-items">
-                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                    <div class="check-panel">
-                                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
-                                    </div>
-                                </div>
-                                <div class="content-items">
-                                    <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                    <div class="check-panel">
-                                        <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="footer-modal">
-                            <!--<button class="btnRechazar">Rechazar todas y cerrar</button>-->
-                            <button class="btnRechazar">Aceptar todas y cerrar</button>
-                            <button class="btnAceptar disabled">Guardar y cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    
 
     <div class="jsondata" id="jsonData"></div>
 
@@ -477,7 +406,9 @@
                 </div>
             </div>
         `;
-        document.body.innerHTML += stringHtml;
+        /*Se va agregar los dos modals*/
+        var modalCookieNotice = document.createElement("div");
+        modalCookieNotice.innerHTML = stringHtml;
 
         setTimeout(checkCookie(),150);
 
@@ -581,10 +512,81 @@
 
         var actionsCofigCookies = {
             HTMLConfig:function(){
-                return ``;
+                return `<div class="modal-ecuavisa hidden-modal" id="modal-ec">
+                            <div class="fondo-modal">
+                                <div class="exterior-modal">
+                                    <div class="container-modal">
+                                        <div class="preferences-modal">
+                                            <div class="header-modal">
+                                                <div class="title-text">
+                                                    Configuración de cookies
+                                                </div>
+                                                <button type="button" id="btn-cerrar">Cerrar</button>
+                                            </div>
+                                            <div class="body-modal">
+                                                <div class="descripccion-modal">
+                                                    Al pulsar "Guardar y cerrar" se guardará la selección de cookies que hayas realizado. Si pulsas sobre "Aceptar todas y cerrar" aceptarás todas las cookies. 
+                                                    Si pulsas sobre "Rechazar todas y cerrar" rechazarás todas las cookies no esenciales. 
+                                                    La aceptación de algunos grupos de cookies se realiza mediante algunas acciones explicitas que vienen detalladas debajo.
+                                                </div>
+                                                <div class="table-panel-items">
+                                                    <div class="content-items">
+                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                                        <div class="check-panel">
+                                                            <input type="checkbox" id="switch" checked/><label for="switch">Toggle</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="content-items">
+                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                                        <div class="check-panel">
+                                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="content-items">
+                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                                        <div class="check-panel">
+                                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="content-items">
+                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                                        <div class="check-panel">
+                                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="content-items">
+                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                                        <div class="check-panel">
+                                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="content-items">
+                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                                        <div class="check-panel">
+                                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="content-items">
+                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
+                                                        <div class="check-panel">
+                                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="footer-modal">
+                                                <!--<button class="btnRechazar">Rechazar todas y cerrar</button>-->
+                                                <button class="btnRechazar">Aceptar todas y cerrar</button>
+                                                <button class="btnAceptar disabled">Guardar y cerrar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`;
             },
             init:function(){
-                this.HTMLConfig();
+                modalCookieNotice.innerHTML += this.HTMLConfig();
                 document.getElementById("btn-cerrar").addEventListener("click", function(){
                     var modal = document.getElementById("modal-ec");
                     if(!modal.classList.contains("hidden-modal")){
