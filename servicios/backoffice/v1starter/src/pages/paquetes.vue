@@ -574,6 +574,7 @@ const itemsTipoDato = [
                       <VTextField v-if="modulo.tipoDato == 'numerico' "
                       v-model="modulo.valor"
                       label="valor"
+                      type="number"
                       :rules="[integerValidator]"
                       />  
                   </td>
@@ -681,7 +682,7 @@ const itemsTipoDato = [
                       <VTextField v-if="modulo.tipoDato == 'numerico' "
                       v-model="modulo.valor"
                       label="valor"
-                      :rules="[integerValidator]"
+                      type="number"
                       />  
                   </td>
 

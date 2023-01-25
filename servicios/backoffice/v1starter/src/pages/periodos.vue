@@ -380,6 +380,7 @@ const itemsTiempo = [
               <VTextField
                 v-model="periodoString"
                 label="Periodo"
+                type="number"
               />
             </VCol>
             <VCol cols="12" md="6" >
@@ -435,6 +436,7 @@ const itemsTiempo = [
               <VTextField
                 v-model="periodoString"
                 label="Periodo"
+                type="number"
               />
             </VCol>
             <VCol cols="12" md="6" >
