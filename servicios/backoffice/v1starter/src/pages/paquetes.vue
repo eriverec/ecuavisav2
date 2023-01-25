@@ -2,22 +2,32 @@
 
 import { usePaquetesListStore } from "@/views/apps/modulos/usePaquetesListStore";
 import { usePeriodosListStore } from "@/views/apps/modulos/usePeriodosListStore";
+import { useModulosListStore } from "@/views/apps/modulos/useModulosListStore";
+import { integerValidator} from '@validators';
 
 const isPaqueteEditVisible = ref(false);
 const isPaqueteAddVisible = ref(false);
 const isPaquetesDeleteVisible = ref(false);
+const modulosListStore = useModulosListStore();
 const paquetesListStore = usePaquetesListStore();
 const periodosListStore = usePeriodosListStore();
+const modulos = ref([]);
 const paquetes = ref([]);
 const rowPerPage = ref(10);
 const updatePaquete = ref({});
 const nuevoPaquete = ref({
-  periodo: ''
+  nombre: '',
+  idPeriodo: '',
+  modulos: []
 });
+const nombrePeriodo = ref('');
 const paqueteId = ref('');
 const periodos = ref([]);
+const periodosItems = ref([]);
+const updModuloPrimero = ref([]);
+const newModuloPrimero = ref([]);
 
-// 👉 Obtener los modulos
+// 👉 Obtener los paquetes
 const fetchPaquetes = () => {
    paquetesListStore
     .fetchPaquetes()
@@ -29,13 +39,15 @@ const fetchPaquetes = () => {
     });
     
 };
-
+// 👉 Obtener los periodos
 const fetchPeriodos = () => {
   return periodosListStore
     .fetchPeriodos()
     .then((response) => {
       //console.log('response',response.data.periodo);
-      periodos.value = response.data;   
+      periodos.value = response.data; 
+      let arrayP = periodos.value.map((e) => e.periodo);
+      periodosItems.value = arrayP;  
     })
     .catch((error) => {
       console.error(error);
@@ -43,36 +55,134 @@ const fetchPeriodos = () => {
 };
 fetchPeriodos();
 
-const getPeriodoNombre = id => {
-let arrayP = periodos.value.map((e) => e.periodo);
-let index = periodos.value.map((e) => e._id).indexOf(id);
-return arrayP[index];
-
-};
-
-
-watchEffect(fetchPaquetes);
-
-// Actualizar módulo
-const onFormPaqueteActive = (id) => {
-  paquetesListStore
-    .fetchPaquete(id)
+// 👉 Obtener los modulos
+const fetchModulos = () => {
+   modulosListStore
+    .fetchModulosPaquetes()
     .then((response) => {
-      updatePaquete.value = response.data;
+      modulos.value = response.data;
     })
     .catch((error) => {
       console.error(error);
     });
+};
+fetchModulos();
+
+const resolveModulosFull = (data) =>{
+let array = Array.from(data);
+let modulosFull = [];
+let arrayModulos = modulos.value.map((e) => e.nombre);
+
+  for (let i = 0; i < array.length; i++) {
+    let index = modulos.value.map((e) => e._id).indexOf(array[i].idModulo);
+    
+    if(index != -1){
+      modulosFull.push(arrayModulos[index] +' - '+ array[i].valor);
+    }
+  }
+
+return modulosFull;
+}
+
+
+
+const getPeriodoNombre = id => {
+let arrayP = periodos.value.map((e) => e.periodo);
+let index = periodos.value.map((e) => e._id).indexOf(id);
+return arrayP[index];
+};
+
+const resolvePeriodoUpd = () => {
+let arrayP = periodos.value.map((e) => e._id);
+let index = periodos.value.map((e) => e.periodo).indexOf(nombrePeriodo.value);
+updatePaquete.value.idPeriodo = arrayP[index];
+
+};
+
+const resolvePeriodoNew = () => {
+let arrayP = periodos.value.map((e) => e._id);
+let index = periodos.value.map((e) => e.periodo).indexOf(nombrePeriodo.value);
+nuevoPaquete.value.idPeriodo = arrayP[index];
+};
+
+watchEffect(fetchPaquetes);
+
+const fetchAll = () =>{
+  fetchPaquetes();
+  fetchModulos();
+  fetchPeriodos();
+}
+
+// Actualizar módulo ----------------------------------------------
+
+const resolveModulosUpdate = () =>{
+let array = Array.from(updatePaquete.value.modulos);
+let modulosPrimer = [];
+
+let modulosNombres = modulos.value.map((e) => e.nombre);
+let modulosTipoDato = modulos.value.map((e) => e.tipoDato);
+
+  for (let i = 0; i < array.length; i++) {
+    let index = modulos.value.map((e) => e._id).indexOf(array[i].idModulo);
+    
+    if(index != -1){
+      let modP= {
+       idModulo: array[i].idModulo,
+       nombre: modulosNombres[index],
+       valor: array[i].valor,
+       tipoDato: modulosTipoDato[index],
+        };
+
+      modulosPrimer.push(modP);
+    }
+  }
+console.log('modulosPrimer', modulosPrimer);
+updModuloPrimero.value = modulosPrimer;
+}
+
+const onFormPaqueteActive = (id) => {
+  nombrePeriodo.value='';
+  
+  paquetesListStore
+    .fetchPaquete(id)
+    .then((response) => {
+      let periodo = response.data;
+      updatePaquete.value = periodo;
+      nombrePeriodo.value = getPeriodoNombre(periodo.idPeriodo); 
+      resolveModulosUpdate(); 
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+ 
   isPaqueteEditVisible.value = true;
 };
 
+const resolveModulosUpdateSend = () =>{
+let arrayUpdate = [];
+let array = Array.from(updModuloPrimero.value);
+  for (let i = 0; i < array.length; i++) {
+    let mod = {
+      idModulo: array[i].idModulo,
+      valor: array[i].valor
+    }
+    arrayUpdate.push(mod);
+  }
+console.log('arrayUpdate',arrayUpdate);  
+updatePaquete.value.modulos = arrayUpdate;
+}
 
 const onFormPaqueteSubmit = (id) => {
+  resolvePeriodoUpd();
+  resolveModulosUpdateSend();
+  console.log("updatePaquete",updatePaquete.value);
+  
   paquetesListStore.updatePaquete(id, updatePaquete.value)
     .catch((error) => {
       console.error(error);
     });
-  window.setTimeout(fetchPeriodos, 900); 
+  window.setTimeout(fetchAll, 900); 
+  
   isPaqueteEditVisible.value = false;
 };
 
@@ -85,15 +195,57 @@ const dialogPaqueteValueUpdate = val => {
   isPaqueteEditVisible.value = val;
 };
 
-// Insertar nuevo módulo
+// Insertar nuevo módulo -------------------------------------------------------
+const resolveModulosNew = () =>{
+let array = Array.from(modulos.value);
+let modulosPrimer = [];
+
+for (let i = 0; i < array.length; i++) {
+   
+  let modP= {
+       idModulo: array[i]._id,
+       nombre: array[i].nombre,
+       valor: '',
+       tipoDato: array[i].tipoDato,
+  };
+
+  modulosPrimer.push(modP);
+  }
+console.log('modulosPrimerNuevo', modulosPrimer);
+newModuloPrimero.value = modulosPrimer;
+}
+
+const onFormAddPaqueteActive = () => {
+  resolveModulosNew();
+  nombrePeriodo.value='';
+  isPaqueteAddVisible.value = true;
+};
+
+const resolveModulosNewSend = () =>{
+let arrayNew = [];
+let array = Array.from(newModuloPrimero.value);
+  for (let i = 0; i < array.length; i++) {
+    let mod = {
+      idModulo: array[i].idModulo,
+      valor: array[i].valor
+    }
+    arrayNew.push(mod);
+  }
+console.log('arrayNew',arrayNew);  
+nuevoPaquete.value.modulos = arrayNew;
+}
 
 const onFormAddPaqueteSubmit = () => {
+  resolveModulosNewSend();
+  resolvePeriodoNew();
   console.log("nuevoPaquete",nuevoPaquete.value);
+  
   paquetesListStore
     .addPaquete(nuevoPaquete.value)
     .catch((error) => {
       console.log(error);
     }); 
+
   nuevoPaquete.value = '';
   isPaqueteAddVisible.value = false;
   window.setTimeout(fetchPaquetes, 900); 
@@ -138,6 +290,7 @@ const itemsTipoDato = [
   'boolean',
   'numerico'
 ]
+
 
 </script>
 
@@ -198,6 +351,7 @@ const itemsTipoDato = [
             <VDivider />
   
             <VCardText class="d-flex flex-wrap py-4 gap-4">
+              <!--
               <div class="me-3" style="width: 80px">
                 <VSelect
                   v-model="rowPerPage"
@@ -206,7 +360,7 @@ const itemsTipoDato = [
                   :items="[10, 20, 30, 50]"
                 />
               </div>
-  
+             -->
               <VSpacer />
   
               <div
@@ -236,7 +390,7 @@ const itemsTipoDato = [
                 <!-- 👉 Add user button -->
                 <VBtn
                   prepend-icon="tabler-plus"
-                  @click="isPaqueteAddVisible=true"
+                  @click="onFormAddPaqueteActive"
                 >
                   Agregar un Paquete
                 </VBtn>
@@ -290,8 +444,8 @@ const itemsTipoDato = [
                     <div class="d-flex align-center">
                       
                       <div class="d-flex ">
-                        <span class="text-capitalize text-base" v-for="modulo in paquete.modulos">
-                          {{ modulo.valor==paquete.modulos[0].valor || paquete.modulos.length == 1? modulo.valor :"; " +modulo.valor }} </span>
+                        <span class="text-capitalize text-base" v-for="modulo in resolveModulosFull(paquete.modulos)">
+                      {{ modulo==resolveModulosFull(paquete.modulos)[0] || resolveModulosFull(paquete.modulos).length == 1? modulo :"; " + modulo }} </span>
                           
                       </div>
                     </div>
@@ -365,14 +519,71 @@ const itemsTipoDato = [
         >
           <VRow >
             <!-- 👉 Nombre -->
-            <VCol cols="12" >
+            <VCol cols="12" md="6">
               <VTextField
                 v-model="updatePaquete.nombre"
-                label="Periodo"
+                label="Nombre"
               />
             </VCol>
+            <VCol cols="12" md="6" >
+            <VCombobox
+              label="Periodo"
+              v-model="nombrePeriodo"
+             :items="periodosItems"
+              />
+            </VCol>
+          <VCol cols="12" >
+            <VTable class="text-no-wrap">
+            <thead>
+                <tr>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Valor</th>
+                  
+                  
+                </tr>
+              </thead>
+            <tbody>
+                <tr
+                  v-for="modulo in updModuloPrimero"
+                  style="height: 3.75rem"
+                >
+                  <!-- 👉 nombre modulo -->
+                  <td>
+                    <div class="d-flex align-center">
+                      
+                      <div class="d-flex flex-column">
+                        <h6 class="text-base">
+                        
+                           {{ modulo.nombre }}
+                        </h6>
+                      </div>
+                    </div>
+                  </td>
 
-          
+                  <td>
+                    <VTextField v-if="modulo.tipoDato == 'texto' "
+                     v-model="modulo.valor"
+                     label="valor"
+                      />
+                      <VSwitch
+                      v-if="modulo.tipoDato == 'boolean' "
+                      v-model="modulo.valor"
+                      density="compact"
+                      label="valor"
+                      />
+                      <VTextField v-if="modulo.tipoDato == 'numerico' "
+                      v-model="modulo.valor"
+                      label="valor"
+                      :rules="[integerValidator]"
+                      />  
+                  </td>
+
+             
+                </tr>
+              </tbody>
+            </VTable>
+            </VCol>
+              
             <!-- 👉 Submit and Cancel -->
             <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
               <VBtn type="submit"> Enviar </VBtn>
@@ -413,15 +624,72 @@ const itemsTipoDato = [
           class="mt-6"
           @submit.prevent="onFormAddPaqueteSubmit"
         >
-          <VRow class="d-flex flex-wrap justify-center gap-4">
+          <VRow>
             <!-- 👉 Nombre -->
-            <VCol cols="12">
+            <VCol cols="12" md="6">
               <VTextField
                 v-model="nuevoPaquete.nombre"
                 label="Nombre"
               />
             </VCol>
-          
+            <VCol cols="12" md="6" >
+            <VCombobox
+              label="Periodo"
+              v-model="nombrePeriodo"
+             :items="periodosItems"
+              />
+            </VCol>
+            <VCol cols="12" >
+            <VTable class="text-no-wrap">
+            <thead>
+                <tr>
+                  <th scope="col">Nombre</th>
+                  <th scope="col">Valor</th>
+                  
+                  
+                </tr>
+              </thead>
+            <tbody>
+                <tr
+                  v-for="modulo in newModuloPrimero"
+                  style="height: 3.75rem"
+                >
+                  <!-- 👉 nombre modulo -->
+                  <td>
+                    <div class="d-flex align-center">
+                      
+                      <div class="d-flex flex-column">
+                        <h6 class="text-base">
+                        
+                           {{ modulo.nombre }}
+                        </h6>
+                      </div>
+                    </div>
+                  </td>
+
+                  <td>
+                    <VTextField v-if="modulo.tipoDato == 'texto' "
+                     v-model="modulo.valor"
+                     label="valor"
+                      />
+                      <VSwitch
+                      v-if="modulo.tipoDato == 'boolean' "
+                      v-model="modulo.valor"
+                      density="compact"
+                      label="valor"
+                      />
+                      <VTextField v-if="modulo.tipoDato == 'numerico' "
+                      v-model="modulo.valor"
+                      label="valor"
+                      :rules="[integerValidator]"
+                      />  
+                  </td>
+
+             
+                </tr>
+              </tbody>
+            </VTable>
+            </VCol>
             <!-- 👉 Submit and Cancel -->
             <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
               <VBtn type="submit"> Aceptar </VBtn>
