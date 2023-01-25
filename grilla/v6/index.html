@@ -409,6 +409,7 @@
         /*Se va agregar los dos modals*/
         var modalCookieNotice = document.createElement("div");
         modalCookieNotice.innerHTML = stringHtml;
+        document.body.appendChild(modalCookieNotice);
 
         setTimeout(checkCookie(),150);
 
@@ -511,6 +512,8 @@
         }
 
         var actionsCofigCookies = {
+            opciones:[],
+            listar:function(){},
             HTMLConfig:function(){
                 return `<div class="modal-ecuavisa hidden-modal" id="modal-ec">
                             <div class="fondo-modal">
@@ -530,46 +533,18 @@
                                                     La aceptación de algunos grupos de cookies se realiza mediante algunas acciones explicitas que vienen detalladas debajo.
                                                 </div>
                                                 <div class="table-panel-items">
-                                                    <div class="content-items">
+                                                    <div class="content-items" option-id="1">
                                                         <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                                        <div class="check-panel">
-                                                            <input type="checkbox" id="switch" checked/><label for="switch">Toggle</label>
+                                                        <div class="check-panel" actions="list-options">
+                                                            <input type="checkbox" data-json='{"id":1,"estado":0}' class="option-check" id="switch"/>
+                                                            <label for="switch">Toggle</label>
                                                         </div>
                                                     </div>
-                                                    <div class="content-items">
+                                                    <div class="content-items" option-id="1">
                                                         <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                                        <div class="check-panel">
-                                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="content-items">
-                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                                        <div class="check-panel">
-                                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="content-items">
-                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                                        <div class="check-panel">
-                                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="content-items">
-                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                                        <div class="check-panel">
-                                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="content-items">
-                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                                        <div class="check-panel">
-                                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="content-items">
-                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                                        <div class="check-panel">
-                                                            <input type="checkbox" id="switch" /><label for="switch">Toggle</label>
+                                                        <div class="check-panel" actions="list-options">
+                                                            <input type="checkbox" data-json='{"id":2,"estado":1}' class="option-check" checked />
+                                                            <label for="switch">Toggle</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -598,7 +573,19 @@
                     if(modal.classList.contains("hidden-modal")){
                         modal.classList.remove("hidden-modal");
                     }
-                });  
+                }); 
+                document.querySelector(`.table-panel-items[actions="list-options"]`).onclick = function(event) {
+                    alert("Submit button is clicked!");
+                    event.preventDefault();
+                }
+                /*document.getElementById("modal-ec").addEventListener("click", function(event){
+                  var dentroContenido = event.target.classList.contains("table-panel-items");
+                  //event.target.getAttribute('actions')
+                  // chrome needs some time to paint yellow
+                  setTimeout(() => {
+                    alert(event.target.parentNode.getAttribute('actions'));
+                  }, 0);
+                }); */
                 return true;
             }
         }
