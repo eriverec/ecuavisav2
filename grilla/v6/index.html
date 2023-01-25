@@ -512,9 +512,51 @@
         }
 
         var actionsCofigCookies = {
-            opciones:[],
-            listar:function(){},
-            HTMLConfig:function(){
+            opciones:[{
+                titulo:'Almacenar o acceder a información en un dispositivo',
+                estado:0,
+                id:1
+            },{
+                titulo:'Seleccionar anuncios básicos',
+                estado:0,
+                id:2
+            },{
+                titulo:'Seleccionar anuncios personalizados',
+                estado:0,
+                id:3
+            }],
+            buscarItems:function(id){
+                var lista = this.opciones;
+                for(var i in lista){
+                    var ins = lista[i];
+                    if(ins.id == id){
+                        return ins;
+                    }
+                } 
+                return [];
+            },
+            editarItem:function(id, index, value){
+                var lista = this.opciones;
+                for(var i in lista){
+                    var ins = lista[i];
+                    if(ins.id == id){
+                        lista[i][index] = value;
+                        //this.listItems();
+                        return true;
+                    }
+                } 
+                return false;
+            },
+            editarItems:function(index, value){
+                var lista = this.opciones;
+                for(var i in lista){
+                    var ins = lista[i];
+                    lista[i][index] = value;
+                } 
+                this.listItems();
+                return true;
+            },
+            HTMLConfig:function(data){
                 return `<div class="modal-ecuavisa hidden-modal" id="modal-ec">
                             <div class="fondo-modal">
                                 <div class="exterior-modal">
@@ -532,26 +574,13 @@
                                                     Si pulsas sobre "Rechazar todas y cerrar" rechazarás todas las cookies no esenciales. 
                                                     La aceptación de algunos grupos de cookies se realiza mediante algunas acciones explicitas que vienen detalladas debajo.
                                                 </div>
-                                                <div class="table-panel-items">
-                                                    <div class="content-items" option-id="1">
-                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                                        <div class="check-panel" actions="list-options">
-                                                            <input type="checkbox" data-json='{"id":1,"estado":0}' class="option-check" id="switch"/>
-                                                            <label for="switch">Toggle</label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="content-items" option-id="1">
-                                                        <div class="title-panel">Almacenar o acceder a información en un dispositivo</div>
-                                                        <div class="check-panel" actions="list-options">
-                                                            <input type="checkbox" data-json='{"id":2,"estado":1}' class="option-check" checked />
-                                                            <label for="switch">Toggle</label>
-                                                        </div>
-                                                    </div>
+                                                <div class="table-panel-items" id="items-modal">
+                                                    
                                                 </div>
                                             </div>
                                             <div class="footer-modal">
                                                 <!--<button class="btnRechazar">Rechazar todas y cerrar</button>-->
-                                                <button class="btnRechazar">Aceptar todas y cerrar</button>
+                                                <button class="btnRechazar" id="aceptar-todos">Aceptar todas y cerrar</button>
                                                 <button class="btnAceptar disabled">Guardar y cerrar</button>
                                             </div>
                                         </div>
@@ -560,8 +589,30 @@
                             </div>
                         </div>`;
             },
+            optionsHTML:function(data){
+                return `<div class="content-items" option-id="3">
+                            <div class="title-panel">${data.titulo}</div>
+                            <div class="check-panel" actions="list-options">
+                                <input type="checkbox" class="option-check" ${(data.estado == '1'? 'checked':'')} id="switch-${data.id}" data-json='{"id":${data.id},"estado":${data.estado}}'/>
+                                <label for="switch-${data.id}">Toggle</label>
+                            </div>
+                        </div>`;
+            },
+            listItems:function(){
+                var itemsContent = document.getElementById("items-modal");
+                itemsContent.innerHTML = "";
+
+                var lista = this.opciones;
+                var html = '';
+                for(var i in lista){
+                    var ins = lista[i];
+                    html += this.optionsHTML(ins);
+                }
+                itemsContent.innerHTML += html;
+            },
             init:function(){
                 modalCookieNotice.innerHTML += this.HTMLConfig();
+                this.listItems();
                 document.getElementById("btn-cerrar").addEventListener("click", function(){
                     var modal = document.getElementById("modal-ec");
                     if(!modal.classList.contains("hidden-modal")){
@@ -573,19 +624,24 @@
                     if(modal.classList.contains("hidden-modal")){
                         modal.classList.remove("hidden-modal");
                     }
-                }); 
-                document.querySelector(`.table-panel-items[actions="list-options"]`).onclick = function(event) {
-                    alert("Submit button is clicked!");
-                    event.preventDefault();
-                }
-                /*document.getElementById("modal-ec").addEventListener("click", function(event){
-                  var dentroContenido = event.target.classList.contains("table-panel-items");
-                  //event.target.getAttribute('actions')
-                  // chrome needs some time to paint yellow
+                });
+                document.getElementById("aceptar-todos").addEventListener("click", function(){
+                    actionsCofigCookies.editarItems('estado', 1);
+                });
+                document.querySelector(".table-panel-items").addEventListener("click", function(event){
                   setTimeout(() => {
-                    alert(event.target.parentNode.getAttribute('actions'));
+                    if(event.target.matches('.option-check')){
+                        var data = JSON.parse(event.target.getAttribute('data-json'));
+                        var estado = 0;
+                        if(data.estado == 0){
+                            estado = 1;
+                        }
+                        data.estado = estado;
+                        event.target.setAttribute("data-json", JSON.stringify(data));
+                        actionsCofigCookies.editarItem(data.id, 'estado', estado);
+                    }
                   }, 0);
-                }); */
+                }); 
                 return true;
             }
         }
