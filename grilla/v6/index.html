@@ -540,22 +540,22 @@
                 return item || [];
             },
             editarItem:function(id, index, value){
-                var lista = this.opciones;
-                for(var i in lista){
-                    var ins = lista[i];
+                for(var i in this.opciones){
+                    var ins = this.opciones[i];
                     if(ins.id == id){
-                        lista[i][index] = value;
+                        this.opciones[i][index] = value;
                         return true;
                     }
                 } 
                 return false;
             },
             editarItems:function(index, value){
-                var lista = this.opciones;
-                for(var i in lista){
-                    var ins = lista[i];
-                    lista[i][index] = value;
+                for(var i in this.opciones){
+                    this.opciones[i][index] = value;
                 } 
+                if(localStorage.getItem('dataAcceptCookies')){
+                    localStorage.setItem('dataAcceptCookies', JSON.stringify(this.opciones));
+                }
                 this.listItems();
                 return true;
             },
