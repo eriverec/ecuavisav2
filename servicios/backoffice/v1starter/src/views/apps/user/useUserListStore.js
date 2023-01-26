@@ -6,6 +6,8 @@ export const useUserListStore = defineStore('UserListStore', {
     // 👉 Fetch users data
     fetchUsers(params) { return axios.get('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get', { params }) },
 
+    fetchFullUsers() { return axios.get('https://ecuavisa-register.onrender.com/full') },
+
     countUsers() { return axios.get('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/count') },
 
     // 👉 Add User
@@ -50,7 +52,7 @@ export const useUserListStore = defineStore('UserListStore', {
       })
     },
 
-
+    
     // 👉 fetch single user
     fetchUser(id) {
       return new Promise((resolve, reject) => {

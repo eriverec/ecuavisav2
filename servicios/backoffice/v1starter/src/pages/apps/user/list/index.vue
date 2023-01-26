@@ -31,7 +31,7 @@ const percentGoogle = ref(0);
 const search = ref('');
 const isLoaded = ref(true);
 const isLoading = ref(false);
-
+const usersFull = ref([]);
 const sectionLoading= () => {
   isLoaded.value = false;
   isLoading.value = true;
@@ -336,7 +336,163 @@ const userListMeta = [
   },
 
 ]*/
+function convertToCSV(objArray) {
+    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+    var str = '';
 
+    for (var i = 0; i < array.length; i++) {
+        var line = '';
+        for (var index in array[i]) {
+            if (line != '') line += ','
+
+            line += array[i][index];
+        }
+
+        str += line + '\r\n';
+    }
+
+    return str;
+}
+
+function exportCSVFile(headers, items, fileTitle) {
+    if (headers) {
+        items.unshift(headers);
+    }
+
+    // Convert Object to JSON
+    var jsonObject = JSON.stringify(items);
+
+    var csv = convertToCSV(jsonObject);
+
+    var exportedFilenmae = fileTitle + '.csv' || 'export.csv';
+
+    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    if (navigator.msSaveBlob) { // IE 10+
+        navigator.msSaveBlob(blob, exportedFilenmae);
+    } else {
+        var link = document.createElement("a");
+        if (link.download !== undefined) { // feature detection
+            // Browsers that support HTML5 download attribute
+            var url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", exportedFilenmae);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    }
+}
+const fetchFullUsers = () =>{
+  
+}
+ 
+const downloadFull = () => {
+  
+let headers = {
+  wylexId: 'wylexId',
+  site: 'site',
+  email: 'email',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  avatar: 'avatar',
+  phone_prefix: 'phone_prefix',
+  phone_number: 'phone_number',
+  gender: 'gender',
+  birth_date: 'birth_date',
+  identification_type: 'identification_type',
+  identification_number:'identification_number',
+  country: 'country',
+  newsletter_opt_in: 'newsletter_opt_in',
+  provider: 'provider'
+}
+
+userListStore.fetchFullUsers()
+  .then((response) => {
+      usersFull.value = response.data;
+      let doc = [];
+      let docRaw = Array.from(usersFull.value);
+
+      let title = 'users_Full';
+
+      docRaw.forEach((item) => {
+        doc.push({
+          wylexId: item.wylexId,
+          site: item.site,
+          email: item.email,
+          first_name: item.first_name,
+          last_name: item.last_name,
+          avatar: item.avatar,
+          phone_prefix: item.phone_prefix,
+          phone_number: item.phone_number,
+          gender: item.gender,
+          birth_date: item.birth_date,
+          identification_type: item.identification_type,
+          identification_number:item.identification_number,
+          country: item.country,
+          newsletter_opt_in: item.newsletter_opt_in,
+          provider: item.provider
+        });   
+      });
+      exportCSVFile(headers, doc, title);
+    })
+  .catch((error) => {
+      console.error(error);
+    });
+
+}
+
+const downloadSection = ()=>{
+
+let headers = {
+  wylexId: 'wylexId',
+  site: 'site',
+  email: 'email',
+  first_name: 'first_name',
+  last_name: 'last_name',
+  avatar: 'avatar',
+  phone_prefix: 'phone_prefix',
+  phone_number: 'phone_number',
+  gender: 'gender',
+  birth_date: 'birth_date',
+  identification_type: 'identification_type',
+  identification_number:'identification_number',
+  country: 'country',
+  newsletter_opt_in: 'newsletter_opt_in',
+  provider: 'provider'
+}
+let doc = [];
+let docRaw = Array.from(users.value);
+
+let firstIndex = users.value.length
+    ? (page.value - 1) * rowPerPage.value + 1
+    : 0;
+let lastIndex =
+    users.value.length + (page.value - 1) * rowPerPage.value;
+    console.log("usersValue ",users.value.length);
+let title = 'users_section_'+firstIndex+'_'+lastIndex;
+docRaw.forEach((item) => {
+    doc.push({
+      wylexId: item.wylexId,
+      site: item.site,
+      email: item.email,
+      first_name: item.first_name,
+      last_name: item.last_name,
+      avatar: item.avatar,
+      phone_prefix: item.phone_prefix,
+      phone_number: item.phone_number,
+      gender: item.gender,
+      birth_date: item.birth_date,
+      identification_type: item.identification_type,
+      identification_number:item.identification_number,
+      country: item.country,
+      newsletter_opt_in: item.newsletter_opt_in,
+      provider: item.provider
+    });   
+});
+
+exportCSVFile(headers, doc, title);
+}
 </script>
 
 <template>
@@ -467,12 +623,21 @@ const userListMeta = [
               Reiniciar
               </VBtn>
               <!-- 👉 Export button -->
-              <VBtn
-                variant="tonal"
-                color="secondary"
+              <VBtn 
+               variant="tonal"
+                color="success"
                 prepend-icon="tabler-screen-share"
+                @click="downloadFull"
               >
-              Exportar
+              Exportar Todo
+              </VBtn>
+              <VBtn
+              variant="tonal"
+                color="success"
+                prepend-icon="tabler-screen-share"
+                @click="downloadSection"
+              >
+              Exportar sección
               </VBtn>
 
               <!-- 👉 Add user button -->
