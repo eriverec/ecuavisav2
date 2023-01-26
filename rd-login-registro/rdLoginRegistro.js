@@ -182,8 +182,8 @@ let cboxTerm = document.getElementById('checkTerms');
 
   let email = document.getElementById("logEmail").value;
   let password = document.getElementById("logPass").value;
-
-  fetch("https://ecuavisa-register.onrender.com/signIn", {
+  //servicio render Luis
+  fetch("https://ecuavisa-login-service.onrender.com/signIn", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -229,8 +229,8 @@ function register() {
   if (password !== passwordConf) {
     console.log("Las contraseñas no coinciden");
   } else {
-   
-    fetch("https://ecuavisa-register.onrender.com/register", {
+    //servicio render Luis
+    fetch("https://ecuavisa-login-service.onrender.com/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -264,8 +264,8 @@ function sendEmailPassReset() {
 
 
 let email = document.getElementById("forgetEmail").value.trim();
-
-  fetch("https://ecuavisa-register.onrender.com/forgotPassword", {
+  //servicio render Luis
+  fetch("https://ecuavisa-login-service.onrender.com/forgotPassword", {
       method: "PUT",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -296,10 +296,10 @@ function validateLogSocials(){
   let check = document.getElementById('checkTerms');
   if(check.checked == true ) {
     let btnGoogle = document.getElementById("aLogGoogle");
-    btnGoogle.setAttribute("href", "https://ecuavisa-register.onrender.com/auth/google");
+    btnGoogle.setAttribute("href", "https://ecuavisa-login-service.onrender.com/auth/google"); //servicio render Luis
 
     let btnFacebook = document.getElementById("aLogFacebook");
-    btnFacebook.setAttribute("href", "https://ecuavisa-register.onrender.com/auth/facebook");
+    btnFacebook.setAttribute("href", "https://ecuavisa-login-service.onrender.com/auth/facebook"); //servicio render Luis
     
       }else{
         alert("Acepte los términos y condiciones para continuar"); 

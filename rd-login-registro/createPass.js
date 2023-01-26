@@ -8,7 +8,7 @@ const queryString = window.location.search;
  const urlParams = new URLSearchParams(queryString);
  tk = urlParams.get('tk');
 
-  fetch("https://ecuavisa-register.onrender.com/check", {
+  fetch("https://ecuavisa-login-service.onrender.com/check", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -89,7 +89,7 @@ const queryString = window.location.search;
     console.log(tk);
 
     
-    fetch("https://ecuavisa-register.onrender.com/resetPassword", {
+    fetch("https://ecuavisa-login-service.onrender.com/resetPassword", {
       method: "PUT",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
