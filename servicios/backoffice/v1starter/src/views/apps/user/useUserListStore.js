@@ -6,7 +6,9 @@ export const useUserListStore = defineStore('UserListStore', {
     // 👉 Fetch users data
     fetchUsers(params) { return axios.get('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get', { params }) },
 
-    fetchFullUsers() { return axios.get('https://ecuavisa-register.onrender.com/full') },
+    countPageUsers() { return axios.get('https://ecuavisa-mongo-users.vercel.app/count') },
+
+    fetchFullUsers(p) { return axios.post('https://ecuavisa-mongo-users.vercel.app/full', {page: p}) },
 
     countUsers() { return axios.get('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/count') },
 

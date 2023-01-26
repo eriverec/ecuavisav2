@@ -3,7 +3,6 @@ import AddNewUserDrawer from "@/views/apps/user/list/AddNewUserDrawer.vue";
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 import { avatarText } from "@core/utils/formatters";
 
-
 import avatar1 from "@/assets/images/avatars/avatar-1.png";
 import avatar2 from "@/assets/images/avatars/avatar-2.png";
 import avatar3 from "@/assets/images/avatars/avatar-3.png";
@@ -13,9 +12,9 @@ import avatar6 from "@/assets/images/avatars/avatar-6.png";
 import avatar7 from "@/assets/images/avatars/avatar-7.png";
 import avatar8 from "@/assets/images/avatars/avatar-8.png";
 
-const userListStore = useUserListStore()
+const userListStore = useUserListStore();
 const searchQuery = ref("");
-const selectedProvider = ref('');
+const selectedProvider = ref("");
 const selectedBoletin = ref();
 const rowPerPage = ref(10);
 const page = ref(1);
@@ -28,19 +27,20 @@ const users = ref([]);
 const percentEmail = ref(0);
 const percentFacebook = ref(0);
 const percentGoogle = ref(0);
-const search = ref('');
+const search = ref("");
 const isLoaded = ref(true);
 const isLoading = ref(false);
 const usersFull = ref([]);
-const sectionLoading= () => {
+const userFullP = ref(0);
+const sectionLoading = () => {
   isLoaded.value = false;
   isLoading.value = true;
-}
+};
 
-const sectionLoaded= () => {
+const sectionLoaded = () => {
   isLoaded.value = true;
   isLoading.value = false;
-}
+};
 
 // 👉 Fetching users
 const fetchUsers = () => {
@@ -51,7 +51,7 @@ const fetchUsers = () => {
       page: page.value,
       query: search.value,
       provider: selectedProvider.value,
-      news: selectedBoletin.value
+      news: selectedBoletin.value,
     })
     .then((response) => {
       users.value = response.data.users;
@@ -76,16 +76,15 @@ const countUsers = () => {
       totalFacebook.value = response.data.totalFacebook;
       totalGoogle.value = response.data.totalGoogle;
 
-      pE.value = (totalEmail.value * 100 ) / total;
+      pE.value = (totalEmail.value * 100) / total;
       percentEmail.value = Math.round((pE.value + Number.EPSILON) * 100) / 100;
 
-      pF.value = (totalFacebook.value * 100 ) / total;
-      percentFacebook.value = Math.round((pF.value + Number.EPSILON) * 100) / 100;
+      pF.value = (totalFacebook.value * 100) / total;
+      percentFacebook.value =
+        Math.round((pF.value + Number.EPSILON) * 100) / 100;
 
-      pG.value = (totalGoogle.value * 100 ) / total;
+      pG.value = (totalGoogle.value * 100) / total;
       percentGoogle.value = Math.round((pG.value + Number.EPSILON) * 100) / 100;
-      
-
     })
     .catch((error) => {
       console.error(error);
@@ -94,31 +93,26 @@ const countUsers = () => {
 countUsers();
 
 const searchUsers = () => {
-  if(searchQuery.value){
-page.value = 1;
-totalPage.value = 1;
-search.value = searchQuery.value;
-fetchUsers();
-}
+  if (searchQuery.value) {
+    page.value = 1;
+    totalPage.value = 1;
+    search.value = searchQuery.value;
+    fetchUsers();
+  }
 };
 
 const reset = () => {
-page.value = 1;
-totalPage.value = 1;
-selectedBoletin.value = '';
-selectedProvider.value = undefined;
-search.value = '';
-searchQuery.value = '';
+  page.value = 1;
+  totalPage.value = 1;
+  selectedBoletin.value = "";
+  selectedProvider.value = undefined;
+  search.value = "";
+  searchQuery.value = "";
 
-fetchUsers();
-
+  fetchUsers();
 };
 
-
-
 watchEffect(fetchUsers);
-
-
 
 // 👉 watching current page
 watchEffect(() => {
@@ -139,7 +133,7 @@ const listProvider = [
   {
     title: "Email",
     value: "email",
-  }
+  },
 ];
 
 const listBoletin = [
@@ -150,7 +144,7 @@ const listBoletin = [
   {
     title: "False",
     value: "false",
-  }
+  },
 ];
 /*
 const status = [
@@ -168,16 +162,16 @@ const status = [
   },
 ];
 */
-const resolveUserRoleVariant = provider => {
+const resolveUserRoleVariant = (provider) => {
   if (provider === "google")
     return {
       color: "warning",
-      icon:'<svg aria-hidden="true" class="native svg-icon iconGoogle" width="18" height="18" viewBox="0 0 18 18"><path d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18Z" fill="#4285F4"></path><path d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17Z" fill="#34A853"></path><path d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07Z" fill="#FBBC05"></path><path d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3Z" fill="#EA4335"></path></svg>',
+      icon: '<svg aria-hidden="true" class="native svg-icon iconGoogle" width="18" height="18" viewBox="0 0 18 18"><path d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18Z" fill="#4285F4"></path><path d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17Z" fill="#34A853"></path><path d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07Z" fill="#FBBC05"></path><path d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3Z" fill="#EA4335"></path></svg>',
     };
   if (provider === "facebook")
     return {
       color: "success",
-      icon:'<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.4922 3.29117 17.2155 7.59375 17.8906V11.6016H5.30859V9H7.59375V7.01719C7.59375 4.76156 8.9374 3.51562 10.9932 3.51562C11.9779 3.51562 13.0078 3.69141 13.0078 3.69141V5.90625H11.8729C10.7549 5.90625 10.4062 6.6 10.4062 7.31175V9H12.9023L12.5033 11.6016H10.4062V17.8906C14.7088 17.2155 18 13.4922 18 9Z" fill="#1877F2"/></svg>',
+      icon: '<svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.4922 3.29117 17.2155 7.59375 17.8906V11.6016H5.30859V9H7.59375V7.01719C7.59375 4.76156 8.9374 3.51562 10.9932 3.51562C11.9779 3.51562 13.0078 3.69141 13.0078 3.69141V5.90625H11.8729C10.7549 5.90625 10.4062 6.6 10.4062 7.31175V9H12.9023L12.5033 11.6016H10.4062V17.8906C14.7088 17.2155 18 13.4922 18 9Z" fill="#1877F2"/></svg>',
     };
 
   return {
@@ -186,7 +180,7 @@ const resolveUserRoleVariant = provider => {
   };
 };
 
-const resolveUserStatusVariant = stat => {
+const resolveUserStatusVariant = (stat) => {
   if (stat === "false") return "error";
   if (stat === "true") return "success";
   if (stat === "inactive") return "secondary";
@@ -206,16 +200,10 @@ const paginationData = computed(() => {
   const firstIndex = users.value.length
     ? (page.value - 1) * rowPerPage.value + 1
     : 0;
-  const lastIndex =
-    users.value.length + (page.value - 1) * rowPerPage.value;
-    console.log("usersValue ",users.value.length);
-console.log("pageValue ",page.value);
-console.log("rowPerPage ",rowPerPage.value);
-console.log("----------- ");
+  const lastIndex = users.value.length + (page.value - 1) * rowPerPage.value;
+  
   return `Showing ${firstIndex} to ${lastIndex} of ${totalUsers.value} entries`;
 });
-
-
 
 const addNewUser = (userData) => {
   userListStore.addUser(userData);
@@ -224,8 +212,6 @@ const addNewUser = (userData) => {
   fetchUsers();
 };
 
-
-
 // 👉 List
 const userListMeta = [
   {
@@ -233,7 +219,7 @@ const userListMeta = [
     color: "primary",
     title: "Total de Usuarios",
     stats: totalUsers,
-    percentage: null ,
+    percentage: null,
     subtitle: "",
   },
   {
@@ -337,141 +323,154 @@ const userListMeta = [
 
 ]*/
 function convertToCSV(objArray) {
-    var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
-    var str = '';
+  var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+  var str = "";
 
-    for (var i = 0; i < array.length; i++) {
-        var line = '';
-        for (var index in array[i]) {
-            if (line != '') line += ','
+  for (var i = 0; i < array.length; i++) {
+    var line = "";
+    for (var index in array[i]) {
+      if (line != "") line += ",";
 
-            line += array[i][index];
-        }
-
-        str += line + '\r\n';
+      line += array[i][index];
     }
 
-    return str;
+    str += line + "\r\n";
+  }
+
+  return str;
 }
 
 function exportCSVFile(headers, items, fileTitle) {
-    if (headers) {
-        items.unshift(headers);
+  if (headers && items[0].wylexId !== "wylexId") {
+    items.unshift(headers);
+  }
+
+  // Convert Object to JSON
+  var jsonObject = JSON.stringify(items);
+
+  var csv = convertToCSV(jsonObject);
+
+  var exportedFilenmae = fileTitle + ".csv" || "export.csv";
+
+  var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  if (navigator.msSaveBlob) {
+    // IE 10+
+    navigator.msSaveBlob(blob, exportedFilenmae);
+  } else {
+    var link = document.createElement("a");
+    if (link.download !== undefined) {
+      // feature detection
+      // Browsers that support HTML5 download attribute
+      var url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", exportedFilenmae);
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
     }
-
-    // Convert Object to JSON
-    var jsonObject = JSON.stringify(items);
-
-    var csv = convertToCSV(jsonObject);
-
-    var exportedFilenmae = fileTitle + '.csv' || 'export.csv';
-
-    var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    if (navigator.msSaveBlob) { // IE 10+
-        navigator.msSaveBlob(blob, exportedFilenmae);
-    } else {
-        var link = document.createElement("a");
-        if (link.download !== undefined) { // feature detection
-            // Browsers that support HTML5 download attribute
-            var url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", exportedFilenmae);
-            link.style.visibility = 'hidden';
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    }
-}
-const fetchFullUsers = () =>{
-  
-}
- 
-const downloadFull = () => {
-  
-let headers = {
-  wylexId: 'wylexId',
-  site: 'site',
-  email: 'email',
-  first_name: 'first_name',
-  last_name: 'last_name',
-  avatar: 'avatar',
-  phone_prefix: 'phone_prefix',
-  phone_number: 'phone_number',
-  gender: 'gender',
-  birth_date: 'birth_date',
-  identification_type: 'identification_type',
-  identification_number:'identification_number',
-  country: 'country',
-  newsletter_opt_in: 'newsletter_opt_in',
-  provider: 'provider'
+  }
 }
 
-userListStore.fetchFullUsers()
-  .then((response) => {
-      usersFull.value = response.data;
-      let doc = [];
-      let docRaw = Array.from(usersFull.value);
+const fetchFullUsers = () => {
+userListStore
+      .countPageUsers()
+      .then((response) => {
 
-      let title = 'users_Full';
-
-      docRaw.forEach((item) => {
-        doc.push({
-          wylexId: item.wylexId,
-          site: item.site,
-          email: item.email,
-          first_name: item.first_name,
-          last_name: item.last_name,
-          avatar: item.avatar,
-          phone_prefix: item.phone_prefix,
-          phone_number: item.phone_number,
-          gender: item.gender,
-          birth_date: item.birth_date,
-          identification_type: item.identification_type,
-          identification_number:item.identification_number,
-          country: item.country,
-          newsletter_opt_in: item.newsletter_opt_in,
-          provider: item.provider
-        });   
-      });
-      exportCSVFile(headers, doc, title);
-    })
-  .catch((error) => {
+      let pages = Number(response.data);
+      for (let i = 1; i < pages+1; i++) {
+        userListStore.fetchFullUsers(i).then((res) => {   
+        
+          //console.log('res',res.data)
+          let array = Array.from(res.data);
+          console.log('array',array)
+          array.forEach((item) => {
+            usersFull.value.push({
+              wylexId: item.wylexId,
+              site: item.site,
+              email: item.email,
+              first_name: item.first_name,
+              last_name: item.last_name,
+              avatar: item.avatar,
+              phone_prefix: item.phone_prefix,
+              phone_number: item.phone_number,
+              gender: item.gender,
+              birth_date: item.birth_date,
+              identification_type: item.identification_type,
+              identification_number: item.identification_number,
+              country: item.country,
+              newsletter_opt_in: item.newsletter_opt_in,
+              provider: item.provider,
+            });
+          });
+        });
+      }
+     
+    }).catch((error) => {
       console.error(error);
     });
+};
+fetchFullUsers();
 
-}
+function downloadFull () {
+   
+       //console.log('usersFull.value',usersFull.value);
+      let headers = {
+        wylexId: "wylexId",
+        site: "site",
+        email: "email",
+        first_name: "first_name",
+        last_name: "last_name",
+        avatar: "avatar",
+        phone_prefix: "phone_prefix",
+        phone_number: "phone_number",
+        gender: "gender",
+        birth_date: "birth_date",
+        identification_type: "identification_type",
+        identification_number: "identification_number",
+        country: "country",
+        newsletter_opt_in: "newsletter_opt_in",
+        provider: "provider",
+      };
+      let doc = [];
+      doc = usersFull.value
+      let title = "users_full";
+      //console.log("usersFull", usersFull.value);
+      //console.log("doc", doc);
+      //if(usersFull.length > totalUsers){
+        exportCSVFile(headers, doc, title);
+     // }
 
-const downloadSection = ()=>{
+};
 
-let headers = {
-  wylexId: 'wylexId',
-  site: 'site',
-  email: 'email',
-  first_name: 'first_name',
-  last_name: 'last_name',
-  avatar: 'avatar',
-  phone_prefix: 'phone_prefix',
-  phone_number: 'phone_number',
-  gender: 'gender',
-  birth_date: 'birth_date',
-  identification_type: 'identification_type',
-  identification_number:'identification_number',
-  country: 'country',
-  newsletter_opt_in: 'newsletter_opt_in',
-  provider: 'provider'
-}
-let doc = [];
-let docRaw = Array.from(users.value);
+const downloadSection = () => {
+  let headers = {
+    wylexId: "wylexId",
+    site: "site",
+    email: "email",
+    first_name: "first_name",
+    last_name: "last_name",
+    avatar: "avatar",
+    phone_prefix: "phone_prefix",
+    phone_number: "phone_number",
+    gender: "gender",
+    birth_date: "birth_date",
+    identification_type: "identification_type",
+    identification_number: "identification_number",
+    country: "country",
+    newsletter_opt_in: "newsletter_opt_in",
+    provider: "provider",
+  };
+  let doc = [];
+  let docRaw = Array.from(users.value);
 
-let firstIndex = users.value.length
+  let firstIndex = users.value.length
     ? (page.value - 1) * rowPerPage.value + 1
     : 0;
-let lastIndex =
-    users.value.length + (page.value - 1) * rowPerPage.value;
-    console.log("usersValue ",users.value.length);
-let title = 'users_section_'+firstIndex+'_'+lastIndex;
-docRaw.forEach((item) => {
+  let lastIndex = users.value.length + (page.value - 1) * rowPerPage.value;
+  console.log("usersValue ", users.value.length);
+  let title = "users_section_" + firstIndex + "_" + lastIndex;
+  docRaw.forEach((item) => {
     doc.push({
       wylexId: item.wylexId,
       site: item.site,
@@ -484,20 +483,19 @@ docRaw.forEach((item) => {
       gender: item.gender,
       birth_date: item.birth_date,
       identification_type: item.identification_type,
-      identification_number:item.identification_number,
+      identification_number: item.identification_number,
       country: item.country,
       newsletter_opt_in: item.newsletter_opt_in,
-      provider: item.provider
-    });   
-});
+      provider: item.provider,
+    });
+  });
 
-exportCSVFile(headers, doc, title);
-}
+  exportCSVFile(headers, doc, title);
+};
 </script>
 
 <template>
   <section>
-    
     <VRow>
       <VCol
         v-for="meta in userListMeta"
@@ -515,9 +513,10 @@ exportCSVFile(headers, doc, title);
                   {{ meta.stats }}
                 </h6>
                 <span
-                  class="text-success" :hidden="meta.percentage ? false : true " 
-                  >({{ meta.percentage }}%) </span
-                >
+                  class="text-success"
+                  :hidden="meta.percentage ? false : true"
+                  >({{ meta.percentage }}%)
+                </span>
               </div>
               <span>{{ meta.subtitle }}</span>
             </div>
@@ -533,38 +532,30 @@ exportCSVFile(headers, doc, title);
       </VCol>
 
       <VCol cols="12">
-       
         <VCard title="Filtro de búsqueda">
           <!-- 👉 Filters -->
-          
-            <VCardText>
-            <VRow>
-              
-            <VCol
-            cols="12"
-            sm="4"
-            >
-            <VSelect
-            v-model="selectedProvider"
-            label="Proveedor"
-            :items="listProvider"
-            clearable
-            clear-icon="tabler-x"
-            />
-            </VCol>
 
-            <VCol
-            cols="12"
-            sm="4"
-            >
-            <VSelect
-            v-model="selectedBoletin"
-            label="Boletín"
-            :items="listBoletin"
-            clearable
-            clear-icon="tabler-x"
-            />
-            </VCol>
+          <VCardText>
+            <VRow>
+              <VCol cols="12" sm="4">
+                <VSelect
+                  v-model="selectedProvider"
+                  label="Proveedor"
+                  :items="listProvider"
+                  clearable
+                  clear-icon="tabler-x"
+                />
+              </VCol>
+
+              <VCol cols="12" sm="4">
+                <VSelect
+                  v-model="selectedBoletin"
+                  label="Boletín"
+                  :items="listBoletin"
+                  clearable
+                  clear-icon="tabler-x"
+                />
+              </VCol>
               <!--
             <VCol
             cols="12"
@@ -580,9 +571,8 @@ exportCSVFile(headers, doc, title);
             </VCol>
               -->
             </VRow>
-            </VCardText> 
-        
-            
+          </VCardText>
+
           <VDivider />
 
           <VCardText class="d-flex flex-wrap py-4 gap-4">
@@ -597,9 +587,7 @@ exportCSVFile(headers, doc, title);
 
             <VSpacer />
 
-            <div
-              class="d-flex align-center flex-wrap gap-2"
-            >
+            <div class="d-flex align-center flex-wrap gap-2">
               <!-- 👉 Search  -->
               <div style="width: 10rem">
                 <VTextField
@@ -609,35 +597,28 @@ exportCSVFile(headers, doc, title);
                 />
               </div>
               <!-- 👉 Search button -->
-              <VBtn
-                prepend-icon="tabler-search"
-                @click="searchUsers"
-              >
+              <VBtn prepend-icon="tabler-search" @click="searchUsers">
                 Buscar
               </VBtn>
               <!-- 👉 Reset button -->
-              <VBtn
-                color="secondary"
-                @click="reset"
-              >
-              Reiniciar
-              </VBtn>
+              <VBtn color="secondary" @click="reset"> Reiniciar </VBtn>
               <!-- 👉 Export button -->
-              <VBtn 
-               variant="tonal"
+              <VBtn
+                :disabled="usersFull.length < totalUsers-1"
+                variant="tonal"
                 color="success"
                 prepend-icon="tabler-screen-share"
                 @click="downloadFull"
               >
-              Exportar Todo
+                Exportar Todo
               </VBtn>
               <VBtn
-              variant="tonal"
+                variant="tonal"
                 color="success"
                 prepend-icon="tabler-screen-share"
                 @click="downloadSection"
               >
-              Exportar sección
+                Exportar sección
               </VBtn>
 
               <!-- 👉 Add user button -->
@@ -645,20 +626,16 @@ exportCSVFile(headers, doc, title);
                 prepend-icon="tabler-plus"
                 @click="isAddNewUserDrawerVisible = true"
               >
-              Agregar usuario
+                Agregar usuario
               </VBtn>
             </div>
           </VCardText>
 
           <VDivider />
           <div class="loader-section" :class="{ loaded: isLoaded }">
-              <VProgressCircular
-               indeterminate
-              color="primary"
-             />
-             </div>
+            <VProgressCircular indeterminate color="primary" />
+          </div>
           <VTable class="text-no-wrap" :class="{ loaded: isLoading }">
-            
             <!-- 👉 table head -->
             <thead>
               <tr>
@@ -697,9 +674,9 @@ exportCSVFile(headers, doc, title);
                           {{ user.first_name }} {{ user.last_name }}
                         </RouterLink>
                       </h6>
-                      <span class="text-sm text-disabled"
-                        >{{ user.email }}</span
-                      >
+                      <span class="text-sm text-disabled">{{
+                        user.email
+                      }}</span>
                     </div>
                   </div>
                 </td>
@@ -708,11 +685,10 @@ exportCSVFile(headers, doc, title);
                 <td>
                   <div class="d-flex align-center">
                     <VAvatar
-                      class="me-3"                 
+                      class="me-3"
                       v-html="resolveUserRoleVariant(user.provider).icon"
                       variant="tonal"
                       size="30"
-                   
                     />
                     <div class="d-flex flex-column">
                       <span class="text-capitalize text-base">{{
@@ -748,16 +724,14 @@ exportCSVFile(headers, doc, title);
                 <td class="text-center" style="width: 5rem">
                   <VBtn icon size="x-small" color="default" variant="text">
                     <RouterLink
-                          :to="{
-                            name: 'apps-user-view-id',
-                            params: { id: user.wylexId },
-                          }"
-                          class="font-weight-medium user-list-name"
-                        >
-                    <VIcon size="22" icon="tabler-eye" />
-                  </RouterLink>
-                          
-                        
+                      :to="{
+                        name: 'apps-user-view-id',
+                        params: { id: user.wylexId },
+                      }"
+                      class="font-weight-medium user-list-name"
+                    >
+                      <VIcon size="22" icon="tabler-eye" />
+                    </RouterLink>
                   </VBtn>
 
                   <VBtn icon size="x-small" color="default" variant="text">
@@ -844,7 +818,7 @@ svg {
   color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
 }
 
-.loader-section{
+.loader-section {
   width: 100vw;
   height: 100vh;
   max-width: 100%;
@@ -855,13 +829,12 @@ svg {
   align-items: center;
   //background-color: rgba(114, 111, 116, 0.2);
   margin-top: -5%;
-  z-index:999;
+  z-index: 999;
   //transition: all 1s 1s ease-out;
-  opacity:1;
+  opacity: 1;
 }
-.loaded{
-  opacity:0;
-  z-index:-1;
+.loaded {
+  opacity: 0;
+  z-index: -1;
 }
-  
 </style>
