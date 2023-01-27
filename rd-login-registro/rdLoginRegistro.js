@@ -273,8 +273,8 @@ function register() {
                 // enviar el token generado al localstorage
                 //localStorage.setItem('access_token', result.access_token);
                 if (res) {
-                  var getToken = res;
-                  console.log(res);
+                  var getToken = res.access_token;
+                  console.log('token',res.access_token);
                   var myHeaders = new Headers();
                   myHeaders.append("Authorization", "Bearer " + getToken);
                   myHeaders.append("Content-Type", "application/json");
