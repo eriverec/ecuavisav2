@@ -1,5 +1,5 @@
 const sheetId = '1dh26Aop4ljyzCCprLXvAq5dZ7iRd-saMrCkbbkN-Xsg';
-const base = `https://docs.google.com/spreadsheets/d/1dh26Aop4ljyzCCprLXvAq5dZ7iRd-saMrCkbbkN-Xsg/gviz/tq?`;
+const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?`;
 const sheetName = 'embed';
 const query = encodeURIComponent('Select *');
 const url = `${base}&sheet=${sheetName}&tq=${query}`;
@@ -20,7 +20,6 @@ function init() {
 
       var xValues = ["Italy", "France", "Spain", "USA", "Argentina","Ecuador"];
       var colz = [];
-      console.log(colz);
       const tr = document.createElement('tr');
    
 
@@ -29,8 +28,6 @@ function init() {
 
         if (heading.label) {
           var column = heading.label;
-
-       
           colz.push(column);
           const th = document.createElement('th');
           th.innerText = column;
@@ -66,6 +63,7 @@ function init() {
           row[ele] = (rowData.c[ind] != null) ? rowData.c[ind].v : '';
         })
         data.push(row);
+        console.log(row);
       })
       processRows(data);
     })
