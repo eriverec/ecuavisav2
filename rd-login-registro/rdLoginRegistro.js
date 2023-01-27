@@ -1,21 +1,20 @@
-var URL_principal_G = 'https://www.ecuavisa.com/';
-var URL_login_G = 'https://www.ecuavisa.com/servicios/login';
-var URL_perfil_G = 'https://www.ecuavisa.com/servicios/perfil';
-var UserId = localStorage.getItem('wylexUserId');
+var URL_principal_G = "https://www.ecuavisa.com/";
+var URL_login_G = "https://www.ecuavisa.com/servicios/login";
+var URL_perfil_G = "https://www.ecuavisa.com/servicios/perfil";
+var UserId = localStorage.getItem("wylexUserId");
 window.onload = () => {
-document.getElementById("forgetButton").disabled=false;
-let btnLogGoogle = document.getElementById("aLogGoogle");
+  document.getElementById("forgetButton").disabled = false;
+  let btnLogGoogle = document.getElementById("aLogGoogle");
   btnLogGoogle.setAttribute("href", "#");
   btnLogGoogle.setAttribute("onclick", "validateLogSocials();");
-let btnLogFacebook = document.getElementById("aLogFacebook");
+  let btnLogFacebook = document.getElementById("aLogFacebook");
   btnLogFacebook.setAttribute("href", "#");
   btnLogFacebook.setAttribute("onclick", "validateLogSocials();");
-
-}
-if (UserId){
-   /*Si existe sesión lo 
+};
+if (UserId) {
+  /*Si existe sesión lo 
    va a redireccionar al perfil */
-   window.location = URL_perfil_G;
+  window.location = URL_perfil_G;
 }
 
 //Animacion de cambio de tabs
@@ -172,221 +171,228 @@ function fb_login() {
 }
 
 function login() {
-let cboxTerm = document.getElementById('checkTerms');
-  if(cboxTerm.checked == true ) {
-     
-    var URL_login_G = 'https://www.ecuavisa.com/servicios/login';
-  document.getElementById("logEmail").required = true;
-  document.getElementById("logPass").required = true;
+  let cboxTerm = document.getElementById("checkTerms");
+  if (cboxTerm.checked == true) {
+    var URL_login_G = "https://www.ecuavisa.com/servicios/login";
+    document.getElementById("logEmail").required = true;
+    document.getElementById("logPass").required = true;
 
-  let email = document.getElementById("logEmail").value;
-  let password = document.getElementById("logPass").value;
-  //servicio render Luis
-  fetch("https://ecuavisa-login-service.onrender.com/signIn", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/x-www-form-urlencoded",
-    },
-    body: new URLSearchParams({
-      email: email,
-      password: password
-    }),
-  })
-    .then((response) => response.json())
-    .then(async (result) => {
-      console.log(result);
-      if (result.token) {
-        window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
-      }else{alert("Nombre de usuario o contraseña incorrecto")}
-    })
-    .catch((error) => {
-      console.log("error", error); /*; window.location = URL_login_G*/
-    });
-    
-      }else{
-        alert("Acepte los términos y condiciones antes de continuar");
-        return false;
-      }
-  
-}
-
-function register() {
-
-  let cboxTermReg = document.getElementById('checkTermsReg');
-  if(cboxTermReg.checked == true ) {
-  document.getElementById("regName").required = true;
-  document.getElementById("regEmail").required = true;
-  document.getElementById("regPass").required = true;
-  document.getElementById("regConf").required = true;
-
-  let name = document.getElementById("regName").value.trim().split(" ");
-  let email = document.getElementById("regEmail").value.trim();
-  let password = document.getElementById("regPass").value;
-  let passwordConf = document.getElementById("regConf").value;
-  let token;
-
-  if (password !== passwordConf) {
-    console.log("Las contraseñas no coinciden");
-  } else {
+    let email = document.getElementById("logEmail").value;
+    let password = document.getElementById("logPass").value;
     //servicio render Luis
-    fetch("https://ecuavisa-login-service.onrender.com/register", {
+    fetch("https://ecuavisa-login-service.onrender.com/signIn", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
       body: new URLSearchParams({
         email: email,
-        nombre: name[0],
-        apellido: name[1],
         password: password,
       }),
     })
       .then((response) => response.json())
       .then(async (result) => {
-        token = result.token;
         console.log(result);
         if (result.token) {
-
-          var myHeadersToken = new Headers();
-          myHeadersToken.append("Content-Type", "application/json");
-          myHeadersToken.append("Cookie", "PHPSESSID=yc872Ui82h2kwQcHr7dvo9RjQ8TXYsU7kArdxCMx; XDEBUG_SESSION=PHPSTORM");
-          
-          var rawToken = JSON.stringify({
-            "grant_type": "client_credentials",
-            "client_id": "c79f7382012df0ea4c6fa37afec6374e",
-            "client_secret": "164551af334e1ec93e1b3099afd93a88"
-          });
-          
-          var requestOptionsToken = {
-            method: 'POST',
-            headers: myHeadersToken,
-            body: rawToken,
-            redirect: 'follow'
-          };
-          
-         await fetch("https://api.sendpulse.com/oauth/access_token", requestOptionsToken)
-            .then(response => response.json())
-            .then(async (result) => {
-              // enviar el token generado al localstorage
-              //localStorage.setItem('access_token', result.access_token);
-
-            var getToken =result;
-
-            var myHeaders = new Headers();
-            myHeaders.append("Authorization", "Bearer " + getToken);
-            myHeaders.append("Content-Type", "application/json");
-            myHeaders.append("Cookie", "PHPSESSID=yc872Ui82h2kwQcHr7dvo9RjQ8TXYsU7kArdxCMx; XDEBUG_SESSION=PHPSTORM");
-            let date_ob = new Date();
-            let date = ("0" + date_ob.getDate()).slice(-2);
-            let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-            let year = date_ob.getFullYear();
-            let hours = date_ob.getHours();
-            let minutes = date_ob.getMinutes();
-            let seconds = date_ob.getSeconds();
-            let localDate =
-              year +
-              "-" +
-              month +
-              "-" +
-              date +
-              " " +
-              hours +
-              ":" +
-              minutes +
-              ":" +
-              seconds;
-                   
-            var raw = JSON.stringify({
-              "emails": [
-                {
-                  "email": email,
-                  //variables que debes de tomar en cuenta al enviar los datos del registro al sendpulse
-                  "variables": {
-                     "nombre": name[0],
-                     "apellido": name[1],
-                     "proveedor": "email",
-                     "sitio": "ecuavisa",
-                     "fechadecreacion": localDate
-                  }
-                },
-                
-              ]
-            });
-            
-            var requestOptions = {
-              method: 'POST',
-              headers: myHeaders,
-              body: raw,
-              redirect: 'follow'
-            };
-            
-            await fetch("https://api.sendpulse.com/addressbooks/403420/emails", requestOptions)
-              .then(response => response.text())
-              .then(result => {
-                console.log(result)
-                if(result){
-                   //window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
-                }
-              })
-              .catch(error => console.log('error', error));  
-            })
-            .catch(error => console.log('error', error));
-          
-         
+          window.location =
+            "https://www.ecuavisa.com/servicios/perfil?tk=" + result.token;
+        } else {
+          alert("Nombre de usuario o contraseña incorrecto");
         }
       })
       .catch((error) => {
         console.log("error", error); /*; window.location = URL_login_G*/
       });
+  } else {
+    alert("Acepte los términos y condiciones antes de continuar");
+    return false;
   }
-  }else{
-  alert("Acepte los términos y condiciones antes de continuar");
-  return false;
+}
+
+function register() {
+  let cboxTermReg = document.getElementById("checkTermsReg");
+  if (cboxTermReg.checked == true) {
+    document.getElementById("regName").required = true;
+    document.getElementById("regEmail").required = true;
+    document.getElementById("regPass").required = true;
+    document.getElementById("regConf").required = true;
+
+    let name = document.getElementById("regName").value.trim().split(" ");
+    let email = document.getElementById("regEmail").value.trim();
+    let password = document.getElementById("regPass").value;
+    let passwordConf = document.getElementById("regConf").value;
+    let token;
+
+    if (password !== passwordConf) {
+      console.log("Las contraseñas no coinciden");
+    } else {
+      //servicio render Luis
+      fetch("https://ecuavisa-login-service.onrender.com/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: new URLSearchParams({
+          email: email,
+          nombre: name[0],
+          apellido: name[1],
+          password: password,
+        }),
+      })
+        .then((response) => response.json())
+        .then(async (result) => {
+          token = result.token;
+          console.log(result);
+          if (result.token) {
+            var myHeadersToken = new Headers();
+            myHeadersToken.append("Content-Type", "application/json");
+            myHeadersToken.append(
+              "Cookie",
+              "PHPSESSID=yc872Ui82h2kwQcHr7dvo9RjQ8TXYsU7kArdxCMx; XDEBUG_SESSION=PHPSTORM"
+            );
+
+            var rawToken = JSON.stringify({
+              grant_type: "client_credentials",
+              client_id: "c79f7382012df0ea4c6fa37afec6374e",
+              client_secret: "164551af334e1ec93e1b3099afd93a88",
+            });
+
+            var requestOptionsToken = {
+              method: "POST",
+              headers: myHeadersToken,
+              body: rawToken,
+              redirect: "follow",
+            };
+
+            await fetch(
+              "https://api.sendpulse.com/oauth/access_token",
+              requestOptionsToken
+            )
+              .then((response) => response.json())
+              .then(async (res) => {
+                // enviar el token generado al localstorage
+                //localStorage.setItem('access_token', result.access_token);
+                if (res) {
+                  var getToken = res;
+                  console.log(res);
+                  var myHeaders = new Headers();
+                  myHeaders.append("Authorization", "Bearer " + getToken);
+                  myHeaders.append("Content-Type", "application/json");
+                  myHeaders.append(
+                    "Cookie",
+                    "PHPSESSID=yc872Ui82h2kwQcHr7dvo9RjQ8TXYsU7kArdxCMx; XDEBUG_SESSION=PHPSTORM"
+                  );
+                  let date_ob = new Date();
+                  let date = ("0" + date_ob.getDate()).slice(-2);
+                  let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
+                  let year = date_ob.getFullYear();
+                  let hours = date_ob.getHours();
+                  let minutes = date_ob.getMinutes();
+                  let seconds = date_ob.getSeconds();
+                  let localDate =
+                    year +
+                    "-" +
+                    month +
+                    "-" +
+                    date +
+                    " " +
+                    hours +
+                    ":" +
+                    minutes +
+                    ":" +
+                    seconds;
+
+                  var raw = JSON.stringify({
+                    emails: [
+                      {
+                        email: email,
+                        //variables que debes de tomar en cuenta al enviar los datos del registro al sendpulse
+                        variables: {
+                          nombre: name[0],
+                          apellido: name[1],
+                          proveedor: "email",
+                          sitio: "ecuavisa",
+                          fechadecreacion: localDate,
+                        },
+                      },
+                    ],
+                  });
+
+                  var requestOptions = {
+                    method: "POST",
+                    headers: myHeaders,
+                    body: raw,
+                    redirect: "follow",
+                  };
+
+                  await fetch(
+                    "https://api.sendpulse.com/addressbooks/403420/emails",
+                    requestOptions
+                  )
+                    .then((response) => response.text())
+                    .then((result) => {
+                      console.log(result);
+                      if (result) {
+                        //window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
+                      }
+                    })
+                    .catch((error) => console.log("error", error));
+                }
+              })
+              .catch((error) => console.log("error", error));
+          }
+        })
+        .catch((error) => {
+          console.log("error", error); /*; window.location = URL_login_G*/
+        });
+    }
+  } else {
+    alert("Acepte los términos y condiciones antes de continuar");
+    return false;
   }
 }
 
 function sendEmailPassReset() {
-
-
-let email = document.getElementById("forgetEmail").value.trim();
+  let email = document.getElementById("forgetEmail").value.trim();
   //servicio render Luis
   fetch("https://ecuavisa-login-service.onrender.com/forgotPassword", {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        email: email
-      }),
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      email: email,
+    }),
+  })
+    .then((response) => response.json())
+    .then(async (result) => {
+      if (!result.error) {
+        alert(result.mensaje);
+        $("#exampleModal").modal("hide");
+      } else {
+        alert("Email inválido");
+      }
     })
-      .then((response) => response.json())
-      .then(async (result) => {
-       
-        if(!result.error){
-          alert(result.mensaje);
-          $('#exampleModal').modal('hide');
-         
-        }else{
-          alert("Email inválido");
-        }
-       
-      })
-      .catch((error) => {
-        console.log("error", error); /*; window.location = URL_login_G*/
-      });
-
+    .catch((error) => {
+      console.log("error", error); /*; window.location = URL_login_G*/
+    });
 }
 
-function validateLogSocials(){
-  let check = document.getElementById('checkTerms');
-  if(check.checked == true ) {
+function validateLogSocials() {
+  let check = document.getElementById("checkTerms");
+  if (check.checked == true) {
     let btnGoogle = document.getElementById("aLogGoogle");
-    btnGoogle.setAttribute("href", "https://ecuavisa-login-service.onrender.com/auth/google"); //servicio render Luis
+    btnGoogle.setAttribute(
+      "href",
+      "https://ecuavisa-login-service.onrender.com/auth/google"
+    ); //servicio render Luis
 
     let btnFacebook = document.getElementById("aLogFacebook");
-    btnFacebook.setAttribute("href", "https://ecuavisa-login-service.onrender.com/auth/facebook"); //servicio render Luis
-    
-      }else{
-        alert("Acepte los términos y condiciones para continuar"); 
-      }
+    btnFacebook.setAttribute(
+      "href",
+      "https://ecuavisa-login-service.onrender.com/auth/facebook"
+    ); //servicio render Luis
+  } else {
+    alert("Acepte los términos y condiciones para continuar");
   }
+}
