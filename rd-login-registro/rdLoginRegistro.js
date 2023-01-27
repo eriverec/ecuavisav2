@@ -332,14 +332,16 @@ function register() {
                     .then((response) => response.text())
                     .then((result) => {
                       console.log('result email:',result);
-                      if (result) {
-                        //window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
-                      }
+                      
                     })
                     .catch((error) => console.log("error", error));
                 }
               })
               .catch((error) => console.log("error", error));
+
+              
+              window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
+             
           }
         })
         .catch((error) => {
