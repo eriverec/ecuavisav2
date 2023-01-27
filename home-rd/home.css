@@ -798,6 +798,17 @@ Cambio de tamaño de imagen grande izq
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
     height: 207px !important;
   }
+  .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .text_block h3 {
+    font-size: 30px;
+    text-align: center;
+}
+
+.HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .text_block {
+    bottom: 20px;
+   }
+
+
+
 }
 
 
@@ -1564,6 +1575,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   .portlet-boundary.portlet-static-end.velocitycontainer-portlet.titulo_programa_web {
     margin-top: 0px;
   }
+
 }
 
 
