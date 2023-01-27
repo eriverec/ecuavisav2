@@ -242,7 +242,7 @@ function register() {
         .then((response) => response.json())
         .then(async (result) => {
           token = result.token;
-          console.log(result);
+          console.log('token registro',result);
           if (result.token) {
             var myHeadersToken = new Headers();
             myHeadersToken.append("Content-Type", "application/json");
@@ -274,7 +274,7 @@ function register() {
                 //localStorage.setItem('access_token', result.access_token);
                 if (res) {
                   var getToken = res.access_token;
-                  console.log('token',res.access_token);
+                  console.log('token mail',res.access_token);
                   var myHeaders = new Headers();
                   myHeaders.append("Authorization", "Bearer " + getToken);
                   myHeaders.append("Content-Type", "application/json");
@@ -331,7 +331,7 @@ function register() {
                   )
                     .then((response) => response.text())
                     .then((result) => {
-                      console.log(result);
+                      console.log('result email:',result);
                       if (result) {
                         //window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
                       }
