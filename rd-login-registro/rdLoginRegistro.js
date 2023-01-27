@@ -223,7 +223,7 @@ function register() {
   let email = document.getElementById("regEmail").value.trim();
   let password = document.getElementById("regPass").value;
   let passwordConf = document.getElementById("regConf").value;
-
+  let token;
 
   if (password !== passwordConf) {
     console.log("Las contraseñas no coinciden");
@@ -243,7 +243,7 @@ function register() {
     })
       .then((response) => response.json())
       .then(async (result) => {
-        
+        token = result.token;
         console.log(result);
         if (result.token) {
 
@@ -324,13 +324,15 @@ function register() {
               .then(response => response.text())
               .then(result => {
                 console.log(result)
-                
+                if(result){
+                   //window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
+                }
               })
               .catch(error => console.log('error', error));  
             })
             .catch(error => console.log('error', error));
           
-          window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
+         
         }
       })
       .catch((error) => {
