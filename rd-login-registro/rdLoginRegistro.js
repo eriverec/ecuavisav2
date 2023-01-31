@@ -196,7 +196,7 @@ function login() {
         if (result.token) {
           let redirect = "https://www.ecuavisa.com/servicios/perfil?tk=" + result.token;
           //console.log("https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url);
-          window.location = redirect;
+          window.location = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
             
         } else {
           alert("Nombre de usuario o contraseña incorrecto");

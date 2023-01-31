@@ -39,33 +39,33 @@ async function Token(){
         localStorage.wylexAvatar=result.avatar;
       }*/
       window.history.replaceState({}, document.title, "/servicios/perfil");
-      let email = result.email;
-      let pass = result.password;
-      let _id = result._id;
 
-      await fetch("https://ecuavisa-login-service.onrender.com/encrypt", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-      body: new URLSearchParams({
-        email: email,
-        password: pass,
-        _id: _id
-      }),
-    })
-      .then((response) => response.json())
-      .then(async (result) => {
-        console.log(result);
+    //   let email = result.email;
+    //   let pass = result.password;
+    //   let _id = result._id;
+    //   await fetch("https://ecuavisa-login-service.onrender.com/encrypt", {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "application/x-www-form-urlencoded",
+    //   },
+    //   body: new URLSearchParams({
+    //     email: email,
+    //     password: pass,
+    //     _id: _id
+    //   }),
+    // })
+    //   .then((response) => response.json())
+    //   .then(async (result) => {
+    //     console.log(result);
        
-         let redirect = "https://www.ecuavisa.com/servicios/perfil";
-          console.log("url","https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url);
-        window.location = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
+    //      let redirect = "https://www.ecuavisa.com/servicios/perfil";
+    //       console.log("url","https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url);
+    //     window.location = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
           
-      })
-      .catch((error) => {
-        console.log("error", error); /*; window.location = URL_login_G*/
-      });
+    //   })
+    //   .catch((error) => {
+    //     console.log("error", error); /*; window.location = URL_login_G*/
+    //   });
 
 
       }
