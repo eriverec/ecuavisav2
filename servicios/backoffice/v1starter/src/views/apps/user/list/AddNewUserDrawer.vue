@@ -79,7 +79,7 @@ const handleDrawerModelValueUpdate = val => {
     <!-- 👉 Title -->
     <div class="d-flex align-center pa-6 pb-1">
       <h6 class="text-h6">
-        Add User
+        Agregar usuario
       </h6>
 
       <VSpacer />
@@ -115,7 +115,7 @@ const handleDrawerModelValueUpdate = val => {
                 <VTextField
                   v-model="fullName"
                   :rules="[requiredValidator]"
-                  label="Full Name"
+                  label="Nombre completo"
                 />
               </VCol>
 
@@ -133,7 +133,7 @@ const handleDrawerModelValueUpdate = val => {
                 <VTextField
                   v-model="company"
                   :rules="[requiredValidator]"
-                  label="Company"
+                  label="Compañía"
                 />
               </VCol>
 
@@ -142,7 +142,7 @@ const handleDrawerModelValueUpdate = val => {
                 <VTextField
                   v-model="country"
                   :rules="[requiredValidator]"
-                  label="Country"
+                  label="País"
                 />
               </VCol>
 
@@ -152,7 +152,7 @@ const handleDrawerModelValueUpdate = val => {
                   v-model="contact"
                   type="number"
                   :rules="[requiredValidator]"
-                  label="Contact"
+                  label="Contacto"
                 />
               </VCol>
 

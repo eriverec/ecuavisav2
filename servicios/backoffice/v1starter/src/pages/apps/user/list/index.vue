@@ -592,7 +592,7 @@ const downloadSection = () => {
               <div style="width: 10rem">
                 <VTextField
                   v-model="searchQuery"
-                  placeholder="Search"
+                  placeholder="Buscar..."
                   density="compact"
                 />
               </div>
