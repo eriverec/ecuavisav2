@@ -1,7 +1,7 @@
 const sheetId = '1dh26Aop4ljyzCCprLXvAq5dZ7iRd-saMrCkbbkN-Xsg';
 const base = `https://docs.google.com/spreadsheets/d/${sheetId}/gviz/tq?`;
 const sheetName = 'embed';
-const query = encodeURIComponent('Select *');
+const query = encodeURIComponent('Select B,C');
 const url = `${base}&sheet=${sheetName}&tq=${query}`;
 
 const data = []
@@ -63,7 +63,7 @@ function init() {
           row[ele] = (rowData.c[ind] != null) ? rowData.c[ind].v : '';
         })
         data.push(row);
-        console.log(row);
+        console.log('row',row);
       })
       processRows(data);
     })
@@ -74,7 +74,8 @@ function processRows(json) {
   json.forEach((row) => {
     const tr = document.createElement('tr');
     const keys = Object.keys(row);
-
+    console.log('keys',row);
+    localStorage.setItem('rowsLocal',keys);
     keys.forEach((key) => {
       const td = document.createElement('td');
       td.textContent = row[key];
