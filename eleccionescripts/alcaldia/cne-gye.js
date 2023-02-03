@@ -192,7 +192,59 @@ series.set("heatRules", [
 
 series.data.setAll(data);
 yAxis.data.setAll(data);
+sortCategoryAxis();
+  
+  // Get series item by category
+function getSeriesItem(category) {
+  for (var i = 0; i < series.dataItems.length; i++) {
+    var dataItem = series.dataItems[i];
+    if (dataItem.get("categoryY") == category) {
+      return dataItem;
+    }
+  }
+}
+  
+  // Axis sorting
+function sortCategoryAxis() {
 
+  // Sort by value
+  series.dataItems.sort(function(x, y) {
+    return x.get("valueX") - y.get("valueX"); // descending
+    //return y.get("valueY") - x.get("valueX"); // ascending
+  })
+
+  // Go through each axis item
+  am5.array.each(yAxis.dataItems, function(dataItem) {
+    // get corresponding series item
+    var seriesDataItem = getSeriesItem(dataItem.get("category"));
+
+    if (seriesDataItem) {
+      // get index of series data item
+      var index = series.dataItems.indexOf(seriesDataItem);
+      // calculate delta position
+      var deltaPosition = (index - dataItem.get("index", 0)) / series.dataItems.length;
+      // set index to be the same as series data item index
+      dataItem.set("index", index);
+      // set deltaPosition instanlty
+      dataItem.set("deltaPosition", -deltaPosition);
+      // animate delta position to 0
+      dataItem.animate({
+        key: "deltaPosition",
+        to: 0,
+        duration: 1000,
+        easing: am5.ease.out(am5.ease.cubic)
+      })
+    }
+  });
+
+  // Sort axis items by index.
+  // This changes the order instantly, but as deltaPosition is set,
+  // they keep in the same places and then animate to true positions.
+  yAxis.dataItems.sort(function(x, y) {
+    return x.get("index") - y.get("index");
+  });
+}
+  
 var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
 cursor.lineX.set("visible", false);
 cursor.lineY.set("visible", false);
