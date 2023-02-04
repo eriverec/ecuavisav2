@@ -1,9 +1,9 @@
 // Create root element
 // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-var root = am5.Root.new("chart_cne_gye");
-var divElement = document.querySelector('#chart_cne_gye');
+var root = am5.Root.new("chart_cne_cuenca");
+var divElement = document.querySelector('#chart_cne_cuenca');
 divElement.setAttribute("style", "height:1000px;");
-{/* <div id="chart_cne_gye" class="amchartDOM" style="width: 100%;"></div> */}
+{/* <div id="chart_cne_cuenca" class="amchartDOM" style="width: 100%;"></div> */}
 
 // Set themes
 // https://www.amcharts.com/docs/v5/concepts/themes/
