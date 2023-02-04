@@ -1,23 +1,23 @@
 // Create root element
 // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-var rootgye = am5.Root.new("chart_cne_gye");
+var root = am5.Root.new("chart_cne_gye");
 var divElementGye = document.querySelector('#chart_cne_gye');
 divElementGye.setAttribute("style", "height:1000px;");
 {/* <div id="chart_cne_gye" class="amchartDOM" style="width: 100%;"></div> */}
 
 // Set themes
 // https://www.amcharts.com/docs/v5/concepts/themes/
-rootgye.setThemes([
-  am5themes_Animated.new(rootgye)
+root.setThemes([
+  am5themes_Animated.new(root)
 ]);
 
-var datagye = [];
-function setNewDataGye(seteado){
-  var datagye = seteado; 
-  console.log(datagye);
+var data = [];
+function setNewData(seteado){
+  var data = seteado; 
+  console.log(data);
   
- var chart = rootgye.container.children.push(
-  am5xy.XYChart.new(rootgye, {
+ var chart = root.container.children.push(
+  am5xy.XYChart.new(root, {
     panX: false,
     panY: false,
     wheelX: "none",
@@ -30,22 +30,22 @@ function setNewDataGye(seteado){
 // Create axes
 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
 
-var yRenderer = am5xy.AxisRendererY.new(rootgye, {});
+var yRenderer = am5xy.AxisRendererY.new(root, {});
 yRenderer.grid.template.set("visible", false);
 
 var yAxis = chart.yAxes.push(
-  am5xy.CategoryAxis.new(rootgye, {
+  am5xy.CategoryAxis.new(root, {
     categoryField: "name",
     renderer: yRenderer,
     paddingRight:40
   })
 );
 
-var xRenderer = am5xy.AxisRendererX.new(rootgye, {});
+var xRenderer = am5xy.AxisRendererX.new(root, {});
 xRenderer.grid.template.set("strokeDasharray", [3]);
 
 var xAxis = chart.xAxes.push(
-  am5xy.ValueAxis.new(rootgye, {
+  am5xy.ValueAxis.new(root, {
     min: 0,
     renderer: xRenderer
   })
@@ -54,7 +54,7 @@ var xAxis = chart.xAxes.push(
 // Add series
 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
 var series = chart.series.push(
-  am5xy.ColumnSeries.new(rootgye, {
+  am5xy.ColumnSeries.new(root, {
     name: "Income",
     xAxis: xAxis,
     yAxis: yAxis,
@@ -63,7 +63,7 @@ var series = chart.series.push(
     sequencedInterpolation: true,
     calculateAggregates: true,
     maskBullets: false,
-    tooltip: am5.Tooltip.new(rootgye, {
+    tooltip: am5.Tooltip.new(root, {
       dy: -30,
       pointerOrientation: "vertical",
       labelText: "{valueX}"
@@ -72,10 +72,10 @@ var series = chart.series.push(
 );
 
   series.bullets.push(function() {
-    return am5.Bullet.new(rootgye, {
+    return am5.Bullet.new(root, {
       locationX: 1,
       locationY: 1.3,
-      sprite: am5.Label.new(rootgye, {
+      sprite: am5.Label.new(root, {
         centerY: am5.p50,
         text: "{valueX}",
         populateText: true
@@ -132,11 +132,11 @@ function handleOut() {
 
 var circleTemplate = am5.Template.new({});
 
-series.bullets.push(function(rootgye, series, dataItem) {
-  var bulletContainer = am5.Container.new(rootgye, {});
+series.bullets.push(function(root, series, dataItem) {
+  var bulletContainer = am5.Container.new(root, {});
   var circle = bulletContainer.children.push(
     am5.Circle.new(
-      rootgye,
+      root,
       {
         radius: 34
       },
@@ -145,19 +145,19 @@ series.bullets.push(function(rootgye, series, dataItem) {
   );
 
   var maskCircle = bulletContainer.children.push(
-    am5.Circle.new(rootgye, { radius: 27 })
+    am5.Circle.new(root, { radius: 27 })
   );
 
   // only containers can be masked, so we add image to another container
   var imageContainer = bulletContainer.children.push(
-    am5.Container.new(rootgye, {
+    am5.Container.new(root, {
       mask: maskCircle
     })
   );
 
   // not working
   var image = imageContainer.children.push(
-    am5.Picture.new(rootgye, {
+    am5.Picture.new(root, {
       templateField: "pictureSettings",
       centerX: am5.p50,
       centerY: am5.p50,
@@ -166,7 +166,7 @@ series.bullets.push(function(rootgye, series, dataItem) {
     })
   );
 
-  return am5.Bullet.new(rootgye, {
+  return am5.Bullet.new(root, {
     locationX: 0,
     sprite: bulletContainer
   });
@@ -190,8 +190,8 @@ series.set("heatRules", [
   }
 ]);
 
-series.datagye.setAll(datagye);
-yAxis.datagye.setAll(datagye);
+series.data.setAll(data);
+yAxis.data.setAll(data);
 sortCategoryAxis();
   
   // Get series item by category
@@ -245,7 +245,7 @@ function sortCategoryAxis() {
   });
 }
   
-var cursor = chart.set("cursor", am5xy.XYCursor.new(rootgye, {}));
+var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
 cursor.lineX.set("visible", false);
 cursor.lineY.set("visible", false);
 
@@ -264,7 +264,7 @@ cursor.events.on("cursormoved", function() {
 series.appear();
 chart.appear(1000, 100); 
 }
-function getDataGye(){
+function getData(){
   let fetchRes = fetch(
     "https://script.google.com/macros/s/AKfycbyrFmU8NcPDhbHKBwJDK2bhloCgfcd28JKjOYW5rfIUBGIRCO5f4Apl_tBiWAeb5nyanQ/exec?funcion=alcaldesGuayaquil");
     // "https://script.google.com/macros/s/AKfycbxRYY3e5CT04dP8xqBBufGqx_FM8QJK4HQG0M3EIof5u5r-cJANbOW62SiA-HjqFae9/exec?funcion=TestgetCandidatosGYENew");
@@ -272,8 +272,8 @@ function getDataGye(){
     // fetchRes is the promise to resolve 
     // it by using.then() method
     fetchRes.then(res => res.json()).then(d => {
-      setNewDataGye(d);
+      setNewData(d);
     })
 }
 
-getDataGye();
+getData();
