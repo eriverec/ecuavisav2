@@ -266,7 +266,7 @@ chart.appear(1000, 100);
 }
 function getData(){
   let fetchRes = fetch(
-    "https://script.google.com/macros/s/AKfycbzDzk8UTvacXaiU32DOVCKFYmxBF0uJ5SLaSdBuHw0FIPa-9jTbMUgOl-rDshRdC6D27Q/exec");
+    "https://script.google.com/macros/s/AKfycbyrFmU8NcPDhbHKBwJDK2bhloCgfcd28JKjOYW5rfIUBGIRCO5f4Apl_tBiWAeb5nyanQ/exec?funcion=alcaldesGuayaquil");
     // "https://script.google.com/macros/s/AKfycbxRYY3e5CT04dP8xqBBufGqx_FM8QJK4HQG0M3EIof5u5r-cJANbOW62SiA-HjqFae9/exec?funcion=TestgetCandidatosGYENew");
   
     // fetchRes is the promise to resolve 
