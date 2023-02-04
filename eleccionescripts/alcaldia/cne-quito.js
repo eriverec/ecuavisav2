@@ -1,8 +1,8 @@
 // Create root element
 // https://www.amcharts.com/docs/v5/getting-started/#Root_element
 var root = am5.Root.new("chart_cne_quito");
-var divElement = document.querySelector('#chart_cne_quito');
-divElement.setAttribute("style", "height:1000px;");
+var divElementQuito = document.querySelector('#chart_cne_quito');
+divElementQuito.setAttribute("style", "height:1000px;");
 {/* <div id="chart_cne_quito" class="amchartDOM"></div> */}
 
 // Set themes
