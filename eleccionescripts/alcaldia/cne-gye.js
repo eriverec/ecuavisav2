@@ -11,10 +11,10 @@ rootgye.setThemes([
   am5themes_Animated.new(rootgye)
 ]);
 
-var data = [];
+var datagye = [];
 function setNewData(seteado){
-  var data = seteado; 
-  console.log(data);
+  var datagye = seteado; 
+  console.log(datagye);
   
  var chart = rootgye.container.children.push(
   am5xy.XYChart.new(rootgye, {
@@ -190,8 +190,8 @@ series.set("heatRules", [
   }
 ]);
 
-series.data.setAll(data);
-yAxis.data.setAll(data);
+series.datagye.setAll(datagye);
+yAxis.datagye.setAll(datagye);
 sortCategoryAxis();
   
   // Get series item by category
@@ -264,7 +264,7 @@ cursor.events.on("cursormoved", function() {
 series.appear();
 chart.appear(1000, 100); 
 }
-function getData(){
+function getDataGye(){
   let fetchRes = fetch(
     "https://script.google.com/macros/s/AKfycbyrFmU8NcPDhbHKBwJDK2bhloCgfcd28JKjOYW5rfIUBGIRCO5f4Apl_tBiWAeb5nyanQ/exec?funcion=alcaldesGuayaquil");
     // "https://script.google.com/macros/s/AKfycbxRYY3e5CT04dP8xqBBufGqx_FM8QJK4HQG0M3EIof5u5r-cJANbOW62SiA-HjqFae9/exec?funcion=TestgetCandidatosGYENew");
@@ -276,4 +276,4 @@ function getData(){
     })
 }
 
-getData();
+getDataGye();
