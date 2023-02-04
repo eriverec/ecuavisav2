@@ -12,7 +12,7 @@ rootgye.setThemes([
 ]);
 
 var datagye = [];
-function setNewData(seteado){
+function setNewDataGye(seteado){
   var datagye = seteado; 
   console.log(datagye);
   
@@ -272,7 +272,7 @@ function getDataGye(){
     // fetchRes is the promise to resolve 
     // it by using.then() method
     fetchRes.then(res => res.json()).then(d => {
-      setNewData(d);
+      setNewDataGye(d);
     })
 }
 
