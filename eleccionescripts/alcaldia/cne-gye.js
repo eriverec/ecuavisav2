@@ -1,14 +1,14 @@
 // Create root element
 // https://www.amcharts.com/docs/v5/getting-started/#Root_element
-var root = am5.Root.new("chart_cne_gye");
+var rootgye = am5.Root.new("chart_cne_gye");
 var divElementGye = document.querySelector('#chart_cne_gye');
 divElementGye.setAttribute("style", "height:1000px;");
 {/* <div id="chart_cne_gye" class="amchartDOM" style="width: 100%;"></div> */}
 
 // Set themes
 // https://www.amcharts.com/docs/v5/concepts/themes/
-root.setThemes([
-  am5themes_Animated.new(root)
+rootgye.setThemes([
+  am5themes_Animated.new(rootgye)
 ]);
 
 var data = [];
@@ -16,8 +16,8 @@ function setNewData(seteado){
   var data = seteado; 
   console.log(data);
   
- var chart = root.container.children.push(
-  am5xy.XYChart.new(root, {
+ var chart = rootgye.container.children.push(
+  am5xy.XYChart.new(rootgye, {
     panX: false,
     panY: false,
     wheelX: "none",
@@ -30,22 +30,22 @@ function setNewData(seteado){
 // Create axes
 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
 
-var yRenderer = am5xy.AxisRendererY.new(root, {});
+var yRenderer = am5xy.AxisRendererY.new(rootgye, {});
 yRenderer.grid.template.set("visible", false);
 
 var yAxis = chart.yAxes.push(
-  am5xy.CategoryAxis.new(root, {
+  am5xy.CategoryAxis.new(rootgye, {
     categoryField: "name",
     renderer: yRenderer,
     paddingRight:40
   })
 );
 
-var xRenderer = am5xy.AxisRendererX.new(root, {});
+var xRenderer = am5xy.AxisRendererX.new(rootgye, {});
 xRenderer.grid.template.set("strokeDasharray", [3]);
 
 var xAxis = chart.xAxes.push(
-  am5xy.ValueAxis.new(root, {
+  am5xy.ValueAxis.new(rootgye, {
     min: 0,
     renderer: xRenderer
   })
@@ -54,7 +54,7 @@ var xAxis = chart.xAxes.push(
 // Add series
 // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
 var series = chart.series.push(
-  am5xy.ColumnSeries.new(root, {
+  am5xy.ColumnSeries.new(rootgye, {
     name: "Income",
     xAxis: xAxis,
     yAxis: yAxis,
@@ -63,7 +63,7 @@ var series = chart.series.push(
     sequencedInterpolation: true,
     calculateAggregates: true,
     maskBullets: false,
-    tooltip: am5.Tooltip.new(root, {
+    tooltip: am5.Tooltip.new(rootgye, {
       dy: -30,
       pointerOrientation: "vertical",
       labelText: "{valueX}"
@@ -72,10 +72,10 @@ var series = chart.series.push(
 );
 
   series.bullets.push(function() {
-    return am5.Bullet.new(root, {
+    return am5.Bullet.new(rootgye, {
       locationX: 1,
       locationY: 1.3,
-      sprite: am5.Label.new(root, {
+      sprite: am5.Label.new(rootgye, {
         centerY: am5.p50,
         text: "{valueX}",
         populateText: true
@@ -132,11 +132,11 @@ function handleOut() {
 
 var circleTemplate = am5.Template.new({});
 
-series.bullets.push(function(root, series, dataItem) {
-  var bulletContainer = am5.Container.new(root, {});
+series.bullets.push(function(rootgye, series, dataItem) {
+  var bulletContainer = am5.Container.new(rootgye, {});
   var circle = bulletContainer.children.push(
     am5.Circle.new(
-      root,
+      rootgye,
       {
         radius: 34
       },
@@ -145,19 +145,19 @@ series.bullets.push(function(root, series, dataItem) {
   );
 
   var maskCircle = bulletContainer.children.push(
-    am5.Circle.new(root, { radius: 27 })
+    am5.Circle.new(rootgye, { radius: 27 })
   );
 
   // only containers can be masked, so we add image to another container
   var imageContainer = bulletContainer.children.push(
-    am5.Container.new(root, {
+    am5.Container.new(rootgye, {
       mask: maskCircle
     })
   );
 
   // not working
   var image = imageContainer.children.push(
-    am5.Picture.new(root, {
+    am5.Picture.new(rootgye, {
       templateField: "pictureSettings",
       centerX: am5.p50,
       centerY: am5.p50,
@@ -166,7 +166,7 @@ series.bullets.push(function(root, series, dataItem) {
     })
   );
 
-  return am5.Bullet.new(root, {
+  return am5.Bullet.new(rootgye, {
     locationX: 0,
     sprite: bulletContainer
   });
@@ -245,7 +245,7 @@ function sortCategoryAxis() {
   });
 }
   
-var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
+var cursor = chart.set("cursor", am5xy.XYCursor.new(rootgye, {}));
 cursor.lineX.set("visible", false);
 cursor.lineY.set("visible", false);
 
