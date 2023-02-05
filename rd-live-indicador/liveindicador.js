@@ -2,7 +2,16 @@
 
 
 function actDIV() {
-  var indicador = document.querySelector('.enVivoRedy .liveIndicator');
+  // var indicador = document.querySelector('.enVivoRedy .liveIndicator');
+  var indicadorEleciones = document.querySelector('.eleccionesEnvivoBanner');
+
+  if(indicadorEleciones){
+    indicadorEleciones.style.display= 'block';
+    console.log('si hay banner elecciones')
+  }else{
+    console.log('no hay banner elecciones');
+  }
+
   var margtop = document.querySelector('.movil .hm-r02');
   // indicador.classList.add('pard__envivo');
   document.querySelector('.enVivoRedy').style.display= 'flex';
