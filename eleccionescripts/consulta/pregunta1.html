@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pregunta 1</title>
+  </head>
+  <body>
+    <div id="chart_cne" class="amchartDOM"></div>
+
+    <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
+    <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
+    <script>
+      
+      // https://www.amcharts.com/docs/v5/getting-started/#Root_element
+      var root = am5.Root.new("chart_cne");
+      var divElement = document.querySelector("#chart_cne");
+      divElement.setAttribute("style", "height:250px;");
+      // Set themes
+      // https://www.amcharts.com/docs/v5/concepts/themes/
+      root.setThemes([am5themes_Animated.new(root)]);
+
+      // datos obtenidos del url
+      var data = [];
+      function setNewData(seteado) {
+        var data = seteado;
+
+        var data = data[Object.keys(data)[0]];
+
+        // data = JSON.parse(JSON.stringify(data).push('"year":""'));
+        data = JSON.parse(
+          JSON.stringify(data).split('"porcentajeCneNo":').join('"expenses":')
+        );
+        data = [
+          JSON.parse(
+            JSON.stringify(data).split('"porcentajeCneSi":').join('"income":')
+          ),
+        ];
+        console.log(data);
+        // console.log(data[Object.keys(data)[1]]);
+
+        // Create chart
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/
+        var chart = root.container.children.push(
+          am5xy.XYChart.new(root, {
+            panX: false,
+            panY: false,
+            wheelX: "none",
+            wheelY: "none",
+            layout: root.verticalLayout,
+          })
+        );
+
+        // Add legend
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
+        var legend = chart.children.push(
+          am5.Legend.new(root, {
+            centerX: am5.p50,
+            x: am5.p50,
+          })
+        );
+
+        // Create axes
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
+        var yAxis = chart.yAxes.push(
+          am5xy.CategoryAxis.new(root, {
+            categoryField: "year",
+            renderer: am5xy.AxisRendererY.new(root, {
+              inversed: true,
+              cellStartLocation: 0.1,
+              cellEndLocation: 0.9,
+            }),
+          })
+        );
+
+        yAxis.data.setAll(data);
+
+        var xAxis = chart.xAxes.push(
+          am5xy.ValueAxis.new(root, {
+            renderer: am5xy.AxisRendererX.new(root, {
+              strokeOpacity: 0.1,
+            }),
+            min: 0,
+          })
+        );
+
+        // Add series
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/series/
+        function createSeries(field, name) {
+          var series = chart.series.push(
+            am5xy.ColumnSeries.new(root, {
+              name: name,
+              xAxis: xAxis,
+              yAxis: yAxis,
+              valueXField: field,
+              categoryYField: "year",
+              sequencedInterpolation: true,
+              // tooltip: am5.Tooltip.new(root, {
+              //   pointerOrientation: "horizontal",
+              //   labelText: "[bold]{name}[/]\n{categoryY}: {valueX}"
+              // })
+            })
+          );
+
+          series.columns.template.setAll({
+            height: am5.p100,
+            strokeOpacity: 0,
+          });
+
+          series.bullets.push(function () {
+            return am5.Bullet.new(root, {
+              locationX: 1,
+              locationY: 0.5,
+              sprite: am5.Label.new(root, {
+                centerY: am5.p50,
+                text: "{valueX}%",
+                populateText: true,
+              }),
+            });
+          });
+
+          series.bullets.push(function () {
+            return am5.Bullet.new(root, {
+              locationX: 1,
+              locationY: 0.5,
+              sprite: am5.Label.new(root, {
+                centerX: am5.p100,
+                centerY: am5.p50,
+                text: "{name}",
+                fill: am5.color(0xffffff),
+                populateText: true,
+              }),
+            });
+          });
+
+          series.data.setAll(data);
+          series.appear();
+
+          return series;
+        }
+
+        createSeries("income", "Si");
+        createSeries("expenses", "No");
+
+        // Add legend
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/legend-xy-series/
+        var legend = chart.children.push(
+          am5.Legend.new(root, {
+            centerX: am5.p50,
+            x: am5.p50,
+          })
+        );
+
+        legend.data.setAll(chart.series.values);
+
+        // Add cursor
+        // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
+        var cursor = chart.set(
+          "cursor",
+          am5xy.XYCursor.new(root, {
+            behavior: "zoomY",
+          })
+        );
+        cursor.lineY.set("forceHidden", true);
+        cursor.lineX.set("forceHidden", true);
+
+        // Make stuff animate on load
+        // https://www.amcharts.com/docs/v5/concepts/animations/
+        chart.appear(1000, 100);
+      }
+
+      function getData() {
+        let fetchRes = fetch(
+          "https://script.google.com/macros/s/AKfycbxwC5hnMXqDMPAbhnGMtLrRdlo3G48piay-26yk4W2lI5i7aQAogdalAHve6jntTPul4g/exec?funcion=getConsultaPopular"
+        );
+        // "https://script.google.com/macros/s/AKfycbxRYY3e5CT04dP8xqBBufGqx_FM8QJK4HQG0M3EIof5u5r-cJANbOW62SiA-HjqFae9/exec?funcion=TestgetCandidatosGYENew");
+
+        // fetchRes is the promise to resolve
+        // it by using.then() method
+        fetchRes
+          .then((res) => res.json())
+          .then((d) => {
+            setNewData(d);
+          });
+      }
+
+      getData();
+    </script>
+  </body>
+</html>
