@@ -297,7 +297,7 @@
         fetchRes
           .then((res) => res.json())
           .then((d) => {
-            var tEscru = d[0].totalEscrutado;
+             var tEscru = d[0].totalEscrutado;
             var divEscru = document.querySelector('.escrutadoElecciones');
             if(divEscru){
               console.log('d:',tEscru);
