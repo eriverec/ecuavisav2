@@ -9,7 +9,7 @@
 .conetenedor__general .escrutadoElecciones {
   position: absolute;
   left: 0px;
-  bottom: 0px;
+  bottom: -8px;
   background: #e43d3d;
   color: #fff;
   padding: 5px;
