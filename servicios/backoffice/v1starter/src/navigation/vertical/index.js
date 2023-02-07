@@ -31,10 +31,4 @@ export default [
     ],
 
   },
-
-  {
-    title: 'Cerrar sesión',
-    to: { name: 'login' },
-    icon: { icon: 'tabler-logout' },
-  },
 ]
