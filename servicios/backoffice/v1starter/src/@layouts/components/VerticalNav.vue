@@ -1,6 +1,8 @@
 <script setup>
 import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
 import { VNodeRenderer } from './VNodeRenderer'
+import { initialAbility } from '@/plugins/casl/ability'
+import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import {
   injectionKeyIsVerticalNavHovered,
   useLayouts,
@@ -70,6 +72,25 @@ const updateIsVerticalNavScrolled = val => isVerticalNavScrolled.value = val
 
 const handleNavScroll = evt => {
   isVerticalNavScrolled.value = evt.target.scrollTop > 0
+}
+const router = useRouter()
+const ability = useAppAbility()
+const userData = JSON.parse(localStorage.getItem('userData') || 'null')
+const logout = () => {
+
+  // Remove "userData" from localStorage
+  localStorage.removeItem('userData')
+
+  // Remove "accessToken" from localStorage
+  localStorage.removeItem('accessToken')
+  router.push('/login').then(() => {
+
+    // Remove "userAbilities" from localStorage
+    localStorage.removeItem('userAbilities')
+
+    // Reset ability to initial ability
+    ability.update(initialAbility)
+  })
 }
 </script>
 
@@ -153,6 +174,22 @@ const handleNavScroll = evt => {
           :key="index"
           :item="item"
         />
+        <li class="nav-group">
+          <VListItem
+            link
+            @click="logout"
+          >
+            <template #prepend>
+              <VIcon
+                class="me-2"
+                icon="tabler-logout"
+                size="22"
+              />
+            </template>
+
+            <VListItemTitle>Cerrar sesión</VListItemTitle>
+          </VListItem>
+        </li>
       </PerfectScrollbar>
     </slot>
   </Component>
