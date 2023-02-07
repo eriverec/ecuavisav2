@@ -176,7 +176,7 @@
 
 .listado__especiales .noticias .article .media_block {
   background-color: #060127;
-  border-radius: 5.0022px;
+  border-radius: 8px 8px 5.0022px 5.0022px;
 }
 
 .listado__especiales .noticias .article .text_block {
