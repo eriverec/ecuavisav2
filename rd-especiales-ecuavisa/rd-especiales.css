@@ -144,3 +144,80 @@
 }
 
 /*Portada - Fin*/
+
+
+
+/*Listado - inicio*/
+
+.listado__especiales .noticias {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  column-gap: 20px;
+}
+
+.listado__especiales .LIST_ESP_ECU {
+  position: relative;
+}
+
+
+.listado__especiales .noticias .article .media_block .multimedia img {
+  position: relative !important;
+  height: 285px !important;
+  object-fit: cover;
+  width: 100% !important;
+  border-radius: 5.0022px;
+  -webkit-mask-image: linear-gradient(to top, #00000029 0, #060127 60%);
+}
+
+
+.listado__especiales .noticias .article .media_block {
+  background-color: #060127;
+  border-radius: 5.0022px;
+}
+
+.listado__especiales .noticias .article .text_block {
+  position: absolute;
+  width: 100%;
+  height: 40%;
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  justify-content: end;
+  bottom: 0;
+  padding-bottom: 8px;
+  padding-left: 15px;
+  padding-right: 15px;
+  z-index: 1;
+}
+
+.listado__especiales .noticias .article .text_block .headline {
+  margin-top: 2px;
+}
+
+.listado__especiales .noticias .article .text_block .section {
+  font-family: 'Mattone 150';
+  font-weight: 600;
+  color: #23DCD1;
+  text-transform: uppercase;
+  font-size: 10px;
+  line-height: 17px;
+}
+
+.listado__especiales .noticias .article .text_block .headline h3 {
+  color: #FFFFFF;
+  font-family: 'Anek Malayalam';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 16px;
+  line-height: 20px;
+  display: block;
+}
+
+
+
+@media (max-width: 767px) {
+  .listado__especiales .noticias {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+
+}
