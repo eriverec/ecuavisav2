@@ -137,6 +137,7 @@ const onSubmit = () => {
                   label="Correo"
                   type="email"
                   :rules="[requiredValidator, emailValidator]"
+                  :error-messages="errors.email"
                 />
               </VCol>
 
@@ -147,6 +148,7 @@ const onSubmit = () => {
                   label="Password"
                   :rules="[requiredValidator]"
                   :type="isPasswordVisible ? 'text' : 'password'"
+                  :error-messages="errors.password"
                   :append-inner-icon="isPasswordVisible ? 'tabler-eye-off' : 'tabler-eye'"
                   @click:append-inner="isPasswordVisible = !isPasswordVisible"
                 />
