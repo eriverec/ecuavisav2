@@ -1,4 +1,11 @@
-/*YOTRABAJOSOLO - ERI VERA*/
+/*YOTRABAJOSOLO - ERI VERA (6 feb - Prohibido Olvidar)*/
+
+/*Eliminar padding top*/
+#iter-content-wrapper {
+  padding-top: 0px !important;
+}
+
+
 /*Portada - Inicio*/
 
 .notas-1-p-ap .noticias .article .text_block .section {
