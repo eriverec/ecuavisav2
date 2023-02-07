@@ -1,5 +1,8 @@
 <script setup>
+import { VForm } from 'vuetify/components'
+import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
+import axios from '@axios'
 import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
 import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
 import { themeConfig } from '@themeConfig'
@@ -17,9 +20,47 @@ import authV2MaskLight from '@/assets/images/pages/misc-mask-light.png'
 const authThemeImg = useGenerateImageVariant(authV2LoginIllustrationLight, authV2LoginIllustrationDark, authV2LoginIllustrationBorderedLight, authV2LoginIllustrationBorderedDark, true)
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
 const isPasswordVisible = ref(false)
+const route = useRoute()
+const router = useRouter()
+const ability = useAppAbility()
+const errors = ref({
+  email: undefined,
+  password: undefined,
+})
+
+const refVForm = ref()
 const email = ref('admin@demo.com')
 const password = ref('admin')
 const rememberMe = ref(false)
+
+const login = () => {
+  axios.post('/auth/login', {
+    email: email.value,
+    password: password.value,
+  }).then(r => {
+    const { accessToken, userData, userAbilities } = r.data
+
+    localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
+    ability.update(userAbilities)
+    localStorage.setItem('userData', JSON.stringify(userData))
+    localStorage.setItem('accessToken', JSON.stringify(accessToken))
+
+    // Redirect to `to` query if exist or redirect to index route
+    router.replace(route.query.to ? String(route.query.to) : '/')
+  }).catch(e => {
+    const { errors: formErrors } = e.response.data
+
+    errors.value = formErrors
+    console.error(e.response.data)
+  })
+}
+
+const onSubmit = () => {
+  refVForm.value?.validate().then(({ valid: isValid }) => {
+    if (isValid)
+      login()
+  })
+}
 </script>
 
 <template>
@@ -84,13 +125,16 @@ const rememberMe = ref(false)
           </VAlert>
         </VCardText>
         <VCardText>
-          <VForm @submit.prevent="() => {}">
+          <VForm
+            ref="refVForm"
+            @submit.prevent="onSubmit"
+          >
             <VRow>
               <!-- email -->
               <VCol cols="12">
                 <VTextField
                   v-model="email"
-                  label="Correo C2"
+                  label="Correo"
                   type="email"
                   :rules="[requiredValidator, emailValidator]"
                 />
