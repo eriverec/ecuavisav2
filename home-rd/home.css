@@ -162,7 +162,8 @@
   }
 
   .HOME_MENU_RD .cintillo-rd {
-    font-size: 55px;
+    /*font-size: 55px;*/
+    font-size: 49px;
     line-height: 24px;
     margin-bottom: 20px;
   }
