@@ -8,39 +8,59 @@ var time_jquery = setInterval(function() {
 }, 500);
 
 let init_jquery = function(){
-    //swiperProgramasGlobal();
+    swiperProgramasGlobal();
     cardsTemasDestacados();
     changeTitleMasVisto();
 }
 
 function swiperProgramasGlobal() {
-    $('.notaSwiper .noticias').addClass('swiper-wrapper');
-    $('.swiper-wrapper .article').addClass('swiper-slide');
+    $('.bloque-programas.notaSwiper .noticias').addClass('swiper-wrapper');
+    $('.bloque-programas.notaSwiper .article').addClass('swiper-slide');
+    var items = document.querySelectorAll('.bloque-programas.notaSwiper');
+    for(var i in items){
+        if(typeof items[i].innerHTML != 'undefined'){
+            if(items[i].querySelector('div') != null){
+                var idTemp = `notaSwiper${items[i].id}`;
+                items[i].classList.add(idTemp);
+            }
+        }
+    }
 
-    var notaSwiper = new Swiper(".notaSwiper", {
-        slidesPerView: 1,
-        slidesPerColumn: 2,
-        spaceBetween: 30,
+    for(var i in items){
+        if(typeof items[i].innerHTML != 'undefined'){
+            if(typeof items[i].innerHTML != 'undefined'){
+                if(items[i].querySelector('div') != null){
+                    var idTemp = `notaSwiper${items[i].id}`;
+                    var notaSwiper = new Swiper(`.${idTemp}`, {
+                        slidesPerView: 1,
+                        slidesPerColumn: 2,
+                        spaceBetween: 30,
 
-        breakpoints: {
-            360: {
-                slidesPerView: 1.5,
-                spaceBetween: 20,
-            },
-            768: {
-                slidesPerView: 3,
-                spaceBetween: 30,
-            },
-            1024: {
-                slidesPerView: 3.5,
-                spaceBetween: 30,
-            },
-            1200: {
-                slidesPerView: 4.5,
-                spaceBetween: 30,
-            },
-        },
-    });
+                        breakpoints: {
+                            360: {
+                                slidesPerView: 1.5,
+                                spaceBetween: 20,
+                            },
+                            768: {
+                                slidesPerView: 3,
+                                spaceBetween: 30,
+                            },
+                            1024: {
+                                slidesPerView: 3.5,
+                                spaceBetween: 30,
+                            },
+                            1200: {
+                                slidesPerView: 4.5,
+                                spaceBetween: 30,
+                            },
+                        },
+                    });
+                }
+            }
+        }
+    }
+
+    
 }
 
 function cardsTemasDestacados() {
