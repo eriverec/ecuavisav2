@@ -8,8 +8,8 @@ var time_jquery = setInterval(function() {
 }, 500);
 
 let init_jquery = function(){
-    //swiperProgramasGlobal();
-    //cardsTemasDestacados();
+    swiperProgramasGlobal();
+    cardsTemasDestacados();
     changeTitleMasVisto();
 }
 
@@ -44,11 +44,11 @@ function swiperProgramasGlobal() {
 }
 
 function cardsTemasDestacados() {
-    $('.tarjeta-destacada').addClass('swiper');
-    $('.tarjeta-destacada .noticias').addClass('swiper-wrapper');
-    $('.tarjeta-destacada .noticias .article').addClass('swiper-slide');
+    $('.tarjeta-destacada.tarjetaSwiper').addClass('swiper');
+    $('.tarjeta-destacada.tarjetaSwiper .noticias').addClass('swiper-wrapper');
+    $('.tarjeta-destacada.tarjetaSwiper .noticias .article').addClass('swiper-slide');
 
-    var swiperProg = new Swiper(".tarjeta-destacada", {
+    var swiperProg = new Swiper(".tarjeta-destacada.tarjetaSwiper", {
         effect: "cards",
         grabCursor: true,
     });
