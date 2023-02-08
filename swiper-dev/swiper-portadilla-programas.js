@@ -8,7 +8,7 @@ var time_jquery = setInterval(function() {
 }, 500);
 
 let init_jquery = function(){
-    swiperProgramasGlobal();
+    //swiperProgramasGlobal();
     cardsTemasDestacados();
     changeTitleMasVisto();
 }
