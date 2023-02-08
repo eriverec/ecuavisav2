@@ -153,6 +153,18 @@
   margin-top: 3rem;
 }
 
+
+.listado__especiales .noticias .article .swiper-slide-shadow {
+  background: #2927B9;
+  border: 0.1px #716fcd solid;
+  border-radius: 5px;
+}
+
+.swiper.listado__especiales{
+  width: 100%!important;
+  padding: 0 40px;
+}
+
 /* .listado__especiales .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
