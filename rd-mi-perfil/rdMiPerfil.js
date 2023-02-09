@@ -12,12 +12,6 @@ document.addEventListener("end-event-rdMiperfil-temas", function(e) {
 });
 /*******FIN ESCUCHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
 
-/*******CAPTURA LOS ERRORES DE FECTH******/
-function catchErrorPerfil( error ){
-  console.log( error );
-}
-/*******CAPTURA LOS ERRORES DE FECTH******/
-
 logoutBtn = document.querySelector('.button_cerrar_sesion a');
 logoutBtn.addEventListener("click", function () {
   localStorage.clear();
