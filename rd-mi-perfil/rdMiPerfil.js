@@ -1,3 +1,23 @@
+/*******ESCUECHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
+document.addEventListener("end-event-rdMiperfil-temas", function(e) {
+  const queryString = window.location.search;
+  const urlParams = new URLSearchParams(queryString);
+  var myHeaders = new Headers();
+  const tk = urlParams.get('tk');
+  if(tk != null){
+    window.history.replaceState({}, document.title, "/servicios/perfil");
+  }
+  //console.log(e.detail); // Prints "Example of an event"
+  
+});
+/*******FIN ESCUCHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
+
+/*******CAPTURA LOS ERRORES DE FECTH******/
+function catchErrorPerfil( error ){
+  console.log( error );
+}
+/*******CAPTURA LOS ERRORES DE FECTH******/
+
 logoutBtn = document.querySelector('.button_cerrar_sesion a');
 logoutBtn.addEventListener("click", function () {
   localStorage.clear();
@@ -38,11 +58,7 @@ async function Token(){
       /*if(result.avatar){
         localStorage.wylexAvatar=result.avatar;
       }*/
-      setTimeout(() => {
-        window.history.replaceState({}, document.title, "/servicios/perfil");
-      }, 2000);
       
-
     //   let email = result.email;
     //   let pass = result.password;
     //   let _id = result._id;
