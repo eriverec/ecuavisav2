@@ -46,6 +46,7 @@ async function Token(){
     .then(response => {
       if( !response.ok ){
         catchErrorPerfil( response );
+        return false;
       } else {
         response.json()
       }
