@@ -149,14 +149,31 @@
 
 /*Listado - inicio*/
 
-.listado__especiales {
-  margin-top: 3rem;
+.parent-listado {
+  background: #2927B9;
+  padding: 60px 0;
 }
 
+.titulo__sec {
+  color: #FFFFFF;
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 20px;
+  text-align: center;
+}
+
+/* .listado__especiales {
+  margin-top: 3rem;
+} */
+
+#iter-footer-wrapper {
+  margin-top: 0px;
+}
 
 .listado__especiales .noticias .article .swiper-slide-shadow {
-  background: #2927B9;
-  border: 0.1px #716fcd solid;
+  background: #464549;
   border-radius: 5px;
 }
 
