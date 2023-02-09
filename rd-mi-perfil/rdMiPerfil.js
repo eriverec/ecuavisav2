@@ -8,6 +8,7 @@ document.addEventListener("end-event-rdMiperfil-temas", function(e) {
     window.history.replaceState({}, document.title, "/servicios/perfil");
   }
   //console.log(e.detail); // Prints "Example of an event"
+  
 });
 /*******FIN ESCUCHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
 
@@ -43,13 +44,7 @@ async function Token(){
   };
   //servicio Luis
   await fetch("https://ecuavisa-login-service.onrender.com/tasks", requestOptions)
-    .then(response => {
-      if( !response.ok ){
-        catchErrorPerfil( response );
-      } else {
-        response.json()
-      }
-    })
+    .then(response => response.json())
     .then (async (result) => {
       console.log(result); 
       if(result.message!='Usuario No Autorizado'){
