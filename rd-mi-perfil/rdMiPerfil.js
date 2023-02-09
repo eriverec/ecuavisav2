@@ -43,7 +43,13 @@ async function Token(){
   };
   //servicio Luis
   await fetch("https://ecuavisa-login-service.onrender.com/tasks", requestOptions)
-    .then(response => response.json())
+    .then(response => {
+      if( !response.ok ){
+        catchErrorPerfil( response );
+      } else {
+        response.json()
+      }
+    })
     .then (async (result) => {
       console.log(result); 
       if(result.message!='Usuario No Autorizado'){
@@ -96,7 +102,7 @@ async function Token(){
     })
     .catch(error => {
       console.log('error', error); 
-      window.location = URL_login_G // comentar para modificar el modelo web
+      //window.location = URL_login_G // comentar para modificar el modelo web
     });
 
     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
