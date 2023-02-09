@@ -39,7 +39,7 @@ async function Token(){
         localStorage.wylexAvatar=result.avatar;
       }*/
       setTimeout(() => {
-        window.history.replaceState({}, document.title, "/servicios/perfil");
+        //window.history.replaceState({}, document.title, "/servicios/perfil");
       }, 1000);
       
 
