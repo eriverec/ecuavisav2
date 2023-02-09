@@ -46,7 +46,6 @@ async function Token(){
     .then(response => {
       if( !response.ok ){
         catchErrorPerfil( response );
-        return false;
       } else {
         response.json()
       }
@@ -103,7 +102,7 @@ async function Token(){
     })
     .catch(error => {
       console.log('error', error); 
-      //window.location = URL_login_G // comentar para modificar el modelo web
+      window.location = URL_login_G // comentar para modificar el modelo web
     });
 
     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
