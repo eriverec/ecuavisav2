@@ -38,8 +38,10 @@ async function Token(){
       /*if(result.avatar){
         localStorage.wylexAvatar=result.avatar;
       }*/
-      console.log('entro');
-      window.history.replaceState({}, document.title, "/servicios/perfil");
+      setTimeout(() => {
+        window.history.replaceState({}, document.title, "/servicios/perfil");
+      }, 1000);
+      
 
     //   let email = result.email;
     //   let pass = result.password;
