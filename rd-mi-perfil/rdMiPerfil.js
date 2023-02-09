@@ -1,9 +1,9 @@
 /*******ESCUECHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
-document.addEventListener("name-of-event", function(e) {
+document.addEventListener("end-event-rdMiperfil-temas", function(e) {
   //console.log(e.detail); // Prints "Example of an event"
   window.history.replaceState({}, document.title, "/servicios/perfil");
 });
-/*******FIN ESCUECHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
+/*******FIN ESCUCHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
 logoutBtn = document.querySelector('.button_cerrar_sesion a');
 logoutBtn.addEventListener("click", function () {
   localStorage.clear();
