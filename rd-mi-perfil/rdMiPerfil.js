@@ -6,7 +6,7 @@ logoutBtn.addEventListener("click", function () {
 });
 
 
-//Token()
+Token()
 async function Token(){
   var URL_principal_G = 'https://www.ecuavisa.com/';
   var URL_login_G = 'https://www.ecuavisa.com/servicios/login';
