@@ -194,7 +194,7 @@ function login() {
       .then(async (result) => {
         console.log(result);
         if (result.token) {
-          localStorage.wylexStatusPerfil=result.user_new;
+          localStorageSetUsuarioNew(result.user);
           let redirect = "https://www.ecuavisa.com/servicios/perfil?tk=" + result.token;
           //console.log("https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url);
           window.location = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
@@ -247,8 +247,7 @@ function register() {
           token = result.token;
           console.log('token registro',result);
           if (result.token) {
-              //estado:0 VERIFICA QUE EL USUARIO ES NUEVO
-              localStorage.wylexStatusPerfil=result.user.user_new;
+              localStorageSetUsuarioNew(result.user);
               window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
           }
         })
@@ -305,4 +304,10 @@ function validateLogSocials() {
   } else {
     alert("Acepte los términos y condiciones para continuar");
   }
+}
+
+function localStorageSetUsuarioNew(user){
+  //estado:0 VERIFICA QUE EL USUARIO ES NUEVO
+  localStorage.wylexStatusPerfil=user.user_new;
+  return true;
 }
