@@ -247,7 +247,7 @@ function register() {
           console.log('token registro',result);
           if (result.token) {
                        
-              window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
+              //window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
           }
         })
         .catch((error) => {
