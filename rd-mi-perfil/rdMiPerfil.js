@@ -4,6 +4,13 @@ document.addEventListener("end-event-rdMiperfil-temas", function(e) {
   window.history.replaceState({}, document.title, "/servicios/perfil");
 });
 /*******FIN ESCUCHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
+
+/*******CAPTURA LOS ERRORES DE FECTH******/
+function catchErrorPerfil( error ){
+  console.log( error );
+}
+/*******CAPTURA LOS ERRORES DE FECTH******/
+
 logoutBtn = document.querySelector('.button_cerrar_sesion a');
 logoutBtn.addEventListener("click", function () {
   localStorage.clear();
@@ -30,7 +37,13 @@ async function Token(){
   };
   //servicio Luis
   await fetch("https://ecuavisa-login-service.onrender.com/tasks", requestOptions)
-    .then(response => response.json())
+    .then(response => {
+      if( !response.ok ){
+        catchErrorPerfil( response );
+      } else {
+        response.json()
+      }
+    })
     .then (async (result) => {
       console.log(result); 
       if(result.message!='Usuario No Autorizado'){
