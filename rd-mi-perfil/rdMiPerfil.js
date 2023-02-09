@@ -39,8 +39,8 @@ async function Token(){
         localStorage.wylexAvatar=result.avatar;
       }*/
       setTimeout(() => {
-        //window.history.replaceState({}, document.title, "/servicios/perfil");
-      }, 1000);
+        window.history.replaceState({}, document.title, "/servicios/perfil");
+      }, 2000);
       
 
     //   let email = result.email;
