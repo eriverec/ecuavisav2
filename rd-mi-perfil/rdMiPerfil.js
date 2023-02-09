@@ -43,13 +43,7 @@ async function Token(){
   };
   //servicio Luis
   await fetch("https://ecuavisa-login-service.onrender.com/tasks", requestOptions)
-    .then(response => {
-      if( !response.ok ){
-        catchErrorPerfil( response );
-      } else {
-        response.json()
-      }
-    })
+    .then(response => response.json())
     .then (async (result) => {
       console.log(result); 
       if(result.message!='Usuario No Autorizado'){
