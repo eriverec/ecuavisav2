@@ -29,9 +29,10 @@ async function Token(){
       console.log(result); 
       if(result.message!='Usuario No Autorizado'){
         localStorage.wylexUserId=result.userId;
-      localStorage.wylexFirstName=result.first_name;
-      localStorage.wylexLastName=result.last_name;
-      localStorage.wylexEmail=result.email;
+        localStorage.wylexFirstName=result.first_name;
+        localStorage.wylexLastName=result.last_name;
+        localStorage.wylexEmail=result.email;
+        localStorage.wylexStatusPerfil=urlParams.get('estado');
 
       /*Añade el ícono de perfil si no existe con el || CR*/
       localStorage.wylexAvatar=result.avatar  || 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/usuario.png'
