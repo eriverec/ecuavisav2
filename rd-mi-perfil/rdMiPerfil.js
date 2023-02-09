@@ -1,3 +1,9 @@
+/*******ESCUECHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
+document.addEventListener("name-of-event", function(e) {
+  //console.log(e.detail); // Prints "Example of an event"
+  window.history.replaceState({}, document.title, "/servicios/perfil");
+});
+/*******FIN ESCUECHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
 logoutBtn = document.querySelector('.button_cerrar_sesion a');
 logoutBtn.addEventListener("click", function () {
   localStorage.clear();
@@ -38,11 +44,7 @@ async function Token(){
       /*if(result.avatar){
         localStorage.wylexAvatar=result.avatar;
       }*/
-      setTimeout(() => {
-        window.history.replaceState({}, document.title, "/servicios/perfil");
-      }, 2000);
       
-
     //   let email = result.email;
     //   let pass = result.password;
     //   let _id = result._id;
