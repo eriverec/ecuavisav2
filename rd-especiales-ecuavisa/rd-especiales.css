@@ -172,10 +172,10 @@
   margin-top: 0px;
 }
 
-.listado__especiales .noticias .article .swiper-slide-shadow {
+/* .listado__especiales .noticias .article .swiper-slide-shadow {
   background: #464549;
   border-radius: 5px;
-}
+} */
 
 .swiper.listado__especiales {
   width: 100% !important;
