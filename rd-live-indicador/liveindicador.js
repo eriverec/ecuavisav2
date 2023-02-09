@@ -1,22 +1,17 @@
-
-
-
 function actDIV() {
   // var indicador = document.querySelector('.enVivoRedy .liveIndicator');
-  var indicadorEleciones = document.querySelector('.eleccionesEnvivoBanner');
+  /*var indicadorEleciones = document.querySelector('.eleccionesEnvivoBanner');
 
   if(indicadorEleciones){
     indicadorEleciones.style.display= 'block';
     console.log('si hay banner elecciones')
   }else{
     console.log('no hay banner elecciones');
-  }
+  }*/
 
-  var margtop = document.querySelector('.movil .hm-r02');
+  // var margtop = document.querySelector('.movil .hm-r02');
   // indicador.classList.add('pard__envivo');
   document.querySelector('.enVivoRedy').style.display= 'flex';
-
-
 
   var devicesearch;
   var btest=navigator.userAgent.toLowerCase();
@@ -28,12 +23,12 @@ function actDIV() {
 
     devicesearch = "Mobile";
 
-    if(margtop == undefined){
-      console.log('no exite')
-    }else{
-      margtop.style.marginTop= '50px';
-      console.log('exite')
-    }
+    // if(margtop == undefined){
+    //   console.log('no exite');
+    // }else{
+    //   margtop.style.marginTop= '50px';
+    //   console.log('exite');
+    // }
 
   } else {
    

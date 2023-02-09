@@ -162,6 +162,7 @@
   font-size: 18px;
   line-height: 20px;
   text-align: center;
+  margin-bottom: 20px;
 }
 
 /* .listado__especiales {
@@ -287,7 +288,11 @@
   }
 }
 
-@media (max-width: 767px) {}
+@media (max-width: 767px) {
+  .swiper.listado__especiales{
+    margin-bottom: 40px;
+  }
+}
 
 @media (max-width: 575px) {
   .swiper.listado__especiales {
