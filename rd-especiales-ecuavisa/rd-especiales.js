@@ -1,4 +1,4 @@
-setTimeout(function () {
+function cardEpecialEcu(){
   $('.cardsLista').addClass('swiper');
   $('.cardsLista .noticias').addClass('swiper-wrapper');
   $('.cardsLista .noticias .article').addClass('swiper-slide');
@@ -7,5 +7,19 @@ setTimeout(function () {
     effect: "cards",
     grabCursor: true,
   });
-}, 300);
+}
+
+function swiperGoEspEcua() {
+  setTimeout(function () {
+    if (typeof Swiper === "undefined") {
+      swiperGoEspEcua();
+    } else {
+      cardEpecialEcu();
+    }
+  }, 300);
+}
+
+$(document).ready(function () {
+  swiperGoEspEcua();
+});
 
