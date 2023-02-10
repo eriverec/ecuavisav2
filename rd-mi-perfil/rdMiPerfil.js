@@ -13,14 +13,16 @@ logoutBtn.addEventListener("click", function () {
   window.location.href = ECUAVISA_EC.URL_login();;
 });
 
+var URL_principal_G = ECUAVISA_EC.URL_principal();
+var URL_login_G = ECUAVISA_EC.URL_login();
+
 if(!ECUAVISA_EC.login()){
   /*SI NO ESTÁ INICIADO SESIÓN MANDA LA FUNCIÓN DE TOKEN()*/
   Token();
 }
 
 async function Token(){
-  var URL_principal_G = ECUAVISA_EC.URL_principal();
-  var URL_login_G = ECUAVISA_EC.URL_login();
+  
     
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -92,8 +94,7 @@ async function Token(){
       window.location = URL_login_G // comentar para modificar el modelo web
     });
 }
-    var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
-    if (!UserId){
+    if (!ECUAVISA_EC.login()){
         /*Si no existe sesión lo 
         va a redireccionar al login */
         window.location = URL_login_G; // comentar para modificar el modelo web
@@ -117,24 +118,28 @@ async function Token(){
     }
     
     function DataEntrada() {
-      const getFirstName = localStorage.getItem('wylexFirstName');
+      /***********ECUAVISA_EC.USER_data(): OBTIENE LA DATA DEL USUARIO DEL LOCALSTORAGE - main_ecuavisa.js*************/
+      var dataUser = ECUAVISA_EC.USER_data();
+      /***********ECUAVISA_EC.USER_data(): OBTIENE LA DATA DEL USUARIO DEL LOCALSTORAGE - main_ecuavisa.js*************/
+      
+      const getFirstName = dataUser.name;
       var firstNameUpperCase = getFirstName.charAt(0).toUpperCase() + getFirstName.slice(1);
-      var getAvatar = localStorage.getItem('wylexAvatar');
-      //Pintar el avatar del usuario
+      var getAvatar = dataUser.avatar;
       var selectImg = document.querySelector('.imgAvatar');
-      var getAvatarDefault = 'https://redyman.netlify.app/header2022/img/user.png';
-    
-      selectImg.innerHTML = `<img src="${getAvatar !== 'null' ? getAvatar : getAvatarDefault}" alt="${getFirstName}">`;
-    
+      selectImg.innerHTML = `<img src="${getAvatar}" alt="${getFirstName}">`;
       //Pintar el primer nombre del usuario
       var selectName = document.querySelector('.infoName');
       selectName.innerHTML = `Hola, ${firstNameUpperCase}`;
     }
     
     function DatosPersonales() {
-      const getFirstName = localStorage.getItem('wylexFirstName');
-      const getLastName = localStorage.getItem('wylexLastName');
-      const getEmail = localStorage.getItem('wylexEmail');
+      /***********ECUAVISA_EC.USER_data(): OBTIENE LA DATA DEL USUARIO DEL LOCALSTORAGE - main_ecuavisa.js*************/
+      var dataUser = ECUAVISA_EC.USER_data();
+      /***********ECUAVISA_EC.USER_data(): OBTIENE LA DATA DEL USUARIO DEL LOCALSTORAGE - main_ecuavisa.js*************/
+
+      const getFirstName = dataUser.name;
+      const getLastName = dataUser.lastname;
+      const getEmail = dataUser.email;
     
       var firstNameUpperCase = getFirstName.charAt(0).toUpperCase() + getFirstName.slice(1);
       var lastNameUpperCase = getLastName.charAt(0).toUpperCase() + getLastName.slice(1);
