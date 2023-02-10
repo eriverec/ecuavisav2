@@ -87,7 +87,7 @@ async function Token(){
       console.log('error', error); 
       window.location = URL_login_G // comentar para modificar el modelo web
     });
-
+}
     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
     if (!UserId){
         /*Si no existe sesión lo 
@@ -457,5 +457,5 @@ async function Token(){
     }
     init_jQuery_Swiper();
 
-}
+
 
