@@ -1,3 +1,7 @@
+/*******************************************************************
+  @VARIABLES GLOBALES ECUAVISA_EC: REVISAR ARCHIVO main_ecuavisa.js
+*******************************************************************/
+
 /*******ESCUECHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
 document.addEventListener("end-event-rdMiperfil-temas", function(e) {
   //console.log(e.detail); // Prints "Example of an event"
