@@ -98,8 +98,8 @@
 
 @media (max-width: 768px) {
 
-  .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
-    border-bottom: none;
+  .notas-1-p-ap .noticias .article .multimedia img {
+   
     height: 323px !important;
   }
 
@@ -122,14 +122,14 @@
     height: 370px !important;
   }
 
-  .notas-1-p-ap .noticias .article .multimedia div {
+  .notas-1-p-ap .noticias .article .multimedia img {
     height: 370px !important;
   }
 }
 
 @media (max-width: 575px) {
-  .notas-1-p-ap .noticias .article .multimedia div {
-    border-bottom: none;
+  .notas-1-p-ap .noticias .article .multimedia img {
+   
     height: 254px !important;
   }
 
