@@ -94,7 +94,9 @@ async function Token(){
       window.location = URL_login_G // comentar para modificar el modelo web
     });
 }
-    if (!ECUAVISA_EC.login()){
+
+    var urlParamsGET = new URLSearchParams(window.location.search);
+    if (!ECUAVISA_EC.login() && urlParamsGET.get('tk')==null){
         /*Si no existe sesión lo 
         va a redireccionar al login */
         window.location = URL_login_G; // comentar para modificar el modelo web
