@@ -1,4 +1,4 @@
-const queryString = window.location.search;
+/*const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
   var myHeaders = new Headers();
   const tk = urlParams.get('tk')
@@ -22,9 +22,9 @@ await fetch("https://ecuavisa-login-service.onrender.com/tasks", requestOptions)
     }
 //     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
 // if (!UserId){
-//     /*Si no existe sesión lo 
-//     va a redireccionar al login */
+//     Si no existe sesión lo va a redireccionar al login
 //     window.location = URL_login_G;
 // }
-  })
-  .catch(error => {console.log('error', error)/*; window.location = URL_login_G*/});
+  }).catch(error => {
+    console.log('error', error)
+  });*/
