@@ -1,29 +1,22 @@
 /*******ESCUECHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
 document.addEventListener("end-event-rdMiperfil-temas", function(e) {
-  const queryString = window.location.search;
-  const urlParams = new URLSearchParams(queryString);
-  var myHeaders = new Headers();
-  const tk = urlParams.get('tk');
-  if(tk != null){
-    window.history.replaceState({}, document.title, "/servicios/perfil");
-  }
   //console.log(e.detail); // Prints "Example of an event"
-  
 });
 /*******FIN ESCUCHAR EVENTO DESDE GLOBAL A MI PERFIL - end-event-rdMiperfil-temas******/
-
 logoutBtn = document.querySelector('.button_cerrar_sesion a');
 logoutBtn.addEventListener("click", function () {
   localStorage.clear();
-  window.location.href = "https://www.ecuavisa.com/servicios/login";
-  // window.location('');
+  window.location.href = ECUAVISA_EC.URL_login();;
 });
 
+if(!ECUAVISA_EC.login()){
+  /*SI NO ESTÁ INICIADO SESIÓN MANDA LA FUNCIÓN DE TOKEN()*/
+  Token();
+}
 
-Token()
 async function Token(){
-  var URL_principal_G = 'https://www.ecuavisa.com/';
-  var URL_login_G = 'https://www.ecuavisa.com/servicios/login';
+  var URL_principal_G = ECUAVISA_EC.URL_principal();
+  var URL_login_G = ECUAVISA_EC.URL_login();
     
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
@@ -40,18 +33,19 @@ async function Token(){
   await fetch("https://ecuavisa-login-service.onrender.com/tasks", requestOptions)
     .then(response => response.json())
     .then (async (result) => {
-      console.log(result); 
       if(result.message!='Usuario No Autorizado'){
         localStorage.wylexUserId=result.userId;
         localStorage.wylexFirstName=result.first_name;
         localStorage.wylexLastName=result.last_name;
         localStorage.wylexEmail=result.email;
 
-      /*Añade el ícono de perfil si no existe con el || CR*/
-      localStorage.wylexAvatar=result.avatar  || 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/usuario.png'
-      /*if(result.avatar){
-        localStorage.wylexAvatar=result.avatar;
-      }*/
+        /*Añade el ícono de perfil si no existe con el || CR*/
+        localStorage.wylexAvatar=result.avatar  || 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/usuario.png'
+        /*if(result.avatar){
+          localStorage.wylexAvatar=result.avatar;
+        }*/
+
+        window.location = ECUAVISA_EC.URL_perfil();
       
     //   let email = result.email;
     //   let pass = result.password;
@@ -91,14 +85,14 @@ async function Token(){
     })
     .catch(error => {
       console.log('error', error); 
-      //window.location = URL_login_G // comentar para modificar el modelo web
+      window.location = URL_login_G // comentar para modificar el modelo web
     });
 
     var UserId = localStorage.getItem('wylexUserId'); //variable de id de usuario
     if (!UserId){
         /*Si no existe sesión lo 
         va a redireccionar al login */
-        //window.location = URL_login_G; // comentar para modificar el modelo web
+        window.location = URL_login_G; // comentar para modificar el modelo web
     }
 
     function collapse() {
