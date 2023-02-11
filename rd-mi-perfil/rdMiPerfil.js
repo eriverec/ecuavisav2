@@ -301,7 +301,7 @@ async function Token(){
             Para ofrecerte una mejor experiencia elige los intereses que se ajusten a ti.
            </p>
            <p class="mis-intereses-modal">
-            Para ofrecerte una mejor experiencia elige los intereses que se ajusten a ti.
+            Mis intereses
            </p>
            <div class="listado-temas" id="listado-temas">
               <div class="item_tema t_58812355">
