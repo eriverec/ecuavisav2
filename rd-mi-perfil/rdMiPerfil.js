@@ -91,7 +91,7 @@ async function Token(){
     })
     .catch(error => {
       console.log('error', error); 
-      window.location = URL_login_G // comentar para modificar el modelo web
+      //window.location = URL_login_G // comentar para modificar el modelo web
     });
 }
 
@@ -99,7 +99,7 @@ async function Token(){
     if (!ECUAVISA_EC.login() && urlParamsGET.get('tk')==null){
         /*Si no existe sesión lo 
         va a redireccionar al login */
-        window.location = URL_login_G; // comentar para modificar el modelo web
+        //window.location = URL_login_G; // comentar para modificar el modelo web
     }
 
     function collapse() {
@@ -461,6 +461,10 @@ async function Token(){
     let $articleNoticiasSave = document.querySelector('.NoticiasGuardadasBox .noticias');
     $articleNoticiasSave.innerHTML = perfil.noticias.loader();
     /*#Fin notificaciones: iniciar loader*/
+
+    /************MODAL DE INICIO************/
+    var modalUserNew = {}
+    /************MODAL DE INICIO************/
     let init_jQuery_Swiper = function () {
       setTimeout(function () {
         return ((window.jQuery && (typeof Swiper !== 'undefined')) ? perfil.init() : init_jQuery_Swiper());
