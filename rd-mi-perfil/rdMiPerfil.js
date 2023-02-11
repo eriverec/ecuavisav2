@@ -289,12 +289,57 @@ async function Token(){
       })
     }
     
-    let perfil = {
+    /************MODAL DE SEGUIMIENTO DE INTERESES************/
+    var modalUserNew = {
+      title:function(){
+        document.querySelector('#modal_titulo_seguimiento_tema').innerHTML = `Cuéntanos sobre ti`;
+      },
+      body:function(){
+        document.querySelector('#modal_body_seguimiento_tema').innerHTML = `
+        <div class="contenido-modal">
+           <p class="parrafo-modal">
+            Para ofrecerte una mejor experiencia elige los intereses que se ajusten a ti.
+           </p>
+           <p class="mis-intereses-modal">
+            Para ofrecerte una mejor experiencia elige los intereses que se ajusten a ti.
+           </p>
+           <div class="listado-temas" id="listado-temas">
+              <div class="item_tema t_58812355">
+               <div class="keywords font-2 fs13">
+                  <a href="/metadatos/-/meta/elecciones-2023" class="button_seguir">elecciones 2023</a> 
+                  <div class="template-meta-favorite-action add" value="elecciones 2023" id="58812355" title="Seguir tema" onclick="if (!window.__cfRLUnblockHandlers) return false; meta_favorite_action('58812355')" style="/* display:none; */">
+                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M2 2v4.586l7 7L13.586 9l-7-7H2zM1 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2z"></path>
+                        <path fill-rule="evenodd" d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"></path>
+                     </svg>
+                     <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <path fill-rule="evenodd" d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
+                     </svg>
+                  </div>
+               </div>
+            </div>
+           </div>
+        </div>`;
+      },
+      init:function(){
+        this.title();
+        this.body();
+        $('#modal_seguimiento_temas').modal('show');
+
+      }
+    }
+    /************FIN MODAL DE SEGUIMIENTO DE INTERESES************/
+
+    var perfil = {
       init: () => {
         eyesPass();
         perfil.notificaciones.listar();
         perfil.noticias.listar();
 
+        if(ECUAVISA_EC.USER_data('isnewuser') == 0){
+          /*****MOSTRAMOS EL MODAL SI EL USUARIO ES NUEVO******/
+          modalUserNew.init();
+        }
         setTimeout(function () {
           $('body').append(`<style>
             .init-page-js .content_mp .temas-hot .botones__, 
@@ -462,9 +507,7 @@ async function Token(){
     $articleNoticiasSave.innerHTML = perfil.noticias.loader();
     /*#Fin notificaciones: iniciar loader*/
 
-    /************MODAL DE INICIO************/
-    var modalUserNew = {}
-    /************MODAL DE INICIO************/
+    
     let init_jQuery_Swiper = function () {
       setTimeout(function () {
         return ((window.jQuery && (typeof Swiper !== 'undefined')) ? perfil.init() : init_jQuery_Swiper());

@@ -927,3 +927,93 @@ button.btn-ecuavisa-noticia img {
 .error.d-block {
   display: block;
 }
+
+
+/* 👉 MODAL SEGUIMIENTO DE TEMAS */
+.MODAL_SEGUIMIENTO_TEMA .modal-title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  font-size: 23.027px;
+  line-height: 28px;
+  color: #2927B9;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .modal-footer{
+  border-top: 1px solid transparent !important;
+  padding: 1rem 0 0.75rem 0 !important;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .modal-footer #btn_enviar_seguimiento_tema {
+  display: flex;
+  flex-direction: column;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 10px 17px;
+  color: #2927b9;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .modal-header{
+  background: #23DCD1;
+  padding: 1.5rem;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .modal-content{
+  border: none !important;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .modal-body {
+  padding: 2.5rem 1.5rem 0 !important;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .modal-body label{
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20.4685px;
+  line-height: 33px;
+}
+
+.MODAL_SEGUIMIENTO_TEMA #btn_enviar_seguimiento_tema{
+  font-family: 'Archivo';
+  font-style: normal;
+  line-height: 33px;
+  background: transparent !important;
+  border: 1px solid #CACACA !important;
+  border-radius: 3px;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .btn {
+  line-height: 1 !important;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .btn-primary:hover {
+  color: #2927b9;
+  background-color: transparent !important;
+  border-color: transparent !important;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .modal-footer button:after {
+  content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-login.svg');
+}
+
+.MODAL_SEGUIMIENTO_TEMA .btn-close{
+  background: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/close-fill.svg') center/1em auto no-repeat !important;
+  border: 0;
+  background-size: 45px !important;
+  opacity: 1 !important;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .btn-check:focus+.btn-primary, .btn-primary:focus{
+  box-shadow: 0 0 0 0.25rem rgb(49 132 253 / 0%);
+}
+
+.MODAL_SEGUIMIENTO_TEMA .btn-close:focus {
+  box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 0%);
+}
+/* FIN MODAL SEGUIMIENTO DE TEMAS */
