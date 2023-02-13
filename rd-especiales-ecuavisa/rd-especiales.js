@@ -1,19 +1,12 @@
 
 setTimeout(function () {
-  var classListaEspecial = document.querySelectorAll('.cardsLista');
-  var classListaEspecialNot = document.querySelectorAll('.cardsLista .noticias');
-  var classListaEspecialNotArt = document.querySelectorAll('.cardsLista .noticias article');
 
-  for (const xy of classListaEspecial) {
-    xy.classList.add('swiper');
-  }
+  $('.cardsLista').addClass('swiper');
+  var parentNoticias = $('.cardsLista .noticias');
 
-  for (const xyz of classListaEspecialNot) {
-    xyz.classList.add('swiper-wrapper');
-  }
-
-  for (const SlideEspeS of classListaEspecialNotArt) {
-    SlideEspeS.classList.add('swiper-slide');
+  if (parentNoticias){
+    parentNoticias.addClass('swiper-wrapper');
+    $('.cardsLista .noticias .article').addClass('swiper-slide');
   }
 
   var swiperEspecial = new Swiper(".cardsLista", {
