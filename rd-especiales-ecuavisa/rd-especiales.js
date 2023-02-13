@@ -11,8 +11,10 @@ setTimeout(function () {
       effect: "cards",
       grabCursor: true,
     });
+  }else{
+    console.log('no exite la clase cardsLista -> noticias')
   }
 
-}, 500);
+}, 300);
 
 
