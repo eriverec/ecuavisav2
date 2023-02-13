@@ -494,6 +494,61 @@ async function Token(){
         }
       }
     }
+
+    /*----seguirmetas----*/
+    function meta_favorite_action(id) {
+      var user=jQryIter.u;
+      if(user!=""){
+        if (ITER.FAVORITE.TOPICS.isFavorite(id)){
+          ITER.FAVORITE.TOPICS.remove(id, del_fav_t(), nodel_fav_t());
+          jQryIter("#"+id).removeClass("remove");
+          jQryIter("#"+id).addClass("add");
+          jQryIter("#"+id).attr("title","Seguir este tema");
+        }
+        else{
+          ITER.FAVORITE.TOPICS.add(id, ok_fav_t(), ko_fav_t());
+          jQryIter("#"+id).addClass("remove");
+          jQryIter("#"+id).removeClass("add");
+          jQryIter("#"+id).attr("title","Dejar de seguir este tema");
+          //$("#favorite_topic_alert").show(300);
+          //$("#favorite_topic_alert").delay(2000).hide(300);
+        }
+      }
+      else{
+        window.location.assign("/servicios/perfil/");
+      }	
+    }
+    function ok_fav_t() {
+      //alert("Tema añadido a favoritos");
+    }
+    function ko_fav_t() {
+      //alert("ERROR. El Tema no se ha podido añadir a favoritos");
+    }
+    function del_fav_t() {
+      //alert("Tema eliminado de favoritos");
+    }
+    function nodel_fav_t() {
+      //alert("ERROR. El Tema no se ha podido eliminar de favoritos");
+    }
+    jQryIter(document).ready(function() {
+      if(ITER.FAVORITE != undefined){
+        if (ITER.FAVORITE.TOPICS.isEnabled()) {
+          jQryIter.registerOnLoadFunction(function(){
+            ITER.FAVORITE.TOPICS.onLoad(function(){
+              // TOPICS
+              $(".template-meta-favorite-action").each(function(){
+                if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
+                  jQryIter(this).addClass("remove");
+                } else {
+                  jQryIter(this).addClass("add");
+                }
+              });
+            });
+          });
+        }
+      }
+    });	
+
     collapse();
     DataEntrada();
     DatosPersonales();
