@@ -280,7 +280,7 @@
   filter: drop-shadow(0px 0px 6px black);
 }
 
-@media (max-width: 1367px) and (min-width: 1365){
+@media (min-width: 1365) and (max-width: 1366px){
 .titulo__sec{
   padding: 0 50px;
 }
