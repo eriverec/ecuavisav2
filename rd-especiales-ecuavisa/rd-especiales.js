@@ -3,12 +3,17 @@ function cardEpecialEcu(){
   // $('.cardsLista .noticias').addClass('swiper-wrapper');
   // $('.cardsLista .noticias .article').addClass('swiper-slide');
 
-  var classListaEspecial = document.querySelector('.cardsLista');
-  var classListaEspecialNot = document.querySelector('.cardsLista .noticias');
+  var classListaEspecial = document.querySelectorAll('.cardsLista');
+  var classListaEspecialNot = document.querySelectorAll('.cardsLista .noticias');
   var classListaEspecialNotArt = document.querySelectorAll('.cardsLista .noticias article');
 
-  classListaEspecial.classList.add('swiper');
-  classListaEspecialNot.classList.add('swiper-wrapper');
+  for (const xy of classListaEspecial) {
+    xy.classList.add('swiper');
+  }
+  
+  for (const xyz of classListaEspecialNot) {
+    xyz.classList.add('swiper-wrapper');
+  }
 
   for (const SlideEspeS of classListaEspecialNotArt) {
     SlideEspeS.classList.add('swiper-slide');
