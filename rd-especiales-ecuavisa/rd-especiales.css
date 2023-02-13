@@ -280,6 +280,12 @@
   filter: drop-shadow(0px 0px 6px black);
 }
 
+@media (min-width: 1365px) and (max-width: 1366px){
+  .titulo__sec{
+    padding: 0 50px;
+  }
+}
+
 @media (max-width: 991px) {
 
   .swiper.listado__especiales {
@@ -304,8 +310,3 @@
   }
 }
 
-@media (min-width: 1365px) and (max-width: 1366px){
-  .titulo__sec{
-    padding: 0 50px;
-  }
-  }
