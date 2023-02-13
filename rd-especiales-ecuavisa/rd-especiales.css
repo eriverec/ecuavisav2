@@ -4,7 +4,9 @@
 #iter-content-wrapper {
   padding-top: 0px !important;
 }
-
+.row.bloque2 {
+  display: none;
+}
 
 /*Portada - Inicio*/
 
