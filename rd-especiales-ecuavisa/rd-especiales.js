@@ -19,7 +19,7 @@ function cardEpecialEcu(){
     SlideEspeS.classList.add('swiper-slide');
   }
 
-  var swiperEsti = new Swiper(".cardsLista", {
+  var swiperEspecial = new Swiper(".cardsLista", {
     effect: "cards",
     grabCursor: true,
   });
@@ -32,7 +32,7 @@ function swiperGoEspEcua() {
     } else {
       cardEpecialEcu();
     }
-  }, 300);
+  }, 400);
 }
 
 $(document).ready(function () {
