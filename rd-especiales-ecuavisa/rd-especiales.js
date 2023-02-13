@@ -16,7 +16,7 @@ setTimeout(function () {
     SlideEspeS.classList.add('swiper-slide');
   }
 
-  var swiperEspecial = new Swiper(".cardsLista", {
+  var swiperEspecial = new Swiper(classListaEspecial, {
     effect: "cards",
     grabCursor: true,
   });
