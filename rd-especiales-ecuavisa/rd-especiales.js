@@ -1,8 +1,5 @@
-function cardEpecialEcu(){
-  // $('.cardsLista').addClass('swiper');
-  // $('.cardsLista .noticias').addClass('swiper-wrapper');
-  // $('.cardsLista .noticias .article').addClass('swiper-slide');
 
+setTimeout(function () {
   var classListaEspecial = document.querySelectorAll('.cardsLista');
   var classListaEspecialNot = document.querySelectorAll('.cardsLista .noticias');
   var classListaEspecialNotArt = document.querySelectorAll('.cardsLista .noticias article');
@@ -10,7 +7,7 @@ function cardEpecialEcu(){
   for (const xy of classListaEspecial) {
     xy.classList.add('swiper');
   }
-  
+
   for (const xyz of classListaEspecialNot) {
     xyz.classList.add('swiper-wrapper');
   }
@@ -23,19 +20,6 @@ function cardEpecialEcu(){
     effect: "cards",
     grabCursor: true,
   });
-}
+}, 500);
 
-function swiperGoEspEcua() {
-  setTimeout(function () {
-    if (typeof Swiper === "undefined") {
-      swiperGoEspEcua();
-    } else {
-      cardEpecialEcu();
-    }
-  }, 400);
-}
-
-$(document).ready(function () {
-  swiperGoEspEcua();
-});
 
