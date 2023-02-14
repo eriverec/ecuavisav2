@@ -310,5 +310,8 @@
   .titulo__sec{
     padding: 0 65px;
   }
+  .row.bloque2 {
+    padding-top: 0;
+  }
 }
 
