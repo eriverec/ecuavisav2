@@ -18,17 +18,17 @@ export default [
     ],
   },
   
-  {
-    title: 'Paquetes',
-    children: [
-      { title: 'Listar paquetes',
-      to:   'paquetes'  },
-      { title: 'Periodos',
-      to:   'periodos'  },
-      { title: 'Modulos',
-      to:   'modulos'  },
+  // {
+  //   title: 'Paquetes',
+  //   children: [
+  //     { title: 'Listar paquetes',
+  //     to:   'paquetes'  },
+  //     { title: 'Periodos',
+  //     to:   'periodos'  },
+  //     { title: 'Modulos',
+  //     to:   'modulos'  },
       
-    ],
+  //   ],
 
-  },
+  // },
 ]
