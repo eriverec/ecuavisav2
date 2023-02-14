@@ -349,6 +349,10 @@ async function Token(){
         var existemodal = setInterval(function () {
             if ((typeof $().modal == 'function')) {
                 $('#modal_seguimiento_temas').modal('show');
+
+                $('#btn_enviar_seguimiento_tema').click(function(){
+                  $('#modal_seguimiento_temas').modal('hide');
+                })
                 clearInterval(existemodal);
             }
         }, 500);
