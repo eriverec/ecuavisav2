@@ -524,11 +524,9 @@ async function Token(){
     }
     function ok_fav_t() {
       //alert("Tema añadido a favoritos");
-      console.log('Tema añadido a favoritos')
     }
     function ko_fav_t() {
       //alert("ERROR. El Tema no se ha podido añadir a favoritos");
-      console.log('ERROR. El Tema no se ha podido añadir a favoritos')
     }
     function del_fav_t() {
       //alert("Tema eliminado de favoritos");
