@@ -1098,5 +1098,6 @@ button.btn-ecuavisa-noticia img {
   display: flex;
   align-items: center;
   gap: 5px;
+  flex-wrap: wrap;
 }
 /* FIN MODAL SEGUIMIENTO DE TEMAS */
