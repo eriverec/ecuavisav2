@@ -270,11 +270,12 @@
   top: 20px;
 }
 
-.swiper-cards.swiper-3d div[class="crop_134_100_L"]:before,
+.swiper-cards.swiper-3d div[class="crop_134_100_L"]:before, 
 .swiper-cards.swiper-3d div[class="crop_134_100_L"]:after {
   content: "";
-  height: 42px;
-  width: 42px;
+  height: 30px;
+  top: 10px;
+  width: 30px;
   position: absolute;
   background-position: center;
   background-repeat: no-repeat;
