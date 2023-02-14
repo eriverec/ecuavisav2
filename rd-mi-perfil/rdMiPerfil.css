@@ -1047,6 +1047,12 @@ button.btn-ecuavisa-noticia img {
 .MODAL_SEGUIMIENTO_TEMA .keywords {
     display: flex;
     align-items: center;
+    line-height: 1.2;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action {
+    display: flex;
+    align-items: center;
     gap: 10px;
     box-shadow: 0 10px 10px rgb(0 0 0 / 8%);
     border: 1px solid #060127;
