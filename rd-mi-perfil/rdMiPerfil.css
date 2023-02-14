@@ -1083,6 +1083,7 @@ button.btn-ecuavisa-noticia img {
 
 .template-meta-favorite-action.remove {
     background-color: #2927b9;
+    padding-bottom: 5px;
 }
 
 .template-meta-favorite-action.remove button small {
@@ -1091,5 +1092,11 @@ button.btn-ecuavisa-noticia img {
 
 .template-meta-favorite-action.remove svg {
     color: #fff;
+}
+
+.listado-temas{
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 /* FIN MODAL SEGUIMIENTO DE TEMAS */
