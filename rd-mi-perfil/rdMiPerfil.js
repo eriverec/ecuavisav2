@@ -351,6 +351,7 @@ async function Token(){
                 $('#modal_seguimiento_temas').modal('show');
 
                 $('#btn_enviar_seguimiento_tema').click(function(){
+                  ECUAVISA_EC.SET_user('isnewuser', 1);
                   $('#modal_seguimiento_temas').modal('hide');
                 })
                 clearInterval(existemodal);
