@@ -324,8 +324,12 @@ async function Token(){
       init:function(){
         this.title();
         this.body();
-        $('#modal_seguimiento_temas').modal('show');
-
+        var existemodal = setInterval(function () {
+            if ((typeof $().modal == 'function')) {
+                $('#modal_seguimiento_temas').modal('show');
+                clearInterval(existemodal);
+            }
+        }, 500);
       }
     }
     /************FIN MODAL DE SEGUIMIENTO DE INTERESES************/
