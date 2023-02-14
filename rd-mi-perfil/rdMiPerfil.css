@@ -1058,10 +1058,15 @@ button.btn-ecuavisa-noticia img {
     border: 1px solid #060127;
     border-radius: 3px;
     color: #060127;
-    padding-right: 17px;
+    padding-right: 8px;
     padding-top: 9px;
-    padding-left: 17px;
-    padding-bottom: 12px;
+    padding-left: 8px;
+    padding-bottom: 8px;
     line-height: 1.2;
+}
+
+.btn-check:focus+.btn.btn-modal-seguir, .btn.btn-modal-seguir:focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 0%);
 }
 /* FIN MODAL SEGUIMIENTO DE TEMAS */
