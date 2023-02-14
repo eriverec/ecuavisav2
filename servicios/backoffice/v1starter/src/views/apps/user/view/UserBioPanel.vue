@@ -300,19 +300,19 @@ const resolveUserRoleVariant = role => {
 
         <!-- 👉 Edit and Suspend button -->
         <VCardText class="d-flex justify-center">
-          <VBtn
-            variant="elevated"
-            class="me-3"
-            @click="isUserInfoEditDialogVisible = true"
-          >
-            Editar
-          </VBtn>
-          <VBtn
-            variant="tonal"
-            color="error"
-          >
-            Suspender
-          </VBtn>
+          // <VBtn
+          //   variant="elevated"
+          //   class="me-3"
+          //   @click="isUserInfoEditDialogVisible = true"
+          // >
+          //   Editar
+          // </VBtn>
+          // <VBtn
+          //   variant="tonal"
+          //   color="error"
+          // >
+          //   Suspender
+          // </VBtn>
         </VCardText>
       </VCard>
     </VCol>
