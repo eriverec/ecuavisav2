@@ -295,22 +295,16 @@ async function Token(){
         document.querySelector('#modal_titulo_seguimiento_tema').innerHTML = `Cuéntanos sobre ti`;
       },
       load:function(){
-        if(ITER.FAVORITE != undefined){
-          if (ITER.FAVORITE.TOPICS.isEnabled()) {
-            jQryIter.registerOnLoadFunction(function(){
-              ITER.FAVORITE.TOPICS.onLoad(function(){
-                // TOPICS
-                $(".template-meta-favorite-action").each(function(){
-                  if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
-                    jQryIter(this).addClass("remove");
-                  } else {
-                    jQryIter(this).addClass("add");
-                  }
-                });
-              });
-            });
-          }
-        }
+        ITER.FAVORITE.TOPICS.onLoad(function(){
+          // TOPICS
+          $(".template-meta-favorite-action").each(function(){
+            if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
+              jQryIter(this).addClass("remove");
+            } else {
+              jQryIter(this).addClass("add");
+            }
+          });
+        });
       },
       body:function(){
         document.querySelector('#modal_body_seguimiento_tema').innerHTML = `
