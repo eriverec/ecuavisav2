@@ -1030,12 +1030,17 @@ button.btn-ecuavisa-noticia img {
     display: none;
 }
 
-.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.add svg:nth-child(2) {
-    display: block;
+.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.add .btn-modal-seguir{
+    display: flex;
+    align-items: center;
 }
 
-.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.remove svg:nth-child(3) {
-    display: block;
+.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.add .btn-modal-seguir svg:nth-child(1) {
+    display: inline-block;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.remove .btn-modal-seguir svg:nth-child(2) {
+    display: inline-block;
 }
 
 .MODAL_SEGUIMIENTO_TEMA .keywords {
