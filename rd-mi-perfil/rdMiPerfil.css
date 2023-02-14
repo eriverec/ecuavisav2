@@ -1033,13 +1033,14 @@ button.btn-ecuavisa-noticia img {
 .MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.add .btn-modal-seguir{
     display: flex;
     align-items: center;
+    gap: 10px;
 }
 
-.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.add .btn-modal-seguir svg:nth-child(1) {
+.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.add .btn-modal-seguir svg:nth-child(2) {
     display: inline-block;
 }
 
-.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.remove .btn-modal-seguir svg:nth-child(2) {
+.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.remove .btn-modal-seguir svg:nth-child(3) {
     display: inline-block;
 }
 
