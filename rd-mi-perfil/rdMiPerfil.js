@@ -333,8 +333,9 @@ async function Token(){
                      </button> 
                   </div>
                </div>
+           </div>
 
-               <div class="item_tema t_18537">
+           <div class="item_tema t_18537">
                <div class="keywords font-2 fs13">
                   <div class="template-meta-favorite-action" value="Guayaquil" id="18537" title="Seguir tema" onclick="if (!window.__cfRLUnblockHandlers) return false; meta_favorite_action('18537')" style="/* display:none; */">
                      <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir">
@@ -352,7 +353,6 @@ async function Token(){
                   </div>
                </div>
             </div>
-           </div>
         </div>`;
       },
       init:function(){
