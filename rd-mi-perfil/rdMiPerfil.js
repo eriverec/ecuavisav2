@@ -376,10 +376,9 @@ async function Token(){
 
         if(ECUAVISA_EC.USER_data('isnewuser') == 0){
           /*****MOSTRAMOS EL MODAL SI EL USUARIO ES NUEVO******/
-          ITER.FAVORITE.TOPICS.onLoad(function(){});
-          
           modalUserNew.init();
         }
+        ITER.FAVORITE.TOPICS.onLoad(function(){});
         setTimeout(function () {
           $('body').append(`<style>
             .init-page-js .content_mp .temas-hot .botones__, 
