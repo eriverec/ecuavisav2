@@ -120,7 +120,7 @@ window.setTimeout(resetTema, 900);
               </tr>
             </tbody>
           </VTable>
-          <div v-if="!userTema.length">No hay temas que mostrar.</div>
+          <div v-if="!userTema.length">No hay temas que mostrar aún.</div>
         </VCardText>
       </VCard>
     </VCol>
