@@ -495,6 +495,10 @@ async function Token(){
       }
     }
 
+    /*----favoritos-on----*/
+    jQryIter.enableFavoriteArticles();
+    jQryIter.enableFavoriteTopics();
+
     /*----seguirmetas----*/
     function meta_favorite_action(id) {
       var user=jQryIter.u;
