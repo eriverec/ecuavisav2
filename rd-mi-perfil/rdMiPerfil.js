@@ -359,7 +359,10 @@ async function Token(){
       },
       temas:[
         {id:'58812355', name:'elecciones 2023'},
-        {id:'18537', name:'Guayaquil'}
+        {id:'18537', name:'Guayaquil'},
+        {id:'7627344', name:'Colombia'},
+        {id:'26853867', name:'RBD'},
+        {id:'13941431', name:'Tour'},
       ]
     }
     /************FIN MODAL DE SEGUIMIENTO DE INTERESES************/
