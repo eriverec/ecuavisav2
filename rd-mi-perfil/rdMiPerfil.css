@@ -1030,11 +1030,11 @@ button.btn-ecuavisa-noticia img {
     display: none;
 }
 
-.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.add svg:nth-child(1) {
+.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.add svg:nth-child(2) {
     display: block;
 }
 
-.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.remove svg:nth-child(2) {
+.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.remove svg:nth-child(3) {
     display: block;
 }
 
