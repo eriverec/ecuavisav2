@@ -159,6 +159,7 @@
 }
 
 .titulo__sec {
+  display: flex;
   color: #FFFFFF;
   font-family: 'Archivo';
   font-style: normal;
@@ -167,6 +168,9 @@
   line-height: 20px;
   text-align: center;
   margin-bottom: 20px;
+  min-height: 50px;
+  justify-content: center;
+  align-items: center;
 }
 
 /* .listado__especiales {
