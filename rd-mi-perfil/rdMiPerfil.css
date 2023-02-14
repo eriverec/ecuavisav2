@@ -1076,4 +1076,20 @@ button.btn-ecuavisa-noticia img {
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 0%);
 }
+
+.template-meta-favorite-action.add svg {
+    color: #2927b9;
+}
+
+.template-meta-favorite-action.remove {
+    background-color: #2927b9;
+}
+
+.template-meta-favorite-action.remove button small {
+    color: #fff;
+}
+
+.template-meta-favorite-action.remove svg {
+    color: #fff;
+}
 /* FIN MODAL SEGUIMIENTO DE TEMAS */
