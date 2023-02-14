@@ -1016,4 +1016,40 @@ button.btn-ecuavisa-noticia img {
 .MODAL_SEGUIMIENTO_TEMA .btn-close:focus {
   box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 0%);
 }
+
+.MODAL_SEGUIMIENTO_TEMA .mis-intereses-modal {
+    font-weight: 600;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .item_tema {
+    display: inline-block;
+    padding: 0px;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action svg {
+    display: none;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.add svg:nth-child(1) {
+    display: block;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.remove svg:nth-child(2) {
+    display: block;
+}
+
+.MODAL_SEGUIMIENTO_TEMA .keywords {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 10px 10px rgb(0 0 0 / 8%);
+    border: 1px solid #060127;
+    border-radius: 3px;
+    color: #060127;
+    padding-right: 17px;
+    padding-top: 9px;
+    padding-left: 17px;
+    padding-bottom: 12px;
+    line-height: 1.2;
+}
 /* FIN MODAL SEGUIMIENTO DE TEMAS */
