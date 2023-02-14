@@ -1061,7 +1061,6 @@ button.btn-ecuavisa-noticia img {
     display: flex;
     align-items: center;
     gap: 10px;
-    box-shadow: 0 10px 10px rgb(0 0 0 / 8%);
     border: 1px solid #2927b9;
     border-radius: 3px;
     color: #2927b9;
