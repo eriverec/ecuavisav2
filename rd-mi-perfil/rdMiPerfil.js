@@ -294,6 +294,26 @@ async function Token(){
       title:function(){
         document.querySelector('#modal_titulo_seguimiento_tema').innerHTML = `Cuéntanos sobre ti`;
       },
+      load:function(){
+        jQryIter(document).ready(function() {
+          if(ITER.FAVORITE != undefined){
+            if (ITER.FAVORITE.TOPICS.isEnabled()) {
+              jQryIter.registerOnLoadFunction(function(){
+                ITER.FAVORITE.TOPICS.onLoad(function(){
+                  // TOPICS
+                  $(".template-meta-favorite-action").each(function(){
+                    if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
+                      jQryIter(this).addClass("remove");
+                    } else {
+                      jQryIter(this).addClass("add");
+                    }
+                  });
+                });
+              });
+            }
+          }
+        });
+      },
       body:function(){
         document.querySelector('#modal_body_seguimiento_tema').innerHTML = `
         <div class="contenido-modal">
@@ -307,7 +327,7 @@ async function Token(){
               <div class="item_tema t_58812355">
                <div class="keywords font-2 fs13">
                   <a href="/metadatos/-/meta/elecciones-2023" class="button_seguir">elecciones 2023</a> 
-                  <div class="template-meta-favorite-action add" value="elecciones 2023" id="58812355" title="Seguir tema" onclick="if (!window.__cfRLUnblockHandlers) return false; meta_favorite_action('58812355')" style="/* display:none; */">
+                  <div class="template-meta-favorite-action" value="elecciones 2023" id="58812355" title="Seguir tema" onclick="if (!window.__cfRLUnblockHandlers) return false; meta_favorite_action('58812355')" style="/* display:none; */">
                      <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                         <path fill-rule="evenodd" d="M2 2v4.586l7 7L13.586 9l-7-7H2zM1 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2z"></path>
                         <path fill-rule="evenodd" d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"></path>
@@ -324,6 +344,7 @@ async function Token(){
       init:function(){
         this.title();
         this.body();
+        this.load();
         var existemodal = setInterval(function () {
             if ((typeof $().modal == 'function')) {
                 $('#modal_seguimiento_temas').modal('show');
@@ -538,24 +559,7 @@ async function Token(){
     function nodel_fav_t() {
       //alert("ERROR. El Tema no se ha podido eliminar de favoritos");
     }
-    jQryIter(document).ready(function() {
-      if(ITER.FAVORITE != undefined){
-        if (ITER.FAVORITE.TOPICS.isEnabled()) {
-          jQryIter.registerOnLoadFunction(function(){
-            ITER.FAVORITE.TOPICS.onLoad(function(){
-              // TOPICS
-              $(".template-meta-favorite-action").each(function(){
-                if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
-                  jQryIter(this).addClass("remove");
-                } else {
-                  jQryIter(this).addClass("add");
-                }
-              });
-            });
-          });
-        }
-      }
-    });	
+    
 
     collapse();
     DataEntrada();
