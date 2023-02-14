@@ -1050,6 +1050,13 @@ button.btn-ecuavisa-noticia img {
     line-height: 1.2;
 }
 
+.btn-modal-seguir small {
+    font-family: 'Mattone 150';
+    color: #2927b9;
+    text-transform: uppercase;
+    font-weight: 500;
+}
+
 .MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action {
     display: flex;
     align-items: center;
