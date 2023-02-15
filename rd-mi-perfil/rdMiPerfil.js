@@ -294,7 +294,7 @@ async function Token(){
     var modalUserNew = {
       modalAlert:function(){
         var alert = document.querySelector('#alert-mensaje-1');
-        if(ECUAVISA_EC.USER_data('wylexUserAlertView') == 'true' && ECUAVISA_EC.USER_data('isnewuser') != 0){
+        if(ECUAVISA_EC.USER_data('wylexUserAlertView') == 'true' && ECUAVISA_EC.USER_data('isnewuser') == 0){
           if(alert.classList.contains('d-none')){
             alert.classList.remove("d-none");
           }
@@ -364,6 +364,8 @@ async function Token(){
 
                 $('#btn_enviar_seguimiento_tema').click(function(){
                   ECUAVISA_EC.SET_user('wylexStatusPerfil', 1);
+                  ECUAVISA_EC.SET_user('wylexUserAlertView', false);
+                  /*CAMBIA EL ESTADO DEL MODAL CUANDO EL USUARIO TIENE SELECCIONADO YA SUS INTERESES, Y YA NO MUESTRA EL ALERT*/
                   $('#modal_seguimiento_temas').modal('hide');
                 })
                 clearInterval(existemodal);
