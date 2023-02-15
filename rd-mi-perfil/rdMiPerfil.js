@@ -295,7 +295,7 @@ async function Token(){
       modalAlert:function(){
         var alert = document.querySelector('#alert-mensaje-1');
         if(ECUAVISA_EC.USER_data('wylexUserAlertView') == 'true'){
-          if(alert.contains('d-none')){
+          if(alert.classList.contains('d-none')){
             alert.classList.remove("d-none");
           }
         }
