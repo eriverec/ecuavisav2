@@ -367,7 +367,27 @@ async function Token(){
                   ECUAVISA_EC.SET_user('wylexUserAlertView', false);
                   /*CAMBIA EL ESTADO DEL MODAL CUANDO EL USUARIO TIENE SELECCIONADO YA SUS INTERESES, Y YA NO MUESTRA EL ALERT*/
                   $('#modal_seguimiento_temas').modal('hide');
-                })
+
+                  /*FETCH*/
+                  fetch("https://ecuavisa-login-service.onrender.com/updatestatususer", {
+                    method: "PUT",
+                    headers: {
+                      "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    body: new URLSearchParams({
+                      user_new: 1
+                    }),
+                  }).then((response) => response.json()).then(async (result) => {
+                      if(!result.error){
+                        console.log(result);
+                      }else{
+                        console.log(result);
+                      }
+                    }).catch((error) => {
+                      console.log("error", error); /*; window.location = URL_login_G*/
+                    });
+                    /*FETCH FIN*/
+                });
                 clearInterval(existemodal);
             }
         }, 500);
