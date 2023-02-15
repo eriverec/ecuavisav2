@@ -39,8 +39,8 @@
   font-weight: 600;
   line-height: 48px;
   padding-top: 15px;
-  padding-bottom: 18px;
-  max-width: 500px;
+  /* padding-bottom: 18px; */
+  max-width: 600px;
 }
 .portada-estilo .noticias .article .text {
   font-size: 16px;
@@ -99,7 +99,7 @@
   font-style: normal;
   font-weight: 300;
   line-height: 26px;
-  max-width: 500px;
+  max-width: 600px;
   color: #d5d5d5;
 }
 

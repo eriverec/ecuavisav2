@@ -57,7 +57,7 @@
     font-style: normal;
     font-weight: 300;
     line-height: 28px;
-    max-width: 650px;
+    max-width: 600px;
     padding-top: 15px;
     padding-bottom: 15px;
 }
@@ -310,7 +310,7 @@ INICIO - PORTADA - 4 DESTACADAS
   bottom: 0;
   left: 0;
   right: 0;
-  padding-bottom: 4rem;
+  padding-bottom: 3rem;
   width: 100%;
 }
 
@@ -339,7 +339,7 @@ INICIO - PORTADA - 4 DESTACADAS
   font-style: normal;
   font-weight: 600;
   line-height: 48px;
-  padding-top: 15px;
+  /* padding-top: 15px; */
   padding-bottom: 18px;
   /* max-width: 500px; */
 }
@@ -512,7 +512,7 @@ Cambio de tamaño de imagen grande izq
 
 /*Banner ancho del título*/
 .portlet-boundary.portlet-static-end.teaser-viewer-portlet.notas-1-p-ap .headline {
-  max-width: 700px;
+  max-width: 600px;
 }
 
 /*Fin Banner ancho del título*/

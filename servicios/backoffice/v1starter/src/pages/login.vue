@@ -108,7 +108,7 @@ const onSubmit = () => {
             Bienvenido a {{ themeConfig.app.title }}! 👋🏻
           </h5>
           <p class="mb-0">
-            Please sign-in to your account and start the adventure
+            Inicia sesión en tu cuenta y comienza la aventura.
           </p>
         </VCardText>
         <VCardText>
@@ -117,11 +117,11 @@ const onSubmit = () => {
             variant="tonal"
           >
             <p class="text-caption mb-2">
-              Admin Email: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
+              Administrador Email: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
             </p>
-            <p class="text-caption mb-0">
+            <!-- <p class="text-caption mb-0">
               Client Email: <strong>client@demo.com</strong> / Pass: <strong>client</strong>
-            </p>
+            </p> -->
           </VAlert>
         </VCardText>
         <VCardText>
@@ -156,7 +156,7 @@ const onSubmit = () => {
                 <div class="d-flex align-center flex-wrap justify-space-between mt-2 mb-4">
                   <VCheckbox
                     v-model="rememberMe"
-                    label="Remember me"
+                    label="Recordarme"
                   />
                   <!-- <a
                     class="text-primary ms-2 mb-1"
@@ -170,7 +170,7 @@ const onSubmit = () => {
                   block
                   type="submit"
                 >
-                  Login
+                  Iniciar sesión
                 </VBtn>
               </VCol>
 
