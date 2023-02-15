@@ -358,7 +358,7 @@ async function Token(){
         var num = 0;
         var highlightedItemss = document.querySelectorAll(".template-meta-favorite-action");
         highlightedItemss.forEach((userItem) => {
-          if(userItem.classList.contains('add')){
+          if(userItem.classList.contains('remove')){
             num ++;
           }
         });
