@@ -437,7 +437,7 @@ async function Token(){
           };
     
           let $articles = '';
-          let $idusuario = ECUAVISA_EC.USER_data('wylexUserId'); || 0;
+          let $idusuario = ECUAVISA_EC.USER_data('wylexUserId') || 0;
           fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/notificationsget.php", requestOptions).then(response => {
             return response.json();
           }).then(jsondata => {
@@ -471,7 +471,7 @@ async function Token(){
         listarUltimas: function (num = 4) {
           var myHeaders = new Headers();
           let $articles = '';
-          let $idusuario = ECUAVISA_EC.USER_data('wylexUserId'); || 0;
+          let $idusuario = ECUAVISA_EC.USER_data('wylexUserId') || 0;
           fetch("https://www.ecuavisa.com/rss/data-noticia.json").then((response) => response.json())
             .then((jsondata) => {
               let items = jsondata.rss.channel.item;
@@ -509,7 +509,7 @@ async function Token(){
           };
     
           let $articles = '';
-          let $idusuario = ECUAVISA_EC.USER_data('wylexUserId'); || 0;
+          let $idusuario = ECUAVISA_EC.USER_data('wylexUserId') || 0;
           fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/notificationsget.php", requestOptions).then(response => {
             return response.json();
           }).then(jsondata => {
