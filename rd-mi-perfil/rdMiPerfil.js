@@ -364,7 +364,7 @@ async function Token(){
         });
 
         return {
-          existe: num > 1,
+          existe: num > 0,
           num : num
         };
       },
