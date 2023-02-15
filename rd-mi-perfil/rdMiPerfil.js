@@ -375,7 +375,7 @@ async function Token(){
                       "Content-Type": "application/x-www-form-urlencoded",
                     },
                     body: new URLSearchParams({
-                      email: ECUAVISA_EC.USER_data('email'),
+                      id: ECUAVISA_EC.USER_data('id'),
                       user_new: 1,
                     }),
                   }).then((response) => response.json()).then(async (result) => {
