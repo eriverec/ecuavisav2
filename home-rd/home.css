@@ -968,6 +968,9 @@ BLOQUE - TE EXPLICO LA NOTICIA
   margin: 0;
 }
 
+.rd-texplico-la-noticia .article-section {
+  display: none;
+}
 /* .texplic .teaser-viewer-title-rd,
 .texplic .button_container{
   display: none !important;
@@ -984,9 +987,9 @@ BLOQUE - TE EXPLICO LA NOTICIA
 .HOME_MENU_RD .rd-texplico-la-noticia .noticias .article .media_block .text_block{
   position: absolute;
   bottom: 0;
-  padding: 0.5rem 1rem;
+  padding: 1rem 1rem;
   width: 100%;
-  min-height: 110px;
+  /* min-height: 110px; */
 }
 
 .HOME_MENU_RD .rd-texplico-la-noticia .noticias .article .media_block .text_block .section {
@@ -998,11 +1001,11 @@ BLOQUE - TE EXPLICO LA NOTICIA
 .HOME_MENU_RD .rd-texplico-la-noticia .noticias .article .media_block .text_block .headline a h3 {
   color: var(--bs-white);
   font-size: var(--rd-size-16);
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
-  overflow: hidden;
+     /* text-overflow: ellipsis; */
+    /* display: -webkit-box; */
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    /* overflow: hidden; */
   font-style: normal;
   font-weight: 700;
   line-height: 22px;
