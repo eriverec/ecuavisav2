@@ -354,6 +354,20 @@ async function Token(){
            </div>
         </div>`;
       },
+      existeTemaSeguimiento:function(){
+        var num = 0;
+        var highlightedItemss = document.querySelectorAll(".template-meta-favorite-action");
+        highlightedItemss.forEach((userItem) => {
+          if(userItem.classList.contains('add')){
+            num ++;
+          }
+        });
+
+        return {
+          existe: num > 1,
+          num : num
+        };
+      },
       init:function(){
         this.title();
         this.body();
@@ -363,6 +377,10 @@ async function Token(){
                 $('#modal_seguimiento_temas').modal('show');
 
                 $('#btn_enviar_seguimiento_tema').click(function(){
+                  if(!modalUserNew.existeTemaSeguimiento().existe){
+                    alert('Debe seleccionar al menos 1');
+                    return false;
+                  }
                   ECUAVISA_EC.SET_user('wylexStatusPerfil', 1);
                   ECUAVISA_EC.SET_user('wylexUserAlertView', false);
                   /*CAMBIA EL ESTADO DEL MODAL CUANDO EL USUARIO TIENE SELECCIONADO YA SUS INTERESES, Y YA NO MUESTRA EL ALERT*/
