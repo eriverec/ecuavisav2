@@ -40,10 +40,11 @@ async function Token(){
     .then(response => response.json())
     .then (async (result) => {
       if(result.message!='Usuario No Autorizado'){
-        localStorage.wylexUserId=result.userId;
-        localStorage.wylexFirstName=result.first_name;
-        localStorage.wylexLastName=result.last_name;
-        localStorage.wylexEmail=result.email;
+        localStorage.wylexUserAlertView    = true;
+        localStorage.wylexUserId    = result.userId;
+        localStorage.wylexFirstName = result.first_name;
+        localStorage.wylexLastName  = result.last_name;
+        localStorage.wylexEmail     = result.email;
 
         /*Añade el ícono de perfil si no existe con el || CR*/
         localStorage.wylexAvatar=result.avatar  || 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/usuario.png'
@@ -291,6 +292,17 @@ async function Token(){
     
     /************MODAL DE SEGUIMIENTO DE INTERESES************/
     var modalUserNew = {
+      modalAlert:function(){
+        var alert = document.querySelector('#alert-mensaje-1');
+        if(ECUAVISA_EC.USER_data('wylexUserAlertView')){
+          if(alert.contains('d-none')){
+            alert.classList.remove("d-none");
+          }
+        }
+        document.querySelector(`#alert-mensaje-1 button[aria-label="Close"]`).addEventListener("click", function(e){
+          ECUAVISA_EC.SET_user('wylexUserAlertView', false);
+        });
+      },
       title:function(){
         document.querySelector('#modal_titulo_seguimiento_tema').innerHTML = `Cuéntanos sobre ti`;
       },
@@ -346,6 +358,7 @@ async function Token(){
         this.title();
         this.body();
         this.load();
+        this.modalAlert();
         var existemodal = setInterval(function () {
             if ((typeof $().modal == 'function')) {
                 $('#modal_seguimiento_temas').modal('show');
