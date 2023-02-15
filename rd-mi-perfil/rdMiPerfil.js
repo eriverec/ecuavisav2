@@ -294,7 +294,7 @@ async function Token(){
     var modalUserNew = {
       modalAlert:function(){
         var alert = document.querySelector('#alert-mensaje-1');
-        if(ECUAVISA_EC.USER_data('wylexUserAlertView')){
+        if(ECUAVISA_EC.USER_data('wylexUserAlertView') == 'true'){
           if(alert.contains('d-none')){
             alert.classList.remove("d-none");
           }
