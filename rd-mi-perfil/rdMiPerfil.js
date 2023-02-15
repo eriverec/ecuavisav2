@@ -358,7 +358,6 @@ async function Token(){
         this.title();
         this.body();
         this.load();
-        this.modalAlert();
         var existemodal = setInterval(function () {
             if ((typeof $().modal == 'function')) {
                 $('#modal_seguimiento_temas').modal('show');
@@ -386,7 +385,8 @@ async function Token(){
         eyesPass();
         perfil.notificaciones.listar();
         perfil.noticias.listar();
-
+        
+        modalUserNew.modalAlert();
         if(ECUAVISA_EC.USER_data('isnewuser') == 0){
           /*****MOSTRAMOS EL MODAL SI EL USUARIO ES NUEVO******/
           modalUserNew.init();
