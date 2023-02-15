@@ -91,7 +91,7 @@ async function Token(){
     })
     .catch(error => {
       console.log('error', error); 
-      window.location = URL_login_G // comentar para modificar el modelo web
+      //window.location = URL_login_G // comentar para modificar el modelo web
     });
 }
 
@@ -99,7 +99,7 @@ async function Token(){
     if (!ECUAVISA_EC.login() && urlParamsGET.get('tk')==null){
         /*Si no existe sesión lo 
         va a redireccionar al login */
-        window.location = URL_login_G; // comentar para modificar el modelo web
+        //window.location = URL_login_G; // comentar para modificar el modelo web
     }
 
     function collapse() {
