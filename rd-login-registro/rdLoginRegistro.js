@@ -310,7 +310,7 @@ function validateLogSocials() {
 function localStorageSetUsuarioNew(user){
   //estado:0 VERIFICA QUE EL USUARIO ES NUEVO
 
-  /*FALTA MANDAR LA VARIABLE USER-NEW POR MEDIO DE GOOGLE Y FACEBOOK*/
-  localStorage.wylexStatusPerfil=user.user_new;
+  /*localStorage.wylexStatusPerfil=user.user_new;*/
+  
   return true;
 }
