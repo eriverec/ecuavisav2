@@ -53,7 +53,7 @@ async function Token(){
           localStorage.wylexAvatar=result.avatar;
         }*/
 
-        //window.location = ECUAVISA_EC.URL_perfil();
+        window.location = ECUAVISA_EC.URL_perfil();
       
     //   let email = result.email;
     //   let pass = result.password;
