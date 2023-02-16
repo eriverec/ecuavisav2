@@ -2,6 +2,7 @@ var URL_principal_G = "https://www.ecuavisa.com/";
 var URL_login_G = "https://www.ecuavisa.com/servicios/login";
 var URL_perfil_G = "https://www.ecuavisa.com/servicios/perfil";
 var UserId = localStorage.getItem("wylexUserId");
+
 window.onload = () => {
   document.getElementById("forgetButton").disabled = false;
   let btnLogGoogle = document.getElementById("aLogGoogle");
@@ -309,7 +310,7 @@ function validateLogSocials() {
 function localStorageSetUsuarioNew(user){
   //estado:0 VERIFICA QUE EL USUARIO ES NUEVO
 
-  /*FALTA MANDAR LA VARIABLE USER-NEW POR MEDIO DE GOOGLE Y FACEBOOK*/
-  localStorage.wylexStatusPerfil=user.user_new;
+  /*localStorage.wylexStatusPerfil=user.user_new;*/
+  
   return true;
 }
