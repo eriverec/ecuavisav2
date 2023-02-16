@@ -502,7 +502,7 @@ async function Token(){
                       <div class="section">${data.category}</div>
                       <a href="${data.url}"><h3>${data.title}</h3></a>
                    </div>
-                   <div class="multimedia"> <a href="${data.url}"><img prueba="ss" src="${ ( data.img == '' ? 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Image_not_available.png' : data.img) }" alt="${data.title}"></a> </div>
+                   <div class="multimedia"> <a href="${data.url}"><img src="${ ( data.img == '' ? 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Image_not_available.png' : data.img) }" alt="${data.title}"></a> </div>
                 </article>`;
         },
         loader: function (data) {
@@ -574,7 +574,7 @@ async function Token(){
                       <a href="${data.url}"><h3>${data.title}</h3></a>
                    </div>
                    <div class="multimedia">
-                      <a href="${data.url}"><img src="${data.img}" alt="${data.title}"></a>
+                      <a href="${data.url}"><img src="${ ( data.img == '' ? 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Image_not_available.png' : data.img) }" alt="${data.title}"></a>
                       <button value="${data.url}" class="btn btn-ecuavisa-noticia active" title="Haz clic para quitar la noticia">
                         <img src="https://ecuavisadev.netlify.app/rd-mi-perfil/assets/saved.svg" width="20" height="20" alt="${data.title}">
                       </button>
