@@ -1,3 +1,8 @@
+/*Ocultar bloques*/
+.BLOQUE_IMG_SEC_TIT_60x100 .media_block .text_block .inf2.rd_date{
+  display: none;
+}
+
 /*Apertura*/
 .portada-estilo .iconPlay{
   background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
