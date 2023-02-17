@@ -54,7 +54,9 @@
   border-top: 16px solid #2927B9;
     border-bottom: 16px solid #2927B9;
 }
-
+.HOME_MENU_RD .destacada__2 .noticias .article .BLOQUE_IMG_SEC_TIT_60x100 .text_block .inf2.rd_date {
+  display: none;
+}
 
 .HOME_MENU_RD .notas-1-p-ap .IMG_SEC_TIT_TXT_PORTADA h3 {
     color: var(--bs-white);
