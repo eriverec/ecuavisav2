@@ -316,7 +316,6 @@ async function Token(){
         }
         if (perfil.contrasenia.validarPass() && pass != '' && passrepeat != '') {
           btn.prop('disabled', true);
-
           fetch(`${ECUAVISA_EC.api.loginService}resetPasswordPerfil`, {
             method: "PUT",
             headers: {
