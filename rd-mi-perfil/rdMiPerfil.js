@@ -281,12 +281,45 @@ async function Token(){
         }
       });
       $('#btnSaveM').click(function (e) {
+        var btn = $(this);
         var pass = $('#pass').val();
         var passrepeat = $('#passrepeat').val();
+        var passOld = $('#passold').val();
+        if(passOld == '' || passOld.length < 1){
+          alert('Debe escribir su contraseña antigua.');
+          return false;
+        }
         if (perfil.contrasenia.validarPass() && pass != '' && passrepeat != '') {
-          alert('Enviado')
+          btn.prop('disabled', true);
+
+          fetch("https://ecuavisa-login-service.onrender.com/resetPasswordPerfil", {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              password: pass,
+              password2: passrepeat,
+              password_old: passOld,
+              email: email,
+            }),
+          }).then((response) => response.json())
+            .then(async (result) => {
+              if (result.resp) {
+                alert(result.mensaje);
+              } else {
+                alert(result.mensaje);
+              }
+              btn.prop('disabled', false);
+              return true;
+            })
+            .catch((error) => {
+              console.log("error", error); /*; window.location = URL_login_G*/
+            });
+          return true;
         } else {
-          alert('Contraseñas no coinciden o están vacías')
+          alert('Contraseñas no coinciden o están vacías');
+          return false;
         }
       })
     }
