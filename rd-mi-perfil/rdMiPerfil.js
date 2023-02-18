@@ -36,7 +36,7 @@ async function Token(){
     redirect: 'follow'
   };
   //servicio Luis
-  await fetch("https://ecuavisa-login-service.onrender.com/tasks", requestOptions)
+  await fetch(`${ECUAVISA_EC.api.loginService}tasks`, requestOptions)
     .then(response => response.json())
     .then (async (result) => {
       if(result.message!='Usuario No Autorizado'){
@@ -292,7 +292,7 @@ async function Token(){
         if (perfil.contrasenia.validarPass() && pass != '' && passrepeat != '') {
           btn.prop('disabled', true);
 
-          fetch("https://ecuavisa-login-service.onrender.com/resetPasswordPerfil", {
+          fetch(`${ECUAVISA_EC.api.loginService}resetPasswordPerfil`, {
             method: "PUT",
             headers: {
               "Content-Type": "application/x-www-form-urlencoded",
@@ -421,7 +421,7 @@ async function Token(){
                   $('#modal_seguimiento_temas').modal('hide');
 
                   /*FETCH*/
-                  fetch("https://ecuavisa-login-service.onrender.com/updatestatususer", {
+                  fetch(`${ECUAVISA_EC.api.loginService}updatestatususer`, {
                     method: "PUT",
                     headers: {
                       "Content-Type": "application/x-www-form-urlencoded",
