@@ -301,7 +301,7 @@ async function Token(){
               password: pass,
               password2: passrepeat,
               password_old: passOld,
-              email: email,
+              email: ECUAVISA_EC.USER_data('email'),
             }),
           }).then((response) => response.json())
             .then(async (result) => {
