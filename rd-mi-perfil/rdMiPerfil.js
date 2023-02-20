@@ -330,7 +330,6 @@ async function Token(){
             }),
           }).then((response) => response.json())
             .then(async (result) => {
-              
               mensajeCambioContrasenia(result.resp, result.mensaje);
               if (result.resp) {
                 $('#pass').val('');
