@@ -84,4 +84,9 @@
     font-size: 55px;
     line-height: 48px;
   }
+  .cintillo-rd h1 {
+    font-size: 55px !important;
+    line-height: 50px !important;
+    margin-bottom: 0px !important;
+}
 }
