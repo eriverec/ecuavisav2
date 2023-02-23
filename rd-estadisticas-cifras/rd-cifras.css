@@ -17,16 +17,16 @@
 }
 
 .cintillo-rd h1{
-  display: inline-block;
-  font-family: 'Anek Malayalam';
-  letter-spacing: -0.03em;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 88px;
-  line-height: 81px;
-  text-transform: lowercase;
-  color: #2927B9;
-  margin-bottom: 24px;
+  display: inline-block !important; 
+  font-family: 'Anek Malayalam' !important;
+  letter-spacing: -0.03em !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 88px !important;
+  line-height: 81px !important;
+  text-transform: lowercase !important;
+  color: #2927B9 !important;
+  margin-bottom: 24px !important;
 }
 
 
