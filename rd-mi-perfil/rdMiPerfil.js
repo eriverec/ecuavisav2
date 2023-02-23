@@ -204,6 +204,10 @@ async function Token(){
     }
     
     function eyesPass() {
+      /*Verifica si es un usuario por primera, vez que no sabe donde está su contraseña generada*/
+      var esNuevo = ECUAVISA_EC.USER_data('isnewuser') == '0';
+      var etiquetaAviso = `<label class="col-form-label text-danger" style="font-size:12px">Si eres nuevo usuario, tu contraseña fue enviada a tu correo, revisa tu bandeja de entrada.</label>`;
+
       $("input[type='password'][data-eye]").each(function (i) {
         var $this = $(this),
           id = 'eye-password-' + i,
@@ -265,6 +269,10 @@ async function Token(){
           }
         });
       });
+
+      if(esNuevo){
+        $('#cambiopass > div.modal-body > div:nth-child(1)').append(etiquetaAviso);
+      }
     
       $('#pass').on('input', function () {
         var pass = $(this).val();
