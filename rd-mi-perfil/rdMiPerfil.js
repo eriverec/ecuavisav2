@@ -36,7 +36,7 @@ async function Token(){
     redirect: 'follow'
   };
   //servicio Luis
-  await fetch("https://ecuavisa-login-service.onrender.com/tasks", requestOptions)
+  await fetch(`${ECUAVISA_EC.api.loginService}tasks`, requestOptions)
     .then(response => response.json())
     .then (async (result) => {
       if(result.message!='Usuario No Autorizado'){
@@ -204,6 +204,10 @@ async function Token(){
     }
     
     function eyesPass() {
+      /*Verifica si es un usuario por primera, vez que no sabe donde está su contraseña generada*/
+      var esNuevo = ECUAVISA_EC.USER_data('isnewuser') == '0';
+      var etiquetaAviso = `<label class="col-form-label text-danger" style="font-size:12px">Si eres nuevo usuario, tu contraseña fue enviada a tu correo, revisa tu bandeja de entrada.</label>`;
+
       $("input[type='password'][data-eye]").each(function (i) {
         var $this = $(this),
           id = 'eye-password-' + i,
@@ -265,6 +269,10 @@ async function Token(){
           }
         });
       });
+
+      if(esNuevo){
+        $('#cambiopass > div.modal-body > div:nth-child(1)').append(etiquetaAviso);
+      }
     
       $('#pass').on('input', function () {
         var pass = $(this).val();
@@ -280,13 +288,72 @@ async function Token(){
           perfil.contrasenia.validarPass();
         }
       });
+
+      var mensajeCambioContrasenia = function(resp, mensaje){
+        if(!document.querySelector('#modal-resp')){
+          $("#cambiopass .modal-body").prepend(`<div id="modal-resp"></div>`);
+        }
+        var respuesta = (resp?'success':'danger');
+        $('#modal-resp').html(`
+          <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+            <symbol id="check-circle-fill" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
+            </symbol>
+            <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+            </symbol>
+            <symbol id="exclamation-triangle-fill" fill="currentColor" viewBox="0 0 16 16">
+              <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"/>
+            </symbol>
+          </svg>
+          <div class="alert alert-${respuesta} alert-dismissible fade show" role="alert">
+              ${resp? `<svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:"><use xlink:href="#check-circle-fill"/></svg>` : `  <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:"><use xlink:href="#exclamation-triangle-fill"/></svg>`} ${mensaje}
+              <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          </div>`);
+        return true;
+      }
+
       $('#btnSaveM').click(function (e) {
+        var btn = $(this);
         var pass = $('#pass').val();
         var passrepeat = $('#passrepeat').val();
+        var passOld = $('#passold').val();
+        if(passOld == '' || passOld.length < 1){
+          alert('Debe escribir su contraseña antigua.');
+          return false;
+        }
         if (perfil.contrasenia.validarPass() && pass != '' && passrepeat != '') {
-          alert('Enviado')
+          btn.prop('disabled', true);
+
+          fetch(`${ECUAVISA_EC.api.loginService}resetPasswordPerfil`, {
+            method: "PUT",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              password: pass,
+              password2: passrepeat,
+              password_old: passOld,
+              email: ECUAVISA_EC.USER_data('email'),
+            }),
+          }).then((response) => response.json())
+            .then(async (result) => {
+              mensajeCambioContrasenia(result.resp, result.mensaje);
+              if (result.resp) {
+                $('#pass').val('');
+                $('#passrepeat').val('');
+                $('#passold').val('');
+              }
+              btn.prop('disabled', false);
+              return true;
+            })
+            .catch((error) => {
+              console.log("error", error); /*; window.location = URL_login_G*/
+            });
+          return true;
         } else {
-          alert('Contraseñas no coinciden o están vacías')
+          alert('Contraseñas no coinciden o están vacías');
+          return false;
         }
       })
     }
@@ -388,7 +455,7 @@ async function Token(){
                   $('#modal_seguimiento_temas').modal('hide');
 
                   /*FETCH*/
-                  fetch("https://ecuavisa-login-service.onrender.com/updatestatususer", {
+                  fetch(`${ECUAVISA_EC.api.loginService}updatestatususer`, {
                     method: "PUT",
                     headers: {
                       "Content-Type": "application/x-www-form-urlencoded",

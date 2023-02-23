@@ -16,6 +16,20 @@
   margin-bottom: 24px;
 }
 
+.cintillo-rd h1{
+  display: inline-block !important; 
+  font-family: 'Anek Malayalam' !important;
+  letter-spacing: -0.03em !important;
+  font-style: normal !important;
+  font-weight: 600 !important;
+  font-size: 88px !important;
+  line-height: 81px !important;
+  text-transform: lowercase !important;
+  color: #2927B9 !important;
+  margin-bottom: 24px !important;
+}
+
+
 .c_azul_celeste_Mobile {
   display: none;
   margin-bottom: 35px;
