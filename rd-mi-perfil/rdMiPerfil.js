@@ -390,25 +390,34 @@ async function Token(){
         var temasSeguir = ``;
         for(var i in modalUserNew.temas){
           var ins = modalUserNew.temas[i];
-          temasSeguir+= `<div class="item_tema t_${ins.id}">
-                           <div class="keywords font-2 fs13">
-                              <div class="template-meta-favorite-action" value="${ins.name}" id="${ins.id}" title="Seguir tema" onclick="if (!window.__cfRLUnblockHandlers) return false; meta_favorite_action('${ins.id}')" style="/* display:none; */">
-                                 <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir">
+          temasSeguir += `<p class="mis-intereses-modal" style="width:100%">
+            ${ins.interes}
+           </p>`;
+           
+           for(var j in ins.data){
+            var dat = ins.data[j];
+              temasSeguir+= `<div class="item_tema t_${dat.id}">
+                   <div class="keywords font-2 fs13">
+                      <div class="template-meta-favorite-action" value="${dat.name}" id="${dat.id}" title="Seguir tema" onclick="if (!window.__cfRLUnblockHandlers) return false; meta_favorite_action('${dat.id}')" style="/* display:none; */">
+                         <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir">
 
-                                    <small>${ins.name}</small>
+                            <small>${dat.name}</small>
 
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                      <path fill-rule="evenodd" d="M2 2v4.586l7 7L13.586 9l-7-7H2zM1 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2z"></path>
-                                      <path fill-rule="evenodd" d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"></path>
-                                    </svg>
-                                    <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                      <path fill-rule="evenodd" d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
-                                    </svg>
-                                 </button> 
-                              </div>
-                           </div>
-                       </div>`;
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" d="M2 2v4.586l7 7L13.586 9l-7-7H2zM1 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2z"></path>
+                              <path fill-rule="evenodd" d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"></path>
+                            </svg>
+                            <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                              <path fill-rule="evenodd" d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
+                            </svg>
+                         </button> 
+                      </div>
+                   </div>
+               </div>`;
+           }
+          
         }
+
         document.querySelector('#modal_body_seguimiento_tema').innerHTML = `
         <div class="contenido-modal">
            <p class="parrafo-modal">
@@ -417,6 +426,7 @@ async function Token(){
            <p class="mis-intereses-modal">
             Mis intereses
            </p>
+           <hr>
            <div class="listado-temas" id="listado-temas">
               ${temasSeguir}
            </div>
@@ -480,11 +490,23 @@ async function Token(){
         }, 500);
       },
       temas:[
-        {id:'58812355', name:'elecciones 2023'},
-        {id:'18537', name:'Guayaquil'},
-        {id:'7627344', name:'Colombia'},
-        {id:'26853867', name:'RBD'},
-        {id:'13941431', name:'Tour'},
+        {
+          "interes":"Noticias",
+          "data":[
+            {id:'58812355', name:'elecciones 2023'},
+            {id:'18465', name:'Ecuador'},
+            {id:'18819', name:'Quito'},
+            {id:'18537', name:'Guayaquil'},
+            {id:'17519', name:'Economía'},
+            {id:'17555', name:'Política'},
+          ]
+        },
+        {
+          "interes":"Estadio",
+          "data":[
+            {id:'6223630', name:'fútbol ecuatoriano'}
+          ]
+        }
       ]
     }
     /************FIN MODAL DE SEGUIMIENTO DE INTERESES************/
