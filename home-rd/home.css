@@ -301,6 +301,16 @@ INICIO - APERTURA 2
 }
 
 
+@media (max-width: 991px){
+  .layout_apertura_2 .articulos_4dest .noticias .article .text_block .headline a h3 {
+    font-size: 18px;
+  }
+  .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block .multimedia .multimediaIconMacroWrapper a div {
+    position: initial !important;
+    width: 130px !important;
+  }
+}
+
 /* ***************************
 INICIO - PORTADA - 4 DESTACADAS 
 *************************** */
