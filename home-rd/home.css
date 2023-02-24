@@ -231,6 +231,17 @@ INICIO - APERTURA 2
   margin: 30px 0;
 }
 
+.layout_apertura_2 .iconPlay {
+  background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlayRedondoCeleste.svg);
+  width: 30px;
+  height: 30px;
+  top: initial;
+  bottom: 0;
+  right: 0;
+  left: initial;
+  margin: 10px;
+}
+
 .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block .multimedia .multimediaIconMacroWrapper a div {
   position: initial !important;
   width: 140px !important;
