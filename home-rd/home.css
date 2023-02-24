@@ -1728,9 +1728,13 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
     font-size: 15px;
     margin: 20px 0;
   }
+
+  /*Apertura 2 - prueba*/
+  .layout_apertura_2 .container{
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 }
-
-
 
 @media (max-width: 575px) {
   .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .top_info .Topheadline .hLine {
@@ -1742,10 +1746,6 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   }
 
 }
-
-
-
-
 
 
 /* ***************************
