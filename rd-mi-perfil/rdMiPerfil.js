@@ -504,7 +504,32 @@ async function Token(){
         {
           "interes":"Estadio",
           "data":[
-            {id:'6223630', name:'fútbol ecuatoriano'}
+            {id:'6223630', name:'fútbol ecuatoriano'},
+            {id:'5906044', name:'Copa Libertadores'},
+            {id:'5350596', name:'Conmebol'},
+            {id:'37204544', name:'El Nacional'},
+          ]
+        },
+        {
+          "interes":"Entretenimiento",
+          "data":[
+            {id:'17525', name:'Entretenimiento'},
+            {id:'9333452', name:'Premios Oscar'},
+            {id:'22433745', name:'novela Ecuavisa'},
+            {id:'5991024', name:'producción'},
+            {id:'154098771', name:'Equipo ideal'},
+          ]
+        },
+        {
+          "interes":"Estilo",
+          "data":[
+            {id:'198495015', name:'ganadores BAFTA 2023'},
+            {id:'4351120', name:'redes sociales'},
+            {id:'9627274', name:'feminismo'},
+            {id:'30647250', name:'personas'},
+            {id:'17587', name:'Tecnología'},
+            {id:'11122250', name:'negocios'},
+            {id:'71599306', name:'Especial Ecuaterra'},
           ]
         }
       ]
