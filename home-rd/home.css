@@ -1984,6 +1984,16 @@ INICIO - BLOQUE - MUNDO
   }
 }
 
+@media (min-width: 768px) and (max-width: 1024px) {
+  .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
+    margin: 20px 0;
+  }
+  .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
+    font-size: 18px;
+  }
+}
+
+
 
 @media (max-width: 1200px) {
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
