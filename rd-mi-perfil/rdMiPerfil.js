@@ -427,7 +427,7 @@ async function Token(){
             Mis intereses
            </p>
            <hr>
-           <div class="listado-temas" id="listado-temas">
+           <div class="listado-temas" id="listado-temas" style=" overflow: auto; max-height: 350px; ">
               ${temasSeguir}
            </div>
         </div>`;
