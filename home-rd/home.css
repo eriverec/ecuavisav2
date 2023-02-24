@@ -305,7 +305,7 @@ INICIO - APERTURA 2
   height: 100%;
 }
 
-.layout_apertura_2 .articulos_4dest.cent .noticias .article {
+.layout_apertura_2 .articulos_4dest .noticias .article {
   border-top: 1px solid var(--rd-gray-border);
   display: flex;
   align-items: center;
