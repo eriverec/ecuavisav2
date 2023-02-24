@@ -390,10 +390,10 @@ async function Token(){
         var temasSeguir = ``;
         for(var i in modalUserNew.temas){
           var ins = modalUserNew.temas[i];
-          temasSeguir += `<p class="mis-intereses-modal" style="width:100%">
+          temasSeguir += `<p class="mis-intereses-modal py-1 m-0" style="width:100%">
             ${ins.interes}
            </p>`;
-           
+
            for(var j in ins.data){
             var dat = ins.data[j];
               temasSeguir+= `<div class="item_tema t_${dat.id}">
@@ -423,7 +423,7 @@ async function Token(){
            <p class="parrafo-modal">
             Para ofrecerte una mejor experiencia elige los intereses que se ajusten a ti.
            </p>
-           <p class="mis-intereses-modal">
+           <p class="mis-intereses-modal fw-bold">
             Mis intereses
            </p>
            <hr>
