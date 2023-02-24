@@ -244,6 +244,7 @@ INICIO - APERTURA 2
   font-size: 14px;
   line-height: 17px;
   text-transform: uppercase;
+  font-family: 'Mattone 150';
 }
 
 .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline {
@@ -257,6 +258,33 @@ INICIO - APERTURA 2
   font-weight: 700;
   line-height: 28px;
   color: var(--bs-black);
+}
+
+.layout_apertura_2 .mini_portada .noticias .article .media_block .text_block .headline h2 {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  color: #000000;
+}
+
+.layout_apertura_2 .mini_portada .noticias .article .media_block .text_block .subheadline h3 {
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 26px;
+    color: #434343;
+}
+
+.layout_apertura_2 .mini_portada .noticias .article .media_block .text_block .section {
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  color: #2927B9;
 }
 
 
