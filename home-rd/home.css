@@ -364,7 +364,22 @@ INICIO - BANNER FIJO
   }
 }
 
-@media (min-width: 768px) and (max-width: 1024px) {
+@media (min-width: 768px) and (max-width: 768px) {
+  .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
+    font-size: 16px;
+    line-height: 22px;
+  }
+  .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
+    margin: 15px 0;
+  }
+  .layout_apertura_2 .mini_portada .noticias .article .media_block .text_block .subheadline h3 {
+    font-size: 17px;
+    line-height: 28px;
+  }
+
+}
+
+@media (min-width: 900px) and (max-width: 1024px) {
   .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
     margin: 20px 0;
   }
