@@ -220,7 +220,7 @@ INICIO - BANNER FIJO
 
 
 /* ***************************
-INICIO - APERTURA 2  
+        INICIO - APERTURA 2  
 *************************** */
 
 .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
@@ -232,7 +232,7 @@ INICIO - APERTURA 2
 }
 
 .layout_apertura_2 .iconPlay {
-  background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlayRedondoCeleste.svg);
+  background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlayRedondoCeleste.svg');
   width: 30px;
   height: 30px;
   top: initial;
@@ -299,6 +299,7 @@ INICIO - APERTURA 2
   margin-top: 20px;
   margin-bottom: 14px;
   display: block;
+  text-transform: uppercase;
 }
 
 .layout_apertura_2 .mini_portada {
@@ -355,7 +356,27 @@ INICIO - APERTURA 2
   .layout_apertura_2 .articulos_4dest.cent .noticias .article:nth-child(5){
     border-bottom: none;
   }
+
+  /*Apertura 2 - prueba*/
+  .layout_apertura_2 .container{
+    padding-left: 0px;
+    padding-right: 0px;
+  }
 }
+
+@media (min-width: 768px) and (max-width: 1024px) {
+  .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
+    margin: 20px 0;
+  }
+  .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
+    font-size: 18px;
+  }
+}
+
+/* *************************
+       FIN - APERTURA 2  
+*************************** */
+
 
 /* ***************************
 INICIO - PORTADA - 4 DESTACADAS 
@@ -375,8 +396,6 @@ INICIO - PORTADA - 4 DESTACADAS
 .HOME_MENU_RD .ly-apertura-rd.mobile_des_5 {
   margin-bottom: 50px;
 }
-
-
 
 .HOME_MENU_RD .rd_grid .c2 {
   display: grid;
@@ -892,8 +911,6 @@ Cambio de tamaño de imagen grande izq
     padding-left: 0;
   }
 
-
-
   .HOME_MENU_RD .listado_1_4_mobile .noticias .article:nth-child(4) {
     border-bottom: 1px solid var(--rd-gray-border);
   }
@@ -975,7 +992,6 @@ Cambio de tamaño de imagen grande izq
 
 
 
-
 /* ***************************
 INICIO - BLOQUE - ECUADOR 
 *************************** */
@@ -1043,8 +1059,6 @@ INICIO - BLOQUE - ECUADOR
   margin: 45px 0;
 }
 
-
-
 .HOME_MENU_RD .lista-bloque .noticias .article .text_block .section {
   color: var(--rd-section);
   font-weight: 500;
@@ -1085,9 +1099,9 @@ INICIO - BLOQUE - ECUADOR
   font-weight: 300;
   line-height: 26px;
 }
-
-
 /*FIN SECCION PADDING*/
+
+
 
 /*SECCIÓN TITULO RIGHT*/
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .headline a h2 {
@@ -1107,7 +1121,6 @@ INICIO - BLOQUE - ECUADOR
   line-height: 27px;
   letter-spacing: -0.025em;
 }
-
 
 .HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT {
   margin: 30px 0;
@@ -1214,8 +1227,6 @@ BLOQUE - TE EXPLICO LA NOTICIA
 }
 
 @media (max-width: 991px) {
-
-
   .HOME_MENU_RD .nota-principal-bloque .noticias .article .text_block .headline a h2 {
     font-size: var(--rd-size-22);
     line-height: 30px;
@@ -1237,13 +1248,10 @@ BLOQUE - TE EXPLICO LA NOTICIA
   .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .headline a h2 {
     font-size: 18px;
   }
-
-
 }
 
 
 @media (max-width: 767px) {
-
   .HOME_MENU_RD .ecuador_list_1x2 .noticias .article{
     padding: 5px 0;
   }
@@ -1353,7 +1361,6 @@ INICIO - BLOQUE - PROGRAMACION
     height: 365px;
   }
 }
-
 
 .HOME_MENU_RD .titulo_programa_web .c_azul_celeste_Desktop {
   margin-top: 10px;
@@ -1589,8 +1596,6 @@ INICIO - BLOQUE - PROGRAMACION
 
 } */
 
-
-
 @media (max-width: 767px) {
   .HOME_MENU_RD .img-header-prog .mediaBlock #rd_cont_botones a {
     font-size: 10px;
@@ -1627,9 +1632,6 @@ INICIO - BLOQUE - PROGRAMACION
     font-size: 45px;
   }
 }
-
-
-
 
 
 /* ***************************
@@ -1762,8 +1764,6 @@ INICIO - BLOQUE - MUNDO
   column-gap: 30px;
 }
 
-
-
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(1) {
   border-top: 1px solid var(--rd-gray-border);
 }
@@ -1775,7 +1775,6 @@ INICIO - BLOQUE - MUNDO
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3) {
   border-top: 1px solid var(--rd-gray-border);
   border-bottom: 1px solid var(--rd-gray-border);
-
 }
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(4) {
@@ -1922,10 +1921,10 @@ INICIO - BLOQUE - MUNDO
     text-transform: uppercase;
   }
 
-  .HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT,
+ /* .HOME_MENU_RD .lista-bloque .noticias .article .BLOQUE_SEC_TIT,
   .HOME_MENU_RD .ecuador_list_1x2 .noticias .article {
-    /* padding-top: 20px; */
-  }
+     padding-top: 20px; 
+  }*/
 
   /* .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(4),
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(3) {
@@ -1972,7 +1971,6 @@ INICIO - BLOQUE - MUNDO
     top: 0;
     z-index: 1;
   }
-
   /**Fin seccion informativos*/
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
@@ -1985,21 +1983,11 @@ INICIO - BLOQUE - MUNDO
 }
 
 @media (min-width: 768px){
-  .container{
+  .layout_apertura_2 .container{
     padding-right: 0px !important; 
     padding-left: 0px !important;
   }
 }
-
-@media (min-width: 768px) and (max-width: 1024px) {
-  .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
-    margin: 20px 0;
-  }
-  .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
-    font-size: 18px;
-  }
-}
-
 
 
 @media (max-width: 1200px) {
@@ -2166,7 +2154,7 @@ INICIO - BLOQUE - MUNDO
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/alfaslabone/v17/6NUQ8FmMKwSEKjnm5-4v-4Jh2d1he-Wv.woff2) format('woff2');
+  src: url('https://fonts.gstatic.com/s/alfaslabone/v17/6NUQ8FmMKwSEKjnm5-4v-4Jh2d1he-Wv.woff2') format('woff2');
   unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+1EA0-1EF9, U+20AB;
 }
 
@@ -2176,7 +2164,7 @@ INICIO - BLOQUE - MUNDO
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/alfaslabone/v17/6NUQ8FmMKwSEKjnm5-4v-4Jh2dxhe-Wv.woff2) format('woff2');
+  src: url('https://fonts.gstatic.com/s/alfaslabone/v17/6NUQ8FmMKwSEKjnm5-4v-4Jh2dxhe-Wv.woff2') format('woff2');
   unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
 
@@ -2186,7 +2174,7 @@ INICIO - BLOQUE - MUNDO
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url(https://fonts.gstatic.com/s/alfaslabone/v17/6NUQ8FmMKwSEKjnm5-4v-4Jh2dJhew.woff2) format('woff2');
+  src: url('https://fonts.gstatic.com/s/alfaslabone/v17/6NUQ8FmMKwSEKjnm5-4v-4Jh2dJhew.woff2') format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
 
