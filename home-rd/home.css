@@ -319,8 +319,8 @@ INICIO - BANNER FIJO
 
 .layout_apertura_2 .articulos_4dest .noticias .article {
   border-top: 1px solid var(--rd-gray-border);
-  display: flex;
-  align-items: center;
+ /* display: flex;
+  align-items: center;*/
 }
 
 .layout_apertura_2 .articulos_4dest.cent .noticias .article:nth-child(5){
