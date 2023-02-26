@@ -594,6 +594,7 @@ async function Token(){
       },
       notificaciones: {
         listar: function () {
+          var myHeaders = new Headers();
           var idUsuario = ECUAVISA_EC.USER_data('id');
           var urlGetNotificaciones = ECUAVISA_EC.api.notificacion.obtener;
           var urlFormateada = urlGetNotificaciones + idUsuario;
