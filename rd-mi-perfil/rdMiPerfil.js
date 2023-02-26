@@ -385,6 +385,8 @@ async function Token(){
             }
           });
         });
+        var classListaTemas = document.querySelector('#listado-temas');
+        classListaTemas.classList.remove("isDisabled");
         return true;
       },
       body:function(){
@@ -428,7 +430,7 @@ async function Token(){
             Mis intereses
            </p>
            <hr>
-           <div class="listado-temas" id="listado-temas" style=" overflow: auto; max-height: 350px; ">
+           <div class="listado-temas isDisabled" id="listado-temas" style=" overflow: auto; max-height: 350px; ">
               ${temasSeguir}
            </div>
         </div>`;
@@ -609,9 +611,10 @@ async function Token(){
             if (!jsondata.resp) {
               perfil.notificaciones.listarUltimas();
             } else {
-              for (var i in jsondata.usuario.Notificaciones) {
-                const d = jsondata.usuario.Notificaciones[i];
-                const iduser = jsondata.usuario.id;
+              var notificaciones = jsondata.data.usuario.Notificaciones;
+              for (var i in notificaciones) {
+                const d = notificaciones[i];
+                const iduser = jsondata.data.usuario.id;
                 $articles += perfil.notificaciones.html_(d);
               }
               $article.innerHTML = $articles;

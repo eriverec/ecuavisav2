@@ -4,6 +4,11 @@
     display: none;
 }*/
 /**********************CINTILLO**********************/
+.isDisabled{
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
 
 #iter-content-wrapper {
   padding-top: 0px;
