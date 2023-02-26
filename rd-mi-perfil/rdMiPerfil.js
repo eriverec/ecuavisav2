@@ -384,9 +384,9 @@ async function Token(){
               jQryIter(this).addClass("add");
             }
           });
+          var classListaTemas = document.querySelector('#listado-temas');
+          classListaTemas.classList.remove("isDisabled");
         });
-        var classListaTemas = document.querySelector('#listado-temas');
-        classListaTemas.classList.remove("isDisabled");
         return true;
       },
       body:function(){
@@ -666,27 +666,23 @@ async function Token(){
       noticias: {
         listar: function () {
           var myHeaders = new Headers();
-          userId = ECUAVISA_EC.USER_data('wylexUserId');;
-          var raw = JSON.stringify({
-            "id": userId
-          });
+          var idUsuario = ECUAVISA_EC.USER_data('id');
+          var urlGetNotificaciones = ECUAVISA_EC.api.notificacion.obtener;
+          var urlFormateada = urlGetNotificaciones + idUsuario;
           var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw
+            method: 'GET',
+            headers: myHeaders
           };
-    
-          let $articles = '';
-          let $idusuario = ECUAVISA_EC.USER_data('wylexUserId') || 0;
-          fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/notificationsget.php", requestOptions).then(response => {
+          fetch(urlFormateada, requestOptions).then(response => {
             return response.json();
           }).then(jsondata => {
-            if (jsondata.error) {
+            if (!jsondata.resp) {
               $articles += 'No tienes notas guardadas';
             } else {
-              for (var i in jsondata.usuario.Notificaciones) {
-                const d = jsondata.usuario.Notificaciones[i];
-                const iduser = jsondata.usuario.id;
+              var notificaciones = jsondata.data.usuario.Notificaciones;
+              for (var i in notificaciones) {
+                const d = notificaciones[i];
+                const iduser = jsondata.data.usuario.id;
                 $articles += perfil.noticias.html_(d, i);
               }
             }
