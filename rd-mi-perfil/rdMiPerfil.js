@@ -385,6 +385,7 @@ async function Token(){
             }
           });
         });
+        return true;
       },
       body:function(){
         var temasSeguir = ``;
@@ -449,7 +450,9 @@ async function Token(){
       init:function(){
         this.title();
         this.body();
-        this.load();
+        /*Activa iter con el modal*/
+        activarIter();
+        /*Activa iter con el modal*/
         var existemodal = setInterval(function () {
             if ((typeof $().modal == 'function')) {
                 $('#modal_seguimiento_temas').modal('show');
@@ -535,6 +538,16 @@ async function Token(){
       ]
     }
     /************FIN MODAL DE SEGUIMIENTO DE INTERESES************/
+    var activarIter = async function(){
+      setTimeout(function () {
+        if (typeof ITER !== 'undefined') {
+          return modalUserNew.load();
+        } else {
+          activarIter();
+        }
+      }, 400) ;
+      return false;
+    }
 
     var perfil = {
       init: () => {
