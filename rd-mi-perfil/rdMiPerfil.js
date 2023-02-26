@@ -594,23 +594,18 @@ async function Token(){
       },
       notificaciones: {
         listar: function () {
-          var myHeaders = new Headers();
-          userId = ECUAVISA_EC.USER_data('wylexUserId');
-          var raw = JSON.stringify({
-            "id": userId
-          });
+          var idUsuario = ECUAVISA_EC.USER_data('id');
+          var urlGetNotificaciones = ECUAVISA_EC.api.notificacion.obtener;
+          var urlFormateada = urlGetNotificaciones + idUsuario;
           var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw
+            method: 'GET',
+            headers: myHeaders
           };
-    
           let $articles = '';
-          let $idusuario = ECUAVISA_EC.USER_data('wylexUserId') || 0;
-          fetch("https://estadisticas.ecuavisa.com/sites/gestor/zonaPrivada/notificationsget.php", requestOptions).then(response => {
+          fetch(urlFormateada, requestOptions).then(response => {
             return response.json();
           }).then(jsondata => {
-            if (jsondata.error) {
+            if (!jsondata.resp) {
               perfil.notificaciones.listarUltimas();
             } else {
               for (var i in jsondata.usuario.Notificaciones) {
