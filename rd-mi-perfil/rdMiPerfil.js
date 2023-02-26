@@ -572,6 +572,11 @@ async function Token(){
             </style>`);
         }, 700);
         
+        $('.NoticiasGuardadasBox').on('click', 'button', function(){
+          var idnota = $(this).val();
+          var btn = $(this);
+          perfil.noticias.delete(idnota, btn);
+        });
       },
       contrasenia: {
         validarPass: function () {
@@ -611,14 +616,20 @@ async function Token(){
             if (!jsondata.resp) {
               perfil.notificaciones.listarUltimas();
             } else {
+              var existeN = false;
               var notificaciones = jsondata.data.usuario.Notificaciones;
               for (var i in notificaciones) {
                 const d = notificaciones[i];
                 const iduser = jsondata.data.usuario.id;
                 $articles += perfil.notificaciones.html_(d);
+                existeN = true;
               }
-              $article.innerHTML = $articles;
-              swiperNotificaciones();
+              if(!existeN){
+                perfil.notificaciones.listarUltimas();
+              }else{
+                $article.innerHTML = $articles;
+                swiperNotificaciones();
+              }
             }
           });
         },
@@ -664,6 +675,24 @@ async function Token(){
         },
       },
       noticias: {
+        delete:function(idnota, btn){
+          btn.prop('disabled', true);
+          /*Se obtiene la data del usuario desde main_ecuavisa.js*/
+          var idusuario = ECUAVISA_EC.USER_data('id');
+          /*Se obtiene la data del usuario desde main_ecuavisa.js*/
+          fetch(`${ECUAVISA_EC.api.notificacion.delete}${idusuario}/${idnota}`, {
+            method: 'DELETE'
+          }).then(response => response.json())
+          .then(result => {
+            perfil.noticias.listar();
+            perfil.notificaciones.listar();
+            btn.prop('disabled', false);
+            return true;
+          }).catch(err => {
+            console.error(err);
+            btn.prop('disabled', false);
+          });
+        },
         listar: function () {
           var myHeaders = new Headers();
           var idUsuario = ECUAVISA_EC.USER_data('id');
@@ -680,11 +709,16 @@ async function Token(){
             if (!jsondata.resp) {
               $articles += 'No tienes notas guardadas';
             } else {
+              var existeN = false;
               var notificaciones = jsondata.data.usuario.Notificaciones;
               for (var i in notificaciones) {
                 const d = notificaciones[i];
                 const iduser = jsondata.data.usuario.id;
                 $articles += perfil.noticias.html_(d, i);
+                var existeN = true;
+              }
+              if(!existeN){
+                $articles += 'No tienes notas guardadas';
               }
             }
             $articleNoticiasSave.innerHTML = $articles;
@@ -698,7 +732,7 @@ async function Token(){
                    </div>
                    <div class="multimedia">
                       <a href="${data.url}"><img src="${ ( data.img == '' ? 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Image_not_available.png' : data.img) }" alt="${data.title}"></a>
-                      <button value="${data.url}" class="btn btn-ecuavisa-noticia active" title="Haz clic para quitar la noticia">
+                      <button value="${data._id}" class="btn btn-ecuavisa-noticia active" title="Haz clic para quitar la noticia">
                         <img src="https://ecuavisadev.netlify.app/rd-mi-perfil/assets/saved.svg" width="20" height="20" alt="${data.title}">
                       </button>
                    </div>
