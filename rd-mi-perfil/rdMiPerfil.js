@@ -673,6 +673,7 @@ async function Token(){
             method: 'GET',
             headers: myHeaders
           };
+          let $articles = '';
           fetch(urlFormateada, requestOptions).then(response => {
             return response.json();
           }).then(jsondata => {
