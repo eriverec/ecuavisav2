@@ -174,6 +174,8 @@ function fb_login() {
 function login() {
   let cboxTerm = document.getElementById("checkTerms");
   if (cboxTerm.checked == true) {
+    var btn = document.querySelector('#acceder');
+    btn.setAttribute("disabled", true); 
     var URL_login_G = "https://www.ecuavisa.com/servicios/login";
     document.getElementById("logEmail").required = true;
     document.getElementById("logPass").required = true;
@@ -190,8 +192,7 @@ function login() {
         email: email,
         password: password,
       }),
-    })
-      .then((response) => response.json())
+    }).then((response) => response.json())
       .then(async (result) => {
         console.log(result);
         if (result.token) {
@@ -199,13 +200,15 @@ function login() {
           let redirect = "https://www.ecuavisa.com/servicios/perfil?tk=" + result.token;
           //console.log("https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url);
           window.location = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
-            
+          btn.removeAttribute('disabled');  
         } else {
           alert("Nombre de usuario o contraseña incorrecto");
+          btn.removeAttribute('disabled');
         }
       })
       .catch((error) => {
         console.log("error", error); /*; window.location = URL_login_G*/
+        btn.removeAttribute('disabled');
       });
   } else {
     alert("Acepte los términos y condiciones antes de continuar");
@@ -216,6 +219,8 @@ function login() {
 function register() {
   let cboxTermReg = document.getElementById("checkTermsReg");
   if (cboxTermReg.checked == true) {
+    var btn = document.querySelector('#registrar');
+    btn.setAttribute("disabled", true); 
     document.getElementById("regName").required = true;
     document.getElementById("regEmail").required = true;
     document.getElementById("regPass").required = true;
@@ -249,11 +254,13 @@ function register() {
           console.log('token registro',result);
           if (result.token) {
               localStorageSetUsuarioNew(result.user);
+              btn.removeAttribute('disabled');
               window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
           }
         })
         .catch((error) => {
           console.log("error", error); /*; window.location = URL_login_G*/
+          btn.removeAttribute('disabled');
         });
     }
   } else {
@@ -263,6 +270,8 @@ function register() {
 }
 
 function sendEmailPassReset() {
+  var btn = document.querySelector('#forgetButton');
+  btn.setAttribute("disabled", true); 
   let email = document.getElementById("forgetEmail").value.trim();
   //servicio render Luis
   fetch("https://ecuavisa-login-service.onrender.com/forgotPassword", {
@@ -273,8 +282,7 @@ function sendEmailPassReset() {
     body: new URLSearchParams({
       email: email,
     }),
-  })
-    .then((response) => response.json())
+  }).then((response) => response.json())
     .then(async (result) => {
       if (!result.error) {
         alert(result.mensaje);
@@ -282,9 +290,11 @@ function sendEmailPassReset() {
       } else {
         alert("Email inválido");
       }
+      btn.removeAttribute('disabled');
     })
     .catch((error) => {
       console.log("error", error); /*; window.location = URL_login_G*/
+      btn.removeAttribute('disabled');
     });
 }
 

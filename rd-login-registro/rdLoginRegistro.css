@@ -4,7 +4,10 @@
   font-family: 'Archivo', sans-serif;
 }
 
-
+#acceder[disabled] {
+    opacity: .4;
+    cursor: not-allowed;
+}
 
 #iter-content-wrapper {
   padding-top: 0px;
