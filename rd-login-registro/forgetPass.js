@@ -2,7 +2,7 @@ $(document).ready(function () {
   $(".modal-footer button").click(function () {
     var email = $('#forgetEmail').val();
 
-    if (IsEmail(email) == false) {
+    if (IsEmail_2(email) == false) {
       $('#invalid_email').show();
       return false;
     } else {
@@ -25,7 +25,7 @@ $(document).ready(function () {
 
   $(document).on('keyup', '#forgetEmail', checkInput);
 
-  /*function IsEmail(email) {
+  /*function IsEmail_2(email) {
     var regex =
       /^([a-zA-Z0-9_.-+])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
     if (!regex.test(email)) {
@@ -34,15 +34,15 @@ $(document).ready(function () {
       return true;
     }
   }*/
+  function IsEmail_2() {
+    var input = document.querySelector('#forgetEmail');
+    var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    if (input.value.match(validRegex)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 });
 
 
-function IsEmail() {
-  var input = document.querySelector('#forgetEmail');
-  var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  if (input.value.match(validRegex)) {
-    return true;
-  } else {
-    return false;
-  }
-}
