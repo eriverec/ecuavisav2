@@ -182,6 +182,13 @@ function login() {
 
     let email = document.getElementById("logEmail").value;
     let password = document.getElementById("logPass").value;
+
+    if(email == '' || password =='' || email.length == 0 || password.length == 0){
+      alert('El correo y la contraseña no deben estar vacíos');
+    btn.setAttribute("disabled", false); 
+      return false;
+    }
+
     //servicio render Luis
     fetch("https://ecuavisa-login-service.onrender.com/signIn", {
       method: "POST",
@@ -232,7 +239,14 @@ function register() {
     let passwordConf = document.getElementById("regConf").value;
     let token;
 
+    if(passwordConf == '' || password =='' || name =='' || email =='' || passwordConf.length == 0 || password.length == 0 || name.length == 0 || email.length == 0){
+      alert('Todos los campos son requeridos, se deben llenar');
+      btn.setAttribute("disabled", false); 
+      return false;
+    }
+
     if (password !== passwordConf) {
+      alert("Las contraseñas no coinciden")
       console.log("Las contraseñas no coinciden");
     } else {
       //servicio render Luis
