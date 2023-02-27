@@ -247,8 +247,7 @@ function register() {
           apellido: name[1],
           password: password,
         }),
-      })
-        .then((response) => response.json())
+      }).then((response) => response.json())
         .then(async (result) => {
           if(typeof result.message !== 'undefined'){
             btn.removeAttribute('disabled');
