@@ -4,7 +4,9 @@
   font-family: 'Archivo', sans-serif;
 }
 
-#acceder[disabled] {
+#acceder[disabled],
+#registrar[disabled],
+#forgetButton[disabled] {
     opacity: .4;
     cursor: not-allowed;
 }

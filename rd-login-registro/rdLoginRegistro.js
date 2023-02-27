@@ -207,8 +207,8 @@ function login() {
         }
       })
       .catch((error) => {
-        console.log("error", error); /*; window.location = URL_login_G*/
         btn.removeAttribute('disabled');
+        console.log("error", error); /*; window.location = URL_login_G*/
       });
   } else {
     alert("Acepte los términos y condiciones antes de continuar");
@@ -259,8 +259,9 @@ function register() {
           }
         })
         .catch((error) => {
-          console.log("error", error); /*; window.location = URL_login_G*/
           btn.removeAttribute('disabled');
+          alert(error)
+          console.log("error", error); /*; window.location = URL_login_G*/
         });
     }
   } else {
@@ -293,8 +294,8 @@ function sendEmailPassReset() {
       btn.removeAttribute('disabled');
     })
     .catch((error) => {
-      console.log("error", error); /*; window.location = URL_login_G*/
       btn.removeAttribute('disabled');
+      console.log("error", error); /*; window.location = URL_login_G*/
     });
 }
 
