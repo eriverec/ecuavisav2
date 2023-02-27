@@ -251,7 +251,7 @@ function register() {
         .then(async (result) => {
           if(typeof result.message !== 'undefined'){
             btn.removeAttribute('disabled');
-            alert(result.message);
+            alert(result.message+' o su correo ya existe');
           }else{
             token = result.token;
             console.log('token registro',result);
