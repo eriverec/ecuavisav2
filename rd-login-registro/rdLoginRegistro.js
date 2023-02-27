@@ -251,7 +251,7 @@ function register() {
         .then(async (result) => {
           if(typeof result.message !== 'undefined'){
             btn.removeAttribute('disabled');
-            alert(error);
+            alert(result.message);
           }else{
             token = result.token;
             console.log('token registro',result);
