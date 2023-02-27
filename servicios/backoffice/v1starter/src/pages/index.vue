@@ -1,6 +1,14 @@
 <script setup>
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 
+import AnalyticsEarningReportsWeeklyOverview from '@/views/dashboards/analytics/AnalyticsEarningReportsWeeklyOverview.vue'
+import AnalyticsSalesByCountries from '@/views/dashboards/analytics/AnalyticsSalesByCountries.vue'
+import CrmProjectStatus from '@/views/dashboards/crm/CrmProjectStatus.vue'
+import UserTabInteres from '@/views/apps/user/view/UserTabInteres.vue'
+import UserTabNavegacion from '@/views/apps/user/view/UserTabNavegacion.vue'
+import UserTabUbicacion from '@/views/apps/user/view/UserTabUbicacion.vue'
+import UserTabDispositivos from '@/views/apps/user/view/UserTabDispositivos.vue'
+
 const userListStore = useUserListStore();
 const totalUsers = ref(0);
 const totalFacebook = ref(0);
@@ -41,6 +49,33 @@ const countUsers = () => {
       console.error(error);
     });
 };
+
+const route = useRoute()
+const userData = ref()
+const userTab = ref(null)
+
+userListStore.fetchUser(Number(route.params.id)).then(response => {
+  userData.value = response.data
+})
+
+const tabs = [
+  {
+    icon: 'tabler-activity-heartbeat',
+    title: 'Navegación',
+  },
+  {
+    icon: 'tabler-devices',
+    title: 'Dispositivos',
+  },
+  {
+    icon: 'tabler-hand-click',
+    title: 'Intereses',
+  },
+  {
+    icon: 'tabler-map-2',
+    title: 'Ubicaciones',
+  }
+]
 
 countUsers();
 const userListMeta = [
@@ -117,5 +152,57 @@ const userListMeta = [
         </VCard>
       </VCol>
     </VRow>
+
+    <VCol
+      class="mt-6"
+      cols="12"
+      md="12"
+      lg="12"
+    >
+      <VTabs
+        v-model="userTab"
+        class="v-tabs-pill"
+      >
+        <VTab
+          v-for="tab in tabs"
+          :key="tab.icon"
+        >
+          <VIcon
+            :size="18"
+            :icon="tab.icon"
+            class="me-1"
+          />
+          <span>{{ tab.title }}</span>
+        </VTab>
+      </VTabs>
+
+      <VWindow
+        v-model="userTab"
+        class="mt-6 disable-tab-transition"
+        :touch="false"
+      >
+      <!-- NAVEGACION -->
+        <VWindowItem>
+          <AnalyticsEarningReportsWeeklyOverview />
+        </VWindowItem>
+
+        <!-- DISPOSITIVOS -->
+        <VWindowItem>
+          <UserTabDispositivos />
+        </VWindowItem>
+
+        <!-- INTERESES -->
+        <VWindowItem>
+          <CrmProjectStatus />
+        </VWindowItem>
+
+        <!-- UBICACIONES -->
+        <VWindowItem>
+          <AnalyticsSalesByCountries />
+        </VWindowItem>
+
+   
+      </VWindow>
+    </VCol>
   </section>
 </template>
