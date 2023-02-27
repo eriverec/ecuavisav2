@@ -291,7 +291,19 @@ function register() {
 function sendEmailPassReset() {
   var btn = document.querySelector('#forgetButton');
   btn.setAttribute("disabled", true); 
-  let email = document.getElementById("forgetEmail").value.trim();
+  let email = document.getElementById("forgetEmail").value.trim() || '';
+  
+  if(!IsEmail()){
+    alert('El correo no es el correcto');
+    btn.removeAttribute('disabled');
+    return false;
+  }
+
+  if(email == '' || email.length == 0){
+    alert('El correo no es el correcto');
+    btn.removeAttribute('disabled');
+    return false;
+  }
   //servicio render Luis
   fetch("https://ecuavisa-login-service.onrender.com/forgotPassword", {
     method: "PUT",
@@ -315,6 +327,16 @@ function sendEmailPassReset() {
       btn.removeAttribute('disabled');
       console.log("error", error); /*; window.location = URL_login_G*/
     });
+}
+
+function IsEmail() {
+  var input = document.querySelector('#forgetEmail');
+  var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  if (input.value.match(validRegex)) {
+    return true;
+  } else {
+    return false;
+  }
 }
 
 function validateLogSocials() {
