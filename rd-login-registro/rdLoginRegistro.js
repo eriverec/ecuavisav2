@@ -250,12 +250,17 @@ function register() {
       })
         .then((response) => response.json())
         .then(async (result) => {
-          token = result.token;
-          console.log('token registro',result);
-          if (result.token) {
-              localStorageSetUsuarioNew(result.user);
-              btn.removeAttribute('disabled');
-              window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
+          if(typeof result.message !== 'undefined'){
+            btn.removeAttribute('disabled');
+            alert(error);
+          }else{
+            token = result.token;
+            console.log('token registro',result);
+            if (result.token) {
+                localStorageSetUsuarioNew(result.user);
+                btn.removeAttribute('disabled');
+                window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
+            }
           }
         })
         .catch((error) => {
