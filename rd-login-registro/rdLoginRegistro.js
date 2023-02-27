@@ -185,7 +185,7 @@ function login() {
 
     if(email == '' || password =='' || email.length == 0 || password.length == 0){
       alert('El correo y la contraseña no deben estar vacíos');
-    btn.setAttribute("disabled", false); 
+      btn.removeAttribute('disabled');
       return false;
     }
 
@@ -241,7 +241,7 @@ function register() {
 
     if(passwordConf == '' || password =='' || name =='' || email =='' || passwordConf.length == 0 || password.length == 0 || name.length == 0 || email.length == 0){
       alert('Todos los campos son requeridos, se deben llenar');
-      btn.setAttribute("disabled", false); 
+      btn.removeAttribute('disabled');
       return false;
     }
 
