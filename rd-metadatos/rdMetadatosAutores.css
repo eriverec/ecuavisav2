@@ -490,7 +490,7 @@ div#r03c01 {
 }
 
 .invisible2,
-.invisible {
+.invisible:not(header .invisible) {
     visibility: visible!important;
 }
 
