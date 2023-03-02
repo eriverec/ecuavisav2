@@ -562,7 +562,7 @@ async function Token(){
           /*****MOSTRAMOS EL MODAL SI EL USUARIO ES NUEVO******/
           modalUserNew.init();
         }
-        ITER.FAVORITE.TOPICS.onLoad(function(){});
+        //ITER.FAVORITE.TOPICS.onLoad(function(){});
         setTimeout(function () {
           $('body').append(`<style>
             .init-page-js .content_mp .temas-hot .botones__, 
