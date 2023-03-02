@@ -488,3 +488,13 @@ div#r03c01 {
     line-height: 22px;
   }
 }
+
+.invisible2,
+.invisible {
+    visibility: visible!important;
+}
+
+.paged.noticias,
+.stats-viewer ul div {
+    display: initial!important;
+}
