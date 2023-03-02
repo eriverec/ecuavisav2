@@ -489,7 +489,8 @@ div#r03c01 {
   }
 }
 
-.invisible2,
+/*CSS QUE MUESTRA BLOQUES CUANDO EL JAVASCRIPT ESTÁ BLOQUEADO EN EL NAVEGADOR*/
+.invisible2:not(.btnseguimiento_meta.invisible2),
 .invisible:not(header .invisible) {
     visibility: visible!important;
 }
@@ -498,3 +499,4 @@ div#r03c01 {
 .stats-viewer ul div {
     display: initial!important;
 }
+/*CSS QUE MUESTRA BLOQUES CUANDO EL JAVASCRIPT ESTÁ BLOQUEADO EN EL NAVEGADOR*/
