@@ -1,13 +1,10 @@
 <script setup>
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 
-import AnalyticsEarningReportsWeeklyOverview from '@/views/dashboards/analytics/AnalyticsEarningReportsWeeklyOverview.vue'
-import AnalyticsSalesByCountries from '@/views/dashboards/analytics/AnalyticsSalesByCountries.vue'
-import CrmProjectStatus from '@/views/dashboards/crm/CrmProjectStatus.vue'
-import UserTabInteres from '@/views/apps/user/view/UserTabInteres.vue'
-import UserTabNavegacion from '@/views/apps/user/view/UserTabNavegacion.vue'
-import UserTabUbicacion from '@/views/apps/user/view/UserTabUbicacion.vue'
-import UserTabDispositivos from '@/views/apps/user/view/UserTabDispositivos.vue'
+import UserTabNavegacion from '@/views/dashboards/traceability/UserTabNavegacion.vue'
+import UserTabDispositivos from '@/views/dashboards/traceability/UserTabDispositivos.vue'
+import UserTabIntereses from '@/views/dashboards/traceability/UserTabIntereses.vue'
+import UserTabUbicacion from '@/views/dashboards/traceability/UserTabUbicacion.vue'
 
 const userListStore = useUserListStore();
 const totalUsers = ref(0);
@@ -183,7 +180,7 @@ const userListMeta = [
       >
       <!-- NAVEGACION -->
         <VWindowItem>
-          <AnalyticsEarningReportsWeeklyOverview />
+          <UserTabNavegacion />
         </VWindowItem>
 
         <!-- DISPOSITIVOS -->
@@ -193,12 +190,12 @@ const userListMeta = [
 
         <!-- INTERESES -->
         <VWindowItem>
-          <CrmProjectStatus />
+          <UserTabIntereses />
         </VWindowItem>
 
         <!-- UBICACIONES -->
         <VWindowItem>
-          <AnalyticsSalesByCountries />
+          <UserTabUbicacion />
         </VWindowItem>
 
    
