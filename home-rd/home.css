@@ -503,9 +503,9 @@ INICIO - BANNER FIJO
   border-top: 1px solid var(--rd-gray-border);
 }
 
-.layout_apertura_3 .articulos_4dest.item_last .noticias .article:nth-child(3){
+/*.layout_apertura_3 .articulos_4dest.item_last .noticias .article:nth-child(3){
   border-bottom: 1px solid var(--rd-gray-border);
-}
+}*/
 
 @media (max-width: 991px){
   .layout_apertura_3 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .media_block .multimedia .multimediaIconMacroWrapper a div {
