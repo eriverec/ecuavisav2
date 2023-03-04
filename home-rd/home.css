@@ -712,7 +712,7 @@ INICIO - PORTADA - 4 DESTACADAS
   /* margin-top: 3rem; */
 }
 
-.HOME_MENU_RD .articulos_4dest:not(.layout_apertura_3 .articulos_4dest) {
+.HOME_MENU_RD .articulos_4dest {
   border-bottom: 1px solid var(--rd-gray-border);
 }
 
