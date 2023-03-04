@@ -516,10 +516,7 @@ INICIO - BANNER FIJO
 
 @media (max-width: 767px){
   /*Apertura 2 - prueba*/
-  .layout_apertura_3 .container{
-    padding-left: 0px;
-    padding-right: 0px;
-  }
+
   .layout_apertura_3 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3{
     font-size: 20px;
   }
