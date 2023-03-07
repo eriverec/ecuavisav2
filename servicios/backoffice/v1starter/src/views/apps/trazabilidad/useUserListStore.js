@@ -1,0 +1,65 @@
+import axios from '@axios'
+import { defineStore } from 'pinia'
+
+export const useUserListStore = defineStore('UserListStore', {
+  actions: {
+    // 👉 Fetch users data
+    fetchUsers(params) { return axios.get('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get', { params }) },
+
+    countPageUsers() { return axios.get('https://ecuavisa-mongo-users.vercel.app/count') },
+
+    fetchFullUsers(p) { return axios.post('https://ecuavisa-mongo-users.vercel.app/full', {page: p}) },
+
+    countUsers() { return axios.get('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/count') },
+
+    // 👉 Add User
+    addUser(userData) {
+      return new Promise((resolve, reject) => {
+        axios.post('/apps/users/user', {
+          user: userData,
+        }).then(response => resolve(response))
+          .catch(error => reject(error))
+      })
+    },
+
+    updateUser(userData, id) {
+      return new Promise((resolve, reject) => {
+      axios.put(`https://ecuavisa-register.onrender.com/update?id=${id}`, new URLSearchParams(userData))
+      .then(response => resolve(response))
+      .catch(error => reject(error))
+      })
+    },
+
+    fetchTema(id) {
+      return new Promise((resolve, reject) => {
+        axios.get(`https://ecuavisa-seguimiento-tema.onrender.com/${id}`).then(response => resolve(response)).catch(error => reject(error))
+      })
+    },
+    
+    deleteTema(id, nombres) {
+      return new Promise((resolve, reject) => {
+        axios.delete(`https://ecuavisa-seguimiento-tema.onrender.com/delete`, { data: { idUser: id, nombreTema: nombres } }).then(response => resolve(response)).catch(error => reject(error))
+      })
+    },
+
+    fetchNotification(id) {
+      return new Promise((resolve, reject) => {
+        axios.get(`https://ecuavisa-notificaciones-local.vercel.app/${id}`).then(response => resolve(response)).catch(error => reject(error))
+      })
+    },
+
+    deleteNotification(id, nombres) {
+      return new Promise((resolve, reject) => {
+        axios.delete(`https://ecuavisa-notificaciones-local.vercel.app/delete`, { data: { idUser: id, nombreNotificacion: nombres } }).then(response => resolve(response)).catch(error => reject(error))
+      })
+    },
+
+    
+    // 👉 fetch single user
+    fetchUser(id) {
+      return new Promise((resolve, reject) => {
+        axios.get(`https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id=${id}`).then(response => resolve(response)).catch(error => reject(error))
+      })
+    },
+  },
+})

@@ -19,6 +19,12 @@ const shortcuts = [
     to: { name: 'apps-user-list' },
   },
   {
+    icon: 'mdi-account-outline',
+    title: 'Trazabilidad',
+    subtitle: 'Manage Users',
+    to: { name: 'apps-trazabilidad-list' },
+  },
+  {
     icon: 'mdi-view-dashboard-outline',
     title: 'Dashboard',
     subtitle: 'Dashboard Analytics',
