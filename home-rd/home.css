@@ -747,7 +747,6 @@ INICIO - PORTADA - 4 DESTACADAS
   font-weight: 600;
   font-size: 14px;
   line-height: 17px;
-  line-height: 48px;
   text-transform: uppercase;
 }
 
@@ -1044,7 +1043,6 @@ Cambio de tamaño de imagen grande izq
     font-size: var(--rd-size-30);
     line-height: 38px;
   }
-
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block {
     width: 100%;
     margin-top: -2px;
@@ -1053,13 +1051,15 @@ Cambio de tamaño de imagen grande izq
     padding-top: 1rem;
     background: #060127;
   }
-
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
     height: 400px !important;
   }
-
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
     height: 400px !important;
+  }
+  .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .section {
+    line-height: 25px;
+    padding-bottom: 34px;
   }
 }
 
