@@ -747,6 +747,7 @@ INICIO - PORTADA - 4 DESTACADAS
   font-weight: 600;
   font-size: 14px;
   line-height: 17px;
+  line-height: 48px;
   text-transform: uppercase;
 }
 
@@ -787,7 +788,6 @@ INICIO - PORTADA - 4 DESTACADAS
   font-weight: 600;
   font-size: 14px;
   line-height: 17px;
-  line-height: 30px;
   text-transform: uppercase;
   color: var(--rd-section);
 }
