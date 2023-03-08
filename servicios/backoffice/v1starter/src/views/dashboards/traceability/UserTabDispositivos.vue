@@ -1,8 +1,32 @@
 <script setup>
+
+import ChartAreaDispositivos from '@/views/charts/apex-chart/ChartAreaDispositivos.vue'
+
 const isNewPasswordVisible = ref(false)
 const isConfirmPasswordVisible = ref(false)
 const smsVerificationNumber = ref('+1(968) 819-2547')
 const isTwoFactorDialogOpen = ref(false)
+
+const chartJsCustomColors = {
+  white: '#fff',
+  yellow: '#ffe802',
+  primary: '#836af9',
+  areaChartBlue: '#2c9aff',
+  barChartYellow: '#ffcf5c',
+  polarChartGrey: '#4f5d70',
+  polarChartInfo: '#299aff',
+  lineChartYellow: '#d4e157',
+  polarChartGreen: '#28dac6',
+  lineChartPrimary: '#9e69fd',
+  lineChartWarning: '#ff9800',
+  horizontalBarInfo: '#26c6da',
+  polarChartWarning: '#ff8131',
+  scatterChartGreen: '#28c76f',
+  warningShade: '#ffbd1f',
+  areaChartBlueLight: '#84d0ff',
+  areaChartGreyLight: '#edf1f4',
+  scatterChartWarning: '#ff9f43',
+}
 
 const recentDevices = [
   {
@@ -58,6 +82,31 @@ const recentDevices = [
 
 <template>
   <VRow>
+
+    <!-- 👉  Area chart -->
+    <VCol cols="12">
+      <VCard>
+        <VCardItem class="d-flex flex-wrap justify-space-between gap-4">
+          <VCardTitle>Area Chart</VCardTitle>
+          <VCardSubtitle>Commercial networks</VCardSubtitle>
+
+          <template #append>
+            <div class="date-picker-wrapper">
+              <AppDateTimePicker
+                model-value="2022-06-09"
+                prepend-inner-icon="tabler-calendar"
+                density="compact"
+                :config="{ position: 'auto right' }"
+              />
+            </div>
+          </template>
+        </VCardItem>
+
+        <VCardText>
+          <ChartAreaDispositivos />
+        </VCardText>
+      </VCard>
+    </VCol>
    
     <VCol cols="12">
       <!-- 👉 Recent devices -->
