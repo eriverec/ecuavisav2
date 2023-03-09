@@ -1057,10 +1057,10 @@ Cambio de tamaño de imagen grande izq
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .multimedia .multimediaIconMacroWrapper a div {
     height: 400px !important;
   }
-  /*.HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .section {
-    line-height: 25px;
-    padding-bottom: 34px;
-  }*/
+  .HOME_MENU_RD .notas-1-p-ap .noticias .article .text_block .section{
+    padding-top: 40px;
+    padding-right: 15px;
+  }
 }
 
 @media (max-width: 767px) {
