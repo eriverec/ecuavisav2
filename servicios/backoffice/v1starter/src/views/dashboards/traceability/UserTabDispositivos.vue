@@ -78,11 +78,12 @@ const recentDevices = [
     activity: '20, July 2021 21:01',
   },
 ]
+
+
 </script>
 
 <template>
   <VRow>
-
     <!-- 👉  Area chart -->
     <VCol cols="12">
       <VCard>
@@ -90,16 +91,6 @@ const recentDevices = [
           <VCardTitle>Area Chart</VCardTitle>
           <VCardSubtitle>Commercial networks</VCardSubtitle>
 
-          <template #append>
-            <div class="date-picker-wrapper">
-              <AppDateTimePicker
-                model-value="2022-06-09"
-                prepend-inner-icon="tabler-calendar"
-                density="compact"
-                :config="{ position: 'auto right' }"
-              />
-            </div>
-          </template>
         </VCardItem>
 
         <VCardText>
@@ -107,7 +98,7 @@ const recentDevices = [
         </VCardText>
       </VCard>
     </VCol>
-   
+
     <VCol cols="12">
       <!-- 👉 Recent devices -->
       <VCard title="Recent devices">
@@ -115,35 +106,18 @@ const recentDevices = [
         <VTable class="text-no-wrap">
           <thead>
             <tr>
-              <th scope="col">
-                BROWSER
-              </th>
-              <th scope="col">
-                DEVICE
-              </th>
-              <th scope="col">
-                LOCATION
-              </th>
-              <th scope="col">
-                RECENT ACTIVITY
-              </th>
+              <th scope="col">BROWSER</th>
+              <th scope="col">DEVICE</th>
+              <th scope="col">LOCATION</th>
+              <th scope="col">RECENT ACTIVITY</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr
-              v-for="device in recentDevices"
-              :key="device.browser"
-            >
+            <tr v-for="device in recentDevices" :key="device.browser">
               <td>
-                <VAvatar
-                  :size="22"
-                  class="me-3"
-                >
-                  <VIcon
-                    :color="device.color"
-                    :icon="device.icon"
-                  />
+                <VAvatar :size="22" class="me-3">
+                  <VIcon :color="device.color" :icon="device.icon" />
                 </VAvatar>
                 <span class="font-weight-medium">{{ device.browser }}</span>
               </td>

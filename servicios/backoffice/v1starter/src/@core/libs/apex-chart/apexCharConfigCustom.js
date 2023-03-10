@@ -391,7 +391,7 @@ export const getDonutChartConfig = themeColors => {
 }
 
 
-// ESTE ES
+// ESTE ES el Dispositivos
 export const getAreaChartSplineConfig = themeColors => {
   const areaColors = {
     series3: '#e0cffe',
