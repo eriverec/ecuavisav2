@@ -1,8 +1,6 @@
 <script setup>
 import VueApexCharts from "vue3-apexcharts";
 import { useTheme } from "vuetify";
-// import { getAreaChartSplineConfig } from "@core/libs/apex-chart/apexCharConfigCustom";
-
 import { hexToRgb } from "@layouts/utils";
 import { Spanish } from 'flatpickr/dist/l10n/es.js'
 // 👉 Colors variables
@@ -33,36 +31,6 @@ const chartConfig = computed(() =>
   getAreaChartSplineConfig(vuetifyTheme.current.value)
 );
 
-/*
-mounted(() =>
-  this.actualizarGrafico()
-);
-
-methods(() =>
-  actualizarGrafico() {
-    const datosFiltrados = this.series.filter(d => d.fecha === this.fechaFiltro);
-    const options = {
-      chart: {
-        type: 'bar'
-      },
-      series: [{
-        name: 'Valores',
-        data: datosFiltrados.map(d => d.value)
-      }],
-      xaxis: {
-        categories: datosFiltrados.map(d => d.name),
-      }
-    };
-    const chart = new ApexCharts(document.querySelector('#chart'), options);
-    chart.render();
-  }
-);
-watch(() =>
-  fechaFiltro() {
-    this.actualizarGrafico();
-  }
-);
-*/
 // ESTE ES el Dispositivos
 const getAreaChartSplineConfig = (themeColors) => {
   const areaColors = {
@@ -76,6 +44,7 @@ const getAreaChartSplineConfig = (themeColors) => {
 
   return {
     chart: {
+      id: "crejemplo",
       type: "bar",
       parentHeightOffset: 0,
       zoom: { enabled: false },
@@ -134,21 +103,7 @@ const getAreaChartSplineConfig = (themeColors) => {
       labels: {
         style: { colors: themeDisabledTextColor },
       },
-      categories: [
-        "700/12",
-        "8/12",
-        "9/12",
-        "10/12",
-        "11/12",
-        "12/12",
-        "13/12",
-        "14/12",
-        "15/12",
-        "16/12",
-        "17/12",
-        "18/12",
-        "19/12",
-      ],
+      categories: [],
     },
   };
 };
@@ -156,55 +111,71 @@ const getAreaChartSplineConfig = (themeColors) => {
 const series = [
   {
     name: "Mobile",
-    data: [100, 120, 90, 170, 130, 160, 140, 240, 220, 180, 270, 280, 375],
-    fecha: "2022-01-01",
-  },
-  {
-    name: "Tablet",
-    data: [60, 80, 70, 110, 80, 100, 90, 180, 160, 140, 200, 220, 275],
-    fecha: "2022-03-01",
-  },
-  {
-    name: "Desktop",
-    data: [20, 40, 30, 70, 40, 60, 50, 140, 120, 100, 140, 180, 220],
-    fecha: "2022-04-06",
-  },
+    data: [{
+            x: '2022-02-01',
+            y: 21,
+          },
+          {
+            x: '2022-02-12',
+            y: 40,
+          },
+          {
+            x: '2022-02-15',
+            y: 1,
+        }]
+  }
 ];
+/*ESCRIPT*/
+flatpickr.setDefaults({
+  disableMobile: true
+});
+console.log(getAreaChartSplineConfig(vuetifyTheme.current.value));
+function obtenerFecha(selectedDates, dateStr, instance){
+  // actualiza la serie de datos filtrados y vuelve a renderizar el gráfico
+  var filteredChartSeries = [{
+    name: "Mobile",
+    data: [{
+            x: '2022-02-01',
+            y: 121,
+          },
+          {
+            x: '2022-02-12',
+            y: 240,
+          },
+          {
+            x: '2022-02-15',
+            y: 21,
+        }]
+  }];
+  ApexCharts.exec("crejemplo", "updateSeries", filteredChartSeries);
+}
 
 </script>
 
 <template>
-  <VueApexCharts
-    type="area"
-    height="400"
-    :options="chartConfig"
-    :series="series"
-  />
+  <div class="date-picker-wrapper">
+    <AppDateTimePicker
+      model-value="2022-06-09"
+      prepend-inner-icon="tabler-calendar"
+      density="compact"
+      @on-change="obtenerFecha"
+      :config="{ 
+        position: 'auto right',
+        locale: Spanish,
+        mode:'range'
+      }"
+    />
+  </div>
+  <div class="w-100">
+    <VCardText>
+      <VueApexCharts
+        id="nuevocomponente"
+        type="area"
+        height="400"
+        :options="chartConfig"
+        :series="series"
+      />
+    </VCardText>
+    
+  </div>
 </template>
-
-<style lang="scss">
-@use "@core/scss/template/libs/apex-chart.scss";
-
-.apexcharts-tooltip.apexcharts-theme-light .apexcharts-tooltip-title {
-  background: #eceff1 !important;
-  border-bottom: 1px solid #ddd;
-}
-
-.apexcharts-tooltip.apexcharts-theme-light {
-  border: 1px solid #e3e3e3;
-  background: rgba(255, 255, 255, 0.96) !important;
-}
-.apexcharts-canvas .apexcharts-tooltip.apexcharts-theme-light {
-  color: #333 !important;
-}
-
-.date-picker-wrapper {
-  inline-size: 10.5rem;
-}
-
-#apex-chart-wrapper {
-  .v-card-item__append {
-    padding-inline-start: 0;
-  }
-}
-</style>

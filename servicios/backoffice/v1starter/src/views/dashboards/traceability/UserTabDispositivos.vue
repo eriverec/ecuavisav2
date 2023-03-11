@@ -1,5 +1,6 @@
 <script setup>
 
+import ChartAreaDispositivosFecha from '@/views/charts/apex-chart/ChartAreaDispositivosfecha.vue'
 import ChartAreaDispositivos from '@/views/charts/apex-chart/ChartAreaDispositivos.vue'
 
 const isNewPasswordVisible = ref(false)
@@ -79,7 +80,6 @@ const recentDevices = [
   },
 ]
 
-
 </script>
 
 <template>
@@ -87,14 +87,12 @@ const recentDevices = [
     <!-- 👉  Area chart -->
     <VCol cols="12">
       <VCard>
-        <VCardItem class="d-flex flex-wrap justify-space-between gap-4">
-          <VCardTitle>Area Chart</VCardTitle>
-          <VCardSubtitle>Commercial networks</VCardSubtitle>
-
-        </VCardItem>
-
-        <VCardText>
-          <ChartAreaDispositivos />
+        <VCardText class="d-flex flex-wrap justify-space-between gap-4">
+          <VCardItem class="pt-0 pb-0">
+            <VCardTitle>Area Chart</VCardTitle>
+            <VCardSubtitle>Commercial networks</VCardSubtitle>
+          </VCardItem>
+          <ChartAreaDispositivosFecha />
         </VCardText>
       </VCard>
     </VCol>

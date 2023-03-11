@@ -82,6 +82,10 @@ onMounted(() => {
 const emitModelValue = val => {
   emit('update:modelValue', val)
 }
+
+flatpickr.setDefaults({
+  disableMobile: true
+});
 </script>
 
 <template>
