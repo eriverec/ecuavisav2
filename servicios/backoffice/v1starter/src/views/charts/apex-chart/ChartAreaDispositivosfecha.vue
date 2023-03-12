@@ -108,51 +108,21 @@ const getAreaChartSplineConfig = (themeColors) => {
   };
 };
 
-const series = [
-  {
-        "name": "Safari",
-        "data": [
-            {
-                "x": "2023-10-03",
-                "y": 907
-            },
-            {
-                "x": "2023-10-04",
-                "y": 907
-            }
-        ]
-    },
-    {
-        "name": "Opera",
-        "data": [
-            {
-                "x": "2023-10-03",
-                "y": 652
-            },
-            {
-                "x": "2023-10-04",
-                "y": 856
-            }
-        ]
-    },
-    {
-        "name": "Chrome",
-        "data": [
-            {
-                "x": "2023-10-03",
-                "y": 640
-            },
-            {
-                "x": "2023-10-04",
-                "y": 0
-            }
-        ]
-    }
-];
-/*ESCRIPT*/
-flatpickr.setDefaults({
-  disableMobile: true
-});
+function addDays(date, sumarDias=0) {
+  var result = new Date(date);
+  result.setDate(date.getDate() + sumarDias);
+  return result;
+}
+
+function getDate(fecha='',sumarDias=0) {
+  var date_ob = new Date();
+  if(fecha != ''){
+    //FORMATO dd/mm/aaaa
+    date_ob = new Date(fecha);
+  }
+  var newFecha = addDays(date_ob, sumarDias);
+  return (newFecha.getMonth() + 1) + '-' + newFecha.getDate() + '-' + newFecha.getFullYear();
+}
 
 function formatDate(date) {
     var d = new Date(date),
@@ -164,7 +134,7 @@ function formatDate(date) {
         month = '0' + month;
     if (day.length < 2) 
         day = '0' + day;
-    return [year, month, day].join('-');
+    return [year, day, month].join('-');
 }
 
 function groupBy(collection, property) {
@@ -209,6 +179,7 @@ async function getDataTrazabilidad(data){
   var serieTotal = [];
   
   var dataFormat = [];
+  //DDDD/MM/AAAA TO AAAA/DD/MM
   for(var i in dataGroupBrowser){
     var serieData = [];
     var nameSerie = '';
@@ -217,7 +188,9 @@ async function getDataTrazabilidad(data){
       var renderData = dataGroupBrowser[i][j];
       nameSerie = renderData.browser;
       var count = renderData.navigationRecord.length;//Math.floor(Math.random()*2000);
-      var fecha = formatDate(renderData.timestamp);
+      var fecha = renderData.timestamp.split(',')[0];
+      fecha = fecha.split("/");
+      fecha = `${fecha[2]}-${fecha[0]}-${fecha[1]}`;
       total += count;
       serieTotal.push(fecha);
       serieData.push({
@@ -255,9 +228,30 @@ async function getDataTrazabilidad(data){
       }
     }
   }
-  //console.log(dataFormat.sort((a, b) => (a.topSpeed - b.topSpeed)))
+  //console.log(dataFormat.sort((a, b) => (a.total - b.total)))
   return dataFormat.sort((a, b) => ( b.total - a.total));
 }
+
+async function getInitGraficoDispositivos(){
+  var fechai = getDate();
+  var fechaf = getDate("",1);
+  var panelGráfico = document.querySelector("#apexchartscrejemplo");
+  panelGráfico.classList.add("disabled");
+  var getData = await getDataGrafico(fechai, fechaf);
+  panelGráfico.classList.remove("disabled");
+  var dataFormateada = await getDataTrazabilidad(getData.grafico);
+  ApexCharts.exec("crejemplo", "updateSeries", dataFormateada);
+  return true;
+}
+
+const series = [];
+setTimeout(async function(){
+    var resp = await getInitGraficoDispositivos();
+}, 1000);
+/*ESCRIPT*/
+flatpickr.setDefaults({
+  disableMobile: true
+});
 
 async function obtenerFechaDispositivos(selectedDates, dateStr, instance){
 
@@ -283,7 +277,7 @@ async function obtenerFechaDispositivos(selectedDates, dateStr, instance){
 </script>
 
 <template>
-  <div class="date-picker-wrapper">
+  <div class="date-picker-wrapper" style="width: 233px;">
     <AppDateTimePicker
       placeholder="Seleccionar una fecha"
       prepend-inner-icon="tabler-calendar"
