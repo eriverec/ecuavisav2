@@ -110,20 +110,44 @@ const getAreaChartSplineConfig = (themeColors) => {
 
 const series = [
   {
-    name: "Mobile",
-    data: [{
-            x: '2022-02-01',
-            y: 21,
-          },
-          {
-            x: '2022-02-12',
-            y: 40,
-          },
-          {
-            x: '2022-02-15',
-            y: 1,
-        }]
-  }
+        "name": "Safari",
+        "data": [
+            {
+                "x": "2023-10-03",
+                "y": 907
+            },
+            {
+                "x": "2023-10-04",
+                "y": 907
+            }
+        ]
+    },
+    {
+        "name": "Opera",
+        "data": [
+            {
+                "x": "2023-10-03",
+                "y": 652
+            },
+            {
+                "x": "2023-10-04",
+                "y": 856
+            }
+        ]
+    },
+    {
+        "name": "Chrome",
+        "data": [
+            {
+                "x": "2023-10-03",
+                "y": 640
+            },
+            {
+                "x": "2023-10-04",
+                "y": 0
+            }
+        ]
+    }
 ];
 /*ESCRIPT*/
 flatpickr.setDefaults({
