@@ -183,147 +183,29 @@ function groupBy(collection, property) {
     return result;
 }
 
-function getDataTrazabilidad(){
-  var data = [{
-    "ip": "157.100.91.13",
-    "os": "Windows",
-    "browser": "Chrome",
-    "url": "https://www.ecuavisa.com/deportes",
-    "timestamp": "10/3/2023, 22:41:44",
-    "navigationRecord": [
-        {
-          "id": 1,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "2:03:38"
-        },
-        {
-          "id": 2,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "14:40:16"
-        },
-        {
-          "id": 3,
-          "url": "https://www.ecuavisa.com/mundo",
-          "fecha": "10/3/2023",
-          "hora": "22:05:19"
-        },
-        {
-          "id": 4,
-          "url": "https://www.ecuavisa.com/noticias/ecuador",
-          "fecha": "10/3/2023",
-          "hora": "22:40:16"
-        },
-        {
-          "id": 5,
-          "url": "https://www.ecuavisa.com/deportes",
-          "fecha": "10/3/2023",
-          "hora": "22:41:44"
-      }
-    ]
-  },
-  {
-    "ip": "157.100.91.13",
-    "os": "Windows",
-    "browser": "Opera",
-    "url": "https://www.ecuavisa.com/deportes",
-    "timestamp": "10/4/2023, 22:41:44",
-    "navigationRecord": [
-        {
-          "id": 1,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "2:03:38"
-        },
-        {
-          "id": 2,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "14:40:16"
-        },
-        {
-          "id": 4,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "14:40:16"
-        }
-    ]
-  },
-  {
-    "ip": "157.100.91.13",
-    "os": "Windows",
-    "browser": "Opera",
-    "url": "https://www.ecuavisa.com/deportes",
-    "timestamp": "10/3/2023, 22:41:44",
-    "navigationRecord": [
-        {
-          "id": 1,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "2:03:38"
-        },
-        {
-          "id": 2,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "14:40:16"
-        },
-        {
-          "id": 2,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "14:40:16"
-        },
-        {
-          "id": 2,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "14:40:16"
-        },
-        {
-          "id": 2,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "14:40:16"
-        }
-    ]
-  },
-  {
-    "ip": "157.100.91.13",
-    "os": "Windows",
-    "browser": "Safari",
-    "url": "https://www.ecuavisa.com/deportes",
-    "timestamp": "10/3/2023, 22:41:44",
-    "navigationRecord": [
-        {
-          "id": 1,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "2:03:38"
-        },
-        {
-          "id": 1,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "2:03:38"
-        },
-        {
-          "id": 1,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "2:03:38"
-        },
-        {
-          "id": 1,
-          "url": "https://www.ecuavisa.com/",
-          "fecha": "10/3/2023",
-          "hora": "2:03:38"
-        }
-    ]
-  }];
+async function getDataGrafico(fechai, fechaf) {
+  /*FORMATO DE FECHA A ENVIAR ES MM/DD/AAAA*/
+  var raw = JSON.stringify({
+      "fechai": fechai,
+      "fechaf": fechaf
+  });
+  var resp = await fetch(`https://servicio-de-actividad.vercel.app/dispositivos`,{
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: raw
+  }); 
+  var obtener = await resp.json();
+  return obtener;
+}
 
-  var dataGroupBrowser = groupBy(data, "browser");
+async function getDataTrazabilidad(data){
+
+  var dataGroupBrowser = [data];
+  if(data.length > 1){
+    dataGroupBrowser = groupBy(data, "browser")
+  }
   var serieTotal = [];
   
   var dataFormat = [];
@@ -334,7 +216,7 @@ function getDataTrazabilidad(){
     for(var j in dataGroupBrowser[i]){
       var renderData = dataGroupBrowser[i][j];
       nameSerie = renderData.browser;
-      var count = Math.floor(Math.random()*2000);
+      var count = renderData.navigationRecord.length;//Math.floor(Math.random()*2000);
       var fecha = formatDate(renderData.timestamp);
       total += count;
       serieTotal.push(fecha);
@@ -377,52 +259,25 @@ function getDataTrazabilidad(){
   return dataFormat.sort((a, b) => ( b.total - a.total));
 }
 
-function obtenerFecha(selectedDates, dateStr, instance){
+async function obtenerFechaDispositivos(selectedDates, dateStr, instance){
+
+  //var respJson = await nuevoArchivoJson(archivoJson);
+  if(selectedDates.length > 1){
+    var dateI = selectedDates[0];
+    var fechai = (dateI.getMonth() + 1) + '/' + dateI.getDate() + '/' + dateI.getFullYear();
+    var dateF = selectedDates[1];
+    var fechaf = (dateF.getMonth() + 1) + '/' + dateF.getDate() + '/' + dateF.getFullYear();
+
+    var panelGráfico = document.querySelector("#apexchartscrejemplo");
+    panelGráfico.classList.add("disabled");
+    var getData = await getDataGrafico(fechai, fechaf);
+    panelGráfico.classList.remove("disabled");
+    var dataFormateada = await getDataTrazabilidad(getData.grafico);
+    ApexCharts.exec("crejemplo", "updateSeries", dataFormateada);
+  }
   //console.log(formatDate(selectedDates[0]))
   // actualiza la serie de datos filtrados y vuelve a renderizar el gráfico
-  var filteredChartSeries = [
-
-    {
-        "name": "Safari",
-        "data": [
-            {
-                "x": "2023-10-03",
-                "y": 907
-            },
-            {
-                "x": "2023-10-04",
-                "y": 907
-            }
-        ]
-    },
-    {
-        "name": "Opera",
-        "data": [
-            {
-                "x": "2023-10-03",
-                "y": 652
-            },
-            {
-                "x": "2023-10-04",
-                "y": 856
-            }
-        ]
-    },
-    {
-        "name": "Chrome",
-        "data": [
-            {
-                "x": "2023-10-03",
-                "y": 640
-            },
-            {
-                "x": "2023-10-04",
-                "y": 0
-            }
-        ]
-    }
-];
-ApexCharts.exec("crejemplo", "updateSeries", getDataTrazabilidad());
+  
 }
 
 </script>
@@ -430,14 +285,16 @@ ApexCharts.exec("crejemplo", "updateSeries", getDataTrazabilidad());
 <template>
   <div class="date-picker-wrapper">
     <AppDateTimePicker
-      model-value="2022-06-09"
+      placeholder="Seleccionar una fecha"
       prepend-inner-icon="tabler-calendar"
       density="compact"
-      @on-change="obtenerFecha"
+      @on-change="obtenerFechaDispositivos"
       :config="{ 
         position: 'auto right',
         locale: Spanish,
-        mode:'range'
+        mode:'range',
+        altFormat: 'F j, Y',
+        dateFormat: 'm-d-Y'
       }"
     />
   </div>

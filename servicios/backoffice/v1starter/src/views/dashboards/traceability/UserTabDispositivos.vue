@@ -82,6 +82,12 @@ const recentDevices = [
 
 </script>
 
+<style type="text/css">
+  .disabled {
+      opacity: 0.1;
+      pointer-events: none;
+  }
+</style>
 <template>
   <VRow>
     <!-- 👉  Area chart -->
