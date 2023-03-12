@@ -170,6 +170,15 @@ async function getDataGrafico(fechai, fechaf) {
   return obtener;
 }
 
+var existeFecha = function(list, fecha){
+  for(var i in list){
+    if(list[i].x == fecha){
+      return {resp:true,index:i,value:list[i].y};
+    }
+  }
+  return {resp:false};
+}
+
 async function getDataTrazabilidad(data){
 
   var dataGroupBrowser = [data];
@@ -193,10 +202,21 @@ async function getDataTrazabilidad(data){
       fecha = `${fecha[2]}-${fecha[0]}-${fecha[1]}`;
       total += count;
       serieTotal.push(fecha);
-      serieData.push({
-        x: fecha,
-        y: count//renderData.navigationRecord.length
-      });
+
+      var procrosarFecha = existeFecha(serieData, fecha);
+      if(!procrosarFecha.resp){
+        serieData.push({
+          x: fecha,
+          y: count//renderData.navigationRecord.length
+        });
+      }else{
+        var dataTempFecha = serieData[procrosarFecha.index];
+        serieData[procrosarFecha.index] = {
+          x: fecha,
+          y: (count * 1 + procrosarFecha.value * 1)//renderData.navigationRecord.length
+        }
+      }
+      
     }
 
     dataFormat.push({
@@ -237,7 +257,106 @@ async function getInitGraficoDispositivos(){
   var fechaf = getDate("",1);
   var panelGráfico = document.querySelector("#apexchartscrejemplo");
   panelGráfico.classList.add("disabled");
-  var getData = await getDataGrafico(fechai, fechaf);
+  var getData = {grafico:[
+  {
+    "idActivity": "82338",
+    "user": "82338",
+    "ip": "200.24.135.16",
+    "os": "Windows",
+    "browser": "Chrome",
+    "url": "https://www.ecuavisa.com/",
+    "timestamp": "12/3/2023, 11:14:56",
+    "navigationRecord": [
+      {
+        "id": 1,
+        "url": "https://www.ecuavisa.com/mundo",
+        "fecha": "12/3/2023",
+        "hora": "10:33:51"
+      }
+    ]
+  },
+  {
+    "idActivity": "82331",
+    "user": "82338",
+    "ip": "200.24.135.16",
+    "os": "Windows",
+    "browser": "Chrome",
+    "url": "https://www.ecuavisa.com/",
+    "timestamp": "12/3/2023, 11:14:56",
+    "navigationRecord": [
+      {
+        "id": 1,
+        "url": "https://www.ecuavisa.com/mundo",
+        "fecha": "12/3/2023",
+        "hora": "10:33:51"
+      },
+      {
+        "id": 2,
+        "url": "https://www.ecuavisa.com/",
+        "fecha": "12/3/2023",
+        "hora": "11:14:56"
+      }
+    ]
+  },
+  {
+    "idActivity": "82333",
+    "user": "82338",
+    "ip": "200.24.135.16",
+    "os": "Windows",
+    "browser": "Firefox",
+    "url": "https://www.ecuavisa.com/",
+    "timestamp": "12/3/2023, 11:14:56",
+    "navigationRecord": [
+      {
+        "id": 1,
+        "url": "https://www.ecuavisa.com/mundo",
+        "fecha": "12/3/2023",
+        "hora": "10:33:51"
+      },
+      {
+        "id": 2,
+        "url": "https://www.ecuavisa.com/",
+        "fecha": "12/3/2023",
+        "hora": "11:14:56"
+      },
+      {
+        "id": 3,
+        "url": "https://www.ecuavisa.com/",
+        "fecha": "12/3/2023",
+        "hora": "11:14:56"
+      }
+    ]
+  },
+  {
+    "idActivity": "82334",
+    "user": "82338",
+    "ip": "200.24.135.16",
+    "os": "Windows",
+    "browser": "Firefox",
+    "url": "https://www.ecuavisa.com/",
+    "timestamp": "13/3/2023, 11:14:56",
+    "navigationRecord": [
+      {
+        "id": 1,
+        "url": "https://www.ecuavisa.com/mundo",
+        "fecha": "12/3/2023",
+        "hora": "10:33:51"
+      },
+      {
+        "id": 2,
+        "url": "https://www.ecuavisa.com/",
+        "fecha": "12/3/2023",
+        "hora": "11:14:56"
+      },
+      {
+        "id": 3,
+        "url": "https://www.ecuavisa.com/",
+        "fecha": "12/3/2023",
+        "hora": "11:14:56"
+      }
+    ]
+  }
+]}//await getDataGrafico(fechai, fechaf);
   panelGráfico.classList.remove("disabled");
   var dataFormateada = await getDataTrazabilidad(getData.grafico);
   ApexCharts.exec("crejemplo", "updateSeries", dataFormateada);
