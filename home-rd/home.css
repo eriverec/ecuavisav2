@@ -1021,7 +1021,8 @@ Cambio de tamaño de imagen grande izq
 
 @media (max-width: 991px) {
   .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
-    font-size: 1rem;
+    font-size: 0.8rem;
+    line-height: 20px;
   }
 
   .HOME_MENU_RD .destacada__5 .noticias .article .IMG_TIT_570x647 .media_block .text_block h3 {
