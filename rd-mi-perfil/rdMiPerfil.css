@@ -1524,6 +1524,7 @@ button.btn-ecuavisa-noticia img {
 }
 .faq_form_ecu{
   float: none !important;
+  margin: 3rem auto;
 }
 
 /*================CONTACTO==================*/
