@@ -1099,3 +1099,66 @@ button.btn-ecuavisa-noticia img {
   flex-wrap: wrap;
 }
 /* FIN MODAL SEGUIMIENTO DE TEMAS */
+
+
+/*================================INICIO=AYUDA==========================================================*/
+.ayuda-faq h1 {
+  color:#2927b9;
+  font-size:55px;
+  line-height:1.2em;
+  font-weight:600;
+  padding-top:2rem;
+  font-family:anek malayalam
+ }
+ .ayuda-faq h2 {
+  font-size:1.25em;
+  display:block;
+  margin:0;
+  cursor:pointer;
+  padding:.5em 0;
+  font-weight:700;
+  width:90%;
+  font-family:archivo!important;
+  color:#060127
+ }
+ .ayuda-faq p {
+  font-weight:700;
+  padding:1rem 0;
+  font-family:archivo
+ }
+ .ayuda-faq .text_block .priority-content {
+  color:#060127;
+  font-weight:500;
+  font-family:archivo
+ }
+ .ayuda-faq .text_block .text .text-wrapper p {
+  color:#060127;
+  font-weight:400;
+  font-family:archivo
+ }
+ .ayuda-faq .contAcordeon {
+  color:#060127;
+  line-height:1.5em;
+  letter-spacing:.05em;
+  position:relative;
+  overflow:hidden;
+  max-height:200em;
+  opacity:1;
+  transform:translate(0,0);
+  margin-top:1em;
+  z-index:2;
+  padding:0 .5em;
+  width:100%;
+  font-family:archivo
+ }
+
+
+ @media(max-width:600px) {
+  .ayuda-faq h2 {
+    font-size:1.1em;
+    letter-spacing:0
+   }
+
+}
+
+/*==================================FIN=AYUDA==========================================================*/
