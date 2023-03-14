@@ -221,7 +221,7 @@ async function getDataTrazabilidad(data){
 
     dataFormat.push({
       name:nameSerie,
-      data:serieData,
+      data: serieData.sort((a, b) => ( b.x - a.x)),
       total:total
     });
   }
