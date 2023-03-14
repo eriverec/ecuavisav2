@@ -820,7 +820,7 @@ var moverContenidoAyuda = () =>{
   var formulario = document.querySelector(".faq_form_ecu").innerHTML;
   // Establecer el contenido en el bloque destino
   document.querySelector("#faq").innerHTML += `<div class="noticias">${contenidoOrigen}</div>`;
-  document.querySelector("#faq_form").innerHTML += `<div class="noticias">${formulario}</div>`;
+  document.querySelector("#faq_form").innerHTML += `<div class="c_002_001 form-portlet">${formulario}</div>`;
   return true;
 }
 
