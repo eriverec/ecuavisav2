@@ -1143,7 +1143,7 @@ button.btn-ecuavisa-noticia img {
  }
  .ayuda-faq p {
   font-weight:700;
-  padding:1rem 0;
+ /* padding:1rem 0;*/
   font-family:archivo;
  }
  .ayuda-faq .text_block .priority-content {
@@ -1519,8 +1519,11 @@ button.btn-ecuavisa-noticia img {
 /*==================================FIN=AYUDA==========================================================*/
 
 /*================CONTACTO==================*/
-.faq_form_ecu form{
+.faq_form_ecu{
   display: none;
+}
+.faq_form_ecu{
+  float: none !important;
 }
 
 /*================CONTACTO==================*/
