@@ -732,7 +732,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   width: 48px;
   background-size: contain;
   position: absolute;
-  top: 50% !important;
+  top: 40% !important;
   left: 50% !important;
   transform: translate(-50%, -50%);
   z-index: 9;
