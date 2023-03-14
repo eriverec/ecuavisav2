@@ -1428,9 +1428,10 @@ button.btn-ecuavisa-noticia img {
   float:right;
  }
 
- @media(max-width:1440px) {
+  @media(max-width:1440px) {
   .title-form ul li i.chevron {
    right:175px;
+  }
   }
   @media(max-width:1024px) {
    .formulario {
@@ -1514,7 +1515,7 @@ button.btn-ecuavisa-noticia img {
     right:-5px!important;
    }
   }
- 
+
 
 /*==================================FIN=AYUDA==========================================================*/
 
@@ -1524,7 +1525,7 @@ button.btn-ecuavisa-noticia img {
 }
 .faq_form_ecu{
   float: none !important;
-  margin: 3rem auto;
+  margin: 3rem auto !important;
 }
 
 /*================CONTACTO==================*/
