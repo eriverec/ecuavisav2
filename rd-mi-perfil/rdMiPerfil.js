@@ -817,8 +817,10 @@ async function Token(){
 var moverContenidoAyuda = () =>{
   // Obtener el contenido del bloque origen
   var contenidoOrigen = document.querySelector(".faq_ecu .noticias").innerHTML;
+  var formulario = document.querySelector(".faq_form_ecu").innerHTML;
   // Establecer el contenido en el bloque destino
   document.querySelector("#faq").innerHTML += `<div class="noticias">${contenidoOrigen}</div>`;
+  document.querySelector("#faq_form").innerHTML += `<div class="noticias">${formulario}</div>`;
   return true;
 }
 
