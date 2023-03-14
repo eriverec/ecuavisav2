@@ -927,7 +927,6 @@ button.btn-ecuavisa-noticia img {
   display: block;
 }
 
-
 /* 👉 MODAL SEGUIMIENTO DE TEMAS */
 .MODAL_SEGUIMIENTO_TEMA .modal-title {
   font-style: normal;
@@ -1102,13 +1101,23 @@ button.btn-ecuavisa-noticia img {
 
 
 /*================================INICIO=AYUDA==========================================================*/
-.ayuda-faq h1 {
+
+ #accesos {
+  min-height:0;
+  display:inline-block;
+  position:relative;
+  left:50%;
+  transform:translate(-50%,0);
+  width:100%;
+  max-width:960px;
+ }
+ .ayuda-faq h1 {
   color:#2927b9;
   font-size:55px;
   line-height:1.2em;
   font-weight:600;
   padding-top:2rem;
-  font-family:anek malayalam
+  font-family:anek malayalam;
  }
  .ayuda-faq h2 {
   font-size:1.25em;
@@ -1119,22 +1128,22 @@ button.btn-ecuavisa-noticia img {
   font-weight:700;
   width:90%;
   font-family:archivo!important;
-  color:#060127
+  color:#060127;
  }
  .ayuda-faq p {
   font-weight:700;
   padding:1rem 0;
-  font-family:archivo
+  font-family:archivo;
  }
  .ayuda-faq .text_block .priority-content {
   color:#060127;
   font-weight:500;
-  font-family:archivo
+  font-family:archivo;
  }
  .ayuda-faq .text_block .text .text-wrapper p {
   color:#060127;
   font-weight:400;
-  font-family:archivo
+  font-family:archivo;
  }
  .ayuda-faq .contAcordeon {
   color:#060127;
@@ -1149,16 +1158,352 @@ button.btn-ecuavisa-noticia img {
   z-index:2;
   padding:0 .5em;
   width:100%;
-  font-family:archivo
+  font-family:archivo;
+ }
+ #accesos ul {
+  list-style:none;
+  perspective:900;
+  padding:0;
+  margin:0;
+ }
+ #accesos ul li {
+  position:relative;
+  padding:10px 0;
+  margin:0;
+ }
+ #accesos ul li:nth-of-type(1) {
+  animation-delay:.5s;
+ }
+ #accesos ul li:nth-of-type(2) {
+  animation-delay:.75s;
+ }
+ #accesos ul li:nth-of-type(3) {
+  animation-delay:1s;
+ }
+ #accesos ul li:last-of-type {
+  animation-delay:1.25s;
+  padding-bottom:0;
+ }
+ #accesos ul li i.chevron {
+  position:absolute;
+  transform:translate(-18px,0);
+  margin-top:15px;
+  right:0;
+ }
+ #accesos ul li i.chevron:before,
+ #accesos ul li i.chevron:after {
+  content:"";
+  position:absolute;
+  background-color:#046cdf;
+  width:2px;
+  height:22px;
+ }
+ #accesos ul li i:before {
+  transform:translate(-22px,0) rotate(45deg);
+ }
+ #accesos ul li i.chevron:after {
+  transform:translate(-8px,0) rotate(-45deg);
+ }
+ #accesos ul li input[type=checkbox] {
+  position:absolute;
+  cursor:pointer;
+  width:100%;
+  height:100%;
+  z-index:1;
+  opacity:0;
+ }
+ #accesos ul li input[type=checkbox]:checked~div {
+  margin-top:0;
+  max-height:0;
+  opacity:0;
+  transform:translate(0,50%);
+ }
+ #accesos ul li input[type=checkbox]:checked~i:before {
+  transform:translate(-6px,0) rotate(45deg);
+ }
+ #accesos ul li input[type=checkbox]:checked~i:after {
+  transform:translate(-22px,0) rotate(-45deg);
+ }
+ #accesos input[type=checkbox]:checked~h2 {
+  background-color:#fff;
+ }
+ #accesos h2>i {
+  width:50px;
+  height:30px;
+  display:inline-block;
+  margin-right:1em;
+  margin-top:10px;
+  text-align:center;
+  float:right;
+ }
+ #accesos .callout {
+  padding:0 1em;
+  margin:0;
+ }
+ #accesos .callout h3 {
+  font-size:18px;
+  margin-bottom:.5em;
+  margin-top:0;
+  color:#060127;
+  font-family:archivo;
+ }
+ .transition,
+ ul li i:before,
+ ul li i:after,
+ .contAcordeon {
+  transition:all .25s ease-in-out;
+ }
+ .ui-dialog {
+  background:#fff;
+  border:4px solid #ccc;
+  border-radius:5px;
+  float:left;
+  padding:10px;
+  z-index:9999999;
+  font-family:archivo;
+ }
+ .ui-dialog.dialog_error .btts_error {
+  text-align:right;
+  position:relative;
+  bottom:4rem;
+ }
+ .ui-dialog.dialog_error .label_error {
+  padding:15px 25px 45px;
+  font-size:18px;
+  bottom:5rem;
+ }
+ .ui-dialog .ui-dialog-titlebar {
+  height:90px;
+ }
+ ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable.dialog_error {
+  position:absolute!important;
+  top:100%!important;
+  left:50%!important;
+  transform:translate(-50%,-50%)!important;
+  font-family:archivo;
+ }
+ .formulario {
+  margin-left:10.5rem;
+ }
+ .formulario .element_form select {
+  width:70%;
+ }
+ .formulario .element_form textarea {
+  width:70%;
+ }
+ .title-form h2 {
+  min-height:0;
+  display:inline-block;
+  position:relative;
+  left:50%;
+  transform:translate(-50%,0);
+  width:100%;
+  max-width:960px;
+  font-size:1.25rem;
+  padding-top:3rem;
+ }
+ .formulario .label_ant {
+  font-size:16px;
+  display:block;
+  margin:0;
+  cursor:pointer;
+  font-weight:700;
+  font-family:archivo;
+  color:#060127;
+ }
+ .formulario .element_form input {
+  line-height:normal;
+  border:none;
+  -webkit-border-radius:5px;
+  -moz-border-radius:5px;
+  border-radius:5px;
+  width:70%;
+  height:35px;
+  border:1px solid #333;
+ }
+ .formulario .btts_forms input {
+  font-weight:600;
+  margin:0 auto;
+  color:#fff;
+  background:#046cdf;
+  border:none;
+  -webkit-border-radius:7px;
+  -moz-border-radius:7px;
+  border-radius:3px;
+  margin:20px 0;
+  padding:10px;
+ }
+ .title-form .transition,
+ ul li i:before,
+ ul li i:after,
+ .contAcordeon {
+  transition:all .25s ease-in-out;
+ }
+ .title-form ul {
+  list-style:none;
+  perspective:900;
+  padding:0;
+  margin:0;
+ }
+ .title-form ul li {
+  position:relative;
+  padding:0;
+  margin:0;
+  padding-bottom:4px;
+  padding-top:0;
+ }
+ .title-form ul li:nth-of-type(1) {
+  animation-delay:.5s;
+ }
+ .title-form ul li:nth-of-type(2) {
+  animation-delay:.75s;
+ }
+ .title-form ul li:nth-of-type(3) {
+  animation-delay:1s;
+ }
+ .title-form ul li:last-of-type {
+  animation-delay:1.25s;
+  padding-bottom:0;
+ }
+ .title-form ul li i.chevron {
+  position:absolute;
+  transform:translate(-18px,0);
+  margin-top:60px;
+  right:10px;
+ }
+ .title-form ul li i.chevron:before,
+ ul li i.chevron:after {
+  content:"";
+  position:absolute;
+  background-color:#046cdf;
+  width:2px;
+  height:22px;
+ }
+ .title-form ul li i:before {
+  transform:translate(-13px,0) rotate(45deg);
+ }
+ .title-form ul li i.chevron:after {
+  transform:translate(2px,0) rotate(-45deg);
+ }
+ .title-form ul li input[type=checkbox] {
+  position:absolute;
+  cursor:pointer;
+  width:100%;
+  height:100%;
+  z-index:1;
+  opacity:0;
+  background-color:#046cdf;
+  max-height:100px;
+ }
+ .title-form ul li input[type=checkbox]:checked~div {
+  margin-top:0;
+  max-height:0;
+  opacity:0;
+  transform:translate(0,50%);
+ }
+ .title-form ul li input[type=checkbox]:checked~i:before {
+  transform:translate(3px,0) rotate(45deg);
+ }
+ .title-form ul li input[type=checkbox]:checked~i:after {
+  transform:translate(-12px,0) rotate(-45deg);
+ }
+ .title-form h2>i {
+  width:50px;
+  height:30px;
+  display:inline-block;
+  margin-right:1em;
+  margin-top:10px;
+  text-align:center;
+  float:right;
  }
 
-
- @media(max-width:600px) {
-  .ayuda-faq h2 {
-    font-size:1.1em;
-    letter-spacing:0
+ @media(max-width:1440px) {
+  .title-form ul li i.chevron {
+   right:175px;
+  }
+  @media(max-width:1024px) {
+   .formulario {
+    margin-left:0;
    }
-
-}
+   .formulario .element_form input {
+    width:100%;
+   }
+   .formulario .element_form select {
+    width:100%;
+   }
+   .formulario .element_form textarea {
+    width:100%;
+   }
+   .title-form ul li i.chevron {
+    right:20px;
+   }
+  }
+  @media(max-width:768px) {
+   .formulario {
+    margin-left:0;
+   }
+   .formulario .element_form input {
+    width:100%;
+   }
+   .formulario .element_form select {
+    width:100%;
+   }
+   .formulario .element_form textarea {
+    width:100%;
+   }
+   .title-form ul li i.chevron {
+    right:20px;
+   }
+  }
+  @media(max-width:600px) {
+   .formulario {
+    margin-left:0;
+   }
+   .formulario .element_form input {
+    width:100%;
+   }
+   .formulario .element_form select {
+    width:100%;
+   }
+   .formulario .element_form textarea {
+    width:100%;
+   }
+   #accesos ul li i.chevron {
+    right:0;
+   }
+   .title-form ul li i.chevron {
+    right:20px;
+   }
+   #accesos {
+    box-sizing:border-box;
+    transform:translate(0,0);
+    max-width:100%;
+    min-height:100%;
+    margin:0;
+    left:0;
+   }
+   .ayuda-faq h2 {
+    font-size:1.1em;
+    letter-spacing:0;
+   }
+   .formulario {
+    padding-left:0;
+   }
+   .ayuda-faq .text_block .text .text-wrapper p {
+    font-size:1rem;
+    font-weight:300;
+    font-family:archivo;
+   }
+  }
+  @media(max-width:375px) {
+   #accesos ul li i.chevron {
+    right:-15px;
+   }
+   .title-form ul li i.chevron {
+    right:-5px!important;
+   }
+  }
+ 
+ 
 
 /*==================================FIN=AYUDA==========================================================*/
