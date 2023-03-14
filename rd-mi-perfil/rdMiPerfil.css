@@ -48,8 +48,6 @@
 }
 
 
-
-
 /****************ENTRADA******************/
 
 .entradaGrid {
@@ -213,12 +211,7 @@
   background: #23dcd1;
 }
 
-
-
-
 /****************DATOS PERSONALES******************/
-
-
 .MP_datos .insideTitle {
   font-family: 'Archivo';
   font-style: normal;
@@ -737,7 +730,8 @@ button.btn-ecuavisa-noticia img {
 
 @media (min-width: 991px) {
   .MP_ayuda .AyudaBox .noticias {
-    max-width: 500px;
+    /*max-width: 500px;*/
+    max-width: 800px;
   }
 }
 
