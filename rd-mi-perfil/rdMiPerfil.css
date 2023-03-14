@@ -1105,7 +1105,20 @@ button.btn-ecuavisa-noticia img {
 /* FIN MODAL SEGUIMIENTO DE TEMAS */
 
 
-/*================================INICIO=AYUDA==========================================================*/
+/*================================INICIO=AYUDA========================================*/
+.AyudaBox .noticias .section{
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 28px;
+}
+
+.AyudaBox .noticias .ayuda-faq{
+  padding-right: 18px;
+  padding-left: 18px;
+}
+
 .ocultar_icon.active_mp:after{
   display: none; /*momentaneo*/
 }
