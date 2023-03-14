@@ -359,6 +359,18 @@ async function Token(){
     }
     
     /************MODAL DE SEGUIMIENTO DE INTERESES************/
+
+    var activarIter = async function(){
+      setTimeout(function () {
+        if (typeof ITER !== 'undefined') {
+          return modalUserNew.load();
+        } else {
+          activarIter();
+        }
+      }, 400) ;
+      return false;
+    }
+
     var modalUserNew = {
       modalAlert:function(){
         var alert = document.querySelector('#alert-mensaje-1');
@@ -453,7 +465,7 @@ async function Token(){
         this.title();
         this.body();
         /*Activa iter con el modal*/
-        activarIter();
+        //activarIter();
         /*Activa iter con el modal*/
         var existemodal = setInterval(function () {
             if ((typeof $().modal == 'function')) {
@@ -540,16 +552,6 @@ async function Token(){
       ]
     }
     /************FIN MODAL DE SEGUIMIENTO DE INTERESES************/
-    var activarIter = async function(){
-      setTimeout(function () {
-        if (typeof ITER !== 'undefined') {
-          return modalUserNew.load();
-        } else {
-          activarIter();
-        }
-      }, 400) ;
-      return false;
-    }
 
     var perfil = {
       init: () => {
