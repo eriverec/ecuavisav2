@@ -632,6 +632,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .bloque-programas .media_block .text_block .headline h3,
+.bloque-programas .media_block .text_block .headline h1,
 .programas-desktop .media_block .text_block .headline h1 {
   color: white;
   font-size: var(--rd-size-20);
