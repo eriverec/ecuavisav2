@@ -465,7 +465,7 @@ async function Token(){
         this.title();
         this.body();
         /*Activa iter con el modal*/
-        //activarIter();
+        activarIter();
         /*Activa iter con el modal*/
         var existemodal = setInterval(function () {
             if ((typeof $().modal == 'function')) {
@@ -562,7 +562,7 @@ async function Token(){
         modalUserNew.modalAlert();
         if(ECUAVISA_EC.USER_data('isnewuser') == 0){
           /*****MOSTRAMOS EL MODAL SI EL USUARIO ES NUEVO******/
-          modalUserNew.init();
+          //modalUserNew.init();
         }
         //ITER.FAVORITE.TOPICS.onLoad(function(){});
         setTimeout(function () {
