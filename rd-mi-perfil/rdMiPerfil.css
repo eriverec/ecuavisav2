@@ -1106,6 +1106,10 @@ button.btn-ecuavisa-noticia img {
 
 
 /*================================INICIO=AYUDA==========================================================*/
+.ocultar_icon.active_mp:after{
+  display: none; /*momentaneo*/
+}
+
 .faq-ayuda.u-ayuda-faq{
   background: #F5F5F5;
 }
