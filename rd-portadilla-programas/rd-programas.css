@@ -189,6 +189,14 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   margin-left: 1rem;
 }
 
+.Topheadline h2 {
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    margin: 5px;
+}
 .sliderVideos .ms-visto-ec .swiper .swiper-wrapper .element .media_block .top_info .Topheadline .hLine {
   background: #23DCD1;
   font-size: 12px;
