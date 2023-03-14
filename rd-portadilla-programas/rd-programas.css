@@ -553,7 +553,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   display: none;
 }
 
-.bloque-programas .Topheadline h2 {
+.bloque-programas .Topheadline h1 {
   text-transform: uppercase;
   font-family: 'Anek Malayalam';
   font-style: normal;
@@ -601,7 +601,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   max-width: 700px;
 }
 
-.programas-desktop .noticias .article .media_block .text_block .headline h2 {
+.programas-desktop .noticias .article .media_block .text_block .headline h1 {
   font-size: 42px;
   line-height: 48px;
 }
@@ -631,8 +631,8 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   border-radius: 5px;
 }
 
-.bloque-programas .media_block .text_block .headline h3,
-.programas-desktop .media_block .text_block .headline h2 {
+.bloque-programas .media_block .text_block .headline h1,
+.programas-desktop .media_block .text_block .headline h1 {
   color: white;
   font-size: var(--rd-size-20);
   font-family: 'Anek Malayalam';
@@ -875,7 +875,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
     top: 45px;
   }
 
-  .bloque-programas .media_block .text_block .headline h3 {
+  .bloque-programas .media_block .text_block .headline h1 {
     font-size: 16px;
   }
 
