@@ -817,6 +817,7 @@ button.btn-ecuavisa-noticia img {
 
 .active_mp:after {
   content: url('./assets/chevron-up.svg');
+
 }
 
 .content_mp {
@@ -1123,8 +1124,7 @@ button.btn-ecuavisa-noticia img {
   padding-left: 18px;
 }
 
-.AyudaBox .noticias .ayuda-faq #accesos
-
+.AyudaBox .noticias .ayuda-faq #accesos,
 .ocultar_icon.active_mp:after{
   display: none; /*momentaneo*/
 }
@@ -1494,9 +1494,6 @@ button.btn-ecuavisa-noticia img {
    }
   }
   @media(max-width:600px) {
-    .active_mp:after{
-      display: none;
-    }
    .formulario {
     margin-left:0;
    }
