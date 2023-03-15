@@ -1123,6 +1123,13 @@ button.btn-ecuavisa-noticia img {
   padding-right: 18px;
   padding-left: 18px;
 }
+.AyudaBox .noticias #faq,
+.AyudaBox .noticias #faq_form p{
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  font-family: archivo;
+}
 
 .ocultar_icon.active_mp:after{
   display: none; /*momentaneo*/
@@ -1227,9 +1234,10 @@ button.btn-ecuavisa-noticia img {
  #accesos ul li i.chevron:after {
   content:"";
   position:absolute;
-  background-color:#046cdf;
-  width:2px;
-  height:11px;
+  /*background-color:#046cdf;*/
+  background-color: #2927b9;
+  width:4px;
+  height:20px;
  }
  #accesos ul li i:before {
   transform:translate(-22px,0) rotate(45deg);
@@ -1237,7 +1245,7 @@ button.btn-ecuavisa-noticia img {
  }
  #accesos ul li i.chevron:after {
   /*transform:translate(-8px,0) rotate(-45deg);*/
-  transform:translate(-15px,0) rotate(-45deg);
+  transform:translate(-10px,0) rotate(-45deg);
  }
  #accesos ul li input[type=checkbox] {
   position:absolute;
@@ -1254,8 +1262,9 @@ button.btn-ecuavisa-noticia img {
   transform:translate(0,50%);
  }
  #accesos ul li input[type=checkbox]:checked~i:before {
-  transform:translate(-6px,0) rotate(45deg);
-  transform: translate(-15px,0) rotate(45deg);
+  /*transform:translate(-6px,0) rotate(45deg);
+  transform: translate(-15px,0) rotate(45deg);*/
+  transform: translate(-10px,0) rotate(45deg);
  }
  #accesos ul li input[type=checkbox]:checked~i:after {
   transform:translate(-22px,0) rotate(-45deg);
@@ -1451,6 +1460,10 @@ button.btn-ecuavisa-noticia img {
   margin-top:10px;
   text-align:center;
   float:right;
+ }
+
+ #accesos ul li i.chevron {
+  right: -20px;
  }
 
   @media(max-width:1440px) {
