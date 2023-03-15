@@ -3,6 +3,7 @@ import VueApexCharts from "vue3-apexcharts";
 import { useTheme } from "vuetify";
 import { hexToRgb } from "@layouts/utils";
 import { Spanish } from 'flatpickr/dist/l10n/es.js'
+
 // 👉 Colors variables
 const colorVariables = (themeColors) => {
   const themeSecondaryTextColor = `rgba(${hexToRgb(
@@ -108,6 +109,14 @@ const getAreaChartSplineConfig = (themeColors) => {
   };
 };
 
+
+
+var fechai = '';
+var fechaf = '';
+var dataFormateada = [];
+var getData = [];
+var visita = false;
+
 function addDays(date, sumarDias=0) {
   var result = new Date(date);
   result.setDate(date.getDate() + sumarDias);
@@ -179,11 +188,11 @@ var existeFecha = function(list, fecha){
   return {resp:false};
 }
 
-async function getDataTrazabilidad(data){
+async function getDataTrazabilidad(data,){
 
   var dataGroupBrowser = [data];
   if(data.length > 1){
-    dataGroupBrowser = groupBy(data, "browser")
+    dataGroupBrowser = groupBy(data, "device")
   }
   var serieTotal = [];
   
@@ -195,8 +204,11 @@ async function getDataTrazabilidad(data){
     var total = 0;
     for(var j in dataGroupBrowser[i]){
       var renderData = dataGroupBrowser[i][j];
-      nameSerie = renderData.browser;
-      var count = renderData.navigationRecord.length;//Math.floor(Math.random()*2000);
+      nameSerie = renderData.device;
+      var count = 1;//Math.floor(Math.random()*2000);
+      if(!visita){
+        count = renderData.navigationRecord.length;
+      }
       var fecha = renderData.timestamp.split(',')[0];
       fecha = fecha.split("/");
       fecha = `${fecha[2]}-${fecha[0]}-${fecha[1]}`;
@@ -278,15 +290,15 @@ async function obtenerFechaDispositivos(selectedDates, dateStr, instance){
   //var respJson = await nuevoArchivoJson(archivoJson);
   if(selectedDates.length > 1){
     var dateI = selectedDates[0];
-    var fechai = (dateI.getMonth() + 1) + '/' + dateI.getDate() + '/' + dateI.getFullYear();
+    fechai = (dateI.getMonth() + 1) + '/' + dateI.getDate() + '/' + dateI.getFullYear();
     var dateF = selectedDates[1];
-    var fechaf = (dateF.getMonth() + 1) + '/' + dateF.getDate() + '/' + dateF.getFullYear();
+    fechaf = (dateF.getMonth() + 1) + '/' + dateF.getDate() + '/' + dateF.getFullYear();
 
     var panelGráfico = document.querySelector("#apexchartscrejemplo");
     panelGráfico.classList.add("disabled");
-    var getData = await getDataGrafico(fechai, fechaf);
+    getData = await getDataGrafico(fechai, fechaf);
     panelGráfico.classList.remove("disabled");
-    var dataFormateada = await getDataTrazabilidad(getData.grafico);
+    dataFormateada = await getDataTrazabilidad(getData.grafico);
     ApexCharts.exec("crejemplo", "updateSeries", dataFormateada);
   }
   //console.log(formatDate(selectedDates[0]))
@@ -294,9 +306,53 @@ async function obtenerFechaDispositivos(selectedDates, dateStr, instance){
   
 }
 
+async function formatVisitaGráfico(){
+  if(dataFormateada.length > 0){
+    var panelGráfico = document.querySelector("#apexchartscrejemplo");
+    visita = true;
+    dataFormateada = await getDataTrazabilidad(getData.grafico);
+    ApexCharts.exec("crejemplo", "updateSeries", dataFormateada);
+    panelGráfico.classList.remove("disabled");
+  }
+}
+
+async function formatActividadGráfico(){
+  if(dataFormateada.length > 0){
+    visita = false;
+    var panelGráfico = document.querySelector("#apexchartscrejemplo");
+    dataFormateada = await getDataTrazabilidad(getData.grafico);
+    ApexCharts.exec("crejemplo", "updateSeries", dataFormateada);
+    panelGráfico.classList.remove("disabled");
+  }
+}
+
+const porVisita = (item) => {
+  if(item.target.checked){
+    formatVisitaGráfico()
+  }else{
+    formatActividadGráfico()
+  }
+};
+
 </script>
 
 <template>
+  <!--<v-switch
+  id="switch-visita"
+  @change="porVisita" 
+  label="Por Visita"
+  ></v-switch>--->
+
+  <VBtnToggle
+    density="compact"
+    color="primary"
+    variant="outlined"
+    divided
+  >
+    <VBtn v-on:click="formatActividadGráfico" class="btn-check">Por Visita</VBtn>
+    <VBtn v-on:click="formatVisitaGráfico" >Por Actividad</VBtn>
+  </VBtnToggle>
+
   <div class="date-picker-wrapper" style="width: 233px;">
     <AppDateTimePicker
       placeholder="Seleccionar una fecha"

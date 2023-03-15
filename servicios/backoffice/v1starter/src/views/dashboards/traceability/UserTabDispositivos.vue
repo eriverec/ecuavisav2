@@ -162,8 +162,8 @@ onMounted(async () => {
       <VCard>
         <VCardText class="d-flex flex-wrap justify-space-between gap-4">
           <VCardItem class="pt-0 pb-0">
-            <VCardTitle>Area Chart</VCardTitle>
-            <VCardSubtitle>Commercial networks</VCardSubtitle>
+            <VCardTitle>Actividad</VCardTitle>
+            <VCardSubtitle>De dispositivos</VCardSubtitle>
           </VCardItem>
           <ChartAreaDispositivosFecha />
         </VCardText>
