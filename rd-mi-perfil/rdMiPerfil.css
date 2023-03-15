@@ -1535,6 +1535,10 @@ button.btn-ecuavisa-noticia img {
    .c_002_001.form-portlet{
     width: 100%;
    }
+   .AyudaBox .noticias .section{
+    font-size: 22px;
+    line-height: 25px;
+   }
   }
   @media(max-width:375px) {
    #accesos ul li i.chevron {
