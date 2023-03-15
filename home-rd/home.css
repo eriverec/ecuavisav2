@@ -1326,6 +1326,10 @@ BLOQUE - TE EXPLICO LA NOTICIA
   margin: 0;
 }
 
+.rd-texplico-la-noticia .inf2.rd_date {
+  display: none;
+}
+
 .rd-texplico-la-noticia .article-section {
   display: none;
 }
