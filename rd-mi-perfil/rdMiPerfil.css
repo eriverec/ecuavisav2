@@ -1118,8 +1118,7 @@ button.btn-ecuavisa-noticia img {
 }
 
 .AyudaBox .noticias #faq,
-.AyudaBox .noticias #faq_form,
-.AyudaBox .noticias .ayuda-faq #accesos{
+.AyudaBox .noticias #faq_form{
   padding-right: 18px;
   padding-left: 18px;
 }
@@ -1495,6 +1494,9 @@ button.btn-ecuavisa-noticia img {
    }
   }
   @media(max-width:600px) {
+    .active_mp:after{
+      display: none;
+    }
    .formulario {
     margin-left:0;
    }
@@ -1523,8 +1525,8 @@ button.btn-ecuavisa-noticia img {
     left:0;
    }
    .ayuda-faq h2 {
-    font-size:1.1em;
     letter-spacing:0;
+    padding-right: 5px;
    }
    .formulario {
     padding-left:0;
@@ -1533,6 +1535,9 @@ button.btn-ecuavisa-noticia img {
     font-size:1rem;
     font-weight:300;
     font-family:archivo;
+   }
+   .c_002_001.form-portlet{
+    width: 100%;
    }
   }
   @media(max-width:375px) {
@@ -1544,7 +1549,6 @@ button.btn-ecuavisa-noticia img {
    }
   }
 
-
 /*==================================FIN=AYUDA==========================================================*/
 
 /*================CONTACTO==================*/
@@ -1555,5 +1559,4 @@ button.btn-ecuavisa-noticia img {
   float: none !important;
   margin: 3rem auto !important;
 }
-
 /*================CONTACTO==================*/
