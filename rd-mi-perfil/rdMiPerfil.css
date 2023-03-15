@@ -1104,6 +1104,9 @@ button.btn-ecuavisa-noticia img {
 }
 /* FIN MODAL SEGUIMIENTO DE TEMAS */
 
+.MP_noticias_save .noticias{
+      padding-left: 7px;
+}
 
 /*================================INICIO=AYUDA========================================*/
 .AyudaBox .noticias .section{
@@ -1114,10 +1117,13 @@ button.btn-ecuavisa-noticia img {
     line-height: 28px;
 }
 
-.AyudaBox .noticias .ayuda-faq p{
+.AyudaBox .noticias .ayuda-faq p,
+.AyudaBox .noticias .ayuda-faq #accesos{
   padding-right: 18px;
   padding-left: 18px;
 }
+
+.AyudaBox .noticias .ayuda-faq #accesos
 
 .ocultar_icon.active_mp:after{
   display: none; /*momentaneo*/
@@ -1224,13 +1230,14 @@ button.btn-ecuavisa-noticia img {
   position:absolute;
   background-color:#046cdf;
   width:2px;
-  height:22px;
+  height:11px;
  }
  #accesos ul li i:before {
   transform:translate(-22px,0) rotate(45deg);
  }
  #accesos ul li i.chevron:after {
-  transform:translate(-8px,0) rotate(-45deg);
+  /*transform:translate(-8px,0) rotate(-45deg);*/
+  transform:translate(-15px,0) rotate(-45deg);
  }
  #accesos ul li input[type=checkbox] {
   position:absolute;
