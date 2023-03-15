@@ -1117,7 +1117,8 @@ button.btn-ecuavisa-noticia img {
     line-height: 28px;
 }
 
-.AyudaBox .noticias #faq p,
+.AyudaBox .noticias #faq,
+.AyudaBox .noticias #faq_form,
 .AyudaBox .noticias .ayuda-faq #accesos{
   padding-right: 18px;
   padding-left: 18px;
@@ -1508,7 +1509,7 @@ button.btn-ecuavisa-noticia img {
    }
    #accesos ul li i.chevron {
     right:0;
-    right:30px;
+    right:-30px;
    }
    .title-form ul li i.chevron {
     right:20px;
