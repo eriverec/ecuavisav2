@@ -639,7 +639,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 .carrusel-programas .text_block {
   border-radius: 5px;
 }
-.programas-desktop .media_block .text_block .headline h2, {
+.programas-desktop .media_block .text_block .headline h2 {
   color: white;
   font-size: 34px;
   font-family: 'Anek Malayalam';
