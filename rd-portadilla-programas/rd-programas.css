@@ -886,6 +886,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
     top: 45px;
   }
 
+  .bloque-programas .media_block .text_block .headline h1,
   .bloque-programas .media_block .text_block .headline h2 {
     font-size: 16px;
   }
