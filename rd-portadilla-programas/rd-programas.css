@@ -519,7 +519,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   top: 60%;
 }
 
-.bloque-programas .media_block .text_block .headline h1, 
+.bloque-programas .media_block .text_block .headline h1,
 .bloque-programas .media_block .text_block .headline h2 {
   color: white;
   font-size: 34px;
@@ -638,6 +638,13 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
 .carrusel-programas .text_block {
   border-radius: 5px;
+}
+.programas-desktop .media_block .text_block .headline h2, {
+  color: white;
+  font-size: 34px;
+  font-family: 'Anek Malayalam';
+  font-weight: 600;
+  padding-top: .5rem;
 }
 
 .bloque-programas .media_block .text_block .headline h3,
