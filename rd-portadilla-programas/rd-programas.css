@@ -610,9 +610,10 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   max-width: 700px;
 }
 
-.programas-desktop .noticias .article .media_block .text_block .headline h1 {
-  font-size: 42px;
-  line-height: 48px;
+.programas-desktop .noticias .article .media_block .text_block .headline h1,
+.programas-desktop .noticias .article .media_block .text_block .headline h2 {
+  font-size: 42px!important;
+  line-height: 48px!important;
 }
 
 .programas-desktop .noticias .article .media_block .text_block .inf2 {
@@ -638,13 +639,6 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
 .carrusel-programas .text_block {
   border-radius: 5px;
-}
-.programas-desktop .media_block .text_block .headline h2 {
-  color: white;
-  font-size: 34px;
-  font-family: 'Anek Malayalam';
-  font-weight: 600;
-  padding-top: .5rem;
 }
 
 .bloque-programas .media_block .text_block .headline h3,
