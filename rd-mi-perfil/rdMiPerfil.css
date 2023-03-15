@@ -1114,7 +1114,7 @@ button.btn-ecuavisa-noticia img {
     line-height: 28px;
 }
 
-.AyudaBox .noticias .ayuda-faq{
+.AyudaBox .noticias .ayuda-faq p{
   padding-right: 18px;
   padding-left: 18px;
 }
@@ -1148,7 +1148,7 @@ button.btn-ecuavisa-noticia img {
   font-family:anek malayalam;
  }
  .ayuda-faq h2 {
-  font-size:1.25em;
+  font-size:1em;
   display:block;
   margin:0;
   cursor:pointer;
