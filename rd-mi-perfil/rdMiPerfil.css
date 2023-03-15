@@ -1117,7 +1117,7 @@ button.btn-ecuavisa-noticia img {
     line-height: 28px;
 }
 
-.AyudaBox .noticias .ayuda-faq p,
+.AyudaBox .noticias #faq p,
 .AyudaBox .noticias .ayuda-faq #accesos{
   padding-right: 18px;
   padding-left: 18px;
@@ -1233,8 +1233,7 @@ button.btn-ecuavisa-noticia img {
   height:11px;
  }
  #accesos ul li i:before {
-  /*transform:translate(-22px,0) rotate(45deg);*/
-  transform: translate(-13px,0) rotate(-45deg);
+  transform:translate(-22px,0) rotate(45deg);
 
  }
  #accesos ul li i.chevron:after {
@@ -1257,6 +1256,7 @@ button.btn-ecuavisa-noticia img {
  }
  #accesos ul li input[type=checkbox]:checked~i:before {
   transform:translate(-6px,0) rotate(45deg);
+  transform: translate(-15px,0) rotate(45deg);
  }
  #accesos ul li input[type=checkbox]:checked~i:after {
   transform:translate(-22px,0) rotate(-45deg);
@@ -1508,6 +1508,7 @@ button.btn-ecuavisa-noticia img {
    }
    #accesos ul li i.chevron {
     right:0;
+    right:30px;
    }
    .title-form ul li i.chevron {
     right:20px;
