@@ -519,7 +519,8 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   top: 60%;
 }
 
-.bloque-programas .media_block .text_block .headline h1 {
+.bloque-programas .media_block .text_block .headline h1,
+.bloque-programas .media_block .text_block .headline h2 {
   color: white;
   font-size: 34px;
   font-family: 'Archivo';
@@ -640,7 +641,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .bloque-programas .media_block .text_block .headline h3,
-.bloque-programas .media_block .text_block .headline h1,
+.bloque-programas .media_block .text_block .headline h2,
 .programas-desktop .media_block .text_block .headline h1 {
   color: white;
   font-size: var(--rd-size-20);
@@ -884,7 +885,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
     top: 45px;
   }
 
-  .bloque-programas .media_block .text_block .headline h1 {
+  .bloque-programas .media_block .text_block .headline h2 {
     font-size: 16px;
   }
 
