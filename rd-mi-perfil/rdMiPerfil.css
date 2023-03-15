@@ -1233,7 +1233,9 @@ button.btn-ecuavisa-noticia img {
   height:11px;
  }
  #accesos ul li i:before {
-  transform:translate(-22px,0) rotate(45deg);
+  /*transform:translate(-22px,0) rotate(45deg);*/
+  transform: translate(-13px,0) rotate(-45deg);
+
  }
  #accesos ul li i.chevron:after {
   /*transform:translate(-8px,0) rotate(-45deg);*/
