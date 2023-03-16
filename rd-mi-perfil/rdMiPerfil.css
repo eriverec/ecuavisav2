@@ -1310,16 +1310,16 @@ button.btn-ecuavisa-noticia img {
  .ui-dialog.dialog_error .btts_error {
   text-align:right;
   position:relative;
-  bottom:4rem;
+  /*bottom:4rem;*/
  }
  .ui-dialog.dialog_error .label_error {
   padding:15px 25px 45px;
   font-size:18px;
   bottom:5rem;
  }
- .ui-dialog .ui-dialog-titlebar {
+ /*.ui-dialog .ui-dialog-titlebar {
   height:90px;
- }
+ }*/
  ui-dialog.ui-widget.ui-widget-content.ui-corner-all.ui-front.ui-draggable.ui-resizable.dialog_error {
   position:absolute!important;
   top:100%!important;
@@ -1649,7 +1649,9 @@ button.btn-ecuavisa-noticia img {
   float: right;
 }
 
-
+.ui-dialog-content {
+  height: auto!important;
+}
 .ui-dialog {
   background: white;
   border: 2px solid #2927b9;
@@ -1657,7 +1659,14 @@ button.btn-ecuavisa-noticia img {
   float: left;
   padding: 10px;
   z-index: 9999999;
-  top: -950px!important;
+  top: -90rem!important;
+  left: 32rem !important;
+}
+.ui-dialog.dialog_error .btts_error{
+  display: flex;
+  flex-direction: column;
+  float: right;
+  text-align: right;
 }
 .ui-dialog.dialog_error .label_error {
   padding: 15px;
