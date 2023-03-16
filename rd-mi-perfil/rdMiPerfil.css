@@ -1648,4 +1648,41 @@ button.btn-ecuavisa-noticia img {
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-login.svg');
   float: right;
 }
+
+
+.ui-dialog {
+  background: white;
+  border: 2px solid #2927b9;
+  border-radius: 10px;
+  float: left;
+  padding: 10px;
+  z-index: 9999999;
+  top: -950px!important;
+}
+.ui-dialog.dialog_error .label_error {
+  padding: 15px;
+  font-family: 'Archivo';
+  font-size: 15px;
+  text-align: center;
+}
+.ui-dialog.dialog_error .btt_repetir {
+  border: none;
+  height: 27px;
+  border-radius: 7px;
+  display: flex;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #2927b9;
+  float: right;
+  padding: 0;
+}
+.ui-dialog.dialog_error .btts_error::after {
+  content: url('https://estadisticas.ecuavisa.com/sites/default/files/2023-01/Vector_0.png');
+  float: right;
+}
 /*================CONTACTO==================*/
