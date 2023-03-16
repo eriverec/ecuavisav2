@@ -1568,8 +1568,74 @@ button.btn-ecuavisa-noticia img {
 .faq_form_ecu{
   display: none;
 }
+
 #faq_form .c_002_001.form-portlet{
   float: none !important;
   margin: 3rem auto !important;
+  background: white;
+}
+.c_002_001.form-portlet .label_ant{
+  font-weight: 700;
+  font-family: 'Mattone 150';
+  color: black;
+  font-size: 14px;
+}
+.c_002_001.form-portlet .element_form input{
+    line-height: normal;
+    position: relative;
+    background: transparent;
+    color: black;
+    background: white;
+    outline: none;
+    margin: 0px 0;
+    font-size: 14px;
+    letter-spacing: 1px;
+    font-weight: 400;
+    border: 1px solid #2927b9;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    height: 40px;
+    border-radius: 2px;
+    font-family: 'Archivo';
+}
+.c_002_001.form-portlet .element_form textarea{
+  background: white;
+}
+.c_002_001.form-portlet .element_form select {
+  width: 100%;
+  height: 40px;
+  border: 1px solid #2927b9;
+  border-radius: 2px;
+  font-family: 'Archivo';
+}
+.c_002_001.form-portlet .btts_forms {
+  padding-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  float: right;
+}
+.c_002_001.form-portlet .btts_forms input {
+  border: none;
+  height: 27px;
+  border-radius: 7px;
+  display: flex;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 10px 17px;
+  color: #2927b9;
+  align-items: center;
+  justify-content: center;
+}
+.btts_forms::after {
+  content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-login.svg');
+  float: right;
 }
 /*================CONTACTO==================*/
