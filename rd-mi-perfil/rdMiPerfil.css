@@ -1572,7 +1572,8 @@ button.btn-ecuavisa-noticia img {
 #faq_form .c_002_001.form-portlet{
   float: none !important;
   margin: 3rem auto !important;
-  background: white;
+  background: white;  
+  height: 920px;
 }
 .c_002_001.form-portlet .label_ant{
   font-weight: 700;
@@ -1602,7 +1603,14 @@ button.btn-ecuavisa-noticia img {
     font-family: 'Archivo';
 }
 .c_002_001.form-portlet .element_form textarea{
-  background: white;
+    background: white;
+    resize: vertical;
+    line-height: normal;
+    border: 1px solid #2927b9;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    border-radius: 2px;
+    width: 100%;
 }
 .c_002_001.form-portlet .element_form select {
   width: 100%;
