@@ -72,7 +72,7 @@ function updateTable() {
 }
 
 onMounted(async () => {
-  const response = await fetch('https://servicio-de-actividad.vercel.app/all/X@2023');
+  const response = await fetch('https://servicio-de-actividad.vercel.app/dispositivos/all');
   state.data = await response.json();
   console.log(state.data);
 });

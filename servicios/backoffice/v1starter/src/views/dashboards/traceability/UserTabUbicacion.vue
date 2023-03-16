@@ -72,34 +72,12 @@ const countriesUbicaciones = [
   },
 ]
 
-// const data = [
-//   { city: 'New York', country: 'USA', device: 'iPhone' },
-//   { city: 'Los Angeles', country: 'USA', device: 'Samsung' },
-//   { city: 'London', country: 'Japan', device: 'Google Pixel' },
-//   { city: 'Paris', country: 'Australia', device: 'iPhone' },
-//   { city: 'Tokyo', country: 'Japan', device: 'OnePlus' },
-//   { city: 'Sydney', country: 'Australia', device: 'Samsung' },
-//   { city: 'Toronto', country: 'Canada', device: 'Google Pixel' },
-//   { city: 'Berlin', country: 'Germany', device: 'iPhone' },
-//   { city: 'Mumbai', country: 'Australia', device: 'OnePlus' },
-//   { city: 'Moscow', country: 'Australia', device: 'Samsung' }
-// ];
-// const countryCounts = {};
-
-// console.log('countryCounts:', countryCounts)
-// data.forEach((datum) => {
-//   if (countryCounts[datum.country]) {
-//     countryCounts[datum.country]++;
-//   } else {
-//     countryCounts[datum.country] = 1;
-//   }
-// });
-
-const apiUrl = 'https://servicio-de-actividad.vercel.app/all/X@2023'
+const apiUrl = 'https://servicio-de-actividad.vercel.app/dispositivos/all'
 const activities = ref([])
 const cityCounts = ref({})
-
-console.log('activities', activities)
+const isLoading = ref(true)
+const sortedCityCounts = ref([])
+const tableRows = ref([])
 
 onMounted(async () => {
   const response = await fetch(apiUrl)
@@ -108,88 +86,113 @@ onMounted(async () => {
   console.log(activities.value)
 
   for (const activity of activities.value) {
-    const cityKey = `
-      <VListItemTitle class="font-weight-medium d-block">
-        ${activity.country}
-      </VListItemTitle>
-      <VListItemSubtitle class="opacity-100 text-disabled">
-        ${activity.city}
-      </VListItemSubtitle>`
+    const cityKey = `${activity.country}-${activity.city}-${activity.countryCode}`
     cityCounts.value[cityKey] = (cityCounts.value[cityKey] || 0) + 1
   }
+  sortedCityCounts.value = Object.entries(cityCounts.value).sort((a, b) => b[1] - a[1])
+
+  tableRows.value = sortedCityCounts.value.map(([cityKey, count]) => {
+    const [country, city, countryCode] = cityKey.split('-')
+    return { country, city, count, countryCode }
+  })
+
+  isLoading.value = false
 })
+
+function sortByDesc() {
+  sortedCityCounts.value = Object.entries(cityCounts.value).sort((a, b) => b[1] - a[1])
+  updateTableRows()
+}
+
+function sortByAsc() {
+  sortedCityCounts.value = Object.entries(cityCounts.value).sort((a, b) => a[1] - b[1])
+  updateTableRows()
+}
+
+function updateTableRows() {
+  tableRows.value = sortedCityCounts.value.map(([cityKey, count]) => {
+    const [country, city, countryCode] = cityKey.split('-')
+    return { country, city, count, countryCode }
+  })
+}
+
 
 </script>
 
 <template>
-  <VCard title="Sales by Countries" subtitle="Monthly Sales Overview">
+  <VCard title="Dispositivos por Países">
     <VCardText>
-      <VList class="card-list">
-        <VListItem v-for="(count, city, country) in cityCounts " :key="city">
-          <template #prepend>
-            <span v-for="ubi in countriesUbicaciones" :key="ubi.country">
-              <span v-if="ubi.country === 'Ecuador'">
-                <VAvatar class="ava" size="34" color="secondary" variant="tonal" :image="ubi.avatarImg" />
-              </span>
-            </span>
-          </template>
-
-          <div v-html="city"></div>
-
-          <template #append>
-            <div :class="`d-flex align-center font-weight-semibold ${count > 0 ? 'text-success' : 'text-error'}`">
-              <VIcon :icon="count > 0 ? 'tabler-chevron-up' : 'tabler-chevron-down'" size="18" class="me-1" />
-              <span>{{ count }}%</span>
-            </div>
-          </template>
-        </VListItem>
-
-      </VList>
-
-
-    </VCardText>
-
-    <template #append>
-      <div class="mt-n4 me-n2">
-        <VBtn icon color="default" size="x-small" variant="plain">
-          <VIcon size="22" icon="tabler-dots-vertical" />
-
-          <VMenu activator="parent">
-            <VList>
-              <VListItem v-for="(item, index) in ['Refresh', 'Download', 'View All']" :key="index" :value="index">
-                <VListItemTitle>{{ item }}</VListItemTitle>
-              </VListItem>
-            </VList>
-          </VMenu>
-        </VBtn>
+      <div v-if="isLoading">
+        Cargando datos...
       </div>
-    </template>
-
-    <VCardText>
-      <VList class="card-list">
-        <VListItem v-for="country in salesByCountries" :key="country.stats">
+      <VList class="card-list" v-else>
+        <VBtnToggle class="grupoBotones mb-5" density="compact" color="primary" variant="outlined" divided>
+          <VBtn @click="sortByAsc" class="btn-check">Ascendente</VBtn>
+          <VBtn @click="sortByDesc">Descendente</VBtn>
+        </VBtnToggle>
+        <VListItem v-for="(row, index) in tableRows" :key="index">
           <template #prepend>
-            <VAvatar size="34" color="secondary" variant="tonal" :image="country.avatarImg" />
+            <VAvatar class="ava" size="34"
+              :image="'https://www.countryflagicons.com/FLAT/64/' + row.countryCode + '.png'" />
           </template>
-
-          <VListItemTitle class="font-weight-medium">
-            {{ country.stats }}
+          <VListItemTitle class="font-weight-medium d-block">
+            {{ row.country }}
           </VListItemTitle>
           <VListItemSubtitle class="opacity-100 text-disabled">
-            {{ country.subtitle }}
+            {{ row.city }}
           </VListItemSubtitle>
-
           <template #append>
-            <div
-              :class="`d-flex align-center font-weight-semibold ${country.profitLoss > 0 ? 'text-success' : 'text-error'}`">
-              <VIcon :icon="country.profitLoss > 0 ? 'tabler-chevron-up' : 'tabler-chevron-down'" size="18"
-                class="me-1" />
-              <span>{{ Math.abs(country.profitLoss) }}%</span>
+            <div :class="`d-flex align-center font-weight-semibold ${row.count > 0 ? 'text-success' : 'text-error'}`">
+              <!-- <span>{{ row.count }} </span> -->
+              <VChip label >{{ row.count }} {{row.count === 1 ? 'Visita' : 'Visitas'}} </VChip>
             </div>
           </template>
         </VListItem>
+
       </VList>
     </VCardText>
+
+    <!-- <template #append>
+          <div class="mt-n4 me-n2">
+            <VBtn icon color="default" size="x-small" variant="plain">
+              <VIcon size="22" icon="tabler-dots-vertical" />
+
+              <VMenu activator="parent">
+                <VList>
+                  <VListItem v-for="(item, index) in ['Refresh', 'Download', 'View All']" :key="index" :value="index">
+                    <VListItemTitle>{{ item }}</VListItemTitle>
+                  </VListItem>
+                </VList>
+              </VMenu>
+            </VBtn>
+          </div>
+        </template> -->
+
+    <!-- <VCardText>
+            <VList class="card-list">
+              <VListItem v-for="country in salesByCountries" :key="country.stats">
+                <template #prepend>
+                  <VAvatar size="34" color="secondary" variant="tonal" :image="country.avatarImg" />
+                </template>
+
+                <VListItemTitle class="font-weight-medium">
+                  {{ country.stats }}
+                </VListItemTitle>
+                <VListItemSubtitle class="opacity-100 text-disabled">
+                  {{ country.subtitle }}
+                </VListItemSubtitle>
+
+                <template #append>
+                  <div
+                    :class="`d-flex align-center font-weight-semibold ${country.profitLoss > 0 ? 'text-success' : 'text-error'}`">
+                    <VIcon :icon="country.profitLoss > 0 ? 'tabler-chevron-up' : 'tabler-chevron-down'" size="18"
+                      class="me-1" />
+                    <span>{{ Math.abs(country.profitLoss) }}%</span>
+                  </div>
+                </template>
+              </VListItem>
+            </VList>
+          </VCardText> -->
   </VCard>
 </template>
 
@@ -198,8 +201,13 @@ onMounted(async () => {
   --v-card-list-gap: 19px;
 }
 
-.v-img__img--contain {
-  object-fit: cover !important;
+.grupoBotones{
+  display: flex;
+  justify-content: center;
+}
+
+.v-avatar {
+  border-radius: initial !important;
 }
 
 .ava {
