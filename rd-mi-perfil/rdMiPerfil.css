@@ -1574,6 +1574,8 @@ button.btn-ecuavisa-noticia img {
   margin: 3rem auto !important;
   background: white;  
   height: 920px;
+  width: 580px;
+  padding: 30px;
 }
 .c_002_001.form-portlet .label_ant{
   font-weight: 700;
