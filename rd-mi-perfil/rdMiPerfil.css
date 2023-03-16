@@ -1546,7 +1546,7 @@ button.btn-ecuavisa-noticia img {
     font-family:archivo;
    }
    .c_002_001.form-portlet{
-    width: 100%;
+    width: 100% !important;
    }
    .AyudaBox .noticias .section{
     font-size: 22px;
