@@ -1659,7 +1659,7 @@ button.btn-ecuavisa-noticia img {
   float: left;
   padding: 10px;
   z-index: 9999999;
-  top: -90rem!important;
+  top: -70rem!important;
   left: 32rem !important;
 }
 .ui-dialog.dialog_error .btts_error{
@@ -1667,6 +1667,7 @@ button.btn-ecuavisa-noticia img {
   flex-direction: column;
   float: right;
   text-align: right;
+  padding-bottom: 23px;
 }
 .ui-dialog.dialog_error .label_error {
   padding: 15px;
@@ -1676,7 +1677,7 @@ button.btn-ecuavisa-noticia img {
 }
 .ui-dialog.dialog_error .btt_repetir {
   border: none;
-  height: 27px;
+  height: 12px;
   border-radius: 7px;
   display: flex;
   background-color: transparent !important;
