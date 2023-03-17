@@ -109,6 +109,40 @@ const earningsReports = [
     progress: '65',
   },
 ]
+
+// const url = 'https://servicio-de-actividad.vercel.app/actividad/all';
+
+const urlCounts = ref([]);
+const isLoading = ref(true);
+
+async function fetchData() {
+  try {
+    const response = await fetch('https://servicio-de-actividad.vercel.app/actividad/all');
+    const data = await response.json();
+    const urlMap = new Map();
+
+    for (const activity of data.data) {
+      for (const record of activity.navigationRecord) {
+        const url = record.url;
+        const title = record.title;
+        if (urlMap.has(url)) {
+          urlMap.get(url).count++;
+        } else {
+          urlMap.set(url, { url, title, count: 1 });
+        }
+      }
+    }
+
+    urlCounts.value = Array.from(urlMap.values());
+    urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
+  } catch (error) {
+    console.error(error);
+  }
+  isLoading.value = false;
+}
+
+onMounted(fetchData);
+
 </script>
 
 <template>
@@ -116,36 +150,33 @@ const earningsReports = [
     <VCardItem class="pb-sm-0">
       <VCardTitle>Earning Reports</VCardTitle>
       <VCardSubtitle>Weekly Earnings Overview</VCardSubtitle>
-
-      <template #append>
-        <div class="mt-n4 me-n2">
-          <VBtn
-            icon
-            size="x-small"
-            variant="plain"
-            color="default"
-          >
-            <VIcon
-              size="22"
-              icon="tabler-dots-vertical"
-            />
-            <VMenu activator="parent">
-              <VList>
-                <VListItem
-                  v-for="(item, index) in ['View More', 'Delete']"
-                  :key="index"
-                  :value="index"
-                >
-                  <VListItemTitle>{{ item }}</VListItemTitle>
-                </VListItem>
-              </VList>
-            </VMenu>
-          </VBtn>
-        </div>
-      </template>
     </VCardItem>
 
     <VCardText>
+
+      <div v-if="isLoading">Cargando datos...</div>
+
+      <VTable class="text-no-wrap tableNavegacion mb-5" v-else>
+          <thead>
+            <tr>
+              <th scope="col">URL</th>
+              <th scope="col">PÁGINAS VISTAS</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr v-for="item  in urlCounts" :key="item.url">
+              <td class="text-high-emphasis">
+                <span> <a :href="item.url" target="_blank"> {{ item.title ? item.title : item.url }}</a>  </span>
+              </td>
+
+              <td class="text-medium-emphasis">
+                {{ item.count }}
+              </td>
+            </tr>
+          </tbody>
+        </VTable>
+  
       <VRow>
         <VCol
           cols="12"
@@ -221,3 +252,21 @@ const earningsReports = [
     </VCardText>
   </VCard>
 </template>
+
+<style scoped>
+
+.tableNavegacion a {
+  color: initial !important; 
+  text-decoration: underline !important;
+}
+
+  td span{
+        display: block;
+        max-width: 500px;
+        /* width: 560px; */
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+</style>
