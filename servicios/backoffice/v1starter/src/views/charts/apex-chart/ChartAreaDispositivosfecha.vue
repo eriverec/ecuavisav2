@@ -2,7 +2,7 @@
 import VueApexCharts from "vue3-apexcharts";
 import { useTheme } from "vuetify";
 import { hexToRgb } from "@layouts/utils";
-import { Spanish } from 'flatpickr/dist/l10n/es.js'
+import { Spanish } from 'flatpickr/dist/l10n/es.js';
 
 // 👉 Colors variables
 const colorVariables = (themeColors) => {
@@ -188,7 +188,7 @@ var existeFecha = function(list, fecha){
   return {resp:false};
 }
 
-async function getDataTrazabilidad(data,){
+async function getDataTrazabilidad(data){
 
   var dataGroupBrowser = [data];
   if(data.length > 1){
@@ -364,7 +364,8 @@ const porVisita = (item) => {
         locale: Spanish,
         mode:'range',
         altFormat: 'F j, Y',
-        dateFormat: 'm-d-Y'
+        dateFormat: 'm-d-Y',
+        maxDate: new Date()
       }"
     />
   </div>

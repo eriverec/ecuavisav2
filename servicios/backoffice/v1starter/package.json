@@ -21,6 +21,8 @@
         "chart.js": "^3.9.1",
         "eslint-import-resolver-alias": "^1.1.2",
         "jwt-decode": "^3.1.2",
+        "moment": "^2.29.4",
+        "moment-range": "^4.0.2",
         "pinia": "^2.0.24",
         "prismjs": "^1.29.0",
         "roboto-fontface": "^0.10.0",
