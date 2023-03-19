@@ -51,7 +51,7 @@ getData();
         <VCardText class="d-flex flex-wrap justify-space-between gap-4">
           <VCardItem class="pt-0 pb-0">
             <VCardTitle>Actividad</VCardTitle>
-            <VCardSubtitle>De dispositivos</VCardSubtitle>
+            <VCardSubtitle>De dispositivos de los últimos 7 días</VCardSubtitle>
           </VCardItem>
           <ChartAreaDispositivosFecha />
         </VCardText>
@@ -64,7 +64,7 @@ getData();
         <VCardText class="d-flex flex-wrap justify-space-between gap-4">
           <VCardItem class="pt-0 pb-0">
             <VCardTitle>Actividad</VCardTitle>
-            <VCardSubtitle>De dispositivos</VCardSubtitle>
+            <VCardSubtitle>De dispositivos de los últimos 7 días</VCardSubtitle>
           </VCardItem>
           
           <!-- <input type="text" id="date-picker" ref="datePicker" /> -->
@@ -82,7 +82,7 @@ getData();
             />
         </div>
 
-        <VTable class="text-no-wrap w-100">
+        <VTable class="text-no-wrap w-100 px-4">
           <thead>
             <tr>
               <th scope="col">BROWSER</th>
@@ -91,9 +91,8 @@ getData();
               <th scope="col">RECENT ACTIVITY</th>
             </tr>
           </thead>
-
-          <tbody>
-            <tr v-for="(dat, index) in datosFiltrados" :key="index">
+          <tbody v-if="visibleData.length">
+            <tr v-for="(dat, index) in visibleData" :key="index">
               <td>
                  <span v-for="iconD in iconDevices" :key="iconD.browser">
                   <VAvatar v-if="dat.os === iconD.os" :size="22" class="me-3">
@@ -107,7 +106,30 @@ getData();
               <td class="text-medium-emphasis">{{ dat.timestamp }}</td>
             </tr>
           </tbody>
+          <tbody v-else>
+            <tr>
+              <td colspan="4">No se encontraron datos.</td>
+            </tr>
+          </tbody>
         </VTable>
+        <div class="pagination px-4">
+          <v-btn
+            :disabled="currentPage === 1" @click="currentPage -= 1"
+            size="small"
+            color="primary"
+          >
+            Anterior
+          </v-btn>
+          <span class="px-2">{{ currentPage }} de {{ totalPages }}</span>
+
+          <v-btn
+            :disabled="currentPage === totalPages" @click="currentPage += 1"
+            size="small"
+            color="primary"
+          >
+            Siguiente
+          </v-btn>
+        </div>
         </VCardText>
       </VCard>
     </VCol>
@@ -117,7 +139,7 @@ getData();
   <EnableOneTimePasswordDialog v-model:isDialogVisible="isTwoFactorDialogOpen" :mobile-number="smsVerificationNumber" />
 </template>
 <script>
-  
+
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 //alert(moment(new Date(), "YYYY-MM-DD").format('YYYY-MM-DD'))
@@ -128,6 +150,9 @@ export default {
       fechaFin: "",
       datos: [],
       datosFiltrados: [],
+      currentPage: 1,
+      itemsPerPage: 10,
+      totalPaginas: 0,
       iconDevices: [
         {
           browser: "Chrome",
@@ -150,6 +175,16 @@ export default {
       ]
     };
   },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.datosFiltrados.length / this.itemsPerPage);
+    },
+    visibleData() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.datosFiltrados.slice(start, end);
+    },
+  },
   mounted() {
     this.obtenerDatos();
   },
@@ -161,38 +196,35 @@ export default {
       this.filtrarDatos([]);
     },
     filtrarDatos(selectedDates, dateStr, instance) {
+      var fechaInicio;
+      var fechaFin;
+      var existe = false;
+
       if(selectedDates.length > 1){
-        var fechaInicio = moment(selectedDates[0], "YYYY-MM-DD");
-        var fechaFin = moment(selectedDates[1], "YYYY-MM-DD");
+        fechaInicio = moment(selectedDates[0], "YYYY-MM-DD");
+        fechaFin = moment(selectedDates[1], "YYYY-MM-DD");
+        existe = true;
+      }
+
+      if(selectedDates.length == 0){
+        fechaInicio = moment(new Date(), "YYYY-MM-DD").subtract(7, 'days');
+        fechaFin = moment(new Date(), "YYYY-MM-DD");
+        existe = true;
+      }
+
+      if(existe){
         this.datosFiltrados = this.datos.filter((dato) => {
           const timestamp = moment(dato.timestamp, "DD-MM-YYYY");
           var range = moment().range(fechaInicio, fechaFin);
           return range.contains(timestamp);
         });
+        this.currentPage = 1;
+        //const inicio = (this.currentPage - 1) * this.itemsPerPage;
+        //const fin = inicio + this.itemsPerPage;
+        //this.datosFiltrados = datosFiltrados.slice(inicio, fin);
+        //this.totalPaginas = Math.ceil(datosFiltrados.length / this.itemsPerPage);
       }
-      if(selectedDates.length == 0){
-        this.datosFiltrados = this.datos;
-      }
-    },
-    formatDate(date) {
-      const options = {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-        second: "numeric",
-      };
-      return new Intl.DateTimeFormat("es-ES", options).format(new Date(date));
-    },
-    actualizarTabla() {
-      // Actualizar el arreglo de datos
-      this.personas = [
-        { nombre: 'Ana', edad: 28 },
-        { nombre: 'Luis', edad: 33 },
-        { nombre: 'Sara', edad: 40 },
-      ];
-    },
+    }
   },
 };
 </script>

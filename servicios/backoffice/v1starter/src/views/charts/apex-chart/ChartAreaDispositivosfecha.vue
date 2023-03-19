@@ -265,11 +265,12 @@ async function getDataTrazabilidad(data){
 }
 
 async function getInitGraficoDispositivos(){
-  var fechai = getDate();
+  var fechai = getDate("",-7);
   var fechaf = getDate("",1);
   var panelGráfico = document.querySelector("#apexchartscrejemplo");
   panelGráfico.classList.add("disabled");
-  var getData = await getDataGrafico(fechai, fechaf);
+
+  getData = await getDataGrafico(fechai, fechaf);
   panelGráfico.classList.remove("disabled");
   var dataFormateada = await getDataTrazabilidad(getData.grafico);
   ApexCharts.exec("crejemplo", "updateSeries", dataFormateada);
@@ -277,6 +278,7 @@ async function getInitGraficoDispositivos(){
 }
 
 const series = [];
+
 setTimeout(async function(){
     var resp = await getInitGraficoDispositivos();
 }, 1000);
@@ -307,7 +309,7 @@ async function obtenerFechaDispositivos(selectedDates, dateStr, instance){
 }
 
 async function formatVisitaGráfico(){
-  if(dataFormateada.length > 0){
+  if(dataFormateada.length > 0 || true){
     var panelGráfico = document.querySelector("#apexchartscrejemplo");
     visita = true;
     dataFormateada = await getDataTrazabilidad(getData.grafico);
@@ -317,7 +319,7 @@ async function formatVisitaGráfico(){
 }
 
 async function formatActividadGráfico(){
-  if(dataFormateada.length > 0){
+  if(dataFormateada.length > 0 || true){
     visita = false;
     var panelGráfico = document.querySelector("#apexchartscrejemplo");
     dataFormateada = await getDataTrazabilidad(getData.grafico);
