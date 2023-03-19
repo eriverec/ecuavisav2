@@ -1,32 +1,17 @@
 <script setup>
+import Moment from 'moment';
+import esLocale from "moment/locale/es";
+import { extendMoment } from 'moment-range';
 import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartAreaDispositivosfecha.vue";
 import ChartAreaDispositivos from "@/views/charts/apex-chart/ChartAreaDispositivos.vue";
 
+import { Spanish } from 'flatpickr/dist/l10n/es.js';
 const isNewPasswordVisible = ref(false);
 const isConfirmPasswordVisible = ref(false);
 const smsVerificationNumber = ref("+1(968) 819-2547");
 const isTwoFactorDialogOpen = ref(false);
 
-const iconDevices = [
-  {
-    browser: "Chrome",
-    os: "Windows",
-    icon: "tabler-brand-windows",
-    color: "info",
-  },
-  {
-    browser: "Safari",
-    os: "Mac OS",
-    icon: "tabler-brand-apple",
-    color: "secondary",
-  },
-  {
-    browser: "Chrome",
-    os: "Android",
-    icon: "tabler-brand-android",
-    color: "success",
-  },
-];
+
 
 // console.log(recentDevices);
 
@@ -47,35 +32,7 @@ async function getData() {
 
 getData();
 */
-const state = reactive({
-  data: [],
-  startDate: "",
-  endDate: "",
-});
 
-const filteredData = computed(() => {
-  if (!state.startDate || !state.endDate) {
-    return state.data;
-  }
-  // device.data[0].timestamp
-  return state.data.filter((item) => {
-    const timestamp = new Date(item.timestamp);
-    return (
-      timestamp >= new Date(state.startDate) &&
-      timestamp <= new Date(state.endDate)
-    );
-  });
-});
-
-function updateTable() {
-  filteredData.value;
-}
-
-onMounted(async () => {
-  const response = await fetch('https://servicio-de-actividad.vercel.app/dispositivos/all');
-  state.data = await response.json();
-  console.log(state.data);
-});
 
 
 </script>
@@ -103,16 +60,29 @@ onMounted(async () => {
 
     <VCol cols="12">
       <!-- 👉 Recent devices -->
-      <VCard title="Table API Dinamica">
-   
-        <!-- <input type="text" id="date-picker" ref="datePicker" /> -->
-        <div class="date-picker-wrapper" style="width: 233px">
-            <AppDateTimePicker id="date-picker" placeholder="Seleccionar una fecha" prepend-inner-icon="tabler-calendar"
-              density="compact" @on-change="updateTable" />
-          </div>
+      <VCard>
+        <VCardText class="d-flex flex-wrap justify-space-between gap-4">
+          <VCardItem class="pt-0 pb-0">
+            <VCardTitle>Actividad</VCardTitle>
+            <VCardSubtitle>De dispositivos</VCardSubtitle>
+          </VCardItem>
           
- 
-        <VTable class="text-no-wrap">
+          <!-- <input type="text" id="date-picker" ref="datePicker" /> -->
+          <div class="date-picker-wrapper" style="width: 233px">
+            <AppDateTimePicker id="date-picker" placeholder="Seleccionar una fecha" prepend-inner-icon="tabler-calendar"
+              density="compact" 
+              @on-change="filtrarDatos"
+              :config="{ 
+                locale: Spanish,
+                mode:'range',
+                altFormat: 'F j, Y',
+                dateFormat: 'Y-m-d',
+                maxDate: new Date()
+              }"
+            />
+        </div>
+
+        <VTable class="text-no-wrap w-100">
           <thead>
             <tr>
               <th scope="col">BROWSER</th>
@@ -123,31 +93,22 @@ onMounted(async () => {
           </thead>
 
           <tbody>
-            <tr id="getDispTable" v-for="disp in filteredData.data" :key="disp.browser">
+            <tr v-for="(dat, index) in datosFiltrados" :key="index">
               <td>
-                <span v-for="iconD in iconDevices" :key="iconD.browser">
-                  <VAvatar v-if="disp.os === iconD.os" :size="22" class="me-3">
+                 <span v-for="iconD in iconDevices" :key="iconD.browser">
+                  <VAvatar v-if="dat.os === iconD.os" :size="22" class="me-3">
                     <VIcon :color="iconD.color" :icon="iconD.icon" />
                   </VAvatar>
                 </span>
-                <span class="font-weight-medium">{{ disp.browser }} on {{ disp.os }}</span>
+                <span class="font-weight-medium">{{ dat.browser }} on {{ dat.os }}</span>
               </td>
-
-              <td class="text-medium-emphasis">
-                {{ disp.device }}
-              </td>
-
-              <td class="text-medium-emphasis">
-                {{ disp.country }}
-              </td>
-
-              <td class="text-medium-emphasis">
-                {{ disp.timestamp }}
-              </td>
+              <td class="text-medium-emphasis">{{ dat.device }}</td>
+              <td class="text-medium-emphasis">{{ dat.country }}</td>
+              <td class="text-medium-emphasis">{{ dat.timestamp }}</td>
             </tr>
           </tbody>
         </VTable>
-   
+        </VCardText>
       </VCard>
     </VCol>
   </VRow>
@@ -155,3 +116,82 @@ onMounted(async () => {
   <!-- 👉 Enable One Time Password Dialog -->
   <EnableOneTimePasswordDialog v-model:isDialogVisible="isTwoFactorDialogOpen" :mobile-number="smsVerificationNumber" />
 </template>
+<script>
+const moment = extendMoment(Moment);
+moment.locale('es', [esLocale]);
+//alert(moment(new Date(), "YYYY-MM-DD").format('YYYY-MM-DD'))
+export default {
+  data() {
+    return {
+      fechaInicio: "",
+      fechaFin: "",
+      datos: [],
+      datosFiltrados: [],
+      iconDevices: [
+        {
+          browser: "Chrome",
+          os: "Windows",
+          icon: "tabler-brand-windows",
+          color: "info",
+        },
+        {
+          browser: "Safari",
+          os: "Mac OS",
+          icon: "tabler-brand-apple",
+          color: "secondary",
+        },
+        {
+          browser: "Chrome",
+          os: "Android",
+          icon: "tabler-brand-android",
+          color: "success",
+        },
+      ]
+    };
+  },
+  mounted() {
+    this.obtenerDatos();
+  },
+  methods: {
+    async obtenerDatos() {
+      const respuesta = await fetch("https://servicio-de-actividad.vercel.app/dispositivos/all");
+      const datos = await respuesta.json();
+      this.datos = datos.data;
+      this.filtrarDatos([]);
+    },
+    filtrarDatos(selectedDates, dateStr, instance) {
+      if(selectedDates.length > 1){
+        var fechaInicio = moment(selectedDates[0], "YYYY-MM-DD");
+        var fechaFin = moment(selectedDates[1], "YYYY-MM-DD");
+        this.datosFiltrados = this.datos.filter((dato) => {
+          const timestamp = moment(dato.timestamp, "DD-MM-YYYY");
+          var range = moment().range(fechaInicio, fechaFin);
+          return range.contains(timestamp);
+        });
+      }
+      if(selectedDates.length == 0){
+        this.datosFiltrados = this.datos;
+      }
+    },
+    formatDate(date) {
+      const options = {
+        year: "numeric",
+        month: "numeric",
+        day: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        second: "numeric",
+      };
+      return new Intl.DateTimeFormat("es-ES", options).format(new Date(date));
+    },
+    actualizarTabla() {
+      // Actualizar el arreglo de datos
+      this.personas = [
+        { nombre: 'Ana', edad: 28 },
+        { nombre: 'Luis', edad: 33 },
+        { nombre: 'Sara', edad: 40 },
+      ];
+    },
+  },
+};
+</script>
