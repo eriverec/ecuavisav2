@@ -88,7 +88,7 @@ getData();
               <th scope="col">BROWSER</th>
               <th scope="col">DEVICE</th>
               <th scope="col">LOCATION</th>
-              <th scope="col">RECENT ACTIVITY</th>
+              <th class="text-right" scope="col" align="right">RECENT ACTIVITY</th>
             </tr>
           </thead>
           <tbody v-if="visibleData.length">
@@ -102,8 +102,18 @@ getData();
                 <span class="font-weight-medium">{{ dat.browser }} on {{ dat.os }}</span>
               </td>
               <td class="text-medium-emphasis">{{ dat.device }}</td>
-              <td class="text-medium-emphasis">{{ dat.country }}</td>
-              <td class="text-medium-emphasis">{{ dat.timestamp }}</td>
+              <td class="text-medium-emphasis">
+                <div style="
+                          display: flex;
+                          align-items: center;
+                          flex-direction: revert;
+                          gap: 5px;
+                      ">
+                  <img style="width: 27px;" v-bind:src="'https://www.countryflagicons.com/FLAT/64/' + dat.countryCode + '.png'">
+                  <p class="py-0 my-0">{{ dat.country }}</p>
+                </div>
+              </td>
+              <td class="text-medium-emphasis" align="right">{{ dat.timestamp }}</td>
             </tr>
           </tbody>
           <tbody v-else>
@@ -120,7 +130,7 @@ getData();
           >
             Anterior
           </v-btn>
-          <span class="px-2">{{ currentPage }} de {{ totalPages }}</span>
+          <span class="px-2">{{ currentPage }} de {{ totalPages }} de un total de {{ datos.length }} registros</span>
 
           <v-btn
             :disabled="currentPage === totalPages" @click="currentPage += 1"
@@ -213,11 +223,18 @@ export default {
       }
 
       if(existe){
+        this.datos.sort(function(a, b) {
+          var timestampA = new Date(moment(a.timestamp, "DD-MM-YYYY"));
+          var timestampB = new Date(moment(b.timestamp, "DD-MM-YYYY"));
+          return  timestampB - timestampA;
+        });
+
         this.datosFiltrados = this.datos.filter((dato) => {
           const timestamp = moment(dato.timestamp, "DD-MM-YYYY");
           var range = moment().range(fechaInicio, fechaFin);
           return range.contains(timestamp);
         });
+
         this.currentPage = 1;
         //const inicio = (this.currentPage - 1) * this.itemsPerPage;
         //const fin = inicio + this.itemsPerPage;

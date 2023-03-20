@@ -4,6 +4,14 @@ import { useTheme } from "vuetify";
 import { hexToRgb } from "@layouts/utils";
 import { Spanish } from 'flatpickr/dist/l10n/es.js';
 
+
+import Moment from 'moment';
+import esLocale from "moment/locale/es";
+import { extendMoment } from 'moment-range';
+
+const moment = extendMoment(Moment);
+moment.locale('es', [esLocale]);
+
 // 👉 Colors variables
 const colorVariables = (themeColors) => {
   const themeSecondaryTextColor = `rgba(${hexToRgb(
@@ -243,6 +251,7 @@ async function getDataTrazabilidad(data){
   });
 
   for(var i in dataFormat){
+
     if(dataFormat[i].data.length != seriTotalFiltrada.length){
       for(var z in seriTotalFiltrada){
         var existe = false;
@@ -258,6 +267,13 @@ async function getDataTrazabilidad(data){
           })
         }
       }
+
+      dataFormat[i].data.sort(function(a, b) {
+        var timestampA = new Date(moment(a.x, "YYYY-DD-MM"));
+        var timestampB = new Date(moment(b.x, "YYYY-DD-MM"));
+        return  timestampA - timestampB;
+      });
+      
     }
   }
   //console.log(dataFormat.sort((a, b) => (a.total - b.total)))
