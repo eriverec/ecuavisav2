@@ -3,6 +3,8 @@ import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
 import { hexToRgb } from '@layouts/utils'
 
+import CrmActivityTimeline from '@/views/dashboards/traceability/UserTabNavegacionTimeline.vue'
+
 const vuetifyTheme = useTheme()
 
 const series = [{
@@ -151,6 +153,8 @@ onMounted(fetchData);
       <VCardTitle>Earning Reports</VCardTitle>
       <VCardSubtitle>Weekly Earnings Overview</VCardSubtitle>
     </VCardItem>
+
+    <CrmActivityTimeline />
 
     <VCardText>
 
