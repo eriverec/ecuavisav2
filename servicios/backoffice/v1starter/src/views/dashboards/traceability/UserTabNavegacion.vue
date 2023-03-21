@@ -148,113 +148,55 @@ onMounted(fetchData);
 </script>
 
 <template>
-  <VCard>
-    <VCardItem class="pb-sm-0">
-      <VCardTitle>Earning Reports</VCardTitle>
-      <VCardSubtitle>Weekly Earnings Overview</VCardSubtitle>
-    </VCardItem>
+   <VRow>
+    <VCol lg="5" cols="12" sm="5" >
+      <VCard>
+        <VCardItem class="pb-sm-0">
+          <VCardTitle>Últimas visitas</VCardTitle>
+          <!-- <VCardSubtitle>Weekly Earnings Overview</VCardSubtitle> -->
+        </VCardItem>
+        <CrmActivityTimeline />
+    
+      </VCard>
 
-    <CrmActivityTimeline />
-
-    <VCardText>
-
-      <div v-if="isLoading">Cargando datos...</div>
-
-      <VTable class="text-no-wrap tableNavegacion mb-5" v-else>
-          <thead>
-            <tr>
-              <th scope="col">URL</th>
-              <th scope="col">PÁGINAS VISTAS</th>
-            </tr>
-          </thead>
-
-          <tbody>
-            <tr v-for="item  in urlCounts" :key="item.url">
-              <td class="text-high-emphasis">
-                <span> <a :href="item.url" target="_blank"> {{ item.title ? item.title : item.url }}</a>  </span>
-              </td>
-
-              <td class="text-medium-emphasis">
-                {{ item.count }}
-              </td>
-            </tr>
-          </tbody>
-        </VTable>
-  
-      <VRow>
-        <VCol
-          cols="12"
-          sm="5"
-          class="d-flex flex-column align-self-end"
-        >
-          <div class="d-flex align-center gap-2 mb-2 pb-1 flex-wrap">
-            <h4 class="text-4xl font-weight-semibold">
-              $468
-            </h4>
-            <VChip
-              label
-              color="success"
-            >
-              +4.2%
-            </VChip>
-          </div>
-
-          <p class="text-sm">
-            You informed of this week compared to last week
-          </p>
-        </VCol>
-
-        <VCol
-          cols="12"
-          sm="7"
-          class="pt-0"
-        >
-          <VueApexCharts
-            :options="chartOptions"
-            :series="series"
-            height="190"
-          />
-        </VCol>
-      </VRow>
-
-      <div class="border rounded mt-3 pa-4">
-        <VRow>
-          <VCol
-            v-for="report in earningsReports"
-            :key="report.title"
-            cols="12"
-            sm="4"
-          >
-            <div class="d-flex align-center">
-              <VAvatar
-                rounded
-                size="30"
-                :color="report.color"
-                variant="tonal"
-                class="me-2"
-              >
-                <VIcon :icon="report.icon" />
-              </VAvatar>
-
-              <h6 class="text-base font-weight-medium">
-                {{ report.title }}
-              </h6>
-            </div>
-            <h6 class="text-h6 my-3">
-              {{ report.amount }}
-            </h6>
-            <VProgressLinear
-              :model-value="report.progress"
-              :color="report.color"
-              height="8"
-              rounded
-              rounded-bar
-            />
-          </VCol>
-        </VRow>
-      </div>
-    </VCardText>
-  </VCard>
+    </VCol>
+    <VCol lg="7" cols="12" sm="7">
+      <VCard>
+        <VCardItem class="pb-sm-0">
+          <VCardTitle> Más vistas</VCardTitle>
+        </VCardItem>
+    
+    
+        <VCardText>
+    
+          <div v-if="isLoading">Cargando datos...</div>
+    
+          <VTable class="text-no-wrap tableNavegacion mb-5" v-else>
+              <thead>
+                <tr>
+                  <th scope="col">URL</th>
+                  <th scope="col">VISITAS</th>
+                </tr>
+              </thead>
+    
+              <tbody>
+                <tr v-for="item  in urlCounts" :key="item.url">
+                  <td class="text-high-emphasis">
+                    <span> <a :href="item.url" target="_blank"> {{ item.title ? item.title : item.url }}</a>  </span>
+                  </td>
+    
+                  <td class="text-medium-emphasis">
+                    {{ item.count }}
+                  </td>
+                </tr>
+              </tbody>
+            </VTable>
+      
+     
+        </VCardText>
+      </VCard>
+    </VCol>
+   </VRow>
 </template>
 
 <style scoped>
@@ -265,12 +207,18 @@ onMounted(fetchData);
 }
 
   td span{
-        display: block;
-        max-width: 500px;
-        /* width: 560px; */
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+    display: block;
+    max-width: 300px;
+    /* width: 560px; */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+      @media (max-width: 1000px){
+        td span{
+          max-width: 200px;
+        }
       }
 
 </style>

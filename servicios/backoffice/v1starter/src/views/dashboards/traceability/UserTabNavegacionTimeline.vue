@@ -11,13 +11,13 @@ async function fetchData() {
     const response = await fetch('https://servicio-de-actividad.vercel.app/actividad/trazabilidad/823381932023210427');
     const data = await response.json();
     const urlMap = new Map();
-    const fechaUnico = data.data.navigationRecord[0].fecha
+    const fechaUnico = data.data[0].date
     const qu = document.querySelector('.feData')
     qu.innerHTML = fechaUnico
     const fechaArray = fechaUnico.split('/');
     const fechaFormateada = `${fechaArray[2]}-${fechaArray[1].padStart(2, '0')}-${fechaArray[0].padStart(2, '0')}`;
 
-    for (const activity of data.data.navigationRecord) {
+    for (const activity of data.data[0].navigationRecord) {
       const url = activity.url;
       const title = activity.title;
       const hora = activity.hora;
