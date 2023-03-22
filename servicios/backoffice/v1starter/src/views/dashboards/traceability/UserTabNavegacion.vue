@@ -149,17 +149,6 @@ onMounted(fetchData);
 
 <template>
    <VRow>
-    <VCol lg="5" cols="12" sm="5" >
-      <VCard>
-        <VCardItem class="pb-sm-0">
-          <VCardTitle>Últimas visitas</VCardTitle>
-          <!-- <VCardSubtitle>Weekly Earnings Overview</VCardSubtitle> -->
-        </VCardItem>
-        <CrmActivityTimeline />
-    
-      </VCard>
-
-    </VCol>
     <VCol lg="7" cols="12" sm="7">
       <VCard>
         <VCardItem class="pb-sm-0">
@@ -196,6 +185,18 @@ onMounted(fetchData);
         </VCardText>
       </VCard>
     </VCol>
+    <VCol lg="5" cols="12" sm="5" >
+      <VCard>
+        <VCardItem class="pb-sm-0">
+          <VCardTitle>Últimas visitas</VCardTitle>
+          <!-- <VCardSubtitle>Weekly Earnings Overview</VCardSubtitle> -->
+        </VCardItem>
+        <CrmActivityTimeline />
+    
+      </VCard>
+
+    </VCol>
+   
    </VRow>
 </template>
 
