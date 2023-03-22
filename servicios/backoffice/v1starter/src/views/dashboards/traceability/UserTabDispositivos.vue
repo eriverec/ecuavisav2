@@ -61,7 +61,7 @@ getData();
     <VCol cols="12">
       <!-- 👉 Recent devices -->
       <VCard>
-        <VCardText class="d-flex flex-wrap justify-space-between gap-4">
+        <VCardText class="d-flex flex-wrap justify-space-between gap-4" id="id-card-actividad">
           <VCardItem class="pt-0 pb-0">
             <VCardTitle>Actividad</VCardTitle>
             <VCardSubtitle>De dispositivos de los últimos 7 días</VCardSubtitle>
@@ -196,14 +196,30 @@ export default {
     },
   },
   mounted() {
-    this.obtenerDatos();
+    this.filtrarDatos([]);
   },
   methods: {
-    async obtenerDatos() {
-      const respuesta = await fetch("https://servicio-de-actividad.vercel.app/dispositivos/all");
+    async obtenerDatos(fechai, fechaf) {
+      const respuesta = await fetch(`https://servicio-de-actividad.vercel.app/dispositivos/all?fechai=${fechai}&fechaf=${fechaf}`);
       const datos = await respuesta.json();
       this.datos = datos.data;
-      this.filtrarDatos([]);
+
+      this.datos.sort(function(a, b) {
+        var timestampA = new Date(moment(a.timestamp, "DD-MM-YYYY"));
+        var timestampB = new Date(moment(b.timestamp, "DD-MM-YYYY"));
+        return  timestampB - timestampA;
+      });
+
+      this.datosFiltrados = this.datos.filter((dato) => {
+        const timestamp = moment(dato.timestamp, "DD-MM-YYYY");
+        var range = moment().range(fechai, fechaf);
+        return range.contains(timestamp);
+      });
+      this.currentPage = 1;
+
+      var carActividad = document.querySelector("#id-card-actividad");
+      carActividad.classList.remove("disabled");
+      return datos.data;
     },
     filtrarDatos(selectedDates, dateStr, instance) {
       var fechaInicio;
@@ -211,31 +227,21 @@ export default {
       var existe = false;
 
       if(selectedDates.length > 1){
-        fechaInicio = moment(selectedDates[0], "YYYY-MM-DD");
-        fechaFin = moment(selectedDates[1], "YYYY-MM-DD");
+        fechaInicio = moment(selectedDates[0], "YYYY-MM-DD").format("MM/DD/YYYY");
+        fechaFin = moment(selectedDates[1], "YYYY-MM-DD").format("MM/DD/YYYY");
         existe = true;
       }
 
       if(selectedDates.length == 0){
-        fechaInicio = moment(new Date(), "YYYY-MM-DD").subtract(7, 'days');
-        fechaFin = moment(new Date(), "YYYY-MM-DD");
+        fechaInicio = moment(new Date(), "YYYY-MM-DD").subtract(7, 'days').format("MM/DD/YYYY");
+        fechaFin = moment(new Date(), "YYYY-MM-DD").format("MM/DD/YYYY");
         existe = true;
       }
 
       if(existe){
-        this.datos.sort(function(a, b) {
-          var timestampA = new Date(moment(a.timestamp, "DD-MM-YYYY"));
-          var timestampB = new Date(moment(b.timestamp, "DD-MM-YYYY"));
-          return  timestampB - timestampA;
-        });
-
-        this.datosFiltrados = this.datos.filter((dato) => {
-          const timestamp = moment(dato.timestamp, "DD-MM-YYYY");
-          var range = moment().range(fechaInicio, fechaFin);
-          return range.contains(timestamp);
-        });
-
-        this.currentPage = 1;
+        var carActividad = document.querySelector("#id-card-actividad");
+        carActividad.classList.add("disabled");
+        this.obtenerDatos(fechaInicio, fechaFin);
         //const inicio = (this.currentPage - 1) * this.itemsPerPage;
         //const fin = inicio + this.itemsPerPage;
         //this.datosFiltrados = datosFiltrados.slice(inicio, fin);
