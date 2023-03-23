@@ -261,12 +261,11 @@ h2.temas_estilo {
   padding-right: 0;
 }
 
-
-
 .layout-estilo-apertura .bloque-notas .media_block {
   width: 35%;
 }
 
+.titulo1 h2,
 .titulo1 h1 {
   font-size: 88px;
   color: #23DCD1;
@@ -1208,6 +1207,7 @@ img.sepDesk {
     border-top: none;
   }
 
+  .titulo1 h2,
   .titulo1 h1 {
     font-size: 55px;
   }
