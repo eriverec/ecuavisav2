@@ -105,6 +105,9 @@ export default {
     async fetchData(idActivity='sort') {
       const response = await fetch('https://servicio-de-actividad.vercel.app/actividad/trazabilidad/'+idActivity);
       const data = await response.json();
+        
+      var carActividad = document.querySelector("#panel-ultimas-visitas");
+      carActividad.classList.remove("disabled");
 
       if(!data.resp){
         this.urlCounts = [];
@@ -143,8 +146,6 @@ export default {
         }
       });
       this.isLoading = false;
-      var carActividad = document.querySelector("#panel-ultimas-visitas");
-      carActividad.classList.remove("disabled");
       return true;
     },
     search: debounce(function() {
