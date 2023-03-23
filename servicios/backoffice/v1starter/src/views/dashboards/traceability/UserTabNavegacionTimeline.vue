@@ -32,7 +32,7 @@ ul.busqueda-anticipada li:hover {
     background: #f1f1f1;
 }
 .title-list-ultimas-noticias span {
-    width: 340px;
+    width: 300px;
     display: block;
     overflow: auto;
 }
