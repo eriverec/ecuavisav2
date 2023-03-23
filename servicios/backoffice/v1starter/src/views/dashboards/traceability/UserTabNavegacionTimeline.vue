@@ -167,8 +167,6 @@ export default {
     selectResult(result) {
       this.query = result.idActivity;
       this.showResults = false;
-      setTimeout(function(){
-      }, 700);
     },
     hideResults() {
       
@@ -180,6 +178,7 @@ export default {
       }
     },
     btnBuscar() {
+      this.showResults = false;
       var idActivity = this.query;
       var carActividad = document.querySelector("#panel-ultimas-visitas");
       carActividad.classList.add("disabled");
