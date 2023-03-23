@@ -21,6 +21,17 @@ import avatar2 from '@/assets/images/avatars/avatar-2.png'
     left: 0;
     max-height: 200px;
     overflow-y: auto;
+    box-shadow: 0 3px 9px 9px var(--v-shadow-key-umbra-opacity),0 9px 8px var(--v-shadow-key-penumbra-opacity),0 1px 6px 4px var(--v-shadow-key-ambient-opacity);
+}
+
+.v-theme--dark ul.busqueda-anticipada{
+  background: rgb(var(--v-theme-surface));
+  box-shadow: 0 3px 9px 1px var(--v-shadow-key-umbra-opacity),0 9px 8px var(--v-shadow-key-penumbra-opacity),0 1px 6px 4px var(--v-shadow-key-ambient-opacity);
+  border-color: rgba(var(--v-border-color),var(--v-border-opacity));
+}
+
+.v-theme--dark ul.busqueda-anticipada li:hover{
+  background: #35394e;
 }
 ul.busqueda-anticipada li {
     padding: 5px 10px;

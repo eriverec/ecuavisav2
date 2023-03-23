@@ -7,116 +7,14 @@ import CrmActivityTimeline from '@/views/dashboards/traceability/UserTabNavegaci
 
 const vuetifyTheme = useTheme()
 
-const series = [{
-  data: [
-    40,
-    65,
-    50,
-    45,
-    90,
-    55,
-    70,
-  ],
-}]
-
-const chartOptions = computed(() => {
-  const currentTheme = vuetifyTheme.current.value.colors
-  const variableTheme = vuetifyTheme.current.value.variables
-  
-  return {
-    chart: {
-      parentHeightOffset: 0,
-      type: 'bar',
-      toolbar: { show: false },
-    },
-    plotOptions: {
-      bar: {
-        barHeight: '60%',
-        columnWidth: '38%',
-        startingShape: 'rounded',
-        endingShape: 'rounded',
-        borderRadius: 4,
-        distributed: true,
-      },
-    },
-    grid: {
-      show: false,
-      padding: {
-        top: -30,
-        bottom: 0,
-        left: -10,
-        right: -10,
-      },
-    },
-    colors: [
-      `rgba(${ hexToRgb(currentTheme.primary) },${ variableTheme['pressed-opacity'] })`,
-      `rgba(${ hexToRgb(currentTheme.primary) },${ variableTheme['pressed-opacity'] })`,
-      `rgba(${ hexToRgb(currentTheme.primary) },${ variableTheme['pressed-opacity'] })`,
-      `rgba(${ hexToRgb(currentTheme.primary) },${ variableTheme['pressed-opacity'] })`,
-      currentTheme.primary,
-      `rgba(${ hexToRgb(currentTheme.primary) },${ variableTheme['pressed-opacity'] })`,
-      `rgba(${ hexToRgb(currentTheme.primary) },${ variableTheme['pressed-opacity'] })`,
-    ],
-    dataLabels: { enabled: false },
-    legend: { show: false },
-    xaxis: {
-      categories: [
-        'Mo',
-        'Tu',
-        'We',
-        'Th',
-        'Fr',
-        'Sa',
-        'Su',
-      ],
-      axisBorder: { show: false },
-      axisTicks: { show: false },
-      labels: {
-        style: {
-          colors: `rgba(${ hexToRgb(currentTheme['on-surface']) },${ variableTheme['disabled-opacity'] })`,
-          fontSize: '14px',
-          fontFamily: 'Public Sans',
-        },
-      },
-    },
-    yaxis: { labels: { show: false } },
-    tooltip: { enabled: false },
-    responsive: [{
-      breakpoint: 1025,
-      options: { chart: { height: 199 } },
-    }],
-  }
-})
-
-const earningsReports = [
-  {
-    color: 'primary',
-    icon: 'tabler-currency-dollar',
-    title: 'Earnings',
-    amount: '$545.69',
-    progress: '55',
-  },
-  {
-    color: 'info',
-    icon: 'tabler-chart-pie-2',
-    title: 'Profit',
-    amount: '$256.34',
-    progress: '25',
-  },
-  {
-    color: 'error',
-    icon: 'tabler-brand-paypal',
-    title: 'Expense',
-    amount: '$74.19',
-    progress: '65',
-  },
-]
 
 // const url = 'https://servicio-de-actividad.vercel.app/actividad/all';
 
 const urlCounts = ref([]);
 const isLoading = ref(true);
-
+const itemsPerPage = 5;
+const currentPage = ref(1);
+const totalCount = computed(() => urlCounts.value.length);
 async function fetchData() {
   try {
     const response = await fetch('https://servicio-de-actividad.vercel.app/actividad/all');
@@ -145,81 +43,101 @@ async function fetchData() {
 
 onMounted(fetchData);
 
+const paginatedUrlCounts = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return urlCounts.value.slice(start, end);
+});
+
+const nextPage = () => {
+  if (currentPage.value * itemsPerPage < urlCounts.value.length) currentPage.value++;
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
+
 </script>
 
 <template>
-   <VRow>
-    <VCol lg="7" cols="12" sm="7">
+  <VRow>
+    <VCol lg="6" cols="12" sm="6">
       <VCard>
         <VCardItem class="pb-sm-0">
           <VCardTitle> Más vistas</VCardTitle>
+          <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
         </VCardItem>
-    
-    
-        <VCardText>
-    
-          <div v-if="isLoading">Cargando datos...</div>
-    
-          <VTable class="text-no-wrap tableNavegacion mb-5" v-else>
-              <thead>
-                <tr>
-                  <th scope="col">URL</th>
-                  <th scope="col">VISITAS</th>
-                </tr>
-              </thead>
-    
-              <tbody>
-                <tr v-for="item  in urlCounts" :key="item.url">
-                  <td class="text-high-emphasis">
-                    <span> <a :href="item.url" target="_blank"> {{ item.title ? item.title : item.url }}</a>  </span>
-                  </td>
-    
-                  <td class="text-medium-emphasis">
-                    {{ item.count }}
-                  </td>
-                </tr>
-              </tbody>
-            </VTable>
-      
-     
+
+        <VCardText v-if="isLoading">Cargando datos...</VCardText>
+
+        <VCardText  v-else>
+          <VTable class="text-no-wrap tableNavegacion mb-5">
+            <thead>
+              <tr>
+                <th scope="col">URL</th>
+                <th scope="col">VISITAS</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="item  in paginatedUrlCounts" :key="item.url">
+                <td class="text-high-emphasis">
+                  <span> <a :href="item.url" target="_blank"> {{ item.title ? item.title : item.url }}</a> </span>
+                </td>
+
+                <td class="text-medium-emphasis">
+                  {{ item.count }}
+                </td>
+              </tr>
+            </tbody>
+          </VTable>
+          <div class="d-flex align-center justify-space-between botonescurrentPage">
+            <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
+            Página {{ currentPage }}
+            <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
+              :disabled="(currentPage * itemsPerPage) >= urlCounts.length">
+            </VBtn>
+            
+       
+          </div>
+
         </VCardText>
       </VCard>
     </VCol>
-    <VCol lg="5" cols="12" sm="5" >
+    <VCol lg="6" cols="12" sm="6">
       <VCard>
         <VCardItem class="pb-sm-0">
           <VCardTitle>Últimas visitas</VCardTitle>
           <!-- <VCardSubtitle>Weekly Earnings Overview</VCardSubtitle> -->
         </VCardItem>
         <CrmActivityTimeline />
-    
+
       </VCard>
 
     </VCol>
-   
-   </VRow>
+
+  </VRow>
 </template>
 
 <style scoped>
-
 .tableNavegacion a {
-  color: initial !important; 
+  color: initial !important;
   text-decoration: underline !important;
 }
 
-  td span{
-    display: block;
-    max-width: 300px;
-    /* width: 560px; */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+
+td span {
+  display: block;
+  max-width: 300px;
+  /* width: 560px; */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 1000px) {
+  td span {
+    max-width: 200px;
   }
-
-      @media (max-width: 1000px){
-        td span{
-          max-width: 200px;
-        }
-      }
-
+}
 </style>
