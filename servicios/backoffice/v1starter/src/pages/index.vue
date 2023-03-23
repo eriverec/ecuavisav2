@@ -61,16 +61,16 @@ const tabs = [
     title: 'Navegación',
   },
   {
+    icon: 'tabler-map-2',
+    title: 'Ubicaciones',
+  },
+  {
     icon: 'tabler-devices',
     title: 'Dispositivos',
   },
   {
     icon: 'tabler-hand-click',
     title: 'Intereses',
-  },
-  {
-    icon: 'tabler-map-2',
-    title: 'Ubicaciones',
   }
 ]
 
@@ -182,6 +182,10 @@ const userListMeta = [
         <VWindowItem>
           <UserTabNavegacion />
         </VWindowItem>
+        <!-- UBICACIONES -->
+        <VWindowItem>
+          <UserTabUbicacion />
+        </VWindowItem>
 
         <!-- DISPOSITIVOS -->
         <VWindowItem>
@@ -193,10 +197,6 @@ const userListMeta = [
           <UserTabIntereses />
         </VWindowItem>
 
-        <!-- UBICACIONES -->
-        <VWindowItem>
-          <UserTabUbicacion />
-        </VWindowItem>
 
    
       </VWindow>
