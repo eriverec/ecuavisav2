@@ -138,7 +138,9 @@ div#r03c01 {
 .ecv_relacionadas_2022 .media_block {
   width: 100%;
 }
-
+.ecv_relacionadas_2022 .recomendadas-rd .text_block .section {
+  padding: 10px 0px;
+}
 
 .cintillo-rd .tit-single h2 {
   font-family: 'Archivo';
@@ -152,6 +154,7 @@ div#r03c01 {
 .ecv_relacionadas_2022 .recomendadas-rd .headline h3 {
   line-height: 28px;
   font-size: 20px;
+  padding-top: 5px;
 }
 
 .ecv_relacionadas_2022 .noticias .article:nth-child(1) {
