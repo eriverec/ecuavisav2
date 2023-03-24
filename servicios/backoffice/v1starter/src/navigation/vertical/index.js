@@ -27,6 +27,16 @@ export default [
     //   // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
     // ],
   },
+
+  {
+    title: 'Concursos',
+    icon: { icon: 'tabler-balloon' },
+    to: { name: 'apps-concursos' },
+    // children: [
+    //   { title: 'Lista', to: 'apps-trasabilidad-list' },
+    //   // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
+    // ],
+  },
   
   // {
   //   title: 'Paquetes',
