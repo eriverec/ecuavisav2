@@ -52,8 +52,10 @@ function removeDuplicateInfo () {
    if (typeof Swiper === "undefined") {
      removeDuplicateInfo();
    } else {
-            var duplicateTag = $('.author_card.d-md-flex')[1];
-            duplicateTag.remove();
+      var duplicateTag = $('.author_card.d-md-flex')[1];
+      if(duplicateTag){
+        duplicateTag.remove();
+      }
    }
   }, 400) ; 
 }
