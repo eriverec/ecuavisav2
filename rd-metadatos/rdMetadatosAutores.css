@@ -150,7 +150,9 @@ div#r03c01 {
   line-height: 24px;
   text-transform: uppercase;
 }
-
+.cintillo-rd .titulo-temas h2 {
+  margin-left: 0;
+}
 .ecv_relacionadas_2022 .recomendadas-rd .headline h3 {
   line-height: 28px;
   font-size: 20px;
