@@ -200,6 +200,7 @@ export default {
   },
   methods: {
     async obtenerDatos(fechai, fechaf) {
+      fechaf = moment(fechaf, "MM/DD/YYYY").add(1, 'days').format("MM/DD/YYYY");
       const respuesta = await fetch(`https://servicio-de-actividad.vercel.app/dispositivos/all?fechai=${fechai}&fechaf=${fechaf}`);
       const datos = await respuesta.json();
       this.datos = datos.data;
@@ -233,7 +234,7 @@ export default {
       }
 
       if(selectedDates.length == 0){
-        fechaInicio = moment(new Date(), "YYYY-MM-DD").subtract(7, 'days').format("MM/DD/YYYY");
+        fechaInicio = moment(new Date(), "YYYY-MM-DD").add(-7, 'days').format("MM/DD/YYYY");
         fechaFin = moment(new Date(), "YYYY-MM-DD").format("MM/DD/YYYY");
         existe = true;
       }
