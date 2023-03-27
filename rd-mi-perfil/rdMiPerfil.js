@@ -131,7 +131,7 @@ async function Token(){
       var firstNameUpperCase = getFirstName.charAt(0).toUpperCase() + getFirstName.slice(1);
       var getAvatar = dataUser.avatar;
       var selectImg = document.querySelector('.imgAvatar');
-      selectImg.innerHTML = `<img src="${getAvatar}" alt="${getFirstName}">`;
+      selectImg.innerHTML = `<img width="512px" height="512px" src="${getAvatar}" alt="${getFirstName}">`;
       //Pintar el primer nombre del usuario
       var selectName = document.querySelector('.infoName');
       selectName.innerHTML = `Hola, ${firstNameUpperCase}`;
