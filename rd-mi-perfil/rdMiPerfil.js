@@ -791,7 +791,12 @@ async function Token(){
     
 
     collapse();
-    DataEntrada();
+
+// ########################################
+if (!ECUAVISA_EC.login() && urlParamsGET.get('tk')==null){/*Si no existe sesión lo va a redireccionar al login */
+}else{  DataEntrada();  }
+// ########################################   
+
     DatosPersonales();
     //suscriptionDymanic();
     /*#Notificaciones: iniciar loader*/
