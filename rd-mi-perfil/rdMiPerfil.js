@@ -642,7 +642,7 @@ async function Token(){
                       <div class="section">${data.category}</div>
                       <a href="${data.url}"><h3>${data.title}</h3></a>
                    </div>
-                   <div class="multimedia"> <a href="${data.url}"><img src="${ ( data.img == '' ? 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Image_not_available.png' : data.img) }" alt="${data.title}"></a> </div>
+                   <div class="multimedia"> <a href="${data.url}"><img title="${data.title}" width="100px" height="97px" src="${ ( data.img == '' ? 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Image_not_available.png' : data.img) }" alt="${data.title}"></a> </div>
                 </article>`;
         },
         loader: function (data) {
@@ -792,10 +792,10 @@ async function Token(){
 
     collapse();
 
-// ##############BUENAS PRACTICAS##########################
-if (!ECUAVISA_EC.login() && urlParamsGET.get('tk')==null){/*Si no existe sesión lo va a redireccionar al login */
+// ##############BUENAS PRACTICAS##################
+if (!ECUAVISA_EC.login() && urlParamsGET.get('tk')==null){ /*Si no existe sesión lo va a redireccionar al login */
 }else{  DataEntrada();  DatosPersonales();   }
-// ########################################   
+// ################################################
 
     
     //suscriptionDymanic();
