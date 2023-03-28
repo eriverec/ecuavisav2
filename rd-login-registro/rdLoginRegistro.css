@@ -48,6 +48,12 @@
   color: #FFFFFF!important;
 }
 
+.forgetPassword .btn.btn-link{
+    text-decoration: none;
+    color: white;
+    padding: 0;
+}
+
 .modal-title {
   font-style: normal;
   font-weight: 700;
@@ -589,6 +595,9 @@ form i {
   line-height: 7px;
   margin: 0px 0 20px -5px !important;
 }
+
+
+
 
 
 
