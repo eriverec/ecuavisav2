@@ -88,11 +88,11 @@ const chartConfigs = computed(() => {
   })
 })
 
-async function fetchData() {
-  const response = await fetch('https://showandevents-service.vercel.app/all')
-  const data = await response.json()
-  console.log(data)
-
+async function fetchData(param="") {
+  const response = await fetch('https://showandevents-service.vercel.app/all'+param)
+  const data = await response.json();
+  preguntas.value = [];
+  preguntasConCount.value = [];
   data.data.forEach(trivia => {
     trivia.data.forEach(datos => {
       datos.trivia.forEach(pregunta => {
@@ -120,7 +120,7 @@ async function fetchData() {
 }
 
 onMounted(() => {
-  fetchData()
+  fetchData();
 })
 
 </script>
@@ -128,13 +128,15 @@ onMounted(() => {
 <template>
   <div>
     <h1>Tabla de Respuestas de Usuarios</h1>
-    <div v-for="(pregunta, index) in preguntas" :key="index">
-      <h3>{{ pregunta }}</h3>
-      <VueApexCharts 
-      :options="chartConfigs[index].chartOptions" 
-      :series="chartConfigs[index].series" 
-      height="240"
-        class="mt-3" />
+    <div v-for="(pregunta, index) in preguntas" :key="index" class="mt-3">
+      <VCard>
+        <h3 class="py-4 px-4">{{ pregunta }}</h3>
+        <VueApexCharts 
+        :options="chartConfigs[index].chartOptions" 
+        :series="chartConfigs[index].series" 
+        height="240"
+        class="py-4 px-4" />
+      </VCard>
     </div>
   </div>
 </template>
