@@ -29,8 +29,8 @@ const errors = ref({
 })
 
 const refVForm = ref()
-const email = ref('admin@demo.com')
-const password = ref('admin')
+const email = ref('')
+const password = ref('')
 const rememberMe = ref(false)
 
 const login = () => {
@@ -105,13 +105,13 @@ const onSubmit = () => {
           />
 
           <h5 class="text-h5 font-weight-semibold mb-1">
-            Bienvenido a {{ themeConfig.app.title }}! 👋🏻
+            Bienvenido a {{ themeConfig.app.title }} Analytics! 👋🏻
           </h5>
-          <p class="mb-0">
+          <!-- <p class="mb-0">
             Inicia sesión en tu cuenta y comienza la aventura.
-          </p>
+          </p> -->
         </VCardText>
-        <VCardText>
+        <!-- <VCardText>
           <VAlert
             color="primary"
             variant="tonal"
@@ -119,11 +119,11 @@ const onSubmit = () => {
             <p class="text-caption mb-2">
               Administrador Email: <strong>admin@demo.com</strong> / Pass: <strong>admin</strong>
             </p>
-            <!-- <p class="text-caption mb-0">
+            <p class="text-caption mb-0">
               Client Email: <strong>client@demo.com</strong> / Pass: <strong>client</strong>
-            </p> -->
+            </p>
           </VAlert>
-        </VCardText>
+        </VCardText> -->
         <VCardText>
           <VForm
             ref="refVForm"

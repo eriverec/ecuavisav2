@@ -140,11 +140,11 @@ onMounted(async () => {
                 </div>
               </th>
               <th>Teléfono</th>
-              <th>Dirección</th>
-              <th>Respuestas</th>
+              <!-- <th>Dirección</th> -->
+              <!-- <th>Respuestas</th> -->
               <th @click="toggleOrderBy('respuestas')">
                 <div class="d-flex align-center justify-space-between v-card--link">
-                  Suma
+                  Respuestas
                   <span class="d-flex flex-sm-column">
                     <VIcon color="danger" icon="tabler-chevron-up" />
                     <VIcon color="danger" icon="tabler-chevron-down" />
@@ -158,13 +158,13 @@ onMounted(async () => {
               <td>{{ user.nombre }}</td>
               <td>{{ user.apellido }}</td>
               <td>{{ user.telefono }}</td>
-              <td>{{ user.direccion }}</td>
+              <!-- <td>{{ user.direccion }}</td> -->
 
-              <td>
+              <!-- <td>
                 <ul>
                   <li v-for="(count, answer) in user.respuestas" :key="answer">{{ answer }} ({{ count }})</li>
                 </ul>
-              </td>
+              </td> -->
 
               <td>{{ Object.values(user.respuestas).reduce((total, curr) => total + curr, 0) }}</td>
 

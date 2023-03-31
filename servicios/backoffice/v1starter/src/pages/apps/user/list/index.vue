@@ -383,7 +383,7 @@ userListStore
         
           //console.log('res',res.data)
           let array = Array.from(res.data);
-          console.log('array',array)
+          // console.log('array',array)
           array.forEach((item) => {
             usersFull.value.push({
               wylexId: item.wylexId,

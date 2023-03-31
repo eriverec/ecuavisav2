@@ -3,6 +3,8 @@ import avatar1 from '@/assets/images/avatars/avatar-1.png'
 import avatar2 from '@/assets/images/avatars/avatar-2.jpg'
 import avatar3 from '@/assets/images/avatars/avatar-3.png'
 import avatar4 from '@/assets/images/avatars/avatar-4.png'
+import avatar5 from '@/assets/images/avatars/logox108.png'
+
 import { initialAbility } from '@/plugins/casl/ability'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
 
@@ -42,7 +44,7 @@ const logout = () => {
       color="primary"
       variant="tonal"
     >
-      <VImg :src="avatar2" />
+      <VImg :src="avatar5" />
 
       <!-- SECTION Menu -->
       <VMenu
@@ -67,7 +69,7 @@ const logout = () => {
                     color="primary"
                     variant="tonal"
                   >
-                    <VImg :src="avatar3" />
+                    <VImg :src="avatar5" />
                   </VAvatar>
                 </VBadge>
               </VListItemAction>
