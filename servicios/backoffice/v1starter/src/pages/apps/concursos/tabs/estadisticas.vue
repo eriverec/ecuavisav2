@@ -132,14 +132,6 @@
         dateRangeModel:null,
         selectedTrivia: {title:`Trivia: 1`,value:1},
         chartList: [],
-
-
-        options: [
-          'Option 1',
-          'Option 2',
-          'Option 3'
-        ],
-        selectedOption: 'Option 1'
       };
     },
     computed: {
@@ -208,9 +200,6 @@
       }
     },
     methods: {
-      handleChange() {
-        console.log('Selected option:', this.selectedOption)
-      },
       async fetchData(param = "") {
         var carActividad = document.querySelector("#id-card-estadistica");
         carActividad.classList.add("disabled");
