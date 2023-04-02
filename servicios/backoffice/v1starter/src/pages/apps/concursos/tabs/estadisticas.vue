@@ -129,7 +129,7 @@
         preguntasConCount:[],
         params:{},
         trivias: [],
-        selectedTrivia: null,
+        selectedTrivia: {title:`Trivia: 1`,value:1},
         chartList: []
       };
     },
@@ -311,6 +311,7 @@
     },
     async mounted() {
       this.getListTrivia();
+      this.params["idTrivia"] = this.selectedTrivia.value;
       await this.fetchData();
       this.initChart();
     },
