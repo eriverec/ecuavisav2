@@ -75,16 +75,7 @@
       </VCard>
     </VCol>
   <div id="id-card-estadistica">
-    <v-select
-      :items="options"
-      label="Select an option"
-      v-model="selectedOption"
-      @change="handleChange"
-    ></v-select>
-
-    <p>Selected option: {{ selectedOption }}</p>
-
-
+    
     <div v-if="isLoading" class="mt-6">Cargando datos...</div>
     <div v-for="(pregunta, index) in preguntas" :key="index" class="mt-6" v-else>
       <VCard>
