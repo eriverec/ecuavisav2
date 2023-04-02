@@ -1,5 +1,6 @@
 <script setup>
-import FlatPickr from 'vue-flatpickr-component'
+import FlatPickr from 'vue-flatpickr-component';
+import { Spanish } from 'flatpickr/dist/l10n/es.js';
 import { useTheme } from 'vuetify'
 import {
   filterFieldProps,
@@ -84,7 +85,8 @@ const emitModelValue = val => {
 }
 
 flatpickr.setDefaults({
-  disableMobile: true
+  disableMobile: true,
+  locale: Spanish,
 });
 </script>
 
