@@ -12,11 +12,11 @@ const tabsTrivia = [
   {
     icon: 'tabler-friends',
     title: 'Participantes',
-  },
-  {
-    icon: 'tabler-sitemap',
-    title: 'Extras',
   }
+  // {
+  //   icon: 'tabler-sitemap',
+  //   title: 'Extras',
+  // }
 ]
 
 </script>

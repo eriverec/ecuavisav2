@@ -1,192 +1,137 @@
 <script setup>
 
-
 /* https://showandevents-service.vercel.app/all */
+// const isLoading = ref(true);
+// const urlAPI = "https://showandevents-service.vercel.app/all"
+
+const apiUrl = 'https://showandevents-service.vercel.app/all' // Aquí deberás poner la URL de tu API
+const data = reactive([])
 const isLoading = ref(true);
-const urlAPI = "https://showandevents-service.vercel.app/all"
-const userList = ref([])
 
-const sortOptions = reactive({
-  type: "asc",
-  column: "total"
-});
-
-const groupedUsers = computed(() => {
-  const groups = {}
-  userList.value.forEach(user => {
-    const key = `${user.nombre}-${user.apellido}`
-    if (!groups[key]) {
-      groups[key] = {
-        nombre: user.nombre,
-        apellido: user.apellido,
-        telefono: user.telefono,
-        direccion: user.direccion,
-        porcentajeRespuestas: [parseFloat(user.porcentajeRespuestas)],
-        respuestas: user.data[0].trivia.reduce((acc, pregunta) => {
-          if (pregunta.respuesta !== "") {
-            acc[pregunta.respuesta] = (acc[pregunta.respuesta] || 0) + 1
-          }
-          return acc
-        }, {})
-      }
-    } else {
-      groups[key].porcentajeRespuestas.push(parseFloat(user.porcentajeRespuestas))
-      user.data[0].trivia.forEach(pregunta => {
-        if (pregunta.respuesta !== "") {
-          groups[key].respuestas[pregunta.respuesta] = (groups[key].respuestas[pregunta.respuesta] || 0) + 1
-        }
-      })
+const fetchData = async () => {
+  const response = await fetch(apiUrl)
+  const json = await response.json()
+  const parsedData = json.data.map(item => {
+    const trivia = item.data[0].trivia.map(ans => ({
+      pregunta: ans.pregunta,
+      respuesta: ans.respuesta
+    }))
+    return {
+      name: item.data[0].name,
+      lastname: item.data[0].lastname,
+      telefono: item.data[0].telefono,
+      idTrivia: item.idTrivia,
+      pregunta: trivia[0].pregunta,
+      answers: trivia.map(ans => ans.respuesta)
     }
   })
-  return Object.values(groups)
-
-})
-const error = ref(null)
-const orderAsc = ref(true);
-const orderState = ref({
-  orderBy: 'nombre',
-  orderAsc: true,
-})
-const toggleOrderBy = (key) => {
-  if (key === orderState.value.orderBy) {
-    orderState.value.orderAsc = !orderState.value.orderAsc
-  }
-  orderState.value.orderBy = key
+  data.push(...parsedData)
+  isLoading.value = false;
 }
-const sortedUsers = computed(() => {
-  const arr = [...groupedUsers.value]
-  const key = orderState.value.orderBy
-  const asc = orderState.value.orderAsc
-  return arr.sort((a, b) => {
-    if (key === 'nombre') {
-      if (asc) {
-        return a.nombre < b.nombre ? -1 : a.nombre > b.nombre ? 1 : 0
-      }
-      return b.nombre < a.nombre ? -1 : b.nombre > a.nombre ? 1 : 0
-    } else if (key === 'apellido') {
-      if (asc) {
-        return a.apellido < b.apellido ? -1 : a.apellido > b.apellido ? 1 : 0
-      }
-      return b.apellido < a.apellido ? -1 : b.apellido > a.apellido ? 1 : 0
-    } 
-    else if (key === 'respuestas') {
-      const totalA = Object.values(a.respuestas).reduce((total, curr) => total + curr, 0)
-      const totalB = Object.values(b.respuestas).reduce((total, curr) => total + curr, 0)
-      if (asc) {
-        return totalA - totalB
-      }
-      return totalB - totalA
-    } else {
-      return 0
-    }
-  })
+
+onMounted(() => {
+  fetchData()
 })
 
-
-onMounted(async () => {
-  try {
-    const response = await fetch(urlAPI)
-    const data = await response.json()
-    if (data.resp === true) {
-      userList.value = data.data.map(item => ({
-        nombre: item.data[0].name,
-        apellido: item.data[0].lastname,
-        telefono: item.data[0].telefono,
-        direccion: item.data[0].direccion,
-        porcentajeRespuestas: `${((item.data[0].trivia.filter(pregunta => pregunta.respuesta !== '').length / item.data[0].trivia.length) * 100).toFixed(2)}`,
-        data: item.data
-      }))
-      isLoading.value = false;
-    } else {
-      error.value = 'Hubo un problema al cargar los datos'
+const groupedData = computed(() => {
+  const byTrivia = data.reduce((acc, item) => {
+    const key = item.idTrivia
+    if (!acc[key]) {
+      acc[key] = []
     }
-  } catch (err) {
-    error.value = `Error: ${err.message}`
+    acc[key].push(item)
+    return acc
+  }, {})
+  const grouped = {}
+  for (const key in byTrivia) {
+    grouped[key] = byTrivia[key].reduce((acc, item) => {
+      const subkey = `${item.name}_${item.lastname}`
+      if (!acc[subkey]) {
+        acc[subkey] = {
+          name: item.name,
+          lastname: item.lastname,
+          telefono: item.telefono,
+          answers: [],
+          total: 0
+        }
+        acc[subkey].pregunta = item.pregunta
+      }
+      acc[subkey].answers.push(...item.answers)
+      acc[subkey].total += item.answers.length
+      return acc
+    }, {})
+    grouped[key] = Object.values(grouped[key])
   }
+  return grouped
 })
-
 
 </script>
 
 <template>
-  <div>
 
-    <div v-if="isLoading" class="mt-6">Cargando datos...</div>
-    <div class="mt-6" v-else>
-      <VCard>
-        <VCardItem class="pb-sm-0">
-          <VCardTitle>Participantes</VCardTitle>
-        </VCardItem>
+  <VCard v-if="isLoading" class="mt-6">
+    <VCardItem >
+      <div class="d-flex justify-space-between">
+        <VCardTitle >Cargando datos...</VCardTitle>
+      </div>
+    </VCardItem>
+  </VCard>
 
-        <VTable class="text-no-wrap w-100 px-4">
-          <thead>
-            <tr>
-              <th @click="toggleOrderBy('nombre')">
-                <div class="d-flex align-center justify-space-between v-card--link">
-                  Nombre
-                  <span class="d-flex flex-sm-column">
-                    <VIcon color="danger" icon="tabler-chevron-up" />
-                    <VIcon color="danger" icon="tabler-chevron-down" />
-                  </span>
-                </div>
-              </th>
-              <th @click="toggleOrderBy('apellido')">
-                <div class="d-flex align-center justify-space-between v-card--link">
-                  Apellido
-                  <span class="d-flex flex-sm-column">
-                    <VIcon color="danger" icon="tabler-chevron-up" />
-                    <VIcon color="danger" icon="tabler-chevron-down" />
-                  </span>
-                </div>
-              </th>
-              <th>Teléfono</th>
-              <!-- <th>Dirección</th> -->
-              <!-- <th>Respuestas</th> -->
-              <th @click="toggleOrderBy('respuestas')">
-                <div class="d-flex align-center justify-space-between v-card--link">
-                  Respuestas
-                  <span class="d-flex flex-sm-column">
-                    <VIcon color="danger" icon="tabler-chevron-up" />
-                    <VIcon color="danger" icon="tabler-chevron-down" />
-                  </span>
-                </div>
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user in sortedUsers" :key="`${user.nombre}-${user.apellido}`">
-              <td>{{ user.nombre }}</td>
-              <td>{{ user.apellido }}</td>
-              <td>{{ user.telefono }}</td>
-              <!-- <td>{{ user.direccion }}</td> -->
-
-              <!-- <td>
-                <ul>
-                  <li v-for="(count, answer) in user.respuestas" :key="answer">{{ answer }} ({{ count }})</li>
-                </ul>
-              </td> -->
-
-              <td>{{ Object.values(user.respuestas).reduce((total, curr) => total + curr, 0) }}</td>
-
-            </tr>
-          </tbody>
-        </VTable>
-
-        <div v-if="error" role="alert">{{ error }}</div>
-
-      </VCard>
-    </div>
+  <VExpansionPanels multiple class="mt-6" v-else>
 
 
-  </div>
+    <VExpansionPanel class="" v-for="(group, id) in groupedData" :key="id">
+      <VExpansionPanelTitle>
+        <div class="d-flex justify-space-between">
+          <VCardTitle>
+            <div>
+              <VChip label class="text-success">Trivia {{ id }} </VChip> {{ group[0].pregunta }}
+            </div>
+          </VCardTitle>
+        </div>
+      </VExpansionPanelTitle>
+      <VExpansionPanelText>
+        <div>
+          <VTable class="text-no-wrap w-100 px-4">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Teléfono</th>
+                <!-- <th>Respuestas</th> -->
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(item, index) in group" :key="index">
+                <td>{{ item.name }}</td>
+                <td>{{ item.lastname }}</td>
+                <td>{{ item.telefono }}</td>
+                <!-- <td><ul><li v-for="(ans, i) in item.answers" :key="i">{{ ans }}</li></ul></td> -->
+                <td>{{ item.total }}</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="4" align="right">
+                  <aside class="mt-4">
+                    <a :href="'https://showandevents-service.vercel.app/export/csv?idTrivia=' + id">
+                      <VBtn class="me-3" variant="tonal" color="success" prepend-icon="tabler-download">
+                        Excel
+                      </VBtn>
+                    </a>
+                    <a :href="'https://showandevents-service.vercel.app/export/csv?idTrivia=' + id">
+                      <VBtn variant="tonal" color="primary" prepend-icon="tabler-download">
+                        CSV
+                      </VBtn>
+                    </a>
+                  </aside>
+                </td>
+              </tr>
+            </tfoot>
+          </VTable>
+        </div>
+      </VExpansionPanelText>
+    </VExpansionPanel>
+  </VExpansionPanels>
 </template>
-
-<style scoped>
-svg.iconify {
-  font-size: 1rem;
-}
-
-.v-icon {
-  height: 0.8em;
-}
-</style>
