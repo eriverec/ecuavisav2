@@ -418,7 +418,7 @@ export default {
       this.isLoading = false;
       this.dataFormateada = await this.getDataTrazabilidad(this.getData.grafico);
       ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
-      this.formatGraficoDonutSesion();
+      this.formatGraficoDonutVisita();
       return true;
     },
     async getDataGrafico(fechai, fechaf) {
