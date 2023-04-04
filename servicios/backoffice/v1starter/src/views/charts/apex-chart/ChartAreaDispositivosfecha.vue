@@ -43,7 +43,7 @@
           />
         </VCardText>
       </div>
-      <div class="v-col-3">
+      <div class="v-col-3" style="align-items: center;display: flex;">
         <VCardText>
           <VueApexCharts
             type="donut"
