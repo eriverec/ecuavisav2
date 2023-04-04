@@ -2,6 +2,8 @@
 
 Ecuavisa Data is build with Vue 3 in Vite.
 
+admin@demo.com
+admin
 ## Recommended IDE Setup
 
 [VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=johnsoncodehk.volar) (and disable Vetur).
