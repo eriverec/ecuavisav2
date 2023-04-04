@@ -3,6 +3,7 @@ import VueApexCharts from "vue3-apexcharts";
 import { useTheme } from "vuetify";
 import { hexToRgb } from "@layouts/utils";
 import { Spanish } from 'flatpickr/dist/l10n/es.js';
+import { getDonutChartConfigPieDispositivos } from '@core/libs/apex-chart/apexCharConfig'
 
 
 import Moment from 'moment';
@@ -39,6 +40,8 @@ const vuetifyTheme = useTheme();
 const chartConfig = computed(() =>
   getAreaChartSplineConfig(vuetifyTheme.current.value)
 );
+
+const expenseRationChartConfig = computed(() => getDonutChartConfigPieDispositivos(vuetifyTheme.current.value))
 
 // ESTE ES el Dispositivos
 const getAreaChartSplineConfig = (themeColors) => {
@@ -115,6 +118,19 @@ const getAreaChartSplineConfig = (themeColors) => {
       categories: [],
     },
   };
+};
+
+
+const getChartPie = (themeColors) => {
+  return {
+        chart: {
+          id: "crejemplopie",
+          type: 'pie',
+        },
+        labels: ['Team A', 'Team B', 'Team C', 'Team D', 'Team E'],
+        responsive: [
+        ],
+      };
 };
 
 
@@ -331,6 +347,15 @@ async function formatVisitaGráfico(){
     dataFormateada = await getDataTrazabilidad(getData.grafico);
     ApexCharts.exec("crejemplo", "updateSeries", dataFormateada);
     panelGráfico.classList.remove("disabled");
+
+
+
+    ApexCharts.exec("crejemplopie", "updateSeries", [
+      85,
+      16,
+      50,
+      50,
+    ]);
   }
 }
 
@@ -388,15 +413,32 @@ const porVisita = (item) => {
     />
   </div>
   <div class="w-100">
-    <VCardText>
-      <VueApexCharts
-        id="nuevocomponente"
-        type="area"
-        height="400"
-        :options="chartConfig"
-        :series="series"
-      />
-    </VCardText>
+    <div class="v-row">
+      <div class="v-col-9">
+        <VCardText>
+          <VueApexCharts
+            id="crejemplo"
+            type="area"
+            height="400"
+            :options="chartConfig"
+            :series="series"
+          />
+        </VCardText>
+      </div>
+
+      <div class="v-col-3">
+        <VCardText>
+
+          <VueApexCharts
+            id="crejemplopie"
+            type="donut"
+            height="410"
+            :options="expenseRationChartConfig"
+            :series="series"
+          />
+        </VCardText>
+      </div>
+    </div>
     
   </div>
 </template>
