@@ -1,8 +1,6 @@
 <script setup>
 
 /* https://showandevents-service.vercel.app/all */
-// const isLoading = ref(true);
-// const urlAPI = "https://showandevents-service.vercel.app/all"
 
 const apiUrl = 'https://showandevents-service.vercel.app/all' // Aquí deberás poner la URL de tu API
 const data = reactive([])
@@ -68,11 +66,10 @@ const groupedData = computed(() => {
 </script>
 
 <template>
-
   <VCard v-if="isLoading" class="mt-6">
-    <VCardItem >
+    <VCardItem>
       <div class="d-flex justify-space-between">
-        <VCardTitle >Cargando datos...</VCardTitle>
+        <VCardTitle>Cargando datos...</VCardTitle>
       </div>
     </VCardItem>
   </VCard>
@@ -85,13 +82,25 @@ const groupedData = computed(() => {
         <div class="d-flex justify-space-between">
           <VCardTitle>
             <div>
-              <VChip label class="text-success">Trivia {{ id }} </VChip> {{ group[0].pregunta }}
+              <VChip label class="text-secundary">Trivia {{ id }} </VChip> {{ group[0].pregunta }}
             </div>
           </VCardTitle>
         </div>
       </VExpansionPanelTitle>
       <VExpansionPanelText>
-        <div>
+        <div> 
+          <aside class="d-flex justify-end">
+            <a :href="'https://showandevents-service.vercel.app/export/csv?idTrivia=' + id">
+              <VBtn class="me-3" variant="tonal" color="success" prepend-icon="tabler-download">
+                Excel
+              </VBtn>
+            </a>
+            <a :href="'https://showandevents-service.vercel.app/export/csv?idTrivia=' + id">
+              <VBtn variant="tonal" color="primary" prepend-icon="tabler-download">
+                CSV
+              </VBtn>
+            </a>
+          </aside>
           <VTable class="text-no-wrap w-100 px-4">
             <thead>
               <tr>
@@ -114,18 +123,7 @@ const groupedData = computed(() => {
             <tfoot>
               <tr>
                 <td colspan="4" align="right">
-                  <aside class="mt-4">
-                    <a :href="'https://showandevents-service.vercel.app/export/csv?idTrivia=' + id">
-                      <VBtn class="me-3" variant="tonal" color="success" prepend-icon="tabler-download">
-                        Excel
-                      </VBtn>
-                    </a>
-                    <a :href="'https://showandevents-service.vercel.app/export/csv?idTrivia=' + id">
-                      <VBtn variant="tonal" color="primary" prepend-icon="tabler-download">
-                        CSV
-                      </VBtn>
-                    </a>
-                  </aside>
+
                 </td>
               </tr>
             </tfoot>
