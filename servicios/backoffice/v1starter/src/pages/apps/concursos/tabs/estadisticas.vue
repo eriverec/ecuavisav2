@@ -14,6 +14,33 @@
   opacity: 0.5;
   pointer-events: none;
 }
+
+/* De tema Dark a Light */
+.v-theme--light .apexcharts-legend-series .apexcharts-legend-text{
+  color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity)) !important;
+}
+
+.v-theme--light .apexcharts-xaxis .apexcharts-xaxis-texts-g text {
+  fill: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity)) !important;
+}
+
+.v-theme--light .apexcharts-yaxis .apexcharts-yaxis-texts-g text {
+  fill: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity)) !important;
+}
+
+/* De tema Light a Dark */
+.v-theme--dark .apexcharts-legend-series .apexcharts-legend-text{
+  color: rgba(228, 230, 244, 0.38) !important;
+}
+.v-theme--dark .apexcharts-xaxis .apexcharts-xaxis-texts-g text {
+  fill: rgba(228, 230, 244, 0.38) !important;
+}
+
+.v-theme--dark .apexcharts-yaxis .apexcharts-yaxis-texts-g text {
+  fill: rgba(228, 230, 244, 0.38) !important;
+}
+
+
 </style>
 <template>
   <!-- 👉 Recent devices -->
