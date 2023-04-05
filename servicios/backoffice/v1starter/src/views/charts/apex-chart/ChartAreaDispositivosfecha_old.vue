@@ -119,7 +119,7 @@ const getAreaChartSplineConfig = (themeColors) => {
   };
 };
 
-const getDonutChartConfigPieDispositivos = themeColors => {
+const getDonutChartConfigPieDispositivos = (themeColors) => {
   const donutColors = {
     series1: '#fdd835',
     series2: '#00d4bd',
