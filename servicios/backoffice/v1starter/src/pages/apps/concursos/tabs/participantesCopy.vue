@@ -1,6 +1,6 @@
 <script setup>
 
-import TriviaParticipantes from '@/pages/apps/concursos/tabs/participantesCopy.vue'
+// import TriviaParticipantes from '@/pages/apps/concursos/tabs/participantesCopy.vue'
 
 /* https://showandevents-service.vercel.app/all */
 const isLoading = ref(true);
@@ -122,7 +122,7 @@ function exportCsv() {
 <template>
   <div>
 
-    <TriviaParticipantes/>
+    <!-- <TriviaParticipantes/> -->
 
     <div v-if="isLoading" class="mt-6">Cargando datos...</div>
     <div class="mt-6" v-else>
@@ -169,7 +169,7 @@ function exportCsv() {
               </th>
               <th>Teléfono</th>
               <!-- <th>idTrivia</th> -->
-              <!-- <th>Respuestas</th> -->
+              <th>Respuestas</th>
               <th @click="toggleOrderBy('respuestas')">
                 <div class="d-flex align-center justify-space-between v-card--link">
                   Respuestas
@@ -189,7 +189,7 @@ function exportCsv() {
               <!-- <td>{{ user.direccion }}</td> -->
               <!-- <td>{{ user.idTrivia }}</td> -->
 
-              <!-- <td><ul><li v-for="(count, answer) in user.respuestas" :key="answer">{{ answer }} ({{ count }})</li></ul></td> -->
+              <td><ul><li v-for="(count, answer) in user.respuestas" :key="answer">{{ answer }} ({{ count }})</li></ul></td>
               <td>{{ Object.values(user.respuestas).reduce((total, curr) => total + curr, 0) }}</td>
             </tr>
           </tbody>
