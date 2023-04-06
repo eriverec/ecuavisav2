@@ -4,8 +4,6 @@ import brFlag from "@/assets/images/icons/countries/br.png";
 import cnFlag from "@/assets/images/icons/countries/cn.png";
 import frFlag from "@/assets/images/icons/countries/fr.png";
 import inFlag from "@/assets/images/icons/countries/in.png";
-import usFlag from "@/assets/images/icons/countries/us.png";
-import ecFlag from "@/assets/images/icons/countries/ec.svg";
 
 const salesByCountries = [
   {
@@ -94,7 +92,7 @@ function toggleOrder(field) {
 </script>
 
 <template>
-  <VCard title="Dispositivos por Países">
+  <VCard title="Resumen de datos demográficos" subtitle="Datos de usuarios registrados desde la creación del proyecto hasta la actualidad">
     <VCardText>
       <div v-if="isLoading">Cargando datos...</div>
       <VList class="card-list" v-else>
@@ -104,8 +102,8 @@ function toggleOrder(field) {
             <tr>
               <th scope="col">Pais</th>
               <th scope="col">Ciudad</th>
-              <th scope="col">Actividades</th>
-              <th scope="col">Visitas</th>
+              <th scope="col">Sesiones</th>
+              <th scope="col">Visitas de Páginas</th>
             </tr>
           </thead>
           <!-- <button @click="toggleOrder('count')">Count {{ orderField === 'count' ? (orderAsc ? '↑' : '↓') : '' }}</button>
