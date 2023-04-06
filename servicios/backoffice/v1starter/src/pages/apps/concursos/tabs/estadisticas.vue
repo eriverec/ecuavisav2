@@ -69,7 +69,7 @@
 
         <div class="d-flex align-center flex-wrap gap-2">
           <div class="date-picker-wrapper" style="width: 233px">
-            <AppDateTimePicker id="date-picker" placeholder="Seleccionar una fecha" prepend-inner-icon="tabler-calendar"
+            <AppDateTimePicker style="display: none;" disabled="true" id="date-picker" placeholder="Seleccionar una fecha" prepend-inner-icon="tabler-calendar"
               density="compact" v-model="dateRangeModel" @on-change="onChangeRange" :config="{
                 position: 'left',
                 mode: 'range',
@@ -137,7 +137,7 @@ export default {
       preguntas: [],
       preguntasData: [],
       preguntasConCount: [],
-      params: {},
+      params: {fechai:"2023-01-01",fechaf:"2023-10-30"},
       trivias: [],
       dateRangeModel: null,
       selectedTrivia: { title: `Trivia: 1`, value: 1 },
@@ -305,7 +305,7 @@ export default {
     },
     async clearSelection() {
       this.selectedTrivia = null;
-      this.params = {};
+      this.params = {fechai:"2023-01-01",fechaf:"2023-10-30"};
       this.preguntas = [];
       await this.fetchData();
       this.initChart();
