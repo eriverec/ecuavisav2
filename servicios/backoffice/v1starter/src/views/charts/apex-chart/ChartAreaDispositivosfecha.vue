@@ -58,6 +58,23 @@
   </div>
 </template>
 
+<style>
+.custom-tooltip {
+  background: linear-gradient(72.47deg, rgb(var(--v-global-theme-primary)) 22.16%, rgba(var(--v-global-theme-primary), 0.7) 76.47%) !important;
+  box-shadow: 0px 3px 1px -2px var(--v-shadow-key-umbra-opacity, rgba(0, 0, 0, 0.2)), 0px 2px 2px 0px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.14)), 0px 1px 5px 0px var(--v-shadow-key-penumbra-opacity, rgba(0, 0, 0, 0.12));
+  
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+}
+.title {
+  font-weight: bold;
+}
+.value {
+  margin-left: 5px;
+}
+</style>
+
 <script>
   import VueApexCharts from 'vue3-apexcharts';
   import { useTheme } from 'vuetify'
@@ -130,9 +147,6 @@
     },
     computed: {
       classLoading() {
-        
-
-
         return this.isLoading ? 'w-100 disabled' : 'w-100'
       },
       chartConfig() {
@@ -166,16 +180,37 @@
         };
 
         return {
+          visita:this.visita,
           chart: {
             id: "crejemplo",
             //type: "area",
             parentHeightOffset: 0,
-            zoom: { enabled: true },
+            zoom: { enabled: false },
             toolbar: { show: false },
           },
           tooltip: {
             shared: false,
             enabled: true,
+            custom: function({series, seriesIndex, dataPointIndex, w}) {
+              //this.ctx.xaxis.categories[dataPointIndex] 
+              var value = series[seriesIndex][dataPointIndex];
+              var text = w.config.visita?"Sesiones":"Páginas visitadas";
+              if(value<2){
+                text = w.config.visita?"Sesión":"Página visitada";
+              }
+              return '<div class="custom-tooltip">' +
+                '<span class="title">Día:</span>' +
+                '<span class="value">' + w.globals.categoryLabels[dataPointIndex]+ '</span>' +
+                '<br>' +
+                //'<span class="title">Ventas:</span>' +
+                '<span class="value">' + value +" " +text +'</span>' +
+              '</div>'
+            },
+            /*y: {
+              formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
+                return 'Ventas: $' + value
+              }
+            },*/
             style: {
               fontSize: "12px",
               fontFamily: undefined,
@@ -402,13 +437,13 @@
             if(!procrosarFecha.resp){
               serieData.push({
                 x: fecha,
-                y: count//renderData.navigationRecord.length
+                y: parseInt(count)//renderData.navigationRecord.length
               });
             }else{
               var dataTempFecha = serieData[procrosarFecha.index];
               serieData[procrosarFecha.index] = {
                 x: fecha,
-                y: (count * 1 + procrosarFecha.value * 1)//renderData.navigationRecord.length
+                y: parseInt(count * 1 + procrosarFecha.value * 1)//renderData.navigationRecord.length
               }
             }
             
@@ -417,7 +452,7 @@
           dataFormat.push({
             name:nameSerie,
             data: serieData.sort((a, b) => ( b.x - a.x)),
-            total:total
+            total: parseInt(total)
           });
         }
 
