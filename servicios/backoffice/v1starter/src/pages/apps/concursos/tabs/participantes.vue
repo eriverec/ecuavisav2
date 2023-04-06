@@ -3,7 +3,7 @@
 /* https://showandevents-service.vercel.app/all */
 // import TriviaParticipantes from '@/pages/apps/concursos/tabs/participantesCopy.vue'
 
-const apiUrl = 'https://showandevents-service.vercel.app/all' // Aquí deberás poner la URL de tu API
+const apiUrl = 'https://showandevents-service.vercel.app/all?fechai=2023-01-01&fechaf=2023-10-30' // Aquí deberás poner la URL de tu API
 const data = reactive([])
 const isLoading = ref(true);
 
