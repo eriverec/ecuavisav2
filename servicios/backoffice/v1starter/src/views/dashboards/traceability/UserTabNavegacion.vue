@@ -12,7 +12,7 @@ const vuetifyTheme = useTheme()
 
 const urlCounts = ref([]);
 const isLoading = ref(true);
-const itemsPerPage = 5;
+const itemsPerPage = 8;
 const currentPage = ref(1);
 const totalCount = computed(() => urlCounts.value.length);
 async function fetchData() {
@@ -61,10 +61,10 @@ const prevPage = () => {
 
 <template>
   <VRow>
-    <VCol lg="6" cols="12" sm="6">
+    <VCol lg="12" cols="12" sm="6">
       <VCard>
         <VCardItem class="pb-sm-0">
-          <VCardTitle> Más vistas</VCardTitle>
+          <VCardTitle>Páginas más vistas</VCardTitle>
           <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
         </VCardItem>
 
@@ -74,7 +74,7 @@ const prevPage = () => {
           <VTable class="text-no-wrap tableNavegacion mb-5">
             <thead>
               <tr>
-                <th scope="col">URL</th>
+                <th scope="col">TÍTULO DE PÁGINA</th>
                 <th scope="col">VISITAS</th>
               </tr>
             </thead>
@@ -82,7 +82,7 @@ const prevPage = () => {
             <tbody>
               <tr v-for="item  in paginatedUrlCounts" :key="item.url">
                 <td class="text-high-emphasis">
-                  <span> <a :href="item.url" target="_blank"> {{ item.title ? item.title : item.url }}</a> </span>
+                  <span> <a :href="item.url" target="_blank" title="Click para ir a la página"> {{ item.title ? item.title : item.url }}</a> </span>
                 </td>
 
                 <td class="text-medium-emphasis">
@@ -104,7 +104,8 @@ const prevPage = () => {
         </VCardText>
       </VCard>
     </VCol>
-    <VCol lg="6" cols="12" sm="6">
+    <VCol class="d-none" lg="6" cols="12" sm="6">
+    <!-- trazabilidad independiente -->
       <VCard>
         <VCardItem class="pb-sm-0">
           <VCardTitle>Últimas visitas</VCardTitle>
