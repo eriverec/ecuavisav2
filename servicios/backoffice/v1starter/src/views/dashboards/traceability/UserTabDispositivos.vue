@@ -1,9 +1,8 @@
 <script setup>
-import Moment from 'moment';
-import esLocale from "moment/locale/es";
-import { extendMoment } from 'moment-range';
 import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartAreaDispositivosfecha.vue";
-import ChartAreaDispositivos from "@/views/charts/apex-chart/ChartAreaDispositivos.vue";
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
 
 import { Spanish } from 'flatpickr/dist/l10n/es.js';
 const isNewPasswordVisible = ref(false);
@@ -50,8 +49,8 @@ getData();
       <VCard>
         <VCardText class="d-flex flex-wrap justify-space-between gap-4">
           <VCardItem class="pt-0 pb-0">
-            <VCardTitle>Actividad</VCardTitle>
-            <VCardSubtitle>De dispositivos de los últimos 7 días</VCardSubtitle>
+            <VCardTitle>Resumen de Tecnología</VCardTitle>
+            <VCardSubtitle>Categoría de dispositivos de los últimos 7 días</VCardSubtitle>
           </VCardItem>
           <ChartAreaDispositivosFecha />
         </VCardText>
@@ -63,8 +62,8 @@ getData();
       <VCard>
         <VCardText class="d-flex flex-wrap justify-space-between gap-4" id="id-card-actividad">
           <VCardItem class="pt-0 pb-0">
-            <VCardTitle>Actividad</VCardTitle>
-            <VCardSubtitle>De dispositivos de los últimos 7 días</VCardSubtitle>
+            <VCardTitle>Plataformas</VCardTitle>
+            <VCardSubtitle> Registro de actividad de los últimos  dispositivos</VCardSubtitle>
           </VCardItem>
           
           <!-- <input type="text" id="date-picker" ref="datePicker" /> -->
@@ -85,10 +84,10 @@ getData();
         <VTable class="text-no-wrap w-100 px-4">
           <thead>
             <tr>
-              <th scope="col">BROWSER</th>
-              <th scope="col">DEVICE</th>
-              <th scope="col">LOCATION</th>
-              <th class="text-right" scope="col" align="right">RECENT ACTIVITY</th>
+              <th scope="col">NAVEGADOR</th>
+              <th scope="col">DISPOSITIVO</th>
+              <th scope="col">PAIS</th>
+              <th class="text-right" scope="col" align="right">REGISTRO DE TIEMPO</th>
             </tr>
           </thead>
           <tbody v-if="visibleData.length">

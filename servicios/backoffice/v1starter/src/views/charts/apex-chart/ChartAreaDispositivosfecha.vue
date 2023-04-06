@@ -15,9 +15,9 @@
     <VBtn v-on:click="formatVisitaGrafico" >Por Sesión</VBtn>
   </VBtnToggle>
 
-  <div class="date-picker-wrapper" style="width: 233px;">
+  <div class="date-picker-wrapper" style="width: 300px;">
     <AppDateTimePicker
-      placeholder="Seleccionar una fecha"
+      placeholder="Seleccionar un rango de fecha"
       prepend-inner-icon="tabler-calendar"
       density="compact"
       @on-change="obtenerFechaDispositivos"
@@ -76,12 +76,12 @@
 </style>
 
 <script>
-  import VueApexCharts from 'vue3-apexcharts';
-  import { useTheme } from 'vuetify'
   import { hexToRgb } from '@layouts/utils';
-  import Moment from 'moment';
-  import esLocale from "moment/locale/es";
-  import { extendMoment } from 'moment-range';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
 
@@ -290,11 +290,11 @@
         this.themePrimaryTextColor= themePrimaryTextColor_2;
         
         const donutColors = {
-          series1: '#fdd835',
+          series1: '#6152d9',
           series2: '#00d4bd',
           series3: '#826bf8',
           series4: '#32baff',
-          series5: '#ffa1a1',
+          series5: '#5288d9',
         }
         return {
           chart: {
@@ -326,12 +326,12 @@
                     fontSize: '1.5rem',
                   },
                   value: {
-                    fontSize: '1.5rem',
+                    fontSize: '0.8rem',
                     color: this.themeSecondaryTextColor,
-                    formatter: val => `${parseInt(val, 10)}`,
+                    formatter: val => `${parseInt(val, 10)} dispositivos`,
                   },
                   total: {
-                    show: true,
+                    show: false,
                     fontSize: '1.5rem',
                     label: 'Total',
                     formatter: () => '37%',
