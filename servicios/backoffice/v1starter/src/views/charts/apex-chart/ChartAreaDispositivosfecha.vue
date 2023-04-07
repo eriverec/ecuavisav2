@@ -427,11 +427,19 @@ import { useTheme } from 'vuetify';
             if(!this.visita){
               count = renderData.navigationRecord.length;
             }
-            var fecha = renderData.timestamp.split(',')[0];
-            fecha = fecha.split("/");
-            fecha = `${fecha[2]}-${fecha[0]}-${fecha[1]}`;
+
+            //console.log(renderData, renderData.timestamp)
+            const cadena = renderData.timestamp;
+            const nuevaCadena = cadena.replace(/[-]/g, "/");
+            renderData.timestamp = nuevaCadena;
+            renderData.timestamp = renderData.timestamp.split(",")[0];
+
+            var fecha = moment(renderData.created_at).format("YYYY-MM-DD");
+
+            //var fecha = moment(renderData.created_at).format("YYYY-MM-DD");
             total += count;
             serieTotal.push(fecha);
+
 
             var procrosarFecha = this.existeFecha(serieData, fecha);
             if(!procrosarFecha.resp){
@@ -479,8 +487,8 @@ import { useTheme } from 'vuetify';
             }
 
             dataFormat[i].data.sort(function(a, b) {
-              var timestampA = new Date(moment(a.x, "YYYY-DD-MM"));
-              var timestampB = new Date(moment(b.x, "YYYY-DD-MM"));
+              var timestampA = new Date(moment(a.x, "YYYY-MM-DD"));
+              var timestampB = new Date(moment(b.x, "YYYY-MM-DD"));
               return  timestampA - timestampB;
             });
             
