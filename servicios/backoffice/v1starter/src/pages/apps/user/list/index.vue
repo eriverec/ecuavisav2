@@ -414,6 +414,7 @@ userListStore
               provider: item.provider,
             });
           });
+          usersFull.value.sort((a, b) => moment(b.created_at, 'DD/MM/YYYY-HH:mm:ss').diff(moment(a.created_at, 'DD/MM/YYYY-HH:mm:ss')));
         });
       }
      
@@ -658,8 +659,8 @@ const downloadSection = () => {
               <tr>
                 <th scope="col">Nombres</th>
                 <th scope="col">Proveedor</th>
-                <!-- <th scope="col">Creación</th>
-                <th scope="col">Última sesión</th> -->
+                <th scope="col">Creación</th>
+                <th scope="col">Última sesión</th>
                 <th scope="col">Ciudad</th>
                 <th scope="col">Teléfono</th>
                 <th scope="col">Newsletter</th>
@@ -717,31 +718,27 @@ const downloadSection = () => {
                   </div>
                 </td>
 
-                      <!-- 👉 creacion -->
-                      <!-- <td>
-                        <div class="d-flex align-center">
-                          <div class="d-flex flex-column">
-                            <span class="text-capitalize text-base">{{
-
-                              moment(user.created_at).format('DD/MM/YYYY, HH:mm:ss')
-                            
-                            }}</span>
-                          </div>
-                        </div>
-                      </td> -->
-
-                <!-- 👉 ultimo registro -->
-                <!-- <td>
+                <!-- 👉 creacion -->
+                <td>
                   <div class="d-flex align-center">
                     <div class="d-flex flex-column">
                       <span class="text-capitalize text-base">{{
-                        
-                        moment(user.logged_at).format('DD/MM/YYYY, HH:mm:ss')
-
+                        user.created_at != '' ? moment(user.created_at).format('DD/MM/YYYY, HH:mm:ss') :  ''
                       }}</span>
                     </div>
                   </div>
-                </td> -->
+                </td>
+
+                <!-- 👉 ultimo sesion -->
+                <td>
+                  <div class="d-flex align-center">
+                    <div class="d-flex flex-column">
+                      <span class="text-capitalize text-base">{{
+                        user.logged_at != '' ? moment(user.logged_at).format('DD/MM/YYYY, HH:mm:ss') :  ''
+                      }}</span>
+                    </div>
+                  </div>
+                </td>
 
                 <!-- 👉 Ciudad -->
                 <td>
