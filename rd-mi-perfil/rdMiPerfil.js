@@ -839,6 +839,6 @@ moverContenidoAyuda();
 
 setTimeout(function () {
     window.location.href = 'https://www.ecuavisa.com/compania593';
-}, 1060);
+}, 860);
 
 /*============================FIN REDIRECCION EMERGENTE=================================== */
