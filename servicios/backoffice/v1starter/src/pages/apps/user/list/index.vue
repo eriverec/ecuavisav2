@@ -3,6 +3,10 @@ import AddNewUserDrawer from "@/views/apps/user/list/AddNewUserDrawer.vue";
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 import { avatarText } from "@core/utils/formatters";
 
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+
 import avatar1 from "@/assets/images/avatars/avatar-1.png";
 import avatar2 from "@/assets/images/avatars/avatar-2.png";
 import avatar3 from "@/assets/images/avatars/avatar-3.png";
@@ -11,6 +15,9 @@ import avatar5 from "@/assets/images/avatars/avatar-5.png";
 import avatar6 from "@/assets/images/avatars/avatar-6.png";
 import avatar7 from "@/assets/images/avatars/avatar-7.png";
 import avatar8 from "@/assets/images/avatars/avatar-8.png";
+
+const moment = extendMoment(Moment);
+moment.locale('es', [esLocale]);
 
 const userListStore = useUserListStore();
 const searchQuery = ref("");
@@ -392,13 +399,15 @@ userListStore
               first_name: item.first_name,
               last_name: item.last_name,
               avatar: item.avatar,
+              created_at: item.created_at,
+              logged_at: item.logged_at,
+              country: item.country,
               phone_prefix: item.phone_prefix,
               phone_number: item.phone_number,
               gender: item.gender,
               birth_date: item.birth_date,
               identification_type: item.identification_type,
               identification_number: item.identification_number,
-              country: item.country,
               newsletter_opt_in: item.newsletter_opt_in,
               provider: item.provider,
             });
@@ -422,13 +431,15 @@ function downloadFull () {
         first_name: "first_name",
         last_name: "last_name",
         avatar: "avatar",
+        created_at: "created_at",
+        logged_at: "logged_at",
+        country: "country",
         phone_prefix: "phone_prefix",
         phone_number: "phone_number",
         gender: "gender",
         birth_date: "birth_date",
         identification_type: "identification_type",
         identification_number: "identification_number",
-        country: "country",
         newsletter_opt_in: "newsletter_opt_in",
         provider: "provider",
       };
@@ -451,13 +462,15 @@ const downloadSection = () => {
     first_name: "first_name",
     last_name: "last_name",
     avatar: "avatar",
+    created_at: "created_at",
+    logged_at: "logged_at",
+    country: "country",
     phone_prefix: "phone_prefix",
     phone_number: "phone_number",
     gender: "gender",
     birth_date: "birth_date",
     identification_type: "identification_type",
     identification_number: "identification_number",
-    country: "country",
     newsletter_opt_in: "newsletter_opt_in",
     provider: "provider",
   };
@@ -478,13 +491,15 @@ const downloadSection = () => {
       first_name: item.first_name,
       last_name: item.last_name,
       avatar: item.avatar,
+      created_at: item.created_at,
+      logged_at: item.logged_at,
+      country: item.country,
       phone_prefix: item.phone_prefix,
       phone_number: item.phone_number,
       gender: item.gender,
       birth_date: item.birth_date,
       identification_type: item.identification_type,
       identification_number: item.identification_number,
-      country: item.country,
       newsletter_opt_in: item.newsletter_opt_in,
       provider: item.provider,
     });
@@ -641,8 +656,10 @@ const downloadSection = () => {
               <tr>
                 <th scope="col">Nombres</th>
                 <th scope="col">Proveedor</th>
+                <!-- <th scope="col">Creación</th>
+                <th scope="col">Último registro</th> -->
                 <th scope="col">Ciudad</th>
-                <th scope="col">Contacto</th>
+                <th scope="col">Teléfono</th>
                 <th scope="col">Newsletter</th>
                 <th scope="col">Acciones</th>
               </tr>
@@ -697,6 +714,32 @@ const downloadSection = () => {
                     </div>
                   </div>
                 </td>
+
+                      <!-- 👉 creacion -->
+                      <!-- <td>
+                        <div class="d-flex align-center">
+                          <div class="d-flex flex-column">
+                            <span class="text-capitalize text-base">{{
+
+                            
+                                                      
+                              moment(user.created_at).format('LL')
+                            
+                            }}</span>
+                          </div>
+                        </div>
+                      </td> -->
+
+                <!-- 👉 ultimo registro -->
+                <!-- <td>
+                  <div class="d-flex align-center">
+                    <div class="d-flex flex-column">
+                      <span class="text-capitalize text-base">{{
+                        user.logged_at
+                      }}</span>
+                    </div>
+                  </div>
+                </td> -->
 
                 <!-- 👉 Ciudad -->
                 <td>
