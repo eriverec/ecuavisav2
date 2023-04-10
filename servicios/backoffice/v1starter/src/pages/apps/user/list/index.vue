@@ -399,8 +399,10 @@ userListStore
               first_name: item.first_name,
               last_name: item.last_name,
               avatar: item.avatar,
-              created_at: item.created_at,
-              logged_at: item.logged_at,
+              // created_at: item.created_at,
+              // logged_at: item.logged_at,
+              created_at: moment(item.created_at).format('DD/MM/YYYY-HH:mm:ss'),
+              logged_at: moment(item.logged_at).format('DD/MM/YYYY-HH:mm:ss'),
               country: item.country,
               phone_prefix: item.phone_prefix,
               phone_number: item.phone_number,
@@ -431,8 +433,8 @@ function downloadFull () {
         first_name: "first_name",
         last_name: "last_name",
         avatar: "avatar",
-        created_at: "created_at",
-        logged_at: "logged_at",
+        created_at: "created",
+        logged_at: "last_session",
         country: "country",
         phone_prefix: "phone_prefix",
         phone_number: "phone_number",
@@ -462,8 +464,8 @@ const downloadSection = () => {
     first_name: "first_name",
     last_name: "last_name",
     avatar: "avatar",
-    created_at: "created_at",
-    logged_at: "logged_at",
+    created_at: "created",
+    logged_at: "last_session",
     country: "country",
     phone_prefix: "phone_prefix",
     phone_number: "phone_number",
@@ -491,8 +493,8 @@ const downloadSection = () => {
       first_name: item.first_name,
       last_name: item.last_name,
       avatar: item.avatar,
-      created_at: item.created_at,
-      logged_at: item.logged_at,
+      created_at: moment(item.created_at).format('DD/MM/YYYY-HH:mm:ss'),
+      logged_at: moment(item.logged_at).format('DD/MM/YYYY-HH:mm:ss'),
       country: item.country,
       phone_prefix: item.phone_prefix,
       phone_number: item.phone_number,
@@ -657,7 +659,7 @@ const downloadSection = () => {
                 <th scope="col">Nombres</th>
                 <th scope="col">Proveedor</th>
                 <!-- <th scope="col">Creación</th>
-                <th scope="col">Último registro</th> -->
+                <th scope="col">Última sesión</th> -->
                 <th scope="col">Ciudad</th>
                 <th scope="col">Teléfono</th>
                 <th scope="col">Newsletter</th>
@@ -721,9 +723,7 @@ const downloadSection = () => {
                           <div class="d-flex flex-column">
                             <span class="text-capitalize text-base">{{
 
-                            
-                                                      
-                              moment(user.created_at).format('LL')
+                              moment(user.created_at).format('DD/MM/YYYY, HH:mm:ss')
                             
                             }}</span>
                           </div>
@@ -735,7 +735,9 @@ const downloadSection = () => {
                   <div class="d-flex align-center">
                     <div class="d-flex flex-column">
                       <span class="text-capitalize text-base">{{
-                        user.logged_at
+                        
+                        moment(user.logged_at).format('DD/MM/YYYY, HH:mm:ss')
+
                       }}</span>
                     </div>
                   </div>
