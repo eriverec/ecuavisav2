@@ -684,7 +684,7 @@ const updateSortDesc = (sortDesc) => {
             <!-- 👉 table head -->
             <thead :sort-by="sortBy" :sort-desc="sortDesc" @update:sort-by="updateSortBy" @update:sort-desc="updateSortDesc">
               <tr>
-                <th scope="col" class="col-cr" @click="sortTable('first_name')">
+                <th scope="col" class="col-cr" title="click para ordenar" @click="sortTable('first_name')">
                   <div class="row-cr">
                     <div>
                       Nombres
@@ -692,37 +692,37 @@ const updateSortDesc = (sortDesc) => {
                     <v-icon v-if="sortBy === 'first_name'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
                   </div>
                 </th>
-                <th scope="col" class="col-cr" @click="sortTable('provider')">
+                <th scope="col" class="col-cr" title="click para ordenar" @click="sortTable('provider')">
                   <div class="row-cr">
                     <div>Proveedor</div>
                     <v-icon v-if="sortBy === 'provider'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
                   </div>
                 </th>
-                <th scope="col" class="col-cr" @click="sortTable('created_at')">
+                <th scope="col" class="col-cr" title="click para ordenar" @click="sortTable('created_at')">
                   <div class="row-cr">
                     <div>Creación</div>
                     <v-icon v-if="sortBy === 'created_at'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
                   </div>
                 </th>
-                <th scope="col" class="col-cr" @click="sortTable('logged_at')">
+                <th scope="col" class="col-cr" title="click para ordenar" @click="sortTable('logged_at')">
                   <div class="row-cr">
                     <div>Última sesión</div>
                     <v-icon v-if="sortBy === 'logged_at'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
                   </div>
                 </th>
-                <th scope="col" class="col-cr" @click="sortTable('country')">
+                <th scope="col" class="col-cr" title="click para ordenar" @click="sortTable('country')">
                   <div class="row-cr">
                     <div>País</div>
                     <v-icon v-if="sortBy === 'country'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
                   </div>
                 </th>
-                <th scope="col" class="col-cr" @click="sortTable('phone_number')">
+                <th scope="col" class="col-cr" title="click para ordenar" @click="sortTable('phone_number')">
                   <div class="row-cr">
                     <div>Teléfono</div>
                     <v-icon v-if="sortBy === 'phone_number'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
                   </div>
                 </th>
-                <th scope="col" class="col-cr" @click="sortTable('newsletter_opt_in')">
+                <th scope="col" class="col-cr" title="click para ordenar" @click="sortTable('newsletter_opt_in')">
                   <div class="row-cr">
                     <div>Newsletter</div>
                     <v-icon v-if="sortBy === 'newsletter_opt_in'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
