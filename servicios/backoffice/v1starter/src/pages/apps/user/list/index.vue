@@ -37,6 +37,8 @@ const percentGoogle = ref(0);
 const search = ref("");
 const isLoaded = ref(true);
 const isLoading = ref(false);
+const sortBy = ref("created_at");
+const sortDesc = ref(true);
 const usersFull = ref([]);
 const userFullP = ref(0);
 const sectionLoading = () => {
@@ -59,6 +61,8 @@ const fetchUsers = () => {
       query: search.value,
       provider: selectedProvider.value,
       news: selectedBoletin.value,
+      sort: (sortDesc.value?-1:1),
+      columnSort: sortBy.value,
     })
     .then((response) => {
       users.value = response.data.users;
@@ -510,6 +514,29 @@ const downloadSection = () => {
 
   exportCSVFile(headers, doc, title);
 };
+
+const sortTable = (column) => {
+  //sectionLoading();
+  //sectionLoaded();
+  if (sortBy.value === column) {
+    sortDesc.value = !sortDesc.value;
+  } else {
+    sortBy.value = column;
+    sortDesc.value = false;
+  }
+
+  fetchUsers();
+};
+
+const updateSortBy = (sortBy) => {
+  sortBy.value = sortBy;
+};
+
+const updateSortDesc = (sortDesc) => {
+  sortDesc.value = sortDesc;
+};
+
+
 </script>
 
 <template>
@@ -655,15 +682,52 @@ const downloadSection = () => {
           </div>
           <VTable class="text-no-wrap" :class="{ loaded: isLoading }">
             <!-- 👉 table head -->
-            <thead>
+            <thead :sort-by="sortBy" :sort-desc="sortDesc" @update:sort-by="updateSortBy" @update:sort-desc="updateSortDesc">
               <tr>
-                <th scope="col">Nombres</th>
-                <th scope="col">Proveedor</th>
-                <th scope="col">Creación</th>
-                <th scope="col">Última sesión</th>
-                <th scope="col">Ciudad</th>
-                <th scope="col">Teléfono</th>
-                <th scope="col">Newsletter</th>
+                <th scope="col" class="col-cr" @click="sortTable('first_name')">
+                  <div class="row-cr">
+                    <div>
+                      Nombres
+                    </div>
+                    <v-icon v-if="sortBy === 'first_name'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
+                  </div>
+                </th>
+                <th scope="col" class="col-cr" @click="sortTable('provider')">
+                  <div class="row-cr">
+                    <div>Proveedor</div>
+                    <v-icon v-if="sortBy === 'provider'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
+                  </div>
+                </th>
+                <th scope="col" class="col-cr" @click="sortTable('created_at')">
+                  <div class="row-cr">
+                    <div>Creación</div>
+                    <v-icon v-if="sortBy === 'created_at'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
+                  </div>
+                </th>
+                <th scope="col" class="col-cr" @click="sortTable('logged_at')">
+                  <div class="row-cr">
+                    <div>Última sesión</div>
+                    <v-icon v-if="sortBy === 'logged_at'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
+                  </div>
+                </th>
+                <th scope="col" class="col-cr" @click="sortTable('country')">
+                  <div class="row-cr">
+                    <div>País</div>
+                    <v-icon v-if="sortBy === 'country'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
+                  </div>
+                </th>
+                <th scope="col" class="col-cr" @click="sortTable('phone_number')">
+                  <div class="row-cr">
+                    <div>Teléfono</div>
+                    <v-icon v-if="sortBy === 'phone_number'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
+                  </div>
+                </th>
+                <th scope="col" class="col-cr" @click="sortTable('newsletter_opt_in')">
+                  <div class="row-cr">
+                    <div>Newsletter</div>
+                    <v-icon v-if="sortBy === 'newsletter_opt_in'">{{ sortDesc ? 'mdi-arrow-down' : 'mdi-arrow-up' }}</v-icon>
+                  </div>
+                </th>
                 <th scope="col">Acciones</th>
               </tr>
             </thead>
@@ -844,6 +908,18 @@ const downloadSection = () => {
 </template>
 
 <style lang="scss">
+  th.col-cr {
+    cursor: pointer;
+}
+th.col-cr:hover {
+    background-color: #f2f2f2;
+}
+  .row-cr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
 .app-user-search-filter {
   inline-size: 31.6rem;
 }
