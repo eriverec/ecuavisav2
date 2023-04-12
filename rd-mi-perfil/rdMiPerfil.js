@@ -632,7 +632,7 @@ var modalUserNewPerfil = {
       
     }
 
-    document.querySelector('#modal_body_seguimiento_tema').innerHTML = `
+    document.querySelector('#segTemasPerfil').innerHTML = `
     <div class="contenido-modal">
        <p class="parrafo-modal">
         Para ofrecerte una mejor experiencia elige los intereses que se ajusten a ti.
