@@ -595,8 +595,8 @@ var modalUserNewPerfil = {
           jQryIter(this).addClass("add");
         }
       });
-      var classListaTemas = document.querySelector('#listado-temas');
-      classListaTemas.classList.remove("isDisabled");
+      // var classListaTemas = document.querySelector('#listado-temas');
+      // classListaTemas.classList.remove("isDisabled");
     });
     return true;
   },
@@ -641,7 +641,7 @@ var modalUserNewPerfil = {
         Mis intereses
        </p>
        <hr>
-       <div class="listado-temas isDisabled" id="listado-temas" style=" overflow: auto; max-height: 350px; ">
+       <div class="listado-temas " id="listado-temas" style=" overflow: auto; max-height: 350px; ">
           ${temasSeguir}
        </div>
     </div>`;
