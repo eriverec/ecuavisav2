@@ -10,7 +10,33 @@
   pointer-events: none;
 }
 
+/*TABS*/
+.tabs-box {
+  white-space: nowrap;
+  overflow-y: hidden;
+  overflow-x: auto;
+}
 
+.tabs-box .b-nav-tab {
+  display: inline-block;
+  text-transform: uppercase;
+  color: #999999;
+}
+
+.tabs-box .b-nav-tab.active {
+ color: #2927B9;
+}
+
+/*CONTENIDOS*/
+
+.content-box .b-tab {
+  padding: 30px 0;
+  display: none;
+}
+
+.content-box .b-tab.active {
+  display: block;
+}
 
 
 #iter-content-wrapper {
@@ -24,7 +50,7 @@
   letter-spacing: -0.03em;
   font-style: normal;
   font-weight: 600;
-  font-size: 88px;
+  font-size: 60px;
   line-height: 96px;
   text-transform: lowercase;
 }
