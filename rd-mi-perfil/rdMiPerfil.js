@@ -634,7 +634,8 @@ var modalUserNewPerfil = {
 
     document.querySelector('#segTemasPerfil').innerHTML = `
     <div class="contenido-modal">
-    <div class="listado-temas " id="listado-temas" style=" overflow: auto; max-height: 350px; ">
+      <button class="collapsible_mp active_mp mp_title">También te puede interesar</button>
+      <div class="listado-temas " id="listado-temas" style=" overflow: auto; max-height: 350px; ">
           ${temasSeguir}
       </div>
     </div>`;
