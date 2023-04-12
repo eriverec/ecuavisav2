@@ -634,7 +634,7 @@ var modalUserNewPerfil = {
 
     document.querySelector('#segTemasPerfil').innerHTML = `
     <div class="contenido-modal">
-      <div class="listado-temas " id="listado-temas" style=" overflow: auto; max-height: 350px; ">
+    <div class="listado-temas " id="listado-temas" style=" overflow: auto; max-height: 350px; ">
           ${temasSeguir}
       </div>
     </div>`;
@@ -660,7 +660,7 @@ var modalUserNewPerfil = {
     activarIterPerfil();
     /*Activa iter con el modal*/
     var existemodal = setInterval(function () {
-        // if ((typeof $().modal == 'function')) {
+        if ((typeof $().modal == 'function')) {
             // $('#segTemasPerfil').modal('show');
 
             $('#btn_enviar_seguimiento_tema').click(function(){
@@ -695,7 +695,7 @@ var modalUserNewPerfil = {
                 /*FETCH FIN*/
             });
             clearInterval(existemodal);
-        // }
+        }
     }, 500);
   },
   temas:[
