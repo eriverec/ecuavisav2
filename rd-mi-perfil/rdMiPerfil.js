@@ -554,6 +554,207 @@ async function Token(){
     }
     /************FIN MODAL DE SEGUIMIENTO DE INTERESES************/
 
+
+
+
+/************ BLOQUE SEGUIMIENTO DE INTERESES ************/
+
+var activarIterPerfil = async function(){
+  setTimeout(function () {
+    if (typeof ITER !== 'undefined') {
+      return modalUserNew.load();
+    } else {
+      activarIterPerfil();
+    }
+  }, 400) ;
+  return false;
+}
+
+var modalUserNew = {
+  modalAlert:function(){
+    var alert = document.querySelector('#alert-mensaje-1');
+    if(ECUAVISA_EC.USER_data('wylexUserAlertView') == 'true' && ECUAVISA_EC.USER_data('isnewuser') == 0){
+      if(alert.classList.contains('d-none')){
+        alert.classList.remove("d-none");
+      }
+    }
+    document.querySelector(`#alert-mensaje-1 button[aria-label="Close"]`).addEventListener("click", function(e){
+      ECUAVISA_EC.SET_user('wylexUserAlertView', false);
+    });
+  },
+  title:function(){
+    document.querySelector('#modal_titulo_seguimiento_tema').innerHTML = `Cuéntanos sobre ti`;
+  },
+  load:function(){
+    ITER.FAVORITE.TOPICS.onLoad(function(){
+      // TOPICS
+      $(".template-meta-favorite-action").each(function(){
+        if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
+          jQryIter(this).addClass("remove");
+        } else {
+          jQryIter(this).addClass("add");
+        }
+      });
+      var classListaTemas = document.querySelector('#listado-temas');
+      classListaTemas.classList.remove("isDisabled");
+    });
+    return true;
+  },
+  body:function(){
+    var temasSeguir = ``;
+    for(var i in modalUserNew.temas){
+      var ins = modalUserNew.temas[i];
+      temasSeguir += `<p class="mis-intereses-modal py-1 m-0" style="width:100%">
+        ${ins.interes}
+       </p>`;
+
+       for(var j in ins.data){
+        var dat = ins.data[j];
+          temasSeguir+= `<div class="item_tema t_${dat.id}">
+               <div class="keywords font-2 fs13">
+                  <div class="template-meta-favorite-action" value="${dat.name}" id="${dat.id}" title="Seguir tema" onclick="if (!window.__cfRLUnblockHandlers) return false; meta_favorite_action('${dat.id}')" style="/* display:none; */">
+                     <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir">
+
+                        <small>${dat.name}</small>
+
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M2 2v4.586l7 7L13.586 9l-7-7H2zM1 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2z"></path>
+                          <path fill-rule="evenodd" d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"></path>
+                        </svg>
+                        <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                          <path fill-rule="evenodd" d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
+                        </svg>
+                     </button> 
+                  </div>
+               </div>
+           </div>`;
+       }
+      
+    }
+
+    document.querySelector('#modal_body_seguimiento_tema').innerHTML = `
+    <div class="contenido-modal">
+       <p class="parrafo-modal">
+        Para ofrecerte una mejor experiencia elige los intereses que se ajusten a ti.
+       </p>
+       <p class="mis-intereses-modal fw-bold">
+        Mis intereses
+       </p>
+       <hr>
+       <div class="listado-temas isDisabled" id="listado-temas" style=" overflow: auto; max-height: 350px; ">
+          ${temasSeguir}
+       </div>
+    </div>`;
+  },
+  existeTemaSeguimiento:function(){
+    var num = 0;
+    var highlightedItemss = document.querySelectorAll(".template-meta-favorite-action");
+    highlightedItemss.forEach((userItem) => {
+      if(userItem.classList.contains('remove')){
+        num ++;
+      }
+    });
+
+    return {
+      existe: num > 0,
+      num : num
+    };
+  },
+  init:function(){
+    this.title();
+    this.body();
+    /*Activa iter con el modal*/
+    activarIterPerfil();
+    /*Activa iter con el modal*/
+    var existemodal = setInterval(function () {
+        if ((typeof $().modal == 'function')) {
+            $('#segTemasPerfil').modal('show');
+
+            $('#btn_enviar_seguimiento_tema').click(function(){
+              if(!modalUserNew.existeTemaSeguimiento().existe){
+                alert('Debe seleccionar al menos 1');
+                return false;
+              }
+              ECUAVISA_EC.SET_user('wylexStatusPerfil', 1);
+              ECUAVISA_EC.SET_user('wylexUserAlertView', false);
+              /*CAMBIA EL ESTADO DEL MODAL CUANDO EL USUARIO TIENE SELECCIONADO YA SUS INTERESES, Y YA NO MUESTRA EL ALERT*/
+              $('#segTemasPerfil').modal('hide');
+
+              /*FETCH*/
+              fetch(`${ECUAVISA_EC.api.loginService}updatestatususer`, {
+                method: "PUT",
+                headers: {
+                  "Content-Type": "application/x-www-form-urlencoded",
+                },
+                body: new URLSearchParams({
+                  id: ECUAVISA_EC.USER_data('id'),
+                  user_new: 1,
+                }),
+              }).then((response) => response.json()).then(async (result) => {
+                  if(!result.error){
+                    console.log(result);
+                  }else{
+                    console.log(result);
+                  }
+                }).catch((error) => {
+                  console.log("error", error); /*; window.location = URL_login_G*/
+                });
+                /*FETCH FIN*/
+            });
+            clearInterval(existemodal);
+        }
+    }, 500);
+  },
+  temas:[
+    {
+      "interes":"Noticias",
+      "data":[
+        {id:'58812355', name:'elecciones 2023'},
+        {id:'18465', name:'Ecuador'},
+        {id:'18819', name:'Quito'},
+        {id:'18537', name:'Guayaquil'},
+        {id:'17519', name:'Economía'},
+        {id:'17555', name:'Política'},
+      ]
+    },
+    {
+      "interes":"Estadio",
+      "data":[
+        {id:'6223630', name:'fútbol ecuatoriano'},
+        {id:'5906044', name:'Copa Libertadores'},
+        {id:'5350596', name:'Conmebol'},
+        {id:'37204544', name:'El Nacional'},
+      ]
+    },
+    {
+      "interes":"Entretenimiento",
+      "data":[
+        {id:'17525', name:'Entretenimiento'},
+        {id:'9333452', name:'Premios Oscar'},
+        {id:'22433745', name:'novela Ecuavisa'},
+        {id:'5991024', name:'producción'},
+        {id:'154098771', name:'Equipo ideal'},
+      ]
+    },
+    {
+      "interes":"Estilo",
+      "data":[
+        {id:'198495015', name:'ganadores BAFTA 2023'},
+        {id:'4351120', name:'redes sociales'},
+        {id:'9627274', name:'feminismo'},
+        {id:'30647250', name:'personas'},
+        {id:'17587', name:'Tecnología'},
+        {id:'11122250', name:'negocios'},
+        {id:'71599306', name:'Especial Ecuaterra'},
+      ]
+    }
+  ]
+}
+/************BLOQUE SEGUIMIENTO DE INTERESES************/
+
+
+
+
     var perfil = {
       init: () => {
         eyesPass();
