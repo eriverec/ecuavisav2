@@ -11,44 +11,7 @@
 }
 
 
-/*TABS*/
-.tabs-box {
-  white-space: nowrap;
-  overflow-y: hidden;
-  overflow-x: auto;
-}
 
-.tabs-box .b-nav-tab {
-  display: inline-block;
-  padding: 13px 13px 10px 13px;
-  font-family: 'Mattone 150';
-  font-style: normal;
-  font-weight: 600;
-  font-size: 12px;
-  line-height: 16px;
-  text-transform: uppercase;
-  color: #2927B9;
-}
-
-.tabs-box .b-nav-tab.active {
-  color: #ffffff;
-  background: #2927B9;
-}
-
-/*CONTENIDOS*/
-
-/* .content-box {
-  border-top: 1px solid #2927B9;
-} */
-
-.content-box .b-tab {
-  padding: 30px 0;
-  display: none;
-}
-
-.content-box .b-tab.active {
-  display: block;
-}
 
 #iter-content-wrapper {
   padding-top: 0px;
