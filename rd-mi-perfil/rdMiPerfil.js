@@ -634,16 +634,9 @@ var modalUserNewPerfil = {
 
     document.querySelector('#segTemasPerfil').innerHTML = `
     <div class="contenido-modal">
-       <p class="parrafo-modal">
-        Para ofrecerte una mejor experiencia elige los intereses que se ajusten a ti.
-       </p>
-       <p class="mis-intereses-modal fw-bold">
-        Mis intereses
-       </p>
-       <hr>
-       <div class="listado-temas " id="listado-temas" style=" overflow: auto; max-height: 350px; ">
+      <div class="listado-temas " id="listado-temas" style=" overflow: auto; max-height: 350px; ">
           ${temasSeguir}
-       </div>
+      </div>
     </div>`;
   },
   existeTemaSeguimiento:function(){
@@ -667,8 +660,8 @@ var modalUserNewPerfil = {
     activarIterPerfil();
     /*Activa iter con el modal*/
     var existemodal = setInterval(function () {
-        if ((typeof $().modal == 'function')) {
-            $('#segTemasPerfil').modal('show');
+        // if ((typeof $().modal == 'function')) {
+            // $('#segTemasPerfil').modal('show');
 
             $('#btn_enviar_seguimiento_tema').click(function(){
               if(!modalUserNewPerfil.existeTemaSeguimiento().existe){
@@ -678,7 +671,7 @@ var modalUserNewPerfil = {
               ECUAVISA_EC.SET_user('wylexStatusPerfil', 1);
               ECUAVISA_EC.SET_user('wylexUserAlertView', false);
               /*CAMBIA EL ESTADO DEL MODAL CUANDO EL USUARIO TIENE SELECCIONADO YA SUS INTERESES, Y YA NO MUESTRA EL ALERT*/
-              $('#segTemasPerfil').modal('hide');
+              // $('#segTemasPerfil').modal('hide');
 
               /*FETCH*/
               fetch(`${ECUAVISA_EC.api.loginService}updatestatususer`, {
@@ -702,7 +695,7 @@ var modalUserNewPerfil = {
                 /*FETCH FIN*/
             });
             clearInterval(existemodal);
-        }
+        // }
     }, 500);
   },
   temas:[
