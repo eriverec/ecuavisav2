@@ -743,6 +743,7 @@ var modalUserNewPerfil = {
     }
   ]
 }
+modalUserNewPerfil.init()
 /************BLOQUE SEGUIMIENTO DE INTERESES************/
 
 
