@@ -570,7 +570,7 @@ var activarIterPerfil = async function(){
   return false;
 }
 
-var modalUserNew = {
+var modalUserNewPerfil = {
   modalAlert:function(){
     var alert = document.querySelector('#alert-mensaje-1');
     if(ECUAVISA_EC.USER_data('wylexUserAlertView') == 'true' && ECUAVISA_EC.USER_data('isnewuser') == 0){
@@ -602,8 +602,8 @@ var modalUserNew = {
   },
   body:function(){
     var temasSeguir = ``;
-    for(var i in modalUserNew.temas){
-      var ins = modalUserNew.temas[i];
+    for(var i in modalUserNewPerfil.temas){
+      var ins = modalUserNewPerfil.temas[i];
       temasSeguir += `<p class="mis-intereses-modal py-1 m-0" style="width:100%">
         ${ins.interes}
        </p>`;
@@ -671,7 +671,7 @@ var modalUserNew = {
             $('#segTemasPerfil').modal('show');
 
             $('#btn_enviar_seguimiento_tema').click(function(){
-              if(!modalUserNew.existeTemaSeguimiento().existe){
+              if(!modalUserNewPerfil.existeTemaSeguimiento().existe){
                 alert('Debe seleccionar al menos 1');
                 return false;
               }
