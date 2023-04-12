@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>envivo</title>
+  <style>
+    /* #programa-titulo, #programa-video {
+      display: none;
+    } */
+    .title_programa {
+      font-size: 1.2rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      width: 100%;
+      max-width: 640px;
+      background: #276cd3;
+      font-family: var(--font-1);
+      color: white;
+      margin: 10px auto 0;
+      position: relative;
+    }
+
+    .fondito_player {
+      max-width: 100%;
+    }
+
+    .title_programa,
+    #playerembed {
+      width: 100%;
+      font-family: 'Archivo';
+      font-style: normal;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="btnTelcomunidad" class="bot" style="display: none;">
+    <div id="cont-botones">
+      <a href="/envivo" class="btn-gye activo"> Ver señal de Guayaquil </a>
+      <a href="/envivo/quito" class="btn-quito"> Ver señal de Quito </a>
+    </div>
+  </div>
+  <div class="player-envivo">
+    <div id="programa-titulo" class="title_programa"></div>
+    <div id="playerembed" style="display: block; margin: auto; text-align: center; visibility: visible;"></div>
+    <div id="claquetaEcuavisa"></div>
+  </div>
+
+  <script src="https://platform-static.cdn.mdstrm.com/js/player_api.js" type="text/javascript"></script>
+  <script defer="" src="https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/springstreams.js"
+    type="text/javascript"></script>
+  <script defer="" src="//redyman.netlify.app/kantar/kantar.js" type="text/javascript"></script>
+  <script defer="" src="https://redyman.netlify.app/envivo2022/envivo.js" type="text/javascript"></script>
+  <!-- <script defer="" src="//redyman.netlify.app/kantar/kantar-grilla-envivo.js" type="text/javascript"></script> -->
+
+  <script>
+    // Programación de la semana en formato JSON array variable
+    const programacion = [
+      { inicio: "05:55", fin: "06:55", titulo: "Televistazo en la comunidad", dia: "LunVien" },
+      { inicio: "06:55", fin: "07:30", titulo: "Contacto Directo",dia: "LunVien" },
+      { inicio: "07:30", fin: "08:24", titulo: "Televistazo en la comunidad",dia: "LunVien" },
+      { inicio: "08:24", fin: "09:00", titulo: "Eri vera",dia: "LunVien" },
+      { inicio: "12:00", fin: "12:46", titulo: "Televistazo",dia: "LunVien" },
+      { inicio: "13:00", fin: "15:30", titulo: "Televistazo Esteler", dia: "Sabado" },
+      { inicio: "19:00", fin: "20:00", titulo: "Televistazo Dominincal", dia: "Domingo" },
+
+    ];
+
+    // Obtener la hora actual en formato hh:mm
+    const obtenerHoraActual = () => {
+      const now = new Date();
+      const hh = now.getHours().toString().padStart(2, "0");
+      const mm = now.getMinutes().toString().padStart(2, "0");
+      // console.log(now, hh, mm)
+      return `${hh}:${mm}`;
+    };
+
+    function TVforzado(titulo, status) {
+      //seleccionamos el div del player 
+      var playerEnvivo = document.querySelector(".player-envivo");
+
+      //variable del html a pintar
+      let tvforzadoenvivo = `
+        <div class="title_programa">${titulo}</div>
+        <div id="playerembed-forzado" style="display:block!important;margin:auto;text-align:center;"></div>
+      `;
+
+      //creamos el html nuevo dentro de la clase player-envivo
+      playerEnvivo.innerHTML = tvforzadoenvivo;
+
+      var player = new MediastreamPlayer("playerembed-forzado", playerOptions);
+      player.videoPlay();
+      console.log("RD TV FORZADO");
+
+    }
+
+    // Buscar el programa actual en la programación de la semana
+    const buscarProgramaActual = (programacion, horaActual) => {
+      const programa = programacion.find((programa) => {
+        return horaActual >= programa.inicio && horaActual < programa.fin;
+      });
+      return programa ? programa : null;
+    };
+
+    const diaActual = new Date().getDay();
+
+    if (diaActual > 0 && diaActual <= 5) { 
+        console.log("entresemana");
+      } else if (diaActual === 6){
+        console.log("sabado")
+      }else{
+        console.log("domingo")
+      }
+
+    // Mostrar el título correspondiente al programa actual
+    const mostrarTituloProgramaActual = (programa) => {
+      const tituloElemento = document.getElementById("programa-titulo");
+
+      if (programa && programa.titulo) {
+        tituloElemento.innerText = programa.titulo;
+        const buttonElemento = document.getElementById("btnTelcomunidad");
+        if (programa.titulo === "Televistazo en la comunidad") {
+          console.log("si es comunidad")
+          buttonElemento.style.display = "block";
+        } else {
+          console.log("no es comunidad")
+        }
+      } else {
+        tituloElemento.innerText = "";
+      }
+    };
+
+    //Ejecutar el title cada 3000 milisigundos
+    function runProgramasTitles() {
+      setTimeout(function () {
+        const horaActual = obtenerHoraActual();
+        const diaActual = new Date().getDay();
+        const programaActual = buscarProgramaActual(programacion, horaActual);
+        mostrarTituloProgramaActual(programaActual);
+        runProgramasTitles();
+      }, 3000);
+    }
+    runProgramasTitles();
+
+    // Mostrar el video player correspondiente al programa actual al cargar la página
+    const horaActual = obtenerHoraActual();
+    const programaActual = buscarProgramaActual(programacion, horaActual);
+    const videoElemento = document.getElementById("playerembed");
+    const claquetaElemento = document.getElementById("claquetaEcuavisa");
+
+    if (programaActual && programaActual.titulo) {
+      
+    } else {
+      videoElemento.style.display = "none";
+      videoElemento.remove();
+      console.log("player-apagado");
+      const imgElement = document.createElement("img");
+      imgElement.classList = "fondito_player";
+      imgElement.setAttribute("src", `https://estadisticas.ecuavisa.com/sites/default/files/2022-12/ecuavisacom.jpg`);
+      claquetaElemento.appendChild(imgElement);
+    }
+  </script>
+</body>
+
+</html>
