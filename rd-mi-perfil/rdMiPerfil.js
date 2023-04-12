@@ -729,17 +729,23 @@ async function Token(){
         },
         html_: function (data) {
           return `<article class="article">
-                   <div class="text_block">
+                    <div class="text_block">
                       <div class="section">${data.category}</div>
                       <a href="${data.url}"><h3>${data.title}</h3></a>
-                   </div>
-                   <div class="multimedia">
+                    </div>
+                    <div class="multimedia">
                       <a href="${data.url}"><img src="${ ( data.img == '' ? 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Image_not_available.png' : data.img) }" alt="${data.title}"></a>
+                    </div>
+                    <div class="buttons_right">
                       <button value="${data._id}" class="btn btn-ecuavisa-noticia active" title="Haz clic para quitar la noticia">
                         <img src="https://ecuavisadev.netlify.app/rd-mi-perfil/assets/saved.svg" width="20" height="20" alt="${data.title}">
                       </button>
-                   </div>
-                </article>`;
+                      <a class="btn btn-ecuavisa-noticia active" rel="external" href="http://twitter.com/share?url=${data.url}&text=${data.title}" target="_blank" title="Twitter" > 
+                          <img src="https://ecuavisadev.netlify.app/rd-mi-perfil/assets/share-fill.svg" width="20" height="20" alt="${data.title}">
+                      </a>
+                    </div>
+                </article>
+                `;
         },
         loader: function (data) {
           return `<div class="container_loader">
