@@ -15,12 +15,15 @@
   white-space: nowrap;
   overflow-y: hidden;
   overflow-x: auto;
+  display: flex;
+  column-gap: 20px;
 }
 
 .tabs-box .b-nav-tab {
   display: inline-block;
   text-transform: uppercase;
   color: #999999;
+  cursor: pointer;
 }
 
 .tabs-box .b-nav-tab.active {
