@@ -406,9 +406,9 @@ async function Token(){
         var temasSeguir = ``;
         for(var i in modalUserNew.temas){
           var ins = modalUserNew.temas[i];
-          temasSeguir += `<p class="mis-intereses-modal py-1 m-0" style="width:100%">
-            ${ins.interes}
-           </p>`;
+          // temasSeguir += `<p class="mis-intereses-modal py-1 m-0" style="width:100%">
+          //   ${ins.interes}
+          //  </p>`;
 
            for(var j in ins.data){
             var dat = ins.data[j];
