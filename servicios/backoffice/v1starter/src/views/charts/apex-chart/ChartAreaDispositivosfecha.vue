@@ -425,7 +425,7 @@ import { useTheme } from 'vuetify';
             nameSerie = renderData.device;
             var count = 1;//Math.floor(Math.random()*2000);
             if(!this.visita){
-              count = renderData.navigationRecord.length;
+              count = renderData.navigationRecord;
             }
 
             //console.log(renderData, renderData.timestamp)
@@ -520,7 +520,7 @@ import { useTheme } from 'vuetify';
             "fechai": fechai,
             "fechaf": fechaf
         });
-        var resp = await fetch(`https://servicio-de-actividad.vercel.app/dispositivos`,{
+        var resp = await fetch(`https://servicio-de-actividad.vercel.app/grafico/dispositivos`,{
           method: 'POST',
           headers: {
             "Content-Type": "application/json",
@@ -606,7 +606,7 @@ import { useTheme } from 'vuetify';
         var data = this.getDataFetch;
         const deviceTotals = data.reduce((acc, obj) => {
           const device = obj.device.toString();
-          const navigationRecordLength = obj.navigationRecord ? obj.navigationRecord.length : 0;
+          const navigationRecordLength = obj.navigationRecord ? obj.navigationRecord : 0;
           acc[device] = (acc[device] || 0) + navigationRecordLength;
           return acc;
         }, {});
