@@ -570,6 +570,17 @@ var activarIterPerfil = async function(){
   return false;
 }
 
+var activarIterPerfil_2 = async function(){
+  setTimeout(function () {
+    if (typeof ITER !== 'undefined') {
+      return modalUserNewPerfil.load();
+    } else {
+      activarIterPerfil();
+    }
+  }, 400) ;
+  return false;
+}
+
 var modalUserNewPerfil = {
   modalAlert:function(){
     var alert = document.querySelector('#alert-mensaje-1');
@@ -660,7 +671,7 @@ var modalUserNewPerfil = {
     this.title();
     this.body();
     /*Activa iter con el modal*/
-    activarIterPerfil();
+    activarIterPerfil_2();
     /*Activa iter con el modal*/
     var existemodal = setInterval(function () {
         if ((typeof $().modal == 'function')) {
