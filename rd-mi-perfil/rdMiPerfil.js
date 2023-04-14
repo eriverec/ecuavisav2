@@ -729,8 +729,26 @@ var modalUserNewPerfil = {
               "feedUrl": btn.getAttribute("data-feedurl"),
               "follow": (btn.getAttribute("data-feedurl") == "0"?false:true)
           };
-
-          console.log(temaData, nombreUsuario);
+          var settings = {
+              "url": ECUAVISA_EC.api.seguimientoTema,
+              "method": "POST",
+              "timeout": 0,
+              "headers": {
+                  "Content-Type": "application/json"
+              },
+              "data": JSON.stringify({
+                  "id": id,
+                  "nombre": nombreUsuario,
+                  "tema": temaData
+              }),
+          };
+          
+          setTimeout(function(){
+            $.ajax(settings).done(function (response) {
+                localStorage.setItem('resultTemas',JSON.stringify(response));
+            });
+          }, 700);
+          
         });
       });
     }, 1000)
