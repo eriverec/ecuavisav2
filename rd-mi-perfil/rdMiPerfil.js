@@ -673,6 +673,7 @@ var modalUserNewPerfil = {
     /*Activa iter con el modal*/
     activarIterPerfil_2();
     /*Activa iter con el modal*/
+
     var existemodal = setInterval(function () {
         if ((typeof $().modal == 'function')) {
             // $('#segTemasPerfil').modal('show');
@@ -715,6 +716,16 @@ var modalUserNewPerfil = {
       document.querySelectorAll('button.btn-modal-seguir').forEach(function(elemento) {
         elemento.addEventListener('click', function(e) {
           var btn = e.target;
+          var usuario = ECUAVISA_EC.USER_data();
+          var nombreUsuario = `${usuario.name} ${usuario.lastname}`;
+          var id = usuario.id;
+          var temaData = {
+              "name": btn.getAttribute("data-name"),
+              "feedUrl": btn.getAttribute("data-feedurl"),
+              "follow": (btn.getAttribute("data-feedurl") == "0"?false:true)
+          };
+
+          console.log(temaData, nombreUsuario);
         });
       });
     }, 1000)
