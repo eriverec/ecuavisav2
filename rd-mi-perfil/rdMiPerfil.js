@@ -590,8 +590,10 @@ var modalUserNewPerfil = {
       // TOPICS
       $(".template-meta-favorite-action").each(function(){
         if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
+          jQryIter(this).find("button.btn-modal-seguir").attr("data-follow", "0");
           jQryIter(this).addClass("remove");
         } else {
+          jQryIter(this).find("button.btn-modal-seguir").attr("data-follow", "1");
           jQryIter(this).addClass("add");
         }
       });
@@ -613,7 +615,7 @@ var modalUserNewPerfil = {
           temasSeguir+= `<div class="item_tema t_${dat.id}">
                <div class="keywords font-2 fs13 keywords-btn-click">
                   <div class="template-meta-favorite-action" value="${dat.name}" id="${dat.id}" title="Seguir tema" onclick="if (!window.__cfRLUnblockHandlers) return false; meta_favorite_action('${dat.id}')" style="/* display:none; */">
-                     <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir">
+                     <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" data-feedUrl="${dat.feedUrl}" data-name="${dat.name}">
 
                         <small>${dat.name}</small>
 
@@ -697,48 +699,56 @@ var modalUserNewPerfil = {
             clearInterval(existemodal);
         }
     }, 500);
+
+    setTimeout(function(){
+      document.querySelectorAll('button.btn-modal-seguir').forEach(function(elemento) {
+        elemento.addEventListener('click', function(e) {
+          var btn = e.target;
+        });
+      });
+    }, 1000)
   },
   temas:[
     {
       "interes":"Noticias",
       "data":[
-        {id:'58812355', name:'elecciones 2023'},
-        {id:'18465', name:'Ecuador'},
-        {id:'18819', name:'Quito'},
-        {id:'18537', name:'Guayaquil'},
-        {id:'17519', name:'Economía'},
-        {id:'17555', name:'Política'},
+        {id:'58812355', name:'elecciones 2023',feedUrl:"#"},
+        {id:'18465', name:'Ecuador',feedUrl:"#"},
+        {id:'18819', name:'Quito',feedUrl:"#"},
+        {id:'18537', name:'Guayaquil',feedUrl:"#"},
+        {id:'17519', name:'Economía',feedUrl:"#"},
+        {id:'17555', name:'Política',feedUrl:"#"},
       ]
     },
     {
       "interes":"Estadio",
       "data":[
-        {id:'6223630', name:'fútbol ecuatoriano'},
-        {id:'5906044', name:'Copa Libertadores'},
-        {id:'5350596', name:'Conmebol'},
-        {id:'37204544', name:'El Nacional'},
+        {id:'6223630', name:'fútbol ecuatoriano',feedUrl:"#"},
+        {id:'5906044', name:'Copa Libertadores',feedUrl:"#"},
+        {id:'5350596', name:'Conmebol',feedUrl:"#"},
+        {id:'37204544', name:'El Nacional',feedUrl:"#"},
       ]
     },
     {
       "interes":"Entretenimiento",
       "data":[
-        {id:'17525', name:'Entretenimiento'},
-        {id:'9333452', name:'Premios Oscar'},
-        {id:'22433745', name:'novela Ecuavisa'},
-        {id:'5991024', name:'producción'},
-        {id:'154098771', name:'Equipo ideal'},
+        {id:'17525', name:'Entretenimiento',feedUrl:"#"},
+        {id:'9333452', name:'Premios Oscar',feedUrl:"#"},
+        {id:'22433745', name:'novela Ecuavisa',feedUrl:"#"},
+        {id:'5991024', name:'producción',feedUrl:"#"},
+        {id:'154098771', name:'Equipo ideal',feedUrl:"#"},
       ]
     },
     {
       "interes":"Estilo",
       "data":[
-        {id:'198495015', name:'ganadores BAFTA 2023'},
-        {id:'4351120', name:'redes sociales'},
-        {id:'9627274', name:'feminismo'},
-        {id:'30647250', name:'personas'},
-        {id:'17587', name:'Tecnología'},
-        {id:'11122250', name:'negocios'},
-        {id:'71599306', name:'Especial Ecuaterra'},
+        {id:'198495015', name:'ganadores BAFTA 2023',feedUrl:"#"},
+        {id:'4351120', name:'redes sociales',feedUrl:"#"},
+        {id:'9627274', name:'feminismo',feedUrl:"#"},
+        {id:'30647250', name:'personas',feedUrl:"#"},
+        {id:'17587', name:'Tecnología',feedUrl:"#"},
+        {id:'11122250', name:'negocios',feedUrl:"#"},
+        {id:'71599306', name:'Especial Ecuaterra',feedUrl:"#"},
       ]
     }
   ]
