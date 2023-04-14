@@ -11,13 +11,17 @@
 
 <body>
   <div id="pdfContent">
-    <div class="titulo">Titulo de la nota</div>
+    <h1 class="titulo">Deslave en Alausí: semanas de angustia, dolor y miedo para rescatar cadáveres</h1>
     <img width="700" class="imagen"
       src="https://www.ecuavisa.com/binrepository/1201x1599/0c213/1200d600/none/11705/FRDQ/guias_899353_20230413135245.jpg"
       alt="">
-    <div class="texto">Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde blanditiis pariatur consectetur
-      minima, expeditadelectus nesciunt accusamus ipsam doloribus architecto, odit, inventore soluta ratione quas vitae
-      harum nisi velitvoluptas.</div>
+    <div class="texto">Más de dos semanas después del gigantesco alud que sepultó parte de Alausí, la angustia y el
+      dolor crecen entre los vecinos de esta población de los Andes de Ecuador, donde ya se han recuperado 34 cuerpos
+      pero aún se espera hallar 52 más, en medio del temor de que la montaña vuelva a venirse abajo.
+      Desde que el deslizamiento de tierra arrasase con al menos 57 casas en la noche del domingo 26 de marzo, la
+      titánica labor de rescate no ha cesado ni un sólo día, pero el avance es lento ante el descomunal tamaño del
+      desastre, que alcanza una extensión de más de 24 hectáreas y que cubrió incluso el estadio municipal de fútbol.
+    </div>
   </div>
 
   <button id="exportar-pdf">Exportar PDF</button>
@@ -25,13 +29,22 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
   <script>
     function exportarPDF() {
-      var doc = new jsPDF();
+      var doc = new jsPDF({
+
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4',
+        putOnlyUsedFonts: true,
+        floatPrecision: 16 // or "smart", default is 16
+
+      });
 
       // Obtener el contenido de la clase 'titulo'
       const titulo = document.querySelector('.titulo').innerText;
+      
 
       // Obtener el contenido de la clase 'imagen'
-      // const imagen = document.querySelector('.imagen').src;
+      const imagen = document.querySelector('.imagen').src;
 
       // Obtener el contenido de la clase 'texto'
       const texto = document.querySelector('.texto').innerText;
@@ -39,6 +52,7 @@
       // Agregar el contenido al documento
       doc.text(titulo, 10, 10);
       // doc.addImage(imagen, 'JPG', 10, 20, 180, 120);
+      doc.addImage("https://www.ecuavisa.com/binrepository/1201x1599/0c213/1200d600/none/11705/FRDQ/guias_899353_20230413135245.jpg", "JPEG", 15, 40, 180, 180);
       doc.text(texto, 10, 150);
 
       // Guardar el documento como PDF
