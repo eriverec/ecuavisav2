@@ -611,7 +611,7 @@ var modalUserNewPerfil = {
        for(var j in ins.data){
         var dat = ins.data[j];
           temasSeguir+= `<div class="item_tema t_${dat.id}">
-               <div class="keywords font-2 fs13">
+               <div class="keywords font-2 fs13 keywords-btn-click">
                   <div class="template-meta-favorite-action" value="${dat.name}" id="${dat.id}" title="Seguir tema" onclick="if (!window.__cfRLUnblockHandlers) return false; meta_favorite_action('${dat.id}')" style="/* display:none; */">
                      <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir">
 
@@ -663,7 +663,6 @@ var modalUserNewPerfil = {
     var existemodal = setInterval(function () {
         if ((typeof $().modal == 'function')) {
             // $('#segTemasPerfil').modal('show');
-
             $('#btn_enviar_seguimiento_tema').click(function(){
               if(!modalUserNewPerfil.existeTemaSeguimiento().existe){
                 alert('Debe seleccionar al menos 1');

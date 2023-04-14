@@ -1025,6 +1025,10 @@
 
 .MODAL_SEGUIMIENTO_TEMA .btn {
   line-height: 1 !important;
+  padding-right: 8px;
+  padding-top: 9px;
+  padding-left: 8px;
+  padding-bottom: 8px;
 }
 
 .MODAL_SEGUIMIENTO_TEMA .btn-primary:hover {
@@ -1066,9 +1070,10 @@
 }
 
 .MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.add .btn-modal-seguir{
-    display: flex;
-    align-items: center;
-    gap: 10px;
+    display: initial;
+    text-align: center;
+    /*align-items: center;
+    gap: 10px;*/
 }
 
 /* .MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.add .btn-modal-seguir svg:nth-child(2) {
@@ -1099,12 +1104,9 @@
     /* border: 1px solid #2927b9; */
     border-radius: 3px;
     color: #2927b9;
-    padding-right: 8px;
-    padding-top: 9px;
-    padding-left: 8px;
-    padding-bottom: 8px;
     line-height: 1.2;
     background: #23dcd1;
+    padding: 0px;
 }
 
 .btn-check:focus+.btn.btn-modal-seguir, .btn.btn-modal-seguir:focus {
@@ -1118,7 +1120,6 @@
 
 .template-meta-favorite-action.remove {
     background-color: #2927b9;
-    padding-bottom: 5px;
 }
 
 .template-meta-favorite-action.remove button small {
