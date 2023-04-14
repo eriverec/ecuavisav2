@@ -715,7 +715,12 @@ var modalUserNewPerfil = {
     setTimeout(function(){
       document.querySelectorAll('button.btn-modal-seguir').forEach(function(elemento) {
         elemento.addEventListener('click', function(e) {
-          var btn = e.target;
+          var btn = null;
+          if (e.target.nodeName === "BUTTON") {
+            btn = e.target;
+          } else {
+            btn = e.target.parentElement;
+          }
           var usuario = ECUAVISA_EC.USER_data();
           var nombreUsuario = `${usuario.name} ${usuario.lastname}`;
           var id = usuario.id;
