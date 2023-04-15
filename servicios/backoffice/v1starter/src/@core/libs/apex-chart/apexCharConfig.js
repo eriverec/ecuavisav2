@@ -51,6 +51,18 @@ export const getScatterChartConfig = themeColors => {
         style: { colors: themeDisabledTextColor },
       },
     },
+    tooltip: {
+      x: {
+        format: 'yyyy-MM-dd'
+      },
+      y: {
+        title: {
+          formatter: function () {
+            return 'Valor'
+          }
+        }
+      }
+    },
     xaxis: {
       tickAmount: 10,
       axisBorder: { show: false },
@@ -58,9 +70,10 @@ export const getScatterChartConfig = themeColors => {
       crosshairs: {
         stroke: { color: themeBorderColor },
       },
+      type: 'datetime',
       labels: {
         style: { colors: themeDisabledTextColor },
-        formatter: val => parseFloat(val).toFixed(1),
+        format: 'yyyy-MM-dd'
       },
     },
   }

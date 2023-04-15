@@ -2,6 +2,11 @@
 import VueApexCharts from "vue3-apexcharts";
 import { useTheme } from "vuetify";
 import { hexToRgb } from "@layouts/utils";
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+
+import { Spanish } from 'flatpickr/dist/l10n/es.js';
 
 import { getScatterChartConfig } from "@core/libs/apex-chart/apexCharConfig";
 
@@ -18,160 +23,28 @@ const series = [
   {
     name: "Angular",
     data: [
-      {
-        x: 5.4,
-        y: 170,
-      },
-      {
-        x: 5.4,
-        y: 100,
-      },
-      {
-        x: 6.3,
-        y: 170,
-      },
-      {
-        x: 5.7,
-        y: 140,
-      },
-      {
-        x: 5.9,
-        y: 130,
-      },
-      {
-        x: 7,
-        y: 150,
-      },
-      {
-        x: 8,
-        y: 120,
-      },
-      {
-        x: 9,
-        y: 170,
-      },
-      {
-        x: 10,
-        y: 190,
-      },
-      {
-        x: 11,
-        y: 220,
-      },
-      {
-        x: 12,
-        y: 170,
-      },
-      {
-        x: 13,
-        y: 230,
-      },
+      { x: '2022-01-01', y: 10 },
+      { x: '2022-02-02', y: 22 },
+      { x: '2022-03-03', y: 33 },
+      { x: '2022-04-04', y: 2 },
     ],
   },
   {
     name: "Vue",
     data: [
-      {
-        x: 14,
-        y: 220,
-      },
-      {
-        x: 15,
-        y: 280,
-      },
-      {
-        x: 16,
-        y: 230,
-      },
-      {
-        x: 18,
-        y: 320,
-      },
-      {
-        x: 17.5,
-        y: 280,
-      },
-      {
-        x: 19,
-        y: 250,
-      },
-      {
-        x: 20,
-        y: 350,
-      },
-      {
-        x: 20.5,
-        y: 320,
-      },
-      {
-        x: 20,
-        y: 320,
-      },
-      {
-        x: 19,
-        y: 280,
-      },
-      {
-        x: 17,
-        y: 280,
-      },
-      {
-        x: 22,
-        y: 300,
-      },
-      {
-        x: 18,
-        y: 120,
-      },
+      { x: '2022-01-01', y: 12 },
+      { x: '2022-02-02', y: 135 },
+      { x: '2022-03-03', y: 2 },
+      { x: '2022-04-04', y: 3 },
     ],
   },
   {
     name: "React",
     data: [
-      {
-        x: 14,
-        y: 290,
-      },
-      {
-        x: 13,
-        y: 190,
-      },
-      {
-        x: 20,
-        y: 220,
-      },
-      {
-        x: 21,
-        y: 350,
-      },
-      {
-        x: 21.5,
-        y: 290,
-      },
-      {
-        x: 22,
-        y: 220,
-      },
-      {
-        x: 23,
-        y: 140,
-      },
-      {
-        x: 19,
-        y: 400,
-      },
-      {
-        x: 20,
-        y: 200,
-      },
-      {
-        x: 22,
-        y: 90,
-      },
-      {
-        x: 20,
-        y: 120,
-      },
+      { x: '2022-01-01', y: 51 },
+      { x: '2022-02-02', y: 65 },
+      { x: '2022-03-03', y: 4 },
+      { x: '2022-04-04', y: 455 },
     ],
   },
 ];
@@ -184,11 +57,20 @@ const series = [
       <VCardTitle>New Technologies Data API</VCardTitle>
 
       <template #append>
-        <VBtnToggle density="compact" color="primary" variant="outlined" divided>
-          <VBtn>Daily</VBtn>
-          <VBtn>Monthly</VBtn>
-          <VBtn>Yearly</VBtn>
-        </VBtnToggle>
+        <!-- <input type="text" id="date-picker" ref="datePicker" /> -->
+          <div class="date-picker-wrapper" style="width: 233px">
+            <AppDateTimePicker id="date-picker" placeholder="Seleccionar una fecha" prepend-inner-icon="tabler-calendar"
+              density="compact" 
+              @on-change="filtrarDatos"
+              :config="{ 
+                locale: Spanish,
+                mode:'range',
+                altFormat: 'F j, Y',
+                dateFormat: 'Y-m-d',
+                maxDate: new Date()
+              }"
+            />
+        </div>
       </template>
     </VCardItem>
 
