@@ -626,7 +626,7 @@ var modalUserNewPerfil = {
           temasSeguir+= `<div class="item_tema t_${dat.id}">
                <div class="keywords font-2 fs13 keywords-btn-click">
                   <div class="template-meta-favorite-action" value="${dat.name}" id="${dat.id}" title="Seguir tema" onclick="if (!window.__cfRLUnblockHandlers) return false; meta_favorite_action('${dat.id}')" style="/* display:none; */">
-                     <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" data-feedUrl="${dat.feedUrl}" data-name="${dat.name}">
+                     <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" data-section="${ins.interes}" data-feedUrl="${dat.feedUrl}" data-idMeta="${dat.id}" data-name="${dat.name}">
 
                         <small>${dat.name}</small>
 
@@ -726,8 +726,10 @@ var modalUserNewPerfil = {
           var id = usuario.id;
           var temaData = {
               "name": btn.getAttribute("data-name"),
+              "idMeta": btn.getAttribute("data-idMeta"),
+              "section": btn.getAttribute("data-section"),
               "feedUrl": btn.getAttribute("data-feedurl"),
-              "follow": (btn.getAttribute("data-feedurl") == "0"?false:true)
+              "follow": (btn.getAttribute("data-follow") == "0"?false:true)
           };
           var settings = {
               "url": ECUAVISA_EC.api.seguimientoTema,
