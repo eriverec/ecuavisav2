@@ -11,43 +11,82 @@ import { Spanish } from 'flatpickr/dist/l10n/es.js';
 import { getScatterChartConfig } from "@core/libs/apex-chart/apexCharConfig";
 
 // import ChartNewInteres from '@/views/charts/apex-chart/ChartNewInteres.vue'
-
+const moment = extendMoment(Moment);
+  moment.locale('es', [esLocale]);
 const vuetifyTheme = useTheme();
 const scatterChartConfig = computed(() =>
   getScatterChartConfig(vuetifyTheme.current.value)
 );
 const currentTab = ref(0);
+const isLoading = ref(false);
+const series = ref([]);
 const refVueApexChart = ref();
 
-const series = [
-  {
-    name: "Angular",
-    data: [
-      { x: '2022-01-01', y: 10 },
-      { x: '2022-02-02', y: 22 },
-      { x: '2022-03-03', y: 33 },
-      { x: '2022-04-04', y: 2 },
-    ],
-  },
-  {
-    name: "Vue",
-    data: [
-      { x: '2022-01-01', y: 12 },
-      { x: '2022-02-02', y: 135 },
-      { x: '2022-03-03', y: 2 },
-      { x: '2022-04-04', y: 3 },
-    ],
-  },
-  {
-    name: "React",
-    data: [
-      { x: '2022-01-01', y: 51 },
-      { x: '2022-02-02', y: 65 },
-      { x: '2022-03-03', y: 4 },
-      { x: '2022-04-04', y: 455 },
-    ],
-  },
-];
+function generateDayWiseTimeSeries(baseval, count, yrange) {
+  var i = 0;
+  var series = [];
+  while (i < count) {
+    var x = baseval;
+    var y =
+      Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
+
+    series.push([x, y]);
+    baseval += 86400000;
+    i++;
+  }
+  return series;
+}
+
+/*const series = [{
+              name: 'TEAM 1',
+              data: generateDayWiseTimeSeries(new Date('2023-04-14').getTime(), 2, {
+                min: 10,
+                max: 60
+              })
+            },
+            {
+              name: 'TEAM 2',
+              data: generateDayWiseTimeSeries(new Date('2023-04-14').getTime(), 2, {
+                min: 10,
+                max: 60
+              })
+            }];*/
+var getData = async function getDataGrafico(fechai="", fechaf="") {
+  /*FORMATO DE FECHA A ENVIAR ES MM/DD/YYYY*/
+  var raw = JSON.stringify({
+      "fechai": fechai || moment().add(-7, 'days').format("MM/DD/YYYY"),
+      "fechaf": fechaf || moment().format("MM/DD/YYYY")
+  });
+  var resp = await fetch(`https://ecuavisa-temas.vercel.app/grafico/intereses`,{
+    method: 'POST',
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: raw
+  }); 
+  var obtener = await resp.json();
+  series.value = obtener.grafico
+  return obtener;
+}
+
+var filtrarDatos = async function obtenerFechaDispositivos(selectedDates, dateStr, instance){
+  //var respJson = await nuevoArchivoJson(archivoJson);
+  if(selectedDates.length > 1){
+    var fechai = moment(selectedDates[0]).format('MM/DD/YYYY');
+    var fechaf = moment(selectedDates[1]).format('MM/DD/YYYY');
+    //var panelGrafico = document.querySelector("#apexchartscrejemplo");
+    //panelGrafico.classList.add("disabled");
+
+    isLoading.value = true;
+    var obtenerData = await getData(fechai, fechaf);
+    isLoading.value = false;
+  }
+}
+
+onMounted(async () =>
+  await getData()
+);
+
 
 </script>
 
@@ -58,7 +97,7 @@ const series = [
 
       <template #append>
         <!-- <input type="text" id="date-picker" ref="datePicker" /> -->
-          <div class="date-picker-wrapper" style="width: 233px">
+          <div class="date-picker-wrapper" style="width: 273px">
             <AppDateTimePicker id="date-picker" placeholder="Seleccionar una fecha" prepend-inner-icon="tabler-calendar"
               density="compact" 
               @on-change="filtrarDatos"
@@ -74,7 +113,7 @@ const series = [
       </template>
     </VCardItem>
 
-    <VCardText>
+    <VCardText :class="isLoading==true?'disabled':'' ">
       <VueApexCharts type="scatter" height="400" :options="scatterChartConfig" :series="series" />
     </VCardText>
   </VCard>

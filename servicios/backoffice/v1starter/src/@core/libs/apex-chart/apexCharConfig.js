@@ -16,6 +16,7 @@ export const getScatterChartConfig = themeColors => {
     series1: '#ff9f43',
     series2: '#7367f0',
     series3: '#28c76f',
+    series4: '#d86055',
   }
 
   const { themeSecondaryTextColor, themeBorderColor, themeDisabledTextColor } = colorVariables(themeColors)
@@ -39,7 +40,7 @@ export const getScatterChartConfig = themeColors => {
         horizontal: 10,
       },
     },
-    colors: [scatterColors.series1, scatterColors.series2, scatterColors.series3],
+    colors: [scatterColors.series1, scatterColors.series2, scatterColors.series3, scatterColors.series4],
     grid: {
       borderColor: themeBorderColor,
       xaxis: {
@@ -53,7 +54,7 @@ export const getScatterChartConfig = themeColors => {
     },
     tooltip: {
       x: {
-        format: 'yyyy-MM-dd'
+        format: 'yyyy-MM-dd hh:mm:ss'
       },
       y: {
         title: {
