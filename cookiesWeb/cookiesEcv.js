@@ -5,7 +5,7 @@ let stringHtml = `
           </div>
           <div class="content-wrap">
               <div class="msg-wrap" >
-                  <p> Vistazo utiliza cookies propias y de terceros para fines analíticos anónimos, guardar las preferencias que selecciones y para el funcionamiento general de la página. Encontrará información más detallada en nuestra <a href="https://www.vistazo.com/politicas-de-cookies" class="text-primary">Política de Cookies</a>.
+                  <p> Ecuavisa utiliza cookies propias y de terceros para fines analíticos anónimos, guardar las preferencias que selecciones y para el funcionamiento general de la página. Encontrará información más detallada en nuestra <a href="https://www.ecuavisa.com/politicas-de-cookies" class="text-primary">Política de Cookies</a>.
                       <br><br>Puedes aceptar todas las cookies pulsando el botón "Aceptar" o configurarlas o rechazar su uso pulsando el botón "Configurar".<br>
                       <!--Puedes obtener más información y volver a configurar tus preferencias en cualquier momento en la</p>
                       <p style="margin-top: 10px;"><a style="color:#115cfa;" href="https://www.ecuavisa.com/servicios/politicas-de-privacidad" target="_blank">Política de cookies</a>.</p>-->
@@ -30,7 +30,7 @@ let stringHtml = `
     if (cookie_consent != "") {
       document.getElementById("cookieNotice").style.display = "none";
       console.log("DISPLAY 1")
-    } else if (localStorage.getItem("noCookiesVistazo")) {
+    } else if (localStorage.getItem("noCookiesEcuavisa")) {
       document.getElementById("cookieNotice").style.display = "none";
       console.log("DISPLAY 2")
     } else {
@@ -81,7 +81,7 @@ let stringHtml = `
 
   function declineCookieConsent() {
     document.getElementById("cookieNotice").style.display = "none";
-    localStorage.setItem("noCookiesVistazo", true);
+    localStorage.setItem("noCookiesEcuavisa", true);
   }
 
   var actionsCofigCookies = {
@@ -130,9 +130,9 @@ let stringHtml = `
       for (var i in this.opciones) {
         this.opciones[i][index] = value;
       }
-      if (localStorage.getItem("dataAcceptCookiesVistazo")) {
+      if (localStorage.getItem("dataAcceptCookiesEcuavisa")) {
         localStorage.setItem(
-          "dataAcceptCookiesVistazo",
+          "dataAcceptCookiesEcuavisa",
           JSON.stringify(this.opciones)
         );
       }
@@ -141,7 +141,7 @@ let stringHtml = `
     },
     guardarItems: function () {
       var lista = this.opciones;
-      localStorage.setItem("dataAcceptCookiesVistazo", JSON.stringify(lista));
+      localStorage.setItem("dataAcceptCookiesEcuavisa", JSON.stringify(lista));
       return true;
     },
     HTMLConfig: function (data) {
@@ -195,7 +195,7 @@ let stringHtml = `
       itemsContent.innerHTML = "";
 
       var lista =
-        JSON.parse(localStorage.getItem("dataAcceptCookiesVistazo")) ||
+        JSON.parse(localStorage.getItem("dataAcceptCookiesEcuavisa")) ||
         this.opciones;
       this.opciones = lista;
       var html = "";

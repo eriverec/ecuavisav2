@@ -173,7 +173,7 @@ body {
 }
 
 .check-panel input:checked + label {
-  background: #2826b8;
+  background: #000;
 }
 
 .check-panel input:checked + label:after {
@@ -335,8 +335,8 @@ tr.programaItem td:not(.text-center) div {
 }
 
 .btnRechazar {
-  background: #23DCD1;
-  color: #2826b8;
+  background: #000;
+  color: #fff;
   border-radius: 2px;
   /*padding: 12px 8px;*/
   padding: 12px 20px;
@@ -349,12 +349,12 @@ tr.programaItem td:not(.text-center) div {
 }
 
 .btnRechazar:hover {
-  background: #141161;
+  background: #494949;
   color: #fff;
 }
 
 .btnAceptar {
-  background: #2826b8;
+  background: #fd0f03;
   color: #fff;
   border-radius: 2px;
   /*padding: 12px 8px;*/
@@ -368,7 +368,7 @@ tr.programaItem td:not(.text-center) div {
 }
 
 .btnAceptar:hover {
-  background: #141161;
+  background: #d50a00;
   color: #fff;
 }
 
