@@ -145,6 +145,87 @@ export const getLineChartSimpleConfig = themeColors => {
     },
   }
 }
+
+/* BANLACE V2-- INICIO */
+
+export const getBarChartConfigV2 = themeColors => {
+  const scatterColors = {
+    series1: '#ff9f43',
+    series2: '#7367f0',
+    series3: '#28c76f',
+    series4: '#d86055',
+  }
+  const { themeSecondaryTextColor, themeBorderColor, themeDisabledTextColor } = colorVariables(themeColors)
+  
+  return {
+    chart: {
+      parentHeightOffset: 0,
+      toolbar: { show: false },
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'left',
+      markers: { offsetX: -3 },
+      labels: { colors: themeSecondaryTextColor },
+      itemMargin: {
+        vertical: 3,
+        horizontal: 10,
+      },
+    },
+    colors: [scatterColors.series1, scatterColors.series2, scatterColors.series3, scatterColors.series4],
+    dataLabels: { enabled: false },
+    plotOptions: {
+      bar: {
+        borderRadius: 2,
+        barHeight: '100%',
+        horizontal: true,
+        startingShape: 'rounded',
+      },
+    },
+    grid: {
+      borderColor: themeBorderColor,
+      xaxis: {
+        lines: { show: true },
+      },
+      // padding: {
+      //   top: -10,
+      // },
+    },
+    xaxis: {
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+    },
+    tooltip: {
+      x: {
+        format: 'yyyy-MM-dd hh:mm:ss'
+        // format: 'yyyy-MM-dd'
+
+      },
+      // y: {
+      //   title: {
+      //     formatter: function () {
+      //       return 'Valor'
+      //     }
+      //   }
+      // }
+    },
+    yaxis: {
+      tickAmount: 10,
+      axisBorder: { show: false },
+      axisTicks: { color: themeBorderColor },
+      crosshairs: {
+        stroke: { color: themeBorderColor },
+      },
+      type: 'datetime',
+      labels: {
+        style: { colors: themeDisabledTextColor },
+        format: 'yyyy-MM-dd'
+      },
+    },
+  }
+}
+/* BANLACE V2-- FIN */
 export const getBarChartConfig = themeColors => {
   const { themeBorderColor, themeDisabledTextColor } = colorVariables(themeColors)
   

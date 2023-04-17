@@ -8,15 +8,13 @@ import esLocale from "moment/locale/es";
 
 import { Spanish } from 'flatpickr/dist/l10n/es.js';
 
-import { getScatterChartConfig } from "@core/libs/apex-chart/apexCharConfig";
+import { getBarChartConfigV2 } from "@core/libs/apex-chart/apexCharConfig";
 
 // import ChartNewInteres from '@/views/charts/apex-chart/ChartNewInteres.vue'
 const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
 const vuetifyTheme = useTheme();
-const scatterChartConfig = computed(() =>
-  getScatterChartConfig(vuetifyTheme.current.value)
-);
+const scatterChartConfig = computed(() => getBarChartConfigV2(vuetifyTheme.current.value));
 const currentTab = ref(0);
 const isLoading = ref(false);
 const series = ref([]);
@@ -65,7 +63,9 @@ var getData = async function getDataGrafico(fechai="", fechaf="") {
     body: raw
   }); 
   var obtener = await resp.json();
+  console.log(obtener)
   series.value = obtener.grafico
+  console.log(series.value)
   return obtener;
 }
 
@@ -114,7 +114,7 @@ onMounted(async () =>
     </VCardItem>
 
     <VCardText :class="isLoading==true?'disabled':'' ">
-      <VueApexCharts type="scatter" height="400" :options="scatterChartConfig" :series="series" />
+      <VueApexCharts type="bar" height="400" :options="scatterChartConfig" :series="series" />
     </VCardText>
   </VCard>
 </template>
