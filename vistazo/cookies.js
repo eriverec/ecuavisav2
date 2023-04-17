@@ -29,10 +29,13 @@ let stringHtml = `
     let cookie_consent = getCookie("user_cookie_consent");
     if (cookie_consent != "") {
       document.getElementById("cookieNotice").style.display = "none";
+      console.log("DISPLAY 1")
     } else if (localStorage.getItem("noCookiesVistazo")) {
       document.getElementById("cookieNotice").style.display = "none";
+      console.log("DISPLAY 2")
     } else {
       document.getElementById("cookieNotice").style.display = "block";
+      console.log("DISPLAY 3")
     }
   }
 
