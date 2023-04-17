@@ -46,7 +46,7 @@ function TVforzado(titulo, status) {
 
 function showTelevistazoComunidad() {
   var btnLives = document.getElementById("btnTelcomunidad");
-  console.log("si es comunidad");
+  // console.log("si es comunidad");
   if (btnLives) {
     // btnLives.removeClass("d-none");
     btnLives.style.display = "block";
@@ -87,7 +87,7 @@ function mostrarProgramacion() {
       if (tituloPrograma === "Televistazo en la comunidad") {
         showTelevistazoComunidad();
       } else {
-        console.log("no es comunidad")
+        // console.log("no es comunidad")
       }
       // fuenteVideo = "https://www.youtube.com/embed/<ID_DEL_VIDEO>?autoplay=1&controls=0";
       break;
@@ -100,6 +100,7 @@ function mostrarProgramacion() {
   const videoPlayer = divProgramacion.querySelector("#playerembed");
   const videoPlayerIframe = document.querySelector("#playerembed iframe");
   const imagenApagado = divProgramacion.querySelector("#programacion #fondito__");
+  var btnLives = document.getElementById("btnTelcomunidad");
   // videoPlayerIframe ? videoPlayerIframe.setAttribute("hidden","") : "";
 
   let forzadoEvent = localStorage.getItem("playerForzado");
@@ -119,6 +120,7 @@ function mostrarProgramacion() {
       videoPlayer.style.display = "none";
       videoPlayerIframe ? videoPlayerIframe.setAttribute("hidden","") : "";
       imagenApagado.style.display = "block";
+      btnLives ? btnLives.style.display = "none" : '';
     }
 
   } else { }
