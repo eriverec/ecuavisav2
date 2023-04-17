@@ -30,7 +30,7 @@ let stringHtml = `
     if (cookie_consent != "") {
       document.getElementById("cookieNotice").style.display = "block";
       console.log("DISPLAY 1")
-    } else if (localStorage.getItem("noCookiesVistazo")) {
+    } else if (localStorage.getItem("dataAcceptCookiesVistazo")) {
       document.getElementById("cookieNotice").style.display = "none";
       console.log("DISPLAY 2")
     } else {
