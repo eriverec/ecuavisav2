@@ -797,6 +797,12 @@ var modalUserNewPerfil = {
         {id:'11122250', name:'negocios',feedUrl:"#"},
         {id:'71599306', name:'Especial Ecuaterra',feedUrl:"#"},
       ]
+    },
+    {
+      "interes":"Mundo",
+      "data":[
+        {id:'25591315', name:'mundo',feedUrl:"#"}
+      ]
     }
   ]
 }
