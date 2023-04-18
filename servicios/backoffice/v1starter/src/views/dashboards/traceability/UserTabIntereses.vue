@@ -191,7 +191,7 @@ onMounted(async () =>{
             <!-- 👉 Add user button -->
           </div>
 
-          <div class="date-picker-wrapper" style="width: 273px">
+          <div class="date-picker-wrapper" style="width: 273px;display: none;">
             <AppDateTimePicker id="date-picker" placeholder="Seleccionar un rango de fecha" prepend-inner-icon="tabler-calendar"
               density="compact" 
               @on-change="filtrarDatos"
