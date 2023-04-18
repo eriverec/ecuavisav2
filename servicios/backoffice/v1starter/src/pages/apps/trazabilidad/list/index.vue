@@ -57,7 +57,7 @@ const tabItemContent = 'Candy canes donut chupa chups candy canes lemon drops oa
                           <span class="text-xs text-disabled">Usuario N° {{ index + 1 }}</span>
                         </VListItemSubtitle>
                         <template #append>
-                          <VChip color="primary" class="mr-4" >{{ user.total }} Sesiones </VChip>
+                          <VChip color="secondary" variant="elevated" class="mr-4" >{{ user.total }} Sesiones </VChip>
                           <!-- <VBtn size="small" href="/apps/user/view/"> Ver usuario </VBtn> -->
                           <RouterLink :to="{ name: 'apps-user-view-id',  params: { id: user.user }, }" class="font-weight-medium user-list-name" >
                             <VBtn size="small"> Ver Perfil de usuario <VIcon end icon="tabler-user" /></VBtn>
