@@ -18,7 +18,8 @@ export default [
     ],
   },
 
-  // {
+
+ // {
   //   title: 'Trazabilidad',
   //   icon: { icon: 'tabler-database' },
   //   to: { name: 'apps-trazabilidad-list' },
@@ -38,6 +39,17 @@ export default [
     // ],
   },
   
+  {
+    title: 'Trazabilidad',
+    icon: { icon: 'tabler-database' },
+    // to: { name: 'apps-trazabilidad-list' },
+    children: [
+      { title: 'Lista de Usuarios', to: 'apps-trazabilidad-list' },
+      // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
+    ],
+  },
+
+
   // {
   //   title: 'Paquetes',
   //   children: [
