@@ -215,3 +215,16 @@ onMounted(async () =>{
     </VCardText>
   </VCard>
 </template>
+
+<style scope>
+.apexcharts-tooltip.apexcharts-theme-light {
+  background: #333 !important;
+  color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+}
+.apexcharts-tooltip.apexcharts-theme-light .apexcharts-tooltip-title{
+  background: #333 !important;
+}
+
+</style>
