@@ -234,8 +234,10 @@ export const getBarChartConfig = themeColors => {
       parentHeightOffset: 0,
       toolbar: { show: false },
     },
-    colors: ['#00cfe8'],
-    dataLabels: { enabled: false },
+    //colors: ['#00cfe8'],
+    dataLabels: { 
+      enabled: false
+    },
     plotOptions: {
       bar: {
         borderRadius: 8,

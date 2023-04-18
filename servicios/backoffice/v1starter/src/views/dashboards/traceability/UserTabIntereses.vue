@@ -14,11 +14,80 @@ import { getBarChartConfigV2 } from "@core/libs/apex-chart/apexCharConfig";
 const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
 const vuetifyTheme = useTheme();
+
+
 const scatterChartConfig = computed(() => getBarChartConfigV2(vuetifyTheme.current.value));
+
+
 const currentTab = ref(0);
 const isLoading = ref(false);
 const series = ref([]);
+const categories = ref([]);
+const labels = ref([]);
 const refVueApexChart = ref();
+
+const colorVariables = themeColors => {
+  const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
+  const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`
+  const themeBorderColor = `rgba(${hexToRgb(String(themeColors.variables['border-color']))},${themeColors.variables['border-opacity']})`
+  const themePrimaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['high-emphasis-opacity']})`
+  
+  return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
+}
+
+const getBarChartConfig = themeColors => {
+  const { themeBorderColor, themeDisabledTextColor } = colorVariables(themeColors)
+  
+  return {
+    chart: {
+      parentHeightOffset: 0,
+      toolbar: { show: false },
+    },
+    dataLabels: { enabled: false },
+    plotOptions: {
+      bar: {
+        borderRadius: 4,
+        barHeight: '50%',
+        horizontal: true,
+        startingShape: 'rounded',
+      },
+    },
+    grid: {
+      borderColor: themeBorderColor,
+      xaxis: {
+        lines: { show: false },
+      },
+      padding: {
+        top: -10,
+      },
+    },
+    yaxis: {
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+    },
+    stroke: {
+      show: true,
+      width: 1,
+      colors: ['#fff']
+    },
+    xaxis: {
+      axisBorder: { show: false },
+      axisTicks: { color: themeBorderColor },
+      categories: categories.value,
+      labels: {
+        style: { 
+          colors: themeDisabledTextColor 
+        },
+      },
+    },
+    labels: labels.value
+  }
+}
+
+
+const horizontalBarChartConfig = computed(() => getBarChartConfig(vuetifyTheme.current.value));
+
 
 function generateDayWiseTimeSeries(baseval, count, yrange) {
   var i = 0;
@@ -35,27 +104,13 @@ function generateDayWiseTimeSeries(baseval, count, yrange) {
   return series;
 }
 
-/*const series = [{
-              name: 'TEAM 1',
-              data: generateDayWiseTimeSeries(new Date('2023-04-14').getTime(), 2, {
-                min: 10,
-                max: 60
-              })
-            },
-            {
-              name: 'TEAM 2',
-              data: generateDayWiseTimeSeries(new Date('2023-04-14').getTime(), 2, {
-                min: 10,
-                max: 60
-              })
-            }];*/
 var getData = async function getDataGrafico(fechai="", fechaf="") {
   /*FORMATO DE FECHA A ENVIAR ES MM/DD/YYYY*/
   var raw = JSON.stringify({
       "fechai": fechai || moment().add(-7, 'days').format("MM/DD/YYYY"),
       "fechaf": fechaf || moment().format("MM/DD/YYYY")
   });
-  var resp = await fetch(`https://ecuavisa-temas.vercel.app/grafico/intereses`,{
+  var resp = await fetch(`https://ecuavisa-temas.vercel.app/grafico/intereses/type/bar`,{
     method: 'POST',
     headers: {
       "Content-Type": "application/json",
@@ -63,9 +118,9 @@ var getData = async function getDataGrafico(fechai="", fechaf="") {
     body: raw
   }); 
   var obtener = await resp.json();
-  console.log(obtener)
-  series.value = obtener.grafico
-  console.log(series.value)
+  series.value = obtener.respuesta;
+  labels.value = obtener.labels;
+  categories.value = obtener.categories;
   return obtener;
 }
 
@@ -86,7 +141,6 @@ var filtrarDatos = async function obtenerFechaDispositivos(selectedDates, dateSt
 onMounted(async () =>
   await getData()
 );
-
 
 </script>
 
@@ -114,7 +168,7 @@ onMounted(async () =>
     </VCardItem>
 
     <VCardText :class="isLoading==true?'disabled':'' ">
-      <VueApexCharts type="bar" height="400" :options="scatterChartConfig" :series="series" />
+      <VueApexCharts type="bar" height="600" :options="horizontalBarChartConfig" :series="series" />
     </VCardText>
   </VCard>
 </template>
