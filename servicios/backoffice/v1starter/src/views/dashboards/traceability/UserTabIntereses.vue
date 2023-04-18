@@ -106,11 +106,12 @@ function generateDayWiseTimeSeries(baseval, count, yrange) {
   return series;
 }
 
-var getData = async function getDataGrafico(fechai="", fechaf="") {
+var getData = async function getDataGrafico(fechai="", fechaf="", seccion="") {
   /*FORMATO DE FECHA A ENVIAR ES MM/DD/YYYY*/
   var raw = JSON.stringify({
       "fechai": fechai || moment().add(-7, 'days').format("MM/DD/YYYY"),
-      "fechaf": fechaf || moment().format("MM/DD/YYYY")
+      "fechaf": fechaf || moment().format("MM/DD/YYYY"),
+      "seccion": seccion,
   });
   var resp = await fetch(`https://ecuavisa-temas.vercel.app/grafico/intereses/type/bar`,{
     method: 'POST',
@@ -142,12 +143,14 @@ var getDataSecciones = async function(fechai="", fechaf="") {
   secciones.value = data;
   return data;
 }
+var fechai = "";
+var fechaf = "";
 
 var filtrarDatos = async function obtenerFechaDispositivos(selectedDates, dateStr, instance){
   //var respJson = await nuevoArchivoJson(archivoJson);
   if(selectedDates.length > 1){
-    var fechai = moment(selectedDates[0]).format('MM/DD/YYYY');
-    var fechaf = moment(selectedDates[1]).format('MM/DD/YYYY');
+    fechai = moment(selectedDates[0]).format('MM/DD/YYYY');
+    fechaf = moment(selectedDates[1]).format('MM/DD/YYYY');
     //var panelGrafico = document.querySelector("#apexchartscrejemplo");
     //panelGrafico.classList.add("disabled");
 
@@ -155,6 +158,12 @@ var filtrarDatos = async function obtenerFechaDispositivos(selectedDates, dateSt
     var obtenerData = await getData(fechai, fechaf);
     isLoading.value = false;
   }
+}
+
+async function filtrarDatosSelect(){
+  isLoading.value = true;
+  var obtenerData = await getData(fechai, fechaf, seccionesModel.value);
+  isLoading.value = false;
 }
 
 onMounted(async () =>{
@@ -176,7 +185,7 @@ onMounted(async () =>{
             <VSelect style="width: 190px;" v-model="seccionesModel" :items="secciones" label="Secciones"
               clearable clear-icon="tabler-x" :searchable="true" />
             <!-- 👉 Export button -->
-            <VBtn variant="tonal" color="success" prepend-icon="tabler-search" @click="btn_filter">
+            <VBtn variant="tonal" color="success" prepend-icon="tabler-search" @click="filtrarDatosSelect">
               Buscar
             </VBtn>
             <!-- 👉 Add user button -->
