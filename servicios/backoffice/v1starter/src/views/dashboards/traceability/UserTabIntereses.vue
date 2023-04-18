@@ -20,7 +20,9 @@ const scatterChartConfig = computed(() => getBarChartConfigV2(vuetifyTheme.curre
 
 
 const currentTab = ref(0);
+const seccionesModel = ref({ title: `Todos`, value: "" });
 const isLoading = ref(false);
+const secciones = ref([]);
 const series = ref([]);
 const categories = ref([]);
 const labels = ref([]);
@@ -124,6 +126,23 @@ var getData = async function getDataGrafico(fechai="", fechaf="") {
   return obtener;
 }
 
+var getDataSecciones = async function(fechai="", fechaf="") {
+  var resp = await fetch(`https://ecuavisa-temas.vercel.app/grafico/intereses/group/seccion`,{
+    method: 'GET',
+    headers: {
+      "Content-Type": "application/json",
+    }
+  }); 
+  var obtener = await resp.json();
+  var data = []
+  data.push({title:"Todos", value:""})
+  for(var i in obtener.categories){
+    data.push({title:obtener.categories[i].name, value:obtener.categories[i].name})
+  }
+  secciones.value = data;
+  return data;
+}
+
 var filtrarDatos = async function obtenerFechaDispositivos(selectedDates, dateStr, instance){
   //var respJson = await nuevoArchivoJson(archivoJson);
   if(selectedDates.length > 1){
@@ -138,9 +157,10 @@ var filtrarDatos = async function obtenerFechaDispositivos(selectedDates, dateSt
   }
 }
 
-onMounted(async () =>
-  await getData()
-);
+onMounted(async () =>{
+  await getData();
+  await getDataSecciones();
+});
 
 </script>
 
@@ -150,7 +170,18 @@ onMounted(async () =>
       <VCardTitle>Intereses de los usuarios suscritos</VCardTitle>
 
       <template #append>
-        <!-- <input type="text" id="date-picker" ref="datePicker" /> -->
+        <VCardText class="d-flex flex-wrap py-4 gap-4 align-items-center" style="justify-content: space-between;">
+          <div class="d-flex align-center flex-wrap gap-2">
+            <!-- 👉 Reset button -->
+            <VSelect style="width: 190px;" v-model="seccionesModel" :items="secciones" label="Secciones"
+              clearable clear-icon="tabler-x" :searchable="true" />
+            <!-- 👉 Export button -->
+            <VBtn variant="tonal" color="success" prepend-icon="tabler-search" @click="btn_filter">
+              Buscar
+            </VBtn>
+            <!-- 👉 Add user button -->
+          </div>
+
           <div class="date-picker-wrapper" style="width: 273px">
             <AppDateTimePicker id="date-picker" placeholder="Seleccionar un rango de fecha" prepend-inner-icon="tabler-calendar"
               density="compact" 
@@ -164,6 +195,9 @@ onMounted(async () =>
               }"
             />
         </div>
+        </VCardText>
+        <!-- <input type="text" id="date-picker" ref="datePicker" /> -->
+          
       </template>
     </VCardItem>
 
