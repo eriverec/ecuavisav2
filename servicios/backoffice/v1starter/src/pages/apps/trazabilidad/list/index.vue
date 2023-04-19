@@ -1,8 +1,4 @@
 <script setup>
-import { useUserListStore } from "@/views/apps/user/useUserListStore";
-
-
-const userListStore = useUserListStore();
 const userTab = ref(null);
 
 const userej = [
@@ -39,27 +35,44 @@ const tabItemContent = 'Candy canes donut chupa chups candy canes lemon drops oa
           <VCardText>
             <VWindow v-model="currentTab">
               <VWindowItem value="tab-fieles">
-                <VCardTitle>Lista de los 500 usuarios mas fieles a ecuavisa.com </VCardTitle>
-                <VCardSubtitle> De click en el botón "ver perfil de usuario" para ver mas detalles del usuario </VCardSubtitle>
-                <!-- inicio lista Usuarios -->
+                <div class="d-flex flex-wrap py-4 gap-4 align-items-center" style="justify-content: space-between;">
+                  <div>
+                    <VCardTitle v-if="usuarioFielModel">Lista de los {{usuarioFielModel}} usuarios mas fieles a ecuavisa.com </VCardTitle>
+                    <VCardSubtitle> De click en el botón "ver perfil de usuario" para ver mas detalles del usuario </VCardSubtitle>
+                  </div>
+                  <div class="d-flex align-center flex-wrap gap-2">
+                  <!-- 👉 Reset button -->
+                  <VSelect style="width: 190px;" v-model="usuarioFielModel" :items="listUsuarioFieles" label="Usuarios fieles"
+                    clearable clear-icon="tabler-x" :searchable="true" />
+                  <!-- 👉 Export button -->
+                  <VBtn variant="tonal" color="success" prepend-icon="mdi-file-excel" @click="direccionar">
+                    Exportar usuarios
+                  </VBtn>
+                  <!-- 👉 Add user button -->
+                </div>
+                </div>
+
                 
+                <!-- inicio lista Usuarios -->
+                  
                   <VList lines="two" >
-                    <template  v-for="(user, index) in datos" :key="user.total" >
+                    <template  v-for="(user, index) in datos" :key="index" >
                       <VListItem border>
                         <!-- <template #prepend>
                           <VIcon :icon="user.prependIcon" class="me-3" />
                         </template> -->
 
                         <VListItemTitle>
-                          <span>Id: {{ user.user }}</span>
+                          <span>{{ (user.users.length > 0)? user.users[0].first_name + " " + user.users[0].last_name : "" }}</span>
                         </VListItemTitle>
                         <VListItemSubtitle class="mt-1">
-                          <span class="text-xs text-disabled">Usuario N° {{ index + 1 }}</span>
+                          <span class="text-xs text-disabled">Usuario N° {{ index + 1 }}, Tel. {{ user.users[0].phone_number }}, UserId. {{ user.userId }}</span>
                         </VListItemSubtitle>
                         <template #append>
-                          <VChip :color="user.total < 50 ? 'default' : (user.total < 100 ? 'warning' : 'success')" class="mr-4" >{{ user.total }} Sesiones </VChip>
+                          <VChip :color="user.navigationRecord < 50 ? 'default' : (user.navigationRecord < 100 ? 'warning' : 'success')" class="mr-4" >{{ user.navigationRecord }} Visitas </VChip>
+                          <VChip :color="user.sesiones < 50 ? 'default' : (user.sesiones < 100 ? 'warning' : 'success')" class="mr-4" >{{ user.sesiones }} Sesiones </VChip>
                           <!-- <VBtn size="small" href="/apps/user/view/"> Ver usuario </VBtn> -->
-                          <RouterLink :to="{ name: 'apps-user-view-id',  params: { id: user.user }, }" class="font-weight-medium user-list-name" >
+                          <RouterLink :to="{ name: 'apps-user-view-id',  params: { id: user.userId }, }" class="font-weight-medium user-list-name" >
                             <VBtn size="small"> Ver Perfil de usuario <VIcon end icon="tabler-user" /></VBtn>
                           </RouterLink>
                         </template>
@@ -90,21 +103,42 @@ const tabItemContent = 'Candy canes donut chupa chups candy canes lemon drops oa
 export default {
   data() {
     return {
+      usuarioFielModel:500,
+      listUsuarioFieles:[
+        {title:"20", value:20 },
+        {title:"30", value:30 },
+        {title:"50", value:50 },
+        {title:"100", value:100 },
+        {title:"300", value:300 },
+        {title:"400", value:400 },
+        {title:"500", value:500 },
+        {title:"700", value:700 },
+        ],
       datos: [],
+      maxRegistros:500,
       currentTab: 'tab-fieles'
     };
+  },
+  watch: {
+    async usuarioFielModel(newVal, oldVal) {
+      this.maxRegistros = newVal;
+      this.obtenerDatos();
+    }
   },
   mounted() {
     this.obtenerDatos();
   },
   methods: {
+    direccionar() {
+      window.location.href = 'https://servicio-de-actividad.vercel.app/actividad/users/fidelidad/export/excel?limit='+this.maxRegistros;
+    },
     async obtenerDatos() {
-      const respuesta = await fetch(`https://servicio-de-actividad.vercel.app/actividad/all`);
+      const respuesta = await fetch(`https://servicio-de-actividad.vercel.app/actividad/users/fidelidad?limit=${this.maxRegistros}`);
       const datos = await respuesta.json();
       const registros = datos.data;
-      const sumatoriaPorUsuario = {};
+      //const sumatoriaPorUsuario = {};
 
-      registros.forEach(registro => {
+      /*registros.forEach(registro => {
         const user = registro.user;
         const cantidad = 1;
 
@@ -113,16 +147,15 @@ export default {
         }
 
         sumatoriaPorUsuario[user] += cantidad;
-      });
+      });*/
 
-      const sumatoriasArray = Object.keys(sumatoriaPorUsuario).map(user => ({ user, total: sumatoriaPorUsuario[user] }));
+      //const sumatoriasArray = Object.keys(sumatoriaPorUsuario).map(user => ({ user, total: sumatoriaPorUsuario[user] }));
 
-      sumatoriasArray.sort((a, b) => b.total - a.total);
-      console.log(sumatoriasArray);
+      //sumatoriasArray.sort((a, b) => b.total - a.total);
+      //console.log(sumatoriasArray);
       // return sumatoriasArray;
-      const maxRegistros = 500;
-      const solo500 = sumatoriasArray.slice(0, maxRegistros);
-      this.datos = solo500; // trae solo 500 registros y la asignamos a la variable datos principal
+      //const solo500 = sumatoriasArray.slice(0, maxRegistros);
+      this.datos = registros; // trae solo 500 registros y la asignamos a la variable datos principal
       // this.datos = sumatoriasArray; // trae todps 
     }
   },
