@@ -42,10 +42,10 @@ const tabItemContent = 'Candy canes donut chupa chups candy canes lemon drops oa
                   </div>
                   <div class="d-flex align-center flex-wrap gap-2">
                   <!-- 👉 Reset button -->
-                  <VSelect style="width: 190px;" v-model="usuarioFielModel" :items="listUsuarioFieles" label="Usuarios fieles"
+                  <VSelect style="width: 190px;" class="d-none" v-model="usuarioFielModel" :items="listUsuarioFieles" label="Usuarios fieles"
                     clearable clear-icon="tabler-x" :searchable="true" />
                   <!-- 👉 Export button -->
-                  <VBtn variant="tonal" color="success" prepend-icon="mdi-file-excel" @click="direccionar">
+                  <VBtn variant="tonal" color="success" class="d-none" prepend-icon="mdi-file-excel" @click="direccionar">
                     Exportar usuarios
                   </VBtn>
                   <!-- 👉 Add user button -->
@@ -62,10 +62,10 @@ const tabItemContent = 'Candy canes donut chupa chups candy canes lemon drops oa
                           <VIcon :icon="user.prependIcon" class="me-3" />
                         </template> -->
 
-                        <VListItemTitle>
+                        <VListItemTitle class="d-none">
                           <span>{{ (user.users.length > 0)? user.users[0].first_name + " " + user.users[0].last_name : "" }}</span>
                         </VListItemTitle>
-                        <VListItemSubtitle class="mt-1">
+                        <VListItemSubtitle class="mt-1" color="info">
                           <span class="text-xs text-disabled">Usuario N° {{ index + 1 }}, Tel. {{ user.users[0].phone_number }}, UserId. {{ user.userId }}</span>
                         </VListItemSubtitle>
                         <template #append>
