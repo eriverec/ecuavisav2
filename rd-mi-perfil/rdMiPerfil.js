@@ -21,6 +21,58 @@ if(!ECUAVISA_EC.login()){
   Token();
 }
 
+//NUEVO MODAL 2023
+
+//declaramos el valor de la trivia primeramente
+localStorage.setItem("trivia1","false");
+
+const getTriviaone =  localStorage.getItem("trivia1");
+
+//redirigir y cambiar el valor del localstorage 
+function pathPage() {
+  localStorage.setItem("trivia1", "false"); // cambia el valor del LocalStorage
+  window.location.href = "https://www.ecuavisa.com/compania593/click-boom/que-esconde-la-cartera-de-victoria-KL4951862"; // redirige a otra página web
+}
+
+//funcion para mostrar el modal 
+function modalHTML() {
+
+  var tituloModal = document.querySelector("#modal_parent #modal_parent_titulo");
+  var textModal = document.querySelector("#modal_parent #modaparent_l_body");
+
+  textModal.innerHTML = `
+  <div class="contenido-modal">
+    <p class="parrafo-modal"> Gracias por ser parte de la comunidad de Ecuavisa. !Te invitamos a participar!</p>
+  </div>
+  <div class="text-ceter">
+    <button onclick="pathPage();" class="btn  btn-default btn-sm btn-modal-seguir"style="background-color: #2927b9;color: #ffffff">Haz clic aquí</button>
+  </div>
+  `
+
+  tituloModal.textContent = "Bienvenido"
+
+  console.log("mostrar el modal");
+  $('#modal_parent').modal('show');
+}
+
+//validacion 
+getTriviaone === "true" ?  modalHTML() : console.log("no mostrar el modal");
+
+
+// if(getTriviaone === "on"){
+//   modalHTML();
+// }else{
+//   console.log("no mostrar el modal")
+// }
+
+
+
+
+
+
+
+
+
 async function Token(){
   
     
@@ -292,7 +344,7 @@ async function Token(){
 
       var mensajeCambioContrasenia = function(resp, mensaje){
         if(!document.querySelector('#modal-resp')){
-          $("#cambiopass .modal-body").prepend(`<div id="modal-resp"></div>`);
+          $("#cambiopass .modal-body").append(`<div id="modal-resp"></div>`);
         }
         var respuesta = (resp?'success':'danger');
         $('#modal-resp').html(`
