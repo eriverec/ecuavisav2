@@ -58,21 +58,6 @@ function modalHTML() {
 //validacion 
 getTriviaone === "true" ?  modalHTML() : console.log("no mostrar el modal");
 
-
-// if(getTriviaone === "on"){
-//   modalHTML();
-// }else{
-//   console.log("no mostrar el modal")
-// }
-
-
-
-
-
-
-
-
-
 async function Token(){
   
     

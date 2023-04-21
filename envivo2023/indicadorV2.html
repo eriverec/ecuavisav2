@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <style>
+    .title_programa {
+      font-size: 1.2rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      width: 100%;
+      max-width: 640px;
+      background: #276cd3;
+      font-family: var(--font-1);
+      color: white;
+      margin: 10px auto 0;
+      position: relative;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="enVivoRedy" style="display: none;">
+    <div class="container">
+      <div class="liveIndicator pard__envivo"> <a href="/envivo"> <img
+            src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fsegvector.svg" alt="ecuavisa" width="28"
+            height="28" title="Icono parpadeo"> <span class="enVivoText"> En vivo</span> </a> </div>
+    </div>
+  </div>
+
+  <script>
+    const programacionLunes_a_Viernes = [
+      { inicio: "05:55", fin: "06:55", titulo: "Televistazo en la comunidad" },
+      { inicio: "06:55", fin: "07:30", titulo: "Contacto Directo" },
+      { inicio: "07:30:00", fin: "09:36:00", titulo: "Televistazo en la comunidad" },
+      { inicio: "10:30:00", fin: "13:00:00", titulo: "En Contacto" },
+      { inicio: "13:00:00", fin: "14:00:00", titulo: "Televistazo 13h00" },
+      { inicio: "14:00:00", fin: "16:30:00", titulo: "En Vivo" },
+      { inicio: "19:00:00", fin: "20:00:00", titulo: "Televistazo 19h00" },
+      { inicio: "20:00:00", fin: "21:00:00", titulo: "En Vivo" },
+      { inicio: "21:00:00", fin: "22:00:00", titulo: "En Vivo" },
+      { inicio: "22:00:00", fin: "23:00:00", titulo: "En Vivo" }
+    ];
+
+    const programacionSabado = [
+      { inicio: "19:00", fin: "19:30", titulo: "Televistazo 19h00" }
+    ];
+
+    const programacionDomingo = [
+      { inicio: "10:30", fin: "11:30", titulo: "Políticamente Correcto" },
+      { inicio: "19:00", fin: "20:00", titulo: "Televistazo 19h00" }
+
+    ];
+
+    function actDIV() {
+      document.querySelector('.enVivoRedy').style.display= 'flex';
+    }
+
+    function getConfigPlayerIndicador() {
+      var xhr = new XMLHttpRequest();
+      // var url = "url?data=" + encodeURIComponent(JSON.stringify({"email": "hey@mail.com", "password": "101010"}));
+      var url = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/getforcedplayer.php";
+      xhr.open("GET", url, true);
+      xhr.setRequestHeader("Content-Type", "application/json");
+      xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4 && xhr.status === 200) {
+          var datoJson = JSON.parse(xhr.responseText);
+          datoJson.estadoActivo ? actDIV() : console.log('player Inactivo Indicador');
+          // console.log(datoJson.titulo + ", " + datoJson.estadoActivo);
+        }
+      };
+      xhr.send();
+    }
+    getConfigPlayerIndicador(); 
+
+    function mostrarProgramacion() {
+      const ahora = new Date();
+      const dia = ahora.getDay();
+      const hora = ahora.getHours().toString().padStart(2, "0") + ':' + ahora.getMinutes().toString().padStart(2, "0") + ':' + ahora.getSeconds().toString().padStart(2, "0");
+      console.log(dia, hora)
+
+      let programacion = [];
+
+      // Elegir programación según día de la semana
+      switch (dia) {
+        case 0:
+          programacion = programacionDomingo;
+          break;
+        case 6:
+          programacion = programacionSabado;
+          break;
+        default:
+          programacion = programacionLunes_a_Viernes;
+          break;
+      }
+
+      let enProgramacion = false;
+      let tituloPrograma = "";
+      // let fuenteVideo = "";
+
+      // Verificar si estamos dentro del horario de programación
+      for (let i = 0; i < programacion.length; i++) {
+        const programa = programacion[i];
+        if (hora >= programa.inicio && hora <= programa.fin) {
+          enProgramacion = true;
+          // fuenteVideo = "https://www.youtube.com/embed/<ID_DEL_VIDEO>?autoplay=1&controls=0";
+          break;
+        }
+      }
+
+      let forzadoEvent = localStorage.getItem("playerForzado");
+      // console.log("forzadoEvent:", forzadoEvent)
+
+      if (forzadoEvent != "true") {
+        if (enProgramacion) {
+          document.querySelector('.enVivoRedy').style.display = 'flex';
+        } else {
+          document.querySelector('.enVivoRedy').style.display = 'none';
+        }
+      } else { }
+      // Llamar a la función de nuevo cada 3 segundos
+      setTimeout(mostrarProgramacion, 3000);
+    }
+
+    // Iniciar el ciclo de verificación
+    mostrarProgramacion();
+  </script>
+</body>
+
+</html>
