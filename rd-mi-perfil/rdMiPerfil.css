@@ -3,6 +3,79 @@
 .content_mp .temas-quemado .botones__ {
     display: none;
 }*/
+
+/**********************RECOMENDADOS**********************/
+
+
+.recomendados__miperfil {
+  margin: 30px 0;
+}
+
+.recomendados__miperfil > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 30px;
+}
+
+.recomendados__miperfil > div .recomendadas-rd {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+}
+
+.recomendados__miperfil > div .recomendadas-rd:nth-child(4),
+.recomendados__miperfil > div .recomendadas-rd:nth-child(5) {
+  display: none;
+}
+
+.recomendados__miperfil > div .recomendadas-rd .media_block {
+  width: 100%;
+}
+
+.recomendados__miperfil > div .recomendadas-rd .text_block {
+  padding: 15px 0;
+  width: 100%;
+}
+
+.recomendados__miperfil > div .recomendadas-rd .text_block .section {
+  font-family: 'mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  color: #2927b9;
+}
+
+.recomendados__miperfil > div .recomendadas-rd .text_block .headline{
+  margin-top: 5px;
+}
+
+.recomendados__miperfil > div .recomendadas-rd .text_block .headline h3 {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  display: flex;
+  align-items: flex-end;
+  color: #060127;
+}
+
+
+@media (max-width: 767px){
+  .recomendados__miperfil > div {
+    grid-template-columns: 1fr;
+    row-gap: 30px;
+  }
+}
+
+
+
+
+
 /**********************CINTILLO**********************/
 .isDisabled{
   opacity: 0.4;
