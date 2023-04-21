@@ -68,7 +68,21 @@
 @media (max-width: 767px){
   .recomendados__miperfil > div {
     grid-template-columns: 1fr;
-    row-gap: 30px;
+  }
+  .recomendados__miperfil > div .recomendadas-rd{
+    display: grid;
+    align-items: center;
+    grid-template-columns: 2fr 1fr;
+    gap: 10px;
+    padding: 20px 0;
+    border-bottom: 1px solid #2927B9;
+  }
+  .recomendados__miperfil > div .recomendadas-rd .text_block .headline h3 {
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 22px;
   }
 }
 
