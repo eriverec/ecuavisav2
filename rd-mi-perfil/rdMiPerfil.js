@@ -44,8 +44,8 @@ function modalHTML() {
   <div class="contenido-modal">
     <p class="parrafo-modal"> Gracias por ser parte de la comunidad de Ecuavisa. !Te invitamos a participar!</p>
   </div>
-  <div class="text-ceter">
-    <button onclick="pathPage();" class="btn  btn-default btn-sm btn-modal-seguir"style="background-color: #2927b9;color: #ffffff">Haz clic aquí</button>
+  <div class="text-center">
+    <button onclick="pathPage();" class="btn btn-default btn-sm btn-modal-seguir"style="background-color: #2927b9;color: #ffffff">Haz clic aquí</button>
   </div>
   `
 
