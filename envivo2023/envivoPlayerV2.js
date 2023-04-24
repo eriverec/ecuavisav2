@@ -57,7 +57,7 @@ function mostrarProgramacion() {
   const ahora = new Date();
   const dia = ahora.getDay();
   const hora = ahora.getHours().toString().padStart(2, "0") + ':' + ahora.getMinutes().toString().padStart(2, "0") + ':' + ahora.getSeconds().toString().padStart(2, "0");
-  console.log(dia,hora)
+  // console.log(dia,hora)
 
   let programacion = [];
 
