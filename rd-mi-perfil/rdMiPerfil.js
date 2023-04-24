@@ -31,7 +31,7 @@ const getTriviaone =  localStorage.getItem("trivia1");
 //redirigir y cambiar el valor del localstorage 
 function pathPage() {
   localStorage.setItem("trivia1", "false"); // cambia el valor del LocalStorage
-  window.location.href = "https://www.ecuavisa.com/compania593/click-boom/que-esconde-la-cartera-de-victoria-KL4951862"; // redirige a otra página web
+  window.location.href = "https://www.ecuavisa.com/compania593/click-boom/la-emocionante-transformacion-de-mare-cevallos-a-victoria-en-compania-593-DF4986489"; // redirige a otra página web
 }
 
 //funcion para mostrar el modal 
