@@ -126,8 +126,8 @@ function mostrarProgramacion() {
   } else { }
 
 
-  // Llamar a la función de nuevo cada 3 segundos
-  setTimeout(mostrarProgramacion, 3000);
+  // Llamar a la función de nuevo cada medio minuto
+  setTimeout(mostrarProgramacion, 30000);
 }
 
 // Iniciar el ciclo de verificación
