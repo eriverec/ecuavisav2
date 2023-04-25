@@ -42,6 +42,10 @@
   width: 100%;
 }
 
+.recomendados__miperfil > div .recomendadas-rd .media_block .multimedia .multimediaIconMacroWrapper a div img {
+  border-radius: 5px;
+}
+
 .recomendados__miperfil > div .recomendadas-rd .text_block {
   padding: 15px 0;
   width: 100%;
