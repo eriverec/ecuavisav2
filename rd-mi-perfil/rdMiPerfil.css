@@ -8,13 +8,23 @@
 
 
 .recomendados__miperfil {
-  margin: 30px 0;
+  margin-bottom: 30px;
 }
 
 .recomendados__miperfil > div {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   column-gap: 30px;
+}
+
+.recomendados__miperfil .iconPlay{
+  background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Ficonplayrd.svg);
+  width: 30px;
+  height: 30px;
+  top: 15px;
+  right: 10px;
+  left: initial;
+  bottom: initial;
 }
 
 .recomendados__miperfil > div .recomendadas-rd {
@@ -924,6 +934,12 @@
 .mp_title:hover {
   color: #2927B9;
 }
+
+#mp-recomendados .mp_title:after {
+  content: initial;
+}
+
+
 
 .mp_title:after {
   content: url('./assets/chevron-down.svg');
