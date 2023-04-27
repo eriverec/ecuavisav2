@@ -4,6 +4,63 @@
     display: none;
 }*/
 
+/**********************notas drivers**********************/
+
+.MP_notas_driver .title__drivers {
+  font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 28px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    color: #060127;
+    color: #2927B9;
+}
+
+.MP_notas_driver .noticias .article .media_block .text_block .headline h3{
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  display: flex;
+  align-items: flex-end;
+  color: #060127;
+}
+.MP_notas_driver .noticias .article .media_block .text_block .subheadline,
+.MP_notas_driver .noticias .article .media_block .text_block .inf2.rd_date{
+  display: none;
+}
+
+.MP_notas_driver .noticias .article .media_block .text_block .section {
+  font-family: 'mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  color: #2927b9;
+}
+
+.MP_notas_driver .noticias .article .media_block .text_block {
+  padding: 15px 0;
+  width: 100%;
+}
+
+.MP_notas_driver .noticias .article .iconPlay{
+  background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Ficonplayrd.svg');
+  width: 30px;
+  height: 30px;
+  top: 15px;
+  right: 10px;
+  left: initial;
+  bottom: initial;
+}
+
+
 /**********************RECOMENDADOS**********************/
 
 
@@ -18,7 +75,7 @@
 }
 
 .recomendados__miperfil .iconPlay{
-  background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Ficonplayrd.svg);
+  background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Ficonplayrd.svg');
   width: 30px;
   height: 30px;
   top: 15px;

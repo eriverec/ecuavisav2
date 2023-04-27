@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Templa API Senpulse</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.1/normalize.css">
+  <style>
+    a {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="list-container"></div>
+
+  <script>
+    fetch('https://www.ecuavisa.com/rss/data-noticia.json')
+      .then(response => response.json())
+      .then(json => {
+        const items = json.rss.channel.item;
+        const listContainer = document.getElementById('list-container');
+
+        // Creamos una plantilla para cada objeto item.
+        const template = ({ title, link, seccion, image }) => `
+          <div>
+            <h3><a href="${link}">${title}</a></h3>
+            <img src="${image}" alt="${title}" width="400px">
+            <div>${seccion}</div>
+          </div>
+        `;
+
+        items.forEach(item => {
+          const title = item.title;
+          const link = item.link;
+          const content = item.content ? item.content : item.content[0];
+          const seccion = link.split('/')[3];
+          const image = content.url ? content.url : content[0].url;
+
+          const listItem = document.createElement('article');
+          listItem.innerHTML = template({ title, link, image, seccion });
+          listContainer.appendChild(listItem);
+        });
+        // Obtenemos el div contenedor de la lista HTML y codificamos su contenido HTML en Base64.
+        const listHTML = document.getElementById('list-container').innerHTML;
+        console.log(listHTML)
+        // const base64HTML = btoa(listHTML);
+        // console.log('HTML en Base64: ', base64HTML);
+        const options = {
+          method: 'PUT',
+          headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            'api-key': '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'
+          },
+          body: JSON.stringify({
+            htmlContent: listHTML
+          })
+        };
+    
+      })
+      .catch(error => console.log(error));
+      
+      fetch('https://api.sendinblue.com/v3/smtp/templates/2', options)
+        .then(response => response.json())
+        .then(response => console.log(response))
+        .catch(err => console.error(err));
+
+
+
+
+  </script>
+</body>
+
+</html>
