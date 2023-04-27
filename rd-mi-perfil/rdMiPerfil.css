@@ -18,6 +18,12 @@
     color: #2927B9;
 }
 
+.MP_notas_driver .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div img {
+  height: 100% !important;
+  object-fit: cover;
+  border-radius: 2px;
+}
+
 .MP_notas_driver .noticias .article .media_block .text_block .headline h3{
   font-family: 'Archivo';
   font-style: normal;
