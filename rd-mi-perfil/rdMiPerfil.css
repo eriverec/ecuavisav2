@@ -24,6 +24,16 @@
   border-radius: 2px;
 }
 
+.list_article_drivers .swiper-pagination-bullet {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+.list_article_drivers .swiper-pagination-bullet-active {
+  background: #2927b9;
+}
+
+
 .MP_notas_driver .noticias .article .media_block .text_block .headline h3{
   font-family: 'Archivo';
   font-style: normal;
