@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+
+  <!-- El script de la librería-->
+  <script src="html2pdf.bundle.min.js"></script>
+
+
+
+
+</head>
+
+<body>
+
+  <h1>Mi página web</h1>
+  <strong>Presiona el siguiente botón para crear un PDF:</strong>
+  <button id="btnCrearPdf">Click aquí</button>
+
+  <div style="display: none;">
+    <h1 class="headline fw-bolder"
+      canonicalurl="/entretenimiento/television/asi-fue-la-presentacion-de-don-alfonso-espinosa-de-los-monteros-en-la-alfombra-roja-de-calabozos-y-dragones-BG4796164"
+      idart="4796164"><span class="priority-content">Así fue la presentación de 'Don Alfonso' Espinosa de
+        los Monteros en la alfombra roja de Calabozos y Dragones</span></h1>
+
+    <div class="text ">
+      <div class="paragraph siquev2">
+        <p></p>
+        <p><b>'Don Alfonso' Espinosa de los Monteros</b> participó en la <i>premier </i>de la película<b><a
+              rel="noopener noreferrer"
+              href="https://www.ecuavisa.com/entretenimiento/cine/https-www-ecuavisa-com-entretenimiento-cine-don-alfonso-espinosa-de-los-monteros-cuenta-en-exclusiva-detalles-de-su-salto-a-hollywood-en-calabozos-y-EC4554336"
+              target="_blank"> Calabozos y Dragones</a> en México</b>. Con un traje azul, y de la mano de su
+          esposa, recorrió la alfombra roja, este 29 de marzo.</p>
+        <p></p>
+        <p>Con una sonrisa en su rostro fue capturado por las cámaras de los medios de comunicación de todo
+          el mundo, dio algunas <b>declaraciones</b> contando su rol en la película: actor de doblaje.</p>
+        <div id="sunmedia-div"></div>
+        <p></p>
+        <p>El evento era a propósito del <b>lanzamiento a nivel mundial</b> que será en los próximos días.
+        </p>
+        <p></p>
+        <p>Más temprano, 'Don Alfonso' contó que estaba aprovechando el viaje para hacer <b>turismo.
+          </b>Publicó un video desde un bus de turismo, listo para dar un paseo en la ciudad.</p>
+        <p></p>
+        <p>Lea más: <b><a rel="noopener noreferrer"
+              href="https://www.ecuavisa.com/entretenimiento/television/don-alfonso-bromea-con-el-apagon-en-el-set-de-televistazo-BX4246276"
+              target="_blank">'Don Alfonso' bromea con el apagón en el set de Televistazo</a></b></p>
+        <div align="center" class="my-4" data-ads="center1" data-ad="top-generico" id="center1"></div>
+      </div>
+
+
+      <h2 class="h2-componente">Don Alfonso dará la voz a un personaje de Calabozos y Dragones</h2>
+      <div class="paragraph siquev2">
+        <p></p>
+        <p><b>'Don Alfonso' </b>es la voz en español de Sven Salfin, un poderoso <b>guerrero</b> que vuelve
+          a la vida y busca a su hermano; se trata de un personaje animado con barba y un estilo medieval.
+        </p>
+        <p></p>
+        <p>En entrevista para Ecuavisa.com, el <a rel="noopener noreferrer"
+            href="https://www.ecuavisa.com/entretenimiento/television/ecuavisa-66-anos-historia-alfonso-espinosa-monteros-IA4534291"
+            target="_blank">presentador de <b>Televistazo</b> </a>evita 'espoilear' la película para que sus
+          fanáticos puedan disfrutarla plenamente en el cine.</p>
+        <p></p>
+        <p>Cuenta que su participación es de pocos minutos, pero que "por supuesto" se siente identificado
+          con el <b>guerrero</b> al que da vida.</p>
+        <p></p>
+        <p>Confiesa que cuando recibió la invitación se imaginó que iba a doblar a actores de la talla de
+          Hugh Grant, el villano de la película.</p>
+      </div>
+      <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet modal-form-trivia p-0 m-0 w-100">
+        <div> </div>
+      </div>
+    </div>
+
+    <div class="img">
+      <img
+        src="https://www.ecuavisa.com/binrepository/768x1024/0c0/768d1024/none/11705/DBVG/c8d578a0-e397-47c9-97bc-194b7760bfa9_879225_20230329203850.jpg"
+        width="300px" alt="">
+
+    </div>
+
+
+  </div>
+
+
+  <div class="htmlPreparado">
+    <h2 class="titulo"></h2>
+    <div class="base64-img"><img src="" width="300px" alt=""></div>
+    <div class="texto"></div>
+  </div>
+
+  <script>
+
+    // Obtener el contenido del div header
+    const header = document.querySelector('.headline.fw-bolder');
+    const headerText = header.querySelector('span').textContent;
+    // Agregar el contenido al div titulo
+    const titulo = document.querySelector('.htmlPreparado .titulo');
+    titulo.textContent = headerText;
+
+
+    const body = document.querySelector('.text .paragraph');
+    // const bodyText = body.querySelectorAll('p').textContent;
+
+    const parrafos = body.querySelectorAll('p');
+
+    // Recorrer los elementos p y mostrar su contenido
+    parrafos.forEach(parrafo => {
+      // console.log(parrafo.textContent);
+      // if (parrafo.textContent !== "") {
+      const texto = document.querySelector('.htmlPreparado .texto');
+      texto.innerHTML += parrafo.outerHTML;
+      // }
+    });
+
+    /*IMAGEN ------------------*/
+
+
+    const originalImg = document.querySelector('.img img');
+
+    fetch(originalImg.src)
+      .then(response => response.blob())
+      .then(blob => {
+        const reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onloadend = () => {
+          const base64data = reader.result;
+          const base64Img = document.querySelector('.base64-img img');
+          base64Img.src = base64data;
+        }
+      });
+
+
+
+
+    // console.log(document.querySelector(".htmlPreparado"))
+    document.addEventListener("DOMContentLoaded", () => {
+      // Escuchamos el click del botón
+      const $boton = document.querySelector("#btnCrearPdf");
+      $boton.addEventListener("click", () => {
+        const $elementoParaConvertir = document.querySelector(".htmlPreparado"); // <-- Aquí puedes elegir cualquier elemento del DOM
+        html2pdf()
+          .set({
+            margin: 1,
+            filename: 'documento.pdf',
+            image: {
+              type: 'jpeg',
+              quality: 0.98
+            },
+            html2canvas: {
+              scale: 3, // A mayor escala, mejores gráficos, pero más peso
+              letterRendering: true,
+            },
+            jsPDF: {
+              unit: "in",
+              format: "a3",
+              orientation: 'portrait' // landscape o portrait
+            }
+          })
+          .from($elementoParaConvertir)
+          .save()
+          .catch(err => console.log(err));
+      });
+    });
+  </script>
+
+</body>
+
+</html>
