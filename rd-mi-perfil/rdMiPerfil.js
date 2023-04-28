@@ -889,6 +889,9 @@ var modalUsuarioSugerencia = {
         }, 500);
       },
       body:function(){
+        document.querySelector('#modal_body_seguimiento_tema').innerHTML=`<div class="spinner-border" role="status">
+          <span class="sr-only">Loading...</span>
+        </div>`;
         var fun = this;
         /*FETCH*/
         var myHeaders = new Headers();
