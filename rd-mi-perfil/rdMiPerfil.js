@@ -847,7 +847,144 @@ modalUserNewPerfil.init()
 /************BLOQUE SEGUIMIENTO DE INTERESES************/
 
 
+/**********************BLOQUE MODAL DE SUGERENCIAS**********************/
+var modalUsuarioSugerencia = {
+      modalAlert:function(){
+        var alert = document.querySelector('#alert-mensaje-1');
+        if(ECUAVISA_EC.USER_data('wylexUserAlertView') == 'true' && ECUAVISA_EC.USER_data('isnewuser') == 0){
+          if(alert.classList.contains('d-none')){
+            alert.classList.remove("d-none");
+          }
+        }
+        document.querySelector(`#alert-mensaje-1 button[aria-label="Close"]`).addEventListener("click", function(e){
+          ECUAVISA_EC.SET_user('wylexUserAlertView', false);
+        });
+      },
+      title:function(){
+        document.querySelector('#modal_titulo_seguimiento_tema').innerHTML = `Cuéntanos sobre ti`;
+      },
+      load:function(){
+        var classListaTemas = document.querySelector('#listado-temas-modal');
+        classListaTemas.classList.remove("isDisabled");
+        return true;
+      },
+      btn_click:function(id, title){
+        var template = document.getElementById(`template_${id}`);
+        var btn = document.getElementById(`btn_${id}`);
+        btn.setAttribute('disabled', true);
+        if (template.classList.contains('remove')) {
+          template.classList.remove('remove');
+        } else {
+          template.classList.add('remove');
+        }
+        btn.removeAttribute('disabled');
+      },
+      initComponent:function(){
+        var contador = 0;
+        var existemodal = setInterval(function () {
+            if ((typeof $().modal == 'function')) {
+                $('#modal_seguimiento_temas').modal('show');
+                clearInterval(existemodal);
+            }
+        }, 500);
+      },
+      body:function(){
+        var fun = this;
+        /*FETCH*/
+        var myHeaders = new Headers();
+        var urlSugerencia = "https://sugerencias-ecuavisa.vercel.app/all";
+        var requestOptions = {
+          method: 'GET',
+          headers: myHeaders
+        };
+        fetch(urlSugerencia, requestOptions).then(response => {
+          return response.json();
+        }).then(jsondata => {
+          if (jsondata.resp) {
+            /*FETCH FIN*/
+            fun.temas = [ { "interes":"Sugerencias", "data":jsondata.data } ];
+            var temasSeguir = ``;
+            for(var i in fun.temas){
+              var ins = fun.temas[i];
+              temasSeguir += `<p class="mis-intereses-modal py-1 m-0" style="width:100%">
+                ${ins.interes}
+               </p>`;
 
+               for(var j in ins.data){
+                var dat = ins.data[j];
+                  dat["id"] = dat._id;
+                  dat["name"] = dat.title;
+                  temasSeguir+= `<div class="item_tema t_${dat.id}">
+                       <div class="keywords font-2 fs13">
+                          <div class="template-meta-favorite-action" value="${dat.name}" id="template_${dat.id}" title="Seguir sugerencia" onclick="modalUsuarioSugerencia.btn_click('${dat.id}', '${dat.name}')" style="/* display:none; */">
+                             <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" id="btn_${dat.id}">
+
+                                <small>${dat.name}</small>
+
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd" d="M2 2v4.586l7 7L13.586 9l-7-7H2zM1 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2z"></path>
+                                  <path fill-rule="evenodd" d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"></path>
+                                </svg>
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                  <path fill-rule="evenodd" d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
+                                </svg>
+                             </button> 
+                          </div>
+                       </div>
+                   </div>`;
+               }
+              
+            }
+
+            document.querySelector('#modal_body_seguimiento_tema').innerHTML = `
+            <div class="contenido-modal">
+               <p class="parrafo-modal">
+                Para ofrecerte una mejor experiencia elige los intereses que se ajusten a ti.
+               </p>
+               <p class="mis-intereses-modal fw-bold">
+                Mis intereses
+               </p>
+               <hr>
+               <div class="listado-temas isDisabled" id="listado-temas-modal" style=" overflow: auto; max-height: 350px; ">
+                  ${temasSeguir}
+               </div>
+            </div>`;
+
+            fun.load();
+          }
+        });
+      },
+      existeTemaSeguimiento:function(){
+        var num = 0;
+        var highlightedItemss = document.querySelectorAll(".template-meta-favorite-action");
+        highlightedItemss.forEach((userItem) => {
+          if(userItem.classList.contains('remove')){
+            num ++;
+          }
+        });
+
+        return {
+          existe: num > 0,
+          num : num
+        };
+      },
+      init:function(){
+        var numIter = 1;
+        var ins = this;
+        ins.title();
+        ins.body();
+        ins.initComponent();
+      },
+      temas:[
+        {
+          "interes":"Noticias",
+          "data":[
+            {id:'', name:''},
+          ]
+        }
+      ]
+    }
+/**********************BLOQUE MODAL DE SUGERENCIAS**********************/
 
     var perfil = {
       init: () => {
@@ -856,6 +993,7 @@ modalUserNewPerfil.init()
         perfil.noticias.listar();
 
         modalUserNew.modalAlert();
+        //modalUsuarioSugerencia.init();
         if(ECUAVISA_EC.USER_data('isnewuser') == 0){
           /*****MOSTRAMOS EL MODAL SI EL USUARIO ES NUEVO******/
           /*modalUserNew.init();*/
