@@ -711,20 +711,18 @@ var modalUserNewPerfil = {
     activarIterPerfil_2();
     /*Activa iter con el modal*/
 
-    var existemodal = setInterval(function () {
-        if ((typeof $().modal == 'function')) {
+    //var existemodal = setInterval(function () {
+        //if ((typeof $().modal == 'function')) {
             // $('#segTemasPerfil').modal('show');
-            $('#btn_enviar_seguimiento_tema').click(function(){
+            /*$('#btn_enviar_seguimiento_tema').click(function(){
               if(!modalUserNewPerfil.existeTemaSeguimiento().existe){
                 alert('Debe seleccionar al menos 1');
                 return false;
               }
               ECUAVISA_EC.SET_user('wylexStatusPerfil', 1);
               ECUAVISA_EC.SET_user('wylexUserAlertView', false);
-              /*CAMBIA EL ESTADO DEL MODAL CUANDO EL USUARIO TIENE SELECCIONADO YA SUS INTERESES, Y YA NO MUESTRA EL ALERT*/
               // $('#segTemasPerfil').modal('hide');
 
-              /*FETCH*/
               fetch(`${ECUAVISA_EC.api.loginService}updatestatususer`, {
                 method: "PUT",
                 headers: {
@@ -741,13 +739,12 @@ var modalUserNewPerfil = {
                     console.log(result);
                   }
                 }).catch((error) => {
-                  console.log("error", error); /*; window.location = URL_login_G*/
+                  console.log("error", error); 
                 });
-                /*FETCH FIN*/
-            });
-            clearInterval(existemodal);
-        }
-    }, 500);
+            });*/
+            //clearInterval(existemodal);
+       // }
+    //}, 500);
 
     setTimeout(function(){
       document.querySelectorAll('button.btn-modal-seguir').forEach(function(elemento) {
