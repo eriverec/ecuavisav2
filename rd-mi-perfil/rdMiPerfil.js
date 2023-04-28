@@ -917,7 +917,8 @@ var modalUsuarioSugerencia = {
                 var dat = ins.data[j];
                   dat["id"] = dat._id;
                   dat["name"] = dat.title;
-                  temasSeguir+= `<div class="item_tema t_${dat.id}">
+                  if(dat.estado){
+                    temasSeguir+= `<div class="item_tema t_${dat.id}">
                        <div class="keywords font-2 fs13">
                           <div class="template-meta-favorite-action" value="${dat.name}" id="template_${dat.id}" title="Seguir sugerencia" onclick="modalUsuarioSugerencia.btn_click('${dat.id}', '${dat.name}')" style="/* display:none; */">
                              <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" id="btn_${dat.id}">
@@ -935,6 +936,7 @@ var modalUsuarioSugerencia = {
                           </div>
                        </div>
                    </div>`;
+                  }
                }
               
             }
