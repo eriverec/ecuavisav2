@@ -49,6 +49,14 @@ export default [
     ],
   },
 
+  {
+    title: 'Sugerencias',
+    icon: { icon: 'tabler-status-change' },
+    children: [
+      { title: 'Ver sugerencias', to: 'apps-sugerencias-list' },
+      { title: 'Agregar sugerencias', to: 'apps-sugerencias-add' },
+    ],
+  },
 
   // {
   //   title: 'Paquetes',
