@@ -58,12 +58,14 @@ if (day > 0 && day <= 5) {
   // }
 
   if ("05:55" <= timeOfDay && timeOfDay <= "09:00") {
-      actDIV();      
+    actDIV();      
   } else if ("10:30" <= timeOfDay && timeOfDay <= "16:00") {
-      actDIV();
-  } else if ("19:00" <= timeOfDay && timeOfDay <= "23:00") {
-      actDIV();
-  } else {}
+    actDIV();
+  } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
+    actDIV();
+  }else if ("21:00" <= timeOfDay && timeOfDay <= "22:00") {
+    actDIV();
+  }  else {}
 } 
 else if (day === 6) {
   if ("19:00" <= timeOfDay && timeOfDay <= "19:30") {
