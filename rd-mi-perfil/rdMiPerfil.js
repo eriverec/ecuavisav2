@@ -899,6 +899,14 @@ var modalUsuarioSugerencia = {
           console.log("error", error);
         });
       },
+      existeSugerencia:function(sugerenciaId, data){
+        for(var i in data){
+          if(data[i].sugerenciaId == sugerenciaId){
+            return true;
+          }
+        }
+        return false;
+      },
       initComponent:function(){
         var contador = 0;
         var existemodal = setInterval(function () {
@@ -912,10 +920,11 @@ var modalUsuarioSugerencia = {
         document.querySelector('#modal_body_seguimiento_tema').innerHTML=`<div class="spinner-border" role="status">
           <span class="sr-only">Loading...</span>
         </div>`;
+        var getUser = ECUAVISA_EC.USER_data();
         var fun = this;
         /*FETCH*/
         var myHeaders = new Headers();
-        var urlSugerencia = "https://sugerencias-ecuavisa.vercel.app/all";
+        var urlSugerencia = "https://sugerencias-ecuavisa.vercel.app/all?userId="+getUser.id;
         var requestOptions = {
           method: 'GET',
           headers: myHeaders
@@ -940,7 +949,7 @@ var modalUsuarioSugerencia = {
                   if(dat.estado){
                     temasSeguir+= `<div class="item_tema t_${dat.id}">
                        <div class="keywords font-2 fs13">
-                          <div class="template-meta-favorite-action" value="${dat.name}" id="template_${dat.id}" title="Seguir sugerencia" onclick="modalUsuarioSugerencia.btn_click('${dat.id}', '${dat.name}')" style="/* display:none; */">
+                          <div class="template-meta-favorite-action ${fun.existeSugerencia(dat.id, jsondata.dataSugerenciasSeguido)?'remove':''}" value="${dat.name}" id="template_${dat.id}" title="Seguir sugerencia" onclick="modalUsuarioSugerencia.btn_click('${dat.id}', '${dat.name}')" style="/* display:none; */">
                              <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" id="btn_${dat.id}">
 
                                 <small>${dat.name}</small>
