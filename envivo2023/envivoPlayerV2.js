@@ -12,12 +12,12 @@ const programacionLunes_a_Viernes = [
 ];
 
 const programacionSabado = [
-  { inicio: "19:00", fin: "19:30", titulo: "Televistazo 19h00" }
+  { inicio: "19:00:00", fin: "19:30:00", titulo: "Televistazo 19h00" }
 ];
 
 const programacionDomingo = [
-  { inicio: "10:30", fin: "11:30", titulo: "Políticamente Correcto" },
-  { inicio: "19:00", fin: "20:00", titulo: "Televistazo 19h00" }
+  { inicio: "10:30:00", fin: "11:30:00", titulo: "Políticamente Correcto" },
+  { inicio: "19:00:00", fin: "20:00:00", titulo: "Televistazo 19h00" }
 
 ];
 
