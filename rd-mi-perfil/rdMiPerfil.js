@@ -866,15 +866,38 @@ var modalUsuarioSugerencia = {
         return true;
       },
       btn_click:function(id, title){
+        var getUser = ECUAVISA_EC.USER_data();
         var template = document.getElementById(`template_${id}`);
         var btn = document.getElementById(`btn_${id}`);
+        var estado = 0;
         btn.setAttribute('disabled', true);
         if (template.classList.contains('remove')) {
           template.classList.remove('remove');
+          estado = 0;
         } else {
           template.classList.add('remove');
+          estado = 0;
         }
         btn.removeAttribute('disabled');
+
+        var resp = fetch("https://sugerencias-ecuavisa.vercel.app/addsugerencia", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            "userId": getUser.id,
+            "sugerenciaId": id,
+            "estado": estado
+          }),
+        }).then( (response) => response.json())
+        .then( (result) => {
+          console.log(result)
+          return true;
+        })
+        .catch((error) => {
+          console.log("error", error);
+        });
       },
       initComponent:function(){
         var contador = 0;
