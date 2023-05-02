@@ -24,7 +24,7 @@ export default [
   //   icon: { icon: 'tabler-database' },
   //   to: { name: 'apps-trazabilidad-list' },
   //   // children: [
-  //   //   { title: 'Lista', to: 'apps-trasabilidad-list' },
+  //   //   { title: 'Lista', to: 'apps-trazabilidad-list' },
   //   //   // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
   //   // ],
   // },
@@ -34,7 +34,7 @@ export default [
     icon: { icon: 'tabler-balloon' },
     to: { name: 'apps-concursos' },
     // children: [
-    //   { title: 'Lista', to: 'apps-trasabilidad-list' },
+    //   { title: 'Lista', to: 'apps-trazabilidad-list' },
     //   // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
     // ],
   },

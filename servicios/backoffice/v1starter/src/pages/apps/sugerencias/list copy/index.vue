@@ -41,11 +41,11 @@ const currentTab = ref('tab-lista')
                           <span>{{ title.title }}</span>
                         </VListItemTitle>
                         <VListItemSubtitle class="mt-1" color="info">
-                          <span class="text-xs text-disabled">Item N° {{ index + 1 }}: {{ title.description }}</span>
+                          <span class="text-xs text-disabled">Item N° {{ index + 1 }}</span>
                         </VListItemSubtitle>
                         <template #append>
-                          <VChip :color="title.estado == true ? 'success' : 'warning'" class="mr-4" >{{ title.estado == true ? 'Activo' : 'Inactivo' }} </VChip>
-                          <VChip :color="default" class="mr-4" >{{ title.users_suscribed }} Sesiones </VChip>
+                          <!-- <VChip :color="user.navigationRecord < 50 ? 'default' : (title.navigationRecord < 100 ? 'warning' : 'success')" class="mr-4" >{{ title.navigationRecord }} Visitas </VChip> -->
+                          <!-- <VChip :color="title.sesiones < 50 ? 'default' : (title.sesiones < 100 ? 'warning' : 'success')" class="mr-4" >{{ title.sesiones }} Sesiones </VChip> -->
                           <!-- <VBtn size="small" href="/apps/user/view/"> Ver usuario </VBtn> -->
                           <!-- <RouterLink :to="{ name: 'apps-user-view-id',  params: { id: user.userId }, }" class="font-weight-medium user-list-name" >
                             <VBtn size="small"> Ver Perfil de usuario <VIcon end icon="tabler-user" /></VBtn>
@@ -60,6 +60,42 @@ const currentTab = ref('tab-lista')
 
               <VWindowItem value="tab-agregar">
                 <p>Próximamente</p>
+                <VForm class="mt-2" @submit.prevent="handleSubmit">
+            <VRow>
+              <VCol md="6" cols="12" >
+                <VTextField v-model="suggestion.title" id="title" label="Título" />
+              </VCol>
+
+              <VCol md="6" cols="12" >
+                <VTextField label="Descripción"  id="description" v-model="suggestion.description" />
+              </VCol>
+
+               <!-- 👉 Checkbox -->
+              <VCol cols="12" md="9" >
+                <VCheckbox  v-model="suggestion.estado" id="estado" label="Publicado" />
+                <VBtn type="submit"> Submit </VBtn>
+              </VCol>
+             
+              
+            </VRow>
+          </VForm>
+                  <!-- <form @submit.prevent="handleSubmit">
+                    <div>
+                      <label for="title">Título:</label>
+                      <input id="title" type="text" v-model="suggestion.title" />
+                    </div>
+                    <div>
+                      <label for="description">Descripción:</label>
+                      <textarea id="description" v-model="suggestion.description"></textarea>
+                    </div>
+                    <div>
+                      <label for="estado">Estado:</label>
+                      <input id="estado" type="checkbox" v-model="suggestion.estado" />
+                    </div>
+                    <div>
+                      <button type="submit">Agregar sugerencia</button>
+                    </div>
+                  </form> -->
 
               </VWindowItem>
 
@@ -135,8 +171,7 @@ export default {
         // sumatoriaPorUsuario[estado] += cantidad;
       });/**/
 
-      // const sumatoriasArray = Object.keys(sumatoriaPorUsuario).map(title => ({ title, users_suscribed: sumatoriaPorUsuario[title] }));
-      const sumatoriasArray = Object.keys(sumatoriaPorUsuario).map(title => ({ title  })).map(estado => ({ estado }));
+      const sumatoriasArray = Object.keys(sumatoriaPorUsuario).map(title => ({ title, users_suscribed: sumatoriaPorUsuario[title] }));
 
       sumatoriasArray.sort((a, b) => b.title - a.title);
       //console.log(sumatoriasArray);
