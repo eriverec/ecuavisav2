@@ -901,7 +901,7 @@ var modalUsuarioSugerencia = {
       },
       existeSugerencia:function(sugerenciaId, data){
         for(var i in data){
-          if(data[i].sugerenciaId == sugerenciaId){
+          if(data[i].sugerenciaId == sugerenciaId && data.meta_existe == true){
             return true;
           }
         }
