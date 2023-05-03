@@ -9,6 +9,7 @@
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      background: #2f3349;
     }
 
     #chartdiv {
@@ -75,10 +76,20 @@
       categoryAxis.dataFields.category = "series";
       categoryAxis.renderer.minGridDistance = 20;
       categoryAxis.renderer.minWidth = 120;
-      // categoryAxis.renderer.grid.template.opacity = 0;
+      categoryAxis.renderer.labels.template.fill = am4core.color("#FFFFFF");
+      // categoryAxis.renderer.grid.template.opacity = 3;
 
       var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
       // valueAxis.renderer.grid.template.opacity = 0;
+      valueAxis.renderer.labels.template.fill = am4core.color("#FFFFFF");
+      valueAxis.min = 0;
+
+      // cambiar el color del grid a blanco
+      categoryAxis.renderer.grid.template.strokeOpacity = .2;
+      categoryAxis.renderer.grid.template.stroke = am4core.color("#c7c7c7");
+      valueAxis.renderer.grid.template.strokeOpacity = .2;
+      valueAxis.renderer.grid.template.stroke = am4core.color("#c7c7c7");
+
 
       valueAxis.renderer.maxLabelPosition = 0.98;
       valueAxis.min = 0;
@@ -88,16 +99,20 @@
       series.dataFields.categoryY = "series";
       series.dataFields.valueX = "value";
       series.tooltipText = "{valueX.value}";
-      series.sequencedInterpolation = true;
-      series.defaultState.transitionDuration = 1000;
-      series.sequencedInterpolationDelay = 100;
+      // series.dataFields.labels.template.fill = am4core.color("#FFFFFF");
       series.columns.template.strokeOpacity = 0;
       series.columns.template.background.fillOpacity = 0.1;
+      // series.sequencedInterpolation = true;
+      // series.defaultState.transitionDuration = 1000;
+      // series.sequencedInterpolationDelay = 100;
+      // cambiar el color de las etiquetas del nombre de las series a blanco
       // series.columns.template.column.cornerRadiusBottomRight = 5;
       // series.columns.template.column.cornerRadiusTopRight = 5;
 
-      series.columns.template.fill = am4core.color("#2CC990");
-      // series.columns.template.adapter.add("fill", assignColor);
+      // cambiar el color del texto de la etiqueta de la categoría de la serie deseada a blanco
+ 
+
+      series.columns.template.fill = am4core.color("#7367f0");
 
       chart.cursor = new am4charts.XYCursor();
       chart.cursor.behavior = "zoomY";
@@ -109,6 +124,8 @@
       labelBullet.label.dx = 10;
       labelBullet.label.text = "{value}";
       labelBullet.locationX = 1;
+      // labelBullet.label.fontSize = 20;
+      labelBullet.label.fill = am4core.color("#FFFFFF");
 
 
     }
