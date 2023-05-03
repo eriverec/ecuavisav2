@@ -60,6 +60,14 @@ const currentTab = ref('tab-lista')
 
               <VWindowItem value="tab-agregar">
                 <p>Próximamente</p>
+                <!-- <iframe src="http://localhost/ecuavisav2/servicios/embeds/sugerenciasAnalytics.html" frameborder="0"></iframe> -->
+                <div style="display: none;">
+                  <iframe style="background:#2f3349 ;" class="iframe-dark" src="https://ecuavisadev.netlify.app/servicios/embeds/suganalyticsdark.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
+                  <iframe class="iframe-light" src="https://ecuavisadev.netlify.app/servicios/embeds/suganalyticslight.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
+
+                </div>
+
+
 
               </VWindowItem>
 
@@ -74,6 +82,24 @@ const currentTab = ref('tab-lista')
     </VRow>
   </section>
 </template>
+<style scoped>  
+.v-card.v-theme--dark .iframe-dark {
+  display: block;
+}
+.v-card.v-theme--dark .iframe-light{
+  display: none;
+}
+
+.v-card.v-theme--light .iframe-dark{
+  display: none;
+}
+.v-card.v-theme--light .iframe-light{
+  display: block;
+}
+
+
+
+</style>
 
 <script>
 export default {
