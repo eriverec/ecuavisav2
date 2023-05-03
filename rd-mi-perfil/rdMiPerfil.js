@@ -876,7 +876,7 @@ var modalUsuarioSugerencia = {
           estado = 0;
         } else {
           template.classList.add('remove');
-          estado = 0;
+          estado = 1;
         }
         btn.removeAttribute('disabled');
 
