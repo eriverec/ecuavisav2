@@ -47,9 +47,11 @@ const currentTab = ref('tab-lista')
                           <VChip :color="title.estado == true ? 'success' : 'warning'" class="mr-4" >{{ title.estado == true ? 'Activo' : 'Inactivo' }} </VChip>
                           <VChip :color="default" class="mr-4" >{{ title.users_suscribed }} Sesiones </VChip>
                           <!-- <VBtn size="small" href="/apps/user/view/"> Ver usuario </VBtn> -->
-                          <!-- <RouterLink :to="{ name: 'apps-user-view-id',  params: { id: user.userId }, }" class="font-weight-medium user-list-name" >
-                            <VBtn size="small"> Ver Perfil de usuario <VIcon end icon="tabler-user" /></VBtn>
-                          </RouterLink> -->
+                          <RouterLink :to="{ name: 'apps-sugerencias-slug-id',  params: { id: title._id }, }" class="font-weight-medium user-list-name" >
+                            <VBtn size="small">Ver
+                              <!-- <VIcon end icon="tabler-user" /> -->
+                            </VBtn>
+                          </RouterLink>
                         </template>
                       </VListItem>
                     </template>
