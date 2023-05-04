@@ -48,8 +48,8 @@ const currentTab = ref('tab-lista')
                           <VChip :color="default" class="mr-4" >{{ title.users_suscribed }} Sesiones </VChip>
                           <!-- <VBtn size="small" href="/apps/user/view/"> Ver usuario </VBtn> -->
                           <RouterLink :to="{ name: 'apps-sugerencias-slug-id',  params: { id: title._id }, }" class="font-weight-medium user-list-name" >
-                            <VBtn size="small">Ver
-                              <!-- <VIcon end icon="tabler-user" /> -->
+                            <VBtn  variant="text" rounded="pill">
+                              <VIcon icon="mdi-pencil" /> 
                             </VBtn>
                           </RouterLink>
                         </template>

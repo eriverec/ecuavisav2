@@ -65,13 +65,14 @@ export default {
   setup() {
     const route = useRoute();
     const id = route.params.id;
-    console.log(id)
+    return {
+      id
+    }
     // Aquí podemos utilizar la variable "id" para hacer algo con el valor del parámetro "id"
   },
   data() {
     return {
       datos: [],
-      id: "",
       suggestion: {
         title: "",
         description: "",
@@ -86,17 +87,11 @@ export default {
     this.obtenerDatos();
   },
   methods: {
-
     async obtenerDatos() {
-      const respuesta = await fetch(`https://sugerencias-ecuavisa.vercel.app/all?id=` + "644bb5d9d76d0c9c13b5ea2e");
+      const respuesta = await fetch(`https://sugerencias-ecuavisa.vercel.app/all?id=${this.id}`);
       const datos = await respuesta.json();
       const registros = datos.data;
-      const id = route.params.id;
-      // console.log(id)
-
       this.suggestion = registros[0];
-      // this.datos = sumatoriasArray; // trae todos 
-      // this.currentTab = 'tab-lista'; 
     },
 
     //https://sugerencias-ecuavisa.vercel.app/all?id=644b40fda2982bb5c6f280bc
@@ -107,6 +102,7 @@ export default {
           "https://sugerencias-ecuavisa.vercel.app/edit/" + this.id,
           this.suggestion
         );
+        
         this.$router.push("/apps/sugerencias/list");
 
       } catch (error) {
