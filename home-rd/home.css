@@ -25,6 +25,7 @@
   --animate-repeat: 1
 }
 
+
 @-webkit-keyframes fadeIn {
   0% {
     opacity: 0
@@ -3345,4 +3346,9 @@ INICIO - BLOQUE - ESTILO
     right: 0px;
     left:10px;
     bottom: 20px;
+}
+
+/*Pautas digitales*/
+img.pud_mobile{
+  height: auto !important;
 }
