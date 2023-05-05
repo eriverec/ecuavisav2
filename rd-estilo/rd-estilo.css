@@ -1438,3 +1438,28 @@ img.sepDesk {
     height: 24px;
 }
 }
+
+/*AÑADIR DEGRADADO A TODOS LOS BLOQUES DE LAS NOTAS*/
+.note-pierdas .multimedia > div,
+.rankSwiper .multimedia > div,
+.card_dest_estilo .multimedia > div {
+    background: #060127;
+}
+
+.card_dest_estilo .text_block {
+    background-image: none!important;
+}
+
+.note-pierdas .multimedia img,
+.rankSwiper .multimedia img,
+.card_dest_estilo .multimedia > div img {
+    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 40%);
+}
+
+.note-pierdas .multimedia img:hover,
+.card_dest_estilo .media_block:hover .multimedia > div img,
+.rankSwiper .multimedia img:hover,
+.card_dest_estilo .multimedia > div img:hover {
+    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 85%)!important;
+}
+/*FIN AÑADIR DEGRADADO A TODOS LOS BLOQUES DE LAS NOTAS*/
