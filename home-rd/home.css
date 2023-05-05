@@ -1895,9 +1895,14 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
 .sliderVideos .multimedia img {
   border-radius: 6px;
-  -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 60%);
+  -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 40%);
   height: 100% !important;
   object-fit: cover;
+}
+
+.sliderVideos .multimedia img:hover {
+  -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 85%);
+
 }
 
 .sliderVideos .swiper-wrapper {
