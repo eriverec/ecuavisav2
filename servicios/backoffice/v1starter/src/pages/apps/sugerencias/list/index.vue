@@ -61,9 +61,9 @@ const currentTab = ref('tab-lista')
               </VWindowItem>
 
               <VWindowItem value="tab-agregar">
-                <p>Próximamente</p>
+                <!-- <p>Próximamente</p> -->
                 <!-- <iframe src="http://localhost/ecuavisav2/servicios/embeds/sugerenciasAnalytics.html" frameborder="0"></iframe> -->
-                <div style="display: none;">
+                <div>
                   <iframe style="background:#2f3349 ;" class="iframe-dark" src="https://ecuavisadev.netlify.app/servicios/embeds/suganalyticsdark.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
                   <iframe class="iframe-light" src="https://ecuavisadev.netlify.app/servicios/embeds/suganalyticslight.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
 
