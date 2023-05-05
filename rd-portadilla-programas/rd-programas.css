@@ -911,3 +911,29 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   }
 
 }
+
+/*AÑADIR DEGRADADO A TODOS LOS BLOQUES DE LAS NOTAS*/
+.carrusel-programas .multimedia > div,
+.rankSwiper .multimedia > div,
+.tarjetaSwiper .multimedia > div {
+    background: #060127;
+}
+
+.carrusel-programas .text_block,
+.tarjetaSwiper .text_block {
+    background-image: none!important;
+}
+
+.carrusel-programas .multimedia > div img,
+.rankSwiper .multimedia img,
+.tarjetaSwiper .multimedia > div img {
+    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 40%);
+}
+
+.carrusel-programas .multimedia > div img:hover,
+.tarjetaSwiper .media_block:hover .multimedia > div img,
+.rankSwiper .multimedia img:hover,
+.tarjetaSwiper .multimedia > div img:hover {
+    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 85%)!important;
+}
+/*FIN AÑADIR DEGRADADO A TODOS LOS BLOQUES DE LAS NOTAS*/
