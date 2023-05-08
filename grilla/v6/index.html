@@ -615,7 +615,7 @@
                                                     <button class="btnRechazar" id="rechazar_todo">Rechazar todo</button>
                                                     <button class="btnAceptar" id="aceptar-todos">Aceptar todo</button>
                                                 </div>
-                                                <button class="btnAceptar disabled d-none" id="aceptar-modal">Guardar y cerrar</button>
+                                                <button class="btnAceptar disabled" style="display:none" id="aceptar-modal">Guardar y cerrar</button>
                                             </div>
                                         </div>
                                     </div>
@@ -661,8 +661,14 @@
                         modal.classList.remove("hidden-modal");
                     }
                     if(actionsCofigCookies.existeItem()){
+                        document.querySelector(".block_btn_re_acep").style.display = "none";
+
+                        document.querySelector("#aceptar-modal").style.display = "block";
                         document.querySelector("#aceptar-modal").classList.remove("disabled");
                     }else{
+                        document.querySelector(".block_btn_re_acep").style.display = "block";
+
+                        document.querySelector("#aceptar-modal").style.display = "none";
                         document.querySelector("#aceptar-modal").classList.add("disabled");
                     }
                 });
@@ -696,9 +702,15 @@
                         actionsCofigCookies.editarItem(data.id, 'accept', accept);
 
                         if(actionsCofigCookies.existeItem()){
+                            document.querySelector(".block_btn_re_acep").style.display = "none";
+
+                            document.querySelector("#aceptar-modal").style.display = "block";
                             document.querySelector("#aceptar-modal").classList.remove("disabled");
                         }else{
                             document.querySelector("#aceptar-modal").classList.add("disabled");
+
+                            document.querySelector("#aceptar-modal").style.display = "none";
+                            document.querySelector(".block_btn_re_acep").style.display = "block";
                         }
                     }
                   }, 0);
