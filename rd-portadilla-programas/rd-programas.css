@@ -937,3 +937,125 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
     -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 85%)!important;
 }
 /*FIN AÑADIR DEGRADADO A TODOS LOS BLOQUES DE LAS NOTAS*/
+
+/*QUITAR LA SECCIÓN MÁS DESTACADAS, TANTO EN MOBILE COMO ESCRITORIO*/
+.tarjeta-destacada {
+    display: none;
+}
+
+.sec-titulo .noticias {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 40px;
+  margin-top: 10px;
+  /* margin-bottom: 50px; */
+}
+
+.sec-titulo .noticias .article {
+  /* height: 100%; */
+  /* display: flex; */
+  /* align-items: center; */
+  /* border-top: 1px solid #2927B9; */
+  /* border-bottom: 1px solid #2927B9; */
+  border-bottom: 1px solid #2927B9;
+  /* height: 135px; */
+  display: flex;
+  align-items: center;
+}
+.sec-titulo .noticias .article:nth-child(1), 
+.sec-titulo .noticias .article:nth-child(2) {
+  border-top: 1px solid #292789;
+}
+.sec-titulo .text_block .article-section a {
+  color: #2927B9;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-family: 'Mattone 150';
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.sec-titulo .headline h2 {
+  color: black;
+  font-size: 22px;
+  font-weight: 700;
+  font-family: 'Archivo';
+  line-height: 26px;
+}
+
+/* .sec-titulo .text_block {
+  padding: 30px 0;
+} */
+.sec-titulo .text_block {
+  padding: 34px 0;
+  width: 100%;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+.sec-titulo .headline h2 {
+  padding-top: .5rem;
+}
+
+
+.sec-titulo.notas-estilo-mobile .noticias .article .media_block{
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  align-items: center;
+  gap: 50px;
+}
+
+.sec-titulo.notas-estilo-mobile .iconPlay {
+  background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Podcast%2FPlayRedondoCeleste.svg');
+  width: 30px;
+  height: 30px;
+  top: initial;
+  bottom: 0;
+  right: 0;
+  left: initial;
+  margin: 10px;
+}
+
+
+@media (max-width: 768px) {
+
+  .sec-titulo.notas-estilo-mobile .noticias .article .media_block{
+    grid-template-columns: 2fr 1fr;
+  }
+
+}
+
+
+@media (max-width: 767px) {
+  
+  .sec-titulo .noticias .article:nth-child(1) {
+    border-top: 1px solid #292789;
+  }
+  .sec-titulo .noticias .article:nth-child(2) {
+    border-top: none;
+  }
+
+  .sec-titulo .noticias {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+}
+
+.notas-estilo-mobile {
+  margin-bottom: 40px;
+}
+
+
+@media (max-width: 600px) {
+  .notas-estilo-mobile h3 {
+    color: white;
+    font-family: 'Mattone 150';
+  }
+  .notas-estilo-mobile .notas2 {
+    margin-top: -20px;
+    padding: 1.5rem 7px 15px;
+  }
+}
+
+/*FIN QUITAR LA SECCIÓN MÁS DESTACADAS, TANTO EN MOBILE COMO ESCRITORIO*/
