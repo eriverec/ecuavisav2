@@ -772,9 +772,9 @@ h2.temas_estilo {
   text-transform: uppercase;
 }
 
-.bloque-programas .media_block .multimedia img {
+/*.bloque-programas .media_block .multimedia img {
   filter: brightness(50%);
-}
+}*/
 
 .carrusel-programas .Topheadline {
   border-radius: 10px 10px 0 0;
@@ -1461,5 +1461,9 @@ img.sepDesk {
 .rankSwiper .multimedia img:hover,
 .card_dest_estilo .multimedia > div img:hover {
     -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 85%)!important;
+}
+
+.note-pierdas .multimedia img{
+  filter: brightness(100%);
 }
 /*FIN AÑADIR DEGRADADO A TODOS LOS BLOQUES DE LAS NOTAS*/
