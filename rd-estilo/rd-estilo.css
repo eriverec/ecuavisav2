@@ -780,6 +780,7 @@ h2.temas_estilo {
   border-radius: 10px 10px 0 0;
 }
 
+.carrusel-programas .media_block .multimedia > div,
 .carrusel-programas .media_block .multimedia img {
   border-radius: 5.0022px;
 }
@@ -1466,4 +1467,5 @@ img.sepDesk {
 .note-pierdas .multimedia img{
   filter: brightness(100%);
 }
+
 /*FIN AÑADIR DEGRADADO A TODOS LOS BLOQUES DE LAS NOTAS*/
