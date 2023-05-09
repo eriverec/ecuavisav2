@@ -86,7 +86,7 @@ getData();
             <tr>
               <th scope="col">NAVEGADOR</th>
               <th scope="col">DISPOSITIVO</th>
-              <th scope="col">PAIS</th>
+              
               <th class="text-right" scope="col" align="right">SESIONES</th>
             </tr>
           </thead>
@@ -101,6 +101,7 @@ getData();
                 <span class="font-weight-medium">{{ dat.browser }} on {{ dat.os == 'Linux' & dat.device == 'movil' ? 'Android' : dat.os }}</span>
               </td>
               <td class="text-medium-emphasis">{{ dat.device }}</td>
+               <!--
               <td class="text-medium-emphasis">
                 <div style="
                           display: flex;
@@ -108,10 +109,12 @@ getData();
                           flex-direction: revert;
                           gap: 5px;
                       ">
-                  <img style="width: 27px;" v-bind:src="'https://www.countryflagicons.com/FLAT/64/' + dat.countryCode + '.png'">
+                      
+                  <img style="width: 27px;" v-bind:src="'https://www.countryflagicons.com/FLAT/64/' + dat.countryCode + '.png'"> 
                   <p class="py-0 my-0">{{ dat.country }}</p>
                 </div>
               </td>
+               -->
               <td class="text-medium-emphasis" align="right">{{ dat.sessions }}</td>
             </tr>
           </tbody>
@@ -199,11 +202,11 @@ export default {
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
       this.datosGrouped = this.datosFiltrados.reduce( (a,b) => {
-       var i = a.findIndex( (x) => x.os == b.os & x.browser == b.browser & x.device == b.device & x.country == b.country );
-       return i === -1 ? a.push({ os : b.os, browser: b.browser, device: b.device, country: b.country, countryCode: b.countryCode, sessions : 1 }) : a[i].sessions++, a;
+       var i = a.findIndex( (x) => x.os == b.os & x.browser == b.browser & x.device == b.device );
+       return i === -1 ? a.push({ os : b.os, browser: b.browser, device: b.device, sessions : 1 }) : a[i].sessions++, a;
        }, []);
 
-      this.datosGrouped.sort((a, b)=> {
+      /* this.datosGrouped.sort((a, b)=> {
         if (a.browser === b.browser){
           if (a.os === b.os){
             return a.device < b.device ? -1 : 1  
@@ -212,8 +215,16 @@ export default {
         } else {
           return a.browser < b.browser ? -1 : 1
         }
-      });
+      });*/
 
+      this.datosGrouped.sort((a, b)=> {
+        if (a.sessions > b.sessions){
+            return -1;  
+        }
+        if (a.sessions < b.sessions){
+            return 1;  
+        }
+      });
       return this.datosGrouped.slice(start, end);
     },
   },
