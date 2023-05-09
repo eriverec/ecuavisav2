@@ -399,6 +399,12 @@
                 padding: 10px;
             }
         }
+        .title-panel small {
+            display: block;
+            line-height: 1.2;
+            font-size: 12px;
+            color: #cdcdcd;
+        }
     </style>
     
 
@@ -586,6 +592,18 @@
                 this.listItems();
                 return true;
             },
+            editarItemsIndex:function(index, value, id){
+                for(var i in this.opciones){
+                    this.opciones[i][index] = false;
+                } 
+
+                this.opciones[id][index] = value;
+                if(localStorage.getItem('dataAcceptCookies')){
+                    localStorage.setItem('dataAcceptCookies', JSON.stringify(this.opciones));
+                }
+                this.listItems();
+                return true;
+            },
             guardarItems:function(){
                 var lista = this.opciones;
                 localStorage.setItem('dataAcceptCookies', JSON.stringify(lista));
@@ -685,6 +703,24 @@
                 document.getElementById("aceptar-todos").addEventListener("click", function(){
                     actionsCofigCookies.editarItems('accept', true);
                     document.querySelector("#aceptar-modal").classList.remove("disabled");
+
+                    var modal = document.getElementById("modal-ec");
+                    modal.classList.add("hidden-modal");
+                    /*Guarda los items a localstorage*/
+                    actionsCofigCookies.guardarItems();
+                    /*Guarda las cookies*/
+                    acceptCookieConsent();
+                });
+                document.getElementById("rechazar_todo").addEventListener("click", function(){
+                    actionsCofigCookies.editarItemsIndex('accept', true, 0);
+                    document.querySelector("#aceptar-modal").classList.remove("disabled");
+
+                    var modal = document.getElementById("modal-ec");
+                    modal.classList.add("hidden-modal");
+                    /*Guarda los items a localstorage*/
+                    actionsCofigCookies.guardarItems();
+                    /*Guarda las cookies*/
+                    acceptCookieConsent();
                 });
                 document.getElementById("aceptarcookies").addEventListener("click", function(){
                     actionsCofigCookies.editarItems('accept', true);
