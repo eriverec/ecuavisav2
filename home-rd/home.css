@@ -1530,12 +1530,12 @@ BLOQUE - TE EXPLICO LA NOTICIA
   .HOME_MENU_RD .nota-principal-bloque-mobile .noticias .article .text_block .text {
     font-size: var(--rd-size-18);
     margin: 16px 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: 5;
-    line-clamp: 5;
-    -webkit-box-orient: vertical;
+    /*overflow: hidden;*/
+    /*text-overflow: ellipsis;*/
+    /*display: -webkit-box;*/
+   /* -webkit-line-clamp: 5;
+    line-clamp: 5;*/
+   /* -webkit-box-orient: vertical;*/
   }
 
   /*.HOME_MENU_RD .ecuador_list_1x2 .noticias {
