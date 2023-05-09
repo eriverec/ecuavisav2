@@ -1344,7 +1344,7 @@ var bloqueUsuarioSugerencia = {
         }).then(jsondata => {
           if (jsondata.resp) {
             /*FETCH FIN*/
-            fun.temas = [ { "interes":"Sugerencias", "data":jsondata.data } ];
+            fun.temas = [ { "interes":"Te Puede Interesar ", "data":jsondata.data } ];
             var temasSeguir = ``;
             for(var i in fun.temas){
               var ins = fun.temas[i];
