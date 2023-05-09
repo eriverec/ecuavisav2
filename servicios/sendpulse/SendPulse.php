@@ -260,7 +260,7 @@ class SendPulse {
         $subject = "hello customer 6";
         $name = $name;
         $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
-        return json_encode(["resp"=>true, "data" => $campaign]);
+        return $campaign;
     }
 
     public function view(){
@@ -277,21 +277,19 @@ class SendPulse {
     					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
     					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
     					///$idtemplate, $name, $body, $list_id
-				        echo $this->estadio(148832, "Newsletter diario estadio ".$getFecha, $this->HtmlToBase64($bodyGenerar), "564325");
+    					$this->estadio(148832, "Newsletter diario estadio ".$getFecha, $this->HtmlToBase64($bodyGenerar), "564325");
+				        echo json_encode(["resp"=>true]);
 				        exit();
     					break;
     				case 'notas':
     					//ZONA DE PRUEBAS
     					$notas = $this->getNotas();
-
     					$template = $this->getTemplate(148832);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
-
     					$notasHtml = '';
     					foreach ($notas as $key => $nota) {
     						$notasHtml .= $this->customTemplate($nota);
     					}
-
     					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
 				        echo $bodyGenerar;
 				        exit();
