@@ -385,7 +385,7 @@ tr.programaItem td:not(.text-center) div {
             border: 1px solid #DFE2EB;
             padding: 5px 15px;
             margin-top: 20px;
-            max-height: 250px;
+            max-height: 260px;
             overflow: auto;
             width: 100%;
         }
