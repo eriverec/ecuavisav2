@@ -87,7 +87,7 @@ getData();
               <th scope="col">NAVEGADOR</th>
               <th scope="col">DISPOSITIVO</th>
               <th scope="col">PAIS</th>
-              <th class="text-right" scope="col" align="right">REGISTRO DE TIEMPO</th>
+              <th class="text-right" scope="col" align="right">SESIONES</th>
             </tr>
           </thead>
           <tbody v-if="visibleData.length">
@@ -98,7 +98,7 @@ getData();
                     <VIcon :color="iconD.color" :icon="iconD.icon" />
                   </VAvatar>
                 </span>
-                <span class="font-weight-medium">{{ dat.browser }} on {{ dat.os }}</span>
+                <span class="font-weight-medium">{{ dat.browser }} on {{ dat.os == 'Linux' & dat.device == 'movil' ? 'Android' : dat.os }}</span>
               </td>
               <td class="text-medium-emphasis">{{ dat.device }}</td>
               <td class="text-medium-emphasis">
@@ -112,7 +112,7 @@ getData();
                   <p class="py-0 my-0">{{ dat.country }}</p>
                 </div>
               </td>
-              <td class="text-medium-emphasis" align="right">{{ dat.timestamp }}</td>
+              <td class="text-medium-emphasis" align="right">{{ dat.sessions }}</td>
             </tr>
           </tbody>
           <tbody v-else>
@@ -129,7 +129,7 @@ getData();
           >
             Anterior
           </v-btn>
-          <span class="px-2">{{ currentPage }} de {{ totalPages }} de un total de {{ datos.length }} registros</span>
+          <span class="px-2">{{ currentPage }} de {{ totalPages }} de un total de {{ datosGrouped.length }} registros</span>
 
           <v-btn
             :disabled="currentPage === totalPages" @click="currentPage += 1"
@@ -159,6 +159,7 @@ export default {
       fechaFin: "",
       datos: [],
       datosFiltrados: [],
+      datosGrouped: [],
       currentPage: 1,
       itemsPerPage: 10,
       totalPaginas: 0,
@@ -186,12 +187,34 @@ export default {
   },
   computed: {
     totalPages() {
-      return Math.ceil(this.datosFiltrados.length / this.itemsPerPage);
+    //return Math.ceil(this.datosFiltrados.length / this.itemsPerPage);
+      return Math.ceil(this.datosGrouped.length / this.itemsPerPage);
     },
-    visibleData() {
+    /*visibleData() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
       return this.datosFiltrados.slice(start, end);
+    },*/
+    visibleData() {
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      this.datosGrouped = this.datosFiltrados.reduce( (a,b) => {
+       var i = a.findIndex( (x) => x.os == b.os & x.browser == b.browser & x.device == b.device & x.country == b.country );
+       return i === -1 ? a.push({ os : b.os, browser: b.browser, device: b.device, country: b.country, sessions : 1 }) : a[i].sessions++, a;
+       }, []);
+
+      this.datosGrouped.sort((a, b)=> {
+        if (a.browser === b.browser){
+          if (a.os === b.os){
+            return a.device < b.device ? -1 : 1  
+          }
+          return a.os < b.os ? -1 : 1
+        } else {
+          return a.browser < b.browser ? -1 : 1
+        }
+      });
+
+      return this.datosGrouped.slice(start, end);
     },
   },
   mounted() {
