@@ -94,7 +94,7 @@ getData();
             <tr v-for="(dat, index) in visibleData" :key="index">
               <td>
                  <span v-for="iconD in iconDevices" :key="iconD.browser">
-                  <VAvatar v-if="dat.os === iconD.os" :size="22" class="me-3">
+                  <VAvatar v-if="(dat.os == 'Linux' & dat.device == 'movil' ? 'Android' : dat.os) === iconD.os" :size="22" class="me-3">
                     <VIcon :color="iconD.color" :icon="iconD.icon" />
                   </VAvatar>
                 </span>
