@@ -276,6 +276,8 @@ class SendPulse {
     					$notasHtml = '';
     					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
     					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
+
+    					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
     					///$idtemplate, $name, $body, $list_id
     					$this->estadio(148832, "Newsletter diario estadio ".$getFecha, $this->HtmlToBase64($bodyGenerar), "564325");
 				        echo json_encode(["resp"=>true]);

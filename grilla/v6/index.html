@@ -538,14 +538,17 @@
         var actionsCofigCookies = {
             opciones:[{
                 titulo:'Almacenar o acceder a información en un dispositivo',
+                descripcion:'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
                 accept:false, //true or false
                 id:1//ID único
             },{
                 titulo:'Seleccionar anuncios básicos',
+                descripcion:'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
                 accept:false,
                 id:2
             },{
                 titulo:'Seleccionar anuncios personalizados',
+                descripcion:'Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum Lorem ipsum',
                 accept:false,
                 id:3
             }],
@@ -625,7 +628,14 @@
             },
             optionsHTML:function(data){
                 return `<div class="content-items" option-id="3">
-                            <div class="title-panel">${data.titulo}</div>
+                            <div class="title-panel">
+                                <div>
+                                    ${data.titulo}
+                                    <small>
+                                        ${data.descripcion}
+                                    </small>
+                                </div>
+                            </div>
                             <div class="check-panel" actions="list-options">
                                 <input type="checkbox" class="option-check" ${(data.accept? 'checked':'')} id="switch-${data.id}" data-json='{"id":${data.id},"accept":${data.accept}}'/>
                                 <label for="switch-${data.id}">Toggle</label>
