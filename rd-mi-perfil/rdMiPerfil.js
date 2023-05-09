@@ -840,7 +840,7 @@ var modalUserNewPerfil = {
     }
   ]
 }
-modalUserNewPerfil.init()
+// modalUserNewPerfil.init()
 /************BLOQUE SEGUIMIENTO DE INTERESES************/
 
 
@@ -1428,6 +1428,8 @@ var bloqueUsuarioSugerencia = {
         }
       ]
     }
+    // comentar para apagar bloque de sugerencias 
+    bloqueUsuarioSugerencia.init();
 /**********************BLOQUE MODAL DE SUGERENCIAS**********************/
 
 // ##############BUENAS PRACTICAS##################
