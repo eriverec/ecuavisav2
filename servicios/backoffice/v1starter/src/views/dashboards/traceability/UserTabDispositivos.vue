@@ -200,7 +200,7 @@ export default {
       const end = start + this.itemsPerPage;
       this.datosGrouped = this.datosFiltrados.reduce( (a,b) => {
        var i = a.findIndex( (x) => x.os == b.os & x.browser == b.browser & x.device == b.device & x.country == b.country );
-       return i === -1 ? a.push({ os : b.os, browser: b.browser, device: b.device, country: b.country, sessions : 1 }) : a[i].sessions++, a;
+       return i === -1 ? a.push({ os : b.os, browser: b.browser, device: b.device, country: b.country, countryCode: b.countryCode, sessions : 1 }) : a[i].sessions++, a;
        }, []);
 
       this.datosGrouped.sort((a, b)=> {
