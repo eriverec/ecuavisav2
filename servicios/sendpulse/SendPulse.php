@@ -219,7 +219,7 @@ class SendPulse {
 				"link" => $value->link,
 				"descripcion" => $descripcionFinal,
 				"subseccion" => [
-					"titulo" => strtoupper($tituloSubseccion),
+					"titulo" => str_replace('-', ' ', strtoupper($tituloSubseccion)),
 					"link" => $linkSubseccion
 				],
 				"image" => $image
@@ -304,9 +304,10 @@ class SendPulse {
     }
 
     private function estadio($name, $body, $list_id){
-        $sender_name = "testv6";
+    	$getFecha = date("Y-m-d", time());
+        $sender_name = "ecuavisa.com";
         $sender_email = $this->sender_email;
-        $subject = "hello customer 6";
+        $subject = "Newsletter estadio - ".$getFecha;
         $name = $name;
         $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
         return $campaign;
