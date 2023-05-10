@@ -266,13 +266,11 @@ var actionsCofigCookies = {
       /*Guarda las cookies*/
       acceptCookieConsent();
     });
-    document
-      .getElementById("aceptarcookies")
-      .addEventListener("click", function () {
-        actionsCofigCookies.editarItems("accept", true);
-        /*Guarda los items a localstorage*/
-        actionsCofigCookies.guardarItems();
-      });
+    document.getElementById("aceptarcookies").addEventListener("click", function () {
+      actionsCofigCookies.editarItems("accept", true);
+      /*Guarda los items a localstorage*/
+      actionsCofigCookies.guardarItems();
+    });
 
     document.getElementById("rechazar_todo").addEventListener("click", function () {
       actionsCofigCookies.editarItemsIndex('accept', true, 0);
