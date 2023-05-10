@@ -89,22 +89,22 @@ function declineCookieConsent() {
 }
 
 var actionsCofigCookies = {
-  opciones:[{
-    titulo:'Almacenar o acceder a información en un dispositivo',
-    descripcion:'Se refiere a la recopilación de información del dispositivo del usuario, como su dirección IP y configuración de idioma',
-    accept:false, //true or false
-    id:1//ID único
-},{
-    titulo:'Seleccionar anuncios básicos',
-    descripcion:'Se refiere a la selección de anuncios genéricos que se basan en la temática del sitio web o en la ubicación geográfica del usuario.',
-    accept:false,
-    id:2
-},{
-    titulo:'Seleccionar anuncios personalizados',
-    descripcion:'Se refiere a la selección de anuncios que se basan en la actividad del usuario en el sitio web o en otros sitios web que ha visitado.',
-    accept:false,
-    id:3
-}],
+  opciones: [{
+    titulo: 'Almacenar o acceder a información en un dispositivo',
+    descripcion: 'Se refiere a la recopilación de información del dispositivo del usuario, como su dirección IP y configuración de idioma',
+    accept: false, //true or false
+    id: 1//ID único
+  }, {
+    titulo: 'Seleccionar anuncios básicos',
+    descripcion: 'Se refiere a la selección de anuncios genéricos que se basan en la temática del sitio web o en la ubicación geográfica del usuario.',
+    accept: false,
+    id: 2
+  }, {
+    titulo: 'Seleccionar anuncios personalizados',
+    descripcion: 'Se refiere a la selección de anuncios que se basan en la actividad del usuario en el sitio web o en otros sitios web que ha visitado.',
+    accept: false,
+    id: 3
+  }],
   existeItem: function () {
     var lista = this.opciones;
     for (var i in lista) {
@@ -142,18 +142,18 @@ var actionsCofigCookies = {
     this.listItems();
     return true;
   },
-  editarItemsIndex:function(index, value, id){
-    for(var i in this.opciones){
-        this.opciones[i][index] = false;
-    } 
+  editarItemsIndex: function (index, value, id) {
+    for (var i in this.opciones) {
+      this.opciones[i][index] = false;
+    }
 
     this.opciones[id][index] = value;
-    if(localStorage.getItem('dataAcceptCookies')){
-        localStorage.setItem('dataAcceptCookies', JSON.stringify(this.opciones));
+    if (localStorage.getItem('dataAcceptCookiesEcuavisa')) {
+      localStorage.setItem('dataAcceptCookiesEcuavisa', JSON.stringify(this.opciones));
     }
     this.listItems();
     return true;
-},
+  },
   guardarItems: function () {
     var lista = this.opciones;
     localStorage.setItem("dataAcceptCookiesEcuavisa", JSON.stringify(lista));
@@ -206,7 +206,7 @@ var actionsCofigCookies = {
         </div>
     </div>
     <div class="check-panel" actions="list-options">
-        <input type="checkbox" class="option-check" ${(data.accept? 'checked':'')} id="switch-${data.id}" data-json='{"id":${data.id},"accept":${data.accept}}'/>
+        <input type="checkbox" class="option-check" ${(data.accept ? 'checked' : '')} id="switch-${data.id}" data-json='{"id":${data.id},"accept":${data.accept}}'/>
         <label for="switch-${data.id}">Toggle</label>
     </div>
 </div>`;
@@ -238,24 +238,24 @@ var actionsCofigCookies = {
           modal.classList.add("hidden-modal");
         }
       });
-      document.getElementById("configurar").addEventListener("click", function(){
-        var modal = document.getElementById("modal-ec");
-        if(modal.classList.contains("hidden-modal")){
-            modal.classList.remove("hidden-modal");
-        }
-        if(actionsCofigCookies.existeItem()){
-            document.querySelector(".block_btn_re_acep").style.display = "none";
+    document.getElementById("configurar").addEventListener("click", function () {
+      var modal = document.getElementById("modal-ec");
+      if (modal.classList.contains("hidden-modal")) {
+        modal.classList.remove("hidden-modal");
+      }
+      if (actionsCofigCookies.existeItem()) {
+        document.querySelector(".block_btn_re_acep").style.display = "none";
 
-            document.querySelector("#aceptar-modal").style.display = "block";
-            document.querySelector("#aceptar-modal").classList.remove("disabled");
-        }else{
-            document.querySelector(".block_btn_re_acep").style.display = "flex";
+        document.querySelector("#aceptar-modal").style.display = "block";
+        document.querySelector("#aceptar-modal").classList.remove("disabled");
+      } else {
+        document.querySelector(".block_btn_re_acep").style.display = "flex";
 
-            document.querySelector("#aceptar-modal").style.display = "none";
-            document.querySelector("#aceptar-modal").classList.add("disabled");
-        }
+        document.querySelector("#aceptar-modal").style.display = "none";
+        document.querySelector("#aceptar-modal").classList.add("disabled");
+      }
     });
-    document.getElementById("aceptar-todos").addEventListener("click", function(){
+    document.getElementById("aceptar-todos").addEventListener("click", function () {
       actionsCofigCookies.editarItems('accept', true);
       document.querySelector("#aceptar-modal").classList.remove("disabled");
 
@@ -265,7 +265,7 @@ var actionsCofigCookies = {
       actionsCofigCookies.guardarItems();
       /*Guarda las cookies*/
       acceptCookieConsent();
-  });
+    });
     document
       .getElementById("aceptarcookies")
       .addEventListener("click", function () {
@@ -274,16 +274,16 @@ var actionsCofigCookies = {
         actionsCofigCookies.guardarItems();
       });
 
-      document.getElementById("rechazar_todo").addEventListener("click", function(){
-        actionsCofigCookies.editarItemsIndex('accept', true, 0);
-        document.querySelector("#aceptar-modal").classList.remove("disabled");
+    document.getElementById("rechazar_todo").addEventListener("click", function () {
+      actionsCofigCookies.editarItemsIndex('accept', true, 0);
+      document.querySelector("#aceptar-modal").classList.remove("disabled");
 
-        var modal = document.getElementById("modal-ec");
-        modal.classList.add("hidden-modal");
-        /*Guarda los items a localstorage*/
-        actionsCofigCookies.guardarItems();
-        /*Guarda las cookies*/
-        acceptCookieConsent();
+      var modal = document.getElementById("modal-ec");
+      modal.classList.add("hidden-modal");
+      /*Guarda los items a localstorage*/
+      actionsCofigCookies.guardarItems();
+      /*Guarda las cookies*/
+      acceptCookieConsent();
     });
 
     document
@@ -296,32 +296,32 @@ var actionsCofigCookies = {
         /*Guarda las cookies*/
         acceptCookieConsent();
       });
-      document.querySelector(".table-panel-items").addEventListener("click", function(event){
-        setTimeout(() => {
-          if(event.target.matches('.option-check')){
-              var data = JSON.parse(event.target.getAttribute('data-json'));
-              var accept = false;
-              if(!data.accept){
-                  accept = true;
-              }
-              data.accept = accept;
-              event.target.setAttribute("data-json", JSON.stringify(data));
-              actionsCofigCookies.editarItem(data.id, 'accept', accept);
-
-              if(actionsCofigCookies.existeItem()){
-                  document.querySelector(".block_btn_re_acep").style.display = "none";
-
-                  document.querySelector("#aceptar-modal").style.display = "block";
-                  document.querySelector("#aceptar-modal").classList.remove("disabled");
-              }else{
-                  document.querySelector("#aceptar-modal").classList.add("disabled");
-
-                  document.querySelector("#aceptar-modal").style.display = "none";
-                  document.querySelector(".block_btn_re_acep").style.display = "flex";
-              }
+    document.querySelector(".table-panel-items").addEventListener("click", function (event) {
+      setTimeout(() => {
+        if (event.target.matches('.option-check')) {
+          var data = JSON.parse(event.target.getAttribute('data-json'));
+          var accept = false;
+          if (!data.accept) {
+            accept = true;
           }
-        }, 0);
-      }); 
+          data.accept = accept;
+          event.target.setAttribute("data-json", JSON.stringify(data));
+          actionsCofigCookies.editarItem(data.id, 'accept', accept);
+
+          if (actionsCofigCookies.existeItem()) {
+            document.querySelector(".block_btn_re_acep").style.display = "none";
+
+            document.querySelector("#aceptar-modal").style.display = "block";
+            document.querySelector("#aceptar-modal").classList.remove("disabled");
+          } else {
+            document.querySelector("#aceptar-modal").classList.add("disabled");
+
+            document.querySelector("#aceptar-modal").style.display = "none";
+            document.querySelector(".block_btn_re_acep").style.display = "flex";
+          }
+        }
+      }, 0);
+    });
     return true;
   },
 };

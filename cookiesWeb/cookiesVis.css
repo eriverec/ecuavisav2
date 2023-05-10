@@ -49,6 +49,16 @@ body {
 #TABS CABECERA
 */
 
+.title-panel small {
+  display: block;
+  line-height: 1.2;
+  font-size: 12px;
+  color: #cdcdcd;
+}
+.block_btn_re_acep {
+  gap: 20px;
+} 
+
 
 .modal-ecuavisa {
   display: block;
