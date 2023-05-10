@@ -615,6 +615,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 .programas-desktop .noticias .article .media_block .text_block .headline h2 {
   font-size: 42px!important;
   line-height: 48px!important;
+  text-transform: lowercase;
 }
 
 .programas-desktop .noticias .article .media_block .text_block .inf2 {
@@ -650,6 +651,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   font-family: 'Anek Malayalam';
   font-weight: 600;
   padding-top: .5rem;
+  text-transform: lowercase;
 }
 
 .bloque-programas .media_block .text_block .article-section {
