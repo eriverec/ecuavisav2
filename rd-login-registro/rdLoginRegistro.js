@@ -207,9 +207,9 @@ function login() {
           //cambiar url destino
           let redirect = "https://www.ecuavisa.com/compania593/click-boom/que-esconde-la-cartera-de-victoria-KL4951862?tk=" + result.token;
           //console.log("https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url);
-          let urlTk = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
+         
           window.location = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
-          localStorage.setItem('urlTk',urlTk);
+          localStorage.setItem('urlTk',result.url);
           btn.removeAttribute('disabled');  
         } else {
           alert("Nombre de usuario o contraseña incorrecto");
