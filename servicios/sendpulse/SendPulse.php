@@ -73,7 +73,7 @@ class SendPulse {
     private function customTemplate($nota){
     	$line = '<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><div class="block-divider" style="font-size:14px; line-height:1.5; padding-left:0px; padding-right:0px; padding-top:10px; padding-bottom:10px"><hr id="iout_block_13_element_0" style="margin:0; border-top-style:solid; border-top-width:1px; border-top-color:#2927b9; border-bottom:0; border-left:0; border-right:0"></div></td></tr></tbody></table>';
 
-    	$htmlBlock = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; width:100%" border="0" width="100%">
+    	$htmlBlock = '<table class="ecuavisa_link" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; width:100%" border="0" width="100%">
 		   <tbody>
 		      <tr style="border-color:transparent">
 		         <td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top">
@@ -149,8 +149,7 @@ class SendPulse {
 		                                       <tbody>
 		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
 		                                             <td class="content-cell padding-top-0 padding-bottom-0" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:0; padding-bottom:0" valign="top">
-		                                                <p style="line-height:inherit; margin:0 0 10px; font-size:inherit; color:inherit; font-family:Verdana, Geneva, sans-serif; font-weight:normal; padding:0"><span style="font-size: 14px;">La Policía, por intentar mantener el orden, confundieron a jugadores y miembro de la delegación de la selección de Perú con aficionados, por lo que resultaron agredidos.</span></p>
-		                                                <div style="font-size:14px; line-height:1.5; clear:both"></div>
+		                                                '.$nota["descripcion"].'
 		                                             </td>
 		                                          </tr>
 		                                       </tbody>
@@ -182,10 +181,10 @@ class SendPulse {
 		return $htmlBlock;
     }
 
-    public function getNotas(){
+    public function getNotas($api_link){
         $curl = curl_init();
 		curl_setopt_array($curl, array(
-		  CURLOPT_URL => 'https://www.ecuavisa.com/rss/data-noticia.json',
+		  CURLOPT_URL => $api_link,
 		  CURLOPT_RETURNTRANSFER => true,
 		  CURLOPT_ENCODING => '',
 		  CURLOPT_MAXREDIRS => 10,
@@ -211,9 +210,12 @@ class SendPulse {
 			}
 			$tituloSubseccion = explode("/", $value->link)[4];
 			$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
+			$descripcion = $value->description->__text;
+			$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
 			$noticias[] = [
 				"titulo" => $value->title,
 				"link" => $value->link,
+				"descripcion" => substr($descripcion_formateado, 0, 400).'...',
 				"subseccion" => [
 					"titulo" => strtoupper($tituloSubseccion),
 					"link" => $linkSubseccion
@@ -254,7 +256,52 @@ class SendPulse {
 		return json_decode($response);
     }
 
-    private function estadio($idtemplate, $name, $body, $list_id){
+    private function estilo($name, $body, $list_id){
+        $sender_name = "testv6";
+        $sender_email = $this->sender_email;
+        $subject = "hello customer 6";
+        $name = $name;
+        $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
+        return $campaign;
+    }
+
+    private function programa($name, $body, $list_id){
+        $sender_name = "testv6";
+        $sender_email = $this->sender_email;
+        $subject = "hello customer 6";
+        $name = $name;
+        $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
+        return $campaign;
+    }
+
+    private function entretenimiento($name, $body, $list_id){
+        $sender_name = "testv6";
+        $sender_email = $this->sender_email;
+        $subject = "hello customer 6";
+        $name = $name;
+        $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
+        return $campaign;
+    }
+
+    private function mundo($name, $body, $list_id){
+        $sender_name = "testv6";
+        $sender_email = $this->sender_email;
+        $subject = "hello customer 6";
+        $name = $name;
+        $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
+        return $campaign;
+    }
+
+    private function loUltimo($name, $body, $list_id){
+        $sender_name = "testv6";
+        $sender_email = $this->sender_email;
+        $subject = "hello customer 6";
+        $name = $name;
+        $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
+        return $campaign;
+    }
+
+    private function estadio($name, $body, $list_id){
         $sender_name = "testv6";
         $sender_email = $this->sender_email;
         $subject = "hello customer 6";
@@ -270,29 +317,152 @@ class SendPulse {
     			$getFecha = date("Y-m-d, h:i:s", time());
     			switch ($get->action) {
     				case 'estadio':
-    					$notas = $this->getNotas();
-    					$template = $this->getTemplate(148832);
+    					$idTemplate = 148832;
+    					$list_id = 564325;
+    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
+    					$template = $this->getTemplate($idTemplate);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
-    					$notasHtml = '';
+    					$notasHtml = '<style>
+    					.ecuavisa_link a[href]{
+    						color: #2927b9!important;
+    					}
+    					</style>';
     					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
     					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
-
     					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
-    					///$idtemplate, $name, $body, $list_id
-    					$this->estadio(148832, "Newsletter diario estadio ".$getFecha, $this->HtmlToBase64($bodyGenerar), "564325");
-				        echo json_encode(["resp"=>true]);
+    					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
+    					$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
+    					/*$name, $body, $list_id*/
+    					$this->estadio("Newsletter diario estadio ".$getFecha, $this->HtmlToBase64($bodyGenerar), $list_id);
+				        echo json_encode(["resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha]);
+				        exit();
+    					break;
+    				case 'loultimo':
+    					$idTemplate = 148832;
+    					$list_id = 564325;
+    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
+    					$template = $this->getTemplate($idTemplate);
+	        			$htmlTemplate = $this->base64ToHTML($template->body);
+    					$notasHtml = '<style>
+    					.ecuavisa_link a[href]{
+    						color: #2927b9!important;
+    					}
+    					</style>';
+    					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
+    					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
+    					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
+    					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
+    					$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
+    					/*$name, $body, $list_id*/
+    					$this->loUltimo("Newsletter diario lo último ".$getFecha, $this->HtmlToBase64($bodyGenerar), $list_id);
+				        echo json_encode(["resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha]);
+				        exit();
+    					break;
+    				case 'mundo':
+    					$idTemplate = 148832;
+    					$list_id = 564325;
+    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
+    					$template = $this->getTemplate($idTemplate);
+	        			$htmlTemplate = $this->base64ToHTML($template->body);
+    					$notasHtml = '<style>
+    					.ecuavisa_link a[href]{
+    						color: #2927b9!important;
+    					}
+    					</style>';
+    					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
+    					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
+    					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
+    					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
+    					$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
+    					/*$name, $body, $list_id*/
+    					$this->mundo("Newsletter diario mundo ".$getFecha, $this->HtmlToBase64($bodyGenerar), $list_id);
+				        echo json_encode(["resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha]);
+				        exit();
+    					break;
+    				case 'entretenimiento':
+    					$idTemplate = 148832;
+    					$list_id = 564325;
+    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
+    					$template = $this->getTemplate($idTemplate);
+	        			$htmlTemplate = $this->base64ToHTML($template->body);
+    					$notasHtml = '<style>
+    					.ecuavisa_link a[href]{
+    						color: #2927b9!important;
+    					}
+    					</style>';
+    					foreach ($notas as $key => $nota) { 
+    						$notasHtml .= $this->customTemplate($nota); 
+    					}
+    					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
+    					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
+    					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
+    					$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
+    					/*$name, $body, $list_id*/
+    					$resp = $this->entretenimiento("Newsletter diario entretenimiento ".$getFecha, $this->HtmlToBase64($bodyGenerar), $list_id);
+				        echo json_encode(["resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha, "respuesta_campania" => $resp]);
+				        exit();
+    					break;
+    				case 'programa':
+    					$idTemplate = 148832;
+    					$list_id = 564325;
+    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
+    					$template = $this->getTemplate($idTemplate);
+	        			$htmlTemplate = $this->base64ToHTML($template->body);
+    					$notasHtml = '<style>
+    					.ecuavisa_link a[href]{
+    						color: #2927b9!important;
+    					}
+    					</style>';
+    					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
+    					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
+    					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
+    					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
+    					$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
+    					/*$name, $body, $list_id*/
+    					$this->programa("Newsletter diario programas ".$getFecha, $this->HtmlToBase64($bodyGenerar), $list_id);
+				        echo json_encode(["resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha]);
+				        exit();
+    					break;
+    				case 'estilo':
+    					$idTemplate = 148832;
+    					$list_id = 564325;
+    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
+    					$template = $this->getTemplate($idTemplate);
+	        			$htmlTemplate = $this->base64ToHTML($template->body);
+    					$notasHtml = '<style>
+    					.ecuavisa_link a[href]{
+    						color: #2927b9!important;
+    					}
+    					</style>';
+    					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
+    					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
+    					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
+    					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
+    					$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
+    					/*$name, $body, $list_id*/
+    					$this->estilo("Newsletter diario estilo ".$getFecha, $this->HtmlToBase64($bodyGenerar), $list_id);
+				        echo json_encode(["resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha]);
 				        exit();
     					break;
     				case 'notas':
     					//ZONA DE PRUEBAS
-    					$notas = $this->getNotas();
+    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
     					$template = $this->getTemplate(148832);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
-    					$notasHtml = '';
+    					$notasHtml = '<style>
+    					.ecuavisa_link a[href]{
+    						color: #2927b9!important;
+    					}
+    					</style>';
     					foreach ($notas as $key => $nota) {
     						$notasHtml .= $this->customTemplate($nota);
     					}
+
     					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
+    					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
+    					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
+    					$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
+				        
 				        echo $bodyGenerar;
 				        exit();
     					break;
