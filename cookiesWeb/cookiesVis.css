@@ -55,9 +55,10 @@ body {
   font-size: 12px;
   color: #cdcdcd;
 }
+
 .block_btn_re_acep {
   gap: 20px;
-} 
+}
 
 
 .modal-ecuavisa {
@@ -71,7 +72,7 @@ body {
 }
 
 .fondo-modal {
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .fondo-modal {
@@ -99,8 +100,9 @@ body {
 }
 
 .exterior-modal {
-  border-color: rgba(255,255,255,0.3);
+  border-color: rgba(255, 255, 255, 0.3);
 }
+
 .exterior-modal {
   border-width: 0px;
   border-color: transparent;
@@ -117,7 +119,7 @@ body {
 }
 
 .container-modal {
-  border-color: rgba(255,255,255,1);
+  border-color: rgba(255, 255, 255, 1);
 }
 
 .container-modal {
@@ -152,7 +154,7 @@ body {
   font-size: 20px;
 }
 
-.check-panel input[type=checkbox]{
+.check-panel input[type=checkbox] {
   height: 0;
   width: 0;
   visibility: hidden;
@@ -182,11 +184,11 @@ body {
   transition: 0.3s;
 }
 
-.check-panel input:checked + label {
+.check-panel input:checked+label {
   background: #000;
 }
 
-.check-panel input:checked + label:after {
+.check-panel input:checked+label:after {
   left: calc(100% - 5px);
   transform: translateX(-100%);
 }
@@ -194,26 +196,31 @@ body {
 .check-panel label:active:after {
   width: 30px;
 }
+
 .content-items {
   display: flex;
   align-items: center;
   gap: 20px;
   flex-wrap: wrap;
 }
+
 .content-items {
   display: flex;
   align-items: center;
   gap: 20px;
   flex-wrap: wrap;
 }
+
 .title-panel {
   width: calc(80% - 20px);
 }
+
 .check-panel {
   width: calc(22% - 20px);
   display: flex;
   justify-content: end;
 }
+
 .table-panel-items {
   border-radius: 3px;
   border: 1px solid #DFE2EB;
@@ -223,36 +230,40 @@ body {
   overflow: auto;
   width: 100%;
 }
+
 .content-items {
   padding: 14px 5px;
 }
+
 .content-items:not(:last-child) {
   border-bottom: 1px solid #DFE2EB;
 }
+
 .footer-modal {
   padding-top: 30px;
   display: flex;
   gap: 20px;
   justify-content: center;
 }
+
 .footer-modal .btnRechazar,
 .footer-modal .btnAceptar {
   padding: 10px 15px;
 }
 
-.disabled{
+.disabled {
   pointer-events: none;
   opacity: .5;
 }
 
-.hidden-modal{
-  display: none!important;
+.hidden-modal {
+  display: none !important;
 }
 
 
-@media (max-width: 575.98px) { 
+@media (max-width: 575.98px) {
   .exterior-modal {
-      padding: 10px;
+    padding: 10px;
   }
 }
 
@@ -356,10 +367,18 @@ tr.programaItem td:not(.text-center) div {
   font-weight: 600;
   font-size: 14px;
   margin: 0;
+  border: 0;
+}
+
+#btn-cerrar {
+  -webkit-appearance: button;
+  background-color: transparent;
+  background-image: none;
+  border: 0;
 }
 
 .btnRechazar:hover {
-  background: #494949;
+  background: #1c1c1c;
   color: #fff;
 }
 
@@ -375,6 +394,7 @@ tr.programaItem td:not(.text-center) div {
   font-weight: 600;
   font-size: 14px;
   margin: 0;
+  border: 0;
 }
 
 .btnAceptar:hover {
