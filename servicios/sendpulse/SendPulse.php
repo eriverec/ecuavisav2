@@ -212,10 +212,12 @@ class SendPulse {
 			$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
 			$descripcion = $value->description->__text;
 			$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
+			$descripcion = substr($descripcion_formateado, 0, 400).'...';
+			$descripcionFinal = str_replace('<a ', '<a style="color: #444;" ', $descripcion);
 			$noticias[] = [
 				"titulo" => $value->title,
 				"link" => $value->link,
-				"descripcion" => substr($descripcion_formateado, 0, 400).'...',
+				"descripcion" => $descripcionFinal,
 				"subseccion" => [
 					"titulo" => strtoupper($tituloSubseccion),
 					"link" => $linkSubseccion
@@ -292,7 +294,7 @@ class SendPulse {
         return $campaign;
     }
 
-    private function loUltimo($name, $body, $list_id){
+    private function noticias($name, $body, $list_id){
         $sender_name = "testv6";
         $sender_email = $this->sender_email;
         $subject = "hello customer 6";
@@ -318,15 +320,11 @@ class SendPulse {
     			switch ($get->action) {
     				case 'estadio':
     					$idTemplate = 148832;
-    					$list_id = 564325;
-    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
+    					$list_id = 564489;
+    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/boletin-noticias.json');
     					$template = $this->getTemplate($idTemplate);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
-    					$notasHtml = '<style>
-    					.ecuavisa_link a[href]{
-    						color: #2927b9!important;
-    					}
-    					</style>';
+    					$notasHtml = "";
     					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
     					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
     					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
@@ -337,24 +335,20 @@ class SendPulse {
 				        echo json_encode(["resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha]);
 				        exit();
     					break;
-    				case 'loultimo':
+    				case 'noticias':
     					$idTemplate = 148832;
     					$list_id = 564325;
     					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
     					$template = $this->getTemplate($idTemplate);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
-    					$notasHtml = '<style>
-    					.ecuavisa_link a[href]{
-    						color: #2927b9!important;
-    					}
-    					</style>';
+    					$notasHtml = "";
     					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
     					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
     					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
     					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
     					$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
     					/*$name, $body, $list_id*/
-    					$this->loUltimo("Newsletter diario lo último ".$getFecha, $this->HtmlToBase64($bodyGenerar), $list_id);
+    					$this->noticias("Newsletter diario de noticias ".$getFecha, $this->HtmlToBase64($bodyGenerar), $list_id);
 				        echo json_encode(["resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha]);
 				        exit();
     					break;
@@ -364,11 +358,7 @@ class SendPulse {
     					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
     					$template = $this->getTemplate($idTemplate);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
-    					$notasHtml = '<style>
-    					.ecuavisa_link a[href]{
-    						color: #2927b9!important;
-    					}
-    					</style>';
+    					$notasHtml = "";
     					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
     					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
     					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
@@ -385,11 +375,7 @@ class SendPulse {
     					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
     					$template = $this->getTemplate($idTemplate);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
-    					$notasHtml = '<style>
-    					.ecuavisa_link a[href]{
-    						color: #2927b9!important;
-    					}
-    					</style>';
+    					$notasHtml = "";
     					foreach ($notas as $key => $nota) { 
     						$notasHtml .= $this->customTemplate($nota); 
     					}
@@ -408,11 +394,7 @@ class SendPulse {
     					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
     					$template = $this->getTemplate($idTemplate);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
-    					$notasHtml = '<style>
-    					.ecuavisa_link a[href]{
-    						color: #2927b9!important;
-    					}
-    					</style>';
+    					$notasHtml = "";
     					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
     					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
     					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
@@ -429,11 +411,7 @@ class SendPulse {
     					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
     					$template = $this->getTemplate($idTemplate);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
-    					$notasHtml = '<style>
-    					.ecuavisa_link a[href]{
-    						color: #2927b9!important;
-    					}
-    					</style>';
+    					$notasHtml = "";
     					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
     					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
     					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
@@ -446,14 +424,10 @@ class SendPulse {
     					break;
     				case 'notas':
     					//ZONA DE PRUEBAS
-    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/data-noticia.json');
+    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/boletin-noticias.json');
     					$template = $this->getTemplate(148832);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
-    					$notasHtml = '<style>
-    					.ecuavisa_link a[href]{
-    						color: #2927b9!important;
-    					}
-    					</style>';
+    					$notasHtml = "";
     					foreach ($notas as $key => $nota) {
     						$notasHtml .= $this->customTemplate($nota);
     					}
