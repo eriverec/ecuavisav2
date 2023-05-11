@@ -258,46 +258,10 @@ class SendPulse {
 		return json_decode($response);
     }
 
-    private function estilo($name, $body, $list_id){
-        $sender_name = "testv6";
-        $sender_email = $this->sender_email;
-        $subject = "hello customer 6";
-        $name = $name;
-        $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
-        return $campaign;
-    }
-
-    private function programa($name, $body, $list_id){
-        $sender_name = "testv6";
-        $sender_email = $this->sender_email;
-        $subject = "hello customer 6";
-        $name = $name;
-        $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
-        return $campaign;
-    }
-
-    private function entretenimiento($name, $body, $list_id){
-        $sender_name = "testv6";
-        $sender_email = $this->sender_email;
-        $subject = "hello customer 6";
-        $name = $name;
-        $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
-        return $campaign;
-    }
-
-    private function mundo($name, $body, $list_id){
-        $sender_name = "testv6";
-        $sender_email = $this->sender_email;
-        $subject = "hello customer 6";
-        $name = $name;
-        $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
-        return $campaign;
-    }
-
     private function noticias($name, $body, $list_id){
-        $sender_name = "testv6";
+        $sender_name = "ecuavisa.com";
         $sender_email = $this->sender_email;
-        $subject = "hello customer 6";
+        $subject = "Newsletter noticias - ".$getFecha;
         $name = $name;
         $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
         return $campaign;
