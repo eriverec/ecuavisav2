@@ -380,7 +380,7 @@ class SendPulse {
     					//ZONA DE PRUEBAS
     					$notas = $this->getNotas('https://www.ecuavisa.com/rss/boletin-noticias.json');
     					$template = $this->getTemplate(148832);
-    					$list_id = 564325;
+    					$list_id = 565120;
     					$numUsers = $this->getListUser($list_id);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
     					$notasHtml = "";
