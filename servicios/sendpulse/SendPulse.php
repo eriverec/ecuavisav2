@@ -70,6 +70,28 @@ class SendPulse {
 		return json_decode($response);
     }
 
+    public function getListUser($id=564325){
+        $curl = curl_init();
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => 'https://api.sendpulse.com/addressbooks/'.$id.'/emails',
+		  CURLOPT_RETURNTRANSFER => true,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'GET',
+		  CURLOPT_HTTPHEADER => array(
+		    'Authorization: Bearer '.$this->getToken()
+		  ),
+		));
+
+		$response = curl_exec($curl);
+
+		curl_close($curl);
+		return json_decode($response);
+    }
+
     private function customTemplate($nota){
     	$line = '<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><div class="block-divider" style="font-size:14px; line-height:1.5; padding-left:0px; padding-right:0px; padding-top:10px; padding-bottom:10px"><hr id="iout_block_13_element_0" style="margin:0; border-top-style:solid; border-top-width:1px; border-top-color:#2927b9; border-bottom:0; border-left:0; border-right:0"></div></td></tr></tbody></table>';
 
@@ -201,7 +223,33 @@ class SendPulse {
 		$rssNotas = $dataNotas->rss;
 		$channel = $rssNotas->channel;
 		$noticias = [];
-		foreach ($channel->item as $key => $value) {
+		if(is_array($channel->item)){
+			foreach ($channel->item as $key => $value) {
+				$image = "";
+				if(is_array($value->content)){
+					$image = $value->content[0]->url;
+				}else{
+					$image = $value->content->url;
+				}
+				$tituloSubseccion = explode("/", $value->link)[4];
+				$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
+				$descripcion = $value->description->__text;
+				$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
+				$descripcion = substr($descripcion_formateado, 0, 400).'...';
+				$descripcionFinal = str_replace('<a ', '<a style="color: #444;" ', $descripcion);
+				$noticias[] = [
+					"titulo" => $value->title,
+					"link" => $value->link,
+					"descripcion" => $descripcionFinal,
+					"subseccion" => [
+						"titulo" => str_replace('-', ' ', strtoupper($tituloSubseccion)),
+						"link" => $linkSubseccion
+					],
+					"image" => $image
+				];
+			}
+		}else{
+			$value = $channel->item;
 			$image = "";
 			if(is_array($value->content)){
 				$image = $value->content[0]->url;
@@ -285,7 +333,8 @@ class SendPulse {
     			switch ($get->action) {
     				case 'estadio':
     					$idTemplate = 148832;
-    					$list_id = 148832;//564489
+    					$list_id = 564325;//564489
+    					$numUsers = $this->getListUser($list_id);
     					$notas = $this->getNotas('https://www.ecuavisa.com/rss/boletin-estadio.json');
     					$template = $this->getTemplate($idTemplate);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
@@ -297,7 +346,7 @@ class SendPulse {
     					$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
     					/*$name, $body, $list_id*/
 
-    					if(count($notas) > 0){
+    					if(count($notas) > 0 && count($numUsers) > 0){
     						$this->estadio("Newsletter diario estadio ".$getFecha, $this->HtmlToBase64($bodyGenerar), $list_id);
 				        	echo json_encode(["resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha]);
 				        	exit();
@@ -308,6 +357,7 @@ class SendPulse {
     				case 'noticias':
     					$idTemplate = 148832;
     					$list_id = 564325;
+    					$numUsers = $this->getListUser($list_id);
     					$notas = $this->getNotas('https://www.ecuavisa.com/rss/boletin-noticias.json');
     					$template = $this->getTemplate($idTemplate);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
@@ -318,7 +368,7 @@ class SendPulse {
     					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
     					$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
     					/*$name, $body, $list_id*/
-    					if(count($notas) > 0){
+    					if(count($notas) > 0 && count($numUsers) > 0){
     						$this->noticias("Newsletter diario de noticias ".$getFecha, $this->HtmlToBase64($bodyGenerar), $list_id);
 					        echo json_encode(["resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha]);
 					        exit();
@@ -330,12 +380,14 @@ class SendPulse {
     					//ZONA DE PRUEBAS
     					$notas = $this->getNotas('https://www.ecuavisa.com/rss/boletin-noticias.json');
     					$template = $this->getTemplate(148832);
+    					$list_id = 564325;
+    					$numUsers = $this->getListUser($list_id);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
     					$notasHtml = "";
     					foreach ($notas as $key => $nota) {
     						$notasHtml .= $this->customTemplate($nota);
     					}
-
+    					echo count($numUsers);
     					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
     					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
     					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
