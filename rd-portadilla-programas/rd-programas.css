@@ -941,7 +941,8 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 /*FIN AÑADIR DEGRADADO A TODOS LOS BLOQUES DE LAS NOTAS*/
 
 /*QUITAR LA SECCIÓN MÁS DESTACADAS, TANTO EN MOBILE COMO ESCRITORIO*/
-.tarjeta-destacada {
+.ocultar-bloque,
+.tarjeta-destacada.titulo-destacadas {
     display: none;
 }
 
