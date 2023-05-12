@@ -58,6 +58,12 @@ export default [
     ],
   },
 
+  {
+    title: 'Colecciones',
+    icon: { icon: 'tabler-database-cog' },
+    to: { name: 'coleccion' }
+  }
+
   // {
   //   title: 'Paquetes',
   //   children: [
