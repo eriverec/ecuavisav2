@@ -58,12 +58,20 @@ export default [
     ],
   },
 
-  {
-    title: 'Colecciones',
-    icon: { icon: 'tabler-database-cog' },
-    to: { name: 'coleccion' }
-  }
+  // {
+  //   title: 'Colecciones',
+  //   icon: { icon: 'tabler-database-cog' },
+  //   to: { name: 'coleccion' }
+  // }
 
+  {
+    title: 'Ecuavisa.com',
+    icon: { icon: 'tabler-settings-2' },
+    children: [
+      { title: 'Módulos', to: 'apps-configuracion-list' },
+      // { title: 'Eventos', to: 'apps-configuracion-add' },
+    ],
+  },
   // {
   //   title: 'Paquetes',
   //   children: [
