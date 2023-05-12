@@ -1429,7 +1429,7 @@ var bloqueUsuarioSugerencia = {
       ]
     }
     // comentar para apagar bloque de sugerencias 
-    bloqueUsuarioSugerencia.init();
+    // bloqueUsuarioSugerencia.init();
 /**********************BLOQUE MODAL DE SUGERENCIAS**********************/
 
 // ##############BUENAS PRACTICAS##################
