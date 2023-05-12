@@ -29,7 +29,9 @@
 
     <div class="text ">
       <div class="paragraph siquev2">
-        <p></p>
+        <p class="img">
+          <img src="https://www.ecuavisa.com/binrepository/fvz22wpwyaixrtd_931927_20230505224911.jpg">
+        </p>
         <p><b>'Don Alfonso' Espinosa de los Monteros</b> participó en la <i>premier </i>de la película<b><a
               rel="noopener noreferrer"
               href="https://www.ecuavisa.com/entretenimiento/cine/https-www-ecuavisa-com-entretenimiento-cine-don-alfonso-espinosa-de-los-monteros-cuenta-en-exclusiva-detalles-de-su-salto-a-hollywood-en-calabozos-y-EC4554336"
@@ -77,7 +79,7 @@
     </div>
 
     <div class="img">
-      <img src="" width="300px" alt="">
+      <img src="https://www.ecuavisa.com/binrepository/fvz22wpwyaixrtd_931927_20230505224911.jpg" width="300px" alt="">
 
     </div>
 
@@ -118,7 +120,7 @@
     /*IMAGEN ------------------*/
 
 
-    const originalImg = document.querySelector('.img img');
+    /*const originalImg = document.querySelector('.img img');
 
     fetch(originalImg.src)
       .then(response => response.blob())
@@ -130,7 +132,7 @@
           const base64Img = document.querySelector('.base64-img img');
           base64Img.src = base64data;
         }
-      });
+      });*/
 
 
 
@@ -147,15 +149,17 @@
             filename: 'documento.pdf',
             image: {
               type: 'jpeg',
-              quality: 0.98
+              quality: 0.20 
             },
             html2canvas: {
+              allowTaint: true,
               scale: 3, // A mayor escala, mejores gráficos, pero más peso
               letterRendering: true,
+              useCORS: true
             },
             jsPDF: {
               unit: "in",
-              format: "a3",
+              format: "a4",
               orientation: 'portrait' // landscape o portrait
             }
           })
