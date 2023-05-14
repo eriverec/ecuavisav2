@@ -532,6 +532,16 @@ class SendPulse {
 				        echo $html;
 				        exit();
     					break;
+    				case 'rankin_json':
+	    				$notas = $this->getRankings(5)->data->id;
+    					$notasHtml = [];
+    					for ($i=0; $i < count($notas) ; $i++) { 
+    						$notasHtml[] = $this->getRanking($notas[$i]);
+    					}
+    					$json_data = json_encode($notasHtml);
+    					file_put_contents('masvisto.json', $json_data);
+				        exit();
+    					break;
 
     				default:
 	                	echo "No tienes acceso";
