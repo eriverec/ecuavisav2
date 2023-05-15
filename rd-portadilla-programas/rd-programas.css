@@ -771,6 +771,23 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
 /* FIN ÍCONO DE VIDEOS */
 
+/* INICIO TEXTOS DESCRIPTIVOS */
+
+.headband-2.article-section p{
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  font-family: 'Archivo';
+  text-transform: initial;
+  line-height: 20px;
+  margin-top: -15px;
+  margin-bottom: 30px;
+}
+/* FIN TEXTOS DESCRIPTIVOS */
+
+
+
+
 /* INICIO CSS MEDIA QUERIES */
 
 @media (max-width: 1024px) {
