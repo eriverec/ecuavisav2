@@ -369,3 +369,9 @@ function localStorageSetUsuarioNew(user){
   
   return true;
 }
+
+
+var urlParamsGET = new URLSearchParams(window.location.search);
+if (urlParamsGET.get('registro')!=null){
+    toggleForm();
+}
