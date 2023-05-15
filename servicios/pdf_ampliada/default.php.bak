@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <title>No tienes acceso</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<style>
+    html, body { margin: 0; padding: 0; background: #eae4db; text-align: center; font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;}
+    svg { width: 100% ;}
+    .icon { max-width: 220px; margin: 0 auto; position: relative; padding: 10% 0 3.5%;}
+    h1 { color: #444; font: 700 48px Montserrat, Arial, "Helvetica Neue", Helvetica, sans-serif; margin-bottom: 45px;}
+    p { color: #444; font: 300 20px/1.7 Roboto, Arial, "Helvetica Neue", Helvetica, sans-serif; font-style: italic; margin: 0 0 1em;}
+</style>
+</head>
+
+<body>
+    <div id="container">
+        <div class="icon">
+            <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 404 387.6" style="enable-background:new 0 0 404 387.6;" xml:space="preserve">
+                <style type="text/css">
+                    .st0{fill:#FBC75C;}
+                    .st1{fill:#444444;}
+                </style>
+                <path class="st0" d="M404,205.8c0,100.4-81.4,181.8-181.9,181.8c-100.4,0-181.8-81.4-181.8-181.8C40.3,105.4,121.7,24,222.2,24
+                    C322.6,24,404,105.4,404,205.8L404,205.8z M404,205.8"></path>
+                <path class="st1" d="M191.4,382.7C85.8,382.7,0,296.8,0,191.3S85.8,0,191.4,0c105.5,0,191.4,85.8,191.4,191.3
+                    S296.9,382.7,191.4,382.7L191.4,382.7z M191.4,19c-95,0-172.3,77.3-172.3,172.3c0,95,77.3,172.3,172.3,172.3
+                    c95,0,172.3-77.3,172.3-172.3C363.7,96.3,286.4,19,191.4,19L191.4,19z M191.4,19"></path>
+                <path class="st1" d="M178.5,221.7c0.6,6,1.6,10.5,3.1,13.7c2,4.4,6,6.9,11.1,6.9c5,0,8.9-2.4,11.1-6.9c1.6-3.3,2.7-7.8,3.1-13.6
+                    l3.8-43c0.4-4.1,0.6-8.2,0.6-12.2c0-7.4-1-13-3-17.2c-1.8-3.6-5.8-8-14.5-8c-5.6,0-10.2,1.9-13.6,5.6c-3.4,3.6-5.2,8.6-5.2,14.7
+                    c0,3.6,0.3,9.6,0.8,17.9L178.5,221.7z M178.5,221.7"></path>
+                <path class="st1" d="M180.2,252.9c-3.4,3.4-5.3,7.8-5.3,12.7c0,5.6,2,10.2,5.7,13.4c3.6,3.1,7.8,4.7,12.6,4.7
+                c4.7,0,8.9-1.6,12.5-4.8c3.7-3.3,5.6-7.9,5.6-13.3c0-4.9-1.9-9.4-5.4-12.8C198.8,245.9,187.1,246,180.2,252.9L180.2,252.9z
+                 M180.2,252.9"></path>
+            </svg>
+        </div>
+        <h1>No tienes acceso a este sitio</h1>
+    </div>
+
+
+</body></html>
