@@ -1,0 +1,8 @@
+{
+  "crons": [
+    {
+      "path": "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/index.php?action=estadio",
+      "schedule": "5 15 * * 1-5"
+    }
+  ]
+}
