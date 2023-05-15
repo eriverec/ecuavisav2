@@ -1,4 +1,17 @@
 {
+  "version": 2,
+  "builds": [
+    {
+      "src": "./index.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
+  ],
   "crons": [
     {
       "path": "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/index.php?action=estadio",
