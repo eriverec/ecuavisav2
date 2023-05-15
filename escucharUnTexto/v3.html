@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>v3</title>
+</head>
+
+<body>
+
+
+  <script>
+    fetch('https://www.ecuavisa.com/news-portlet/getArticle/5131938.json'), {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }
+      .then(response => response.json())
+      .then(data => {
+        const components = data.article.content.component;
+        for (let component of components) {
+          if (component.name === 'Text') {
+            const __text = component.__text;
+            console.log(__text); // aquí obtendría el contenido de la etiqueta de texto
+            break;
+          }
+        }
+      })
+      .catch(error => console.error(error));
+  </script>
+</body>
+
+</html>
