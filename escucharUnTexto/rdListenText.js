@@ -1,31 +1,3 @@
-// Función para leer una matriz de valores de texto usando SpeechSynthesisUtterance
-// var te = localStorage.getItem('textValues');
-// console.log(te);
-
-let mensaje = null;
-let pausado = false;
-
-function leerContenido() {
-  // Seleccionar el elemento div que contiene el texto a leer
-  // const divTexto = document.querySelector('.text');
-
-  // Obtener el texto del elemento div
-  // const texto = divTexto.textContent.trim();
-
-  // Crear un objeto SpeechSynthesisUtterance con el texto a leer
-  mensaje = new SpeechSynthesisUtterance(te);
-
-  // Establecer la voz y el idioma del mensaje (opcional)
-  mensaje.voice = window.speechSynthesis.getVoices()[0];
-  mensaje.lang = 'es-EC';
-
-  // Reproducir el mensaje de voz y activar bandera de pausa
-  window.speechSynthesis.speak(mensaje);
-  // document.querySelector(".btn-play").style.display = "none";
-  // document.querySelector(".btn-pausa").style.display = "";
-  pausado = false;
-}
-
 // var getIdArticle = "5134589"
 var getIdArticle = ITER.CONTEXT.articleId;
 console.log(getIdArticle); // Devuelve "5134589"
@@ -47,28 +19,47 @@ fetch('https://estadisticas.ecuavisa.com/sites/services/global/mirrorGetVoice.ph
     var ddd = JSON.stringify(textValues);
     // localStorage.setItem('textValues', JSON.stringify(textValues)); // aquí guardamos la matriz en el localStorage
     console.log("textAPI:", ddd); // aquí obtendría todos los valores de textos dentro del objeto JSON
+    // speechSynthesis.onvoiceschanged = () => {
+    //   const voices = speechSynthesis.getVoices();
+    //   console.log(voices);
+    // };
 
+    /*
+      Microsoft Pablo - Spanish (Spain)
+      Microsoft Helena - Spanish (Spain)
+      Microsoft Laura - Spanish (Spain)
+    */
 
     let message;
     let paused = false;
 
     function speakText(textArray) {
       message = new SpeechSynthesisUtterance();
-      message.volume = 1;
-      message.rate = 1;
-      message.pitch = 1;
-      message.text = textArray.join('.');
-      message.onend = () => {
-        paused = false;
-        playButton.disabled = false;
-        pauseButton.disabled = true;
-        stopButton.disabled = true;
+      speechSynthesis.onvoiceschanged = () => {
+        const voices = speechSynthesis.getVoices();
+        message.voice = voices.find(voice => voice.name === 'Microsoft Pablo - Spanish (Spain)');
+        if (message.voice) {
+          message.volume = 1;
+          message.rate = 1;
+          message.pitch = 1;
+          message.text = textArray.join('.');
+          message.onend = () => {
+            paused = false;
+            playButton.disabled = false;
+            pauseButton.disabled = true;
+            stopButton.disabled = true;
+          };
+          speechSynthesis.speak(message);
+          console.log(message)
+        } else {
+          console.error('No se puede encontrar la voz');
+        }
       };
-      speechSynthesis.speak(message);
       paused = false;
       playButton.disabled = true;
       pauseButton.disabled = false;
       stopButton.disabled = false;
+      speechSynthesis.resume();
     }
 
     playButton.addEventListener('click', () => {
@@ -102,4 +93,3 @@ fetch('https://estadisticas.ecuavisa.com/sites/services/global/mirrorGetVoice.ph
     });
   })
   .catch(error => console.error(error));
-
