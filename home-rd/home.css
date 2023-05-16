@@ -3476,3 +3476,29 @@ BLOQUE DE COLUMNISTA - INICIO
 /* ------------------------------
 BLOQUE DE COLUMNISTA - FIN
 ------------------------------ */
+
+
+/*  CINTILLO ENVIO PARA LAS NOTAS */
+
+.article_envivo {
+  background: #ff3737;
+  color: #fff;
+  padding: 3px 7px;
+  font-family: 'Archivo';
+  text-transform: uppercase;
+  font-size: 20px;
+  margin-right: 10px;
+}
+
+.punnto_svg {
+  vertical-align: sub;
+  width: 15px;
+  animation-name: parpadeomenu;
+  animation-duration: 1s;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  -webkit-animation-name: parpadeomenu;
+  -webkit-animation-duration: 1s;
+  -webkit-animation-timing-function: linear;
+  -webkit-animation-iteration-count: infinite;
+}
