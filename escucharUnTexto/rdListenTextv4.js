@@ -25,7 +25,6 @@ async function getJsonArticle() {
       if(responsiveVoice.voiceSupport()) {
         playButton.classList.add("disabled");
         playButton.setAttribute("disabled", true);
-        responsiveVoice.enableWindowClickHook();
         responsiveVoice.speak(plainText, 'Spanish Male', {
           onend: function() {
             pauseBtn = false;
