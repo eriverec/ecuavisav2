@@ -1,7 +1,7 @@
 // var getIdArticle = "5134589";
 var playButton = document.getElementById('playButton_2');
 var pauseButton = document.getElementById('pauseButton_2');
-var stopButton = document.getElementById('stopButton_2');
+//var stopButton = document.getElementById('stopButton_2');
 
 var pauseBtn = false;
 
@@ -34,14 +34,14 @@ async function getJsonArticle() {
 
             // pauseButton.classList.add("disabled");
             pauseButton.setAttribute("disabled", true);
-            stopButton.setAttribute("disabled", true);
+            //stopButton.setAttribute("disabled", true);
 
           }
         });
 
         // pauseButton.classList.remove("disabled");
         pauseButton.removeAttribute("disabled");
-        stopButton.removeAttribute("disabled");
+        //stopButton.removeAttribute("disabled");
 
       }else{
         console.log("El traductor no es compatible")
@@ -61,12 +61,12 @@ async function getJsonArticle() {
       }
     });
 
-    stopButton.addEventListener('click', () => {
+    /*stopButton.addEventListener('click', () => {
       speechSynthesis.cancel();
       playButton.disabled = false;
       pauseButton.disabled = true;
       stopButton.disabled = true;
-    });
+    });*/
 
     return true;
   } catch (error) {
