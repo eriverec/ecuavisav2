@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>v3</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+    rel="stylesheet">
+</head>
+<script src="https://code.responsivevoice.org/responsivevoice.js?key=9seloDgm"></script>
+
+<body class="container">
+  <!-- <button type="button" class="btn btn-secondary btn-play" onclick="leerContenido()">
+    <span id="icono-play">
+      <svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm8.856-3.845A1.25 1.25 0 0 0 9 9.248v5.504a1.25 1.25 0 0 0 1.856 1.093l5.757-3.189a.75.75 0 0 0 0-1.312l-5.757-3.189Z"
+          fill="#FFFFFF" />
+      </svg>
+    </span>
+  </button> -->
+
+  <style>
+    .btn_parent_audio button {
+      background: #2927B9;
+      color: #fff;
+      border: 0;
+      padding-right: 10px;
+      padding-top: 8px;
+      padding-left: 10px;
+      padding-bottom: 8px;
+      font-family: 'Archivo';
+      border-radius: 0.2rem;
+    }
+
+    .btn_parent_audio button:disabled {
+      background: #7877c5;
+    }
+  </style>
+  <div class="btn_parent_audio">
+    <button id="playButton_2">Escuchar</button>
+    <button id="pauseButton_2">Pausar</button>
+  </div>
+
+  <script>
+
+    var getIdArticle = "5134589";
+    var playButton = document.getElementById('playButton_2');
+    var pauseButton = document.getElementById('pauseButton_2');
+    var pauseBtn = false;
+
+    function stripHtmlTags(text) {
+      return text.replace(/<[^>]+>/g, '');
+    }
+    // var getIdArticle = ITER.CONTEXT.articleId;
+    async function getJsonArticle() {
+      try {
+        var resp = await fetch(`https://estadisticas.ecuavisa.com/sites/services/global/mirrorGetVoice.php?idarticulo=${getIdArticle}`); 
+        var obtener = await resp.json();
+        const components = obtener.article.content.component;
+        var textValues = "";
+        for (let component of components) {
+          if (component.name === 'Text') {
+            textValues += component.__text;
+          }
+        }
+        var plainText = stripHtmlTags(textValues);
+        playButton.addEventListener('click', () => {
+          if(responsiveVoice.voiceSupport()) {
+            responsiveVoice.speak(plainText, 'Spanish Male');
+          }else{
+            console.log("El traductor no es compatible")
+          }
+        });
+
+        pauseButton.addEventListener('click', () => {
+          if(!pauseBtn){
+            pauseBtn = true;
+            pauseButton.innerHTML = "Seguir";
+            responsiveVoice.pause();
+          }else{
+            pauseBtn = false;
+            pauseButton.innerHTML = "Pausar";
+            responsiveVoice.resume();
+          }
+        });
+
+        return true;
+      } catch (error) {
+        console.log('Error:', error);
+      }
+    }
+
+
+    getJsonArticle();
+
+
+  </script>
+</body>
+
+</html>
