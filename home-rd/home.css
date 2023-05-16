@@ -3502,3 +3502,8 @@ BLOQUE DE COLUMNISTA - FIN
   -webkit-animation-timing-function: linear;
   -webkit-animation-iteration-count: infinite;
 }
+
+.article-section.cint__envio{
+  display: flex;
+  align-items: center;
+}
