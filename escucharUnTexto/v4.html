@@ -47,7 +47,7 @@
   </style>
   <div class="btn_parent_audio">
     <button id="playButton_2">Escuchar</button>
-    <button id="pauseButton_2">Pausar</button>
+    <button id="pauseButton_2" disabled="true" class="disabled">Pausar</button>
   </div>
 
   <script>
@@ -75,7 +75,23 @@
         var plainText = stripHtmlTags(textValues);
         playButton.addEventListener('click', () => {
           if(responsiveVoice.voiceSupport()) {
-            responsiveVoice.speak(plainText, 'Spanish Male');
+            playButton.classList.add("disabled");
+            playButton.setAttribute("disabled", true);
+
+            responsiveVoice.speak(plainText, 'Spanish Male', {
+              onend: function() {
+                pauseBtn = false;
+                pauseButton.innerHTML = "Pausar";
+                playButton.classList.remove("disabled");
+                playButton.removeAttribute("disabled");
+
+                pauseButton.classList.add("disabled");
+                pauseButton.setAttribute("disabled", true);
+              }
+            });
+
+            pauseButton.classList.remove("disabled");
+            pauseButton.removeAttribute("disabled");
           }else{
             console.log("El traductor no es compatible")
           }
@@ -92,12 +108,6 @@
             responsiveVoice.resume();
           }
         });
-
-        /*responsiveVoice.onend = function() {
-          pauseBtn = false;
-          pauseButton.innerHTML = "Pausar";
-          responsiveVoice.resume();
-        };*/
 
         return true;
       } catch (error) {
