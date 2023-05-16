@@ -47,7 +47,9 @@
   </style>
   <div class="btn_parent_audio">
     <button id="playButton_2">Escuchar</button>
-    <button id="pauseButton_2" disabled="true" class="disabled">Pausar</button>
+    <button id="pauseButton_2" disabled="true">Pausar</button>
+    <button id="stopButton_2" disabled="true">Detener</button>
+
   </div>
 
   <script>
@@ -55,6 +57,8 @@
     var getIdArticle = "5134589";
     var playButton = document.getElementById('playButton_2');
     var pauseButton = document.getElementById('pauseButton_2');
+    var stopButton = document.getElementById('stopButton_2');
+
     var pauseBtn = false;
 
     function stripHtmlTags(text) {
@@ -85,13 +89,17 @@
                 playButton.classList.remove("disabled");
                 playButton.removeAttribute("disabled");
 
-                pauseButton.classList.add("disabled");
+                // pauseButton.classList.add("disabled");
                 pauseButton.setAttribute("disabled", true);
+                stopButton.setAttribute("disabled", true);
+
               }
             });
 
-            pauseButton.classList.remove("disabled");
+            // pauseButton.classList.remove("disabled");
             pauseButton.removeAttribute("disabled");
+            stopButton.removeAttribute("disabled");
+
           }else{
             console.log("El traductor no es compatible")
           }
@@ -100,13 +108,20 @@
         pauseButton.addEventListener('click', () => {
           if(!pauseBtn){
             pauseBtn = true;
-            pauseButton.innerHTML = "Seguir";
+            pauseButton.innerHTML = "Reanudar";
             responsiveVoice.pause();
           }else{
             pauseBtn = false;
             pauseButton.innerHTML = "Pausar";
             responsiveVoice.resume();
           }
+        });
+
+        stopButton.addEventListener('click', () => {
+          speechSynthesis.cancel();
+          playButton.disabled = false;
+          pauseButton.disabled = true;
+          stopButton.disabled = true;
         });
 
         return true;

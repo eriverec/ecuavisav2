@@ -1,13 +1,14 @@
-
-var getIdArticle = "5134589";
+// var getIdArticle = "5134589";
 var playButton = document.getElementById('playButton_2');
 var pauseButton = document.getElementById('pauseButton_2');
+var stopButton = document.getElementById('stopButton_2');
+
 var pauseBtn = false;
 
 function stripHtmlTags(text) {
   return text.replace(/<[^>]+>/g, '');
 }
-// var getIdArticle = ITER.CONTEXT.articleId;
+var getIdArticle = ITER.CONTEXT.articleId;
 async function getJsonArticle() {
   try {
     var resp = await fetch(`https://estadisticas.ecuavisa.com/sites/services/global/mirrorGetVoice.php?idarticulo=${getIdArticle}`); 
@@ -32,13 +33,17 @@ async function getJsonArticle() {
             playButton.classList.remove("disabled");
             playButton.removeAttribute("disabled");
 
-            pauseButton.classList.add("disabled");
+            // pauseButton.classList.add("disabled");
             pauseButton.setAttribute("disabled", true);
+            stopButton.setAttribute("disabled", true);
+
           }
         });
 
-        pauseButton.classList.remove("disabled");
+        // pauseButton.classList.remove("disabled");
         pauseButton.removeAttribute("disabled");
+        stopButton.removeAttribute("disabled");
+
       }else{
         console.log("El traductor no es compatible")
       }
@@ -47,13 +52,20 @@ async function getJsonArticle() {
     pauseButton.addEventListener('click', () => {
       if(!pauseBtn){
         pauseBtn = true;
-        pauseButton.innerHTML = "Seguir";
+        pauseButton.innerHTML = "Reanudar";
         responsiveVoice.pause();
       }else{
         pauseBtn = false;
         pauseButton.innerHTML = "Pausar";
         responsiveVoice.resume();
       }
+    });
+
+    stopButton.addEventListener('click', () => {
+      speechSynthesis.cancel();
+      playButton.disabled = false;
+      pauseButton.disabled = true;
+      stopButton.disabled = true;
     });
 
     return true;
