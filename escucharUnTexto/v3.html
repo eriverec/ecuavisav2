@@ -6,30 +6,155 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>v3</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
 </head>
 
-<body>
+<body class="container">
+  <!-- <button type="button" class="btn btn-secondary btn-play" onclick="leerContenido()">
+    <span id="icono-play">
+      <svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M2 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10S2 17.523 2 12Zm8.856-3.845A1.25 1.25 0 0 0 9 9.248v5.504a1.25 1.25 0 0 0 1.856 1.093l5.757-3.189a.75.75 0 0 0 0-1.312l-5.757-3.189Z"
+          fill="#FFFFFF" />
+      </svg>
+    </span>
+  </button> -->
 
+  <style>
+    .btn_parent_audio button {
+      background: #2927B9;
+      color: #fff;
+      border: 0;
+      padding-right: 10px;
+      padding-top: 8px;
+      padding-left: 10px;
+      padding-bottom: 8px;
+      font-family: 'Archivo';
+      border-radius: 0.2rem;
+    }
+
+    .btn_parent_audio button:disabled {
+      background: #7877c5;
+    }
+  </style>
+  <div class="btn_parent_audio">
+    <button id="playButton">Escuchar</button>
+    <button id="pauseButton">Pausar</button>
+    <button id="stopButton">Detener</button>
+  </div>
 
   <script>
-    fetch('https://www.ecuavisa.com/news-portlet/getArticle/5131938.json'), {
-      method: 'GET',
-      headers: {
-        'Content-Type': 'application/json'
-      }
+    // Función para leer una matriz de valores de texto usando SpeechSynthesisUtterance
+    // var te = localStorage.getItem('textValues');
+    // console.log(te);
+
+    let mensaje = null;
+    let pausado = false;
+
+    function leerContenido() {
+      // Seleccionar el elemento div que contiene el texto a leer
+      // const divTexto = document.querySelector('.text');
+
+      // Obtener el texto del elemento div
+      // const texto = divTexto.textContent.trim();
+
+      // Crear un objeto SpeechSynthesisUtterance con el texto a leer
+      mensaje = new SpeechSynthesisUtterance(te);
+
+      // Establecer la voz y el idioma del mensaje (opcional)
+      mensaje.voice = window.speechSynthesis.getVoices()[0];
+      mensaje.lang = 'es-EC';
+
+      // Reproducir el mensaje de voz y activar bandera de pausa
+      window.speechSynthesis.speak(mensaje);
+      // document.querySelector(".btn-play").style.display = "none";
+      // document.querySelector(".btn-pausa").style.display = "";
+      pausado = false;
     }
+
+    var getIdArticle = "5134589"
+    // var getIdArticle = ITER.CONTEXT.articleId;
+    console.log(getIdArticle); // Devuelve "5134589"
+
+    fetch('https://estadisticas.ecuavisa.com/sites/services/global/mirrorGetVoice.php?idarticulo=' + getIdArticle)
       .then(response => response.json())
       .then(data => {
         const components = data.article.content.component;
+        const textValues = [];
+        // console.log(ddd)
         for (let component of components) {
           if (component.name === 'Text') {
             const __text = component.__text;
-            console.log(__text); // aquí obtendría el contenido de la etiqueta de texto
-            break;
+            textValues.push(__text);
           }
         }
+
+
+        var ddd = JSON.stringify(textValues);
+        // localStorage.setItem('textValues', JSON.stringify(textValues)); // aquí guardamos la matriz en el localStorage
+        console.log("textAPI:", ddd); // aquí obtendría todos los valores de textos dentro del objeto JSON
+
+
+        let message;
+        let paused = false;
+
+        function speakText(textArray) {
+          message = new SpeechSynthesisUtterance();
+          message.volume = 1;
+          message.rate = 1;
+          message.pitch = 1;
+          message.text = textArray.join('.');
+          message.onend = () => {
+            paused = false;
+            playButton.disabled = false;
+            pauseButton.disabled = true;
+            stopButton.disabled = true;
+          };
+          speechSynthesis.speak(message);
+          paused = false;
+          playButton.disabled = true;
+          pauseButton.disabled = false;
+          stopButton.disabled = false;
+        }
+
+        playButton.addEventListener('click', () => {
+          const components = data.article.content.component;
+          const textValues = [];
+          for (let component of components) {
+            if (component.name === 'Text') {
+              textValues.push(component.__text);
+            }
+          }
+          speakText(textValues);
+        });
+
+        pauseButton.addEventListener('click', () => {
+          if (!paused) {
+            paused = true;
+            speechSynthesis.pause();
+            pauseButton.textContent = "Reanudar lectura"
+          } else {
+            paused = false;
+            speechSynthesis.resume();
+            pauseButton.textContent = "Pausar lectura"
+          }
+        });
+
+        stopButton.addEventListener('click', () => {
+          speechSynthesis.cancel();
+          playButton.disabled = false;
+          pauseButton.disabled = true;
+          stopButton.disabled = true;
+        });
       })
       .catch(error => console.error(error));
+
+
   </script>
 </body>
 
