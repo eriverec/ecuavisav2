@@ -52,8 +52,8 @@ async function getJsonArticle() {
       if(!pauseBtn){
         pauseBtn = true;
         pauseButton.innerHTML = "Reanudar";
-        //responsiveVoice.pause();
-        responsiveVoice.cancel();
+        responsiveVoice.pause();
+        //responsiveVoice.cancel();
       }else{
         pauseBtn = false;
         pauseButton.innerHTML = "Pausar";
