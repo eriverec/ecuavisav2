@@ -108,7 +108,7 @@
   <!-- <button id="play-pause-btn">Play</button> -->
   <div class="boton-play"></div>
 
-  
+
 
   <script>
 
@@ -159,8 +159,8 @@
 
         const playAudio = () => {
           audioElement.play();
-          playPauseButton.innerHTML = 
-          playPauseButton.innerHTML = ` 
+          playPauseButton.innerHTML =
+            playPauseButton.innerHTML = ` 
           <div style="display: flex; align-items: end; padding: 8px 104px 8px 8px; margin: -8px -104px -8px -8px;">
             <div class="wpds-c-jWPqza wpds-c-jWPqza-irGthP-css"></div>
             <div class="wpds-c-jWPqza wpds-c-jWPqza-ieYnvbI-css"></div>
@@ -186,6 +186,12 @@
           isPlaying = false;
         };
 
+        const handleVisibilityChange = () => {
+          if (document.hidden && isPlaying) {
+            pauseAudio();
+          }
+        };
+
         playPauseButton.addEventListener('click', () => {
           if (isPlaying) {
             pauseAudio();
@@ -194,6 +200,7 @@
           }
         });
 
+        document.addEventListener('visibilitychange', handleVisibilityChange);
 
       })
       .catch(err => {
