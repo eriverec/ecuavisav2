@@ -43,9 +43,14 @@ const s3 = new AWS.S3();
 const polly = new AWS.Polly();
 
 routes.get("/", async function (req, res) {
+	return res.json("Servicio de speechsynthesis: v0.01 - "+moment().format('MMMM Do YYYY, h:mm:ss a'));
+});
+
+routes.get("/speechsynthesis", async function (req, res) {
 	try {
+		var { texto="" } = req.query;
 		// Define el texto que quieres convertir a voz
-	  const texto = 'Hola, esto es un ejemplo de texto a voz utilizando AWS Polly.';
+	  //const texto = 'Hola, esto es un ejemplo de texto a voz utilizando AWS Polly.';
 
 	  // Configura los parámetros para la solicitud de Polly
 	  const params = {
@@ -57,7 +62,7 @@ routes.get("/", async function (req, res) {
 	  // Realiza la solicitud a Polly para obtener el audio
 	  polly.synthesizeSpeech(params, (err, data) => {
 	    if (err) {
-	      console.log('Error al obtener el audio de Polly:', err);
+	      //console.log('Error al obtener el audio de Polly:', err);
 	      res.status(500).send('Error al obtener el audio de Polly');
 	    } else if (data.AudioStream instanceof Buffer) {
 	      // Guarda el archivo de audio en el bucket de S3
