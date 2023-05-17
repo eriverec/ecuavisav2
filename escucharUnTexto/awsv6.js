@@ -1,7 +1,7 @@
 
-var getIdArticle = "5134589";
+// var getIdArticle = "5134589";
 // var getIdArticle = "5154428";
-// var getIdArticle = ITER.CONTEXT.articleId;
+var getIdArticle = ITER.CONTEXT.articleId;
 
 // const audioElement = document.createElement('audio');
 
