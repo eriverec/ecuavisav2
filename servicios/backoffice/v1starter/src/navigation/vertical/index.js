@@ -73,7 +73,7 @@ export default [
     ],
   },
   {
-       title: 'Categorias',
+       title: 'Intereses',
       icon: { icon: 'tabler-database-cog' },
        to: { name: 'categorias' }
   },
