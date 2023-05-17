@@ -1,4 +1,5 @@
 import AWS from "aws-sdk";
+import base64 from "base64-stream";
 import fetch from "node-fetch";
 import { Router } from 'express';
 import moment from 'moment-timezone';
@@ -42,39 +43,33 @@ const s3 = new AWS.S3();
 const polly = new AWS.Polly();
 
 routes.get("/", async function (req, res) {
-  // Define el texto que quieres convertir a voz
-  const texto = 'Hola, esto es un ejemplo de texto a voz utilizando AWS Polly.';
+	try {
+		// Define el texto que quieres convertir a voz
+	  const texto = 'Hola, esto es un ejemplo de texto a voz utilizando AWS Polly.';
 
-  // Configura los parámetros para la solicitud de Polly
-  const params = {
-    OutputFormat: 'mp3',
-    Text: texto,
-    VoiceId: 'Mia',
-  };
+	  // Configura los parámetros para la solicitud de Polly
+	  const params = {
+	    OutputFormat: 'mp3',
+	    Text: texto,
+	    VoiceId: 'Mia',
+	  };
 
-  // Realiza la solicitud a Polly para obtener el audio
-  polly.synthesizeSpeech(params, (err, data) => {
-    if (err) {
-      console.log('Error al obtener el audio de Polly:', err);
-      res.status(500).send('Error al obtener el audio de Polly');
-    } else if (data.AudioStream instanceof Buffer) {
-      // Guarda el archivo de audio en el bucket de S3
-      const bucketParams = {
-        Bucket: 'TU_BUCKET_NAME',
-        Key: 'audio.mp3', // Nombre del archivo de audio en S3
-        Body: data.AudioStream,
-        ContentType: 'audio/mpeg',
-      };
-
-      s3.upload(bucketParams, (err, data) => {
-        if (err) {
-          console.log('Error al subir el archivo de audio a S3:', err);
-          res.status(500).send('Error al subir el archivo de audio a S3');
-        } else {
-          console.log('Archivo de audio subido exitosamente a S3:', data.Location);
-          res.send('Archivo de audio subido exitosamente a S3');
-        }
-      });
-    }
-  });
+	  // Realiza la solicitud a Polly para obtener el audio
+	  polly.synthesizeSpeech(params, (err, data) => {
+	    if (err) {
+	      console.log('Error al obtener el audio de Polly:', err);
+	      res.status(500).send('Error al obtener el audio de Polly');
+	    } else if (data.AudioStream instanceof Buffer) {
+	      // Guarda el archivo de audio en el bucket de S3
+	      const audioBuffer = Buffer.from(data.AudioStream);
+		    // Convierte el buffer en una cadena base64
+		    const audioData = audioBuffer.toString('base64');
+		    // audioData contiene el audio en formato base64
+		    return res.send(audioData);
+	    }
+	  });
+	} catch (error) {
+    console.error('Error al generar el audio:', error);
+    res.status(500).send('Error al generar el audio.');
+  }
 });
