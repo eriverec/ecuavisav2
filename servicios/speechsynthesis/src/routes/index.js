@@ -76,7 +76,7 @@ async function getArticle(getIdArticle) {
 };
 
 routes.get("/", async function (req, res) {
-	return res.json("Servicio de speechsynthesis: v0.02 - "+moment().format('MMMM Do YYYY, h:mm:ss a'));
+	return res.json("Servicio de speechsynthesis: v0.03 - "+moment().format('MMMM Do YYYY, h:mm:ss a'));
 });
 
 routes.get("/speechsynthesis", async function (req, res) {
