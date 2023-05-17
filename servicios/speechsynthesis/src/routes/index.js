@@ -49,6 +49,9 @@ routes.get("/", async function (req, res) {
 routes.get("/speechsynthesis", async function (req, res) {
 	try {
 		var { texto="" } = req.query;
+		if(texto=="" ){
+			return res.status(200).send({ resp:false,message: "Falta el texto" });
+		}
 		// Define el texto que quieres convertir a voz
 	  //const texto = 'Hola, esto es un ejemplo de texto a voz utilizando AWS Polly.';
 
