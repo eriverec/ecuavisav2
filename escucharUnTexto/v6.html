@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>v6</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+    rel="stylesheet">
+</head>
+<!-- <script src="https://code.responsivevoice.org/responsivevoice.js?key=9seloDgm"></script> -->
+
+<body class="container">
+
+
+  <style>
+    .btn_parent_audio button {
+      background: #2927B9;
+      color: #fff;
+      border: 0;
+      padding-right: 10px;
+      padding-top: 8px;
+      padding-left: 10px;
+      padding-bottom: 8px;
+      font-family: 'Archivo';
+      border-radius: 0.2rem;
+    }
+
+    .btn_parent_audio button:disabled {
+      background: #7877c5;
+    }
+
+    /*  */
+    .wpds-c-iyKTdE {
+      background: #333;
+      bottom: 30%;
+      height: 2px;
+      position: relative;
+      width: 3px;
+      margin-left: 1px;
+    }
+
+    .wpds-c-iyKTdE-ijwIBRZ-css {
+      background: #333;
+    }
+
+    #play-pause-btn {
+      display: flex;
+      align-items: flex-end;
+
+    }
+
+
+    /* animation */
+    .wpds-c-jWPqza {
+      background: #333;
+      bottom: 30%;
+      height: 2px;
+      position: relative;
+      width: 3px;
+      animation: 0ms linear -800ms infinite alternate none running wpds-k-esEONM;
+    }
+
+    @keyframes wpds-k-esEONM {
+      0% {
+        opacity: 1;
+        height: 2px
+      }
+
+      100% {
+        opacity: 1;
+        height: 0.75rem
+      }
+    }
+
+    .wpds-c-jWPqza {
+      margin-left: 1px;
+    }
+
+    .wpds-c-jWPqza-irGthP-css {
+      background: #333;
+      animation-duration: 474ms;
+    }
+
+    .wpds-c-jWPqza-ieYnvbI-css {
+      background: #333;
+      animation-duration: 433ms;
+    }
+
+    .wpds-c-jWPqza-igThDMz-css {
+      background: #333;
+      animation-duration: 407ms;
+    }
+
+    .wpds-c-jWPqza-igxkfZF-css {
+      background: #333;
+      animation-duration: 458ms;
+    }
+  </style>
+
+  <!-- <button id="play-pause-btn">Play</button> -->
+  <div class="boton-play"></div>
+
+  
+
+  <script>
+
+    var getIdArticle = "5134589";
+    // var getIdArticle = "5154428";
+    // var getIdArticle = ITER.CONTEXT.articleId;
+
+    // const audioElement = document.createElement('audio');
+
+    // Hacer una solicitud a la ruta /audio en Express para obtener el audio en base64
+    fetch(`https://aws-polly.vercel.app/speechsynthesis?idArticle=${getIdArticle}`)
+      .then(response => response.text())
+      .then(audioBase64 => {
+        // Decodificar el audio base64 en un blob
+        const audioBlob = base64toBlob(audioBase64, 'audio/mp3');
+
+        // Crear una URL del blob para reproducir el audio
+        const audioUrl = URL.createObjectURL(audioBlob);
+
+        // Reproducir el audio en una etiqueta <audio>
+        const audioElement = document.createElement('audio');
+        audioElement.src = audioUrl;
+        audioElement.controls = true;
+        // document.body.appendChild(audioElement);
+
+        const selecArea = document.querySelector('.boton-play');
+
+        // const botonElement = document.createElement('button');
+        // botonElement.setAttribute('id', 'play-pause-btn');
+        // botonElement.textContent = 'Play';
+
+        const ele = `
+          <button id="play-pause-btn">
+            <div style="display: flex; align-items: end; padding: 8px 104px 8px 8px; margin: -8px -104px -8px -8px;">
+              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
+              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
+              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
+              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
+            </div>
+            <span>Play</span>
+          </button>
+        `
+
+        selecArea.innerHTML = ele;
+
+        const playPauseButton = document.querySelector('#play-pause-btn');
+        let isPlaying = false;
+
+        const playAudio = () => {
+          audioElement.play();
+          playPauseButton.innerHTML = 
+          playPauseButton.innerHTML = ` 
+          <div style="display: flex; align-items: end; padding: 8px 104px 8px 8px; margin: -8px -104px -8px -8px;">
+            <div class="wpds-c-jWPqza wpds-c-jWPqza-irGthP-css"></div>
+            <div class="wpds-c-jWPqza wpds-c-jWPqza-ieYnvbI-css"></div>
+            <div class="wpds-c-jWPqza wpds-c-jWPqza-igThDMz-css"></div>
+            <div class="wpds-c-jWPqza wpds-c-jWPqza-igxkfZF-css"></div>
+          </div>
+          <span>Pause</span>
+          `;
+          isPlaying = true;
+        };
+
+        const pauseAudio = () => {
+          audioElement.pause();
+          playPauseButton.innerHTML = ` 
+            <div style="display: flex; align-items: end; padding: 8px 104px 8px 8px; margin: -8px -104px -8px -8px;">
+              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
+              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
+              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
+              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
+            </div>
+            <span>Play</span>
+          `;
+          isPlaying = false;
+        };
+
+        playPauseButton.addEventListener('click', () => {
+          if (isPlaying) {
+            pauseAudio();
+          } else {
+            playAudio();
+          }
+        });
+
+
+      })
+      .catch(err => {
+        console.error('Error al obtener el audio:', err);
+      });
+
+    // Función para convertir una cadena base64 en un blob
+    function base64toBlob(base64, contentType) {
+      const byteCharacters = atob(base64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+        byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      return new Blob([byteArray], { type: contentType });
+    }
+
+  </script>
+</body>
+
+</html>
