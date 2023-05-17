@@ -1,7 +1,7 @@
 
-// var getIdArticle = "5134589";
+var getIdArticle = "5134589";
 // var getIdArticle = "5154428";
-var getIdArticle = ITER.CONTEXT.articleId;
+// var getIdArticle = ITER.CONTEXT.articleId;
 
 // const audioElement = document.createElement('audio');
 
@@ -28,16 +28,16 @@ fetch(`https://aws-polly.vercel.app/speechsynthesis?idArticle=${getIdArticle}`)
     // botonElement.textContent = 'Play';
 
     const ele = `
-          <button id="play-pause-btn">
-            <div style="display: flex; align-items: end; padding: 8px 104px 8px 8px; margin: -8px -104px -8px -8px;">
-              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
-              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
-              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
-              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
-            </div>
-            <span>Play</span>
-          </button>
-        `
+      <button id="play-pause-btn">
+        <div style="display: flex; align-items: end; padding: 8px 104px 8px 8px; margin: -8px -104px -8px -8px;">
+          <div class="event-pause wpds-c-iyKTdE-ijwIBRZ-css"></div>
+          <div class="event-pause wpds-c-iyKTdE-ijwIBRZ-css"></div>
+          <div class="event-pause wpds-c-iyKTdE-ijwIBRZ-css"></div>
+          <div class="event-pause wpds-c-iyKTdE-ijwIBRZ-css"></div>
+        </div>
+        <span>Play</span>
+      </button>
+    `
 
     selecArea.innerHTML = ele;
 
@@ -48,28 +48,28 @@ fetch(`https://aws-polly.vercel.app/speechsynthesis?idArticle=${getIdArticle}`)
       audioElement.play();
       playPauseButton.innerHTML =
         playPauseButton.innerHTML = ` 
-          <div style="display: flex; align-items: end; padding: 8px 104px 8px 8px; margin: -8px -104px -8px -8px;">
-            <div class="wpds-c-jWPqza wpds-c-jWPqza-irGthP-css"></div>
-            <div class="wpds-c-jWPqza wpds-c-jWPqza-ieYnvbI-css"></div>
-            <div class="wpds-c-jWPqza wpds-c-jWPqza-igThDMz-css"></div>
-            <div class="wpds-c-jWPqza wpds-c-jWPqza-igxkfZF-css"></div>
-          </div>
-          <span>Pause</span>
-          `;
+      <div style="display: flex; align-items: end; padding: 8px 104px 8px 8px; margin: -8px -104px -8px -8px;">
+        <div class="event-play event-play-irGthP-css"></div>
+        <div class="event-play event-play-ieYnvbI-css"></div>
+        <div class="event-play event-play-igThDMz-css"></div>
+        <div class="event-play event-play-igxkfZF-css"></div>
+      </div>
+      <span>Pause</span>
+      `;
       isPlaying = true;
     };
 
     const pauseAudio = () => {
       audioElement.pause();
       playPauseButton.innerHTML = ` 
-            <div style="display: flex; align-items: end; padding: 8px 104px 8px 8px; margin: -8px -104px -8px -8px;">
-              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
-              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
-              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
-              <div class="wpds-c-iyKTdE wpds-c-iyKTdE-ijwIBRZ-css"></div>
-            </div>
-            <span>Play</span>
-          `;
+        <div style="display: flex; align-items: end; padding: 8px 104px 8px 8px; margin: -8px -104px -8px -8px;">
+          <div class="event-pause wpds-c-iyKTdE-ijwIBRZ-css"></div>
+          <div class="event-pause wpds-c-iyKTdE-ijwIBRZ-css"></div>
+          <div class="event-pause wpds-c-iyKTdE-ijwIBRZ-css"></div>
+          <div class="event-pause wpds-c-iyKTdE-ijwIBRZ-css"></div>
+        </div>
+        <span>Play</span>
+      `;
       isPlaying = false;
     };
 
