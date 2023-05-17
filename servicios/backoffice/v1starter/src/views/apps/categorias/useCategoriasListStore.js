@@ -16,7 +16,7 @@ export const useCategoriasListStore = defineStore("CategoriasListStore", {
         let config = {
           method: "post",
           maxBodyLength: Infinity,
-          url: "https://estadisticas.ecuavisa.com/sites/gestor/Tools/Intereses/index.php",
+          url: "https://getmetadatos-service.vercel.app/send",
           headers: {
             "Content-Type": "application/json",
           },
