@@ -72,6 +72,11 @@ export default [
       // { title: 'Eventos', to: 'apps-configuracion-add' },
     ],
   },
+  {
+       title: 'Categorias',
+      icon: { icon: 'tabler-database-cog' },
+       to: { name: 'categorias' }
+  },
   // {
   //   title: 'Paquetes',
   //   children: [
