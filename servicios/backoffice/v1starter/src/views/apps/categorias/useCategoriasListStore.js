@@ -16,7 +16,7 @@ export const useCategoriasListStore = defineStore("CategoriasListStore", {
         let config = {
           method: "post",
           maxBodyLength: Infinity,
-          url: "https://getmetadatos-service.vercel.app/send",
+          url: "https://send-category.vercel.app/send",
           headers: {
             "Content-Type": "application/json",
           },
