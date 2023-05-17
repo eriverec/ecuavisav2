@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>v5</title>
+</head>
+
+<body>
+
+  <script src="https://sdk.amazonaws.com/js/aws-sdk-2.821.0.min.js"></script>
+
+  <h1>Texto a Audio con Amazon Polly</h1>
+  <input type="text" id="texto"
+    value="El jefe del Comando Conjunto de las Fuerzas Armadas, Nelson Proaño, pide respetar la decisión del presidente de la República, Guillermo Lasso, con respecto a la muerte cruzada.En un mensaje televisivo, Proaño señaló">
+  <button onclick="convertirTexto()">Convertir a Audio</button>
+
+  <audio id="audio" src="" controls></audio>
+  <p id="timer"></p>
+  <button id="botonPausa" onclick="pausar()">Pausar</button>
+  <script>
+    AWS.config.update({
+      accessKeyId: 'AKIAQ2QO2B4OI5CWSZ7I',
+      secretAccessKey: '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',
+      region: 'us-east-1'
+    });
+
+    var polly = new AWS.Polly({
+      signatureVersion: 'v4',
+      region: 'us-east-1'
+    });
+
+
+    var audio = document.getElementById('audio');
+    var timer = document.getElementById('timer');
+    var botonPausa = document.getElementById('botonPausa');
+
+    function convertirTexto() {
+      var texto = document.getElementById('texto').value;
+      var params = {
+        OutputFormat: 'mp3',
+        Text: texto,
+        VoiceId: 'Mia'
+      };
+
+      polly.synthesizeSpeech(params, function (err, data) {
+        if (err) {
+          console.log(err, err.stack);
+        } else {
+          var url = URL.createObjectURL(new Blob([data.AudioStream], { type: 'audio/mpeg' }));
+          audio.src = url;
+          audio.addEventListener("timeupdate", function () {
+            var duracionMinutos = Math.floor(audio.duration / 60);
+            var duracionSegundos = Math.floor(audio.duration - (duracionMinutos * 60));
+            var tiempoMinutos = Math.floor(audio.currentTime / 60);
+            var tiempoSegundos = Math.floor(audio.currentTime - (tiempoMinutos * 60));
+            if (duracionSegundos < 10) { duracionSegundos = "0" + duracionSegundos; }
+            if (tiempoSegundos < 10) { tiempoSegundos = "0" + tiempoSegundos; }
+            if (duracionMinutos < 10) { duracionMinutos = "0" + duracionMinutos; }
+            if (tiempoMinutos < 10) { tiempoMinutos = "0" + tiempoMinutos; }
+            timer.innerHTML = tiempoMinutos + ":" + tiempoSegundos + " / " + duracionMinutos + ":" + duracionSegundos;
+          }, false);
+        }
+      });
+    }
+
+    function pausar() {
+      if (audio.paused) {
+        audio.play();
+        botonPausa.innerHTML = "Pausar";
+      } else {
+        audio.pause();
+        botonPausa.innerHTML = "Reproducir";
+      }
+    }
+  </script>
+
+</body>
+
+</html>
