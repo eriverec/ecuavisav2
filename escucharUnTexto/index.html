@@ -1,74 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Esuchar el contenido</title>
+  <title>escuchartexto</title>
 </head>
-
 <body>
-  <div id="content">
-    <div class="text ">
-      <div class="paragraph siquev2">
-        <p></p>
-        <p>Tras el anuncio de <a
-            href="https://www.ecuavisa.com/mundo/la-oms-pone-fin-a-mas-de-3-anos-de-emergencia-internacional-por-el-covid-19-GX5055293">la
-            Organización Mundial de la Salud (OMS)</a> de declarar el fin de la pandemia por COVID-19, <b>el Comité de
-            Operaciones de Emergencia (COE) Nacional,</b> este jueves 11 de mayo de 2023, presidido por su presidente,
-          Juan Zapata, resolvió ratificar el fin de la emergencia sanitaria en Ecuador.</p>
-        <p></p>
-        <p>Además, luego de tres años y dos meses también se anunció el cierre del COE Nacional por pandemia. Ahora
-          el<b> Ministerio de Salud Pública (MSP) </b>mantendrá la vigilancia epidemiológica.</p>
-        <div id="sunmedia-div"></div>
-        <p></p>
-        <p>Asimismo, se recomendó el uso de la mascarilla en hospitales, centros de salud y laboratorios clínicos al
-          igual que en aglomeraciones, transporte público o lugares cerrados. <b>A la población priorizada</b>, es
-          decir, adultos mayores, trabajadores de la salud, personas con enfermedades crónicas, se le recomienda cumplir
-          con los refuerzos de la vacuna contra la COVID-19.</p>
-        <p></p>
-        <div align="center" class="my-4" data-ads="center1" data-ad="top-generico" id="center1"></div>
-        <p><b>LEA: </b><a
-            href="https://www.ecuavisa.com/tendencias/ciencia/que-es-el-covid-largo-y-por-que-preocupa-a-la-oms-EY5045767">¿Qué
-            es el covid largo?</a></p>
-        <p></p>
-     
-      </div>
-
-
-      <div id="" class="portlet-boundary portlet-static-end htmlcontainer-portlet modal-form-trivia p-0 m-0 w-100">
-        <div> </div>
-      </div>
-    </div>
-
-  </div>
-
-  <button id="speak">Hablar</button>
-
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <!-- <script src="https://code.responsivevoice.org/responsivevoice.js?key=YOUR_API_KEY"></script> -->
-  <script src="https://code.responsivevoice.org/responsivevoice.js?key=nmlmOLfe"></script>
-  <script>
-    $(document).ready(function () {
-      var content = $('#content .paragraph').text().trim(); // Obtener el contenido del div limpiado y sin caracteres extraños
-
-      // Eliminar los saltos de línea y otros caracteres no deseados
-      content = content.replace(/[\r\n]+/gm, ' ').replace(/&nbsp;/gi, ' ').replace(/[^\w\s]/gi, '').replace("<b>", '').replace("</b>", '');
-      console.log(content)
-
-      $('#speak').on('click', function () {
-        responsiveVoice.speak(content, 'Spanish Female', { // Convertir el contenido a audio
-          onstart: function () {
-            console.log('Empezando a hablar');
-          },
-          onend: function () {
-            console.log('Terminando de hablar');
-          }
-        });
-      });
-    });
-  </script>
+  <h4 style="font-family: monospace;">escuchartexto</h4>
 </body>
-
 </html>
