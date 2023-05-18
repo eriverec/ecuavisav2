@@ -120,4 +120,3 @@ routes.get("/speechsynthesis", async function (req, res) {
     res.status(500).send('Error al generar el audio.');
   }
 });
-
