@@ -164,7 +164,7 @@ routes.get("/speechsynthesis", async function (req, res) {
 
 	  var getArticuloMongoDB = await getArticleMongoDB(idArticle);
     if(getArticuloMongoDB){
-	    return res.send(getArticuloMongoDB.base64);
+	    return res.send(getArticuloMongoDB);
     };
 
 	  // Realiza una solicitud por cada parte del texto
@@ -224,7 +224,7 @@ routes.get("/speechsynthesis_3", async function (req, res) {
 
 	  var getArticuloMongoDB = await getArticleMongoDB(idArticle);
     if(getArticuloMongoDB){
-	    return res.send(getArticuloMongoDB.audio);
+	    return res.send((getArticuloMongoDB.audio.data).toString('base64'));
     };
 
 	  // Realiza una solicitud por cada parte del texto
@@ -259,7 +259,7 @@ routes.get("/speechsynthesis_3", async function (req, res) {
 
 		var sugerenciaResp = await addArticleMongoDB(idArticle, audioBuffer);
 		if(sugerenciaResp.resp){
-    	return res.send(audioDoc);
+    	return res.send(audioDoc.audio.data.toString('base64'));
 		}
 
 	  console.error('Error al generar el audio:', error);
