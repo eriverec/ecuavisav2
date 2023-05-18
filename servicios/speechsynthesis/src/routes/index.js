@@ -53,7 +53,7 @@ function textPARTS(text){
 	  const part = text.substr(i, MAX_TEXT_LENGTH);
 	  textParts.push(part);
 	}
-	return textParts[0];
+	return textParts;
 }
 
 async function getArticle(getIdArticle) {
@@ -93,7 +93,7 @@ routes.get("/speechsynthesis", async function (req, res) {
 	  if(text_Article == ""){
 	  	return res.status(200).send({ resp:false,message: "No existe el artículo" }); 
 	  }
-	  text_Article = textPARTS(text_Article);
+	  text_Article = textPARTS(text_Article)[0];
 
 	  const params = {
 	    OutputFormat: 'mp3',
@@ -120,3 +120,4 @@ routes.get("/speechsynthesis", async function (req, res) {
     res.status(500).send('Error al generar el audio.');
   }
 });
+
