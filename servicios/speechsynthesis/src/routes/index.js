@@ -101,7 +101,7 @@ async function addArticleMongoDB(idarticulo, audioData) {
 }
 
 routes.get("/", async function (req, res) {
-	return res.json("Servicio de speechsynthesis: v0.03 - "+moment().format('MMMM Do YYYY, h:mm:ss a'));
+	return res.json("Servicio de speechsynthesis: v0.04 - "+moment().format('MMMM Do YYYY, h:mm:ss a'));
 });
 
 routes.get("/speechsynthesis_2", async function (req, res) {
