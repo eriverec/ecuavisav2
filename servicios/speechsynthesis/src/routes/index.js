@@ -64,7 +64,7 @@ async function getArticle(getIdArticle) {
   	const components = obtener.article.content.component;
 	  var textValues = "";
 	  for (let component of components) {
-	    if (component.name === 'Text') {
+	    if (component.name === 'Text' || component.name === 'Quotecv' || component.name === 'Cita' || component.name === 'H2' || component.name === 'bullet' || component.name === 'SabiasQue') {
 	      textValues += component.__text;
 	    }
 	  }
@@ -74,6 +74,7 @@ async function getArticle(getIdArticle) {
 
   return "";
 };
+
 
 routes.get("/", async function (req, res) {
 	return res.json("Servicio de speechsynthesis: v0.03 - "+moment().format('MMMM Do YYYY, h:mm:ss a'));
