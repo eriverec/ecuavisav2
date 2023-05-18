@@ -20,8 +20,6 @@ const fetchCategorias = () => {
 		.fetchCategorias()
 		.then((response) => {
 			categorias.value = response.data;
-            
-			//console.log("categorias", categorias);
 		})
 		.catch((error) => {
 			console.error(error);
@@ -30,10 +28,9 @@ const fetchCategorias = () => {
 
 watchEffect(fetchCategorias);
 
-// 👉 watching current page
-//watchEffect(() => {
-// if (currentPage.value > totalPages.value) currentPage.value = totalPages.value;
-//});
+const totalPages = computed(() => {
+	return Math.ceil(categorias.value.length / itemsPerPage.value);
+});
 
 // 👉 Computing pagination data
 const paginatedData = computed(() => {
@@ -42,16 +39,12 @@ const paginatedData = computed(() => {
 	return categorias.value.slice(start, end);
 });
 
-const totalPages = computed(() => {
-	return Math.ceil(categorias.value.length / itemsPerPage.value);
-});
-
 // Editar una categoría ----------------------------------------------
 
 const onFormCategoriasActive = (data) => {
     console.log('data',data);
 	//let index =  categorias.value.map((e) => e.id).indexOf(id);  	
-    updateCategorias.value = data; 
+	updateCategorias.value = data; 
 	isCategoriasEditVisible.value = true;
 	
     console.log("upd", updateCategorias.value);
@@ -83,7 +76,7 @@ const onFormCategoriasSubmit = (id) => {
 	categoriasListStore.sendCategorias(arrayFinal).catch((error) => {
 		console.error(error);
 	});
-	window.setTimeout(fetchCategorias, 800);
+	window.setTimeout(fetchCategorias, 600);
 
 	isCategoriasEditVisible.value = false;
 };
@@ -91,10 +84,13 @@ const onFormCategoriasSubmit = (id) => {
 const onFormCategoriasReset = () => {
     updateCategorias.value = {};
 	isCategoriasEditVisible.value = false;	
-    window.setTimeout(fetchCategorias, 500);
+    window.setTimeout(fetchCategorias, 300);
 };
 
 const dialogCategoriasValueUpdate = (val) => {
+	if(val === false){
+		window.setTimeout(fetchCategorias, 300);
+	}
 	isCategoriasEditVisible.value = val;
 };
 </script>

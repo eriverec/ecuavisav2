@@ -14,12 +14,8 @@ const isColeccionDeleteVisible = ref(false);
 const rowPerPage = ref(10);
 const updateColeccion = ref({});
 const nuevaColeccion = ref('');
-
-
-
 const updColeccionPrimero = ref([]);
 const newColeccionPrimero = ref([]);
-
 
 
 
@@ -54,7 +50,7 @@ newColeccionPrimero.value = modulosPrimer;
 }
 
 const onFormAddColeccionActive = () => {
-  resolveColeccionNew();
+  //resolveColeccionNew();
   isColeccionAddVisible.value = true;
 };
 
