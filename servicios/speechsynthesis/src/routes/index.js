@@ -5,13 +5,16 @@ import { Router } from 'express';
 import moment from 'moment-timezone';
 import 'moment/locale/es.js';
 import fs from 'fs';
+import mongoose from "mongoose";
 import { ACCESSKEY_ID } from "./../../src/config.js";
 import { SECRET_ACCESSKEY } from "./../../src/config.js";
 import { REGION } from "./../../src/config.js";
 import { S3Client } from "@aws-sdk/client-s3";
+import { pollySchema } from "./../../models/polly.js";
 
 const MAX_TEXT_LENGTH = 3000;
 export const routes = Router();
+const ObjectIdS = mongoose.Types.ObjectId;
 moment.tz.setDefault('America/Guayaquil');
 
 var formatDates = "MM/DD/YYYY";
@@ -75,6 +78,27 @@ async function getArticle(getIdArticle) {
   return "";
 };
 
+async function getArticleMongoDB(idarticulo) {
+  var query = {
+    $and:[ 
+        {"idarticulo": idarticulo }
+    ]
+  };
+  return await pollySchema.findOne(query);
+}
+
+async function addArticleMongoDB(idarticulo, audioData) {
+  var archivoObj = { 
+    idarticulo: idarticulo,
+    audio: {
+	    data: audioData, // Aquí debes proporcionar los datos binarios del archivo de audio
+	    contentType: 'audio/mp3' // Aquí debes especificar el tipo de contenido del archivo
+	  }
+  };
+  const addMongo = await pollySchema(archivoObj).save();
+  if(addMongo){return {resp:true,data:addMongo};}
+  return { resp:false,  data:[]};
+}
 
 routes.get("/", async function (req, res) {
 	return res.json("Servicio de speechsynthesis: v0.03 - "+moment().format('MMMM Do YYYY, h:mm:ss a'));
@@ -138,6 +162,11 @@ routes.get("/speechsynthesis", async function (req, res) {
 	  }
 	  text_Article = textPARTS(text_Article);
 
+	  var getArticuloMongoDB = await getArticleMongoDB(idArticle);
+    if(getArticuloMongoDB){
+	    return res.send(getArticuloMongoDB.base64);
+    };
+
 	  // Realiza una solicitud por cada parte del texto
 	  const audioPromises = text_Article.map(part => {
 	    const params = {
@@ -158,17 +187,84 @@ routes.get("/speechsynthesis", async function (req, res) {
 	  });
 
 	  // Espera a que todas las solicitudes se completen y concatena los resultados
-	  Promise.all(audioPromises)
-	    .then(audioStreams => {
-	      const concatenatedAudio = Buffer.concat(audioStreams);
-	      // Envía el audio como respuesta al cliente
-	      res.send(concatenatedAudio.toString('base64'));
-	    })
-	    .catch(err => {
-	      console.error('Error al generar el audio:', err);
-	      return res.status(200).send({ resp:false,message: "Error al generar el audio" }); 
+	  var audioStreams = await Promise.all(audioPromises);
+	  const concatenatedAudio = Buffer.concat(audioStreams);
+    // Envía el audio como respuesta al cliente
+
+    var base64Generado = concatenatedAudio.toString('base64');
+    var sugerenciaResp = await addArticleMongoDB(idArticle, base64Generado);
+		if(sugerenciaResp.resp){
+			return res.send(base64Generado);
+		}
+
+	  console.error('Error al generar el audio:', error);
+	  return res.status(200).send({ resp:false,message: "Error al generar el audio" }); 
+
+	} catch (error) {
+    console.error('Error al generar el audio:', error);
+	  return res.status(200).send({ resp:false,message: "Error al generar el audio" }); 
+  }
+});
+
+routes.get("/speechsynthesis_3", async function (req, res) {
+	try {
+		var { idArticle="" } = req.query;
+		if(idArticle=="" ){
+			return res.status(200).send({ resp:false,message: "Falta el idArticle" });
+		}
+		// Define el texto que quieres convertir a voz
+	  //const texto = 'Hola, esto es un ejemplo de texto a voz utilizando AWS Polly.';
+
+	  // Configura los parámetros para la solicitud de Polly
+	  var text_Article = await getArticle(idArticle);
+	  if(text_Article == ""){
+	  	return res.status(200).send({ resp:false,message: "No existe el artículo" }); 
+	  }
+	  text_Article = textPARTS(text_Article);
+
+	  var getArticuloMongoDB = await getArticleMongoDB(idArticle);
+    if(getArticuloMongoDB){
+	    return res.send(getArticuloMongoDB.audio);
+    };
+
+	  // Realiza una solicitud por cada parte del texto
+	  const audioPromises = text_Article.map(part => {
+	    const params = {
+		    OutputFormat: 'mp3',
+		    Text: part,
+		    VoiceId: 'Mia',
+		  };
+
+	    return new Promise((resolve, reject) => {
+	      polly.synthesizeSpeech(params, (err, data) => {
+	        if (err) {
+	          reject(err);
+	        } else {
+	          resolve(data.AudioStream);
+	        }
+	      });
 	    });
-	  
+	  });
+
+	  // Espera a que todas las solicitudes se completen y concatena los resultados
+	  var audioStreams = await Promise.all(audioPromises);
+	  const concatenatedAudio = Buffer.concat(audioStreams);
+    // Envía el audio como respuesta al cliente
+
+	  // Crear un objeto Buffer con los datos binarios del archivo
+    const audioBuffer = Buffer.from(concatenatedAudio);
+
+    // Crear el documento a ser guardado en la colección
+    const audioDoc = { audio: audioBuffer };
+
+		var sugerenciaResp = await addArticleMongoDB(idArticle, audioBuffer);
+		if(sugerenciaResp.resp){
+    	return res.send(audioDoc);
+		}
+
+	  console.error('Error al generar el audio:', error);
+	  return res.status(200).send({ resp:false,message: "Error al generar el audio" }); 
+
 	} catch (error) {
     console.error('Error al generar el audio:', error);
 	  return res.status(200).send({ resp:false,message: "Error al generar el audio" }); 

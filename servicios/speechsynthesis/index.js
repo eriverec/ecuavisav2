@@ -1,5 +1,7 @@
+import "./src/database.js";
 import "dotenv/config.js";
 import express from "express";
+import mongoose from "mongoose";
 import { routes } from './src/routes/index.js';
 
 var app = express();
