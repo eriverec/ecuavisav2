@@ -25,7 +25,9 @@ import { Spanish } from 'flatpickr/dist/l10n/es.js';
             <VCardSubtitle>Categoría de dispositivos de los últimos 7 días</VCardSubtitle>
           </VCardItem>
         <VDivider/>
+          <div class="d-flex flex-wrap">
           <ChartAreaDispositivosFecha />   
+        </div>
         </VCardText>
       </VCard>
     </VCol>

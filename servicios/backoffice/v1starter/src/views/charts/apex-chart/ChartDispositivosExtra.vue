@@ -48,21 +48,31 @@
      />
         </VCol>
     </VRow>
+  <VRow>
+    <VCol cols="8">
     <div class="date-picker-wrapper" style="width: 300px;">
       <AppDateTimePicker
-        placeholder="Seleccionar un rango de fecha"
         prepend-inner-icon="tabler-calendar"
         density="compact"
+        v-model="fechaIngesada"
+        show-current= true
         @on-change="obtenerFechaDispositivos"
         :config="{ 
           position: 'auto right',
           mode:'range',
           altFormat: 'F j, Y',
           dateFormat: 'm-d-Y',
-          maxDate: new Date()
+          maxDate: new Date(),
+          reactive :true
+          
         }"
       />
     </div>
+  </VCol>
+  <VCol cols="5">
+    <VBtn color="success" @click="reset"> Reiniciar filtros</VBtn>
+     </VCol>
+  </VRow>
     <div :class="classLoading">
       <div class="v-row">
         <div class="v-col-9">
@@ -163,7 +173,7 @@ import { useTheme } from 'vuetify';
           getDataFetch:[],
           dataFormateada:[],
           getData:[],
-          visita:false,
+          visita:true,
           isLoading: true,
           preguntas: [],
           preguntasData: [],
@@ -225,9 +235,11 @@ import { useTheme } from 'vuetify';
             }           
           ],
           selectedActividad: "sesion",
-          selectedDispositivo: "desktop",
-          selectedOs: "Windows",
-          selectedBrowser: "Chrome",
+          selectedDispositivo: "",
+          selectedOs: "",
+          selectedBrowser: "",
+          fechaIngesada: ""
+          
         };
       },
       computed: {
@@ -615,15 +627,43 @@ import { useTheme } from 'vuetify';
           //var dataGroupBrowser = data;
           
           var serieTotal = [];
+          let query = "";
+          
+          if(this.selectedOs !== ""){
+            if(query !== ""){
+              query += " && e.os == this.selectedOs";
+            }else{
+              query += "e.os == this.selectedOs";
+            }  
+          }
 
-          let dataGroupBrowser = data.filter(e => {
-           return e.os == this.selectedOs && e.browser == this.selectedBrowser  && e.device == this.selectedDispositivo;
-           });
-
-          //console.log("browser", this.selectedBrowser)  
-          //console.log("device", this.selectedDispositivo)  
-          //console.log("os", this.selectedOs) 
-          console.log("prueba", dataGroupBrowser)
+          if(this.selectedBrowser !== ""){
+            if(query !== ""){
+              query += " && e.browser == this.selectedBrowser";
+            }else{
+              query += "e.browser == this.selectedBrowser";
+            }  
+            
+            }
+          if(this.selectedDispositivo !== ""){
+            if(query !== ""){
+              query += " && e.device == this.selectedDispositivo";
+            }else{
+              query += "e.device == this.selectedDispositivo";
+            }  
+            
+          }
+          let dataGroupBrowser;
+          if(query!== ""){
+            dataGroupBrowser = data.filter(e => {
+              return eval(query);
+            });
+          }else{
+            dataGroupBrowser = data;
+          }
+          
+          //console.log("query", query)
+          //console.log("prueba", dataGroupBrowser)
           //DDDD/MM/AAAA TO AAAA/DD/MM
          
             var serieData = [];
@@ -666,8 +706,7 @@ import { useTheme } from 'vuetify';
                   y: parseInt(count * 1 + procrosarFecha.value * 1)//renderData.navigationRecord.length
                 }
               }
-              
-            
+          
             }
             
           var dataFormat = {
@@ -679,9 +718,7 @@ import { useTheme } from 'vuetify';
           let seriTotalFiltrada = serieTotal.filter((item,index)=>{
             return serieTotal.indexOf(item) === index;
           });
-  
-          
-  
+   
             if(dataFormat.data.length != seriTotalFiltrada.length){
               for(var z in seriTotalFiltrada){
                 var existe = false;
@@ -696,119 +733,40 @@ import { useTheme } from 'vuetify';
                     y:0
                   })
                 }
-              }
-  
-              
-            }
-          
-          console.log('Final FUll' ,[dataFormat])
-          return [dataFormat];
-        },
-        async getDataTrazabilidadFull(data){
-          var dataGroupBrowser = data;
-          
-          var serieTotal = [];
-          
-          
-          //DDDD/MM/AAAA TO AAAA/DD/MM
-         
-            var serieData = [];
-            var nameSerie = 'Total dispositivos';
-            var total = 0;
-            
-            for(var i in dataGroupBrowser){
-               
-              var renderData = dataGroupBrowser[i];
-              //nameSerie = renderData.device;
-              var count = 1;//Math.floor(Math.random()*2000);
-              if(!this.visita){
-                count = renderData.navigationRecord;
-              }
-  
-              //console.log(renderData, renderData.timestamp)
-              const cadena = renderData.timestamp;
-              const nuevaCadena = cadena.replace(/[-]/g, "/");
-              renderData.timestamp = nuevaCadena;
-              renderData.timestamp = renderData.timestamp.split(",")[0];
-  
-              var fecha = moment(renderData.created_at).format("YYYY-MM-DD");
-  
-              //var fecha = moment(renderData.created_at).format("YYYY-MM-DD");
-              total += count;
-              serieTotal.push(fecha);
-  
-  
-              var procrosarFecha = this.existeFecha(serieData, fecha);
-              if(!procrosarFecha.resp){
-                serieData.push({
-                  x: fecha,
-                  y: parseInt(count)//renderData.navigationRecord.length
-                });
-              }else{
-                var dataTempFecha = serieData[procrosarFecha.index];
-                serieData[procrosarFecha.index] = {
-                  x: fecha,
-                  y: parseInt(count * 1 + procrosarFecha.value * 1)//renderData.navigationRecord.length
-                }
-              }
-              
-            
-            }
-            
-          var dataFormat = {
-              name: nameSerie,
-              data: serieData.sort((a, b) => ( b.x - a.x)),
-              total: parseInt(total)
-            }
-           
-          let seriTotalFiltrada = serieTotal.filter((item,index)=>{
-            return serieTotal.indexOf(item) === index;
-          });
-  
-          
-  
-            if(dataFormat.data.length != seriTotalFiltrada.length){
-              for(var z in seriTotalFiltrada){
-                var existe = false;
-                for(var j in dataFormat[i].data){
-                  if(seriTotalFiltrada[z] == dataFormat.data[j].x){
-                    existe = true;
-                  }
-                }
-                if(!existe){
-                  dataFormat[i].data.push({
-                    x: seriTotalFiltrada[z],
-                    y:0
-                  })
-                }
-              }
-  
-              
+              }            
             }
           
           //console.log('Final FUll' ,[dataFormat])
           return [dataFormat];
         },
-
-     
+  
         async getInitGraficoDispositivos(){
-          var fechai = moment().add(-5, 'days').format("MM/DD/YYYY");
-          var fechaf = moment().add(1, 'days').format("MM/DD/YYYY");
+          let formatI = moment().add(-29, 'days').format("MM-DD-YYYY");
+          let formatF = moment().format("MM-DD-YYYY");
+
+          this.fechaIngesada = String(formatI+' a '+formatF);
+
+          console.log('dates',this.fechaIngesada)
+          
+          var fechai = moment().add(-28, 'days').format("MM-DD-YYYY");
+          var fechaf = moment().add(1, 'days').format("MM-DD-YYYY");
           //var panelGrafico = document.querySelector("#apexchartscrejemplo");
           //panelGrafico.classList.add("disabled");
-  
+          
+          
+
           this.isLoading = true;
   
           this.getData = await this.getDataGrafico(fechai, fechaf);
-          //panelGrafico.classList.remove("disabled");
-  
-          this.isLoading = false;
+          
           this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
           ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
+          this.isLoading = false;
           //console.log("data format",this.dataFormateada)
-          this.formatGraficoDonutVisita();
+          
           return true;
         },
+
         async getDataGrafico(fechai, fechaf) {
           /*FORMATO DE FECHA A ENVIAR ES MM/DD/AAAA*/
           var raw = JSON.stringify({
@@ -824,25 +782,27 @@ import { useTheme } from 'vuetify';
           }); 
           var obtener = await resp.json();
           this.getDataFetch = obtener.grafico;
-          console.log('res fetch',this.getDataFetch)
+          //console.log('res fetch',this.getDataFetch)
           return obtener;
         },
+        
         async obtenerFechaDispositivos(selectedDates, dateStr, instance){
           //var respJson = await nuevoArchivoJson(archivoJson);
           if(selectedDates.length > 1){
-            this.fechai = moment(selectedDates[0]).format('MM/DD/YYYY');
+            this.fechai = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
             this.fechaf = moment(selectedDates[1]).format('MM/DD/YYYY');
+            console.log('obtenido',this.fechaIngesada)
             //var panelGrafico = document.querySelector("#apexchartscrejemplo");
             //panelGrafico.classList.add("disabled");
-  
+            //console.log('fecha ingresada',this.fechaIngesada)
+            //console.log(typeof this.fechaIngesada);
             this.isLoading = true;
             this.getData = await this.getDataGrafico(this.fechai, this.fechaf);
             this.isLoading = false;
             //panelGrafico.classList.remove("disabled");
-            this.formatGraficoDonutSesion();
             this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
             ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
-            this.formatGraficoDonutVisita();
+            
           }
         },
         async formatVisitaGrafico(){
@@ -851,7 +811,7 @@ import { useTheme } from 'vuetify';
             this.visita = true;
             this.dataFormateada = await this.getDataTrazabilidadFull(this.getData.grafico);
             ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
-            this.formatGraficoDonutSesion();
+            
             this.isLoading = false;
           }
         },
@@ -863,18 +823,18 @@ import { useTheme } from 'vuetify';
             this.dataFormateada = await this.getDataTrazabilidadFull(this.getData.grafico);
             ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
             this.isLoading = false;
-            this.formatGraficoDonutVisita();
+            
           }
         },
         async resolveChart(){
-            if(this.selectedActividad == "sesion"){
+            if(this.selectedActividad == "visita"){
                 this.visita = false;
                 this.isLoading = true;
                 this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
                 ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
                 this.isLoading = false;  
             };
-            if(this.selectedActividad == "visita"){
+            if(this.selectedActividad == "sesion"){
                 this.visita = true;
                 this.isLoading = true;
                 this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
@@ -882,59 +842,15 @@ import { useTheme } from 'vuetify';
                 this.isLoading = false; 
             };
         },
-        
-        formatGraficoDonutSesion(){
-          var data = this.getDataFetch;
-          // Agrupamos los objetos por el valor de su propiedad 'device'
-          const groupedData = data.reduce((result, current) => {
-            // Si aún no existe un grupo para el valor de 'device' actual, lo creamos
-            if (!result[current.device]) {
-              result[current.device] = [];
-            }
-            // Agregamos el objeto actual al grupo correspondiente
-            result[current.device].push(current);
-            return result;
-          }, {});
-  
-          // Calculamos el total de objetos para cada grupo
-          const deviceTotals = Object.keys(groupedData).map(device => {
-            return {
-              device: device,
-              total: groupedData[device].length
-            };
-          });
-  
-          var seriesTemp = [];
-          var labelsTemp = [];
-  
-          for(var i in deviceTotals){
-            seriesTemp.push(deviceTotals[i].total);
-            labelsTemp.push(deviceTotals[i].device);
-          }
-  
-          this.chartOptions.series = seriesTemp;
-          this.chartOptions.labels = labelsTemp;
-        },
-        formatGraficoDonutVisita(){
-          var data = this.getDataFetch;
-          const deviceTotals = data.reduce((acc, obj) => {
-            const device = obj.device.toString();
-            const navigationRecordLength = obj.navigationRecord ? obj.navigationRecord : 0;
-            acc[device] = (acc[device] || 0) + navigationRecordLength;
-            return acc;
-          }, {});
-          var seriesTemp = [];
-          var labelsTemp = [];
-  
-          Object.keys(deviceTotals).forEach(function(key) {
-            const value = deviceTotals[key];
-            seriesTemp.push(value);
-            labelsTemp.push(key);
-          });
-          this.chartOptions.series = seriesTemp;
-          this.chartOptions.labels = labelsTemp;
-  
+        reset(){
+          this.selectedBrowser ="";
+          this.selectedOs ="";
+          this.selectedDispositivo ="";
+          this.fechaIngesada= "";
+          this.selectedActividad = "sesion";
+          this.getInitGraficoDispositivos();
         }
+          
       },
       async mounted() {
         var resp = await this.getInitGraficoDispositivos();
