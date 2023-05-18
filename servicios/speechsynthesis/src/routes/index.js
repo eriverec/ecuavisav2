@@ -79,7 +79,7 @@ routes.get("/", async function (req, res) {
 	return res.json("Servicio de speechsynthesis: v0.03 - "+moment().format('MMMM Do YYYY, h:mm:ss a'));
 });
 
-routes.get("/speechsynthesis", async function (req, res) {
+routes.get("/speechsynthesis_2", async function (req, res) {
 	try {
 		var { idArticle="" } = req.query;
 		if(idArticle=="" ){
@@ -118,5 +118,58 @@ routes.get("/speechsynthesis", async function (req, res) {
 	} catch (error) {
     console.error('Error al generar el audio:', error);
     res.status(500).send('Error al generar el audio.');
+  }
+});
+
+routes.get("/speechsynthesis", async function (req, res) {
+	try {
+		var { idArticle="" } = req.query;
+		if(idArticle=="" ){
+			return res.status(200).send({ resp:false,message: "Falta el idArticle" });
+		}
+		// Define el texto que quieres convertir a voz
+	  //const texto = 'Hola, esto es un ejemplo de texto a voz utilizando AWS Polly.';
+
+	  // Configura los parámetros para la solicitud de Polly
+	  var text_Article = await getArticle(idArticle);
+	  if(text_Article == ""){
+	  	return res.status(200).send({ resp:false,message: "No existe el artículo" }); 
+	  }
+	  text_Article = textPARTS(text_Article);
+
+	  // Realiza una solicitud por cada parte del texto
+	  const audioPromises = text_Article.map(part => {
+	    const params = {
+		    OutputFormat: 'mp3',
+		    Text: part,
+		    VoiceId: 'Mia',
+		  };
+
+	    return new Promise((resolve, reject) => {
+	      polly.synthesizeSpeech(params, (err, data) => {
+	        if (err) {
+	          reject(err);
+	        } else {
+	          resolve(data.AudioStream);
+	        }
+	      });
+	    });
+	  });
+
+	  // Espera a que todas las solicitudes se completen y concatena los resultados
+	  Promise.all(audioPromises)
+	    .then(audioStreams => {
+	      const concatenatedAudio = Buffer.concat(audioStreams);
+	      // Envía el audio como respuesta al cliente
+	      res.send(concatenatedAudio.toString('base64'));
+	    })
+	    .catch(err => {
+	      console.error('Error al generar el audio:', err);
+	      return res.status(200).send({ resp:false,message: "Error al generar el audio" }); 
+	    });
+	  
+	} catch (error) {
+    console.error('Error al generar el audio:', error);
+	  return res.status(200).send({ resp:false,message: "Error al generar el audio" }); 
   }
 });
