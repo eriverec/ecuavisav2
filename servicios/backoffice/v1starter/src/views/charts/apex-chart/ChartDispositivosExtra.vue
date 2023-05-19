@@ -14,8 +14,10 @@
       <VBtn v-on:click="formatActividadGrafico" class="btn-check">Por páginas vistas</VBtn>
       <VBtn v-on:click="formatVisitaGrafico" >Por Sesión</VBtn>
     </VBtnToggle>--->
+    
     <VRow>
-        <VCol cols="5">
+      
+    <VCol sm="4" cols="12">
     <VSelect
     v-model="selectedDispositivo"
     :items="itemDispositivos"
@@ -23,7 +25,7 @@
     @update:modelValue="resolveChart"
      />
         </VCol>
-        <VCol cols="5">
+        <VCol sm="4" cols="12">
     <VSelect
     v-model="selectedActividad"
     :items="itemActividad"
@@ -31,7 +33,7 @@
     @update:modelValue="resolveChart"
      />
         </VCol>
-        <VCol cols="5">
+        <VCol sm="4" cols="12">
     <VSelect
     v-model="selectedOs"
     :items="itemOs"
@@ -39,7 +41,7 @@
     @update:modelValue="resolveChart"
      />
         </VCol>
-        <VCol cols="5">
+        <VCol sm="4" cols="12">
     <VSelect
     v-model="selectedBrowser"
     :items="itemBrowser"
@@ -47,11 +49,11 @@
     @update:modelValue="resolveChart"
      />
         </VCol>
-    </VRow>
-  <VRow>
-    <VCol cols="8">
-    <div class="date-picker-wrapper" style="width: 300px;">
+   
+    <VCol sm="4" cols="12" >
+    <div class="date-picker-wrapper" style="width: 100%;">
       <AppDateTimePicker
+        
         prepend-inner-icon="tabler-calendar"
         density="compact"
         v-model="fechaIngesada"
@@ -69,13 +71,14 @@
       />
     </div>
   </VCol>
-  <VCol cols="5">
+  <VCol sm="4" cols="12" >
     <VBtn color="success" @click="reset"> Reiniciar filtros</VBtn>
      </VCol>
   </VRow>
+
     <div :class="classLoading">
       <div class="v-row">
-        <div class="v-col-9">
+        <div class="v-col-12">
           <VCardText>
             <VueApexCharts
               id="crejemplo"
@@ -100,6 +103,7 @@
       </div>
       
     </div>
+  
   </template>
   
   <style>
@@ -238,8 +242,8 @@ import { useTheme } from 'vuetify';
           selectedDispositivo: "",
           selectedOs: "",
           selectedBrowser: "",
-          fechaIngesada: ""
-          
+          fechaIngesada: "",
+          activityData: []
         };
       },
       computed: {
@@ -481,6 +485,7 @@ import { useTheme } from 'vuetify';
         }
       },
       methods: {
+    
         groupBy(collection, property){
           var i = 0, val, index,
           values = [], result = [];
@@ -624,8 +629,6 @@ import { useTheme } from 'vuetify';
         },
 
         async getDataTrazabilidadFull2(data){
-          //var dataGroupBrowser = data;
-          
           var serieTotal = [];
           let query = "";
           
@@ -661,11 +664,11 @@ import { useTheme } from 'vuetify';
           }else{
             dataGroupBrowser = data;
           }
-          
+          this.activityData = dataGroupBrowser;
+          //console.log('filtro',dataGroupBrowser)
           //console.log("query", query)
           //console.log("prueba", dataGroupBrowser)
-          //DDDD/MM/AAAA TO AAAA/DD/MM
-         
+          //DDDD/MM/AAAA TO AAAA/DD/MM 
             var serieData = [];
             var nameSerie = 'Total dispositivos';
             var total = 0;
@@ -676,10 +679,9 @@ import { useTheme } from 'vuetify';
               //nameSerie = renderData.device;
               var count = 1;//Math.floor(Math.random()*2000);
               if(!this.visita){
-                count = renderData.navigationRecord;
-                
+                count = renderData.navigationRecord;              
               }
-  
+
               //console.log(renderData, renderData.timestamp)
               const cadena = renderData.timestamp;
               const nuevaCadena = cadena.replace(/[-]/g, "/");
@@ -691,8 +693,7 @@ import { useTheme } from 'vuetify';
               //var fecha = moment(renderData.created_at).format("YYYY-MM-DD");
               total += count;
               serieTotal.push(fecha);
-              
-  
+                
               var procrosarFecha = this.existeFecha(serieData, fecha);
               if(!procrosarFecha.resp){
                 serieData.push({
@@ -705,8 +706,7 @@ import { useTheme } from 'vuetify';
                   x: fecha,
                   y: parseInt(count * 1 + procrosarFecha.value * 1)//renderData.navigationRecord.length
                 }
-              }
-          
+              }         
             }
             
           var dataFormat = {
@@ -734,31 +734,22 @@ import { useTheme } from 'vuetify';
                   })
                 }
               }            
-            }
-          
+            }         
           //console.log('Final FUll' ,[dataFormat])
+          
           return [dataFormat];
         },
   
         async getInitGraficoDispositivos(){
           let formatI = moment().add(-29, 'days').format("MM-DD-YYYY");
           let formatF = moment().format("MM-DD-YYYY");
-
           this.fechaIngesada = String(formatI+' a '+formatF);
-
-          console.log('dates',this.fechaIngesada)
-          
           var fechai = moment().add(-28, 'days').format("MM-DD-YYYY");
           var fechaf = moment().add(1, 'days').format("MM-DD-YYYY");
           //var panelGrafico = document.querySelector("#apexchartscrejemplo");
           //panelGrafico.classList.add("disabled");
-          
-          
-
           this.isLoading = true;
-  
-          this.getData = await this.getDataGrafico(fechai, fechaf);
-          
+          this.getData = await this.getDataGrafico(fechai, fechaf);         
           this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
           ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
           this.isLoading = false;
@@ -791,7 +782,6 @@ import { useTheme } from 'vuetify';
           if(selectedDates.length > 1){
             this.fechai = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
             this.fechaf = moment(selectedDates[1]).format('MM/DD/YYYY');
-            console.log('obtenido',this.fechaIngesada)
             //var panelGrafico = document.querySelector("#apexchartscrejemplo");
             //panelGrafico.classList.add("disabled");
             //console.log('fecha ingresada',this.fechaIngesada)
@@ -802,6 +792,7 @@ import { useTheme } from 'vuetify';
             //panelGrafico.classList.remove("disabled");
             this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
             ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
+            this.emitData();
             
           }
         },
@@ -827,12 +818,14 @@ import { useTheme } from 'vuetify';
           }
         },
         async resolveChart(){
+            
             if(this.selectedActividad == "visita"){
                 this.visita = false;
                 this.isLoading = true;
                 this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
                 ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
                 this.isLoading = false;  
+                this.emitData();
             };
             if(this.selectedActividad == "sesion"){
                 this.visita = true;
@@ -840,20 +833,31 @@ import { useTheme } from 'vuetify';
                 this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
                 ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
                 this.isLoading = false; 
+                this.emitData();
             };
         },
-        reset(){
+        async reset(){
           this.selectedBrowser ="";
           this.selectedOs ="";
           this.selectedDispositivo ="";
           this.fechaIngesada= "";
           this.selectedActividad = "sesion";
-          this.getInitGraficoDispositivos();
+          await this.getInitGraficoDispositivos();
+          this.emitData();
+        },
+        emitData(){
+          //console.log(this.activityData);
+          let full = {
+            data: this.activityData,
+            visita: this.visita 
+          }
+          this.$emit('activityData',full );
         }
           
       },
       async mounted() {
         var resp = await this.getInitGraficoDispositivos();
+        this.emitData();
       },
       updated() {
         //console.log("El DOM ha sido actualizado");
