@@ -109,13 +109,13 @@ var filteredData = computed(() => {
       item.id.toLowerCase().includes(searchKeyword.value.toLowerCase())
     );
   });
+  
   const start = (currentPage.value - 1) * itemsPerPage.value;
 	const end = start + itemsPerPage.value;
 	var dataFiltrada = catag_list.slice(start, end);
-
 	totalPages.value = Math.ceil(catag_list.length / itemsPerPage.value);
-
 	//filteredData =  catag_list;
+	
 	return dataFiltrada;
 });
 
@@ -132,7 +132,7 @@ var filteredData = computed(() => {
 	<section>
 		<VRow>
 			<VCol cols="12">
-				<VCard title="Categorías">
+				<VCard title="Intereses">
 					<VCardText class="py-4 gap-0 w-100">
 			      <div style="width: 30%" class="d-flex gap-1 px-0  position-relative">
 			          <VTextField
@@ -211,9 +211,7 @@ var filteredData = computed(() => {
 								<td>
 									<div class="d-flex align-left">
 										<div class="d-flex flex-column">
-											<h6 class="text-base">
-												{{ categoria.picImg }}
-											</h6>
+											<img v-if="categoria.picImg !== ''" :src="categoria.picImg" width="200" class="img-intereses">
 										</div>
 									</div>
 								</td>
