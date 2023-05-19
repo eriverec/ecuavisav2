@@ -104,7 +104,10 @@ const searchKeyword = ref('');
 
 var filteredData = computed(() => {
 	var catag_list =  categorias.value.filter(item => {
-    return item.__text.toLowerCase().includes(searchKeyword.value.toLowerCase());
+		return (
+      item.__text.toLowerCase().includes(searchKeyword.value.toLowerCase()) ||
+      item.id.toLowerCase().includes(searchKeyword.value.toLowerCase())
+    );
   });
   const start = (currentPage.value - 1) * itemsPerPage.value;
 	const end = start + itemsPerPage.value;
