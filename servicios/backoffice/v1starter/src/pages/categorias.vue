@@ -138,7 +138,7 @@ var filteredData = computed(() => {
 			          <VTextField
 			            v-model="searchKeyword"
 			            pattern="\d*"
-			            placeholder="Buscar..."
+			            placeholder="Buscar por id o por nombre..."
 			            class="ms-0 me-1 chat-list-search"
 			          >
 			          </VTextField>
