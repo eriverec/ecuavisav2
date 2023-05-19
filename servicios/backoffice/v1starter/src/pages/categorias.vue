@@ -119,10 +119,7 @@ var filteredData = computed(() => {
 	return dataFiltrada;
 });
 
-function buscar() {
-  console.log('Búsqueda realizada:', searchKeyword.value);
-  
-}
+
 </script>
 
 <style type="text/css">
@@ -145,10 +142,6 @@ function buscar() {
 			            class="ms-0 me-1 chat-list-search"
 			          >
 			          </VTextField>
-
-			          <VBtn prepend-icon="tabler-search" @click="buscar">
-			            Buscar
-			          </VBtn>
 			      </div>
 			    </VCardText>
 					<!--
