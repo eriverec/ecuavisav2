@@ -2226,6 +2226,9 @@ INICIO - BLOQUE - MUNDO
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
     grid-template-columns: 3fr 1fr;
   }
+  .article_envivo{
+    display: flex;
+  }
 }
 
 @media (max-width: 991px) {
