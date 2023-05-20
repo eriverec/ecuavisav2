@@ -1088,6 +1088,10 @@ Cambio de tamaño de imagen grande izq
     padding-top: 40px;
     padding-right: 15px;
   }
+
+  .article_envivo{
+    display: flex;
+  }
 }
 
 @media (max-width: 767px) {
