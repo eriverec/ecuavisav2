@@ -84,8 +84,8 @@ async function Token(){
         localStorage.wylexEmail     = result.email;
         localStorage.wylexStatusPerfil  =result.user_new;
 
-        /*Añade el ícono de perfil si no existe con el || CR*/
-        localStorage.wylexAvatar=result.avatar  || 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/usuario.png'
+        /*Añade el ícono de perfil si no existe con el || CR https://estadisticas.ecuavisa.com/sites/gestor/Recursos/usuario.png*/
+        localStorage.wylexAvatar=result.avatar  || 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/user-perfil.png'
         /*if(result.avatar){
           localStorage.wylexAvatar=result.avatar;
         }*/
