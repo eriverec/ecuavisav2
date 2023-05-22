@@ -1088,6 +1088,10 @@ Cambio de tamaño de imagen grande izq
     padding-top: 40px;
     padding-right: 15px;
   }
+
+  .article_envivo{
+    display: flex;
+  }
 }
 
 @media (max-width: 767px) {
@@ -2221,6 +2225,9 @@ INICIO - BLOQUE - MUNDO
 @media (max-width: 1200px) {
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
     grid-template-columns: 3fr 1fr;
+  }
+  .article_envivo{
+    display: flex;
   }
 }
 
@@ -3488,6 +3495,7 @@ BLOQUE DE COLUMNISTA - FIN
   text-transform: uppercase;
   font-size: 20px;
   margin-right: 10px;
+  display: flex;
 }
 
 .punnto_svg {

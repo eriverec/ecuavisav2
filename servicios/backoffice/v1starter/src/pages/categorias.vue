@@ -9,10 +9,12 @@ const isCategoriasAddVisible = ref(false);
 const isCategoriasDeleteVisible = ref(false);
 const currentPage = ref(1);
 const itemsPerPage = ref(10);
+var totalPages = ref(1);
 const updateCategorias = ref({});
 //const nuevaCategorias = ref("");
 const updCategoriaPrimero = ref([]);
 const newCategoriaPrimero = ref([]);
+const filteredData_2 = ref([]);
 
 // Obtener las colecciones
 const fetchCategorias = () => {
@@ -28,25 +30,20 @@ const fetchCategorias = () => {
 
 watchEffect(fetchCategorias);
 
-const totalPages = computed(() => {
+totalPages.value = computed(() => {
 	return Math.ceil(categorias.value.length / itemsPerPage.value);
 });
 
 // 👉 Computing pagination data
-const paginatedData = computed(() => {
-	const start = (currentPage.value - 1) * itemsPerPage.value;
-	const end = start + itemsPerPage.value;
-	return categorias.value.slice(start, end);
-});
+/**/
 
 // Editar una categoría ----------------------------------------------
 
 const onFormCategoriasActive = (data) => {
     console.log('data',data);
-	//let index =  categorias.value.map((e) => e.id).indexOf(id);  	
-	updateCategorias.value = data; 
-	isCategoriasEditVisible.value = true;
-	
+		//let index =  categorias.value.map((e) => e.id).indexOf(id);  	
+		updateCategorias.value = data; 
+		isCategoriasEditVisible.value = true;
     console.log("upd", updateCategorias.value);
     
 };
@@ -93,12 +90,60 @@ const dialogCategoriasValueUpdate = (val) => {
 	}
 	isCategoriasEditVisible.value = val;
 };
+
+const searchKeyword = ref('');
+/*var filteredData = computed(() => {
+	var data = categorias.value;
+	const start = (currentPage.value - 1) * itemsPerPage.value;
+	const end = start + itemsPerPage.value;
+	var dataFiltrada = data.slice(start, end);
+	totalPages.value = Math.ceil(categorias.value.length / itemsPerPage.value);
+	//filteredData_2.value = filteredData
+	return dataFiltrada;
+});*/
+
+var filteredData = computed(() => {
+	var catag_list =  categorias.value.filter(item => {
+		return (
+      item.__text.toLowerCase().includes(searchKeyword.value.toLowerCase()) ||
+      item.id.toLowerCase().includes(searchKeyword.value.toLowerCase())
+    );
+  });
+  
+  const start = (currentPage.value - 1) * itemsPerPage.value;
+	const end = start + itemsPerPage.value;
+	var dataFiltrada = catag_list.slice(start, end);
+	totalPages.value = Math.ceil(catag_list.length / itemsPerPage.value);
+	//filteredData =  catag_list;
+	
+	return dataFiltrada;
+});
+
+
 </script>
+
+<style type="text/css">
+	.p-10 {
+	    padding: 12px;
+	}
+</style>
+
 <template>
 	<section>
 		<VRow>
 			<VCol cols="12">
-				<VCard title="Categorías">
+				<VCard title="Intereses">
+					<VCardText class="py-4 gap-0 w-100">
+			      <div style="width: 30%" class="d-flex gap-1 px-0  position-relative">
+			          <VTextField
+			            v-model="searchKeyword"
+			            pattern="\d*"
+			            placeholder="Buscar por id o por nombre..."
+			            class="ms-0 me-1 chat-list-search"
+			          >
+			          </VTextField>
+			      </div>
+			    </VCardText>
 					<!--
 					<VDivider />
                     
@@ -117,21 +162,21 @@ const dialogCategoriasValueUpdate = (val) => {
 
 					<VDivider />
                     -->
-					<VTable class="text-no-wrap">
+					<VTable class="text-no-wrap p-10">
 						<!-- 👉 table head -->
 						<thead>
 							<tr>
-								<th scope="col">Id</th>
-								<th scope="col">Text</th>
+								<th scope="col">ID</th>
+								<th scope="col">Nombre del interés</th>
 								<th scope="col">Descripción</th>
-								<th scope="col">ImgUrl</th>
+								<th scope="col">IMG Url</th>
 								<th scope="col">Publicado</th>
 								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
 						<!-- 👉 table body -->
 						<tbody>
-							<tr v-for="categoria in paginatedData" style="height: 3.5rem">
+							<tr v-for="categoria in filteredData" style="height: 3.5rem">
 								<!-- 👉 nombre modulo -->
 								<td>
 									<div class="d-flex align-left">
@@ -166,9 +211,7 @@ const dialogCategoriasValueUpdate = (val) => {
 								<td>
 									<div class="d-flex align-left">
 										<div class="d-flex flex-column">
-											<h6 class="text-base">
-												{{ categoria.picImg }}
-											</h6>
+											<img v-if="categoria.picImg !== ''" :src="categoria.picImg" width="200" class="img-intereses">
 										</div>
 									</div>
 								</td>
