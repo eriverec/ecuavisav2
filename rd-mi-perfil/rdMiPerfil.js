@@ -309,7 +309,7 @@ async function Token(){
       });
 
       if(esNuevo){
-        $('#cambiopass > div:nth-child(1)').append(etiquetaAviso);
+        // $('#cambiopass > div:nth-child(1)').append(etiquetaAviso);
       }
     
       $('#pass').on('input', function () {
