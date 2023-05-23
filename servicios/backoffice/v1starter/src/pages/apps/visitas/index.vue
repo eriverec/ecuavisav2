@@ -197,6 +197,7 @@ for (let i of arrayFiltro) {
 };
 
 const resolveUltimasVisitasUser =(first, last)=>{
+  
   const inicio = rawData.value.map(({first_name, last_name, navigationRecord})=>{ 
   return {first_name, last_name, navigationRecord};
   });
@@ -281,7 +282,7 @@ const resolveUltimasVisitasUser =(first, last)=>{
     </VCardText>
         <VCardText v-if="isLoading">Cargando datos...</VCardText>
         <VCardText  v-else>
-          <VTable class="text-no-wrap tableNavegacion mb-5">
+          <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
             <thead>
               <tr>
                 <th scope="col">TÍTULO DE PÁGINA</th>
@@ -290,9 +291,11 @@ const resolveUltimasVisitasUser =(first, last)=>{
             </thead>
 
             <tbody>
-              <tr v-for="item  in paginatedUrlCounts" :key="item.url">
-                <td class="text-high-emphasis">
-                  <span @click="resolveUltimosUsuarios(item.title || item.url)"> <a href="#"> {{ item.title ? item.title : item.url }}</a> </span>
+              <tr v-for="item  in paginatedUrlCounts" :key="item.title || item.url" >
+                <td class="clickable" @click="resolveUltimosUsuarios(item.title || item.url)">
+                  
+                   {{ item.title ? item.title : item.url }}
+                 
                 </td>
 
                 <td class="text-medium-emphasis">
@@ -316,10 +319,11 @@ const resolveUltimasVisitasUser =(first, last)=>{
     </VCol>
     <VCol lg="6" cols="12" sm="6">
     <!-- trazabilidad independiente -->
-      <VCard v-if="ultimosUsuariosVisible">
+    <VExpandTransition>
+      <VCard v-show="ultimosUsuariosVisible">
         <VCardItem class="pb-sm-0">
           <VCardTitle>Últimas 10 visitas a la página</VCardTitle>
-          <VTable class="text-no-wrap tableNavegacion mb-5">
+          <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
             <thead>
               <tr>
                 <th scope="col">Nombre</th>
@@ -329,9 +333,9 @@ const resolveUltimasVisitasUser =(first, last)=>{
             </thead>
 
             <tbody>
-              <tr v-for="user in ultimosUsuarios">
+              <tr class="clickable" v-for="user in ultimosUsuarios" @click="resolveUltimasVisitasUser(user.first_name, user.last_name)">
                 <td class="text-high-emphasis">
-                  <span @click="resolveUltimasVisitasUser(user.first_name, user.last_name)"> <a href="#">  {{ user.first_name }} {{ user.last_name }}</a> </span>
+                  {{ user.first_name }} {{ user.last_name }}
                 </td>
                 <td class="text-medium-emphasis">
                   {{ user.fecha}}
@@ -343,44 +347,39 @@ const resolveUltimasVisitasUser =(first, last)=>{
             </tbody>
           </VTable>
         </VCardItem>
-    
-
       </VCard>
-
+    </VExpandTransition>
     </VCol>
     <VCol lg="6" cols="12" sm="6">
     <!-- trazabilidad independiente -->
-      <VCard v-if="ultimasVisitasVisible">
-        <VCardItem class="pb-sm-0">
-          <VCardTitle>Últimas 10 visitas del usuario</VCardTitle>
-          <VTable class="text-no-wrap tableNavegacion mb-5">
-            <thead>
-              <tr>
-                <th scope="col">Título</th>
-                <th scope="col">Fecha</th>
-                <th scope="col">Hora</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr v-for="user in ultimasVisitas">
-                <td class="text-high-emphasis">
+    <VExpandTransition>
+      <VCard title="Actividad del usuario" v-show="ultimasVisitasVisible">
+        
+        <VCardText>
+          <VTimeline
+            density="compact"
+            align="start"
+            truncate-line="both"
+            class="v-timeline-density-compact"
+          > 
+            <VTimelineItem dot-color="primary" size="x-small"
+            v-for="user in ultimasVisitas">
+              <div class="d-flex justify-space-between align-center flex-wrap">
+                <h4 class="text-base font-weight-semibold me-1">
                   {{ user.title || user.url }} 
-                </td>
-                <td class="text-medium-emphasis">
-                  {{ user.fecha}}
-                </td>
-                <td class="text-medium-emphasis">
-                  {{ user.hora}}
-                </td>
-              </tr>
-            </tbody>
-          </VTable>
-        </VCardItem>
-    
+                </h4>
+                
+                
+              </div>
 
+              <p class="mb-1">{{ user.fecha}} {{ user.hora}}</p>
+            
+            </VTimelineItem>
+
+          </VTimeline>
+        </VCardText>
       </VCard>
-
+    </VExpandTransition>
     </VCol>
   </VRow>
 </template>
@@ -400,7 +399,7 @@ td span {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
+.clickable { cursor: pointer; }
 @media (max-width: 1000px) {
   td span {
     max-width: 200px;
