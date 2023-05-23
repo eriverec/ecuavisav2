@@ -968,7 +968,7 @@
   padding-left: 18px;
 }
 
-.MP_cerrar_session .button_cerrar_sesion {
+.button_cerrar_sesion {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -977,7 +977,7 @@
 }
 
 
-.MP_cerrar_session .button_cerrar_sesion a {
+.button_cerrar_sesion a {
   display: flex;
   flex-direction: row;
   justify-content: center;
