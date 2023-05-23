@@ -998,6 +998,125 @@
   color: #2927B9;
 }
 
+/****************EDIT NUEVO DISEÑO******************/
+
+
+.sep_regresar {
+	padding-top: 20px;
+	font-family: 'Archivo';
+font-style: normal;
+font-weight: 300;
+font-size: 14px;
+line-height: 26px;
+	color: #2927B9;
+}
+/* Desplegable cambiar contraseña */
+.pass_oculto {
+  display: none;
+}
+
+button.cambiar-btn.btn.btn-link {
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 26px;
+    text-decoration-line: underline;
+    color: #2927B9;
+}
+button.recuperar-btn.btn.btn-link {
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 26px;
+    text-decoration-line: underline;
+    color: #2927B9;
+}
+button#btnCerrarM {
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 26px;
+    text-decoration-line: underline;
+    color: #2927B9;
+}
+
+label.form-label {
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 300;
+    font-size: 22px;
+    line-height: 26px;
+    color: #060127;
+    padding-top: 20px;
+}
+
+button#btnSaveM {
+    background: #23DCD1;
+    border: 1px solid #23DCD1;
+    border-radius: 2px;
+    font-family: 'Mattone 150';
+    font-style: normal;
+    color: #2927B9;
+    font-weight: 600;
+    font-size: 22px;
+    width: 123px;
+    height: 48px;
+    line-height: 12px;
+}
+.button_password {
+    padding: 10px 0px;
+}
+.input-icon {
+    color: #191919;
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 12px;
+    /* top: 98%; */
+    transform: translateY(-143%);
+}
+
+.input-icon.password {
+    right: unset;
+    left: 386px;
+}
+.form-control {  
+    width: 113% !important;
+}
+
+@media (max-width: 768px) {
+
+label.form-label {
+    font-size: 16px;
+}
+button.cambiar-btn.btn.btn-link {
+    font-size: 16px;
+    margin-left: 179px;
+}
+button#btnCerrarM {
+    font-size: 16px;
+    margin-left: 166px;
+}
+.form-control {
+    width: 102% !important;
+}
+.input-icon.password {
+    right: unset;
+    left: 327px;
+}
+button#btnSaveM {
+    font-size: 16px;
+    margin-left: 212px;
+}
+
+}
+/**************** FIN EDIT NUEVO DISEÑO******************/
+
+
+
 /****************COLLAPSE SIEMPRE DEBE DE ESTAR AL FINAL******************/
 
 .mp_title {
