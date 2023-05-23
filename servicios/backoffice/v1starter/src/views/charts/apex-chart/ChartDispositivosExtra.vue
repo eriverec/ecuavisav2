@@ -764,7 +764,7 @@ import { useTheme } from 'vuetify';
               "fechai": fechai,
               "fechaf": fechaf
           });
-          var resp = await fetch(`https://servicio-de-actividad.vercel.app/actividad/full`,{
+          var resp = await fetch(`https://servicio-de-actividad.vercel.app/dispositivos/full`,{
             method: 'POST',
             headers: {
               "Content-Type": "application/json",

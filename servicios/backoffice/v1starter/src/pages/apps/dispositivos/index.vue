@@ -1,7 +1,5 @@
 <script setup>
 import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositivosExtra.vue";
-
-
 </script>
 
 <style type="text/css">
@@ -50,7 +48,7 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
           <tbody v-if="visibleData.length">
             <tr v-for="(dat, index) in visibleData" :key="index">
               
-              <td class="text-medium-emphasis">{{ dat.users[0].first_name }} {{ dat.users[0].last_name }}</td>
+              <td class="text-medium-emphasis">{{ dat.first_name  }} {{ dat.last_name }}</td>
               <td class="text-medium-emphasis">{{ dat.device }}</td>
               <td>
                  <span v-for="iconD in iconDevices" :key="iconD.browser">
@@ -78,7 +76,7 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
               </td>
                -->
               
-              <td class="text-medium-emphasis" >{{ dat.navigationRecord }}</td>
+              <td class="text-medium-emphasis" >{{ dat.total }}</td>
             </tr>
           </tbody>
           <tbody v-else>
@@ -95,7 +93,7 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
           >
             Anterior
           </v-btn>
-          <span class="px-2">{{ currentPage }} de {{ totalPages }} de un total de {{ dataN.length }} registros</span>
+          <span class="px-2">{{ currentPage }} de {{ totalPages || 0 }} de un total de {{ datosGrouped.length || 0 }} registros</span>
 
           <v-btn
             :disabled="currentPage === totalPages" @click="currentPage += 1"
@@ -154,7 +152,7 @@ export default {
   computed: {
     totalPages() {
     //return Math.ceil(this.datosFiltrados.length / this.itemsPerPage);
-      return Math.ceil(this.dataN.length / this.itemsPerPage);
+      return Math.ceil(this.datosGrouped.length / this.itemsPerPage);
     },
     /*visibleData() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
@@ -164,31 +162,72 @@ export default {
     visibleData() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
+    
+      const arrayI = JSON.parse(JSON.stringify(this.dataN));
       
-      const final = JSON.parse(JSON.stringify(this.dataN));
-      if(this.visita){
+      if(arrayI.length !== 0){
+      let arrayFixed =[];  
+      
+        for (let j in arrayI){
+        //console.log('prueba', arrayI[j].users[0].first_name )
+        let data = {
+          device: arrayI[j].device,
+          os: arrayI[j].os,
+          browser: arrayI[j].browser,
+          first_name: arrayI[j].users[0]?.first_name  ? arrayI[j].users[0].first_name.trim() :  "",
+          last_name: arrayI[j].users[0]?.last_name  ? arrayI[j].users[0].last_name.trim() : "" ,
+          navigationRecord: arrayI[j].navigationRecord,
+          total: 0
+          
+        }
         
-      for(var i in final){
-        final[i].navigationRecord = 1;                           
-      }     
-      
-      }else{
+        arrayFixed.push(data); 
+       }
+       //console.log('fixed',arrayFixed);
+       
+       const final = arrayFixed.reduce( (a,b) => {
+       
+       var i = a.findIndex((x) => x.first_name == b.first_name & x.last_name == b.last_name & x.os == b.os & x.browser == b.browser & x.device == b.device);
+       return i === -1 ? a.push({ 
+        os : b.os, browser: b.browser, device: b.device, navigationRecord: b.navigationRecord, first_name :b.first_name, last_name: b.last_name, total: b.navigationRecord, count: 1
+       }) : (a[i].total += parseInt(a[i].navigationRecord) , a[i].count++) , a;
+       }, []);
+       
+       //console.log('final', final);
 
-      final.sort((a, b)=> {
-        if (a.navigationRecord > b.navigationRecord){
-            return -1;  
-        }
-        if (a.navigationRecord < b.navigationRecord){
-            return 1;  
-        }
-      });
+       if(this.visita){   
+        for(var i in final){
+          let count = final[i].count
+          final[i].total = count;        
+                             
+        }       
       }
-      this.datosGrouped = final;
-      console.log('final',final);
-      console.log('visita',this.visita);
-      console.log('dataN',this.dataN);
+  
+        final.sort((a, b)=> {
+          if (a.total > b.total){
+              return -1;  
+          }
+          if (a.total < b.total){
+              return 1;  
+          }
+        });
+        
+        this.datosGrouped = final;
+        
+      }
+      return this.datosGrouped.slice(start, end);  
+      //const final = JSON.parse(JSON.stringify(this.dataN));
+       //const final = this.dataN.flat();      
+       //let all = final.reduce((prev, next) => prev.concat(next.users), []);
+         
+       /*
+      final = this.dataN.reduce( (a,b) => {
+       var i = a.findIndex((x) => x.users[0].first_name == b.users[0].first_name & x.users[0].last_name == b.users[0].last_name);
+       return i === -1 ? a.push({ os : b.os, browser: b.browser, device: b.device, sessions : 1 }) : a[i].sessions++, a;
+       }, []);
+       */
       
-      return this.datosGrouped.slice(start, end);
+      
     },
   },
   mounted() {
@@ -201,7 +240,7 @@ export default {
     getActivity(value) {
       this.dataN = value.data;
       this.visita = value.visita;
-      console.log('llega',value); 
+      //console.log('llega',value); 
     }
   
   },
