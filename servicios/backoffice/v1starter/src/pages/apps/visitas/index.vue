@@ -33,9 +33,26 @@ async function fetchData() {
             },
           });   
     const data = await response.json();
-    const urlMap = new Map();
+    //const urlMap = new Map();
     rawData.value = data.data;
-    console.log('raw',rawData.value);
+    //console.log('raw',rawData.value);
+    const navArray = [];
+          for (const a of data.data) {
+            for(const b of a.navigationRecord){
+            let data = {
+              title: b.title,
+              url: b.url,
+            }
+            navArray.push(data);
+            }
+          }
+   
+    const finArray = navArray.reduce( (a,b) => {    
+       var i = a.findIndex((x) => x.title == b.title || x.url == b.url);
+       return i === -1 ? a.push({ url : b.url, title: b.title, count: 1}) : a[i].count++ , a;
+       }, []);
+    //console.log('dataf',finArray);
+    /*
     for (const activity of data.data) {
       for (const record of activity.navigationRecord) {
         const url = record.url;
@@ -47,8 +64,8 @@ async function fetchData() {
         }
       }
     }
-
-    urlCounts.value = Array.from(urlMap.values());
+   */
+    urlCounts.value = Array.from(finArray);
     urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
     //console.log('filtered fetch',urlCounts.value);
   } catch (error) {
@@ -125,9 +142,7 @@ onMounted(fetchData);
 const paginatedUrlCounts = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
-  console.log('start',start);
-  console.log('end',end);
-  console.log('perPage',urlCounts.value.slice(start, end));
+
   return urlCounts.value.slice(start, end);
 });
 
