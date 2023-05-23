@@ -1024,8 +1024,8 @@ var modalUsuarioSugerencia = {
     var perfil = {
       init: () => {
         eyesPass();
-        perfil.notificaciones.listar();
-        perfil.noticias.listar();
+        //perfil.notificaciones.listar();
+        //perfil.noticias.listar();
 
         modalUserNew.modalAlert();
         //modalUsuarioSugerencia.init();
