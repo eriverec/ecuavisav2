@@ -1544,7 +1544,7 @@ function sGoListDrivers() {
     if (typeof Swiper === "undefined") {
       sGoListDrivers();
     } else {
-      swiperListDrivers();
+      // swiperListDrivers();
     }
   }, 400);
 }
