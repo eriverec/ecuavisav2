@@ -23,6 +23,7 @@
 }
 
 @media (max-width: 768px) {
+
   .title_seccion .cintillo-rd h1,
   .title_seccion .cintillo-rd h2 {
     font-size: 55px;
@@ -48,3 +49,54 @@
 }
 
 /* CINTILLO - FIN */
+
+/*
+  @
+  @ noticias recomendadas:
+  @
+*/
+
+.ecv_relacionadas_2022.mt-4>div>div {
+  position: relative;
+  margin-right: 0px;
+  text-transform: uppercase;
+  font-family: 'Archivo';
+  padding-left: 0px;
+  color: #060127;
+  font-size: 24px;
+  position: relative;
+  font-size: 40px;
+  text-transform: uppercase;
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+}
+
+.ecv_relacionadas_2022 span.second {
+  color: rgba(43, 183, 107, 1);
+  margin-top: -10px;
+  display: block;
+  padding-left: 0px;
+}
+
+
+@media (max-width: 700px) {
+  .ecv_relacionadas_2022 span.second {
+    margin-top: -10px;
+    display: block;
+    padding-left: 0px;
+  }
+
+  .ecv_relacionadas_2022.mt-4>div>div {
+    position: relative;
+    margin-right: 0px;
+    padding-bottom: 0px;
+    text-transform: uppercase;
+    font-family: 'Archivo';
+    padding-left: 0px;
+    color: #060127;
+    font-size: 24px;
+    line-height: 35px;
+    margin-bottom: 0px;
+  }
+}
