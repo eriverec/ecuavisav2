@@ -267,7 +267,7 @@ async function Token(){
         });
         $this.after($("<div/>", {
           html: '<svg width="22" height="16" viewBox="0 0 22 16" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20.1445 6.962C20.6185 7.582 20.6185 8.419 20.1445 9.038C18.6515 10.987 15.0695 15 10.8875 15C6.70546 15 3.12346 10.987 1.63046 9.038C1.39985 8.74113 1.27466 8.37592 1.27466 8C1.27466 7.62408 1.39985 7.25887 1.63046 6.962C3.12346 5.013 6.70546 1 10.8875 1C15.0695 1 18.6515 5.013 20.1445 6.962V6.962Z" stroke="#2927B9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10.8875 11C12.5443 11 13.8875 9.65685 13.8875 8C13.8875 6.34315 12.5443 5 10.8875 5C9.2306 5 7.88745 6.34315 7.88745 8C7.88745 9.65685 9.2306 11 10.8875 11Z" stroke="#2927B9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-          class: 'btn btn-primary btn-sm btn-eyes',
+          class: 'btn btn-default btn-sm btn-eyes',
           id: 'passeye-toggle-' + i,
         }).css({
           position: 'absolute',
