@@ -1344,7 +1344,7 @@ var bloqueUsuarioSugerencia = {
         }).then(jsondata => {
           if (jsondata.resp) {
             /*FETCH FIN*/
-            fun.temas = [ { "interes":"Te Puede Interesar ", "data":jsondata.data } ];
+            fun.temas = [ { "interes":"", "data":jsondata.data } ];
             var temasSeguir = ``;
             for(var i in fun.temas){
               var ins = fun.temas[i];
@@ -1382,13 +1382,11 @@ var bloqueUsuarioSugerencia = {
 
             document.querySelector('#'+this.idBloque).innerHTML = `
             <div class="contenido-modal">
-               <p class="parrafo-modal">
-                Para ofrecerte una mejor experiencia elige los intereses que se ajusten a ti.
-               </p>
+               <p class="parrafo-modal"></p>
                <p class="mis-intereses-modal fw-bold">
-                Mis intereses
+                Sugerencias
                </p>
-               <hr>
+               <!--<hr>-->
                <div class="listado-temas isDisabled" id="${this.idListadoTema}" style=" overflow: auto; max-height: 350px; ">
                   ${temasSeguir}
                </div>
@@ -1607,7 +1605,8 @@ var bloqueUsuarioIntereses = {
         return false;
       },
       initComponent:function(){
-        var classListalistDrivers = document.querySelector('.MODAL_SEGUIMIENTO_TEMA');
+        var classListalistDrivers = document.querySelector('.MP_seg_temas');
+        classListalistDrivers.classList.add("MODAL_SEGUIMIENTO_TEMA");
         var dpagination = document.createElement("div");
         dpagination.setAttribute("id", "bloque_body_intereses_tema");
         classListalistDrivers.append(dpagination);
@@ -1630,7 +1629,7 @@ var bloqueUsuarioIntereses = {
         }).then(jsondata => {
           if (jsondata.length > 0) {
             /*FETCH FIN*/
-            fun.temas = [ { "interes":"Seguimiento de intereses ", "data":jsondata } ];
+            fun.temas = [ { "interes":"Intereses", "data":jsondata } ];
             var temasSeguir = ``;
             for(var i in fun.temas){
               var ins = fun.temas[i];
@@ -1676,13 +1675,9 @@ var bloqueUsuarioIntereses = {
               }
             </style>
             <div class="contenido-modal">
-               <p class="parrafo-modal">
-                Para ofrecerte una mejor experiencia elige los intereses que se ajusten a ti.
-               </p>
-               <p class="mis-intereses-modal fw-bold">
-                Mis intereses
-               </p>
-               <hr>
+               <p class="parrafo-modal"></p>
+               <p class="mis-intereses-modal fw-bold"></p>
+               <!--<hr>-->
                <div class="listado-temas isDisabled" id="${this.idListadoTemaSugerencia}" style=" overflow: auto; max-height: 350px; ">
                   ${temasSeguir}
                </div>
