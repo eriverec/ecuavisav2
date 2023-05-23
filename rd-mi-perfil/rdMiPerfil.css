@@ -1132,14 +1132,14 @@ button#btnSaveM {
 @media (max-width: 768px) {
   .title_seccion .cintillo-rd h1,
   .title_seccion .cintillo-rd h2 {
-    font-size: 55px;
+    font-size: 48px;
     line-height: 24px;
     display: flex;
     align-items: center;
   }
 
   .title_seccion .c_azul_celeste_Mobile {
-    margin-top: 1.7rem;
+    margin-top: 24px;
   }
 }
 

@@ -309,7 +309,7 @@ async function Token(){
       });
 
       if(esNuevo){
-        $('#cambiopass > div.modal-body > div:nth-child(1)').append(etiquetaAviso);
+        $('#cambiopass > div:nth-child(1)').append(etiquetaAviso);
       }
     
       $('#pass').on('input', function () {
@@ -1440,12 +1440,12 @@ if (!ECUAVISA_EC.login() && urlParamsGET.get('tk')==null){ /*Si no existe sesió
     
     //suscriptionDymanic();
     /*#Notificaciones: iniciar loader*/
-    let $article = document.querySelector('.notificationBox .noticias');
-    $article.innerHTML = perfil.notificaciones.loader();
+    // let $article = document.querySelector('.notificationBox .noticias');
+    // $article.innerHTML = perfil.notificaciones.loader();
     
     
-    let $articleNoticiasSave = document.querySelector('.NoticiasGuardadasBox .noticias');
-    $articleNoticiasSave.innerHTML = perfil.noticias.loader();
+    // let $articleNoticiasSave = document.querySelector('.NoticiasGuardadasBox .noticias');
+    // $articleNoticiasSave.innerHTML = perfil.noticias.loader();
     /*#Fin notificaciones: iniciar loader*/
 
     
