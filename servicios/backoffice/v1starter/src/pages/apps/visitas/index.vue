@@ -50,7 +50,7 @@ async function fetchData() {
 
     urlCounts.value = Array.from(urlMap.values());
     urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
-    console.log('filtered fetch',urlCounts.value);
+    //console.log('filtered fetch',urlCounts.value);
   } catch (error) {
     console.error(error);
   }
@@ -125,6 +125,9 @@ onMounted(fetchData);
 const paginatedUrlCounts = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
+  console.log('start',start);
+  console.log('end',end);
+  console.log('perPage',urlCounts.value.slice(start, end));
   return urlCounts.value.slice(start, end);
 });
 
@@ -205,8 +208,8 @@ const resolveUltimasVisitasUser =(first, last)=>{
   const arrayFiltro = [];
   
   let fullNameViene = first+' '+last;
-  console.log('name',fullNameViene);
-  console.log('inicio' ,inicio); 
+  //console.log('name',fullNameViene);
+  //console.log('inicio' ,inicio); 
   for (let p of inicio) {
     let fullName = p.first_name+' '+p.last_name;
     if (fullName == fullNameViene) { 
@@ -245,7 +248,7 @@ const resolveUltimasVisitasUser =(first, last)=>{
     return  timestampB - timestampA;
   });
 
-  console.log('Sorted F',arrayFiltro);
+  //console.log('Sorted F',arrayFiltro);
   ultimasVisitas.value = arrayFiltro.slice(0,10);
 
   ultimasVisitasVisible.value = true;
@@ -291,7 +294,7 @@ const resolveUltimasVisitasUser =(first, last)=>{
             </thead>
 
             <tbody>
-              <tr v-for="item  in paginatedUrlCounts" :key="item.title || item.url" >
+              <tr v-for="item  in paginatedUrlCounts" >
                 <td class="clickable" @click="resolveUltimosUsuarios(item.title || item.url)">
                   
                    {{ item.title ? item.title : item.url }}
