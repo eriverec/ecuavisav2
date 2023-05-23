@@ -1344,7 +1344,7 @@ var bloqueUsuarioSugerencia = {
         }).then(jsondata => {
           if (jsondata.resp) {
             /*FETCH FIN*/
-            fun.temas = [ { "interes":"", "data":jsondata.data } ];
+            fun.temas = [ { "interes":"Sugerencias", "data":jsondata.data } ];
             var temasSeguir = ``;
             for(var i in fun.temas){
               var ins = fun.temas[i];
@@ -1383,9 +1383,7 @@ var bloqueUsuarioSugerencia = {
             document.querySelector('#'+this.idBloque).innerHTML = `
             <div class="contenido-modal">
                <p class="parrafo-modal"></p>
-               <p class="mis-intereses-modal fw-bold">
-                Sugerencias
-               </p>
+               <p class="mis-intereses-modal fw-bold"></p>
                <!--<hr>-->
                <div class="listado-temas isDisabled" id="${this.idListadoTema}" style=" overflow: auto; max-height: 350px; ">
                   ${temasSeguir}
