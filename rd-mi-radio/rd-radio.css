@@ -72,6 +72,11 @@
   font-weight: 700;
 }
 
+.ecv_relacionadas_2022 {
+  margin-bottom: 23px;
+}
+
+
 .ecv_relacionadas_2022 span.second {
   color: rgba(43, 183, 107, 1);
   margin-top: -10px;
@@ -79,6 +84,56 @@
   padding-left: 0px;
 }
 
+.recoment_miradio>div:not(.ecv_relacionadas_2022.mt-4 > div) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+.recoment_miradio .recomendadas-rd .text_block .section {
+  font-family: 'mattone 150';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 16px;
+  display: flex;
+  align-items: center;
+  text-transform: uppercase;
+  color: #2927b9;
+}
+
+.recoment_miradio .recomendadas-rd .headline {
+  margin-top: 5px;
+}
+
+.recoment_miradio .recomendadas-rd .headline h3 {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  line-height: 28px;
+  display: flex;
+  align-items: flex-end;
+  color: #060127;
+}
+
+.recoment_miradio .recomendadas-rd {
+  display: flex;
+  width: 100%;
+  border-bottom: 0px solid #2927B9;
+  flex-direction: column-reverse;
+}
+
+.recoment_miradio>div:not(.ecv_relacionadas_2022.mt-4 > div) {
+  display: grid;
+  align-items: baseline;
+  grid-template-columns: 1fr 1fr 1fr;
+  column-gap: 20px;
+}
+
+.recoment_miradio>div:not(.ecv_relacionadas_2022.mt-4 > div) .recomendadas-rd:nth-child(n+4) {
+  display: none;
+}
 
 @media (max-width: 700px) {
   .ecv_relacionadas_2022 span.second {
@@ -99,4 +154,105 @@
     line-height: 35px;
     margin-bottom: 0px;
   }
+
+  .recoment_miradio>div:not(.ecv_relacionadas_2022.mt-4 > div) {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+
+  .recoment_miradio>div:not(.ecv_relacionadas_2022.mt-4 > div) .recomendadas-rd {
+    width: 100%;
+    padding-right: 0px;
+    flex-wrap: wrap;
+    padding-bottom: 10px;
+  }
+
+  .recoment_miradio .recomendadas-rd .text_block {
+    width: 100%;
+    background: rgba(43, 183, 107, 1);
+    padding: 23px;
+    border-radius: 2px;
+  }
+
+  .recoment_miradio .recomendadas-rd .media_block {
+    width: 100%;
+    display: none;
+  }
+
+  .recoment_miradio .recomendadas-rd .headline h3 {
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 700;
+    font-size: 18px;
+    line-height: 22px;
+  }
+
+  .recoment_miradio .recomendadas-rd .headline h3 {
+    color: #ffffff;
+  }
+
+  .recoment_miradio .recomendadas-rd .text_block .section {
+    font-weight: 600;
+    font-family: 'Mattone 150' !important;
+    font-style: normal !important;
+    font-size: 15px;
+    display: none;
+  }
+
+
+}
+
+
+/*
+  @
+  @ pautas digitales
+  @
+*/
+
+
+.pub_autopautas {
+  background: #2927b9;
+  padding: 30px 20px;
+  margin: 25px 0;
+}
+
+.pub_autopautas .swiper-wrapper {
+  padding-bottom: 40px;
+}
+
+.IMG_PAUTAS_DIGITALES {
+  padding: 20px 0;
+  border-bottom: 1px solid #23dcd1;
+  border-top: 1px solid #23dcd1;
+}
+
+.swiper-pagination-mi-ecuavisa {
+  margin-bottom: -12px;
+}
+
+.bullets-notas .swiper-pagination-bullet-active,
+.banner_fijos_rd .swiper-pagination-bullet-active {
+  background: #23dcd1;
+}
+
+.bullets-notas .swiper-pagination-bullet,
+.banner_fijos_rd .swiper-pagination-bullet {
+  width: 15px !important;
+  height: 15px !important;
+}
+
+.bullets-notas .swiper-pagination-bullet,
+.banner_fijos_rd .swiper-pagination-bullet {
+  background: var(--swiper-pagination-bullet-inactive-color, #23dcd1);
+}
+
+.swiper-horizontal>.swiper-pagination-bullets .swiper-pagination-bullet,
+.swiper-pagination-horizontal.swiper-pagination-bullets .swiper-pagination-bullet {
+  margin: 0 var(--swiper-pagination-bullet-horizontal-gap, 8px);
+}
+
+.banner_fijos_rd_mobile {
+  padding-bottom: 5px;
+  margin-bottom: 15px;
 }
