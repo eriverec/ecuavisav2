@@ -610,7 +610,7 @@
 
 .MP_suscripciones {
   margin-top: 50px;
-  display: none;
+  /* display: none; */
 }
 
 .MP_suscripciones .grid-miperfil {
@@ -896,7 +896,7 @@
 
 /****************AYUDA******************/
 .MP_ayuda{
-  display: none;
+  /* display: none; */
 }
 
 .MP_ayuda .AyudaBox {
