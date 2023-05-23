@@ -1709,9 +1709,10 @@ var bloqueUsuarioIntereses = {
         var numIter = 1;
         var contador = 1;
         var ins = this;
-        ITER.FAVORITE.TOPICS.onLoad(function(){});
+        
         var EXISTEiter = setInterval(function () {
         if (typeof ITER !== 'undefined') {
+            ITER.FAVORITE.TOPICS.onLoad(function(){});
             ins.initComponent();
             ins.body();
             clearInterval(EXISTEiter);
