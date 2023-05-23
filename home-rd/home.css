@@ -3516,7 +3516,7 @@ BLOQUE DE COLUMNISTA - FIN
   align-items: center;
 }
 
-@media (max-width: 768px){
+@media (max-width: 600px){
   .article-section.cint__envio {
       align-items: center;
       flex-direction: column;
