@@ -1308,8 +1308,8 @@ button#btnSaveM {
 }
 
 .btn-eyes {
-  background-color: #2927b9;
-  border: 1px solid #2927b9;
+  background-color: transparent;
+  border: transparent;
   border-radius: 2px;
   font-family: 'Mattone 150';
   font-style: normal;
