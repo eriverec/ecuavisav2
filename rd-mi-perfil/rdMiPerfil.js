@@ -1555,6 +1555,11 @@ var bloqueUsuarioIntereses = {
       },
       btn_click:function(id, title, feedUrl, follow){
         var getUser = ECUAVISA_EC.USER_data();
+        var ins = this;
+        meta_favorite_action(id);
+        ins.body();
+        
+        return true;
         var template = document.getElementById(`b_template_${id}`);
         var btn = document.getElementById(`b_btn_${id}`);
         var estado = 0;
@@ -1643,7 +1648,7 @@ var bloqueUsuarioIntereses = {
                   if(dat.publicado){
                     temasSeguir+= `<div class="item_tema t_${dat.id}">
                        <div class="keywords font-2 fs13">
-                          <div class="template-meta-favorite-action ${fun.existeSugerencia( dat.id, [] )?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir intereses" onclick="bloqueUsuarioIntereses.btn_click('${dat.id}', '${dat.name}', '#', true)" style="/* display:none; */">
+                          <div class="template-meta-favorite-action ${ ITER.FAVORITE.TOPICS.isFavorite(dat.id) ?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir intereses" onclick="bloqueUsuarioIntereses.btn_click('${dat.id}', '${dat.name}', '#', true)" style="/* display:none; */">
                              <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" id="b_btn_${dat.id}">
 
                                 <small>${dat.name}</small>
@@ -1701,10 +1706,21 @@ var bloqueUsuarioIntereses = {
       },
       init:function(){
         var numIter = 1;
+        var contador = 1;
         var ins = this;
-        ins.title();
-        ins.initComponent();
-        ins.body();
+        var EXISTEiter = setInterval(function () {
+        if (typeof ITER !== 'undefined') {
+            ins.initComponent();
+            ins.body();
+            clearInterval(EXISTEiter);
+        }else{
+          contador++;
+        }
+        if(contador == 100){
+            console.error("ITER no está definido");
+            clearInterval(EXISTEiter);
+          }
+        }, 500);
       },
       temas:[
         {
@@ -1715,6 +1731,4 @@ var bloqueUsuarioIntereses = {
         }
       ]
     }
-
-
 bloqueUsuarioIntereses.init();
