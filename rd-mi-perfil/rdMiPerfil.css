@@ -1322,7 +1322,7 @@ button#btnSaveM {
 
 .btn-eyes.btn-outline-primary {
   background-color: transparent;
-  border: 1px solid #2927b9;
+  border: transparent;
   border-radius: 2px;
   font-family: 'Mattone 150';
   font-style: normal;
