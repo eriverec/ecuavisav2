@@ -1,0 +1,50 @@
+/* CINTILLO - INICIO */
+
+.c_azul_celeste_Mobile {
+  display: none;
+}
+
+/*Título sección Desktop*/
+.title-section .tit2 span {
+  color: #2927b9;
+}
+
+.title_seccion .cintillo-rd h1,
+.title_seccion .cintillo-rd h2 {
+  display: inline-block;
+  font-family: 'Anek Malayalam';
+  letter-spacing: -0.03em;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 88px;
+  line-height: 96px;
+  text-transform: lowercase;
+  color: #2927B9;
+}
+
+@media (max-width: 768px) {
+  .title_seccion .cintillo-rd h1,
+  .title_seccion .cintillo-rd h2 {
+    font-size: 55px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+  }
+
+  .title_seccion .c_azul_celeste_Mobile {
+    margin-top: 1.7rem;
+  }
+}
+
+
+@media (max-width: 767px) {
+  .c_azul_celeste_Mobile {
+    display: block;
+  }
+
+  .c_azul_celeste_Desktop {
+    display: none;
+  }
+}
+
+/* CINTILLO - FIN */

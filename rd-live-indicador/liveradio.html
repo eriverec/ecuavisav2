@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>radio</title>
+  <link href="https://fonts.cdnfonts.com/css/mattone" rel="stylesheet">
+  <style>
+    #parent_radio img {
+      animation-name: parpadeomenu;
+      animation-duration: 1s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+      -webkit-animation-name: parpadeomenu;
+      -webkit-animation-duration: 1s;
+      -webkit-animation-timing-function: linear;
+      -webkit-animation-iteration-count: infinite;
+    }
+
+    span.enVivoText {
+      color: #ffffff;
+      /* font-size: 11px; */
+      font-size: 14px;
+      /* font-family: 'Mattone'; */
+      font-family: 'Mattone 150';
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    @-moz-keyframes parpadeomenu {
+      0% {
+        opacity: 1.0;
+      }
+
+      50% {
+        opacity: 0.0;
+      }
+
+      100% {
+        opacity: 1.0;
+      }
+    }
+
+    @-webkit-keyframes parpadeomenu {
+      0% {
+        opacity: 1.0;
+      }
+
+      50% {
+        opacity: 0.0;
+      }
+
+      100% {
+        opacity: 1.0;
+      }
+    }
+
+    @keyframes parpadeomenu {
+      0% {
+        opacity: 1.0;
+      }
+
+      50% {
+        opacity: 0.0;
+      }
+
+      100% {
+        opacity: 1.0;
+      }
+    }
+  </style>
+</head>
+
+<body style="background: #060127;">
+  <div id="parent_radio" style="display: none;">
+    <a href="/envivo">
+      <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fheader%2Fradio(2).svg" alt="ecuavisa" width="28"
+        height="28" title="Icono parpadeo">
+      <span class="enVivoText">Radio</span>
+    </a>
+  </div>
+  <script src="liveRadio.js"></script>
+</body>
+
+</html>
