@@ -1098,7 +1098,7 @@ var modalUsuarioSugerencia = {
                 perfil.notificaciones.listarUltimas();
               }else{
                 $article.innerHTML = $articles;
-                swiperNotificaciones();
+                // swiperNotificaciones();
               }
             }
           });
@@ -1140,7 +1140,7 @@ var modalUsuarioSugerencia = {
                 $articles += perfil.notificaciones.html_(jsonData);
               });
               $article.innerHTML = $articles;
-              swiperNotificaciones();
+              // swiperNotificaciones();
             });
         },
       },
@@ -1470,7 +1470,7 @@ var moverContenidoAyuda = () =>{
   return true;
 }
 
-moverContenidoAyuda();
+// moverContenidoAyuda();
 
 /*============================FIN AYUDA=================================== */
 
