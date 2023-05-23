@@ -297,19 +297,7 @@ async function Token(){
             $this.attr('type', 'password');
             $this.removeClass("show");
             $(this).removeClass("btn-outline-primary");
-            $(this).addClass("btn-primary");
-            $this.after($("<div/>", {
-              html: '<svg width="22" height="18" viewBox="0 0 22 18" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M6.2601 14.129C4.4151 12.819 2.9551 11.115 2.1301 10.039C1.8994 9.74198 1.77417 9.37659 1.77417 9.0005C1.77417 8.62441 1.8994 8.25902 2.1301 7.962C3.6231 6.013 7.2051 2 11.3871 2C13.2631 2 15.0171 2.807 16.5171 3.874" stroke="#2927B9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M13.0175 6.887C12.7397 6.60467 12.4089 6.38011 12.044 6.22629C11.679 6.07246 11.2873 5.99241 10.8912 5.99075C10.4952 5.98909 10.1028 6.06586 9.7366 6.21662C9.3704 6.36738 9.03767 6.58916 8.75761 6.86915C8.47755 7.14915 8.25569 7.48183 8.10484 7.84799C7.954 8.21416 7.87714 8.60657 7.8787 9.00259C7.88027 9.3986 7.96023 9.79039 8.11397 10.1554C8.26771 10.5203 8.49218 10.8512 8.77445 11.129M2.88745 17L18.8875 1M8.88745 15.704C9.53666 15.8972 10.2101 15.9969 10.8875 16C15.0695 16 18.6515 11.987 20.1445 10.038C20.3751 9.74071 20.5002 9.37509 20.5 8.99883C20.4998 8.62256 20.3744 8.25707 20.1435 7.96C19.6187 7.27549 19.0559 6.62112 18.4575 6" stroke="#2927B9" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>',
-              class: 'btn btn-primary btn-sm btn-eyes',
-              id: 'passeye-toggle-' + i,
-            }).css({
-              position: 'absolute',
-              right: 10,
-              //top: ($this.outerHeight() / 2) + 3,
-              //padding: '2px 7px',
-              //fontSize: 12,
-              cursor: 'pointer',
-            }));
+            // $(this).addClass("btn-primary");
           } else {
             //$this.val($("#passeye-"+i).val());  
             $this.attr('type', 'text');
