@@ -236,6 +236,9 @@
 .c_azul_celeste_Mobile_mp {
   display: none;
 }
+.c_azul_celeste_Desktop_mp {
+  display: none;
+}
 
 
 @media (max-width: 767px) {
@@ -263,7 +266,7 @@
   display: none;
 }
 
-.alert-mensaje-1{
+#alert-mensaje-1{
   display: none;
 }
 
