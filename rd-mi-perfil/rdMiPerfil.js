@@ -1668,8 +1668,8 @@ var bloqueUsuarioIntereses = {
             document.querySelector('#'+this.idBloque).innerHTML = `
             <style>
               #bloque_body_intereses_tema{
-                padding-top:50px;
-                padding-bottom:50px;
+                padding-top:0px;
+                padding-bottom:0px;
               }
             </style>
             <div class="contenido-modal">
