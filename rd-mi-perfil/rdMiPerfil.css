@@ -1472,7 +1472,7 @@ button#btnSaveM {
 } */
 
 .MODAL_SEGUIMIENTO_TEMA .keywords {
-  display: flex;
+  /* display: flex; */
   align-items: center;
   line-height: 1.2;
 }
@@ -1492,8 +1492,13 @@ button#btnSaveM {
   border-radius: 3px;
   color: #2927b9;
   line-height: 1.2;
-  background: #23dcd1;
+  /* background: #23dcd1; */
   padding: 0px;
+
+  border: 1px solid #2927b9;
+  justify-content: center;
+
+
 }
 
 .btn-check:focus+.btn.btn-modal-seguir,
@@ -1519,10 +1524,15 @@ button#btnSaveM {
 }
 
 .listado-temas {
-  display: flex;
+  /* display: flex;
   align-items: center;
   gap: 5px;
-  flex-wrap: wrap;
+  flex-wrap: wrap; */
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 2fr 1fr;
+  gap: 15px;
 }
 
 .listado-temas .mis-intereses-modal{
