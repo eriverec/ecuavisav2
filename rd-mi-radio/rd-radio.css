@@ -341,6 +341,10 @@
   display: none !important;
 }
 
+.msp_radio .np__global_player{
+  z-index: 9 !important;
+}
+
 @media (max-width: 600px) {
   .msp_radio .np__global_player .np__player_widget .np__elements_soundbadge .np__avatar_element {
     display: none !important;
