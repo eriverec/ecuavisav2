@@ -1,6 +1,12 @@
 /* CINTILLO - INICIO */
 
-.c_azul_celeste_Mobile {
+.title_seccion .c_azul_celeste_Mobile {
+  display: block;
+  max-width: 400px;
+  margin-top: 24px;
+}
+
+.c_azul_celeste_Desktop {
   display: none;
 }
 
@@ -16,9 +22,8 @@
   letter-spacing: -0.03em;
   font-style: normal;
   font-weight: 600;
-  font-size: 88px;
-  line-height: 96px;
-  text-transform: lowercase;
+  font-size: 60px;
+  line-height: 24px;
   color: #2927B9;
 }
 
@@ -33,7 +38,7 @@
   }
 
   .title_seccion .c_azul_celeste_Mobile {
-    margin-top: 1.7rem;
+    margin-top: 24px;
   }
 }
 
