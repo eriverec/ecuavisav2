@@ -8,7 +8,7 @@ export const useUserListStore = defineStore('UserListStore', {
 
     countPageUsers() { return axios.get('https://ecuavisa-mongo-users.vercel.app/count') },
 
-    fetchFullUsers(p) { return axios.post('https://ecuavisa-mongo-users.vercel.app/full', {page: p}) },
+    fetchFullUsers(p) { return axios.get(`https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/fullUsers?page=${p}`) },
 
     countUsers() { return axios.get('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/count') },
 
