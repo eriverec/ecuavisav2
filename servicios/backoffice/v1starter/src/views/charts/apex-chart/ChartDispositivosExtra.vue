@@ -222,7 +222,16 @@ import { useTheme } from 'vuetify';
             {
             title: "Linux",
             value: "Linux",
-            }           
+            },
+            {
+            title: "Android",
+            value: "Android",
+            },  
+            {
+            title: "Todos",
+            value: "todos",
+            }   
+                       
           ],
           itemBrowser: [
             {
@@ -236,12 +245,16 @@ import { useTheme } from 'vuetify';
             {
             title: "Firefox",
             value: "Firefox",
-            }           
+            },
+            {
+            title: "Todos",
+            value: "todos",
+            }               
           ],
           selectedActividad: "sesion",
           selectedDispositivo: "",
-          selectedOs: "",
-          selectedBrowser: "",
+          selectedOs: "todos",
+          selectedBrowser: "todos",
           fechaIngesada: "",
           activityData: []
         };
@@ -631,31 +644,66 @@ import { useTheme } from 'vuetify';
         async getDataTrazabilidadFull2(data){
           var serieTotal = [];
           let query = "";
-          
-          if(this.selectedOs !== ""){
+          if(this.selectedOs == "Android" &&  this.selectedDispositivo == "movil"){
             if(query !== ""){
-              query += " && e.os == this.selectedOs";
+              query += " && e.device == this.selectedDispositivo && e.os == 'Linux' ";
             }else{
-              query += "e.os == this.selectedOs";
+              query += "e.device == this.selectedDispositivo && e.os == 'Linux'";
             }  
+          }else if(this.selectedOs == "Android" &&  this.selectedDispositivo == "desktop"){
+            if(query !== ""){
+              query += " && e.device == 'x' && e.os == 'x' ";
+            }else{
+              query += "e.device == 'x' && e.os == 'x' ";
+            } 
+          }else if(this.selectedOs == "Linux" &&  this.selectedDispositivo == "desktop"){
+            if(query !== ""){
+              query += " && e.device == this.selectedDispositivo && e.os == 'Linux' ";
+            }else{
+              query += "e.device == this.selectedDispositivo && e.os == 'Linux'";
+            } 
+          }else if(this.selectedOs == "Linux" &&  this.selectedDispositivo == "movil"){
+            if(query !== ""){
+              query += " && e.device == 'x' && e.os == 'x' ";
+            }else{
+              query += "e.device == 'x' && e.os == 'x' ";
+            } 
+          }else if(this.selectedOs == "Linux" || this.selectedOs == "Android"){
+            if(query !== ""){
+              query += " && e.os == 'Linux' ";
+            }else{
+              query += "e.os == 'Linux' ";
+            } 
           }
-
+          else{
+            if(this.selectedOs !== ""){
+              if(this.selectedOs !== "todos"){
+              if(query !== ""){
+                query += " && e.os == this.selectedOs";
+              }else{
+                query += "e.os == this.selectedOs";
+              }  
+              }
+            }
+            if(this.selectedDispositivo !== ""){
+              if(query !== ""){
+                query += " && e.device == this.selectedDispositivo";
+              }else{
+                query += "e.device == this.selectedDispositivo";
+              }   
+            }
+          }
+          
           if(this.selectedBrowser !== ""){
+            if(this.selectedBrowser !== "todos"){
             if(query !== ""){
               query += " && e.browser == this.selectedBrowser";
             }else{
               query += "e.browser == this.selectedBrowser";
             }  
-            
+           }
             }
-          if(this.selectedDispositivo !== ""){
-            if(query !== ""){
-              query += " && e.device == this.selectedDispositivo";
-            }else{
-              query += "e.device == this.selectedDispositivo";
-            }  
-            
-          }
+          
           let dataGroupBrowser;
           if(query!== ""){
             dataGroupBrowser = data.filter(e => {
