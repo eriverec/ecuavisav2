@@ -283,7 +283,7 @@
   text-align: left;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 .button_container .sp_button {
