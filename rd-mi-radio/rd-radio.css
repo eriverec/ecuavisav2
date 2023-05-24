@@ -256,3 +256,21 @@
   padding-bottom: 5px;
   margin-bottom: 15px;
 }
+
+
+
+/*
+  @
+  @ BLOQUE EMBED PLAYER RADIO
+  @
+*/
+
+.parent_texto_visible {
+  font-family: 'Anek Malayalam';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 22px;
+  line-height: 24px;
+  letter-spacing: -0.03em;
+  color: #2927B9;
+}
