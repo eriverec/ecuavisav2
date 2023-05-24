@@ -42,7 +42,7 @@ const sectionLoaded = () => {
   isLoaded.value = true;
   isLoading.value = false;
 };
-
+const isFullLoading = ref(true);
 // 👉 Fetching users
 const fetchUsers = () => {
   sectionLoading();
@@ -120,7 +120,7 @@ watchEffect(fetchUsers);
 // 👉 watching current page
 watchEffect(() => {
   if (page.value > totalPage.value) page.value = totalPage.value;
-  console.log("watch totalPageValue", totalPage.value);
+  //console.log("watch totalPageValue", totalPage.value);
 });
 
 // 👉 search filters
@@ -375,18 +375,19 @@ function exportCSVFile(headers, items, fileTitle) {
   }
 }
 
-const fetchFullUsers = () => {
-userListStore
+async function fetchFullUsers (){
+
+await userListStore
       .countPageUsers()
-      .then((response) => {
+      .then(async(response) => {
 
       let pages = Number(response.data);
       for (let i = 1; i < pages+1; i++) {
-        userListStore.fetchFullUsers(i).then((res) => {   
+        await userListStore.fetchFullUsers(i).then((res) => {   
         
           //console.log('res',res.data)
           let array = Array.from(res.data);
-          // console.log('array',array)
+          
           array.forEach((item) => {
             usersFull.value.push({
               wylexId: item.wylexId,
@@ -413,12 +414,13 @@ userListStore
           usersFull.value.sort((a, b) => moment(b.created_at, 'DD/MM/YYYY-HH:mm:ss').diff(moment(a.created_at, 'DD/MM/YYYY-HH:mm:ss')));
         });
       }
-     
+      
+      isFullLoading.value=false;
     }).catch((error) => {
       console.error(error);
     });
 };
-fetchFullUsers();
+onMounted(fetchFullUsers);
 
 function downloadFull () {
    
@@ -445,10 +447,10 @@ function downloadFull () {
       let doc = [];
       doc = usersFull.value
       let title = "users_full";
-      //console.log("usersFull", usersFull.value);
+      console.log("usersFull", usersFull.value);
       //console.log("doc", doc);
       //if(usersFull.length > totalUsers){
-        exportCSVFile(headers, doc, title);
+      exportCSVFile(headers, doc, title);
      // }
 
 };
@@ -646,6 +648,7 @@ const updateSortDesc = (sortDesc) => {
                 color="success"
                 prepend-icon="tabler-screen-share"
                 @click="downloadFull"
+                :disabled="isFullLoading"
               >
                 Exportar Todo
               </VBtn>
