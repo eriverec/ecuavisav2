@@ -1525,6 +1525,10 @@ button#btnSaveM {
   flex-wrap: wrap;
 }
 
+.listado-temas .mis-intereses-modal{
+  display: none;
+}
+
 /* FIN MODAL SEGUIMIENTO DE TEMAS */
 
 .MP_noticias_save .noticias {
