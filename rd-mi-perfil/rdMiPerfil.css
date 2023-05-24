@@ -1554,6 +1554,9 @@ button#btnSaveM {
 #listado-temas-modal .btn-modal-seguir small {
   color: #00a1d3;
 }
+#listado-temas-modal .template-meta-favorite-action.remove button small {
+  color: #fff;
+}
 
 
 /*================================INICIO=AYUDA========================================*/
