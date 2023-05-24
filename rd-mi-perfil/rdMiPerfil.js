@@ -1554,13 +1554,10 @@ var bloqueUsuarioIntereses = {
         classListaTemas.classList.remove("isDisabled");
         return true;
       },
-      btn_click:function(id, title, feedUrl, follow){
+      btn_click:function(id, title, feedUrl){
         var getUser = ECUAVISA_EC.USER_data();
         var ins = this;
-        meta_favorite_action(id);
-        ins.body();
-        
-        return true;
+
         var template = document.getElementById(`b_template_${id}`);
         var btn = document.getElementById(`b_btn_${id}`);
         var estado = 0;
@@ -1574,25 +1571,22 @@ var bloqueUsuarioIntereses = {
         }
         btn.removeAttribute('disabled');
 
-        var temaData = {
-            "name": title,
-            "feedUrl": feedUrl,
-            "follow": true
-        };
-
-        var resp = fetch(ECUAVISA_EC.api.seguimientoTema, {
+        var resp = fetch("https://sugerencias-ecuavisa.vercel.app/interes/add", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            "id": getUser.id,
-            "nombre": getUser.name + " "+getUser.lastname,
-            "tema": temaData
+            "userId": getUser.id,
+            "interesId": id,
+            "description": "-",
+            "title": title,
+            "estado": estado,
+            "meta_existe": true,
           }),
         }).then( (response) => response.json())
         .then( (result) => {
-          console.log(result)
+          meta_favorite_action(id);
           return true;
         })
         .catch((error) => {
@@ -1616,9 +1610,9 @@ var bloqueUsuarioIntereses = {
         classListalistDrivers.append(dpagination);
       },
       body:function(){
-        document.querySelector('#'+this.idBloque).innerHTML=`<div class="spinner-border" role="status">
+        /*document.querySelector('#'+this.idBloque).innerHTML=`<div class="spinner-border" role="status">
           <span class="sr-only">Loading...</span>
-        </div>`;
+        </div>`;*/
         var getUser = ECUAVISA_EC.USER_data();
         var fun = this;
         /*FETCH*/
@@ -1649,7 +1643,7 @@ var bloqueUsuarioIntereses = {
                   if(dat.publicado){
                     temasSeguir+= `<div class="item_tema t_${dat.id}">
                        <div class="keywords font-2 fs13">
-                          <div class="template-meta-favorite-action ${ ITER.FAVORITE.TOPICS.isFavorite(dat.id) ?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir intereses" onclick="bloqueUsuarioIntereses.btn_click('${dat.id}', '${dat.name}', '#', true)" style="/* display:none; */">
+                          <div class="template-meta-favorite-action ${ ITER.FAVORITE.TOPICS.isFavorite(dat.id) ?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir intereses" onclick="bloqueUsuarioIntereses.btn_click('${dat.id}', '${dat.name}', '#')" style="/* display:none; */">
                              <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" id="b_btn_${dat.id}">
 
                                 <small>${dat.name}</small>
