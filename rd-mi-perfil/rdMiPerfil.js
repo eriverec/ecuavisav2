@@ -1328,9 +1328,9 @@ var bloqueUsuarioSugerencia = {
         classListalistDrivers.append(dpagination);
       },
       body:function(){
-        document.querySelector('#'+this.idBloque).innerHTML=`<div class="spinner-border" role="status">
+        /*document.querySelector('#'+this.idBloque).innerHTML=`<div class="spinner-border" role="status">
           <span class="sr-only">Loading...</span>
-        </div>`;
+        </div>`;*/
         var getUser = ECUAVISA_EC.USER_data();
         var fun = this;
         /*FETCH*/
@@ -1360,7 +1360,7 @@ var bloqueUsuarioSugerencia = {
                   if(dat.estado){
                     temasSeguir+= `<div class="item_tema t_${dat.id}">
                        <div class="keywords font-2 fs13">
-                          <div class="template-meta-favorite-action ${fun.existeSugerencia(dat.id, jsondata.dataSugerenciasSeguido)?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir sugerencia" onclick="bloqueUsuarioSugerencia.btn_click('${dat.id}', '${dat.name}')" style="/* display:none; */">
+                          <div class="color_${Math.floor(Math.random() * 15) + 1} template-meta-favorite-action ${fun.existeSugerencia(dat.id, jsondata.dataSugerenciasSeguido)?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir sugerencia" onclick="bloqueUsuarioSugerencia.btn_click('${dat.id}', '${dat.name}')" style="/* display:none; */" >
                              <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" id="b_btn_${dat.id}">
 
                                 <small>${dat.name}</small>
@@ -1643,7 +1643,7 @@ var bloqueUsuarioIntereses = {
                   if(dat.publicado){
                     temasSeguir+= `<div class="item_tema t_${dat.id}">
                        <div class="keywords font-2 fs13">
-                          <div class="template-meta-favorite-action ${ ITER.FAVORITE.TOPICS.isFavorite(dat.id) ?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir intereses" onclick="bloqueUsuarioIntereses.btn_click('${dat.id}', '${dat.name}', '#')" style="/* display:none; */">
+                          <div class="color_${Math.floor(Math.random() * 15) + 1} template-meta-favorite-action ${ ITER.FAVORITE.TOPICS.isFavorite(dat.id) ?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir intereses" onclick="bloqueUsuarioIntereses.btn_click('${dat.id}', '${dat.name}', '#')" style="/* display:none; */">
                              <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" id="b_btn_${dat.id}">
 
                                 <small>${dat.name}</small>
@@ -1661,9 +1661,7 @@ var bloqueUsuarioIntereses = {
                    </div>`;
                   }
                }
-              
             }
-
 
             document.querySelector('#'+this.idBloque).innerHTML = `
             <style>
