@@ -1528,7 +1528,6 @@ button#btnSaveM {
   align-items: center;
   gap: 5px;
   flex-wrap: wrap; */
-
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 15px;
@@ -1543,6 +1542,16 @@ button#btnSaveM {
 .MP_noticias_save .noticias {
   padding-left: 7px;
 }
+
+
+/* CAMBIO DE COLORES EN INTERES */
+#listado-temas-modal  .template-meta-favorite-action{
+  border: 1px solid #00A1D3;
+}
+#listado-temas-modal .template-meta-favorite-action.remove {
+  background-color: #00A1D3;
+}
+
 
 /*================================INICIO=AYUDA========================================*/
 .AyudaBox .noticias .section {
