@@ -1267,6 +1267,26 @@ var modalUsuarioSugerencia = {
     collapse();
 
 /**********************BLOQUE MODAL DE SUGERENCIAS**********************/
+function generarNumeroAleatorioNoRepetido(min, max) {
+  if (!generarNumeroAleatorioNoRepetido.numeros) {
+    generarNumeroAleatorioNoRepetido.numeros = [];
+    
+    for (var i = min; i <= max; i++) {
+      generarNumeroAleatorioNoRepetido.numeros.push(i);
+    }
+  }
+  
+  if (generarNumeroAleatorioNoRepetido.numeros.length === 0) {
+    generarNumeroAleatorioNoRepetido.numeros = null;
+    return 1;
+  }
+  
+  var indiceAleatorio = Math.floor(Math.random() * generarNumeroAleatorioNoRepetido.numeros.length);
+  var numeroAleatorio = generarNumeroAleatorioNoRepetido.numeros.splice(indiceAleatorio, 1)[0];
+  
+  return numeroAleatorio;
+}
+
 var bloqueUsuarioSugerencia = {
       idBloque:"bloque_body_seguimiento_tema",
       idListadoTema:"listado-temas-modal",
@@ -1360,7 +1380,7 @@ var bloqueUsuarioSugerencia = {
                   if(dat.estado){
                     temasSeguir+= `<div class="item_tema t_${dat.id}">
                        <div class="keywords font-2 fs13">
-                          <div class="color_${Math.floor(Math.random() * 15) + 1} template-meta-favorite-action ${fun.existeSugerencia(dat.id, jsondata.dataSugerenciasSeguido)?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir sugerencia" onclick="bloqueUsuarioSugerencia.btn_click('${dat.id}', '${dat.name}')" style="/* display:none; */" >
+                          <div class="color_${ generarNumeroAleatorioNoRepetido(1, 15) } template-meta-favorite-action ${fun.existeSugerencia(dat.id, jsondata.dataSugerenciasSeguido)?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir sugerencia" onclick="bloqueUsuarioSugerencia.btn_click('${dat.id}', '${dat.name}')" style="/* display:none; */" >
                              <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" id="b_btn_${dat.id}">
 
                                 <small>${dat.name}</small>
@@ -1428,6 +1448,7 @@ var bloqueUsuarioSugerencia = {
     // comentar para apagar bloque de sugerencias 
     // bloqueUsuarioSugerencia.init();
 /**********************BLOQUE MODAL DE SUGERENCIAS**********************/
+
 
 // ##############BUENAS PRACTICAS##################
 if (!ECUAVISA_EC.login() && urlParamsGET.get('tk')==null){ /*Si no existe sesión lo va a redireccionar al login */
@@ -1643,7 +1664,7 @@ var bloqueUsuarioIntereses = {
                   if(dat.publicado){
                     temasSeguir+= `<div class="item_tema t_${dat.id}">
                        <div class="keywords font-2 fs13">
-                          <div class="color_${Math.floor(Math.random() * 15) + 1} template-meta-favorite-action ${ ITER.FAVORITE.TOPICS.isFavorite(dat.id) ?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir intereses" onclick="bloqueUsuarioIntereses.btn_click('${dat.id}', '${dat.name}', '#')" style="/* display:none; */">
+                          <div class="color_${ generarNumeroAleatorioNoRepetido(1, 15) } template-meta-favorite-action ${ ITER.FAVORITE.TOPICS.isFavorite(dat.id) ?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir intereses" onclick="bloqueUsuarioIntereses.btn_click('${dat.id}', '${dat.name}', '#')" style="/* display:none; */">
                              <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" id="b_btn_${dat.id}">
 
                                 <small>${dat.name}</small>
