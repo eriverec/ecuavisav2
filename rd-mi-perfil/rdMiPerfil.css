@@ -1411,9 +1411,9 @@ button#btnSaveM {
 
 .MODAL_SEGUIMIENTO_TEMA .btn {
   line-height: 1 !important;
-  padding-right: 15px;
-  padding-top: 12px;
-  padding-left: 15px;
+  padding-right: 0;
+  padding-left: 0;
+  padding-top: 12px;  
   padding-bottom: 12px;
 }
 
@@ -1472,7 +1472,7 @@ button#btnSaveM {
 } */
 
 .MODAL_SEGUIMIENTO_TEMA .keywords {
-  display: flex;
+  /* display: flex; */
   align-items: center;
   line-height: 1.2;
 }
@@ -1492,8 +1492,13 @@ button#btnSaveM {
   border-radius: 3px;
   color: #2927b9;
   line-height: 1.2;
-  background: #23dcd1;
+  /* background: #23dcd1; */
   padding: 0px;
+
+  border: 1px solid #2927b9;
+  justify-content: center;
+
+
 }
 
 .btn-check:focus+.btn.btn-modal-seguir,
@@ -1519,10 +1524,17 @@ button#btnSaveM {
 }
 
 .listado-temas {
-  display: flex;
+  /* display: flex;
   align-items: center;
   gap: 5px;
-  flex-wrap: wrap;
+  flex-wrap: wrap; */
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+}
+
+.listado-temas .mis-intereses-modal{
+  display: none;
 }
 
 /* FIN MODAL SEGUIMIENTO DE TEMAS */
@@ -1530,6 +1542,22 @@ button#btnSaveM {
 .MP_noticias_save .noticias {
   padding-left: 7px;
 }
+
+
+/* CAMBIO DE COLORES EN INTERES */
+#listado-temas-modal  .template-meta-favorite-action{
+  border: 1px solid #00A1D3;
+}
+#listado-temas-modal .template-meta-favorite-action.remove {
+  background-color: #00A1D3;
+}
+#listado-temas-modal .btn-modal-seguir small {
+  color: #00a1d3;
+}
+#listado-temas-modal .template-meta-favorite-action.remove button small {
+  color: #fff;
+}
+
 
 /*================================INICIO=AYUDA========================================*/
 .AyudaBox .noticias .section {
@@ -2050,6 +2078,10 @@ ul li i.chevron:after {
   .AyudaBox .noticias .section {
     font-size: 22px;
     line-height: 25px;
+  }
+  .listado-temas {
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
   }
 }
 

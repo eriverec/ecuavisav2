@@ -7,14 +7,6 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 
-import avatar1 from "@/assets/images/avatars/avatar-1.png";
-import avatar2 from "@/assets/images/avatars/avatar-2.png";
-import avatar3 from "@/assets/images/avatars/avatar-3.png";
-import avatar4 from "@/assets/images/avatars/avatar-4.png";
-import avatar5 from "@/assets/images/avatars/avatar-5.png";
-import avatar6 from "@/assets/images/avatars/avatar-6.png";
-import avatar7 from "@/assets/images/avatars/avatar-7.png";
-import avatar8 from "@/assets/images/avatars/avatar-8.png";
 
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
@@ -50,7 +42,7 @@ const sectionLoaded = () => {
   isLoaded.value = true;
   isLoading.value = false;
 };
-
+const isFullLoading = ref(true);
 // 👉 Fetching users
 const fetchUsers = () => {
   sectionLoading();
@@ -128,7 +120,7 @@ watchEffect(fetchUsers);
 // 👉 watching current page
 watchEffect(() => {
   if (page.value > totalPage.value) page.value = totalPage.value;
-  console.log("watch totalPageValue", totalPage.value);
+  //console.log("watch totalPageValue", totalPage.value);
 });
 
 // 👉 search filters
@@ -383,18 +375,19 @@ function exportCSVFile(headers, items, fileTitle) {
   }
 }
 
-const fetchFullUsers = () => {
-userListStore
+async function fetchFullUsers (){
+
+await userListStore
       .countPageUsers()
-      .then((response) => {
+      .then(async(response) => {
 
       let pages = Number(response.data);
       for (let i = 1; i < pages+1; i++) {
-        userListStore.fetchFullUsers(i).then((res) => {   
+        await userListStore.fetchFullUsers(i).then((res) => {   
         
           //console.log('res',res.data)
           let array = Array.from(res.data);
-          // console.log('array',array)
+          
           array.forEach((item) => {
             usersFull.value.push({
               wylexId: item.wylexId,
@@ -421,12 +414,13 @@ userListStore
           usersFull.value.sort((a, b) => moment(b.created_at, 'DD/MM/YYYY-HH:mm:ss').diff(moment(a.created_at, 'DD/MM/YYYY-HH:mm:ss')));
         });
       }
-     
+      
+      isFullLoading.value=false;
     }).catch((error) => {
       console.error(error);
     });
 };
-fetchFullUsers();
+onMounted(fetchFullUsers);
 
 function downloadFull () {
    
@@ -453,10 +447,10 @@ function downloadFull () {
       let doc = [];
       doc = usersFull.value
       let title = "users_full";
-      //console.log("usersFull", usersFull.value);
+      console.log("usersFull", usersFull.value);
       //console.log("doc", doc);
       //if(usersFull.length > totalUsers){
-        exportCSVFile(headers, doc, title);
+      exportCSVFile(headers, doc, title);
      // }
 
 };
@@ -649,11 +643,12 @@ const updateSortDesc = (sortDesc) => {
               <VBtn color="secondary" @click="reset"> Reiniciar </VBtn>
               <!-- 👉 Export button -->
               <VBtn
-                :disabled="usersFull.length < totalUsers-1"
+                
                 variant="tonal"
                 color="success"
                 prepend-icon="tabler-screen-share"
                 @click="downloadFull"
+                :disabled="isFullLoading"
               >
                 Exportar Todo
               </VBtn>
