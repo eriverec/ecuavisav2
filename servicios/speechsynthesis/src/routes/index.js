@@ -12,7 +12,7 @@ import { REGION } from "./../../src/config.js";
 import { S3Client } from "@aws-sdk/client-s3";
 import { pollySchema } from "./../../models/polly.js";
 
-const MAX_TEXT_LENGTH = 3000;
+const MAX_TEXT_LENGTH = 2000;
 export const routes = Router();
 const ObjectIdS = mongoose.Types.ObjectId;
 moment.tz.setDefault('America/Guayaquil');
@@ -47,7 +47,8 @@ const s3 = new AWS.S3();
 const polly = new AWS.Polly();
 
 function stripHtmlTags(text) {
-  return text.replace(/<[^>]+>/g, '');
+	text = text.replace(/<[^>]+>/g, '');
+  return text.replace(/\\/g, '');
 }
 
 function textPARTS(text){
@@ -261,6 +262,39 @@ routes.get("/speechsynthesis_3", async function (req, res) {
 		if(sugerenciaResp.resp){
     	return res.send(audioDoc.audio.data.toString('base64'));
 		}
+
+	  console.error('Error al generar el audio:', error);
+	  return res.status(200).send({ resp:false,message: "Error al generar el audio" }); 
+
+	} catch (error) {
+    console.error('Error al generar el audio:', error);
+	  return res.status(200).send({ resp:false,message: "Error al generar el audio" }); 
+  }
+});
+
+function textoABase64(texto) {
+  const buffer = Buffer.from(texto, 'utf8');
+  return buffer.toString('base64');
+}
+
+routes.post("/save/json", async function (req, res) {
+	try {
+		var { idArticle="5246039" } = req.query;
+		if(idArticle=="" ){
+			return res.status(200).send({ resp:false,message: "Falta el idArticle" });
+		}
+	  var text_Article = await getArticle(idArticle);
+	  if(text_Article == ""){
+	  	return res.status(200).send({ resp:false,message: "No existe el artículo" }); 
+	  }
+	  text_Article = textPARTS(text_Article);//.toString('base64')
+		
+		var newParts = [];
+		for (var i = 0; i < (text_Article.length); i++) {
+			newParts.push(textoABase64(text_Article[i]));
+	  }
+
+	  return res.status(200).send({ resp:true, partes: newParts }); 
 
 	  console.error('Error al generar el audio:', error);
 	  return res.status(200).send({ resp:false,message: "Error al generar el audio" }); 
