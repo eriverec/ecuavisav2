@@ -14,79 +14,112 @@ const rawData = ref([]);
 const isLoading = ref(true);
 const itemsPerPage = 8;
 const currentPage = ref(1);
-const fechaIngesada = ref('');
+const fechaIngresada = ref('');
 const ultimosUsuarios = ref([])
 const ultimasVisitas = ref([])
 const totalCount = computed(() => urlCounts.value.length);
-const fechai = ref('');
-const fechaf = ref('');
+const fechaIni = ref('');
+const fechaFin = ref('');
 const ultimosUsuariosVisible = ref(false);
 const ultimasVisitasVisible = ref(false);
 const titulo = ref('');
 
-async function fetchData() {
-  try { 
-    const response = await fetch('https://servicio-de-actividad.vercel.app/actividad/full',{
-            method: 'POST',
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });   
-    const data = await response.json();
-    //const urlMap = new Map();
-    rawData.value = data.data;
-    //console.log('raw',rawData.value);
-    const navArray = [];
-          for (const a of data.data) {
-            for(const b of a.navigationRecord){
-            let data = {
-              title: b.title,
-              url: b.url,
-            }
-            navArray.push(data);
-            }
-          }
-   
-    const finArray = navArray.reduce( (a,b) => {    
-       var i = a.findIndex((x) => x.title == b.title || x.url == b.url);
-       return i === -1 ? a.push({ url : b.url, title: b.title, count: 1}) : a[i].count++ , a;
-       }, []);
-    //console.log('dataf',finArray);
-    /*
-    for (const activity of data.data) {
-      for (const record of activity.navigationRecord) {
-        const url = record.url;
-        const title = record.title;
-        if (urlMap.has(url)) {
-          urlMap.get(url).count++;
-        } else {
-          urlMap.set(url, { url, title, count: 1 });
-        }
-      }
+
+async function fetchData(fechai, fechaf) {
+    isLoading.value = true;
+    
+    if(!fechai && !fechaf){
+    var fechaI = moment().add(-28, 'days').format("MM-DD-YYYY");
+    var fechaF = moment().add(1, 'days').format("MM-DD-YYYY");
     }
-   */
-    urlCounts.value = Array.from(finArray);
-    urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
-    //console.log('filtered fetch',urlCounts.value);
-  } catch (error) {
-    console.error(error);
-  }
-  isLoading.value = false;
+    
+
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var fechasCount = JSON.stringify({
+              "fechai": fechai || fechaI,
+              "fechaf": fechaf || fechaF
+          });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: fechasCount,
+      redirect: 'follow'
+    };        
+    const navArray = []; 
+    await fetch('https://servicio-de-actividad.vercel.app/count',requestOptions)
+    .then(response => response.text())
+    .then(async count => { 
+            let pages = parseInt(count); 
+            //console.log('pages',pages);
+            
+            var myHeaders2 = new Headers();
+            myHeaders2.append("Content-Type", "application/json");
+        
+            for (let i = 1; i < pages+1; i++){  
+            var fechasFetch = JSON.stringify({
+                      "fechai": fechai || fechaI,
+                      "fechaf": fechaf || fechaF,
+                      "page": i
+                  });      
+             var requestOptions2 = {
+                    method: 'POST',
+                    headers: myHeaders2,
+                    body: fechasFetch,
+                    redirect: 'follow'
+             };       
+            await fetch('https://servicio-de-actividad.vercel.app/actividad/full',requestOptions2)
+                  .then(response => response.json())
+                  .then(async response=>{
+
+                    let array = Array.from(response.data); 
+                    //console.log('array',array);    
+                    array.forEach((item)=>{
+                    rawData.value.push(item);
+                    })
+
+                          for (const a of array) {
+                            for(const b of a.navigationRecord){
+                            let data = {
+                              title: b.title,
+                              url: b.url,
+                            }
+                            navArray.push(data);
+                            }
+                          }
+
+                  }).catch((error) => {return error});       
+          }
+          //console.log(navArray.length) ;
+                    const finArray = navArray.reduce( (a,b) => {    
+                      var i = a.findIndex((x) => x.title == b.title || x.url == b.url);
+                      return i === -1 ? a.push({ url : b.url, title: b.title, count: 1}) : a[i].count++ , a;
+                      }, []);
+                  
+                    urlCounts.value = Array.from(finArray);
+                    urlCounts.value.sort((a, b) => b.count - a.count); 
+                    isLoading.value = false; 
+        }).catch((error) => {return error});   
+    
+}
+
+async function initData (){
+  let formatI = moment().add(-29, 'days').format("MM-DD-YYYY");
+  let formatF = moment().format("MM-DD-YYYY");
+  fechaIngresada.value = String(formatI+' a '+formatF); 
+  await fetchData();  
 }
 
 async function fetchDataFecha(fechai, fechaf) {
-  try {
-    var raw = JSON.stringify({
-              "fechai": fechai,
-              "fechaf": fechaf
-          });
-          console.log('fecht by date',raw)
+  try {   
     const response = await fetch('https://servicio-de-actividad.vercel.app/actividad/full' ,{
             method: 'POST',
             headers: {
               "Content-Type": "application/json",
             },
-            body: raw
+            body: fechas
           });
     const data = await response.json();
     const urlMap = new Map();
@@ -112,24 +145,15 @@ async function fetchDataFecha(fechai, fechaf) {
   isLoading.value = false;
 }
 
-async function obtenerDataInit (selectedDates, dateStr, instance){
-  var fechaI = moment().add(-28, 'days').format("MM-DD-YYYY");
-  var fechaF = moment().add(1, 'days').format("MM-DD-YYYY");
-  fechai.value = fechaI;
-  fechaf.value = fechaF;
-  await fetchDataFecha(fechaI, fechaF);
-}
-
 async function obtenerFechaDispositivos (selectedDates, dateStr, instance){
     try {
         
         if(selectedDates.length > 1){
             let fechaI = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
             let fechaF = moment(selectedDates[1]).format('MM/DD/YYYY');
-            fechai.value = fechaI;
-            fechaf.value = fechaF;
-            console.log('fechai value', fechai.value)
-            await fetchDataFecha(fechaI, fechaF);
+            fechaIni.value = fechaI;
+            fechaFin.value = fechaF;          
+            await fetchData(fechaI, fechaF);
             
             //panelGrafico.classList.remove("disabled");                       
           }
@@ -137,7 +161,7 @@ async function obtenerFechaDispositivos (selectedDates, dateStr, instance){
         console.error(error); 
     }          
 }
-onMounted(fetchData);
+onMounted(initData);
 
 const paginatedUrlCounts = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
@@ -280,10 +304,11 @@ const resolveUltimasVisitasUser =(first, last)=>{
           <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
         </VCardItem>
         
-        <div class="date-picker-wrapper" style="width: 300px;">
+        <div class="date-picker-wrapper" style="width: 300px;" v-if="!isLoading">
         <AppDateTimePicker
         prepend-inner-icon="tabler-calendar"
         density="compact"
+        v-model="fechaIngresada"
         show-current= true
         @on-change="obtenerFechaDispositivos"
         :config="{ 
