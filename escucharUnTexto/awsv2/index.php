@@ -5,8 +5,23 @@ header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 
 // Lee el archivo .json
-$data = file_get_contents('https://estadisticas.ecuavisa.com/sites/gestor/Tools/awsv2/mirrorBase64.json');
+if(isset($_GET["id"])){
+	if ($_GET["id"]!='') {
+		if (!file_exists("./".$_GET['id'].".json")) {
+		    echo '{"resp":false}';
+			exit();
+		}
 
-// Devuelve los datos leídos en formato JSON
-echo json_encode(json_decode($data));
+		$data = file_get_contents("./".$_GET['id'].".json");
+		// Devuelve los datos leídos en formato JSON
+		echo json_encode([
+			"resp"=> true,
+			"data" => json_decode($data)
+		]);
+		exit();
+	}
+}
+
+echo '{"resp":false}';
+exit();
 ?>
