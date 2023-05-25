@@ -484,6 +484,7 @@
 @media (max-width: 767px) {
   .MP_datos .insideTitle {
     font-size: 16px;
+    padding-bottom: 0px; 
   }
 
   .MP_datos .changeEmail,
@@ -493,6 +494,7 @@
 
   .MP_datos .insideValue {
     font-size: 16px;
+    padding-top: 0px; 
   }
 
 }
@@ -1253,6 +1255,20 @@ button#btnSaveM {
       display: flex;
       margin-top: -30px;
   }
+  .sep_regresar {
+    padding-top: 0px;
+     padding-bottom: 0px; 
+    font-size: 16px;
+}
+.MP_datos .outsidetName, .MP_datos .outsideEmail, .MP_datos .outsidePassword {
+  padding: 15px 10px;
+}
+.button_cerrar_sesion a {
+  width: 168px;
+  height: 42px;
+  font-weight: 400;
+  font-size: 12px;
+}
 }
 
 @media (max-width: 768px) {
@@ -1262,6 +1278,8 @@ button#btnSaveM {
     line-height: 24px;
     display: flex;
     align-items: center;
+    padding-top: 60px;
+    padding-bottom: 0px; 
   }
 
   .title_seccion .c_azul_celeste_Mobile {
@@ -1308,6 +1326,8 @@ button#btnSaveM {
 
   button#btnSaveM {
     font-size: 16px;
+    width: 116px;
+    height: 32px;
     /* margin-left: 212px; */
   }
 
