@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sugerencias Analytics</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    }
+    html,body{
+      background: #2f3349;
+    }
+
+    #chartdiv {
+      width: 100%;
+      height: 500px;
+    }
+  </style>
+
+  <!-- Incluimos AmCharts -->
+
+  <script src="//www.amcharts.com/lib/4/core.js"></script>
+  <script src="//www.amcharts.com/lib/4/charts.js"></script>
+  <script src="//www.amcharts.com/lib/4/themes/animated.js"></script>
+
+</head>
+
+<body>
+  <div id="chartdiv" style="width: 100%; height: 500px;"></div>
+
+  <script>
+    fetch('https://sugerencias-ecuavisa.vercel.app/interes/all')
+      .then(response => response.json())
+      .then(data => {
+        //console.log('data',data);
+        createChart(data); // llamar a la función para crear la gráfica de barras horizontales con los datos obtenidos
+      });
+
+
+    function createChart(data) {
+
+      /* Enable theme(s) */
+      am4core.useTheme(am4themes_animated);
+
+      // crear el objeto de configuración de la gráfica
+      var chart = am4core.create("chartdiv", am4charts.XYChart);
+      chart.colors.saturation = 0.4;
+      
+      let filtro = data.data.filter(a=>{ return a.estado === true && a.users_suscribed > 0});
+      //console.log('filtro',filtro)
+      // agregar los datos a la gráfica
+      chart.data = filtro.map(d => {
+        return {
+          "series": d.title,
+          "value": d.users_suscribed
+        };
+      });
+
+      /* Add legend */
+      // chart.legend = new am4charts.Legend();
+
+      /* Create a cursor */
+
+      // We don't want zoom-out button to appear while animating, so we hide it
+      // chart.zoomOutButton.set("forceHidden", true);
+
+      /* Make automatic colors more distinctive by increasing steps */
+      // chart.colors.step = 2;
+
+      // crear los ejes de la gráfica
+      var categoryAxis = chart.yAxes.push(new am4charts.CategoryAxis());
+      categoryAxis.renderer.grid.template.location = 0;
+      categoryAxis.dataFields.category = "series";
+      categoryAxis.renderer.minGridDistance = 20;
+      categoryAxis.renderer.minWidth = 120;
+      categoryAxis.renderer.labels.template.fill = am4core.color("#FFFFFF");
+      // categoryAxis.renderer.grid.template.opacity = 3;
+
+      var valueAxis = chart.xAxes.push(new am4charts.ValueAxis());
+      // valueAxis.renderer.grid.template.opacity = 0;
+      valueAxis.renderer.labels.template.fill = am4core.color("#FFFFFF");
+      valueAxis.min = 0;
+
+      // cambiar el color del grid a blanco
+      categoryAxis.renderer.grid.template.strokeOpacity = .2;
+      categoryAxis.renderer.grid.template.stroke = am4core.color("#c7c7c7");
+      valueAxis.renderer.grid.template.strokeOpacity = .2;
+      valueAxis.renderer.grid.template.stroke = am4core.color("#c7c7c7");
+
+
+      valueAxis.renderer.maxLabelPosition = 0.98;
+      valueAxis.min = 0;
+
+      // crear las series de la gráfica
+      var series = chart.series.push(new am4charts.ColumnSeries());
+      series.dataFields.categoryY = "series";
+      series.dataFields.valueX = "value";
+      series.tooltipText = "{valueX.value}";
+      // series.dataFields.labels.template.fill = am4core.color("#FFFFFF");
+      series.columns.template.strokeOpacity = 0;
+      series.columns.template.background.fillOpacity = 0.1;
+      // series.sequencedInterpolation = true;
+      // series.defaultState.transitionDuration = 1000;
+      // series.sequencedInterpolationDelay = 100;
+      // cambiar el color de las etiquetas del nombre de las series a blanco
+      // series.columns.template.column.cornerRadiusBottomRight = 5;
+      // series.columns.template.column.cornerRadiusTopRight = 5;
+
+      // cambiar el color del texto de la etiqueta de la categoría de la serie deseada a blanco
+ 
+
+      series.columns.template.fill = am4core.color("#7367f0");
+
+      chart.cursor = new am4charts.XYCursor();
+      chart.cursor.behavior = "zoomY";
+
+
+      // agregar etiquetas a las barras de la gráfica
+      var labelBullet = series.bullets.push(new am4charts.LabelBullet());
+      labelBullet.label.horizontalCenter = "left";
+      labelBullet.label.dx = 10;
+      labelBullet.label.text = "{value}";
+      labelBullet.locationX = 1;
+      // labelBullet.label.fontSize = 20;
+      labelBullet.label.fill = am4core.color("#FFFFFF");
+
+
+    }
+  </script>
+
+</body>
+
+</html>
