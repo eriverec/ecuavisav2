@@ -1,8 +1,8 @@
 const programacionLunes_a_Viernes = [
   { inicio: "05:55", fin: "06:55", titulo: "Televistazo en la comunidad" },
   { inicio: "06:55", fin: "07:30", titulo: "Contacto Directo" },
-  { inicio: "07:30:00", fin: "13:00:00", titulo: "Televistazo en la comunidad" },
-  // { inicio: "10:43:00", fin: "10:45:00", titulo: "En Contacto" },
+  { inicio: "07:30:00", fin: "09:00:00", titulo: "Televistazo en la comunidad" },
+  { inicio: "10:30:00", fin: "13:00:00", titulo: "En Contacto" },
   { inicio: "13:00:00", fin: "19:00:00", titulo: "Televistazo 13h00" },
   { inicio: "19:00:00", fin: "20:00:00", titulo: "Televistazo 19h00" }
 ];
