@@ -16,7 +16,7 @@ $data = json_decode($postdata, true);
 // Procesar los datos para obtener el id y el base64
 $id = $data[0]['id'];
 $base64 = $data[0]['base64'];
-$fechahoy = new date("Y-m-d h:i:s", time());
+$fechahoy = date("Y-m-d h:i:s", time());
 
 // Leer el archivo JSON existente
 $file = 'datos.json';
