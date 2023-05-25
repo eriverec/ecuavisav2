@@ -329,9 +329,9 @@ async function Token(){
       });
 
       var mensajeCambioContrasenia = function(resp, mensaje){
-        if(!document.querySelector('#modal-resp')){
+        /*if(!document.querySelector('#modal-resp')){
           $("#cambiopass .modal-body").append(`<div id="modal-resp"></div>`);
-        }
+        }*/
         var respuesta = (resp?'success':'danger');
         $('#modal-resp').html(`
           <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
@@ -378,6 +378,10 @@ async function Token(){
           }).then((response) => response.json())
             .then(async (result) => {
               mensajeCambioContrasenia(result.resp, result.mensaje);
+              var posicion = $("#modal-resp").offset().top + 100;
+              $("html, body").animate({
+                  scrollTop: posicion
+              }, 1000); 
               if (result.resp) {
                 $('#pass').val('');
                 $('#passrepeat').val('');
