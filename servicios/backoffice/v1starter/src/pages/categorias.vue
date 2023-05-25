@@ -15,6 +15,7 @@ const updateCategorias = ref({});
 const updCategoriaPrimero = ref([]);
 const newCategoriaPrimero = ref([]);
 const filteredData_2 = ref([]);
+const currentTab = ref('tab-lista')
 
 // Obtener las colecciones
 const fetchCategorias = () => {
@@ -131,9 +132,17 @@ var filteredData = computed(() => {
 <template>
 	<section>
 		<VRow>
-			<VCol cols="12">
-				<VCard title="Intereses">
-					<VCardText class="py-4 gap-0 w-100">
+			<VCol class="mt-6" cols="12" md="12" lg="12">
+				<VTabs v-model="currentTab" class="v-tabs-pill">
+						<VTab value="tab-lista">Listado</VTab>
+						<VTab value="tab-estadistica">Estadísticas</VTab>
+						<!-- <VTab>Tab Three</VTab> -->
+						</VTabs>
+
+				<VCard class="mt-5" title="Intereses">	
+					<VWindow v-model="currentTab">
+             		 <VWindowItem value="tab-lista">
+					<VCardText class="py-4 gap-0 w-100">	
 			      <div style="width: 30%" class="d-flex gap-1 px-0  position-relative">
 			          <VTextField
 			            v-model="searchKeyword"
@@ -376,7 +385,21 @@ var filteredData = computed(() => {
                 :length="totalPage"
               />
             </VCardText>
-             -->
+             -->	
+						</VWindowItem>
+						<VWindowItem value="tab-estadistica">
+                <!-- <p>Próximamente</p> -->
+                <!-- <iframe src="http://localhost/ecuavisav2/servicios/embeds/sugerenciasAnalytics.html" frameborder="0"></iframe> -->
+                <div>
+                  <iframe style="background:#2f3349 ;" class="iframe-dark" src="https://ecuavisadev.netlify.app/servicios/embeds/interesAnalyticsDark.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
+                  <iframe class="iframe-light" src="https://ecuavisadev.netlify.app/servicios/embeds/interesAnalyticsLight.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
+
+                </div>
+
+
+
+              </VWindowItem>
+					</VWindow>
 				</VCard>
 			</VCol>
 		</VRow>
@@ -389,7 +412,21 @@ var filteredData = computed(() => {
       />-->
 	</section>
 </template>
+<style scoped>  
+.v-card.v-theme--dark .iframe-dark {
+  display: block;
+}
+.v-card.v-theme--dark .iframe-light{
+  display: none;
+}
 
+.v-card.v-theme--light .iframe-dark{
+  display: none;
+}
+.v-card.v-theme--light .iframe-light{
+  display: block;
+}
+</style>
 <style lang="scss">
 .app-user-search-filter {
 	inline-size: 31.6rem;
