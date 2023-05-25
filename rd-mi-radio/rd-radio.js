@@ -3,7 +3,7 @@ const programacionLunes_a_Viernes = [
   { inicio: "06:55", fin: "07:30", titulo: "Contacto Directo" },
   { inicio: "07:30:00", fin: "09:00:00", titulo: "Televistazo en la comunidad" },
   { inicio: "10:30:00", fin: "13:00:00", titulo: "En Contacto" },
-  { inicio: "13:00:00", fin: "19:00:00", titulo: "Televistazo 13h00" },
+  { inicio: "13:00:00", fin: "14:00:00", titulo: "Televistazo 13h00" },
   { inicio: "19:00:00", fin: "20:00:00", titulo: "Televistazo 19h00" }
 ];
 
@@ -59,7 +59,7 @@ function mostrarProgramacion() {
   const h1Titulo = document.querySelector(".title_programa_text");
   const tituloEstasEscu = document.querySelector(".title_estas_escuchando");
   const embedPlayer = document.querySelector(".contenedor_embed_radio");
-  const imagenApagado = document.querySelector("#no_transmision__");
+  const textApagado = document.querySelector("#no_transmision__");
 
   if (enProgramacion) {
     h1Titulo.innerText = tituloPrograma;
@@ -67,17 +67,20 @@ function mostrarProgramacion() {
     // tituloEstasEscu.display = "block";
     tituloEstasEscu.innerText = "Estas escuchando";
     embedPlayer.style.display = "block";
-    imagenApagado.style.display = "none";
+    textApagado.style.display = "none";
+    textApagado.innerText = "";
   } else {
     h1Titulo.innerText = "";
     // h1Titulo.style.display = "none";
     tituloEstasEscu.innerText = "";
     embedPlayer.style.display = "none";
-    imagenApagado.style.display = "block";
+    textApagado.style.display = "block";
+    textApagado.innerText = "Aquí encontrarás una opción para acceder a toda la programación informartiva Radio Envivo: Contacto Directo(6:55), Televistazo en la Comunidad(5:55-7:30), Televistazo (13:00-19:00)."
+
   }
 
   // Llamar a la función de nuevo cada medio minuto
-  setTimeout(mostrarProgramacion, 3000);
+  setTimeout(mostrarProgramacion, 30000);
 }
 
 // Iniciar el ciclo de verificación
