@@ -348,6 +348,18 @@
   @
 */
 
+#no_transmision__ {
+  /* background: rgb(35, 220, 209); */
+  /* padding: 20px; */
+  display: block;
+  font-family: "Anek Malayalam";
+  letter-spacing: -0.03em;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 22px;
+  color: #2927B9;
+}
+
 .parent_texto_visible {
   font-family: 'Anek Malayalam';
   font-style: normal;
