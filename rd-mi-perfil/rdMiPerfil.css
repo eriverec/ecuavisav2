@@ -1334,7 +1334,47 @@ button#btnSaveM {
 }
 
 /**************** FIN EDIT NUEVO DISEÑO******************/
+/*Modal correo */
+.modal-title {
+  font-style: normal;
+  font-weight: 700;
+  font-size: 22px;
+  font-size: 23.027px;
+  line-height: 28px;
+  color: #2927B9;
+}
+.modal-footer{
+  border-top: 1px solid transparent !important;
+  padding: 1rem 0 0.75rem 0 !important;
+}
 
+.modal-footer #forgetButton {
+  /*background-color: #2927b9 !important;
+  border: 1px solid #2927b9 !important;
+  border-radius: 2px;
+  font-size: 12px;*/
+  display: flex;
+  flex-direction: column;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 10px 17px;
+  color: #2927b9;
+}
+.modal-body label,
+#forgetEmail {
+font-size: 16.4685px !important;
+}
+@media (min-width: 576px){
+  .modal-dialog {
+      max-width: 425px !important;
+  }
+  }
+  /* FIN Modal correo */
 
 
 /****************COLLAPSE SIEMPRE DEBE DE ESTAR AL FINAL******************/
