@@ -10,13 +10,9 @@ $id = $data[0]['id'];
 $base64 = $data[0]['base64'];
 
 // Leer el archivo JSON existente
-$file = 'datos.json';
-if (file_exists($file)) {
-    $json = file_get_contents($file);
-    $items = json_decode($json, true);
-} else {
-    $items = array();
-}
+$file = 'https://estadisticas.ecuavisa.com/sites/services/aws/mirrorBase64.json';
+$json = file_get_contents($file);
+$items = json_decode($json, true);
 
 // Buscar si el ID existe en el archivo JSON
 $found = false;
@@ -34,10 +30,10 @@ if (!$found) {
     array_push($items, array('id' => $id, 'base64' => $base64));
 }
 
-// Guardar los datos en el archivo JSON
+// Codificar los datos en JSON y guardarlos en el archivo
 $json = json_encode($items);
 file_put_contents($file, $json);
 
 // Confirmación de que los datos han sido guardados exitosamente
-echo "Datos guardados correctamente.";
+echo "Datos guardados correctamente en " . $file;
 ?>
