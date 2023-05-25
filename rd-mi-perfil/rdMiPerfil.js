@@ -378,7 +378,7 @@ async function Token(){
           }).then((response) => response.json())
             .then(async (result) => {
               mensajeCambioContrasenia(result.resp, result.mensaje);
-              var posicion = $("#modal-resp").offset().top + 100;
+              var posicion = $("#modal-resp").offset().top - 100;
               $("html, body").animate({
                   scrollTop: posicion
               }, 1000); 
