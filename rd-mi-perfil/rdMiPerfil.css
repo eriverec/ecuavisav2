@@ -1393,6 +1393,63 @@ font-size: 16.4685px !important;
   border: 1px solid #CACACA !important;
   border-radius: 3px;
 }
+.modal-header {
+  background: #23DCD1;
+  padding: 1.5rem;
+}
+.modal-header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid #dee2e6;
+  border-top-left-radius: calc(.3rem - 1px);
+  border-top-right-radius: calc(.3rem - 1px);
+}
+.modal-body label {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 20.4685px;
+  line-height: 33px;
+}
+#forgetEmail {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-size: 20.4685px !important;
+  line-height: 33px;
+  background: transparent !important;
+  border: 1px solid #CACACA !important;
+  border-radius: 3px;
+}
+#forgetEmail {
+  position: relative;
+  width: 100%;
+  padding: 10px;
+  background: #f5f5f5;
+  color: #333;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  margin: 8px 0;
+  font-size: 14px;
+  letter-spacing: 1px;
+  font-weight: 300;
+}
+.modal-footer #forgetButton {
+  display: flex;
+  flex-direction: column;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 10px 17px;
+  color: #2927b9;
+}
 @media (min-width: 576px){
   .modal-dialog {
       max-width: 425px !important;
