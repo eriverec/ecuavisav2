@@ -1,4 +1,7 @@
 <?php
+
+header('Content-type: application/json');
+header('Access-Control-Allow-Origin: *');
 // Recuperar los datos de la petición POST
 $postdata = file_get_contents("php://input");
 
@@ -10,7 +13,7 @@ $id = $data[0]['id'];
 $base64 = $data[0]['base64'];
 
 // Leer el archivo JSON existente
-$file = 'https://estadisticas.ecuavisa.com/sites/services/aws/mirrorBase64.json';
+$file = 'datos.json';
 $json = file_get_contents($file);
 $items = json_decode($json, true);
 
