@@ -1749,3 +1749,24 @@ var bloqueUsuarioIntereses = {
       ]
     }
 bloqueUsuarioIntereses.init();
+
+/*BLOQUE SECCION MI PERFIL*/
+var miPerfil = function(){
+    if(ECUAVISA_EC.login()){
+        var usuario = ECUAVISA_EC.USER_data();
+        var imgUserMe = document.querySelector('.u-img-user-me');
+        imgUserMe.src = usuario.avatar;
+
+        var name = document.querySelector('.name-user-me');
+        name.innerHTML = `${usuario.name} ${usuario.lastname}`;
+
+        var descipcion = document.querySelector('.descripcion-user-me');
+        descipcion.innerHTML = `¡Bienvenido(a) a tu Ecuavisa`;
+
+    }else{
+        console.error("El usuario no está logueado");
+    }
+}
+
+miPerfil();
+/*BLOQUE SECCION MI PERFIL*/
