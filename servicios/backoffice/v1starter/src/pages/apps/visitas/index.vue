@@ -29,7 +29,7 @@ async function fetchData(fechai, fechaf) {
     isLoading.value = true;
     
     if(!fechai && !fechaf){
-    var fechaI = moment().add(-28, 'days').format("MM-DD-YYYY");
+    var fechaI = moment().add(-6, 'days').format("MM-DD-YYYY");
     var fechaF = moment().add(1, 'days').format("MM-DD-YYYY");
     }
     
@@ -53,7 +53,7 @@ async function fetchData(fechai, fechaf) {
     .then(response => response.text())
     .then(async count => { 
             let pages = parseInt(count); 
-            //console.log('pages',pages);
+            console.log('pages',pages);
             
             var myHeaders2 = new Headers();
             myHeaders2.append("Content-Type", "application/json");
@@ -75,7 +75,7 @@ async function fetchData(fechai, fechaf) {
                   .then(async response=>{
 
                     let array = Array.from(response.data); 
-                    //console.log('array',array);    
+                    console.log('array',array);    
                     array.forEach((item)=>{
                     rawData.value.push(item);
                     })
@@ -92,7 +92,7 @@ async function fetchData(fechai, fechaf) {
 
                   }).catch((error) => {return error});       
           }
-          //console.log(navArray.length) ;
+          console.log(navArray.length) ;
                     const finArray = navArray.reduce( (a,b) => {    
                       var i = a.findIndex((x) => x.title == b.title || x.url == b.url);
                       return i === -1 ? a.push({ url : b.url, title: b.title, count: 1}) : a[i].count++ , a;
@@ -106,10 +106,10 @@ async function fetchData(fechai, fechaf) {
 }
 
 async function initData (){
-  let formatI = moment().add(-29, 'days').format("MM-DD-YYYY");
+  let formatI = moment().add(-7, 'days').format("MM-DD-YYYY");
   let formatF = moment().format("MM-DD-YYYY");
   fechaIngresada.value = String(formatI+' a '+formatF); 
-  await fetchData();  
+  fetchData();  
 }
 
 async function fetchDataFecha(fechai, fechaf) {
