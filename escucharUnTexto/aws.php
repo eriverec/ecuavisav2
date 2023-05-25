@@ -19,7 +19,7 @@ $base64 = $data[0]['base64'];
 $fechahoy = date("Y-m-d h:i:s", time());
 
 // Leer el archivo JSON existente
-$file = 'datos.json';
+$file = 'mirrorBase64.json';
 $json = file_get_contents($file);
 $items = json_decode($json, true);
 
