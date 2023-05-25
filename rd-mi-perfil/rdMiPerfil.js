@@ -1770,3 +1770,105 @@ var miPerfil = function(){
 
 miPerfil();
 /*BLOQUE SECCION MI PERFIL*/
+
+
+
+
+
+// MODAL RECUPERAR CONTRASEÑA
+
+function sendEmailPassReset() {
+  var btn = document.querySelector('#forgetButton');
+  btn.setAttribute("disabled", true); 
+  let email = document.getElementById("forgetEmail").value.trim() || '';
+  
+  if(!IsEmail()){
+    alert('El correo no es el correcto');
+    btn.removeAttribute('disabled');
+    return false;
+  }
+
+  if(email == '' || email.length == 0){
+    alert('El correo no es el correcto');
+    btn.removeAttribute('disabled');
+    return false;
+  }
+  //servicio render Luis
+  fetch("https://ecuavisa-login-service.onrender.com/forgotPassword", {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      email: email,
+    }),
+  }).then((response) => response.json())
+    .then(async (result) => {
+      if (!result.error) {
+        alert(result.mensaje);
+        $("#exampleModalRecuperar").modal("hide");
+      } else {
+        alert("Email inválido");
+      }
+      btn.removeAttribute('disabled');
+    })
+    .catch((error) => {
+      btn.removeAttribute('disabled');
+      console.log("error", error); /*; window.location = URL_login_G*/
+    });
+}
+
+function IsEmail() {
+  var input = document.querySelector('#forgetEmail');
+  var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  if (input.value.match(validRegex)) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+$("#exampleModalRecuperar .modal-footer button").click(function () {
+  var email = $('#forgetEmail').val();
+
+  if (IsEmail_2(email) == false) {
+    $('#invalid_email').show();
+    return false;
+  } else {
+    console.log('correo: ', email);
+    $('#invalid_email').hide();
+    $('#exampleModalRecuperar .modal-footer').hide();
+    $('#exampleModalRecuperar .modal-body').html(`
+    <div class="alert alert-success" role="alert">
+     Correo enviado con éxito
+   </div>
+   `);
+  }
+
+});
+
+var checkInput = (e) => {
+  const content = $("#forgetEmail").val().trim();
+  $('#forgetButton').prop('disabled', content === '');
+};
+
+$(document).on('keyup', '#forgetEmail', checkInput);
+
+/*function IsEmail_2(email) {
+  var regex =
+    /^([a-zA-Z0-9_.-+])+@(([a-zA-Z0-9-])+.)+([a-zA-Z0-9]{2,4})+$/;
+  if (!regex.test(email)) {
+    return false;
+  } else {
+    return true;
+  }
+}*/
+function IsEmail_2() {
+  var input = document.querySelector('#forgetEmail');
+  var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  if (input.value.match(validRegex)) {
+    return true;
+  } else {
+    return false;
+  }
+}
