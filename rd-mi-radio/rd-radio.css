@@ -81,6 +81,35 @@
   margin-bottom: 23px;
 }
 
+.cin__mobile {
+  display: none;
+  width: 100%;
+}
+
+.cin__desktop {
+  width: 100%;
+}
+
+.t-nt-rec {
+  display: flex;
+  align-items: center;
+  column-gap: 7px;
+}
+
+@media (max-width: 767px) {
+  .cin__mobile {
+    display: block;
+  }
+
+  .t-nt-rec {
+    display: initial;
+  }
+
+  .cin__desktop {
+    display: none;
+  }
+}
+
 
 .ecv_relacionadas_2022 span.second {
   color: rgba(43, 183, 107, 1);
@@ -127,6 +156,7 @@
   width: 100%;
   border-bottom: 0px solid #2927B9;
   flex-direction: column-reverse;
+  gap: 15px;
 }
 
 .recoment_miradio>div:not(.ecv_relacionadas_2022.mt-4 > div) {
@@ -341,7 +371,7 @@
   display: none !important;
 }
 
-.msp_radio .np__global_player{
+.msp_radio .np__global_player {
   z-index: 9 !important;
 }
 
