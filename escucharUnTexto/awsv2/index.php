@@ -7,12 +7,12 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 // Lee el archivo .json
 if(isset($_GET["id"])){
 	if ($_GET["id"]!='') {
-		if (!file_exists("./".$_GET['id'].".json")) {
-		    echo '{"resp":false}';
+		if (!file_exists("./idaudio/".$_GET['id'].".json")) {
+		    echo '{"resp":false, "msj":1}';
 			exit();
 		}
 
-		$data = file_get_contents("./".$_GET['id'].".json");
+		$data = file_get_contents("./idaudio/".$_GET['id'].".json");
 		// Devuelve los datos leídos en formato JSON
 		echo json_encode([
 			"resp"=> true,
@@ -22,6 +22,6 @@ if(isset($_GET["id"])){
 	}
 }
 
-echo '{"resp":false}';
+echo '{"resp":false, "msj":2}';
 exit();
 ?>

@@ -19,7 +19,7 @@ $base64 = $data[0]['base64'];
 $fechahoy = date("Y-m-d h:i:s", time());
 
 // Leer el archivo JSON existente
-$file = $id.'.json';
+$file = './idaudio/'.$id.'.json';
 if (!file_exists($file)) {
     file_put_contents($file, json_encode([]));
 }
