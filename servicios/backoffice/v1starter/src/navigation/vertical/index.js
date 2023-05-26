@@ -75,11 +75,7 @@ export default [
       // { title: 'Eventos', to: 'apps-configuracion-add' },
     ],
   },
-  {
-       title: 'Intereses',
-      icon: { icon: 'tabler-database-cog' },
-       to: { name: 'categorias' }
-  },
+
   // {
   //   title: 'Paquetes',
   //   children: [
