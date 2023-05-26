@@ -52,11 +52,12 @@ export default [
   },
 
   {
-    title: 'Sugerencias',
+    title: 'Intereses y Sug.',
     icon: { icon: 'tabler-status-change' },
     children: [
       { title: 'Ver sugerencias', to: 'apps-sugerencias-list' },
       { title: 'Agregar sugerencias', to: 'apps-sugerencias-add' },
+      { title: 'Ver Intereses', to: 'categorias' },
     ],
   },
 
