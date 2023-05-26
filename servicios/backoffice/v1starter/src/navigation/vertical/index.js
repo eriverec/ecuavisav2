@@ -75,7 +75,20 @@ export default [
       // { title: 'Eventos', to: 'apps-configuracion-add' },
     ],
   },
+<<<<<<< Updated upstream
 
+=======
+  {
+       title: 'Intereses',
+      icon: { icon: 'tabler-database-cog' },
+       to: { name: 'categorias' }
+  },
+  {
+    title: 'Filtros',
+   icon: { icon: 'tabler-database-cog' },
+    to: { name: 'apps-filtros' }
+},
+>>>>>>> Stashed changes
   // {
   //   title: 'Paquetes',
   //   children: [
