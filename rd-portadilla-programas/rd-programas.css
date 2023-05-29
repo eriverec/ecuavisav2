@@ -657,9 +657,9 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   text-transform: initial;
 }
 
-.bloque-programas .media_block .text_block .article-section {
+/* .bloque-programas .media_block .text_block .article-section {
   padding-bottom: 15px;
-}
+} */
 .bloque-programas .media_block .text_block .article-section a,
 .destacada-entretenimiento .media_block .text_block .article-section a {
   color: #23dcd1;
