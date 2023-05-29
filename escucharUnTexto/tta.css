@@ -1,5 +1,5 @@
 
-#play-pause-btn {
+#play-pause-btn, #div_reproducir, #div_pausar_reanudar{
   display: flex;
   align-items: center;
   column-gap: 5px;
