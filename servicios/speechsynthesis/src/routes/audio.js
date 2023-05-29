@@ -102,7 +102,7 @@ async function getArticle(getIdArticle) {
 };
 
 routes.get("/", async function (req, res) {
-	return res.json("Servicio de speechsynthesis: v0.04 - "+moment().format('MMMM Do YYYY, h:mm:ss a'));
+	return res.json("Servicio de speechsynthesis: v0.02 - "+moment().format('MMMM Do YYYY, h:mm:ss a'));
 });
 
 function textoABase64(texto) {
