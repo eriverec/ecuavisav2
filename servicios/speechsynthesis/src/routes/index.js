@@ -12,7 +12,7 @@ import { REGION } from "./../../src/config.js";
 import { S3Client } from "@aws-sdk/client-s3";
 import { pollySchema } from "./../../models/polly.js";
 
-const MAX_TEXT_LENGTH = 2000;
+const MAX_TEXT_LENGTH = 1000;
 export const routes = Router();
 const ObjectIdS = mongoose.Types.ObjectId;
 moment.tz.setDefault('America/Guayaquil');
@@ -277,9 +277,26 @@ function textoABase64(texto) {
   return buffer.toString('base64');
 }
 
-routes.post("/save/json", async function (req, res) {
+async function getJsonEstadisticas(idarticulo) {
+  var resp = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/awsjson/index.php?id=${idarticulo}`,{
+    method: "GET",
+    headers: { "Content-Type": "application/json" },
+  }); 
+  return await resp.json();
+}
+
+async function addJsonEstadisticas(data) {
+  var resp = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/awsjson/endpoindAWS.php`,{
+    method: "POST",
+    body: JSON.stringify(data),
+    headers: { "Content-Type": "application/json" },
+  }); 
+  return await resp.json();
+}
+
+routes.post("/get/audio", async function (req, res) {
 	try {
-		var { idArticle="5246039" } = req.query;
+		var { idArticle="5246039", part = 0 } = req.body;
 		if(idArticle=="" ){
 			return res.status(200).send({ resp:false,message: "Falta el idArticle" });
 		}
@@ -287,17 +304,112 @@ routes.post("/save/json", async function (req, res) {
 	  if(text_Article == ""){
 	  	return res.status(200).send({ resp:false,message: "No existe el artículo" }); 
 	  }
-	  text_Article = textPARTS(text_Article);//.toString('base64')
-		
-		var newParts = [];
-		for (var i = 0; i < (text_Article.length); i++) {
-			newParts.push(textoABase64(text_Article[i]));
+
+	  var respJson = await getJsonEstadisticas(idArticle);
+	  if(respJson.resp){
+	  	var parteEnviar = respJson.data[0].base64[part];
+	  	if(parteEnviar.encode){
+	  		return res.send({ resp:true, base64: parteEnviar.code });
+	  	}
+
+	  	var params = {
+		    OutputFormat: 'mp3',
+		    Text: parteEnviar.code,
+		    VoiceId: 'Mia',
+		  };
+
+		  polly.synthesizeSpeech(params, (err, data) => {
+			  if (err) {
+			    console.error('Error al obtener el audio de Polly:', err);
+			    res.status(500).send('Error al obtener el audio de Polly');
+			  } else if (data.AudioStream instanceof Buffer) {
+			    // Guardar el archivo de audio en el bucket de S3 o cualquier otra acción necesaria
+			    
+			    const audioBuffer = Buffer.from(data.AudioStream);
+			    const audioData = audioBuffer.toString('base64');
+			    // audioData contiene el audio en formato Base64
+			    console.log(respJson.data[0].base64[part])
+			    // Preparar el objeto de datos JSON a enviar
+			    respJson.data[0].base64[part] = {
+			    	"encode":true,
+			    	"code":audioData
+			    };
+			    //var dataJsonPut = parteEnviar;
+			    //dataJsonPut[part].encode = true;
+			    //dataJsonPut[part].code = audioData;
+			    
+			    // Llamar a una función async para agregar los datos JSON a alguna fuente de datos
+			    addJsonEstadisticas([
+			      {
+			        "id": idArticle.toString(),
+			        "base64": respJson.data[0].base64
+			      }
+			    ])
+			      .then(() => {
+			        return res.send({ resp: true, base64: audioData });
+			      })
+			      .catch((error) => {
+			        console.error('Error al agregar los datos JSON:', error);
+			        return res.status(500).send('Error al agregar los datos JSON');
+			      });
+			  } else {
+			    console.error('Respuesta inválida de Polly:', data);
+			    res.status(500).send('Respuesta inválida de Polly');
+			  }
+			});
+	  }else{
+	  	text_Article = textPARTS(text_Article);//.toString('base64')
+			var newParts = [];
+			for (var i = 0; i < (text_Article.length); i++) {
+				newParts.push({
+					"code":text_Article[i],
+					"encode":false
+				});
+		  }
+
+		  //return res.send({ resp: true, base64: newParts });
+
+		  	var params = {
+			    OutputFormat: 'mp3',
+			    Text: newParts[part].code,
+			    VoiceId: 'Mia',
+			  };
+
+			  // Realiza la solicitud a Polly para obtener el audio
+			  polly.synthesizeSpeech(params, (err, data) => {
+				  if (err) {
+				    console.error('Error al obtener el audio de Polly:', err);
+				    res.status(500).send('Error al obtener el audio de Polly: ' + err);
+				  } else if (data.AudioStream instanceof Buffer) {
+				    const audioBuffer = Buffer.from(data.AudioStream);
+				    const audioData = audioBuffer.toString('base64');
+
+				    newParts[part] = {
+				    	"encode":true,
+				    	"code":audioData
+				    };
+
+				    addJsonEstadisticas([
+				      {
+				        "id": idArticle.toString(),
+				        "base64": newParts
+				      }
+				    ])
+				    .then(() => {
+				      return res.send({ resp: true, base64: audioData });
+				    })
+				    .catch((error) => {
+				      console.error('Error al agregar los datos JSON:', error);
+				      res.status(500).send('Error al agregar los datos JSON: ' + error);
+				    });
+				  }
+				});
 	  }
 
-	  return res.status(200).send({ resp:true, partes: newParts }); 
+	  
 
-	  console.error('Error al generar el audio:', error);
-	  return res.status(200).send({ resp:false,message: "Error al generar el audio" }); 
+	  //return res.status(200).send({ resp:true, partes: newParts[part] }); 
+
 
 	} catch (error) {
     console.error('Error al generar el audio:', error);

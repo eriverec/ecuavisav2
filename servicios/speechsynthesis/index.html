@@ -6,37 +6,103 @@
 	<title></title>
 </head>
 <body>
+<button id="btn-reproducir">Reproducir</button>
 <script type="text/javascript">
-	// Hacer una solicitud a la ruta /audio en Express para obtener el audio en base64
-	fetch('https://aws-polly.vercel.app/speechsynthesis?idArticle=5154428')
-	  .then(response => response.text())
-	  .then(audioBase64 => {
-	    // Decodificar el audio base64 en un blob
-	    const audioBlob = base64toBlob(audioBase64, 'audio/mp3');
+	// Crear un contexto de audio
+var audioContext = new AudioContext();
 
-	    // Crear una URL del blob para reproducir el audio
-	    const audioUrl = URL.createObjectURL(audioBlob);
+// Array que almacena los fragmentos de audio
+var audioFragments = [];
 
-	    // Reproducir el audio en una etiqueta <audio>
-	    const audioElement = document.createElement('audio');
-	    audioElement.src = audioUrl;
-	    audioElement.controls = true;
-	    document.body.appendChild(audioElement);
-	  })
-	  .catch(err => {
-	    console.error('Error al obtener el audio:', err);
-	  });
+// Índice del fragmento actual
+var currentIndex = 0;
 
-	// Función para convertir una cadena base64 en un blob
-	function base64toBlob(base64, contentType) {
-	  const byteCharacters = atob(base64);
-	  const byteNumbers = new Array(byteCharacters.length);
-	  for (let i = 0; i < byteCharacters.length; i++) {
-	    byteNumbers[i] = byteCharacters.charCodeAt(i);
-	  }
-	  const byteArray = new Uint8Array(byteNumbers);
-	  return new Blob([byteArray], { type: contentType });
-	}
+// Variable para controlar si los fragmentos ya han sido cargados
+var loaded = false;
+
+// Función para cargar los fragmentos de audio
+async function cargarFragmentosDeAudio() {
+  if (!loaded) {
+    const response = await fetch('http://localhost:8080/audio', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+
+    // Obtener el cuerpo de la respuesta como un ReadableStream
+    const body = response.body;
+
+    // Crear un lector de streams
+    const reader = body.getReader();
+
+    // Función para leer los datos del stream
+    async function leerStream() {
+      while (true) {
+        const { done, value } = await reader.read();
+
+        if (done) {
+          // Finalizar la reproducción cuando se completa el stream
+          break;
+        }
+
+        // Decodificar los datos del stream en el buffer de audio
+        const decodedBuffer = await audioContext.decodeAudioData(value.buffer);
+
+        // Agregar el fragmento decodificado al array de fragmentos de audio
+        audioFragments.push(decodedBuffer);
+
+        // Si es el primer fragmento, comenzar la reproducción
+        if (audioFragments.length === 1) {
+          reproducirFragmentos();
+        }
+      }
+    }
+
+    // Iniciar la lectura del stream
+    leerStream();
+
+    // Indicar que los fragmentos han sido cargados
+    loaded = true;
+  } else {
+    // Si los fragmentos ya están cargados, comenzar la reproducción
+    reproducirFragmentos();
+  }
+}
+
+// Función para reproducir los fragmentos de audio
+function reproducirFragmentos() {
+  if (currentIndex < audioFragments.length) {
+    // Obtener el fragmento actual
+    var currentBuffer = audioFragments[currentIndex];
+
+    // Crear un buffer fuente y conectarlo al destino de reproducción
+    var source = audioContext.createBufferSource();
+    source.buffer = currentBuffer;
+    source.connect(audioContext.destination);
+
+    // Reproducir el fragmento actual
+    source.start(0);
+
+    // Escuchar el evento 'ended' para detectar cuando se ha terminado de reproducir el buffer
+    source.addEventListener('ended', function () {
+      // Incrementar el índice del fragmento actual
+      currentIndex++;
+
+      // Verificar si hay más fragmentos por reproducir
+      if (currentIndex < audioFragments.length) {
+        // Reproducir el siguiente fragmento después de un breve retraso
+        setTimeout(reproducirFragmentos, 500);
+      }
+    });
+  }
+}
+
+// Obtener referencia al botón en tu página HTML
+const btnReproducir = document.getElementById('btn-reproducir');
+
+// Asignar evento 'click' al botón para cargar y reproducir los fragmentos de audio
+btnReproducir.addEventListener('click', cargarFragmentosDeAudio);
 </script>
 </body>
 </html>

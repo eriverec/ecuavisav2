@@ -8,39 +8,53 @@ if(strcasecmp($_SERVER['REQUEST_METHOD'], 'POST') != 0){
     exit();
 }
 
+// Lee el archivo .json
+if(!isset($_GET["parte"])){
+    if ($_GET["parte"]=='') {
+        echo '{"resp":false, "msj":"no se mandó la parte del artículo"}';
+        exit();
+    }
+}
+
 $postdata = file_get_contents("php://input");
 
 // Decodificar el JSON enviado
 $data = json_decode($postdata, true);
 
 // Procesar los datos para obtener el id y el base64
-$id = $data[0]['id'];
-$base64 = $data[0]['base64'];
+$id = $data['id'];
+$base64 = $data['base64'];
+$totalPartes = $data['totalPartes'];
+$parte = $_GET["parte"];
 $fechahoy = date("Y-m-d h:i:s", time());
 
 // Leer el archivo JSON existente
 $file = './idaudio/'.$id.'.json';
+$idarticulo = $id;
 if (!file_exists($file)) {
-    file_put_contents($file, json_encode([]));
+    file_put_contents($file, json_encode([
+        "id" => $id,
+        "base64" => [],
+        "time" => $fechahoy,
+        "totalPartes" => $totalPartes,
+    ]));
 }
+
 $json = file_get_contents($file);
 $items = json_decode($json, true);
 
-// Buscar si el ID existe en el archivo JSON
-$found = false;
-foreach ($items as $key => $item) {
-    if ($item['id'] == $id) {
-        $found = true;
-        // Si el ID existe, actualizar el registro existente
-        $items[$key]['base64'] = $base64;
-        $items[$key]['time'] = $fechahoy;
-        break;
-    }
-}
-
-// Si el ID no existe, agregar un nuevo registro
-if (!$found) {
-    array_push($items, array('id' => $id, 'base64' => $base64));
+if(array_key_exists($parte, $items["base64"])){
+    $items["base64"][$parte] =  [
+        "audioBase64" => $base64,
+        "encode" => false,
+        "totalPartes" => $totalPartes,
+    ];
+}else{
+    $items["base64"][] =  [
+        "audioBase64" => $base64,
+        "encode" => false,
+        "totalPartes" => $totalPartes,
+    ];
 }
 
 // Codificar los datos en JSON y guardarlos en el archivo

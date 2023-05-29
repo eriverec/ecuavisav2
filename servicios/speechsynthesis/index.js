@@ -1,8 +1,8 @@
-import "./src/database.js";
-import "dotenv/config.js";
+//import "./src/database.js";
+//import "dotenv/config.js";
 import express from "express";
-import mongoose from "mongoose";
-import { routes } from './src/routes/index.js';
+//import mongoose from "mongoose";
+import { routes } from './src/routes/audio.js';
 
 var app = express();
 var port = process.env.PORT || 8080;
