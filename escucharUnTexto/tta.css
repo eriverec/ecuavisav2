@@ -1,5 +1,6 @@
-
-#play-pause-btn, #div_reproducir, #div_pausar_reanudar{
+#play-pause-btn,
+#div_reproducir,
+#div_pausar_reanudar {
   display: flex;
   align-items: center;
   column-gap: 5px;
@@ -21,9 +22,9 @@
   animation: rotate var(--uib-speed) linear infinite;
 }
 
-.parent_player svg{
-  width: 30px;
-    height: 30px;
+.parent_player svg {
+  width: 30px !important;
+  height: 30px !important;
 }
 
 .ring circle {
