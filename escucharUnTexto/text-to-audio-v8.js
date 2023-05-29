@@ -89,5 +89,5 @@ function pausarReanudarAudio() {
     audioPlayer.play(); // si se está pausado, reanudar
     reproduciendo = true;
   }
-  document.getElementsByTagName("button")[1].innerHTML = reproduciendo ? divWave : divReanudar; // cambiar texto del botón según se esté reproduciendo o pausado
+  audioPausarReanudar.innerHTML = reproduciendo ? divWave : divReanudar; // cambiar texto del botón según se esté reproduciendo o pausado
 }
