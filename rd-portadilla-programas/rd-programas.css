@@ -619,6 +619,8 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   text-transform: initial;
 }
 
+
+.bloque-programas .media_block .text_block .inf2.rd_date,
 .programas-desktop .noticias .article .media_block .text_block .inf2 {
   font-family: 'Archivo';
   font-size: 16px;
