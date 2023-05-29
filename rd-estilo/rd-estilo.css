@@ -665,7 +665,15 @@ h2.temas_estilo {
   padding: 1.5rem 0 0px;
 }
 
-.bloque-programas .media_block .text_block .date,
+.bloque-programas .media_block .text_block .date{
+  font-family: 'Archivo';
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 300;
+  line-height: 26px;
+  color: #d5d5d5;
+}
+
 .bloque-programas .media_block .text_block .article-section a {
   text-transform: uppercase;
   font-weight: 600;
