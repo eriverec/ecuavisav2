@@ -37,6 +37,7 @@ if (!file_exists($file)) {
         "base64" => [],
         "time" => $fechahoy,
         "totalPartes" => $totalPartes,
+        "tamanioBase64" => 0,
     ]));
 }
 
@@ -44,16 +45,18 @@ $json = file_get_contents($file);
 $items = json_decode($json, true);
 
 if(array_key_exists($parte, $items["base64"])){
+    $items["tamanioBase64"] = count($items["base64"]);
+    $items["totalPartes"] = $totalPartes;
     $items["base64"][$parte] =  [
         "audioBase64" => $base64,
         "encode" => false,
-        "totalPartes" => $totalPartes,
     ];
 }else{
+    $items["tamanioBase64"] = count($items["base64"]);
+    $items["totalPartes"] = $totalPartes;
     $items["base64"][] =  [
         "audioBase64" => $base64,
-        "encode" => false,
-        "totalPartes" => $totalPartes,
+        "encode" => false
     ];
 }
 

@@ -7,7 +7,7 @@
 </head>
 <body>
 <button id="btn-reproducir">Reproducir</button>
-
+<button id="btn-reproducir_2">Reproducir 2</button>
 <script type="text/javascript">
 	// Crear un contexto de audio
 var audioContext = new AudioContext();
@@ -21,10 +21,10 @@ var currentIndex = 0;
 // Variable para controlar si los fragmentos ya han sido cargados
 var loaded = false;
 
-// Función para cargar y reproducir los fragmentos de audio
+// Función para cargar los fragmentos de audio
 async function cargarFragmentosDeAudio() {
   if (!loaded) {
-    const response = await fetch('http://localhost:8080/audio', {
+    const response = await fetch('https://text-to-audio-mu.vercel.app/audio/?idArticle=5134589', {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -49,26 +49,32 @@ async function cargarFragmentosDeAudio() {
 
         // Decodificar los datos del stream en el buffer de audio
         const decodedBuffer = await audioContext.decodeAudioData(value.buffer);
-
+        console.log(decodedBuffer)
         // Agregar el fragmento decodificado al array de fragmentos de audio
         audioFragments.push(decodedBuffer);
+
+        // Si es el primer fragmento, comenzar la reproducción
+        if (audioFragments.length === 1) {
+          setTimeout(reproducirFragmentos, 500);
+        }
       }
     }
 
     // Iniciar la lectura del stream
-    await leerStream();
+    leerStream();
 
     // Indicar que los fragmentos han sido cargados
     loaded = true;
+  } else {
+    currentIndex = 0;
+    // Si los fragmentos ya están cargados, comenzar la reproducción
+    reproducirFragmentos();
   }
-
-  // Reproducir los fragmentos de audio almacenados localmente
-  reproducirFragmentos();
 }
 
-// Función para reproducir los fragmentos de audio almacenados localmente
+// Función para reproducir los fragmentos de audio
 function reproducirFragmentos() {
-  if (audioFragments.length > 0) {
+  if (currentIndex < audioFragments.length) {
     // Obtener el fragmento actual
     var currentBuffer = audioFragments[currentIndex];
 
@@ -87,8 +93,9 @@ function reproducirFragmentos() {
 
       // Verificar si hay más fragmentos por reproducir
       if (currentIndex < audioFragments.length) {
-        // Reproducir el siguiente fragmento
-        reproducirFragmentos();
+        // Reproducir el siguiente fragmento después de un breve retraso
+        setTimeout(reproducirFragmentos, 200);
+        //reproducirFragmentos()
       }
     });
   }
@@ -99,6 +106,20 @@ const btnReproducir = document.getElementById('btn-reproducir');
 
 // Asignar evento 'click' al botón para cargar y reproducir los fragmentos de audio
 btnReproducir.addEventListener('click', cargarFragmentosDeAudio);
+
+// Obtener referencia al botón en tu página HTML
+const btnReproducir_2 = document.getElementById('btn-reproducir_2');
+
+// Asignar evento 'click' al botón para cargar y reproducir los fragmentos de audio
+btnReproducir_2.addEventListener('click', function(){
+  var currentBuffer = audioFragments[2];
+  // Crear un buffer fuente y conectarlo al destino de reproducción
+  var source = audioContext.createBufferSource();
+  source.buffer = currentBuffer;
+  source.connect(audioContext.destination);
+  source.start(0);
+  alert()
+});
 </script>
 </body>
 </html>

@@ -24,6 +24,7 @@ if(isset($_GET["id"])){
 		    echo json_encode([
 				"resp"=> true,
 				"data" => $data->base64[$_GET["parte"]],
+				"tamanioBase64" => count($data->base64),
 				"part" => $_GET["parte"],
 				"totalPartes" => $data->totalPartes
 			]);
@@ -31,7 +32,9 @@ if(isset($_GET["id"])){
 		}else{
 		    echo json_encode([
 				"resp"=> false,
-				"msj" => "No exise el artículo"
+				"msj" => "No exise el artículo",
+				"tamanioBase64" => count($data->base64),
+				"totalPartes" => $data->totalPartes,
 			]);
 			exit();
 		}

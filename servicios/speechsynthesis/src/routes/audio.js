@@ -102,7 +102,7 @@ async function getArticle(getIdArticle) {
 };
 
 routes.get("/", async function (req, res) {
-	return res.json("Servicio de speechsynthesis: v0.02 - "+moment().format('MMMM Do YYYY, h:mm:ss a'));
+	return res.json("Servicio de speechsynthesis: v0.03 - "+moment().format('MMMM Do YYYY, h:mm:ss a'));
 });
 
 function textoABase64(texto) {
@@ -145,10 +145,7 @@ routes.get('/audio', async (req, res) => {
 	  var respJson = await getJsonEstadisticas(idArticle, parte);
 	  if(respJson.resp){
 	  	res.setHeader('Content-Type', 'audio/mpeg');
-	    res.set({
-		    'Content-Type': 'audio/mpeg',
-		    'Accept-Ranges': 'bytes',
-		  });
+	    
 
 		  var decodedData = Buffer.from(respJson.data.audioBase64, 'base64');
 	    res.write(decodedData);
@@ -179,10 +176,7 @@ routes.get('/audio', async (req, res) => {
 	  	// Dividir el texto en partes pequeñas
 	    const parts = splitTextIntoParts(text_Article);
 	  	res.setHeader('Content-Type', 'audio/mpeg');
-	    res.set({
-		    'Content-Type': 'audio/mpeg',
-		    'Accept-Ranges': 'bytes',
-		  });
+	    
 
 	    //return res.status(200).send({ resp:true,message: parts }); 
 	    // Establecer los encabezados de la respuesta para indicar que es un audio
@@ -217,6 +211,82 @@ routes.get('/audio', async (req, res) => {
 	        return res.end();
 	      }
 	    }
+	  }
+
+	  
+
+    // Finalizar la respuesta
+    //res.end();
+  } catch (err) {
+    console.error('Error al generar el audio:', err);
+    res.status(500).send('Error al generar el audio');
+  }
+});
+
+routes.get('/audio/base64', async (req, res) => {
+	var { idArticle="5233399", part = 0 } = req.query;
+	if (!idArticle) {
+    return res.status(400).json({ resp: false, message: "Falta el idArticle" });
+  }
+
+  try {
+  	const outputFormat = 'mp3';
+	  var parte = part * 1;
+	  var respJson = await getJsonEstadisticas(idArticle, parte);
+	  var tamanioArchivoJsonCreada = respJson.tamanioBase64 * 1 || 1;
+	  var tamanioArchivoJsonTexto = respJson.totalPartes * 1 || 0;
+	  if( parte >  tamanioArchivoJsonTexto){
+	  	return res.status(200).send({ resp:false,message: "El tamaño excede del texto a generar" }); 
+	  }
+	  tamanioArchivoJsonCreada = tamanioArchivoJsonCreada - 1;
+	  //1 <= 2
+	  if( (tamanioArchivoJsonCreada == parte || parte <= (tamanioArchivoJsonCreada *1 + 1) ) ||  parte == 0){
+
+	  	if( parte ==  tamanioArchivoJsonTexto && tamanioArchivoJsonCreada < parte){
+		  	return res.status(200).send({ resp:false,message: "El tamaño excede del texto a generar" }); 
+		  }
+
+	  	if(respJson.resp){
+		  	return res.send({
+		  		base64: respJson.data.audioBase64,
+		  		parte: part,
+		  		tamanioTotal: respJson.totalPartes - 1
+		  	});
+		  }else{
+			  const text_Article = await getArticle(idArticle);
+			  if(text_Article == ""){
+			  	return res.status(200).send({ resp:false,message: "No existe el artículo" }); 
+			  }
+		  	// Dividir el texto en partes pequeñas
+		    const parts = splitTextIntoParts(text_Article);
+		    
+		    const audioData = await generateAudioData(parts[part], outputFormat);
+		      //console.log("-----------------------")
+		      //console.log(parts[part])
+		      //console.log("-----------------------")
+
+		      // Convertir a base64
+					const base64Data = Buffer.from(audioData).toString('base64');
+
+					// Decodificar desde base64
+					//const decodedData = Buffer.from(base64Data, 'base64');
+
+		      var addJson = await addJsonEstadisticas({
+		        "id": idArticle.toString(),
+		        "base64": base64Data,
+		        "encode": false,
+		        "totalPartes" : parts.length
+		      }, parts);
+
+		      return res.send({
+			  		base64: base64Data,
+			  		parte: part,
+			  		tamanioTotal: parts.length - 1
+			  	});
+		  }
+	  }else{
+	  	return res.status(200).send({ resp:false,message: "La parte enviada no es la correcta" }); 
+
 	  }
 
 	  
