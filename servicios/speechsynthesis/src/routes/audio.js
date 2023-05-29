@@ -111,11 +111,11 @@ function textoABase64(texto) {
 }
 
 async function getJsonEstadisticas(idarticulo, parte) {
-  /*var resp = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/awsjson/index.php?id=${idarticulo}`,{
-    method: "GET",
+  var resp = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/awsjson/index.php?id=${idarticulo}&parte=${parte}`,{
+  /*  method: "GET",
     headers: { "Content-Type": "application/json" },
   }); */
-  var resp = await fetch(`http://localhost/ecuavisa/ecuavisav2/escucharUnTexto/awsv2/index.php?id=${idarticulo}&parte=${parte}`,{
+  //var resp = await fetch(`http://localhost/ecuavisa/ecuavisav2/escucharUnTexto/awsv2/index.php?id=${idarticulo}&parte=${parte}`,{
     method: "GET",
     headers: { "Content-Type": "application/json" },
   }); 
@@ -123,8 +123,8 @@ async function getJsonEstadisticas(idarticulo, parte) {
 }
 
 async function addJsonEstadisticas(data, parte) {
-  //var resp = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/awsjson/endpoindAWS.php`,{
-	var resp = await fetch(`http://localhost/ecuavisa/ecuavisav2/escucharUnTexto/awsv2/endpoindAWS.php?parte=${parte}`,{
+  var resp = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/awsjson/endpoindAWS.php?parte=${parte}`,{
+	//var resp = await fetch(`http://localhost/ecuavisa/ecuavisav2/escucharUnTexto/awsv2/endpoindAWS.php?parte=${parte}`,{
     method: "POST",
     body: JSON.stringify(data),
     headers: { "Content-Type": "application/json" },
