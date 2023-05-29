@@ -13,7 +13,7 @@
 .ring {
   --uib-size: 20px;
   --uib-speed: 2s;
-  --uib-color: black;
+  --uib-color:  var(--color-azul);
 
   height: var(--uib-size);
   width: var(--uib-size);
@@ -25,6 +25,9 @@
 .parent_player svg {
   width: 30px !important;
   height: 30px !important;
+}
+.parent_player svg path{
+  fill: var(--color-azul);
 }
 
 .ring circle {
@@ -77,7 +80,7 @@
 .waveform__bar {
   width: var(--uib-line-weight);
   height: 100%;
-  background-color: var(--uib-color);
+  background-color: var(--color-azul);
 }
 
 .waveform__bar:nth-child(1) {
