@@ -17,13 +17,13 @@
 .portada-estilo .multimedia img,
 .estilo-principal .multimedia img,
 .estilo-principal-desktop .multimedia img {
-  filter: brightness(40%);
-  -webkit-mask-image: linear-gradient(to top, transparent 0, #2927B9 60%) !important;
+
+  -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 60%) !important;
 }
 
 .portada-estilo .multimediaIconMacroWrapper {
   position: relative;
-  background-image: -webkit-linear-gradient(bottom, #2927B9 50%, #2927B9 65%) !important;
+  background-image: -webkit-linear-gradient(bottom, #060127 50%, white 65%);
 
 }
 .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
@@ -69,11 +69,11 @@
 .note-pierdas .multimedia img,
 .estilo-principal .multimedia img,
 .estilo-principal-desktop .multimedia img {
-  filter: brightness(40%);
+ /* filter: brightness(40%);*/
 }
 .portada-estilo .media_block {
   position: relative;
-  background: #2927B9;
+  background: #060127;
 }
 .estilo-principal .headline h2 {
   color: white;
