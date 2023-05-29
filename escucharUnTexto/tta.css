@@ -21,6 +21,11 @@
   animation: rotate var(--uib-speed) linear infinite;
 }
 
+.parent_player svg{
+  width: 30px;
+    height: 30px;
+}
+
 .ring circle {
   fill: none;
   stroke: var(--uib-color);
@@ -55,10 +60,10 @@
 /* playing */
 
 .waveform {
-  --uib-size: 20px;
+  --uib-size: 30px;
   --uib-speed: 1s;
   --uib-color: black;
-  --uib-line-weight: 3.5px;
+  --uib-line-weight: 4.5px;
 
   display: flex;
   flex-flow: row nowrap;
