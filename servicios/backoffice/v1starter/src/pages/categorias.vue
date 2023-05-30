@@ -1,5 +1,10 @@
 <script setup>
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
 
 const categoriasListStore = useCategoriasListStore();
 const categorias = ref([]);
@@ -15,7 +20,8 @@ const updateCategorias = ref({});
 const updCategoriaPrimero = ref([]);
 const newCategoriaPrimero = ref([]);
 const filteredData_2 = ref([]);
-const currentTab = ref('tab-lista')
+const currentTab = ref('tab-lista');
+const fechaIngresada = ref('');
 
 // Obtener las colecciones
 const fetchCategorias = () => {
@@ -41,22 +47,27 @@ totalPages.value = computed(() => {
 // Editar una categoría ----------------------------------------------
 
 const onFormCategoriasActive = (data) => {
-    console.log('data',data);
-		//let index =  categorias.value.map((e) => e.id).indexOf(id);  	
-		updateCategorias.value = data; 
+		//let index =  categorias.value.map((e) => e.id).indexOf(id);  
+		updateCategorias.value = Object.create(data); 
 		isCategoriasEditVisible.value = true;
-    console.log("upd", updateCategorias.value);
+		//console.log('upd',updateCategorias.value);
+    
     
 };
 
-const onFormCategoriasSubmit = (id) => {
+async function onFormCategoriasSubmit (id){
 	//resolveColeccionUpdateSend();
 
     //sendCategorias.value = categorias.value;
+	let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
     let arrayFinal = [];
-    arrayFinal = categorias.value;
-    let index = categorias.value.map((e) => e.id).indexOf(id);  
-    let data = {
+    arrayFinal = Array.from(categorias.value);
+	
+    let index = arrayFinal.map((e) => e.id).indexOf(id);  
+	let data;
+	//console.log('array',arrayFinal[index]);
+	if(updateCategorias.value.publicado == true ){
+		data = {
               id:categorias.value[index].id,
               vn: categorias.value[index].vn,
               vid: categorias.value[index].vid,
@@ -64,19 +75,49 @@ const onFormCategoriasSubmit = (id) => {
               picImg: updateCategorias.value.picImg,
               feedUrl: categorias.value[index].feedUrl,
               description: updateCategorias.value.description,
-              publicado: updateCategorias.value.publicado
-            }     
-    arrayFinal[index] = data;      
+              publicado: updateCategorias.value.publicado,
+			  fechaPublicado: dateNow 
+            }  
+	}else{
+		data = {
+              id:categorias.value[index].id,
+              vn: categorias.value[index].vn,
+              vid: categorias.value[index].vid,
+              __text: categorias.value[index].__text,
+              picImg: updateCategorias.value.picImg,
+              feedUrl: categorias.value[index].feedUrl,
+              description: updateCategorias.value.description,
+              publicado: updateCategorias.value.publicado,
+			  fechaPublicado: arrayFinal[index]?.fechaPublicado? arrayFinal[index].fechaPublicado : ""
+            } 
+	}
+	   	    
+    arrayFinal[index] = data;     
 
-    console.log('sending ',arrayFinal );     
-    
-    
-	categoriasListStore.sendCategorias(arrayFinal).catch((error) => {
+	var myHeaders = new Headers();
+		myHeaders.append("Content-Type", "application/json");
+
+	var raw = JSON.stringify(arrayFinal);
+
+		var requestOptions = {
+		method: 'POST',
+		headers: myHeaders,
+		body: raw,
+		redirect: 'follow'
+		};
+
+		await fetch("https://send-category.vercel.app/send", requestOptions)
+		.then(response => response.text())
+		.then(result => {
+			fetchCategorias();
+			isCategoriasEditVisible.value = false;
+			return true
+		})
+		.catch(error => console.log('error', error));
+	/*categoriasListStore.sendCategorias(arrayFinal).catch((error) => {
 		console.error(error);
-	});
-	window.setTimeout(fetchCategorias, 600);
-
-	isCategoriasEditVisible.value = false;
+	});*/
+	
 };
 
 const onFormCategoriasReset = () => {
@@ -110,17 +151,35 @@ var filteredData = computed(() => {
       item.id.toLowerCase().includes(searchKeyword.value.toLowerCase())
     );
   });
-  
+  	let filtroFecha;
+	
+  	if(fechaIngresada.value){
+  	let fechaSelected = fechaIngresada.value.toString();
+	//console.log(fechaSelected);
+ 	filtroFecha = catag_list.filter(item => {
+		if(item.fechaPublicado){
+			let array = item.fechaPublicado.split(' ');
+			console.log('array',array)
+			return array[0] == fechaSelected;
+		}else{
+			return false;
+		}		
+	});
+	//console.log('filtroFecha',filtroFecha);
+	}	
   const start = (currentPage.value - 1) * itemsPerPage.value;
 	const end = start + itemsPerPage.value;
-	var dataFiltrada = catag_list.slice(start, end);
+	var dataFiltrada = fechaIngresada.value? filtroFecha.slice(start, end): catag_list.slice(start, end);
 	totalPages.value = Math.ceil(catag_list.length / itemsPerPage.value);
 	//filteredData =  catag_list;
-	
 	return dataFiltrada;
 });
 
-
+const resetFiltro =()=>{
+	fechaIngresada.value = '';
+	searchKeyword.value = '';
+	fetchCategorias();
+}
 </script>
 
 <style type="text/css">
@@ -138,11 +197,17 @@ var filteredData = computed(() => {
 						<VTab value="tab-estadistica">Estadísticas</VTab>
 						<!-- <VTab>Tab Three</VTab> -->
 						</VTabs>
-
+						
 				<VCard class="mt-5" title="Intereses">	
+					
 					<VWindow v-model="currentTab">
+						
              		 <VWindowItem value="tab-lista">
+	
+   
+  
 					<VCardText class="py-4 gap-0 w-100">	
+				<div style="display: flex;" >
 			      <div style="width: 30%" class="d-flex gap-1 px-0  position-relative">
 			          <VTextField
 			            v-model="searchKeyword"
@@ -152,7 +217,33 @@ var filteredData = computed(() => {
 			          >
 			          </VTextField>
 			      </div>
+				  <div class="date-picker-wrapper" style="width:30%; margin-left: 5px;" >
+					<AppDateTimePicker
+						label="Fecha"
+						prepend-inner-icon="tabler-calendar"
+						density="compact"
+						v-model="fechaIngresada"
+						show-current= true
+						@on-change="obtenerFechaDispositivos"
+						:config="{ 												
+						altFormat: 'F j, Y',
+						dateFormat: 'd/m/Y',
+						maxDate: new Date(),
+						reactive :true						
+						}"
+					/>
+					</div>
+					<div style="margin-left: 5px;">
+						<VBtn
+							color="primary"							
+							@click="resetFiltro"
+							>
+							Reinciar filtro
+						</VBtn>
+					</div>
+				</div>
 			    </VCardText>
+				
 					<!--
 					<VDivider />
                     
@@ -178,8 +269,9 @@ var filteredData = computed(() => {
 								<th scope="col">ID</th>
 								<th scope="col">Nombre del interés</th>
 								<th scope="col">Descripción</th>
-								<th scope="col">IMG Url</th>
+								<th scope="col">IMG Url</th>								
 								<th scope="col">Publicado</th>
+								<th scope="col">Fecha de publicación</th>
 								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
@@ -224,6 +316,7 @@ var filteredData = computed(() => {
 										</div>
 									</div>
 								</td>
+
 								<td>
 									<div class="d-flex align-left">
 										<div class="d-flex flex-column">
@@ -233,7 +326,15 @@ var filteredData = computed(() => {
 										</div>
 									</div>
 								</td>
-
+								<td>
+									<div class="d-flex align-left">
+										<div class="d-flex flex-column">
+											<h6 class="text-base">
+												{{ categoria.fechaPublicado }}
+											</h6>
+										</div>
+									</div>
+								</td>
 								<td class="text-center" style="width: 5rem">
 									<VBtn
 										icon
