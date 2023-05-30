@@ -15,8 +15,21 @@
       <VBtn v-on:click="formatVisitaGrafico" >Por Sesión</VBtn>
     </VBtnToggle>--->
     
+
     <VRow>
-      
+      <VCol cols="12">
+  <VBtnToggle    
+        v-model="btnFiltros"
+        color="primary"
+        divided
+      >
+   <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosDispositivos">
+    {{ item.nombre }}
+   </VBtn>
+
+   </VBtnToggle>
+
+    </VCol>
     <VCol sm="4" cols="12">
     <VSelect
     v-model="selectedDispositivo"
@@ -256,7 +269,12 @@ import { useTheme } from 'vuetify';
           selectedOs: "todos",
           selectedBrowser: "todos",
           fechaIngesada: "",
-          activityData: []
+          activityData: [],
+          filtrosDispositivos: [],
+          filtroSelected: {},
+          btnFiltros: '',
+          filtroDefault: {}
+
         };
       },
       computed: {
@@ -789,11 +807,21 @@ import { useTheme } from 'vuetify';
         },
   
         async getInitGraficoDispositivos(){
+          await this.fetchFiltros();
+          let fechai;
+          let fechaf;
+          if(!this.filtroDefault){
           let formatI = moment().add(-29, 'days').format("MM-DD-YYYY");
           let formatF = moment().format("MM-DD-YYYY");
           this.fechaIngesada = String(formatI+' a '+formatF);
-          var fechai = moment().add(-28, 'days').format("MM-DD-YYYY");
-          var fechaf = moment().add(1, 'days').format("MM-DD-YYYY");
+          fechai = moment().add(-28, 'days').format("MM-DD-YYYY");
+          fechaf = moment().add(1, 'days').format("MM-DD-YYYY");
+          }else{
+          let fechas = this.filtroDefault.fecha.split('a');
+          fechai = moment(fechas[0]).add(+1, 'days').format('MM/DD/YYYY');
+          fechaf = moment(fechas[1]).add(-1, 'days').format('MM/DD/YYYY');  
+          }
+          
           //var panelGrafico = document.querySelector("#apexchartscrejemplo");
           //panelGrafico.classList.add("disabled");
           this.isLoading = true;
@@ -804,6 +832,21 @@ import { useTheme } from 'vuetify';
           //console.log("data format",this.dataFormateada)
           
           return true;
+        },
+
+
+        async getDataNoFilter(){
+        let formatI = moment().add(-29, 'days').format("MM-DD-YYYY");
+        let formatF = moment().format("MM-DD-YYYY");
+        this.fechaIngesada = String(formatI+' a '+formatF);
+        var fechai = moment().add(-28, 'days').format("MM-DD-YYYY");
+        var fechaf = moment().add(1, 'days').format("MM-DD-YYYY"); 
+        this.isLoading = true;
+        this.getData = await this.getDataGrafico(fechai, fechaf);         
+        this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
+        ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
+        this.isLoading = false;
+        return true; 
         },
 
         async getDataGrafico(fechai, fechaf) {
@@ -829,7 +872,7 @@ import { useTheme } from 'vuetify';
           //var respJson = await nuevoArchivoJson(archivoJson);
           if(selectedDates.length > 1){
             this.fechai = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
-            this.fechaf = moment(selectedDates[1]).format('MM/DD/YYYY');
+            this.fechaf = moment(selectedDates[1]).add(-1, 'days').format('MM/DD/YYYY');
             //var panelGrafico = document.querySelector("#apexchartscrejemplo");
             //panelGrafico.classList.add("disabled");
             //console.log('fecha ingresada',this.fechaIngesada)
@@ -884,13 +927,52 @@ import { useTheme } from 'vuetify';
                 this.emitData();
             };
         },
+
+        async fetchFiltros(){
+          await fetch('https://servicio-filtros.vercel.app/dispositivos/grafico/all')
+        .then(response => response.json())
+        .then(data => {
+        this.filtrosDispositivos = Array.from(data);
+         })
+        .catch(error => {return error});
+       
+        let filtros = Array.from(this.filtrosDispositivos);
+        let checkDefault = filtros.filter(a => a.isDefault === true );
+        this.filtroDefault = checkDefault[0];
+        this.btnFiltros = checkDefault[0]._id;
+        this.selectedBrowser = checkDefault[0].browser;
+        this.selectedOs = checkDefault[0].os;
+        this.selectedDispositivo = checkDefault[0].device;
+        this.selectedActividad = checkDefault[0].actividad;
+        this.fechaIngesada = String(checkDefault[0].fecha);
+        
+        },
+
+        async resolveFiltroSelection(id){
+
+         await fetch('https://servicio-filtros.vercel.app/dispositivos/grafico/id?' + new URLSearchParams({ id: id }))
+        .then(response => response.json())
+        .then(data => {
+        this.filtroSelected = data;        
+        })
+        .catch(error => {return error}); 
+        let filtro = this.filtroSelected;
+        this.selectedBrowser = filtro.browser;
+        this.selectedOs = filtro.os;
+        this.selectedDispositivo = filtro.device;
+        this.selectedActividad = filtro.actividad;
+        this.fechaIngesada = String(filtro.fecha);
+        await this.obtenerFechaDispositivos(filtro.fecha);        
+        
+        },
         async reset(){
+          this.btnFiltros = "";
           this.selectedBrowser ="";
           this.selectedOs ="";
           this.selectedDispositivo ="";
           this.fechaIngesada= "";
           this.selectedActividad = "sesion";
-          await this.getInitGraficoDispositivos();
+          await this.getDataNoFilter();
           this.emitData();
         },
         emitData(){
@@ -901,11 +983,12 @@ import { useTheme } from 'vuetify';
           }
           this.$emit('activityData',full );
         }
-          
+      
       },
       async mounted() {
         var resp = await this.getInitGraficoDispositivos();
         this.emitData();
+        
       },
       updated() {
         //console.log("El DOM ha sido actualizado");

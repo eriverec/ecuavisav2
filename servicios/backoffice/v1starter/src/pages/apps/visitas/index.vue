@@ -53,7 +53,7 @@ async function fetchData(fechai, fechaf) {
     .then(response => response.text())
     .then(async count => { 
             let pages = parseInt(count); 
-            console.log('pages',pages);
+            
             
             var myHeaders2 = new Headers();
             myHeaders2.append("Content-Type", "application/json");
@@ -75,7 +75,7 @@ async function fetchData(fechai, fechaf) {
                   .then(async response=>{
 
                     let array = Array.from(response.data); 
-                    console.log('array',array);    
+                    
                     array.forEach((item)=>{
                     rawData.value.push(item);
                     })
@@ -92,7 +92,7 @@ async function fetchData(fechai, fechaf) {
 
                   }).catch((error) => {return error});       
           }
-          console.log(navArray.length) ;
+          
                     const finArray = navArray.reduce( (a,b) => {    
                       var i = a.findIndex((x) => x.title == b.title || x.url == b.url);
                       return i === -1 ? a.push({ url : b.url, title: b.title, count: 1}) : a[i].count++ , a;
