@@ -510,6 +510,9 @@ button#btnNombreM {
     font-size: 16px;
     padding-top: 0px; 
   }
+  .tabs-box {
+    column-gap: 40px;
+}
 
 }
 
