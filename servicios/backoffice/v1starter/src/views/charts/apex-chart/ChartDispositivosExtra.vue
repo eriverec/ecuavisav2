@@ -21,6 +21,7 @@
   <VBtnToggle    
         v-model="btnFiltros"
         color="primary"
+        variant="outlined"
         divided
       >
    <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosDispositivos">
@@ -660,6 +661,7 @@ import { useTheme } from 'vuetify';
         },
 
         async getDataTrazabilidadFull2(data){
+          console.log('primero',data)
           var serieTotal = [];
           let query = "";
           if(this.selectedOs == "Android" &&  this.selectedDispositivo == "movil"){
@@ -821,12 +823,12 @@ import { useTheme } from 'vuetify';
           fechai = moment(fechas[0]).add(+1, 'days').format('MM/DD/YYYY');
           fechaf = moment(fechas[1]).add(-1, 'days').format('MM/DD/YYYY');  
           }
-          
+          await this.resolveActividad();
           //var panelGrafico = document.querySelector("#apexchartscrejemplo");
           //panelGrafico.classList.add("disabled");
           this.isLoading = true;
           this.getData = await this.getDataGrafico(fechai, fechaf);         
-          this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
+          this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData);
           ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
           this.isLoading = false;
           //console.log("data format",this.dataFormateada)
@@ -836,6 +838,7 @@ import { useTheme } from 'vuetify';
 
 
         async getDataNoFilter(){
+        await this.resolveActividad();  
         let formatI = moment().add(-29, 'days').format("MM-DD-YYYY");
         let formatF = moment().format("MM-DD-YYYY");
         this.fechaIngesada = String(formatI+' a '+formatF);
@@ -843,13 +846,13 @@ import { useTheme } from 'vuetify';
         var fechaf = moment().add(1, 'days').format("MM-DD-YYYY"); 
         this.isLoading = true;
         this.getData = await this.getDataGrafico(fechai, fechaf);         
-        this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
+        this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData);
         ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
         this.isLoading = false;
         return true; 
         },
 
-        async getDataGrafico(fechai, fechaf) {
+        async getDataGrafico1(fechai, fechaf) {
           /*FORMATO DE FECHA A ENVIAR ES MM/DD/AAAA*/
           var raw = JSON.stringify({
               "fechai": fechai,
@@ -867,8 +870,62 @@ import { useTheme } from 'vuetify';
           //console.log('res fetch',this.getDataFetch)
           return obtener;
         },
+
+        async getDataGrafico(fechai, fechaf) {
+   
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var fechasCount = JSON.stringify({
+              "fechai": fechai,
+              "fechaf": fechaf
+          });
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: fechasCount,
+      redirect: 'follow'
+    };        
+    
+    const resp = await fetch('https://servicio-de-actividad.vercel.app/count',requestOptions)
+    .then(response => response.text())
+    .then(async count => { 
+            let pages = parseInt(count); 
+            const fullArray = []; 
+            
+            var myHeaders2 = new Headers();
+            myHeaders2.append("Content-Type", "application/json");
         
+            for (let i = 1; i < pages+1; i++){  
+            var fechasFetch = JSON.stringify({
+                      "fechai": fechai,
+                      "fechaf": fechaf,
+                      "page": i
+                  });      
+             var requestOptions2 = {
+                    method: 'POST',
+                    headers: myHeaders2,
+                    body: fechasFetch,
+                    redirect: 'follow'
+             };       
+            await fetch('https://servicio-de-actividad.vercel.app/dispositivos/full',requestOptions2)
+                  .then(response => response.json())
+                  .then(async response=>{
+                    let array = Array.from(response.grafico);
+                    array.forEach(e => fullArray.push(e));                       
+                  }).catch((error) => {return error});       
+          }
+          
+          return fullArray;                   
+        }).catch((error) => {return error});  
+        let obtener = resp;
+        this.getDataFetch =  obtener;
+        console.log("data",obtener);
+        return obtener;
+},
         async obtenerFechaDispositivos(selectedDates, dateStr, instance){
+          await this.resolveActividad();
           //var respJson = await nuevoArchivoJson(archivoJson);
           if(selectedDates.length > 1){
             this.fechai = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
@@ -881,7 +938,7 @@ import { useTheme } from 'vuetify';
             this.getData = await this.getDataGrafico(this.fechai, this.fechaf);
             this.isLoading = false;
             //panelGrafico.classList.remove("disabled");
-            this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
+            this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData);
             ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
             this.emitData();
             
@@ -891,7 +948,7 @@ import { useTheme } from 'vuetify';
           if(this.dataFormateada.length > 0 || true){
             this.isLoading = true;
             this.visita = true;
-            this.dataFormateada = await this.getDataTrazabilidadFull(this.getData.grafico);
+            this.dataFormateada = await this.getDataTrazabilidadFull(this.getData);
             ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
             
             this.isLoading = false;
@@ -902,18 +959,28 @@ import { useTheme } from 'vuetify';
             /**/
             this.visita = false;
             this.isLoading = true;
-            this.dataFormateada = await this.getDataTrazabilidadFull(this.getData.grafico);
+            this.dataFormateada = await this.getDataTrazabilidadFull(this.getData);
             ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
             this.isLoading = false;
             
           }
+        },
+
+        async resolveActividad(){
+            
+            if(this.selectedActividad == "visita"){
+                this.visita = false;               
+            };
+            if(this.selectedActividad == "sesion"){
+                this.visita = true;                
+            };
         },
         async resolveChart(){
             
             if(this.selectedActividad == "visita"){
                 this.visita = false;
                 this.isLoading = true;
-                this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
+                this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData);
                 ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
                 this.isLoading = false;  
                 this.emitData();
@@ -921,7 +988,7 @@ import { useTheme } from 'vuetify';
             if(this.selectedActividad == "sesion"){
                 this.visita = true;
                 this.isLoading = true;
-                this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData.grafico);
+                this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData);
                 ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
                 this.isLoading = false; 
                 this.emitData();
