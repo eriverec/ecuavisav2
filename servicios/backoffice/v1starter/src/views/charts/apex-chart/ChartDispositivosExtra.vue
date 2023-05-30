@@ -561,7 +561,7 @@ import { useTheme } from 'vuetify';
           
           if(data.length > 1){
             dataGroupBrowser = this.groupBy(data, "device")
-            console.log("dataGroupBrowser", dataGroupBrowser);
+            //console.log("dataGroupBrowser", dataGroupBrowser);
           }
 
         
@@ -661,7 +661,7 @@ import { useTheme } from 'vuetify';
         },
 
         async getDataTrazabilidadFull2(data){
-          console.log('primero',data)
+          
           var serieTotal = [];
           let query = "";
           if(this.selectedOs == "Android" &&  this.selectedDispositivo == "movil"){
@@ -921,7 +921,7 @@ import { useTheme } from 'vuetify';
         }).catch((error) => {return error});  
         let obtener = resp;
         this.getDataFetch =  obtener;
-        console.log("data",obtener);
+        
         return obtener;
 },
         async obtenerFechaDispositivos(selectedDates, dateStr, instance){
