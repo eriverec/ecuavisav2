@@ -819,7 +819,7 @@ h2.temas_estilo {
   font-family: 'Anek Malayalam';
 }
 
-.bloque-programas .media_block .text_block .date,
+/* .bloque-programas .media_block .text_block .date, */
 .bloque-programas .media_block .text_block .article-section a {
   color: #23dcd1;
   text-transform: uppercase;
@@ -860,7 +860,7 @@ h2.temas_estilo {
   opacity: .7;
 }
 
-.carrusel-programas.bloque-programas .media_block .text_block .date,
+/* .carrusel-programas.bloque-programas .media_block .text_block .date, */
 .bloque-programas .media_block .text_block .article-section a {
   text-transform: uppercase;
   font-weight: 600 !important;
