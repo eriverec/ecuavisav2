@@ -23,23 +23,51 @@ const fechaFin = ref('');
 const ultimosUsuariosVisible = ref(false);
 const ultimasVisitasVisible = ref(false);
 const titulo = ref('');
+const filtrosVisitas = ref([]);
+const filtroSelected= ref({});
+const btnFiltros= ref('');
+const filtroDefault= ref({});
 
+async function fetchFiltros() {
+        await fetch('https://servicio-filtros.vercel.app/visitas/all')
+        .then(response => response.json())
+        .then(data => {
+          filtrosVisitas.value = Array.from(data);
+         })
+        .catch(error => {return error});
+       
+        let filtros = Array.from(filtrosVisitas.value);
+        if(filtros.length > 0){
+        let checkDefault = filtros.filter(a => a.isDefault === true );
+        filtroDefault.value = checkDefault[0];
+        btnFiltros.value = checkDefault[0]._id;
+        fechaIngresada.value = String(checkDefault[0].fecha);
+        }       
+}
 
 async function fetchData(fechai, fechaf) {
     isLoading.value = true;
-    
-    if(!fechai && !fechaf){
-    var fechaI = moment().add(-6, 'days').format("MM-DD-YYYY");
-    var fechaF = moment().add(1, 'days').format("MM-DD-YYYY");
+    let fechaI;
+    let fechaF;
+    if(fechai && fechaf){
+      fechaI = fechai;
+      fechaF = fechaf; 
+    }else if(filtroDefault.value){
+      let fechas = filtroDefault.value.fecha.split('a');
+      fechaI = moment(fechas[0]).add(+1, 'days').format('MM/DD/YYYY');
+      fechaF = moment(fechas[1]).add(-1, 'days').format('MM/DD/YYYY');      
     }
-    
+    else{
+    fechaI = moment().add(-6, 'days').format("MM-DD-YYYY");
+    fechaF = moment().add(1, 'days').format("MM-DD-YYYY");
+    }  
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     var fechasCount = JSON.stringify({
-              "fechai": fechai || fechaI,
-              "fechaf": fechaf || fechaF
+              "fechai": fechaI,
+              "fechaf": fechaF
           });
 
     var requestOptions = {
@@ -60,8 +88,8 @@ async function fetchData(fechai, fechaf) {
         
             for (let i = 1; i < pages+1; i++){  
             var fechasFetch = JSON.stringify({
-                      "fechai": fechai || fechaI,
-                      "fechaf": fechaf || fechaF,
+                      "fechai": fechaI,
+                      "fechaf": fechaF,
                       "page": i
                   });      
              var requestOptions2 = {
@@ -106,6 +134,7 @@ async function fetchData(fechai, fechaf) {
 }
 
 async function initData (){
+  await fetchFiltros();
   let formatI = moment().add(-7, 'days').format("MM-DD-YYYY");
   let formatF = moment().format("MM-DD-YYYY");
   fechaIngresada.value = String(formatI+' a '+formatF); 
@@ -147,7 +176,7 @@ async function fetchDataFecha(fechai, fechaf) {
 
 async function obtenerFechaDispositivos (selectedDates, dateStr, instance){
     try {
-        
+    btnFiltros.value = ''; 
         if(selectedDates.length > 1){
             let fechaI = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
             let fechaF = moment(selectedDates[1]).format('MM/DD/YYYY');
@@ -160,6 +189,38 @@ async function obtenerFechaDispositivos (selectedDates, dateStr, instance){
     } catch (error) {
         console.error(error); 
     }          
+}
+
+async function obtenerFechaFiltroDispositivos (fechas){
+    try {
+        let array = fechas.toString().split('a');
+        if(array.length > 1){
+            let fechaI = moment(array[0]).add(+1, 'days').format('MM/DD/YYYY');
+            let fechaF = moment(array[1]).format('MM/DD/YYYY');
+            fechaIni.value = fechaI;
+            fechaFin.value = fechaF;          
+            await fetchData(fechaI, fechaF);
+            
+            //panelGrafico.classList.remove("disabled");                       
+          }
+    } catch (error) {
+        console.error(error); 
+    }          
+}
+
+async function resolveFiltroSelection(id){
+
+await fetch('https://servicio-filtros.vercel.app/visitas/id?' + new URLSearchParams({ id: id }))
+.then(response => response.json())
+.then(data => {
+filtroSelected.value = data;        
+})
+.catch(error => {return error}); 
+let filtro = filtroSelected.value;
+fechaIngresada.value = String(filtro.fecha);
+
+await obtenerFechaFiltroDispositivos(filtro.fecha);        
+
 }
 onMounted(initData);
 
@@ -322,6 +383,19 @@ const resolveUltimasVisitasUser =(first, last)=>{
         }"
         />
         </div>
+        <VCol cols="12">
+  <VBtnToggle v-if="!isLoading"   
+        v-model="btnFiltros"
+        color="primary"
+        divided
+      >
+   <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosVisitas">
+    {{ item.nombre }}
+   </VBtn>
+
+   </VBtnToggle>
+
+    </VCol>
     </VCardText>
         <VCardText v-if="isLoading">Cargando datos...</VCardText>
         <VCardText  v-else>

@@ -935,8 +935,9 @@ import { useTheme } from 'vuetify';
         this.filtrosDispositivos = Array.from(data);
          })
         .catch(error => {return error});
-       
+         
         let filtros = Array.from(this.filtrosDispositivos);
+        if(filtros.length > 0){
         let checkDefault = filtros.filter(a => a.isDefault === true );
         this.filtroDefault = checkDefault[0];
         this.btnFiltros = checkDefault[0]._id;
@@ -945,7 +946,7 @@ import { useTheme } from 'vuetify';
         this.selectedDispositivo = checkDefault[0].device;
         this.selectedActividad = checkDefault[0].actividad;
         this.fechaIngesada = String(checkDefault[0].fecha);
-        
+        }
         },
 
         async resolveFiltroSelection(id){
