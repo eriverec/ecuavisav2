@@ -665,11 +665,11 @@ h2.temas_estilo {
   padding: 1.5rem 0 0px;
 }
 
-.bloque-programas .media_block .text_block .date{
+.bloque-programas .media_block .text_block .inf2{
   font-family: 'Archivo';
-  font-size: 16px;
+  font-size: 14px;
   font-style: normal;
-  font-weight: 300;
+  font-weight: 500;
   line-height: 26px;
   color: #d5d5d5;
 }
