@@ -494,6 +494,20 @@ button#btnNombreM {
   text-decoration-line: underline;
   color: #2927B9;
 }
+button#cambionombre {
+  display: flex;
+  flex-direction: column;
+  background-color: transparent !important;
+  border-color: transparent !important;
+  font-family: 'Mattone 150';
+  font-style: normal;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: uppercase;
+  padding: 10px 17px;
+  color: #2927b9;
+
+}
 
 @media (max-width: 767px) {
   .MP_datos .insideTitle {
