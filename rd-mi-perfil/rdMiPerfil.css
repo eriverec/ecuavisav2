@@ -480,6 +480,20 @@
 .MP_datos .outsidetName {
   border-top: 1px solid #CACACA;
 }
+.button_nombre.btn_nombre {
+  display: flex;
+  justify-content: flex-end;
+}
+button#btnNombreM {
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 30px;
+  padding-top: 0px;
+  line-height: 26px;
+  text-decoration-line: underline;
+  color: #2927B9;
+}
 
 @media (max-width: 767px) {
   .MP_datos .insideTitle {
