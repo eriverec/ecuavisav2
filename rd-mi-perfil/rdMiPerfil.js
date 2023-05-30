@@ -1776,8 +1776,52 @@ miPerfil();
 /*BLOQUE SECCION MI PERFIL*/
 
 
+/*CAMBIAR EL NOMBRE DEL USUARIO*/
+var cambionombre = document.querySelector('#cambionombre');
+cambionombre.addEventListener("click", function () {
+  cambiarNombre();
+});
 
+document.getElementById("cambioname").value = ECUAVISA_EC.USER_data().name
+document.getElementById("cambionape").value = ECUAVISA_EC.USER_data().lastname
 
+function cambiarNombre() {
+  var btn = cambionombre
+  btn.setAttribute("disabled", true); 
+
+  let first_name = document.getElementById("cambioname").value.trim() || '';
+  let last_name = document.getElementById("cambionape").value.trim() || '';
+  
+  //servicio render Luis
+  fetch("https://ecuavisa-login-service.onrender.com/update/name", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: new URLSearchParams({
+      email: ECUAVISA_EC.USER_data().email,
+      idUser: ECUAVISA_EC.USER_data().id,
+      first_name: first_name,
+      last_name: last_name,
+    }),
+  }).then((response) => response.json())
+    .then(async (result) => {
+      if (result.resp) {
+        localStorage.wylexFirstName = first_name;
+        localStorage.wylexLastName  = last_name;
+
+        alert("Tados los datos fueron guardados");
+        location.reload();
+      } else {
+        alert(result.msj);
+      }
+      btn.removeAttribute('disabled');
+    })
+    .catch((error) => {
+      btn.removeAttribute('disabled');
+      console.log("error", error); /*; window.location = URL_login_G*/
+    });
+}
 
 // MODAL RECUPERAR CONTRASEÑA
 
