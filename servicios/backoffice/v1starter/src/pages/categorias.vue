@@ -91,9 +91,13 @@ async function onFormCategoriasSubmit (id){
 			  fechaPublicado: arrayFinal[index]?.fechaPublicado? arrayFinal[index].fechaPublicado : ""
             } 
 	}
-	   	    
-    arrayFinal[index] = data;     
+	let objectUpd = updateCategorias.value;
+	let objectOg = Object.create(arrayFinal[index]);
+	console.log(objectUpd);
+	 
+    arrayFinal[index] = data;    
 
+		  
 	var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
 
@@ -108,15 +112,33 @@ async function onFormCategoriasSubmit (id){
 
 		await fetch("https://getmetadatos-service.vercel.app/send", requestOptions)
 		.then(response => response.text())
-		.then(result => {
+		.then(async result => {		
+			var myHeaders2 = new Headers();
+				myHeaders2.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+						"tipo": "intereses",
+						"id": objectOg.id,
+						"accion": "update",
+						"campos": objectUpd,
+						"fecha": dateNow,
+						"usuario": ""
+					});
+			var requestOptions2 = {
+				method: 'POST',
+				headers: myHeaders2,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/send`, requestOptions2)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+			
 			fetchCategorias();
 			isCategoriasEditVisible.value = false;
 			return true
 		})
 		.catch(error => console.log('error', error));
-	/*categoriasListStore.sendCategorias(arrayFinal).catch((error) => {
-		console.error(error);
-	});*/
+
 	
 };
 
