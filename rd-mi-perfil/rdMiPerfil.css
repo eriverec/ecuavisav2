@@ -1196,6 +1196,17 @@ button#btnSaveM {
   gap: 20px;
   width: 100%;
 }
+.img-user-me:after {
+  position: absolute;
+  content: "";
+  width: 20px;
+  height: 20px;
+  background: #00C17C;
+  border-radius: 100px;
+  transform: translate(-54px, 11px);
+  top: 0;
+  left: 100%;
+}
 
 .data-user-me {
   padding-bottom: 10px;
