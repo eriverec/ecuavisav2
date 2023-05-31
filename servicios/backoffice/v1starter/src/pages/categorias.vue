@@ -106,7 +106,7 @@ async function onFormCategoriasSubmit (id){
 		redirect: 'follow'
 		};
 
-		await fetch("https://send-category.vercel.app/send", requestOptions)
+		await fetch("https://getmetadatos-service.vercel.app/send", requestOptions)
 		.then(response => response.text())
 		.then(result => {
 			fetchCategorias();
