@@ -46,8 +46,9 @@ export default [
     children: [
       { title: 'Lista de Usuarios', to: 'apps-trazabilidad-list' },
       // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
-      { title: 'Dispositivos', to: 'apps-dispositivos' },
-      { title: 'Visitas', to: 'apps-visitas' }
+      // modulos por salir 
+      // { title: 'Dispositivos', to: 'apps-dispositivos' },
+      // { title: 'Visitas', to: 'apps-visitas' }
     ],
   },
 
@@ -75,11 +76,12 @@ export default [
       // { title: 'Eventos', to: 'apps-configuracion-add' },
     ],
   },
-  {
-    title: 'Filtros',
-   icon: { icon: 'tabler-database-cog' },
-    to: { name: 'apps-filtros' }
-},
+  // modulo por salir filtros
+//   {
+//     title: 'Filtros',
+//    icon: { icon: 'tabler-database-cog' },
+//     to: { name: 'apps-filtros' }
+// },
   // {
   //   title: 'Paquetes',
   //   children: [
