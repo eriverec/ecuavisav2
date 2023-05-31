@@ -1046,7 +1046,7 @@ button#btnNombreM {
 
 .sep_regresar {
   padding-top: 20px;
-  padding-bottom: 28px;
+  padding-bottom: 0px;
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 300;
@@ -1186,7 +1186,7 @@ button#btnSaveM {
 
 .info-perfil {
   margin-top: -100px;
-  margin-bottom: 55px;
+  margin-bottom: 40px;
   margin-right: 120px;
 }
 
@@ -1201,7 +1201,7 @@ button#btnSaveM {
   padding-bottom: 10px;
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 30px;
   width: calc(100% - 250px);
   padding-top: 130px;
   justify-content: flex-end;
