@@ -291,9 +291,9 @@ const resetFiltro =()=>{
 								<th scope="col">ID</th>
 								<th scope="col">Nombre del interés</th>
 								<th scope="col">Descripción</th>
-								<th scope="col">IMG Url</th>								
+								<!-- <th scope="col">IMG Url</th>								 -->
 								<th scope="col">Publicado</th>
-								<th scope="col">Fecha de publicación</th>
+								<!-- <th scope="col">Fecha de publicación</th> -->
 								<th scope="col">Acciones</th>
 							</tr>
 						</thead>
@@ -331,24 +331,23 @@ const resetFiltro =()=>{
 									</div>
 								</td>
 
-								<td>
+								<!-- <td>
 									<div class="d-flex align-left">
 										<div class="d-flex flex-column">
 											<img v-if="categoria.picImg !== ''" :src="categoria.picImg" width="200" class="img-intereses">
 										</div>
 									</div>
-								</td>
+								</td> -->
 
 								<td>
 									<div class="d-flex align-left">
 										<div class="d-flex flex-column">
-											<h6 class="text-base">
-												{{ categoria.publicado }}
-											</h6>
+											<!-- <h6 class="text-base"> {{ categoria.publicado }} </h6> -->
+											<VChip :color="categoria.publicado == true ? 'success' : 'warning'" class="mr-4" >{{ categoria.publicado == true ? 'Activo' : 'Inactivo' }} </VChip>
 										</div>
 									</div>
 								</td>
-								<td>
+								<!-- <td>
 									<div class="d-flex align-left">
 										<div class="d-flex flex-column">
 											<h6 class="text-base">
@@ -356,7 +355,7 @@ const resetFiltro =()=>{
 											</h6>
 										</div>
 									</div>
-								</td>
+								</td> -->
 								<td class="text-center" style="width: 5rem">
 									<VBtn
 										icon

@@ -32,11 +32,11 @@ export default [
   {
     title: 'Concursos',
     icon: { icon: 'tabler-balloon' },
-    to: { name: 'apps-concursos' },
-    // children: [
-    //   { title: 'Lista', to: 'apps-trazabilidad-list' },
+    // to: { name: 'apps-concursos' },
+    children: [
+      { title: 'Click click boom', to: 'apps-concursos' },
     //   // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
-    // ],
+    ],
   },
   
   {
@@ -56,9 +56,9 @@ export default [
     title: 'Intereses y Sug.',
     icon: { icon: 'tabler-status-change' },
     children: [
-      { title: 'Ver sugerencias', to: 'apps-sugerencias-list' },
       { title: 'Agregar sugerencias', to: 'apps-sugerencias-add' },
-      { title: 'Ver Intereses', to: 'categorias' },
+      { title: 'Lista Sugerencias', to: 'apps-sugerencias-list' },
+      { title: 'Lista Intereses', to: 'categorias' },
     ],
   },
 
