@@ -1201,7 +1201,7 @@ button#btnSaveM {
   padding-bottom: 10px;
   display: flex;
   flex-direction: column;
-  gap: 23px;
+  gap: 25px;
   width: calc(100% - 250px);
   padding-top: 130px;
   justify-content: flex-end;
