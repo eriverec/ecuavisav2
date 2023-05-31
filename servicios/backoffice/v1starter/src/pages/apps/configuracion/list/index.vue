@@ -28,7 +28,7 @@ const checkbox = ref(1)
                 </div>
 
                 
-                <!-- inicio lista Usuarios -->
+                <!-- inicio lista de Módulos -->
                   
                   <VList lines="two" >
                     <template  v-for="(element, index) in datos" :key="index" >
@@ -43,7 +43,7 @@ const checkbox = ref(1)
                           
                         </VListItemTitle>
                         <VListItemSubtitle class="mt-1" color="info">
-                          <span class="text-xs text-disabled">Item N° {{ index + 1 }}: {{ element.description }}</span>
+                          <!-- <span class="text-xs text-disabled">Item N° {{ index + 1 }}: {{ element.description }}</span> -->
                         </VListItemSubtitle>
                         <template #append>
                           <vSwitch
