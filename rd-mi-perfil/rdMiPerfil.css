@@ -1201,11 +1201,10 @@ button#btnSaveM {
   padding-bottom: 10px;
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 23px;
   width: calc(100% - 250px);
   padding-top: 130px;
   justify-content: flex-end;
-}
 }
 
 .name-user-me {
