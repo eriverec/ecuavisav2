@@ -81,7 +81,7 @@ const currentTab = ref('tab-lista')
 
                 </div>
 
-                <div class="body" v-if="listUsuariosG.length > 0">
+                <div class="body" v-if="listUsuariosG.length < 0">
                   <VBtn prepend-icon="mdi-file-excel" @click="searchUsers">
                     Exportar a .XLS
                   </VBtn>
