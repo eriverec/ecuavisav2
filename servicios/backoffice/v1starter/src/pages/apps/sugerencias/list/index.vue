@@ -82,6 +82,10 @@ const currentTab = ref('tab-lista')
                 </div>
 
                 <div class="body" v-if="listUsuariosG.length > 0">
+                  <VBtn prepend-icon="mdi-file-excel" @click="searchUsers">
+                    Exportar a .XLS
+                  </VBtn>
+
                   <VTable class="text-no-wrap p-10">
                     <!-- 👉 table head -->
                     <thead>
@@ -177,6 +181,22 @@ const currentTab = ref('tab-lista')
 </style>
 
 <script>
+  import * as XLSX from 'xlsx';
+
+  function exportarLista(lista, nombreArchivo) {
+    // Crear un nuevo libro de Excel
+    const libro = XLSX.utils.book_new();
+
+    // Crear una hoja de cálculo con los datos de la lista
+    const hoja = XLSX.utils.json_to_sheet(lista);
+
+    // Añadir la hoja al libro
+    XLSX.utils.book_append_sheet(libro, hoja, 'Datos');
+
+    // Guardar el libro como un archivo .xlsx
+    XLSX.writeFile(libro, nombreArchivo + '.xlsx');
+  }
+
 export default {
   data() {
     return {
@@ -207,7 +227,30 @@ export default {
     // direccionar() {
     //   window.location.href = 'https://servicio-de-actividad.vercel.app/actividad/users/fidelidad/export/excel?limit='+this.maxRegistros;
     // },
+    async searchUsers() {
+      var nuevalist = [];
+      var titulo = "";
+      for(var i in this.listUsuarioFieles){
+        if(this.listUsuarioFieles[i].value == this.usuarioFielModel){
+          titulo = this.listUsuarioFieles[i].title;
+        }
+      }
 
+      for(var i in this.listUsuariosG){
+        var ins = this.listUsuariosG[i];
+        nuevalist.push({
+          "Sugerencia": titulo,
+          "Nombre": `${ins.first_name}`,
+          "Apellido": `${ins.last_name}`,
+          "Nombre completo": `${ins.first_name} ${ins.last_name}`,
+          "Teléfono": `${ins.phone_number}`,
+          "Correo": `${ins.email}`,
+          "wylexId": `${ins.wylexId}`,
+        });
+      }
+
+      exportarLista(nuevalist, `usuarios-${titulo}`);
+    },
     async obtenerDatosGrupoUsuarios(id) {
       const respuesta = await fetch(`https://sugerencias-ecuavisa.vercel.app/sugerencia/group/usuario?idSugerencia=${id}`);
       const datos = await respuesta.json();
