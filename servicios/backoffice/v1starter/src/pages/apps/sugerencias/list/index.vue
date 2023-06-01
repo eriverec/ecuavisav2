@@ -1,6 +1,6 @@
 <script setup>
+import chartSugerencias from "@/views/charts/apex-chart/ChartSugerenciasAnalytics.vue";
 import axios from '@axios';
-
 const currentTab = ref('tab-lista')
 </script>
 
@@ -61,20 +61,21 @@ const currentTab = ref('tab-lista')
               </VWindowItem>
 
               <VWindowItem value="tab-agregar">
+                <chartSugerencias/>
+                <!-- 
                 <div class="pt-4">
                   <div class="d-flex align-center flex-wrap gap-2">
-                    <!-- 👉 Reset button -->
+               
                     <VSelect style="width: 190px;" class="" v-model="usuarioFielModel" :items="listUsuarioFieles" label="Listado de sugerencias"
                       clearable clear-icon="tabler-x" :searchable="false" />
-                    <!-- 👉 Export button -->
+                 
                     <VBtn variant="tonal" color="success" class="d-none" prepend-icon="mdi-file-excel" @click="direccionar">
                       Exportar usuarios
                     </VBtn>
-                    <!-- 👉 Add user button -->
+               
                   </div>
                 </div>
-                <!-- <p>Próximamente</p> -->
-                <!-- <iframe src="http://localhost/ecuavisav2/servicios/embeds/sugerenciasAnalytics.html" frameborder="0"></iframe> -->
+               
                 <div>
                   <iframe style="background:#2f3349 ;" class="iframe-dark" src="https://ecuavisadev.netlify.app/servicios/embeds/suganalyticsdark.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
                   <iframe class="iframe-light" src="https://ecuavisadev.netlify.app/servicios/embeds/suganalyticslight.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
@@ -87,7 +88,7 @@ const currentTab = ref('tab-lista')
                   </VBtn>
 
                   <VTable class="text-no-wrap p-10">
-                    <!-- 👉 table head -->
+                  
                     <thead>
                       <tr>
                         <th scope="col">Usuario</th>
@@ -95,10 +96,10 @@ const currentTab = ref('tab-lista')
                         <th scope="col">último inicio</th>
                       </tr>
                     </thead>
-                    <!-- 👉 table body -->
+
                     <tbody >
                       <tr v-for="usuario in listUsuariosG" style="height: 3.5rem">
-                        <!-- 👉 nombre modulo -->
+                       
                         <td>
                           <div class="d-flex align-center">
                           <VAvatar variant="tonal" class="me-3" size="38">
@@ -147,7 +148,7 @@ const currentTab = ref('tab-lista')
                     </tbody>
                   </VTable>
                 </div>
-
+                    -->
               </VWindowItem>
 
               <!-- <VWindowItem v-for="item in 3" :key="item" >
@@ -181,7 +182,7 @@ const currentTab = ref('tab-lista')
 </style>
 
 <script>
-  import * as XLSX from 'xlsx';
+  //import * as XLSX from 'xlsx';
 
   function exportarLista(lista, nombreArchivo) {
     // Crear un nuevo libro de Excel

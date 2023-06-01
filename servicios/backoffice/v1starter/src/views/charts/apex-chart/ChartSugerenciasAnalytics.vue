@@ -22,10 +22,12 @@ const fechaSelected = ref('');
 const isUsersTableVisible = ref(false);
 const selectedInteres = ref('');
 async function fetchData (){ 
-    await fetch('https://sugerencias-ecuavisa.vercel.app/interes/all')
+    await fetch('https://sugerencias-ecuavisa.vercel.app/all')
       .then(response => response.json())
       .then(resp => {     
-       data.value = resp.data;  
+       let filtro = resp.data.filter(a=>{ return a.users_suscribed > 0});   
+       data.value = filtro;  
+       console.log('data',data.value);
       });
      
 }
@@ -63,7 +65,7 @@ const seriesFormat = {
 const categoriesRaw = [];
 for (let i in dataRaw) {
     let num = parseInt(dataRaw[i].users_suscribed);
-    seriesFormat.data.push(num+1);
+    seriesFormat.data.push(num);
     categoriesRaw.push(dataRaw[i].title);   
 }
 
@@ -112,13 +114,12 @@ return {series: [seriesFormat], options: options, intereses: categoriesRaw};
 
 async function resolveUsuarios(value){
     let filter = data.value.filter(e=> e.title == value); 
-    let id = filter[0].interesId;
+    let id = filter[0]._id;
    
-    await fetch('https://sugerencias-ecuavisa.vercel.app/interes/group/usuario?' + new URLSearchParams({interesId : id}))
+    await fetch('https://sugerencias-ecuavisa.vercel.app/sugerencia/group/usuario?' + new URLSearchParams({idSugerencia : id}))
       .then(response => response.json())
-      .then(resp => {     
+      .then(resp => {         
        dataUsuarios.value = resp.data;  
-       //console.log('users',dataUsuarios.value);
       });
     isUsersTableVisible.value = true;  
 }
@@ -195,7 +196,8 @@ function downloadSelection () {
   let doc = [];
   doc = Array.from(dataUsuarios.value);
   let title = "users_"+selectedInteres.value.replace(/ /g,"_");
-
+  console.log("usersFull", dataUsuarios.value);
+  //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
   exportCSVFile(headers, doc, title);
  // }
@@ -226,7 +228,7 @@ function downloadSelection () {
 					<VSelect style="width:100%;"
                             v-model="selectedInteres"
                             :items="resolveData.intereses"
-                            label="Intereses"
+                            label="Sugerencias"
                             @update:modelValue="resolveUsuarios"
                             />
 						
