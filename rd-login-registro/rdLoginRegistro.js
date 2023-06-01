@@ -291,7 +291,7 @@ function register() {
           email: email,
           nombre: name[0],
           apellido: name[1],
-          telefono: telefono,
+          telefono_numero: telefono,
           password: password,
         }),
       }).then((response) => response.json())
