@@ -23,7 +23,7 @@ const jsonDataHtml = [
   {
     "titulo": "Noticias",
     "descripcion": "Ecuavisa.com",
-    "listid": "565083",
+    "listid": "565081",
     "img": "https://placehold.co/80x80@2x.png"
   },
   {
@@ -33,11 +33,54 @@ const jsonDataHtml = [
     "img": "https://placehold.co/80x80@2x.png"
   },
   {
+    "titulo": "Mundo",
+    "descripcion": "Ecuavisa.com",
+    "listid": "568629",
+    "img": "https://placehold.co/80x80@2x.png"
+  },
+  {
+    "titulo": "Entretenimiento",
+    "descripcion": "Ecuavisa.com",
+    "listid": "568630",
+    "img": "https://placehold.co/80x80@2x.png"
+  },
+  {
     "titulo": "Estilo",
     "descripcion": "Ecuavisa.com",
-    "listid": "565083",
+    "listid": "568631",
     "img": "https://placehold.co/80x80@2x.png"
+  },
+  {
+    "titulo": "Abdón Rodríguez",
+    "descripcion": "Periodista Nacional",
+    "listid": "568633",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/RSJX/abdon_692508_20230112131150.jpg"
+  },
+  {
+    "titulo": "Claudia Roura",
+    "descripcion": "Periodista Digital",
+    "listid": "568634",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/POIX/claudia-roura_693183_20221230102842.jpg"
+  },
+  {
+    "titulo": "Daniela Maggi",
+    "descripcion": "Periodista Nacional",
+    "listid": "568635",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/MQIX/daniela-maggi_702985_20221230105507.jpg"
+  },
+  {
+    "titulo": "Diego Bravo",
+    "descripcion": "Periodista Nacional",
+    "listid": "568636",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/CBVU/diego-bravo_700751_20221230122757.jpg"
+  },
+  {
+    "titulo": "Fernando Guevara",
+    "descripcion": "Periodista Deportivo",
+    "listid": "568637",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/0d0/none/11705/ITJQ/fernando_696583_20230323151009.jpg"
   }
+
 ]
 
 
@@ -61,8 +104,8 @@ function buscarTemas(temas, name) {
 }
 
 function fetchPintarBotones() {
-  var  idUser = ECUAVISA_EC.USER_data().id;
-  
+  var idUser = ECUAVISA_EC.USER_data().id;
+
   return fetch("https://ecuavisa-temas.vercel.app/" + idUser)
     .then(response => response.json())
     .then(result => {
