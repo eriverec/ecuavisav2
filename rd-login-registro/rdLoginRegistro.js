@@ -226,11 +226,33 @@ function login() {
   }
 }
 
+var telefonoValido = false;
+
+var telefonoInput2 = document.getElementById('regTelefono'); // Obtener el elemento de entrada de teléfono
+
+telefonoInput2.addEventListener('input', function() {
+  const telefono = telefonoInput2.value.trim(); // Obtener el valor del teléfono sin espacios al inicio y al final
+
+  // Validar que solo se ingresen números y tenga una longitud entre 7 y 10 caracteres
+  const validacion = /^\d{7,10}$/.test(telefono);
+
+  if (validacion) {
+    // El teléfono es válido
+    telefonoValido = true;
+    // Puedes realizar otras acciones aquí si el teléfono es válido
+  } else {
+    // El teléfono es inválido
+    telefonoValido = false;
+    // Puedes mostrar un mensaje de error o realizar otras acciones aquí si el teléfono es inválido
+  }
+});
+
 function register() {
   let cboxTermReg = document.getElementById("checkTermsReg");
   if (cboxTermReg.checked == true) {
     var btn = document.querySelector('#registrar');
     btn.setAttribute("disabled", true); 
+    document.getElementById("regTelefono").required = true;
     document.getElementById("regName").required = true;
     document.getElementById("regEmail").required = true;
     document.getElementById("regPass").required = true;
@@ -238,12 +260,19 @@ function register() {
 
     let name = document.getElementById("regName").value.trim().split(" ");
     let email = document.getElementById("regEmail").value.trim();
+    let telefono = document.getElementById("regTelefono").value.trim();
     let password = document.getElementById("regPass").value;
     let passwordConf = document.getElementById("regConf").value;
     let token;
 
-    if(passwordConf == '' || password =='' || name =='' || email =='' || passwordConf.length == 0 || password.length == 0 || name.length == 0 || email.length == 0){
+    if(passwordConf == '' || password =='' || name =='' || telefono =='' || email =='' || passwordConf.length == 0 || password.length == 0 || name.length == 0 || email.length == 0){
       alert('Todos los campos son requeridos, se deben llenar');
+      btn.removeAttribute('disabled');
+      return false;
+    }
+
+    if(!telefonoValido){
+      alert('El número de teléfono no es el correcto');
       btn.removeAttribute('disabled');
       return false;
     }
@@ -262,6 +291,7 @@ function register() {
           email: email,
           nombre: name[0],
           apellido: name[1],
+          telefono_numero: telefono,
           password: password,
         }),
       }).then((response) => response.json())
