@@ -1,13 +1,12 @@
 <script setup>
 import { useUserListStore } from '@/views/apps/user/useUserListStore'
 import UserBioPanel from '@/views/apps/user/view/UserBioPanel.vue'
-//import UserTabBillingsPlans from '@/views/apps/user/view/UserTabBillingsPlans.vue'
-//import UserTabConnections from '@/views/apps/user/view/UserTabConnections.vue'
-//import UserTabNotifications from '@/views/apps/user/view/UserTabNotifications.vue'
+import UserIntereses from '@/views/apps/user/view/UserIntereses.vue'
+import UserNotifications from '@/views/apps/user/view/UserNotifications.vue'
+import UserSugerencias from '@/views/apps/user/view/UserSugerencias.vue'
 import UserTabOverview from '@/views/apps/user/view/UserTabOverview.vue'
 import UserTemas from '@/views/apps/user/view/UserTemas.vue'
-import UserNotifications from '@/views/apps/user/view/UserNotifications.vue'
-//import UserTabSecurity from '@/views/apps/user/view/UserTabSecurity.vue'
+
 
 const userListStore = useUserListStore()
 const route = useRoute()
@@ -41,8 +40,7 @@ const tabs = [
 
 const fetchId = () => {
 userListStore.fetchUser(Number(route.params.id)).then(response => {
-  userData.value = response.data;
-  
+  userData.value = response.data; 
 })
 };
 watchEffect(fetchId); 
@@ -93,6 +91,10 @@ const reloadP = () =>  {
     <UserNotifications/>
     
   </VCol>
+  
+    <UserSugerencias/>
+    <UserIntereses/>
+    
  
     <!--
       <VTabs

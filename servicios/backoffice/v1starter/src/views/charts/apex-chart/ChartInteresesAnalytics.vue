@@ -25,7 +25,8 @@ async function fetchData (){
     await fetch('https://sugerencias-ecuavisa.vercel.app/interes/all')
       .then(response => response.json())
       .then(resp => {     
-       data.value = resp.data;  
+       let filtro = resp.data.filter(a=>{ return a.estado == true && a.users_suscribed > 0});   
+       data.value = filtro;    
       });
      
 }

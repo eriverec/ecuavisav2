@@ -25,7 +25,7 @@ async function fetchData (){
     await fetch('https://sugerencias-ecuavisa.vercel.app/all')
       .then(response => response.json())
       .then(resp => {     
-       let filtro = resp.data.filter(a=>{ return a.users_suscribed > 0});   
+       let filtro = resp.data.filter(a=>{ return a.estado == true && a.users_suscribed > 0});   
        data.value = filtro;  
        console.log('data',data.value);
       });
