@@ -19,7 +19,8 @@
   <!-- <script src="main.js"></script> -->
   <!-- <script src="token.js"></script> -->
 
-  <div class="parent_block" style="margin-bottom: 10px;"></div>
+  <div class="parent_block"></div>
+  <!-- <script src="https://itemsnewsletter.onrender.com/newsletterTabs.js"></script> -->
 
   <script>
     function templateHtml(section) {
@@ -85,7 +86,10 @@
     }
 
     function fetchPintarBotones() {
-      return fetch("https://ecuavisa-temas.vercel.app/76572")
+      var idUser = "76521";
+      // const emailUser = ECUAVISA_EC.USER_data().id;
+
+      return fetch("https://ecuavisa-temas.vercel.app/" + idUser)
         .then(response => response.json())
         .then(result => {
 
@@ -155,7 +159,7 @@
 
 
               // const emailUser = ECUAVISA_EC.USER_data().id;
-              var idUser = "76572";
+              var idUser = "76521";
               // var article = document.querySelector("#list-btn");
               var seletItems = document.querySelectorAll('.section-items');
 
@@ -245,7 +249,7 @@
                     console.log(result)
 
                     // const emailUser = ECUAVISA_EC.USER_data().id;
-                    var idUser = "76572";
+                    var idUser = "76521";
                     // var article = document.querySelector("#list-btn");
                     var seletItems = document.querySelectorAll('.section-items');
                     var nameSection = element.dataset.idname;

@@ -61,7 +61,9 @@ function buscarTemas(temas, name) {
 }
 
 function fetchPintarBotones() {
-  return fetch("https://ecuavisa-temas.vercel.app/76572")
+  var  idUser = ECUAVISA_EC.USER_data().id;
+  
+  return fetch("https://ecuavisa-temas.vercel.app/" + idUser)
     .then(response => response.json())
     .then(result => {
 
