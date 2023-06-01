@@ -1,5 +1,6 @@
 <script setup>
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
+import chartIntereses from "@/views/charts/apex-chart/ChartInteresesAnalytics.vue";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -173,6 +174,7 @@ var filteredData = computed(() => {
       item.id.toLowerCase().includes(searchKeyword.value.toLowerCase())
     );
   });
+  	/*
   	let filtroFecha;
 	
   	if(fechaIngresada.value){
@@ -188,21 +190,37 @@ var filteredData = computed(() => {
 		}		
 	});
 	//console.log('filtroFecha',filtroFecha);
-	}	
+	}*/	
   const start = (currentPage.value - 1) * itemsPerPage.value;
 	const end = start + itemsPerPage.value;
-	var dataFiltrada = fechaIngresada.value? filtroFecha.slice(start, end): catag_list.slice(start, end);
+	var dataFiltrada = catag_list.slice(start, end);
 	totalPages.value = Math.ceil(catag_list.length / itemsPerPage.value);
 	//filteredData =  catag_list;
 	return dataFiltrada;
 });
 
+
 const resetFiltro =()=>{
+	const iframeD = document.getElementById('iframeAnalyticsD');
+	const iframeL = document.getElementById('iframeAnalyticsL');	
 	fechaIngresada.value = '';
-	searchKeyword.value = '';
-	fetchCategorias();
+	iframeD.contentWindow.createChart();
 }
+const resolveFechaEstadisticas = (dates) =>{
+	if(dates.length > 1){
+		const iframeD = document.getElementById('iframeAnalyticsD');
+		const iframeL = document.getElementById('iframeAnalyticsL');
+		let fechas = dates.toString();
+
+		iframeD.contentWindow.postMessage(fechas, '*');	
+		iframeD.contentWindow.createChart();
+
+	}
+
+}
+
 </script>
+
 
 <style type="text/css">
 	.p-10 {
@@ -239,30 +257,7 @@ const resetFiltro =()=>{
 			          >
 			          </VTextField>
 			      </div>
-				  <div class="date-picker-wrapper" style="width:30%; margin-left: 5px;" >
-					<AppDateTimePicker
-						label="Fecha"
-						prepend-inner-icon="tabler-calendar"
-						density="compact"
-						v-model="fechaIngresada"
-						show-current= true
-						@on-change="obtenerFechaDispositivos"
-						:config="{ 												
-						altFormat: 'F j, Y',
-						dateFormat: 'd/m/Y',
-						maxDate: new Date(),
-						reactive :true						
-						}"
-					/>
-					</div>
-					<div style="margin-left: 5px;">
-						<VBtn
-							color="primary"							
-							@click="resetFiltro"
-							>
-							Reinciar filtro
-						</VBtn>
-					</div>
+				  
 				</div>
 			    </VCardText>
 				
@@ -490,32 +485,15 @@ const resetFiltro =()=>{
 							</VCardText>
 						</VCard>
 					</VDialog>
-                    
-                
-					<!--
-            <VCardText
-              class="d-flex align-center flex-wrap justify-space-between gap-4 py-3 px-5"
-            >
-              <span class="text-sm text-disabled">
-                {{ paginationData }}
-              </span>
-  
-              <VPagination
-                v-model="page"
-                size="small"
-                :total-visible="5"
-                :length="totalPage"
-              />
-            </VCardText>
-             -->	
-						</VWindowItem>
+                    	
+			</VWindowItem>
 						<VWindowItem value="tab-estadistica">
-                <!-- <p>Próximamente</p> -->
-                <!-- <iframe src="http://localhost/ecuavisav2/servicios/embeds/sugerenciasAnalytics.html" frameborder="0"></iframe> -->
+						
                 <div>
-                  <iframe style="background:#2f3349 ;" class="iframe-dark" src="https://ecuavisadev.netlify.app/servicios/embeds/interesAnalyticsDark.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
-                  <iframe class="iframe-light" src="https://ecuavisadev.netlify.app/servicios/embeds/interesAnalyticsLight.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
-
+				<chartIntereses/>
+                 <!-- <iframe id= "iframeAnalyticsD" style="background:#2f3349 ;" class="iframe-dark" src="src\pages\apps\interesAnalyticsDark.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
+                  <iframe id= "iframeAnalyticsL" class="iframe-light" src="https://ecuavisadev.netlify.app/servicios/embeds/interesAnalyticsLight.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
+					-->
                 </div>
 
 
@@ -525,30 +503,10 @@ const resetFiltro =()=>{
 				</VCard>
 			</VCol>
 		</VRow>
-
-		<!-- 👉 Add New User -->
-		<!--
-      <AddNewUserDrawer
-        v-model:isDrawerOpen="isAddNewUserDrawerVisible"
-        @user-data="addNewUser"
-      />-->
+	
 	</section>
 </template>
-<style scoped>  
-.v-card.v-theme--dark .iframe-dark {
-  display: block;
-}
-.v-card.v-theme--dark .iframe-light{
-  display: none;
-}
 
-.v-card.v-theme--light .iframe-dark{
-  display: none;
-}
-.v-card.v-theme--light .iframe-light{
-  display: block;
-}
-</style>
 <style lang="scss">
 .app-user-search-filter {
 	inline-size: 31.6rem;
