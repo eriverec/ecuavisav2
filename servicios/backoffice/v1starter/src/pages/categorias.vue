@@ -470,13 +470,13 @@ var filteredData = computed(() => {
 			</VWindowItem>
 						<VWindowItem value="tab-estadistica">
 						
-                <div>
+                <VCardItem>
 				<chartIntereses/>
                  <!-- <iframe id= "iframeAnalyticsD" style="background:#2f3349 ;" class="iframe-dark" src="src\pages\apps\interesAnalyticsDark.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
                   <iframe id= "iframeAnalyticsL" class="iframe-light" src="https://ecuavisadev.netlify.app/servicios/embeds/interesAnalyticsLight.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
 					-->
-                </div>
-
+               
+				</VCardItem>
 
 
               </VWindowItem>

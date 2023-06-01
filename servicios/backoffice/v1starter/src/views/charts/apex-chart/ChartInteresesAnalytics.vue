@@ -15,19 +15,19 @@ const colorVariables = themeColors => {
 
 const vuetifyTheme = useTheme()
 const data = ref([]);
+const dataUsuarios = ref([]);
 const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value);
 const fechaIngresada = ref([]);
 const fechaSelected = ref('');
-
-const fetchData =()=>{ 
-      fetch('https://sugerencias-ecuavisa.vercel.app/interes/all')
+const isUsersTableVisible = ref(false);
+const selectedInteres = ref('');
+async function fetchData (){ 
+    await fetch('https://sugerencias-ecuavisa.vercel.app/interes/all')
       .then(response => response.json())
       .then(resp => {     
-       data.value = resp.data; 
-    
-      
+       data.value = resp.data;  
       });
-      
+     
 }
 onMounted(fetchData);
 
@@ -37,7 +37,7 @@ const getSelectedDates =(dates)=>{
     }
 }
 
-const resolveSeries = computed(() => {
+const resolveData = computed(() => {
 let dataRaw;
 let arrayFecha = Array.from(fechaIngresada.value);
 if(arrayFecha.length > 0){
@@ -63,7 +63,7 @@ const seriesFormat = {
 const categoriesRaw = [];
 for (let i in dataRaw) {
     let num = parseInt(dataRaw[i].users_suscribed);
-    seriesFormat.data.push(num);
+    seriesFormat.data.push(num+1);
     categoriesRaw.push(dataRaw[i].title);   
 }
 
@@ -107,21 +107,35 @@ const options= {
     }
       }
 
-return {series: [seriesFormat], options: options};
+return {series: [seriesFormat], options: options, intereses: categoriesRaw};
 });
+
+async function resolveUsuarios(value){
+    let filter = data.value.filter(e=> e.title == value); 
+    let id = filter[0].interesId;
+   
+    await fetch('https://sugerencias-ecuavisa.vercel.app/interes/group/usuario?' + new URLSearchParams({interesId : id}))
+      .then(response => response.json())
+      .then(resp => {     
+       dataUsuarios.value = resp.data;  
+       //console.log('users',dataUsuarios.value);
+      });
+    isUsersTableVisible.value = true;  
+}
 
 const resetFiltro = () =>{
     fechaIngresada.value = [];
     fechaSelected.value = '';
 }
-      
+  
+  
 </script>
 
 <template>
-    <div style="display: flex;" >		
-					<div class="date-picker-wrapper" style="width:30%; margin-left:2%;" >
+    <VRow style="display: flex;">
+                 <VCol sm="4" cols="6">
+					<div class="date-picker-wrapper" style="width:100%;" >
 					<AppDateTimePicker
-						
 						prepend-inner-icon="tabler-calendar"
 						density="compact"
 						v-model="fechaSelected"
@@ -135,21 +149,61 @@ const resetFiltro = () =>{
 						}"
 					/>
 					</div>
-					<div style="margin-left: 5px;">
+                </VCol>	
+                <VCol sm="4" cols="6">
+					
 						<VBtn
 							color="primary"							
 							@click="resetFiltro"
 							>
 							Reinciar filtro
 						</VBtn>
-					</div>	
-					</div>	
+					
+                </VCol>
+                <VCol sm="4" cols="6">              
+					<VSelect
+                            v-model="selectedInteres"
+                            :items="resolveData.intereses"
+                            label="Intereses"
+                            @update:modelValue="resolveUsuarios"
+                            />
+						
+                </VCol>
+						
+                </VRow>
   <VueApexCharts
     type="bar"
     height="400"
-    :options="resolveSeries.options"
-    :series="resolveSeries.series"
+    :options="resolveData.options"
+    :series="resolveData.series"
   />
+  <VCardText v-show="isUsersTableVisible">
+  <VCardTitle>Usuarios suscritos a {{ selectedInteres }}</VCardTitle> 
+  <VTable class="text-no-wrap tableNavegacion mb-5" hover="true" >
+            <thead>
+              <tr>
+                <th scope="col">Nombre</th>
+                <th scope="col">Email</th>
+                <th scope="col">Número de teléfono</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr v-for="item  in dataUsuarios" >
+                <td >
+                   {{ item.first_name}} {{ item.last_name}} 
+                </td>
+                <td >
+                  {{ item.email }}
+                </td>
+                <td >
+                  {{ item.phone_number }}
+                </td>
+                
+              </tr>
+            </tbody>
+          </VTable>
+        </VCardText>
 </template>
 <style type="text/css">
 .bg-light {
