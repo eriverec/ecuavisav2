@@ -128,12 +128,85 @@ const resetFiltro = () =>{
     fechaSelected.value = '';
 }
   
-  
+function convertToCSV(objArray) {
+  var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+  var str = "";
+
+  for (var i = 0; i < array.length; i++) {
+    var line = "";
+    for (var index in array[i]) {
+      if (line != "") line += ",";
+
+      line += array[i][index];
+    }
+
+    str += line + "\r\n";
+  }
+
+  return str;
+}
+
+function exportCSVFile(headers, items, fileTitle) {
+  if (headers && items[0].wylexId !== "wylexId") {
+    items.unshift(headers);
+  }
+
+  // Convert Object to JSON
+  var jsonObject = JSON.stringify(items);
+
+  var csv = convertToCSV(jsonObject);
+
+  var exportedFilenmae = fileTitle + ".csv" || "export.csv";
+
+  var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  if (navigator.msSaveBlob) {
+    // IE 10+
+    navigator.msSaveBlob(blob, exportedFilenmae);
+  } else {
+    var link = document.createElement("a");
+    if (link.download !== undefined) {
+      // feature detection
+      // Browsers that support HTML5 download attribute
+      var url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", exportedFilenmae);
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+}
+
+function downloadSelection () {
+   
+   //console.log('usersFull.value',usersFull.value);
+  let headers = {
+    userId: "userId",
+    interesId: "interesId",
+    meta_existe: "meta_existe",
+    created_at: "created",
+    first_name: "first_name",
+    last_name: "last_name",
+    phone_number: "phone_number",
+    email: "email",
+    site: "site"
+  };
+  let doc = [];
+  doc = Array.from(dataUsuarios.value);
+  let title = "users_"+selectedInteres.value.replace(/ /g,"_");
+  console.log("usersFull", dataUsuarios.value);
+  //console.log("doc", doc);
+  //if(usersFull.length > totalUsers){
+  exportCSVFile(headers, doc, title);
+ // }
+
+};
 </script>
 
 <template>
-    <VRow style="display: flex;">
-                 <VCol sm="4" cols="6">
+    <VRow style="display: flex; flex-wrap: wrap; row-gap: 0.1em;">
+              <VCol cols="4" >
 					<div class="date-picker-wrapper" style="width:100%;" >
 					<AppDateTimePicker
 						prepend-inner-icon="tabler-calendar"
@@ -149,19 +222,9 @@ const resetFiltro = () =>{
 						}"
 					/>
 					</div>
-                </VCol>	
-                <VCol sm="4" cols="6">
-					
-						<VBtn
-							color="primary"							
-							@click="resetFiltro"
-							>
-							Reinciar filtro
-						</VBtn>
-					
-                </VCol>
-                <VCol sm="4" cols="6">              
-					<VSelect
+        </VCol>
+          <VCol cols="3" >      
+					<VSelect style="width:100%;"
                             v-model="selectedInteres"
                             :items="resolveData.intereses"
                             label="Intereses"
@@ -169,7 +232,25 @@ const resetFiltro = () =>{
                             />
 						
                 </VCol>
-						
+
+                <VCol cols="5" style="display: flex; flex-wrap: wrap; column-gap: 0.2em; row-gap: 0.2em;" >					
+						<VBtn
+							color="primary"							
+							@click="resetFiltro"
+              :disabled="isExportLoading"
+							>
+							Reinciar filtro
+						</VBtn>	
+       
+          <VBtn
+            color="primary"							
+            @click="downloadSelection"
+            >
+            Exportar
+          </VBtn>
+        
+              </VCol>
+               					
                 </VRow>
   <VueApexCharts
     type="bar"
