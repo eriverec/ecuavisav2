@@ -14,7 +14,9 @@
 const btnReproducir = document.getElementById('btnReproducir');
 
 // Asigna el evento 'click' al botón para decodificar y reproducir el audio
-btnReproducir.addEventListener('click', cargarYReproducirAudio);
+btnReproducir.addEventListener('click', function(){
+  cargarYReproducirAudio();
+});
 
 // Variables de control
 let currentIndex = 0;
@@ -22,8 +24,8 @@ let audioFragments = [];
 let audioPlayer = null;
 
 // Función para cargar y reproducir el audio
-async function cargarYReproducirAudio() {
-  const jsonResponse = await fetch('https://text-to-audio-mu.vercel.app/audio/base64?idArticle=5233399&part=0'); // Aquí debes ajustar la URL de tu API
+async function cargarYReproducirAudio(nextPartG = 0) {
+  const jsonResponse = await fetch('https://text-to-audio-mu.vercel.app/audio/base64?idArticle=5233399&part='+nextPartG); // Aquí debes ajustar la URL de tu API
 
   if (jsonResponse.ok) {
     const data = await jsonResponse.json();
@@ -49,10 +51,13 @@ async function cargarYReproducirAudio() {
 
     // Si es la primera parte, crea el elemento de audio
     if (currentIndex === 0) {
-      alert()
       audioPlayer = new Audio(audioUrl);
       audioPlayer.addEventListener('ended', function(){
-        cargarYReproducirAudio()
+        // Verifica si hay partes siguientes para cargar y reproducir
+        if (currentPart < totalParts - 1) {
+          const nextPart = currentPart * 1 + 1;
+          cargarYReproducirAudio(nextPart)
+        }
       }); // Carga la siguiente parte al finalizar la reproducción
     }
 
@@ -63,11 +68,7 @@ async function cargarYReproducirAudio() {
     // Agrega la parte actual al array de fragmentos de audio
     audioFragments[currentPart] = audioUrl;
 
-    // Verifica si hay partes siguientes para cargar y reproducir
-    if (currentPart < totalParts - 1) {
-      const nextPart = currentPart * 1 + 1;
-      cargarParteAudio(nextPart);
-    }
+    
 
     // Incrementa el índice de la parte actual
     currentIndex++;

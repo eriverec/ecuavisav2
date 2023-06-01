@@ -61,6 +61,18 @@ const currentTab = ref('tab-lista')
               </VWindowItem>
 
               <VWindowItem value="tab-agregar">
+                <div class="pt-4">
+                  <div class="d-flex align-center flex-wrap gap-2">
+                    <!-- 👉 Reset button -->
+                    <VSelect style="width: 190px;" class="" v-model="usuarioFielModel" :items="listUsuarioFieles" label="Listado de sugerencias"
+                      clearable clear-icon="tabler-x" :searchable="false" />
+                    <!-- 👉 Export button -->
+                    <VBtn variant="tonal" color="success" class="d-none" prepend-icon="mdi-file-excel" @click="direccionar">
+                      Exportar usuarios
+                    </VBtn>
+                    <!-- 👉 Add user button -->
+                  </div>
+                </div>
                 <!-- <p>Próximamente</p> -->
                 <!-- <iframe src="http://localhost/ecuavisav2/servicios/embeds/sugerenciasAnalytics.html" frameborder="0"></iframe> -->
                 <div>
@@ -69,7 +81,68 @@ const currentTab = ref('tab-lista')
 
                 </div>
 
+                <div class="body" v-if="listUsuariosG.length > 0">
+                  <VTable class="text-no-wrap p-10">
+                    <!-- 👉 table head -->
+                    <thead>
+                      <tr>
+                        <th scope="col">Usuario</th>
+                        <th scope="col">N. Teléfono</th>
+                        <th scope="col">último inicio</th>
+                      </tr>
+                    </thead>
+                    <!-- 👉 table body -->
+                    <tbody >
+                      <tr v-for="usuario in listUsuariosG" style="height: 3.5rem">
+                        <!-- 👉 nombre modulo -->
+                        <td>
+                          <div class="d-flex align-center">
+                          <VAvatar variant="tonal" class="me-3" size="38">
+                            <VImg  :src="usuario.avatar || 'https://estadisticas.ecuavisa.com/sites/gestor/Recursos/usuario.png' " />
+                          </VAvatar>
 
+                          <div class="d-flex flex-column">
+                            <h6 class="text-base">
+                              <RouterLink
+                                :to="{
+                                  name: 'apps-user-view-id',
+                                  params: { id: usuario.wylexId },
+                                }"
+                                class="font-weight-medium user-list-name"
+                              >
+                                {{ usuario.first_name }} {{ usuario.last_name }}
+                              </RouterLink>
+                            </h6>
+                            <span class="text-sm text-disabled">{{
+                              usuario.email
+                            }}</span>
+                          </div>
+                        </div>
+                        </td>
+
+                        <td>
+                          <div class="d-flex align-left">
+                            <div class="d-flex flex-column">
+                              <span class="text-capitalize text-base">
+                                {{ usuario.phone_number }}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td>
+                          <div class="d-flex align-left">
+                            <div class="d-flex flex-column">
+                              <span class="text-capitalize text-base">
+                                {{ usuario.logged_at }}
+                              </span>
+                            </div>
+                          </div>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </VTable>
+                </div>
 
               </VWindowItem>
 
@@ -107,17 +180,9 @@ const currentTab = ref('tab-lista')
 export default {
   data() {
     return {
-      usuarioFielModel:500,
-      listUsuarioFieles:[
-        {title:"20", value:20 },
-        {title:"30", value:30 },
-        {title:"50", value:50 },
-        {title:"100", value:100 },
-        {title:"300", value:300 },
-        {title:"400", value:400 },
-        {title:"500", value:500 },
-        {title:"700", value:700 },
-        ],
+      listUsuariosG:[],
+      usuarioFielModel:"",
+      listUsuarioFieles:[],
       datos: [],
       suggestion: {
         title: "",
@@ -129,10 +194,11 @@ export default {
     };
   },
   watch: {
-    // async usuarioFielModel(newVal, oldVal) {
-    //   this.maxRegistros = newVal;
-      // this.obtenerDatos();
-    // }
+    async usuarioFielModel(newVal, oldVal) {
+      //alert(newVal)
+      //this.maxRegistros = newVal;
+      this.obtenerDatosGrupoUsuarios(newVal);
+    }
   },
   mounted() {
     this.obtenerDatos();
@@ -141,11 +207,18 @@ export default {
     // direccionar() {
     //   window.location.href = 'https://servicio-de-actividad.vercel.app/actividad/users/fidelidad/export/excel?limit='+this.maxRegistros;
     // },
+
+    async obtenerDatosGrupoUsuarios(id) {
+      const respuesta = await fetch(`https://sugerencias-ecuavisa.vercel.app/sugerencia/group/usuario?idSugerencia=${id}`);
+      const datos = await respuesta.json();
+      this.listUsuariosG = datos.data;
+    },
     async obtenerDatos() {
       const respuesta = await fetch(`https://sugerencias-ecuavisa.vercel.app/all`);
       const datos = await respuesta.json();
       const registros = datos.data;
       const sumatoriaPorUsuario = {};
+      var nuevaListSelect = [];
 
       registros.forEach(registro => {
         const title = registro.title;
@@ -161,7 +234,11 @@ export default {
 
         sumatoriaPorUsuario[title] += cantidad;
         // sumatoriaPorUsuario[estado] += cantidad;
+
+        nuevaListSelect.push({title:title, value:registro._id });
       });/**/
+
+      this.listUsuarioFieles = nuevaListSelect;
 
       // const sumatoriasArray = Object.keys(sumatoriaPorUsuario).map(title => ({ title, users_suscribed: sumatoriaPorUsuario[title] }));
       const sumatoriasArray = Object.keys(sumatoriaPorUsuario).map(title => ({ title  })).map(estado => ({ estado }));
@@ -172,7 +249,7 @@ export default {
       //const solo500 = sumatoriasArray.slice(0, maxRegistros);
       this.datos = registros; // trae solo 500 registros y la asignamos a la variable datos principal
       // this.datos = sumatoriasArray; // trae todos 
-      this.currentTab = 'tab-lista'; 
+      //this.currentTab = 'tab-lista'; 
     },
     async handleSubmit() {
       try {
