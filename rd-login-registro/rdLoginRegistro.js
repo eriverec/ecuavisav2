@@ -228,10 +228,10 @@ function login() {
 
 var telefonoValido = false;
 
-const telefonoInput = document.getElementById('regTelefono'); // Obtener el elemento de entrada de teléfono
+var telefonoInput2 = document.getElementById('regTelefono'); // Obtener el elemento de entrada de teléfono
 
-telefonoInput.addEventListener('input', function() {
-  const telefono = telefonoInput.value.trim(); // Obtener el valor del teléfono sin espacios al inicio y al final
+telefonoInput2.addEventListener('input', function() {
+  const telefono = telefonoInput2.value.trim(); // Obtener el valor del teléfono sin espacios al inicio y al final
 
   // Validar que solo se ingresen números y tenga una longitud entre 7 y 10 caracteres
   const validacion = /^\d{7,10}$/.test(telefono);
