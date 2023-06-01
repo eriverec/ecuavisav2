@@ -23,7 +23,8 @@ fetch("https://api.sendpulse.com/oauth/access_token", requestOptionsToken)
   .then(response => response.json())
   .then(result => {
     // enviar el token generado al localstorage
-    localStorage.setItem('access_token', result.access_token);
+    // localStorage.setItem('access_token', result.access_token);
+    return result.access_token;
   })
   .catch(error => console.log('error', error));
 
@@ -32,10 +33,10 @@ Enviar correos al listado de sendpulse
 *************************************** */
 
 //Obtener el token del localstorage
-var getToken = localStorage.getItem('access_token');
+// var getToken = localStorage.getItem('access_token');
 
 var myHeaders = new Headers();
-myHeaders.append("Authorization", "Bearer " + getToken);
+myHeaders.append("Authorization", "Bearer " + requestOptionsToken);
 myHeaders.append("Content-Type", "application/json");
 myHeaders.append("Cookie", "PHPSESSID=yc872Ui82h2kwQcHr7dvo9RjQ8TXYsU7kArdxCMx; XDEBUG_SESSION=PHPSTORM");
 
@@ -43,14 +44,6 @@ var raw = JSON.stringify({
   "emails": [
     {
       "email":"test98ds@test.com"
-      //variables que debes de tomar en cuenta al enviar los datos del registro al sendpulse
-      /*"variables":{
-         "nombre":"first_name",
-         "apellido":"last_name",
-         "proveedor":"provider",
-         "sitio":"site",
-         "fechadecreacion":"created_at"
-      }*/
     },
     
   ]
