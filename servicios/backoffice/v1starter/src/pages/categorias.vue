@@ -22,7 +22,7 @@ const updCategoriaPrimero = ref([]);
 const newCategoriaPrimero = ref([]);
 const filteredData_2 = ref([]);
 const currentTab = ref('tab-lista');
-const fechaIngresada = ref('');
+
 
 // Obtener las colecciones
 const fetchCategorias = () => {
@@ -199,25 +199,6 @@ var filteredData = computed(() => {
 	return dataFiltrada;
 });
 
-
-const resetFiltro =()=>{
-	const iframeD = document.getElementById('iframeAnalyticsD');
-	const iframeL = document.getElementById('iframeAnalyticsL');	
-	fechaIngresada.value = '';
-	iframeD.contentWindow.createChart();
-}
-const resolveFechaEstadisticas = (dates) =>{
-	if(dates.length > 1){
-		const iframeD = document.getElementById('iframeAnalyticsD');
-		const iframeL = document.getElementById('iframeAnalyticsL');
-		let fechas = dates.toString();
-
-		iframeD.contentWindow.postMessage(fechas, '*');	
-		iframeD.contentWindow.createChart();
-
-	}
-
-}
 
 </script>
 

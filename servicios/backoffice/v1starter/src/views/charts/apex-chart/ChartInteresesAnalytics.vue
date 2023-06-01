@@ -16,22 +16,46 @@ const colorVariables = themeColors => {
 const vuetifyTheme = useTheme()
 const data = ref([]);
 const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value);
-const categories = ref([]);
+const fechaIngresada = ref([]);
+const fechaSelected = ref('');
 
 const fetchData =()=>{ 
       fetch('https://sugerencias-ecuavisa.vercel.app/interes/all')
       .then(response => response.json())
       .then(resp => {     
        data.value = resp.data; 
-       console.log('data',data.value);
+    
       
       });
       
 }
 onMounted(fetchData);
 
+const getSelectedDates =(dates)=>{
+    if(dates.length > 1){
+   fechaIngresada.value = dates;
+    }
+}
+
 const resolveSeries = computed(() => {
-let dataRaw = Array.from(data.value)
+let dataRaw;
+let arrayFecha = Array.from(fechaIngresada.value);
+if(arrayFecha.length > 0){
+    
+    let fechai = new Date(arrayFecha[0]);
+    let fechaf = new Date(arrayFecha[1]);
+    let dataIn = Array.from(data.value);   
+    dataRaw = dataIn.filter((item) => {
+        let fecha = new Date(item.created_at);
+    return fecha.getTime() >= fechai.getTime() &&
+           fecha.getTime() <= fechaf.getTime();
+});
+
+    
+
+}else{
+    dataRaw = Array.from(data.value);
+}
 const seriesFormat = {
     data: []
 };
@@ -86,7 +110,10 @@ const options= {
 return {series: [seriesFormat], options: options};
 });
 
-
+const resetFiltro = () =>{
+    fechaIngresada.value = [];
+    fechaSelected.value = '';
+}
       
 </script>
 
@@ -94,12 +121,12 @@ return {series: [seriesFormat], options: options};
     <div style="display: flex;" >		
 					<div class="date-picker-wrapper" style="width:30%; margin-left:2%;" >
 					<AppDateTimePicker
-						label="Fecha"
+						
 						prepend-inner-icon="tabler-calendar"
 						density="compact"
-						v-model="fechaIngresada"
+						v-model="fechaSelected"
 						show-current= true
-						@on-change="resolveFechaEstadisticas"
+						@on-change="getSelectedDates"
 						:config="{ 	
 						mode:'range',												
 						altFormat: 'F j, Y',
