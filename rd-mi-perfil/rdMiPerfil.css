@@ -1286,7 +1286,7 @@ button#btnSaveM {
 
   .data-user-me{
       width: calc(74% - 20px);
-      gap: 25px;
+      gap: 2px;
       padding-top: 0px;
       min-height: 0px;
       display: flex;
@@ -1296,6 +1296,9 @@ button#btnSaveM {
       padding-bottom: 0px;
     margin-bottom: -27px;
   }
+  .img-user-me:after {
+    left: 144px;
+}
   
   .info-perfil {
       margin-bottom: -10px;
