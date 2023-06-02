@@ -2878,6 +2878,11 @@ ul li i.chevron:after {
 
 /*MI CUENTA - NEWSLETTER - INICIO*/
 
+.section-items .bloc_chil button.seguir.loading,
+.section-items .bloc_chil button.siguiendo.loading  {
+  opacity: 0.4;
+}
+
 .parent_block {
   display: grid;
   grid-template-columns: 1fr 1fr;
