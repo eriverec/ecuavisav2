@@ -2918,7 +2918,7 @@ ul li i.chevron:after {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 300;
-  font-size: 18px;
+  font-size: 18px !important;
   line-height: 30px;
   display: flex;
   align-items: center;
