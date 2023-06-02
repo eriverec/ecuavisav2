@@ -1,18 +1,17 @@
 function templateHtml(section) {
   return /*html*/ `
-  <div class="section-items d-flex" data-name="${section.titulo}">
-    <div class="">
-      <img src="${section.img}" alt="" />
+  <div class="section-items " data-name="${section.titulo}">
+    <div class="block_img">
+      <img src="${section.img}" alt="${section.titulo}" />
     </div>
-    <div class="d-flex flex-column">
-      <span>${section.titulo}</span>
-      <span>${section.descripcion}</span>
-
+    <div class="bloc_chil">
+      <h2>${section.titulo}</h2>
+      <h3>${section.descripcion}</h3>
       <button id="list-btn" class="seguir" data-idname="${section.titulo}" data-listid="${section.listid}" onclick="btnSendEmails(this)">
-        seguir
+        seguir <svg width="13" height="12" viewBox="0 0 13 12" fill="none" xmlns="http://www.w3.org/2000/svg"><line x1="6.11146" y1="11.0001" x2="6.11146" y2="0.99987" stroke="#2927B9" stroke-width="1.99974" stroke-linecap="round"/><path d="M12 6H1" stroke="#2927B9" stroke-width="1.99974" stroke-linecap="round"/></svg>
       </button>
       <button id="list-btn" class="siguiendo" data-idname="${section.titulo}" data-listid="${section.listid}" onclick="btnDeleteEmails(this)" style="display:none">
-        siguiendo
+        siguiendo <svg width="12" height="10" viewBox="0 0 12 10" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M1 5.65643L3.95397 8.28218L10.8466 1.71781" stroke="#2927B9" stroke-width="1.96931" stroke-linecap="round" stroke-linejoin="round"/></svg> 
       </button>
     </div>
   </div>
@@ -81,8 +80,11 @@ const jsonDataHtml = [
     "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/0d0/none/11705/ITJQ/fernando_696583_20230323151009.jpg"
   }
 
-]
+];
 
+
+// Ordenar los elementos por título asc
+jsonDataHtml.sort((a, b) => a.titulo.localeCompare(b.titulo));
 
 // console.log("data:", data);
 var recordItems = "";
