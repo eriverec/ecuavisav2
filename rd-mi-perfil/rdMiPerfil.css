@@ -2878,6 +2878,12 @@ ul li i.chevron:after {
 
 /*MI CUENTA - NEWSLETTER - INICIO*/
 
+.parent_block {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 40px;
+}
+
 .section-items {
   display: flex;
   align-items: center;
@@ -2959,10 +2965,16 @@ ul li i.chevron:after {
   vertical-align: unset;
 }
 
+@media(max-width: 991px) {
+  .parent_block {
+    grid-template-columns: none;
+  }
+}
+
 @media(max-width: 600px) {
   .section-items .bloc_chil h2 {
     font-size: 22px;
   }
-
 }
+
 /*MI CUENTA - NEWSLETTER - FIN*/
