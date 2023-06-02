@@ -705,3 +705,7 @@ form i {
   top: 50%;
 }*/
 }
+
+.box-input input {
+    margin: 0px!important;
+}
