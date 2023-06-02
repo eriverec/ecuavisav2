@@ -2,6 +2,7 @@ var URL_principal_G = "https://www.ecuavisa.com/";
 var URL_login_G = "https://www.ecuavisa.com/servicios/login";
 var URL_perfil_G = "https://www.ecuavisa.com/servicios/perfil";
 var UserId = localStorage.getItem("wylexUserId");
+var urlParamsGET = new URLSearchParams(window.location.search);
 
 window.onload = () => {
   document.getElementById("forgetButton").disabled = false;
@@ -306,7 +307,11 @@ function register() {
                 localStorageSetUsuarioNew(result.user);
                 btn.removeAttribute('disabled');
                 // cambiar url destino
-                window.location = "https://www.ecuavisa.com/compania593/click-boom/que-esconde-la-cartera-de-victoria-KL4951862?tk="+ result.token;
+                if (urlParamsGET.get('urlredirect')!=null){
+                    window.location = `${urlParamsGET.get('urlredirect')}?tk=`+ result.token;
+                }else{
+                  window.location = "https://www.ecuavisa.com/compania593/click-boom/que-esconde-la-cartera-de-victoria-KL4951862?tk="+ result.token;
+                }
             }
           }
         })
@@ -400,8 +405,6 @@ function localStorageSetUsuarioNew(user){
   return true;
 }
 
-
-var urlParamsGET = new URLSearchParams(window.location.search);
 if (urlParamsGET.get('registro')!=null){
     toggleForm();
 }
