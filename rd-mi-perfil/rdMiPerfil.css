@@ -2967,6 +2967,7 @@ ul li i.chevron:after {
 
 @media(max-width: 991px) {
   .parent_block {
+    display: initial;
     grid-template-columns: none;
   }
 }
@@ -2986,6 +2987,7 @@ ul li i.chevron:after {
   .section-items .bloc_chil button.seguir,
   .section-items .bloc_chil button.siguiendo {
     font-size: 10px;
+    width: 141px;
   }
 }
 
