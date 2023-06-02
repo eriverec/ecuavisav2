@@ -2920,7 +2920,7 @@ ul li i.chevron:after {
 }
 
 .section-items .bloc_chil button.seguir {
-  font-family: 'Mattone';
+  font-family: 'Mattone 150';
   border: 2px solid #23dcd1;
   padding: 8px 20px;
   font-weight: 600;
@@ -2935,7 +2935,7 @@ ul li i.chevron:after {
 }
 
 .section-items .bloc_chil button.siguiendo {
-  font-family: 'Mattone';
+  font-family: 'Mattone 150';
   border: 2px solid #23dcd1;
   background: #23dcd1;
   padding: 8px 20px;
