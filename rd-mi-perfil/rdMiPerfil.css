@@ -2890,7 +2890,7 @@ ul li i.chevron:after {
   column-gap: 30px;
   background: #F5F5F5;
   padding: 15px;
-  margin: 30px 0;
+  margin: 20px 0;
 }
 
 .section-items .siguiendo {
@@ -2974,6 +2974,18 @@ ul li i.chevron:after {
 @media(max-width: 600px) {
   .section-items .bloc_chil h2 {
     font-size: 22px;
+  }
+
+  .section-items .bloc_chil h3 {
+    font-size: 16px !important;
+    line-height: 22px;
+  }
+}
+
+@media(max-width: 400px) {
+  .section-items .bloc_chil button.seguir,
+  .section-items .bloc_chil button.siguiendo {
+    font-size: 10px;
   }
 }
 
