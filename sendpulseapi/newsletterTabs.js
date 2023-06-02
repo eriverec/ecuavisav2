@@ -199,7 +199,8 @@ function btnSendEmails(element) {
               "tema": {
                 "name": nameSection,
                 "feedUrl": "#",
-                "follow": true
+                "follow": true,
+                "idMeta": listEmails
               }
             }),
             redirect: 'follow'
@@ -288,7 +289,8 @@ function btnDeleteEmails(element) {
                     "tema": {
                       "name": nameSection,
                       "feedUrl": "#",
-                      "follow": true
+                      "follow": true,
+                      "idMeta": listEmails
                     }
                   }),
                   redirect: 'follow'

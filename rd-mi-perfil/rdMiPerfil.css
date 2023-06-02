@@ -2917,6 +2917,7 @@ ul li i.chevron:after {
   display: flex;
   align-items: center;
   color: #060127;
+  font-size: 12px;
 }
 
 .section-items .bloc_chil button.seguir {
@@ -2932,6 +2933,7 @@ ul li i.chevron:after {
   justify-content: center;
   color: #2927B9;
   width: 165px;
+  font-size: 12px;
 }
 
 .section-items .bloc_chil button.siguiendo {
@@ -2948,6 +2950,7 @@ ul li i.chevron:after {
   justify-content: center;
   color: #2927B9;
   width: 165px;
+  font-size: 12px;
 }
 
 .section-items .bloc_chil button.seguir svg,
