@@ -95,7 +95,7 @@ const jsonDataHtml = [
     "titulo": "Liz Rivera",
     "descripcion": "Productora",
     "listid": "568656",
-    "img": "ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/SRNO/liz-rivera_748899_20221230104123.jpg"
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/SRNO/liz-rivera_748899_20221230104123.jpg"
   },
   {
     "titulo": "Alfredo Viteri",
