@@ -2984,11 +2984,22 @@ ul li i.chevron:after {
 }
 
 @media(max-width: 400px) {
+
   .section-items .bloc_chil button.seguir,
   .section-items .bloc_chil button.siguiendo {
     font-size: 10px;
     width: 141px;
+    padding: 8px 8px;
+  }
+
+  .section-items {
+    column-gap: 14px;
+  }
+
+  .section-items .block_img img {
+    width: 120px;
   }
 }
+
 
 /*MI CUENTA - NEWSLETTER - FIN*/
