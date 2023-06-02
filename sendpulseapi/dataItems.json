@@ -2,19 +2,169 @@
   {
     "titulo": "Noticias",
     "descripcion": "Ecuavisa.com",
-    "listid": "565083",
-    "img": "https://placehold.co/80x80@2x.png"
+    "listid": "565081",
+    "img": "https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/header/logox512.png"
   },
   {
     "titulo": "Estadio",
     "descripcion": "Ecuavisa.com",
     "listid": "565083",
-    "img": "https://placehold.co/80x80@2x.png"
+    "img": "https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/header/logox512.png"
+  },
+  {
+    "titulo": "Mundo",
+    "descripcion": "Ecuavisa.com",
+    "listid": "568629",
+    "img": "https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/header/logox512.png"
+  },
+  {
+    "titulo": "Entretenimiento",
+    "descripcion": "Ecuavisa.com",
+    "listid": "568630",
+    "img": "https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/header/logox512.png"
   },
   {
     "titulo": "Estilo",
     "descripcion": "Ecuavisa.com",
-    "listid": "565083",
-    "img": "https://placehold.co/80x80@2x.png"
+    "listid": "568631",
+    "img": "https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/header/logox512.png"
+  },
+  {
+    "titulo": "Abdón Rodríguez",
+    "descripcion": "Periodista Nacional",
+    "listid": "568633",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/RSJX/abdon_692508_20230112131150.jpg"
+  },
+  {
+    "titulo": "Claudia Roura",
+    "descripcion": "Periodista Digital",
+    "listid": "568634",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/POIX/claudia-roura_693183_20221230102842.jpg"
+  },
+  {
+    "titulo": "Daniela Maggi",
+    "descripcion": "Periodista Nacional",
+    "listid": "568635",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/MQIX/daniela-maggi_702985_20221230105507.jpg"
+  },
+  {
+    "titulo": "Diego Bravo",
+    "descripcion": "Periodista Nacional",
+    "listid": "568636",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/CBVU/diego-bravo_700751_20221230122757.jpg"
+  },
+  {
+    "titulo": "Fernando Guevara",
+    "descripcion": "Periodista Deportivo",
+    "listid": "568637",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/0d0/none/11705/ITJQ/fernando_696583_20230323151009.jpg"
+  },
+  {
+    "titulo": "Andrea López",
+    "descripcion": "Productora de Monetización",
+    "listid": "568654",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/QBNG/andrea-l_786061_20230116140739.jpg"
+  },
+  {
+    "titulo": "Gabriela Narváez",
+    "descripcion": "Productora",
+    "listid": "568655",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/1c0/600d600/none/11705/KJKW/gaby-narvaez_771420_20230105191056.jpg"
+  },
+  {
+    "titulo": "Liz Rivera",
+    "descripcion": "Productora",
+    "listid": "568656",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/SRNO/liz-rivera_748899_20221230104123.jpg"
+  },
+  {
+    "titulo": "Alfredo Viteri",
+    "descripcion": "Community Manager",
+    "listid": "568657",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/MLKJ/alfredo_780483_20230112113038.jpg"
+  },
+  {
+    "titulo": "Carlos Rojas",
+    "descripcion": "Director de Contenido",
+    "listid": "568653",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/TLLW/carlos-rojas_693226_20230105190803.jpg"
+  },
+  {
+    "titulo": "Brian Criollo",
+    "descripcion": "Productor",
+    "listid": "568658",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/WFJX/brian_775191_20230112113540.jpg"
+  },
+  {
+    "titulo": "Andrea Salas",
+    "descripcion": "Community Manager",
+    "listid": "568659",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/NPLQ/andrea_748916_20230109120705.jpg"
+  },
+  {
+    "titulo": "Jorge André Hernández",
+    "descripcion": "Community Manager",
+    "listid": "568660",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/NNTW/jorge-andre-hernandez_762907_20221230122849.jpg"
+  },
+  {
+    "titulo": "Nelson Dávalos",
+    "descripcion": "Productor",
+    "listid": "568648",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/1c0/600d600/none/11705/KILS/nelson-davalos_771443_20230105191547.jpg"
+  },
+  {
+    "titulo": "Verónica Yépez",
+    "descripcion": "Community Manager",
+    "listid": "568649",
+    "img": "https://www.ecuavisa.com/binrepository/601x601/0c0/600d600/none/11705/LCMS/veronica-yepez_771519_20230117163246.jpg"
+  },
+  {
+    "titulo": "Camila Villacrés",
+    "descripcion": "Community Manager",
+    "listid": "568650",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/EMKG/camila-villacres_701773_20221230103244.jpg"
+  },
+  {
+    "titulo": "María Fernanda De la Bastida",
+    "descripcion": "Coordinadora",
+    "listid": "568651",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/MWEV/fernanda-de-la-bastida_699988_20221230103823.jpg"
+  },
+  {
+    "titulo": "Iván Maestre",
+    "descripcion": "Director de Contenido",
+    "listid": "568652",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/KHLW/ivan-maestre_700192_20230112212756.jpg"
+  },
+  {
+    "titulo": "Gisella Rojas",
+    "descripcion": "Periodista Profundidad",
+    "listid": "568643",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/RHLW/gisellarojas_693044_20221221152651.jpg"
+  },
+  {
+    "titulo": "Kevin Verdezoto",
+    "descripcion": "Periodista Deportivo",
+    "listid": "568644",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/NKJX/kevin_694612_20230109120736.jpg"
+  },
+  {
+    "titulo": "Marco Carrasco",
+    "descripcion": "Periodista Deportivo",
+    "listid": "568645",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/URMS/marco-carrasco_693081_20230112213328.jpg"
+  },
+  {
+    "titulo": "María del Cisne Guamán",
+    "descripcion": "Periodista Digital",
+    "listid": "568646",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/IIJX/cisne_692877_20230109120252.jpg"
+  },
+  {
+    "titulo": "Marlene Astudillo",
+    "descripcion": "Periodista Entretenimiento",
+    "listid": "568647",
+    "img": "https://www.ecuavisa.com/binrepository/600x600/0c0/600d600/none/11705/ITKJ/marlene_693197_20230109120335.jpg"
   }
 ]
