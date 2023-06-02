@@ -97,6 +97,8 @@ fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/mirrorAuto
 // const emailUser = ECUAVISA_EC.USER_data().id;
 
 function btnSendEmails(element) {
+  // Agregar la clase "loading" al botón
+  element.classList.add('loading');
   fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php')
     .then(function (response) {
       return response.text();
@@ -122,7 +124,8 @@ function btnSendEmails(element) {
       })
         .then(response => response.text())
         .then(result => {
-
+          // Remover la clase "loading" del botón
+          element.classList.remove('loading');
 
           const idUser = ECUAVISA_EC.USER_data().id;
           // var idUser = "76572";
@@ -171,6 +174,8 @@ function btnSendEmails(element) {
 
 
 function btnDeleteEmails(element) {
+  // Agregar la clase "loading" al botón
+  element.classList.add('loading');
   fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php')
     .then(function (response) {
       return response.text();
@@ -214,6 +219,8 @@ function btnDeleteEmails(element) {
               .then(response => response.text())
               .then(result => {
                 console.log(result)
+                // Remover la clase "loading" del botón
+                element.classList.remove('loading');
 
                 const idUser = ECUAVISA_EC.USER_data().id;
                 // var idUser = "76572";

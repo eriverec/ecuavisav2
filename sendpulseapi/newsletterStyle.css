@@ -54,6 +54,11 @@
   width: 165px;
 }
 
+.section-items .bloc_chil button.seguir.loading,
+.section-items .bloc_chil button.siguiendo.loading  {
+  opacity: 0.4;
+}
+
 .section-items .bloc_chil button.siguiendo {
   font-family: 'Mattone';
   border: 2px solid #23dcd1;
