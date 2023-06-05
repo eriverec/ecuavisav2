@@ -297,6 +297,7 @@ var filteredData = computed(() => {
                 <th scope="col">Nombre para el banner</th>
                 <th scope="col">IMG Escritorio</th>
                 <th scope="col">IMG mobile</th>
+                <th scope="col">Página a mostrar</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Acciones</th>
               </tr>
@@ -337,6 +338,22 @@ var filteredData = computed(() => {
                   <div class="d-flex align-left">
                     <div class="d-flex flex-column">
                       <img v-if="categoria.images.mobile !== ''" :src="categoria.images.mobile" width="175" class="img-intereses">
+                    </div>
+                  </div>
+                </td>
+
+                <td>
+                  <div class="d-flex align-left">
+                    <div class="d-flex flex-column">
+                      <h6 class="text-base">
+                        <div v-if="categoria.url=='https://www.ecuavisa.com/servicios/mi-ecuavisa/'">
+                          <a :href="categoria.url" target="_blank">Landing mi ecuavisa 
+                            <v-icon>mdi-link-variant</v-icon></a>
+                        </div>
+                        <div v-else>
+                          <a :href="categoria.url" target="_blank">Otro landing <v-icon>mdi-link-variant</v-icon></a>
+                        </div>
+                      </h6>
                     </div>
                   </div>
                 </td>
