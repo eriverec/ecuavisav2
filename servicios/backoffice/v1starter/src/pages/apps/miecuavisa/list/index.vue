@@ -15,7 +15,8 @@ const updateCategorias = ref({});
 const updCategoriaPrimero = ref([]);
 const newCategoriaPrimero = ref([]);
 const filteredData_2 = ref([]);
-const currentTab = ref('tab-lista')
+const currentTab = ref('tab-lista');
+const isDialogVisible = ref(false)
 
 // Obtener las colecciones
 const fetchCategorias = () => {
@@ -51,29 +52,34 @@ const onFormCategoriasActive = (data) => {
 
 const onFormDelete = (data) => {
     //let index =  categorias.value.map((e) => e.id).indexOf(id);   
+    isDialogVisible.value = true;
     isCategoriasEditVisible.value = false;
     //console.log("upd", updateCategorias.value);
     var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
     var requestOptions = {
-      method: 'DELETE',
+      method: 'POST',
       headers: myHeaders,
       body: JSON.stringify({
         "id":data.id
       }),
       redirect: 'follow'
     };
-    fetch("https://estadisticas.ecuavisa.com/sites/gestor/Tools/miecuavisa/ajax.php", requestOptions)
+    fetch("https://estadisticas.ecuavisa.com/sites/gestor/Tools/miecuavisa/ajax.php?action=delete", requestOptions)
       .then(response => response.text())
       .then(result => {
         console.log(result)
         window.setTimeout(fetchCategorias, 600);
         isCategoriasEditVisible.value = false;
+        isDialogVisible.value = false;
       })
-      .catch(error => console.log('error', error));  
+      .catch(error => {
+        console.log('error', error)
+        isDialogVisible.value = false;
+      });  
 };
 
 const onFormCategoriasSubmit = (id) => {
+    isDialogVisible.value = true;
   //resolveColeccionUpdateSend();
 
     //sendCategorias.value = categorias.value;
@@ -88,8 +94,8 @@ const onFormCategoriasSubmit = (id) => {
       escritorio: categorias.value[index].images.escritorio,
       estado: updateCategorias.value.estado
     }     
-    //arrayFinal[index] = data;      
-
+    //arrayFinal[index] = data;  
+    isCategoriasEditVisible.value = false;    
     console.log('sending ',data );
     var myHeaders = new Headers();
     var requestOptions = {
@@ -103,9 +109,13 @@ const onFormCategoriasSubmit = (id) => {
       .then(result => {
         console.log(result)
         window.setTimeout(fetchCategorias, 600);
-        isCategoriasEditVisible.value = false;
+        isDialogVisible.value = false;
       })
-      .catch(error => console.log('error', error));  
+      .catch(error => {
+        alert("Ocurrió un error al guardar el registro")
+        console.log('error', error)
+        isDialogVisible.value = false;
+      });  
 };
 
 const onFormCategoriasReset = () => {
@@ -149,8 +159,6 @@ var filteredData = computed(() => {
   return dataFiltrada;
 });
 
-
-
 </script>
 
 <style type="text/css">
@@ -160,6 +168,26 @@ var filteredData = computed(() => {
 </style>
 
 <template>
+  <!-- Dialog -->
+  <VDialog
+    v-model="isDialogVisible"
+    width="300"
+  >
+    <VCard
+      color="primary"
+      width="300"
+    >
+      <VCardText class="pt-3">
+        Guardando información
+        <VProgressLinear
+          indeterminate
+          color="white"
+          class="mb-0"
+        />
+      </VCardText>
+    </VCard>
+  </VDialog>
+
   <section>
     <VRow>
       <VCol class="mt-6" cols="12" md="12" lg="12">
