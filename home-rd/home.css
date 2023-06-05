@@ -3548,3 +3548,27 @@ BLOQUE DE COLUMNISTA - FIN
       justify-content: space-between;
   }
 }
+
+/*IPAD PRO ESTILOS*/
+
+@media only screen and (min-width: 990px) and (max-width: 1190px)  {
+    .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
+        margin-top: .5rem;
+    }
+
+    .layout_apertura_3 .mini_portada .noticias .article .media_block .text_block .headline h2 {
+        line-height:1.3;
+    }
+    .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
+        font-size: 20px;
+        line-height:1.2
+    }
+    .layout_apertura_3 .mini_portada.item_last {
+        padding-top:18px;
+    }
+    .HOME_MENU_RD .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA {
+        
+        grid-gap: 10px;
+        padding-top: 10px;
+    }
+}
