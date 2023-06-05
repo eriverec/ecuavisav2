@@ -15,6 +15,7 @@ const updateCategorias = ref({});
 const updCategoriaPrimero = ref([]);
 const newCategoriaPrimero = ref([]);
 const filteredData_2 = ref([]);
+const isDialogVisible_2 = ref(false)
 const currentTab = ref('tab-lista');
 const isDialogVisible = ref(false)
 
@@ -50,10 +51,21 @@ const onFormCategoriasActive = (data) => {
     
 };
 
-const onFormDelete = (data) => {
+var dataBanners = {};
+
+const onFormDelete = (data, eliminar=false) => {
     //let index =  categorias.value.map((e) => e.id).indexOf(id);   
-    isDialogVisible.value = true;
+
+    if(!eliminar){
+      isDialogVisible.value = true;
+      dataBanners = data;
+      return false;
+    }
+
+    isDialogVisible.value = false;
+    data = dataBanners;
     isCategoriasEditVisible.value = false;
+    isDialogVisible_2.value = true;
     //console.log("upd", updateCategorias.value);
     var myHeaders = new Headers();
     var requestOptions = {
@@ -70,19 +82,18 @@ const onFormDelete = (data) => {
         console.log(result)
         window.setTimeout(fetchCategorias, 600);
         isCategoriasEditVisible.value = false;
-        isDialogVisible.value = false;
+        isDialogVisible_2.value = false;
       })
       .catch(error => {
         console.log('error', error)
-        isDialogVisible.value = false;
       });  
 };
 
 const onFormCategoriasSubmit = (id) => {
-    isDialogVisible.value = true;
   //resolveColeccionUpdateSend();
 
     //sendCategorias.value = categorias.value;
+    isDialogVisible_2.value = true;
     let arrayFinal = [];
     arrayFinal = categorias.value;
     let index = categorias.value.map((e) => e.id).indexOf(id);  
@@ -108,13 +119,12 @@ const onFormCategoriasSubmit = (id) => {
       .then(response => response.text())
       .then(result => {
         console.log(result)
+        isDialogVisible_2.value = false;
         window.setTimeout(fetchCategorias, 600);
-        isDialogVisible.value = false;
       })
       .catch(error => {
         alert("Ocurrió un error al guardar el registro")
         console.log('error', error)
-        isDialogVisible.value = false;
       });  
 };
 
@@ -144,9 +154,9 @@ const searchKeyword = ref('');
 
 var filteredData = computed(() => {
   var catag_list =  categorias.value.filter(item => {
+    console.log(item.id)
     return (
-      item.name.toLowerCase().includes(searchKeyword.value.toLowerCase()) ||
-      item.id.includes(searchKeyword.value.toLowerCase())
+      item.name.toLowerCase().includes(searchKeyword.value.toLowerCase())
     );
   });
   
@@ -159,6 +169,7 @@ var filteredData = computed(() => {
   return dataFiltrada;
 });
 
+
 </script>
 
 <style type="text/css">
@@ -168,25 +179,7 @@ var filteredData = computed(() => {
 </style>
 
 <template>
-  <!-- Dialog -->
-  <VDialog
-    v-model="isDialogVisible"
-    width="300"
-  >
-    <VCard
-      color="primary"
-      width="300"
-    >
-      <VCardText class="pt-3">
-        Guardando información
-        <VProgressLinear
-          indeterminate
-          color="white"
-          class="mb-0"
-        />
-      </VCardText>
-    </VCard>
-  </VDialog>
+  
 
   <section>
     <VRow>
@@ -203,7 +196,56 @@ var filteredData = computed(() => {
                       
           <VWindow v-model="currentTab">
                  <VWindowItem value="tab-lista">
-                  
+                  <VDialog
+                    v-model="isDialogVisible"
+                    persistent
+                    class="v-dialog-sm"
+                  >
+                    <!-- Dialog close btn -->
+                    <DialogCloseBtn @click="isDialogVisible = !isDialogVisible" />
+
+                    <!-- Dialog Content -->
+                    <VCard title="¿Desea eliminar el registro?">
+                      <VCardText>
+                        Al eliminar no se podrá recuperar
+                      </VCardText>
+
+                      <VCardText class="d-flex justify-end gap-3 flex-wrap">
+                        <VBtn
+                          color="secondary"
+                          variant="tonal"
+                          @click="isDialogVisible = false"
+                        >
+                          No, Cancelar
+                        </VBtn>
+                        <VBtn @click="onFormDelete([], true)">
+                          Si, Eliminar
+                        </VBtn>
+                      </VCardText>
+                    </VCard>
+                  </VDialog>
+
+                    <!-- Dialog -->
+                    <VDialog
+                      v-model="isDialogVisible_2"
+                      width="300"
+                    >
+                      <VCard
+                        color="primary"
+                        width="300"
+                      >
+                        <VCardText class="pt-3">
+                          Guardando información
+                          <VProgressLinear
+                            indeterminate
+                            color="white"
+                            class="mb-0"
+                          />
+                        </VCardText>
+                      </VCard>
+                    </VDialog>
+
+
                   <div class="pl-4">
                     <RouterLink to="./add">
                       <VBtn
