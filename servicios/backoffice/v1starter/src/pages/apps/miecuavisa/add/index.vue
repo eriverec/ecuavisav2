@@ -1,5 +1,9 @@
 <script setup>
 import axios from '@axios';
+import {
+  emailValidator,
+  requiredValidator,
+} from '@validators';
 
 const currentTab = ref('tab-agregar')
 </script>
@@ -21,8 +25,8 @@ const currentTab = ref('tab-agregar')
               <VWindowItem value="tab-agregar">
                 <div class="d-flex flex-wrap py-4 gap-4 align-items-center" style="justify-content: space-between;">
                   <div>
-                    <VCardTitle v-if="usuarioFielModel">Agrega un temas de interés para sugerirlo en ecuavisa.com </VCardTitle>
-                    <VCardSubtitle> Al sugerir un tema nuevo y habilitarlo, aparecerá en el área de perfil del sitio </VCardSubtitle>
+                    <VCardTitle v-if="usuarioFielModel">Agregar un banner </VCardTitle>
+                    <VCardSubtitle> Añadir banner </VCardSubtitle>
                   </div>
                   
                 </div>
@@ -30,23 +34,43 @@ const currentTab = ref('tab-agregar')
                 <VForm class="mt-2" @submit.prevent="handleSubmit">
                   <VRow>
                     <VCol md="6" cols="12" >
-                      <VTextField v-model="suggestion.title" id="title" label="Título" />
+                      <VTextField v-model="suggestion.name" id="name" label="Nombre del banner" :rules="[requiredValidator]" />
                     </VCol>
 
                     <VCol md="6" cols="12" >
-                      <VTextField label="Descripción"  id="description" v-model="suggestion.description" />
+                      <VSelect style="width: 100%;" class="" v-model="selectedOption" :items="items_url" label="Donde visualizar"
+                      clearable clear-icon="tabler-x" :searchable="false" />
+                    </VCol>
+
+                    <VCol md="6" cols="12" >
+                      <VTextField label="URL de imagen para escritorio"  id="url_escritorio" v-model="suggestion.escritorio" :rules="[requiredValidator]"  />
+                      <p>Tamaño recomendado: 1121x375 px</p>
+                    </VCol>
+
+                    <VCol md="6" cols="12" >
+                      <VTextField label="URL de imagen para dispositivos móviles"  id="url_movil" v-model="suggestion.mobile" />
                     </VCol>
                     <!-- 👉 Checkbox -->
+
                     <VCol cols="12" md="9" >
                       <VCheckbox  v-model="suggestion.estado" id="estado" label="Publicado" />
-                      <VBtn type="submit" class="mt-4"> Agregar item </VBtn>
+                      
+
+                    </VCol>
+                    <VCol cols="12" md="9" >
+                      <VBtn type="submit" class="mr-4"> Agregar item </VBtn>
+                      <RouterLink to="./list">
+                          <VBtn
+                          color="primary"
+                          variant="tonal"
+                          >
+                          Cancelar
+                        </VBtn> 
+                      </RouterLink>
+                      
                     </VCol>
                   </VRow>
                 </VForm>
-              </VWindowItem>
-
-              <VWindowItem value="tab-lista">
-                <p>Próximamente</p>
               </VWindowItem>
 
 
@@ -63,11 +87,17 @@ const currentTab = ref('tab-agregar')
 export default {
   data() {
     return {
+      items_url: [
+        { value: "https://www.ecuavisa.com/servicios/mi-ecuavisa/", title: 'Landgin Mi Ecuavisa' },
+      ],
+      selectedOption: null,
       usuarioFielModel:500,
       datos: [],
       suggestion: {
-        title: "",
-        description: "",
+        name: "",
+        url: "",
+        escritorio: "",
+        mobile: "",
         estado: true,
       },
       maxRegistros:500,
@@ -75,6 +105,9 @@ export default {
     };
   },
   watch: {
+    async selectedOption(newVal, oldVal) {
+      this.suggestion.url = newVal;
+    }
   },
   mounted() {
   },
@@ -82,11 +115,28 @@ export default {
 
     async handleSubmit() {
       try {
-        const response = await axios.post(
-          "https://sugerencias-ecuavisa.vercel.app/add",
-          this.suggestion
-        );
-        this.$router.push("/apps/sugerencias/list");
+        let data = JSON.stringify(this.suggestion);
+        if(this.suggestion.name.length < 1){
+          return false;
+        }
+        if(this.suggestion.escritorio.length < 1){
+          return false;
+        }
+        var myHeaders = new Headers();
+        var raw = data;
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+        };
+
+        fetch("https://estadisticas.ecuavisa.com/sites/gestor/Tools/miecuavisa/ajax.php", requestOptions)
+          .then(response => response.text())
+          .then(result => {
+            console.log(result)
+            this.$router.push("/apps/miecuavisa/list");})
+          .catch(error => console.log('error', error));
       } catch (error) {
         console.error(error);
       }

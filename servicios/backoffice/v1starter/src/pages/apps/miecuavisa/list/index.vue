@@ -41,12 +41,36 @@ totalPages.value = computed(() => {
 // Editar una categoría ----------------------------------------------
 
 const onFormCategoriasActive = (data) => {
-    console.log('data',data);
     //let index =  categorias.value.map((e) => e.id).indexOf(id);   
+    /**/
     updateCategorias.value = data; 
     isCategoriasEditVisible.value = true;
-    console.log("upd", updateCategorias.value);
+    //console.log("upd", updateCategorias.value);
     
+};
+
+const onFormDelete = (data) => {
+    //let index =  categorias.value.map((e) => e.id).indexOf(id);   
+    isCategoriasEditVisible.value = false;
+    //console.log("upd", updateCategorias.value);
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: 'DELETE',
+      headers: myHeaders,
+      body: JSON.stringify({
+        "id":data.id
+      }),
+      redirect: 'follow'
+    };
+    fetch("https://estadisticas.ecuavisa.com/sites/gestor/Tools/miecuavisa/ajax.php", requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        console.log(result)
+        window.setTimeout(fetchCategorias, 600);
+        isCategoriasEditVisible.value = false;
+      })
+      .catch(error => console.log('error', error));  
 };
 
 const onFormCategoriasSubmit = (id) => {
@@ -57,32 +81,37 @@ const onFormCategoriasSubmit = (id) => {
     arrayFinal = categorias.value;
     let index = categorias.value.map((e) => e.id).indexOf(id);  
     let data = {
-              id:categorias.value[index].id,
-              url: categorias.value[index].url,
-              name: categorias.value[index].name,
-              images: {
-                mobile: categorias.value[index].images.mobile,
-                escritorio: categorias.value[index].images.escritorio,
-              },
-              estado: updateCategorias.value.estado
-            }     
+      id:categorias.value[index].id,
+      url: categorias.value[index].url,
+      name: categorias.value[index].name,
+      mobile: categorias.value[index].images.mobile,
+      escritorio: categorias.value[index].images.escritorio,
+      estado: updateCategorias.value.estado
+    }     
     //arrayFinal[index] = data;      
 
-    console.log('sending ',data );     
-    
-    
-  categoriasListStore.sendCategorias(data).catch((error) => {
-    console.error(error);
-  });
-  window.setTimeout(fetchCategorias, 600);
-
-  isCategoriasEditVisible.value = false;
+    console.log('sending ',data );
+    var myHeaders = new Headers();
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify(data),
+      redirect: 'follow'
+    };
+    fetch("https://estadisticas.ecuavisa.com/sites/gestor/Tools/miecuavisa/ajax.php", requestOptions)
+      .then(response => response.text())
+      .then(result => {
+        console.log(result)
+        window.setTimeout(fetchCategorias, 600);
+        isCategoriasEditVisible.value = false;
+      })
+      .catch(error => console.log('error', error));  
 };
 
 const onFormCategoriasReset = () => {
-    updateCategorias.value = {};
-  isCategoriasEditVisible.value = false;  
-    window.setTimeout(fetchCategorias, 300);
+    /*updateCategorias.value = {};
+    window.setTimeout(fetchCategorias, 300);*/
+    isCategoriasEditVisible.value = false;  
 };
 
 const dialogCategoriasValueUpdate = (val) => {
@@ -121,6 +150,7 @@ var filteredData = computed(() => {
 });
 
 
+
 </script>
 
 <style type="text/css">
@@ -147,13 +177,15 @@ var filteredData = computed(() => {
                  <VWindowItem value="tab-lista">
                   
                   <div class="pl-4">
-                    <VBtn
+                    <RouterLink to="./add">
+                      <VBtn
                       color="primary"
                       variant="tonal"
-                      @click="onFormCategoriasActive([])"
-                    >
+                      >
                       Añadir nuevo registro
                     </VBtn> 
+                  </RouterLink>
+                    
                   </div>
 
                   <br>
@@ -225,8 +257,8 @@ var filteredData = computed(() => {
 
                 <td>
                   <div class="d-flex align-left">
-                    <div class="d-flex flex-column">
-                      <img v-if="categoria.images.mobile !== ''" :src="categoria.images.mobile" width="200" class="img-intereses">
+                    <div class="d-flex flex-column pt-2 pb-2">
+                      <img v-if="categoria.images.escritorio !== ''" :src="categoria.images.escritorio" width="175" class="img-intereses">
                     </div>
                   </div>
                 </td>
@@ -234,15 +266,25 @@ var filteredData = computed(() => {
                 <td>
                   <div class="d-flex align-left">
                     <div class="d-flex flex-column">
-                      <img v-if="categoria.images.escritorio !== ''" :src="categoria.images.escritorio" width="200" class="img-intereses">
+                      <img v-if="categoria.images.mobile !== ''" :src="categoria.images.mobile" width="175" class="img-intereses">
                     </div>
                   </div>
                 </td>
+
                 <td>
                   <div class="d-flex align-left">
                     <div class="d-flex flex-column">
                       <h6 class="text-base">
-                        {{ categoria.estado }}
+                        <div v-if="categoria.estado">
+                          <VChip color="success">
+                            Activo
+                          </VChip>
+                        </div>
+                        <div v-else>
+                          <VChip color="error">
+                            Inactivo
+                          </VChip>
+                        </div>
                       </h6>
                     </div>
                   </div>
@@ -257,6 +299,16 @@ var filteredData = computed(() => {
                     @click="onFormCategoriasActive(categoria)"
                   >
                     <VIcon size="22" icon="tabler-edit" />
+                  </VBtn>
+
+                  <VBtn
+                    icon
+                    size="x-small"
+                    color="error"
+                    variant="text"
+                    @click="onFormDelete(categoria)"
+                  >
+                    <VIcon size="22" icon="mdi-delete-forever" />
                   </VBtn>
                 </td>
               </tr>
