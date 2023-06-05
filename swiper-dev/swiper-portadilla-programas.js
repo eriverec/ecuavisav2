@@ -127,3 +127,84 @@ if (/(ipad|tablet|(android(?!.*mobile))|(windows(?!.*phone)(.*touch))|kindle|pla
 //   });
   //     seguimosSwiper();
   //     dameSwiper ();
+
+let init_jQuery_Swiper = function(){
+  setTimeout(function () {
+    if((typeof Swiper !== 'undefined')){
+      init_jquery_2(".u-t-comunidad");
+      init_jquery_2(".u-t-comunidad-gye");
+     /* init_jquery(".u-n-1min");*/
+    }
+  }, 400) ;
+}
+
+let init_jquery_2 = function($contenedor){
+  //u-t-comunidad
+  document.querySelector( $contenedor ).innerHTML += `<div class="swiper-button-next"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-pagination"></div>`;
+    
+  var noticias = document.querySelector($contenedor+" .noticias");
+  noticias.style.display = 'flex';
+  noticias.classList.add("swiper-wrapper");
+  var slides = document.querySelectorAll(".swiper-wrapper .article");
+
+  for (let elem of slides) {
+    elem.classList.add("swiper-slide");
+  }
+  var swiper = new Swiper($contenedor, {
+      slidesPerView: 3,
+      spaceBetween: 20,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true,
+        dynamicBullets:true
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
+      },
+      breakpoints: {
+        // when window width is >= 320px
+        320: {
+          slidesPerView: 1.5,
+          spaceBetween: 10
+        },
+        // when window width is >= 480px
+        480: {
+          slidesPerView: 2.5,
+          spaceBetween: 10
+        },
+        // when window width is >= 640px
+        640: {
+          slidesPerView: 2.5,
+          spaceBetween: 10
+        },
+      
+        768:{
+          slidesPerView: 1,
+          spaceBetween: 10
+        },
+
+        992: {
+            slidesPerView: 2,
+            spaceBetween: 20
+        },
+        
+        1280: {
+            slidesPerView: 2,
+            spaceBetween: 20
+        }
+      }
+    });
+}
+
+setTimeout(function(){
+    if((typeof Swiper !== 'undefined')){
+      init_jquery_2(".u-t-comunidad");
+      init_jquery_2(".u-t-comunidad-gye");
+     /* init_jquery(".u-n-1min");*/
+    }else{
+      init_jQuery_Swiper();
+    }
+}, 1500);

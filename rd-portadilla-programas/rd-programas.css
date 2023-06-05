@@ -1084,3 +1084,159 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
     width: 100%;
 }
 /*FIN QUITAR LA SECCIÓN MÁS DESTACADAS, TANTO EN MOBILE COMO ESCRITORIO*/
+
+/*Comunidad Quito*/
+#main-content .u-t-comunidad article.article{
+    background-color: var(--color-azul-oscuro);
+    border-radius: 5.0022px;
+  }
+
+  .u-t-comunidad .swiper-wrapper {
+    padding: 30px 0px;
+    /* padding-bottom: 50px; */
+    padding-bottom: 35px;
+  }
+
+  .u-t-comunidad {
+    overflow: hidden;
+    position: relative;
+    background-color: #fff;
+  }
+  
+  #main-content .u-t-comunidad article.article{
+    background-color: var(--color-azul-oscuro)
+  }
+
+.u-t-comunidad .text_block {
+    position: absolute;
+    bottom: 0;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-bottom: 12px;
+  }
+
+  .u-t-comunidad a,
+  .u-t-comunidad h3,
+  .u-t-comunidad h2{
+    color: #fff;
+    font-size: 15px;
+  }
+
+  .u-t-comunidad img {
+      position: initial!important;
+      height: 333px!important;
+      min-height: 333px !important;
+      max-height: 333px !important;
+      object-fit: cover!important;
+      width: 100%!important;
+      min-width: 100%!important;
+      max-width: 100%!important;
+      background-color: var(--color-azul-oscuro);
+      position: relative !important;
+      border-radius: 5.0022px;
+      -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 40%);
+  }
+
+  .u-t-comunidad img:hover {
+      -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 85%);
+  }
+
+  .u-t-comunidad .multimediaIconMacroWrapper a > div {
+      padding-top: 0px!important;
+  }
+  
+  .u-t-comunidad .date{
+    color: #23DCD1;
+    font-size: 10px;
+    font-weight: 400;
+  }
+
+#main-content .u-t-comunidad-gye article.article{
+  background-color: var(--color-azul-oscuro);
+  border-radius: 5.0022px;
+}
+
+.u-t-comunidad-gye .swiper-wrapper {
+  padding: 30px 0px;
+  /* padding-bottom: 50px; */
+  padding-bottom: 35px;
+}
+
+.u-t-comunidad-gye {
+  overflow: hidden;
+  position: relative;
+  background-color: #fff;
+}
+
+#main-content .u-t-comunidad-gye article.article{
+  background-color: var(--color-azul-oscuro)
+}
+
+.u-t-comunidad-gye .text_block {
+  position: absolute;
+  bottom: 0;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-bottom: 12px;
+}
+
+.u-t-comunidad-gye a,
+.u-t-comunidad-gye h3,
+.u-t-comunidad-gye h2{
+  color: #fff;
+  font-size: 15px;
+}
+
+.u-t-comunidad-gye img {
+    position: initial!important;
+    height: 333px!important;
+    min-height: 333px !important;
+    max-height: 333px !important;
+    object-fit: cover!important;
+    width: 100%!important;
+    min-width: 100%!important;
+    max-width: 100%!important;
+    background-color: var(--color-azul-oscuro);
+    position: relative !important;
+    border-radius: 5.0022px;
+    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 40%);
+}
+
+.u-t-comunidad-gye img:hover {
+    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 85%);
+}
+
+.u-t-comunidad-gye .multimediaIconMacroWrapper a > div {
+    padding-top: 0px!important;
+}
+
+.u-t-comunidad-gye .date{
+  color: #23DCD1;
+  font-size: 10px;
+  font-weight: 400;
+}
+.u-t-comunidad .text_block {
+  padding-bottom: 20px;
+}
+
+.u-t-comunidad .swiper-wrapper{
+    padding-left: calc(var(--bs-gutter-x)/2);
+}
+.u-t-comunidad .swiper-pagination{
+  /*display: none;*/
+}
+
+.u-video-t-contac .swiper-wrapper,
+.u-t-comunidad .swiper-wrapper,
+.u-t-comunidad-gye .swiper-wrapper,
+.u-video-t-politc .swiper-wrapper,
+.u-video-t-7pm .swiper-wrapper{
+    padding-left: calc(var(--bs-gutter-x)/2);
+}
+
+@media (max-width: 1219px) and (min-width: 767px ){
+      .u-t-comunidad-gye .swiper-wrapper,
+      .u-t-comunidad .swiper-wrapper {
+        padding-bottom: 30px;
+      }
+}
