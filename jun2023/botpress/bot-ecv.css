@@ -53,6 +53,7 @@ body {
 .bpw-send-button {
   margin-bottom: 0.5rem;
   font-family: 'Roboto';
+  font-size: 12px !important;
 }
 
 .bpw-header-title {
