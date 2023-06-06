@@ -1,3 +1,8 @@
+:root {
+    --color-azul: #2927B9;
+    --color-azul-oscuro: #060127;
+}
+
 /* QUITAR MARGENES */
 #iter-content-wrapper {
   padding-top: 0;
@@ -1085,7 +1090,8 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 /*FIN QUITAR LA SECCIÓN MÁS DESTACADAS, TANTO EN MOBILE COMO ESCRITORIO*/
 
-/*Comunidad Quito*/
+/*Comunidades*/
+
 #main-content .u-t-comunidad article.article{
     background-color: var(--color-azul-oscuro);
     border-radius: 5.0022px;
