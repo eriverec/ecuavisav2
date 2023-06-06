@@ -62,6 +62,11 @@ export default [
     ],
   },
 
+  {
+    title: 'Newsletter',
+    icon: { icon: 'tabler-news' },
+    to: { name: 'apps-newsletter' }
+  },
   // {
   //   title: 'Colecciones',
   //   icon: { icon: 'tabler-database-cog' },
