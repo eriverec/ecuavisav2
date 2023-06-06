@@ -88,7 +88,7 @@ export default {
   data() {
     return {
       items_url: [
-        { value: "https://www.ecuavisa.com/servicios/mi-ecuavisa/", title: 'Landgin Mi Ecuavisa' },
+        { value: "https://www.ecuavisa.com/servicios/mi-ecuavisa/", title: 'Landing Mi Ecuavisa' },
       ],
       selectedOption: null,
       usuarioFielModel:500,
