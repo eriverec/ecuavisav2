@@ -1274,3 +1274,12 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
         padding-bottom: 30px;
       }
 }
+
+body:not(body.webkit.ltr) 
+#col-100-top-one-col > 
+div.portlet-boundary.portlet-static-end.ranking-viewer-portlet.ms-visto-ec.rankSwiper
+ > * {
+    /* background: red; */
+    display: none;
+    /* padding: 100px; */
+}
