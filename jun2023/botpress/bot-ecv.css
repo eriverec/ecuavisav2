@@ -35,6 +35,13 @@ body {
   padding-left: 0.5rem;
 }
 
+.bpw-chat-bubble-content{
+  font-size: 14px !important;   
+}
+.bpw-button, .bpw-button-alt{
+  font-size: 14px;  
+}
+
 .bpw-widget-btn {
   border-radius: 50%;
   box-shadow: none;
