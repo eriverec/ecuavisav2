@@ -35,6 +35,11 @@ body {
   padding-left: 0.5rem;
 }
 
+.bpw-widget-btn {
+  border-radius: 50%;
+  box-shadow: none;
+}
+
 .bpw-chat-container {
   border: 0.5px solid #b6b6b6;
   border-radius: 8px;
