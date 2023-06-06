@@ -47,7 +47,7 @@ const currentTab = ref('tab-agregar')
                       <p>Tamaño recomendado: 1121x375 px</p>
                     </VCol>
 
-                    <VCol md="6" cols="12" >
+                    <VCol md="6" cols="12"  style="display:none;">
                       <VTextField label="URL de imagen para dispositivos móviles"  id="url_movil" v-model="suggestion.mobile" />
                     </VCol>
                     <!-- 👉 Checkbox -->

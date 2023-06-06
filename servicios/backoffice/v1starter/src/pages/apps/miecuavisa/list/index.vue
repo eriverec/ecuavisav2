@@ -296,7 +296,7 @@ var filteredData = computed(() => {
                 <th scope="col">ID</th>
                 <th scope="col">Nombre para el banner</th>
                 <th scope="col">IMG Escritorio</th>
-                <th scope="col">IMG mobile</th>
+                <th scope="col" style="display:none;">IMG mobile</th>
                 <th scope="col">Página a mostrar</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Acciones</th>
@@ -334,7 +334,7 @@ var filteredData = computed(() => {
                   </div>
                 </td>
 
-                <td>
+                <td style="display:none;">
                   <div class="d-flex align-left">
                     <div class="d-flex flex-column">
                       <img v-if="categoria.images.mobile !== ''" :src="categoria.images.mobile" width="175" class="img-intereses">
@@ -464,7 +464,7 @@ var filteredData = computed(() => {
                       />
                     </VCol>
 
-                    <VCol cols="8">
+                    <VCol cols="8"  style="display:none;">
                       <VTextField
                         v-model="updateCategorias.images.mobile"
                         label="Url para la imagen en mobile"
