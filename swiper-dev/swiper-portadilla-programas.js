@@ -75,13 +75,17 @@ function cardsTemasDestacados() {
 }
 
 function changeTitleMasVisto() {
-    var infor = document.querySelector('.title_informativos .tit-vid a h2');
-    var entre = document.querySelector(".title_entretenimiento .tit-vid a h2");
+    if(document.querySelector('.title_informativos .tit-vid a h2')){
+        var infor = document.querySelector('.title_informativos .tit-vid a h2');
+        infor.textContent = 'ACTUALIDAD';
+    }
+    if(document.querySelector('.title_entretenimiento .tit-vid a h2')){
+        var entre = document.querySelector(".title_entretenimiento .tit-vid a h2");
+        entre.textContent = 'ENTRETENIMIENTO';
+    }
     if(document.querySelector('.MENU_M_VISTO .container')){
          var deleteClass = document.querySelector('.MENU_M_VISTO .container');
         deleteClass.classList.remove('container');
-        infor.textContent = 'ACTUALIDAD';
-        entre.textContent = 'ENTRETENIMIENTO';
     }
 }
 
