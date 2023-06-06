@@ -1254,7 +1254,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .u-t-comunidad .swiper-wrapper{
-    padding-left: calc(var(--bs-gutter-x)/2);
+    padding-left: 0;
 }
 .u-t-comunidad .swiper-pagination{
   /*display: none;*/
@@ -1265,7 +1265,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 .u-t-comunidad-gye .swiper-wrapper,
 .u-video-t-politc .swiper-wrapper,
 .u-video-t-7pm .swiper-wrapper{
-    padding-left: calc(var(--bs-gutter-x)/2);
+    padding-left: 0;
 }
 
 @media (max-width: 1219px) and (min-width: 767px ){
