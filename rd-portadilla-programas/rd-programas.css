@@ -1283,3 +1283,9 @@ div.portlet-boundary.portlet-static-end.ranking-viewer-portlet.ms-visto-ec.rankS
     display: none;
     /* padding: 100px; */
 }
+
+@media (max-width: 768px){
+  #navegacion .enlace-programa {
+    font-size: 9px;
+  }
+}
