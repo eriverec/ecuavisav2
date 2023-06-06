@@ -1091,6 +1091,34 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 /*FIN QUITAR LA SECCIÓN MÁS DESTACADAS, TANTO EN MOBILE COMO ESCRITORIO*/
 
 /*Comunidades*/
+.iconPlay.bottom, .iconPlay.left, .iconPlay {
+    top: 20px!important;
+    left: auto!important;
+    background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos/play-icon-white.svg);
+    right: 10px!important;
+    stroke: white;
+    width: 30px;
+    height: 30px;
+}
+
+#main-content .swiper-pagination-bullet-active {
+    opacity: var(--swiper-pagination-bullet-opacity, 1);
+    background: #2927B9!important;
+}
+
+#main-content .swiper-pagination-bullet {
+    background: #2927B9!important;
+}
+
+.swiper-horizontal>.swiper-pagination-bullets.swiper-pagination-bullets-dynamic, .swiper-pagination-horizontal.swiper-pagination-bullets.swiper-pagination-bullets-dynamic {
+    bottom: 0px;
+}
+
+.u-t-comunidad-gye .swiper-button-next, .u-t-comunidad-gye .swiper-button-prev ,
+.u-t-comunidad .swiper-button-next, .u-t-comunidad .swiper-button-prev {
+    color: #23DCD1;
+    display: none;
+}
 
 #main-content .u-t-comunidad article.article{
     background-color: var(--color-azul-oscuro);
