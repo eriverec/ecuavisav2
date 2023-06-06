@@ -23,23 +23,37 @@ body {
   background: initial !important;
 }
 
-.bpw-layout{
+.bpw-layout {
   box-shadow: 0px 0px 14px -7px;
 }
 
-.bpw-from-user .bpw-chat-bubble .bpw-chat-bubble-content{
+.bpw-from-user .bpw-chat-bubble .bpw-chat-bubble-content {
   background-color: #2927B9 !important;
 }
 
 .bpw-header-container {
-  padding-left: 0.5rem;
+  padding-left: 8px;
+  padding: 8px 10px;
 }
 
-.bpw-chat-bubble-content{
-  font-size: 14px !important;   
+.bpw-chat-bubble-content {
+  font-size: 14px !important;
+  padding: 8px 15px;
 }
-.bpw-button, .bpw-button-alt{
-  font-size: 14px;  
+
+.bpw-keyboard-single-choice{
+  padding: 10px 10px  !important;
+}
+
+.bpw-date-container {
+  font-size: 14px;
+}
+
+.bpw-button,
+.bpw-button-alt {
+  font-size: 14px;
+  min-width: 80px;
+  padding: 5px 5px;
 }
 
 .bpw-widget-btn {
@@ -64,12 +78,12 @@ body {
 }
 
 .bpw-composer textarea {
-  font-size: 14px !important;
-  padding: 10px 25px 0px 1rem !important;
+  font-size: 14px ;
+  padding: 10px 25px 0px 16px;
 }
 
 .bpw-send-button {
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
   font-family: 'Roboto';
   font-size: 12px !important;
 }
@@ -78,10 +92,10 @@ body {
   padding-bottom: 0;
 }
 
-.bpw-header-title .bpw-header-name{
+.bpw-header-title .bpw-header-name {
   font-size: 16px;
 }
 
-.bpw-composer-inner{
+.bpw-composer-inner {
   padding: 0px;
 }
