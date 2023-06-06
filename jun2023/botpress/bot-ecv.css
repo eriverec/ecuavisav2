@@ -56,6 +56,10 @@ body {
   font-size: 12px !important;
 }
 
-.bpw-header-title {
+.bpw-composer {
+  padding-bottom: 0;
+}
+
+.bpw-header-title .bpw-header-name{
   font-size: 16px;
 }
