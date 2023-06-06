@@ -18,6 +18,9 @@ body {
   padding: 10px;
 
 }
+.ConfirmDialogContainer_43be06>div .bp3-button-text{
+  font-size: 12px !important;
+}
 
 .bpw-send-button[disabled] {
   background: initial !important;
