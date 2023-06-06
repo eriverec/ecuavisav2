@@ -47,7 +47,8 @@ body {
 }
 
 .bpw-composer textarea {
-  font-size: 14px;
+  font-size: 14px !important;
+  padding: 10px 25px 0px 1rem !important;
 }
 
 .bpw-send-button {
@@ -62,4 +63,8 @@ body {
 
 .bpw-header-title .bpw-header-name{
   font-size: 16px;
+}
+
+.bpw-composer-inner{
+  padding: 0px;
 }
