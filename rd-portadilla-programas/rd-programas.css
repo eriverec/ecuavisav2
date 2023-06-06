@@ -1294,3 +1294,19 @@ body:not(body.webkit.ltr) .u-mas-visto-1 {
     font-size: 9px;
   }
 }
+
+@media (max-width: 600px){
+  .title_seccion {
+      padding: 0rem 1rem 1rem;
+      padding-left: 0.3rem;
+      padding-right: 0.3rem;
+  }
+
+  .u-mas-vistos-2-entretenimiento .container {
+      padding: 0.7rem;
+  }
+
+  .tarjeta-destacada.mb-4 {
+      margin-bottom: 0px!important;
+  }
+}
