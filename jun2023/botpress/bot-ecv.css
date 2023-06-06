@@ -30,15 +30,6 @@ body {
   background-color: #2927B9 !important;
 }
 
-#bp-web-widget.bp-widget-side {
-  bottom: 7px;
-  right: 7px;
-  top: unset;
-  width: 361px;
-  height: 80% !important;
-  z-index: 999;
-}
-
 .bpw-chat-container {
   border: 0.5px solid #b6b6b6;
   border-radius: 8px;
