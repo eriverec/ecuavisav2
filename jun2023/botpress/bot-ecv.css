@@ -35,3 +35,22 @@ body {
   border-radius: 8px;
   overflow: hidden;
 }
+
+.bpw-bot-avatar img {
+  height: 30px;
+  width: 30px;
+}
+
+.bpw-header-icon svg {
+  height: 12px;
+  width: 12px;
+}
+
+.bpw-composer textarea {
+  font-size: 14px;
+}
+
+.bpw-send-button {
+  margin-bottom: 0.5rem;
+  font-family: 'Roboto';
+}
