@@ -67,7 +67,7 @@ export default [
   //   icon: { icon: 'tabler-news' },
   //   to: { name: 'apps-newsletter' }
   // },
-  
+
   // {
   //   title: 'Colecciones',
   //   icon: { icon: 'tabler-database-cog' },
@@ -79,6 +79,7 @@ export default [
     icon: { icon: 'tabler-settings-2' },
     children: [
       { title: 'Módulos', to: 'apps-configuracion-list' },
+      { title: 'Banner Slider', to: 'apps-miecuavisa-list' },
       // { title: 'Eventos', to: 'apps-configuracion-add' },
     ],
   },
