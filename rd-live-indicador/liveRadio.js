@@ -67,7 +67,7 @@ if (userIdXRadio == 0) {
     // if (forzadoEvent != "true") {
     if (enProg) {
       //aqui va el display block
-      selectDivRad.style.display = "none";
+      selectDivRad.style.display = "block";
     } else {
       //aqui va el display none
       selectDivRad.style.display = "none";
