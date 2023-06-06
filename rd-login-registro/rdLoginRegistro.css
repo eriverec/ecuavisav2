@@ -657,6 +657,7 @@ form i {
   font-size: 50px;
   margin-top: 15px;
   letter-spacing: .3px;
+  padding: 1rem 0;
 }
 .section-lr .container-lr .signinBx .formBx {
   margin: 0 10px;
@@ -670,7 +671,7 @@ form i {
   font-size: 14px;
 }
 .section-lr .container-lr .user .formBx form .signup.registro {
-  margin-top: 30px;
+  margin-top: 0px;
 }
 .modal-body label,
 #forgetEmail {
