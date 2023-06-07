@@ -35,6 +35,7 @@ export default [
     // to: { name: 'apps-concursos' },
     children: [
       { title: 'Click click boom', to: 'apps-concursos' },
+      { title: 'Gavilanes', to: 'apps-concursos-gavilanes' },
     //   // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
     ],
   },
