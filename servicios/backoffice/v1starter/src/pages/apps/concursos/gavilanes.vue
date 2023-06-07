@@ -123,11 +123,11 @@ function downloadSelection () {
           <VCardItem class="pb-sm-0"> 
           <VCardText v-if="isLoading">Cargando usuarios...</VCardText>
           <VCardText v-else> 
-          <VTable class="text-no-wrap tableNavegacion mb-5" >
+          <VTable class="text-no-wrap tableNavegacion" >
             <thead>
               <tr>
-                <th scope="col">Nombre</th>
                 <th scope="col">Id de usuario</th>
+                <th scope="col">Nombre</th>
                 <th scope="col">Email</th>
                 <th scope="col">Teléfono</th>  
                 <th scope="col">URL de imágen</th>               
@@ -136,11 +136,11 @@ function downloadSelection () {
 
             <tbody>
               <tr v-for="user in paginatedData">
-                <td >
-                  {{ user.nombre }} 
-                </td>
                 <td>
                   {{ user.id_usuario }} 
+                </td>
+                <td >
+                  {{ user.nombre }} 
                 </td>
                 <td>
                   {{ user.correo }} 
@@ -149,14 +149,16 @@ function downloadSelection () {
                   {{ user.telefono }} 
                 </td>
                 <td>
-                  {{ user.url_imagen }} 
+                  <a class="pt-2 pb-2" style="display:block" :href="'https://phpstack-1011861-3575405.cloudwaysapps.com/servicios/gavilanes/'+user.url_imagen" target="_blank">
+                    <img :src="'https://phpstack-1011861-3575405.cloudwaysapps.com/servicios/gavilanes/'+user.url_imagen" width="105" class="img-gavilanes">
+                  </a>
                 </td>
               </tr>
             </tbody>
           </VTable>
           <VDivider />
 
-<div class="px-4 py-4">
+<div class="px-4 py-4 mt-5">
     <v-btn
         :disabled="currentPage === 1"
         @click="currentPage -= 1"
