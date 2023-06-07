@@ -129,6 +129,7 @@ function downloadSelection () {
                 <th scope="col">Nombre</th>
                 <th scope="col">Id de usuario</th>
                 <th scope="col">Email</th>
+                <th scope="col">Teléfono</th>  
                 <th scope="col">URL de imágen</th>               
               </tr>
             </thead>
@@ -143,6 +144,9 @@ function downloadSelection () {
                 </td>
                 <td>
                   {{ user.correo }} 
+                </td>
+                <td>
+                  {{ user.telefono }} 
                 </td>
                 <td>
                   {{ user.url_imagen }} 
