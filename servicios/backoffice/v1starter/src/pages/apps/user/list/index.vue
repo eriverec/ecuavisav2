@@ -42,7 +42,7 @@ const sectionLoaded = () => {
   isLoaded.value = true;
   isLoading.value = false;
 };
-const isFullLoading = ref(true);
+const isFullLoading = ref(false);
 // 👉 Fetching users
 const fetchUsers = () => {
   sectionLoading();
@@ -420,10 +420,12 @@ await userListStore
       console.error(error);
     });
 };
-onMounted(fetchFullUsers);
+//onMounted(fetchFullUsers);
 
-function downloadFull () {
-   
+async function downloadFull () {
+      isFullLoading.value=true;
+      await fetchFullUsers();
+      isFullLoading.value=false;
        //console.log('usersFull.value',usersFull.value);
       let headers = {
         wylexId: "wylexId",
@@ -642,16 +644,28 @@ const updateSortDesc = (sortDesc) => {
               <!-- 👉 Reset button -->
               <VBtn color="secondary" @click="reset"> Reiniciar </VBtn>
               <!-- 👉 Export button -->
-              <VBtn
-                
+              
+              <VBtn               
                 variant="tonal"
                 color="success"
                 prepend-icon="tabler-screen-share"
                 @click="downloadFull"
+                :loading="isFullLoading"
                 :disabled="isFullLoading"
               >
-                Exportar Todo
-              </VBtn>
+                <span>Exportar Todo</span>
+                <VTooltip 
+              open-on-click
+              :open-on-hover="false"                                                      
+              location="top"
+              activator="parent"
+              no-click-animation
+              :disabled="!isFullLoading"
+                >
+                <span>Esta carga puede demorar hasta 12 minutos, espere por favor</span>
+              </VTooltip>     
+
+              </VBtn>          
               <VBtn
                 variant="tonal"
                 color="success"
