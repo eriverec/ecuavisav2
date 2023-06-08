@@ -103,3 +103,8 @@ body {
 .bpw-composer-inner {
   padding: 0px;
 }
+
+.bpw-message-group>:not(:last-child):not(.hidden){
+  width: 100%;
+  max-width: 100%;
+}
