@@ -104,6 +104,10 @@ body {
   padding: 0px;
 }
 
+.bpw-card-title{
+  max-height: initial;
+}
+
 .bpw-message-group>:not(:last-child):not(.hidden){
   width: 100%;
   max-width: 100%;
