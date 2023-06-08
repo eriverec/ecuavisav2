@@ -205,9 +205,9 @@ function login() {
         console.log(result);
         if (result.token) {
           localStorageSetUsuarioNew(result.user);
-          let redirect = "https://www.ecuavisa.com/servicios/perfil?tk=" + result.token;
+          // let redirect = "https://www.ecuavisa.com/servicios/perfil?tk=" + result.token;
           //cambiar url destino
-          //let redirect = "https://www.ecuavisa.com/compania593/click-boom/que-esconde-la-cartera-de-victoria-KL4951862?tk=" + result.token;
+          let redirect = "https://www.ecuavisa.com/concursos?tk=" + result.token;
           //console.log("https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url);
          
           window.location = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
@@ -312,7 +312,7 @@ function register() {
                     window.location = `${urlParamsGET.get('urlredirect')}?tk=`+ result.token;
                 }else{
                   //window.location = "https://www.ecuavisa.com/compania593/click-boom/que-esconde-la-cartera-de-victoria-KL4951862?tk="+ result.token;
-                  window.location = "https://www.ecuavisa.com/servicios/perfil?tk="+ result.token;
+                  window.location = "https://www.ecuavisa.com/concursos?tk="+ result.token;
                 }
             }
           }
