@@ -84,6 +84,11 @@ export default [
       // { title: 'Eventos', to: 'apps-configuracion-add' },
     ],
   },
+  {
+    title: 'Backoffice',
+    to: { name: 'apps-backoffice' },
+    icon: { icon: 'tabler-settings-2' },
+  },
   // modulo por salir filtros
 //   {
 //     title: 'Filtros',

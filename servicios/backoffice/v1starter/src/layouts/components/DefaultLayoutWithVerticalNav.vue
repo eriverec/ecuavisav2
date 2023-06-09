@@ -1,5 +1,7 @@
 <script setup>
-import navItems from '@/navigation/vertical'
+import navItemsA from '@/navigation/vertical'
+import navItemsV from '@/navigation/verticalVisor'
+import navItemsWm from '@/navigation/verticalWebmaster'
 import { useThemeConfig } from '@core/composable/useThemeConfig'
 
 // Components
@@ -12,11 +14,23 @@ import { VerticalNavLayout } from '@layouts'
 
 const { appRouteTransition, isLessThanOverlayNavBreakpoint } = useThemeConfig()
 const { width: windowWidth } = useWindowSize()
+
+const resolveRole = computed(() =>{
+let rol = localStorage.getItem('role');
+if(rol== 'administrador'){
+  return navItemsA;
+}else if(rol== 'webmaster'){
+  return navItemsWm;  
+}else{
+  return navItemsV;
+}
+});
+
 </script>
 
 <template>
   <VerticalNavLayout
-    :nav-items="navItems"
+    :nav-items="resolveRole"
   >
     <!-- 👉 navbar -->
     <template #navbar="{ toggleVerticalOverlayNavActive }">

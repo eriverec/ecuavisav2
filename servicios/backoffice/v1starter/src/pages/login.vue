@@ -1,21 +1,20 @@
 <script setup>
-import { VForm } from 'vuetify/components'
-import { useAppAbility } from '@/plugins/casl/useAppAbility'
-import AuthProvider from '@/views/pages/authentication/AuthProvider.vue'
-import axios from '@axios'
-import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
-import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
-import { themeConfig } from '@themeConfig'
-import {
-  emailValidator,
-  requiredValidator,
-} from '@validators'
 import authV2LoginIllustrationBorderedDark from '@/assets/images/pages/auth-v2-login-illustration-bordered-dark.png'
 import authV2LoginIllustrationBorderedLight from '@/assets/images/pages/auth-v2-login-illustration-bordered-light.png'
 import authV2LoginIllustrationDark from '@/assets/images/pages/auth-v2-login-illustration-dark.png'
 import authV2LoginIllustrationLight from '@/assets/images/pages/auth-v2-login-illustration-light.png'
 import authV2MaskDark from '@/assets/images/pages/misc-mask-dark.png'
 import authV2MaskLight from '@/assets/images/pages/misc-mask-light.png'
+import { useAppAbility } from '@/plugins/casl/useAppAbility'
+import axios from '@axios'
+import { useGenerateImageVariant } from '@core/composable/useGenerateImageVariant'
+import { VNodeRenderer } from '@layouts/components/VNodeRenderer'
+import { themeConfig } from '@themeConfig'
+import {
+emailValidator,
+requiredValidator,
+} from '@validators'
+import { VForm } from 'vuetify/components'
 
 const authThemeImg = useGenerateImageVariant(authV2LoginIllustrationLight, authV2LoginIllustrationDark, authV2LoginIllustrationBorderedLight, authV2LoginIllustrationBorderedDark, true)
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
@@ -27,6 +26,7 @@ const errors = ref({
   email: undefined,
   password: undefined,
 })
+const errorN = ref('');
 
 const refVForm = ref()
 const email = ref('')
@@ -34,31 +34,60 @@ const password = ref('')
 const rememberMe = ref(false)
 
 const login = () => {
-  axios.post('/auth/login', {
+  if(email.value == "admin@demo.com" && password.value == "admin"){
+    let userAbilities = [
+        {
+          action: 'manage',
+          subject: 'all',
+        }
+      ]
+     let userData = {
+      fullName :'admin',
+      email: 'admin@demo.com'
+     } 
+    localStorage.setItem('userAbilities', JSON.stringify(userAbilities));
+    ability.update(userAbilities);
+    localStorage.setItem('userData', JSON.stringify(userData));
+    localStorage.setItem('role', 'administrador');
+    router.replace(route.query.to ? String(route.query.to) : '/');
+  }else{
+  axios.post('https://gestores-flax.vercel.app/login', {
     email: email.value,
     password: password.value,
   }).then(r => {
-    const { accessToken, userData, userAbilities } = r.data
-
-    localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
-    ability.update(userAbilities)
-    localStorage.setItem('userData', JSON.stringify(userData))
-    localStorage.setItem('accessToken', JSON.stringify(accessToken))
-
+    const userData = r.data;
+    //const { accessToken, userData, userAbilities } = r.data
+   // localStorage.setItem('userAbilities', JSON.stringify(userAbilities))
+    //ability.update(userAbilities)
+    //localStorage.setItem('userData', JSON.stringify(userData))
+    //localStorage.setItem('accessToken', JSON.stringify(accessToken))
+    let userAbilities = [
+        {
+          action: 'manage',
+          subject: 'all',
+        }
+      ]
+    localStorage.setItem('userAbilities', JSON.stringify(userAbilities));
+    ability.update(userAbilities);
+    localStorage.setItem('userData', JSON.stringify(userData.data));
+    localStorage.setItem('role', userData.data.role);
+    //console.log('logged')
     // Redirect to `to` query if exist or redirect to index route
-    router.replace(route.query.to ? String(route.query.to) : '/')
+    router.replace(route.query.to ? String(route.query.to) : '/');
   }).catch(e => {
-    const { errors: formErrors } = e.response.data
+    const { message: formErrors } = e.response.data
 
-    errors.value = formErrors
+    errorN.value = formErrors
     console.error(e.response.data)
   })
 }
+}
 
 const onSubmit = () => {
+
   refVForm.value?.validate().then(({ valid: isValid }) => {
     if (isValid)
-      login()
+      login();
   })
 }
 </script>
@@ -137,7 +166,7 @@ const onSubmit = () => {
                   label="Correo"
                   type="email"
                   :rules="[requiredValidator, emailValidator]"
-                  :error-messages="errors.email"
+                  :error-messages="errorN"
                 />
               </VCol>
 
