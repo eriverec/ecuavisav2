@@ -14,6 +14,7 @@ export default [
     icon: { icon: 'tabler-user' },
     children: [
       { title: 'Lista', to: 'apps-user-list' },
+      { title: 'Backoffice', to: 'apps-backoffice' },
       // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
     ],
   },
@@ -84,11 +85,11 @@ export default [
       // { title: 'Eventos', to: 'apps-configuracion-add' },
     ],
   },
-  {
+  /* {
     title: 'Backoffice',
     to: { name: 'apps-backoffice' },
     icon: { icon: 'tabler-settings-2' },
-  },
+  }, */
   // modulo por salir filtros
 //   {
 //     title: 'Filtros',
