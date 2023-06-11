@@ -357,10 +357,12 @@ INICIO - BANNER FIJO
     font-size: 16px !important;
     line-height: 1;
     gap: 10px;
+    align-items: center;
   }
 }
 
 @media (min-width: 770px) and (max-width: 1250px) {
+  #_col-50-50-top-one-col .article-section.cint__envio,
   #col-50-50-top-two-col .article-section.cint__envio{
     align-items: center;
     display: flex;
