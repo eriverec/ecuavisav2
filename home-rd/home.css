@@ -354,11 +354,22 @@ INICIO - BANNER FIJO
 
 @media (min-width: 1400px) and (max-width: 1500px) {
   .article_envivo{
-    font-size: 16px;
+    font-size: 16px !important;
     line-height: 1;
     gap: 10px;
   }
 }
+
+@media (min-width: 1000px) and (max-width: 1250px) {
+  #col-50-50-top-two-col .article-section.cint__envio{
+    align-items: center;
+    display: flex;
+    align-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  }
+  
 
 @media (max-width: 991px) {
   .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {
