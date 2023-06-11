@@ -354,7 +354,7 @@ INICIO - BANNER FIJO
 
 @media (min-width: 1400px) and (max-width: 1500px) {
   .article_envivo{
-    font-size: 16px !important;
+    font-size: 18px !important;
     line-height: 1;
     gap: 10px;
     align-items: center;
