@@ -14,7 +14,7 @@ export default [
     icon: { icon: 'tabler-user' },
     children: [
       { title: 'Lista', to: 'apps-user-list' },
-      { title: 'Backoffice', to: 'apps-backoffice' },
+      // { title: 'Usuarios Backoffice', to: 'apps-backoffice' },
       // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
     ],
   },
