@@ -5,9 +5,11 @@ var UserId = localStorage.getItem("wylexUserId");
 var urlParamsGET = new URLSearchParams(window.location.search);
 
 if(document.getElementById("checkTermsReg")){
-  var miCheckbox = document.getElementById("checkTermsReg");
-  // Establece el estado activo del checkbox
-  miCheckbox.checked = true;
+  var miCheckbox = document.querySelectorAll("checkTerms");
+  for(var i in miCheckbox){
+    // Establece el estado activo del checkbox
+    miCheckbox[i].checked = true;
+  }
 }
 
 window.onload = () => {
