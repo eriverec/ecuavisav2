@@ -1,19 +1,23 @@
 <script setup>
-import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
-import { VNodeRenderer } from './VNodeRenderer'
 import { initialAbility } from '@/plugins/casl/ability'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import {
-  injectionKeyIsVerticalNavHovered,
-  useLayouts,
+injectionKeyIsVerticalNavHovered,
+useLayouts,
 } from '@layouts'
 import {
-  VerticalNavGroup,
-  VerticalNavLink,
-  VerticalNavSectionTitle,
+VerticalNavGroup,
+VerticalNavLink,
+VerticalNavSectionTitle,
 } from '@layouts/components'
 import { config } from '@layouts/config'
-
+import Moment from 'moment'
+import { extendMoment } from 'moment-range'
+import esLocale from "moment/locale/es"
+import { PerfectScrollbar } from 'vue3-perfect-scrollbar'
+import { VNodeRenderer } from './VNodeRenderer'
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
 const props = defineProps({
   tag: {
     type: [
@@ -76,8 +80,9 @@ const handleNavScroll = evt => {
 const router = useRouter()
 const ability = useAppAbility()
 const userData = JSON.parse(localStorage.getItem('userData') || 'null')
-const logout = () => {
 
+async function logout (){
+  await accionBackoffice();
   // Remove "userData" from localStorage
   localStorage.removeItem('userData')
 
@@ -91,6 +96,29 @@ const logout = () => {
     // Reset ability to initial ability
     ability.update(initialAbility)
   })
+}
+
+async function accionBackoffice (){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "logout",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
 }
 </script>
 

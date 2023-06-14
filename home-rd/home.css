@@ -352,6 +352,26 @@ INICIO - BANNER FIJO
   column-gap: 24px;
 }
 
+@media (min-width: 1400px) and (max-width: 1500px) {
+  .article_envivo{
+    font-size: 18px !important;
+    line-height: 1;
+    gap: 10px;
+    align-items: center;
+  }
+}
+
+@media (min-width: 770px) and (max-width: 1250px) {
+  #_col-50-50-top-one-col .article-section.cint__envio,
+  #col-50-50-top-two-col .article-section.cint__envio{
+    align-items: center;
+    display: flex;
+    align-content: flex-start;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  }
+  
 
 @media (max-width: 991px) {
   .layout_apertura_2 .articulos_4dest .noticias .article .SEC_TIT_IMG_4DESTACADA .text_block .headline a h3 {

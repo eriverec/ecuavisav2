@@ -43,6 +43,8 @@ const sectionLoaded = () => {
   isLoading.value = false;
 };
 const isFullLoading = ref(false);
+const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
+const dateNow = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
 // 👉 Fetching users
 const fetchUsers = () => {
   sectionLoading();
@@ -122,6 +124,28 @@ watchEffect(() => {
   if (page.value > totalPage.value) page.value = totalPage.value;
   //console.log("watch totalPageValue", totalPage.value);
 });
+
+async function accionBackoffice (logData){
+  if(userBackoffice.value.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify(logData);
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
+};
+accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "lista-usuarios",
+            "fecha": dateNow.value
+					});
 
 // 👉 search filters
 const listProvider = [
@@ -208,7 +232,14 @@ const paginationData = computed(() => {
   return `Showing ${firstIndex} to ${lastIndex} of ${totalUsers.value} entries`;
 });
 
-const addNewUser = (userData) => {
+async function addNewUser (userData){
+  await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "lista-usuarios",
+            "accion": "agregar",
+            "data": userData,
+            "fecha": dateNow.value
+					});  
   userListStore.addUser(userData);
 
   // refetch User
@@ -449,15 +480,21 @@ async function downloadFull () {
       let doc = [];
       doc = usersFull.value
       let title = "users_full";
-      console.log("usersFull", usersFull.value);
+      //console.log("usersFull", usersFull.value);
       //console.log("doc", doc);
       //if(usersFull.length > totalUsers){
+      await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "lista-usuarios",
+            "accion": "descarga-completa",
+            "fecha": dateNow.value
+					});  
       exportCSVFile(headers, doc, title);
      // }
 
 };
 
-const downloadSection = () => {
+async function downloadSection (){
   let headers = {
     wylexId: "wylexId",
     site: "site",
@@ -484,7 +521,7 @@ const downloadSection = () => {
     ? (page.value - 1) * rowPerPage.value + 1
     : 0;
   let lastIndex = users.value.length + (page.value - 1) * rowPerPage.value;
-  console.log("usersValue ", users.value.length);
+  //console.log("usersValue ", users.value.length);
   let title = "users_section_" + firstIndex + "_" + lastIndex;
   docRaw.forEach((item) => {
     doc.push({
@@ -507,7 +544,12 @@ const downloadSection = () => {
       provider: item.provider,
     });
   });
-
+  await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "lista-usuarios",
+            "accion": "descarga-seccion",
+            "fecha": dateNow.value
+					});
   exportCSVFile(headers, doc, title);
 };
 

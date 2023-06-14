@@ -27,6 +27,8 @@ const filtrosVisitas = ref([]);
 const filtroSelected= ref({});
 const btnFiltros= ref('');
 const filtroDefault= ref({});
+const titleSelected = ref('');
+const ultimosUsuariosDownload = ref([]);
 
 async function fetchFiltros() {
         await fetch('https://servicio-filtros.vercel.app/visitas/all')
@@ -239,7 +241,9 @@ const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
 };
 
+
 const resolveUltimosUsuarios = (title) =>{
+  titleSelected.value = title;
   const inicio = rawData.value.map(({first_name, last_name, navigationRecord})=>{ 
   return {first_name, last_name, navigationRecord};
   });
@@ -251,7 +255,7 @@ const resolveUltimosUsuarios = (title) =>{
     for (let i of p.navigationRecord) {
       if (i.title === title || i.url === title) { 
 
-          var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY' ];    
+          var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY', 'M/D/YYYY', 'D/M/YYYY' ];    
           var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss','DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];    
           let fechaFormat = moment(i.fecha, allowedDateFormats, true).format( 'DD/MM/YYYY');
           let horaFix = i.hora.split(':');
@@ -271,7 +275,8 @@ const resolveUltimosUsuarios = (title) =>{
               fecha: fechaFormat,
               fechaRaw: i.fecha,
               fullFecha: fullFechaFormat,
-              hora: horaFinal
+              hora: horaFinal,
+              horaRaw: i.hora
           }
           arrayFiltro.push(data);}
       }
@@ -286,15 +291,34 @@ for (let i of arrayFiltro) {
 }*/
 //console.log('pruebaF',pruebaF);
 
-  arrayFiltro.sort((a, b) => {
+let grupos = {};
+
+arrayFiltro.forEach(obj => {
+  let clave = obj.first_name + '-' + obj.last_name;
+
+  if (grupos.hasOwnProperty(clave)) {
+    if (new Date(obj.fullFecha) > new Date(grupos[clave].fullFecha)) {
+      grupos[clave] = obj;
+    }
+  } else {
+    grupos[clave] = obj;
+  }
+});
+
+let resultado = Object.values(grupos);
+
+
+
+resultado.sort((a, b) => {
     var timestampA = new Date(a.fullFecha);
     var timestampB = new Date(b.fullFecha);
     return  timestampB - timestampA;
   });
+  //console.log('res',resultado);
 
   //console.log('Sorted F',arrayFiltro);
-  ultimosUsuarios.value = arrayFiltro.slice(0,10);
-
+  ultimosUsuarios.value = resultado.slice(0,25);
+  ultimosUsuariosDownload.value = ultimosUsuarios.value.map(({ first_name, last_name, fecha, hora, title, url }) => ({ first_name, last_name, fecha, hora, title, url }));
   ultimosUsuariosVisible.value = true;
   titulo.value = title;
 };
@@ -353,6 +377,81 @@ const resolveUltimasVisitasUser =(first, last)=>{
 
   ultimasVisitasVisible.value = true;
 }
+
+function convertToCSV(objArray) {
+  var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+  var str = "";
+
+  for (var i = 0; i < array.length; i++) {
+    var line = "";
+    for (var index in array[i]) {
+      if (line != "") line += ",";
+
+      line += array[i][index];
+    }
+
+    str += line + "\r\n";
+  }
+
+  return str;
+}
+
+function exportCSVFile(headers, items, fileTitle) {
+  if (headers && items[0].wylexId !== "wylexId") {
+    items.unshift(headers);
+  }
+
+  // Convert Object to JSON
+  var jsonObject = JSON.stringify(items);
+
+  var csv = convertToCSV(jsonObject);
+
+  var exportedFilenmae = fileTitle + ".csv" || "export.csv";
+
+  var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  if (navigator.msSaveBlob) {
+    // IE 10+
+    navigator.msSaveBlob(blob, exportedFilenmae);
+  } else {
+    var link = document.createElement("a");
+    if (link.download !== undefined) {
+      // feature detection
+      // Browsers that support HTML5 download attribute
+      var url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", exportedFilenmae);
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+}
+
+async function downloadSelection () {
+   
+  let headers = {
+    first_name: "first_name",
+    last_name: "last_name",
+    fecha: "fecha",
+    hora: "hora",
+    title: "title",
+    url: "url"
+  };
+  let doc = [];
+  doc = Array.from(ultimosUsuariosDownload.value);
+  let title = "ultimos_usuarios_"+titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
+  //console.log("doc", doc);
+  //if(usersFull.length > totalUsers){
+
+  exportCSVFile(headers, doc, title);
+ // }
+
+
+
+};
+
+
 </script>
 
 <template>
@@ -439,7 +538,20 @@ const resolveUltimasVisitasUser =(first, last)=>{
     <VExpandTransition>
       <VCard v-show="ultimosUsuariosVisible">
         <VCardItem class="pb-sm-0">
-          <VCardTitle>Últimas 10 visitas a la página</VCardTitle>
+          <div style="display: flex; flex-wrap: wrap;">   
+          <div style="margin-right: auto;">
+          <VCardTitle >Últimas visitas a la página</VCardTitle>  
+        </div>
+          <div style="margin-left: auto;">
+          <VBtn 
+            color="primary"							
+            @click="downloadSelection"
+            >
+            Exportar
+          </VBtn>
+        </div>
+    </div> 
+         
           <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
             <thead>
               <tr>

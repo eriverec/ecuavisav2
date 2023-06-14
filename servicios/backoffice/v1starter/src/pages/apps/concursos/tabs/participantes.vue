@@ -1,5 +1,9 @@
 <script setup>
-
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
 /* https://showandevents-service.vercel.app/all */
 // import TriviaParticipantes from '@/pages/apps/concursos/tabs/participantesCopy.vue'
 
@@ -29,8 +33,32 @@ const fetchData = async () => {
   isLoading.value = false;
 }
 
-onMounted(() => {
-  fetchData()
+async function accionBackoffice (){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "concursos-clickclickboom-participantes",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
+}
+
+onMounted(async() => {
+  await fetchData();
+  await accionBackoffice();
 })
 
 const groupedData = computed(() => {

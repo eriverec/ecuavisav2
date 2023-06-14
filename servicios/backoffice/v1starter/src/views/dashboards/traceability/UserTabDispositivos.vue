@@ -230,6 +230,7 @@ export default {
   },
   mounted() {
     this.filtrarDatos([]);
+    this.accionBackoffice();
   },
   methods: {
     async obtenerDatos(fechai, fechaf) {
@@ -281,6 +282,28 @@ export default {
         //this.datosFiltrados = datosFiltrados.slice(inicio, fin);
         //this.totalPaginas = Math.ceil(datosFiltrados.length / this.itemsPerPage);
       }
+    },
+    async accionBackoffice (){
+      let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+      let userData = JSON.parse(localStorage.getItem('userData'));
+      if(userData.email !== 'admin@demo.com' ){
+      var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "dashboard-dispositivos",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
     }
   },
 };

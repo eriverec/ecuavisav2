@@ -22,6 +22,8 @@ const updCategoriaPrimero = ref([]);
 const newCategoriaPrimero = ref([]);
 const filteredData_2 = ref([]);
 const currentTab = ref('tab-lista');
+const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
+const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
 
 
 // Obtener las colecciones
@@ -37,6 +39,47 @@ const fetchCategorias = () => {
 };
 
 watchEffect(fetchCategorias);
+
+async function accionBackoffice (logData){
+	if(userBackoffice.value.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+			myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify(logData);
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+		}
+};
+
+async function accionBackofficeList (){
+	await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "interesesSugerencias-listaIntereses-listado",
+            "fecha": dateNowF.value
+					});
+};
+
+async function accionBackofficeInit (){
+	await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "interesesSugerencias-listaIntereses",
+            "fecha": dateNowF.value
+					});
+	await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "interesesSugerencias-listaIntereses-listado",
+            "fecha": dateNowF.value
+					});				
+};
+
+accionBackofficeInit();
+				
 
 totalPages.value = computed(() => {
 	return Math.ceil(categorias.value.length / itemsPerPage.value);
@@ -96,9 +139,16 @@ async function onFormCategoriasSubmit (id){
 	let objectOg = Object.create(arrayFinal[index]);
 	console.log(objectUpd);
 	 
-    arrayFinal[index] = data;    
+    arrayFinal[index] = data; 
 
-		  
+	await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "interesesSugerencias-listaIntereses-listado",
+			"accion": "editar",
+			"data": {id: objectOg.id,...objectUpd},
+            "fecha": dateNowF.value
+					});	
+
 	var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
 
@@ -214,7 +264,7 @@ var filteredData = computed(() => {
 		<VRow>
 			<VCol class="mt-6" cols="12" md="12" lg="12">
 				<VTabs v-model="currentTab" class="v-tabs-pill">
-						<VTab value="tab-lista">Listado</VTab>
+						<VTab value="tab-lista" @click="accionBackofficeList()">Listado</VTab>
 						<VTab value="tab-estadistica">Estadísticas</VTab>
 						<!-- <VTab>Tab Three</VTab> -->
 						</VTabs>

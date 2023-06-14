@@ -1,10 +1,12 @@
 <script setup>
-import VueApexCharts from 'vue3-apexcharts'
-import { useTheme } from 'vuetify'
-import { hexToRgb } from '@layouts/utils'
+import { useTheme } from 'vuetify';
 
-import CrmActivityTimeline from '@/views/dashboards/traceability/UserTabNavegacionTimeline.vue'
-
+import CrmActivityTimeline from '@/views/dashboards/traceability/UserTabNavegacionTimeline.vue';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
 const vuetifyTheme = useTheme()
 
 
@@ -15,12 +17,13 @@ const isLoading = ref(true);
 const itemsPerPage = 8;
 const currentPage = ref(1);
 const totalCount = computed(() => urlCounts.value.length);
+
 async function fetchData() {
   try {
     const response = await fetch('https://servicio-de-actividad.vercel.app/actividad/all');
     const data = await response.json();
     const urlMap = new Map();
-
+    
     for (const activity of data.data) {
       for (const record of activity.navigationRecord) {
         const url = record.url;
@@ -41,7 +44,33 @@ async function fetchData() {
   isLoading.value = false;
 }
 
-onMounted(fetchData);
+async function accionBackoffice (){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "dashboard-navegacion",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
+}
+
+onMounted(async ()=>{
+  await fetchData();
+  await accionBackoffice();
+});
 
 const paginatedUrlCounts = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;

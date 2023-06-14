@@ -4,7 +4,7 @@ import { defineStore } from 'pinia'
 export const useUserListStore = defineStore('UserListStore', {
   actions: {
     // 👉 Fetch users data
-    fetchUsers(params) { return axios.get('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/get', { params }) },
+    fetchUsers(params) { return axios.get('https://ecuavisa-mongo-users.vercel.app/all', { params }) },
 
     countPageUsers() { return axios.get('https://ecuavisa-mongo-users.vercel.app/count') },
 

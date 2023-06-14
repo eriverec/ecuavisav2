@@ -14,7 +14,14 @@ import {
 emailValidator,
 requiredValidator,
 } from '@validators'
+import Moment from 'moment'
+import { extendMoment } from 'moment-range'
+import esLocale from "moment/locale/es"
 import { VForm } from 'vuetify/components'
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
+
+
 
 const authThemeImg = useGenerateImageVariant(authV2LoginIllustrationLight, authV2LoginIllustrationDark, authV2LoginIllustrationBorderedLight, authV2LoginIllustrationBorderedDark, true)
 const authThemeMask = useGenerateImageVariant(authV2MaskLight, authV2MaskDark)
@@ -61,6 +68,7 @@ const login = () => {
     //ability.update(userAbilities)
     //localStorage.setItem('userData', JSON.stringify(userData))
     //localStorage.setItem('accessToken', JSON.stringify(accessToken))
+    let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
     let userAbilities = [
         {
           action: 'manage',
@@ -71,14 +79,24 @@ const login = () => {
     ability.update(userAbilities);
     localStorage.setItem('userData', JSON.stringify(userData.data));
     localStorage.setItem('role', userData.data.role);
+        
+			var log = {
+        usuario: userData.data.email,   
+        pagina: "login",
+        fecha: dateNow
+                };		
+			axios.post(`https://servicio-logs.vercel.app/accion`, log);
     //console.log('logged')
     // Redirect to `to` query if exist or redirect to index route
     router.replace(route.query.to ? String(route.query.to) : '/');
   }).catch(e => {
-    const { message: formErrors } = e.response.data
-
-    errorN.value = formErrors
-    console.error(e.response.data)
+    if(e.response){
+    const { message: formErrors } = e.response.data;     
+    errorN.value = formErrors;
+    console.error(e.response.data);
+    }
+    console.error(e);
+    
   })
 }
 }

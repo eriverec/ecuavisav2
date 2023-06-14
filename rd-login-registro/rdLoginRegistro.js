@@ -4,6 +4,11 @@ var URL_perfil_G = "https://www.ecuavisa.com/servicios/perfil";
 var UserId = localStorage.getItem("wylexUserId");
 var urlParamsGET = new URLSearchParams(window.location.search);
 
+if(document.getElementById("checkTerms")){
+  var miCheckbox = document.querySelector("#checkTerms");
+  miCheckbox.checked = true;
+}
+
 window.onload = () => {
   document.getElementById("forgetButton").disabled = false;
   let btnLogGoogle = document.getElementById("aLogGoogle");

@@ -1,7 +1,12 @@
 <script setup>
-import TriviaEstadisticas from '@/pages/apps/concursos/tabs/estadisticas.vue'
-import TriviaParticipantes from '@/pages/apps/concursos/tabs/participantes.vue'
-
+import TriviaEstadisticas from '@/pages/apps/concursos/tabs/estadisticas.vue';
+import TriviaParticipantes from '@/pages/apps/concursos/tabs/participantes.vue';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+import { onMounted } from 'vue';
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
 const userTab = ref(null)
 
 const tabsTrivia = [
@@ -18,7 +23,29 @@ const tabsTrivia = [
   //   title: 'Extras',
   // }
 ]
-
+onMounted(accionBackoffice)
+async function accionBackoffice (){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "concursos-clickclickboom",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
+}
 </script>
 
 <template>

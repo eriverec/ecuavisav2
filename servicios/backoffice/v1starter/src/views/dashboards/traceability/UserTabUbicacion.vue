@@ -4,7 +4,11 @@ import brFlag from "@/assets/images/icons/countries/br.png";
 import cnFlag from "@/assets/images/icons/countries/cn.png";
 import frFlag from "@/assets/images/icons/countries/fr.png";
 import inFlag from "@/assets/images/icons/countries/in.png";
-
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
 const salesByCountries = [
   {
     avatarImg: brFlag,
@@ -49,7 +53,7 @@ onMounted(async () => {
     "https://servicio-de-actividad.vercel.app/dispositivos/all"
   );
   const data = await response.json();
-
+  await accionBackoffice();
   const citiesMap = new Map();
   data.data.forEach((activity) => {
     const key = `${activity.country}-${activity.city}`;
@@ -69,6 +73,29 @@ onMounted(async () => {
   cities.value = Array.from(citiesMap.values());
   isLoading.value = false;
 });
+
+async function accionBackoffice (){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "dashboard-ubicacion",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
+}
 
 const sortedCities = computed(() => {
   if (orderField.value) {
