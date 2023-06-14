@@ -314,7 +314,7 @@ resultado.sort((a, b) => {
     var timestampB = new Date(b.fullFecha);
     return  timestampB - timestampA;
   });
-  console.log('res',resultado);
+  //console.log('res',resultado);
 
   //console.log('Sorted F',arrayFiltro);
   ultimosUsuarios.value = resultado.slice(0,25);
