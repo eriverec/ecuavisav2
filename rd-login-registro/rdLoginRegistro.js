@@ -4,12 +4,9 @@ var URL_perfil_G = "https://www.ecuavisa.com/servicios/perfil";
 var UserId = localStorage.getItem("wylexUserId");
 var urlParamsGET = new URLSearchParams(window.location.search);
 
-if(document.getElementById("checkTermsReg")){
-  var miCheckbox = document.querySelectorAll("checkTerms");
-  for(var i in miCheckbox){
-    // Establece el estado activo del checkbox
-    miCheckbox[i].checked = true;
-  }
+if(document.getElementById("checkTerms")){
+  var miCheckbox = document.querySelector("#checkTerms");
+  miCheckbox.checked = true;
 }
 
 window.onload = () => {
