@@ -1,19 +1,19 @@
 <script setup>
-import avatar1 from '@/assets/images/avatars/avatar-1.png'
-import avatar2 from '@/assets/images/avatars/avatar-2.jpg'
-import avatar3 from '@/assets/images/avatars/avatar-3.png'
-import avatar4 from '@/assets/images/avatars/avatar-4.png'
 import avatar5 from '@/assets/images/avatars/logox108.png'
 
 import { initialAbility } from '@/plugins/casl/ability'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
-
+import Moment from 'moment'
+import { extendMoment } from 'moment-range'
+import esLocale from "moment/locale/es"
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
 const router = useRouter()
 const ability = useAppAbility()
 const userData = JSON.parse(localStorage.getItem('userData') || 'null')
 
-const logout = () => {
-
+async function logout () {
+  await accionBackoffice();
   // Remove "userData" from localStorage
   localStorage.removeItem('userData')
 
@@ -27,6 +27,29 @@ const logout = () => {
     // Reset ability to initial ability
     ability.update(initialAbility)
   })
+}
+
+async function accionBackoffice (){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "logout",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
 }
 </script>
 

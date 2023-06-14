@@ -1,9 +1,14 @@
 <script setup>
 import { hexToRgb } from '@layouts/utils';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
 import { onMounted } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
-
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
+    
 const colorVariables = themeColors => {
   const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
   const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`
@@ -21,6 +26,7 @@ const fechaIngresada = ref([]);
 const fechaSelected = ref('');
 const isUsersTableVisible = ref(false);
 const selectedInteres = ref('');
+
 async function fetchData (){ 
     await fetch('https://sugerencias-ecuavisa.vercel.app/interes/all')
       .then(response => response.json())
@@ -30,7 +36,35 @@ async function fetchData (){
       });
      
 }
-onMounted(fetchData);
+
+async function accionBackoffice (){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "interesesSugerencias-listaIntereses-estadisticas",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
+}
+
+onMounted(async()=>{
+  await fetchData();
+  await accionBackoffice();
+});
+
 
 const getSelectedDates =(dates)=>{
     if(dates.length > 1){
@@ -179,7 +213,7 @@ function exportCSVFile(headers, items, fileTitle) {
   }
 }
 
-function downloadSelection () {
+async function downloadSelection () {
    
    //console.log('usersFull.value',usersFull.value);
   let headers = {
@@ -198,6 +232,27 @@ function downloadSelection () {
   let title = "users_"+selectedInteres.value.replace(/ /g,"_");
 
   //if(usersFull.length > totalUsers){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){  
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "interesesSugerencias-listaIntereses-estadisticas",
+            "accion": "export",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
   exportCSVFile(headers, doc, title);
  // }
 

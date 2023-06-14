@@ -1,6 +1,10 @@
 <script setup>
 import { useBannersListStore } from "@/views/apps/miecuavisa/useBannersListStore";
-
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
 const categoriasListStore = useBannersListStore();
 const categorias = ref([]);
 const sendCategorias = ref([]);
@@ -18,6 +22,8 @@ const filteredData_2 = ref([]);
 const isDialogVisible_2 = ref(false)
 const currentTab = ref('tab-lista');
 const isDialogVisible = ref(false)
+const dateNow = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
+const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
 
 // Obtener las colecciones
 const fetchCategorias = () => {
@@ -30,6 +36,29 @@ const fetchCategorias = () => {
       console.error(error);
     });
 };
+
+async function accionBackoffice (logData){
+  
+  if(userBackoffice.value.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify(logData);
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
+}
+accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "ecuavisa.com-bannerSlider",
+            "fecha": dateNow.value
+					});
 
 watchEffect(fetchCategorias);
 
@@ -53,15 +82,21 @@ const onFormCategoriasActive = (data) => {
 
 var dataBanners = {};
 
-const onFormDelete = (data, eliminar=false) => {
+async function onFormDelete (data, eliminar=false) {
     //let index =  categorias.value.map((e) => e.id).indexOf(id);   
-
+    
     if(!eliminar){
       isDialogVisible.value = true;
       dataBanners = data;
       return false;
     }
-
+    await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "ecuavisa.com-bannerSlider",
+            "accion": "editar",
+            "data": data,
+            "fecha": dateNow.value
+		}); 
     isDialogVisible.value = false;
     data = dataBanners;
     isCategoriasEditVisible.value = false;
@@ -76,7 +111,7 @@ const onFormDelete = (data, eliminar=false) => {
       }),
       redirect: 'follow'
     };
-    fetch("https://estadisticas.ecuavisa.com/sites/gestor/Tools/miecuavisa/ajax.php?action=delete", requestOptions)
+    await fetch("https://estadisticas.ecuavisa.com/sites/gestor/Tools/miecuavisa/ajax.php?action=delete", requestOptions)
       .then(response => response.text())
       .then(result => {
         console.log(result)
@@ -89,9 +124,9 @@ const onFormDelete = (data, eliminar=false) => {
       });  
 };
 
-const onFormCategoriasSubmit = (id) => {
+async function onFormCategoriasSubmit(id) {
   //resolveColeccionUpdateSend();
-
+    
     //sendCategorias.value = categorias.value;
     isDialogVisible_2.value = true;
     let arrayFinal = [];
@@ -115,7 +150,7 @@ const onFormCategoriasSubmit = (id) => {
       body: JSON.stringify(data),
       redirect: 'follow'
     };
-    fetch("https://estadisticas.ecuavisa.com/sites/gestor/Tools/miecuavisa/ajax.php", requestOptions)
+    await fetch("https://estadisticas.ecuavisa.com/sites/gestor/Tools/miecuavisa/ajax.php", requestOptions)
       .then(response => response.text())
       .then(result => {
         console.log(result)
@@ -125,7 +160,14 @@ const onFormCategoriasSubmit = (id) => {
       .catch(error => {
         alert("Ocurrió un error al guardar el registro")
         console.log('error', error)
-      });  
+      }); 
+    await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "ecuavisa.com-bannerSlider",
+            "accion": "editar",
+            "data": data,
+            "fecha": dateNow.value
+		}); 
 };
 
 const onFormCategoriasReset = () => {

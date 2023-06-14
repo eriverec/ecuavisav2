@@ -100,10 +100,14 @@
 
 
 <script>
-import { useTheme } from 'vuetify'
 import { hexToRgb } from '@layouts/utils';
-import VueApexCharts from 'vue3-apexcharts';
-import ApexCharts from 'apexcharts'
+import ApexCharts from 'apexcharts';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+import { useTheme } from 'vuetify';
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
 export default {
   setup() {
     const vuetifyTheme = useTheme();
@@ -319,12 +323,35 @@ export default {
       // Do something when the user selects a country
       console.log("Selected country:", selectedDates);
     },
+    async accionBackoffice (){
+      let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+      let userData = JSON.parse(localStorage.getItem('userData'));
+      if(userData.email !== 'admin@demo.com' ){
+      var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+          var log = JSON.stringify({
+                "usuario": userData.email,   
+                "pagina": "concursos-clickclickboom-estadisticas",
+                "fecha": dateNow
+              });
+          var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: log,
+            redirect: 'follow'
+          };
+          await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+          .then(response =>{			
+          }).catch(error => console.log('error', error));
+        }
+      }
   },
   async mounted() {
     this.getListTrivia();
     this.params["idTrivia"] = this.selectedTrivia.value;
     await this.fetchData();
     this.initChart();
+    await this.accionBackoffice();
   },
 };
 </script>

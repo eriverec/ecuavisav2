@@ -1,5 +1,10 @@
 <script setup>
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
 import { onMounted } from 'vue';
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
 
 const dataUsuarios = ref([]);
 const currentPage = ref(1);
@@ -18,7 +23,33 @@ async function getUsuarios(){
 }
 
 
-onMounted(getUsuarios);
+onMounted(async ()=>{
+  await getUsuarios();
+  await accionBackoffice();
+});
+
+async function accionBackoffice (){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "concursos-gavilanes",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
+}
 
 const paginatedData = computed(() => {	
     const start = (currentPage.value - 1) * itemsPerPage.value;
@@ -79,7 +110,7 @@ function exportCSVFile(headers, items, fileTitle) {
   }
 }
 
-function downloadSelection () {
+async function downloadSelection () {
    
   let headers = {
     nombre: "nombre",
@@ -93,6 +124,28 @@ function downloadSelection () {
   let title = "users_concurso_gavilanes";
   //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){  
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+	var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "concursos-gavilanes",
+            "accion": "export",
+            "fecha": dateNow
+					});
+	var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+	await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+	.then(response =>{			
+	}).catch(error => console.log('error', error));
+  }
+
   exportCSVFile(headers, doc, title);
  // }
 

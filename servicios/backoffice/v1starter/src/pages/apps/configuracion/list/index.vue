@@ -111,6 +111,12 @@ const checkbox = ref(1)
 </style>
 
 <script>
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
+
 export default {
   data() {
     return {
@@ -142,8 +148,9 @@ export default {
     // }
     
   },
-  mounted() {
+  async mounted() {
     this.obtenerDatos();
+    await this.accionBackoffice();
   },
   methods: {
     // direccionar() {
@@ -191,6 +198,28 @@ export default {
         console.error(error);
       }
     },
+    async accionBackoffice (){
+      let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+      let userData = JSON.parse(localStorage.getItem('userData'));
+      if(userData.email !== 'admin@demo.com' ){
+      var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+          var log = JSON.stringify({
+                "usuario": userData.email,   
+                "pagina": "ecuavisa.com-modulos",
+                "fecha": dateNow
+              });
+          var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: log,
+            redirect: 'follow'
+          };
+          await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+          .then(response =>{			
+          }).catch(error => console.log('error', error));
+        }
+      }
   },
 };
 </script>

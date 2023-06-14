@@ -1,9 +1,14 @@
 <script setup>
 import { hexToRgb } from '@layouts/utils';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
 import { onMounted } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
-
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
+    
 const colorVariables = themeColors => {
   const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
   const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`
@@ -21,17 +26,44 @@ const fechaIngresada = ref([]);
 const fechaSelected = ref('');
 const isUsersTableVisible = ref(false);
 const selectedInteres = ref('');
+
 async function fetchData (){ 
     await fetch('https://sugerencias-ecuavisa.vercel.app/all')
       .then(response => response.json())
       .then(resp => {     
        let filtro = resp.data.filter(a=>{ return a.estado == true && a.users_suscribed > 0});   
        data.value = filtro;  
-       console.log('data',data.value);
+       //console.log('data',data.value);
       });
      
 }
-onMounted(fetchData);
+
+async function accionBackoffice (){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "interesesSugerencias-listaSugerencias-estadisticas",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
+}
+onMounted(async()=>{
+  await fetchData();
+  await accionBackoffice();
+});
 
 const getSelectedDates =(dates)=>{
     if(dates.length > 1){
@@ -151,7 +183,7 @@ function exportCSVFile(headers, items, fileTitle) {
   if (headers && items[0].wylexId !== "wylexId") {
     items.unshift(headers);
   }
-
+  
   // Convert Object to JSON
   var jsonObject = JSON.stringify(items);
 
@@ -179,7 +211,7 @@ function exportCSVFile(headers, items, fileTitle) {
   }
 }
 
-function downloadSelection () {
+async function downloadSelection () {
    
    //console.log('usersFull.value',usersFull.value);
   let headers = {
@@ -196,9 +228,30 @@ function downloadSelection () {
   let doc = [];
   doc = Array.from(dataUsuarios.value);
   let title = "users_"+selectedInteres.value.replace(/ /g,"_");
-  console.log("usersFull", dataUsuarios.value);
+  //console.log("usersFull", dataUsuarios.value);
   //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){  
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "interesesSugerencias-listaSugerencias-estadisticas",
+            "accion": "export",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
   exportCSVFile(headers, doc, title);
  // }
 

@@ -1,10 +1,15 @@
 <script setup>
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 
-import UserTabNavegacion from '@/views/dashboards/traceability/UserTabNavegacion.vue'
-import UserTabDispositivos from '@/views/dashboards/traceability/UserTabDispositivos.vue'
-import UserTabIntereses from '@/views/dashboards/traceability/UserTabIntereses.vue'
-import UserTabUbicacion from '@/views/dashboards/traceability/UserTabUbicacion.vue'
+import UserTabDispositivos from '@/views/dashboards/traceability/UserTabDispositivos.vue';
+import UserTabIntereses from '@/views/dashboards/traceability/UserTabIntereses.vue';
+import UserTabNavegacion from '@/views/dashboards/traceability/UserTabNavegacion.vue';
+import UserTabUbicacion from '@/views/dashboards/traceability/UserTabUbicacion.vue';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
 
 const userListStore = useUserListStore();
 const totalUsers = ref(0);
@@ -39,13 +44,35 @@ const countUsers = () => {
 
       pG.value = (totalGoogle.value * 100 ) / total;
       percentGoogle.value = Math.round((pG.value + Number.EPSILON) * 100) / 100;
-      
+      accionBackoffice();
 
     })
     .catch((error) => {
       console.error(error);
     });
 };
+async function accionBackoffice (){
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if(userData.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+				myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify({
+            "usuario": userData.email,   
+            "pagina": "dashboard",
+            "fecha": dateNow
+					});
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+    }
+}
 
 const route = useRoute()
 const userData = ref()
