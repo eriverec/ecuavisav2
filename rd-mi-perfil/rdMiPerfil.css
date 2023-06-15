@@ -1531,7 +1531,7 @@ button#btnSaveM {
 
 @media (min-width: 576px) {
   .modal-dialog {
-    max-width: 425px !important;
+    max-width: 600px !important;
   }
 }
 
@@ -1803,6 +1803,29 @@ button#btnSaveM {
   display: none;
 }
 
+#modal_seguimiento_temas .listado-temas::-webkit-scrollbar-thumb {
+  height: 6px;
+  background-color: #134bc93b;
+}
+
+#modal_seguimiento_temas .listado-temas::-webkit-scrollbar-thumb:hover {
+  background-color: #072569;
+  height: 4px;
+}
+
+#modal_seguimiento_temas .listado-temas::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+#modal_seguimiento_temas .listado-temas::-webkit-scrollbar:hover {
+  height: 10px;
+  padding-top: 10px;
+}
+#modal_seguimiento_temas .listado-temas::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 0px rgba(0, 0, 0, 0);
+}
+
+
 .MODAL_SEGUIMIENTO_TEMA .template-meta-favorite-action.add .btn-modal-seguir {
   display: initial;
   text-align: center;
@@ -1878,6 +1901,7 @@ button#btnSaveM {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   gap: 15px;
+  padding: 0 10px;
 }
 
 .listado-temas .mis-intereses-modal {
