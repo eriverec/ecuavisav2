@@ -214,6 +214,10 @@ const onFormGestoresDeleteReset = () => {
   deleteShowGestores.value = {};
 	isGestoresDeleteConfirmVisible.value = false;	
 };
+
+
+
+
 </script>
 
 <template>
@@ -250,7 +254,7 @@ const onFormGestoresDeleteReset = () => {
           <VCardItem class="pb-sm-0"> 
           <VCardText v-if="isLoading">Cargando información...</VCardText>
           <VCardText v-else> 
-          <VTable class="text-no-wrap tableNavegacion" >
+          <VTable class="text-no-wrap tableNavegacion">
             <thead>
               <tr>
                 <th scope="col">Nombre</th>
@@ -261,8 +265,8 @@ const onFormGestoresDeleteReset = () => {
             </thead>
 
             <tbody>
-              <tr v-for="user in paginatedData">
-                <td>
+              <tr v-for="user in paginatedData" >
+                <td >
                   {{ user.fullName }} 
                 </td>
                 <td >
@@ -498,3 +502,11 @@ const onFormGestoresDeleteReset = () => {
     </VCol>
 </VRow>
 </template>
+<style scoped>
+.clickable { cursor: pointer; }
+@media (max-width: 1000px) {
+  td span {
+    max-width: 200px;
+  }
+}
+</style>
