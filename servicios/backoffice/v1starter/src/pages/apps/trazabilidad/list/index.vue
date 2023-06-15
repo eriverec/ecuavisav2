@@ -93,7 +93,7 @@ async function accionBackoffice (){
                           <span>{{ (user.users.length > 0)? user.users[0].first_name + " " + user.users[0].last_name : "" }}</span>
                         </VListItemTitle>
                         <VListItemSubtitle class="mt-1" color="info">
-                          <span class="text-xs text-disabled">Usuario N° {{ index + 1 }}, Tel. {{ user.users[0].phone_number }}, UserId. {{ user.userId }}</span>
+                          <span class="text-xs text-disabled">Usuario N° {{ index + 1 }}, Tel. {{ (user.users.length > 0 ? user.users[0].phone_number : "") }}, UserId. {{ user.userId }}</span>
                         </VListItemSubtitle>
                         <template #append>
                           <VChip :color="user.navigationRecord < 50 ? 'default' : (user.navigationRecord < 100 ? 'warning' : 'success')" class="mr-4" >{{ user.navigationRecord }} Visitas </VChip>
