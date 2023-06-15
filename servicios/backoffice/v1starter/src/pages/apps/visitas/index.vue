@@ -29,6 +29,7 @@ const btnFiltros= ref('');
 const filtroDefault= ref({});
 const titleSelected = ref('');
 const ultimosUsuariosDownload = ref([]);
+const userSelected = ref('');
 
 async function fetchFiltros() {
         await fetch('https://servicio-filtros.vercel.app/visitas/all')
@@ -300,7 +301,9 @@ arrayFiltro.forEach(obj => {
     if (new Date(obj.fullFecha) > new Date(grupos[clave].fullFecha)) {
       grupos[clave] = obj;
     }
+    grupos[clave].cantidad = (grupos[clave].cantidad || 1) + 1;
   } else {
+    obj.cantidad = 1;
     grupos[clave] = obj;
   }
 });
@@ -318,7 +321,7 @@ resultado.sort((a, b) => {
 
   //console.log('Sorted F',arrayFiltro);
   ultimosUsuarios.value = resultado.slice(0,25);
-  ultimosUsuariosDownload.value = ultimosUsuarios.value.map(({ first_name, last_name, fecha, hora, title, url }) => ({ first_name, last_name, fecha, hora, title, url }));
+  ultimosUsuariosDownload.value = ultimosUsuarios.value.map(({ first_name, last_name, fecha, hora, cantidad, title, url }) => ({ first_name, last_name, fecha, hora, cantidad, title, url }));
   ultimosUsuariosVisible.value = true;
   titulo.value = title;
 };
@@ -330,7 +333,7 @@ const resolveUltimasVisitasUser =(first, last)=>{
   });
 
   const arrayFiltro = [];
-  
+  userSelected.value = first+' '+last;
   let fullNameViene = first+' '+last;
   //console.log('name',fullNameViene);
   //console.log('inicio' ,inicio); 
@@ -339,7 +342,7 @@ const resolveUltimasVisitasUser =(first, last)=>{
     if (fullName == fullNameViene) { 
     for (let i of p.navigationRecord) {
       
-          var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY' ];    
+          var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY' , 'M/D/YYYY', 'D/M/YYYY' ];    
           var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss','DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];    
           let fechaFormat = moment(i.fecha, allowedDateFormats, true).format( 'DD/MM/YYYY');
           let horaFix = i.hora.split(':');
@@ -435,6 +438,7 @@ async function downloadSelection () {
     last_name: "last_name",
     fecha: "fecha",
     hora: "hora",
+    cantidad: "cantidad",
     title: "title",
     url: "url"
   };
@@ -539,10 +543,10 @@ async function downloadSelection () {
       <VCard v-show="ultimosUsuariosVisible">
         <VCardItem class="pb-sm-0">
           <div style="display: flex; flex-wrap: wrap;">   
-          <div style="margin-right: auto;">
-          <VCardTitle >Últimas visitas a la página</VCardTitle>  
+          <div style="width: max-content;">
+          <VCardTitle >Últimas visitas a la página {{ titleSelected }}</VCardTitle>  
         </div>
-          <div style="margin-left: auto;">
+          <div style="margin-left: auto; margin-top: 1rem; margin-bottom: 1rem;">
           <VBtn 
             color="primary"							
             @click="downloadSelection"
@@ -557,6 +561,7 @@ async function downloadSelection () {
               <tr>
                 <th scope="col">Nombre</th>
                 <th scope="col">Fecha</th>
+                <th scope="col">Cantidad</th>
                 <th scope="col">Hora</th>
               </tr>
             </thead>
@@ -568,6 +573,9 @@ async function downloadSelection () {
                 </td>
                 <td class="text-medium-emphasis">
                   {{ user.fecha}}
+                </td>
+                <td class="text-medium-emphasis">
+                  {{ user.cantidad}}
                 </td>
                 <td class="text-medium-emphasis">
                   {{ user.hora}}
@@ -582,8 +590,10 @@ async function downloadSelection () {
     <VCol lg="6" cols="12" sm="6">
     <!-- trazabilidad independiente -->
     <VExpandTransition>
-      <VCard title="Actividad del usuario" v-show="ultimasVisitasVisible">
-        
+      <VCard v-show="ultimasVisitasVisible">
+        <VCardItem>
+      <VCardTitle >Actividad del usuario {{ userSelected }}</VCardTitle>
+     </VCardItem>
         <VCardText>
           <VTimeline
             density="compact"
