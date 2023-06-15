@@ -134,11 +134,12 @@ async function resolveActividad(email){
     <VCol cols="12" >
     <!-- trazabilidad independiente -->
     <VExpandTransition>
-      <VCard v-show="actividadVisible" v-if="dataActividad.length > 0">
+      <VCard v-show="actividadVisible" >
         <VCardItem class="pb-sm-0" >    
         <div style="display: flex; flex-wrap: wrap;">   
           <div style="margin-right: auto;">
-          <VCardTitle >Actividad del usuario {{ selectedUsuario }}</VCardTitle>  
+        <VCardTitle >Actividad del usuario {{ selectedUsuario }}</VCardTitle>
+       
         </div>
         <!--
           <div style="margin-left: auto;">
@@ -152,7 +153,10 @@ async function resolveActividad(email){
         -->
     </div> 
         </VCardItem>
-          <VCardItem class="pb-sm-0"> 
+          <VCardItem class="pb-sm-0" v-if="dataActividad.length == 0">
+            <VCardText>No existe actividad</VCardText>
+        </VCardItem>
+          <VCardItem class="pb-sm-0" v-else> 
           <VCardText v-if="actividadLoading">Cargando usuarios...</VCardText>
           <VCardText v-else> 
 
