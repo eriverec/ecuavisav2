@@ -145,7 +145,7 @@
 
 .section-lr .container-lr .user .formBx {
   position: relative;
-  /* width: 100%; */
+  width: 100%;
   /* width: 50%; */
   height: 100%;
   background: transparent;
@@ -414,6 +414,10 @@ input#registrar {
 
 .section-lr .container-lr.active .signupBx .imgBx {
   left: 0%;
+}
+
+.formBx form {
+    width: 100%;
 }
 
 .section-lr .container-lr .signinBx .formBx {
