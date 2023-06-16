@@ -134,9 +134,24 @@ export default {
     await this.accionBackoffice();
   },
   methods: {
-    clicka(){
-      console.log('presionaste el click');
-      console.log(JSON.stringify(this.datos))
+    async clicka(){
+      console.log(JSON.stringify(this.datos));
+      var myHeaders = new Headers();
+            myHeaders.append("Content-Type", "application/json");
+      var raw = JSON.stringify(this.datos);
+      var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+          };
+      await fetch('https://estadisticas.ecuavisa.com/sites/services/global/index.php',requestOptions)
+      .then(response =>{			
+      }).catch(error => console.log('error', error));
+      await this.obtenerDatos();
+      //console.log('presionaste el click');
+      //console.log(JSON.stringify(this.datos));
+
     },
     async obtenerDatos() {
       const respuesta = await fetch(`https://estadisticas.ecuavisa.com/sites/services/global/datareader.php`);
