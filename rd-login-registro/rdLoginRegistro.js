@@ -470,8 +470,9 @@ eventBtnCont.addEventListener('click', function () {
 				console.log(`${capValEmail} EXISTE!`);
 				const selBtnCont = document.querySelector('.user.signinBx .formBx form .box-input-continuar');
 				const selLabelEm = document.querySelector('.user.signinBx .formBx form .label__email');
-				//ocultar Politica de privacidad
 				const selLabelPP = document.querySelector('.user.signinBx .formBx form .forgetPassword label');
+        const selTCentral = document.querySelector('.user.signinBx .formBx form .title__central');
+        selTCentral.innerHTML = /*html*/`<h2>Inicia Sesión</h2>`;
 				selLabelPP.style.display = "none";
 				selBtnCont.style.display = "none";
 				selLabelEm.style.display = "none";
