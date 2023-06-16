@@ -242,7 +242,7 @@
 } */
 .section-lr .container-lr .user .formBx form input {
   position: relative;
-  background: #2927b9;
+  /* background: #2927b9; */
   color: #ffff;
   outline: none;
   margin: 15px 0;
@@ -730,8 +730,8 @@ form i {
   color: #2927B9
 }
 
-.forgetPassword a
+/* .forgetPassword a */
 
-.user.signinBx .formBx form .forgetPassword label input{
+.user.signinBx .formBx form .forgetPassword.__olvid label #checkTerms{
   display: none;
 }
