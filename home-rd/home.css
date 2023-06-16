@@ -3601,6 +3601,7 @@ BLOQUE DE COLUMNISTA - FIN
 
 .Tematica_Semanal{
   display: none;
+  margin-top: 30px;
 }
 
 .__tematicaSemanal .noticias .article .media_block .top_info {
