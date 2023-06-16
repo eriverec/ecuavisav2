@@ -50,33 +50,16 @@ const checkbox = ref(1)
                             v-model="element.configuracionModuloSugerencias"
                             :label="element.configuracionModuloSugerencias ? 'Activo' : 'Inactivo'"
                           />
-                          <!-- <VCheckbox v-model="{{element.configuracionModuloSugerencias}}" :label="capitalizedLabel(checkboxOne)" /> -->
-                          <!-- <VChip :color="title.estado == true ? 'success' : 'warning'" class="mr-4" >{{ element.estado == true ? 'Activo' : 'Inactivo' }} </VChip> -->
-                          <!-- <VChip :color="default" class="mr-4" >{{ element.users_suscribed }} Suscrito(s) </VChip> -->
-                          <!-- <VBtn size="small" href="/apps/user/view/"> Ver usuario </VBtn> -->
-                          <!-- <RouterLink :to="{ name: 'apps-sugerencias-slug-id',  params: { id: element._id }, }" class="font-weight-medium user-list-name" >
-                            <VBtn  variant="text" rounded="pill">
-                              <VIcon icon="mdi-pencil" /> 
-                            </VBtn>
-                          </RouterLink> -->
                         </template>
                       </VListItem>
                     </template>
                   </VList>
-                  <VBtn class="mt-5" color="success" @click="load(0)"> Aplicar Cambios en Ecuavisa.com<VIcon end icon="tabler-cloud-upload" /> </VBtn>
+                  <VBtn class="mt-5" color="success" @click="clicka()"> Aplicar Cambios en Ecuavisa.com<VIcon end icon="tabler-cloud-upload" /> </VBtn>
                 <!-- fin lista usuarios -->
               </VWindowItem>
 
               <VWindowItem value="tab-agregar">
                 <!-- <p>Próximamente</p> -->
-                <!-- <iframe src="http://localhost/ecuavisav2/servicios/embeds/sugerenciasAnalytics.html" frameborder="0"></iframe> -->
-                <!-- <div>
-                  <iframe style="background:#2f3349 ;" class="iframe-dark" src="https://ecuavisadev.netlify.app/servicios/embeds/suganalyticsdark.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
-                  <iframe class="iframe-light" src="https://ecuavisadev.netlify.app/servicios/embeds/suganalyticslight.html" width="100%" height="530px" frameborder="0" allow="autoplay; fullscreen;" allowfullscreen></iframe>
-
-                </div> -->
-
-
 
               </VWindowItem>
 
@@ -105,9 +88,6 @@ const checkbox = ref(1)
 .v-card.v-theme--light .iframe-light{
   display: block;
 }
-
-
-
 </style>
 
 <script>
@@ -137,6 +117,7 @@ export default {
         description: "",
         estado: true,
       },
+      estado: "",
       maxRegistros:500,
       currentTab: 'tab-lista'
     };
@@ -153,32 +134,18 @@ export default {
     await this.accionBackoffice();
   },
   methods: {
-    // direccionar() {
-    //   window.location.href = 'https://servicio-de-actividad.vercel.app/actividad/users/fidelidad/export/excel?limit='+this.maxRegistros;
-    // },
+    clicka(){
+      console.log('presionaste el click');
+      console.log(JSON.stringify(this.datos))
+    },
     async obtenerDatos() {
       const respuesta = await fetch(`https://estadisticas.ecuavisa.com/sites/services/global/datareader.php`);
       const datos = await respuesta.json();
-      const registros = datos; //datos.data;
+      // const registros = datos; //datos.data;
       const sumatoriaPorUsuario = {};
-
-      registros.forEach(registro => {
-        // const title = registro.urlactual;
-        // const estado = registro.estado;
-
-      });/**/
-
-      // const sumatoriasArray = Object.keys(sumatoriaPorUsuario).map(title => ({ title, users_suscribed: sumatoriaPorUsuario[title] }));
-      // const sumatoriasArray = Object.keys(sumatoriaPorUsuario).map(urlactual => ({ urlactual  })).map(milliseconds => ({ milliseconds }));
-
-      // sumatoriasArray.sort((a, b) => b.title - a.title);
-      //console.log(sumatoriasArray);
-      // return sumatoriasArray;
-      //const solo500 = sumatoriasArray.slice(0, maxRegistros);
-      this.datos = registros; // trae solo 500 registros y la asignamos a la variable datos principal
-      // this.datos = sumatoriasArray; // trae todos 
-      // this.currentTab = 'tab-lista'; 
+      this.datos = datos; // eljson de datos lo hacemos el nuevo valor del app this.datos
     },
+
     async handleSubmit() {
       try {
         const response = await axios.post(
@@ -187,17 +154,12 @@ export default {
         );
         window.location.reload();
         // this.$router.push("/apps/sugerencias/list");
-
-        // this.currentTab = ref('tab-lista');
-        
-        // this.obtenerDatos(); 
-        // this.currentTab = 'tab-lista'; // aquí se cambia el tab activo a 'tab-lista'
-        // this.$forceUpdate()
-        
       } catch (error) {
         console.error(error);
       }
     },
+
+    //journal de usuarios del backoffice
     async accionBackoffice (){
       let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
       let userData = JSON.parse(localStorage.getItem('userData'));
