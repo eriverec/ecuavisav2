@@ -45,12 +45,12 @@
   /*text-decoration-line: underline;*/
 }
 .forgetPassword a {
-  color: #FFFFFF!important;
+  color: #2927B9!important;
 }
 
 .forgetPassword .btn.btn-link{
     text-decoration: none;
-    color: white;
+    color: #2927B9;
     padding: 0;
 }
 
@@ -88,7 +88,7 @@
 .section-lr {
   position: relative;
   min-height: 100vh;
-  background-color: #2927B9;
+  /* background-color: #2927B9; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -293,7 +293,7 @@ input#registrar {
 } */
 .section-lr .container-lr .user .formBx form input[type='submit'] {
   max-width: 100px;
-  background: transparent;
+  background: #2927B9;
   color: #FFFFFF;
   cursor: pointer;
   font-size: 11px;
@@ -411,7 +411,7 @@ input#registrar {
   margin: 1em auto;
   position: relative;
   text-align: center;
-  color: white;
+  color: #2927B9;
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 300;
@@ -429,7 +429,7 @@ input#registrar {
 
 .auth-method-separator:after,
 .auth-method-separator:before {
-  border-top: 1px solid #fff;
+  border-top: 1px solid #2927B9;
   content: " ";
   display: inline-block;
   position: absolute;
@@ -560,7 +560,7 @@ form i {
 
 
 .inicio-registro{
-	background-color: #2927B9;
+	/* background-color: #2927B9; */
 }
 .inicio-registro .logo-ecuavisa-lr{
 	width: 100%;
@@ -582,14 +582,14 @@ form i {
     position: relative;
 }
 
-.inicio-registro .section-lr::before {
+/* .inicio-registro .section-lr::before {
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-loginwhite.svg');
   position: absolute;
   z-index: 5;
   left: 21%;
   top: 52%;
   transform: translate(-50%,-50%);
-}
+} */
 
 .inicio-registro label{
   line-height: 7px;
@@ -709,4 +709,29 @@ form i {
 
 .box-input input {
     margin: 0px!important;
+}
+
+
+
+
+
+
+/*new design login*/ 
+
+.user.signinBx .formBx form .label__email{
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 26px;
+  color: #060127;
+}
+.user.signinBx .formBx form .forgetPassword label{
+  color: #2927B9
+}
+
+.forgetPassword a
+
+.user.signinBx .formBx form .forgetPassword label input{
+  display: none;
 }
