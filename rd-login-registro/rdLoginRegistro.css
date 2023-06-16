@@ -820,7 +820,7 @@ form i {
 .eye-icon {
   position: absolute;
   top: 50%;
-  right: 10;
+  right: 10px;
   transform: translateY(-50%);
   width: 40px;
   height: 40px;
