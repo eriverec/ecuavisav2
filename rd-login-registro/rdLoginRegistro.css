@@ -51,7 +51,7 @@
 }
 
 .forgetPassword .btn.btn-link {
-  text-decoration: none;
+  text-decoration: underline;
   color: #2927B9;
   padding: 0;
 }
@@ -97,6 +97,7 @@
   align-items: center;
   padding: 20px;
   flex-direction: column;
+  padding-top: 0px;
 }
 
 /* .section-lr .logo-ecuavisa-lr img {
@@ -150,7 +151,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  /* padding: 40px; */
   transition: 0.5s;
 }
 
@@ -282,6 +283,8 @@
   width: 377px;
   height: 48px;
   border: 1px solid #CACACA;
+  margin-top: 5px;
+  padding-right: 60px;
 }
 
 input#acceder {
@@ -712,7 +715,6 @@ form i {
 
   .section-lr .container-lr .signinBx .formBx {
     margin: 0 10px;
-    padding-top: 1rem;
   }
 
   .section-lr .container-lr.active .signupBx .formBx {
@@ -819,7 +821,7 @@ form i {
 .eye-icon {
   position: absolute;
   top: 50%;
-  right: 0;
+  right: 10;
   transform: translateY(-50%);
   width: 40px;
   height: 40px;
