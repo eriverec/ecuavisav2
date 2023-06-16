@@ -3592,3 +3592,176 @@ BLOQUE DE COLUMNISTA - FIN
         padding-top: 10px;
     }
 }
+
+
+
+
+
+/*TEMATICA SEMANAL*/
+
+.Tematica_Semanal{
+  display: none;
+}
+
+.__tematicaSemanal .noticias .article .media_block .top_info {
+  display: flex;
+  position: absolute;
+  top: 17px;
+  z-index: 9;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.__tematicaSemanal {
+  padding-bottom: 50px;
+}
+
+.rankSwiper .swiper-pagination-bullet,
+.__tematicaSemanal .swiper-pagination-bullet {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.rankSwiper .swiper-pagination-bullet-active,
+.__tematicaSemanal .swiper-pagination-bullet-active {
+  background: #2927b9;
+}
+
+.__tematicaSemanal .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div {
+  background-image: linear-gradient(180deg, rgba(6, 2, 34, 0) 0%, rgba(6, 2, 34, 0.9) 0%);
+  border-radius: 6px;
+}
+
+.__tematicaSemanal .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div img {
+  -webkit-mask-image: linear-gradient(to top, transparent 0, rgba(6, 2, 34, 0.9) 40%);
+  border-radius: 6px;
+  height: 100% !important;
+  object-fit: cover;
+}
+
+.__tematicaSemanal .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div img:hover {
+  -webkit-mask-image: linear-gradient(to top, transparent 0, rgba(6, 2, 34, 0.9) 85%);
+}
+
+.__tematicaSemanal .noticias .article .media_block .text_block {
+  position: absolute;
+  bottom: 0;
+  padding: 0.5rem 1rem;
+  width: 100%;
+  min-height: 75px;
+}
+
+.__tematicaSemanal .noticias .article .media_block {
+  position: relative;
+}
+
+.__tematicaSemanal .noticias .article .media_block .top_info img {
+  width: 20px;
+  margin-right: 15px;
+}
+
+.__tematicaSemanal .noticias .article .media_block .top_info .Topheadline {
+  margin-left: 1rem;
+}
+
+.__tematicaSemanal .noticias .article .media_block .top_info .Topheadline .hLine {
+  background: #23DCD1;
+  font-size: 12px;
+  margin: 0;
+  padding: 5px;
+  text-transform: uppercase;
+}
+
+.__tematicaSemanal .noticias .article .media_block .top_info .Topheadline .hide {
+  opacity: 0;
+}
+
+.__tematicaSemanal .noticias .article .media_block .text_block .headline a h3 {
+  color: var(--bs-white);
+  font-size: var(--rd-size-16);
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 22px;
+  margin-top: 5px;
+}
+
+.__tematicaSemanal .noticias .article .media_block .rd_date ul li {
+  color: #c7c7c7;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 22px;
+  margin-top: -5px;
+}
+
+.__tematicaSemanal .noticias .article .media_block .text_block .section {
+
+  font-weight: 600 !important;
+  color: #23DCD1 !important;
+  /* display: block !important; */
+}
+
+.__tematicaSemanal .iconPlay {
+  background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Ficonplayrd.svg');
+  width: 30px;
+  height: 30px;
+  top: 15px;
+  right: 10px;
+  left: initial;
+  bottom: initial;
+}
+
+.button_container_tematica {
+  text-align: left;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.button_container_tematica .sp_button {
+  border-radius: 2px;
+  background-color: transparent;
+  color: #2927B9;
+  width: auto;
+  font-weight: 700;
+  font-style: normal;
+  box-shadow: none;
+  border-color: transparent;
+  padding: 11px 0;
+  display: block;
+  height: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  text-transform: uppercase;
+  font-family: 'Mattone 150';
+  font-size: 14px;
+}
+
+.button_container_tematica .sp_button:after {
+  content: url('https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FbotonNews.svg');
+}
+
+.teaser-viewer-title-rd-tematica a {
+  text-transform: uppercase;
+  margin: 20px 0;
+  font-weight: 600;
+  color: #2927B9;
+  font-size: 22px;
+  font-family: 'Mattone 150';
+  display: block;
+}
+
+@media (max-width: 575px) {
+  .teaser-viewer-title-rd-tematica a {
+    font-size: 15px;
+  }
+}
