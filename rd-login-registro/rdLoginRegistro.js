@@ -415,3 +415,78 @@ function localStorageSetUsuarioNew(user){
 if (urlParamsGET.get('registro')!=null){
     toggleForm();
 }
+
+
+
+
+/* nuevos ajutes */
+
+
+//ocultar el input de password
+const selInPass = document.querySelector('.user.signinBx .formBx #logPass');
+selInPass.style.display = "none";
+
+//ocultar boton olvidaste la contraseña
+const selBtnOC = document.querySelector('.user.signinBx .formBx form .forgetPassword .btn.btn-link');
+selBtnOC.style.display = "none";
+
+//ocultar boton acceder
+const selBtnAcc = document.querySelector('.user.signinBx .formBx form .box-input');
+selBtnAcc.style.display = "none";
+
+// agregar un boton en la tercera posicion
+const selform = document.querySelector('.user.signinBx .formBx form');
+const newBotonNext = document.createElement('div');
+newBotonNext.setAttribute('class', 'box-input-continuar');
+newBotonNext.setAttribute('style', 'display: flex;justify-items: right;flex-direction: column;align-items: flex-end;');
+
+newBotonNext.innerHTML = /*html*/`<input type="submit" name="continuar" id="continuar" value="Continuar" style="margin-top:0px;"> <label for="continuar"> <img src="https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FbotonNews.svg" alt="boton" width="75" height="10" title="Continuar"> </label>`;
+selform.insertBefore(newBotonNext, selform.children[4]);
+
+//funcion para el boton continuar
+const eventBtnCont = document.querySelector('.user.signinBx .formBx form .box-input-continuar #continuar');
+
+eventBtnCont.addEventListener('click', function () {
+
+	const inputPrinEmail = document.querySelector('.user.signinBx .formBx form #logEmail');
+	const capValEmail = inputPrinEmail.value;
+	localStorage.setItem('EmilCapturado', capValEmail);
+
+	inputPrinEmail.setAttribute('style', 'opacity: 0.4;');
+
+	fetch("https://ecuavisa-login-service.onrender.com/check/email", {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json', },
+		body: JSON.stringify({
+			"email": capValEmail
+		}),
+		redirect: 'follow'
+	})
+		.then(response => response.json())
+		.then(result => {
+			inputPrinEmail.setAttribute('style', 'opacity: initial;');
+			// console.log(result.existe);
+			if (result.existe === true) {
+				console.log(`${capValEmail} EXISTE!`);
+				const selBtnCont = document.querySelector('.user.signinBx .formBx form .box-input-continuar');
+				const selLabelEm = document.querySelector('.user.signinBx .formBx form .label__email');
+				//ocultar Politica de privacidad
+				const selLabelPP = document.querySelector('.user.signinBx .formBx form .forgetPassword label');
+				selLabelPP.style.display = "none";
+				selBtnCont.style.display = "none";
+				selLabelEm.style.display = "none";
+				selBtnAcc.style.display = "flex";
+				selInPass.style.display = "block";
+				selBtnOC.style.display = "block";
+			} else {
+				console.log(`${capValEmail} NO EXISTE!`);
+				window.location.href = 'https://www.ecuavisa.com/servicios/registro/';
+			}
+
+		})
+		.catch(error => console.log('error', error));
+
+});
+
+
+
