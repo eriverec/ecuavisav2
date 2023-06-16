@@ -248,7 +248,7 @@
   letter-spacing: -0.03em;
   text-transform: initial;
   color: #2927B9;
-  padding: 1rem 0;
+  padding: 0.6rem 0;
 }
 
 /* .section-lr .container-lr .user .formBx form input {
@@ -689,7 +689,7 @@ form i {
   }
 
   .section-lr .container-lr .user .formBx form input {
-    width: 280px;
+    /* width: 280px; */
     height: 48px;
   }
 
@@ -709,7 +709,7 @@ form i {
     font-size: 36px;
     margin-top: 15px;
     letter-spacing: .3px;
-    padding: 1rem 0;
+    padding: 0.6rem 0;
   }
 
   .section-lr .container-lr .signinBx .formBx {
@@ -780,6 +780,7 @@ form i {
 
 /*new design login*/
 
+
 .user.signinBx .formBx form .label__email {
   font-family: 'Archivo';
   font-style: normal;
@@ -838,4 +839,10 @@ form i {
 
 #logPass {
   padding-right: 60px;
+}
+
+@media (max-width: 600px){
+  .user.signinBx .formBx form {
+    width: 100%;
+  }
 }
