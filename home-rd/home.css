@@ -3645,12 +3645,13 @@ BLOQUE DE COLUMNISTA - FIN
   -webkit-mask-image: linear-gradient(to top, transparent 0, rgba(6, 2, 34, 0.9) 85%);
 } */
 
-.__tematicaSemanal .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div:hover img {
+.__tematicaSemanal .noticias .article .media_block:hover .multimedia .multimediaIconMacroWrapper a div img {
   -webkit-mask-image: linear-gradient(to top, transparent 0, rgba(6, 2, 34, 0.9) 85%);
 }
-.__tematicaSemanal .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div:hover .text_block {
+.__tematicaSemanal .noticias .article .media_block:hover .text_block {
   -webkit-mask-image: linear-gradient(to top, transparent 0, rgba(6, 2, 34, 0.9) 85%);
 }
+
 
 .__tematicaSemanal .noticias .article .media_block .text_block {
   position: absolute;
