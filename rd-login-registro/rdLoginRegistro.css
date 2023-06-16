@@ -247,7 +247,7 @@
 .section-lr .container-lr .user .formBx form input {
   position: relative;
   /* background: #2927b9; */
-  color: #ffff;
+  color: #333;
   outline: none;
   margin: 15px 0;
   font-size: 14px;
@@ -269,7 +269,7 @@ input#acceder {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: flex-end;
+  align-items: center;
 }
 
 input#registrar {
@@ -277,7 +277,7 @@ input#registrar {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: flex-end;
+  align-items: center;
 }
 
 ::placeholder {
@@ -300,7 +300,7 @@ input#registrar {
   padding-right: 0;
 } */
 .section-lr .container-lr .user .formBx form input[type='submit'] {
-  max-width: 100px;
+  /* max-width: 100px; */
   background: #2927B9;
   color: #FFFFFF;
   cursor: pointer;
@@ -309,7 +309,6 @@ input#registrar {
   letter-spacing: 1px;
   transition: 0.5s;
   font-family: 'Mattone 150';
-  padding-bottom: 0;
   margin-bottom: 0;
   padding-left: 0;
   padding-right: 0;
@@ -317,7 +316,7 @@ input#registrar {
   align-items: center;
   text-align: center;
   text-transform: uppercase;
-  justify-content: flex-end;
+  justify-content: center;
   border-color: transparent;
 }
 
@@ -563,7 +562,7 @@ form i {
 /* 👉 REGISTRO */
 
 .section-lr .container-lr .user .formBx form input {
-  color: #ffff !important;
+  color: #333;
 }
 
 .section-lr input label {
