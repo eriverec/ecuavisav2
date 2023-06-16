@@ -7,8 +7,8 @@
 #acceder[disabled],
 #registrar[disabled],
 #forgetButton[disabled] {
-    opacity: .4;
-    cursor: not-allowed;
+  opacity: .4;
+  cursor: not-allowed;
 }
 
 #iter-content-wrapper {
@@ -34,8 +34,8 @@
   font-weight: 300;
 }
 
-.alert-danger, 
-.alert-success, 
+.alert-danger,
+.alert-success,
 .forgetPassword {
   font-family: 'Archivo';
   font-style: normal;
@@ -44,14 +44,15 @@
   line-height: 26px;
   /*text-decoration-line: underline;*/
 }
+
 .forgetPassword a {
-  color: #2927B9!important;
+  color: #2927B9 !important;
 }
 
-.forgetPassword .btn.btn-link{
-    text-decoration: none;
-    color: #2927B9;
-    padding: 0;
+.forgetPassword .btn.btn-link {
+  text-decoration: none;
+  color: #2927B9;
+  padding: 0;
 }
 
 .modal-title {
@@ -62,7 +63,8 @@
   line-height: 28px;
   color: #2927B9;
 }
-.modal-footer{
+
+.modal-footer {
   border-top: 1px solid transparent !important;
   padding: 1rem 0 0.75rem 0 !important;
 }
@@ -186,6 +188,7 @@
   padding: 15px 35px;
   gap: 10px;
 }
+
 /* 
 .section-lr .container-lr .user .formBx form .boton-redes-lr .br-google {
   display: inline-block;
@@ -202,6 +205,7 @@
   padding: 14px 35px;
   gap: 10px;
 }
+
 /* .section-lr .container-lr .user .formBx form h2 {
   font-size: 18px;
   font-weight: 600;
@@ -249,7 +253,6 @@
   font-size: 14px;
   letter-spacing: 1px;
   font-weight: 300;
-  border: 1px solid #F5F5F5;
   border-radius: 2px;
   display: flex;
   flex-direction: row;
@@ -258,7 +261,9 @@
   gap: 10px;
   width: 377px;
   height: 48px;
+  border: 1px solid #CACACA;
 }
+
 input#acceder {
   border: none;
   display: flex;
@@ -266,6 +271,7 @@ input#acceder {
   justify-content: flex-end;
   align-items: flex-end;
 }
+
 input#registrar {
   border: none;
   display: flex;
@@ -273,9 +279,11 @@ input#registrar {
   justify-content: flex-end;
   align-items: flex-end;
 }
+
 ::placeholder {
   color: white;
 }
+
 /* .section-lr .container-lr .user .formBx form input[type='submit'] {
   max-width: 100px;
   background: transparent;
@@ -344,6 +352,7 @@ input#registrar {
   line-height: 26px;
   left: calc(50% - 315px/2 + 22px);
 }
+
 /* 
 .section-lr .container-lr .user .formBx form .signup a {
   font-weight: 600;
@@ -436,6 +445,7 @@ input#registrar {
   top: .7em;
   width: 25%;
 }
+
 /* 
 .auth-method-separator:after,
 .auth-method-separator:before {
@@ -452,11 +462,11 @@ input#registrar {
 
 /* 👉 CREATE PASSWORD */
 
-.section-lr .container-lr .user .formBx.createPass{
+.section-lr .container-lr .user .formBx.createPass {
   width: 100%;
 }
 
-.section-lr .container-lr .user.createPass{
+.section-lr .container-lr .user.createPass {
   display: block;
 }
 
@@ -486,12 +496,12 @@ form i {
 
 /* 👉 MODAL PASSWORD */
 
-.modal-header{
+.modal-header {
   background: #23DCD1;
   padding: 1.5rem;
 }
 
-.modal-content{
+.modal-content {
   border: none !important;
 }
 
@@ -499,7 +509,7 @@ form i {
   padding: 2.5rem 1.5rem 0 !important;
 }
 
-.modal-body label{
+.modal-body label {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 300;
@@ -507,7 +517,7 @@ form i {
   line-height: 33px;
 }
 
-#forgetEmail{
+#forgetEmail {
   font-family: 'Archivo';
   font-style: normal;
   font-size: 20.4685px !important;
@@ -516,9 +526,11 @@ form i {
   border: 1px solid #CACACA !important;
   border-radius: 3px;
 }
+
 .btn {
   line-height: 1 !important;
 }
+
 .btn-primary:hover {
   color: #2927b9;
   background-color: transparent !important;
@@ -529,57 +541,67 @@ form i {
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-login.svg');
 }
 
-.btn-close{
+.btn-close {
   background: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/close-fill.svg') center/1em auto no-repeat !important;
   border: 0;
   background-size: 45px !important;
   opacity: 1 !important;
 }
-.btn-check:focus+.btn-primary, .btn-primary:focus{
+
+.btn-check:focus+.btn-primary,
+.btn-primary:focus {
   box-shadow: 0 0 0 0.25rem rgb(49 132 253 / 0%);
 }
+
 .btn-close:focus {
   box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 0%);
 }
+
 /* FIN MODAL PASSWORD */
 
 
 /* 👉 REGISTRO */
 
-.section-lr .container-lr .user .formBx form input{
+.section-lr .container-lr .user .formBx form input {
   color: #ffff !important;
 }
-.section-lr input label{
+
+.section-lr input label {
   line-height: 7px;
 }
-.section-lr .container-lr .user .formBx form .signup.registro{
+
+.section-lr .container-lr .user .formBx form .signup.registro {
   margin-top: 55px;
 }
 
 /* FIN REGISTRO */
 
 
-.inicio-registro{
-	/* background-color: #2927B9; */
+.inicio-registro {
+  /* background-color: #2927B9; */
 }
-.inicio-registro .logo-ecuavisa-lr{
-	width: 100%;
-    text-align: center;
-    padding: 30px 0;
+
+.inicio-registro .logo-ecuavisa-lr {
+  width: 100%;
+  text-align: center;
+  padding: 30px 0;
 }
+
 .inicio-registro .logo-ecuavisa-lr img {
-    width: 95px;
+  width: 95px;
 }
-.inicio-registro .section-lr{
-	max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
+
+.inicio-registro .section-lr {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
 }
-.inicio-registro .section-lr{
-	max-width: 900px;
-    margin-left: auto;
-    margin-right: auto;
-    position: relative;
+
+.inicio-registro .section-lr {
+  max-width: 900px;
+  margin-left: auto;
+  margin-right: auto;
+  position: relative;
 }
 
 /* .inicio-registro .section-lr::before {
@@ -591,7 +613,7 @@ form i {
   transform: translate(-50%,-50%);
 } */
 
-.inicio-registro label{
+.inicio-registro label {
   line-height: 7px;
   margin: 0px 0 20px -5px !important;
 }
@@ -601,10 +623,10 @@ form i {
 
 
 
-@media (min-width: 576px){
-.modal-dialog {
+@media (min-width: 576px) {
+  .modal-dialog {
     max-width: 425px !important;
-}
+  }
 }
 
 
@@ -621,68 +643,84 @@ form i {
     width: 100%;
   }
 }
+
 @media (max-width: 768px) {
   .section-lr .container-lr .signinBx .formBx {
     left: 0;
-}
-.section-lr .container-lr.active .signupBx .formBx {
-  left: 0%;
-} 
+  }
+
+  .section-lr .container-lr.active .signupBx .formBx {
+    left: 0%;
+  }
 }
 
 @media (max-width: 600px) {
+
   /*mobile login*/
-.inicio-registro .logo-ecuavisa-lr {
-  top: 5%;
-  position: absolute;
-}
-.section-lr .container-lr .user .formBx form h2 {
-  font-size: 50px;
-  line-height: 48px;
-}
-.section-lr .container-lr .user .formBx form input {
-  width: 280px;
-  height: 48px;
-}
-.inicio-registro .section-lr::before {
-  /*left: 10%;
+  .inicio-registro .logo-ecuavisa-lr {
+    top: 5%;
+    position: absolute;
+  }
+
+  .section-lr .container-lr .user .formBx form h2 {
+    font-size: 50px;
+    line-height: 48px;
+  }
+
+  .section-lr .container-lr .user .formBx form input {
+    width: 280px;
+    height: 48px;
+  }
+
+  .inicio-registro .section-lr::before {
+    /*left: 10%;
   top: 52%;*/
-  left: 7%;
-  top: 45%;
-}
-.auth-method-separator:after, .auth-method-separator:before {
-  width: 20%;
-}
-.section-lr .container-lr .user .formBx form h2 {
-  font-size: 50px;
-  margin-top: 15px;
-  letter-spacing: .3px;
-  padding: 1rem 0;
-}
-.section-lr .container-lr .signinBx .formBx {
-  margin: 0 10px;
-  padding-top: 1rem;
-}
-.section-lr .container-lr.active .signupBx .formBx {
-  margin: 0 10px;
-}
-.section-lr .container-lr .user .formBx form .signup {
-  left: 0;
-  font-size: 14px;
-}
-.section-lr .container-lr .user .formBx form .signup.registro {
-  margin-top: 0px;
-}
-.modal-body label,
-#forgetEmail {
-  font-size: 16.4685px !important;
-}
-.section-lr .container-lr{
-  height: 600px;
-}
-.inicio-registro label{
-  font-size: 15px;
-}
+    left: 7%;
+    top: 45%;
+  }
+
+  .auth-method-separator:after,
+  .auth-method-separator:before {
+    width: 20%;
+  }
+
+  .section-lr .container-lr .user .formBx form h2 {
+    font-size: 50px;
+    margin-top: 15px;
+    letter-spacing: .3px;
+    padding: 1rem 0;
+  }
+
+  .section-lr .container-lr .signinBx .formBx {
+    margin: 0 10px;
+    padding-top: 1rem;
+  }
+
+  .section-lr .container-lr.active .signupBx .formBx {
+    margin: 0 10px;
+  }
+
+  .section-lr .container-lr .user .formBx form .signup {
+    left: 0;
+    font-size: 14px;
+  }
+
+  .section-lr .container-lr .user .formBx form .signup.registro {
+    margin-top: 0px;
+  }
+
+  .modal-body label,
+  #forgetEmail {
+    font-size: 16.4685px !important;
+  }
+
+  .section-lr .container-lr {
+    height: 600px;
+  }
+
+  .inicio-registro label {
+    font-size: 15px;
+  }
 
 }
 
@@ -691,16 +729,20 @@ form i {
   .section-lr .container-lr {
     max-width: 300px;
   }
+
   .inicio-registro .logo-ecuavisa-lr {
     padding: 5px 0;
-}
-.section-lr .container-lr .user .formBx form .signup.registro {
-  margin-top: 10px;
-}
-.section-lr .container-lr .user .formBx form h2 {
-  font-size: 48px;
-}
-/*
+  }
+
+  .section-lr .container-lr .user .formBx form .signup.registro {
+    margin-top: 10px;
+  }
+
+  .section-lr .container-lr .user .formBx form h2 {
+    font-size: 48px;
+  }
+
+  /*
 .inicio-registro .section-lr::before {
   left: 10%;
   top: 50%;
@@ -708,7 +750,7 @@ form i {
 }
 
 .box-input input {
-    margin: 0px!important;
+  margin: 0px !important;
 }
 
 
@@ -716,9 +758,9 @@ form i {
 
 
 
-/*new design login*/ 
+/*new design login*/
 
-.user.signinBx .formBx form .label__email{
+.user.signinBx .formBx form .label__email {
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 700;
@@ -726,12 +768,13 @@ form i {
   line-height: 26px;
   color: #060127;
 }
-.user.signinBx .formBx form .forgetPassword label{
+
+.user.signinBx .formBx form .forgetPassword label {
   color: #2927B9
 }
 
 /* .forgetPassword a */
 
-.user.signinBx .formBx form .forgetPassword.__olvid label #checkTerms{
+.user.signinBx .formBx form .forgetPassword.__olvid label #checkTerms {
   display: none;
 }
