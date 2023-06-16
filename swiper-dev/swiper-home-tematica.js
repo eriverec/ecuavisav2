@@ -24,7 +24,7 @@ function swiperHomeTematica() {
     },
     breakpoints: {
       600: {
-        slidesPerView: 1.5,
+        slidesPerView: 1,
         spaceBetween: 20,
       },
       768: {
