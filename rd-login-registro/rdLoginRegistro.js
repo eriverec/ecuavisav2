@@ -423,7 +423,7 @@ if (urlParamsGET.get('registro') != null) {
 
 
 //ocultar el input de password
-const selInPass = document.querySelector('.user.signinBx .formBx #logPass');
+const selInPass = document.querySelector('.user.signinBx .formBx #eye-password-0');
 selInPass.style.display = "none";
 
 //ocultar boton olvidaste la contraseña
@@ -495,5 +495,24 @@ eventBtnCont.addEventListener('click', function () {
 
 });
 
+
+
+//visibilidad del eye
+
+function togglePasswordVisibility() {
+  var passwordInput = document.getElementById("logPass");
+  var eyeIconOpen = document.getElementById("eye-icon-open");
+  var eyeIconClosed = document.getElementById("eye-icon-closed");
+
+  if (passwordInput.type === "password") {
+    passwordInput.type = "text";
+    eyeIconOpen.style.display = "none";
+    eyeIconClosed.style.display = "block";
+  } else {
+    passwordInput.type = "password";
+    eyeIconOpen.style.display = "block";
+    eyeIconClosed.style.display = "none";
+  }
+}
 
 
