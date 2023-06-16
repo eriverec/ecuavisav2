@@ -683,8 +683,7 @@ form i {
   }
 
   .section-lr .container-lr .user .formBx form h2 {
-    font-size: 50px;
-    line-height: 48px;
+    line-height: 0px;
   }
 
   .section-lr .container-lr .user .formBx form input {
@@ -705,7 +704,7 @@ form i {
   }
 
   .section-lr .container-lr .user .formBx form h2 {
-    font-size: 50px;
+    font-size: 36px;
     margin-top: 15px;
     letter-spacing: .3px;
     padding: 1rem 0;
