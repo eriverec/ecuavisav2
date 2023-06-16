@@ -280,7 +280,7 @@
   align-items: center;
   padding: 11px 18px;
   gap: 10px;
-  width: 377px;
+  width: 100%;
   height: 48px;
   border: 1px solid #CACACA;
   margin-top: 5px;
@@ -844,6 +844,6 @@ form i {
 
 @media (max-width: 600px){
   .user.signinBx .formBx form {
-    /* width: 100%; */
+    width: 100%;
   }
 }
