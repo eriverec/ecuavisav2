@@ -440,7 +440,7 @@ const newBotonNext = document.createElement('div');
 newBotonNext.setAttribute('class', 'box-input-continuar');
 newBotonNext.setAttribute('style', 'display: flex;justify-items: right;flex-direction: column;align-items: flex-end;');
 
-newBotonNext.innerHTML = /*html*/`<input type="submit" name="continuar" id="continuar" value="Continuar" style="margin-top:0px;"> <label for="continuar"> <img src="https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FbotonNews.svg" alt="boton" width="75" height="10" title="Continuar"> </label>`;
+newBotonNext.innerHTML = /*html*/`<input type="submit" name="continuar" id="continuar" value="Continuar" style="margin-top:0px;">`;
 selform.insertBefore(newBotonNext, selform.children[4]);
 
 //funcion para el boton continuar
