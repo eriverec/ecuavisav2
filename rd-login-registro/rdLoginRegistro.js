@@ -4,7 +4,7 @@ var URL_perfil_G = "https://www.ecuavisa.com/servicios/perfil";
 var UserId = localStorage.getItem("wylexUserId");
 var urlParamsGET = new URLSearchParams(window.location.search);
 
-if(document.getElementById("checkTerms")){
+if (document.getElementById("checkTerms")) {
   var miCheckbox = document.querySelector("#checkTerms");
   miCheckbox.checked = true;
 }
@@ -181,7 +181,7 @@ function login() {
   let cboxTerm = document.getElementById("checkTerms");
   if (cboxTerm.checked == true) {
     var btn = document.querySelector('#acceder');
-    btn.setAttribute("disabled", true); 
+    btn.setAttribute("disabled", true);
     var URL_login_G = "https://www.ecuavisa.com/servicios/login";
     document.getElementById("logEmail").required = true;
     document.getElementById("logPass").required = true;
@@ -189,7 +189,7 @@ function login() {
     let email = document.getElementById("logEmail").value;
     let password = document.getElementById("logPass").value;
 
-    if(email == '' || password =='' || email.length == 0 || password.length == 0){
+    if (email == '' || password == '' || email.length == 0 || password.length == 0) {
       alert('El correo y la contraseña no deben estar vacíos');
       btn.removeAttribute('disabled');
       return false;
@@ -214,10 +214,10 @@ function login() {
           //cambiar url destino
           let redirect = "https://www.ecuavisa.com/concursos?tk=" + result.token;
           //console.log("https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url);
-         
+
           window.location = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
-          localStorage.setItem('urlTk',result.url);
-          btn.removeAttribute('disabled');  
+          localStorage.setItem('urlTk', result.url);
+          btn.removeAttribute('disabled');
         } else {
           alert("Nombre de usuario o contraseña incorrecto");
           btn.removeAttribute('disabled');
@@ -237,7 +237,7 @@ var telefonoValido = false;
 
 var telefonoInput2 = document.getElementById('regTelefono'); // Obtener el elemento de entrada de teléfono
 
-telefonoInput2.addEventListener('input', function() {
+telefonoInput2.addEventListener('input', function () {
   const telefono = telefonoInput2.value.trim(); // Obtener el valor del teléfono sin espacios al inicio y al final
 
   // Validar que solo se ingresen números y tenga una longitud entre 7 y 10 caracteres
@@ -258,7 +258,7 @@ function register() {
   let cboxTermReg = document.getElementById("checkTermsReg");
   if (cboxTermReg.checked == true) {
     var btn = document.querySelector('#registrar');
-    btn.setAttribute("disabled", true); 
+    btn.setAttribute("disabled", true);
     document.getElementById("regTelefono").required = true;
     document.getElementById("regName").required = true;
     document.getElementById("regEmail").required = true;
@@ -272,13 +272,13 @@ function register() {
     let passwordConf = document.getElementById("regConf").value;
     let token;
 
-    if(passwordConf == '' || password =='' || name =='' || telefono =='' || email =='' || passwordConf.length == 0 || password.length == 0 || name.length == 0 || email.length == 0){
+    if (passwordConf == '' || password == '' || name == '' || telefono == '' || email == '' || passwordConf.length == 0 || password.length == 0 || name.length == 0 || email.length == 0) {
       alert('Todos los campos son requeridos, se deben llenar');
       btn.removeAttribute('disabled');
       return false;
     }
 
-    if(!telefonoValido){
+    if (!telefonoValido) {
       alert('El número de teléfono no es el correcto');
       btn.removeAttribute('disabled');
       return false;
@@ -303,22 +303,22 @@ function register() {
         }),
       }).then((response) => response.json())
         .then(async (result) => {
-          if(typeof result.message !== 'undefined'){
+          if (typeof result.message !== 'undefined') {
             btn.removeAttribute('disabled');
-            alert(result.message+' o su correo ya existe');
-          }else{
+            alert(result.message + ' o su correo ya existe');
+          } else {
             token = result.token;
-            console.log('token registro',result);
+            console.log('token registro', result);
             if (result.token) {
-                localStorageSetUsuarioNew(result.user);
-                btn.removeAttribute('disabled');
-                // cambiar url destino
-                if (urlParamsGET.get('urlredirect')!=null){
-                    window.location = `${urlParamsGET.get('urlredirect')}?tk=`+ result.token;
-                }else{
-                  //window.location = "https://www.ecuavisa.com/compania593/click-boom/que-esconde-la-cartera-de-victoria-KL4951862?tk="+ result.token;
-                  window.location = "https://www.ecuavisa.com/concursos?tk="+ result.token;
-                }
+              localStorageSetUsuarioNew(result.user);
+              btn.removeAttribute('disabled');
+              // cambiar url destino
+              if (urlParamsGET.get('urlredirect') != null) {
+                window.location = `${urlParamsGET.get('urlredirect')}?tk=` + result.token;
+              } else {
+                //window.location = "https://www.ecuavisa.com/compania593/click-boom/que-esconde-la-cartera-de-victoria-KL4951862?tk="+ result.token;
+                window.location = "https://www.ecuavisa.com/concursos?tk=" + result.token;
+              }
             }
           }
         })
@@ -336,16 +336,16 @@ function register() {
 
 function sendEmailPassReset() {
   var btn = document.querySelector('#forgetButton');
-  btn.setAttribute("disabled", true); 
+  btn.setAttribute("disabled", true);
   let email = document.getElementById("forgetEmail").value.trim() || '';
-  
-  if(!IsEmail()){
+
+  if (!IsEmail()) {
     alert('El correo no es el correcto');
     btn.removeAttribute('disabled');
     return false;
   }
 
-  if(email == '' || email.length == 0){
+  if (email == '' || email.length == 0) {
     alert('El correo no es el correcto');
     btn.removeAttribute('disabled');
     return false;
@@ -404,16 +404,16 @@ function validateLogSocials() {
   }
 }
 
-function localStorageSetUsuarioNew(user){
+function localStorageSetUsuarioNew(user) {
   //estado:0 VERIFICA QUE EL USUARIO ES NUEVO
 
   /*localStorage.wylexStatusPerfil=user.user_new;*/
-  
+
   return true;
 }
 
-if (urlParamsGET.get('registro')!=null){
-    toggleForm();
+if (urlParamsGET.get('registro') != null) {
+  toggleForm();
 }
 
 
@@ -448,44 +448,50 @@ const eventBtnCont = document.querySelector('.user.signinBx .formBx form .box-in
 
 eventBtnCont.addEventListener('click', function () {
 
-	const inputPrinEmail = document.querySelector('.user.signinBx .formBx form #logEmail');
-	const capValEmail = inputPrinEmail.value;
-	localStorage.setItem('EmilCapturado', capValEmail);
+  const inputPrinEmail = document.querySelector('.user.signinBx .formBx form #logEmail');
+  const inputBConi = document.querySelector('.user.signinBx .formBx form .box-input-continuar');
 
-	inputPrinEmail.setAttribute('style', 'opacity: 0.4;');
 
-	fetch("https://ecuavisa-login-service.onrender.com/check/email", {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json', },
-		body: JSON.stringify({
-			"email": capValEmail
-		}),
-		redirect: 'follow'
-	})
-		.then(response => response.json())
-		.then(result => {
-			inputPrinEmail.setAttribute('style', 'opacity: initial;');
-			// console.log(result.existe);
-			if (result.existe === true) {
-				console.log(`${capValEmail} EXISTE!`);
-				const selBtnCont = document.querySelector('.user.signinBx .formBx form .box-input-continuar');
-				const selLabelEm = document.querySelector('.user.signinBx .formBx form .label__email');
-				const selLabelPP = document.querySelector('.user.signinBx .formBx form .forgetPassword label');
+  const capValEmail = inputPrinEmail.value;
+  localStorage.setItem('EmilCapturado', capValEmail);
+
+  inputPrinEmail.setAttribute('style', 'opacity: 0.4;');
+  inputBConi.setAttribute('style', 'opacity: 0.4;');
+
+  fetch("https://ecuavisa-login-service.onrender.com/check/email", {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', },
+    body: JSON.stringify({
+      "email": capValEmail
+    }),
+    redirect: 'follow'
+  })
+    .then(response => response.json())
+    .then(result => {
+      inputPrinEmail.setAttribute('style', 'opacity: initial;');
+      inputBConi.setAttribute('style', 'opacity: initial');
+
+      // console.log(result.existe);
+      if (result.existe === true) {
+        console.log(`${capValEmail} EXISTE!`);
+        const selBtnCont = document.querySelector('.user.signinBx .formBx form .box-input-continuar');
+        const selLabelEm = document.querySelector('.user.signinBx .formBx form .label__email');
+        const selLabelPP = document.querySelector('.user.signinBx .formBx form .forgetPassword label');
         const selTCentral = document.querySelector('.user.signinBx .formBx form .title__central');
         selTCentral.innerHTML = /*html*/`<h2>Inicia Sesión</h2>`;
-				selLabelPP.style.display = "none";
-				selBtnCont.style.display = "none";
-				selLabelEm.style.display = "none";
-				selBtnAcc.style.display = "flex";
-				selInPass.style.display = "block";
-				selBtnOC.style.display = "block";
-			} else {
-				console.log(`${capValEmail} NO EXISTE!`);
-				window.location.href = 'https://www.ecuavisa.com/servicios/registro/';
-			}
+        selLabelPP.style.display = "none";
+        selBtnCont.style.display = "none";
+        selLabelEm.style.display = "none";
+        selBtnAcc.style.display = "flex";
+        selInPass.style.display = "block";
+        selBtnOC.style.display = "block";
+      } else {
+        console.log(`${capValEmail} NO EXISTE!`);
+        window.location.href = 'https://www.ecuavisa.com/servicios/registro/';
+      }
 
-		})
-		.catch(error => console.log('error', error));
+    })
+    .catch(error => console.log('error', error));
 
 });
 
