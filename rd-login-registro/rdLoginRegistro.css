@@ -112,7 +112,7 @@
   height: 695px;
   background: transparent;
   /* box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1); */
-  overflow: hidden;
+  /* overflow: hidden; */
 }
 
 
@@ -654,7 +654,7 @@ form i {
 
 @media (max-width: 991px) {
   .section-lr .container-lr {
-    max-width: 390px;
+    width: 100%;
   }
 
   .section-lr .container-lr .imgBx {
@@ -713,7 +713,8 @@ form i {
   }
 
   .section-lr .container-lr .signinBx .formBx {
-    margin: 0 10px;
+    /* margin: 0 10px; */
+    /* padding: 0 20px; */
   }
 
   .section-lr .container-lr.active .signupBx .formBx {
@@ -843,6 +844,6 @@ form i {
 
 @media (max-width: 600px){
   .user.signinBx .formBx form {
-    width: 100%;
+    /* width: 100%; */
   }
 }
