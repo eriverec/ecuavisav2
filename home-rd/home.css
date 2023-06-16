@@ -3600,7 +3600,7 @@ BLOQUE DE COLUMNISTA - FIN
 /*TEMATICA SEMANAL*/
 
 .Tematica_Semanal{
-  display: none;
+  /* display: none; */
   margin-top: 30px;
 }
 
