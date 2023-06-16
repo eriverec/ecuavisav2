@@ -235,104 +235,104 @@ function login() {
 
 var telefonoValido = false;
 
-var telefonoInput2 = document.getElementById('regTelefono'); // Obtener el elemento de entrada de teléfono
+// var telefonoInput2 = document.getElementById('regTelefono'); // Obtener el elemento de entrada de teléfono
 
-telefonoInput2.addEventListener('input', function () {
-  const telefono = telefonoInput2.value.trim(); // Obtener el valor del teléfono sin espacios al inicio y al final
+// telefonoInput2.addEventListener('input', function () {
+//   const telefono = telefonoInput2.value.trim(); // Obtener el valor del teléfono sin espacios al inicio y al final
 
-  // Validar que solo se ingresen números y tenga una longitud entre 7 y 10 caracteres
-  const validacion = /^\d{7,10}$/.test(telefono);
+//   // Validar que solo se ingresen números y tenga una longitud entre 7 y 10 caracteres
+//   const validacion = /^\d{7,10}$/.test(telefono);
 
-  if (validacion) {
-    // El teléfono es válido
-    telefonoValido = true;
-    // Puedes realizar otras acciones aquí si el teléfono es válido
-  } else {
-    // El teléfono es inválido
-    telefonoValido = false;
-    // Puedes mostrar un mensaje de error o realizar otras acciones aquí si el teléfono es inválido
-  }
-});
+//   if (validacion) {
+//     // El teléfono es válido
+//     telefonoValido = true;
+//     // Puedes realizar otras acciones aquí si el teléfono es válido
+//   } else {
+//     // El teléfono es inválido
+//     telefonoValido = false;
+//     // Puedes mostrar un mensaje de error o realizar otras acciones aquí si el teléfono es inválido
+//   }
+// });
 
-function register() {
-  let cboxTermReg = document.getElementById("checkTermsReg");
-  if (cboxTermReg.checked == true) {
-    var btn = document.querySelector('#registrar');
-    btn.setAttribute("disabled", true);
-    document.getElementById("regTelefono").required = true;
-    document.getElementById("regName").required = true;
-    document.getElementById("regEmail").required = true;
-    document.getElementById("regPass").required = true;
-    document.getElementById("regConf").required = true;
+// function register() {
+//   let cboxTermReg = document.getElementById("checkTermsReg");
+//   if (cboxTermReg.checked == true) {
+//     var btn = document.querySelector('#registrar');
+//     btn.setAttribute("disabled", true);
+//     document.getElementById("regTelefono").required = true;
+//     document.getElementById("regName").required = true;
+//     document.getElementById("regEmail").required = true;
+//     document.getElementById("regPass").required = true;
+//     document.getElementById("regConf").required = true;
 
-    let name = document.getElementById("regName").value.trim().split(" ");
-    let email = document.getElementById("regEmail").value.trim();
-    let telefono = document.getElementById("regTelefono").value.trim();
-    let password = document.getElementById("regPass").value;
-    let passwordConf = document.getElementById("regConf").value;
-    let token;
+//     let name = document.getElementById("regName").value.trim().split(" ");
+//     let email = document.getElementById("regEmail").value.trim();
+//     let telefono = document.getElementById("regTelefono").value.trim();
+//     let password = document.getElementById("regPass").value;
+//     let passwordConf = document.getElementById("regConf").value;
+//     let token;
 
-    if (passwordConf == '' || password == '' || name == '' || telefono == '' || email == '' || passwordConf.length == 0 || password.length == 0 || name.length == 0 || email.length == 0) {
-      alert('Todos los campos son requeridos, se deben llenar');
-      btn.removeAttribute('disabled');
-      return false;
-    }
+//     if (passwordConf == '' || password == '' || name == '' || telefono == '' || email == '' || passwordConf.length == 0 || password.length == 0 || name.length == 0 || email.length == 0) {
+//       alert('Todos los campos son requeridos, se deben llenar');
+//       btn.removeAttribute('disabled');
+//       return false;
+//     }
 
-    if (!telefonoValido) {
-      alert('El número de teléfono no es el correcto');
-      btn.removeAttribute('disabled');
-      return false;
-    }
+//     if (!telefonoValido) {
+//       alert('El número de teléfono no es el correcto');
+//       btn.removeAttribute('disabled');
+//       return false;
+//     }
 
-    if (password !== passwordConf) {
-      alert("Las contraseñas no coinciden")
-      console.log("Las contraseñas no coinciden");
-    } else {
-      //servicio render Luis
-      fetch("https://ecuavisa-login-service.onrender.com/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
-        },
-        body: new URLSearchParams({
-          email: email,
-          nombre: name[0],
-          apellido: name[1],
-          telefono_numero: telefono,
-          password: password,
-        }),
-      }).then((response) => response.json())
-        .then(async (result) => {
-          if (typeof result.message !== 'undefined') {
-            btn.removeAttribute('disabled');
-            alert(result.message + ' o su correo ya existe');
-          } else {
-            token = result.token;
-            console.log('token registro', result);
-            if (result.token) {
-              localStorageSetUsuarioNew(result.user);
-              btn.removeAttribute('disabled');
-              // cambiar url destino
-              if (urlParamsGET.get('urlredirect') != null) {
-                window.location = `${urlParamsGET.get('urlredirect')}?tk=` + result.token;
-              } else {
-                //window.location = "https://www.ecuavisa.com/compania593/click-boom/que-esconde-la-cartera-de-victoria-KL4951862?tk="+ result.token;
-                window.location = "https://www.ecuavisa.com/concursos?tk=" + result.token;
-              }
-            }
-          }
-        })
-        .catch((error) => {
-          btn.removeAttribute('disabled');
-          alert(error)
-          console.log("error", error); /*; window.location = URL_login_G*/
-        });
-    }
-  } else {
-    alert("Acepte los términos y condiciones antes de continuar");
-    return false;
-  }
-}
+//     if (password !== passwordConf) {
+//       alert("Las contraseñas no coinciden")
+//       console.log("Las contraseñas no coinciden");
+//     } else {
+//       //servicio render Luis
+//       fetch("https://ecuavisa-login-service.onrender.com/register", {
+//         method: "POST",
+//         headers: {
+//           "Content-Type": "application/x-www-form-urlencoded",
+//         },
+//         body: new URLSearchParams({
+//           email: email,
+//           nombre: name[0],
+//           apellido: name[1],
+//           telefono_numero: telefono,
+//           password: password,
+//         }),
+//       }).then((response) => response.json())
+//         .then(async (result) => {
+//           if (typeof result.message !== 'undefined') {
+//             btn.removeAttribute('disabled');
+//             alert(result.message + ' o su correo ya existe');
+//           } else {
+//             token = result.token;
+//             console.log('token registro', result);
+//             if (result.token) {
+//               localStorageSetUsuarioNew(result.user);
+//               btn.removeAttribute('disabled');
+//               // cambiar url destino
+//               if (urlParamsGET.get('urlredirect') != null) {
+//                 window.location = `${urlParamsGET.get('urlredirect')}?tk=` + result.token;
+//               } else {
+//                 //window.location = "https://www.ecuavisa.com/compania593/click-boom/que-esconde-la-cartera-de-victoria-KL4951862?tk="+ result.token;
+//                 window.location = "https://www.ecuavisa.com/concursos?tk=" + result.token;
+//               }
+//             }
+//           }
+//         })
+//         .catch((error) => {
+//           btn.removeAttribute('disabled');
+//           alert(error)
+//           console.log("error", error); /*; window.location = URL_login_G*/
+//         });
+//     }
+//   } else {
+//     alert("Acepte los términos y condiciones antes de continuar");
+//     return false;
+//   }
+// }
 
 function sendEmailPassReset() {
   var btn = document.querySelector('#forgetButton');
