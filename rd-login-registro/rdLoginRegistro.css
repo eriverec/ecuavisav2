@@ -221,13 +221,13 @@
   margin-bottom: 10px;
   font-family: 'Anek Malayalam';
   font-style: normal;
-  font-weight: 600;
+  font-weight: 700;
   font-size: 55px;
   line-height: 24px;
   letter-spacing: -0.03em;
   text-transform: lowercase;
-  color: #23DCD1;
-  padding: 2rem 0;
+  color: #2927B9;
+  padding: 1rem 0;
 }
 
 /* .section-lr .container-lr .user .formBx form input {
@@ -777,4 +777,9 @@ form i {
 
 .user.signinBx .formBx form .forgetPassword.__olvid label #checkTerms {
   display: none;
+}
+
+
+.title__central {
+  text-align: center;
 }
