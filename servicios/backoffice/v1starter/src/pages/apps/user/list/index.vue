@@ -45,6 +45,8 @@ const sectionLoaded = () => {
 const isFullLoading = ref(false);
 const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
 const dateNow = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
+const deleteShowUsers = ref({});
+const isUsersDeleteConfirmVisible = ref(false);
 // 👉 Fetching users
 const fetchUsers = () => {
   sectionLoading();
@@ -575,6 +577,57 @@ const updateSortDesc = (sortDesc) => {
 };
 
 
+//  ------------- DELETE 
+async function onConfirmUsersDeleteActive (id){
+  await fetch("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id="+id)
+  .then(response => response.json())
+        .then(data => {
+        deleteShowUsers.value = data;   
+    })
+    .catch(error => {return error});
+    isUsersDeleteConfirmVisible.value = true;  
+}
+
+async function onFormUsersDeleteSend  (){
+  
+  let id = deleteShowUsers.value.wylexId;
+
+  var requestOptions = {
+  method: 'DELETE',
+  redirect: 'follow'
+  };
+
+  await fetch('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/delete/wylex?id='+id,requestOptions)
+        .then(response => response.json())
+        .then(data => {     
+        return true;             
+    })
+    .catch(error => {return error}); 
+
+  await fetch('https://servicio-delete.vercel.app/delete?id='+id,requestOptions)
+        .then(response => response.json())
+        .then(data => {
+        return true;             
+    })
+    .catch(error => {return error});   
+    isUsersDeleteConfirmVisible.value = false;  
+    deleteShowUsers.value = {};  
+    fetchUsers(); 
+}
+
+const dialogUsersDeleteValueUpdate = (val) => {
+	if(val === false){
+		deleteShowUsers.value = {}; 
+	}
+	isUsersDeleteConfirmVisible.value = val;
+};
+
+const onFormUsersDeleteReset = () => {
+  deleteShowUsers.value = {};
+	isUsersDeleteConfirmVisible.value = false;	
+};
+
+
 </script>
 
 <template>
@@ -919,7 +972,7 @@ const updateSortDesc = (sortDesc) => {
                     </RouterLink>
                   </VBtn>
 
-                  <VBtn icon size="x-small" color="default" variant="text">
+                  <VBtn icon size="x-small" color="default" variant="text" @click="onConfirmUsersDeleteActive(user.wylexId)">
                     <VIcon size="22" icon="tabler-trash" />
                   </VBtn>
 
@@ -974,6 +1027,48 @@ const updateSortDesc = (sortDesc) => {
               :length="totalPage"
             />
           </VCardText>
+
+          <VDialog
+             persistent
+             no-click-animation
+						:width="$vuetify.display.smAndDown ? 'auto' : 600"
+						:model-value="isUsersDeleteConfirmVisible"
+						@update:model-value="dialogUsersDeleteValueUpdate"
+					>
+						<!-- Dialog close btn -->
+						<DialogCloseBtn @click="dialogUsersDeleteValueUpdate(false)" />
+
+						<VCard class="pa-sm-14 pa-5">
+							<VCardItem class="text-center">
+								<VCardTitle class="text-h5 mb-3 p-5">
+									<span>¿ Está seguro que desea eliminar</span><br>
+                  <span>el usuario <i>{{ deleteShowUsers.first_name }} {{ deleteShowUsers.last_name }}</i> ?</span>
+								</VCardTitle>
+							</VCardItem>
+              <VCardItem >
+                <VCol
+											cols="12"
+											class="d-flex flex-wrap justify-center gap-4"
+										>
+                <VBtn color="error"
+											
+											@click="onFormUsersDeleteSend"
+                      > 
+                      Aceptar 
+                </VBtn>
+
+								<VBtn
+												
+												
+												@click="onFormUsersDeleteReset"
+											>
+												Cancelar
+								</VBtn>
+              </VCol>
+              </VCardItem>
+
+						</VCard>
+					</VDialog>
         </VCard>
       </VCol>
     </VRow>
