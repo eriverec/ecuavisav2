@@ -318,7 +318,7 @@
   }
 }
 
-.outsideEmail>div:last-child {
+.outsideEmail>div:last-child:not(.outsideEmail.delete_user>div:last-child) {
   display: none;
 }
 
@@ -3032,3 +3032,97 @@ ul li i.chevron:after {
 
 
 /*MI CUENTA - NEWSLETTER - FIN*/
+
+/*MODAL DE ELIMINAR CUENTA*/
+.outsidetName {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end!important;
+}
+
+.outsideEmail.delete_user {
+    display: flex;
+    align-content: center;
+    align-items: center;
+}
+
+.outsideEmail.delete_user .insideValue {
+    display: none;
+}
+
+.outsideEmail.delete_user .insideTitle {
+    padding: 0px;
+}
+
+#delete_user {
+    background-color: #FF1E1E;
+    border-color: #FF1E1E;
+    padding: 10px 25px;
+    line-height: 1.2;
+    border-radius: 2px;
+    font-size: 15px;
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 500;
+}
+
+.modal_elimiar_cuenta {
+    
+}
+
+.modal-dialog {
+    max-width: 400px !important;
+}
+
+.modal_elimiar_cuenta .modal-footer {
+    display: flex;
+    justify-content: center;
+    padding-top: 0px!important;
+}
+
+.modal_elimiar_cuenta .modal-body p{
+    text-align:center;
+    width:100%M
+}
+
+.modal_elimiar_cuenta .modal-footer button{
+    border-radius:2px;
+    font-size:14px;
+}
+
+.modal_elimiar_cuenta .modal-title {
+    color: #fff;
+    font-weight:500;
+}
+
+.modal_elimiar_cuenta .modal-header {
+    background: #2927B9;
+}
+
+.modal_elimiar_cuenta .btn-close {
+    box-sizing: content-box;
+    width: 1em;
+    height: 1em;
+    padding: 0.25em 0.25em;
+    color: #000;
+    background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23FFF'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
+    border: 0;
+    border-radius: 0.25rem;
+    opacity: 1;
+}
+
+.btn.no_eliminar{
+    background-color:#fff;
+    border:1px solid #2e22b6;
+    color:#2e22b6;
+    font-weight:500;
+    font-family: 'Archivo';
+    font-style: normal;
+}
+
+.btn.si_eliminar{
+    font-weight:500;
+    font-family: 'Archivo';
+    font-style: normal;
+}
+/*FIN MODAL DE ELIMINAR CUENTA*/
