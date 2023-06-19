@@ -487,9 +487,11 @@ async function downloadSelection () {
         />
         </div>
         <VCol cols="12">
+  <!-- botonera de filtros guardados ##estado desactivado##-->
   <VBtnToggle v-if="!isLoading"   
         v-model="btnFiltros"
         color="primary"
+        class="d-none"
         divided
       >
    <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosVisitas">
