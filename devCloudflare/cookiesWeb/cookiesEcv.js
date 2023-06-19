@@ -14,8 +14,8 @@ let stringHtml = `
               <p style="margin-top: 10px;"><a style="color:#115cfa;" href="https://www.ecuavisa.com/servicios/politica-cookies" target="_blank">Políticas de cookies</a></p>
           
           <div class="btn-wrap ">
-              <button class="btnRechazar" id="configurar">Configurar</button>
-              <button class="btnAceptar" id="aceptarcookies" onclick="acceptCookieConsent();">Aceptar</button>
+              <button class="btn btnRechazar" id="configurar">Configurar</button>
+              <button class="btn btnAceptar" id="aceptarcookies" onclick="acceptCookieConsent();">Aceptar</button>
           </div>
       </div>
   </div>
