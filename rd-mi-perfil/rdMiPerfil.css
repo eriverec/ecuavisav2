@@ -3125,4 +3125,12 @@ ul li i.chevron:after {
     font-family: 'Archivo';
     font-style: normal;
 }
+
+.outsideEmail.delete_user > div:nth-child(2) {
+    margin-left: auto;
+}
+
+.outsideEmail.delete_user {
+    display: none;
+}
 /*FIN MODAL DE ELIMINAR CUENTA*/
