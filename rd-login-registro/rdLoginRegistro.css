@@ -852,3 +852,11 @@ form i {
     width: 100%;
   }
 }
+
+#ly-header.container {
+    margin-bottom: 0rem!important;
+}
+
+.inicio-registro .section-lr {
+    margin-top: calc(60px + 2rem);
+}
