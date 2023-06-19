@@ -411,6 +411,8 @@ tr.programaItem td:not(.text-center) div {
 .title-wrap h4 {
   display: flex;
   gap: 10px;
+  font-weight: bold;
+  font-size: 20px;
 }
 
 .btn-wrap {
@@ -419,6 +421,11 @@ tr.programaItem td:not(.text-center) div {
   justify-content: center;
   align-items: center;
   column-gap: 20px;
+}
+
+.content-wrap p {
+    font-size: 15px;
+    line-height: 1.2;
 }
 
 @media (max-width: 767px) {
