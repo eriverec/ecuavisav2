@@ -354,7 +354,7 @@ tr.programaItem td:not(.text-center) div {
   bottom: 1rem;
   right: 1rem;
   background: #fff;
-  z-index: 2051;
+  z-index: 99999;
   line-height: 20px;
   font-size: 16px;
   border-radius: 6px;
