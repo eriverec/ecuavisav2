@@ -1,5 +1,5 @@
 let stringHtml = `
-<div id="cookieNotice" class="cookie-overlay p-4 d-none" style="display: none;">
+<div id="cookieNotice" class="cookie-overlay p-4" style="display: none;">
   <div class="title-wrap" style="font-weight: bold; font-size: 20px;">
       <h4><img src="https://estadisticas.ecuavisa.com/sites/gestor/Banner/cookies.svg" alt="cookies">Aviso de política de cookies</h4>
   </div>
@@ -184,10 +184,10 @@ var actionsCofigCookies = {
                       </div>
                       <div class="footer-modal">
                           <div class="block_btn_re_acep p-0 m-0">
-                              <button class="btnRechazar" id="rechazar_todo">Rechazar todo</button>
-                              <button class="btnAceptar" id="aceptar-todos">Aceptar todo</button>
+                              <button class="btn btnRechazar" id="rechazar_todo">Rechazar todo</button>
+                              <button class="btn btnAceptar" id="aceptar-todos">Aceptar todo</button>
                           </div>
-                          <button class="btnAceptar disabled" style="display:none" id="aceptar-modal">Guardar y cerrar</button>
+                          <button class="btn btnAceptar disabled" style="display:none" id="aceptar-modal">Guardar y cerrar</button>
                       </div>
                   </div>
               </div>

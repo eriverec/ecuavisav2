@@ -372,7 +372,7 @@ tr.programaItem td:not(.text-center) div {
   text-transform: uppercase;
   font-style: normal;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   margin: 0;
 }
 
@@ -391,7 +391,7 @@ tr.programaItem td:not(.text-center) div {
   text-transform: uppercase;
   font-style: normal;
   font-weight: 600;
-  font-size: 14px;
+  font-size: 12px;
   margin: 0;
 }
 
@@ -405,12 +405,18 @@ tr.programaItem td:not(.text-center) div {
 }
 
 .title-wrap {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .title-wrap h4 {
   display: flex;
   gap: 10px;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+.content-wrap p {
+    font-size: 15px;
 }
 
 .btn-wrap {
