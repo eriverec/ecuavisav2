@@ -62,7 +62,7 @@
   font-size: 22px;
   font-size: 23.027px;
   line-height: 28px;
-  color: #2927B9;
+  color: #ffffff;
 }
 
 .modal-footer {
@@ -77,15 +77,20 @@
   font-size: 12px;*/
   display: flex;
   flex-direction: column;
-  background-color: transparent !important;
-  border-color: transparent !important;
+  background-color: #2927b9!important;
+  border-color: #2927b9!important;
   font-family: 'Mattone 150';
   font-style: normal;
-  font-size: 14px;
-  font-weight: 600;
+  font-size: 12px;
+  font-weight: 500;
   text-transform: uppercase;
   padding: 10px 17px;
-  color: #2927b9;
+  color: #ffffff;
+  border: 1px solid #2927b9;
+  margin-right: 24px;
+  border-radius: 2px;
+  display: block;
+  padding: 15px 38px;
 }
 
 .section-lr {
@@ -524,7 +529,7 @@ form i {
 /* 👉 MODAL PASSWORD */
 
 .modal-header {
-  background: #23DCD1;
+  background: #2927B9;
   padding: 1.5rem;
 }
 
@@ -566,13 +571,15 @@ form i {
 
 .modal-footer button:after {
   content: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/Vector-login.svg');
+  display: none;
 }
 
 .btn-close {
-  background: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/close-fill.svg') center/1em auto no-repeat !important;
+  /* background: url('https://estadisticas.ecuavisa.com/sites/gestor/Banner/close-fill.svg') center/1em auto no-repeat !important; */
   border: 0;
   background-size: 45px !important;
   opacity: 1 !important;
+  background: transparent url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%23FFF'%3e%3cpath d='M.293.293a1 1 0 011.414 0L8 6.586 14.293.293a1 1 0 111.414 1.414L9.414 8l6.293 6.293a1 1 0 01-1.414 1.414L8 9.414l-6.293 6.293a1 1 0 01-1.414-1.414L6.586 8 .293 1.707a1 1 0 010-1.414z'/%3e%3c/svg%3e") center/1em auto no-repeat;
 }
 
 .btn-check:focus+.btn-primary,
