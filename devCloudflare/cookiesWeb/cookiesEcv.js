@@ -27,66 +27,232 @@ var modalCookieNotice = document.createElement("div");
 modalCookieNotice.innerHTML = stringHtml;
 document.body.appendChild(modalCookieNotice);
 
-setTimeout(checkCookie(), 150);
-
-function checkCookie() {
-  let cookie_consent = getCookie("user_cookie_consent");
-  if (cookie_consent != "") {
-    document.getElementById("cookieNotice").style.display = "none";
-    console.log("DISPLAY 1")
-  } else if (localStorage.getItem("noCookiesEcuavisa")) {
-    document.getElementById("cookieNotice").style.display = "none";
-    console.log("DISPLAY 2")
-  } else {
-    document.getElementById("cookieNotice").style.display = "block";
-    console.log("DISPLAY 3")
+var cookieCRUD = {
+  checkCookieSupport:function() {
+    return navigator.cookieEnabled;
+  },
+  getCookie: function(name){
+    var ins = this;
+    if (ins.checkCookieSupport()) {
+      var cookies = document.cookie.split(';');
+      for (var i = 0; i < cookies.length; i++) {
+        var cookie = cookies[i].trim();
+        if (cookie.indexOf(name + "=") === 0) {
+          return cookie.substring(name.length + 1, cookie.length);
+        }
+      }
+    } else {
+      // console.log("El navegador no soporta cookies.");
+      return ins.getLocalStorageItem(name);
+    }
+    return null;
+  },
+  createCookie:function(name, value, days) {
+    var ins = this;
+    if (ins.checkCookieSupport()) {
+      var expires = "";
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = name + "=" + value + expires + "; path=/";
+      console.log("Cookie creada:", name);
+    } else {
+      ins.createLocalStorageItem(name, value, days);
+      // console.log("El navegador no soporta cookies.");
+    }
+  },
+  updateCookie:function(name, value) {
+    if (ins.checkCookieSupport()) {
+      if (ins.getCookie(name) !== null) {
+        ins.createCookie(name, value);
+        console.log("Cookie actualizada:", name);
+      } else {
+        console.log("La cookie", name, "no existe.");
+      }
+    } else {
+      console.log("El navegador no soporta cookies.");
+    }
+  },
+  deleteCookie:function(name) {
+    if (ins.checkCookieSupport()) {
+      if (ins.getCookie(name) !== null) {
+        ins.createCookie(name, "", -1);
+        console.log("Cookie eliminada:", name);
+      } else {
+        console.log("La cookie", name, "no existe.");
+      }
+    } else {
+      console.log("El navegador no soporta cookies.");
+    }
+  },
+  checkCookie:function() {
+    var ins = this;
+    if (ins.checkCookieSupport()) {
+      var cookie_consent = ins.getCookie("user_cookie_consent");
+      if (cookie_consent !== null) {
+        document.getElementById("cookieNotice").style.display = "none";
+        // console.log("DISPLAY 1")
+      } else {
+        document.getElementById("cookieNotice").style.display = "block";
+        // console.log("DISPLAY 3")
+      }
+    } else {
+      // console.log("El navegador no soporta cookies.");
+      var cookie_consent = ins.getLocalStorageItem("user_cookie_consent");
+      if (cookie_consent !== null) {
+        document.getElementById("cookieNotice").style.display = "none";
+        // console.log("DISPLAY 1")
+      } else {
+        document.getElementById("cookieNotice").style.display = "block";
+        // console.log("DISPLAY 3")
+      }
+    }
+  },
+  checkLocalStorageSupport:function() {
+    try {
+      var storage = window.localStorage;
+      var testKey = "__test__";
+      storage.setItem(testKey, testKey);
+      storage.removeItem(testKey);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  },
+  createLocalStorageItem:function(key, value, days) {
+    var ins = this;
+    if (ins.checkLocalStorageSupport()) {
+      var expirationDate = null;
+      if (days) {
+        var date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expirationDate = date.toISOString();
+      }
+      var item = {
+        value: value,
+        expirationDate: expirationDate
+      };
+      localStorage.setItem(key, JSON.stringify(item));
+      console.log("Item creado en localStorage:", key);
+    } else {
+      console.log("El navegador no soporta localStorage.");
+    }
+  },
+  getLocalStorageItem:function(key) {
+    var ins = this;
+    if (ins.checkLocalStorageSupport()) {
+      var item = localStorage.getItem(key);
+      if (item) {
+        item = JSON.parse(item);
+        // Comprobar la fecha de expiración
+        if (item.expirationDate && new Date(item.expirationDate) < new Date()) {
+          // Item expirado, eliminarlo
+          ins.deleteLocalStorageItem(key);
+          console.log("Item expirado eliminado de localStorage:", key);
+          return null;
+        }
+        return item.value;
+      }
+    } else {
+      // console.log("El navegador no soporta localStorage.");
+      // alert("Por favor, habilita las cookies en tu navegador para utilizar este sitio.");
+      return null;
+    }
+  },
+  updateLocalStorageItem:function(key, value) {
+    var ins = this;
+    if (ins.checkLocalStorageSupport()) {
+      var item = localStorage.getItem(key);
+      if (item) {
+        item = JSON.parse(item);
+        // Actualizar solo el valor
+        item.value = value;
+        localStorage.setItem(key, JSON.stringify(item));
+        console.log("Item actualizado en localStorage:", key);
+      } else {
+        console.log("Item no encontrado en localStorage:", key);
+      }
+    } else {
+      console.log("El navegador no soporta localStorage.");
+    }
+  },
+  deleteLocalStorageItem:function(key) {
+    var ins = this;
+    if (ins.checkLocalStorageSupport()) {
+      if (ins.getLocalStorageItem(key) !== null) {
+        localStorage.removeItem(key);
+        console.log("Item eliminado de localStorage:", key);
+      } else {
+        console.log("El item", key, "no existe en localStorage.");
+      }
+    } else {
+      console.log("El navegador no soporta localStorage.");
+    }
   }
 }
+
+setTimeout(cookieCRUD.checkCookie(), 150);
+
+// function checkCookie() {
+//   let cookie_consent = getCookie("user_cookie_consent");
+//   if (cookie_consent != "") {
+//     document.getElementById("cookieNotice").style.display = "none";
+//     console.log("DISPLAY 1")
+//   } else if (localStorage.getItem("noCookiesEcuavisa")) {
+//     document.getElementById("cookieNotice").style.display = "none";
+//     console.log("DISPLAY 2")
+//   } else {
+//     document.getElementById("cookieNotice").style.display = "block";
+//     console.log("DISPLAY 3")
+//   }
+// }
 
 // Crear cookie
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
-  let expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
+// function setCookie(cname, cvalue, exdays) {
+//   const d = new Date();
+//   d.setTime(d.getTime() + exdays * 24 * 60 * 60 * 1000);
+//   let expires = "expires=" + d.toUTCString();
+//   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+// }
 
 // Borrar cookie
-function deleteCookie(cname) {
-  const d = new Date();
-  d.setTime(d.getTime() + 24 * 60 * 60 * 1000);
-  let expires = "expires=" + d.toUTCString();
-  document.cookie = cname + "=;" + expires + ";path=/";
-}
+// function deleteCookie(cname) {
+//   const d = new Date();
+//   d.setTime(d.getTime() + 24 * 60 * 60 * 1000);
+//   let expires = "expires=" + d.toUTCString();
+//   document.cookie = cname + "=;" + expires + ";path=/";
+// }
 
 // Leer cookie
-function getCookie(cname) {
-  let name = cname + "=";
-  let decodedCookie = decodeURIComponent(document.cookie);
-  let ca = decodedCookie.split(";");
-  for (let i = 0; i < ca.length; i++) {
-    let c = ca[i];
-    while (c.charAt(0) == " ") {
-      c = c.substring(1);
-    }
-    if (c.indexOf(name) == 0) {
-      return c.substring(name.length, c.length);
-    }
-  }
-  return "";
-}
+// function getCookie(cname) {
+//   let name = cname + "=";
+//   let decodedCookie = decodeURIComponent(document.cookie);
+//   let ca = decodedCookie.split(";");
+//   for (let i = 0; i < ca.length; i++) {
+//     let c = ca[i];
+//     while (c.charAt(0) == " ") {
+//       c = c.substring(1);
+//     }
+//     if (c.indexOf(name) == 0) {
+//       return c.substring(name.length, c.length);
+//     }
+//   }
+//   return "";
+// }
 
 // Set cookie consent
 function acceptCookieConsent() {
-  deleteCookie("user_cookie_consent");
-  setCookie("user_cookie_consent", 1, 30);
+  // deleteCookie("user_cookie_consent");
+  cookieCRUD.createCookie("user_cookie_consent", 1, 30);
   document.getElementById("cookieNotice").style.display = "none";
 }
 
-function declineCookieConsent() {
-  document.getElementById("cookieNotice").style.display = "none";
-  localStorage.setItem("noCookiesEcuavisa", true);
-}
+// function declineCookieConsent() {
+//   document.getElementById("cookieNotice").style.display = "none";
+//   localStorage.setItem("noCookiesEcuavisa", true);
+// }
 
 var actionsCofigCookies = {
   opciones: [{
