@@ -10,7 +10,7 @@ let stringHtml = `
               <!--Puedes obtener más información y volver a configurar tus preferencias en cualquier momento en la</p>
               <p style="margin-top: 10px;"><a style="color:#115cfa;" href="https://www.ecuavisa.com/servicios/politicas-de-privacidad" target="_blank">Política de cookies</a>.</p>-->
 
-              <p style="margin-top: 10px;"><a style="color:#115cfa;" href="https://www.ecuavisa.com/servicios/politicas-de-privacidad" target="_blank">Políticas de privacidad</a></p>
+              <p style="margin-top: 10px;"><a style="color:#115cfa;" href="https://www.ecuavisa.com/servicios/politicas-de-privacidad" target="_blank">Política de privacidad</a></p>
               <p style="margin-top: 10px;"><a style="color:#115cfa;" href="https://www.ecuavisa.com/servicios/politica-cookies" target="_blank">Políticas de cookies</a></p>
           
           <div class="btn-wrap ">
