@@ -157,6 +157,8 @@ var cookieCRUD = {
       }
     } else {
       // console.log("El navegador no soporta localStorage.");
+      document.getElementById("cookieNotice").classList.add("notSupportCookies");
+      
       // alert("Por favor, habilita las cookies en tu navegador para utilizar este sitio.");
       return null;
     }
