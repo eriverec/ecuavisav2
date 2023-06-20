@@ -64,6 +64,7 @@ var cookieCRUD = {
     }
   },
   updateCookie:function(name, value) {
+    var ins = this;
     if (ins.checkCookieSupport()) {
       if (ins.getCookie(name) !== null) {
         ins.createCookie(name, value);
@@ -76,6 +77,7 @@ var cookieCRUD = {
     }
   },
   deleteCookie:function(name) {
+    var ins = this;
     if (ins.checkCookieSupport()) {
       if (ins.getCookie(name) !== null) {
         ins.createCookie(name, "", -1);
@@ -111,6 +113,7 @@ var cookieCRUD = {
     }
   },
   checkLocalStorageSupport:function() {
+    var ins = this;
     try {
       var storage = window.localStorage;
       var testKey = "__test__";
