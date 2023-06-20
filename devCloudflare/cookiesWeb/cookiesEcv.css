@@ -455,3 +455,31 @@ padding: 1rem 2rem;
     object-fit: cover;
   }
 }
+
+#cookieNotice.notSupportCookies .content-wrap{
+    position:relative;
+}
+
+#cookieNotice.notSupportCookies .content-wrap:after {
+    content: "Por favor habilitar las cookies del navegador para que pueda aceptar nuestras políticas de cookies";
+    position:absolute;
+    width:100%;
+    color:#2e22b6;
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 800;
+    font-size:20px;
+    line-height:1.2;
+    text-align:center;
+    background-color:#ffffffc2;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#cookieNotice.notSupportCookies .content-wrap:before {
+    content: "";
+    background-color:#ffffffc2;
+    position:absolute;
+    width:100%;
+    height:100%;
+}
