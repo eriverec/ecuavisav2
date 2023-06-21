@@ -78,7 +78,7 @@ if(rol== 'administrador'){
       icon
       size="small"
       class="app-customizer-toggler rounded-s-lg rounded-0"
-      style="z-index: 1001;"
+      style="z-index: 1001; display: none;"
       @click="isNavDrawerOpen = true"
     >
       <VIcon icon="tabler-settings" />
