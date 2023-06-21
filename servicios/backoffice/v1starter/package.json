@@ -25,6 +25,7 @@
         "moment-range": "^4.0.2",
         "pinia": "^2.0.24",
         "prismjs": "^1.29.0",
+        "pusher-js": "^8.2.0",
         "roboto-fontface": "^0.10.0",
         "sass": "^1.56.1",
         "unplugin-vue-define-options": "^0.12.8",
