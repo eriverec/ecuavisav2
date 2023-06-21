@@ -33,6 +33,9 @@ const sortBy = ref("created_at");
 const sortDesc = ref(true);
 const usersFull = ref([]);
 const userFullP = ref(0);
+const fechai = ref('');
+const fechaf = ref('');
+const fechaIngesada = ref('');
 const sectionLoading = () => {
   isLoaded.value = false;
   isLoading.value = true;
@@ -49,6 +52,7 @@ const deleteShowUsers = ref({});
 const isUsersDeleteConfirmVisible = ref(false);
 // 👉 Fetching users
 const fetchUsers = () => {
+  try {
   sectionLoading();
   userListStore
     .fetchUsers({
@@ -59,6 +63,8 @@ const fetchUsers = () => {
       news: selectedBoletin.value,
       sort: (sortDesc.value?-1:1),
       columnSort: sortBy.value,
+      fechai: fechai.value && fechaf.value? fechai.value:'',
+      fechaf: fechai.value && fechaf.value? fechaf.value:'',
     })
     .then((response) => {
       users.value = response.data.users;
@@ -69,6 +75,10 @@ const fetchUsers = () => {
     .catch((error) => {
       console.error(error);
     });
+       
+  } catch (error) {
+    console.error(error);
+  }
 };
 
 const countUsers = () => {
@@ -115,6 +125,9 @@ const reset = () => {
   selectedProvider.value = undefined;
   search.value = "";
   searchQuery.value = "";
+  fechai.value = "";
+  fechaf.value = "";
+  fechaIngesada.value = "";
 
   fetchUsers();
 };
@@ -589,7 +602,7 @@ async function onConfirmUsersDeleteActive (id){
 }
 
 async function onFormUsersDeleteSend  (){
-  
+  sectionLoading();
   let id = deleteShowUsers.value.wylexId;
 
   var requestOptions = {
@@ -613,6 +626,7 @@ async function onFormUsersDeleteSend  (){
     isUsersDeleteConfirmVisible.value = false;  
     deleteShowUsers.value = {};  
     fetchUsers(); 
+    sectionLoaded();
 }
 
 const dialogUsersDeleteValueUpdate = (val) => {
@@ -627,7 +641,13 @@ const onFormUsersDeleteReset = () => {
 	isUsersDeleteConfirmVisible.value = false;	
 };
 
-
+const resolveFechaSelected = (fechas) => {
+  if(fechas.length > 1){
+    fechai.value = fechas[0].toString();
+    fechaf.value = fechas[1].toString();
+    console.log("fechas", fechas);
+  } 
+};
 </script>
 
 <template>
@@ -691,6 +711,28 @@ const onFormUsersDeleteReset = () => {
                   clearable
                   clear-icon="tabler-x"
                 />
+              </VCol>
+              <VCol cols="12" sm="4">
+              <div class="date-picker-wrapper" style="width: auto">
+                <AppDateTimePicker
+        
+                prepend-inner-icon="tabler-calendar"
+                density="compact"
+                v-model="fechaIngesada"
+                show-current= true
+                @on-change="resolveFechaSelected"
+                :config="{ 
+                  position: 'auto right',
+                  mode:'range',
+                  altFormat: 'F j, Y',
+                  dateFormat: 'd-m-Y',
+                  maxDate: new Date(),
+                  reactive :true,
+                  clearable: true
+                  
+                }"
+              />
+             </div>
               </VCol>
               <!--
             <VCol

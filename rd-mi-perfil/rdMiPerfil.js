@@ -1765,7 +1765,7 @@ var miPerfil = function(){
         name.innerHTML = `${usuario.name} ${usuario.lastname}`;
 
         var descipcion = document.querySelector('.descripcion-user-me');
-        descipcion.innerHTML = `¡Bienvenido(a) a tu Ecuavisa`;
+        descipcion.innerHTML = `¡Bienvenido(a) a tu Ecuavisa!`;
 
     }else{
         console.error("El usuario no está logueado");
