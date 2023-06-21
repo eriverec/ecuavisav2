@@ -3136,3 +3136,10 @@ ul li i.chevron:after {
     display: none;
 }
 /*FIN MODAL DE ELIMINAR CUENTA*/
+
+@media (max-width: 600px){
+  #delete_user {
+      width: 130px;
+      padding: 10px 5px;
+  }
+}
