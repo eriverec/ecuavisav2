@@ -3121,9 +3121,11 @@ ul li i.chevron:after {
 }
 
 .btn.si_eliminar{
-    font-weight:500;
+    font-weight: 500;
     font-family: 'Archivo';
     font-style: normal;
+    background-color: #FF1E1E;
+    border-color: #FF1E1E;
 }
 
 .outsideEmail.delete_user > div:nth-child(2) {
