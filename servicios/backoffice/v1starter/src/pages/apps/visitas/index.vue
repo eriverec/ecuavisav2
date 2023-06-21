@@ -181,6 +181,7 @@ async function obtenerFechaDispositivos (selectedDates, dateStr, instance){
     try {
     btnFiltros.value = ''; 
         if(selectedDates.length > 1){
+            console.log('dates',selectedDates);
             let fechaI = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
             let fechaF = moment(selectedDates[1]).format('MM/DD/YYYY');
             fechaIni.value = fechaI;
@@ -268,6 +269,7 @@ const resolveUltimosUsuarios = (title) =>{
           let fullFecha = fechaFormat+' '+horaFinal;
           let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
 
+          if( p.first_name !== undefined && p.last_name !== undefined && p.first_name !== null && p.last_name !== null  && p.first_name !== '' && p.last_name !== '' ){
           let data = {
               first_name: p.first_name,
               last_name: p.last_name,
@@ -279,7 +281,10 @@ const resolveUltimosUsuarios = (title) =>{
               hora: horaFinal,
               horaRaw: i.hora
           }
-          arrayFiltro.push(data);}
+          arrayFiltro.push(data);
+           }
+          }      
+             
       }
   }
 //console.log('Antes',arrayFiltro);
@@ -321,6 +326,9 @@ resultado.sort((a, b) => {
 
   //console.log('Sorted F',arrayFiltro);
   ultimosUsuarios.value = resultado.slice(0,25);
+
+  console.log('ultimosUsuarios',ultimosUsuarios.value);
+
   ultimosUsuariosDownload.value = ultimosUsuarios.value.map(({ first_name, last_name, fecha, hora, cantidad, title, url }) => ({ first_name, last_name, fecha, hora, cantidad, title, url }));
   ultimosUsuariosVisible.value = true;
   titulo.value = title;
