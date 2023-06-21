@@ -1920,3 +1920,40 @@ function IsEmail_2() {
     return false;
   }
 }
+
+if(document.querySelector(".btn.si_eliminar")){
+    var btnEliminar = document.querySelector(".btn.si_eliminar");
+    var usuario = ECUAVISA_EC.USER_data();
+    btnEliminar.addEventListener("click", function(e){
+        btnEliminar.classList.add("disabled");
+        const urlTemp_2 = `https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/delete/wylex?id=${usuario.id}`; // URL de la API
+        const urlTemp_1 = `https://servicio-delete.vercel.app/delete?id=${usuario.id}`; // URL de la API
+        const headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+        // headers.append('Authorization', 'Bearer tu-token-de-autenticacion');
+        const requestOptions = {
+          method: 'DELETE',
+          headers: headers,
+        };
+        fetch(urlTemp_1, requestOptions).then(response => response.json())
+        .then(data => {
+          // Manipula la respuesta de la API
+          if(data.deletedCount != '0'){
+            fetch(urlTemp_2, requestOptions).then(response_2 => response_2.json())
+            .then(data_2 => {
+              /*SE DEBE CERRAR LA SESION CON LA FUNCION QUE SE ENCUENTRA EN global.js*/
+              clearSesion();
+              /*SE DEBE CERRAR LA SESION CON LA FUNCION QUE SE ENCUENTRA EN global.js*/
+            }).catch(error => {
+              // Maneja el error en caso de que ocurra
+              alert('Error al intentar eliminar:', error);
+              btnEliminar.classList.remove("disabled");
+            });
+          }
+        }).catch(error => {
+          // Maneja el error en caso de que ocurra
+          alert('Error al intentar eliminar:', error);
+          btnEliminar.classList.remove("disabled");
+        });
+    });
+}
