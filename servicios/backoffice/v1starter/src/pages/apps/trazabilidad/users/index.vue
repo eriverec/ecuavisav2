@@ -31,22 +31,6 @@ const titleSelected = ref('');
 const ultimosUsuariosDownload = ref([]);
 const userSelected = ref('');
 
-async function fetchFiltros() {
-        await fetch('https://servicio-filtros.vercel.app/visitas/all')
-        .then(response => response.json())
-        .then(data => {
-          filtrosVisitas.value = Array.from(data);
-         })
-        .catch(error => {return error});
-       
-        let filtros = Array.from(filtrosVisitas.value);
-        if(filtros.length > 0){
-        let checkDefault = filtros.filter(a => a.isDefault === true );
-        filtroDefault.value = checkDefault[0];
-        btnFiltros.value = checkDefault[0]._id;
-        fechaIngresada.value = String(checkDefault[0].fecha);
-        }       
-}
 
 async function fetchData(fechai, fechaf) {
     isLoading.value = true;
@@ -106,7 +90,7 @@ async function fetchData(fechai, fechaf) {
                   .then(async response=>{
 
                     let array = Array.from(response.data); 
-                    
+                    console.log(response.data);
                     array.forEach((item)=>{
                     rawData.value.push(item);
                     })
@@ -137,62 +121,10 @@ async function fetchData(fechai, fechaf) {
 }
 
 async function initData (){
-  await fetchFiltros();
   let formatI = moment().add(-7, 'days').format("MM-DD-YYYY");
   let formatF = moment().format("MM-DD-YYYY");
   fechaIngresada.value = String(formatI+' a '+formatF); 
   fetchData();  
-}
-
-async function fetchDataFecha(fechai, fechaf) {
-  try {   
-    const response = await fetch('https://servicio-de-actividad.vercel.app/actividad/full' ,{
-            method: 'POST',
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: fechas
-          });
-    const data = await response.json();
-    const urlMap = new Map();
-    rawData.value = data.data;
-    
-    for (const activity of data.data) {
-      for (const record of activity.navigationRecord) {
-        const url = record.url;
-        const title = record.title;
-        if (urlMap.has(url)) {
-          urlMap.get(url).count++;
-        } else {
-          urlMap.set(url, { url, title, count: 1 });
-        }
-      }
-    }
-
-    urlCounts.value = Array.from(urlMap.values());
-    urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
-  } catch (error) {
-    console.error(error);
-  }
-  isLoading.value = false;
-}
-
-async function obtenerFechaDispositivos (selectedDates, dateStr, instance){
-    try {
-    btnFiltros.value = ''; 
-        if(selectedDates.length > 1){
-            
-            let fechaI = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
-            let fechaF = moment(selectedDates[1]).format('MM/DD/YYYY');
-            fechaIni.value = fechaI;
-            fechaFin.value = fechaF;          
-            await fetchData(fechaI, fechaF);
-            
-            //panelGrafico.classList.remove("disabled");                       
-          }
-    } catch (error) {
-        console.error(error); 
-    }          
 }
 
 async function obtenerFechaFiltroDispositivos (fechas){
@@ -210,21 +142,6 @@ async function obtenerFechaFiltroDispositivos (fechas){
     } catch (error) {
         console.error(error); 
     }          
-}
-
-async function resolveFiltroSelection(id){
-
-await fetch('https://servicio-filtros.vercel.app/visitas/id?' + new URLSearchParams({ id: id }))
-.then(response => response.json())
-.then(data => {
-filtroSelected.value = data;        
-})
-.catch(error => {return error}); 
-let filtro = filtroSelected.value;
-fechaIngresada.value = String(filtro.fecha);
-
-await obtenerFechaFiltroDispositivos(filtro.fecha);        
-
 }
 onMounted(initData);
 
@@ -249,7 +166,7 @@ const resolveUltimosUsuarios = (title) =>{
   const inicio = rawData.value.map(({first_name, last_name, navigationRecord})=>{ 
   return {first_name, last_name, navigationRecord};
   });
-  
+  console.log('inicio' ,rawData.value); 
   const arrayFiltro = [];
 
   //console.log('title',title)
@@ -472,43 +389,26 @@ async function downloadSelection () {
       <VCard>
         <VCardText class="d-flex flex-wrap justify-space-between gap-4">
         <VCardItem class="pb-sm-0">
-          <VCardTitle>Páginas más vistas</VCardTitle>
-          <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
+          <VCardTitle>Trazabilidad usuarios</VCardTitle>
+          
         </VCardItem>
         
-        <div class="date-picker-wrapper" style="width: 300px;" v-if="!isLoading">
-        <AppDateTimePicker
-        prepend-inner-icon="tabler-calendar"
-        density="compact"
-        v-model="fechaIngresada"
-        show-current= true
-        @on-change="obtenerFechaDispositivos"
-        :config="{ 
-          position: 'auto right',
-          mode:'range',
-          altFormat: 'F j, Y',
-          dateFormat: 'm-d-Y',
-          maxDate: new Date(),
-          reactive :true
-          
-        }"
-        />
-        </div>
-        <VCol cols="12">
-  <!-- botonera de filtros guardados ##estado desactivado##-->
-  <VBtnToggle v-if="!isLoading"   
-        v-model="btnFiltros"
-        color="primary"
-        class="d-none"
-        divided
-      >
-   <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosVisitas">
-    {{ item.nombre }}
-   </VBtn>
-
-   </VBtnToggle>
-
-    </VCol>
+        <VCol lg="12" cols="12" sm="6">
+            <div class="d-flex align-center flex-wrap gap-2">
+            <div style="width: 15rem">
+                <VTextField
+                  v-model="searchQuery"
+                  placeholder="Buscar..."
+                  density="compact"
+                />
+              </div>   
+              <VBtn prepend-icon="tabler-search" @click="searchUsers">
+                Buscar
+              </VBtn> 
+            </div>
+        </VCol >
+   
+        
     </VCardText>
         <VCardText v-if="isLoading">Cargando datos...</VCardText>
         <VCardText  v-else>

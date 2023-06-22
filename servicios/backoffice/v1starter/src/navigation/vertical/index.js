@@ -50,7 +50,8 @@ export default [
       // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
       // modulos por salir 
       // { title: 'Dispositivos', to: 'apps-dispositivos' },
-      { title: 'Visitas', to: 'apps-visitas' }
+      { title: 'Visitas', to: 'apps-visitas' },
+      //{ title: 'Trazabilidad usuarios', to: 'apps-trazabilidad-users' }
     ],
   },
 
