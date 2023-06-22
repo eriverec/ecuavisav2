@@ -198,7 +198,9 @@ var cookieCRUD = {
   }
 }
 
-setTimeout(cookieCRUD.checkCookie(), 150);
+if(document.querySelectorAll(".webkit.ltr").length == 0){
+    setTimeout(cookieCRUD.checkCookie(), 150);
+}
 
 // function checkCookie() {
 //   let cookie_consent = getCookie("user_cookie_consent");
