@@ -19,8 +19,6 @@ const currentPageA = ref(1);
 const fechaIngresada = ref('');
 const actividadUser = ref([])
 const totalCount = computed(() => usersData.value.length);
-const fechaIni = ref('');
-const fechaFin = ref('');
 const actividadVisible = ref(false);
 const titulo = ref('');
 const titleSelected = ref('');
@@ -32,6 +30,8 @@ const paginasUser = ref('');
 const actividadUserRaw = ref([]);
 const ultimasVisitasPag = ref([]);
 const ultimasVisitasPagVisible = ref(false);
+const fechaInicial = ref('');
+const fechaFinal = ref('');
 async function searchUsers() {
     isLoading.value = true;
     isLoaded.value = false;
@@ -143,7 +143,7 @@ const resolveActividad =(first, last)=>{
   });
   
   let grupos = {};
-  console.log('arrayFiltro',arrayFiltro)
+  //console.log('arrayFiltro',arrayFiltro)
   arrayFiltro.forEach(obj => {
       let clave = obj.title;
       if( obj.country !== undefined  && obj.country !== null && obj.country !== '' ){
@@ -178,10 +178,12 @@ const resolveActividadFecha =(dates)=>{
       
     let fechaI = dates[0].toString();
     let fechaF = dates[1].toString();  
+    
     if(fechaI === fechaF){ 
       fechaF = new Date(new Date(fechaI).getTime() + 60 * 60 * 24 * 1000);
     }
-    
+    fechaInicial.value = fechaI;
+    fechaFinal.value = fechaF;
     let filtroActividad = actividadUserRaw.value.filter((item) => {
       return new Date(item.fullFecha) >= new Date(fechaI) && new Date(item.fullFecha) <= new Date(fechaF);         
     });
@@ -294,10 +296,14 @@ const resolveVisitas = (title) =>{
   });
   //console.log('res',resultado);
 
-  //console.log('Sorted F',arrayFiltro);
-  ultimasVisitasPag.value = arrayFiltro.slice(0,25);
-
-  //console.log('ultimosUsuarios',ultimosUsuarios.value);
+  if(fechaInicial.value && fechaFinal.value){
+    let filtroVisitas = arrayFiltro.filter((item) => {
+      return new Date(item.fullFecha) >= new Date(fechaInicial.value) && new Date(item.fullFecha) <= new Date(fechaFinal.value);         
+    });  
+    ultimasVisitasPag.value = filtroVisitas.slice(0,25);
+  }else{
+    ultimasVisitasPag.value = arrayFiltro.slice(0,25);
+  }
 
   ultimosUsuariosDownload.value = ultimasVisitasPag.value.map(({ first_name, last_name, fecha, hora, cantidad, title, url }) => ({ first_name, last_name, fecha, hora, cantidad, title, url }));
   ultimasVisitasPagVisible.value = true;
