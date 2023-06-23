@@ -93,8 +93,8 @@ const prevPage = () => {
 
 const resolveActividad =(first, last)=>{
   fechaIngresada.value = '';
-  const inicio = rawData.value.map(({first_name, last_name, navigationRecord})=>{ 
-  return {first_name, last_name, navigationRecord};
+  const inicio = rawData.value.map(({first_name, last_name, country, navigationRecord})=>{ 
+  return {first_name, last_name, country, navigationRecord};
   });
   
 
@@ -128,7 +128,8 @@ const resolveActividad =(first, last)=>{
               fecha: fechaFormat,
               fechaRaw: i.fecha,
               fullFecha: fullFechaFormat,
-              hora: horaFinal
+              hora: horaFinal,
+              country : p.country
           }
           arrayFiltro.push(data);
         }
@@ -142,17 +143,19 @@ const resolveActividad =(first, last)=>{
   });
   
   let grupos = {};
+  console.log('arrayFiltro',arrayFiltro)
   arrayFiltro.forEach(obj => {
       let clave = obj.title;
-
+      if( obj.country !== undefined  && obj.country !== null && obj.country !== '' ){
       if (grupos.hasOwnProperty(clave)) {   
       grupos[clave].cantidad = (grupos[clave].cantidad || 1) + 1;
       } else {
        obj.cantidad = 1;
       grupos[clave] = obj;
       }
+      }
       });
-
+      
       let resultado = Object.values(grupos);
 
       resultado.sort((a, b) => {  
@@ -187,12 +190,13 @@ const resolveActividadFecha =(dates)=>{
     let grupos = {};
     filtroActividad.forEach(obj => {
       let clave = obj.title;
-
+      if( obj.country !== undefined  && obj.country !== null && obj.country !== '' ){
       if (grupos.hasOwnProperty(clave)) {   
       grupos[clave].cantidad = (grupos[clave].cantidad || 1) + 1;
       } else {
        obj.cantidad = 1;
       grupos[clave] = obj;
+      }
       }
       });
 
