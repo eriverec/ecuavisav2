@@ -414,6 +414,7 @@ ins[id*="Ecuavisa_Bottom_Anchor_0"] {
   margin-bottom: 18px;
 }
 
+.title-wrap div,
 .title-wrap h4 {
   display: flex;
   gap: 10px;

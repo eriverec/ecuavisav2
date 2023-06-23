@@ -1,7 +1,7 @@
 let stringHtml = `
 <div id="cookieNotice" class="cookie-overlay p-4" style="display: none;">
   <div class="title-wrap" style="font-weight: bold; font-size: 20px;">
-      <h4><img src="https://estadisticas.ecuavisa.com/sites/gestor/Banner/cookies.svg" alt="cookies">Aviso de política de cookies</h4>
+      <div><img width="24px" height="24px" src="https://estadisticas.ecuavisa.com/sites/gestor/Banner/cookies.svg" alt="cookies">Aviso de política de cookies</div>
   </div>
   <div class="content-wrap">
       <div class="msg-wrap" >
