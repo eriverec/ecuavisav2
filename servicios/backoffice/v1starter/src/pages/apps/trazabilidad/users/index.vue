@@ -9,254 +9,95 @@ const moment = extendMoment(Moment);
 
 // const url = 'https://servicio-de-actividad.vercel.app/actividad/all';
 
-const urlCounts = ref([]);
+
 const rawData = ref([]);
-const isLoading = ref(true);
+const isLoading = ref(false);
+const isLoaded= ref(false);
 const itemsPerPage = 8;
 const currentPage = ref(1);
+const currentPageA = ref(1);
 const fechaIngresada = ref('');
-const ultimosUsuarios = ref([])
-const ultimasVisitas = ref([])
-const totalCount = computed(() => urlCounts.value.length);
+const actividadUser = ref([])
+const totalCount = computed(() => usersData.value.length);
 const fechaIni = ref('');
 const fechaFin = ref('');
-const ultimosUsuariosVisible = ref(false);
-const ultimasVisitasVisible = ref(false);
+const actividadVisible = ref(false);
 const titulo = ref('');
-const filtrosVisitas = ref([]);
-const filtroSelected= ref({});
-const btnFiltros= ref('');
-const filtroDefault= ref({});
 const titleSelected = ref('');
 const ultimosUsuariosDownload = ref([]);
 const userSelected = ref('');
-
-
-async function fetchData(fechai, fechaf) {
+const searchQuery = ref('');
+const usersData = ref([]);  
+const paginasUser = ref('');
+const actividadUserRaw = ref([]);
+const ultimasVisitasPag = ref([]);
+const ultimasVisitasPagVisible = ref(false);
+async function searchUsers() {
     isLoading.value = true;
-    let fechaI;
-    let fechaF;
-    if(fechai && fechaf){
-      fechaI = fechai;
-      fechaF = fechaf; 
-    }else if(filtroDefault.value){
-      let fechas = filtroDefault.value.fecha.split('a');
-      fechaI = moment(fechas[0]).add(+1, 'days').format('MM/DD/YYYY');
-      fechaF = moment(fechas[1]).add(-1, 'days').format('MM/DD/YYYY');      
-    }
-    else{
-    fechaI = moment().add(-6, 'days').format("MM-DD-YYYY");
-    fechaF = moment().add(1, 'days').format("MM-DD-YYYY");
-    }  
-
+    isLoaded.value = false;
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
-    var fechasCount = JSON.stringify({
-              "fechai": fechaI,
-              "fechaf": fechaF
+    var query = JSON.stringify({
+              "query": searchQuery.value,
           });
 
     var requestOptions = {
       method: 'POST',
       headers: myHeaders,
-      body: fechasCount,
+      body: query,
       redirect: 'follow'
     };        
     const navArray = []; 
-    await fetch('https://servicio-de-actividad.vercel.app/count',requestOptions)
-    .then(response => response.text())
-    .then(async count => { 
-            let pages = parseInt(count); 
-            
-            
-            var myHeaders2 = new Headers();
-            myHeaders2.append("Content-Type", "application/json");
-        
-            for (let i = 1; i < pages+1; i++){  
-            var fechasFetch = JSON.stringify({
-                      "fechai": fechaI,
-                      "fechaf": fechaF,
-                      "page": i
-                  });      
-             var requestOptions2 = {
-                    method: 'POST',
-                    headers: myHeaders2,
-                    body: fechasFetch,
-                    redirect: 'follow'
-             };       
-            await fetch('https://servicio-de-actividad.vercel.app/actividad/full',requestOptions2)
-                  .then(response => response.json())
-                  .then(async response=>{
+    await fetch('https://servicio-de-actividad.vercel.app/actividad/full/extra',requestOptions)
+    .then(response => response.json())
+    .then(resp => { 
+      let inicio = resp.data;
+      rawData.value = resp.data;
+      let grupos = {};
 
-                    let array = Array.from(response.data); 
-                    console.log(response.data);
-                    array.forEach((item)=>{
-                    rawData.value.push(item);
-                    })
+      inicio.forEach(obj => {
+      let clave = obj.first_name + '-' + obj.last_name;
 
-                          for (const a of array) {
-                            for(const b of a.navigationRecord){
-                            let data = {
-                              title: b.title,
-                              url: b.url,
-                            }
-                            navArray.push(data);
-                            }
-                          }
+      if (grupos.hasOwnProperty(clave)) {   
+      grupos[clave].cantidad = (grupos[clave].cantidad || 1) + 1;
+      } else {
+       obj.cantidad = 1;
+      grupos[clave] = obj;
+      }
+      });
 
-                  }).catch((error) => {return error});       
-          }
-          
-                    const finArray = navArray.reduce( (a,b) => {    
-                      var i = a.findIndex((x) => x.title == b.title || x.url == b.url);
-                      return i === -1 ? a.push({ url : b.url, title: b.title, count: 1}) : a[i].count++ , a;
-                      }, []);
-                  
-                    urlCounts.value = Array.from(finArray);
-                    urlCounts.value.sort((a, b) => b.count - a.count); 
-                    isLoading.value = false; 
+      let resultado = Object.values(grupos);
+      usersData.value = resultado;
+
+      isLoading.value = false;
+      isLoaded.value = true;
         }).catch((error) => {return error});   
     
 }
 
-async function initData (){
-  let formatI = moment().add(-7, 'days').format("MM-DD-YYYY");
-  let formatF = moment().format("MM-DD-YYYY");
-  fechaIngresada.value = String(formatI+' a '+formatF); 
-  fetchData();  
-}
-
-async function obtenerFechaFiltroDispositivos (fechas){
-    try {
-        let array = fechas.toString().split('a');
-        if(array.length > 1){
-            let fechaI = moment(array[0]).add(+1, 'days').format('MM/DD/YYYY');
-            let fechaF = moment(array[1]).format('MM/DD/YYYY');
-            fechaIni.value = fechaI;
-            fechaFin.value = fechaF;          
-            await fetchData(fechaI, fechaF);
-            
-            //panelGrafico.classList.remove("disabled");                       
-          }
-    } catch (error) {
-        console.error(error); 
-    }          
-}
-onMounted(initData);
-
-const paginatedUrlCounts = computed(() => {
+const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
 
-  return urlCounts.value.slice(start, end);
+  return usersData.value.slice(start, end);
 });
 
 const nextPage = () => {
-  if (currentPage.value * itemsPerPage < urlCounts.value.length) currentPage.value++;
+  if (currentPage.value * itemsPerPage < usersData.value.length) currentPage.value++;
 };
 
 const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
 };
 
-
-const resolveUltimosUsuarios = (title) =>{
-  titleSelected.value = title;
-  const inicio = rawData.value.map(({first_name, last_name, navigationRecord})=>{ 
-  return {first_name, last_name, navigationRecord};
-  });
-  console.log('inicio' ,rawData.value); 
-  const arrayFiltro = [];
-
-  //console.log('title',title)
-  for (let p of inicio) {
-    for (let i of p.navigationRecord) {
-      if (i.title === title || i.url === title) { 
-
-          var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY', 'M/D/YYYY', 'D/M/YYYY' ];    
-          var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss','DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];    
-          let fechaFormat = moment(i.fecha, allowedDateFormats, true).format( 'DD/MM/YYYY');
-          let horaFix = i.hora.split(':');
-          if(horaFix[2].indexOf(' ')>= 0){
-            let slot3 = horaFix[2].split(' ');
-            horaFix[2] = slot3[0];
-          }
-          let horaFinal = horaFix[0]+':'+horaFix[1]+':'+horaFix[2];
-          let fullFecha = fechaFormat+' '+horaFinal;
-          let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
-
-          if( p.first_name !== undefined && p.last_name !== undefined && p.first_name !== null && p.last_name !== null  && p.first_name !== '' && p.last_name !== '' ){
-          let data = {
-              first_name: p.first_name,
-              last_name: p.last_name,
-              url: i.url,
-              title: i.title,
-              fecha: fechaFormat,
-              fechaRaw: i.fecha,
-              fullFecha: fullFechaFormat,
-              hora: horaFinal,
-              horaRaw: i.hora
-          }
-          arrayFiltro.push(data);
-           }
-          }      
-             
-      }
-  }
-//console.log('Antes',arrayFiltro);
-/*let pruebaF = [];
-for (let i of arrayFiltro) {
-  let p = {
-    prueba: new Date(i.fullFecha)
-  };
-  pruebaF.push(p);
-}*/
-//console.log('pruebaF',pruebaF);
-
-let grupos = {};
-
-arrayFiltro.forEach(obj => {
-  let clave = obj.first_name + '-' + obj.last_name;
-
-  if (grupos.hasOwnProperty(clave)) {
-    if (new Date(obj.fullFecha) > new Date(grupos[clave].fullFecha)) {
-      grupos[clave] = obj;
-    }
-    grupos[clave].cantidad = (grupos[clave].cantidad || 1) + 1;
-  } else {
-    obj.cantidad = 1;
-    grupos[clave] = obj;
-  }
-});
-
-let resultado = Object.values(grupos);
-
-
-
-resultado.sort((a, b) => {
-    var timestampA = new Date(a.fullFecha);
-    var timestampB = new Date(b.fullFecha);
-    return  timestampB - timestampA;
-  });
-  //console.log('res',resultado);
-
-  //console.log('Sorted F',arrayFiltro);
-  ultimosUsuarios.value = resultado.slice(0,25);
-
-  //console.log('ultimosUsuarios',ultimosUsuarios.value);
-
-  ultimosUsuariosDownload.value = ultimosUsuarios.value.map(({ first_name, last_name, fecha, hora, cantidad, title, url }) => ({ first_name, last_name, fecha, hora, cantidad, title, url }));
-  ultimosUsuariosVisible.value = true;
-  titulo.value = title;
-};
-
-const resolveUltimasVisitasUser =(first, last)=>{
-  
+const resolveActividad =(first, last)=>{
+  fechaIngresada.value = '';
   const inicio = rawData.value.map(({first_name, last_name, navigationRecord})=>{ 
   return {first_name, last_name, navigationRecord};
   });
   
+
   const arrayFiltro = [];
   userSelected.value = first+' '+last;
   let fullNameViene = first+' '+last;
@@ -267,7 +108,7 @@ const resolveUltimasVisitasUser =(first, last)=>{
     if (fullName == fullNameViene) { 
     for (let i of p.navigationRecord) {
       
-          var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY' , 'M/D/YYYY', 'D/M/YYYY' ];    
+          var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY' , 'D/M/YYYY' ];    
           var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss','DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];    
           let fechaFormat = moment(i.fecha, allowedDateFormats, true).format( 'DD/MM/YYYY');
           let horaFix = i.hora.split(':');
@@ -299,12 +140,166 @@ const resolveUltimasVisitasUser =(first, last)=>{
     var timestampB = new Date(b.fullFecha);
     return  timestampB - timestampA;
   });
+  
+  let grupos = {};
+  arrayFiltro.forEach(obj => {
+      let clave = obj.title;
+
+      if (grupos.hasOwnProperty(clave)) {   
+      grupos[clave].cantidad = (grupos[clave].cantidad || 1) + 1;
+      } else {
+       obj.cantidad = 1;
+      grupos[clave] = obj;
+      }
+      });
+
+      let resultado = Object.values(grupos);
+
+      resultado.sort((a, b) => {  
+       return  b.cantidad - a.cantidad;
+        });
+
+  paginasUser.value = resultado;
+
+
+  
+  //console.log('Sorted F',arrayFiltro);
+  actividadUser.value = arrayFiltro.slice(0,10);
+  //console.log('actividadUser',actividadUser.value);
+  actividadUserRaw.value = arrayFiltro;      
+  actividadVisible.value = true;
+}
+
+const resolveActividadFecha =(dates)=>{
+    if(dates.length > 1){
+      
+    let fechaI = dates[0].toString();
+    let fechaF = dates[1].toString();  
+    if(fechaI === fechaF){ 
+      fechaF = new Date(new Date(fechaI).getTime() + 60 * 60 * 24 * 1000);
+    }
+    
+    let filtroActividad = actividadUserRaw.value.filter((item) => {
+      return new Date(item.fullFecha) >= new Date(fechaI) && new Date(item.fullFecha) <= new Date(fechaF);         
+    });
+    actividadUser.value = filtroActividad.slice(0,10);
+
+    let grupos = {};
+    filtroActividad.forEach(obj => {
+      let clave = obj.title;
+
+      if (grupos.hasOwnProperty(clave)) {   
+      grupos[clave].cantidad = (grupos[clave].cantidad || 1) + 1;
+      } else {
+       obj.cantidad = 1;
+      grupos[clave] = obj;
+      }
+      });
+
+      let paginaFiltrado = Object.values(grupos);
+
+      paginaFiltrado.sort((a, b) => {  
+       return  b.cantidad - a.cantidad;
+        });
+
+    paginasUser.value = paginaFiltrado;
+    //console.log('paginasUser',paginasUser.value);
+
+  } 
+}
+
+const paginatedActividad = computed(() => {
+  const start = (currentPageA.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+
+  return paginasUser.value.slice(start, end);
+});
+
+
+const nextPageActividad = () => {
+  if (currentPageA.value * itemsPerPage < paginasUser.value.length) currentPageA.value++;
+};
+
+const prevPageActividad = () => {
+  if (currentPageA.value > 1) currentPageA.value--;
+};
+
+
+
+
+const resolveVisitas = (title) =>{
+  titleSelected.value = title;
+
+  let resultado = [];
+  
+  for (let a of rawData.value) {
+    let clave = a.first_name + ' ' + a.last_name;
+    if(clave == userSelected.value){
+      resultado.push(a);
+    }
+  }
+  
+  const inicio = resultado.map(({device, country, navigationRecord})=>{ 
+  return {device, country, navigationRecord};
+  });
+  //console.log('inicio',inicio);
+  const arrayFiltro = [];
+
+  //console.log('title',title)
+  for (let p of inicio) {
+    for (let i of p.navigationRecord) {
+      if (i.title === title || i.url === title) { 
+
+          var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY', 'D/M/YYYY' ];    
+          var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss','DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];    
+          let fechaFormat = moment(i.fecha, allowedDateFormats, true).format( 'DD/MM/YYYY');
+          let horaFix = i.hora.split(':');
+          if(horaFix[2].indexOf(' ')>= 0){
+            let slot3 = horaFix[2].split(' ');
+            horaFix[2] = slot3[0];
+          }
+          let horaFinal = horaFix[0]+':'+horaFix[1]+':'+horaFix[2];
+          let fullFecha = fechaFormat+' '+horaFinal;
+          let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
+
+          if( p.country !== undefined  && p.country !== null && p.country !== '' ){
+          let data = {
+              device: p.device,
+              country: p.country,
+              url: i.url,
+              title: i.title,
+              fecha: fechaFormat,
+              fechaRaw: i.fecha,
+              fullFecha: fullFechaFormat,
+              hora: horaFinal,
+              horaRaw: i.hora
+          }
+          arrayFiltro.push(data);
+           }
+          }      
+             
+      }
+  }
+
+
+  //console.log('arrayFiltro',arrayFiltro);
+  arrayFiltro.sort((a, b) => {
+    var timestampA = new Date(a.fullFecha);
+    var timestampB = new Date(b.fullFecha);
+    return  timestampB - timestampA;
+  });
+  //console.log('res',resultado);
 
   //console.log('Sorted F',arrayFiltro);
-  ultimasVisitas.value = arrayFiltro.slice(0,10);
+  ultimasVisitasPag.value = arrayFiltro.slice(0,25);
 
-  ultimasVisitasVisible.value = true;
-}
+  //console.log('ultimosUsuarios',ultimosUsuarios.value);
+
+  ultimosUsuariosDownload.value = ultimasVisitasPag.value.map(({ first_name, last_name, fecha, hora, cantidad, title, url }) => ({ first_name, last_name, fecha, hora, cantidad, title, url }));
+  ultimasVisitasPagVisible.value = true;
+  titulo.value = title;
+};
+
 
 function convertToCSV(objArray) {
   var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
@@ -385,7 +380,7 @@ async function downloadSelection () {
 
 <template>
   <VRow>
-    <VCol lg="12" cols="12" sm="6">
+    <VCol lg="6" cols="12" sm="6">
       <VCard>
         <VCardText class="d-flex flex-wrap justify-space-between gap-4">
         <VCardItem class="pb-sm-0">
@@ -393,7 +388,7 @@ async function downloadSelection () {
           
         </VCardItem>
         
-        <VCol lg="12" cols="12" sm="6">
+        
             <div class="d-flex align-center flex-wrap gap-2">
             <div style="width: 15rem">
                 <VTextField
@@ -406,30 +401,30 @@ async function downloadSelection () {
                 Buscar
               </VBtn> 
             </div>
-        </VCol >
-   
-        
+       
+         
     </VCardText>
+    
         <VCardText v-if="isLoading">Cargando datos...</VCardText>
-        <VCardText  v-else>
+        <VCardText  v-if="isLoaded">
           <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
             <thead>
               <tr>
-                <th scope="col">TÍTULO DE PÁGINA</th>
-                <th scope="col">VISITAS</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Email</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr v-for="item  in paginatedUrlCounts" >
-                <td class="clickable" @click="resolveUltimosUsuarios(item.title || item.url)">
+              <tr v-for="item  in paginatedData" class="clickable" @click="resolveActividad(item.first_name, item.last_name)">
+                <td >
                   
-                   {{ item.title ? item.title : item.url }}
+                   {{ item.first_name }} {{ item.last_name }}
                  
                 </td>
 
                 <td class="text-medium-emphasis">
-                  {{ item.count }}
+                  {{ item.email }}
                 </td>
               </tr>
             </tbody>
@@ -438,24 +433,25 @@ async function downloadSelection () {
             <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
             Página {{ currentPage }}
             <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
-              :disabled="(currentPage * itemsPerPage) >= urlCounts.length">
+              :disabled="(currentPage * itemsPerPage) >= usersData.length">
             </VBtn>
             
        
           </div>
 
         </VCardText>
+      
       </VCard>
-    </VCol>
-    <VCol lg="6" cols="12" sm="6">
+      
     <!-- trazabilidad independiente -->
     <VExpandTransition>
-      <VCard v-show="ultimosUsuariosVisible">
+      <VCard v-show="actividadVisible" style="margin-top: 1rem;">
         <VCardItem class="pb-sm-0">
           <div style="display: flex; flex-wrap: wrap;">   
           <div style="width: max-content;">
-          <VCardTitle >Últimas visitas a la página {{ titleSelected }}</VCardTitle>  
+          <VCardTitle >Páginas más visitadas de {{ userSelected }}</VCardTitle>  
         </div>
+        <!--
           <div style="margin-left: auto; margin-top: 1rem; margin-bottom: 1rem;">
           <VBtn 
             color="primary"							
@@ -464,46 +460,69 @@ async function downloadSelection () {
             Exportar
           </VBtn>
         </div>
+        -->
     </div> 
-         
+         <VCardText>
           <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
             <thead>
               <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Fecha</th>
+                <th scope="col" >Página</th>
                 <th scope="col">Cantidad</th>
-                <th scope="col">Hora</th>
               </tr>
             </thead>
 
             <tbody>
-              <tr class="clickable" v-for="user in ultimosUsuarios" @click="resolveUltimasVisitasUser(user.first_name, user.last_name)">
+              <tr class="clickable" v-for="item in paginatedActividad" @click="resolveVisitas(item.title || item.url)">
                 <td class="text-high-emphasis">
-                  {{ user.first_name }} {{ user.last_name }}
+                  {{ item.title ? item.title : item.url }}
                 </td>
                 <td class="text-medium-emphasis">
-                  {{ user.fecha}}
+                  {{ item.cantidad}}
                 </td>
-                <td class="text-medium-emphasis">
-                  {{ user.cantidad}}
-                </td>
-                <td class="text-medium-emphasis">
-                  {{ user.hora}}
-                </td>
+               
               </tr>
             </tbody>
           </VTable>
+          <div class="d-flex align-center justify-space-between botonescurrentPage">
+            <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageActividad" :disabled="currentPageA === 1"></VBtn>
+            Página {{ currentPageA }}
+            <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageActividad"
+              :disabled="(currentPageA * itemsPerPage) >= paginasUser.length">
+            </VBtn>
+          </div>
+        </VCardText>
         </VCardItem>
       </VCard>
     </VExpandTransition>
+   
     </VCol>
     <VCol lg="6" cols="12" sm="6">
     <!-- trazabilidad independiente -->
     <VExpandTransition>
-      <VCard v-show="ultimasVisitasVisible">
+      <VCard v-show="actividadVisible">
         <VCardItem>
       <VCardTitle >Actividad del usuario {{ userSelected }}</VCardTitle>
      </VCardItem>
+     <VCardItem>
+     <div class="date-picker-wrapper" style="width: 300px;">
+        <AppDateTimePicker
+        prepend-inner-icon="tabler-calendar"
+        density="compact"
+        v-model="fechaIngresada"
+        show-current= true
+        @on-change="resolveActividadFecha"
+        :config="{ 
+          position: 'auto right',
+          mode:'range',
+          altFormat: 'F j, Y',
+          dateFormat: 'd-m-Y',
+          maxDate: new Date(),
+          reactive :true
+          
+        }"
+        />
+        </div>
+        </VCardItem>
         <VCardText>
           <VTimeline
             density="compact"
@@ -512,7 +531,7 @@ async function downloadSelection () {
             class="v-timeline-density-compact"
           > 
             <VTimelineItem dot-color="primary" size="x-small"
-            v-for="user in ultimasVisitas">
+            v-for="user in actividadUser">
               <div class="d-flex justify-space-between align-center flex-wrap">
                 <h4 class="text-base font-weight-semibold me-1">
                   {{ user.title || user.url }} 
@@ -529,7 +548,62 @@ async function downloadSelection () {
         </VCardText>
       </VCard>
     </VExpandTransition>
+
+    <VExpandTransition>
+      <VCard v-show="ultimasVisitasPagVisible" style="margin-top: 1rem;">
+        
+        <VCardItem class="pb-sm-0">
+          <div style="display: flex; flex-wrap: wrap;">   
+          <div style="width: max-content;">
+          <VCardTitle >Últimas visitas a la página {{ titleSelected }}</VCardTitle>  
+        </div>
+        <!--
+          <div style="margin-left: auto; margin-top: 1rem; margin-bottom: 1rem;">
+          <VBtn 
+            color="primary"							
+            @click="downloadSelection"
+            >
+            Exportar
+          </VBtn>
+        </div>
+      -->
+    </div> 
+    <VCardText v-if="ultimasVisitasPag.length == 0">No existen datos</VCardText>
+        <VCardText v-else>
+          <VTable class="text-no-wrap tableNavegacion mb-5">
+            <thead>
+              <tr>
+                <th scope="col">País</th>
+                <th scope="col">Dispositivo</th>
+                <th scope="col">Fecha</th>
+                <th scope="col">Hora</th>
+              </tr>
+            </thead>
+
+            <tbody>
+              <tr class="clickable" v-for="item in ultimasVisitasPag">
+                <td class="text-high-emphasis">
+                  {{ item.country }} 
+                </td>
+                <td class="text-medium-emphasis">
+                  {{ item.device}}
+                </td>
+                <td class="text-medium-emphasis">
+                  {{ item.fecha}}
+                </td>
+                <td class="text-medium-emphasis">
+                  {{ item.hora}}
+                </td>
+              </tr>
+            </tbody>
+          </VTable>
+        </VCardText>
+        </VCardItem>
+      
+      </VCard>
+    </VExpandTransition>
     </VCol>
+    
   </VRow>
 </template>
 
