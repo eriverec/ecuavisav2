@@ -8,6 +8,18 @@ const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
+      path: '/pages/password-recovery/forgot-password',
+      name: 'forgot-password',
+      component: () => import('@/pages/pages/password-recovery/forgot-password.vue'),
+      meta: { requiresAuth: false}
+    },
+    {
+      path: '/pages/password-recovery/reset-password',
+      name: 'reset-password',
+      component: () => import('@/pages/pages/password-recovery/reset-password.vue'),
+      meta: { requiresAuth: false}
+    },
+    {
       path: '/',
       redirect: to => {
         const userData = JSON.parse(localStorage.getItem('userData') || '{}')
@@ -54,6 +66,13 @@ router.beforeEach(to => {
     return next()
   
     */
+  if (to.meta.requiresAuth === false) {
+      // Bypass the route guard
+  } else {
+      // Perform the regular route guard logic
+      // e.g., check authentication, user permissions, etc.
+      // ...
+    
   if (canNavigate(to)) {
     if (to.meta.redirectIfLoggedIn && isLoggedIn)
       return '/'
@@ -63,6 +82,7 @@ router.beforeEach(to => {
       return { name: 'not-authorized' }
     else
       return { name: 'login', query: { to: to.name !== 'index' ? to.fullPath : undefined } }
+  }
   }
 })
 export default router
