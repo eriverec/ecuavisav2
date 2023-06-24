@@ -19,10 +19,11 @@ const isSuccess = ref(false);
 const errorResponse = ref(false);
 const refVForm = ref();
 const email = ref('');
-
+const isLoading = ref(false);
 
 async function sendResetLink (){
   if(email.value){
+  isLoading.value = true; 
   const raw = JSON.stringify({"email":email.value});
   //console.log('email',email.value);
   //isSuccess.value = true;
@@ -49,6 +50,7 @@ async function sendResetLink (){
             }                    
         })
         .catch(error => {console.log(error) }); 
+        isLoading.value = false; 
   }else{
     errorResponse.value = true;
     mensaje.value = "Debe ingresar un email";
@@ -150,6 +152,7 @@ const onSubmit = () => {
                 <VBtn
                   block
                   type="submit"
+                  :loading="isLoading"
                 >
                   Enviar enlace de restablecimiento
                 </VBtn>

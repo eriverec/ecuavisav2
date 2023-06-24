@@ -23,13 +23,22 @@ const refVForm = ref();
 const mensaje = ref('');
 const isSuccess = ref(false);
 const errorResponse = ref(false);
+const isLoading = ref(false);
 
 async function sendPassword (){
+   
   if(form.value.newPassword == form.value.confirmPassword){ 
-
-  const raw = JSON.stringify({"email":email.value});
-
-  await fetch('https://gestores-flax.vercel.app/forgotPassword' ,
+   isLoading.value = true; 
+  var url = window.location.search;
+  var params = new URLSearchParams(url);
+  var tk = params.get("tk");
+  
+  const raw = JSON.stringify({
+    "password":form.value.newPassword,
+    "token": tk
+  });
+  
+  await fetch('https://gestores-flax.vercel.app/updatePassword' ,
           {
             method: 'PUT',
             headers: {
@@ -39,17 +48,18 @@ async function sendPassword (){
           })
         .then(response => response.json())
         .then(resp =>{          
-            if(resp.mensaje == "Siga las instrucciones enviadas a su email"){ 
-                mensaje.value = resp.mensaje;                  
+            if(resp.message == "Su contraseña ha sido modificada"){ 
+                mensaje.value = resp.message;                  
                 isSuccess.value = true;
                 return true;
-            }else if(resp.error == "El email no existe"){
+            }else if(resp.error){
                 errorResponse.value = true;
                 mensaje.value = resp.error;
                 return false;
             }                    
         })
         .catch(error => {console.log(error) }); 
+      isLoading.value = false; 
   }else{
     errorResponse.value = true;
     mensaje.value = "Las contraseñas deben coincidir";
@@ -166,6 +176,7 @@ const onSubmit = () => {
                 <VBtn
                   block
                   type="submit"
+                  :loading="isLoading"
                 >
                  Enviar
                 </VBtn>
