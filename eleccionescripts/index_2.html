@@ -114,8 +114,6 @@ series.columns.template.adapters.add("stroke", (stroke, target) => {
   return chart.get("colors").getIndex(series.columns.indexOf(target));
 });
 
-
-
 series.bullets.push(function() {
   return am5.Bullet.new(root, {
     locationY: 1,
