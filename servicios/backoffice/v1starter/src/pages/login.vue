@@ -219,6 +219,17 @@ const onSubmit = () => {
                 >
                   Iniciar sesión
                 </VBtn>
+                <div style="margin-top: 1rem;">
+                <h5 >
+                        <RouterLink
+                          :to="{
+                            name: 'forgot-password'                   
+                          }"
+                        >
+                          ¿Olvidaste tu contraseña?
+                        </RouterLink>
+                      </h5>
+                    </div>      
               </VCol>
 
               <!-- create account -->
