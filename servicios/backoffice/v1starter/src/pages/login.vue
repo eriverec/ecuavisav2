@@ -41,7 +41,7 @@ const password = ref('')
 const rememberMe = ref(false)
 
 const login = () => {
-  if(email.value == "admin@demo.com" && password.value == "admin"){
+  if(email.value == "admin@demo.com" && password.value == "EcuavisaBackoffice"){
     let userAbilities = [
         {
           action: 'manage',

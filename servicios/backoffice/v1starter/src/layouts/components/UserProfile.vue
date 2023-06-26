@@ -11,6 +11,7 @@ const moment = extendMoment(Moment);
 const router = useRouter()
 const ability = useAppAbility()
 const userData = JSON.parse(localStorage.getItem('userData') || 'null')
+const role = localStorage.getItem('role');
 
 async function logout () {
   await accionBackoffice();
@@ -72,7 +73,7 @@ async function accionBackoffice (){
       <!-- SECTION Menu -->
       <VMenu
         activator="parent"
-        width="230"
+        width="270"
         location="bottom end"
         offset="14px"
       >
@@ -99,9 +100,9 @@ async function accionBackoffice (){
             </template>
 
             <VListItemTitle class="font-weight-semibold">
-              ecuavisa
+              {{userData.email}}
             </VListItemTitle>
-            <VListItemSubtitle>Administrador</VListItemSubtitle>
+            <VListItemSubtitle>{{role}}</VListItemSubtitle>
           </VListItem>
 
           <VDivider class="my-2" />
