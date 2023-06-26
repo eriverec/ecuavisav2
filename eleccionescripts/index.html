@@ -47,7 +47,17 @@ root.setThemes([
 
 var data = [];
 function setNewData(seteado){
-  var data = seteado; 
+  var data = [
+    {
+        "name": "OMAR CEVALLOS",
+        "cne": 30.12,
+        "color": "#ff8a00",
+        "cedatos": 40.12,
+        "pictureSettings": {
+            "src": "https://estadisticas.ecuavisa.com/sites/gestor/Recursos/nuevaselecciones/img-1.jpg"
+        }
+    }
+]; 
   console.log(data);
   
  var chart = root.container.children.push(
@@ -252,9 +262,11 @@ function getData(){
   
     // fetchRes is the promise to resolve 
     // it by using.then() method
-    fetchRes.then(res => res.json()).then(d => {
-      setNewData(d);
-    })
+    // fetchRes.then(res => res.json()).then(d => {
+    //   setNewData(d);
+    // })
+
+  setNewData([]);
 }
 
 getData();
