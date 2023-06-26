@@ -27,64 +27,9 @@ am5.ready(async function() {
 
 async function fetchData() {
   try {
-    // let response = await fetch("https://script.google.com/macros/s/AKfycbz-zb3AVvu8TmnnfcGHo0rb-0i0JUttYl1y2P6MN7h47Lt9zJ89uf_4sLRLqjBAkPJi6Q/exec?funcion=alcaldesQuito");
-    // let data = await response.json();
-    initChart([
-    {
-        "name": "PABLO PONCE",
-        "cne": 1.26,
-        "color": "#c15f00",
-        "cedatos": 1.33,
-        "pictureSettings": {
-            "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-2.jpg"
-        }
-    },
-    {
-        "name": "LUISA MALDONADO",
-        "cne": 1.33,
-        "color": "#0030bb",
-        "cedatos": 2.67,
-        "pictureSettings": {
-            "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-1.jpg"
-        }
-    },
-    {
-        "name": "NATASHA ROJAS",
-        "cne": 3.21,
-        "color": "#ab0020",
-        "cedatos": 34.23,
-        "pictureSettings": {
-            "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-2.jpg"
-        }
-    },
-    {
-        "name": "PABEL MUÑOZ",
-        "cne": 7.47,
-        "color": "#3399cc",
-        "cedatos": 18.51,
-        "pictureSettings": {
-            "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-1.jpg"
-        }
-    },
-    {
-        "name": "ANDRÉS PÁEZ",
-        "cne": 16.51,
-        "color": "#800000",
-        "cedatos": 21.21,
-        "pictureSettings": {
-            "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-2.jpg"
-        }
-    },
-    {
-        "name": "OMAR CEVALLOS",
-        "cne": 30.12,
-        "color": "#ff8a00",
-        "cedatos": 40.12,
-        "pictureSettings": {
-            "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-1.jpg"
-        }
-    }
-]);
+    let response = await fetch("https://script.google.com/macros/s/AKfycbz-zb3AVvu8TmnnfcGHo0rb-0i0JUttYl1y2P6MN7h47Lt9zJ89uf_4sLRLqjBAkPJi6Q/exec?funcion=alcaldesQuito");
+    let data = await response.json();
+    initChart(data);
   } catch (error) {
     console.error(error);
   }
