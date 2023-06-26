@@ -206,23 +206,35 @@ series.bullets.push(function(root, series, dataItem) {
   });
 });
 
+series.columns.template.adapters.add("fill", (fill, target) => {
+  var dataItem = target.dataItem;
+  return dataItem.dataContext.color;
+  // return chart.get("colors").getIndex(series.columns.indexOf(target));
+});
+
+series.columns.template.adapters.add("stroke", (stroke, target) => {
+  var dataItem = target.dataItem;
+  return dataItem.dataContext.color;
+  // return chart.get("colors").getIndex(series.columns.indexOf(target));
+});
+
 // heatrule
-series.set("heatRules", [
-  {
-    dataField: "valueX",
-    min: am5.color(0xe5dc36),
-    max: am5.color(0x5faa46),
-    target: series.columns.template,
-    key: "fill"
-  },
-  {
-    dataField: "valueX",
-    min: am5.color(0xe5dc36),
-    max: am5.color(0x5faa46),
-    target: circleTemplate,
-    key: "fill"
-  }
-]);
+// series.set("heatRules", [
+//   {
+//     dataField: "valueX",
+//     min: am5.color(0xe5dc36),
+//     max: am5.color(0x5faa46),
+//     target: series.columns.template,
+//     key: "fill"
+//   },
+//   {
+//     dataField: "valueX",
+//     min: am5.color(0xe5dc36),
+//     max: am5.color(0x5faa46),
+//     target: circleTemplate,
+//     key: "fill"
+//   }
+// ]);
 
 series.data.setAll(data);
 yAxis.data.setAll(data);
