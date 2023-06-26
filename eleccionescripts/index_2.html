@@ -27,7 +27,7 @@ am5.ready(async function() {
 
 async function fetchData() {
   try {
-    let response = await fetch("https://script.google.com/macros/s/AKfycbz-zb3AVvu8TmnnfcGHo0rb-0i0JUttYl1y2P6MN7h47Lt9zJ89uf_4sLRLqjBAkPJi6Q/exec?funcion=alcaldesQuito");
+    let response = await fetch("https://script.google.com/macros/s/AKfycbwUtzfUEGjrh6qiG8AmfLub6pzQGmlx28hy85SRzgm1d5FVakydHrnj6WbCkRtxM8XErQ/exec?funcion=alcaldesQuito");
     let data = await response.json();
     initChart(data);
 //     initChart([
@@ -38,6 +38,9 @@ async function fetchData() {
 //         "cedatos": 1.33,
 //         "pictureSettings": {
 //             "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-2.jpg"
+//         },
+//         "pictureSettings2": {
+//           "src": "http://localhost/ecuavisa/ecuavisav2/devCloudflare/img-elecciones/img-1.jpg"
 //         }
 //     },
 //     {
@@ -47,6 +50,9 @@ async function fetchData() {
 //         "cedatos": 2.67,
 //         "pictureSettings": {
 //             "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-1.jpg"
+//         },
+//         "pictureSettings2": {
+//           "src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63c49c769c16ac4353101111/IZQUIERDA_DEMOCRATICA.jpg"
 //         }
 //     },
 //     {
@@ -56,6 +62,9 @@ async function fetchData() {
 //         "cedatos": 34.23,
 //         "pictureSettings": {
 //             "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-2.jpg"
+//         },
+//         "pictureSettings2": {
+//           "src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63c49c769c16ac4353101111/IZQUIERDA_DEMOCRATICA.jpg"
 //         }
 //     },
 //     {
@@ -65,6 +74,9 @@ async function fetchData() {
 //         "cedatos": 18.51,
 //         "pictureSettings": {
 //             "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-1.jpg"
+//         },
+//         "pictureSettings2": {
+//           "src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63c49c769c16ac4353101111/IZQUIERDA_DEMOCRATICA.jpg"
 //         }
 //     },
 //     {
@@ -74,6 +86,9 @@ async function fetchData() {
 //         "cedatos": 21.21,
 //         "pictureSettings": {
 //             "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-2.jpg"
+//         },
+//         "pictureSettings2": {
+//           "src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63c49c769c16ac4353101111/IZQUIERDA_DEMOCRATICA.jpg"
 //         }
 //     },
 //     {
@@ -82,7 +97,10 @@ async function fetchData() {
 //         "color": "#ff8a00",
 //         "cedatos": 40.12,
 //         "pictureSettings": {
-//             "src": "http://localhost/ecuavisa/ecuavisav2/eleccionescripts/img/img-1.jpg"
+//             "src": "http://localhost/ecuavisa/ecuavisav2/devCloudflare/img-elecciones/img-1.jpg"
+//         },
+//         "pictureSettings2": {
+//           "src": "http://localhost/ecuavisa/ecuavisav2/devCloudflare/img-elecciones/img-1.jpg"
 //         }
 //     }
 // ]);
@@ -152,13 +170,13 @@ var series = chart.series.push(am5xy.ColumnSeries.new(root, {
   valueYField: "cne",
   sequencedInterpolation: true,
   categoryXField: "name",
-  tooltip: am5.Tooltip.new(root, { dy: -25, labelText: "{valueY} %" })
+  tooltip: am5.Tooltip.new(root, { dy: -25, html: `<div style="color:#fff; padding:2px 5px">{valueY} %</div>` })
 }));
 
 
 series.columns.template.setAll({
-  cornerRadiusTL: 5,
-  cornerRadiusTR: 5,
+  cornerRadiusTL: 2,
+  cornerRadiusTR: 2,
   strokeOpacity: 0
 });
 
@@ -194,27 +212,23 @@ series.bullets.push(function() {
 
 series.bullets.push(function() {
   return am5.Bullet.new(root, {
-    locationY: 1,
+    location: 1,
+    paddingTop: 20,
     sprite: am5.Picture.new(root, {
-      templateField: "pictureSettings",
-      width: 70,
-      height: 75,
+      templateField: "pictureSettings2",
+      width: 34,
+      height: 34,
+      centerY: am5.p50,
       centerX: am5.p50,
-      centerY: am5.percent(10),
-      shadowColor: am5.color(0x000000),
-      shadowBlur: 4,
-      shadowOffsetX: 4,
-      shadowOffsetY: 4,
-      shadowOpacity: 0.6,
     })
   });
 });
 
-series.bullets.push(function() {
+series.bullets.push(function(target) {
   return am5.Bullet.new(root, {
     locationY: 1,
     sprite: am5.Label.new(root, {
-        html: "{valueY}<br>hola",
+        html: `<div style="background-color:#fff; padding:2px 2px;font-size:12px">{valueY} %</div>`,
         fill: root.interfaceColors.get("alternativeText"),
         centerY: am5.percent(0),
         centerX: am5.percent(50),
