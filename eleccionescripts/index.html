@@ -100,7 +100,7 @@ var series = chart.series.push(
     tooltip: am5.Tooltip.new(root, {
       dy: -30,
       pointerOrientation: "vertical",
-      labelText: "{valueX}"
+      html: `<div style="color:#fff; padding:2px 2px;font-size:12px">{valueX} %</div>`,
     })
   })
 );
@@ -111,7 +111,7 @@ var series = chart.series.push(
       locationY: 1.3,
       sprite: am5.Label.new(root, {
         centerY: am5.p50,
-        text: "{valueX}",
+        html: `<div style="padding:2px 2px;font-size:12px">{valueX} %, <b>Partido: </b> {partidos}</div>`,
         populateText: true
       })
     });
@@ -259,7 +259,7 @@ series.appear();
 chart.appear(1000, 100); 
 }
 function getData(){
-  let fetchRes = fetch("https://script.google.com/macros/s/AKfycbz-zb3AVvu8TmnnfcGHo0rb-0i0JUttYl1y2P6MN7h47Lt9zJ89uf_4sLRLqjBAkPJi6Q/exec?funcion=alcaldesQuito");
+  let fetchRes = fetch("https://script.google.com/macros/s/AKfycbxpv2oC-yEVx4R1VK2XPO2dEGJaF001P3PracZF5BswUoygu3xpB0TDk4T9zuDa9g3pVg/exec?funcion=alcaldesQuito");
     // "https://script.google.com/macros/s/AKfycbxRYY3e5CT04dP8xqBBufGqx_FM8QJK4HQG0M3EIof5u5r-cJANbOW62SiA-HjqFae9/exec?funcion=TestgetCandidatosGYENew");
   
     // fetchRes is the promise to resolve 
