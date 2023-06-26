@@ -195,26 +195,8 @@ series.bullets.push(function() {
 series.bullets.push(function() {
   return am5.Bullet.new(root, {
     locationY: 1,
-    sprite: am5.Picture.new(root, {
-      templateField: "pictureSettings",
-      width: 70,
-      height: 75,
-      centerX: am5.p50,
-      centerY: am5.percent(10),
-      shadowColor: am5.color(0x000000),
-      shadowBlur: 4,
-      shadowOffsetX: 4,
-      shadowOffsetY: 4,
-      shadowOpacity: 0.6,
-    })
-  });
-});
-
-series.bullets.push(function() {
-  return am5.Bullet.new(root, {
-    locationY: 1,
     sprite: am5.Label.new(root, {
-        html: "{valueY}<br>hola",
+        text: "{valueY}",
         fill: root.interfaceColors.get("alternativeText"),
         centerY: am5.percent(0),
         centerX: am5.percent(50),
