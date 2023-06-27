@@ -107,7 +107,7 @@ var series = chart.series.push(
 
   series.bullets.push(function() {
     return am5.Bullet.new(root, {
-      locationX: 1,
+      locationX: 0,
       locationY: 1.3,
       sprite: am5.Label.new(root, {
         centerY: am5.p50,
@@ -129,13 +129,13 @@ series.columns.template.setAll({
 
 var currentlyHovered;
 
-series.columns.template.events.on("pointerover", function(e) {
-  handleHover(e.target.dataItem);
-});
+// series.columns.template.events.on("pointerover", function(e) {
+//   handleHover(e.target.dataItem);
+// });
 
-series.columns.template.events.on("pointerout", function(e) {
-  handleOut();
-});
+// series.columns.template.events.on("pointerout", function(e) {
+//   handleOut();
+// });
 
 function handleHover(dataItem) {
   if (dataItem && currentlyHovered != dataItem) {
@@ -243,15 +243,15 @@ var cursor = chart.set("cursor", am5xy.XYCursor.new(root, {}));
 cursor.lineX.set("visible", false);
 cursor.lineY.set("visible", false);
 
-cursor.events.on("cursormoved", function() {
-  var dataItem = series.get("tooltip").dataItem;
-  if (dataItem) {
-    handleHover(dataItem)
-  }
-  else {
-    handleOut();
-  }
-})
+// cursor.events.on("cursormoved", function() {
+//   var dataItem = series.get("tooltip").dataItem;
+//   if (dataItem) {
+//     handleHover(dataItem)
+//   }
+//   else {
+//     handleOut();
+//   }
+// })
 
 // Make stuff animate on load
 // https://script.google.com/macros/s/AKfycbz-zb3AVvu8TmnnfcGHo0rb-0i0JUttYl1y2P6MN7h47Lt9zJ89uf_4sLRLqjBAkPJi6Q/exec?funcion=alcaldesQuito
