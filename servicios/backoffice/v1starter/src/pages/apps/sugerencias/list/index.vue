@@ -227,6 +227,7 @@ export default {
     }
   },
   async mounted() {
+    this.authorizedCheck();
     await this.accionBackoffice("interesesSugerencias-listaSugerencias");
     await this.accionBackoffice("interesesSugerencias-listaSugerencias-listado");
     this.obtenerDatos();
@@ -342,7 +343,13 @@ export default {
 			.then(response =>{			
 			}).catch(error => console.log('error', error));
     }
-}
+  },
+  authorizedCheck (){
+    let rol = localStorage.getItem('role');
+    if(rol !== 'administrador' && rol !== 'webmaster'){
+      this.$router.push({ path: '/pages/errors/not-authorized' })
+    }
+    } 
   },
 };
 </script>

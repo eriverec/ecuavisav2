@@ -36,6 +36,7 @@ const userFullP = ref(0);
 const fechai = ref('');
 const fechaf = ref('');
 const fechaIngesada = ref('');
+
 const sectionLoading = () => {
   isLoaded.value = false;
   isLoading.value = true;
@@ -50,6 +51,8 @@ const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
 const dateNow = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
 const deleteShowUsers = ref({});
 const isUsersDeleteConfirmVisible = ref(false);
+const router = useRouter();
+
 // 👉 Fetching users
 const fetchUsers = () => {
   try {
@@ -80,6 +83,14 @@ const fetchUsers = () => {
     console.error(error);
   }
 };
+
+const authorizedCheck = () => {
+    let rol = localStorage.getItem('role');
+    if(rol !== 'administrador' && rol !== 'webmaster'){
+        router.push({ path: '/pages/errors/not-authorized' })
+    }
+}
+authorizedCheck();
 
 const countUsers = () => {
   userListStore

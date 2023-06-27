@@ -130,6 +130,7 @@ export default {
     
   },
   async mounted() {
+    this.authorizedCheck();
     this.obtenerDatos();
     await this.accionBackoffice();
   },
@@ -196,7 +197,13 @@ export default {
           .then(response =>{			
           }).catch(error => console.log('error', error));
         }
-      }
+      },
+      authorizedCheck (){
+      let rol = localStorage.getItem('role');
+       if(rol !== 'administrador' && rol !== 'webmaster'){
+      this.$router.push({ path: '/pages/errors/not-authorized' })
+        }
+      },
   },
 };
 </script>

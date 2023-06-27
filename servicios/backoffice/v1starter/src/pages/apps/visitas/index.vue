@@ -2,6 +2,7 @@
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
+import { onMounted } from 'vue';
 import { useTheme } from 'vuetify';
 const vuetifyTheme = useTheme()
 const moment = extendMoment(Moment);
@@ -30,7 +31,7 @@ const filtroDefault= ref({});
 const titleSelected = ref('');
 const ultimosUsuariosDownload = ref([]);
 const userSelected = ref('');
-
+const router = useRouter();
 async function fetchFiltros() {
         await fetch('https://servicio-filtros.vercel.app/visitas/all')
         .then(response => response.json())
@@ -226,7 +227,18 @@ fechaIngresada.value = String(filtro.fecha);
 await obtenerFechaFiltroDispositivos(filtro.fecha);        
 
 }
-onMounted(initData);
+
+const authorizedCheck = () => {
+    let rol = localStorage.getItem('role');
+    if(rol !== 'administrador' && rol !== 'webmaster'){
+        router.push({ path: '/pages/errors/not-authorized' })
+    }
+}
+
+onMounted(() => {
+    authorizedCheck();
+    initData();
+});
 
 const paginatedUrlCounts = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;

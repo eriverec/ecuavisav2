@@ -24,7 +24,7 @@ const filteredData_2 = ref([]);
 const currentTab = ref('tab-lista');
 const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
 const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
-
+const router = useRouter();
 
 // Obtener las colecciones
 const fetchCategorias = () => {
@@ -39,6 +39,14 @@ const fetchCategorias = () => {
 };
 
 watchEffect(fetchCategorias);
+
+const authorizedCheck = () => {
+    let rol = localStorage.getItem('role');
+    if(rol !== 'administrador' && rol !== 'webmaster'){
+        router.push({ path: '/pages/errors/not-authorized' })
+    }
+}
+authorizedCheck();
 
 async function accionBackoffice (logData){
 	if(userBackoffice.value.email !== 'admin@demo.com' ){

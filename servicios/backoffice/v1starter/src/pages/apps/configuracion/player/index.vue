@@ -4,9 +4,12 @@ import { onMounted } from 'vue';
 const estadoSend = ref(false);
 const estado = ref(false);
 const titulo = ref('');
-
+const router = useRouter();
+const isError = ref(false);
 async function configPlayer(){
-    var raw = JSON.stringify({
+    if(titulo.value == '') return isError.value = true;
+    
+   var raw = JSON.stringify({
                 "titulo": titulo.value,
                 "estadoActivo": estado.value
             });
@@ -20,9 +23,19 @@ async function configPlayer(){
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
             await getConfig();
+    
 }
 
-onMounted(() => { getConfig(); });
+const authorizedCheck = () => {
+    let rol = localStorage.getItem('role');
+    if(rol !== 'administrador' && rol !== 'webmaster'){
+        router.push({ path: '/pages/errors/not-authorized' })
+    }
+}
+onMounted(() => { 
+    authorizedCheck(); 
+    getConfig(); 
+});
 
 async function getConfig(){
     var xhr = new XMLHttpRequest();
@@ -47,9 +60,17 @@ async function getConfig(){
 									
   			<VCardText class="py-4 gap-0 w-100">	
                 <VRow>
+                    <VSnackbar
+                    v-model="isError"
+                    color="error"
+                    transition="scale-transition"
+                    location="top center"
+                    >
+                    <h3>Se necesita un título</h3>
+                    </VSnackbar>
                     <VCol cols="12" style="display: flex; flex-wrap: wrap; align-items: center;">
 				
-			      <div style="width: 325; margin-top: 1rem; margin-bottom: 1rem;">
+			      <div style="width: 325px; margin-top: 1rem; margin-bottom: 1rem;">
 			          <VTextField
 			            v-model="titulo"
 			            placeholder="Escriba el título..."
@@ -68,7 +89,7 @@ async function getConfig(){
                     <div style="margin-left: 2rem;">
                        <VBtn
 												color="primary"
-												@click=""
+												@click="configPlayer"
 											>
 												Enviar
 											</VBtn>

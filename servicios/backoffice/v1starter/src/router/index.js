@@ -20,6 +20,12 @@ const router = createRouter({
       meta: { requiresAuth: false}
     },
     {
+      path: '/pages/errors/not-authorized',
+      name: 'not-authorized',
+      component: () => import('@/pages/pages/errors/not-authorized.vue'),
+      meta: { requiresAuth: false}
+    },
+    {
       path: '/',
       redirect: to => {
         const userData = JSON.parse(localStorage.getItem('userData') || '{}')

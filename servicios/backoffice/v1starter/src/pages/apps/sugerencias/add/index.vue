@@ -64,7 +64,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 const moment = extendMoment(Moment);
-    moment.locale('es', [esLocale]);
+    moment.locale('es', [esLocale]); 
 export default {
   data() {
     return {
@@ -82,6 +82,7 @@ export default {
   watch: {
   },
   async mounted() {
+    this.authorizedCheck();
     await this.accionBackoffice();
   },
   methods: {
@@ -117,6 +118,12 @@ export default {
       } catch (error) {
         console.error(error);
       }
+    },
+    authorizedCheck (){
+    let rol = localStorage.getItem('role');
+    if(rol !== 'administrador' && rol !== 'webmaster'){
+      this.$router.push({ path: '/pages/errors/not-authorized' })
+     }
     },
     async accionBackoffice (){
       let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
