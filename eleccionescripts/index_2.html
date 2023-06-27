@@ -27,83 +27,115 @@ am5.ready(async function() {
 
 async function fetchData() {
   try {
-    let response = await fetch("https://script.google.com/macros/s/AKfycbxpv2oC-yEVx4R1VK2XPO2dEGJaF001P3PracZF5BswUoygu3xpB0TDk4T9zuDa9g3pVg/exec?funcion=alcaldesQuito");
-    let data = await response.json();
-    initChart(data);
-//     initChart([
-//     {
-//         "name": "PABLO PONCE",
-//         "cne": 1.26,
-//         "color": "#c15f00",
-//         "cedatos": 1.33,
-//         "pictureSettings": {
-//             "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-2.jpg"
-//         },
-//         "pictureSettings2": {
-//           "src": "http://localhost/ecuavisa/ecuavisav2/devCloudflare/img-elecciones/img-1.jpg"
-//         }
-//     },
-//     {
-//         "name": "LUISA MALDONADO",
-//         "cne": 1.33,
-//         "color": "#0030bb",
-//         "cedatos": 2.67,
-//         "pictureSettings": {
-//             "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-1.jpg"
-//         },
-//         "pictureSettings2": {
-//           "src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63c49c769c16ac4353101111/IZQUIERDA_DEMOCRATICA.jpg"
-//         }
-//     },
-//     {
-//         "name": "NATASHA ROJAS",
-//         "cne": 3.21,
-//         "color": "#ab0020",
-//         "cedatos": 34.23,
-//         "pictureSettings": {
-//             "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-2.jpg"
-//         },
-//         "pictureSettings2": {
-//           "src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63c49c769c16ac4353101111/IZQUIERDA_DEMOCRATICA.jpg"
-//         }
-//     },
-//     {
-//         "name": "PABEL MUÑOZ",
-//         "cne": 7.47,
-//         "color": "#3399cc",
-//         "cedatos": 18.51,
-//         "pictureSettings": {
-//             "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-1.jpg"
-//         },
-//         "pictureSettings2": {
-//           "src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63c49c769c16ac4353101111/IZQUIERDA_DEMOCRATICA.jpg"
-//         }
-//     },
-//     {
-//         "name": "ANDRÉS PÁEZ",
-//         "cne": 16.51,
-//         "color": "#800000",
-//         "cedatos": 21.21,
-//         "pictureSettings": {
-//             "src": "https://ecuavisadev.netlify.app/eleccionescripts/img/img-2.jpg"
-//         },
-//         "pictureSettings2": {
-//           "src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63c49c769c16ac4353101111/IZQUIERDA_DEMOCRATICA.jpg"
-//         }
-//     },
-//     {
-//         "name": "OMAR CEVALLOS",
-//         "cne": 30.12,
-//         "color": "#ff8a00",
-//         "cedatos": 40.12,
-//         "pictureSettings": {
-//             "src": "http://localhost/ecuavisa/ecuavisav2/devCloudflare/img-elecciones/img-1.jpg"
-//         },
-//         "pictureSettings2": {
-//           "src": "http://localhost/ecuavisa/ecuavisav2/devCloudflare/img-elecciones/img-1.jpg"
-//         }
-//     }
-// ]);
+    // let response = await fetch("https://script.google.com/macros/s/AKfycbxpv2oC-yEVx4R1VK2XPO2dEGJaF001P3PracZF5BswUoygu3xpB0TDk4T9zuDa9g3pVg/exec?funcion=alcaldesQuito");
+    // let data = await response.json();
+    // initChart(data);
+    initChart([
+{
+"name": "Xavier Hervas",
+"partidos": "RETO",
+"cne": 2.45,
+"color": "#06aaab",
+"cedatos": 1.33,
+"pictureSettings": {
+"src": "https://ecuavisav2.pages.dev/img-elecciones/hervas.jpg"
+},
+"pictureSettings2": {
+"src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63c49c769c16ac4353101111/IZQUIERDA_DEMOCRATICA.jpg"
+}
+},
+{
+"name": "Otto Sonnenholzner",
+"partidos": "Actuemos",
+"cne": 3.21,
+"color": "#e7691a",
+"cedatos": 34.23,
+"pictureSettings": {
+"src": "https://ecuavisav2.pages.dev/img-elecciones/Otto.jpg"
+},
+"pictureSettings2": {
+"src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63cda4128dfcb6392b390507/12_PARTIDO_UNIDAD_POPULAR.jpg"
+}
+},
+{
+"name": "Luisa Gonzáles",
+"partidos": "Revolución Ciudadana",
+"cne": 3.33,
+"color": "#1e96d4",
+"cedatos": 2.67,
+"pictureSettings": {
+"src": "https://ecuavisav2.pages.dev/img-elecciones/Gonzales.jpg"
+},
+"pictureSettings2": {
+"src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63c49c7d9c16ac435310111c/8_AVANZA.jpg"
+}
+},
+{
+"name": "Fernando Villavicencio",
+"partidos": "Construye",
+"cne": 3.44,
+"color": "#0244af",
+"cedatos": 0,
+"pictureSettings": {
+"src": "https://ecuavisav2.pages.dev/img-elecciones/Villavicencio.jpg"
+},
+"pictureSettings2": {
+"src": ""
+}
+},
+{
+"name": "Yaku Pérez ",
+"partidos": "Claro que se Puede",
+"cne": 5.68,
+"color": "#1e8546",
+"cedatos": 0,
+"pictureSettings": {
+"src": "https://ecuavisav2.pages.dev/img-elecciones/Yku.jpg"
+},
+"pictureSettings2": {
+"src": ""
+}
+},
+{
+"name": "Jan Topic",
+"partidos": "Por un País sin Miedo",
+"cne": 7.47,
+"color": "#0271ba",
+"cedatos": 18.51,
+"pictureSettings": {
+"src": "https://ecuavisav2.pages.dev/img-elecciones/Topic.jpg"
+},
+"pictureSettings2": {
+"src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63c49c779c16ac4353101114/REVOLUCION_CIUDADANA.jpg"
+}
+},
+{
+"name": "Bolívar Armijos",
+"partidos": "Amigo",
+"cne": 16.51,
+"color": "#eb0a1c",
+"cedatos": 21.21,
+"pictureSettings": {
+"src": "https://ecuavisav2.pages.dev/img-elecciones/Armijos.jpg"
+},
+"pictureSettings2": {
+"src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63ce0caa6c911c359d8ee81b/QUITO_VUELVE.jpg"
+}
+},
+{
+"name": "Daniel Noboa",
+"partidos": "Acción Democrática Nacional",
+"cne": 30.12,
+"color": "#672893",
+"cedatos": 40.12,
+"pictureSettings": {
+"src": "https://ecuavisav2.pages.dev/img-elecciones/Noboa.jpg"
+},
+"pictureSettings2": {
+"src": "https://media-cdn.flowics.com/user-library-prod/v1/team/3086/63ce0ca36c911c359d8ee811/CENTRO_DEMOCRATICO.jpg"
+}
+}
+]);
   } catch (error) {
     console.error(error);
   }
@@ -128,12 +160,21 @@ var chart = root.container.children.push(am5xy.XYChart.new(root, {
   panX: false,
   panY: false,
   wheelX: "none",
-  wheelY: "none"
+  wheelY: "none",
+  zoomFactor: 0.1
 }));
 
-chart.set("scrollbarX", am5.Scrollbar.new(root, {
+var scrollbarX = chart.set("scrollbarX", am5.Scrollbar.new(root, {
   orientation: "horizontal"
 }));
+
+
+
+setTimeout(async function(){
+  // scrollbarX.startGrip.set("scale", 0);
+  // scrollbarX.endGrip.set("scale", 0);
+  // alert()
+}, 2000);
 
 // Add cursor
 // https://www.amcharts.com/docs/v5/charts/xy-chart/cursor/
@@ -202,7 +243,7 @@ series.bullets.push(function() {
     sprite: am5.Picture.new(root, {
       templateField: "pictureSettings",
       width: 60,
-      height: 65,
+      height: 55,
       centerX: am5.p50,
       centerY: am5.percent(100),
       shadowColor: am5.color(0x000000),
@@ -241,6 +282,19 @@ series.bullets.push(function(target) {
   });
 });
 
+series.bullets.push(function(target) {
+  return am5.Bullet.new(root, {
+    locationY: 1,
+    sprite: am5.Label.new(root, {
+        html: `<div style="color:#fff; padding:2px 2px;font-size:10px;">{partidos}</div>`,
+        fill: root.interfaceColors.get("alternativeText"),
+        centerY: am5.percent(20),
+        centerX: am5.percent(50),
+        populateText: true
+      })
+  });
+});
+
 var label = chart.plotContainer.children.push(am5.Label.new(root, {
   text: "Elecciones 2023",
   fontSize: "5em",
@@ -250,6 +304,18 @@ var label = chart.plotContainer.children.push(am5.Label.new(root, {
   centerY: am5.percent(100),
   centerX: am5.percent(100)
 }));
+const isMobile = window.matchMedia("only screen and (max-width: 767px)").matches;
+const isTablet = window.matchMedia("only screen and (min-width: 768px) and (max-width: 991px)").matches;
+if(isMobile){
+  setTimeout(function(){
+      xAxis.zoomToIndexes(0, 2);
+  }, 1500);
+}
+if(isTablet){
+  setTimeout(function(){
+      xAxis.zoomToIndexes(0, 3);
+  }, 1500);
+}
 
 xAxis.data.setAll(data);
 series.data.setAll(data);
