@@ -82,6 +82,7 @@ export default [
         { title: 'Módulos', to: 'apps-configuracion-list' },
         { title: 'Banner Slider', to: 'apps-miecuavisa-list' },
         // { title: 'Eventos', to: 'apps-configuracion-add' },
+        //{ title: 'Player Forzado', to: 'apps-configuracion-player' }
       ],
     },
     // modulo por salir filtros
