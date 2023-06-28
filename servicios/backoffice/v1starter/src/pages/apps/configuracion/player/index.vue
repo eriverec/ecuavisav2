@@ -9,9 +9,10 @@ const isError = ref(false);
 async function configPlayer(){
     if(titulo.value == '') return isError.value = true;
     
+   var myHeaders = new Headers();
    var raw = JSON.stringify({
                 "titulo": titulo.value,
-                "estadoActivo": estado.value
+                "estadoActivo": estadoSend.value
             });
             var requestOptions = {
                 method: 'POST',
@@ -23,7 +24,7 @@ async function configPlayer(){
             .then(result => console.log(result))
             .catch(error => console.log('error', error));
             await getConfig();
-    
+   
 }
 
 const authorizedCheck = () => {
