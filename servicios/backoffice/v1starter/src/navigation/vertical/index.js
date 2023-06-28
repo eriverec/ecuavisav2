@@ -51,6 +51,7 @@ export default [
       // modulos por salir 
       // { title: 'Dispositivos', to: 'apps-dispositivos' },
       { title: 'Visitas', to: 'apps-visitas' },
+      { title: 'Metadatos', to: 'apps-metadatos' },
       //{ title: 'Trazabilidad usuarios', to: 'apps-trazabilidad-users' }
     ],
   },
