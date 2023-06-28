@@ -18,8 +18,3 @@
 .conetenedor__general .escrutadoElecciones p{
   margin: 0;
 }
-@media (max-width: 767px) {
-.conetenedor__general .escrutadoElecciones {
-  margin-bottom: -2px;
-}
-}
