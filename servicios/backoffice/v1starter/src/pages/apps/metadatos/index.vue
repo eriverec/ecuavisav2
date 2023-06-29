@@ -522,7 +522,7 @@ async function downloadSelection() {
                 
                   <VCardText style="display: flex; flex-wrap: wrap;">           
                     <div style="width: max-content;">
-                      <VCardTitle>Últimas visitas a la página {{ titleSelected }}</VCardTitle>
+                      <VCardTitle>Usuarios que hicieron visitas en: {{ titleSelected }}</VCardTitle>
                     </div>
                     <div style="margin-left: auto; margin-bottom: 0.80rem;">
                       <VBtn color="primary" @click="downloadSelection">
@@ -580,7 +580,8 @@ async function downloadSelection() {
             <VExpandTransition id="actividadusuario">
               <VCard v-show="actividadUsuarioVisible">
                 <VCardItem>
-                  <VCardTitle>Actividad del usuario {{ userSelected }}</VCardTitle>
+                  <VCardTitle>
+                  <h4>Actividad del usuario</h4> {{ userSelected }}</VCardTitle>
                 </VCardItem>
 
                 <VCardText v-if="actividadUsuario.length > 0">
@@ -611,7 +612,7 @@ async function downloadSelection() {
               <VCard v-show="actividadUsuarioVisible">
                 <VCardItem>
                   <VCardTitle>
-                    <h4>Temas con mayor interes para el cliente:</h4>
+                    <h4>Temas con mayor interés para el cliente:</h4>
                     {{ userSelected }}
                   </VCardTitle>
                 </VCardItem>
