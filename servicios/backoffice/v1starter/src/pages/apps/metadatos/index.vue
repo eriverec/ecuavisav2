@@ -1,17 +1,18 @@
 <script setup>
 // import chartMetadatos from "@/views/charts/apex-chart/ChartMetadatosIdAnalytics.vue";
-import ApexCharts from 'apexcharts'
-
-const tab = ref('tab-meta-data')
+import ApexCharts from 'apexcharts';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 import { onMounted } from 'vue';
+
+const tab = ref('tab-meta-data')
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 
 const itemsPerPage = 8;
 const currentPage = ref(1);
+const currentPageV = ref(1);
 const metadatos = ref([]);
 const isLoading = ref(false);
 const fechaIngresada = ref('');
@@ -137,12 +138,27 @@ async function resolveVisitas(titulo) {
         return timestampB - timestampA;
       });
       //console.log(arrayFiltro);
-      ultimasVisitas.value = arrayFiltro.slice(0, 25);
+      ultimasVisitas.value = arrayFiltro;
       ultimasVisitasVisible.value = true;
       isLoading.value = false;
     })
     .catch(error => { return console.error(error) });
 }
+
+const paginatedVisitas = computed(() => {
+  const start = (currentPageV.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+
+  return ultimasVisitas.value.slice(start, end);
+});
+
+const nextPageV = () => {
+  if (currentPageV.value * itemsPerPage < ultimasVisitas.value.length) currentPageV.value++;
+};
+
+const prevPageV = () => {
+  if (currentPageV.value > 1) currentPageV.value--;
+};
 
 async function resolveUsuario(id, nombre, apellido) {
   userSelected.value = nombre + ' ' + apellido;
@@ -486,8 +502,6 @@ async function downloadSelection() {
                   <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
                     :disabled="(currentPage * itemsPerPage) >= metadatos.length">
                   </VBtn>
-
-
                 </div>
 
               </VCardText>
@@ -497,17 +511,18 @@ async function downloadSelection() {
             <!-- trazabilidad independiente -->
             <VExpandTransition>
               <VCard v-show="ultimasVisitasVisible">
-                <VCardItem class="pb-sm-0">
-                  <div style="display: flex; flex-wrap: wrap;">
+                
+                  <VCardText style="display: flex; flex-wrap: wrap;">           
                     <div style="width: max-content;">
                       <VCardTitle>Últimas visitas a la página {{ titleSelected }}</VCardTitle>
                     </div>
-                    <div style="margin-left: auto; margin-top: 1rem; margin-bottom: 1rem;">
+                    <div style="margin-left: auto; margin-bottom: 0.80rem;">
                       <VBtn color="primary" @click="downloadSelection">
                         Exportar
                       </VBtn>
-                    </div>
-                  </div>
+                    </div>        
+                 </VCardText>
+                  <VCardText>
 
                   <div style="max-height: 520px;overflow: auto;">
                     <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
@@ -522,7 +537,7 @@ async function downloadSelection() {
 
                       <tbody>
                         <tr class="clickable" :class="{ active: user.userId === selectedRowUser }"
-                          v-for="user in ultimasVisitas"
+                          v-for="user in paginatedVisitas"
                           @click="resolveUsuario(user.userId, user.first_name, user.last_name)">
                           <td class="text-high-emphasis">
                             {{ user.first_name }} {{ user.last_name }}
@@ -540,7 +555,15 @@ async function downloadSelection() {
                       </tbody>
                     </VTable>
                   </div>
-                </VCardItem>
+                  <div class="d-flex align-center justify-space-between botonescurrentPage">
+                  <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageV" :disabled="currentPageV === 1"></VBtn>
+                  Página {{ currentPageV }}
+                  <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageV"
+                    :disabled="(currentPageV * itemsPerPage) >= ultimasVisitas.length">
+                  </VBtn>
+                </div>
+                 </VCardText>
+                
               </VCard>
             </VExpandTransition>
           </VCol>
