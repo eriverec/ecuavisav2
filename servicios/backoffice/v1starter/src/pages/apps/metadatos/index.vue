@@ -80,6 +80,7 @@ const prevPage = () => {
 async function obtenerPorFechaMeta(selectedDates) {
   try {
     if (selectedDates.length > 1) {
+      currentPage.value = 1;
       let fechaI = moment(selectedDates[0]).format('YYYY-MM-DD');
       let fechaF = moment(selectedDates[1]).format('YYYY-MM-DD');
       fechaIni.value = fechaI;
@@ -93,6 +94,7 @@ async function obtenerPorFechaMeta(selectedDates) {
 }
 
 async function resolveVisitas(titulo) {
+  currentPageV.value = 1;
   if(actividadUsuarioVisible.value == true){
     actividadUsuarioVisible.value = false;
   }
@@ -164,6 +166,7 @@ const prevPageV = () => {
 };
 
 async function resolveUsuario(id, nombre, apellido) {
+  
   userSelected.value = nombre + ' ' + apellido;
   selectedRowUser.value = id;
   console.log('ID:', id);
