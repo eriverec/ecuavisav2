@@ -1,4 +1,5 @@
 <script setup>
+const tab = ref('tab-meta-data')
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -20,6 +21,8 @@ const visitasExport = ref([]);
 const userSelected = ref('');
 const actividadUsuario = ref([]);
 const actividadUsuarioVisible = ref(false);
+const selectedRow = ref(null);
+const selectedRowUser = ref(null);
 async function getMetadatos (fechai = '', fechaf = ''){
   isLoading.value = true;
   /*
@@ -87,6 +90,7 @@ async function obtenerPorFechaMeta (selectedDates){
 
 async function resolveVisitas(titulo){
   titleSelected.value = titulo;
+  selectedRow.value = titulo;
   isLoading.value = true;
   await fetch(`https://servicio-de-actividad.vercel.app/meta/usuario/${titulo}?fechai=${fechaIni.value}&fechaf=${fechaFin.value}`)
   .then(response => response.json())
@@ -139,44 +143,46 @@ async function resolveVisitas(titulo){
 
 async function resolveUsuario (id, nombre, apellido) {
   userSelected.value = nombre+' '+apellido;
+  selectedRowUser.value = id;
   isLoading.value = true;
   await fetch(`https://servicio-de-actividad.vercel.app/meta/navegation/${id}?fechai=${fechaIni.value}&fechaf=${fechaFin.value}`)
   .then(response => response.json())
         .then(data => {
+
         let rawData = Array.from(data.data); 
         
         //console.log(rawData);
         const arrayFiltro = [];  
 
         for (let p of rawData) {       
-        for (let i of p.navigationRecord) {
-      
-          var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY' , 'M/D/YYYY', 'D/M/YYYY' ];    
-          var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss','DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];    
-          let fechaFormat = moment(i.fecha, allowedDateFormats, true).format( 'DD/MM/YYYY');
-          let horaFix = i.hora.split(':');
-          if(horaFix[2].indexOf(' ')>= 0){
-            let slot3 = horaFix[2].split(' ');
-            horaFix[2] = slot3[0];
-          }
-          let horaFinal = horaFix[0]+':'+horaFix[1]+':'+horaFix[2];
-          let fullFecha = fechaFormat+' '+horaFinal;
-          let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
+            for (let i of p.navigationRecord) {
+          
+              var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY' , 'M/D/YYYY', 'D/M/YYYY' ];    
+              var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss','DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];    
+              let fechaFormat = moment(i.fecha, allowedDateFormats, true).format( 'DD/MM/YYYY');
+              let horaFix = i.hora.split(':');
+              if(horaFix[2].indexOf(' ')>= 0){
+                let slot3 = horaFix[2].split(' ');
+                horaFix[2] = slot3[0];
+              }
+              let horaFinal = horaFix[0]+':'+horaFix[1]+':'+horaFix[2];
+              let fullFecha = fechaFormat+' '+horaFinal;
+              let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
 
-          let data = {
-              first_name: p.first_name,
-              last_name: p.last_name,
-              url: i.url,
-              title: i.title,
-              fecha: fechaFormat,
-              fechaRaw: i.fecha,
-              fullFecha: fullFechaFormat,
-              hora: horaFinal
-          }
-          arrayFiltro.push(data);
-        }
-      
-  }
+              let data = {
+                  first_name: p.first_name,
+                  last_name: p.last_name,
+                  url: i.url,
+                  title: i.title,
+                  fecha: fechaFormat,
+                  fechaRaw: i.fecha,
+                  fullFecha: fullFechaFormat,
+                  hora: horaFinal
+              }
+              arrayFiltro.push(data);
+            }
+          
+      }
 
         arrayFiltro.sort((a, b) => {
         var timestampA = new Date(a.fullFecha);
@@ -289,11 +295,36 @@ async function downloadSelection () {
 
 };
 
+
+
+
 </script>
 
 <template>
+  <div title="Metadatos, navegación de usuarios" >
+    <VTabs v-model="tab">
+      <VTab value="tab-meta-data">
+        Trazabilidad
+      </VTab>
+      <VTab value="account-details">
+        Temas destacados
+      </VTab>
+      <!-- <VTab value="account-details">
+        Account Details
+      </VTab>
+      <VTab value="social-links">
+        Social Links
+      </VTab> -->
+    </VTabs>
+    
+
+    <br>
+      
+        <VWindow v-model="tab">
+          <VWindowItem value="tab-meta-data">
+            
   <VRow>
-    <VCol lg="12" cols="12" sm="6">
+    <VCol lg="6" cols="12" sm="6">
       <VDialog
     v-model="isLoading"
     width="300"
@@ -312,9 +343,18 @@ async function downloadSelection () {
       </VCardText>
     </VCard>
   </VDialog>
+
+
+        
+
+
       <VCard>
+
+
+
         <VCardText class="d-flex flex-wrap justify-space-between gap-4">
-        <VCardItem class="pb-sm-0">
+        
+        <VCardItem class="pb-sm-0 pl-0 pt-0">
           <VCardTitle>Metadatos</VCardTitle>
           <VCardSubtitle>Un total de {{ metadatos.length }} registros</VCardSubtitle>
         </VCardItem>
@@ -367,7 +407,7 @@ async function downloadSelection () {
             </thead>
 
             <tbody>
-              <tr v-for="item  in paginatedMeta" class="clickable" @click="resolveVisitas(item._id)">
+              <tr v-for="item  in paginatedMeta" class="clickable" :class="{ active: item._id === selectedRow }" @click="resolveVisitas(item._id)">
                 <td >
                   
                    {{ item._id}}
@@ -404,7 +444,7 @@ async function downloadSelection () {
         </div>
           <div style="margin-left: auto; margin-top: 1rem; margin-bottom: 1rem;">
           <VBtn 
-            color="primary"							
+            color="primary"             
             @click="downloadSelection"
             >
             Exportar
@@ -412,7 +452,8 @@ async function downloadSelection () {
         </div>
     </div> 
          
-          <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+          <div style="max-height: 520px;overflow: auto;">
+            <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
             <thead>
               <tr>
                 <th scope="col">Nombre</th>
@@ -423,7 +464,7 @@ async function downloadSelection () {
             </thead>
 
             <tbody>
-              <tr class="clickable" v-for="user in ultimasVisitas" @click="resolveUsuario(user.userId, user.first_name, user.last_name)">
+              <tr class="clickable" :class="{ active: user.userId === selectedRowUser }"  v-for="user in ultimasVisitas" @click="resolveUsuario(user.userId, user.first_name, user.last_name)">
                 <td class="text-high-emphasis">
                   {{ user.first_name }} {{ user.last_name }}
                 </td>
@@ -439,13 +480,14 @@ async function downloadSelection () {
               </tr>
             </tbody>
           </VTable>
+          </div>
         </VCardItem>
       </VCard>
     </VExpandTransition>
     </VCol>
     <VCol lg="6" cols="12" sm="6">
     <!-- trazabilidad independiente -->
-    <VExpandTransition>
+    <VExpandTransition id="actividadusuario">
       <VCard v-show="actividadUsuarioVisible">
         <VCardItem>
       <VCardTitle >Actividad del usuario {{ userSelected }}</VCardTitle>
@@ -478,10 +520,45 @@ async function downloadSelection () {
       </VCard>
     </VExpandTransition>
     </VCol>
+
+    <VCol lg="6" cols="12" sm="6">
+    <!-- trazabilidad independiente -->
+    <VExpandTransition>
+      <VCard v-show="actividadUsuarioVisible">
+        <VCardItem>
+      <VCardTitle >Temas con mayor interes para el cliente: {{ userSelected }}</VCardTitle>
+     </VCardItem>
+        Aqui es el gráfico
+      </VCard>
+    </VExpandTransition>
+    </VCol>
   </VRow>
+
+
+
+          </VWindowItem>
+
+          <VWindowItem value="account-details">
+            Soy El gráfico
+          </VWindowItem>
+          <!-- <VWindowItem value="account-details">
+            Soy detalis  ssss
+          </VWindowItem>
+
+          <VWindowItem value="social-links">
+            Soy social sdddsdd
+          </VWindowItem> -->
+        </VWindow>
+      
+    
+  </div>
+
 </template>
 
 <style scoped>
+  tr.clickable.active {
+    background-color: #00000012;
+}
 .clickable { cursor: pointer; }
 @media (max-width: 1000px) {
   td span {
