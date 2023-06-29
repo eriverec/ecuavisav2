@@ -93,6 +93,9 @@ async function obtenerPorFechaMeta(selectedDates) {
 }
 
 async function resolveVisitas(titulo) {
+  if(actividadUsuarioVisible.value == true){
+    actividadUsuarioVisible.value = false;
+  }
   titleSelected.value = titulo;
   selectedRow.value = titulo;
   isLoading.value = true;
