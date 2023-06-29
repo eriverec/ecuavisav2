@@ -227,9 +227,11 @@ async function resolveUsuario(id, nombre, apellido) {
         }
       }
 
-
-      const chart = new ApexCharts(document.querySelector('#chart'), chartOptions)
-      chart.render()
+      setTimeout(function(){
+          const chart = new ApexCharts(document.querySelector('#chart'), chartOptions)
+          chart.render()
+      }, 700);
+      
     }
   } catch (error) {
     console.error(error)
