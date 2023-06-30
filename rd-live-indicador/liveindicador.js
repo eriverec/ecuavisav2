@@ -11,7 +11,10 @@ function actDIV() {
 
   // var margtop = document.querySelector('.movil .hm-r02');
   // indicador.classList.add('pard__envivo');
-  document.querySelector('.enVivoRedy').style.display= 'flex';
+  const envi_ = document.querySelector('.enVivoRedy');
+  if(envi_){
+    envi_.style.display= "flex";
+  }
 
   var devicesearch;
   var btest=navigator.userAgent.toLowerCase();
@@ -75,7 +78,11 @@ else {
       actDIV();
   } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
       actDIV();
-  } else {}
+  } 
+  else if ("20:00" <= timeOfDay && timeOfDay <= "21:00") {
+    actDIV();
+}
+  else {}
 }
 
 
