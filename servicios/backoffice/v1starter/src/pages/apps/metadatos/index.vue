@@ -24,9 +24,12 @@ const ultimasVisitasVisible = ref(false);
 const visitasExport = ref([]);
 const userSelected = ref('');
 const actividadUsuario = ref([]);
+const actividadUsuarioFull = ref([]);
 const actividadUsuarioVisible = ref(false);
 const selectedRow = ref(null);
 const selectedRowUser = ref(null);
+const verMas = ref(false);
+
 async function getMetadatos(fechai = '', fechaf = '') {
   isLoading.value = true;
   /*
@@ -166,7 +169,7 @@ const prevPageV = () => {
 };
 
 async function resolveUsuario(id, nombre, apellido) {
-  
+  verMas.value = false;
   userSelected.value = nombre + ' ' + apellido;
   selectedRowUser.value = id;
   console.log('ID:', id);
@@ -282,6 +285,7 @@ async function resolveUsuario(id, nombre, apellido) {
       });
       //console.log(arrayFiltro);
       actividadUsuario.value = arrayFiltro.slice(0, 10);
+      actividadUsuarioFull.value = arrayFiltro;
       actividadUsuarioVisible.value = true;
       isLoading.value = false;
     })
@@ -596,7 +600,7 @@ async function downloadSelection() {
 
                 <VCardText v-if="actividadUsuario.length > 0">
                   <VTimeline density="compact" align="start" truncate-line="both" class="v-timeline-density-compact">
-                    <VTimelineItem :dot-color="user.title === titleSelected ? 'success' : 'primary'" size="x-small" v-for="user in actividadUsuario">
+                    <VTimelineItem :dot-color="user.title === titleSelected ? 'success' : 'primary'" size="x-small" v-for="user in verMas? actividadUsuarioFull : actividadUsuario">
                       <div class="d-flex justify-space-between align-center flex-wrap">
                         <h4 class="text-base font-weight-semibold me-1">
                           {{ user.title || user.url }}
@@ -610,6 +614,18 @@ async function downloadSelection() {
                     </VTimelineItem>
 
                   </VTimeline>
+                  <div style="text-align: center;"> 
+                  <VBtn
+                    v-if="!verMas && actividadUsuarioFull.length > 10"
+                    color="primary"
+                    @click="verMas = true"
+                  >Ver más</VBtn>
+                  <VBtn
+                    v-if="verMas && actividadUsuarioFull.length > 10"
+                    color="primary"
+                    @click="verMas = false"
+                  >Ver menos</VBtn>
+                </div>
                 </VCardText>
                 <VCardText v-else>No existen datos</VCardText>
               </VCard>
