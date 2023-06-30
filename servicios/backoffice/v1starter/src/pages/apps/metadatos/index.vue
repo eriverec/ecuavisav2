@@ -172,7 +172,7 @@ async function resolveUsuario(id, nombre, apellido) {
   verMas.value = false;
   userSelected.value = nombre + ' ' + apellido;
   selectedRowUser.value = id;
-  console.log('ID:', id);
+  //console.log('ID:', id);
   isLoading.value = true;
   try {
 
@@ -189,8 +189,8 @@ async function resolveUsuario(id, nombre, apellido) {
     if (data.resp) {
       const seriesData = data.data.map(item => item.count)
       const categories = data.data.map(item => item._id)
-      console.log("seriesData:",seriesData);
-      console.log("categories:",categories);
+      //console.log("seriesData:",seriesData);
+      //console.log("categories:",categories);
 
 
       // const series = [{
@@ -263,6 +263,15 @@ async function resolveUsuario(id, nombre, apellido) {
           let fullFecha = fechaFormat + ' ' + horaFinal;
           let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
 
+          var tipo = "";
+          var url = i.url;
+          // Validar si la URL tiene más de 1 subcarpeta o contiene la palabra "metadatos"
+          if (url.split("/").length > 5 || url.includes("metadatos")) {
+            tipo = "Nota";
+          } else {
+            tipo = "Sección";
+          }
+
           let data = {
             first_name: p.first_name,
             last_name: p.last_name,
@@ -271,7 +280,8 @@ async function resolveUsuario(id, nombre, apellido) {
             fecha: fechaFormat,
             fechaRaw: i.fecha,
             fullFecha: fullFechaFormat,
-            hora: horaFinal
+            hora: horaFinal,
+            tipo
           }
           arrayFiltro.push(data);
         }
@@ -605,11 +615,50 @@ async function downloadSelection() {
                         <h4 class="text-base font-weight-semibold me-1">
                           {{ user.title || user.url }}
                         </h4>
-
-
+                        <small><b>Tipo: </b>{{ user.tipo }}</small>
                       </div>
 
                       <p class="mb-1">{{ user.fecha }} {{ user.hora }}</p>
+                      <div style="display:flex; gap: 20px;">
+                        <a
+                          target="_blank"
+                          :href="user.url"
+                          class="d-flex align-center"
+                        >
+                          <VIcon
+                            color="primary"
+                            icon="tabler-link"
+                            size="18"
+                            class="me-1"
+                          />
+                          <h6 class="text-primary font-weight-semibold text-sm">
+                            
+                            {{ user.tipo=="Nota"?"Ir a la nota":"Ir a la sección" }}
+
+                            
+                          </h6>
+                        </a>
+                        <a
+                          v-if="user.tipo=='Nota'"
+                          target="_blank"
+                          :href="(user.url).replace(/\/[^\/]*$/, '')"
+                          class="d-flex align-center"
+                        >
+                          <VIcon
+                            color="primary"
+                            icon="tabler-link"
+                            size="18"
+                            class="me-1"
+                          />
+                          <h6 class="text-primary font-weight-semibold text-sm">
+                            
+                            Ir a la sección
+                            
+                          </h6>
+                        </a>
+                      </div>
+                      <br>
+                      <VDivider />
 
                     </VTimelineItem>
 
