@@ -1,5 +1,5 @@
 <script setup>
-// import chartMetadatos from "@/views/charts/apex-chart/ChartMetadatosIdAnalytics.vue";
+import chartMetadatos from "@/views/charts/apex-chart/ChartMetadatos.vue";
 import ApexCharts from 'apexcharts';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -199,15 +199,15 @@ async function resolveUsuario(id, nombre, apellido) {
       // }]
 
       const chartOptions = {
-        tooltip: {
-          enabled: true,
-          y: {
-            formatter: function(value) {
-              // Personaliza el texto del tooltip aquí
-              return value;
-            }
-          }
-        },
+        // tooltip: {
+        //   enabled: true,
+        //   y: {
+        //     formatter: function(value) {
+        //       // Personaliza el texto del tooltip aquí
+        //       return value;
+        //     }
+        //   }
+        // },
         chart: {
           toolbar: { show: false },
           type: 'bar',
@@ -546,7 +546,7 @@ async function downloadSelection() {
                   <VCardText style="display: flex; flex-wrap: wrap;">           
                     <div style="width: max-content;">
                       <VCardTitle>
-                        Usuarios que hicieron visitas en: <b>{{ titleSelected }}</b>
+                        Visitantes en: <b>{{ titleSelected }}</b>
 
                       </VCardTitle>
                       <VCardSubtitle style="margin-top: -10px;font-size: 12px;">
@@ -697,7 +697,7 @@ async function downloadSelection() {
               <VCard v-show="actividadUsuarioVisible">
                 <VCardItem>
                   <VCardTitle>
-                    Temas con mayor interés para el cliente: <b>{{ userSelected }}</b>
+                    Temas con mayor interés para el usuario: <b>{{ userSelected }}</b>
                   </VCardTitle>
 
                   <VCardSubtitle style="margin-top: -2px;font-size: 12px;">
@@ -720,7 +720,7 @@ async function downloadSelection() {
       </VWindowItem>
 
       <VWindowItem value="account-details">
-        Soy El gráfico
+        <chartMetadatos />
       </VWindowItem>
       <!-- <VWindowItem value="account-details">
             Soy detalis  ssss
@@ -753,6 +753,11 @@ tr.clickable.active {
 
 <style>
 
+.apexcharts-tooltip-title,
+.apexcharts-tooltip-text span{
+  color: white;
+}
+
 .v-theme--dark .apexcharts-text.apexcharts-yaxis-label {
   fill: white;
 }
@@ -760,4 +765,6 @@ tr.clickable.active {
 .v-theme--dark .apexcharts-text.apexcharts-xaxis-label {
   fill: white;
 }
+
+
 </style>
