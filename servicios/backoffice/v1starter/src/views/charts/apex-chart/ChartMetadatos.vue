@@ -1,11 +1,11 @@
 <script setup>
-import VueApexCharts from 'vue3-apexcharts';
-import { useTheme } from 'vuetify';
 import { hexToRgb } from '@layouts/utils';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 import { onMounted } from 'vue';
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
 
 const fechaIngresada = ref('');
 const moment = extendMoment(Moment);
@@ -18,6 +18,7 @@ const isDialogUserVisible = ref(false);
 const searchQuery = ref('');
 const usuarioSeleccionado = ref(null);
 const isDialogVisibleChart2 = ref(false);
+const dataChart = ref([]);
 
 const initData = async (init = false) => {
   let fechai = moment().subtract(7, 'days').format("DD-MM-YYYY").toString();
@@ -51,7 +52,7 @@ async function getChart(idusuario) {
   await fetch(`https://servicio-de-actividad.vercel.app/meta/navegation/group/${idusuario}?fechai=${fechaIni.value}&fechaf=${fechaFin.value}`)
     .then(response => response.json())
     .then(data => {
-      console.log(data)
+      dataChart.value = data.data;
       isDialogVisibleChart2.value = false;
     }).catch(error => { 
       isDialogVisibleChart2.value = false;
@@ -114,7 +115,7 @@ const colorVariables = themeColors => {
   
   return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
 }
-
+/*
 const getBarChartConfig = themeColors => {
   const { themeBorderColor, themeDisabledTextColor } = colorVariables(themeColors)
   
@@ -157,21 +158,69 @@ const getBarChartConfig = themeColors => {
     },
   }
 }
-
+*/
 const vuetifyTheme = useTheme()
-const horizontalBarChartConfig = computed(() => getBarChartConfig(vuetifyTheme.current.value))
+//const horizontalBarChartConfig = computed(() => getBarChartConfig(vuetifyTheme.current.value))
 
-const series = [{
-  data: [
-    700,
-    350,
-    480,
-    600,
-    210,
-    550,
-    150,
-  ],
-}]
+const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value);
+const resolveData = computed(() => {
+
+let dataRaw = Array.from(dataChart.value);
+const seriesFormat = {
+    data: []
+};
+
+const categoriesRaw = [];
+for (let i in dataRaw) {
+    let num = parseInt(dataRaw[i].count);
+    seriesFormat.data.push(num);
+    categoriesRaw.push(dataRaw[i]._id);   
+}
+
+const options= {
+    chart: {
+      parentHeightOffset: 0,
+      toolbar: { show: false },
+    },
+    dataLabels: { 
+      enabled: false
+    },
+    colors: ['#00cfe8'],   
+    plotOptions: {
+      bar: {
+        borderRadius: 8,
+        barHeight: '30%',
+        horizontal: true,
+        startingShape: 'rounded',
+      },
+    },
+    grid: {
+      borderColor: themeBorderColor,
+      xaxis: {
+        lines: { show: false },
+      },
+      padding: {
+        top: -10,
+      },
+    },
+    yaxis: {
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+    },
+    xaxis: {
+      axisBorder: { show: false },
+      axisTicks: { color: themeBorderColor },
+      categories: categoriesRaw,
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+    }
+      }
+
+return {series: [seriesFormat], options: options, intereses: categoriesRaw};
+});
+
 
 </script>
 
@@ -296,8 +345,8 @@ const series = [{
           <VueApexCharts
             type="bar"
             height="400"
-            :options="horizontalBarChartConfig"
-            :series="series"
+            :options="resolveData.options"
+            :series="resolveData.series"
           />
         </VCardText>
       </VCard>
