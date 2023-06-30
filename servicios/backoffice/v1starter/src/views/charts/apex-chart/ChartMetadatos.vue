@@ -6,7 +6,6 @@ import esLocale from "moment/locale/es";
 import { onMounted } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
-
 const fechaIngresada = ref('');
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
@@ -20,12 +19,16 @@ const usuarioSeleccionado = ref(null);
 const isDialogVisibleChart2 = ref(false);
 const dataChart = ref([]);
 
+const isMobile = window.innerWidth <= 768;
+
+
 const initData = async (init = false) => {
   let fechai = moment().subtract(7, 'days').format("DD-MM-YYYY").toString();
   let fechaf = moment().format("DD-MM-YYYY").toString();
   fechaIni.value = fechai;
   fechaFin.value = fechaf;
   fechaIngresada.value = fechai + ' a ' + fechaf;
+  await getChart(0)
 }
 
 async function getUsers() {
@@ -167,6 +170,7 @@ const resolveData = computed(() => {
 
 let dataRaw = Array.from(dataChart.value);
 const seriesFormat = {
+    name: 'Nivel de interés',
     data: []
 };
 
@@ -181,6 +185,7 @@ const options= {
     chart: {
       parentHeightOffset: 0,
       toolbar: { show: false },
+      height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 4)?300:500
     },
     dataLabels: { 
       enabled: false
@@ -188,16 +193,19 @@ const options= {
     colors: ['#00cfe8'],   
     plotOptions: {
       bar: {
-        borderRadius: 8,
+        borderRadius: 0,
         barHeight: '30%',
-        horizontal: true,
+        horizontal: (
+          (seriesFormat.data.length > 0 && seriesFormat.data.length < 4)
+          || isMobile
+        ),
         startingShape: 'rounded',
       },
     },
     grid: {
       borderColor: themeBorderColor,
       xaxis: {
-        lines: { show: false },
+        lines: { show: true },
       },
       padding: {
         top: -10,
@@ -215,8 +223,9 @@ const options= {
       labels: {
         style: { colors: themeDisabledTextColor },
       },
-    }
-      }
+    },
+    minHeight: 300,
+  }
 
 return {series: [seriesFormat], options: options, intereses: categoriesRaw};
 });
@@ -344,7 +353,6 @@ return {series: [seriesFormat], options: options, intereses: categoriesRaw};
         <VCardText>
           <VueApexCharts
             type="bar"
-            height="400"
             :options="resolveData.options"
             :series="resolveData.series"
           />
