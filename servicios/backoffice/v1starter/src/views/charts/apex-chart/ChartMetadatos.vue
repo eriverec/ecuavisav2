@@ -28,7 +28,6 @@ const initData = async (init = false) => {
   fechaIni.value = fechai;
   fechaFin.value = fechaf;
   fechaIngresada.value = fechai + ' a ' + fechaf;
-  await getChart(0)
 }
 
 async function getUsers() {
@@ -38,10 +37,9 @@ async function getUsers() {
     .then(data => {
       if(data.resp){
         dataUsers.value = data.data;
-
-        if (data.data.length < 1) {
+        // if (data.data.length < 1) {
           usuarioSeleccionado.value = null;
-        }
+        // }
       }
       isDialogVisibleChart2.value = false;
     }).catch(error => { 
@@ -85,7 +83,9 @@ async function obtenerPorFechaMeta(selectedDates) {
       let fechaF = moment(selectedDates[1]).format('YYYY-MM-DD');
       fechaIni.value = fechaI;
       fechaFin.value = fechaF;
+      await getChart(0);
       await getUsers();
+
       //panelGrafico.classList.remove("disabled");                       
     }
   } catch (error) {
@@ -185,7 +185,7 @@ const options= {
     chart: {
       parentHeightOffset: 0,
       toolbar: { show: false },
-      height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 4)?300:500
+      height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6)?400:500
     },
     dataLabels: { 
       enabled: false
@@ -196,7 +196,7 @@ const options= {
         borderRadius: 0,
         barHeight: '30%',
         horizontal: (
-          (seriesFormat.data.length > 0 && seriesFormat.data.length < 4)
+          ((seriesFormat.data.length > 0 && seriesFormat.data.length < 4) || seriesFormat.data.length > 10 )
           || isMobile
         ),
         startingShape: 'rounded',
@@ -313,7 +313,7 @@ return {series: [seriesFormat], options: options, intereses: categoriesRaw};
       <VCard>
         <VCardItem class="d-flex flex-wrap justify-space-between gap-4 w-100">
           <VCardTitle class="d-flex flex-wrap justify-space-between gap-4 w-100">
-            Filtros metadatos <small style="font-size: 15px">Datos desde {{ fechaIni }} {{ fechaFin }}</small>
+            Filtros metadatos <small style="font-size: 15px">Datos desde {{ fechaIni }} hasta {{ fechaFin }}</small>
           </VCardTitle>
           <VCardSubtitle>
             Puede visualizar los metadatos más utilizados por usuario y por fecha
