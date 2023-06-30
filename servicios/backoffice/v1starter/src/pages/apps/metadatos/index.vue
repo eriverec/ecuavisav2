@@ -522,7 +522,13 @@ async function downloadSelection() {
                 
                   <VCardText style="display: flex; flex-wrap: wrap;">           
                     <div style="width: max-content;">
-                      <VCardTitle>Usuarios que hicieron visitas en: {{ titleSelected }}</VCardTitle>
+                      <VCardTitle>
+                        Usuarios que hicieron visitas en: <b>{{ titleSelected }}</b>
+
+                      </VCardTitle>
+                      <VCardSubtitle style="margin-top: -10px;font-size: 12px;">
+                          Datos desde {{fechaIni}} hasta {{fechaFin}}
+                      </VCardSubtitle>
                     </div>
                     <div style="margin-left: auto; margin-bottom: 0.80rem;">
                       <VBtn color="primary" @click="downloadSelection">
@@ -581,7 +587,11 @@ async function downloadSelection() {
               <VCard v-show="actividadUsuarioVisible">
                 <VCardItem>
                   <VCardTitle>
-                  <h4>Actividad del usuario</h4> {{ userSelected }}</VCardTitle>
+                   Actividad del usuario <b>{{ userSelected }}</b>
+                  </VCardTitle>
+                  <VCardSubtitle style="margin-top: -2px;font-size: 12px;">
+                      Datos desde {{fechaIni}} hasta {{fechaFin}}
+                  </VCardSubtitle>
                 </VCardItem>
 
                 <VCardText v-if="actividadUsuario.length > 0">
@@ -612,9 +622,12 @@ async function downloadSelection() {
               <VCard v-show="actividadUsuarioVisible">
                 <VCardItem>
                   <VCardTitle>
-                    <h4>Temas con mayor interés para el cliente:</h4>
-                    {{ userSelected }}
+                    Temas con mayor interés para el cliente: <b>{{ userSelected }}</b>
                   </VCardTitle>
+
+                  <VCardSubtitle style="margin-top: -2px;font-size: 12px;">
+                      Datos desde {{fechaIni}} hasta {{fechaFin}}
+                  </VCardSubtitle>
                 </VCardItem>
                 <VCardText>
                   <!-- <chartMetadatos /> -->
