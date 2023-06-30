@@ -199,13 +199,22 @@ async function resolveUsuario(id, nombre, apellido) {
       // }]
 
       const chartOptions = {
+        tooltip: {
+          enabled: true,
+          y: {
+            formatter: function(value) {
+              // Personaliza el texto del tooltip aquí
+              return value;
+            }
+          }
+        },
         chart: {
           toolbar: { show: false },
           type: 'bar',
           height: 500
         },
         series: [{
-          name: 'Count',
+          name: 'Nivel de interés',
           data: seriesData
         }],
         plotOptions: {
@@ -663,6 +672,7 @@ async function downloadSelection() {
                     </VTimelineItem>
 
                   </VTimeline>
+                  <br>
                   <div style="text-align: center;"> 
                   <VBtn
                     v-if="!verMas && actividadUsuarioFull.length > 10"
