@@ -31,7 +31,7 @@ const initData = async (init = false) => {
 }
 
 async function getUsers() {
-  isDialogVisibleChart2.value = true;
+  // isDialogVisibleChart2.value = true;
   await fetch(`https://servicio-de-actividad.vercel.app/metadato/usuario/all/${fechaIni.value}/to/${fechaFin.value}`)
     .then(response => response.json())
     .then(data => {
@@ -41,22 +41,22 @@ async function getUsers() {
           usuarioSeleccionado.value = null;
         // }
       }
-      isDialogVisibleChart2.value = false;
+      // isDialogVisibleChart2.value = false;
     }).catch(error => { 
-      isDialogVisibleChart2.value = false;
+      // isDialogVisibleChart2.value = false;
       return error;
     });
 }
 
 async function getChart(idusuario) {
-  isDialogVisibleChart2.value = true;
+  // isDialogVisibleChart2.value = true;
   await fetch(`https://servicio-de-actividad.vercel.app/meta/navegation/group/${idusuario}?fechai=${fechaIni.value}&fechaf=${fechaFin.value}`)
     .then(response => response.json())
     .then(data => {
       dataChart.value = data.data;
-      isDialogVisibleChart2.value = false;
+      // isDialogVisibleChart2.value = false;
     }).catch(error => { 
-      isDialogVisibleChart2.value = false;
+      // isDialogVisibleChart2.value = false;
       return error;
     });
 }
@@ -83,7 +83,9 @@ async function obtenerPorFechaMeta(selectedDates) {
       let fechaF = moment(selectedDates[1]).format('YYYY-MM-DD');
       fechaIni.value = fechaI;
       fechaFin.value = fechaF;
+      isDialogVisibleChart2.value = true;
       await getChart(0);
+      isDialogVisibleChart2.value = false;
       await getUsers();
 
       //panelGrafico.classList.remove("disabled");                       
@@ -102,7 +104,9 @@ async function resolveUsuario(usuario) {
   }else{
     usuarioSeleccionado.value = "Todos los usuarios";
   }
-  await getChart(idusuario)
+  isDialogVisibleChart2.value = true;
+  await getChart(idusuario);
+  isDialogVisibleChart2.value = false;
 }
 
 onMounted(() => {
