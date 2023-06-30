@@ -78,7 +78,11 @@ else {
       actDIV();
   } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
       actDIV();
-  } else {}
+  } 
+  else if ("20:00" <= timeOfDay && timeOfDay <= "21:00") {
+    actDIV();
+}
+  else {}
 }
 
 
