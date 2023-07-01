@@ -192,7 +192,7 @@ const options= {
       height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6)?400:500
     },
     dataLabels: { 
-      enabled: false
+      enabled: true
     },
     colors: ['#00cfe8'],   
     plotOptions: {
