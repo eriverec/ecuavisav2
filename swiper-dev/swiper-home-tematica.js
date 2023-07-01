@@ -1,6 +1,4 @@
-  
-  /*
-  
+
   function swiperHomeTematica() {
     var classListaProgramas = document.querySelector('.__tematicaSemanal');
     var classListaProgramasNot = document.querySelector('.__tematicaSemanal .noticias');
@@ -61,4 +59,3 @@
     sGoHTematica();
   });
   
-  */
