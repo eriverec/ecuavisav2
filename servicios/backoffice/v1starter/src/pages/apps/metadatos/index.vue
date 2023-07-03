@@ -449,23 +449,23 @@ async function downloadSelection() {
 
         <VRow>
           <VCol lg="6" cols="12" sm="6">
-            <!-- <VDialog v-model="isLoading" width="300">
+            <VDialog v-model="isLoading" width="300">
               <VCard color="primary" width="300">
                 <VCardText class="pt-3">
                   Espere porfavor
                   <VProgressLinear indeterminate color="white" class="mb-0" />
                 </VCardText>
               </VCard>
-            </VDialog> -->
+            </VDialog>
 
-            <VDialog v-model="isLoading" width="300">
+            <!-- <VDialog v-model="isLoading" width="300">
               <VCardText class="pt-3 text-center">
                   <v-progress-circular
                     indeterminate
                     color="primary"
                   ></v-progress-circular>
                 </VCardText>
-            </VDialog>
+            </VDialog> -->
 
 
 
