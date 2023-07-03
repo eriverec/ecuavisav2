@@ -238,7 +238,7 @@ return {series: [seriesFormat], options: options, intereses: categoriesRaw};
 </script>
 
 <template>
-      <VDialog
+      <!-- <VDialog
         v-model="isDialogVisibleChart2"
         width="300"
       >
@@ -255,8 +255,16 @@ return {series: [seriesFormat], options: options, intereses: categoriesRaw};
             />
           </VCardText>
         </VCard>
+      </VDialog> -->
+      <VDialog v-model="isDialogVisibleChart2" width="300">
+        <VCardText class="pt-3 text-center">
+            <v-progress-circular
+              indeterminate
+              color="primary"
+            ></v-progress-circular>
+          </VCardText>
       </VDialog>
-
+      
       <VDialog
         v-model="isDialogUserVisible"
         width="700"
