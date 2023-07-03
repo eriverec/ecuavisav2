@@ -29,6 +29,8 @@ const actividadUsuarioVisible = ref(false);
 const selectedRow = ref(null);
 const selectedRowUser = ref(null);
 const verMas = ref(false);
+const searchQuery = ref('');
+const metaRaw = ref([]);
 
 async function getMetadatos(fechai = '', fechaf = '') {
   isLoading.value = true;
@@ -46,6 +48,7 @@ async function getMetadatos(fechai = '', fechaf = '') {
   await fetch('https://servicio-de-actividad.vercel.app/meta/all/?' + new URLSearchParams({ fechai: fechai, fechaf: fechaf }))
     .then(response => response.json())
     .then(data => {
+      metaRaw.value = data.data;
       metadatos.value = data.data;
       isLoading.value = false;
     })
@@ -65,6 +68,20 @@ onMounted(() => {
   initData();
 });
 
+const searchMeta = () => {
+  if(searchQuery.value !== ''){
+    currentPage.value = 1;
+    const normalizedSearchQuery = searchQuery.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+
+    const filtered = metaRaw.value.filter((item) => {
+    const normalizedItemName = item._id.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+     return normalizedItemName.includes(normalizedSearchQuery);
+    });
+
+    metadatos.value = filtered;
+  }
+};
+
 const paginatedMeta = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
@@ -78,6 +95,14 @@ const nextPage = () => {
 
 const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
+};
+
+const reset = () => {
+  currentPage.value = 1;
+  searchQuery.value = '';
+  ultimasVisitasVisible.value = false;
+  actividadUsuarioVisible.value = false;
+  metadatos.value = metaRaw.value;
 };
 
 async function obtenerPorFechaMeta(selectedDates) {
@@ -507,6 +532,22 @@ async function downloadSelection() {
 
     </VCol>
   -->
+              </VCardText>
+              <VCardText class="d-flex flex-wrap gap-4">
+                <div style="width: 15rem">
+                <VTextField
+                  v-model="searchQuery"
+                  placeholder="Buscar..."
+                  density="compact"
+                />
+              </div>
+              <!-- 👉 Search button -->
+              <VBtn prepend-icon="tabler-search" @click="searchMeta">
+                Buscar
+              </VBtn>
+              <VBtn @click="reset">
+                Reiniciar
+              </VBtn>
               </VCardText>
 
               <VCardText>
