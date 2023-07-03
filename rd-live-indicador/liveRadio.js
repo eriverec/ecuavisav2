@@ -1,9 +1,9 @@
 //obtenermos el iduser del localsotage
 const userIdXRadio = localStorage.getItem('wylexUserId') || 0;
 if (userIdXRadio == 0) {
-  console.warn("LiveRadio - no estas logueado");
+  // console.warn("LiveRadio - no estas logueado");
 } else {
-  console.info("LiveRadio - Si estas logueado");
+  // console.info("LiveRadio - Si estas logueado");
 
   const eventLun_Vie = [
     { inicio: "05:55", fin: "06:55", titulo: "Televistazo en la comunidad" },
