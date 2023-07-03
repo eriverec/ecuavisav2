@@ -6,7 +6,7 @@ import { onMounted } from 'vue';
 import { useTheme } from 'vuetify';
 const vuetifyTheme = useTheme()
 const moment = extendMoment(Moment);
-    moment.locale('es', [esLocale]);
+moment.locale('es', [esLocale]);
 
 // const url = 'https://servicio-de-actividad.vercel.app/actividad/all';
 
@@ -25,139 +25,139 @@ const ultimosUsuariosVisible = ref(false);
 const ultimasVisitasVisible = ref(false);
 const titulo = ref('');
 const filtrosVisitas = ref([]);
-const filtroSelected= ref({});
-const btnFiltros= ref('');
-const filtroDefault= ref({});
+const filtroSelected = ref({});
+const btnFiltros = ref('');
+const filtroDefault = ref({});
 const titleSelected = ref('');
 const ultimosUsuariosDownload = ref([]);
 const userSelected = ref('');
 const router = useRouter();
 async function fetchFiltros() {
-        await fetch('https://servicio-filtros.vercel.app/visitas/all')
-        .then(response => response.json())
-        .then(data => {
-          filtrosVisitas.value = Array.from(data);
-         })
-        .catch(error => {return error});
-       
-        let filtros = Array.from(filtrosVisitas.value);
-        if(filtros.length > 0){
-        let checkDefault = filtros.filter(a => a.isDefault === true );
-        filtroDefault.value = checkDefault[0];
-        btnFiltros.value = checkDefault[0]._id;
-        fechaIngresada.value = String(checkDefault[0].fecha);
-        }       
+  await fetch('https://servicio-filtros.vercel.app/visitas/all')
+    .then(response => response.json())
+    .then(data => {
+      filtrosVisitas.value = Array.from(data);
+    })
+    .catch(error => { return error });
+
+  let filtros = Array.from(filtrosVisitas.value);
+  if (filtros.length > 0) {
+    let checkDefault = filtros.filter(a => a.isDefault === true);
+    filtroDefault.value = checkDefault[0];
+    btnFiltros.value = checkDefault[0]._id;
+    fechaIngresada.value = String(checkDefault[0].fecha);
+  }
 }
 
 async function fetchData(fechai, fechaf) {
-    isLoading.value = true;
-    let fechaI;
-    let fechaF;
-    if(fechai && fechaf){
-      fechaI = fechai;
-      fechaF = fechaf; 
-    }else if(filtroDefault.value){
-      let fechas = filtroDefault.value.fecha.split('a');
-      fechaI = moment(fechas[0]).add(+1, 'days').format('MM/DD/YYYY');
-      fechaF = moment(fechas[1]).add(-1, 'days').format('MM/DD/YYYY');      
-    }
-    else{
+  isLoading.value = true;
+  let fechaI;
+  let fechaF;
+  if (fechai && fechaf) {
+    fechaI = fechai;
+    fechaF = fechaf;
+  } else if (filtroDefault.value) {
+    let fechas = filtroDefault.value.fecha.split('a');
+    fechaI = moment(fechas[0]).add(+1, 'days').format('MM/DD/YYYY');
+    fechaF = moment(fechas[1]).add(-1, 'days').format('MM/DD/YYYY');
+  }
+  else {
     fechaI = moment().add(-6, 'days').format("MM-DD-YYYY");
     fechaF = moment().add(1, 'days').format("MM-DD-YYYY");
-    }  
+  }
 
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
 
-    var fechasCount = JSON.stringify({
-              "fechai": fechaI,
-              "fechaf": fechaF
-          });
+  var fechasCount = JSON.stringify({
+    "fechai": fechaI,
+    "fechaf": fechaF
+  });
 
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: fechasCount,
-      redirect: 'follow'
-    };        
-    const navArray = []; 
-    await fetch('https://servicio-de-actividad.vercel.app/count',requestOptions)
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: fechasCount,
+    redirect: 'follow'
+  };
+  const navArray = [];
+  await fetch('https://servicio-de-actividad.vercel.app/count', requestOptions)
     .then(response => response.text())
-    .then(async count => { 
-            let pages = parseInt(count); 
-            
-            
-            var myHeaders2 = new Headers();
-            myHeaders2.append("Content-Type", "application/json");
-        
-            for (let i = 1; i < pages+1; i++){  
-            var fechasFetch = JSON.stringify({
-                      "fechai": fechaI,
-                      "fechaf": fechaF,
-                      "page": i
-                  });      
-             var requestOptions2 = {
-                    method: 'POST',
-                    headers: myHeaders2,
-                    body: fechasFetch,
-                    redirect: 'follow'
-             };       
-            await fetch('https://servicio-de-actividad.vercel.app/actividad/full',requestOptions2)
-                  .then(response => response.json())
-                  .then(async response=>{
+    .then(async count => {
+      let pages = parseInt(count);
 
-                    let array = Array.from(response.data); 
-                    
-                    array.forEach((item)=>{
-                    rawData.value.push(item);
-                    })
 
-                          for (const a of array) {
-                            for(const b of a.navigationRecord){
-                            let data = {
-                              title: b.title,
-                              url: b.url,
-                            }
-                            navArray.push(data);
-                            }
-                          }
+      var myHeaders2 = new Headers();
+      myHeaders2.append("Content-Type", "application/json");
 
-                  }).catch((error) => {return error});       
-          }
-          
-                    const finArray = navArray.reduce( (a,b) => {    
-                      var i = a.findIndex((x) => x.title == b.title || x.url == b.url);
-                      return i === -1 ? a.push({ url : b.url, title: b.title, count: 1}) : a[i].count++ , a;
-                      }, []);
-                  
-                    urlCounts.value = Array.from(finArray);
-                    urlCounts.value.sort((a, b) => b.count - a.count); 
-                    isLoading.value = false; 
-        }).catch((error) => {return error});   
-    
+      for (let i = 1; i < pages + 1; i++) {
+        var fechasFetch = JSON.stringify({
+          "fechai": fechaI,
+          "fechaf": fechaF,
+          "page": i
+        });
+        var requestOptions2 = {
+          method: 'POST',
+          headers: myHeaders2,
+          body: fechasFetch,
+          redirect: 'follow'
+        };
+        await fetch('https://servicio-de-actividad.vercel.app/actividad/full', requestOptions2)
+          .then(response => response.json())
+          .then(async response => {
+
+            let array = Array.from(response.data);
+
+            array.forEach((item) => {
+              rawData.value.push(item);
+            })
+
+            for (const a of array) {
+              for (const b of a.navigationRecord) {
+                let data = {
+                  title: b.title,
+                  url: b.url,
+                }
+                navArray.push(data);
+              }
+            }
+
+          }).catch((error) => { return error });
+      }
+
+      const finArray = navArray.reduce((a, b) => {
+        var i = a.findIndex((x) => x.title == b.title || x.url == b.url);
+        return i === -1 ? a.push({ url: b.url, title: b.title, count: 1 }) : a[i].count++, a;
+      }, []);
+
+      urlCounts.value = Array.from(finArray);
+      urlCounts.value.sort((a, b) => b.count - a.count);
+      isLoading.value = false;
+    }).catch((error) => { return error });
+
 }
 
-async function initData (){
+async function initData() {
   await fetchFiltros();
   let formatI = moment().add(-7, 'days').format("MM-DD-YYYY");
   let formatF = moment().format("MM-DD-YYYY");
-  fechaIngresada.value = String(formatI+' a '+formatF); 
-  fetchData();  
+  fechaIngresada.value = String(formatI + ' a ' + formatF);
+  fetchData();
 }
 
 async function fetchDataFecha(fechai, fechaf) {
-  try {   
-    const response = await fetch('https://servicio-de-actividad.vercel.app/actividad/full' ,{
-            method: 'POST',
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: fechas
-          });
+  try {
+    const response = await fetch('https://servicio-de-actividad.vercel.app/actividad/full', {
+      method: 'POST',
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: fechas
+    });
     const data = await response.json();
     const urlMap = new Map();
     rawData.value = data.data;
-    
+
     for (const activity of data.data) {
       for (const record of activity.navigationRecord) {
         const url = record.url;
@@ -178,66 +178,66 @@ async function fetchDataFecha(fechai, fechaf) {
   isLoading.value = false;
 }
 
-async function obtenerFechaDispositivos (selectedDates, dateStr, instance){
-    try {
-    btnFiltros.value = ''; 
-        if(selectedDates.length > 1){
-            
-            let fechaI = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
-            let fechaF = moment(selectedDates[1]).format('MM/DD/YYYY');
-            fechaIni.value = fechaI;
-            fechaFin.value = fechaF;          
-            await fetchData(fechaI, fechaF);
-            
-            //panelGrafico.classList.remove("disabled");                       
-          }
-    } catch (error) {
-        console.error(error); 
-    }          
+async function obtenerFechaDispositivos(selectedDates, dateStr, instance) {
+  try {
+    btnFiltros.value = '';
+    if (selectedDates.length > 1) {
+
+      let fechaI = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
+      let fechaF = moment(selectedDates[1]).format('MM/DD/YYYY');
+      fechaIni.value = fechaI;
+      fechaFin.value = fechaF;
+      await fetchData(fechaI, fechaF);
+
+      //panelGrafico.classList.remove("disabled");                       
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-async function obtenerFechaFiltroDispositivos (fechas){
-    try {
-        let array = fechas.toString().split('a');
-        if(array.length > 1){
-            let fechaI = moment(array[0]).add(+1, 'days').format('MM/DD/YYYY');
-            let fechaF = moment(array[1]).format('MM/DD/YYYY');
-            fechaIni.value = fechaI;
-            fechaFin.value = fechaF;          
-            await fetchData(fechaI, fechaF);
-            
-            //panelGrafico.classList.remove("disabled");                       
-          }
-    } catch (error) {
-        console.error(error); 
-    }          
+async function obtenerFechaFiltroDispositivos(fechas) {
+  try {
+    let array = fechas.toString().split('a');
+    if (array.length > 1) {
+      let fechaI = moment(array[0]).add(+1, 'days').format('MM/DD/YYYY');
+      let fechaF = moment(array[1]).format('MM/DD/YYYY');
+      fechaIni.value = fechaI;
+      fechaFin.value = fechaF;
+      await fetchData(fechaI, fechaF);
+
+      //panelGrafico.classList.remove("disabled");                       
+    }
+  } catch (error) {
+    console.error(error);
+  }
 }
 
-async function resolveFiltroSelection(id){
+async function resolveFiltroSelection(id) {
 
-await fetch('https://servicio-filtros.vercel.app/visitas/id?' + new URLSearchParams({ id: id }))
-.then(response => response.json())
-.then(data => {
-filtroSelected.value = data;        
-})
-.catch(error => {return error}); 
-let filtro = filtroSelected.value;
-fechaIngresada.value = String(filtro.fecha);
+  await fetch('https://servicio-filtros.vercel.app/visitas/id?' + new URLSearchParams({ id: id }))
+    .then(response => response.json())
+    .then(data => {
+      filtroSelected.value = data;
+    })
+    .catch(error => { return error });
+  let filtro = filtroSelected.value;
+  fechaIngresada.value = String(filtro.fecha);
 
-await obtenerFechaFiltroDispositivos(filtro.fecha);        
+  await obtenerFechaFiltroDispositivos(filtro.fecha);
 
 }
 
 const authorizedCheck = () => {
-    let rol = localStorage.getItem('role');
-    if(rol !== 'administrador' && rol !== 'webmaster'){
-        router.push({ path: '/pages/errors/not-authorized' })
-    }
+  let rol = localStorage.getItem('role');
+  if (rol !== 'administrador' && rol !== 'webmaster') {
+    router.push({ path: '/pages/errors/not-authorized' })
+  }
 }
 
 onMounted(() => {
-    authorizedCheck();
-    initData();
+  authorizedCheck();
+  initData();
 });
 
 const paginatedUrlCounts = computed(() => {
@@ -256,88 +256,88 @@ const prevPage = () => {
 };
 
 
-const resolveUltimosUsuarios = (title) =>{
+const resolveUltimosUsuarios = (title) => {
   titleSelected.value = title;
-  const inicio = rawData.value.map(({first_name, last_name, navigationRecord})=>{ 
-  return {first_name, last_name, navigationRecord};
+  const inicio = rawData.value.map(({ first_name, last_name, navigationRecord }) => {
+    return { first_name, last_name, navigationRecord };
   });
-  
+
   const arrayFiltro = [];
 
   //console.log('title',title)
   for (let p of inicio) {
     for (let i of p.navigationRecord) {
-      if (i.title === title || i.url === title) { 
+      if (i.title === title || i.url === title) {
 
-          var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY', 'M/D/YYYY', 'D/M/YYYY' ];    
-          var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss','DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];    
-          let fechaFormat = moment(i.fecha, allowedDateFormats, true).format( 'DD/MM/YYYY');
-          let horaFix = i.hora.split(':');
-          if(horaFix[2].indexOf(' ')>= 0){
-            let slot3 = horaFix[2].split(' ');
-            horaFix[2] = slot3[0];
-          }
-          let horaFinal = horaFix[0]+':'+horaFix[1]+':'+horaFix[2];
-          let fullFecha = fechaFormat+' '+horaFinal;
-          let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
+        var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY', 'M/D/YYYY', 'D/M/YYYY'];
+        var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss', 'DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];
+        let fechaFormat = moment(i.fecha, allowedDateFormats, true).format('DD/MM/YYYY');
+        let horaFix = i.hora.split(':');
+        if (horaFix[2].indexOf(' ') >= 0) {
+          let slot3 = horaFix[2].split(' ');
+          horaFix[2] = slot3[0];
+        }
+        let horaFinal = horaFix[0] + ':' + horaFix[1] + ':' + horaFix[2];
+        let fullFecha = fechaFormat + ' ' + horaFinal;
+        let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
 
-          if( p.first_name !== undefined && p.last_name !== undefined && p.first_name !== null && p.last_name !== null  && p.first_name !== '' && p.last_name !== '' ){
+        if (p.first_name !== undefined && p.last_name !== undefined && p.first_name !== null && p.last_name !== null && p.first_name !== '' && p.last_name !== '') {
           let data = {
-              first_name: p.first_name,
-              last_name: p.last_name,
-              url: i.url,
-              title: i.title,
-              fecha: fechaFormat,
-              fechaRaw: i.fecha,
-              fullFecha: fullFechaFormat,
-              hora: horaFinal,
-              horaRaw: i.hora
+            first_name: p.first_name,
+            last_name: p.last_name,
+            url: i.url,
+            title: i.title,
+            fecha: fechaFormat,
+            fechaRaw: i.fecha,
+            fullFecha: fullFechaFormat,
+            hora: horaFinal,
+            horaRaw: i.hora
           }
           arrayFiltro.push(data);
-           }
-          }      
-             
+        }
       }
+
+    }
   }
-//console.log('Antes',arrayFiltro);
-/*let pruebaF = [];
-for (let i of arrayFiltro) {
-  let p = {
-    prueba: new Date(i.fullFecha)
-  };
-  pruebaF.push(p);
-}*/
-//console.log('pruebaF',pruebaF);
+  //console.log('Antes',arrayFiltro);
+  /*let pruebaF = [];
+  for (let i of arrayFiltro) {
+    let p = {
+      prueba: new Date(i.fullFecha)
+    };
+    pruebaF.push(p);
+  }*/
+  //console.log('pruebaF',pruebaF);
 
-let grupos = {};
+  let grupos = {};
 
-arrayFiltro.forEach(obj => {
-  let clave = obj.first_name + '-' + obj.last_name;
+  arrayFiltro.forEach(obj => {
+    let clave = obj.first_name + '-' + obj.last_name;
 
-  if (grupos.hasOwnProperty(clave)) {
-    if (new Date(obj.fullFecha) > new Date(grupos[clave].fullFecha)) {
+    if (grupos.hasOwnProperty(clave)) {
+      if (new Date(obj.fullFecha) > new Date(grupos[clave].fullFecha)) {
+        grupos[clave] = obj;
+      }
+      grupos[clave].cantidad = (grupos[clave].cantidad || 1) + 1;
+    } else {
+      obj.cantidad = 1;
       grupos[clave] = obj;
     }
-    grupos[clave].cantidad = (grupos[clave].cantidad || 1) + 1;
-  } else {
-    obj.cantidad = 1;
-    grupos[clave] = obj;
-  }
-});
+  });
 
-let resultado = Object.values(grupos);
+  let resultado = Object.values(grupos);
 
 
 
-resultado.sort((a, b) => {
+  resultado.sort((a, b) => {
     var timestampA = new Date(a.fullFecha);
     var timestampB = new Date(b.fullFecha);
-    return  timestampB - timestampA;
+    return timestampB - timestampA;
   });
   //console.log('res',resultado);
 
   //console.log('Sorted F',arrayFiltro);
-  ultimosUsuarios.value = resultado.slice(0,25);
+  ultimosUsuarios.value = resultado.slice(0, 25);
 
   //console.log('ultimosUsuarios',ultimosUsuarios.value);
 
@@ -346,57 +346,57 @@ resultado.sort((a, b) => {
   titulo.value = title;
 };
 
-const resolveUltimasVisitasUser =(first, last)=>{
-  
-  const inicio = rawData.value.map(({first_name, last_name, navigationRecord})=>{ 
-  return {first_name, last_name, navigationRecord};
+const resolveUltimasVisitasUser = (first, last) => {
+
+  const inicio = rawData.value.map(({ first_name, last_name, navigationRecord }) => {
+    return { first_name, last_name, navigationRecord };
   });
-  
+
   const arrayFiltro = [];
-  userSelected.value = first+' '+last;
-  let fullNameViene = first+' '+last;
+  userSelected.value = first + ' ' + last;
+  let fullNameViene = first + ' ' + last;
   //console.log('name',fullNameViene);
   //console.log('inicio' ,inicio); 
   for (let p of inicio) {
-    let fullName = p.first_name+' '+p.last_name;
-    if (fullName == fullNameViene) { 
-    for (let i of p.navigationRecord) {
-      
-          var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY' , 'M/D/YYYY', 'D/M/YYYY' ];    
-          var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss','DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];    
-          let fechaFormat = moment(i.fecha, allowedDateFormats, true).format( 'DD/MM/YYYY');
-          let horaFix = i.hora.split(':');
-          if(horaFix[2].indexOf(' ')>= 0){
-            let slot3 = horaFix[2].split(' ');
-            horaFix[2] = slot3[0];
-          }
-          let horaFinal = horaFix[0]+':'+horaFix[1]+':'+horaFix[2];
-          let fullFecha = fechaFormat+' '+horaFinal;
-          let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
+    let fullName = p.first_name + ' ' + p.last_name;
+    if (fullName == fullNameViene) {
+      for (let i of p.navigationRecord) {
 
-          let data = {
-              first_name: p.first_name,
-              last_name: p.last_name,
-              url: i.url,
-              title: i.title,
-              fecha: fechaFormat,
-              fechaRaw: i.fecha,
-              fullFecha: fullFechaFormat,
-              hora: horaFinal
-          }
-          arrayFiltro.push(data);
+        var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY', 'M/D/YYYY', 'D/M/YYYY'];
+        var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss', 'DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];
+        let fechaFormat = moment(i.fecha, allowedDateFormats, true).format('DD/MM/YYYY');
+        let horaFix = i.hora.split(':');
+        if (horaFix[2].indexOf(' ') >= 0) {
+          let slot3 = horaFix[2].split(' ');
+          horaFix[2] = slot3[0];
         }
+        let horaFinal = horaFix[0] + ':' + horaFix[1] + ':' + horaFix[2];
+        let fullFecha = fechaFormat + ' ' + horaFinal;
+        let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
+
+        let data = {
+          first_name: p.first_name,
+          last_name: p.last_name,
+          url: i.url,
+          title: i.title,
+          fecha: fechaFormat,
+          fechaRaw: i.fecha,
+          fullFecha: fullFechaFormat,
+          hora: horaFinal
+        }
+        arrayFiltro.push(data);
       }
+    }
   }
 
   arrayFiltro.sort((a, b) => {
     var timestampA = new Date(a.fullFecha);
     var timestampB = new Date(b.fullFecha);
-    return  timestampB - timestampA;
+    return timestampB - timestampA;
   });
 
   //console.log('Sorted F',arrayFiltro);
-  ultimasVisitas.value = arrayFiltro.slice(0,10);
+  ultimasVisitas.value = arrayFiltro.slice(0, 10);
 
   ultimasVisitasVisible.value = true;
 }
@@ -451,8 +451,8 @@ function exportCSVFile(headers, items, fileTitle) {
   }
 }
 
-async function downloadSelection () {
-   
+async function downloadSelection() {
+
   let headers = {
     first_name: "first_name",
     last_name: "last_name",
@@ -464,185 +464,190 @@ async function downloadSelection () {
   };
   let doc = [];
   doc = Array.from(ultimosUsuariosDownload.value);
-  let title = "ultimos_usuarios_"+titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
+  let title = "ultimos_usuarios_" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
   //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
 
   exportCSVFile(headers, doc, title);
- // }
+  // }
 
 
 
 };
 
-
+const tab = ref('tab-ecuavisa')
 </script>
 
 <template>
-  <VRow>
-    <VCol lg="12" cols="12" sm="6">
-      <VCard>
-        <VCardText class="d-flex flex-wrap justify-space-between gap-4">
-        <VCardItem class="pb-sm-0">
-          <VCardTitle>Páginas más vistas</VCardTitle>
-          <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
-        </VCardItem>
-        
-        <div class="date-picker-wrapper" style="width: 300px;" v-if="!isLoading">
-        <AppDateTimePicker
-        prepend-inner-icon="tabler-calendar"
-        density="compact"
-        v-model="fechaIngresada"
-        show-current= true
-        @on-change="obtenerFechaDispositivos"
-        :config="{ 
-          position: 'auto right',
-          mode:'range',
-          altFormat: 'F j, Y',
-          dateFormat: 'm-d-Y',
-          maxDate: new Date(),
-          reactive :true
-          
-        }"
-        />
-        </div>
-        <VCol cols="12">
-  <!-- botonera de filtros guardados ##estado desactivado##-->
-  <VBtnToggle v-if="!isLoading"   
-        v-model="btnFiltros"
-        color="primary"
-        class="d-none"
-        divided
-      >
-   <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosVisitas">
-    {{ item.nombre }}
-   </VBtn>
+  <!-- -- -->
 
-   </VBtnToggle>
+  <VTabs v-model="tab">
+    <VTab value="tab-ecuavisa">
+      Ecuavisa.com
+    </VTab>
+    <VTab value="tab-notasdrivers">
+      Notas Drivers
+    </VTab>
+  </VTabs>
+  <br>
 
-    </VCol>
-    </VCardText>
-        <VCardText v-if="isLoading">Cargando datos...</VCardText>
-        <VCardText  v-else>
-          <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
-            <thead>
-              <tr>
-                <th scope="col">TÍTULO DE PÁGINA</th>
-                <th scope="col">VISITAS</th>
-              </tr>
-            </thead>
+  <VWindow v-model="tab">
+    <VWindowItem value="tab-ecuavisa">
+      <VRow>
+        <VCol lg="12" cols="12" sm="6">
+          <VCard>
+            <VCardText class="d-flex flex-wrap justify-space-between gap-4">
+              <VCardItem class="pb-sm-0">
+                <VCardTitle>Páginas más vistas</VCardTitle>
+                <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
+              </VCardItem>
 
-            <tbody>
-              <tr v-for="item  in paginatedUrlCounts" >
-                <td class="clickable" @click="resolveUltimosUsuarios(item.title || item.url)">
-                  
-                   {{ item.title ? item.title : item.url }}
-                 
-                </td>
+              <div class="date-picker-wrapper" style="width: 300px;" v-if="!isLoading">
+                <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngresada"
+                  show-current=true @on-change="obtenerFechaDispositivos" :config="{
+                    position: 'auto right',
+                    mode: 'range',
+                    altFormat: 'F j, Y',
+                    dateFormat: 'm-d-Y',
+                    maxDate: new Date(),
+                    reactive: true
 
-                <td class="text-medium-emphasis">
-                  {{ item.count }}
-                </td>
-              </tr>
-            </tbody>
-          </VTable>
-          <div class="d-flex align-center justify-space-between botonescurrentPage">
-            <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
-            Página {{ currentPage }}
-            <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
-              :disabled="(currentPage * itemsPerPage) >= urlCounts.length">
-            </VBtn>
-            
-       
-          </div>
+                  }" />
+              </div>
+              <VCol cols="12">
+                <!-- botonera de filtros guardados ##estado desactivado##-->
+                <VBtnToggle v-if="!isLoading" v-model="btnFiltros" color="primary" class="d-none" divided>
+                  <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosVisitas">
+                    {{ item.nombre }}
+                  </VBtn>
 
-        </VCardText>
-      </VCard>
-    </VCol>
-    <VCol lg="6" cols="12" sm="6">
-    <!-- trazabilidad independiente -->
-    <VExpandTransition>
-      <VCard v-show="ultimosUsuariosVisible">
-        <VCardItem class="pb-sm-0">
-          <div style="display: flex; flex-wrap: wrap;">   
-          <div style="width: max-content;">
-          <VCardTitle >Últimas visitas a la página {{ titleSelected }}</VCardTitle>  
-        </div>
-          <div style="margin-left: auto; margin-top: 1rem; margin-bottom: 1rem;">
-          <VBtn 
-            color="primary"							
-            @click="downloadSelection"
-            >
-            Exportar
-          </VBtn>
-        </div>
-    </div> 
-         
-          <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
-            <thead>
-              <tr>
-                <th scope="col">Nombre</th>
-                <th scope="col">Fecha</th>
-                <th scope="col">Cantidad</th>
-                <th scope="col">Hora</th>
-              </tr>
-            </thead>
+                </VBtnToggle>
 
-            <tbody>
-              <tr class="clickable" v-for="user in ultimosUsuarios" @click="resolveUltimasVisitasUser(user.first_name, user.last_name)">
-                <td class="text-high-emphasis">
-                  {{ user.first_name }} {{ user.last_name }}
-                </td>
-                <td class="text-medium-emphasis">
-                  {{ user.fecha}}
-                </td>
-                <td class="text-medium-emphasis">
-                  {{ user.cantidad}}
-                </td>
-                <td class="text-medium-emphasis">
-                  {{ user.hora}}
-                </td>
-              </tr>
-            </tbody>
-          </VTable>
-        </VCardItem>
-      </VCard>
-    </VExpandTransition>
-    </VCol>
-    <VCol lg="6" cols="12" sm="6">
-    <!-- trazabilidad independiente -->
-    <VExpandTransition>
-      <VCard v-show="ultimasVisitasVisible">
-        <VCardItem>
-      <VCardTitle >Actividad del usuario {{ userSelected }}</VCardTitle>
-     </VCardItem>
-        <VCardText>
-          <VTimeline
-            density="compact"
-            align="start"
-            truncate-line="both"
-            class="v-timeline-density-compact"
-          > 
-            <VTimelineItem dot-color="primary" size="x-small"
-            v-for="user in ultimasVisitas">
-              <div class="d-flex justify-space-between align-center flex-wrap">
-                <h4 class="text-base font-weight-semibold me-1">
-                  {{ user.title || user.url }} 
-                </h4>
-                
-                
+              </VCol>
+            </VCardText>
+            <VCardText v-if="isLoading">Cargando datos...</VCardText>
+            <VCardText v-else>
+              <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                <thead>
+                  <tr>
+                    <th scope="col">TÍTULO DE PÁGINA</th>
+                    <th scope="col">VISITAS</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr v-for="item  in paginatedUrlCounts">
+                    <td class="clickable" @click="resolveUltimosUsuarios(item.title || item.url)">
+
+                      {{ item.title ? item.title : item.url }}
+
+                    </td>
+
+                    <td class="text-medium-emphasis">
+                      {{ item.count }}
+                    </td>
+                  </tr>
+                </tbody>
+              </VTable>
+              <div class="d-flex align-center justify-space-between botonescurrentPage">
+                <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
+                Página {{ currentPage }}
+                <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
+                  :disabled="(currentPage * itemsPerPage) >= urlCounts.length">
+                </VBtn>
+
+
               </div>
 
-              <p class="mb-1">{{ user.fecha}} {{ user.hora}}</p>
-            
-            </VTimelineItem>
+            </VCardText>
+          </VCard>
+        </VCol>
+        <VCol lg="6" cols="12" sm="6">
+          <!-- trazabilidad independiente -->
+          <VExpandTransition>
+            <VCard v-show="ultimosUsuariosVisible">
+              <VCardItem class="pb-sm-0">
+                <div style="display: flex; flex-wrap: wrap;">
+                  <div style="width: max-content;">
+                    <VCardTitle>Últimas visitas a la página {{ titleSelected }}</VCardTitle>
+                  </div>
+                  <div style="margin-left: auto; margin-top: 1rem; margin-bottom: 1rem;">
+                    <VBtn color="primary" @click="downloadSelection">
+                      Exportar
+                    </VBtn>
+                  </div>
+                </div>
 
-          </VTimeline>
-        </VCardText>
-      </VCard>
-    </VExpandTransition>
-    </VCol>
-  </VRow>
+                <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                  <thead>
+                    <tr>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">Fecha</th>
+                      <th scope="col">Cantidad</th>
+                      <th scope="col">Hora</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr class="clickable" v-for="user in ultimosUsuarios"
+                      @click="resolveUltimasVisitasUser(user.first_name, user.last_name)">
+                      <td class="text-high-emphasis">
+                        {{ user.first_name }} {{ user.last_name }}
+                      </td>
+                      <td class="text-medium-emphasis">
+                        {{ user.fecha }}
+                      </td>
+                      <td class="text-medium-emphasis">
+                        {{ user.cantidad }}
+                      </td>
+                      <td class="text-medium-emphasis">
+                        {{ user.hora }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </VTable>
+              </VCardItem>
+            </VCard>
+          </VExpandTransition>
+        </VCol>
+        <VCol lg="6" cols="12" sm="6">
+          <!-- trazabilidad independiente -->
+          <VExpandTransition>
+            <VCard v-show="ultimasVisitasVisible">
+              <VCardItem>
+                <VCardTitle>Actividad del usuario {{ userSelected }}</VCardTitle>
+              </VCardItem>
+              <VCardText>
+                <VTimeline density="compact" align="start" truncate-line="both" class="v-timeline-density-compact">
+                  <VTimelineItem dot-color="primary" size="x-small" v-for="user in ultimasVisitas">
+                    <div class="d-flex justify-space-between align-center flex-wrap">
+                      <h4 class="text-base font-weight-semibold me-1">
+                        {{ user.title || user.url }}
+                      </h4>
+
+
+                    </div>
+
+                    <p class="mb-1">{{ user.fecha }} {{ user.hora }}</p>
+
+                  </VTimelineItem>
+
+                </VTimeline>
+              </VCardText>
+            </VCard>
+          </VExpandTransition>
+        </VCol>
+      </VRow>
+    </VWindowItem>
+
+    <VWindowItem value="tab-notasdrivers">
+      <h5>drivers</h5>
+
+    </VWindowItem>
+
+  </VWindow>
+
+  <!-- -- -->
 </template>
 
 <style scoped>
@@ -660,7 +665,11 @@ td span {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.clickable { cursor: pointer; }
+
+.clickable {
+  cursor: pointer;
+}
+
 @media (max-width: 1000px) {
   td span {
     max-width: 200px;
