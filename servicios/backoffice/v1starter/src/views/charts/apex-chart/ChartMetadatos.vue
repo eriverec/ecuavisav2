@@ -355,9 +355,9 @@ return {series: [seriesFormat], options: options, intereses: categoriesRaw};
             />
           </div>
           <div class="select" style="width: 250px;margin-top: -22px;">
-            <small>{{ !usuarioSeleccionado?'Seleccionar cliente':(`Usuario seleccionado`) }}</small>
+            <small>{{ !usuarioSeleccionado?'Seleccionar usuario':(`Usuario seleccionado`) }}</small>
             <VBtn :color="!usuarioSeleccionado?'primary':'success' " width="300px" variant="outlined" @click="isDialogUserVisible = !isDialogUserVisible">
-              {{ !usuarioSeleccionado?'Seleccionar cliente':(`${usuarioSeleccionado}`) }}
+              {{ !usuarioSeleccionado?'Seleccionar usuario':(`${usuarioSeleccionado}`) }}
             </VBtn>
           </div>
         </div>

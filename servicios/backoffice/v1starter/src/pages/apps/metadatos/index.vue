@@ -744,7 +744,7 @@ async function downloadSelection() {
               <VCard v-show="actividadUsuarioVisible">
                 <VCardItem>
                   <VCardTitle>
-                    Temas con mayor interés para el usuario: <b>{{ userSelected }}</b>
+                    Temas de mayor navegación del usuario: <b>{{ userSelected }}</b>
                   </VCardTitle>
 
                   <VCardSubtitle style="margin-top: -2px;font-size: 12px;">
