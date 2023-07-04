@@ -33,6 +33,22 @@
                 </VBtnToggle>
 
               </VCol>
+              <VCol cols="12" class="d-flex flex-wrap gap-4">
+              <div style="width: 20rem">
+                <VTextField
+                  v-model="searchQuery"
+                  placeholder="Buscar..."
+                  density="compact"
+                />
+              </div>
+              <!-- 👉 Search button -->
+              <VBtn prepend-icon="tabler-search" @click="searchData">
+                Buscar
+              </VBtn>
+              <VBtn @click="reset">
+                Reiniciar
+              </VBtn>
+            </VCol>
             </VCardText>
             <VCardText v-if="isLoading">Cargando datos...</VCardText>
             <VCardText v-else>
@@ -206,6 +222,8 @@ const titleSelected = ref('');
 const ultimosUsuariosDownload = ref([]);
 const userSelected = ref('');
 const router = useRouter();
+const searchQuery = ref('');
+const urlRaw = ref([]);
 // const userTabVisitas = ref(null)
 // // const tabVisitas = ref('tab-ecuavisa')
 // const tabsVisitas = [
@@ -316,6 +334,8 @@ async function fetchData(fechai, fechaf) {
         return i === -1 ? a.push({ url: b.url, title: b.title, count: 1 }) : a[i].count++, a;
       }, []);
 
+      urlRaw.value = Array.from(finArray);
+      urlRaw.value.sort((a, b) => b.count - a.count); 
       urlCounts.value = Array.from(finArray);
       urlCounts.value.sort((a, b) => b.count - a.count);
       isLoading.value = false;
@@ -355,7 +375,7 @@ async function fetchDataFecha(fechai, fechaf) {
         }
       }
     }
-
+    
     urlCounts.value = Array.from(urlMap.values());
     urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
   } catch (error) {
@@ -441,6 +461,27 @@ const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
 };
 
+const searchData = () => {
+  if(searchQuery.value !== ''){
+    currentPage.value = 1;
+    const normalizedSearchQuery = searchQuery.value.trim();
+
+    const filtered = urlRaw.value.filter((item) => {
+    const normalizedItemName = item.url.trim();
+     return normalizedItemName.includes(normalizedSearchQuery);
+    });
+
+    urlCounts.value = filtered;
+  }
+};
+
+const reset = () => {
+  currentPage.value = 1;
+  searchQuery.value = '';
+  ultimasVisitasVisible.value = false;
+  ultimosUsuariosVisible.value = false;
+  urlCounts.value = urlRaw.value;
+};
 
 const resolveUltimosUsuarios = (title) => {
   titleSelected.value = title;
