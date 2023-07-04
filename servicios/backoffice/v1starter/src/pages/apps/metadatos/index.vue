@@ -179,8 +179,8 @@ async function resolveVisitas(titulo) {
 }
 
 const paginatedVisitas = computed(() => {
-  const start = (currentPageV.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
+  const start = (currentPageV.value - 1) * (itemsPerPage + 1);
+  const end = start + (itemsPerPage + 1);
 
   return ultimasVisitas.value.slice(start, end);
 });
@@ -607,8 +607,8 @@ async function downloadSelection() {
                     </div>        
                  </VCardText>
                   <VCardText>
-
-                  <div style="max-height: 520px;overflow: auto;">
+<!-- max-height: 520px;overflow: auto; -->
+                  <div style="">
                     <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
                       <thead>
                         <tr>
