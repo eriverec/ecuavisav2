@@ -695,6 +695,7 @@ async function downloadSelection() {
                           </h6>
                         </a>
                         <a
+                          style="display: none;"
                           v-if="user.tipo=='Nota'"
                           target="_blank"
                           :href="(user.url).replace(/\/[^\/]*$/, '')"
