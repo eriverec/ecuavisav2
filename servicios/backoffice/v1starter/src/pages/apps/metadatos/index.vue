@@ -689,8 +689,8 @@ async function downloadSelection() {
                           />
                           <h6 class="text-primary font-weight-semibold text-sm">
                             
-                            {{ user.tipo=="Nota"?"Ir a la nota":"Ir a la sección" }}
-
+                            <!-- {{ user.tipo=="Nota"?"Ir a la nota":"Ir a la sección" }} -->
+                            {{ user.tipo=="Nota"?"Visitar en la web":"Ir a la sección" }}
                             
                           </h6>
                         </a>
