@@ -1,3 +1,177 @@
+
+
+<template>
+  <!-- -- -->
+  <VRow>
+        <VCol lg="12" cols="12" sm="6">
+          <VCard>
+            <VCardText class="d-flex flex-wrap justify-space-between gap-4">
+              <VCardItem class="pb-sm-0">
+                <VCardTitle>Páginas más vistas</VCardTitle>
+                <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
+              </VCardItem>
+
+              <div class="date-picker-wrapper" style="width: 300px;" v-if="!isLoading">
+                <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngresada"
+                  show-current=true @on-change="obtenerFechaDispositivos" :config="{
+                    position: 'auto right',
+                    mode: 'range',
+                    altFormat: 'F j, Y',
+                    dateFormat: 'm-d-Y',
+                    maxDate: new Date(),
+                    reactive: true
+
+                  }" />
+              </div>
+              <VCol cols="12">
+                <!-- botonera de filtros guardados ##estado desactivado##-->
+                <VBtnToggle v-if="!isLoading" v-model="btnFiltros" color="primary" class="d-none" divided>
+                  <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosVisitas">
+                    {{ item.nombre }}
+                  </VBtn>
+
+                </VBtnToggle>
+
+              </VCol>
+            </VCardText>
+            <VCardText v-if="isLoading">Cargando datos...</VCardText>
+            <VCardText v-else>
+              <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                <thead>
+                  <tr>
+                    <th scope="col">TÍTULO DE PÁGINA</th>
+                    <th scope="col">VISITAS</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr v-for="item  in paginatedUrlCounts">
+                    <td class="clickable" @click="resolveUltimosUsuarios(item.title || item.url)">
+
+                      {{ item.title ? item.title : item.url }}
+
+                    </td>
+
+                    <td class="text-medium-emphasis">
+                      {{ item.count }}
+                    </td>
+                  </tr>
+                </tbody>
+              </VTable>
+              <div class="d-flex align-center justify-space-between botonescurrentPage">
+                <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
+                Página {{ currentPage }}
+                <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
+                  :disabled="(currentPage * itemsPerPage) >= urlCounts.length">
+                </VBtn>
+
+
+              </div>
+
+            </VCardText>
+          </VCard>
+        </VCol>
+        <VCol lg="6" cols="12" sm="6">
+          <!-- trazabilidad independiente -->
+          <VExpandTransition>
+            <VCard v-show="ultimosUsuariosVisible">
+              <VCardItem class="pb-sm-0">
+                <div style="display: flex; flex-wrap: wrap;">
+                  <div style="width: max-content;">
+                    <VCardTitle>Últimas visitas a la página {{ titleSelected }}</VCardTitle>
+                  </div>
+                  <div style="margin-left: auto; margin-top: 1rem; margin-bottom: 1rem;">
+                    <VBtn color="primary" @click="downloadSelection">
+                      Exportar
+                    </VBtn>
+                  </div>
+                </div>
+
+                <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                  <thead>
+                    <tr>
+                      <th scope="col">Nombre</th>
+                      <th scope="col">Fecha</th>
+                      <th scope="col">Cantidad</th>
+                      <th scope="col">Hora</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr class="clickable" v-for="user in ultimosUsuarios"
+                      @click="resolveUltimasVisitasUser(user.first_name, user.last_name)">
+                      <td class="text-high-emphasis">
+                        {{ user.first_name }} {{ user.last_name }}
+                      </td>
+                      <td class="text-medium-emphasis">
+                        {{ user.fecha }}
+                      </td>
+                      <td class="text-medium-emphasis">
+                        {{ user.cantidad }}
+                      </td>
+                      <td class="text-medium-emphasis">
+                        {{ user.hora }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </VTable>
+              </VCardItem>
+            </VCard>
+          </VExpandTransition>
+        </VCol>
+        <VCol lg="6" cols="12" sm="6">
+          <!-- trazabilidad independiente -->
+          <VExpandTransition>
+            <VCard v-show="ultimasVisitasVisible">
+              <VCardItem>
+                <VCardTitle>Actividad del usuario {{ userSelected }}</VCardTitle>
+              </VCardItem>
+              <VCardText>
+                <VTimeline density="compact" align="start" truncate-line="both" class="v-timeline-density-compact">
+                  <VTimelineItem dot-color="primary" size="x-small" v-for="user in ultimasVisitas">
+                    <div class="d-flex justify-space-between align-center flex-wrap">
+                      <h4 class="text-base font-weight-semibold me-1">
+                        {{ user.title || user.url }}
+                      </h4>
+
+
+                    </div>
+
+                    <p class="mb-1">{{ user.fecha }} {{ user.hora }}</p>
+
+                  </VTimelineItem>
+
+                </VTimeline>
+              </VCardText>
+            </VCard>
+          </VExpandTransition>
+        </VCol>
+      </VRow>
+<!-- 
+  <VTabs v-model="userTabVisitas" class="v-tabs-pill">
+    <VTab v-for="tab in tabsVisitas" :key="tab.icon">
+      <VIcon :size="18" :icon="tab.icon" class="me-1" />
+      <span>{{ tab.title }}</span>
+    </VTab>
+  </VTabs> -->
+
+  <!-- <VWindow v-model="userTabVisitas" class="mt-6 disable-tab-transition" :touch="false">
+
+    <VWindowItem>
+     
+    </VWindowItem>
+ 
+    <VWindowItem>
+
+    </VWindowItem>
+
+  </VWindow> -->
+
+
+
+  <!-- -- -->
+</template>
+
 <script setup>
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -32,6 +206,18 @@ const titleSelected = ref('');
 const ultimosUsuariosDownload = ref([]);
 const userSelected = ref('');
 const router = useRouter();
+// const userTabVisitas = ref(null)
+// // const tabVisitas = ref('tab-ecuavisa')
+// const tabsVisitas = [
+//   {
+//     icon: 'tabler-activity-heartbeat',
+//     title: 'Ecuavisa.com',
+//   },
+//   {
+//     icon: 'tabler-map-2',
+//     title: 'Notas Drivers',
+//   }
+// ]
 async function fetchFiltros() {
   await fetch('https://servicio-filtros.vercel.app/visitas/all')
     .then(response => response.json())
@@ -475,180 +661,7 @@ async function downloadSelection() {
 
 };
 
-const tab = ref('tab-ecuavisa')
 </script>
-
-<template>
-  <!-- -- -->
-
-  <VTabs v-model="tab">
-    <VTab value="tab-ecuavisa">
-      Ecuavisa.com
-    </VTab>
-    <VTab value="tab-notasdrivers">
-      Notas Drivers
-    </VTab>
-  </VTabs>
-  <br>
-
-  <VWindow v-model="tab">
-    <VWindowItem value="tab-ecuavisa">
-      <VRow>
-        <VCol lg="12" cols="12" sm="6">
-          <VCard>
-            <VCardText class="d-flex flex-wrap justify-space-between gap-4">
-              <VCardItem class="pb-sm-0">
-                <VCardTitle>Páginas más vistas</VCardTitle>
-                <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
-              </VCardItem>
-
-              <div class="date-picker-wrapper" style="width: 300px;" v-if="!isLoading">
-                <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngresada"
-                  show-current=true @on-change="obtenerFechaDispositivos" :config="{
-                    position: 'auto right',
-                    mode: 'range',
-                    altFormat: 'F j, Y',
-                    dateFormat: 'm-d-Y',
-                    maxDate: new Date(),
-                    reactive: true
-
-                  }" />
-              </div>
-              <VCol cols="12">
-                <!-- botonera de filtros guardados ##estado desactivado##-->
-                <VBtnToggle v-if="!isLoading" v-model="btnFiltros" color="primary" class="d-none" divided>
-                  <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosVisitas">
-                    {{ item.nombre }}
-                  </VBtn>
-
-                </VBtnToggle>
-
-              </VCol>
-            </VCardText>
-            <VCardText v-if="isLoading">Cargando datos...</VCardText>
-            <VCardText v-else>
-              <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
-                <thead>
-                  <tr>
-                    <th scope="col">TÍTULO DE PÁGINA</th>
-                    <th scope="col">VISITAS</th>
-                  </tr>
-                </thead>
-
-                <tbody>
-                  <tr v-for="item  in paginatedUrlCounts">
-                    <td class="clickable" @click="resolveUltimosUsuarios(item.title || item.url)">
-
-                      {{ item.title ? item.title : item.url }}
-
-                    </td>
-
-                    <td class="text-medium-emphasis">
-                      {{ item.count }}
-                    </td>
-                  </tr>
-                </tbody>
-              </VTable>
-              <div class="d-flex align-center justify-space-between botonescurrentPage">
-                <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
-                Página {{ currentPage }}
-                <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
-                  :disabled="(currentPage * itemsPerPage) >= urlCounts.length">
-                </VBtn>
-
-
-              </div>
-
-            </VCardText>
-          </VCard>
-        </VCol>
-        <VCol lg="6" cols="12" sm="6">
-          <!-- trazabilidad independiente -->
-          <VExpandTransition>
-            <VCard v-show="ultimosUsuariosVisible">
-              <VCardItem class="pb-sm-0">
-                <div style="display: flex; flex-wrap: wrap;">
-                  <div style="width: max-content;">
-                    <VCardTitle>Últimas visitas a la página {{ titleSelected }}</VCardTitle>
-                  </div>
-                  <div style="margin-left: auto; margin-top: 1rem; margin-bottom: 1rem;">
-                    <VBtn color="primary" @click="downloadSelection">
-                      Exportar
-                    </VBtn>
-                  </div>
-                </div>
-
-                <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
-                  <thead>
-                    <tr>
-                      <th scope="col">Nombre</th>
-                      <th scope="col">Fecha</th>
-                      <th scope="col">Cantidad</th>
-                      <th scope="col">Hora</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    <tr class="clickable" v-for="user in ultimosUsuarios"
-                      @click="resolveUltimasVisitasUser(user.first_name, user.last_name)">
-                      <td class="text-high-emphasis">
-                        {{ user.first_name }} {{ user.last_name }}
-                      </td>
-                      <td class="text-medium-emphasis">
-                        {{ user.fecha }}
-                      </td>
-                      <td class="text-medium-emphasis">
-                        {{ user.cantidad }}
-                      </td>
-                      <td class="text-medium-emphasis">
-                        {{ user.hora }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </VTable>
-              </VCardItem>
-            </VCard>
-          </VExpandTransition>
-        </VCol>
-        <VCol lg="6" cols="12" sm="6">
-          <!-- trazabilidad independiente -->
-          <VExpandTransition>
-            <VCard v-show="ultimasVisitasVisible">
-              <VCardItem>
-                <VCardTitle>Actividad del usuario {{ userSelected }}</VCardTitle>
-              </VCardItem>
-              <VCardText>
-                <VTimeline density="compact" align="start" truncate-line="both" class="v-timeline-density-compact">
-                  <VTimelineItem dot-color="primary" size="x-small" v-for="user in ultimasVisitas">
-                    <div class="d-flex justify-space-between align-center flex-wrap">
-                      <h4 class="text-base font-weight-semibold me-1">
-                        {{ user.title || user.url }}
-                      </h4>
-
-
-                    </div>
-
-                    <p class="mb-1">{{ user.fecha }} {{ user.hora }}</p>
-
-                  </VTimelineItem>
-
-                </VTimeline>
-              </VCardText>
-            </VCard>
-          </VExpandTransition>
-        </VCol>
-      </VRow>
-    </VWindowItem>
-
-    <VWindowItem value="tab-notasdrivers">
-      <h5>drivers</h5>
-
-    </VWindowItem>
-
-  </VWindow>
-
-  <!-- -- -->
-</template>
 
 <style scoped>
 .tableNavegacion a {

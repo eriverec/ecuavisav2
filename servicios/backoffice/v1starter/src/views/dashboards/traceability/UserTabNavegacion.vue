@@ -93,7 +93,7 @@ const prevPage = () => {
     <VCol lg="12" cols="12" sm="6">
       <VCard>
         <VCardItem class="pb-sm-0">
-          <VCardTitle>Páginas más vistas</VCardTitle>
+          <VCardTitle>Páginas más vistas --</VCardTitle>
           <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
         </VCardItem>
 
