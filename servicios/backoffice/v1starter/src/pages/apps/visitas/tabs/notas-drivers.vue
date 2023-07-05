@@ -362,6 +362,7 @@ ultimasVisitasVisible.value = true;
 </script>
 
 <template>
+  <VRow>
     <VCol lg="12" cols="12">
        <VCard>
          <VCardText class="d-flex flex-wrap justify-space-between gap-4">
@@ -515,6 +516,7 @@ ultimasVisitasVisible.value = true;
        
 
       </VCol>
+    </VRow>
 </template>
 
 <style scoped>

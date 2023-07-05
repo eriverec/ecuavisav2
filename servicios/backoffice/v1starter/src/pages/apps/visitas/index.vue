@@ -2,7 +2,7 @@
 
 <template>
   <!-- -- -->
-  <VRow>
+  <VRow style="margin-bottom: 0.5rem;">
     <VCol lg="12" cols="12" sm="6">
     <VTabs v-model="tabs" class="v-tabs-pill">
       <VTab value="ecuavisa-com">
@@ -14,8 +14,11 @@
     </VTabs>
     </VCol>
 
-    <VWindow v-model="tabs">
-      <VWindowItem value="ecuavisa-com">
+  </VRow>
+  
+  <VWindow v-model="tabs">
+   <VWindowItem value="ecuavisa-com">
+    <VRow>
         <VCol lg="12" cols="12" sm="6">
        
           <VCard>
@@ -178,13 +181,15 @@
        
 
       </VCol>
-    </VWindowItem>
-    <VWindowItem value="notas-drivers">
-      <notasDrivers/>
-    </VWindowItem>
-    </VWindow>
+    
      
       </VRow>
+    </VWindowItem>   
+    <VWindowItem value="notas-drivers"> 
+      <notasDrivers/>   
+    </VWindowItem>
+
+    </VWindow>
     
 <!-- 
   <VTabs v-model="userTabVisitas" class="v-tabs-pill">
