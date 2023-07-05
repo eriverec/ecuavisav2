@@ -3,7 +3,21 @@
 <template>
   <!-- -- -->
   <VRow>
+    <VCol lg="12" cols="12" sm="6">
+    <VTabs v-model="tabs" class="v-tabs-pill">
+      <VTab value="ecuavisa-com">
+        Ecuavisa.com
+      </VTab>
+      <VTab value="notas-drivers">
+        Notas drivers
+      </VTab>
+    </VTabs>
+    </VCol>
+
+    <VWindow v-model="tabs">
+      <VWindowItem value="ecuavisa-com">
         <VCol lg="12" cols="12" sm="6">
+       
           <VCard>
             <VCardText class="d-flex flex-wrap justify-space-between gap-4">
               <VCardItem class="pb-sm-0">
@@ -161,8 +175,17 @@
               </VCardText>
             </VCard>
           </VExpandTransition>
-        </VCol>
+       
+
+      </VCol>
+    </VWindowItem>
+    <VWindowItem value="notas-drivers">
+      <notasDrivers/>
+    </VWindowItem>
+    </VWindow>
+     
       </VRow>
+    
 <!-- 
   <VTabs v-model="userTabVisitas" class="v-tabs-pill">
     <VTab v-for="tab in tabsVisitas" :key="tab.icon">
@@ -184,11 +207,13 @@
   </VWindow> -->
 
 
+ 
 
   <!-- -- -->
 </template>
 
 <script setup>
+import notasDrivers from '@/pages/apps/visitas/tabs/notas-drivers.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -224,6 +249,7 @@ const userSelected = ref('');
 const router = useRouter();
 const searchQuery = ref('');
 const urlRaw = ref([]);
+const tabs = ref('ecuavisa-com');
 // const userTabVisitas = ref(null)
 // // const tabVisitas = ref('tab-ecuavisa')
 // const tabsVisitas = [
