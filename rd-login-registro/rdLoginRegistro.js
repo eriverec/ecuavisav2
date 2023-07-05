@@ -212,7 +212,7 @@ function login() {
           localStorageSetUsuarioNew(result.user);
           // let redirect = "https://www.ecuavisa.com/servicios/perfil?tk=" + result.token;
           //cambiar url destino
-          let redirect = "https://www.ecuavisa.com/servicios/perfil/?tk=" + result.token;
+          let redirect = "https://www.ecuavisa.com/concursos?tk=" + result.token;
           //console.log("https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url);
 
           window.location = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
