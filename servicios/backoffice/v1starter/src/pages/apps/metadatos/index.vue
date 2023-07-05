@@ -13,12 +13,15 @@ moment.locale('es', [esLocale]);
 const itemsPerPage = 8;
 const currentPage = ref(1);
 const currentPageV = ref(1);
+const currentPageT = ref(1);
 const metadatos = ref([]);
 const isLoading = ref(false);
 const fechaIngresada = ref('');
 const fechaIni = ref('');
 const fechaFin = ref('');
 const ultimasVisitas = ref([]);
+const datosURLTemas = ref([]);
+const datosURLTemasVisible = ref(false);
 const titleSelected = ref('');
 const ultimasVisitasVisible = ref(false);
 const visitasExport = ref([]);
@@ -121,9 +124,67 @@ async function obtenerPorFechaMeta(selectedDates) {
   }
 }
 
+/*PAGINADO TEMA FECHA*/
+const paginatedMetas = computed(() => {
+  const start = (currentPageT.value - 1) * (itemsPerPage);
+  const end = start + (itemsPerPage);
+
+  return datosURLTemas.value.slice(start, end);
+});
+
+const nextPageT = () => {
+  if (currentPageT.value * itemsPerPage < datosURLTemas.value.length) currentPageT.value++;
+};
+
+const prevPageT = () => {
+  if (currentPageT.value > 1) currentPageT.value--;
+};
+/*FIN PAGINA TEMA FECHA*/
+
+async function recuperarURLPorTemas(titulo) {
+  await fetch(`https://servicio-de-actividad.vercel.app/temas/navegation/${titulo}?fechai=${fechaIni.value}&fechaf=${fechaFin.value}`)
+    .then(response => response.json())
+    .then(d => {
+      var data = d.data[0].navigationRecord;
+      var newData = [];
+      var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY', 'M/D/YYYY', 'D/M/YYYY'];
+      var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss', 'DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];
+      
+      for(var i in data){
+        const ins = data[i];
+
+        var fechaFormat = moment(ins.fecha, allowedDateFormats, true).format('DD/MM/YYYY');
+        var horaFix = ins.hora.split(':');
+        if (horaFix[2].indexOf(' ') >= 0) {
+          let slot3 = horaFix[2].split(' ');
+          horaFix[2] = slot3[0];
+        }
+        let horaFinal = horaFix[0] + ':' + horaFix[1] + ':' + horaFix[2];
+        let fullFecha = fechaFormat + ' ' + horaFinal;
+        let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
+
+        var dataTemp = {
+          id: (i*1+1),
+          url: ins.url,
+          title: ins.title,
+          fecha: fechaFormat,
+          fechaRaw: ins.fecha,
+          fullFecha: fullFechaFormat,
+          hora: horaFinal
+        }
+        newData.push(dataTemp);
+      }
+
+      datosURLTemas.value = newData;
+      
+      isLoading.value = false;
+    })
+    .catch(error => { return console.error(error) });
+}
 
 async function resolveVisitas(titulo) {
   currentPageV.value = 1;
+  currentPageT.value = 1;
   if (actividadUsuarioVisible.value == true) {
     actividadUsuarioVisible.value = false;
   }
@@ -177,11 +238,12 @@ async function resolveVisitas(titulo) {
       isLoading.value = false;
     })
     .catch(error => { return console.error(error) });
+  await recuperarURLPorTemas(titulo);
 }
 
 const paginatedVisitas = computed(() => {
-  const start = (currentPageV.value - 1) * (itemsPerPage + 1);
-  const end = start + (itemsPerPage + 1);
+  const start = (currentPageV.value - 1) * (itemsPerPage);
+  const end = start + (itemsPerPage);
 
   return ultimasVisitas.value.slice(start, end);
 });
@@ -557,9 +619,7 @@ async function downloadSelection() {
                     <tr v-for="item  in paginatedMeta" class="clickable" :class="{ active: item._id === selectedRow }"
                       @click="resolveVisitas(item._id)">
                       <td>
-
                         {{ item._id }}
-
                       </td>
 
                       <td class="text-medium-emphasis">
@@ -590,6 +650,7 @@ async function downloadSelection() {
                     <div @click="selectTabMeta(1)" :class="{ active: selectedTabMeta === 1 }">Url</div>
                   </div>
                   <div class="tab-content">
+                    <br>
                     <div v-if="selectedTabMeta === 0" class="tab-item">
                       <div style="display: flex; flex-wrap: wrap;">
                         <div style="width: max-content;">
@@ -661,11 +722,11 @@ async function downloadSelection() {
                             Datos desde {{ fechaIni }} hasta {{ fechaFin }}
                           </VCardSubtitle>
                         </div>
-                        <div style="margin-left: auto; margin-bottom: 0.80rem;">
+                        <!-- <div style="margin-left: auto; margin-bottom: 0.80rem;">
                           <VBtn color="primary" @click="downloadSelection">
                             Exportar
                           </VBtn>
-                        </div>
+                        </div> -->
                       </div>
                       <div>
                         <!-- max-height: 520px;overflow: auto; -->
@@ -673,12 +734,48 @@ async function downloadSelection() {
                           <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
                             <thead>
                               <tr>
-                                <th scope="col">Nombre ss</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Hora</th>
                               </tr>
                             </thead>
-
-                            
+                            <tbody>
+                              <tr 
+                                v-if="datosURLTemas.length > 0"
+                                v-for="item in paginatedMetas" 
+                                :key="item.id" 
+                              >
+                                <td>
+                                  <a style="" target="_blank" :href="item.url" class="d-flex align-center">
+                                    <VIcon color="primary" icon="tabler-link" size="18" class="me-1" />
+                                    <!-- <h6 class="text-primary font-weight-semibold text-sm">
+                                      {{ item.title }}
+                                    </h6> -->
+                                    <small class="url-temas" style="margin-left:-12px">
+                                      {{ item.url.replace(/https:\/\/www\.ecuavisa\.com/g, "") }}
+                                    </small>
+                                  </a>
+                                </td>
+                                <td class="text-medium-emphasis">
+                                  {{ item.fechaRaw }}
+                                </td>
+                                <td class="text-medium-emphasis">
+                                  {{ item.hora }}
+                                </td>
+                              </tr>
+                              <tr v-else>
+                                <td colspan="3">No hay datos</td>
+                              </tr>
+                            </tbody>
                           </VTable>
+                        </div>
+                        <div class="d-flex align-center justify-space-between botonescurrentPage">
+                          <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageT" :disabled="currentPageT === 1">
+                          </VBtn>
+                          Página {{ currentPageT }}
+                          <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageT"
+                            :disabled="(currentPageT * itemsPerPage) >= datosURLTemas.length">
+                          </VBtn>
                         </div>
                       </div>
                     </div>
@@ -826,6 +923,24 @@ tr.clickable.active {
   td span {
     max-width: 200px;
   }
+}
+
+.url-temas{
+  color: rgba(var(--v-theme-on-background), var(--v-disabled-opacity));
+  display: block;
+  font-size: 12px;
+  width: 280px;
+  font-weight: 500;
+  hyphens: auto;
+  letter-spacing: 0.0125em;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0.5rem 1rem;
+  text-overflow: ellipsis;
+  text-transform: none;
+  white-space: nowrap;
+  word-break: normal;
+  word-wrap: break-word;
 }
 </style>
 
