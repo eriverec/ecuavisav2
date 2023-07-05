@@ -125,7 +125,7 @@ onMounted(() => {
 const searchData = () => {
   if(searchQuery.value !== ''){
     currentPage.value = 1;
-    const normalizedSearchQuery = searchQuery.value.trim();
+    const normalizedSearchQuery = searchQuery.value.endsWith('/')? searchQuery.value.replace(/\/$/, '').trim() : searchQuery.value.trim();
 
     const filtered = driversRaw.value.filter((item) => {
     const normalizedItemName = item.url.trim();
