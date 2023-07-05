@@ -22,54 +22,35 @@ const titulo = ref('');
 const ultimasVisitas = ref([]);
 const ultimasVisitasVisible = ref(false);
 const userSelected = ref('');
+const searchQuery = ref('');
 
 
 async function getDrivers(fechai = '', fechaf = '') {
   isLoading.value = true;
- 
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-  var fechasCount = JSON.stringify({
-    "fechai": fechai,
-    "fechaf": fechaf
-  });
-
-  var requestOptions = {
-    method: 'POST',
-    headers: myHeaders,
-    body: fechasCount,
-    redirect: 'follow'
-  };
-  const navArray = [];
-  await fetch('https://servicio-de-actividad.vercel.app/count', requestOptions)
-    .then(response => response.text())
-    .then(async count => {
-    //console.log('count',count)
-    let pages = parseInt(count);    
-    var myHeaders2 = new Headers();
-    myHeaders2.append("Content-Type", "application/json");
-    for (let i = 1; i < pages + 1; i++) {    
+    const navArray = [];
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+        
     var raw = JSON.stringify({
                 "fechai": fechai,
                 "fechaf": fechaf,
-                "page": i
             });
 
-    var requestOptions2 = {
+    var requestOptions = {
         method: 'POST',
-        headers: myHeaders2,
+        headers: myHeaders,
         body: raw,
         redirect: 'follow'
         };        
-    await fetch('https://servicio-de-actividad.vercel.app/actividad/driver/full',requestOptions2)
+
+    await fetch('https://servicio-de-actividad.vercel.app/actividad/driver/full',requestOptions)
         .then(response => response.json())
         .then(data => {
         
         let arrayIn = Array.from(data.data);   
         arrayIn.forEach((item) => {
           rawData.value.push(item);
-            })
+        })
 
             for (const a of arrayIn) {
               for (const b of a.navigationRecord) {
@@ -83,8 +64,7 @@ async function getDrivers(fechai = '', fechaf = '') {
 
         })
         .catch(error => { console.error(error) });
-
-    }
+   
     const finArray = navArray.reduce((a, b) => {
         var i = a.findIndex((x) => x.title == b.title || x.url == b.url);
         return i === -1 ? a.push({ url: b.url, title: b.title, count: 1 }) : a[i].count++, a;
@@ -95,10 +75,8 @@ async function getDrivers(fechai = '', fechaf = '') {
 
     drivers.value = Array.from(finArray);
     drivers.value.sort((a, b) => b.count - a.count);
-    console.log('drivers',drivers.value)
-    isLoading.value = false;
-    }).catch((error) => { console.error(error) });
-    
+    //console.log('drivers',drivers.value)
+    isLoading.value = false;    
         
 }
 
@@ -143,6 +121,28 @@ const initData = () => {
 onMounted(() => {
   initData();
 });
+
+const searchData = () => {
+  if(searchQuery.value !== ''){
+    currentPage.value = 1;
+    const normalizedSearchQuery = searchQuery.value.trim();
+
+    const filtered = driversRaw.value.filter((item) => {
+    const normalizedItemName = item.url.trim();
+     return normalizedItemName.includes(normalizedSearchQuery);
+    });
+
+    drivers.value = filtered;
+  }
+};
+
+const reset = () => {
+  currentPage.value = 1;
+  searchQuery.value = '';
+  ultimasVisitasVisible.value = false;
+  ultimosUsuariosVisible.value = false;
+  drivers.value = driversRaw.value;
+};
 
 const resolveUltimosUsuarios = (title) => {
   titleSelected.value = title;
@@ -383,7 +383,7 @@ ultimasVisitasVisible.value = true;
 
                }" />
            </div>
-         <!-- 
+        
            <VCol cols="12" class="d-flex flex-wrap gap-4">
            <div style="width: 20rem">
              <VTextField
@@ -399,7 +399,7 @@ ultimasVisitasVisible.value = true;
              Reiniciar
            </VBtn>
          </VCol>
-        -->
+      
          </VCardText>
          <VCardText v-if="isLoading">Cargando datos...</VCardText>
          <VCardText v-else>
