@@ -47,11 +47,12 @@ export default [
     // to: { name: 'apps-trazabilidad-list' },
     children: [
       { title: 'Lista de Usuarios', to: 'apps-trazabilidad-list' },
+      { title: 'Visitas', to: 'apps-visitas-list' },
+      { title: 'Metadatos', to: 'apps-metadatos' }
+
       // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
       // modulos por salir 
       // { title: 'Dispositivos', to: 'apps-dispositivos' },
-      { title: 'Visitas', to: 'apps-visitas' },
-      { title: 'Metadatos', to: 'apps-metadatos' },
       //{ title: 'Trazabilidad usuarios', to: 'apps-trazabilidad-users' }
     ],
   },
