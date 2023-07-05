@@ -367,7 +367,7 @@ ultimasVisitasVisible.value = true;
        <VCard>
          <VCardText class="d-flex flex-wrap justify-space-between gap-4">
            <VCardItem class="pb-sm-0">
-             <VCardTitle>Páginas más vistas</VCardTitle>
+             <VCardTitle>Páginas más vistas (Notas Drivers)</VCardTitle>
              <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
            </VCardItem>
 
