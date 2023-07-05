@@ -4,7 +4,7 @@ import ApexCharts from 'apexcharts';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
-import { onMounted } from 'vue';
+import { ref, onMounted } from 'vue';
 
 const tab = ref('tab-meta-data')
 const moment = extendMoment(Moment);
@@ -69,13 +69,13 @@ onMounted(() => {
 });
 
 const searchMeta = () => {
-  if(searchQuery.value !== ''){
+  if (searchQuery.value !== '') {
     currentPage.value = 1;
     const normalizedSearchQuery = searchQuery.value.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 
     const filtered = metaRaw.value.filter((item) => {
-    const normalizedItemName = item._id.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
-     return normalizedItemName.includes(normalizedSearchQuery);
+      const normalizedItemName = item._id.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+      return normalizedItemName.includes(normalizedSearchQuery);
     });
 
     metadatos.value = filtered;
@@ -121,9 +121,10 @@ async function obtenerPorFechaMeta(selectedDates) {
   }
 }
 
+
 async function resolveVisitas(titulo) {
   currentPageV.value = 1;
-  if(actividadUsuarioVisible.value == true){
+  if (actividadUsuarioVisible.value == true) {
     actividadUsuarioVisible.value = false;
   }
   titleSelected.value = titulo;
@@ -210,7 +211,7 @@ async function resolveUsuario(id, nombre, apellido) {
     // const getIdRowUser = localStorage.getItem('idRowUser');
     const response = await fetch(`https://servicio-de-actividad.vercel.app/meta/navegation/group/${id}?fechai=${fechaIni.value}&fechaf=${fechaFin.value}`);
     const data = await response.json();
-    
+
     if (data.resp) {
       const seriesData = data.data.map(item => item.count)
       const categories = data.data.map(item => item._id)
@@ -264,11 +265,11 @@ async function resolveUsuario(id, nombre, apellido) {
         }
       }
 
-      setTimeout(function(){
-          const chart = new ApexCharts(document.querySelector('#chart'), chartOptions)
-          chart.render()
+      setTimeout(function () {
+        const chart = new ApexCharts(document.querySelector('#chart'), chartOptions)
+        chart.render()
       }, 700);
-      
+
     }
   } catch (error) {
     console.error(error)
@@ -482,11 +483,8 @@ async function downloadSelection() {
 
             <VDialog v-model="isLoading" width="300">
               <VCardText class="pt-3 text-center">
-                  <v-progress-circular
-                    indeterminate
-                    color="primary"
-                  ></v-progress-circular>
-                </VCardText>
+                <v-progress-circular indeterminate color="primary"></v-progress-circular>
+              </VCardText>
             </VDialog>
 
 
@@ -535,19 +533,15 @@ async function downloadSelection() {
               </VCardText>
               <VCardText class="d-flex flex-wrap gap-4">
                 <div style="width: 15rem">
-                <VTextField
-                  v-model="searchQuery"
-                  placeholder="Buscar..."
-                  density="compact"
-                />
-              </div>
-              <!-- 👉 Search button -->
-              <VBtn prepend-icon="tabler-search" @click="searchMeta">
-                Buscar
-              </VBtn>
-              <VBtn @click="reset">
-                Reiniciar
-              </VBtn>
+                  <VTextField v-model="searchQuery" placeholder="Buscar..." density="compact" />
+                </div>
+                <!-- 👉 Search button -->
+                <VBtn prepend-icon="tabler-search" @click="searchMeta">
+                  Buscar
+                </VBtn>
+                <VBtn @click="reset">
+                  Reiniciar
+                </VBtn>
               </VCardText>
 
               <VCardText>
@@ -589,65 +583,110 @@ async function downloadSelection() {
             <!-- trazabilidad independiente -->
             <VExpandTransition>
               <VCard v-show="ultimasVisitasVisible">
-                
-                  <VCardText style="display: flex; flex-wrap: wrap;">           
-                    <div style="width: max-content;">
-                      <VCardTitle>
-                        Visitantes en: <b>{{ titleSelected }}</b>
 
-                      </VCardTitle>
-                      <VCardSubtitle style="margin-top: -10px;font-size: 12px;">
-                          Datos desde {{fechaIni}} hasta {{fechaFin}}
-                      </VCardSubtitle>
-                    </div>
-                    <div style="margin-left: auto; margin-bottom: 0.80rem;">
-                      <VBtn color="primary" @click="downloadSelection">
-                        Exportar
-                      </VBtn>
-                    </div>        
-                 </VCardText>
-                  <VCardText>
-<!-- max-height: 520px;overflow: auto; -->
-                  <div style="">
-                    <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
-                      <thead>
-                        <tr>
-                          <th scope="col">Nombre</th>
-                          <th scope="col">Fecha</th>
-                          <th scope="col">Visitas</th>
-                          <th scope="col">Hora</th>
-                        </tr>
-                      </thead>
-
-                      <tbody>
-                        <tr class="clickable" :class="{ active: user.userId === selectedRowUser }"
-                          v-for="user in paginatedVisitas"
-                          @click="resolveUsuario(user.userId, user.first_name, user.last_name)">
-                          <td class="text-high-emphasis">
-                            {{ user.first_name }} {{ user.last_name }}
-                          </td>
-                          <td class="text-medium-emphasis">
-                            {{ user.fecha }}
-                          </td>
-                          <td class="text-medium-emphasis">
-                            {{ user.visitas }}
-                          </td>
-                          <td class="text-medium-emphasis">
-                            {{ user.hora }}
-                          </td>
-                        </tr>
-                      </tbody>
-                    </VTable>
+                <VCardText>
+                  <div class="tab-titles">
+                    <div @click="selectTabMeta(0)" :class="{ active: selectedTabMeta === 0 }">Últimas Visitas</div>
+                    <div @click="selectTabMeta(1)" :class="{ active: selectedTabMeta === 1 }">Url</div>
                   </div>
-                  <div class="d-flex align-center justify-space-between botonescurrentPage">
-                  <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageV" :disabled="currentPageV === 1"></VBtn>
-                  Página {{ currentPageV }}
-                  <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageV"
-                    :disabled="(currentPageV * itemsPerPage) >= ultimasVisitas.length">
-                  </VBtn>
-                </div>
-                 </VCardText>
-                
+                  <div class="tab-content">
+                    <div v-if="selectedTabMeta === 0" class="tab-item">
+                      <div style="display: flex; flex-wrap: wrap;">
+                        <div style="width: max-content;">
+                          <VCardTitle>
+                            Visitantes en: <b>{{ titleSelected }}</b>
+
+                          </VCardTitle>
+                          <VCardSubtitle style="margin-top: -10px;font-size: 12px;">
+                            Datos desde {{ fechaIni }} hasta {{ fechaFin }}
+                          </VCardSubtitle>
+                        </div>
+                        <div style="margin-left: auto; margin-bottom: 0.80rem;">
+                          <VBtn color="primary" @click="downloadSelection">
+                            Exportar
+                          </VBtn>
+                        </div>
+                      </div>
+                      <div>
+                        <!-- max-height: 520px;overflow: auto; -->
+                        <div style="">
+                          <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                            <thead>
+                              <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Fecha</th>
+                                <th scope="col">Visitas</th>
+                                <th scope="col">Hora</th>
+                              </tr>
+                            </thead>
+
+                            <tbody>
+                              <tr class="clickable" :class="{ active: user.userId === selectedRowUser }"
+                                v-for="user in paginatedVisitas"
+                                @click="resolveUsuario(user.userId, user.first_name, user.last_name)">
+                                <td class="text-high-emphasis">
+                                  {{ user.first_name }} {{ user.last_name }}
+                                </td>
+                                <td class="text-medium-emphasis">
+                                  {{ user.fecha }}
+                                </td>
+                                <td class="text-medium-emphasis">
+                                  {{ user.visitas }}
+                                </td>
+                                <td class="text-medium-emphasis">
+                                  {{ user.hora }}
+                                </td>
+                              </tr>
+                            </tbody>
+                          </VTable>
+                        </div>
+                        <div class="d-flex align-center justify-space-between botonescurrentPage">
+                          <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageV" :disabled="currentPageV === 1">
+                          </VBtn>
+                          Página {{ currentPageV }}
+                          <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageV"
+                            :disabled="(currentPageV * itemsPerPage) >= ultimasVisitas.length">
+                          </VBtn>
+                        </div>
+                      </div>
+                    </div>
+                    <div v-if="selectedTabMeta === 1" class="tab-item">
+                      <div style="display: flex; flex-wrap: wrap;">
+                        <div style="width: max-content;">
+                          <VCardTitle>
+                            URLs de: <b>{{ titleSelected }}</b>
+
+                          </VCardTitle>
+                          <VCardSubtitle style="margin-top: -10px;font-size: 12px;">
+                            Datos desde {{ fechaIni }} hasta {{ fechaFin }}
+                          </VCardSubtitle>
+                        </div>
+                        <div style="margin-left: auto; margin-bottom: 0.80rem;">
+                          <VBtn color="primary" @click="downloadSelection">
+                            Exportar
+                          </VBtn>
+                        </div>
+                      </div>
+                      <div>
+                        <!-- max-height: 520px;overflow: auto; -->
+                        <div style="">
+                          <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                            <thead>
+                              <tr>
+                                <th scope="col">Nombre ss</th>
+                              </tr>
+                            </thead>
+
+                            
+                          </VTable>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </VCardText>
+
+
               </VCard>
             </VExpandTransition>
           </VCol>
@@ -657,16 +696,17 @@ async function downloadSelection() {
               <VCard v-show="actividadUsuarioVisible">
                 <VCardItem>
                   <VCardTitle>
-                   Actividad del usuario <b>{{ userSelected }}</b>
+                    Actividad del usuario <b>{{ userSelected }}</b>
                   </VCardTitle>
                   <VCardSubtitle style="margin-top: -2px;font-size: 12px;">
-                      Datos desde {{fechaIni}} hasta {{fechaFin}}
+                    Datos desde {{ fechaIni }} hasta {{ fechaFin }}
                   </VCardSubtitle>
                 </VCardItem>
 
                 <VCardText v-if="actividadUsuario.length > 0">
                   <VTimeline density="compact" align="start" truncate-line="both" class="v-timeline-density-compact">
-                    <VTimelineItem :dot-color="user.title === titleSelected ? 'success' : 'primary'" size="x-small" v-for="user in verMas? actividadUsuarioFull : actividadUsuario">
+                    <VTimelineItem :dot-color="user.title === titleSelected ? 'success' : 'primary'" size="x-small"
+                      v-for="user in verMas ? actividadUsuarioFull : actividadUsuario">
                       <div class="d-flex justify-space-between align-center flex-wrap">
                         <h4 class="text-base font-weight-semibold me-1">
                           {{ user.title || user.url }}
@@ -676,41 +716,22 @@ async function downloadSelection() {
 
                       <p class="mb-1">{{ user.fecha }} {{ user.hora }}</p>
                       <div style="display:flex; gap: 20px;">
-                        <a
-                          target="_blank"
-                          :href="user.url"
-                          class="d-flex align-center"
-                        >
-                          <VIcon
-                            color="primary"
-                            icon="tabler-link"
-                            size="18"
-                            class="me-1"
-                          />
+                        <a target="_blank" :href="user.url" class="d-flex align-center">
+                          <VIcon color="primary" icon="tabler-link" size="18" class="me-1" />
                           <h6 class="text-primary font-weight-semibold text-sm">
-                            
+
                             <!-- {{ user.tipo=="Nota"?"Ir a la nota":"Ir a la sección" }} -->
-                            {{ user.tipo=="Nota"?"Visitar en la web":"Ir a la sección" }}
-                            
+                            {{ user.tipo == "Nota" ? "Visitar en la web" : "Ir a la sección" }}
+
                           </h6>
                         </a>
-                        <a
-                          style="display: none!important;"
-                          v-if="user.tipo=='Nota'"
-                          target="_blank"
-                          :href="(user.url).replace(/\/[^\/]*$/, '')"
-                          class="d-flex align-center"
-                        >
-                          <VIcon
-                            color="primary"
-                            icon="tabler-link"
-                            size="18"
-                            class="me-1"
-                          />
+                        <a style="display: none!important;" v-if="user.tipo == 'Nota'" target="_blank"
+                          :href="(user.url).replace(/\/[^\/]*$/, '')" class="d-flex align-center">
+                          <VIcon color="primary" icon="tabler-link" size="18" class="me-1" />
                           <h6 class="text-primary font-weight-semibold text-sm">
-                            
+
                             Ir a la sección
-                            
+
                           </h6>
                         </a>
                       </div>
@@ -721,18 +742,12 @@ async function downloadSelection() {
 
                   </VTimeline>
                   <br>
-                  <div style="text-align: center;"> 
-                  <VBtn
-                    v-if="!verMas && actividadUsuarioFull.length > 10"
-                    color="primary"
-                    @click="verMas = true"
-                  >Ver más</VBtn>
-                  <VBtn
-                    v-if="verMas && actividadUsuarioFull.length > 10"
-                    color="primary"
-                    @click="verMas = false"
-                  >Ver menos</VBtn>
-                </div>
+                  <div style="text-align: center;">
+                    <VBtn v-if="!verMas && actividadUsuarioFull.length > 10" color="primary" @click="verMas = true">Ver
+                      más</VBtn>
+                    <VBtn v-if="verMas && actividadUsuarioFull.length > 10" color="primary" @click="verMas = false">Ver
+                      menos</VBtn>
+                  </div>
                 </VCardText>
                 <VCardText v-else>No existen datos</VCardText>
               </VCard>
@@ -749,7 +764,7 @@ async function downloadSelection() {
                   </VCardTitle>
 
                   <VCardSubtitle style="margin-top: -2px;font-size: 12px;">
-                      Datos desde {{fechaIni}} hasta {{fechaFin}}
+                    Datos desde {{ fechaIni }} hasta {{ fechaFin }}
                   </VCardSubtitle>
                 </VCardItem>
                 <VCardText>
@@ -783,6 +798,21 @@ async function downloadSelection() {
   </div>
 </template>
 
+<script>
+export default {
+  data() {
+    return {
+      selectedTabMeta: 0,
+    };
+  },
+  methods: {
+    selectTabMeta(index) {
+      this.selectedTabMeta = index;
+    },
+  },
+};
+</script>
+
 <style scoped>
 tr.clickable.active {
   background-color: #00000012;
@@ -800,9 +830,8 @@ tr.clickable.active {
 </style>
 
 <style>
-
 .apexcharts-tooltip-title,
-.apexcharts-tooltip-text span{
+.apexcharts-tooltip-text span {
   color: white;
 }
 
@@ -813,6 +842,36 @@ tr.clickable.active {
 .v-theme--dark .apexcharts-text.apexcharts-xaxis-label {
   fill: white;
 }
-
-
 </style>
+
+<style>
+.tab-titles {
+  display: flex;
+}
+
+.tab-titles div {
+  cursor: pointer;
+  /* background-color: lightgray; */
+  margin-right: 8px;
+  height: var(--v-tabs-height);
+  padding: 10px 20px;
+  text-transform: uppercase;
+  font-size: .875rem;
+  --v-btn-size: .875rem;
+  --v-btn-height: 38px;
+  font-weight: 500;
+  letter-spacing: .0892857143em;
+  line-height: normal;
+}
+
+.tab-titles div.active {
+  background-color: rgb(var(--v-theme-primary));
+  color: rgb(var(--v-theme-on-primary)) !important;
+  border-radius: 0.25rem !important;
+}
+
+.tab-content {
+  margin-top: 16px;
+}
+</style>
+  
