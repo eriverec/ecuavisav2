@@ -129,7 +129,7 @@ import { useTheme } from 'vuetify';
         getDataFetch:[],
         dataFormateada:[],
         getData:[],
-        visita:true,
+        visita:false,
         isLoading: true,
         preguntas: [],
         preguntasData: [],
@@ -194,9 +194,9 @@ import { useTheme } from 'vuetify';
             custom: function({series, seriesIndex, dataPointIndex, w}) {
               //this.ctx.xaxis.categories[dataPointIndex] 
               var value = series[seriesIndex][dataPointIndex];
-              var text = !w.config.visita?"Sesiones":"Páginas visitadas";
+              var text = w.config.visita?"Sesiones":"Páginas visitadas";
               if(value<2){
-                text = !w.config.visita?"Sesión":"Página visitada";
+                text = w.config.visita?"Sesión":"Página visitada";
               }
               return '<div class="custom-tooltip">' +
                 '<span class="title">Día:</span>' +
@@ -407,74 +407,95 @@ import { useTheme } from 'vuetify';
         }
         return {resp:false};
       },
-      async getDataTrazabilidad(data) {
-        var trazabilidad = data;
-        var grafico = [];
+      async getDataTrazabilidad(data){
+        var dataGroupBrowser = [data];
+        if(data.length > 1){
+          dataGroupBrowser = this.groupBy(data, "device")
+        }
+        var serieTotal = [];
         
-        // Paso 1: Identificar fecha mínima y máxima
-        var minDate = Infinity;
-        var maxDate = -Infinity;
-        
-        for (var i in trazabilidad) {
-          var principal = trazabilidad[i];
+        var dataFormat = [];
+        //DDDD/MM/AAAA TO AAAA/DD/MM
+        for(var i in dataGroupBrowser){
+          var serieData = [];
+          var nameSerie = '';
+          var total = 0;
+          for(var j in dataGroupBrowser[i]){
+            var renderData = dataGroupBrowser[i][j];
+            nameSerie = renderData.device;
+            var count = 1;//Math.floor(Math.random()*2000);
+            if(!this.visita){
+              count = renderData.navigationRecord;
+            }
 
-          for (var j in principal.data) {
-            var datosDentro = principal.data[j];
-            var date = new Date(datosDentro.timestamp);
-            if (date < minDate) {
-              minDate = date;
-            }
-            if (date > maxDate) {
-              maxDate = date;
-            }
-          }
-        }
-        
-        // Paso 2: Crear conjunto de fechas únicas
-        var uniqueDates = [];
-        var currentDate = new Date(minDate);
-        
-        while (currentDate <= maxDate) {
-          uniqueDates.push(new Date(currentDate));
-          currentDate.setDate(currentDate.getDate() + 1);
-        }
-        
-        for (var i in trazabilidad) {
-          var principal = trazabilidad[i];
-          var dataTemp = [];
-          var totalSesiones = 0;
-          var totalNavegaciones = 0;
-          
-          // Paso 3: Agregar fechas faltantes con valor de 0
-          for (var j in uniqueDates) {
-            var date = uniqueDates[j];
-            var foundData = principal.data.find(d => new Date(d.timestamp).getTime() === date.getTime());
-            if (foundData) {
-              dataTemp.push({
-                "x": foundData.timestamp,
-                "y": this.visita ? foundData.totalNavigationRecord : foundData.sesiones
+            //console.log(renderData, renderData.timestamp)
+            const cadena = renderData.timestamp;
+            const nuevaCadena = cadena.replace(/[-]/g, "/");
+            renderData.timestamp = nuevaCadena;
+            renderData.timestamp = renderData.timestamp.split(",")[0];
+
+            var fecha = moment(renderData.created_at).format("YYYY-MM-DD");
+
+            //var fecha = moment(renderData.created_at).format("YYYY-MM-DD");
+            total += count;
+            serieTotal.push(fecha);
+
+
+            var procrosarFecha = this.existeFecha(serieData, fecha);
+            if(!procrosarFecha.resp){
+              serieData.push({
+                x: fecha,
+                y: parseInt(count)//renderData.navigationRecord.length
               });
-              totalSesiones += foundData.sesiones * 1;
-              totalNavegaciones += foundData.totalNavigationRecord * 1;
-            } else {
-              dataTemp.push({
-                "x": moment(date).format("YYYY-MM-DD"),
-                "y": 0
-              });
+            }else{
+              var dataTempFecha = serieData[procrosarFecha.index];
+              serieData[procrosarFecha.index] = {
+                x: fecha,
+                y: parseInt(count * 1 + procrosarFecha.value * 1)//renderData.navigationRecord.length
+              }
             }
+            
           }
-          
-          // Paso 4: Ordenar por fecha
-          dataTemp.sort((a, b) => (new Date(a.x) - new Date(b.x)));
-          
-          grafico.push({
-            "name": principal.device,
-            "data": dataTemp,
-            "total": parseInt(this.visita ? totalSesiones : totalNavegaciones)
+
+          dataFormat.push({
+            name:nameSerie,
+            data: serieData.sort((a, b) => ( b.x - a.x)),
+            total: parseInt(total)
           });
         }
-        
-        return grafico.sort((a, b) => (b.total - a.total));
+
+        let seriTotalFiltrada = serieTotal.filter((item,index)=>{
+          return serieTotal.indexOf(item) === index;
+        });
+
+        for(var i in dataFormat){
+
+          if(dataFormat[i].data.length != seriTotalFiltrada.length){
+            for(var z in seriTotalFiltrada){
+              var existe = false;
+              for(var j in dataFormat[i].data){
+                if(seriTotalFiltrada[z] == dataFormat[i].data[j].x){
+                  existe = true;
+                }
+              }
+              if(!existe){
+                dataFormat[i].data.push({
+                  x: seriTotalFiltrada[z],
+                  y:0
+                })
+              }
+            }
+
+            dataFormat[i].data.sort(function(a, b) {
+              var timestampA = new Date(moment(a.x, "YYYY-MM-DD"));
+              var timestampB = new Date(moment(b.x, "YYYY-MM-DD"));
+              return  timestampA - timestampB;
+            });
+            
+          }
+        }
+        //console.log(dataFormat.sort((a, b) => (a.total - b.total)))
+        return dataFormat.sort((a, b) => ( b.total - a.total));
       },
       async getInitGraficoDispositivos(){
         var fechai = moment().add(-5, 'days').format("MM/DD/YYYY");
@@ -488,35 +509,27 @@ import { useTheme } from 'vuetify';
         //panelGrafico.classList.remove("disabled");
 
         this.isLoading = false;
-        this.dataFormateada = await this.getDataTrazabilidad(this.getData);
-
+        this.dataFormateada = await this.getDataTrazabilidad(this.getData.grafico);
         ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
         this.formatGraficoDonutVisita();
         return true;
       },
       async getDataGrafico(fechai, fechaf) {
         /*FORMATO DE FECHA A ENVIAR ES MM/DD/AAAA*/
-        // var raw = JSON.stringify({
-        //     "fechai": fechai,
-        //     "fechaf": fechaf
-        // });
-        var resp = await fetch(`https://servicio-de-actividad.vercel.app/dispositivos/v2/all?fechai=${fechai}&fechaf=${fechaf}`,{
-          method: 'GET',
+        var raw = JSON.stringify({
+            "fechai": fechai,
+            "fechaf": fechaf
+        });
+        var resp = await fetch(`https://servicio-de-actividad.vercel.app/grafico/dispositivos`,{
+          method: 'POST',
           headers: {
             "Content-Type": "application/json",
           },
-          // body: raw
+          body: raw
         }); 
-        // var resp = await fetch(`https://servicio-de-actividad.vercel.app/grafico/dispositivos`,{
-        //   method: 'POST',
-        //   headers: {
-        //     "Content-Type": "application/json",
-        //   },
-        //   body: raw
-        // }); 
         var obtener = await resp.json();
-        this.getDataFetch = obtener.data;
-        return obtener.data;
+        this.getDataFetch = obtener.grafico;
+        return obtener;
       },
       async obtenerFechaDispositivos(selectedDates, dateStr, instance){
         //var respJson = await nuevoArchivoJson(archivoJson);
@@ -531,7 +544,7 @@ import { useTheme } from 'vuetify';
           this.isLoading = false;
           //panelGrafico.classList.remove("disabled");
           this.formatGraficoDonutSesion();
-          this.dataFormateada = await this.getDataTrazabilidad(this.getData);
+          this.dataFormateada = await this.getDataTrazabilidad(this.getData.grafico);
           ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
           this.formatGraficoDonutVisita();
         }
@@ -539,8 +552,8 @@ import { useTheme } from 'vuetify';
       async formatVisitaGrafico(){
         if(this.dataFormateada.length > 0 || true){
           this.isLoading = true;
-          this.visita = false;
-          this.dataFormateada = await this.getDataTrazabilidad(this.getData);
+          this.visita = true;
+          this.dataFormateada = await this.getDataTrazabilidad(this.getData.grafico);
           ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
           this.formatGraficoDonutSesion();
           this.isLoading = false;
@@ -548,60 +561,66 @@ import { useTheme } from 'vuetify';
       },
       async formatActividadGrafico(){
         if(this.dataFormateada.length > 0 || true){
-          this.visita = true;
+          /**/
+          this.visita = false;
           this.isLoading = true;
-          this.dataFormateada = await this.getDataTrazabilidad(this.getData);
+          this.dataFormateada = await this.getDataTrazabilidad(this.getData.grafico);
           ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
           this.isLoading = false;
           this.formatGraficoDonutVisita();
         }
       },
       formatGraficoDonutSesion(){
-        var trazabilidad = this.getDataFetch;
-        var grafico = [];
+        var data = this.getDataFetch;
+        // Agrupamos los objetos por el valor de su propiedad 'device'
+        const groupedData = data.reduce((result, current) => {
+          // Si aún no existe un grupo para el valor de 'device' actual, lo creamos
+          if (!result[current.device]) {
+            result[current.device] = [];
+          }
+          // Agregamos el objeto actual al grupo correspondiente
+          result[current.device].push(current);
+          return result;
+        }, {});
+
+        // Calculamos el total de objetos para cada grupo
+        const deviceTotals = Object.keys(groupedData).map(device => {
+          return {
+            device: device,
+            total: groupedData[device].length
+          };
+        });
+
         var seriesTemp = [];
         var labelsTemp = [];
-        for(var i in trazabilidad){
-          var principal = trazabilidad[i];
-          var totalSesiones = 0;
-          var totalNavegaciones = 0;
 
-          for(var j in principal.data){
-            var datosDentro = principal.data[j];
-            totalSesiones += datosDentro.sesiones *1;
-            totalNavegaciones += datosDentro.totalNavigationRecord *1;
-          }
-          
-          labelsTemp.push(principal.device);
-          seriesTemp.push(parseInt(!this.visita?totalSesiones:totalNavegaciones));
-
+        for(var i in deviceTotals){
+          seriesTemp.push(deviceTotals[i].total);
+          labelsTemp.push(deviceTotals[i].device);
         }
 
         this.chartOptions.series = seriesTemp;
         this.chartOptions.labels = labelsTemp;
       },
       formatGraficoDonutVisita(){
-        var trazabilidad = this.getDataFetch;
-        var grafico = [];
+        var data = this.getDataFetch;
+        const deviceTotals = data.reduce((acc, obj) => {
+          const device = obj.device.toString();
+          const navigationRecordLength = obj.navigationRecord ? obj.navigationRecord : 0;
+          acc[device] = (acc[device] || 0) + navigationRecordLength;
+          return acc;
+        }, {});
         var seriesTemp = [];
         var labelsTemp = [];
-        for(var i in trazabilidad){
-          var principal = trazabilidad[i];
-          var totalSesiones = 0;
-          var totalNavegaciones = 0;
 
-          for(var j in principal.data){
-            var datosDentro = principal.data[j];
-            totalSesiones += datosDentro.sesiones *1;
-            totalNavegaciones += datosDentro.totalNavigationRecord *1;
-          }
-          
-          labelsTemp.push(principal.device);
-          seriesTemp.push(parseInt(!this.visita?totalSesiones:totalNavegaciones));
-        }
-
+        Object.keys(deviceTotals).forEach(function(key) {
+          const value = deviceTotals[key];
+          seriesTemp.push(value);
+          labelsTemp.push(key);
+        });
         this.chartOptions.series = seriesTemp;
         this.chartOptions.labels = labelsTemp;
+
       }
     },
     async mounted() {
