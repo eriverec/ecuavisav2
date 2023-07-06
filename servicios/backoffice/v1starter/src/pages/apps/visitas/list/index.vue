@@ -12,7 +12,7 @@
                         <VCard>
                             <VCardText class="d-flex flex-wrap justify-space-between gap-4">
                                 <VCardItem class="pb-sm-0">
-                                    <VCardTitle>Páginas más vistas (Ecuavisa.com)</VCardTitle>
+                                    <VCardTitle>Páginas más vistas</VCardTitle>
                                     <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
                                 </VCardItem>
 
@@ -41,31 +41,37 @@
                                     </VBtnToggle>
 
                                 </VCol>
-                                <VCol cols="12" class="d-flex flex-wrap gap-4">
-                                    <div style="width: 20rem">
-                                        <VTextField v-model="searchQueryUrl" placeholder="Buscar por link..." density="compact" />
+
+                            </VCardText>
+                            <VCardText class="">
+                                <div class="contenedorBotones">
+
+                                    <div class="grup_one">
+                                        <div class="w-100" >
+                                            <VTextField v-model="searchQueryUrl" placeholder="Buscar por link..."
+                                                density="compact" />
+                                        </div>
+                                        <!-- 👉 Search button -->
+                                        <VBtn prepend-icon="tabler-search" @click="searchUrl"></VBtn>
+                                        <VBtn @click="resetUrl">
+                                            Reiniciar
+                                        </VBtn>
+
                                     </div>
-                                    <!-- 👉 Search button -->
-                                    <VBtn prepend-icon="tabler-search" @click="searchUrl">
-                                        Buscar 
-                                    </VBtn>
-                                    <VBtn @click="resetUrl">
-                                        Reiniciar
-                                    </VBtn>
-    
-                                </VCol>
-                                <VCol cols="12" class="d-flex flex-wrap gap-4">
-                                    <div style="width: 20rem">
-                                        <VTextField v-model="searchQuery" placeholder="Buscar por término o palabra..." density="compact" />
+                                    <div class="grup_two">
+                                        <div class="w-100" >
+                                            <VTextField v-model="searchQuery" placeholder="Buscar por término o palabra..."
+                                                density="compact" />
+                                        </div>
+                                        <!-- 👉 Search button -->
+                                        <VBtn prepend-icon="tabler-search" @click="searchTitle"></VBtn>
+                                        <VBtn @click="resetTitle">
+                                            Reiniciar
+                                        </VBtn>
                                     </div>
-                                    <!-- 👉 Search button -->
-                                    <VBtn prepend-icon="tabler-search" @click="searchTitle">
-                                        Buscar 
-                                    </VBtn>
-                                    <VBtn @click="resetTitle">
-                                        Reiniciar
-                                    </VBtn>
-                                </VCol>
+
+
+                                </div>
                             </VCardText>
                             <VCardText v-if="isLoading">Cargando datos...</VCardText>
                             <VCardText v-else>
@@ -193,7 +199,63 @@
         </div>
     </div>
 </template>
+<style>
+.tab-titles {
+    display: flex;
+}
 
+.tab-titles div {
+    cursor: pointer;
+    /* background-color: lightgray; */
+    margin-right: 8px;
+    height: var(--v-tabs-height);
+    padding: 10px 20px;
+    text-transform: uppercase;
+    font-size: .875rem;
+    --v-btn-size: .875rem;
+    --v-btn-height: 38px;
+    font-weight: 500;
+    letter-spacing: .0892857143em;
+    line-height: normal;
+}
+
+.tab-titles div.active {
+    background-color: rgb(var(--v-theme-primary));
+    color: rgb(var(--v-theme-on-primary)) !important;
+    border-radius: 0.25rem !important;
+}
+
+.tab-content {
+    margin-top: 16px;
+}
+
+.contenedorBotones {
+    display: flex;
+    column-gap: 30px;
+}
+.contenedorBotones .grup_one {
+    display: flex;
+    width: 100%;
+    column-gap: 10px;
+}
+.contenedorBotones .grup_two {
+    display: flex;
+    width: 100%;
+    column-gap: 10px;
+}
+.v-btn__prepend{
+    margin-inline-start: initial;
+    margin-inline-end: initial;
+}
+
+@media(max-width: 1279px){
+    .contenedorBotones{
+        row-gap: 30px;
+        flex-direction: column;
+    }
+}
+</style>
+  
 <script setup>
 import notasDrivers from '@/pages/apps/visitas/tabs/notas-drivers.vue';
 import Moment from 'moment';
@@ -462,7 +524,7 @@ const prevPage = () => {
 const searchUrl = () => {
     if (searchQueryUrl.value !== '') {
         currentPage.value = 1;
-        const normalizedsearchQueryUrl = searchQueryUrl.value.endsWith('/')? searchQueryUrl.value.replace(/\/$/, '').trim() : searchQueryUrl.value.trim();
+        const normalizedsearchQueryUrl = searchQueryUrl.value.endsWith('/') ? searchQueryUrl.value.replace(/\/$/, '').trim() : searchQueryUrl.value.trim();
 
         const filtered = urlRaw.value.filter((item) => {
             const normalizedItemName = item.url.trim();
@@ -488,22 +550,22 @@ const searchTitle = () => {
 };
 
 const resetTitle = () => {
-    if(searchQuery.value !== ''){
-    currentPage.value = 1;
-    searchQuery.value = '';
-    ultimasVisitasVisible.value = false;
-    ultimosUsuariosVisible.value = false;
-    urlCounts.value = urlRaw.value;
+    if (searchQuery.value !== '') {
+        currentPage.value = 1;
+        searchQuery.value = '';
+        ultimasVisitasVisible.value = false;
+        ultimosUsuariosVisible.value = false;
+        urlCounts.value = urlRaw.value;
     }
 };
 
 const resetUrl = () => {
-    if(searchQueryUrl.value !== ''){
-    currentPage.value = 1;
-    searchQueryUrl.value = '';
-    ultimasVisitasVisible.value = false;
-    ultimosUsuariosVisible.value = false;
-    urlCounts.value = urlRaw.value;
+    if (searchQueryUrl.value !== '') {
+        currentPage.value = 1;
+        searchQueryUrl.value = '';
+        ultimasVisitasVisible.value = false;
+        ultimosUsuariosVisible.value = false;
+        urlCounts.value = urlRaw.value;
     }
 };
 
@@ -746,35 +808,4 @@ export default {
     },
 };
 </script>
-  
-<style>
-.tab-titles {
-    display: flex;
-}
-
-.tab-titles div {
-    cursor: pointer;
-    /* background-color: lightgray; */
-    margin-right: 8px;
-    height: var(--v-tabs-height);
-    padding: 10px 20px;
-    text-transform: uppercase;
-    font-size: .875rem;
-    --v-btn-size: .875rem;
-    --v-btn-height: 38px;
-    font-weight: 500;
-    letter-spacing: .0892857143em;
-    line-height: normal;
-}
-
-.tab-titles div.active {
-    background-color: rgb(var(--v-theme-primary));
-    color: rgb(var(--v-theme-on-primary)) !important;
-    border-radius: 0.25rem !important;
-}
-
-.tab-content {
-    margin-top: 16px;
-}
-</style>
   
