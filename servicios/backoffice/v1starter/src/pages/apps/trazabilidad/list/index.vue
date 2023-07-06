@@ -83,7 +83,8 @@ async function accionBackoffice (){
                 <!-- inicio lista Usuarios -->
                   
                   <VList lines="two" >
-                    <template  v-for="(user, index) in datos" :key="index" >
+                    <VCardTitle v-if="datos.length === 0"> Cargando...</VCardTitle>
+                    <template  v-for="(user, index) in datos" :key="index" v-else >
                       <VListItem border>
                         <!-- <template #prepend>
                           <VIcon :icon="user.prependIcon" class="me-3" />

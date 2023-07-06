@@ -43,13 +43,26 @@
                                 </VCol>
                                 <VCol cols="12" class="d-flex flex-wrap gap-4">
                                     <div style="width: 20rem">
-                                        <VTextField v-model="searchQuery" placeholder="Buscar..." density="compact" />
+                                        <VTextField v-model="searchQueryUrl" placeholder="Buscar por link..." density="compact" />
                                     </div>
                                     <!-- 👉 Search button -->
-                                    <VBtn prepend-icon="tabler-search" @click="searchData">
-                                        Buscar
+                                    <VBtn prepend-icon="tabler-search" @click="searchUrl">
+                                        Buscar 
                                     </VBtn>
-                                    <VBtn @click="reset">
+                                    <VBtn @click="resetUrl">
+                                        Reiniciar
+                                    </VBtn>
+    
+                                </VCol>
+                                <VCol cols="12" class="d-flex flex-wrap gap-4">
+                                    <div style="width: 20rem">
+                                        <VTextField v-model="searchQuery" placeholder="Buscar por término o palabra..." density="compact" />
+                                    </div>
+                                    <!-- 👉 Search button -->
+                                    <VBtn prepend-icon="tabler-search" @click="searchTitle">
+                                        Buscar 
+                                    </VBtn>
+                                    <VBtn @click="resetTitle">
                                         Reiniciar
                                     </VBtn>
                                 </VCol>
@@ -217,6 +230,7 @@ const titleSelected = ref('');
 const ultimosUsuariosDownload = ref([]);
 const userSelected = ref('');
 const router = useRouter();
+const searchQueryUrl = ref('');
 const searchQuery = ref('');
 const urlRaw = ref([]);
 
@@ -445,26 +459,52 @@ const prevPage = () => {
     if (currentPage.value > 1) currentPage.value--;
 };
 
-const searchData = () => {
-    if (searchQuery.value !== '') {
+const searchUrl = () => {
+    if (searchQueryUrl.value !== '') {
         currentPage.value = 1;
-        const normalizedSearchQuery = searchQuery.value.endsWith('/')? searchQuery.value.replace(/\/$/, '').trim() : searchQuery.value.trim();
+        const normalizedsearchQueryUrl = searchQueryUrl.value.endsWith('/')? searchQueryUrl.value.replace(/\/$/, '').trim() : searchQueryUrl.value.trim();
 
         const filtered = urlRaw.value.filter((item) => {
             const normalizedItemName = item.url.trim();
-            return normalizedItemName.includes(normalizedSearchQuery);
+            return normalizedItemName.includes(normalizedsearchQueryUrl);
         });
 
         urlCounts.value = filtered;
     }
 };
 
-const reset = () => {
+const searchTitle = () => {
+    if (searchQuery.value !== '') {
+        currentPage.value = 1;
+        const normalizedsearchQuery = searchQuery.value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
+
+        const filtered = urlRaw.value.filter((item) => {
+            const normalizedItemName = item.title.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
+            return normalizedItemName.includes(normalizedsearchQuery);
+        });
+
+        urlCounts.value = filtered;
+    }
+};
+
+const resetTitle = () => {
+    if(searchQuery.value !== ''){
     currentPage.value = 1;
     searchQuery.value = '';
     ultimasVisitasVisible.value = false;
     ultimosUsuariosVisible.value = false;
     urlCounts.value = urlRaw.value;
+    }
+};
+
+const resetUrl = () => {
+    if(searchQueryUrl.value !== ''){
+    currentPage.value = 1;
+    searchQueryUrl.value = '';
+    ultimasVisitasVisible.value = false;
+    ultimosUsuariosVisible.value = false;
+    urlCounts.value = urlRaw.value;
+    }
 };
 
 const resolveUltimosUsuarios = (title) => {
