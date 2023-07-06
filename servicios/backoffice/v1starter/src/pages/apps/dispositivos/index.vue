@@ -56,7 +56,14 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
               <tr v-for="(dat, index) in visibleData" :key="index">
 
                 <td class="text-medium-emphasis">{{ dat.first_name }} {{ dat.last_name }}</td>
-                <td class="text-medium-emphasis">{{ dat.device }}</td>
+                <td class="text-medium-emphasis">
+                  <span v-for="iconD in device" :key="iconD.name">
+                  <VAvatar v-if="(iconD.name) === dat.device" :size="22" class="me-3">
+                    <VIcon :color="iconD.color" :icon="iconD.icon" />
+                  </VAvatar>
+                </span>
+                <span class="font-weight-medium">{{ dat.device }}</span>
+                </td>
                 <td>
                   <span v-for="iconD in iconDevices" :key="iconD.browser">
                     <VAvatar v-if="(dat.os == 'Linux' & dat.device == 'movil' ? 'Android' : dat.os) === iconD.os"
@@ -150,6 +157,22 @@ export default {
           icon: "tabler-brand-android",
           color: "success",
         },
+        {
+          browser: "Chrome",
+          os: "Linux",
+          icon: "mdi-linux",
+          color: "success",
+        },
+      ],
+      device: [
+        {
+          name: "movil",
+          icon: "mdi-cellphone-android",
+        },
+        {
+          name: "desktop",
+          icon: "mdi-laptop-chromebook",
+        }
       ]
     };
   },
