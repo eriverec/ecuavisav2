@@ -94,13 +94,20 @@ getData();
             <tr v-for="(dat, index) in visibleData" :key="index">
               <td>
                  <span v-for="iconD in iconDevices" :key="iconD.browser">
-                  <VAvatar v-if="(dat.os == 'Linux' & dat.device == 'movil' ? 'Android' : dat.os) === iconD.os" :size="22" class="me-3">
+                  <VAvatar v-if="(dat._id.os == 'Linux' & dat._id.device == 'movil' ? 'Android' : dat._id.os) === iconD.os" :size="22" class="me-3">
                     <VIcon :color="iconD.color" :icon="iconD.icon" />
                   </VAvatar>
                 </span>
-                <span class="font-weight-medium">{{ dat.browser }} on {{ dat.os == 'Linux' & dat.device == 'movil' ? 'Android' : dat.os }}</span>
+                <span class="font-weight-medium">{{ dat._id.browser }} on {{ dat._id.os == 'Linux' & dat._id.device == 'movil' ? 'Android' : dat._id.os }}</span>
               </td>
-              <td class="text-medium-emphasis">{{ dat.device }}</td>
+              <td class="text-medium-emphasis">
+                <span v-for="iconD in device" :key="iconD.name">
+                  <VAvatar v-if="(iconD.name) === dat._id.device" :size="22" class="me-3">
+                    <VIcon :color="iconD.color" :icon="iconD.icon" />
+                  </VAvatar>
+                </span>
+                <span class="font-weight-medium">{{ dat._id.device }}</span>
+              </td>
                <!--
               <td class="text-medium-emphasis">
                 <div style="
@@ -115,7 +122,7 @@ getData();
                 </div>
               </td>
                -->
-              <td class="text-medium-emphasis" align="right">{{ dat.sessions }}</td>
+              <td class="text-medium-emphasis" align="right">{{ dat.sesiones }}</td>
             </tr>
           </tbody>
           <tbody v-else>
@@ -185,6 +192,22 @@ export default {
           icon: "tabler-brand-android",
           color: "success",
         },
+        {
+          browser: "Chrome",
+          os: "Linux",
+          icon: "mdi-linux",
+          color: "success",
+        },
+      ],
+      device: [
+        {
+          name: "movil",
+          icon: "mdi-cellphone-android",
+        },
+        {
+          name: "desktop",
+          icon: "mdi-laptop-chromebook",
+        }
       ]
     };
   },
@@ -201,10 +224,11 @@ export default {
     visibleData() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
-      this.datosGrouped = this.datosFiltrados.reduce( (a,b) => {
-       var i = a.findIndex( (x) => x.os == b.os & x.browser == b.browser & x.device == b.device );
-       return i === -1 ? a.push({ os : b.os, browser: b.browser, device: b.device, sessions : 1 }) : a[i].sessions++, a;
-       }, []);
+      this.datosGrouped = this.datosFiltrados;
+      // this.datosGrouped = this.datosFiltrados.reduce( (a,b) => {
+      //  var i = a.findIndex( (x) => x.os == b.os & x.browser == b.browser & x.device == b.device );
+      //  return i === -1 ? a.push({ os : b.os, browser: b.browser, device: b.device, sessions : 1 }) : a[i].sessions++, a;
+      //  }, []);
 
       /* this.datosGrouped.sort((a, b)=> {
         if (a.browser === b.browser){
@@ -217,14 +241,15 @@ export default {
         }
       });*/
 
-      this.datosGrouped.sort((a, b)=> {
-        if (a.sessions > b.sessions){
-            return -1;  
-        }
-        if (a.sessions < b.sessions){
-            return 1;  
-        }
-      });
+      // this.datosGrouped.sort((a, b)=> {
+      //   if (a.sessions > b.sessions){
+      //       return -1;  
+      //   }
+      //   if (a.sessions < b.sessions){
+      //       return 1;  
+      //   }
+      // });
+      // console.log(this.datosGrouped)
       return this.datosGrouped.slice(start, end);
     },
   },
@@ -235,21 +260,21 @@ export default {
   methods: {
     async obtenerDatos(fechai, fechaf) {
       fechaf = moment(fechaf, "MM/DD/YYYY").add(1, 'days').format("MM/DD/YYYY");
-      const respuesta = await fetch(`https://servicio-de-actividad.vercel.app/dispositivos/all?fechai=${fechai}&fechaf=${fechaf}`);
+      const respuesta = await fetch(`https://servicio-de-actividad.vercel.app/plataformas/v2/all?fechai=${fechai}&fechaf=${fechaf}`);
       const datos = await respuesta.json();
       this.datos = datos.data;
+      this.datosFiltrados = this.datos;
+      // this.datos.sort(function(a, b) {
+      //   var timestampA = new Date(moment(a.timestamp, "DD-MM-YYYY"));
+      //   var timestampB = new Date(moment(b.timestamp, "DD-MM-YYYY"));
+      //   return  timestampB - timestampA;
+      // });
 
-      this.datos.sort(function(a, b) {
-        var timestampA = new Date(moment(a.timestamp, "DD-MM-YYYY"));
-        var timestampB = new Date(moment(b.timestamp, "DD-MM-YYYY"));
-        return  timestampB - timestampA;
-      });
-
-      this.datosFiltrados = this.datos.filter((dato) => {
-        const timestamp = moment(dato.timestamp, "DD-MM-YYYY");
-        var range = moment().range(fechai, fechaf);
-        return range.contains(timestamp);
-      });
+      // this.datosFiltrados = this.datos.filter((dato) => {
+      //   const timestamp = moment(dato.timestamp, "DD-MM-YYYY");
+      //   var range = moment().range(fechai, fechaf);
+      //   return range.contains(timestamp);
+      // });
       this.currentPage = 1;
 
       var carActividad = document.querySelector("#id-card-actividad");
