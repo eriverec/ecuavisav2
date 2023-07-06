@@ -20,7 +20,7 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
           </VCardItem>
           <VDivider />
 
-          <ChartAreaDispositivosFecha @activityData="getActivity" />
+          <!-- <ChartAreaDispositivosFecha @activityData="getActivity" /> -->
 
         </VCardText>
       </VCard>
