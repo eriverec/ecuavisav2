@@ -98,7 +98,7 @@ getData();
                     <VIcon :color="iconD.color" :icon="iconD.icon" />
                   </VAvatar>
                 </span>
-                <span class="font-weight-medium">{{ dat._id.browser }} on {{ dat._id.os == 'Linux' & dat._id.device == 'movil' ? 'Android' : dat._id.os }}</span>
+                <span class="font-weight-medium">{{ dat._id.browser || "Otro" }} on {{ (dat._id.os == 'Linux' & dat._id.device == 'movil' ? 'Android' : dat._id.os) || "SO indefinido" }}</span>
               </td>
               <td class="text-medium-emphasis">
                 <span v-for="iconD in device" :key="iconD.name">
