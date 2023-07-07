@@ -128,6 +128,7 @@ export default {
   components: {
     VueApexCharts
   },
+  emits: ["activityData"],
   setup() {
     const vuetifyTheme = useTheme();
     const themeColors = vuetifyTheme.current.value;
@@ -1062,9 +1063,9 @@ export default {
     this.emitData();
 
   },
-  updated() {
+  //updated() {
     //console.log("El DOM ha sido actualizado");
-  }
+ // }
 }
 </script>
   

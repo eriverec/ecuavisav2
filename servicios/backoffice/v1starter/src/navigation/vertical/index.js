@@ -49,7 +49,7 @@ export default [
       { title: 'Lista de Usuarios', to: 'apps-trazabilidad-list' },
       { title: 'Visitas', to: 'apps-visitas-list' },
       { title: 'Metadatos', to: 'apps-metadatos' },
-      { title: 'Dispositivos', to: 'apps-dispositivos' },
+      { title: 'Dispositivos', to: 'apps-dispositivos' }
       // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
       // modulos por salir 
       // 

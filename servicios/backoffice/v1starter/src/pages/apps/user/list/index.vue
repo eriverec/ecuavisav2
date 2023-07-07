@@ -579,6 +579,82 @@ async function downloadSection (){
   exportCSVFile(headers, doc, title);
 };
 
+async function downloadSearch (){
+  if(search.value){
+  let headers = {
+    wylexId: "wylexId",
+    site: "site",
+    email: "email",
+    first_name: "first_name",
+    last_name: "last_name",
+    avatar: "avatar",
+    created_at: "created",
+    logged_at: "last_session",
+    country: "country",
+    phone_prefix: "phone_prefix",
+    phone_number: "phone_number",
+    gender: "gender",
+    birth_date: "birth_date",
+    identification_type: "identification_type",
+    identification_number: "identification_number",
+    newsletter_opt_in: "newsletter_opt_in",
+    provider: "provider",
+  };
+  let doc = [];
+  for (let i = 1; i < totalPage.value+1; i++) {
+  await userListStore
+    .fetchUsers({
+      pageSize: rowPerPage.value,
+      page: i,
+      query: search.value,
+      provider: selectedProvider.value,
+      news: selectedBoletin.value,
+      sort: (sortDesc.value?-1:1),
+      columnSort: sortBy.value,
+      fechai: fechai.value && fechaf.value? fechai.value:'',
+      fechaf: fechai.value && fechaf.value? fechaf.value:'',
+    })
+    .then((response) => {
+      let docRaw = response.data.users;
+      docRaw.forEach((item) => {
+      doc.push({
+      wylexId: item.wylexId,
+      site: item.site,
+      email: item.email,
+      first_name: item.first_name,
+      last_name: item.last_name,
+      avatar: item.avatar,
+      created_at: moment(item.created_at).format('DD/MM/YYYY-HH:mm:ss'),
+      logged_at: moment(item.logged_at).format('DD/MM/YYYY-HH:mm:ss'),
+      country: item.country,
+      phone_prefix: item.phone_prefix,
+      phone_number: item.phone_number,
+      gender: item.gender,
+      birth_date: item.birth_date,
+      identification_type: item.identification_type,
+      identification_number: item.identification_number,
+      newsletter_opt_in: item.newsletter_opt_in,
+      provider: item.provider,
+    });   
+  });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
+  }
+  //console.log("usersValue ", users.value.length);
+  let title = "users_busqueda_" + search.value;
+  
+  await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "lista-usuarios",
+            "accion": "descarga-busqueda",
+            "fecha": dateNow.value
+					});
+  exportCSVFile(headers, doc, title);
+  }
+};
+
 const sortTable = (column) => {
   //sectionLoading();
   //sectionLoaded();
@@ -786,9 +862,8 @@ const resolveFechaSelected = (fechas) => {
                 />
               </div>
               <!-- 👉 Search button -->
-              <VBtn prepend-icon="tabler-search" @click="searchUsers">
-                Buscar
-              </VBtn>
+              <VBtn prepend-icon="tabler-search" @click="searchUsers"/>
+              
               <!-- 👉 Reset button -->
               <VBtn color="secondary" @click="reset"> Reiniciar </VBtn>
               <!-- 👉 Export button -->
@@ -821,6 +896,14 @@ const resolveFechaSelected = (fechas) => {
                 @click="downloadSection"
               >
                 Exportar sección
+              </VBtn>
+              <VBtn
+                variant="tonal"
+                color="success"
+                prepend-icon="tabler-screen-share"
+                @click="downloadSearch"
+              >
+                Exportar búsqueda
               </VBtn>
 
               <!-- 👉 Add user button -->
