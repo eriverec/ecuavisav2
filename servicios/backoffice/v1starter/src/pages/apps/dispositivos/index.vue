@@ -19,7 +19,7 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
             <VCardSubtitle>Categoría de dispositivos de los últimos 7 días</VCardSubtitle>
           </VCardItem>
           <VDivider />
-
+          
           <ChartAreaDispositivosFecha @activityData="getActivity" /> 
 
         </VCardText>

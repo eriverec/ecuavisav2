@@ -18,7 +18,7 @@
 
   <VRow>
     <VCol cols="12">
-      <VBtnToggle v-model="btnFiltros" color="primary" variant="outlined" divided>
+      <VBtnToggle class="d-none" v-model="btnFiltros" color="primary" variant="outlined" divided>
         <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosDispositivos">
           {{ item.nombre }}
         </VBtn>
