@@ -477,7 +477,7 @@ import { useTheme } from 'vuetify';
         return grafico.sort((a, b) => (b.total - a.total));
       },
       async getInitGraficoDispositivos(){
-        var fechai = moment().add(-5, 'days').format("MM/DD/YYYY");
+        var fechai = moment().add(-6, 'days').format("MM/DD/YYYY");
         var fechaf = moment().add(1, 'days').format("MM/DD/YYYY");
         //var panelGrafico = document.querySelector("#apexchartscrejemplo");
         //panelGrafico.classList.add("disabled");
