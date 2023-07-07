@@ -119,7 +119,7 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
   </VRow>
 
   <!-- 👉 Enable One Time Password Dialog -->
-  <EnableOneTimePasswordDialog v-model:isDialogVisible="isTwoFactorDialogOpen" :mobile-number="smsVerificationNumber" />
+  <!-- <EnableOneTimePasswordDialog v-model:isDialogVisible="isTwoFactorDialogOpen" :mobile-number="smsVerificationNumber" />-->
 </template>
 <script>
 
@@ -192,9 +192,12 @@ export default {
       const end = start + this.itemsPerPage;
 
       const arrayI = JSON.parse(JSON.stringify(this.dataN));
+
+      
       const divText32 = document.querySelector('.dataTable');
       const divTable = document.querySelector('.tableDataUser');
       const divPageTable = document.querySelector('.pagtable');
+
 
       if(divText32){
         if (arrayI != 0) {
@@ -212,7 +215,7 @@ export default {
         }
       }
 
-
+      
       
 
       if (arrayI.length !== 0) {
@@ -281,13 +284,13 @@ export default {
 
     },
   },
-  mounted() {
+ // mounted() {
     //this.filtrarDatos([]);
-  },
+ // },
   methods: {
-    resolveActivity() {
+    //resolveActivity() {
 
-    },
+   // },
     getActivity(value) {
       this.dataN = value.data;
       this.visita = value.visita;
@@ -295,6 +298,6 @@ export default {
       //console.log('llega',value); 
     }
 
-  },
+  }
 };
 </script>
