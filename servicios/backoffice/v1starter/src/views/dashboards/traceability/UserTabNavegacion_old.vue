@@ -10,7 +10,7 @@ const moment = extendMoment(Moment);
 const vuetifyTheme = useTheme();
 const fecha = ref({});
 fecha.value = {
-  i: moment().add(-7, 'days'),
+  i: moment().add(-30, 'days'),
   f: moment(),
 }
 
@@ -25,11 +25,24 @@ const totalCount = computed(() => urlCounts.value.length);
 
 async function fetchData() {
   try {
-    const response = await fetch(`https://servicio-de-actividad.vercel.app/paginas/vistas/v2/all?fechai=${(fecha.value.i).format('MM-DD-YYYY')}&fechaf=${(fecha.value.f).format('MM-DD-YYYY')}`);
+    const response = await fetch('https://servicio-de-actividad.vercel.app/actividad/all');
     const data = await response.json();
+    const urlMap = new Map();
+    
+    for (const activity of data.data) {
+      for (const record of activity.navigationRecord) {
+        const url = record.url;
+        const title = record.title;
+        if (urlMap.has(url)) {
+          urlMap.get(url).count++;
+        } else {
+          urlMap.set(url, { url, title, count: 1 });
+        }
+      }
+    }
 
-    urlCounts.value = Array.from(data.data);
-    // urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
+    urlCounts.value = Array.from(urlMap.values());
+    urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
   } catch (error) {
     console.error(error);
   }
@@ -85,8 +98,8 @@ const prevPage = () => {
     <VCol lg="12" cols="12" sm="6">
       <VCard>
         <VCardItem class="pb-sm-0">
-          <VCardTitle>Páginas más vistas de los útimos 7 días</VCardTitle>
-          <VCardSubtitle>Un total de {{ totalCount }} registros, mostrando data desde {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
+          <VCardTitle>Páginas más vistas --</VCardTitle>
+          <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
         </VCardItem>
 
         <VCardText v-if="isLoading">Cargando datos...</VCardText>
@@ -103,7 +116,7 @@ const prevPage = () => {
             <tbody>
               <tr v-for="item  in paginatedUrlCounts" :key="item.url">
                 <td class="text-high-emphasis">
-                  <span> <a :href="item.url" target="_blank" title="Click para ir a la página"> {{ item._id ? item._id : item.url }}</a> </span>
+                  <span> <a :href="item.url" target="_blank" title="Click para ir a la página"> {{ item.title ? item.title : item.url }}</a> </span>
                 </td>
 
                 <td class="text-medium-emphasis">
@@ -125,7 +138,18 @@ const prevPage = () => {
         </VCardText>
       </VCard>
     </VCol>
-    
+    <VCol class="d-none" lg="6" cols="12" sm="6">
+    <!-- trazabilidad independiente -->
+      <VCard>
+        <VCardItem class="pb-sm-0">
+          <VCardTitle>Últimas visitas</VCardTitle>
+          <!-- <VCardSubtitle>Weekly Earnings Overview</VCardSubtitle> -->
+        </VCardItem>
+        <CrmActivityTimeline />
+
+      </VCard>
+
+    </VCol>
 
   </VRow>
 </template>
