@@ -104,7 +104,8 @@
 }
 
 .loaderText{
-  margin: auto;
+  text-align: center;
+  margin-top: 30px;
 }
 
 .value {

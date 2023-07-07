@@ -13,7 +13,7 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
     <!-- 👉  Area chart -->
     <VCol cols="12">
       <VCard>
-        <VCardText class="d-flex flex-wrap justify-space-between gap-4">
+        <VCardText class=" flex-wrap justify-space-between gap-4">
           <VCardItem class="pt-0 pb-0">
             <VCardTitle>Resumen de Tecnología</VCardTitle>
             <VCardSubtitle>Categoría de dispositivos de los últimos 7 días</VCardSubtitle>
