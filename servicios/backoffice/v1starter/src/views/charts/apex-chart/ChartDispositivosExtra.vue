@@ -720,11 +720,11 @@ export default {
       const divText = document.querySelector('.divtext');
       const divGraf = document.getElementById('crejemplo');
       if(dataGroupBrowser.length === 0){
-        // console.log("vacio")
+        //console.log("vacio")
         divText.classList.remove('d-none');
         divGraf.classList.add('d-none');
       }else{
-        // console.log("lleno");
+        //console.log("lleno");
         divText.classList.add('d-none');
         divGraf.classList.remove('d-none');
       }
@@ -819,8 +819,9 @@ export default {
         let fechas = this.filtroDefault.fecha.split('a');
         fechai = moment(fechas[0]).add(+1, 'days').format('MM/DD/YYYY');
         fechaf = moment(fechas[1]).add(-1, 'days').format('MM/DD/YYYY');
+        this.fechaIngesada = this.filtroDefault.fecha;
       }
-      await this.resolveActividad();
+     /* await this.resolveActividad();
       //var panelGrafico = document.querySelector("#apexchartscrejemplo");
       //panelGrafico.classList.add("disabled");
       this.isLoading = true;
@@ -829,7 +830,7 @@ export default {
       ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
       this.isLoading = false;
       //console.log("data format",this.dataFormateada)
-
+*/
       return true;
     },
 
@@ -839,6 +840,7 @@ export default {
       let formatI = moment().add(-29, 'days').format("MM-DD-YYYY");
       let formatF = moment().format("MM-DD-YYYY");
       this.fechaIngesada = String(formatI + ' a ' + formatF);
+      /*
       var fechai = moment().add(-28, 'days').format("MM-DD-YYYY");
       var fechaf = moment().add(1, 'days').format("MM-DD-YYYY");
       this.isLoading = true;
@@ -846,6 +848,7 @@ export default {
       this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData);
       ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
       this.isLoading = false;
+      */
       return true;
     },
 
@@ -1011,7 +1014,7 @@ export default {
         this.selectedOs = checkDefault[0].os;
         this.selectedDispositivo = checkDefault[0].device;
         this.selectedActividad = checkDefault[0].actividad;
-        this.fechaIngesada = String(checkDefault[0].fecha);
+        //this.fechaIngesada = String(checkDefault[0].fecha);
       }
     },
 
@@ -1031,7 +1034,7 @@ export default {
       this.selectedDispositivo = filtro.device;
       this.selectedActividad = filtro.actividad;
       this.fechaIngesada = String(filtro.fecha);
-      await this.obtenerFechaDispositivos(filtro.fecha);
+      //await this.obtenerFechaDispositivos(filtro.fecha);
 
     },
     async reset() {
@@ -1039,7 +1042,6 @@ export default {
       this.selectedBrowser = "";
       this.selectedOs = "";
       this.selectedDispositivo = "";
-      this.fechaIngesada = "";
       this.selectedActividad = "sesion";
       await this.getDataNoFilter();
       this.emitData();

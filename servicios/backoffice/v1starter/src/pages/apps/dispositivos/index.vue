@@ -198,13 +198,13 @@ export default {
 
       if(divText32){
         if (arrayI != 0) {
-          console.log("lleno");
+          //console.log("lleno");
           divText32.classList.add('d-none');
           divTable.classList.remove('d-none');
           divPageTable.classList.remove('d-none');
 
         } else {
-          console.log("vacio");
+          //console.log("vacio");
           divText32.classList.remove('d-none');
           divTable.classList.add('d-none');
           divPageTable.classList.add('d-none');
