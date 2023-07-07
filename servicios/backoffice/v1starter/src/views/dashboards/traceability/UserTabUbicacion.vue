@@ -1,76 +1,31 @@
 <script setup>
-import auFlag from "@/assets/images/icons/countries/au.png";
-import brFlag from "@/assets/images/icons/countries/br.png";
-import cnFlag from "@/assets/images/icons/countries/cn.png";
-import frFlag from "@/assets/images/icons/countries/fr.png";
-import inFlag from "@/assets/images/icons/countries/in.png";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
-const salesByCountries = [
-  {
-    avatarImg: brFlag,
-    stats: "$2,415k",
-    subtitle: "Brazil",
-    profitLoss: -6.2,
-  },
-  {
-    avatarImg: inFlag,
-    stats: "$865k",
-    subtitle: "India",
-    profitLoss: 12.4,
-  },
-  {
-    avatarImg: auFlag,
-    stats: "$745k",
-    subtitle: "Australia",
-    profitLoss: -11.9,
-  },
-  {
-    avatarImg: frFlag,
-    stats: "$45",
-    subtitle: "France",
-    profitLoss: 16.2,
-  },
-  {
-    avatarImg: cnFlag,
-    stats: "$12k",
-    subtitle: "China",
-    profitLoss: 14.8,
-  },
-];
 
 const cities = ref([]);
+const fecha = ref({});
 const isLoading = ref(true);
+const activeIndex = ref(0); // Inicialmente, el primer tab está activado
 
 const orderField = ref("");
 const orderAsc = ref(true);
 
+fecha.value = {
+  i: moment().add(-30, 'days'),
+  f: moment(),
+}
+
 onMounted(async () => {
   const response = await fetch(
-    "https://servicio-de-actividad.vercel.app/dispositivos/all"
+    `https://servicio-de-actividad.vercel.app/ubicaciones/demograficos/v2/all?fechai=${(fecha.value.i).format('MM-DD-YYYY')}&fechaf=${(fecha.value.f).format('MM-DD-YYYY')}`
   );
   const data = await response.json();
   await accionBackoffice();
-  const citiesMap = new Map();
-  data.data.forEach((activity) => {
-    const key = `${activity.country}-${activity.city}`;
-    const city = citiesMap.get(key) || {
-      country: activity.country,
-      city: activity.city,
-      countryCode: activity.countryCode,
-      count: 0,
-      totalNavigationRecords: 0,
-    };
-    city.count++;
-    city.totalNavigationRecords += activity.navigationRecord;
-    citiesMap.set(key, city);
-  });
-
   // orderDirection.value = orderDirection.value === 'desc' ? 'desc' : 'asc'
-  cities.value = Array.from(citiesMap.values());
+  cities.value = Array.from(data.data);
   isLoading.value = false;
 });
 
@@ -99,63 +54,62 @@ async function accionBackoffice (){
 
 const sortedCities = computed(() => {
   if (orderField.value) {
-    const orderMultiplier = orderAsc.value ? 1 : -1;
-    return cities.value.sort(
-      (a, b) => (a[orderField.value] - b[orderField.value]) * orderMultiplier
-    );
+    return cities.value;
   } else {
     return cities.value;
   }
 });
-
-function toggleOrder(field) {
-  if (orderField.value === field) {
-    orderAsc.value = !orderAsc.value;
-  } else {
-    orderField.value = field;
-    orderAsc.value = true;
-  }
-}
 </script>
 
 <template>
-  <VCard title="Resumen de datos demográficos" subtitle="Datos de usuarios registrados desde la creación del proyecto hasta la actualidad">
+  <VCard title="Resumen de datos demográficos de los últimos 30 días" :subtitle="'Datos de usuarios registrados desde '+fecha.i.format('YYYY-MM-DD')+' hasta '+fecha.f.format('YYYY-MM-DD') ">
     <VCardText>
       <div v-if="isLoading">Cargando datos...</div>
       <VList class="card-list" v-else>
+        <VExpansionPanels variant="accordion" v-model="activeIndex">
+          <VExpansionPanel
+            v-for="country in sortedCities"
+            :key="country.country"
+          >
+            <VExpansionPanelTitle class="d-flex flex-wrap justify-space-between gap-4">
+              <div>
+                <VAvatar class="ava" size="34" :image=" 'https://www.countryflagicons.com/FLAT/64/' + country.countryCode + '.png' " /> {{ country.country }} 
+              </div>
+              <div style="" :class="`d-flex align-center text-secondary`">
+                <VChip label>{{ country.data.length }} {{ country.data.length > 1?"Ciudades":"Ciudad" }} </VChip>
+              </div>
+            </VExpansionPanelTitle>
+            <VExpansionPanelText>
+              <div style="border:1px solid rgba(var(--v-theme-on-background), var(--v-disabled-opacity));border-radius: 7px;">
+                <VTable class="text-no-wrap">
+                  <thead>
+                    <tr>
+                      <th scope="col">Ciudad</th>
+                      <th scope="col">Sesiones</th>
+                      <th scope="col">Visitas de Páginas</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="city in country.data" :key="city.city">
+                      <td> {{ city.city }} </td>
+                      <td>
+                        <div :class="`d-flex align-center font-weight-semibold ${city.sesiones > 0 ? 'text-success' : 'text-error' }`">
+                          <VChip label>{{ city.sesiones }} </VChip>
+                        </div>
+                      </td>
 
-        <VTable class="text-no-wrap">
-          <thead>
-            <tr>
-              <th scope="col">Pais</th>
-              <th scope="col">Ciudad</th>
-              <th scope="col">Sesiones</th>
-              <th scope="col">Visitas de Páginas</th>
-            </tr>
-          </thead>
-          <!-- <button @click="toggleOrder('count')">Count {{ orderField === 'count' ? (orderAsc ? '↑' : '↓') : '' }}</button>
-      <button @click="toggleOrder('totalNavigationRecords')">Total Navigation Records {{ orderField === 'totalNavigationRecords' ? (orderAsc ? '↑' : '↓') : '' }}</button> -->
-          <tbody>
-            <tr id="getDispTable" v-for="city in sortedCities" :key="city.city">
-              <td>
-                <VAvatar class="ava" size="34" :image=" 'https://www.countryflagicons.com/FLAT/64/' + city.countryCode + '.png' " />
-                <span class="font-weight-medium">{{ city.country }}</span>
-              </td>
-              <td> {{ city.city }} </td>
-              <td>
-                <div :class="`d-flex align-center font-weight-semibold ${city.count > 0 ? 'text-success' : 'text-error' }`">
-                  <VChip label>{{ city.count }} </VChip>
-                </div>
-              </td>
-
-              <td>
-                <div :class="`d-flex align-center font-weight-semibold ${city.count > 0 ? 'text-warning' : 'text-error' }`">
-                  <VChip label>{{ city.totalNavigationRecords }} </VChip>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </VTable>
+                      <td>
+                        <div :class="`d-flex align-center font-weight-semibold ${city.sesiones > 0 ? 'text-warning' : 'text-error' }`">
+                          <VChip label>{{ city.totalNavigationRecord }} </VChip>
+                        </div>
+                      </td>
+                    </tr>
+                  </tbody>
+                </VTable>
+              </div>
+            </VExpansionPanelText>
+          </VExpansionPanel>
+        </VExpansionPanels>
       </VList>
     </VCardText>
 
