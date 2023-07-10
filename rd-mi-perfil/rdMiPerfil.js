@@ -404,13 +404,22 @@ async function Token(){
     /************MODAL DE SEGUIMIENTO DE INTERESES************/
 
     var activarIter = async function(){
-      setTimeout(function () {
-        if (typeof ITER !== 'undefined') {
+      ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
+        if (existe) {
           return modalUserNew.load();
-        } else {
-          activarIter();
         }
-      }, 400) ;
+        //  else {
+        //   console.log('La VARIABLE no existe o el tiempo de espera ha expirado');
+        // }
+      });
+
+      // setTimeout(function () {
+      //   if (typeof ITER !== 'undefined') {
+      //     return modalUserNew.load();
+      //   } else {
+      //     activarIter();
+      //   }
+      // }, 400) ;
       return false;
     }
 
@@ -430,17 +439,21 @@ async function Token(){
         document.querySelector('#modal_titulo_seguimiento_tema').innerHTML = `Cuéntanos sobre ti`;
       },
       load:function(){
-        ITER.FAVORITE.TOPICS.onLoad(function(){
-          // TOPICS
-          $(".template-meta-favorite-action").each(function(){
-            if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
-              jQryIter(this).addClass("remove");
-            } else {
-              jQryIter(this).addClass("add");
-            }
-          });
-          var classListaTemas = document.querySelector('#listado-temas');
-          classListaTemas.classList.remove("isDisabled");
+        ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
+          if (existe) {
+            ITER.FAVORITE.TOPICS.onLoad(function(){
+              // TOPICS
+              $(".template-meta-favorite-action").each(function(){
+                if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
+                  jQryIter(this).addClass("remove");
+                } else {
+                  jQryIter(this).addClass("add");
+                }
+              });
+              var classListaTemas = document.querySelector('#listado-temas');
+              classListaTemas.classList.remove("isDisabled");
+            });
+          }
         });
         return true;
       },
@@ -601,25 +614,36 @@ async function Token(){
 
 /************ BLOQUE SEGUIMIENTO DE INTERESES ************/
 
-var activarIterPerfil = async function(){
-  setTimeout(function () {
-    if (typeof ITER !== 'undefined') {
-      return modalUserNew.load();
-    } else {
-      activarIterPerfil();
-    }
-  }, 400) ;
-  return false;
-}
+ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
+  if (existe) {
+    modalUserNew.load();
+  }
+});
+
+// var activarIterPerfil = async function(){
+//   setTimeout(function () {
+//     if (typeof ITER !== 'undefined') {
+//       return modalUserNew.load();
+//     } else {
+//       activarIterPerfil();
+//     }
+//   }, 400) ;
+//   return false;
+// }
 
 var activarIterPerfil_2 = async function(){
-  setTimeout(function () {
-    if (typeof ITER !== 'undefined') {
+  ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
+    if (existe) {
       return modalUserNewPerfil.load();
-    } else {
-      activarIterPerfil();
     }
-  }, 400) ;
+  });
+  // setTimeout(function () {
+  //   if (typeof ITER !== 'undefined') {
+  //     return modalUserNewPerfil.load();
+  //   } else {
+  //     activarIterPerfil();
+  //   }
+  // }, 400) ;
   return false;
 }
 
@@ -639,19 +663,23 @@ var modalUserNewPerfil = {
     document.querySelector('#modal_titulo_seguimiento_tema').innerHTML = `Cuéntanos sobre ti`;
   },
   load:function(){
-    ITER.FAVORITE.TOPICS.onLoad(function(){
-      // TOPICS
-      $(".template-meta-favorite-action").each(function(){
-        if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
-          jQryIter(this).find("button.btn-modal-seguir").attr("data-follow", "0");
-          jQryIter(this).addClass("remove");
-        } else {
-          jQryIter(this).find("button.btn-modal-seguir").attr("data-follow", "1");
-          jQryIter(this).addClass("add");
-        }
-      });
-      // var classListaTemas = document.querySelector('#listado-temas');
-      // classListaTemas.classList.remove("isDisabled");
+    ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
+      if (existe) {
+        ITER.FAVORITE.TOPICS.onLoad(function(){
+          // TOPICS
+          $(".template-meta-favorite-action").each(function(){
+            if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
+              jQryIter(this).find("button.btn-modal-seguir").attr("data-follow", "0");
+              jQryIter(this).addClass("remove");
+            } else {
+              jQryIter(this).find("button.btn-modal-seguir").attr("data-follow", "1");
+              jQryIter(this).addClass("add");
+            }
+          });
+          // var classListaTemas = document.querySelector('#listado-temas');
+          // classListaTemas.classList.remove("isDisabled");
+        });
+      }
     });
     return true;
   },
@@ -1233,26 +1261,29 @@ var modalUsuarioSugerencia = {
 
     /*----seguirmetas----*/
     function meta_favorite_action(id) {
-      var user=jQryIter.u;
-      if(user!=""){
-        if (ITER.FAVORITE.TOPICS.isFavorite(id)){
-          ITER.FAVORITE.TOPICS.remove(id, del_fav_t(), nodel_fav_t());
-          jQryIter("#"+id).removeClass("remove");
-          jQryIter("#"+id).addClass("add");
-          jQryIter("#"+id).attr("title","Seguir este tema");
+      ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
+        if (existe) {
+          var user=jQryIter.u;
+          if(user!=""){
+            if (ITER.FAVORITE.TOPICS.isFavorite(id)){
+              ITER.FAVORITE.TOPICS.remove(id, del_fav_t(), nodel_fav_t());
+              jQryIter("#"+id).removeClass("remove");
+              jQryIter("#"+id).addClass("add");
+              jQryIter("#"+id).attr("title","Seguir este tema");
+            }
+            else{
+              ITER.FAVORITE.TOPICS.add(id, ok_fav_t(), ko_fav_t());
+              jQryIter("#"+id).addClass("remove");
+              jQryIter("#"+id).removeClass("add");
+              jQryIter("#"+id).attr("title","Dejar de seguir este tema");
+              //$("#favorite_topic_alert").show(300);
+              //$("#favorite_topic_alert").delay(2000).hide(300);
+            }
+          }else{
+            window.location.assign("/servicios/perfil/");
+          }
         }
-        else{
-          ITER.FAVORITE.TOPICS.add(id, ok_fav_t(), ko_fav_t());
-          jQryIter("#"+id).addClass("remove");
-          jQryIter("#"+id).removeClass("add");
-          jQryIter("#"+id).attr("title","Dejar de seguir este tema");
-          //$("#favorite_topic_alert").show(300);
-          //$("#favorite_topic_alert").delay(2000).hide(300);
-        }
-      }
-      else{
-        window.location.assign("/servicios/perfil/");
-      }	
+      });	
     }
     function ok_fav_t() {
       //alert("Tema añadido a favoritos");
@@ -1726,22 +1757,30 @@ var bloqueUsuarioIntereses = {
         var numIter = 1;
         var contador = 1;
         var ins = this;
-        
-        var EXISTEiter = setInterval(function () {
-        if (typeof ITER !== 'undefined') {
+        ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
+          if (existe) {
             ITER.FAVORITE.TOPICS.onLoad(function(){
               ins.initComponent();
               ins.body();
             });
-            clearInterval(EXISTEiter);
-        }else{
-          contador++;
-        }
-        if(contador == 100){
-            console.error("ITER no está definido");
-            clearInterval(EXISTEiter);
           }
-        }, 500);
+        });
+        
+        // var EXISTEiter = setInterval(function () {
+        // if (typeof ITER !== 'undefined') {
+            //   ITER.FAVORITE.TOPICS.onLoad(function(){
+            //   ins.initComponent();
+            //   ins.body();
+            // });
+        //     clearInterval(EXISTEiter);
+        // }else{
+        //   contador++;
+        // }
+        // if(contador == 100){
+        //     console.error("ITER no está definido");
+        //     clearInterval(EXISTEiter);
+        //   }
+        // }, 500);
       },
       temas:[
         {
