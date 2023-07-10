@@ -441,18 +441,20 @@ async function Token(){
       load:function(){
         ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
           if (existe) {
-            ITER.FAVORITE.TOPICS.onLoad(function(){
-              // TOPICS
-              $(".template-meta-favorite-action").each(function(){
-                if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
-                  jQryIter(this).addClass("remove");
-                } else {
-                  jQryIter(this).addClass("add");
-                }
-              });
-              var classListaTemas = document.querySelector('#listado-temas');
-              classListaTemas.classList.remove("isDisabled");
-            });
+            setTimeout(function(){
+                ITER.FAVORITE.TOPICS.onLoad(function(){
+                  // TOPICS
+                  $(".template-meta-favorite-action").each(function(){
+                    if (ITER.FAVORITE.TOPICS.isFavorite($(this).attr("id"))){
+                      jQryIter(this).addClass("remove");
+                    } else {
+                      jQryIter(this).addClass("add");
+                    }
+                  });
+                  var classListaTemas = document.querySelector('#listado-temas');
+                  classListaTemas.classList.remove("isDisabled");
+                });
+            }, 1000);
           }
         });
         return true;
@@ -1759,10 +1761,12 @@ var bloqueUsuarioIntereses = {
         var ins = this;
         ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
           if (existe) {
-            ITER.FAVORITE.TOPICS.onLoad(function(){
-              ins.initComponent();
-              ins.body();
-            });
+            setTimeout(function(){
+                ITER.FAVORITE.TOPICS.onLoad(function(){
+                  ins.initComponent();
+                  ins.body();
+                });
+            }, 1000);
           }
         });
         
