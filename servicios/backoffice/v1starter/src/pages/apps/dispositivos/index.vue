@@ -7,6 +7,10 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
   opacity: 0.1;
   pointer-events: none;
 }
+.clickable {
+  cursor: pointer;
+}
+
 </style>
 <template>
   <VRow>
@@ -31,8 +35,17 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
       <VCard>
         <VCardText class=" flex-wrap justify-space-between gap-4" id="id-card-actividad">
           <VCardItem class="pt-0 pb-0">
+            <div style="display: flex; flex-wrap: wrap;">
+                        <div style="width: max-content;">
             <VCardTitle>Usuarios</VCardTitle>
             <VCardSubtitle> Registro de actividad de los usuarios</VCardSubtitle>
+            </div>
+            <div style="margin-left: auto; margin-bottom: 0.80rem;">
+                          <VBtn color="primary" @click="download">
+                            Exportar
+                          </VBtn>
+                        </div>
+                        </div>
           </VCardItem>
           
           <VCardItem class="pt-0 pb-0">
@@ -40,7 +53,7 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
           </VCardItem>
 
 
-          <VTable class="text-no-wrap w-100 px-4 tableDataUser" >
+          <VTable class="text-no-wrap w-100 px-4 tableDataUser" hover="true">
             <thead>
               <tr>
                 <th scope="col">USUARIO</th>
@@ -53,7 +66,8 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
 
 
             <tbody v-if="visibleData.length">
-              <tr v-for="(dat, index) in visibleData" :key="index">
+              <tr class="clickable" v-for="(dat, index) in visibleData" :key="index"
+              @click="resolveActividadUser(dat.first_name, dat.last_name)">
 
                 <td class="text-medium-emphasis">{{ dat.first_name }} {{ dat.last_name }}</td>
                 <td class="text-medium-emphasis">
@@ -116,17 +130,60 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
         </VCardText>
       </VCard>
     </VCol>
+
+    <VCol lg="12" cols="12" sm="12">
+            <!-- trazabilidad independiente -->
+            <VExpandTransition id="actividadusuario">
+              <VCard v-show="actividadUsuarioVisible">
+                <VCardItem>
+                  <VCardTitle>
+                    Actividad del usuario <b>{{ userSelected }}</b>
+                  </VCardTitle>
+                </VCardItem>
+
+                <VCardText v-if="actividadUsuario.length > 0">
+                  <VTimeline density="compact" align="start" truncate-line="both" class="v-timeline-density-compact">
+                    <VTimelineItem :dot-color="user.title === titleSelected ? 'success' : 'primary'" size="x-small"
+                      v-for="user in verMas ? actividadUsuarioFull : actividadUsuario">
+                      <div class="d-flex justify-space-between align-center flex-wrap">
+                        <h4 class="text-base font-weight-semibold me-1">
+                          {{ user.title || user.url }}
+                        </h4>
+                      </div>
+                      <p class="mb-1">{{ user.fecha }} {{ user.hora }}</p>                     
+                      <VDivider />
+
+                    </VTimelineItem>
+
+                  </VTimeline>
+                  <br>
+                  <div style="text-align: center;">
+                    <VBtn v-if="!verMas && actividadUsuarioFull.length > 10" color="primary" @click="verMas = true">Ver
+                      más</VBtn>
+                    <VBtn v-if="verMas && actividadUsuarioFull.length > 10" color="primary" @click="verMas = false">Ver
+                      menos</VBtn>
+                  </div>
+                </VCardText>
+                <VCardText v-else>No existen datos</VCardText>
+              </VCard>
+            </VExpandTransition>
+          </VCol>
   </VRow>
 
   <!-- 👉 Enable One Time Password Dialog -->
   <!-- <EnableOneTimePasswordDialog v-model:isDialogVisible="isTwoFactorDialogOpen" :mobile-number="smsVerificationNumber" />-->
 </template>
 <script>
-
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+const moment = extendMoment(Moment);
+moment.locale('es', [esLocale]);
 //alert(moment(new Date(), "YYYY-MM-DD").format('YYYY-MM-DD'))
 export default {
   data() {
     return {
+      userSelected: "",
       visita: true,
       fechaInicio: "",
       fechaFin: "",
@@ -138,6 +195,10 @@ export default {
       currentPage: 1,
       itemsPerPage: 10,
       totalPaginas: 0,
+      actividadUsuario: [],
+      actividadUsuarioFull: [],
+      actividadUsuarioVisible: false,
+      verMas: false,
       iconDevices: [
         {
           browser: "Chrome",
@@ -296,8 +357,170 @@ export default {
       this.visita = value.visita;
       this.isLoading = false;
       //console.log('llega',value); 
+    },
+    resolveActividadUser(first, last){
+
+      const arrayI = JSON.parse(JSON.stringify(this.dataN));
+      console.log('arrayI',arrayI);
+      const inicio = [];
+      arrayI.forEach(e => {
+        let data = {
+          first_name: e.users[0]?.first_name,
+          last_name: e.users[0]?.last_name,
+          navigationData: e.navigationData
+        }
+        inicio.push(data);
+      });
+
+      console.log('inicio',inicio);
+
+      const arrayFiltro = [];
+      this.userSelected = first + ' ' + last;
+      let fullNameViene = first + ' ' + last;
+      //console.log('name',fullNameViene);
+      //console.log('inicio' ,inicio); 
+      for (let p of inicio) {
+          let fullName = p.first_name + ' ' + p.last_name;
+          if (fullName == fullNameViene) {
+              for (let i of p.navigationData) {
+
+                  var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY', 'M/D/YYYY', 'D/M/YYYY'];
+                  var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss', 'DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];
+                  let fechaFormat = moment(i.fecha, allowedDateFormats, true).format('DD/MM/YYYY');
+                  let horaFix = i.hora.split(':');
+                  if (horaFix[2].indexOf(' ') >= 0) {
+                      let slot3 = horaFix[2].split(' ');
+                      horaFix[2] = slot3[0];
+                  }
+                  let horaFinal = horaFix[0] + ':' + horaFix[1] + ':' + horaFix[2];
+                  let fullFecha = fechaFormat + ' ' + horaFinal;
+                  let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
+
+                  let data = {
+                      first_name: p.first_name,
+                      last_name: p.last_name,
+                      url: i.url,
+                      title: i.title,
+                      fecha: fechaFormat,
+                      fechaRaw: i.fecha,
+                      fullFecha: fullFechaFormat,
+                      hora: horaFinal
+                  }
+                  arrayFiltro.push(data);
+              }
+          }
+      }
+
+      arrayFiltro.sort((a, b) => {
+          var timestampA = new Date(a.fullFecha);
+          var timestampB = new Date(b.fullFecha);
+          return timestampB - timestampA;
+      });
+
+      //console.log('Sorted F',arrayFiltro);
+      this.actividadUsuario = arrayFiltro.slice(0, 10);
+      this.actividadUsuarioFull = arrayFiltro;
+
+      this.actividadUsuarioVisible = true;
+  },
+  convertToCSV(objArray) {
+      var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+      var str = "";
+
+      for (var i = 0; i < array.length; i++) {
+        var line = "";
+        for (var index in array[i]) {
+          if (line != "") line += ",";
+
+          line += array[i][index];
+        }
+
+        str += line + "\r\n";
+      }
+
+      return str;
+  },
+  exportCSVFile(headers, items, fileTitle) {
+    if (headers && items[0].wylexId !== "wylexId") {
+      items.unshift(headers);
     }
 
-  }
+    // Convert Object to JSON
+    var jsonObject = JSON.stringify(items);
+
+    var csv = this.convertToCSV(jsonObject);
+
+    var exportedFilenmae = fileTitle + ".csv" || "export.csv";
+
+    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    if (navigator.msSaveBlob) {
+      // IE 10+
+      navigator.msSaveBlob(blob, exportedFilenmae);
+    } else {
+      var link = document.createElement("a");
+      if (link.download !== undefined) {
+        // feature detection
+        // Browsers that support HTML5 download attribute
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", exportedFilenmae);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  },
+  download() {
+    const arrayI = JSON.parse(JSON.stringify(this.dataN));
+    const arrayExport = [];
+    for (let i of arrayI) {
+      let user = i.users[0];
+      let data = {
+        userId: i.userId,
+        first_name: user?.first_name,
+        last_name: user?.last_name,
+        phone_number: user?.phone_number,
+        browser: i.browser,
+        city: i.city,
+        created_at: i.created_at,
+        device: i.device,
+        idActivity: i.idActivity,
+        actividad: i.navigationRecord,
+        os: i.os,
+        timestamp: i.timestamp
+      }
+      arrayExport.push(data);
+    }
+    let headers = {
+      userId: "userId",
+      first_name: "first_name",
+      last_name: "last_name",
+      phone_number: "phone_number",
+      browser: "browser",
+      city: "city",
+      created_at: "created_at",
+      device: "device",
+      idActivity: "idActivity",
+      actividad: "actividad",
+      os: "os",
+      timestamp: "timestamp"
+    };
+
+    let title = "usuarios_dispositivos";
+    //if(usersFull.length > totalUsers){
+    //console.log("arrayExport", arrayExport);
+    this.exportCSVFile(headers, arrayExport, title);
+    // }
+  },
+  filtrarDatos() {
+          this.isLoading = true;
+          const arrayI = JSON.parse(JSON.stringify(this.dataN));
+          const divText32 = document.querySelector('.dataTable');
+          const divTable = document.querySelector('.tableDataUser');
+          const divPageTable = document.querySelector('.pagtable');
+
+    }
+},
 };
 </script>
