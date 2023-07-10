@@ -59,19 +59,16 @@ if (day > 0 && day <= 5) {
   // if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
   //     comunidadHeight();
   // }
-  if ("00:00" <= timeOfDay && timeOfDay <= "05:55") {
-    actDIV();      
-  }
-  else if ("05:55" <= timeOfDay && timeOfDay <= "09:00") {
+  if ("00:30" <= timeOfDay && timeOfDay <= "09:00") {
     actDIV();      
   } else if ("10:30" <= timeOfDay && timeOfDay <= "17:20") {
     actDIV();
   } else if ("18:00" <= timeOfDay && timeOfDay <= "19:00") {
     actDIV();
-  } else if ("19:00" <= timeOfDay && timeOfDay <= "21:00") {
+  } else if ("19:00" <= timeOfDay && timeOfDay <= "21:30") {
     actDIV();
   }  
-  else if ("22:00" <= timeOfDay && timeOfDay <= "23:59") {
+  else if ("22:30" <= timeOfDay && timeOfDay <= "00:29") {
     actDIV();
   } 
   else {}
