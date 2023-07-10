@@ -616,11 +616,11 @@ async function Token(){
 
 /************ BLOQUE SEGUIMIENTO DE INTERESES ************/
 
-ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
-  if (existe) {
-    modalUserNew.load();
-  }
-});
+// ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
+//   if (existe) {
+//     modalUserNew.load();
+//   }
+// });
 
 // var activarIterPerfil = async function(){
 //   setTimeout(function () {
