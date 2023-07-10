@@ -29,6 +29,16 @@
   display: none;
 }
 
+.c_azul_celeste_Desktop img,
+.c_azul_celeste_Mobile img {
+  height: auto;
+} 
+
+.estilo_separadorDesktop,
+.estilo_separadorMobile{
+  height: auto;
+}
+
 @media (max-width: 767px) {
   .c_azul_celeste_Mobile {
     display: block;
