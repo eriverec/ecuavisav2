@@ -25,6 +25,10 @@
   --animate-repeat: 1
 }
 
+.swiper-lazy-preloader-white {
+  opacity: 0 !important;
+}
+
 
 @-webkit-keyframes fadeIn {
   0% {
