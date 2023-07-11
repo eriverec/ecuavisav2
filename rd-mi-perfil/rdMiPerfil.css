@@ -3143,3 +3143,11 @@ ul li i.chevron:after {
       padding: 10px 5px;
   }
 }
+
+#ly-header.container {
+    margin-bottom: 0rem!important;
+}
+
+#main-content {
+    margin-top: 2.5rem;
+}
