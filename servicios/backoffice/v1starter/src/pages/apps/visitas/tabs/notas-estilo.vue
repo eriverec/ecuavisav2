@@ -26,6 +26,7 @@ const searchQuery = ref('');
 const selectedRow = ref(null);
 const selectedRowUser = ref(null);
 
+
 async function getDrivers(fechai = '', fechaf = '') {
   isLoading.value = true;
   const navArray = [];
@@ -44,7 +45,7 @@ async function getDrivers(fechai = '', fechaf = '') {
     redirect: 'follow'
   };
 
-  await fetch('https://servicio-de-actividad.vercel.app/actividad/driver/full', requestOptions)
+  await fetch('https://servicio-de-actividad.vercel.app/actividad/seccion/full/Tendencias', requestOptions)
     .then(response => response.json())
     .then(data => {
 
@@ -96,7 +97,7 @@ async function obtenerPorFecha(selectedDates) {
   }
 }
 
-const paginatedDrivers = computed(() => {
+const paginatedEstadio = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
 
@@ -153,7 +154,6 @@ const resolveUltimosUsuarios = (title) => {
     const targetElement = document.getElementById('target'); // ID del elemento al que quieres hacer scroll
     targetElement.scrollIntoView({ behavior: 'smooth' }); // Hace scroll suavemente hacia el elemento
   }, 100);
-
   const inicio = rawData.value.map(({ first_name, last_name, navigationRecord }) => {
     return { first_name, last_name, navigationRecord };
   });
@@ -305,7 +305,7 @@ async function downloadSelection() {
   };
   let doc = [];
   doc = Array.from(ultimosUsuariosDownload.value);
-  let title = "drivers_ultimos_usuarios_" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
+  let title = "estilo_ultimos_usuarios_" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
   //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
   exportCSVFile(headers, doc, title);
@@ -313,7 +313,9 @@ async function downloadSelection() {
 };
 
 const resolveUltimasVisitasUser = (first, last) => {
+
   selectedRowUser.value = first;
+
   const inicio = rawData.value.map(({ first_name, last_name, navigationRecord }) => {
     return { first_name, last_name, navigationRecord };
   });
@@ -375,7 +377,7 @@ const resolveUltimasVisitasUser = (first, last) => {
       <VCard>
         <VCardText class="d-flex flex-wrap justify-space-between gap-4">
           <VCardItem class="pb-sm-0">
-            <VCardTitle>Páginas más vistas </VCardTitle>
+            <VCardTitle>Páginas más vistas</VCardTitle>
             <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
           </VCardItem>
 
@@ -416,7 +418,7 @@ const resolveUltimasVisitasUser = (first, last) => {
             </thead>
 
             <tbody>
-              <tr v-for="item  in paginatedDrivers" class="clickable" :class="{ active: item.title === selectedRow }"
+              <tr v-for="item  in paginatedEstadio" class="clickable" :class="{ active: item.title === selectedRow }"
                 @click="resolveUltimosUsuarios(item.title || item.url)">
                 <td>
                   {{ item.title ? item.title : item.url }}
@@ -467,7 +469,9 @@ const resolveUltimasVisitasUser = (first, last) => {
               </thead>
 
               <tbody>
-                <tr class="clickable" v-for="user in ultimosUsuarios" :key="user.first" :class="{ active: user.first_name === selectedRowUser }" @click="resolveUltimasVisitasUser(user.first_name, user.last_name)">
+                <tr v-for="user in ultimosUsuarios" :key="user.first" class="clickable"
+                  :class="{ active: user.first_name === selectedRowUser }"
+                  @click="resolveUltimasVisitasUser(user.first_name, user.last_name, user.first)">
                   <td class="text-high-emphasis">
                     {{ user.first_name }} {{ user.last_name }}
                   </td>
@@ -502,9 +506,14 @@ const resolveUltimasVisitasUser = (first, last) => {
                   <h4 class="text-base font-weight-semibold me-1">
                     {{ user.title || user.url }}
                   </h4>
+
+
                 </div>
+
                 <p class="mb-1">{{ user.fecha }} {{ user.hora }}</p>
+
               </VTimelineItem>
+
             </VTimeline>
           </VCardText>
         </VCard>
@@ -521,10 +530,13 @@ const resolveUltimasVisitasUser = (first, last) => {
   text-decoration: underline !important;
 }
 
-.v-card-title {
-  white-space: initial;
+tr.clickable.active {
+  background-color: #00000012;
 }
 
+.clickable {
+  cursor: pointer;
+}
 
 td span {
   display: block;
@@ -534,10 +546,10 @@ td span {
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-.clickable {
-  cursor: pointer;
+.v-card-title{
+  white-space: initial;
 }
+
 
 @media (max-width: 1000px) {
   td span {
