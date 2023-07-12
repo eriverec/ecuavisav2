@@ -61,7 +61,7 @@ if (day > 0 && day <= 5) {
   // }
   if ("00:30" <= timeOfDay && timeOfDay <= "09:00") {
     actDIV();      
-  } else if ("10:30" <= timeOfDay && timeOfDay <= "17:10") {
+  } else if ("10:30" <= timeOfDay && timeOfDay <= "17:59") {
     actDIV();
   } else if ("18:00" <= timeOfDay && timeOfDay <= "19:00") {
     actDIV();
