@@ -226,9 +226,6 @@
 </template>
 <style>
 
-html {
-  scroll-behavior: smooth;
-}
 .tab-titles {
   display: flex;
 }
