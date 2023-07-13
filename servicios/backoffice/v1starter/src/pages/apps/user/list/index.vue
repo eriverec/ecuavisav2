@@ -36,7 +36,7 @@ const userFullP = ref(0);
 const fechai = ref('');
 const fechaf = ref('');
 const fechaIngesada = ref('');
-
+const isSearchLoading = ref(false);
 const sectionLoading = () => {
   isLoaded.value = false;
   isLoading.value = true;
@@ -580,7 +580,7 @@ async function downloadSection (){
 };
 
 async function downloadSearch (){
-  if(search.value){
+  isSearchLoading.value = true;
   let headers = {
     wylexId: "wylexId",
     site: "site",
@@ -643,7 +643,7 @@ async function downloadSearch (){
     });
   }
   //console.log("usersValue ", users.value.length);
-  let title = "users_busqueda_" + search.value;
+  let title = "users_busqueda";
   
   await accionBackoffice({
             "usuario": userBackoffice.value.email,   
@@ -652,7 +652,7 @@ async function downloadSearch (){
             "fecha": dateNow.value
 					});
   exportCSVFile(headers, doc, title);
-  }
+  isSearchLoading.value = false;
 };
 
 const sortTable = (column) => {
@@ -902,6 +902,8 @@ const resolveFechaSelected = (fechas) => {
                 color="success"
                 prepend-icon="tabler-screen-share"
                 @click="downloadSearch"
+                :loading="isSearchLoading"
+                :disabled="isSearchLoading"
               >
                 Exportar búsqueda
               </VBtn>
