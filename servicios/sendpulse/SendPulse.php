@@ -346,6 +346,11 @@ class SendPulse {
 		return json_decode($json);
     }
 
+    public function getBoletinDiario(){
+        $json = file_get_contents("https://www.ecuavisa.com/rss/boletin-diario.json");
+		return json_decode($json);
+    }
+
     private function getDetail($list, $type){
     	if(is_array($list)){
     		foreach ($list as $key => $value) {
@@ -526,16 +531,14 @@ class SendPulse {
 				        exit();
     					break;
     				case 'boletin_diario':
-    					//ZONA DE PRUEBAS
-    					$notas = $this->getRankings(3)->data->id;
-    					$template = $this->getTemplate(148832);
-    					$list_id = 565083;
+    					$idTemplate = 148832;//TEMPLATE CORREO
+    					$list_id = 565083;//LISTA DE USUARIOS
     					$numUsers = $this->getListUser($list_id);
+    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/boletin-diario.json');
+    					$template = $this->getTemplate($idTemplate);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
     					$notasHtml = "";
-    					for ($i=0; $i < count($notas) ; $i++) { 
-    						$notasHtml .= $this->customTemplate($this->getRanking($notas[$i]));
-    					}
+    					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
     					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
     					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
     					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
@@ -545,9 +548,13 @@ class SendPulse {
 				        if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $bodyGenerar, $matches)) {
 						    $bodyContent = $matches[1];
 						}
-    					$resp = $this->rankinUltimasNoticias("Newsletter diario últimas noticias ".$getFecha, $this->HtmlToBase64($bodyContent), $list_id);
-			        	echo json_encode(["respSendPulse"=>$resp,"resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha, "num_usuario" => count($numUsers)]);
-			        	exit();
+    					if(count($notas) > 0 && count($numUsers) > 0){
+    						$resp = $this->estadio("Newsletter diario estadio ".$getFecha, $this->HtmlToBase64($bodyContent), $list_id);
+				        	echo json_encode(["respSendPulse"=>$resp,"resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha, "num_usuario" => count($numUsers), "num_notas" => count($notas)]);
+				        	exit();
+    					}
+    					echo json_encode(["resp"=>false, "message"=>"El Newsletter no fue enviado por que no existe notas que enviar", "num_usuario" => count($numUsers), "num_notas" => count($notas)]);
+				        exit();
     					break;
     				case 'template':
     					//ZONA DE PRUEBAS
