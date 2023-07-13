@@ -165,6 +165,7 @@ const resolveNoticiasporUsuarios = (id) => {
 
 const reset = () => {
   searchQuery.value = '';
+  usuariosRaw.value = [];
   usuarioEncontrado.value = false;
   noticiasDeUsuariosVisible.value = false;
 }
@@ -391,7 +392,7 @@ async function downloadUsuarios() {
 
                 <VCardItem class="pb-sm-0 pl-0 pt-0">
                   <VCardTitle>Notas por usuarios</VCardTitle>
-                  <VCardSubtitle>Un total de {{ recomendadas.length }} registros</VCardSubtitle>
+                  <VCardSubtitle>Un total de {{ usuariosRaw.length }} registros</VCardSubtitle>
                 </VCardItem>
 
                 <div class="d-flex flex-wrap gap-4">
