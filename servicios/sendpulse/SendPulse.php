@@ -525,6 +525,30 @@ class SendPulse {
 				        echo json_encode($this->getRanking(5117800));
 				        exit();
     					break;
+    				case 'boletin_diario':
+    					//ZONA DE PRUEBAS
+    					$notas = $this->getRankings(3)->data->id;
+    					$template = $this->getTemplate(148832);
+    					$list_id = 565083;
+    					$numUsers = $this->getListUser($list_id);
+	        			$htmlTemplate = $this->base64ToHTML($template->body);
+    					$notasHtml = "";
+    					for ($i=0; $i < count($notas) ; $i++) { 
+    						$notasHtml .= $this->customTemplate($this->getRanking($notas[$i]));
+    					}
+    					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
+    					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
+    					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
+    					$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
+    					/*$name, $body, $list_id*/
+    					$bodyContent = "";
+				        if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $bodyGenerar, $matches)) {
+						    $bodyContent = $matches[1];
+						}
+    					$resp = $this->rankinUltimasNoticias("Newsletter diario últimas noticias ".$getFecha, $this->HtmlToBase64($bodyContent), $list_id);
+			        	echo json_encode(["respSendPulse"=>$resp,"resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha, "num_usuario" => count($numUsers)]);
+			        	exit();
+    					break;
     				case 'template':
     					//ZONA DE PRUEBAS
 	    				$template = $this->getTemplate(148832);
