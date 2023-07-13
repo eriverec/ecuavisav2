@@ -31,7 +31,7 @@ const usuarioSeleceted = ref('');
 
 async function getRecomendadas(fechai = '', fechaf = '') {
   isLoading.value = true;
-  await fetch('https://servicio-de-actividad.vercel.app/recomendadas/get?' + new URLSearchParams({ fechai: fechai, fechaf: fechaf }))
+  await fetch('https://servicio-de-actividad.vercel.app/recomendadas/get/all?' + new URLSearchParams({ fechai: fechai, fechaf: fechaf }))
     .then(response => response.json())
     .then(data => {
       recomendadasRaw.value = data;
@@ -168,6 +168,75 @@ const reset = () => {
   usuarioEncontrado.value = false;
   noticiasDeUsuariosVisible.value = false;
 }
+
+function convertToCSV(objArray) {
+  var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+  var str = "";
+
+  for (var i = 0; i < array.length; i++) {
+    var line = "";
+    for (var index in array[i]) {
+      if (line != "") line += ",";
+
+      line += array[i][index];
+    }
+
+    str += line + "\r\n";
+  }
+
+  return str;
+}
+
+function exportCSVFile(headers, items, fileTitle) {
+  if (headers && items[0].wylexId !== "wylexId") {
+    items.unshift(headers);
+  }
+
+  // Convert Object to JSON
+  var jsonObject = JSON.stringify(items);
+
+  var csv = convertToCSV(jsonObject);
+
+  var exportedFilenmae = fileTitle + ".csv" || "export.csv";
+
+  var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  if (navigator.msSaveBlob) {
+    // IE 10+
+    navigator.msSaveBlob(blob, exportedFilenmae);
+  } else {
+    var link = document.createElement("a");
+    if (link.download !== undefined) {
+      // feature detection
+      // Browsers that support HTML5 download attribute
+      var url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", exportedFilenmae);
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+}
+
+async function downloadUsuarios() {
+  let headers = {
+    userId: "userId",
+    first_name: "first_name",
+    last_name: "last_name",
+    created_at: "created_at",
+  };
+  let doc = notasUsuarios.value.map(({ userId , first_name, last_name, created_at }) => {
+    return { userId, first_name, last_name, created_at };
+  });
+  let title = "usuarios_" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
+  //console.log("doc", doc);
+  //if(usersFull.length > totalUsers){
+
+  exportCSVFile(headers, doc, title);
+  // }
+
+};
 </script>
 <template>
   <div>
@@ -273,6 +342,11 @@ const reset = () => {
                     <div style="width: max-content;">
                       <VCardTitle>Usuarios de la nota: {{ titleSelected }}</VCardTitle>
                     </div>
+                  </div>
+                  <div style="margin-left: auto; margin-top: 1rem; margin-bottom: 1rem;">
+                      <VBtn color="success" @click="downloadUsuarios">
+                        Exportar
+                      </VBtn>
                   </div>
 
                   <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
