@@ -207,17 +207,51 @@ function login() {
       }),
     }).then((response) => response.json())
       .then(async (result) => {
-        console.log(result);
+        // console.log(result);
         if (result.token) {
-          localStorageSetUsuarioNew(result.user);
-          let redirect = "https://www.ecuavisa.com/servicios/perfil?tk=" + result.token;
-          //cambiar url destino
-          //let redirect = "https://www.ecuavisa.com/concursos?tk=" + result.token;
-          //console.log("https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url);
+          var redirection = "https://www.ecuavisa.com/servicios/perfil";
+          ECUAVISA_EC.initUserToken(result.token, redirection).then(urlGenerada => {
+            // La función se completó correctamente y se obtuvo la URL generada
+            // window.location = "https://www.ecuavisa.com/concursos";
+            ECUAVISA_EC.loginUser(urlGenerada.email)
+            .then(loginSuccessful => {
+                console.log(loginSuccessful);
+                localStorage.setItem('urlTk', result.url);
+                localStorageSetUsuarioNew(result.user);
+                btn.removeAttribute('disabled');
+                window.location = urlGenerada.url;
+                // let redirect = "https://www.ecuavisa.com/servicios/perfil?tk=" + result.token;
+                //cambiar url destino
+                //let redirect = "https://www.ecuavisa.com/concursos?tk=" + result.token;
+                //console.log("https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url);
 
-          window.location = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
-          localStorage.setItem('urlTk', result.url);
-          btn.removeAttribute('disabled');
+                // window.location = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
+                
+            }).catch(error => {
+              localStorageSetUsuarioNew(result.user);
+              let redirect = redirection+"?tk=" + result.token;
+              //cambiar url destino
+              //let redirect = "https://www.ecuavisa.com/concursos?tk=" + result.token;
+              //console.log("https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url);
+
+              window.location = "https://www.ecuavisa.com/user-portlet/refreshuserentitlements?redirect=" + redirect + "&ssodata=" + result.url;
+              localStorage.setItem('urlTk', result.url);
+              btn.removeAttribute('disabled');
+            });
+
+            // Realiza acciones adicionales aquí
+
+            /*// Obtén la URL actual
+            var url = new URL(window.location.href);
+            // Elimina el parámetro deseado
+            url.searchParams.delete('parametro');
+            // Modifica la URL en el historial del navegador sin recargar la página
+            history.replaceState(null, '', url.toString());*/
+          }).catch(error => {
+            // Se produjo un error durante la ejecución de la función
+            console.error('Ocurrió un error en initUserToken:', error);
+            // Realiza acciones de manejo de errores aquí
+          });
         } else {
           alert("Nombre de usuario o contraseña incorrecto");
           btn.removeAttribute('disabled');
