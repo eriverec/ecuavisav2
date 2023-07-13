@@ -4,7 +4,7 @@ import ApexCharts from 'apexcharts';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
-import { ref, onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 
 const tab = ref('tab-meta-data')
 const moment = extendMoment(Moment);
