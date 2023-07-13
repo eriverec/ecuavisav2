@@ -22,6 +22,12 @@ const titleSelected = ref('');
 const selectedRow = ref(null);
 const verMas = ref(false);
 const recomendadasRaw = ref([]);
+const searchQuery = ref('');
+const usuariosRaw = ref([]);
+const usuarioEncontrado = ref(false);
+const noticiasDeUsuariosVisible = ref(false);
+const noticiasDeUsuario = ref([]);
+const usuarioSeleceted = ref('');
 
 async function getRecomendadas(fechai = '', fechaf = '') {
   isLoading.value = true;
@@ -58,8 +64,8 @@ async function getRecomendadas(fechai = '', fechaf = '') {
 const initData = async() => {
   let fechai = moment().subtract(7, 'days').format("DD-MM-YYYY").toString();
   let fechaf = moment().format("DD-MM-YYYY").toString();
-  let fechaI = moment(fechai).format('YYYY-MM-DD');
-  let fechaF = moment(fechaf).format('YYYY-MM-DD');
+  let fechaI = moment(fechai, "DD-MM-YYYY").format('YYYY-MM-DD');
+  let fechaF = moment(fechaf, "DD-MM-YYYY").format('YYYY-MM-DD');
   fechaIni.value = fechai;
   fechaFin.value = fechaf;
   fechaIngresada.value = fechai + ' a ' + fechaf;
@@ -127,8 +133,42 @@ async function resolveUsuarios(titulo){
   notasUsuarios.value = resultado;    
   usuariosVisible.value = true;
 }
-</script>
 
+async function searchUsuario(){
+    const consulta = await fetch('https://servicio-de-actividad.vercel.app/recomendadas/get/usuario?searchQuery=' + searchQuery.value);
+    const consultaJson = await consulta.json();
+    const array = [];
+    for (let i of consultaJson) {
+      let data = {
+        userId: i.userId,
+        first_name: i.first_name,
+        last_name: i.last_name,
+        created_at: i.created_at,
+        fecha: moment(i.created_at).format('DD/MM/YYYY'),
+        hora: moment(i.created_at).format('HH:mm:ss'),
+        data: i.data,
+        noticias: i.data.length
+      }
+      array.push(data);
+    }
+    usuariosRaw.value = array;
+    usuarioEncontrado.value = true;
+}
+
+const resolveNoticiasporUsuarios = (id) => {
+  const rawArray = Array.from(usuariosRaw.value);
+  const usuarioSeleccionado = rawArray.find(usuario => usuario.userId === id);
+  noticiasDeUsuario.value = usuarioSeleccionado.data;
+  usuarioSeleceted.value = usuarioSeleccionado.first_name + ' ' + usuarioSeleccionado.last_name;
+  noticiasDeUsuariosVisible.value = true;
+}
+
+const reset = () => {
+  searchQuery.value = '';
+  usuarioEncontrado.value = false;
+  noticiasDeUsuariosVisible.value = false;
+}
+</script>
 <template>
   <div>
     <VTabs v-model="tab">
@@ -186,24 +226,7 @@ async function resolveUsuarios(titulo){
 
                     }" />
                 </div>
-                <!-- botonera de filtros guardados ##estado desactivado##-->
-                <!--
-        <VCol cols="12">
-  
-  <VBtnToggle v-if="!isLoading"   
-        v-model="btnFiltros"
-        color="primary"
-        class="d-none"
-        divided
-      >
-   <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosVisitas">
-    {{ item.nombre }}
-   </VBtn>
-
-   </VBtnToggle>
-
-    </VCol>
-  -->
+         
               </VCardText>
             
               <VCardText v-if="isLoading">Cargando datos...</VCardText>
@@ -285,8 +308,94 @@ async function resolveUsuarios(titulo){
 
       </VWindowItem>
 
-      <VWindowItem value="account-details">
-  
+      <VWindowItem value="tab-b">
+        <VRow>
+          <VCol lg="6" cols="12" sm="6">
+         
+            <VCard>
+              <VCardText class="d-flex flex-wrap justify-space-between gap-4">
+
+                <VCardItem class="pb-sm-0 pl-0 pt-0">
+                  <VCardTitle>Notas por usuarios</VCardTitle>
+                  <VCardSubtitle>Un total de {{ recomendadas.length }} registros</VCardSubtitle>
+                </VCardItem>
+
+                <div class="d-flex flex-wrap gap-4">
+                <div style="width: 15rem">
+                  <VTextField v-model="searchQuery" placeholder="Buscar..." density="compact" />
+                </div>
+                <!-- 👉 Search button -->
+                <VBtn prepend-icon="tabler-search" @click="searchUsuario">
+                  Buscar
+                </VBtn>
+                <VBtn @click="reset">
+                  Reiniciar
+                </VBtn>
+              </div>
+
+              </VCardText>
+            
+              <VCardText v-show="usuarioEncontrado" v-if="isLoading">Cargando datos...</VCardText>
+              <VCardText v-show="usuarioEncontrado" v-else-if="usuariosRaw.length > 0">
+
+                <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                  <thead>
+                    <tr>
+                      <th scope="col">NOMBRE</th>
+                      <th scope="col">NOTICIAS</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr v-for="item  in usuariosRaw" class="clickable" @click="resolveNoticiasporUsuarios(item.userId)">
+                      <td>
+                        {{ item.first_name }} {{ item.last_name }}
+                      </td>
+
+                      <td class="text-medium-emphasis">
+                        {{ item.noticias }}
+                      </td>
+                    </tr>
+                  </tbody>
+                </VTable>
+              
+              </VCardText>
+              <VCardText v-show="usuarioEncontrado" v-else>No se econtraron datos</VCardText>
+            </VCard>
+          </VCol>
+
+          <VCol lg="6" cols="12" sm="6">
+          
+            <VExpandTransition>
+              <VCard v-show="noticiasDeUsuariosVisible" >
+                <VCardItem class="pb-sm-0">
+                  <div style="display: flex; flex-wrap: wrap;">
+                    <div style="width: max-content;">
+                      <VCardTitle>Noticias del usuario: {{ usuarioSeleceted }}</VCardTitle>
+                    </div>
+                  </div>
+
+                  <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                    <thead>
+                      <tr>
+                        <th scope="col">TITULO</th>
+                      </tr>
+                    </thead>
+
+                    <tbody>
+                      <tr v-for="item  in noticiasDeUsuario">
+                        <td class="text-high-emphasis">
+                          {{ item.title }}
+                        </td>       
+       
+                      </tr>
+                    </tbody>
+                  </VTable>
+                </VCardItem>
+              </VCard>
+            </VExpandTransition>
+          </VCol>
+        </VRow>
       </VWindowItem>
       <!-- <VWindowItem value="account-details">
             Soy detalis  ssss
