@@ -4,6 +4,8 @@ var URL_perfil_G = "https://www.ecuavisa.com/servicios/perfil";
 var UserId = localStorage.getItem("wylexUserId");
 var urlParamsGET = new URLSearchParams(window.location.search);
 
+var urlRedirect = urlParamsGET.get('nextpage') || "";
+
 if (document.getElementById("checkTerms")) {
   var miCheckbox = document.querySelector("#checkTerms");
   miCheckbox.checked = true;
@@ -25,10 +27,10 @@ if (UserId) {
 }
 
 //Animacion de cambio de tabs
-const toggleForm = () => {
-  const container_lr = document.querySelector(".container-lr");
-  container_lr.classList.toggle("active");
-};
+// const toggleForm = () => {
+//   const container_lr = document.querySelector(".container-lr");
+//   container_lr.classList.toggle("active");
+// };
 
 //Google Platform
 // function onSignIn(googleUser) {
@@ -211,14 +213,19 @@ function login() {
         if (result.token) {
           var redirection = "https://www.ecuavisa.com/servicios/perfil";
           /*FUNCIÓN QUE LEE EL TOKEN DE RESPUESTA E INICIA SESION INSTANTÁNEAMENTE*/
-          ECUAVISA_EC.initUserToken(result.token, redirection).then(urlGenerada => {
+          ECUAVISA_EC.initUserToken(result.token, redirection).then(respuesta => {
             // La función se completó correctamente y se obtuvo la URL generada
             // window.location = "https://www.ecuavisa.com/concursos";
             localStorage.setItem('urlTk', result.url);
             localStorageSetUsuarioNew(result.user);
             btn.removeAttribute('disabled');
-            window.location = urlGenerada.url;
             btn.removeAttribute('disabled');
+
+            if(respuesta.login){
+              window.location = respuesta.urlSinFormat;
+            }else{
+              window.location = urlGenerada.url;
+            }
 
             // Realiza acciones adicionales aquí
 
@@ -435,9 +442,9 @@ function localStorageSetUsuarioNew(user) {
   return true;
 }
 
-if (urlParamsGET.get('registro') != null) {
-  toggleForm();
-}
+// if (urlParamsGET.get('registro') != null) {
+//   toggleForm();
+// }
 
 
 
