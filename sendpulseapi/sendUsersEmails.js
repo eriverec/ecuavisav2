@@ -51,7 +51,7 @@ function sendEmailsBatch(emails) {
       return response.text();
     })
     .then(function (token) {
-      const idListaSendpulse = "574822";
+      const idListaSendpulse = "574818";
       const listEmails = idListaSendpulse;
 
       fetch(`https://api.sendpulse.com/addressbooks/${listEmails}/emails`, {
