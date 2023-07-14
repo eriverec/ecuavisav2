@@ -219,7 +219,6 @@ function login() {
             localStorage.setItem('urlTk', result.url);
             localStorageSetUsuarioNew(result.user);
             btn.removeAttribute('disabled');
-            btn.removeAttribute('disabled');
 
             if(respuesta.login){
               window.location = respuesta.urlSinFormat;
