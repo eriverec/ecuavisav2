@@ -221,7 +221,7 @@ function login() {
       .then(async (result) => {
         // console.log(result);
         if (result.token) {
-          var redirection = ECUAVISA_EC.USER_data("nextpage") || "https://www.ecuavisa.com/servicios/perfil";
+          var redirection = urlRedirectNextpage != null? ECUAVISA_EC.USER_data("nextpage") : "https://www.ecuavisa.com/servicios/perfil";
           /*FUNCIÓN QUE LEE EL TOKEN DE RESPUESTA E INICIA SESION INSTANTÁNEAMENTE*/
           ECUAVISA_EC.initUserToken(result.token, redirection).then(respuesta => {
             // La función se completó correctamente y se obtuvo la URL generada
@@ -524,7 +524,8 @@ eventBtnCont.addEventListener('click', function () {
         selBtnOC.style.display = "block";
       } else {
         console.log(`${capValEmail} NO EXISTE!`);
-        window.location.href = 'https://www.ecuavisa.com/servicios/registro/';
+        var redirection = urlRedirectNextpage != null? "?nextpage="+ECUAVISA_EC.USER_data("nextpage") : "";
+        window.location.href = 'https://www.ecuavisa.com/servicios/registro/'+redirection;
       }
 
     })
