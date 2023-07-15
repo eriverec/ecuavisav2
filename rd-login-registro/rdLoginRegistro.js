@@ -3,8 +3,19 @@ var URL_login_G = "https://www.ecuavisa.com/servicios/login";
 var URL_perfil_G = "https://www.ecuavisa.com/servicios/perfil";
 var UserId = localStorage.getItem("wylexUserId");
 var urlParamsGET = new URLSearchParams(window.location.search);
+var urlRedirectNextpage = urlParamsGET.get('nextpage') || null;
 
-var urlRedirect = urlParamsGET.get('nextpage') || "";
+if(!ECUAVISA_EC){
+  console.error("Este archivo necesita a ECUAVISA_EC para funcionar");
+  return false;
+}
+
+/* VERIFICAMOS SI NEXTPAGE VIENE DEL MISMO DOMINIO DE ECUAVISA*/
+if(urlRedirectNextpage){
+  if(ECUAVISA_EC.validateUrl(urlRedirectNextpage)){
+    ECUAVISA_EC.SET_user("nextpage", urlRedirectNextpage);
+  }
+}
 
 if (document.getElementById("checkTerms")) {
   var miCheckbox = document.querySelector("#checkTerms");
@@ -211,7 +222,7 @@ function login() {
       .then(async (result) => {
         // console.log(result);
         if (result.token) {
-          var redirection = "https://www.ecuavisa.com/servicios/perfil";
+          var redirection = ECUAVISA_EC.USER_data("nextpage") || "https://www.ecuavisa.com/servicios/perfil";
           /*FUNCIÓN QUE LEE EL TOKEN DE RESPUESTA E INICIA SESION INSTANTÁNEAMENTE*/
           ECUAVISA_EC.initUserToken(result.token, redirection).then(respuesta => {
             // La función se completó correctamente y se obtuvo la URL generada
@@ -219,13 +230,11 @@ function login() {
             localStorage.setItem('urlTk', result.url);
             localStorageSetUsuarioNew(result.user);
             btn.removeAttribute('disabled');
-
             if(respuesta.login){
               window.location = respuesta.urlSinFormat;
             }else{
               window.location = urlGenerada.url;
             }
-
             // Realiza acciones adicionales aquí
 
             /*// Obtén la URL actual
