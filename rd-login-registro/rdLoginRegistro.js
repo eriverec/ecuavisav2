@@ -7,7 +7,6 @@ var urlRedirectNextpage = urlParamsGET.get('nextpage') || null;
 
 if(!ECUAVISA_EC){
   console.error("Este archivo necesita a ECUAVISA_EC para funcionar");
-  return false;
 }
 
 /* VERIFICAMOS SI NEXTPAGE VIENE DEL MISMO DOMINIO DE ECUAVISA*/
