@@ -554,3 +554,35 @@ function togglePasswordVisibility() {
 }
 
 
+/*VALIDAR CAMPO NOMBRE*/
+if(document.querySelector('#regName')){
+  const inputElement = document.getElementById('regName');
+  inputElement.addEventListener('input', function(event) {
+    let inputValue = event.target.value;
+    const regex = /^[a-zA-Z\s]*$/;
+    
+    if (!regex.test(inputValue)) {
+      event.target.value = inputValue.replace(/[^a-zA-Z\s]/g, '');
+      inputValue = event.target.value;
+    }
+    
+    const spaceCount = (inputValue.match(/\s/g) || []).length;
+    if (spaceCount > 3) {
+      const textArray = inputValue.split(" ");
+      const lastElement = textArray.pop();
+      let trimmedText = textArray.join(" ");
+      
+      if (trimmedText.length > 50) {
+        trimmedText = trimmedText.slice(0, 50);
+      }
+      
+      event.target.value = trimmedText + lastElement;
+    } else if (inputValue.length > 50) {
+      event.target.value = inputValue.slice(0, 50);
+    }
+    
+    if (inputValue.startsWith(" ")) {
+      event.target.value = inputValue.trimStart();
+    }
+  });
+}
