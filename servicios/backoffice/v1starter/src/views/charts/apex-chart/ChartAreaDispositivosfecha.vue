@@ -40,6 +40,7 @@
             height="400"
             :options="chartConfig"
             :series="series"
+            @click="handleBarClick"
           />
         </VCardText>
       </div>
@@ -187,6 +188,16 @@ import { useTheme } from 'vuetify';
             parentHeightOffset: 0,
             zoom: { enabled: false },
             toolbar: { show: false },
+          },
+          plotOptions: {
+            bar: {
+              distributed: true,
+              dataLabels: {
+                style: {
+                  cursor: 'pointer'
+                }
+              }
+            }
           },
           tooltip: {
             shared: false,
@@ -384,6 +395,15 @@ import { useTheme } from 'vuetify';
       }
     },
     methods: {
+      handleBarClick(event, chartContext, config) {
+        // Aquí puedes manejar la lógica cuando se hace clic en una barra del gráfico
+        // Puedes acceder a la información sobre la barra clicada utilizando la variable "config"
+        // console.log(config.dataPointIndex); // Índice de la barra clicada
+        // console.log(config.seriesIndex); // Índice de la barra clicada
+        // console.log(config); // Valor en el eje X de la barra clicada
+        // console.log(config.globals.categoryLabels[config.dataPointIndex]); // Valor en el eje X de la barra clicada
+        // console.log(config.globals.seriesNames[config.seriesIndex]); // Valor en el eje X de la barra clicada
+      },
       groupBy(collection, property){
         var i = 0, val, index,
         values = [], result = [];
