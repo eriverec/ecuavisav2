@@ -424,17 +424,18 @@ function IsEmail() {
 
 function validateLogSocials() {
   let check = document.getElementById("checkTerms");
+  var redirection = urlRedirectNextpage != null? ECUAVISA_EC.USER_data("nextpage") : "https://www.ecuavisa.com/servicios/perfil";
   if (check.checked == true) {
     let btnGoogle = document.getElementById("aLogGoogle");
     btnGoogle.setAttribute(
       "href",
-      "https://ecuavisa-login-service.onrender.com/auth/google"
+      `https://ecuavisa-login-service.onrender.com/auth/google?nextpage=${redirection}`
     ); //servicio render Luis
 
     let btnFacebook = document.getElementById("aLogFacebook");
     btnFacebook.setAttribute(
       "href",
-      "https://ecuavisa-login-service.onrender.com/auth/facebook"
+      `https://ecuavisa-login-service.onrender.com/auth/facebook?nextpage=${redirection}`
     ); //servicio render Luis
   } else {
     alert("Acepte los términos y condiciones para continuar");
