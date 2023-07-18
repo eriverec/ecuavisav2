@@ -442,14 +442,17 @@ await userListStore
       for (let i = 1; i < pages+1; i++) {
         await userListStore.fetchFullUsers(i).then((res) => {   
         
-          //console.log('res',res.data)
+          console.log('res',res.data)
           let array = Array.from(res.data);
           
           array.forEach((item) => {
             usersFull.value.push({
+              _id: item._id,
               wylexId: item.wylexId,
               site: item.site,
+              site_id: item.site_id,
               email: item.email,
+              // contraseña: item.contraseña,
               first_name: item.first_name,
               last_name: item.last_name,
               avatar: item.avatar,
@@ -457,6 +460,10 @@ await userListStore
               // logged_at: item.logged_at,
               created_at: moment(item.created_at).format('DD/MM/YYYY-HH:mm:ss'),
               logged_at: moment(item.logged_at).format('DD/MM/YYYY-HH:mm:ss'),
+              logged_at_site: item.logged_at_site,
+              updated_at: item.updated_at,
+              validated_at: item.validated_at,
+              banned_at: item.banned_at,
               country: item.country,
               phone_prefix: item.phone_prefix,
               phone_number: item.phone_number,
@@ -485,14 +492,20 @@ async function downloadFull () {
       isFullLoading.value=false;
        //console.log('usersFull.value',usersFull.value);
       let headers = {
+        _id: "_id",
         wylexId: "wylexId",
         site: "site",
+        site_id: "site_id",
         email: "email",
         first_name: "first_name",
         last_name: "last_name",
         avatar: "avatar",
-        created_at: "created",
-        logged_at: "last_session",
+        created_at: "created_at",
+        logged_at: "logged_at",
+        logged_at_site: "logged_at_site",
+        updated_at: "updated_at",
+        validated_at: "validated_at",
+        banned_at: "banned_at",
         country: "country",
         phone_prefix: "phone_prefix",
         phone_number: "phone_number",
