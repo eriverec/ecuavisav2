@@ -207,6 +207,352 @@ class SendPulse {
 		return $htmlBlock;
     }
 
+    private function customTemplate_1_diarias($nota){
+    	$line = '<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><div class="block-divider" style="font-size:14px; line-height:1.5; padding-left:0px; padding-right:0px; padding-top:10px; padding-bottom:10px"><hr id="iout_block_13_element_0" style="margin:0; border-top-style:solid; border-top-width:1px; border-top-color:#2927b9; border-bottom:0; border-left:0; border-right:0"></div></td></tr></tbody></table>';
+
+    	$htmlBlock = '<table class="ecuavisa_link" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; width:100%" border="0" width="100%">
+		   <tbody>
+		      <tr style="border-color:transparent">
+		         <td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top">
+		            <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; width:100%" border="0" width="100%">
+		               <tbody>
+		                  <tr style="border-color:transparent">
+		                     <th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top">
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_9_element_0" style="border-collapse:separate; font-size:14px; line-height:1.5; border-top-left-radius:2px; border-top-right-radius:2px; border-bottom-left-radius:2px; border-bottom-right-radius:2px; overflow:hidden">
+		                                       <tbody>
+		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
+		                                             <td class="content-cell" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:20px; padding-bottom:24px" valign="top">
+		                                                <div id="wout_block_9_element_0" style="font-size:14px; line-height:1.5; width:100%; height:220; display:block" width="100%" height="220">
+		                                                   <a class="link_img" href="'.$nota["link"].'" style="text-decoration:none; color:#0089bf; display:block">
+		                                                      <div style="width:100%;height:280px;background-image:url('.$nota["image"].');background-size: cover;background-repeat: no-repeat;background-position: top;">
+
+		                                                      </div>
+		                                                      <!--<img border="0" width="440" height="auto" class="desktop  sp-img " align="left" alt="'.$nota["titulo"].'" src="'.$nota["image"].'" iout_block_9_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; margin:0; border-top-left-radius:2px; border-top-right-radius:2px; border-bottom-left-radius:2px; border-bottom-right-radius:2px; display:block; -ms-interpolation-mode:bicubic">-->
+		                                                      <!--[if !mso]><!-->
+		                                                      <div style="font-size:14px; line-height:1.5; mso-hide:all"><img border="0" width="100%" height="auto" class="mobile  sp-img " align="left" alt="'.$nota["titulo"].'" src="'.$nota["image"].'" iout_block_9_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; border-top-left-radius:2px; border-top-right-radius:2px; border-bottom-left-radius:2px; border-bottom-right-radius:2px; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:100% !important"></div>
+		                                                      <!--<![endif]-->
+		                                                   </a>
+		                                                </div>
+		                                                <div style="font-size:14px; line-height:1.5; clear:both"></div>
+		                                             </td>
+		                                          </tr>
+		                                       </tbody>
+		                                    </table>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0;margin-top: 15px;">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_4" style="border-collapse:separate; font-size:14px; line-height:1.5; text-color:black; font-family:Verdana, Geneva, sans-serif; font-family-short:verdana; font-weight:normal; color:#2927b9; margin:0; overflow:hidden">
+		                                       <tbody>
+		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
+		                                             <td class="content-cell padding-top-0 padding-bottom-0" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:0; padding-bottom:0" valign="top">
+		                                                <p itemprop="headline" canonicalurl="/estadio/nacional/trasladan-en-ambulancia-al-arquero-de-el-nacional-luego-de-desplomarse-tres-veces-en-pleno-juego-HK2279696" idart="2279696" style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#2927b9; font-family:Verdana, Geneva, sans-serif; font-weight:normal; padding:0"><strong><span style="font-size: 18px; color: #2927b9;"><a href="'.$nota["subseccion"]["link"].'" style="text-decoration:none; color:inherit">'.$nota["subseccion"]["titulo"].'</a></span></strong></p>
+		                                                <div style="font-size:14px; line-height:1.5; clear:both"></div>
+		                                             </td>
+		                                          </tr>
+		                                       </tbody>
+		                                    </table>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_4" style="border-collapse:separate; font-size:14px; line-height:1.5; text-color:black; font-family:Verdana, Geneva, sans-serif; font-family-short:verdana; font-weight:normal; color:#060127; margin:0; overflow:hidden">
+		                                       <tbody>
+		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
+		                                             <td class="content-cell padding-top-0 padding-bottom-0" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:0; padding-bottom:0" valign="top">
+		                                                <p canonicalurl="/deportes/futbol-internacional/portero-de-peru-quedo-en-libertad-tras-agredir-a-un-policia-en-madrid-XH4786642" idart="4786642" style="line-height:1.5; margin:0 0 10px; font-size:inherit; color:#060127; font-family:Verdana, Geneva, sans-serif; font-weight:normal; padding:0"><span style="color: #060127;"><strong><span style="font-size: 18px;"><a href="'.$nota["link"].'" style="text-decoration:none; color:#060127">'.$nota["titulo"].'</a></span></strong></span></p>
+		                                                <div style="font-size:14px; line-height:1.5; clear:both"></div>
+		                                             </td>
+		                                          </tr>
+		                                       </tbody>
+		                                    </table>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_37" style="border-collapse:separate; font-size:14px; line-height:1.5; text-color:black; font-family:Verdana, Geneva, sans-serif; font-family-short:verdana; font-weight:normal; margin:0; overflow:hidden">
+		                                       <tbody>
+		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
+		                                             <td class="content-cell padding-top-0 padding-bottom-0" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:0; padding-bottom:0" valign="top">
+		                                                '.$nota["descripcion"].'
+		                                             </td>
+		                                          </tr>
+		                                       </tbody>
+		                                    </table>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <div class="block-divider" style="font-size:14px; line-height:1.5; padding-left:0px; padding-right:0px; padding-top:27px; padding-bottom:27px">
+		                                       <hr id="iout_block_13_element_0" style="margin:0; border-top-style:solid; border-top-width:1px; border-top-color:#2927b9; border-bottom:0; border-left:0; border-right:0">
+		                                    </div>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                     </th>
+		                  </tr>
+		               </tbody>
+		            </table>
+		         </td>
+		      </tr>
+		   </tbody>
+		</table>';
+
+		return $htmlBlock;
+    }
+
+    private function customTemplate_2_diarias($nota){
+    	$line = '<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><div class="block-divider" style="font-size:14px; line-height:1.5; padding-left:0px; padding-right:0px; padding-top:10px; padding-bottom:10px"><hr id="iout_block_13_element_0" style="margin:0; border-top-style:solid; border-top-width:1px; border-top-color:#2927b9; border-bottom:0; border-left:0; border-right:0"></div></td></tr></tbody></table>';
+
+    	$htmlBlock = '<table class="ecuavisa_link" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; width:100%" border="0" width="100%">
+		   <tbody>
+		      <tr style="border-color:transparent">
+		         <td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top">
+		            <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; width:100%" border="0" width="100%">
+		               <tbody>
+		                  <tr style="border-color:transparent">
+		                     <th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top">
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_9_element_0" style="border-collapse:separate; font-size:14px; line-height:1.5; border-top-left-radius:2px; border-top-right-radius:2px; border-bottom-left-radius:2px; border-bottom-right-radius:2px; overflow:hidden">
+		                                       <tbody>
+		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
+		                                             <td class="content-cell" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:20px; padding-bottom:24px" valign="top">
+		                                                <div id="wout_block_9_element_0" style="font-size:14px; line-height:1.5; width:100%; height:220; display:block" width="100%" height="220">
+		                                                   <a class="link_img" href="'.$nota["link"].'" style="text-decoration:none; color:#0089bf; display:block">
+		                                                      <div style="width:100%;height:280px;background-image:url('.$nota["image"].');background-size: cover;background-repeat: no-repeat;background-position: top;">
+
+		                                                      </div>
+		                                                      <!--<img border="0" width="440" height="auto" class="desktop  sp-img " align="left" alt="'.$nota["titulo"].'" src="'.$nota["image"].'" iout_block_9_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; margin:0; border-top-left-radius:2px; border-top-right-radius:2px; border-bottom-left-radius:2px; border-bottom-right-radius:2px; display:block; -ms-interpolation-mode:bicubic">-->
+		                                                      <!--[if !mso]><!-->
+		                                                      <div style="font-size:14px; line-height:1.5; mso-hide:all"><img border="0" width="100%" height="auto" class="mobile  sp-img " align="left" alt="'.$nota["titulo"].'" src="'.$nota["image"].'" iout_block_9_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; border-top-left-radius:2px; border-top-right-radius:2px; border-bottom-left-radius:2px; border-bottom-right-radius:2px; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:100% !important"></div>
+		                                                      <!--<![endif]-->
+		                                                   </a>
+		                                                </div>
+		                                                <div style="font-size:14px; line-height:1.5; clear:both"></div>
+		                                             </td>
+		                                          </tr>
+		                                       </tbody>
+		                                    </table>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0;margin-top: 15px;">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_4" style="border-collapse:separate; font-size:14px; line-height:1.5; text-color:black; font-family:Verdana, Geneva, sans-serif; font-family-short:verdana; font-weight:normal; color:#2927b9; margin:0; overflow:hidden">
+		                                       <tbody>
+		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
+		                                             <td class="content-cell padding-top-0 padding-bottom-0" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:0; padding-bottom:0" valign="top">
+		                                                <p itemprop="headline" canonicalurl="/estadio/nacional/trasladan-en-ambulancia-al-arquero-de-el-nacional-luego-de-desplomarse-tres-veces-en-pleno-juego-HK2279696" idart="2279696" style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#2927b9; font-family:Verdana, Geneva, sans-serif; font-weight:normal; padding:0"><strong><span style="font-size: 18px; color: #2927b9;"><a href="'.$nota["subseccion"]["link"].'" style="text-decoration:none; color:inherit">'.$nota["subseccion"]["titulo"].'</a></span></strong></p>
+		                                                <div style="font-size:14px; line-height:1.5; clear:both"></div>
+		                                             </td>
+		                                          </tr>
+		                                       </tbody>
+		                                    </table>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_4" style="border-collapse:separate; font-size:14px; line-height:1.5; text-color:black; font-family:Verdana, Geneva, sans-serif; font-family-short:verdana; font-weight:normal; color:#060127; margin:0; overflow:hidden">
+		                                       <tbody>
+		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
+		                                             <td class="content-cell padding-top-0 padding-bottom-0" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:0; padding-bottom:0" valign="top">
+		                                                <p canonicalurl="/deportes/futbol-internacional/portero-de-peru-quedo-en-libertad-tras-agredir-a-un-policia-en-madrid-XH4786642" idart="4786642" style="line-height:1.5; margin:0 0 10px; font-size:inherit; color:#060127; font-family:Verdana, Geneva, sans-serif; font-weight:normal; padding:0"><span style="color: #060127;"><strong><span style="font-size: 18px;"><a href="'.$nota["link"].'" style="text-decoration:none; color:#060127">'.$nota["titulo"].'</a></span></strong></span></p>
+		                                                <div style="font-size:14px; line-height:1.5; clear:both"></div>
+		                                             </td>
+		                                          </tr>
+		                                       </tbody>
+		                                    </table>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_37" style="border-collapse:separate; font-size:14px; line-height:1.5; text-color:black; font-family:Verdana, Geneva, sans-serif; font-family-short:verdana; font-weight:normal; margin:0; overflow:hidden">
+		                                       <tbody>
+		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
+		                                             <td class="content-cell padding-top-0 padding-bottom-0" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:0; padding-bottom:0" valign="top">
+		                                                '.$nota["descripcion"].'
+		                                             </td>
+		                                          </tr>
+		                                       </tbody>
+		                                    </table>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <div class="block-divider" style="font-size:14px; line-height:1.5; padding-left:0px; padding-right:0px; padding-top:27px; padding-bottom:27px">
+		                                       <hr id="iout_block_13_element_0" style="margin:0; border-top-style:solid; border-top-width:1px; border-top-color:#2927b9; border-bottom:0; border-left:0; border-right:0">
+		                                    </div>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                     </th>
+		                  </tr>
+		               </tbody>
+		            </table>
+		         </td>
+		      </tr>
+		   </tbody>
+		</table>';
+
+		return $htmlBlock;
+    }
+
+
+    private function customTemplate_3_diarias($nota){
+    	$line = '<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><div class="block-divider" style="font-size:14px; line-height:1.5; padding-left:0px; padding-right:0px; padding-top:10px; padding-bottom:10px"><hr id="iout_block_13_element_0" style="margin:0; border-top-style:solid; border-top-width:1px; border-top-color:#2927b9; border-bottom:0; border-left:0; border-right:0"></div></td></tr></tbody></table>';
+
+    	$htmlBlock = '<table class="ecuavisa_link" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; width:100%" border="0" width="100%">
+		   <tbody>
+		      <tr style="border-color:transparent">
+		         <td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top">
+		            <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; width:100%" border="0" width="100%">
+		               <tbody>
+		                  <tr style="border-color:transparent">
+		                     <th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top">
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_9_element_0" style="border-collapse:separate; font-size:14px; line-height:1.5; border-top-left-radius:2px; border-top-right-radius:2px; border-bottom-left-radius:2px; border-bottom-right-radius:2px; overflow:hidden">
+		                                       <tbody>
+		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
+		                                             <td class="content-cell" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:20px; padding-bottom:24px" valign="top">
+		                                                <div id="wout_block_9_element_0" style="font-size:14px; line-height:1.5; width:100%; height:220; display:block" width="100%" height="220">
+		                                                   <a class="link_img" href="'.$nota["link"].'" style="text-decoration:none; color:#0089bf; display:block">
+		                                                      <div style="width:100%;height:280px;background-image:url('.$nota["image"].');background-size: cover;background-repeat: no-repeat;background-position: top;">
+
+		                                                      </div>
+		                                                      <!--<img border="0" width="440" height="auto" class="desktop  sp-img " align="left" alt="'.$nota["titulo"].'" src="'.$nota["image"].'" iout_block_9_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; margin:0; border-top-left-radius:2px; border-top-right-radius:2px; border-bottom-left-radius:2px; border-bottom-right-radius:2px; display:block; -ms-interpolation-mode:bicubic">-->
+		                                                      <!--[if !mso]><!-->
+		                                                      <div style="font-size:14px; line-height:1.5; mso-hide:all"><img border="0" width="100%" height="auto" class="mobile  sp-img " align="left" alt="'.$nota["titulo"].'" src="'.$nota["image"].'" iout_block_9_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; border-top-left-radius:2px; border-top-right-radius:2px; border-bottom-left-radius:2px; border-bottom-right-radius:2px; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:100% !important"></div>
+		                                                      <!--<![endif]-->
+		                                                   </a>
+		                                                </div>
+		                                                <div style="font-size:14px; line-height:1.5; clear:both"></div>
+		                                             </td>
+		                                          </tr>
+		                                       </tbody>
+		                                    </table>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0;margin-top: 15px;">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_4" style="border-collapse:separate; font-size:14px; line-height:1.5; text-color:black; font-family:Verdana, Geneva, sans-serif; font-family-short:verdana; font-weight:normal; color:#2927b9; margin:0; overflow:hidden">
+		                                       <tbody>
+		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
+		                                             <td class="content-cell padding-top-0 padding-bottom-0" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:0; padding-bottom:0" valign="top">
+		                                                <p itemprop="headline" canonicalurl="/estadio/nacional/trasladan-en-ambulancia-al-arquero-de-el-nacional-luego-de-desplomarse-tres-veces-en-pleno-juego-HK2279696" idart="2279696" style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#2927b9; font-family:Verdana, Geneva, sans-serif; font-weight:normal; padding:0"><strong><span style="font-size: 18px; color: #2927b9;"><a href="'.$nota["subseccion"]["link"].'" style="text-decoration:none; color:inherit">'.$nota["subseccion"]["titulo"].'</a></span></strong></p>
+		                                                <div style="font-size:14px; line-height:1.5; clear:both"></div>
+		                                             </td>
+		                                          </tr>
+		                                       </tbody>
+		                                    </table>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_4" style="border-collapse:separate; font-size:14px; line-height:1.5; text-color:black; font-family:Verdana, Geneva, sans-serif; font-family-short:verdana; font-weight:normal; color:#060127; margin:0; overflow:hidden">
+		                                       <tbody>
+		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
+		                                             <td class="content-cell padding-top-0 padding-bottom-0" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:0; padding-bottom:0" valign="top">
+		                                                <p canonicalurl="/deportes/futbol-internacional/portero-de-peru-quedo-en-libertad-tras-agredir-a-un-policia-en-madrid-XH4786642" idart="4786642" style="line-height:1.5; margin:0 0 10px; font-size:inherit; color:#060127; font-family:Verdana, Geneva, sans-serif; font-weight:normal; padding:0"><span style="color: #060127;"><strong><span style="font-size: 18px;"><a href="'.$nota["link"].'" style="text-decoration:none; color:#060127">'.$nota["titulo"].'</a></span></strong></span></p>
+		                                                <div style="font-size:14px; line-height:1.5; clear:both"></div>
+		                                             </td>
+		                                          </tr>
+		                                       </tbody>
+		                                    </table>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_37" style="border-collapse:separate; font-size:14px; line-height:1.5; text-color:black; font-family:Verdana, Geneva, sans-serif; font-family-short:verdana; font-weight:normal; margin:0; overflow:hidden">
+		                                       <tbody>
+		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:Arial, &quot;Helvetica Neue&quot;, Helvetica, sans-serif">
+		                                             <td class="content-cell padding-top-0 padding-bottom-0" width="440" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:0; padding-bottom:0" valign="top">
+		                                                '.$nota["descripcion"].'
+		                                             </td>
+		                                          </tr>
+		                                       </tbody>
+		                                    </table>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+		                           <tbody>
+		                              <tr style="border-color:transparent">
+		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+		                                    <div class="block-divider" style="font-size:14px; line-height:1.5; padding-left:0px; padding-right:0px; padding-top:27px; padding-bottom:27px">
+		                                       <hr id="iout_block_13_element_0" style="margin:0; border-top-style:solid; border-top-width:1px; border-top-color:#2927b9; border-bottom:0; border-left:0; border-right:0">
+		                                    </div>
+		                                 </td>
+		                              </tr>
+		                           </tbody>
+		                        </table>
+		                     </th>
+		                  </tr>
+		               </tbody>
+		            </table>
+		         </td>
+		      </tr>
+		   </tbody>
+		</table>';
+
+		return $htmlBlock;
+    }
+
     private function cropImagen($url){
     	// Obtener imagen de la URL
 		$image = imagecreatefromstring(file_get_contents($url));
@@ -231,7 +577,7 @@ class SendPulse {
 		return $src_url;
     }
 
-    public function getNotas($api_link){
+    public function getNotasNewTemplate($api_link){
         $curl = curl_init();
 		curl_setopt_array($curl, array(
 		  CURLOPT_URL => $api_link,
@@ -303,7 +649,13 @@ class SendPulse {
 				"image" => $image
 			];
 		}
-		return $noticias;
+
+		$firstArray = array_slice($noticias, 0, 1);
+		$secondArray = array_slice($noticias, 1, 2);
+		$thirdArray = array_slice($noticias, 3);
+
+		$finalArray = array($firstArray, $secondArray, $thirdArray);
+		return $finalArray;
     }
 
     public function createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body){
@@ -534,12 +886,29 @@ class SendPulse {
     					$idTemplate = 148832;//TEMPLATE CORREO
     					$list_id = 565083;//LISTA DE USUARIOS
     					$numUsers = $this->getListUser($list_id);
-    					$notas = $this->getNotas('https://www.ecuavisa.com/rss/boletin-diario.json');
+    					$notas = $this->getNotasNewTemplate('https://www.ecuavisa.com/rss/boletin-diario.json');
+    					
     					$template = $this->getTemplate($idTemplate);
 	        			$htmlTemplate = $this->base64ToHTML($template->body);
-    					$notasHtml = "";
-    					foreach ($notas as $key => $nota) { $notasHtml .= $this->customTemplate($nota); }
-    					$bodyGenerar = str_replace("{{ bloque_noticias }}", $notasHtml, $htmlTemplate);
+
+    					$bloque_noticias = "";
+    					foreach ($notas[0] as $key => $nota) { 
+    						$bloque_noticias .= $this->customTemplate_1_diarias($nota); 
+    					}
+    					$bodyGenerar = str_replace("{{ bloque_noticias }}", $bloque_noticias, $htmlTemplate);
+
+    					$bloque_2_verticales = "";
+    					foreach ($notas[1] as $key => $nota) { 
+    						$bloque_2_verticales .= $this->customTemplate_2_diarias($nota); 
+    					}
+    					$bodyGenerar = str_replace("{{ bloque_2_verticales }}", $bloque_2_verticales, $htmlTemplate);
+
+    					$bloque_2_horizontales = "";
+    					foreach ($notas[2] as $key => $nota) { 
+    						$bloque_2_horizontales .= $this->customTemplate_3_diarias($nota); 
+    					}
+    					$bodyGenerar = str_replace("{{ bloque_2_horizontales }}", $bloque_2_horizontales, $htmlTemplate);
+
     					$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
     					$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
     					$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
