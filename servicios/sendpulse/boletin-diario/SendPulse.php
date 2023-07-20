@@ -3,10 +3,21 @@ class SendPulse {
 
 	private $token;
 	private $sender_email;
+	private $fecha;
+	private $listaUsuario;
 
 	function __construct(){
+        $this->listaUsuario = 565083;
         $this->token = $this->initToken();
         $this->sender_email = "suscripciones@ecuavisa.com";
+
+        // Obtener el número del mes
+		$numeroMes = date("n");
+		// Obtener el nombre del mes en español
+		$nombreMes = $this->obtenerMesEnEspanol($numeroMes);
+		$fechaFormateada =  $nombreMes. " ". date("d") . ", " . date("Y");
+
+		$this->fechaFormateada = $fechaFormateada;
     }
 
 	public function initToken(){
@@ -104,6 +115,22 @@ class SendPulse {
 		$context = stream_context_create($options);
 		$content = file_get_contents($url, false, $context);
 		return $content;
+    }
+
+	public function createJSONPHP($dat){
+    	$datos = [
+    		"notas" => [$this->fechaFormateada, $dat, $this->listaUsuario]
+    	];
+		$options = array(
+		    'http' => array(
+		        'method' => 'POST',
+		        'header' => 'Content-type: application/x-www-form-urlencoded',
+		        'content' => http_build_query($datos)
+		    )
+		);
+		$context = stream_context_create($options);
+		$content = file_get_contents("https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/json/boletin-diario/create.php", false, $context);
+		return json_decode($content);
     }
 
     private function cropImagen($url){
@@ -222,6 +249,10 @@ class SendPulse {
 
 		$finalArray = array($firstArray, $secondArray, $thirdArray);
 		return $finalArray;
+
+		// $id = $this->createJSONPHP($finalArray)->id;
+		// $finalArray_2 = array($firstArray, $secondArray, $thirdArray, $id);
+		// return $finalArray_2;
     }
 
     public function createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body){
@@ -264,12 +295,34 @@ class SendPulse {
         return $campaign;
     }
 
+    private function obtenerMesEnEspanol($numeroMes) {
+	    $mesesEnEspanol = array(
+	        1 => "enero",
+	        2 => "febrero",
+	        3 => "marzo",
+	        4 => "abril",
+	        5 => "mayo",
+	        6 => "junio",
+	        7 => "julio",
+	        8 => "agosto",
+	        9 => "septiembre",
+	        10 => "octubre",
+	        11 => "noviembre",
+	        12 => "diciembre"
+	    );
+
+	    return $mesesEnEspanol[$numeroMes];
+	}
+
     public function view(){
     	if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     		$getFecha = date("Y-m-d, h:i:s", time());
+
+			$nombreNeswletter = "Newsletter diario ".$getFecha; //NOMBRE DEL NEWSLETTER
 			$idTemplate = 148832;//TEMPLATE CORREO
-			$list_id = 565083;//LISTA DE USUARIOS
-			$numUsers = $this->getListUser($list_id);
+			$list_id = $this->listaUsuario;//LISTA DE USUARIOS
+			// $numUsers = $this->getListUser($list_id);
+			$numUsers = 1;
 			$notas = $this->getNotasNewTemplate('https://www.ecuavisa.com/rss/boletin-diario.json');
 
 			$template = $this->getTemplate($idTemplate);
@@ -300,6 +353,8 @@ class SendPulse {
 
 
 			$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
+			$bodyGenerar = str_replace("{{date}}", $this->fechaFormateada , $bodyGenerar);
+			$bodyGenerar = str_replace("{{_nlid}}", $list_id."&name=".$nombreNeswletter , $bodyGenerar);
 			$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
 			$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
 			/*$name, $body, $list_id*/
@@ -308,14 +363,14 @@ class SendPulse {
 			    $bodyContent = $matches[1];
 			}
 
-			// echo ($bodyContent);
-			// exit();
+			echo ($bodyContent);
+			exit();
 			if(count($notas) > 0 && count($numUsers) > 0){
-				$resp = $this->armarCorreo("Newsletter diario ".$getFecha, $this->HtmlToBase64($bodyContent), $list_id);
-	        	echo json_encode(["respSendPulse"=>$resp,"resp"=>true, "message"=>"La campania fue creada en la fecha ".$getFecha, "num_usuario" => count($numUsers), "num_notas" => count($notas)]);
+				$resp = $this->armarCorreo($nombreNeswletter, $this->HtmlToBase64($bodyContent), $list_id);
+	        	echo json_encode(["respSendPulse"=>$resp,"resp"=>true, "message"=>"La campaña fue creada en la fecha ".$getFecha]);
 	        	exit();
 			}
-			echo json_encode(["resp"=>false, "message"=>"El Newsletter no fue enviado por que no existe notas que enviar", "num_usuario" => count($numUsers), "num_notas" => count($notas)]);
+			echo json_encode(["resp"=>false, "message"=>"El Newsletter no fue enviado por que no existe notas que enviar"]);
 	        exit();
     	}
     	echo "No tienes acceso";
