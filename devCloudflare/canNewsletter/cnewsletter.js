@@ -6,15 +6,15 @@ function btnDarseBaja() {
     .then(function (token) {
       const emailUser = ECUAVISA_EC.USER_data().email;
       // Obtenemos el URL actual
-      // const urlActual = window.location.href;
-      // const urlObj = new URL(urlActual);
-      // const emailUser = urlObj.searchParams.get('nlcorreo');
+      const urlActualHref = window.location.href;
+      const urlObj = new URL(urlActualHref);
+      const idBoletin = urlObj.searchParams.get('nlid');
       // document.querySelector('.seca_darse').style.opacity = "0.5";
 
       // Verificamos si se encontró el parámetro 'correo' en el URL
      
       /*GET VALIDACION DE EMAIL*/
-      fetch(`https://api.sendpulse.com/addressbooks/565083/emails`, {
+      fetch(`https://api.sendpulse.com/addressbooks/${idBoletin}/emails`, {
         method: 'GET',
         headers: {
           'Authorization': 'Bearer ' + token,
@@ -29,7 +29,7 @@ function btnDarseBaja() {
           const foundEmail = resultget.find(email => email.email === emailUser);
           if (foundEmail) {
             console.log('existe en la lista.');
-            fetch(`https://api.sendpulse.com/addressbooks/565083/emails`, {
+            fetch(`https://api.sendpulse.com/addressbooks/${idBoletin}/emails`, {
               method: 'DELETE',
               headers: {
                 'Content-Type': 'application/json',
@@ -51,7 +51,7 @@ function btnDarseBaja() {
             console.log('emails no existe en la lista de sendpulse.');
             // document.querySelector('.seca_darse').classList.add('d-none');
             // document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
-            document.querySelector('.seca_mensaje_exito').textContent = 'Ya te has dado de baja';
+            document.querySelector('.seca_mensaje_exito').textContent = 'Te has dado de baja con éxito de la newsletter Ecuavisa Informa';
           }
           // console.log(valemail);
         })
@@ -63,7 +63,7 @@ function btnDarseBaja() {
     });
 }
 
-btnDarseBaja()
+btnDarseBaja();
 
 
 function btnSuscribirse() {
@@ -74,9 +74,12 @@ function btnSuscribirse() {
     .then(function (token) {
       // console.log(idListaSendpulse);
       const emailUser = ECUAVISA_EC.USER_data().email;
+      const urlActualHref = window.location.href;
+      const urlObj = new URL(urlActualHref);
+      const idBoletin = urlObj.searchParams.get('nlid');
       document.querySelector('.se_btn._suscribirse').style.opacity = "0.5";
  
-      fetch(`https://api.sendpulse.com/addressbooks/565083/emails`, {
+      fetch(`https://api.sendpulse.com/addressbooks/${idBoletin}/emails`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
