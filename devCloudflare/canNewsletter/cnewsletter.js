@@ -60,6 +60,9 @@ function btnDarseBaja() {
 
       } else {
         console.log('No se encontró el parámetro "correo" en el URL.');
+        document.querySelector('.seca_darse').classList.add('d-none');
+        document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
+        document.querySelector('.seca_mensaje_exito').textContent = 'Ya te has dado de baja';
       }
     })
     .catch(function (error) {
