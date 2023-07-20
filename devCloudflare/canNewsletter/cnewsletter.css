@@ -23,7 +23,8 @@
   color: #000;
 }
 
-.seccionCancelacion .seca_mensaje_exito {
+.seccionCancelacion .seca_mensaje_exito,
+.seccionOpinion .seca_mensaje_exito_susc {
   color: #000;
   font-family: Archivo;
   font-size: 18px;
