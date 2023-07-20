@@ -6,14 +6,8 @@ function btnDarseBaja() {
       return response.text();
     })
     .then(function (token) {
-
-      // const article = document.querySelector("#list-btn");
-      // const listEmails = element.dataset.listid;
-      // const emailUser = "caru8ip@test333.com";
       const emailUser = ECUAVISA_EC.USER_data().email;
       document.querySelector('.seca_darse').style.opacity = "0.5";
-
-      //validacion si el user email existe
 
       /*GET VALIDACION DE EMAIL*/
       fetch(`https://api.sendpulse.com/addressbooks/565083/emails`, {
@@ -45,12 +39,8 @@ function btnDarseBaja() {
               .then(response => response.text())
               .then(result => {
                 console.log(result);
-
                 document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
                 document.querySelector('.seca_darse').classList.add('d-none');
-
-
-
               })
               .catch(error => console.log('error', error));
           } else {
