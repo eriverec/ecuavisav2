@@ -8,13 +8,12 @@ function btnDarseBaja() {
       // Obtenemos el URL actual
       const urlActual = window.location.href;
       const urlObj = new URL(urlActual);
-      const correoParam = urlObj.searchParams.get('nlcorreo');
+      const emailUser = urlObj.searchParams.get('nlcorreo');
       document.querySelector('.seca_darse').style.opacity = "0.5";
 
       // Verificamos si se encontró el parámetro 'correo' en el URL
-      if (correoParam) {
-        console.log('El correo recuperado es: ' + correoParam);
-        // Puedes utilizar la variable 'correoParam' para lo que necesites aquí
+      if (emailUser) {
+        console.log('El correo recuperado es: ' + emailUser);
         /*GET VALIDACION DE EMAIL*/
         fetch(`https://api.sendpulse.com/addressbooks/565083/emails`, {
           method: 'GET',
