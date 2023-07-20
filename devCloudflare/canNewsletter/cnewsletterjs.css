@@ -1,3 +1,8 @@
+
+.seccionCancelacion{
+  margin-bottom: 100px;
+}
+
 .seccionCancelacion .seca_actualiza {
   color: #000;
   font-family: Archivo;
@@ -15,10 +20,37 @@
   font-weight: 600;
 }
 
-.seccionOpinion .seop_title_pregunta{
+.seccionOpinion .seop_title_pregunta {
   color: #000;
-    font-family: Archivo;
-    font-size: 18px;
-    font-style: normal;
-    font-weight: 400;
+  font-family: Archivo;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+}
+
+
+.seccionOpinion .seop_boton {
+  color: #23DCD1;
+  font-family: 'Mattone 150';
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  text-transform: uppercase;
+  background: #2927B9;
+  display: block;
+  width: 441px;
+  height: 44px;
+  flex-shrink: 0;
+  text-align: center;
+  padding: 10px;
+  margin: 22px 0;
+}
+
+
+
+@media (max-width: 767px){
+  .seccionOpinion .seop_boton {
+    width: 100%;
+    height: auto;
+  }
 }
