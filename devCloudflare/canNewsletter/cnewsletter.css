@@ -56,7 +56,7 @@
   padding: 10px;
   margin: 22px 0;
 }
-
+/*---*/
 @media (max-width: 767px) {
   .seccionOpinion .seop_boton {
     width: 100%;

@@ -80,26 +80,35 @@ function btnSuscribirse(element) {
       return response.text();
     })
     .then(function (token) {
-
       // console.log(idListaSendpulse);
-      const emailUser = ECUAVISA_EC.USER_data().email;
+      // const emailUser = ECUAVISA_EC.USER_data().email;
+      const urlActual = window.location.href;
+      const urlObj = new URL(urlActual);
+      const emailUser = urlObj.searchParams.get('nlcorreo');
 
-      fetch(`https://api.sendpulse.com/addressbooks/565083/emails`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
-        },
-        body: JSON.stringify({
-          "emails": [{ "email": emailUser }]
-        }),
-        redirect: 'follow'
-      })
-        .then(response => response.text())
-        .then(result => {
-          console.log(result);
+      document.querySelector('.se_btn._suscribirse').style.opacity = "0.5";
+
+      if (emailUser) {
+        fetch(`https://api.sendpulse.com/addressbooks/565083/emails`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token
+          },
+          body: JSON.stringify({
+            "emails": [{ "email": emailUser }]
+          }),
+          redirect: 'follow'
         })
-        .catch(error => console.log('error', error));
+          .then(response => response.text())
+          .then(result => {
+            console.log(result);
+            document.querySelector('.se_btn._suscribirse').style.opacity = "1";
+            document.querySelector('.seca_mensaje_exito_susc').classList.remove('d-none');
+          })
+          .catch(error => console.log('error', error));
+      }
+
 
     })
     .catch(function (error) {
