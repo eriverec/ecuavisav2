@@ -1,5 +1,4 @@
-
-.seccionCancelacion{
+.seccionCancelacion {
   margin-bottom: 100px;
 }
 
@@ -18,6 +17,14 @@
   font-size: 30px;
   font-style: normal;
   font-weight: 600;
+}
+
+.seccionCancelacion .seca_mensaje_exito {
+  color: #000;
+  font-family: Archivo;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
 }
 
 .seccionOpinion .seop_title_pregunta {
@@ -48,7 +55,7 @@
 
 
 
-@media (max-width: 767px){
+@media (max-width: 767px) {
   .seccionOpinion .seop_boton {
     width: 100%;
     height: auto;
