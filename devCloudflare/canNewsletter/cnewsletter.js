@@ -78,8 +78,6 @@ function btnSuscribirse() {
       const urlObj = new URL(urlActualHref);
       const idBoletin = urlObj.searchParams.get('nlid');
       document.querySelector('.se_btn._suscribir').style.opacity = "0.5";
-
-
  
       fetch(`https://api.sendpulse.com/addressbooks/${idBoletin}/emails`, {
         method: 'POST',
