@@ -1,5 +1,7 @@
 function btnDarseBaja() {
-  fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php')
+  fetch(
+    "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php"
+  )
     .then(function (response) {
       return response.text();
     })
@@ -8,55 +10,58 @@ function btnDarseBaja() {
       // Obtenemos el URL actual
       const urlActualHref = window.location.href;
       const urlObj = new URL(urlActualHref);
-      const idBoletin = urlObj.searchParams.get('nlid');
+      const idBoletin = urlObj.searchParams.get("nlid");
       // document.querySelector('.seca_darse').style.opacity = "0.5";
 
       // Verificamos si se encontró el parámetro 'correo' en el URL
-     
+
       /*GET VALIDACION DE EMAIL*/
       fetch(`https://api.sendpulse.com/addressbooks/${idBoletin}/emails`, {
-        method: 'GET',
+        method: "GET",
         headers: {
-          'Authorization': 'Bearer ' + token,
-          'Content-Type': 'application/json'
+          Authorization: "Bearer " + token,
+          "Content-Type": "application/json",
         },
-        redirect: 'follow'
+        redirect: "follow",
       })
-        .then(response => response.json())
-        .then(resultget => {
-          console.log('lista de corros sendpulse:', resultget)
+        .then((response) => response.json())
+        .then((resultget) => {
+          console.log("lista de corros sendpulse:", resultget);
           // const emailUser = "eriveraec@gmail.com";
-          const foundEmail = resultget.find(email => email.email === emailUser);
+          const foundEmail = resultget.find((email) => email.email === emailUser);
           if (foundEmail) {
-            console.log('existe en la lista.');
-            fetch(`https://api.sendpulse.com/addressbooks/${idBoletin}/emails`, {
-              method: 'DELETE',
-              headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token
-              },
-              body: JSON.stringify({
-                "emails": [emailUser]
-              }),
-              redirect: 'follow'
-            })
-              .then(response => response.text())
-              .then(result => {
+            console.log("existe en la lista.");
+            fetch(
+              `https://api.sendpulse.com/addressbooks/${idBoletin}/emails`,
+              {
+                method: "DELETE",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: "Bearer " + token,
+                },
+                body: JSON.stringify({
+                  emails: [emailUser],
+                }),
+                redirect: "follow",
+              }
+            )
+              .then((response) => response.text())
+              .then((result) => {
                 console.log(result);
                 // document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
                 // document.querySelector('.seca_darse').classList.add('d-none');
               })
-              .catch(error => console.log('error', error));
+              .catch((error) => console.log("error", error));
           } else {
-            console.log('emails no existe en la lista de sendpulse.');
+            console.log("emails no existe en la lista de sendpulse.");
             // document.querySelector('.seca_darse').classList.add('d-none');
             // document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
-            document.querySelector('.seca_mensaje_exito').textContent = 'Te has dado de baja con éxito de la newsletter Ecuavisa Informa';
+            document.querySelector(".seca_mensaje_exito").textContent =
+              "Te has dado de baja con éxito de la newsletter Ecuavisa Informa";
           }
           // console.log(valemail);
         })
-        .catch(error => console.log('error', error));
-  
+        .catch((error) => console.log("error", error));
     })
     .catch(function (error) {
       console.log(error);
@@ -65,9 +70,10 @@ function btnDarseBaja() {
 
 btnDarseBaja();
 
-
 function btnSuscribirse() {
-  fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php')
+  fetch(
+    "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php"
+  )
     .then(function (response) {
       return response.text();
     })
@@ -76,31 +82,65 @@ function btnSuscribirse() {
       const emailUser = ECUAVISA_EC.USER_data().email;
       const urlActualHref = window.location.href;
       const urlObj = new URL(urlActualHref);
-      const idBoletin = urlObj.searchParams.get('nlid');
-      document.querySelector('.se_btn._suscribir').style.opacity = "0.5";
- 
+      const idBoletin = urlObj.searchParams.get("nlid");
+      document.querySelector(".se_btn._suscribir").style.opacity = "0.5";
+
       fetch(`https://api.sendpulse.com/addressbooks/${idBoletin}/emails`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer ' + token
+          "Content-Type": "application/json",
+          Authorization: "Bearer " + token,
         },
         body: JSON.stringify({
-          "emails": [{ "email": emailUser }]
+          emails: [{ email: emailUser }],
         }),
-        redirect: 'follow'
+        redirect: "follow",
       })
-        .then(response => response.text())
-        .then(result => {
+        .then((response) => response.text())
+        .then((result) => {
           console.log(result);
-          document.querySelector('.se_btn._suscribir').style.opacity = "1";
-          document.querySelector('.seca_mensaje_exito_susc').classList.remove('d-none');
+          document.querySelector(".se_btn._suscribir").style.opacity = "1";
+          document
+            .querySelector(".seca_mensaje_exito_susc")
+            .classList.remove("d-none");
         })
-        .catch(error => console.log('error', error));
-
+        .catch((error) => console.log("error", error));
     })
     .catch(function (error) {
       console.log(error);
     });
+}
 
+function enviarMotivo() {
+  const dataID = parseInt(ECUAVISA_EC.USER_data("id"));
+  const uMotivo = window.location.href;
+  const urlObj = new URL(uMotivo);
+  const idMID = urlObj.searchParams.get("nlid");
+  const idMName = urlObj.searchParams.get("name");
+
+  // Obtener el elemento select por su ID
+  const selectElement = document.querySelector(".motivo_option select");
+  // Agregar un evento 'change' al select para detectar cuando cambia el valor seleccionado
+  selectElement.addEventListener("change", function () {
+    // Obtener el índice de la opción seleccionada
+    const selectedIndex = selectElement.selectedIndex;
+    const selectedText = selectElement.options[selectedIndex].text;
+    console.log(selectedText);
+    fetch("https://abandonos.vercel.app/motivo/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        motivo: selectedText,
+        idusuario: dataID,
+        idlista: idMID,
+        titulo: idMName,
+      }),
+      redirect: "follow",
+    })
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  });
 }
