@@ -72,9 +72,7 @@ function btnDarseBaja() {
 
 
 
-function btnSuscribirse(element) {
-  // Agregar la clase "loading" al botón
-  element.classList.add('loading');
+function btnSuscribirse() {
   fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php')
     .then(function (response) {
       return response.text();
@@ -108,8 +106,6 @@ function btnSuscribirse(element) {
           })
           .catch(error => console.log('error', error));
       }
-
-
     })
     .catch(function (error) {
       console.log(error);
