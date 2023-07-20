@@ -1,0 +1,24 @@
+.seccionCancelacion .seca_actualiza {
+  color: #000;
+  font-family: Archivo;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.seccionCancelacion .seca_darse {
+  color: #000;
+  font-family: Archivo;
+  font-size: 30px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.seccionOpinion .seop_title_pregunta{
+  color: #000;
+    font-family: Archivo;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+}
