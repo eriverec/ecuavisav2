@@ -77,7 +77,9 @@ function btnSuscribirse() {
       const urlActualHref = window.location.href;
       const urlObj = new URL(urlActualHref);
       const idBoletin = urlObj.searchParams.get('nlid');
-      document.querySelector('.se_btn._suscribirse').style.opacity = "0.5";
+      document.querySelector('.se_btn._suscribir').style.opacity = "0.5";
+
+
  
       fetch(`https://api.sendpulse.com/addressbooks/${idBoletin}/emails`, {
         method: 'POST',
@@ -93,7 +95,7 @@ function btnSuscribirse() {
         .then(response => response.text())
         .then(result => {
           console.log(result);
-          document.querySelector('.se_btn._suscribirse').style.opacity = "1";
+          document.querySelector('.se_btn._suscribir').style.opacity = "1";
           document.querySelector('.seca_mensaje_exito_susc').classList.remove('d-none');
         })
         .catch(error => console.log('error', error));
