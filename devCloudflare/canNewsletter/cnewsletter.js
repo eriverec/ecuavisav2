@@ -125,22 +125,22 @@ function enviarMotivo() {
     // Obtener el índice de la opción seleccionada
     const selectedIndex = selectElement.selectedIndex;
     const selectedText = selectElement.options[selectedIndex].text;
-    console.log(selectedText);
-    fetch("https://abandonos.vercel.app/motivo/add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        motivo: selectedText,
-        idusuario: dataID,
-        idlista: idMID,
-        titulo: idMName,
-      }),
-      redirect: "follow",
-    })
-      .then((response) => response.text())
-      .then((result) => console.log(result))
-      .catch((error) => console.log("error", error));
   });
+  
+  fetch("https://abandonos.vercel.app/motivo/add", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      motivo: selectedText,
+      idusuario: dataID,
+      idlista: idMID,
+      titulo: idMName,
+    }),
+    redirect: "follow",
+  })
+    .then((response) => response.text())
+    .then((result) => console.log(result))
+    .catch((error) => console.log("error", error));
 }
