@@ -117,31 +117,28 @@ function enviarMotivo() {
   const urlObj = new URL(uMotivo);
   const idMID = urlObj.searchParams.get("nlid");
   const idMName = urlObj.searchParams.get("name");
-
-  // Obtener el elemento select por su ID
   const selectElement = document.querySelector(".motivo_option select");
-  let selectedText; // Declarar la variable en un alcance más amplio
-  // Agregar un evento 'change' al select para detectar cuando cambia el valor seleccionado
-  selectElement.addEventListener("change", function () {
-    // Obtener el índice de la opción seleccionada
-    const selectedIndex = selectElement.selectedIndex;
-    const selectedText = selectElement.options[selectedIndex].text;
-  });
+  const valorSeleccionado = selectElement.value;
+
+  if(valorSeleccionado != '0'){
+    fetch("https://abandonos.vercel.app/motivo/add", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        motivo: valorSeleccionado,
+        idusuario: dataID,
+        idlista: idMID,
+        titulo: idMName,
+      }),
+      redirect: "follow",
+    })
+      .then((response) => response.text())
+      .then((result) => console.log(result))
+      .catch((error) => console.log("error", error));
+  } else{
+    console.log("es 0");
+  }
   
-  fetch("https://abandonos.vercel.app/motivo/add", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      motivo: selectedText,
-      idusuario: dataID,
-      idlista: idMID,
-      titulo: idMName,
-    }),
-    redirect: "follow",
-  })
-    .then((response) => response.text())
-    .then((result) => console.log(result))
-    .catch((error) => console.log("error", error));
 }
