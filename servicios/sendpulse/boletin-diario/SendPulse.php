@@ -221,7 +221,7 @@ class SendPulse {
 					$image = $value->content->url;
 				}
 				//$image = $this->cropImagen($image);
-				$tituloSubseccion = explode("/", $value->link)[4];
+				$tituloSubseccion = (count(explode("/", $value->link)) > 5 ? explode("/", $value->link)[4]:explode("/", $value->link)[3]);
 				$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
 				$descripcion = $value->description->__text;
 				$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
@@ -248,7 +248,7 @@ class SendPulse {
 				$image = $value->content->url;
 			}
 			//$image = $this->cropImagen($image);
-			$tituloSubseccion = explode("/", $value->link)[4];
+			$tituloSubseccion = (count(explode("/", $value->link)) > 5 ? explode("/", $value->link)[4]:explode("/", $value->link)[3]);
 			$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
 			$descripcion = $value->description->__text;
 			$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
@@ -307,7 +307,7 @@ class SendPulse {
 					$image = $value->content->url;
 				}
 				//$image = $this->cropImagen($image);
-				$tituloSubseccion = explode("/", $value->link)[4];
+				$tituloSubseccion = (count(explode("/", $value->link)) > 5 ? explode("/", $value->link)[4]:explode("/", $value->link)[3]);
 				$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
 				$descripcion = $value->description->__text;
 				$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
@@ -334,7 +334,7 @@ class SendPulse {
 				$image = $value->content->url;
 			}
 			//$image = $this->cropImagen($image);
-			$tituloSubseccion = explode("/", $value->link)[4];
+			$tituloSubseccion = (count(explode("/", $value->link)) > 5 ? explode("/", $value->link)[4]:explode("/", $value->link)[3]);
 			$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
 			$descripcion = $value->description->__text;
 			$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
@@ -352,12 +352,7 @@ class SendPulse {
 			];
 		}
 
-		$firstArray = array_slice($noticias, 0, 1);
-		$secondArray = array_slice($noticias, 1, 2);
-		$thirdArray = array_slice($noticias, 3);
-
-		$finalArray = array($firstArray, $secondArray, $thirdArray);
-		return $finalArray;
+		return $noticias[0];
 
 		// $id = $this->createJSONPHP($finalArray)->id;
 		// $finalArray_2 = array($firstArray, $secondArray, $thirdArray, $id);
@@ -459,6 +454,27 @@ class SendPulse {
 			$bloque_2_horizontales .= $this->getTemplatePHP($notas[2], "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/2-notas-abajo.php"); 
 			// }
 			$bodyGenerar = str_replace("{{ bloque_2_horizontales }}", $bloque_2_horizontales, $bodyGenerar);
+
+			$bloque_3_horizontales_col_1 = "";
+			$bloque_3_horizontales_col_1 .= $this->getTemplatePHP( 
+				$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-televistazo-19.json") , 
+				"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/ultimaseccionauzl.php"
+			); 
+			$bodyGenerar = str_replace("{{noticiero_19}}", $bloque_3_horizontales_col_1, $bodyGenerar);
+
+			$bloque_3_horizontales_col_2 = "";
+			$bloque_3_horizontales_col_2 .= $this->getTemplatePHP( 
+				$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-televistazo-13.json") , 
+				"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/ultimaseccionauzl.php"
+			); 
+			$bodyGenerar = str_replace("{{noticiero_13}}", $bloque_3_horizontales_col_2, $bodyGenerar);
+
+			$bloque_3_horizontales_col_3 = "";
+			$bloque_3_horizontales_col_3 .= $this->getTemplatePHP( 
+				$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-contacto-directo.json") , 
+				"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/ultimaseccionauzl.php"
+			); 
+			$bodyGenerar = str_replace("{{contacto_directo}}", $bloque_3_horizontales_col_3, $bodyGenerar);
 
 
 			$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);

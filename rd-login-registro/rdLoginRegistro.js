@@ -17,7 +17,7 @@ if(urlParamsGET.get('msjenvivo')){
   // Agregar la clase al nuevo div
   newDiv.classList.add('mensaje_continuar_viendo');
   // Agregar el contenido de texto al nuevo div
-  newDiv.innerHTML = 'Continúa disfrutando la programación de Ecuavisa';
+  newDiv.innerHTML = 'En Vivo <br> Continúa disfrutando la programación de Ecuavis';
   // Insertar el nuevo div antes de container-lr
   container.parentNode.insertBefore(newDiv, container);
 }
