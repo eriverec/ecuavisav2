@@ -11,6 +11,7 @@ function btnDarseBaja() {
       const urlActualHref = window.location.href;
       const urlObj = new URL(urlActualHref);
       const idBoletin = urlObj.searchParams.get("nlid");
+      const idUser = ECUAVISA_EC.USER_data().id;
       // document.querySelector('.seca_darse').style.opacity = "0.5";
 
       // Verificamos si se encontró el parámetro 'correo' en el URL
@@ -48,6 +49,28 @@ function btnDarseBaja() {
               .then((response) => response.text())
               .then((result) => {
                 console.log(result);
+                fetch("https://ecuavisa-temas.vercel.app", {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    "id": idUser,
+                    "nombre": "Newsletter",
+                    "tema": {
+                      "name": "",
+                      "feedUrl": "#",
+                      "follow": true,
+                      "idMeta": idBoletin
+                    }
+                  }),
+                  redirect: 'follow'
+                })
+                  .then(response => response.json())
+                  .then(result => {
+                    console.log(result)
+                  })
+                  .catch(error => console.log('error', error));
                 // document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
                 // document.querySelector('.seca_darse').classList.add('d-none');
               })
