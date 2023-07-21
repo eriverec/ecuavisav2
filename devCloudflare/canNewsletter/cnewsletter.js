@@ -11,7 +11,6 @@ function btnDarseBaja() {
       const urlActualHref = window.location.href;
       const urlObj = new URL(urlActualHref);
       const idBoletin = urlObj.searchParams.get("nlid");
-      const idUser = ECUAVISA_EC.USER_data().id;
       // document.querySelector('.seca_darse').style.opacity = "0.5";
 
       // Verificamos si se encontró el parámetro 'correo' en el URL
@@ -49,28 +48,6 @@ function btnDarseBaja() {
               .then((response) => response.text())
               .then((result) => {
                 console.log(result);
-                fetch("https://ecuavisa-temas.vercel.app", {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json'
-                  },
-                  body: JSON.stringify({
-                    "id": idUser,
-                    "nombre": "Newsletter",
-                    "tema": {
-                      "name": "",
-                      "feedUrl": "#",
-                      "follow": true,
-                      "idMeta": idBoletin
-                    }
-                  }),
-                  redirect: 'follow'
-                })
-                  .then(response => response.json())
-                  .then(result => {
-                    console.log(result)
-                  })
-                  .catch(error => console.log('error', error));
                 // document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
                 // document.querySelector('.seca_darse').classList.add('d-none');
               })
@@ -91,13 +68,13 @@ function btnDarseBaja() {
     });
 }
 
-function valIdNewsletter() {
+function valIdNewsletter()  {
   const userLoginRD = localStorage.getItem('wylexUserId') || 0;
   if (userLoginRD === 0) {
     setTimeout(() => {
       redireccionAlLogin();
     }, 300);
-  } else {
+  } else { 
     btnDarseBaja();
   }
 }
@@ -106,12 +83,12 @@ valIdNewsletter();
 
 var estadoDarseDeBaja = true;
 
-function habilitarDeshabilitarBtn(resp = true) {
+function habilitarDeshabilitarBtn(resp = true){
   var btn_motivo = document.querySelector("#enviarMotivo");
-  if (!resp) {
+  if(!resp){
     btn_motivo.style.opacity = "0.5";
     btn_motivo.setAttribute("disabled", true);
-  } else {
+  }else{
     btn_motivo.style.opacity = "1";
     btn_motivo.removeAttribute("disabled");
   }
@@ -152,31 +129,6 @@ function btnSuscribirse() {
           habilitarDeshabilitarBtn(false);
           estadoDarseDeBaja = false;
 
-          const idUser = ECUAVISA_EC.USER_data().id;
-
-          fetch("https://ecuavisa-temas.vercel.app", {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-              "id": idUser,
-              "nombre": "Newsletter",
-              "tema": {
-                "name": "Boletín diario",
-                "feedUrl": "#",
-                "follow": true,
-                "idMeta": idBoletin
-              }
-            }),
-            redirect: 'follow'
-          })
-            .then(response => response.json())
-            .then(result => {
-              console.log(result)
-            })
-            .catch(error => console.log('error', error));
-
           document.querySelector(".seca_mensaje_exito_susc").classList.remove("d-none");
         })
         .catch((error) => console.log("error", error));
@@ -195,12 +147,12 @@ function enviarMotivo() {
   const selectElement = document.querySelector(".motivo_option select");
   const valorSeleccionado = selectElement.value;
 
-  if (!estadoDarseDeBaja) {
+  if(!estadoDarseDeBaja){
     alert("Para poder enviar el motivo no debe estar suscrito.");
     return false;
   }
 
-  if (valorSeleccionado != '0') {
+  if(valorSeleccionado != '0'){
     fetch("https://abandonos.vercel.app/motivo/add", {
       method: "POST",
       headers: {
@@ -217,8 +169,8 @@ function enviarMotivo() {
       .then((response) => response.text())
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
-  } else {
+  } else{
     alert("Por favor seleccione una razón.")
   }
-
+  
 }
