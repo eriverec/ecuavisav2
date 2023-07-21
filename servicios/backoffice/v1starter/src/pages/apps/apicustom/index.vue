@@ -40,6 +40,9 @@ const tipoSeccionAnidadoEdit3 = ref({});
 const isOnDeleteConfiguracionConfirmActive = ref(false);
 const configOnDelete = ref('');
 
+const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
+const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
+
 //--- Items de selects -- //
 const itemsSeccion = [
     "Texto",
@@ -72,6 +75,11 @@ async function fetchConfiguraciones (){
 onMounted(async()=>{
     await fetchConfiguraciones();
     authorizedCheck();
+    await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "apicustom",
+            "fecha": dateNowF.value
+					});	
 })
 
 const authorizedCheck = () => {
@@ -94,6 +102,23 @@ const nextPage = () => {
 
 const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
+};
+
+async function accionBackoffice (logData){
+	if(userBackoffice.value.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+			myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify(logData);
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+		}
 };
 
 
@@ -333,6 +358,15 @@ async function onAddConfiguracionSubmit () {
 		}).catch(error => console.log('error', error));
         
         //console.log('nuevaConfiguracion',nuevaConfiguracion.value);
+
+        await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "apicustom",
+            "accion": "agregar",
+            "data": nuevaConfiguracion.value,
+            "fecha": dateNowF.value
+					});	
+
         await fetchConfiguraciones();
         seccionesForm.value = [];   
         nuevaConfiguracion.value = {
@@ -665,6 +699,15 @@ async function onEditConfiguracionSubmit () {
 		}).catch(error => console.log('error', error));
         
         console.log('editConfiguracion',editConfiguracion.value);
+
+        await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "apicustom",
+            "accion": "editar",
+            "data": editConfiguracion.value,
+            "fecha": dateNowF.value
+		});	
+
         await fetchConfiguraciones();
         seccionesFormEdit.value = [];   
         editConfiguracion.value = {
@@ -690,6 +733,13 @@ const onDeleteConfiguracionSend = async() => {
         .then(data => {})
         .catch(error => {console.error(error)});   
 
+    await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "apicustom",
+            "accion": "borrar",
+            "data": {key: key},
+            "fecha": dateNowF.value
+	});	    
     isOnDeleteConfiguracionConfirmActive.value = false;  
     configOnDelete.value = '';  
     await fetchConfiguraciones();  	

@@ -20,7 +20,8 @@ const isDialogVisibleChart2 = ref(false);
 const dataChart = ref([]);
 
 const isMobile = window.innerWidth <= 768;
-
+const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
+const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
 
 const initData = async (init = false) => {
   let fechai = moment().subtract(7, 'days').format("DD-MM-YYYY").toString();
@@ -109,8 +110,30 @@ async function resolveUsuario(usuario) {
   isDialogVisibleChart2.value = false;
 }
 
-onMounted(() => {
+async function accionBackoffice (logData){
+	if(userBackoffice.value.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+			myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify(logData);
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+		}
+};
+
+onMounted(async() => {
   initData(true);
+  await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "metadatos-temasDestacados",
+            "fecha": dateNowF.value
+  });
 });
 
 // 👉 Colors variables

@@ -34,6 +34,8 @@ const selectedRowUser = ref(null);
 const verMas = ref(false);
 const searchQuery = ref('');
 const metaRaw = ref([]);
+const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
+const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
 
 async function getMetadatos(fechai = '', fechaf = '') {
   isLoading.value = true;
@@ -67,8 +69,30 @@ const initData = () => {
   fechaIngresada.value = fechai + ' a ' + fechaf;
 }
 
-onMounted(() => {
+async function accionBackoffice (logData){
+	if(userBackoffice.value.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+			myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify(logData);
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+		}
+};
+
+onMounted(async() => {
   initData();
+  await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "trazabilidad-metadatos",
+            "fecha": dateNowF.value
+  });
 });
 
 const searchMeta = () => {
@@ -496,6 +520,12 @@ async function downloadSelection() {
 
   let title = "ultimas_visitas_metadatos" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
 
+  await accionBackoffice({
+   "usuario": userBackoffice.value.email,   
+   "pagina": "trazabilidad-metadatos",
+   "accion": "export",
+   "fecha": dateNowF.value
+	});  
   //if(usersFull.length > totalUsers){
   //console.log("arrayExport", arrayExport);
   exportCSVFile(headers, arrayExport, title);

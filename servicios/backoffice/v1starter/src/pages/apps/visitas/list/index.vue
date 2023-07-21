@@ -336,13 +336,13 @@ tr.clickable.active {
   
 <script setup>
 import notasDrivers from '@/pages/apps/visitas/tabs/notas-drivers.vue';
-import notasEstadio from '@/pages/apps/visitas/tabs/notas-estadio.vue';
-import notasNoticias from '@/pages/apps/visitas/tabs/notas-noticias.vue';
-import notasMundo from '@/pages/apps/visitas/tabs/notas-mundo.vue';
 import notasEntretenimiento from '@/pages/apps/visitas/tabs/notas-entretenimiento.vue';
+import notasEstadio from '@/pages/apps/visitas/tabs/notas-estadio.vue';
 import notasEstilo from '@/pages/apps/visitas/tabs/notas-estilo.vue';
-import notasProgramas from '@/pages/apps/visitas/tabs/notas-programas.vue';
 import notasLoUltimo from '@/pages/apps/visitas/tabs/notas-loultimo.vue';
+import notasMundo from '@/pages/apps/visitas/tabs/notas-mundo.vue';
+import notasNoticias from '@/pages/apps/visitas/tabs/notas-noticias.vue';
+import notasProgramas from '@/pages/apps/visitas/tabs/notas-programas.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -382,6 +382,9 @@ const searchQuery = ref('');
 const urlRaw = ref([]);
 const selectedRow = ref(null);
 const selectedRowUser = ref(null);
+
+const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
+const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
 
 async function fetchFiltros() {
   await fetch('https://servicio-filtros.vercel.app/visitas/all')
@@ -588,9 +591,31 @@ const authorizedCheck = () => {
   }
 }
 
-onMounted(() => {
+async function accionBackoffice (logData){
+	if(userBackoffice.value.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+			myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify(logData);
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+		}
+};
+
+onMounted(async() => {
   authorizedCheck();
   initData();
+  await accionBackoffice({
+   "usuario": userBackoffice.value.email,   
+   "pagina": "trazabilidad-visitas-list",
+    "fecha": dateNowF.value
+					});
 });
 
 const paginatedUrlCounts = computed(() => {
@@ -877,7 +902,12 @@ async function downloadSelection() {
   let title = "ultimos_usuarios_" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
   //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
-
+  await accionBackoffice({
+   "usuario": userBackoffice.value.email,   
+   "pagina": "trazabilidad-visitas-list",
+   "accion": "export",
+   "fecha": dateNowF.value
+	});  
   exportCSVFile(headers, doc, title);
   // }
 

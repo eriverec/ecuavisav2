@@ -199,6 +199,8 @@ export default {
       actividadUsuarioFull: [],
       actividadUsuarioVisible: false,
       verMas: false,
+      dateNowF: moment().format("DD/MM/YYYY HH:mm:ss").toString(),
+      userBackoffice: JSON.parse(localStorage.getItem('userData')),
       iconDevices: [
         {
           browser: "Chrome",
@@ -345,9 +347,14 @@ export default {
 
     },
   },
- // mounted() {
+  async mounted() {
     //this.filtrarDatos([]);
- // },
+    await this.accionBackoffice({
+      "usuario": this.userBackoffice.email,   
+      "pagina": "trazabilidad-dispositivos",
+      "fecha": this.dateNowF
+    });
+  },
   methods: {
     //resolveActivity() {
 
@@ -471,7 +478,7 @@ export default {
       }
     }
   },
-  download() {
+  async download() {
     const arrayI = JSON.parse(JSON.stringify(this.dataN));
     const arrayExport = [];
     for (let i of arrayI) {
@@ -508,6 +515,13 @@ export default {
     };
 
     let title = "usuarios_dispositivos";
+
+    await this.accionBackoffice({
+    "usuario": this.userBackoffice.email,   
+    "pagina": "trazabilidad-dispositivos",
+    "accion": "export",
+    "fecha": this.dateNowF
+    });  
     //if(usersFull.length > totalUsers){
     //console.log("arrayExport", arrayExport);
     this.exportCSVFile(headers, arrayExport, title);
@@ -520,7 +534,23 @@ export default {
           const divTable = document.querySelector('.tableDataUser');
           const divPageTable = document.querySelector('.pagtable');
 
-    }
+  },
+  async accionBackoffice (logData){
+	if(this.userBackoffice.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+			myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify(logData);
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+		}
+  }
 },
 };
 </script>

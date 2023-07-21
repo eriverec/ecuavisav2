@@ -32,6 +32,9 @@ const ultimasVisitasPag = ref([]);
 const ultimasVisitasPagVisible = ref(false);
 const fechaInicial = ref('');
 const fechaFinal = ref('');
+const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
+const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
+
 async function searchUsers() {
     isLoading.value = true;
     isLoaded.value = false;
@@ -230,7 +233,30 @@ const prevPageActividad = () => {
   if (currentPageA.value > 1) currentPageA.value--;
 };
 
+async function accionBackoffice (logData){
+	if(userBackoffice.value.email !== 'admin@demo.com' ){
+  var myHeaders = new Headers();
+			myHeaders.append("Content-Type", "application/json");
+			var log = JSON.stringify(logData);
+			var requestOptions = {
+				method: 'POST',
+				headers: myHeaders,
+				body: log,
+				redirect: 'follow'
+			};
+			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+			.then(response =>{			
+			}).catch(error => console.log('error', error));
+		}
+};
 
+onMounted(async()=>{
+  await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "trazabilidad-users",
+            "fecha": dateNowF.value
+  });
+});
 
 
 const resolveVisitas = (title) =>{
@@ -377,7 +403,12 @@ async function downloadSelection () {
   let title = "ultimos_usuarios_"+titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
   //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
-
+  await accionBackoffice({
+   "usuario": userBackoffice.value.email,   
+   "pagina": "trazabilidad-users",
+   "accion": "export",
+   "fecha": dateNowF.value
+	});    
   exportCSVFile(headers, doc, title);
  // }
 
