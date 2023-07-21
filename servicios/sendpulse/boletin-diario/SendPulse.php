@@ -278,6 +278,92 @@ class SendPulse {
 		// return $finalArray_2;
     }
 
+    public function getNotasFormatRespaldo($api_link){
+        $curl = curl_init();
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => $api_link,
+		  CURLOPT_RETURNTRANSFER => true,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'GET',
+		));
+
+		$response = curl_exec($curl);
+
+		curl_close($curl);
+		$dataNotas = json_decode($response);
+		$rssNotas = $dataNotas->rss;
+		$channel = $rssNotas->channel;
+		$noticias = [];
+		if(is_array($channel->item)){
+			foreach ($channel->item as $key => $value) {
+				$image = "";
+				if(is_array($value->content)){
+					$image = $value->content[0]->url;
+				}else{
+					$image = $value->content->url;
+				}
+				//$image = $this->cropImagen($image);
+				$tituloSubseccion = explode("/", $value->link)[4];
+				$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
+				$descripcion = $value->description->__text;
+				$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
+				$descripcion = substr($descripcion_formateado, 0, 290).'...';
+				$descripcionFinal = str_replace('<a ', '<a style="color: #444;" ', $descripcion);
+				$noticias[] = [
+					"titulo" => $value->title,
+					"link" => $value->link,
+					"color" => $this->imgSeparador($linkSubseccion),
+					"descripcion" => $descripcionFinal,
+					"subseccion" => [
+						"titulo" => str_replace('-', ' ', strtoupper($tituloSubseccion)),
+						"link" => $linkSubseccion
+					],
+					"image" => $image
+				];
+			}
+		}else{
+			$value = $channel->item;
+			$image = "";
+			if(is_array($value->content)){
+				$image = $value->content[0]->url;
+			}else{
+				$image = $value->content->url;
+			}
+			//$image = $this->cropImagen($image);
+			$tituloSubseccion = explode("/", $value->link)[4];
+			$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
+			$descripcion = $value->description->__text;
+			$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
+			$descripcion = substr($descripcion_formateado, 0, 290).'...';
+			$descripcionFinal = str_replace('<a ', '<a style="color: #444;" ', $descripcion);
+			$noticias[] = [
+				"titulo" => $value->title,
+				"link" => $value->link,
+				"descripcion" => $descripcionFinal,
+				"subseccion" => [
+					"titulo" => str_replace('-', ' ', strtoupper($tituloSubseccion)),
+					"link" => $linkSubseccion
+				],
+				"image" => $image
+			];
+		}
+
+		$firstArray = array_slice($noticias, 0, 1);
+		$secondArray = array_slice($noticias, 1, 2);
+		$thirdArray = array_slice($noticias, 3);
+
+		$finalArray = array($firstArray, $secondArray, $thirdArray);
+		return $finalArray;
+
+		// $id = $this->createJSONPHP($finalArray)->id;
+		// $finalArray_2 = array($firstArray, $secondArray, $thirdArray, $id);
+		// return $finalArray_2;
+    }
+
     public function createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body){
         $curl = curl_init();
 		curl_setopt_array($curl, array(

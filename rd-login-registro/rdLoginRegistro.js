@@ -9,6 +9,19 @@ if(!ECUAVISA_EC){
   console.error("Este archivo necesita a ECUAVISA_EC para funcionar");
 }
 
+if(urlParamsGET.get('msjenvivo')){
+  // Obtener la referencia del elemento container-lr
+  const container = document.querySelector('.inicio-registro .container-lr');
+  // Crear el nuevo div
+  const newDiv = document.createElement('div');
+  // Agregar la clase al nuevo div
+  newDiv.classList.add('mensaje_continuar_viendo');
+  // Agregar el contenido de texto al nuevo div
+  newDiv.innerHTML = 'Continúa disfrutando la programación de Ecuavisa';
+  // Insertar el nuevo div antes de container-lr
+  container.parentNode.insertBefore(newDiv, container);
+}
+
 /* VERIFICAMOS SI NEXTPAGE VIENE DEL MISMO DOMINIO DE ECUAVISA*/
 if(urlRedirectNextpage){
   if(ECUAVISA_EC.validateUrl(urlRedirectNextpage)){
