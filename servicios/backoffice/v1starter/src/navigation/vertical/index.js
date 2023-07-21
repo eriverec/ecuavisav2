@@ -4,11 +4,6 @@ export default [
     to: { name: 'index' },
     icon: { icon: 'tabler-smart-home' },
   },
-  // {
-  //   title: 'Usuarios',
-  //   to: { name: 'usersList' },
-  //   icon: { icon: 'tabler-user' },
-  // },
   {
     title: 'Usuarios',
     icon: { icon: 'tabler-user' },
@@ -19,40 +14,25 @@ export default [
     ],
   },
 
-
- // {
-  //   title: 'Trazabilidad',
-  //   icon: { icon: 'tabler-database' },
-  //   to: { name: 'apps-trazabilidad-list' },
-  //   // children: [
-  //   //   { title: 'Lista', to: 'apps-trazabilidad-list' },
-  //   //   // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
-  //   // ],
-  // },
-
   {
     title: 'Concursos',
     icon: { icon: 'tabler-balloon' },
     // to: { name: 'apps-concursos' },
     children: [
       { title: 'Click click boom', to: 'apps-concursos' },
-      { title: 'Gavilanes', to: 'apps-concursos-gavilanes' },
-    //   // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
+      { title: 'Gavilanes', to: 'apps-concursos-gavilanes' }
     ],
   },
   
   {
     title: 'Trazabilidad',
     icon: { icon: 'tabler-database' },
-    // to: { name: 'apps-trazabilidad-list' },
     children: [
       { title: 'Lista de Usuarios', to: 'apps-trazabilidad-list' },
       { title: 'Visitas', to: 'apps-visitas-list' },
       { title: 'Metadatos', to: 'apps-metadatos' },
-      { title: 'Dispositivos', to: 'apps-dispositivos' }
-      // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
+      { title: 'Dispositivos', to: 'apps-dispositivos' },
       // modulos por salir 
-      // 
       //{ title: 'Trazabilidad usuarios', to: 'apps-trazabilidad-users' }
     ],
   },
