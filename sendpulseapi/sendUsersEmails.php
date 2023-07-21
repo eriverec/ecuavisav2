@@ -14,7 +14,7 @@ function sendApiEmails() {
     }
   
     // Tamaño del lote
-    $batchSize = 50;
+    $batchSize = 1000;
   
     // Dividir los usuarios filtrados en lotes de 1000
     $totalEmails = count($filteredUsers);
