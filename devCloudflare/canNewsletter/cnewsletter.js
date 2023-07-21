@@ -140,7 +140,7 @@ function btnSuscribirse() {
               "id": idUser,
               "nombre": "Newsletter",
               "tema": {
-                "name": "",
+                "name": "Boletín diario",
                 "feedUrl": "#",
                 "follow": true,
                 "idMeta": idBoletin
