@@ -46,19 +46,6 @@ export default [
       { title: 'Lista Intereses', to: 'categorias' },
     ],
   },
-
-  // {
-  //   title: 'Newsletter',
-  //   icon: { icon: 'tabler-news' },
-  //   to: { name: 'apps-newsletter' }
-  // },
-
-  // {
-  //   title: 'Colecciones',
-  //   icon: { icon: 'tabler-database-cog' },
-  //   to: { name: 'coleccion' }
-  // }
-
   {
     title: 'Ecuavisa.com',
     icon: { icon: 'tabler-settings-2' },
@@ -69,17 +56,34 @@ export default [
       //{ title: 'Player Forzado', to: 'apps-configuracion-player' }
     ],
   },
-  /* {
-    title: 'Backoffice',
-    to: { name: 'apps-backoffice' },
-    icon: { icon: 'tabler-settings-2' },
-  }, */
-  // modulo por salir filtros
-//   {
-//     title: 'Filtros',
-//    icon: { icon: 'tabler-database-cog' },
-//     to: { name: 'apps-filtros' }
-// },
+
+  //########################
+  // módulos no visibles
+  //########################
+
+  // {
+  //   title: 'Newsletter',
+  //   icon: { icon: 'tabler-news' },
+  //   to: { name: 'apps-newsletter' }
+  // },
+  // {
+  //   title: 'Colecciones',
+  //   icon: { icon: 'tabler-database-cog' },
+  //   to: { name: 'coleccion' }
+  // },  
+  // {
+  //   title: 'Backoffice',
+  //   icon: { icon: 'tabler-settings-2' },
+  //   children: [
+  //     { title: 'Usuarios y Roles', to: 'apps-backoffice' },
+  //     { title: 'Actividad', to: 'apps-backoffice-actividad' },
+  //   ],
+  // },
+  // {
+  //   title: 'Filtros Guardados',
+  //  icon: { icon: 'tabler-database-cog' },
+  //   to: { name: 'apps-filtros' }
+  // },
   // {
   //   title: 'Paquetes',
   //   children: [
@@ -89,8 +93,6 @@ export default [
   //     to:   'periodos'  },
   //     { title: 'Modulos',
   //     to:   'modulos'  },
-      
   //   ],
-
   // },
 ]
