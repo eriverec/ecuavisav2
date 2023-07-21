@@ -175,3 +175,5 @@ const valIdNewsletter = () => {
 
 
 
+valIdNewsletter();
+
