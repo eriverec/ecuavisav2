@@ -390,7 +390,7 @@ class SendPulse {
     }
 
     private function armarCorreo($name, $body, $list_id){
-    	$getFecha = date("Y-m-d", time());
+    	$getFecha = date("Y-m-d, h:i:s", time());
         $sender_name = "ecuavisa.com";
         $sender_email = $this->sender_email;
         $subject = "Newsletter diario - ".$getFecha;
@@ -489,8 +489,10 @@ class SendPulse {
 			    $bodyContent = $matches[1];
 			}
 
-			echo ($bodyContent);
-			exit();
+			if(isset($_GET["view"])){
+				echo ($bodyContent);
+				exit();
+			}
 			if(count($notas) > 0 && count($numUsers) > 0){
 				$resp = $this->armarCorreo($nombreNeswletter, $this->HtmlToBase64($bodyContent), $list_id);
 	        	echo json_encode(["respSendPulse"=>$resp,"resp"=>true, "message"=>"La campaña fue creada en la fecha ".$getFecha]);
