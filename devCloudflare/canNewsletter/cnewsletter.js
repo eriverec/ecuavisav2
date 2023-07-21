@@ -71,7 +71,9 @@ function btnDarseBaja() {
 function valIdNewsletter()  {
   const userLoginRD = localStorage.getItem('wylexUserId') || 0;
   if (userLoginRD === 0) {
-    redireccionAlLogin();
+    setTimeout(() => {
+      redireccionAlLogin();
+    }, 300);
   } else { 
     btnDarseBaja();
   }
