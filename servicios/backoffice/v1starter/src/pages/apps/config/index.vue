@@ -12,6 +12,7 @@ const currentPage = ref(1);
 const itemsPerPage = ref(10);
 const configuraciones = ref([]);
 const isLoading = ref(false);
+//--- Constantes seccion ADD -- //
 const isConfiguracionAddActive = ref(false);
 const formNuevo = ref();
 const nuevaConfiguracion = ref({
@@ -23,7 +24,7 @@ const tipoSeccion = ref('');
 const tipoSeccionAnidado = ref({});
 const tipoSeccionAnidado2 = ref({});
 const tipoSeccionAnidado3 = ref({});
-
+//--- Constantes seccion EDIT -- //
 const isConfiguracionEditActive = ref(false);
 const formEdit = ref();
 const editConfiguracion = ref({
@@ -35,7 +36,11 @@ const tipoSeccionEdit = ref('');
 const tipoSeccionAnidadoEdit = ref({});
 const tipoSeccionAnidadoEdit2 = ref({});
 const tipoSeccionAnidadoEdit3 = ref({});
+//--- Constantes seccion DELETE -- //
+const isOnDeleteConfiguracionConfirmActive = ref(false);
+const configOnDelete = ref('');
 
+//--- Items de selects -- //
 const itemsSeccion = [
     "Texto",
     "Boolean",
@@ -496,9 +501,8 @@ const onEditConfiguracionActive = async(key) => {
     isConfiguracionEditActive.value = true;
     const consulta = await fetch('https://configuracion-service.vercel.app/configuracion/'+key);
     const data = await consulta.json();
-    console.log('array convertido',data);
     let arrRaw = convertirObjetoAArray(data);
-    console.log('array convertido',arrRaw);
+    console.log('array edit convertido',arrRaw);
     editConfiguracion.value.key = key;
     seccionesFormEdit.value = arrRaw;
     
@@ -673,9 +677,35 @@ async function onEditConfiguracionSubmit () {
 }
 
 // ------------------------     DELETE   ----------------------------   //
-const onConfirmConfiguracionDeleteActive = () => {
-    
+const onDeleteConfiguracionConfirmActive = (key) => {
+    isOnDeleteConfiguracionConfirmActive.value = true;
+    configOnDelete.value = key;
 }
+
+const onDeleteConfiguracionSend = async() => {
+    let key = configOnDelete.value;
+ 
+    await fetch('https://configuracion-service.vercel.app/delete?nombre='+key)
+        .then(response => response.json())
+        .then(data => {})
+        .catch(error => {console.error(error)});   
+
+    isOnDeleteConfiguracionConfirmActive.value = false;  
+    configOnDelete.value = '';  
+    await fetchConfiguraciones();  	
+};
+
+const onDeleteConfiguracionValueUpdate = (val) => {
+    if(val == false){
+        configOnDelete.value = '';
+    }
+    isOnConfirmConfiguracionDeleteActive = val;
+}
+
+const onDeleteConfiguracionReset = () => {
+    configOnDelete.value = '';
+	isOnDeleteConfiguracionConfirmActive.value = false;	
+};
 
 </script>
 
@@ -735,7 +765,7 @@ const onConfirmConfiguracionDeleteActive = () => {
 										<VIcon size="22" icon="tabler-edit" />
 									</VBtn>
 
-                                    <VBtn icon size="x-small" color="default" variant="text" @click="onConfirmConfiguracionDeleteActive(item.key)">
+                                    <VBtn icon size="x-small" color="default" variant="text" @click="onDeleteConfiguracionConfirmActive(item.key)">
                                         <VIcon size="22" icon="tabler-trash" />
                                     </VBtn>
 								</td>
@@ -1786,7 +1816,48 @@ const onConfirmConfiguracionDeleteActive = () => {
 						</VCard>
 					</VDialog>
 
+    <!----------------    DELETE DIALOG      ----------------->
+    <VDialog
+             persistent
+             no-click-animation
+						:width="$vuetify.display.smAndDown ? 'auto' : 600"
+						:model-value="isOnDeleteConfiguracionConfirmActive"
+						@update:model-value="onDeleteConfiguracionValueUpdate"
+					>
+						<!-- Dialog close btn -->
+						<DialogCloseBtn @click="onDeleteConfiguracionValueUpdate(false)" />
 
+					<VCard class="pa-sm-14 pa-5">
+					<VCardItem class="text-center">
+					<VCardTitle class="text-h5 mb-3 p-5">
+					<span>¿ Está seguro que desea eliminar</span><br>
+                  <span>la configuración <i>{{ configOnDelete }}</i> ?</span>
+					</VCardTitle>
+					</VCardItem>
+              <VCardItem >
+                <VCol
+				cols="12"
+				class="d-flex flex-wrap justify-center gap-4"
+				>
+                <VBtn color="error"						
+				@click="onDeleteConfiguracionSend"
+                > 
+                 Aceptar 
+                </VBtn>
+
+				<VBtn
+												
+												
+				@click="onDeleteConfiguracionReset"
+				>
+				Cancelar
+				</VBtn>
+              </VCol>
+              </VCardItem>
+
+						</VCard>
+					</VDialog>
+                    
 				</VCard>
 			</VCol>
 		</VRow>
