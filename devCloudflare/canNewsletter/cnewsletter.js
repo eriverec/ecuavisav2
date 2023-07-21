@@ -1,6 +1,6 @@
-const valIdNewsletter = () => {
+function valIdNewsletter () {
   const userLoginRD = localStorage.getItem('wylexUserId') || 0;
-  if (userLoginRD === 0) {
+  if (userLoginRD == 0) {
     redireccionAlLogin();
   } else {
     function btnDarseBaja() {
@@ -172,8 +172,6 @@ const valIdNewsletter = () => {
     }
   }
 }
-
-
 
 valIdNewsletter();
 
