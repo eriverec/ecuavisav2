@@ -5,8 +5,11 @@ class SendPulse {
 	private $sender_email;
 	private $fecha;
 	private $listaUsuario;
+	private $nombreNeswletter;
 
 	function __construct(){
+		$getFecha = date("Y-m-d, h:i:s", time());
+		$this->nombreNeswletter = "Newsletter diario ".$getFecha;
         $this->listaUsuario = 565083;
         $this->token = $this->initToken();
         $this->sender_email = "suscripciones@ecuavisa.com";
@@ -101,6 +104,26 @@ class SendPulse {
 
 		curl_close($curl);
 		return json_decode($response);
+    }
+
+    private function getURLVerNavegador(){
+		//return '<a style="text-decoration:none; color:#000" href="#">Quiero ver en mi navegador</a>';
+        // $curl = curl_init();
+		// curl_setopt_array($curl, array(
+		//   CURLOPT_URL => 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/api.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter,
+		//   CURLOPT_RETURNTRANSFER => true,
+		//   CURLOPT_ENCODING => '',
+		//   CURLOPT_MAXREDIRS => 10,
+		//   CURLOPT_TIMEOUT => 0,
+		//   CURLOPT_FOLLOWLOCATION => true,
+		//   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		//   CURLOPT_CUSTOMREQUEST => 'GET',
+		// ));
+
+		// $response = curl_exec($curl);
+
+		// curl_close($curl);
+		return '<label style="display:none">Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label><a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none; color:#000" href="https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/email.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter.'">Quiero ver en mi navegador</a>';
     }
 
     private function getTemplatePHP($data, $url){
@@ -318,11 +341,11 @@ class SendPulse {
     	if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     		$getFecha = date("Y-m-d, h:i:s", time());
 
-			$nombreNeswletter = "Newsletter diario ".$getFecha; //NOMBRE DEL NEWSLETTER
+			$nombreNeswletter = $this->nombreNeswletter;
 			$idTemplate = 148832;//TEMPLATE CORREO
 			$list_id = $this->listaUsuario;//LISTA DE USUARIOS
 			// $numUsers = $this->getListUser($list_id);
-			$numUsers = 1;
+			$numUsers = [0, 1];
 			$notas = $this->getNotasNewTemplate('https://www.ecuavisa.com/rss/boletin-diario.json');
 
 			$template = $this->getTemplate($idTemplate);
@@ -354,6 +377,7 @@ class SendPulse {
 
 			$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
 			$bodyGenerar = str_replace("{{date}}", $this->fechaFormateada , $bodyGenerar);
+			$bodyGenerar = str_replace("{{linkNavegador}}", $this->getURLVerNavegador() , $bodyGenerar);
 			$bodyGenerar = str_replace("{{_nlid}}", $list_id."&name=".$nombreNeswletter , $bodyGenerar);
 			$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
 			$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);

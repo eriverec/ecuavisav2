@@ -59,6 +59,49 @@
   margin: 22px 0;
 }
 /*---*/
+
+.seca_mensaje_exito_susc {
+    background-color: #23DCD1;
+    width: 100%;
+    display: flex;
+    max-width: 441px;
+    padding: 20px;
+    color: #2927B9!important;
+    border-radius: 2px;
+    margin-top: -15px;
+    margin-bottom: 40px;
+    font-weight: bold!important;
+}
+
+.seccionOpinion select {
+    background-color: #F5F5F5;
+    border: 1px solid #F5F5F5;
+    padding: 14px 10px;
+    width: 100%;
+    max-width: 441px;
+    color: #717171;
+    margin-top: 5px;
+    font-weight: 500;
+    font-family: Archivo;
+}
+
+
+.seccionOpinion select {
+  background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fabajo-redi.png); /*aquí deberás escribir la ruta de la imagen que utilizarás como flecha del desplegable*/
+  background-repeat: no-repeat;
+  background-position: right center;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -o-appearance: none;
+  appearance: none;
+  background-size: 27px;
+  background-position: 94% 50%;
+}
+
+.seccionOpinion select::-ms-expand {
+  display: none; /*Evita que se muestre la flecha por defecto en versiones de IE*/
+}
+
 @media (max-width: 767px) {
   .seccionOpinion .seop_boton {
     width: 100%;
