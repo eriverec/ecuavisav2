@@ -68,9 +68,25 @@ function btnDarseBaja() {
     });
 }
 
+var estadoDarseDeBaja = true;
+
 btnDarseBaja();
 
+function habilitarDeshabilitarBtn(resp = true){
+  var btn_motivo = document.querySelector("#enviarMotivo");
+  if(!resp){
+    btn_motivo.style.opacity = "0.5";
+    btn_motivo.setAttribute("disabled", true);
+  }else{
+    btn_motivo.style.opacity = "1";
+    btn_motivo.removeAttribute("disabled");
+  }
+}
+
 function btnSuscribirse() {
+  var btn_suscribir = document.querySelector(".se_btn._suscribir");
+  btn_suscribir.style.opacity = "0.5";
+  btn_suscribir.setAttribute("disabled", true);
   fetch(
     "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php"
   )
@@ -83,7 +99,6 @@ function btnSuscribirse() {
       const urlActualHref = window.location.href;
       const urlObj = new URL(urlActualHref);
       const idBoletin = urlObj.searchParams.get("nlid");
-      document.querySelector(".se_btn._suscribir").style.opacity = "0.5";
 
       fetch(`https://api.sendpulse.com/addressbooks/${idBoletin}/emails`, {
         method: "POST",
@@ -98,8 +113,11 @@ function btnSuscribirse() {
       })
         .then((response) => response.text())
         .then((result) => {
-          console.log(result);
-          document.querySelector(".se_btn._suscribir").style.opacity = "1";
+          btn_suscribir.style.opacity = "1";
+          btn_suscribir.removeAttribute("disabled");
+          habilitarDeshabilitarBtn(false);
+          estadoDarseDeBaja = false;
+
           document
             .querySelector(".seca_mensaje_exito_susc")
             .classList.remove("d-none");
@@ -120,6 +138,11 @@ function enviarMotivo() {
   const selectElement = document.querySelector(".motivo_option select");
   const valorSeleccionado = selectElement.value;
 
+  if(!estadoDarseDeBaja){
+    alert("Para poder enviar el motivo no debe estar suscrito.");
+    return false;
+  }
+
   if(valorSeleccionado != '0'){
     fetch("https://abandonos.vercel.app/motivo/add", {
       method: "POST",
@@ -138,7 +161,7 @@ function enviarMotivo() {
       .then((result) => console.log(result))
       .catch((error) => console.log("error", error));
   } else{
-    console.log("es 0");
+    alert("Por favor seleccione una razón.")
   }
   
 }
