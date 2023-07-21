@@ -9,7 +9,6 @@ export default [
     icon: { icon: 'tabler-user' },
     children: [
       { title: 'Lista', to: 'apps-user-list' },
-      // { title: 'Usuarios Backoffice', to: 'apps-backoffice' },
       // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
     ],
   },
@@ -33,7 +32,9 @@ export default [
       { title: 'Metadatos', to: 'apps-metadatos' },
       { title: 'Dispositivos', to: 'apps-dispositivos' },
       // modulos por salir 
-      //{ title: 'Trazabilidad usuarios', to: 'apps-trazabilidad-users' }
+      //{ title: 'Trazabilidad usuarios', to: 'apps-trazabilidad-users' },
+      // { title: 'Trazabilidad usuarios', to: 'apps-notas-recomendadas'}, //apps/notas-recomendadas
+
     ],
   },
 
@@ -93,6 +94,13 @@ export default [
   //     to:   'periodos'  },
   //     { title: 'Modulos',
   //     to:   'modulos'  },
+  //   ],
+  // },
+  // {
+  //   title: 'Utilidades',
+  //   icon: { icon: 'tabler-settings-2' },
+  //   children: [
+  //     { title: 'Herramienta de Apis', to: 'apps-apicustom' },
   //   ],
   // },
 ]
