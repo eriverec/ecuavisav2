@@ -1,0 +1,20 @@
+[
+  {
+    "titulo": "Boletín diario",
+    "descripcion": "Ecuavisa.com",
+    "listid": "565083",
+    "img": "https://placehold.co/600x400"
+  },
+  {
+    "titulo": "Boletín semanal",
+    "descripcion": "Ecuavisa.com",
+    "listid": "565081",
+    "img": "https://placehold.co/600x400"
+  },
+  {
+    "titulo": "Boletín columnista",
+    "descripcion": "Ecuavisa.com",
+    "listid": "568629",
+    "img": "https://placehold.co/600x400"
+  }
+]
