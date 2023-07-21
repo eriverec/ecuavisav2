@@ -19,7 +19,7 @@ function templateHtml(section) {
 }
 
 
-fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/mirrorAutores.php', {
+fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/mirrorBoletin.php', {
   method: "GET",
   headers: {
     "Content-Type": "application/json"
@@ -28,7 +28,7 @@ fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/mirrorAuto
   .then(response => response.json())
   .then(data => {
     // Trabaja con los datos obtenidos de la API
-    console.log(data);
+    console.log("data PHP:",data);
     // Ordenar los elementos por título
     data.sort((a, b) => a.titulo.localeCompare(b.titulo));
 
