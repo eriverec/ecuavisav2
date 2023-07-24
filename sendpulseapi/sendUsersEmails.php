@@ -48,9 +48,9 @@ function sendApiEmails() {
         // print_r($emailData);
         // echo "</pre>";
       
+        sendEmailsBatch($emailData);
         // Realizar el envío de correo del lote actual
     }
-    sendEmailsBatch($emailData);
 }
 
 function sendEmailsBatch($emails) {

@@ -10,7 +10,7 @@ function btnSendApiEmails() {
     .then(data => {
       const filteredUsers = data;
       const totalEmails = filteredUsers.length;
-      const batchSize = 50; // Tamaño del lote
+      const batchSize = 1000; // Tamaño del lote
 
       // Dividir los usuarios filtrados en lotes de 1000
       for (let i = 0; i < totalEmails; i += batchSize) {
