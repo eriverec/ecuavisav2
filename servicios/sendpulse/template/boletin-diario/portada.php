@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                <tbody>
                   <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
                      <td class="content-cell padding-bottom-0" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:15px; padding-bottom:0" valign="top">
-                        <p style="line-height:inherit; margin:0 0 10px; font-size:inherit; color:#2927b9; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><strong><a style="text-decoration:none; color:#2927b9" href="<?= $datosRecibidos["subseccion"]["link"] ?>"><?= $datosRecibidos["subseccion"]["titulo"] ?></a></strong></p>
+                        <p style="line-height:inherit; margin:0 0 10px; font-size:inherit; color:#2927b9; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><strong><a style="text-decoration:none; color:<?= $datosRecibidos["color"][0] ?>" href="<?= $datosRecibidos["subseccion"]["link"] ?>"><?= $datosRecibidos["subseccion"]["titulo"] ?></a></strong></p>
                         <div style="font-size:14px; line-height:1.5; clear:both"></div>
                      </td>
                   </tr>

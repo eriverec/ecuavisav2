@@ -6,21 +6,56 @@ class SendPulse {
 	private $fecha;
 	private $listaUsuario;
 	private $nombreNeswletter;
+	private $subject;
 
 	function __construct(){
 		$getFecha = date("Y-m-d, h:i:s", time());
+		$this->subject = "Newsletter diario - ".$getFecha;
 		$this->nombreNeswletter = "Newsletter diario ".$getFecha;
         $this->listaUsuario = 565083;
         $this->token = $this->initToken();
         $this->sender_email = "suscripciones@ecuavisa.com";
 
-        // Obtener el número del mes
-		$numeroMes = date("n");
-		// Obtener el nombre del mes en español
-		$nombreMes = $this->obtenerMesEnEspanol($numeroMes);
-		$fechaFormateada =  $nombreMes. " ". date("d") . ", " . date("Y");
+        // // Obtener el número del mes
+		// $numeroMes = date("n");
+		// // Obtener el nombre del mes en español
+		// $nombreMes = $this->obtenerMesEnEspanol($numeroMes);
+		// $fechaFormateada =  $nombreMes. " ". date("d") . ", " . date("Y");
 
-		$this->fechaFormateada = $fechaFormateada;
+		// Crear un objeto DateTime con la fecha actual
+		$fecha = new DateTime();
+
+		// Establecer el idioma a español para los meses y días de la semana
+		$meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
+		$diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+
+		// Obtener el día de la semana, el día del mes, el mes y el año en español
+		$diaSemana = $diasSemana[intval($fecha->format('w'))];
+		$dia = $fecha->format('d');
+		$mes = $meses[intval($fecha->format('m')) - 1];
+		$anio = $fecha->format('Y');
+
+		// Imprimir la fecha en español
+
+		// echo str_replace("{{fecha}}", date("Y-m-d", time()), $this->getAttrBoletin(1)->subject);
+		$this->fechaFormateada = "$diaSemana $dia de $mes de $anio";
+    }
+
+	private function getAttrBoletin($id){
+        $curl = curl_init();
+		curl_setopt_array($curl, array(
+		  CURLOPT_URL => 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/json/boletin-diario/forzado/ajax.php?id='.$id,
+		  CURLOPT_RETURNTRANSFER => true,
+		  CURLOPT_ENCODING => '',
+		  CURLOPT_MAXREDIRS => 10,
+		  CURLOPT_TIMEOUT => 0,
+		  CURLOPT_FOLLOWLOCATION => true,
+		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		  CURLOPT_CUSTOMREQUEST => 'GET',
+		));
+		$response = curl_exec($curl);
+		curl_close($curl);
+		return json_decode($response);
     }
 
 	public function initToken(){
@@ -183,13 +218,21 @@ class SendPulse {
     private function imgSeparador($link_category){
     	/*VERDE: 0*/
     	/*OTRO: 1*/
-    	$imagenes = ["https://estadisticas.ecuavisa.com/sites/gestor/Tools%2Fsendpulse%2FVector%2016.png", "https://estadisticas.ecuavisa.com/sites/gestor/Tools%2Fsendpulse%2FVector%2017.png"];
+    	$imagenes = ["https://estadisticas.ecuavisa.com/sites/gestor/Tools%2Fsendpulse%2FVector%2016.png", "https://estadisticas.ecuavisa.com/sites/gestor/Tools%2Fsendpulse%2FVector%2017.png", "https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2Fcintillo_azull_nl.png"];
+    	
+
     	$frase = strtolower($link_category);
 		$palabra = strtolower("deportes");
     	if(strpos(strtolower($frase), $palabra) !== false){
 			return array("#2bb76b", $imagenes[0]);
 		}
-    	return array("#ff006b", $imagenes[1]);
+
+		$palabra = strtolower("entretenimiento");
+    	if(strpos(strtolower($frase), $palabra) !== false){
+    		return array("#ff006b", $imagenes[1]);
+		}
+
+		return array("#2927B9", $imagenes[2]);
     }
 
     public function getNotasNewTemplate($api_link){
@@ -223,6 +266,17 @@ class SendPulse {
 				//$image = $this->cropImagen($image);
 				$tituloSubseccion = (count(explode("/", $value->link)) > 5 ? explode("/", $value->link)[4]:explode("/", $value->link)[3]);
 				$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
+
+				// Obtener los componentes de la URL
+				$componentes = parse_url($linkSubseccion);
+				// Obtener el path
+				$path = $componentes['path'];
+				// Dividir el path en partes usando el separador '/'
+				$partesPath = explode('/', trim($path, '/'));
+				// Obtener la primera parte del path
+				$primeraParte = $partesPath[0];
+				$tituloSubseccion = $primeraParte;
+
 				$descripcion = $value->description->__text;
 				$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
 				$descripcion = substr($descripcion_formateado, 0, 290).'...';
@@ -250,6 +304,17 @@ class SendPulse {
 			//$image = $this->cropImagen($image);
 			$tituloSubseccion = (count(explode("/", $value->link)) > 5 ? explode("/", $value->link)[4]:explode("/", $value->link)[3]);
 			$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
+			
+			// Obtener los componentes de la URL
+			$componentes = parse_url($linkSubseccion);
+			// Obtener el path
+			$path = $componentes['path'];
+			// Dividir el path en partes usando el separador '/'
+			$partesPath = explode('/', trim($path, '/'));
+			// Obtener la primera parte del path
+			$primeraParte = $partesPath[0];
+			$tituloSubseccion = $primeraParte;
+
 			$descripcion = $value->description->__text;
 			$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
 			$descripcion = substr($descripcion_formateado, 0, 290).'...';
@@ -309,6 +374,17 @@ class SendPulse {
 				//$image = $this->cropImagen($image);
 				$tituloSubseccion = (count(explode("/", $value->link)) > 5 ? explode("/", $value->link)[4]:explode("/", $value->link)[3]);
 				$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
+				
+				// Obtener los componentes de la URL
+				$componentes = parse_url($linkSubseccion);
+				// Obtener el path
+				$path = $componentes['path'];
+				// Dividir el path en partes usando el separador '/'
+				$partesPath = explode('/', trim($path, '/'));
+				// Obtener la primera parte del path
+				$primeraParte = $partesPath[0];
+				$tituloSubseccion = $primeraParte;
+
 				$descripcion = $value->description->__text;
 				$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
 				$descripcion = substr($descripcion_formateado, 0, 290).'...';
@@ -336,6 +412,17 @@ class SendPulse {
 			//$image = $this->cropImagen($image);
 			$tituloSubseccion = (count(explode("/", $value->link)) > 5 ? explode("/", $value->link)[4]:explode("/", $value->link)[3]);
 			$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
+			
+			// Obtener los componentes de la URL
+			$componentes = parse_url($linkSubseccion);
+			// Obtener el path
+			$path = $componentes['path'];
+			// Dividir el path en partes usando el separador '/'
+			$partesPath = explode('/', trim($path, '/'));
+			// Obtener la primera parte del path
+			$primeraParte = $partesPath[0];
+			$tituloSubseccion = $primeraParte;
+
 			$descripcion = $value->description->__text;
 			$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
 			$descripcion = substr($descripcion_formateado, 0, 290).'...';
@@ -393,7 +480,7 @@ class SendPulse {
     	$getFecha = date("Y-m-d, h:i:s", time());
         $sender_name = "ecuavisa.com";
         $sender_email = $this->sender_email;
-        $subject = "Newsletter diario - ".$getFecha;
+        $subject = $this->subject;
         $name = $name;
         $campaign = $this->createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body);
         return $campaign;
