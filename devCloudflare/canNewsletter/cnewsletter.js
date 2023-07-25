@@ -75,7 +75,7 @@ function valIdNewsletter()  {
       redireccionAlLogin();
     }, 300);
   } else { 
-    btnDarseBaja();
+    // btnDarseBaja();
   }
 }
 

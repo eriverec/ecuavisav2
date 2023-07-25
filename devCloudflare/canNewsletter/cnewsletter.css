@@ -86,7 +86,6 @@
     cursor: pointer;
 }
 
-
 .seccionOpinion select {
   background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fabajo-redi.png); /*aquí deberás escribir la ruta de la imagen que utilizarás como flecha del desplegable*/
   background-repeat: no-repeat;
