@@ -11,7 +11,7 @@ function btnDarseBaja() {
       const urlActualHref = window.location.href;
       const urlObj = new URL(urlActualHref);
       const idBoletin = urlObj.searchParams.get("nlid");
-      // document.querySelector('.seca_darse').style.opacity = "0.5";
+      document.querySelector('._darsedebaja').style.opacity = "0.5";
 
       // Verificamos si se encontró el parámetro 'correo' en el URL
 
@@ -48,16 +48,16 @@ function btnDarseBaja() {
               .then((response) => response.text())
               .then((result) => {
                 console.log(result);
-                // document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
-                // document.querySelector('.seca_darse').classList.add('d-none');
+                document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
+                document.querySelector('._darsedebaja').classList.add('d-none');
               })
               .catch((error) => console.log("error", error));
           } else {
             console.log("emails no existe en la lista de sendpulse.");
-            // document.querySelector('.seca_darse').classList.add('d-none');
-            // document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
+            document.querySelector('._darsedebaja').classList.add('d-none');
+            document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
             document.querySelector(".seca_mensaje_exito").textContent =
-              "Te has dado de baja con éxito de la newsletter Ecuavisa Informa";
+              "Te has dado de baja con éxito";
           }
           // console.log(valemail);
         })
@@ -75,7 +75,7 @@ function valIdNewsletter()  {
       redireccionAlLogin();
     }, 300);
   } else { 
-    btnDarseBaja();
+    // btnDarseBaja();
   }
 }
 
