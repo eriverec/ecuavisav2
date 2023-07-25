@@ -37,6 +37,14 @@
   font-weight: 400;
 }
 
+.seccionCancelacion .seca_mensaje{
+  color: #000;
+  font-family: Archivo;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+}
+
 .seccionOpinion .seop_title_pregunta {
   color: #000;
   font-family: Archivo;
