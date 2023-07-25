@@ -598,7 +598,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .bloque-programas .media_block .multimedia img {
-  filter: brightness(70%);
+  
   border-radius: 5px;
   height: 100% !important;
   object-fit: cover;
