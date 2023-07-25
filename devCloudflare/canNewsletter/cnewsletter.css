@@ -24,6 +24,10 @@
 }
 
 /*--------------*/
+.seccionCancelacion .seca_mensaje_exito{
+  max-width: 700px;
+}
+
 .seccionCancelacion .seca_mensaje_exito,
 .seccionOpinion .seca_mensaje_exito_susc {
   color: #000;
@@ -42,7 +46,8 @@
 }
 /* ss */
 
-.seccionOpinion .seop_boton {
+.seccionOpinion .seop_boton,
+.seccionCancelacion .seop_boton{
   color: #23DCD1;
   font-family: 'Mattone 150';
   font-size: 18px;
