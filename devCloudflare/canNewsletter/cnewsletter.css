@@ -2,7 +2,7 @@
   margin-bottom: 100px;
 }
 
-#iter-content-wrapper{
+#iter-content-wrapper {
   padding-top: 0;
 }
 
@@ -24,7 +24,7 @@
 }
 
 /*--------------*/
-.seccionCancelacion .seca_mensaje_exito{
+.seccionCancelacion .seca_mensaje_exito {
   max-width: 700px;
 }
 
@@ -37,7 +37,7 @@
   font-weight: 400;
 }
 
-.seccionCancelacion .seca_mensaje{
+.seccionCancelacion .seca_mensaje {
   color: #000;
   font-family: Archivo;
   font-size: 18px;
@@ -52,10 +52,11 @@
   font-style: normal;
   font-weight: 400;
 }
+
 /* ss */
 
 .seccionOpinion .seop_boton,
-.seccionCancelacion .seop_boton{
+.seccionCancelacion .seop_boton {
   color: #23DCD1;
   font-family: 'Mattone 150';
   font-size: 18px;
@@ -71,36 +72,53 @@
   padding: 10px;
   margin: 22px 0;
 }
+
 /*--------*/
 
+
+.seccionCancelacion .seca_mensaje_exito {
+  background-color: #23DCD1;
+  width: 100%;
+  display: flex;
+  max-width: 441px;
+  padding: 20px;
+  color: #2927B9 !important;
+  border-radius: 2px;
+  /* margin-top: -15px; */
+  margin-bottom: 40px;
+  font-weight: bold !important;
+  justify-content: center;
+}
+
 .seca_mensaje_exito_susc {
-    background-color: #23DCD1;
-    width: 100%;
-    display: flex;
-    max-width: 441px;
-    padding: 20px;
-    color: #2927B9!important;
-    border-radius: 2px;
-    margin-top: -15px;
-    margin-bottom: 40px;
-    font-weight: bold!important;
+  background-color: #23DCD1;
+  width: 100%;
+  display: flex;
+  max-width: 441px;
+  padding: 20px;
+  color: #2927B9 !important;
+  border-radius: 2px;
+  margin-top: -15px;
+  margin-bottom: 40px;
+  font-weight: bold !important;
 }
 
 .seccionOpinion select {
-    background-color: #F5F5F5;
-    border: 1px solid #F5F5F5;
-    padding: 14px 10px;
-    width: 100%;
-    max-width: 441px;
-    color: #717171;
-    margin-top: 5px;
-    font-weight: 500;
-    font-family: Archivo;
-    cursor: pointer;
+  background-color: #F5F5F5;
+  border: 1px solid #F5F5F5;
+  padding: 14px 10px;
+  width: 100%;
+  max-width: 441px;
+  color: #717171;
+  margin-top: 5px;
+  font-weight: 500;
+  font-family: Archivo;
+  cursor: pointer;
 }
 
 .seccionOpinion select {
-  background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fabajo-redi.png); /*aquí deberás escribir la ruta de la imagen que utilizarás como flecha del desplegable*/
+  background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fabajo-redi.png);
+  /*aquí deberás escribir la ruta de la imagen que utilizarás como flecha del desplegable*/
   background-repeat: no-repeat;
   background-position: right center;
   -webkit-appearance: none;
@@ -112,15 +130,16 @@
 }
 
 .seccionOpinion select::-ms-expand {
-  display: none; /*Evita que se muestre la flecha por defecto en versiones de IE*/
+  display: none;
+  /*Evita que se muestre la flecha por defecto en versiones de IE*/
 }
 
 #ly-header.container {
-     margin-bottom: 0rem;
+  margin-bottom: 0rem;
 }
 
 .seccionCancelacion {
-    margin-top: 3rem;
+  margin-top: 3rem;
 }
 
 @media (max-width: 767px) {
@@ -128,14 +147,15 @@
     width: 100%;
     height: auto;
   }
+
   .seccionCancelacion {
-      margin-bottom: 75px;
+    margin-bottom: 75px;
   }
 }
 
-.seccionOpinion > div:nth-child(5),
-.seccionOpinion > div.frecuencia_option,
-.seccionOpinion > div:nth-child(7),
-.seccionOpinion > div:nth-child(4) > a {
-    display: none;
+.seccionOpinion>div:nth-child(5),
+.seccionOpinion>div.frecuencia_option,
+.seccionOpinion>div:nth-child(7),
+.seccionOpinion>div:nth-child(4)>a {
+  display: none;
 }
