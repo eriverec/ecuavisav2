@@ -14,7 +14,7 @@ class SendPulse {
 		$this->nombreNeswletter = "Newsletter diario ".$getFecha;
 
 		// echo $this->nombreNeswletter;
-        $this->listaUsuario = 565083;
+        $this->listaUsuario = 576150;//565083;
         $this->token = $this->initToken();
         $this->sender_email = "suscripciones@ecuavisa.com";
 
