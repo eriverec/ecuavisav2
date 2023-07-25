@@ -109,3 +109,10 @@
     height: auto;
   }
 }
+
+.seccionOpinion > div:nth-child(5),
+.seccionOpinion > div.frecuencia_option,
+.seccionOpinion > div:nth-child(7),
+.seccionOpinion > div:nth-child(4) > a {
+    display: none;
+}

@@ -9,9 +9,11 @@ class SendPulse {
 	private $subject;
 
 	function __construct(){
-		$getFecha = date("Y-m-d, h:i:s", time());
-		$this->subject = "Newsletter diario - ".$getFecha;
+		$getFecha = date("Y-m-d, H:i:s", time());
+		$this->subject = "🛑 Este es el legado de Agustín Intriago, el alcalde de Manta asesinado en un ataque armado";//"Newsletter diario - ".$getFecha;
 		$this->nombreNeswletter = "Newsletter diario ".$getFecha;
+
+		// echo $this->nombreNeswletter;
         $this->listaUsuario = 565083;
         $this->token = $this->initToken();
         $this->sender_email = "suscripciones@ecuavisa.com";
@@ -477,7 +479,7 @@ class SendPulse {
     }
 
     private function armarCorreo($name, $body, $list_id){
-    	$getFecha = date("Y-m-d, h:i:s", time());
+    	$getFecha = date("Y-m-d, H:i:s", time());
         $sender_name = "ecuavisa.com";
         $sender_email = $this->sender_email;
         $subject = $this->subject;
@@ -507,7 +509,7 @@ class SendPulse {
 
     public function view(){
     	if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    		$getFecha = date("Y-m-d, h:i:s", time());
+    		$getFecha = date("Y-m-d, H:i:s", time());
 
 			$nombreNeswletter = $this->nombreNeswletter;
 			$idTemplate = 148832;//TEMPLATE CORREO

@@ -86,7 +86,7 @@ class Subject {
 
     public function view(){
     	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    		$getFecha = date("Y-m-d, h:i:s", time());
+    		$getFecha = date("Y-m-d, H:i:s", time());
     		$post = (object) $_POST;
     		if(isset($post->action)){
     			switch ($post->action) {
