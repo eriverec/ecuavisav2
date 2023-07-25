@@ -103,10 +103,21 @@
   display: none; /*Evita que se muestre la flecha por defecto en versiones de IE*/
 }
 
+#ly-header.container {
+     margin-bottom: 0rem;
+}
+
+.seccionCancelacion {
+    margin-top: 3rem;
+}
+
 @media (max-width: 767px) {
   .seccionOpinion .seop_boton {
     width: 100%;
     height: auto;
+  }
+  .seccionCancelacion {
+      margin-bottom: 75px;
   }
 }
 
