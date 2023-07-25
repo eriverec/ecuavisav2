@@ -21,7 +21,7 @@
 
   <section class="jumbotron text-center">
     <div class="container">
-      <h1 class="jumbotron-heading">¿Cómo cambiar el subject?</h1>
+      <h1 class="jumbotron-heading">¿Cómo cambiar el asunto?</h1>
       <p class="lead text-muted">Buscar el nombre del boletín que desea ser cambiado luego de clic en el botón de guardado ingresando la clave.</p>
     </div>
   </section>
@@ -44,11 +44,11 @@
                     <small id="passHelp-<?=$value["id"]?>" class="form-text text-muted">Se debe ingresar la contraseña de seguridad para que el cambio se haga correctamente</small>
                   </div>
                   <div class="form-group">
-                    <label for="subject">Escribir el subject</label>
-                    <input required name="subject" type="text" maxlength="100" class="form-control" id="subject-<?=$value["id"]?>" placeholder="Ingrese el Subject para este correo" value="<?=$value["subject"]?>">
+                    <label for="subject">Escribir el asunto</label>
+                    <input required name="subject" type="text" maxlength="100" class="form-control" id="subject-<?=$value["id"]?>" placeholder="Ingrese el asunto para este correo" value="<?=$value["subject"]?>">
                     <small id="subject-<?=$value["id"]?>" class="form-text text-muted">Añade esto para que la fecha sea dinámica <b>{{fecha}}</b></small>
                   </div>
-                  <button type="submit" class="btn btn-primary">Guardar subject</button>
+                  <button type="submit" class="btn btn-primary">Guardar asunto</button>
                   <div class="alert alert-success mt-2 d-none" data-id="alert" role="alert">
                     A simple success alert—check it out!
                   </div>
@@ -65,7 +65,7 @@
 
 <footer class="text-muted">
   <div class="container" style="display:flex;align-items: center;justify-content: space-between;;">
-    <p>Cambiar el nombre de subject en los newsletter de ecuavisa.com</p>
+    <p>Cambiar el nombre de asunto en los newsletter de ecuavisa.com</p>
     <p>Ir a <a href="https://www.ecuavisa.com/" target="_blank">Ecuavisa</a>.</p>
   </div>
 </footer>

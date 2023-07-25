@@ -62,7 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                <tbody>
                   <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
                      <td class="content-cell padding-top-0 padding-bottom-0" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0px; padding-right:0px; padding-top:0; padding-bottom:0" valign="top">
-                        <p style="line-height:inherit; margin:0 0 10px; font-size:inherit; color:#000; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><strong><span style="font-size: 24px;"><a style="text-decoration:none; color:#060127" href="https://www.ecuavisa.com/tendencias/ciencia/razones-eje-tierra-cuales-consecuencias-FE5600456"><?= $datosRecibidos["titulo"]  ?></a></span></strong></p>
+                        <p style="line-height:inherit; margin:0 0 10px; font-size:inherit; color:#000; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><strong><span style="font-size: 24px;"><a style="text-decoration:none; color:#060127;line-height: 1.2;" href="<?= $datosRecibidos["link"]  ?>"><?= $datosRecibidos["titulo"]  ?></a></span></strong></p>
                         <div style="font-size:14px; line-height:1.5; clear:both"></div>
                      </td>
                   </tr>

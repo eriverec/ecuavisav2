@@ -4,19 +4,21 @@ class SendPulse {
 	private $token;
 	private $sender_email;
 	private $fecha;
+	private $fechaDeEnvio;
 	private $listaUsuario;
 	private $nombreNeswletter;
 	private $subject;
 
 	function __construct(){
 		$getFecha = date("Y-m-d, H:i:s", time());
-		$this->subject = "🛑 Este es el legado de Agustín Intriago, el alcalde de Manta asesinado en un ataque armado";//"Newsletter diario - ".$getFecha;
+		$this->fechaDeEnvio = $this->obtenerFechaHoraFormateada("14:30:00");//send_date
+		$this->subject = str_replace("{{fecha}}", date("Y-m-d", time()), $this->getAttrBoletin(1)->subject);//"🛑 Este es el legado de Agustín Intriago, el alcalde de Manta asesinado en un ataque armado";//"Newsletter diario - ".$getFecha;
 		$this->nombreNeswletter = "Newsletter diario ".$getFecha;
 
 		// echo $this->nombreNeswletter;
-        $this->listaUsuario = 576150;//565083;
+        $this->listaUsuario = 576336;//565083;//576150;
         $this->token = $this->initToken();
-        $this->sender_email = "suscripciones@ecuavisa.com";
+        $this->sender_email = "ecuavisainforma@ecuavisa.com";
 
         // // Obtener el número del mes
 		// $numeroMes = date("n");
@@ -42,6 +44,49 @@ class SendPulse {
 		// echo str_replace("{{fecha}}", date("Y-m-d", time()), $this->getAttrBoletin(1)->subject);
 		$this->fechaFormateada = "$diaSemana $dia de $mes de $anio";
     }
+
+    private function obtenerFechaHoraFormateada($hora) {
+	    $fechaHoraActual = time(); // Obtener la fecha y hora actual en formato Unix (timestamp)
+	    $horaActual = date('H:i:s', $fechaHoraActual); // Obtener la hora actual en formato H:i:s
+
+	    // Obtener la hora deseada (07:00:00 en este caso) y combinarla con la fecha actual
+	    $fechaHoraDeseada = date('Y-m-d') . ' '.$hora;
+
+	    // Comparar la hora actual con la hora deseada
+	    if ($horaActual >= $hora) {
+	        // Si la hora actual es mayor o igual a las 07:00:00, incrementamos la fecha en 1 día
+	        $fechaHoraDeseada = date('Y-m-d', strtotime('+1 day')) . ' '.$hora;
+	    }
+
+	    return $fechaHoraDeseada;
+	}
+
+	private function UTMLinks($id, $link){
+		$utm = [
+				"utm_source=SendPulse&utm_medium=bannerHeader&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+				"utm_source=SendPulse&utm_medium=Nota1&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+				"utm_source=SendPulse&utm_medium=Nota2&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+				"utm_source=SendPulse&utm_medium=Nota3&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+				"utm_source=SendPulse&utm_medium=Nota4&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+				"utm_source=SendPulse&utm_medium=Nota5&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+				"utm_source=SendPulse&utm_medium=Adicional1&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+				"utm_source=SendPulse&utm_medium=Adicional2&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+				"utm_source=SendPulse&utm_medium=Adicional3&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+				"utm_source=SendPulse&utm_medium=CancelarSuscripcion&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter"
+			];
+		// Obtener la URL actual
+	    $urlActual = $link;
+
+	    // Verificar si la URL ya tiene parámetros
+	    if (strpos($urlActual, '?') !== false) {
+	        // Si ya tiene parámetros, agregamos los UTM con un '&'
+	        $urlActual .= '&' . $utm[$id];
+	    } else {
+	        // Si no tiene parámetros, agregamos los UTM con un '?'
+	        $urlActual .= '?' . $utm[$id];
+	    }
+	    return $urlActual;
+	}
 
 	private function getAttrBoletin($id){
         $curl = curl_init();
@@ -160,7 +205,9 @@ class SendPulse {
 		// $response = curl_exec($curl);
 
 		// curl_close($curl);
-		return '<label style="display:none">Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label><a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none; color:#000" href="https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/email.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter.'">Quiero ver en mi navegador</a>';
+		$link = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/email.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter.'';
+
+		return '<label style="display:none">Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label><a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none; color:#000" href="'.$link.'">Quiero ver en mi navegador</a>';
     }
 
     private function getTemplatePHP($data, $url){
@@ -193,29 +240,50 @@ class SendPulse {
 		return json_decode($content);
     }
 
-    private function cropImagen($url){
-    	// Obtener imagen de la URL
-		$image = imagecreatefromstring(file_get_contents($url));
-		$originalWidth = imagesx($image);
-		$originalHeight = imagesy($image);
-		// Redimensionar imagen
+    private function cropImagen($url) {
+	    $imagePath = './../img/boletin-diario/'; // Ruta donde se guardarán las imágenes
 
-		$new_width = 800;
-		$new_height = $new_width * ($originalHeight / $originalWidth);
+	    // Obtener el nombre de la imagen a partir de la URL
+	    $imageName = basename($url);
+	    $imageFilePath = $imagePath . $imageName;
 
-		$resized_image = imagecreatetruecolor($new_width, $new_height);
-		imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $new_width, $new_height, imagesx($image), imagesy($image));
+	    // Verificar si la imagen ya existe en la ruta
+	    if (!file_exists($imageFilePath)) {
+	        // La imagen no existe, crearla a partir de la URL
+	        $image = imagecreatefromstring(file_get_contents($url));
+	        $originalWidth = imagesx($image);
+	        $originalHeight = imagesy($image);
 
-		// Recortar imagen
-		$cropped_image = imagecrop($resized_image, ['x' => 0, 'y' => 30, 'width' => $new_width, 'height' => 420]);
+	        // Redimensionar imagen
+	        $new_width = 600;
+	        $new_height = $new_width * ($originalHeight / $originalWidth);
+	        $resized_image = imagecreatetruecolor($new_width, $new_height);
+	        imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $new_width, $new_height, imagesx($image), imagesy($image));
 
-		// Convertir imagen a base64
-		ob_start();
-		imagepng($cropped_image);
-		$base64_image = base64_encode(ob_get_clean());
-		$src_url = 'data:image/png;base64,' . $base64_image . '';
-		return $src_url;
-    }
+	        // Recortar imagen
+	        $cropped_image = imagecrop($resized_image, ['x' => 0, 'y' => 30, 'width' => $new_width, 'height' => 420]);
+
+	        // Obtener la extensión de la imagen
+	        $extension = strtolower(pathinfo($imageFilePath, PATHINFO_EXTENSION));
+
+	        // Comprimir y guardar la imagen en la ruta especificada según su extensión
+	        if ($extension === 'jpg' || $extension === 'jpeg') {
+	            imagejpeg($cropped_image, $imageFilePath, 75); // Calidad JPEG: 75 (valor entre 0 y 100)
+	        } elseif ($extension === 'png') {
+	            imagepng($cropped_image, $imageFilePath);
+	        }
+
+	        // Liberar memoria
+	        imagedestroy($image);
+	        imagedestroy($resized_image);
+	        imagedestroy($cropped_image);
+	    }
+
+	    // Obtener la nueva URL de la imagen
+	    $src_url = $imagePath . $imageName;
+
+	    return $src_url;
+	}
 
     private function imgSeparador($link_category){
     	/*VERDE: 0*/
@@ -283,6 +351,8 @@ class SendPulse {
 				$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
 				$descripcion = substr($descripcion_formateado, 0, 290).'...';
 				$descripcionFinal = str_replace('<a ', '<a style="color: #444;" ', $descripcion);
+
+				echo $this->cropImagen($image);
 				$noticias[] = [
 					"titulo" => $value->title,
 					"link" => $value->link,
@@ -336,6 +406,22 @@ class SendPulse {
 		$firstArray = array_slice($noticias, 0, 1);
 		$secondArray = array_slice($noticias, 1, 2);
 		$thirdArray = array_slice($noticias, 3);
+
+		$i_1 = 0;
+		foreach ($firstArray as $key => &$v) {
+			$v["link"] = $this->UTMLinks($i_1, $v["link"]);
+			$i_1 = $i_1 + 1;
+		}
+
+		foreach ($secondArray as $key => &$v) {
+			$v["link"] = $this->UTMLinks($i_1, $v["link"]);
+			$i_1 = $i_1 + 1;
+		}
+		
+		foreach ($thirdArray as $key => &$v) {
+			$v["link"] = $this->UTMLinks($i_1, $v["link"]);
+			$i_1 = $i_1 + 1;
+		}
 
 		$finalArray = array($firstArray, $secondArray, $thirdArray);
 		return $finalArray;
@@ -462,6 +548,7 @@ class SendPulse {
 		  CURLOPT_POSTFIELDS =>'{
 		    "sender_name":"'.$sender_name.'",
 		    "sender_email":"'.$sender_email.'",
+		    "send_date":"'.$this->fechaDeEnvio.'",
 		    "subject":"'.$subject.'",
 		    "list_id":"'.$list_id.'",
 		    "name":"'.$name.'",
@@ -480,7 +567,7 @@ class SendPulse {
 
     private function armarCorreo($name, $body, $list_id){
     	$getFecha = date("Y-m-d, H:i:s", time());
-        $sender_name = "ecuavisa.com";
+        $sender_name = "Ecuavisa Informa";
         $sender_email = $this->sender_email;
         $subject = $this->subject;
         $name = $name;
@@ -544,32 +631,32 @@ class SendPulse {
 			// }
 			$bodyGenerar = str_replace("{{ bloque_2_horizontales }}", $bloque_2_horizontales, $bodyGenerar);
 
-			$bloque_3_horizontales_col_1 = "";
-			$bloque_3_horizontales_col_1 .= $this->getTemplatePHP( 
-				$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-televistazo-19.json") , 
-				"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/ultimaseccionauzl.php"
-			); 
-			$bodyGenerar = str_replace("{{noticiero_19}}", $bloque_3_horizontales_col_1, $bodyGenerar);
+			// $bloque_3_horizontales_col_1 = "";
+			// $bloque_3_horizontales_col_1 .= $this->getTemplatePHP( 
+			// 	$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-televistazo-19.json") , 
+			// 	"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/ultimaseccionauzl.php"
+			// ); 
+			// $bodyGenerar = str_replace("{{noticiero_19}}", $bloque_3_horizontales_col_1, $bodyGenerar);
 
-			$bloque_3_horizontales_col_2 = "";
-			$bloque_3_horizontales_col_2 .= $this->getTemplatePHP( 
-				$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-televistazo-13.json") , 
-				"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/ultimaseccionauzl.php"
-			); 
-			$bodyGenerar = str_replace("{{noticiero_13}}", $bloque_3_horizontales_col_2, $bodyGenerar);
+			// $bloque_3_horizontales_col_2 = "";
+			// $bloque_3_horizontales_col_2 .= $this->getTemplatePHP( 
+			// 	$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-televistazo-13.json") , 
+			// 	"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/ultimaseccionauzl.php"
+			// ); 
+			// $bodyGenerar = str_replace("{{noticiero_13}}", $bloque_3_horizontales_col_2, $bodyGenerar);
 
-			$bloque_3_horizontales_col_3 = "";
-			$bloque_3_horizontales_col_3 .= $this->getTemplatePHP( 
-				$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-contacto-directo.json") , 
-				"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/ultimaseccionauzl.php"
-			); 
-			$bodyGenerar = str_replace("{{contacto_directo}}", $bloque_3_horizontales_col_3, $bodyGenerar);
+			// $bloque_3_horizontales_col_3 = "";
+			// $bloque_3_horizontales_col_3 .= $this->getTemplatePHP( 
+			// 	$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-contacto-directo.json") , 
+			// 	"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/ultimaseccionauzl.php"
+			// ); 
+			// $bodyGenerar = str_replace("{{contacto_directo}}", $bloque_3_horizontales_col_3, $bodyGenerar);
 
 
 			$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
 			$bodyGenerar = str_replace("{{date}}", $this->fechaFormateada , $bodyGenerar);
 			$bodyGenerar = str_replace("{{linkNavegador}}", $this->getURLVerNavegador() , $bodyGenerar);
-			$bodyGenerar = str_replace("{{_nlid}}", $list_id."&name=".$nombreNeswletter , $bodyGenerar);
+			$bodyGenerar = str_replace("{{_nlid}}", $list_id."&name=".$nombreNeswletter."&utm_source=SendPulse&utm_medium=CancelarSuscripcion&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter" , $bodyGenerar);
 			$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
 			$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
 			/*$name, $body, $list_id*/
@@ -589,6 +676,96 @@ class SendPulse {
 			}
 			echo json_encode(["resp"=>false, "message"=>"El Newsletter no fue enviado por que no existe notas que enviar"]);
 	        exit();
+    	}
+    	echo "No tienes acceso";
+    	exit();
+    }
+
+    public function preview(){
+    	if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    		echo '<div style="max-width: 500px;margin-left: auto;margin-right: auto;padding:30px">';
+			echo '<b>Subject: </b>'.$this->subject;
+			echo '<br>';
+			echo '<b>ID Lista de usuario: </b>'.$this->listaUsuario;
+			echo '<br>';
+			echo '<b>Sender email: </b>'.$this->sender_email;
+			echo '<br>';
+			echo '<b>Fecha de envío: </b>'.$this->fechaDeEnvio;
+			echo '<br>';
+			echo '<b>Nombre de la plantilla: </b>'.$this->nombreNeswletter;
+			echo '</div>';
+
+    		$getFecha = date("Y-m-d, H:i:s", time());
+
+			$nombreNeswletter = $this->nombreNeswletter;
+			$idTemplate = 148832;//TEMPLATE CORREO
+			$list_id = $this->listaUsuario;//LISTA DE USUARIOS
+			// $numUsers = $this->getListUser($list_id);
+			$numUsers = [0, 1];
+			$notas = $this->getNotasNewTemplate('https://www.ecuavisa.com/rss/boletin-diario.json');
+
+			$template = $this->getTemplate($idTemplate);
+			$htmlTemplate = $this->base64ToHTML($template->body);
+
+
+
+			$bloque_noticias = "";
+			foreach ($notas[0] as $key => $nota) { 
+				$bloque_noticias .= $this->getTemplatePHP($nota, "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/portada.php"); 
+			}
+			$bodyGenerar = str_replace("{{ bloque_noticias }}", $bloque_noticias, $htmlTemplate);
+
+
+
+			$bloque_2_verticales = "";
+			// foreach ($notas[1] as $key => $nota) { 
+			$bloque_2_verticales .= $this->getTemplatePHP($notas[1], "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/2-notas.php"); 
+			// }
+			$bodyGenerar = str_replace("{{ bloque_2_verticales }}", $bloque_2_verticales, $bodyGenerar);
+
+
+			$bloque_2_horizontales = "";
+			// foreach ($notas[1] as $key => $nota) { 
+			$bloque_2_horizontales .= $this->getTemplatePHP($notas[2], "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/2-notas-abajo.php"); 
+			// }
+			$bodyGenerar = str_replace("{{ bloque_2_horizontales }}", $bloque_2_horizontales, $bodyGenerar);
+
+			// $bloque_3_horizontales_col_1 = "";
+			// $bloque_3_horizontales_col_1 .= $this->getTemplatePHP( 
+			// 	$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-televistazo-19.json") , 
+			// 	"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/ultimaseccionauzl.php"
+			// ); 
+			// $bodyGenerar = str_replace("{{noticiero_19}}", $bloque_3_horizontales_col_1, $bodyGenerar);
+
+			// $bloque_3_horizontales_col_2 = "";
+			// $bloque_3_horizontales_col_2 .= $this->getTemplatePHP( 
+			// 	$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-televistazo-13.json") , 
+			// 	"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/ultimaseccionauzl.php"
+			// ); 
+			// $bodyGenerar = str_replace("{{noticiero_13}}", $bloque_3_horizontales_col_2, $bodyGenerar);
+
+			// $bloque_3_horizontales_col_3 = "";
+			// $bloque_3_horizontales_col_3 .= $this->getTemplatePHP( 
+			// 	$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-contacto-directo.json") , 
+			// 	"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/ultimaseccionauzl.php"
+			// ); 
+			// $bodyGenerar = str_replace("{{contacto_directo}}", $bloque_3_horizontales_col_3, $bodyGenerar);
+
+
+			$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
+			$bodyGenerar = str_replace("{{date}}", $this->fechaFormateada , $bodyGenerar);
+			$bodyGenerar = str_replace("{{linkNavegador}}", $this->getURLVerNavegador() , $bodyGenerar);
+			$bodyGenerar = str_replace("{{_nlid}}", $list_id."&name=".$nombreNeswletter."&utm_source=SendPulse&utm_medium=CancelarSuscripcion&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter" , $bodyGenerar);
+			$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
+			$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
+			/*$name, $body, $list_id*/
+			$bodyContent = "";
+	        if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $bodyGenerar, $matches)) {
+			    $bodyContent = $matches[1];
+			}
+
+			echo ($bodyContent);
+			exit();
     	}
     	echo "No tienes acceso";
     	exit();

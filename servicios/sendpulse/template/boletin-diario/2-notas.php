@@ -72,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                           <tbody>
                                              <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
                                                 <td class="content-cell padding-top-0 padding-bottom-0" width="220" style="border-collapse:collapse; border-color:transparent; vertical-align:top; <?= $b==1?"padding-left:15px;":"" ?> <?= $b==0?"padding-right:15px;":"" ?> padding-top:0; padding-bottom:0" valign="top">
-                                                   <p style="line-height:inherit; margin:0 0 10px; font-size:inherit; color:#000; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><span style="font-size: 14px;"><strong><a style="text-decoration:none; color:#060127" href="<?= $datosRecibidos["link"] ?>"><?= $datosRecibidos["titulo"] ?></a></strong></span></p>
+                                                   <p style="line-height:inherit; margin:0 0 10px; font-size:inherit; color:#000; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><span style="font-size: 14px;"><strong><a style="text-decoration:none; color:#060127;line-height: 1.3;" href="<?= $datosRecibidos["link"] ?>"><?= $datosRecibidos["titulo"] ?></a></strong></span></p>
                                                    <div style="font-size:14px; line-height:1.5; clear:both"></div>
                                                 </td>
                                              </tr>
