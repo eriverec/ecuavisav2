@@ -11,15 +11,17 @@ class SendPulse {
 	private $subject;
 
 	function __construct(){
-		/*"Gracias por formar parte de la familia de ecuavisa";*/
+		/*"Gracias por formar parte de la familia de Ecuavisa.com";*/
 		$getFecha = date("Y-m-d, H:i:s", time());
 		$this->fechaDeEnvio = $this->obtenerFechaHoraFormateada("14:30:00");//send_date
 		$this->subject = str_replace("{{fecha}}", date("Y-m-d", time()), $this->getAttrBoletin(1)->subject);//"🛑 Este es el legado de Agustín Intriago, el alcalde de Manta asesinado en un ataque armado";//"Newsletter diario - ".$getFecha;
 		$this->nombreNeswletter = "Newsletter diario ".$getFecha;
 
 		// echo $this->nombreNeswletter;
-        $this->listaUsuario = 574818;//565083;//576150;
-        $this->idTemplate = 148832;//148832
+        // $this->listaUsuario = 574818;
+        // $this->idTemplate = 148832;
+        $this->listaUsuario = 574818;
+        $this->idTemplate = 148832;
         $this->token = $this->initToken();
         $this->sender_email = "ecuavisainforma@ecuavisa.com";
 
@@ -243,54 +245,77 @@ class SendPulse {
 		return json_decode($content);
     }
 
-    private function cropImagen($url, $newWidth = 800, $newHeight = 420) {
+    private function cropImagen($url = "", $newWidth = 600, $newHeight = 400, $compress= 75, $verticalPosition = 'arriba') {
 	    $imagePath = './../img/boletin-diario/'; // Ruta donde se guardarán las imágenes
+
+	    // Obtener la fecha actual
+	    $currentDate = date("Y/m/d");
+	    $currentYear = date("Y");
+	    $currentMonth = date("m");
+
+	    // Crear carpetas si no existen
+	    if (!file_exists($imagePath . $currentYear)) {
+	        mkdir($imagePath . $currentYear);
+	    }
+	    if (!file_exists($imagePath . $currentYear . '/' . $currentMonth)) {
+	        mkdir($imagePath . $currentYear . '/' . $currentMonth);
+	    }
 
 	    // Obtener el nombre de la imagen a partir de la URL
 	    $imageName = basename($url);
-	    $imageFilePath = $imagePath . $imageName;
+	    $imageFilePath = $imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
 
 	    // Verificar si la imagen ya existe en la ruta
-    	if (!file_exists($imageFilePath)) {
+	    if (!file_exists($imageFilePath)) {
 	        // La imagen no existe, crearla a partir de la URL
 	        $image = imagecreatefromstring(file_get_contents($url));
 	        $originalWidth = imagesx($image);
 	        $originalHeight = imagesy($image);
 
-	        // Calcular el factor de zoom para que la imagen ocupe completamente el tamaño requerido
-	        $zoomFactor = min($newWidth / $originalWidth, $newHeight / $originalHeight);
+	        // Calcular el factor de zoom para ajustar la imagen dentro del área sin dejar fondo negro
+	        $zoomFactor = max($newWidth / $originalWidth, $newHeight / $originalHeight);
 
-	        // Calcular las dimensiones finales de la imagen
+	        // Calcular las dimensiones finales de la imagen con el zoom
 	        $finalWidth = $originalWidth * $zoomFactor;
 	        $finalHeight = $originalHeight * $zoomFactor;
 
-	        // Crear una imagen en blanco del tamaño requerido
-	        $resized_image = imagecreatetruecolor($newWidth, $newHeight);
+	        // Crear una imagen en blanco del tamaño requerido para aplicar el recorte y zoom
+	        $cropped_image = imagecreatetruecolor($newWidth, $newHeight);
 
-	        // Copiar y redimensionar la imagen para centrarla
-	        $start_x = ($newWidth - $finalWidth) / 2;
-	        $start_y = ($newHeight - $finalHeight) / 2;
-	        imagecopyresampled($resized_image, $image, $start_x, $start_y, 0, 0, $finalWidth, $finalHeight, $originalWidth, $originalHeight);
+	        // Calcular las coordenadas para centrar el recorte horizontal
+	        $start_x = ($finalWidth - $newWidth) / -2;
+
+	        // Calcular las coordenadas para el recorte vertical
+	        if ($verticalPosition === 'arriba') {
+	            $start_y = 0;
+	        } elseif ($verticalPosition === 'abajo') {
+	            $start_y = $finalHeight - $newHeight;
+	        } else {
+	            // Vertical centrada (valor por defecto)
+	            $start_y = ($finalHeight - $newHeight) / 2;
+	        }
+
+	        // Copiar y recortar la imagen con el zoom aplicado
+	        imagecopyresampled($cropped_image, $image, $start_x, $start_y, 0, 0, $finalWidth, $finalHeight, $originalWidth, $originalHeight);
 
 	        // Obtener la extensión de la imagen
 	        $extension = strtolower(pathinfo($imageFilePath, PATHINFO_EXTENSION));
 
 	        // Comprimir y guardar la imagen en la ruta especificada según su extensión
 	        if ($extension === 'jpg' || $extension === 'jpeg') {
-	            imagejpeg($resized_image, $imageFilePath, 75); // Calidad JPEG: 75 (valor entre 0 y 100)
+	            imagejpeg($cropped_image, $imageFilePath, $compress); // Calidad JPEG: 75 (valor entre 0 y 100)
 	        } elseif ($extension === 'png') {
-	            imagepng($resized_image, $imageFilePath);
+	            imagepng($cropped_image, $imageFilePath);
 	        }
 
 	        // Liberar memoria
 	        imagedestroy($image);
-	        imagedestroy($resized_image);
+	        imagedestroy($cropped_image);
 	    }
 
 	    // Obtener la nueva URL de la imagen
-	    // $src_url = $imagePath . $imageName;
-	    $src_url = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/img/boletin-diario/" . $imageName;
-	    return $src_url."?v=0.4";
+	    $src_url = $imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
+	    return $src_url; //. "?v=" . $this->generarNumeroRandom();
 	}
 
     private function imgSeparador($link_category){
@@ -416,16 +441,19 @@ class SendPulse {
 		$i_1 = 0;
 		foreach ($firstArray as $key => &$v) {
 			$v["link"] = $this->UTMLinks($i_1, $v["link"]);
+			$v["image"] = $this->cropImagen($v["image"], 440, 250);
 			$i_1 = $i_1 + 1;
 		}
 
 		foreach ($secondArray as $key => &$v) {
 			$v["link"] = $this->UTMLinks($i_1, $v["link"]);
+			$v["image"] = $this->cropImagen($v["image"], 250, 225, 80);
 			$i_1 = $i_1 + 1;
 		}
 		
 		foreach ($thirdArray as $key => &$v) {
 			$v["link"] = $this->UTMLinks($i_1, $v["link"]);
+			$v["image"] = $this->cropImagen($v["image"], 250, 175);
 			$i_1 = $i_1 + 1;
 		}
 
@@ -436,6 +464,12 @@ class SendPulse {
 		// $finalArray_2 = array($firstArray, $secondArray, $thirdArray, $id);
 		// return $finalArray_2;
     }
+
+    private function generarNumeroRandom() {
+	   $numero = rand(0, 10000) / 100; // Genera un número aleatorio entre 0 y 10000 y lo divide por 100
+	   $numero = round($numero, 2); // Redondea el número a 2 decimales
+	   return $numero;
+	}
 
     public function getNotasFormatRespaldo($api_link){
         $curl = curl_init();

@@ -1,1 +1,10 @@
-[{"id":"1","nombre":"Boletines diarios","subject":"Newsletter ent\u00e9rate de las noticias - {{fecha}}","pass":"ec2023","edit_at":"2023-07-24, 06:13:20"}]
+[
+	{
+		"id": "1",
+		"nombre": "Boletines diarios",
+		"descripcion": "Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.",
+		"subject": "🔴 La crisis carcelaria, atentados en las calles y el asesinato de un alcalde han marcado la jornada violenta de Ecuador en los últimos cuatro días",
+		"pass": "ec2023",
+		"edit_at": "2023-07-26, 06:39:29"
+	}
+]

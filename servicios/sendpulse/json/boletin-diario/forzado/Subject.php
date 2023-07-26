@@ -14,7 +14,7 @@ class Subject {
 		header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
     }
 
-    private function edit($subject, $id, $pass, $fecha){
+    private function edit($subject,$descripcion, $id, $pass, $fecha){
     	// Ruta al archivo JSON
 		$rutaArchivo = './../../boletines.json';
 		// Leer el contenido del archivo JSON
@@ -27,6 +27,7 @@ class Subject {
 			if($value["id"] == $id){
 				if($value["pass"] == $pass	){
 					$value["subject"] = $subject;
+					$value["descripcion"] = $descripcion;
 					$value["edit_at"] = $fecha;
 					$existe = true;
 				}
@@ -84,6 +85,85 @@ class Subject {
 		return null;
     }
 
+    private function generarNumeroRandom() {
+	   $numero = rand(0, 10000) / 100; // Genera un número aleatorio entre 0 y 10000 y lo divide por 100
+	   $numero = round($numero, 2); // Redondea el número a 2 decimales
+	   return $numero;
+	}
+
+	private function cropImagen($url = "https://www.ecuavisa.com/binrepository/barbie-ken-ecuavisa_1058738_20230725181857.jpg", $newWidth = 600, $newHeight = 400, $verticalPosition = 'arriba') {
+	    $imagePath = './../../../img/boletin-diario/'; // Ruta donde se guardarán las imágenes
+
+	    // Obtener la fecha actual
+	    $currentDate = date("Y/m/d");
+	    $currentYear = date("Y");
+	    $currentMonth = date("m");
+
+	    // Crear carpetas si no existen
+	    if (!file_exists($imagePath . $currentYear)) {
+	        mkdir($imagePath . $currentYear);
+	    }
+	    if (!file_exists($imagePath . $currentYear . '/' . $currentMonth)) {
+	        mkdir($imagePath . $currentYear . '/' . $currentMonth);
+	    }
+
+	    // Obtener el nombre de la imagen a partir de la URL
+	    $imageName = basename($url);
+	    $imageFilePath = $imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
+
+	    // Verificar si la imagen ya existe en la ruta
+	    if (!file_exists($imageFilePath)) {
+	        // La imagen no existe, crearla a partir de la URL
+	        $image = imagecreatefromstring(file_get_contents($url));
+	        $originalWidth = imagesx($image);
+	        $originalHeight = imagesy($image);
+
+	        // Calcular el factor de zoom para ajustar la imagen dentro del área sin dejar fondo negro
+	        $zoomFactor = max($newWidth / $originalWidth, $newHeight / $originalHeight);
+
+	        // Calcular las dimensiones finales de la imagen con el zoom
+	        $finalWidth = $originalWidth * $zoomFactor;
+	        $finalHeight = $originalHeight * $zoomFactor;
+
+	        // Crear una imagen en blanco del tamaño requerido para aplicar el recorte y zoom
+	        $cropped_image = imagecreatetruecolor($newWidth, $newHeight);
+
+	        // Calcular las coordenadas para centrar el recorte horizontal
+	        $start_x = ($finalWidth - $newWidth) / -2;
+
+	        // Calcular las coordenadas para el recorte vertical
+	        if ($verticalPosition === 'arriba') {
+	            $start_y = 0;
+	        } elseif ($verticalPosition === 'abajo') {
+	            $start_y = $finalHeight - $newHeight;
+	        } else {
+	            // Vertical centrada (valor por defecto)
+	            $start_y = ($finalHeight - $newHeight) / 2;
+	        }
+
+	        // Copiar y recortar la imagen con el zoom aplicado
+	        imagecopyresampled($cropped_image, $image, $start_x, $start_y, 0, 0, $finalWidth, $finalHeight, $originalWidth, $originalHeight);
+
+	        // Obtener la extensión de la imagen
+	        $extension = strtolower(pathinfo($imageFilePath, PATHINFO_EXTENSION));
+
+	        // Comprimir y guardar la imagen en la ruta especificada según su extensión
+	        if ($extension === 'jpg' || $extension === 'jpeg') {
+	            imagejpeg($cropped_image, $imageFilePath, 75); // Calidad JPEG: 75 (valor entre 0 y 100)
+	        } elseif ($extension === 'png') {
+	            imagepng($cropped_image, $imageFilePath);
+	        }
+
+	        // Liberar memoria
+	        imagedestroy($image);
+	        imagedestroy($cropped_image);
+	    }
+
+	    // Obtener la nueva URL de la imagen
+	    $src_url = $imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
+	    return $src_url . "?v=" . $this->generarNumeroRandom();
+	}
+	
     public function view(){
     	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     		$getFecha = date("Y-m-d, H:i:s", time());
@@ -102,6 +182,8 @@ class Subject {
     		echo 'null';
 	        exit();
     	}
+
+    	echo '<img src="'.$this->cropImagen().'">';
 
     	if(isset($_GET["id"]) && !isset($_GET["pass"])){
     		if($_GET['id'] != ""){

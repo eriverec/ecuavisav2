@@ -31,8 +31,11 @@
         <?php foreach ($datos as $key => $value): ?>
           <div class="col-md-4">
             <div class="card">
-              <div class="card-header">
+              <div class="card-header" style="display:flex;justify-content: space-between;align-items: center;">
                 <?=$value["nombre"]?>
+                <div class="view">
+                  <button class="btn btn-info btn-sm">Ver correo</button>
+                </div>
               </div>
               <div class="card-body">
                 <form data-id="boletindiario-<?=$value["id"]?>" class="miFormulario">
@@ -45,14 +48,22 @@
                   </div>
                   <div class="form-group">
                     <label for="subject">Escribir el asunto</label>
-                    <input required name="subject" type="text" maxlength="100" class="form-control" id="subject-<?=$value["id"]?>" placeholder="Ingrese el asunto para este correo" value="<?=$value["subject"]?>">
+                    <input required name="subject" type="text"  class="form-control" id="subject-<?=$value["id"]?>" placeholder="Ingrese el asunto para este correo" value="<?=$value["subject"]?>">
                     <small id="subject-<?=$value["id"]?>" class="form-text text-muted">Añade esto para que la fecha sea dinámica <b>{{fecha}}</b></small>
+                  </div>
+                  <div class="form-group">
+                    <label for="subject">Escribir descripción corta</label>
+                    <input required name="descripcion" type="text"  class="form-control" id="descripcion-<?=$value["id"]?>" placeholder="Ingrese una descripción" value="<?=$value["descripcion"]?>">
+                    <small id="descripcion-<?=$value["id"]?>" class="form-text text-muted">Ayuda dar al correo una descripción breve</small>
                   </div>
                   <button type="submit" class="btn btn-primary">Guardar asunto</button>
                   <div class="alert alert-success mt-2 d-none" data-id="alert" role="alert">
                     A simple success alert—check it out!
                   </div>
                 </form>
+              </div>
+              <div class="card-footer text-muted">
+                <small>Última modificación <?=$value["edit_at"]?></small>
               </div>
             </div>
           </div>

@@ -15,9 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div id="" style="font-size:14px; line-height:1.5; width:100%; height:auto; display:block;" width="100%" height="165">
                <a class="link_img" href="<?= $datosRecibidos["link"] ?>" style="text-decoration:none; color:#0089bf; display:block;height: auto;width: 100%;padding-left: 0px;padding-right: 0px;">
                   <center>
-                     <img border="0" width="100%" height="auto" class="desktop  sp-img " align="center" alt="sp-default-3" src="<?= $datosRecibidos["image"] ?>" iout_block_23_element_0="" style="height: 155px;object-fit: cover; line-height:100%; outline:0; text-decoration:none; border:0; display:block; -ms-interpolation-mode:bicubic"><!--[if !mso]><!-->
+                     <img border="0" width="100%" height="auto" class="desktop  sp-img " align="center" alt="<?= $datosRecibidos["titulo"] ?>" src="<?= $datosRecibidos["image"] ?>" iout_block_23_element_0="" style="line-height:100%; outline:0; text-decoration:none; border:0; display:block; -ms-interpolation-mode:bicubic"><!--[if !mso]><!-->
                      <div style="font-size:14px; line-height:1.5; mso-hide:all">
-                        <img border="0" width="100%" height="auto" class="mobile  sp-img " align="center" alt="sp-default-3" src="<?= $datosRecibidos["image"] ?>" iout_block_23_element_0="" style="height: 155px;object-fit: cover; line-height:100%; outline:0; text-decoration:none; border:0; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:100% !important">
+                        <img border="0" width="100%" height="auto" class="mobile  sp-img " align="center" alt="<?= $datosRecibidos["titulo"] ?>" src="<?= $datosRecibidos["image"] ?>" iout_block_23_element_0="" style=" line-height:100%; outline:0; text-decoration:none; border:0; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:100% !important">
                      </div>
                      <!--<![endif]-->
                   </center>
