@@ -7,16 +7,19 @@ class SendPulse {
 	private $fechaDeEnvio;
 	private $listaUsuario;
 	private $nombreNeswletter;
+	private $idTemplate;
 	private $subject;
 
 	function __construct(){
+		/*"Gracias por formar parte de la familia de ecuavisa";*/
 		$getFecha = date("Y-m-d, H:i:s", time());
 		$this->fechaDeEnvio = $this->obtenerFechaHoraFormateada("14:30:00");//send_date
 		$this->subject = str_replace("{{fecha}}", date("Y-m-d", time()), $this->getAttrBoletin(1)->subject);//"🛑 Este es el legado de Agustín Intriago, el alcalde de Manta asesinado en un ataque armado";//"Newsletter diario - ".$getFecha;
 		$this->nombreNeswletter = "Newsletter diario ".$getFecha;
 
 		// echo $this->nombreNeswletter;
-        $this->listaUsuario = 576336;//565083;//576150;
+        $this->listaUsuario = 574818;//565083;//576150;
+        $this->idTemplate = 148832;//148832
         $this->token = $this->initToken();
         $this->sender_email = "ecuavisainforma@ecuavisa.com";
 
@@ -240,7 +243,7 @@ class SendPulse {
 		return json_decode($content);
     }
 
-    private function cropImagen($url) {
+    private function cropImagen($url, $newWidth = 800, $newHeight = 420) {
 	    $imagePath = './../img/boletin-diario/'; // Ruta donde se guardarán las imágenes
 
 	    // Obtener el nombre de la imagen a partir de la URL
@@ -248,41 +251,46 @@ class SendPulse {
 	    $imageFilePath = $imagePath . $imageName;
 
 	    // Verificar si la imagen ya existe en la ruta
-	    if (!file_exists($imageFilePath)) {
+    	if (!file_exists($imageFilePath)) {
 	        // La imagen no existe, crearla a partir de la URL
 	        $image = imagecreatefromstring(file_get_contents($url));
 	        $originalWidth = imagesx($image);
 	        $originalHeight = imagesy($image);
 
-	        // Redimensionar imagen
-	        $new_width = 600;
-	        $new_height = $new_width * ($originalHeight / $originalWidth);
-	        $resized_image = imagecreatetruecolor($new_width, $new_height);
-	        imagecopyresampled($resized_image, $image, 0, 0, 0, 0, $new_width, $new_height, imagesx($image), imagesy($image));
+	        // Calcular el factor de zoom para que la imagen ocupe completamente el tamaño requerido
+	        $zoomFactor = min($newWidth / $originalWidth, $newHeight / $originalHeight);
 
-	        // Recortar imagen
-	        $cropped_image = imagecrop($resized_image, ['x' => 0, 'y' => 30, 'width' => $new_width, 'height' => 420]);
+	        // Calcular las dimensiones finales de la imagen
+	        $finalWidth = $originalWidth * $zoomFactor;
+	        $finalHeight = $originalHeight * $zoomFactor;
+
+	        // Crear una imagen en blanco del tamaño requerido
+	        $resized_image = imagecreatetruecolor($newWidth, $newHeight);
+
+	        // Copiar y redimensionar la imagen para centrarla
+	        $start_x = ($newWidth - $finalWidth) / 2;
+	        $start_y = ($newHeight - $finalHeight) / 2;
+	        imagecopyresampled($resized_image, $image, $start_x, $start_y, 0, 0, $finalWidth, $finalHeight, $originalWidth, $originalHeight);
 
 	        // Obtener la extensión de la imagen
 	        $extension = strtolower(pathinfo($imageFilePath, PATHINFO_EXTENSION));
 
 	        // Comprimir y guardar la imagen en la ruta especificada según su extensión
 	        if ($extension === 'jpg' || $extension === 'jpeg') {
-	            imagejpeg($cropped_image, $imageFilePath, 75); // Calidad JPEG: 75 (valor entre 0 y 100)
+	            imagejpeg($resized_image, $imageFilePath, 75); // Calidad JPEG: 75 (valor entre 0 y 100)
 	        } elseif ($extension === 'png') {
-	            imagepng($cropped_image, $imageFilePath);
+	            imagepng($resized_image, $imageFilePath);
 	        }
 
 	        // Liberar memoria
 	        imagedestroy($image);
 	        imagedestroy($resized_image);
-	        imagedestroy($cropped_image);
 	    }
 
 	    // Obtener la nueva URL de la imagen
-	    $src_url = $imagePath . $imageName;
-
-	    return $src_url;
+	    // $src_url = $imagePath . $imageName;
+	    $src_url = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/img/boletin-diario/" . $imageName;
+	    return $src_url."?v=0.4";
 	}
 
     private function imgSeparador($link_category){
@@ -351,8 +359,6 @@ class SendPulse {
 				$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
 				$descripcion = substr($descripcion_formateado, 0, 290).'...';
 				$descripcionFinal = str_replace('<a ', '<a style="color: #444;" ', $descripcion);
-
-				echo $this->cropImagen($image);
 				$noticias[] = [
 					"titulo" => $value->title,
 					"link" => $value->link,
@@ -548,7 +554,6 @@ class SendPulse {
 		  CURLOPT_POSTFIELDS =>'{
 		    "sender_name":"'.$sender_name.'",
 		    "sender_email":"'.$sender_email.'",
-		    "send_date":"'.$this->fechaDeEnvio.'",
 		    "subject":"'.$subject.'",
 		    "list_id":"'.$list_id.'",
 		    "name":"'.$name.'",
@@ -562,6 +567,7 @@ class SendPulse {
 
 		$response = curl_exec($curl);
 		curl_close($curl);
+		//"send_date":"'.$this->fechaDeEnvio.'",
 		return json_decode($response);
     }
 
@@ -599,7 +605,7 @@ class SendPulse {
     		$getFecha = date("Y-m-d, H:i:s", time());
 
 			$nombreNeswletter = $this->nombreNeswletter;
-			$idTemplate = 148832;//TEMPLATE CORREO
+			$idTemplate = $this->idTemplate;//148832;//TEMPLATE CORREO
 			$list_id = $this->listaUsuario;//LISTA DE USUARIOS
 			// $numUsers = $this->getListUser($list_id);
 			$numUsers = [0, 1];
@@ -698,7 +704,7 @@ class SendPulse {
     		$getFecha = date("Y-m-d, H:i:s", time());
 
 			$nombreNeswletter = $this->nombreNeswletter;
-			$idTemplate = 148832;//TEMPLATE CORREO
+			$idTemplate = $this->idTemplate;//148832;//TEMPLATE CORREO
 			$list_id = $this->listaUsuario;//LISTA DE USUARIOS
 			// $numUsers = $this->getListUser($list_id);
 			$numUsers = [0, 1];
