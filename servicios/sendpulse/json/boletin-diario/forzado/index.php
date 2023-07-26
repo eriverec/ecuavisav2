@@ -114,21 +114,30 @@
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <script type="text/javascript">
     $(function(){
+      var previousUrl = ''; // Variable para almacenar la URL anterior
+
       function cargarIframe(url) {
         var iframe = document.getElementById('miIframe');
-        iframe.src = url;
-        iframe.onload = function() {
-          // Ajustar la altura del iframe según el contenido cargado
-          //iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+        
+        // Comprobar si la URL es diferente a la anterior
+        if (url !== previousUrl) {
+          iframe.src = url;
+          iframe.onload = function() {
+            // Ajustar la altura del iframe según el contenido cargado
+            //iframe.style.height = iframe.contentWindow.document.body.scrollHeight + 'px';
+            
+            // Deshabilitar enlaces dentro del iframe
+            var links = iframe.contentWindow.document.getElementsByTagName('a');
+            for (var i = 0; i < links.length; i++) {
+              links[i].onclick = function(event) {
+                event.preventDefault(); // Evitar redirección al hacer clic en el enlace
+              };
+            }
+          };
           
-          // Deshabilitar enlaces dentro del iframe
-          var links = iframe.contentWindow.document.getElementsByTagName('a');
-          for (var i = 0; i < links.length; i++) {
-            links[i].onclick = function(event) {
-              event.preventDefault(); // Evitar redirección al hacer clic en el enlace
-            };
-          }
-        };
+          // Actualizar la URL anterior con la nueva URL
+          previousUrl = url;
+        }
       }
 
       $("#contenedor").on("submit", ".miFormulario", function(event) {
