@@ -9,18 +9,21 @@ class SendPulse {
 	private $nombreNeswletter;
 	private $idTemplate;
 	private $subject;
+	private $descripcion;
 
 	function __construct(){
 		/*"Gracias por formar parte de la familia de Ecuavisa.com";*/
+		$obtenerJsonSubject = $this->getAttrBoletin(1);
 		$getFecha = date("Y-m-d, H:i:s", time());
 		$this->fechaDeEnvio = $this->obtenerFechaHoraFormateada("14:30:00");//send_date
-		$this->subject = str_replace("{{fecha}}", date("Y-m-d", time()), $this->getAttrBoletin(1)->subject);//"🛑 Este es el legado de Agustín Intriago, el alcalde de Manta asesinado en un ataque armado";//"Newsletter diario - ".$getFecha;
+		$this->descripcion = $obtenerJsonSubject->descripcion;
+		$this->subject = str_replace("{{fecha}}", date("Y-m-d", time()), $obtenerJsonSubject->subject);//"🛑 Este es el legado de Agustín Intriago, el alcalde de Manta asesinado en un ataque armado";//"Newsletter diario - ".$getFecha;
 		$this->nombreNeswletter = "Newsletter diario ".$getFecha;
 
 		// echo $this->nombreNeswletter;
         // $this->listaUsuario = 574818;
         // $this->idTemplate = 148832;
-        $this->listaUsuario = 574818;
+        $this->listaUsuario = 565083;//574818;
         $this->idTemplate = 148832;
         $this->token = $this->initToken();
         $this->sender_email = "ecuavisainforma@ecuavisa.com";
@@ -212,7 +215,7 @@ class SendPulse {
 		// curl_close($curl);
 		$link = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/email.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter.'';
 
-		return '<label style="display:none">Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label><a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none; color:#000" href="'.$link.'">Quiero ver en mi navegador</a>';
+		return '<label style="display:none">'.$this->descripcion.'. Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label><a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none; color:#000" href="'.$link.'">Quiero ver en mi navegador</a>';
     }
 
     private function getTemplatePHP($data, $url){
@@ -314,7 +317,7 @@ class SendPulse {
 	    }
 
 	    // Obtener la nueva URL de la imagen
-	    $src_url = $imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
+	    $src_url = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/img/boletin-diario/'.$currentYear.'/'.$currentMonth.'/'.$imageName;//$imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
 	    return $src_url; //. "?v=" . $this->generarNumeroRandom();
 	}
 
@@ -725,6 +728,8 @@ class SendPulse {
     	if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     		echo '<div style="max-width: 500px;margin-left: auto;margin-right: auto;padding:30px">';
 			echo '<b>Subject: </b>'.$this->subject;
+			echo '<br>';
+			echo '<b>Descripción: </b>'.$this->descripcion;
 			echo '<br>';
 			echo '<b>ID Lista de usuario: </b>'.$this->listaUsuario;
 			echo '<br>';

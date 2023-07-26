@@ -14,7 +14,7 @@ class Subject {
 		header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
     }
 
-    private function edit($subject,$descripcion, $id, $pass, $fecha){
+    private function edit($subject, $descripcion, $id, $pass, $fecha){
     	// Ruta al archivo JSON
 		$rutaArchivo = './../../boletines.json';
 		// Leer el contenido del archivo JSON
@@ -171,7 +171,7 @@ class Subject {
     		if(isset($post->action)){
     			switch ($post->action) {
     				case 'edit':
-    					echo json_encode($this->edit($post->subject, $post->id, $post->pass, $getFecha));
+    					echo json_encode($this->edit($post->subject,$post->descripcion, $post->id, $post->pass, $getFecha));
         				exit();
     					break;
     				default:
@@ -182,8 +182,6 @@ class Subject {
     		echo 'null';
 	        exit();
     	}
-
-    	echo '<img src="'.$this->cropImagen().'">';
 
     	if(isset($_GET["id"]) && !isset($_GET["pass"])){
     		if($_GET['id'] != ""){
