@@ -112,7 +112,7 @@ function eventoRecomendadasUser() {
                       <div class="headlineRec">
                         <a href="${link}">${title}</a> 
                       </div>
-                     <div class="text-wrapper"><p>${eliminarEtiquetasHTML(texto).substring(0, 100)+'...'}</p> </div>
+                     <div class="text-wrapper"><p>${eliminarEtiquetasHTML(texto).substring(0, 300)+'...'}</p> </div>
                     </div>
                     <div class="multimediaRec">
                       <a href="${link}">
