@@ -1,7 +1,7 @@
 function eventoRecomendadasUser() {
   // Obtener la referencia al elemento contenedor
-  // const wUserId = localStorage.getItem("wylexUserId");
-  const wUserId = "81408";
+  const wUserId = localStorage.getItem("wylexUserId");
+  // const wUserId = "81408";
 
   if (wUserId) {
     const htmlContainer = document.querySelector(".htmlRecomen");
