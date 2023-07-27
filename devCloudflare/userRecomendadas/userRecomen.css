@@ -21,8 +21,8 @@
 }
 /* FIN TITULO */
 
-/* INICIO - ESTILO GRID */
 
+/* INICIO - ESTILO GRID */
 .parent_grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -89,8 +89,8 @@
 
 /* FIN - ESTILO GRID */
 
-/* INICIO - ESTILO FEATURED */
 
+/* INICIO - ESTILO FEATURED */
 .parent_featured {
   display: grid;
   grid-template-rows: 1fr 1fr 1fr;
@@ -226,7 +226,6 @@
     margin-top: 1rem;
   }
 
-
 }
 
 @media (max-width: 767px) {
@@ -248,8 +247,6 @@
     line-height: 20px;
     font-family: 'Archivo', sans-serif;
   }
-
-
 
   .parent_featured .element-rec-2 .media_block, 
   .parent_featured .element-rec-3 .media_block, 
@@ -275,10 +272,7 @@
   }
 }
 
-
-
 /* FIN - ESTILO FEATURED */
-
 
 
 /* INICIO - ESTILO SWIPER */
