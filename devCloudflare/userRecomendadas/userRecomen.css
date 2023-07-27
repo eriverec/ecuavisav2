@@ -1,7 +1,7 @@
 /* INICIO TÍTULO */
 .text_recomendadas h2{
   display: inline-block;
-  color: var(--rd-cintillo);
+  color: #2927b9 !important;
   font-family: 'Anek Malayalam';
   letter-spacing: -0.03em;
   font-style: normal;
@@ -129,6 +129,10 @@
   padding-top: 10px;
 }
 
+.parent_featured article.element-rec-1 .headlineRec{
+  max-width: 100%;
+}
+
 
 .parent_featured .element-rec-2 .multimediaRec img,
 .parent_featured .element-rec-3 .multimediaRec img,
@@ -151,7 +155,7 @@
   display: grid;
   grid-template-columns: 3fr 1fr;
   margin: 1rem 0;
-  padding-top: 15px;
+  padding-top: 25px;
 }
 
 .parent_featured .element-rec-1 .media_block {
