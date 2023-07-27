@@ -210,7 +210,6 @@
 }
 
 @media (min-width: 990px) and (max-width: 1190px) {
-
   .parent_featured .element-rec-2 .media_block,
   .parent_featured .element-rec-3 .media_block,
   .parent_featured .element-rec-4 .media_block {
@@ -238,11 +237,19 @@
     height: 100%;
     column-gap: 30px;
   }
+
+  .parent_featured .element-rec-1 .headlineRec a{
+    font-size: 22px;
+    line-height: 28px;
+  }
+
   .parent_featured article .headlineRec a{
     font-size: 20px;
     line-height: 20px;
     font-family: 'Archivo', sans-serif;
   }
+
+
 
   .parent_featured .element-rec-2 .media_block, 
   .parent_featured .element-rec-3 .media_block, 
