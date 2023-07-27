@@ -1,3 +1,11 @@
+function eliminarEtiquetasHTML(texto) {
+  // Eliminar todas las etiquetas HTML
+  const textoSinEtiquetas = texto.replace(/<[^>]*>/g, '');
+  // Eliminar las imágenes
+  const textoSinImagenes = textoSinEtiquetas.replace(/\bhttps?:\/\/\S+\.(?:png|jpe?g|gif)\b/gi, '');
+  return textoSinImagenes;
+}
+
 function eventoRecomendadasUser() {
   // Obtener la referencia al elemento contenedor
   const wUserId = localStorage.getItem("wylexUserId");
@@ -16,11 +24,9 @@ function eventoRecomendadasUser() {
 
         // Declarar e inicializar el contador
         let contadorRec = 1;
-
         //swiper
         //featured
         //grid
-
         // Fetch the configTemplate from the API
         fetch("https://api-configuracion.vercel.app/web/foryou-conf")
           .then((response) => response.json())
@@ -92,12 +98,11 @@ function eventoRecomendadasUser() {
               for (let i = 0; i < conNotas && i < apiData.length; i++) {
                 const item = apiData[i];
                 const content = item.content[0];
-
-                // Obtener los valores que deseas mostrar
                 const imageUrl = content.url;
                 const link = item.link;
                 const section = item.section;
                 const title = item.title;
+                const texto = item.description.__text;
 
                 const htCont = /*html*/ `
                 <article class="article-rec style-${conStyle} element-rec-${contadorRec}">
@@ -107,6 +112,7 @@ function eventoRecomendadasUser() {
                       <div class="headlineRec">
                         <a href="${link}">${title}</a> 
                       </div>
+                     <div class="text-wrapper"><p>${eliminarEtiquetasHTML(texto).substring(0, 100)+'...'}</p> </div>
                     </div>
                     <div class="multimediaRec">
                       <a href="${link}">
@@ -120,6 +126,7 @@ function eventoRecomendadasUser() {
 
                 div_featured.innerHTML += htCont;
               }
+
               htmlContainer.appendChild(div_featured);
             } else if (conStyle === "swiper") {
               //ESTO ES SWIPER
@@ -244,7 +251,6 @@ function eventoRecomendadasUser() {
           })
           .catch((error) => console.log(error));
 
-        //https://api-configuracion.vercel.app/web/foryou-conf
       })
       .catch((error) => console.log(error));
   }
