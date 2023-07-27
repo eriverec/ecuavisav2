@@ -17,7 +17,7 @@ function eventoRecomendadasUser() {
         // Declarar e inicializar el contador
         let contadorRec = 1;
 
-        //swipper
+        //swiper
         //featured
         //grid
 
@@ -114,7 +114,7 @@ function eventoRecomendadasUser() {
                 div_featured.innerHTML += htCont;
               }
               htmlContainer.appendChild(div_featured);
-            } else {
+            } else if (conStyle === "swiper") {
               //ESTO ES SWIPER
               const div_grid = document.createElement("div");
               div_grid.classList.add("parent_" + conStyle);
@@ -152,10 +152,10 @@ function eventoRecomendadasUser() {
                 function swiperReco() {
                   const sw = document.querySelector(".htmlRecomen");
                   const wra = document.querySelector(
-                    ".htmlRecomen .parent_swipper"
+                    ".htmlRecomen .parent_swiper"
                   );
                   const slide = document.querySelectorAll(
-                    ".htmlRecomen .parent_swipper .article-rec"
+                    ".htmlRecomen .parent_swiper .article-rec"
                   );
 
                   sw.classList.add("swiper");
@@ -202,6 +202,8 @@ function eventoRecomendadasUser() {
               }
               htmlContainer.appendChild(div_grid);
               console.log("si es swipper");
+            }else{
+              console.log("no esta en ningun style");
             }
 
             // htmlContainer.appendChild(div_grid);
