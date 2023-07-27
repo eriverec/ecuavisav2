@@ -13,6 +13,12 @@
   text-transform: lowercase;
 }
 
+@media (max-width: 767px) {
+  .text_recomendadas h2{
+    font-size: 38px;
+    line-height: 35px;
+  }
+}
 /* FIN TITULO */
 
 /* INICIO - ESTILO GRID */
@@ -131,8 +137,20 @@
 
 .parent_featured article.element-rec-1 .headlineRec{
   max-width: 100%;
+  padding-bottom: 10px;
 }
-
+.parent_featured article.element-rec-1 .textBlock{
+  margin-top: 2rem;
+}
+.parent_featured article.element-rec-1 .text-wrapper{
+  font-family: 'Archivo';
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 26px;
+  color: #434343;
+  margin-bottom: 20px;
+}
 
 .parent_featured .element-rec-2 .multimediaRec img,
 .parent_featured .element-rec-3 .multimediaRec img,
@@ -208,7 +226,48 @@
   .parent_featured .element-rec-4 .media_block {
     margin-top: 1.5rem;
   }
+
+
 }
+/* 
+@media (max-width: 991px){
+
+
+  width: 130px !important;
+} */
+
+@media (max-width: 767px) {
+  .parent_featured {
+    display: flex;
+    flex-direction: column;
+    gap: 0px;
+    height: 100%;
+    column-gap: 30px;
+  }
+  .parent_featured article .headlineRec a{
+    font-size: 20px;
+    line-height: 20px;
+
+  }
+  .parent_featured .element-rec-2 .media_block .multimediaRec, 
+  .parent_featured .element-rec-3 .media_block .multimediaRec, 
+  .parent_featured .element-rec-4 .media_block .multimediaRec{
+    width: 130px !important;
+  }
+
+  .parent_featured .element-rec-2 .multimediaRec img,
+  .parent_featured .element-rec-3 .multimediaRec img,
+  .parent_featured .element-rec-4 .multimediaRec img {
+    width: 100% !important;
+    max-height: 100% !important;
+    max-width: 100% !important;
+    position: relative !important;
+    height: 135px !important;
+    object-fit: cover;
+  }
+}
+
+
 
 /* FIN - ESTILO FEATURED */
 
