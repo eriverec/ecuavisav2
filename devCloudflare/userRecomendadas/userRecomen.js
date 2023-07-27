@@ -191,7 +191,7 @@ function eventoRecomendadasUser() {
                     } else {
                       swiperReco();
                     }
-                  }, 300);
+                  }, 100);
                 }
 
                 $(document).ready(function () {
