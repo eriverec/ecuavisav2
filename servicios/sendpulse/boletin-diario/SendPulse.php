@@ -24,7 +24,7 @@ class SendPulse {
         // $this->listaUsuario = 574818;
         // $this->idTemplate = 148832;
         $this->listaUsuario = 574818;//565083;
-        $this->idTemplate = 160050;// ID NORMAL: 148832;
+        $this->idTemplate = 148832;// ID Gracias:160050;
         $this->token = $this->initToken();
         $this->sender_email = "ecuavisainforma@ecuavisa.com";
 
