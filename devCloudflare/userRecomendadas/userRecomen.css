@@ -1,3 +1,20 @@
+/* INICIO TÍTULO */
+.text_recomendadas h2{
+  display: inline-block;
+  color: var(--rd-cintillo);
+  font-family: 'Anek Malayalam';
+  letter-spacing: -0.03em;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 88px;
+  line-height: 96px;
+  margin-top: 0px;
+  margin-top: 30px;
+  text-transform: lowercase;
+}
+
+/* FIN TITULO */
+
 /* INICIO - ESTILO GRID */
 
 .parent_grid {
@@ -107,6 +124,12 @@
   text-decoration: none;
 }
 
+.parent_featured article .headlineRec{
+  max-width: 350px;
+  padding-top: 10px;
+}
+
+
 .parent_featured .element-rec-2 .multimediaRec img,
 .parent_featured .element-rec-3 .multimediaRec img,
 .parent_featured .element-rec-4 .multimediaRec img {
@@ -128,7 +151,7 @@
   display: grid;
   grid-template-columns: 3fr 1fr;
   margin: 1rem 0;
-  padding-top: 10px;
+  padding-top: 15px;
 }
 
 .parent_featured .element-rec-1 .media_block {
