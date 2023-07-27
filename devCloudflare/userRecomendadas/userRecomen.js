@@ -11,7 +11,7 @@ function eventoRecomendadasUser() {
       .then((data) => {
         // Obtener el contenido de la API
         const apiData = data.data;
-        console.log(apiData);
+        // console.log(apiData);
         htmlContainer.textContent = "";
 
         // Declarar e inicializar el contador
@@ -29,15 +29,22 @@ function eventoRecomendadasUser() {
             const conStyle = configTemplate.style;
             const conTitulo = configTemplate.titulo;
             const conNotas = configTemplate.notas;
-            const conColor = configTemplate.color
+            const conColor = configTemplate.color;
             const conBase = document.querySelector(".htmlRecomen");
 
             // Add the title above the items with an <h1> element
-            const h1Title = document.createElement("h1");
-            h1Title.textContent = conTitulo;
-            h1Title.classList.add("text_recomendadas");
-            h1Title.style.color = conColor;
-            conBase.appendChild(h1Title);
+            const divTitle = document.createElement("div");
+            divTitle.classList.add("text_recomendadas");
+            conBase.appendChild(divTitle);
+
+            const textRec = document.querySelector(".text_recomendadas");
+
+            const cintilloImg = /*html*/ `
+            <h2 class="t_recom" style="color:${conColor};">${conTitulo}</h2>
+            <div class="c_azul_celeste_Desktop mb-4"><img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fcintillo_azul_celeste.svg" alt="line_bloque" width="100%" height="auto" title="Cintillo"></div>
+            <div class="c_azul_celeste_Mobile mb-4"><img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fcintillo_azul_celeste_mobile.svg" alt="line_bloque" width="100%" height="25px" title="Cintillo"></div>`;
+
+            textRec.innerHTML = cintilloImg;
 
             // console.log(conStyle);
             if (conStyle === "grid") {
@@ -167,19 +174,46 @@ function eventoRecomendadasUser() {
                   var dprev = document.createElement("div");
                   dprev.classList = "swiper-button-prev";
 
-                  sw.append(dprev);
-                  sw.append(dnext);
+                  var dpag = document.createElement("div");
+                  dpag.classList = "swiper-pagination";
+
+                  // sw.append(dprev);
+                  // sw.append(dnext);
+                  sw.append(dpag);
 
                   for (const slides of slide) {
                     slides.classList.add("swiper-slide");
                   }
 
                   var swiper = new Swiper(".htmlRecomen", {
-                    slidesPerView: 3,
+                    slidesPerView: 1,
                     spaceBetween: 20,
-                    navigation: {
-                      nextEl: ".swiper-button-next",
-                      prevEl: ".swiper-button-prev",
+                    // navigation: {
+                    //   nextEl: ".swiper-button-next",
+                    //   prevEl: ".swiper-button-prev",
+                    // },
+                    pagination: {
+                      el: ".swiper-pagination",
+                      dynamicBullets: true,
+                      clickable: true,
+                    },
+                    breakpoints: {
+                      600: {
+                        slidesPerView: 1,
+                        spaceBetween: 20,
+                      },
+                      768: {
+                        slidesPerView: 2,
+                        spaceBetween: 30,
+                      },
+                      1024: {
+                        slidesPerView: 3,
+                        spaceBetween: 30,
+                      },
+                      1200: {
+                        slidesPerView: 4,
+                        spaceBetween: 30,
+                      },
                     },
                   });
                 }
@@ -202,7 +236,7 @@ function eventoRecomendadasUser() {
               }
               htmlContainer.appendChild(div_grid);
               console.log("si es swipper");
-            }else{
+            } else {
               console.log("no esta en ningun style");
             }
 
