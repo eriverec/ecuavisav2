@@ -26,12 +26,12 @@ function sendApiEmails() {
         $emailData = [];
         // Recorrer los usuarios del lote actual y agregar los datos al array
         foreach ($batch as $user) {
-            $_id = $user['_id'];
+            $email = $user['email'];
             $firstName = $user['first_name'];
             $lastName = $user['last_name'];
             $createdAt = $user['created_at'];
             $userData = [
-                'email' => $_id,
+                'email' => $email,
                 'variables' => [
                     'Nombre' => $firstName,
                     'Apellido' => $lastName,
