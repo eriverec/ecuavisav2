@@ -32,7 +32,7 @@ const usuarioSeleceted = ref('');
 const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
 const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
 
-async function getRecomendadas(fechai = '', fechaf = '') {
+async function getRecomendadas1(fechai = '', fechaf = '') {
   isLoading.value = true;
   await fetch('https://servicio-de-actividad.vercel.app/recomendadas/get/all?' + new URLSearchParams({ fechai: fechai, fechaf: fechaf }))
     .then(response => response.json())
@@ -62,6 +62,46 @@ async function getRecomendadas(fechai = '', fechaf = '') {
       isLoading.value = false;
     })
     .catch(error => { return error });
+}
+
+async function getRecomendadas(fechai = '', fechaf = '') {
+  isLoading.value = true;
+  var recomendadasArr = [];
+  let page = 1;
+  let limit = 1000;
+  while (true) {
+    const batchRecomendadas = await fetch('https://servicio-de-actividad.vercel.app/recomendadas/get/all?' + new URLSearchParams({ fechai: fechai, fechaf: fechaf, limit: limit, page: page}));
+    const recomendadasJson = await batchRecomendadas.json()
+     if (recomendadasJson.length === 0) {
+            break;
+     }
+     recomendadasArr.push(...recomendadasJson);
+     page += 1;
+  }
+      recomendadasRaw.value = recomendadasArr;
+      const rawArray = Array.from(recomendadasArr);
+      let grupos = {};
+      for(let i of rawArray){
+        for(let j of i.data){      
+          let clave = j.title;
+          let data = {
+            userId: i.userId,
+            created_at: i.created_at,
+            title: j.title,
+            cantidad: 1
+          }
+          if (grupos.hasOwnProperty(clave) && grupos[clave].userId !== i.userId ) {   
+            grupos[clave] = data;   
+            grupos[clave].cantidad = (grupos[clave].cantidad || 1) + 1;
+          } else {
+            grupos[clave] = data;
+          }
+        }
+      }
+      let resultado = Object.values(grupos);
+      recomendadas.value = resultado;
+      isLoading.value = false;
+    
 }
 
 const initData = async() => {
