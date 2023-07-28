@@ -10,6 +10,8 @@ class SendPulse {
 	private $idTemplate;
 	private $subject;
 	private $descripcion;
+	private $horai;
+	private $horaf;
 
 	function __construct(){
 		/*"Gracias por formar parte de la familia de Ecuavisa.com";*/
@@ -17,12 +19,14 @@ class SendPulse {
 		$getFecha = date("Y-m-d, H:i:s", time());
 		$this->fechaDeEnvio = $this->obtenerFechaHoraFormateada("14:30:00");//send_date
 		$this->descripcion = $obtenerJsonSubject->descripcion;
-		$this->subject = str_replace("{{fecha}}", date("Y-m-d", time()), $obtenerJsonSubject->subject);//"🛑 Este es el legado de Agustín Intriago, el alcalde de Manta asesinado en un ataque armado";//"Newsletter diario - ".$getFecha;
-		$this->nombreNeswletter = "Newsletter diario ".$getFecha;
+		$this->subject = str_replace("{{fecha}}", date("Y-m-d", time()), $obtenerJsonSubject->subject);//"🛑 Este es el legado de Agustín Intriago, el alcalde de Manta asesinado en un ataque armado";//"Ecuavisa Informa - ".$getFecha;
+		$this->nombreNeswletter = "Ecuavisa Informa ".$getFecha;
 
 		// echo $this->nombreNeswletter;
         // $this->listaUsuario = 574818;
         // $this->idTemplate = 148832;
+        $this->horai = '06:00:00';
+        $this->horaf = '08:00:00';
         $this->listaUsuario = 574818;//565083;
         $this->idTemplate = 148832;// ID Gracias:160050;
         $this->token = $this->initToken();
@@ -113,32 +117,71 @@ class SendPulse {
 		return json_decode($response);
     }
 
+    private function logToFile($functionName, $data) {
+	    // Obtener la fecha y hora actual en el formato deseado
+	    $fechaHoraActual = date('Y-m-d H:i:s');
+	    
+	    // Obtener la información del cliente (dirección IP y agente de usuario)
+	    $clienteInfo = $_SERVER['REMOTE_ADDR'] . ' - ' . $_SERVER['HTTP_USER_AGENT'];
+	    
+	    // Obtener el resultado de print_r con la opción return y eliminar los saltos de línea
+	    $dataAsString = str_replace(array("\r", "\n"), '', print_r($data, true));
+	    
+	    // Construir el mensaje de registro
+	    $logMessage = "[$fechaHoraActual] [$clienteInfo] [$functionName]: $dataAsString\n";
+	    
+	    // Ruta del archivo de registro (puedes cambiarla según tus necesidades)
+	    $archivoLog = 'boletin_log.txt';
+	    
+	    // Guardar el mensaje de registro en el archivo
+	    file_put_contents($archivoLog, $logMessage, FILE_APPEND);
+	}
+
 	public function initToken(){
-        $curl = curl_init();
-		curl_setopt_array($curl, array(
-		  CURLOPT_URL => 'https://api.sendpulse.com/oauth/access_token',
-		  CURLOPT_RETURNTRANSFER => true,
-		  CURLOPT_ENCODING => '',
-		  CURLOPT_MAXREDIRS => 10,
-		  CURLOPT_TIMEOUT => 0,
-		  CURLOPT_FOLLOWLOCATION => true,
-		  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-		  CURLOPT_CUSTOMREQUEST => 'POST',
-		  CURLOPT_POSTFIELDS =>'{
-		   "grant_type":"client_credentials",
-		   "client_id":"c79f7382012df0ea4c6fa37afec6374e",
-		   "client_secret":"164551af334e1ec93e1b3099afd93a88"
-		}',
-		  CURLOPT_HTTPHEADER => array(
-		    'Content-Type: application/json'
-		  ),
-		));
+		date_default_timezone_set('America/Guayaquil');
+		$this->logToFile("Consumo de token", array("accion" => "Init token"));
+    	// Ruta al archivo JSON
+		$rutaArchivo = './../token.json';
+		// Leer el contenido del archivo JSON
+		$contenidoJSON = file_get_contents($rutaArchivo);
+		// Decodificar el contenido JSON en un array asociativo
+		$datos = json_decode($contenidoJSON, true);
+		if($this->calcularTiempoTranscurridoEnMinutos($datos["fecha"]) > 30){
+			$curl = curl_init();
+			curl_setopt_array($curl, array(
+			  CURLOPT_URL => 'https://api.sendpulse.com/oauth/access_token',
+			  CURLOPT_RETURNTRANSFER => true,
+			  CURLOPT_ENCODING => '',
+			  CURLOPT_MAXREDIRS => 10,
+			  CURLOPT_TIMEOUT => 0,
+			  CURLOPT_FOLLOWLOCATION => true,
+			  CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+			  CURLOPT_CUSTOMREQUEST => 'POST',
+			  CURLOPT_POSTFIELDS =>'{
+			   "grant_type":"client_credentials",
+			   "client_id":"c79f7382012df0ea4c6fa37afec6374e",
+			   "client_secret":"164551af334e1ec93e1b3099afd93a88"
+			}',
+			  CURLOPT_HTTPHEADER => array(
+			    'Content-Type: application/json'
+			  ),
+			));
 
-		$response = curl_exec($curl);
+			$response = curl_exec($curl);
 
-		curl_close($curl);
+			curl_close($curl);
 
-		return json_decode($response)->access_token;
+			$newFile = array(
+				"fecha" => date('Y-m-d H:i:s', time()),
+				"token" => json_decode($response)->access_token
+			);
+			file_put_contents($rutaArchivo, json_encode($newFile));
+
+			return json_decode($response)->access_token;
+		}
+
+		return $datos["token"];
+        
     }
 
     public function getToken(){
@@ -637,6 +680,27 @@ class SendPulse {
 	    return $mesesEnEspanol[$numeroMes];
 	}
 
+	private function calcularTiempoTranscurridoEnMinutos($fechaHora) {
+	    date_default_timezone_set('America/Guayaquil'); // Reemplaza 'tu_zona_horaria' con la zona horaria que desees utilizar, por ejemplo, 'America/New_York' o 'Europe/Madrid'.
+	    // Obtener la fecha y hora actual
+	    $fechaHoraActual = new DateTime();
+	    // Convertir la fecha y hora enviada al formato DateTime
+	    $fechaHoraEnviada = DateTime::createFromFormat('Y-m-d H:i:s', $fechaHora);
+	    // Calcular la diferencia de tiempo en minutos
+	    $intervalo = $fechaHoraActual->diff($fechaHoraEnviada);
+	    $minutosTranscurridos = $intervalo->days * 24 * 60 + $intervalo->h * 60 + $intervalo->i;
+	    return $minutosTranscurridos;
+	}
+
+	private function estaEnRangoHorario() {
+	    date_default_timezone_set('America/Guayaquil'); // Reemplaza 'tu_zona_horaria' con la zona horaria que desees utilizar, por ejemplo, 'America/New_York' o 'Europe/Madrid'.
+	    $horaInicio = $this->horai;
+	    $horaFin = $this->horaf;
+	    $horaActual = date('H:i:s');
+
+	    return ($horaActual >= $horaInicio && $horaActual <= $horaFin);
+	}
+
     public function view(){
     	if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     		$getFecha = date("Y-m-d, H:i:s", time());
@@ -708,13 +772,20 @@ class SendPulse {
 			    $bodyContent = $matches[1];
 			}
 
-			if(isset($_GET["view"])){
-				echo ($bodyContent);
-				exit();
-			}
+			// if(isset($_GET["view"])){
+			// 	echo ($bodyContent);
+			// 	exit();
+			// }
 			if(count($notas) > 0 && count($numUsers) > 0){
-				$resp = $this->armarCorreo($nombreNeswletter, $this->HtmlToBase64($bodyContent), $list_id);
-	        	echo json_encode(["respSendPulse"=>$resp,"resp"=>true, "message"=>"La campaña fue creada en la fecha ".$getFecha]);
+				if($this->estaEnRangoHorario()){
+					$resp = $this->armarCorreo($nombreNeswletter, $this->HtmlToBase64($bodyContent), $list_id);
+	        		echo json_encode(["respSendPulse"=>$resp,"resp"=>true, "message"=>"La campaña fue creada en la fecha ".$getFecha]);
+					$this->logToFile("Crear campaña a SendPulse", array("accion" => "Crear campaña"));
+	        		exit();
+	        		// echo json_encode(["resp"=>true, "message"=>"Enviado."]);
+	        		// exit();
+				}
+				echo json_encode(["resp"=>false, "message"=>"No se puede mandar la campaña por que la hora no corresponde a la acordada."]);
 	        	exit();
 			}
 			echo json_encode(["resp"=>false, "message"=>"El Newsletter no fue enviado por que no existe notas que enviar"]);
@@ -809,7 +880,8 @@ class SendPulse {
 			    $bodyContent = $matches[1];
 			}
 
-			echo ($bodyContent);
+			echo $bodyContent;
+			$this->logToFile("Ver contenido", array("accion" => "Ver correo"));
 			exit();
     	}
     	echo "No tienes acceso";
