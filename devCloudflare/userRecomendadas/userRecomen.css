@@ -20,11 +20,6 @@
   }
 }
 
-@media (max-width: 1024px) {
-  .text_recomendadas h2{
-    font-size: 70px;
-  }
-}
 /* FIN TITULO */
 
 
@@ -226,7 +221,7 @@
 }
 
 
-@media (max-width: 1024px) {
+@media (min-width: 1024px) and (max-width: 1024px) {
   .parent_featured .element-rec-2 .headlineRec a,
   .parent_featured .element-rec-3 .headlineRec a,
   .parent_featured .element-rec-4 .headlineRec a{
@@ -239,6 +234,10 @@
   .parent_featured .element-rec-4 .multimediaRec{
     position: initial !important;
     width: 160px !important;
+  }
+
+  .text_recomendadas h2{
+    font-size: 70px;
   }
 }
 
