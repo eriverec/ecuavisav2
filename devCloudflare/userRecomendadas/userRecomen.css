@@ -227,11 +227,16 @@
 
 
 @media (max-width: 1024px) {
-  .parent_featured article .headlineRec a{
+  .parent_featured .element-rec-2 .headlineRec a,
+  .parent_featured .element-rec-3 .headlineRec a,
+  .parent_featured .element-rec-4 .headlineRec a{
     font-size: 20px;
     line-height: 1.2;
   }
-  .parent_grid article .multimediaRec{
+
+  .parent_featured .element-rec-2 .multimediaRec,
+  .parent_featured .element-rec-3 .multimediaRec,
+  .parent_featured .element-rec-4 .multimediaRec{
     position: initial !important;
     width: 160px !important;
   }
@@ -250,6 +255,16 @@
   .text_recomendadas h2{
     font-size: 55px;
     line-height: 60px;
+  }
+  .parent_featured{
+    grid-template-rows: 1fr;
+  }
+  .parent_featured .element-rec-2 .media_block, 
+  .parent_featured .element-rec-3 .media_block, 
+  .parent_featured .element-rec-4 .media_block{
+    grid-gap: 10px 20px;
+    padding-top: 10px;
+    align-items: center;
   }
   
   .parent_featured .element-rec-2 .headlineRec a,
