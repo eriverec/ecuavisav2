@@ -85,14 +85,13 @@ async function getRecomendadas(fechai = '', fechaf = '') {
         for(let j of i.data){      
           let clave = j.title;
           let data = {
-            userId: i.userId,
-            created_at: i.created_at,
+            //userId: i.userId,
+            //created_at: i.created_at,
             title: j.title,
             cantidad: 1
           }
           if (grupos.hasOwnProperty(clave) && grupos[clave].userId !== i.userId ) {   
-            grupos[clave] = data;   
-            grupos[clave].cantidad = (grupos[clave].cantidad || 1) + 1;
+            grupos[clave].cantidad += 1;
           } else {
             grupos[clave] = data;
           }
