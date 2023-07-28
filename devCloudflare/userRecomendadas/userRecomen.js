@@ -19,6 +19,9 @@ function eventoRecomendadasUser() {
       .then((data) => {
         // Obtener el contenido de la API
         const apiData = data.data;
+
+        const randomItems = getRandomItems(apiData, 5);
+
         // console.log(apiData);
         htmlContainer.textContent = "";
 
@@ -59,8 +62,8 @@ function eventoRecomendadasUser() {
               div_grid.classList.add("parent_" + conStyle);
 
               // Recorrer los elementos de la matriz 'data'
-              for (let i = 0; i < conNotas && i < apiData.length; i++) {
-                const item = apiData[i];
+              for (let i = 0; i < conNotas && i < randomItems.length; i++) {
+                const item = randomItems[i];
                 const content = item.content[0];
 
                 // Obtener los valores que deseas mostrar
@@ -95,8 +98,8 @@ function eventoRecomendadasUser() {
               console.log("si es featured");
               const div_featured = document.createElement("div");
               div_featured.classList.add("parent_" + conStyle);
-              for (let i = 0; i < conNotas && i < apiData.length; i++) {
-                const item = apiData[i];
+              for (let i = 0; i < conNotas && i < randomItems.length; i++) {
+                const item = randomItems[i];
                 const content = item.content[0];
                 const imageUrl = content.url;
                 const link = item.link;
@@ -133,8 +136,8 @@ function eventoRecomendadasUser() {
               const div_grid = document.createElement("div");
               div_grid.classList.add("parent_" + conStyle);
               // Recorrer los elementos de la matriz 'data'
-              for (let i = 0; i < conNotas && i < apiData.length; i++) {
-                const item = apiData[i];
+              for (let i = 0; i < conNotas && i < randomItems.length; i++) {
+                const item = randomItems[i];
                 const content = item.content[0];
 
                 // Obtener los valores que deseas mostrar
@@ -254,6 +257,23 @@ function eventoRecomendadasUser() {
       })
       .catch((error) => console.log(error));
   }
+}
+
+// Function to get 'count' random items from an array
+function getRandomItems(array, count) {
+  const randomItems = [];
+  const length = array.length;
+  const selectedIndexes = new Set();
+
+  while (selectedIndexes.size < count && selectedIndexes.size < length) {
+    const randomIndex = Math.floor(Math.random() * length);
+    if (!selectedIndexes.has(randomIndex)) {
+      selectedIndexes.add(randomIndex);
+      randomItems.push(array[randomIndex]);
+    }
+  }
+
+  return randomItems;
 }
 
 eventoRecomendadasUser();
