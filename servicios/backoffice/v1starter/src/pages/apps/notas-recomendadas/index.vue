@@ -13,6 +13,7 @@ const currentPage = ref(1);
 
 const recomendadas = ref([]);
 const isLoading = ref(false);
+const isLoadingUser = ref(false);
 const fechaIngresada = ref('');
 const fechaIni = ref('');
 const fechaFin = ref('');
@@ -159,6 +160,8 @@ async function resolveUsuarios(titulo){
 }
 
 async function searchUsuario(){
+    isLoadingUser.value = true;
+    usuarioEncontrado.value = true;
     const consulta = await fetch('https://servicio-de-actividad.vercel.app/recomendadas/get/usuario?searchQuery=' + searchQuery.value);
     const consultaJson = await consulta.json();
     const array = [];
@@ -176,7 +179,7 @@ async function searchUsuario(){
       array.push(data);
     }
     usuariosRaw.value = array;
-    usuarioEncontrado.value = true;
+    isLoadingUser.value = false;
 }
 
 const resolveNoticiasporUsuarios = (id) => {
@@ -439,7 +442,7 @@ async function downloadUsuarios() {
 
               </VCardText>
             
-              <VCardText v-show="usuarioEncontrado" v-if="isLoading">Cargando datos...</VCardText>
+              <VCardText v-show="usuarioEncontrado" v-if="isLoadingUser">Cargando datos...</VCardText>
               <VCardText v-show="usuarioEncontrado" v-else-if="usuariosRaw.length > 0">
 
                 <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
