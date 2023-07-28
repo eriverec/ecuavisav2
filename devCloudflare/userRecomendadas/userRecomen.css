@@ -258,6 +258,7 @@
   .parent_featured{
     grid-template-rows: 1fr;
   }
+  
   .parent_featured .element-rec-2 .media_block, 
   .parent_featured .element-rec-3 .media_block, 
   .parent_featured .element-rec-4 .media_block{
@@ -306,11 +307,17 @@
     line-height: 20px;
     font-family: 'Archivo', sans-serif;
   }
+  .parent_featured .element-rec-2 .headlineRec,
+  .parent_featured .element-rec-3 .headlineRec,
+  .parent_featured .element-rec-4 .headlineRec{
+    line-height: 1;
+  }
 
   .parent_featured .element-rec-2 .media_block, 
   .parent_featured .element-rec-3 .media_block, 
   .parent_featured .element-rec-4 .media_block{
     align-items: center;
+    grid-gap: 20px;
   }
 
   .parent_featured .element-rec-2 .media_block .multimediaRec, 
