@@ -1297,6 +1297,11 @@ img.sepDesk {
     padding-right: calc(var(--bs-gutter-x)/ 2);
     padding-left: calc(var(--bs-gutter-x)/ 2);
   }
+  .note-pierdas .text_block .article-section a {
+
+    color: #2927B9 !important;
+
+}
   .micro_593 .noticias,
   .quiz-entretenimiento .noticias {
     margin-bottom: 50px;
