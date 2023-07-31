@@ -37,6 +37,52 @@ const metaRaw = ref([]);
 const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
 const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
 
+function mergeAndSum(obj1, obj2) {
+  const merged = {};
+
+  // Unificar los registros de obj1 en el objeto merged
+  for (const item of obj1) {
+    const id = item._id;
+    if (!merged[id]) {
+      merged[id] = { ...item };
+    } else {
+      merged[id].navegaciones += item.navegaciones;
+    }
+  }
+
+  // Unificar los registros de obj2 en el objeto merged
+  for (const item of obj2) {
+    const id = item._id;
+    if (!merged[id]) {
+      merged[id] = { ...item };
+    } else {
+      merged[id].navegaciones += item.navegaciones;
+    }
+  }
+
+  // Convertir merged en un array de objetos
+  const result = Object.values(merged);
+
+  return result;
+}
+
+async function sortByVariable(data, variableName, order = 'asc') {
+  if (order !== 'asc' && order !== 'desc') {
+    throw new Error('Invalid order. Use "asc" for ascending or "desc" for descending.');
+  }
+
+  const sortedData = [...data];
+  sortedData.sort((a, b) => {
+    if (order === 'asc') {
+      return a[variableName] < b[variableName] ? -1 : 1;
+    } else {
+      return a[variableName] > b[variableName] ? -1 : 1;
+    }
+  });
+
+  return sortedData;
+}
+
 async function getMetadatos(fechai = '', fechaf = '') {
   isLoading.value = true;
   /*
@@ -50,14 +96,43 @@ async function getMetadatos(fechai = '', fechaf = '') {
     fechaIngresada.value = formatedI + ' a ' + formatedF;
   }*/
 
-  await fetch('https://servicio-de-actividad.vercel.app/meta/all/?' + new URLSearchParams({ fechai: fechai, fechaf: fechaf }))
-    .then(response => response.json())
-    .then(data => {
-      metaRaw.value = data.data;
-      metadatos.value = data.data;
-      isLoading.value = false;
-    })
-    .catch(error => { return error });
+  var metadatosFetch = [];
+  let skip = 1;
+  let batchSize = 700;
+
+  while (true) {
+    // const batchTrazabilidad = await getAllPaginasSesionesHome(fechai, fechaf, batchSize, skip);
+    const response = await fetch('https://servicio-de-actividad.vercel.app/meta/all/?' + new URLSearchParams({ 
+      fechai: fechai, 
+      fechaf: fechaf,
+      limit: batchSize,
+      page: skip
+    }));
+    const data = await response.json();
+    // console.log("Nombre: ",skip, data.data.length)
+    if (data.data.length === 0) {
+      break;
+    }
+
+    metadatosFetch = mergeAndSum(metadatosFetch, data.data);
+
+    metaRaw.value = await sortByVariable(Object.values(metadatosFetch), "navegaciones", "desc");
+    metadatos.value = await sortByVariable(Object.values(metadatosFetch), "navegaciones", "desc");
+    // metadatosFetch.push(...data.data);
+    skip += 1;
+  }
+
+
+  isLoading.value = false;
+
+  // await fetch('https://servicio-de-actividad.vercel.app/meta/all/?' + new URLSearchParams({ fechai: fechai, fechaf: fechaf }))
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     metaRaw.value = data.data;
+  //     metadatos.value = data.data;
+  //     isLoading.value = false;
+  //   })
+  //   .catch(error => { return error });
 
 }
 
@@ -564,20 +639,20 @@ async function downloadSelection() {
 
         <VRow>
           <VCol lg="6" cols="12" sm="6">
-            <!-- <VDialog v-model="isLoading" width="300">
+            <VDialog v-model="isLoading" width="300">
               <VCard color="primary" width="300">
                 <VCardText class="pt-3">
-                  Espere porfavor
+                  Espere porfavor, obteniendo registros.. {{ metadatos.length }}
                   <VProgressLinear indeterminate color="white" class="mb-0" />
                 </VCardText>
               </VCard>
-            </VDialog> -->
+            </VDialog>
 
-            <VDialog v-model="isLoading" width="300">
+            <!-- <VDialog v-model="isLoading" width="300">
               <VCardText class="pt-3 text-center">
                 <v-progress-circular indeterminate color="primary"></v-progress-circular>
               </VCardText>
-            </VDialog>
+            </VDialog> -->
 
 
 
