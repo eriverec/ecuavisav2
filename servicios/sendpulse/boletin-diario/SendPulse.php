@@ -483,25 +483,35 @@ class SendPulse {
 		$firstArray = array_slice($noticias, 0, 1);
 		$secondArray = array_slice($noticias, 1, 2);
 		$thirdArray = array_slice($noticias, 3);
-
+		$totalNoticia = count($noticias);
+		
 		$i_1 = 0;
 		foreach ($firstArray as $key => &$v) {
 			$v["link"] = $this->UTMLinks($i_1, $v["link"]);
-			$v["image"] = $this->cropImagen($v["image"], 440, 250);
+			if($totalNoticia > 4){
+				$v["image"] = $this->cropImagen($v["image"], 440, 250);
+			}
 			$i_1 = $i_1 + 1;
 		}
 
 		foreach ($secondArray as $key => &$v) {
 			$v["link"] = $this->UTMLinks($i_1, $v["link"]);
-			$v["image"] = $this->cropImagen($v["image"], 250, 225, 80);
+			if($totalNoticia > 4){
+				$v["image"] = $this->cropImagen($v["image"], 250, 225, 80);
+			}
+			
 			$i_1 = $i_1 + 1;
 		}
 		
 		foreach ($thirdArray as $key => &$v) {
 			$v["link"] = $this->UTMLinks($i_1, $v["link"]);
-			$v["image"] = $this->cropImagen($v["image"], 250, 175);
+			if($totalNoticia > 4){
+				$v["image"] = $this->cropImagen($v["image"], 250, 175);
+			}
+			
 			$i_1 = $i_1 + 1;
 		}
+		
 
 		$finalArray = array($firstArray, $secondArray, $thirdArray);
 		return $finalArray;
