@@ -2,6 +2,64 @@
   padding-top: 0px;
 }
 
+.fondo-agenda {
+  position: relative;
+  /* display: inline-block; */
+  text-align: center;
+  min-height: 170px;
+}
+
+.fondo-agenda img {
+  width: 100%;
+  display: none;
+}
+
+.fondo-agenda iframe {
+  position: absolute;
+  bottom: 30px;
+  left: 0px;
+  /*padding-left: 2rem;
+  padding-right:2rem!important;*/
+}
+
+.banner_desk,
+.banner_mov {
+  margin: 0 0 20px;
+}
+
+.banner_mov {
+  display: none;
+}
+
+@media (max-width: 600px) {
+  .banner_mov {
+      display: block;
+  }
+
+  .banner_desk {
+      display: none;
+  }
+}
+
+@media (min-width: 768px) {
+  .banner_mov {
+      display: none;
+  }
+
+  .banner_desk {
+      display: block;
+  }
+}
+
+@media (max-width: 767px) {
+  .fondo-agenda img {
+      height: 300px;
+      /* object-fit: cover; */
+      background-position: center;
+  }
+
+}
+
 /*CINTILLO*/
 .cintillo-rd {
   display: inline-block;
