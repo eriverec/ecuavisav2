@@ -18,6 +18,7 @@
 .navChilds.s_acumulada{
   justify-content: center;
   background: #000;
+  display: none;
 }
 
 .fondo-agenda {
