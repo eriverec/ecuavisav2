@@ -158,7 +158,43 @@
 .navCentral::-webkit-scrollbar:vertical {
   display: none;
 }
+/*menú de pills en móvil*/
+.navChilds {
+  margin: 30px 0;
+  border-bottom: 1px solid #2927B9;
+  overflow: auto;
+  white-space: nowrap;
+  display: flex;
+  flex-wrap: nowrap !important;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+}
 
+.navChilds::-webkit-scrollbar {
+  height: 8px;
+}
+
+.navChilds::-webkit-scrollbar:hover {
+  height: 10px;
+  padding-top: 10px;
+}
+
+.navChilds::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 0px rgba(0, 0, 0, 0);
+}
+
+.navChilds::-webkit-scrollbar-thumb {
+  height: 6px;
+  background-color: #b4b0ff;
+}
+
+.navChilds::-webkit-scrollbar:vertical {
+  background-color: #072569;
+  height: 10px;
+}
+
+/* END menú de pills en móvil*/
 .navChilds {
   margin: 30px 0;
 }
