@@ -23,17 +23,80 @@ const itemsPerPage = 8;
 const currentPage = ref(1);
 const totalCount = computed(() => urlCounts.value.length);
 
+function mergeAndSum(obj1, obj2) {
+  const merged = {};
+
+  // Unificar los registros de obj1 en el objeto merged
+  for (const item of obj1) {
+    const id = item._id;
+    if (!merged[id]) {
+      merged[id] = { ...item };
+    } else {
+      merged[id].count += item.count;
+    }
+  }
+
+  // Unificar los registros de obj2 en el objeto merged
+  for (const item of obj2) {
+    const id = item._id;
+    if (!merged[id]) {
+      merged[id] = { ...item };
+    } else {
+      merged[id].count += item.count;
+    }
+  }
+
+  // Convertir merged en un array de objetos
+  const result = Object.values(merged);
+
+  return result;
+}
+
+async function sortByVariable(data, variableName, order = 'asc') {
+  if (order !== 'asc' && order !== 'desc') {
+    throw new Error('Invalid order. Use "asc" for ascending or "desc" for descending.');
+  }
+
+  const sortedData = [...data];
+  sortedData.sort((a, b) => {
+    if (order === 'asc') {
+      return a[variableName] < b[variableName] ? -1 : 1;
+    } else {
+      return a[variableName] > b[variableName] ? -1 : 1;
+    }
+  });
+
+  return sortedData;
+}
+
 async function fetchData() {
   try {
-    const response = await fetch(`https://servicio-de-actividad.vercel.app/paginas/vistas/v2/all?fechai=${(fecha.value.i).format('MM-DD-YYYY')}&fechaf=${(fecha.value.f).format('MM-DD-YYYY')}`);
-    const data = await response.json();
+    var metadatosFetch = [];
+    let skip = 1;
+    let batchSize = 700;
+    isLoading.value = false;
+    // while (true) {
 
-    urlCounts.value = Array.from(data.data);
+      const response = await fetch(`https://servicio-de-actividad.vercel.app/paginas/vistas/v2/all?${ new URLSearchParams({ 
+        fechai: (fecha.value.i).format('MM-DD-YYYY'), 
+        fechaf: (fecha.value.f).format('MM-DD-YYYY'),
+        limit: batchSize,
+        page: skip
+      })}`);
+      const data = await response.json();
+      // console.log("Nombre: ",skip, data.data)
+      // if (data.data.length === 0) {
+      //   break;
+      // }
+      metadatosFetch = mergeAndSum(metadatosFetch, data.data);
+      urlCounts.value = Array.from(metadatosFetch);
+      skip += 1;
+    // }
+    
     // urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
   } catch (error) {
     console.error(error);
   }
-  isLoading.value = false;
 }
 
 async function accionBackoffice (){
