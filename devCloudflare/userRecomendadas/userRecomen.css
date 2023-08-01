@@ -465,10 +465,10 @@
 
 
 
-.parent_swiper .swiper-pagination-bullet {
+.swiper-pagination-bullets-dynamic .swiper-pagination-bullet {
   background: #2927B9!important;
 }
-.parent_swiper .swiper-pagination-bullet {
+.swiper-pagination-bullets-dynamic .swiper-pagination-bullet {
   width: 12px !important;
   height: 12px !important;
 }
