@@ -196,7 +196,7 @@ function eventoRecomendadasUser() {
                   }
 
                   var swiper = new Swiper(".htmlRecomen", {
-                    slidesPerView: 1,
+                    slidesPerView: 1.5,
                     spaceBetween: 20,
                     // navigation: {
                     //   nextEl: ".swiper-button-next",
@@ -209,7 +209,7 @@ function eventoRecomendadasUser() {
                     },
                     breakpoints: {
                       600: {
-                        slidesPerView: 1,
+                        slidesPerView: 1.5,
                         spaceBetween: 20,
                       },
                       768: {

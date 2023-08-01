@@ -12,9 +12,9 @@ const programacionLunes_a_Viernes = [
   { inicio: "17:00:00", fin: "18:00:00", titulo: "En Vivo" },
   { inicio: "18:00:00", fin: "19:00:00", titulo: "La ley de la venganza" },
   { inicio: "19:00:00", fin: "20:30:00", titulo: "Televistazo 19h00" },
-  { inicio: "20:30:00", fin: "21:30:00", titulo: "En Vivo" },
+  { inicio: "20:30:00", fin: "22:30:00", titulo: "En Vivo" },
  // { inicio: "21:00:00", fin: "22:00:00", titulo: "En Vivo" },
-  { inicio: "22:30:00", fin: "23:30:00", titulo: "En Vivo" },
+  //{ inicio: "22:30:00", fin: "23:30:00", titulo: "En Vivo" },
   { inicio: "23:30:00", fin: "00:30:00", titulo: "En Vivo" }
 
 ];
