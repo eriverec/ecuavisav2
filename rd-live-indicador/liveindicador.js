@@ -53,7 +53,6 @@ var min = d.getMinutes();
 var t = d.getTime();
 
 timeOfDay = d.getHours().toString().padStart(2, '0') + ":" + d.getMinutes().toString().padStart(2, '0');
-
 if (day > 0 && day <= 5) {
   //validacion de lunes a viernes
   // if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
@@ -65,10 +64,10 @@ if (day > 0 && day <= 5) {
     actDIV();
   } else if ("18:00" <= timeOfDay && timeOfDay <= "19:00") {
     actDIV();
-  } else if ("19:00" <= timeOfDay && timeOfDay <= "21:30") {
+  } else if ("19:00" <= timeOfDay && timeOfDay <= "22:30") {
     actDIV();
   }  
-  else if ("22:30" <= timeOfDay && timeOfDay <= "00:29") {
+  else if ("23:30" <= timeOfDay && timeOfDay <= "00:29") {
     actDIV();
   } 
   else {}
