@@ -337,7 +337,7 @@ function eventSudamericana() {
     }
   }
   // Agregar el contenido HTML al cuerpo del documento
-  const skk = document.querySelector(".contenido_dinamico__libertadores");
+  const skk = document.querySelector(".contenido_dinamico__sudamericana");
   if(skk){
     skk.innerHTML = htmlContent;
   }
