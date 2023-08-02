@@ -10,7 +10,7 @@ const moment = extendMoment(Moment);
 const vuetifyTheme = useTheme();
 const fecha = ref({});
 fecha.value = {
-  i: moment().add(-7, 'days'),
+  i: moment().add(-5, 'days'),
   f: moment(),
 }
 
@@ -75,7 +75,7 @@ async function fetchData() {
     let skip = 1;
     let batchSize = 700;
     isLoading.value = false;
-    // while (true) {
+    while (true) {
 
       const response = await fetch(`https://servicio-de-actividad.vercel.app/paginas/vistas/v2/all?${ new URLSearchParams({ 
         fechai: (fecha.value.i).format('MM-DD-YYYY'), 
@@ -84,14 +84,14 @@ async function fetchData() {
         page: skip
       })}`);
       const data = await response.json();
-      // console.log("Nombre: ",skip, data.data)
-      // if (data.data.length === 0) {
-      //   break;
-      // }
+      console.log("Nombre: ",skip, data.data)
+      if (data.data.length === 0) {
+        break;
+      }
       metadatosFetch = mergeAndSum(metadatosFetch, data.data);
       urlCounts.value = Array.from(metadatosFetch);
       skip += 1;
-    // }
+    }
     
     // urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
   } catch (error) {
@@ -148,7 +148,7 @@ const prevPage = () => {
     <VCol lg="12" cols="12" sm="6">
       <VCard>
         <VCardItem class="pb-sm-0">
-          <VCardTitle>Páginas más vistas de los útimos 7 días</VCardTitle>
+          <VCardTitle>Páginas más vistas de los útimos 5 días</VCardTitle>
           <VCardSubtitle>Un total de {{ totalCount }} registros, mostrando data desde {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
         </VCardItem>
 
