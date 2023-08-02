@@ -244,10 +244,13 @@ function eventLibertadores() {
 }
 
 if (window.location.pathname === "/deportes/tabla-de-posiciones" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/calendario" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/goleadores" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/planteles") {
-  eventLigaPro();
+  setTimeout(() => {
+    eventLigaPro();
+  }, 200);
 } else if (window.location.pathname === "/deportes/copa-libertadores" || window.location.pathname === "/deportes/copa-libertadores/calendario" || window.location.pathname === "/deportes/copa-libertadores/goleadores" || window.location.pathname === "/deportes/copa-libertadores/planteles") {
-  eventLibertadores();
+  setTimeout(() => {
+    eventLibertadores();
+  }, 200);
 } else if (window.location.pathname === "/deportes/copa-sudamericana") {
 } else {
 }
-
