@@ -1,0 +1,5 @@
+{
+  "watch": ["./"],
+  "ext": "js",
+  "exec": "uglifyjs ./cookiesEcv.js -c -m -o ./../devCloudflare/cookiesWeb/cookiesEcv.js"
+}

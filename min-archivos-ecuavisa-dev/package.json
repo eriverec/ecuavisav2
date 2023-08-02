@@ -1,0 +1,22 @@
+{
+  "name": "main-ecuavisa-dev",
+  "version": "1.0.0",
+  "description": "Este es el archivo original que se va a trabajar en modo de ambientes de pruebas, para luego minificarlo y mandarlo al ambiente de producción con: https://skalman.github.io/UglifyJS-online/",
+  "main": "main_ecuavisa.js",
+  "scripts": {
+    "main_ecuavisa": "uglifyjs ./main_ecuavisa.js -c -m -o ./../2023/main_ecuavisa.js",
+    "mapingads": "uglifyjs ./mapingads.js -c -m -o ./../2023/mapingads.js",
+    "mapingads_noads": "uglifyjs ./mapingads_noads.js -c -m -o ./../2023/mapingads_noads.js",
+    "trazabilidad": "uglifyjs ./trazabilidad.js -c -m -o ./../2023/trazabilidad.js",
+    "global": "uglifyjs ./global.js -c -m -o ./../2023/global.js"
+  },
+  "author": "Crojano",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1",
+    "uglify-js": "^3.17.4"
+  },
+  "dependencies": {
+    "terser": "^5.19.2"
+  }
+}
