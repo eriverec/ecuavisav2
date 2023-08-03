@@ -443,6 +443,7 @@ function eventPremierLeague() {
   }
 }
 
+
 if (window.location.pathname === "/deportes/tabla-de-posiciones" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/calendario" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/goleadores" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/planteles") {
   setTimeout(() => {
     eventLigaPro();
