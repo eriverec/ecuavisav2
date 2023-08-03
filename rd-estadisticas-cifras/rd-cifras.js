@@ -99,7 +99,7 @@ function eventLigaPro() {
                   <a class="nav-link" id="" href="/deportes/premierleague" >Premier League</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="" href="/deportes/liga-espanola">Liga Española</a>
+                  <a class="nav-link" id="" href="/deportes/liga-espanola">Liga Española</a>
               </li>
           </ul>
           <div class="tab-content" id="myTabContent">
@@ -214,7 +214,7 @@ function eventLibertadores() {
                   <a class="nav-link" id="" href="/deportes/premierleague" >Premier League</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="" href="/deportes/liga-espanola">Liga Española</a>
+                  <a class="nav-link" id="" href="/deportes/liga-espanola">Liga Española</a>
               </li>
           </ul>
           <div class="tab-content" id="myTabContent">
@@ -320,7 +320,7 @@ function eventSudamericana() {
                   <a class="nav-link" id="" href="/deportes/premierleague" >Premier League</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="" href="/deportes/liga-espanola">Liga Española</a>
+                  <a class="nav-link " id="" href="/deportes/liga-espanola">Liga Española</a>
               </li>
           </ul>
           <div class="tab-content" id="myTabContent">
@@ -426,7 +426,7 @@ function eventPremierLeague() {
                   <a class="nav-link active" id="" href="/deportes/premierleague" >Premier League</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="" href="/deportes/liga-espanola">Liga Española</a>
+                  <a class="nav-link" id="" href="/deportes/liga-espanola">Liga Española</a>
               </li>
           </ul>
           <div class="tab-content" id="myTabContent">
