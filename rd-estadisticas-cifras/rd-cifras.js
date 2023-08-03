@@ -69,6 +69,8 @@ function eventLigaPro() {
       },
     },
   ];
+
+  const currentUrl = window.location.pathname;
     
   // Variable para almacenar el contenido HTML
   let htmlContent = "";
