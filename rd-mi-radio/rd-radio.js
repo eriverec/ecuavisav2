@@ -5,7 +5,7 @@ const programacionLunes_a_Viernes = [
   // { inicio: "10:30:00", fin: "13:00:00", titulo: "En Contacto" },
   { inicio: "13:00:00", fin: "14:00:00", titulo: "Televistazo 13h00" },
   // { inicio: "14:00:00", fin: "15:30:00", titulo: "Los hackers de la farándula" },//hachers
-  { inicio: "19:00:00", fin: "20:00:00", titulo: "Televistazo 19h00" }
+  { inicio: "19:00:00", fin: "20:30:00", titulo: "Televistazo 19h00" }
 ];
 
 const programacionSabado = [
