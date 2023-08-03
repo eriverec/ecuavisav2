@@ -98,6 +98,9 @@ function eventLigaPro() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/premierleague" >Premier League</a>
               </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link active" id="" href="/deportes/liga-espanola">Liga Española</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
@@ -210,6 +213,9 @@ function eventLibertadores() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/premierleague" >Premier League</a>
               </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link active" id="" href="/deportes/liga-espanola">Liga Española</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
@@ -313,6 +319,9 @@ function eventSudamericana() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/premierleague" >Premier League</a>
               </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link active" id="" href="/deportes/liga-espanola">Liga Española</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
@@ -415,6 +424,9 @@ function eventPremierLeague() {
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link active" id="" href="/deportes/premierleague" >Premier League</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link active" id="" href="/deportes/liga-espanola">Liga Española</a>
               </li>
           </ul>
           <div class="tab-content" id="myTabContent">
