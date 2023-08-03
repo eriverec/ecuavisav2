@@ -95,6 +95,9 @@ function eventLigaPro() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana" >Copa Sudamericana</a>
               </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/premierleague" >Premier League</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
@@ -204,6 +207,9 @@ function eventLibertadores() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana" >Copa Sudamericana</a>
               </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/premierleague" >Premier League</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
@@ -303,6 +309,9 @@ function eventSudamericana() {
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link active" id="copaSudamericana-tab" href="/deportes/copa-sudamericana" >Copa Sudamericana</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/premierleague" >Premier League</a>
               </li>
           </ul>
           <div class="tab-content" id="myTabContent">
