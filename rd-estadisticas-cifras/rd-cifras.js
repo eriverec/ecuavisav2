@@ -452,6 +452,108 @@ function eventPremierLeague() {
   }
 }
 
+function eventLaLigaEspañola() {
+  const urlsCifras = [
+    {
+      mainUrl: "/deportes/liga-espanola",
+      subUrl: {
+        name: "Posiciones",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/espana/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.espana&lang=es_LA&page=posiciones",
+      },
+    },
+    {
+      mainUrl: "/deportes/liga-espanola/calendario",
+      subUrl: {
+        name: "Calendario",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/espana/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.espana&lang=es_LA&page=fixture",
+      },
+    },
+    {
+      mainUrl: "/deportes/liga-espanola/goleadores",
+      subUrl: {
+        name: "Goleadores",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/espana/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.espana&lang=es_LA&page=goleadores",
+      },
+    },
+    {
+      mainUrl: "/deportes/liga-espanola/planteles",
+      subUrl: {
+        name: "Planteles",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/espana/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.espana&lang=es_LA&page=planteles",
+      },
+    },
+  ];
+
+  const currentUrl = window.location.pathname;
+
+  // Variable para almacenar el contenido HTML
+  let htmlContent = "";
+
+  const uligaespanolaTabla = "/deportes/liga-espanola";
+  const uligaespanolaCalendario = "/deportes/liga-espanola/calendario";
+  const uligaespanolaGoleadores = "/deportes/liga-espanola/goleadores";
+  const uligaespanolaPlanteles = "/deportes/liga-espanola/planteles";
+
+  // Recorrer el objeto urlsCifras
+  for (const urlObj of urlsCifras) {
+    if (currentUrl === urlObj.mainUrl) {
+      // Generar el contenido HTML usando un template string
+      htmlContent = /*html*/ `        
+          <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones">LigaPro</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="copali-tab" href="/deportes/copa-libertadores">Copa Libertadores</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="copaSudamericana-tab" href="/deportes/copa-sudamericana">Copa Sudamericana</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/premierleague">Premier League</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link active" id="" href="/deportes/liga-espanola">Liga Española</a>
+              </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+              <div class="" id="ligapro" role="tabpanel">
+                  <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
+                  <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/liga-espanola" class="nav-link ${currentUrl === uligaespanolaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/liga-espanola/calendario" class="nav-link ${currentUrl === uligaespanolaCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/liga-espanola/goleadores" class="nav-link ${currentUrl === uligaespanolaGoleadores ? "active" : ""} " id="Goleadores-tab" >Goleadores</a>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/liga-espanola/planteles" class="nav-link ${currentUrl === uligaespanolaPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
+                      </li>
+                  </ul>
+                  <div class="tab-content" id="myTabContent">
+                      <div class="" id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
+                          <iframe title="ifr_Posiciones" src="${urlObj.subUrl.iframe}" width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"class=""></iframe>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        `;
+      break; // Detener el bucle una vez que se encuentra una coincidencia
+    }
+  }
+  // Agregar el contenido HTML al cuerpo del documento
+  const skk = document.querySelector(".contenido_dinamico__espana");
+  if(skk){
+    skk.innerHTML = htmlContent;
+  }
+}
 
 if (window.location.pathname === "/deportes/tabla-de-posiciones" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/calendario" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/goleadores" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/planteles") {
   setTimeout(() => {
@@ -469,4 +571,8 @@ if (window.location.pathname === "/deportes/tabla-de-posiciones" || window.locat
   setTimeout(() => {
     eventPremierLeague();
   }, 200);
-} else { console.log("no esta validado dicha url");}
+} else if (window.location.pathname === "/deportes/liga-espanola" || window.location.pathname === "/deportes/liga-espanola/calendario" || window.location.pathname === "/deportes/liga-espanola/goleadores" || window.location.pathname === "/deportes/liga-espanola/planteles") {
+  setTimeout(() => {
+    eventLaLigaEspañola();
+  }, 200);
+}else { console.log("no esta validado dicha url");}

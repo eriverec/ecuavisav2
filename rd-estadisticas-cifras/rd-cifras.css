@@ -48,7 +48,6 @@
   display: none;
 }
 
-
 @media (max-width: 600px) {
   .banner_mov {
       display: block;
@@ -78,7 +77,7 @@
 
 }
 
-/*CINTILLO*/
+/*  CINTILLO*/
 .cintillo-rd {
   display: inline-block;
   font-family: 'Anek Malayalam';
