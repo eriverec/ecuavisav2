@@ -32,19 +32,19 @@ var connectTabs = new Tabs();
 const navLinksTemplate = /*html*/ `
 <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
     <li class="nav-item" role="presentation">
-        <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones">LigaPro</a>
+        <a class="nav-link ${window.location.pathname === "/deportes/tabla-de-posiciones" ? "active" : ""}" id="ligapro-tab" href="/deportes/tabla-de-posiciones">LigaPro</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link" id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
+        <a class="nav-link ${window.location.pathname === "/deportes/copa-libertadores/calendario" ? "active" : ""}" id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link" id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario">Copa Sudamericana</a>
+        <a class="nav-link ${window.location.pathname === "/deportes/copa-sudamericana/calendario" ? "active" : ""}" id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario">Copa Sudamericana</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link" id="" href="/deportes/premierleague/calendario">Premier League</a>
+        <a class="nav-link ${window.location.pathname === "/deportes/premierleague/calendario" ? "active" : ""}" id="" href="/deportes/premierleague/calendario">Premier League</a>
     </li>
     <li class="nav-item" role="presentation">
-        <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
+        <a class="nav-link ${window.location.pathname === "/deportes/liga-espanola/calendario" ? "active" : ""}" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
     </li>
 </ul>
 `;
