@@ -76,7 +76,7 @@ function mostrarProgramacion() {
     tituloEstasEscu.innerText = "";
     embedPlayer.style.display = "none";
     textApagado.style.display = "block";
-    textApagado.innerText = "Aquí encontrarás una opción para acceder a toda la programación informativa Radio En vivo: Contacto Directo (6:55), Televistazo en la Comunidad (5:55-7:30), Televistazo (13:00-19:00)."
+    textApagado.innerText = "Aquí encontrarás una opción para acceder a toda la programación informativa Audio En vivo: Contacto Directo (6:55), Televistazo en la Comunidad (5:55-7:30), Televistazo (13:00-19:00)."
 
   }
 
