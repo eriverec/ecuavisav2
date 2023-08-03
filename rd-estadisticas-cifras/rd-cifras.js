@@ -222,7 +222,7 @@ function eventLibertadores() {
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/tabla-de-posiciones" class="nav-link ${currentUrl === uLibertadoresTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                          <a href="/deportes/copa-libertadores" class="nav-link ${currentUrl === uLibertadoresTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/copa-libertadores/calendario" class="nav-link ${currentUrl === uLibertadoresCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
@@ -328,7 +328,7 @@ function eventSudamericana() {
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/tabla-de-posiciones" class="nav-link ${currentUrl === usudamericanaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                          <a href="/deportes/copa-sudamericana" class="nav-link ${currentUrl === usudamericanaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/copa-sudamericana/calendario" class="nav-link ${currentUrl === usudamericanaCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
