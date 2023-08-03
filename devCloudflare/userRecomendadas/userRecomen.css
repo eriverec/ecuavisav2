@@ -403,10 +403,6 @@
 
 
 /* INICIO - ESTILO SWIPER */
-.swiper-backface-hidden{
-    padding-right: 1rem;
-    padding-left: 1rem;
-}
 
 .parent_swiper {
   padding-bottom: 50px;
@@ -471,6 +467,13 @@
 .swiper-pagination-bullets-dynamic .swiper-pagination-bullet {
   width: 12px !important;
   height: 12px !important;
+}
+
+@media (max-width: 767px) {
+  .swiper-backface-hidden{
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
 }
 
 /* FIN - ESTILO SWIPER */
