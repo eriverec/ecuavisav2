@@ -79,6 +79,14 @@ function eventLigaPro() {
   const uLigaProCalendario = "/deportes/liga-pro-serie-a-ecuador/calendario";
   const uLigaProGoleadores = "/deportes/liga-pro-serie-a-ecuador/goleadores";
   const uLigaProPlanteles = "/deportes/liga-pro-serie-a-ecuador/planteles";
+  const uLigaProAcumulada = "/deportes/liga-pro-serie-a-ecuador/tabla-acumulada";
+
+  //cambiarle al cintillo texto a tabla acumulada
+  if(currentUrl === uLigaProAcumulada){
+    console.log("es la url tabla acumulada");
+    const uee = document.querySelector('.cintillo-rd h1');
+    uee.innerHTML = "LigaPro - T. Acumulada"
+  }
 
   const acumulada = /*html*/`<ul class="nav nav-pills navChilds s_acumulada __cvamos" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
@@ -130,7 +138,7 @@ function eventLigaPro() {
                   </ul>
                   <div class="tab-content" id="myTabContent">
                       <div id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
-                          ${currentUrl === uLigaProTabla ? acumulada : currentUrl === uLigaProCalendario ? acumulada : ''}
+                          ${currentUrl === uLigaProTabla ? acumulada : currentUrl === uLigaProAcumulada ? acumulada : ''}
                           <iframe title="ifr_Posiciones"
                               src="${urlObj.subUrl.iframe}"
                               width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"
