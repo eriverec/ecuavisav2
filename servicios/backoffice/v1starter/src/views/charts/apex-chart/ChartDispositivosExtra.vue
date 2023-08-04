@@ -811,11 +811,12 @@ export default {
       await this.fetchFiltros();
       let fechai;
       let fechaf;
+      console.log('filtro def',this.filtroDefault );
       if (!this.filtroDefault) {
-        let formatI = moment().add(-29, 'days').format("MM-DD-YYYY");
+        let formatI = moment().add(-3, 'days').format("MM-DD-YYYY");
         let formatF = moment().format("MM-DD-YYYY");
         this.fechaIngesada = String(formatI + ' a ' + formatF);
-        fechai = moment().add(-28, 'days').format("MM-DD-YYYY");
+        fechai = moment().add(-1, 'days').format("MM-DD-YYYY");
         fechaf = moment().add(1, 'days').format("MM-DD-YYYY");
       } else {
         let fechas = this.filtroDefault.fecha.split('a');
@@ -875,6 +876,37 @@ export default {
 
     async getDataGrafico(fechai, fechaf) {
 
+      var Arr = [];
+      let page = 1;
+      //let limit = 1000;
+      while (true) {
+           var myHeaders = new Headers();
+           myHeaders.append("Content-Type", "application/json"); 
+           var fechasFetch = JSON.stringify({
+              "fechai": fechai,
+              "fechaf": fechaf,
+              "page": page
+            });
+            var requestOptions = {
+              method: 'POST',
+              headers: myHeaders,
+              body: fechasFetch,
+              redirect: 'follow'
+            };
+        const consulta = await fetch('https://servicio-de-actividad.vercel.app/dispositivos/full', requestOptions);
+        const consultaJson = await consulta.json();
+        const data = consultaJson.grafico;
+        if (data.length === 0) {
+                break;
+        }
+        Arr.push(...data);
+        page += 1;
+      }
+      let obtener = Arr;
+      this.getDataFetch = obtener;
+
+      return obtener;
+      /*
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -925,6 +957,7 @@ export default {
       this.getDataFetch = obtener;
 
       return obtener;
+      */
     },
     async obtenerFechaDispositivos(selectedDates, dateStr, instance) {
       await this.resolveActividad();
@@ -1059,7 +1092,7 @@ export default {
 
   },
   async mounted() {
-    var resp = await this.getInitGraficoDispositivos();
+    await this.getInitGraficoDispositivos();
     this.emitData();
 
   },
