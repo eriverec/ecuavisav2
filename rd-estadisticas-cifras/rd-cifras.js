@@ -118,6 +118,12 @@ function eventLigaPro() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
               </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
@@ -226,6 +232,12 @@ function eventLibertadores() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
               </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
@@ -331,6 +343,12 @@ function eventSudamericana() {
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
           </ul>
           <div class="tab-content" id="myTabContent">
@@ -439,6 +457,12 @@ function eventPremierLeague() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
               </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel">
@@ -541,6 +565,12 @@ function eventLaLigaEspañola() {
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link active" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
           </ul>
           <div class="tab-content" id="myTabContent">
@@ -648,6 +678,9 @@ function eventMLS() {
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link active" id="" href="/deportes/mls/calendario">MLS</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
           </ul>
           <div class="tab-content" id="myTabContent">
@@ -757,8 +790,8 @@ function eventLeaguesCup() {
                   <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
               </li>
               <li class="nav-item" role="presentation">
-              <a class="nav-link active" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
-          </li>
+                  <a class="nav-link active" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div role="tabpanel">
