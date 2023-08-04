@@ -190,7 +190,7 @@ function eventLibertadores() {
   // Variable para almacenar el contenido HTML
   let htmlContent = "";
 
-  const uLibertadoresTabla = "/deportes/copa-libertadores";
+  const uLibertadoresTabla = "/deportes/copa-libertadores/tablaposiciones";
   const uLibertadoresCalendario = "/deportes/copa-libertadores/calendario";
   const uLibertadoresGoleadores = "/deportes/copa-libertadores/goleadores";
   const uLibertadoresPlanteles = "/deportes/copa-libertadores/planteles";
@@ -231,7 +231,7 @@ function eventLibertadores() {
                           <a href="/deportes/copa-libertadores/planteles" class="nav-link ${currentUrl === uLibertadoresPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
                       </li>
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/copa-libertadores" class="nav-link ${currentUrl === uLibertadoresTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                          <a href="/deportes/copa-libertadores/tablaposiciones" class="nav-link ${currentUrl === uLibertadoresTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                   </ul>
                   <div class="tab-content" id="myTabContent">
@@ -296,7 +296,7 @@ function eventSudamericana() {
   // Variable para almacenar el contenido HTML
   let htmlContent = "";
 
-  const usudamericanaTabla = "/deportes/copa-sudamericana";
+  const usudamericanaTabla = "/deportes/copa-sudamericana/tablaposiciones";
   const usudamericanaCalendario = "/deportes/copa-sudamericana/calendario";
   const usudamericanaGoleadores = "/deportes/copa-sudamericana/goleadores";
   const usudamericanaPlanteles = "/deportes/copa-sudamericana/planteles";
@@ -338,7 +338,7 @@ function eventSudamericana() {
                           <a href="/deportes/copa-sudamericana/planteles" class="nav-link ${currentUrl === usudamericanaPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
                       </li>
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/copa-sudamericana" class="nav-link ${currentUrl === usudamericanaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                          <a href="/deportes/copa-sudamericana/tablaposiciones" class="nav-link ${currentUrl === usudamericanaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                   </ul>
                   <div class="tab-content" id="myTabContent">
@@ -403,7 +403,7 @@ function eventPremierLeague() {
   // Variable para almacenar el contenido HTML
   let htmlContent = "";
 
-  const upremierleagueTabla = "/deportes/premierleague";
+  const upremierleagueTabla = "/deportes/premierleague/tablaposiciones";
   const upremierleagueCalendario = "/deportes/premierleague/calendario";
   const upremierleagueGoleadores = "/deportes/premierleague/goleadores";
   const upremierleaguePlanteles = "/deportes/premierleague/planteles";
@@ -444,7 +444,7 @@ function eventPremierLeague() {
                           <a href="/deportes/premierleague/planteles" class="nav-link ${currentUrl === upremierleaguePlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
                       </li>
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/premierleague" class="nav-link ${currentUrl === upremierleagueTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                          <a href="/deportes/premierleague/tablaposiciones" class="nav-link ${currentUrl === upremierleagueTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                   </ul>
                   <div class="tab-content" id="myTabContent">
@@ -506,7 +506,7 @@ function eventLaLigaEspañola() {
   // Variable para almacenar el contenido HTML
   let htmlContent = "";
 
-  const uligaespanolaTabla = "/deportes/liga-espanola";
+  const uligaespanolaTabla = "/deportes/liga-espanola/tablaposiciones";
   const uligaespanolaCalendario = "/deportes/liga-espanola/calendario";
   const uligaespanolaGoleadores = "/deportes/liga-espanola/goleadores";
   const uligaespanolaPlanteles = "/deportes/liga-espanola/planteles";
@@ -548,7 +548,7 @@ function eventLaLigaEspañola() {
                           <a href="/deportes/liga-espanola/planteles" class="nav-link ${currentUrl === uligaespanolaPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
                       </li>
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/liga-espanola" class="nav-link ${currentUrl === uligaespanolaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                          <a href="/deportes/liga-espanola/tablaposiciones" class="nav-link ${currentUrl === uligaespanolaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                   </ul>
                   <div class="tab-content" id="myTabContent">
@@ -573,19 +573,19 @@ if (window.location.pathname === "/deportes/tabla-de-posiciones" || window.locat
   setTimeout(() => {
     eventLigaPro();
   }, 200);
-} else if (window.location.pathname === "/deportes/copa-libertadores" || window.location.pathname === "/deportes/copa-libertadores/calendario" || window.location.pathname === "/deportes/copa-libertadores/goleadores" || window.location.pathname === "/deportes/copa-libertadores/planteles") {
+} else if (window.location.pathname === "/deportes/copa-libertadores/tablaposiciones" || window.location.pathname === "/deportes/copa-libertadores/calendario" || window.location.pathname === "/deportes/copa-libertadores/goleadores" || window.location.pathname === "/deportes/copa-libertadores/planteles") {
   setTimeout(() => {
     eventLibertadores();
   }, 200);
-} else if (window.location.pathname === "/deportes/copa-sudamericana" || window.location.pathname === "/deportes/copa-sudamericana/calendario" || window.location.pathname === "/deportes/copa-sudamericana/goleadores" || window.location.pathname === "/deportes/copa-sudamericana/planteles") {
+} else if (window.location.pathname === "/deportes/copa-sudamericana/tablaposiciones" || window.location.pathname === "/deportes/copa-sudamericana/calendario" || window.location.pathname === "/deportes/copa-sudamericana/goleadores" || window.location.pathname === "/deportes/copa-sudamericana/planteles") {
   setTimeout(() => {
     eventSudamericana();
   }, 200);
-} else if (window.location.pathname === "/deportes/premierleague" || window.location.pathname === "/deportes/premierleague/calendario" || window.location.pathname === "/deportes/premierleague/goleadores" || window.location.pathname === "/deportes/premierleague/planteles") {
+} else if (window.location.pathname === "/deportes/premierleague/tablaposiciones" || window.location.pathname === "/deportes/premierleague/calendario" || window.location.pathname === "/deportes/premierleague/goleadores" || window.location.pathname === "/deportes/premierleague/planteles") {
   setTimeout(() => {
     eventPremierLeague();
   }, 200);
-} else if (window.location.pathname === "/deportes/liga-espanola" || window.location.pathname === "/deportes/liga-espanola/calendario" || window.location.pathname === "/deportes/liga-espanola/goleadores" || window.location.pathname === "/deportes/liga-espanola/planteles") {
+} else if (window.location.pathname === "/deportes/liga-espanola/tablaposiciones" || window.location.pathname === "/deportes/liga-espanola/calendario" || window.location.pathname === "/deportes/liga-espanola/goleadores" || window.location.pathname === "/deportes/liga-espanola/planteles") {
   setTimeout(() => {
     eventLaLigaEspañola();
   }, 200);
