@@ -656,16 +656,16 @@ function eventMLS() {
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
                       
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/mls/calendario" class="nav-link ${currentUrl === uligaespanolaCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
+                          <a href="/deportes/mls/calendario" class="nav-link ${currentUrl === uMLSCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
                       </li>
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/mls/goleadores" class="nav-link ${currentUrl === uligaespanolaGoleadores ? "active" : ""} " id="Goleadores-tab" >Goleadores</a>
+                          <a href="/deportes/mls/goleadores" class="nav-link ${currentUrl === uMLSGoleadores ? "active" : ""} " id="Goleadores-tab" >Goleadores</a>
                       </li>
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/mls/planteles" class="nav-link ${currentUrl === uligaespanolaPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
+                          <a href="/deportes/mls/planteles" class="nav-link ${currentUrl === uMLSPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
                       </li>
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/mls/tablaposiciones" class="nav-link ${currentUrl === uligaespanolaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                          <a href="/deportes/mls/tablaposiciones" class="nav-link ${currentUrl === uMLSTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                   </ul>
                   <div class="tab-content" id="myTabContent">
@@ -706,5 +706,9 @@ if (window.location.pathname === "/deportes/tabla-de-posiciones" || window.locat
 } else if (window.location.pathname === "/deportes/liga-espanola/tablaposiciones" || window.location.pathname === "/deportes/liga-espanola/calendario" || window.location.pathname === "/deportes/liga-espanola/goleadores" || window.location.pathname === "/deportes/liga-espanola/planteles") {
   setTimeout(() => {
     eventLaLigaEspañola();
+  }, 200);
+} else if (window.location.pathname === "/deportes/mls/tablaposiciones" || window.location.pathname === "/deportes/mls/calendario" || window.location.pathname === "/deportes/mls/goleadores" || window.location.pathname === "/deportes/mls/planteles") {
+  setTimeout(() => {
+    eventMLS();
   }, 200);
 }else { console.log("no esta validado dicha url");}
