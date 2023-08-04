@@ -130,7 +130,7 @@ function eventLigaPro() {
                   </ul>
                   <div class="tab-content" id="myTabContent">
                       <div id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
-                          ${currentUrl === uLigaProTabla ? acumulada : ''}
+                          ${currentUrl === uLigaProTabla ? acumulada : currentUrl === uLigaProCalendario ? acumulada : ''}
                           <iframe title="ifr_Posiciones"
                               src="${urlObj.subUrl.iframe}"
                               width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"
