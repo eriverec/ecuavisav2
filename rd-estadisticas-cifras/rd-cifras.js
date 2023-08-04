@@ -80,6 +80,15 @@ function eventLigaPro() {
   const uLigaProGoleadores = "/deportes/liga-pro-serie-a-ecuador/goleadores";
   const uLigaProPlanteles = "/deportes/liga-pro-serie-a-ecuador/planteles";
 
+  const acumulada = /*html*/`<ul class="nav nav-pills navChilds s_acumulada __cvamos" id="myTab" role="tablist">
+  <li class="nav-item" role="presentation">
+      <a href="/deportes/tabla-de-posiciones" class="nav-link active" id="fase2-tab" >Fase 2</a>
+  </li>
+  <li class="nav-item" role="presentation">
+      <a href="/deportes/liga-pro-serie-a-ecuador/tabla-acumulada" class="nav-link " id="acumulada-tab">Acumulada</a>
+  </li>
+</ul>`;
+
   // Recorrer el objeto urlsCifras
   for (const urlObj of urlsCifras) {
     if (currentUrl === urlObj.mainUrl) {
@@ -120,15 +129,8 @@ function eventLigaPro() {
                       </li>
                   </ul>
                   <div class="tab-content" id="myTabContent">
-                      <div class="" id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
-                          <ul class="nav nav-pills navChilds s_acumulada" id="myTab" role="tablist">
-                              <li class="nav-item" role="presentation">
-                                  <a href="/deportes/tabla-de-posiciones" class="nav-link active" id="fase2-tab" >Fase 2</a>
-                              </li>
-                              <li class="nav-item" role="presentation">
-                                  <a href="/deportes/liga-pro-serie-a-ecuador/tabla-acumulada" class="nav-link " id="acumulada-tab">Acumulada</a>
-                              </li>
-                          </ul>
+                      <div id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
+                          ${currentUrl === uLigaProTabla ? acumulada : ''}
                           <iframe title="ifr_Posiciones"
                               src="${urlObj.subUrl.iframe}"
                               width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"
@@ -564,6 +566,113 @@ function eventLaLigaEspañola() {
   }
   // Agregar el contenido HTML al cuerpo del documento
   const skk = document.querySelector(".contenido_dinamico__espana");
+  if(skk){
+    skk.innerHTML = htmlContent;
+  }
+}
+
+function eventMLS() {
+  const urlsCifras = [
+    {
+      mainUrl: "/deportes/mls/tablaposiciones",
+      subUrl: {
+        name: "Posiciones",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/mls/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.mls&lang=es_LA&page=posiciones",
+      },
+    },
+    {
+      mainUrl: "/deportes/mls/calendario",
+      subUrl: {
+        name: "Calendario",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/mls/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.mls&lang=es_LA&page=fixture",
+      },
+    },
+    {
+      mainUrl: "/deportes/mls/goleadores",
+      subUrl: {
+        name: "Goleadores",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/mls/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.mls&lang=es_LA&page=goleadores",
+      },
+    },
+    {
+      mainUrl: "/deportes/mls/planteles",
+      subUrl: {
+        name: "Planteles",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/mls/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.mls&lang=es_LA&page=planteles",
+      },
+    },
+  ];
+
+  const currentUrl = window.location.pathname;
+
+  // Variable para almacenar el contenido HTML
+  let htmlContent = "";
+
+  const uMLSTabla = "/deportes/mls/tablaposiciones";
+  const uMLSCalendario = "/deportes/mls/calendario";
+  const uMLSGoleadores = "/deportes/mls/goleadores";
+  const uMLSPlanteles = "/deportes/mls/planteles";
+
+  // Recorrer el objeto urlsCifras
+  for (const urlObj of urlsCifras) {
+    if (currentUrl === urlObj.mainUrl) {
+      // Generar el contenido HTML usando un template string
+      htmlContent = /*html*/ `        
+          <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones">LigaPro</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario">Copa Sudamericana</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/premierleague/calendario">Premier League</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link active" id="" href="/deportes/mls/calendario">MLS</a>
+              </li>
+          </ul>
+          <div class="tab-content" id="myTabContent">
+              <div role="tabpanel">
+                  <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
+                  <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
+                      
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/mls/calendario" class="nav-link ${currentUrl === uligaespanolaCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/mls/goleadores" class="nav-link ${currentUrl === uligaespanolaGoleadores ? "active" : ""} " id="Goleadores-tab" >Goleadores</a>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/mls/planteles" class="nav-link ${currentUrl === uligaespanolaPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/mls/tablaposiciones" class="nav-link ${currentUrl === uligaespanolaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                      </li>
+                  </ul>
+                  <div class="tab-content" id="myTabContent">
+                      <div class="" id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
+                          <iframe title="ifr_Posiciones" src="${urlObj.subUrl.iframe}" width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"class=""></iframe>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        `;
+      break; // Detener el bucle una vez que se encuentra una coincidencia
+    }
+  }
+  // Agregar el contenido HTML al cuerpo del documento
+  const skk = document.querySelector(".contenido_dinamico__mls");
   if(skk){
     skk.innerHTML = htmlContent;
   }

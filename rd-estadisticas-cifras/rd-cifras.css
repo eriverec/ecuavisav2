@@ -74,7 +74,6 @@
       /* object-fit: cover; */
       background-position: center;
   }
-
 }
 
 /*  CINTILLO*/
@@ -99,7 +98,7 @@
   font-weight: 600 !important;
   font-size: 88px !important;
   line-height: 81px !important;
-  text-transform: lowercase !important;
+  text-transform: capitalize !important;
   color: #2927B9 !important;
   margin-bottom: 24px !important;
 }
