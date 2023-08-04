@@ -28,16 +28,16 @@
     </VCol>
     <VCol sm="4" cols="12">
       <VSelect v-model="selectedDispositivo" :items="itemDispositivos" label="Dispositivos"
-        @update:modelValue="resolveChart" />
+        @update:modelValue="resolveChart" :disabled="isLoading" />
     </VCol>
     <VCol sm="4" cols="12">
-      <VSelect v-model="selectedActividad" :items="itemActividad" label="Actividad" @update:modelValue="resolveChart" />
+      <VSelect v-model="selectedActividad" :items="itemActividad" label="Actividad" @update:modelValue="resolveChart" :disabled="isLoading"/>
     </VCol>
     <VCol sm="4" cols="12">
-      <VSelect v-model="selectedOs" :items="itemOs" label="Sistema operativo" @update:modelValue="resolveChart" />
+      <VSelect v-model="selectedOs" :items="itemOs" label="Sistema operativo" @update:modelValue="resolveChart" :disabled="isLoading" />
     </VCol>
     <VCol sm="4" cols="12">
-      <VSelect v-model="selectedBrowser" :items="itemBrowser" label="Browser" @update:modelValue="resolveChart" />
+      <VSelect v-model="selectedBrowser" :items="itemBrowser" label="Browser" @update:modelValue="resolveChart" :disabled="isLoading" />
     </VCol>
 
     <VCol sm="4" cols="12">
@@ -55,12 +55,12 @@
       </div>
     </VCol>
     <VCol sm="4" cols="12">
-      <VBtn color="success" @click="reset"> Reiniciar filtros</VBtn>
+      <VBtn color="success" @click="reset" :disabled="isLoading"> Reiniciar filtros</VBtn>
     </VCol>
   </VRow>
 
 
-  <h3 :class="classLoadingText" class="loaderText">Cargando...</h3>
+   <h3 v-show="isLoading" class="loaderText">Cargando...</h3> 
 
   <div :class="classLoading">
     <div class="v-row">
@@ -256,12 +256,14 @@ export default {
     };
   },
   computed: {
+    /*
     classLoading() {
       return this.isLoading ? 'w-100 disabled' : 'w-100'
     },
     classLoadingText() {
       return this.isLoading ? '' : 'd-none';
     },
+    */
     chartConfig() {
       var vuetifyTheme_2 = useTheme();
       var themeColors_2 = vuetifyTheme_2.current.value;
@@ -300,6 +302,11 @@ export default {
           parentHeightOffset: 0,
           zoom: { enabled: false },
           toolbar: { show: false },
+          animations: {
+            enabled: true,
+            easing: 'easeinout',
+            speed: 300,
+          }
         },
         tooltip: {
           shared: false,
@@ -377,123 +384,6 @@ export default {
           categories: [],
         },
       };
-    },
-    chartConfigDonut() {
-      var vuetifyTheme_2 = useTheme();
-      var themeColors_2 = vuetifyTheme_2.current.value;
-      var themeSecondaryTextColor_2 = `rgba(${hexToRgb(
-        themeColors_2.colors["on-surface"]
-      )},${themeColors_2.variables["medium-emphasis-opacity"]})`;
-
-      var themeDisabledTextColor_2 = `rgba(${hexToRgb(
-        themeColors_2.colors["on-surface"]
-      )},${themeColors_2.variables["disabled-opacity"]})`;
-
-      var themeBorderColor_2 = `rgba(${hexToRgb(
-        String(themeColors_2.variables["border-color"])
-      )},${themeColors_2.variables["border-opacity"]})`;
-
-      var themePrimaryTextColor_2 = `rgba(${hexToRgb(
-        themeColors_2.colors["on-surface"]
-      )},${themeColors_2.variables["high-emphasis-opacity"]})`;
-
-      this.themeSecondaryTextColor = themeSecondaryTextColor_2;
-      this.themeDisabledTextColor = themeDisabledTextColor_2;
-      this.themeBorderColor = themeBorderColor_2;
-      this.themePrimaryTextColor = themePrimaryTextColor_2;
-
-      const donutColors = {
-        series1: '#6152d9',
-        series2: '#00d4bd',
-        series3: '#826bf8',
-        series4: '#32baff',
-        series5: '#5288d9',
-      }
-      return {
-        chart: {
-          type: 'donut',
-        },
-        stroke: { width: 0 },
-        labels: this.chartOptions.labels,
-        series: this.chartOptions.series,
-        colors: [donutColors.series1, donutColors.series5, donutColors.series3, donutColors.series2],
-        dataLabels: {
-          enabled: true,
-          formatter: val => `${parseInt(val, 10)}%`,
-        },
-        legend: {
-          position: 'bottom',
-          markers: { offsetX: -3 },
-          labels: { colors: this.themeSecondaryTextColor },
-          itemMargin: {
-            vertical: 3,
-            horizontal: 10,
-          },
-        },
-        plotOptions: {
-          pie: {
-            donut: {
-              labels: {
-                show: true,
-                name: {
-                  fontSize: '1.5rem',
-                },
-                value: {
-                  fontSize: '0.8rem',
-                  color: this.themeSecondaryTextColor,
-                  formatter: val => `${parseInt(val, 10)} dispositivos`,
-                },
-                total: {
-                  show: false,
-                  fontSize: '1.5rem',
-                  label: 'Total',
-                  formatter: () => '37%',
-                  color: this.themePrimaryTextColor,
-                },
-              },
-            },
-          },
-        },
-        responsive: [
-          {
-            breakpoint: 992,
-            options: {
-              chart: {
-                height: 380,
-              },
-              legend: {
-                position: 'bottom',
-              },
-            },
-          },
-          {
-            breakpoint: 576,
-            options: {
-              chart: {
-                height: 320,
-              },
-              plotOptions: {
-                pie: {
-                  donut: {
-                    labels: {
-                      show: true,
-                      name: {
-                        fontSize: '1rem',
-                      },
-                      value: {
-                        fontSize: '1rem',
-                      },
-                      total: {
-                        fontSize: '1rem',
-                      },
-                    },
-                  },
-                },
-              },
-            },
-          },
-        ],
-      }
     }
   },
   methods: {
@@ -638,10 +528,7 @@ export default {
     },
 
     async getDataTrazabilidadFull2(data) {
-
       var serieTotal = [];
-     
-     
       // if(serieTotal.length > 1){
       //   console.log("si hay");
       // }else{
@@ -721,6 +608,7 @@ export default {
 
       const divText = document.querySelector('.divtext');
       const divGraf = document.getElementById('crejemplo');
+      /*
       if(dataGroupBrowser.length === 0){
         //console.log("vacio")
         divText.classList.remove('d-none');
@@ -730,8 +618,8 @@ export default {
         divText.classList.add('d-none');
         divGraf.classList.remove('d-none');
       }
+      */
 
-      
       //console.log('filtro',dataGroupBrowser)
       //console.log("query", query)
       //console.log("prueba", dataGroupBrowser)
@@ -803,7 +691,7 @@ export default {
         }
       }
       //console.log('Final FUll' ,[dataFormat])
-
+      this.dataFormateada = [dataFormat];
       return [dataFormat];
     },
 
@@ -836,7 +724,6 @@ export default {
 */
       return true;
     },
-
 
     async getDataNoFilter() {
       await this.resolveActividad();
@@ -875,7 +762,8 @@ export default {
     },
 
     async getDataGrafico(fechai, fechaf) {
-
+      this.isLoading = true;
+      console.log('obteniendo datos..');
       var Arr = [];
       let page = 1;
       //let limit = 1000;
@@ -900,12 +788,16 @@ export default {
                 break;
         }
         Arr.push(...data);
+        this.getDataFetch = Array.from(Arr);
+        this.dataFormateada = await this.getDataTrazabilidadFull2(Arr);
         page += 1;
+        ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
+        this.emitData();
+        console.log('data',this.dataFormateada);
       }
-      let obtener = Arr;
-      this.getDataFetch = obtener;
+      this.isLoading = false;
 
-      return obtener;
+      //return obtener;
       /*
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -959,48 +851,44 @@ export default {
       return obtener;
       */
     },
+    async resolveChart() {
+
+    if (this.selectedActividad == "visita") {
+      this.visita = false;
+      //this.isLoading = true;
+      await this.getDataTrazabilidadFull2(this.getDataFetch);
+      ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
+      //this.isLoading = false;
+      this.emitData();
+    };
+    if (this.selectedActividad == "sesion") {
+      this.visita = true;
+    // this.isLoading = true;
+      await this.getDataTrazabilidadFull2(this.getDataFetch);
+      ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
+    // this.isLoading = false;
+      this.emitData();
+    };
+    },
+
     async obtenerFechaDispositivos(selectedDates, dateStr, instance) {
-      await this.resolveActividad();
-      //var respJson = await nuevoArchivoJson(archivoJson);
-      if (selectedDates.length > 1) {
-        this.fechai = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
-        this.fechaf = moment(selectedDates[1]).add(-1, 'days').format('MM/DD/YYYY');
-        //var panelGrafico = document.querySelector("#apexchartscrejemplo");
-        //panelGrafico.classList.add("disabled");
-        //console.log('fecha ingresada',this.fechaIngesada)
-        //console.log(typeof this.fechaIngesada);
-        this.isLoading = true;
-        this.getData = await this.getDataGrafico(this.fechai, this.fechaf);
-        this.isLoading = false;
-        //panelGrafico.classList.remove("disabled");
-        this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData);
-        ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
-        this.emitData();
-
-      }
+    console.log('obtener fecha');
+    await this.resolveActividad();
+    //var respJson = await nuevoArchivoJson(archivoJson);
+    if (selectedDates.length > 1) {
+      this.fechai = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
+      this.fechaf = moment(selectedDates[1]).add(-1, 'days').format('MM/DD/YYYY');
+      //var panelGrafico = document.querySelector("#apexchartscrejemplo");
+      //panelGrafico.classList.add("disabled");
+      //console.log('fecha ingresada',this.fechaIngesada)
+      //console.log(typeof this.fechaIngesada);
+    // this.isLoading = true;
+      await this.getDataGrafico(this.fechai, this.fechaf);
+    // this.isLoading = false;
+      //panelGrafico.classList.remove("disabled");
+      //await this.getDataTrazabilidadFull2(this.getDataFetch);
+    }
     },
-    async formatVisitaGrafico() {
-      if (this.dataFormateada.length > 0 || true) {
-        this.isLoading = true;
-        this.visita = true;
-        this.dataFormateada = await this.getDataTrazabilidadFull(this.getData);
-        ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
-
-        this.isLoading = false;
-      }
-    },
-    async formatActividadGrafico() {
-      if (this.dataFormateada.length > 0 || true) {
-        /**/
-        this.visita = false;
-        this.isLoading = true;
-        this.dataFormateada = await this.getDataTrazabilidadFull(this.getData);
-        ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
-        this.isLoading = false;
-
-      }
-    },
-
     async resolveActividad() {
 
       if (this.selectedActividad == "visita") {
@@ -1010,27 +898,7 @@ export default {
         this.visita = true;
       };
     },
-    async resolveChart() {
-
-      if (this.selectedActividad == "visita") {
-        this.visita = false;
-        this.isLoading = true;
-        this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData);
-        ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
-        this.isLoading = false;
-        this.emitData();
-      };
-      if (this.selectedActividad == "sesion") {
-        this.visita = true;
-        this.isLoading = true;
-        this.dataFormateada = await this.getDataTrazabilidadFull2(this.getData);
-        ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
-        this.isLoading = false;
-        this.emitData();
-      };
-    },
-
-
+    
     /* nooooo vale */
     async fetchFiltros() {
       await fetch('https://servicio-filtros.vercel.app/dispositivos/grafico/all')
