@@ -152,7 +152,7 @@ function eventLigaPro() {
 function eventLibertadores() {
   const urlsCifras = [
     {
-      mainUrl: "/deportes/copa-libertadores",
+      mainUrl: "/deportes/copa-libertadores/tablaposiciones",
       subUrl: {
         name: "Posiciones",
         agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/libertadores/pages/es/agenda.html",
@@ -258,7 +258,7 @@ function eventLibertadores() {
 function eventSudamericana() {
   const urlsCifras = [
     {
-      mainUrl: "/deportes/copa-sudamericana",
+      mainUrl: "/deportes/copa-sudamericana/tablaposiciones",
       subUrl: {
         name: "Posiciones",
         agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/sudamericana/pages/es/agenda.html",
@@ -365,7 +365,7 @@ function eventSudamericana() {
 function eventPremierLeague() {
   const urlsCifras = [
     {
-      mainUrl: "/deportes/premierleague",
+      mainUrl: "/deportes/premierleague/tablaposiciones",
       subUrl: {
         name: "Posiciones",
         agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/premierleague/pages/es/agenda.html",
@@ -468,7 +468,7 @@ function eventPremierLeague() {
 function eventLaLigaEspañola() {
   const urlsCifras = [
     {
-      mainUrl: "/deportes/liga-espanola",
+      mainUrl: "/deportes/liga-espanola/tablaposiciones",
       subUrl: {
         name: "Posiciones",
         agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/espana/pages/es/agenda.html",
