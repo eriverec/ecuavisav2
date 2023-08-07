@@ -31,15 +31,18 @@
 
 
 //FUNCION PARA HACER SCROLL HORIZONTAL AUTOMATICO DE ACUERDO A LA CLASE ACTIVE
-var activeNavItem = document.querySelector(".nav-link.active");
-if (activeNavItem) {
-  var contTabs = document.querySelectorAll("#myTab");
-  if(contTabs){
-    for (const sst of contTabs){
-      sst.scrollLeft = activeNavItem.offsetLeft - (sst.offsetWidth - activeNavItem.offsetWidth) / 2;
+setTimeout(() => {
+  var activeNavItem = document.querySelector(".nav-link.active");
+  if (activeNavItem) {
+    var contTabs = document.querySelectorAll("#myTab");
+    if(contTabs){
+      for (const sst of contTabs){
+        sst.scrollLeft = activeNavItem.offsetLeft - (sst.offsetWidth - activeNavItem.offsetWidth) / 2;
+        console.log('for ejecutado scroll horizontal');
+      }
     }
   }
-}
+}, 200);
 
 
 function eventLigaPro() {
