@@ -33,7 +33,7 @@ var connectTabs = new Tabs();
 function eventLigaPro() {
   const urlsCifras = [
     {
-      mainUrl: "/deportes/tabla-de-posiciones",
+      mainUrl: "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador",
       subUrl: {
         name: "Posiciones",
         agenda:
@@ -75,11 +75,11 @@ function eventLigaPro() {
   // Variable para almacenar el contenido HTML
   let htmlContent = "";
 
-  const uLigaProTabla = "/deportes/tabla-de-posiciones";
+  const uLigaProTabla = "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador";
   const uLigaProCalendario = "/deportes/liga-pro-serie-a-ecuador/calendario";
   const uLigaProGoleadores = "/deportes/liga-pro-serie-a-ecuador/goleadores";
   const uLigaProPlanteles = "/deportes/liga-pro-serie-a-ecuador/planteles";
-  const uLigaProAcumulada = "/deportes/liga-pro-serie-a-ecuador/tabla-acumulada";
+  const uLigaProAcumulada = "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador";
 
   //cambiarle al cintillo texto a tabla acumulada
   if(currentUrl === uLigaProAcumulada){
@@ -90,10 +90,10 @@ function eventLigaPro() {
 
   const acumulada = /*html*/`<ul class="nav nav-pills navChilds s_acumulada __cvamos" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
-      <a href="/deportes/tabla-de-posiciones" class="nav-link active" id="fase2-tab" >Fase 2</a>
+      <a href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" class="nav-link active" id="fase2-tab" >Fase 2</a>
   </li>
   <li class="nav-item" role="presentation">
-      <a href="/deportes/liga-pro-serie-a-ecuador/tabla-acumulada" class="nav-link " id="acumulada-tab">Acumulada</a>
+      <a href="/deportes/tabla-acumulada/liga-pro/serie-a-ecuador" class="nav-link " id="acumulada-tab">Acumulada</a>
   </li>
 </ul>`;
 
@@ -104,7 +104,7 @@ function eventLigaPro() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones">LigaPro</a>
+                  <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
@@ -130,7 +130,7 @@ function eventLigaPro() {
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/tabla-de-posiciones" class="nav-link ${currentUrl === uLigaProTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                          <a href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" class="nav-link ${currentUrl === uLigaProTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/liga-pro-serie-a-ecuador/calendario" class="nav-link ${currentUrl === uLigaProCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
@@ -218,7 +218,7 @@ function eventLibertadores() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="ligapro-tab" href="/deportes/tabla-de-posiciones">LigaPro</a>
+                  <a class="nav-link " id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link active" id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
@@ -330,7 +330,7 @@ function eventSudamericana() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="ligapro-tab" href="/deportes/tabla-de-posiciones">LigaPro</a>
+                  <a class="nav-link " id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
@@ -443,7 +443,7 @@ function eventPremierLeague() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="ligapro-tab" href="/deportes/tabla-de-posiciones">LigaPro</a>
+                  <a class="nav-link " id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
@@ -552,7 +552,7 @@ function eventLaLigaEspañola() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones">LigaPro</a>
+                  <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
@@ -662,7 +662,7 @@ function eventMLS() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones">LigaPro</a>
+                  <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
@@ -772,7 +772,7 @@ function eventLeaguesCup() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones">LigaPro</a>
+                  <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
@@ -830,7 +830,7 @@ function eventLeaguesCup() {
 
 
 
-if (window.location.pathname === "/deportes/tabla-de-posiciones" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/calendario" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/goleadores" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/planteles") {
+if (window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/calendario" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/goleadores" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/planteles") {
   setTimeout(() => {
     eventLigaPro();
   }, 200);
