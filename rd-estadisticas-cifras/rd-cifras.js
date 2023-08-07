@@ -1004,18 +1004,13 @@ window.location.pathname === "/deportes/eliminatorias-conmebol/planteles") {
 //FUNCION PARA HACER SCROLL HORIZONTAL AUTOMATICO DE ACUERDO A LA CLASE ACTIVE
 setTimeout(() => {
   var activeNavItem = document.querySelector(".nav-link.active");
-  console.log("dentro de setTimeout");
   if (activeNavItem) {
-  console.log("dentro del 1er if");
-
-    var contTabs = document.querySelectorAll("#myTab");
+    var contTabs = document.getElementById("myTab");
     if(contTabs){
-    console.log("dentro del 2do if");
-
-      for (const sst of contTabs){
-        sst.scrollLeft = activeNavItem.offsetLeft - (sst.offsetWidth - activeNavItem.offsetWidth) / 2;
-        console.log('for ejecutado scroll horizontal');
-      }
+      contTabs.scrollLeft = activeNavItem.offsetLeft - (contTabs.offsetWidth - activeNavItem.offsetWidth) / 2;
+      // for (const sst of contTabs){
+      //   console.log('for ejecutado scroll horizontal');
+      // }
     }
   }
 }, 300);
