@@ -29,22 +29,6 @@
 
 // var connectTabs = new Tabs();
 
-
-//FUNCION PARA HACER SCROLL HORIZONTAL AUTOMATICO DE ACUERDO A LA CLASE ACTIVE
-setTimeout(() => {
-  var activeNavItem = document.querySelector(".nav-link.active");
-  if (activeNavItem) {
-    var contTabs = document.querySelectorAll("#myTab");
-    if(contTabs){
-      for (const sst of contTabs){
-        sst.scrollLeft = activeNavItem.offsetLeft - (sst.offsetWidth - activeNavItem.offsetWidth) / 2;
-        console.log('for ejecutado scroll horizontal');
-      }
-    }
-  }
-}, 200);
-
-
 function eventLigaPro() {
   const urlsCifras = [
     {
@@ -1016,3 +1000,22 @@ window.location.pathname === "/deportes/eliminatorias-conmebol/planteles") {
     eventEliminatorios();
   }, 200);
 } else { console.log("no esta validado dicha url");}
+
+//FUNCION PARA HACER SCROLL HORIZONTAL AUTOMATICO DE ACUERDO A LA CLASE ACTIVE
+setTimeout(() => {
+  var activeNavItem = document.querySelector(".nav-link.active");
+  console.log("dentro de setTimeout");
+  if (activeNavItem) {
+  console.log("dentro del 1er if");
+
+    var contTabs = document.querySelectorAll("#myTab");
+    if(contTabs){
+    console.log("dentro del 2do if");
+
+      for (const sst of contTabs){
+        sst.scrollLeft = activeNavItem.offsetLeft - (sst.offsetWidth - activeNavItem.offsetWidth) / 2;
+        console.log('for ejecutado scroll horizontal');
+      }
+    }
+  }
+}, 300);
