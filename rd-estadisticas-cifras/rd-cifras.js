@@ -81,16 +81,16 @@ function eventLigaPro() {
   const uLigaProPlanteles = "/deportes/liga-pro-serie-a-ecuador/planteles";
   const uLigaProAcumulada = "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador";
 
-  const uee = document.querySelector('.cintillo-rd h1');
-  if(currentUrl === uLigaProCalendario){
-    uee.innerHTML = "LigaPro - Calendario"
-  } else if(currentUrl === uLigaProGoleadores){
-    uee.innerHTML = "LigaPro - Goleadores"
-  } else if(currentUrl === uLigaProPlanteles){
-    uee.innerHTML = "LigaPro - Planteles"
-  } else if(currentUrl === uLigaProAcumulada){
-    uee.innerHTML = "LigaPro - T. Acumulada"
-  } else {}
+  // const uee = document.querySelector('.cintillo-rd h1');
+  // if(currentUrl === uLigaProCalendario){
+  //   uee.innerHTML = "LigaPro - Calendario"
+  // } else if(currentUrl === uLigaProGoleadores){
+  //   uee.innerHTML = "LigaPro - Goleadores"
+  // } else if(currentUrl === uLigaProPlanteles){
+  //   uee.innerHTML = "LigaPro - Planteles"
+  // } else if(currentUrl === uLigaProAcumulada){
+  //   uee.innerHTML = "LigaPro - T. Acumulada"
+  // } else {}
 
   const acumulada = /*html*/`<ul class="nav nav-pills navChilds s_acumulada __cvamos" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
@@ -944,8 +944,6 @@ function eventEliminatorios() {
   }
 }
 
-
-
 if (window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/calendario" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/goleadores" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/planteles") {
   setTimeout(() => {
     eventLigaPro();
@@ -974,8 +972,11 @@ if (window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a
   setTimeout(() => {
     eventLeaguesCup();
   }, 200);
-} else if (window.location.pathname === "/deportes/eliminatorias-conmebol/tablaposiciones" || window.location.pathname === "/deportes/eliminatorias-conmebol/calendario" || window.location.pathname === "/deportes/eliminatorias-conmebol/goleadores" || window.location.pathname === "/deportes/eliminatorias-conmebol/planteles") {
+} else if (window.location.pathname === "/deportes/eliminatorias-conmebol/tablaposiciones" || 
+window.location.pathname === "/deportes/eliminatorias-conmebol/calendario" || 
+window.location.pathname === "/deportes/eliminatorias-conmebol/goleadores" || 
+window.location.pathname === "/deportes/eliminatorias-conmebol/planteles") {
   setTimeout(() => {
-    eventLeaguesCup();
+    eventEliminatorios();
   }, 200);
 } else { console.log("no esta validado dicha url");}
