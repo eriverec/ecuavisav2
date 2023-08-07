@@ -81,12 +81,16 @@ function eventLigaPro() {
   const uLigaProPlanteles = "/deportes/liga-pro-serie-a-ecuador/planteles";
   const uLigaProAcumulada = "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador";
 
-  //cambiarle al cintillo texto a tabla acumulada
-  if(currentUrl === uLigaProAcumulada){
-    console.log("es la url tabla acumulada");
-    const uee = document.querySelector('.cintillo-rd h1');
+  const uee = document.querySelector('.cintillo-rd h1');
+  if(currentUrl === uLigaProCalendario){
+    uee.innerHTML = "LigaPro - Calendario"
+  } else if(currentUrl === uLigaProGoleadores){
+    uee.innerHTML = "LigaPro - Goleadores"
+  } else if(currentUrl === uLigaProPlanteles){
+    uee.innerHTML = "LigaPro - Planteles"
+  } else if(currentUrl === uLigaProAcumulada){
     uee.innerHTML = "LigaPro - T. Acumulada"
-  }
+  } else {}
 
   const acumulada = /*html*/`<ul class="nav nav-pills navChilds s_acumulada __cvamos" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
