@@ -128,6 +128,9 @@ function eventLigaPro() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
@@ -242,6 +245,9 @@ function eventLibertadores() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
@@ -353,6 +359,9 @@ function eventSudamericana() {
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
               </li>
           </ul>
           <div class="tab-content" id="myTabContent">
@@ -467,6 +476,9 @@ function eventPremierLeague() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel">
@@ -575,6 +587,9 @@ function eventLaLigaEspañola() {
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
               </li>
           </ul>
           <div class="tab-content" id="myTabContent">
@@ -686,6 +701,9 @@ function eventMLS() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+              </li>
           </ul>
           <div class="tab-content" id="myTabContent">
               <div role="tabpanel">
@@ -795,6 +813,9 @@ function eventLeaguesCup() {
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link active" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
               </li>
           </ul>
           <div class="tab-content" id="myTabContent">
