@@ -1,9 +1,8 @@
 <script setup>
-import {
-  avatarText,
-  kFormatter,
-} from '@core/utils/formatters'
 import { useUserListStore } from '@/views/apps/user/useUserListStore'
+import {
+avatarText
+} from '@core/utils/formatters'
 
 const userListStore = useUserListStore()
 const route = useRoute()
@@ -39,7 +38,14 @@ const resolveUserProvider = provider => {
 };
 const isUserInfoEditDialogVisible = ref(false);
 const isUpgradePlanDialogVisible = ref(false);
-
+const isUpdatePassVisible = ref(false);
+const password = ref({
+  new: '',
+  confirm: ''
+})
+const passwordsDifferent = ref(false);
+const mensaje = ref('');
+const mensajeActivo = ref(false);
 const mailIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2rem" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="#7367f0" d="M4 20q-.825 0-1.412-.587Q2 18.825 2 18V6q0-.825.588-1.412Q3.175 4 4 4h16q.825 0 1.413.588Q22 5.175 22 6v12q0 .825-.587 1.413Q20.825 20 20 20Zm8-7.175q.125 0 .262-.038q.138-.037.263-.112L19.6 8.25q.2-.125.3-.312q.1-.188.1-.413q0-.5-.425-.75T18.7 6.8L12 11L5.3 6.8q-.45-.275-.875-.013Q4 7.05 4 7.525q0 .25.1.437q.1.188.3.288l7.075 4.425q.125.075.263.112q.137.038.262.038Z"/></svg>'
 
 
@@ -53,13 +59,62 @@ console.log('datos a enviar',userData);
  
 };
 
+async function updatePass () {
+//console.log('datos a enviar',password.value);
+//console.log('email', props.userData.email);
+try {
+  if(password.value.new && password.value.confirm){
+    if(password.value.new !== password.value.confirm){
+      passwordsDifferent.value = true;
+      return mensaje.value = 'Las contraseñas no coinciden';
+    }
+  
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
 
+  var raw = JSON.stringify({
+    "email": props.userData.email,
+    "password": password.value.new
+  });
 
+  var requestOptions = {
+    method: 'PUT',
+    headers: myHeaders,
+    body: raw,
+    redirect: 'follow'
+  };
+  await fetch('https://ecuavisa-login-service.onrender.com/changePassword', requestOptions)
+  .then(response => response.json())
+  .then((result) => {
+    //console.log('resultado',result.mensaje);
+    mensaje.value = result.mensaje;
+    mensajeActivo.value = true;
+    onPasswordUpdateReset();
+  })
+  .catch(error => console.log('error', error));
+  
+  }   
+  } catch (error) {
+    console.error(error.message);
+  }
+};
 
+const dialogPasswordValueUpdate = (value) =>{
+  isUpdatePassVisible.value = value;
+  if(value === false){
+    password.value.new = '';
+    password.value.confirm = '';
+  }
+}
+
+const onPasswordUpdateReset  = () =>{
+  password.value.new = '';
+  password.value.confirm = '';
+  isUpdatePassVisible.value = false;
+}
 
 
 /*
-
 const standardPlan = {
   plan: 'Standard',
   price: 99,
@@ -82,8 +137,6 @@ const resolveUserStatusVariant = stat => {
   
   return 'primary'
 }
-
-
 
 const resolveUserRoleVariant = role => {
   if (role === 'subscriber')
@@ -122,6 +175,25 @@ const resolveUserRoleVariant = role => {
 
 <template>
   <VRow>
+
+    <VSnackbar
+      v-model="passwordsDifferent" 
+      color="error"
+      transition="scale-transition"
+      location="top center"
+    >
+      {{ mensaje }}
+    </VSnackbar>
+
+    <VSnackbar
+      v-model="mensajeActivo" 
+      color="success"
+      transition="scale-transition"
+      location="top center"
+    >
+      {{ mensaje }}
+    </VSnackbar>
+
     <!-- SECTION User Details -->
     <VCol cols="12">
       <VCard v-if="props.userData">
@@ -302,6 +374,14 @@ const resolveUserRoleVariant = role => {
         <VCardText class="d-flex justify-center">
           <VBtn
             variant="elevated"
+            class="me-3"
+            @click="isUpdatePassVisible = true"
+          >
+            Actualizar contraseña
+          </VBtn>
+
+          <VBtn
+            variant="elevated"
             class="me-3 d-none"
             @click="isUserInfoEditDialogVisible = true"
           >
@@ -407,6 +487,64 @@ const resolveUserRoleVariant = role => {
     :user-data="props.userData"
     @submit="updateUser"
   />
+  <!-- 👉 Actualizar password -->
+  <VDialog
+            :width="$vuetify.display.smAndDown ? 'auto' : 700"
+            :model-value="isUpdatePassVisible"
+            @update:model-value="dialogPasswordValueUpdate"
+          >
+            <!-- Dialog close btn -->
+            <DialogCloseBtn @click="dialogPasswordValueUpdate(false)" />
+
+            <VCard class="pa-sm-14 pa-5">
+              <VCardItem class="text-center">
+                <VCardTitle class="text-h5 mb-3">
+                  Actualizar contraseña
+                </VCardTitle>
+              </VCardItem>
+
+              <VCardText>
+                <!-- 👉 Form -->
+                <VForm
+                  class="mt-6"
+                  @submit.prevent="updatePass()"
+                >
+                  <VRow class="d-flex flex-wrap justify-center gap-4">
+                    <!-- 👉 Nombre -->
+                    <VCol cols="8">
+                      <VTextField
+                        v-model="password.new"
+                        label="Contraseña nueva"
+                      />
+                    </VCol>
+
+                    <VCol cols="8">
+                      <VTextField
+                        v-model="password.confirm"
+                        label="Confirmar contraseña"
+                      />
+                    </VCol>
+
+                    <!-- 👉 Submit and Cancel -->
+                    <VCol
+                      cols="12"
+                      class="d-flex flex-wrap justify-center gap-4"
+                    >
+                      <VBtn type="submit"> Enviar </VBtn>
+
+                      <VBtn
+                        color="secondary"
+                        variant="tonal"
+                        @click="onPasswordUpdateReset"
+                      >
+                        Cancelar
+                      </VBtn>
+                    </VCol>
+                  </VRow>
+                </VForm>
+              </VCardText>
+            </VCard>
+          </VDialog>
 
   <!-- 👉 Upgrade plan dialog -->
   <!--
