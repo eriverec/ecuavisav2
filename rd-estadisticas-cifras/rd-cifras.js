@@ -34,11 +34,25 @@ function eventLigaPro() {
     {
       mainUrl: "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador",
       subUrl: {
-        name: "Posiciones",
-        agenda:
-          "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/ecuador/pages/es/agenda.html",
-        iframe:
-          "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.ecuador.posiciones&lang=es_LA&page=Fase_2",
+        name: "Posiciones Fase 1",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/ecuador/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.ecuador.posiciones&lang=es_LA&page=Fase_1",
+      },
+    },
+    {
+      mainUrl: "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador/etapa-2",
+      subUrl: {
+        name: "Posiciones Fase 2",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/ecuador/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.ecuador.posiciones&lang=es_LA&page=Fase_2",
+      },
+    },
+    {
+      mainUrl: "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador",
+      subUrl: {
+        name: "Tabla Acumulada",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/ecuador/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.ecuador.posiciones&lang=es_LA&page=Acumulada",
       },
     },
     {
@@ -67,14 +81,7 @@ function eventLigaPro() {
         iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.ecuador&lang=es_LA&page=planteles",
       },
     },
-    {
-      mainUrl: "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador",
-      subUrl: {
-        name: "Tabla Acumulada",
-        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/ecuador/pages/es/agenda.html",
-        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.ecuador.posiciones&lang=es_LA&page=Acumulada",
-      },
-    },
+   
   ];
 
   const currentUrl = window.location.pathname;
@@ -83,10 +90,11 @@ function eventLigaPro() {
   let htmlContent = "";
 
   const uLigaProTabla = "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador";
+  const uLigaProTablaFase2 = "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador/etapa-2";
+  const uLigaProAcumulada = "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador";
   const uLigaProCalendario = "/deportes/liga-pro-serie-a-ecuador/calendario";
   const uLigaProGoleadores = "/deportes/liga-pro-serie-a-ecuador/goleadores";
   const uLigaProPlanteles = "/deportes/liga-pro-serie-a-ecuador/planteles";
-  const uLigaProAcumulada = "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador";
 
   // const uee = document.querySelector('.cintillo-rd h1');
   // if(currentUrl === uLigaProCalendario){
@@ -101,7 +109,10 @@ function eventLigaPro() {
 
   const acumulada = /*html*/`<ul class="nav nav-pills navChilds s_acumulada __cvamos" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
-      <a href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" class="nav-link ${currentUrl === uLigaProTabla ? "active" : ""}" id="fase2-tab" >Fase 2</a>
+      <a href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" class="nav-link ${currentUrl === uLigaProTabla ? "active" : ""}" id="etapa-tab" >Fase 1</a>
+  </li>
+  <li class="nav-item" role="presentation">
+      <a href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador/etapa-2" class="nav-link ${currentUrl === uLigaProTablaFase2 ? "active" : ""}" id="etapa-tab" >Fase 2</a>
   </li>
   <li class="nav-item" role="presentation">
       <a href="/deportes/tabla-acumulada/liga-pro/serie-a-ecuador" class="nav-link ${currentUrl === uLigaProAcumulada ? "active" : ""}" id="acumulada-tab">Acumulada</a>
@@ -158,7 +169,7 @@ function eventLigaPro() {
                   </ul>
                   <div class="tab-content" id="myTabContent">
                       <div id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
-                          ${currentUrl === uLigaProTabla ? acumulada : currentUrl === uLigaProAcumulada ? acumulada : ''}
+                          ${currentUrl === uLigaProTabla ? acumulada : currentUrl === uLigaProAcumulada ? acumulada : currentUrl === uLigaProTablaFase2 ? acumulada : ''}
                           <iframe title="ifr_Posiciones"
                               src="${urlObj.subUrl.iframe}"
                               width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"
@@ -976,7 +987,8 @@ if (window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a
 window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/calendario" || 
 window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/goleadores" || 
 window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/planteles"|| 
-window.location.pathname === "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador") {
+window.location.pathname === "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador" ||
+window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador/etapa-2") {
   setTimeout(() => {
     eventLigaPro();
   }, 200);
