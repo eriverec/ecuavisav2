@@ -38,7 +38,7 @@ function eventLigaPro() {
         agenda:
           "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/ecuador/pages/es/agenda.html",
         iframe:
-          "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.ecuador&lang=es_LA&page=posiciones",
+          "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.ecuador.posiciones&lang=es_LA&page=Fase_2",
       },
     },
     {
@@ -65,6 +65,14 @@ function eventLigaPro() {
         name: "Planteles",
         agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/ecuador/pages/es/agenda.html",
         iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.ecuador&lang=es_LA&page=planteles",
+      },
+    },
+    {
+      mainUrl: "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador",
+      subUrl: {
+        name: "Tabla Acumulada",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/ecuador/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.ecuador.posiciones&lang=es_LA&page=Acumulada",
       },
     },
   ];
@@ -964,7 +972,11 @@ function eventEliminatorios() {
   }
 }
 
-if (window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/calendario" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/goleadores" || window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/planteles") {
+if (window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" || 
+window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/calendario" || 
+window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/goleadores" || 
+window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/planteles"|| 
+window.location.pathname === "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador") {
   setTimeout(() => {
     eventLigaPro();
   }, 200);
