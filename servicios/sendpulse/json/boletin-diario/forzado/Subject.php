@@ -85,6 +85,24 @@ class Subject {
 		return null;
     }
 
+    private function getAll(){
+    	// Ruta al archivo JSON
+		$rutaArchivo = './../../boletines.json';
+		// Leer el contenido del archivo JSON
+		$contenidoJSON = file_get_contents($rutaArchivo);
+		// Decodificar el contenido JSON en un array asociativo
+		// $datos = json_decode($contenidoJSON, true);
+		// $existe = false;
+
+		// foreach ($datos as $key => $value) {
+		// 	if($value["id"] == $id){
+		// 		return $value;
+		// 	}
+		// }
+		// return null;
+		return $contenidoJSON;
+    }
+
     private function generarNumeroRandom() {
 	   $numero = rand(0, 10000) / 100; // Genera un número aleatorio entre 0 y 10000 y lo divide por 100
 	   $numero = round($numero, 2); // Redondea el número a 2 decimales
@@ -183,6 +201,11 @@ class Subject {
 	        exit();
     	}
 
+    	if(isset($_GET["all"])){
+    		echo $this->getAll();
+        	exit();
+    	}
+
     	if(isset($_GET["id"]) && !isset($_GET["pass"])){
     		if($_GET['id'] != ""){
     			echo json_encode($this->get($_GET["id"]));
@@ -200,7 +223,6 @@ class Subject {
         		exit();
     		}
     	}
-
 
     	echo "No tienes acceso";
     	exit();

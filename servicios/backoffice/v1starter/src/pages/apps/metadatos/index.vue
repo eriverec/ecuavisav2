@@ -84,7 +84,7 @@ async function sortByVariable(data, variableName, order = 'asc') {
 }
 
 async function getMetadatos(fechai = '', fechaf = '') {
-  isLoading.value = true;
+  // isLoading.value = true;
   /*
   if(!fechai && !fechaf){
     fechai = moment().subtract(7, 'days').format("YYYY-MM-DD").toString();
@@ -123,7 +123,7 @@ async function getMetadatos(fechai = '', fechaf = '') {
   }
 
 
-  isLoading.value = false;
+  // isLoading.value = false;
 
   // await fetch('https://servicio-de-actividad.vercel.app/meta/all/?' + new URLSearchParams({ fechai: fechai, fechaf: fechaf }))
   //   .then(response => response.json())

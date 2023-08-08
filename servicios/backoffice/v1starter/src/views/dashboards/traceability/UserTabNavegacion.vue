@@ -52,23 +52,6 @@ function mergeAndSum(obj1, obj2) {
   return result;
 }
 
-async function sortByVariable(data, variableName, order = 'asc') {
-  if (order !== 'asc' && order !== 'desc') {
-    throw new Error('Invalid order. Use "asc" for ascending or "desc" for descending.');
-  }
-
-  const sortedData = [...data];
-  sortedData.sort((a, b) => {
-    if (order === 'asc') {
-      return a[variableName] < b[variableName] ? -1 : 1;
-    } else {
-      return a[variableName] > b[variableName] ? -1 : 1;
-    }
-  });
-
-  return sortedData;
-}
-
 async function fetchData() {
   try {
     var metadatosFetch = [];
@@ -84,14 +67,17 @@ async function fetchData() {
         page: skip
       })}`);
       const data = await response.json();
-      console.log("Nombre: ",skip, data.data)
+      // if (true) {
       if (data.data.length === 0) {
         break;
       }
+      console.log("Nombre: ",skip, metadatosFetch)
       metadatosFetch = mergeAndSum(metadatosFetch, data.data);
-      urlCounts.value = Array.from(metadatosFetch);
+      urlCounts.value = Array.from(metadatosFetch.sort((a, b) => b.count - a.count));
+      // urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
       skip += 1;
     }
+
     
     // urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
   } catch (error) {
