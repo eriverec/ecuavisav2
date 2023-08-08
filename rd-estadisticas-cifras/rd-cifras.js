@@ -109,10 +109,10 @@ function eventLigaPro() {
 
   const acumulada = /*html*/`<ul class="nav nav-pills navChilds s_acumulada __cvamos" id="myTab" role="tablist">
   <li class="nav-item" role="presentation">
-      <a href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" class="nav-link ${currentUrl === uLigaProTabla ? "active" : ""}" id="etapa-tab" >Fase 1</a>
+      <a href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" class="nav-link ${currentUrl === uLigaProTabla ? "active" : ""}" id="etapa-tab" >Etapa 1</a>
   </li>
   <li class="nav-item" role="presentation">
-      <a href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador/etapa-2" class="nav-link ${currentUrl === uLigaProTablaFase2 ? "active" : ""}" id="etapa-tab" >Fase 2</a>
+      <a href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador/etapa-2" class="nav-link ${currentUrl === uLigaProTablaFase2 ? "active" : ""}" id="etapa-tab" >Etapa 2</a>
   </li>
   <li class="nav-item" role="presentation">
       <a href="/deportes/tabla-acumulada/liga-pro/serie-a-ecuador" class="nav-link ${currentUrl === uLigaProAcumulada ? "active" : ""}" id="acumulada-tab">Acumulada</a>
