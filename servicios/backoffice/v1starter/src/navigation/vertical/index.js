@@ -67,10 +67,9 @@ export default [
     icon: { icon: 'tabler-ad' },
     children: [
       { title: 'Lista de campañas', to: 'apps-campaigns-list' },
-      { title: 'Crear campaña', to: 'apps-miecuavisa-list' },
+      { title: 'Crear campaña', to: 'apps-configuracion-player' },
       { title: 'Posiciones', to: 'apps-configuracion-add' },
-
-      //{ title: 'Player Forzado', to: 'apps-configuracion-player' }
+      
     ],
   },
 
