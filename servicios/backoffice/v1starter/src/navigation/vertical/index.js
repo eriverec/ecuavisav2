@@ -9,6 +9,7 @@ export default [
     icon: { icon: 'tabler-user' },
     children: [
       { title: 'Lista', to: 'apps-user-list' },
+
       // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
     ],
   },
@@ -16,10 +17,11 @@ export default [
   {
     title: 'Concursos',
     icon: { icon: 'tabler-balloon' },
+
     // to: { name: 'apps-concursos' },
     children: [
       { title: 'Click click boom', to: 'apps-concursos' },
-      { title: 'Gavilanes', to: 'apps-concursos-gavilanes' }
+      { title: 'Gavilanes', to: 'apps-concursos-gavilanes' },
     ],
   },
   
@@ -31,6 +33,7 @@ export default [
       { title: 'Visitas', to: 'apps-visitas-list' },
       { title: 'Metadatos', to: 'apps-metadatos' },
       { title: 'Dispositivos', to: 'apps-dispositivos' },
+
       // modulos por salir 
       //{ title: 'Trazabilidad usuarios', to: 'apps-trazabilidad-users' },
       // { title: 'Trazabilidad usuarios', to: 'apps-notas-recomendadas'}, //apps/notas-recomendadas
@@ -53,7 +56,20 @@ export default [
     children: [
       { title: 'Módulos', to: 'apps-configuracion-list' },
       { title: 'Banner Slider', to: 'apps-miecuavisa-list' },
+
       // { title: 'Eventos', to: 'apps-configuracion-add' },
+      //{ title: 'Player Forzado', to: 'apps-configuracion-player' }
+    ],
+  },
+
+  {
+    title: 'Campañas / Ads',
+    icon: { icon: 'tabler-ad' },
+    children: [
+      { title: 'Lista de campañas', to: 'apps-campaigns-list' },
+      { title: 'Crear campaña', to: 'apps-miecuavisa-list' },
+      { title: 'Posiciones', to: 'apps-configuracion-add' },
+
       //{ title: 'Player Forzado', to: 'apps-configuracion-player' }
     ],
   },
