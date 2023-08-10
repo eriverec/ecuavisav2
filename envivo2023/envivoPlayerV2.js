@@ -1,9 +1,9 @@
 const programacionLunes_a_Viernes = [
 
   //LUNES A VIERNES
-  { inicio: "00:30", fin: "05:55", titulo: "En Vivo" },
-  { inicio: "05:55", fin: "06:55", titulo: "Televistazo en la comunidad" },
-  { inicio: "06:55", fin: "07:30", titulo: "Contacto Directo" },
+  { inicio: "00:00:00", fin: "05:55:00", titulo: "En Vivo" },
+  { inicio: "05:55:00", fin: "06:55:00", titulo: "Televistazo en la comunidad" },
+  { inicio: "06:55:00", fin: "07:30:00", titulo: "Contacto Directo" },
   { inicio: "07:30:00", fin: "09:00:00", titulo: "Televistazo en la comunidad" },
   { inicio: "10:30:00", fin: "13:00:00", titulo: "En Contacto" },
   { inicio: "13:00:00", fin: "14:00:00", titulo: "Televistazo 13h00" },
@@ -15,7 +15,7 @@ const programacionLunes_a_Viernes = [
   { inicio: "20:30:00", fin: "22:30:00", titulo: "En Vivo" },
  // { inicio: "21:00:00", fin: "22:00:00", titulo: "En Vivo" },
   //{ inicio: "22:30:00", fin: "23:30:00", titulo: "En Vivo" },
-  { inicio: "23:30:00", fin: "00:30:00", titulo: "En Vivo" }
+  { inicio: "23:30:00", fin: "00:00:00", titulo: "En Vivo" }
 
 ];
 
