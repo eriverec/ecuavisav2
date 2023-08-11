@@ -87,21 +87,21 @@ function mostrarProgramacion() {
   let tituloPrograma = "";
   // let fuenteVideo = "";
 
-  // Verificar si estamos dentro del horario de programación
-  // for (let i = 0; i < programacion.length; i++) {
-  //   const programa = programacion[i];
-  //   if (hora >= programa.inicio && hora <= programa.fin) {
-  //     enProgramacion = true;
-  //     tituloPrograma = programa.titulo;
-  //     if (tituloPrograma === "Televistazo en la comunidad") {
-  //       showTelevistazoComunidad();
-  //     } else {
-  //       // console.log("no es comunidad")
-  //     }
-  //     // fuenteVideo = "https://www.youtube.com/embed/<ID_DEL_VIDEO>?autoplay=1&controls=0";
-  //     break;
-  //   }
-  // }
+  Verificar si estamos dentro del horario de programación
+  for (let i = 0; i < programacion.length; i++) {
+    const programa = programacion[i];
+    if (hora >= programa.inicio && hora <= programa.fin) {
+      enProgramacion = true;
+      tituloPrograma = programa.titulo;
+      if (tituloPrograma === "Televistazo en la comunidad") {
+        showTelevistazoComunidad();
+      } else {
+        // console.log("no es comunidad")
+      }
+      // fuenteVideo = "https://www.youtube.com/embed/<ID_DEL_VIDEO>?autoplay=1&controls=0";
+      break;
+    }
+  }
 
   // Mostrar u ocultar elementos según corresponda
   const divProgramacion = document.getElementById("programacion");
