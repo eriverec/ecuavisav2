@@ -87,7 +87,7 @@ function mostrarProgramacion() {
   let tituloPrograma = "";
   // let fuenteVideo = "";
 
-  Verificar si estamos dentro del horario de programación
+  //Verificar si estamos dentro del horario de programación
   for (let i = 0; i < programacion.length; i++) {
     const programa = programacion[i];
     if (hora >= programa.inicio && hora <= programa.fin) {
