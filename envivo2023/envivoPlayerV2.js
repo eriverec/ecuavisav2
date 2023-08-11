@@ -1,21 +1,22 @@
 const programacionLunes_a_Viernes = [
 
   //LUNES A VIERNES
-  { inicio: "00:00:00", fin: "05:55:00", titulo: "En Vivo" },
-  { inicio: "05:55:00", fin: "06:55:00", titulo: "Televistazo en la comunidad" },
-  { inicio: "06:55:00", fin: "07:30:00", titulo: "Contacto Directo" },
-  { inicio: "07:30:00", fin: "09:00:00", titulo: "Televistazo en la comunidad" },
-  { inicio: "10:30:00", fin: "13:00:00", titulo: "En Contacto" },
-  { inicio: "13:00:00", fin: "14:00:00", titulo: "Televistazo 13h00" },
-  { inicio: "14:00:00", fin: "16:20:00", titulo: "En Vivo" },
-  { inicio: "16:20:00", fin: "17:00:00", titulo: "En Vivo" },
-  { inicio: "17:00:00", fin: "18:00:00", titulo: "En Vivo" },
-  { inicio: "18:00:00", fin: "19:00:00", titulo: "En Vivo" },
+  // { inicio: "00:00:00", fin: "05:55:00", titulo: "En Vivo" },
+  // { inicio: "05:55:00", fin: "06:55:00", titulo: "Televistazo en la comunidad" },
+  // { inicio: "06:55:00", fin: "07:30:00", titulo: "Contacto Directo" },
+  // { inicio: "07:30:00", fin: "09:00:00", titulo: "Televistazo en la comunidad" },
+  // { inicio: "10:30:00", fin: "13:00:00", titulo: "En Contacto" },
+  // { inicio: "13:00:00", fin: "14:00:00", titulo: "Televistazo 13h00" },
+  // { inicio: "14:00:00", fin: "16:20:00", titulo: "En Vivo" },
+  // { inicio: "16:20:00", fin: "17:00:00", titulo: "En Vivo" },
+  // { inicio: "17:00:00", fin: "18:00:00", titulo: "En Vivo" },
+  // { inicio: "18:00:00", fin: "19:00:00", titulo: "En Vivo" },
+  // { inicio: "19:00:00", fin: "20:30:00", titulo: "Televistazo 19h00" },
+  // { inicio: "20:30:00", fin: "22:30:00", titulo: "En Vivo" },
+  // { inicio: "23:30:00", fin: "23:59:59", titulo: "En Vivo" },
+
   { inicio: "19:00:00", fin: "20:30:00", titulo: "Televistazo 19h00" },
-  { inicio: "20:30:00", fin: "22:30:00", titulo: "En Vivo" },
-  { inicio: "23:30:00", fin: "23:59:59", titulo: "En Vivo" },
- // { inicio: "21:00:00", fin: "22:00:00", titulo: "En Vivo" },
-  //{ inicio: "22:30:00", fin: "23:30:00", titulo: "En Vivo" },
+  { inicio: "20:30:00", fin: "22:30:00", titulo: "En Vivo" }
 
 ];
 
@@ -87,20 +88,20 @@ function mostrarProgramacion() {
   // let fuenteVideo = "";
 
   // Verificar si estamos dentro del horario de programación
-  for (let i = 0; i < programacion.length; i++) {
-    const programa = programacion[i];
-    if (hora >= programa.inicio && hora <= programa.fin) {
-      enProgramacion = true;
-      tituloPrograma = programa.titulo;
-      if (tituloPrograma === "Televistazo en la comunidad") {
-        showTelevistazoComunidad();
-      } else {
-        // console.log("no es comunidad")
-      }
-      // fuenteVideo = "https://www.youtube.com/embed/<ID_DEL_VIDEO>?autoplay=1&controls=0";
-      break;
-    }
-  }
+  // for (let i = 0; i < programacion.length; i++) {
+  //   const programa = programacion[i];
+  //   if (hora >= programa.inicio && hora <= programa.fin) {
+  //     enProgramacion = true;
+  //     tituloPrograma = programa.titulo;
+  //     if (tituloPrograma === "Televistazo en la comunidad") {
+  //       showTelevistazoComunidad();
+  //     } else {
+  //       // console.log("no es comunidad")
+  //     }
+  //     // fuenteVideo = "https://www.youtube.com/embed/<ID_DEL_VIDEO>?autoplay=1&controls=0";
+  //     break;
+  //   }
+  // }
 
   // Mostrar u ocultar elementos según corresponda
   const divProgramacion = document.getElementById("programacion");
