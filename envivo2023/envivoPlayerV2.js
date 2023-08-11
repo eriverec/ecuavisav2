@@ -13,9 +13,9 @@ const programacionLunes_a_Viernes = [
   { inicio: "18:00:00", fin: "19:00:00", titulo: "En Vivo" },
   { inicio: "19:00:00", fin: "20:30:00", titulo: "Televistazo 19h00" },
   { inicio: "20:30:00", fin: "22:30:00", titulo: "En Vivo" },
+  { inicio: "23:30:00", fin: "00:00:00", titulo: "En Vivo" }
  // { inicio: "21:00:00", fin: "22:00:00", titulo: "En Vivo" },
   //{ inicio: "22:30:00", fin: "23:30:00", titulo: "En Vivo" },
-  { inicio: "23:30:00", fin: "00:00:00", titulo: "En Vivo" }
 
 ];
 
@@ -65,7 +65,7 @@ function mostrarProgramacion() {
   const ahora = new Date();
   const dia = ahora.getDay();
   const hora = ahora.getHours().toString().padStart(2, "0") + ':' + ahora.getMinutes().toString().padStart(2, "0") + ':' + ahora.getSeconds().toString().padStart(2, "0");
-  // console.log(dia,hora)
+  console.log(dia,hora)
 
   let programacion = [];
 
