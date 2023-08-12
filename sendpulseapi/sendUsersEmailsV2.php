@@ -1,6 +1,7 @@
 <?php
 function sendApiEmails() {
     // URL de la API para obtener los usuarios filtrados
+    // $apiUrl = "https://mongo-users-drab.vercel.app/usuario/sendpulse/?fechai=2023-08-11";
     $apiUrl = "https://mongo-users-drab.vercel.app/usuario/sendpulse";
     
     // Obtener los usuarios filtrados
