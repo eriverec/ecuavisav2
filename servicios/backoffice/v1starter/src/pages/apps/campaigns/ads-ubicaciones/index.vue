@@ -9,24 +9,24 @@ const openDesktop = ref([
 
 const desktopTradicionales = [
     {
-        title: "Full Banner",
+        title: "Full Banner (Top 1)",
         value: "fullBanner"
     },
     {
-        title:"Adbox",
+        title:"Full Banner (Top 2)",
         value: "adbox"
     },
     {
-        title: "Takeover",
+        title: "Full Banner (Top 3)",
         value: "takeover"
     },
     {
-        title: "Zócalo",
+        title: "Floating",
         value: "zocalo"
     } 
 ]
 
-const desktopRichMedia = [
+/*const desktopRichMedia = [
     {
         title:"Tab",
         value: "tab"
@@ -59,7 +59,7 @@ const desktopRichMedia = [
         title:"Leader Video",
         value:"leaderVideo"
     } 
-]
+]*/
 
 const desktopData = {
     fullBanner : [
@@ -87,7 +87,7 @@ const desktopData = {
         },
         {
             title: "Tamaños",
-            desc: "300x250 - 300x600 pxl"      
+            desc: "728x90 - 728x250 - 728x180 pxl"      
         },
         {
             title: "Peso",
@@ -105,7 +105,7 @@ const desktopData = {
         },
         {
             title: "Tamaños",
-            desc: "600x500 - 1000x540 - 990x560 pxl"      
+            desc: "728x90 - 728x250 - 728x180 pxl"      
         },
         {
             title: "Peso",
@@ -292,28 +292,29 @@ const openMobile = ref([
 ]);
 const mobileTradicionales = [
 {
-        title: "Full Banner",
+        title: "Full Banner (Top 1)",
         value: "fullBanner"
     },
     {
-        title:"Adbox",
+        title:"Full Banner (Top 2)",
         value: "adbox"
     },
     {
-        title: "Takeover",
+        title: "Full Banner (Top 2)",
         value: "takeover"
-    },
-    {
-        title: "Zócalo",
-        value: "zocalo"
-    }  
+    }
+    //,
+    //{
+   //     title: "Zócalo",
+    //    value: "zocalo"
+    //}  
 ]
 
 const mobileRichMedia = [
-    {
-        title:"Push",
-        value:"push"
-    },
+    /*{
+       title:"Push",
+       value:"push"
+   },
     {
         title:"Half Formulario",
         value:"halfFormulario"
@@ -333,7 +334,7 @@ const mobileRichMedia = [
     {
         title:"Takeover Interactivo",
         value:"takeoverInteractivo"
-    },
+    },*/
     {
         title:"Parallax",
         value:"parallax"
@@ -366,7 +367,7 @@ const mobileData = {
         },
         {
             title: "Tamaños",
-            desc: "300x250 px"      
+            desc: "300x50 - 300x100 - 320x50 - 320x100 px"      
         },
         {
             title: "Peso",
@@ -384,7 +385,7 @@ const mobileData = {
         },
         {
             title: "Tamaños",
-            desc: "300x300 - 320x480 px"      
+            desc: "300x50 - 300x100 - 320x50 - 320x100 px"      
         },
         {
             title: "Peso",
@@ -607,9 +608,9 @@ const changeTabMobile = (item) =>{
                                 <Vcol cols="4" md="4" lg="4">
                                     <VImg
                                         :width="500"
-                                        aspect-ratio="16/9"
+                                        aspect-ratio="1/1"
                                         cover
-                                        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+                                        src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Posiciones/top1.png"
                                     ></VImg>  
                                 </Vcol>
                                 <Vcol style="width: 400px;" cols="5" md="5" lg="5">
@@ -637,7 +638,7 @@ const changeTabMobile = (item) =>{
                                         :width="500"
                                         aspect-ratio="16/9"
                                         cover
-                                        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+                                        src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Posiciones/top2.png"
                                     ></VImg>  
                                 </Vcol>
                                 <Vcol style="width: 400px;" cols="5" md="5" lg="5">
@@ -665,7 +666,7 @@ const changeTabMobile = (item) =>{
                                         :width="500"
                                         aspect-ratio="16/9"
                                         cover
-                                        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+                                        src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Posiciones/top3.png"
                                     ></VImg>  
                                 </Vcol>
                                 <Vcol style="width: 400px;" cols="5" md="5" lg="5">
@@ -693,7 +694,7 @@ const changeTabMobile = (item) =>{
                                         :width="500"
                                         aspect-ratio="16/9"
                                         cover
-                                        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+                                        src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Posiciones/floating.png"
                                     ></VImg>  
                                 </Vcol>
                                 <Vcol style="width: 400px;" cols="5" md="5" lg="5">
@@ -1036,7 +1037,7 @@ const changeTabMobile = (item) =>{
                                         :width="500"
                                         aspect-ratio="16/9"
                                         cover
-                                        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+                                        src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Posiciones/top1-m.png"
                                     ></VImg>  
                                 </Vcol>
                                 <Vcol style="width: 400px;" cols="5" md="5" lg="5">
@@ -1065,7 +1066,7 @@ const changeTabMobile = (item) =>{
                                         :width="500"
                                         aspect-ratio="16/9"
                                         cover
-                                        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+                                        src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Posiciones/top2-m.png"
                                     ></VImg>  
                                 </Vcol>
                                 <Vcol style="width: 400px;" cols="5" md="5" lg="5">
@@ -1094,7 +1095,7 @@ const changeTabMobile = (item) =>{
                                         :width="500"
                                         aspect-ratio="16/9"
                                         cover
-                                        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+                                        src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Posiciones/top3-m.png"
                                     ></VImg>  
                                 </Vcol>
                                 <Vcol style="width: 400px;" cols="5" md="5" lg="5">
@@ -1358,7 +1359,7 @@ const changeTabMobile = (item) =>{
                                         :width="500"
                                         aspect-ratio="16/9"
                                         cover
-                                        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+                                        src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Posiciones/parallax-m.png"
                                     ></VImg>  
                                 </Vcol>
                                 <Vcol style="width: 400px;" cols="5" md="5" lg="5">
