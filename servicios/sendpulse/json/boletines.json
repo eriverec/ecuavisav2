@@ -1,1 +1,20 @@
-[{"id":"1","nombre":"Boletines diarios","descripcion":"Ecuavisa 2 | \u00daltimas Noticias del Ecuador y del mundo hoy.","subject":"\ud83d\udd34 La crisis carcelaria, atentados en las calles y el asesinato de un alcalde han marcado la jornada violenta de Ecuador en los \u00faltimos cuatro d\u00edas","pass":"ec2023","edit_at":"2023-07-26, 06:39:29","preview":"https:\/\/estadisticas.ecuavisa.com\/sites\/gestor\/Tools\/sendpulse\/boletin-diario\/preview.php"}]
+[
+	{
+		"id": "1",
+		"nombre": "Boletines diarios",
+		"descripcion": "Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.",
+		"subject": "🔴 Fernando Villavicencio fue asesinado en un mitin político en Quito.",
+		"pass": "ec2023",
+		"edit_at": "2023-08-10, 06:10:25",
+		"preview": "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/boletin-diario/preview.php"
+	},
+	{
+		"id": "2",
+		"nombre": "Newsletter Opinión",
+		"descripcion": "Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.",
+		"subject": "🔴 Fernando Villavicencio fue asesinado en un mitin político en Quito.",
+		"pass": "ec2023",
+		"edit_at": "2023-08-10, 06:10:25",
+		"preview": "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/opinion/preview.php"
+	}
+]
