@@ -815,7 +815,7 @@ class SendPulse {
                     	<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
                     		<tr>
 				        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;padding-top: 20px;padding-bottom: 0px;">
-				        			<p style="text-decoration:none;color: #311db3;font-weight: 700;font-size: 18px;" href="#">
+				        			<p style="text-decoration:none;color: #311db3;font-weight: 700;font-size: 18px;padding:0px;margin:0px">
 				        				OPINIÓN
 				        			</p>
 				        		<td>
