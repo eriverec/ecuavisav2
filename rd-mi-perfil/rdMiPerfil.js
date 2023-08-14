@@ -2031,15 +2031,17 @@ function TabsResultados() {
   vicularTodo();
 }
 
-setTimeout(function(){
-  if(!window.bootstrap){
-      var scriptBoostrap = document.createElement("script");
-      scriptBoostrap.setAttribute( 'src', `https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js` );
-      document.body.appendChild(scriptBoostrap);
-  }
-}, 1000);
+TabsResultados()
+
+// setTimeout(function(){
+//   if(!window.bootstrap){
+//       var scriptBoostrap = document.createElement("script");
+//       scriptBoostrap.setAttribute( 'src', `https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js` );
+//       document.body.appendChild(scriptBoostrap);
+//   }
+// }, 1000);
 
 
-setTimeout(function(){
-  var connectTabsResultados = new TabsResultados();
-}, 1500);
+// setTimeout(function(){
+//   var connectTabsResultados = new TabsResultados();
+// }, 1500);
