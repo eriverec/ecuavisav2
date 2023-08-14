@@ -2001,7 +2001,7 @@ if(document.querySelector(".btn.si_eliminar")){
     });
 }
 
-function TabsResultados_2() {
+function TabsResultados() {
   var vicularTodo = function() {
     var menuElementsRes = document.querySelectorAll('[data-tab]');
     for(var i = 0; i < menuElementsRes.length ; i++) {
@@ -2031,28 +2031,15 @@ function TabsResultados_2() {
   vicularTodo();
 }
 
-// setTimeout(function(){
-//   if(!window.bootstrap){
-//       var scriptBoostrap = document.createElement("script");
-//       scriptBoostrap.setAttribute( 'src', `https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js` );
-//       document.body.appendChild(scriptBoostrap);
-//   }
-// }, 1000);
+setTimeout(function(){
+  if(!window.bootstrap){
+      var scriptBoostrap = document.createElement("script");
+      scriptBoostrap.setAttribute( 'src', `https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js` );
+      document.body.appendChild(scriptBoostrap);
+  }
+}, 1000);
 
-var connectTabsResultados = new TabsResultados_2();
 
 setTimeout(function(){
-  if(window.bootstrap){
-      if(!connectTabsResultados){
-        connectTabsResultados = new TabsResultados_2();
-      }
-  }
+  var connectTabsResultados = new TabsResultados();
 }, 1500);
-
-setTimeout(function(){
-  if(window.bootstrap){
-      if(!connectTabsResultados){
-        connectTabsResultados = new TabsResultados_2();
-      }
-  }
-}, 2500);
