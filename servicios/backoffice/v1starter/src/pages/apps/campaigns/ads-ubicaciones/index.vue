@@ -21,7 +21,7 @@ const desktopTradicionales = [
         value: "takeover"
     },
     {
-        title: "Floating",
+        title: "Floating | Layer",
         value: "zocalo"
     } 
 ]
@@ -303,11 +303,11 @@ const mobileTradicionales = [
         title: "Full Banner (Top 2)",
         value: "takeover"
     }
-    //,
-    //{
-   //     title: "Zócalo",
-    //    value: "zocalo"
-    //}  
+    ,
+    {
+       title: "Layer | Floating | Takeover",
+        value: "zocalo"
+    }  
 ]
 
 const mobileRichMedia = [
@@ -582,7 +582,7 @@ const changeTabMobile = (item) =>{
                                 />
                             </VListGroup>  
 
-                            <VListGroup value="richMedia">
+                           <!-- <VListGroup value="richMedia">
                                 <template #activator="{ props }">
                                 <VListItem
                                     v-bind="props"
@@ -597,7 +597,7 @@ const changeTabMobile = (item) =>{
                                 :title="item.title"
                                 @click="changeTabDesktop(item.value)"
                                 />
-                            </VListGroup>
+                            </VListGroup>-->
                         </VList>
                     </VCol>
 
@@ -1009,7 +1009,7 @@ const changeTabMobile = (item) =>{
                                 />
                             </VListGroup>  
 
-                            <VListGroup value="richMedia">
+                           <!-- <VListGroup value="richMedia">
                                 <template #activator="{ props }">
                                 <VListItem
                                     v-bind="props"
@@ -1024,7 +1024,7 @@ const changeTabMobile = (item) =>{
                                 :title="item.title"
                                 @click="changeTabMobile(item.value)"
                                 />
-                            </VListGroup>
+                            </VListGroup>-->
                         </VList>
                     </VCol>
 
@@ -1122,9 +1122,9 @@ const changeTabMobile = (item) =>{
                                 <Vcol cols="4" md="4" lg="4">
                                     <VImg
                                         :width="500"
-                                        aspect-ratio="16/9"
+                                        aspect-ratio="1/1"
                                         cover
-                                        src="https://cdn.vuetifyjs.com/images/parallax/material.jpg"
+                                        src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Posiciones/m-floating.png"
                                     ></VImg>  
                                 </Vcol>
                                 <Vcol style="width: 400px;" cols="5" md="5" lg="5">
@@ -1359,7 +1359,7 @@ const changeTabMobile = (item) =>{
                                         :width="500"
                                         aspect-ratio="16/9"
                                         cover
-                                        src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Posiciones/parallax-m.png"
+                                        src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/Posiciones/m-parallax.png"
                                     ></VImg>  
                                 </Vcol>
                                 <Vcol style="width: 400px;" cols="5" md="5" lg="5">
