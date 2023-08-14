@@ -2001,7 +2001,7 @@ if(document.querySelector(".btn.si_eliminar")){
     });
 }
 
-function TabsResultados() {
+function TabsResultados_2() {
   var vicularTodo = function() {
     var menuElementsRes = document.querySelectorAll('[data-tab]');
     for(var i = 0; i < menuElementsRes.length ; i++) {
@@ -2039,10 +2039,20 @@ function TabsResultados() {
 //   }
 // }, 1000);
 
-var connectTabsResultados = new TabsResultados();
+var connectTabsResultados = new TabsResultados_2();
 
 setTimeout(function(){
   if(window.bootstrap){
-      var connectTabsResultados = new TabsResultados();
+      if(!connectTabsResultados){
+        connectTabsResultados = new TabsResultados_2();
+      }
   }
 }, 1500);
+
+setTimeout(function(){
+  if(window.bootstrap){
+      if(!connectTabsResultados){
+        connectTabsResultados = new TabsResultados_2();
+      }
+  }
+}, 2500);
