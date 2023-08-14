@@ -1571,6 +1571,9 @@ BLOQUE - TE EXPLICO LA NOTICIA
     flex-wrap: wrap;
   }*/
 
+  .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .headline a h2{
+    line-height: 22px;
+  }
 }
 
 
