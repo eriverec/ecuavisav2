@@ -83,7 +83,7 @@ else {
   } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
       actDIV();
   } 
-  else if ("20:00" <= timeOfDay && timeOfDay <= "22:00") {
+  else if ("20:00" <= timeOfDay && timeOfDay <= "21:00") {
     actDIV();
 }
   else {}
