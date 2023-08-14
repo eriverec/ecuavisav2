@@ -2039,9 +2039,10 @@ function TabsResultados() {
 //   }
 // }, 1000);
 
+var connectTabsResultados = new TabsResultados();
 
 setTimeout(function(){
   if(window.bootstrap){
       var connectTabsResultados = new TabsResultados();
   }
-}, 700);
+}, 1500);
