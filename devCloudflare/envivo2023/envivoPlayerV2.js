@@ -23,11 +23,8 @@ const programacionSabado = [
 ];
 
 const programacionDomingo = [
-  { inicio: "10:30:00", fin: "11:30:00", titulo: "Políticamente Correcto" },
-  { inicio: "19:00:00", fin: "22:00:00", titulo: "Debate Presidencial" },
-  
-  // { inicio: "19:00:00", fin: "20:00:00", titulo: "Televistazo 19h00" },
-  // { inicio: "20:00:00", fin: "21:00:00", titulo: "Políticamente Correcto" },
+  { inicio: "19:00:00", fin: "20:00:00", titulo: "Televistazo 19h00" },
+  { inicio: "20:00:00", fin: "20:50:00", titulo: "Políticamente Correcto" },
 ];
 
 
