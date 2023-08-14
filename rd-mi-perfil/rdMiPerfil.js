@@ -1801,14 +1801,16 @@ bloqueUsuarioIntereses.init();
 var miPerfil = function(){
     if(ECUAVISA_EC.login()){
         var usuario = ECUAVISA_EC.USER_data();
-        var imgUserMe = document.querySelector('.u-img-user-me');
-        imgUserMe.src = usuario.avatar;
+        if(document.querySelector('.u-img-user-me')){
+          var imgUserMe = document.querySelector('.u-img-user-me');
+          imgUserMe.src = usuario.avatar;
 
-        var name = document.querySelector('.name-user-me');
-        name.innerHTML = `${usuario.name} ${usuario.lastname}`;
+          var name = document.querySelector('.name-user-me');
+          name.innerHTML = `${usuario.name} ${usuario.lastname}`;
 
-        var descipcion = document.querySelector('.descripcion-user-me');
-        descipcion.innerHTML = `¡Bienvenido(a) a tu Ecuavisa!`;
+          var descipcion = document.querySelector('.descripcion-user-me');
+          descipcion.innerHTML = `¡Bienvenido(a) a tu Ecuavisa!`;
+        }
 
     }else{
         console.error("El usuario no está logueado");
