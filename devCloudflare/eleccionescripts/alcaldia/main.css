@@ -1,0 +1,20 @@
+* {
+  font-family: 'Archivo', sans-serif;
+}
+
+.conetenedor__general{
+  position: relative;
+}
+
+.conetenedor__general .escrutadoElecciones {
+  position: absolute;
+  left: 0px;
+  bottom: 0px;
+  background: #e43d3d;
+  color: #fff;
+  padding: 5px;
+}
+
+.conetenedor__general .escrutadoElecciones p{
+  margin: 0;
+}
