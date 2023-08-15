@@ -29,7 +29,7 @@ async function fetchData() {
   try {
     let response = await fetch("https://script.google.com/macros/s/AKfycbxpv2oC-yEVx4R1VK2XPO2dEGJaF001P3PracZF5BswUoygu3xpB0TDk4T9zuDa9g3pVg/exec?funcion=alcaldesQuito");
     let data = await response.json();
-    initChart(data);
+    initChart(data.candidatos);
 //     initChart([
 // {
 // "name": "Xavier Hervas",
