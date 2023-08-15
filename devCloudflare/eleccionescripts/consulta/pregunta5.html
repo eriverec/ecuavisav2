@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pregunta 1</title>
+  <title>Pregunta 5</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
@@ -21,59 +21,56 @@
       <span class="escrutadoElecciones">Cargando...</span>
     </div>
     <span class="text_fuente">Fuente: CNE</span>
-    <div id="chartdivDatos" style="text-align: center;">Cargando...</div>
+    <div id="chartdivDatos"></div>
   </div>
 
   <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
   <script>
-
     // URL del endpoint
-const apiUrl = "https://script.googleusercontent.com/macros/echo?user_content_key=H330iB_SoDFtZ9hA-DIvPFDbb6hcyV9RGnY-k-7ZI_qVbLTdDBzgLHYvpuQHYsLeDMVgNZLELamYfpzcU7-wvXgW9qx9o1H2OJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMWojr9NvTBuBLhyHCd5hHa2x2LnKFYx7Xt5pOsGDJ-o2omGdJGRRSix-1AmDDRA4XlStZRiQb5R0BBQ5iYwxlTkhJqfXedoEr-Zfp9WhQCXIaj7sqyYO7OpylxCDdq3IBNRa8IdutaUyqbQCY0hYNm21KehrZOPC4&lib=MKzfoxib5zhlOtZwJ7n0XxL4ZcExjOBYo";
+    const apiUrl = "https://script.googleusercontent.com/macros/echo?user_content_key=H330iB_SoDFtZ9hA-DIvPFDbb6hcyV9RGnY-k-7ZI_qVbLTdDBzgLHYvpuQHYsLeDMVgNZLELamYfpzcU7-wvXgW9qx9o1H2OJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMWojr9NvTBuBLhyHCd5hHa2x2LnKFYx7Xt5pOsGDJ-o2omGdJGRRSix-1AmDDRA4XlStZRiQb5R0BBQ5iYwxlTkhJqfXedoEr-Zfp9WhQCXIaj7sqyYO7OpylxCDdq3IBNRa8IdutaUyqbQCY0hYNm21KehrZOPC4&lib=MKzfoxib5zhlOtZwJ7n0XxL4ZcExjOBYo";
 
-// Elemento HTML donde se pintará la información
-const chartdivDatos = document.getElementById("chartdivDatos");
+    // Elemento HTML donde se pintará la información
+    const chartdivDatos = document.getElementById("chartdivDatos");
 
-// Realizar solicitud HTTP
-fetch(apiUrl)
-  .then(response => response.json())
-  .then(data => {
-    // Tomar el primer elemento del arreglo
-    const firstItem = data[0];
-    
-    // Crear el fragmento HTML con los valores
-    const htmlTemplate = `
-      <div class="conteo_votos">
-        <div class="procesadas">
-          <div class="act-proc">
-            <h3> Actas Procesadas: </h3>
-            <div class="valor_procesadas">${firstItem.actasProcesadas}</div>
+    // Realizar solicitud HTTP
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        // Tomar el primer elemento del arreglo
+        const firstItem = data[4];
+
+        // Crear el fragmento HTML con los valores
+        const htmlTemplate = `
+          <div class="conteo_votos">
+            <div class="procesadas">
+              <div class="act-proc">
+                <h3> Actas Procesadas: </h3>
+                <div class="valor_procesadas">${firstItem.actasProcesadas}</div>
+              </div>
+            </div>
+            <div class="nulos">
+              <div class="vot-nulos">
+                <h3> Votos Nulos: </h3>
+                <div class="valor_nulos">${firstItem.votosNulos}</div>
+              </div>
+            </div>
+            <div class="blancos">
+              <div class="vot-blancos">
+                <h3> Votos en Blanco: </h3>
+                <div class="valor_blancos">${firstItem.votosBlancos}</div>
+              </div>
+            </div>
           </div>
-        </div>
-        <div class="nulos">
-          <div class="vot-nulos">
-            <h3> Votos Nulos: </h3>
-            <div class="valor_nulos">${firstItem.votosNulos}</div>
-          </div>
-        </div>
-        <div class="blancos">
-          <div class="vot-blancos">
-            <h3> Votos en Blanco: </h3>
-            <div class="valor_blancos">${firstItem.votosBlancos}</div>
-          </div>
-        </div>
-      </div>
-    `;
-    
-    // Insertar el HTML en el elemento
-    chartdivDatos.innerHTML = htmlTemplate;
-  })
-  .catch(error => {
-    console.error("Error:", error);
-  });
+        `;
 
-
+        // Insertar el HTML en el elemento
+        chartdivDatos.innerHTML = htmlTemplate;
+      })
+      .catch(error => {
+        console.error("Error:", error);
+      });
 
     // https://www.amcharts.com/docs/v5/getting-started/#Root_element
     var root = am5.Root.new("chart_cne");
@@ -88,7 +85,7 @@ fetch(apiUrl)
     function setNewData(seteado) {
       var data = seteado;
 
-      var data = data[Object.keys(data)[0]];
+      var data = data[Object.keys(data)[4]];
 
       // data = JSON.parse(JSON.stringify(data).push('"year":""'));
       data = JSON.parse(
@@ -100,12 +97,15 @@ fetch(apiUrl)
         ),
       ];
       console.log(data);
+      // console.log(data[0].porcentajeEscrutado);
+
       var tEscru = data[0].porcentajeEscrutado;
       var divEscru = document.querySelector('.escrutadoElecciones');
       if (divEscru) {
         console.log('d:', tEscru);
         divEscru.innerHTML = `<p>${tEscru}</p>`;
       }
+
       // console.log(data[Object.keys(data)[1]]);
 
       // Create chart
@@ -250,6 +250,7 @@ fetch(apiUrl)
       fetchRes
         .then((res) => res.json())
         .then((d) => {
+
           setNewData(d);
         });
     }
