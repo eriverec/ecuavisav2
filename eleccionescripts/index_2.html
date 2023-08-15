@@ -11,7 +11,7 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
     rel="stylesheet">
-  <link rel="stylesheet" href="./alcaldia/main.css">
+  <link rel="stylesheet" href="./consulta/main.css">
   <style type="text/css">
     #chartdiv {
       width: 100%;
@@ -22,6 +22,7 @@
 
 <body>
   <div id="chartdiv"></div>
+  <span class="text_fuente">Fuente: CNE</span>
   <div id="chartdivDatos"></div>
 
 
@@ -31,22 +32,22 @@
   <script src="https://cdn.amcharts.com/lib/5/themes/Animated.js"></script>
   <script>
 
-// URL de la API
-const apiUrl = "https://script.googleusercontent.com/macros/echo?user_content_key=jyd_4sqmdKK08jNsZHZkbBZ2lYEpGCj8IVQgYsMnL0LirrC9Q11OD_GYua6hvb6XbbfYGBlCtDi_mT0Le3aWiOuBQFYJOeJ7OJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMWojr9NvTBuBLhyHCd5hHa6hpTEepkuErOdxFII6iPZENJaTJuAATrGxQvDms7e9kw2Wqsio-wO0pKyYi5g6RIn8Y4Ih4YGICXP-PsWFIs57K2xOQ_GScSZylxCDdq3IB__fuwxUdw-71_TJRQ0mmwQ&lib=MgH1N6f4vGPDTfW1kGEEmVr4ZcExjOBYo";
+    // URL de la API
+    const apiUrl = "https://script.googleusercontent.com/macros/echo?user_content_key=jyd_4sqmdKK08jNsZHZkbBZ2lYEpGCj8IVQgYsMnL0LirrC9Q11OD_GYua6hvb6XbbfYGBlCtDi_mT0Le3aWiOuBQFYJOeJ7OJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMWojr9NvTBuBLhyHCd5hHa6hpTEepkuErOdxFII6iPZENJaTJuAATrGxQvDms7e9kw2Wqsio-wO0pKyYi5g6RIn8Y4Ih4YGICXP-PsWFIs57K2xOQ_GScSZylxCDdq3IB__fuwxUdw-71_TJRQ0mmwQ&lib=MgH1N6f4vGPDTfW1kGEEmVr4ZcExjOBYo";
 
-// Elemento donde se mostrarán los datos
-const chartdivDatos = document.getElementById("chartdivDatos");
+    // Elemento donde se mostrarán los datos
+    const chartdivDatos = document.getElementById("chartdivDatos");
 
-// Realizar la solicitud GET a la API
-fetch(apiUrl)
-  .then(response => response.json())
-  .then(data => {
-    const actasProcesadas = data.datos.actasProcesadas;
-    const votosNulos = data.datos.votosNulos;
-    const votosBlancos = data.datos.votosBlancos;
-    
-    // Crear el HTML con los datos
-    const htmlTemplate = `
+    // Realizar la solicitud GET a la API
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const actasProcesadas = data.datos.actasProcesadas;
+        const votosNulos = data.datos.votosNulos;
+        const votosBlancos = data.datos.votosBlancos;
+
+        // Crear el HTML con los datos
+        const htmlTemplate = `
       <div class="conteo_votos">
         <div class="procesadas">
           <div class="act-proc">
@@ -68,13 +69,13 @@ fetch(apiUrl)
         </div>
       </div>
     `;
-    
-    // Insertar el HTML en el elemento
-    chartdivDatos.innerHTML = htmlTemplate;
-  })
-  .catch(error => {
-    console.error("Error al obtener los datos:", error);
-  });
+
+        // Insertar el HTML en el elemento
+        chartdivDatos.innerHTML = htmlTemplate;
+      })
+      .catch(error => {
+        console.error("Error al obtener los datos:", error);
+      });
 
 
     am5.ready(async function () {
