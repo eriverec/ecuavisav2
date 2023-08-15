@@ -43,7 +43,7 @@ class SendPulse {
 
 		// Establecer el idioma a español para los meses y días de la semana
 		$meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-		$diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+		$diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 
 		// Obtener el día de la semana, el día del mes, el mes y el año en español
 		$diaSemana = $diasSemana[intval($fecha->format('w'))];
@@ -54,7 +54,7 @@ class SendPulse {
 		// Imprimir la fecha en español
 
 		// echo str_replace("{{fecha}}", date("Y-m-d", time()), $this->getAttrBoletin(1)->subject);
-		$this->fechaFormateada = "$diaSemana $dia de $mes de $anio";
+		$this->fechaFormateada = "$diaSemana, $dia de $mes de $anio";
     }
 
     private function obtenerFechaHoraFormateada($hora) {
