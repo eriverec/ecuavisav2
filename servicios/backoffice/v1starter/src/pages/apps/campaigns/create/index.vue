@@ -9,21 +9,22 @@ const dataCampaigns = ref([]);
 // const TabContent = ref(false);
 
 const firstName = ref('')
-const email = ref('')
-const mobile = ref()
-const password = ref()
 const languages = ref([])
 const criterio = ref([])
 const posicion = ref([])
 
-const languageList = [
-  'Local',
-  'html'
-]
+const languageList = [{
+  title:'Imágenes locales',
+  value:'Local'
+},{
+  title:'Códigos externos',
+  value:'html'
+}]
 
-const criterioList = [
-  'Geolocalización'
-]
+const criterioList = [{
+  title:'Geolocalización',
+  value:'Geolocalización'
+}];
 
 const posicionList = [
   'RDTop1',
@@ -140,7 +141,7 @@ async function validateAsync() {
                               cols="12"
                               md="12"
                             >
-                              <label for="firstName">Nombre de la campaña</label>
+                              <label for="nombreCampania">Nombre de la campaña</label>
                             </VCol>
 
                             <VCol
@@ -164,7 +165,7 @@ async function validateAsync() {
                               cols="12"
                               md="12"
                             >
-                              <label for="email">Tipo de contenido</label>
+                              <label for="tipocontenido">Tipo de contenido</label>
                             </VCol>
 
                             <VCol
@@ -176,7 +177,7 @@ async function validateAsync() {
                                 :items="languageList"
                                 chips
                                 clearable
-                                label="Tipo de contenido"
+                                label=""
                               />
                             </VCol>
                           </VRow>
