@@ -15,3 +15,4 @@ if(jd){
     googletag.pubads().setCentering(true);
     googletag.enableServices();
     });
+    console.log("ad ejecutado con exito")
