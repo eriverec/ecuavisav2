@@ -15,4 +15,9 @@ if(jd){
     googletag.pubads().setCentering(true);
     googletag.enableServices();
     });
+    
+
+
+    _html3 = '<div id="'"floating_ad"'" data-ads="floating_ad"></div>';
+    document.body.appendChild._html3
     console.log("ad ejecutado con exito")
