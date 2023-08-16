@@ -1,5 +1,6 @@
 <script setup>
-
+import {FormWizard,TabContent} from "vue3-form-wizard";
+import 'vue3-form-wizard/dist/style.css'
 const currentTab = ref('tab-lista');
 const checkbox = ref(1);
 const dataCampaigns = ref([]);
@@ -19,7 +20,7 @@ async function getCampaigns(){
   var response = await fetch(`https://ads-service.vercel.app/campaign/get/all`, requestOptions);
   const data = await response.json();
 
-  dataCampaigns.value = data;
+  dataCampaigns.value = data.data;
 }
 
 </script>
@@ -70,28 +71,17 @@ async function getCampaigns(){
                 
                 <!-- inicio lista de Módulos -->
                   
-                <VList lines="two">
-                  <template
-                    v-for="(element, index) in dataCampaigns"
-                    :key="index"
-                  >
-                    <VListItem
-                      v-if="element.campaignTitle"
-                      border
-                    >
-
-                      <VListItemTitle>
-                        <span>{{ element.position }}</span>
-                      </VListItemTitle>
-                      <VListItemSubtitle
-                        class="mt-1"
-                        color="info"
-                      >
-                      </VListItemSubtitle>
-                      
-                    </VListItem>
-                  </template>
-                </VList>
+                <form-wizard @on-complete="onComplete">
+                  <tab-content title="Personal details">
+                    My first tab content
+                  </tab-content>
+                  <tab-content title="Additional Info" >
+                    My second tab content
+                  </tab-content>
+                  <tab-content title="Last step" >
+                    Yuhuuu! This seems pretty damn simple
+                  </tab-content>
+                </form-wizard>
                 <!-- fin lista usuarios -->
               </VWindowItem>
 
