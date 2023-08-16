@@ -124,6 +124,7 @@ async function validateAsync() {
                 <!-- inicio lista de Módulos -->
                   
                 <form-wizard 
+
                   @on-complete="onComplete" 
                   @on-loading="setLoading"
                   color="#7367F0" 
@@ -133,7 +134,7 @@ async function validateAsync() {
                 >
                   <tab-content title="Detalles de la campaña" :before-change="validateAsync">
                    
-                    <VRow>
+                    <VRow class="pb-5">
                         <VCol cols="12">
                           <VRow no-gutters>
                             <!-- 👉 First Name -->
