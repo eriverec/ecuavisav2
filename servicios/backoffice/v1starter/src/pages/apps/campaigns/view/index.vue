@@ -70,26 +70,36 @@ async function getCampaigns(){
                 
                 <!-- inicio lista de Módulos -->
                   
-                <VList lines="two">
+                <VList lines="two" border>
                   <template
-                    v-for="(element, index) in dataCampaigns"
+                    v-for="(c, index) of dataCampaigns"
                     :key="index"
                   >
-                    <VListItem
-                      v-if="element.campaignTitle"
-                      border
-                    >
-
+                    <VListItem>
                       <VListItemTitle>
-                        <span>{{ element.position }}</span>
+                        {{ user.name }}
                       </VListItemTitle>
-                      <VListItemSubtitle
-                        class="mt-1"
-                        color="info"
-                      >
+                      <VListItemSubtitle class="mt-1">
+                        <VBadge
+                          dot
+                          location="start center"
+                          offset-x="2"
+                          :color="success"
+                          class="me-3"
+                        >
+                          <span class="ms-4">{{ user.status }}</span>
+                        </VBadge>
+
+                        <span class="text-xs text-disabled">{{ user.lastVisited }}</span>
                       </VListItemSubtitle>
-                      
+
+                      <template #append>
+                        <VBtn size="small">
+                          Add
+                        </VBtn>
+                      </template>
                     </VListItem>
+                    <VDivider v-if="index !== users.length - 1" />
                   </template>
                 </VList>
                 <!-- fin lista usuarios -->

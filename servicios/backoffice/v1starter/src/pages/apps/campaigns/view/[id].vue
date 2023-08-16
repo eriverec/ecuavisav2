@@ -71,12 +71,13 @@ export default {
   },
   methods: {
     async obtenerDetalles() {
-      //const respuesta = await fetch(`https://ads-service.vercel.app/campaign${this.id}/user`); 
-      const respuesta = await fetch(`https://ads-service.vercel.app/campaign/64db93a5251f961bdbb22365/user`); 
+      const respuesta = await fetch(`https://ads-service.vercel.app/campaign/${this.id}/user`); 
+      // const respuesta = await fetch(`https://ads-service.vercel.app/campaign/64db93a5251f961bdbb22365/user`); 
       const datos = await respuesta.json();
-      const registros = datos.data;
-      this.suggestion = registros;
-      console.log(registros);
+      this.suggestion = datos[0];
+      console.log(this.suggestion)
+      // const registros = datos.userId;
+      // 
     },
 
     //https://ads-service.vercel.app/campaign/64db93a5251f961bdbb22365/user
