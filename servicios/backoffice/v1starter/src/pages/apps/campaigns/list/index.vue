@@ -7,14 +7,19 @@ const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 
 const currentTab = ref('tab-lista');
+const isDialogVisibleDelete = ref(false);
 const checkbox = ref(1);
 const dataCampaigns = ref([]);
 const currentPage = ref(1);
 const totalRegistros = ref(1);
+const totalRegistrosHtml = ref(1);
+const idCampaign = ref("");
 const disabledPagination = ref(false);
+const disabledViewList = ref(false);
 
 const banderas = {
-  "Ecuador":"EC"
+  "Ecuador":"EC",
+  "Japan":"JP",
 }
 
 onMounted(getCampaigns)
@@ -34,6 +39,7 @@ async function getCampaigns(page = 1, limit= 10){
       const data = await response.json();
 
       dataCampaigns.value = data.data;
+      totalRegistrosHtml.value = data.total;
       totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
       return console.error(error.message);    
@@ -49,10 +55,70 @@ const handlePaginationClick = async () => {
   disabledPagination.value = false;
 };
 
+// Función para manejar el cambio de paginación
+const eliminarRegistro = async (id) => {
+  isDialogVisibleDelete.value = true;
+  idCampaign.value = id;
+  // console.log(id)
+};
+
+const eliminarRegistroSi = async () => {
+  try {
+      isDialogVisibleDelete.value = false;
+      disabledViewList.value = true;
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'DELETE',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://ads-service.vercel.app/campaign/delete/${idCampaign.value}`, requestOptions);
+      const data = await response.json();
+
+      disabledViewList.value = false;
+      await getCampaigns(currentPage.value);
+
+  } catch (error) {
+      return console.error(error.message);    
+  }
+};
+
 </script>
 
 <template>
   <section>
+    <VDialog
+      v-model="isDialogVisibleDelete"
+      persistent
+      class="v-dialog-sm"
+    >
+
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleDelete = !isDialogVisibleDelete" />
+
+      <!-- Dialog Content -->
+      <VCard title="Eliminar registro">
+        <VCardText>
+          ¿Desea eliminar el registro?
+        </VCardText>
+
+        <VCardText class="d-flex justify-end gap-3 flex-wrap">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            @click="isDialogVisibleDelete = false"
+          >
+            No, Cerrar
+          </VBtn>
+          <VBtn @click="eliminarRegistroSi">
+            Si, eliminar
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
     <VRow>
       <VCol
         class="mt-6"
@@ -110,7 +176,7 @@ const handlePaginationClick = async () => {
                     v-for="(c, index) of dataCampaigns"
                     :key="index"
                   >
-                    <VListItem>
+                    <VListItem :disabled="disabledViewList">
                       <VListItemTitle>
                         <div class="nombre-campania">
                           {{ c.campaignTitle }}
@@ -164,6 +230,7 @@ const handlePaginationClick = async () => {
                             size="x-small"
                             color="error"
                             variant="text"
+                            @click="eliminarRegistro(c._id)"
                           >
                             <VIcon
                               size="22"
@@ -189,13 +256,16 @@ const handlePaginationClick = async () => {
                     <VDivider v-if="index !== dataCampaigns.length - 1" />
                   </template>
                 </VList>
+                <span class="text-sm text-disabled">
+                  Total de registros {{ totalRegistrosHtml }}
+                </span>
                 <VPagination
-                      :disabled="disabledPagination"
-                      v-model="currentPage"
-                      :length="totalRegistros"
-                      class="mt-4"
-                      @click="handlePaginationClick"
-                    />
+                    :disabled="disabledPagination"
+                    v-model="currentPage"
+                    :length="totalRegistros"
+                    class="mt-4"
+                    @click="handlePaginationClick"
+                  />
                 </div>
                 <!-- fin lista usuarios -->
               </VWindowItem>
@@ -242,5 +312,9 @@ const handlePaginationClick = async () => {
 
 .ava {
   margin-inline-end: 16px;
+}
+
+.paginador-campaign{
+  display: flex;
 }
 </style>
