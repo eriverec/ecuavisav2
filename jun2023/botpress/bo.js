@@ -3,8 +3,7 @@ if(jd){
   jd.style.color = "red";
 }
 
-// ad floating de campaña
- _html3 = document.createElement('div'); // creamos el elemento
+
 // agregamos el maping unico del nuevo floating
 window.googletag = window.googletag || {cmd: []};
 googletag.cmd.push(function() {
@@ -19,9 +18,7 @@ googletag.cmd.push(function() {
   googletag.pubads().setCentering(true);
   googletag.enableServices();
 });
-// agregamos el contenido y atributos al elemento creado
-_html3.innerHTML = '<div id="floating_ad" data-ads="floating_ad"> <script> googletag.cmd.push(function() { googletag.display("floating_ad"); }); </script></div>';
-document.body.appendChild(_html3); // agregamos al body el espacio
+
 setTimeout(() => {
   // console.log(runAdContainer("floating_ad"));// Corremos Floating
 }, "1000");
