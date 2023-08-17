@@ -1,7 +1,7 @@
-const jd = document.querySelector(".txt__");
-if(jd){
-  jd.style.color = "red";
-}
+// const jd = document.querySelector(".txt__");
+// if(jd){
+//   jd.style.color = "red";
+// }
 
 var scriptNewAdSpace = document.createElement("script");
 scriptNewAdSpace.innerHTML = `
