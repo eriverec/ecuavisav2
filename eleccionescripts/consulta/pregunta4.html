@@ -130,7 +130,7 @@ fetch(apiUrl)
         // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
         var yAxis = chart.yAxes.push(
           am5xy.CategoryAxis.new(root, {
-            categoryField: "year",
+            categoryField: "pregunta",
             renderer: am5xy.AxisRendererY.new(root, {
               inversed: true,
               cellStartLocation: 0.1,
@@ -159,7 +159,7 @@ fetch(apiUrl)
               xAxis: xAxis,
               yAxis: yAxis,
               valueXField: field,
-              categoryYField: "year",
+              categoryYField: "pregunta",
               sequencedInterpolation: true,
               // tooltip: am5.Tooltip.new(root, {
               //   pointerOrientation: "horizontal",

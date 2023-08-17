@@ -22,9 +22,8 @@ const criterio = ref([])
 const posicion = ref([]);
 const selectedItem = ref([]);
 const selectedItemCiudad = ref([]);
-const dataUsuarios = ref({});
-const selectItemParticipantes = ref(null);
-const selectItemsList = ref([{ title:'Otro', value: 'Otro' },{ title:'100', value: '100' }]);
+const dataUsuarios = ref([]);
+
 
 const languageList = [{
   title:'Imágenes locales',
@@ -80,17 +79,49 @@ async function getCountries(){
 async function getUsuarios(){
   var ciudad = selectedItemCiudad.value;
   var pais = selectedItem.value;
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-  };
-  var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}`, requestOptions);
-  const data = await response.json();
-  dataUsuarios.value = data;
 
+  // var myHeaders = new Headers();
+  // myHeaders.append("Content-Type", "application/json");
+  // var requestOptions = {
+  //   method: 'GET',
+  //   headers: myHeaders,
+  //   redirect: 'follow'
+  // };
+  // var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/${pais}/${ciudad}`, requestOptions);
+  // const data = await response.json();
+  // dataUsuarios.value = data;
+
+
+  var usuariosTemp = [];
+  let skip = 1;
+  let batchSize = 700;
+  isLoading.value = false;
+  while (true) {
+    const response = await fetch(`https://ads-service.vercel.app/campaign/get/user/${pais}/${ciudad}?${ new URLSearchParams({
+      limit: batchSize,
+      page: skip
+    })}`);
+    const data = await response.json();
+    // if (true) {
+    if (data.length === 0) {
+      break;
+    }
+    // console.log("Nombre: ",skip, data)
+    // usuariosTemp.push(data);
+
+    // dataUsuarios.value = data;
+
+    usuariosTemp = await mergeAndSum(usuariosTemp, data);
+    console.log(usuariosTemp)
+    dataUsuarios.value = Array.from(usuariosTemp);
+
+    // usuariosTemp = mergeAndSum(usuariosTemp, data);
+    // dataUsuarios.value = Array.from(usuariosTemp);
+    // urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
+    skip += 1;
+  }
+
+   // = usuariosTemp;
 }
 
 const consentimiento = ref(false);
@@ -231,6 +262,35 @@ async function validateAsyncUsuarios() {
   return true;
 }
 
+async function mergeAndSum(obj1, obj2) {
+  const merged = {};
+
+  // Unificar los registros de obj1 en el objeto merged
+  for (const item of obj1) {
+    const id = item.userId;
+    if (!merged[id]) {
+      merged[id] = { ...item };
+    } else {
+      merged[id].count += item.count;
+    }
+  }
+
+  // Unificar los registros de obj2 en el objeto merged
+  for (const item of obj2) {
+    const id = item.userId;
+    if (!merged[id]) {
+      merged[id] = { ...item };
+    } else {
+      merged[id].count += item.count;
+    }
+  }
+
+  // Convertir merged en un array de objetos
+  const result = Object.values(merged);
+
+  return result;
+}
+
 
 watch(() => selectedItem.value, (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
@@ -254,17 +314,32 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
   // console.log('Valor anterior:', oldValue);
   if(selectedItemCiudad.value != null){
     await getUsuarios();
-    alert(dataUsuarios.value.total)
-    if(dataUsuarios.value.total < 100){
-      selectItemsList.value = [{ title:'Todos', value: 'Todos' },{ title:'Otro valor', value: 'Otro' }];
-    }
   }else{
-    dataUsuarios.value = {};
+    dataUsuarios.value = [];
   }
 
-  // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
 
+const urlCounts = ref([]);
+const isLoading = ref(true);
+const itemsPerPage = 4;
+const currentPage = ref(1);
+const totalCount = dataUsuarios.value.length;
+
+const paginatedListUsuarios = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  // console.log(dataUsuarios.value.slice(start, end))
+  return dataUsuarios.value.slice(start, end);
+});
+
+const nextPage = () => {
+  if (currentPage.value * itemsPerPage < dataUsuarios.value.length) currentPage.value++;
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
 </script>
 
 <template>
@@ -547,140 +622,157 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
 
                   </tab-content>
                   <tab-content title="Criterio de búsqueda"  :before-change="validateAsyncUsuarios">
-                      
+                    <VRow class="pb-5">
 
-                      <VRow class="pb-5">
-                        <VCol col="6">
-                          
-                          <VRow class="pb-5">
-                            <VCol cols="12" >
-                              <VRow no-gutters>
-                                <!-- 👉 Email -->
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <label for="email">Criterio</label>
-                                </VCol>
-
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <VSelect
-                                    v-model="criterio"
-                                    :items="criterioList"
-                                    multiple
-                                    chips
-                                    clearable
-                                  />
-                                </VCol>
-                              </VRow>
+                        <VCol cols="6" >
+                          <VRow no-gutters>
+                            <!-- 👉 Email -->
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+                              <label for="email">Criterio</label>
                             </VCol>
-                            <VCol cols="12">
-                              <VRow no-gutters>
-                                <!-- 👉 Email -->
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <label for="email">Países</label>
-                                </VCol>
 
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <VSelect
-                                    v-model="selectedItem"
-                                    :items="countryList"
-                                    
-                                    chips
-                                    clearable
-                                  />
-                                </VCol>
-                              </VRow>
-                            </VCol>
-                            <VCol cols="12">
-                              <VRow no-gutters>
-                                <!-- 👉 Email -->
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <label for="email">Ciudades</label>
-                                </VCol>
-
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <VSelect
-                                    :items="cityList"
-                                    v-model="selectedItemCiudad"
-                                    chips
-                                    clearable
-                                  />
-                                </VCol>
-                              </VRow>
-                            </VCol>
-                            <VCol cols="12">
-                              <VRow no-gutters>
-                                <!-- 👉 Email -->
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <label for="email">Seleccionar participantes</label>
-                                </VCol>
-
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <VSelect
-                                    :items="selectItemsList"
-                                    v-model="selectItemParticipantes"
-                                    chips
-                                    clearable
-                                  />
-                                </VCol>
-                              </VRow>
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+                              <VSelect
+                                v-model="criterio"
+                                :items="criterioList"
+                                multiple
+                                chips
+                                clearable
+                              />
                             </VCol>
                           </VRow>
-
                         </VCol>
-                        <VCol col="6">
-                          <VCardText class="text-center pt-15">
-                            <!-- 👉 Avatar -->
-                            <VAvatar
-                              rounded
-                              :size="120"
-                              color="primary"
-                              variant="tonal"
+                        <VCol cols="6">
+                        </VCol>
+                        <VCol cols="6">
+                          <VRow no-gutters>
+                            <!-- 👉 Email -->
+                            <VCol
+                              cols="12"
+                              md="12"
                             >
-                              
-                              <VIcon
-                                :size="62"
-                                icon="tabler-users"
+                              <label for="email">Países</label>
+                            </VCol>
+
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+                              <VSelect
+                                v-model="selectedItem"
+                                :items="countryList"
+                                
+                                chips
+                                clearable
                               />
-                            </VAvatar>
-
-                            <!-- 👉 User fullName -->
-                            <h6 class="text-h6 mt-4">
-                              Usuarios participantes
-                            </h6>
-
-                            <!-- 👉 Role chip -->
-                            <VChip
-                              label
-                              :color="'success'"
-                              size="large"
-                              class="text-capitalize mt-4"
+                            </VCol>
+                          </VRow>
+                        </VCol>
+                        <VCol cols="6">
+                          <VRow no-gutters>
+                            <!-- 👉 Email -->
+                            <VCol
+                              cols="12"
+                              md="12"
                             >
-                              {{ dataUsuarios.total || "0" }}
-                            </VChip>
-                          </VCardText>
+                              <label for="email">Ciudades</label>
+                            </VCol>
+
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+                              <VSelect
+                                :items="cityList"
+                                v-model="selectedItemCiudad"
+                                chips
+                                clearable
+                              />
+                            </VCol>
+                          </VRow>
+                        </VCol>
+                        <VCol cols="12">
+                          <hr>
+                        </VCol>
+                        <VCol cols="12">
+                          <VList lines="two" border class="px-3 py-3">
+                              <div class="pb-3">
+                                <div class="pl-4">
+                                  <b>Números de usuarios afectados: </b> {{ dataUsuarios.length }} <VIcon icon="mdi-account-group" class="text-primary pl-2" />
+                                </div>
+                              </div>
+                              <hr>
+                              <VTable class="text-no-wrap">
+                                <!-- 👉 table head -->
+                                <thead>
+                                  <tr>
+                                    <th scope="col">
+                                      Nombre
+                                    </th>
+                                    <th scope="col">
+                                      Correo
+                                    </th>
+                                    <th scope="col">
+                                      Acciones
+                                    </th>
+                                  </tr>
+                                </thead>
+                                <!-- 👉 table body -->
+                                <tbody>
+                                  <tr
+                                    v-for="c  in paginatedListUsuarios"
+                                    :key="c.userId"
+                                    style="height: 3.75rem;"
+                                  >
+                                    <!-- 👉 Billing -->
+                                    <td>
+                                      <span class="text-base">{{ c.user.first_name }} {{ c.user.last_name }}</span>
+                                    </td>
+                                    <td>
+                                      <span class="text-base">{{ c.user.email }}</span>
+                                    </td>
+
+                                    <td style="width: 5rem;">
+                                      <VBtn
+                                        icon
+                                        size="x-small"
+                                        color="primary"
+                                      >
+                                        <VIcon
+                                          size="22"
+                                          icon="tabler-plus"
+                                        />
+                                      </VBtn>
+                                    </td>
+                                  </tr>
+                                </tbody>
+
+                                <!-- 👉 table footer  -->
+                                <tfoot v-show="!dataUsuarios.length">
+                                  <tr>
+                                    <td
+                                      colspan="7"
+                                      class="text-center"
+                                    >
+                                      No data available
+                                    </td>
+                                  </tr>
+                                </tfoot>
+                              </VTable>
+                              <div class="d-flex align-center justify-space-between botonescurrentPage mt-5 pt-5">
+                                <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
+                                Página {{ currentPage }}
+                                <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
+                                  :disabled="(currentPage * itemsPerPage) >= dataUsuarios.length">
+                                </VBtn>
+                              </div>
+                          </VList>
                         </VCol>
                       </VRow>
                   
