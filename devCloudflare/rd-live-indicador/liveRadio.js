@@ -1,7 +1,7 @@
 // Obtenemos el iduser del localstorage
 const userIdXRadio = localStorage.getItem("wylexUserId") || 0;
 
-// if (ECUAVISA_EC.login()) {
+if (ECUAVISA_EC.login()) {
     console.info("LiveRadio - Si estas logueado - v2");
 
     const eventLun_Vie = [
@@ -65,6 +65,6 @@ const userIdXRadio = localStorage.getItem("wylexUserId") || 0;
 
     // Iniciar el ciclo de verificación
     mostrarProgramacion();
-// } else {
-//     console.warn("LiveRadio - no estas logueado");
-// }
+} else {
+    console.warn("LiveRadio - no estas logueado");
+}
