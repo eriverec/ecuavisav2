@@ -37,24 +37,24 @@ if (day > 0 && day <= 5) {
     actDIV();
     setTimeout(() => {
       acRadio();
-    }, 200);
+    }, 300);
   } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {
     actDIV();
   } else if ("13:00" <= timeOfDay && timeOfDay <= "14:00") {
     actDIV();
     setTimeout(() => {
       acRadio();
-    }, 200);
+    }, 300);
   } else if ("14:00" <= timeOfDay && timeOfDay <= "19:00") {
     actDIV();
     setTimeout(() => {
       acRadio();
-    }, 200);
+    }, 300);
   } else if ("19:00" <= timeOfDay && timeOfDay <= "20:30") {
     actDIV();
     setTimeout(() => {
       acRadio();
-    }, 200);
+    }, 300);
   } else if ("20:30" <= timeOfDay && timeOfDay <= "22:30") {
     actDIV();
   } else if ("23:30" <= timeOfDay && timeOfDay <= "00:00") {
@@ -66,7 +66,7 @@ if (day > 0 && day <= 5) {
     actDIV();
     setTimeout(() => {
       acRadio();
-    }, 200);
+    }, 300);
   } else {
   }
 } else {
@@ -74,12 +74,12 @@ if (day > 0 && day <= 5) {
     actDIV();
     setTimeout(() => {
       acRadio();
-    }, 200);
+    }, 300);
   } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
     actDIV();
     setTimeout(() => {
       acRadio();
-    }, 200);
+    }, 300);
   } else if ("20:00" <= timeOfDay && timeOfDay <= "21:00") {
     actDIV();
   } else {
