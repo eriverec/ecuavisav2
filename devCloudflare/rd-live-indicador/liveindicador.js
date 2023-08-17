@@ -5,10 +5,10 @@ function actDIV() {
   }
 }
 
-const selectDivRad = document.getElementById("parent_radio");
-selectDivRad.setAttribute("style", "display: none");
+// selectDivRad.setAttribute("style", "display: none");
 function acRadio() {
   if (ECUAVISA_EC.login()) {
+    const selectDivRad = document.getElementById("parent_radio");
     if (selectDivRad) {
       selectDivRad.setAttribute("style", "display: block");
     }
@@ -35,18 +35,26 @@ if (day > 0 && day <= 5) {
     actDIV();
   } else if ("05:55" <= timeOfDay && timeOfDay <= "09:00") {
     actDIV();
-    acRadio();
+    setTimeout(() => {
+      acRadio();
+    }, 200);
   } else if ("10:30" <= timeOfDay && timeOfDay <= "13:00") {
     actDIV();
   } else if ("13:00" <= timeOfDay && timeOfDay <= "14:00") {
     actDIV();
-    acRadio();
+    setTimeout(() => {
+      acRadio();
+    }, 200);
   } else if ("14:00" <= timeOfDay && timeOfDay <= "19:00") {
     actDIV();
-    acRadio();
+    setTimeout(() => {
+      acRadio();
+    }, 200);
   } else if ("19:00" <= timeOfDay && timeOfDay <= "20:30") {
     actDIV();
-    acRadio();
+    setTimeout(() => {
+      acRadio();
+    }, 200);
   } else if ("20:30" <= timeOfDay && timeOfDay <= "22:30") {
     actDIV();
   } else if ("23:30" <= timeOfDay && timeOfDay <= "00:00") {
@@ -56,16 +64,22 @@ if (day > 0 && day <= 5) {
 } else if (day === 6) {
   if ("19:00" <= timeOfDay && timeOfDay <= "19:30") {
     actDIV();
-    acRadio();
+    setTimeout(() => {
+      acRadio();
+    }, 200);
   } else {
   }
 } else {
   if ("10:30" <= timeOfDay && timeOfDay <= "11:30") {
     actDIV();
-    acRadio();
+    setTimeout(() => {
+      acRadio();
+    }, 200);
   } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
     actDIV();
-    acRadio();
+    setTimeout(() => {
+      acRadio();
+    }, 200);
   } else if ("20:00" <= timeOfDay && timeOfDay <= "21:00") {
     actDIV();
   } else {
