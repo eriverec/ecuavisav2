@@ -1,12 +1,12 @@
 // Obtenemos el iduser del localstorage
 const userIdXRadio = localStorage.getItem("wylexUserId") || 0;
 
-if (ECUAVISA_EC.login()) {
+// if (ECUAVISA_EC.login()) {
     console.info("LiveRadio - Si estas logueado - v2");
 
     const eventLun_Vie = [
-        { inicio: "05:55", fin: "06:55", titulo: "Televistazo en la comunidad" },
-        { inicio: "06:55", fin: "07:30", titulo: "Contacto Directo" },
+        { inicio: "05:55:00", fin: "06:55:00", titulo: "Televistazo en la comunidad" },
+        { inicio: "06:55:00", fin: "07:30:00", titulo: "Contacto Directo" },
         {inicio: "07:30:00",fin: "09:00:00",titulo: "Televistazo en la comunidad",},
         // { inicio: "10:30:00", fin: "13:00:00", titulo: "En Contacto" },
         { inicio: "13:00:00", fin: "14:00:00", titulo: "Televistazo 13h00" },
@@ -65,6 +65,6 @@ if (ECUAVISA_EC.login()) {
 
     // Iniciar el ciclo de verificación
     mostrarProgramacion();
-} else {
-    console.warn("LiveRadio - no estas logueado");
-}
+// } else {
+//     console.warn("LiveRadio - no estas logueado");
+// }
