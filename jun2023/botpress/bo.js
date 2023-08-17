@@ -32,4 +32,10 @@ setTimeout(() => {
 }, "1000");
 
 console.log("ad ejecutado con exito") // si el espaciocorre todo ok
-`; document.head.appendChild(scriptNewAdSpace); //agregamos mapping al head tag
+
+`;
+setTimeout(() => {
+  document.head.appendChild(scriptNewAdSpace); //agregamos mapping al head tag
+  console.log('se creó el nuevo mapping de este espacio publicitario');
+  // console.log(runAdContainer("floating_ad"));// Corremos Floating
+}, "1000");
