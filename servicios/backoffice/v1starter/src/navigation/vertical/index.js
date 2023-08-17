@@ -68,7 +68,6 @@ export default [
     icon: { icon: 'tabler-ad' },
     children: [
       { title: 'Lista de campañas', to: 'apps-campaigns-list' },
-      { title: 'Ver campaña', to: 'apps-campaigns-view' },
       { title: 'Crear campaña', to: 'apps-campaigns-create' },
       { title: 'Posiciones', to: 'apps-campaigns-ads-ubicaciones' },
       

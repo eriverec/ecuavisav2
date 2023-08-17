@@ -15,14 +15,138 @@
               <VWindowItem value="tab-detalles">
                 <div class="d-flex flex-wrap py-4 gap-4 align-items-center" style="justify-content: space-between;">
                   <div>
-                    <VCardTitle>Información sobre la campaña: <b>{{suggestion.campaignTitle}}CAMPAÑA EJEMPLO</b>
+                    <VCardTitle>Información sobre la campaña: <b>{{suggestion.campaignTitle}}</b>
                     </VCardTitle>
-                    <VCardSubtitle> Al sugerir un tema nuevo y habilitarlo, aparecerá en el área de perfil del sitio
+                    <VCardSubtitle> A continuación encontrarás los detalles de la campaña 
                     </VCardSubtitle>
                   </div>
 
                 </div>
+                  <!-- 👉 Cuadro datos -->
+    <VCol
+      md="6"
+      lg="8"
+      cols="12"
+    >
+      <VCard>
+        <VRow no-gutters>
+          <VCol
+            cols="12"
+            sm="8"
+            md="12"
+            lg="7"
+            order="2"
+            order-lg="1"
+          >
+            <VCardItem>
+              <VCardTitle>{{suggestion.campaignTitle}}</VCardTitle>
+            </VCardItem>
 
+            <VCardText>
+              Here, I focus on a range of items and features that we use in life without giving them a second thought such as Coca Cola, body muscles and holding ones own breath. Though, most of these notes are not fundamentally necessary, they are such that you can use them for a good laugh, at a drinks party or for picking up women or men.
+            </VCardText>
+
+            <VCardText>
+              <VDivider />
+            </VCardText>
+
+            <VCardText class="d-flex justify-center">
+              <div class="me-auto pe-4">
+                <p class="d-flex align-center mb-6">
+                  <VIcon
+                    color="primary"
+                    icon="tabler-lock-open"
+                    size="22"
+                  />
+                  <span class="ms-3">{{suggestion.criterial.country}}</span>
+                </p>
+
+                <p class="d-flex align-center mb-0">
+                  <VIcon
+                    color="primary"
+                    icon="tabler-user"
+                    size="22"
+                  />
+                  <span class="ms-3">{{suggestion.userId.length}} usuarios</span>
+                </p>
+              </div>
+
+              <VDivider
+                v-if="$vuetify.display.smAndUp"
+                vertical
+                inset
+              />
+
+              <div class="ms-auto ps-4">
+                <p class="d-flex align-center mb-6">
+                  <VIcon
+                    color="primary"
+                    icon="tabler-star"
+                    size="22"
+                  />
+                  <span class="ms-3">Access all Features</span>
+                </p>
+
+                <p class="d-flex align-center mb-0">
+                  <VIcon
+                    color="primary"
+                    icon="tabler-trending-up"
+                    size="22"
+                  />
+                  <span class="ms-3">Lifetime Free Update</span>
+                </p>
+              </div>
+            </VCardText>
+          </VCol>
+
+          <VCol
+            cols="12"
+            sm="4"
+            md="12"
+            lg="5"
+            order="1"
+            order-lg="2"
+            class="member-pricing-bg text-center"
+          >
+            <div class="membership-pricing d-flex flex-column align-center py-14 h-100 justify-center">
+              <p class="mb-5">
+                <!-- <sub class="text-h5">$</sub> -->
+                <sup class="text-h2 font-weight-medium">
+                  <VChip v-if="suggestion.statusCampaign" color="success">
+                      <VIcon
+                        start
+                        size="50"
+                        icon="mdi-toggle-switch"
+                         />
+                        ACTIVA
+                  </VChip>
+
+                  <VChip v-else>
+                      <VIcon
+                        start
+                        size="50"
+                        icon="mdi-toggle-switch-off"
+                      />
+                      INACTIVA
+                  </VChip>
+               
+                
+                </sup>
+                <!-- <sub class="text-h5">USD</sub> -->
+              </p>
+
+              <p class="text-sm">
+                5 Tips For Offshore <br> Software Development
+              </p>
+
+              <VBtn class="mt-8">
+                Contact Now
+              </VBtn>
+            </div>
+          </VCol>
+        </VRow>
+      </VCard>
+    </VCol>
                 
               </VWindowItem>
 
@@ -36,6 +160,8 @@
 
       </VCol>
     </VRow>
+
+    
   </section>
 </template>
 
@@ -60,6 +186,15 @@ export default {
         _id: "",
         campaignTitle: "",
         statusCampaign: true,
+        urls: {},
+        criterial: {
+          country: "",
+          city: 0
+        },
+        type: "",
+        position: "",
+        created_at: "",
+        userId: []
       },
       currentTab: 'tab-detalles'
     };
