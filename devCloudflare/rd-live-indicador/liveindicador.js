@@ -8,8 +8,10 @@ function actDIV() {
 const selectDivRad = document.getElementById("parent_radio");
 selectDivRad.setAttribute("style", "display: none");
 function acRadio() {
-  if (selectDivRad) {
-    selectDivRad.setAttribute("style", "display: block");
+  if (ECUAVISA_EC.login()) {
+    if (selectDivRad) {
+      selectDivRad.setAttribute("style", "display: block");
+    }
   }
 }
 
