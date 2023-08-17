@@ -5,7 +5,7 @@ if(jd){
 function newAdSpace(){
   console.log("itsOk")
 }
-// newAdSpace();
+newAdSpace();
 // var scriptNewAdSpace = document.createElement("script");
 // scriptNewAdSpace.innerHTML = `
 // // agregamos el maping unico del nuevo floating
