@@ -22,4 +22,6 @@ googletag.cmd.push(function() {
 // agregamos el contenido y atributos al elemento creado
 _html3.innerHTML = '<div id="floating_ad" data-ads="floating_ad"> <script> googletag.cmd.push(function() { googletag.display("floating_ad"); }); </script></div>';
 document.body.appendChild(_html3); // agregamos al body el espacio
+
+console.log(runAdContainer("floating_ad"));// Corremos Floating
 console.log("ad ejecutado con exito") // si el espaciocorre todo ok
