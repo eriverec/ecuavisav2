@@ -121,14 +121,14 @@ const eliminarRegistroSi = async () => {
     </VDialog>
     <VRow>
       <VCol
-        class="mt-6"
+        class="mt-0"
         cols="12"
         md="12"
         lg="12"
       >
         <VTabs
           v-model="currentTab"
-          class="v-tabs-pill"
+          class="v-tabs-pill  d-none"
         >
           <VTab
             value="tab-lista"
@@ -183,7 +183,7 @@ const eliminarRegistroSi = async () => {
                           <div>
                             <VAvatar :title="'Ubicación: '+c.criterial.country+', '+c.criterial.city" class="ava" size="24" :image=" 'https://www.countryflagicons.com/FLAT/64/' + banderas[c.criterial.country] + '.png' " />
                             <span class="text-xs text-disabled">
-                              {{ c.criterial.city == "0" ? "Todos": c.criterial.city }} 
+                             <b>Sector: </b> {{c.criterial.country}}{{ c.criterial.city == "0" ? "": ", "+c.criterial.city }} 
                             </span>
                           </div>
                         </div>
