@@ -4,6 +4,7 @@ import 'vue3-form-wizard/dist/style.css'
 const currentTab = ref('tab-lista');
 const checkbox = ref(false);
 const loadingWizard = ref(false);
+const loadingPanel = ref(false);
 const dataCampaigns = ref([]);
 const dataCountry = ref([]);
 // const modelPaises = ref(null);
@@ -66,6 +67,7 @@ async function getCampaigns(){
 
 async function getCountries(){
   var myHeaders = new Headers();
+  loadingPanel.value=true;
   myHeaders.append("Content-Type", "application/json");
   var requestOptions = {
     method: 'GET',
@@ -75,22 +77,25 @@ async function getCountries(){
   var response = await fetch(`https://ads-service.vercel.app/campaign/get/all/paisesyciudad`, requestOptions);
   const data = await response.json();
   dataCountry.value = data;
+  loadingPanel.value=false;
 }
 
 async function getUsuarios(){
   var ciudad = selectedItemCiudad.value;
   var pais = selectedItem.value;
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-  };
-  var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}`, requestOptions);
-  const data = await response.json();
-  dataUsuarios.value = data;
 
+  if(ciudad != '' && ciudad != null && pais != '' && pais != null){
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}`, requestOptions);
+    const data = await response.json();
+    dataUsuarios.value = data;
+  }
 }
 
 const consentimiento = ref(false);
@@ -231,32 +236,74 @@ async function validateAsyncUsuarios() {
   return true;
 }
 
+function compareByTitle(a, b) {
+  if (a.title < b.title) {
+    return -1;
+  }
+  if (a.title > b.title) {
+    return 1;
+  }
+  return 0;
+}
 
 watch(() => selectedItem.value, (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
+  if(selectedItem.value != null){
 
-  var ciudades = [];
-  for(var i in dataCountry.value){
-    var ins = dataCountry.value[i];
-    if(ins.country == newValue){
-      for(var j in ins.data){
-        var ins2 = ins.data[j];
-        ciudades.push({ title:ins2.city, value:ins2.city });
+    selectedItemCiudad.value = [];
+    selectItemParticipantes.value = [];
+    var ciudades = [];
+    for(var i in dataCountry.value){
+      var ins = dataCountry.value[i];
+      if(ins.country == newValue){
+        for(var j in ins.data){
+          var ins2 = ins.data[j];
+          ciudades.push({ title:ins2.city, value:ins2.city });
+        }
       }
     }
+
+
+    cityList.value = ciudades.sort(compareByTitle);
+  }else{
+    selectedItemCiudad.value = [];
+    selectItemParticipantes.value = [];
   }
-  cityList.value = ciudades;
 });
+
+function generateRandomIntegers(min, max, count) {
+  const randomIntegers = [];
+  
+  for (let i = 0; i < count; i++) {
+    const randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
+    randomIntegers.push(randomInt);
+  }
+  
+  return randomIntegers;
+}
+
 
 watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(selectedItemCiudad.value != null){
+    loadingPanel.value=true;
     await getUsuarios();
-    alert(dataUsuarios.value.total)
+    loadingPanel.value=false;
     if(dataUsuarios.value.total < 100){
       selectItemsList.value = [{ title:'Todos', value: 'Todos' },{ title:'Otro valor', value: 'Otro' }];
+    }else{
+      var numeros = generateRandomIntegers(100, dataUsuarios.value.total, 3);
+      var items = [];
+      items.push({ title:'Otro valor', value: 'Otro' });
+      if(dataUsuarios.value.total != 100){
+        for(var i in numeros){
+          items.push({ title:numeros[i], value: numeros[i] });
+        }
+      }
+      items.push({ title:'Todos', value: 'Todos' });
+      selectItemsList.value = items;
     }
   }else{
     dataUsuarios.value = {};
@@ -316,7 +363,7 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
                 <!-- inicio lista de Módulos -->
                   
                 <form-wizard 
-
+                  :class="loadingPanel?'disabled':''"
                   @on-complete="onComplete" 
                   @on-loading="setLoading"
                   color="#7367F0" 

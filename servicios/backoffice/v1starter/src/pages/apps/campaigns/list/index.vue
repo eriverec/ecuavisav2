@@ -20,6 +20,7 @@ const disabledViewList = ref(false);
 const banderas = {
   "Ecuador":"EC",
   "Japan":"JP",
+  "Cuba":"CU",
 }
 
 onMounted(getCampaigns)
