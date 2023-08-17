@@ -41,10 +41,10 @@
             <VCardItem>
               <VCardTitle>{{suggestion.campaignTitle}}</VCardTitle>
             </VCardItem>
-
-            <VCardText>
+              
+            <!-- <VCardText>
               Here, I focus on a range of items and features that we use in life without giving them a second thought such as Coca Cola, body muscles and holding ones own breath. Though, most of these notes are not fundamentally necessary, they are such that you can use them for a good laugh, at a drinks party or for picking up women or men.
-            </VCardText>
+            </VCardText> -->
 
             <VCardText>
               <VDivider />
@@ -55,7 +55,7 @@
                 <p class="d-flex align-center mb-6">
                   <VIcon
                     color="primary"
-                    icon="tabler-lock-open"
+                    icon="mdi-map-marker"
                     size="22"
                   />
                   <span class="ms-3">{{suggestion.criterial.country}}</span>
@@ -81,19 +81,19 @@
                 <p class="d-flex align-center mb-6">
                   <VIcon
                     color="primary"
-                    icon="tabler-star"
+                    icon="mdi-page-layout-header-footer"
                     size="22"
                   />
-                  <span class="ms-3">Access all Features</span>
+                  <span class="ms-3">Posición: {{suggestion.position}}</span>
                 </p>
 
                 <p class="d-flex align-center mb-0">
                   <VIcon
                     color="primary"
-                    icon="tabler-trending-up"
+                    icon="mdi-calendar-month-outline"
                     size="22"
                   />
-                  <span class="ms-3">Lifetime Free Update</span>
+                  <span class="ms-3">{{suggestion.created_at}}</span>
                 </p>
               </div>
             </VCardText>
@@ -115,7 +115,7 @@
                   <VChip v-if="suggestion.statusCampaign" color="success">
                       <VIcon
                         start
-                        size="50"
+                        size="60"
                         icon="mdi-toggle-switch"
                          />
                         ACTIVA
@@ -124,7 +124,7 @@
                   <VChip v-else>
                       <VIcon
                         start
-                        size="50"
+                        size="60"
                         icon="mdi-toggle-switch-off"
                       />
                       INACTIVA
@@ -135,13 +135,13 @@
                 <!-- <sub class="text-h5">USD</sub> -->
               </p>
 
-              <p class="text-sm">
+              <!-- <p class="text-sm">
                 5 Tips For Offshore <br> Software Development
-              </p>
+              </p> -->
 
-              <VBtn class="mt-8">
-                Contact Now
-              </VBtn>
+              <!-- <VBtn class="mt-8">
+                Ver otra campaña
+              </VBtn> -->
             </div>
           </VCol>
         </VRow>
