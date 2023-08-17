@@ -2,14 +2,14 @@
 const userIdXRadio = localStorage.getItem("wylexUserId") || 0;
 
 if (ECUAVISA_EC.login()) {
-    console.info("LiveRadio - Si estas logueado - v2");
+    console.info("LiveRadio - Si estas logueado - v3");
 
     const eventLun_Vie = [
         { inicio: "05:55:00", fin: "06:55:00", titulo: "Televistazo en la comunidad" },
         { inicio: "06:55:00", fin: "07:30:00", titulo: "Contacto Directo" },
         {inicio: "07:30:00",fin: "09:00:00",titulo: "Televistazo en la comunidad",},
         // { inicio: "10:30:00", fin: "13:00:00", titulo: "En Contacto" },
-        { inicio: "13:00:00", fin: "14:00:00", titulo: "Televistazo 13h00" },
+        { inicio: "13:00:00", fin: "15:00:00", titulo: "Televistazo 13h00" },
         // { inicio: "14:00:00", fin: "15:30:00", titulo: "Los hackers de la farándula" },//hachers
         { inicio: "19:00:00", fin: "20:30:00", titulo: "Televistazo 19h00" },
       ];
@@ -53,9 +53,9 @@ if (ECUAVISA_EC.login()) {
         const selectDivRad = document.getElementById("parent_radio");
         if (selectDivRad) {
             if (enProg) {
-                selectDivRad.style.display = "block";
+                selectDivRad.setAttribute('style','display: block');
             } else {
-                selectDivRad.style.display = "none";
+                selectDivRad.setAttribute('style','display: none');
             }
         }
 
