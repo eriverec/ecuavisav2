@@ -5,6 +5,10 @@ const currentTab = ref('tab-lista');
 const checkbox = ref(false);
 const loadingWizard = ref(false);
 const dataCampaigns = ref([]);
+const dataCountry = ref([]);
+// const modelPaises = ref(null);
+const cityList = ref([]);
+const countryList = ref([]);
 // const FormWizard = ref(false);
 // const TabContent = ref(false);
 
@@ -15,7 +19,11 @@ const linkImageEscritorio = ref('')
 const linkImageMobile = ref('')
 const languages = ref([])
 const criterio = ref([])
-const posicion = ref([])
+const posicion = ref([]);
+const selectedItem = ref([]);
+const selectedItemCiudad = ref([]);
+const dataUsuarios = ref([]);
+
 
 const languageList = [{
   title:'Imágenes locales',
@@ -55,6 +63,67 @@ async function getCampaigns(){
 
 }
 
+async function getCountries(){
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+  var response = await fetch(`https://ads-service.vercel.app/campaign/get/all/paisesyciudad`, requestOptions);
+  const data = await response.json();
+  dataCountry.value = data;
+}
+
+async function getUsuarios(){
+  var ciudad = selectedItemCiudad.value;
+  var pais = selectedItem.value;
+
+  // var myHeaders = new Headers();
+  // myHeaders.append("Content-Type", "application/json");
+  // var requestOptions = {
+  //   method: 'GET',
+  //   headers: myHeaders,
+  //   redirect: 'follow'
+  // };
+  // var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/${pais}/${ciudad}`, requestOptions);
+  // const data = await response.json();
+  // dataUsuarios.value = data;
+
+
+  var usuariosTemp = [];
+  let skip = 1;
+  let batchSize = 700;
+  isLoading.value = false;
+  while (true) {
+    const response = await fetch(`https://ads-service.vercel.app/campaign/get/user/${pais}/${ciudad}?${ new URLSearchParams({
+      limit: batchSize,
+      page: skip
+    })}`);
+    const data = await response.json();
+    // if (true) {
+    if (data.length === 0) {
+      break;
+    }
+    // console.log("Nombre: ",skip, data)
+    // usuariosTemp.push(data);
+
+    // dataUsuarios.value = data;
+
+    usuariosTemp = await mergeAndSum(usuariosTemp, data);
+    console.log(usuariosTemp)
+    dataUsuarios.value = Array.from(usuariosTemp);
+
+    // usuariosTemp = mergeAndSum(usuariosTemp, data);
+    // dataUsuarios.value = Array.from(usuariosTemp);
+    // urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
+    skip += 1;
+  }
+
+   // = usuariosTemp;
+}
+
 const consentimiento = ref(false);
 
 async function onComplete() {
@@ -66,12 +135,25 @@ async function onComplete() {
 }
 
 async function handleValidation(isValid, tabIndex) {
-  console.log('Tab: '+tabIndex+ ' valid: '+isValid)
+  if(tabIndex == 1 && isValid == true){
+    await getCountries();
+
+    var paises = [];
+    for(var i in dataCountry.value){
+      var ins = dataCountry.value[i];
+      paises.push({ title:ins.country, value:ins.country });
+    }
+
+    // console.log(paises)
+    countryList.value = paises;
+
+  }
+  // console.log('Tab: '+tabIndex+ ' valid: '+isValid)
   return false;
 }
 
 async function handleValidationChange(prevIndex, nextIndex) {
-  console.log('prevIndex: '+prevIndex+ ' nextIndex: '+nextIndex)
+  // console.log('prevIndex: '+prevIndex+ ' nextIndex: '+nextIndex)
   return false;
 }
 
@@ -180,14 +262,84 @@ async function validateAsyncUsuarios() {
   return true;
 }
 
+async function mergeAndSum(obj1, obj2) {
+  const merged = {};
 
-const dataUsuarios = ref([
-  { nombre: 'Juan', edad: 25, email: 'juan@example.com' },
-  { nombre: 'María', edad: 30, email: 'maria@example.com' },
-  { nombre: 'Pedro', edad: 35, email: 'pedro@example.com' },
-]);
+  // Unificar los registros de obj1 en el objeto merged
+  for (const item of obj1) {
+    const id = item.userId;
+    if (!merged[id]) {
+      merged[id] = { ...item };
+    } else {
+      merged[id].count += item.count;
+    }
+  }
+
+  // Unificar los registros de obj2 en el objeto merged
+  for (const item of obj2) {
+    const id = item.userId;
+    if (!merged[id]) {
+      merged[id] = { ...item };
+    } else {
+      merged[id].count += item.count;
+    }
+  }
+
+  // Convertir merged en un array de objetos
+  const result = Object.values(merged);
+
+  return result;
+}
 
 
+watch(() => selectedItem.value, (newValue, oldValue) => {
+  // console.log('Nuevo valor seleccionado:', newValue);
+  // console.log('Valor anterior:', oldValue);
+
+  var ciudades = [];
+  for(var i in dataCountry.value){
+    var ins = dataCountry.value[i];
+    if(ins.country == newValue){
+      for(var j in ins.data){
+        var ins2 = ins.data[j];
+        ciudades.push({ title:ins2.city, value:ins2.city });
+      }
+    }
+  }
+  cityList.value = ciudades;
+});
+
+watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
+  // console.log('Nuevo valor seleccionado:', newValue);
+  // console.log('Valor anterior:', oldValue);
+  if(selectedItemCiudad.value != null){
+    await getUsuarios();
+  }else{
+    dataUsuarios.value = [];
+  }
+
+});
+
+const urlCounts = ref([]);
+const isLoading = ref(true);
+const itemsPerPage = 4;
+const currentPage = ref(1);
+const totalCount = dataUsuarios.value.length;
+
+const paginatedListUsuarios = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  // console.log(dataUsuarios.value.slice(start, end))
+  return dataUsuarios.value.slice(start, end);
+});
+
+const nextPage = () => {
+  if (currentPage.value * itemsPerPage < dataUsuarios.value.length) currentPage.value++;
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
 </script>
 
 <template>
@@ -197,7 +349,7 @@ const dataUsuarios = ref([
         class="mt-0"
         cols="12"
         md="12"
-        lg="6"
+        lg="8"
       >
         <VTabs
           v-model="currentTab"
@@ -472,7 +624,7 @@ const dataUsuarios = ref([
                   <tab-content title="Criterio de búsqueda"  :before-change="validateAsyncUsuarios">
                     <VRow class="pb-5">
 
-                        <VCol cols="6">
+                        <VCol cols="6" >
                           <VRow no-gutters>
                             <!-- 👉 Email -->
                             <VCol
@@ -496,7 +648,7 @@ const dataUsuarios = ref([
                             </VCol>
                           </VRow>
                         </VCol>
-                        <VCol cols="12">
+                        <VCol cols="6">
                         </VCol>
                         <VCol cols="6">
                           <VRow no-gutters>
@@ -513,9 +665,9 @@ const dataUsuarios = ref([
                               md="12"
                             >
                               <VSelect
-                                v-model="modelPaises"
-                                :items="paisesList"
-                                multiple
+                                v-model="selectedItem"
+                                :items="countryList"
+                                
                                 chips
                                 clearable
                               />
@@ -537,9 +689,8 @@ const dataUsuarios = ref([
                               md="12"
                             >
                               <VSelect
-                                v-model="modelPaises"
-                                :items="paisesList"
-                                multiple
+                                :items="cityList"
+                                v-model="selectedItemCiudad"
                                 chips
                                 clearable
                               />
@@ -551,6 +702,12 @@ const dataUsuarios = ref([
                         </VCol>
                         <VCol cols="12">
                           <VList lines="two" border class="px-3 py-3">
+                              <div class="pb-3">
+                                <div class="pl-4">
+                                  <b>Números de usuarios afectados: </b> {{ dataUsuarios.length }} <VIcon icon="mdi-account-group" class="text-primary pl-2" />
+                                </div>
+                              </div>
+                              <hr>
                               <VTable class="text-no-wrap">
                                 <!-- 👉 table head -->
                                 <thead>
@@ -569,16 +726,16 @@ const dataUsuarios = ref([
                                 <!-- 👉 table body -->
                                 <tbody>
                                   <tr
-                                    v-for="user in dataUsuarios"
-                                    :key="user.nombre"
+                                    v-for="c  in paginatedListUsuarios"
+                                    :key="c.userId"
                                     style="height: 3.75rem;"
                                   >
                                     <!-- 👉 Billing -->
                                     <td>
-                                      <span class="text-base">{{ user.nombre }}</span>
+                                      <span class="text-base">{{ c.user.first_name }} {{ c.user.last_name }}</span>
                                     </td>
                                     <td>
-                                      <span class="text-base">{{ user.email }}</span>
+                                      <span class="text-base">{{ c.user.email }}</span>
                                     </td>
 
                                     <td style="width: 5rem;">
@@ -608,6 +765,13 @@ const dataUsuarios = ref([
                                   </tr>
                                 </tfoot>
                               </VTable>
+                              <div class="d-flex align-center justify-space-between botonescurrentPage mt-5 pt-5">
+                                <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
+                                Página {{ currentPage }}
+                                <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
+                                  :disabled="(currentPage * itemsPerPage) >= dataUsuarios.length">
+                                </VBtn>
+                              </div>
                           </VList>
                         </VCol>
                       </VRow>
