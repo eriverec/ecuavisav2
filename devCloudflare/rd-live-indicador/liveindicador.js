@@ -68,19 +68,18 @@ if (day > 0 && day <= 5) {
   }
 } else {
   if ("10:30" <= timeOfDay && timeOfDay <= "11:30") {
-    actDIV();
-    setTimeout(() => {
-      acRadio();
-    }, 300);
+    // actDIV();
+    // setTimeout(() => {
+    //   acRadio();
+    // }, 300);
   } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
-    actDIV();
-    setTimeout(() => {
-      acRadio();
-    }, 300);
+    // actDIV();
+    // setTimeout(() => {
+    //   acRadio();
+    // }, 300);
   } else if ("20:00" <= timeOfDay && timeOfDay <= "21:00") {
-    actDIV();
-  } else {
-  }
+    // actDIV();
+  } else {}
 }
 
 function getConfigPlayerIndicador() {
