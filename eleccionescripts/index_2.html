@@ -21,9 +21,14 @@
 </head>
 
 <body>
-  <div id="chartdiv"></div>
-  <span class="text_fuente">Fuente: CNE</span>
-  <div id="chartdivDatos" style="text-align: center;">Cargando...</div>
+  <div class="conetenedor__general ">
+    <div id="chartdiv"></div>
+    <div class="block__info">
+      <span class="escrutadoElecciones">Cargando...</span>
+    </div>
+    <span class="text_fuente">Fuente: CNE</span>
+    <div id="chartdivDatos" style="text-align: center;">Cargando...</div>
+  </div>
 
   <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
@@ -43,6 +48,15 @@
         const actasProcesadas = data.datos.actasProcesadas;
         const votosNulos = data.datos.votosNulos;
         const votosBlancos = data.datos.votosBlancos;
+        const horaCorte = data.datos.horaCorte;
+
+
+        // var tEscru = data[0].porcentajeEscrutado;
+        var divEscru = document.querySelector('.escrutadoElecciones');
+        if (divEscru) {
+          console.log('d:', horaCorte);
+          divEscru.innerHTML = `<p>HORA DE CORTE: ${horaCorte}</p>`;
+        }
 
         // Crear el HTML con los datos
         const htmlTemplate = `
