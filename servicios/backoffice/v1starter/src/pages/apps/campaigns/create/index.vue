@@ -339,17 +339,17 @@ async function validateAsyncUsuarios() {
     return false;
   }
 
-  if(participantes == 'Otro'){
-    if(numeroOtrosUsuarios < 1 || numeroOtrosUsuarios == ""){
-      alert("Debes ingresar el valor correspondiente para el número de participantes");
-      return false;
-    }
+  // if(participantes == 'Otro'){
+  //   if(numeroOtrosUsuarios < 1 || numeroOtrosUsuarios == ""){
+  //     alert("Debes ingresar el valor correspondiente para el número de participantes");
+  //     return false;
+  //   }
 
-    if(hasErrors){
-      return false;
-    }
+  //   if(hasErrors){
+  //     return false;
+  //   }
     
-  }
+  // }
   return true;
 }
 
