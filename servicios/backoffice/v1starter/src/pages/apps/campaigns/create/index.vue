@@ -1,4 +1,6 @@
 <script setup>
+import { useRouter } from 'vue-router';
+const router = useRouter();
 import {FormWizard,TabContent} from "vue3-form-wizard";
 import 'vue3-form-wizard/dist/style.css'
 const currentTab = ref('tab-lista');
@@ -17,15 +19,24 @@ const nombreCampania = ref('')
 const codigoExternoModel = ref('')
 const linkAds = ref('')
 const linkImageEscritorio = ref('')
-const linkImageMobile = ref('')
-const languages = ref([])
-const criterio = ref([])
+const linkImageMobile = ref('');
+const numeroOtroUsuarios = ref('');
+const languages = ref([]);
+const criterio = ref([]);
 const posicion = ref([]);
 const selectedItem = ref([]);
 const selectedItemCiudad = ref([]);
 const dataUsuarios = ref({});
 const selectItemParticipantes = ref(null);
 const selectItemsList = ref([{ title:'Otro', value: 'Otro' },{ title:'100', value: '100' }]);
+const minValue = ref(1); // Valor mínimo permitido
+const maxValue = ref(100); // Valor máximo permitido
+
+const numeroRules = [
+  (v) => !!v || 'El número es requerido', // Verifica que no esté vacío
+  (v) => /^\d+$/.test(v) || 'Ingrese solo números', // Verifica que solo sean números
+  (v) => v >= minValue.value && v <= maxValue.value || 'Ingrese un número entre '+minValue.value+' y '+maxValue.value // Verifica el rango de valores
+];
 
 const languageList = [{
   title:'Imágenes locales',
@@ -38,7 +49,7 @@ const languageList = [{
   value:'script'
 }]
 
-const criterioList = [{ title:'Geolocalización', value:'trazabilidad' }];//, { title:'Metadatos', value:'metadato' }
+const criterioList = [{ title:'Geolocalización', value:'trazabilidads' }];//, { title:'Metadatos', value:'metadato' }
 
 const posicionList = [
   'floating_ad',
@@ -100,12 +111,76 @@ async function getUsuarios(){
 
 const consentimiento = ref(false);
 
+function slugify(text) {
+  return text
+    .toString()
+    .toLowerCase()
+    .replace(/[áàâä]/g, 'a')
+    .replace(/[éèêë]/g, 'e')
+    .replace(/[íìîï]/g, 'i')
+    .replace(/[óòôö]/g, 'o')
+    .replace(/[úùûü]/g, 'u')
+    .replace(/[ñ]/g, 'n')
+    .replace(/[^a-z0-9\-]+/g, '-') // Remover caracteres no alfanuméricos ni guiones
+    .replace(/\s+/g, '-') // Reemplazar espacios por guiones bajos
+    .replace(/\-\-+/g, '-') // Remover múltiples guiones bajos
+    .replace(/^-+/, '') // Remover guiones bajos al inicio
+    .replace(/-+$/, ''); // Remover guiones bajos al final
+}
+
 async function onComplete() {
-  if (checkbox.value) {
-    alert("Formulario completado");
-  } else {
-    alert("Debes aceptar los términos y condiciones para continuar.");
-  }
+  var name = nombreCampania.value;
+  var tipoContenido = languages.value;
+  var cri = criterio.value;
+  var po = posicion.value;
+  var script = codigoExternoModel.value || "";
+  var linksWeb = linkAds.value || "#";
+  var urlImagen_1 = linkImageEscritorio.value || "";
+  var urlImagen_2 = linkImageMobile.value || "";
+  var paises_temp = selectedItem.value;
+  var ciudades_temp = selectedItemCiudad.value;
+  var participantes_temp = selectItemParticipantes.value;
+  var otroValor_temp = numeroOtroUsuarios.value;
+
+  var jsonEnviar = {
+        "campaignTitle": name,
+        "type": tipoContenido,
+        "criterial": {
+            "country": paises_temp,
+            "city": ciudades_temp.join(',')
+        },
+        "coleccion": cri.join(','),
+        "position": po,
+        "participantes": participantes_temp,
+        "otroValor": otroValor_temp,
+        "urls": {
+            "url": linksWeb,
+            "img": {
+                "escritorio": urlImagen_1,
+                "mobile": urlImagen_2
+            },
+            "html": script
+        },
+        "campaignSlug" : slugify(name)
+    }
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: JSON.stringify(jsonEnviar),
+    redirect: 'follow'
+  };
+  loadingPanel.value=true;
+  var response = await fetch(`https://ads-service.vercel.app/campaign/create`, requestOptions);
+  const data = await response.json();
+  if(data.resp){
+    router.push('/apps/campaigns/list');
+  }else{
+    alert("Un error se presentó: "+data.error)
+  };
+  loadingPanel.value=false;
 }
 
 async function handleValidation(isValid, tabIndex) {
@@ -231,19 +306,92 @@ async function validateAsyncCriterio() {
   return true;
 }
 
+
+const errorMessages = computed(() => numeroRules.map(rule => rule(numeroOtroUsuarios.value)).filter(Boolean));
+const hasErrors = computed(() => errorMessages.value.length > 0);
+
 async function validateAsyncUsuarios() {
-  
+  var pais = selectedItem.value;
+  var ciudad = selectedItemCiudad.value;
+
+  // console.log(ciudad)
+  var crit = criterio.value;
+  var participantes = selectItemParticipantes.value;
+  var numeroOtrosUsuarios = numeroOtroUsuarios.value;
+
+  if(pais.length < 1 || pais == ""){
+    alert("Debe ingresar el país");
+    return false;
+  }
+
+  if(ciudad.length < 1 || ciudad == ""){
+    alert("Debes ingresar la ciudad");
+    return false;
+  }
+
+  if(crit.length < 1 || crit == ""){
+    alert("Debes ingresar el criterio");
+    return false;
+  }
+
+  if(participantes.length < 1 || participantes == ""){
+    alert("Debes ingresar el número de participantes");
+    return false;
+  }
+
+  if(participantes == 'Otro'){
+    if(numeroOtrosUsuarios < 1 || numeroOtrosUsuarios == ""){
+      alert("Debes ingresar el valor correspondiente para el número de participantes");
+      return false;
+    }
+
+    if(hasErrors){
+      return false;
+    }
+    
+  }
   return true;
 }
 
 function compareByTitle(a, b) {
-  if (a.title < b.title) {
-    return -1;
-  }
-  if (a.title > b.title) {
+  if (a.title === "Todas las ciudes") {
+    return -1; // El elemento "Todas las ciudes" se mantiene en el primer lugar
+  } else if (b.title === "Todas las ciudes") {
     return 1;
+  } else {
+    if (a.title < b.title) {
+      return -1;
+    }
+    if (a.title > b.title) {
+      return 1;
+    }
+    return 0;
   }
-  return 0;
+}
+
+function groupByTitle(arr) {
+  const grouped = {};
+  
+  for (const item of arr) {
+    const title = item.title;
+    if (!grouped[title]) {
+      grouped[title] = [];
+    }
+    grouped[title].push(item);
+  }
+  
+  const result = [];
+  for (const title in grouped) {
+    if (grouped.hasOwnProperty(title)) {
+      result.push({
+        title: title,
+        value: title,
+        cities: grouped[title].length
+      });
+    }
+  }
+  
+  return result;
 }
 
 watch(() => selectedItem.value, (newValue, oldValue) => {
@@ -254,6 +402,7 @@ watch(() => selectedItem.value, (newValue, oldValue) => {
     selectedItemCiudad.value = [];
     selectItemParticipantes.value = [];
     var ciudades = [];
+    ciudades.push({ title: "Todas las ciudes", value: "0" });
     for(var i in dataCountry.value){
       var ins = dataCountry.value[i];
       if(ins.country == newValue){
@@ -264,8 +413,9 @@ watch(() => selectedItem.value, (newValue, oldValue) => {
       }
     }
 
-
-    cityList.value = ciudades.sort(compareByTitle);
+    ciudades.sort(compareByTitle);
+    // console.log(Object.values(groupByTitle(ciudades)))
+    cityList.value = Object.values(groupByTitle(ciudades));
   }else{
     selectedItemCiudad.value = [];
     selectItemParticipantes.value = [];
@@ -291,13 +441,15 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
     loadingPanel.value=true;
     await getUsuarios();
     loadingPanel.value=false;
+    maxValue.value = dataUsuarios.value.total;
+    minValue.value = 1;
     if(dataUsuarios.value.total < 100){
       selectItemsList.value = [{ title:'Todos', value: 'Todos' },{ title:'Otro valor', value: 'Otro' }];
     }else{
       var numeros = generateRandomIntegers(100, dataUsuarios.value.total, 3);
       var items = [];
       items.push({ title:'Otro valor', value: 'Otro' });
-      if(dataUsuarios.value.total != 100){
+      if(dataUsuarios.value.total > 110){
         for(var i in numeros){
           items.push({ title:numeros[i], value: numeros[i] });
         }
@@ -372,6 +524,7 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
                   validate-on-back="true"
                   nextButtonText="Siguiente"
                   backButtonText="Anterior"
+                  finishButtonText="Crear campaña"
                 >
                   <tab-content title="Detalles de la campaña" :before-change="validateAsync">
                    
@@ -665,6 +818,7 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
                                   <VSelect
                                     :items="cityList"
                                     v-model="selectedItemCiudad"
+                                    multiple
                                     chips
                                     clearable
                                   />
@@ -690,6 +844,33 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
                                     v-model="selectItemParticipantes"
                                     chips
                                     clearable
+                                  />
+                                </VCol>
+                              </VRow>
+                            </VCol>
+
+                            <VCol cols="12" :class="selectItemParticipantes!='Otro'?'d-none':''">
+                              <VRow no-gutters>
+                                <!-- 👉 Email -->
+                                <VCol
+                                  cols="12"
+                                  md="12"
+                                >
+                                  <label for="email">Escriba el número</label>
+                                </VCol>
+
+                                <VCol
+                                  cols="12"
+                                  md="12"
+                                >
+                                  <VTextField
+                                    id="numero"
+                                    v-model="numeroOtroUsuarios"
+                                    placeholder="Escriba el número de participantes"
+                                    persistent-placeholder
+                                    :rules="numeroRules"
+                                    :min="minValue"
+                                    :max="maxValue"
                                   />
                                 </VCol>
                               </VRow>

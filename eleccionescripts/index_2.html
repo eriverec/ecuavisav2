@@ -250,9 +250,17 @@
         var yRenderer = am5xy.AxisRendererY.new(root, {});
         var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
           maxDeviation: 0,
+          // min: 0,
+          // extraMax: 0.1,
+          renderer: yRenderer,
           min: 0,
-          extraMax: 0.1,
-          renderer: yRenderer
+          max: 100,
+          numberFormat: "#'%'",
+          strictMinMax: true,
+          // calculateTotals: true,
+          // renderer: am5xy.AxisRendererY.new(root, {
+          //   strokeOpacity: 0.1
+          // })
         }));
 
         yRenderer.grid.template.setAll({

@@ -1,5 +1,5 @@
 <script setup>
-
+import { getPaisConfig } from "@core/libs/campaigns/config";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -21,6 +21,7 @@ const banderas = {
   "Ecuador":"EC",
   "Japan":"JP",
   "Cuba":"CU",
+  "Colombia":"CU",
 }
 
 onMounted(getCampaigns)
@@ -182,7 +183,7 @@ const eliminarRegistroSi = async () => {
                         <div class="nombre-campania">
                           {{ c.campaignTitle }}
                           <div>
-                            <VAvatar :title="'Ubicación: '+c.criterial.country+', '+c.criterial.city" class="ava" size="24" :image=" 'https://www.countryflagicons.com/FLAT/64/' + banderas[c.criterial.country] + '.png' " />
+                            <VAvatar :title="'Ubicación: '+c.criterial.country+', '+c.criterial.city" class="ava" size="24" :image=" 'https://www.countryflagicons.com/FLAT/64/' + getPaisConfig(c.criterial.country)['alpha-2'] + '.png' " />
                             <span class="text-xs text-disabled">
                              <b>Sector: </b> {{c.criterial.country}}{{ c.criterial.city == "0" ? "": ", "+c.criterial.city }} 
                             </span>
