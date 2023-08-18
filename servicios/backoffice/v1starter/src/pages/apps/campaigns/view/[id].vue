@@ -15,7 +15,7 @@
               <VWindowItem value="tab-detalles">
                 <div class="d-flex flex-wrap py-4 gap-4 align-items-center" style="justify-content: space-between;">
                   <div>
-                    <VCardTitle>Información sobre la campaña: <b>{{suggestion.campaignTitle}}</b>
+                    <VCardTitle>Información sobre la campaña: <b>"{{suggestion.campaignTitle}}"</b>
                     </VCardTitle>
                     <VCardSubtitle> A continuación encontrarás los detalles de la campaña 
                     </VCardSubtitle>
@@ -23,21 +23,10 @@
 
                 </div>
                   <!-- 👉 Cuadro datos -->
-    <VCol
-      md="6"
-      lg="8"
-      cols="12"
-    >
+    <VCol md="6" lg="8" cols="12">
       <VCard>
         <VRow no-gutters>
-          <VCol
-            cols="12"
-            sm="8"
-            md="12"
-            lg="7"
-            order="2"
-            order-lg="1"
-          >
+          <VCol cols="12" sm="8" md="12" lg="7" order="2" order-lg="1">
             <VCardItem>
               <VCardTitle>{{suggestion.campaignTitle}}</VCardTitle>
             </VCardItem>
@@ -53,20 +42,12 @@
             <VCardText class="d-flex justify-center">
               <div class="me-auto pe-4">
                 <p class="d-flex align-center mb-6">
-                  <VIcon
-                    color="primary"
-                    icon="mdi-map-marker"
-                    size="22"
-                  />
+                  <VIcon color="primary" icon="mdi-map-marker" size="22"/>
                   <span class="ms-3">{{suggestion.criterial.country}}</span>
                 </p>
 
                 <p class="d-flex align-center mb-0">
-                  <VIcon
-                    color="primary"
-                    icon="tabler-user"
-                    size="22"
-                  />
+                  <VIcon color="primary" icon="tabler-user" size="22"/>
                   <span class="ms-3">{{suggestion.userId.length}} usuarios</span>
                 </p>
               </div>
@@ -79,54 +60,30 @@
 
               <div class="ms-auto ps-4">
                 <p class="d-flex align-center mb-6">
-                  <VIcon
-                    color="primary"
-                    icon="mdi-page-layout-header-footer"
-                    size="22"
-                  />
+                  <VIcon color="primary" icon="mdi-page-layout-header-footer" size="22"/>
                   <span class="ms-3">Posición: {{suggestion.position}}</span>
                 </p>
 
                 <p class="d-flex align-center mb-0">
-                  <VIcon
-                    color="primary"
-                    icon="mdi-calendar-month-outline"
-                    size="22"
-                  />
+                  <VIcon color="primary" icon="mdi-calendar-month-outline" size="22"/>
                   <span class="ms-3">{{suggestion.created_at}}</span>
                 </p>
               </div>
             </VCardText>
           </VCol>
 
-          <VCol
-            cols="12"
-            sm="4"
-            md="12"
-            lg="5"
-            order="1"
-            order-lg="2"
-            class="member-pricing-bg text-center"
-          >
+          <VCol cols="12" sm="4" md="12" lg="5" order="1" order-lg="2" class="member-pricing-bg text-center">
             <div class="membership-pricing d-flex flex-column align-center py-14 h-100 justify-center">
               <p class="mb-5">
                 <!-- <sub class="text-h5">$</sub> -->
                 <sup class="text-h2 font-weight-medium">
                   <VChip v-if="suggestion.statusCampaign" color="success">
-                      <VIcon
-                        start
-                        size="60"
-                        icon="mdi-toggle-switch"
-                         />
+                      <VIcon start size="60" icon="mdi-toggle-switch"/>
                         ACTIVA
                   </VChip>
 
                   <VChip v-else>
-                      <VIcon
-                        start
-                        size="60"
-                        icon="mdi-toggle-switch-off"
-                      />
+                      <VIcon start size="60" icon="mdi-toggle-switch-off"/>
                       INACTIVA
                   </VChip>
                
@@ -151,7 +108,31 @@
               </VWindowItem>
 
               <VWindowItem value="tab-usuarios">
-                <p>Próximamente</p>
+                <VCardTitle>Esta es la lista de usuarios de la campaña "{{suggestion.campaignTitle}}":
+                    </VCardTitle>
+                    <VCardSubtitle>
+                    </VCardSubtitle>
+            
+                <VList lines="two" >
+                    <template  v-for="(user, index) in currentUsers" :key="index" >
+                      <VListItem border> 
+
+                        <VListItemTitle>
+                          <span>{{ user.firstname }} {{ user.last_name }}</span>
+                          
+                          
+                        </VListItemTitle>
+                        <VListItemSubtitle class="mt-1" color="info"> 
+                          <span class="text-xs text-disabled"> Correo: {{ user.email }}</span>
+                        </VListItemSubtitle>
+                      
+                      </VListItem>
+                    </template>
+                  </VList>
+
+                  <button @click="currentPage--" :disabled="currentPage <= 1">Anterior </button>
+                  <button @click="currentPage++" :disabled="currentPage >= totalPages">Siguiente</button>
+
               </VWindowItem>
 
             </VWindow>
@@ -196,7 +177,10 @@ export default {
         created_at: "",
         userId: []
       },
-      currentTab: 'tab-detalles'
+      currentTab: 'tab-detalles',
+      currentPage: 1,
+      usersPerPage: 20,
+      currentUsers: ""
     };
   },
   watch: {
@@ -204,6 +188,18 @@ export default {
   mounted() {
     this.obtenerDetalles();
   },
+
+        computed: {
+            totalPages() {
+                return Math.ceil(this.suggestion.userId.length / this.usersPerPage);
+            },
+            currentUsers() {
+                const start = (this.currentPage - 1) * this.usersPerPage;
+                const end = start + this.usersPerPage;
+                return this.suggestion.userId.slice(start, end);
+            }
+        },
+
   methods: {
     async obtenerDetalles() {
       const respuesta = await fetch(`https://ads-service.vercel.app/campaign/${this.id}/user`); 
