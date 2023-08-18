@@ -348,7 +348,7 @@ async function validateAsyncUsuarios() {
     // if(hasErrors){
     //   return false;
     // }
-    
+
   }
   return true;
 }
@@ -369,30 +369,30 @@ function compareByTitle(a, b) {
   }
 }
 
-function groupByTitle(arr) {
+function groupByTitleWithAttributes(arr) {
   const grouped = {};
-  
+
   for (const item of arr) {
     const title = item.title;
     if (!grouped[title]) {
       grouped[title] = [];
     }
-    grouped[title].push(item);
+    grouped[title].push(item.value);
   }
-  
+
   const result = [];
   for (const title in grouped) {
     if (grouped.hasOwnProperty(title)) {
       result.push({
         title: title,
-        value: title,
-        cities: grouped[title].length
+        value: grouped[title][0]
       });
     }
   }
-  
+
   return result;
 }
+
 
 watch(() => selectedItem.value, (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
@@ -415,7 +415,9 @@ watch(() => selectedItem.value, (newValue, oldValue) => {
 
     ciudades.sort(compareByTitle);
     // console.log(Object.values(groupByTitle(ciudades)))
-    cityList.value = Object.values(groupByTitle(ciudades));
+    cityList.value = Object.values(groupByTitleWithAttributes(ciudades));
+
+    console.log(cityList.value)
   }else{
     selectedItemCiudad.value = [];
     selectItemParticipantes.value = [];
