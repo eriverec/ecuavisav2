@@ -214,17 +214,25 @@ const eliminarRegistroSi = async () => {
 
                       <template #append>
                         <div class="espacio-right-2">
-
+                          
                           <VBtn
                             icon
                             size="x-small"
                             color="info"
                             variant="text"
                           >
+                          <RouterLink
+                            :to="{
+                              name: 'apps-campaigns-edit-id',
+                              params: { id: c._id },
+                            }"
+                            class="font-weight-medium user-list-name"
+                            >
                             <VIcon
                               size="22"
                               icon="tabler-edit"
                             />
+                          </RouterLink>
                           </VBtn>
 
                           <VBtn
