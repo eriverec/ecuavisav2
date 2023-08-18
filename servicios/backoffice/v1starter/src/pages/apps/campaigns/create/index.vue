@@ -339,17 +339,17 @@ async function validateAsyncUsuarios() {
     return false;
   }
 
-  // if(participantes == 'Otro'){
-  //   if(numeroOtrosUsuarios < 1 || numeroOtrosUsuarios == ""){
-  //     alert("Debes ingresar el valor correspondiente para el número de participantes");
-  //     return false;
-  //   }
+  if(participantes == 'Otro'){
+    if(numeroOtrosUsuarios < 1 || numeroOtrosUsuarios == ""){
+      alert("Debes ingresar el valor correspondiente para el número de participantes");
+      return false;
+    }
 
-  //   if(hasErrors){
-  //     return false;
-  //   }
+    // if(hasErrors){
+    //   return false;
+    // }
     
-  // }
+  }
   return true;
 }
 
@@ -424,12 +424,18 @@ watch(() => selectedItem.value, (newValue, oldValue) => {
 
 function generateRandomIntegers(min, max, count) {
   const randomIntegers = [];
-  
+
   for (let i = 0; i < count; i++) {
-    const randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
+    let randomInt = Math.floor(Math.random() * (max - min + 1)) + min;
+    
+    // Asegurarse de que el número termine en 0
+    if (randomInt % 10 !== 0) {
+      randomInt += 10 - (randomInt % 10);
+    }
+
     randomIntegers.push(randomInt);
   }
-  
+
   return randomIntegers;
 }
 
