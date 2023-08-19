@@ -187,7 +187,8 @@ computed: {
   filteredUsers() {
     return this.suggestion.userId.filter(user => {
       return user.firstname.toLowerCase().includes(this.filter.toLowerCase()) ||
-             user.last_name.toLowerCase().includes(this.filter.toLowerCase());
+             user.last_name.toLowerCase().includes(this.filter.toLowerCase()) ||
+             user.email.toLowerCase().includes(this.filter.toLowerCase()); // Agregar filtro por correo electrónico
     });
   }
 },
