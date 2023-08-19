@@ -6,7 +6,6 @@
         <VTabs v-model="currentTab" class="v-tabs-pill">
           <VTab value="tab-detalles">Detalles</VTab>
           <VTab value="tab-usuarios">Usuarios</VTab>
-          <!-- <VTab>Tab Three</VTab> -->
         </VTabs>
 
         <VCard class="mt-5">
@@ -15,124 +14,112 @@
               <VWindowItem value="tab-detalles">
                 <div class="d-flex flex-wrap py-4 gap-4 align-items-center" style="justify-content: space-between;">
                   <div>
-                    <VCardTitle>Información sobre la campaña: <b>"{{suggestion.campaignTitle}}"</b>
+                    <VCardTitle>Información sobre: <b>"{{suggestion.campaignTitle}}"</b>
                     </VCardTitle>
-                    <VCardSubtitle> A continuación encontrarás los detalles de la campaña 
+                    <VCardSubtitle> A continuación encontrarás detalles sobre la campaña 
                     </VCardSubtitle>
                   </div>
-
                 </div>
-                  <!-- 👉 Cuadro datos -->
-    <VCol md="6" lg="8" cols="12">
-      <VCard>
-        <VRow no-gutters>
-          <VCol cols="12" sm="8" md="12" lg="7" order="2" order-lg="1">
-            <VCardItem>
-              <VCardTitle>{{suggestion.campaignTitle}}</VCardTitle>
-            </VCardItem>
-              
-            <!-- <VCardText>
-              Here, I focus on a range of items and features that we use in life without giving them a second thought such as Coca Cola, body muscles and holding ones own breath. Though, most of these notes are not fundamentally necessary, they are such that you can use them for a good laugh, at a drinks party or for picking up women or men.
-            </VCardText> -->
+                <!-- 👉 Cuadro datos -->
+                <VCol md="6" lg="12" cols="12">
+                  <VAlert color="success" variant="tonal">
+                    <VRow no-gutters>
+                      <VCol cols="12" sm="8" md="12" lg="8" order="2" order-lg="1">
+                        <VCardItem>
+                          <VCardTitle>{{suggestion.campaignTitle}}</VCardTitle>
+                        </VCardItem>
 
-            <VCardText>
-              <VDivider />
-            </VCardText>
+                        <VCardText class="d-flex justify-center">
+                          <div class="me-auto pe-4">
+                            <p class="d-flex align-center mb-6">
+                              <VIcon color="primary" icon="mdi-map-marker" size="22"/>
+                              <span class="ms-3">{{suggestion.criterial.country}}</span>
+                            </p>
 
-            <VCardText class="d-flex justify-center">
-              <div class="me-auto pe-4">
-                <p class="d-flex align-center mb-6">
-                  <VIcon color="primary" icon="mdi-map-marker" size="22"/>
-                  <span class="ms-3">{{suggestion.criterial.country}}</span>
-                </p>
+                            <p class="d-flex align-center mb-0">
+                              <VIcon color="primary" icon="tabler-user" size="22"/>
+                              <span class="ms-3">{{suggestion.userId.length}} usuarios</span>
+                            </p>
+                          
+                            <VBtn class="mt-4" color="success" size="small" @click="exportToCSV">Descargar Usuarios<VIcon end icon="tabler-download" /></VBtn>
+                          </div>
 
-                <p class="d-flex align-center mb-0">
-                  <VIcon color="primary" icon="tabler-user" size="22"/>
-                  <span class="ms-3">{{suggestion.userId.length}} usuarios</span>
-                </p>
-              </div>
+                          <VDivider
+                            v-if="$vuetify.display.smAndUp"
+                            vertical
+                            inset
+                          />
 
-              <VDivider
-                v-if="$vuetify.display.smAndUp"
-                vertical
-                inset
-              />
+                          <div class="ms-auto ps-4">
+                            <p class="d-flex align-center mb-6">
+                              <VIcon color="primary" icon="mdi-page-layout-header-footer" size="22"/>
+                              <span class="ms-3">Posición: {{suggestion.position}}</span>
+                            </p>
 
-              <div class="ms-auto ps-4">
-                <p class="d-flex align-center mb-6">
-                  <VIcon color="primary" icon="mdi-page-layout-header-footer" size="22"/>
-                  <span class="ms-3">Posición: {{suggestion.position}}</span>
-                </p>
+                            <p class="d-flex align-center mb-0">
+                              <VIcon color="primary" icon="mdi-calendar-month-outline" size="22"/>
+                              <span class="ms-3">{{suggestion.created_at}}</span>
+                            </p>
+                          </div>
+                        </VCardText>
+                      </VCol>
 
-                <p class="d-flex align-center mb-0">
-                  <VIcon color="primary" icon="mdi-calendar-month-outline" size="22"/>
-                  <span class="ms-3">{{suggestion.created_at}}</span>
-                </p>
-              </div>
-            </VCardText>
-          </VCol>
-
-          <VCol cols="12" sm="4" md="12" lg="5" order="1" order-lg="2" class="member-pricing-bg text-center">
-            <div class="membership-pricing d-flex flex-column align-center py-14 h-100 justify-center">
-              <p class="mb-5">
-                <!-- <sub class="text-h5">$</sub> -->
-                <sup class="text-h2 font-weight-medium">
-                  <VChip v-if="suggestion.statusCampaign" color="success">
-                      <VIcon start size="60" icon="mdi-toggle-switch"/>
-                        ACTIVA
-                  </VChip>
-
-                  <VChip v-else>
-                      <VIcon start size="60" icon="mdi-toggle-switch-off"/>
-                      INACTIVA
-                  </VChip>
-               
-                
-                </sup>
-                <!-- <sub class="text-h5">USD</sub> -->
-              </p>
-
-              <!-- <p class="text-sm">
-                5 Tips For Offshore <br> Software Development
-              </p> -->
-
-              <!-- <VBtn class="mt-8">
-                Ver otra campaña
-              </VBtn> -->
-            </div>
-          </VCol>
-        </VRow>
-      </VCard>
-    </VCol>
+                      <VCol cols="12" sm="4" md="12" lg="4" order="1" order-lg="2" class="member-pricing-bg text-center">
+                        <div class="membership-pricing d-flex flex-column align-center py-14 h-100 justify-center">
+                              <VCardTitle>Estado:</VCardTitle>
+                            <sup class="text-h2 font-weight-medium">
+                                <VChip v-if="suggestion.statusCampaign" color="success">
+                                    <VIcon start size="60" icon="mdi-toggle-switch"/>
+                                    ACTIVA
+                                </VChip>
+                                <VChip v-else>
+                                    <VIcon start size="60" icon="mdi-toggle-switch-off"/>
+                                    INACTIVA
+                                </VChip>
+                            </sup>
+                            
+                          
+                        </div>
+                      </VCol>
+                    </VRow>
+                  </VAlert>
+                </VCol>
                 
               </VWindowItem>
 
               <VWindowItem value="tab-usuarios">
-                <VCardTitle>Esta es la lista de usuarios de la campaña "{{suggestion.campaignTitle}}":
-                    </VCardTitle>
-                    <VCardSubtitle>
-                    </VCardSubtitle>
-            
+                <VCardTitle>Esta es la lista de usuarios de la campaña "{{suggestion.campaignTitle}}":</VCardTitle>
+                <VCardSubtitle></VCardSubtitle>
+
+                <!-- Campo de búsqueda -->
+                <VRow justify="space-between" class="my-4">
+                  <VCol cols="4">
+                    <VTextField append-inner-icon="tabler-user-search" v-model="filter" label="Buscar usuarios"/>
+                  </VCol>
+                  <VCol cols="auto">
+                    <VBtn color="info" @click="exportToCSV">Descargar Usuarios<VIcon end icon="tabler-download" /></VBtn>
+                  </VCol>
+                </VRow>
+
+                <!-- items -->
                 <VList lines="two" >
-                    <template  v-for="(user, index) in currentUsers" :key="index" >
-                      <VListItem border> 
+                  <template  v-for="(user, index) in currentUsers" :key="index" >
+                    <VListItem border> 
+                      <VListItemTitle>
+                        <span>{{ user.firstname }} {{ user.last_name }}</span>
+                      </VListItemTitle>
+                      <VListItemSubtitle class="mt-1" color="info"> 
+                        <span class="text-xs text-disabled"> Correo: {{ user.email }}</span>
+                      </VListItemSubtitle>
 
-                        <VListItemTitle>
-                          <span>{{ user.firstname }} {{ user.last_name }}</span>
-                          
-                          
-                        </VListItemTitle>
-                        <VListItemSubtitle class="mt-1" color="info"> 
-                          <span class="text-xs text-disabled"> Correo: {{ user.email }}</span>
-                        </VListItemSubtitle>
-                      
-                      </VListItem>
-                    </template>
-                  </VList>
+                    </VListItem>
+                  </template>
+                </VList>
 
-                  <button @click="currentPage--" :disabled="currentPage <= 1">Anterior </button>
-                  <button @click="currentPage++" :disabled="currentPage >= totalPages">Siguiente</button>
-
+                <!-- botones paginado -->
+                <VBtn variant="tonal" @click="currentPage--" :disabled="currentPage <= 1" size="small" color="primary"> <VIcon start icon="tabler-arrow-left" /> Anterior </VBtn>
+                <VBtn variant="tonal" @click="currentPage++" :disabled="currentPage >= totalPages" size="small" color="primary" class="ma-3">  Siguiente <VIcon end icon="tabler-arrow-right" /></VBtn>
+                
               </VWindowItem>
 
             </VWindow>
@@ -155,10 +142,7 @@ export default {
   setup() {
     const route = useRoute();
     const id = route.params.id;
-    return {
-      id
-    }
-    // Aquí podemos utilizar la variable "id" para hacer algo con el valor del parámetro "id"
+    return { id }
   },
   data() {
     return {
@@ -179,8 +163,9 @@ export default {
       },
       currentTab: 'tab-detalles',
       currentPage: 1,
-      usersPerPage: 20,
-      currentUsers: ""
+      usersPerPage: 10,
+      currentUsers: "",
+      filter: "" // Agregar un modelo de datos para el filtro
     };
   },
   watch: {
@@ -189,31 +174,49 @@ export default {
     this.obtenerDetalles();
   },
 
-        computed: {
-            totalPages() {
-                return Math.ceil(this.suggestion.userId.length / this.usersPerPage);
-            },
-            currentUsers() {
-                const start = (this.currentPage - 1) * this.usersPerPage;
-                const end = start + this.usersPerPage;
-                return this.suggestion.userId.slice(start, end);
-            }
-        },
+computed: {
+  totalPages() {
+    return Math.ceil(this.filteredUsers.length / this.usersPerPage);
+  },
+  currentUsers() {
+    const start = (this.currentPage - 1) * this.usersPerPage;
+    const end = start + this.usersPerPage;
+    return this.filteredUsers.slice(start, end);
+  },
+  // Agregar una función computada para los usuarios filtrados
+  filteredUsers() {
+    return this.suggestion.userId.filter(user => {
+      return user.firstname.toLowerCase().includes(this.filter.toLowerCase()) ||
+             user.last_name.toLowerCase().includes(this.filter.toLowerCase());
+    });
+  }
+},
+
 
   methods: {
+    //método que obtiene los detalles de la campaña y el listado de usuarios
     async obtenerDetalles() {
       const respuesta = await fetch(`https://ads-service.vercel.app/campaign/${this.id}/user`); 
-      // const respuesta = await fetch(`https://ads-service.vercel.app/campaign/64db93a5251f961bdbb22365/user`); 
       const datos = await respuesta.json();
       this.suggestion = datos[0];
-      console.log(this.suggestion)
-      // const registros = datos.userId;
-      // 
     },
+    // metodo que exporta a csv los registros obtenidos
+    exportToCSV() {
+      let csvContent = "data:text/csv;charset=utf-8,";
+      csvContent += [
+        ["firstname", "last_name", "email"].join(","),
+        ...this.suggestion.userId.map(user => [user.firstname, user.last_name, user.email].join(","))
+      ].join("\n");
 
-    //https://ads-service.vercel.app/campaign/64db93a5251f961bdbb22365/user
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "usuarios.csv");
+      document.body.appendChild(link); // Required for Firefox
 
-    
+      link.click(); // This will download the data file named "usuarios.csv".
+    },
   },
 };
 </script>
+
