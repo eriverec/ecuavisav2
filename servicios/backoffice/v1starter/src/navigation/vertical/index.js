@@ -34,8 +34,9 @@ export default [
       { title: 'Metadatos', to: 'apps-metadatos' },
       { title: 'Dispositivos', to: 'apps-dispositivos' },
 
-      // modulos por salir 
+      // modulos por salir
       //{ title: 'Trazabilidad usuarios', to: 'apps-trazabilidad-users' },
+      //{ title: 'Trazabilidad usuarios', to: 'apps-trazabilidad-ubicaciones' },
       // { title: 'Trazabilidad usuarios', to: 'apps-notas-recomendadas'}, //apps/notas-recomendadas
 
     ],
