@@ -75,7 +75,7 @@ if (day > 0 && day <= 5) {
     setTimeout(() => {
       acRadio();
     }, 300);
-  } else if ("19:00" <= timeOfDay && timeOfDay <= "20:00") {
+  } else if ("16:00" <= timeOfDay && timeOfDay <= "20:00") {
     actDIV();
     setTimeout(() => {
       acRadio();
