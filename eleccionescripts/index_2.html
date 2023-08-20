@@ -261,6 +261,15 @@
 
         xRenderer.grid.template.set("visible", false);
 
+        // xRenderer.labels.template.setAll({
+        //   rotation: -90,
+        //   centerY: am5.p50,
+        //   centerX: am5.p100,
+        //   paddingRight: 15
+        // });
+        xRenderer.labels.template.set("fontSize", 12);
+
+
         var yRenderer = am5xy.AxisRendererY.new(root, {});
         var yAxis = chart.yAxes.push(am5xy.ValueAxis.new(root, {
           maxDeviation: 0,
@@ -369,6 +378,7 @@
             })
           });
         });
+        
 
         var label = chart.plotContainer.children.push(am5.Label.new(root, {
           text: "Elecciones 2023",
