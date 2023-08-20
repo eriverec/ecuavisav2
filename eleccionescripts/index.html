@@ -64,7 +64,10 @@ function setNewData(seteado){
 // Create axes
 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
 
-var yRenderer = am5xy.AxisRendererY.new(root, {});
+var yRenderer = am5xy.AxisRendererY.new(root, {
+  minGridDistance: 30,
+  inversed: true
+});
 yRenderer.grid.template.set("visible", false);
 
 var yAxis = chart.yAxes.push(
