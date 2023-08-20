@@ -17,7 +17,7 @@ if (ECUAVISA_EC.login()) {
     
       const eventDom = [
         { inicio: "10:30:00", fin: "11:30:00", titulo: "Políticamente Correcto" },
-        { inicio: "16:00:00", fin: "20:00:00", titulo: "Televistazo 19h00" },
+        { inicio: "16:00:00", fin: "20:00:00", titulo: "Ecuavisa En vivo" },
       ];
 
     function mostrarProgramacion() {
