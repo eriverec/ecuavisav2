@@ -3515,7 +3515,8 @@ BLOQUE DE COLUMNISTA - FIN
 /*  CINTILLO ENVIO PARA LAS NOTAS */
 
 .article_envivo {
-  background: #ff3737;
+  /* background: #ff3737; */
+  background: #e31010;
   color: #fff;
   padding: 3px 7px;
   font-family: 'Archivo';
