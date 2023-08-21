@@ -12,7 +12,11 @@
     href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="./consulta/main.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.js"></script>
   <style type="text/css">
     #chartdiv {
       width: 100%;
@@ -20,46 +24,53 @@
     }
 
     .content-candidatos {
-      display: flex;
+      /* display: flex;
       gap: 10px;
       max-width: 575px;
       justify-content: center;
       margin-left: auto;
-      margin-right: auto;
+      margin-right: auto; */
+    }
+
+    .parent-candidatos{
+      padding-bottom: 50px;
     }
 
     .nombre-candidato {
-        text-align: center;
+      text-align: center;
     }
 
     .nombre-candidato {
-        text-align: center;
+      text-align: center;
     }
 
-    .imagen-partido > img {
-        width: 35px;
+    .imagen-partido>img {
+      width: 35px;
     }
 
     .imagen-partido {
-        position: absolute;
-        bottom: 0;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 115px;
     }
 
     .imagen-candidato {
-        position: relative;
+      position: relative;
+      text-align: center;
     }
 
-    .imagen-candidato > img {
+    .imagen-candidato>img {
       width: 150px;
       height: 140px;
       object-fit: cover;
     }
 
     .content-elecciones {
-        padding: 7px;
-        border: 1px solid #dedede;
-        border-radius: 2px;
-        padding-top: 0px;
+      padding: 7px;
+      border: 1px solid #dedede;
+      border-radius: 2px;
+      padding-top: 0px;
     }
 
     .nombre-candidato {
@@ -80,25 +91,34 @@
     }
 
     .nombre-candidato.name {
-        font-weight: 700;
-        font-size: 15px;
+      font-weight: 700;
+      font-size: 15px;
     }
 
     .text_fuente {
-        margin-top: 15px;
+      margin-top: 15px;
     }
 
     .btn_content {
-        text-align: center;
-        margin-top: 20px;
+      text-align: center;
+      margin-top: 20px;
     }
 
     a.btn_vermas.btn.btn-default {
-        background-color: #2927b9;
-        color: #ffff;
-        padding: 7px 20px;
-        margin-top: 10px;
+      background-color: #2927b9;
+      color: #ffff;
+      padding: 7px 20px;
+      margin-top: 10px;
     }
+
+     .swiper-pagination-bullet, .HOME_MENU_RD .lista-bloque-programas .swiper-pagination-bullet {
+    width: 14px !important;
+    height: 14px !important;
+}
+ .swiper-pagination-bullet-active, .HOME_MENU_RD .lista-bloque-programas .swiper-pagination-bullet-active {
+    background: #2927b9;
+}
+
   </style>
 </head>
 
@@ -106,37 +126,45 @@
   <div class="conetenedor__general  p-5">
     <ul class="nav nav-tabs d-none" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
-        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button" role="tab" aria-controls="home" aria-selected="true">Presidente</button>
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+          role="tab" aria-controls="home" aria-selected="true">Presidente</button>
       </li>
       <li class="nav-item" role="presentation">
-        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Asambleísta nacionales</button>
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
+          role="tab" aria-controls="profile" aria-selected="false">Asambleísta nacionales</button>
       </li>
     </ul>
     <div class="tab-content" id="myTabContent">
       <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-        <div class="content-candidatos pt-3" id="candidatos">
-          
+        <div class="parent-candidatos">
+          <div class="content-candidatos pt-3 text-center" id="candidatos">
+            Cargando...
+          </div>
         </div>
-        <div class="btn_content"> 
-          <a class="btn_vermas btn btn-default" href="https://www.ecuavisa.com/elecciones-presidenciales-ecuador-2023/resultados">Ver más resultados</a>
+        <div class="btn_content">
+          <a class="btn_vermas btn btn-default"
+            href="https://www.ecuavisa.com/elecciones-presidenciales-ecuador-2023/resultados">Ver
+            más resultados</a>
         </div>
         <span class="text_fuente">Fuente: CNE</span>
       </div>
       <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-        
+
       </div>
     </div>
     <!-- <div class="block__info">
       <span class="escrutadoElecciones">Cargando...</span>
     </div> -->
-    
+
     <!-- <div id="chartdivDatos" style="text-align: center;">Cargando...</div> -->
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 
   <script>
-    function templateCandidatos(c){
+    function templateCandidatos(c) {
       return `<div class="body-candidatos">
             <div class="content-elecciones">
               <div class="nombre-candidato ">
@@ -144,41 +172,97 @@
               </div>
               <div class="imagen-candidato">
                 <img src="${c.pictureSettings.src}" alt="${c.name}" width="100">
-                <div class="imagen-partido">
+                <!--<div class="imagen-partido">
                   <img src="${c.pictureSettings2.src}" alt="${c.name}" width="100">
-                </div>
+                </div>-->
               </div>
               <div class="nombre-candidato name" style="background-color:${c.color};color:#fff">
                 ${c.name}
               </div>
               <div class="porcentaje-candidato">
-                <div class="porcentaje-num">27.4%</div>
+                <div class="porcentaje-num">${c.cne}</div>
               </div>
             </div>
           </div>`;
     }
 
-     async function armarTabla() {
-        try {
-          let response = await fetch("https://script.google.com/macros/s/AKfycbxpv2oC-yEVx4R1VK2XPO2dEGJaF001P3PracZF5BswUoygu3xpB0TDk4T9zuDa9g3pVg/exec?funcion=alcaldesQuito");
-          let data = await response.json();
-          
-          const primerosCandidatos = data.candidatos.slice(0, 4);
-          console.log(primerosCandidatos)
-          if(document.querySelector("#candidatos")){
-            var escritorioContent = document.querySelector("#candidatos");
-            escritorioContent.innerHTML = "";
-            for(var i in primerosCandidatos){
-              var elemento = document.createElement("div"); // Crea un nuevo elemento
-              elemento.innerHTML = templateCandidatos(primerosCandidatos[i]); // Agrega el contenido al nuevo elemento
-              escritorioContent.appendChild(elemento); // Agrega el elemento al contenedor
-            }
+    async function armarTabla() {
+      try {
+        let response = await fetch("https://script.google.com/macros/s/AKfycbxpv2oC-yEVx4R1VK2XPO2dEGJaF001P3PracZF5BswUoygu3xpB0TDk4T9zuDa9g3pVg/exec?funcion=alcaldesQuito");
+        let data = await response.json();
+
+        const primerosCandidatos = data.candidatos.slice(0, 4);
+        console.log(primerosCandidatos)
+        if (document.querySelector("#candidatos")) {
+          var escritorioContent = document.querySelector("#candidatos");
+          escritorioContent.innerHTML = "";
+          for (var i in primerosCandidatos) {
+            var elemento = document.createElement("div"); // Crea un nuevo elemento
+            elemento.classList.add('items-candidatos');
+            elemento.innerHTML = templateCandidatos(primerosCandidatos[i]); // Agrega el contenido al nuevo elemento
+            escritorioContent.appendChild(elemento); // Agrega el elemento al contenedor
           }
-        } catch (error) {
-          console.error(error);
+
+          function swiperHomeCandidatos() {
+            var candidatos = document.querySelector('.parent-candidatos');
+            var candidatosNot = document.querySelector('.parent-candidatos .content-candidatos');
+            var candidatosNotArt = document.querySelectorAll('.parent-candidatos .content-candidatos .items-candidatos');
+
+            var candpagination = document.createElement("div");
+            candpagination.classList = "swiper-pagination";
+
+            candidatos.classList.add('swiper');
+            candidatos.append(candpagination);
+
+            candidatosNot.classList.add('swiper-wrapper');
+
+            for (const SlideExplico of candidatosNotArt) {
+              SlideExplico.classList.add('swiper-slide');
+            }
+
+            var swiperExplico = new Swiper(candidatos, {
+              slidesPerView: 1,
+              spaceBetween: 20,
+              pagination: {
+                el: ".swiper-pagination",
+                dynamicBullets: true,
+                clickable: true,
+              },
+              breakpoints: {
+                600: {
+                  slidesPerView: 2,
+                  spaceBetween: 20,
+                },
+                768: {
+                  slidesPerView: 3,
+                  spaceBetween: 30,
+                },
+                1024: {
+                  slidesPerView: 4,
+                  spaceBetween: 30,
+                },
+                1200: {
+                  slidesPerView: 4,
+                  spaceBetween: 30,
+                },
+              },
+            });
+          }
+
+
+          swiperHomeCandidatos();
         }
+      } catch (error) {
+        console.error(error);
       }
-      armarTabla()
+    }
+    armarTabla()
+
+
+
+
+
+
   </script>
 </body>
 

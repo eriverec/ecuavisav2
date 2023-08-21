@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Forzar Envio Newsletter</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+</head>
+<body>
+
+  <!DOCTYPE html>
+<html>
+<head>
+    <title>Botón y Respuesta PHP</title>
+    <script>
+        function ejecutarPHP() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendUsersEmailsV2.php", true);
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    document.getElementById("respuestaDiv").innerHTML = xhr.responseText;
+                }
+            };
+            xhr.send();
+        }
+    </script>
+</head>
+<body>
+    <button onclick="ejecutarPHP()">Ejecutar PHP</button>
+    <div id="respuestaDiv"></div>
+</body>
+</html>
+
+  
+</body>
+</html>
