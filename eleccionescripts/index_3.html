@@ -23,17 +23,15 @@
       height: 600px;
     }
 
-    .content-candidatos {
-      /* display: flex;
-      gap: 10px;
-      max-width: 575px;
-      justify-content: center;
-      margin-left: auto;
-      margin-right: auto; */
+    #home {
+      display: flex;
+      align-items: center;
+      column-gap: 30px;
     }
 
-    .parent-candidatos{
+    .parent-candidatos {
       padding-bottom: 35px;
+      color: #fff;
     }
 
     .nombre-candidato {
@@ -71,6 +69,7 @@
       border: 1px solid #dedede;
       border-radius: 2px;
       padding-top: 0px;
+      background: #fff;
     }
 
     .nombre-candidato {
@@ -80,6 +79,7 @@
       padding: 5px;
       font-size: 13px;
       line-height: 1.2;
+      color: #333;
     }
 
     .porcentaje-num {
@@ -98,9 +98,14 @@
     .text_fuente {
       margin-top: 15px;
       margin-bottom: 0px !important;
+      color: #fff !important;
     }
 
+    .swiper-pagination-bullet{
+      background: #fff !important;
+    }
     .btn_content {
+      display: none;
       text-align: center;
       /* margin-top: 20px; */
     }
@@ -110,22 +115,59 @@
       color: #ffff;
       padding: 7px 20px;
       margin-top: 10px;
+      text-transform: uppercase;
+      border: 2px solid #fff;
+      border-radius: 0px;
     }
 
-     .swiper-pagination-bullet, .HOME_MENU_RD .lista-bloque-programas .swiper-pagination-bullet {
-    width: 14px !important;
-    height: 14px !important;
-}
- .swiper-pagination-bullet-active, .HOME_MENU_RD .lista-bloque-programas .swiper-pagination-bullet-active {
-    background: #2927b9;
-}
+    .swiper-pagination-bullet,
+    .HOME_MENU_RD .lista-bloque-programas .swiper-pagination-bullet {
+      width: 14px !important;
+      height: 14px !important;
+    }
 
-@media (max-width: 430px){
-  .imagen-candidato>img{
-    width: 100%;
-  }
-}
+    ._loading{
+      text-align: center;
+      margin: auto;
+      display: block;
+      color: #fff;
+    }
 
+    .nombre-candidato._top{
+      height: 41px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .swiper-pagination-bullet-active,
+    .HOME_MENU_RD .lista-bloque-programas .swiper-pagination-bullet-active {
+      background: #2927b9;
+    }
+
+    #myTabContent{
+      background: url('https://www.ecuavisa.com/binrepository/993x447/212c0/570d447/none/11705/MXGC/pallatanga_1104343_20230821125110.jpg');
+      background-repeat: no-repeat;
+      background-size: cover;
+    }
+
+    @media (max-width: 767px) {
+      #home{
+        display: block;
+      }
+    }
+
+    @media (max-width: 430px) {
+      .imagen-candidato>img {
+        width: 100%;
+      }
+    }
+
+    @media (max-width: 1200px) {
+      .imagen-candidato>img {
+        width: 130px;
+      }
+    }
   </style>
 </head>
 
@@ -142,18 +184,16 @@
       </li>
     </ul>
     <div class="tab-content" id="myTabContent">
-      <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+      <span class="pt-3 _loading">Cargando...</span>
+      <div class="tab-pane fade show active container" id="home" role="tabpanel" aria-labelledby="home-tab">
         <div class="parent-candidatos">
-          <div class="content-candidatos pt-3 text-center" id="candidatos">
-            Cargando...
-          </div>
+          <div class="content-candidatos pt-3 text-center" id="candidatos"></div>
         </div>
         <div class="btn_content">
           <a class="btn_vermas btn btn-default"
-            href="https://www.ecuavisa.com/elecciones-presidenciales-ecuador-2023/resultados">Ver
-            más resultados</a>
+            href="https://www.ecuavisa.com/elecciones-presidenciales-ecuador-2023/resultados">Ver resultados</a>
+          <span class="text_fuente">Fuente: CNE</span>
         </div>
-        <span class="text_fuente">Fuente: CNE</span>
       </div>
       <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
 
@@ -174,7 +214,7 @@
     function templateCandidatos(c) {
       return `<div class="body-candidatos">
             <div class="content-elecciones">
-              <div class="nombre-candidato ">
+              <div class="nombre-candidato _top">
                 ${c.partidos}
               </div>
               <div class="imagen-candidato">
@@ -202,6 +242,8 @@
         console.log(primerosCandidatos)
         if (document.querySelector("#candidatos")) {
           var escritorioContent = document.querySelector("#candidatos");
+          document.querySelector('.btn_content').style.display = 'block';
+          document.querySelector('._loading').style.display = 'none';
           escritorioContent.innerHTML = "";
           for (var i in primerosCandidatos) {
             var elemento = document.createElement("div"); // Crea un nuevo elemento
