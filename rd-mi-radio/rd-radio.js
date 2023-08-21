@@ -71,21 +71,13 @@ function mostrarProgramacion() {
     textApagado.style.display = "none";
     textApagado.innerText = "";
   } else {
-    // h1Titulo.innerText = "";
-    // // h1Titulo.style.display = "none";
-    // tituloEstasEscu.innerText = "";
-    // embedPlayer.style.display = "none";
-    // textApagado.style.display = "block";
-    // textApagado.innerText = "Aquí encontrarás una opción para acceder a toda la programación informativa Audio En vivo: Contacto Directo (6:55), Televistazo en la Comunidad (5:55-7:30), Televistazo (13:00-19:00)."
+    h1Titulo.innerText = "";
+    // h1Titulo.style.display = "none";
+    tituloEstasEscu.innerText = "";
+    embedPlayer.style.display = "none";
+    textApagado.style.display = "block";
+    textApagado.innerText = "Aquí encontrarás una opción para acceder a toda la programación informativa Audio En vivo: Contacto Directo (6:55), Televistazo en la Comunidad (5:55-7:30), Televistazo (13:00-19:00)."
 
-
-    h1Titulo.innerText = tituloPrograma;
-    // h1Titulo.style.display = "block";
-    // tituloEstasEscu.display = "block";
-    tituloEstasEscu.innerText = "Estás escuchando";
-    embedPlayer.style.display = "block";
-    textApagado.style.display = "none";
-    textApagado.innerText = "";
   }
 
   // Llamar a la función de nuevo cada medio minuto
