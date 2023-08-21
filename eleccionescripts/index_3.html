@@ -119,11 +119,17 @@
     background: #2927b9;
 }
 
+@media (max-width: 500px){
+  .imagen-candidato>img{
+    width: 100%;
+  }
+}
+
   </style>
 </head>
 
 <body>
-  <div class="conetenedor__general  p-5">
+  <div class="conetenedor__general">
     <ul class="nav nav-tabs d-none" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
         <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
@@ -221,7 +227,7 @@
             }
 
             var swiperExplico = new Swiper(candidatos, {
-              slidesPerView: 1,
+              slidesPerView: 2,
               spaceBetween: 20,
               pagination: {
                 el: ".swiper-pagination",
