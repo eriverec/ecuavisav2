@@ -26,7 +26,7 @@ class SendPulse {
         // $this->listaUsuario = 574818;
         // $this->idTemplate = 148832;
         $this->horai = '06:00:00';
-        $this->horaf = '08:00:00';
+        $this->horaf = '23:00:00';
         $this->listaUsuario = 574818;//565083;
         $this->idTemplate = 148832;// ID Gracias:160050;
         $this->token = $this->initToken();
