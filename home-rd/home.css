@@ -3515,7 +3515,8 @@ BLOQUE DE COLUMNISTA - FIN
 /*  CINTILLO ENVIO PARA LAS NOTAS */
 
 .article_envivo {
-  background: #ff3737;
+  /* background: #ff3737; */
+  background: #e31010;
   color: #fff;
   padding: 3px 7px;
   font-family: 'Archivo';
@@ -3546,7 +3547,8 @@ BLOQUE DE COLUMNISTA - FIN
 @media (max-width: 600px){
   .article-section.cint__envio {
       align-items: center;
-      flex-direction: column;
+      /* flex-direction: column; */
+      flex-direction: row;
       display: flex;
       align-content: flex-start;
       gap: 10px;
@@ -3554,12 +3556,11 @@ BLOQUE DE COLUMNISTA - FIN
   }
 
   .article-section.cint__envio a{
-    margin-right: auto;
-      width:auto;
+    /* margin-right: auto;
+      width:auto; */
   }
 
   .article_envivo {
-      background: #ff3737;
       color: #fff;
       padding: 0px 5px;
       font-family: 'Archivo';
