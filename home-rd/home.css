@@ -3547,7 +3547,8 @@ BLOQUE DE COLUMNISTA - FIN
 @media (max-width: 600px){
   .article-section.cint__envio {
       align-items: center;
-      flex-direction: column;
+      /* flex-direction: column; */
+      flex-direction: row;
       display: flex;
       align-content: flex-start;
       gap: 10px;
