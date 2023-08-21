@@ -3555,12 +3555,11 @@ BLOQUE DE COLUMNISTA - FIN
   }
 
   .article-section.cint__envio a{
-    margin-right: auto;
-      width:auto;
+    /* margin-right: auto;
+      width:auto; */
   }
 
   .article_envivo {
-      background: #ff3737;
       color: #fff;
       padding: 0px 5px;
       font-family: 'Archivo';
