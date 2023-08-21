@@ -30,10 +30,8 @@
     }
 
     .parent-candidatos {
-      padding-bottom: 10px;
+      padding-bottom: 35px;
       color: #fff;
-      padding-right: 55px;
-      padding-top: 10px;
     }
 
     .nombre-candidato {
@@ -60,15 +58,14 @@
       text-align: center;
     }
 
-    .imagen-candidato > img {
-      width: 100px;
-      height: 90px;
+    .imagen-candidato>img {
+      width: 150px;
+      height: 140px;
       object-fit: cover;
-      max-width: 140px;
     }
 
     .content-elecciones {
-      padding: 5px;
+      padding: 7px;
       border: 1px solid #dedede;
       border-radius: 2px;
       padding-top: 0px;
@@ -76,11 +73,11 @@
     }
 
     .nombre-candidato {
-      margin-top: 5px;
-      margin-bottom: 5px;
+      margin-top: 7px;
+      margin-bottom: 7px;
       background-color: #e2e2e2;
       padding: 5px;
-      font-size: 11px;
+      font-size: 13px;
       line-height: 1.2;
       color: #333;
     }
@@ -95,7 +92,7 @@
 
     .nombre-candidato.name {
       font-weight: 700;
-      font-size: 12px;
+      font-size: 15px;
     }
 
     .text_fuente {
@@ -137,11 +134,10 @@
     }
 
     .nombre-candidato._top{
-/*      height: 41px;*/
+      height: 41px;
       display: flex;
       align-items: center;
       justify-content: center;
-      line-height: 1;
     }
 
     .swiper-pagination-bullet-active,
@@ -149,27 +145,15 @@
       background: #2927b9;
     }
 
-    .conetenedor__general{
+    #myTabContent{
       background: url('https://estadisticas.ecuavisa.com/sites/gestor/Tools/miecuavisa/fondo-elecciones-cortado-22.png');
       background-repeat: no-repeat;
       background-size: cover;
     }
 
-    #home {
-        max-width: 900px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-
     @media (max-width: 767px) {
       #home{
         display: block;
-      }
-      .parent-candidatos {
-          padding-left: 20px;
-      }
-      .conetenedor__general{
-        padding-bottom: 20px;
       }
     }
 
@@ -189,17 +173,37 @@
 
 <body>
   <div class="conetenedor__general">
-    <span class="pt-3 _loading">Cargando...</span>
-    <div class="tab-pane fade show active " id="home" role="tabpanel" aria-labelledby="home-tab">
-      <div class="parent-candidatos">
-        <div class="content-candidatos text-center" id="candidatos"></div>
+    <ul class="nav nav-tabs d-none" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#home" type="button"
+          role="tab" aria-controls="home" aria-selected="true">Presidente</button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile" type="button"
+          role="tab" aria-controls="profile" aria-selected="false">Asambleísta nacionales</button>
+      </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+      <span class="pt-3 _loading">Cargando...</span>
+      <div class="tab-pane fade show active container" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <div class="parent-candidatos">
+          <div class="content-candidatos pt-3 text-center" id="candidatos"></div>
+        </div>
+        <div class="btn_content">
+          <a class="btn_vermas btn btn-default" target="_blank"
+            href="https://www.ecuavisa.com/elecciones-presidenciales-ecuador-2023/resultados">Ver resultados</a>
+          <span class="text_fuente">Fuente: CNE</span>
+        </div>
       </div>
-      <div class="btn_content">
-        <a class="btn_vermas btn btn-default" target="_blank"
-          href="https://www.ecuavisa.com/elecciones-presidenciales-ecuador-2023/resultados">Ver resultados</a>
-        <span class="text_fuente">Fuente: CNE</span>
+      <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+
       </div>
     </div>
+    <!-- <div class="block__info">
+      <span class="escrutadoElecciones">Cargando...</span>
+    </div> -->
+
+    <!-- <div id="chartdivDatos" style="text-align: center;">Cargando...</div> -->
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
@@ -223,7 +227,7 @@
                 ${c.name}
               </div>
               <div class="porcentaje-candidato">
-                <div class="porcentaje-num">${c.cne}%</div>
+                <div class="porcentaje-num">${c.cne} %</div>
               </div>
             </div>
           </div>`;
@@ -247,8 +251,6 @@
             elemento.innerHTML = templateCandidatos(primerosCandidatos[i]); // Agrega el contenido al nuevo elemento
             escritorioContent.appendChild(elemento); // Agrega el elemento al contenedor
           }
-
-
 
           function swiperHomeCandidatos() {
             var candidatos = document.querySelector('.parent-candidatos');
@@ -277,7 +279,7 @@
               },
               breakpoints: {
                 600: {
-                  slidesPerView: 2.2,
+                  slidesPerView: 2,
                   spaceBetween: 20,
                 },
                 768: {
@@ -286,11 +288,11 @@
                 },
                 1024: {
                   slidesPerView: 4,
-                  spaceBetween: 20,
+                  spaceBetween: 30,
                 },
                 1200: {
                   slidesPerView: 4,
-                  spaceBetween: 20,
+                  spaceBetween: 30,
                 },
               },
             });
