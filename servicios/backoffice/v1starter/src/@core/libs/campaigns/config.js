@@ -3242,7 +3242,7 @@ const paisVariables = Pais => {
   ]
 
   for(var i in paises){
-    if(paises[i].name == Pais){
+    if(paises[i].name.includes(Pais)){
       return paises[i];
     }
   }
