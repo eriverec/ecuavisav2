@@ -13,6 +13,9 @@ const diaSelected = ref('');
 const horarios = ref([]);
 const horariosRaw = ref([]);
 
+const tituloForzado = ref('');
+const labelForzado = ref('');
+
 const diasTotales = [
     {
         title: "Lunes",
@@ -84,8 +87,11 @@ const addDia = () => {
     if(diaSelected.value){
         let diaNuevo = {
             dia: diaSelected.value,
+            estadoDia: true,
             horas: [
                 {
+                    tituloPrograma: '',
+                    estadoHorario: true,
                     inicio: "12:00",
                     fin: "14:00"
                 }
@@ -103,7 +109,9 @@ const elimDia = (index) =>{
 // ---------------- HORA ------------------
 
 const addHora = (index) => {  
-        let horaNuevo = {        
+        let horaNuevo = {  
+            tituloPrograma: '',
+            estadoHorario: true,      
             inicio: "12:00",
             fin: "14:00"  
         }
@@ -131,9 +139,9 @@ async function enviar (){
             "key": "horarioRadio",
             "estructura": 
                 {                    
-                    "forzado": estadoRaw.value,
-                    "horarios": horarios.value 
-                }
+            "forzado": estadoRaw.value,
+            "horarios": horarios.value 
+        }
         };
 
         console.log('datos a enviar ',nuevaConfiguracion );
@@ -165,7 +173,11 @@ let nuevaConfiguracion = {
     "key": "horarioRadio",
     "estructura": 
         {                    
-            "forzado": estado.value,
+            "forzado": {
+                "estado": estado.value,
+                "titulo": tituloForzado.value,
+                "textoLabel": labelForzado.value
+            },
             "horarios": horariosRaw.value 
         }
 };
@@ -250,22 +262,31 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                         >
                                         <VExpansionPanelTitle class="d-flex flex-wrap justify-space-between gap-4">
                                            <h3> {{ resolveDia(horario.dia) }} </h3>
+                                           <VChip :color="horario.estadoDia == true ? 'success' : 'warning'" class="mr-4" >{{ horario.estadoDia == true ? 'Activo' : 'Inactivo' }} </VChip>
                                         </VExpansionPanelTitle>
                                         <VExpansionPanelText class="d-flex flex-wrap justify-space-between">
                                             <div style="padding: 1rem; border:1px solid rgba(var(--v-theme-on-background), var(--v-disabled-opacity));border-radius: 7px;">
                                             <VTable class="w-full">
                                             <thead>
                                                 <tr>
-                                                <th scope="col" style="width: 250px;">Hora de inicio</th>
-                                                <th scope="col" style="width: 250px;">Hora de fin</th>
-                                                <th scope="col" class="pb-4">
+                                                <th scope="col" style="width: 300px;">Título</th>    
+                                                <th scope="col" style="width: 170px;">Hora de inicio</th>
+                                                <th scope="col" style="width: 170px;">Hora de fin</th>
+                                                <th scope="col" class="d-flex gap-4 pb-4">
+
+                                                    <VSwitch
+                                                        v-model="horario.estadoDia"
+                                                        color="success"
+                                                        :label="horario.estadoDia == true ? 'Día activo' : 'Día inactivo'"
+                                                    />
+
                                                     <VBtn
                                                     color="primary"
                                                     @click="addHora(index)"                                              
                                                     >
                                                     Añadir hora
                                                     </VBtn>
-                                                    
+                                                                                                                                                                         
                                                     <VBtn     
                                                     style="margin-left: 0.5rem;"                                          
                                                     color="error"
@@ -273,13 +294,22 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                                     >
                                                     Eliminar día
                                                     </VBtn>
-                                                    
-                                                </th>
+                                                                               
+                                                    </th>
                                                 
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr v-for="hora,indexHora in horario.horas" :key="indexHora">                                           
+                                                <tr v-for="hora,indexHora in horario.horas" :key="indexHora">      
+                                                <td class="py-4">
+                                                    <VTextField
+                                                        v-model="hora.tituloPrograma"
+                                                        label="Título del horario"
+                                                        placeholder="Escriba el título..."
+                                                        class="ms-0 me-1 chat-list-search"
+                                                    />
+                                                </td>   
+
                                                 <td class="py-4">
                                                     <AppDateTimePicker
                                                     
@@ -297,8 +327,16 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                                     :config="{ enableTime: true, noCalendar: true , dateFormat: 'H:i'}"
                                                     />
                                                 </td>
-                                                <td>
-                                                    <VBtn v-if="horario.horas.length>1" color="error" @click="elimHora(index,indexHora)"><VIcon icon="tabler-trash"></VIcon></VBtn>                                                      
+                                                <td class="py-4">
+                                                    <div class="d-flex gap-4 py-4">
+                                                    <VSwitch
+                                                        v-model="hora.estadoHorario"
+                                                        color="success"
+                                                        :label="hora.estadoHorario == true ? 'Horario activo' : 'Horario inactivo'"
+                                                    />
+                                 
+                                                    <VBtn v-if="horario.horas.length>1" color="error" @click="elimHora(index,indexHora)"><VIcon icon="tabler-trash"></VIcon></VBtn>  
+                                                    </div>        
                                                 </td>
                                                                                
                                                 </tr>
@@ -322,15 +360,23 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                     <VRow> 
                         <VCol cols="12" style="display: flex; flex-wrap: wrap; align-items: center;">
                     
-                    <!--
-                    <div style="width: 325px; margin-top: 1rem; margin-bottom: 1rem;">
+                    
+                    <div style="width: 650px; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-2">
                         <VTextField
-                            v-model="titulo"
+                            v-model="tituloForzado"
+                            label="Título"
                             placeholder="Escriba el título..."
                             class="ms-0 me-1 chat-list-search"
                         >
                         </VTextField>
-                        </div>-->
+                        <VTextField
+                            v-model="labelForzado"
+                            label="Label"
+                            placeholder="Escriba el label..."
+                            class="ms-0 me-1 chat-list-search"
+                        >
+                        </VTextField>
+                        </div>
                         <div style="display: flex; margin: 1rem;">
                         <div>
                         <VSwitch
