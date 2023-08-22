@@ -357,7 +357,7 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                 <span>Estado del player: </span>
                                 </div>
                                 <div style="margin-left: 2rem;">
-                                <VChip :color="estado == true ? 'success' : 'warning'" class="mr-4" >{{ estado == true ? 'Activo' : 'Inactivo' }} </VChip>
+                                <VChip :color="estadoRaw == true ? 'success' : 'warning'" class="mr-4" >{{ estadoRaw == true ? 'Activo' : 'Inactivo' }} </VChip>
                                 </div>    
                             
                         </VCol>
