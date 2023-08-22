@@ -3,6 +3,7 @@ import { computed, onMounted } from 'vue';
 
 const estadoSend = ref(false);
 const estado = ref(false);
+const estadoRaw = ref(false);
 //const titulo = ref('');
 const router = useRouter();
 //const isError = ref(false);
@@ -10,7 +11,7 @@ const isLoading = ref(false);
 const currentTab = ref('');
 const diaSelected = ref('');
 const horarios = ref([]);
-
+const horariosRaw = ref([]);
 
 const diasTotales = [
     {
@@ -50,7 +51,9 @@ async function getConfig () {
     const data = await consultaDesktop.json();
     console.log('dataRAW: ', data);
     estado.value = data.forzado; 
+    estadoRaw.value = data.forzado; 
     horarios.value = Array.from(data.horarios);
+    horariosRaw.value =  Array.from(data.horarios);
     //console.log('horario llega ', horarios.value);  
     isLoading.value = false;
 }
@@ -128,7 +131,7 @@ async function enviar (){
             "key": "horarioRadio",
             "estructura": 
                 {                    
-                    "forzado": estado.value,
+                    "forzado": estadoRaw.value,
                     "horarios": horarios.value 
                 }
         };
@@ -154,6 +157,40 @@ async function enviar (){
             }
         })
         .catch(error => console.error('error', error));
+}
+
+async function enviarForzado (){
+
+let nuevaConfiguracion = {
+    "key": "horarioRadio",
+    "estructura": 
+        {                    
+            "forzado": estado.value,
+            "horarios": horariosRaw.value 
+        }
+};
+
+console.log('datos a enviar ',nuevaConfiguracion );
+
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+var raw = JSON.stringify(nuevaConfiguracion);
+var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+};
+await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
+.then(response => response.json())
+.then(async(responseJson) => {
+    console.log('respuesta POST ',responseJson);
+    if(responseJson == 'Configuración actualizada correctamente'){
+        success.value = true;
+        await getConfig();
+    }
+})
+.catch(error => console.error('error', error));
 }
 
 </script>
@@ -297,15 +334,15 @@ async function enviar (){
                         <div style="display: flex; margin: 1rem;">
                         <div>
                         <VSwitch
-                            v-model="estadoSend"
+                            v-model="estado"
                             color="success"
-                            :label="estadoSend == true ? 'Activo' : 'Inactivo'"
+                            :label="estado == true ? 'Activo' : 'Inactivo'"
                         />
                         </div>
                         <div style="margin-left: 2rem;">
                         <VBtn
                                                     color="primary"
-                                                    @click="configPlayer"
+                                                    @click="enviarForzado"
                                                 >
                                                     Enviar
                                                 </VBtn>
