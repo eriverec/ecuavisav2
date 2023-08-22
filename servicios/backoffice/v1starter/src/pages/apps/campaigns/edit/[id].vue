@@ -31,7 +31,43 @@ const selectItemParticipantes = ref(null);
 const selectItemsList = ref([{ title:'Otro', value: 'Otro' },{ title:'100', value: '100' }]);
 const minValue = ref(1); // Valor mínimo permitido
 const maxValue = ref(100); // Valor máximo permitido
-const route = useRoute()
+const route = useRoute();
+const tamanioUsuarios = ref(0)
+
+const search = ref(null)
+
+const selectItemVisibilidad = ref([]);
+const selectItemsListVisibilidad = ref([
+  { title:'Todo el sitio', value: 'all', avatar:"" },
+  { title:'Noticias', value: 'noticias', avatar:"" }
+]);
+
+const selectItemDispositivos = ref([]);
+const selectItemsListDispositivos = ref([
+  { title:'Todos', value: '0', avatar:"mdi-cellphone-link" },
+  { title:'Escritorio', value: 'desktop', avatar:"mdi-laptop-chromebook" },
+  { title:'Móvil', value: 'movil', avatar:"mdi-cellphone-android" },
+  ]);
+
+const selectItemNavegador = ref([]);
+const selectItemsListNavegador = ref([
+  { title:'Todos', value: '0', avatar:"" },
+  { title:'Chrome', value: 'Chrome', avatar:"" },
+  { title:'Safari', value: 'Safari', avatar:"" },
+  { title:'Firefox', value: 'Firefox', avatar:""},
+  { title:'Otro', value: 'Otro', avatar:"" } ,
+  ]);
+
+const selectItemSO = ref([]);
+const selectItemsListSO = ref([
+  { title:'Todos', value: '0', avatar:"", navegador: [] },
+  { title:'Windows', value: 'Windows', avatar:"tabler-brand-windows", navegador: [{ title:'Chrome', value: 'Chrome' },{ title:'Firefox', value: 'Firefox' }] },
+  { title:'Mac OS', value: 'Mac OS', avatar:"tabler-brand-apple", navegador: [{ title:'Safari', value: 'Safari' },{ title:'Chrome', value: 'Chrome' }] },
+  { title:'Android', value: 'Android', avatar:"tabler-brand-android", navegador: [{ title:'Chrome', value: 'Chrome' },{ title:'Firefox', value: 'Firefox' }] },
+  { title:'Linux', value: 'Linux', avatar:"mdi-linux", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
+  { title:'Otro', value: 'Otro', avatar:"", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
+  ]);
+
 const numeroRules = [
   (v) => !!v || 'El número es requerido', // Verifica que no esté vacío
   (v) => /^\d+$/.test(v) || 'Ingrese solo números', // Verifica que solo sean números
@@ -49,7 +85,11 @@ const languageList = [{
   value:'script'
 }]
 
-const criterioList = [{ title:'Geolocalización', value:'trazabilidads' }];//, { title:'Metadatos', value:'metadato' }
+const criterioList = [
+  { title:'Geolocalización', value:'trazabilidads' },
+  { title:'Dispositivos', value:'dispositivos' },
+  // { title:'Navegador', value:'navegador' },
+];//, { title:'Metadatos', value:'metadato' }
 
 const posicionList = [
   'floating_ad',
@@ -59,10 +99,17 @@ const posicionList = [
   'RDRDFloating',
 ]
 
+watch(posicion, value => {
+  console.log(value)
+  if(Array.isArray()){
+    if (value.length > 1)
+      nextTick(() => posicion.value.pop())
+  }
+})
 
 onMounted(async()=>{
   await getCampaignToEdit();
-  await getCampaigns();
+  // await getCampaigns();
 })
 
 
@@ -83,31 +130,55 @@ async function getCampaignToEdit(){
   nombreCampania.value = dataCampaignToEdit.campaignTitle;
   languages.value = dataCampaignToEdit.type;
   criterio.value = dataCampaignToEdit.coleccion.split(',');
-  posicion.value = dataCampaignToEdit.position;
+  posicion.value = dataCampaignToEdit.position.split(',');
   codigoExternoModel.value = dataCampaignToEdit.urls.html || "";
   linkAds.value = dataCampaignToEdit.urls.url || "#";
   linkImageEscritorio.value = dataCampaignToEdit.urls.img.escritorio || "";
   linkImageMobile.value = dataCampaignToEdit.urls.img.mobile || "";
   selectedItem.value = dataCampaignToEdit.criterial.country;
+  // console.log(dataCampaignToEdit.criterial.city.split(',') ,"Ciudad")
+  selectItemVisibilidad.value = dataCampaignToEdit.criterial.visibilitySection || "all";
+  // console.log(dataCampaignToEdit)
+  tamanioUsuarios.value = dataCampaignToEdit.userId.length;
+
+  setTimeout(function(){
+      selectedItemCiudad.value = dataCampaignToEdit.criterial.city.split(',');
+  }, 2000);
+
   selectedItemCiudad.value = dataCampaignToEdit.criterial.city.split(',');
-  selectItemParticipantes.value = dataCampaignToEdit.participantes;
-  numeroOtroUsuarios.value = dataCampaignToEdit.otroValor;
+
+  setTimeout(function(){
+      selectItemParticipantes.value = dataCampaignToEdit.participantes;
+      numeroOtroUsuarios.value = dataCampaignToEdit.otroValor;
+  }, 2000);
+  
+  if(dataCampaignToEdit.criterial.dispositivo){
+    selectItemDispositivos.value = dataCampaignToEdit.criterial.dispositivo.split(',');
+  }
+
+  if(dataCampaignToEdit.criterial.navegador){
+    selectItemNavegador.value = dataCampaignToEdit.criterial.navegador.split(',');
+  }
+
+  if(dataCampaignToEdit.criterial.so){
+    selectItemSO.value = dataCampaignToEdit.criterial.so.split(',');
+  }
   
 }
 
-async function getCampaigns(){
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-  };
-  var response = await fetch(`https://ads-service.vercel.app/campaign/get/all`, requestOptions);
-  const data = await response.json();
-  dataCampaigns.value = data.data;
+// async function getCampaigns(){
+//   var myHeaders = new Headers();
+//   myHeaders.append("Content-Type", "application/json");
+//   var requestOptions = {
+//     method: 'GET',
+//     headers: myHeaders,
+//     redirect: 'follow'
+//   };
+//   var response = await fetch(`https://ads-service.vercel.app/campaign/get/all`, requestOptions);
+//   const data = await response.json();
+//   dataCampaigns.value = data.data;
 
-}
+// }
 
 async function getCountries(){
   
@@ -127,22 +198,29 @@ async function getCountries(){
 }
 
 async function getUsuarios(){
-  var ciudad = selectedItemCiudad.value;
-  var pais = selectedItem.value;
+  var ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
+  var pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
 
-  if(ciudad != '' && ciudad != null && pais != '' && pais != null){
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-    var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}`, requestOptions);
-    const data = await response.json();
-    dataUsuarios.value = data;
-    
-  }
+  var so_temp = selectItemSO.value || null;
+  var dispositivo_temp = selectItemDispositivos.value || null;
+  var navegador_temp = selectItemNavegador.value || null;
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+  // console.log(pais || "-1")
+  // alert(pais.length)
+  var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+    so: so_temp, 
+    dispositivo: dispositivo_temp,
+    navegador: navegador_temp
+  }) }`, requestOptions);
+  const data = await response.json();
+  dataUsuarios.value = data;
 }
 
 const consentimiento = ref(false);
@@ -171,19 +249,38 @@ async function onComplete() {
   var po = posicion.value;
   var script = codigoExternoModel.value || "";
   var linksWeb = linkAds.value || "#";
-  var urlImagen_1 = linkImageEscritorio.value || "#";
-  var urlImagen_2 = linkImageMobile.value || "#";
+  var urlImagen_1 = linkImageEscritorio.value || "";
+  var urlImagen_2 = linkImageMobile.value || "";
   var paises_temp = selectedItem.value;
+
+  var ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
+  var pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
+
+  var so_temp = selectItemSO.value || null;
+  var dispositivo_temp = selectItemDispositivos.value || null;
+  var navegador_temp = selectItemNavegador.value || null;
+
+
   var ciudades_temp = selectedItemCiudad.value;
   var participantes_temp = selectItemParticipantes.value;
   var otroValor_temp = numeroOtroUsuarios.value;
-  //console.log('criterio ',criterio.value);
+
+  var visibilidad = selectItemVisibilidad.value;
+
+  // var so_temp = selectItemSO.value;
+  // var dispositivo_temp = selectItemDispositivos.value;
+  // var navegador_temp = selectItemNavegador.value;
+
   var jsonEnviar = {
         "campaignTitle": name,
         "type": tipoContenido,
         "criterial": {
-            "country": paises_temp,
-            "city": ciudades_temp.join(',')
+            "visibilitySection": visibilidad,
+            "country": pais,
+            "city": ciudad.join(',') || -1,
+            "so": so_temp.join(',') || null,
+            "dispositivo": dispositivo_temp.join(',') || null,
+            "navegador": navegador_temp.join(',') || null
         },
         "coleccion": cri.join(','),
         "position": po,
@@ -222,7 +319,7 @@ async function onComplete() {
 }
 
 async function handleValidation(isValid, tabIndex) {
-  if(tabIndex == 1 && isValid == true){
+  if(tabIndex == 1 && isValid == true && dataCountry.value.length < 1){
     await getCountries();
 
     var paises = [];
@@ -254,6 +351,7 @@ async function validateAsync() {
   var crit = criterio.value;
   var pos = posicion.value;
 
+  var visibilidad = selectItemVisibilidad.value;
 
   if(nombre.length < 1 || nombre.trim() == ""){
     alert("Debes añadir un nombre de campaña");
@@ -272,6 +370,11 @@ async function validateAsync() {
 
   if(pos.length < 1){
     alert("Debes añadir la posicion del ads");
+    return false;
+  }
+
+  if(visibilidad.length < 1){
+    alert("Debes añadir la La visibilidad en el sitio web");
     return false;
   }
 
@@ -407,28 +510,27 @@ function compareByTitle(a, b) {
   }
 }
 
-function groupByTitle(arr) {
+function groupByTitleWithAttributes(arr) {
   const grouped = {};
-  
+
   for (const item of arr) {
     const title = item.title;
     if (!grouped[title]) {
       grouped[title] = [];
     }
-    grouped[title].push(item);
+    grouped[title].push(item.value);
   }
-  
+
   const result = [];
   for (const title in grouped) {
     if (grouped.hasOwnProperty(title)) {
       result.push({
         title: title,
-        value: title,
-        cities: grouped[title].length
+        value: grouped[title][0]
       });
     }
   }
-  
+
   return result;
 }
 
@@ -436,20 +538,14 @@ watch(() => selectedItem.value, (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(selectedItem.value != null){
-    //console.log('oldValue ',oldValue)   
-    
-    if(oldValue.length !== 0){
-      selectedItemCiudad.value = [];
-      selectItemParticipantes.value = [];
-    }
-    //console.log('ciudad ',selectedItemCiudad.value)
-    
+
+    selectedItemCiudad.value = [];
+    selectItemParticipantes.value = [];
     var ciudades = [];
     ciudades.push({ title: "Todas las ciudes", value: "0" });
     for(var i in dataCountry.value){
       var ins = dataCountry.value[i];
       if(ins.country == newValue){
-        //console.log('entra')
         for(var j in ins.data){
           var ins2 = ins.data[j];
           ciudades.push({ title:ins2.city, value:ins2.city });
@@ -459,8 +555,9 @@ watch(() => selectedItem.value, (newValue, oldValue) => {
 
     ciudades.sort(compareByTitle);
     // console.log(Object.values(groupByTitle(ciudades)))
-    cityList.value = Object.values(groupByTitle(ciudades));
-    //console.log('Lista de ciudades', ciudades);
+    cityList.value = Object.values(groupByTitleWithAttributes(ciudades));
+
+    console.log(cityList.value)
   }else{
     selectedItemCiudad.value = [];
     selectItemParticipantes.value = [];
@@ -484,6 +581,27 @@ function generateRandomIntegers(min, max, count) {
   return randomIntegers;
 }
 
+async function generarOtrosValores(){
+  maxValue.value = dataUsuarios.value.total;
+  minValue.value = 1;
+  if(dataUsuarios.value.total < 100){
+    selectItemsList.value = [{ title:'Todos', value: 'Todos' },{ title:'Otro valor', value: 'Otro' }];
+  }else{
+    var numeros = generateRandomIntegers(100, dataUsuarios.value.total, 3);
+    var items = [];
+    items.push({ title:'Otro valor', value: 'Otro' });
+    if(dataUsuarios.value.total > 110){
+      for(var i in numeros){
+        items.push({ title:numeros[i], value: numeros[i] });
+      }
+    }
+    items.push({ title:'Todos', value: 'Todos' });
+    selectItemsList.value = items;
+  }
+
+  return true;
+}
+
 
 watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
@@ -492,23 +610,53 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
     loadingPanel.value=true;
     await getUsuarios();
     loadingPanel.value=false;
-    maxValue.value = dataUsuarios.value.total;
-    //console.log('maxValue ', maxValue.value);
-    minValue.value = 1;
-    if(dataUsuarios.value.total < 100){
-      selectItemsList.value = [{ title:'Todos', value: 'Todos' },{ title:'Otro valor', value: 'Otro' }];
-    }else{
-      var numeros = generateRandomIntegers(100, dataUsuarios.value.total, 3);
-      var items = [];
-      items.push({ title:'Otro valor', value: 'Otro' });
-      if(dataUsuarios.value.total > 110){
-        for(var i in numeros){
-          items.push({ title:numeros[i], value: numeros[i] });
-        }
-      }
-      items.push({ title:'Todos', value: 'Todos' });
-      selectItemsList.value = items;
-    }
+    await generarOtrosValores();
+  }else{
+    dataUsuarios.value = {};
+  }
+
+  // selectItemsList.value = [100, 200, 1000, "Otro"];
+});
+
+watch(async () => selectItemDispositivos.value,async  (newValue, oldValue) => {
+  // console.log('Nuevo valor seleccionado:', newValue);
+  // console.log('Valor anterior:', oldValue);
+  if(selectItemDispositivos.value != null){
+    loadingPanel.value=true;
+    await getUsuarios();
+    loadingPanel.value=false;
+    await generarOtrosValores();
+  }else{
+    dataUsuarios.value = {};
+  }
+
+  // selectItemsList.value = [100, 200, 1000, "Otro"];
+});
+
+watch(async () => selectItemSO.value,async  (newValue, oldValue) => {
+  // console.log('Nuevo valor seleccionado:', newValue);
+  // console.log('Valor anterior:', oldValue);
+  if(selectItemSO.value != null){
+    loadingPanel.value=true;
+    await getUsuarios();
+    loadingPanel.value=false;
+    await generarOtrosValores();
+  }else{
+    dataUsuarios.value = {};
+  }
+
+  // selectItemsList.value = [100, 200, 1000, "Otro"];
+});
+
+
+watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
+  // console.log('Nuevo valor seleccionado:', newValue);
+  // console.log('Valor anterior:', oldValue);
+  if(selectItemNavegador.value != null){
+    loadingPanel.value=true;
+    await getUsuarios();
+    loadingPanel.value=false;
+    await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
   }
@@ -654,7 +802,31 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
                             </VCol>
                           </VRow>
                         </VCol>
-                        <VCol cols="12">
+                        <VCol cols="6">
+                          <VRow no-gutters>
+                            <!-- 👉 Email -->
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+                              <label for="tipocontenido">Visibilidad en la web</label>
+                            </VCol>
+
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+                              <VSelect
+                                v-model="selectItemVisibilidad"
+                                :items="selectItemsListVisibilidad"
+                                chips
+                                clearable
+                                label=""
+                              />
+                            </VCol>
+                          </VRow>
+                        </VCol>
+                        <VCol cols="6">
                           <VRow no-gutters>
                             <!-- 👉 Email -->
                             <VCol
@@ -829,51 +1001,160 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
                                 </VCol>
                               </VRow>
                             </VCol>
-                            <VCol cols="12">
-                              <VRow no-gutters>
-                                <!-- 👉 Email -->
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <label for="email">Países</label>
-                                </VCol>
+                            <VCol cols="12" :class="criterio.includes('trazabilidads')?'':'d-none'">
+                              <VRow no-gutters >
+                                <VCol cols="6">
+                                  <VRow no-gutters>
+                                    <!-- 👉 Email -->
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <label for="email">Países</label>
+                                    </VCol>
 
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <VSelect
-                                    v-model="selectedItem"
-                                    :items="countryList"
-                                    
-                                    chips
-                                    clearable
-                                  />
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <VSelect
+                                        v-model="selectedItem"
+                                        :items="countryList"
+                                        class="pr-1"
+                                        chips
+                                        clearable
+                                      />
+                                    </VCol>
+                                  </VRow>
+                                </VCol>
+                                <VCol cols="6">
+                                  <VRow no-gutters>
+                                    <!-- 👉 Email -->
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <label for="email">Ciudades</label>
+                                    </VCol>
+
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <VSelect
+                                        :items="cityList"
+                                        v-model="selectedItemCiudad"
+                                        multiple
+                                        chips
+                                        clearable
+                                        class="pl-1"
+                                      />
+                                    </VCol>
+                                  </VRow>
                                 </VCol>
                               </VRow>
                             </VCol>
-                            <VCol cols="12">
-                              <VRow no-gutters>
-                                <!-- 👉 Email -->
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <label for="email">Ciudades</label>
-                                </VCol>
+                            <VCol cols="12" :class="criterio.includes('dispositivos')?'':'d-none'">
+                              <VRow no-gutters >
+                                <VCol cols="12">
+                                  <VRow no-gutters>
+                                    <!-- 👉 Email -->
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <label for="email">Dispositivos</label>
+                                    </VCol>
 
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <VSelect
-                                    :items="cityList"
-                                    v-model="selectedItemCiudad"
-                                    multiple
-                                    chips
-                                    clearable
-                                  />
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <VSelect
+                                        v-model="selectItemDispositivos"
+                                        :items="selectItemsListDispositivos"
+                                        item-title="title"
+                                        item-value="value"
+                                        class="pr-1"
+                                        
+                                        multiple
+                                        clearable
+                                      >
+                                        <template #selection="{ item }">
+                                          <VChip>
+                                            <VAvatar>
+                                              <VIcon color="" :icon="item.raw.avatar" />
+                                            </VAvatar>
+                                            <span>{{ item.title }}</span>
+                                          </VChip>
+                                        </template>
+                                      </VSelect>
+                                    </VCol>
+                                  </VRow>
+                                </VCol>
+                                <VCol cols="6 pt-2">
+                                  <VRow no-gutters>
+                                    <!-- 👉 Email -->
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <label for="navegador">Sistema operativo</label>
+                                    </VCol>
+
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <VSelect
+                                        v-model="selectItemSO"
+                                        :items="selectItemsListSO"
+                                        item-title="title"
+                                        item-value="value"
+                                        class="pr-1"
+                                        
+                                        multiple
+                                        clearable
+                                      >
+                                        <template #selection="{ item }">
+                                          <VChip>
+                                            <VAvatar>
+                                              <VIcon color="" :icon="item.raw.avatar" />
+                                            </VAvatar>
+                                            <span>{{ item.title }}</span>
+                                          </VChip>
+                                        </template>
+                                      </VSelect>
+                                    </VCol>
+                                  </VRow>
+                                </VCol>
+                                <VCol cols="6 pt-2">
+                                  <VRow no-gutters>
+                                    <!-- 👉 Email -->
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <label for="navegador">Navegador</label>
+                                    </VCol>
+
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <VSelect
+                                        v-model="selectItemNavegador"
+                                        :items="selectItemsListNavegador"
+                                        item-title="title"
+                                        item-value="value"
+                                        class="pr-1"
+                                        chips
+                                        multiple
+                                        clearable
+                                      />
+                                      
+                                    </VCol>
+                                  </VRow>
                                 </VCol>
                               </VRow>
                             </VCol>
@@ -915,7 +1196,7 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
                                   cols="12"
                                   md="12"
                                 >
-                                  <VTextField v-if="dataUsuarios.total"
+                                  <VTextField
                                     id="numero"
                                     v-model="numeroOtroUsuarios"
                                     placeholder="Escriba el número de participantes"
@@ -958,8 +1239,34 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
                               size="large"
                               class="text-capitalize mt-4"
                             >
-                              {{ dataUsuarios.total || "0" }}
+                              {{ tamanioUsuarios || "0" }}
                             </VChip>
+                            <div v-if="dataUsuarios.total!=tamanioUsuarios" class="mt-2">
+                              <VBtn
+                                
+                                color="primary"
+                                variant="text"
+                                title="Actualizar lista de usuarios"
+                              >
+
+                                <VIcon
+                                  size="22"
+                                  icon="mdi-reload"
+                                />
+
+                                <small style="font-size: 11px;">
+                                  {{ dataUsuarios.total }}
+                                </small >
+
+                                <VIcon
+                                  size="12"
+                                  icon="mdi-account-group"
+                                />
+                              </VBtn>
+                              
+                            </div>
+                            
+
                           </VCardText>
                         </VCol>
                       </VRow>

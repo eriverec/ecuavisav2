@@ -88,6 +88,14 @@ const eliminarRegistroSi = async () => {
   }
 };
 
+const handleSwitchChange = (index) => {
+  const campaign = dataCampaigns.value[index];
+  const id = campaign._id;
+  const estado = campaign.statusCampaign ? 'Activo' : 'Inactivo';
+  console.log(id)
+  // Realiza las operaciones necesarias con el ID y el estado
+};
+
 </script>
 
 <template>
@@ -173,7 +181,15 @@ const eliminarRegistroSi = async () => {
                       icon="tabler-plus"
                     />
                   </VBtn>
-                  <VList lines="two" border>
+                  <VList lines="two" border v-if="dataCampaigns.length < 1">
+                    <VListItem>
+                      <VListItemTitle>
+                        <div class="loading"></div>
+                      </VListItemTitle>
+                    </VListItem>
+                  </VList>
+
+                  <VList lines="two" border  v-if="dataCampaigns.length > 0">
                   <template
                     v-for="(c, index) of dataCampaigns"
                     :key="index"
@@ -191,15 +207,18 @@ const eliminarRegistroSi = async () => {
                         </div>
                       </VListItemTitle>
                       <VListItemSubtitle class="mt-1" title="Estado de campaña">
-                        <VBadge
-                          dot
-                          location="start center"
-                          offset-x="2"
-                          :color="c.statusCampaign?'success':'error'"
-                          class="me-3"
-                        >
-                          <span class="ms-4" style="font-weight:medium">{{ c.statusCampaign?'Activo':'Inactivo' }}</span>
-                        </VBadge>
+                        <div class="switch-estatus">
+                          <VSwitch v-model="c.statusCampaign" @change="handleSwitchChange(index)" />
+                          <VBadge
+                            dot
+                            location="start center"
+                            offset-x="2"
+                            :color="c.statusCampaign?'success':'error'"
+                            class="me-3"
+                          >
+                            <span class="ms-4" style="font-weight:medium">{{ c.statusCampaign?'Activo':'Inactivo' }}</span>
+                          </VBadge>
+                        </div>
 
                         <span class="text-xs text-disabled">
                           <i>
@@ -294,6 +313,20 @@ const eliminarRegistroSi = async () => {
 
 
 <style scoped>  
+  .loading{
+    border:2px solid #7367F0;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border-right-color: transparent;
+    animation: rot 1s linear infinite;
+  }
+
+  @keyframes rot {
+    100%{
+      transform: rotate(360deg);
+    }
+  }
 .v-card.v-theme--dark .iframe-dark {
   display: block;
 }

@@ -32,6 +32,15 @@ const selectItemsList = ref([{ title:'Otro', value: 'Otro' },{ title:'100', valu
 const minValue = ref(1); // Valor mínimo permitido
 const maxValue = ref(100); // Valor máximo permitido
 
+
+const search = ref(null)
+
+const selectItemVisibilidad = ref([]);
+const selectItemsListVisibilidad = ref([
+  { title:'Todo el sitio', value: 'all', avatar:"" },
+  { title:'Noticias', value: 'noticias', avatar:"" }
+]);
+
 const selectItemDispositivos = ref([]);
 const selectItemsListDispositivos = ref([
   { title:'Todos', value: '0', avatar:"mdi-cellphone-link" },
@@ -89,22 +98,27 @@ const posicionList = [
   'RDRDFloating',
 ]
 
+watch(posicion, value => {
+  if (value.length > 1)
+    nextTick(() => posicion.value.pop())
+})
 
-onMounted(getCampaigns)
 
-async function getCampaigns(){
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-  };
-  var response = await fetch(`https://ads-service.vercel.app/campaign/get/all`, requestOptions);
-  const data = await response.json();
-  dataCampaigns.value = data.data;
+// onMounted(getCampaigns)
 
-}
+// async function getCampaigns(){
+//   var myHeaders = new Headers();
+//   myHeaders.append("Content-Type", "application/json");
+//   var requestOptions = {
+//     method: 'GET',
+//     headers: myHeaders,
+//     redirect: 'follow'
+//   };
+//   var response = await fetch(`https://ads-service.vercel.app/campaign/get/all`, requestOptions);
+//   const data = await response.json();
+//   dataCampaigns.value = data.data;
+
+// }
 
 async function getCountries(){
   var myHeaders = new Headers();
@@ -120,6 +134,7 @@ async function getCountries(){
   dataCountry.value = data;
   loadingPanel.value=false;
 }
+
 async function getUsuarios(){
   var ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
   var pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
@@ -188,6 +203,8 @@ async function onComplete() {
   var participantes_temp = selectItemParticipantes.value;
   var otroValor_temp = numeroOtroUsuarios.value;
 
+  var visibilidad = selectItemVisibilidad.value;
+
   // var so_temp = selectItemSO.value;
   // var dispositivo_temp = selectItemDispositivos.value;
   // var navegador_temp = selectItemNavegador.value;
@@ -196,6 +213,7 @@ async function onComplete() {
         "campaignTitle": name,
         "type": tipoContenido,
         "criterial": {
+            "visibilitySection": visibilidad,
             "country": pais,
             "city": ciudad.join(',') || -1,
             "so": so_temp.join(',') || null,
@@ -203,7 +221,7 @@ async function onComplete() {
             "navegador": navegador_temp.join(',') || null
         },
         "coleccion": cri.join(','),
-        "position": po,
+        "position": po.join(","),
         "participantes": participantes_temp,
         "otroValor": otroValor_temp,
         "urls": {
@@ -237,7 +255,7 @@ async function onComplete() {
 }
 
 async function handleValidation(isValid, tabIndex) {
-  if(tabIndex == 1 && isValid == true){
+  if(tabIndex == 1 && isValid == true && dataCountry.value.length < 1){
     await getCountries();
 
     var paises = [];
@@ -268,7 +286,7 @@ async function validateAsync() {
   var tipoC = languages.value;
   var crit = criterio.value;
   var pos = posicion.value;
-
+  var visibilidad = selectItemVisibilidad.value;
 
   if(nombre.length < 1 || nombre.trim() == ""){
     alert("Debes añadir un nombre de campaña");
@@ -287,6 +305,11 @@ async function validateAsync() {
 
   if(pos.length < 1){
     alert("Debes añadir la posicion del ads");
+    return false;
+  }
+
+  if(visibilidad.length < 1){
+    alert("Debes añadir la La visibilidad en el sitio web");
     return false;
   }
 
@@ -714,7 +737,33 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
                             </VCol>
                           </VRow>
                         </VCol>
-                        <VCol cols="12">
+
+                        <VCol cols="6">
+                          <VRow no-gutters>
+                            <!-- 👉 Email -->
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+                              <label for="tipocontenido">Visibilidad en la web</label>
+                            </VCol>
+
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+                              <VSelect
+                                v-model="selectItemVisibilidad"
+                                :items="selectItemsListVisibilidad"
+                                chips
+                                clearable
+                                label=""
+                              />
+                            </VCol>
+                          </VRow>
+                        </VCol>
+
+                        <VCol cols="6">
                           <VRow no-gutters>
                             <!-- 👉 Email -->
                             <VCol
@@ -728,11 +777,19 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
                               cols="12"
                               md="12"
                             >
-                              <VSelect
+
+                              <VCombobox
                                 v-model="posicion"
-                                :items="posicionList"
+                                multiple
                                 chips
-                                clearable
+                                :items="posicionList"
+                                variant="outlined"
+                                label=""
+                                persistent-hint
+                                v-model:search-input="search"
+                                hide-selected
+                                :hide-no-data="false"
+                                hint=""
                               />
                             </VCol>
                           </VRow>
