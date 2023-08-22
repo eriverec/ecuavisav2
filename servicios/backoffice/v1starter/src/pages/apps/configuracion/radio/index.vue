@@ -248,7 +248,7 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                     color="primary"
                                     @click="enviar()"                                 
                                     >
-                                    Guardar configuración
+                                    Guardar Horarios
                                     </VBtn>
                                 </VCol>  
                             
@@ -263,23 +263,18 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                         <VExpansionPanelTitle class="d-flex flex-wrap justify-space-between gap-4">
                                            <h3> {{ resolveDia(horario.dia) }} </h3>
                                            <VChip :color="horario.estadoDia == true ? 'success' : 'warning'" class="mr-4" >{{ horario.estadoDia == true ? 'Activo' : 'Inactivo' }} </VChip>
+                                        <VSwitch
+                                            v-model="horario.estadoDia"
+                                            color="success"
+                                            :label="horario.estadoDia == true ? 'Día activo' : 'Día inactivo'"
+                                        />
                                         </VExpansionPanelTitle>
                                         <VExpansionPanelText class="d-flex flex-wrap justify-space-between">
                                             <div style="padding: 1rem; border:1px solid rgba(var(--v-theme-on-background), var(--v-disabled-opacity));border-radius: 7px;">
                                             <VTable class="w-full">
                                             <thead>
                                                 <tr>
-                                                <th scope="col" style="width: 300px;">Título</th>    
-                                                <th scope="col" style="width: 170px;">Hora de inicio</th>
-                                                <th scope="col" style="width: 170px;">Hora de fin</th>
-                                                <th scope="col" class="d-flex gap-4 pb-4">
-
-                                                    <VSwitch
-                                                        v-model="horario.estadoDia"
-                                                        color="success"
-                                                        :label="horario.estadoDia == true ? 'Día activo' : 'Día inactivo'"
-                                                    />
-
+                                                <th scope="col"  class="d-flex gap-4 pb-4">
                                                     <VBtn
                                                     color="primary"
                                                     @click="addHora(index)"                                              
@@ -294,8 +289,15 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                                     >
                                                     Eliminar día
                                                     </VBtn>
-                                                                               
-                                                    </th>
+                                                </th> 
+                                                    
+                                                </tr>
+                                                <tr>
+                                                <th scope="col" style="width: 300px;">Título</th>    
+                                                <th scope="col" style="width: 170px;">Hora de inicio</th>
+                                                <th scope="col" style="width: 170px;">Hora de fin</th>
+                                                <th scope="col" class="d-flex gap-4 pb-4">                                                                             
+                                                </th>
                                                 
                                                 </tr>
                                             </thead>
