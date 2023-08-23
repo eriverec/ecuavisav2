@@ -16,6 +16,10 @@ const horariosRaw = ref([]);
 const tituloForzado = ref('');
 const labelForzado = ref('');
 
+const codigo = ref(``);
+const estadoHtml = ref(false);
+const embedRaw = ref(false);
+
 const diasTotales = [
     {
         title: "Lunes",
@@ -57,6 +61,10 @@ async function getConfig () {
     estadoRaw.value = data.forzado; 
     horarios.value = Array.from(data.horarios);
     horariosRaw.value =  Array.from(data.horarios);
+
+    codigo.value = data.html.value;
+    estadoHtml.value = data.html.estadoHtml;
+    embedRaw.value = data.html;
     //console.log('horario llega ', horarios.value);  
     isLoading.value = false;
 }
@@ -138,7 +146,8 @@ async function enviar (){
         let nuevaConfiguracion = {
             "key": "horarioRadio",
             "estructura": 
-                {                    
+                {         
+            "html": embedRaw.value,                   
             "forzado": estadoRaw.value,
             "horarios": horarios.value 
         }
@@ -172,7 +181,8 @@ async function enviarForzado (){
 let nuevaConfiguracion = {
     "key": "horarioRadio",
     "estructura": 
-        {                    
+        {           
+            "html": embedRaw.value,         
             "forzado": {
                 "estado": estado.value,
                 "titulo": tituloForzado.value,
@@ -205,6 +215,47 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
 .catch(error => console.error('error', error));
 }
 
+async function enviarEmbed (){
+
+let nuevaConfiguracion = {
+    "key": "horarioRadio",
+    "estructura": 
+        {         
+            "html":{
+                "estadoHtml": estadoHtml.value,
+                "value": codigo.value
+            },           
+            "forzado": {
+                "estado": estado.value,
+                "titulo": tituloForzado.value,
+                "textoLabel": labelForzado.value
+            },
+            "horarios": horariosRaw.value 
+        }
+};
+
+console.log('datos a enviar ',nuevaConfiguracion );
+
+var myHeaders = new Headers();
+myHeaders.append("Content-Type", "application/json");
+var raw = JSON.stringify(nuevaConfiguracion);
+var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+};
+await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
+.then(response => response.json())
+.then(async(responseJson) => {
+    console.log('respuesta POST ',responseJson);
+    if(responseJson == 'Configuración actualizada correctamente'){
+        success.value = true;
+        await getConfig();
+    }
+})
+.catch(error => console.error('error', error));
+}
 </script>
 
 <template>
@@ -220,6 +271,7 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
   <VTabs v-model="currentTab" class="v-tabs-pill">
         <VTab value="tab-config" >Configuración</VTab>
         <VTab value="tab-forzado" >Forzado</VTab>
+        <VTab value="tab-embed" >Código embed</VTab>
   </VTabs>
   <VWindow v-model="currentTab">
                 <VWindowItem value="tab-config">
@@ -355,7 +407,7 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                         </VCardText>
                     </VCard>
                 </VWindowItem>
-
+                <!------------------------  FORZADO ----------------------------->
                 <VWindowItem value="tab-forzado">
                     <VCard class="mt-5" title="Player Forzado">	
                     <VCardText class="py-4 gap-0 w-100">	
@@ -407,6 +459,58 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                 <div style="margin-left: 2rem;">
                                 <VChip :color="estadoRaw == true ? 'success' : 'warning'" class="mr-4" >{{ estadoRaw == true ? 'Activo' : 'Inactivo' }} </VChip>
                                 </div>    
+                            
+                        </VCol>
+                        </VRow>
+                    </VCardText>
+                </VCard>
+                </VWindowItem>
+                <!------------------------  EMBED  ----------------------------->
+                <VWindowItem value="tab-embed">
+                    <VCard class="mt-5" title="Código embed">	
+                    <VCardText class="py-4 gap-0 w-100">	
+                    <VRow> 
+                        <VCol cols="12" style="display: flex; flex-wrap: wrap; align-items: center;">
+                    
+                    
+                    <div style="width: 100%; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-2">
+                        <VTextarea
+                            v-model="codigo"
+                            label="Código"
+                            placeholder="Escriba el código..."
+                            class="ms-0 me-1 chat-list-search"
+                            auto-grow
+                        />
+                        
+                        </div>
+                        
+                                  
+                        </VCol>
+                        <VCol cols="12"  style="display: flex; align-items: center;" >
+                            
+                                <div>
+                                <span>Estado: </span>
+                                </div>
+                                <div style="margin-left: 2rem;">
+                                <VChip :color="embedRaw.estadoHtml == true ? 'success' : 'warning'" class="mr-4" >{{ embedRaw.estadoHtml == true ? 'Activo' : 'Inactivo' }} </VChip>
+                                </div>    
+                                <div style="display: flex; margin: 1rem;">
+                                <div>
+                                <VSwitch
+                                    v-model="estadoHtml"
+                                    color="success"
+                                    :label="estadoHtml == true ? 'Activo' : 'Inactivo'"
+                                />
+                                </div>
+                                <div style="margin-left: 2rem;">
+                                <VBtn
+                                    color="primary"
+                                    @click="enviarEmbed"
+                                >
+                                Enviar
+                                </VBtn>
+                                </div>
+                                </div>
                             
                         </VCol>
                         </VRow>
