@@ -85,4 +85,4 @@ function mostrarProgramacion() {
 }
 
 // Iniciar el ciclo de verificación
-mostrarProgramacion();
+// mostrarProgramacion();
