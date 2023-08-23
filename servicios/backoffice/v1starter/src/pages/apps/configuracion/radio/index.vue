@@ -183,11 +183,9 @@ let nuevaConfiguracion = {
     "estructura": 
         {           
             "html": embedRaw.value,         
-            "forzado": {
-                "estado": estado.value,
-                "titulo": tituloForzado.value,
-                "textoLabel": labelForzado.value
-            },
+            "forzado": 
+                estadoRaw.value
+            ,
             "horarios": horariosRaw.value 
         }
 };
@@ -415,7 +413,7 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                         <VCol cols="8" style="/*display: flex; flex-wrap: wrap; align-items: center;">
                             <div style="width: 650px; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-3">
                                 <VTextField
-                                    v-model="tituloForzado"
+                                    v-model="estadoRaw.titulo"
                                     label="Título sobre el player"
                                     placeholder="Escriba el título que mostrará sobre el reproductor..."
                                     class="ms-0 me-1 chat-list-search"
@@ -433,7 +431,7 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                             </div>
                             <div style="width: 650px; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-3">
                                 <VTextField
-                                    v-model="labelForzado"
+                                    v-model="estadoRaw.label"
                                     label="Texto del Indicador"
                                     placeholder="Escriba el texto que deseas en el indicador parpadeante..."
                                     class="ms-0 me-1 chat-list-search"
@@ -453,9 +451,9 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                             <div style="display: flex; margin: 1rem;">
                                 <div>
                                 <VSwitch
-                                    v-model="estado"
+                                    v-model="estadoRaw.estado"
                                     color="success"
-                                    :label="estado == true ? 'Activo' : 'Inactivo'"
+                                    :label="estadoRaw.estado == true ? 'Activo' : 'Inactivo'"
                                 />
                                 </div>
                                 <div style="margin-left: 2rem;">
@@ -472,7 +470,7 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                 <span>Estado del player: </span>
                                 </div>
                                 <div style="margin-left: 2rem;">
-                                <VChip :color="estadoRaw == true ? 'success' : 'warning'" class="mr-4" >{{ estadoRaw == true ? 'Activo' : 'Inactivo' }} </VChip>
+                                <VChip :color="estadoRaw.estado == true ? 'success' : 'warning'" class="mr-4" >{{ estadoRaw.estado == true ? 'Activo' : 'Inactivo' }} </VChip>
                                 </div>    
                             
                         </VCol>
