@@ -128,6 +128,12 @@ function eventEnvivoManager() {
 
 if (ECUAVISA_EC.login()) {
   eventEnvivoManager();
+}else{
+  const txtBase = document.querySelector('#no_transmision__');
+  if (txtBase) {
+    txtBase.style.display = "block";
+    txtBase.innerHTML = `Aquí encontrarás una opción para acceder a toda la programación informativa Audio En vivo: Contacto Directo (6:55), Televistazo en la Comunidad (5:55-7:30), Televistazo (13:00-19:00).`;
+  }
 }
 
 // eventEnvivoManager();
