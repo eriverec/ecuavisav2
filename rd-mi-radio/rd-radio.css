@@ -6,6 +6,10 @@
   margin-top: 24px;
 }
 
+.contenedor_embed_radio{
+  display: none;
+}
+
 .c_azul_celeste_Desktop {
   display: none;
 }
@@ -348,7 +352,7 @@
   @
 */
 
-#no_transmision__ {
+#no_transmision__,#programacion_radio {
   /* background: rgb(35, 220, 209); */
   /* padding: 20px; */
   display: block;
