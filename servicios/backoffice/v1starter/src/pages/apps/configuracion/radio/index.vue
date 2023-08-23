@@ -269,9 +269,9 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
         <h3>Se ha guardado la configuración exitosamente</h3>
     </VSnackbar>
   <VTabs v-model="currentTab" class="v-tabs-pill">
-        <VTab value="tab-config" >Configuración</VTab>
-        <VTab value="tab-forzado" >Forzado</VTab>
-        <VTab value="tab-embed" >Código embed</VTab>
+        <VTab value="tab-config" >Configuración de Horarios</VTab>
+        <VTab value="tab-forzado" >Player Forzado</VTab>
+        <VTab value="tab-embed" >Código del reprodcutor</VTab>
   </VTabs>
   <VWindow v-model="currentTab">
                 <VWindowItem value="tab-config">
@@ -407,50 +407,65 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                         </VCardText>
                     </VCard>
                 </VWindowItem>
-                <!------------------------  FORZADO ----------------------------->
+                <!------------------------ TRANSMISIÓN FORZADA ----------------------------->
                 <VWindowItem value="tab-forzado">
                     <VCard class="mt-5" title="Player Forzado">	
                     <VCardText class="py-4 gap-0 w-100">	
                     <VRow> 
-                        <VCol cols="12" style="display: flex; flex-wrap: wrap; align-items: center;">
-                    
-                    
-                    <div style="width: 650px; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-2">
-                        <VTextField
-                            v-model="tituloForzado"
-                            label="Título"
-                            placeholder="Escriba el título..."
-                            class="ms-0 me-1 chat-list-search"
-                        >
-                        </VTextField>
-                        <VTextField
-                            v-model="labelForzado"
-                            label="Label"
-                            placeholder="Escriba el label..."
-                            class="ms-0 me-1 chat-list-search"
-                        >
-                        </VTextField>
-                        </div>
-                        <div style="display: flex; margin: 1rem;">
-                        <div>
-                        <VSwitch
-                            v-model="estado"
-                            color="success"
-                            :label="estado == true ? 'Activo' : 'Inactivo'"
-                        />
-                        </div>
-                        <div style="margin-left: 2rem;">
-                        <VBtn
-                                                    color="primary"
-                                                    @click="enviarForzado"
-                                                >
-                                                    Enviar
-                                                </VBtn>
-                        </div>
-                        </div>
+                        <VCol cols="8" style="/*display: flex; flex-wrap: wrap; align-items: center;">
+                            <div style="width: 650px; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-3">
+                                <VTextField
+                                    v-model="tituloForzado"
+                                    label="Título sobre el player"
+                                    placeholder="Escriba el título que mostrará sobre el reproductor..."
+                                    class="ms-0 me-1 chat-list-search"
+                                >
+                                </VTextField>
+                                
+                                <VTooltip location="top">
+                                   <template #activator="{ props }">
+                                        <VIcon v-bind="props" size="30" icon="tabler-alert-circle" />
+                                   </template>
+                                  <span>Este titular aparecerá en lugar del título del programa sobre el reproductor</span>
+                                </VTooltip>
+
+                                
+                            </div>
+                            <div style="width: 650px; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-3">
+                                <VTextField
+                                    v-model="labelForzado"
+                                    label="Texto del Indicador"
+                                    placeholder="Escriba el texto que deseas en el indicador parpadeante..."
+                                    class="ms-0 me-1 chat-list-search"
+                                >
+                                </VTextField>
+                                <VTooltip location="top">
+                                   <template #activator="{ props }">
+                                        <VIcon v-bind="props" size="30" icon="tabler-alert-circle" />
+                                   </template>
+                                  <span>Este texto es el que aparece en el indicador que parpadea sobre el header</span>
+                                </VTooltip>
+                            </div>
                     
                     
                         </VCol>
+                        <VCol cols="4" style="display: flex; flex-wrap: wrap; align-items: center;">
+                            <div style="display: flex; margin: 1rem;">
+                                <div>
+                                <VSwitch
+                                    v-model="estado"
+                                    color="success"
+                                    :label="estado == true ? 'Activo' : 'Inactivo'"
+                                />
+                                </div>
+                                <div style="margin-left: 2rem;">
+                                    <VBtn color="primary" @click="enviarForzado" >
+                                        Enviar
+                                    </VBtn>
+                                </div>
+                            </div>
+                        </VCol>
+
                         <VCol cols="12"  style="display: flex; align-items: center;" >
                             
                                 <div>
@@ -461,13 +476,13 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                 </div>    
                             
                         </VCol>
-                        </VRow>
+                    </VRow>
                     </VCardText>
                 </VCard>
                 </VWindowItem>
-                <!------------------------  EMBED  ----------------------------->
+                <!------------------------ Código EMBED del player  ----------------------------->
                 <VWindowItem value="tab-embed">
-                    <VCard class="mt-5" title="Código embed">	
+                    <VCard class="mt-5" title="Código HTML del embed player">	
                     <VCardText class="py-4 gap-0 w-100">	
                     <VRow> 
                         <VCol cols="12" style="display: flex; flex-wrap: wrap; align-items: center;">
@@ -477,7 +492,7 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                         <VTextarea
                             v-model="codigo"
                             label="Código"
-                            placeholder="Escriba el código..."
+                            placeholder="Escriba el código html del reproductor..."
                             class="ms-0 me-1 chat-list-search"
                             auto-grow
                         />
