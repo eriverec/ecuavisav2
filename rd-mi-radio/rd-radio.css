@@ -6,6 +6,10 @@
   margin-top: 24px;
 }
 
+.contenedor_embed_radio{
+  display: none;
+}
+
 .c_azul_celeste_Desktop {
   display: none;
 }
