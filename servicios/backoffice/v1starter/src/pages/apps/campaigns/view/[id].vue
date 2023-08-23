@@ -66,8 +66,9 @@
 
                       <VCol cols="12" sm="4" md="12" lg="4" order="1" order-lg="2" class="member-pricing-bg text-center">
                         <div class="membership-pricing d-flex flex-column align-center py-14 h-100 justify-center">
-                              <VCardTitle>Estado:</VCardTitle>
-                            <sup class="text-h2 font-weight-medium">
+                            <VCardTitle>Estado:</VCardTitle>
+                            <VSwitch v-model="suggestion.statusCampaign" @change="handleSwitchChange(index)" />
+                            <!-- <sup class="text-h2 font-weight-medium">
                                 <VChip v-if="suggestion.statusCampaign" color="success">
                                     <VIcon start size="60" icon="mdi-toggle-switch"/>
                                     ACTIVA
@@ -76,7 +77,7 @@
                                     <VIcon start size="60" icon="mdi-toggle-switch-off"/>
                                     INACTIVA
                                 </VChip>
-                            </sup>
+                            </sup> -->
                             
                           
                         </div>
@@ -196,6 +197,31 @@ computed: {
 
   methods: {
     //método que obtiene los detalles de la campaña y el listado de usuarios
+    handleSwitchChange(index) {
+      // console.log(this.suggestion.statusCampaign)
+
+      var jsonEnviar = {
+            statusCampaign:this.suggestion.statusCampaign
+      }
+
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(jsonEnviar),
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://ads-service.vercel.app/campaign/update/status`, requestOptions);
+      const data = await response.json();
+      if(data.resp){
+        // alert("Registro guardado");
+      }else{
+        alert("Un error se presentó: "+data.error)
+      };
+
+    },
     async obtenerDetalles() {
       const respuesta = await fetch(`https://ads-service.vercel.app/campaign/${this.id}/user`); 
       const datos = await respuesta.json();

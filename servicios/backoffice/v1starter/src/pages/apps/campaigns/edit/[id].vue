@@ -1,4 +1,5 @@
 <script setup>
+import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
 import { useRouter } from 'vue-router';
 import { FormWizard, TabContent } from "vue3-form-wizard";
 import 'vue3-form-wizard/dist/style.css';
@@ -35,6 +36,22 @@ const route = useRoute();
 const tamanioUsuarios = ref(0)
 
 const search = ref(null)
+
+const metadatos = ref([]);
+const metadatosItems = ref([]);
+const searchMetadatos = ref([]);
+const selectMetadatos = ref(null);
+const loadComponent = ref(true);
+const categoriasListStore = useCategoriasListStore();
+const fetchCategorias = async () => {
+  try {
+    const response = await categoriasListStore.fetchCategorias();
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
 
 const selectItemVisibilidad = ref([]);
 const selectItemsListVisibilidad = ref([
@@ -88,6 +105,8 @@ const languageList = [{
 const criterioList = [
   { title:'Geolocalización', value:'trazabilidads' },
   { title:'Dispositivos', value:'dispositivos' },
+  { title:'Metadatos', value:'metadatos' },
+  { title:'Plataforma', value:'plataforma' },
   // { title:'Navegador', value:'navegador' },
 ];//, { title:'Metadatos', value:'metadato' }
 
@@ -100,15 +119,24 @@ const posicionList = [
 ]
 
 watch(posicion, value => {
-  console.log(value)
-  if(Array.isArray()){
+  if(Array.isArray(value)){
     if (value.length > 1)
       nextTick(() => posicion.value.pop())
   }
 })
 
+watch(metadatos, value => {
+  if(Array.isArray(value)){
+    if (value.length > 5)
+      nextTick(() => metadatos.value.pop())
+  }
+})
+
 onMounted(async()=>{
+  loadComponent.value = true;
   await getCampaignToEdit();
+  await getMetadatos();
+  loadComponent.value = false;
   // await getCampaigns();
 })
 
@@ -124,13 +152,18 @@ async function getCampaignToEdit(){
   var response = await fetch(`https://ads-service.vercel.app/campaign/`+ route.params.id+ `/`, requestOptions);
   const data = await response.json();
   const dataCampaignToEdit = data[0];
-  //console.log('campaña a editar ',dataCampaignToEdit );
+  console.log('campaña a editar ',dataCampaignToEdit );
   await getCountries();
   
   nombreCampania.value = dataCampaignToEdit.campaignTitle;
   languages.value = dataCampaignToEdit.type;
   criterio.value = dataCampaignToEdit.coleccion.split(',');
   posicion.value = dataCampaignToEdit.position.split(',');
+
+  if(dataCampaignToEdit.criterial.metadato){
+    metadatos.value = dataCampaignToEdit.criterial.metadato.split(',');
+  }
+  
   codigoExternoModel.value = dataCampaignToEdit.urls.html || "";
   linkAds.value = dataCampaignToEdit.urls.url || "#";
   linkImageEscritorio.value = dataCampaignToEdit.urls.img.escritorio || "";
@@ -141,11 +174,15 @@ async function getCampaignToEdit(){
   // console.log(dataCampaignToEdit)
   tamanioUsuarios.value = dataCampaignToEdit.userId.length;
 
+  // alert(tamanioUsuarios.value)
+
   setTimeout(function(){
-      selectedItemCiudad.value = dataCampaignToEdit.criterial.city.split(',');
+      if(dataCampaignToEdit.criterial.city != null && dataCampaignToEdit.criterial.city != -1){
+        selectedItemCiudad.value = dataCampaignToEdit.criterial.city.split(',');
+      }
   }, 2000);
 
-  selectedItemCiudad.value = dataCampaignToEdit.criterial.city.split(',');
+  // selectedItemCiudad.value = dataCampaignToEdit.criterial.city.split(',');
 
   setTimeout(function(){
       selectItemParticipantes.value = dataCampaignToEdit.participantes;
@@ -158,10 +195,14 @@ async function getCampaignToEdit(){
 
   if(dataCampaignToEdit.criterial.navegador){
     selectItemNavegador.value = dataCampaignToEdit.criterial.navegador.split(',');
+  }else{
+    // selectItemNavegador.value = [{ title:'Todos', value: '0', avatar:"", navegador: [] }]
   }
 
   if(dataCampaignToEdit.criterial.so){
     selectItemSO.value = dataCampaignToEdit.criterial.so.split(',');
+  }else{
+    // selectItemSO.value = [{ title:'Todos', value: '0', avatar:"", navegador: [] }]
   }
   
 }
@@ -197,13 +238,56 @@ async function getCountries(){
   loadingPanel.value=false;
 }
 
-async function getUsuarios(){
-  var ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
-  var pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
+async function getMetadatos(){
+  try {
+    var metadatosTemp = await fetchCategorias();
 
-  var so_temp = selectItemSO.value || null;
-  var dispositivo_temp = selectItemDispositivos.value || null;
-  var navegador_temp = selectItemNavegador.value || null;
+    var metadatosList = [];
+    var metadatosListItems = [];
+    for(var i in metadatosTemp){
+      metadatosList.push({ title:metadatosTemp[i].__text, value:metadatosTemp[i].__text });
+      metadatosListItems.push(metadatosTemp[i].__text);
+    }
+    selectMetadatos.value = metadatosList;
+
+    metadatosListItems.slice().sort();
+
+    const arraySinDuplicados = metadatosListItems.filter((valor, indice, arreglo) => arreglo.indexOf(valor) === indice);
+
+    metadatosItems.value = arraySinDuplicados;
+
+  } catch (error) {
+      console.error("Error al listar todos los metadatos")
+  }
+}
+
+async function getUsuarios(){
+  var ciudad = -1;
+  var pais = -1;
+  var criterioTemp = criterio.value;
+
+  var so_temp = null;
+  var dispositivo_temp = null;
+  var navegador_temp = null;
+  var metadato = null;
+
+  if(criterioTemp.includes("metadatos") || criterioTemp.includes("trazabilidads")){
+    pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
+    ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
+  }
+
+  if(criterioTemp.includes("metadatos")){
+    metadato = metadatos.value || null;
+  }
+
+  if(criterioTemp.includes("dispositivos")){
+    dispositivo_temp = selectItemDispositivos.value || null;
+  }
+
+  if(criterioTemp.includes("plataforma")){
+    so_temp = selectItemSO.value || null;
+    navegador_temp = selectItemNavegador.value.join(',') || null;
+  }
 
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -217,6 +301,8 @@ async function getUsuarios(){
   var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
     so: so_temp, 
     dispositivo: dispositivo_temp,
+    metadato: metadato,
+    criterio: criterioTemp.join(','),
     navegador: navegador_temp
   }) }`, requestOptions);
   const data = await response.json();
@@ -253,12 +339,13 @@ async function onComplete() {
   var urlImagen_2 = linkImageMobile.value || "";
   var paises_temp = selectedItem.value;
 
-  var ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
-  var pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
+  var ciudad = -1;
+  var pais = -1;
 
-  var so_temp = selectItemSO.value || null;
-  var dispositivo_temp = selectItemDispositivos.value || null;
-  var navegador_temp = selectItemNavegador.value || null;
+  var so_temp = null;
+  var dispositivo_temp = null;
+  var metadato_temp = null;
+  var navegador_temp = null;
 
 
   var ciudades_temp = selectedItemCiudad.value;
@@ -266,6 +353,21 @@ async function onComplete() {
   var otroValor_temp = numeroOtroUsuarios.value;
 
   var visibilidad = selectItemVisibilidad.value;
+
+  if(cri.includes("metadatos") || cri.includes("trazabilidads")){
+    pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
+    ciudad = (selectedItemCiudad.value).length > 0 ? (selectedItemCiudad.value).join(',') : -1;
+  }
+
+  if(cri.includes("metadatos")){
+    metadato_temp = (metadatos.value).join(',') || null;
+  }
+
+  if(cri.includes("dispositivos")){
+    so_temp = (selectItemSO.value).join(',') || null;
+    dispositivo_temp = (selectItemDispositivos.value).join(',') || null;
+    navegador_temp = (selectItemNavegador.value).join(',') || null;
+  }
 
   // var so_temp = selectItemSO.value;
   // var dispositivo_temp = selectItemDispositivos.value;
@@ -277,13 +379,14 @@ async function onComplete() {
         "criterial": {
             "visibilitySection": visibilidad,
             "country": pais,
-            "city": ciudad.join(',') || -1,
-            "so": so_temp.join(',') || null,
-            "dispositivo": dispositivo_temp.join(',') || null,
-            "navegador": navegador_temp.join(',') || null
+            "city": ciudad || -1,
+            "so": so_temp || null,
+            "dispositivo": dispositivo_temp || null,
+            "metadato": metadato_temp || null,
+            "navegador": navegador_temp || null
         },
         "coleccion": cri.join(','),
-        "position": po,
+        "position": po.join(','),
         "participantes": participantes_temp,
         "otroValor": otroValor_temp,
         "urls": {
@@ -319,7 +422,10 @@ async function onComplete() {
 }
 
 async function handleValidation(isValid, tabIndex) {
-  if(tabIndex == 1 && isValid == true && dataCountry.value.length < 1){
+   // alert(isValid+" "+tabIndex+" "+countryList.value.length)
+   // console.log(dataCountry.value)
+  if(tabIndex == 1 && isValid == true && (dataCountry.value.length < 2 || countryList.value.length < 1)){
+
     await getCountries();
 
     var paises = [];
@@ -459,15 +565,62 @@ async function validateAsyncUsuarios() {
   var crit = criterio.value;
   var participantes = selectItemParticipantes.value;
   var numeroOtrosUsuarios = numeroOtroUsuarios.value;
+  var dispositivos_temp = selectItemDispositivos.value;
+  var metadatos_temp = metadatos.value;
+  var selectItemSO_temp = selectItemSO.value;
+  var selectItemNavegador_temp = selectItemNavegador.value;
+  var selectedItem_temp = selectedItem.value;
+  var selectedItemCiudad_temp = selectedItemCiudad.value;
 
-  if(pais.length < 1 || pais == ""){
-    alert("Debe ingresar el país");
-    return false;
+// console.log(dispositivos_temp)
+
+  // if(pais.length < 1 || pais == ""){
+  //   alert("Debe ingresar el país");
+  //   return false;
+  // }
+
+  // if(ciudad.length < 1 || ciudad == ""){
+  //   alert("Debes ingresar la ciudad");
+  //   return false;
+  // }
+
+  if(crit.includes("dispositivos")){
+    if(dispositivos_temp.length < 1 || dispositivos_temp == ""){
+      alert("Debe seleccionar un dispositivo");
+      return false;
+    }
   }
 
-  if(ciudad.length < 1 || ciudad == ""){
-    alert("Debes ingresar la ciudad");
-    return false;
+  if(crit.includes("metadatos")){
+    if(metadatos_temp.length < 1 || metadatos_temp == ""){
+      alert("Debe seleccionar al menos 1 metadato");
+      return false;
+    }
+  }
+
+  if(crit.includes("plataforma")){
+    if(selectItemSO_temp.length < 1 || selectItemSO_temp == ""){
+      alert("Debe seleccionar al menos 1 SO");
+      return false;
+    }
+
+    if(selectItemNavegador_temp.length < 1 || selectItemNavegador_temp == ""){
+      alert("Debe seleccionar al menos 1 Navegador");
+      return false;
+    }
+  }
+
+  if(crit.includes("trazabilidads")){
+    if(selectedItem_temp.length < 1 || selectedItem_temp == ""){
+      alert("Debe seleccionar al menos 1 país");
+      return false;
+    }
+
+    if(selectedItemCiudad_temp.length < 1 || selectedItemCiudad_temp == ""){
+      alert("Debe seleccionar al menos 1 ciudad");
+      return false;
+    }
+
   }
 
   if(crit.length < 1 || crit == ""){
@@ -489,7 +642,12 @@ async function validateAsyncUsuarios() {
     // if(hasErrors){
     //   return false;
     // }
-    
+
+  }
+
+  if(participantes == ''){
+    alert("Debes seleccionar la cantidad de usuarios");
+    return false;
   }
   return true;
 }
@@ -555,11 +713,17 @@ watch(() => selectedItem.value, (newValue, oldValue) => {
 
     ciudades.sort(compareByTitle);
     // console.log(Object.values(groupByTitle(ciudades)))
-    cityList.value = Object.values(groupByTitleWithAttributes(ciudades));
+    var ciudadesTemp_2 = Object.values(groupByTitleWithAttributes(ciudades));
+    var ciudadesSi = [];
+    for(var i in ciudadesTemp_2){
+      ciudadesSi.push(ciudadesTemp_2[i].title);
+    }
+    cityList.value = ciudadesSi;
 
     console.log(cityList.value)
   }else{
-    selectedItemCiudad.value = [];
+    // selectedItemCiudad.value = [];
+    cityList.value = [];
     selectItemParticipantes.value = [];
   }
 });
@@ -606,14 +770,17 @@ async function generarOtrosValores(){
 watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
-  if(selectedItemCiudad.value != null){
-    loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
-    await generarOtrosValores();
-  }else{
-    dataUsuarios.value = {};
+  if(!loadComponent.value){
+    if(selectedItemCiudad.value != null){
+      loadingPanel.value=true;
+      await getUsuarios();
+      loadingPanel.value=false;
+      await generarOtrosValores();
+    }else{
+      dataUsuarios.value = {};
+    }
   }
+  
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
@@ -621,14 +788,17 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
 watch(async () => selectItemDispositivos.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
-  if(selectItemDispositivos.value != null){
-    loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
-    await generarOtrosValores();
-  }else{
-    dataUsuarios.value = {};
+  if(!loadComponent.value){
+    if(selectItemDispositivos.value != null){
+      loadingPanel.value=true;
+      await getUsuarios();
+      loadingPanel.value=false;
+      await generarOtrosValores();
+    }else{
+      dataUsuarios.value = {};
+    }
   }
+  
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
@@ -636,14 +806,17 @@ watch(async () => selectItemDispositivos.value,async  (newValue, oldValue) => {
 watch(async () => selectItemSO.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
-  if(selectItemSO.value != null){
-    loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
-    await generarOtrosValores();
-  }else{
-    dataUsuarios.value = {};
+  if(!loadComponent.value){
+    if(selectItemSO.value != null){
+      loadingPanel.value=true;
+      await getUsuarios();
+      loadingPanel.value=false;
+      await generarOtrosValores();
+    }else{
+      dataUsuarios.value = {};
+    }
   }
+  
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
@@ -652,17 +825,57 @@ watch(async () => selectItemSO.value,async  (newValue, oldValue) => {
 watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
-  if(selectItemNavegador.value != null){
-    loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
-    await generarOtrosValores();
-  }else{
-    dataUsuarios.value = {};
+  if(!loadComponent.value){
+    if(selectItemNavegador.value != null){
+      loadingPanel.value=true;
+      await getUsuarios();
+      loadingPanel.value=false;
+      await generarOtrosValores();
+    }else{
+      dataUsuarios.value = {};
+    }
   }
+  
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
+
+watch(async () => metadatos.value,async  (newValue, oldValue) => {
+  // console.log('Nuevo valor seleccionado:', newValue);
+  // console.log('Valor anterior:', oldValue);
+  if(!loadComponent.value){
+    if(metadatos.value != null){
+      loadingPanel.value=true;
+      await getUsuarios();
+      loadingPanel.value=false;
+      await generarOtrosValores();
+    }else{
+      dataUsuarios.value = {};
+    }
+  }
+  
+
+  // selectItemsList.value = [100, 200, 1000, "Otro"];
+});
+
+
+// watch(async () => criterio.value,async  (newValue, oldValue) => {
+//   // console.log('Nuevo valor seleccionado:', newValue);
+//   // console.log('Valor anterior:', oldValue);
+//   if(!loadComponent.value){
+//     if(criterio.value != null){
+//       loadingPanel.value=true;
+//       await getUsuarios();
+//       loadingPanel.value=false;
+//       await generarOtrosValores();
+//     }else{
+//       dataUsuarios.value = {};
+//     }
+//   }
+  
+
+//   // selectItemsList.value = [100, 200, 1000, "Otro"];
+// });
 
 </script>
 
@@ -840,11 +1053,18 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
                               cols="12"
                               md="12"
                             >
-                              <VSelect
+                              <VCombobox
                                 v-model="posicion"
-                                :items="posicionList"
+                                multiple
                                 chips
-                                clearable
+                                :items="posicionList"
+                                variant="outlined"
+                                label=""
+                                persistent-hint
+                                v-model:search-input="search"
+                                hide-selected
+                                :hide-no-data="false"
+                                hint=""
                               />
                             </VCol>
                           </VRow>
@@ -1001,6 +1221,41 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
                                 </VCol>
                               </VRow>
                             </VCol>
+                            <VCol cols="12" :class="criterio.includes('metadatos')?'':'d-none'">
+                              <VRow no-gutters >
+                                <VCol cols="12">
+                                  <VRow no-gutters>
+                                    <!-- 👉 Email -->
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <label for="metadatos">Metadatos</label>
+                                    </VCol>
+
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                    <VCombobox
+                                        v-model="metadatos"
+                                        multiple
+                                        chips
+                                        :items="metadatosItems"
+                                        variant="outlined"
+                                        label=""
+                                        persistent-hint
+                                        v-model:search-input="searchMetadatos"
+                                        hide-selected
+                                        :hide-no-data="false"
+                                        hint=""
+                                      />
+
+                                    </VCol>
+                                  </VRow>
+                                </VCol>
+                              </VRow>
+                            </VCol>
                             <VCol cols="12" :class="criterio.includes('trazabilidads')?'':'d-none'">
                               <VRow no-gutters >
                                 <VCol cols="6">
@@ -1054,6 +1309,7 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
                                 </VCol>
                               </VRow>
                             </VCol>
+                            
                             <VCol cols="12" :class="criterio.includes('dispositivos')?'':'d-none'">
                               <VRow no-gutters >
                                 <VCol cols="12">
@@ -1092,6 +1348,10 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
                                     </VCol>
                                   </VRow>
                                 </VCol>
+                              </VRow>
+                            </VCol>
+                            <VCol cols="12" :class="criterio.includes('plataforma')?'':'d-none'">
+                              <VRow no-gutters >
                                 <VCol cols="6 pt-2">
                                   <VRow no-gutters>
                                     <!-- 👉 Email -->
@@ -1239,32 +1499,10 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
                               size="large"
                               class="text-capitalize mt-4"
                             >
-                              {{ tamanioUsuarios || "0" }}
-                            </VChip>
-                            <div v-if="dataUsuarios.total!=tamanioUsuarios" class="mt-2">
-                              <VBtn
-                                
-                                color="primary"
-                                variant="text"
-                                title="Actualizar lista de usuarios"
-                              >
-
-                                <VIcon
-                                  size="22"
-                                  icon="mdi-reload"
-                                />
-
-                                <small style="font-size: 11px;">
-                                  {{ dataUsuarios.total }}
-                                </small >
-
-                                <VIcon
-                                  size="12"
-                                  icon="mdi-account-group"
-                                />
-                              </VBtn>
+                              <!-- {{tamanioUsuarios.value}} -->
+                              {{ dataUsuarios.total || tamanioUsuarios }} 
                               
-                            </div>
+                            </VChip>
                             
 
                           </VCardText>

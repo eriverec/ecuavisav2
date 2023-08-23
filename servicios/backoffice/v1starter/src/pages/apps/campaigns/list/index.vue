@@ -198,7 +198,7 @@ const handleSwitchChange = (index) => {
                       <VListItemTitle>
                         <div class="nombre-campania">
                           {{ c.campaignTitle }}
-                          <div>
+                          <div v-if="c.criterial.country != null && c.criterial.country != -1">
                             <VAvatar :title="'Ubicación: '+c.criterial.country+', '+c.criterial.city" class="ava" size="24" :image=" 'https://www.countryflagicons.com/FLAT/64/' + getPaisConfig(c.criterial.country)['alpha-2'] + '.png' " />
                             <span class="text-xs text-disabled">
                              <b>Sector: </b> {{c.criterial.country}}{{ c.criterial.city == "0" ? "": ", "+c.criterial.city }} 
@@ -208,7 +208,7 @@ const handleSwitchChange = (index) => {
                       </VListItemTitle>
                       <VListItemSubtitle class="mt-1" title="Estado de campaña">
                         <div class="switch-estatus">
-                          <VSwitch v-model="c.statusCampaign" @change="handleSwitchChange(index)" />
+                          <!-- <VSwitch v-model="c.statusCampaign" @change="handleSwitchChange(index)" /> -->
                           <VBadge
                             dot
                             location="start center"
