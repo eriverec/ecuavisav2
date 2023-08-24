@@ -17,7 +17,7 @@ function eventEnvivoManager() {
     try {
       const response = await fetch(apiUrl);
       const data = await response.json();
-      const forzado = data.forzado.estado.estado;
+      const forzado = data.forzado.estado.estado.estado;
       // Iterar a través de los días y horarios
 
       if (!forzado) {
