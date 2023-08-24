@@ -286,8 +286,11 @@ async function onComplete() {
   }
 
   if(cri.includes("dispositivos")){
-    so_temp = (selectItemSO.value).join(',') || null;
     dispositivo_temp = (selectItemDispositivos.value).join(',') || null;
+  }
+
+  if(cri.includes("plataforma")){
+    so_temp = (selectItemSO.value).join(',') || null;
     navegador_temp = (selectItemNavegador.value).join(',') || null;
   }
 
@@ -1211,7 +1214,9 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                                         v-model:search-input="searchCiudades"
                                         hide-selected
                                         :hide-no-data="false"
+                                        density="default"
                                         hint=""
+                                        class="custom-combobox-ciudad"
                                       />
 
                                       
@@ -1492,5 +1497,10 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+.v-menu .v-select__slot {
+  max-height: 10px; /* Ajusta el valor según tus necesidades */
+  overflow-y: auto;
 }
 </style>

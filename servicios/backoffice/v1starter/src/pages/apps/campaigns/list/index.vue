@@ -16,6 +16,7 @@ const totalRegistrosHtml = ref(1);
 const idCampaign = ref("");
 const disabledPagination = ref(false);
 const disabledViewList = ref(false);
+const switchOnDisabled = ref(false);
 
 const banderas = {
   "Ecuador":"EC",
@@ -88,11 +89,33 @@ const eliminarRegistroSi = async () => {
   }
 };
 
-const handleSwitchChange = (index) => {
+const handleSwitchChange = async (index) => {
   const campaign = dataCampaigns.value[index];
   const id = campaign._id;
-  const estado = campaign.statusCampaign ? 'Activo' : 'Inactivo';
-  console.log(id)
+  const estado = campaign.statusCampaign;
+  switchOnDisabled.value = true;
+  var jsonEnviar = {
+        status: estado
+  }
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: JSON.stringify(jsonEnviar),
+    redirect: 'follow'
+  };
+
+  var response = await fetch(`https://ads-service.vercel.app/campaign/update/status/${id}`, requestOptions);
+  const data = await response.json();
+  if(data.resp){
+    // alert("Registro guardado");
+  }else{
+    alert("Un error se presentó: "+data.error);
+    campaign.statusCampaign = !campaign.statusCampaign;
+  };
+  switchOnDisabled.value = false;
   // Realiza las operaciones necesarias con el ID y el estado
 };
 
@@ -208,17 +231,21 @@ const handleSwitchChange = (index) => {
                         </div>
                       </VListItemTitle>
                       <VListItemSubtitle class="mt-1" title="Estado de campaña">
-                        <div class="switch-estatus">
-                          <!-- <VSwitch v-model="c.statusCampaign" @change="handleSwitchChange(index)" /> -->
-                          <VBadge
-                            dot
-                            location="start center"
-                            offset-x="2"
-                            :color="c.statusCampaign?'success':'error'"
-                            class="me-3"
+                        <div class="switch-estatus" style="margin-bottom:-10px">
+                          <VSwitch :disabled="switchOnDisabled" :loading="switchOnDisabled?'warning':false" :color="c.statusCampaign?'success':'error'" v-model="c.statusCampaign" size="x-small" class="custom-vswitch" @change="handleSwitchChange(index)" />
+                          <VChip
+                            title="Publicidad pausada"
+                            v-if="c.statusCampaign != true"
+                            size="x-small"
+                            label
+                            color="error"
                           >
-                            <span class="ms-4" style="font-weight:medium">{{ c.statusCampaign?'Activo':'Inactivo' }}</span>
-                          </VBadge>
+                            <span style="font-weight:medium">{{ c.statusCampaign?'Activo':'Inactivo' }}</span>
+                          </VChip>
+
+                          <small title="Publicidad activa, iniciada" color="success" v-if="c.statusCampaign == true">
+                            <span style="font-weight:medium">{{ c.statusCampaign?'Activo':'Inactivo' }}</span>
+                          </small>
                         </div>
 
                         <span class="text-xs text-disabled">
@@ -360,5 +387,18 @@ const handleSwitchChange = (index) => {
 
 .paginador-campaign{
   display: flex;
+}
+
+.custom-vswitch  {
+  transform: scale(0.55); /* Ajusta el valor según tus necesidades */
+  transform-origin: left center;
+}
+
+.switch-estatus {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 0;
+    padding-left: 5px;
 }
 </style>

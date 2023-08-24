@@ -364,8 +364,11 @@ async function onComplete() {
   }
 
   if(cri.includes("dispositivos")){
-    so_temp = (selectItemSO.value).join(',') || null;
     dispositivo_temp = (selectItemDispositivos.value).join(',') || null;
+  }
+
+  if(cri.includes("plataforma")){
+    so_temp = (selectItemSO.value).join(',') || null;
     navegador_temp = (selectItemNavegador.value).join(',') || null;
   }
 
