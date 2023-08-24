@@ -43,7 +43,7 @@ window.onload = () => {
   btnLogFacebook.setAttribute("href", "#");
   btnLogFacebook.setAttribute("onclick", "validateLogSocials();");
 };
-if (UserId) {
+if (UserId && ECUAVISA_EC.isPageProduccion()) {
   /*Si existe sesión lo 
    va a redireccionar al perfil */
   window.location = URL_perfil_G;

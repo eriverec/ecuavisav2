@@ -788,7 +788,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
         class="mt-0"
         cols="12"
         md="12"
-        lg="8"
+        lg="7"
       >
         <VTabs
           v-model="currentTab"
