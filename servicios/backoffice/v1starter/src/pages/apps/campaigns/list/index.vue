@@ -198,6 +198,7 @@ const handleSwitchChange = (index) => {
                       <VListItemTitle>
                         <div class="nombre-campania">
                           {{ c.campaignTitle }}
+                          
                           <div v-if="c.criterial.country != null && c.criterial.country != -1">
                             <VAvatar :title="'Ubicación: '+c.criterial.country+', '+c.criterial.city" class="ava" size="24" :image=" 'https://www.countryflagicons.com/FLAT/64/' + getPaisConfig(c.criterial.country)['alpha-2'] + '.png' " />
                             <span class="text-xs text-disabled">
