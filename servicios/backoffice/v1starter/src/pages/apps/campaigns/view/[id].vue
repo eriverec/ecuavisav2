@@ -200,26 +200,26 @@ computed: {
     handleSwitchChange(index) {
       // console.log(this.suggestion.statusCampaign)
 
-      var jsonEnviar = {
-            statusCampaign:this.suggestion.statusCampaign
-      }
+      // var jsonEnviar = {
+      //       statusCampaign:this.suggestion.statusCampaign
+      // }
 
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: JSON.stringify(jsonEnviar),
-        redirect: 'follow'
-      };
+      // var myHeaders = new Headers();
+      // myHeaders.append("Content-Type", "application/json");
+      // var requestOptions = {
+      //   method: 'POST',
+      //   headers: myHeaders,
+      //   body: JSON.stringify(jsonEnviar),
+      //   redirect: 'follow'
+      // };
 
-      var response = await fetch(`https://ads-service.vercel.app/campaign/update/status`, requestOptions);
-      const data = await response.json();
-      if(data.resp){
-        // alert("Registro guardado");
-      }else{
-        alert("Un error se presentó: "+data.error)
-      };
+      // var response = await fetch(`https://ads-service.vercel.app/campaign/update/status`, requestOptions);
+      // const data = await response.json();
+      // if(data.resp){
+      //   // alert("Registro guardado");
+      // }else{
+      //   alert("Un error se presentó: "+data.error)
+      // };
 
     },
     async obtenerDetalles() {
