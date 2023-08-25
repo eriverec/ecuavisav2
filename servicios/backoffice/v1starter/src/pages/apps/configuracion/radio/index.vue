@@ -8,7 +8,7 @@ const estadoRaw = ref(false);
 const router = useRouter();
 //const isError = ref(false);
 const isLoading = ref(false);
-const currentTab = ref('');
+const currentTab = ref('tab-detalles')
 const diaSelected = ref('');
 const horarios = ref([]);
 const horariosRaw = ref([]);
@@ -219,15 +219,8 @@ let nuevaConfiguracion = {
     "key": "horarioRadio",
     "estructura": 
         {         
-            "html":{
-                "estadoHtml": estadoHtml.value,
-                "value": codigo.value
-            },           
-            "forzado": {
-                "estado": estado.value,
-                "titulo": tituloForzado.value,
-                "textoLabel": labelForzado.value
-            },
+            "html":embedRaw.value,           
+            "forzado": estadoRaw.value,
             "horarios": horariosRaw.value 
         }
 };
@@ -269,148 +262,149 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
   <VTabs v-model="currentTab" class="v-tabs-pill">
         <VTab value="tab-config" >Configuración de Horarios</VTab>
         <VTab value="tab-forzado" >Player Forzado</VTab>
-        <VTab value="tab-embed" >Código del reprodcutor</VTab>
+        <VTab value="tab-embed" >Código del reproductor</VTab>
   </VTabs>
-  <VWindow v-model="currentTab">
-                <VWindowItem value="tab-config">
-     
-                    <VCard class="mt-5" title="Configuración de los horarios" >	
-                        <VCardText v-if="isLoading">
-                                Cargando configuración...
-                        </VCardText>      
-                        <VCardText class="py-4 gap-0 w-100" v-else>	
-                        <VRow> 
-                            <VCol cols="12" style="display: flex; flex-wrap: wrap; align-items: center;">
-                                <VCol cols="4">
-                                
-                                <VSelect v-model="diaSelected" :items="diasDisponibles" :disabled="diasDisponibles.length===0" label="Día de la semana" />
-                                </VCol>    
-                                <VCol cols="6" class="d-flex gap-4">
-                                    <VBtn
-                                    color="primary"
-                                    @click="addDia()"
-                                    :disabled="diasDisponibles.length===0 || !diaSelected"
-                                    >
-                                    Añadir día
-                                    </VBtn>
 
-                                    <VBtn
-                                    color="primary"
-                                    @click="enviar()"                                 
-                                    >
-                                    Guardar Horarios
-                                    </VBtn>
-                                </VCol>  
-                            
-                            </VCol>
-                            <VCol cols="12">
-                            <VList class="card-list">
-                                <VExpansionPanels variant="accordion" multiple>
-                                        <VExpansionPanel
-                                            v-for="horario,index in horarios"
-                                            :key="index"                        
-                                        >
-                                        <VExpansionPanelTitle class="d-flex flex-wrap justify-space-between gap-4">
-                                           <h3> {{ resolveDia(horario.dia) }} </h3>
-                                           <VChip :color="horario.estadoDia == true ? 'success' : 'warning'" class="mr-4" >{{ horario.estadoDia == true ? 'Activo' : 'Inactivo' }} </VChip>
-                                        <VSwitch
-                                            v-model="horario.estadoDia"
-                                            color="success"
-                                            :label="horario.estadoDia == true ? 'Día activo' : 'Día inactivo'"
-                                        />
-                                        </VExpansionPanelTitle>
-                                        <VExpansionPanelText class="d-flex flex-wrap justify-space-between">
-                                            <div style="padding: 1rem; border:1px solid rgba(var(--v-theme-on-background), var(--v-disabled-opacity));border-radius: 7px;">
-                                            <VTable class="w-full">
-                                            <thead>
-                                                <tr>
-                                                <th scope="col"  class="d-flex gap-4 pb-4">
-                                                    <VBtn
-                                                    color="primary"
-                                                    @click="addHora(index)"                                              
-                                                    >
-                                                    Añadir hora
-                                                    </VBtn>
-                                                                                                                                                                         
-                                                    <VBtn     
-                                                    style="margin-left: 0.5rem;"                                          
-                                                    color="error"
-                                                    @click="elimDia(index)"                                              
-                                                    >
-                                                    Eliminar día
-                                                    </VBtn>
-                                                </th> 
-                                                    
-                                                </tr>
-                                                <tr>
-                                                <th scope="col" style="width: 300px;">Título</th>    
-                                                <th scope="col" style="width: 170px;">Hora de inicio</th>
-                                                <th scope="col" style="width: 170px;">Hora de fin</th>
-                                                <th scope="col" class="d-flex gap-4 pb-4">                                                                             
-                                                </th>
-                                                
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr v-for="hora,indexHora in horario.horas" :key="indexHora">      
-                                                <td class="py-4">
-                                                    <VTextField
-                                                        v-model="hora.tituloPrograma"
-                                                        label="Título del horario"
-                                                        placeholder="Escriba el título..."
-                                                        class="ms-0 me-1 chat-list-search"
-                                                    />
-                                                </td>   
+    <VWindow v-model="currentTab">
+        <VWindowItem value="tab-config">
 
-                                                <td class="py-4">
-                                                    <AppDateTimePicker
-                                                    
-                                                    v-model="hora.inicio"
-                                                    label="Hora Inicio"
-                                                    :config="{ enableTime: true, noCalendar: true, dateFormat: 'H:i' }"
-                                                    />
-                                                </td>
+            <VCard class="mt-5" title="Configuración de los horarios" >	
+                <VCardText v-if="isLoading">
+                        Cargando configuración...
+                </VCardText>      
+                <VCardText class="py-4 gap-0 w-100" v-else>	
+                <VRow> 
+                    <VCol cols="12" style="display: flex; flex-wrap: wrap; align-items: center;">
+                        <VCol cols="4">
+                        
+                        <VSelect v-model="diaSelected" :items="diasDisponibles" :disabled="diasDisponibles.length===0" label="Día de la semana" />
+                        </VCol>    
+                        <VCol cols="6" class="d-flex gap-4">
+                            <VBtn
+                            color="primary"
+                            @click="addDia()"
+                            :disabled="diasDisponibles.length===0 || !diaSelected"
+                            >
+                            Añadir día
+                            </VBtn>
 
-                                                <td class="py-4">
-                                                    <AppDateTimePicker
-                                                    
-                                                    v-model="hora.fin"
-                                                    label="Hora Fin"                                              
-                                                    :config="{ enableTime: true, noCalendar: true , dateFormat: 'H:i'}"
-                                                    />
-                                                </td>
-                                                <td class="py-4">
-                                                    <div class="d-flex gap-4 py-4">
-                                                    <VSwitch
-                                                        v-model="hora.estadoHorario"
-                                                        color="success"
-                                                        :label="hora.estadoHorario == true ? 'Horario activo' : 'Horario inactivo'"
-                                                    />
-                                 
-                                                    <VBtn v-if="horario.horas.length>1" color="error" @click="elimHora(index,indexHora)"><VIcon icon="tabler-trash"></VIcon></VBtn>  
-                                                    </div>        
-                                                </td>
-                                                                               
-                                                </tr>
-                                            </tbody>
-                                            </VTable>
-                                        </div>
-                                        </VExpansionPanelText>
-                                    </VExpansionPanel>
-                                </VExpansionPanels>
-                            </VList>
-                            </VCol>
-                            
-                            </VRow>
-                        </VCardText>
-                    </VCard>
-                </VWindowItem>
-                <!------------------------ TRANSMISIÓN FORZADA ----------------------------->
-                <VWindowItem value="tab-forzado">
-                    <VCard class="mt-5" title="Player Forzado">	
-                    <VCardText class="py-4 gap-0 w-100">	
+                            <VBtn
+                            color="primary"
+                            @click="enviar()"                                 
+                            >
+                            Guardar Horarios
+                            </VBtn>
+                        </VCol>  
+                    
+                    </VCol>
+                    <VCol cols="12">
+                    <VList class="card-list">
+                        <VExpansionPanels variant="accordion" multiple>
+                                <VExpansionPanel
+                                    v-for="horario,index in horarios"
+                                    :key="index"                        
+                                >
+                                <VExpansionPanelTitle class="d-flex flex-wrap justify-space-between gap-4">
+                                   <h3> {{ resolveDia(horario.dia) }} </h3>
+                                   <VChip :color="horario.estadoDia == true ? 'success' : 'warning'" class="mr-4" >{{ horario.estadoDia == true ? 'Activo' : 'Inactivo' }} </VChip>
+                                <VSwitch
+                                    v-model="horario.estadoDia"
+                                    color="success"
+                                    :label="horario.estadoDia == true ? 'Día activo' : 'Día inactivo'"
+                                />
+                                </VExpansionPanelTitle>
+                                <VExpansionPanelText class="d-flex flex-wrap justify-space-between">
+                                    <div style="padding: 1rem; border:1px solid rgba(var(--v-theme-on-background), var(--v-disabled-opacity));border-radius: 7px;">
+                                    <VTable class="w-full">
+                                    <thead>
+                                        <tr>
+                                        <th scope="col"  class="d-flex gap-4 pb-4">
+                                            <VBtn
+                                            color="primary"
+                                            @click="addHora(index)"                                              
+                                            >
+                                            Añadir hora
+                                            </VBtn>
+                                                                                                                                                                 
+                                            <VBtn     
+                                            style="margin-left: 0.5rem;"                                          
+                                            color="error"
+                                            @click="elimDia(index)"                                              
+                                            >
+                                            Eliminar día
+                                            </VBtn>
+                                        </th> 
+                                            
+                                        </tr>
+                                        <tr>
+                                        <th scope="col" style="width: 300px;">Título</th>    
+                                        <th scope="col" style="width: 170px;">Hora de inicio</th>
+                                        <th scope="col" style="width: 170px;">Hora de fin</th>
+                                        <th scope="col" class="d-flex gap-4 pb-4">                                                                             
+                                        </th>
+                                        
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr v-for="hora,indexHora in horario.horas" :key="indexHora">      
+                                        <td class="py-4">
+                                            <VTextField
+                                                v-model="hora.tituloPrograma"
+                                                label="Título del horario"
+                                                placeholder="Escriba el título..."
+                                                class="ms-0 me-1 chat-list-search"
+                                            />
+                                        </td>   
+
+                                        <td class="py-4">
+                                            <AppDateTimePicker
+                                            
+                                            v-model="hora.inicio"
+                                            label="Hora Inicio"
+                                            :config="{ enableTime: true, noCalendar: true, dateFormat: 'H:i' }"
+                                            />
+                                        </td>
+
+                                        <td class="py-4">
+                                            <AppDateTimePicker
+                                            
+                                            v-model="hora.fin"
+                                            label="Hora Fin"                                              
+                                            :config="{ enableTime: true, noCalendar: true , dateFormat: 'H:i'}"
+                                            />
+                                        </td>
+                                        <td class="py-4">
+                                            <div class="d-flex gap-4 py-4">
+                                            <VSwitch
+                                                v-model="hora.estadoHorario"
+                                                color="success"
+                                                :label="hora.estadoHorario == true ? 'Horario activo' : 'Horario inactivo'"
+                                            />
+                         
+                                            <VBtn v-if="horario.horas.length>1" color="error" @click="elimHora(index,indexHora)"><VIcon icon="tabler-trash"></VIcon></VBtn>  
+                                            </div>        
+                                        </td>
+                                                                       
+                                        </tr>
+                                    </tbody>
+                                    </VTable>
+                                </div>
+                                </VExpansionPanelText>
+                            </VExpansionPanel>
+                        </VExpansionPanels>
+                    </VList>
+                    </VCol>
+                    
+                    </VRow>
+                </VCardText>
+            </VCard>
+        </VWindowItem>
+        <!------------------------ TRANSMISIÓN FORZADA ----------------------------->
+        <VWindowItem value="tab-forzado">
+            <VCard class="mt-5" title="Player Forzado" subtitle="Para transmisiones emergentes, este módulo permitirá activar el reproductor de forma forzada">
+                <VCardText class="py-4 gap-0 w-100">	
                     <VRow> 
-                        <VCol cols="8" style="/*display: flex; flex-wrap: wrap; align-items: center;">
+                        <VCol cols="8" style="/* display: flex; flex-wrap: wrap; align-items: center; */">
                             <div style="width: 650px; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-3">
                                 <VTextField
                                     v-model="estadoRaw.titulo"
@@ -421,10 +415,10 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                 </VTextField>
                                 
                                 <VTooltip location="top">
-                                   <template #activator="{ props }">
+                                    <template #activator="{ props }">
                                         <VIcon v-bind="props" size="30" icon="tabler-alert-circle" />
-                                   </template>
-                                  <span>Este titular aparecerá en lugar del título del programa sobre el reproductor</span>
+                                    </template>
+                                    <span>Este titular aparecerá en lugar del título del programa sobre el reproductor</span>
                                 </VTooltip>
 
                                 
@@ -444,9 +438,8 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                   <span>Este texto es el que aparece en el indicador que parpadea sobre el header</span>
                                 </VTooltip>
                             </div>
-                    
-                    
                         </VCol>
+
                         <VCol cols="4" style="display: flex; flex-wrap: wrap; align-items: center;">
                             <div style="display: flex; margin: 1rem;">
                                 <div>
@@ -465,49 +458,48 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                         </VCol>
 
                         <VCol cols="12"  style="display: flex; align-items: center;" >
-                            
-                                <div>
+                            <div>
                                 <span>Estado del player: </span>
-                                </div>
-                                <div style="margin-left: 2rem;">
+                            </div>
+                            <div style="margin-left: 2rem;">
                                 <VChip :color="estadoRaw.estado == true ? 'success' : 'warning'" class="mr-4" >{{ estadoRaw.estado == true ? 'Activo' : 'Inactivo' }} </VChip>
-                                </div>    
-                            
+                            </div>    
                         </VCol>
+
                     </VRow>
-                    </VCardText>
-                </VCard>
-                </VWindowItem>
-                <!------------------------ Código EMBED del player  ----------------------------->
-                <VWindowItem value="tab-embed">
-                    <VCard class="mt-5" title="Código HTML del embed player">	
-                    <VCardText class="py-4 gap-0 w-100">	
+                </VCardText>
+            </VCard>
+        </VWindowItem>
+
+        <!------------------------ Código EMBED del player  ----------------------------->
+        <VWindowItem value="tab-embed">
+            <VCard class="mt-5" title="Embed player" subtitle="Proporciona el código HTML del reproductor que presentará embebido en la seccion de audio">	
+                <VCardText class="py-4 gap-0 w-100">	
                     <VRow> 
                         <VCol cols="12" style="display: flex; flex-wrap: wrap; align-items: center;">
-                    
-                    
-                    <div style="width: 100%; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-2">
-                        <VTextarea
-                            v-model="codigo"
-                            label="Código"
-                            placeholder="Escriba el código html del reproductor..."
-                            class="ms-0 me-1 chat-list-search"
-                            auto-grow
-                        />
-                        
-                        </div>
-                        
-                                  
+                            <div style="width: 100%; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-2">
+                                <VTextarea
+                                    v-model="embedRaw.value"
+                                    label="Código"
+                                    placeholder="Escriba el código html del reproductor..."
+                                    class="ms-0 me-1 chat-list-search"
+                                    auto-grow
+                                />
+
+                            </div>
+                            <VBtn color="primary" @click="enviarEmbed" >
+                                Enviar
+                            </VBtn>     
                         </VCol>
-                        <VCol cols="12"  style="display: flex; align-items: center;" >
+                        <!-- <VCol cols="12"  style="display: flex; align-items: center;" >
                             
-                                <div>
+                            <div>
                                 <span>Estado: </span>
-                                </div>
-                                <div style="margin-left: 2rem;">
+                            </div>
+                            <div style="margin-left: 2rem;">
                                 <VChip :color="embedRaw.estadoHtml == true ? 'success' : 'warning'" class="mr-4" >{{ embedRaw.estadoHtml == true ? 'Activo' : 'Inactivo' }} </VChip>
-                                </div>    
-                                <div style="display: flex; margin: 1rem;">
+                            </div>    
+                            <div style="display: flex; margin: 1rem;">
                                 <div>
                                 <VSwitch
                                     v-model="estadoHtml"
@@ -516,21 +508,16 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                 />
                                 </div>
                                 <div style="margin-left: 2rem;">
-                                <VBtn
-                                    color="primary"
-                                    @click="enviarEmbed"
-                                >
-                                Enviar
-                                </VBtn>
+                                    
                                 </div>
-                                </div>
-                            
-                        </VCol>
-                        </VRow>
-                    </VCardText>
-                </VCard>
-                </VWindowItem>
-            </VWindow>
+                            </div>
+
+                        </VCol> -->
+                    </VRow>
+                </VCardText>
+            </VCard>
+        </VWindowItem>
+    </VWindow>
   
 			
            
