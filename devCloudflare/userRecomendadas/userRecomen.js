@@ -11,7 +11,8 @@ function recomendadasNavegacion(){
   
   function eventoRecomendadasUser() {
     // Obtener la referencia al elemento contenedor
-    const wUserId = localStorage.getItem("wylexUserId");
+    // const wUserId = localStorage.getItem("wylexUserId");
+    const wUserId = ECUAVISA_EC.USER_data("id");
     // const wUserId = "81408";
   
     if (wUserId) {
@@ -305,8 +306,8 @@ function recomendadasIntereses(){
   
   function eventoRecomendadasUserIn() {
     // Obtener la referencia al elemento contenedor
-    const wUserId = localStorage.getItem("wylexUserId");
-    // const wUserId = ECUAVISA_EC.USER_data("id");
+    // const wUserId = localStorage.getItem("wylexUserId");
+    const wUserId = ECUAVISA_EC.USER_data("id");
     // const wUserId = "81408";
   
   
