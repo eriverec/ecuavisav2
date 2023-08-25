@@ -122,7 +122,24 @@ function eventEnvivoManager() {
           txtBase.style.display = "none";
         }
 
-        if (audio) { audio.style.display = 'block'; }
+        // if (audio) { audio.style.display = 'block'; }
+
+        if (audio) {
+          audio.style.display = 'block';
+          audio.innerHTML = htmlIframe;
+          // Obtener el elemento <div> con el atributo data-id
+          var divdataid = document.querySelector('[data-id="643823bbf3b3410854ba942b"]');
+
+          if(divdataid){
+            // Obtener el elemento <script> dentro del <div>
+            var scriptElement = divdataid.querySelector('script');
+            var scriptSrc = scriptElement.getAttribute('src');
+            var resultElement = document.createElement('script');
+            resultElement.setAttribute('src',scriptSrc);
+            document.body.appendChild(resultElement);
+          } 
+
+        }
 
         if (BO_par) { BO_par.style.display = 'block' }
         if (BO_parTxt) { BO_parTxt.textContent = datalabel }
