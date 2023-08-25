@@ -1,5 +1,5 @@
 /*codigo-manager*/
-function envivoManager() {
+function eventEnvivoManager() {
   const apiUrl = "https://api-configuracion.vercel.app/web/horarioRadio";
   const fechaActual = new Date();
   const diaSemana = fechaActual.getDay();
