@@ -1,5 +1,5 @@
 /*codigo-manager*/
-function eventEnvivoManager() {
+function envivoManager() {
   const apiUrl = "https://api-configuracion.vercel.app/web/horarioRadio";
   const fechaActual = new Date();
   const diaSemana = fechaActual.getDay();
@@ -18,7 +18,12 @@ function eventEnvivoManager() {
       const response = await fetch(apiUrl);
       const data = await response.json();
       const forzado = data.forzado.estado;
+      const htmlIframe = data.html.value;
       // Iterar a través de los días y horarios
+
+      console.log(htmlIframe);
+
+      // document.body.innerHTML = (htmlIframe);
 
       if (!forzado) {
         console.log("forzado:", forzado);
@@ -69,7 +74,10 @@ function eventEnvivoManager() {
                   txtBase.style.display = "none";
                 }
 
-                if (audio) { audio.style.display = 'block'; }
+                if (audio) { 
+                  audio.style.display = 'block';
+                  audio.innerHTML = htmlIframe;
+                }
               });
             } else {
 
@@ -84,7 +92,10 @@ function eventEnvivoManager() {
                 txtBase.innerHTML = `Aquí encontrarás una opción para acceder a toda la programación informativa Audio En vivo: Contacto Directo (6:55), Televistazo en la Comunidad (5:55-7:30), Televistazo (13:00-19:00).`;
               }
 
-              if (audio) { audio.style.display = 'none'; }
+              if (audio) {
+                audio.style.display = 'none'; 
+                audio.innerHTML = '';
+              }
             }
           }
         }
