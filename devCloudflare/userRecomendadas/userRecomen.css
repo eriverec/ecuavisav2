@@ -1,6 +1,7 @@
 /*general*/
 
-.htmlRecomen .ring {
+.htmlRecomen .ring, 
+.htmlRecomenIntereses .ring {
   --uib-size: 40px;
   --uib-speed: 2s;
   --uib-color: black;
@@ -14,7 +15,8 @@
   margin-top: 30px;
 }
 
-.htmlRecomen .ring circle {
+.htmlRecomen .ring circle, 
+.htmlRecomenIntereses .ring circle{
   fill: none;
   stroke: var(--uib-color);
   stroke-dasharray: 1, 200;
