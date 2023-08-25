@@ -8,22 +8,12 @@ function eventEnvivoManager() {
   const diasSemanaTexto = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
   console.log(`Hoy es ${diasSemanaTexto[diaSemana - 1]}`);
 
-  // Función para formatear los minutos con ceros a la izquierda si es necesario
-  // function formatearMinutos(minutos) {
-  //   return minutos < 10 ? `0${minutos}` : minutos;
-  // }
-
   async function fetchHorario() {
     try {
       const response = await fetch(apiUrl);
       const data = await response.json();
       const forzado = data.forzado.estado;
       const htmlIframe = data.html.value;
-      // Iterar a través de los días y horarios
-
-      console.log(htmlIframe);
-
-      // document.body.innerHTML = (htmlIframe);
 
       if (!forzado) {
         console.log("forzado:", forzado);
@@ -74,9 +64,21 @@ function eventEnvivoManager() {
                   txtBase.style.display = "none";
                 }
 
-                if (audio) { 
+                if (audio) {
                   audio.style.display = 'block';
                   audio.innerHTML = htmlIframe;
+                  // Obtener el elemento <div> con el atributo data-id
+                  var divdataid = document.querySelector('[data-id="643823bbf3b3410854ba942b"]');
+
+                  if(divdataid){
+                    // Obtener el elemento <script> dentro del <div>
+                    var scriptElement = divdataid.querySelector('script');
+                    var scriptSrc = scriptElement.getAttribute('src');
+                    var resultElement = document.createElement('script');
+                    resultElement.setAttribute('src',scriptSrc);
+                    document.body.appendChild(resultElement);
+                  } 
+
                 }
               });
             } else {
@@ -93,7 +95,7 @@ function eventEnvivoManager() {
               }
 
               if (audio) {
-                audio.style.display = 'none'; 
+                audio.style.display = 'none';
                 audio.innerHTML = '';
               }
             }
@@ -136,6 +138,7 @@ function eventEnvivoManager() {
   fetchHorario();
 
 }
+
 
 if (ECUAVISA_EC.login()) {
   eventEnvivoManager();
