@@ -48,7 +48,7 @@ const diasTotales = [
     },
     {
         title: "Domingo",
-        value: 7
+        value: 0
     },
 ]
 
@@ -112,7 +112,7 @@ const addDia = () => {
 
 const elimDia = (index) =>{
     horarios.value.splice(index, 1);
-};
+}; 
 
 // ---------------- HORA ------------------
 
