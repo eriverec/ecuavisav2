@@ -5,8 +5,8 @@ function eventEnvivoManager() {
   const diaSemana = fechaActual.getDay();
   const horaActual = fechaActual.getHours();
   const minutosActuales = fechaActual.getMinutes();
-  const diasSemanaTexto = ["Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado", "Domingo"];
-  console.log(`Hoy es ${diasSemanaTexto[diaSemana - 1]}`);
+  const diasSemanaTexto = ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" ];
+  console.log(`Hoy es v2 ${diasSemanaTexto[diaSemana]}`);
 
   async function fetchHorario() {
     try {
@@ -20,7 +20,7 @@ function eventEnvivoManager() {
         for (const dia of data.horarios) {
           // console.log('dia.dia:',dia.dia);
           if (dia.estadoDia && dia.dia === diaSemana) { //validamos si el dia esta activo
-            console.log(`Día ${dia.dia} (${diasSemanaTexto[dia.dia - 1]}):`);
+            console.log(`Día ${dia.dia} (${diasSemanaTexto[dia.dia]}):`);
 
             let programasHoy = [];
 
