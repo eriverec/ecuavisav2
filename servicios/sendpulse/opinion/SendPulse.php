@@ -845,22 +845,102 @@ class SendPulse {
 			        	</table>';
                 }
                 if($value->name == "Quotecv"){
-                    $content[] = '
-                    <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
-			        	<tr>
-			        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
-			        			<p style="display:block;
-                                	text-align: center;
-                                	font-weight: 700;
-                                	margin-top: 0px;
-                                	padding: 10px;
-                                	margin-bottom: 5px;font-style: italic;
-                                    color: #4a4663;
-                                    font-size: 12px;background-color:#EDF0F3;line-height: 1.2;">'.$value->__text.'</p>
-			        		<td>
-			        	<tr>
-			        </table>
-                    ';
+                	$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%">
+					   <tbody>
+					      <tr style="border-color:transparent">
+					         <th width="55" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc no-responsive " align="left" valign="top">
+					            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+					               <tbody>
+					                  <tr style="border-color:transparent">
+					                     <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+					                        <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_33_element_0" style="border-collapse:separate; font-size:14px; line-height:1.2; overflow:hidden">
+					                           <tbody>
+					                              <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
+					                                 <td class="content-cell" width="25" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top">
+					                                    <div id="wout_block_33_element_0" style="font-size:14px; line-height:1.2; width:100%; height:168.285714; display:block" width="100%" height="168.285714">
+					                                       <img border="0" width="19" height="auto" class="desktop  sp-img small_img smallImg " align="right" alt="linea-vertical-opinion" src="https://s7844538.sendpul.se/files/emailservice/userfiles/f7d451814eb533de3f3b83b6f72ec10c7844538/linea-vertical-opinion.png" iout_block_33_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; margin:0; display:block; -ms-interpolation-mode:bicubic"><!--[if !mso]><!-->
+					                                       <div style="font-size:14px; line-height:1.2; mso-hide:all"><img border="0" width="100%" height="auto" class="mobile  sp-img small_img smallImg " align="right" alt="linea-vertical-opinion" src="https://s7844538.sendpul.se/files/emailservice/userfiles/f7d451814eb533de3f3b83b6f72ec10c7844538/linea-vertical-opinion.png" iout_block_33_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:21px !important"></div>
+					                                       <!--<![endif]-->
+					                                    </div>
+					                                    <div style="font-size:14px; line-height:1.2; clear:both"></div>
+					                                 </td>
+					                              </tr>
+					                           </tbody>
+					                        </table>
+					                     </td>
+					                  </tr>
+					               </tbody>
+					            </table>
+					         </th>
+					         <th width="445" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc no-responsive " align="left" valign="top">
+					            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+					               <tbody>
+					                  <tr style="border-color:transparent">
+					                     <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+					                        <table class="separator" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size:14px; line-height:1.2; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; height:31px" height="31">
+					                           <tbody>
+					                              <tr style="border-color:transparent">
+					                                 <td height="31" style="border-collapse:collapse; border-color:transparent"></td>
+					                              </tr>
+					                           </tbody>
+					                        </table>
+					                     </td>
+					                  </tr>
+					               </tbody>
+					            </table>
+					            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+					               <tbody>
+					                  <tr style="border-color:transparent">
+					                     <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+					                        <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_24" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#333; margin:0; overflow:hidden">
+					                           <tbody>
+					                              <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
+					                                 <td class="content-cell padding-lr-0 padding-top-0 padding-bottom-0" width="430" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0; padding-right:15px; padding-top:0; padding-bottom:0" valign="top">
+					                                    <p style="line-height:1.5; margin:0 0 10px; font-size:inherit; color:#333; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><strong><span style="font-size: 18px;">'.$value->__text.'</span></strong></p>
+					                                    <div style="font-size:14px; line-height:1.2; clear:both"></div>
+					                                 </td>
+					                              </tr>
+					                           </tbody>
+					                        </table>
+					                     </td>
+					                  </tr>
+					               </tbody>
+					            </table>
+					            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+					               <tbody>
+					                  <tr style="border-color:transparent">
+					                     <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+					                        <table class="separator" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size:14px; line-height:1.2; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; height:31px" height="31">
+					                           <tbody>
+					                              <tr style="border-color:transparent">
+					                                 <td height="31" style="border-collapse:collapse; border-color:transparent"></td>
+					                              </tr>
+					                           </tbody>
+					                        </table>
+					                     </td>
+					                  </tr>
+					               </tbody>
+					            </table>
+					         </th>
+					      </tr>
+					   </tbody>
+					</table>';
+                    // $content[] = '
+                    // <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
+			        // 	<tr>
+			        // 		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
+			        // 			<p style="display:block;
+                    //             	text-align: center;
+                    //             	font-weight: 700;
+                    //             	margin-top: 0px;
+                    //             	padding: 10px;
+                    //             	margin-bottom: 5px;font-style: italic;
+                    //                 color: #4a4663;
+                    //                 font-size: 12px;background-color:#EDF0F3;line-height: 1.2;">'.$value->__text.'</p>
+			        // 		<td>
+			        // 	<tr>
+			        // </table>
+                    // ';
                 }
                 if($value->name == "Cita"){
                     $content[] = '
