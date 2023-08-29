@@ -1,14 +1,12 @@
 <script setup>
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+import { onMounted } from 'vue';
 //import UserInvoiceTable from './UserInvoiceTable.vue'
-import avatar2 from "@/assets/images/avatars/avatar-2.png";
-import figma from "@/assets/images/icons/project-icons/figma.png";
-import html5 from "@/assets/images/icons/project-icons/html5.png";
-import python from "@/assets/images/icons/project-icons/python.png";
-import react from "@/assets/images/icons/project-icons/react.png";
-import sketch from "@/assets/images/icons/project-icons/sketch.png";
-import vue from "@/assets/images/icons/project-icons/vue.png";
-import xamarin from "@/assets/images/icons/project-icons/xamarin.png";
-import { avatarText, kFormatter } from "@core/utils/formatters";
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
+
 
 const p = defineProps({
   userData: {
@@ -19,6 +17,119 @@ const p = defineProps({
 const createD = ref(0);
 const updateD = ref(0);
 const loginD = ref(0);
+const currentTab = ref('');
+const dataIntereses = ref([]);
+const dataTrazabilidad = ref([]);
+const itemsPerPage = 8;
+const currentPage = ref(1);
+const isLoading = ref(false);
+
+async function getIntereses (){
+  await fetch(`https://sugerencias-ecuavisa.vercel.app/interes/all?userId=${p.userData.wylexId}`)
+      .then(response => response.json())
+      .then(resp => {       
+        let dataRaw = resp.data;
+        let dataInt = Array.from(resp.dataInteresSeguido);
+        const finalArray = [];
+        for(let i in dataInt){
+            let match = dataRaw.find(a => {return a.interesId == dataInt[i].interesId});
+            finalArray.push(match);
+        }
+        dataIntereses.value = finalArray;  
+
+      });
+}
+
+async function getTrazabilidad (){
+    isLoading.value = true;
+        
+    const consulta = await fetch('https://servicio-de-actividad.vercel.app/actividad/usuario/'+p.userData.wylexId);
+    const consultaJSON = await consulta.json();
+    
+    if(consultaJSON.resp === false){
+      isLoading.value = false;
+    }
+    
+    if(consultaJSON.resp === true) {
+      const dataRaw = consultaJSON.data;
+      console.log('trazabilidad ',dataRaw);
+      const arrayFiltro = [];
+        for (let i of dataRaw.navigationRecord) {
+          
+              var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY' , 'D/M/YYYY' ];    
+              var allowedFullDateFormats = ['DD/MM/YYYY HH:mm:ss','DD/MM/YYYY H:mm:ss', 'DD/MM/YYYY H:mm:ss a', 'DD/MM/YYYY HH:mm:ss a'];    
+              let fechaFormat = moment(i.fecha, allowedDateFormats, true).format( 'DD/MM/YYYY');
+              let horaFix = i.hora.split(':');
+              if(horaFix[2].indexOf(' ')>= 0){
+                let slot3 = horaFix[2].split(' ');
+                horaFix[2] = slot3[0];
+              }
+              let horaFinal = horaFix[0]+':'+horaFix[1]+':'+horaFix[2];
+              let fullFecha = fechaFormat+' '+horaFinal;
+              let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
+
+              let data = {    
+                  url: i.url,
+                  title: i.title,
+                  fecha: fechaFormat,
+                  fechaRaw: i.fecha,
+                  fullFecha: fullFechaFormat,
+                  hora: horaFinal,
+              }
+              arrayFiltro.push(data);
+            }
+          
+     
+
+      arrayFiltro.sort((a, b) => {
+        var timestampA = new Date(a.fullFecha);
+        var timestampB = new Date(b.fullFecha);
+        return  timestampB - timestampA;
+      });
+      
+      let grupos = {};
+      //console.log('arrayFiltro',arrayFiltro)
+      arrayFiltro.forEach(obj => {
+          let clave = obj.title;     
+          if (grupos.hasOwnProperty(clave)) {   
+          grupos[clave].cantidad = (grupos[clave].cantidad || 1) + 1;
+          } else {
+          obj.cantidad = 1;
+          grupos[clave] = obj;
+          }      
+          });
+          
+          let resultado = Object.values(grupos);
+
+          resultado.sort((a, b) => {  
+          return  b.cantidad - a.cantidad;
+            });
+
+  dataTrazabilidad.value = resultado;
+  isLoading.value = false;      
+            
+  }    
+}
+
+onMounted(async()=>{
+  await getIntereses();
+  await getTrazabilidad();
+});
+
+const paginatedTrazabilidad = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+
+  return dataTrazabilidad.value.slice(start, end);
+});
+
+const nextPage = () => {
+  if (currentPage.value * itemsPerPage < dataTrazabilidad.value.length) currentPage.value++;
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
 
 const formatDate = function(date){
   let dateF;
@@ -224,10 +335,24 @@ const resolveUserProgressVariant = (progress) => {
       </VCard>
     </VCol>
     -->
+    
+
     <VCol cols="12">
       <!-- 👉 Activity timeline -->
-      <VCard title="Actividad del usuario">
-        <VCardText>
+      
+      <VCard>
+        <div class="pt-4 pl-4">
+        <VTabs v-model="currentTab" class="v-tabs-pill">
+          <VTab value="tab-actividad" >Actividad</VTab>
+          <VTab value="tab-intereses" >Intereses</VTab>
+          <VTab value="tab-trazabilidad" >Trazabilidad</VTab>
+       </VTabs>
+      </div>
+       
+        <VCardItem>
+          <VWindow v-model="currentTab">
+          <VWindowItem value="tab-actividad">      
+               
           <VTimeline
             density="compact"
             align="start"
@@ -277,6 +402,7 @@ const resolveUserProgressVariant = (progress) => {
                 </div>
               </div>
                -->
+             
             </VTimelineItem>
 
             <VTimelineItem dot-color="info" size="x-small">
@@ -305,7 +431,74 @@ const resolveUserProgressVariant = (progress) => {
               </p>
             </VTimelineItem>
           </VTimeline>
-        </VCardText>
+           
+        </VWindowItem>
+
+        <VWindowItem value="tab-intereses"> 
+          
+            <VTable v-if="dataIntereses.length" class="text-no-wrap">
+            <!-- 👉 table head -->
+            <thead>
+              <tr>             
+                <th scope="col">Título</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                v-for="item in dataIntereses"              
+                style="height: 3rem"
+              >
+                <!-- 👉 User -->
+                <td>
+                {{ item.title }}
+                </td>
+              </tr>
+            </tbody>          
+          </VTable>
+          <div v-else>No hay intereses que mostrar.</div>
+        </VWindowItem>
+
+        <VWindowItem value="tab-trazabilidad">
+            <div v-if="isLoading">Cargando datos..</div>
+            <VCardText v-else-if="dataTrazabilidad.length > 0">
+            <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+              <thead>
+                <tr>
+                  <th scope="col" >Página</th>
+                  <th scope="col">Cantidad</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr class="clickable" v-for="item in paginatedTrazabilidad">
+                  <td class="text-high-emphasis">
+                    {{ item.title ? item.title : item.url }}
+                  </td>
+                  <td class="text-medium-emphasis">
+                    {{ item.cantidad}}
+                  </td>
+                
+                </tr>
+              </tbody>
+            </VTable>
+            <div class="d-flex align-center justify-space-between botonescurrentPage">
+              <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
+              Página {{ currentPage }}
+              <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
+                :disabled="(currentPage * itemsPerPage) >= dataTrazabilidad.length">
+              </VBtn>
+            </div>
+          </VCardText>
+          <div v-else>No existen datos de trazabilidad</div>
+
+        </VWindowItem>
+        </VWindow>
+        </VCardItem>
+        
+         
+        
+
+       
       </VCard>
     </VCol>
     <!--
