@@ -43,7 +43,7 @@ async function getListasCorreos(){
         const consulta = await fetch('https://api.sendpulse.com/addressbooks', requestOptions);
         const consultaJson = await consulta.json();
         listasCorreos.value = consultaJson;
-        console.log('consulta 1 ', consultaJson);
+        //console.log('consulta 1 ', consultaJson);
         
     } catch (error) {
         console.error(error.message);   
@@ -84,7 +84,7 @@ async function getListaCampaigns(){
         const consulta = await fetch('https://api.sendpulse.com/campaigns', requestOptions);
         const consultaJson = await consulta.json();
         listaCampaigns.value = consultaJson;
-        console.log('consulta 2 ', consultaJson);
+        //console.log('consulta 2 ', consultaJson);
         
     } catch (error) {
         console.error(error.message);   
@@ -125,7 +125,7 @@ async function getListaPlantillas(){
         const consulta = await fetch('https://api.sendpulse.com/templates', requestOptions);
         const consultaJson = await consulta.json();
         listaPlantillas.value = consultaJson;
-        console.log('consulta 3 ', consultaJson);
+        //console.log('consulta 3 ', consultaJson);
         
     } catch (error) {
         console.error(error.message);   
@@ -166,7 +166,7 @@ async function getListaPlantillasSistema(){
         const consulta = await fetch('https://api.sendpulse.com/templates/?owner=sendpulse', requestOptions);
         const consultaJson = await consulta.json();
         listaPlantillasSistema.value = consultaJson;
-        console.log('consulta 4 ', consultaJson);
+        //console.log('consulta 4 ', consultaJson);
         
     } catch (error) {
         console.error(error.message);   
@@ -207,7 +207,7 @@ async function getListaPlantillasUser(){
         const consulta = await fetch('https://api.sendpulse.com/templates/?owner=me', requestOptions);
         const consultaJson = await consulta.json();
         listaPlantillasUser.value = consultaJson;
-        console.log('consulta 5 ', consultaJson);
+        //console.log('consulta 5 ', consultaJson);
         
     } catch (error) {
         console.error(error.message);   
@@ -248,7 +248,7 @@ async function getListaRemitentes(){
         const consulta = await fetch('https://api.sendpulse.com/senders', requestOptions);
         const consultaJson = await consulta.json();
         listaRemitentes.value = consultaJson;
-        console.log('consulta 6 ', consultaJson);
+        //console.log('consulta 6 ', consultaJson);
         
     } catch (error) {
         console.error(error.message);   
@@ -289,7 +289,7 @@ async function getListaBlacklist(){
         const consulta = await fetch('https://api.sendpulse.com/blacklist', requestOptions);
         const consultaJson = await consulta.json();
         listaBlacklist.value = consultaJson;
-        console.log('consulta 7 ', consultaJson);
+        //console.log('consulta 7 ', consultaJson);
         
     } catch (error) {
         console.error(error.message);   
