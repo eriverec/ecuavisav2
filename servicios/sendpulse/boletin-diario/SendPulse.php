@@ -27,7 +27,7 @@ class SendPulse {
         // $this->idTemplate = 148832;
         $this->horai = '06:00:00';
         $this->horaf = '22:00:00';
-        $this->listaUsuario = 574818;//564325;
+        $this->listaUsuario = 564325;//;574818
         $this->idTemplate = 148832;// ID Gracias:160050;
         $this->token = $this->initToken();
         $this->sender_email = "ecuavisainforma@ecuavisa.com";
@@ -86,6 +86,11 @@ class SendPulse {
 				"utm_source=SendPulse&utm_medium=Adicional3&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
 				"utm_source=SendPulse&utm_medium=CancelarSuscripcion&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter"
 			];
+
+		if(count($utm) < $id + 1){
+			return $link;
+		}
+		
 		// Obtener la URL actual
 	    $urlActual = $link;
 

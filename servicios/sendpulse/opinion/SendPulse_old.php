@@ -15,13 +15,17 @@ class SendPulse {
 	private $folder;
 
 	function __construct(){
+		/*"Gracias por formar parte de la familia de Ecuavisa.com";*/
 		$obtenerJsonSubject = $this->getAttrNewsletter(2);
 		$getFecha = date("Y-m-d, H:i:s", time());
 		$this->fechaDeEnvio = $this->obtenerFechaHoraFormateada("14:30:00");//send_date
 		$this->descripcion = $obtenerJsonSubject->descripcion;
 		$this->subject = str_replace("{{fecha}}", date("Y-m-d", time()), $obtenerJsonSubject->subject);//"🛑 Este es el legado de Agustín Intriago, el alcalde de Manta asesinado en un ataque armado";//"Ecuavisa Informa - ".$getFecha;
-		$this->nombreNeswletter = "Ecuavisa Informa - Opinión ".$getFecha;
+		$this->nombreNeswletter = "Ecuavisa Informa prueba boletin ".$getFecha;
 
+		// echo $this->nombreNeswletter;
+        // $this->listaUsuario = 574818;
+        // $this->idTemplate = 148832;
         $this->horai = '06:00:00';
         $this->horaf = '22:00:00';
         $this->listaUsuario = 564325;//565083;
@@ -29,6 +33,12 @@ class SendPulse {
         $this->token = $this->initToken();
         $this->folder = "opinion";
         $this->sender_email = "ecuavisainforma@ecuavisa.com";
+
+        // // Obtener el número del mes
+		// $numeroMes = date("n");
+		// // Obtener el nombre del mes en español
+		// $nombreMes = $this->obtenerMesEnEspanol($numeroMes);
+		// $fechaFormateada =  $nombreMes. " ". date("d") . ", " . date("Y");
 
 		// Crear un objeto DateTime con la fecha actual
 		$fecha = new DateTime();
@@ -49,28 +59,55 @@ class SendPulse {
 		$this->fechaFormateada = "$diaSemana $dia de $mes de $anio";
     }
 
-    private function mensajeError($esJson = false, $mensaje = ""){
-    	if($mensaje == ""){
-    		$mensaje = "Se ha producido una excepción: La API no contiene notas, todos los procesos se han detenido.";
-    	}
-    	if($esJson){
-    		echo '{"resp":false,"mensaje":"'.$mensaje.'"}';
-    		exit();
-			return false;
-    	}
+    private function obtenerFechaHoraFormateada($hora) {
+	    $fechaHoraActual = time(); // Obtener la fecha y hora actual en formato Unix (timestamp)
+	    $horaActual = date('H:i:s', $fechaHoraActual); // Obtener la hora actual en formato H:i:s
 
-    	echo '<div style="
-		    color: #721c24;
-		    background-color: #f8d7da;
-		    padding: 20px 10px;
-		    text-align: center;
-		"><b>'.$mensaje.'
-		</b><br> Todos los procesos se han detenido.</div>';
-		exit();
-		return false;
-    }
+	    // Obtener la hora deseada (07:00:00 en este caso) y combinarla con la fecha actual
+	    $fechaHoraDeseada = date('Y-m-d') . ' '.$hora;
 
-    //Nunca cambia por que todos los newsletter estarán en ese archivo json
+	    // Comparar la hora actual con la hora deseada
+	    if ($horaActual >= $hora) {
+	        // Si la hora actual es mayor o igual a las 07:00:00, incrementamos la fecha en 1 día
+	        $fechaHoraDeseada = date('Y-m-d', strtotime('+1 day')) . ' '.$hora;
+	    }
+
+	    return $fechaHoraDeseada;
+	}
+
+	private function UTMLinks($id, $link){
+		$utm = [
+			"utm_source_ecuavisa=Prueba",
+			// "utm_source=SendPulse&utm_medium=Nota1&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+			// "utm_source=SendPulse&utm_medium=Nota2&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+			// "utm_source=SendPulse&utm_medium=Nota3&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+			// "utm_source=SendPulse&utm_medium=Nota4&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+			// "utm_source=SendPulse&utm_medium=Nota5&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+			// "utm_source=SendPulse&utm_medium=Adicional1&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+			// "utm_source=SendPulse&utm_medium=Adicional2&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+			// "utm_source=SendPulse&utm_medium=Adicional3&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter",
+			// "utm_source=SendPulse&utm_medium=CancelarSuscripcion&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter"
+		];
+
+		if(count($utm) < $id + 1){
+			return "";
+		}
+		
+		// Obtener la URL actual
+	    $urlActual = $link;
+
+	    // Verificar si la URL ya tiene parámetros
+	    if (strpos($urlActual, '?') !== false) {
+	        // Si ya tiene parámetros, agregamos los UTM con un '&'
+	        $urlActual .= '&' . $utm[$id];
+	    } else {
+	        // Si no tiene parámetros, agregamos los UTM con un '?'
+	        $urlActual .= '?' . $utm[$id];
+	    }
+	    return $urlActual;
+	}
+
+	//Nunca cambia por que todos los newsletter estarán en ese archivo json
 	private function getAttrNewsletter($id){
         $curl = curl_init();
 		curl_setopt_array($curl, array(
@@ -88,52 +125,7 @@ class SendPulse {
 		return json_decode($response);
     }
 
-    private function obtenerFechaHoraFormateada($hora) {
-	    $fechaHoraActual = time(); // Obtener la fecha y hora actual en formato Unix (timestamp)
-	    $horaActual = date('H:i:s', $fechaHoraActual); // Obtener la hora actual en formato H:i:s
-	    // Obtener la hora deseada (07:00:00 en este caso) y combinarla con la fecha actual
-	    $fechaHoraDeseada = date('Y-m-d') . ' '.$hora;
-	    // Comparar la hora actual con la hora deseada
-	    if ($horaActual >= $hora) {
-	        // Si la hora actual es mayor o igual a las 07:00:00, incrementamos la fecha en 1 día
-	        $fechaHoraDeseada = date('Y-m-d', strtotime('+1 day')) . ' '.$hora;
-	    }
-	    return $fechaHoraDeseada;
-	}
-
-	private function UTMLinks($id, $link){
-		$utm = [
-			"utm_source=SendPulse&utm_medium=bannerHeader&utm_campaign=N_CodigoRojas&utm_id=Newsletter",//0
-			"utm_source=SendPulse&utm_medium=SeccionPolitica&utm_campaign=N_CodigoRojas&utm_id=Newsletter",//1
-			"utm_source=SendPulse&utm_medium=es&utm_campaign=N_CodigoRojas&utm_id=Newsletter",//2
-			"utm_source=SendPulse&utm_medium=noEs&utm_campaign=N_CodigoRojas&utm_id=Newsletter",//3
-			"utm_source=SendPulse&utm_medium=noEs&utm_campaign=N_CodigoRojas&utm_id=Newsletter",//4
-			"utm_source=SendPulse&utm_medium=Nota1&utm_campaign=N_CodigoRojas&utm_id=Newsletter",//5
-			"utm_source=SendPulse&utm_medium=Nota2&utm_campaign=N_CodigoRojas&utm_id=Newsletter",//6
-			"utm_source=SendPulse&utm_medium=Nota3&utm_campaign=N_CodigoRojas&utm_id=Newsletter"//7
-		];
-
-		//utm_source_ecuavisa=Prueba
-		if(count($utm) < $id + 1){
-			return $link;
-		}
-		
-		// Obtener la URL actual
-	    $urlActual = $link;
-
-	    // Verificar si la URL ya tiene parámetros
-	    if (strpos($urlActual, '?') !== false) {
-	        // Si ya tiene parámetros, agregamos los UTM con un '&'
-	        $urlActual .= '&' . $utm[$id];
-	    } else {
-	        // Si no tiene parámetros, agregamos los UTM con un '?'
-	        $urlActual .= '?' . $utm[$id];
-	    }
-
-	    return $urlActual;
-	}
-
-	private function logToFile($functionName, $data) {
+    private function logToFile($functionName, $data) {
 	    // Obtener la fecha y hora actual en el formato deseado
 	    $fechaHoraActual = date('Y-m-d H:i:s');
 	    
@@ -257,7 +249,23 @@ class SendPulse {
     }
 
     private function getURLVerNavegador(){
-		$link = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/email.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter.'&';
+		//return '<a style="text-decoration:none; color:#000" href="#">Quiero ver en mi navegador</a>';
+        // $curl = curl_init();
+		// curl_setopt_array($curl, array(
+		//   CURLOPT_URL => 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/api.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter,
+		//   CURLOPT_RETURNTRANSFER => true,
+		//   CURLOPT_ENCODING => '',
+		//   CURLOPT_MAXREDIRS => 10,
+		//   CURLOPT_TIMEOUT => 0,
+		//   CURLOPT_FOLLOWLOCATION => true,
+		//   CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+		//   CURLOPT_CUSTOMREQUEST => 'GET',
+		// ));
+
+		// $response = curl_exec($curl);
+
+		// curl_close($curl);
+		$link = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/email.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter.'';
 
 		return '<label style="display:none">'.$this->descripcion.'. Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label><a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none; color:#000" href="'.$link.'">Quiero ver en mi navegador</a>';
     }
@@ -386,20 +394,9 @@ class SendPulse {
 
 		curl_close($curl);
 		$dataNotas = json_decode($response);
-		if(!isset($dataNotas)){
-			$this->mensajeError();
-			exit();
-		}
-
 		$rssNotas = $dataNotas->rss;
 		$channel = $rssNotas->channel;
 		$noticias = [];
-
-		if(!isset($channel->item)){
-			$this->mensajeError();
-			exit();
-		}
-
 		if(is_array($channel->item)){
 			foreach ($channel->item as $key => $value) {
 				$image = "";
@@ -477,10 +474,10 @@ class SendPulse {
 		}
 
 		$firstArray = array_slice($noticias, 0, 1);
-		$secondArray = array_slice($noticias, 1);
+		$secondArray = array_slice($noticias, 2);
 		$totalNoticia = count($noticias);
 		
-		$i_1 = 1;
+		$i_1 = 0;
 		foreach ($firstArray as $key => &$v) {
 			$v["link"] = $this->UTMLinks($i_1, $v["link"]);
 			if($totalNoticia > 4){
@@ -489,14 +486,13 @@ class SendPulse {
 			$i_1 = $i_1 + 1;
 		}
 
-		$Notas_3 = 5;
-
 		foreach ($secondArray as $key => &$v) {
-			$v["link"] = $this->UTMLinks($Notas_3, $v["link"]);
-			$v["image"] = $this->cropImagen($v["image"], 250, 180, 80);
+			$v["link"] = $this->UTMLinks($i_1, $v["link"]);
+			if($totalNoticia > 4){
+				$v["image"] = $this->cropImagen($v["image"], 250, 225, 80);
+			}
+			
 			$i_1 = $i_1 + 1;
-
-			$Notas_3 = $Notas_3 + 1;
 		}
 
 		$finalArray = array($firstArray, $secondArray);
@@ -723,6 +719,34 @@ class SendPulse {
         }
         return [];
     }
+
+    public function getRanking($idarticle = 5117800){
+        $value = $this->getArticle($idarticle);
+        $image = $this->getDetail($value->article->content->component, "Image");
+        $titulo = $this->getDetail($value->article->content->component, "Headline");
+        $Subheadline = $this->getDetail($value->article->content->component, "Subheadline");
+        $link = $value->article->metadata->link[0]->href;
+        $subseccion = $this->getDetailSubseccion($value->article->metadata->sections->section);
+        $tituloSubseccion = $subseccion->name;
+        $linkSubseccion = "https://www.ecuavisa.com$subseccion->url";
+        
+        $descripcion = $this->getDetail($value->article->content->component, "Text");
+        $descripcion_formateado = $descripcion->__text;
+        $descripcion = $descripcion_formateado;
+        $descripcionFinal = str_replace('<a ', '<a style="color: #444;" ', $descripcion);
+        $noticias = [
+            "titulo" => $titulo->__text,
+            "subheadline" => (isset($Subheadline->__text)?$Subheadline->__text:""),
+            "link" => $link,
+            "descripcion" => $descripcionFinal,
+            "subseccion" => [
+                "titulo" => str_replace('-', ' ', strtoupper($tituloSubseccion)),
+                "link" => $linkSubseccion
+            ],
+            "image" => $image->remoteContent->href
+        ];
+        return $noticias;
+    }
     
     private function getImgParrafo($dataImg){
         if(!is_array($dataImg)){
@@ -762,14 +786,9 @@ class SendPulse {
         </table>';
     }
 
-    private function getDetail_2($list, $getNota){
+    private function getDetail_2($list, $getFristNota){
         $content = [];
         $titulo = "";
-        $getFristNota = $getNota[0][0];
-        $bloque3 = $getNota[1];
-
-        // echo count($bloque3);
-        $getOpinionesBloquesURLVar = $this->getOpinionesBloquesURL($list);
         if(is_array($list)){
             foreach ($list as $key => $value) {
                 if($value->name == "Image"){
@@ -786,17 +805,15 @@ class SendPulse {
                     /*<a style="text-decoration:none;color: #311db3;font-weight: 700;font-size: 18px;" href="#">
 				        				<p style="padding:0px;margin:0px">OPINIÓN</p>
 				        			</a>*/
-
-				        			/*<tr>
+                    $content[] = '
+                    	<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
+                    		<tr>
 				        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;padding-top: 20px;padding-bottom: 0px;">
 				        			<p style="text-decoration:none;color: #311db3;font-weight: 700;font-size: 18px;padding:0px;margin:0px">
 				        				OPINIÓN
 				        			</p>
 				        		<td>
-				        	<tr>*/
-                    $content[] = '
-                    	<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
-                    		
+				        	<tr>
 				        	<tr>
 				        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
 				        			<a style="text-decoration:none;color: black;" href="'.$getFristNota["link"].'">
@@ -822,7 +839,7 @@ class SendPulse {
 			        	</table>';
                 }
                 if($value->name == "Quotecv"){
-                	$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px;line-height:1.2;width:100%;padding-left: 20px;padding-right: 20px;display: block;" border="0" width="100%">
+                	$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%">
 					   <tbody>
 					      <tr style="border-color:transparent">
 					         <th width="55" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc no-responsive " align="left" valign="top">
@@ -1059,178 +1076,8 @@ class SendPulse {
                     
                 }
             }
-
-            $content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;padding-bottom:20px" border="0" width="100%"><tbody><tr style="border-color:transparent"><td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top"><table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%"><tbody><tr style="border-color:transparent"><th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top"><table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size:14px; line-height:1.2; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell padding-top-0" width="570" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:0; padding-bottom:25px" valign="top"><table cellpadding="0" border="0" cellspacing="0" align="left" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-color:#ddd; border-width:1px; border-style:solid; border:0; width:auto !important; border-radius:5px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; padding:0; border-width:0; border-style:none; border:0; align:left; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; padding:0; border:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="https://www.ecuavisa.com/noticias/">Ver otras noticias</a></td></tr></tbody></table></td></tr></tbody></table><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table></td></tr></tbody></table>';
-            $content[] = $getOpinionesBloquesURLVar;
-            $content[] = $this->getBloque3($bloque3);
         }
         return [$content, $titulo];
-    }
-
-    private function getOpinionesBloquesURL($list){
-        $content = [];
-        $titulosOpinion = [];
-		$titulosUrl = [];
-		$bloquesN = [];
-		$html = '';
-		$existe = false;
-		$coloresList = ["#00a1d3", "#2927b9"];
-		if(is_array($list)){
-            foreach ($list as $key => $value) {
-            	if ($value->name === "HTML_Text") {
-			        $titulosOpinion[] = $value->__text;
-					$existe = true;
-			    }
-            }
-        }
-        if(!$existe){
-        	return "";
-        }
-        
-        $ecuadirEsList = explode("*", $titulosOpinion[0]);
-        $ecuadirNoEsList = explode("*", $titulosOpinion[1]);
-
-        // print_r($ecuadirEsList);
-
-        $ecuadorEs = '';
-        $ecuadorEs.= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; background-color:'.$coloresList[0].'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#fff; margin:0; overflow:hiddenpadding-right: 15px;
-	    padding-left: 0px;
-	    padding-right: 0px;
-	    padding-top: 0px;
-	    padding-bottom: 0px;" border="0" width="100%">';
-    	$ecuadorEs.= '<tbody>';
-    	$ecuadorEs.= '<tr>';
-
-    	$ecuadorEs.= '<td>';
-    	$ecuadorEs.= '  <div style="display:block;text-align:center;background-color:'.$coloresList[0].';padding-left:20px;padding-right:20px;padding-bottom:15px;padding-top:20px">
-		            		<p style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-bottom:20px">
-		            			<span style="font-size: 20px;">
-		            				<strong>Ecuador hoy es un mejor país por...</strong>
-		            			</span>
-		            		</p>';
-		for ($i=1; $i < count($ecuadirEsList); $i++) {
-
-			$dataJsonList = explode("https://", $ecuadirEsList[$i]);
-
-			$ecuadorEs.= '  <a href="'.$this->UTMLinks(2, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;font-style: italic;line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
-		            			<span>'.$dataJsonList[0].'.</span>
-		            		</a>';
-		}
-	    $ecuadorEs.=   '</div>';
-    	$ecuadorEs.= '</td>';
-    	$ecuadorEs.= '</tr>';
-    	$ecuadorEs.= '</tbody>';
-    	$ecuadorEs.= '</table>';
-
-
-
-
-        $ecuadorNoEs = '';
-		$ecuadorNoEs.= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; background-color:'.$coloresList[1].'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#fff; margin:0; overflow:hiddenpadding-right: 15px;
-	    padding-left: 0px;
-	    padding-right: 0px;
-	    padding-top: 0px;
-	    padding-bottom: 0px;" border="0" width="100%">';
-    	$ecuadorNoEs.= '<tbody>';
-    	$ecuadorNoEs.= '<tr>';
-    	$ecuadorNoEs.= '<td>';
-    	$ecuadorNoEs.= '  <div style="display:block;text-align:center;background-color:'.$coloresList[1].';padding-left:20px;padding-right:20px;padding-bottom:15px;padding-top:20px">
-		            		<p style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-bottom:20px">
-		            			<span style="font-size: 20px;">
-		            				<strong>Ecuador hoy no es un mejor país por...</strong>
-		            			</span>
-		            		</p>';
-
-		for ($i=1; $i < count($ecuadirNoEsList); $i++) {
-
-			$dataJsonList = explode("https://", $ecuadirNoEsList[$i]);
-
-			$ecuadorNoEs.= '  <a href="'.$this->UTMLinks(3, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;font-style: italic;line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
-		            			<span>'.$dataJsonList[0].'.</span>
-		            		</a>';
-		}
-
-	    $ecuadorNoEs.=   '</div>';
-    	$ecuadorNoEs.= '</td>';
-    	$ecuadorNoEs.= '</tr>';
-    	$ecuadorNoEs.= '</tbody>';
-    	$ecuadorNoEs.= '</table>';
-
-        return $ecuadorEs.$ecuadorNoEs;
-    }
-
-    private function getBloque3($data){
-    	$html = '';
-    	$html .= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;padding-top:20px;display:block" border="0" width="100%"><tbody><tr style="border-color:transparent"><td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top"><table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%"><tbody><tr style="border-color:transparent"><th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top"><table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_48" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; margin:0; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top"><p style="line-height:1; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><span style="color: #000000;"><strong><span style="font-size: 20px;font-style: italic;">También te puede interesar...</span></strong></span></p><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table></td></tr></tbody></table>';
-    	for ($i=0; $i < count($data) ; $i++) { 
-    		$b = $data[$i];
-
-    		$html .= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%">
-			   <tbody>
-			      <tr style="border-color:transparent">
-			         <td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top">
-			            <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%">
-			               <tbody>
-			                  <tr style="border-color:transparent">
-			                     <th width="250" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc no-responsive " align="left" valign="top">
-			                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
-			                           <tbody>
-			                              <tr style="border-color:transparent">
-			                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
-			                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_22" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; margin:0; overflow:hidden">
-			                                       <tbody>
-			                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
-			                                             <td class="content-cell" width="220" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top">
-			                                                <p canonicalurl="'.$b['link'].'" idart="5741040" style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-top: 5px;"><span style="font-size: 20px; color: #000000;"><strong><span mlnid="idcon1084747order30"><a href="'.$b['link'].'" style="text-decoration:none; color:#000">
-			                                                '.$b['titulo'].'</a></span></strong></span></p>
-			                                                <div style="font-size:14px; line-height:1.2; clear:both"></div>
-			                                             </td>
-			                                          </tr>
-			                                       </tbody>
-			                                    </table>
-			                                 </td>
-			                              </tr>
-			                           </tbody>
-			                        </table>
-			                     </th>
-			                     <th width="250" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc no-responsive " align="left" valign="top">
-			                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
-			                           <tbody>
-			                              <tr style="border-color:transparent">
-			                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
-			                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_27_element_0" style="border-collapse:separate; font-size:14px; line-height:1.2; overflow:hidden">
-			                                       <tbody>
-			                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
-			                                             <td class="content-cell" width="220" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:0px" valign="top">
-			                                                <div id="wout_block_27_element_0" style="font-size:14px; line-height:1.2; width:100%; height:145; display:block; text-align:center" width="100%" height="145" align="center">
-			                                                   <center>
-			                                                   	<a href="'.$b['link'].'" style="text-decoration:none; color:#000">
-			                                                      <img border="0" width="220" height="auto" class="desktop  sp-img small_img " align="center" alt="'.$b['titulo'].'" src="'.$b['image'].'" iout_block_27_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; display:block; -ms-interpolation-mode:bicubic"><!--[if !mso]><!-->
-			                                                      <div style="font-size:14px; line-height:1.2; mso-hide:all"><img border="0" width="100%" height="auto" class="mobile  sp-img small_img " align="center" alt="'.$b['titulo'].'" src="'.$b['image'].'" iout_block_27_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:250px !important"></div>
-			                                                      <!--<![endif]-->
-			                                                    </a>
-			                                                   </center>
-			                                                </div>
-			                                                <div style="font-size:14px; line-height:1.2; clear:both"></div>
-			                                             </td>
-			                                          </tr>
-			                                       </tbody>
-			                                    </table>
-			                                 </td>
-			                              </tr>
-			                           </tbody>
-			                        </table>
-			                     </th>
-			                  </tr>
-			               </tbody>
-			            </table>
-			         </td>
-			      </tr>
-			   </tbody>
-			</table>';
-    	}
-
-    	return $html;
     }
 
     public function getRanking_2($idarticle, $getFristNota){
@@ -1239,56 +1086,101 @@ class SendPulse {
         return $data;
     }
 
-    private function htmlTemplate(){
-    	$getFecha = date("Y-m-d, H:i:s", time());
-    	$nombreNeswletter = $this->nombreNeswletter;
-		$idTemplate = $this->idTemplate;//148832;//TEMPLATE CORREO
-		$list_id = $this->listaUsuario;//LISTA DE USUARIOS
-		$notas = $this->getNotasNewTemplate('https://www.ecuavisa.com/rss/boletin-opinion.json');
-
-		$template = $this->getTemplate($idTemplate);
-		$htmlTemplate = $this->base64ToHTML($template->body);
-
-
-		$lastSegment = (explode("/", $notas[0][0]["link"])); // Obtener el último segmento
-		$textoSinParametros = explode("?", end($lastSegment));
-		$ecSegment = explode("-", $textoSinParametros[0]);
-		$numbersOnly = preg_replace("/[^0-9]/", "", end($ecSegment));// Obtener id de la nota capturada por la api de opinión
-
-
-		$articulo = $this->getRanking_2($numbersOnly, $notas)[0];
-		$bloque_noticias = "";
-		for ($i=0; $i < count($articulo) ; $i++) { 
-			$bloque_noticias .= $articulo[$i]; 
-		}
-		$bodyGenerar = str_replace("{{contenido}}", $bloque_noticias, $htmlTemplate);
-
-		$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
-		$bodyGenerar = str_replace("{{date}}", $this->fechaFormateada , $bodyGenerar);
-		$bodyGenerar = str_replace("{{linkNavegador}}", $this->getURLVerNavegador() , $bodyGenerar);
-		$bodyGenerar = str_replace("{{_nlid}}", $list_id."&name=".$nombreNeswletter."&utm_source=SendPulse&utm_medium=CancelarSuscripcion&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter" , $bodyGenerar);
-		$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
-		$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
-		/*$name, $body, $list_id*/
-		$bodyContent = "";
-        if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $bodyGenerar, $matches)) {
-		    $bodyContent = $matches[1];
-		}
-
-		return [$bodyContent, $notas];
-    }
-
     public function view(){
     	if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     		$getFecha = date("Y-m-d, H:i:s", time());
 
-    		$template = $this->htmlTemplate();
-			$bodyContent = $template[0];
-			$notas = $template[1];
 			$nombreNeswletter = $this->nombreNeswletter;
+			$idTemplate = $this->idTemplate;//148832;//TEMPLATE CORREO
 			$list_id = $this->listaUsuario;//LISTA DE USUARIOS
+			// $numUsers = $this->getListUser($list_id);
+			$numUsers = [0, 1];
+			$notas = $this->getNotasNewTemplate('https://www.ecuavisa.com/rss/boletin-opinion.json');
 
-			if(count($notas) > 0){
+			$template = $this->getTemplate($idTemplate);
+			$htmlTemplate = $this->base64ToHTML($template->body);
+
+
+
+			// $bloque_noticias = "";
+			// foreach ($notas[0] as $key => $nota) { 
+			// 	$bloque_noticias .= $this->getTemplatePHP($nota, "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/".$this->folder."/portada.php"); 
+			// }
+			// $bodyGenerar = str_replace("{{ bloque_noticias }}", $bloque_noticias, $htmlTemplate);
+
+
+
+			// $bloque_2_verticales = "";
+			// // foreach ($notas[1] as $key => $nota) { 
+			// $bloque_2_verticales .= $this->getTemplatePHP($notas[1], "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/".$this->folder."/2-notas.php"); 
+			// // }
+			// $bodyGenerar = str_replace("{{ bloque_2_verticales }}", $bloque_2_verticales, $bodyGenerar);
+
+
+			// $bloque_2_horizontales = "";
+			// // foreach ($notas[1] as $key => $nota) { 
+			// $bloque_2_horizontales .= $this->getTemplatePHP($notas[2], "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/".$this->folder."/2-notas-abajo.php"); 
+			// // }
+			// $bodyGenerar = str_replace("{{ bloque_2_horizontales }}", $bloque_2_horizontales, $bodyGenerar);
+
+			// $bloque_3_horizontales_col_1 = "";
+			// $bloque_3_horizontales_col_1 .= $this->getTemplatePHP( 
+			// 	$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-televistazo-19.json") , 
+			// 	"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/".$this->folder."/ultimaseccionauzl.php"
+			// ); 
+			// $bodyGenerar = str_replace("{{noticiero_19}}", $bloque_3_horizontales_col_1, $bodyGenerar);
+
+			// $bloque_3_horizontales_col_2 = "";
+			// $bloque_3_horizontales_col_2 .= $this->getTemplatePHP( 
+			// 	$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-televistazo-13.json") , 
+			// 	"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/".$this->folder."/ultimaseccionauzl.php"
+			// ); 
+			// $bodyGenerar = str_replace("{{noticiero_13}}", $bloque_3_horizontales_col_2, $bodyGenerar);
+
+			// $bloque_3_horizontales_col_3 = "";
+			// $bloque_3_horizontales_col_3 .= $this->getTemplatePHP( 
+			// 	$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-contacto-directo.json") , 
+			// 	"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/".$this->folder."/ultimaseccionauzl.php"
+			// ); 
+			// $bodyGenerar = str_replace("{{contacto_directo}}", $bloque_3_horizontales_col_3, $bodyGenerar);
+
+			$lastSegment = (explode("/", $notas[0][0]["link"])); // Obtener el último segmento
+			$textoSinParametros = explode("?", end($lastSegment));
+			$ecSegment = explode("-", $textoSinParametros[0]);
+			$numbersOnly = preg_replace("/[^0-9]/", "", end($ecSegment));// Obtener id de la nota capturada por la api de opinión
+
+
+			$articulo = $this->getRanking_2($numbersOnly, $notas[0][0])[0];
+			$bloque_noticias = "";
+			for ($i=0; $i < count($articulo) ; $i++) { 
+				$bloque_noticias .= $articulo[$i]; 
+			}
+			$bodyGenerar = str_replace("{{contenido}}", $bloque_noticias, $htmlTemplate);
+
+
+
+			$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
+			$bodyGenerar = str_replace("{{date}}", $this->fechaFormateada , $bodyGenerar);
+			$bodyGenerar = str_replace("{{linkNavegador}}", $this->getURLVerNavegador() , $bodyGenerar);
+			$bodyGenerar = str_replace("{{_nlid}}", $list_id."&name=".$nombreNeswletter."&utm_source=SendPulse&utm_medium=CancelarSuscripcion&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter" , $bodyGenerar);
+			$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
+			$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
+			/*$name, $body, $list_id*/
+			$bodyContent = "";
+	        if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $bodyGenerar, $matches)) {
+			    $bodyContent = $matches[1];
+			}
+
+			// echo ($bodyContent);
+			// exit();
+
+			// if(isset($_GET["view"])){
+			// 	echo ($bodyContent);
+			// 	exit();
+			// }
+
+
+			if(count($notas) > 0 && count($numUsers) > 0){
 				if($this->estaEnRangoHorario()){
 					$resp = $this->armarCorreo($nombreNeswletter, $this->HtmlToBase64($bodyContent), $list_id);
 	        		echo json_encode(["respSendPulse"=>$resp,"resp"=>true, "message"=>"La campaña fue creada en la fecha ".$getFecha]);
@@ -1317,21 +1209,111 @@ class SendPulse {
 			echo '<b>ID Lista de usuario: </b>'.$this->listaUsuario;
 			echo '<br>';
 			echo '<b>Sender email: </b>'.$this->sender_email;
-			// echo '<br>';
-			// echo '<b>Fecha de envío: </b>'.$this->fechaDeEnvio;
+			echo '<br>';
+			echo '<b>Fecha de envío: </b>'.$this->fechaDeEnvio;
 			echo '<br>';
 			echo '<b>Nombre de la plantilla: </b>'.$this->nombreNeswletter;
 			echo '</div>';
 
     		$getFecha = date("Y-m-d, H:i:s", time());
 
-    		$template = $this->htmlTemplate();
-			$bodyContent = $template[0];
-			$notas = $template[1];
 			$nombreNeswletter = $this->nombreNeswletter;
+			$idTemplate = $this->idTemplate;//148832;//TEMPLATE CORREO
 			$list_id = $this->listaUsuario;//LISTA DE USUARIOS
+			// $numUsers = $this->getListUser($list_id);
+			$numUsers = [0, 1];
+			$notas = $this->getNotasNewTemplate('https://www.ecuavisa.com/rss/boletin-opinion.json');
+
+			$template = $this->getTemplate($idTemplate);
+			$htmlTemplate = $this->base64ToHTML($template->body);
+
+
+
+			// $bloque_noticias = "";
+			// foreach ($notas[0] as $key => $nota) { 
+			// 	$bloque_noticias .= $this->getTemplatePHP($nota, "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/".$this->folder."/portada.php"); 
+			// }
+			// $bodyGenerar = str_replace("{{ bloque_noticias }}", $bloque_noticias, $htmlTemplate);
+
+
+
+			// $bloque_2_verticales = "";
+			// // foreach ($notas[1] as $key => $nota) { 
+			// $bloque_2_verticales .= $this->getTemplatePHP($notas[1], "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/".$this->folder."/2-notas.php"); 
+			// // }
+			// $bodyGenerar = str_replace("{{ bloque_2_verticales }}", $bloque_2_verticales, $bodyGenerar);
+
+
+			// $bloque_2_horizontales = "";
+			// // foreach ($notas[1] as $key => $nota) { 
+			// $bloque_2_horizontales .= $this->getTemplatePHP($notas[2], "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/".$this->folder."/2-notas-abajo.php"); 
+			// // }
+			// $bodyGenerar = str_replace("{{ bloque_2_horizontales }}", $bloque_2_horizontales, $bodyGenerar);
+
+
+
+
+
+
+
+			// $bloque_3_horizontales_col_1 = "";
+			// $bloque_3_horizontales_col_1 .= $this->getTemplatePHP( 
+			// 	$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-televistazo-19.json") , 
+			// 	"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/".$this->folder."/ultimaseccionauzl.php"
+			// ); 
+			// $bodyGenerar = str_replace("{{noticiero_19}}", $bloque_3_horizontales_col_1, $bodyGenerar);
+
+			// $bloque_3_horizontales_col_2 = "";
+			// $bloque_3_horizontales_col_2 .= $this->getTemplatePHP( 
+			// 	$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-televistazo-13.json") , 
+			// 	"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/".$this->folder."/ultimaseccionauzl.php"
+			// ); 
+			// $bodyGenerar = str_replace("{{noticiero_13}}", $bloque_3_horizontales_col_2, $bodyGenerar);
+
+			// $bloque_3_horizontales_col_3 = "";
+			// $bloque_3_horizontales_col_3 .= $this->getTemplatePHP( 
+			// 	$this->getNotasFormatRespaldo("https://www.ecuavisa.com/rss/nl-contacto-directo.json") , 
+			// 	"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/".$this->folder."/ultimaseccionauzl.php"
+			// ); 
+			// $bodyGenerar = str_replace("{{contacto_directo}}", $bloque_3_horizontales_col_3, $bodyGenerar);
+
+			// header('Content-type: application/json');
+
+			$lastSegment = (explode("/", $notas[0][0]["link"])); // Obtener el último segmento
+			$textoSinParametros = explode("?", end($lastSegment));
+			$ecSegment = explode("-", $textoSinParametros[0]);
+			$numbersOnly = preg_replace("/[^0-9]/", "", end($ecSegment));// Obtener id de la nota capturada por la api de opinión
+
+
+			$articulo = $this->getRanking_2($numbersOnly, $notas[0][0])[0];
+			$bloque_noticias = "";
+			for ($i=0; $i < count($articulo) ; $i++) { 
+				$bloque_noticias .= $articulo[$i]; 
+			}
+			$bodyGenerar = str_replace("{{contenido}}", $bloque_noticias, $htmlTemplate);
+
+
+
+			$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
+			$bodyGenerar = str_replace("{{date}}", $this->fechaFormateada , $bodyGenerar);
+			$bodyGenerar = str_replace("{{linkNavegador}}", $this->getURLVerNavegador() , $bodyGenerar);
+			$bodyGenerar = str_replace("{{_nlid}}", $list_id."&name=".$nombreNeswletter."&utm_source=SendPulse&utm_medium=CancelarSuscripcion&utm_campaign=N_EcuavisaInforma&utm_id=Newsletter" , $bodyGenerar);
+			$bodyGenerar = str_replace("Enviado a través de", "" , $bodyGenerar);
+			$bodyGenerar = str_replace('<img class="small_img" style="height:32px !important; line-height:100%; outline:0; text-decoration:none; border:0; width:132px !important" src="https://img.stat-pulse.com/img/my/emailservice/sendpulse-reward-logo-green.png" alt="SendPulse" border="0" vspace="2" width="132" height="32px !important">', "" , $bodyGenerar);
+			/*$name, $body, $list_id*/
+			$bodyContent = "";
+	        if (preg_match('/<body[^>]*>(.*?)<\/body>/is', $bodyGenerar, $matches)) {
+			    $bodyContent = $matches[1];
+			}
+
+
+
+
+			
 
 			echo $bodyContent;
+
+			// $this->logToFile("Ver contenido", array("accion" => "Ver correo"));
 			exit();
     	}
     	echo "No tienes acceso";
