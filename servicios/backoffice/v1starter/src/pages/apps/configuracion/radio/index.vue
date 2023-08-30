@@ -250,7 +250,7 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
 </script>
 
 <template>
-
+<section>
     <VSnackbar
         v-model="success"
         color="success"
@@ -519,7 +519,7 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
         </VWindowItem>
     </VWindow>
   
-			
+</section>			
            
             
   			

@@ -1,7 +1,6 @@
 <script setup>
 import { useUserListStore } from '@/views/apps/user/useUserListStore'
 import UserBioPanel from '@/views/apps/user/view/UserBioPanel.vue'
-import UserIntereses from '@/views/apps/user/view/UserIntereses.vue'
 import UserNotifications from '@/views/apps/user/view/UserNotifications.vue'
 import UserSugerencias from '@/views/apps/user/view/UserSugerencias.vue'
 import UserTabOverview from '@/views/apps/user/view/UserTabOverview.vue'
@@ -122,7 +121,7 @@ const reloadP = () =>  {
   </VCol>
   
     <UserSugerencias/>
-    <UserIntereses/>
+    
     
  
     <!--
