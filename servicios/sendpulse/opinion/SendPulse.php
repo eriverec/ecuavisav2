@@ -24,7 +24,7 @@ class SendPulse {
 
         $this->horai = '06:00:00';
         $this->horaf = '22:00:00';
-        $this->listaUsuario = 564325;//565083;
+        $this->listaUsuario = 555955;//565083;
         $this->idTemplate = 162582;// ID Gracias:160050;
         $this->token = $this->initToken();
         $this->folder = "opinion";
@@ -1060,7 +1060,7 @@ class SendPulse {
                 }
             }
 
-            $content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;padding-bottom:20px" border="0" width="100%"><tbody><tr style="border-color:transparent"><td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top"><table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%"><tbody><tr style="border-color:transparent"><th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top"><table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size:14px; line-height:1.2; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell padding-top-0" width="570" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:0; padding-bottom:25px" valign="top"><table cellpadding="0" border="0" cellspacing="0" align="left" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-color:#ddd; border-width:1px; border-style:solid; border:0; width:auto !important; border-radius:5px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; padding:0; border-width:0; border-style:none; border:0; align:left; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; padding:0; border:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="https://www.ecuavisa.com/noticias/">Ver otras noticias</a></td></tr></tbody></table></td></tr></tbody></table><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table></td></tr></tbody></table>';
+            $content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;padding-bottom:20px" border="0" width="100%"><tbody><tr style="border-color:transparent"><td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top"><table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%"><tbody><tr style="border-color:transparent"><th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top"><table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size:14px; line-height:1.2; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell padding-top-0" width="570" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:0; padding-bottom:25px" valign="top"><table cellpadding="0" border="0" cellspacing="0" align="left" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-color:#ddd; border-width:1px; border-style:solid; border:0; width:auto !important; border-radius:5px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; padding:0; border-width:0; border-style:none; border:0; align:left; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; padding:0; border:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="https://www.ecuavisa.com/noticias/?utm_source=SendPulse&utm_medium=SeccionPolitica&utm_campaign=N_CodigoRojas&utm_id=Newsletter">Ver otras noticias</a></td></tr></tbody></table></td></tr></tbody></table><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table></td></tr></tbody></table>';
             $content[] = $getOpinionesBloquesURLVar;
             $content[] = $this->getBloque3($bloque3);
         }
@@ -1069,94 +1069,121 @@ class SendPulse {
 
     private function getOpinionesBloquesURL($list){
         $content = [];
-        $titulosOpinion = [];
+        $titulosOpinionEs = [];
+        $titulosOpinionNoEs = [];
 		$titulosUrl = [];
 		$bloquesN = [];
 		$html = '';
 		$existe = false;
+		$existeNoEs = false;
+		$existeEs = false;
 		$coloresList = ["#00a1d3", "#2927b9"];
+
 		if(is_array($list)){
             foreach ($list as $key => $value) {
-            	if ($value->name === "HTML_Text") {
-			        $titulosOpinion[] = $value->__text;
+            	if ($value->name === "esUnMejor") {
+			        $titulosOpinionEs[] = $value->__text;
+					$existe = true;
+			    }
+            }
+
+            foreach ($list as $key => $value) {
+            	if ($value->name === "noEsUnMejor") {
+			        $titulosOpinionNoEs[] = $value->__text;
 					$existe = true;
 			    }
             }
         }
-        if(!$existe){
+
+        if(count($titulosOpinionNoEs) < 1 && count($titulosOpinionEs) < 1){ // Si no existe ningun bloque no se pinta la sección
         	return "";
         }
         
-        $ecuadirEsList = explode("*", $titulosOpinion[0]);
-        $ecuadirNoEsList = explode("*", $titulosOpinion[1]);
+        $ecuadirEsList = [];//Es un mejor
+        $ecuadirNoEsList = [];//No es un mejor
 
         // print_r($ecuadirEsList);
 
         $ecuadorEs = '';
-        $ecuadorEs.= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; background-color:'.$coloresList[0].'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#fff; margin:0; overflow:hiddenpadding-right: 15px;
-	    padding-left: 0px;
-	    padding-right: 0px;
-	    padding-top: 0px;
-	    padding-bottom: 0px;" border="0" width="100%">';
-    	$ecuadorEs.= '<tbody>';
-    	$ecuadorEs.= '<tr>';
 
-    	$ecuadorEs.= '<td>';
-    	$ecuadorEs.= '  <div style="display:block;text-align:center;background-color:'.$coloresList[0].';padding-left:20px;padding-right:20px;padding-bottom:15px;padding-top:20px">
-		            		<p style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-bottom:20px">
-		            			<span style="font-size: 20px;">
-		            				<strong>Ecuador hoy es un mejor país por...</strong>
-		            			</span>
-		            		</p>';
-		for ($i=1; $i < count($ecuadirEsList); $i++) {
+        if(count($titulosOpinionEs) > 0){
+        	$ecuadirEsList = explode("*", $titulosOpinionEs[0]); //Es un mejor
+        	$ecuadorEs.= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; background-color:'.$coloresList[0].'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#fff; margin:0; overflow:hiddenpadding-right: 15px;
+		    padding-left: 0px;
+		    padding-right: 0px;
+		    padding-top: 0px;
+		    padding-bottom: 0px;" border="0" width="100%">';
+	    	$ecuadorEs.= '<tbody>';
+	    	$ecuadorEs.= '<tr>';
 
-			$dataJsonList = explode("https://", $ecuadirEsList[$i]);
+	    	$ecuadorEs.= '<td>';
+	    	$ecuadorEs.= '  <div style="display:block;text-align:center;background-color:'.$coloresList[0].';padding-left:20px;padding-right:20px;padding-bottom:15px;padding-top:20px">
+			            		<p style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-bottom:20px">
+			            			<span style="font-size: 20px;">
+			            				<strong>Ecuador hoy es un mejor país por...</strong>
+			            			</span>
+			            		</p>';
+			for ($i=1; $i < count($ecuadirEsList); $i++) {
+				$existeEs = true;
+				$dataJsonList = explode("https://", $ecuadirEsList[$i]);
 
-			$ecuadorEs.= '  <a href="'.$this->UTMLinks(2, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;font-style: italic;line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
-		            			<span>'.$dataJsonList[0].'.</span>
-		            		</a>';
-		}
-	    $ecuadorEs.=   '</div>';
-    	$ecuadorEs.= '</td>';
-    	$ecuadorEs.= '</tr>';
-    	$ecuadorEs.= '</tbody>';
-    	$ecuadorEs.= '</table>';
+				if(count($dataJsonList) < 2){
+					$ecuadorEs.= '';
+				}else{
+					$ecuadorEs.= '  <a href="'.$this->UTMLinks(2, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;font-style: italic;line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
+			            			<span>'.$dataJsonList[0].'.</span>
+			            		</a>';
+				}
 
-
-
+			}
+		    $ecuadorEs.=   '</div>';
+	    	$ecuadorEs.= '</td>';
+	    	$ecuadorEs.= '</tr>';
+	    	$ecuadorEs.= '</tbody>';
+	    	$ecuadorEs.= '</table>';
+        }
+        
 
         $ecuadorNoEs = '';
-		$ecuadorNoEs.= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; background-color:'.$coloresList[1].'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#fff; margin:0; overflow:hiddenpadding-right: 15px;
-	    padding-left: 0px;
-	    padding-right: 0px;
-	    padding-top: 0px;
-	    padding-bottom: 0px;" border="0" width="100%">';
-    	$ecuadorNoEs.= '<tbody>';
-    	$ecuadorNoEs.= '<tr>';
-    	$ecuadorNoEs.= '<td>';
-    	$ecuadorNoEs.= '  <div style="display:block;text-align:center;background-color:'.$coloresList[1].';padding-left:20px;padding-right:20px;padding-bottom:15px;padding-top:20px">
-		            		<p style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-bottom:20px">
-		            			<span style="font-size: 20px;">
-		            				<strong>Ecuador hoy no es un mejor país por...</strong>
-		            			</span>
-		            		</p>';
 
-		for ($i=1; $i < count($ecuadirNoEsList); $i++) {
+        if(count($titulosOpinionNoEs) > 0){
+        	$ecuadirNoEsList = explode("*", $titulosOpinionNoEs[0]);//No es un mejor
+        	$ecuadorNoEs.= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; background-color:'.$coloresList[1].'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#fff; margin:0; overflow:hiddenpadding-right: 15px;
+		    padding-left: 0px;
+		    padding-right: 0px;
+		    padding-top: 0px;
+		    padding-bottom: 0px;" border="0" width="100%">';
+	    	$ecuadorNoEs.= '<tbody>';
+	    	$ecuadorNoEs.= '<tr>';
+	    	$ecuadorNoEs.= '<td>';
+	    	$ecuadorNoEs.= '  <div style="display:block;text-align:center;background-color:'.$coloresList[1].';padding-left:20px;padding-right:20px;padding-bottom:15px;padding-top:20px">
+			            		<p style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-bottom:20px">
+			            			<span style="font-size: 20px;">
+			            				<strong>Ecuador hoy no es un mejor país por...</strong>
+			            			</span>
+			            		</p>';
 
-			$dataJsonList = explode("https://", $ecuadirNoEsList[$i]);
+			for ($i=1; $i < count($ecuadirNoEsList); $i++) {
+				$existeNoEs = true;
+				$dataJsonList = explode("https://", $ecuadirNoEsList[$i]);
+				if(count($dataJsonList) < 2){
+					$ecuadorEs.= '';
+				}
+				else{
+					$ecuadorNoEs.= '  <a href="'.$this->UTMLinks(3, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;font-style: italic;line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
+			            			<span>'.$dataJsonList[0].'.</span>
+			            		</a>';
+				}
+			}
 
-			$ecuadorNoEs.= '  <a href="'.$this->UTMLinks(3, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;font-style: italic;line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
-		            			<span>'.$dataJsonList[0].'.</span>
-		            		</a>';
-		}
-
-	    $ecuadorNoEs.=   '</div>';
-    	$ecuadorNoEs.= '</td>';
-    	$ecuadorNoEs.= '</tr>';
-    	$ecuadorNoEs.= '</tbody>';
-    	$ecuadorNoEs.= '</table>';
-
-        return $ecuadorEs.$ecuadorNoEs;
+		    $ecuadorNoEs.=   '</div>';
+	    	$ecuadorNoEs.= '</td>';
+	    	$ecuadorNoEs.= '</tr>';
+	    	$ecuadorNoEs.= '</tbody>';
+	    	$ecuadorNoEs.= '</table>';
+        }
+		
+        return ($existeEs?$ecuadorEs:'').($existeNoEs?$ecuadorNoEs:'');
     }
 
     private function getBloque3($data){
