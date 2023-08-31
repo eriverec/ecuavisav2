@@ -311,6 +311,171 @@ const prevPageG = () => {
   if (currentPageG.value > 1) currentPageG.value--;
 };
 
+// -----------------------------------Mail------------------------------------------  //
+// ----------------------------------   8    --------------------------------------  //
+const listaMailSelected = ref('');
+const isLoadingListaMail = ref(false);
+async function getListasMail(id, name){
+    listaMailSelected.value = name;
+    isLoadingListaMail.value = true;
+    await getListaVariableMail(id);
+    await getListaMails(id);
+    await getTotalContactos(id);
+    //await getListaContactosPorVariable(id);
+    isLoadingListaMail.value = false;
+}
+
+const currentPageH = ref(1);
+const listaVariableMail = ref([]);
+async function getListaVariableMail(id){
+    try {       
+        if(!token_auth.value) return false;
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer "+token_auth.value);
+
+        var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+        };
+
+        const consulta = await fetch('https://api.sendpulse.com/addressbooks/'+id+'/variables' , requestOptions);
+        const consultaJson = await consulta.json();
+        listaVariableMail.value = consultaJson;
+        //console.log('consulta 8 ', consultaJson);
+        
+    } catch (error) {
+        console.error(error.message);   
+    }
+}
+
+const paginatedListaVariableMail = computed(() => {
+  const start = (currentPageH.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+
+  return listaVariableMail.value.slice(start, end);
+});
+
+const nextPageH = () => {
+  if (currentPageH.value * itemsPerPage < listaVariableMail.value.length) currentPageH.value++;
+};
+
+const prevPageH = () => {
+  if (currentPageH.value > 1) currentPageH.value--;
+};
+
+// -------------------------------------  9  ---------------------------------------  //
+
+const currentPageI = ref(1);
+const listaMails = ref([]);
+async function getListaMails(id){
+    try {       
+        if(!token_auth.value) return false;
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer "+token_auth.value);
+
+        var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+        };
+
+        const consulta = await fetch('https://api.sendpulse.com/addressbooks/'+id+'/emails' , requestOptions);
+        const consultaJson = await consulta.json();
+        listaMails.value = consultaJson;
+        //console.log('consulta 9 ', consultaJson);
+        
+    } catch (error) {
+        console.error(error.message);   
+    }
+}
+
+const paginatedListaMails = computed(() => {
+  const start = (currentPageI.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+
+  return listaMails.value.slice(start, end);
+});
+
+const nextPageI = () => {
+  if (currentPageI.value * itemsPerPage < listaMails.value.length) currentPageI.value++;
+};
+
+const prevPageI = () => {
+  if (currentPageI.value > 1) currentPageI.value--;
+};
+
+// -------------------------------------  10  ---------------------------------------  //
+
+const totalContactos = ref([]);
+async function getTotalContactos(id){
+    try {       
+        if(!token_auth.value) return false;
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer "+token_auth.value);
+
+        var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+        };
+
+        const consulta = await fetch('https://api.sendpulse.com/addressbooks/'+id+'/emails/total' , requestOptions);
+        const consultaJson = await consulta.json();
+        totalContactos.value = consultaJson;
+        //console.log('consulta 10 ', consultaJson);
+        
+    } catch (error) {
+        console.error(error.message);   
+    }
+}
+
+// -------------------------------------  11  ---------------------------------------  //
+/*
+const currentPageJ = ref(1);
+const listaContactosPorVariable = ref([]);
+async function getListaContactosPorVariable(id){
+    try {       
+        if(!token_auth.value) return false;
+
+        var myHeaders = new Headers();
+        myHeaders.append("Authorization", "Bearer "+token_auth.value);
+
+        var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+        };
+
+        const consulta = await fetch('https://api.sendpulse.com/addressbooks/'+id+'/emails' , requestOptions);
+        const consultaJson = await consulta.json();
+        listaContactosPorVariable.value = consultaJson;
+        console.log('consulta 11 ', consultaJson);
+        
+    } catch (error) {
+        console.error(error.message);   
+    }
+}
+
+const paginatedListaContactosPorVariable = computed(() => {
+  const start = (currentPageJ.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+
+  return listaContactosPorVariable.value.slice(start, end);
+});
+
+const nextPageJ = () => {
+  if (currentPageJ.value * itemsPerPage < listaContactosPorVariable.value.length) currentPageJ.value++;
+};
+
+const prevPageJ = () => {
+  if (currentPageJ.value > 1) currentPageJ.value--;
+};
+*/
+// --------------------------------------------------------------------------------  //
 // --------------------------------------------------------------------------------  //
 onMounted(async()=>{
     await sendpulseAuth();
@@ -334,7 +499,7 @@ onMounted(async()=>{
             <VCard >
                 <VCardTitle class="pt-4 pl-6">Listas de correo</VCardTitle>
                 <VCardItem v-if="listasCorreos.length>0">
-                <VTable class="text-no-wrap tableNavegacion mb-5" >
+                <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
                     <thead>
                         <tr>
                         <th scope="col">Id</th>    
@@ -348,7 +513,7 @@ onMounted(async()=>{
                     </thead>
 
                     <tbody>
-                        <tr class="clickable" v-for="item in paginatedListasCorreos">
+                        <tr class="clickable" v-for="item in paginatedListasCorreos" @click="getListasMail(item.id, item.name)">
                         <td class="text-medium-emphasis">
                             {{ item.id}}
                         </td>      
@@ -386,6 +551,110 @@ onMounted(async()=>{
                 </VCardItem>      
             </VCard>
         </VCol>
+        <!--------------------------------------------Listas Mail-------------------------------------------------->
+        <VCol cols="6">
+            <VCard v-if="listaMailSelected">
+                <VCardTitle class="pt-4 pl-6">Variables de {{ listaMailSelected }}</VCardTitle>
+                <VCardItem v-if="!isLoadingListaMail">
+                <VTable class="text-no-wrap tableNavegacion mb-5">
+                    <thead>
+                        <tr>
+                        <th scope="col">Nombre</th>    
+                        <th scope="col">Tipo</th>
+
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr v-for="item in paginatedListaVariableMail">
+                        <td class="text-medium-emphasis">
+                            {{ item.name}}
+                        </td>      
+                        <td class="text-medium-emphasis">
+                            {{ item.type}}
+                        </td>                  
+                        </tr>
+                    </tbody>
+                </VTable>
+                <div class="d-flex align-center justify-space-between botonescurrentPage">
+                <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageH" :disabled="currentPageH === 1"></VBtn>
+                Página {{ currentPageH }}
+                <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageH"
+                    :disabled="(currentPageH * itemsPerPage) >= listaVariableMail.length">
+                </VBtn>
+                </div>
+                </VCardItem>  
+                <VCardItem v-else>
+                Cargando datos...
+                </VCardItem>      
+            </VCard>
+        </VCol>
+
+        <VCol cols="6">
+            <VCard v-if="listaMailSelected">
+                <VCardTitle class="pt-4 pl-6">Lista de correos de {{ listaMailSelected }}</VCardTitle>
+                <VCardItem v-if="!isLoadingListaMail && listaMails.length>0">
+                <VTable class="text-no-wrap tableNavegacion mb-5">
+                    <thead>
+                        <tr>
+                        <th scope="col">Email</th>    
+                        <th scope="col">Añadido</th>
+                        <th scope="col">Teléfono</th>
+                        <th scope="col">Estado</th>    
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr v-for="item in paginatedListaMails">
+                        <td class="text-medium-emphasis">
+                            {{ item.email}}
+                        </td>      
+                        <td class="text-medium-emphasis">
+                            {{ item.add_date}}
+                        </td>   
+                        <td class="text-medium-emphasis">
+                            {{ item.phone}}
+                        </td>     
+                        <td class="text-medium-emphasis">
+                            {{ item.status_explain}}
+                        </td>          
+                        </tr>
+                    </tbody>
+                </VTable>
+                <div class="d-flex align-center justify-space-between botonescurrentPage">
+                <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageI" :disabled="currentPageI === 1"></VBtn>
+                Página {{ currentPageI }}
+                <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageI"
+                    :disabled="(currentPageI * itemsPerPage) >= listaMails.length">
+                </VBtn>
+                </div>
+                </VCardItem>  
+                <VCardItem v-else-if="!isLoadingListaMail && listaMails.length===0">
+                No hay datos que mostrar.
+                </VCardItem>   
+                <VCardItem v-else>
+                Cargando datos...
+                </VCardItem>      
+            </VCard>
+        </VCol>
+
+        <VCol cols="6">
+            <VCard v-if="listaMailSelected">
+                <VCardTitle class="pt-4 pl-6">Número total de contactos en {{ listaMailSelected }}</VCardTitle>
+                <VCardItem v-if="!isLoadingListaMail">
+                    <VList>
+                        <VListItem>
+                        Total:   {{ totalContactos.total }}
+                        </VListItem>
+                    </VList>
+                </VCardItem>  
+                <VCardItem v-else>
+                Cargando datos...
+                </VCardItem>      
+            </VCard>
+        </VCol>
+     
+        <!--------------------------------------------FIN Listas Mail-------------------------------------------------->
 
         <VCol cols="6">
             <VCard>
@@ -406,7 +675,7 @@ onMounted(async()=>{
                     </thead>
 
                     <tbody>
-                        <tr class="clickable" v-for="item in paginatedListaCampaigns">
+                        <tr v-for="item in paginatedListaCampaigns">
                         <td class="text-medium-emphasis">
                             {{ item.id}}
                         </td>    
@@ -464,7 +733,7 @@ onMounted(async()=>{
                     </thead>
 
                     <tbody>
-                        <tr class="clickable" v-for="item in paginatedListaPlantillas">
+                        <tr v-for="item in paginatedListaPlantillas">
                         <td class="text-medium-emphasis">
                             {{ item.id}}
                         </td>    
@@ -513,7 +782,7 @@ onMounted(async()=>{
                     </thead>
 
                     <tbody>
-                        <tr class="clickable" v-for="item in paginatedListaPlantillasSistema">
+                        <tr v-for="item in paginatedListaPlantillasSistema">
                         <td class="text-medium-emphasis">
                             {{ item.id}}
                         </td>    
@@ -559,7 +828,7 @@ onMounted(async()=>{
                     </thead>
 
                     <tbody>
-                        <tr class="clickable" v-for="item in paginatedListaPlantillasUser">
+                        <tr v-for="item in paginatedListaPlantillasUser">
                         <td class="text-medium-emphasis">
                             {{ item.id}}
                         </td>    
@@ -605,7 +874,7 @@ onMounted(async()=>{
                     </thead>
 
                     <tbody>
-                        <tr class="clickable" v-for="item in paginatedListaRemitentes">
+                        <tr v-for="item in paginatedListaRemitentes">
                         <td class="text-medium-emphasis">
                             {{ item.name}}
                         </td>    
@@ -648,7 +917,7 @@ onMounted(async()=>{
                     </thead>
 
                     <tbody>
-                        <tr class="clickable" v-for="item in paginatedListaBlacklist">
+                        <tr v-for="item in paginatedListaBlacklist">
                         <td class="text-medium-emphasis">
                             {{ item }}
                         </td>                                 
@@ -675,3 +944,8 @@ onMounted(async()=>{
 
 </section>
 </template>
+<style>
+.clickable {
+  cursor: pointer;
+}
+</style>
