@@ -1600,6 +1600,202 @@ $(document).ready(function () {
   sGoListDrivers();
 });
 
+// var bloqueUsuarioIntereses = {
+//       idBloque:"bloque_body_intereses_tema",
+//       idListadoTemaSugerencia:"listado-temas-intereses-modal",
+//       diBloqueSeguiT:"bloque_titulo_intereses_tema",
+//       title:function(){
+//         //document.querySelector('#'+this.diBloqueSeguiT).innerHTML = `Cuéntanos sobre ti`;
+//       },
+//       load:function(){
+//         var classListaTemas = document.querySelector('#'+this.idListadoTemaSugerencia);
+//         classListaTemas.classList.remove("isDisabled");
+//         return true;
+//       },
+//       btn_click:function(id, title, feedUrl){
+//         var getUser = ECUAVISA_EC.USER_data();
+//         var ins = this;
+
+//         var template = document.getElementById(`b_template_${id}`);
+//         var btn = document.getElementById(`b_btn_${id}`);
+//         var estado = 0;
+//         btn.setAttribute('disabled', true);
+//         if (template.classList.contains('remove')) {
+//           template.classList.remove('remove');
+//           estado = 0;
+//         } else {
+//           template.classList.add('remove');
+//           estado = 1;
+//         }
+//         btn.removeAttribute('disabled');
+
+//         var resp = fetch("https://sugerencias-ecuavisa.vercel.app/interes/add", {
+//           method: "POST",
+//           headers: {
+//             "Content-Type": "application/json",
+//           },
+//           body: JSON.stringify({
+//             "userId": getUser.id,
+//             "interesId": id,
+//             "description": "-",
+//             "title": title,
+//             "estado": estado,
+//             "meta_existe": true,
+//           }),
+//         }).then( (response) => response.json())
+//         .then( (result) => {
+//           meta_favorite_action(id);
+//           return true;
+//         })
+//         .catch((error) => {
+//           console.log("error", error);
+//         });
+//       },
+//       existeSugerencia:function(sugerenciaId, data){
+//         return false;
+//         for(var i in data){
+//           if(data[i].sugerenciaId == sugerenciaId && data[i].meta_existe == true){
+//             return true;
+//           }
+//         }
+//         return false;
+//       },
+//       initComponent:function(){
+//         var classListalistDrivers = document.querySelector('.MP_seg_temas');
+//         classListalistDrivers.classList.add("MODAL_SEGUIMIENTO_TEMA");
+//         var dpagination = document.createElement("div");
+//         dpagination.setAttribute("id", "bloque_body_intereses_tema");
+//         classListalistDrivers.append(dpagination);
+//       },
+//       body:function(){
+//         /*document.querySelector('#'+this.idBloque).innerHTML=`<div class="spinner-border" role="status">
+//           <span class="sr-only">Loading...</span>
+//         </div>`;*/
+//         var getUser = ECUAVISA_EC.USER_data();
+//         var fun = this;
+//         /*FETCH*/
+//         var myHeaders = new Headers();
+//         var urlSugerencia = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/Intereses/datareader.php";
+//         var requestOptions = {
+//           method: 'GET',
+//           headers: myHeaders
+//         };
+//         fetch(urlSugerencia, requestOptions).then(response => {
+//           return response.json();
+//         }).then(jsondata => {
+//           if (jsondata.length > 0) {
+//             /*FETCH FIN*/
+//             fun.temas = [ { "interes":"Intereses", "data":jsondata } ];
+//             var temasSeguir = ``;
+//             for(var i in fun.temas){
+//               var ins = fun.temas[i];
+//               temasSeguir += `<p class="mis-intereses-modal py-1 m-0" style="width:100%">
+//                 ${ins.interes}
+//                </p>`;
+
+//                for(var j in ins.data){
+//                 var dat = ins.data[j];
+//                   dat["id"] = dat.id;
+//                   dat["name"] = dat.__text;
+
+//                   if(dat.publicado){
+//                     temasSeguir+= `<div class="item_tema t_${dat.id}">
+//                        <div class="keywords font-2 fs13">
+//                           <div class="color_${ generarNumeroAleatorioNoRepetido(1, 15) } template-meta-favorite-action ${ ITER.FAVORITE.TOPICS.isFavorite(dat.id) ?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir intereses" onclick="bloqueUsuarioIntereses.btn_click('${dat.id}', '${dat.name}', '#')" style="/* display:none; */">
+//                              <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" id="b_btn_${dat.id}">
+
+//                                 <small>${dat.name}</small>
+
+//                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+//                                   <path fill-rule="evenodd" d="M2 2v4.586l7 7L13.586 9l-7-7H2zM1 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2z"></path>
+//                                   <path fill-rule="evenodd" d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"></path>
+//                                 </svg>
+//                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+//                                   <path fill-rule="evenodd" d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
+//                                 </svg>
+//                              </button> 
+//                           </div>
+//                        </div>
+//                    </div>`;
+//                   }
+//                }
+//             }
+
+//             document.querySelector('#'+this.idBloque).innerHTML = `
+//             <style>
+//               #bloque_body_intereses_tema{
+//                 padding-top:0px;
+//                 padding-bottom:0px;
+//               }
+//             </style>
+//             <div class="contenido-modal">
+//                <p class="parrafo-modal"></p>
+//                <p class="mis-intereses-modal fw-bold"></p>
+//                <!--<hr>-->
+//                <div class="listado-temas isDisabled" id="${this.idListadoTemaSugerencia}" style=" overflow: auto; max-height: 350px; ">
+//                   ${temasSeguir}
+//                </div>
+//             </div>`;
+
+//             fun.load();
+//           }
+//         });
+//       },
+//       existeTemaSeguimiento:function(){
+//         var num = 0;
+//         var highlightedItemss = document.querySelectorAll(".template-meta-favorite-action");
+//         highlightedItemss.forEach((userItem) => {
+//           if(userItem.classList.contains('remove')){
+//             num ++;
+//           }
+//         });
+
+//         return {
+//           existe: num > 0,
+//           num : num
+//         };
+//       },
+//       init:function(){
+//         var numIter = 1;
+//         var contador = 1;
+//         var ins = this;
+//         ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
+//           if (existe) {
+//             setTimeout(function(){
+//                 ITER.FAVORITE.TOPICS.onLoad(function(){
+//                   ins.initComponent();
+//                   ins.body();
+//                 });
+//             }, 1000);
+//           }
+//         });
+        
+//         // var EXISTEiter = setInterval(function () {
+//         // if (typeof ITER !== 'undefined') {
+//             //   ITER.FAVORITE.TOPICS.onLoad(function(){
+//             //   ins.initComponent();
+//             //   ins.body();
+//             // });
+//         //     clearInterval(EXISTEiter);
+//         // }else{
+//         //   contador++;
+//         // }
+//         // if(contador == 100){
+//         //     console.error("ITER no está definido");
+//         //     clearInterval(EXISTEiter);
+//         //   }
+//         // }, 500);
+//       },
+//       temas:[
+//         {
+//           "interes":"Noticias",
+//           "data":[
+//             {id:'', name:''},
+//           ]
+//         }
+//       ]
+//     }
+
 var bloqueUsuarioIntereses = {
       idBloque:"bloque_body_intereses_tema",
       idListadoTemaSugerencia:"listado-temas-intereses-modal",
@@ -1644,7 +1840,9 @@ var bloqueUsuarioIntereses = {
           }),
         }).then( (response) => response.json())
         .then( (result) => {
-          meta_favorite_action(id);
+          // meta_favorite_action(id);
+
+          // bloqueUsuarioIntereses.init();
           return true;
         })
         .catch((error) => {
@@ -1667,6 +1865,15 @@ var bloqueUsuarioIntereses = {
         dpagination.setAttribute("id", "bloque_body_intereses_tema");
         classListalistDrivers.append(dpagination);
       },
+      buscarInteres(data, interesId){
+        for(var i in data){
+          if(data[i].interesId == interesId){
+            return true;
+          }
+        }
+
+        return false;
+      },
       body:function(){
         /*document.querySelector('#'+this.idBloque).innerHTML=`<div class="spinner-border" role="status">
           <span class="sr-only">Loading...</span>
@@ -1684,60 +1891,77 @@ var bloqueUsuarioIntereses = {
           return response.json();
         }).then(jsondata => {
           if (jsondata.length > 0) {
-            /*FETCH FIN*/
-            fun.temas = [ { "interes":"Intereses", "data":jsondata } ];
-            var temasSeguir = ``;
-            for(var i in fun.temas){
-              var ins = fun.temas[i];
-              temasSeguir += `<p class="mis-intereses-modal py-1 m-0" style="width:100%">
-                ${ins.interes}
-               </p>`;
+            var myHeaders_2 = new Headers();
+            var urlSugerencia_2 = "https://sugerencias-ecuavisa.vercel.app/interes/all?userId="+getUser.id;
+            var requestOptions_2 = {
+              method: 'GET',
+              headers: myHeaders_2
+            };
+            fetch(urlSugerencia_2, requestOptions_2).then(response => {
+              return response.json();
+            }).then(jsondata_2 => {
+              
+              console.log(jsondata_2.dataInteresSeguido)
 
-               for(var j in ins.data){
-                var dat = ins.data[j];
-                  dat["id"] = dat.id;
-                  dat["name"] = dat.__text;
+              /*FETCH FIN*/
+              fun.temas = [ { "interes":"Intereses", "data":jsondata } ];
+              var temasSeguir = ``;
+              for(var i in fun.temas){
+                var ins = fun.temas[i];
+                temasSeguir += `<p class="mis-intereses-modal py-1 m-0" style="width:100%">
+                  ${ins.interes}
+                 </p>`;
 
-                  if(dat.publicado){
-                    temasSeguir+= `<div class="item_tema t_${dat.id}">
-                       <div class="keywords font-2 fs13">
-                          <div class="color_${ generarNumeroAleatorioNoRepetido(1, 15) } template-meta-favorite-action ${ ITER.FAVORITE.TOPICS.isFavorite(dat.id) ?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir intereses" onclick="bloqueUsuarioIntereses.btn_click('${dat.id}', '${dat.name}', '#')" style="/* display:none; */">
-                             <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" id="b_btn_${dat.id}">
+                 for(var j in ins.data){
+                  var dat = ins.data[j];
+                    dat["id"] = dat.id;
+                    dat["name"] = dat.__text;
+                    if(dat.publicado){ //${ ITER.FAVORITE.TOPICS.isFavorite(dat.id) ?'remove':''}
+                      // console.log(dat)
+                      temasSeguir+= `<div class="item_tema t_${dat.id}">
+                         <div class="keywords font-2 fs13">
+                            <div class="color_${ generarNumeroAleatorioNoRepetido(1, 15) } template-meta-favorite-action ${ bloqueUsuarioIntereses.buscarInteres(jsondata_2.dataInteresSeguido, dat.id) ?'remove':''}" value="${dat.name}" id="b_template_${dat.id}" title="Seguir intereses" onclick="bloqueUsuarioIntereses.btn_click('${dat.id}', '${dat.name}', '#')" style="/* display:none; */">
+                               <button type="button" class="button_seguir btn btn-default btn-sm btn-modal-seguir" id="b_btn_${dat.id}">
 
-                                <small>${dat.name}</small>
+                                  <small>${dat.name}</small>
 
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                  <path fill-rule="evenodd" d="M2 2v4.586l7 7L13.586 9l-7-7H2zM1 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2z"></path>
-                                  <path fill-rule="evenodd" d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"></path>
-                                </svg>
-                                <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                                  <path fill-rule="evenodd" d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
-                                </svg>
-                             </button> 
-                          </div>
-                       </div>
-                   </div>`;
-                  }
-               }
-            }
-
-            document.querySelector('#'+this.idBloque).innerHTML = `
-            <style>
-              #bloque_body_intereses_tema{
-                padding-top:0px;
-                padding-bottom:0px;
+                                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M2 2v4.586l7 7L13.586 9l-7-7H2zM1 2a1 1 0 0 1 1-1h4.586a1 1 0 0 1 .707.293l7 7a1 1 0 0 1 0 1.414l-4.586 4.586a1 1 0 0 1-1.414 0l-7-7A1 1 0 0 1 1 6.586V2z"></path>
+                                    <path fill-rule="evenodd" d="M4.5 5a.5.5 0 1 0 0-1 .5.5 0 0 0 0 1zm0 1a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3z"></path>
+                                  </svg>
+                                  <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-tag-fill" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                                    <path fill-rule="evenodd" d="M2 1a1 1 0 0 0-1 1v4.586a1 1 0 0 0 .293.707l7 7a1 1 0 0 0 1.414 0l4.586-4.586a1 1 0 0 0 0-1.414l-7-7A1 1 0 0 0 6.586 1H2zm4 3.5a1.5 1.5 0 1 1-3 0 1.5 1.5 0 0 1 3 0z"></path>
+                                  </svg>
+                               </button> 
+                            </div>
+                         </div>
+                     </div>`;
+                    }
+                 }
               }
-            </style>
-            <div class="contenido-modal">
-               <p class="parrafo-modal"></p>
-               <p class="mis-intereses-modal fw-bold"></p>
-               <!--<hr>-->
-               <div class="listado-temas isDisabled" id="${this.idListadoTemaSugerencia}" style=" overflow: auto; max-height: 350px; ">
-                  ${temasSeguir}
-               </div>
-            </div>`;
 
-            fun.load();
+              document.querySelector('#'+this.idBloque).innerHTML = `
+              <style>
+                #bloque_body_intereses_tema{
+                  padding-top:0px;
+                  padding-bottom:0px;
+                }
+              </style>
+              <div class="contenido-modal">
+                 <p class="parrafo-modal"></p>
+                 <p class="mis-intereses-modal fw-bold"></p>
+                 <!--<hr>-->
+                 <div class="listado-temas isDisabled" id="${this.idListadoTemaSugerencia}" style=" overflow: auto; max-height: 350px; ">
+                    ${temasSeguir}
+                 </div>
+              </div>`;
+
+              fun.load();
+
+
+
+            });
+            
           }
         });
       },
@@ -1759,16 +1983,9 @@ var bloqueUsuarioIntereses = {
         var numIter = 1;
         var contador = 1;
         var ins = this;
-        ECUAVISA_EC.initVariable('ITER', 10).then((existe) => {
-          if (existe) {
-            setTimeout(function(){
-                ITER.FAVORITE.TOPICS.onLoad(function(){
-                  ins.initComponent();
-                  ins.body();
-                });
-            }, 1000);
-          }
-        });
+
+        ins.initComponent();
+        ins.body();
         
         // var EXISTEiter = setInterval(function () {
         // if (typeof ITER !== 'undefined') {
