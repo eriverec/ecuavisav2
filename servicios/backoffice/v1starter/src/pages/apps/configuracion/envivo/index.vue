@@ -289,10 +289,12 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                             </VBtn>
 
                             <VBtn
-                            color="primary"
+                            rounded="pill"
+                            color="success"
+                            class="boton-fija"
                             @click="enviar()"                                 
                             >
-                            Guardar Horarios
+                            <VIcon size="30" icon="tabler-device-floppy"></VIcon>
                             </VBtn>
                         </VCol>  
                     
@@ -519,13 +521,25 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
         </VWindowItem>
     </VWindow>
   
-</section>			
+</section>	
+
+
            
             
   			
 
   
 </template>
+
+<style>
+    .boton-fija{
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        margin: 30px;
+        z-index: 9999;
+    }
+</style>
 
 
 
