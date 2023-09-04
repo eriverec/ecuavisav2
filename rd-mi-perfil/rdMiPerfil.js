@@ -1839,7 +1839,7 @@ var bloqueUsuarioIntereses = {
 
         var temaData = {
             "name": title,
-            "feedUrl": `https://www.ecuavisa.com/metadatos/-/meta/${ins.generarSlug(title)}`,
+            "feedUrl": `/metadatos/-/meta/${ins.generarSlug(title)}`,
             "follow": (estado == 1?true:false)
         };
 
