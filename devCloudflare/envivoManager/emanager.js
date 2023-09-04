@@ -6,7 +6,7 @@ function eventRadioManager() {
   const horaActual = fechaActual.getHours();
   const minutosActuales = fechaActual.getMinutes();
   const diasSemanaTexto = ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" ];
-  console.log(`Hoy es v2 ${diasSemanaTexto[diaSemana]}`);
+  console.log(`Hoy es ${diasSemanaTexto[diaSemana]}`);
 
   async function fetchHorario() {
     try {

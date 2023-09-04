@@ -21,10 +21,7 @@ var hour = d.getHours();
 var min = d.getMinutes();
 var t = d.getTime();
 
-timeOfDay =
-  d.getHours().toString().padStart(2, "0") +
-  ":" +
-  d.getMinutes().toString().padStart(2, "0");
+timeOfDay = d.getHours().toString().padStart(2, "0") +":" + d.getMinutes().toString().padStart(2, "0");
 if (day > 0 && day <= 5) {
   //validacion de lunes a viernes
   // if ("07:30" <= timeOfDay && timeOfDay <= "09:00") {
