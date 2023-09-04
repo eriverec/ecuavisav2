@@ -20,11 +20,13 @@ class SendPulse {
 		$this->fechaDeEnvio = $this->obtenerFechaHoraFormateada("14:30:00");//send_date
 		$this->descripcion = $obtenerJsonSubject->descripcion;
 		$this->subject = str_replace("{{fecha}}", date("Y-m-d", time()), $obtenerJsonSubject->subject);//"🛑 Este es el legado de Agustín Intriago, el alcalde de Manta asesinado en un ataque armado";//"Ecuavisa Informa - ".$getFecha;
-		$this->nombreNeswletter = "Ecuavisa Informa - Opinión ".$getFecha;
+		$this->nombreNeswletter = "Código Rojas ".$getFecha;
 
         $this->horai = '06:00:00';
         $this->horaf = '22:00:00';
-        $this->listaUsuario = 555955;//565083;
+        /*Nosotros: 564325*/
+        /*Prueba, ecuavisa: 574818*/
+        $this->listaUsuario = 574818;//
         $this->idTemplate = 162582;// ID Gracias:160050;
         $this->token = $this->initToken();
         $this->folder = "opinion";
@@ -403,11 +405,14 @@ class SendPulse {
 		if(is_array($channel->item)){
 			foreach ($channel->item as $key => $value) {
 				$image = "";
-				if(is_array($value->content)){
-					$image = $value->content[0]->url;
-				}else{
-					$image = $value->content->url;
+				if(isset($value->content)){
+					if(is_array($value->content)){
+						$image = $value->content[0]->url;
+					}else{
+						$image = $value->content->url;
+					}
 				}
+				
 				//$image = $this->cropImagen($image);
 				$tituloSubseccion = (count(explode("/", $value->link)) > 5 ? explode("/", $value->link)[4]:explode("/", $value->link)[3]);
 				$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
@@ -649,7 +654,7 @@ class SendPulse {
 
     private function armarCorreo($name, $body, $list_id){
     	$getFecha = date("Y-m-d, H:i:s", time());
-        $sender_name = "Ecuavisa Informa";
+        $sender_name = "Código Rojas";
         $sender_email = $this->sender_email;
         $subject = $this->subject;
         $name = $name;
