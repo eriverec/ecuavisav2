@@ -1,5 +1,5 @@
 /*codigo-manager*/
-function eventEnvivoManager() {
+function eventRadioManager() {
   const apiUrl = "https://api-configuracion.vercel.app/web/horarioRadio";
   const fechaActual = new Date();
   const diaSemana = fechaActual.getDay();
@@ -158,7 +158,7 @@ function eventEnvivoManager() {
 
 
 if (ECUAVISA_EC.login()) {
-  eventEnvivoManager();
+  eventRadioManager();
 }else{
   const txtBase = document.querySelector('#no_transmision__');
   if (txtBase) {
@@ -167,5 +167,5 @@ if (ECUAVISA_EC.login()) {
   }
 }
 
-// eventEnvivoManager();
+// eventRadioManager();
 
