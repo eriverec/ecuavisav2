@@ -1803,6 +1803,18 @@ var bloqueUsuarioIntereses = {
       title:function(){
         //document.querySelector('#'+this.diBloqueSeguiT).innerHTML = `Cuéntanos sobre ti`;
       },
+      generarSlug:function(texto) {
+        // Reemplazar tildes y diacríticos
+        const textoSinTildes = texto.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+
+        // Reemplazar caracteres especiales y espacios con guiones
+        const slug = textoSinTildes
+          .toLowerCase() // Convertir a minúsculas
+          .replace(/[^a-z0-9]+/g, '-') // Reemplazar caracteres no alfanuméricos con guiones
+          .replace(/^-+|-+$/g, ''); // Eliminar guiones al principio y al final
+
+        return slug;
+      },
       load:function(){
         var classListaTemas = document.querySelector('#'+this.idListadoTemaSugerencia);
         classListaTemas.classList.remove("isDisabled");
@@ -1825,29 +1837,50 @@ var bloqueUsuarioIntereses = {
         }
         btn.removeAttribute('disabled');
 
-        var resp = fetch("https://sugerencias-ecuavisa.vercel.app/interes/add", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            "userId": getUser.id,
-            "interesId": id,
-            "description": "-",
-            "title": title,
-            "estado": estado,
-            "meta_existe": true,
-          }),
-        }).then( (response) => response.json())
-        .then( (result) => {
-          // meta_favorite_action(id);
+        var temaData = {
+            "name": title,
+            "feedUrl": `https://www.ecuavisa.com/metadatos/-/meta/${ins.generarSlug(title)}`,
+            "follow": (estado == 1?true:false)
+        };
 
-          // bloqueUsuarioIntereses.init();
-          return true;
-        })
-        .catch((error) => {
-          console.log("error", error);
+        var settings = {
+           "url": ECUAVISA_EC.api.seguimientoTema,
+           "method": "POST",
+           "timeout": 0,
+           "headers": {
+               "Content-Type": "application/json"
+           },
+           "data": JSON.stringify({
+               "id": getUser.id,
+               "nombre": `${getUser.name} ${getUser.lastname}`,
+               "tema": temaData
+           }),
+        };
+
+        $.ajax(settings).done(function (response) {
+             var resp = fetch("https://sugerencias-ecuavisa.vercel.app/interes/add", {
+             method: "POST",
+             headers: {
+               "Content-Type": "application/json",
+             },
+             body: JSON.stringify({
+               "userId": getUser.id,
+               "interesId": id,
+               "description": "-",
+               "title": title,
+               "estado": estado,
+               "meta_existe": true,
+             }),
+            }).then( (response) => response.json())
+            .then( (result) => {
+             // meta_favorite_action(id);
+             // bloqueUsuarioIntereses.init();
+             return true;
+            }).catch((error) => {
+             console.log("error", error);
+            });
         });
+        
       },
       existeSugerencia:function(sugerenciaId, data){
         return false;
@@ -1987,21 +2020,6 @@ var bloqueUsuarioIntereses = {
         ins.initComponent();
         ins.body();
         
-        // var EXISTEiter = setInterval(function () {
-        // if (typeof ITER !== 'undefined') {
-            //   ITER.FAVORITE.TOPICS.onLoad(function(){
-            //   ins.initComponent();
-            //   ins.body();
-            // });
-        //     clearInterval(EXISTEiter);
-        // }else{
-        //   contador++;
-        // }
-        // if(contador == 100){
-        //     console.error("ITER no está definido");
-        //     clearInterval(EXISTEiter);
-        //   }
-        // }, 500);
       },
       temas:[
         {
