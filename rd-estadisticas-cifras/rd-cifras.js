@@ -126,6 +126,9 @@ function eventLigaPro() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+              </li>
+              <li class="nav-item" role="presentation">
                   <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
@@ -146,9 +149,7 @@ function eventLigaPro() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
-              </li>
+              
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
@@ -243,10 +244,13 @@ function eventLibertadores() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
+                  <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario" >Copa Sudamericana</a>
@@ -263,9 +267,7 @@ function eventLibertadores() {
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
-              </li>
+              
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
@@ -356,32 +358,33 @@ function eventSudamericana() {
     if (currentUrl === urlObj.mainUrl) {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
-          <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario" >Copa Sudamericana</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/premierleague/calendario" >Premier League</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
-              </li>
-          </ul>
+      <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+          <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario" >Copa Sudamericana</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link" id="" href="/deportes/premierleague/calendario" >Premier League</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+      </li>
+      
+  </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
@@ -474,16 +477,19 @@ function eventPremierLeague() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario" >Copa Sudamericana</a>
+                  <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario" >Copa Sudamericana</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="" href="/deportes/premierleague/calendario" >Premier League</a>
+                  <a class="nav-link" id="" href="/deportes/premierleague/calendario" >Premier League</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
@@ -492,11 +498,9 @@ function eventPremierLeague() {
                   <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+                  <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
-              </li>
+              
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel">
@@ -586,29 +590,30 @@ function eventLaLigaEspañola() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
+                  <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario">Copa Sudamericana</a>
+                  <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/premierleague/calendario">Premier League</a>
+                  <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario" >Copa Sudamericana</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
+                  <a class="nav-link" id="" href="/deportes/premierleague/calendario" >Premier League</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+                  <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
-              </li>
+              
           </ul>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel">
@@ -699,29 +704,30 @@ function eventMLS() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
+                  <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario">Copa Sudamericana</a>
+                  <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/premierleague/calendario">Premier League</a>
+                  <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario" >Copa Sudamericana</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/premierleague/calendario" >Premier League</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="" href="/deportes/mls/calendario">MLS</a>
+                  <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+                  <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
-              </li>
+              
           </ul>
           <div class="tab-content" id="myTabContent">
               <div role="tabpanel">
@@ -812,16 +818,19 @@ function eventLeaguesCup() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
+                  <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario">Copa Sudamericana</a>
+                  <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/premierleague/calendario">Premier League</a>
+                  <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario" >Copa Sudamericana</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/premierleague/calendario" >Premier League</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
@@ -830,11 +839,9 @@ function eventLeaguesCup() {
                   <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+                  <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
-              </li>
+              
           </ul>
           <div class="tab-content" id="myTabContent">
               <div role="tabpanel">
@@ -924,16 +931,19 @@ function eventEliminatorios() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+                  <a class="nav-link" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
+                  <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario">Copa Sudamericana</a>
+                  <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/premierleague/calendario">Premier League</a>
+                  <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario" >Copa Sudamericana</a>
+              </li>
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="" href="/deportes/premierleague/calendario" >Premier League</a>
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
@@ -942,11 +952,9 @@ function eventEliminatorios() {
                   <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+                  <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
-              </li>
+              
           </ul>
           <div class="tab-content" id="myTabContent">
               <div role="tabpanel">
