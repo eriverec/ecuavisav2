@@ -29,6 +29,10 @@
 
 // var connectTabs = new Tabs();
 
+
+if
+https://www.ecuavisa.com/deportes/copa-sudamericana/calendario
+
 function eventLigaPro() {
   const urlsCifras = [
     {
@@ -975,7 +979,7 @@ function eventEliminatorios() {
                   </ul>
                   <div class="tab-content" id="myTabContent">
                       <div class="" id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
-                          <iframe title="ifr_Posiciones" src="${urlObj.subUrl.iframe}" width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"class=""></iframe>
+                          <iframe title="iframe-eliminarias-calendario" src="${urlObj.subUrl.iframe}" width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"class=""></iframe>
                       </div>
                   </div>
               </div>
@@ -1046,3 +1050,22 @@ setTimeout(() => {
     }
   }
 }, 300);
+
+
+
+if(window.location.pathname === "/deportes/copa-sudamericana/planteles"){
+
+}
+
+if(window.location.pathname === "/deportes/eliminatorias-conmebol/calendario"){
+  var iframe = document.querySelector('iframe[title="iframe-eliminarias-calendario"]');
+  iframe.setAttribute('height', '400'); 
+}
+
+if (window.location.pathname === "/deportes/copa-libertadores/calendario"){
+
+}
+
+if(window.location.pathname ===  "deportes/leaguescup/calendario"){
+
+}
