@@ -30,9 +30,6 @@
 // var connectTabs = new Tabs();
 
 
-if
-https://www.ecuavisa.com/deportes/copa-sudamericana/calendario
-
 function eventLigaPro() {
   const urlsCifras = [
     {
