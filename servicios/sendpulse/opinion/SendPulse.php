@@ -1153,6 +1153,7 @@ class SendPulse {
 
         if(count($titulosOpinionNoEs) > 0){
         	$ecuadirNoEsList = explode("*", $titulosOpinionNoEs[0]);//No es un mejor
+        	// echo json_encode($ecuadirNoEsList);
         	$ecuadorNoEs.= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; background-color:'.$coloresList[1].'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#fff; margin:0; overflow:hiddenpadding-right: 15px;
 		    padding-left: 0px;
 		    padding-right: 0px;
