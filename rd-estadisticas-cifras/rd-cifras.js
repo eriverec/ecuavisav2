@@ -289,7 +289,7 @@ function eventLibertadores() {
                   </ul>
                   <div class="tab-content" id="myTabContent">
                       <div class="" id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
-                          <iframe title="ifr_Posiciones"
+                          <iframe title="iframe_libertadores_calendario"
                               src="${urlObj.subUrl.iframe}"
                               width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"
                               class=""></iframe>
@@ -406,7 +406,7 @@ function eventSudamericana() {
                   </ul>
                   <div class="tab-content" id="myTabContent">
                       <div class="" id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
-                          <iframe title="ifr_Posiciones"
+                          <iframe title="iframe_sudamericana_calendario"
                               src="${urlObj.subUrl.iframe}"
                               width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"
                               class=""></iframe>
@@ -976,7 +976,7 @@ function eventEliminatorios() {
                   </ul>
                   <div class="tab-content" id="myTabContent">
                       <div class="" id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
-                          <iframe title="iframe-eliminarias-calendario" src="${urlObj.subUrl.iframe}" width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"class=""></iframe>
+                          <iframe title="iframe_eliminatorias_calendario" src="${urlObj.subUrl.iframe}" width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"class=""></iframe>
                       </div>
                   </div>
               </div>
@@ -1050,21 +1050,24 @@ setTimeout(() => {
 
 
 
+/* ------------------- editar los height del segundo iframe de arriba oara abajo--------------------- */
 if(window.location.pathname === "/deportes/copa-sudamericana/planteles"){
-
+  setTimeout(() => {
+    var iframe = document.querySelector('iframe[title="iframe_sudamericana_calendario"]');
+    iframe.setAttribute('height', '400');
+  }, 600);
 }
 
 if(window.location.pathname === "/deportes/eliminatorias-conmebol/calendario"){
   setTimeout(() => {
-    var iframe = document.querySelector('iframe[title="iframe-eliminarias-calendario"]');
+    var iframe = document.querySelector('iframe[title="iframe_eliminatorias_calendario"]');
     iframe.setAttribute('height', '400');
   }, 600);
 }
 
 if (window.location.pathname === "/deportes/copa-libertadores/calendario"){
-
-}
-
-if(window.location.pathname ===  "deportes/leaguescup/calendario"){
-
+  setTimeout(() => {
+    var iframe = document.querySelector('iframe[title="iframe_libertadores_calendario"]');
+    iframe.setAttribute('height', '400');
+  }, 600);
 }
