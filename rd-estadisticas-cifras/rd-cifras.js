@@ -1055,8 +1055,10 @@ if(window.location.pathname === "/deportes/copa-sudamericana/planteles"){
 }
 
 if(window.location.pathname === "/deportes/eliminatorias-conmebol/calendario"){
-  var iframe = document.querySelector('iframe[title="iframe-eliminarias-calendario"]');
-  iframe.setAttribute('height', '400'); 
+  setTimeout(() => {
+    var iframe = document.querySelector('iframe[title="iframe-eliminarias-calendario"]');
+    iframe.setAttribute('height', '400');
+  }, 600);
 }
 
 if (window.location.pathname === "/deportes/copa-libertadores/calendario"){
