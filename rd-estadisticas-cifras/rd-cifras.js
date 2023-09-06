@@ -962,6 +962,9 @@ function eventEliminatorios() {
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
                       <li class="nav-item" role="presentation">
+                          <a href="/deportes/eliminatorias-conmebol/tablaposiciones" class="nav-link ${currentUrl === ueliminatoriasConmebolTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                      </li>
+                      <li class="nav-item" role="presentation">
                           <a href="/deportes/eliminatorias-conmebol/calendario" class="nav-link ${currentUrl === ueliminatoriasConmebolCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
                       </li>
                       <li class="nav-item" role="presentation">
@@ -970,9 +973,7 @@ function eventEliminatorios() {
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/eliminatorias-conmebol/planteles" class="nav-link ${currentUrl === ueliminatoriasConmebolPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
                       </li>
-                      <li class="nav-item" role="presentation">
-                          <a href="/deportes/eliminatorias-conmebol/tablaposiciones" class="nav-link ${currentUrl === ueliminatoriasConmebolTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
-                      </li>
+                      
                   </ul>
                   <div class="tab-content" id="myTabContent">
                       <div class="" id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
