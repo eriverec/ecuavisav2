@@ -22,8 +22,8 @@ class SendPulse {
 		$this->subject = str_replace("{{fecha}}", date("Y-m-d", time()), $obtenerJsonSubject->subject);//"🛑 Este es el legado de Agustín Intriago, el alcalde de Manta asesinado en un ataque armado";//"Ecuavisa Informa - ".$getFecha;
 		$this->nombreNeswletter = "Código Rojas ".$getFecha;
 
-        $this->horai = '17:30:00';
-        $this->horaf = '18:30:00';
+        $this->horai = '06:00:00';
+        $this->horaf = '22:00:00';
         /*Nosotros: 564325*/
         /*Prueba, ecuavisa: 574818*/
         $this->listaUsuario = 574818;//
@@ -427,7 +427,7 @@ class SendPulse {
 				$primeraParte = $partesPath[0];
 				$tituloSubseccion = $primeraParte;
 
-				$descripcion = isset($value->description->__text)?$value->description->__text:"";
+				$descripcion = $value->description->__text;
 				$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
 				$descripcion = substr($descripcion_formateado, 0, 290).'...';
 				$descripcionFinal = str_replace('<a ', '<a style="color: #444;" ', $descripcion);
@@ -446,12 +446,10 @@ class SendPulse {
 		}else{
 			$value = $channel->item;
 			$image = "";
-			if(isset($value->content)){
-				if(is_array($value->content)){
-					$image = $value->content[0]->url;
-				}else{
-					$image = $value->content->url;
-				}
+			if(is_array($value->content)){
+				$image = $value->content[0]->url;
+			}else{
+				$image = $value->content->url;
 			}
 			//$image = $this->cropImagen($image);
 			$tituloSubseccion = (count(explode("/", $value->link)) > 5 ? explode("/", $value->link)[4]:explode("/", $value->link)[3]);
@@ -618,23 +616,9 @@ class SendPulse {
 
 		return $noticias[0];
 
-    }
-
-	public function createJSONPHP($dat){
-    	$datos = [
-    		"notas" => [$this->fechaFormateada, $dat, $this->listaUsuario]
-    	];
-		$options = array(
-		    'http' => array(
-		        'method' => 'POST',
-		        'header' => 'Content-type: application/x-www-form-urlencoded',
-		        'content' => http_build_query($datos)
-		    )
-		);
-		$context = stream_context_create($options);
-		$content = file_get_contents("https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/json/opinion/create.php", false, $context);
-		// $content = file_get_contents("https://pruebasecuavisa.phpdemo.site/json/opinion/create.php", false, $context);
-		return json_decode($content);
+		// $id = $this->createJSONPHP($finalArray)->id;
+		// $finalArray_2 = array($firstArray, $secondArray, $thirdArray, $id);
+		// return $finalArray_2;
     }
 
     public function createCampaigns($sender_name, $sender_email, $subject, $list_id, $name, $body){
@@ -1085,14 +1069,6 @@ class SendPulse {
             $content[] = $getOpinionesBloquesURLVar;
             $content[] = $this->getBloque3($bloque3);
         }
-
-        $id = $this->createJSONPHP(array(
-			"notaPrincipal" => $getFristNota,
-			"notasFinal" => $bloque3,
-			"fullPrinpial" => $list,
-
-		))->id;
-
         return [$content, $titulo];
     }
 
@@ -1388,7 +1364,6 @@ class SendPulse {
 			$nombreNeswletter = $this->nombreNeswletter;
 			$list_id = $this->listaUsuario;//LISTA DE USUARIOS
 
-			// $resp = $this->createJSONPHP($this->HtmlToBase64($bodyContent));
 			echo $bodyContent;
 			exit();
     	}
