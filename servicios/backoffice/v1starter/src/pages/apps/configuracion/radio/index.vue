@@ -346,7 +346,7 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr v-for="hora,indexHora in horario.horas" :key="indexHora">      
+                                        <tr v-for="hora,indexHora in horario.horas.sort((b, a) => b.inicio.localeCompare(a.inicio))" :key="indexHora">      
                                         <td class="py-4">
                                             <VTextField
                                                 v-model="hora.tituloPrograma"
