@@ -54,7 +54,7 @@ let sendPulseAccessToken = null;
 // Función para obtener el token de acceso
 const fetchSendPulseAccessToken = async () => {
   try {
-    const response = await axios.post('URL_DE_TU_ENDPOINT_PARA_OBTENER_TOKEN', {
+    const response = await axios.post('https://api.sendpulse.com/oauth/access_token', {
       grant_type: 'client_credentials',
       client_id: clientID,
       client_secret: clientSecret,
