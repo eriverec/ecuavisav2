@@ -286,6 +286,138 @@ function eventoEnvivoManager() {
   fetchHorarioEnvivo();
 }
 
+function eventoEnvivoManagerQuito() {
+  const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivoQuito";
+  const enVivoRedy = document.querySelector('.enVivoRedy');
+  const textIndicador = document.querySelector('.enVivoRedy .liveIndicator .enVivoText');
+  const btnTelcomunidad = document.querySelector('#btnTelcomunidad');
+  const title_programa_quito = document.querySelector('.title_programa_quito');
+  const playerembed_quito = document.querySelector('#playerembed_quito');
+  const fondito__quito = document.querySelector('#fondito__quito');
+  
+  function fetchHorarioEnvivoQuito() {
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        const fechaActual = new Date();
+        const diaSemana = fechaActual.getDay();
+        const horaActual = fechaActual.getHours();
+        const minutosActuales = fechaActual.getMinutes();
+        const forzado = data.forzado.estado;
+        const htmlIframe = data.html.value;
+
+        if (!forzado) {
+          for (const dia of data.horarios) {
+            if (dia.estadoDia) {
+              if (dia.dia === diaSemana) {
+                let programasHoy = [];
+                for (const hora of dia.horas) {
+                  if (hora.estadoHorario) {
+                    const inicioHora = parseInt(hora.inicio.split(":")[0]);
+                    const inicioMinutos = parseInt(hora.inicio.split(":")[1]);
+                    const finHora = parseInt(hora.fin.split(":")[0]);
+                    const finMinutos = parseInt(hora.fin.split(":")[1]);
+                    if (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) {
+                      if (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos)) {
+                        programasHoy.push(hora.tituloPrograma);
+                      }
+                    }
+                  }
+                }
+                if (programasHoy.length > 0) {
+                  if (fondito__quito) {
+                    fondito__quito.style.display = "none";
+                  }
+                  programasHoy.forEach(programa => {
+                    if (title_programa_quito) {
+                      title_programa_quito.innerHTML = programa;
+                      title_programa_quito.style.display = 'block';
+                    }
+                    if (playerembed_quito && fondito__quito) {
+                      playerembed_quito.style.display = 'block';
+                      fondito__quito.style.display = "none";
+                      if (!document.querySelector('#playerembed_quito iframe')) {
+                        if (playerembed_quito) {
+                          playerembed_quito.innerHTML = htmlIframe;
+                        }
+                      }
+                    }
+                    if (enVivoRedy) {
+                      enVivoRedy.style.display = 'flex';
+                    }
+                    if (programa === "Televistazo en la comunidad") {
+                      if (btnTelcomunidad) {
+                        btnTelcomunidad.style.display = "block";
+                      }
+                    }
+                  });
+                } else {
+                  if (title_programa_quito) {
+                    title_programa_quito.innerHTML = '';
+                    title_programa_quito.style.display = 'none';
+                  }
+                  if (playerembed_quito && fondito__quito) {
+                    playerembed_quito.style.display = 'none';
+                    if (document.querySelector('#playerembed_quito iframe')) {
+                      document.querySelector('#playerembed_quito iframe').remove();
+                    }
+                    fondito__quito.style.display = "block";
+                  }
+                  if (enVivoRedy) {
+                    enVivoRedy.style.display = 'none';
+                  }
+                  if (btnTelcomunidad) {
+                    btnTelcomunidad.style.display = "none";
+                  }
+                }
+              }else { }
+            } else {
+              if (fondito__quito) { fondito__quito.style.display = "block"; }
+              if (title_programa_quito) {
+                title_programa_quito.innerHTML = '';
+                title_programa_quito.style.display = 'none';
+              }
+              if (playerembed_quito) {
+                playerembed_quito.style.display = 'none';
+                if (document.querySelector('#playerembed_quito iframe')) {
+                  document.querySelector('#playerembed_quito iframe').remove();
+                }
+  
+              }
+              if (enVivoRedy) { enVivoRedy.style.display = 'none'; }
+            }
+          }
+        } else {
+          const dataTitulo = data.forzado.titulo;
+          const datalabel = data.forzado.label;
+  
+          if (title_programa_quito) {
+            title_programa_quito.innerHTML = dataTitulo;
+          }
+  
+          if (playerembed_quito && fondito__quito) {
+            textIndicador.innerHTML = datalabel;
+            playerembed_quito.style.display = 'block';
+            fondito__quito.style.display = "none";
+          }
+          if (enVivoRedy) { enVivoRedy.style.display = 'flex'; }
+  
+          console.log("Forzado:", forzado);
+        }
+      })
+      .catch(error => {
+        console.error("Error al obtener los datos:", error);
+      });
+
+    // setTimeout(fetchHorarioEnvivoQuito, 120000); //cada 2 minutos se actualiza
+  }
+
+  // Llamar a la función para obtener y procesar los datos inicialmente
+  fetchHorarioEnvivoQuito();
+}
+
+eventoEnvivoManagerQuito();
+
 eventoEnvivoManager();
 
 if (ECUAVISA_EC.login()) {
