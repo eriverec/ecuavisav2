@@ -543,11 +543,6 @@ async function selectHorario() {
       {{ configSnackbar.message }}
     </VSnackbar>
 
-
-
-
-
-
     <VRow>
       <VCol class="mt-0" cols="12" md="12" lg="12">
         <VTabs v-model="currentTab" class="v-tabs-pill  d-none">
@@ -606,7 +601,7 @@ async function selectHorario() {
                         <VCheckbox v-model="checkboxEstado" label="Estado del Newsletter" />
                       </VCol> -->
                       <VCol cols="12" sm="6" md="12">
-                        <VBtn color="success" class="mb-4" @click="showAddForm">
+                        <VBtn color="success" class="mb-4" @click="">
                           Enviar boletín
                         </VBtn>
 
