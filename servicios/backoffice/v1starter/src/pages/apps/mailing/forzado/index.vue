@@ -602,7 +602,10 @@ async function selectHorario() {
                       </VCol> -->
                       <VCol cols="12" sm="6" md="12">
                         <VBtn color="success" class="mb-4" @click="">
-                          Enviar boletín
+                          <VIcon
+                                :size="22"
+                                icon="tabler-mail-fast"
+                              />  Enviar boletín
                         </VBtn>
 
                       </VCol>
