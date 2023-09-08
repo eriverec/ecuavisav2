@@ -19,6 +19,7 @@ const currentPage = ref(1);
 const totalRegistros = ref(1);
 const totalRegistrosHtml = ref(1);
 const idNewsletter = ref("");
+const mensajeHorario = ref("");
 const disabledPagination = ref(false);
 const disabledViewList = ref(false);
 const switchOnDisabled = ref(false);
@@ -52,6 +53,13 @@ const calendariosInputs = ref([
   },
   {
     value:4,
+    diaModel: null,
+    horaModel: null,
+    mesModel:null,
+    minutoModel: null,
+  },
+  {
+    value:5,
     diaModel: null,
     horaModel: null,
     mesModel:null,
@@ -219,6 +227,7 @@ const showAddForm = async () => {
   pass.value = "";
   preview.value = "";
   checkboxEstado.value = false;
+  radios.value = '2';
 }
 
 const showEditForm = async (id) => {
@@ -238,6 +247,43 @@ const showEditForm = async (id) => {
   checkboxEstado.value = ins.estado;
   dataBookUserModel.value = ins.config.addressbook;
   dataTemplateModel.value = ins.config.template;
+
+  if(ins.config.horarioEjecucion){
+    // console.log(ins.config.horarioEjecucion.method)
+    radios.value = ins.config.horarioEjecucion.method
+    calendariosInputs.value = [
+      {
+        value:1,
+        minutoModel: ins.config.horarioEjecucion.horario[0].minutoModel
+      },
+      {
+        value:2,
+        horaModel: ins.config.horarioEjecucion.horario[1].horaModel,
+        minutoModel: ins.config.horarioEjecucion.horario[1].minutoModel,
+      },
+      {
+        value:3,
+        diaModel: ins.config.horarioEjecucion.horario[2].diaModel,
+        horaModel: ins.config.horarioEjecucion.horario[2].horaModel,
+        minutoModel: ins.config.horarioEjecucion.horario[2].minutoModel,
+      },
+      {
+        value:4,
+        diaModel: ins.config.horarioEjecucion.horario[3].diaModel,
+        horaModel: ins.config.horarioEjecucion.horario[3].horaModel,
+        mesModel:ins.config.horarioEjecucion.horario[3].mesModel,
+        minutoModel: ins.config.horarioEjecucion.horario[3].minutoModel,
+      },
+      {
+        value:5,
+        diaModel: (ins.config.horarioEjecucion.horario.length > 4 ? ins.config.horarioEjecucion.horario[4].diaModel:null),
+        horaModel: (ins.config.horarioEjecucion.horario.length > 4 ? ins.config.horarioEjecucion.horario[4].horaModel:null),
+        mesModel: (ins.config.horarioEjecucion.horario.length > 4 ? ins.config.horarioEjecucion.horario[4].mesModel:null),
+        minutoModel: (ins.config.horarioEjecucion.horario.length > 4 ? ins.config.horarioEjecucion.horario[4].minutoModel:null),
+      }
+    ];
+  }
+  
 }
 
 const accionForm = async () => {
@@ -464,7 +510,7 @@ async function checkboxHorarioFuncion() {
 const horariosListDiaHora = ref([]);
 
 async function selectHorario() {
-  var idValueSeleccion = radios.value;
+  var idValueSeleccion = radios.value || 2;
   var horario = {
     method: idValueSeleccion,
     horario: [
@@ -485,6 +531,13 @@ async function selectHorario() {
       },
       {
         value:4,
+        diaModel: null,
+        horaModel: null,
+        mesModel:null,
+        minutoModel: null,
+      },
+      {
+        value:5,
         diaModel: null,
         horaModel: null,
         mesModel:null,
@@ -521,18 +574,46 @@ async function selectHorario() {
         value:4,
         diaModel: calendariosInputs.value[3].diaModel,
         horaModel: calendariosInputs.value[3].horaModel,
-        mesModel:calendariosInputs.value[3].mesModel,
+        mesModel: calendariosInputs.value[3].mesModel,
         minutoModel: calendariosInputs.value[3].minutoModel,
+      },
+      {
+        value:5,
+        diaModel: calendariosInputs.value[4].diaModel,
+        horaModel: calendariosInputs.value[4].horaModel,
+        mesModel: calendariosInputs.value[4].mesModel,
+        minutoModel: calendariosInputs.value[4].minutoModel,
       }
     ]
   }
   return horario;
 }
 
-// watch(radios, async(value)=>{
-//   await selectHorario();
-// })
+watch(radios, async(value)=>{
+  // console.log(radios.value)
+  mensajeHorario.value = null;
+  watch(calendariosInputs.value[radios.value - 1], async(value2)=>{
+    if(radios.value == 2 && value2.horaModel && value2.minutoModel){
+      // console.log(value2)
+      mensajeHorario.value = 'El newsletter se enviará todos los días a las '+value2.horaModel.toString().padStart(2, '0')+':'+value2.minutoModel.toString().padStart(2, '0');
+    }
+    if(radios.value == 3 && value2.diaModel && value2.horaModel && value2.minutoModel){
+      // console.log(value2)
+      mensajeHorario.value = 'El newsletter se enviará el '+value2.diaModel.toString().padStart(2, '0')+' de cada mes, a las '+" "+value2.horaModel.toString().padStart(2, '0')+":"+value2.minutoModel.toString().padStart(2, '0');
+    }
 
+    if(radios.value == 4 && value2.diaModel && value2.mesModel && value2.horaModel && value2.minutoModel){
+      // console.log(value2)
+      mensajeHorario.value = 'El newsletter se enviará cada año, el '+value2.diaModel.toString().padStart(2, '0')+' de '+value2.mesModel.toString().padStart(2, '0')+" a las "+value2.horaModel.toString().padStart(2, '0')+":"+value2.minutoModel.toString().padStart(2, '0');
+    }
+
+    if(radios.value == 5 && value2.diaModel && value2.mesModel && value2.horaModel && value2.minutoModel){
+      // console.log(value2)
+      mensajeHorario.value = 'El newsletter se enviará en los días de la semana: '+value2.diaModel.join(",")+' para los meses: '+" "+value2.mesModel.join(",")+" a las "+value2.horaModel.toString().padStart(2, '0')+":"+value2.minutoModel.toString().padStart(2, '0');
+    }
+  })
+  await selectHorario();
+})
 
 </script>
 
@@ -695,149 +776,212 @@ async function selectHorario() {
               <VIcon icon="mdi-clock-edit-outline" style="margin-right: 10px;" /> Calendario de ejecución
             </VExpansionPanelTitle>
             <VExpansionPanelText>
-              <VRadioGroup
-                v-model="radios"
-                inline
-              >
-                <div class="horario-ejecucion">
-                  <VRow>
-
-                    <VCol
-                      cols="12"
-                      sm="6"
-                      md="12"
-                    >
-                      <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
+              <VRow class="horario-ejecucion">
+                <VCol cols="12" sm="6" md="12" >
+                  <div class="d-flex justify-init align-items-center gap-3 flex-wrap active-items-cr">
+                    <VRadioGroup v-model="radios" inline >
                         <VRadio
                           label="Todos los días a las"
                           value="2"
                         />
-                        <div style="width: 90px;width: 90px;" title="Seleccione la hora">
-                          <label class="label-radio" style="margin-top: -12px;">Horas</label>
+                    </VRadioGroup>
+                    <div style="width: 60px;width: 60px;" title="Seleccione la hora">
+                      <label class="label-radio" style="margin-top: -12px;">Horas</label>
+                      <VAutocomplete
+                          v-model="calendariosInputs[1].horaModel"
+                          variant="underlined"
+                          :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
+                          label=""
+                      />
+                    </div>
+                    <span>:</span>
+                    <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
+                      <label class="label-radio" style="margin-top: -12px;">Minutos</label>
+                      <VAutocomplete
+                          v-model="calendariosInputs[1].minutoModel"
+                          variant="underlined"
+                          :items="Array.from({ length: 60 - 1 + 1 }, (_, index) => 1 + index)"
+                          label=""
+                      />
+                    </div>
+                  </div>
+                </VCol>
+                <VCol cols="12" sm="6" md="12" >
+                  <div class="d-flex justify-init align-items-center gap-3 flex-wrap pt-2 no-active-items-cr">
+                    <VRadioGroup v-model="radios" inline >
+                      <VRadio
+                        label="Cada"
+                        value="3"
+                      />
+                    </VRadioGroup>
+
+                    <div style="width: 60px;width: 60px;" title="Seleccione el día">
+
+                      <label class="label-radio" style="margin-top: -12px;">Día</label>
+                      <VAutocomplete
+                          v-model="calendariosInputs[2].diaModel"
+                          variant="underlined"
+                          :items="Array.from({ length: 31 - 1 + 1 }, (_, index) => 1 + index)"
+                          label=""
+                      />
+                    </div>
+                    <span>del mes, a las</span>
+                    <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
+                      <div style="width: 60px;width: 60px;" title="Seleccione la hora">
+
+                        <label class="label-radio" style="margin-top: -12px;">Hora</label>
+                        <VAutocomplete
+                            v-model="calendariosInputs[2].horaModel"
+                            variant="underlined"
+                            :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
+                            label=""
+                        />
+                      </div>
+                      <span>:</span>
+                      <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
+
+                        <label class="label-radio" style="margin-top: -12px;">Minuto</label>
+                        <VAutocomplete
+                            v-model="calendariosInputs[2].minutoModel"
+                            variant="underlined"
+                            :items="Array.from({ length: 60 - 1 + 1 }, (_, index) => 1 + index)"
+                            label=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </VCol>
+                <VCol cols="12" sm="6" md="12">
+                  <div class="active-items-cr">
+                    <VRadioGroup v-model="radios" inline >
+                      <VRadio
+                        label="Cada año el:"
+                        value="4"
+                      />
+                    </VRadioGroup>
+                    <div class="d-flex justify-init align-items-center gap-3 flex-wrap pl-7 pt-2">
+                      
+                      <div style="width: 60px;width: 60px;" title="Seleccione el día">
+
+                        <label class="label-radio" style="margin-top: -12px;">Día</label>
+                        <VAutocomplete
+                            v-model="calendariosInputs[3].diaModel"
+                            variant="underlined"
+                            :items="Array.from({ length: 31 - 1 + 1 }, (_, index) => 1 + index)"
+                            label=""
+                        />
+                      </div>
+                      <span>de</span>
+                      <div style="min-width: 60px;" title="Seleccione el mes">
+
+                        <label class="label-radio" style="margin-top: -12px;">Mes</label>
+                        <VAutocomplete
+                            v-model="calendariosInputs[3].mesModel"
+                            variant="underlined"
+                            :items="['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']"
+                            label=""
+                        />
+                      </div>
+                      <span>a las</span>
+
+                      <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
+                        <div style="width: 60px;width: 60px;" title="Seleccione la hora">
+
+                          <label class="label-radio" style="margin-top: -12px;">Hora</label>
                           <VAutocomplete
-                              v-model="calendariosInputs[1].horaModel"
+                              v-model="calendariosInputs[3].horaModel"
+                              variant="underlined"
                               :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
                               label=""
                           />
                         </div>
                         <span>:</span>
-                        <div style="width: 90px;width: 90px;" title="Seleccione el minuto">
-                          <label class="label-radio" style="margin-top: -12px;">Minutos</label>
+                        <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
+
+                          <label class="label-radio" style="margin-top: -12px;">Minuto</label>
                           <VAutocomplete
-                              v-model="calendariosInputs[1].minutoModel"
+                              v-model="calendariosInputs[3].minutoModel"
+                              variant="underlined"
                               :items="Array.from({ length: 60 - 1 + 1 }, (_, index) => 1 + index)"
                               label=""
                           />
                         </div>
                       </div>
-                    </VCol>
+                    </div>
+                  </div>
+                </VCol>
 
-                    <VCol
-                      cols="12"
-                      sm="6"
-                      md="12"
-                    >
-                      <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
-                        
-                        <VRadio
-                          label="Cada"
-                          value="3"
-                        />
-
-                        <div style="width: 80px;width: 80px;" title="Seleccione el día">
-
-                          <label class="label-radio" style="margin-top: -12px;">Día</label>
-                          <VAutocomplete
-                              v-model="calendariosInputs[2].diaModel"
-                              :items="Array.from({ length: 31 - 1 + 1 }, (_, index) => 1 + index)"
-                              label=""
-                          />
-                        </div>
-                        <span>del mes, a las</span>
-                        <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
-                          <div style="width: 80px;width: 80px;" title="Seleccione la hora">
-
-                            <label class="label-radio" style="margin-top: -12px;">Hora</label>
-                            <VAutocomplete
-                                v-model="calendariosInputs[2].horaModel"
-                                :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
-                                label=""
-                            />
-                          </div>
-                          <span>:</span>
-                          <div style="width: 80px;width: 80px;" title="Seleccione el minuto">
-
-                            <label class="label-radio" style="margin-top: -12px;">Minuto</label>
-                            <VAutocomplete
-                                v-model="calendariosInputs[2].minutoModel"
-                                :items="Array.from({ length: 60 - 1 + 1 }, (_, index) => 1 + index)"
-                                label=""
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </VCol>
-
-                    <VCol
-                      cols="12"
-                      sm="6"
-                      md="12"
-                    >
-                      <VRadio
-                          label="Cada año el:"
-                          value="4"
-                        />
-                      <div class="d-flex justify-init align-items-center gap-3 flex-wrap pl-7">
-                        
-                        <div style="width: 80px;width: 80px;" title="Seleccione el día">
-
-                          <label class="label-radio" style="margin-top: -12px;">Día</label>
-                          <VAutocomplete
-                              v-model="calendariosInputs[3].diaModel"
-                              :items="Array.from({ length: 31 - 1 + 1 }, (_, index) => 1 + index)"
-                              label=""
-                          />
-                        </div>
-                        <span>de</span>
-                        <div style="" title="Seleccione el mes">
-
-                          <label class="label-radio" style="margin-top: -12px;">Mes</label>
-                          <VAutocomplete
-                              v-model="calendariosInputs[3].mesModel"
-                              :items="['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']"
-                              label=""
-                          />
-                        </div>
-                        <span>a las</span>
-
-                        <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
-                          <div style="width: 80px;width: 80px;" title="Seleccione la hora">
-
-                            <label class="label-radio" style="margin-top: -12px;">Hora</label>
-                            <VAutocomplete
-                                v-model="calendariosInputs[3].horaModel"
-                                :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
-                                label=""
-                            />
-                          </div>
-                          <span>:</span>
-                          <div style="width: 80px;width: 80px;" title="Seleccione el minuto">
-
-                            <label class="label-radio" style="margin-top: -12px;">Minuto</label>
-                            <VAutocomplete
-                                v-model="calendariosInputs[3].minutoModel"
-                                :items="Array.from({ length: 60 - 1 + 1 }, (_, index) => 1 + index)"
-                                label=""
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </VCol>
-
+                <VCol cols="12" sm="6" md="12" >
+                  <VRadioGroup v-model="radios" inline >
+                    <VRadio
+                      label="Personalizado"
+                      value="5"
+                    />
+                  </VRadioGroup>
+                  
+                  <div v-if="radios == '5'" class="d-flex justify-init align-items-center gap-3 flex-wrap pl-7 pt-4">
                     
-                  </VRow>
-                </div>
-              </VRadioGroup>
+                    <div style="min-width: 60px;max-width: 45%;" title="Seleccione el día de la semana">
+                      <label class="label-radio" style="margin-top: -12px;">Días de la semana</label>
+                      
+                      <VAutocomplete
+                          v-model="calendariosInputs[4].diaModel"
+                          variant="underlined"
+                          multiple
+                          chips
+                          :items="['Lunes','Martes','Miercoles','Jueves','Viernes','Sábado','Domingo']"
+                          label=""
+                      />
+                    </div>
+                    <div style="min-width: 60px;max-width: 45%;" title="Seleccione el mes">
+                      <label class="label-radio" style="margin-top: -12px;">Meses</label>
+                      <VAutocomplete
+                          v-model="calendariosInputs[4].mesModel"
+                          variant="underlined"
+                          multiple
+                          chips
+                          :items="['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']"
+                          label=""
+                      />
+                    </div>
+
+                    <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
+                      <div style="min-width: 60px;max-width: 45%;" title="Seleccione la hora">
+                        <label class="label-radio" style="margin-top: -12px;">Horas</label>
+                        <VAutocomplete
+                            v-model="calendariosInputs[4].horaModel"
+                            variant="underlined"
+                            :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
+                            label=""
+                        />
+                      </div>
+                      <span>:</span>
+                      <div style="min-width: 60px;max-width: 45%;" title="Seleccione el minuto">
+
+                        <label class="label-radio" style="margin-top: -12px;">Minutos</label>
+                        <VAutocomplete
+                            v-model="calendariosInputs[4].minutoModel"
+                            variant="underlined"
+                            :items="Array.from({ length: 60 - 1 + 1 }, (_, index) => 1 + index)"
+                            label=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </VCol>
+
+                <VCol cols="12" sm="6" md="12" >
+                  <VAlert
+                    v-if="mensajeHorario"
+                    density="default"
+                    color="success"
+                    variant="tonal"
+                  >
+                    <VIcon icon="mdi-clock-time-eight-outline" /> {{mensajeHorario}}
+                  </VAlert>
+                </VCol>
+              </VRow>
+
             </VExpansionPanelText>
           </VExpansionPanel>
         </VExpansionPanels>
@@ -1144,5 +1288,19 @@ async function selectHorario() {
     padding-top: 3px;
 }
 
+.horario-ejecucion .v-input{
 
+}
+
+.no-active-items-cr{
+/*  padding-top: 20px; padding-bottom: 23px; padding-left: 15px; padding-right: 15px; border-radius: 7px;*/
+}
+
+.active-items-cr{
+/*  background-color: rgb(233 232 235 / 26%); padding-top: 20px; padding-bottom: 23px; padding-left: 15px; padding-right: 15px; border-radius: 7px;*/
+}
+
+.horario-ejecucion .v-input.v-radio-group {
+    display: contents;
+}
 </style>
