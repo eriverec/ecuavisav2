@@ -574,27 +574,27 @@ async function selectHorario() {
 
                     <VRow>
                       <VCol cols="12" sm="6" md="6">
-                        <VTextField v-model="nombre" label="Nombre del Newsletter" autocomplete="off" />
+                        <VTextField prepend-inner-icon="tabler-clipboard-text" v-model="nombre" label="Nombre del Newsletter" autocomplete="off" />
                       </VCol>
                       <VCol cols="12" sm="6" md="6">
-                        <VTextField v-model="descripcion" label="Escribir descripción corta"
+                        <VTextField prepend-inner-icon="tabler-inbox" v-model="descripcion" label="Escribir descripción corta"
                           placeholder="Ayuda dar al correo una descripción breve" autocomplete="off" />
                       </VCol>
                       <VCol cols="12" sm="6" md="12">
-                        <VTextField v-model="subject" label="Escribir el asunto" persistent-hint autocomplete="off" />
+                        <VTextField prepend-inner-icon="tabler-mail-check" v-model="subject" label="Escribir el asunto" persistent-hint autocomplete="off" />
                       </VCol>
                       <VCol cols="12">
-                        <VTextField v-model="pass" label="Escribe una contraseña" type="password" autocomplete="off" />
+                        <VTextField prepend-inner-icon="tabler-lock" v-model="pass" label="Escribe una contraseña" type="password" autocomplete="off" />
                       </VCol>
                       <VCol cols="12" sm="6">
-                        <VTextField v-model="preview" label="Link de vista previa"
+                        <VTextField prepend-inner-icon="tabler-eye" v-model="preview" label="Link de vista previa"
                           type="Ingrese el link de la vista previa" autocomplete="off" />
                       </VCol>
                       <VCol cols="12" sm="6">
-                        <VAutocomplete v-model="dataBookUserModel" :items="dataBookUserList" label="Lista de usuarios" />
+                        <VAutocomplete prepend-inner-icon="tabler-users" v-model="dataBookUserModel" :items="dataBookUserList" label="Lista de usuarios" />
                       </VCol>
                       <VCol cols="12" sm="12">
-                        <VAutocomplete v-model="dataTemplateModel" :items="dataTemplateList"
+                        <VAutocomplete prepend-inner-icon="tabler-template" v-model="dataTemplateModel" :items="dataTemplateList"
                           label="Lista de plantillas del sendpulse" />
                       </VCol>
                       <!-- <VCol cols="12" sm="6" md="12">
@@ -722,3 +722,5 @@ async function selectHorario() {
     padding-top: 3px;
   }
 </style>
+
+
