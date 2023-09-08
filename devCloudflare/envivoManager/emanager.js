@@ -342,9 +342,9 @@ function eventoEnvivoManagerQuito() {
                         }
                       }
                     }
-                    if (enVivoRedy) {
-                      enVivoRedy.style.display = 'flex';
-                    }
+                    // if (enVivoRedy) {
+                    //   enVivoRedy.style.display = 'flex';
+                    // }
                     if (programa === "Televistazo en la comunidad") {
                       if (btnTelcomunidad) {
                         btnTelcomunidad.style.display = "block";
@@ -363,9 +363,9 @@ function eventoEnvivoManagerQuito() {
                     }
                     fondito__quito.style.display = "block";
                   }
-                  if (enVivoRedy) {
-                    enVivoRedy.style.display = 'none';
-                  }
+                  // if (enVivoRedy) {
+                  //   enVivoRedy.style.display = 'none';
+                  // }
                   if (btnTelcomunidad) {
                     btnTelcomunidad.style.display = "none";
                   }
@@ -384,7 +384,7 @@ function eventoEnvivoManagerQuito() {
                 }
   
               }
-              if (enVivoRedy) { enVivoRedy.style.display = 'none'; }
+              // if (enVivoRedy) { enVivoRedy.style.display = 'none'; }
             }
           }
         } else {
@@ -400,7 +400,7 @@ function eventoEnvivoManagerQuito() {
             playerembed_quito.style.display = 'block';
             fondito__quito.style.display = "none";
           }
-          if (enVivoRedy) { enVivoRedy.style.display = 'flex'; }
+          // if (enVivoRedy) { enVivoRedy.style.display = 'flex'; }
   
           console.log("Forzado:", forzado);
         }
