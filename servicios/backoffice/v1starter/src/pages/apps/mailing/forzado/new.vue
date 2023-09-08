@@ -90,6 +90,7 @@ onMounted(async () => {
       },
     });
     templates.value = templatesResponse.data;
+    console.log("templatesResponse.data:",templatesResponse.data);
   } catch (error) {
     console.error('Error al obtener datos de la API de SendPulse', error);
   }
@@ -97,13 +98,21 @@ onMounted(async () => {
 
 // Función para crear la campaña
 const createCampaign = () => {
+  
+  if (!sendPulseAccessToken) {
+    console.error('Token de acceso no disponible');
+    return;
+  }
+
   const campaignData = {
     name: newsletterName.value,
     subject: subject.value,
-    list_id: selectedUserList.value,
-    template_id: selectedTemplate.value,
+    list_id: selectedUserList.id,
+    template_id: selectedTemplate.id,
     // Otros datos necesarios para crear la campaña
   };
+
+  console.log("campaignData:",campaignData);
 
   // Llama a la API de SendPulse para crear la campaña con campaignData
   axios.post('https://api.sendpulse.com/campaigns', campaignData, {
