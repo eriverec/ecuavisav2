@@ -264,6 +264,12 @@ function eventoEnvivoManager() {
           if (title_programa) {
             title_programa.innerHTML = dataTitulo;
           }
+
+          if (!document.querySelector('#playerembed iframe')) {
+            if (playerembed) {
+              playerembed.innerHTML = htmlIframe;
+            }
+          }
   
           if (playerembed && fondito__) {
             textIndicador.innerHTML = datalabel;
@@ -393,6 +399,11 @@ function eventoEnvivoManagerQuito() {
   
           if (title_programa_quito) {
             title_programa_quito.innerHTML = dataTitulo;
+          }
+          if (!document.querySelector('#playerembed_quito iframe')) {
+            if (playerembed_quito) {
+              playerembed_quito.innerHTML = htmlIframe;
+            }
           }
   
           if (playerembed_quito && fondito__quito) {
