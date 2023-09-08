@@ -396,7 +396,7 @@ function eventoEnvivoManagerQuito() {
           }
   
           if (playerembed_quito && fondito__quito) {
-            textIndicador.innerHTML = datalabel;
+            // textIndicador.innerHTML = datalabel;
             playerembed_quito.style.display = 'block';
             fondito__quito.style.display = "none";
           }
