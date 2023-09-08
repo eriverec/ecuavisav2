@@ -99,7 +99,6 @@ onMounted(async () => {
 const createCampaign = () => {
   const campaignData = {
     name: newsletterName.value,
-    description: shortDescription.value,
     subject: subject.value,
     list_id: selectedUserList.value,
     template_id: selectedTemplate.value,
@@ -107,7 +106,7 @@ const createCampaign = () => {
   };
 
   // Llama a la API de SendPulse para crear la campaña con campaignData
-  axios.post('URL_DE_LA_API_DE_SENDPULSE_PARA_CREAR_CAMPAÑA', campaignData, {
+  axios.post('https://api.sendpulse.com/campaigns', campaignData, {
     headers: {
       Authorization: `Bearer ${sendPulseAccessToken}`,
     },
