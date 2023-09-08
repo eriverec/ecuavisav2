@@ -91,6 +91,8 @@ onMounted(async () => {
     });
     templates.value = templatesResponse.data;
     console.log("templatesResponse.data:",templatesResponse.data);
+    console.log("userListsResponse.data:",userListsResponse.data);
+
   } catch (error) {
     console.error('Error al obtener datos de la API de SendPulse', error);
   }
@@ -108,7 +110,7 @@ const createCampaign = () => {
     name: newsletterName.value,
     subject: subject.value,
     list_id: selectedUserList.id,
-    template_id: selectedTemplate.id,
+    template_id: selectedTemplate.real_id,
     // Otros datos necesarios para crear la campaña
   };
 
