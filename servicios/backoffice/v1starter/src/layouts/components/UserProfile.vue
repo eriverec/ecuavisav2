@@ -121,7 +121,7 @@ async function accionBackoffice (){
           </VListItem>
 
           <!-- 👉 Settings -->
-          <VListItem link>
+          <VListItem link @click="$router.push({ name: 'apps-settings-menu' })">
             <template #prepend>
               <VIcon
                 class="me-2"
