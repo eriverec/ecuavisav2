@@ -3,12 +3,11 @@
     <h2>Crear Campaña</h2>
     <form @submit.prevent="createCampaign">
       <div>
-        <label for="newsletterName">Nombre del Newsletter:</label>
-        <input type="text" id="newsletterName" v-model="newsletterName" required />
+        <VTextField prepend-inner-icon="tabler-clipboard-text" v-model="newsletterName" label="Nombre del Newsletter" autocomplete="off" />
       </div>
       <div>
-        <label for="shortDescription">Descripción Corta:</label>
-        <input type="text" id="shortDescription" v-model="shortDescription" required />
+        <label for="nameRemitente">Nombre del remitente </label>
+        <input type="text" id="nameRemitente" v-model="nameRemitente" required />
       </div>
       <div>
         <label for="subject">Asunto:</label>
@@ -29,6 +28,12 @@
           <!-- Renderiza las opciones de plantillas desde la API de SendPulse -->
           <option v-for="template in templates" :key="template.real_id" :value="template.real_id">{{ template.name }}</option>
         </select>
+        <VAutocomplete 
+          prepend-inner-icon="tabler-template"
+          item-text="name"
+          item-value="real_id"
+          v-model="selectedTemplate" 
+          :items="templates" label="Lista de plantillas del sendpulse" />
       </div>
       <button type="submit">Crear Campaña</button>
     </form>
@@ -39,7 +44,7 @@ import { ref, onMounted } from 'vue';
 import axios from 'axios';
 
 const newsletterName = ref('');
-const shortDescription = ref('');
+const nameRemitente = ref('');
 const subject = ref('');
 const selectedUserList = ref('');
 const selectedTemplate = ref('');
@@ -107,7 +112,7 @@ const createCampaign = () => {
   }
 
   const campaignData = {
-    sender_name: shortDescription.value,
+    sender_name: nameRemitente.value,
     sender_email: "ecuavisainforma@ecuavisa.com",
     name: newsletterName.value,
     subject: subject.value,
