@@ -1206,4 +1206,59 @@ class SendPulse {
 			exit();
 		}
     }
+
+	public function forzado(){//
+    	try {
+    		$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
+				"enviado" => true
+			]);
+
+    		$getFecha = date("Y-m-d, H:i:s", time());
+    		$template = $this->htmlTemplate();
+			$bodyContent = $template[0];
+			$notas = $template[1];
+			$nombreNeswletter = $this->nombreNeswletter;
+			$list_id = $this->listaUsuario;
+
+			if(count($notas[0]) > 0){
+				// $resp = $this->armarCorreo($nombreNeswletter, $this->ctrFunciones->HtmlToBase64($bodyContent), $list_id);
+        		
+				$resp = json_decode('{
+				  "id": 245587,
+				  "status": 13, 
+				  "count": 1, 
+				  "tariff_email_qty": 1, 
+				  "overdraft_price": "0.0044",
+				  "ovedraft_currency": "RUR" 
+				}');
+
+				$respuestaJson = ["respSendPulse"=>$resp,"resp"=>isset($resp->id), "fecha"=>$getFecha];
+        		
+        		echo json_encode($respuestaJson);
+        		
+				if(isset($resp->id)){
+					$this->logToFile("Crear campaña a SendPulse", array("accion" => "Crear campaña"));
+					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
+		    			"enviado" => true
+		    		]);
+				}else{
+					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
+		    			"error" => $respuestaJson
+		    		]);
+				}
+				// echo json_encode(["resp"=>true, "message"=>"Newsletter creado."]);
+	        	exit();
+			}
+
+			echo json_encode(["resp" => false, "message"=>"El Newsletter no fue enviado por que no existe notas que enviar"]);
+	        exit();
+
+    	} catch (Exception $e) {
+		    echo json_encode(["resp" => false, "mensaje" => "Se produjo una excepción: " . $e->getMessage()]);
+			exit();
+		} catch (Error $error) {
+		    echo json_encode(["resp" => false, "mensaje" => "Se produjo un error: " . $error->getMessage()]);
+			exit();
+		}
+    }
 }
