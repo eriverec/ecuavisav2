@@ -668,12 +668,12 @@ function getMensajeHorario(value, value2){
 }
 
 function calcularProximaEjecucion(horarioEjecucion) {
-  return "";
   const fechaActual = new Date();
   const diaActual = fechaActual.getDate();
   const mesActual = fechaActual.getMonth();
   const horaActual = fechaActual.getHours();
   const minutoActual = fechaActual.getMinutes();
+
 
   let proximaEjecucion = new Date();
 
@@ -704,7 +704,7 @@ function calcularProximaEjecucion(horarioEjecucion) {
       }
       break;
     case 3:
-      console.log(horario)
+      // console.log(horario)
       // Ejecución cada día del mes
       var diaEjecucion = horario.diaModel;
       proximaEjecucion.setDate(diaEjecucion);
@@ -729,22 +729,38 @@ function calcularProximaEjecucion(horarioEjecucion) {
       const diasSemana = horario.diaModel.map((dia) =>
         getDiaSemanaIndex(dia)
       );
+      // return "";
       const meses = horario.mesModel.map((mes) => getNombreMesIndex(mes));
       let encontrado = false;
-      while (!encontrado) {
-        proximaEjecucion.setDate(proximaEjecucion.getDate() + 1);
-        const diaEjecucion = proximaEjecucion.getDay();
-        const mesEjecucion = proximaEjecucion.getMonth();
-        if (
-          diasSemana.includes(diaEjecucion) &&
-          meses.includes(mesEjecucion) &&
-          (proximaEjecucion.getHours() > horario.horaModel ||
-            (proximaEjecucion.getHours() === horario.horaModel &&
-              proximaEjecucion.getMinutes() >= horario.minutoModel))
-        ) {
-          encontrado = true;
+      var existe = false;
+
+      if(diasSemana.includes(fechaActual.getDay())){
+        if(meses.includes(fechaActual.getMonth())){
+          if(fechaActual.getHours() >= horario.horaModel){
+            if(horario.minutoModel >= fechaActual.getMinutes()){
+              proximaEjecucion.setDate(proximaEjecucion.getDate());
+              existe = true;
+            }
+          }
         }
       }
+
+      if(!existe){
+        while (!encontrado) {
+          proximaEjecucion.setDate(proximaEjecucion.getDate() + 1);
+
+          const diaEjecucion = proximaEjecucion.getDay();
+          const mesEjecucion = proximaEjecucion.getMonth();
+
+          if(diasSemana.includes(diaEjecucion)){
+            if(meses.includes(mesEjecucion)){
+              encontrado = true;
+            }
+          }
+        }
+      }
+
+      
       proximaEjecucion.setHours(horario.horaModel, horario.minutoModel);
       break;
   }
@@ -764,7 +780,7 @@ function calcularProximaEjecucion(horarioEjecucion) {
     .toString()
     .padStart(2, "0")}`;
 
-  return moment(proximaEjecucionFormat, "YYYY-MM-DD HH:mm:ss").format("MMM Do YYYY, HH:mm a");
+  return moment(proximaEjecucionFormat, "YYYY-MM-DD HH:mm:ss").locale('es').format("Do MMM YYYY, HH:mm a");
 }
 
 function getDiaSemanaIndex(dia) {
