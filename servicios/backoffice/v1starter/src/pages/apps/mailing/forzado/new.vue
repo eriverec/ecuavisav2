@@ -107,6 +107,8 @@ const createCampaign = () => {
   }
 
   const campaignData = {
+    sender_name: shortDescription.value,
+    sender_email: "ecuavisainforma@ecuavisa.com",
     name: newsletterName.value,
     subject: subject.value,
     list_id: selectedUserList.value,
