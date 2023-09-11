@@ -193,14 +193,19 @@ class Ctrfunciones {
 	}
 
     public function cropImagen($url = "", $newWidth = 600, $newHeight = 400, $compress= 75, $verticalPosition = 'arriba') {
-	    $imagePath = './../img/'.$this->folder.'/'; // Ruta donde se guardarán las imágenes
-
+	    
+	    // $imagePath = './img/'.$this->folder.'/'; // Ruta donde se guardarán las imágenes
+    	$imagePath = './img/';
 	    // Obtener la fecha actual
 	    $currentDate = date("Y/m/d");
 	    $currentYear = date("Y");
 	    $currentMonth = date("m");
 
 	    // Crear carpetas si no existen
+	    if (!file_exists($imagePath)) {
+	        mkdir($imagePath);
+	    }
+
 	    if (!file_exists($imagePath . $currentYear)) {
 	        mkdir($imagePath . $currentYear);
 	    }
@@ -276,7 +281,7 @@ class Ctrfunciones {
 
 		// Construye la URL completa
 		$urlActual = $protocolo . "://" . $host . $uri;
-	    $src_url = $this->typeProyect == "Production"?'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/img/'.$this->folder.'/'.$currentYear.'/'.$currentMonth.'/'.$imageName:'../../sendpulse/img/'.$this->folder.'/'.$currentYear.'/'.$currentMonth.'/'.$imageName;//$imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
+	    $src_url = $this->typeProyect == "Production"?'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/'.$this->folder.'/img/'.$currentYear.'/'.$currentMonth.'/'.$imageName:'../../sendpulse/'.$this->folder.'/img/'.$currentYear.'/'.$currentMonth.'/'.$imageName;//$imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
 	    return $src_url; //. "?v=" . $this->generarNumeroRandom();
 	}
 

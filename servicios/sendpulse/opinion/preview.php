@@ -10,4 +10,4 @@ date_default_timezone_set('America/Guayaquil');
 require './SendPulse.php';
 $c = new SendPulse();
 // echo json_encode($c->getNotasNewTemplate('https://www.ecuavisa.com/rss/boletin-diario.json'));
-$c->preview();
+$c->view();

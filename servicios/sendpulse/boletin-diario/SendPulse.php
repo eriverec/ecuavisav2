@@ -366,6 +366,7 @@ class SendPulse {
 			  $image = $value->content->url;
 			}
 		}
+
 		//$image = $this->cropImagen($image);
 		$tituloSubseccion = (count(explode("/", $value->link)) > 5 ? explode("/", $value->link)[4]:explode("/", $value->link)[3]);
 		$linkSubseccion = explode($tituloSubseccion, $value->link)[0].$tituloSubseccion;
@@ -426,27 +427,29 @@ class SendPulse {
 					$i_1 = 0;
 					foreach ($firstArray as $key => &$v) {
 						$v["link"] = $this->UTMLinks($i_1, $v["link"]);
-						if($totalNoticia > 4){
-							$v["image"] = $this->ctrFunciones->cropImagen($v["image"], 440, 250);
-						}
+						// if($totalNoticia > 4){
+							
+						// }
+						$v["image"] = $this->ctrFunciones->cropImagen($v["image"], 440, 250);
 						$i_1 = $i_1 + 1;
 					}
 
 					foreach ($secondArray as $key => &$v) {
 						$v["link"] = $this->UTMLinks($i_1, $v["link"]);
-						if($totalNoticia > 4){
-							$v["image"] = $this->ctrFunciones->cropImagen($v["image"], 250, 225, 80);
-						}
+						// if($totalNoticia > 4){
+							
+						// }
+						$v["image"] = $this->ctrFunciones->cropImagen($v["image"], 250, 225, 80);
 						
 						$i_1 = $i_1 + 1;
 					}
 					
 					foreach ($thirdArray as $key => &$v) {
 						$v["link"] = $this->UTMLinks($i_1, $v["link"]);
-						if($totalNoticia > 4){
-							$v["image"] = $this->ctrFunciones->cropImagen($v["image"], 250, 175);
-						}
-						
+						// if($totalNoticia > 4){
+							
+						// }
+						$v["image"] = $this->ctrFunciones->cropImagen($v["image"], 250, 175);
 						$i_1 = $i_1 + 1;
 					}
 					
@@ -545,6 +548,96 @@ class SendPulse {
 
 		return [$bodyContent, $notas];
     }
+
+    private function armarCorreo($name, $body, $list_id){
+    	$getFecha = date("Y-m-d, H:i:s", time());
+        $sender_name = $this->sender_name;
+        $sender_email = $this->sender_email;
+        $subject = $this->subject;
+        $name = $name;
+        $campaign = $this->getApiMethodPostAuthorization('https://api.sendpulse.com/campaigns', [
+        	"sender_name"=>$sender_name,
+        	"sender_email"=>$sender_email,
+        	"subject"=>$subject,
+        	"list_id"=>$list_id,
+        	"name"=>$name,
+        	"body"=>$body
+        ]);
+        return json_decode($campaign);
+    }
+
+    public function createNewsletter(){
+		try {
+
+			if($this->ctrFunciones->haPasadoDesfase($this->dataJsonNewsletter->data->config)){
+				if($this->dataJsonNewsletter->data->enviado){
+					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
+		    			"enviado" => false
+		    		]);
+				}
+				echo json_encode(["resp" => false, "mensaje" => "La hora es superior, venga mañana antes."]);
+				exit();
+			}
+			
+			if(!$this->ctrFunciones->validarAcceso($this->dataJsonNewsletter->data->config)){
+				echo json_encode(["resp" => false, "mensaje" => "Error 004 - Acceso no permitido de acuerdo a la fecha indicada"]);
+				exit();
+			}
+
+    		if($this->dataJsonNewsletter->data->enviado){
+				echo json_encode(["resp" => false, "mensaje" => "Error 003 - Newsletter ya fue enviado anteriormente"]);
+				exit();
+			}
+
+
+    		$getFecha = date("Y-m-d, H:i:s", time());
+    		$template = $this->htmlTemplate();
+			$bodyContent = $template[0];
+			$notas = $template[1];
+			$nombreNeswletter = $this->nombreNeswletter;
+			$list_id = $this->listaUsuario;
+
+			if(count($notas[0]) > 0){
+				// $resp = $this->armarCorreo($nombreNeswletter, $this->ctrFunciones->HtmlToBase64($bodyContent), $list_id);
+        		
+				$resp = json_decode('{
+				  "id": 245587,
+				  "status": 13, 
+				  "count": 1, 
+				  "tariff_email_qty": 1, 
+				  "overdraft_price": "0.0044",
+				  "ovedraft_currency": "RUR" 
+				}');
+
+				$respuestaJson = ["respSendPulse"=>$resp,"resp"=>isset($resp->id), "fecha"=>$getFecha];
+        		
+        		echo json_encode($respuestaJson);
+        		
+				if(isset($resp->id)){
+					$this->logToFile("Crear campaña a SendPulse", array("accion" => "Crear campaña"));
+					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
+		    			"enviado" => true
+		    		]);
+				}else{
+					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
+		    			"error" => $respuestaJson
+		    		]);
+				}
+				// echo json_encode(["resp"=>true, "message"=>"Newsletter creado."]);
+	        	exit();
+			}
+
+			echo json_encode(["resp" => false, "message"=>"El Newsletter no fue enviado por que no existe notas que enviar"]);
+	        exit();
+
+		} catch (Exception $e) {
+		    echo json_encode(["resp" => false, "mensaje" => "Se produjo una excepción: " . $e->getMessage()]);
+			exit();
+		} catch (Error $error) {
+		    echo json_encode(["resp" => false, "mensaje" => "Se produjo un error: " . $error->getMessage()]);
+			exit();
+		}
+	}
 
     public function view(){
 		try {
