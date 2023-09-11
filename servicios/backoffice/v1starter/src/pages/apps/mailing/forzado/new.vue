@@ -27,7 +27,7 @@
         <select id="template" v-model="selectedTemplate" required>
           <option value="">Seleccionar Plantilla</option>
           <!-- Renderiza las opciones de plantillas desde la API de SendPulse -->
-          <option v-for="template in templates" :key="template.id" :value="template.id">{{ template.name }}</option>
+          <option v-for="template in templates" :key="template.real_id" :value="template.real_id">{{ template.name }}</option>
         </select>
       </div>
       <button type="submit">Crear Campaña</button>
