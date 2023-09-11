@@ -13,6 +13,9 @@ const configSnackbar = ref({
 
 const currentTab = ref('tab-lista');
 const isDialogVisibleDelete = ref(false);
+const isDialogVisiblePreview = ref(false);
+const nombrePreview = ref('');
+const iframePreview = ref('');
 const checkbox = ref(1);
 const dataNewsletter = ref([]);
 const currentPage = ref(1);
@@ -161,6 +164,12 @@ const eliminarRegistro = async (id) => {
   isDialogVisibleDelete.value = true;
   idNewsletter.value = id;
   // console.log(id)
+};
+
+// Función para manejar el cambio de paginación
+const previewNeswletterIframe = async (preview) => {
+  isDialogVisiblePreview.value = true;
+  iframePreview.value = preview;
 };
 
 const eliminarRegistroSi = async () => {
@@ -658,6 +667,115 @@ function getMensajeHorario(value, value2){
   }
 }
 
+function calcularProximaEjecucion(horarioEjecucion) {
+  const fechaActual = new Date();
+  const diaActual = fechaActual.getDate();
+  const mesActual = fechaActual.getMonth();
+  const horaActual = fechaActual.getHours();
+  const minutoActual = fechaActual.getMinutes();
+
+  let proximaEjecucion = new Date();
+
+  var index = horarioEjecucion.method - 1;
+  var horario = horarioEjecucion.horario[index];
+  switch (parseInt(horarioEjecucion.method)) {
+    case 1:
+      // Ejecución cada día
+      proximaEjecucion = new Date(
+        proximaEjecucion.getTime() + 24 * 60 * 60 * 1000
+      );
+      break;
+    case 2:
+      if (
+        horaActual > horario.horaModel ||
+        (horaActual === horario.horaModel &&
+          minutoActual >= horario.minutoModel)
+      ) {
+        proximaEjecucion = new Date(
+          proximaEjecucion.getTime() +
+            ((horario.horaModel - horaActual + 24) % 24 * 60 +
+              horario.minutoModel - minutoActual) *
+              60 *
+              1000
+        );
+      } else {
+        proximaEjecucion.setHours(horario.horaModel, horario.minutoModel);
+      }
+      break;
+    case 3:
+      console.log(horario)
+      // Ejecución cada día del mes
+      var diaEjecucion = horario.diaModel;
+      proximaEjecucion.setDate(diaEjecucion);
+      if (proximaEjecucion <= fechaActual) {
+        proximaEjecucion.setMonth(proximaEjecucion.getMonth() + 1);
+        proximaEjecucion.setHours(horario.horaModel, horario.minutoModel);
+      }
+
+      break;
+    case 4:
+      // Ejecución cada mes
+      var diaEjecucion = horario.diaModel;
+      const mesEjecucion = horario.mesModel;
+      proximaEjecucion.setDate(diaEjecucion);
+      proximaEjecucion.setMonth(mesEjecucion);
+      if (proximaEjecucion <= fechaActual) {
+        proximaEjecucion.setFullYear(proximaEjecucion.getFullYear() + 1);
+      }
+      break;
+    case 5:
+      // Ejecución en días de la semana y meses específicos
+      const diasSemana = horario.diaModel.map((dia) =>
+        getDiaSemanaIndex(dia)
+      );
+      const meses = horario.mesModel.map((mes) => getNombreMesIndex(mes));
+      let encontrado = false;
+      while (!encontrado) {
+        proximaEjecucion.setDate(proximaEjecucion.getDate() + 1);
+        const diaEjecucion = proximaEjecucion.getDay();
+        const mesEjecucion = proximaEjecucion.getMonth();
+        if (
+          diasSemana.includes(diaEjecucion) &&
+          meses.includes(mesEjecucion) &&
+          (proximaEjecucion.getHours() > horario.horaModel ||
+            (proximaEjecucion.getHours() === horario.horaModel &&
+              proximaEjecucion.getMinutes() >= horario.minutoModel))
+        ) {
+          encontrado = true;
+        }
+      }
+      proximaEjecucion.setHours(horario.horaModel, horario.minutoModel);
+      break;
+  }
+
+  const proximaEjecucionFormat = `${proximaEjecucion.getFullYear()}-${(
+    proximaEjecucion.getMonth() + 1
+  )
+    .toString()
+    .padStart(2, "0")}-${proximaEjecucion
+    .getDate()
+    .toString()
+    .padStart(2, "0")} ${proximaEjecucion
+    .getHours()
+    .toString()
+    .padStart(2, "0")}:${proximaEjecucion
+    .getMinutes()
+    .toString()
+    .padStart(2, "0")}`;
+
+  return moment(proximaEjecucionFormat, "YYYY-MM-DD HH:mm:ss").format("MMM Do YYYY, HH:mm a");
+}
+
+function getDiaSemanaIndex(dia) {
+  const diasSemana = ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
+  return diasSemana.indexOf(dia);
+}
+
+function getNombreMesIndex(mes) {
+  const nombresMeses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  return nombresMeses.indexOf(mes);
+}
+
 watch(radios, async(value)=>{
   // console.log(radios.value)
   mensajeHorario.value = null;
@@ -750,7 +868,7 @@ watch(radios, async(value)=>{
                   >
                     <VTextField
                       v-model="nombre"
-                      label="Nombre del Newsletter"
+                      label="Nombre del Newsletter para SendPulse"
                       autocomplete="off"
                     />
                     <small style="
@@ -831,7 +949,7 @@ watch(radios, async(value)=>{
                   >
                     <VTextField
                       v-model="sender_name"
-                      label="Nombre del asunto"
+                      label="Nombre del remitente"
                       persistent-hint
                       autocomplete="off"
                     />
@@ -1024,7 +1142,7 @@ watch(radios, async(value)=>{
                             variant="underlined"
                             multiple
                             chips
-                            :items="['Lunes','Martes','Miercoles','Jueves','Viernes','Sábado','Domingo']"
+                            :items="['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo']"
                             label=""
                         />
                       </div>
@@ -1097,6 +1215,44 @@ watch(radios, async(value)=>{
       </VCard>
     </VDialog>
 
+    <VDialog
+        v-model="isDialogVisiblePreview"
+        fullscreen
+        :scrim="false"
+        transition="dialog-bottom-transition"
+      >
+        <VCard>
+          <!-- Toolbar -->
+          <div>
+            <VToolbar color="primary">
+              <VBtn
+                icon
+                variant="plain"
+                @click="isDialogVisiblePreview = false"
+              >
+                <VIcon
+                  color="white"
+                  icon="tabler-x"
+                />
+              </VBtn>
+
+              <VToolbarTitle>Vista previa del Newsletter</VToolbarTitle>
+
+              <VSpacer />
+
+              <VToolbarItems>
+                <VBtn
+                  variant="text"
+                  @click="isDialogVisiblePreview = false"
+                >
+                  Cerrar
+                </VBtn>
+              </VToolbarItems>
+            </VToolbar>
+          </div>
+          <iframe loading="lazy" width="100%" height="2000px" :src="iframePreview" frameborder="0"></iframe>
+        </VCard>
+      </VDialog>
 
     <VRow>
       <VCol
@@ -1149,11 +1305,11 @@ watch(radios, async(value)=>{
 
                     <VSpacer />
 
-                    <div class="d-flex align-center flex-wrap gap-4">
+                    <div class="d-flex align-center flex-wrap gap-4 d-none">
                       <!-- 👉 Select status -->
-                      <div class="invoice-list-filter d-flex align-center flex-wrap">
-                        <VBtn variant="text" icon="mdi-format-list-bulleted"  color="primary" class="mb-4" :to="{ name: 'apps-campaigns-create' }"/>
-                        <VBtn color="secondary" variant="text" icon="mdi-view-comfy" class="mb-4" :to="{ name: 'apps-campaigns-create' }"/>
+                      <div class="invoice-list-filter d-flex align-center flex-wrap d-none">
+                        <VBtn variant="text" icon="mdi-format-list-bulleted"  color="primary" class="mb-4  d-none" :to="{ name: 'apps-campaigns-create' }"/>
+                        <VBtn color="secondary" variant="text" icon="mdi-view-comfy" class="mb-4  d-none" :to="{ name: 'apps-campaigns-create' }"/>
                       </div>
                     </div>
                   </VCardText>
@@ -1221,14 +1377,25 @@ watch(radios, async(value)=>{
                           </span>
                         </div>
 
-                        <span class="text-xs text-disabled">
-                         <b><VIcon icon="mdi-account-group" /> Subject: </b> {{ c.subject }}
-                        </span>
+                        <div class="d-bloc">
+                          <span class="text-xs text-disabled">
+                           <b><VIcon icon="mdi-account-group" /> Subject: </b> {{ c.subject }}
+                          </span>
+                          <span class="text-xs text-disabled mt-1">
+                           <b><VIcon size="15" icon="mdi-email-open-multiple-outline" /> Sender Name: </b> {{ c.sender_name }}, {{ c.sender_email }}
+                          </span>
+                          <span class="text-xs text-disabled mt-1">
+                           <VChip  color="success">
+                            <b><VIcon style="margin-top: -2px;" icon="mdi-email-fast-outline" /> Próximo envío: </b>  {{calcularProximaEjecucion(c.config.horarioEjecucion)}}
+                          </VChip>
+                          </span>
+                        </div>
                       </VListItemSubtitle>
 
                       <template #append>
                         <div class="espacio-right-2">
                           
+
                           <VBtn
                             class=""
                             @click="showEditForm(c._id)"
@@ -1248,6 +1415,15 @@ watch(radios, async(value)=>{
                               icon="tabler-trash"
                             />
                           </VBtn>
+
+                          <VBtn
+                            title="Vista previa del Newsletter"
+                            class=""
+                            variant="text"
+                            @click="previewNeswletterIframe(c.preview)"
+                            color="success"
+                            icon="mdi-file-eye-outline"
+                            size="22"/>
 
                         </div>
                       </template>
@@ -1391,5 +1567,25 @@ watch(radios, async(value)=>{
 
 .v-menu .v-overlay__content.v-autocomplete__content {
     max-height: calc(75vh - 250px);
+}
+
+.icon-spinner {
+    animation: spin-animation 1.5s infinite;
+    display: inline-block;
+}
+
+.d-bloc{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start
+}
+
+@keyframes spin-animation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(359deg);
+    }
 }
 </style>

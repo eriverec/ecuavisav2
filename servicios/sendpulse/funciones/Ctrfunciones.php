@@ -98,11 +98,14 @@ class Ctrfunciones {
 
 		    // Calcular la diferencia en minutos entre los dos momentos de tiempo
 		    $diferenciaEnMinutos = $minutosTotalesActual - $minutosTotalesModel;
-
+		    if($diferenciaEnMinutos < 0){
+		    	$diferenciaEnMinutos = $diferenciaEnMinutos * -1;
+		    }
 		    // Definir el desfase máximo permitido (15 minutos)
 		    
 
 		    // Verificar si la diferencia es mayor o igual al desfase máximo
+		    
 		    return $diferenciaEnMinutos >= $this->desfaseMaximo;
 	    }
 	    return null;

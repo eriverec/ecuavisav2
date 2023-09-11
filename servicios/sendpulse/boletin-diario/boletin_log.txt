@@ -41,3 +41,5 @@
 [2023-09-11 10:51:36] [::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0] [Consumo de token]: Array(    [accion] => Init token)
 [2023-09-11 10:51:39] [::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0] [Consumo de token]: Array(    [accion] => Init token)
 [2023-09-11 10:51:42] [::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0] [Consumo de token]: Array(    [accion] => Init token)
+[2023-09-11 11:30:22] [::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0] [Consumo de token]: Array(    [accion] => Init token)
+[2023-09-11 11:30:47] [::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0] [Consumo de token]: Array(    [accion] => Init token)
