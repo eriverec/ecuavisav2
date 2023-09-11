@@ -30,10 +30,11 @@
         </select>
         <VAutocomplete 
           prepend-inner-icon="tabler-template"
+          v-model="selectedTemplate" 
+          :items="templates" 
           item-text="name"
           item-value="real_id"
-          v-model="selectedTemplate" 
-          :items="templates" label="Lista de plantillas del sendpulse" />
+          label="Lista de plantillas del sendpulse" />
       </div>
       <button type="submit">Crear Campaña</button>
     </form>
@@ -50,7 +51,6 @@ const selectedUserList = ref('');
 const selectedTemplate = ref('');
 const userLists = ref([]);
 const templates = ref([]);
-
 // Define tu cliente ID y cliente secreto de SendPulse
 const clientID = 'c79f7382012df0ea4c6fa37afec6374e';
 const clientSecret = '164551af334e1ec93e1b3099afd93a88';
