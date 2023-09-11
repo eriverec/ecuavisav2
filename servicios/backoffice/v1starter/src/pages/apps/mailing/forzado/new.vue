@@ -109,8 +109,8 @@ const createCampaign = () => {
   const campaignData = {
     name: newsletterName.value,
     subject: subject.value,
-    list_id: selectedUserList.id,
-    template_id: selectedTemplate.real_id,
+    list_id: selectedUserList.value,
+    template_id: selectedTemplate.value,
     // Otros datos necesarios para crear la campaña
   };
 
