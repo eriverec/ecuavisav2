@@ -493,7 +493,7 @@ async function getUserBook(){
       dataBookUserData.value = consultaJson;
 
       for(var i in consultaJson){
-        dataBookUserList.value.push({ title: `${consultaJson[i].name}`, value:consultaJson[i].id })
+        dataBookUserList.value.push({ title: `${consultaJson[i].name} - ${consultaJson[i].id}`, value:consultaJson[i].id })
       }
 
       dataBookUserList.value.sort((a, b) => a.title.localeCompare(b.title));
@@ -668,6 +668,7 @@ function getMensajeHorario(value, value2){
 }
 
 function calcularProximaEjecucion(horarioEjecucion) {
+  return "";
   const fechaActual = new Date();
   const diaActual = fechaActual.getDate();
   const mesActual = fechaActual.getMonth();
@@ -986,7 +987,7 @@ watch(radios, async(value)=>{
             </VExpansionPanel>
             <VExpansionPanel>
               <VExpansionPanelTitle>
-                <VIcon icon="mdi-clock-edit-outline" style="margin-right: 10px;" /> Calendario de ejecución
+                <VIcon icon="mdi-clock-edit-outline" style="margin-right: 10px;" /> Frecuencia de ejecución
               </VExpansionPanelTitle>
               <VExpansionPanelText>
                 <VRow class="horario-ejecucion">
@@ -1424,6 +1425,16 @@ watch(radios, async(value)=>{
                             color="success"
                             icon="mdi-file-eye-outline"
                             size="22"/>
+
+
+                          <VBtn
+                            :disabled="true"
+                            :title="'Envío forzado: '+c.nombre"
+                            class=""
+                            @click="showEditForm(c._id)"
+                            color="success"
+                            icon="mdi-email-fast-outline"
+                            size="37"/>
 
                         </div>
                       </template>
