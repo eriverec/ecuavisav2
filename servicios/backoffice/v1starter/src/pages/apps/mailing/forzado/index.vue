@@ -545,14 +545,14 @@ async function selectHorario() {
 
     <VRow>
       <VCol class="mt-0" cols="12" md="12" lg="12">
-        <VTabs v-model="currentTab" class="v-tabs-pill  d-none">
-          <VTab value="tab-lista" class=" d-none">
-            Listado
-          </VTab>
-          <VTab value="tab-agregar" class=" d-none">
-            Estadísticas
-          </VTab>
-        </VTabs>
+        <div class="demo-space-x">
+          <VBtn color="primary" variant="text" class="mb-4" :to="{ name: 'apps-mailing-list' }">
+            Lista de Newsletter
+          </VBtn>
+          <VBtn color="primary" class="mb-4" :to="{ name: 'apps-mailing-forzado' }">
+            Enviar Forzado
+          </VBtn>
+        </div>
 
         <VCard class="mt-5">
           <VCardText>
@@ -723,6 +723,10 @@ async function selectHorario() {
 
   .horario-ejecucion .v-field__append-inner {
     padding-top: 3px;
+  }
+
+  .v-menu .v-overlay__content.v-autocomplete__content {
+      height: calc(75vh - 250px);
   }
 </style>
 
