@@ -736,7 +736,7 @@ function calcularProximaEjecucion(horarioEjecucion) {
 
       if(diasSemana.includes(fechaActual.getDay())){
         if(meses.includes(fechaActual.getMonth())){
-          if(fechaActual.getHours() >= horario.horaModel){
+          if(horario.horaModel >= fechaActual.getHours()){
             if(horario.minutoModel >= fechaActual.getMinutes()){
               proximaEjecucion.setDate(proximaEjecucion.getDate());
               existe = true;
