@@ -9,6 +9,9 @@
           <VBtn color="primary" class="mb-4" :to="{ name: 'apps-mailing-forzado' }">
             Enviar Forzado
           </VBtn>
+          <VBtn color="primary" variant="text" class="mb-4" :to="{ name: 'apps-mailing-tabs-edit' }">
+            Editar newsletter
+          </VBtn>
         </div>
 
         <VCard class="mt-5">
@@ -75,8 +78,8 @@
   </div>
 </template>
 <script setup>
-import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { onMounted, ref } from 'vue';
 
 const newsletterName = ref('');
 const nameRemitente = ref('');

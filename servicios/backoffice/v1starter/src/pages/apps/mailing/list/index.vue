@@ -1285,6 +1285,9 @@ watch(radios, async(value)=>{
           <VBtn color="primary" variant="text" class="mb-4" :to="{ name: 'apps-mailing-forzado' }">
             Enviar Forzado
           </VBtn>
+          <VBtn color="primary" variant="text" class="mb-4" :to="{ name: 'apps-mailing-tabs-edit' }">
+            Editar newsletter
+          </VBtn>
         </div>
         
 
