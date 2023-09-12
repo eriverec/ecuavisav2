@@ -29,41 +29,77 @@
 
             <div class="px-4">
               <VCardText class="align-center px-0 pb-0 pt-2">
-
-
                 <form @submit.prevent="createCampaign">
                   <VRow>
 
-                    <!-- <VCol cols="12" sm="12" md="12">
-                      <VAutocomplete prepend-inner-icon="tabler-abc" v-model="selectedTemplate" :items="dataList"
-                        label="Elegir el boletín" />
-                    </VCol> -->
+                    <VCol cols="12" sm="8" md="8">
+                      <VCol cols="12" sm="12" md="12">
+                        <VTextField prepend-inner-icon="tabler-clipboard-text" v-model="newsletterName"
+                          label="Nombre del Newsletter" autocomplete="off" />
+                      </VCol>
+                      <VCol cols="12" sm="12" md="12">
+                        <VTextField prepend-inner-icon="tabler-mail-check" v-model="nameRemitente"
+                          label="Escribir el remitente" persistent-hint autocomplete="off" />
+                      </VCol>
+                      <VCol cols="12" sm="12" md="12">
+                        <VTextField prepend-inner-icon="tabler-mail-check" v-model="subject" label="Escribir el asunto"
+                          persistent-hint autocomplete="off" />
+                      </VCol>
+                      <VCol cols="12" sm="12" md="12">
+                        <VAutocomplete prepend-inner-icon="tabler-users" v-model="selectedUserList"
+                          :items="dataBookUserList" label="Lista de usuarios" />
+                      </VCol>
+
+                      <VCol cols="12" sm="12" md="12">
+                        <VAutocomplete prepend-inner-icon="tabler-template" @change="fetchTemplateBody" v-model="selectedTemplate"
+                          :items="dataTemplateList" label="Lista de plantillas del sendpulse" />
+                      </VCol>
+
+                      
+                      <div class="bloque_editar_template">
+                        <VCardTitle>Campos para editar la nueva campaña </VCardTitle>
+                        <VCol cols="12" sm="12" md="12">
+                          <VTextField prepend-inner-icon="tabler-list" v-model="subject" label="Imagen del articulo"
+                            persistent-hint autocomplete="off" />
+                        </VCol>
+  
+                        <VCol cols="12" sm="12" md="12">
+                          <VTextField prepend-inner-icon="tabler-list" v-model="subject" label="Url del articulo"
+                            persistent-hint autocomplete="off" />
+                        </VCol>
+  
+                        <VCol cols="12" sm="12" md="12">
+                          <VTextField prepend-inner-icon="tabler-list" v-model="subject" label="Titulo del nota"
+                            persistent-hint autocomplete="off" />
+                        </VCol>
+  
+                        <VCol cols="12" sm="12" md="12">
+                          <VTextField prepend-inner-icon="tabler-list" v-model="subject" label="Subtitulo del nota"
+                            persistent-hint autocomplete="off" />
+                        </VCol>
+
+                      </div>
 
 
-                    <VCol cols="12" sm="6" md="6">
-                      <VTextField prepend-inner-icon="tabler-clipboard-text" v-model="newsletterName"
-                        label="Nombre del Newsletter" autocomplete="off" />
+                      <VCol cols="12" sm="12" md="12">
+                        <VBtn color="success" type="submit">
+                          <VIcon :size="22" icon="tabler-mail-fast" /> Crear Campaña
+                        </VBtn>
+                      </VCol>
                     </VCol>
-                    <VCol cols="12" sm="6" md="6">
-                      <VTextField prepend-inner-icon="tabler-mail-check" v-model="nameRemitente"
-                        label="Escribir el remitente" persistent-hint autocomplete="off" />
-                    </VCol>
-                    <VCol cols="12" sm="12" md="12">
-                      <VTextField prepend-inner-icon="tabler-mail-check" v-model="subject" label="Escribir el asunto"
-                        persistent-hint autocomplete="off" />
-                    </VCol>
-                    <VCol cols="12" sm="6" md="6">
-                      <VAutocomplete prepend-inner-icon="tabler-users" v-model="selectedUserList"
-                        :items="dataBookUserList" label="Lista de usuarios" />
-                    </VCol>
-                    <VCol cols="12" sm="6" md="6">
-                      <VAutocomplete prepend-inner-icon="tabler-template" v-model="selectedTemplate"
-                        :items="dataTemplateList" label="Lista de plantillas del sendpulse" />
-                    </VCol>
-                    <VCol cols="12" sm="12" md="12">
-                      <VBtn color="success" type="submit">
-                        <VIcon :size="22" icon="tabler-mail-fast" /> Crear Campaña
-                      </VBtn>
+
+                    <VCol cols="12" sm="4" md="4">
+                      <VCol cols="12" sm="12" md="12">
+                        <div v-if="selectedTemplatePreview">
+                          <img class="imgPreview" :src="selectedTemplatePreview" alt="Vista Previa del Template" />
+                        </div>
+
+                        <div v-if="htmlBody">
+                          <p v-html="htmlBody"></p>
+                        </div>
+
+        
+                      </VCol>
                     </VCol>
                   </VRow>
                 </form>
@@ -78,9 +114,8 @@
   </div>
 </template>
 <script setup>
+import { ref, onMounted, watch } from 'vue';
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
-
 const newsletterName = ref('');
 const nameRemitente = ref('');
 const subject = ref('');
@@ -91,9 +126,29 @@ const templates = ref([]);
 const dataBookUserList = ref([]);
 const dataList = ref([]);
 const dataTemplateList = ref([]);
+const htmlBody = ref(atob(''))
 
 // Arreglo con las opciones para el campo VAutocomplete
 // const dataBoletinList = ['Diario', 'Opinión'];
+
+watch(selectedTemplate, async(value)=>{
+  if (value) {
+    try {
+      const response = await axios.get(`https://api.sendpulse.com/template/${value}`, {
+        headers: {
+          Authorization: `Bearer ${sendPulseAccessToken}`, // Agregamos el encabezado de autorización
+        },
+      });
+      htmlBody.value = (response.data.body);
+      console.log(htmlBody.value );
+
+      // return templateBody; // Devuelve el cuerpo del template
+    } catch (error) {
+      console.error('Error al obtener el cuerpo del template', error);
+    }
+  }
+  // alert(value)
+})
 
 const dataBoletinList = [
   { text: 'Diario', value: '3499' },
@@ -110,6 +165,7 @@ const configSnackbar = ref({
   type: "success",
   model: false
 });
+
 
 
 // Define tu cliente ID y cliente secreto de SendPulse
@@ -167,7 +223,10 @@ onMounted(async () => {
     templates.value = templatesResponse.data;
 
     for (var i in templatesResponse.data) {
-      dataTemplateList.value.push({ title: `${templatesResponse.data[i].name} - ${templatesResponse.data[i].real_id}`, value: templatesResponse.data[i].real_id })
+      dataTemplateList.value.push({
+        title: `${templatesResponse.data[i].name} - ${templatesResponse.data[i].real_id}`,
+        value: templatesResponse.data[i].real_id
+      })
     }
 
     dataTemplateList.value.sort((a, b) => a.title.localeCompare(b.title));
@@ -219,4 +278,26 @@ const createCampaign = () => {
       console.error('Error al crear la campaña', error);
     });
 };
+
+
+// Propiedad computada para obtener la vista previa de la plantilla seleccionada
+const selectedTemplatePreview = computed(() => {
+  const selectedTemplateId = selectedTemplate.value;
+  if (selectedTemplateId) {
+    // Buscar la plantilla seleccionada en la lista de plantillas
+    const selectedTemplate = templates.value.find(template => template.real_id === selectedTemplateId);
+    if (selectedTemplate) {
+      return selectedTemplate.preview;
+    }
+  }
+  return ''; // Si no se selecciona una plantilla o no se encuentra la vista previa, devuelve una cadena vacía
+});
+
+
 </script>
+
+<style>
+.imgPreview {
+  width: 100%;
+}
+</style>
