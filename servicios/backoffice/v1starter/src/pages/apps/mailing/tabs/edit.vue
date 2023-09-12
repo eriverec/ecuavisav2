@@ -171,6 +171,12 @@ const accionForm = async (index) => {
 
 }
 
+const configSnackbar = ref({
+  message:"Datos guardados",
+  type:"success",
+  model:false
+});
+
 const editRegister = async (json, id) => {
   disabledViewList.value = true;
   var jsonEnviar = json
@@ -398,6 +404,15 @@ async function selectHorario(indexP) {
 
 <template>
   <section>
+    <!-- tonal snackbar -->
+    <VSnackbar
+      v-model="configSnackbar.model"
+      location="top end"
+      variant="flat"
+      :color="configSnackbar.type"
+    >
+      {{configSnackbar.message}}
+    </VSnackbar>
     <VRow>
       <VCol
         class="mt-0"
