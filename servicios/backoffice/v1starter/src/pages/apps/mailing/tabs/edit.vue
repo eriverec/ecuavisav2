@@ -419,12 +419,13 @@ async function selectHorario(indexP) {
 
     </VCol>
     </VRow>
-    <VRow>
-      <VCol
+    <VRow class="d-flex">
+      <VCol       
         cols="6"
+        class="container" 
         v-for=" item, index in dataNewsletter"
       >
-    <VCard class="mt-5"  :title="'Editar '+item.nombre">
+    <VCard class="mt-5" :title="'Editar '+item.nombre">
           <VCardText>
             <VExpansionPanels v-model="panelSendpulse[index]">
             <VExpansionPanel>
@@ -473,6 +474,7 @@ async function selectHorario(indexP) {
                       autocomplete="off"
                     />
                   </VCol>
+                   <!--
                   <VCol cols="12" class="d-none">
                     <VTextField
                       v-model="item.pass"
@@ -481,7 +483,7 @@ async function selectHorario(indexP) {
                       autocomplete="off"
                     />
                   </VCol>
-                  <!--
+                 
                   <VCol
                     cols="12"
                     sm="12"
@@ -785,3 +787,11 @@ async function selectHorario(indexP) {
   </section>
 
 </template>
+
+<style>
+@media screen and (max-width: 1000px) {
+  .container {
+   min-width: 90svw; 
+  }
+}
+</style>
