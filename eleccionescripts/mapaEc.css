@@ -36,7 +36,7 @@ body {
 }
 
 #dataPorcentaje {
-    display: flex;
+    display: none;
 }
 
 .itemsFoto img {
@@ -56,8 +56,8 @@ body {
 
 .itemsFoto:nth-child(2) .block-text {
     display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+    flex-direction: column;
+    align-items: flex-end;
 }
 
 .block-text {
@@ -72,7 +72,7 @@ body {
 }
 
 #dataFotos {
-    display: flex;
+    display: none;
     justify-content: space-between;
     margin-bottom: 15px;
 }
@@ -111,6 +111,30 @@ body {
 }
 
 
+@media (max-width: 767px) {
+    .itemsFoto:nth-child(1) {
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .itemsFoto:nth-child(2) {
+        flex-direction: column;
+        align-items: end;
+    }
+
+    .block-text .fotoName {
+        font-size: 16px;
+    }
+
+    .porcentaje-item {
+        font-size: 24px;
+    }
+
+    .itemsFoto img {
+        width: 80px;
+        height: 80px;
+    }
+}
 
 
 @media (max-width: 680px) {
@@ -121,26 +145,6 @@ body {
     .mapa_ec_2023 {
         height: 720px;
     }
-    .itemsFoto:nth-child(1) {
-        flex-direction: column;
-        align-items: start;
-    }
-    
-    .itemsFoto:nth-child(2) {
-        flex-direction: column;
-        align-items: end;
-    }
-    .block-text .fotoName{
-        font-size: 16px;
-    }
-    .porcentaje-item{
-        font-size: 24px;
-    }
-    .itemsFoto img{
-        width: 80px;
-        height: 80px;
-    }
-
 }
 
 @media (max-width: 550px) {
