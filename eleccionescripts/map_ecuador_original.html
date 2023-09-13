@@ -136,11 +136,11 @@
                         name: 'Votos',
                         data: [{
                             name: 'Daniel Noboa',
-                            color: '#C40401',
+                            color: '#b5e2c9',
                             y: parseInt(columns[3][row], 10)
                         }, {
                             name: 'Luisa Gonzáles',
-                            color: '#0200D0',
+                            color: '#f7c0b5',
                             y: parseInt(columns[2][row], 10)
                         }],
                         dataLabels: {
@@ -189,7 +189,7 @@
                         align: 'left'
                     },
                     subtitle: {
-                        text: 'Source: <a href="https://transition.fec.gov/pubrec/fe2016/2016presgeresults.pdf">Federal Election Commission</a>',
+                        text: 'Fuente: CNE',
                         align: 'left'
                     },
 
@@ -215,18 +215,18 @@
 
                     colorAxis: {
                         stops: [
-                          [0, '#C40401'],       // Color para Daniel Noboa
-                          [1, '#0200D0']        // Color para Luisa Gonzáles
+                          [0, '#b5e2c9'],       // Color para Daniel Noboa
+                          [1, '#f7c0b5']        // Color para Luisa Gonzáles
                         ],
                         dataClasses: [{
                             from: -100,
                             to: 0,
-                            color: '#0200D0',
+                            color: '#f7c0b5',
                             name: 'Luisa Gonzáles'
                         }, {
                             from: 0,
                             to: 100,
-                            color: '#C40401',
+                            color: '#b5e2c9',
                             name: 'Daniel Noboa'
                         }]
                     },
@@ -295,7 +295,7 @@
             //     var mayorContrincante = getMayorContrincante(i);
             //     var color = '';
             //     if(mayorContrincante){
-            //         color = mayorContrincante === 'Daniel Noboa' ? '#C40401' : '#0200D0'; // Cambia los colores aquí
+            //         color = mayorContrincante === 'Daniel Noboa' ? '#b5e2c9' : '#f7c0b5'; // Cambia los colores aquí
             //     }
 
             //     console.log(mayorContrincante)
@@ -320,7 +320,7 @@
                 var color = '';
 
                 if (mayorContrincante) {
-                  color = mayorContrincante[0] === 'Daniel Noboa' ? '#C40401' : '#0200D0'; // Asigna el color según el contrincante mayor
+                  color = mayorContrincante[0] === 'Daniel Noboa' ? '#b5e2c9' : '#f7c0b5'; // Asigna el color según el contrincante mayor
                 }
 
                 if (mayorContrincante) {
