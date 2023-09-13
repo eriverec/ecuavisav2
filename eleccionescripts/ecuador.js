@@ -1,4 +1,4 @@
-{
+const jsonMap = {
   "type": "Topology",
   "objects": {
     "default": {

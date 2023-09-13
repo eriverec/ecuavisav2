@@ -440,369 +440,369 @@ async function selectHorario(indexP) {
         class="container" 
         v-for=" item, index in dataNewsletter"
       >
-    <VCard class="mt-5" :title="'Editar '+item.nombre">
-          <VCardText>
-            <VExpansionPanels v-model="panelSendpulse[index]">
-            <VExpansionPanel>
-              <VExpansionPanelTitle>Formulario</VExpansionPanelTitle>
-              <VExpansionPanelText>
-                <VRow>
-                  <VCol
-                    cols="12"
-                    sm="6"
-                    md="6"
-                  >
-                    <VTextField
-                      v-model="item.nombre"
-                      label="Nombre del Newsletter para SendPulse"
-                      autocomplete="off"
-                    />
-                    <small style="
-                        line-height: 1.2;
-                        display: block;
-                        font-size: 10px;
-                        padding-top: 4px;
-                        padding-left: 4px;
-                    "><VIcon icon="mdi-information-outline" size="13px" /> Nombre como se va a guardar en SendPulse</small>
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="6"
-                    md="6"
-                  >
-                    <VTextField
-                      v-model="item.descripcion"
-                      label="Escribir descripción corta"
-                      placeholder="Ayuda dar al correo una descripción breve"
-                      autocomplete="off"
-                    />
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="6"
-                    md="12"
-                  >
-                    <VTextField
-                      v-model="item.subject"
-                      label="Escribir el asunto"
-                      persistent-hint
-                      autocomplete="off"
-                    />
-                  </VCol>
-                   <!--
-                  <VCol cols="12" class="d-none">
-                    <VTextField
-                      v-model="item.pass"
-                      label="Escribe una contraseña"
-                      type="password"
-                      autocomplete="off"
-                    />
-                  </VCol>
-                 
-                  <VCol
-                    cols="12"
-                    sm="12"
-                  >
-                    <VTextField
-                      v-model="item.preview"
-                      label="Link de vista previa"
-                      type="Ingrese el link de la vista previa"
-                      autocomplete="off"
-                    />
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="6"
-                  >
-                    <VAutocomplete
-                      v-model="item.config.addressbook"
-                      :items="dataBookUserList"
-                      label="Lista de usuarios"
-                    />
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="6"
-                  >
-                    <VAutocomplete
-                      v-model="item.config.template"
-                      :items="dataTemplateList"
-                      label="Lista de plantillas del sendpulse"
-                    />
-                  </VCol>
-                  -->
-                  <VCol
-                    cols="12"
-                    sm="6"
-                    md="5"
-                  >
-                    <VTextField
-                      v-model="item.sender_name"
-                      label="Nombre del remitente"
-                      persistent-hint
-                      autocomplete="off"
-                    />
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="7"
-                  >
-                    <VAutocomplete
-                      v-model="item.sender_email"
-                      :items="dataSenderEmailList"
-                      label="Lista de remitentes disponible"
-                    />
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="6"
-                    md="12"
-                  >
-                    <VCheckbox
-                      v-model="item.estado"
-                      label="Estado del Newsletter"
-                    />
-                  </VCol>
-                  <VCol
-                    cols="12"
-                    sm="6"
-                    md="12"
-                  >
-                    
-                  </VCol>
-                </VRow>
-              </VExpansionPanelText>
-            </VExpansionPanel>
-            <VExpansionPanel>
-              <VExpansionPanelTitle>
-                <VIcon icon="mdi-clock-edit-outline" style="margin-right: 10px;" /> Frecuencia de ejecución
-              </VExpansionPanelTitle>
-              <VExpansionPanelText>
-                <VRow class="horario-ejecucion">
-                  <VCol cols="12" sm="6" md="12" >
-                    <VDivider style="margin-bottom: 2rem;"/>
-                    <div class="d-flex justify-init align-items-center gap-3 flex-wrap active-items-cr">
-                      <VRadioGroup v-model="horarios[index].radios" inline >
-                          <VRadio
-                            label="Todos los días a las"
-                            value="2"
-                          />
-                      </VRadioGroup>
-                      <div class="d-flex">
-                      <div style="width: 60px;width: 60px;" title="Seleccione la hora">
-                        <label class="label-radio" style="margin-top: -12px;">Horas</label>
+        <VCard class="mt-5" :title="'Editar '+item.nombre">
+              <VCardText>
+                <VExpansionPanels v-model="panelSendpulse[index]">
+                <VExpansionPanel>
+                  <VExpansionPanelTitle>Formulario</VExpansionPanelTitle>
+                  <VExpansionPanelText>
+                    <VRow>
+                      <VCol
+                          cols="12"
+                          sm="6"
+                          md="6"
+                        >
+                        <VTextField
+                          v-model="item.nombre"
+                          label="Nombre del Newsletter para SendPulse"
+                          autocomplete="off"
+                        />
+                        <small style="
+                            line-height: 1.2;
+                            display: block;
+                            font-size: 10px;
+                            padding-top: 4px;
+                            padding-left: 4px;
+                        "><VIcon icon="mdi-information-outline" size="13px" /> Nombre como se va a guardar en SendPulse</small>
+                      </VCol>
+                      <VCol
+                          cols="12"
+                          sm="6"
+                          md="6"
+                        >
+                        <VTextField
+                          v-model="item.descripcion"
+                          label="Escribir descripción corta"
+                          placeholder="Ayuda dar al correo una descripción breve"
+                          autocomplete="off"
+                        />
+                      </VCol>
+                      <VCol
+                        cols="12"
+                        sm="6"
+                        md="12"
+                      >
+                        <VTextField
+                          v-model="item.subject"
+                          label="Escribir el asunto"
+                          persistent-hint
+                          autocomplete="off"
+                        />
+                      </VCol>
+                       <!--
+                      <VCol cols="12" class="d-none">
+                        <VTextField
+                          v-model="item.pass"
+                          label="Escribe una contraseña"
+                          type="password"
+                          autocomplete="off"
+                        />
+                      </VCol>
+                     
+                      <VCol
+                        cols="12"
+                        sm="12"
+                      >
+                        <VTextField
+                          v-model="item.preview"
+                          label="Link de vista previa"
+                          type="Ingrese el link de la vista previa"
+                          autocomplete="off"
+                        />
+                      </VCol>
+                      <VCol
+                        cols="12"
+                        sm="6"
+                      >
                         <VAutocomplete
-                            v-model="horarios[index].calendariosInputs[1].horaModel"
-                            variant="underlined"
-                            :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
-                            label=""
+                          v-model="item.config.addressbook"
+                          :items="dataBookUserList"
+                          label="Lista de usuarios"
                         />
-                      </div>
-                      <span> : </span>
-                      <div style="width: 60px;width: 65px;" title="Seleccione el minuto">
-                        <label class="label-radio" style="margin-top: -12px;">Minutos</label>
+                      </VCol>
+                      <VCol
+                        cols="12"
+                        sm="6"
+                      >
                         <VAutocomplete
-                            v-model="horarios[index].calendariosInputs[1].minutoModel"
-                            variant="underlined"
-                            :items="Array.from({ length: 61 - 1 + 0 }, (_, index) => 0 + index)"
-                            label=""
+                          v-model="item.config.template"
+                          :items="dataTemplateList"
+                          label="Lista de plantillas del sendpulse"
                         />
-                      </div>
-                     </div>
-                    </div>
-                    <VDivider style="margin-top: 2rem;"/>
-                  </VCol>
-                  <VCol cols="12" sm="6" md="12" >
-                    <div class="d-flex justify-init align-items-center gap-3 flex-wrap pt-2 no-active-items-cr">
-                      <VRadioGroup v-model="horarios[index].radios" inline >
-                        <VRadio
-                          label="Cada"
-                          value="3"
+                      </VCol>
+                      -->
+                      <VCol
+                        cols="12"
+                        sm="6"
+                        md="5"
+                      >
+                        <VTextField
+                          v-model="item.sender_name"
+                          label="Nombre del remitente"
+                          persistent-hint
+                          autocomplete="off"
                         />
-                      </VRadioGroup>
-
-                      <div style="width: 60px;width: 60px;" title="Seleccione el día">
-
-                        <label class="label-radio" style="margin-top: -4px;">Día</label>
+                      </VCol>
+                      <VCol
+                        cols="12"
+                        sm="7"
+                      >
                         <VAutocomplete
-                            v-model="horarios[index].calendariosInputs[2].diaModel"
-                            variant="underlined"
-                            :items="Array.from({ length: 31 - 1 + 1 }, (_, index) => 1 + index)"
-                            label=""
+                          v-model="item.sender_email"
+                          :items="dataSenderEmailList"
+                          label="Lista de remitentes disponible"
                         />
-                      </div>
-                      <span>del mes, a las</span>
-                      <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
-                        <div style="width: 60px;width: 60px;" title="Seleccione la hora">
-
-                          <label class="label-radio" style="margin-top: -4px;">Hora</label>
-                          <VAutocomplete
-                              v-model="horarios[index].calendariosInputs[2].horaModel"
-                              variant="underlined"
-                              :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
-                              label=""
-                          />
-                        </div>
-                        <span>:</span>
-                        <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
-
-                          <label class="label-radio" style="margin-top: -4px;">Minuto</label>
-                          <VAutocomplete
-                              v-model="horarios[index].calendariosInputs[2].minutoModel"
-                              variant="underlined"
-                              :items="Array.from({ length: 61 - 1 + 0 }, (_, index) => 0 + index)"
-                              label=""
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    <VDivider style="margin-top: 2rem;"/>
-                  </VCol>
-                  <VCol cols="12" sm="6" md="12">
-                    <div class="active-items-cr">
-                      <VRadioGroup v-model="horarios[index].radios" inline >
-                        <VRadio
-                          label="Cada año el:"
-                          value="4"
+                      </VCol>
+                      <VCol
+                        cols="12"
+                        sm="6"
+                        md="12"
+                      >
+                        <VCheckbox
+                          v-model="item.estado"
+                          label="Estado del Newsletter"
                         />
-                      </VRadioGroup>
-                      <div class="d-flex justify-init align-items-center gap-3 flex-wrap pl-7 pt-2">
+                      </VCol>
+                      <VCol
+                        cols="12"
+                        sm="6"
+                        md="12"
+                      >
                         
-                        <div style="width: 60px;width: 60px;" title="Seleccione el día">
-
-                          <label class="label-radio" style="margin-top: -4px;">Día</label>
-                          <VAutocomplete
-                              v-model="horarios[index].calendariosInputs[3].diaModel"
-                              variant="underlined"
-                              :items="Array.from({ length: 31 - 1 + 1 }, (_, index) => 1 + index)"
-                              label=""
-                          />
-                        </div>
-                        <span>de</span>
-                        <div style="min-width: 60px;" title="Seleccione el mes">
-
-                          <label class="label-radio" style="margin-top: -4px;">Mes</label>
-                          <VAutocomplete
-                              v-model="horarios[index].calendariosInputs[3].mesModel"
-                              variant="underlined"
-                              :items="['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']"
-                              label=""
-                          />
-                        </div>
-                        <span>a las</span>
-
-                        <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
+                      </VCol>
+                    </VRow>
+                  </VExpansionPanelText>
+                </VExpansionPanel>
+                <VExpansionPanel>
+                  <VExpansionPanelTitle>
+                    <VIcon icon="mdi-clock-edit-outline" style="margin-right: 10px;" /> Frecuencia de ejecución
+                  </VExpansionPanelTitle>
+                  <VExpansionPanelText>
+                    <VRow class="horario-ejecucion">
+                      <VCol cols="12" sm="6" md="12" >
+                        <VDivider style="margin-bottom: 2rem;"/>
+                        <div class="d-flex justify-init align-items-center gap-3 flex-wrap active-items-cr">
+                          <VRadioGroup v-model="horarios[index].radios" inline >
+                              <VRadio
+                                label="Todos los días a las"
+                                value="2"
+                              />
+                          </VRadioGroup>
+                          <div class="d-flex">
                           <div style="width: 60px;width: 60px;" title="Seleccione la hora">
-
-                            <label class="label-radio" style="margin-top: -4px;">Hora</label>
+                            <label class="label-radio" style="margin-top: -12px;">Horas</label>
                             <VAutocomplete
-                                v-model="horarios[index].calendariosInputs[3].horaModel"
+                                v-model="horarios[index].calendariosInputs[1].horaModel"
                                 variant="underlined"
                                 :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
                                 label=""
                             />
                           </div>
-                          <span>:</span>
-                          <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
-
-                            <label class="label-radio" style="margin-top: -4px;">Minuto</label>
+                          <span> : </span>
+                          <div style="width: 60px;width: 65px;" title="Seleccione el minuto">
+                            <label class="label-radio" style="margin-top: -12px;">Minutos</label>
                             <VAutocomplete
-                                v-model="horarios[index].calendariosInputs[3].minutoModel"
+                                v-model="horarios[index].calendariosInputs[1].minutoModel"
                                 variant="underlined"
                                 :items="Array.from({ length: 61 - 1 + 0 }, (_, index) => 0 + index)"
                                 label=""
                             />
                           </div>
+                         </div>
                         </div>
-                      </div>
-                    </div>
-                    <VDivider style="margin-top: 2rem;"/>
-                  </VCol>
+                        <VDivider style="margin-top: 2rem;"/>
+                      </VCol>
+                      <VCol cols="12" sm="6" md="12" >
+                        <div class="d-flex justify-init align-items-center gap-3 flex-wrap pt-2 no-active-items-cr">
+                          <VRadioGroup v-model="horarios[index].radios" inline >
+                            <VRadio
+                              label="Cada"
+                              value="3"
+                            />
+                          </VRadioGroup>
 
-                  <VCol cols="12" sm="6" md="12" >
-                    <VRadioGroup v-model="horarios[index].radios" inline >
-                      <VRadio
-                        label="Personalizado"
-                        value="5"
-                      />
-                    </VRadioGroup>
-                    
-                    <div v-if="horarios[index].radios == '5'" class="d-flex justify-init gap-3 flex-wrap pl-7 pt-4">
-                      
-                      <div style="min-width: 45%;max-width: 45%;" title="Seleccione el día de la semana">
-                        <label class="label-radio" >Días de la semana</label>
+                          <div style="width: 60px;width: 60px;" title="Seleccione el día">
+
+                            <label class="label-radio" style="margin-top: -4px;">Día</label>
+                            <VAutocomplete
+                                v-model="horarios[index].calendariosInputs[2].diaModel"
+                                variant="underlined"
+                                :items="Array.from({ length: 31 - 1 + 1 }, (_, index) => 1 + index)"
+                                label=""
+                            />
+                          </div>
+                          <span>del mes, a las</span>
+                          <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
+                            <div style="width: 60px;width: 60px;" title="Seleccione la hora">
+
+                              <label class="label-radio" style="margin-top: -4px;">Hora</label>
+                              <VAutocomplete
+                                  v-model="horarios[index].calendariosInputs[2].horaModel"
+                                  variant="underlined"
+                                  :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
+                                  label=""
+                              />
+                            </div>
+                            <span>:</span>
+                            <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
+
+                              <label class="label-radio" style="margin-top: -4px;">Minuto</label>
+                              <VAutocomplete
+                                  v-model="horarios[index].calendariosInputs[2].minutoModel"
+                                  variant="underlined"
+                                  :items="Array.from({ length: 61 - 1 + 0 }, (_, index) => 0 + index)"
+                                  label=""
+                              />
+                            </div>
+                          </div>
+                        </div>
+                        <VDivider style="margin-top: 2rem;"/>
+                      </VCol>
+                      <VCol cols="12" sm="6" md="12">
+                        <div class="active-items-cr">
+                          <VRadioGroup v-model="horarios[index].radios" inline >
+                            <VRadio
+                              label="Cada año el:"
+                              value="4"
+                            />
+                          </VRadioGroup>
+                          <div class="d-flex justify-init align-items-center gap-3 flex-wrap pl-7 pt-2">
+                            
+                            <div style="width: 60px;width: 60px;" title="Seleccione el día">
+
+                              <label class="label-radio" style="margin-top: -4px;">Día</label>
+                              <VAutocomplete
+                                  v-model="horarios[index].calendariosInputs[3].diaModel"
+                                  variant="underlined"
+                                  :items="Array.from({ length: 31 - 1 + 1 }, (_, index) => 1 + index)"
+                                  label=""
+                              />
+                            </div>
+                            <span>de</span>
+                            <div style="min-width: 60px;" title="Seleccione el mes">
+
+                              <label class="label-radio" style="margin-top: -4px;">Mes</label>
+                              <VAutocomplete
+                                  v-model="horarios[index].calendariosInputs[3].mesModel"
+                                  variant="underlined"
+                                  :items="['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']"
+                                  label=""
+                              />
+                            </div>
+                            <span>a las</span>
+
+                            <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
+                              <div style="width: 60px;width: 60px;" title="Seleccione la hora">
+
+                                <label class="label-radio" style="margin-top: -4px;">Hora</label>
+                                <VAutocomplete
+                                    v-model="horarios[index].calendariosInputs[3].horaModel"
+                                    variant="underlined"
+                                    :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
+                                    label=""
+                                />
+                              </div>
+                              <span>:</span>
+                              <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
+
+                                <label class="label-radio" style="margin-top: -4px;">Minuto</label>
+                                <VAutocomplete
+                                    v-model="horarios[index].calendariosInputs[3].minutoModel"
+                                    variant="underlined"
+                                    :items="Array.from({ length: 61 - 1 + 0 }, (_, index) => 0 + index)"
+                                    label=""
+                                />
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        <VDivider style="margin-top: 2rem;"/>
+                      </VCol>
+
+                      <VCol cols="12" sm="6" md="12" >
+                        <VRadioGroup v-model="horarios[index].radios" inline >
+                          <VRadio
+                            label="Personalizado"
+                            value="5"
+                          />
+                        </VRadioGroup>
                         
-                        <VAutocomplete
-                            v-model="horarios[index].calendariosInputs[4].diaModel"
-                            variant="underlined"
-                            multiple
-                            chips
-                            :items="['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo']"
-                            label=""
-                        />
-                      </div>
-                      <div style="min-width: 45%;max-width: 45%;" title="Seleccione el mes">
-                        <label class="label-radio" >Meses</label>
-                        <VAutocomplete
-                            v-model="horarios[index].calendariosInputs[4].mesModel"
-                            variant="underlined"
-                            multiple
-                            chips
-                            :items="['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']"
-                            label=""
-                        />
-                      </div>
+                        <div v-if="horarios[index].radios == '5'" class="d-flex justify-init gap-3 flex-wrap pl-7 pt-4">
+                          
+                          <div style="min-width: 45%;max-width: 45%;" title="Seleccione el día de la semana">
+                            <label class="label-radio" >Días de la semana</label>
+                            
+                            <VAutocomplete
+                                v-model="horarios[index].calendariosInputs[4].diaModel"
+                                variant="underlined"
+                                multiple
+                                chips
+                                :items="['Lunes','Martes','Miércoles','Jueves','Viernes','Sábado','Domingo']"
+                                label=""
+                            />
+                          </div>
+                          <div style="min-width: 45%;max-width: 45%;" title="Seleccione el mes">
+                            <label class="label-radio" >Meses</label>
+                            <VAutocomplete
+                                v-model="horarios[index].calendariosInputs[4].mesModel"
+                                variant="underlined"
+                                multiple
+                                chips
+                                :items="['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre']"
+                                label=""
+                            />
+                          </div>
 
-                      <div class="d-flex justify-init align-items-center gap-3 flex-wrap pt-3" style="width:100%">
-                        <div style="min-width: 30%;max-width: 45%;" title="Seleccione la hora">
-                          <label class="label-radio" style="margin-top: -4px;">Horas</label>
-                          <VAutocomplete
-                              v-model="horarios[index].calendariosInputs[4].horaModel"
-                              variant="underlined"
-                              :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
-                              label=""
-                          />
+                          <div class="d-flex justify-init align-items-center gap-3 flex-wrap pt-3" style="width:100%">
+                            <div style="min-width: 30%;max-width: 45%;" title="Seleccione la hora">
+                              <label class="label-radio" style="margin-top: -4px;">Horas</label>
+                              <VAutocomplete
+                                  v-model="horarios[index].calendariosInputs[4].horaModel"
+                                  variant="underlined"
+                                  :items="Array.from({ length: 23 - 0 + 1 }, (_, index) => 0 + index)"
+                                  label=""
+                              />
+                            </div>
+                            <span>:</span>
+                            <div style="min-width: 30%;max-width: 45%;" title="Seleccione el minuto">
+
+                              <label class="label-radio" style="margin-top: -4px;">Minutos</label>
+                              <VAutocomplete
+                                  v-model="horarios[index].calendariosInputs[4].minutoModel"
+                                  variant="underlined"
+                                  :items="Array.from({ length: 61 - 1 + 0 }, (_, index) => 0 + index)"
+                                  label=""
+                              />
+                            </div>
+                          </div>
                         </div>
-                        <span>:</span>
-                        <div style="min-width: 30%;max-width: 45%;" title="Seleccione el minuto">
+                        
+                      </VCol>
+                      <!--
+                      <VCol cols="12" sm="6" md="12" >
+                        <VAlert
+                          v-if="mensajeHorario"
+                          density="default"
+                          color="success"
+                          variant="tonal"
+                        >
+                          <VIcon icon="mdi-clock-time-eight-outline" /> {{mensajeHorario}}
+                        </VAlert>
+                      </VCol>
+                      -->
+                    </VRow>
 
-                          <label class="label-radio" style="margin-top: -4px;">Minutos</label>
-                          <VAutocomplete
-                              v-model="horarios[index].calendariosInputs[4].minutoModel"
-                              variant="underlined"
-                              :items="Array.from({ length: 61 - 1 + 0 }, (_, index) => 0 + index)"
-                              label=""
-                          />
-                        </div>
-                      </div>
-                    </div>
-                    
-                  </VCol>
-                  <!--
-                  <VCol cols="12" sm="6" md="12" >
-                    <VAlert
-                      v-if="mensajeHorario"
-                      density="default"
-                      color="success"
-                      variant="tonal"
-                    >
-                      <VIcon icon="mdi-clock-time-eight-outline" /> {{mensajeHorario}}
-                    </VAlert>
-                  </VCol>
-                  -->
-                </VRow>
-
-              </VExpansionPanelText>
-            </VExpansionPanel>
-          </VExpansionPanels>
-          </VCardText>
-          <VCardText class="d-flex justify-end flex-wrap gap-3">
-          
-          <VBtn @click="accionForm(index)">
-            Guardar
-          </VBtn>
-        </VCardText>
-    </VCard>
+                  </VExpansionPanelText>
+                </VExpansionPanel>
+              </VExpansionPanels>
+              </VCardText>
+              <VCardText class="d-flex justify-end flex-wrap gap-3">
+              
+              <VBtn @click="accionForm(index)">
+                Guardar
+              </VBtn>
+            </VCardText>
+        </VCard>
 
       </VCol>
     </VRow>

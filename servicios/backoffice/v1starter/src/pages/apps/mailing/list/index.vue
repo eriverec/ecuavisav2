@@ -1273,11 +1273,11 @@ watch(radios, async(value)=>{
 
     <VRow>
       <VCol
-        class="mt-0"
-        cols="12"
-        md="12"
-        lg="12"
-      >
+          class="mt-0"
+          cols="12"
+          md="12"
+          lg="12"
+        >
         <div class="demo-space-x">
           <VBtn color="primary" class="mb-4" :to="{ name: 'apps-mailing-list' }">
             Lista de Newsletter
@@ -1327,9 +1327,9 @@ watch(radios, async(value)=>{
 
                     <div class="d-flex align-center flex-wrap gap-4 d-none">
                       <!-- 👉 Select status -->
-                      <div class="invoice-list-filter d-flex align-center flex-wrap d-none">
-                        <VBtn variant="text" icon="mdi-format-list-bulleted"  color="primary" class="mb-4  d-none" :to="{ name: 'apps-campaigns-create' }"/>
-                        <VBtn color="secondary" variant="text" icon="mdi-view-comfy" class="mb-4  d-none" :to="{ name: 'apps-campaigns-create' }"/>
+                      <div class="invoice-list-filter d-flex align-center flex-wrap">
+                        <VBtn variant="text" icon="mdi-format-list-bulleted"  color="primary" class="mb-4  " :to="{ name: 'apps-mailing-list' }"/>
+                        <VBtn color="secondary" variant="text" icon="mdi-view-comfy" class="mb-4" :to="{ name: 'apps-mailing-tabs-edit' }"/>
                       </div>
                     </div>
                   </VCardText>
