@@ -695,3 +695,7 @@
 [2023-09-13 10:57:10] [::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0] [Consumo de token]: Array(    [accion] => Init token)
 [2023-09-13 11:02:26] [::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0] [Consumo de token]: Array(    [accion] => Init token)
 [2023-09-13 11:02:54] [::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0] [Consumo de token]: Array(    [accion] => Init token)
+[2023-09-13 12:31:11] [::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0] [Consumo de token]: Array(    [accion] => Init token)
+[2023-09-13 12:57:43] [::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0] [Consumo de token]: Array(    [accion] => Init token)
+[2023-09-13 12:57:44] [::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0] [Crear campaña a SendPulse]: Array(    [accion] => Crear campaña)
+[2023-09-13 13:01:44] [::1 - Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.0.0 Safari/537.36 OPR/101.0.0.0] [Consumo de token]: Array(    [accion] => Init token)

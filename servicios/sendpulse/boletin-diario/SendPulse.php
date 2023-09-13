@@ -309,6 +309,10 @@ class SendPulse {
     	return $tokenSendPulse["token"];
     }
 
+    public function getToken(){
+    	return $this->token;
+    }
+
     private function logToFile($functionName, $data) {
 	    // Obtener la fecha y hora actual en el formato deseado
 	    $fechaHoraActual = date('Y-m-d H:i:s');

@@ -13,4 +13,9 @@ header('Access-Control-Allow-Methods: GET, POST, PATCH, PUT, DELETE, OPTIONS');
 header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 require './SendPulse.php';
 $c = new SendPulse();
-$c->createNewsletter();
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+	$c->createNewsletter();
+}else{
+	echo json_encode(["resp" => false, "message"=>"No tienes acceso, error 0020"]);
+	exit();
+}

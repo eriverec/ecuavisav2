@@ -15,4 +15,9 @@ header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token');
 require './SendPulse.php';
 $c = new SendPulse();
 // // echo json_encode($c->getNotasNewTemplate('https://www.ecuavisa.com/rss/boletin-diario.json'));
-$c->forzado();
+if($_SERVER['REQUEST_METHOD'] == 'POST'){
+	$c->forzado();
+}else{
+	echo json_encode(["resp" => false, "message"=>"No tienes acceso, error 0020"]);
+	exit();
+}

@@ -40,6 +40,23 @@ const dataSenderEmailList = ref([]);
 const dataSenderEmailData = ref([]);
 const dataSenderEmailModel = ref([]);
 
+const isDialogForzado = ref(false);
+const btnClickForzado = ref(null);
+const disabledForzado = ref(false);
+const linkForzado = ref(false);
+const linkForzadoList = ref([
+  {
+    "id":"64f9f5225c4a279b69ff2ac8",
+    "name":"Boletín diario",
+    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-diario/forzado.php"
+  },
+  {
+    "id":"64f9f5455c4a279b69ff2aca",
+    "name":"Newsletter Opinión",
+    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/opinion/forzado.php"
+  }
+]);
+
 const sender_name = ref([]);
 const token_auth = ref('');
 
@@ -826,7 +843,64 @@ watch(dataBookUserModel, async(value)=>{
 watch(dataTemplateModel, async(value)=>{
   const instancia = dataTemplateList.value.find(objeto => objeto.value === value);
   dataTemplateView.value = instancia.preview;
-})
+});
+
+const forzadoClick = async () => {
+  try {
+      isDialogForzado.value = false;
+      disabledViewList.value = true;
+
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(linkForzado.value, requestOptions);
+      const data = await response.json();
+      if(data.hasOwnProperty('resp')){
+        if(data.resp){
+          configSnackbar.value = {
+            message:"Newsletter creado y enviado",
+            type:"success",
+            model:true
+          };
+        }else{
+          configSnackbar.value = {
+            message:"Un error se presentó: "+data.message,
+            type:"error",
+            model:true
+          };
+        }
+      }else{
+        configSnackbar.value = {
+          message:"Un error se presentó: "+JSON.stringify(data),
+          type:"error",
+          model:true
+        };
+      }
+      
+      disabledViewList.value = false;
+  } catch (error) {
+      return console.error(error.message);    
+  }
+};
+
+const showForzadoSendDialog = async (id) => {
+  const ins = linkForzadoList.value.find(objeto => objeto.id === id);
+  if(ins){
+    if(ins.forzado != ''){
+      isDialogForzado.value = true;
+      accion.value = "forzado";
+      linkForzado.value = ins.forzado;
+    }
+  }else{
+    alert("El forzado no está configurado")
+  }
+}
 
 </script>
 
@@ -867,6 +941,36 @@ watch(dataTemplateModel, async(value)=>{
           </VBtn>
           <VBtn @click="eliminarRegistroSi">
             Si, eliminar
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
+
+    <VDialog
+        v-model="isDialogForzado"
+        persistent
+        class="v-dialog-sm"
+      >
+
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogForzado = !isDialogForzado" />
+
+      <!-- Dialog Content -->
+      <VCard title="Forzado">
+        <VCardText>
+          ¿Desea enviar el Newsletter ahora?
+        </VCardText>
+
+        <VCardText class="d-flex justify-end gap-3 flex-wrap">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            @click="isDialogForzado = false"
+          >
+            No, enviar
+          </VBtn>
+          <VBtn @click="forzadoClick">
+            Si, enviar
           </VBtn>
         </VCardText>
       </VCard>
@@ -1473,10 +1577,10 @@ watch(dataTemplateModel, async(value)=>{
 
 
                           <VBtn
-                            :disabled="true"
+                            :disabled="disabledForzado"
                             :title="'Envío forzado: '+c.nombre"
                             class=""
-                            @click="showEditForm(c._id)"
+                            @click="showForzadoSendDialog(c._id)"
                             color="success"
                             icon="mdi-email-fast-outline"
                             size="37"/>
