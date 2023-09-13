@@ -588,6 +588,7 @@ async function selectHorario(indexP) {
                             value="2"
                           />
                       </VRadioGroup>
+                      <div class="d-flex">
                       <div style="width: 60px;width: 60px;" title="Seleccione la hora">
                         <label class="label-radio" style="margin-top: -12px;">Horas</label>
                         <VAutocomplete
@@ -597,7 +598,7 @@ async function selectHorario(indexP) {
                             label=""
                         />
                       </div>
-                      <span>:</span>
+                      <span> : </span>
                       <div style="width: 60px;width: 65px;" title="Seleccione el minuto">
                         <label class="label-radio" style="margin-top: -12px;">Minutos</label>
                         <VAutocomplete
@@ -607,6 +608,7 @@ async function selectHorario(indexP) {
                             label=""
                         />
                       </div>
+                     </div>
                     </div>
                     <VDivider style="margin-top: 2rem;"/>
                   </VCol>
@@ -621,7 +623,7 @@ async function selectHorario(indexP) {
 
                       <div style="width: 60px;width: 60px;" title="Seleccione el día">
 
-                        <label class="label-radio" style="margin-top: -12px;">Día</label>
+                        <label class="label-radio" style="margin-top: -4px;">Día</label>
                         <VAutocomplete
                             v-model="horarios[index].calendariosInputs[2].diaModel"
                             variant="underlined"
@@ -633,7 +635,7 @@ async function selectHorario(indexP) {
                       <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
                         <div style="width: 60px;width: 60px;" title="Seleccione la hora">
 
-                          <label class="label-radio" style="margin-top: -12px;">Hora</label>
+                          <label class="label-radio" style="margin-top: -4px;">Hora</label>
                           <VAutocomplete
                               v-model="horarios[index].calendariosInputs[2].horaModel"
                               variant="underlined"
@@ -644,7 +646,7 @@ async function selectHorario(indexP) {
                         <span>:</span>
                         <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
 
-                          <label class="label-radio" style="margin-top: -12px;">Minuto</label>
+                          <label class="label-radio" style="margin-top: -4px;">Minuto</label>
                           <VAutocomplete
                               v-model="horarios[index].calendariosInputs[2].minutoModel"
                               variant="underlined"
@@ -668,7 +670,7 @@ async function selectHorario(indexP) {
                         
                         <div style="width: 60px;width: 60px;" title="Seleccione el día">
 
-                          <label class="label-radio" style="margin-top: -12px;">Día</label>
+                          <label class="label-radio" style="margin-top: -4px;">Día</label>
                           <VAutocomplete
                               v-model="horarios[index].calendariosInputs[3].diaModel"
                               variant="underlined"
@@ -679,7 +681,7 @@ async function selectHorario(indexP) {
                         <span>de</span>
                         <div style="min-width: 60px;" title="Seleccione el mes">
 
-                          <label class="label-radio" style="margin-top: -12px;">Mes</label>
+                          <label class="label-radio" style="margin-top: -4px;">Mes</label>
                           <VAutocomplete
                               v-model="horarios[index].calendariosInputs[3].mesModel"
                               variant="underlined"
@@ -692,7 +694,7 @@ async function selectHorario(indexP) {
                         <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
                           <div style="width: 60px;width: 60px;" title="Seleccione la hora">
 
-                            <label class="label-radio" style="margin-top: -12px;">Hora</label>
+                            <label class="label-radio" style="margin-top: -4px;">Hora</label>
                             <VAutocomplete
                                 v-model="horarios[index].calendariosInputs[3].horaModel"
                                 variant="underlined"
@@ -703,7 +705,7 @@ async function selectHorario(indexP) {
                           <span>:</span>
                           <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
 
-                            <label class="label-radio" style="margin-top: -12px;">Minuto</label>
+                            <label class="label-radio" style="margin-top: -4px;">Minuto</label>
                             <VAutocomplete
                                 v-model="horarios[index].calendariosInputs[3].minutoModel"
                                 variant="underlined"
@@ -753,7 +755,7 @@ async function selectHorario(indexP) {
 
                       <div class="d-flex justify-init align-items-center gap-3 flex-wrap pt-3" style="width:100%">
                         <div style="min-width: 30%;max-width: 45%;" title="Seleccione la hora">
-                          <label class="label-radio" style="margin-top: -12px;">Horas</label>
+                          <label class="label-radio" style="margin-top: -4px;">Horas</label>
                           <VAutocomplete
                               v-model="horarios[index].calendariosInputs[4].horaModel"
                               variant="underlined"
@@ -764,7 +766,7 @@ async function selectHorario(indexP) {
                         <span>:</span>
                         <div style="min-width: 30%;max-width: 45%;" title="Seleccione el minuto">
 
-                          <label class="label-radio" style="margin-top: -12px;">Minutos</label>
+                          <label class="label-radio" style="margin-top: -4px;">Minutos</label>
                           <VAutocomplete
                               v-model="horarios[index].calendariosInputs[4].minutoModel"
                               variant="underlined"
