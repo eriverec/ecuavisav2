@@ -70,16 +70,16 @@
                     $div = $('<div></div>')
                         .dialog({
                             title: `Provincia ${this.name}`,
-                            width: 420,
-                            height: 300
+                            width: 320,
+                            height: 200
                         });
 
                 window.chart = new Highcharts.Chart({
                     chart: {
                         renderTo: $div[0],
                         type: 'pie',
-                        width: 410,
-                        height: 240
+                        width: 290,
+                        height: 140
                     },
                     title: {
                         text: null
