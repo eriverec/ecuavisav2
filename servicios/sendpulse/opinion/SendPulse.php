@@ -1,7 +1,7 @@
 <?php
 require '../vendor/autoload.php';
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
+// use GuzzleHttp\Client;
+// use GuzzleHttp\Psr7\Request;
 class SendPulse {
 
 	private $token;
@@ -21,18 +21,23 @@ class SendPulse {
 	private $apiProtec;
 	private $ctrFunciones;
 	private $contadorSolicitudes;
+	private $jsonPDF;
 
 	function __construct(){
 		require '../funciones/Ctrfunciones.php';
+
+		$this->typeProyect =  "Production"; //Production - Guzzle
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 15,
-			"folder" => "opinion",
+			"folder" => "opinion", // Guardado de img y json
+			"folderPrimary" => ($this->typeProyect == "Production" ? "sendpulse/sendpulsev3": "sendpulse"),
+			"typeProyect" => $this->typeProyect
 		));
 
 		$getFecha = date("Y-m-d, H:i:s", time());
+		$this->jsonPDF = [];
 
 		$this->contadorSolicitudes = 0; //DESFASE DE MINUTOS
-		$this->typeProyect =  "Guzzle"; //Production - Guzzle
 		$this->dataJsonNewsletter = $this->getAttrNewsletter("64f9f5455c4a279b69ff2aca");
 		$this->apiProtec = "https://www.ecuavisa.com/rss/boletin-opinion.json";
 
@@ -91,7 +96,7 @@ class SendPulse {
 	    // Obtener la fecha y hora actual en el formato deseado
 	    $fechaHoraActual = date('Y-m-d H:i:s');
 	    // Obtener la información del cliente (dirección IP y agente de usuario)
-	    $clienteInfo = $_SERVER['REMOTE_ADDR'] . ' - ' . $_SERVER['HTTP_USER_AGENT'];
+	    $clienteInfo = (isset($_SERVER['REMOTE_ADDR'])?$_SERVER['REMOTE_ADDR']:'') . ' - ' . (isset($_SERVER['HTTP_USER_AGENT'])?$_SERVER['HTTP_USER_AGENT']:"");
 	    // Obtener el resultado de print_r con la opción return y eliminar los saltos de línea
 	    $dataAsString = str_replace(array("\r", "\n"), '', print_r($data, true));
 	    // Construir el mensaje de registro
@@ -597,6 +602,9 @@ class SendPulse {
 	    	$ecuadorNoEs.= '</tbody>';
 	    	$ecuadorNoEs.= '</table>';
         }
+
+		$this->jsonPDF[] = array("ecuadorNoEs" => $ecuadirNoEsList);
+        $this->jsonPDF[] = array("ecuadorEs" => $ecuadirEsList);
 		
         return ($existeEs?$ecuadorEs:'').($existeNoEs?$ecuadorNoEs:'');
     }
@@ -1021,12 +1029,14 @@ class SendPulse {
             $content[] = $this->getUltimaSeccion($bloque3);
         }
 
-        // $id = $this->createJSONPHP(array(
-		// 	"notaPrincipal" => $getFristNota,
-		// 	"notasFinal" => $bloque3,
-		// 	"fullPrinpial" => $list,
 
-		// ))->id;
+        $this->jsonPDF[] = array("notaPrincipalDefault" => $getFristNota);
+        $this->jsonPDF[] = array("notasFinal" => $bloque3);
+        $this->jsonPDF[] = array("notaPrincipalTodosDatos" => $list);
+
+
+
+
 
         return [$content, $titulo];
     }
@@ -1093,6 +1103,21 @@ class SendPulse {
         return json_decode($campaign);
     }
 
+    public function getJsonId(){
+    	if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    		$get = (object) $_GET;
+    		$idUnico = $get->id ?? 0;
+    		$json = $this->ctrFunciones->getJson($idUnico);
+    		if($json != null){
+    			// echo $this->pdf($json);
+    			echo json_encode($json);
+    			exit();
+    		}
+    	}
+		echo '{"resp":false}';
+		exit();
+    }
+
 	public function view(){
 		try {
 
@@ -1108,6 +1133,13 @@ class SendPulse {
 				exit();
 			}
 
+			$idPDF = $this->ctrFunciones->createJSONPHP(array(
+				"fechaFormateada" => $this->fechaFormateada,
+				"data" => $this->jsonPDF,
+				"listaUsuario" => $this->listaUsuario,
+				"newsletter" => "opinion"
+			));
+
     		echo '<div style="max-width: 500px;margin-left: auto;margin-right: auto;padding:30px">';
 			echo '<b>Subject: </b>'.$this->subject;
 			echo '<br>';
@@ -1121,7 +1153,6 @@ class SendPulse {
 			echo '<br>';
 			echo '<b>Número de solicitudes HTTP: </b>'.$this->contadorSolicitudes;
 			echo '</div>';
-
 			echo $bodyContent;
 			exit();
 
@@ -1186,6 +1217,14 @@ class SendPulse {
 					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
 		    			"enviado" => true
 		    		]);
+
+					$idPDF = $this->ctrFunciones->createJSONPHP(array(
+						"fechaFormateada" => $this->fechaFormateada,
+						"data" => $this->jsonPDF,
+						"listaUsuario" => $this->listaUsuario,
+						"newsletter" => "opinion"
+					));
+
 				}else{
 					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
 		    			"error" => $respuestaJson
@@ -1209,9 +1248,6 @@ class SendPulse {
 
 	public function forzado(){//
     	try {
-    		$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
-				"enviado" => true
-			]);
 
     		$getFecha = date("Y-m-d, H:i:s", time());
     		$template = $this->htmlTemplate();
