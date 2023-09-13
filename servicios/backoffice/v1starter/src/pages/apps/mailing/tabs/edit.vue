@@ -580,6 +580,7 @@ async function selectHorario(indexP) {
               <VExpansionPanelText>
                 <VRow class="horario-ejecucion">
                   <VCol cols="12" sm="6" md="12" >
+                    <VDivider style="margin-bottom: 2rem;"/>
                     <div class="d-flex justify-init align-items-center gap-3 flex-wrap active-items-cr">
                       <VRadioGroup v-model="horarios[index].radios" inline >
                           <VRadio
@@ -597,7 +598,7 @@ async function selectHorario(indexP) {
                         />
                       </div>
                       <span>:</span>
-                      <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
+                      <div style="width: 60px;width: 65px;" title="Seleccione el minuto">
                         <label class="label-radio" style="margin-top: -12px;">Minutos</label>
                         <VAutocomplete
                             v-model="horarios[index].calendariosInputs[1].minutoModel"
@@ -607,6 +608,7 @@ async function selectHorario(indexP) {
                         />
                       </div>
                     </div>
+                    <VDivider style="margin-top: 2rem;"/>
                   </VCol>
                   <VCol cols="12" sm="6" md="12" >
                     <div class="d-flex justify-init align-items-center gap-3 flex-wrap pt-2 no-active-items-cr">
@@ -652,6 +654,7 @@ async function selectHorario(indexP) {
                         </div>
                       </div>
                     </div>
+                    <VDivider style="margin-top: 2rem;"/>
                   </VCol>
                   <VCol cols="12" sm="6" md="12">
                     <div class="active-items-cr">
@@ -711,6 +714,7 @@ async function selectHorario(indexP) {
                         </div>
                       </div>
                     </div>
+                    <VDivider style="margin-top: 2rem;"/>
                   </VCol>
 
                   <VCol cols="12" sm="6" md="12" >
@@ -721,10 +725,10 @@ async function selectHorario(indexP) {
                       />
                     </VRadioGroup>
                     
-                    <div v-if="horarios[index].radios == '5'" class="d-flex justify-init align-items-center gap-3 flex-wrap pl-7 pt-4">
+                    <div v-if="horarios[index].radios == '5'" class="d-flex justify-init gap-3 flex-wrap pl-7 pt-4">
                       
                       <div style="min-width: 45%;max-width: 45%;" title="Seleccione el día de la semana">
-                        <label class="label-radio" style="margin-top: -12px;">Días de la semana</label>
+                        <label class="label-radio" >Días de la semana</label>
                         
                         <VAutocomplete
                             v-model="horarios[index].calendariosInputs[4].diaModel"
@@ -736,7 +740,7 @@ async function selectHorario(indexP) {
                         />
                       </div>
                       <div style="min-width: 45%;max-width: 45%;" title="Seleccione el mes">
-                        <label class="label-radio" style="margin-top: -12px;">Meses</label>
+                        <label class="label-radio" >Meses</label>
                         <VAutocomplete
                             v-model="horarios[index].calendariosInputs[4].mesModel"
                             variant="underlined"
@@ -770,6 +774,7 @@ async function selectHorario(indexP) {
                         </div>
                       </div>
                     </div>
+                    
                   </VCol>
                   <!--
                   <VCol cols="12" sm="6" md="12" >
@@ -809,4 +814,73 @@ async function selectHorario(indexP) {
    min-width: 90svw; 
   }
 }
+
+[disabled="true"] {
+    opacity: .2;
+    cursor: no-drop;
+    pointer-events: none;
+}
+.align-items-center {
+    align-items: center;
+}
+
+.label-radio{
+    font-size: 11px;
+    letter-spacing: 0.009375em;
+    min-width: 0;
+    line-height: 1.2;
+    opacity: var(--v-medium-emphasis-opacity);
+    display: block;
+}
+
+.horario-ejecucion .v-field__input {
+    min-height: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.horario-ejecucion .v-field__append-inner {
+    padding-top: 3px;
+}
+
+.horario-ejecucion .v-input{
+
+}
+
+.no-active-items-cr{
+/*  padding-top: 20px; padding-bottom: 23px; padding-left: 15px; padding-right: 15px; border-radius: 7px;*/
+}
+
+.active-items-cr{
+/*  background-color: rgb(233 232 235 / 26%); padding-top: 20px; padding-bottom: 23px; padding-left: 15px; padding-right: 15px; border-radius: 7px;*/
+}
+
+.horario-ejecucion .v-input.v-radio-group {
+    display: contents;
+}
+
+.v-menu .v-overlay__content.v-autocomplete__content {
+    max-height: calc(75vh - 250px);
+}
+
+.icon-spinner {
+    animation: spin-animation 1.5s infinite;
+    display: inline-block;
+}
+
+.d-bloc{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start
+}
+
+@keyframes spin-animation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(359deg);
+    }
+}
+
 </style>
