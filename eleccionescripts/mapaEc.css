@@ -8,15 +8,26 @@
     margin: 0 auto;
 }
 
+.highcharts-mapview-inset-border{
+    display: none;
+}
+
 .loading {
     margin-top: 10em;
     text-align: center;
     color: gray;
 }
+.mapa_ec_2023{
+    height: 820px;
+    border: 1px solid;
+}
 
-@media (max-width: 650px) {
+@media (max-width: 680px) {
     #container {
         height: 700px;
+    }
+    .mapa_ec_2023{
+        height: 720px;
     }
 }
 
@@ -24,11 +35,17 @@
     #container {
         height: 600px;
     }
+    .mapa_ec_2023{
+        height: 620px;
+    }
 }
 
 @media (max-width: 450px) {
     #container {
-        height: 580px;
+        height: 480px;
+    }
+    .mapa_ec_2023{
+        height: 520px;
     }
 }
 
@@ -36,10 +53,16 @@
     #container {
         height: 500px;
     }
+    .mapa_ec_2023{
+        height: 520px;
+    }
 }
 
 @media (max-width: 350px) {
     #container {
         height: 450px;
+    }
+    .mapa_ec_2023{
+        height: 466px;
     }
 }
