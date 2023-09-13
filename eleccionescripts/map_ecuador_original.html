@@ -3,7 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>AmCharts JS Example</title>
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet" type="text/css">
+
   <style type="text/css">
+    *{
+      font-family: 'Archivo';
+    }
     #container {
         height: 800px;
         max-width: 700px;
@@ -35,7 +40,7 @@
 <div id="container">
     <div class="loading">
         <i class="icon-spinner icon-spin icon-large"></i>
-        Loading data from Google Spreadsheets...
+        Cargando datos...
     </div>
 </div>
 <script type="text/javascript">
@@ -161,7 +166,7 @@
                         type: 'map',
                         map: mapData,
                         renderTo: 'container',
-                        borderWidth: 1,
+                        borderWidth: 0,
                     },
 
                     plotOptions: {
@@ -186,20 +191,20 @@
 
                     title: {
                         text: 'Segunda vuelta - Elecciones 2023',
-                        align: 'left'
+                        align: 'center'
                     },
                     subtitle: {
                         text: 'Fuente: CNE',
-                        align: 'left'
+                        align: 'center'
                     },
 
                     legend: {
-                        align: 'right',
+                        align: 'center',
                         verticalAlign: 'top',
-                        x: -100,
-                        y: 70,
+                        x: 0,
+                        y: 50,
                         floating: true,
-                        layout: 'vertical',
+                        layout: 'horizontal',
                         valueDecimals: 0,
                         backgroundColor: ( // theme
                             Highcharts.defaultOptions &&
