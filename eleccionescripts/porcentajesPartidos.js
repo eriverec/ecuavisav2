@@ -5,7 +5,6 @@ const apiUrl = 'https://api-configuracion.vercel.app/web/data-sv';
 const dataPorcentajeDiv = document.getElementById('dataPorcentaje');
 const dataPorcentajeFotos = document.getElementById('dataFotos');
 
-
 // Realizar una solicitud GET a la API
 fetch(apiUrl)
     .then(response => response.json())
@@ -27,7 +26,10 @@ fetch(apiUrl)
             const imgPartido = item.partido;
 
             // Establecer una clase CSS en función del valor del porcentaje
-            const claseCSS = item.value > 50 ? 'high' : 'low';
+            // const claseCSS = item.value > 50 ? 'high' : 'low';
+             // Establecer una clase CSS en función del valor del porcentaje
+            const claseCSS = item.name === 'Daniel Noboa' ? 'daniel-noboa' : (item.name === 'Luisa González' ? 'luisa-gonzalez' : (item.value > 50 ? 'high' : 'low'));
+
 
             // Crear el elemento de porcentaje
             const porcentajeElement = `<div class="porcentaje-item ${claseCSS}" style="width: ${porcentajeFormateado}%">

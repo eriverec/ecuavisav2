@@ -15,14 +15,24 @@ body {
     font-size: 44px;
 }
 
+/* Estilo de fondo para Daniel Noboa */
+.daniel-noboa {
+    background-color: #0a6aa6;
+}
+
+/* Estilo de fondo para Luisa González */
+.luisa-gonzalez {
+    background-color: #cd181c;
+}
+
 /* Estilo de fondo para porcentajes mayores al 50% */
 .porcentaje-item.high {
-    background-color: #0a6aa6;
+    background-color: green;
 }
 
 /* Estilo de fondo para porcentajes menores o iguales al 50% */
 .porcentaje-item.low {
-    background-color: #cd181c;
+    background-color: red;
 }
 
 #dataPorcentaje {
@@ -42,6 +52,12 @@ body {
 
 .itemsFoto:nth-child(2) img {
     margin-left: 10px;
+}
+
+.itemsFoto:nth-child(2) .block-text {
+    display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .block-text {
@@ -94,6 +110,9 @@ body {
     height: 820px;
 }
 
+
+
+
 @media (max-width: 680px) {
     #container {
         height: 700px;
@@ -102,6 +121,26 @@ body {
     .mapa_ec_2023 {
         height: 720px;
     }
+    .itemsFoto:nth-child(1) {
+        flex-direction: column;
+        align-items: start;
+    }
+    
+    .itemsFoto:nth-child(2) {
+        flex-direction: column;
+        align-items: end;
+    }
+    .block-text .fotoName{
+        font-size: 16px;
+    }
+    .porcentaje-item{
+        font-size: 24px;
+    }
+    .itemsFoto img{
+        width: 80px;
+        height: 80px;
+    }
+
 }
 
 @media (max-width: 550px) {

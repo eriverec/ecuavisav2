@@ -95,11 +95,11 @@
                         name: 'Votos',
                         data: [{
                             name: 'Daniel Noboa',
-                            color: '#b5e2c9',
+                            color: '#0a6aa6',
                             y: parseInt(columns[3][row], 10)
                         }, {
                             name: 'Luisa Gonzáles',
-                            color: '#f7c0b5',
+                            color: '#cd181c',
                             y: parseInt(columns[2][row], 10)
                         }],
                         dataLabels: {
@@ -177,18 +177,18 @@
 
                     colorAxis: {
                         stops: [
-                          [0, '#b5e2c9'],       // Color para Daniel Noboa
-                          [1, '#f7c0b5']        // Color para Luisa Gonzáles
+                          [0, '#0a6aa6'],       // Color para Daniel Noboa
+                          [1, '#cd181c']        // Color para Luisa Gonzáles
                         ],
                         dataClasses: [{
                             from: -100,
                             to: 0,
-                            color: '#f7c0b5',
+                            color: '#cd181c',
                             name: 'Luisa Gonzáles'
                         }, {
                             from: 0,
                             to: 100,
-                            color: '#b5e2c9',
+                            color: '#0a6aa6',
                             name: 'Daniel Noboa'
                         }]
                     },
@@ -257,7 +257,7 @@
             //     var mayorContrincante = getMayorContrincante(i);
             //     var color = '';
             //     if(mayorContrincante){
-            //         color = mayorContrincante === 'Daniel Noboa' ? '#b5e2c9' : '#f7c0b5'; // Cambia los colores aquí
+            //         color = mayorContrincante === 'Daniel Noboa' ? '#0a6aa6' : '#cd181c'; // Cambia los colores aquí
             //     }
 
             //     console.log(mayorContrincante)
@@ -282,7 +282,7 @@
                 var color = '';
 
                 if (mayorContrincante) {
-                  color = mayorContrincante[0] === 'Daniel Noboa' ? '#b5e2c9' : '#f7c0b5'; // Asigna el color según el contrincante mayor
+                  color = mayorContrincante[0] === 'Daniel Noboa' ? '#0a6aa6' : '#cd181c'; // Asigna el color según el contrincante mayor
                 }
 
                 if (mayorContrincante) {
