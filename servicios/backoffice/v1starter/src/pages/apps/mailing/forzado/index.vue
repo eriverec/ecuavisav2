@@ -3,7 +3,7 @@
     <VRow>
       <VCol class="mt-0" cols="12" md="12" lg="12">
         <div class="demo-space-x">
-          <VBtn color="primary" variant="text" class="mb-4" :to="{ name: 'apps-mailing-list' }">
+          <VBtn color="primary" variant="text" class="mb-4 d-none" :to="{ name: 'apps-mailing-list' }">
             Lista de Newsletter
           </VBtn>
           <VBtn color="primary" class="mb-4" :to="{ name: 'apps-mailing-forzado' }">
