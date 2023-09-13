@@ -6,12 +6,155 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mapa de Ecuador con Highcharts</title>
   <link rel="stylesheet" href="mapaEc.css">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+    rel="stylesheet" type="text/css">
+  <style>
+    * {
+      font-family: 'Archivo';
+    }
 
+    /* Estilos para los elementos de porcentaje */
+    .porcentaje-item {
+      margin-bottom: 10px;
+      padding: 5px;
+      color: white;
+      font-weight: bold;
+      text-align: center;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 44px;
+    }
+
+    /* Estilo de fondo para porcentajes mayores al 50% */
+    .porcentaje-item.high {
+      background-color: #0a6aa6;
+    }
+
+    /* Estilo de fondo para porcentajes menores o iguales al 50% */
+    .porcentaje-item.low {
+      background-color: #cd181c;
+    }
+
+    #dataPorcentaje {
+      display: flex;
+    }
+
+    .itemsFoto img {
+      border-radius: 50%;
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+    }
+
+    .itemsFoto:nth-child(1) img {
+      margin-right: 10px;
+    }
+
+    .itemsFoto:nth-child(2) img {
+      margin-left: 10px;
+    }
+
+    .block-text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .block-text .fotoName {
+      text-transform: uppercase;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    #dataFotos {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 15px;
+    }
+
+    .itemsFoto:nth-child(1) {
+      display: flex;
+      flex-direction: initial;
+      align-items: center;
+    }
+
+    .itemsFoto:nth-child(2) {
+      display: flex;
+      flex-direction: row-reverse;
+      align-items: center;
+    }
+
+
+  </style>
 </head>
 
 <body>
-  <iframe class="mapa_ec_2023" src="https://ecuavisadev.netlify.app/eleccionescripts/map_ecuador_original.html" width="100%" height="800px" frameborder="0" scrolling="auto" allowfullscreen="" title="Ecuavisa" style="
-  "> </iframe>
+  <div id="dataFotos"></div>
+  <div id="dataPorcentaje"></div>
+
+  <script>
+    // URL de la API
+    const apiUrl = 'https://api-configuracion.vercel.app/web/data-sv';
+
+    // Obtener referencia al elemento div
+    const dataPorcentajeDiv = document.getElementById('dataPorcentaje');
+    const dataPorcentajeFotos = document.getElementById('dataFotos');
+
+
+    // Realizar una solicitud GET a la API
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        // Acceder a los datos de porcentaje
+        const porcentajeData = data.porcentaje;
+
+        // Crear una cadena para almacenar los elementos de porcentaje formateados
+        let porcentajeHTML = '';
+        let porcentajeHTMLFoto = '';
+
+
+        // Iterar a través de los datos de porcentaje
+        porcentajeData.forEach(item => {
+          // Formatear el porcentaje a dos decimales
+          const porcentajeFormateado = item.value.toFixed(2);
+          const imgFoto = item.img;
+          const imgName = item.name;
+          const imgPartido = item.partido;
+
+          // Establecer una clase CSS en función del valor del porcentaje
+          const claseCSS = item.value > 50 ? 'high' : 'low';
+
+          // Crear el elemento de porcentaje
+          const porcentajeElement = `<div class="porcentaje-item ${claseCSS}" style="width: ${porcentajeFormateado}%">
+           ${porcentajeFormateado}%</div>`;
+
+          const porcentajeElementFoto = `
+          <div class="itemsFoto"><img src="${imgFoto}" width="180px" alt="Ecuavisa"/>
+            <div class="block-text">
+              <span class="fotoName"> ${imgName} </span>
+              <span class="fotoPartido"> ${imgPartido} </span>
+            </div>
+          </div> `;
+
+          // Agregar el elemento de porcentaje al HTML
+          porcentajeHTML += porcentajeElement;
+          porcentajeHTMLFoto += porcentajeElementFoto;
+
+        });
+
+        // Asignar el HTML al elemento div
+        dataPorcentajeDiv.innerHTML = porcentajeHTML;
+        dataPorcentajeFotos.innerHTML = porcentajeHTMLFoto;
+
+      })
+      .catch(error => {
+        console.error('Error al obtener los datos:', error);
+      });
+
+
+  </script>
 </body>
 
 </html>
