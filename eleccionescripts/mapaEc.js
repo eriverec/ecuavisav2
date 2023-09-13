@@ -168,8 +168,11 @@
                     },
 
                     mapNavigation: {
-                        enabled: false,
-                        enableButtons: false
+                        enabled: true,
+                        enableButtons: true,
+                        buttonOptions: {
+                            verticalAlign: 'bottom'
+                        }
                     },
 
                     colorAxis: {
@@ -204,7 +207,7 @@
                               // Personaliza el formato de la etiqueta de datos con HTML
                               if(v.hasOwnProperty('valorCandidatoG')){
                               // console.log(this.point, v.name)
-                                 return '<b>' + this.point.name + '</b><br> <div style="font-size:8px">' + this.point.valorCandidatoG + ' Votos</div>';
+                                 return '<b>' + this.point.name + '</b><br> <div style="font-size:12px">' + this.point.valorCandidatoG + ' Votos</div>';
                                }else{
                                 return this.point.name;
                                }
