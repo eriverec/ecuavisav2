@@ -30,9 +30,11 @@ const checkboxEstado = ref(false);
 const dataBookUserList = ref([]);
 const dataBookUserData = ref([]);
 const dataBookUserModel = ref([]);
+const userCountMessage = ref('');
 const dataTemplateList = ref([]);
 const dataTemplateData = ref([]);
 const dataTemplateModel = ref([]);
+const dataTemplateView = ref("");
 
 const dataSenderEmailList = ref([]);
 const dataSenderEmailData = ref([]);
@@ -493,7 +495,7 @@ async function getUserBook(){
       dataBookUserData.value = consultaJson;
 
       for(var i in consultaJson){
-        dataBookUserList.value.push({ title: `${consultaJson[i].name} - ${consultaJson[i].id}`, value:consultaJson[i].id })
+        dataBookUserList.value.push({ title: `${consultaJson[i].name} - ${consultaJson[i].id}`, value:consultaJson[i].id, all_email_qty:consultaJson[i].all_email_qty })
       }
 
       dataBookUserList.value.sort((a, b) => a.title.localeCompare(b.title));
@@ -522,7 +524,7 @@ async function getListaPlantillasUser(){
         dataTemplateData.value = consultaJson;
         // console.log(consultaJson)
         for(var i in consultaJson){
-          dataTemplateList.value.push({ title: `${consultaJson[i].name}`, value:consultaJson[i].real_id })
+          dataTemplateList.value.push({ title: `${consultaJson[i].name}`, value:consultaJson[i].real_id, preview:consultaJson[i].preview })
         }
 
         dataTemplateList.value.sort((a, b) => a.title.localeCompare(b.title));
@@ -816,6 +818,16 @@ watch(radios, async(value)=>{
   await selectHorario();
 })
 
+watch(dataBookUserModel, async(value)=>{
+  const instancia = dataBookUserList.value.find(objeto => objeto.value === value);
+  userCountMessage.value = instancia.all_email_qty;
+})
+
+watch(dataTemplateModel, async(value)=>{
+  const instancia = dataTemplateList.value.find(objeto => objeto.value === value);
+  dataTemplateView.value = instancia.preview;
+})
+
 </script>
 
 <template>
@@ -948,6 +960,13 @@ watch(radios, async(value)=>{
                       :items="dataBookUserList"
                       label="Lista de usuarios"
                     />
+                    <small title="Usuarios afectados" v-if="userCountMessage" style="
+                        line-height: 1.2;
+                        display: block;
+                        font-size: 10px;
+                        padding-top: 4px;
+                        padding-left: 4px;
+                    "><VIcon icon="mdi-account-multiple-outline" size="13px" /> {{ userCountMessage }}</small>
                   </VCol>
                   <VCol
                     cols="12"
@@ -958,6 +977,13 @@ watch(radios, async(value)=>{
                       :items="dataTemplateList"
                       label="Lista de plantillas del sendpulse"
                     />
+                    <small v-if="dataTemplateView" title="Ver vista previa" style="
+                        line-height: 1.2;
+                        display: block;
+                        font-size: 10px;
+                        padding-top: 4px;
+                        padding-left: 4px;
+                    "><a :href="dataTemplateView" target="_blank"><VIcon icon="mdi-image-search-outline" size="13px" /> vista previa</a> </small>
                   </VCol>
                   <VCol
                     cols="12"
