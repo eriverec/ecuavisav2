@@ -1087,7 +1087,7 @@ const showForzadoSendDialog = async (id) => {
                         font-size: 10px;
                         padding-top: 4px;
                         padding-left: 4px;
-                    "><a :href="dataTemplateView" target="_blank"><VIcon icon="mdi-image-search-outline" size="13px" /> vista previa</a> </small>
+                    "><a :href="dataTemplateView" target="_blank"><VIcon icon="mdi-image-search-outline" size="13px" /> vista previa de la plantilla seleccionada</a> </small>
                   </VCol>
                   <VCol
                     cols="12"
@@ -1433,7 +1433,7 @@ const showForzadoSendDialog = async (id) => {
                     <VCardTitle>
                       Listado de Newsletters
                     </VCardTitle>
-                    <VCardSubtitle> E una herramienta que le permite a los usuarios explorar y gestionar una colección de boletines informativos de manera eficiente. </VCardSubtitle>
+                    <VCardSubtitle> Es una herramienta que le permite a los usuarios explorar y gestionar una colección de boletines informativos de manera eficiente. </VCardSubtitle>
                   </div>
                 </div>
                 
