@@ -156,8 +156,8 @@
                         align: 'center',
                         verticalAlign: 'top',
                         x: 0,
-                        y: 50,
-                        floating: true,
+                        y: 0,
+                        floating: false,
                         layout: 'horizontal',
                         valueDecimals: 0,
                         backgroundColor: ( // theme

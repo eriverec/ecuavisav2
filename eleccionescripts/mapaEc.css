@@ -13,3 +13,33 @@
     text-align: center;
     color: gray;
 }
+
+@media (max-width: 650px) {
+    #container {
+        height: 700px;
+    }
+}
+
+@media (max-width: 550px) {
+    #container {
+        height: 600px;
+    }
+}
+
+@media (max-width: 450px) {
+    #container {
+        height: 580px;
+    }
+}
+
+@media (max-width: 400px) {
+    #container {
+        height: 500px;
+    }
+}
+
+@media (max-width: 350px) {
+    #container {
+        height: 450px;
+    }
+}
