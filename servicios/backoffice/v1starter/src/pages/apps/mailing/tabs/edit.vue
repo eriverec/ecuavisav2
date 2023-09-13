@@ -171,6 +171,12 @@ const accionForm = async (index) => {
 
 }
 
+const configSnackbar = ref({
+  message:"Datos guardados",
+  type:"success",
+  model:false
+});
+
 const editRegister = async (json, id) => {
   disabledViewList.value = true;
   var jsonEnviar = json
@@ -398,6 +404,15 @@ async function selectHorario(indexP) {
 
 <template>
   <section>
+    <!-- tonal snackbar -->
+    <VSnackbar
+      v-model="configSnackbar.model"
+      location="top end"
+      variant="flat"
+      :color="configSnackbar.type"
+    >
+      {{configSnackbar.message}}
+    </VSnackbar>
     <VRow>
       <VCol
         class="mt-0"
@@ -419,12 +434,13 @@ async function selectHorario(indexP) {
 
     </VCol>
     </VRow>
-    <VRow>
-      <VCol
+    <VRow class="d-flex">
+      <VCol       
         cols="6"
+        class="container" 
         v-for=" item, index in dataNewsletter"
       >
-    <VCard class="mt-5"  :title="'Editar '+item.nombre">
+    <VCard class="mt-5" :title="'Editar '+item.nombre">
           <VCardText>
             <VExpansionPanels v-model="panelSendpulse[index]">
             <VExpansionPanel>
@@ -473,6 +489,7 @@ async function selectHorario(indexP) {
                       autocomplete="off"
                     />
                   </VCol>
+                   <!--
                   <VCol cols="12" class="d-none">
                     <VTextField
                       v-model="item.pass"
@@ -481,7 +498,7 @@ async function selectHorario(indexP) {
                       autocomplete="off"
                     />
                   </VCol>
-                  <!--
+                 
                   <VCol
                     cols="12"
                     sm="12"
@@ -563,6 +580,7 @@ async function selectHorario(indexP) {
               <VExpansionPanelText>
                 <VRow class="horario-ejecucion">
                   <VCol cols="12" sm="6" md="12" >
+                    <VDivider style="margin-bottom: 2rem;"/>
                     <div class="d-flex justify-init align-items-center gap-3 flex-wrap active-items-cr">
                       <VRadioGroup v-model="horarios[index].radios" inline >
                           <VRadio
@@ -570,6 +588,7 @@ async function selectHorario(indexP) {
                             value="2"
                           />
                       </VRadioGroup>
+                      <div class="d-flex">
                       <div style="width: 60px;width: 60px;" title="Seleccione la hora">
                         <label class="label-radio" style="margin-top: -12px;">Horas</label>
                         <VAutocomplete
@@ -579,8 +598,8 @@ async function selectHorario(indexP) {
                             label=""
                         />
                       </div>
-                      <span>:</span>
-                      <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
+                      <span> : </span>
+                      <div style="width: 60px;width: 65px;" title="Seleccione el minuto">
                         <label class="label-radio" style="margin-top: -12px;">Minutos</label>
                         <VAutocomplete
                             v-model="horarios[index].calendariosInputs[1].minutoModel"
@@ -589,7 +608,9 @@ async function selectHorario(indexP) {
                             label=""
                         />
                       </div>
+                     </div>
                     </div>
+                    <VDivider style="margin-top: 2rem;"/>
                   </VCol>
                   <VCol cols="12" sm="6" md="12" >
                     <div class="d-flex justify-init align-items-center gap-3 flex-wrap pt-2 no-active-items-cr">
@@ -602,7 +623,7 @@ async function selectHorario(indexP) {
 
                       <div style="width: 60px;width: 60px;" title="Seleccione el día">
 
-                        <label class="label-radio" style="margin-top: -12px;">Día</label>
+                        <label class="label-radio" style="margin-top: -4px;">Día</label>
                         <VAutocomplete
                             v-model="horarios[index].calendariosInputs[2].diaModel"
                             variant="underlined"
@@ -614,7 +635,7 @@ async function selectHorario(indexP) {
                       <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
                         <div style="width: 60px;width: 60px;" title="Seleccione la hora">
 
-                          <label class="label-radio" style="margin-top: -12px;">Hora</label>
+                          <label class="label-radio" style="margin-top: -4px;">Hora</label>
                           <VAutocomplete
                               v-model="horarios[index].calendariosInputs[2].horaModel"
                               variant="underlined"
@@ -625,7 +646,7 @@ async function selectHorario(indexP) {
                         <span>:</span>
                         <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
 
-                          <label class="label-radio" style="margin-top: -12px;">Minuto</label>
+                          <label class="label-radio" style="margin-top: -4px;">Minuto</label>
                           <VAutocomplete
                               v-model="horarios[index].calendariosInputs[2].minutoModel"
                               variant="underlined"
@@ -635,6 +656,7 @@ async function selectHorario(indexP) {
                         </div>
                       </div>
                     </div>
+                    <VDivider style="margin-top: 2rem;"/>
                   </VCol>
                   <VCol cols="12" sm="6" md="12">
                     <div class="active-items-cr">
@@ -648,7 +670,7 @@ async function selectHorario(indexP) {
                         
                         <div style="width: 60px;width: 60px;" title="Seleccione el día">
 
-                          <label class="label-radio" style="margin-top: -12px;">Día</label>
+                          <label class="label-radio" style="margin-top: -4px;">Día</label>
                           <VAutocomplete
                               v-model="horarios[index].calendariosInputs[3].diaModel"
                               variant="underlined"
@@ -659,7 +681,7 @@ async function selectHorario(indexP) {
                         <span>de</span>
                         <div style="min-width: 60px;" title="Seleccione el mes">
 
-                          <label class="label-radio" style="margin-top: -12px;">Mes</label>
+                          <label class="label-radio" style="margin-top: -4px;">Mes</label>
                           <VAutocomplete
                               v-model="horarios[index].calendariosInputs[3].mesModel"
                               variant="underlined"
@@ -672,7 +694,7 @@ async function selectHorario(indexP) {
                         <div class="d-flex justify-init align-items-center gap-3 flex-wrap">
                           <div style="width: 60px;width: 60px;" title="Seleccione la hora">
 
-                            <label class="label-radio" style="margin-top: -12px;">Hora</label>
+                            <label class="label-radio" style="margin-top: -4px;">Hora</label>
                             <VAutocomplete
                                 v-model="horarios[index].calendariosInputs[3].horaModel"
                                 variant="underlined"
@@ -683,7 +705,7 @@ async function selectHorario(indexP) {
                           <span>:</span>
                           <div style="width: 60px;width: 60px;" title="Seleccione el minuto">
 
-                            <label class="label-radio" style="margin-top: -12px;">Minuto</label>
+                            <label class="label-radio" style="margin-top: -4px;">Minuto</label>
                             <VAutocomplete
                                 v-model="horarios[index].calendariosInputs[3].minutoModel"
                                 variant="underlined"
@@ -694,6 +716,7 @@ async function selectHorario(indexP) {
                         </div>
                       </div>
                     </div>
+                    <VDivider style="margin-top: 2rem;"/>
                   </VCol>
 
                   <VCol cols="12" sm="6" md="12" >
@@ -704,10 +727,10 @@ async function selectHorario(indexP) {
                       />
                     </VRadioGroup>
                     
-                    <div v-if="horarios[index].radios == '5'" class="d-flex justify-init align-items-center gap-3 flex-wrap pl-7 pt-4">
+                    <div v-if="horarios[index].radios == '5'" class="d-flex justify-init gap-3 flex-wrap pl-7 pt-4">
                       
                       <div style="min-width: 45%;max-width: 45%;" title="Seleccione el día de la semana">
-                        <label class="label-radio" style="margin-top: -12px;">Días de la semana</label>
+                        <label class="label-radio" >Días de la semana</label>
                         
                         <VAutocomplete
                             v-model="horarios[index].calendariosInputs[4].diaModel"
@@ -719,7 +742,7 @@ async function selectHorario(indexP) {
                         />
                       </div>
                       <div style="min-width: 45%;max-width: 45%;" title="Seleccione el mes">
-                        <label class="label-radio" style="margin-top: -12px;">Meses</label>
+                        <label class="label-radio" >Meses</label>
                         <VAutocomplete
                             v-model="horarios[index].calendariosInputs[4].mesModel"
                             variant="underlined"
@@ -732,7 +755,7 @@ async function selectHorario(indexP) {
 
                       <div class="d-flex justify-init align-items-center gap-3 flex-wrap pt-3" style="width:100%">
                         <div style="min-width: 30%;max-width: 45%;" title="Seleccione la hora">
-                          <label class="label-radio" style="margin-top: -12px;">Horas</label>
+                          <label class="label-radio" style="margin-top: -4px;">Horas</label>
                           <VAutocomplete
                               v-model="horarios[index].calendariosInputs[4].horaModel"
                               variant="underlined"
@@ -743,7 +766,7 @@ async function selectHorario(indexP) {
                         <span>:</span>
                         <div style="min-width: 30%;max-width: 45%;" title="Seleccione el minuto">
 
-                          <label class="label-radio" style="margin-top: -12px;">Minutos</label>
+                          <label class="label-radio" style="margin-top: -4px;">Minutos</label>
                           <VAutocomplete
                               v-model="horarios[index].calendariosInputs[4].minutoModel"
                               variant="underlined"
@@ -753,6 +776,7 @@ async function selectHorario(indexP) {
                         </div>
                       </div>
                     </div>
+                    
                   </VCol>
                   <!--
                   <VCol cols="12" sm="6" md="12" >
@@ -785,3 +809,80 @@ async function selectHorario(indexP) {
   </section>
 
 </template>
+
+<style>
+@media screen and (max-width: 1000px) {
+  .container {
+   min-width: 90svw; 
+  }
+}
+
+[disabled="true"] {
+    opacity: .2;
+    cursor: no-drop;
+    pointer-events: none;
+}
+.align-items-center {
+    align-items: center;
+}
+
+.label-radio{
+    font-size: 11px;
+    letter-spacing: 0.009375em;
+    min-width: 0;
+    line-height: 1.2;
+    opacity: var(--v-medium-emphasis-opacity);
+    display: block;
+}
+
+.horario-ejecucion .v-field__input {
+    min-height: 30px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.horario-ejecucion .v-field__append-inner {
+    padding-top: 3px;
+}
+
+.horario-ejecucion .v-input{
+
+}
+
+.no-active-items-cr{
+/*  padding-top: 20px; padding-bottom: 23px; padding-left: 15px; padding-right: 15px; border-radius: 7px;*/
+}
+
+.active-items-cr{
+/*  background-color: rgb(233 232 235 / 26%); padding-top: 20px; padding-bottom: 23px; padding-left: 15px; padding-right: 15px; border-radius: 7px;*/
+}
+
+.horario-ejecucion .v-input.v-radio-group {
+    display: contents;
+}
+
+.v-menu .v-overlay__content.v-autocomplete__content {
+    max-height: calc(75vh - 250px);
+}
+
+.icon-spinner {
+    animation: spin-animation 1.5s infinite;
+    display: inline-block;
+}
+
+.d-bloc{
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start
+}
+
+@keyframes spin-animation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(359deg);
+    }
+}
+
+</style>
