@@ -300,7 +300,7 @@ class Ctrfunciones {
         return base64_encode($html);
     }
 
-	public function createJSONPHP($data = array()){
+	public function createJSONPHP($data = array(), $idUnico){
 		$valoresFecto = array(
 			"fechaFormateada" => "",
 			"data" => array(),
@@ -313,13 +313,13 @@ class Ctrfunciones {
 		if (!file_exists($directorio)) {
 	        mkdir($directorio);
 	    }
-		$idUnico = $this->generarIDUnico();
+		// $idUnico = $this->generarIDUnico();
 		$nombre_archivo = $directorio.$idUnico.".json";
 		file_put_contents($nombre_archivo, json_encode($resultado));
 		return $idUnico;
     }
 
-    private function generarIDUnico($texto = "user") {
+    public function generarIDUnico($texto = "user") {
 	    $uniqid = uniqid();
 	    $idUnico = $texto . "_" . $uniqid;
 	    return $idUnico;

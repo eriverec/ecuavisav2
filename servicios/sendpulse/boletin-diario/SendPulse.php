@@ -30,6 +30,7 @@ class SendPulse {
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 15,
 			"folder" => "boletin-diario",
+			"folderPrimary" => ($this->typeProyect == "Production" ? "sendpulse/sendpulsev3": "sendpulse"),
 			"typeProyect" => $this->typeProyect
 		));
 		$this->jsonPDF = [];

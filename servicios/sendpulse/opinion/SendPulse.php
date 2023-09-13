@@ -1,7 +1,7 @@
 <?php
 require '../vendor/autoload.php';
-// use GuzzleHttp\Client;
-// use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 class SendPulse {
 
 	private $token;
@@ -22,17 +22,20 @@ class SendPulse {
 	private $ctrFunciones;
 	private $contadorSolicitudes;
 	private $jsonPDF;
+	private $idPDF;
 
 	function __construct(){
 		require '../funciones/Ctrfunciones.php';
 
-		$this->typeProyect =  "Production"; //Production - Guzzle
+		$this->typeProyect =  "Guzzle"; //Production - Guzzle
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 15,
 			"folder" => "opinion", // Guardado de img y json
 			"folderPrimary" => ($this->typeProyect == "Production" ? "sendpulse/sendpulsev3": "sendpulse"),
 			"typeProyect" => $this->typeProyect
 		));
+
+		$this->idPDF = $this->ctrFunciones->generarIDUnico();
 
 		$getFecha = date("Y-m-d, H:i:s", time());
 		$this->jsonPDF = [];
@@ -482,8 +485,12 @@ class SendPulse {
     }
 
     private function getURLVerNavegador(){
-		$link = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/email.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter.'&';
-		return '<label style="display:none">'.$this->descripcion.'. Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label><a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none; color:#000" href="'.$link.'">Quiero ver en mi navegador</a>';
+    	$link = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/email.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter.'&';
+    	$view = '<a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none;color:#000;padding-right: 10px;" href="'.$link.'">Quiero ver en mi navegador</a>';
+    	$pdf = '<a title="Exportar Newsletter a PDF" target="blank_" style="display:none;text-decoration:none;color:#000;padding-left: 10px;" href="#'.$this->idPDF.'">Guardar como PDF</a>';
+		
+		return '<label style="display:none">'.$this->descripcion.'. Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label>'.$view.$pdf;
+		// return '<label style="display:none">'.$this->descripcion.'. Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label><a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none; color:#000" href="'.$link.'">Quiero ver en mi navegador</a>';
     }
 
     private function getOpinionesBloquesURL($list){
@@ -1120,7 +1127,6 @@ class SendPulse {
 
 	public function view(){
 		try {
-
 			$getFecha = date("Y-m-d, H:i:s", time());
     		$template = $this->htmlTemplate();
 			$bodyContent = $template[0];
@@ -1132,13 +1138,6 @@ class SendPulse {
 				echo json_encode(["resp" => false, "mensaje" => "Hay un erro no hay notas en la api"]);
 				exit();
 			}
-
-			$idPDF = $this->ctrFunciones->createJSONPHP(array(
-				"fechaFormateada" => $this->fechaFormateada,
-				"data" => $this->jsonPDF,
-				"listaUsuario" => $this->listaUsuario,
-				"newsletter" => "opinion"
-			));
 
     		echo '<div style="max-width: 500px;margin-left: auto;margin-right: auto;padding:30px">';
 			echo '<b>Subject: </b>'.$this->subject;
@@ -1218,12 +1217,12 @@ class SendPulse {
 		    			"enviado" => true
 		    		]);
 
-					$idPDF = $this->ctrFunciones->createJSONPHP(array(
+					$idPDFLocal = $this->ctrFunciones->createJSONPHP(array(
 						"fechaFormateada" => $this->fechaFormateada,
 						"data" => $this->jsonPDF,
 						"listaUsuario" => $this->listaUsuario,
 						"newsletter" => "opinion"
-					));
+					), $this->idPDF);
 
 				}else{
 					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
