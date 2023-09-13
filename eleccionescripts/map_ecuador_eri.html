@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mapa de Ecuador con Highcharts</title>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://code.highcharts.com/maps/highmaps.js"></script>
+  <!-- <script src="https://code.highcharts.com/modules/map.js"></script> -->
+  <script src="https://code.highcharts.com/maps/modules/exporting.js"></script>
+  <script src="https://code.highcharts.com/maps/modules/offline-exporting.js"></script>
+  <script src="https://code.highcharts.com/mapdata/countries/ec/ec-all.js"></script>
+
+</head>
+
+<body>
+  <div id="map-container" style="height: 500px; width: 100%;"></div>
+
+  <script>
+    // Obtener el contenedor del mapa
+    const mapContainer = document.getElementById('map-container');
+
+    // Realizar una solicitud a la API
+    fetch('https://api-configuracion.vercel.app/web/data-sv')
+      .then(response => response.json())
+      .then(data => {
+        const candidatesData = data.values.slice(2); // Extraer datos de los candidatos
+
+        // Configuración del mapa de Ecuador
+        Highcharts.mapChart(mapContainer, {
+          chart: {
+            map: 'countries/ec/ec-all',
+          },
+          title: {
+            text: 'Mapa de Ecuador con Puntajes de Candidatos',
+          },
+          mapNavigation: {
+            enabled: true,
+          },
+          legend: {
+            title: {
+              text: 'Candidato',
+            },
+          },
+          series: [{
+            name: 'Puntajes',
+            data: candidatesData,
+            keys: ['key', 'gu', 'es', 'cr', 'im', 'su', 'se', 'sd', 'az', 'eo', 'lj', 'zc', 'cn', 'bo', 'ct', 'lr', 'mn', 'cb', 'ms', 'pi', 'pa', 'tum', 'n', 'tu', 'ga'],
+            tooltip: {
+              pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.value}</b><br/>',
+            },
+          }],
+        });
+      })
+      .catch(error => {
+        console.error('Error al cargar los datos de la API:', error);
+      });
+
+  </script>
+</body>
+
+</html>
