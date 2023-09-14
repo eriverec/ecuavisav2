@@ -246,9 +246,9 @@
                         },
                         name: 'Provincia',
                         point: {
-                            events: {
-                                click: pointClick
-                            }
+                            // events: {
+                            //     click: pointClick
+                            // }
                         },
                         // tooltip: {
                         //     // ySuffix: ' %',
