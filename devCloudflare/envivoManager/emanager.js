@@ -13,7 +13,7 @@ function eventRadioManager() {
   const horaActual = (fechaActual.getUTCHours());
   const minutosActuales = (fechaActual.getUTCMinutes());
 
-  console.log(`${horaActual}:${minutosActuales} audio`);
+  // console.log(`${horaActual}:${minutosActuales} audio`);
 
   async function fetchHorario() {
     try {
@@ -191,7 +191,7 @@ function eventoEnvivoManager() {
         const forzado = data.forzado.estado;
         const htmlIframe = data.html.value;
 
-        console.log(`${horaActual}:${minutosActuales} gye`);
+        // console.log(`${horaActual}:${minutosActuales} gye`);
 
         if (!forzado) {
           for (const dia of data.horarios) {
@@ -335,7 +335,7 @@ function eventoEnvivoManagerQuito() {
         const forzado = data.forzado.estado;
         const htmlIframe = data.html.value;
 
-        console.log(`${horaActual}:${minutosActuales} uio`);
+        // console.log(`${horaActual}:${minutosActuales} uio`);
 
         console.log(data.horarios);
 
