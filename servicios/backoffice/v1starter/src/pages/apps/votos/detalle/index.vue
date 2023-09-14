@@ -291,7 +291,8 @@ async function deleteDetalleVoto (){
                 <VCardItem v-else>
                 <VTable class="text-no-wrap tableNavegacion mb-5" >
                     <thead>
-                        <tr>                          
+                        <tr>           
+                        <th scope="col">Id</th>                   
                         <th scope="col">Nombre</th>
                         <th scope="col">Descripción</th>
                         <th scope="col">Etiqueta</th>
@@ -303,6 +304,9 @@ async function deleteDetalleVoto (){
 
                     <tbody>
                         <tr v-for="item in paginatedDataVotos">
+                        <td class="text-medium-emphasis">
+                            {{ item._id}}
+                        </td>    
                         <td class="text-medium-emphasis">
                             {{ item.nombre}}
                         </td>      
