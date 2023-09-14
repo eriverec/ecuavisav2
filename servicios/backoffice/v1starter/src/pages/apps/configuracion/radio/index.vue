@@ -70,6 +70,7 @@ async function getConfig () {
 }
 
 onMounted(() => { 
+    pusher();
     authorizedCheck(); 
     getConfig(); 
 });
@@ -247,10 +248,134 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
 })
 .catch(error => console.error('error', error));
 }
+
+//------------------------USUARIOS EN LINEA-------------------------------//
+const isNavDrawerOpen = ref(false);
+const rol = localStorage.getItem('role');
+const usersData = ref([]);
+
+const pusher =() =>{
+      //Pusher.logToConsole = true;
+      
+      let a =  JSON.parse(localStorage.getItem('userData'));
+      let email = a.email;
+      const pusher = new Pusher(
+        "69f5e107f97ef8dcc25f", 
+        {
+          cluster: "us2", 
+          forceTLS: true,
+          channelAuthorization: {
+            paramsProvider: () => { return { param1: email }; },
+            endpoint: "https://pusher-auth-mocha.vercel.app/pusher/auth",
+          }
+        }
+      );     
+      const channel = pusher.subscribe("presence-configuracion");
+      
+      channel.bind("pusher:subscription_succeeded", () =>
+        channel.members.each((member) => usersData.value.push({email: member.id}))
+      );
+      channel.bind("pusher:member_added", (member) =>{
+        
+        usersData.value.push({email: member.id})
+      });
+      
+      channel.bind("pusher:member_removed", (member) => {
+      
+      let array = Array.from(usersData.value); 
+      const index = array.findIndex(u => u.email === member.id);
+      if (index !== -1) {
+        usersData.value.splice(index, 1);
+      }     
+      });
+      
+};
+
 </script>
 
 <template>
 <section>
+
+    <VBtn v-if="rol== 'administrador'"
+      icon
+      size="small"
+      class="app-custom-toggler rounded-s-lg rounded-0"
+      style="z-index: 1001;"
+      @click="isNavDrawerOpen = true"
+    >
+      <VIcon icon="tabler-users" />
+    </VBtn>
+
+    <VNavigationDrawer
+      v-if="rol== 'administrador'"
+      v-model="isNavDrawerOpen"
+      temporary
+      location="end"
+      width="400"
+      :scrim="false"
+      class="app-customizer"
+    >
+      <!-- 👉 Header -->
+      <div class="custom-heading d-flex align-center justify-space-between">
+        <div>
+          <h6 class="text-h6 py-4 pl-4">
+            Usuarios activos en configuración
+          </h6>
+          <span class="text-body-1"></span>
+        </div>
+        <VBtn
+          icon
+          variant="text"
+          color="secondary"
+          size="x-small"
+          @click="isNavDrawerOpen = false"
+        >
+          <VIcon
+            icon="tabler-x"
+            size="20"
+          />
+        </VBtn>
+      </div>
+
+      <VDivider />
+      <div style="padding: 1rem;">
+      <PerfectScrollbar
+        tag="ul"
+        :options="{ wheelPropagation: false }"
+      >
+      
+      <VList
+    lines="two"
+    border
+  >
+    <template
+      v-for="(user, index) of usersData"
+      :key="user.email"
+    >
+      <VListItem>
+        <VListItemTitle>
+          {{ user.email }}
+        </VListItemTitle>
+        <VListItemSubtitle class="mt-1">
+          <VBadge
+            dot
+            location="start center"
+            offset-x="2"
+            color="success"
+            class="me-3"
+          >
+            <span class="ms-4">Online</span>
+          </VBadge>     
+        </VListItemSubtitle>       
+      </VListItem>
+      <VDivider v-if="index !== usersData.length - 1" />
+    </template>
+  </VList>
+  
+      </PerfectScrollbar>
+    </div>
+    </VNavigationDrawer> 
+
     <VSnackbar
         v-model="success"
         color="success"
@@ -521,11 +646,35 @@ await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
   
 </section>			
            
-            
-  			
-
-  
 </template>
 
+<style>
+.app-custom {
+  .customizer-section {
+    padding: 1.25rem;
+  }
+
+  .custom-heading {
+    padding-block: 0.875rem;
+    padding-inline: 1.25rem;
+  }
+
+  .v-navigation-drawer__content {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.app-custom-toggler {
+  position: fixed !important;
+  inset-block-start: 60%;
+  inset-inline-end: 0;
+  transform: translateY(-50%);
+
+  &:active {
+    transform: translateY(-50%) !important;
+  }
+}
+</style>
 
 
