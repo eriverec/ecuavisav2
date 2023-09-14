@@ -119,6 +119,7 @@
     animation-fill-mode: forwards;
     -webkit-animation-name: us2020-fade-in;
     animation-name: us2020-fade-in;
+    padding: 0 15px;
 }
 
 
