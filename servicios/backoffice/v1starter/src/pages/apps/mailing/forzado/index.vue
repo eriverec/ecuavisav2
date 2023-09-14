@@ -417,4 +417,8 @@ const selectedTemplatePreview = computed(() => {
 .imgPreview {
   width: 100%;
 }
+.v-avatar--variant-tonal .v-avatar__underlay {
+    background: transparent;
+    background-color: transparent;
+}
 </style>

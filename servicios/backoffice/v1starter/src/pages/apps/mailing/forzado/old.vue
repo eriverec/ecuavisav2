@@ -728,5 +728,9 @@ async function selectHorario() {
   .v-menu .v-overlay__content.v-autocomplete__content {
       height: calc(75vh - 250px);
   }
+  .v-avatar--variant-tonal .v-avatar__underlay {
+    background: transparent;
+    background-color: transparent;
+}
 </style>
 

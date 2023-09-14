@@ -884,5 +884,8 @@ async function selectHorario(indexP) {
         transform: rotate(359deg);
     }
 }
-
+.v-avatar--variant-tonal .v-avatar__underlay {
+    background: transparent;
+    background-color: transparent;
+}
 </style>
