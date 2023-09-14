@@ -87,7 +87,7 @@
 }
 
 #dataPorcentaje {
-    display: flex;
+    display: none;
 }
 
 .itemsFoto img {
@@ -132,7 +132,7 @@
 }
 
 #dataFotos {
-    display: flex;
+    display: none;
     justify-content: space-between;
 }
 
