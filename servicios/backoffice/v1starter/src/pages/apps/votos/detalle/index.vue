@@ -28,27 +28,10 @@ async function getDataDetalleVoto (){
     }
 } 
 
-async function getVotosDetalleVoto (){
-    try {
-
-      for (const item of dataDetalleVoto.value ) {
-      const id = item._id; 
-      const consulta = await fetch('https://ecuavisa-servicio-votacion.vercel.app/votacion/cantidad/detalle/?id='+id);
-      const consultaJson = await consulta.json();
-      if(consultaJson.resp){
-        item.total =  consultaJson.data.total; 
-      } 
-      }
-
-    } catch (error) {
-        console.error(error.message);
-    }
-} 
 
 async function onInit(){
     isLoading.value = true;
     await getDataDetalleVoto();
-    await getVotosDetalleVoto();
     isLoading.value = false;
 }
 
@@ -325,7 +308,7 @@ async function deleteDetalleVoto (){
                             ></VImg>
                         </td>     
                         <td class="text-medium-emphasis">
-                            {{ item.total? item.total: 0}} 
+                            {{ item.votosTotales}} 
                         </td>    
                         <td class="text-medium-emphasis">
                             <VBtn icon size="x-small" color="default" variant="text" @click="onEditDetalleVoto(item._id)">
