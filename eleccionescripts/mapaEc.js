@@ -69,7 +69,7 @@
                 var row = this.options.row,
                     $div = $('<div></div>')
                         .dialog({
-                            title: `Provincia ${this.name}`,
+                            title: `Provincia - ${this.name}`,
                             width: 320,
                             height: 200
                         });
@@ -94,16 +94,16 @@
                     series: [{
                         name: 'Votos',
                         data: [{
-                            name: 'Daniel Noboa',
+                            name: 'Noboa',
                             color: '#0a6aa6',
                             y: parseInt(columns[3][row], 10)
                         }, {
-                            name: 'Luisa Gonzáles',
+                            name: 'Gonzáles',
                             color: '#cd181c',
                             y: parseInt(columns[2][row], 10)
                         }],
                         dataLabels: {
-                            format: '<b>{point.name}</b> {point.percentage:.1f}%'
+                            format: '<b>{point.name}</b> <br/> {point.percentage:.1f}%'
                         }
                     }]
                 });
@@ -127,8 +127,8 @@
                         map: {
                             allAreas: true,
                             tooltip: {
-                                // headerFormat: '<div style="color:{point.color}">⦿</div> {series.name} <br>',
-                                pointFormat: '<b>{point.nombreContrincante}</b> lidera con: <b>{point.valorCandidatoG} votos</b>'
+                                headerFormat: '',
+                                pointFormat: '<div style="color:{point.color};">⦿</div> <span style="font-size:14px;font-weight: bold;">{series.name} de {point.name}</span>  <br/> <b>{point.nombreContrincante}</b> lidera con: <b>{point.valorCandidatoG} votos</b>'
                             },
                             footerFormat: '</br>',
 

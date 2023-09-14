@@ -1,6 +1,32 @@
-body {
+:root{
+  --animate-duration: 1s;
+  --animate-delay: 1s;
+  --animate-repeat: 1
+}
+* {
     font-family: 'Archivo';
 }
+
+@-webkit-keyframes fadeIn {
+    0% {
+      opacity: 0
+    }
+  
+    to {
+      opacity: 1
+    }
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0
+    }
+  
+    to {
+      opacity: 1
+    }
+  }
+  
 
 .porcentaje-item {
     margin-bottom: 10px;
@@ -13,11 +39,26 @@ body {
     align-items: center;
     justify-content: center;
     font-size: 44px;
+    
+    /* opacity: 0; */
+    animation: fadeIn 1s ease-in-out forwards;
+
+}
+
+.parent_votos{
+    display: flex;
+    justify-content: center;
+    column-gap: 30px;
+    align-items: center;
+    margin: 15px 0;
 }
 
 /* Estilo de fondo para Daniel Noboa */
 .daniel-noboa {
-    background-color: #0a6aa6;
+    background-color: #0a6aa6; 
+    position: relative; /* Agrega posicionamiento relativo para animación */
+    overflow: hidden; /* Oculta el exceso de barra de color */
+    
 }
 
 /* Estilo de fondo para Luisa González */
@@ -35,8 +76,18 @@ body {
     background-color: red;
 }
 
+/* Animación de fondo de derecha a izquierda */
+@keyframes fillBar {
+    0% {
+        width: 0;
+    }
+    100% {
+        width: 100%;
+    }
+}
+
 #dataPorcentaje {
-    display: none;
+    display: flex;
 }
 
 .itemsFoto img {
@@ -44,6 +95,15 @@ body {
     width: 100px;
     height: 100px;
     object-fit: cover;
+
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-duration: var(--animate-duration);
+    animation-duration: var(--animate-duration);
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
 }
 
 .itemsFoto:nth-child(1) img {
@@ -72,9 +132,8 @@ body {
 }
 
 #dataFotos {
-    display: none;
+    display: flex;
     justify-content: space-between;
-    margin-bottom: 15px;
 }
 
 .itemsFoto:nth-child(1) {
