@@ -6,7 +6,7 @@ const totalVotos = ref(0);
 
 async function getTotalVotos (){
     try {
-        const consulta = await fetch('https://ecuavisa-servicio-votacion.vercel.app/votacion/cantidad/all');
+        const consulta = await fetch('https://ecuavisa-servicio-votacion.vercel.app/votacion/cantidad/total');
         const consultaJson = await consulta.json();
         //console.log(consultaJson);
         totalVotos.value = consultaJson.data.total;
