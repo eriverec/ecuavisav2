@@ -10,8 +10,8 @@ function eventRadioManager() {
   const fechaActual = new Date();
   fechaActual.setUTCHours(fechaActual.getUTCHours() - 5); // Ajustar a la zona horaria de UTC-5 (Ecuador).
   const diaSemana = fechaActual.getUTCDay();
-  const horaActual = String(fechaActual.getUTCHours()).padStart(2, '0');
-  const minutosActuales = String(fechaActual.getUTCMinutes()).padStart(2, '0');
+  const horaActual = (fechaActual.getUTCHours());
+  const minutosActuales = (fechaActual.getUTCMinutes());
 
   console.log(`${horaActual}:${minutosActuales} audio`);
 
