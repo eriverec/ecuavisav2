@@ -41,7 +41,7 @@
     font-size: 44px;
     
     /* opacity: 0; */
-    animation: fadeIn 1s ease-in-out forwards;
+    /* animation: fadeIn 1s ease-in-out forwards; */
 
 }
 
@@ -87,7 +87,7 @@
 }
 
 #dataPorcentaje {
-    display: none;
+    display: flex;
 }
 
 .itemsFoto img {
@@ -132,7 +132,7 @@
 }
 
 #dataFotos {
-    display: none;
+    display: flex;
     justify-content: space-between;
 }
 

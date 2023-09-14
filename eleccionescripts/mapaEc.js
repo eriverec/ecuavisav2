@@ -144,12 +144,13 @@
                     },
 
                     title: {
-                        text: 'Segunda vuelta - Elecciones 2023',
+                        text: 'Mapa de resultados - Elecciones 2023',
                         align: 'center'
                     },
                     subtitle: {
-                        text: 'Fuente: CNE',
-                        align: 'center'
+                        text: '<span style="font-size:14px;font-weight: bold;">Fuente: CNE </span>',
+                        align: 'center',
+                        verticalAlign: 'bottom',
                     },
 
                     legend: {
