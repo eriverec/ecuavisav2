@@ -110,6 +110,7 @@
             }
 
             // Make the columns easier to read
+
             columns = columns.values;
             var keys = columns[0],
                 names = columns[1],
@@ -128,7 +129,27 @@
                             allAreas: true,
                             tooltip: {
                                 headerFormat: '',
-                                pointFormat: '<div style="color:{point.color};">⦿</div> <span style="font-size:14px;font-weight: bold;">{series.name} de {point.name}</span>  <br/> <b>{point.nombreContrincante}</b> lidera con: <b>{point.valorCandidatoG} votos</b>'
+                                // pointFormat: '<div style="color:{point.color};">⦿</div> <span style="font-size:14px;font-weight: bold;">{series.name} de {point.name}</span>  <br/> <b>{point.nombreContrincante}</b> lidera con: <b>{point.valorCandidatoG} votos</b>'
+                                pointFormatter: function() {
+                                    // Puedes acceder a los datos del punto a través de 'this'
+                                    const point = this;
+                                    
+                                    // Construye el contenido personalizado para el tooltip
+                                    var luisa = point.options.luisa.votos;
+                                    var daniel = point.options.daniel.votos;
+
+                                    var total = luisa + daniel;
+
+                                    const content = `
+                                            <div style="text-align:left"><div style="color:#0a6aa6;">⦿</div> <small>Daniel Noboa: ${daniel} votos - ${((daniel*100)/total).toFixed(2)} %</small></div><br>
+                                            <div style="text-align:left"><div style="color:#cd181c;">⦿</div> <small>Luisa Gonzáles: ${luisa} votos - ${((luisa*100)/total).toFixed(2)} %</small></div>`;
+                                    // const content = `<div style="color:${point.color};">⦿</div>
+                                    //   <span style="font-size:14px;font-weight: bold;">${point.series.name} de ${point.name}</span><br/>
+                                    //   <b>${point.nombreContrincante}</b> lidera con: <b>${point.valorCandidatoG} votos</b>
+                                    // `;
+                                    
+                                    return content;
+                                  }
                             },
                             footerFormat: '</br>',
 
@@ -291,6 +312,12 @@
                     value: parseFloat(percent[i]),
                     valorCandidatoG: parseFloat(mayorContrincante[1]),
                     nombreContrincante: mayorContrincante[0],
+                    daniel: {
+                        "votos": parseInt(columns[3][i], 10)
+                    },
+                    luisa: {
+                        "votos": parseInt(columns[2][i], 10)
+                    },
                     name: names[i],
                     'postal-code': postalCode,
                     row: i,
