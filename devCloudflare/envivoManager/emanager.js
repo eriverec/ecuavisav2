@@ -1,12 +1,19 @@
 /*codigo-manager*/
 function eventRadioManager() {
   const apiUrl = "https://api-configuracion.vercel.app/web/horarioRadio";
-  const fechaActual = new Date();
-  const diaSemana = fechaActual.getDay();
-  const horaActual = fechaActual.getHours();
-  const minutosActuales = fechaActual.getMinutes();
+  // const fechaActual = new Date();
+  // const diaSemana = fechaActual.getDay();
+  // const horaActual = fechaActual.getHours();
+  // const minutosActuales = fechaActual.getMinutes();
   const diasSemanaTexto = ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" ];
-  console.log(`Hoy es ${diasSemanaTexto[diaSemana]}`);
+
+  const fechaActual = new Date();
+  fechaActual.setUTCHours(fechaActual.getUTCHours() - 5); // Ajustar a la zona horaria de UTC-5 (Ecuador).
+  const diaSemana = fechaActual.getUTCDay();
+  const horaActual = String(fechaActual.getUTCHours()).padStart(2, '0');
+  const minutosActuales = String(fechaActual.getUTCMinutes()).padStart(2, '0');
+
+  console.log(`${horaActual}:${minutosActuales} audio`);
 
   async function fetchHorario() {
     try {
@@ -169,12 +176,22 @@ function eventoEnvivoManager() {
     fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
+        // const fechaActual = new Date();
+        // const diaSemana = fechaActual.getDay();
+        // const horaActual = fechaActual.getHours();
+        // const minutosActuales = fechaActual.getMinutes();
+        // const forzado = data.forzado.estado;
+        // const htmlIframe = data.html.value;
+
         const fechaActual = new Date();
-        const diaSemana = fechaActual.getDay();
-        const horaActual = fechaActual.getHours();
-        const minutosActuales = fechaActual.getMinutes();
+        fechaActual.setUTCHours(fechaActual.getUTCHours() - 5); // Ajustar a la zona horaria de UTC-5 (Ecuador).
+        const diaSemana = fechaActual.getUTCDay();
+        const horaActual = String(fechaActual.getUTCHours()).padStart(2, '0');
+        const minutosActuales = String(fechaActual.getUTCMinutes()).padStart(2, '0');
         const forzado = data.forzado.estado;
         const htmlIframe = data.html.value;
+
+        console.log(`${horaActual}:${minutosActuales} gye`);
 
         if (!forzado) {
           for (const dia of data.horarios) {
@@ -294,8 +311,6 @@ function eventoEnvivoManager() {
 
 function eventoEnvivoManagerQuito() {
   const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivoQuito";
-  const enVivoRedy = document.querySelector('.enVivoRedy');
-  const textIndicador = document.querySelector('.enVivoRedy .liveIndicator .enVivoText');
   const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad_quito');
   const title_programa_quito = document.querySelector('.title_programa_quito');
   const playerembed_quito = document.querySelector('#playerembed_quito');
@@ -305,12 +320,22 @@ function eventoEnvivoManagerQuito() {
     fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
+        // const fechaActual = new Date();
+        // const diaSemana = fechaActual.getDay();
+        // const horaActual = fechaActual.getHours();
+        // const minutosActuales = fechaActual.getMinutes();
+        // const forzado = data.forzado.estado;
+        // const htmlIframe = data.html.value;
+
         const fechaActual = new Date();
-        const diaSemana = fechaActual.getDay();
-        const horaActual = fechaActual.getHours();
-        const minutosActuales = fechaActual.getMinutes();
+        fechaActual.setUTCHours(fechaActual.getUTCHours() - 5);
+        const diaSemana = fechaActual.getUTCDay();
+        const horaActual = String(fechaActual.getUTCHours()).padStart(2, '0');
+        const minutosActuales = String(fechaActual.getUTCMinutes()).padStart(2, '0');
         const forzado = data.forzado.estado;
         const htmlIframe = data.html.value;
+
+        console.log(`${horaActual}:${minutosActuales} uio`);
 
         console.log(data.horarios);
 
@@ -404,7 +429,6 @@ function eventoEnvivoManagerQuito() {
           }
         } else {
           const dataTitulo = data.forzado.titulo;
-          const datalabel = data.forzado.label;
 
           if (title_programa_quito) {
             title_programa_quito.innerHTML = dataTitulo;
