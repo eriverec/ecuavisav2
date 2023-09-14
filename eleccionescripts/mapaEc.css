@@ -58,12 +58,44 @@
     background-color: #0a6aa6; 
     position: relative; /* Agrega posicionamiento relativo para animación */
     overflow: hidden; /* Oculta el exceso de barra de color */
+
+    justify-content: end;
+
+    -webkit-transform-origin: 100% 0;
+    -ms-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+    -webkit-animation-name: us2020-result-bar;
+    animation-name: us2020-result-bar;
+    -webkit-animation-duration: 0.75s;
+    animation-duration: 0.75s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-timing-function: cubic-bezier(0.25,0.46,0.45,0.94);
+    animation-timing-function: cubic-bezier(0.25,0.46,0.45,0.94);
+    -webkit-transition: width 0.75s cubic-bezier(0.455,0.03,0.515,0.955) 0.75s;
+    transition: width 0.75s cubic-bezier(0.455,0.03,0.515,0.955) 0.75s;
     
 }
+
+
 
 /* Estilo de fondo para Luisa González */
 .luisa-gonzalez {
     background-color: #cd181c;
+    justify-content: start;
+    -webkit-transform-origin: 0 100%;
+    -ms-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-animation-name: us2020-result-bar;
+    animation-name: us2020-result-bar;
+    -webkit-animation-duration: 0.75s;
+    animation-duration: 0.75s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-timing-function: cubic-bezier(0.25,0.46,0.45,0.94);
+    animation-timing-function: cubic-bezier(0.25,0.46,0.45,0.94);
+    -webkit-transition: width 0.75s cubic-bezier(0.455,0.03,0.515,0.955) 0.75s;
+    transition: width 0.75s cubic-bezier(0.455,0.03,0.515,0.955) 0.75s;
 }
 
 /* Estilo de fondo para porcentajes mayores al 50% */
@@ -76,13 +108,70 @@
     background-color: red;
 }
 
-/* Animación de fondo de derecha a izquierda */
-@keyframes fillBar {
+
+#dataPorcentaje .contador {
+    opacity: 0;
+    -webkit-animation-delay: 0.75s;
+    animation-delay: 0.75s;
+    -webkit-animation-duration: 0.75s;
+    animation-duration: 0.75s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-name: us2020-fade-in;
+    animation-name: us2020-fade-in;
+}
+
+
+@-webkit-keyframes us2020-fade-in {
     0% {
-        width: 0;
+        opacity: 0;
     }
+
     100% {
-        width: 100%;
+        opacity: 1;
+    }
+}
+
+@keyframes us2020-fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+@-webkit-keyframes us2020-result-bar {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0,1);
+        -ms-transform: scale(0,1);
+        transform: scale(0,1);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1,1);
+        -ms-transform: scale(1,1);
+        transform: scale(1,1);
+    }
+}
+
+@keyframes us2020-result-bar {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0,1);
+        -ms-transform: scale(0,1);
+        transform: scale(0,1);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1,1);
+        -ms-transform: scale(1,1);
+        transform: scale(1,1);
     }
 }
 

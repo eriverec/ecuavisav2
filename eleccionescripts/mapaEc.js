@@ -96,11 +96,11 @@
                         data: [{
                             name: 'Noboa',
                             color: '#0a6aa6',
-                            y: parseInt(columns[3][row], 10)
+                            y: parseInt(columns[3][row])
                         }, {
                             name: 'Gonzáles',
                             color: '#cd181c',
-                            y: parseInt(columns[2][row], 10)
+                            y: parseInt(columns[2][row])
                         }],
                         dataLabels: {
                             format: '<b>{point.name}</b> <br/> {point.percentage:.1f}%'
@@ -141,8 +141,13 @@
                                     var total = luisa + daniel;
 
                                     const content = `
-                                            <div style="text-align:left"><div style="color:#0a6aa6;">⦿</div> <small>Daniel Noboa: ${daniel} votos - ${((daniel*100)/total).toFixed(2)} %</small></div><br>
-                                            <div style="text-align:left"><div style="color:#cd181c;">⦿</div> <small>Luisa Gonzáles: ${luisa} votos - ${((luisa*100)/total).toFixed(2)} %</small></div>`;
+                                    <span style="font-size:14px;font-weight: bold;">${point.series.name} de ${point.name}</span><br/>
+                                    <div style="text-align:left"><div style="color:#0a6aa6;">⦿</div> 
+                                        <small>Daniel Noboa: <br/> ${daniel}  votos - ${((daniel*100)/total).toFixed(2)} %</small>
+                                    </div><br><br>
+                                    <div style="text-align:left"><div style="color:#cd181c;">⦿</div> 
+                                        <small>Luisa Gonzáles: <br/> ${luisa} votos - ${((luisa*100)/total).toFixed(2)} %</small>
+                                    </div>`;
                                     // const content = `<div style="color:${point.color};">⦿</div>
                                     //   <span style="font-size:14px;font-weight: bold;">${point.series.name} de ${point.name}</span><br/>
                                     //   <b>${point.nombreContrincante}</b> lidera con: <b>${point.valorCandidatoG} votos</b>
@@ -313,10 +318,10 @@
                     valorCandidatoG: parseFloat(mayorContrincante[1]),
                     nombreContrincante: mayorContrincante[0],
                     daniel: {
-                        "votos": parseInt(columns[3][i], 10)
+                        "votos": parseInt(columns[3][i])
                     },
                     luisa: {
-                        "votos": parseInt(columns[2][i], 10)
+                        "votos": parseInt(columns[2][i])
                     },
                     name: names[i],
                     'postal-code': postalCode,

@@ -48,8 +48,11 @@ fetch(apiUrl)
             // Establecer una clase CSS en función del valor del porcentaje
             const claseCSS = item.name === 'Daniel Noboa' ? 'daniel-noboa' : (item.name === 'Luisa González' ? 'luisa-gonzalez' : (item.value > 50 ? 'high' : 'low'));
 
-            const porcentajeElement = `<div class="porcentaje-item ${claseCSS}" style="width: ${porcentajeFormateado}%">
-            <span class="contador">${porcentajeFormateado}</span>%</div>`;
+            /*DESCOMENTAR A LAS 5PM*/
+            const porcentajeElement = `<div class="porcentaje-item ${claseCSS}" style="width: ${porcentajeFormateado}%"><span class="contador">${porcentajeFormateado}%</span></div>`;
+
+            /*NO COMENTARLO ANTES DE LAS 5PM*/
+            // const porcentajeElement = `<div class="porcentaje-item ${claseCSS}" style="width: 50%">// <span class="contador">0</span>%</div>`;
 
 
             const porcentajeElementFoto = `
@@ -70,8 +73,8 @@ fetch(apiUrl)
         dataPorcentajeDiv.innerHTML = porcentajeHTML;
         dataPorcentajeFotos.innerHTML = porcentajeHTMLFoto;
         // Iniciar la animación del contador
-        startCounterAnimation();
-        startBarAnimation();
+        // startCounterAnimation();
+        // startBarAnimation();
 
     })
     .catch(error => {
@@ -104,7 +107,7 @@ function startCounterAnimation() {
     const contadorElements = document.querySelectorAll('.contador');
     contadorElements.forEach((element, index) => {
         const porcentaje = parseFloat(element.textContent);
-        const animationDuration = 2000; // Duración de la animación en milisegundos
+        const animationDuration = 1000; // Duración de la animación en milisegundos
         const interval = 50; // Intervalo de actualización en milisegundos
         const steps = animationDuration / interval;
         const stepValue = porcentaje / steps;
