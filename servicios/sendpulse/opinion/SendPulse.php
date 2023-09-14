@@ -29,7 +29,7 @@ class SendPulse {
 
 		$this->typeProyect =  "Guzzle"; //Production - Guzzle
 		$this->ctrFunciones = new Ctrfunciones(array(
-			"desfaseMinutosMax" => 15,
+			"desfaseMinutosMax" => 5,
 			"folder" => "opinion", // Guardado de img y json
 			"folderPrimary" => ($this->typeProyect == "Production" ? "sendpulse/sendpulsev3": "sendpulse"),
 			"typeProyect" => $this->typeProyect
@@ -487,7 +487,7 @@ class SendPulse {
     private function getURLVerNavegador(){
     	$link = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/email.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter.'&';
     	$view = '<a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none;color:#000;padding-right: 10px;" href="'.$link.'">Quiero ver en mi navegador</a>';
-    	$pdf = '<a title="Exportar Newsletter a PDF" target="blank_" style="display:none;text-decoration:none;color:#000;padding-left: 10px;" href="#'.$this->idPDF.'">Guardar como PDF</a>';
+    	$pdf = '<a title="Exportar Newsletter a PDF" target="blank_" style="display:none;text-decoration:none;color:#000;padding-left: 10px;" href="https://pruebasecuavisa.phpdemo.site/sendpulse/opinion/pdf.php?id='.$this->idPDF.'">Guardar como PDF</a>';
 		
 		return '<label style="display:none">'.$this->descripcion.'. Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label>'.$view.$pdf;
 		// return '<label style="display:none">'.$this->descripcion.'. Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label><a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none; color:#000" href="'.$link.'">Quiero ver en mi navegador</a>';
@@ -1178,6 +1178,11 @@ class SendPulse {
 			}
 			
 			if(!$this->ctrFunciones->validarAcceso($this->dataJsonNewsletter->data->config)){
+				if($this->dataJsonNewsletter->data->enviado){
+					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
+		    			"enviado" => false
+		    		]);
+				}
 				echo json_encode(["resp" => false, "mensaje" => "Error 004 - Acceso no permitido de acuerdo a la fecha indicada"]);
 				exit();
 			}
@@ -1196,16 +1201,19 @@ class SendPulse {
 			$list_id = $this->listaUsuario;
 
 			if(count($notas[0]) > 0){
-				// $resp = $this->armarCorreo($nombreNeswletter, $this->ctrFunciones->HtmlToBase64($bodyContent), $list_id);
-        		
-				$resp = json_decode('{
-				  "id": 245587,
-				  "status": 13, 
-				  "count": 1, 
-				  "tariff_email_qty": 1, 
-				  "overdraft_price": "0.0044",
-				  "ovedraft_currency": "RUR" 
-				}');
+				$resp = [];
+				if($this->typeProyect == "Production"){
+					$resp = $this->armarCorreo($nombreNeswletter, $this->ctrFunciones->HtmlToBase64($bodyContent), $list_id);
+				}else{
+					$resp = json_decode('{
+					  "id": 245587,
+					  "status": 13, 
+					  "count": 1, 
+					  "tariff_email_qty": 1, 
+					  "overdraft_price": "0.0044",
+					  "ovedraft_currency": "RUR" 
+					}');
+				}
 
 				$respuestaJson = ["respSendPulse"=>$resp,"resp"=>isset($resp->id), "fecha"=>$getFecha];
         		
@@ -1256,16 +1264,19 @@ class SendPulse {
 			$list_id = $this->listaUsuario;
 
 			if(count($notas[0]) > 0){
-				// $resp = $this->armarCorreo($nombreNeswletter, $this->ctrFunciones->HtmlToBase64($bodyContent), $list_id);
-        		
-				$resp = json_decode('{
-				  "id": 245587,
-				  "status": 13, 
-				  "count": 1, 
-				  "tariff_email_qty": 1, 
-				  "overdraft_price": "0.0044",
-				  "ovedraft_currency": "RUR" 
-				}');
+				$resp = [];
+				if($this->typeProyect == "Production"){
+					$resp = $this->armarCorreo($nombreNeswletter, $this->ctrFunciones->HtmlToBase64($bodyContent), $list_id);
+				}else{
+					$resp = json_decode('{
+					  "id": 245587,
+					  "status": 13, 
+					  "count": 1, 
+					  "tariff_email_qty": 1, 
+					  "overdraft_price": "0.0044",
+					  "ovedraft_currency": "RUR" 
+					}');
+				}
 
 				$respuestaJson = ["respSendPulse"=>$resp,"resp"=>isset($resp->id), "fecha"=>$getFecha];
         		
@@ -1273,9 +1284,15 @@ class SendPulse {
         		
 				if(isset($resp->id)){
 					$this->logToFile("Crear campaña a SendPulse", array("accion" => "Crear campaña"));
-					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
-		    			"enviado" => true
-		    		]);
+					// $updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
+		    		// 	"enviado" => true
+		    		// ]);
+		    		$idPDFLocal = $this->ctrFunciones->createJSONPHP(array(
+						"fechaFormateada" => $this->fechaFormateada,
+						"data" => $this->jsonPDF,
+						"listaUsuario" => $this->listaUsuario,
+						"newsletter" => "opinion"
+					), $this->idPDF);
 				}else{
 					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
 		    			"error" => $respuestaJson

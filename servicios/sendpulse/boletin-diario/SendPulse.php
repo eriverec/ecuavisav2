@@ -2,8 +2,8 @@
 require '../funciones/Ctrfunciones.php';
 
 require '../vendor/autoload.php';
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
+// use GuzzleHttp\Client;
+// use GuzzleHttp\Psr7\Request;
 class SendPulse {
 
 	private $token;
@@ -26,9 +26,9 @@ class SendPulse {
 	private $jsonPDF;
 
 	function __construct(){
-		$this->typeProyect =  "Guzzle"; //Production - Guzzle
+		$this->typeProyect =  "Production"; //Production - Guzzle
 		$this->ctrFunciones = new Ctrfunciones(array(
-			"desfaseMinutosMax" => 15,
+			"desfaseMinutosMax" => 5,
 			"folder" => "boletin-diario",
 			"folderPrimary" => ($this->typeProyect == "Production" ? "sendpulse/sendpulsev3": "sendpulse"),
 			"typeProyect" => $this->typeProyect
@@ -586,6 +586,11 @@ class SendPulse {
 			}
 			
 			if(!$this->ctrFunciones->validarAcceso($this->dataJsonNewsletter->data->config)){
+				if($this->dataJsonNewsletter->data->enviado){
+					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
+		    			"enviado" => false
+		    		]);
+				}
 				echo json_encode(["resp" => false, "mensaje" => "Error 004 - Acceso no permitido de acuerdo a la fecha indicada"]);
 				exit();
 			}
@@ -604,16 +609,19 @@ class SendPulse {
 			$list_id = $this->listaUsuario;
 
 			if(count($notas[0]) > 0){
-				// $resp = $this->armarCorreo($nombreNeswletter, $this->ctrFunciones->HtmlToBase64($bodyContent), $list_id);
-        		
-				$resp = json_decode('{
-				  "id": 245587,
-				  "status": 13, 
-				  "count": 1, 
-				  "tariff_email_qty": 1, 
-				  "overdraft_price": "0.0044",
-				  "ovedraft_currency": "RUR" 
-				}');
+				$resp = [];
+				if($this->typeProyect == "Production"){
+					$resp = $this->armarCorreo($nombreNeswletter, $this->ctrFunciones->HtmlToBase64($bodyContent), $list_id);
+				}else{
+					$resp = json_decode('{
+					  "id": 245587,
+					  "status": 13, 
+					  "count": 1, 
+					  "tariff_email_qty": 1, 
+					  "overdraft_price": "0.0044",
+					  "ovedraft_currency": "RUR" 
+					}');
+				}
 
 				$respuestaJson = ["respSendPulse"=>$resp,"resp"=>isset($resp->id), "fecha"=>$getFecha];
         		
@@ -699,16 +707,19 @@ class SendPulse {
 			$list_id = $this->listaUsuario;
 
 			if(count($notas[0]) > 0){
-				// $resp = $this->armarCorreo($nombreNeswletter, $this->ctrFunciones->HtmlToBase64($bodyContent), $list_id);
-        		
-				$resp = json_decode('{
-				  "id": 245587,
-				  "status": 13, 
-				  "count": 1, 
-				  "tariff_email_qty": 1, 
-				  "overdraft_price": "0.0044",
-				  "ovedraft_currency": "RUR" 
-				}');
+				$resp = [];
+				if($this->typeProyect == "Production"){
+					$resp = $this->armarCorreo($nombreNeswletter, $this->ctrFunciones->HtmlToBase64($bodyContent), $list_id);
+				}else{
+					$resp = json_decode('{
+					  "id": 245587,
+					  "status": 13, 
+					  "count": 1, 
+					  "tariff_email_qty": 1, 
+					  "overdraft_price": "0.0044",
+					  "ovedraft_currency": "RUR" 
+					}');
+				}
 
 				$respuestaJson = ["respSendPulse"=>$resp,"resp"=>isset($resp->id), "fecha"=>$getFecha];
         		
@@ -716,9 +727,9 @@ class SendPulse {
         		
 				if(isset($resp->id)){
 					$this->logToFile("Crear campaña a SendPulse", array("accion" => "Crear campaña"));
-					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
-		    			"enviado" => true
-		    		]);
+					// $updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
+		    		// 	"enviado" => true
+		    		// ]);
 				}else{
 					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
 		    			"error" => $respuestaJson
