@@ -142,7 +142,7 @@
 
                                     const content = `
                                             <div style="text-align:left"><div style="color:#0a6aa6;">⦿</div> <small>Daniel Noboa: ${daniel} votos - ${((daniel*100)/total).toFixed(2)} %</small></div><br>
-                                            <div style="text-align:left"><div style="color:#cd181c;">⦿</div> <small>Luisa Gonzáles: ${luisa} votos - ${((luisa*100)/total).toFixed(2)}</small></div>`;
+                                            <div style="text-align:left"><div style="color:#cd181c;">⦿</div> <small>Luisa Gonzáles: ${luisa} votos - ${((luisa*100)/total).toFixed(2)} %</small></div>`;
                                     // const content = `<div style="color:${point.color};">⦿</div>
                                     //   <span style="font-size:14px;font-weight: bold;">${point.series.name} de ${point.name}</span><br/>
                                     //   <b>${point.nombreContrincante}</b> lidera con: <b>${point.valorCandidatoG} votos</b>
