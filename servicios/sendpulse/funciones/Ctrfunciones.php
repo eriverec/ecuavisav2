@@ -57,11 +57,11 @@ class Ctrfunciones {
 	                return $this->validarDiaHoraMinuto($diasModel, $horaActual, $minutoActual, $horaModel, $minutoModel);
 	            case 4:
 	                // Método 4: Validar día, hora, mes y minuto
-	                $diasModel = $horario->diaModel ?? [];
+	                $diasModel = $horario->diaModel ?? 1;
 	                $horaModel = intval($horario->horaModel ?? 0);
 	                $minutoModel = intval($horario->minutoModel ?? 0);
-	                $mesModel = $horario->mesModel ?? [];
-	                return $this->validarDiaHoraMesMinuto($diasModel, $horaActual, $minutoActual, $horaModel, $minutoModel, $mesModel);
+	                $mesModel = $horario->mesModel ?? "Enero";
+	                return $this->validarDiaHoraMesMinuto_2($diasModel, $horaActual, $minutoActual, $horaModel, $minutoModel, $mesModel);
 	            case 5:
 	                // Método 5: Validar día, hora, mes y minuto (similar a Método 4)
 	                $diasModel = $horario->diaModel ?? [];
@@ -115,6 +115,50 @@ class Ctrfunciones {
 	    return null;
 	}
 
+	private function validarDiaHoraMesMinuto_2($diasModel, $horaActual, $minutoActual, $horaModel, $minutoModel, $mesModel) {
+
+		$traduccionesDias = [
+		    "Sunday" => "Domingo",
+		    "Saturday" => "Sábado",
+		    "Friday" => "Viernes",
+		    "Thursday" => "Jueves",
+		    "Wednesday" => "Miércoles",
+		    "Tuesday" => "Martes",
+		    "Monday" => "Lunes"
+		];
+
+		$traduccionesMeses = [
+		    "January" => "Enero",
+		    "February" => "Febrero",
+		    "March" => "Marzo",
+		    "April" => "Abril",
+		    "May" => "Mayo",
+		    "June" => "Junio",
+		    "July" => "Julio",
+		    "August" => "Agosto",
+		    "September" => "Septiembre",
+		    "October" => "Octubre",
+		    "November" => "Noviembre",
+		    "December" => "Diciembre"
+		];
+
+	    // Validar el día de la semana, la hora, el mes y los minutos con un desfase de 15 minutos
+	    
+	    $diaActual = date('d');
+	    // echo $diaActual;
+	    $horaMinutoActual = $horaActual * 60 + $minutoActual;
+	    $horaMinutoModel = $horaModel * 60 + $minutoModel;
+	    $mesActual = date('F');
+
+		// $nombreDia = $traduccionesDias[$diaActual];
+
+		$nombreMes = $traduccionesMeses[$mesActual];
+
+		// echo abs($horaMinutoActual - $horaMinutoModel);
+
+	    return ($diaActual == $diasModel) && in_array($nombreMes, [$mesModel]) && abs($horaMinutoActual - $horaMinutoModel) <= $this->desfaseMaximo && $this->estaEnRangoHorario(str_pad($horaModel, 2, '0', STR_PAD_LEFT), str_pad($minutoModel, 2, '0', STR_PAD_LEFT));
+	}
+
 	private function validarDiaHoraMesMinuto($diasModel, $horaActual, $minutoActual, $horaModel, $minutoModel, $mesModel) {
 
 		$traduccionesDias = [
@@ -153,7 +197,7 @@ class Ctrfunciones {
 
 		$nombreMes = $traduccionesMeses[$mesActual];
 
-	    return in_array($nombreDia, $diasModel) && in_array($nombreMes, $mesModel) && abs($horaMinutoActual - $horaMinutoModel) <= $this->desfaseMaximo;
+	    return in_array($nombreDia, $diasModel) && in_array($nombreMes, $mesModel) && abs($horaMinutoActual - $horaMinutoModel) <= $this->desfaseMaximo && $this->estaEnRangoHorario(str_pad($horaModel, 2, '0', STR_PAD_LEFT), str_pad($minutoModel, 2, '0', STR_PAD_LEFT));
 	}
 
 	private function validarDiaHoraMinuto($diasModel, $horaActual, $minutoActual, $horaModel, $minutoModel) {
@@ -175,7 +219,7 @@ class Ctrfunciones {
 
 	    $nombreDia = $traduccionesDias[$diaActual];
 
-	    return in_array($nombreDia, $diasModel) && abs($horaMinutoActual - $horaMinutoModel) <= $this->desfaseMaximo;
+	    return in_array($nombreDia, $diasModel) && abs($horaMinutoActual - $horaMinutoModel) <= $this->desfaseMaximo && $this->estaEnRangoHorario(str_pad($horaModel, 2, '0', STR_PAD_LEFT), str_pad($minutoModel, 2, '0', STR_PAD_LEFT));
 	}
 
 	private function validarHoraMinuto($horaActual, $minutoActual, $horaModel, $minutoModel) {
@@ -184,7 +228,7 @@ class Ctrfunciones {
 	    $minutosTotalesActual = $horaActual * 60 + $minutoActual;
 	    $minutosTotalesModel = $horaModel * 60 + $minutoModel;
 
-	    return abs($minutosTotalesActual - $minutosTotalesModel) <= $this->desfaseMaximo;
+	    return abs($minutosTotalesActual - $minutosTotalesModel) <= $this->desfaseMaximo && $this->estaEnRangoHorario(str_pad($horaModel, 2, '0', STR_PAD_LEFT), str_pad($minutoModel, 2, '0', STR_PAD_LEFT));
 	}
 
 	public function calcularTiempoTranscurridoEnMinutos($fechaHora) {
@@ -350,4 +394,16 @@ class Ctrfunciones {
 		$content = file_get_contents($url, false, $context);
 		return $content;
     }
+
+    private function estaEnRangoHorario($hora, $minuto) {
+	    date_default_timezone_set('America/Guayaquil'); // Reemplaza 'tu_zona_horaria' con la zona horaria que desees utilizar, por ejemplo, 'America/New_York' o 'Europe/Madrid'.
+	    // Obtén la hora de inicio a partir de $horai
+	    $horaInicio = "$hora:$minuto:00";
+	    // Calcula la hora final sumando 15 minutos a la hora de inicio
+	    $horaObjeto = new DateTime($horaInicio);
+	    $horaObjeto->add(new DateInterval('PT15M'));
+	    $horaFin = $horaObjeto->format('H:i:s');
+	    $horaActual = date('H:i:s');
+	    return ($horaActual >= $horaInicio && $horaActual <= $horaFin);
+	}
 }
