@@ -94,11 +94,11 @@
                     series: [{
                         name: 'Votos',
                         data: [{
-                            name: 'D. Noboa',
+                            name: 'Noboa',
                             color: '#0a6aa6',
                             y: parseInt(columns[3][row], 10)
                         }, {
-                            name: 'L. Gonzáles',
+                            name: 'Gonzáles',
                             color: '#cd181c',
                             y: parseInt(columns[2][row], 10)
                         }],
