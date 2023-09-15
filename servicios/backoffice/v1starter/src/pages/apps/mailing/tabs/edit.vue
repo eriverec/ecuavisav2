@@ -399,6 +399,13 @@ async function selectHorario(indexP) {
   return horario;
 }
 
+const isDialogVisiblePreview = ref(false);
+const iframePreview = ref('');
+
+const onPreview = async (preview) => {
+  isDialogVisiblePreview.value = true;
+  iframePreview.value = preview;
+};
 
 </script>
 
@@ -797,7 +804,9 @@ async function selectHorario(indexP) {
               </VExpansionPanels>
               </VCardText>
               <VCardText class="d-flex justify-end flex-wrap gap-3">
-              
+              <VBtn @click="onPreview(item.preview)">
+                Vista previa
+              </VBtn>
               <VBtn @click="accionForm(index)">
                 Guardar
               </VBtn>
@@ -806,6 +815,45 @@ async function selectHorario(indexP) {
 
       </VCol>
     </VRow>
+
+    <VDialog
+        v-model="isDialogVisiblePreview"
+        fullscreen
+        :scrim="false"
+        transition="dialog-bottom-transition"
+      >
+        <VCard>
+          <!-- Toolbar -->
+          <div>
+            <VToolbar color="primary">
+              <VBtn
+                icon
+                variant="plain"
+                @click="isDialogVisiblePreview = false"
+              >
+                <VIcon
+                  color="white"
+                  icon="tabler-x"
+                />
+              </VBtn>
+
+              <VToolbarTitle>Vista previa del Newsletter</VToolbarTitle>
+
+              <VSpacer />
+
+              <VToolbarItems>
+                <VBtn
+                  variant="text"
+                  @click="isDialogVisiblePreview = false"
+                >
+                  Cerrar
+                </VBtn>
+              </VToolbarItems>
+            </VToolbar>
+          </div>
+          <iframe loading="lazy" width="100%" height="2000px" :src="iframePreview" frameborder="0"></iframe>
+        </VCard>
+      </VDialog>
   </section>
 
 </template>
