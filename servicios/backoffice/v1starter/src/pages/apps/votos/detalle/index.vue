@@ -81,11 +81,20 @@ const nombre = ref('');
 const descripcion = ref('');
 const etiqueta = ref('');
 const urlImagen = ref('');
+const categoria = ref('');
+
 const configSnackbar = ref({
     message: "Datos guardados",
     type: "success",
     model: false
 });
+
+const categorias = [
+    {
+        title: "Desafío a la fama",
+        value: "desafio a la fama"
+    }
+]
 
 
 async function onEditDetalleVoto(id) {
@@ -100,6 +109,7 @@ async function onEditDetalleVoto(id) {
     descripcion.value = detalle.descripcion;
     etiqueta.value = detalle.etiqueta;
     urlImagen.value = detalle.urlImagen;
+    categoria.value = detalle?.categoria;
 }
 
 async function onAddDetalleVoto() {
@@ -108,6 +118,7 @@ async function onAddDetalleVoto() {
     descripcion.value = '';
     etiqueta.value = '';
     urlImagen.value = '';
+    categoria.value = '';
     isDialogActive.value = true;
 }
 
@@ -119,10 +130,11 @@ async function onSubmit() {
     if (formAccion.value === 'agregar') {
 
         let dataEnviar = {
-            "nombre": nombre.value,
-            "descripcion": descripcion.value,
-            "etiqueta": etiqueta.value,
-            "urlImagen": urlImagen.value
+           "nombre": nombre.value,
+           "descripcion": descripcion.value,
+           "etiqueta": etiqueta.value,
+           "urlImagen": urlImagen.value,
+           "categoria": categoria.value 
         }
 
         var raw = JSON.stringify(dataEnviar);
@@ -152,11 +164,12 @@ async function onSubmit() {
     } else if (formAccion.value === 'editar') {
 
         let dataEnviar = {
-            "id": idToEdit.value,
-            "nombre": nombre.value,
-            "descripcion": descripcion.value,
-            "etiqueta": etiqueta.value,
-            "urlImagen": urlImagen.value
+           "id": idToEdit.value,
+           "nombre": nombre.value,
+           "descripcion": descripcion.value,
+           "etiqueta": etiqueta.value,
+           "urlImagen": urlImagen.value, 
+           "categoria": categoria.value 
         }
 
         var raw = JSON.stringify(dataEnviar);
@@ -194,9 +207,9 @@ function resetForm() {
     descripcion.value = '';
     etiqueta.value = '';
     urlImagen.value = '';
+    categoria.value = '';
 }
 
-import pages1 from '@/assets/images/pages/1.png'
 
 // -------------------------------DELETE-----------------------------------//
 const isDialogVisibleDelete = ref(false);
@@ -352,9 +365,16 @@ async function deleteDetalleVoto() {
                                 <VCol cols="6">
                                     <VTextField v-model="descripcion" label="Descripción" />
                                 </VCol>
-                                <VCol cols="12">
+                                <VCol cols="5">
                                     <VTextField v-model="etiqueta" label="Etiqueta" />
                                 </VCol>
+                                <VCol cols="7" >
+											<VSelect
+												v-model="categoria"
+												label="Categoría"
+                                                :items="categorias"
+											/>
+										</VCol>
                                 <VCol cols="12">
                                     <VTextField v-model="urlImagen" label="Imágen" />
                                 </VCol>
