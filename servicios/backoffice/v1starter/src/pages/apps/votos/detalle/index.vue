@@ -258,7 +258,7 @@ async function deleteDetalleVoto() {
                     <VCardText>
                         <div class="d-flex flex-wrap gap-4 mt-10">
                             <div style="width: 15rem">
-                                <VTextField v-model="searchQuery" placeholder="Buscar..." density="compact" />
+                                <VTextField @keyup.enter="searchByName" v-model="searchQuery" placeholder="Buscar..." density="compact" />
                             </div>
                             <!-- 👉 Search button -->
                             <VBtn prepend-icon="tabler-search" @click="searchByName">
@@ -267,11 +267,11 @@ async function deleteDetalleVoto() {
                             <VBtn @click="reiniciarSearch" :disabled="!searchQuery">
                                 Reiniciar
                             </VBtn>
-                            <VBtn class="ml-auto" @click="onAddDetalleVoto">
+                            <VBtn prepend-icon="tabler-user-plus" color="success" variant="tonal" class="ml-auto" @click="onAddDetalleVoto">
                                 Agregar participante
                             </VBtn>
                         </div>
-
+    
                     </VCardText>
                 </VCard>
             </VCol>
@@ -284,10 +284,10 @@ async function deleteDetalleVoto() {
                 No existen datos para mostrar.
             </VCardItem>
 
-            <VCol v-else cols="12" sm="6" lg="4" v-for="item in paginatedDataVotos">
+            <VCol v-else cols="12" sm="6" lg="3" v-for="item in paginatedDataVotos">
                 <VCard>
 
-                    <VImg :width="500" aspect-ratio="1/1" :src=item.urlImagen cover />
+                    <VImg class="immm__" :width="200" aspect-ratio="1/1" :src=item.urlImagen cover />
                     <VCardText class="position-relative">
                         <div class="d-flex justify-space-between flex-wrap pt-8">
                             <div class="me-2 mb-2">
@@ -314,7 +314,7 @@ async function deleteDetalleVoto() {
 
                     <VCardText>
                         <!-- {{ item._id }} -->
-                        <VBtn class="mr-3" color="warning" variant="tonal" icon  @click="onEditDetalleVoto(item._id)">
+                        <VBtn class="mr-3" color="success" variant="tonal" icon  @click="onEditDetalleVoto(item._id)">
                             <VIcon size="22" icon="tabler-edit" />
                         </VBtn>
 
@@ -416,3 +416,11 @@ async function deleteDetalleVoto() {
         </VDialog>
     </section>
 </template>
+
+
+<style>
+.immm__{
+    margin: auto !important;
+}
+
+</style>
