@@ -2,7 +2,6 @@
 import axios from '@axios';
 
 const tabActual = ref('tab-lista')
-const isDialogVisible = ref(false)
 </script>
 
 <template>
@@ -13,7 +12,7 @@ const isDialogVisible = ref(false)
 				<VTabs v-model="tabActual" class="v-tabs-pill">
 					<VTab value="tab-Principal" ><VIcon icon="mdi-settings" class="pe-1" size="25" />En vivo</VTab>
 					<VTab value="tab-bo" ><VIcon icon="mdi-settings" class="pe-1" size="25" />Backoffice</VTab>
-					<VTab value="tab-mail" ><VIcon icon="tabler-mail" class="pe-1" size="25" />Newsletter</VTab>
+					<VTab value="tab-tools" ><VIcon icon="mdi-tools" class="pe-1" size="25" />Newsletter</VTab>
 					<VTab value="tab-tools" ><VIcon icon="mdi-tools" class="pe-1" size="25" />Utilidades</VTab>
 
 				</VTabs>
@@ -141,7 +140,7 @@ const isDialogVisible = ref(false)
 								<VRow>
 									<VCol cols="12" lg="10" class="mx-auto my-8 align-items-center" >
 										<VRow>
-											<VCol cols="12" md="6" center >
+											<VCol cols="12" md="12" center >
 												<VCard  flat  border class=" cursor-pointer"  @click="$router.push({ name: 'apps-apicustom' })" >
 													<VCardText class="text-center">
 														<VAvatar rounded size="70" color="primary" variant="tonal" class="p-5 mb-2" >
@@ -157,121 +156,133 @@ const isDialogVisible = ref(false)
 													</VCardText>
 												</VCard>
 
-												
+												<!-- kan ban actividades -->
+											 	<div id="kanban" class="container">
+												    <div v-for="column in columns" :key="column.id" class="column">
+												      <h2>{{ column.title }}</h2>
+												      <VCard v-for="card in column.cards" :key="card.id" class="card">
+												        <template v-if="card.editing">
+												        	<VTextField
+				                                                v-model="card.title"
+				                                                label="Título de actividad"
+				                                                placeholder="Escriba el titulo..."
+				                                                class="ms-0 me-1 chat-list-search"
+				                                            />
+												          <!-- <input type="text" v-model="card.title" class="form-control"> -->
+												          <VTextField v-model="card.description" label="Descripción" placeholder="Escriba el contenido..." class="ms-0 me-1 chat-list-search"/>
+												          	
+												          	<VSelect v-model="card.labels" :items="labels" label="Standard" />
+												          	<!-- <VSelect v-model="card.columnId" @change="moveCard(card.id, card.columnId)" :items="card.columnId" label="Standard" /> -->
+												          	
+												          	<select v-model="card.labels" class="form-control">
+											            		<option v-for="label in labels" :key="label" :value="label">{{ label }}</option>
+												          	</select>
+												          	<select v-model="card.columnId" @change="moveCard(card.id, card.columnId)" class="form-control">
+												            	<option v-for="column in columns" :key="column.id" :value="column.id">{{ column.title }}</option>
+												          	</select>
+
+												          <!-- <input type="text" v-model="card.labels" class="form-control"> -->
+												          <button @click="card.editing = false" class="btn btn-primary">Guardar</button>
+												        </template>
+												        <template v-else>
+												          	<h3>{{ card.title }}</h3>
+												          	<p>{{ card.description }}</p>
+												           	<VChip v-for="label in card.labels" :key="label" color="warning" class="mr-4" >{{ label }} </VChip>
+												          	<button @click="card.editing = true" class="btn btn-secondary">Editar</button>
+												        </template>
+												      </VCard>
+												      <button @click="addCard(column.id)" class="btn btn-primary">Agregar tarjeta</button>
+												    </div>
+												    <button @click="saveData" class="btn btn-primary">Guardar datos</button>
+											  	</div>
 
 											</VCol>
-											<VCol cols="12" md="6" >
-												<VCard  flat  border class=" cursor-pointer"  @click="clickButton">
+											<!-- <VCol cols="12" md="4" >
+												<VCard  flat  border class=" cursor-pointer"  @click="$router.push({ name: 'apps-backoffice-actividad' })">
 													<VCardText class="text-center">
 														<VAvatar rounded size="70" color="primary" variant="tonal" class="p-5 mb-2" >
-															<VIcon icon="mdi-folders"  size="45" />
+															<VIcon icon="mdi-account-clock-outline"  size="45" />
 														</VAvatar>
 														<h6 class="text-h6 my-3">
-															Gestor de archivos
+															Actividad de Usuarios
 														</h6>
-														    <!-- Dialog Activator -->
-
-														<VBtn size="small" variant="tonal"  >
-															abrir gestor
+														<VBtn size="small" variant="tonal" :to="{  name: 'apps-settings-menu' }" >
+															Ver Reportes
 														</VBtn>
 													</VCardText>
 												</VCard>
-											</VCol>
+											</VCol> -->
 											
 										</VRow>
 									</VCol>
 								</VRow>
 							</VWindowItem>
 
-							<!-- $$$$$$$$$$$$$ tab4 $$$$$$$$$$$$$$ -->
-							<VWindowItem value="tab-mail">
-								<div class=" py-5 gap-4 align-items-center">   
-									<VCardTitle >Configurar el envío de campañas de emails</VCardTitle>
-									<VCardSubtitle>  <vBtn variant="tonal" color="warning"><VIcon icon="mdi-info"  size="20" /> Advertencia de configuraciones sensibles, como eliminar una campaña </vBtn> </VCardSubtitle>
-								</div>
-								<!-- content here -->
-								<VRow>
-									<VCol cols="12" lg="10" class="mx-auto my-8 align-items-center" >
-										<VRow>
-											<VCol cols="12" md="12" center >
-												<VCard  flat  border class=" cursor-pointer"  @click="$router.push({ name: 'apps-mailing-list' })" >
-													<VCardText class="text-center">
-														<VAvatar rounded size="70" color="primary" variant="tonal" class="p-5 mb-2" >
-															<VIcon icon="mdi-email"  size="45" />
-														</VAvatar>
-														<h6 class="text-h6 my-3">
-															Listado de Boletines
-														</h6>
-														<!-- <p>mas info</p> -->
-														<VBtn size="small" variant="tonal" :to="{  name: 'apps-settings-menu' }" >
-															Configurar
-														</VBtn>
-													</VCardText>
-												</VCard>
-											</VCol>
-										</VRow>
-									</VCol>
-								</VRow>
-							</VWindowItem>
 						</VWindow>
 					</VCardText>
 				</VCard>
 
 			</VCol>
 		</VRow>
-		
-  <VDialog
-    v-model="isDialogVisible"
-    fullscreen
-    :scrim="false"
-    transition="dialog-bottom-transition"
-  >
-    <template #activator="{ props }">
-      <VBtn v-bind="props" ref="myButton" class="d-none">
-        Open Dialog
-      </VBtn>
-    </template>
-
-    <!-- Dialog Content -->
-    <VCard>
-      <!-- Toolbar -->
-      <div>
-        <VToolbar color="primary">
-          
-
-          <VToolbarTitle>Gestor de archivos</VToolbarTitle>
-
-          <VSpacer />
-
-          <VToolbarItems>
-            <VBtn icon variant="plain" @click="isDialogVisible = false" >
-            	<VIcon color="white" icon="tabler-x" />
-          	</VBtn>
-          </VToolbarItems>
-        </VToolbar>
-      </div>
-
-      <!-- List -->
-      <iframe src="https://estadisticas.ecuavisa.com/sites/gestor/index.php" frameborder="0"></iframe>
-    </VCard>
-  </VDialog>
 	</section>
-
-
 </template>
 <style scoped>  
 /*.v-card.v-theme--dark .iframe-dark {  display: block; }*/
 </style>
-<style lang="scss">
-	.dialog-bottom-transition-enter-active,
-	.dialog-bottom-transition-leave-active {
-	  transition: transform 0.2s ease-in-out;
-	}
-	iframe {
-      	height: 90vh;
-    }
-</style>
+
 <script>
+import { createStore } from 'vuex'
+
+const store = createStore({
+  state: {
+    columns: [
+      { id: '1', title: 'Por hacer', cards: [{ id: '1', title: 'Tarjeta 1', description: 'Descripción', labels: ['Importante'], editing: false }] },
+      { id: '2', title: 'En progreso', cards: [{ id: '2', title: 'Tarjeta 2', description: 'Descripción', labels: ['Urgente'], editing: false }] },
+      { id: '3', title: 'Hecho', cards: [{ id: '3', title: 'Tarjeta 3', description: 'Descripción', labels: ['Opcional'], editing: false }] }
+    ],
+    labels: ['Importante', 'Urgente', 'Opcional']
+  },
+  mutations: {
+    setColumns(state, columns) {
+      state.columns = columns;
+    },
+    addCard(state, { columnId, card }) {
+      const column = state.columns.find(column => column.id === columnId);
+      column.cards.push(card);
+    },
+    moveCard(state, { fromColumnId, toColumnId, cardId }) {
+      const fromColumn = state.columns.find(column => column.id === fromColumnId);
+      const toColumn = state.columns.find(column => column.id === toColumnId);
+      const cardIndex = fromColumn.cards.findIndex(card => card.id === cardId);
+      const [card] = fromColumn.cards.splice(cardIndex, 1);
+      toColumn.cards.push(card);
+    },
+    editCard(state, { columnId, cardId, cardData }) {
+      const column = state.columns.find(column => column.id === columnId);
+      const card = column.cards.find(card => card.id === cardId);
+      Object.assign(card, cardData);
+    },
+    deleteCard(state, { columnId, cardId }) {
+      const column = state.columns.find(column => column.id === columnId);
+      const cardIndex = column.cards.findIndex(card => card.id === cardId);
+      column.cards.splice(cardIndex, 1);
+    },
+    addLabel(state, { columnId, cardId, label }) {
+      const column = state.columns.find(column => column.id === columnId);
+      const card = column.cards.find(card => card.id === cardId);
+      card.labels.push(label);
+    },
+    removeLabel(state, { columnId, cardId, label }) {
+      const column = state.columns.find(column => column.id === columnId);
+      const card = column.cards.find(card => card.id === cardId);
+      const labelIndex = card.labels.indexOf(label);
+      if (labelIndex !== -1) {
+        card.labels.splice(labelIndex, 1);
+      }
+    }
+  }
+});
+
 
 
 export default {
@@ -287,6 +298,7 @@ export default {
 		// }
 		
 	},
+	name: 'Kanban',
   	computed: {
     	columns() {
       		return store.state.columns;
@@ -298,9 +310,11 @@ export default {
 	},
 
 	methods: {
-		clickButton() {
-	       this.$refs.myButton.$el.click();
-	    },
+		
+		moveCard(cardId, columnId) {
+		    store.commit('moveCard', { fromColumnId: cardId, toColumnId: columnId, cardId });
+	  	},
+
 		async obtenerDatos() {
 			const respuesta = await fetch(`https://estadisticas.ecuavisa.com/sites/services/global/datareader.php`);
 			const datos = await respuesta.json();
@@ -339,6 +353,26 @@ export default {
 				this.$router.push({ path: '/pages/errors/not-authorized' })
 			}
 		},
+
+
+		addCard(columnId) {
+	      const card = { /* datos de la tarjeta */ };
+	      store.commit('addCard', { columnId, card });
+	    },
+	    saveData() {
+	      fetch('https://api.example.com/endpoint', {
+	        method: 'POST',
+	        headers: {
+	          'Content-Type': 'application/json'
+	        },
+	        body: JSON.stringify(store.state.columns)
+	      })
+	      .then(response => response.json())
+	      .then(data => console.log(data))
+	      .catch((error) => {
+	        console.error('Error:', error);
+	      });
+	    }
 	},
 };
 </script>
