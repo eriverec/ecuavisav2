@@ -924,9 +924,6 @@ function eventEliminatorios() {
       <li class="nav-item" role="presentation">
           <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
       </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
-      </li>
       
   </ul>
           <div class="tab-content" id="myTabContent">
@@ -1041,9 +1038,6 @@ function eventChampions() {
       </li>
       <li class="nav-item" role="presentation">
           <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
       </li>
       
   </ul>
