@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://code.highcharts.com/highcharts.js"></script>
   <title>Mapa de Ecuador con Highcharts</title>
   <link rel="stylesheet" href="mapaEc.css">
   <link
@@ -17,7 +18,13 @@
   <div id="dataVotos"></div>
   <div id="dataPorcentaje"></div>
 
+
   <iframe class="mapa_ec_2023" src="https://ecuavisadev.netlify.app/eleccionescripts/map_ecuador_original.html" width="100%" height="800px" frameborder="0" scrolling="auto" allowfullscreen="" title="Ecuavisa"> </iframe>
+
+  <div id="chart-container-pie" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+  <div id="chart-container-column" style="min-width: 300px; height: 400px; margin: 0 auto"></div>
+
+
 
 
   <script src="porcentajesPartidos.js"></script>
