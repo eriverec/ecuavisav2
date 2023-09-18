@@ -49,6 +49,10 @@ async function searchByName() {
         const consultaJson = await consulta.json();
         dataDetalleVoto.value = consultaJson.data;
         isLoading.value = false;
+    }else{
+            searchQuery.value = ''
+            await onInit();
+        
     }
 }
 
@@ -258,15 +262,19 @@ async function deleteDetalleVoto() {
                     <VCardText>
                         <div class="d-flex flex-wrap gap-4 mt-10">
                             <div style="width: 15rem">
-                                <VTextField @keyup.enter="searchByName" v-model="searchQuery" placeholder="Buscar..." density="compact" />
+                                <VTextField @keyup.enter="searchByName" @input="searchByName" v-model="searchQuery"  density="compact"
+                                label="Buscar"
+                                prepend-inner-icon="tabler-search"
+                                
+                                />
                             </div>
                             <!-- 👉 Search button -->
-                            <VBtn prepend-icon="tabler-search" @click="searchByName">
+                            <!-- <VBtn prepend-icon="tabler-search" @click="searchByName">
                                 Buscar
-                            </VBtn>
-                            <VBtn @click="reiniciarSearch" :disabled="!searchQuery">
+                            </VBtn>-->
+                            <VBtn @click="reiniciarSearch">
                                 Reiniciar
-                            </VBtn>
+                            </VBtn> 
                             <VBtn prepend-icon="tabler-user-plus" color="success" variant="tonal" class="ml-auto" @click="onAddDetalleVoto">
                                 Agregar participante
                             </VBtn>
@@ -326,9 +334,11 @@ async function deleteDetalleVoto() {
                 </VCard>
             </VCol>
         </VRow>
-        <VCard class="mt-5">
-            <VCardText>
-                <div class="d-flex align-center justify-space-evenly botonescurrentPage">
+        <!-- <VCard class="mt-5"> -->
+            <!-- <VCardText> -->
+         
+                <VCardItem v-if="isLoading"></VCardItem> 
+                <div v-else class="mt-5 d-flex align-center justify-space-evenly botonescurrentPage">
                     <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
                     Página {{ currentPage }}
                     <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
@@ -336,8 +346,8 @@ async function deleteDetalleVoto() {
                     </VBtn>
                 </div>
 
-            </VCardText>
-        </VCard>
+            <!-- </VCardText> -->
+        <!-- </VCard> -->
 
         <VDialog v-model="isDialogActive" persistent max-width="600">
 
