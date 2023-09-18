@@ -1,35 +1,3 @@
-// 'use strict';
-
-// function Tabs() {
-//   var bindAll = function() {
-//     var menuElements = document.querySelectorAll('[data-tab]');
-//     for(var i = 0; i < menuElements.length ; i++) {
-//       menuElements[i].addEventListener('click', change, false);
-//     }
-//   }
-
-//   var clear = function() {
-//     var menuElements = document.querySelectorAll('[data-tab]');
-//     for(var i = 0; i < menuElements.length ; i++) {
-//       menuElements[i].classList.remove('active');
-//       var id = menuElements[i].getAttribute('data-tab');
-//       document.getElementById(id).classList.remove('active');
-//     }
-//   }
-
-//   var change = function(e) {
-//     clear();
-//     e.target.classList.add('active');
-//     var id = e.currentTarget.getAttribute('data-tab');
-//     document.getElementById(id).classList.add('active');
-//   }
-
-//   bindAll();
-// }
-
-// var connectTabs = new Tabs();
-
-
 function eventLigaPro() {
   const urlsCifras = [
     {
@@ -131,6 +99,9 @@ function eventLigaPro() {
                   <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
               <li class="nav-item" role="presentation">
+                <a class="nav-link" href="/deportes/champions/tablaposiciones">Champions League</a>
+              </li> 
+              <li class="nav-item" role="presentation">
                   <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
               </li>
               <li class="nav-item" role="presentation">
@@ -147,9 +118,6 @@ function eventLigaPro() {
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
               
           </ul>
@@ -248,6 +216,9 @@ function eventLibertadores() {
           <li class="nav-item" role="presentation">
               <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
           </li>
+          <li class="nav-item" role="presentation">
+            <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
+          </li> 
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
               </li>
@@ -265,9 +236,6 @@ function eventLibertadores() {
               </li>
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
               </li>
               
           </ul>
@@ -362,8 +330,11 @@ function eventSudamericana() {
       htmlContent = /*html*/ `        
       <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
-      <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-      </li>
+        <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+        </li>
+        <li class="nav-item" role="presentation">
+                <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
+              </li> 
       <li class="nav-item" role="presentation">
           <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
       </li>
@@ -381,9 +352,6 @@ function eventSudamericana() {
       </li>
       <li class="nav-item" role="presentation">
           <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
       </li>
       
   </ul>
@@ -482,6 +450,9 @@ function eventPremierLeague() {
       <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
       </li>
       <li class="nav-item" role="presentation">
+      <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
+    </li> 
+      <li class="nav-item" role="presentation">
           <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
       </li>
       <li class="nav-item" role="presentation">
@@ -498,9 +469,6 @@ function eventPremierLeague() {
       </li>
       <li class="nav-item" role="presentation">
           <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
       </li>
       
   </ul>
@@ -595,6 +563,9 @@ function eventLaLigaEspañola() {
       <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
       </li>
       <li class="nav-item" role="presentation">
+      <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
+    </li> 
+      <li class="nav-item" role="presentation">
           <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
       </li>
       <li class="nav-item" role="presentation">
@@ -611,9 +582,6 @@ function eventLaLigaEspañola() {
       </li>
       <li class="nav-item" role="presentation">
           <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
       </li>
       
   </ul>
@@ -709,6 +677,9 @@ function eventMLS() {
       <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
       </li>
       <li class="nav-item" role="presentation">
+        <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
+      </li> 
+      <li class="nav-item" role="presentation">
           <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
       </li>
       <li class="nav-item" role="presentation">
@@ -725,9 +696,6 @@ function eventMLS() {
       </li>
       <li class="nav-item" role="presentation">
           <a class="nav-link active" id="" href="/deportes/mls/calendario">MLS</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
       </li>
       
   </ul>
@@ -823,6 +791,9 @@ function eventLeaguesCup() {
       <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
       </li>
       <li class="nav-item" role="presentation">
+        <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
+      </li> 
+      <li class="nav-item" role="presentation">
           <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
       </li>
       <li class="nav-item" role="presentation">
@@ -839,9 +810,6 @@ function eventLeaguesCup() {
       </li>
       <li class="nav-item" role="presentation">
           <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
       </li>
       
   </ul>
@@ -936,6 +904,9 @@ function eventEliminatorios() {
       <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
       </li>
       <li class="nav-item" role="presentation">
+        <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
+      </li> 
+      <li class="nav-item" role="presentation">
           <a class="nav-link active" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
       </li>
       <li class="nav-item" role="presentation">
@@ -962,11 +933,12 @@ function eventEliminatorios() {
               <div role="tabpanel">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
-                      <li class="nav-item" role="presentation">
-                          <a href="/deportes/eliminatorias-conmebol/tablaposiciones" class="nav-link ${currentUrl === ueliminatoriasConmebolTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
-                      </li>
+                      
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/eliminatorias-conmebol/calendario" class="nav-link ${currentUrl === ueliminatoriasConmebolCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/eliminatorias-conmebol/tablaposiciones" class="nav-link ${currentUrl === ueliminatoriasConmebolTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/eliminatorias-conmebol/goleadores" class="nav-link ${currentUrl === ueliminatoriasConmebolGoleadores ? "active" : ""} " id="Goleadores-tab" >Goleadores</a>
@@ -994,6 +966,123 @@ function eventEliminatorios() {
   }
 }
 
+function eventChampions() {
+  const urlsCifras = [
+    {
+      mainUrl: "/deportes/champions/tablaposiciones",
+      subUrl: {
+        name: "Posiciones",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/champions/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.champions&lang=es_LA&page=posiciones",
+      },
+    },
+    {
+      mainUrl: "/deportes/champions/calendario",
+      subUrl: {
+        name: "Calendario",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/champions/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.champions&lang=es_LA&page=fixture",
+      },
+    },
+    {
+      mainUrl: "/deportes/champions/goleadores",
+      subUrl: {
+        name: "Goleadores",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/champions/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.champions&lang=es_LA&page=goleadores",
+      },
+    },
+    {
+      mainUrl: "/deportes/champions/planteles",
+      subUrl: {
+        name: "Planteles",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/champions/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.champions&lang=es_LA&page=planteles",
+      },
+    },
+  ];
+
+  const currentUrl = window.location.pathname;
+
+  // Variable para almacenar el contenido HTML
+  let htmlContent = "";
+
+  const uchampionsTabla = "/deportes/champions/tablaposiciones";
+  const uchampionsCalendario = "/deportes/champions/calendario";
+  const uchampionsGoleadores = "/deportes/champions/goleadores";
+  const uchampionsPlanteles = "/deportes/champions/planteles";
+
+  // Recorrer el objeto urlsCifras
+  for (const urlObj of urlsCifras) {
+    if (currentUrl === urlObj.mainUrl) {
+      // Generar el contenido HTML usando un template string
+      htmlContent = /*html*/ `        
+      <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
+      <li class="nav-item" role="presentation">
+      <a class="nav-link"  href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+      </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link active"  href="/deportes/champions/tablaposiciones">Champions League</a>
+      </li> 
+      <li class="nav-item" role="presentation">
+          <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario" >Copa Sudamericana</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link" id="" href="/deportes/premierleague/calendario" >Premier League</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link " id="" href="/deportes/leaguescup/calendario">Leagues Cup</a>
+      </li>
+      
+  </ul>
+          <div class="tab-content" id="myTabContent">
+              <div role="tabpanel">
+                  <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
+                  <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/champions/tablaposiciones" class="nav-link ${currentUrl === uchampionsTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/champions/calendario" class="nav-link ${currentUrl === uchampionsCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/champions/goleadores" class="nav-link ${currentUrl === uchampionsGoleadores ? "active" : ""} " id="Goleadores-tab" >Goleadores</a>
+                      </li>
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/champions/planteles" class="nav-link ${currentUrl === uchampionsPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
+                      </li>
+                      
+                  </ul>
+                  <div class="tab-content" id="myTabContent">
+                      <div class="" id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
+                          <iframe title="champions" src="${urlObj.subUrl.iframe}" width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"class=""></iframe>
+                      </div>
+                  </div>
+              </div>
+          </div>
+        `;
+      break; // Detener el bucle una vez que se encuentra una coincidencia
+    }
+  }
+  // Agregar el contenido HTML al cuerpo del documento
+  const skk = document.querySelector(".contenido_dinamico__champions");
+  if(skk){
+    skk.innerHTML = htmlContent;
+  }
+}
+
 if (window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" || 
 window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/calendario" || 
 window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/goleadores" || 
@@ -1003,30 +1092,62 @@ window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecu
   setTimeout(() => {
     eventLigaPro();
   }, 200);
-} else if (window.location.pathname === "/deportes/copa-libertadores/tablaposiciones" || window.location.pathname === "/deportes/copa-libertadores/calendario" || window.location.pathname === "/deportes/copa-libertadores/goleadores" || window.location.pathname === "/deportes/copa-libertadores/planteles") {
+
+
+} else if (window.location.pathname === "/deportes/copa-libertadores/tablaposiciones" || 
+  window.location.pathname === "/deportes/copa-libertadores/calendario" || 
+  window.location.pathname === "/deportes/copa-libertadores/goleadores" || 
+  window.location.pathname === "/deportes/copa-libertadores/planteles") {
   setTimeout(() => {
     eventLibertadores();
   }, 200);
-} else if (window.location.pathname === "/deportes/copa-sudamericana/tablaposiciones" || window.location.pathname === "/deportes/copa-sudamericana/calendario" || window.location.pathname === "/deportes/copa-sudamericana/goleadores" || window.location.pathname === "/deportes/copa-sudamericana/planteles") {
+
+
+} else if (window.location.pathname === "/deportes/copa-sudamericana/tablaposiciones" || 
+window.location.pathname === "/deportes/copa-sudamericana/calendario" || 
+window.location.pathname === "/deportes/copa-sudamericana/goleadores" || 
+window.location.pathname === "/deportes/copa-sudamericana/planteles") {
   setTimeout(() => {
     eventSudamericana();
   }, 200);
-} else if (window.location.pathname === "/deportes/premierleague/tablaposiciones" || window.location.pathname === "/deportes/premierleague/calendario" || window.location.pathname === "/deportes/premierleague/goleadores" || window.location.pathname === "/deportes/premierleague/planteles") {
+
+
+} else if (window.location.pathname === "/deportes/premierleague/tablaposiciones" || 
+window.location.pathname === "/deportes/premierleague/calendario" || 
+window.location.pathname === "/deportes/premierleague/goleadores" || 
+window.location.pathname === "/deportes/premierleague/planteles") {
   setTimeout(() => {
     eventPremierLeague();
   }, 200);
-} else if (window.location.pathname === "/deportes/liga-espanola/tablaposiciones" || window.location.pathname === "/deportes/liga-espanola/calendario" || window.location.pathname === "/deportes/liga-espanola/goleadores" || window.location.pathname === "/deportes/liga-espanola/planteles") {
+
+
+} else if (window.location.pathname === "/deportes/liga-espanola/tablaposiciones" || 
+window.location.pathname === "/deportes/liga-espanola/calendario" || 
+window.location.pathname === "/deportes/liga-espanola/goleadores" || 
+window.location.pathname === "/deportes/liga-espanola/planteles") {
   setTimeout(() => {
     eventLaLigaEspañola();
   }, 200);
-} else if (window.location.pathname === "/deportes/mls/tablaposiciones" || window.location.pathname === "/deportes/mls/calendario" || window.location.pathname === "/deportes/mls/goleadores" || window.location.pathname === "/deportes/mls/planteles") {
+
+
+} else if (window.location.pathname === "/deportes/mls/tablaposiciones" || 
+window.location.pathname === "/deportes/mls/calendario" || 
+window.location.pathname === "/deportes/mls/goleadores" || 
+window.location.pathname === "/deportes/mls/planteles") {
   setTimeout(() => {
     eventMLS();
   }, 200);
-} else if (window.location.pathname === "/deportes/leaguescup/tablaposiciones" || window.location.pathname === "/deportes/leaguescup/calendario" || window.location.pathname === "/deportes/leaguescup/goleadores" || window.location.pathname === "/deportes/leaguescup/planteles") {
+
+
+} else if (window.location.pathname === "/deportes/leaguescup/tablaposiciones" || 
+window.location.pathname === "/deportes/leaguescup/calendario" || 
+window.location.pathname === "/deportes/leaguescup/goleadores" || 
+window.location.pathname === "/deportes/leaguescup/planteles") {
   setTimeout(() => {
-    eventLeaguesCup();
+    // eventLeaguesCup();
   }, 200);
+
+
 } else if (window.location.pathname === "/deportes/eliminatorias-conmebol/tablaposiciones" || 
 window.location.pathname === "/deportes/eliminatorias-conmebol/calendario" || 
 window.location.pathname === "/deportes/eliminatorias-conmebol/goleadores" || 
@@ -1034,6 +1155,16 @@ window.location.pathname === "/deportes/eliminatorias-conmebol/planteles") {
   setTimeout(() => {
     eventEliminatorios();
   }, 200);
+
+ } else if (window.location.pathname === "/deportes/champions/tablaposiciones" || 
+  window.location.pathname === "/deportes/champions/calendario" || 
+  window.location.pathname === "/deportes/champions/goleadores" || 
+  window.location.pathname === "/deportes/champions/planteles") {
+  setTimeout(() => {
+    eventChampions();
+  }, 200);
+
+
 } else { console.log("no esta validado dicha url");}
 
 //FUNCION PARA HACER SCROLL HORIZONTAL AUTOMATICO DE ACUERDO A LA CLASE ACTIVE
