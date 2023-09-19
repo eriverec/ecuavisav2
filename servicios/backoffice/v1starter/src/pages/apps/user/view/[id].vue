@@ -108,7 +108,7 @@ const reloadP = () =>  {
       lg="8"
     >
     <UserTabOverview :user-data="userData"/>
-    <UserTemas />
+    <!-- <UserTemas /> -->
   </VCol>
 
   <VCol

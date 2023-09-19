@@ -52,6 +52,12 @@ window.setTimeout(resetNotification, 900);
     <VCol cols="12">
       <!-- 👉 Activity timeline -->
       <VCard  title="Notificaciones del usuario"  >
+        <template #prepend>
+            <VIcon
+              size="1.5rem"
+              icon="tabler-bell-ringing"
+            />
+          </template>
         <VCardText>
           <VTable v-if="userNotification.length" class="text-no-wrap">
             <!-- 👉 table head -->
