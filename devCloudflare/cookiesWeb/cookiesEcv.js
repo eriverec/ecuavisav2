@@ -6,7 +6,7 @@ let stringHtml=`
   <div class="content-wrap">
       <div class="msg-wrap" >
           <p> Ecuavisa utiliza cookies propias y de terceros para fines analíticos anónimos, guardar las preferencias que selecciones y para el funcionamiento general de la página.
-              <br><br>Puedes aceptar todas las cookies pulsando el botón "Aceptar" o configurarlas o rechazar su uso pulsando el botón "Configurar".<br>
+              <br><br>Puedes aceptar todas las cookies pulsando el botón "Aceptar" o configurarlas o rechazar su uso pulsando el botón "Configurar" ${(/WebView/.test(navigator.userAgent) || window.navigator.userAgent.includes('WebView'))}.<br>
               <!--Puedes obtener más información y volver a configurar tus preferencias en cualquier momento en la</p>
               <p style="margin-top: 10px;"><a style="color:#115cfa;" href="https://www.ecuavisa.com/servicios/politicas-de-privacidad" target="_blank">Política de cookies</a>.</p>-->
 
