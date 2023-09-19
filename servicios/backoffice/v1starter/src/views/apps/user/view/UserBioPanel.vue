@@ -1,11 +1,12 @@
 <script setup>
 import { useUserListStore } from '@/views/apps/user/useUserListStore'
 import {
-avatarText
+  avatarText
 } from '@core/utils/formatters'
 
 const userListStore = useUserListStore()
 const route = useRoute()
+const mensajeNodefinido = "No configurado";
 //const updateData = ref()
 
 const emit = defineEmits([
@@ -23,12 +24,12 @@ const resolveUserProvider = provider => {
   if (provider === "google")
     return {
       color: "warning",
-      icon:'<svg aria-hidden="true" class="native svg-icon iconGoogle" width="2rem" height="2rem" viewBox="0 0 18 18"><path d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18Z" fill="#4285F4"></path><path d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17Z" fill="#34A853"></path><path d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07Z" fill="#FBBC05"></path><path d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3Z" fill="#EA4335"></path></svg>',
+      icon: '<svg aria-hidden="true" class="native svg-icon iconGoogle" width="2rem" height="2rem" viewBox="0 0 18 18"><path d="M16.51 8H8.98v3h4.3c-.18 1-.74 1.48-1.6 2.04v2.01h2.6a7.8 7.8 0 0 0 2.38-5.88c0-.57-.05-.66-.15-1.18Z" fill="#4285F4"></path><path d="M8.98 17c2.16 0 3.97-.72 5.3-1.94l-2.6-2a4.8 4.8 0 0 1-7.18-2.54H1.83v2.07A8 8 0 0 0 8.98 17Z" fill="#34A853"></path><path d="M4.5 10.52a4.8 4.8 0 0 1 0-3.04V5.41H1.83a8 8 0 0 0 0 7.18l2.67-2.07Z" fill="#FBBC05"></path><path d="M8.98 4.18c1.17 0 2.23.4 3.06 1.2l2.3-2.3A8 8 0 0 0 1.83 5.4L4.5 7.49a4.77 4.77 0 0 1 4.48-3.3Z" fill="#EA4335"></path></svg>',
     };
   if (provider === "facebook")
     return {
       color: "success",
-      icon:'<svg width="2rem" height="2rem" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.4922 3.29117 17.2155 7.59375 17.8906V11.6016H5.30859V9H7.59375V7.01719C7.59375 4.76156 8.9374 3.51562 10.9932 3.51562C11.9779 3.51562 13.0078 3.69141 13.0078 3.69141V5.90625H11.8729C10.7549 5.90625 10.4062 6.6 10.4062 7.31175V9H12.9023L12.5033 11.6016H10.4062V17.8906C14.7088 17.2155 18 13.4922 18 9Z" fill="#1877F2"/></svg>',
+      icon: '<svg width="2rem" height="2rem" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg"> <path d="M18 9C18 4.02944 13.9706 0 9 0C4.02944 0 0 4.02944 0 9C0 13.4922 3.29117 17.2155 7.59375 17.8906V11.6016H5.30859V9H7.59375V7.01719C7.59375 4.76156 8.9374 3.51562 10.9932 3.51562C11.9779 3.51562 13.0078 3.69141 13.0078 3.69141V5.90625H11.8729C10.7549 5.90625 10.4062 6.6 10.4062 7.31175V9H12.9023L12.5033 11.6016H10.4062V17.8906C14.7088 17.2155 18 13.4922 18 9Z" fill="#1877F2"/></svg>',
     };
 
   return {
@@ -51,63 +52,63 @@ const mailIcon = '<svg xmlns="http://www.w3.org/2000/svg" width="2rem" height="2
 
 
 const updateUser = userData => {
-console.log('datos a enviar',userData);
- console.log('id', route.params.id);
- userListStore.updateUser(userData, route.params.id);
+  console.log('datos a enviar', userData);
+  console.log('id', route.params.id);
+  userListStore.updateUser(userData, route.params.id);
   emit('reload');
- // refetch User
- 
+  // refetch User
+
 };
 
-async function updatePass () {
-//console.log('datos a enviar',password.value);
-//console.log('email', props.userData.email);
-try {
-  if(password.value.new && password.value.confirm){
-    if(password.value.new !== password.value.confirm){
-      passwordsDifferent.value = true;
-      return mensaje.value = 'Las contraseñas no coinciden';
+async function updatePass() {
+  //console.log('datos a enviar',password.value);
+  //console.log('email', props.userData.email);
+  try {
+    if (password.value.new && password.value.confirm) {
+      if (password.value.new !== password.value.confirm) {
+        passwordsDifferent.value = true;
+        return mensaje.value = 'Las contraseñas no coinciden';
+      }
+
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        "email": props.userData.email,
+        "password": password.value.new
+      });
+
+      var requestOptions = {
+        method: 'PUT',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+      await fetch('https://ecuavisa-login-service.onrender.com/changePassword', requestOptions)
+        .then(response => response.json())
+        .then((result) => {
+          //console.log('resultado',result.mensaje);
+          mensaje.value = result.mensaje;
+          mensajeActivo.value = true;
+          onPasswordUpdateReset();
+        })
+        .catch(error => console.log('error', error));
+
     }
-  
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-
-  var raw = JSON.stringify({
-    "email": props.userData.email,
-    "password": password.value.new
-  });
-
-  var requestOptions = {
-    method: 'PUT',
-    headers: myHeaders,
-    body: raw,
-    redirect: 'follow'
-  };
-  await fetch('https://ecuavisa-login-service.onrender.com/changePassword', requestOptions)
-  .then(response => response.json())
-  .then((result) => {
-    //console.log('resultado',result.mensaje);
-    mensaje.value = result.mensaje;
-    mensajeActivo.value = true;
-    onPasswordUpdateReset();
-  })
-  .catch(error => console.log('error', error));
-  
-  }   
   } catch (error) {
     console.error(error.message);
   }
 };
 
-const dialogPasswordValueUpdate = (value) =>{
+const dialogPasswordValueUpdate = (value) => {
   isUpdatePassVisible.value = value;
-  if(value === false){
+  if (value === false) {
     password.value.new = '';
     password.value.confirm = '';
   }
 }
 
-const onPasswordUpdateReset  = () =>{
+const onPasswordUpdateReset = () => {
   password.value.new = '';
   password.value.confirm = '';
   isUpdatePassVisible.value = false;
@@ -176,21 +177,11 @@ const resolveUserRoleVariant = role => {
 <template>
   <VRow>
 
-    <VSnackbar
-      v-model="passwordsDifferent" 
-      color="error"
-      transition="scale-transition"
-      location="top center"
-    >
+    <VSnackbar v-model="passwordsDifferent" color="error" transition="scale-transition" location="top center">
       {{ mensaje }}
     </VSnackbar>
 
-    <VSnackbar
-      v-model="mensajeActivo" 
-      color="success"
-      transition="scale-transition"
-      location="top center"
-    >
+    <VSnackbar v-model="mensajeActivo" color="success" transition="scale-transition" location="top center">
       {{ mensaje }}
     </VSnackbar>
 
@@ -199,82 +190,58 @@ const resolveUserRoleVariant = role => {
       <VCard v-if="props.userData">
         <VCardText class="text-center pt-15">
           <!-- 👉 Avatar -->
-          <VAvatar
-            rounded
-            :size="120"
-            color="primary"
-            variant="tonal"
-          >
-            <VImg
-              v-if="props.userData.avatar"
-              :src="props.userData.avatar"
-            />
-            <span
-              v-else
-              class="text-5xl font-weight-semibold"
-            >
-              {{ avatarText(props.userData.first_name +' ' + props.userData.last_name ) }}
+          <VAvatar rounded :size="120" color="primary" variant="tonal">
+            <VImg v-if="props.userData.avatar" :src="props.userData.avatar" />
+            <span v-else class="text-5xl font-weight-semibold">
+              {{ avatarText(props.userData.first_name + ' ' + props.userData.last_name) }}
             </span>
           </VAvatar>
 
           <!-- 👉 User fullName -->
           <h6 class="text-h6 mt-4">
-            {{ props.userData.first_name +' '+ props.userData.last_name}}
+            {{ props.userData.first_name + ' ' + props.userData.last_name }}
           </h6>
 
           <!-- 👉 Role chip -->
-           <!--
-          <VChip
+          <!--
+          <span
             label
             :color="resolveUserRoleVariant(props.userData.role).color"
             size="small"
             class="text-capitalize mt-4"
           >
             {{ props.userData.role }}
-          </VChip>
+          </span>
            -->
         </VCardText>
 
         <VCardText class="d-flex justify-center flex-wrap mt-3">
           <!-- 👉 Newsletter -->
           <div class="d-flex align-center me-4 mb-2">
-            <VAvatar
-              v-html= "mailIcon"
-              rounded
-              color="primary"
-              variant="tonal"
-              class="me-3"
+            <VAvatar v-html="mailIcon" rounded color="primary" variant="tonal" class="me-3" />
 
-            />
-              
-            
+
 
             <div>
               <h6 class="text-base font-weight-semibold">
                 Newsletter
               </h6>
-              <span class="text-sm">{{ props.userData.newsletter_opt_in}}</span>
+              <span class="text-sm">{{ props.userData.newsletter_opt_in }}</span>
             </div>
           </div>
 
           <!-- 👉 Provider -->
           <div class="d-flex align-center  me-4 mb-2">
-            <VAvatar
-              v-html= "resolveUserProvider(props.userData.provider).icon"
-              size="38"
-              rounded
-              color="primary"
-              variant="tonal"
-              class="me-3"
-              />
-              
-         
+            <VAvatar v-html="resolveUserProvider(props.userData.provider).icon" size="38" rounded color="primary"
+              variant="tonal" class="me-3" />
+
+
 
             <div>
               <h6 class="text-base font-weight-semibold">
                 Proveedor
               </h6>
-              <span class="text-sm">{{ props.userData.provider}}</span>
+              <span class="text-sm">{{ props.userData.provider }}</span>
             </div>
           </div>
         </VCardText>
@@ -292,9 +259,9 @@ const resolveUserRoleVariant = role => {
             <VListItem>
               <VListItemTitle>
                 <h6 class="text-base font-weight-semibold">
-                  Nombre: 
+                  Nombre:
                   <span class="text-body-2">
-                    {{  props.userData.first_name +' '+ props.userData.last_name}}
+                    {{ props.userData.first_name + ' ' + props.userData.last_name }}
                   </span>
                 </h6>
               </VListItemTitle>
@@ -314,9 +281,11 @@ const resolveUserRoleVariant = role => {
                 <h6 class="text-base font-weight-semibold">
                   Prefijo teléfono:
 
-                  <span class="text-capitalize text-body-2">
+                  <span v-if="props.userData.phone_prefix.length > 0" class="text-capitalize text-body-2">
                     {{ props.userData.phone_prefix }}
                   </span>
+                  <span v-else class="text-body-2" label color="warning">{{ mensajeNodefinido }}</span>
+                  
                 </h6>
               </VListItemTitle>
             </VListItem>
@@ -325,7 +294,10 @@ const resolveUserRoleVariant = role => {
               <VListItemTitle>
                 <h6 class="text-base font-weight-semibold">
                   Teléfono:
-                  <span class="text-capitalize text-body-2">{{ props.userData.phone_number }}</span>
+                  <span v-if="props.userData.phone_number.length > 0" class="text-capitalize text-body-2">
+                    {{ props.userData.phone_number }}
+                  </span>
+                  <span v-else class="text-body-2" label color="warning">{{ mensajeNodefinido }}</span>
                 </h6>
               </VListItemTitle>
             </VListItem>
@@ -334,9 +306,10 @@ const resolveUserRoleVariant = role => {
               <VListItemTitle>
                 <h6 class="text-base font-weight-semibold">
                   Género:
-                  <span class="text-body-2">
+                  <span v-if="props.userData.gender.length > 0" class="text-body-2">
                     {{ props.userData.gender }}
                   </span>
+                  <span v-else class="text-body-2" label color="warning">{{ mensajeNodefinido }}</span>
                 </h6>
               </VListItemTitle>
             </VListItem>
@@ -345,7 +318,10 @@ const resolveUserRoleVariant = role => {
               <VListItemTitle>
                 <h6 class="text-base font-weight-semibold">
                   Nacimiento:
-                  <span class="text-body-2">{{ props.userData.birth_date }}</span>
+                  <span v-if="props.userData.birth_date.length > 0" class="text-body-2">{{ props.userData.birth_date
+                  }}</span>
+                  <span v-else class="text-body-2" label color="warning">{{ mensajeNodefinido }}</span>
+
                 </h6>
               </VListItemTitle>
             </VListItem>
@@ -354,7 +330,8 @@ const resolveUserRoleVariant = role => {
               <VListItemTitle>
                 <h6 class="text-base font-weight-semibold">
                   Tipo de ID:
-                  <span class="text-body-2">{{ props.userData.identification_type }}</span>
+                  <span v-if="props.userData.identification_type.length > 0" class="text-body-2">{{ props.userData.identification_type }}</span>
+                  <span v-else class="text-body-2" label color="warning">{{ mensajeNodefinido }}</span>
                 </h6>
               </VListItemTitle>
             </VListItem>
@@ -363,7 +340,9 @@ const resolveUserRoleVariant = role => {
               <VListItemTitle>
                 <h6 class="text-base font-weight-semibold">
                   Número de ID:
-                  <span class="text-body-2">{{ props.userData.identification_number || '' }}</span>
+                  <span v-if="props.userData.identification_number.length > 0" class="text-body-2">{{ props.userData.identification_number || '' }}</span>
+                  <span v-else class="text-body-2" label color="warning">{{ mensajeNodefinido }}</span>
+
                 </h6>
               </VListItemTitle>
             </VListItem>
@@ -372,45 +351,34 @@ const resolveUserRoleVariant = role => {
 
         <!-- 👉 Edit and Suspend button -->
         <VCardText class="d-flex justify-center">
-          <VBtn
-            variant="elevated"
-            class="me-3"
-            @click="isUpdatePassVisible = true"
-          >
+          <VBtn variant="elevated" class="me-3" @click="isUpdatePassVisible = true">
             Actualizar contraseña
           </VBtn>
 
-          <VBtn
-            variant="elevated"
-            class="me-3 d-none"
-            @click="isUserInfoEditDialogVisible = true"
-          >
+          <VBtn variant="elevated" class="me-3 d-none" @click="isUserInfoEditDialogVisible = true">
             Editar
           </VBtn>
-          <VBtn
-            variant="tonal" class="d-none"
-            color="error"
-          >
+          <VBtn variant="tonal" class="d-none" color="error">
             Suspender
           </VBtn>
         </VCardText>
       </VCard>
     </VCol>
     <!-- !SECTION -->
-    
+
     <!-- SECTION Current Plan -->
-     <!--
+    <!--
     <VCol cols="12">
       <VCard>
         <VCardText class="d-flex">
          // 👉 Standard Chip 
-          <VChip
+          <span
             label
             color="primary"
             size="small"
           >
             Standard
-          </VChip>
+          </span>
 
           <VSpacer />
 
@@ -480,71 +448,49 @@ const resolveUserRoleVariant = role => {
         -->
     <!-- !SECTION -->
   </VRow>
-  
+
   <!-- 👉 Edit user info dialog -->
-  <UserInfoEditDialog
-    v-model:isDialogVisible="isUserInfoEditDialogVisible"
-    :user-data="props.userData"
-    @submit="updateUser"
-  />
+  <UserInfoEditDialog v-model:isDialogVisible="isUserInfoEditDialogVisible" :user-data="props.userData"
+    @submit="updateUser" />
   <!-- 👉 Actualizar password -->
-  <VDialog
-            :width="$vuetify.display.smAndDown ? 'auto' : 700"
-            :model-value="isUpdatePassVisible"
-            @update:model-value="dialogPasswordValueUpdate"
-          >
-            <!-- Dialog close btn -->
-            <DialogCloseBtn @click="dialogPasswordValueUpdate(false)" />
+  <VDialog :width="$vuetify.display.smAndDown ? 'auto' : 700" :model-value="isUpdatePassVisible"
+    @update:model-value="dialogPasswordValueUpdate">
+    <!-- Dialog close btn -->
+    <DialogCloseBtn @click="dialogPasswordValueUpdate(false)" />
 
-            <VCard class="pa-sm-14 pa-5">
-              <VCardItem class="text-center">
-                <VCardTitle class="text-h5 mb-3">
-                  Actualizar contraseña
-                </VCardTitle>
-              </VCardItem>
+    <VCard class="pa-sm-14 pa-5">
+      <VCardItem class="text-center">
+        <VCardTitle class="text-h5 mb-3">
+          Actualizar contraseña
+        </VCardTitle>
+      </VCardItem>
 
-              <VCardText>
-                <!-- 👉 Form -->
-                <VForm
-                  class="mt-6"
-                  @submit.prevent="updatePass()"
-                >
-                  <VRow class="d-flex flex-wrap justify-center gap-4">
-                    <!-- 👉 Nombre -->
-                    <VCol cols="8">
-                      <VTextField
-                        v-model="password.new"
-                        label="Contraseña nueva"
-                      />
-                    </VCol>
+      <VCardText>
+        <!-- 👉 Form -->
+        <VForm class="mt-6" @submit.prevent="updatePass()">
+          <VRow class="d-flex flex-wrap justify-center gap-4">
+            <!-- 👉 Nombre -->
+            <VCol cols="8">
+              <VTextField v-model="password.new" label="Contraseña nueva" />
+            </VCol>
 
-                    <VCol cols="8">
-                      <VTextField
-                        v-model="password.confirm"
-                        label="Confirmar contraseña"
-                      />
-                    </VCol>
+            <VCol cols="8">
+              <VTextField v-model="password.confirm" label="Confirmar contraseña" />
+            </VCol>
 
-                    <!-- 👉 Submit and Cancel -->
-                    <VCol
-                      cols="12"
-                      class="d-flex flex-wrap justify-center gap-4"
-                    >
-                      <VBtn type="submit"> Enviar </VBtn>
+            <!-- 👉 Submit and Cancel -->
+            <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
+              <VBtn type="submit"> Enviar </VBtn>
 
-                      <VBtn
-                        color="secondary"
-                        variant="tonal"
-                        @click="onPasswordUpdateReset"
-                      >
-                        Cancelar
-                      </VBtn>
-                    </VCol>
-                  </VRow>
-                </VForm>
-              </VCardText>
-            </VCard>
-          </VDialog>
+              <VBtn color="secondary" variant="tonal" @click="onPasswordUpdateReset">
+                Cancelar
+              </VBtn>
+            </VCol>
+          </VRow>
+        </VForm>
+      </VCardText>
+    </VCard>
+  </VDialog>
 
   <!-- 👉 Upgrade plan dialog -->
   <!--

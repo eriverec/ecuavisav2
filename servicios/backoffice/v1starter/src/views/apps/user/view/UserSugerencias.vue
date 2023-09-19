@@ -28,6 +28,12 @@ onMounted(fetchSugerencias);
     <VCol cols="6">
       <!-- 👉 Activity timeline -->
       <VCard  title="Sugerencias del usuario"  >
+        <template #prepend>
+            <VIcon
+              size="1.5rem"
+              icon="tabler-tag"
+            />
+          </template>
         <VCardText>
           <VTable v-if="dataSugerencias.length" class="text-no-wrap">
             <!-- 👉 table head -->

@@ -122,3 +122,141 @@ function startCounterAnimation() {
         setTimeout(updateCounter, index * 200); // Retrasar la animación de cada contador
     });
 }
+
+
+
+
+function eventoCharPie() {
+
+    // Llamada a la API
+    fetch('https://api-configuracion.vercel.app/web/data-sv')
+        .then(response => response.json())
+        .then(data => {
+            // Obtener los datos del objeto "porcentaje"
+            const porcentajeData = data.porcentaje;
+
+            // Crear un array para los datos del gráfico
+            const chartData = porcentajeData.map(item => ({
+                name: item.name,
+                y: parseFloat(item.value.toFixed(2)),
+                hoverName: item.partido // Nombre para el hover
+            }));
+
+            // Definir una paleta de colores personalizada
+            const customColors = {
+                'Luisa González': '#cd181c', // Color para Luisa
+                'Daniel Noboa': '#0a6aa6' // Color para Novoa
+            };
+            // Asignar colores según el nombre del partido
+            chartData.forEach(item => {
+                item.color = customColors[item.name];
+            });
+
+            // Configurar el gráfico con Highcharts
+            Highcharts.chart('chart-container-pie', {
+                chart: {
+                    type: 'pie'
+                },
+                title: {
+                    text: 'Resultados Electorales (Pie)'
+                },
+                plotOptions: {
+                    pie: {
+                        allowPointSelect: true,
+                        cursor: 'pointer',
+                        dataLabels: {
+                            enabled: true,
+                            format: '<b>{point.name}</b>: {point.y:.2f}%'
+                        }
+                    }
+                },
+                tooltip: {
+                    pointFormat: '{point.hoverName}: <b>{point.y:.2f}%</b>'
+                },
+                exporting: {
+                    enabled: false // Esto oculta el botón de menú de exportación
+                },
+                credits: {
+                    enabled: false // Esto oculta el crédito de Highcharts
+                },
+                series: [{
+                    name: 'Porcentaje de Votos',
+                    data: chartData
+                }]
+            });
+        });
+}
+
+function eventoCharColumn() {
+
+    // Llamada a la API
+    fetch('https://api-configuracion.vercel.app/web/data-sv')
+        .then(response => response.json())
+        .then(data => {
+            // Obtener los datos del objeto "porcentaje"
+            const porcentajeData = data.porcentaje;
+
+            // Crear un array para los datos del gráfico
+            const chartData = porcentajeData.map(item => ({
+                name: item.name,
+                y: parseFloat(item.value.toFixed(2)),
+                hoverName: item.partido // Nombre para el hover
+            }));
+
+            // Definir una paleta de colores personalizada
+            const customColors = {
+                'Luisa González': '#cd181c', // Color para Luisa
+                'Daniel Noboa': '#0a6aa6' // Color para Novoa
+            };
+            // Asignar colores según el nombre del partido
+            chartData.forEach(item => {
+                item.color = customColors[item.name];
+            });
+
+            // Configurar el gráfico con Highcharts
+            Highcharts.chart('chart-container-column', {
+                chart: {
+                    type: 'column'
+                },
+                title: {
+                    text: 'Resultados Electorales (Barras)'
+                },
+                xAxis: {
+                    type: 'category',
+                    title: {
+                        // text: 'Partidos'
+                    }
+                },
+                yAxis: {
+                    title: {
+                        text: 'Porcentaje de Votos (%)'
+                    }
+                },
+                plotOptions: {
+                    column: {
+                        colorByPoint: true,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.2f}%'
+                        }
+                    }
+                },
+                tooltip: {
+                    pointFormat: '{point.hoverName}: <b>{point.y:.2f}%</b>'
+                },
+                exporting: {
+                    enabled: false // Esto oculta el botón de menú de exportación
+                },
+                credits: {
+                    enabled: false // Esto oculta el crédito de Highcharts
+                },
+                series: [{
+                    name: 'Porcentaje de Votos',
+                    data: chartData
+                }]
+            });
+        });
+}
+
+eventoCharColumn();
+eventoCharPie();

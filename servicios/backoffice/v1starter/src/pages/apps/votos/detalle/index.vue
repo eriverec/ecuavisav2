@@ -49,6 +49,10 @@ async function searchByName() {
         const consultaJson = await consulta.json();
         dataDetalleVoto.value = consultaJson.data;
         isLoading.value = false;
+    }else{
+            searchQuery.value = ''
+            await onInit();
+        
     }
 }
 
@@ -258,20 +262,24 @@ async function deleteDetalleVoto() {
                     <VCardText>
                         <div class="d-flex flex-wrap gap-4 mt-10">
                             <div style="width: 15rem">
-                                <VTextField v-model="searchQuery" placeholder="Buscar..." density="compact" />
+                                <VTextField @keyup.enter="searchByName" @input="searchByName" v-model="searchQuery"  density="compact"
+                                label="Buscar"
+                                prepend-inner-icon="tabler-search"
+                                
+                                />
                             </div>
                             <!-- 👉 Search button -->
-                            <VBtn prepend-icon="tabler-search" @click="searchByName">
+                            <!-- <VBtn prepend-icon="tabler-search" @click="searchByName">
                                 Buscar
-                            </VBtn>
-                            <VBtn @click="reiniciarSearch" :disabled="!searchQuery">
+                            </VBtn>-->
+                            <VBtn @click="reiniciarSearch">
                                 Reiniciar
-                            </VBtn>
-                            <VBtn class="ml-auto" @click="onAddDetalleVoto">
+                            </VBtn> 
+                            <VBtn prepend-icon="tabler-user-plus" color="success" variant="tonal" class="ml-auto" @click="onAddDetalleVoto">
                                 Agregar participante
                             </VBtn>
                         </div>
-
+    
                     </VCardText>
                 </VCard>
             </VCol>
@@ -284,10 +292,10 @@ async function deleteDetalleVoto() {
                 No existen datos para mostrar.
             </VCardItem>
 
-            <VCol v-else cols="12" sm="6" lg="4" v-for="item in paginatedDataVotos">
+            <VCol v-else cols="12" sm="6" lg="3" v-for="item in paginatedDataVotos">
                 <VCard>
 
-                    <VImg :width="500" aspect-ratio="1/1" :src=item.urlImagen cover />
+                    <VImg class="immm__" :width="200" aspect-ratio="1/1" :src=item.urlImagen cover />
                     <VCardText class="position-relative">
                         <div class="d-flex justify-space-between flex-wrap pt-8">
                             <div class="me-2 mb-2">
@@ -314,7 +322,7 @@ async function deleteDetalleVoto() {
 
                     <VCardText>
                         <!-- {{ item._id }} -->
-                        <VBtn class="mr-3" color="warning" variant="tonal" icon  @click="onEditDetalleVoto(item._id)">
+                        <VBtn class="mr-3" color="success" variant="tonal" icon  @click="onEditDetalleVoto(item._id)">
                             <VIcon size="22" icon="tabler-edit" />
                         </VBtn>
 
@@ -326,9 +334,11 @@ async function deleteDetalleVoto() {
                 </VCard>
             </VCol>
         </VRow>
-        <VCard class="mt-5">
-            <VCardText>
-                <div class="d-flex align-center justify-space-evenly botonescurrentPage">
+        <!-- <VCard class="mt-5"> -->
+            <!-- <VCardText> -->
+         
+                <VCardItem v-if="isLoading"></VCardItem> 
+                <div v-else class="mt-5 d-flex align-center justify-space-evenly botonescurrentPage">
                     <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
                     Página {{ currentPage }}
                     <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
@@ -336,8 +346,8 @@ async function deleteDetalleVoto() {
                     </VBtn>
                 </div>
 
-            </VCardText>
-        </VCard>
+            <!-- </VCardText> -->
+        <!-- </VCard> -->
 
         <VDialog v-model="isDialogActive" persistent max-width="600">
 
@@ -416,3 +426,11 @@ async function deleteDetalleVoto() {
         </VDialog>
     </section>
 </template>
+
+
+<style>
+.immm__{
+    margin: auto !important;
+}
+
+</style>

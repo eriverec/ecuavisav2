@@ -669,6 +669,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   font-weight: 600;
   padding-top: .5rem;
   text-transform: initial;
+  line-height: 0.9em;
 }
 
 /* .bloque-programas .media_block .text_block .article-section {
