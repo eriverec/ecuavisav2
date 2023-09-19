@@ -44,14 +44,14 @@ class SendPulse {
 		$fecha = new DateTime();
 		// Establecer el idioma a español para los meses y días de la semana
 		$meses = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'];
-		$diasSemana = ['domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado'];
+		$diasSemana = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
 		// Obtener el día de la semana, el día del mes, el mes y el año en español
 		$diaSemana = $diasSemana[intval($fecha->format('w'))];
 		$dia = $fecha->format('d');
 		$mes = $meses[intval($fecha->format('m')) - 1];
 		$anio = $fecha->format('Y');
 		// Imprimir la fecha en español
-		$this->fechaFormateada = "$diaSemana $dia de $mes de $anio";
+		$this->fechaFormateada = "$diaSemana, $dia de $mes de $anio";
 
 		if(!isset($this->dataJsonNewsletter)){
 			echo json_encode(["resp" => false, "mensaje" => "Error 001 - No hay datos con el id proporsionado"]);
