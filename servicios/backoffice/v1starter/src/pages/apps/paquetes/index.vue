@@ -442,7 +442,7 @@ async function deletePaquete() {
                   validate-on-back="true"
                   nextButtonText="Siguiente"
                   backButtonText="Anterior"
-                  finishButtonText="Crear campaña"
+                  finishButtonText="Guardar paquete"
                 >
                   <tab-content title="Detalles del paquete" :before-change="validateAsync">
                    
