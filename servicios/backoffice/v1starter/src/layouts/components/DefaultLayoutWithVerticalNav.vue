@@ -1,5 +1,6 @@
 <script setup>
 import navItemsA from '@/navigation/vertical';
+import navItemsR from '@/navigation/verticalRedaccion';
 import navItemsV from '@/navigation/verticalVisor';
 import navItemsWm from '@/navigation/verticalWebmaster';
 import { useThemeConfig } from '@core/composable/useThemeConfig';
@@ -65,6 +66,8 @@ if(rol== 'administrador'){
   return navItemsA;
 }else if(rol== 'webmaster'){
   return navItemsWm;  
+}else if(rol== 'redaccion'){
+  return navItemsR;  
 }else{
   return navItemsV;
 }

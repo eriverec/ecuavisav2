@@ -30,8 +30,14 @@ const router = createRouter({
       redirect: to => {
         const userData = JSON.parse(localStorage.getItem('userData') || '{}')
         const userRole = userData && userData.role ? userData.role : null
-        if (userRole || userData)
+        if (userRole || userData){
+          if(userRole == "redaccion"){
+            return { path: 'apps/mailing/tabs/edit' }
+          }
           return { name: 'index' }
+        }
+          
+        
         //if (userRole === 'visor')
         //  return { name: 'access-control' }
         
