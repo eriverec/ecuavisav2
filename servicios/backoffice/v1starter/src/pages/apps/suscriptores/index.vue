@@ -3,9 +3,9 @@
 		<VRow>
 			<VCol cols="12">
 				<div class="tab-titles parentTabs">
-					<div @click="selectTab(0)" :class="{ active: selectedTab === 0 }">Tarjeta de credio</div>
-					<div @click="selectTab(1)" :class="{ active: selectedTab === 1 }">Paquete</div>
-					<div @click="selectTab(2)" :class="{ active: selectedTab === 2 }">Rechazados</div>
+					<div class="" @click="selectTab(0)" :class="{ active: selectedTab === 0 }">Tarjeta de credio</div>
+					<div @click="selectTab(1)" :class="{ active: selectedTab === 1 }">Cobros por paquete</div>
+					<div @click="selectTab(2)" :class="{ active: selectedTab === 2 }">Cobros rechazados</div>
 					<div @click="selectTab(3)" :class="{ active: selectedTab === 3 }">Alta de suscriptores</div>
 				</div>
 				<VCard>
@@ -63,7 +63,7 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
 .parentTabs {
   overflow: auto;
   white-space: nowrap;
