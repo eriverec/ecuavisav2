@@ -20,8 +20,10 @@ export default [
 
     // to: { name: 'apps-concursos' },
     children: [
+      { title: 'Desafío a la Fama', to: 'apps-votos-detalle' },
       { title: 'Click click boom', to: 'apps-concursos' },
       { title: 'Gavilanes', to: 'apps-concursos-gavilanes' },
+
     ],
   },
   
