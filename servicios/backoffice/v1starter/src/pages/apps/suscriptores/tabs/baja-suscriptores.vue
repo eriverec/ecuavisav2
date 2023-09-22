@@ -214,7 +214,7 @@ export default {
 <template>
 	<div class="text-center py-3" v-if="isLoading">Cargando...</div>
 	<div v-else>
-    <VCardTitle class="pt-4 pl-6">Montos cobrados por tipo de tarjeta</VCardTitle>
+    <VCardTitle class="pt-4 pl-6">Baja de suscriptores por paquete de suscripción</VCardTitle>
 		<VCardTitle class="pt-4 pl-6">
 			<VRow>
 				<VCol cols="4">
@@ -255,8 +255,8 @@ export default {
 		<VTable v-else hover="true" class="text-no-wrap tableNavegacion mx-5 my-5">
 			<thead>
 				<tr>
-					<th>Tipo de Tarjeta</th>
-					<th>Suma de Montos</th>
+					<th>Paquetes</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>

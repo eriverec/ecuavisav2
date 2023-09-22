@@ -261,7 +261,7 @@ export default {
 			<thead>
 				<tr>
 					<th>Tipo de Tarjeta</th>
-					<th>Suma de Montos</th>
+					<th></th>
 				</tr>
 			</thead>
 			<tbody>

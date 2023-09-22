@@ -3,11 +3,11 @@
 		<VRow>
 			<VCol cols="12">
 				<div class="tab-titles parentTabs">
-					<div class="" @click="selectTab(0)" :class="{ active: selectedTab === 0 }">Tarjeta de credio</div>
+					<div class="" @click="selectTab(0)" :class="{ active: selectedTab === 0 }">Cobros con Tarjeta de crédito</div>
 					<div @click="selectTab(1)" :class="{ active: selectedTab === 1 }">Cobros por paquete</div>
 					<div @click="selectTab(2)" :class="{ active: selectedTab === 2 }">Alta de suscriptores</div>
-					<div @click="selectTab(3)" :class="{ active: selectedTab === 3 }">Baja de suscriptores</div>
-					<div @click="selectTab(4)" :class="{ active: selectedTab === 4 }">Baja de suscriptores por motivos</div>
+					<div @click="selectTab(3)" :class="{ active: selectedTab === 3 }">Baja de suscriptores por paquete</div>
+					<div @click="selectTab(4)" :class="{ active: selectedTab === 4 }">Baja de suscriptores por motivo</div>
 
 				</div>
 				<VCard>
@@ -62,7 +62,7 @@ const selectTab = (index) => {
 }
 .parentTabs {
   overflow: auto;
-  white-space: nowrap;
+  /* white-space: nowrap; */
   display: flex;
   align-items: flex-start;
   align-items: center;
@@ -112,7 +112,7 @@ const selectTab = (index) => {
   height: var(--v-tabs-height);
   padding: 10px 20px;
   text-transform: uppercase;
-  font-size: .875rem;
+  font-size: .775rem;
   --v-btn-size: .875rem;
   --v-btn-height: 38px;
   font-weight: 500;
