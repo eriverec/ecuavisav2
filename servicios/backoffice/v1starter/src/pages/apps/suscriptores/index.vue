@@ -7,6 +7,8 @@
 					<div @click="selectTab(1)" :class="{ active: selectedTab === 1 }">Cobros por paquete</div>
 					<div @click="selectTab(2)" :class="{ active: selectedTab === 2 }">Alta de suscriptores</div>
 					<div @click="selectTab(3)" :class="{ active: selectedTab === 3 }">Baja de suscriptores</div>
+					<div @click="selectTab(4)" :class="{ active: selectedTab === 4 }">Baja de suscriptores por motivos</div>
+
 				</div>
 				<VCard>
 					<div class="tab-content">
@@ -20,10 +22,15 @@
 							<AltaSuscriptores />
 						</div>
 						<div v-if="selectedTab === 3" class="tab-item">
-							<div>bajas</div>
+							<BajaSuscriptores />
+						</div>
+						<div v-if="selectedTab === 4" class="tab-item">
+							<BajaSuscriptoresMotivo />
 						</div>
 					</div>
 				</VCard>
+				<div class="tab-slider"></div>
+
 			</VCol>
 		</VRow>
 	</section>
@@ -35,24 +42,24 @@ import axios from 'axios';
 import CobrosTarjetaCredito from '@/pages/apps/suscriptores/tabs/cobros-tarjeta-credito.vue';
 import CobrosPaquetes from '@/pages/apps/suscriptores/tabs/cobros-paquetes.vue';
 import AltaSuscriptores from '@/pages/apps/suscriptores/tabs/alta-suscriptores.vue';
-
-</script>
-<script>
-export default {
-	data() {
-		return {
-			selectedTab: 0,
-		};
-	},
-	methods: {
-		selectTab(index) {
-			this.selectedTab = index;
-		},
-	},
+import BajaSuscriptores from '@/pages/apps/suscriptores/tabs/baja-suscriptores.vue';
+import BajaSuscriptoresMotivo from '@/pages/apps/suscriptores/tabs/baja-suscriptores-motivo.vue';
+const selectedTab = ref(0);
+const selectTab = (index) => {
+  selectedTab.value = index;
 };
 </script>
 
 <style scoped>
+.tab-slider {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px; /* Altura del slider */
+  background-color: rgb(var(--v-theme-primary)); /* Color del slider */
+  width: 0; /* Inicialmente el ancho es cero */
+  transition: width 0.3s; /* Agregar transición para suavizar el deslizamiento */
+}
 .parentTabs {
   overflow: auto;
   white-space: nowrap;
