@@ -5,47 +5,36 @@
 				<div class="tab-titles parentTabs">
 					<div class="" @click="selectTab(0)" :class="{ active: selectedTab === 0 }">Tarjeta de credio</div>
 					<div @click="selectTab(1)" :class="{ active: selectedTab === 1 }">Cobros por paquete</div>
-					<div @click="selectTab(2)" :class="{ active: selectedTab === 2 }">Cobros rechazados</div>
-					<div @click="selectTab(3)" :class="{ active: selectedTab === 3 }">Alta de suscriptores</div>
+					<div @click="selectTab(2)" :class="{ active: selectedTab === 2 }">Alta de suscriptores</div>
+					<div @click="selectTab(3)" :class="{ active: selectedTab === 3 }">Baja de suscriptores</div>
 				</div>
 				<VCard>
-					
-
 					<div class="tab-content">
 						<div v-if="selectedTab === 0" class="tab-item">
-							<TarjetaCredito />
+							<CobrosTarjetaCredito />
 						</div>
 						<div v-if="selectedTab === 1" class="tab-item">
-							<div>paquetes</div>
+							<CobrosPaquetes />
 						</div>
 						<div v-if="selectedTab === 2" class="tab-item">
-							<div>rechazados</div>
+							<AltaSuscriptores />
 						</div>
 						<div v-if="selectedTab === 3" class="tab-item">
-							<div>alta</div>
+							<div>bajas</div>
 						</div>
-
 					</div>
-
-
 				</VCard>
-
 			</VCol>
-
 		</VRow>
-
-
-
 	</section>
 </template>
 
-
-
-  
 <script setup>
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import TarjetaCredito from '@/pages/apps/suscriptores/tabs/cobros-tarjeta-credito.vue';
+import CobrosTarjetaCredito from '@/pages/apps/suscriptores/tabs/cobros-tarjeta-credito.vue';
+import CobrosPaquetes from '@/pages/apps/suscriptores/tabs/cobros-paquetes.vue';
+import AltaSuscriptores from '@/pages/apps/suscriptores/tabs/alta-suscriptores.vue';
 
 </script>
 <script>

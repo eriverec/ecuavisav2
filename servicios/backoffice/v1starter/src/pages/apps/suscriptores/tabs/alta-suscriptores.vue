@@ -1,5 +1,4 @@
 <script setup>
-import Pack from '@/pages/apps/suscriptores/tabs/pack.vue';
 import { hexToRgb } from '@layouts/utils';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -10,7 +9,6 @@ import { useTheme } from 'vuetify';
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 
-
 const colorVariables = themeColors => {
 	const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
 	const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`
@@ -19,168 +17,10 @@ const colorVariables = themeColors => {
 
 	return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
 }
-const dataTest = ref([]);
-const selectedPlan = ref('');
-const selectedRecursivo = ref('all');
-const selectedTarjeta = ref('');
-
-const dataCC = [
-	{
-		tipoTarjeta: "Visa",
-		montos: 20,
-		fecha: "2023-05-01",
-		plan: "plan1",
-		recursivo: true
-	},
-	{
-		tipoTarjeta: "Visa",
-		montos: 55,
-		fecha: "2023-06-02",
-		plan: "plan2",
-		recursivo: true
-	},
-	{
-		tipoTarjeta: "Visa",
-		montos: 83,
-		fecha: "2023-07-25",
-		plan: "plan3",
-		recursivo: false
-	},
-	{
-		tipoTarjeta: "American Express",
-		montos: 62,
-		fecha: "2023-05-21",
-		plan: "plan2",
-		recursivo: false
-	},
-	{
-		tipoTarjeta: "American Express",
-		montos: 94,
-		fecha: "2023-06-01",
-		plan: "plan1",
-		recursivo: true
-	},
-	{
-		tipoTarjeta: "American Express",
-		montos: 86,
-		fecha: "2023-07-14",
-		plan: "plan3",
-		recursivo: true
-	},
-	{
-		tipoTarjeta: "Mastercard",
-		montos: 36,
-		fecha: "2023-05-11",
-		plan: "plan1",
-		recursivo: false
-	},
-	{
-		tipoTarjeta: "Mastercard",
-		montos: 91,
-		fecha: "2023-06-21",
-		plan: "plan2",
-		recursivo: true
-	},
-	{
-		tipoTarjeta: "Mastercard",
-		montos: 74,
-		fecha: "2023-07-01",
-		plan: "plan3",
-		recursivo: true
-	},
-	{
-		tipoTarjeta: "Dinners",
-		montos: 42,
-		fecha: "2023-05-21",
-		plan: "plan1",
-		recursivo: true
-	},
-	{
-		tipoTarjeta: "Dinners",
-		montos: 84,
-		fecha: "2023-06-14",
-		plan: "plan2",
-		recursivo: false
-	},
-	{
-		tipoTarjeta: "Dinners",
-		montos: 78,
-		fecha: "2023-07-27",
-		plan: "plan3",
-		recursivo: true
-	}
-]
-
-const planes = [
-	{
-		title: "Plan 1",
-		value: "plan1"
-	},
-	{
-		title: "Plan 2",
-		value: "plan2"
-	},
-	{
-		title: "Plan 3",
-		value: "plan3"
-	}
-]
-
-const recursivo = [
-	{
-		title: "Si",
-		value: "si"
-	},
-	{
-		title: "No",
-		value: "no"
-	},
-	{
-		title: "Todos",
-		value: "all"
-	}
-]
-
-const tarjetas = [
-	"Visa", "Mastercard", "Dinners", "American Express"
-]
-
-function resolveDataRaw(){
-	let resultado = dataCC;
-	
-		let fechaInicio = new Date(fechaFrom.value);
-		let fechaFin = new Date(fechaTo.value);
-
-		// Filtra los elementos del array según el rango de fechas
-		resultado = dataCC.filter(item => {
-		const fechaItem = new Date(item.fecha);
-		return fechaItem >= fechaInicio && fechaItem <= fechaFin;	
-		});
-
-		if(selectedRecursivo.value !== "all"){			
-			let isRecursive;
-			selectedRecursivo.value === "si"? isRecursive = true : isRecursive = false;
-			resultado = resultado.filter(item => item.recursivo === isRecursive);
-		}
-		
-		if(selectedPlan.value !== ""){
-			resultado = resultado.filter(item => item.plan === selectedPlan.value);
-		}
-
-		if(selectedTarjeta.value !== ""){
-			resultado = resultado.filter(item => item.tipoTarjeta === selectedTarjeta.value);
-		}
-	
-
-	dataTest.value = resultado;
-	console.log('dataTest ',dataTest.value);		
-}
-
-
 
 const vuetifyTheme = useTheme()
 const data = ref([]);
-const { themeBorderColor, themeDisabledTextColor, themeSecondaryTextColor } = colorVariables(vuetifyTheme.current.value);
+const { themeBorderColor, themeDisabledTextColor,themeSecondaryTextColor } = colorVariables(vuetifyTheme.current.value);
 const fechaIngresada = ref([]);
 const fechaSelected = ref(moment().subtract(1, 'days').format("DD-MM-YYYY").toString() + ' a ' + moment().format("DD-MM-YYYY").toString());
 const isLoading = ref(true);
@@ -209,44 +49,46 @@ const chartOptionsPie = ref({
 	},
 });
 
+
 const chartSeriesPie = ref([]);
 
 async function graficoTorta() {
-	const response = await fetch(`https://api-configuracion.vercel.app/web/suscriptores-conf?from=${fechaFrom.value}&to=${fechaTo.value}`);
-	const dataPie = await response.json();
+	const response = await fetch(`https://api-configuracion.vercel.app/web/alta-suscriptores?from=${fechaFrom.value}&to=${fechaTo.value}`);
+		const dataPie = await response.json();
 
-	if (dataPie.status === 'ok') {
-		const resultForChart = dataPie.resultForChart;
+		if (dataPie.status === 'ok') {
+			const resultForChart = dataPie.resultForChart;
 
-		// Recuperar los valores de mounts
-		const mountsData = resultForChart.mounts;
+			// Recuperar los valores de mounts
+			const mountsData = resultForChart.mounts;
 
-		// Convertir los datos en un formato adecuado para el gráfico
-		const labels = Object.keys(mountsData);
-		const series = Object.values(mountsData);
+			// Convertir los datos en un formato adecuado para el gráfico
+			const labels = Object.keys(mountsData);
+			const series = Object.values(mountsData);
 
-		chartOptionsPie.value.labels = labels;
-		chartSeriesPie.value = series;
+			chartOptionsPie.value.labels = labels;
+			chartSeriesPie.value = series;
 
-		const sortedMontos = Object.entries(mountsData)
-			.sort((b, a) => a[1] - b[1])
-			.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
-		dataPie.value = sortedMontos;
+			const sortedMontos = Object.entries(mountsData)
+				.sort((b, a) => a[1] - b[1])
+				.reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
+				dataPie.value = sortedMontos;
 
-		montosPorTarjeta.value = sortedMontos;
-		totalAmount.value = Object.values(mountsData).reduce((acc, val) => acc + val, 0);
-		// isLoading.value = false;
+			montosPorTarjeta.value = sortedMontos;
+			totalAmount.value = Object.values(mountsData).reduce((acc, val) => acc + val, 0);
+			// isLoading.value = false;
 
-	} else {
-		console.error('Error en la respuesta de la API');
-	}
+		} else {
+			console.error('Error en la respuesta de la API');
+		}
 }
 
 
 async function fetchData() {
-	await fetch(`https://api-configuracion.vercel.app/web/suscriptores-conf?from=${fechaFrom.value}&to=${fechaTo.value}`)
+	await fetch(`https://api-configuracion.vercel.app/web/alta-suscriptores?from=${fechaFrom.value}&to=${fechaTo.value}`)
 		.then(response => response.json())
 		.then(resp => {
+			// console.log(resp);
 			const montos = resp.resultForChart.mounts;
 			const sortedMontos = Object.entries(montos)
 				.sort((b, a) => a[1] - b[1])
@@ -274,7 +116,6 @@ async function getPaquetes() {
 }
 
 onMounted(async () => {
-	resolveDataRaw();
 	await fetchData();
 	await graficoTorta();
 	await getPaquetes();
@@ -286,14 +127,14 @@ const getSelectedDates = async (dates) => {
 		let arrayFecha = Array.from(fechaIngresada.value);
 		fechaFrom.value = moment(arrayFecha[0]).format('YYYY-MM-DD');
 		fechaTo.value = moment(arrayFecha[1]).format('YYYY-MM-DD');
-		resolveDataRaw();
-		// await fetchData();
+		await fetchData();
 	}
 }
 
 const resolveData = computed(() => {
 	let dataRaw;
 	let arrayFecha = Array.from(fechaIngresada.value);
+	// console.log(arrayFecha);
 	if (arrayFecha.length > 0) {
 		dataRaw = (data.value);
 
@@ -373,9 +214,9 @@ export default {
 <template>
 	<div class="text-center py-3" v-if="isLoading">Cargando...</div>
 	<div v-else>
-		<VCardTitle class="pt-4 pl-6">Montos cobrados por tipo de tarjeta</VCardTitle>
+    <VCardTitle class="pt-4 pl-6">Montos cobrados por tipo de tarjeta</VCardTitle>
 		<VCardTitle class="pt-4 pl-6">
-			<VRow class="align-center">
+			<VRow>
 				<VCol cols="4">
 					<AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaSelected"
 						show-current=true @on-change="getSelectedDates" :config="{
@@ -389,19 +230,15 @@ export default {
 
 				</VCol>
 				<VCol cols="8">
-						<Pack/>
+					<VSelect style="width:100%;" v-model="selectedPaquetes" :items="paquetes" label="Paquetes" />
 				</VCol>
 			</VRow>
 
 		</VCardTitle>
 
 		<div class="tab-titles parentTabs">
-			<div class="" @click="selectTab(0)" :class="{ active: selectedTab === 0 }">
-				<VIcon :size="22" icon="tabler-chart-bar" />
-			</div>
-			<div @click="selectTab(1)" :class="{ active: selectedTab === 1 }">
-				<VIcon :size="22" icon="tabler-chart-pie" />
-			</div>
+			<div class="" @click="selectTab(0)" :class="{ active: selectedTab === 0 }"> <VIcon :size="22" icon="tabler-chart-bar" /></div>
+			<div @click="selectTab(1)" :class="{ active: selectedTab === 1 }"> <VIcon :size="22" icon="tabler-chart-pie" /></div>
 		</div>
 
 		<div class="tab-content">
@@ -438,75 +275,77 @@ export default {
 
 <style scoped>
 .parentTabs {
-	overflow: auto;
-	white-space: nowrap;
-	display: flex;
-	align-items: flex-start;
-	align-items: center;
-	justify-content: center;
-	width: 100%;
-	padding-bottom: 15px;
-	padding-top: 15px;
+  overflow: auto;
+  white-space: nowrap;
+  display: flex;
+  align-items: flex-start;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-bottom: 15px;
+  padding-top: 15px;
 
 }
 
 .parentTabs::-webkit-scrollbar {
-	height: 10px;
+  height: 10px;
 }
 
 .parentTabs::-webkit-scrollbar:hover {
-	height: 10px;
-	padding-top: 10px;
+  height: 10px;
+  padding-top: 10px;
 }
 
 .parentTabs::-webkit-scrollbar-track {
-	-webkit-box-shadow: inset 0 0 0px rgba(0, 0, 0, 0);
+  -webkit-box-shadow: inset 0 0 0px rgba(0, 0, 0, 0);
 }
 
 .parentTabs::-webkit-scrollbar-thumb {
-	height: 6px;
-	background-color: rgba(var(--v-theme-on-background), var(--v-medium-emphasis-opacity));
-	border-radius: 6px;
+  height: 6px;
+  background-color: rgba(var(--v-theme-on-background), var(--v-medium-emphasis-opacity));
+  border-radius: 6px;
 }
 
 .parentTabs::-webkit-scrollbar-thumb:hover {
-	background-color: rgb(var(--v-theme-primary));
-	height: 10px;
+  background-color: rgb(var(--v-theme-primary));
+  height: 10px;
 
 }
-
 .tab-titles div.active {
-	background-color: rgb(var(--v-theme-primary));
-	color: rgb(var(--v-theme-on-primary)) !important;
-	border-radius: 0.25rem !important;
+  background-color: rgb(var(--v-theme-primary));
+  color: rgb(var(--v-theme-on-primary)) !important;
+  border-radius: 0.25rem !important;
 }
 
 .tab-titles {
-	display: flex;
+  display: flex;
 }
 
 .tab-titles div {
-	cursor: pointer;
-	/* background-color: lightgray; */
-	margin-right: 8px;
-	height: var(--v-tabs-height);
-	padding: 10px 20px;
-	text-transform: uppercase;
-	font-size: .875rem;
-	--v-btn-size: .875rem;
-	--v-btn-height: 38px;
-	font-weight: 500;
-	letter-spacing: .0892857143em;
-	line-height: normal;
+  cursor: pointer;
+  /* background-color: lightgray; */
+  margin-right: 8px;
+  height: var(--v-tabs-height);
+  padding: 10px 20px;
+  text-transform: uppercase;
+  font-size: .875rem;
+  --v-btn-size: .875rem;
+  --v-btn-height: 38px;
+  font-weight: 500;
+  letter-spacing: .0892857143em;
+  line-height: normal;
 }
 
 .tab-content {
-	margin-top: 16px;
+  margin-top: 16px;
 }
+
 </style>
 
 
 <style>
+
+
 /* De tema Dark a Light */
 .v-theme--light .apexcharts-legend-series .apexcharts-legend-text {
 	color: rgba(var(--v-theme-on-surface), var(--v-medium-emphasis-opacity)) !important;
@@ -531,4 +370,5 @@ export default {
 
 .v-theme--dark .apexcharts-yaxis .apexcharts-yaxis-texts-g text {
 	fill: rgba(228, 230, 244, 0.38) !important;
-}</style>
+}
+</style>
