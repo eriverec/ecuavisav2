@@ -13,7 +13,8 @@ const dataTest = ref([]);
 const selectedPlan = ref('');
 const selectedRecursivo = ref('all');
 const selectedTarjeta = ref('');
-
+const fechaFrom = ref(moment().format('YYYY-MM-DD'));
+const fechaTo = ref(moment().subtract(1, 'days').format('YYYY-MM-DD'));
 const dataCC = [
 	{
 		tipoTarjeta: "Visa",
