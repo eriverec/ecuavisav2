@@ -2379,6 +2379,11 @@ INICIO - BLOQUE - MUNDO
 ************************** */
 /* @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap'); */
 
+.bloque_estadio_2 .noticias .BLOQUE_IMG_SEC_TIT_60x100 .article_envivo{
+  display: inline-block;
+}
+
+
 /*Espacio imagen grande*/
 .bloque_estadio_1>section:nth-child(1)>article:nth-child(1)>div:nth-child(1)>div:nth-child(1)>div:nth-child(2)>div:nth-child(1)>a:nth-child(1)>div:nth-child(1)>img:nth-child(1) {
   margin: 0px !important;
