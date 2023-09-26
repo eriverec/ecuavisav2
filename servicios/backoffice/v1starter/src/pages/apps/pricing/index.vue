@@ -39,6 +39,18 @@ const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
 };
 
+const frecuenciaItems = [
+    {
+     title: "Mensual",
+     value: "mensual"
+    },
+    {
+     title: "Anual",
+     value: "anual"
+    }
+]
+
+
 // ------------------------------MOSTRAR PLANES-----------------------------------
 const planesToShow = ref([]);
 const planesVisible = ref(false);
@@ -46,7 +58,7 @@ const productoSelected = ref('');
 const idProductoSelected = ref('')
 
 function viewPlanes(id = '', nombre){
-    console.log('id',id);
+    //console.log('id',id);
     let productoRaw = dataProductos.value.find(item => item._id == id); 
     planesToShow.value = productoRaw.planes;
     idProductoSelected.value = id;
@@ -283,7 +295,7 @@ async function deleteConfirmed() {
         </VSnackbar>
 
         <VRow>
-            <VCol cols="5" sm="5" lg="5">
+            <VCol cols="5" sm="12" lg="5" class="container">
                 <VCard>
                 <VCardTitle class="pt-4 pl-6">Lista de productos</VCardTitle>   
                  
@@ -341,7 +353,7 @@ async function deleteConfirmed() {
                 </VCard>
             </VCol>
 
-            <VCol cols="7" sm="7" lg="7">
+            <VCol cols="7" sm="12" lg="7" class="container">
                 <VCard v-if="planesVisible">
                 <VCardTitle class="pt-4 pl-6">Planes de {{ productoSelected }}</VCardTitle>   
                  
@@ -437,7 +449,7 @@ async function deleteConfirmed() {
                                     </VCol> 
 
                                     <VCol cols="5">
-                                        <VTextField v-model="item.frecuencia" label="Frecuencia"/>
+                                        <VSelect v-model="item.frecuencia" :items="frecuenciaItems" label="Frecuencia"/>
                                     </VCol> 
 
                                     <VCol cols="6">
@@ -499,5 +511,11 @@ async function deleteConfirmed() {
 <style>  
 .clickable {
   cursor: pointer;
+}
+
+@media screen and (max-width: 1000px) {
+  .container {
+   min-width: 90svw; 
+  }
 }
 </style>
