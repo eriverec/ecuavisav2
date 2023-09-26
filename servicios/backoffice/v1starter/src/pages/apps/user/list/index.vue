@@ -88,7 +88,6 @@ const fetchUsers = () => {
     .then((response) => {
       users.value = response.data.users;
       totalPage.value = response.data.totalPage;
-      totalUsers.value = response.data.totalUsers;
       sectionLoaded();
     })
     .catch((error) => {
@@ -118,12 +117,14 @@ const countUsers = () => {
       const pAppE = ref(0);
       const pAppF = ref(0);
       const pAppG = ref(0);
-      const total = response.data.fullUsers;
+      const total = (response.data.totalEmail) + (response.data.totalFacebook) + (response.data.totalGoogle);
 
       totalEmail.value = response.data.totalEmail;
       totalFacebook.value = response.data.totalFacebook;
       totalGoogle.value = response.data.totalGoogle;
 
+      totalUsers.value = (response.data.totalEmail) + (response.data.totalFacebook) + (response.data.totalGoogle);
+      
       //app
       totalAppUsers.value = (response.data.totalAppEmail) + (response.data.totalAppGoogle) + (response.data.totalAppFacebook);
       totalAppEmail.value = response.data.totalAppEmail;
@@ -132,7 +133,7 @@ const countUsers = () => {
 
       let totalApp = totalAppUsers.value;
 
-      totalDevicesUser.value = (response.data.fullUsers) + (totalApp);
+      totalDevicesUser.value = (response.data.totalEmail) + (response.data.totalFacebook) + (response.data.totalGoogle) + (totalApp);
       totalDevicesEmail.value = (response.data.totalEmail) + (response.data.totalAppEmail);
       totalDevicesFacebook.value = (response.data.totalFacebook) + (response.data.totalAppFacebook);
       totalDevicesGoogle.value = (response.data.totalGoogle) + (response.data.totalGoogle);

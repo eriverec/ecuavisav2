@@ -53,7 +53,7 @@ const countUsers = () => {
       const pAppF = ref(0);
       const pAppG = ref(0);
 
-      totalUsers.value = response.data.fullUsers;
+      totalUsers.value = (response.data.totalEmail) + (response.data.totalFacebook) + (response.data.totalGoogle) ;
       totalEmail.value = response.data.totalEmail;
       totalFacebook.value = response.data.totalFacebook;
       totalGoogle.value = response.data.totalGoogle;
@@ -66,9 +66,10 @@ const countUsers = () => {
       totalAppGoogle.value = response.data.totalAppGoogle;
       
       let total = totalUsers.value;
+      
       let totalApp = totalAppUsers.value;
 
-      totalDevicesUser.value = (response.data.fullUsers) + (totalApp);
+      totalDevicesUser.value = (response.data.totalEmail) + (response.data.totalFacebook) + (response.data.totalGoogle) + (totalApp);
       totalDevicesEmail.value = (response.data.totalEmail) + (response.data.totalAppEmail);
       totalDevicesFacebook.value = (response.data.totalFacebook) + (response.data.totalAppFacebook);
       totalDevicesGoogle.value = (response.data.totalGoogle) + (response.data.totalGoogle);
