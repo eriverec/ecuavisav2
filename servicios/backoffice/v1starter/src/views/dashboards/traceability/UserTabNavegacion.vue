@@ -71,7 +71,7 @@ async function fetchData() {
       if (data.data.length === 0) {
         break;
       }
-      console.log("Nombre: ",skip, metadatosFetch)
+      // console.log("Nombre: ",skip, metadatosFetch)
       metadatosFetch = mergeAndSum(metadatosFetch, data.data);
       urlCounts.value = Array.from(metadatosFetch.sort((a, b) => b.count - a.count));
       // urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
