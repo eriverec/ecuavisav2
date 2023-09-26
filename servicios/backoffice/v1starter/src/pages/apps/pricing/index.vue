@@ -453,7 +453,7 @@ async function deleteConfirmed() {
                                     </VCol> 
 
                                     <VCol cols="6">
-                                        <VTextarea v-model="item.descripcion" label="Desccripción" auto-grow/>
+                                        <VTextarea v-model="item.descripcion" label="Descripción" auto-grow/>
                                     </VCol> 
 
                                     <VCol cols="6">
