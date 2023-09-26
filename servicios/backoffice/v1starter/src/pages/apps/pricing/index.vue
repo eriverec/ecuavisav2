@@ -393,7 +393,8 @@ async function deleteConfirmed() {
                             <VImg :width="200" aspect-ratio="1/1" :src=item.url_imagen />
                         </td>
                         <td class="text-medium-emphasis">
-                            {{ item.descripcion}}
+                            <VList :items="item.descripcion">        
+                            </VList>                     
                         </td>
                         <td class="text-medium-emphasis">
                             {{ item.condiciones}}
