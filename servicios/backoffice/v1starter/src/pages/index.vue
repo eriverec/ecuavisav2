@@ -13,12 +13,22 @@ const moment = extendMoment(Moment);
 
 const userListStore = useUserListStore();
 const totalUsers = ref(0);
+
 const totalFacebook = ref(0);
 const totalGoogle = ref(0);
 const totalEmail = ref(0);
+
+const totalAppFacebook = ref(0);
+const totalAppGoogle = ref(0);
+const totalAppEmail = ref(0);
+
 const percentEmail = ref(0);
 const percentFacebook = ref(0);
 const percentGoogle = ref(0);
+
+const percentAppEmail = ref(0);
+const percentAppFacebook = ref(0);
+const percentAppGoogle = ref(0);
 
 // 👉 Fetching users
 
@@ -29,6 +39,11 @@ const countUsers = () => {
       const pE = ref(0);
       const pF = ref(0);
       const pG = ref(0);
+
+      const pAppE = ref(0);
+      const pAppF = ref(0);
+      const pAppG = ref(0);
+
       totalUsers.value = response.data.fullUsers;
       totalEmail.value = response.data.totalEmail;
       totalFacebook.value = response.data.totalFacebook;
