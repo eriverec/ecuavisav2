@@ -88,7 +88,7 @@ function addPlan(){
         nombre_plan: "",
         precio: 0,
         url_imagen:"",
-        descripcion: "",
+        descripcion: [],
         condiciones: "",
         frecuencia: ""
     }
@@ -97,6 +97,14 @@ function addPlan(){
 
 const eliminarPlan = (index) =>{
     planes.value.splice(index, 1);
+};
+
+function addDesc(index){   
+    planes.value[index].descripcion.push('');
+}
+
+const eliminarDesc = (index, index2) =>{
+    planes.value[index].descripcion.splice(index2, 1);
 };
 
 function resetForm(){
@@ -117,7 +125,7 @@ async function onAddProducto(){
         nombre_plan: "",
         precio: 0,
         url_imagen:"",
-        descripcion: "",
+        descripcion: [],
         condiciones: "",
         frecuencia: ""
     }
@@ -168,7 +176,7 @@ async function onComplete(){
 
     for(let item of planesValid){
 
-        if(item.nombre_plan == "" || item.precio ==0 || item.url_imagen == "" || item.descripcion == "" || item.condicion == "" || item.frecuencia ==""){
+        if(item.nombre_plan == "" || item.precio ==0 || item.url_imagen == "" || item.descripcion.length == 0 || item.condicion == "" || item.frecuencia ==""){
             configSnackbar.value = {
                         message: "Debe ingresar todos los datos del plan",
                         type: "error",
@@ -451,13 +459,28 @@ async function deleteConfirmed() {
                                     <VCol cols="5">
                                         <VSelect v-model="item.frecuencia" :items="frecuenciaItems" label="Frecuencia"/>
                                     </VCol> 
-
-                                    <VCol cols="6">
-                                        <VTextarea v-model="item.descripcion" label="Descripción" auto-grow/>
+                                                                                                    
+                                    <VCol cols="12">
+                                        <VCol class="d-flex" cols="12">
+                                            <span class="mt-4">Descripción</span>
+                                            <VBtn style="margin-left: auto;" @click="addDesc(index)"><VIcon icon="tabler-plus"></VIcon></VBtn>
+                                        </VCol>   
+                                        <VCol class="d-flex" v-for="(itemDesc, indexDesc) in item.descripcion" :key="indexDesc" cols="12">
+                                            <VCol cols="10">
+                                                <VTextarea rows="1" v-model="item.descripcion[indexDesc]" :label="'Descripción '+ (indexDesc+1) " auto-grow/>
+                                            </VCol>
+                                            <VCol cols="2">
+                                                <VBtn color="error" @click="eliminarDesc(index, indexDesc)" >
+                                                <VIcon icon="tabler-trash"></VIcon>
+                                                </VBtn>
+                                            </VCol>
+                                            
+                                        </VCol> 
+                                        
                                     </VCol> 
 
-                                    <VCol cols="6">
-                                        <VTextarea v-model="item.condiciones" label="Condiciones" auto-grow/>
+                                    <VCol cols="12">
+                                        <VTextarea rows="2" v-model="item.condiciones" label="Condiciones" auto-grow/>
                                     </VCol>
                                     <VCol style="position: relative;" class="my-4" cols="12">                                       
                                         <VBtn style="position: absolute; bottom: 0%; right: 0%;" class="mr-2" prepend-icon="tabler-trash" color="error" @click="eliminarPlan(index)" >
