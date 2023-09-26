@@ -16,10 +16,10 @@ logoutBtn.addEventListener("click", function () {
 var URL_principal_G = ECUAVISA_EC.URL_principal();
 var URL_login_G = ECUAVISA_EC.URL_login();
 
-if(!ECUAVISA_EC.login()){
+// if(!ECUAVISA_EC.login()){
   /*SI NO ESTÁ INICIADO SESIÓN MANDA LA FUNCIÓN DE TOKEN()*/
-  Token();
-}
+  // Token();
+// }
 
 //NUEVO MODAL 2023
 
