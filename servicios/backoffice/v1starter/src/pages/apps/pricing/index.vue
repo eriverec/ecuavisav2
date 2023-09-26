@@ -514,7 +514,7 @@ async function deleteConfirmed() {
             <!-- Dialog Content -->
             <VCard title="Eliminar registro">
                 <VCardText>
-                    ¿Desea eliminar la característica?
+                    ¿Desea eliminar el producto?
                 </VCardText>
 
                 <VCardText class="d-flex justify-end gap-3 flex-wrap">
