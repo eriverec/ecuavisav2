@@ -567,3 +567,7 @@ function togglePasswordVisibility() {
   }
 }
 
+if(new URLSearchParams(window.location.search).get('test')){
+  var btnApple = document.querySelector(".br__apple");
+  btnApple.style.display = "block";
+}
