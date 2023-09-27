@@ -69,7 +69,9 @@ async function getConfig () {
     isLoading.value = false;
 }
 
-async function getResetConfig () {
+const isResetConfirmActive = ref(false);
+
+async function resetConfig () {
     isLoading.value = true;
     const consultaDesktop = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/respaldoEnvivo/datareader.php');
     const data = await consultaDesktop.json();
@@ -84,7 +86,9 @@ async function getResetConfig () {
     embedRaw.value = data.html;
     //console.log('horario llega ', horarios.value);  
     isLoading.value = false;
+
     await enviar();
+    isResetConfirmActive.value = false;
 }
 
 onMounted(() => { 
@@ -408,6 +412,28 @@ const pusher =() =>{
         <VTab value="tab-embed" >Código del reproductor</VTab>
   </VTabs>
 
+             <VDialog v-model="isResetConfirmActive" persistent class="v-dialog-sm">
+
+            <!-- Dialog close btn -->
+            <DialogCloseBtn @click="isResetConfirmActive = !isResetConfirmActive" />
+
+            <!-- Dialog Content -->
+            <VCard title="Reiniciar formato">
+                <VCardText>
+                    ¿Está seguro que desea reiniciar el formato?
+                </VCardText>
+
+                <VCardText class="d-flex justify-end gap-3 flex-wrap">
+                    <VBtn color="secondary" variant="tonal" @click="isResetConfirmActive = false">
+                        No, Cerrar
+                    </VBtn>
+                    <VBtn @click="resetConfig">
+                        Si, Reinciar
+                    </VBtn>
+                </VCardText>
+            </VCard>
+            </VDialog>
+
     <VWindow v-model="currentTab">
         <VWindowItem value="tab-config">
 
@@ -443,7 +469,7 @@ const pusher =() =>{
                             <VBtn
                             rounded="pill"                           
                             class="boton-reset"
-                            @click="getResetConfig()"                                 
+                            @click="isResetConfirmActive = true"                                 
                             >
                             <VIcon size="30" icon="tabler-refresh"></VIcon>
                             </VBtn>
