@@ -93,7 +93,6 @@ const countUsers = () => {
       percentGoogle.value = Math.round((pG.value + Number.EPSILON) * 100) / 100;
 
       pA.value = (totalApple.value * 100 ) / total;
-      console.log(pA)
       percentApple.value = Math.round((pA.value + Number.EPSILON) * 100) / 100;
 
       //DATOS DE APP
