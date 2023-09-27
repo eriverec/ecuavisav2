@@ -56,7 +56,7 @@ async function getConfig () {
     isLoading.value = true;
     const consultaDesktop = await fetch('https://configuracion-service.vercel.app/configuracion/horarioEnvivo');
     const data = await consultaDesktop.json();
-    console.log('dataRAW: ', data);
+    //console.log('dataRAW: ', data);
     estado.value = data.forzado; 
     estadoRaw.value = data.forzado; 
     horarios.value = Array.from(data.horarios);
@@ -67,6 +67,24 @@ async function getConfig () {
     embedRaw.value = data.html;
     //console.log('horario llega ', horarios.value);  
     isLoading.value = false;
+}
+
+async function getResetConfig () {
+    isLoading.value = true;
+    const consultaDesktop = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/respaldoEnvivo/datareader.php');
+    const data = await consultaDesktop.json();
+    //console.log('dataReset: ', data);
+    estado.value = data.forzado; 
+    estadoRaw.value = data.forzado; 
+    horarios.value = Array.from(data.horarios);
+    horariosRaw.value =  Array.from(data.horarios);
+
+    codigo.value = data.html.value;
+    estadoHtml.value = data.html.estadoHtml;
+    embedRaw.value = data.html;
+    //console.log('horario llega ', horarios.value);  
+    isLoading.value = false;
+    await enviar();
 }
 
 onMounted(() => { 
@@ -421,6 +439,14 @@ const pusher =() =>{
                             >
                             <VIcon size="30" icon="tabler-device-floppy"></VIcon>
                             </VBtn>
+
+                            <VBtn
+                            rounded="pill"                           
+                            class="boton-reset"
+                            @click="getResetConfig()"                                 
+                            >
+                            <VIcon size="30" icon="tabler-refresh"></VIcon>
+                            </VBtn>
                         </VCol>  
                     
                     </VCol>
@@ -660,6 +686,13 @@ const pusher =() =>{
     .boton-fija{
         position: fixed;
         bottom: 0;
+        right: 0;
+        margin: 30px;
+        z-index: 9999;
+    }
+    .boton-reset{
+        position: fixed;
+        bottom: 10%;
         right: 0;
         margin: 30px;
         z-index: 9999;
