@@ -1,0 +1,140 @@
+body {
+  font-family: 'Archivo';
+}
+
+.ring {
+  --uib-size: 40px;
+  --uib-speed: 2s;
+  --uib-color: black;
+  
+  height: var(--uib-size);
+  width: var(--uib-size);
+  vertical-align: middle;
+  transform-origin: center;
+  animation: rotate var(--uib-speed) linear infinite;
+}
+
+.ring circle {
+  fill: none;
+  stroke: var(--uib-color);
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  stroke-linecap: round;
+  animation: stretch calc(var(--uib-speed) * 0.75) ease-in-out infinite;
+}
+
+@keyframes rotate {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes stretch {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 90, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dashoffset: -124px;
+  }
+}
+
+.plans-tabs {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  column-gap: 20px;
+  flex-wrap: wrap;
+}
+.plans-tabs .tab-button{
+  margin-top: 10px;
+}
+
+.tab {
+  display: none;
+}
+
+.active-tab {
+  display: block;
+}
+
+.tab-button {
+  cursor: pointer;
+  padding: 7px 20px;
+  border-radius: 3px;
+  border: 1px solid #ddd;
+  background: #D5D5D5;
+}
+
+.active-button {
+  background: #2927B9;
+  color: #fff;
+}
+
+.card {
+  box-shadow: 0 0 15px 0 rgba(0, 0, 0, .1);
+}
+
+.list-card-plans {
+  margin: 20px 0;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  column-gap: 20px;
+  flex-wrap: wrap;
+}
+
+.list-card-plans .card {
+  margin-top: 20px;
+}
+
+.card-body img {
+  width: 100%;
+  margin: auto;
+  display: block;
+}
+
+.card-title {
+  text-align: center;
+  margin: 15px 0;
+  text-transform: uppercase;
+}
+.boton_sus{
+  margin: 20px 0;
+  background: #23DCD1;
+  display: block;
+  color: #2927B9;
+  border-radius: 20px;
+}
+
+.icono {
+  list-style-type: none;
+  padding: 0;
+  background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/check-line.svg');
+  /* Ruta al archivo SVG */
+  background-repeat: no-repeat;
+  background-position: left center;
+  /* Puedes ajustar la posición del ícono */
+  padding-left: 30px;
+  /* Ajusta el espaciado izquierdo para dejar espacio para el ícono */
+  margin-bottom: 12px;
+  /* Ajusta el espaciado entre elementos */
+}
+
+.plan_grupos {
+  margin: 20px 0;
+}
+
+.plan_precio{
+  text-align: center;
+}
+
+.plan_precio .span_ {
+  font-weight: 800;
+  font-size: 40px;
+}

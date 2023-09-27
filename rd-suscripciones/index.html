@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
+    rel="stylesheet" type="text/css">
+  <title>Tabs Example</title>
+  <style>
+    body {
+      font-family: 'Archivo';
+    }
+
+    .plans-tabs {
+      margin-top: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      column-gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .plans-tabs .tab-button {
+      margin-top: 10px;
+    }
+
+    .tab {
+      display: none;
+    }
+
+    .active-tab {
+      display: block;
+    }
+
+    .tab-button {
+      cursor: pointer;
+      padding: 7px 20px;
+      border-radius: 3px;
+      border: 1px solid #ddd;
+      background: #D5D5D5;
+    }
+
+    .active-button {
+      background: #2927B9;
+      color: #fff;
+    }
+
+    .card {
+      box-shadow: 0 0 15px 0 rgba(0, 0, 0, .1);
+    }
+
+    .list-card-plans {
+      margin: 20px 0;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+      column-gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .list-card-plans .card {
+      margin-top: 20px;
+    }
+
+    .card-body img {
+      width: 100%;
+      margin: auto;
+      display: block;
+    }
+
+    .card-title {
+      text-align: center;
+      margin: 15px 0;
+      text-transform: uppercase;
+    }
+
+    .icono {
+      list-style-type: none;
+      padding: 0;
+      background-image: url('https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/check-line.svg');
+      /* Ruta al archivo SVG */
+      background-repeat: no-repeat;
+      background-position: left center;
+      /* Puedes ajustar la posición del ícono */
+      padding-left: 30px;
+      /* Ajusta el espaciado izquierdo para dejar espacio para el ícono */
+      margin-bottom: 10px;
+      /* Ajusta el espaciado entre elementos */
+    }
+
+
+
+    .plan_grupos {
+      margin: 20px 0;
+    }
+
+    .plan_precio {
+      text-align: center;
+    }
+
+    .plan_precio .span_ {
+      font-weight: 800;
+      font-size: 50px;
+    }
+
+    .boton_sus {
+      margin: 20px 0;
+      background: #23DCD1;
+      display: block;
+      color: #2927B9;
+      border-radius: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="plans-tabs container">
+    <button class="tab-button" onclick="showTab(0)">Ecuavisa</button>
+    <button class="tab-button" onclick="showTab(1)">Vistazo</button>
+    <button class="tab-button" onclick="showTab(2)">Fast</button>
+    <button class="tab-button" onclick="showTab(3)">EcuavisaGo</button>
+  </div>
+
+  <div class="tab-content container">
+    <div class="tab active-tab">
+      <!-- PLAN ECUAVISA -->
+      <div class="list-card-plans">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Noticias digital</h5>
+            <h5 class="plan_precio">
+              <span class="span_">$40</span>
+              <span>/mes</span>
+            </h5>
+            <a href="#" class="btn boton_sus">Suscríbete</a>
+            <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/portada--423c34f.png"
+              class="card-img-top" alt="Ecuavisa">
+            <div class="plan_grupos">
+              <li class="icono">3 meses por $1</li>
+              <li class="icono">35% de descuento en tu edición digital</li>
+              <li class="icono">Acceso a edición digital de la revista a través del APP</li>
+              <li class="icono">Newsletters</li>
+            </div>
+          </div>
+          <div class="card-footer text-muted">
+            <p>* Pago mensual recurrente. Renovable automáticamente al vencimiento. La promoción de $1 es por los 3
+              primeros meses. A partir del 4to mes el valor es de $2,99. </p>
+          </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">
+              Guayaquil mi destino
+            </h5>
+            <h5 class="plan_precio">
+              <span class="span_">$55</span>
+              <span>/mes</span>
+            </h5>
+            <a href="#" class="btn boton_sus">Suscríbete</a>
+            <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/gye-des.jpg" class="card-img-top"
+              alt="...">
+            <div class="plan_grupos">
+              <li class="icono">3 meses por $1</li>
+              <li class="icono">35% de descuento en tu edición digital</li>
+              <li class="icono">Acceso a edición digital de la revista a través del APP</li>
+              <li class="icono">Newsletters</li>
+            </div>
+            
+          </div>
+          <div class="card-footer text-muted">
+            <p>* Pago mensual recurrente. Renovable automáticamente al vencimiento. La promoción de $1 es por los 3
+              primeros meses. A partir del 4to mes el valor es de $2,99. </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    <div class="tab ">
+      <!-- PLAN VISTAZO -->
+      <div class="list-card-plans">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Vistazo digital</h5>
+            <h5 class="plan_precio">
+              <span class="span_">$25</span>
+              <span>/mes</span>
+            </h5>
+            <a href="#" class="btn boton_sus">Suscríbete</a>
+            <img src="https://suscripciones.vistazo.com/img/resources/789855964fcccded89124c81ad47a910.png"
+              class="card-img-top" alt="Ecuavisa">
+            <div class="plan_grupos">
+              <li class="icono">3 meses por $1</li>
+              <li class="icono">35% de descuento en tu edición digital</li>
+              <li class="icono">Acceso a edición digital de la revista a través del APP</li>
+              <li class="icono">Newsletters</li>
+            </div>
+
+            
+          </div>
+          <div class="card-footer text-muted">
+            <p>* Pago mensual recurrente. Renovable automáticamente al vencimiento. La promoción de $1 es por los 3
+              primeros meses. A partir del 4to mes el valor es de $2,99. </p>
+          </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">
+              VISTAZO IMPRESA DIGITAL POR 3 MESES MÁS 1 GRATIS
+            </h5>
+            <h5 class="plan_precio">
+              <span class="span_">$35</span>
+              <span>/mes</span>
+            </h5>
+            <a href="#" class="btn boton_sus">Suscríbete</a>
+            <img src="https://suscripciones.vistazo.com/img/resources/a00a33718a7c68d81f246552c626e919.png"
+              class="card-img-top" alt="...">
+            <div class="plan_grupos">
+              <li class="icono">3 meses por $1</li>
+              <li class="icono">35% de descuento en tu edición digital</li>
+              <li class="icono">Acceso a edición digital de la revista a través del APP</li>
+              <li class="icono">Newsletters</li>
+            </div>
+            
+          </div>
+          <div class="card-footer text-muted">
+            <p>* Pago mensual recurrente. Renovable automáticamente al vencimiento. La promoción de $1 es por los 3
+              primeros meses. A partir del 4to mes el valor es de $2,99. </p>
+          </div>
+        </div>
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">
+              VISTAZO IMPRESA
+            </h5>
+            <h5 class="plan_precio">
+              <span class="span_">$45</span>
+              <span>/año</span>
+            </h5>
+            <a href="#" class="btn boton_sus">Suscríbete</a>
+            <img src="https://suscripciones.vistazo.com/img/resources/0e2dcd0461180256db34b065852c89ac.png"
+              class="card-img-top" alt="...">
+            <div class="plan_grupos">
+              <li class="icono">3 meses por $1</li>
+              <li class="icono">35% de descuento en tu edición digital</li>
+              <li class="icono">Acceso a edición digital de la revista a través del APP</li>
+              <li class="icono">Newsletters</li>
+            </div>
+            
+          </div>
+          <div class="card-footer text-muted">
+            <p>* Pago mensual recurrente. Renovable automáticamente al vencimiento. La promoción de $1 es por los 3
+              primeros meses. A partir del 4to mes el valor es de $2,99. </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="tab">
+      <!-- PLAN APP -->
+      <div class="list-card-plans">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">APP digital</h5>
+            <h5 class="plan_precio">
+              <span class="span_">$15</span>
+              <span>/mes</span>
+            </h5>
+            <a href="#" class="btn boton_sus">Suscríbete</a>
+            <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/unnamed.jpg" class="card-img-top"
+              alt="Ecuavisa">
+            <div class="plan_grupos">
+              <li class="icono">3 meses por $1</li>
+              <li class="icono">35% de descuento en tu edición digital</li>
+            </div>
+
+            
+          </div>
+          <div class="card-footer text-muted">
+            <p>* Pago mensual recurrente. Renovable automáticamente al vencimiento. La promoción de $1 es por los 3
+              primeros meses. A partir del 4to mes el valor es de $2,99. </p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="tab">
+      <!-- PLAN ECUAVISA GO -->
+      <div class="list-card-plans">
+        <div class="card" style="width: 18rem;">
+          <div class="card-body">
+            <h5 class="card-title">Ecuavisago</h5>
+            <h5 class="plan_precio">
+              <span class="span_">$20</span>
+              <span>/mes</span>
+            </h5>
+            <a href="#" class="btn boton_sus">Suscríbete</a>
+            <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/ecugo.jpg" class="card-img-top"
+              alt="Ecuavisa">
+            <div class="plan_grupos">
+              <li class="icono">Acceso a edición digital de la revista a través del APP</li>
+              <li class="icono">Newsletters</li>
+            </div>
+
+            
+          </div>
+          <div class="card-footer text-muted">
+            <p>* Pago mensual recurrente. Renovable automáticamente al vencimiento. La promoción de $1 es por los 3
+              primeros meses. A partir del 4to mes el valor es de $2,99. </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tabs = document.querySelectorAll('.tab');
+    const tabButtons = document.querySelectorAll('.tab-button');
+
+    function showTab(index) {
+      tabs.forEach((tab, i) => {
+        if (i === index) {
+          tab.classList.add('active-tab');
+          tabButtons[i].classList.add('active-button');
+        } else {
+          tab.classList.remove('active-tab');
+          tabButtons[i].classList.remove('active-button');
+        }
+      });
+    }
+
+    showTab(0);
+
+
+  </script>
+</body>
+
+</html>
