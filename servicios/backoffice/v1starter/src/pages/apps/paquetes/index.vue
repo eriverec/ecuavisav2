@@ -724,8 +724,9 @@ async function deletePaquete() {
                             <VCol
                               cols="6"
                               md="6"
+                              class="mdContainer"
                             >
-                            <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="activoDesde"
+                            <AppDateTimePicker  prepend-inner-icon="tabler-calendar" density="compact" v-model="activoDesde"
                               show-current=true label="Activo desde" :config="{
                                 position: 'auto right',                
                                 altFormat: 'F j, Y',
@@ -738,6 +739,7 @@ async function deletePaquete() {
                             <VCol
                               cols="6"
                               md="6"
+                              class="mdContainer"
                             >
                             <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="activoHasta"
                               show-current=true label="Activo hasta" :config="{
