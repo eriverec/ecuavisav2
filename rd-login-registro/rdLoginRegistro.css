@@ -884,3 +884,7 @@ form i {
     align-items: center;
     justify-content: center;
 }
+
+.br__apple{
+  display: block!important;
+}
