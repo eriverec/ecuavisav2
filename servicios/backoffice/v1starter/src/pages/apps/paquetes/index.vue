@@ -570,7 +570,7 @@ async function deletePaquete() {
             </VCol>
         </VRow>
 
-        <VDialog v-model="isDialogActive" persistent max-width="800">
+        <VDialog v-model="isDialogActive" persistent no-click-animation max-width="800">
 
             <!-- Dialog close btn -->
             <DialogCloseBtn @click="closeDiag" />
@@ -597,7 +597,7 @@ async function deletePaquete() {
                   nextButtonText="Siguiente"
                   backButtonText="Anterior"
                   finishButtonText="Guardar paquete"
-                  overflow=""
+                  
                 >
                   <tab-content title="Detalles del paquete" :before-change="validateAsync">
                    
@@ -725,20 +725,28 @@ async function deletePaquete() {
                               cols="6"
                               md="6"
                             >
-                            <VTextField
-                                v-model="activoDesde"
-                                label="Activo desde"                                
-                              />
+                            <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="activoDesde"
+                              show-current=true label="Activo desde" :config="{
+                                position: 'auto right',                
+                                altFormat: 'F j, Y',
+                                dateFormat: 'd/m/Y',
+                                maxDate: new Date(),
+                                reactive: true
+                              }" />
                             </VCol>
 
                             <VCol
                               cols="6"
                               md="6"
                             >
-                            <VTextField
-                                v-model="activoHasta"
-                                label="Activo Hasta"                                
-                              />
+                            <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="activoHasta"
+                              show-current=true label="Activo hasta" :config="{
+                                position: 'auto right',                
+                                altFormat: 'F j, Y',
+                                dateFormat: 'd/m/Y',
+                                maxDate: new Date(),
+                                reactive: true
+                              }" />
                             </VCol>
                           </VRow>
 
@@ -951,4 +959,9 @@ async function deletePaquete() {
    min-width: 300px; 
   }
 }
+
+.flatpickr-calendar.open {
+    z-index: 100000;
+}
+
 </style>
