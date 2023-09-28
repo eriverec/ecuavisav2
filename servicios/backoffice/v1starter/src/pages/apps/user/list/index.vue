@@ -120,6 +120,7 @@ const countUsers = () => {
       const pE = ref(0);
       const pF = ref(0);
       const pG = ref(0);
+      const pA = ref(0);
       const pAppE = ref(0);
       const pAppF = ref(0);
       const pAppG = ref(0);
