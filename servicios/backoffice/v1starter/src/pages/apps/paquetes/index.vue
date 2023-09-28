@@ -47,12 +47,12 @@ async function getGrupos (){
         grupos.push(item);
       }
       grupos.push({
-        title: "No aplica",
+        title: "Sin grupo",
         value: "no aplica"
       });
       gruposItems.value =  grupos;
 
-      console.log('.value',gruposItems.value);   
+      //console.log('.value',gruposItems.value);   
     } catch (error) {
         console.error(error.message);
     }
@@ -100,7 +100,46 @@ const tipoPagoItems = [
   }
 ]
 
+const visibilidadItems = [
+  "Visible", "Oculto"
+]
 
+const cambioPlanItems = [
+  {
+    title: "Bloquear cambio de plan",
+    value: "bloquear"
+  },
+  {
+    title: "Permitir cambio de plan",
+    value: "permitir"
+  }
+]
+
+const paqueteCortesiaItems = [
+  {
+    title: "Si",
+    value: true
+  },
+  {
+    title: "No",
+    value: false
+  }
+]
+
+const direccionCompraItems = [
+  {
+    title: "Solicitar dirección completa",
+    value: "completa"
+  },
+  {
+    title: "Solicitar solamente localidad",
+    value: "local"
+  },
+  {
+    title: "No solicitar",
+    value: "no solicitar"
+  }
+]
 // -------------------------------ACCIONES------------------------------------------
 const isDialogActive = ref(false);
 const accionForm = ref('');
@@ -113,7 +152,7 @@ const periodicidad = ref('');
 const ciclosPromocion = ref(0);
 const precioPromocional = ref(0);
 const descripcionPrecios = ref('');
-const grupo = ref('');
+const grupo = ref('no aplica');
 const sitio = ref('');
 const activoDesde = ref('');
 const activoHasta = ref('');
@@ -165,7 +204,7 @@ function resetForm(){
     ciclosPromocion.value = null;
     precioPromocional.value = null;
     descripcionPrecios.value = '';
-    grupo.value = '';
+    grupo.value = 'no aplica';
     sitio.value = '';
     activoDesde.value = '';
     activoHasta.value = '';
@@ -173,6 +212,13 @@ function resetForm(){
     destaque.value = '';
     clasesCss.value = '';
     caracteristicasSelected.value = [];
+
+    url_imagen.value ='';
+    visibilidad.value = '';
+    cambioPlan.value = '';
+    paqueteCortesia.value =false;
+    direccionCompra.value = '';
+    descripcionCustom.value = '';
 }
 
 async function handleValidation(isValid, tabIndex) {
@@ -263,11 +309,19 @@ async function onEditPaquete(id){
     clasesCss.value = paquete.clasesCss;
     caracteristicasSelected.value = paquete.caracteristicas;
     
+    url_imagen.value = paquete.url_imagen;
+    visibilidad.value = paquete.visibilidad;
+    cambioPlan.value = paquete.cambioPlan;
+    paqueteCortesia.value = paquete.paqueteCortesia;
+    direccionCompra.value = paquete.direccionCompra;
+    descripcionCustom.value = paquete.descripcionCustom;
+
     isDialogActive.value = true;
 }
 
 // ------------SEND--------------
 async function onComplete(){
+    try {
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -290,11 +344,17 @@ async function onComplete(){
         "color": color.value,
         "destaque": destaque.value,
         "clasesCss":  clasesCss.value,
-        "caracteristicas": caracteristicasSelected.value
+        "caracteristicas": caracteristicasSelected.value,
+        "url_imagen" : url_imagen.value,
+        "visibilidad" : visibilidad.value,
+        "cambioPlan" : cambioPlan.value,
+        "paqueteCortesia" : paqueteCortesia.value,
+        "direccionCompra" : direccionCompra.value,
+        "descripcionCustom" : descripcionCustom.value  
         }
 
         var raw = JSON.stringify(jsonEnviar);
-
+        console.log('jsonEnviar ', jsonEnviar);
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -335,7 +395,13 @@ async function onComplete(){
         "color": color.value,
         "destaque": destaque.value,
         "clasesCss":  clasesCss.value,
-        "caracteristicas": caracteristicasSelected.value
+        "caracteristicas": caracteristicasSelected.value,
+        "url_imagen" : url_imagen.value,
+        "visibilidad" : visibilidad.value,
+        "cambioPlan" : cambioPlan.value,
+        "paqueteCortesia" : paqueteCortesia.value,
+        "direccionCompra" : direccionCompra.value,
+        "descripcionCustom" : descripcionCustom.value
         }
 
         var raw = JSON.stringify(jsonEnviar);
@@ -365,7 +431,9 @@ async function onComplete(){
     }
     await getPaquetes();
     isDialogActive.value = false;
-    
+    } catch (error) {
+      console.error(error.message);
+    }
 }
 
 // -------------------------------DELETE-----------------------------------//
@@ -547,7 +615,8 @@ async function deletePaquete() {
                             >
                             <VTextField
                                 v-model="precio"
-                                label="Precio"                                
+                                label="Precio"  
+                                type="number"                              
                               />
                             </VCol>
                           </VRow>
@@ -570,7 +639,8 @@ async function deletePaquete() {
                             >
                             <VTextField
                                 v-model="ciclosPromocion"
-                                label="Ciclos de Promoción"                                
+                                label="Ciclos de Promoción" 
+                                type="number"                                
                               />
                             </VCol>
 
@@ -580,7 +650,8 @@ async function deletePaquete() {
                             >
                             <VTextField
                                 v-model="precioPromocional"
-                                label="Precio promocional"                                
+                                label="Precio promocional" 
+                                type="number"                                
                               />
                             </VCol>
 
@@ -598,14 +669,12 @@ async function deletePaquete() {
                         <VCol cols="12">
 
                           <VRow> 
-                            <VCol
+                            <VCol v-if="accionForm == 'add'"
                               cols="6"
                               md="6"
                             >
-                            <VTextField
-                                v-model="grupo"
-                                label="Grupo"                                
-                              />
+                            
+                            <VSelect v-model="grupo" label="Grupo" :items="gruposItems" />  
                             </VCol>
 
                             <VCol
@@ -668,6 +737,65 @@ async function deletePaquete() {
                                 v-model="clasesCss"
                                 label="Clases CSS"                                
                               />
+                            </VCol>
+
+                            <VCol cols="6" md="6">
+                            <span>Visibilidad</span>  
+                            <VRadioGroup v-model="visibilidad">
+                              <VRadio
+                                v-for="(vis,indexV) in visibilidadItems"
+                                :key="indexV"
+                                :label="vis"
+                                :value="vis"
+                              />
+                            </VRadioGroup>
+                            </VCol>
+
+                            <VCol cols="6" md="6">
+                            <span>Cambio de plan</span>  
+                            <VRadioGroup v-model="cambioPlan">
+                              <VRadio
+                                v-for="(plan,indexP) in cambioPlanItems"
+                                :key="indexP"
+                                :label="plan.title"
+                                :value="plan.value"
+                              />
+                            </VRadioGroup>
+                            </VCol>
+
+                            <VCol cols="6" md="6">
+                            <span>¿Es un paquete de cortesía?</span>  
+                            <VRadioGroup v-model="paqueteCortesia">
+                              <VRadio
+                                v-for="(paqCor,indexPc) in paqueteCortesiaItems"
+                                :key="indexPc"
+                                :label="paqCor.title"
+                                :value="paqCor.value"
+                              />
+                            </VRadioGroup>
+                            </VCol>
+
+                            <VCol cols="6" md="6">
+                            <span>¿Solicitar dirección durante la compra?</span>  
+                            <VRadioGroup v-model="direccionCompra">
+                              <VRadio
+                                v-for="(dir,indexD) in direccionCompraItems"
+                                :key="indexD"
+                                :label="dir.title"
+                                :value="dir.value"
+                              />
+                            </VRadioGroup>
+                            </VCol>
+
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+                            <VTextarea rows="1" v-model="url_imagen" label="Url de imágen" auto-grow/>
+                            </VCol>
+
+                            <VCol cols="12" md="12">
+                              <VTextarea rows="2" v-model="descripcionCustom" label="Descripción personalizada" auto-grow/>
                             </VCol>
                           </VRow>
 
