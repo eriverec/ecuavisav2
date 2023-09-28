@@ -8,6 +8,9 @@ const dataCaracteristicas = ref([]);
 const isLoading = ref(false);
 const dataGrupos = ref([]);
 const gruposItems = ref([]);
+const sitiosItems = ref([]);
+const sitiosRaw = ref([]);
+
 async function getPaquetes (){
     try {
       isLoading.value = true;  
@@ -58,8 +61,30 @@ async function getGrupos (){
     }
 } 
 
+async function getSitios (){
+    try {  
+      
+      const consulta = await fetch('https://ecuavisa-suscripciones.vercel.app/sitio/all');
+      const consultaJson = await consulta.json();
+      sitiosRaw.value = consultaJson.data;     
+
+      let sitios = [];
+      for(let sitio of consultaJson.data){
+        let item = {
+          title: sitio.nombre,
+          value: sitio._id
+        }
+        sitios.push(item);
+      }  
+      sitiosItems.value = sitios;       
+    } catch (error) {
+        console.error(error.message);
+    }
+} 
+
 onMounted(async()=>{
     await getPaquetes();
+    await getSitios();
 })
 
 const itemsPerPage = 8;
@@ -179,6 +204,11 @@ const loadingWizard = ref(false);
 
 const caracteristicasItems = ref([]);
     //------FUNCIONES
+
+function resolveSitio(id){
+    let sitioMap = sitiosRaw.value.find(item => item._id == id);
+    return sitioMap;
+}
 
 function resolveCaracteristicasItems(){
     
@@ -301,7 +331,7 @@ async function onEditPaquete(id){
     precioPromocional.value = paquete.precioPromocional;
     descripcionPrecios.value = paquete.descripcionPrecios;
     grupo.value = paquete.grupo;
-    sitio.value = paquete.sitio;
+    sitio.value = paquete.sitio._id;
     activoDesde.value = paquete.activoDesde;
     activoHasta.value = paquete.activoHasta;
     color.value = paquete.color;
@@ -338,7 +368,7 @@ async function onComplete(){
         "precioPromocional": precioPromocional.value,
         "descripcionPrecios": descripcionPrecios.value,
         "grupo": grupo.value,
-        "sitio": sitio.value,
+        "sitio": resolveSitio(sitio.value),
         "activoDesde": activoDesde.value,
         "activoHasta": activoHasta.value,
         "color": color.value,
@@ -389,7 +419,7 @@ async function onComplete(){
         "precioPromocional": precioPromocional.value,
         "descripcionPrecios": descripcionPrecios.value,
         "grupo": grupo.value,
-        "sitio": sitio.value,
+        "sitio": resolveSitio(sitio.value),
         "activoDesde": activoDesde.value,
         "activoHasta": activoHasta.value,
         "color": color.value,
@@ -567,6 +597,7 @@ async function deletePaquete() {
                   nextButtonText="Siguiente"
                   backButtonText="Anterior"
                   finishButtonText="Guardar paquete"
+                  overflow=""
                 >
                   <tab-content title="Detalles del paquete" :before-change="validateAsync">
                    
@@ -623,11 +654,12 @@ async function deletePaquete() {
                         </VCol>
 
                         <VCol cols="12">
-                          <VRow >
+                          <VRow class="d-flex flex-wrap">
                                 
                             <VCol
                               cols="4"
                               md="4"
+                              class="mdContainer"
                             >
                             
                             <VSelect v-model="periodicidad" label="Periodicidad" :items="periodicidadItems" />  
@@ -636,6 +668,7 @@ async function deletePaquete() {
                             <VCol
                               cols="4"
                               md="4"
+                              class="mdContainer"
                             >
                             <VTextField
                                 v-model="ciclosPromocion"
@@ -647,6 +680,7 @@ async function deletePaquete() {
                             <VCol
                               cols="4"
                               md="4"
+                              class="mdContainer"
                             >
                             <VTextField
                                 v-model="precioPromocional"
@@ -681,10 +715,8 @@ async function deletePaquete() {
                               cols="6"
                               md="6"
                             >
-                            <VTextField
-                                v-model="sitio"
-                                label="Sitio"                                
-                              />
+                           
+                            <VSelect  v-model="sitio" label="Sitio" :items="sitiosItems" />  
                             </VCol>
                           </VRow>
 
@@ -710,20 +742,23 @@ async function deletePaquete() {
                             </VCol>
                           </VRow>
 
-                          <VRow > 
+                          <VRow class="d-flex flex-wrap"> 
                             <VCol
                               cols="2"
                               md="2"
+                              class="smContainer"
                             >
                             <VTextField
                                 v-model="color"
-                                label="Color"                                
+                                label="Color"   
+                                                             
                               />
                             </VCol>
 
                             <VCol
                               cols="4"
                               md="4"
+                              class="smContainer"
                             >
                             
                             <VSelect v-model="destaque" label="Destaque" :items="destaqueItems" />
@@ -732,6 +767,7 @@ async function deletePaquete() {
                             <VCol
                               cols="6"
                               md="6"
+                              class="mdContainer"
                             >
                             <VTextField
                                 v-model="clasesCss"
@@ -739,7 +775,7 @@ async function deletePaquete() {
                               />
                             </VCol>
 
-                            <VCol cols="6" md="6">
+                            <VCol cols="6" md="6" class="lgContainer">
                             <span>Visibilidad</span>  
                             <VRadioGroup v-model="visibilidad">
                               <VRadio
@@ -751,7 +787,7 @@ async function deletePaquete() {
                             </VRadioGroup>
                             </VCol>
 
-                            <VCol cols="6" md="6">
+                            <VCol cols="6" md="6" class="lgContainer">
                             <span>Cambio de plan</span>  
                             <VRadioGroup v-model="cambioPlan">
                               <VRadio
@@ -763,7 +799,7 @@ async function deletePaquete() {
                             </VRadioGroup>
                             </VCol>
 
-                            <VCol cols="6" md="6">
+                            <VCol cols="6" md="6" class="lgContainer">
                             <span>¿Es un paquete de cortesía?</span>  
                             <VRadioGroup v-model="paqueteCortesia">
                               <VRadio
@@ -775,7 +811,7 @@ async function deletePaquete() {
                             </VRadioGroup>
                             </VCol>
 
-                            <VCol cols="6" md="6">
+                            <VCol cols="6" md="6" class="lgContainer">
                             <span>¿Solicitar dirección durante la compra?</span>  
                             <VRadioGroup v-model="direccionCompra">
                               <VRadio
@@ -904,4 +940,15 @@ async function deletePaquete() {
   }
 }
 
+@media screen and (max-width: 1000px) {
+  .smContainer {
+   min-width: 100px; 
+  }
+  .mdContainer {
+   min-width: 200px; 
+  }
+  .lgContainer {
+   min-width: 300px; 
+  }
+}
 </style>
