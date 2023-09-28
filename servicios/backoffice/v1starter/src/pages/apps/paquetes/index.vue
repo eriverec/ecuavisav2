@@ -6,7 +6,8 @@ import 'vue3-form-wizard/dist/style.css';
 const dataPaquetes = ref([]);
 const dataCaracteristicas = ref([]);
 const isLoading = ref(false);
-
+const dataGrupos = ref([]);
+const gruposItems = ref([]);
 async function getPaquetes (){
     try {
       isLoading.value = true;  
@@ -26,6 +27,32 @@ async function getCaracteristicas (){
       const consultaJson = await consulta.json();
       dataCaracteristicas.value = consultaJson.data;     
              
+    } catch (error) {
+        console.error(error.message);
+    }
+} 
+
+async function getGrupos (){
+    try {       
+      const consulta = await fetch('https://ecuavisa-modulos.vercel.app/grupo');
+      const consultaJson = await consulta.json();
+      dataGrupos.value = consultaJson.data;   
+
+      let grupos = [];
+      for(let grupo of consultaJson.data){
+        let item = {
+          title: grupo.nombre,
+          value: grupo._id
+        }
+        grupos.push(item);
+      }
+      grupos.push({
+        title: "No aplica",
+        value: "no aplica"
+      });
+      gruposItems.value =  grupos;
+
+      console.log('.value',gruposItems.value);   
     } catch (error) {
         console.error(error.message);
     }
@@ -53,6 +80,25 @@ const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
 };
 
+// ------------------------------ITEMS----------------------------------------------
+const destaqueItems = [
+  "No aplica", "Recomendado", "Mejor precio", "Oferta"
+]
+
+const periodicidadItems = [
+  "No aplica", "Diaria", "Mensual", "Bimestral", "Trimestral", "Cuatrimestral", "5 Meses", "Semestral", "8 Meses", "Anual", "18 Meses", "Bianual"
+]
+
+const tipoPagoItems = [
+  {
+    title: "Pago único",
+    value: "pago unico"
+  },
+  {
+    title: "Recursivo",
+    value: "Recursivo"
+  }
+]
 
 
 // -------------------------------ACCIONES------------------------------------------
@@ -74,6 +120,13 @@ const activoHasta = ref('');
 const color = ref('');
 const destaque = ref('');
 const clasesCss = ref('');
+
+const url_imagen = ref('');
+const visibilidad = ref('');
+const cambioPlan = ref('');
+const paqueteCortesia = ref(false);
+const direccionCompra = ref('');
+const descripcionCustom = ref('');
 //const caracteristicas = ref([]);
 
 const caracteristicasSelected = ref([]);
@@ -87,6 +140,7 @@ const loadingWizard = ref(false);
 
 const caracteristicasItems = ref([]);
     //------FUNCIONES
+
 function resolveCaracteristicasItems(){
     
     let caracteristicasRaw = Array.from(dataCaracteristicas.value);
@@ -175,6 +229,7 @@ async function onAddPaquete(){
     resetForm(); 
     accionForm.value = 'add';
     await getCaracteristicas();
+    await getGrupos();
     isDialogActive.value = true;
 }
 
@@ -185,6 +240,7 @@ async function onEditPaquete(id){
     resetForm(); 
     accionForm.value = 'edit';
     await getCaracteristicas();
+    await getGrupos();
     const consulta = await fetch('https://ecuavisa-modulos.vercel.app/paquete/' + id);
     const consultaJson = await consulta.json();
     const paquete = consultaJson.data;
@@ -482,10 +538,8 @@ async function deletePaquete() {
                               cols="6"
                               md="6"
                             >
-                            <VTextField
-                                v-model="tipoPago"
-                                label="Tipo de pago"                                
-                              />
+                            
+                            <VSelect v-model="tipoPago" label="Tipo de pago" :items="tipoPagoItems" />    
                             </VCol>
                             <VCol
                               cols="6"
@@ -506,10 +560,8 @@ async function deletePaquete() {
                               cols="4"
                               md="4"
                             >
-                            <VTextField
-                                v-model="periodicidad"
-                                label="Periodicidad"                                
-                              />
+                            
+                            <VSelect v-model="periodicidad" label="Periodicidad" :items="periodicidadItems" />  
                             </VCol>
 
                             <VCol
@@ -604,10 +656,8 @@ async function deletePaquete() {
                               cols="4"
                               md="4"
                             >
-                            <VTextField
-                                v-model="destaque"
-                                label="Destaque"                                
-                              />
+                            
+                            <VSelect v-model="destaque" label="Destaque" :items="destaqueItems" />
                             </VCol>
 
                             <VCol
