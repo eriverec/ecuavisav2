@@ -2380,7 +2380,7 @@ INICIO - BLOQUE - MUNDO
 /* @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap'); */
 
 .bloque_estadio_2 .noticias .BLOQUE_IMG_SEC_TIT_60x100 .article_envivo{
-  display: inline-block;
+  /* display: inline-block; */
 }
 
 
@@ -3530,9 +3530,12 @@ BLOQUE DE COLUMNISTA - FIN
   padding: 3px 7px;
   font-family: 'Archivo';
   text-transform: uppercase;
-  font-size: 20px;
+  font-size: 18px;
   margin-right: 10px;
   display: flex;
+  width: 115px;
+  margin-bottom: 10px;
+  align-items: center;
 }
 
 .punnto_svg {
@@ -3577,12 +3580,12 @@ BLOQUE DE COLUMNISTA - FIN
       font-size: 10px;
       margin-right: 10px;
       display: flex;
-      width: 100%;
+      width: 130px;
       gap: 3px;
       flex-wrap: wrap;
       align-content: flex-start;
       align-items: center;
-      justify-content: space-between;
+      justify-content: flex-start;
   }
 }
 
