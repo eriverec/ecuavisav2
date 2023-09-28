@@ -384,7 +384,7 @@ async function onComplete(){
         }
 
         var raw = JSON.stringify(jsonEnviar);
-        console.log('jsonEnviar ', jsonEnviar);
+        //console.log('jsonEnviar ', jsonEnviar);
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
