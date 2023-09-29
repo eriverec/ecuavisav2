@@ -183,7 +183,7 @@ function cargarPlanes(producto, productos) {
 		const suscribirseButtons = document.querySelectorAll('.btn.boton_sus');
 		suscribirseButtons.forEach(button => {
 			button.addEventListener('click', () => {
-				if (!ECUAVISA_EC.login()) {
+				if (ECUAVISA_EC.login()) {
 					console.log("estas logueado");
 				} else {
 					console.log("no estas logueado");
