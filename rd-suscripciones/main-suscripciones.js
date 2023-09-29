@@ -180,21 +180,23 @@ function cargarPlanes(producto, productos) {
 			});
 		});
 
+
 		const suscribirseButtons = document.querySelectorAll('.btn.boton_sus');
 		suscribirseButtons.forEach(button => {
-			const pathnn = window.location.href;
-			const searnn = window.location.search;
 			button.addEventListener('click', () => {
 
-				if (ECUAVISA_EC.login()) {
+				if (!ECUAVISA_EC.login()) {
 					console.log("estas logueado");
 				} else {
 					console.log("no estas logueado");
-					const gru = document.querySelector('.form-group');
-					gru.innerHTML = `
+					setTimeout(() => {
+						const gru = document.querySelector('.form-group');
+						gru.innerHTML = `
 						<span>Debes iniciar sesion</span> <br>
-						<a href="https://www.ecuavisa.com/servicios/login/?nextpage=${pathnn}" class="btn btn-secondary html_Login" onclick="">Login</a>
-					`
+						<a href="https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}" class="btn btn-secondary html_Login" onclick="">Login</a>
+					`;
+					}, 200);
+
 				}
 
 				const planData = JSON.parse(button.getAttribute('data-plan'));
