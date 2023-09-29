@@ -186,7 +186,7 @@ function cargarPlanes(producto, productos) {
 			const searnn = window.location.search;
 			button.addEventListener('click', () => {
 
-				if (!ECUAVISA_EC.login()) {
+				if (ECUAVISA_EC.login()) {
 					console.log("estas logueado");
 				} else {
 					console.log("no estas logueado");
