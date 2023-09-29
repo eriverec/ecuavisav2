@@ -32,14 +32,12 @@ function buscarPaquete(id) {
 function detallesPaquete(id) {
 	const planData = buscarPaquete(id);
 	modalPaquete.show();
-	console.log(planData);
 }
 
 function URLParams() {
 	if (new URLSearchParams(window.location.search).get('paquete')) {
 		const valueParam = new URLSearchParams(window.location.search).get('paquete');
 		detallesPaquete(valueParam);
-		console.log(valueParam);
 	}
 }
 
@@ -115,7 +113,7 @@ function cargarPlanes(producto, productos) {
               </h5>
               <div class="btn boton_sus" data-id="${plan.id}" data-plan='${JSON.stringify(plan)}'>Suscríbete</div>
 
-              <img src="${plan.url_imagen ? imgPreder : plan.url_imagen}" alt="Ecuavisa">
+              <img src="${plan.url_imagen ? plan.url_imagen : imgPreder}" alt="Ecuavisa">
               <div class="plan_grupos">
                 ${descripcionHtml}
               </div>
@@ -145,52 +143,57 @@ function cargarPlanes(producto, productos) {
 		const susButtons = document.querySelectorAll('.boton_sus');
 		susButtons.forEach(button => {
 			button.addEventListener('click', () => {
+				// const planId = button.getAttribute('data-id');
+				// const idEcuavisa = ECUAVISA_EC.USER_data().id;
+				// const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
+				// const load_BTN = document.querySelector(`.btn.boton_sus[data-id='${planId}']`);
+				// const getToken = localStorage.getItem('x-token');
+				// // load_BTN.style.opacity = "0.4";
+				// console.log('Plan ID:', planId, idEcuavisa, idwylexIdObject);
 
-				if (ECUAVISA_EC.login()) {
-					console.log("estas logueado");
-					// const planId = button.getAttribute('data-id');
-					// const idEcuavisa = ECUAVISA_EC.USER_data().id;
-					// const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
-					// const load_BTN = document.querySelector(`.btn.boton_sus[data-id='${planId}']`);
-					// const getToken = localStorage.getItem('x-token');
-					// // load_BTN.style.opacity = "0.4";
-					// console.log('Plan ID:', planId, idEcuavisa, idwylexIdObject);
+				// myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTYwMDkwNjEsImV4cCI6MTY5NjAxMDI2MX0.YPjL_uhp2zTUnsZwEr45rn2D7E4d11OSkJui8W38-0k");
 
-					// myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTYwMDkwNjEsImV4cCI6MTY5NjAxMDI2MX0.YPjL_uhp2zTUnsZwEr45rn2D7E4d11OSkJui8W38-0k");
+				// fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
+				// 	method: 'POST',
+				// 	headers: {
+				// 		'Authorization': 'Bearer ' + getToken,
+				// 		'Content-Type': 'application/json'
+				// 	},
+				// 	body: JSON.stringify({
+				// 		"idPaquete": planId,
+				// 		"idUsuario": idEcuavisa,
+				// 		"idUsuarioObject": idwylexIdObject,
+				// 		"metodoPago": "1"
+				// 	}),
+				// 	redirect: 'follow'
+				// })
+				// 	.then(response => response.json())
+				// 	.then(result => {
+				// 		console.log(result);
+				// 		load_BTN.style.opacity = "1";
+				// 	})
+				// 	.catch(error => {
+				// 		console.log('error', error);
+				// 		load_BTN.style.opacity = "1";
+				// 	});
 
-					// fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
-					// 	method: 'POST',
-					// 	headers: {
-					// 		'Authorization': 'Bearer ' + getToken,
-					// 		'Content-Type': 'application/json'
-					// 	},
-					// 	body: JSON.stringify({
-					// 		"idPaquete": planId,
-					// 		"idUsuario": idEcuavisa,
-					// 		"idUsuarioObject": idwylexIdObject,
-					// 		"metodoPago": "1"
-					// 	}),
-					// 	redirect: 'follow'
-					// })
-					// 	.then(response => response.json())
-					// 	.then(result => {
-					// 		console.log(result);
-					// 		load_BTN.style.opacity = "1";
-					// 	})
-					// 	.catch(error => {
-					// 		console.log('error', error);
-					// 		load_BTN.style.opacity = "1";
-					// 	});
-				} else {
-					console.log("no estas logueado");
-					redireccionAlLogin();
-				}
 			});
 		});
 
 		const suscribirseButtons = document.querySelectorAll('.btn.boton_sus');
 		suscribirseButtons.forEach(button => {
 			button.addEventListener('click', () => {
+				if (!ECUAVISA_EC.login()) {
+					console.log("estas logueado");
+				} else {
+					console.log("no estas logueado");
+					const gru = document.querySelector('.form-group');
+					gru.innerHTML = `
+						<span>Debes iniciar sesion</span> <br>
+						<div class="btn btn-secondary html_Login" onclick="redireccionAlLogin();">Login</div>
+					
+					`  
+				}
 				const planData = JSON.parse(button.getAttribute('data-plan'));
 				var varPaquete = planData.id;
 				var parametrosURL = new URLSearchParams(window.location.search);
