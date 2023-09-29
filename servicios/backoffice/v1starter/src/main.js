@@ -31,3 +31,6 @@ app.use(abilitiesPlugin, ability, {
 
 // Mount vue app
 app.mount('#app')
+
+
+

@@ -1,4 +1,5 @@
 <script setup>
+
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 
 import UserTabDispositivos from '@/views/dashboards/traceability/UserTabDispositivos.vue';
@@ -227,44 +228,49 @@ const userListMeta = [
 </script>
 
 <template>
+
   <section>
     <VRow >
-      <VCol
+      <VCol class="mr-10"
     
         v-for="meta in userListMeta"
         :key="meta.title"
         cols="12"
         sm="6"
-        lg="3"
+        lg="2"
       >
-      <VCard>
-        <VCardText class="d-flex justify-space-between">
-          <div>
-            <span>{{ meta.title }}</span>
-            <!-- <h4 v-if="isLoading">Cargando...</h4> -->
-              <div>
-                <div class="d-flex align-center gap-2 my-1">
-                   <VChip label color="success">Web</VChip>  {{ meta.stats }}
-                  <span class="text-success" :hidden="meta.percentage ? false : true " >({{ meta.percentage }}%) </span>
-                </div>
-                <div class="d-flex align-center gap-2 my-1">
-                  <VChip label color="warning">App</VChip> {{ meta.subtitle }} <span class="text-warning" :hidden="meta.percentageApp ? false : true " >({{ meta.percentageApp }}%) </span>
-                </div>
-                <div class="d-flex align-center gap-2 my-1">
-                  <VChip label>Total</VChip> {{ meta.total }}
-                </div>
+      <VCard :style="{ width: '270px' }">
+  <VCardText class="d-flex justify-space-between">
+    <div>
+      <span>{{ meta.title }}</span>
+      <div>
+        <div class="d-flex align-center gap-2 my-1">
+          <svg xmlns="http://www.w3.org/2000/svg" color="#7367F0" width="18" height="18" viewBox="0 0 256 256"><path fill="currentColor" d="M245.11 60.68c-7.65-13.19-27.84-16.16-58.5-8.66A95.93 95.93 0 0 0 32 128a98 98 0 0 0 .78 12.31C5.09 169 5.49 186 10.9 195.32C16 204.16 26.64 208 40.64 208a124.11 124.11 0 0 0 28.79-4A95.93 95.93 0 0 0 224 128a97.08 97.08 0 0 0-.77-12.25c12.5-13 20.82-25.35 23.65-35.92c1.95-7.32 1.36-13.76-1.77-19.15ZM128 48a80.11 80.11 0 0 1 78 62.2c-17.06 16.06-40.15 32.53-62.07 45.13c-27.55 15.81-51.45 25.67-70.51 31.07A79.94 79.94 0 0 1 128 48ZM24.74 187.29c-1.46-2.51-.65-7.24 2.22-13a79.05 79.05 0 0 1 10.29-15.05a96 96 0 0 0 18 31.32c-17.25 2.9-28.01 1.05-30.51-3.27ZM128 208a79.45 79.45 0 0 1-38.56-9.94a370 370 0 0 0 62.43-28.86c21.58-12.39 40.68-25.82 56.07-39.08A80.07 80.07 0 0 1 128 208ZM231.42 75.69c-1.7 6.31-6.19 13.53-12.63 21.13a95.69 95.69 0 0 0-18-31.35c14.21-2.35 27.37-2.17 30.5 3.24c.9 1.57.95 3.92.13 6.98Z"/></svg>
+<!-- Ícono para "Web" -->
+          <label class="text-primary">Web:</label>  {{ meta.stats }}
+          <span class="text-success" :hidden="meta.percentage ? false : true " >({{ meta.percentage }}%) </span>
+        </div>
+        <div class="d-flex align-center gap-2 my-1">
+          <svg xmlns="http://www.w3.org/2000/svg" color="#7367F0" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="m17.578 4.432l-2-1.05C13.822 2.461 12.944 2 12 2s-1.822.46-3.578 1.382l-.321.169l8.923 5.099l4.016-2.01c-.646-.732-1.688-1.279-3.462-2.21Zm4.17 3.532l-3.998 2V13a.75.75 0 0 1-1.5 0v-2.287l-3.5 1.75v9.441c.718-.179 1.535-.607 2.828-1.286l2-1.05c2.151-1.129 3.227-1.693 3.825-2.708c.597-1.014.597-2.277.597-4.8v-.117c0-1.893 0-3.076-.252-3.978ZM11.25 21.904v-9.44l-8.998-4.5C2 8.866 2 10.05 2 11.941v.117c0 2.525 0 3.788.597 4.802c.598 1.015 1.674 1.58 3.825 2.709l2 1.049c1.293.679 2.11 1.107 2.828 1.286ZM2.96 6.641l9.04 4.52l3.411-1.705l-8.886-5.078l-.103.054c-1.773.93-2.816 1.477-3.462 2.21Z"/></svg>
+ <!-- Ícono para "App" -->
+          <label class="text-primary">App:</label> {{ meta.subtitle }} <span class="text-success" :hidden="meta.percentageApp ? false : true " >({{ meta.percentageApp }}%) </span>
+        </div>
+        <div class="d-flex align-center gap-2 my-1">
+          <svg xmlns="http://www.w3.org/2000/svg" color="#7367F0" width="18" height="18" viewBox="0 0 26 26"><path fill="currentColor" d="M12.906-.031a1 1 0 0 0-.125.031A1 1 0 0 0 12 1v1H3a3 3 0 0 0-3 3v13c0 1.656 1.344 3 3 3h9v.375l-5.438 2.719a1.006 1.006 0 0 0 .875 1.812L12 23.625V24a1 1 0 1 0 2 0v-.375l4.563 2.281a1.006 1.006 0 0 0 .875-1.812L14 21.375V21h9c1.656 0 3-1.344 3-3V5a3 3 0 0 0-3-3h-9V1a1 1 0 0 0-1.094-1.031zM2 5h22v13H2V5zm18.875 1a1 1 0 0 0-.594.281L17 9.563L14.719 7.28a1 1 0 0 0-1.594.219l-2.969 5.188l-1.219-3.063a1 1 0 0 0-1.656-.344l-3 3a1.016 1.016 0 1 0 1.439 1.44l1.906-1.906l1.438 3.562a1 1 0 0 0 1.812.125l3.344-5.844l2.062 2.063a1 1 0 0 0 1.438 0l4-4A1 1 0 0 0 20.875 6z"/></svg>
+ <!-- Ícono para "Total" -->
+          <label class="text-primary">Total:</label> {{ meta.total }}
+        </div>
+      </div>
+    </div>
+    <VAvatar
+      rounded
+      variant="tonal"
+      :color="meta.color"
+      v-html="meta.icon"
+    />
+  </VCardText>
+</VCard>
 
-              </div>
-            </div>
-
-            <VAvatar
-              rounded
-              variant="tonal"
-              :color="meta.color"
-              v-html="meta.icon"
-            />
-          </VCardText>
-        </VCard>
       </VCol>
     </VRow>
 
@@ -283,7 +289,7 @@ const userListMeta = [
           :key="tab.icon"
         >
           <VIcon
-            :size="18"
+            :size="15"
             :icon="tab.icon"
             class="me-1"
           />
