@@ -9,9 +9,12 @@
   <link
     href="https://fonts.googleapis.com/css2?family=Archivo:wght@100;200;300;400;500;600;700;800;900&amp;display=swap"
     rel="stylesheet" type="text/css">
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-      <script src="main.js"></script>
-      <script src="global.js"></script>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AdrianVillamayor/Wizard-JS@1.9.9/styles/css/main.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="main.js"></script>
+  <script src="global.js"></script>
+
 </head>
 
 <body>
@@ -27,6 +30,212 @@
   <div class="tab-content container">
     <div class="list-card-plans"></div>
   </div>
+
+
+
+  <!-- Modal -->
+  <div class="modal fade" id="modalPaqueteHtml">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <!-- Encabezado del modal -->
+        <div class="modal-header">
+          <h4 class="modal-title">Detalles del Plan</h4>
+          <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
+      
+        </div>
+        <!-- Cuerpo del modal -->
+        <div class="modal-body" id="modal-body-content">
+          <!-- El contenido dinámico se insertará aquí -->
+          <main class="container-fluid">
+
+            <form class="wizard" id="formWizard">
+
+              <aside class="wizard-content container">
+                <div class="wizard-step" data-title="Acceso">
+                  <div class="form-group">
+                    <p>Nombre:</p>
+                    <p>Apellido:</p>
+                    <p>correo:</p>
+                  </div>
+                </div>
+
+                <div class="wizard-step" data-title="Datos de facturación">
+                  <div class="form-group">
+                    <label for="titleNoti">Nombre y apellidos <span class="required">*</span></label>
+                    <input type="text" name="title" class="form-control required banner-info" id="titleNoti"
+                      placeholder="Example: Message title">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="bodyNoti">Direccion de domicilio <span class="required">*</span></label>
+                    <input type="text" name="body" class="form-control required banner-info" id="bodyNoti"
+                      placeholder="Example: Message body">
+                  </div>
+
+                  <div class="form-group">
+                    <label for="imageNoti">Codigo ZIP</label>
+                    <input type="text" name="body" class="form-control required banner-info" id="bodyNoti"
+                      placeholder="Example: Message body">
+                  </div>
+
+                </div>
+
+                <div class="wizard-step" data-title="Método de pago">
+                  <div class="form-group">
+                    <label for="bodyNoti">Metodo</label>
+                    <select class="form-control" name="segment">
+                      <option>Select one ...</option>
+                      <option value="0">Paypal</option>
+                      <option value="1">Bitcoin</option>
+                      <option value="2">Diners</option>
+                      <option value="3">Visa</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label for="titleNoti">Action <span class="required">*</span></label>
+                    <select class="form-control required" name="action">
+                      <option>Select one ...</option>
+                      <option value="0">Open bolus configurator</option>
+                    </select>
+                  </div>
+
+                  
+                </div>
+
+              </aside>
+            </form>
+
+            <div class="align-content-center justify-content-start m-3" style="display:flex">
+              <button id="btn_lock" class="btn btn-danger">Lock</button>
+              <button id="btn_unlock" class="btn btn-primary ms-4">Unlock</button>
+              <button id="btn_reset" class="btn btn-warning ms-4">Reset</button>
+              <button id="btn_append" class="btn btn-secondary ms-4">Add new step</button>
+            </div>
+          </main>
+        </div>
+
+        <!-- Pie del modal -->
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/AdrianVillamayor/Wizard-JS@1.9.9/src/wizard.min.js"></script>
+  <script>
+    let wz_class = ".wizard";
+
+    let args = {
+      wz_class: wz_class,
+      wz_nav_style: "dots", // dots, tabs, progress
+      wz_ori: "vertical",
+      buttons: true,
+      navigation: "all" // buttons, nav, all
+    };
+
+    document.addEventListener("wz.ready", function (e) {
+      console.log("My body is ready");
+
+      console.log(`↓ Target ↓`);
+      console.log(e.detail.target);
+
+      console.log(`↓ Elem ↓`);
+      console.log(e.detail.elem);
+    });
+
+    const wizard = new Wizard(args);
+
+    wizard.init();
+
+    document.getElementById("btn_reset").onclick = function () {
+      wizard.reset();
+    };
+
+    document.getElementById("btn_lock").onclick = function () {
+      wizard.lock();
+    };
+
+    document.getElementById("btn_unlock").onclick = function () {
+      wizard.unlock();
+    };
+
+    let $wz_doc = document.querySelector(wz_class);
+
+    $wz_doc.addEventListener("wz.btn.prev", function (e) {
+      console.log("Prev Step");
+    });
+
+    $wz_doc.addEventListener("wz.btn.next", function (e) {
+      console.log("Next Step");
+    });
+
+    $wz_doc.addEventListener("wz.nav.forward", function (e) {
+      console.log("Forward Nav");
+    });
+
+    $wz_doc.addEventListener("wz.nav.backward", function (e) {
+      console.log("Backward Nav");
+    });
+
+    $wz_doc.addEventListener("wz.form.submit", function (e) {
+      alert("Form Submit");
+    });
+
+    $wz_doc.addEventListener("wz.end", function (e) {
+      alert("Wizard End");
+    });
+
+    $wz_doc.addEventListener("wz.error", function (e) {
+      console.log(`↓ ID ↓`)
+      console.log(e.detail.id) // form_validaton
+
+      console.log(`↓ Message ↓`)
+      console.log(e.detail.msg) //options.i18n.form_validation
+    });
+
+    $wz_doc.addEventListener("wz.lock", function (e) {
+      alert("Wizard locked");
+    });
+
+    $wz_doc.addEventListener("wz.unlock", function (e) {
+      alert("Wizard unlocked");
+    });
+
+    $wz_doc.addEventListener("wz.reset", function (e) {
+      document.getElementById("formWizard").reset();
+      alert("Wizard has restarted");
+    });
+
+    $wz_doc.addEventListener("wz.update", function (e) {
+      alert("The Wizard has been updated !");
+      console.log(`↓ Target ↓`)
+      console.log(e.detail.target) // .wizard
+
+      console.log(`↓ DOM Elem ↓`)
+      console.log(e.detail.elem) // DOM form#wizard.wizard.horizontal
+    });
+
+
+    document.getElementById("btn_append").onclick = function () {
+      setStep(wizard);
+    };
+
+    function setStep(wizard) {
+      $html = `<div class="card card-body m-4 wizard-step" data-id="patata" data-title="Datos de facturacion"> <label class="question"> Embedded step </label> <input type="text" maxlength="100" name="patata" class="form-control required" placeholder="Embedded step"> </div>`;
+
+      const wz = document.querySelector(wizard.wz_class);
+      const wz_content = wz.querySelector(wizard.wz_content);
+
+      let target = wz_content.querySelector(`${wizard.wz_step}[data-step="2"]`);
+
+      target.insertAdjacentHTML("beforebegin", $html);
+
+      wizard.update();
+    }
+
+  </script>
   <script src="main-suscripciones.js"></script>
 
 

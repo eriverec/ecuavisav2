@@ -1,10 +1,56 @@
+var productos = [];
+
+var modalPaquete = new bootstrap.Modal(document.getElementById('modalPaqueteHtml'), {
+	keyboard: false
+})
+
+var modalPaqueteHtml = document.getElementById('modalPaqueteHtml')
+modalPaqueteHtml.addEventListener('hidden.bs.modal', function (event) {
+	var urlActual = window.location.href;
+
+	// Crea un objeto URL
+	var url = new URL(urlActual);
+
+	// Elimina el parámetro "paquete"
+	url.searchParams.delete("paquete");
+
+	// Reemplaza la URL actual en la barra de direcciones sin recargar la página
+	window.history.replaceState({}, document.title, url.toString());
+})
+
+function buscarPaquete(id) {
+	for (let i = 0; i < productos.length; i++) {
+		for (let x = 0; x < productos[i].planes.length; x++) {
+			if (id === productos[i].planes[x].id) {
+				return productos[i].planes[x]
+			}
+		}
+	}
+	return null;
+}
+
+function detallesPaquete(id) {
+	const planData = buscarPaquete(id);
+	modalPaquete.show();
+	console.log(planData);
+}
+
+function URLParams() {
+	if (new URLSearchParams(window.location.search).get('paquete')) {
+		const valueParam = new URLSearchParams(window.location.search).get('paquete');
+		detallesPaquete(valueParam);
+		console.log(valueParam);
+	}
+}
+
+
 function cargarNombresYPlanes() {
 	const loadingElement = document.getElementById('loading');
 	loadingElement.style.display = 'block';
 	fetch('https://ecuavisa-modulos.vercel.app/paquete/display/all')
 		.then(response => response.json())
 		.then(data => {
-			const productos = data.data;
+			productos = data.data;
 			const resp = data.resp;
 			const x_Token = data.token;
 			localStorage.setItem('x-token', x_Token);
@@ -12,7 +58,7 @@ function cargarNombresYPlanes() {
 			if (resp) {
 				const tabContainer = document.querySelector('.tab-container');
 				tabContainer.innerHTML = ''; // Limpiar contenido anterior
-
+				URLParams();
 				productos.forEach(producto => {
 					const productoNombre = producto.nombre;
 					const buttonHtml = `
@@ -67,7 +113,8 @@ function cargarPlanes(producto, productos) {
                 <span class="span_">$${plan.precio}</span>
                 <span>/${plan.frecuencia}</span>
               </h5>
-              <div class="btn boton_sus" data-id="${plan.id}">Suscríbete</div>
+              <div class="btn boton_sus" data-id="${plan.id}" data-plan='${JSON.stringify(plan)}'>Suscríbete</div>
+
               <img src="${plan.url_imagen ? imgPreder : plan.url_imagen}" alt="Ecuavisa">
               <div class="plan_grupos">
                 ${descripcionHtml}
@@ -79,6 +126,7 @@ function cargarPlanes(producto, productos) {
           </div>
         `;
 			tabContent.innerHTML += planHtml;
+
 		});
 
 		// Ocultar todas las tabs
@@ -94,48 +142,66 @@ function cargarPlanes(producto, productos) {
 		});
 
 
-		// Evento click para la suscripción
 		const susButtons = document.querySelectorAll('.boton_sus');
 		susButtons.forEach(button => {
 			button.addEventListener('click', () => {
 
 				if (ECUAVISA_EC.login()) {
 					console.log("estas logueado");
-					const planId = button.getAttribute('data-id');
-					const idEcuavisa = ECUAVISA_EC.USER_data().id;
-					const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
-					const load_BTN = document.querySelector(`.btn.boton_sus[data-id='${planId}']`);
-					const getToken = localStorage.getItem('x-token');
-					load_BTN.style.opacity = "0.4";
-					console.log('Plan ID:', planId, idEcuavisa, idwylexIdObject);
+					// const planId = button.getAttribute('data-id');
+					// const idEcuavisa = ECUAVISA_EC.USER_data().id;
+					// const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
+					// const load_BTN = document.querySelector(`.btn.boton_sus[data-id='${planId}']`);
+					// const getToken = localStorage.getItem('x-token');
+					// // load_BTN.style.opacity = "0.4";
+					// console.log('Plan ID:', planId, idEcuavisa, idwylexIdObject);
 
-					fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
-						method: 'POST',
-						headers: {
-							'x-auth-token': getToken,
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({
-							"idPaquete": planId,
-							"idUsuario": idEcuavisa,
-							"idUsuarioObject": idwylexIdObject,
-							"metodoPago": "1"
-						}),
-						redirect: 'follow'
-					})
-						.then(response => response.json())
-						.then(result => {
-							console.log(result);
-							load_BTN.style.opacity = "1";
-						})
-						.catch(error => {
-							console.log('error', error);
-							load_BTN.style.opacity = "1";
-						});
+					// myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTYwMDkwNjEsImV4cCI6MTY5NjAxMDI2MX0.YPjL_uhp2zTUnsZwEr45rn2D7E4d11OSkJui8W38-0k");
+
+					// fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
+					// 	method: 'POST',
+					// 	headers: {
+					// 		'Authorization': 'Bearer ' + getToken,
+					// 		'Content-Type': 'application/json'
+					// 	},
+					// 	body: JSON.stringify({
+					// 		"idPaquete": planId,
+					// 		"idUsuario": idEcuavisa,
+					// 		"idUsuarioObject": idwylexIdObject,
+					// 		"metodoPago": "1"
+					// 	}),
+					// 	redirect: 'follow'
+					// })
+					// 	.then(response => response.json())
+					// 	.then(result => {
+					// 		console.log(result);
+					// 		load_BTN.style.opacity = "1";
+					// 	})
+					// 	.catch(error => {
+					// 		console.log('error', error);
+					// 		load_BTN.style.opacity = "1";
+					// 	});
 				} else {
 					console.log("no estas logueado");
 					redireccionAlLogin();
 				}
+			});
+		});
+
+		const suscribirseButtons = document.querySelectorAll('.btn.boton_sus');
+		suscribirseButtons.forEach(button => {
+			button.addEventListener('click', () => {
+				const planData = JSON.parse(button.getAttribute('data-plan'));
+				var varPaquete = planData.id;
+				var parametrosURL = new URLSearchParams(window.location.search);
+				parametrosURL.set('paquete', varPaquete);
+				var urlBase = window.location.href.split('?')[0];
+				var nuevaURL = urlBase + '?' + parametrosURL.toString();
+				history.replaceState(null, null, nuevaURL);
+				detallesPaquete(varPaquete);
+
+				// Construir el contenido dinámico del modal utilizando una plantilla de cadena
+				// const modalContent = `${planData.nombre_plan}`;
 			});
 		});
 
