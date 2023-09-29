@@ -1,11 +1,14 @@
 function cargarNombresYPlanes() {
 	const loadingElement = document.getElementById('loading');
 	loadingElement.style.display = 'block';
-	fetch('https://ecuavisa-pricing.vercel.app/pricing/get/all/producto')
+	fetch('https://ecuavisa-modulos.vercel.app/paquete/display/all')
 		.then(response => response.json())
 		.then(data => {
 			const productos = data.data;
 			const resp = data.resp;
+			const x_Token = data.token;
+			localStorage.setItem('x-token', x_Token);
+			// console.log(x_Token);
 			if (resp) {
 				const tabContainer = document.querySelector('.tab-container');
 				tabContainer.innerHTML = ''; // Limpiar contenido anterior
@@ -47,7 +50,7 @@ function cargarNombresYPlanes() {
 
 function cargarPlanes(producto, productos) {
 	const productoData = productos.find(item => item.nombre === producto);
-
+	const imgPreder = "https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/ecuavisayellow.jpg"
 	if (productoData) {
 		const planes = productoData.planes;
 		const tabContent = document.querySelector('.list-card-plans');
@@ -55,6 +58,7 @@ function cargarPlanes(producto, productos) {
 
 		planes.forEach(plan => {
 			const descripcionHtml = plan.descripcion.map(item => `<li class="icono">${item}</li>`).join('');
+
 			const planHtml = `
           <div class="tab card" style="width: 18rem;" data-producto="${producto}">
             <div class="card-body">
@@ -63,8 +67,8 @@ function cargarPlanes(producto, productos) {
                 <span class="span_">$${plan.precio}</span>
                 <span>/${plan.frecuencia}</span>
               </h5>
-              <a href="#" class="btn boton_sus">Suscríbete</a>
-              <img src="${plan.url_imagen}" alt="Ecuavisa">
+              <div class="btn boton_sus" data-id="${plan.id}">Suscríbete</div>
+              <img src="${plan.url_imagen ? imgPreder : plan.url_imagen}" alt="Ecuavisa">
               <div class="plan_grupos">
                 ${descripcionHtml}
               </div>
@@ -88,6 +92,53 @@ function cargarPlanes(producto, productos) {
 		tabToShow.forEach(tabTo => {
 			tabTo.style.display = 'flex';
 		});
+
+
+		// Evento click para la suscripción
+		const susButtons = document.querySelectorAll('.boton_sus');
+		susButtons.forEach(button => {
+			button.addEventListener('click', () => {
+
+				if (ECUAVISA_EC.login()) {
+					console.log("estas logueado");
+					const planId = button.getAttribute('data-id');
+					const idEcuavisa = ECUAVISA_EC.USER_data().id;
+					const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
+					const load_BTN = document.querySelector(`.btn.boton_sus[data-id='${planId}']`);
+					const getToken = localStorage.getItem('x-token');
+					load_BTN.style.opacity = "0.4";
+					console.log('Plan ID:', planId, idEcuavisa, idwylexIdObject);
+
+					fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
+						method: 'POST',
+						headers: {
+							'x-auth-token': getToken,
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							"idPaquete": planId,
+							"idUsuario": idEcuavisa,
+							"idUsuarioObject": idwylexIdObject,
+							"metodoPago": "1"
+						}),
+						redirect: 'follow'
+					})
+						.then(response => response.json())
+						.then(result => {
+							console.log(result);
+							load_BTN.style.opacity = "1";
+						})
+						.catch(error => {
+							console.log('error', error);
+							load_BTN.style.opacity = "1";
+						});
+				} else {
+					console.log("no estas logueado");
+					redireccionAlLogin();
+				}
+			});
+		});
+
 	}
 }
 // Cargar los nombres de los productos y los planes
