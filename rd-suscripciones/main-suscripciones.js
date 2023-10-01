@@ -18,6 +18,15 @@ modalPaqueteHtml.addEventListener('hidden.bs.modal', function (event) {
 	window.history.replaceState({}, document.title, url.toString());
 })
 
+modalPaqueteHtml.addEventListener('show.bs.modal', function (event) {
+	setTimeout(() => {
+		var bg = document.querySelector(".modal-backdrop");
+		bg.style.backgroundColor = "#e8ebf4";
+		bg.style.opacity = "1";
+	}, 200);
+	// $('.modal-backdrop').css('background', 'red');
+})
+
 function buscarPaquete(id) {
 	for (let i = 0; i < productos.length; i++) {
 		for (let x = 0; x < productos[i].planes.length; x++) {

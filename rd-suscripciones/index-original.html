@@ -13,7 +13,192 @@
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="main.js"></script>
   <script src="global.js"></script>
-  
+  <style type="text/css">
+    .wizard-nav .wizard-step {
+        background-color: #6bd8d1;
+        border: 1px solid #6BD8D2!important;
+        border-radius: 0px!important;
+        color: #2d21b5;
+        font-weight: 700;
+        font-size: 18px!important;
+        padding: 15px 20px 15px 20px!important;
+        line-height: 1.2;
+        fill: #2d21b5;
+    }
+
+    .wizard-nav .wizard-step.active {
+        background-color: #2927B9;
+        border: 1px solid #2927B9!important;
+        color: #ffffff;
+        fill: #ffff;
+    }
+    .wizard .wizard-content {
+        border: 1px solid #ffffff;
+        /*margin-top: 20px;
+        margin-bottom: 20px;*/
+        background-color: #ffffff;
+        border-radius: 7px;
+        padding: 30px 20px!important;
+    }
+
+    .modal-wizard .modal-content {
+        border: 1px solid #fff0;
+    }
+
+    .wizard-nav .wizard-step:first-child{
+        border-top-left-radius: 7px !important;
+        border-bottom-left-radius: 7px !important;
+    }
+
+    .wizard-nav .wizard-step:last-child{
+        border-top-right-radius: 7px !important;
+        border-bottom-right-radius: 7px !important;
+    }
+
+    .wizard .wizard-buttons {
+        display: flex;
+        justify-content: center!important;
+        gap: 20px;
+    }
+    button.wizard-btn.btn.btn-ecuavisa.finish,
+    button.wizard-btn.btn.btn-ecuavisa.next {
+        background: #2826b8;
+        color: #fff;
+        border-radius: 2px;
+        /* padding: 12px 8px; */
+        padding: 12px 20px;
+        text-align: center;
+        text-transform: uppercase;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        margin: 0;
+    }
+
+    button.wizard-btn.btn.btn-ecuavisa.prev {
+        background: #23DCD1;
+        color: #2826b8;
+        border-radius: 2px;
+        /* padding: 12px 8px; */
+        padding: 12px 20px;
+        text-align: center;
+        text-transform: uppercase;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 12px;
+        margin: 0;
+    }
+    .wizard-step[data-step="1"] .form-control {
+        padding: 0.675rem 1.1rem;
+        border-radius: 0.34rem;
+    }
+
+    .wizard-step[data-step="1"] .form-control::placeholder {
+      opacity: 0.3;
+      line-height: 1.2;
+      font-weight: 200;
+      font-size: 16px;
+    }
+
+    .wizard-step[data-step="1"] .form-label {
+        margin-bottom: 0.1rem;
+    }
+    .btn-changeplan {
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    max-width: 100%;
+    position: relative;
+    min-width: 100%;
+}
+.detaill-content {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+#changePlan .icon {
+    display: flex;
+    align-items: center;
+}
+
+#changePlan .flex-row {
+    gap: 20px;
+}
+.price-detaill {
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    align-items: center;
+}
+
+#changePlan .flex-row {
+    gap: 20px;
+}
+
+.price-detaill {
+    gap: 10px;
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    position: relative;
+    align-items: center;
+}
+
+#changePlan {
+    background-color: #e9ebf4;
+    padding: 20px 20px;
+    border-radius: 10px;
+    border: 2px solid #2d21b5;
+}
+
+.title-plan {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.title-detaill {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.change-descripcion {
+    font-size: 15px;
+    color: #afafaf;
+    line-height: 1.2;
+    letter-spacing: 1.2px;
+    font-weight: 200;
+}
+
+.price-detaill .valor {
+    position: relative;
+    font-size: 40px;
+    font-weight: 900;
+    line-height: 1.2;
+}
+
+.price-detaill .usd {
+    position: absolute;
+    left: -17px;
+    top: -5px;
+    font-size: 25px;
+    font-weight: 200;
+    color: #727272;
+}
+
+.price-detaill .frecuencia {
+    /* position: absolute; */
+    /* left: -17px; */
+    /* top: -5px; */
+    font-size: 16px;
+    font-weight: 200;
+    color: #727272;
+}
+  </style>
 </head>
 
 <body>
@@ -32,7 +217,7 @@
   </div>
 
   <!-- Modal -->
-  <div class="modal fade" id="modalPaqueteHtml">
+  <div class="modal fade modal-wizard" id="modalPaqueteHtml">
     <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <!-- Encabezado del modal -->
@@ -42,14 +227,17 @@
       
         </div>
         <!-- Cuerpo del modal -->
-        <div class="modal-body" id="modal-body-content">
+        <div class="modal-body pb-4" id="modal-body-content">
           <!-- El contenido dinámico se insertará aquí -->
-          <main class="container-fluid">
+          <main class="container-fluid pb-4">
 
             <form class="wizard" id="formWizard">
 
               <aside class="wizard-content container">
-                <div class="wizard-step" data-title="Acceso">
+                <div class="wizard-step" data-title='<div class="svg-title mb-2">
+                  <svg height="30px" width="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>login</title><path d="M10,17V14H3V10H10V7L15,12L10,17M10,2H19A2,2 0 0,1 21,4V20A2,2 0 0,1 19,22H10A2,2 0 0,1 8,20V18H10V20H19V4H10V6H8V4A2,2 0 0,1 10,2Z" /></svg>
+                </div>
+                Iniciar sesión'>
                   <div class="form-group">
                     <p>Nombre:</p>
                     <p>Apellido:</p>
@@ -57,66 +245,99 @@
                   </div>
                 </div>
 
-                <div class="wizard-step" data-title="Datos de facturación">
-                  <div class="form-group">
-                    <label for="titleNoti">Nombre y apellidos <span class="required">*</span></label>
-                    <input type="text" name="title" class="form-control required banner-info" id="titleNoti"
-                      placeholder="Example: Message title">
+                <div class="wizard-step" data-title='<div class="svg-title mb-2">
+                    <svg  height="30px" width="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>file-document-edit-outline</title><path d="M8,12H16V14H8V12M10,20H6V4H13V9H18V12.1L20,10.1V8L14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H10V20M8,18H12.1L13,17.1V16H8V18M20.2,13C20.3,13 20.5,13.1 20.6,13.2L21.9,14.5C22.1,14.7 22.1,15.1 21.9,15.3L20.9,16.3L18.8,14.2L19.8,13.2C19.9,13.1 20,13 20.2,13M20.2,16.9L14.1,23H12V20.9L18.1,14.8L20.2,16.9Z" /></svg>
+                  </div>
+                  Datos de facturación'>
+                  <div class="row">
+                    <div class="col-6">
+                      <label for="nombre" class="form-label">Nombres</label>
+                      <input type="text" maxlength="100" placeholder="Escriba sus nombres completos." class="form-control" id="nombre" aria-describedby="NombreUser" required>
+                      <!-- <div id="NombreUser" class="form-text">Escriba sus nombres completos.</div> -->
+                    </div>
+
+                    <div class="col-6">
+                      <label for="apellidos" class="form-label">Apellidos</label>
+                      <input type="text" maxlength="100" placeholder="Escriba sus apellidos completos." class="form-control" id="apellidos" aria-describedby="apellidosHelp" required>
+                      <!-- <div id="apellidosHelp" class="form-text">Escriba sus apellidos completos.</div> -->
+                    </div>
+                  </div>
+                  <div class="row mt-4">
+                    <div class="col-6">
+                      <label for="cedula" class="form-label">Cédula</label>
+                      <input type="text" maxlength="100" placeholder="Ingrese su número de cédula" class="form-control" id="cedula" aria-describedby="cedulaHelp" required>
+                      <!-- <div id="cedulaHelp" class="form-text">Ingrese su número de cédula</div> -->
+                    </div>
+                    <div class="col-6">
+                      <label for="direccion" class="form-label">Dirección domiciliaria</label>
+                      <input type="text" maxlength="100" placeholder="Ingrese su dirección." class="form-control" id="direccion" aria-describedby="direccionHelp" required>
+                      <!-- <div id="direccionHelp" class="form-text">Ingrese su dirección.</div> -->
+                    </div>
                   </div>
 
-                  <div class="form-group">
-                    <label for="bodyNoti">Direccion de domicilio <span class="required">*</span></label>
-                    <input type="text" name="body" class="form-control required banner-info" id="bodyNoti"
-                      placeholder="Example: Message body">
-                  </div>
-
-                  <div class="form-group">
-                    <label for="imageNoti">Codigo ZIP</label>
-                    <input type="text" name="body" class="form-control required banner-info" id="bodyNoti"
-                      placeholder="Example: Message body">
-                  </div>
 
                 </div>
 
-                <div class="wizard-step" data-title="Método de pago">
-                  <div class="form-group">
-                    <label for="bodyNoti">Metodo</label>
-                    <select class="form-control" name="segment">
-                      <option>Select one ...</option>
-                      <option value="0">Paypal</option>
-                      <option value="1">Bitcoin</option>
-                      <option value="2">Diners</option>
-                      <option value="3">Visa</option>
-                    </select>
+                <div class="wizard-step" data-title='<div class="svg-title mb-2">
+                  <svg height="30px" width="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>cash-multiple</title><path d="M5,6H23V18H5V6M14,9A3,3 0 0,1 17,12A3,3 0 0,1 14,15A3,3 0 0,1 11,12A3,3 0 0,1 14,9M9,8A2,2 0 0,1 7,10V14A2,2 0 0,1 9,16H19A2,2 0 0,1 21,14V10A2,2 0 0,1 19,8H9M1,10H3V20H19V22H1V10Z" /></svg>
+                </div>
+                Método de pago'>
+                  
+                  <div class="row">
+                    <div class="col-12 d-flex flex-column">
+                      <h3>Suscribirse al plan</h3>
+                      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+                      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    </div>
+                    <div class="col-12 d-flex flex-column">
+                      <button id="changePlan" class="btn btn-changeplan">
+                        <div class="w-100 d-flex flex-row">
+                          <div class="icon">
+                            <svg width="35px" height="35px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>access-point</title><path d="M4.93,4.93C3.12,6.74 2,9.24 2,12C2,14.76 3.12,17.26 4.93,19.07L6.34,17.66C4.89,16.22 4,14.22 4,12C4,9.79 4.89,7.78 6.34,6.34L4.93,4.93M19.07,4.93L17.66,6.34C19.11,7.78 20,9.79 20,12C20,14.22 19.11,16.22 17.66,17.66L19.07,19.07C20.88,17.26 22,14.76 22,12C22,9.24 20.88,6.74 19.07,4.93M7.76,7.76C6.67,8.85 6,10.35 6,12C6,13.65 6.67,15.15 7.76,16.24L9.17,14.83C8.45,14.11 8,13.11 8,12C8,10.89 8.45,9.89 9.17,9.17L7.76,7.76M16.24,7.76L14.83,9.17C15.55,9.89 16,10.89 16,12C16,13.11 15.55,14.11 14.83,14.83L16.24,16.24C17.33,15.15 18,13.65 18,12C18,10.35 17.33,8.85 16.24,7.76M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10Z" /></svg>
+                          </div>
+                          <div class="detaill-content">
+                            <div class="title-detaill">
+                              <div class="title-plan">
+                                Ecuavisa Go
+                              </div>
+                              <div class="change-descripcion">
+                                Cambiar plan
+                              </div>
+                            </div>
+                            <div class="price-detaill">
+                              <div class="usd">$</div>
+                              <div class="valor">300.00</div>
+                              <div class="frecuencia">/year</div>
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    </div>
                   </div>
-                  <div class="form-group">
-                    <label for="titleNoti">Action <span class="required">*</span></label>
-                    <select class="form-control required" name="action">
-                      <option>Select one ...</option>
-                      <option value="0">Open bolus configurator</option>
-                    </select>
-                  </div>
-
                   
                 </div>
 
               </aside>
             </form>
 
-            <div class="align-content-center justify-content-start m-3" style="display:flex">
+            <!-- <div class="align-content-center justify-content-start m-3" style="display:flex">
               <button id="btn_lock" class="btn btn-danger">Lock</button>
               <button id="btn_unlock" class="btn btn-primary ms-4">Unlock</button>
               <button id="btn_reset" class="btn btn-warning ms-4">Reset</button>
               <button id="btn_append" class="btn btn-secondary ms-4">Add new step</button>
-            </div>
+            </div> -->
           </main>
         </div>
 
         <!-- Pie del modal -->
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
+        <!-- <div class="modal-footer"> -->
+          <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        <!-- </div> -->
       </div>
     </div>
   </div>
@@ -127,9 +348,13 @@
 
     let args = {
       wz_class: wz_class,
-      wz_nav_style: "dots", // dots, tabs, progress
-      wz_ori: "vertical",
+      wz_nav_style: "tabs", // dots, tabs, progress
+      // wz_ori: "vertical",
       buttons: true,
+      next:"Siguiente",
+      prev:"Anterior",
+      finish:"Realizar compra",
+      wz_button_style:"btn btn-ecuavisa",
       navigation: "all" // buttons, nav, all
     };
 
@@ -147,17 +372,17 @@
 
     wizard.init();
 
-    document.getElementById("btn_reset").onclick = function () {
-      wizard.reset();
-    };
+    // document.getElementById("btn_reset").onclick = function () {
+    //   wizard.reset();
+    // };
 
-    document.getElementById("btn_lock").onclick = function () {
-      wizard.lock();
-    };
+    // document.getElementById("btn_lock").onclick = function () {
+    //   wizard.lock();
+    // };
 
-    document.getElementById("btn_unlock").onclick = function () {
-      wizard.unlock();
-    };
+    // document.getElementById("btn_unlock").onclick = function () {
+    //   wizard.unlock();
+    // };
 
     let $wz_doc = document.querySelector(wz_class);
 
@@ -216,22 +441,22 @@
     });
 
 
-    document.getElementById("btn_append").onclick = function () {
-      setStep(wizard);
-    };
+    // document.getElementById("btn_append").onclick = function () {
+    //   setStep(wizard);
+    // };
 
-    function setStep(wizard) {
-      $html = `<div class="card card-body m-4 wizard-step" data-id="patata" data-title="Datos de facturacion"> <label class="question"> Embedded step </label> <input type="text" maxlength="100" name="patata" class="form-control required" placeholder="Embedded step"> </div>`;
+    // function setStep(wizard) {
+    //   $html = `<div class="card card-body m-4 wizard-step" data-id="patata" data-title="Datos de facturacion"> <label class="question"> Embedded step </label> <input type="text" maxlength="100" name="patata" class="form-control required" placeholder="Embedded step"> </div>`;
 
-      const wz = document.querySelector(wizard.wz_class);
-      const wz_content = wz.querySelector(wizard.wz_content);
+    //   const wz = document.querySelector(wizard.wz_class);
+    //   const wz_content = wz.querySelector(wizard.wz_content);
 
-      let target = wz_content.querySelector(`${wizard.wz_step}[data-step="2"]`);
+    //   let target = wz_content.querySelector(`${wizard.wz_step}[data-step="2"]`);
 
-      target.insertAdjacentHTML("beforebegin", $html);
+    //   target.insertAdjacentHTML("beforebegin", $html);
 
-      wizard.update();
-    }
+    //   wizard.update();
+    // }
 
   </script>
   <script src="main-suscripciones.js"></script>
