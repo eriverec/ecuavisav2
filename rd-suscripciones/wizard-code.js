@@ -57,7 +57,7 @@ $wz_doc.addEventListener("wz.nav.backward", function (e) {
 });
 
 $wz_doc.addEventListener("wz.form.submit", function (e) {
-  alert("Form Submit");
+  // alert("Form Submit");
 });
 
 $wz_doc.addEventListener("wz.end", function (e) {

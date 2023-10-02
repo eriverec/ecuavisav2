@@ -22,6 +22,7 @@
 
 		let dataPlanes = await cargarNombresYPlanes();
 		let productos = await dataPlanes.data;
+		let planId = "";
 		let x_Token = await dataPlanes.token;
 		let valorMetodoPago = 0;
 		localStorage.setItem('x-token', x_Token);
@@ -96,6 +97,7 @@
 		}
 
 		function detallesPaquete(id) {
+			planId = id;
 			const planData = buscarPaquete(id);
 			var nombrePlan = planData.nombre_plan;
 			var precio = parseFloat(planData.precio_promocional || planData.precio).toFixed(2);
@@ -131,7 +133,6 @@
 		function URLParams() {
 			if (new URLSearchParams(window.location.search).get('paquete')) {
 				const valueParam = new URLSearchParams(window.location.search).get('paquete');
-				
 				detallesPaquete(valueParam);
 			}
 		}
@@ -198,46 +199,6 @@
 					tabTo.style.display = 'flex';
 				});
 
-
-				const realizarCompra = document.querySelectorAll('.wizard-btn.btn.btn-ecuavisa.finish');
-				realizarCompra.forEach(button => {
-					button.addEventListener('click', () => {
-						// const planId = button.getAttribute('data-id');
-						const planId = localStorage.getItem('PlanID');
-						const idEcuavisa = ECUAVISA_EC.USER_data().id;
-						const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
-						const load_BTN = document.querySelector(`.btn.boton_sus[data-id='${planId}']`);
-						const getToken = localStorage.getItem('x-token');
-						// load_BTN.style.opacity = "0.4";
-						console.log('Plan ID:', planId, idEcuavisa, idwylexIdObject);
-
-						// fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
-						// 	method: 'POST',
-						// 	headers: {
-						// 		'Authorization': 'Bearer ' + getToken,
-						// 		'Content-Type': 'application/json'
-						// 	},
-						// 	body: JSON.stringify({
-						// 		"idPaquete": planId,
-						// 		"idUsuario": idEcuavisa,
-						// 		"idUsuarioObject": idwylexIdObject,
-						// 		"metodoPago": "1"
-						// 	}),
-						// 	redirect: 'follow'
-						// })
-						// 	.then(response => response.json())
-						// 	.then(result => {
-						// 		console.log(result);
-						// 		load_BTN.style.opacity = "1";
-						// 	})
-						// 	.catch(error => {
-						// 		console.log('error', error);
-						// 		load_BTN.style.opacity = "1";
-						// 	});
-
-					});
-				});
-
 				const suscribirseButtons = document.querySelectorAll('.btn.boton_sus');
 				suscribirseButtons.forEach(button => {
 					button.addEventListener('click', () => {
@@ -268,6 +229,46 @@
 		    boton.classList.add('active');
 		    valorMetodoPago = boton.value;
 		  });
+		});
+
+		$wz_doc.addEventListener("wz.form.submit", function (e) {
+		  if(!ECUAVISA_EC.login()){//VERIFICA SI EL USUARIO ESTÁ LOGUEADO
+		  	if(buscarPaquete(planId)){
+					const idEcuavisa = ECUAVISA_EC.USER_data().id;
+					const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
+					const load_BTN = document.querySelector(`.btn.boton_sus[data-id='${planId}']`);
+					const getToken = localStorage.getItem('x-token');
+
+					fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
+						method: 'POST',
+						headers: {
+							'Authorization': 'Bearer ' + getToken,
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify({
+							"idPaquete": planId,
+							"idUsuario": idEcuavisa,
+							"idUsuarioObject": idwylexIdObject,
+							"metodoPago": "1"
+						}),
+						redirect: 'follow'
+					}).then(response => response.json())
+						.then(result => {
+							console.log(result);
+							load_BTN.style.opacity = "1";
+						})
+						.catch(error => {
+							console.log('error', error);
+							load_BTN.style.opacity = "1";
+						});
+
+		  	}else{
+		  		alert("El plan seleccionado no existe")
+		  	}
+		  }else{
+		  	alert("No estas logueado")
+		  }
+
 		});
 
 	}
