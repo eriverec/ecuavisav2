@@ -268,7 +268,7 @@
 
 					var myHeaders = new Headers();
 					myHeaders.append("Content-Type", "application/json");
-					myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTYwMDkwNjEsImV4cCI6MTY5NjAxMDI2MX0.YPjL_uhp2zTUnsZwEr45rn2D7E4d11OSkJui8W38-0k");
+					myHeaders.append("Authorization", "Bearer "+getToken);
 
 					var raw = JSON.stringify(jsonSend);
 
