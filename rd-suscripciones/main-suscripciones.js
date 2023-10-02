@@ -24,7 +24,7 @@
 		let productos = await dataPlanes.data;
 		let planId = "";
 		let x_Token = await dataPlanes.token;
-		let valorMetodoPago = 0;
+		let valorMetodoPago = document.querySelectorAll('.pago-list .btn.atice').value || 1;
 		localStorage.setItem('x-token', x_Token);
 
 		async function armarPlanes(){
