@@ -119,14 +119,17 @@
 			});
 
 			if (ECUAVISA_EC.login()) {
-				
+				var usuario = ECUAVISA_EC.USER_data();
+				if(document.querySelector("#nombre")){
+					document.querySelector("#nombre").value = usuario.first_name;
+					document.querySelector("#apellidos").value = usuario.last_name;
+				}
 			} else {
 				const gru = document.querySelector('.form-group');
 				gru.innerHTML = `
 				<span>Debes iniciar sesion</span> <br>
 				<a href="https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}" class="btn btn-secondary html_Login" onclick="">Login</a>`;
 			}
-
 			modalPaquete.show();
 		}
 
@@ -232,7 +235,7 @@
 		});
 
 		$wz_doc.addEventListener("wz.form.submit", function (e) {
-		  if(!ECUAVISA_EC.login()){//VERIFICA SI EL USUARIO ESTÁ LOGUEADO
+		  if(ECUAVISA_EC.login()){//VERIFICA SI EL USUARIO ESTÁ LOGUEADO
 		  	if(buscarPaquete(planId)){
 					const idEcuavisa = ECUAVISA_EC.USER_data().id;
 					const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
