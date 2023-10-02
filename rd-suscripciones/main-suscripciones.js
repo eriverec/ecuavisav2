@@ -7,14 +7,8 @@ var modalPaquete = new bootstrap.Modal(document.getElementById('modalPaqueteHtml
 var modalPaqueteHtml = document.getElementById('modalPaqueteHtml')
 modalPaqueteHtml.addEventListener('hidden.bs.modal', function (event) {
 	var urlActual = window.location.href;
-
-	// Crea un objeto URL
 	var url = new URL(urlActual);
-
-	// Elimina el parámetro "paquete"
 	url.searchParams.delete("paquete");
-
-	// Reemplaza la URL actual en la barra de direcciones sin recargar la página
 	window.history.replaceState({}, document.title, url.toString());
 })
 
@@ -40,6 +34,7 @@ function buscarPaquete(id) {
 
 function detallesPaquete(id) {
 	const planData = buscarPaquete(id);
+	localStorage.setItem('PlanID',planData.id);
 	modalPaquete.show();
 }
 
@@ -61,11 +56,25 @@ function cargarNombresYPlanes() {
 			const resp = data.resp;
 			const x_Token = data.token;
 			localStorage.setItem('x-token', x_Token);
-			// console.log(x_Token);
 			if (resp) {
 				const tabContainer = document.querySelector('.tab-container');
 				tabContainer.innerHTML = ''; // Limpiar contenido anterior
 				URLParams();
+
+				const classNombre = document.querySelector('.data_nombre');
+				const classApellido = document.querySelector('.data_apellido');
+				const classCorreo = document.querySelector('.data_correo');
+
+				if (classNombre) {
+					classNombre.innerHTML = localStorage.getItem('wylexFirstName');
+				}
+				if (classApellido) {
+					classApellido.innerHTML = localStorage.getItem('wylexLastName');
+				}
+				if (classCorreo) {
+					classCorreo.innerHTML = localStorage.getItem('wylexEmail');
+				}
+
 				productos.forEach(producto => {
 					const productoNombre = producto.nombre;
 					const buttonHtml = `
@@ -109,6 +118,8 @@ function cargarPlanes(producto, productos) {
 		const tabContent = document.querySelector('.list-card-plans');
 		tabContent.innerHTML = ''; // Limpiar contenido anterior
 
+
+
 		planes.forEach(plan => {
 			const descripcionHtml = plan.descripcion.map(item => `<li class="icono">${item}</li>`).join('');
 
@@ -149,42 +160,41 @@ function cargarPlanes(producto, productos) {
 		});
 
 
-		const susButtons = document.querySelectorAll('.boton_sus');
-		susButtons.forEach(button => {
+		const realizarCompra = document.querySelectorAll('.wizard-btn.btn.btn-ecuavisa.finish');
+		realizarCompra.forEach(button => {
 			button.addEventListener('click', () => {
 				// const planId = button.getAttribute('data-id');
-				// const idEcuavisa = ECUAVISA_EC.USER_data().id;
-				// const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
-				// const load_BTN = document.querySelector(`.btn.boton_sus[data-id='${planId}']`);
-				// const getToken = localStorage.getItem('x-token');
-				// // load_BTN.style.opacity = "0.4";
-				// console.log('Plan ID:', planId, idEcuavisa, idwylexIdObject);
+				const planId = localStorage.getItem('PlanID');
+				const idEcuavisa = ECUAVISA_EC.USER_data().id;
+				const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
+				const load_BTN = document.querySelector(`.btn.boton_sus[data-id='${planId}']`);
+				const getToken = localStorage.getItem('x-token');
+				// load_BTN.style.opacity = "0.4";
+				console.log('Plan ID:', planId, idEcuavisa, idwylexIdObject);
 
-				// myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTYwMDkwNjEsImV4cCI6MTY5NjAxMDI2MX0.YPjL_uhp2zTUnsZwEr45rn2D7E4d11OSkJui8W38-0k");
-
-				// fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
-				// 	method: 'POST',
-				// 	headers: {
-				// 		'Authorization': 'Bearer ' + getToken,
-				// 		'Content-Type': 'application/json'
-				// 	},
-				// 	body: JSON.stringify({
-				// 		"idPaquete": planId,
-				// 		"idUsuario": idEcuavisa,
-				// 		"idUsuarioObject": idwylexIdObject,
-				// 		"metodoPago": "1"
-				// 	}),
-				// 	redirect: 'follow'
-				// })
-				// 	.then(response => response.json())
-				// 	.then(result => {
-				// 		console.log(result);
-				// 		load_BTN.style.opacity = "1";
-				// 	})
-				// 	.catch(error => {
-				// 		console.log('error', error);
-				// 		load_BTN.style.opacity = "1";
-				// 	});
+				fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
+					method: 'POST',
+					headers: {
+						'Authorization': 'Bearer ' + getToken,
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({
+						"idPaquete": planId,
+						"idUsuario": idEcuavisa,
+						"idUsuarioObject": idwylexIdObject,
+						"metodoPago": "1"
+					}),
+					redirect: 'follow'
+				})
+					.then(response => response.json())
+					.then(result => {
+						console.log(result);
+						load_BTN.style.opacity = "1";
+					})
+					.catch(error => {
+						console.log('error', error);
+						load_BTN.style.opacity = "1";
+					});
 
 			});
 		});
@@ -196,6 +206,19 @@ function cargarPlanes(producto, productos) {
 
 				if (ECUAVISA_EC.login()) {
 					console.log("estas logueado");
+					const classNombre = document.querySelector('.data_nombre');
+					const classApellido = document.querySelector('.data_apellido');
+					const classCorreo = document.querySelector('.data_correo');
+
+					if (classNombre) {
+						classNombre.innerHTML = localStorage.getItem('wylexFirstName');
+					}
+					if (classApellido) {
+						classApellido.innerHTML = localStorage.getItem('wylexLastName');
+					}
+					if (classCorreo) {
+						classCorreo.innerHTML = localStorage.getItem('wylexEmail');
+					}
 				} else {
 					console.log("no estas logueado");
 					setTimeout(() => {
@@ -216,6 +239,12 @@ function cargarPlanes(producto, productos) {
 				var nuevaURL = urlBase + '?' + parametrosURL.toString();
 				history.replaceState(null, null, nuevaURL);
 				detallesPaquete(varPaquete);
+
+
+				const classPLanSelect = document.querySelector('.plan_Select_id');
+				if (classPLanSelect) {
+					classPLanSelect.innerHTML = planData.nombre_plan
+				}
 
 				// Construir el contenido dinámico del modal utilizando una plantilla de cadena
 				// const modalContent = `${planData.nombre_plan}`;

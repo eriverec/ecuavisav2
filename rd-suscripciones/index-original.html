@@ -14,218 +14,12 @@
   <script src="main.js"></script>
   <script src="global.js"></script>
   <style type="text/css">
-    .wizard-nav .wizard-step {
-        background-color: #6bd8d1;
-        border: 1px solid #6BD8D2!important;
-        border-radius: 0px!important;
-        color: #2d21b5;
-        font-weight: 700;
-        font-size: 18px!important;
-        padding: 15px 20px 15px 20px!important;
-        line-height: 1.2;
-        fill: #2d21b5;
-    }
 
-    .wizard-nav .wizard-step.active {
-        background-color: #2927B9;
-        border: 1px solid #2927B9!important;
-        color: #ffffff;
-        fill: #ffff;
-    }
-    .wizard .wizard-content {
-        border: 1px solid #ffffff;
-        /*margin-top: 20px;
-        margin-bottom: 20px;*/
-        background-color: #ffffff;
-        border-radius: 7px;
-        padding: 30px 20px!important;
-    }
-
-    .modal-wizard .modal-content {
-        border: 1px solid #fff0;
-    }
-
-    .wizard-nav .wizard-step:first-child{
-        border-top-left-radius: 7px !important;
-        border-bottom-left-radius: 7px !important;
-    }
-
-    .wizard-nav .wizard-step:last-child{
-        border-top-right-radius: 7px !important;
-        border-bottom-right-radius: 7px !important;
-    }
-
-    .wizard .wizard-buttons {
-        display: flex;
-        justify-content: center!important;
-        gap: 20px;
-    }
-    button.wizard-btn.btn.btn-ecuavisa.finish,
-    button.wizard-btn.btn.btn-ecuavisa.next {
-        background: #2826b8;
-        color: #fff;
-        border-radius: 2px;
-        /* padding: 12px 8px; */
-        padding: 12px 20px;
-        text-align: center;
-        text-transform: uppercase;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 12px;
-        margin: 0;
-    }
-
-    button.wizard-btn.btn.btn-ecuavisa.prev {
-        background: #23DCD1;
-        color: #2826b8;
-        border-radius: 2px;
-        /* padding: 12px 8px; */
-        padding: 12px 20px;
-        text-align: center;
-        text-transform: uppercase;
-        font-style: normal;
-        font-weight: 600;
-        font-size: 12px;
-        margin: 0;
-    }
-    .wizard-step[data-step="1"] .form-control {
-        padding: 0.675rem 1.1rem;
-        border-radius: 0.34rem;
-    }
-
-    .wizard-step[data-step="1"] .form-control::placeholder {
-      opacity: 0.3;
-      line-height: 1.2;
-      font-weight: 200;
-      font-size: 16px;
-    }
-
-    .wizard-step[data-step="1"] .form-label {
-        margin-bottom: 0.1rem;
-    }
-    .btn-changeplan {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    align-items: center;
-    max-width: 100%;
-    position: relative;
-    min-width: 100%;
-}
-.detaill-content {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-}
-#changePlan .icon {
-    display: flex;
-    background-color: #6bd8d1;
-    border-radius: 7px;
-    align-items: center;
-    padding: 10px 10px;
-}
-
-#changePlan .flex-row {
-    gap: 20px;
-}
-.price-detaill {
-    gap: 10px;
-    display: flex;
-    flex-direction: row;
-    align-content: center;
-    align-items: center;
-}
-
-#changePlan .flex-row {
-    gap: 20px;
-}
-
-.price-detaill {
-    gap: 10px;
-    display: flex;
-    flex-direction: row;
-    position: relative;
-    align-items: flex-end;
-}
-
-#changePlan {
-    background-color: #e9ebf4;
-    padding: 20px 20px;
-    border-radius: 10px;
-    border: 2px solid #2d21b5;
-}
-
-.title-plan {}
-
-.title-plan {
-    font-size: 20px;
-    font-weight: bold;
-}
-
-.title-detaill {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.change-descripcion {
-    font-size: 15px;
-    color: #afafaf;
-    line-height: 1.2;
-    letter-spacing: 1.2px;
-    font-weight: 200;
-}
-
-.price-detaill .valor {
-    position: relative;
-    font-size: 40px;
-    font-weight: 900;
-    line-height: 1.2;
-}
-
-.price-detaill .usd {
-    position: absolute;
-    left: -17px;
-    top: -5px;
-    font-size: 25px;
-    font-weight: 200;
-    color: #727272;
-}
-
-.price-detaill .frecuencia {
-    /* position: absolute; */
-    /* right: 0; */
-    font-size: 16px;
-    font-weight: 200;
-    color: #727272;
-    /* bottom: 0px; */
-}
-
-.item-beneficio {
-    display: flex;
-    gap: 20px;
-    flex-direction: row;
-    align-items: flex-start;
-    padding: 10px 10px;
-    justify-content: flex-start;
-}
-
-.caracteristica-beneficio {
-    font-size: 12px;
-    font-weight: 300;
-    color: #cccccc;
-}
-
-.icon-beneficio svg {
-    fill: #6bd8d1;
-}
   </style>
 </head>
 
 <body>
-  
+
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/AdrianVillamayor/Wizard-JS@1.9.9/styles/css/main.css">
   <link rel="stylesheet" href="style-suscripciones.css">
   <!-- Contenedor de las tabs -->
@@ -245,9 +39,9 @@
       <div class="modal-content">
         <!-- Encabezado del modal -->
         <div class="modal-header">
-          <h4 class="modal-title">Detalles del Plan</h4>
+          <h4 class="modal-title">Detalles del Plan - <span class="plan_Select_id"></span></h4>
           <button type="button" class="btn-close " data-bs-dismiss="modal" aria-label="Close"></button>
-      
+
         </div>
         <!-- Cuerpo del modal -->
         <div class="modal-body pb-4" id="modal-body-content">
@@ -262,9 +56,18 @@
                 </div>
                 Iniciar sesión'>
                   <div class="form-group">
-                    <p>Nombre:</p>
-                    <p>Apellido:</p>
-                    <p>correo:</p>
+                    <p class="">
+                      <span>Nombre:</span>
+                      <span class="data_nombre"></span>
+                    </p>
+                    <p class=""> 
+                      <span>Apellido:</span>
+                      <span class="data_apellido"></span>
+                    </p>
+                    <p class="">
+                      <span>Correo:</span> 
+                      <span class="data_correo"></span>          
+                    </p>
                   </div>
                 </div>
 
@@ -275,25 +78,29 @@
                   <div class="row">
                     <div class="col-6">
                       <label for="nombre" class="form-label">Nombres</label>
-                      <input type="text" maxlength="100" placeholder="Escriba sus nombres completos." class="form-control" id="nombre" aria-describedby="NombreUser" required>
+                      <input type="text" maxlength="100" placeholder="Escriba sus nombres completos."
+                        class="form-control" id="nombre" aria-describedby="NombreUser" required>
                       <!-- <div id="NombreUser" class="form-text">Escriba sus nombres completos.</div> -->
                     </div>
 
                     <div class="col-6">
                       <label for="apellidos" class="form-label">Apellidos</label>
-                      <input type="text" maxlength="100" placeholder="Escriba sus apellidos completos." class="form-control" id="apellidos" aria-describedby="apellidosHelp" required>
+                      <input type="text" maxlength="100" placeholder="Escriba sus apellidos completos."
+                        class="form-control" id="apellidos" aria-describedby="apellidosHelp" required>
                       <!-- <div id="apellidosHelp" class="form-text">Escriba sus apellidos completos.</div> -->
                     </div>
                   </div>
                   <div class="row mt-4">
                     <div class="col-6">
                       <label for="cedula" class="form-label">Cédula</label>
-                      <input type="text" maxlength="100" placeholder="Ingrese su número de cédula" class="form-control" id="cedula" aria-describedby="cedulaHelp" required>
+                      <input type="text" maxlength="100" placeholder="Ingrese su número de cédula" class="form-control"
+                        id="cedula" aria-describedby="cedulaHelp" required>
                       <!-- <div id="cedulaHelp" class="form-text">Ingrese su número de cédula</div> -->
                     </div>
                     <div class="col-6">
                       <label for="direccion" class="form-label">Dirección domiciliaria</label>
-                      <input type="text" maxlength="100" placeholder="Ingrese su dirección." class="form-control" id="direccion" aria-describedby="direccionHelp" required>
+                      <input type="text" maxlength="100" placeholder="Ingrese su dirección." class="form-control"
+                        id="direccion" aria-describedby="direccionHelp" required>
                       <!-- <div id="direccionHelp" class="form-text">Ingrese su dirección.</div> -->
                     </div>
                   </div>
@@ -305,22 +112,26 @@
                   <svg height="30px" width="30px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>cash-multiple</title><path d="M5,6H23V18H5V6M14,9A3,3 0 0,1 17,12A3,3 0 0,1 14,15A3,3 0 0,1 11,12A3,3 0 0,1 14,9M9,8A2,2 0 0,1 7,10V14A2,2 0 0,1 9,16H19A2,2 0 0,1 21,14V10A2,2 0 0,1 19,8H9M1,10H3V20H19V22H1V10Z" /></svg>
                 </div>
                 Método de pago'>
-                  
+
                   <div class="row">
                     <div class="col-12 d-flex flex-column">
                       <h3>Suscribirse al plan</h3>
                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                      tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                      quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                      consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                      cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                      proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
                     </div>
                     <div class="col-12 d-flex flex-column">
                       <button id="changePlan" class="btn btn-changeplan" type="button">
                         <div class="w-100 d-flex flex-row">
                           <div class="icon">
-                            <svg width="35px" height="35px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>access-point</title><path d="M4.93,4.93C3.12,6.74 2,9.24 2,12C2,14.76 3.12,17.26 4.93,19.07L6.34,17.66C4.89,16.22 4,14.22 4,12C4,9.79 4.89,7.78 6.34,6.34L4.93,4.93M19.07,4.93L17.66,6.34C19.11,7.78 20,9.79 20,12C20,14.22 19.11,16.22 17.66,17.66L19.07,19.07C20.88,17.26 22,14.76 22,12C22,9.24 20.88,6.74 19.07,4.93M7.76,7.76C6.67,8.85 6,10.35 6,12C6,13.65 6.67,15.15 7.76,16.24L9.17,14.83C8.45,14.11 8,13.11 8,12C8,10.89 8.45,9.89 9.17,9.17L7.76,7.76M16.24,7.76L14.83,9.17C15.55,9.89 16,10.89 16,12C16,13.11 15.55,14.11 14.83,14.83L16.24,16.24C17.33,15.15 18,13.65 18,12C18,10.35 17.33,8.85 16.24,7.76M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10Z" /></svg>
+                            <svg width="35px" height="35px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                              <title>access-point</title>
+                              <path
+                                d="M4.93,4.93C3.12,6.74 2,9.24 2,12C2,14.76 3.12,17.26 4.93,19.07L6.34,17.66C4.89,16.22 4,14.22 4,12C4,9.79 4.89,7.78 6.34,6.34L4.93,4.93M19.07,4.93L17.66,6.34C19.11,7.78 20,9.79 20,12C20,14.22 19.11,16.22 17.66,17.66L19.07,19.07C20.88,17.26 22,14.76 22,12C22,9.24 20.88,6.74 19.07,4.93M7.76,7.76C6.67,8.85 6,10.35 6,12C6,13.65 6.67,15.15 7.76,16.24L9.17,14.83C8.45,14.11 8,13.11 8,12C8,10.89 8.45,9.89 9.17,9.17L7.76,7.76M16.24,7.76L14.83,9.17C15.55,9.89 16,10.89 16,12C16,13.11 15.55,14.11 14.83,14.83L16.24,16.24C17.33,15.15 18,13.65 18,12C18,10.35 17.33,8.85 16.24,7.76M12,10A2,2 0 0,0 10,12A2,2 0 0,0 12,14A2,2 0 0,0 14,12A2,2 0 0,0 12,10Z" />
+                            </svg>
                           </div>
                           <div class="detaill-content">
                             <div class="title-detaill">
@@ -345,7 +156,11 @@
                       <div class="beneficios-list d-flex flex-column">
                         <div class="item-beneficio">
                           <div class="icon-beneficio">
-                            <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
+                            <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                              <title>check-all</title>
+                              <path
+                                d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" />
+                            </svg>
                           </div>
                           <div class="caracteristica-beneficio">
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -354,7 +169,11 @@
                         </div>
                         <div class="item-beneficio">
                           <div class="icon-beneficio">
-                            <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
+                            <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                              <title>check-all</title>
+                              <path
+                                d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" />
+                            </svg>
                           </div>
                           <div class="caracteristica-beneficio">
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -363,7 +182,11 @@
                         </div>
                         <div class="item-beneficio">
                           <div class="icon-beneficio">
-                            <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-all</title><path d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" /></svg>
+                            <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                              <title>check-all</title>
+                              <path
+                                d="M0.41,13.41L6,19L7.41,17.58L1.83,12M22.24,5.58L11.66,16.17L7.5,12L6.07,13.41L11.66,19L23.66,7M18,7L16.59,5.58L10.24,11.93L11.66,13.34L18,7Z" />
+                            </svg>
                           </div>
                           <div class="caracteristica-beneficio">
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
@@ -373,7 +196,7 @@
                       </div>
                     </div>
                   </div>
-                  
+
                 </div>
 
               </aside>
@@ -390,130 +213,15 @@
 
         <!-- Pie del modal -->
         <!-- <div class="modal-footer"> -->
-          <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
-          <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button> -->
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
         <!-- </div> -->
       </div>
     </div>
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AdrianVillamayor/Wizard-JS@1.9.9/src/wizard.min.js"></script>
-  <script>
-    let wz_class = ".wizard";
-
-    let args = {
-      wz_class: wz_class,
-      wz_nav_style: "tabs", // dots, tabs, progress
-      // wz_ori: "vertical",
-      buttons: true,
-      next:"Siguiente",
-      prev:"Anterior",
-      finish:"Realizar compra",
-      wz_button_style:"btn btn-ecuavisa",
-      navigation: "all" // buttons, nav, all
-    };
-
-    document.addEventListener("wz.ready", function (e) {
-      console.log("My body is ready");
-
-      console.log(`↓ Target ↓`);
-      console.log(e.detail.target);
-
-      console.log(`↓ Elem ↓`);
-      console.log(e.detail.elem);
-    });
-
-    const wizard = new Wizard(args);
-
-    wizard.init();
-
-    // document.getElementById("btn_reset").onclick = function () {
-    //   wizard.reset();
-    // };
-
-    // document.getElementById("btn_lock").onclick = function () {
-    //   wizard.lock();
-    // };
-
-    // document.getElementById("btn_unlock").onclick = function () {
-    //   wizard.unlock();
-    // };
-
-    let $wz_doc = document.querySelector(wz_class);
-
-    $wz_doc.addEventListener("wz.btn.prev", function (e) {
-      console.log("Prev Step");
-    });
-
-    $wz_doc.addEventListener("wz.btn.next", function (e) {
-      console.log("Next Step");
-    });
-
-    $wz_doc.addEventListener("wz.nav.forward", function (e) {
-      console.log("Forward Nav");
-    });
-
-    $wz_doc.addEventListener("wz.nav.backward", function (e) {
-      console.log("Backward Nav");
-    });
-
-    $wz_doc.addEventListener("wz.form.submit", function (e) {
-      alert("Form Submit");
-    });
-
-    $wz_doc.addEventListener("wz.end", function (e) {
-      alert("Wizard End");
-    });
-
-    $wz_doc.addEventListener("wz.error", function (e) {
-      console.log(`↓ ID ↓`)
-      console.log(e.detail.id) // form_validaton
-
-      console.log(`↓ Message ↓`)
-      console.log(e.detail.msg) //options.i18n.form_validation
-    });
-
-    $wz_doc.addEventListener("wz.lock", function (e) {
-      alert("Wizard locked");
-    });
-
-    $wz_doc.addEventListener("wz.unlock", function (e) {
-      alert("Wizard unlocked");
-    });
-
-    $wz_doc.addEventListener("wz.reset", function (e) {
-      document.getElementById("formWizard").reset();
-      alert("Wizard has restarted");
-    });
-
-    $wz_doc.addEventListener("wz.update", function (e) {
-      alert("The Wizard has been updated !");
-      console.log(`↓ Target ↓`)
-      console.log(e.detail.target) // .wizard
-
-      console.log(`↓ DOM Elem ↓`)
-      console.log(e.detail.elem) // DOM form#wizard.wizard.horizontal
-    });
-
-
-    // document.getElementById("btn_append").onclick = function () {
-    //   setStep(wizard);
-    // };
-
-    // function setStep(wizard) {
-    //   $html = `<div class="card card-body m-4 wizard-step" data-id="patata" data-title="Datos de facturacion"> <label class="question"> Embedded step </label> <input type="text" maxlength="100" name="patata" class="form-control required" placeholder="Embedded step"> </div>`;
-
-    //   const wz = document.querySelector(wizard.wz_class);
-    //   const wz_content = wz.querySelector(wizard.wz_content);
-
-    //   let target = wz_content.querySelector(`${wizard.wz_step}[data-step="2"]`);
-
-    //   target.insertAdjacentHTML("beforebegin", $html);
-
-    //   wizard.update();
-    // }
-
-  </script>
+ <script src="wizard-code.js"></script>
   <script src="main-suscripciones.js"></script>
 
 
