@@ -346,3 +346,70 @@ fill: #6bd8d1;
   font-weight: 800;
   font-size: 40px;
 }
+
+.item-pago .btn {
+    width: 100%;
+    align-items: center;
+    justify-content: initial;
+    gap: 20px;
+    border: 1px solid #d4d4d4;
+    padding: 15px 20px;
+    border-radius: 7px;
+    transition: all 0.5s ease;
+}
+
+.item-pago .check-pago {
+    background: #ffffff;
+    width: 20px;
+    height: 20px;
+    border-radius: 100px;
+    border: 1px solid #c4c4c4;
+    position: relative;
+}
+.method-pago {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    gap: 20px;
+}
+.titulo-beneficio {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0px;
+    font-weight: 700;
+    justify-content: center;
+}
+
+.titulo-beneficio p {
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 300;
+    color: #cccccc;
+}
+.item-pago .btn:hover {
+    background-color: #f2f2f2;
+}
+
+.item-pago .btn:hover {
+    background-color: #f2f2f2;
+}
+
+.item-pago .active .check-pago {background: #2d21b5;border-color: #2d21b5;}
+
+.item-pago .active .check-circle {
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+.pago-list {
+    gap: 5px;
+}
