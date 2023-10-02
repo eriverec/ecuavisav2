@@ -98,8 +98,8 @@
 
 		function htmlTemplatePrice(precio, precioPromo){
 			precio = parseFloat(precio).toFixed(2);
-			
-			if(precioPromo == 0){
+
+			if(precioPromo > 0){
 				precioPromo = parseFloat(precioPromo).toFixed(2);
 				return `<div class="precio-promo-content"><div class="precio-normal">${precio}</div><div class="precio-promo">${precioPromo}</div></div>`;
 			}else{
@@ -113,7 +113,7 @@
 			var nombrePlan = planData.nombre_plan;
 			var precio = parseFloat(planData.precio || 0).toFixed(2);
 			var precioPromo = parseFloat(planData.precio_promocional || 0).toFixed(2);
-
+			// console.log(precioPromo)
 			var frecuencia = planData.frecuencia;
 
 			localStorage.setItem('PlanID', planData.id);
