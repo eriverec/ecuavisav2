@@ -253,6 +253,8 @@
 					const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
 					const load_BTN = document.querySelector(`.btn-ecuavisa.finish`);
 					const modal_Load = document.querySelector(`#modalPaqueteHtml`);
+					const formWizard_btn = document.querySelector(`#formWizard`);
+					const contentgracias_btn = document.querySelector(`.content-gracias`);
 					const getToken = localStorage.getItem('x-token');
 
 					var jsonSend = {
@@ -286,11 +288,17 @@
 							// load_BTN.style.opacity = "1";
 							load_BTN.removeAttribute("disabled");
 							modal_Load.removeAttribute("disabled");
+							formWizard_btn.classList.add('d-none');
+							contentgracias_btn.classList.remove('d-none');
+
 					  }).catch(error => {
 					  	console.log(result);
 							// load_BTN.style.opacity = "1";
 							load_BTN.removeAttribute("disabled");
 							modal_Load.removeAttribute("disabled");
+							
+							formWizard_btn.classList.add('d-none');
+							contentgracias_btn.classList.remove('d-none');
 							console.log('error', error)
 					  });
 

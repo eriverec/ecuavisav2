@@ -472,3 +472,35 @@ fill: #6bd8d1;
     pointer-events: none!important;
     z-index: 22;
 }
+
+.content-gracias {
+    max-width: 255px;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding: 32px 25px;
+    box-shadow: -6px 5px 25px -10px rgb(0 0 0 / 49%);
+    -webkit-box-shadow: -6px 5px 25px -10px rgb(0 0 0 / 33%);
+    -moz-box-shadow: -6px 5px 25px -10px rgba(0,0,0,0.75);
+}
+
+.icon-gracias svg {
+    fill: green;
+    width: 100px;
+    height: 100px;
+}
+
+.gracias-descripcion {
+    font-size: 25px;
+    line-height: 1.2;
+    font-weight: 600;
+}
+
+.gracias-email {
+    font-size: 12px;
+    line-height: 1.2;
+    margin-top: 20px;
+    font-weight: 300;
+    fill: #c1c1c1;
+    color: #c1c1c1;
+}
