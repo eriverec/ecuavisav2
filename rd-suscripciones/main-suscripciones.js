@@ -35,6 +35,12 @@ function buscarPaquete(id) {
 function detallesPaquete(id) {
 	const planData = buscarPaquete(id);
 	localStorage.setItem('PlanID', planData.id);
+
+	const classPack = document.querySelector('.plan_Select_id');
+	classPack.innerHTML = planData.nombre_plan;
+
+	console.log(planData.id);
+	console.log(planData.nombre_plan);
 	modalPaquete.show();
 }
 
@@ -171,29 +177,29 @@ function cargarPlanes(producto, productos) {
 				// load_BTN.style.opacity = "0.4";
 				console.log('Plan ID:', planId, idEcuavisa, idwylexIdObject);
 
-				fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
-					method: 'POST',
-					headers: {
-						'Authorization': 'Bearer ' + getToken,
-						'Content-Type': 'application/json'
-					},
-					body: JSON.stringify({
-						"idPaquete": planId,
-						"idUsuario": idEcuavisa,
-						"idUsuarioObject": idwylexIdObject,
-						"metodoPago": "1"
-					}),
-					redirect: 'follow'
-				})
-					.then(response => response.json())
-					.then(result => {
-						console.log(result);
-						load_BTN.style.opacity = "1";
-					})
-					.catch(error => {
-						console.log('error', error);
-						load_BTN.style.opacity = "1";
-					});
+				// fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
+				// 	method: 'POST',
+				// 	headers: {
+				// 		'Authorization': 'Bearer ' + getToken,
+				// 		'Content-Type': 'application/json'
+				// 	},
+				// 	body: JSON.stringify({
+				// 		"idPaquete": planId,
+				// 		"idUsuario": idEcuavisa,
+				// 		"idUsuarioObject": idwylexIdObject,
+				// 		"metodoPago": "1"
+				// 	}),
+				// 	redirect: 'follow'
+				// })
+				// 	.then(response => response.json())
+				// 	.then(result => {
+				// 		console.log(result);
+				// 		load_BTN.style.opacity = "1";
+				// 	})
+				// 	.catch(error => {
+				// 		console.log('error', error);
+				// 		load_BTN.style.opacity = "1";
+				// 	});
 
 			});
 		});
