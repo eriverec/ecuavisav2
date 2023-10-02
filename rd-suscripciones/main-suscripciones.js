@@ -97,7 +97,10 @@
 		}
 
 		function htmlTemplatePrice(precio, precioPromo){
+			precio = parseFloat(precio).toFixed(2);
+			
 			if(precioPromo == 0){
+				precioPromo = parseFloat(precioPromo).toFixed(2);
 				return `<div class="precio-promo-content"><div class="precio-normal">${precio}</div><div class="precio-promo">${precioPromo}</div></div>`;
 			}else{
 				return precio;
@@ -156,7 +159,7 @@
           <div class="card-body">
             <h5 class="card-title">${plan.nombre_plan}</h5>
             <h5 class="plan_precio">
-              <span class="span_">$${plan.precio}</span>
+              <span class="span_">$${htmlTemplatePrice(plan.precio, plan.precio_promocional)}</span>
               <span>/${plan.frecuencia}</span>
             </h5>
             <div class="btn boton_sus" data-id="${plan.id}" data-plan='${JSON.stringify(plan)}'>Suscríbete</div>
