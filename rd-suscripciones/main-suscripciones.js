@@ -34,7 +34,7 @@ function buscarPaquete(id) {
 
 function detallesPaquete(id) {
 	const planData = buscarPaquete(id);
-	localStorage.setItem('PlanID',planData.id);
+	localStorage.setItem('PlanID', planData.id);
 	modalPaquete.show();
 }
 
@@ -57,6 +57,8 @@ function cargarNombresYPlanes() {
 			const x_Token = data.token;
 			localStorage.setItem('x-token', x_Token);
 			if (resp) {
+				const nombresProductos = productos.map(producto => producto.nombre);
+				nombresProductos.sort((b, a) => b.localeCompare(a));
 				const tabContainer = document.querySelector('.tab-container');
 				tabContainer.innerHTML = ''; // Limpiar contenido anterior
 				URLParams();
@@ -75,11 +77,8 @@ function cargarNombresYPlanes() {
 					classCorreo.innerHTML = localStorage.getItem('wylexEmail');
 				}
 
-				productos.forEach(producto => {
-					const productoNombre = producto.nombre;
-					const buttonHtml = `
-                <button class="tab-button" data-producto="${productoNombre}">${productoNombre}</button>
-              `;
+				nombresProductos.forEach(productoNombre => {
+					const buttonHtml = `<button class="tab-button" data-producto="${productoNombre}">${productoNombre}</button>`;
 					tabContainer.innerHTML += buttonHtml;
 				});
 
