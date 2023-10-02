@@ -466,3 +466,9 @@ fill: #6bd8d1;
     transform: rotate(70deg);
     background-color: #ff0303;
 }
+
+#modalPaqueteHtml[disabled="true"] .modal-dialog {
+    opacity: 0.3;
+    pointer-events: none!important;
+    z-index: 22;
+}

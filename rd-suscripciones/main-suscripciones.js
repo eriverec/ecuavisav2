@@ -64,7 +64,7 @@
 		/*Inicio de modal*/
 		var modalPaqueteID = document.getElementById('modalPaqueteHtml');
 		var modalPaquete = new bootstrap.Modal(modalPaqueteID, {
-			keyboard: false
+			keyboard: true
 		});
 
 		modalPaqueteID.addEventListener('hidden.bs.modal', function (event) {
@@ -251,7 +251,8 @@
 		  	if(buscarPaquete(planId)){
 					const idUser = ECUAVISA_EC.USER_data().id;
 					const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
-					const load_BTN = document.querySelector(`.btn.boton_sus[data-id='${planId}']`);
+					const load_BTN = document.querySelector(`.btn-ecuavisa.finish`);
+					const modal_Load = document.querySelector(`#modalPaqueteHtml`);
 					const getToken = localStorage.getItem('x-token');
 
 					var jsonSend = {
@@ -261,30 +262,30 @@
 						"metodoPago" : valorMetodoPago
 					};
 
-					console.log(jsonSend)
-
-					// fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
-					// 	method: 'POST',
-					// 	headers: {
-					// 		'Authorization': 'Bearer ' + getToken,
-					// 		'Content-Type': 'application/json'
-					// 	},
-					// 	body: JSON.stringify({
-					// 		"idPaquete": planId,
-					// 		"idUsuario": idEcuavisa,
-					// 		"idUsuarioObject": idwylexIdObject,
-					// 		"metodoPago": "1"
-					// 	}),
-					// 	redirect: 'follow'
-					// }).then(response => response.json())
-					// 	.then(result => {
-					// 		console.log(result);
-					// 		load_BTN.style.opacity = "1";
-					// 	})
-					// 	.catch(error => {
-					// 		console.log('error', error);
-					// 		load_BTN.style.opacity = "1";
-					// 	});
+					// console.log(jsonSend)
+					load_BTN.setAttribute("disabled", "true");
+					modal_Load.setAttribute("disabled", "true");
+					fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
+						method: 'POST',
+						headers: {
+							'Authorization': 'Bearer ' + getToken,
+							'Content-Type': 'application/json'
+						},
+						body: JSON.stringify(getToken),
+						redirect: 'follow'
+					}).then(response => response.json())
+						.then(result => {
+							console.log(result);
+							// load_BTN.style.opacity = "1";
+							load_BTN.removeAttribute("disabled");
+							modal_Load.removeAttribute("disabled");
+						})
+						.catch(error => {
+							console.log('error', error);
+							// load_BTN.style.opacity = "1";
+							load_BTN.removeAttribute("disabled");
+							modal_Load.removeAttribute("disabled");
+						});
 
 		  	}else{
 		  		alert("El plan seleccionado no existe")
