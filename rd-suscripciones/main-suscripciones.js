@@ -257,7 +257,7 @@
 
 					var jsonSend = {
 						"idPaquete": planId,
-				    "idUsuario": idUser,
+				    "idUsuario": parseInt(idUser),
 				    "idUsuarioObject": idwylexIdObject,
 						"metodoPago" : valorMetodoPago
 					};
@@ -265,27 +265,34 @@
 					// console.log(jsonSend)
 					load_BTN.setAttribute("disabled", "true");
 					modal_Load.setAttribute("disabled", "true");
-					fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", {
-						method: 'POST',
-						headers: {
-							'Authorization': 'Bearer ' + getToken,
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify(getToken),
-						redirect: 'follow'
-					}).then(response => response.json())
-						.then(result => {
-							console.log(result);
+
+					var myHeaders = new Headers();
+					myHeaders.append("Content-Type", "application/json");
+					myHeaders.append("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2OTYwMDkwNjEsImV4cCI6MTY5NjAxMDI2MX0.YPjL_uhp2zTUnsZwEr45rn2D7E4d11OSkJui8W38-0k");
+
+					var raw = JSON.stringify(jsonSend);
+
+					var requestOptions = {
+					  method: 'POST',
+					  headers: myHeaders,
+					  body: raw,
+					  redirect: 'follow'
+					};
+
+					fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", requestOptions)
+					  .then(response => response.text())
+					  .then(result => {
+					  	console.log(result);
 							// load_BTN.style.opacity = "1";
 							load_BTN.removeAttribute("disabled");
 							modal_Load.removeAttribute("disabled");
-						})
-						.catch(error => {
-							console.log('error', error);
+					  }).catch(error => {
+					  	console.log(result);
 							// load_BTN.style.opacity = "1";
 							load_BTN.removeAttribute("disabled");
 							modal_Load.removeAttribute("disabled");
-						});
+							console.log('error', error)
+					  });
 
 		  	}else{
 		  		alert("El plan seleccionado no existe")
