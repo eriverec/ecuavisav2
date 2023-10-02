@@ -59,6 +59,7 @@ function cargarNombresYPlanes() {
 		.then(response => response.json())
 		.then(data => {
 			productos = data.data;
+			console.log(productos);
 			const resp = data.resp;
 			const x_Token = data.token;
 			localStorage.setItem('x-token', x_Token);
@@ -83,8 +84,14 @@ function cargarNombresYPlanes() {
 					classCorreo.innerHTML = localStorage.getItem('wylexEmail');
 				}
 
-				nombresProductos.forEach(productoNombre => {
-					const buttonHtml = `<button class="tab-button" data-producto="${productoNombre}">${productoNombre}</button>`;
+				productos.forEach(producto => {
+					const productoNombre = producto.nombre;
+					const buttonHtml = `
+                <button class="tab-button" data-producto="${productoNombre}">${productoNombre}</button>
+              `;
+
+				// nombresProductos.forEach(productoNombre => {
+				// 	const buttonHtml = `<button class="tab-button" data-producto="${productoNombre}">${productoNombre}</button>`;
 					tabContainer.innerHTML += buttonHtml;
 				});
 
