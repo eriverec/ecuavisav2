@@ -14,7 +14,72 @@
   <script src="main.js"></script>
   <script src="global.js"></script>
   <style type="text/css">
+     .item-pago .btn {
+    width: 100%;
+    align-items: center;
+    justify-content: initial;
+    gap: 20px;
+    border: 1px solid #d4d4d4;
+    padding: 15px 20px;
+    border-radius: 7px;
+    transition: all 0.5s ease;
+}
 
+.item-pago .check-pago {
+    background: #ffffff;
+    width: 20px;
+    height: 20px;
+    border-radius: 100px;
+    border: 1px solid #c4c4c4;
+    position: relative;
+}
+.method-pago {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-direction: row;
+    gap: 20px;
+}
+.titulo-beneficio {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0px;
+    font-weight: 700;
+    justify-content: center;
+}
+
+.titulo-beneficio p {
+    font-size: 12px;
+    line-height: 1.2;
+    font-weight: 300;
+    color: #cccccc;
+}
+.item-pago .btn:hover {
+    background-color: #f2f2f2;
+}
+
+.item-pago .btn:hover {
+    background-color: #f2f2f2;
+}
+
+.item-pago .active .check-pago {background: #2d21b5;border-color: #2d21b5;}
+
+.item-pago .active .check-circle {
+    width: 8px;
+    height: 8px;
+    background: white;
+    border-radius: 50px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+.pago-list {
+    gap: 5px;
+}
   </style>
 </head>
 
@@ -117,11 +182,7 @@
                     <div class="col-12 d-flex flex-column">
                       <h3>Suscribirse al plan</h3>
                       <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-                        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                        tempor incididunt ut labore et dolore magna aliqua.</p>
                     </div>
                     <div class="col-12 d-flex flex-column">
                       <button id="changePlan" class="btn btn-changeplan" type="button">
@@ -192,6 +253,44 @@
                             Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
                             tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam
                           </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="col-12 d-flex flex-column py-3 px-4 pt-2">
+                      <h4 class="title-beneficios">Pagos</h4>
+                      <div class="pago-list d-flex flex-column">
+                        <div class="item-pago">
+                          <button value="1" type="button" class="btn active d-flex flex-row">
+                            <div class="check-pago">
+                              <div class="check-circle"></div>
+                            </div>
+                            <div class="method-pago">
+                              <div class="icon-pago">
+                                <svg width="35px" height="35px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>credit-card-multiple-outline</title><path d="M21,8V6H7V8H21M21,16V11H7V16H21M21,4A2,2 0 0,1 23,6V16A2,2 0 0,1 21,18H7C5.89,18 5,17.1 5,16V6C5,4.89 5.89,4 7,4H21M3,20H18V22H3A2,2 0 0,1 1,20V9H3V20Z" /></svg>
+                              </div>
+                              <div class="titulo-beneficio">
+                                Pago directo
+                                <p class="p-0 pt-1 mb-0">Paga directamente con tu tarjeta</p>
+                              </div>
+                            </div>
+                          </button>
+                        </div>
+                        <div class="item-pago">
+                          <button type="button" class="btn d-flex flex-row">
+                            <div class="check-pago">
+                              <div class="check-circle"></div>
+                            </div>
+                            <div class="method-pago">
+                              <div class="icon-pago">
+                                <svg width="35px" height="35px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>credit-card-multiple-outline</title><path d="M21,8V6H7V8H21M21,16V11H7V16H21M21,4A2,2 0 0,1 23,6V16A2,2 0 0,1 21,18H7C5.89,18 5,17.1 5,16V6C5,4.89 5.89,4 7,4H21M3,20H18V22H3A2,2 0 0,1 1,20V9H3V20Z" /></svg>
+                              </div>
+                              <div class="titulo-beneficio">
+                                Depósito bancario
+                                <p class="p-0 pt-1 mb-0">Deposita a nuestra cuenta de banco</p>
+                              </div>
+                            </div>
+                          </button>
                         </div>
                       </div>
                     </div>
