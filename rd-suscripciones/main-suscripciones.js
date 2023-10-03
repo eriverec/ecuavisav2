@@ -1,5 +1,6 @@
 (async () => {
 	if(ECUAVISA_EC){
+		const contentgracias_btn = document.querySelector(`.content-gracias`);
 		async function cargarNombresYPlanes() {
 			const loadingElement = document.getElementById('loading');
 			loadingElement.style.display = 'block';
@@ -73,6 +74,7 @@
 			var url = new URL(urlActual);
 			url.searchParams.delete("paquete");
 			window.history.replaceState({}, document.title, url.toString());
+			contentgracias_btn.classList.add('d-none');
 		})
 
 		modalPaqueteID.addEventListener('show.bs.modal', function (event) {
@@ -261,7 +263,6 @@
 					const load_BTN = document.querySelector(`.btn-ecuavisa.finish`);
 					const modal_Load = document.querySelector(`#modalPaqueteHtml`);
 					const formWizard_btn = document.querySelector(`#formWizard`);
-					const contentgracias_btn = document.querySelector(`.content-gracias`);
 					const getToken = localStorage.getItem('x-token');
 
 					var jsonSend = {
