@@ -55,7 +55,7 @@
 
 /* Estilo de fondo para Daniel Noboa */
 .daniel-noboa {
-    background-color: #0a6aa6; 
+    background-color: #672893; 
     position: relative; /* Agrega posicionamiento relativo para animación */
     overflow: hidden; /* Oculta el exceso de barra de color */
 
@@ -77,11 +77,14 @@
     
 }
 
+.highcharts-label.highcharts-data-label.highcharts-data-label-color-undefined:nth-child(24){
+    translate: 35px -6px !important;
+}
 
 
 /* Estilo de fondo para Luisa González */
 .luisa-gonzalez {
-    background-color: #cd181c;
+    background-color: #1e96d4;
     justify-content: start;
     -webkit-transform-origin: 0 100%;
     -ms-transform-origin: 0 100%;
