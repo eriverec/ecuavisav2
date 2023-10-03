@@ -4,11 +4,12 @@ import 'vue3-form-wizard/dist/style.css';
 
 const dataCaracteristicas = ref([]);
 const isLoading = ref(false);
+const urlDom = "https://ecuavisa-suscripciones.vercel.app";
 
 async function getCaracteristicas (){
     try {
       isLoading.value = true;  
-      const consulta = await fetch('https://ecuavisa-modulos.vercel.app/caracteristica');
+      const consulta = await fetch(urlDom + '/caracteristica');
       const consultaJson = await consulta.json();
       dataCaracteristicas.value = consultaJson.data;             
       isLoading.value = false; 
@@ -81,7 +82,7 @@ const idToEdit = ref('');
 async function onEditCaracteristica(id){
     resetForm(); 
     accionForm.value = 'edit';
-    const consulta = await fetch('https://ecuavisa-modulos.vercel.app/caracteristica/' + id);
+    const consulta = await fetch(urlDom + '/caracteristica/' + id);
     const consultaJson = await consulta.json();
     const caracteristica = consultaJson.data;
     //console.log(paquete);
@@ -122,7 +123,7 @@ async function onComplete(){
             body: raw,
             redirect: 'follow'
         };
-        const send = await fetch('https://ecuavisa-modulos.vercel.app/caracteristica', requestOptions);
+        const send = await fetch(urlDom + '/caracteristica', requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
             configSnackbar.value = {
@@ -152,7 +153,7 @@ async function onComplete(){
             body: raw,
             redirect: 'follow'
         };
-        const send = await fetch('https://ecuavisa-modulos.vercel.app/caracteristica', requestOptions);
+        const send = await fetch(urlDom + '/caracteristica', requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
             configSnackbar.value = {
@@ -189,7 +190,7 @@ async function deletePaquete() {
         redirect: 'follow'
     };
 
-    const deleted = await fetch('https://ecuavisa-modulos.vercel.app/caracteristica/' + idToDelete.value, requestOptions);
+    const deleted = await fetch(urlDom + '/caracteristica/' + idToDelete.value, requestOptions);
     const respuesta = await deleted.json();
     if (respuesta.resp) {
         configSnackbar.value = {

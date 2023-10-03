@@ -504,3 +504,52 @@ fill: #6bd8d1;
     fill: #c1c1c1;
     color: #c1c1c1;
 }
+
+.content-gracias.error svg.success {
+    display: none;
+}
+
+.content-gracias.success svg.error {
+    display: none;
+}
+
+.content-gracias.error svg.error {
+    fill: #dd0000;
+}
+
+.content-gracias.error .gracias-email {
+    display: none;
+}
+
+.no-login {max-width: 270px;gap: 10px;text-align: center;margin-left: auto;display: flex;margin-right: auto;flex-direction: column;}
+
+.icon-login svg {
+    width: 40px;
+    height: 40px;
+}
+
+#btn-login-ec {
+    background: #2826b8;
+    color: #fff;
+    border-radius: 2px;
+    padding: 12px 20px;
+    text-align: center;
+    text-transform: uppercase;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 12px;
+    margin: 0;
+    margin-top: 20px;
+}
+
+.detalles .login {
+  max-width: 350px;
+  text-align: center;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 20px 0;
+}
+
+.btn-ecuavisa.next[disabled="true"] {
+    display: none;
+}

@@ -1,10 +1,11 @@
 (async () => {
 	if(ECUAVISA_EC){
+		const contentgracias_btn = document.querySelector(`.content-gracias`);
 		async function cargarNombresYPlanes() {
 			const loadingElement = document.getElementById('loading');
 			loadingElement.style.display = 'block';
 			try {
-		    const response = await fetch('https://ecuavisa-modulos.vercel.app/paquete/display/all');
+		    const response = await fetch('https://ecuavisa-suscripciones.vercel.app/paquete/display/all');
 		    if (!response.ok) {
 		      throw new Error('Error al obtener datos desde JSON');
 		    }
@@ -64,7 +65,8 @@
 		/*Inicio de modal*/
 		var modalPaqueteID = document.getElementById('modalPaqueteHtml');
 		var modalPaquete = new bootstrap.Modal(modalPaqueteID, {
-			keyboard: true
+			keyboard: false,
+			backdrop: 'static'
 		});
 
 		modalPaqueteID.addEventListener('hidden.bs.modal', function (event) {
@@ -72,9 +74,12 @@
 			var url = new URL(urlActual);
 			url.searchParams.delete("paquete");
 			window.history.replaceState({}, document.title, url.toString());
+			contentgracias_btn.classList.add('d-none');
 		})
 
 		modalPaqueteID.addEventListener('show.bs.modal', function (event) {
+
+			document.querySelector(".item-pago button[value='2']").setAttribute("disabled", "true");
 			setTimeout(() => {
 				var bg = document.querySelector(".modal-backdrop");
 				bg.style.backgroundColor = "#e8ebf4";
@@ -135,12 +140,18 @@
 				if(document.querySelector("#nombre")){
 					document.querySelector("#nombre").value = usuario.name;
 					document.querySelector("#apellidos").value = usuario.lastname;
+					document.querySelector('.no-login').style.display = "none";
+					document.querySelector('.detalles .login').style.display = "block";
 				}
 			} else {
-				const gru = document.querySelector('.form-group');
-				gru.innerHTML = `
-				<span>Debes iniciar sesion</span> <br>
-				<a href="https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}" class="btn btn-secondary html_Login" onclick="">Login</a>`;
+				// const gru = document.querySelector('.form-group');
+				// gru.innerHTML = `
+				// <span>Debes iniciar sesion</span> <br>
+				// <a href="https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}" class="btn btn-secondary html_Login" onclick="">Login</a>`;
+				
+				document.querySelector('.no-login').style.display = "block";
+				document.querySelector('.detalles .login').style.display = "none";
+				document.querySelector('#btn-login-ec').href = `https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}`;
 			}
 			modalPaquete.show();
 		}
@@ -254,7 +265,6 @@
 					const load_BTN = document.querySelector(`.btn-ecuavisa.finish`);
 					const modal_Load = document.querySelector(`#modalPaqueteHtml`);
 					const formWizard_btn = document.querySelector(`#formWizard`);
-					const contentgracias_btn = document.querySelector(`.content-gracias`);
 					const getToken = localStorage.getItem('x-token');
 
 					var jsonSend = {
@@ -282,9 +292,15 @@
 					};
 
 					fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", requestOptions)
-					  .then(response => response.text())
+					  .then(response => response.json())
 					  .then(result => {
 					  	console.log(result);
+					  	if(result.resp){
+								contentgracias_btn.classList.add('success');
+					  	}else{
+								contentgracias_btn.classList.add('error');
+								document.querySelector(".gracias-descripcion").innerHTML = "Se presentó un error: "+result.error;
+					  	}
 							// load_BTN.style.opacity = "1";
 							load_BTN.removeAttribute("disabled");
 							modal_Load.removeAttribute("disabled");
@@ -292,14 +308,18 @@
 							contentgracias_btn.classList.remove('d-none');
 
 					  }).catch(error => {
-					  	console.log(result);
+					  	// console.log(result);
 							// load_BTN.style.opacity = "1";
 							load_BTN.removeAttribute("disabled");
 							modal_Load.removeAttribute("disabled");
 							
 							formWizard_btn.classList.add('d-none');
 							contentgracias_btn.classList.remove('d-none');
-							console.log('error', error)
+
+							contentgracias_btn.classList.add('error');
+
+							document.querySelector(".gracias-descripcion").innerHTML = "Se presentó un error: "+error;
+							// console.log('error', error)
 					  });
 
 		  	}else{
