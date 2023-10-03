@@ -6,11 +6,12 @@ const dataPaquetes = ref([]);
 const dataPaquetesRaw = ref([]);
 const dataGrupos = ref([]);
 const isLoading = ref(false);
+const urlDom = "https://ecuavisa-suscripciones.vercel.app";
 
 async function getGrupos (){
     try {
       isLoading.value = true;  
-      const consulta = await fetch('https://ecuavisa-modulos.vercel.app/grupo');
+      const consulta = await fetch(urlDom + '/grupo');
       const consultaJson = await consulta.json();
       dataGrupos.value = consultaJson.data;             
       isLoading.value = false; 
@@ -22,7 +23,7 @@ async function getGrupos (){
 async function getPaquetes (){
     try {  
       
-      const consulta = await fetch('https://ecuavisa-modulos.vercel.app/paquete');
+      const consulta = await fetch(urlDom + '/paquete');
       const consultaJson = await consulta.json();
 
       let paquetesRaw = Array.from(consultaJson.data);
@@ -109,7 +110,7 @@ async function onEditGrupo(id){
     resetForm(); 
     accionForm.value = 'edit';
     await getPaquetes();
-    const consulta = await fetch('https://ecuavisa-modulos.vercel.app/grupo/' + id);
+    const consulta = await fetch(urlDom + '/grupo/' + id);
     const consultaJson = await consulta.json();
     const grupo = consultaJson.data;
     //console.log(paquete);
@@ -161,7 +162,7 @@ async function onComplete(){
             body: raw,
             redirect: 'follow'
         };
-        const send = await fetch('https://ecuavisa-modulos.vercel.app/grupo', requestOptions);
+        const send = await fetch(urlDom + '/grupo', requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
             configSnackbar.value = {
@@ -192,7 +193,7 @@ async function onComplete(){
             body: raw,
             redirect: 'follow'
         };
-        const send = await fetch('https://ecuavisa-modulos.vercel.app/grupo', requestOptions);
+        const send = await fetch(urlDom + '/grupo', requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
             configSnackbar.value = {
@@ -229,7 +230,7 @@ async function deletePaquete() {
         redirect: 'follow'
     };
 
-    const deleted = await fetch('https://ecuavisa-modulos.vercel.app/grupo/' + idToDelete.value, requestOptions);
+    const deleted = await fetch(urlDom + '/grupo/' + idToDelete.value, requestOptions);
     const respuesta = await deleted.json();
     if (respuesta.resp) {
         configSnackbar.value = {
