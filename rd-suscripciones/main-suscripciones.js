@@ -78,7 +78,7 @@
 		})
 
 		modalPaqueteID.addEventListener('show.bs.modal', function (event) {
-
+			document.querySelector(`#formWizard`).classList.remove('d-none');
 			document.querySelector(".item-pago button[value='2']").setAttribute("disabled", "true");
 			setTimeout(() => {
 				var bg = document.querySelector(".modal-backdrop");

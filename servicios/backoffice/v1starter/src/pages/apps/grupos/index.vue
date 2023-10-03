@@ -135,9 +135,9 @@ async function onComplete(){
         return false;
     }
 
-    if(grupoPaquetes.length < 2){
+    if(grupoPaquetes.length < 1){
         configSnackbar.value = {
-                    message: "Debe seleccionar almenos 2 paquetes",
+                    message: "Debe seleccionar almenos 1 paquete",
                     type: "error",
                     model: true
                 };

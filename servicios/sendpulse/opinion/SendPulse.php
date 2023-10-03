@@ -635,7 +635,7 @@ class SendPulse {
 				if(count($dataJsonList) < 2){
 					$ecuadorEsText.= '';
 				}else{
-					$ecuadorEsText.= '  <a href="'.$this->UTMLinks(2, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;font-style: italic;line-height:1.2; margin:0 0 10px; font-size:14px; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
+					$ecuadorEsText.= '  <a href="'.$this->UTMLinks(2, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;line-height:1.2; margin:0 0 10px; font-size:14px; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
 			            			<span>'.$dataJsonList[0].'.</span>
 			            		</a>';
 				}

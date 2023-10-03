@@ -576,14 +576,14 @@ async function deletePaquete() {
             <!-- Dialog close btn -->
             <DialogCloseBtn @click="closeDiag" />
 
-            <VCard>
+            <VCard  class="pa-sm-14 pa-5">
                 <VCardItem class="text-center">
                     <VCardTitle class="text-h5 mb-3">
                         {{ accionForm === "add" ? "Crear un paquete" : "Editar " + nombre }}
                     </VCardTitle>
                 </VCardItem>
 
-                <VCardText class="px-5 py-3">
+                <VCardText>
 
                      <!-- inicio lista de Módulos -->
                   
@@ -703,13 +703,13 @@ async function deletePaquete() {
                         <VDivider class="my-2"/>
                         <VCol cols="12">
 
-                          <VRow class="mb-4"> 
+                          <VRow> 
                             <VCol v-if="accionForm == 'add'"
                               cols="6"
                               md="6"
                             >
-                                <VSelect v-model="grupo" label="Grupo" :items="gruposItems" />  
                             
+                            <VSelect v-model="grupo" label="Grupo" :items="gruposItems" />  
                             </VCol>
 
                             <VCol
@@ -717,11 +717,11 @@ async function deletePaquete() {
                               md="6"
                             >
                            
-                                <VSelect  v-model="sitio" label="Sitio" :items="sitiosItems" />  
+                            <VSelect  v-model="sitio" label="Sitio" :items="sitiosItems" />  
                             </VCol>
                           </VRow>
 
-                          <VRow class="mb-4"> 
+                          <VRow > 
                             <VCol
                               cols="6"
                               md="6"
@@ -753,15 +753,26 @@ async function deletePaquete() {
                             </VCol>
                           </VRow>
 
-                          <VRow class="d-flex flex-wrap mb-4"> 
+                          <VRow class="d-flex flex-wrap"> 
+                            <VCol
+                              cols="2"
+                              md="2"
+                              class="smContainer"
+                            >
+                            <VTextField
+                                v-model="color"
+                                label="Color"   
+                                                             
+                              />
+                            </VCol>
 
                             <VCol
-                              cols="6"
-                              md="6"
+                              cols="4"
+                              md="4"
                               class="smContainer"
                             >
                             
-                                <VSelect v-model="destaque" label="Destaque" :items="destaqueItems" />
+                            <VSelect v-model="destaque" label="Destaque" :items="destaqueItems" />
                             </VCol>
 
                             <VCol
@@ -769,34 +780,34 @@ async function deletePaquete() {
                               md="6"
                               class="mdContainer"
                             >
-                                <VTextField
-                                    v-model="clasesCss"
-                                    label="Clases CSS"                                
-                                  />
+                            <VTextField
+                                v-model="clasesCss"
+                                label="Clases CSS"                                
+                              />
                             </VCol>
 
                             <VCol cols="6" md="6" class="lgContainer">
-                                <span>Visibilidad</span>  
-                                <VRadioGroup v-model="visibilidad">
-                                  <VRadio
-                                    v-for="(vis,indexV) in visibilidadItems"
-                                    :key="indexV"
-                                    :label="vis"
-                                    :value="vis"
-                                  />
-                                </VRadioGroup>
+                            <span>Visibilidad</span>  
+                            <VRadioGroup v-model="visibilidad">
+                              <VRadio
+                                v-for="(vis,indexV) in visibilidadItems"
+                                :key="indexV"
+                                :label="vis"
+                                :value="vis"
+                              />
+                            </VRadioGroup>
                             </VCol>
 
                             <VCol cols="6" md="6" class="lgContainer">
-                                <span>Cambio de plan</span>  
-                                <VRadioGroup v-model="cambioPlan">
-                                  <VRadio
-                                    v-for="(plan,indexP) in cambioPlanItems"
-                                    :key="indexP"
-                                    :label="plan.title"
-                                    :value="plan.value"
-                                  />
-                                </VRadioGroup>
+                            <span>Cambio de plan</span>  
+                            <VRadioGroup v-model="cambioPlan">
+                              <VRadio
+                                v-for="(plan,indexP) in cambioPlanItems"
+                                :key="indexP"
+                                :label="plan.title"
+                                :value="plan.value"
+                              />
+                            </VRadioGroup>
                             </VCol>
 
                             <VCol cols="6" md="6" class="lgContainer">
