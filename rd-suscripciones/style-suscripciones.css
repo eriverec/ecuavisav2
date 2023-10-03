@@ -549,3 +549,7 @@ fill: #6bd8d1;
   margin-right: auto;
   padding: 20px 0;
 }
+
+.btn-ecuavisa.next[disabled="true"] {
+    display: none;
+}

@@ -78,6 +78,8 @@
 		})
 
 		modalPaqueteID.addEventListener('show.bs.modal', function (event) {
+
+			document.querySelector(".item-pago button[value='2']").setAttribute("disabled", "true");
 			setTimeout(() => {
 				var bg = document.querySelector(".modal-backdrop");
 				bg.style.backgroundColor = "#e8ebf4";
