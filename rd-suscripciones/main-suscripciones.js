@@ -64,7 +64,8 @@
 		/*Inicio de modal*/
 		var modalPaqueteID = document.getElementById('modalPaqueteHtml');
 		var modalPaquete = new bootstrap.Modal(modalPaqueteID, {
-			keyboard: true
+			keyboard: false,
+			backdrop: 'static'
 		});
 
 		modalPaqueteID.addEventListener('hidden.bs.modal', function (event) {
@@ -282,9 +283,15 @@
 					};
 
 					fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", requestOptions)
-					  .then(response => response.text())
+					  .then(response => response.json())
 					  .then(result => {
 					  	console.log(result);
+					  	if(result.resp){
+								contentgracias_btn.classList.add('success');
+					  	}else{
+								contentgracias_btn.classList.add('error');
+								document.querySelector(".gracias-descripcion")innerHTML = "Se presentó un error: "+result.error;
+					  	}
 							// load_BTN.style.opacity = "1";
 							load_BTN.removeAttribute("disabled");
 							modal_Load.removeAttribute("disabled");
@@ -292,14 +299,18 @@
 							contentgracias_btn.classList.remove('d-none');
 
 					  }).catch(error => {
-					  	console.log(result);
+					  	// console.log(result);
 							// load_BTN.style.opacity = "1";
 							load_BTN.removeAttribute("disabled");
 							modal_Load.removeAttribute("disabled");
 							
 							formWizard_btn.classList.add('d-none');
 							contentgracias_btn.classList.remove('d-none');
-							console.log('error', error)
+
+							contentgracias_btn.classList.add('error');
+
+							document.querySelector(".gracias-descripcion")innerHTML = "Se presentó un error: "+error;
+							// console.log('error', error)
 					  });
 
 		  	}else{

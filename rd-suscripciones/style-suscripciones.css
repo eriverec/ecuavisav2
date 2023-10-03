@@ -504,3 +504,19 @@ fill: #6bd8d1;
     fill: #c1c1c1;
     color: #c1c1c1;
 }
+
+.content-gracias.error svg.success {
+    display: none;
+}
+
+.content-gracias.success svg.error {
+    display: none;
+}
+
+.content-gracias.error svg.error {
+    fill: #dd0000;
+}
+
+.content-gracias.error .gracias-email {
+    display: none;
+}
