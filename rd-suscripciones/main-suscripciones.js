@@ -5,7 +5,7 @@
 			const loadingElement = document.getElementById('loading');
 			loadingElement.style.display = 'block';
 			try {
-		    const response = await fetch('https://ecuavisa-modulos.vercel.app/paquete/display/all');
+		    const response = await fetch('https://ecuavisa-suscripciones.vercel.app/paquete/display/all');
 		    if (!response.ok) {
 		      throw new Error('Error al obtener datos desde JSON');
 		    }
