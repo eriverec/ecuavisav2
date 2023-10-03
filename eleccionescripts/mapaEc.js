@@ -95,11 +95,11 @@
                         name: 'Votos',
                         data: [{
                             name: 'Noboa',
-                            color: '#0a6aa6',
+                            color: '#672893',
                             y: parseInt(columns[3][row])
                         }, {
                             name: 'Gonzáles',
-                            color: '#cd181c',
+                            color: '#1e96d4',
                             y: parseInt(columns[2][row])
                         }],
                         dataLabels: {
@@ -141,11 +141,11 @@
                                     var total = luisa + daniel;
 
                                     const content = `
-                                    <span style="font-size:14px;font-weight: bold;">${point.series.name} de ${point.name}</span><br/>
-                                    <div style="text-align:left"><div style="color:#0a6aa6;">⦿</div> 
+                                    <span style="font-size:14px;font-weight: bold;">${point.name}</span><br/>
+                                    <div style="text-align:left"><div style="color:#672893;">⦿</div> 
                                         <small>Daniel Noboa: <br/> ${daniel}  votos - ${((daniel*100)/total).toFixed(2)} %</small>
                                     </div><br><br>
-                                    <div style="text-align:left"><div style="color:#cd181c;">⦿</div> 
+                                    <div style="text-align:left"><div style="color:#1e96d4;">⦿</div> 
                                         <small>Luisa Gonzáles: <br/> ${luisa} votos - ${((luisa*100)/total).toFixed(2)} %</small>
                                     </div>`;
                                     // const content = `<div style="color:${point.color};">⦿</div>
@@ -204,18 +204,18 @@
 
                     colorAxis: {
                         stops: [
-                          [0, '#0a6aa6'],       // Color para Daniel Noboa
-                          [1, '#cd181c']        // Color para Luisa Gonzáles
+                          [0, '#672893'],       // Color para Daniel Noboa
+                          [1, '#1e96d4']        // Color para Luisa Gonzáles
                         ],
                         dataClasses: [{
                             from: -100,
                             to: 0,
-                            color: '#cd181c',
+                            color: '#1e96d4',
                             name: 'Luisa Gonzáles'
                         }, {
                             from: 0,
                             to: 100,
-                            color: '#0a6aa6',
+                            color: '#672893',
                             name: 'Daniel Noboa'
                         }]
                     },
@@ -234,7 +234,7 @@
                               // Personaliza el formato de la etiqueta de datos con HTML
                               if(v.hasOwnProperty('valorCandidatoG')){
                               // console.log(this.point, v.name)
-                                 return '<b>' + this.point.name + '</b><br> <div style="font-size:12px">' + this.point.valorCandidatoG + ' Votos</div>';
+                                 return '<b>' + this.point.name + '</b>';
                                }else{
                                 return this.point.name;
                                }
@@ -284,7 +284,7 @@
             //     var mayorContrincante = getMayorContrincante(i);
             //     var color = '';
             //     if(mayorContrincante){
-            //         color = mayorContrincante === 'Daniel Noboa' ? '#0a6aa6' : '#cd181c'; // Cambia los colores aquí
+            //         color = mayorContrincante === 'Daniel Noboa' ? '#672893' : '#1e96d4'; // Cambia los colores aquí
             //     }
 
             //     console.log(mayorContrincante)
@@ -309,7 +309,7 @@
                 var color = '';
 
                 if (mayorContrincante) {
-                  color = mayorContrincante[0] === 'Daniel Noboa' ? '#0a6aa6' : '#cd181c'; // Asigna el color según el contrincante mayor
+                  color = mayorContrincante[0] === 'Daniel Noboa' ? '#672893' : '#1e96d4'; // Asigna el color según el contrincante mayor
                 }
 
                 if (mayorContrincante) {

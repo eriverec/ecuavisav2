@@ -227,7 +227,24 @@ const userListMeta = [
 
 
 </script>
+<style>
+@media screen and (max-width: 1500px) and (min-width: 1280px) {
+  .tarjeta {
+    width: 185px;
+  }
+  svg {
+   display: none;
+  }
+}
 
+@media screen and (max-width: 3000px) and (min-width: 1501px) {
+  .tarjeta {
+    width: 215px;
+  }
+ 
+}
+
+</style>
 <template>
 
   <section>
@@ -242,7 +259,7 @@ const userListMeta = [
       >
 
       
-      <VCard class="col-12 col-sm- col-lg-2" >
+      <VCard class="col-12 col-sm- col-lg-2 tarjeta" >
   <VCardText class="d-flex justify-space-between" style="font-size:11px;">
     <div>
       <span>{{ meta.title }}</span>

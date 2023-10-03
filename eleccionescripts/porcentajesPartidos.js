@@ -21,12 +21,15 @@ fetch(apiUrl)
         votosData.forEach(voto => {
             const votoNulos = voto.nulos;
             const votoBlancos = voto.blancos;
+            const votoEscrutado = voto.escrutado;
+
 
 
             const votoElementNulo = `
             <div class="parent_votos"> 
-                <span>Votos Nulos: <b>${votoNulos}</b> </span>
-                <span>Votos en Blanco: <b>${votoBlancos}</b>  </span>
+                <span>Escrutado: <b>${votoEscrutado}</b>%</span>
+                <span>Votos Nulos: <b>${votoNulos}</b>%</span>
+                <span>Votos en Blanco: <b>${votoBlancos}</b>%  </span>
             </div> `;
 
             votoHTML += votoElementNulo;
@@ -144,8 +147,8 @@ function eventoCharPie() {
 
             // Definir una paleta de colores personalizada
             const customColors = {
-                'Luisa González': '#cd181c', // Color para Luisa
-                'Daniel Noboa': '#0a6aa6' // Color para Novoa
+                'Luisa González': '#1e96d4', // Color para Luisa
+                'Daniel Noboa': '#672893' // Color para Novoa
             };
             // Asignar colores según el nombre del partido
             chartData.forEach(item => {
@@ -205,8 +208,8 @@ function eventoCharColumn() {
 
             // Definir una paleta de colores personalizada
             const customColors = {
-                'Luisa González': '#cd181c', // Color para Luisa
-                'Daniel Noboa': '#0a6aa6' // Color para Novoa
+                'Luisa González': '#1e96d4', // Color para Luisa
+                'Daniel Noboa': '#672893' // Color para Novoa
             };
             // Asignar colores según el nombre del partido
             chartData.forEach(item => {
