@@ -109,10 +109,12 @@ justify-content: space-between;
 }
 #changePlan .icon {
 display: flex;
-background-color: #6bd8d1;
-border-radius: 7px;
-align-items: center;
-padding: 10px 10px;
+    background-color: #6bd8d1;
+    border-radius: 7px;
+    align-items: center;
+    padding: 10px 10px;
+    width: 55px;
+    height: 55px;
 }
 
 #changePlan .flex-row {
@@ -552,4 +554,17 @@ fill: #6bd8d1;
 
 .btn-ecuavisa.next[disabled="true"] {
     display: none;
+}
+
+#bloque-ec-one {
+    padding-bottom: 56px;
+}
+
+.title-plan {
+    text-align: left;
+    line-height: 1.2;
+}
+
+.title-detaill {
+    padding-right: 50px;
 }
