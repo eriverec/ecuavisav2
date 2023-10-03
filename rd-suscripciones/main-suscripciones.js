@@ -75,6 +75,7 @@
 			url.searchParams.delete("paquete");
 			window.history.replaceState({}, document.title, url.toString());
 			contentgracias_btn.classList.add('d-none');
+			wizard.reset();
 		})
 
 		modalPaqueteID.addEventListener('show.bs.modal', function (event) {
@@ -85,6 +86,8 @@
 				bg.style.backgroundColor = "#e8ebf4";
 				bg.style.opacity = "1";
 			}, 200);
+
+			
 		})
 		/*Fin de modal*/
 

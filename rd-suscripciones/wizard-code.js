@@ -81,8 +81,8 @@ $wz_doc.addEventListener("wz.unlock", function (e) {
 });
 
 $wz_doc.addEventListener("wz.reset", function (e) {
-  document.getElementById("formWizard").reset();
-  alert("Wizard has restarted");
+  // document.getElementById("formWizard").reset();
+  // alert("Wizard has restarted");
 });
 
 $wz_doc.addEventListener("wz.update", function (e) {
