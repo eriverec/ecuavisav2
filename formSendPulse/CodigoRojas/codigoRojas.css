@@ -21,7 +21,7 @@
 
 .newsletter_rd_codigo_rojas .newsContenido .news-texto-rd {
   text-align: left;
-  padding-left: 30px;
+  padding-left: 22px;
   margin-top: 93px;
 }
 
@@ -95,9 +95,9 @@
     display: block;
   }
 
-  .newsletter_rd_codigo_rojas .newsContenido .news_line_left {
+  /*.newsletter_rd_codigo_rojas .newsContenido .news_line_left {
     display: none;
-  }
+  }*/
 
   .newsletter_rd_codigo_rojas .newsContenido .news-texto-rd {
     padding-left: 15px;
@@ -120,4 +120,31 @@
   .newsletter_rd_codigo_rojas .newsContenido .news-texto-rd .esendpulse iframe {
     width: 265px;
   }
+}
+
+h2.newsletterh1 {
+    display: flex;
+    gap: 0px;
+    flex-direction: column;
+}
+
+h2.newsletterh1 div {
+    font-size: 72px;
+    line-height: 0.8;
+}
+
+@media only screen and (max-width: 600px) {
+    
+    h2.newsletterh1 {
+        display: flex;
+        gap: 0px;
+        flex-direction: row;
+        align-items: flex-end;
+    }
+    
+    h2.newsletterh1 div {
+        font-size: 60px;
+        line-height: 0.8;
+    }
+    
 }
