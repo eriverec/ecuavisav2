@@ -138,10 +138,10 @@
 					document.querySelector("#apellidos").value = usuario.lastname;
 				}
 			} else {
-				const gru = document.querySelector('.form-group');
-				gru.innerHTML = `
-				<span>Debes iniciar sesion</span> <br>
-				<a href="https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}" class="btn btn-secondary html_Login" onclick="">Login</a>`;
+				// const gru = document.querySelector('.form-group');
+				// gru.innerHTML = `
+				// <span>Debes iniciar sesion</span> <br>
+				// <a href="https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}" class="btn btn-secondary html_Login" onclick="">Login</a>`;
 			}
 			modalPaquete.show();
 		}
@@ -290,7 +290,7 @@
 								contentgracias_btn.classList.add('success');
 					  	}else{
 								contentgracias_btn.classList.add('error');
-								document.querySelector(".gracias-descripcion")innerHTML = "Se presentó un error: "+result.error;
+								document.querySelector(".gracias-descripcion").innerHTML = "Se presentó un error: "+result.error;
 					  	}
 							// load_BTN.style.opacity = "1";
 							load_BTN.removeAttribute("disabled");
@@ -309,7 +309,7 @@
 
 							contentgracias_btn.classList.add('error');
 
-							document.querySelector(".gracias-descripcion")innerHTML = "Se presentó un error: "+error;
+							document.querySelector(".gracias-descripcion").innerHTML = "Se presentó un error: "+error;
 							// console.log('error', error)
 					  });
 
