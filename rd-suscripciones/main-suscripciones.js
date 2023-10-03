@@ -136,12 +136,18 @@
 				if(document.querySelector("#nombre")){
 					document.querySelector("#nombre").value = usuario.name;
 					document.querySelector("#apellidos").value = usuario.lastname;
+					document.querySelector('.no-login').style.display = "none";
+					document.querySelector('.detalles .login').style.display = "block";
 				}
 			} else {
 				// const gru = document.querySelector('.form-group');
 				// gru.innerHTML = `
 				// <span>Debes iniciar sesion</span> <br>
 				// <a href="https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}" class="btn btn-secondary html_Login" onclick="">Login</a>`;
+				
+				document.querySelector('.no-login').style.display = "block";
+				document.querySelector('.detalles .login').style.display = "none";
+				document.querySelector('#btn-login-ec').href = `https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}`;
 			}
 			modalPaquete.show();
 		}

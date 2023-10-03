@@ -1,7 +1,7 @@
 <?php
 require '../vendor/autoload.php';
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
+// use GuzzleHttp\Client;
+// use GuzzleHttp\Psr7\Request;
 class SendPulse {
 
 	private $token;
@@ -27,7 +27,7 @@ class SendPulse {
 	function __construct(){
 		require '../funciones/Ctrfunciones.php';
 
-		$this->typeProyect =  "Guzzle"; //Production - Guzzle
+		$this->typeProyect =  "Production"; //Production - Guzzle
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 5,
 			"folder" => "opinion", // Guardado de img y json
