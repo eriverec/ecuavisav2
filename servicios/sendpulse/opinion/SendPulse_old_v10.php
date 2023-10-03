@@ -1,7 +1,7 @@
 <?php
 require '../vendor/autoload.php';
-// use GuzzleHttp\Client;
-// use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 class SendPulse {
 
 	private $token;
@@ -27,7 +27,7 @@ class SendPulse {
 	function __construct(){
 		require '../funciones/Ctrfunciones.php';
 
-		$this->typeProyect =  "Production"; //Production - Guzzle
+		$this->typeProyect =  "Guzzle"; //Production - Guzzle
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 5,
 			"folder" => "opinion", // Guardado de img y json
@@ -493,84 +493,6 @@ class SendPulse {
 		// return '<label style="display:none">'.$this->descripcion.'. Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label><a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none; color:#000" href="'.$link.'">Quiero ver en mi navegador</a>';
     }
 
-    private function templateEcuadorNoyEs($text){
-    	return '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%">
-		   <tbody>
-		      <tr style="border-color:transparent">
-		         <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top;padding: 20px;" valign="top">
-		         
-		            <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fnewsletterrojas%2Ffondo-azul.png);border-radius: 10px;" border="0" width="100%">
-		               <tbody>
-		                  <tr style="border-color:transparent">
-		                     <th width="100%" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top">
-		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
-		                           <tbody>
-		                              <tr style="border-color:transparent">
-		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
-		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_51_element_0" style="border-collapse:separate; font-size:14px; line-height:1.2; overflow:hidden">
-		                                       <tbody>
-		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
-		                                             <td class="content-cell" width="100%" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top">
-		                                                <div id="wout_block_51_element_0" style="font-size:14px; line-height:1.2; width:100%; height:45; display:block" width="100%" height="45">
-		                                                   <img border="0" width="100%" height="auto" class="desktop  sp-img " align="left" alt="news-rojas-arriba" src="https://s7844538.sendpul.se/files/emailservice/userfiles/f7d451814eb533de3f3b83b6f72ec10c7844538/news-rojas-arriba.png" iout_block_51_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; margin:0; display:block; -ms-interpolation-mode:bicubic"><!--[if !mso]><!-->
-		                                                   <div style="font-size:14px; line-height:1.2; mso-hide:all">
-		                                                      <img border="0" width="100%" height="auto" class="mobile  sp-img " align="left" alt="news-rojas-arriba" src="https://s7844538.sendpul.se/files/emailservice/userfiles/f7d451814eb533de3f3b83b6f72ec10c7844538/news-rojas-arriba.png" iout_block_51_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:453px !important"></div>
-		                                                   <!--<![endif]-->
-		                                                </div>
-		                                                <div style="font-size:14px; line-height:1.2; clear:both"></div>
-		                                             </td>
-		                                          </tr>
-		                                       </tbody>
-		                                    </table>
-		                                 </td>
-		                              </tr>
-		                           </tbody>
-		                        </table>
-		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
-		                           <tbody>
-		                              <tr style="border-color:transparent">
-		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
-		                                    
-		                                 	'.$text.'
-
-		                                 </td>
-		                              </tr>
-		                           </tbody>
-		                        </table>
-		                        <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
-		                           <tbody>
-		                              <tr style="border-color:transparent">
-		                                 <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
-		                                    <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_52_element_0" style="border-collapse:separate; font-size:14px; line-height:1.2; overflow:hidden">
-		                                       <tbody>
-		                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
-		                                             <td class="content-cell" width="100%" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top" align="center">
-		                                                <div id="wout_block_52_element_0" style="font-size:14px;line-height:1.2;height:15;display:block;padding-left: 20px;padding-right: 20px;" width="100%" height="15">
-		                                                   <img border="0" width="100%" height="auto" class="desktop  sp-img " align="left" alt="news-rojas-abajo" src="https://s7844538.sendpul.se/files/emailservice/userfiles/f7d451814eb533de3f3b83b6f72ec10c7844538/news-rojas-abajo.png" iout_block_52_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; margin:0; display:block; -ms-interpolation-mode:bicubic"><!--[if !mso]><!-->
-		                                                   <div style="font-size:14px; line-height:1.2; mso-hide:all">
-		                                                      <img border="0" width="100%" height="auto" class="mobile  sp-img " align="left" alt="news-rojas-abajo" src="https://s7844538.sendpul.se/files/emailservice/userfiles/f7d451814eb533de3f3b83b6f72ec10c7844538/news-rojas-abajo.png" iout_block_52_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:371px !important"></div>
-		                                                   <!--<![endif]-->
-		                                                </div>
-		                                                <div style="font-size:14px; line-height:1.2; clear:both"></div>
-		                                             </td>
-		                                          </tr>
-		                                       </tbody>
-		                                    </table>
-		                                 </td>
-		                              </tr>
-		                           </tbody>
-		                        </table>
-		                     </th>
-		                  </tr>
-		               </tbody>
-		            </table>
-
-		         </td>
-		      </tr>
-		   </tbody>
-		</table>';
-    }
-
     private function getOpinionesBloquesURL($list){
         $content = [];
         $titulosOpinionEs = [];
@@ -609,22 +531,21 @@ class SendPulse {
         // print_r($ecuadirEsList);
 
         $ecuadorEs = '';
-        $ecuadorEsText = '';
 
         if(count($titulosOpinionEs) > 0){
         	$ecuadirEsList = explode("*", $titulosOpinionEs[0]); //Es un mejor
-        	// $ecuadorEs.= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; background-color:'.$coloresList[0].'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#fff; margin:0; overflow:hiddenpadding-right: 15px;
-		    // padding-left: 0px;
-		    // padding-right: 0px;
-		    // padding-top: 0px;
-		    // padding-bottom: 0px;" border="0" width="100%">';
-	    	// $ecuadorEs.= '<tbody>';
-	    	// $ecuadorEs.= '<tr>';
+        	$ecuadorEs.= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; background-color:'.$coloresList[0].'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#fff; margin:0; overflow:hiddenpadding-right: 15px;
+		    padding-left: 0px;
+		    padding-right: 0px;
+		    padding-top: 0px;
+		    padding-bottom: 0px;" border="0" width="100%">';
+	    	$ecuadorEs.= '<tbody>';
+	    	$ecuadorEs.= '<tr>';
 
-	    	// $ecuadorEs.= '<td>';
-	    	$ecuadorEsText.= '  <div style="display:block;text-align:left;padding-left:20px;padding-right:20px;padding-bottom:15px;padding-top:20px">
-			            		<p style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-bottom:10px">
-			            			<span style="font-size: 18px;color:#009DED">
+	    	$ecuadorEs.= '<td>';
+	    	$ecuadorEs.= '  <div style="display:block;text-align:center;background-color:'.$coloresList[0].';padding-left:20px;padding-right:20px;padding-bottom:15px;padding-top:20px">
+			            		<p style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-bottom:20px">
+			            			<span style="font-size: 16px;">
 			            				<strong>Ecuador hoy es un mejor país por...</strong>
 			            			</span>
 			            		</p>';
@@ -633,42 +554,38 @@ class SendPulse {
 				$dataJsonList = explode("https://", $ecuadirEsList[$i]);
 
 				if(count($dataJsonList) < 2){
-					$ecuadorEsText.= '';
+					$ecuadorEs.= '';
 				}else{
-					$ecuadorEsText.= '  <a href="'.$this->UTMLinks(2, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;font-style: italic;line-height:1.2; margin:0 0 10px; font-size:14px; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
+					$ecuadorEs.= '  <a href="'.$this->UTMLinks(2, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;font-style: italic;line-height:1.2; margin:0 0 10px; font-size:14px; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
 			            			<span>'.$dataJsonList[0].'.</span>
 			            		</a>';
 				}
 
 			}
-		    $ecuadorEsText.=   '</div>';
-
-	    	// $ecuadorEs.= '</td>';
-	    	// $ecuadorEs.= '</tr>';
-	    	// $ecuadorEs.= '</tbody>';
-	    	// $ecuadorEs.= '</table>';
+		    $ecuadorEs.=   '</div>';
+	    	$ecuadorEs.= '</td>';
+	    	$ecuadorEs.= '</tr>';
+	    	$ecuadorEs.= '</tbody>';
+	    	$ecuadorEs.= '</table>';
         }
-
-        $ecuadorEs = $this->templateEcuadorNoyEs($ecuadorEsText);
         
 
         $ecuadorNoEs = '';
-        $ecuadorNoEsText = '';
 
         if(count($titulosOpinionNoEs) > 0){
         	$ecuadirNoEsList = explode("*", $titulosOpinionNoEs[0]);//No es un mejor
         	// echo json_encode($ecuadirNoEsList);
-        	// $ecuadorNoEs.= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; background-color:'.$coloresList[1].'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#fff; margin:0; overflow:hiddenpadding-right: 15px;
-		    // padding-left: 0px;
-		    // padding-right: 0px;
-		    // padding-top: 0px;
-		    // padding-bottom: 0px;" border="0" width="100%">';
-	    	// $ecuadorNoEs.= '<tbody>';
-	    	// $ecuadorNoEs.= '<tr>';
-	    	// $ecuadorNoEs.= '<td>';
-	    	$ecuadorNoEsText.= '  <div style="display:block;text-align:left;padding-left:20px;padding-right:20px;padding-bottom:15px;padding-top:20px">
-			            		<p style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-bottom:10px">
-			            			<span style="font-size: 18px;color:#009DED">
+        	$ecuadorNoEs.= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; background-color:'.$coloresList[1].'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#fff; margin:0; overflow:hiddenpadding-right: 15px;
+		    padding-left: 0px;
+		    padding-right: 0px;
+		    padding-top: 0px;
+		    padding-bottom: 0px;" border="0" width="100%">';
+	    	$ecuadorNoEs.= '<tbody>';
+	    	$ecuadorNoEs.= '<tr>';
+	    	$ecuadorNoEs.= '<td>';
+	    	$ecuadorNoEs.= '  <div style="display:block;text-align:center;background-color:'.$coloresList[1].';padding-left:20px;padding-right:20px;padding-bottom:15px;padding-top:20px">
+			            		<p style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-bottom:20px">
+			            			<span style="font-size: 16px;">
 			            				<strong>Ecuador hoy no es un mejor país por...</strong>
 			            			</span>
 			            		</p>';
@@ -680,20 +597,18 @@ class SendPulse {
 					$ecuadorEs.= '';
 				}
 				else{
-					$ecuadorNoEsText.= '  <a href="'.$this->UTMLinks(3, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;line-height:1.2; margin:0 0 10px; font-size:14px; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
+					$ecuadorNoEs.= '  <a href="'.$this->UTMLinks(3, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;font-style: italic;line-height:1.2; margin:0 0 10px; font-size:14px; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
 			            			<span>'.$dataJsonList[0].'.</span>
 			            		</a>';
 				}
 			}
 
-		    $ecuadorNoEsText.=   '</div>';
-	    	// $ecuadorNoEs.= '</td>';
-	    	// $ecuadorNoEs.= '</tr>';
-	    	// $ecuadorNoEs.= '</tbody>';
-	    	// $ecuadorNoEs.= '</table>';
+		    $ecuadorNoEs.=   '</div>';
+	    	$ecuadorNoEs.= '</td>';
+	    	$ecuadorNoEs.= '</tr>';
+	    	$ecuadorNoEs.= '</tbody>';
+	    	$ecuadorNoEs.= '</table>';
         }
-
-        $ecuadorNoEs = $this->templateEcuadorNoyEs($ecuadorNoEsText);
 
 		$this->jsonPDF[] = array("ecuadorNoEs" => $ecuadirNoEsList);
         $this->jsonPDF[] = array("ecuadorEs" => $ecuadirEsList);
@@ -741,9 +656,7 @@ class SendPulse {
 
     private function getUltimaSeccion($data){
     	$html = '';
-    	// $html .= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;padding-top:20px;display:block" border="0" width="100%"><tbody><tr style="border-color:transparent"><td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top"><table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%"><tbody><tr style="border-color:transparent"><th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top"><table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_48" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; margin:0; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top"><p style="line-height:1; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><span style="color: #000000;"><strong><span style="font-size: 18px;font-style: italic;">También te puede interesar...</span></strong></span></p><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table></td></tr></tbody></table>';
-    	
-    	$html .= '<table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_48" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#2927b9; margin:0; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top"><p style="line-height:1;margin: 10px 0 0px;font-size:inherit;color:#2927b9;font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif;text-align:center;font-weight:normal;padding:0" align="center"><strong><span style="font-size: 20px;">También te puede interesar</span></strong></p><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table>';
+    	$html .= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;padding-top:20px;display:block" border="0" width="100%"><tbody><tr style="border-color:transparent"><td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top"><table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%"><tbody><tr style="border-color:transparent"><th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top"><table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_48" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; margin:0; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top"><p style="line-height:1; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><span style="color: #000000;"><strong><span style="font-size: 18px;font-style: italic;">También te puede interesar...</span></strong></span></p><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table></td></tr></tbody></table>';
     	for ($i=0; $i < count($data) ; $i++) { 
     		$b = $data[$i];
 
@@ -765,7 +678,6 @@ class SendPulse {
 			                                             <td class="content-cell" width="220" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top">
 			                                                <p canonicalurl="'.$b['link'].'" idart="5741040" style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-top: 5px;"><span style="font-size: 20px; color: #000000;"><strong><span mlnid="idcon1084747order30"><a href="'.$b['link'].'" style="text-decoration:none; color:#000">
 			                                                '.$b['titulo'].'</a></span></strong></span></p>
-			                                                '.$this->btnVerMasNoticiasRow($b['link']).'
 			                                                <div style="font-size:14px; line-height:1.2; clear:both"></div>
 			                                             </td>
 			                                          </tr>
@@ -819,16 +731,6 @@ class SendPulse {
 	public function getArticle($idarticle){
         $json = $this->getApiMethodGet("https://www.ecuavisa.com/news-portlet/getArticle/$idarticle.json");
         return json_decode($json);
-    }
-
-    private function btnVerMasNoticias(){
-    	return '<br><br><table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; margin-left:auto; margin-right:auto; width:auto !important; border-radius:5px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1;"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold;" href="https://www.ecuavisa.com/noticias/?utm_source=SendPulse&amp;utm_medium=SeccionPolitica&amp;utm_campaign=N_CodigoRojas&amp;utm_id=Newsletter">Ver otras noticias</a></td></tr></tbody></table></td></tr></tbody></table>';
-    	// return '<table align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;padding-bottom:20px" border="0" width="100%"><tbody><tr style="border-color:transparent"><td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top"><table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%"><tbody><tr style="border-color:transparent"><th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top"><table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size:14px; line-height:1.2; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell padding-top-0" width="570" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:0; padding-bottom:25px" valign="top"><table cellpadding="0" border="0" cellspacing="0" align="left" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-color:#ddd; border-width:1px; border-style:solid; border:0; width:auto !important; border-radius:5px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; padding:0; border-width:0; border-style:none; border:0; align:left; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; padding:0; border:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="https://www.ecuavisa.com/noticias/?utm_source=SendPulse&utm_medium=SeccionPolitica&utm_campaign=N_CodigoRojas&utm_id=Newsletter">Ver otras noticias</a></td></tr></tbody></table></td></tr></tbody></table><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table></td></tr></tbody></table>';
-    }
-
-    private function btnVerMasNoticiasRow($link=""){
-    	return '<table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; width:auto !important; border-radius:5px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style=" border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="'.($link == "" ? "https://www.ecuavisa.com/noticias/?utm_source=SendPulse&amp;utm_medium=SeccionPolitica&amp;utm_campaign=N_CodigoRojas&amp;utm_id=Newsletter": $link).'">Seguir leyendo</a></td></tr></tbody></table></td></tr></tbody></table>';
-    	// return '<table align="center" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;padding-bottom:20px" border="0" width="100%"><tbody><tr style="border-color:transparent"><td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top"><table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%"><tbody><tr style="border-color:transparent"><th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top"><table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size:14px; line-height:1.2; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell padding-top-0" width="570" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:0; padding-bottom:25px" valign="top"><table cellpadding="0" border="0" cellspacing="0" align="left" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-color:#ddd; border-width:1px; border-style:solid; border:0; width:auto !important; border-radius:5px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; padding:0; border-width:0; border-style:none; border:0; align:left; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; padding:0; border:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="https://www.ecuavisa.com/noticias/?utm_source=SendPulse&utm_medium=SeccionPolitica&utm_campaign=N_CodigoRojas&utm_id=Newsletter">Ver otras noticias</a></td></tr></tbody></table></td></tr></tbody></table><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table></td></tr></tbody></table>';
     }
 
     private function getDetallesNotaPrincial($list, $getNota){
@@ -1129,6 +1031,7 @@ class SendPulse {
                 }
             }
 
+            $content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;padding-bottom:20px" border="0" width="100%"><tbody><tr style="border-color:transparent"><td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top"><table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%"><tbody><tr style="border-color:transparent"><th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top"><table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><table width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size:14px; line-height:1.2; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell padding-top-0" width="570" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:0; padding-bottom:25px" valign="top"><table cellpadding="0" border="0" cellspacing="0" align="left" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-color:#ddd; border-width:1px; border-style:solid; border:0; width:auto !important; border-radius:5px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; padding:0; border-width:0; border-style:none; border:0; align:left; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; padding:0; border:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="https://www.ecuavisa.com/noticias/?utm_source=SendPulse&utm_medium=SeccionPolitica&utm_campaign=N_CodigoRojas&utm_id=Newsletter">Ver otras noticias</a></td></tr></tbody></table></td></tr></tbody></table><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table></td></tr></tbody></table>';
             $content[] = $getOpinionesBloquesURLVar;
             $content[] = $this->getUltimaSeccion($bloque3);
         }
@@ -1173,7 +1076,7 @@ class SendPulse {
 		for ($i=0; $i < count($articulo) ; $i++) { 
 			$bloque_noticias .= $articulo[$i]; 
 		}
-		$bodyGenerar = str_replace("{{contenido}}", $bloque_noticias.$this->btnVerMasNoticias(), $htmlTemplate);
+		$bodyGenerar = str_replace("{{contenido}}", $bloque_noticias, $htmlTemplate);
 
 		$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
 		$bodyGenerar = str_replace("{{date}}", $this->fechaFormateada , $bodyGenerar);
