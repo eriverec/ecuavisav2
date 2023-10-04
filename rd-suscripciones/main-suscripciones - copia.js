@@ -10,16 +10,15 @@
 		      throw new Error('Error al obtener datos desde JSON');
 		    }
 		    const resp = await response.json();
-				loadingElement.style.display = 'none';
 		    if(resp.resp){
 		    	return resp;
 		    }
 		    return [];
 		  } catch (error) {
-				loadingElement.style.display = 'none';
 		    console.error('Error al obtener datos desde JSON:', error);
 		    throw error;
 		  }
+			loadingElement.style.display = 'none';
 		}
 
 		let dataPlanes = await cargarNombresYPlanes();
@@ -28,6 +27,40 @@
 		let x_Token = await dataPlanes.token;
 		let valorMetodoPago = document.querySelectorAll('.pago-list .btn.atice').value || 1;
 		localStorage.setItem('x-token', x_Token);
+
+		async function armarPlanes(){
+			if(productos.length > 0){
+				const tabContainer = document.querySelector('.tab-container');
+				tabContainer.innerHTML = ''; // Limpiar contenido anterior
+
+				productos.forEach(producto => {
+					const productoNombre = producto.nombre;
+					const buttonHtml = `
+                <button class="tab-button" data-producto="${productoNombre}">${productoNombre}</button>`;
+
+					tabContainer.innerHTML += buttonHtml;
+				});
+
+				// Evento click para cambiar de producto
+				const tabButtons = document.querySelectorAll('.tab-button');
+				tabButtons.forEach(button => {
+					button.addEventListener('click', () => {
+						const producto = button.getAttribute('data-producto');
+						cargarPlanes(producto, productos);
+						// Cambiar clase activa
+						tabButtons.forEach(btn => btn.classList.remove('active-button'));
+						button.classList.add('active-button');
+					});
+				});
+
+				// Cargar los planes del primer producto por defecto
+				if (productos.length > 0) {
+					cargarPlanes(productos[0].nombre, productos);
+					tabButtons[0].classList.add('active-button');
+				}
+				URLParams();
+			}
+		}
 
 		/*Inicio de modal*/
 		var modalPaqueteID = document.getElementById('modalPaqueteHtml');
@@ -79,24 +112,6 @@
 				return `<div class="precio-promo-content"><div class="precio-normal">${precio}</div><div class="precio-promo">${precioPromo}</div></div>`;
 			}else{
 				return precio;
-			}
-		}
-
-		function htmlTemplatePriceCard(precio, precioPromo){
-			precio = parseFloat(precio).toFixed(2);
-
-			if(precioPromo > 0){
-				precioPromo = parseFloat(precioPromo).toFixed(2);
-				var save = (100 - ((precioPromo * 100) / precio)).toFixed(2)
-				return `<div class="precio-promo-content">
-					<div class="precio-normal mb-2">
-						<div class="price_currency">$ ${precio}</div>
-						<div class="save_price">Ahorre ${save} %</div>
-					</div>
-					<div class="precio-promo">$${precioPromo}</div>
-				</div>`;
-			}else{
-				return "$"+precio;
 			}
 		}
 
@@ -153,71 +168,26 @@
 
 		function templatePlanes(producto, plan, descripcionHtml){
 			const imgPreder = "https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/ecuavisayellow.jpg";
-			return `<div class="col-12 col-md-4 col-lg-4 col-xl-4">
-        <div class="card shadow-none" style="" data-producto='${JSON.stringify(producto)}'>
+			return `
+        <div class="tab card" style="width: 18rem;" data-producto="${producto}">
           <div class="card-body">
             <h5 class="card-title">${plan.nombre_plan}</h5>
             <h5 class="plan_precio">
-              <span class="span_">${htmlTemplatePriceCard(plan.precio, plan.precio_promocional)}</span>
+              <span class="span_">$${htmlTemplatePrice(plan.precio, plan.precio_promocional)}</span>
               <span>/${plan.frecuencia}</span>
             </h5>
             <div class="btn boton_sus" data-id="${plan.id}" data-plan='${JSON.stringify(plan)}'>Suscríbete</div>
 
             <img src="${plan.url_imagen ? plan.url_imagen : imgPreder}" alt="Ecuavisa">
-            
-            <hr class="hr-planes">
             <div class="plan_grupos">
-            	<div class="h4 pb-2">Características principales</div>
-              <ul class="caracteristicas-card p-0">
-              	${descripcionHtml}
-              </ul>
+              ${descripcionHtml}
             </div>
           </div>
           <div class="card-footer text-muted">
             <p>${plan.condiciones}</p>
           </div>
         </div>
-      </div>`;
-		}
-
-		function slug(text){
-			return text
-	    .toLowerCase()
-	    .replace(/ /g, '-')  // Reemplazar espacios por guiones
-	    .replace(/[^\w-]+/g, '')  // Eliminar caracteres especiales
-	    .replace(/--+/g, '-')  // Reemplazar múltiples guiones por uno solo
-	    .replace(/^-+|-+$/g, '');  // Eliminar guiones al principio y al final
-		}
-
-		function cabeceraTabTemplate(){
-			var data = productos;
-
-			var html = `<ul class="nav nav-pills mb-3 d-flex justify-content-center gap-3" id="pills-tab" role="tablist">`;
-			for(var i in data){
-				html += `<li class="nav-item" role="presentation">
-							    <button class="nav-link ${ (i == 0 ? "active":"") }" id="pills-${slug(data[i].nombre)}-tab" data-bs-toggle="pill" data-bs-target="#pills-${slug(data[i].nombre)}" type="button" role="tab" aria-controls="pills-${slug(data[i].nombre)}" aria-selected="true">${data[i].nombre}</button>
-							  </li>`;
-			}
-			html += `</ul>`;
-			return html;
-		}
-
-		function contentTabTemplate(){
-			var data = productos;
-			var html = `<div class="tab-content container" id="pills-tabContent">`;
-			for(var i in data){
-				const planes = data[i].planes;
-				html += `<div class="tab-pane fade ${ (i == 0 ? "show active":"") }" id="pills-${slug(data[i].nombre)}" role="tabpanel" aria-labelledby="pills-${slug(data[i].nombre)}-tab">`;
-					html += `<div class="row  d-flex justify-content-center">`;
-						planes.forEach(plan => {
-							const descripcionHtml = plan.descripcion.map(item => `<li class="icono">${item}</li>`).join('');
-							html += templatePlanes(data[i], plan, descripcionHtml);
-						});       
-					html += `</div>`;
-				html += `</div>`;
-			}
-			html += `</div>`;
-			return html;
+      `;
 		}
 
 		function templateBeneficios(beneficios){
@@ -234,78 +204,44 @@
               </div>`;
 		}
 
+		function cargarPlanes(producto, productos) {
+			const productoData = productos.find(item => item.nombre === producto);
+			if (productoData) {
+				const planes = productoData.planes;
+				const tabContent = document.querySelector('.list-card-plans');
+				tabContent.innerHTML = ''; // Limpiar contenido anterior
 
-		async function armarPlanes(){
-			if(productos.length > 0){
-				// if (productoData) {
-					// const planes = productoData.planes;
-					const tabContent = document.querySelector('.list-card-plans');
-					tabContent.innerHTML = ''; // Limpiar contenido anterior
-					// planes.forEach(plan => {
-					// 	const descripcionHtml = plan.descripcion.map(item => `<li class="icono">${item}</li>`).join('');
-					// 	tabContent.innerHTML += templatePlanes(producto, plan, descripcionHtml);
-					// });
-					var tabCabecera = cabeceraTabTemplate();
-					var tabContentPlan = contentTabTemplate();
-					tabContent.innerHTML = tabCabecera+tabContentPlan;
+				planes.forEach(plan => {
+					const descripcionHtml = plan.descripcion.map(item => `<li class="icono">${item}</li>`).join('');
+					tabContent.innerHTML += templatePlanes(producto, plan, descripcionHtml);
+				});
 
-					// // Ocultar todas las tabs
-					// const tabs = document.querySelectorAll('.tab');
-					// tabs.forEach(tab => {
-					// 	tab.style.display = 'none';
-					// });
+				// Ocultar todas las tabs
+				const tabs = document.querySelectorAll('.tab');
+				tabs.forEach(tab => {
+					tab.style.display = 'none';
+				});
 
-					// // Mostrar solo la tab del producto seleccionado
-					// const tabToShow = document.querySelectorAll(`.tab[data-producto="${producto}"]`);
-					// tabToShow.forEach(tabTo => {
-					// 	tabTo.style.display = 'flex';
-					// });
+				// Mostrar solo la tab del producto seleccionado
+				const tabToShow = document.querySelectorAll(`.tab[data-producto="${producto}"]`);
+				tabToShow.forEach(tabTo => {
+					tabTo.style.display = 'flex';
+				});
 
-					const suscribirseButtons = document.querySelectorAll('.btn.boton_sus');
-					suscribirseButtons.forEach(button => {
-						button.addEventListener('click', () => {
-							const planData = JSON.parse(button.getAttribute('data-plan'));
-							var varPaquete = planData.id;
-							var parametrosURL = new URLSearchParams(window.location.search);
-							parametrosURL.set('paquete', varPaquete);
-							var urlBase = window.location.href.split('?')[0];
-							var nuevaURL = urlBase + '?' + parametrosURL.toString();
-							history.replaceState(null, null, nuevaURL);
-							detallesPaquete(varPaquete);
-						});
+				const suscribirseButtons = document.querySelectorAll('.btn.boton_sus');
+				suscribirseButtons.forEach(button => {
+					button.addEventListener('click', () => {
+						const planData = JSON.parse(button.getAttribute('data-plan'));
+						var varPaquete = planData.id;
+						var parametrosURL = new URLSearchParams(window.location.search);
+						parametrosURL.set('paquete', varPaquete);
+						var urlBase = window.location.href.split('?')[0];
+						var nuevaURL = urlBase + '?' + parametrosURL.toString();
+						history.replaceState(null, null, nuevaURL);
+						detallesPaquete(varPaquete);
 					});
+				});
 
-				// }
-
-				// const tabContainer = document.querySelector('.tab-container');
-				// tabContainer.innerHTML = ''; // Limpiar contenido anterior
-
-				// productos.forEach(producto => {
-				// 	const productoNombre = producto.nombre;
-				// 	const buttonHtml = `
-        //         <button class="tab-button" data-producto="${productoNombre}">${productoNombre}</button>`;
-
-				// 	tabContainer.innerHTML += buttonHtml;
-				// });
-
-				// // Evento click para cambiar de producto
-				// const tabButtons = document.querySelectorAll('.tab-button');
-				// tabButtons.forEach(button => {
-				// 	button.addEventListener('click', () => {
-				// 		const producto = button.getAttribute('data-producto');
-				// 		cargarPlanes(producto, productos);
-				// 		// Cambiar clase activa
-				// 		tabButtons.forEach(btn => btn.classList.remove('active-button'));
-				// 		button.classList.add('active-button');
-				// 	});
-				// });
-
-				// // Cargar los planes del primer producto por defecto
-				// if (productos.length > 0) {
-				// 	cargarPlanes(productos[0].nombre, productos);
-				// 	tabButtons[0].classList.add('active-button');
-				// }
-				// URLParams();
 			}
 		}
 

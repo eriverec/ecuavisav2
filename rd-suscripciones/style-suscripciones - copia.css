@@ -265,30 +265,24 @@ fill: #6bd8d1;
   margin-top: 10px;
 }
 
-/*.tab {
+.tab {
   display: none;
 }
 
 .active-tab {
   display: block;
-}*/
+}
 
-.nav-pills .nav-link,
-.list-card-plans ul button,
 .tab-button {
   cursor: pointer;
   padding: 7px 20px;
   border-radius: 3px;
-  border: 1px solid #D5D5D5;
+  border: 1px solid #ddd;
   background: #D5D5D5;
-  color: #000;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link,
-.list-card-plans ul .active {
-  background-color: #2927B9;
+.active-button {
   background: #2927B9;
-  border: 1px solid #2927B9;
   color: #fff;
 }
 
@@ -297,12 +291,12 @@ fill: #6bd8d1;
 }
 
 .list-card-plans {
-  /*margin: 20px 0;
+  margin: 20px 0;
   display: flex;
   align-items: stretch;
   justify-content: center;
   column-gap: 20px;
-  flex-wrap: wrap;*/
+  flex-wrap: wrap;
 }
 
 .list-card-plans .card {
@@ -456,7 +450,7 @@ fill: #6bd8d1;
     position: relative;
 }
 
-/*.plan_precio .precio-normal {
+.plan_precio .precio-normal {
     position: absolute;
     font-size: 16px;
     color: #ff0303;
@@ -473,7 +467,7 @@ fill: #6bd8d1;
     left: 21px;
     transform: rotate(70deg);
     background-color: #ff0303;
-}*/
+}
 
 #modalPaqueteHtml[disabled="true"] .modal-dialog {
     opacity: 0.3;
@@ -573,44 +567,4 @@ fill: #6bd8d1;
 
 .title-detaill {
     padding-right: 50px;
-}
-
-.precio-promo-content .precio-normal {
-    display: flex;
-    flex-direction: row;
-    gap: 10px;
-    align-items: center;
-    justify-content: center;
-}
-
-.precio-promo-content  .price_currency {
-    font-size: 14px;
-    color: #727586;
-    text-decoration-line: line-through;
-    font-weight: 400;
-}
-
-.precio-promo-content .save_price {
-    font-size: 16px;
-    color: #2e22b6;
-    background-color: #2e22b621;
-    border-radius: 20px;
-    display: inline-block;
-    padding: 7px 12px;
-}
-
-.plan_grupos .h4 {
-    font-size: 18px;
-    line-height: 24px;
-    font-weight: 700;
-}
-
-#pills-tabContent {
-    max-width: 1100px;
-}
-
-hr.hr-planes {
-    opacity: 1;
-    height: 0.3px;
-    background: #dfdfdf;
 }
