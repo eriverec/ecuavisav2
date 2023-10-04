@@ -43,7 +43,7 @@
 			window.history.replaceState({}, document.title, url.toString());
 			contentgracias_btn.classList.add('d-none');
 			localStorage.removeItem("planId_paquete");
-			
+
 			wizard.reset();
 		})
 
@@ -190,7 +190,10 @@
 				const valueParam = new URLSearchParams(window.location.search).get('paquete');
 				detallesPaquete(valueParam.split("?")[0]);
 			}else{
-				detallesPaquete(localStorage.getItem('planId_paquete'));
+				if(localStorage.getItem('planId_paquete')){
+					detallesPaquete(localStorage.getItem('planId_paquete'));
+				}
+				
 			}
 		}
 
