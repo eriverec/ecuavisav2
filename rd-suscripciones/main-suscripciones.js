@@ -102,6 +102,7 @@
 
 		function detallesPaquete(id) {
 			planId = id;
+			localStorage.setItem('planId_paquete', id);
 			const planData = buscarPaquete(id);
 			var nombrePlan = planData.nombre_plan;
 			var precio = parseFloat(planData.precio || 0).toFixed(2);
@@ -139,7 +140,7 @@
 				
 				document.querySelector('.no-login').style.display = "block";
 				document.querySelector('.detalles .login').style.display = "none";
-				document.querySelector('#btn-login-ec').href = `https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}`;
+				document.querySelector('#btn-login-ec').href = `https://www.ecuavisa.com/servicios/login/?nextpage=${(window.location.href).split("?")[0]}`;
 			}
 
 			var total_finish = document.querySelector(".total-precio");
@@ -185,7 +186,9 @@
 		function URLParams() {
 			if (new URLSearchParams(window.location.search).get('paquete')) {
 				const valueParam = new URLSearchParams(window.location.search).get('paquete');
-				detallesPaquete(valueParam);
+				detallesPaquete(valueParam.split("?")[0]);
+			}else{
+				detallesPaquete(localStorage.getItem('planId_paquete'));
 			}
 		}
 
