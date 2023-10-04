@@ -42,6 +42,8 @@
 			url.searchParams.delete("paquete");
 			window.history.replaceState({}, document.title, url.toString());
 			contentgracias_btn.classList.add('d-none');
+			localStorage.removeItem("planId_paquete");
+			
 			wizard.reset();
 		})
 
