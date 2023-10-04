@@ -135,6 +135,14 @@ h2.newsletterh1 div {
     font-size: 72px;
     line-height: 0.8;
 }
+@media(max-width: 991px){
+  h2.newsletterh1 div{
+    font-size: 52px;
+  }
+  .newsletter_rd_codigo_rojas .info-formulario .news-texto-rd h2{
+    font-size: 16px;
+  }
+}
 
 @media only screen and (max-width: 600px) {
     
@@ -151,3 +159,5 @@ h2.newsletterh1 div {
     }
     
 }
+
+
