@@ -141,6 +141,44 @@
 				document.querySelector('.detalles .login').style.display = "none";
 				document.querySelector('#btn-login-ec').href = `https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}`;
 			}
+
+			var total_finish = document.querySelector(".total-precio");
+			var htmlTotal = ``;
+			var totalValor = precio;
+
+			if(parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null){
+				var save = (100 - ((precioPromo * 100) / precio)).toFixed(2)
+				htmlTotal += `<div class="row-precios">`;
+				htmlTotal += `<div class="column-precio">`;
+				htmlTotal += `Descuento - ${save}%`;
+				htmlTotal += `</div>`;
+				htmlTotal += `<div class="column-precio valor">`;
+				htmlTotal += `-$${precio - precioPromo}`;
+				htmlTotal += `</div>`;
+				htmlTotal += `</div>`;
+				htmlTotal += `<hr class="precio-hr">`;
+				totalValor = precioPromo;
+			}
+			
+
+			htmlTotal += `<div class="row-precios">`;
+			htmlTotal += `<div class="column-precio total">`;
+			htmlTotal += `Total`;
+			htmlTotal += `</div>`;
+			htmlTotal += `<div class="column-precio valor">`;
+
+			if(parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null){
+				htmlTotal += `<div class="precio-normal-t">`;
+				htmlTotal += `$${precio}`;
+				htmlTotal += `</div>`;
+			}
+
+			htmlTotal += `<div class="precio-promo-t">`;
+			htmlTotal += `$${totalValor}`;
+			htmlTotal += `</div>`;
+			htmlTotal += `</div>`;
+			htmlTotal += `</div>`;
+			total_finish.innerHTML = htmlTotal;
 			modalPaquete.show();
 		}
 
