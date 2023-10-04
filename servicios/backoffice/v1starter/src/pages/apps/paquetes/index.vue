@@ -732,7 +732,7 @@ async function deletePaquete() {
                                 position: 'auto right',                
                                 altFormat: 'F j, Y',
                                 dateFormat: 'd/m/Y',
-                                maxDate: new Date(),
+                                // maxDate: new Date(),
                                 reactive: true
                               }" />
                             </VCol>
@@ -747,7 +747,7 @@ async function deletePaquete() {
                                 position: 'auto right',                
                                 altFormat: 'F j, Y',
                                 dateFormat: 'd/m/Y',
-                                maxDate: new Date(),
+                                // maxDate: new Date(),
                                 reactive: true
                               }" />
                             </VCol>
