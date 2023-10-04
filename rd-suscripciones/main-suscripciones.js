@@ -305,7 +305,7 @@
 				// 	cargarPlanes(productos[0].nombre, productos);
 				// 	tabButtons[0].classList.add('active-button');
 				// }
-				// URLParams();
+				URLParams();
 			}
 		}
 
