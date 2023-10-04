@@ -523,7 +523,7 @@ async function deleteConfirmed() {
                                         position: 'auto right',                
                                         altFormat: 'F j, Y',
                                         dateFormat: 'm-d-Y',
-                                        maxDate: new Date(),
+                                        //maxDate: new Date(),
                                         reactive: true
                                     }" />
                                 </VCol>
@@ -533,7 +533,7 @@ async function deleteConfirmed() {
                                         position: 'auto right',                
                                         altFormat: 'F j, Y',
                                         dateFormat: 'm-d-Y',
-                                        maxDate: new Date(),
+                                        //maxDate: new Date(),
                                         reactive: true
                                     }" />
                                 </VCol>
