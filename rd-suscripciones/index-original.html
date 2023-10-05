@@ -14,7 +14,7 @@
   <script src="main.js"></script>
   <script src="global.js"></script>
   <style type="text/css">
-     
+
   </style>
 </head>
 
@@ -59,7 +59,11 @@
                   <div class="form-group detalles">
                     <div class="no-login">
                       <div class="icon-login">
-                        <svg width="25px" height="25px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>login</title><path d="M10,17V14H3V10H10V7L15,12L10,17M10,2H19A2,2 0 0,1 21,4V20A2,2 0 0,1 19,22H10A2,2 0 0,1 8,20V18H10V20H19V4H10V6H8V4A2,2 0 0,1 10,2Z" /></svg>
+                        <svg width="25px" height="25px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                          <title>login</title>
+                          <path
+                            d="M10,17V14H3V10H10V7L15,12L10,17M10,2H19A2,2 0 0,1 21,4V20A2,2 0 0,1 19,22H10A2,2 0 0,1 8,20V18H10V20H19V4H10V6H8V4A2,2 0 0,1 10,2Z" />
+                        </svg>
                       </div>
                       <div class="login-descripcion">
                         Debes iniciar sesión para poder contratar la suscripción
@@ -120,7 +124,8 @@
                   <div class="row">
                     <div class="col-12 d-flex flex-column">
                       <h3>Suscribirse al plan</h3>
-                      <p>Obtén acceso exclusivo a noticias premium y contenido especial al suscribirte, mantente informado como nunca antes.</p>
+                      <p>Obtén acceso exclusivo a noticias premium y contenido especial al suscribirte, mantente
+                        informado como nunca antes.</p>
                     </div>
                     <div class="col-12 d-flex flex-column">
                       <button id="changePlan" class="btn btn-changeplan" type="button">
@@ -153,7 +158,7 @@
                     <div class="col-12 d-flex flex-column py-3 px-4 pt-4">
                       <h4 class="title-beneficios">Beneficios</h4>
                       <div class="beneficios-list d-flex flex-column">
-                        
+
                       </div>
                     </div>
 
@@ -173,7 +178,8 @@
                                     <p class="p-0 pt-1 mb-0 d-none">Paga directamente con tu tarjeta</p>
                                   </div>
                                   <div class="icon-pago">
-                                    <img width="35px" height="35px" src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fprocessout-removebg-preview.png">
+                                    <img width="35px" height="35px"
+                                      src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fprocessout-removebg-preview.png">
                                   </div>
                                 </div>
                               </button>
@@ -189,7 +195,8 @@
                                     <p class="p-0 pt-1 mb-0 d-none">Deposita a nuestra cuenta de banco</p>
                                   </div>
                                   <div class="icon-pago">
-                                    <img width="35px" height="35px" src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fbraintree_paypal.svg">  
+                                    <img width="35px" height="35px"
+                                      src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fbraintree_paypal.svg">
                                   </div>
                                 </div>
                               </button>
@@ -198,29 +205,51 @@
                         </div>
                         <div class="col-12 col-md-5">
                           <div class="total-precio">
-                            
+
                           </div>
                         </div>
+
+                        <div class="col-12 col-md-12">
+                          <div class="total-cupon">
+                            <button class="btn btn-link" type="button" id="toggleCupon">¿Tiene un código de cupón?</button>
+                            <div id="inputText" class="bloque_cupon" style="display: none;">
+                              <input class="form-control bc_input"  type="text" >
+                              <div class="btn btn-secondary bc_aplicar">Aplicar</div>
+                            </div>
+                          </div>
+                        </div>
+
                       </div>
                     </div>
-                  </div>
 
-                </div>
+                  </div>
 
               </aside>
             </form>
 
             <div class="content-gracias d-none">
               <div class="icon-gracias">
-                <svg class="success" width="40px" height="40px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>check-circle-outline</title><path d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20M16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z" /></svg>
+                <svg class="success" width="40px" height="40px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <title>check-circle-outline</title>
+                  <path
+                    d="M12 2C6.5 2 2 6.5 2 12S6.5 22 12 22 22 17.5 22 12 17.5 2 12 2M12 20C7.59 20 4 16.41 4 12S7.59 4 12 4 20 7.59 20 12 16.41 20 12 20M16.59 7.58L10 14.17L7.41 11.59L6 13L10 17L18 9L16.59 7.58Z" />
+                </svg>
 
-                <svg class="error" width="40px" height="40px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>close-circle-outline</title><path d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2 12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z" /></svg>
+                <svg class="error" width="40px" height="40px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <title>close-circle-outline</title>
+                  <path
+                    d="M12,20C7.59,20 4,16.41 4,12C4,7.59 7.59,4 12,4C16.41,4 20,7.59 20,12C20,16.41 16.41,20 12,20M12,2C6.47,2 2,6.47 2,12C2,17.53 6.47,22 12,22C17.53,22 22,17.53 22,12C22,6.47 17.53,2 12,2M14.59,8L12,10.59L9.41,8L8,9.41L10.59,12L8,14.59L9.41,16L12,13.41L14.59,16L16,14.59L13.41,12L16,9.41L14.59,8Z" />
+                </svg>
               </div>
               <div class="gracias-descripcion">
                 La operación se ha realizado con éxito!
               </div>
               <div class="gracias-email">
-                <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><title>email-fast-outline</title><path d="M22 5.5H9C7.9 5.5 7 6.4 7 7.5V16.5C7 17.61 7.9 18.5 9 18.5H22C23.11 18.5 24 17.61 24 16.5V7.5C24 6.4 23.11 5.5 22 5.5M22 16.5H9V9.17L15.5 12.5L22 9.17V16.5M15.5 10.81L9 7.5H22L15.5 10.81M5 16.5C5 16.67 5.03 16.83 5.05 17H1C.448 17 0 16.55 0 16S.448 15 1 15H5V16.5M3 7H5.05C5.03 7.17 5 7.33 5 7.5V9H3C2.45 9 2 8.55 2 8S2.45 7 3 7M1 12C1 11.45 1.45 11 2 11H5V13H2C1.45 13 1 12.55 1 12Z" /></svg> 
+                <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                  <title>email-fast-outline</title>
+                  <path
+                    d="M22 5.5H9C7.9 5.5 7 6.4 7 7.5V16.5C7 17.61 7.9 18.5 9 18.5H22C23.11 18.5 24 17.61 24 16.5V7.5C24 6.4 23.11 5.5 22 5.5M22 16.5H9V9.17L15.5 12.5L22 9.17V16.5M15.5 10.81L9 7.5H22L15.5 10.81M5 16.5C5 16.67 5.03 16.83 5.05 17H1C.448 17 0 16.55 0 16S.448 15 1 15H5V16.5M3 7H5.05C5.03 7.17 5 7.33 5 7.5V9H3C2.45 9 2 8.55 2 8S2.45 7 3 7M1 12C1 11.45 1.45 11 2 11H5V13H2C1.45 13 1 12.55 1 12Z" />
+                </svg>
                 Verifique su correo electrónico que le enviamos con los datos del servicio realizado.
               </div>
             </div>
@@ -244,7 +273,7 @@
   </div>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AdrianVillamayor/Wizard-JS@1.9.9/src/wizard.min.js"></script>
- <script src="wizard-code.js"></script>
+  <script src="wizard-code.js"></script>
   <script src="main-suscripciones.js" async></script>
 
 

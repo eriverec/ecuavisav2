@@ -1,25 +1,74 @@
 (async () => {
-	if(ECUAVISA_EC){
+	// Obtener referencias a los elementos del DOM
+	const toggleCupon = document.getElementById("toggleCupon");
+	const inputText = document.getElementById("inputText");
+
+	const botonAplicarCupon = document.querySelector('.bc_aplicar');
+	const inputAplicarCupon = document.querySelector('.bc_input');
+
+	botonAplicarCupon.addEventListener("click", function () {
+		if (inputAplicarCupon.value.length != 0) {
+			const textCupon = inputAplicarCupon.value;
+
+			//agregar el un nuevo parametro al url actual
+			var urlHREF = window.location.href;
+			if (urlHREF.indexOf('?') === -1) { urlHREF += '?'; } else { urlHREF += '&'; }
+			urlHREF += 'usocupon=true';
+			window.history.pushState({ path: urlHREF }, '', urlHREF);
+
+			//enviar el cupo por el metodo post
+			const planId = localStorage.getItem('planId_paquete');
+			console.log(planId);
+			fetch("https://ecuavisa-cupones.vercel.app/cupon/validacion", {
+				method: 'POST',
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify({
+					"idPaquete": planId,
+					"nombreCupon": textCupon
+				}),
+				redirect: 'follow'
+			})
+				.then(response => response.json())
+				.then(result => {
+					console.log(result);
+				}).catch(error => {
+					console.log(error);
+				});
+		}
+	});
+
+
+	toggleCupon.addEventListener("click", function () {
+		if (inputText.style.display === "none" || inputText.style.display === "") {
+			inputText.style.display = "flex";
+		} else {
+			inputText.style.display = "none";
+		}
+	});
+
+	if (ECUAVISA_EC) {
 		const contentgracias_btn = document.querySelector(`.content-gracias`);
 		async function cargarNombresYPlanes() {
 			const loadingElement = document.getElementById('loading');
 			loadingElement.style.display = 'block';
 			try {
-		    const response = await fetch('https://ecuavisa-suscripciones.vercel.app/paquete/display/all');
-		    if (!response.ok) {
-		      throw new Error('Error al obtener datos desde JSON');
-		    }
-		    const resp = await response.json();
+				const response = await fetch('https://ecuavisa-suscripciones.vercel.app/paquete/display/all');
+				if (!response.ok) {
+					throw new Error('Error al obtener datos desde JSON');
+				}
+				const resp = await response.json();
 				loadingElement.style.display = 'none';
-		    if(resp.resp){
-		    	return resp;
-		    }
-		    return [];
-		  } catch (error) {
+				if (resp.resp) {
+					return resp;
+				}
+				return [];
+			} catch (error) {
 				loadingElement.style.display = 'none';
-		    console.error('Error al obtener datos desde JSON:', error);
-		    throw error;
-		  }
+				console.error('Error al obtener datos desde JSON:', error);
+				throw error;
+			}
 		}
 
 		let dataPlanes = await cargarNombresYPlanes();
@@ -40,6 +89,7 @@
 			var urlActual = window.location.href;
 			var url = new URL(urlActual);
 			url.searchParams.delete("paquete");
+			url.searchParams.delete("usocupon");
 			window.history.replaceState({}, document.title, url.toString());
 			contentgracias_btn.classList.add('d-none');
 			localStorage.removeItem("planId_paquete");
@@ -56,7 +106,7 @@
 				bg.style.opacity = "1";
 			}, 200);
 
-			
+
 		})
 		/*Fin de modal*/
 
@@ -73,21 +123,21 @@
 			return null;
 		}
 
-		function htmlTemplatePrice(precio, precioPromo){
+		function htmlTemplatePrice(precio, precioPromo) {
 			precio = parseFloat(precio).toFixed(2);
 
-			if(precioPromo > 0){
+			if (precioPromo > 0) {
 				precioPromo = parseFloat(precioPromo).toFixed(2);
 				return `<div class="precio-promo-content"><div class="precio-normal">${precio}</div><div class="precio-promo">${precioPromo}</div></div>`;
-			}else{
+			} else {
 				return precio;
 			}
 		}
 
-		function htmlTemplatePriceCard(precio, precioPromo){
+		function htmlTemplatePriceCard(precio, precioPromo) {
 			precio = parseFloat(precio).toFixed(2);
 
-			if(precioPromo > 0){
+			if (precioPromo > 0) {
 				precioPromo = parseFloat(precioPromo).toFixed(2);
 				var save = (100 - ((precioPromo * 100) / precio)).toFixed(2)
 				return `<div class="precio-promo-content">
@@ -97,8 +147,8 @@
 					</div>
 					<div class="precio-promo">$${precioPromo}</div>
 				</div>`;
-			}else{
-				return "$"+precio;
+			} else {
+				return "$" + precio;
 			}
 		}
 
@@ -128,7 +178,7 @@
 
 			if (ECUAVISA_EC.login()) {
 				var usuario = ECUAVISA_EC.USER_data();
-				if(document.querySelector("#nombre")){
+				if (document.querySelector("#nombre")) {
 					document.querySelector("#nombre").value = usuario.name;
 					document.querySelector("#apellidos").value = usuario.lastname;
 					document.querySelector('.no-login').style.display = "none";
@@ -139,7 +189,7 @@
 				// gru.innerHTML = `
 				// <span>Debes iniciar sesion</span> <br>
 				// <a href="https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}" class="btn btn-secondary html_Login" onclick="">Login</a>`;
-				
+
 				document.querySelector('.no-login').style.display = "block";
 				document.querySelector('.detalles .login').style.display = "none";
 				document.querySelector('#btn-login-ec').href = `https://www.ecuavisa.com/servicios/login/?nextpage=${(window.location.href).split("?")[0]}`;
@@ -149,7 +199,7 @@
 			var htmlTotal = ``;
 			var totalValor = precio;
 
-			if(parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null){
+			if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
 				var save = (100 - ((precioPromo * 100) / precio)).toFixed(2)
 				htmlTotal += `<div class="row-precios">`;
 				htmlTotal += `<div class="column-precio">`;
@@ -162,7 +212,7 @@
 				htmlTotal += `<hr class="precio-hr">`;
 				totalValor = precioPromo;
 			}
-			
+
 
 			htmlTotal += `<div class="row-precios">`;
 			htmlTotal += `<div class="column-precio total">`;
@@ -170,7 +220,7 @@
 			htmlTotal += `</div>`;
 			htmlTotal += `<div class="column-precio valor">`;
 
-			if(parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null){
+			if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
 				htmlTotal += `<div class="precio-normal-t">`;
 				htmlTotal += `$${precio}`;
 				htmlTotal += `</div>`;
@@ -189,15 +239,15 @@
 			if (new URLSearchParams(window.location.search).get('paquete')) {
 				const valueParam = new URLSearchParams(window.location.search).get('paquete');
 				detallesPaquete(valueParam.split("?")[0]);
-			}else{
-				if(localStorage.getItem('planId_paquete')){
+			} else {
+				if (localStorage.getItem('planId_paquete')) {
 					detallesPaquete(localStorage.getItem('planId_paquete'));
 				}
-				
+
 			}
 		}
 
-		function templatePlanes(producto, plan, descripcionHtml){
+		function templatePlanes(producto, plan, descripcionHtml) {
 			const imgPreder = "https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/ecuavisayellow.jpg";
 			return `<div class="col-12 col-md-4 col-lg-4 col-xl-4">
         <div class="card shadow-none" style="" data-producto='${JSON.stringify(producto)}'>
@@ -226,47 +276,47 @@
       </div>`;
 		}
 
-		function slug(text){
+		function slug(text) {
 			return text
-	    .toLowerCase()
-	    .replace(/ /g, '-')  // Reemplazar espacios por guiones
-	    .replace(/[^\w-]+/g, '')  // Eliminar caracteres especiales
-	    .replace(/--+/g, '-')  // Reemplazar múltiples guiones por uno solo
-	    .replace(/^-+|-+$/g, '');  // Eliminar guiones al principio y al final
+				.toLowerCase()
+				.replace(/ /g, '-')  // Reemplazar espacios por guiones
+				.replace(/[^\w-]+/g, '')  // Eliminar caracteres especiales
+				.replace(/--+/g, '-')  // Reemplazar múltiples guiones por uno solo
+				.replace(/^-+|-+$/g, '');  // Eliminar guiones al principio y al final
 		}
 
-		function cabeceraTabTemplate(){
+		function cabeceraTabTemplate() {
 			var data = productos;
 
 			var html = `<ul class="nav nav-pills mb-3 d-flex justify-content-center gap-3" id="pills-tab" role="tablist">`;
-			for(var i in data){
+			for (var i in data) {
 				html += `<li class="nav-item" role="presentation">
-							    <button class="nav-link ${ (i == 0 ? "active":"") }" id="pills-${slug(data[i].nombre)}-tab" data-bs-toggle="pill" data-bs-target="#pills-${slug(data[i].nombre)}" type="button" role="tab" aria-controls="pills-${slug(data[i].nombre)}" aria-selected="true">${data[i].nombre}</button>
+							    <button class="nav-link ${(i == 0 ? "active" : "")}" id="pills-${slug(data[i].nombre)}-tab" data-bs-toggle="pill" data-bs-target="#pills-${slug(data[i].nombre)}" type="button" role="tab" aria-controls="pills-${slug(data[i].nombre)}" aria-selected="true">${data[i].nombre}</button>
 							  </li>`;
 			}
 			html += `</ul>`;
 			return html;
 		}
 
-		function contentTabTemplate(){
+		function contentTabTemplate() {
 			var data = productos;
 			var html = `<div class="tab-content container" id="pills-tabContent">`;
-			for(var i in data){
+			for (var i in data) {
 				const planes = data[i].planes;
-				html += `<div class="tab-pane fade ${ (i == 0 ? "show active":"") }" id="pills-${slug(data[i].nombre)}" role="tabpanel" aria-labelledby="pills-${slug(data[i].nombre)}-tab">`;
-					html += `<div class="row  d-flex justify-content-center">`;
-						planes.forEach(plan => {
-							const descripcionHtml = plan.descripcion.map(item => `<li class="icono">${item}</li>`).join('');
-							html += templatePlanes(data[i], plan, descripcionHtml);
-						});       
-					html += `</div>`;
+				html += `<div class="tab-pane fade ${(i == 0 ? "show active" : "")}" id="pills-${slug(data[i].nombre)}" role="tabpanel" aria-labelledby="pills-${slug(data[i].nombre)}-tab">`;
+				html += `<div class="row  d-flex justify-content-center">`;
+				planes.forEach(plan => {
+					const descripcionHtml = plan.descripcion.map(item => `<li class="icono">${item}</li>`).join('');
+					html += templatePlanes(data[i], plan, descripcionHtml);
+				});
+				html += `</div>`;
 				html += `</div>`;
 			}
 			html += `</div>`;
 			return html;
 		}
 
-		function templateBeneficios(beneficios){
+		function templateBeneficios(beneficios) {
 			return `<div class="item-beneficio">
                 <div class="icon-beneficio">
                   <svg width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
@@ -281,45 +331,45 @@
 		}
 
 
-		async function armarPlanes(){
-			if(productos.length > 0){
+		async function armarPlanes() {
+			if (productos.length > 0) {
 				// if (productoData) {
-					// const planes = productoData.planes;
-					const tabContent = document.querySelector('.list-card-plans');
-					tabContent.innerHTML = ''; // Limpiar contenido anterior
-					// planes.forEach(plan => {
-					// 	const descripcionHtml = plan.descripcion.map(item => `<li class="icono">${item}</li>`).join('');
-					// 	tabContent.innerHTML += templatePlanes(producto, plan, descripcionHtml);
-					// });
-					var tabCabecera = cabeceraTabTemplate();
-					var tabContentPlan = contentTabTemplate();
-					tabContent.innerHTML = tabCabecera+tabContentPlan;
+				// const planes = productoData.planes;
+				const tabContent = document.querySelector('.list-card-plans');
+				tabContent.innerHTML = ''; // Limpiar contenido anterior
+				// planes.forEach(plan => {
+				// 	const descripcionHtml = plan.descripcion.map(item => `<li class="icono">${item}</li>`).join('');
+				// 	tabContent.innerHTML += templatePlanes(producto, plan, descripcionHtml);
+				// });
+				var tabCabecera = cabeceraTabTemplate();
+				var tabContentPlan = contentTabTemplate();
+				tabContent.innerHTML = tabCabecera + tabContentPlan;
 
-					// // Ocultar todas las tabs
-					// const tabs = document.querySelectorAll('.tab');
-					// tabs.forEach(tab => {
-					// 	tab.style.display = 'none';
-					// });
+				// // Ocultar todas las tabs
+				// const tabs = document.querySelectorAll('.tab');
+				// tabs.forEach(tab => {
+				// 	tab.style.display = 'none';
+				// });
 
-					// // Mostrar solo la tab del producto seleccionado
-					// const tabToShow = document.querySelectorAll(`.tab[data-producto="${producto}"]`);
-					// tabToShow.forEach(tabTo => {
-					// 	tabTo.style.display = 'flex';
-					// });
+				// // Mostrar solo la tab del producto seleccionado
+				// const tabToShow = document.querySelectorAll(`.tab[data-producto="${producto}"]`);
+				// tabToShow.forEach(tabTo => {
+				// 	tabTo.style.display = 'flex';
+				// });
 
-					const suscribirseButtons = document.querySelectorAll('.btn.boton_sus');
-					suscribirseButtons.forEach(button => {
-						button.addEventListener('click', () => {
-							const planData = JSON.parse(button.getAttribute('data-plan'));
-							var varPaquete = planData.id;
-							var parametrosURL = new URLSearchParams(window.location.search);
-							parametrosURL.set('paquete', varPaquete);
-							var urlBase = window.location.href.split('?')[0];
-							var nuevaURL = urlBase + '?' + parametrosURL.toString();
-							history.replaceState(null, null, nuevaURL);
-							detallesPaquete(varPaquete);
-						});
+				const suscribirseButtons = document.querySelectorAll('.btn.boton_sus');
+				suscribirseButtons.forEach(button => {
+					button.addEventListener('click', () => {
+						const planData = JSON.parse(button.getAttribute('data-plan'));
+						var varPaquete = planData.id;
+						var parametrosURL = new URLSearchParams(window.location.search);
+						parametrosURL.set('paquete', varPaquete);
+						var urlBase = window.location.href.split('?')[0];
+						var nuevaURL = urlBase + '?' + parametrosURL.toString();
+						history.replaceState(null, null, nuevaURL);
+						detallesPaquete(varPaquete);
 					});
+				});
 
 				// }
 
@@ -329,7 +379,7 @@
 				// productos.forEach(producto => {
 				// 	const productoNombre = producto.nombre;
 				// 	const buttonHtml = `
-        //         <button class="tab-button" data-producto="${productoNombre}">${productoNombre}</button>`;
+				//         <button class="tab-button" data-producto="${productoNombre}">${productoNombre}</button>`;
 
 				// 	tabContainer.innerHTML += buttonHtml;
 				// });
@@ -359,20 +409,20 @@
 		const botonesPago = document.querySelectorAll('.pago-list .btn');
 		// Agrega un manejador de eventos "click" a cada botón
 		botonesPago.forEach((boton) => {
-		  boton.addEventListener('click', () => {
-		    // Elimina la clase "active" de todos los botones
-		    botonesPago.forEach((b) => {
-		      b.classList.remove('active');
-		    });
-		    // Agrega la clase "active" al botón que se hizo clic
-		    boton.classList.add('active');
-		    valorMetodoPago = boton.value;
-		  });
+			boton.addEventListener('click', () => {
+				// Elimina la clase "active" de todos los botones
+				botonesPago.forEach((b) => {
+					b.classList.remove('active');
+				});
+				// Agrega la clase "active" al botón que se hizo clic
+				boton.classList.add('active');
+				valorMetodoPago = boton.value;
+			});
 		});
 
 		$wz_doc.addEventListener("wz.form.submit", function (e) {
-		  if(ECUAVISA_EC.login()){//VERIFICA SI EL USUARIO ESTÁ LOGUEADO
-		  	if(buscarPaquete(planId)){
+			if (ECUAVISA_EC.login()) {//VERIFICA SI EL USUARIO ESTÁ LOGUEADO
+				if (buscarPaquete(planId)) {
 					const idUser = ECUAVISA_EC.USER_data().id;
 					const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
 					const load_BTN = document.querySelector(`.btn-ecuavisa.finish`);
@@ -382,9 +432,9 @@
 
 					var jsonSend = {
 						"idPaquete": planId,
-				    "idUsuario": parseInt(idUser),
-				    "idUsuarioObject": idwylexIdObject,
-						"metodoPago" : valorMetodoPago
+						"idUsuario": parseInt(idUser),
+						"idUsuarioObject": idwylexIdObject,
+						"metodoPago": valorMetodoPago
 					};
 
 					// console.log(jsonSend)
@@ -393,54 +443,54 @@
 
 					var myHeaders = new Headers();
 					myHeaders.append("Content-Type", "application/json");
-					myHeaders.append("Authorization", "Bearer "+getToken);
+					myHeaders.append("Authorization", "Bearer " + getToken);
 
 					var raw = JSON.stringify(jsonSend);
 
 					var requestOptions = {
-					  method: 'POST',
-					  headers: myHeaders,
-					  body: raw,
-					  redirect: 'follow'
+						method: 'POST',
+						headers: myHeaders,
+						body: raw,
+						redirect: 'follow'
 					};
 
 					fetch("https://ecuavisa-suscripciones.vercel.app/cash/create", requestOptions)
-					  .then(response => response.json())
-					  .then(result => {
-					  	console.log(result);
-					  	if(result.resp){
+						.then(response => response.json())
+						.then(result => {
+							console.log(result);
+							if (result.resp) {
 								contentgracias_btn.classList.add('success');
-					  	}else{
+							} else {
 								contentgracias_btn.classList.add('error');
-								document.querySelector(".gracias-descripcion").innerHTML = "Se presentó un error: "+result.error;
-					  	}
+								document.querySelector(".gracias-descripcion").innerHTML = "Se presentó un error: " + result.error;
+							}
 							// load_BTN.style.opacity = "1";
 							load_BTN.removeAttribute("disabled");
 							modal_Load.removeAttribute("disabled");
 							formWizard_btn.classList.add('d-none');
 							contentgracias_btn.classList.remove('d-none');
 
-					  }).catch(error => {
-					  	// console.log(result);
+						}).catch(error => {
+							// console.log(result);
 							// load_BTN.style.opacity = "1";
 							load_BTN.removeAttribute("disabled");
 							modal_Load.removeAttribute("disabled");
-							
+
 							formWizard_btn.classList.add('d-none');
 							contentgracias_btn.classList.remove('d-none');
 
 							contentgracias_btn.classList.add('error');
 
-							document.querySelector(".gracias-descripcion").innerHTML = "Se presentó un error: "+error;
+							document.querySelector(".gracias-descripcion").innerHTML = "Se presentó un error: " + error;
 							// console.log('error', error)
-					  });
+						});
 
-		  	}else{
-		  		alert("El plan seleccionado no existe")
-		  	}
-		  }else{
-		  	alert("No estas logueado")
-		  }
+				} else {
+					alert("El plan seleccionado no existe")
+				}
+			} else {
+				alert("No estas logueado")
+			}
 
 		});
 
