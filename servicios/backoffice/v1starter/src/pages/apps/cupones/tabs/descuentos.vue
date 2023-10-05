@@ -8,6 +8,10 @@ const datosSelectedDesc = ref({
     paises:[],
     ciudades:[]
 });
+const datosSelectedDescFull = ref({
+    paises:[],
+    ciudades:[]
+});
 const excepcionesSelectedDesc = ref({
     paises:[],
     ciudades:[]
@@ -18,6 +22,8 @@ const selectedDescuento = ref('');
 const paisesItems = ref([]);
 const ciudadesItems = ref([]);
 
+const verMasPaisesActive = ref(true);
+const verMasCiudadesActive = ref(true);
 
 async function getDescuentos (){
     try {
@@ -34,13 +40,24 @@ async function getDescuentos (){
 async function resolveSelectedDescuento (id, nombre){
     try {
       isLoading2.value = true;  
+      verMasPaisesActive.value = true;
+      verMasCiudadesActive.value = true;
       selectedDescuento.value = nombre;
       const consulta = await fetch('https://ecuavisa-cupones.vercel.app/descuento/get/id/'+id);
       const consultaJson = await consulta.json();
+      console.log("consultaJson",consultaJson);
+      if(consultaJson.data.paises == 'full' && consultaJson.data.ciudades == 'full'){
+        datosSelectedDescFull.value.paises = paisesItems.value; 
+        datosSelectedDescFull.value.ciudades = ciudadesItems.value;  
+        datosSelectedDesc.value.paises = paisesItems.value.slice(0,15); 
+        datosSelectedDesc.value.ciudades = ciudadesItems.value.slice(0,15);   
 
-      datosSelectedDesc.value.paises = consultaJson.data.paises;     
-      datosSelectedDesc.value.ciudades = consultaJson.data.ciudades;     
-      
+      }else{
+        datosSelectedDescFull.value.paises = consultaJson.data.paises; 
+        datosSelectedDescFull.value.ciudades = consultaJson.data.ciudades;
+        datosSelectedDesc.value.paises = consultaJson.data.paises.slice(0,15);     
+        datosSelectedDesc.value.ciudades = consultaJson.data.ciudades.slice(0,15); 
+      }
       excepcionesSelectedDesc.value =  consultaJson.data.excepciones;
 
       Card2Visible.value = true;  
@@ -49,6 +66,26 @@ async function resolveSelectedDescuento (id, nombre){
         console.error(error.message);
     }
 } 
+
+function verMasPaises(){
+    verMasPaisesActive.value = false;
+    datosSelectedDesc.value.paises = datosSelectedDescFull.value.paises;
+}
+
+function verMasCiudades(){
+    verMasCiudadesActive.value = false;
+    datosSelectedDesc.value.ciudades = datosSelectedDescFull.value.ciudades;
+}
+
+function verMenosPaises(){
+    verMasPaisesActive.value = true;
+    datosSelectedDesc.value.paises = datosSelectedDescFull.value.paises.slice(0,15);
+}
+
+function verMenosCiudades(){
+    verMasCiudadesActive.value = true;
+    datosSelectedDesc.value.ciudades = datosSelectedDescFull.value.ciudades.slice(0,15);
+}
 
 async function getPaisesCiudades (){
     try {  
@@ -80,7 +117,10 @@ async function getPaisesCiudades (){
 } 
 
 onMounted(async()=>{
-    await getDescuentos();
+    isLoading2.value = true;  
+    await getPaisesCiudades();
+    await getDescuentos();   
+    isLoading2.value = false; 
 })
 
 const itemsPerPage = 8;
@@ -196,8 +236,8 @@ function resolvePaquetesOptions(){
         asignPaquetesVisible.value = false;
        
     }else if(paquetesOptions.value === 'Full'){
-        paises.value = paisesItems.value;
-        ciudades.value = ciudadesItems.value
+        paises.value = 'full';
+        ciudades.value = 'full';
         searchQuery.value = '';
         asignPaquetesVisible.value = false;
     }
@@ -229,7 +269,6 @@ function closeDiag(){
 async function onAdd(){
     isLoading2.value = true;
     resetForm(); 
-    await getPaisesCiudades();
     accionForm.value = 'add';
     isDialogActive.value = true;
     isLoading2.value = false;
@@ -241,7 +280,6 @@ const idToEdit = ref('');
 async function onEdit(id){
     isLoading2.value = true;
     resetForm(); 
-    await getPaisesCiudades();
     accionForm.value = 'edit';
     const consulta = await fetch('https://ecuavisa-cupones.vercel.app/descuento/get/id/' + id);
     const consultaJson = await consulta.json();
@@ -249,6 +287,11 @@ async function onEdit(id){
     //console.log(paquete);
     idToEdit.value = data._id;
     nombre.value = data.nombre;
+    if((data.paises !== 'full' && data.paises.length >0)&&(data.ciudades !== 'full' && data.ciudades.length >0) ){
+        paquetesOptions.value = 'Personalizado';
+    }else if(data.ciudades == 'full' && data.paises == 'full'){
+        paquetesOptions.value = 'Full';
+    }
     paises.value = data.paises;
     ciudades.value = data.ciudades;
     excepciones.value = data.excepciones;
@@ -283,8 +326,8 @@ async function onComplete(){
 
     
     if(paquetesOptions.value == 'Full'){
-        paises.value = paisesItems.value;
-        ciudades.value = ciudadesItems.value
+        paises.value = 'full';
+        ciudades.value = 'full'
     }
     isLoading2.value = true;
     if (accionForm.value === 'add') {
@@ -500,12 +543,32 @@ async function deleteConfirmed() {
                         <div class="d-flex flex-wrap" style="max-width: 1000px;">                        
                                 <VChip v-for="p in datosSelectedDesc.paises" color="primary"> {{ p }}</VChip>   
                         </div>    
+                        <div v-if="verMasPaisesActive && datosSelectedDescFull.paises.length > 15" class="text-center" >                        
+                            <VBtn @click="verMasPaises">
+                                Ver más países
+                            </VBtn>  
+                        </div>  
+                        <div v-if="!verMasPaisesActive && datosSelectedDescFull.paises.length > 15" class="text-center" >                        
+                            <VBtn @click="verMenosPaises">
+                                Ver menos países
+                            </VBtn>  
+                        </div> 
                         </VCol> 
                         <VCol cols="12">
                         <span>Ciudades:</span> 
                         <div class="d-flex flex-wrap" style="max-width: 1000px;">                        
                             <VChip v-for="c in datosSelectedDesc.ciudades" color="primary"> {{ c }}</VChip>   
-                        </div>    
+                        </div>   
+                        <div v-if="verMasCiudadesActive && datosSelectedDescFull.ciudades.length > 15" class="text-center" >                        
+                            <VBtn @click="verMasCiudades">
+                                Ver más ciudades
+                            </VBtn>  
+                        </div>  
+                        <div v-if="!verMasCiudadesActive && datosSelectedDescFull.ciudades.length > 15" class="text-center" >                        
+                            <VBtn @click="verMenosCiudades">
+                                Ver menos ciudades
+                            </VBtn>  
+                        </div>  
                         </VCol> 
                     </VCardItem>  
                     
