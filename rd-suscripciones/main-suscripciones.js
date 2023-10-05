@@ -6,38 +6,41 @@
 	const botonAplicarCupon = document.querySelector('.bc_aplicar');
 	const inputAplicarCupon = document.querySelector('.bc_input');
 
-	botonAplicarCupon.addEventListener("click", function () {
-		if (inputAplicarCupon.value.length != 0) {
-			const textCupon = inputAplicarCupon.value;
+	if (botonAplicarCupon) {
+		botonAplicarCupon.addEventListener("click", function () {
+			if (inputAplicarCupon.value.length != 0) {
+				const textCupon = inputAplicarCupon.value;
 
-			//agregar el un nuevo parametro al url actual
-			var urlHREF = window.location.href;
-			if (urlHREF.indexOf('?') === -1) { urlHREF += '?'; } else { urlHREF += '&'; }
-			urlHREF += 'usocupon=true';
-			window.history.pushState({ path: urlHREF }, '', urlHREF);
+				//agregar el un nuevo parametro al url actual
+				var urlHREF = window.location.href;
+				if (urlHREF.indexOf('?') === -1) { urlHREF += '?'; } else { urlHREF += '&'; }
+				urlHREF += 'usocupon=true';
+				window.history.pushState({ path: urlHREF }, '', urlHREF);
 
-			//enviar el cupo por el metodo post
-			const planId = localStorage.getItem('planId_paquete');
-			console.log(planId);
-			fetch("https://ecuavisa-cupones.vercel.app/cupon/validacion", {
-				method: 'POST',
-				headers: {
-					"Content-Type": "application/json"
-				},
-				body: JSON.stringify({
-					"idPaquete": planId,
-					"nombreCupon": textCupon
-				}),
-				redirect: 'follow'
-			})
-				.then(response => response.json())
-				.then(result => {
-					console.log(result);
-				}).catch(error => {
-					console.log(error);
-				});
-		}
-	});
+				//enviar el cupo por el metodo post
+				const planId = localStorage.getItem('planId_paquete');
+				console.log(planId);
+				fetch("https://ecuavisa-cupones.vercel.app/cupon/validacion", {
+					method: 'POST',
+					headers: {
+						"Content-Type": "application/json"
+					},
+					body: JSON.stringify({
+						"idPaquete": planId,
+						"nombreCupon": textCupon
+					}),
+					redirect: 'follow'
+				})
+					.then(response => response.json())
+					.then(result => {
+						console.log(result);
+					}).catch(error => {
+						console.log(error);
+					});
+			}
+		});
+	}
+
 
 
 	toggleCupon.addEventListener("click", function () {
