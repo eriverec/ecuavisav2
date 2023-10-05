@@ -168,6 +168,7 @@ const excepciones = ref({
 const discount = ref(0);
 const type = ref('');
 const helper = ref('');
+const activo = ref(false);
 const dateIni = ref('');
 const dateEnd = ref('');
 
@@ -255,6 +256,7 @@ function resetForm(){
     discount.value = 0;
     type.value = '';
     helper.value = '';
+    activo.value = false;
     dateIni.value = '';
     dateEnd.value = '';
     paquetesOptions.value = 'Full';
@@ -298,6 +300,7 @@ async function onEdit(id){
     discount.value = data.discount;
     type.value = data.type;
     helper.value = data.helper;
+    activo.value = data.activo;
     dateIni.value = data.dateIni;
     dateEnd.value = data.dateEnd;
     
@@ -340,6 +343,7 @@ async function onComplete(){
         "discount": discount.value,
         "type": type.value,
         "helper": helper.value,
+        "activo": activo.value,
         "dateIni": dateIni.value,
         "dateEnd": dateEnd.value 
         }
@@ -380,6 +384,7 @@ async function onComplete(){
         "discount": discount.value,
         "type": type.value,
         "helper": helper.value,
+        "activo": activo.value,
         "dateIni": dateIni.value,
         "dateEnd": dateEnd.value     
         }
@@ -621,8 +626,15 @@ async function deleteConfirmed() {
                             <VRow class="d-flex flex-wrap justify-center gap-4">
                                 <VRow>
                                     
-                                    <VCol cols="12">
+                                    <VCol cols="8">
                                         <VTextField v-model="nombre" label="Nombre" />
+                                    </VCol>
+                                    <VCol cols="4">
+                                    <VSwitch
+                                    v-model="activo"
+                                    color="success"
+                                    :label="activo == true ? 'Activo' : 'Inactivo'"
+                                     />
                                     </VCol>
                                     <VCol cols="6">
                                         <VTextField v-model="discount" label="Descuento" typer="number" />
