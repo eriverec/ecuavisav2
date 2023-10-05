@@ -220,6 +220,8 @@ function resetSearch () {
         paises: [],
         ciudades: []
     };
+    paisesFiltrados.value = [];
+    ciudadesFiltradas.value = [];
     asignPaquetesVisible.value = false;
 }
 
@@ -245,6 +247,7 @@ function resolvePaquetesOptions(){
 }
 
 function resetForm(){
+    asignPaquetesVisible.value = false;
     searchQuery.value = '';
     nombre.value = '';
     paises.value = [];
@@ -253,6 +256,8 @@ function resetForm(){
         paises: [],
         ciudades: []
     };
+    paisesFiltrados.value = [];
+    ciudadesFiltradas.value = [];
     discount.value = 0;
     type.value = '';
     helper.value = '';
