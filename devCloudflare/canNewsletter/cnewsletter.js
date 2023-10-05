@@ -69,14 +69,14 @@ function btnDarseBaja() {
 }
 
 function valIdNewsletter()  {
-  const userLoginRD = localStorage.getItem('wylexUserId') || 0;
-  if (userLoginRD === 0) {
-    setTimeout(() => {
+  setTimeout(() => {
+    const userLoginRD = localStorage.getItem('wylexUserId') || 0;
+    if (userLoginRD === 0) {
       redireccionAlLogin();
-    }, 300);
-  } else { 
-    // btnDarseBaja();
-  }
+    } else { 
+      // btnDarseBaja();
+    }
+  }, 900);
 }
 
 valIdNewsletter();
