@@ -1,4 +1,5 @@
 <script setup>
+import tabDescuentos from "@/pages/apps/cupones/tabs/descuentos.vue";
 import { onMounted } from 'vue';
 import 'vue3-form-wizard/dist/style.css';
 
@@ -10,6 +11,7 @@ const excepcionesCupon = ref([]);
 const Card2Visible = ref(false);
 const selectedCupon = ref('');
 const dataPaquetes = ref([]);
+const currentTab = ref('tab-cupones');
 
 async function getCupones (){
     try {
@@ -346,258 +348,278 @@ async function deleteConfirmed() {
 <template>
     <section>
     
-        <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :color="configSnackbar.type">
-            {{ configSnackbar.message }}
-        </VSnackbar>
+        <VTabs v-model="currentTab" class="v-tabs-pill">
+          <VTab value="tab-cupones">Cupones</VTab>
+          <VTab value="tab-descuentos">Descuentos</VTab>
+          <!-- <VTab>Tab Three</VTab> -->
+        </VTabs>
+        
+            <VWindow class="mt-4" v-model="currentTab">
+              <VWindowItem value="tab-cupones">
 
-        <VDialog v-model="isLoading2" width="300">
-              <VCardText class="pt-3 text-center">
-                <v-progress-circular indeterminate color="primary"></v-progress-circular>
-              </VCardText>
-        </VDialog>
+            <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :color="configSnackbar.type">
+                {{ configSnackbar.message }}
+            </VSnackbar>
 
-        <VRow>
-            <VCol cols="12" sm="12" lg="12">
-                <VCard>
-                <VCardTitle class="pt-4 pl-6">Lista de cupones</VCardTitle>   
-                 
-                <VCardText style="margin-bottom: -2rem;">
-                        <div class="d-flex flex-wrap gap-4 mt-10">
-                            <VBtn prepend-icon="tabler-user-plus" color="success" variant="tonal" class="ml-auto" @click="onAdd">
-                                Crear cupón
-                            </VBtn>
-                        </div>
-    
+            <VDialog v-model="isLoading2" width="300">
+                <VCardText class="pt-3 text-center">
+                    <v-progress-circular indeterminate color="primary"></v-progress-circular>
                 </VCardText>
+            </VDialog>
 
-                <VCardItem v-if="isLoading">
-                Cargando datos... 
-                </VCardItem>   
-                <VCardItem v-else>
-                <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
-                    <thead>
-                        <tr>   
-                        <th scope="col">Nombre</th>                             
-                        <th scope="col">Valor</th>
-                        <th scope="col">Fecha inicio</th>    
-                        <th scope="col">Fecha fin</th>   
-                        <th scope="col">Acciones</th>   
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr v-for="item in paginatedCupones" @click="resolveSelectedCupon(item._id, item.nombre)" class="clickable">
-                        <td class="text-medium-emphasis">
-                            {{ item.nombre}}
-                        </td>      
-                        <td class="text-medium-emphasis">
-                            {{ item.helper}}
-                        </td>
-                        <td class="text-medium-emphasis">
-                            {{ item.dateIni}}
-                        </td>
-                        <td class="text-medium-emphasis">
-                            {{ item.dateEnd}}
-                        </td>
-                        <td class="text-medium-emphasis">
-                            <VBtn color="success" variant="text" icon  @click="onEdit(item._id)">
-                                <VIcon size="22" icon="tabler-edit" />
-                            </VBtn>
-
-                            <VBtn icon  color="error" variant="text" @click="onDelete(item._id)">
-                                <VIcon size="22" icon="tabler-trash" />
-                            </VBtn>
-                        </td>             
-                        </tr>
-                    </tbody>
-                </VTable>
-                <div class="d-flex align-center justify-space-between botonescurrentPage">
-                <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
-                Página {{ currentPage }}
-                <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
-                    :disabled="(currentPage * itemsPerPage) >= dataCupones.length">
-                </VBtn>
-                </div>
-                </VCardItem>  
-                   
-                </VCard>
-            </VCol>
-
-            <VCol v-if="Card2Visible" cols="6" sm="12" lg="6" class="container">
-                <VCard>
-                <VCardTitle class="pt-4 pl-6">Paquetes de {{ selectedCupon }}</VCardTitle>   
-                      
-                <VCardItem>
-                <VTable class="text-no-wrap tableNavegacion mb-5">
-                    <thead>
-                        <tr>   
-                        <th scope="col">Id</th>                             
-                        <th scope="col">Nombre</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr v-for="paquete in paquetesCupon">
-                        <td class="text-medium-emphasis">
-                            {{ paquete._id}}
-                        </td>      
-                        <td class="text-medium-emphasis">
-                            {{ paquete.nombre}}
-                        </td>            
-                        </tr>
-                    </tbody>
-                </VTable>            
-                </VCardItem>  
-                   
-                </VCard>
-            </VCol>
-
-            <VCol v-if="Card2Visible" cols="6" sm="12" lg="6" class="container">
-                <VCard>
-                <VCardTitle class="pt-4 pl-6">Excepciones de {{ selectedCupon }}</VCardTitle>   
-                      
-                <VCardItem v-if="excepcionesCupon.length === 0">
-                No existen excepciones para mostrar.          
-                </VCardItem>  
-                
-                <VCardItem v-else>
-                <VTable class="text-no-wrap tableNavegacion mb-5">
-                    <thead>
-                        <tr>   
-                        <th scope="col">Id</th>                             
-                        <th scope="col">Nombre</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr v-for="excepcion in excepcionesCupon">
-                        <td class="text-medium-emphasis">
-                            {{ excepcion._id}}
-                        </td>      
-                        <td class="text-medium-emphasis">
-                            {{ excepcion.nombre}}
-                        </td>            
-                        </tr>
-                    </tbody>
-                </VTable>            
-                </VCardItem>
-                   
-                </VCard>
-            </VCol>
-        </VRow>
-
-        <VDialog v-model="isDialogActive" persistent no-click-animation max-width="800">
-
-            <!-- Dialog close btn -->
-            <DialogCloseBtn @click="closeDiag" />
-
-            <VCard  class="pa-sm-14 pa-5">
-                <VCardItem class="text-center">
-                    <VCardTitle class="text-h5 mb-3">
-                        {{ accionForm === "add" ? "Crear un cupón" : "Editar " + nombre }}
-                    </VCardTitle>
-                </VCardItem>
-
-                <VCardText>
-
-                    <!-- 👉 Form -->
-                    <VForm class="mt-6" @submit.prevent="onComplete">
-                        <VRow class="d-flex flex-wrap justify-center gap-4">
-                            <VRow>
-                                
-                                <VCol cols="12">
-                                    <VTextField v-model="nombre" label="Nombre" />
-                                </VCol>
-                                <VCol cols="6">
-                                    <VTextField v-model="discount" label="Descuento" typer="number" />
-                                </VCol>
-                                <VCol cols="6">
-                                    <VTextField v-model="helper" label="Helper" />
-                                </VCol>
-                                <VCol cols="12">
-                                    <VSelect v-model="type" label="Tipo" :items="typeItems" />
-                                </VCol>
-                                <VCol cols="6">
-                                    <AppDateTimePicker  prepend-inner-icon="tabler-calendar" density="compact" v-model="dateIni"
-                                    show-current=true label="Fecha inicio" :config="{
-                                        position: 'auto right',                
-                                        altFormat: 'F j, Y',
-                                        dateFormat: 'm-d-Y',
-                                        //maxDate: new Date(),
-                                        reactive: true
-                                    }" />
-                                </VCol>
-                                <VCol cols="6">                                  
-                                    <AppDateTimePicker  prepend-inner-icon="tabler-calendar" density="compact" v-model="dateEnd"
-                                    show-current=true label="Fecha fin" :config="{
-                                        position: 'auto right',                
-                                        altFormat: 'F j, Y',
-                                        dateFormat: 'm-d-Y',
-                                        //maxDate: new Date(),
-                                        reactive: true
-                                    }" />
-                                </VCol>
-                                <VCol cols="12">
-                                    <VSelect class="mb-6" v-model="paquetesOptions" label="Asignar paquetes" :items="paquetesOptionsItems"  @update:model-value="resolvePaquetesOptions"/>                              
-                                    <VCol v-if="paquetesOptions == 'Personalizado'" style="margin-top: -1.5rem;" v-for="item in dataPaquetes" cols="6">                  
-                                    <VCheckbox
-                                    v-model="paquetes"
-                                    :label="item.title"
-                                    :value="item.value"
-                                    />
-                                    
-                                  </VCol>
-                                </VCol>
-
-                                <VCol style="margin-top: -2rem;" v-if="paquetesOptions == 'Full'" cols="12">                                 
-                                    <div class="mb-6">Asignar excepciones</div>           
-                                    <VCol  style="margin-top: -1.5rem;" v-for="item in dataPaquetes" cols="6">                  
-                                    <VCheckbox
-                                    v-model="excepciones"
-                                    :label="item.title"
-                                    :value="item.value"
-                                    />
-                                    
-                                  </VCol>
-                                </VCol>
-                                
-                            </VRow>
-                            <!-- 👉 Submit and Cancel -->
-                            <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
-                                <VBtn type="submit"> Guardar </VBtn>
-
-                                <VBtn color="secondary" variant="tonal" @click="closeDiag">
-                                    Cancelar
+            <VRow>
+                <VCol cols="12" sm="12" lg="12">
+                    <VCard>
+                    <VCardTitle class="pt-4 pl-6">Lista de cupones</VCardTitle>   
+                    
+                    <VCardText style="margin-bottom: -2rem;">
+                            <div class="d-flex flex-wrap gap-4 mt-10">
+                                <VBtn prepend-icon="tabler-user-plus" color="success" variant="tonal" class="ml-auto" @click="onAdd">
+                                    Crear cupón
                                 </VBtn>
-                            </VCol>
-                        </VRow>
-                    </VForm>
-                </VCardText>
-            </VCard>
-        </VDialog>
+                            </div>
+        
+                    </VCardText>
 
-        <VDialog v-model="isDialogVisibleDelete" persistent class="v-dialog-sm">
+                    <VCardItem v-if="isLoading">
+                    Cargando datos... 
+                    </VCardItem>   
+                    <VCardItem v-else>
+                    <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                        <thead>
+                            <tr>   
+                            <th scope="col">Nombre</th>                             
+                            <th scope="col">Valor</th>
+                            <th scope="col">Fecha inicio</th>    
+                            <th scope="col">Fecha fin</th>   
+                            <th scope="col">Acciones</th>   
+                            </tr>
+                        </thead>
 
-            <!-- Dialog close btn -->
-            <DialogCloseBtn @click="isDialogVisibleDelete = !isDialogVisibleDelete" />
+                        <tbody>
+                            <tr v-for="item in paginatedCupones" @click="resolveSelectedCupon(item._id, item.nombre)" class="clickable">
+                            <td class="text-medium-emphasis">
+                                {{ item.nombre}}
+                            </td>      
+                            <td class="text-medium-emphasis">
+                                {{ item.helper}}
+                            </td>
+                            <td class="text-medium-emphasis">
+                                {{ item.dateIni}}
+                            </td>
+                            <td class="text-medium-emphasis">
+                                {{ item.dateEnd}}
+                            </td>
+                            <td class="text-medium-emphasis">
+                                <VBtn color="success" variant="text" icon  @click="onEdit(item._id)">
+                                    <VIcon size="22" icon="tabler-edit" />
+                                </VBtn>
 
-            <!-- Dialog Content -->
-            <VCard title="Eliminar registro">
-                <VCardText>
-                    ¿Desea eliminar el cupón?
-                </VCardText>
-
-                <VCardText class="d-flex justify-end gap-3 flex-wrap">
-                    <VBtn color="secondary" variant="tonal" @click="isDialogVisibleDelete = false">
-                        No, Cerrar
+                                <VBtn icon  color="error" variant="text" @click="onDelete(item._id)">
+                                    <VIcon size="22" icon="tabler-trash" />
+                                </VBtn>
+                            </td>             
+                            </tr>
+                        </tbody>
+                    </VTable>
+                    <div class="d-flex align-center justify-space-between botonescurrentPage">
+                    <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
+                    Página {{ currentPage }}
+                    <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
+                        :disabled="(currentPage * itemsPerPage) >= dataCupones.length">
                     </VBtn>
-                    <VBtn @click="deleteConfirmed">
-                        Si, eliminar
-                    </VBtn>
-                </VCardText>
-            </VCard>
-        </VDialog>
+                    </div>
+                    </VCardItem>  
+                    
+                    </VCard>
+                </VCol>
 
+                <VCol v-if="Card2Visible" cols="6" sm="12" lg="6" class="container">
+                    <VCard>
+                    <VCardTitle class="pt-4 pl-6">Paquetes de {{ selectedCupon }}</VCardTitle>   
+                        
+                    <VCardItem>
+                    <VTable class="text-no-wrap tableNavegacion mb-5">
+                        <thead>
+                            <tr>   
+                            <th scope="col">Id</th>                             
+                            <th scope="col">Nombre</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr v-for="paquete in paquetesCupon">
+                            <td class="text-medium-emphasis">
+                                {{ paquete._id}}
+                            </td>      
+                            <td class="text-medium-emphasis">
+                                {{ paquete.nombre}}
+                            </td>            
+                            </tr>
+                        </tbody>
+                    </VTable>            
+                    </VCardItem>  
+                    
+                    </VCard>
+                </VCol>
+
+                <VCol v-if="Card2Visible" cols="6" sm="12" lg="6" class="container">
+                    <VCard>
+                    <VCardTitle class="pt-4 pl-6">Excepciones de {{ selectedCupon }}</VCardTitle>   
+                        
+                    <VCardItem v-if="excepcionesCupon.length === 0">
+                    No existen excepciones para mostrar.          
+                    </VCardItem>  
+                    
+                    <VCardItem v-else>
+                    <VTable class="text-no-wrap tableNavegacion mb-5">
+                        <thead>
+                            <tr>   
+                            <th scope="col">Id</th>                             
+                            <th scope="col">Nombre</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr v-for="excepcion in excepcionesCupon">
+                            <td class="text-medium-emphasis">
+                                {{ excepcion._id}}
+                            </td>      
+                            <td class="text-medium-emphasis">
+                                {{ excepcion.nombre}}
+                            </td>            
+                            </tr>
+                        </tbody>
+                    </VTable>            
+                    </VCardItem>
+                    
+                    </VCard>
+                </VCol>
+            </VRow>
+
+            <VDialog v-model="isDialogActive" persistent no-click-animation max-width="800">
+
+                <!-- Dialog close btn -->
+                <DialogCloseBtn @click="closeDiag" />
+
+                <VCard  class="pa-sm-14 pa-5">
+                    <VCardItem class="text-center">
+                        <VCardTitle class="text-h5 mb-3">
+                            {{ accionForm === "add" ? "Crear un cupón" : "Editar " + nombre }}
+                        </VCardTitle>
+                    </VCardItem>
+
+                    <VCardText>
+
+                        <!-- 👉 Form -->
+                        <VForm class="mt-6" @submit.prevent="onComplete">
+                            <VRow class="d-flex flex-wrap justify-center gap-4">
+                                <VRow>
+                                    
+                                    <VCol cols="12">
+                                        <VTextField v-model="nombre" label="Nombre" />
+                                    </VCol>
+                                    <VCol cols="6">
+                                        <VTextField v-model="discount" label="Descuento" typer="number" />
+                                    </VCol>
+                                    <VCol cols="6">
+                                        <VTextField v-model="helper" label="Helper" />
+                                    </VCol>
+                                    <VCol cols="12">
+                                        <VSelect v-model="type" label="Tipo" :items="typeItems" />
+                                    </VCol>
+                                    <VCol cols="6">
+                                        <AppDateTimePicker  prepend-inner-icon="tabler-calendar" density="compact" v-model="dateIni"
+                                        show-current=true label="Fecha inicio" :config="{
+                                            position: 'auto right',                
+                                            altFormat: 'F j, Y',
+                                            dateFormat: 'm-d-Y',
+                                            //maxDate: new Date(),
+                                            reactive: true
+                                        }" />
+                                    </VCol>
+                                    <VCol cols="6">                                  
+                                        <AppDateTimePicker  prepend-inner-icon="tabler-calendar" density="compact" v-model="dateEnd"
+                                        show-current=true label="Fecha fin" :config="{
+                                            position: 'auto right',                
+                                            altFormat: 'F j, Y',
+                                            dateFormat: 'm-d-Y',
+                                            //maxDate: new Date(),
+                                            reactive: true
+                                        }" />
+                                    </VCol>
+                                    <VCol cols="12">
+                                        <VSelect class="mb-6" v-model="paquetesOptions" label="Asignar paquetes" :items="paquetesOptionsItems"  @update:model-value="resolvePaquetesOptions"/>                              
+                                        <VCol v-if="paquetesOptions == 'Personalizado'" style="margin-top: -1.5rem;" v-for="item in dataPaquetes" cols="6">                  
+                                        <VCheckbox
+                                        v-model="paquetes"
+                                        :label="item.title"
+                                        :value="item.value"
+                                        />
+                                        
+                                    </VCol>
+                                    </VCol>
+
+                                    <VCol style="margin-top: -2rem;" v-if="paquetesOptions == 'Full'" cols="12">                                 
+                                        <div class="mb-6">Asignar excepciones</div>           
+                                        <VCol  style="margin-top: -1.5rem;" v-for="item in dataPaquetes" cols="6">                  
+                                        <VCheckbox
+                                        v-model="excepciones"
+                                        :label="item.title"
+                                        :value="item.value"
+                                        />
+                                        
+                                    </VCol>
+                                    </VCol>
+                                    
+                                </VRow>
+                                <!-- 👉 Submit and Cancel -->
+                                <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
+                                    <VBtn type="submit"> Guardar </VBtn>
+
+                                    <VBtn color="secondary" variant="tonal" @click="closeDiag">
+                                        Cancelar
+                                    </VBtn>
+                                </VCol>
+                            </VRow>
+                        </VForm>
+                    </VCardText>
+                </VCard>
+            </VDialog>
+
+            <VDialog v-model="isDialogVisibleDelete" persistent class="v-dialog-sm">
+
+                <!-- Dialog close btn -->
+                <DialogCloseBtn @click="isDialogVisibleDelete = !isDialogVisibleDelete" />
+
+                <!-- Dialog Content -->
+                <VCard title="Eliminar registro">
+                    <VCardText>
+                        ¿Desea eliminar el cupón?
+                    </VCardText>
+
+                    <VCardText class="d-flex justify-end gap-3 flex-wrap">
+                        <VBtn color="secondary" variant="tonal" @click="isDialogVisibleDelete = false">
+                            No, Cerrar
+                        </VBtn>
+                        <VBtn @click="deleteConfirmed">
+                            Si, eliminar
+                        </VBtn>
+                    </VCardText>
+                </VCard>
+            </VDialog>
+      
+              </VWindowItem>
+
+              <VWindowItem value="tab-descuentos">
+                <tabDescuentos/>              
+              </VWindowItem>
+
+             
+            </VWindow>
+          
+
+        
     </section>
 </template>
 
@@ -610,6 +632,9 @@ async function deleteConfirmed() {
 @media screen and (max-width: 1000px) {
   .container {
    min-width: 90svw; 
+  }
+  .mdContainer {
+    min-width: 100px;  
   }
 }
 .open.flatpickr-calendar {
