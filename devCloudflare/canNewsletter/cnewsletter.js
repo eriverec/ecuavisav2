@@ -2,7 +2,7 @@ function eventoNP(){
   const pageNext = window.location.search ;
   localStorage.setItem('pagePreview',pageNext);
 
-  const getNP = localStorage.get('pageNext');
+  const getNP = localStorage.getItem('pagePreview');
   console.log(getNP);
 
   // if(getNP){
