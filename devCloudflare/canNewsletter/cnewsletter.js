@@ -26,15 +26,15 @@ function btnDarseBaja() {
         },
         redirect: "follow",
       })
-        .then((response) => response.json())
+        .then((response) => response.text())
         .then((resultget) => {
           // console.log("lista de corros sendpulse:", resultget);
           // const emailUser = "eriveraec@gmail.com";
           // const foundEmail = resultget.find((email) => email.email === emailUser);
           // console.log("foundEmail:",foundEmail);
 
-          if (resultget.includes(emailUser)) {
-            console.log("existe en la lista.");
+          // if (resultget.includes(emailUser)) {
+            // console.log("existe en la lista.");
             fetch(
               `https://api.sendpulse.com/addressbooks/${idBoletin}/emails`,
               {
@@ -54,15 +54,19 @@ function btnDarseBaja() {
                 console.log(result);
                 document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
                 document.querySelector('._darsedebaja').classList.add('d-none');
+                document.querySelector(".seca_mensaje_exito").textContent = "Te has dado de baja con éxito";
               })
-              .catch((error) => console.log("error", error));
-          } else {
-            console.log("emails no existe en la lista de sendpulse.");
-            document.querySelector('._darsedebaja').classList.add('d-none');
-            document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
-            document.querySelector(".seca_mensaje_exito").textContent =
-              "Te has dado de baja con éxito";
-          }
+              .catch((error) => {
+                console.log("error", error);
+                console.log("correo no existe");
+              } );
+          // } else {
+          //   console.log("emails no existe en la lista de sendpulse.");
+          //   document.querySelector('._darsedebaja').classList.add('d-none');
+          //   document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
+          //   document.querySelector(".seca_mensaje_exito").textContent =
+          //     "Te has dado de baja con éxito";
+          // }
           // console.log(valemail);
         })
         .catch((error) => console.log("error", error));
