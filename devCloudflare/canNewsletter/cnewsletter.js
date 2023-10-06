@@ -7,6 +7,7 @@ function btnDarseBaja() {
     })
     .then(function (token) {
       const emailUser = ECUAVISA_EC.USER_data().email;
+      console.log("emailUser:",emailUser);
       // Obtenemos el URL actual
       const urlActualHref = window.location.href;
       const urlObj = new URL(urlActualHref);
@@ -26,9 +27,10 @@ function btnDarseBaja() {
       })
         .then((response) => response.json())
         .then((resultget) => {
-          console.log("lista de corros sendpulse:", resultget);
+          // console.log("lista de corros sendpulse:", resultget);
           // const emailUser = "eriveraec@gmail.com";
           const foundEmail = resultget.find((email) => email.email === emailUser);
+          console.log("foundEmail:",foundEmail);
           if (foundEmail) {
             console.log("existe en la lista.");
             fetch(
