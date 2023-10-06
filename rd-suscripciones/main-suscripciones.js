@@ -186,6 +186,10 @@
 					document.querySelector("#apellidos").value = usuario.lastname;
 					document.querySelector('.no-login').style.display = "none";
 					document.querySelector('.detalles .login').style.display = "block";
+					// Obtén una referencia al botón por su clase
+					const button = document.querySelector(".btn-ecuavisa.next");
+					// Simula un clic en el botón
+					button.click();
 				}
 			} else {
 				// const gru = document.querySelector('.form-group');
