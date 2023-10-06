@@ -869,7 +869,7 @@ form i {
 }
 
 .mensaje_continuar_viendo {
-    display: none!important;
+/*    display: none!important;*/
     background-color: #23DCD1;
     width: 100%;
     display: flex;
