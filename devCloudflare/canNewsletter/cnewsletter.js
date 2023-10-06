@@ -12,6 +12,7 @@ function btnDarseBaja() {
       const urlActualHref = window.location.href;
       const urlObj = new URL(urlActualHref);
       const idBoletin = urlObj.searchParams.get("nlid");
+      console.log("idBoletin:",idBoletin);
       document.querySelector('._darsedebaja').style.opacity = "0.5";
 
       // Verificamos si se encontró el parámetro 'correo' en el URL
@@ -29,9 +30,10 @@ function btnDarseBaja() {
         .then((resultget) => {
           // console.log("lista de corros sendpulse:", resultget);
           // const emailUser = "eriveraec@gmail.com";
-          const foundEmail = resultget.find((email) => email.email === emailUser);
-          console.log("foundEmail:",foundEmail);
-          if (foundEmail) {
+          // const foundEmail = resultget.find((email) => email.email === emailUser);
+          // console.log("foundEmail:",foundEmail);
+
+          if (data.includes(emailUser)) {
             console.log("existe en la lista.");
             fetch(
               `https://api.sendpulse.com/addressbooks/${idBoletin}/emails`,
