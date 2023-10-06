@@ -1,4 +1,5 @@
 <script setup>
+import tabDescuentos from "@/pages/apps/cupones/tabs/descuentos.vue";
 import { onMounted } from 'vue';
 import 'vue3-form-wizard/dist/style.css';
 
@@ -98,88 +99,7 @@ const typeItems = [
     },
 ]
 
-const matchItems = [
-    {
-        title: "Coinciden todas",
-        value: "all"
-    },
-    {
-        title: "Coincide alguna",
-        value: "some"
-    }
-]
 
-const tipoCondicionItems = [
-    {
-        title: "País",
-        value: "pais"
-    },
-    {
-        title: "Ciudad",
-        value: "ciudad"
-    },
-    {
-        title: "Proveedor",
-        value: "proveedor"
-    },
-    {
-        title: "Grupo de usuario",
-        value: "grupo_usuario"
-    }
-]
-
-const condicionItems = [
-    {
-        title: "Incluir",
-        value: "incluir"
-    },
-    {
-        title: "Excluir",
-        value: "excluir"
-    }
-]
-
-const usuariosItems = [
-    {
-        title: "Seleccionar todos",
-        value: ["nuevo","registrado", "suscrito"]
-    },
-    {
-        title: "Usuario nuevo",
-        value: "nuevo"
-    },
-    {
-        title: "Usuario registrado",
-        value: "registrado"
-    },
-    {
-        title: "Usuario suscrito",
-        value: "suscrito"
-    }
-]
-
-const proveedorItems = [
-    {
-        title: "Seleccionar todos",
-        value: ["apple","google", "facebook", "email"]
-    },
-    {
-        title: "Apple",
-        value: "apple"
-    },
-    {
-        title: "Google",
-        value: "google"
-    },
-    {
-        title: "Facebook",
-        value: "facebook"
-    },
-    {
-        title: "Email",
-        value: "email"
-    }
-]
 
 // -------------------------------ACCIONES------------------------------------------
 const isDialogActive = ref(false);
@@ -194,10 +114,6 @@ const helper = ref('');
 const dateIni = ref('');
 const dateEnd = ref('');
 
-const activo = ref(false);
-const aplica = ref(false);
-const condiciones = ref([]);
-const match = ref('all');
 
 const configSnackbar = ref({
     message: "Datos guardados",
@@ -232,10 +148,6 @@ function resetForm(){
     helper.value = '';
     dateIni.value = '';
     dateEnd.value = '';
-    activo.value = false;
-    aplica.value = false;
-    condiciones.value = [];
-    match.value = 'all';
     paquetesOptions.value = 'Full';
 }
 
@@ -435,9 +347,15 @@ async function deleteConfirmed() {
 
 <template>
     <section>
+    
+        <VTabs v-model="currentTab" class="v-tabs-pill">
+          <VTab value="tab-cupones">Cupones</VTab>
+          <VTab value="tab-descuentos">Descuentos</VTab>
+          <!-- <VTab>Tab Three</VTab> -->
+        </VTabs>
         
-        
-           
+            <VWindow class="mt-4" v-model="currentTab">
+              <VWindowItem value="tab-cupones">
 
             <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :color="configSnackbar.type">
                 {{ configSnackbar.message }}
@@ -452,12 +370,12 @@ async function deleteConfirmed() {
             <VRow>
                 <VCol cols="12" sm="12" lg="12">
                     <VCard>
-                    <VCardTitle class="pt-4 pl-6">Reglas de descuento</VCardTitle>   
+                    <VCardTitle class="pt-4 pl-6">Lista de cupones</VCardTitle>   
                     
                     <VCardText style="margin-bottom: -2rem;">
                             <div class="d-flex flex-wrap gap-4 mt-10">
                                 <VBtn prepend-icon="tabler-user-plus" color="success" variant="tonal" class="ml-auto" @click="onAdd">
-                                    Nueva regla
+                                    Crear cupón
                                 </VBtn>
                             </div>
         
@@ -470,11 +388,10 @@ async function deleteConfirmed() {
                     <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
                         <thead>
                             <tr>   
-                            <th scope="col">Título</th>                             
-                            <th scope="col">Tipo de descuento</th>
+                            <th scope="col">Nombre</th>                             
+                            <th scope="col">Valor</th>
                             <th scope="col">Fecha inicio</th>    
                             <th scope="col">Fecha fin</th>   
-                            <th scope="col">Estado</th>
                             <th scope="col">Acciones</th>   
                             </tr>
                         </thead>
@@ -485,7 +402,7 @@ async function deleteConfirmed() {
                                 {{ item.nombre}}
                             </td>      
                             <td class="text-medium-emphasis">
-                                {{ item.type == "percent"? "Porcentaje de descuento": "Descuento fijo"}}
+                                {{ item.helper}}
                             </td>
                             <td class="text-medium-emphasis">
                                 {{ item.dateIni}}
@@ -494,19 +411,8 @@ async function deleteConfirmed() {
                                 {{ item.dateEnd}}
                             </td>
                             <td class="text-medium-emphasis">
-                                <VSwitch
-                                    v-model="item.activo"
-                                    color="success"
-                                    :label="activo == true ? 'Activo' : 'Inactivo'"
-                                />
-                            </td>
-                            <td class="text-medium-emphasis">
                                 <VBtn color="success" variant="text" icon  @click="onEdit(item._id)">
                                     <VIcon size="22" icon="tabler-edit" />
-                                </VBtn>
-
-                                <VBtn color="primary" variant="text" icon  @click="">
-                                    <VIcon size="22" icon="tabler-copy" />
                                 </VBtn>
 
                                 <VBtn icon  color="error" variant="text" @click="onDelete(item._id)">
@@ -599,7 +505,7 @@ async function deleteConfirmed() {
                 <VCard  class="pa-sm-14 pa-5">
                     <VCardItem class="text-center">
                         <VCardTitle class="text-h5 mb-3">
-                            {{ accionForm === "add" ? "Nueva regla de descuento" : "Editar " + nombre }}
+                            {{ accionForm === "add" ? "Crear un cupón" : "Editar " + nombre }}
                         </VCardTitle>
                     </VCardItem>
 
@@ -610,26 +516,8 @@ async function deleteConfirmed() {
                             <VRow class="d-flex flex-wrap justify-center gap-4">
                                 <VRow>
                                     
-                                    <VCol cols="5" >
+                                    <VCol cols="12">
                                         <VTextField v-model="nombre" label="Nombre" />
-                                    </VCol>
-                                    <VCol cols="2" >
-                                        <VCheckbox
-                                        v-model="activo"
-                                        :label=" activo == true? 'Activo': 'Inactivo' "                   
-                                        />
-                                    </VCol>
-                                    <VCol cols="5" class="d-flex">
-                                        <div>
-                                        <VCheckbox
-                                        v-model="aplica"                                                
-                                        >
-                                        </VCheckbox>
-                                        </div>
-                                        <div>
-                                        <p>Activa esta regla si coincide<br>
-                                         e ignora todas las demás</p>
-                                        </div>
                                     </VCol>
                                     <VCol cols="6">
                                         <VTextField v-model="discount" label="Descuento" typer="number" />
@@ -721,8 +609,17 @@ async function deleteConfirmed() {
                 </VCard>
             </VDialog>
       
+              </VWindowItem>
+
+              <VWindowItem value="tab-descuentos">
+                <tabDescuentos/>              
+              </VWindowItem>
+
              
-             
+            </VWindow>
+          
+
+        
     </section>
 </template>
 
