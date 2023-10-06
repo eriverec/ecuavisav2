@@ -17,7 +17,7 @@ if(urlParamsGET.get('msjcodigorojas') != null){
   // Agregar la clase al nuevo div
   newDiv.classList.add('mensaje_continuar_viendo');
   // Agregar el contenido de texto al nuevo div
-  newDiv.innerHTML = 'Código Rojas <br> Continúa disfrutando la programación de Ecuavisa.com inciando sesión';
+  newDiv.innerHTML = 'Código Rojas <br> Continúa disfrutando el contenido inciando sesión';
   // Insertar el nuevo div antes de container-lr
   container.parentNode.insertBefore(newDiv, container);
 }
