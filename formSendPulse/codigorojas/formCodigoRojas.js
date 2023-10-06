@@ -22,7 +22,7 @@ function armarFormulario (){
         <h2>LO MEJOR DE ECUAVISA</h2>
         <p>Boletín diario y toda la programación con un solo click.</p>
         <!-- Subscription Form -->
-        <div class="esendpulseNoticias"></div>
+        <div class="esendpulseCodigoRojas"></div>
         <!-- /Subscription Form -->
       </div>
     </div>
@@ -34,7 +34,7 @@ armarFormulario();
 
 setTimeout(() => {
   const embedsend = document.createElement('iframe');
-  embedsend.setAttribute('src', 'https://ecuavisadev.netlify.app/formSendPulse/codigoRojas/formCodigoRojas.html');
+  embedsend.setAttribute('src', 'https://ecuavisadev.netlify.app/formSendPulse/codigorojas/formCodigoRojas.html');
   embedsend.setAttribute('frameborder', '0');
   embedsend.setAttribute('scrolling', 'no');
   embedsend.setAttribute('allowtransparency', 'true');
