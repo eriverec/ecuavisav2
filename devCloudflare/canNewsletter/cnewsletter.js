@@ -17,59 +17,64 @@ function btnDarseBaja() {
 
       // Verificamos si se encontró el parámetro 'correo' en el URL
 
-      /*GET VALIDACION DE EMAIL*/
-      fetch(`https://api.sendpulse.com/addressbooks/${idBoletin}/emails`, {
-        method: "GET",
-        headers: {
-          Authorization: "Bearer " + token,
-          "Content-Type": "application/json",
-        },
-        redirect: "follow",
-      })
+      fetch(
+        `https://api.sendpulse.com/addressbooks/${idBoletin}/emails`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token,
+          },
+          body: JSON.stringify({
+            emails: [emailUser],
+          }),
+          redirect: "follow",
+        }
+      )
         .then((response) => response.text())
-        .then((resultget) => {
-          // console.log("lista de corros sendpulse:", resultget);
-          // const emailUser = "eriveraec@gmail.com";
-          // const foundEmail = resultget.find((email) => email.email === emailUser);
-          // console.log("foundEmail:",foundEmail);
-
-          // if (resultget.includes(emailUser)) {
-            // console.log("existe en la lista.");
-            fetch(
-              `https://api.sendpulse.com/addressbooks/${idBoletin}/emails`,
-              {
-                method: "DELETE",
-                headers: {
-                  "Content-Type": "application/json",
-                  Authorization: "Bearer " + token,
-                },
-                body: JSON.stringify({
-                  emails: [emailUser],
-                }),
-                redirect: "follow",
-              }
-            )
-              .then((response) => response.text())
-              .then((result) => {
-                console.log(result);
-                document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
-                document.querySelector('._darsedebaja').classList.add('d-none');
-                document.querySelector(".seca_mensaje_exito").textContent = "Te has dado de baja con éxito";
-              })
-              .catch((error) => {
-                console.log("error", error);
-                console.log("correo no existe");
-              } );
-          // } else {
-          //   console.log("emails no existe en la lista de sendpulse.");
-          //   document.querySelector('._darsedebaja').classList.add('d-none');
-          //   document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
-          //   document.querySelector(".seca_mensaje_exito").textContent =
-          //     "Te has dado de baja con éxito";
-          // }
-          // console.log(valemail);
+        .then((result) => {
+          console.log(result);
+          document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
+          document.querySelector('._darsedebaja').classList.add('d-none');
+          document.querySelector(".seca_mensaje_exito").textContent = "Te has dado de baja con éxito";
         })
-        .catch((error) => console.log("error", error));
+        .catch((error) => {
+          console.log("error", error);
+          console.log("correo no existe en el listado");
+          document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
+          document.querySelector('._darsedebaja').classList.add('d-none');
+          document.querySelector(".seca_mensaje_exito").textContent = "Te has dado de baja con anterioridad";
+        } );
+
+      /*GET VALIDACION DE EMAIL*/
+      // fetch(`https://api.sendpulse.com/addressbooks/${idBoletin}/emails`, {
+      //   method: "GET",
+      //   headers: {
+      //     Authorization: "Bearer " + token,
+      //     "Content-Type": "application/json",
+      //   },
+      //   redirect: "follow",
+      // })
+      //   .then((response) => response.text())
+      //   .then((resultget) => {
+      //     // console.log("lista de corros sendpulse:", resultget);
+      //     // const emailUser = "eriveraec@gmail.com";
+      //     // const foundEmail = resultget.find((email) => email.email === emailUser);
+      //     // console.log("foundEmail:",foundEmail);
+
+      //     // if (resultget.includes(emailUser)) {
+      //       // console.log("existe en la lista.");
+           
+      //     // } else {
+      //     //   console.log("emails no existe en la lista de sendpulse.");
+      //     //   document.querySelector('._darsedebaja').classList.add('d-none');
+      //     //   document.querySelector('.seca_mensaje_exito').classList.remove('d-none');
+      //     //   document.querySelector(".seca_mensaje_exito").textContent =
+      //     //     "Te has dado de baja con éxito";
+      //     // }
+      //     // console.log(valemail);
+      //   })
+      //   .catch((error) => console.log("error", error));
     })
     .catch(function (error) {
       console.log(error);
