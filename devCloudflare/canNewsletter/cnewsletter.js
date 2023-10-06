@@ -33,7 +33,7 @@ function btnDarseBaja() {
           // const foundEmail = resultget.find((email) => email.email === emailUser);
           // console.log("foundEmail:",foundEmail);
 
-          if (data.includes(emailUser)) {
+          if (resultget.includes(emailUser)) {
             console.log("existe en la lista.");
             fetch(
               `https://api.sendpulse.com/addressbooks/${idBoletin}/emails`,
