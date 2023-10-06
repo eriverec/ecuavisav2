@@ -9,7 +9,7 @@ if(!ECUAVISA_EC){
   console.error("Este archivo necesita a ECUAVISA_EC para funcionar");
 }
 
-if(urlParamsGET.get('msjcodigorojas')){
+if(urlParamsGET.get('msjcodigorojas') != null){
   // Obtener la referencia del elemento container-lr
   const container = document.querySelector('.inicio-registro .container-lr');
   // Crear el nuevo div
@@ -22,7 +22,7 @@ if(urlParamsGET.get('msjcodigorojas')){
   container.parentNode.insertBefore(newDiv, container);
 }
 
-if(urlParamsGET.get('msjenvivo')){
+if(urlParamsGET.get('msjenvivo') != null){
   // // Obtener la referencia del elemento container-lr
   // const container = document.querySelector('.inicio-registro .container-lr');
   // // Crear el nuevo div
