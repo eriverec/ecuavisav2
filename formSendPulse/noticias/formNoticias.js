@@ -4,17 +4,21 @@ function armarFormulario (){
   <div class="info-formulario">
     <div class="newsContenido">
       <div class="news_line_left">
-        <img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2FVector-vertical.svg" alt="line_left"width="33" height="400" title="separador vertical">
-      </div>
-      <div class="news_line_left mobile__">
-        <img src="https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FlineLeftNewsBlanco.svg" alt="line_left" width="22" height="473" title="separador blanco">
-      </div>
+        <img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2FVector-vertical.svg" alt="line_left" width="33" height="400" title="separador vertical" />
+    </div>
+    <div class="news_line_left mobile__">
+        <img src="https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FlineLeftNewsBlanco.svg" alt="line_left" width="22" height="473" title="separador blanco" />
+    </div>
+
       <div class="news-texto-rd">
-        <h2 class="newsletterh1"> 
-          <div class="news-letter-1"> news 
-            </div> <div class="news-letter-2"> letter 
+        <h2 class="newsletterh1">
+          <div class="news-letter-1">
+              news
           </div>
-        </h2>
+          <div class="news-letter-2">
+              letter
+          </div>
+      </h2>
         <h2>LO MEJOR DE ECUAVISA</h2>
         <p>Boletín diario y toda la programación con un solo click.</p>
         <!-- Subscription Form -->
