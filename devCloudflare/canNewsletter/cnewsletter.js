@@ -1,16 +1,3 @@
-function eventoNP(){
-  const pageNext = window.location.search ;
-  localStorage.setItem('pagePreview',pageNext);
-
-  const getNP = localStorage.getItem('pagePreview');
-  console.log(getNP);
-
-  // if(getNP){
-  //   console.log("si esta lleno ");
-  // }
-}
-eventoNP();
-
 function btnDarseBaja() {
   fetch(
     "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php"
@@ -86,7 +73,14 @@ function valIdNewsletter()  {
     // const userLoginRD = localStorage.getItem('wylexUserId') || 0;
     if (ECUAVISA_EC.login()) {
       console.log("estas logeado ---");
+      const getNP = localStorage.getItem('pagePreview');
+      console.log(getNP);
+
     } else { 
+ 
+      const pageNext = window.location.search ;
+      localStorage.setItem('pagePreview',pageNext);
+
       console.log("no estas logueado ---");
       redireccionAlLogin();
       // btnDarseBaja();
