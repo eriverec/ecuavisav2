@@ -72,16 +72,20 @@ function valIdNewsletter()  {
   setTimeout(() => {
     // const userLoginRD = localStorage.getItem('wylexUserId') || 0;
     if (ECUAVISA_EC.login()) {
-      console.log("estas logeado ---");
       const getNP = localStorage.getItem('pagePreview');
-      console.log(getNP);
+      const urlActualHref = window.location.href;
+      const urlObj = new URL(urlActualHref);
+      const idNL = urlObj.searchParams.get("nlid");
+      if(idNL){
+        console.log("si exite nlid");
+      }else{
+        window.history.replaceState({}, document.title, window.location.pathname + getNP);
+        console.log("no existe nlid");
+      }
 
     } else { 
- 
       const pageNext = window.location.search ;
       localStorage.setItem('pagePreview',pageNext);
-
-      console.log("no estas logueado ---");
       redireccionAlLogin();
       // btnDarseBaja();
     }
