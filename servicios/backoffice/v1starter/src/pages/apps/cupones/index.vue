@@ -10,6 +10,7 @@ const excepcionesCupon = ref([]);
 const Card2Visible = ref(false);
 const selectedCupon = ref('');
 const dataPaquetes = ref([]);
+
 const currentTab = ref('tab-cupones');
 
 async function getCupones (){
@@ -66,7 +67,10 @@ async function getPaquetes (){
 } 
 
 onMounted(async()=>{
+    isLoading2.value = true;
     await getCupones();
+    await getPaisesCiudades();
+    isLoading2.value = false;
 })
 
 const itemsPerPage = 8;
@@ -86,6 +90,40 @@ const nextPage = () => {
 const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
 };
+
+const ciudadesItems = ref([]);
+const paisesItems = ref([]);
+
+async function getPaisesCiudades (){
+    try {  
+      
+      const consulta = await fetch('https://ads-service.vercel.app/campaign/get/all/paisesyciudad');
+      const consultaJson = await consulta.json();
+
+      let paises = [];
+      let ciudades = [];
+
+      for (let i = 0; i < consultaJson.length; i++) {
+        let pais = consultaJson[i].country;
+        paises.push(pais);
+
+        let ciudadesPais = consultaJson[i].data.map(function(ciudad) {
+            return ciudad.city;
+        });
+
+        ciudades = ciudades.concat(ciudadesPais);
+       }
+       let ciudadesNoRepetidos = [...new Set(ciudades)];
+       ciudadesNoRepetidos.sort();
+       paisesItems.value = paises;
+       ciudadesItems.value = ciudadesNoRepetidos;
+      
+          
+    } catch (error) {
+        console.error(error.message);
+    }
+} 
+
 
 const typeItems = [
     {
@@ -110,22 +148,23 @@ const matchItems = [
 ]
 
 const tipoCondicionItems = [
-    {
-        title: "País",
-        value: "pais"
-    },
+    
     {
         title: "Ciudad",
         value: "ciudad"
     },
     {
-        title: "Proveedor",
-        value: "proveedor"
+        title: "País",
+        value: "pais"
     },
     {
-        title: "Grupo de usuario",
-        value: "grupo_usuario"
-    }
+        title: "Grupo de usuarios",
+        value: "grupo_usuarios"
+    },
+    {
+        title: "Proveedores",
+        value: "proveedor"
+    },
 ]
 
 const condicionItems = [
@@ -141,43 +180,42 @@ const condicionItems = [
 
 const usuariosItems = [
     {
-        title: "Seleccionar todos",
-        value: ["nuevo","registrado", "suscrito"]
+        title: "Todos",
+        value: "todos"
     },
     {
-        title: "Usuario nuevo",
-        value: "nuevo"
+        title: "Usuarios nuevos",
+        value: "nuevos"
     },
     {
-        title: "Usuario registrado",
-        value: "registrado"
-    },
-    {
-        title: "Usuario suscrito",
-        value: "suscrito"
+        title: "Suscritos",
+        value: "suscritos"
     }
 ]
 
-const proveedorItems = [
+const proveedorItems = ["apple", "google", "facebook", "email"  ]
+
+const ciudadOptionsItems = [
+   
     {
-        title: "Seleccionar todos",
-        value: ["apple","google", "facebook", "email"]
+        title: "Todas las ciudades",
+        value: "full"
     },
     {
-        title: "Apple",
-        value: "apple"
+        title: "Personalizado",
+        value: "personalizado"
+    }
+]
+
+const paisesOptionsItems = [
+   
+    {
+        title: "Todos los países",
+        value: "full"
     },
     {
-        title: "Google",
-        value: "google"
-    },
-    {
-        title: "Facebook",
-        value: "facebook"
-    },
-    {
-        title: "Email",
-        value: "email"
+        title: "Personalizado",
+        value: "personalizado"
     }
 ]
 
@@ -207,9 +245,100 @@ const configSnackbar = ref({
 
 
     //------FUNCIONES
-const paquetesOptions = ref('Full');
+
+//const paisesFiltrados = ref([]);
+//const ciudadesFiltradas = ref([]);
+
+const searchCiudad = (index) => {
+  if ( condiciones.value[index].search !== '') {
+    let val = condiciones.value[index].search;
+    const normalizedsearchQuery = val.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();;
+
+    const filteredCiudad = ciudadesItems.value.filter((item) => {
+      const normalizedItemName = item.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
+      return normalizedItemName.includes(normalizedsearchQuery);
+    });
+
+    condiciones.value[index].items = filteredCiudad.slice(0,10);
+    condiciones.value[index].asign = true;
+  }
+}
+
+function resetSearchCiudad (index) {
+    condiciones.value[index].search = '';
+    condiciones.value[index].asign = false;
+    condiciones.value[index].items = [];
+    //ciudadesFiltradas.value = [];
+}
+
+const searchPais = (index) => {
+  if ( condiciones.value[index].search !== '') {
+    let val = condiciones.value[index].search;
+    const normalizedsearchQuery = val.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();;
+
+    const filteredPais = paisesItems.value.filter((item) => {
+      const normalizedItemName = item.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
+      return normalizedItemName.includes(normalizedsearchQuery);
+    });
+
+    condiciones.value[index].items = filteredPais.slice(0,10);
+    condiciones.value[index].asign = true;
+  }
+}
+
+function resetSearchPais (index) {
+    condiciones.value[index].search = '';
+    condiciones.value[index].asign = false;
+    condiciones.value[index].items = [];
+    //paisesFiltrados.value = [];
+}
+
+const tipoCondicion = ref('');
+
+function resolveCiudadPaisOptions(index){
+    if(condiciones.value[index].opcion == "personalizado"){
+        condiciones.value[index].valor = [];
+    }else{
+        condiciones.value[index].valor = "full";
+    }   
+}
+
+function resolveAñadirTipoCondicion(val){
+    tipoCondicion.value = val;
+    //console.log("select" , tipoCondicion.value);
+    let nuevaCondicion;
+    if(val == "grupo_usuarios" ){
+        nuevaCondicion = {
+            tipo: val,
+            condicion: "incluir",    
+            valor: "",
+            opcion: "full",
+            search: "",
+            items: [],
+            asign: false
+        }
+    }else{
+        nuevaCondicion = {
+            tipo: val,
+            condicion: "incluir",    
+            valor: [],
+            opcion: "full",
+            search: "",
+            items: [],
+            asign: false
+        }
+    }
+    
+    condiciones.value.push(nuevaCondicion);
+}
+
+function eliminarTipoCondicion (index){
+    condiciones.value.splice(index, 1);
+}
+
+const paquetesOptions = ref('Todos los productos');
 const asignPaquetesVisible = ref(false);
-const paquetesOptionsItems = ['Personalizado', 'Full'];
+const paquetesOptionsItems = ['Personalizado', 'Todos los productos'];
 
 function resolvePaquetesOptions(){
     
@@ -217,7 +346,7 @@ function resolvePaquetesOptions(){
     if(paquetesOptions.value === 'Personalizado' ){
         paquetes.value = [];
         asignPaquetesVisible.value = true;
-    }else if(paquetesOptions.value === 'Full'){
+    }else if(paquetesOptions.value === 'Todos los productos'){
         paquetes.value = 'full';
         asignPaquetesVisible.value = false;
     }
@@ -236,13 +365,50 @@ function resetForm(){
     aplica.value = false;
     condiciones.value = [];
     match.value = 'all';
-    paquetesOptions.value = 'Full';
+    paquetesOptions.value = 'Todos los productos';
 }
 
 
 function closeDiag(){
     resetForm(); 
     isDialogActive.value = false;
+}
+
+async function switchActive(id, val){
+    let jsonEnviar = {
+        "id": id,
+        "activo": val
+    }
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify(jsonEnviar);
+
+        var requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+        const send = await fetch('https://ecuavisa-cupones.vercel.app/cupon/update', requestOptions);
+        const respuesta = await send.json();
+        if (respuesta.resp) {
+            configSnackbar.value = {
+                message: "Cupón editado correctamente",
+                type: "success",
+                model: true
+            };
+
+            isLoading2.value = true;
+            await getCupones();     
+            isLoading2.value = false;
+        } else {
+            configSnackbar.value = {
+                message: respuesta.mensaje,
+                type: "error",
+                model: true
+            };
+        }
+        
 }
 // ----------ADD-------------
 async function onAdd(){
@@ -271,16 +437,81 @@ async function onEdit(id){
     if(data.paquetes !== 'full' && data.paquetes.length >0 ){
         paquetesOptions.value = 'Personalizado';
     }else if(data.paquetes == 'full'){
-        paquetesOptions.value = 'Full';
+        paquetesOptions.value = 'Todos los productos';
     }
     paquetes.value = data.paquetes;
     excepciones.value = data.excepciones;
+    
+    for(let cond of data.condiciones){
+        let add = {
+            tipo: cond.tipo,
+            condicion: cond.condicion,    
+            valor: cond.valor,
+            opcion: cond.valor == "full" ? "full" : "personalizado",
+            search: "",
+            items: [],
+            asign: false
+        }
+        condiciones.value.push(add);
+    }
+      
     discount.value = data.discount;
     type.value = data.type;
     helper.value = data.helper;
     dateIni.value = data.dateIni;
     dateEnd.value = data.dateEnd;
     
+    activo.value = data.activo;
+    aplica.value = data.aplica;
+    match.value = data.match;
+
+    isLoading2.value = false;
+    isDialogActive.value = true;
+    
+}
+
+async function onDuplicate(id){
+    isLoading2.value = true;
+    resetForm(); 
+    await getPaquetes();
+    accionForm.value = 'duplicate';
+    const consulta = await fetch('https://ecuavisa-cupones.vercel.app/cupon/get/id/' + id);
+    const consultaJson = await consulta.json();
+    const data = consultaJson.data;
+    //console.log(paquete);
+    //idToEdit.value = data._id;
+    nombre.value = data.nombre;
+    if(data.paquetes !== 'full' && data.paquetes.length >0 ){
+        paquetesOptions.value = 'Personalizado';
+    }else if(data.paquetes == 'full'){
+        paquetesOptions.value = 'Todos los productos';
+    }
+    paquetes.value = data.paquetes;
+    excepciones.value = data.excepciones;
+    
+    for(let cond of data.condiciones){
+        let add = {
+            tipo: cond.tipo,
+            condicion: cond.condicion,    
+            valor: cond.valor,
+            opcion: cond.valor == "full" ? "full" : "personalizado",
+            search: "",
+            items: [],
+            asign: false
+        }
+        condiciones.value.push(add);
+    }
+      
+    discount.value = data.discount;
+    type.value = data.type;
+    helper.value = data.helper;
+    dateIni.value = data.dateIni;
+    dateEnd.value = data.dateEnd;
+    
+    activo.value = data.activo;
+    aplica.value = data.aplica;
+    match.value = data.match;
+
     isLoading2.value = false;
     isDialogActive.value = true;
     
@@ -304,10 +535,24 @@ async function onComplete(){
     myHeaders.append("Content-Type", "application/json");
 
     
-    if(paquetesOptions.value == 'Full'){
+    if(paquetesOptions.value == 'Todos los productos'){
         paquetes.value = 'full';
     }
-    isLoading2.value = true;
+
+    for(let cond of condiciones.value){
+        if((cond.tipo== "pais" || cond.tipo== "ciudad") && cond.opcion == "full"){
+            cond.valor = "full";
+        }
+    }
+
+    let condicionesReduced = condiciones.value.map(objeto => ({
+    tipo: objeto.tipo,
+    condicion: objeto.condicion,
+    valor: objeto.valor
+    }));
+    //console.log("condicionesReduced", condicionesReduced);
+
+    
     if (accionForm.value === 'add') {
 
         let jsonEnviar ={
@@ -318,9 +563,13 @@ async function onComplete(){
         "type": type.value,
         "helper": helper.value,
         "dateIni": dateIni.value,
-        "dateEnd": dateEnd.value 
+        "dateEnd": dateEnd.value,
+        "condiciones": condicionesReduced,
+        "activo" : activo.value,
+        "aplica" : aplica.value,
+        "match" : match.value
         }
-        console.log(jsonEnviar);
+        
         var raw = JSON.stringify(jsonEnviar);
 
         var requestOptions = {
@@ -357,9 +606,14 @@ async function onComplete(){
         "type": type.value,
         "helper": helper.value,
         "dateIni": dateIni.value,
-        "dateEnd": dateEnd.value     
+        "dateEnd": dateEnd.value,
+        "condiciones": condicionesReduced,
+        "activo" : activo.value,
+        "aplica" : aplica.value,
+        "match" : match.value     
         }
 
+        
         var raw = JSON.stringify(jsonEnviar);
 
         var requestOptions = {
@@ -384,8 +638,50 @@ async function onComplete(){
             };
         }
 
+    }else if(accionForm.value === 'duplicate'){
+        let jsonEnviar ={
+        "nombre": nombre.value,
+        "paquetes": paquetes.value,
+        "excepciones": excepciones.value,
+        "discount": discount.value,
+        "type": type.value,
+        "helper": helper.value,
+        "dateIni": dateIni.value,
+        "dateEnd": dateEnd.value,
+        "condiciones": condicionesReduced,
+        "activo" : activo.value,
+        "aplica" : aplica.value,
+        "match" : match.value
+        }
+        
+        var raw = JSON.stringify(jsonEnviar);
+        console.log(jsonEnviar);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+        const send = await fetch('https://ecuavisa-cupones.vercel.app/cupon/create', requestOptions);
+        const respuesta = await send.json();
+        if (respuesta.resp) {
+            configSnackbar.value = {
+                message: "Cupón creado correctamente",
+                type: "success",
+                model: true
+            };
+        } else {
+            configSnackbar.value = {
+                message: respuesta.mensaje,
+                type: "error",
+                model: true
+            };
+            console.error(respuesta.error);
+            return false;
+        }
     }
-    isLoading2.value = false;
+    
     await getCupones();
     Card2Visible.value = false;
     isDialogActive.value = false;
@@ -443,7 +739,7 @@ async function deleteConfirmed() {
                 {{ configSnackbar.message }}
             </VSnackbar>
 
-            <VDialog v-model="isLoading2" width="300">
+            <VDialog v-model="isLoading2" persistent no-click-animation width="300">
                 <VCardText class="pt-3 text-center">
                     <v-progress-circular indeterminate color="primary"></v-progress-circular>
                 </VCardText>
@@ -480,7 +776,7 @@ async function deleteConfirmed() {
                         </thead>
 
                         <tbody>
-                            <tr v-for="item in paginatedCupones" @click="resolveSelectedCupon(item._id, item.nombre)" class="clickable">
+                            <tr v-for="item in paginatedCupones" @click="" class="clickable">
                             <td class="text-medium-emphasis">
                                 {{ item.nombre}}
                             </td>      
@@ -497,7 +793,8 @@ async function deleteConfirmed() {
                                 <VSwitch
                                     v-model="item.activo"
                                     color="success"
-                                    :label="activo == true ? 'Activo' : 'Inactivo'"
+                                    :label="item.activo == true ? 'Activo' : 'Inactivo'"
+                                    @update:model-value="switchActive(item._id, item.activo)"
                                 />
                             </td>
                             <td class="text-medium-emphasis">
@@ -505,7 +802,7 @@ async function deleteConfirmed() {
                                     <VIcon size="22" icon="tabler-edit" />
                                 </VBtn>
 
-                                <VBtn color="primary" variant="text" icon  @click="">
+                                <VBtn color="primary" variant="text" icon  @click="onDuplicate(item._id)">
                                     <VIcon size="22" icon="tabler-copy" />
                                 </VBtn>
 
@@ -599,7 +896,7 @@ async function deleteConfirmed() {
                 <VCard  class="pa-sm-14 pa-5">
                     <VCardItem class="text-center">
                         <VCardTitle class="text-h5 mb-3">
-                            {{ accionForm === "add" ? "Nueva regla de descuento" : "Editar " + nombre }}
+                            {{ accionForm === "add" || accionForm === "duplicate" ? "Nueva regla de descuento" : "Editar " + nombre }}
                         </VCardTitle>
                     </VCardItem>
 
@@ -631,15 +928,250 @@ async function deleteConfirmed() {
                                          e ignora todas las demás</p>
                                         </div>
                                     </VCol>
-                                    <VCol cols="6">
+                                    <VCol cols="6" style="margin-top: -1.5rem;">
                                         <VTextField v-model="discount" label="Descuento" typer="number" />
                                     </VCol>
-                                    <VCol cols="6">
+                                    <VCol cols="6" style="margin-top: -1.5rem;">
                                         <VTextField v-model="helper" label="Helper" />
                                     </VCol>
                                     <VCol cols="12">
                                         <VSelect v-model="type" label="Tipo" :items="typeItems" />
                                     </VCol>
+                                    
+                                    <VCol cols="12">
+                                        <VSelect class="mb-6" v-model="paquetesOptions" label="Escoge productos" :items="paquetesOptionsItems"  @update:model-value="resolvePaquetesOptions"/>                              
+                                        <VCol v-if="paquetesOptions == 'Personalizado'" style="margin-top: -1.5rem;" v-for="item in dataPaquetes" cols="6">                  
+                                        <VCheckbox
+                                        v-model="paquetes"
+                                        :label="item.title"
+                                        :value="item.value"
+                                        />
+                                        
+                                        </VCol>
+                                    </VCol>
+
+
+                                    <VCol style="margin-top: -2rem;" v-if="paquetesOptions == 'Full'" cols="12">                                 
+                                        <div class="mb-6">Asignar excepciones</div>           
+                                        <VCol  style="margin-top: -1.5rem;" v-for="item in dataPaquetes" cols="6">                  
+                                        <VCheckbox
+                                        v-model="excepciones"
+                                        :label="item.title"
+                                        :value="item.value"
+                                        />
+                                        
+                                    </VCol>
+                                    </VCol>
+                                    <VCol cols="12" class="d-flex">
+                                        <div class="d-flex align-content-end flex-wrap">Condiciones</div>
+                                        <VMenu location="bottom"  >
+                                            <template #activator="{ props }">
+                                            <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" v-bind="props" >
+                                            Añadir condición
+                                            </VBtn>
+                                            </template>
+                                            <VList >                                                                 
+                                            <VListItem   
+                                                v-for="(item, iT) in tipoCondicionItems"
+                                                :key="iT"
+                                                :value="item.value"
+                                                :title="item.title"
+                                                @click="resolveAñadirTipoCondicion(item.value)"
+                                                />
+                                            
+                                            </VList>           
+                                        </VMenu>
+                                    </VCol>                                
+                                    <VDivider/>
+                                    <VCol v-for="m in matchItems" cols="4">
+                                        <VCheckbox 
+                                        v-model="match" 
+                                        :label="m.title"   
+                                        :value="m.value"                                             
+                                        />                            
+                                    </VCol>  
+                                    <VCol v-for="(c, index) in condiciones" cols="12" class="d-flex">    
+                                        <VCol cols="12" v-if=" c.tipo=='ciudad' "> 
+                                            <VRow>  
+                                            <VCol cols="8">
+                                                <VSelect class="mb-6" v-model="c.opcion" label="Asignar ciudades" :items="ciudadOptionsItems"  @update:model-value="resolveCiudadPaisOptions(index)"/>
+                                            </VCol>
+                                            <VCol cols="4">
+                                                <VBtn class="ml-auto" size="38" color="error" @click="eliminarTipoCondicion(index)">
+                                                <VIcon
+                                                    icon="tabler-x"
+                                                    size="22"
+                                                />
+                                                </VBtn>
+                                            </VCol>
+                                            </VRow>                                    
+                                            <VRow v-if=" c.opcion!=='full' ">
+                                                <VCol cols="3" style="margin-right: -1rem;">
+                                                    <VTextField value="Ciudad" readonly />        
+                                                </VCol>    
+                                                <VCol cols="3" style="margin-right: -1rem;">
+                                                    <VSelect class="mb-6" v-model="c.condicion" label="Condición" :items="condicionItems" />        
+                                                </VCol>                                       
+                                                <VCol cols="4" style="margin-right: -1rem;">                                                                             
+                                                    <VTextField v-model="c.search" placeholder="Buscar ciudad..." density="compact" />
+                                                </VCol>    
+                                                <VCol cols="2" style="margin-right: -1rem;" class="d-flex gap-1">   
+                                                    <VBtn @click="searchCiudad(index)" size="38">
+                                                        <VIcon
+                                                            icon="tabler-search"
+                                                            size="22"
+                                                        />
+                                                    </VBtn>   
+                                                    <VBtn @click="resetSearchCiudad(index)" size="38">
+                                                        <VIcon
+                                                            icon="tabler-refresh"
+                                                            size="22"
+                                                        />
+                                                    </VBtn>  
+                                                </VCol>  
+                                                <div style="margin-top: -1.5rem;" v-if="c.valor.length > 0">
+                                                <VCol cols="12">
+                                                    <span>Ciudades seleccionadas: </span>
+                                                </VCol>
+                                                <VCol cols="12" style="margin-top: -1rem;">
+                                                    <VChip v-for="cV in c.valor" color="primary"> {{ cV}}</VChip>
+                                                </VCol>
+                                                </div>
+                                                <VCol v-if="c.asign" cols="12">
+                                                <span >Ciudades</span>  
+                                                <div style="margin-top: -0.5rem;" v-for="ciudad in c.items">                                      
+                                                <VCheckbox
+                                                v-model="c.valor"
+                                                :label="ciudad"
+                                                :value="ciudad"
+                                                />                                       
+                                                </div>
+                                                </VCol>
+                                                                                
+                                            </VRow>   
+                                            <VDivider/>
+                                        </VCol>     
+                                        <VCol cols="12" v-if=" c.tipo=='pais' "> 
+                                            <VRow>  
+                                            <VCol cols="8">
+                                                <VSelect class="mb-6" v-model="c.opcion" label="Asignar países" :items="paisesOptionsItems"  @update:model-value="resolveCiudadPaisOptions(index)"/>
+                                            </VCol>
+                                            <VCol cols="4">
+                                                <VBtn class="ml-auto" size="38" color="error" @click="eliminarTipoCondicion(index)">
+                                                <VIcon
+                                                    icon="tabler-x"
+                                                    size="22"
+                                                />
+                                                </VBtn>
+                                            </VCol>
+                                            </VRow>                                    
+                                            <VRow v-if=" c.opcion!=='full' ">
+                                                <VCol cols="3" style="margin-right: -1rem;">
+                                                    <VTextField value="País" readonly />        
+                                                </VCol>    
+                                                <VCol cols="3" style="margin-right: -1rem;">
+                                                    <VSelect class="mb-6" v-model="c.condicion" label="Condición" :items="condicionItems" />        
+                                                </VCol>                                       
+                                                <VCol cols="4" style="margin-right: -1rem;">                                                                             
+                                                    <VTextField v-model="c.search" placeholder="Buscar país..." density="compact" />
+                                                </VCol>    
+                                                <VCol cols="2" style="margin-right: -1rem;" class="d-flex gap-1">   
+                                                    <VBtn @click="searchPais(index)" size="38">
+                                                        <VIcon
+                                                            icon="tabler-search"
+                                                            size="22"
+                                                        />
+                                                    </VBtn>   
+                                                    <VBtn @click="resetSearchPais(index)" size="38">
+                                                        <VIcon
+                                                            icon="tabler-refresh"
+                                                            size="22"
+                                                        />
+                                                    </VBtn>  
+                                                </VCol>  
+                                                <div style="margin-top: -1.5rem;" v-if="c.valor.length > 0">
+                                                <VCol cols="12">
+                                                    <span>Países seleccionadas: </span>
+                                                </VCol>
+                                                <VCol cols="12" style="margin-top: -1rem;">
+                                                    <VChip v-for="cV in c.valor" color="primary"> {{ cV}}</VChip>
+                                                </VCol>
+                                                </div>
+                                                <VCol v-if="c.asign" cols="12">
+                                                <span >Países</span>  
+                                                <div style="margin-top: -0.5rem;" v-for="pais in c.items">                                      
+                                                <VCheckbox
+                                                v-model="c.valor"
+                                                :label="pais"
+                                                :value="pais"
+                                                />                                       
+                                                </div>
+                                                </VCol>
+                                                                                
+                                            </VRow>   
+                                            <VDivider/>
+                                        </VCol>    
+                                        <VCol cols="12" v-if=" c.tipo=='grupo_usuarios' "> 
+                                            <VRow>  
+                                            <VCol cols="12">Escoge grupo de usuarios</VCol>    
+                                            <VCol cols="8" class="d-flex gap-4">                                                                 
+                                                <VCheckbox
+                                                v-for="gUsers in usuariosItems"
+                                                v-model="c.valor"
+                                                :label="gUsers.title"
+                                                :value="gUsers.value"
+                                                />                                       
+                                                
+                                            </VCol>
+                                            <VCol cols="4">
+                                                <VBtn class="ml-auto" size="38" color="error" @click="eliminarTipoCondicion(index)">
+                                                <VIcon
+                                                    icon="tabler-x"
+                                                    size="22"
+                                                />
+                                                </VBtn>
+                                            </VCol>
+                                            </VRow>                                                                            
+                                            <VDivider class="mt-1"/>
+                                        </VCol>   
+                                        <VCol cols="12" v-if=" c.tipo=='proveedor' "> 
+                                                                              
+                                            <VRow>
+                                                <VCol cols="12">Escoge proveedor(es)</VCol>
+                                                <VCol cols="3" style="margin-right: -1rem;">
+                                                    <VTextField value="Proveedor" readonly />        
+                                                </VCol>    
+                                                <VCol cols="3" style="margin-right: -1rem;">
+                                                    <VSelect class="mb-6" v-model="c.condicion" label="Condición" :items="condicionItems" />        
+                                                </VCol>                                       
+                                                <VCol cols="4" style="margin-right: -1rem;">                                                                                                                              
+                                                    <VCombobox
+                                                        v-model="c.valor"
+                                                        :items="proveedorItems"       
+                                                        label="Proveedores"                                               
+                                                        multiple
+                                                        chips
+                                                    />
+                                                </VCol>    
+                                                <VCol cols="2" style="margin-right: -1rem;" class="d-flex gap-1">                                                
+                                                    <VBtn class="ml-auto" size="38" color="error" @click="eliminarTipoCondicion(index)">
+                                                    <VIcon
+                                                        icon="tabler-x"
+                                                        size="22"
+                                                    />
+                                                    </VBtn>                                  
+                                                </VCol>  
+                                                                                                                        
+                                            </VRow>   
+                                            <VDivider/>
+                                        </VCol>                                   
+                                    </VCol>
+                                                       
+                                    <VCol cols="12">
+                                        <span>Validez de regla</span>
+                                        
+                                    </VCol>
+                                    <VDivider/>
                                     <VCol cols="6">
                                         <AppDateTimePicker  prepend-inner-icon="tabler-calendar" density="compact" v-model="dateIni"
                                         show-current=true label="Fecha inicio" :config="{
@@ -659,29 +1191,6 @@ async function deleteConfirmed() {
                                             //maxDate: new Date(),
                                             reactive: true
                                         }" />
-                                    </VCol>
-                                    <VCol cols="12">
-                                        <VSelect class="mb-6" v-model="paquetesOptions" label="Asignar paquetes" :items="paquetesOptionsItems"  @update:model-value="resolvePaquetesOptions"/>                              
-                                        <VCol v-if="paquetesOptions == 'Personalizado'" style="margin-top: -1.5rem;" v-for="item in dataPaquetes" cols="6">                  
-                                        <VCheckbox
-                                        v-model="paquetes"
-                                        :label="item.title"
-                                        :value="item.value"
-                                        />
-                                        
-                                    </VCol>
-                                    </VCol>
-
-                                    <VCol style="margin-top: -2rem;" v-if="paquetesOptions == 'Full'" cols="12">                                 
-                                        <div class="mb-6">Asignar excepciones</div>           
-                                        <VCol  style="margin-top: -1.5rem;" v-for="item in dataPaquetes" cols="6">                  
-                                        <VCheckbox
-                                        v-model="excepciones"
-                                        :label="item.title"
-                                        :value="item.value"
-                                        />
-                                        
-                                    </VCol>
                                     </VCol>
                                     
                                 </VRow>
