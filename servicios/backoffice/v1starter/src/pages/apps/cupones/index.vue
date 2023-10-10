@@ -219,6 +219,17 @@ const paisesOptionsItems = [
     }
 ]
 
+const tipoItems = [
+    {
+        title: "Cupón",
+        value: "Cupon"
+    },
+    {
+        title: "Regla",
+        value: "Regla"
+    }
+]
+
 // -------------------------------ACCIONES------------------------------------------
 const isDialogActive = ref(false);
 const accionForm = ref('');
@@ -236,6 +247,7 @@ const activo = ref(false);
 const aplica = ref(false);
 const condiciones = ref([]);
 const match = ref('all');
+const tipo = ref('Cupón');
 
 const configSnackbar = ref({
     message: "Datos guardados",
@@ -361,6 +373,7 @@ function resetForm(){
     helper.value = '';
     dateIni.value = '';
     dateEnd.value = '';
+    tipo.value = '';
     activo.value = false;
     aplica.value = false;
     condiciones.value = [];
@@ -434,6 +447,7 @@ async function onEdit(id){
     //console.log(paquete);
     idToEdit.value = data._id;
     nombre.value = data.nombre;
+    tipo.value = data.tipo;
     if(data.paquetes !== 'full' && data.paquetes.length >0 ){
         paquetesOptions.value = 'Personalizado';
     }else if(data.paquetes == 'full'){
@@ -481,6 +495,7 @@ async function onDuplicate(id){
     //console.log(paquete);
     //idToEdit.value = data._id;
     nombre.value = data.nombre;
+    tipo.value = data.tipo;
     if(data.paquetes !== 'full' && data.paquetes.length >0 ){
         paquetesOptions.value = 'Personalizado';
     }else if(data.paquetes == 'full'){
@@ -557,6 +572,7 @@ async function onComplete(){
 
         let jsonEnviar ={
         "nombre": nombre.value,
+        "tipo": tipo.value,
         "paquetes": paquetes.value,
         "excepciones": excepciones.value,
         "discount": discount.value,
@@ -600,6 +616,7 @@ async function onComplete(){
         let jsonEnviar ={
         "id": idToEdit.value,
         "nombre": nombre.value,
+        "tipo": tipo.value,
         "paquetes": paquetes.value,
         "excepciones": excepciones.value,
         "discount": discount.value,
@@ -766,6 +783,7 @@ async function deleteConfirmed() {
                     <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
                         <thead>
                             <tr>   
+                            <th scope="col">Tipo</th>
                             <th scope="col">Título</th>                             
                             <th scope="col">Tipo de descuento</th>
                             <th scope="col">Fecha inicio</th>    
@@ -777,6 +795,9 @@ async function deleteConfirmed() {
 
                         <tbody>
                             <tr v-for="item in paginatedCupones" @click="" class="clickable">
+                            <td class="text-medium-emphasis">
+                                {{ item.tipo}}
+                            </td>     
                             <td class="text-medium-emphasis">
                                 {{ item.nombre}}
                             </td>      
@@ -906,6 +927,10 @@ async function deleteConfirmed() {
                         <VForm class="mt-6" @submit.prevent="onComplete">
                             <VRow class="d-flex flex-wrap justify-center gap-4">
                                 <VRow>
+
+                                    <VCol cols="12">
+                                        <VSelect v-model="tipo" label="Tipo" :items="tipoItems" />
+                                    </VCol>
                                     
                                     <VCol cols="5" >
                                         <VTextField v-model="nombre" label="Nombre" />
@@ -928,12 +953,10 @@ async function deleteConfirmed() {
                                          e ignora todas las demás</p>
                                         </div>
                                     </VCol>
-                                    <VCol cols="6" style="margin-top: -1.5rem;">
+                                    <VCol cols="12" style="margin-top: -1.5rem;">
                                         <VTextField v-model="discount" label="Descuento" typer="number" />
                                     </VCol>
-                                    <VCol cols="6" style="margin-top: -1.5rem;">
-                                        <VTextField v-model="helper" label="Helper" />
-                                    </VCol>
+                                    
                                     <VCol cols="12">
                                         <VSelect v-model="type" label="Tipo" :items="typeItems" />
                                     </VCol>
