@@ -1491,7 +1491,7 @@ var bloqueUsuarioSugerencia = {
 if (!ECUAVISA_EC.login() && urlParamsGET.get('tk')==null){ /*Si no existe sesión lo va a redireccionar al login */
     setTimeout(function(){
         if(ECUAVISA_EC.login()){
-          location.reload();
+          // location.reload();
         }
     }, 2000);
 }else{  
