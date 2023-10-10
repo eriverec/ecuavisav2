@@ -934,6 +934,13 @@ async function deleteConfirmed() {
                             <VRow class="d-flex flex-wrap justify-center gap-4">
                                 <VRow>
 
+                                    <VCol cols="6" >                         
+                                        <VSwitch
+                                            v-model="activo"
+                                            color="success"
+                                            label="Estado de publicación"                           
+                                        />
+                                    </VCol>
                                     <VCol cols="6">
                                         <VSwitch
                                     v-model="tipo"
@@ -943,20 +950,14 @@ async function deleteConfirmed() {
                                     false-value="Regla"
                                      />
                                     </VCol>
-                                    <VCol cols="6" v-if="tipo == 'Cupon'">
-                                        <VTextField v-model="codigo" label="Código del cupón" placeholder="Escriba el código con el que canjeará el cupón" />
+                                    
+                                    
+                                    <VCol cols="6" >
+                                        <VTextField v-model="nombre" label="Título descriptivo" :placeholder="tipo == 'Cupon'? 'Título del cupón':'Título de la regla'" />
                                     </VCol>
                                     
-                                    <VCol cols="5" >
-                                        <VTextField v-model="nombre" label="Nombre" :placeholder="tipo == 'Cupon'? 'Título del cupón':'Título de la regla'" />
-                                    </VCol>
-                                    <VCol cols="2" >
-                                        <VCheckbox
-                                        v-model="activo"
-                                        :label=" activo == true? 'Activo': 'Inactivo' "                   
-                                        />
-                                    </VCol>
-                                    <VCol cols="5" class="d-flex">
+                                    
+                                    <VCol cols="6" class="d-flex">
                                         <div>
                                         <VCheckbox
                                         v-model="aplica"                                                
@@ -968,7 +969,12 @@ async function deleteConfirmed() {
                                          e ignora todas las demás</p>
                                         </div>
                                     </VCol>
-                                    <VCol cols="12" style="margin-top: -1.5rem;">
+
+                                    <VCol cols="12" style="margin-top: -1.5rem;" v-if="tipo == 'Cupon'">
+                                        <VTextField v-model="codigo" label="Código del cupón" placeholder="Escriba el código con el que canjeará el cupón" />
+                                    </VCol>
+
+                                    <VCol cols="12" >
                                         <VTextField v-model="discount" label="Descuento" typer="number" />
                                     </VCol>
                                     
