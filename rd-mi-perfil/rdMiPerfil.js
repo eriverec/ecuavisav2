@@ -1490,7 +1490,10 @@ var bloqueUsuarioSugerencia = {
 // ##############BUENAS PRACTICAS##################
 if (!ECUAVISA_EC.login() && urlParamsGET.get('tk')==null){
   /*Si no existe sesión lo va a redireccionar al login */
-  window.location = URL_login_G;
+  if(ECUAVISA_EC.isPageProduccion()){
+    window.location = URL_login_G;
+  }
+  
 }else{  
   if(ECUAVISA_EC.login()){
     DataEntrada();  
