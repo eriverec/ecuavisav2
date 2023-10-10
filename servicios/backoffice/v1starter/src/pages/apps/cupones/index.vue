@@ -1013,182 +1013,155 @@ async function deleteConfirmed() {
                                         :value="m.value"                                             
                                         />                            
                                     </VCol>  
-                                    <VCol v-for="(c, index) in condiciones" cols="12" class="d-flex">    
-                                        <VCol cols="12" v-if=" c.tipo=='ciudad' "> 
-                                            <VRow>  
-                                            <VCol cols="8">
-                                                <VSelect class="mb-6" v-model="c.opcion" label="Asignar ciudades" :items="ciudadOptionsItems"  @update:model-value="resolveCiudadPaisOptions(index)"/>
-                                            </VCol>
-                                            <VCol cols="4">
-                                                <VBtn class="ml-auto" size="38" color="error" @click="eliminarTipoCondicion(index)">
-                                                <VIcon
-                                                    icon="tabler-x"
-                                                    size="22"
-                                                />
-                                                </VBtn>
-                                            </VCol>
-                                            </VRow>                                    
-                                            <VRow v-if=" c.opcion!=='full' ">
-                                                <VCol cols="3" style="margin-right: -1rem;">
-                                                    <VTextField value="Ciudad" readonly />        
-                                                </VCol>    
-                                                <VCol cols="3" style="margin-right: -1rem;">
-                                                    <VSelect class="mb-6" v-model="c.condicion" label="Condición" :items="condicionItems" />        
-                                                </VCol>                                       
-                                                <VCol cols="4" style="margin-right: -1rem;">                                                                             
-                                                    <VTextField v-model="c.search" placeholder="Buscar ciudad..." density="compact" />
-                                                </VCol>    
-                                                <VCol cols="2" style="margin-right: -1rem;" class="d-flex gap-1">   
-                                                    <VBtn @click="searchCiudad(index)" size="38">
-                                                        <VIcon
-                                                            icon="tabler-search"
-                                                            size="22"
+                                    <div v-for="(c, index) in condiciones" cols="12" class="w-100 my-4 item-cards"> 
+                                        <VBtn class="ml-auto boton-eleminar-itemsCards" size="38" color="error" @click="eliminarTipoCondicion(index)"><VIcon icon="tabler-x" size="22" /></VBtn>
+                                        
+                                        <VCardText>
+                                            <VCol cols="12" v-if=" c.tipo=='ciudad' "> 
+                                                <VRow>  
+                                                <VCol cols="8">
+                                                    <VSelect class="mb-6" v-model="c.opcion" label="Asignar ciudades" :items="ciudadOptionsItems"  @update:model-value="resolveCiudadPaisOptions(index)"/>
+                                                </VCol>
+                                              
+                                                </VRow>                                    
+                                                <VRow v-if=" c.opcion!=='full' ">
+                                                    <VCol cols="3" style="margin-right: -1rem;">
+                                                        <VTextField value="Ciudad" readonly />        
+                                                    </VCol>    
+                                                    <VCol cols="3" style="margin-right: -1rem;">
+                                                        <VSelect class="mb-6" v-model="c.condicion" label="Condición" :items="condicionItems" />        
+                                                    </VCol>                                       
+                                                    <VCol cols="4" style="margin-right: -1rem;">                                                                             
+                                                        <VTextField v-model="c.search" placeholder="Buscar ciudad..." density="compact" />
+                                                    </VCol>    
+                                                    <VCol cols="2" style="margin-right: -1rem;" class="d-flex gap-1">   
+                                                        <VBtn @click="searchCiudad(index)" size="38">
+                                                            <VIcon
+                                                                icon="tabler-search"
+                                                                size="22"
+                                                            />
+                                                        </VBtn>   
+                                                        <VBtn @click="resetSearchCiudad(index)" size="38">
+                                                            <VIcon
+                                                                icon="tabler-refresh"
+                                                                size="22"
+                                                            />
+                                                        </VBtn>  
+                                                    </VCol>  
+                                                    <div style="margin-top: -1.5rem;" v-if="c.valor.length > 0">
+                                                    <VCol cols="12">
+                                                        <span>Ciudades seleccionadas: </span>
+                                                    </VCol>
+                                                    <VCol cols="12" style="margin-top: -1rem;">
+                                                        <VChip v-for="cV in c.valor" color="primary"> {{ cV}}</VChip>
+                                                    </VCol>
+                                                    </div>
+                                                    <VCol v-if="c.asign" cols="12">
+                                                    <span >Ciudades</span>  
+                                                    <div style="margin-top: -0.5rem;" v-for="ciudad in c.items">                                      
+                                                    <VCheckbox
+                                                    v-model="c.valor"
+                                                    :label="ciudad"
+                                                    :value="ciudad"
+                                                    />                                       
+                                                    </div>
+                                                    </VCol>
+                                                                                    
+                                                </VRow>
+                                            </VCol>     
+                                            <VCol cols="12" v-if=" c.tipo=='pais' "> 
+                                                <VRow>  
+                                                <VCol cols="8">
+                                                    <VSelect class="mb-6" v-model="c.opcion" label="Asignar países" :items="paisesOptionsItems"  @update:model-value="resolveCiudadPaisOptions(index)"/>
+                                                </VCol>
+                                                <VCol cols="4">
+                                                   
+                                                </VCol>
+                                                </VRow>                                    
+                                                <VRow v-if=" c.opcion!=='full' ">
+                                                    <VCol cols="3" style="margin-right: -1rem;">
+                                                        <VTextField value="País" readonly />        
+                                                    </VCol>    
+                                                    <VCol cols="3" style="margin-right: -1rem;">
+                                                        <VSelect class="mb-6" v-model="c.condicion" label="Condición" :items="condicionItems" />        
+                                                    </VCol>                                       
+                                                    <VCol cols="4" style="margin-right: -1rem;">                                                                             
+                                                        <VTextField v-model="c.search" placeholder="Buscar país..." density="compact" />
+                                                    </VCol>    
+                                                    <VCol cols="2" style="margin-right: -1rem;" class="d-flex gap-1">   
+                                                        <VBtn @click="searchPais(index)" size="38">
+                                                            <VIcon
+                                                                icon="tabler-search"
+                                                                size="22"
+                                                            />
+                                                        </VBtn>   
+                                                        <VBtn @click="resetSearchPais(index)" size="38">
+                                                            <VIcon
+                                                                icon="tabler-refresh"
+                                                                size="22"
+                                                            />
+                                                        </VBtn>  
+                                                    </VCol>  
+                                                    <div style="margin-top: -1.5rem;" v-if="c.valor.length > 0">
+                                                    <VCol cols="12">
+                                                        <span>Países seleccionadas: </span>
+                                                    </VCol>
+                                                    <VCol cols="12" style="margin-top: -1rem;">
+                                                        <VChip v-for="cV in c.valor" color="primary"> {{ cV}}</VChip>
+                                                    </VCol>
+                                                    </div>
+                                                    <VCol v-if="c.asign" cols="12">
+                                                    <span >Países</span>  
+                                                    <div style="margin-top: -0.5rem;" v-for="pais in c.items">                                      
+                                                    <VCheckbox
+                                                    v-model="c.valor"
+                                                    :label="pais"
+                                                    :value="pais"
+                                                    />                                       
+                                                    </div>
+                                                    </VCol>
+                                                                                    
+                                                </VRow>
+                                            </VCol>    
+                                            <VCol cols="12" v-if=" c.tipo=='grupo_usuarios' "> 
+                                                <VRow>  
+                                                <VCol cols="12">Escoge grupo de usuarios</VCol>    
+                                                <VCol cols="8" class="d-flex gap-4">                                                                 
+                                                    <VCheckbox
+                                                    v-for="gUsers in usuariosItems"
+                                                    v-model="c.valor"
+                                                    :label="gUsers.title"
+                                                    :value="gUsers.value"
+                                                    />                                       
+                                                    
+                                                </VCol>
+                                                </VRow>
+                                            </VCol>   
+                                            <VCol cols="12" v-if=" c.tipo=='proveedor' "> 
+                                                                                  
+                                                <VRow>
+                                                    <VCol cols="12">Escoge proveedor(es)</VCol>
+                                                    <VCol cols="3" style="margin-right: -1rem;">
+                                                        <VTextField value="Proveedor" readonly />        
+                                                    </VCol>    
+                                                    <VCol cols="3" style="margin-right: -1rem;">
+                                                        <VSelect class="mb-6" v-model="c.condicion" label="Condición" :items="condicionItems" />        
+                                                    </VCol>                                       
+                                                    <VCol cols="4" style="margin-right: -1rem;">                                                                                                                              
+                                                        <VCombobox
+                                                            v-model="c.valor"
+                                                            :items="proveedorItems"       
+                                                            label="Proveedores"                                               
+                                                            multiple
+                                                            chips
                                                         />
-                                                    </VBtn>   
-                                                    <VBtn @click="resetSearchCiudad(index)" size="38">
-                                                        <VIcon
-                                                            icon="tabler-refresh"
-                                                            size="22"
-                                                        />
-                                                    </VBtn>  
-                                                </VCol>  
-                                                <div style="margin-top: -1.5rem;" v-if="c.valor.length > 0">
-                                                <VCol cols="12">
-                                                    <span>Ciudades seleccionadas: </span>
-                                                </VCol>
-                                                <VCol cols="12" style="margin-top: -1rem;">
-                                                    <VChip v-for="cV in c.valor" color="primary"> {{ cV}}</VChip>
-                                                </VCol>
-                                                </div>
-                                                <VCol v-if="c.asign" cols="12">
-                                                <span >Ciudades</span>  
-                                                <div style="margin-top: -0.5rem;" v-for="ciudad in c.items">                                      
-                                                <VCheckbox
-                                                v-model="c.valor"
-                                                :label="ciudad"
-                                                :value="ciudad"
-                                                />                                       
-                                                </div>
-                                                </VCol>
-                                                                                
-                                            </VRow>   
-                                            <VDivider/>
-                                        </VCol>     
-                                        <VCol cols="12" v-if=" c.tipo=='pais' "> 
-                                            <VRow>  
-                                            <VCol cols="8">
-                                                <VSelect class="mb-6" v-model="c.opcion" label="Asignar países" :items="paisesOptionsItems"  @update:model-value="resolveCiudadPaisOptions(index)"/>
-                                            </VCol>
-                                            <VCol cols="4">
-                                                <VBtn class="ml-auto" size="38" color="error" @click="eliminarTipoCondicion(index)">
-                                                <VIcon
-                                                    icon="tabler-x"
-                                                    size="22"
-                                                />
-                                                </VBtn>
-                                            </VCol>
-                                            </VRow>                                    
-                                            <VRow v-if=" c.opcion!=='full' ">
-                                                <VCol cols="3" style="margin-right: -1rem;">
-                                                    <VTextField value="País" readonly />        
-                                                </VCol>    
-                                                <VCol cols="3" style="margin-right: -1rem;">
-                                                    <VSelect class="mb-6" v-model="c.condicion" label="Condición" :items="condicionItems" />        
-                                                </VCol>                                       
-                                                <VCol cols="4" style="margin-right: -1rem;">                                                                             
-                                                    <VTextField v-model="c.search" placeholder="Buscar país..." density="compact" />
-                                                </VCol>    
-                                                <VCol cols="2" style="margin-right: -1rem;" class="d-flex gap-1">   
-                                                    <VBtn @click="searchPais(index)" size="38">
-                                                        <VIcon
-                                                            icon="tabler-search"
-                                                            size="22"
-                                                        />
-                                                    </VBtn>   
-                                                    <VBtn @click="resetSearchPais(index)" size="38">
-                                                        <VIcon
-                                                            icon="tabler-refresh"
-                                                            size="22"
-                                                        />
-                                                    </VBtn>  
-                                                </VCol>  
-                                                <div style="margin-top: -1.5rem;" v-if="c.valor.length > 0">
-                                                <VCol cols="12">
-                                                    <span>Países seleccionadas: </span>
-                                                </VCol>
-                                                <VCol cols="12" style="margin-top: -1rem;">
-                                                    <VChip v-for="cV in c.valor" color="primary"> {{ cV}}</VChip>
-                                                </VCol>
-                                                </div>
-                                                <VCol v-if="c.asign" cols="12">
-                                                <span >Países</span>  
-                                                <div style="margin-top: -0.5rem;" v-for="pais in c.items">                                      
-                                                <VCheckbox
-                                                v-model="c.valor"
-                                                :label="pais"
-                                                :value="pais"
-                                                />                                       
-                                                </div>
-                                                </VCol>
-                                                                                
-                                            </VRow>   
-                                            <VDivider/>
-                                        </VCol>    
-                                        <VCol cols="12" v-if=" c.tipo=='grupo_usuarios' "> 
-                                            <VRow>  
-                                            <VCol cols="12">Escoge grupo de usuarios</VCol>    
-                                            <VCol cols="8" class="d-flex gap-4">                                                                 
-                                                <VCheckbox
-                                                v-for="gUsers in usuariosItems"
-                                                v-model="c.valor"
-                                                :label="gUsers.title"
-                                                :value="gUsers.value"
-                                                />                                       
-                                                
-                                            </VCol>
-                                            <VCol cols="4">
-                                                <VBtn class="ml-auto" size="38" color="error" @click="eliminarTipoCondicion(index)">
-                                                <VIcon
-                                                    icon="tabler-x"
-                                                    size="22"
-                                                />
-                                                </VBtn>
-                                            </VCol>
-                                            </VRow>                                                                            
-                                            <VDivider class="mt-1"/>
-                                        </VCol>   
-                                        <VCol cols="12" v-if=" c.tipo=='proveedor' "> 
-                                                                              
-                                            <VRow>
-                                                <VCol cols="12">Escoge proveedor(es)</VCol>
-                                                <VCol cols="3" style="margin-right: -1rem;">
-                                                    <VTextField value="Proveedor" readonly />        
-                                                </VCol>    
-                                                <VCol cols="3" style="margin-right: -1rem;">
-                                                    <VSelect class="mb-6" v-model="c.condicion" label="Condición" :items="condicionItems" />        
-                                                </VCol>                                       
-                                                <VCol cols="4" style="margin-right: -1rem;">                                                                                                                              
-                                                    <VCombobox
-                                                        v-model="c.valor"
-                                                        :items="proveedorItems"       
-                                                        label="Proveedores"                                               
-                                                        multiple
-                                                        chips
-                                                    />
-                                                </VCol>    
-                                                <VCol cols="2" style="margin-right: -1rem;" class="d-flex gap-1">                                                
-                                                    <VBtn class="ml-auto" size="38" color="error" @click="eliminarTipoCondicion(index)">
-                                                    <VIcon
-                                                        icon="tabler-x"
-                                                        size="22"
-                                                    />
-                                                    </VBtn>                                  
-                                                </VCol>  
-                                                                                                                        
-                                            </VRow>   
-                                            <VDivider/>
-                                        </VCol>                                   
-                                    </VCol>
+                                                    </VCol>
+                                                                                                                            
+                                                </VRow>
+                                            </VCol>                                   
+
+                                        </VCardText>   
+                                    </div>
                                                        
                                     <VCol cols="12">
                                         <span>Validez de regla</span>
@@ -1262,6 +1235,30 @@ async function deleteConfirmed() {
  
 .clickable {
   cursor: pointer;
+}
+
+.item-cards {
+  background:  rgba(var(--v-border-color), var(--v-hover-opacity));
+  box-shadow: none !important;
+  border-radius: 6px;
+}
+
+.boton-eleminar-itemsCards{
+    height: 38px;
+    width: 38px;
+    display: block;
+    margin: -11px;
+}
+
+.v-theme--light .item-cards{
+   background:   #f2f2f2;
+}
+
+.v-theme--light.v-field{
+    background: #fff;
+}
+.v-card-text{
+    padding: 0px 10px;
 }
 
 @media screen and (max-width: 1000px) {
