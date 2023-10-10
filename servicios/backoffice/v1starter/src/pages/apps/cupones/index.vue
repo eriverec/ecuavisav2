@@ -16,7 +16,7 @@ const currentTab = ref('tab-cupones');
 async function getCupones (){
     try {
       isLoading.value = true;  
-      const consulta = await fetch('https://ecuavisa-cupones.vercel.app/cupon/get/all');
+      const consulta = await fetch('https://ecuavisa-cupones.vercel.app/get/all');
       const consultaJson = await consulta.json();
       dataCupones.value = consultaJson.data;             
       isLoading.value = false; 
@@ -402,7 +402,7 @@ async function switchActive(id, val){
             body: raw,
             redirect: 'follow'
         };
-        const send = await fetch('https://ecuavisa-cupones.vercel.app/cupon/update', requestOptions);
+        const send = await fetch('https://ecuavisa-cupones.vercel.app/update', requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
             configSnackbar.value = {
@@ -441,7 +441,7 @@ async function onEdit(id){
     resetForm(); 
     await getPaquetes();
     accionForm.value = 'edit';
-    const consulta = await fetch('https://ecuavisa-cupones.vercel.app/cupon/get/id/' + id);
+    const consulta = await fetch('https://ecuavisa-cupones.vercel.app/get/id/' + id);
     const consultaJson = await consulta.json();
     const data = consultaJson.data;
     //console.log(paquete);
@@ -489,7 +489,7 @@ async function onDuplicate(id){
     resetForm(); 
     await getPaquetes();
     accionForm.value = 'duplicate';
-    const consulta = await fetch('https://ecuavisa-cupones.vercel.app/cupon/get/id/' + id);
+    const consulta = await fetch('https://ecuavisa-cupones.vercel.app/get/id/' + id);
     const consultaJson = await consulta.json();
     const data = consultaJson.data;
     //console.log(paquete);
@@ -594,7 +594,7 @@ async function onComplete(){
             body: raw,
             redirect: 'follow'
         };
-        const send = await fetch('https://ecuavisa-cupones.vercel.app/cupon/create', requestOptions);
+        const send = await fetch('https://ecuavisa-cupones.vercel.app/create', requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
             configSnackbar.value = {
@@ -639,7 +639,7 @@ async function onComplete(){
             body: raw,
             redirect: 'follow'
         };
-        const send = await fetch('https://ecuavisa-cupones.vercel.app/cupon/update', requestOptions);
+        const send = await fetch('https://ecuavisa-cupones.vercel.app/update', requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
             configSnackbar.value = {
@@ -680,7 +680,7 @@ async function onComplete(){
             body: raw,
             redirect: 'follow'
         };
-        const send = await fetch('https://ecuavisa-cupones.vercel.app/cupon/create', requestOptions);
+        const send = await fetch('https://ecuavisa-cupones.vercel.app/create', requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
             configSnackbar.value = {
@@ -723,7 +723,7 @@ async function deleteConfirmed() {
         redirect: 'follow'
     };
 
-    const deleted = await fetch('https://ecuavisa-cupones.vercel.app/cupon/delete/' + idToDelete.value, requestOptions);
+    const deleted = await fetch('https://ecuavisa-cupones.vercel.app/delete/' + idToDelete.value, requestOptions);
     const respuesta = await deleted.json();
     if (respuesta.resp) {
         configSnackbar.value = {
