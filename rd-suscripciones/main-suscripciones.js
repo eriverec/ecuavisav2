@@ -200,6 +200,8 @@
 				document.querySelector('.no-login').style.display = "block";
 				document.querySelector('.detalles .login').style.display = "none";
 				document.querySelector('#btn-login-ec').href = `https://www.ecuavisa.com/servicios/login/?nextpage=${(window.location.href).split("?")[0]}`;
+				wizard.lock();
+				
 			}
 
 			var total_finish = document.querySelector(".total-precio");

@@ -73,7 +73,7 @@ $wz_doc.addEventListener("wz.error", function (e) {
 });
 
 $wz_doc.addEventListener("wz.lock", function (e) {
-  alert("Wizard locked");
+  alert("Debes iniciar sesión para poder continuar con el pago");
 });
 
 $wz_doc.addEventListener("wz.unlock", function (e) {
