@@ -714,6 +714,8 @@ const ECUAVISA_EC = {
       }
   },
   login: function (){
+
+    return true;
       if(!this.isLocalStorageEnabled()){
           console.log({
               resp:false,

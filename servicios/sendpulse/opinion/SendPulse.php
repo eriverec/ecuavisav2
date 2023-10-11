@@ -499,7 +499,7 @@ class SendPulse {
 		      <tr style="border-color:transparent">
 		         <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top;padding: 20px;" valign="top">
 		         
-		            <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fnewsletterrojas%2Ffondo-azul.png);border-radius: 10px;" border="0" width="100%">
+		            <table cellpadding="0" cellspacing="0" style="background-color: #060026;border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fnewsletterrojas%2Ffondo-azul.png);border-radius: 10px;" border="0" width="100%">
 		               <tbody>
 		                  <tr style="border-color:transparent">
 		                     <th width="100%" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top">
@@ -635,8 +635,10 @@ class SendPulse {
 				if(count($dataJsonList) < 2){
 					$ecuadorEsText.= '';
 				}else{
-					$ecuadorEsText.= '  <a href="'.$this->UTMLinks(2, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;line-height:1.2; margin:0 0 10px; font-size:14px; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
-			            			<span style="color:#fff" class="color-link">'.$dataJsonList[0].'.</span>
+					$ecuadorEsText.= '  <a href="'.$this->UTMLinks(2, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;line-height:1.2; margin:0 0 10px; font-size:14px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
+			            			<p style="color:#c0c9c9;padding:0px 0px 0px 0px;margin:0px 0px 0px 0px">
+			            				<span style="color:#c0c9c9!important" class="color-link">'.$dataJsonList[0].'.</span>
+			            			</p>
 			            		</a>';
 				}
 
@@ -680,8 +682,10 @@ class SendPulse {
 					$ecuadorEs.= '';
 				}
 				else{
-					$ecuadorNoEsText.= '  <a href="'.$this->UTMLinks(3, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;line-height:1.2; margin:0 0 10px; font-size:14px; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
-			            			<span style="color:#fff" class="color-link">'.$dataJsonList[0].'.</span>
+					$ecuadorNoEsText.= '  <a href="'.$this->UTMLinks(3, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;line-height:1.2; margin:0 0 10px; font-size:14px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
+			            			<p style="color:#c0c9c9;padding:0px 0px 0px 0px;margin:0px 0px 0px 0px">
+			            				<span style="color:#c0c9c9!important" class="color-link">'.$dataJsonList[0].'.</span>
+			            			</p>
 			            		</a>';
 				}
 			}

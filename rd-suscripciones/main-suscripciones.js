@@ -19,7 +19,7 @@
 
 				//enviar el cupo por el metodo post
 				const planId = localStorage.getItem('planId_paquete');
-				console.log(planId);
+				// console.log(planId);
 				fetch("https://ecuavisa-cupones.vercel.app/cupon/validacion", {
 					method: 'POST',
 					headers: {
@@ -74,7 +74,27 @@
 			}
 		}
 
+
+		async function cargarPaisesYCiudad() {
+			try {
+				const response = await fetch('https://ecuavisa-suscripciones.vercel.app/otros/obtener-paises-ciudades');
+				if (!response.ok) {
+					throw new Error('Error al obtener datos desde JSON');
+				}
+				const resp = await response.json();
+				if (resp) {
+					return resp;
+				}
+				return [];
+			} catch (error) {
+				console.error('Error al obtener datos desde JSON:', error);
+				throw error;
+			}
+		}
+
 		let dataPlanes = await cargarNombresYPlanes();
+		let dataPaisesCiudades = await cargarPaisesYCiudad();
+
 		let productos = await dataPlanes.data;
 		let planId = "";
 		let x_Token = await dataPlanes.token;
@@ -503,5 +523,66 @@
 
 		});
 
+		async function buscarCiudades(p){
+			var paises = [];
+			var ciudades = [];
+			$('#ciudad option').remove();
+			$('#ciudad').append(`<option value="">Seleccione su ciudad</option>`);
+			for(var i in dataPaisesCiudades){
+				const pais = dataPaisesCiudades[i].country;
+				if(pais.includes(p)){
+					for(var j in dataPaisesCiudades[i].data){
+						const ciudad = dataPaisesCiudades[i].data[j].city;
+						$('#ciudad').append(`<option value="${ciudad}">${ciudad}</option>`);
+					}
+				}
+				
+			}
+
+			$('#ciudad').select2({
+					// allowClear: true,
+			    theme: "bootstrap-5",
+			    width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+			    placeholder: $( this ).data( 'placeholder' )
+			});
+			// $("#pais").select2('data', {id: 1, text: "sdas"});      
+			return true;
+		}
+
+		async function armarSelectPaises(){
+			var paises = [];
+			var ciudades = [];
+			$('#pais option').remove();
+			$('#pais').append(`<option value="">Seleccione su país</option>`);
+			for(var i in dataPaisesCiudades){
+				const pais = dataPaisesCiudades[i].country;
+				$('#pais').append(`<option value="${pais}">${pais}</option>`);
+			}
+
+			$('#pais').select2({
+					// allowClear: true,
+			    theme: "bootstrap-5",
+			    width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+			    placeholder: $( this ).data( 'placeholder' )
+			});
+
+			$('#ciudad').select2({
+					// allowClear: true,
+			    theme: "bootstrap-5",
+			    width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
+			    placeholder: $( this ).data( 'placeholder' )
+			});
+			// $("#pais").select2('data', {id: 1, text: "sdas"});      
+			return true;
+		}
+
+		$('#pais').change(function(){
+			var pais = $(this).val();
+			buscarCiudades(pais)
+		})
+
+		var respSelect = await armarSelectPaises();
+
 	}
+
 })();

@@ -685,3 +685,25 @@ hr.hr-planes {
     line-height: 24px;
     font-weight: 700;
 }
+
+.select2-container--open{
+    z-index: 9999;
+}
+
+.select2-container--bootstrap-5 .select2-selection {
+    width: 100%;
+    min-height: calc(1.5em + 0.75rem + 11px);
+    padding: 0.675rem 1.1rem;
+    border-radius: 0.34rem;
+}
+
+.select2-selection__rendered {
+    opacity: 0.3;
+    line-height: 1.2;
+    font-weight: 200;
+    font-size: 16px;
+}
+
+small.bg-red {
+    color: red;
+}
