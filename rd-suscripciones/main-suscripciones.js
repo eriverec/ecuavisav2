@@ -550,8 +550,12 @@
 		}
 
 		async function armarSelectPaises(){
-			var paises = [];
-			var ciudades = [];
+			var paises = "";
+			var ciudades = "";
+
+			var geoLocal = ECUAVISA_EC.USER_data("geo");
+			
+
 			$('#pais option').remove();
 			$('#pais').append(`<option value="">Seleccione su país</option>`);
 			for(var i in dataPaisesCiudades){
@@ -572,7 +576,16 @@
 			    width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
 			    placeholder: $( this ).data( 'placeholder' )
 			});
-			// $("#pais").select2('data', {id: 1, text: "sdas"});      
+			// $("#pais").select2('data', {id: 1, text: "sdas"});
+			if(geoLocal){
+				var jsonGeoLocal = JSON.parse(geoLocal);
+				// paises = jsonGeoLocal.country;
+				// ciudades = jsonGeoLocal.city;
+				$('#pais').val(jsonGeoLocal.country).trigger("change");
+				setTimeout(function(){
+					$('#pais').val(jsonGeoLocal.city).trigger("change");
+				}, 500);
+			}
 			return true;
 		}
 
