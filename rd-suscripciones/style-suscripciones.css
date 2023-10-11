@@ -707,3 +707,7 @@ hr.hr-planes {
 small.bg-red {
     color: red;
 }
+
+.show.invalid-feedback{
+    display: block!important;
+}
