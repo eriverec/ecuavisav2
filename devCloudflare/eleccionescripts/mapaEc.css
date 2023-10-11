@@ -32,6 +32,15 @@
     background: #e43d3d;
     color: #fff;
     padding: 5px;
+    opacity: 0;
+    -webkit-animation-delay: 0.75s;
+    animation-delay: 0.75s;
+    -webkit-animation-duration: 0.75s;
+    animation-duration: 0.75s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-name: us2020-fade-in;
+    animation-name: us2020-fade-in;
 }
   
 
