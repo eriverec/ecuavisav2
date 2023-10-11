@@ -248,6 +248,7 @@ const aplica = ref(false);
 const condiciones = ref([]);
 const match = ref('all');
 const tipo = ref('Cupón');
+const codigo = ref('');
 
 const configSnackbar = ref({
     message: "Datos guardados",
@@ -374,6 +375,7 @@ function resetForm(){
     dateIni.value = '';
     dateEnd.value = '';
     tipo.value = '';
+    codigo.value = '';
     activo.value = false;
     aplica.value = false;
     condiciones.value = [];
@@ -573,6 +575,7 @@ async function onComplete(){
         let jsonEnviar ={
         "nombre": nombre.value,
         "tipo": tipo.value,
+        "codigo": codigo.value,
         "paquetes": paquetes.value,
         "excepciones": excepciones.value,
         "discount": discount.value,
@@ -617,6 +620,7 @@ async function onComplete(){
         "id": idToEdit.value,
         "nombre": nombre.value,
         "tipo": tipo.value,
+        "codigo": codigo.value,
         "paquetes": paquetes.value,
         "excepciones": excepciones.value,
         "discount": discount.value,
@@ -658,6 +662,8 @@ async function onComplete(){
     }else if(accionForm.value === 'duplicate'){
         let jsonEnviar ={
         "nombre": nombre.value,
+        "tipo": tipo.value,
+        "codigo": codigo.value,
         "paquetes": paquetes.value,
         "excepciones": excepciones.value,
         "discount": discount.value,
@@ -928,20 +934,30 @@ async function deleteConfirmed() {
                             <VRow class="d-flex flex-wrap justify-center gap-4">
                                 <VRow>
 
-                                    <VCol cols="12">
-                                        <VSelect v-model="tipo" label="Tipo" :items="tipoItems" />
-                                    </VCol>
-                                    
-                                    <VCol cols="5" >
-                                        <VTextField v-model="nombre" label="Nombre" />
-                                    </VCol>
-                                    <VCol cols="2" >
-                                        <VCheckbox
-                                        v-model="activo"
-                                        :label=" activo == true? 'Activo': 'Inactivo' "                   
+                                    <VCol cols="6" >                         
+                                        <VSwitch
+                                            v-model="activo"
+                                            color="success"
+                                            label="Estado de publicación"                           
                                         />
                                     </VCol>
-                                    <VCol cols="5" class="d-flex">
+                                    <VCol cols="6">
+                                        <VSwitch
+                                    v-model="tipo"
+                                    color="success"
+                                    label="El descuento es un cupón?"
+                                    true-value="Cupon"
+                                    false-value="Regla"
+                                     />
+                                    </VCol>
+                                    
+                                    
+                                    <VCol cols="6" >
+                                        <VTextField v-model="nombre" label="Título descriptivo" :placeholder="tipo == 'Cupon'? 'Título del cupón':'Título de la regla'" />
+                                    </VCol>
+                                    
+                                    
+                                    <VCol cols="6" class="d-flex">
                                         <div>
                                         <VCheckbox
                                         v-model="aplica"                                                
@@ -953,7 +969,12 @@ async function deleteConfirmed() {
                                          e ignora todas las demás</p>
                                         </div>
                                     </VCol>
-                                    <VCol cols="12" style="margin-top: -1.5rem;">
+
+                                    <VCol cols="12" style="margin-top: -1.5rem;" v-if="tipo == 'Cupon'">
+                                        <VTextField v-model="codigo" label="Código del cupón" placeholder="Escriba el código con el que canjeará el cupón" />
+                                    </VCol>
+
+                                    <VCol cols="12" >
                                         <VTextField v-model="discount" label="Descuento" typer="number" />
                                     </VCol>
                                     
