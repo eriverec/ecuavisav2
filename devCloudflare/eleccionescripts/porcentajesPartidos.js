@@ -5,6 +5,7 @@ const apiUrl = 'https://api-configuracion.vercel.app/web/data-sv';
 const dataPorcentajeDiv = document.getElementById('dataPorcentaje');
 const dataPorcentajeFotos = document.getElementById('dataFotos');
 const dataVotosClass = document.getElementById('dataVotos');
+const dataHoraCorteClass = document.querySelector('#dataHoraCorte .escrutadoElecciones');
 
 
 // Realizar una solicitud GET a la API
@@ -16,14 +17,20 @@ fetch(apiUrl)
         let porcentajeHTML = '';
         let porcentajeHTMLFoto = '';
         let votoHTML = '';
+        let votoHoraCorteHTML = '';
+
         const votosData = data.votos;
 
         votosData.forEach(voto => {
             const votoNulos = voto.nulos;
             const votoBlancos = voto.blancos;
             const votoEscrutado = voto.escrutado;
+            const votoHoraCorte = voto.horaCorte;
 
+            const votoElementHoraCorte = `
+            <span>HORA DE CORTE: ${votoHoraCorte}</span> `;
 
+            votoHoraCorteHTML += votoElementHoraCorte;
 
             const votoElementNulo = `
             <div class="parent_votos"> 
@@ -36,6 +43,8 @@ fetch(apiUrl)
         });
 
         dataVotosClass.innerHTML = votoHTML;
+        dataHoraCorteClass.innerHTML = votoHoraCorteHTML;
+
 
 
         // Iterar a través de los datos de porcentaje
@@ -222,7 +231,7 @@ function eventoCharColumn() {
                     type: 'column'
                 },
                 title: {
-                    text: 'Resultados Electorales (Barras)'
+                    text: 'Resultados Electorales'
                 },
                 xAxis: {
                     type: 'category',
@@ -261,5 +270,54 @@ function eventoCharColumn() {
         });
 }
 
+function eventoCharColumnNulosBlancos() {
+
+    fetch('https://api-configuracion.vercel.app/web/data-sv')
+            .then(response => response.json())
+            .then(data => {
+                const votos = data.votos[0];
+                const nulos = votos.nulos;
+                const blancos = votos.blancos;
+
+                // Crear el gráfico de barras con Highcharts
+                Highcharts.chart('chart-container-nulosblancos', {
+                    chart: {
+                        type: 'column'
+                    },
+                    plotOptions: {
+                        column: {
+                            colorByPoint: true,
+                            dataLabels: {
+                                enabled: true,
+                                format: '{point.y:.2f}%'
+                            }
+                        }
+                    },
+                    colors: [
+                        '#2927B9',
+                        '#23DCD1'
+                    ],
+                    title: {
+                        text: 'Votos Nulos y Blancos'
+                    },
+                    xAxis: {
+                        categories: ['Nulos', 'Blancos']
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'Cantidad de Votos'
+                        }
+                    },
+                    series: [{
+                        name: 'Votos',
+                        data: [nulos, blancos]
+                    }]
+                });
+            })
+            .catch(error => console.error('Error al obtener datos de la API:', error));
+  
+}
+
 eventoCharColumn();
-eventoCharPie();
+// eventoCharColumnNulosBlancos();
+// eventoCharPie();

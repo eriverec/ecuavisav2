@@ -55,7 +55,7 @@
       const luisaGonzalesVotes = parseInt(columns[2][row], 10);
 
       if(danielNoboaVotes){
-        return danielNoboaVotes > luisaGonzalesVotes ? ['Daniel Noboa', danielNoboaVotes] : ['Luisa Gonzáles',luisaGonzalesVotes];
+        return danielNoboaVotes > luisaGonzalesVotes ? ['Daniel Noboa', danielNoboaVotes] : ['Luisa González',luisaGonzalesVotes];
       }
       return null;
 
@@ -98,7 +98,7 @@
                             color: '#672893',
                             y: parseInt(columns[3][row])
                         }, {
-                            name: 'Gonzáles',
+                            name: 'González',
                             color: '#1e96d4',
                             y: parseInt(columns[2][row])
                         }],
@@ -146,7 +146,7 @@
                                         <small>Daniel Noboa: <br/> ${daniel}  votos - ${((daniel*100)/total).toFixed(2)} %</small>
                                     </div><br><br>
                                     <div style="text-align:left"><div style="color:#1e96d4;">⦿</div> 
-                                        <small>Luisa Gonzáles: <br/> ${luisa} votos - ${((luisa*100)/total).toFixed(2)} %</small>
+                                        <small>Luisa González: <br/> ${luisa} votos - ${((luisa*100)/total).toFixed(2)} %</small>
                                     </div>`;
                                     // const content = `<div style="color:${point.color};">⦿</div>
                                     //   <span style="font-size:14px;font-weight: bold;">${point.series.name} de ${point.name}</span><br/>
@@ -170,7 +170,7 @@
                     },
 
                     title: {
-                        text: 'Mapa de resultados - Elecciones 2023',
+                        text: 'Resultados Segunda Vuelta Elecciones 2023',
                         align: 'center'
                     },
                     subtitle: {
@@ -211,7 +211,7 @@
                             from: -100,
                             to: 0,
                             color: '#1e96d4',
-                            name: 'Luisa Gonzáles'
+                            name: 'Luisa González'
                         }, {
                             from: 0,
                             to: 100,
