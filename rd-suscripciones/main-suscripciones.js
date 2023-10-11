@@ -604,7 +604,20 @@
 		$('#pais').change(function(){
 			var pais = $(this).val();
 			buscarCiudades(pais)
-		})
+		});
+
+		$wz_doc.addEventListener("wz.error", function (e) {
+		  $(`.invalid-feedback`).remove();
+		  for(var i in e.detail.target){
+		      const field = e.detail.target[i];
+		      if(!document.querySelector(`.invalid-feedback.${field.id}`)){
+		          $(`#${field.id}`).after(`<div class="show invalid-feedback ${field.id}">Campo requerido. </div>`);
+		      }
+		      setTimeout(function(){
+					    $(`.invalid-feedback`).remove();
+					}, 2000);
+		  }
+		});
 
 		var respSelect = await armarSelectPaises();
 
