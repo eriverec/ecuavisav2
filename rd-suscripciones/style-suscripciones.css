@@ -692,9 +692,9 @@ hr.hr-planes {
 
 .select2-container--bootstrap-5 .select2-selection {
     width: 100%;
-    min-height: calc(1.5em + 0.75rem + 11px);
-    padding: 0.675rem 1.1rem;
-    border-radius: 0.34rem;
+    min-height: calc(1.5em + 0.75rem + 11px)!important;
+    padding: 0.675rem 1.1rem!important;
+    border-radius: 0.34rem!important;
 }
 
 .select2-selection__rendered {
