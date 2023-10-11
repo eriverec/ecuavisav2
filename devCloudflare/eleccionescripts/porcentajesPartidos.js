@@ -273,51 +273,74 @@ function eventoCharColumn() {
 function eventoCharColumnNulosBlancos() {
 
     fetch('https://api-configuracion.vercel.app/web/data-sv')
-            .then(response => response.json())
-            .then(data => {
-                const votos = data.votos[0];
-                const nulos = votos.nulos;
-                const blancos = votos.blancos;
+        .then(response => response.json())
+        .then(data => {
+            const votos = data.barras[0];
+            const nulos = votos.nulos;
+            const blancos = votos.blancos;
+            const luisa = votos.luisa;
+            const daniel = votos.daniel;
+            // Obtener los datos del objeto "porcentaje"
+            const porcentajeData = data.porcentaje;
 
-                // Crear el gráfico de barras con Highcharts
-                Highcharts.chart('chart-container-nulosblancos', {
-                    chart: {
-                        type: 'column'
-                    },
-                    plotOptions: {
-                        column: {
-                            colorByPoint: true,
-                            dataLabels: {
-                                enabled: true,
-                                format: '{point.y:.2f}%'
-                            }
+            // Crear un array para los datos del gráfico
+            const chartData = porcentajeData.map(item => ({
+                name: item.name,
+                y: parseFloat(item.value.toFixed(2)),
+                hoverName: item.partido // Nombre para el hover
+            }));
+
+
+            // Crear el gráfico de barras con Highcharts
+            Highcharts.chart('chart-container-nulosblancos', {
+                chart: {
+                    type: 'column'
+                },
+                plotOptions: {
+                    column: {
+                        colorByPoint: true,
+                        dataLabels: {
+                            enabled: true,
+                            format: '{point.y:.2f}%'
                         }
-                    },
-                    colors: [
-                        '#2927B9',
-                        '#23DCD1'
-                    ],
+                    }
+                },
+                tooltip: {
+                    pointFormat: '<b>{point.y:.2f}%</b>'
+                },
+                exporting: {
+                    enabled: false // Esto oculta el botón de menú de exportación
+                },
+                credits: {
+                    enabled: false // Esto oculta el crédito de Highcharts
+                },
+                colors: [
+                    '#1e96d4',
+                    '#672893',
+                    '#2927B9',
+                    '#23DCD1'
+                ],
+                title: {
+                    text: 'Resultados Electorales'
+                },
+                xAxis: {
+                    categories: ['Luisa González', 'Daniel Noboa', 'Nulos', 'Blancos',]
+                },
+                yAxis: {
                     title: {
-                        text: 'Votos Nulos y Blancos'
-                    },
-                    xAxis: {
-                        categories: ['Nulos', 'Blancos']
-                    },
-                    yAxis: {
-                        title: {
-                            text: 'Cantidad de Votos'
-                        }
-                    },
-                    series: [{
-                        name: 'Votos',
-                        data: [nulos, blancos]
-                    }]
-                });
-            })
-            .catch(error => console.error('Error al obtener datos de la API:', error));
-  
+                        text: 'Porcentaje de Votos (%)'
+                    }
+                },
+                series: [{
+                    name: 'Porcentaje de Votos',
+                    data: [luisa, daniel, nulos, blancos,]
+                }]
+            });
+        })
+        .catch(error => console.error('Error al obtener datos de la API:', error));
+
 }
 
-eventoCharColumn();
-// eventoCharColumnNulosBlancos();
+// eventoCharColumn();
+eventoCharColumnNulosBlancos();
 // eventoCharPie();
