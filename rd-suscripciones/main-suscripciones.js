@@ -581,10 +581,13 @@
 				var jsonGeoLocal = JSON.parse(geoLocal);
 				// paises = jsonGeoLocal.country;
 				// ciudades = jsonGeoLocal.city;
-				$('#pais').val(jsonGeoLocal.country).trigger("change");
 				setTimeout(function(){
 					$('#pais').val(jsonGeoLocal.city).trigger("change");
 				}, 500);
+
+				setTimeout(function(){
+					$('#ciudad').val(jsonGeoLocal.city).trigger("change");
+				}, 700);
 			}
 			return true;
 		}
