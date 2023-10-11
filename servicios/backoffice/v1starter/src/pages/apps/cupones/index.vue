@@ -450,6 +450,7 @@ async function onEdit(id){
     idToEdit.value = data._id;
     nombre.value = data.nombre;
     tipo.value = data.tipo;
+    codigo.value = data.codigo;
     if(data.paquetes !== 'full' && data.paquetes.length >0 ){
         paquetesOptions.value = 'Personalizado';
     }else if(data.paquetes == 'full'){
@@ -498,6 +499,7 @@ async function onDuplicate(id){
     //idToEdit.value = data._id;
     nombre.value = data.nombre;
     tipo.value = data.tipo;
+    codigo.value = data.codigo;
     if(data.paquetes !== 'full' && data.paquetes.length >0 ){
         paquetesOptions.value = 'Personalizado';
     }else if(data.paquetes == 'full'){
