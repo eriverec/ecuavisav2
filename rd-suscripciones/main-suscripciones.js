@@ -554,7 +554,6 @@
 			var ciudades = "";
 
 			var geoLocal = ECUAVISA_EC.USER_data("geo");
-			
 
 			$('#pais option').remove();
 			$('#pais').append(`<option value="">Seleccione su país</option>`);
@@ -582,7 +581,7 @@
 				// paises = jsonGeoLocal.country;
 				// ciudades = jsonGeoLocal.city;
 				setTimeout(function(){
-					$('#pais').val(jsonGeoLocal.city).trigger("change");
+					$('#pais').val(jsonGeoLocal.country).trigger("change");
 				}, 500);
 
 				setTimeout(function(){
