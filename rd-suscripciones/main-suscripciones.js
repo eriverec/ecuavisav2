@@ -563,7 +563,7 @@
 		async function armarSelectPaises(){
 			var paises = "";
 			var ciudades = "";
-			var geoLocal = (ECUAVISA_EC.USER_data("location") == "null" ? ECUAVISA_EC.USER_data("geo") : null);
+			var geoLocal = (ECUAVISA_EC.USER_data("location") == "null" ? ECUAVISA_EC.USER_data("geo") : ECUAVISA_EC.USER_data("location"));
 
 			$('#pais option').remove();
 			$('#pais').append(`<option value="">Seleccione su país</option>`);
