@@ -247,7 +247,7 @@ const activo = ref(false);
 const aplica = ref(false);
 const condiciones = ref([]);
 const match = ref('all');
-const tipo = ref('Cupón');
+const tipo = ref('Regla');
 const codigo = ref('');
 
 const configSnackbar = ref({
@@ -374,7 +374,7 @@ function resetForm(){
     helper.value = '';
     dateIni.value = '';
     dateEnd.value = '';
-    tipo.value = '';
+    tipo.value = 'Regla';
     codigo.value = '';
     activo.value = false;
     aplica.value = false;
