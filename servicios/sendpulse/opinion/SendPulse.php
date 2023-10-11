@@ -636,7 +636,7 @@ class SendPulse {
 					$ecuadorEsText.= '';
 				}else{
 					$ecuadorEsText.= '  <a href="'.$this->UTMLinks(2, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;line-height:1.2; margin:0 0 10px; font-size:14px; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
-			            			<span>'.$dataJsonList[0].'.</span>
+			            			<span style="color:#fff" class="color-link">'.$dataJsonList[0].'.</span>
 			            		</a>';
 				}
 
@@ -681,7 +681,7 @@ class SendPulse {
 				}
 				else{
 					$ecuadorNoEsText.= '  <a href="'.$this->UTMLinks(3, 'https://'.$dataJsonList[1]).'" style="text-decoration: none;line-height:1.2; margin:0 0 10px; font-size:14px; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;display:block;padding-bottom:10px">
-			            			<span>'.$dataJsonList[0].'.</span>
+			            			<span style="color:#fff" class="color-link">'.$dataJsonList[0].'.</span>
 			            		</a>';
 				}
 			}
@@ -698,7 +698,19 @@ class SendPulse {
 		$this->jsonPDF[] = array("ecuadorNoEs" => $ecuadirNoEsList);
         $this->jsonPDF[] = array("ecuadorEs" => $ecuadirEsList);
 		
-        return ($existeEs?$ecuadorEs:'').($existeNoEs?$ecuadorNoEs:'');
+        return '<style>
+				    /* Estilos predeterminados para el modo claro */
+				    .color-link {
+			            color: white;
+			        }
+
+				    /* Estilos para el modo oscuro */
+				    @media (prefers-color-scheme: dark) {
+				        .color-link {
+				            color: white;
+				        }
+				    }
+				</style>'.($existeEs?$ecuadorEs:'').($existeNoEs?$ecuadorNoEs:'');
     }
 
     private function getImgParrafo($dataImg){
