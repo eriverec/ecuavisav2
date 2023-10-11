@@ -459,11 +459,22 @@
 					const formWizard_btn = document.querySelector(`#formWizard`);
 					const getToken = localStorage.getItem('x-token');
 
+					const user = {
+						nombre: document.querySelector(`#nombre`).value || null,
+						apellido: document.querySelector(`#apellidos`).value || null,
+						cedula: document.querySelector(`#cedula`).value || null,
+						pais: document.querySelector(`#pais`).value || null,
+						ciudad: document.querySelector(`#ciudad`).value || null,
+						direccion: document.querySelector(`#direccion`).value || null,
+						telefono: document.querySelector(`#telefono`).value || null
+					}
+
 					var jsonSend = {
 						"idPaquete": planId,
 						"idUsuario": parseInt(idUser),
 						"idUsuarioObject": idwylexIdObject,
-						"metodoPago": valorMetodoPago
+						"metodoPago": valorMetodoPago,
+						"usuario":user
 					};
 
 					// console.log(jsonSend)
@@ -552,8 +563,7 @@
 		async function armarSelectPaises(){
 			var paises = "";
 			var ciudades = "";
-
-			var geoLocal = ECUAVISA_EC.USER_data("geo");
+			var geoLocal = (ECUAVISA_EC.USER_data("location") == "null" ? ECUAVISA_EC.USER_data("geo") : null);
 
 			$('#pais option').remove();
 			$('#pais').append(`<option value="">Seleccione su país</option>`);
