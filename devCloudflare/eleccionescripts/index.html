@@ -64,7 +64,10 @@ function setNewData(seteado){
 // Create axes
 // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
 
-var yRenderer = am5xy.AxisRendererY.new(root, {});
+var yRenderer = am5xy.AxisRendererY.new(root, {
+  minGridDistance: 30,
+  inversed: true
+});
 yRenderer.grid.template.set("visible", false);
 
 var yAxis = chart.yAxes.push(
@@ -269,7 +272,7 @@ function getData(){
     // fetchRes is the promise to resolve 
     // it by using.then() method
     fetchRes.then(res => res.json()).then(d => {
-      setNewData(d);
+      setNewData(d.candidatos);
     })
 }
 

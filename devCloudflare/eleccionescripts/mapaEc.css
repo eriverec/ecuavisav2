@@ -1,0 +1,340 @@
+:root{
+  --animate-duration: 1s;
+  --animate-delay: 1s;
+  --animate-repeat: 1
+}
+* {
+    font-family: 'Archivo';
+}
+
+@-webkit-keyframes fadeIn {
+    0% {
+      opacity: 0
+    }
+  
+    to {
+      opacity: 1
+    }
+  }
+  
+  @keyframes fadeIn {
+    0% {
+      opacity: 0
+    }
+  
+    to {
+      opacity: 1
+    }
+  }
+  
+
+.porcentaje-item {
+    margin-bottom: 10px;
+    padding: 5px;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 44px;
+    
+    /* opacity: 0; */
+    /* animation: fadeIn 1s ease-in-out forwards; */
+
+}
+
+.parent_votos{
+    display: flex;
+    justify-content: center;
+    column-gap: 30px;
+    align-items: center;
+    margin: 15px 0;
+}
+
+/* Estilo de fondo para Daniel Noboa */
+.daniel-noboa {
+    background-color: #672893; 
+    position: relative; /* Agrega posicionamiento relativo para animación */
+    overflow: hidden; /* Oculta el exceso de barra de color */
+
+    justify-content: end;
+
+    -webkit-transform-origin: 100% 0;
+    -ms-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+    -webkit-animation-name: us2020-result-bar;
+    animation-name: us2020-result-bar;
+    -webkit-animation-duration: 0.75s;
+    animation-duration: 0.75s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-timing-function: cubic-bezier(0.25,0.46,0.45,0.94);
+    animation-timing-function: cubic-bezier(0.25,0.46,0.45,0.94);
+    -webkit-transition: width 0.75s cubic-bezier(0.455,0.03,0.515,0.955) 0.75s;
+    transition: width 0.75s cubic-bezier(0.455,0.03,0.515,0.955) 0.75s;
+    
+}
+
+.highcharts-label.highcharts-data-label.highcharts-data-label-color-undefined:nth-child(24){
+    translate: 35px -6px !important;
+}
+
+
+/* Estilo de fondo para Luisa González */
+.luisa-gonzalez {
+    background-color: #1e96d4;
+    justify-content: start;
+    -webkit-transform-origin: 0 100%;
+    -ms-transform-origin: 0 100%;
+    transform-origin: 0 100%;
+    -webkit-animation-name: us2020-result-bar;
+    animation-name: us2020-result-bar;
+    -webkit-animation-duration: 0.75s;
+    animation-duration: 0.75s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-timing-function: cubic-bezier(0.25,0.46,0.45,0.94);
+    animation-timing-function: cubic-bezier(0.25,0.46,0.45,0.94);
+    -webkit-transition: width 0.75s cubic-bezier(0.455,0.03,0.515,0.955) 0.75s;
+    transition: width 0.75s cubic-bezier(0.455,0.03,0.515,0.955) 0.75s;
+}
+
+/* Estilo de fondo para porcentajes mayores al 50% */
+.porcentaje-item.high {
+    background-color: green;
+}
+
+/* Estilo de fondo para porcentajes menores o iguales al 50% */
+.porcentaje-item.low {
+    background-color: red;
+}
+
+
+#dataPorcentaje .contador {
+    opacity: 0;
+    -webkit-animation-delay: 0.75s;
+    animation-delay: 0.75s;
+    -webkit-animation-duration: 0.75s;
+    animation-duration: 0.75s;
+    -webkit-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+    -webkit-animation-name: us2020-fade-in;
+    animation-name: us2020-fade-in;
+    padding: 0 15px;
+}
+
+
+@-webkit-keyframes us2020-fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes us2020-fade-in {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+
+@-webkit-keyframes us2020-result-bar {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0,1);
+        -ms-transform: scale(0,1);
+        transform: scale(0,1);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1,1);
+        -ms-transform: scale(1,1);
+        transform: scale(1,1);
+    }
+}
+
+@keyframes us2020-result-bar {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(0,1);
+        -ms-transform: scale(0,1);
+        transform: scale(0,1);
+    }
+
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1,1);
+        -ms-transform: scale(1,1);
+        transform: scale(1,1);
+    }
+}
+
+#dataPorcentaje {
+    display: flex;
+}
+
+.itemsFoto img {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+
+    -webkit-animation-name: fadeIn;
+    animation-name: fadeIn;
+    -webkit-animation-duration: 1s;
+    animation-duration: 1s;
+    -webkit-animation-duration: var(--animate-duration);
+    animation-duration: var(--animate-duration);
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+}
+
+.itemsFoto:nth-child(1) img {
+    margin-right: 10px;
+}
+
+.itemsFoto:nth-child(2) img {
+    margin-left: 10px;
+}
+
+.itemsFoto:nth-child(2) .block-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.block-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.block-text .fotoName {
+    text-transform: uppercase;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+#dataFotos {
+    display: flex;
+    justify-content: space-between;
+}
+
+.itemsFoto:nth-child(1) {
+    display: flex;
+    flex-direction: initial;
+    align-items: center;
+}
+
+.itemsFoto:nth-child(2) {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+}
+
+
+#container {
+    height: 800px;
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+.highcharts-mapview-inset-border {
+    display: none;
+}
+
+.loading {
+    margin-top: 10em;
+    text-align: center;
+    color: gray;
+}
+
+.mapa_ec_2023 {
+    height: 820px;
+}
+
+
+@media (max-width: 767px) {
+    .itemsFoto:nth-child(1) {
+        flex-direction: column;
+        align-items: start;
+    }
+
+    .itemsFoto:nth-child(2) {
+        flex-direction: column;
+        align-items: end;
+    }
+
+    .block-text .fotoName {
+        font-size: 16px;
+    }
+
+    .porcentaje-item {
+        font-size: 24px;
+    }
+
+    .itemsFoto img {
+        width: 80px;
+        height: 80px;
+    }
+}
+
+
+@media (max-width: 680px) {
+    #container {
+        height: 700px;
+    }
+
+    .mapa_ec_2023 {
+        height: 720px;
+    }
+}
+
+@media (max-width: 550px) {
+    #container {
+        height: 600px;
+    }
+
+    .mapa_ec_2023 {
+        height: 620px;
+    }
+}
+
+@media (max-width: 450px) {
+    #container {
+        height: 480px;
+    }
+
+    .mapa_ec_2023 {
+        height: 520px;
+    }
+}
+
+@media (max-width: 400px) {
+    #container {
+        height: 500px;
+    }
+
+    .mapa_ec_2023 {
+        height: 520px;
+    }
+}
+
+@media (max-width: 350px) {
+    #container {
+        height: 450px;
+    }
+
+    .mapa_ec_2023 {
+        height: 466px;
+    }
+}

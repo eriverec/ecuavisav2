@@ -21,7 +21,8 @@
       <span class="escrutadoElecciones">Cargando...</span>
     </div>
     <span class="text_fuente">Fuente: CNE</span>
-    <div id="chartdivDatos"></div>
+    <div id="chartdivDatos" style="text-align: center;">Cargando...</div>
+
   </div>
 
   <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
@@ -46,7 +47,7 @@
           <div class="conteo_votos">
             <div class="procesadas">
               <div class="act-proc">
-                <h3> Escrutado: </h3>
+                <h3> Escrutado:  </h3>
                 <div class="valor_procesadas">${firstItem.actasProcesadas}</div>
               </div>
             </div>
@@ -133,7 +134,7 @@
       // https://www.amcharts.com/docs/v5/charts/xy-chart/axes/
       var yAxis = chart.yAxes.push(
         am5xy.CategoryAxis.new(root, {
-          categoryField: "year",
+          categoryField: "pregunta",
           renderer: am5xy.AxisRendererY.new(root, {
             inversed: true,
             cellStartLocation: 0.1,
@@ -162,7 +163,7 @@
             xAxis: xAxis,
             yAxis: yAxis,
             valueXField: field,
-            categoryYField: "year",
+            categoryYField: "pregunta",
             sequencedInterpolation: true,
             // tooltip: am5.Tooltip.new(root, {
             //   pointerOrientation: "horizontal",
