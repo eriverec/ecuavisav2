@@ -280,10 +280,10 @@
 					const textCupon = inputAplicarCupon.value;
 
 					//agregar el un nuevo parametro al url actual
-					var urlHREF = window.location.href;
-					if (urlHREF.indexOf('?') === -1) { urlHREF += '?'; } else { urlHREF += '&'; }
-					urlHREF += 'usocupon=true';
-					window.history.pushState({ path: urlHREF }, '', urlHREF);
+					// var urlHREF = window.location.href;
+					// if (urlHREF.indexOf('?') === -1) { urlHREF += '?'; } else { urlHREF += '&'; }
+					// urlHREF += 'usocupon=true';
+					// window.history.pushState({ path: urlHREF }, '', urlHREF);
 
 					//enviar el cupo por el metodo post
 					const planId = localStorage.getItem('planId_paquete');
