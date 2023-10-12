@@ -539,7 +539,7 @@
 						"idPaquete": planId,
 						"idUsuario": parseInt(idUser),
 						"idUsuarioObject": idwylexIdObject,
-						"metodoPago": valorMetodoPago,
+						"metodoPago": paqueteJSON.opcion_pago,
 						"usuario":user
 					};
 
