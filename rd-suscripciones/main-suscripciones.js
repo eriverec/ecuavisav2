@@ -303,17 +303,27 @@
 								text.classList.remove("valid-feedback");
 								text.classList.remove("invalid-feedback");
 								text.classList.remove("show");
+
+								var continuar = false;
 								if(result.resp){
 									if(result.data.cambiar_precio_otros){
 										if(paqueteJSON.esta_descuento){
-											//OTRO CALCULO
-
+											continuar = true;
 										}
 										text.innerHTML = `Tu cupón fue insertado con éxito`;
 										text.classList.add("valid-feedback");
+
 									}else{
-										text.innerHTML = `Cupón insertado no válido.`;
-										text.classList.add("invalid-feedback");
+										continuar = true;
+
+										if(paqueteJSON.esta_descuento){
+											text.innerHTML = `Cupón insertado no válido, el paquete ya se encuentra en oferta.`;
+											text.classList.add("invalid-feedback");
+											continuar = false;
+										}
+									}
+									if(continuar){
+										await actualizarDatos();
 									}
 								}else{
 									text.innerHTML = `Cupón insertado no válido`;
