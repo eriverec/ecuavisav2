@@ -304,8 +304,17 @@
 							if(document.querySelector(".mensaje-text-cupon")){
 								var text = document.querySelector(".mensaje-text-cupon");
 								if(result.resp){
-									text.innerHTML = `Tu cupón fue insertado con éxito`;
-									text.classList.add("valid-feedback");
+									if(result.data.cambiar_precio_otros){
+										if(paqueteJSON.esta_descuento){
+											//OTRO CALCULO
+
+										}
+										text.innerHTML = `Tu cupón fue insertado con éxito`;
+										text.classList.add("valid-feedback");
+									}else{
+										text.innerHTML = `Cupón insertado no válido.`;
+										text.classList.add("invalid-feedback");
+									}
 								}else{
 									text.innerHTML = `Cupón insertado no válido`;
 									text.classList.add("invalid-feedback");
