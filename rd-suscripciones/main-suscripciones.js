@@ -259,7 +259,6 @@
 				// precio = descuento.nuevo_valor;
 			}
 
-
 			htmlTotal += `<div class="row-precios">`;
 			htmlTotal += `<div class="column-precio total">`;
 			htmlTotal += `Total a pagar`;
@@ -270,7 +269,9 @@
 				htmlTotal += `<div class="precio-normal-t">`;
 				htmlTotal += `$${precio}`;
 				htmlTotal += `</div>`;
-				totalValor = precioPromo;
+				if(paqueteJSON.descuentos.length < 1){
+					totalValor = precioPromo;
+				}
 			}
 
 			htmlTotal += `<div class="precio-promo-t">`;
