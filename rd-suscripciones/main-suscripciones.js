@@ -263,7 +263,7 @@
 
 			htmlTotal += `<div class="row-precios">`;
 			htmlTotal += `<div class="column-precio total">`;
-			htmlTotal += `Total`;
+			htmlTotal += `Total a pagar`;
 			htmlTotal += `</div>`;
 			htmlTotal += `<div class="column-precio valor">`;
 
@@ -354,7 +354,7 @@
 											text.classList.add("invalid-feedback");
 											continuar = false;
 										}else{
-											text.innerHTML = `Cupón insertado aceptado.`;
+											text.innerHTML = `Cupón aceptado.`;
 											text.classList.add("valid-feedback");
 											continuar = true;
 											paqueteJSON.descuentos.push(result.data);
