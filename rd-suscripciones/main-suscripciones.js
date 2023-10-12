@@ -289,7 +289,7 @@
 						    "userId": parseInt(ECUAVISA_EC.USER_data("id")),
 						    "codigoCupon": textCupon,
 						    "paqueteJSON" : parseFloat(paqueteJSON.precio_final),
-						    "paquete": paqueteJSON.idpaquete.,
+						    "paquete": paqueteJSON.idpaquete,
 						    "country" : paqueteJSON.location.country,
 						    "city": paqueteJSON.location.city
 						}),
