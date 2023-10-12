@@ -267,9 +267,9 @@
 
 			if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
 				htmlTotal += `<div class="precio-normal-t">`;
-				htmlTotal += `$${precio - paqueteJSON.precio_descuento}`;
+				htmlTotal += `$${precio}`;
 				htmlTotal += `</div>`;
-				totalValor = precio;
+				totalValor = precioPromo;
 			}
 
 			htmlTotal += `<div class="precio-promo-t">`;
