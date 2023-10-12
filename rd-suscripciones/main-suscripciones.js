@@ -165,6 +165,14 @@
 			return html;
 		}
 
+		function removerDatos(){
+			document.querySelector("bc_input").value = "";
+			var text = document.querySelector(".mensaje-text-cupon");
+			text.classList.remove("valid-feedback");
+			text.classList.remove("invalid-feedback");
+			text.classList.remove("show");
+		}
+
 		function contentTabTemplate() {
 			var data = productos;
 			var html = `<div class="tab-content container" id="pills-tabContent">`;
@@ -337,7 +345,7 @@
 
 								text.classList.add("show");
 							}
-							
+
 							actualizarDatos();
 						}).catch(error => {
 							console.log(error);
@@ -372,11 +380,13 @@
 			contentgracias_btn.classList.add('d-none');
 			localStorage.removeItem("planId_paquete");
 			wizard.reset();
+			removerDatos();
 		})
 
 		modalPaqueteID.addEventListener('show.bs.modal', function (event) {
 			document.querySelector(`#formWizard`).classList.remove('d-none');
 			document.querySelector(".item-pago button[value='2']").setAttribute("disabled", "true");
+			removerDatos();
 			setTimeout(() => {
 				var bg = document.querySelector(".modal-backdrop");
 				bg.style.backgroundColor = "#e8ebf4";
