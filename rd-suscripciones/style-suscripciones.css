@@ -708,6 +708,10 @@ small.bg-red {
     color: red;
 }
 
+.mensaje-text-cupon{
+    display: none;
+}
+
 .show.valid-feedback,
 .show.invalid-feedback{
     display: block!important;
