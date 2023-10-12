@@ -298,6 +298,7 @@
 					}).then(response => response.json())
 						.then(result => {
 							console.log(result);
+							paqueteJSON.descuentos = [];
 							if(document.querySelector(".mensaje-text-cupon")){
 								var text = document.querySelector(".mensaje-text-cupon");
 								text.classList.remove("valid-feedback");
@@ -309,28 +310,35 @@
 									if(result.data.cambiar_precio_otros){
 										if(paqueteJSON.esta_descuento){
 											continuar = true;
+											paqueteJSON.descuentos.push(result.data);
 										}
 										text.innerHTML = `Tu cupón fue insertado con éxito`;
 										text.classList.add("valid-feedback");
 
 									}else{
-										continuar = true;
-
+										//
 										if(paqueteJSON.esta_descuento){
 											text.innerHTML = `Cupón insertado no válido, el paquete ya se encuentra en oferta.`;
 											text.classList.add("invalid-feedback");
 											continuar = false;
+										}else{
+											text.innerHTML = `Cupón insertado aceptado.`;
+											text.classList.add("valid-feedback");
+											continuar = true;
+											paqueteJSON.descuentos.push(result.data);
 										}
 									}
-									if(continuar){
-									 actualizarDatos();
-									}
+
 								}else{
 									text.innerHTML = `Cupón insertado no válido`;
 									text.classList.add("invalid-feedback");
+									continuar = false;
 								}
+
 								text.classList.add("show");
 							}
+							
+							actualizarDatos();
 						}).catch(error => {
 							console.log(error);
 						});
