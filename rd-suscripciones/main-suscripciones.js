@@ -295,10 +295,23 @@
 						    "city": paqueteJSON.location.city
 						}),
 						redirect: 'follow'
-					})
-						.then(response => response.json())
+					}).then(response => response.json())
 						.then(result => {
 							console.log(result);
+							text.classList.remove("valid-feedback");
+							text.classList.remove("invalid-feedback");
+							text.classList.remove("show");
+							if(document.querySelector(".mensaje-text-cupon")){
+								var text = document.querySelector(".mensaje-text-cupon");
+								if(result.resp){
+									text.innerHTML = `Tu cupón fue insertado con éxito`;
+									text.classList.add("valid-feedback");
+								}else{
+									text.innerHTML = `Cupón insertado no válido`;
+									text.classList.add("invalid-feedback");
+								}
+							}
+							text.classList.add("show");
 						}).catch(error => {
 							console.log(error);
 						});
