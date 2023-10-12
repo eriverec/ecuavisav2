@@ -68,7 +68,7 @@ fetch(apiUrl)
 
 
             const porcentajeElementFoto = `
-            <div class="itemsFoto"><img src="${imgFoto}" width="180px" alt="Ecuavisa"/>
+            <div class="itemsFoto"><img src="${imgFoto}" width="180px" height="100" alt="Ecuavisa"/>
                 <div class="block-text">
                 <span class="fotoName"> ${imgName} </span>
                 <span class="fotoPartido"> ${imgPartido} </span>
