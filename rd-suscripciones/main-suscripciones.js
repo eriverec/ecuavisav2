@@ -523,7 +523,7 @@
 					const load_BTN = document.querySelector(`.btn-ecuavisa.finish`);
 					const modal_Load = document.querySelector(`#modalPaqueteHtml`);
 					const formWizard_btn = document.querySelector(`#formWizard`);
-					const getToken = localStorage.getItem('x-token');
+					const getToken = x_Token;
 
 					const user = {
 						nombre: document.querySelector(`#nombre`).value || null,
