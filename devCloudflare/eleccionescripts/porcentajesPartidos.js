@@ -140,10 +140,14 @@ function startCounterAnimation() {
 
 function eventoCharPie() {
 
-    // Llamada a la API
     fetch('https://api-configuracion.vercel.app/web/data-sv')
         .then(response => response.json())
         .then(data => {
+            const votos = data.barras[0];
+            const nulos = votos.nulos;
+            const blancos = votos.blancos;
+            const luisa = votos.luisa;
+            const daniel = votos.daniel;
             // Obtener los datos del objeto "porcentaje"
             const porcentajeData = data.porcentaje;
 
@@ -154,36 +158,26 @@ function eventoCharPie() {
                 hoverName: item.partido // Nombre para el hover
             }));
 
-            // Definir una paleta de colores personalizada
-            const customColors = {
-                'Luisa González': '#1e96d4', // Color para Luisa
-                'Daniel Noboa': '#672893' // Color para Novoa
-            };
-            // Asignar colores según el nombre del partido
-            chartData.forEach(item => {
-                item.color = customColors[item.name];
-            });
 
-            // Configurar el gráfico con Highcharts
+            // Crear el gráfico de barras con Highcharts
             Highcharts.chart('chart-container-pie', {
                 chart: {
                     type: 'pie'
                 },
-                title: {
-                    text: 'Resultados Electorales (Pie)'
-                },
                 plotOptions: {
-                    pie: {
-                        allowPointSelect: true,
-                        cursor: 'pointer',
+                    column: {
+                        colorByPoint: true,
                         dataLabels: {
                             enabled: true,
-                            format: '<b>{point.name}</b>: {point.y:.2f}%'
+                            format: '{point.y:.2f}%'
                         }
                     }
                 },
+                legend: {
+                    enabled: false
+                },
                 tooltip: {
-                    pointFormat: '{point.hoverName}: <b>{point.y:.2f}%</b>'
+                    pointFormat: '<b>{point.y:.2f}%</b>'
                 },
                 exporting: {
                     enabled: false // Esto oculta el botón de menú de exportación
@@ -191,12 +185,35 @@ function eventoCharPie() {
                 credits: {
                     enabled: false // Esto oculta el crédito de Highcharts
                 },
+                colors: [
+                    '#1e96d4',
+                    '#672893',
+                    '#2927B9',
+                    '#23DCD1'
+                ],
+                title: {
+                    text: 'Resultados Electorales'
+                },
+                xAxis: {
+                    categories: ['Luisa González', 'Daniel Noboa', 'Nulos', 'Blancos',]
+                },
+                yAxis: {
+                    title: {
+                        text: 'Porcentaje de Votos'
+                    }
+                },
                 series: [{
-                    name: 'Porcentaje de Votos',
-                    data: chartData
+                    name: 'test',
+                    data: [
+                        { name: "Luisa González", y: luisa },
+                        { name: "Daniel Noboa", y: daniel },
+                        { name: "Nulos", y: nulos },
+                        { name: "Blancos", y: blancos }
+                    ]
                 }]
             });
-        });
+        })
+        .catch(error => console.error('Error al obtener datos de la API:', error));
 }
 
 function eventoCharColumn() {
@@ -347,15 +364,15 @@ function eventoCharColumnNulosBlancos() {
 var scriptAdded = false;
 
 function addHighchartsScript() {
-  if (!scriptAdded && window.scrollY > 0) {
-    var script = document.createElement('script');
-    script.src = 'https://code.highcharts.com/highcharts.js';
-    document.head.appendChild(script);
-    scriptAdded = true;
-    eventoCharColumnNulosBlancos();
-    // eventoCharColumn();
-    // eventoCharPie();
-  }
+    if (!scriptAdded && window.scrollY > 0) {
+        var script = document.createElement('script');
+        script.src = 'https://code.highcharts.com/highcharts.js';
+        document.head.appendChild(script);
+        scriptAdded = true;
+        eventoCharColumnNulosBlancos();
+        // eventoCharColumn();
+        // eventoCharPie();
+    }
 }
 
 // Escuchar el evento de scroll
