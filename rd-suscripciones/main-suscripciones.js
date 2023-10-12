@@ -289,6 +289,7 @@
 					//enviar el cupo por el metodo post
 					const planId = localStorage.getItem('planId_paquete');
 					// console.log(planId);
+					document.querySelector(".wizard-content").classList.add("disabled-content");
 					fetch("https://ecuavisa-suscripciones.vercel.app/cupon/validar/usuario", {
 						method: 'POST',
 						headers: {
@@ -346,10 +347,11 @@
 
 								text.classList.add("show");
 							}
-
 							actualizarDatos();
+							document.querySelector(".wizard-content").classList.remove("disabled-content");
 						}).catch(error => {
 							console.log(error);
+							document.querySelector(".wizard-content").classList.remove("disabled-content");
 						});
 				}
 			});

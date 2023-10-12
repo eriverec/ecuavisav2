@@ -729,3 +729,18 @@ small.bg-red {
 .bloque_cupon {
     flex-direction: column;
 }
+
+.disabled-content:after {
+    content: "";
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    background-color: #ffffffbf;
+    z-index: 999;
+    top: 0;
+    cursor: no-drop;
+}
+
+.disabled-content {
+    position: relative;
+}
