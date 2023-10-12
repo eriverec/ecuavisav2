@@ -8,7 +8,7 @@ body {
 }
 
 .bloque_cupon .bc_input{ 
-  width: 300px;
+  max-width: 300px;
 }
 
 .total-cupon .btn-check:focus+.btn, 
@@ -708,6 +708,20 @@ small.bg-red {
     color: red;
 }
 
+.show.valid-feedback,
 .show.invalid-feedback{
     display: block!important;
+}
+
+.mensaje-text-cupon {
+    width: 100%;
+}
+
+.content-form-cupon {
+    display: flex;
+    gap: 15px;
+}
+
+.bloque_cupon {
+    flex-direction: column;
 }
