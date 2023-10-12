@@ -298,11 +298,11 @@
 					}).then(response => response.json())
 						.then(result => {
 							console.log(result);
-							text.classList.remove("valid-feedback");
-							text.classList.remove("invalid-feedback");
-							text.classList.remove("show");
 							if(document.querySelector(".mensaje-text-cupon")){
 								var text = document.querySelector(".mensaje-text-cupon");
+								text.classList.remove("valid-feedback");
+								text.classList.remove("invalid-feedback");
+								text.classList.remove("show");
 								if(result.resp){
 									if(result.data.cambiar_precio_otros){
 										if(paqueteJSON.esta_descuento){
@@ -319,8 +319,8 @@
 									text.innerHTML = `Cupón insertado no válido`;
 									text.classList.add("invalid-feedback");
 								}
+								text.classList.add("show");
 							}
-							text.classList.add("show");
 						}).catch(error => {
 							console.log(error);
 						});
