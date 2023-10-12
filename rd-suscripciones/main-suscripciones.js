@@ -341,9 +341,9 @@
 								if(result.resp){
 									if(result.data.cambiar_precio_otros){
 										if(paqueteJSON.esta_descuento){
-											continuar = true;
-											paqueteJSON.descuentos.push(result.data);
 										}
+										continuar = true;
+										paqueteJSON.descuentos.push(result.data);
 										text.innerHTML = `Tu cupón fue insertado con éxito`;
 										text.classList.add("valid-feedback");
 
