@@ -578,10 +578,12 @@
 				// paises = jsonGeoLocal.country;
 				// ciudades = jsonGeoLocal.city;
 				setTimeout(function(){
+					paqueteJSON.location.country = jsonGeoLocal.country;
 					$('#pais').val(jsonGeoLocal.country).trigger("change");
 				}, 500);
 
 				setTimeout(function(){
+					paqueteJSON.location.city = jsonGeoLocal.city;
 					$('#ciudad').val(jsonGeoLocal.city).trigger("change");
 				}, 700);
 			}
