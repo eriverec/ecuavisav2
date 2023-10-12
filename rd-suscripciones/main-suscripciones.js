@@ -1,58 +1,25 @@
 (async () => {
-	// Obtener referencias a los elementos del DOM
-	const toggleCupon = document.getElementById("toggleCupon");
-	const inputText = document.getElementById("inputText");
-
-	const botonAplicarCupon = document.querySelector('.bc_aplicar');
-	const inputAplicarCupon = document.querySelector('.bc_input');
-
-	if (botonAplicarCupon) {
-		botonAplicarCupon.addEventListener("click", function () {
-			if (inputAplicarCupon.value.length != 0) {
-				const textCupon = inputAplicarCupon.value;
-
-				//agregar el un nuevo parametro al url actual
-				var urlHREF = window.location.href;
-				if (urlHREF.indexOf('?') === -1) { urlHREF += '?'; } else { urlHREF += '&'; }
-				urlHREF += 'usocupon=true';
-				window.history.pushState({ path: urlHREF }, '', urlHREF);
-
-				//enviar el cupo por el metodo post
-				const planId = localStorage.getItem('planId_paquete');
-				// console.log(planId);
-				fetch("https://ecuavisa-cupones.vercel.app/cupon/validacion", {
-					method: 'POST',
-					headers: {
-						"Content-Type": "application/json"
-					},
-					body: JSON.stringify({
-						"idPaquete": planId,
-						"nombreCupon": textCupon
-					}),
-					redirect: 'follow'
-				})
-					.then(response => response.json())
-					.then(result => {
-						console.log(result);
-					}).catch(error => {
-						console.log(error);
-					});
-			}
-		});
-	}
-
-
-
-	toggleCupon.addEventListener("click", function () {
-		if (inputText.style.display === "none" || inputText.style.display === "") {
-			inputText.style.display = "flex";
-		} else {
-			inputText.style.display = "none";
+	var paqueteJSON = {
+		nombre:"",
+		precio_normal:0,
+		precio_descuento:0,
+		precio_final:0,
+		esta_descuento:false,
+		frecuencia:"",
+		descuentos:[],
+		beneficios:[],
+		idpaquete:"",
+		usuario:null,
+		opcion_pago: 1,
+		location:{
+			country:"",
+			city:""
 		}
-	});
+	};
 
 	if (ECUAVISA_EC) {
 		const contentgracias_btn = document.querySelector(`.content-gracias`);
+
 		async function cargarNombresYPlanes() {
 			const loadingElement = document.getElementById('loading');
 			loadingElement.style.display = 'block';
@@ -74,7 +41,6 @@
 			}
 		}
 
-
 		async function cargarPaisesYCiudad() {
 			try {
 				const response = await fetch('https://ecuavisa-suscripciones.vercel.app/otros/obtener-paises-ciudades');
@@ -92,48 +58,10 @@
 			}
 		}
 
-		let dataPlanes = await cargarNombresYPlanes();
-		let dataPaisesCiudades = await cargarPaisesYCiudad();
-
-		let productos = await dataPlanes.data;
-		let planId = "";
-		let x_Token = await dataPlanes.token;
-		let valorMetodoPago = document.querySelectorAll('.pago-list .btn.atice').value || 1;
-		localStorage.setItem('x-token', x_Token);
-
-		/*Inicio de modal*/
-		var modalPaqueteID = document.getElementById('modalPaqueteHtml');
-		var modalPaquete = new bootstrap.Modal(modalPaqueteID, {
-			keyboard: false,
-			backdrop: 'static'
-		});
-
-		modalPaqueteID.addEventListener('hidden.bs.modal', function (event) {
-			var urlActual = window.location.href;
-			var url = new URL(urlActual);
-			url.searchParams.delete("paquete");
-			url.searchParams.delete("usocupon");
-			window.history.replaceState({}, document.title, url.toString());
-			contentgracias_btn.classList.add('d-none');
-			localStorage.removeItem("planId_paquete");
-
-			wizard.reset();
-		})
-
-		modalPaqueteID.addEventListener('show.bs.modal', function (event) {
-			document.querySelector(`#formWizard`).classList.remove('d-none');
-			document.querySelector(".item-pago button[value='2']").setAttribute("disabled", "true");
-			setTimeout(() => {
-				var bg = document.querySelector(".modal-backdrop");
-				bg.style.backgroundColor = "#e8ebf4";
-				bg.style.opacity = "1";
-			}, 200);
-
-
-		})
-		/*Fin de modal*/
-
-		await armarPlanes();
+		async function guardarTokenPago(token){
+			localStorage.setItem('x-token-suscripcion', token);
+			return localStorage.getItem('x-token-suscripcion');
+		}
 
 		function buscarPaquete(id) {
 			for (let i = 0; i < productos.length; i++) {
@@ -159,7 +87,6 @@
 
 		function htmlTemplatePriceCard(precio, precioPromo) {
 			precio = parseFloat(precio).toFixed(2);
-
 			if (precioPromo > 0) {
 				precioPromo = parseFloat(precioPromo).toFixed(2);
 				var save = (100 - ((precioPromo * 100) / precio)).toFixed(2)
@@ -173,95 +100,6 @@
 			} else {
 				return "$" + precio;
 			}
-		}
-
-		function detallesPaquete(id) {
-			planId = id;
-			localStorage.setItem('planId_paquete', id);
-			const planData = buscarPaquete(id);
-			var nombrePlan = planData.nombre_plan;
-			var precio = parseFloat(planData.precio || 0).toFixed(2);
-			var precioPromo = parseFloat(planData.precio_promocional || 0).toFixed(2);
-			// console.log(precioPromo)
-			var frecuencia = planData.frecuencia;
-
-			localStorage.setItem('PlanID', planData.id);
-			const classPLanSelect = document.querySelector('.plan_Select_id');
-			if (classPLanSelect) {
-				classPLanSelect.innerHTML = nombrePlan
-			}
-
-			document.querySelector('.title-plan').innerHTML = nombrePlan;
-			document.querySelector('.price-detaill .valor').innerHTML = htmlTemplatePrice(precio, precioPromo);
-			document.querySelector('.price-detaill .frecuencia').innerHTML = `/${frecuencia}`;
-			document.querySelector('.beneficios-list').innerHTML = "";
-			planData.descripcion.forEach(benefcio => {
-				document.querySelector('.beneficios-list').innerHTML += templateBeneficios(benefcio);
-			});
-
-			if (ECUAVISA_EC.login()) {
-				var usuario = ECUAVISA_EC.USER_data();
-				if (document.querySelector("#nombre")) {
-					document.querySelector("#nombre").value = usuario.name;
-					document.querySelector("#apellidos").value = usuario.lastname;
-					document.querySelector('.no-login').style.display = "none";
-					document.querySelector('.detalles .login').style.display = "block";
-					// Obtén una referencia al botón por su clase
-					const button = document.querySelector(".btn-ecuavisa.next");
-					// Simula un clic en el botón
-					button.click();
-				}
-			} else {
-				// const gru = document.querySelector('.form-group');
-				// gru.innerHTML = `
-				// <span>Debes iniciar sesion</span> <br>
-				// <a href="https://www.ecuavisa.com/servicios/login/?nextpage=${window.location.href}" class="btn btn-secondary html_Login" onclick="">Login</a>`;
-
-				document.querySelector('.no-login').style.display = "block";
-				document.querySelector('.detalles .login').style.display = "none";
-				document.querySelector('#btn-login-ec').href = `https://www.ecuavisa.com/servicios/login/?nextpage=${(window.location.href).split("?")[0]}`;
-				wizard.lock();
-				
-			}
-
-			var total_finish = document.querySelector(".total-precio");
-			var htmlTotal = ``;
-			var totalValor = precio;
-
-			if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
-				var save = (100 - ((precioPromo * 100) / precio)).toFixed(2)
-				htmlTotal += `<div class="row-precios">`;
-				htmlTotal += `<div class="column-precio">`;
-				htmlTotal += `Descuento - ${save}%`;
-				htmlTotal += `</div>`;
-				htmlTotal += `<div class="column-precio valor">`;
-				htmlTotal += `-$${precio - precioPromo}`;
-				htmlTotal += `</div>`;
-				htmlTotal += `</div>`;
-				htmlTotal += `<hr class="precio-hr">`;
-				totalValor = precioPromo;
-			}
-
-
-			htmlTotal += `<div class="row-precios">`;
-			htmlTotal += `<div class="column-precio total">`;
-			htmlTotal += `Total`;
-			htmlTotal += `</div>`;
-			htmlTotal += `<div class="column-precio valor">`;
-
-			if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
-				htmlTotal += `<div class="precio-normal-t">`;
-				htmlTotal += `$${precio}`;
-				htmlTotal += `</div>`;
-			}
-
-			htmlTotal += `<div class="precio-promo-t">`;
-			htmlTotal += `$${totalValor}`;
-			htmlTotal += `</div>`;
-			htmlTotal += `</div>`;
-			htmlTotal += `</div>`;
-			total_finish.innerHTML = htmlTotal;
-			modalPaquete.show();
 		}
 
 		function URLParams() {
@@ -359,32 +197,210 @@
               </div>`;
 		}
 
+		//INICIO DE ACTUALZIAR DATA
+		async function actualizarDatos(){
+			document.querySelector('.title-plan').innerHTML = paqueteJSON.nombre;
+			document.querySelector('.price-detaill .valor').innerHTML = htmlTemplatePrice(paqueteJSON.precio_normal, paqueteJSON.precio_descuento);
+			document.querySelector('.price-detaill .frecuencia').innerHTML = `/${paqueteJSON.frecuencia}`;
+			document.querySelector('.beneficios-list').innerHTML = "";
+			paqueteJSON.beneficios.forEach(benefcio => {
+				document.querySelector('.beneficios-list').innerHTML += templateBeneficios(benefcio);
+			});
+
+			//
+
+			var total_finish = document.querySelector(".total-precio");
+			var htmlTotal = ``;
+			var totalValor = paqueteJSON.precio_normal;
+			var precioPromo = paqueteJSON.precio_descuento;
+			var precio = paqueteJSON.precio_normal;
+
+			if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
+				var save = (100 - ((precioPromo * 100) / precio)).toFixed(2)
+				htmlTotal += `<div class="row-precios">`;
+				htmlTotal += `<div class="column-precio">`;
+				htmlTotal += `Descuento - ${save}%`;
+				htmlTotal += `</div>`;
+				htmlTotal += `<div class="column-precio valor">`;
+				htmlTotal += `-$${precio - precioPromo}`;
+				htmlTotal += `</div>`;
+				htmlTotal += `</div>`;
+				htmlTotal += `<hr class="precio-hr">`;
+				totalValor = precioPromo;
+			}
+
+
+			htmlTotal += `<div class="row-precios">`;
+			htmlTotal += `<div class="column-precio total">`;
+			htmlTotal += `Total`;
+			htmlTotal += `</div>`;
+			htmlTotal += `<div class="column-precio valor">`;
+
+			if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
+				htmlTotal += `<div class="precio-normal-t">`;
+				htmlTotal += `$${precio}`;
+				htmlTotal += `</div>`;
+				totalValor = precio;
+			}
+
+			htmlTotal += `<div class="precio-promo-t">`;
+			htmlTotal += `$${totalValor}`;
+			htmlTotal += `</div>`;
+			htmlTotal += `</div>`;
+			htmlTotal += `</div>`;
+			total_finish.innerHTML = htmlTotal;
+
+			paqueteJSON.precio_final = totalValor;
+		}
+		//FIN DE ACTUALZIAR DATA
+
+		const dataPlanes = await cargarNombresYPlanes();
+		const dataPaisesCiudades = await cargarPaisesYCiudad();
+		const productos = await dataPlanes.data;
+		const x_Token = await guardarTokenPago(await dataPlanes.token);
+
+		// Obtener referencias a los elementos del DOM
+		const toggleCupon = document.getElementById("toggleCupon");
+		const inputText = document.getElementById("inputText");
+
+		const botonAplicarCupon = document.querySelector('.bc_aplicar');
+		const inputAplicarCupon = document.querySelector('.bc_input');
+
+		if (botonAplicarCupon) {
+			botonAplicarCupon.addEventListener("click", async function () {
+				if (inputAplicarCupon.value.length != 0) {
+					const textCupon = inputAplicarCupon.value;
+
+					//agregar el un nuevo parametro al url actual
+					var urlHREF = window.location.href;
+					if (urlHREF.indexOf('?') === -1) { urlHREF += '?'; } else { urlHREF += '&'; }
+					urlHREF += 'usocupon=true';
+					window.history.pushState({ path: urlHREF }, '', urlHREF);
+
+					//enviar el cupo por el metodo post
+					const planId = localStorage.getItem('planId_paquete');
+					// console.log(planId);
+					fetch("https://ecuavisa-suscripciones.vercel.app/cupon/validar/usuario", {
+						method: 'POST',
+						headers: {
+							"Content-Type": "application/json"
+						},
+						body: JSON.stringify({      
+						    "userId": parseInt(ECUAVISA_EC.USER_data("id")),
+						    "codigoCupon": textCupon,
+						    "paqueteJSON" : parseFloat(paqueteJSON.precio_final),
+						    "paquete": paqueteJSON.idpaquete.,
+						    "country" : paqueteJSON.location.country,
+						    "city": paqueteJSON.location.city
+						}),
+						redirect: 'follow'
+					})
+						.then(response => response.json())
+						.then(result => {
+							console.log(result);
+						}).catch(error => {
+							console.log(error);
+						});
+				}
+			});
+		}
+
+		toggleCupon.addEventListener("click", function () {
+			if (inputText.style.display === "none" || inputText.style.display === "") {
+				inputText.style.display = "flex";
+			} else {
+				inputText.style.display = "none";
+			}
+		});
+
+		paqueteJSON.opcion_pago = parseInt(document.querySelectorAll('.pago-list .btn.active').value || 1);
+
+		var modalPaqueteID = document.getElementById('modalPaqueteHtml');
+		var modalPaquete = new bootstrap.Modal(modalPaqueteID, {
+			keyboard: false,
+			backdrop: 'static'
+		});
+
+		modalPaqueteID.addEventListener('hidden.bs.modal', function (event) {
+			var urlActual = window.location.href;
+			var url = new URL(urlActual);
+			url.searchParams.delete("paquete");
+			url.searchParams.delete("usocupon");
+			//POJJO
+			window.history.replaceState({}, document.title, url.toString());
+			contentgracias_btn.classList.add('d-none');
+			localStorage.removeItem("planId_paquete");
+			wizard.reset();
+		})
+
+		modalPaqueteID.addEventListener('show.bs.modal', function (event) {
+			document.querySelector(`#formWizard`).classList.remove('d-none');
+			document.querySelector(".item-pago button[value='2']").setAttribute("disabled", "true");
+			setTimeout(() => {
+				var bg = document.querySelector(".modal-backdrop");
+				bg.style.backgroundColor = "#e8ebf4";
+				bg.style.opacity = "1";
+			}, 200);
+		})
+
+		await armarPlanes();
+
+		async function detallesPaquete(id) {
+			planId = id;
+			localStorage.setItem('planId_paquete', id);
+
+			const planData = buscarPaquete(id);
+			var nombrePlan = planData.nombre_plan;
+			var precio = parseFloat(planData.precio || 0).toFixed(2);
+			var precioPromo = parseFloat(planData.precio_promocional || 0).toFixed(2);
+			var frecuencia = planData.frecuencia;
+
+			localStorage.setItem('PlanID', planData.id);
+			const classPLanSelect = document.querySelector('.plan_Select_id');
+			if (classPLanSelect) {
+				classPLanSelect.innerHTML = nombrePlan
+			}
+
+			paqueteJSON.idpaquete = id;
+			paqueteJSON.nombre = nombrePlan;
+			paqueteJSON.precio_normal = precio;
+			paqueteJSON.precio_descuento = precioPromo;
+			paqueteJSON.esta_descuento = (precioPromo != 0);
+			paqueteJSON.frecuencia = frecuencia;
+			paqueteJSON.beneficios = planData.descripcion;
+			
+
+			if (ECUAVISA_EC.login()) {
+				var usuario = ECUAVISA_EC.USER_data();
+				if (document.querySelector("#nombre")) {
+					document.querySelector("#nombre").value = usuario.name;
+					document.querySelector("#apellidos").value = usuario.lastname;
+					document.querySelector('.no-login').style.display = "none";
+					document.querySelector('.detalles .login').style.display = "block";
+					// Obtén una referencia al botón por su clase
+					const button = document.querySelector(".btn-ecuavisa.next");
+					// Simula un clic en el botón
+					button.click();
+				}
+			} else {
+				document.querySelector('.no-login').style.display = "block";
+				document.querySelector('.detalles .login').style.display = "none";
+				document.querySelector('#btn-login-ec').href = `https://www.ecuavisa.com/servicios/login/?nextpage=${(window.location.href).split("?")[0]}`;
+				wizard.lock();
+			}
+
+			await actualizarDatos();
+			modalPaquete.show();
+		}
 
 		async function armarPlanes() {
 			if (productos.length > 0) {
-				// if (productoData) {
-				// const planes = productoData.planes;
 				const tabContent = document.querySelector('.list-card-plans');
 				tabContent.innerHTML = ''; // Limpiar contenido anterior
-				// planes.forEach(plan => {
-				// 	const descripcionHtml = plan.descripcion.map(item => `<li class="icono">${item}</li>`).join('');
-				// 	tabContent.innerHTML += templatePlanes(producto, plan, descripcionHtml);
-				// });
+
 				var tabCabecera = cabeceraTabTemplate();
 				var tabContentPlan = contentTabTemplate();
 				tabContent.innerHTML = tabCabecera + tabContentPlan;
-
-				// // Ocultar todas las tabs
-				// const tabs = document.querySelectorAll('.tab');
-				// tabs.forEach(tab => {
-				// 	tab.style.display = 'none';
-				// });
-
-				// // Mostrar solo la tab del producto seleccionado
-				// const tabToShow = document.querySelectorAll(`.tab[data-producto="${producto}"]`);
-				// tabToShow.forEach(tabTo => {
-				// 	tabTo.style.display = 'flex';
-				// });
 
 				const suscribirseButtons = document.querySelectorAll('.btn.boton_sus');
 				suscribirseButtons.forEach(button => {
@@ -400,36 +416,6 @@
 					});
 				});
 
-				// }
-
-				// const tabContainer = document.querySelector('.tab-container');
-				// tabContainer.innerHTML = ''; // Limpiar contenido anterior
-
-				// productos.forEach(producto => {
-				// 	const productoNombre = producto.nombre;
-				// 	const buttonHtml = `
-				//         <button class="tab-button" data-producto="${productoNombre}">${productoNombre}</button>`;
-
-				// 	tabContainer.innerHTML += buttonHtml;
-				// });
-
-				// // Evento click para cambiar de producto
-				// const tabButtons = document.querySelectorAll('.tab-button');
-				// tabButtons.forEach(button => {
-				// 	button.addEventListener('click', () => {
-				// 		const producto = button.getAttribute('data-producto');
-				// 		cargarPlanes(producto, productos);
-				// 		// Cambiar clase activa
-				// 		tabButtons.forEach(btn => btn.classList.remove('active-button'));
-				// 		button.classList.add('active-button');
-				// 	});
-				// });
-
-				// // Cargar los planes del primer producto por defecto
-				// if (productos.length > 0) {
-				// 	cargarPlanes(productos[0].nombre, productos);
-				// 	tabButtons[0].classList.add('active-button');
-				// }
 				URLParams();
 			}
 		}
@@ -556,7 +542,8 @@
 			    width: $( this ).data( 'width' ) ? $( this ).data( 'width' ) : $( this ).hasClass( 'w-100' ) ? '100%' : 'style',
 			    placeholder: $( this ).data( 'placeholder' )
 			});
-			// $("#pais").select2('data', {id: 1, text: "sdas"});      
+			// $("#pais").select2('data', {id: 1, text: "sdas"}); 
+
 			return true;
 		}
 
@@ -603,7 +590,13 @@
 
 		$('#pais').change(function(){
 			var pais = $(this).val();
-			buscarCiudades(pais)
+			buscarCiudades(pais);
+			paqueteJSON.location.country = pais;
+		});
+
+		$('#ciudad').change(function(){
+			var ciudad = $(this).val();
+			paqueteJSON.location.city = ciudad;
 		});
 
 		$wz_doc.addEventListener("wz.error", function (e) {
@@ -621,6 +614,6 @@
 
 		var respSelect = await armarSelectPaises();
 
-	}
 
+	}
 })();
