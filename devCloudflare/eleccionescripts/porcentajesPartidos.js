@@ -369,7 +369,9 @@ function addHighchartsScript() {
         script.src = 'https://code.highcharts.com/highcharts.js';
         document.head.appendChild(script);
         scriptAdded = true;
-        eventoCharColumnNulosBlancos();
+        setTimeout(() => {
+            eventoCharColumnNulosBlancos();
+        }, 300);
         // eventoCharColumn();
         // eventoCharPie();
     }
