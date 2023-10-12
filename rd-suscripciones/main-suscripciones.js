@@ -288,9 +288,10 @@
 						body: JSON.stringify({      
 						    "userId": parseInt(ECUAVISA_EC.USER_data("id")),
 						    "codigoCupon": textCupon,
-						    "paqueteJSON" : parseFloat(paqueteJSON.precio_final),
+						    // "paqueteJSON" : parseFloat(paqueteJSON.precio_final),
 						    "paquete": paqueteJSON.idpaquete,
 						    "country" : paqueteJSON.location.country,
+						    "valorInicial" : paqueteJSON.precio_final,
 						    "city": paqueteJSON.location.city
 						}),
 						redirect: 'follow'
