@@ -307,7 +307,7 @@ function eventoCharColumnNulosBlancos() {
                 },
                 legend: {
                     enabled: false
-                  },
+                },
                 tooltip: {
                     pointFormat: '<b>{point.y:.2f}%</b>'
                 },
@@ -344,6 +344,19 @@ function eventoCharColumnNulosBlancos() {
 
 }
 
-// eventoCharColumn();
-eventoCharColumnNulosBlancos();
-// eventoCharPie();
+var scriptAdded = false;
+
+function addHighchartsScript() {
+  if (!scriptAdded && window.scrollY > 0) {
+    var script = document.createElement('script');
+    script.src = 'https://code.highcharts.com/highcharts.js';
+    document.head.appendChild(script);
+    scriptAdded = true;
+    eventoCharColumnNulosBlancos();
+    // eventoCharColumn();
+    // eventoCharPie();
+  }
+}
+
+// Escuchar el evento de scroll
+window.addEventListener('scroll', addHighchartsScript);
