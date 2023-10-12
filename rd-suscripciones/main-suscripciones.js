@@ -241,19 +241,24 @@
 
 			}
 
+			var reemplazarDescuento = false;
+
 			if(paqueteJSON.descuentos.length > 0){
 				for(var i in paqueteJSON.descuentos){
 					var descuento = paqueteJSON.descuentos[i];
-					htmlTotal += `<div class="row-precios">`;
-					htmlTotal += `<div class="column-precio">`;
-					htmlTotal += `Descuento, cupón - ${100 - descuento.descuento_porcentaje}%`;
-					htmlTotal += `</div>`;
-					htmlTotal += `<div class="column-precio valor">`;
-					htmlTotal += `-$${descuento.valor_cupon}`;
-					htmlTotal += `</div>`;
-					htmlTotal += `</div>`;
-					htmlTotal += `<hr class="precio-hr">`;
-					totalValor = descuento.nuevo_valor;
+					if(!paqueteJSON.esta_descuento){
+						htmlTotal += `<div class="row-precios">`;
+						htmlTotal += `<div class="column-precio">`;
+						htmlTotal += `Descuento, cupón - ${100 - descuento.descuento_porcentaje}%`;
+						htmlTotal += `</div>`;
+						htmlTotal += `<div class="column-precio valor">`;
+						htmlTotal += `-$${descuento.valor_cupon}`;
+						htmlTotal += `</div>`;
+						htmlTotal += `</div>`;
+						htmlTotal += `<hr class="precio-hr">`;
+						totalValor = descuento.nuevo_valor;
+						reemplazarDescuento = descuento.cambiar_precio_otros;
+					}
 				}
 				// precioPromo = paqueteJSON.precio_descuento;
 				// precio = descuento.nuevo_valor;
@@ -265,13 +270,34 @@
 			htmlTotal += `</div>`;
 			htmlTotal += `<div class="column-precio valor">`;
 
-			if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
-				htmlTotal += `<div class="precio-normal-t">`;
-				htmlTotal += `$${precio}`;
-				htmlTotal += `</div>`;
-				if(paqueteJSON.descuentos.length < 1){
-					totalValor = precioPromo;
+			if(!reemplazarDescuento){
+				if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
+					htmlTotal += `<div class="precio-normal-t">`;
+					htmlTotal += `$${precio}`;
+					htmlTotal += `</div>`;
+					if(paqueteJSON.descuentos.length < 1){
+						totalValor = precioPromo;
+					}
 				}
+			}else{
+				// var tipo = paqueteJSON.descuentos[0].type;
+				// var precioNormal = 0;
+				// var precioPromo = paqueteJSON.descuentos[0].valor_cupon;
+				// if(tipo.includes("dollars")){
+				// 	precioNormal
+				// }
+
+				// htmlTotal += `<div class="row-precios">`;
+				// htmlTotal += `<div class="column-precio">`;
+				// htmlTotal += `Descuento, cupón - ${100 - descuento.descuento_porcentaje}%`;
+				// htmlTotal += `</div>`;
+				// htmlTotal += `<div class="column-precio valor">`;
+				// htmlTotal += `-$${descuento.valor_cupon}`;
+				// htmlTotal += `</div>`;
+				// htmlTotal += `</div>`;
+				// htmlTotal += `<hr class="precio-hr">`;
+				// totalValor = descuento.nuevo_valor;
+				alert("No valida todavia")
 			}
 
 			htmlTotal += `<div class="precio-promo-t">`;
@@ -281,7 +307,7 @@
 			htmlTotal += `</div>`;
 			total_finish.innerHTML = htmlTotal;
 
-			paqueteJSON.precio_final = totalValor;
+			paqueteJSON.precio_final = paqueteJSON.precio_normal;
 		}
 		//FIN DE ACTUALZIAR DATA
 
@@ -341,7 +367,7 @@
 								if(result.resp){
 									if(!result.data.cambiar_precio_otros){
 										if(paqueteJSON.esta_descuento){
-											
+
 										}
 										continuar = true;
 										paqueteJSON.descuentos.push(result.data);
@@ -350,6 +376,7 @@
 									}else{
 										//
 										if(paqueteJSON.esta_descuento){
+
 											text.innerHTML = `Cupón insertado no válido, el paquete ya se encuentra en oferta.`;
 											text.classList.add("invalid-feedback");
 											continuar = false;
