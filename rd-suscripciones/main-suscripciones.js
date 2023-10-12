@@ -256,6 +256,8 @@
 				}
 
 				totalValor = descuento.nuevo_valor;
+				// precioPromo = paqueteJSON.precio_descuento;
+				// precio = descuento.nuevo_valor;
 			}
 
 
