@@ -305,6 +305,9 @@ function eventoCharColumnNulosBlancos() {
                         }
                     }
                 },
+                legend: {
+                    enabled: false
+                  },
                 tooltip: {
                     pointFormat: '<b>{point.y:.2f}%</b>'
                 },
@@ -328,11 +331,11 @@ function eventoCharColumnNulosBlancos() {
                 },
                 yAxis: {
                     title: {
-                        text: 'Porcentaje de Votos (%)'
+                        text: 'Porcentaje de Votos'
                     }
                 },
                 series: [{
-                    name: 'Porcentaje de Votos',
+                    name: 'test',
                     data: [luisa, daniel, nulos, blancos,]
                 }]
             });
