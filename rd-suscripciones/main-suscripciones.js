@@ -400,6 +400,7 @@
 			var url = new URL(urlActual);
 			url.searchParams.delete("paquete");
 			url.searchParams.delete("usocupon");
+			paqueteJSON.descuentos = [];
 			//POJJO
 			window.history.replaceState({}, document.title, url.toString());
 			contentgracias_btn.classList.add('d-none');
