@@ -323,7 +323,7 @@
 										}
 									}
 									if(continuar){
-										await actualizarDatos();
+									 actualizarDatos();
 									}
 								}else{
 									text.innerHTML = `Cupón insertado no válido`;
