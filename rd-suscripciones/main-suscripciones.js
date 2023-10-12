@@ -243,7 +243,7 @@
 
 			if(paqueteJSON.descuentos.length > 0){
 				for(var i in paqueteJSON.descuentos){
-					var descuento = paqueteJSON.descuentos;
+					var descuento = paqueteJSON.descuentos[i];
 					htmlTotal += `<div class="row-precios">`;
 					htmlTotal += `<div class="column-precio">`;
 					htmlTotal += `Descuento, cupón - ${descuento.descuento_porcentaje}%`;
