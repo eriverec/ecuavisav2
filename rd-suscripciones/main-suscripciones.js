@@ -253,9 +253,8 @@
 					htmlTotal += `</div>`;
 					htmlTotal += `</div>`;
 					htmlTotal += `<hr class="precio-hr">`;
+					totalValor = descuento.nuevo_valor;
 				}
-
-				totalValor = descuento.nuevo_valor;
 				// precioPromo = paqueteJSON.precio_descuento;
 				// precio = descuento.nuevo_valor;
 			}
