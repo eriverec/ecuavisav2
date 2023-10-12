@@ -10,6 +10,7 @@
 		beneficios:[],
 		idpaquete:"",
 		usuario:null,
+		cupon:null,
 		opcion_pago: 1,
 		location:{
 			country:"",
@@ -225,6 +226,7 @@
 			var precio = paqueteJSON.precio_normal;
 
 			if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
+
 				var save = (100 - ((precioPromo * 100) / precio)).toFixed(2)
 				htmlTotal += `<div class="row-precios">`;
 				htmlTotal += `<div class="column-precio">`;
@@ -236,6 +238,24 @@
 				htmlTotal += `</div>`;
 				htmlTotal += `<hr class="precio-hr">`;
 				totalValor = precioPromo;
+
+			}
+
+			if(paqueteJSON.descuentos.length > 0){
+				for(var i in paqueteJSON.descuentos){
+					var descuento = paqueteJSON.descuentos;
+					htmlTotal += `<div class="row-precios">`;
+					htmlTotal += `<div class="column-precio">`;
+					htmlTotal += `Descuento, cupón - ${descuento.descuento_porcentaje}%`;
+					htmlTotal += `</div>`;
+					htmlTotal += `<div class="column-precio valor">`;
+					htmlTotal += `-$${descuento.valor_cupon}`;
+					htmlTotal += `</div>`;
+					htmlTotal += `</div>`;
+					htmlTotal += `<hr class="precio-hr">`;
+				}
+
+				totalValor = descuento.nuevo_valor;
 			}
 
 
@@ -347,6 +367,8 @@
 
 								text.classList.add("show");
 							}
+
+							paqueteJSON.cupon = textCupon;
 							actualizarDatos();
 							document.querySelector(".wizard-content").classList.remove("disabled-content");
 						}).catch(error => {
@@ -486,6 +508,7 @@
 				// Agrega la clase "active" al botón que se hizo clic
 				boton.classList.add('active');
 				valorMetodoPago = boton.value;
+				paqueteJSON.opcion_pago = boton.value;
 			});
 		});
 
