@@ -27,6 +27,12 @@
     }
   }
 
+
+  #iter-content-wrapper{
+    padding-top: 0;
+  }
+
+
   #dataHoraCorte .escrutadoElecciones {
     display: inline-block;
     background: #e43d3d;
