@@ -167,6 +167,7 @@
 
 		function removerDatos(){
 			document.querySelector(".bc_input").value = "";
+			document.querySelector(".bloque_cupon").style.display = "none";
 			var text = document.querySelector(".mensaje-text-cupon");
 			text.classList.remove("valid-feedback");
 			text.classList.remove("invalid-feedback");
