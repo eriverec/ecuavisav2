@@ -246,7 +246,7 @@
 					var descuento = paqueteJSON.descuentos[i];
 					htmlTotal += `<div class="row-precios">`;
 					htmlTotal += `<div class="column-precio">`;
-					htmlTotal += `Descuento, cupón - ${descuento.descuento_porcentaje}%`;
+					htmlTotal += `Descuento, cupón - ${100 - descuento.descuento_porcentaje}%`;
 					htmlTotal += `</div>`;
 					htmlTotal += `<div class="column-precio valor">`;
 					htmlTotal += `-$${descuento.valor_cupon}`;
@@ -339,14 +339,14 @@
 
 								var continuar = false;
 								if(result.resp){
-									if(result.data.cambiar_precio_otros){
+									if(!result.data.cambiar_precio_otros){
 										if(paqueteJSON.esta_descuento){
+											
 										}
 										continuar = true;
 										paqueteJSON.descuentos.push(result.data);
 										text.innerHTML = `Tu cupón fue insertado con éxito`;
 										text.classList.add("valid-feedback");
-
 									}else{
 										//
 										if(paqueteJSON.esta_descuento){
