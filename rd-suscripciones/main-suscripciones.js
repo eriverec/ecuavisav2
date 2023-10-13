@@ -408,6 +408,32 @@
 				// alert("4")
 			}
 
+			if(!reemplazarDescuento && ingresoCupon && !paqueteJSON.esta_descuento){
+				htmlTotal += `<div class="row-precios">`;
+				htmlTotal += `<div class="column-precio total">`;
+				htmlTotal += `Total a pagar`;
+				htmlTotal += `</div>`;
+				htmlTotal += `<div class="column-precio valor">`;
+				// if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
+				// 	htmlTotal += `<div class="precio-normal-t">`;
+				// 	htmlTotal += `$${precioNormal}`;
+				// 	htmlTotal += `</div>`;
+
+				// 	totalValor = precioPromo;
+				// 	if(!reemplazarDescuento && ingresoCupon){
+				// 		totalValor = totalValor - precioPromo;
+				// 	}
+				// }
+
+				htmlTotal += `<div class="precio-promo-t">`;
+				htmlTotal += `$${totalValor}`;
+				htmlTotal += `</div>`;
+				htmlTotal += `</div>`;
+				htmlTotal += `</div>`;
+				// totalValor = precioNormal;
+				// alert("4")
+			}
+
 			total_finish.innerHTML = htmlTotal;
 			paqueteJSON.precio_final = totalValor;
 		}
