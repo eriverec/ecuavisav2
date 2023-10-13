@@ -235,7 +235,7 @@
 						// SI ES FALSO EL CUPÓN SE COMBINARÁ CON OTROS DESCUENTOS
 						htmlTotal += `<div class="row-precios">`;
 						htmlTotal += `<div class="column-precio">`;
-						htmlTotal += `Descuento, cupón - ${100 - descuento.descuento_porcentaje}%`;
+						htmlTotal += `Descuento cupón`; // - ${100 - descuento.descuento_porcentaje}%
 						htmlTotal += `</div>`;
 						htmlTotal += `<div class="column-precio valor">`;
 						htmlTotal += `-$${descuento.valor_cupon}`;
@@ -252,7 +252,7 @@
 						// SI ES FALSO EL CUPÓN SE REEMPLAZARÁ CON OTROS DESCUENTOS
 						htmlTotal += `<div class="row-precios">`;
 						htmlTotal += `<div class="column-precio">`;
-						htmlTotal += `Descuento, cupón - ${100 - descuento.descuento_porcentaje}%`;
+						htmlTotal += `Descuento cupón`;// - ${100 - descuento.descuento_porcentaje}%
 						htmlTotal += `</div>`;
 						htmlTotal += `<div class="column-precio valor">`;
 						htmlTotal += `-$${descuento.valor_cupon}`;
@@ -273,7 +273,7 @@
 						}
 						htmlTotal += `<div class="row-precios">`;
 						htmlTotal += `<div class="column-precio">`;
-						htmlTotal += `Descuento cupón - ${100 - save}%`;
+						htmlTotal += `Descuento cupón`; // - ${100 - save}%
 						htmlTotal += `</div>`;
 						htmlTotal += `<div class="column-precio valor">`;
 						htmlTotal += `-$${descuento.valor_cupon}`;
