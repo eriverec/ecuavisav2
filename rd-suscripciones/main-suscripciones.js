@@ -12,6 +12,7 @@
 		usuario:null,
 		cupon:null,
 		opcion_pago: 1,
+		ingreso_cupon: false,
 		location:{
 			country:"",
 			city:""
@@ -217,36 +218,21 @@
 				document.querySelector('.beneficios-list').innerHTML += templateBeneficios(benefcio);
 			});
 
-			//
-
 			var total_finish = document.querySelector(".total-precio");
 			var htmlTotal = ``;
 			var totalValor = paqueteJSON.precio_normal;
 			var precioPromo = paqueteJSON.precio_descuento;
-			var precio = paqueteJSON.precio_normal;
+			var precioNormal = paqueteJSON.precio_normal;
 
-			if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
-
-				var save = (100 - ((precioPromo * 100) / precio)).toFixed(2)
-				htmlTotal += `<div class="row-precios">`;
-				htmlTotal += `<div class="column-precio">`;
-				htmlTotal += `Descuento - ${save}%`;
-				htmlTotal += `</div>`;
-				htmlTotal += `<div class="column-precio valor">`;
-				htmlTotal += `-$${precio - precioPromo}`;
-				htmlTotal += `</div>`;
-				htmlTotal += `</div>`;
-				htmlTotal += `<hr class="precio-hr">`;
-				totalValor = precioPromo;
-
-			}
-
+			
 			var reemplazarDescuento = false;
+			var ingresoCupon = false;
 
 			if(paqueteJSON.descuentos.length > 0){
 				for(var i in paqueteJSON.descuentos){
 					var descuento = paqueteJSON.descuentos[i];
-					if(!paqueteJSON.esta_descuento){
+					if(!descuento.cambiar_precio_otros){
+						// SI ES FALSO EL CUPÓN SE COMBINARÁ CON OTROS DESCUENTOS
 						htmlTotal += `<div class="row-precios">`;
 						htmlTotal += `<div class="column-precio">`;
 						htmlTotal += `Descuento, cupón - ${100 - descuento.descuento_porcentaje}%`;
@@ -256,58 +242,174 @@
 						htmlTotal += `</div>`;
 						htmlTotal += `</div>`;
 						htmlTotal += `<hr class="precio-hr">`;
+
 						totalValor = descuento.nuevo_valor;
-						reemplazarDescuento = descuento.cambiar_precio_otros;
+						reemplazarDescuento = false;
+						ingresoCupon = true;
+					}
+
+					if(descuento.cambiar_precio_otros  && !paqueteJSON.esta_descuento){
+						// SI ES FALSO EL CUPÓN SE REEMPLAZARÁ CON OTROS DESCUENTOS
+						htmlTotal += `<div class="row-precios">`;
+						htmlTotal += `<div class="column-precio">`;
+						htmlTotal += `Descuento, cupón - ${100 - descuento.descuento_porcentaje}%`;
+						htmlTotal += `</div>`;
+						htmlTotal += `<div class="column-precio valor">`;
+						htmlTotal += `-$${descuento.valor_cupon}`;
+						htmlTotal += `</div>`;
+						htmlTotal += `</div>`;
+						htmlTotal += `<hr class="precio-hr">`;
+
+						totalValor = descuento.nuevo_valor;
+						reemplazarDescuento = true;
+						ingresoCupon = true;
+					}
+
+					if(descuento.cambiar_precio_otros  && paqueteJSON.esta_descuento){
+						// SI ES FALSO EL CUPÓN SE REEMPLAZARÁ CON OTROS DESCUENTOS
+						var save = 0;
+						if(descuento.type.includes("dollars")){
+							save = (100 - ((descuento.valor_cupon * 100) / precioNormal)).toFixed(2);
+						}
+						htmlTotal += `<div class="row-precios">`;
+						htmlTotal += `<div class="column-precio">`;
+						htmlTotal += `Descuento cupón - ${100 - save}%`;
+						htmlTotal += `</div>`;
+						htmlTotal += `<div class="column-precio valor">`;
+						htmlTotal += `-$${descuento.valor_cupon}`;
+						htmlTotal += `</div>`;
+						htmlTotal += `</div>`;
+						htmlTotal += `<hr class="precio-hr">`;
+						totalValor = precioNormal - descuento.valor_cupon;
+
+						// htmlTotal += `<div class="row-precios">`;
+						// htmlTotal += `<div class="column-precio">`;
+						// htmlTotal += `Descuento, cupón - ${100 - descuento.descuento_porcentaje}%`;
+						// htmlTotal += `</div>`;
+						// htmlTotal += `<div class="column-precio valor">`;
+						// htmlTotal += `-$${descuento.valor_cupon}`;
+						// htmlTotal += `</div>`;
+						// htmlTotal += `</div>`;
+						// htmlTotal += `<hr class="precio-hr">`;
+
+						// totalValor = descuento.nuevo_valor;
+						reemplazarDescuento = true;
+						ingresoCupon = true;
 					}
 				}
-				// precioPromo = paqueteJSON.precio_descuento;
-				// precio = descuento.nuevo_valor;
 			}
 
-			htmlTotal += `<div class="row-precios">`;
-			htmlTotal += `<div class="column-precio total">`;
-			htmlTotal += `Total a pagar`;
-			htmlTotal += `</div>`;
-			htmlTotal += `<div class="column-precio valor">`;
+			if(reemplazarDescuento && ingresoCupon){
+				htmlTotal += `<div class="row-precios">`;
+				htmlTotal += `<div class="column-precio total">`;
+				htmlTotal += `Total a pagar`;
+				htmlTotal += `</div>`;
+				htmlTotal += `<div class="column-precio valor">`;
 
-			if(!reemplazarDescuento){
+				htmlTotal += `<div class="precio-normal-t">`;
+				htmlTotal += `$${precioNormal}`;
+				htmlTotal += `</div>`;
+
+				// totalValor = precioNormal;
+
+				htmlTotal += `<div class="precio-promo-t">`;
+				htmlTotal += `$${totalValor}`;
+				htmlTotal += `</div>`;
+				htmlTotal += `</div>`;
+				htmlTotal += `</div>`;
+				// alert("1")
+
+			}else{
+				if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
+						var save = (100 - ((precioPromo * 100) / precioNormal)).toFixed(2)
+						htmlTotal += `<div class="row-precios">`;
+						htmlTotal += `	<div class="column-precio">`;
+						htmlTotal += `		Descuento - ${save}%`;
+						htmlTotal += `	</div>`;
+						htmlTotal += `	<div class="column-precio valor">`;
+						htmlTotal += `		-$${precioNormal - precioPromo}`;
+						htmlTotal += `	</div>`;
+						htmlTotal += `</div>`;
+						htmlTotal += `<hr class="precio-hr">`;
+						totalValor = precioPromo;
+						// alert("5")
+					}
+			}
+
+			if(!reemplazarDescuento && !ingresoCupon && paqueteJSON.esta_descuento){
+				htmlTotal += `<div class="row-precios">`;
+				htmlTotal += `<div class="column-precio total">`;
+				htmlTotal += `Total a pagar`;
+				htmlTotal += `</div>`;
+				htmlTotal += `<div class="column-precio valor">`;
+				if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
+					htmlTotal += `		<div class="precio-normal-t">`;
+					htmlTotal += `			$${precioNormal}`;
+					htmlTotal += `		</div>`;
+					totalValor = precioPromo;
+				}
+				htmlTotal += `		<div class="precio-promo-t">`;
+				htmlTotal += `			$${totalValor}`;
+				htmlTotal += `		</div>`;
+				htmlTotal += `	</div>`;
+				htmlTotal += `</div>`;
+				// alert("2")
+
+			}
+
+			if(!reemplazarDescuento && ingresoCupon && paqueteJSON.esta_descuento){
+				htmlTotal += `<div class="row-precios">`;
+				htmlTotal += `<div class="column-precio total">`;
+				htmlTotal += `Total a pagar`;
+				htmlTotal += `</div>`;
+				htmlTotal += `<div class="column-precio valor">`;
 				if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
 					htmlTotal += `<div class="precio-normal-t">`;
-					htmlTotal += `$${precio}`;
+					htmlTotal += `$${precioNormal}`;
 					htmlTotal += `</div>`;
-					if(paqueteJSON.descuentos.length < 1){
-						totalValor = precioPromo;
+
+					totalValor = precioPromo;
+					if(!reemplazarDescuento && ingresoCupon){
+						totalValor = totalValor - precioPromo;
 					}
 				}
-			}else{
-				// var tipo = paqueteJSON.descuentos[0].type;
-				// var precioNormal = 0;
-				// var precioPromo = paqueteJSON.descuentos[0].valor_cupon;
-				// if(tipo.includes("dollars")){
-				// 	precioNormal
-				// }
 
-				// htmlTotal += `<div class="row-precios">`;
-				// htmlTotal += `<div class="column-precio">`;
-				// htmlTotal += `Descuento, cupón - ${100 - descuento.descuento_porcentaje}%`;
-				// htmlTotal += `</div>`;
-				// htmlTotal += `<div class="column-precio valor">`;
-				// htmlTotal += `-$${descuento.valor_cupon}`;
-				// htmlTotal += `</div>`;
-				// htmlTotal += `</div>`;
-				// htmlTotal += `<hr class="precio-hr">`;
-				// totalValor = descuento.nuevo_valor;
-				alert("No valida todavia")
+				htmlTotal += `<div class="precio-promo-t">`;
+				htmlTotal += `$${totalValor}`;
+				htmlTotal += `</div>`;
+				htmlTotal += `</div>`;
+				htmlTotal += `</div>`;
+				alert("3 ")
 			}
 
-			htmlTotal += `<div class="precio-promo-t">`;
-			htmlTotal += `$${totalValor}`;
-			htmlTotal += `</div>`;
-			htmlTotal += `</div>`;
-			htmlTotal += `</div>`;
-			total_finish.innerHTML = htmlTotal;
+			if(!reemplazarDescuento && !ingresoCupon && !paqueteJSON.esta_descuento){
+				htmlTotal += `<div class="row-precios">`;
+				htmlTotal += `<div class="column-precio total">`;
+				htmlTotal += `Total a pagar`;
+				htmlTotal += `</div>`;
+				htmlTotal += `<div class="column-precio valor">`;
+				// if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
+				// 	htmlTotal += `<div class="precio-normal-t">`;
+				// 	htmlTotal += `$${precioNormal}`;
+				// 	htmlTotal += `</div>`;
 
-			paqueteJSON.precio_final = paqueteJSON.precio_normal;
+				// 	totalValor = precioPromo;
+				// 	if(!reemplazarDescuento && ingresoCupon){
+				// 		totalValor = totalValor - precioPromo;
+				// 	}
+				// }
+
+				htmlTotal += `<div class="precio-promo-t">`;
+				htmlTotal += `$${precioNormal}`;
+				htmlTotal += `</div>`;
+				htmlTotal += `</div>`;
+				htmlTotal += `</div>`;
+				totalValor = precioNormal;
+				// alert("4")
+			}
+
+			total_finish.innerHTML = htmlTotal;
+			paqueteJSON.precio_final = totalValor;
 		}
 		//FIN DE ACTUALZIAR DATA
 
@@ -338,6 +440,7 @@
 					const planId = localStorage.getItem('planId_paquete');
 					// console.log(planId);
 					document.querySelector(".wizard-content").classList.add("disabled-content");
+					// alert(paqueteJSON.precio_final)
 					fetch("https://ecuavisa-suscripciones.vercel.app/cupon/validar/usuario", {
 						method: 'POST',
 						headers: {
@@ -364,41 +467,38 @@
 								text.classList.remove("show");
 
 								var continuar = false;
-								if(result.resp){
-									if(!result.data.cambiar_precio_otros){
-										if(paqueteJSON.esta_descuento){
-
+								if(!paqueteJSON.ingreso_cupon){
+									// VERIFICAR SI TODO ESTÁ BIEN EN LA CONSULTA
+									if(result.resp){
+										paqueteJSON.ingreso_cupon = true
+										paqueteJSON.cupon = textCupon;
+										// SI TODO ESTÁ BIEN VERIFICAMOS EL TIPO DE NIVEL DEL CUPÓN
+										const cupon_resp = result.data;
+										if(cupon_resp.cambiar_precio_otros){
+											// SI ES VERDADERO SE CAMBIA EL PRECIO NO IMPORTA SI ESTÁ EN PROMOCION
+										}else{
+											
 										}
+										text.innerHTML = `Cupón aceptado.`;
+										text.classList.add("valid-feedback");
 										continuar = true;
 										paqueteJSON.descuentos.push(result.data);
-										text.innerHTML = `Tu cupón fue insertado con éxito`;
-										text.classList.add("valid-feedback");
 									}else{
-										//
-										if(paqueteJSON.esta_descuento){
-
-											text.innerHTML = `Cupón insertado no válido, el paquete ya se encuentra en oferta.`;
-											text.classList.add("invalid-feedback");
-											continuar = false;
-										}else{
-											text.innerHTML = `Cupón aceptado.`;
-											text.classList.add("valid-feedback");
-											continuar = true;
-											paqueteJSON.descuentos.push(result.data);
-										}
+										text.innerHTML = `Cupón insertado no válido`;
+										text.classList.add("invalid-feedback");
+										continuar = false;
 									}
-
 								}else{
-									text.innerHTML = `Cupón insertado no válido`;
+									text.innerHTML = `Ya tienes un cupón activo, recarga la página si quieres ingresar otro`;
 									text.classList.add("invalid-feedback");
 									continuar = false;
 								}
 
+								if(continuar){
+									actualizarDatos();
+								}
 								text.classList.add("show");
 							}
-
-							paqueteJSON.cupon = textCupon;
-							actualizarDatos();
 							document.querySelector(".wizard-content").classList.remove("disabled-content");
 						}).catch(error => {
 							console.log(error);
@@ -430,6 +530,7 @@
 			url.searchParams.delete("paquete");
 			url.searchParams.delete("usocupon");
 			paqueteJSON.descuentos = [];
+			paqueteJSON.ingreso_cupon = false;
 			//POJJO
 			window.history.replaceState({}, document.title, url.toString());
 			contentgracias_btn.classList.add('d-none');
