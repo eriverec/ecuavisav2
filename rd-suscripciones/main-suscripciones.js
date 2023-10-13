@@ -379,7 +379,7 @@
 				htmlTotal += `</div>`;
 				htmlTotal += `</div>`;
 				htmlTotal += `</div>`;
-				alert("3 ")
+				// alert("3 ")
 			}
 
 			if(!reemplazarDescuento && !ingresoCupon && !paqueteJSON.esta_descuento){
