@@ -365,3 +365,16 @@
 #dataVotos > div > span:nth-child(2) {
     display: none;
 }
+
+#dataHoraCorte {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.btn-elecciones {
+    background-color: #2927b9;
+    color: #ffff!important;
+    padding: 5px 14px;
+    border-radius: 0px;
+}
