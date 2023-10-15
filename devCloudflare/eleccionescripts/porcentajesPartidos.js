@@ -28,7 +28,7 @@ fetch(apiUrl)
             const votoHoraCorte = voto.horaCorte;
 
             const votoElementHoraCorte = `
-            <span>HORA DE CORTE: ${votoHoraCorte}</span> `;
+            <span>Hora de corte: ${votoHoraCorte}</span> `;
 
             votoHoraCorteHTML += votoElementHoraCorte;
 
