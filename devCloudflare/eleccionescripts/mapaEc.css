@@ -360,3 +360,8 @@
         height: 466px;
     }
 }
+
+#dataVotos > div > span:nth-child(3), 
+#dataVotos > div > span:nth-child(2) {
+    display: none;
+}
