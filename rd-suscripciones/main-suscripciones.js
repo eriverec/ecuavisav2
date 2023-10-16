@@ -89,6 +89,23 @@
 			}
 		}
 
+		async function cargarReglas(pais="Ecuador", ciudad="Guayaquil", idusuario=0) {
+			try {
+				const response = await fetch(`https://ecuavisa-suscripciones.vercel.app/reglas/all/usuario/${idusuario}/${ciudad}/${pais}`);
+				if (!response.ok) {
+					throw new Error('Error al obtener datos desde JSON');
+				}
+				const resp = await response.json();
+				if (resp) {
+					return resp;
+				}
+				return [];
+			} catch (error) {
+				console.error('Error al obtener datos desde JSON:', error);
+				throw error;
+			}
+		}
+
 		async function guardarTokenPago(token){
 			localStorage.setItem('x-token-suscripcion', token);
 			return localStorage.getItem('x-token-suscripcion');
@@ -147,8 +164,9 @@
 
 		function templatePlanes(producto, plan, descripcionHtml) {
 			const imgPreder = "https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/ecuavisayellow.jpg";
-			return `<div class="col-12 col-md-4 col-lg-4 col-xl-4">
+			return `<div class="col-12 col-md-4 col-lg-4 col-xl-4 ${plan.hasOwnProperty('regla')?"regla":""}">
         <div class="card shadow-none" style="" data-producto='${JSON.stringify(producto)}'>
+        ${plan.hasOwnProperty('regla')?`<div class="ribbon ribbon-top-left"><span>${plan.hasOwnProperty('regla')?plan.regla.nombre:""}</span></div>`:""}
           <div class="card-body">
             <h5 class="card-title">${plan.nombre_plan}</h5>
             <h5 class="plan_precio">
@@ -237,6 +255,17 @@
               </div>`;
 		}
 
+		function buscarpaquetes(idPaquete, reglas){
+			var paqueteList = [];
+			for(var i in reglas){
+				const ins = reglas[i];
+				if(ins.paquetes.includes(idPaquete) && ins.activo){
+					paqueteList.push(ins);
+				}
+			}
+			return paqueteList;
+		}
+
 		//INICIO DE ACTUALZIAR DATA
 		async function actualizarDatos(){
 			document.querySelector('.title-plan').innerHTML = paqueteJSON.nombre;
@@ -267,7 +296,7 @@
 						htmlTotal += `Descuento cupón`; // - ${100 - descuento.descuento_porcentaje}%
 						htmlTotal += `</div>`;
 						htmlTotal += `<div class="column-precio valor">`;
-						htmlTotal += `-$${descuento.valor_cupon}`;
+						htmlTotal += `-$${parseFloat(descuento.valor_cupon).toFixed(2)}`;
 						htmlTotal += `</div>`;
 						htmlTotal += `</div>`;
 						htmlTotal += `<hr class="precio-hr">`;
@@ -284,7 +313,7 @@
 						htmlTotal += `Descuento cupón`;// - ${100 - descuento.descuento_porcentaje}%
 						htmlTotal += `</div>`;
 						htmlTotal += `<div class="column-precio valor">`;
-						htmlTotal += `-$${descuento.valor_cupon}`;
+						htmlTotal += `-$${parseFloat(descuento.valor_cupon).toFixed(2)}`;
 						htmlTotal += `</div>`;
 						htmlTotal += `</div>`;
 						htmlTotal += `<hr class="precio-hr">`;
@@ -305,7 +334,7 @@
 						htmlTotal += `Descuento cupón`; // - ${100 - save}%
 						htmlTotal += `</div>`;
 						htmlTotal += `<div class="column-precio valor">`;
-						htmlTotal += `-$${descuento.valor_cupon}`;
+						htmlTotal += `-$${parseFloat(descuento.valor_cupon).toFixed(2)}`;
 						htmlTotal += `</div>`;
 						htmlTotal += `</div>`;
 						htmlTotal += `<hr class="precio-hr">`;
@@ -342,7 +371,7 @@
 				// totalValor = precioNormal;
 
 				htmlTotal += `<div class="precio-promo-t">`;
-				htmlTotal += `$${totalValor}`;
+				htmlTotal += `$${parseFloat(totalValor).toFixed(2)}`;
 				htmlTotal += `</div>`;
 				htmlTotal += `</div>`;
 				htmlTotal += `</div>`;
@@ -356,7 +385,7 @@
 						htmlTotal += `		Descuento - ${save}%`;
 						htmlTotal += `	</div>`;
 						htmlTotal += `	<div class="column-precio valor">`;
-						htmlTotal += `		-$${precioNormal - precioPromo}`;
+						htmlTotal += `		-$${(parseFloat(precioNormal - precioPromo).toFixed(2))}`;
 						htmlTotal += `	</div>`;
 						htmlTotal += `</div>`;
 						htmlTotal += `<hr class="precio-hr">`;
@@ -373,12 +402,12 @@
 				htmlTotal += `<div class="column-precio valor">`;
 				if (parseInt(precioPromo) != 0 && precioPromo != "" && precioPromo != null) {
 					htmlTotal += `		<div class="precio-normal-t">`;
-					htmlTotal += `			$${precioNormal}`;
+					htmlTotal += `			$${parseFloat(precioNormal).toFixed(2)}`;
 					htmlTotal += `		</div>`;
 					totalValor = precioPromo;
 				}
 				htmlTotal += `		<div class="precio-promo-t">`;
-				htmlTotal += `			$${totalValor}`;
+				htmlTotal += `			$${parseFloat(totalValor).toFixed(2)}`;
 				htmlTotal += `		</div>`;
 				htmlTotal += `	</div>`;
 				htmlTotal += `</div>`;
@@ -404,7 +433,7 @@
 				}
 
 				htmlTotal += `<div class="precio-promo-t">`;
-				htmlTotal += `$${totalValor}`;
+				htmlTotal += `$${parseFloat(totalValor).toFixed(2)}`;
 				htmlTotal += `</div>`;
 				htmlTotal += `</div>`;
 				htmlTotal += `</div>`;
@@ -429,7 +458,7 @@
 				// }
 
 				htmlTotal += `<div class="precio-promo-t">`;
-				htmlTotal += `$${precioNormal}`;
+				htmlTotal += `$${(parseFloat(precioNormal).toFixed(2))}`;
 				htmlTotal += `</div>`;
 				htmlTotal += `</div>`;
 				htmlTotal += `</div>`;
@@ -455,7 +484,7 @@
 				// }
 
 				htmlTotal += `<div class="precio-promo-t">`;
-				htmlTotal += `$${totalValor}`;
+				htmlTotal += `$${parseFloat(totalValor).toFixed(2)}`;
 				htmlTotal += `</div>`;
 				htmlTotal += `</div>`;
 				htmlTotal += `</div>`;
@@ -470,6 +499,42 @@
 
 		var dataPlanes = await cargarNombresYPlanes();
 		const dataPaisesCiudades = await cargarPaisesYCiudad();
+		let dataReglas = null;
+
+		if(ECUAVISA_EC.USER_data("location")){
+			var geoLocal = (ECUAVISA_EC.USER_data("location") == "null" ? null : ECUAVISA_EC.USER_data("location"));
+			var jsonGeoLocal = JSON.parse(geoLocal);
+			dataReglas = await cargarReglas(geoLocal.country, geoLocal.city, ECUAVISA_EC.USER_data("id"));
+			
+			for(var i in dataPlanes.data){
+				for(var j in dataPlanes.data[i].planes){
+					var paquetesCambia = buscarpaquetes(dataPlanes.data[i].planes[j].id, dataReglas.data);
+					if(paquetesCambia.length > 0){
+						var paqueteRegla = paquetesCambia[0];
+						if(paqueteRegla.type.includes("dollars")){
+							if(paqueteRegla.discount < dataPlanes.data[i].planes[j].precio){
+								// dataPlanes.data[i].planes[j].precio = parseFloat(paqueteRegla.discount);
+								dataPlanes.data[i].planes[j].precio_promocional = parseFloat(paqueteRegla.discount);
+								dataPlanes.data[i].planes[j].regla = {
+									nombre: paqueteRegla.nombre
+								};
+							}
+						}
+						if(paqueteRegla.type.includes("percent")){
+							// dataPlanes.data[i].planes[j].precio = dataPlanes.data[i].planes[j].precio - parseFloat((paqueteRegla.discount * dataPlanes.data[i].planes[j].precio) / 100).toFixed(2);
+							dataPlanes.data[i].planes[j].precio_promocional = dataPlanes.data[i].planes[j].precio - parseFloat((paqueteRegla.discount * dataPlanes.data[i].planes[j].precio) / 100).toFixed(2);
+							dataPlanes.data[i].planes[j].regla = {
+								nombre: paqueteRegla.nombre
+							};
+						}
+						// console.log(paqueteRegla)
+						// console.log(dataPlanes.data[i].planes[j].precio)
+					}
+				}
+			}
+			
+		}
+
 		const productos = await dataPlanes.data;
 		const x_Token = await guardarTokenPago(await dataPlanes.token);
 
@@ -868,7 +933,10 @@
 		$('#pais').change(function(){
 			var pais = $(this).val();
 			var pais_code = $("#pais option:selected").attr("data-paiscode");
-			iti_telefono.setCountry(pais_code);
+			if(pais_code){
+				iti_telefono.setCountry(pais_code);
+			}
+			
 			buscarCiudades(pais);
 			paqueteJSON.location.country = pais;
 		});
