@@ -2,8 +2,8 @@
 require '../funciones/Ctrfunciones.php';
 
 require '../vendor/autoload.php';
-// use GuzzleHttp\Client;
-// use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 class SendPulse {
 
 	private $token;
@@ -26,7 +26,7 @@ class SendPulse {
 	private $jsonPDF;
 
 	function __construct(){
-		$this->typeProyect =  "Production"; //Production - Guzzle
+		$this->typeProyect =  "Guzzle"; //Production - Guzzle
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 5,
 			"folder" => "boletin-diario",
