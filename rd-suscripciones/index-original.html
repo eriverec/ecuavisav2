@@ -24,6 +24,9 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.0/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.full.min.js"></script>
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/css/intlTelInput.css">
+
 </head>
 
 <body >
@@ -107,16 +110,25 @@
                       <!-- <div id="apellidosHelp" class="form-text">Escriba sus apellidos completos.</div> -->
                     </div>
 
-                    <div class="col-6 mt-4">
+                    <div class="col-6 mt-4" id="col-cedula">
                       <label for="cedula" class="form-label">Cédula <small class="bg-red">*</small></label>
                       <input type="text" maxlength="100" placeholder="Ingrese su número de cédula" class="form-control"
                         id="cedula" aria-describedby="cedulaHelp" required>
                       <!-- <div id="cedulaHelp" class="form-text">Ingrese su número de cédula</div> -->
+                      <div class="invalid-feedback">
+                        Cédula ingresada no válida.
+                      </div>
                     </div>
-                    <div class="col-6 mt-4">
+                    <div class="col-6 mt-4" id="col-telefono">
                       <label for="cedula" class="form-label">Teléfono <small class="bg-red">*</small></label>
-                      <input type="telefono" maxlength="100" placeholder="Ingrese su número de teléfono" class="form-control"
-                        id="cedula" aria-describedby="telefono" required>
+                      <div class="content-telefono">
+                        <input type="telefono" maxlength="100" placeholder="Ingrese su número de teléfono" class="form-control"
+                        id="telefono" aria-describedby="telefono" required>
+                      </div>
+
+                      <div class="invalid-feedback">
+                        Teléfono ingresado no es válido.
+                      </div>
                       <!-- <div id="cedulaHelp" class="form-text">Ingrese su número de cédula</div> -->
                     </div>
                     <div class="col-6 mt-4">
@@ -300,6 +312,7 @@
       </div>
     </div>
   </div>
+  <script src="https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/intlTelInput.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/gh/AdrianVillamayor/Wizard-JS@1.9.9/src/wizard.min.js"></script>
   <script src="wizard-code.js"></script>

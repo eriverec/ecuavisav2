@@ -1,4 +1,20 @@
 (async () => {
+
+	const validarCedula = (ced)=>{
+		let [suma, mul, chars] = [0, 1, ced.length];
+		for (let index = 0; index < chars; index += 1) {
+		  let num = ced[index] * mul;
+		  suma += num - (num > 9) * 9;
+		  mul = 1 << index % 2;
+		}
+
+		if ((suma % 10 === 0) && (suma > 0)) {
+		  return true;
+		} else {
+		  return false;
+		}
+	}
+
 	var paqueteJSON = {
 		nombre:"",
 		precio_normal:0,
@@ -12,6 +28,10 @@
 		usuario:null,
 		cupon:null,
 		opcion_pago: 1,
+		validar:{
+			cedula:false,
+			telefono:false
+		},
 		ingreso_cupon: false,
 		location:{
 			country:"",
@@ -21,6 +41,15 @@
 
 	if (ECUAVISA_EC) {
 		const contentgracias_btn = document.querySelector(`.content-gracias`);
+
+		const telefono_g = document.querySelector("#telefono");
+	  const iti_telefono = intlTelInput(telefono_g, {
+	    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js",
+	    initialCountry: "auto",
+		  geoIpLookup: function(callback) {
+		    callback("ec")
+		  }
+	  });
 
 		async function cargarNombresYPlanes() {
 			const loadingElement = document.getElementById('loading');
@@ -439,7 +468,7 @@
 		}
 		//FIN DE ACTUALZIAR DATA
 
-		const dataPlanes = await cargarNombresYPlanes();
+		var dataPlanes = await cargarNombresYPlanes();
 		const dataPaisesCiudades = await cargarPaisesYCiudad();
 		const productos = await dataPlanes.data;
 		const x_Token = await guardarTokenPago(await dataPlanes.token);
@@ -671,6 +700,16 @@
 
 		$wz_doc.addEventListener("wz.form.submit", function (e) {
 			if (ECUAVISA_EC.login()) {//VERIFICA SI EL USUARIO ESTÁ LOGUEADO
+				if(!paqueteJSON.validar.cedula){
+					alert("Debes ingresar una cédila válida");
+					return false;
+				}
+
+				if(!paqueteJSON.validar.telefono){
+					alert("Debes ingresar un teléfono válido");
+					return false;
+				}
+
 				if (buscarPaquete(planId)) {
 					const idUser = ECUAVISA_EC.USER_data().id;
 					const idwylexIdObject = ECUAVISA_EC.USER_data().wylexIdObject;
@@ -764,7 +803,7 @@
 				if(pais.includes(p)){
 					for(var j in dataPaisesCiudades[i].data){
 						const ciudad = dataPaisesCiudades[i].data[j].city;
-						$('#ciudad').append(`<option value="${ciudad}">${ciudad}</option>`);
+						$('#ciudad').append(`<option value="${ciudad}" >${ciudad}</option>`);
 					}
 				}
 				
@@ -788,9 +827,11 @@
 
 			$('#pais option').remove();
 			$('#pais').append(`<option value="">Seleccione su país</option>`);
+
 			for(var i in dataPaisesCiudades){
 				const pais = dataPaisesCiudades[i].country;
-				$('#pais').append(`<option value="${pais}">${pais}</option>`);
+				const pais_code = dataPaisesCiudades[i].countryCode.toLowerCase();
+				$('#pais').append(`<option value="${pais}" data-paiscode="${pais_code}">${pais}</option>`);
 			}
 
 			$('#pais').select2({
@@ -826,6 +867,8 @@
 
 		$('#pais').change(function(){
 			var pais = $(this).val();
+			var pais_code = $("#pais option:selected").attr("data-paiscode");
+			iti_telefono.setCountry(pais_code);
 			buscarCiudades(pais);
 			paqueteJSON.location.country = pais;
 		});
@@ -835,21 +878,63 @@
 			paqueteJSON.location.city = ciudad;
 		});
 
-		$wz_doc.addEventListener("wz.error", function (e) {
-		  $(`.invalid-feedback`).remove();
-		  for(var i in e.detail.target){
-		      const field = e.detail.target[i];
-		      if(!document.querySelector(`.invalid-feedback.${field.id}`)){
-		          $(`#${field.id}`).after(`<div class="show invalid-feedback ${field.id}">Campo requerido. </div>`);
-		      }
-		      setTimeout(function(){
-					    $(`.invalid-feedback`).remove();
-					}, 2000);
-		  }
-		});
+		// $wz_doc.addEventListener("wz.error", function (e) {
+		//   $(`.invalid-feedback.error`).remove();
+		//   for(var i in e.detail.target){
+		//       const field = e.detail.target[i];
+		//       if(!document.querySelector(`.invalid-feedback.error.${field.id}`)){
+		//           $(`#${field.id}`).after(`<div class="show invalid-feedback ${field.id}">Campo requerido. </div>`);
+		//       }
+		//       setTimeout(function(){
+		// 			    $(`.invalid-feedback`).remove();
+		// 			}, 2000);
+		//   }
+		// });
 
 		var respSelect = await armarSelectPaises();
+// iti.isValidNumber()
+		$('#cedula').change(function(){
+			var cedula = $(this).val();
+			// alert(validarCedula(cedula))
+			// alert((cedula))
+			paqueteJSON.validar.cedula = validarCedula(cedula);
+			if(!paqueteJSON.validar.cedula){
+				$("#col-cedula").addClass("was-validated-suscripcion");
+				$("#cedula").addClass("is-invalid-suscripcion");
+			}else{
+				$("#col-cedula").removeClass("was-validated-suscripcion");
+				$("#cedula").removeClass("is-invalid-suscripcion");
+			}
+		});
 
+		var validarTelefono = () =>{
+			// alert(paqueteJSON.validar.telefono)
+			if(!paqueteJSON.validar.telefono){
+				$("#col-telefono").addClass("was-validated-suscripcion");
+				$("#telefono").addClass("is-invalid-suscripcion");
+			}else{
+				$("#col-telefono").removeClass("was-validated-suscripcion");
+				$("#telefono").removeClass("is-invalid-suscripcion");
+			}
+			// alert()
+		}
+
+		$('#telefono').change(function(){
+			var telefono = $(this).val();
+			// alert(iti_telefono.isValidNumber())
+			paqueteJSON.validar.telefono = iti_telefono.isValidNumber();
+			// setTimeout(function(){
+			validarTelefono();
+			// }, 800);
+			
+		});
+
+		telefono_g.addEventListener("countrychange", function() {
+			paqueteJSON.validar.telefono = iti_telefono.isValidNumber();
+			// setTimeout(function(){
+			validarTelefono();
+			// }, 800);
+		});
 
 	}
 })();
