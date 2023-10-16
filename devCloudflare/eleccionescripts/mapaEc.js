@@ -143,11 +143,20 @@
                                     const content = `
                                     <span style="font-size:14px;font-weight: bold;">${point.name}</span><br/>
                                     <div style="text-align:left"><div style="color:#672893;">⦿</div> 
-                                        <small>Daniel Noboa: <br/> ${daniel}  votos - ${((daniel*100)/total).toFixed(2)} %</small>
+                                        <small>Daniel Noboa: <br/> ${((daniel*100)/total).toFixed(2)} %</small>
                                     </div><br><br>
                                     <div style="text-align:left"><div style="color:#1e96d4;">⦿</div> 
-                                        <small>Luisa González: <br/> ${luisa} votos - ${((luisa*100)/total).toFixed(2)} %</small>
+                                        <small>Luisa González: <br/> ${((luisa*100)/total).toFixed(2)} %</small>
                                     </div>`;
+
+                                    // const content = `
+                                    // <span style="font-size:14px;font-weight: bold;">${point.name}</span><br/>
+                                    // <div style="text-align:left"><div style="color:#672893;">⦿</div> 
+                                    //     <small>Daniel Noboa: <br/> ${daniel}  votos - ${((daniel*100)/total).toFixed(2)} %</small>
+                                    // </div><br><br>
+                                    // <div style="text-align:left"><div style="color:#1e96d4;">⦿</div> 
+                                    //     <small>Luisa González: <br/> ${luisa} votos - ${((luisa*100)/total).toFixed(2)} %</small>
+                                    // </div>`;
                                     // const content = `<div style="color:${point.color};">⦿</div>
                                     //   <span style="font-size:14px;font-weight: bold;">${point.series.name} de ${point.name}</span><br/>
                                     //   <b>${point.nombreContrincante}</b> lidera con: <b>${point.valorCandidatoG} votos</b>
