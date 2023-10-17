@@ -205,6 +205,7 @@ async function getUsuarios(){
   if(criterioTemp.includes("metadatos") || criterioTemp.includes("trazabilidads")){
     pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
     ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
+    ciudad = (ciudad=="Todas las ciudes"?-1:ciudad);
   }
 
   if(criterioTemp.includes("metadatos")){
