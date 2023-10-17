@@ -1,18 +1,36 @@
 (async () => {
 
-	const validarCedula = (ced)=>{
-		let [suma, mul, chars] = [0, 1, ced.length];
-		for (let index = 0; index < chars; index += 1) {
-		  let num = ced[index] * mul;
-		  suma += num - (num > 9) * 9;
-		  mul = 1 << index % 2;
-		}
+	function validarCedula(ci) {
+	    // Verificar si el valor de entrada es numérico
+	    if (isNaN(ci)) {
+	        return false;
+	    }
 
-		if ((suma % 10 === 0) && (suma > 0)) {
-		  return true;
-		} else {
-		  return false;
-		}
+	    // Asegurarse de que la cédula tenga exactamente 10 dígitos
+	    if (ci.toString().length !== 10) {
+	        return false;
+	    }
+
+	    // Inicializar el total en 0
+	    var total = 0;
+
+	    for (var position = 0; position < 10; position++) {
+	        var individual = parseInt(ci.toString().charAt(position));
+
+	        if (position % 2 === 0) {
+	            // Duplicar el valor y ajustarlo si es mayor que 9
+	            individual *= 2;
+	            if (individual > 9) {
+	                individual = individual - 9;
+	            }
+	        }
+
+	        // Agregar el número individual al total
+	        total += individual;
+	    }
+
+	    // El número válido debe ser un múltiplo de 10
+	    return total % 10 === 0;
 	}
 
 	var paqueteJSON = {
@@ -50,6 +68,29 @@
 		    callback("ec")
 		  }
 	  });
+
+	  var cambiosInputCedula = function(cedula){
+	  	if(cedula){
+	  		var pais_code = $("#pais option:selected").attr("data-paiscode");
+				if(pais_code){
+					if(pais_code.includes("ec")){
+						paqueteJSON.validar.cedula = validarCedula(cedula);
+						if(!paqueteJSON.validar.cedula){
+							$("#col-cedula").addClass("was-validated-suscripcion");
+							$("#cedula").addClass("is-invalid-suscripcion");
+						}else{
+							$("#col-cedula").removeClass("was-validated-suscripcion");
+							$("#cedula").removeClass("is-invalid-suscripcion");
+						}
+					}else{
+						paqueteJSON.validar.cedula = true;
+						$("#col-cedula").removeClass("was-validated-suscripcion");
+						$("#cedula").removeClass("is-invalid-suscripcion");
+					}
+				}
+	  	}
+			return true;
+		}
 
 		async function cargarNombresYPlanes() {
 			const loadingElement = document.getElementById('loading');
@@ -766,7 +807,7 @@
 		$wz_doc.addEventListener("wz.form.submit", function (e) {
 			if (ECUAVISA_EC.login()) {//VERIFICA SI EL USUARIO ESTÁ LOGUEADO
 				if(!paqueteJSON.validar.cedula){
-					alert("Debes ingresar una cédila válida");
+					alert("Debes ingresar una cédula válida");
 					return false;
 				}
 
@@ -798,7 +839,8 @@
 						"idUsuario": parseInt(idUser),
 						"idUsuarioObject": idwylexIdObject,
 						"metodoPago": paqueteJSON.opcion_pago,
-						"usuario":user
+						"usuario":user,
+						"paqueteJSON":paqueteJSON
 					};
 
 					// console.log(jsonSend)
@@ -939,6 +981,11 @@
 			
 			buscarCiudades(pais);
 			paqueteJSON.location.country = pais;
+
+			var cedula = $('#cedula').val();
+			// alert(validarCedula(cedula))
+			// alert((cedula))
+			cambiosInputCedula(cedula);
 		});
 
 		$('#ciudad').change(function(){
@@ -961,18 +1008,13 @@
 
 		var respSelect = await armarSelectPaises();
 // iti.isValidNumber()
+		
+
 		$('#cedula').change(function(){
 			var cedula = $(this).val();
 			// alert(validarCedula(cedula))
 			// alert((cedula))
-			paqueteJSON.validar.cedula = validarCedula(cedula);
-			if(!paqueteJSON.validar.cedula){
-				$("#col-cedula").addClass("was-validated-suscripcion");
-				$("#cedula").addClass("is-invalid-suscripcion");
-			}else{
-				$("#col-cedula").removeClass("was-validated-suscripcion");
-				$("#cedula").removeClass("is-invalid-suscripcion");
-			}
+			cambiosInputCedula(cedula);
 		});
 
 		var validarTelefono = () =>{
