@@ -45,12 +45,13 @@
 		idpaquete:"",
 		usuario:null,
 		cupon:null,
+		ingreso_cupon: false,
 		opcion_pago: 1,
 		validar:{
 			cedula:false,
 			telefono:false
 		},
-		ingreso_cupon: false,
+		regla: null,
 		location:{
 			country:"",
 			city:""
@@ -833,6 +834,9 @@
 						direccion: document.querySelector(`#direccion`).value || null,
 						telefono: document.querySelector(`#telefono`).value || null
 					}
+
+					var paquetTemp = buscarPaquete(planId);
+					paqueteJSON.regla = paquetTemp.hasOwnProperty("regla") ? paquetTemp.regla : null;
 
 					var jsonSend = {
 						"idPaquete": planId,
