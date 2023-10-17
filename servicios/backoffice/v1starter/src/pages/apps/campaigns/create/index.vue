@@ -183,6 +183,13 @@ async function getMetadatos(){
   }
 }
 
+const fetchWithTimeout = (url, options, timeout = 10000) => {
+    return Promise.race([
+        fetch(url, options),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
+    ]);
+};
+
 async function getUsuarios(){
   var ciudad = -1;
   var pais = -1;
@@ -220,15 +227,31 @@ async function getUsuarios(){
   };
   // console.log(pais || "-1")
   // alert(pais.length)
-  var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-    so: so_temp, 
-    dispositivo: dispositivo_temp,
-    metadato: metadato,
-    criterio: criterioTemp.join(','),
-    navegador: navegador_temp
-  }) }`, requestOptions);
-  const data = await response.json();
-  dataUsuarios.value = data;
+  // var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+  //   so: so_temp, 
+  //   dispositivo: dispositivo_temp,
+  //   metadato: metadato,
+  //   criterio: criterioTemp.join(','),
+  //   navegador: navegador_temp
+  // }) }`, requestOptions);
+  // const data = await response.json();
+  // dataUsuarios.value = data;
+
+  const response = await fetchWithTimeout(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+      so: so_temp, 
+      dispositivo: dispositivo_temp,
+      metadato: metadato,
+      criterio: criterioTemp.join(','),
+      navegador: navegador_temp
+  }) }`, requestOptions, 25000); // Aquí hemos establecido un tiempo de espera de 15 segundos (15000 milisegundos)
+
+  if (response.status === 200) {
+      const data = await response.json();
+      dataUsuarios.value = data;
+  } else {
+      console.error("Error en la solicitud:", response.status);
+      // Puedes manejar el error de acuerdo a tus necesidades
+  }
 }
 
 const consentimiento = ref(false);
