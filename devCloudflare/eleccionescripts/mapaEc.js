@@ -96,11 +96,11 @@
                         data: [{
                             name: 'Noboa',
                             color: '#672893',
-                            y: parseInt(columns[3][row])
+                            y: parseFloat(columns[3][row])
                         }, {
                             name: 'González',
                             color: '#1e96d4',
-                            y: parseInt(columns[2][row])
+                            y: parseFloat(columns[2][row])
                         }],
                         dataLabels: {
                             format: '<b>{point.name}</b> <br/> {point.percentage:.1f}%'
@@ -137,16 +137,15 @@
                                     // Construye el contenido personalizado para el tooltip
                                     var luisa = point.options.luisa.votos;
                                     var daniel = point.options.daniel.votos;
-
                                     var total = luisa + daniel;
 
                                     const content = `
                                     <span style="font-size:14px;font-weight: bold;">${point.name}</span><br/>
                                     <div style="text-align:left"><div style="color:#672893;">⦿</div> 
-                                        <small>Daniel Noboa: <br/> ${((daniel*100)/total).toFixed(2)} %</small>
+                                        <small>Daniel Noboa: <br/> ${daniel} %</small>
                                     </div><br><br>
                                     <div style="text-align:left"><div style="color:#1e96d4;">⦿</div> 
-                                        <small>Luisa González: <br/> ${((luisa*100)/total).toFixed(2)} %</small>
+                                        <small>Luisa González: <br/> ${luisa} %</small>
                                     </div>`;
 
                                     // const content = `
@@ -327,10 +326,10 @@
                     valorCandidatoG: parseFloat(mayorContrincante[1]),
                     nombreContrincante: mayorContrincante[0],
                     daniel: {
-                        "votos": parseInt(columns[3][i])
+                        "votos": parseFloat(columns[3][i])
                     },
                     luisa: {
-                        "votos": parseInt(columns[2][i])
+                        "votos": parseFloat(columns[2][i])
                     },
                     name: names[i],
                     'postal-code': postalCode,
