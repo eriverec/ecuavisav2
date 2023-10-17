@@ -187,6 +187,8 @@ async function getCampaignToEdit(){
   setTimeout(function(){
       selectItemParticipantes.value = dataCampaignToEdit.participantes;
       numeroOtroUsuarios.value = dataCampaignToEdit.otroValor;
+      maxValue.value = dataCampaignToEdit.userId.length;//dataUsuarios.total || tamanioUsuarios;
+      // alert(dataCampaignToEdit.otroValor)
   }, 2000);
   
   if(dataCampaignToEdit.criterial.dispositivo){

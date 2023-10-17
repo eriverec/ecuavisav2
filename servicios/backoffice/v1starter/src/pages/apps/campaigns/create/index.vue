@@ -56,7 +56,9 @@ const fetchCategorias = async () => {
 const selectItemVisibilidad = ref([]);
 const selectItemsListVisibilidad = ref([
   { title:'Todo el sitio', value: 'all', avatar:"" },
-  { title:'Noticias', value: 'noticias', avatar:"" }
+  { title:'Noticias', value: 'noticias', avatar:"" },
+  { title:'Comercial', value: 'contenido-comercial', avatar:"" },
+  { title:'Laboratorio', value: 'laboratorio', avatar:"" },
 ]);
 
 const selectItemDispositivos = ref([]);
@@ -154,7 +156,7 @@ async function getCountries(){
     headers: myHeaders,
     redirect: 'follow'
   };
-  var response = await fetch(`https://ads-service.vercel.app/campaign/get/all/paisesyciudad`, requestOptions);
+  var response = await fetch(`https://ecuavisa-suscripciones.vercel.app/otros/obtener-paises-ciudades`, requestOptions);
   const data = await response.json();
   dataCountry.value = data;
   loadingPanel.value=false;
