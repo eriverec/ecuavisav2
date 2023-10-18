@@ -546,7 +546,11 @@
 		async function armarreglas(){
 			if(ECUAVISA_EC.login()){
 				if(ECUAVISA_EC.USER_data("location")){
-					var geoLocal = (ECUAVISA_EC.USER_data("location") == "null" ? null : ECUAVISA_EC.USER_data("location"));
+					var geoLocal = (ECUAVISA_EC.USER_data("location")==null ? null : ECUAVISA_EC.USER_data("location"));
+					if(geoLocal==null){
+						return false;
+					}
+
 					var jsonGeoLocal = JSON.parse(geoLocal);
 					dataReglas = await cargarReglas(geoLocal.country, geoLocal.city, ECUAVISA_EC.USER_data("id"));
 					
