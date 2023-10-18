@@ -117,7 +117,7 @@ const posicionList = [
   'RDTop1',
   'RDTop2',
   'RDTop3',
-  'RDRDFloating',
+  'RDFloating',
 ]
 
 watch(posicion, value => {
