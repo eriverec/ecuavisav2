@@ -140,7 +140,7 @@
                                     var total = luisa + daniel;
 
                                     const content = `
-                                    <span style="font-size:14px;font-weight: bold;">${point.name}</span><br/>
+                                    <span style="font-size:14px;font-weight: bold;">${point.name_2}</span><br/>
                                     <div style="text-align:left"><div style="color:#672893;">⦿</div> 
                                         <small>Daniel Noboa: <br/> ${daniel} %</small>
                                     </div><br><br>
@@ -241,10 +241,10 @@
                               var v = this.point;
                               // Personaliza el formato de la etiqueta de datos con HTML
                               if(v.hasOwnProperty('valorCandidatoG')){
-                              // console.log(this.point, v.name)
-                                 return '<b>' + this.point.name + '</b>';
+                              // console.log(this)
+                                 return '<b>' + this.point.name_2 + '</b>';
                                }else{
-                                return this.point.name;
+                                return this.point.name_2;
                                }
                              
                             }
@@ -321,6 +321,7 @@
                 }
 
                 if (mayorContrincante) {
+                    console.log(datosJSON.values[1][i], postalCode)
                   var dataObject = Highcharts.extend({
                     value: parseFloat(percent[i]),
                     valorCandidatoG: parseFloat(mayorContrincante[1]),
@@ -331,7 +332,8 @@
                     luisa: {
                         "votos": parseFloat(columns[2][i])
                     },
-                    name: names[i],
+                    name_2: datosJSON.values[1][i],
+                    // name_2: names[i]+'asdsdsd',
                     'postal-code': postalCode,
                     row: i,
                   }, geometry);
