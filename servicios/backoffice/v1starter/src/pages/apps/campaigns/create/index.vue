@@ -57,7 +57,7 @@ const selectItemVisibilidad = ref([]);
 const selectItemsListVisibilidad = ref([
   { title:'Todo el sitio', value: 'all', avatar:"" },
   { title:'Noticias', value: 'noticias', avatar:"" },
-  { title:'Comercial', value: 'contenido-comercial', avatar:"" },
+  { title:'Comercial', value: 'comercial', avatar:"" },
   { title:'Laboratorio', value: 'laboratorio', avatar:"" },
 ]);
 
