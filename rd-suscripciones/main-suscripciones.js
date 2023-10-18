@@ -552,6 +552,7 @@
 					}
 
 					var jsonGeoLocal = JSON.parse(geoLocal);
+					console.log(geoLocal.country)
 					dataReglas = await cargarReglas(geoLocal.country, geoLocal.city, ECUAVISA_EC.USER_data("id"));
 					
 					for(var i in dataPlanes.data){
