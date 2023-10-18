@@ -543,38 +543,45 @@
 		const dataPaisesCiudades = await cargarPaisesYCiudad();
 		let dataReglas = null;
 
-		if(ECUAVISA_EC.USER_data("location")){
-			var geoLocal = (ECUAVISA_EC.USER_data("location") == "null" ? null : ECUAVISA_EC.USER_data("location"));
-			var jsonGeoLocal = JSON.parse(geoLocal);
-			dataReglas = await cargarReglas(geoLocal.country, geoLocal.city, ECUAVISA_EC.USER_data("id"));
-			
-			for(var i in dataPlanes.data){
-				for(var j in dataPlanes.data[i].planes){
-					var paquetesCambia = buscarpaquetes(dataPlanes.data[i].planes[j].id, dataReglas.data);
-					if(paquetesCambia.length > 0){
-						var paqueteRegla = paquetesCambia[0];
-						if(paqueteRegla.type.includes("dollars")){
-							if(paqueteRegla.discount < dataPlanes.data[i].planes[j].precio){
-								// dataPlanes.data[i].planes[j].precio = parseFloat(paqueteRegla.discount);
-								dataPlanes.data[i].planes[j].precio_promocional = parseFloat(paqueteRegla.discount);
-								dataPlanes.data[i].planes[j].regla = {
-									nombre: paqueteRegla.nombre
-								};
+		async function armarreglas(){
+			if(ECUAVISA_EC.login()){
+				if(ECUAVISA_EC.USER_data("location")){
+					var geoLocal = (ECUAVISA_EC.USER_data("location") == "null" ? null : ECUAVISA_EC.USER_data("location"));
+					var jsonGeoLocal = JSON.parse(geoLocal);
+					dataReglas = await cargarReglas(geoLocal.country, geoLocal.city, ECUAVISA_EC.USER_data("id"));
+					
+					for(var i in dataPlanes.data){
+						for(var j in dataPlanes.data[i].planes){
+							var paquetesCambia = buscarpaquetes(dataPlanes.data[i].planes[j].id, dataReglas.data);
+							if(paquetesCambia.length > 0){
+								var paqueteRegla = paquetesCambia[0];
+								if(paqueteRegla.type.includes("dollars")){
+									if(paqueteRegla.discount < dataPlanes.data[i].planes[j].precio){
+										// dataPlanes.data[i].planes[j].precio = parseFloat(paqueteRegla.discount);
+										dataPlanes.data[i].planes[j].precio_promocional = parseFloat(paqueteRegla.discount);
+										dataPlanes.data[i].planes[j].regla = {
+											nombre: paqueteRegla.nombre
+										};
+									}
+								}
+								if(paqueteRegla.type.includes("percent")){
+									// dataPlanes.data[i].planes[j].precio = dataPlanes.data[i].planes[j].precio - parseFloat((paqueteRegla.discount * dataPlanes.data[i].planes[j].precio) / 100).toFixed(2);
+									dataPlanes.data[i].planes[j].precio_promocional = dataPlanes.data[i].planes[j].precio - parseFloat((paqueteRegla.discount * dataPlanes.data[i].planes[j].precio) / 100).toFixed(2);
+									dataPlanes.data[i].planes[j].regla = {
+										nombre: paqueteRegla.nombre
+									};
+								}
+								// console.log(paqueteRegla)
+								// console.log(dataPlanes.data[i].planes[j].precio)
 							}
 						}
-						if(paqueteRegla.type.includes("percent")){
-							// dataPlanes.data[i].planes[j].precio = dataPlanes.data[i].planes[j].precio - parseFloat((paqueteRegla.discount * dataPlanes.data[i].planes[j].precio) / 100).toFixed(2);
-							dataPlanes.data[i].planes[j].precio_promocional = dataPlanes.data[i].planes[j].precio - parseFloat((paqueteRegla.discount * dataPlanes.data[i].planes[j].precio) / 100).toFixed(2);
-							dataPlanes.data[i].planes[j].regla = {
-								nombre: paqueteRegla.nombre
-							};
-						}
-						// console.log(paqueteRegla)
-						// console.log(dataPlanes.data[i].planes[j].precio)
 					}
+					await armarPlanes();
+					return true;
 				}
 			}
-			
+			await armarPlanes();
+			return false;
 		}
 
 		const productos = await dataPlanes.data;
@@ -712,7 +719,7 @@
 			}, 200);
 		})
 
-		await armarPlanes();
+		const respArmarReglas = await armarreglas();
 
 		async function detallesPaquete(id) {
 			planId = id;
@@ -805,7 +812,7 @@
 			});
 		});
 
-		$wz_doc.addEventListener("wz.form.submit", function (e) {
+		$wz_doc.addEventListener("wz.form.submit", async function (e) {
 			if (ECUAVISA_EC.login()) {//VERIFICA SI EL USUARIO ESTÁ LOGUEADO
 				if(!paqueteJSON.validar.cedula){
 					alert("Debes ingresar una cédula válida");
@@ -869,7 +876,17 @@
 						.then(result => {
 							console.log(result);
 							if (result.resp) {
-								contentgracias_btn.classList.add('success');
+								ECUAVISA_EC.loginCheckEmail(correo).then(respuesta => {
+                    if(respuesta){
+
+											contentgracias_btn.classList.add('success');
+											armarreglas();
+											
+                      console.log("Se ha refrescado el localStorage.");
+                    }
+                }).catch(error => {
+                    console.log('Ocurrió un error en al buscar el correo:', error);
+                });
 							} else {
 								contentgracias_btn.classList.add('error');
 								document.querySelector(".gracias-descripcion").innerHTML = "Se presentó un error: " + result.error;
@@ -934,7 +951,7 @@
 		async function armarSelectPaises(){
 			var paises = "";
 			var ciudades = "";
-			var geoLocal = (ECUAVISA_EC.USER_data("location") == "null" ? ECUAVISA_EC.USER_data("geo") : ECUAVISA_EC.USER_data("location"));
+			var geoLocal = (ECUAVISA_EC.USER_data("location")==null ? ECUAVISA_EC.USER_data("geo") : ECUAVISA_EC.USER_data("location"));
 
 			$('#pais option').remove();
 			$('#pais').append(`<option value="">Seleccione su país</option>`);
@@ -976,7 +993,7 @@
 			return true;
 		}
 
-		$('#pais').change(function(){
+		$('#pais').change(async function(){
 			var pais = $(this).val();
 			var pais_code = $("#pais option:selected").attr("data-paiscode");
 			if(pais_code){
@@ -990,11 +1007,14 @@
 			// alert(validarCedula(cedula))
 			// alert((cedula))
 			cambiosInputCedula(cedula);
+
+			await armarreglas()
 		});
 
 		$('#ciudad').change(function(){
 			var ciudad = $(this).val();
 			paqueteJSON.location.city = ciudad;
+			await armarreglas()
 		});
 
 		// $wz_doc.addEventListener("wz.error", function (e) {
