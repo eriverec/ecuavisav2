@@ -95,7 +95,7 @@ const languageList = [{
   title:'Imágenes locales',
   value:'imagen'
 },{
-  title:'Códigos externos',
+  title:'Código HTML',
   value:'html'
 },{
   title:'Códigos ADS',
