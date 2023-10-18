@@ -876,7 +876,7 @@
 						.then(result => {
 							console.log(result);
 							if (result.resp) {
-								ECUAVISA_EC.loginCheckEmail(correo).then(respuesta => {
+								ECUAVISA_EC.loginCheckEmail(ECUAVISA_EC.USER_data("email")).then(respuesta => {
                     if(respuesta){
 
 											contentgracias_btn.classList.add('success');
