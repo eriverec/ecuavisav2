@@ -881,7 +881,7 @@
 
 											contentgracias_btn.classList.add('success');
 											armarreglas();
-											
+
                       console.log("Se ha refrescado el localStorage.");
                     }
                 }).catch(error => {
@@ -1008,13 +1008,13 @@
 			// alert((cedula))
 			cambiosInputCedula(cedula);
 
-			await armarreglas()
+			await armarreglas();
 		});
 
-		$('#ciudad').change(function(){
+		$('#ciudad').change(async function(){
 			var ciudad = $(this).val();
 			paqueteJSON.location.city = ciudad;
-			await armarreglas()
+			await armarreglas();
 		});
 
 		// $wz_doc.addEventListener("wz.error", function (e) {
