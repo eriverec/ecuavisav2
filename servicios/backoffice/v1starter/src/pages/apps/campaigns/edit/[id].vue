@@ -56,7 +56,9 @@ const fetchCategorias = async () => {
 const selectItemVisibilidad = ref([]);
 const selectItemsListVisibilidad = ref([
   { title:'Todo el sitio', value: 'all', avatar:"" },
-  { title:'Noticias', value: 'noticias', avatar:"" }
+  { title:'Noticias', value: 'noticias', avatar:"" },
+  { title:'Comercial', value: 'contenido-comercial', avatar:"" },
+  { title:'Laboratorio', value: 'laboratorio', avatar:"" },
 ]);
 
 const selectItemDispositivos = ref([]);
