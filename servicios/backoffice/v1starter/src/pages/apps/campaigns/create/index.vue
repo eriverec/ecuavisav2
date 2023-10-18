@@ -113,7 +113,7 @@ const criterioList = [
 ];//, { title:'Metadatos', value:'metadato' }
 
 const posicionList = [
-  'floating_ad',
+  // 'floating_ad',
   'RDTop1',
   'RDTop2',
   'RDTop3',
