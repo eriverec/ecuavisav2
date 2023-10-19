@@ -552,7 +552,10 @@
 					}
 
 					var jsonGeoLocal = JSON.parse(geoLocal);
-					console.log(geoLocal.country)
+					if(geoLocal.country){
+						return false;
+					}
+
 					dataReglas = await cargarReglas(geoLocal.country, geoLocal.city, ECUAVISA_EC.USER_data("id"));
 					
 					for(var i in dataPlanes.data){
