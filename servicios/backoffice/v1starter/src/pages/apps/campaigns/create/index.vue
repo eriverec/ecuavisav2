@@ -1,5 +1,6 @@
 <script setup>
 import { useRouter } from 'vue-router';
+import axios from "axios";
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
 const router = useRouter();
 import {FormWizard,TabContent} from "vue3-form-wizard";
@@ -192,6 +193,14 @@ const fetchWithTimeout = (url, options, timeout = 10000) => {
     ]);
 };
 
+async function mergeAndRemoveDuplicates(groups) {
+  const merged = [].concat(...groups); // Combina todos los grupos en una sola matriz.
+  const uniqueNumbers = [...new Set(merged)]; // Elimina duplicados.
+  return uniqueNumbers;
+}
+
+var nextpage = ref(1);
+
 async function getUsuarios(){
   var ciudad = -1;
   var pais = -1;
@@ -240,41 +249,29 @@ async function getUsuarios(){
   // const data = await response.json();
   // dataUsuarios.value = data;
   document.querySelector('.totalPart').style.opacity = "0.4";
-  let nextpage = 1;
-  let batchSize = 1000;
-  
-  while (true) {
-    const response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-        so: so_temp, 
-        dispositivo: dispositivo_temp,
-        metadato: metadato,
-        criterio: criterioTemp.join(','),
-        navegador: navegador_temp,
-        limit: batchSize,
-        page: nextpage
-    }) }`, requestOptions); // Aquí hemos establecido un tiempo de espera de 15 segundos (15000 milisegundos)
 
-    if (response.status === 200) {
-        const data = await response.json();
-        console.log('data:',data);
-        dataUsuarios.value = data;
-        usuariosIDS.value = usuariosIDS.value.concat(data.usuarios);
-        console.log(usuariosIDS.value);
+  let batchSize = 10;
+  var metadatosFetch = [];
+  // Realizar la solicitud a la URL
+  const response = await axios.get(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+      so: so_temp, 
+      dispositivo: dispositivo_temp,
+      metadato: metadato,
+      criterio: criterioTemp.join(','),
+      navegador: navegador_temp,
+      limit: batchSize,
+      page: nextpage.value
+  }) }`, {
+    timeout: (20 * 1000),
+  });
+  // Obtener el JSON de la respuesta
+  const json = response.data;
 
-        if (data.next === false) {
-          break;
-        }
-
-        nextpage += 1;
-
-        document.querySelector('.totalPart').style.opacity = "1";
-
-    } else {
-        console.error("Error en la solicitud:", response.status);
-    }
-
+  if(json){
+      console.log(json);
   }
-  
+
+  return true;
 }
 
 const consentimiento = ref(false);
@@ -827,13 +824,11 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 // });
 
 
-const calcularPartic = () => {
-  loadingPanel.value=true;
-  getUsuarios();
-  loadingPanel.value=false;
-  generarOtrosValores();
-
-  
+const calcularPartic = async () => {
+  // loadingPanel.value=true;
+  await getUsuarios();
+  // loadingPanel.value=false;
+  await generarOtrosValores();
 };
 
 </script>
@@ -1465,7 +1460,7 @@ const calcularPartic = () => {
                             <h6 class="text-h6 mt-4">
                               <VBtn color="warning" variant="tonal" @click="calcularPartic()">
                                   <VIcon start icon="tabler-refresh" />
-                                  Calcular participantes
+                                    Calcular participantes
                                   </VBtn>
                             </h6>
 
