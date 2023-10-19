@@ -543,7 +543,7 @@
 		const dataPaisesCiudades = await cargarPaisesYCiudad();
 		let dataReglas = null;
 
-		async function armarreglas(){
+		async function armarreglas(dataLocal = {country:null,city:null}){
 			if(ECUAVISA_EC.login()){
 				if(ECUAVISA_EC.USER_data("location")){
 					var geoLocal = (ECUAVISA_EC.USER_data("location")==null ? null : ECUAVISA_EC.USER_data("location"));
@@ -553,7 +553,14 @@
 
 					var jsonGeoLocal = JSON.parse(geoLocal);
 
-					dataReglas = await cargarReglas(jsonGeoLocal.country, jsonGeoLocal.city, ECUAVISA_EC.USER_data("id"));
+					var paisRegla = dataLocal.country || jsonGeoLocal.country;
+					var ciudadRegla = dataLocal.city || jsonGeoLocal.city;
+
+					if(paisRegla == null && ciudadRegla == null){
+						return false;
+					}
+
+					dataReglas = await cargarReglas(paisRegla, ciudadRegla, ECUAVISA_EC.USER_data("id"));
 					
 					for(var i in dataPlanes.data){
 						for(var j in dataPlanes.data[i].planes){
@@ -1013,13 +1020,15 @@
 			// alert((cedula))
 			cambiosInputCedula(cedula);
 
-			await armarreglas();
+			await armarreglas({country:pais,city:null});
 		});
 
 		$('#ciudad').change(async function(){
 			var ciudad = $(this).val();
+			var pais = $('#pais').val() || null;
+
 			paqueteJSON.location.city = ciudad;
-			await armarreglas();
+			await armarreglas({country:pais,city:ciudad});
 		});
 
 		// $wz_doc.addEventListener("wz.error", function (e) {
