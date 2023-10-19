@@ -552,11 +552,8 @@
 					}
 
 					var jsonGeoLocal = JSON.parse(geoLocal);
-					if(geoLocal.country){
-						return false;
-					}
 
-					dataReglas = await cargarReglas(geoLocal.country, geoLocal.city, ECUAVISA_EC.USER_data("id"));
+					dataReglas = await cargarReglas(jsonGeoLocal.country, jsonGeoLocal.city, ECUAVISA_EC.USER_data("id"));
 					
 					for(var i in dataPlanes.data){
 						for(var j in dataPlanes.data[i].planes){
