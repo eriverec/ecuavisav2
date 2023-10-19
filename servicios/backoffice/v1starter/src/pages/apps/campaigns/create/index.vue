@@ -2,7 +2,6 @@
 import { useRouter } from 'vue-router';
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
 const router = useRouter();
-import axios from 'axios';
 import {FormWizard,TabContent} from "vue3-form-wizard";
 import 'vue3-form-wizard/dist/style.css'
 const currentTab = ref('tab-lista');
@@ -33,7 +32,7 @@ const selectItemParticipantes = ref(null);
 const selectItemsList = ref([{ title:'Otro', value: 'Otro' },{ title:'100', value: '100' }]);
 const minValue = ref(1); // Valor mínimo permitido
 const maxValue = ref(100); // Valor máximo permitido
-
+const usuariosIDS = ref([]);
 
 const search = ref(null)
 
@@ -222,40 +221,60 @@ async function getUsuarios(){
     navegador_temp = selectItemNavegador.value || null;
   }
 
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
   // console.log(pais || "-1")
   // alert(pais.length)
   // var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-    //   so: so_temp, 
-    //   dispositivo: dispositivo_temp,
-    //   metadato: metadato,
-    //   criterio: criterioTemp.join(','),
-    //   navegador: navegador_temp
-    // }) }`, requestOptions);
-    // const data = await response.json();
-    // dataUsuarios.value = data;
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Content-Type", "application/json");
-  //   var requestOptions = {
-  //     method: 'GET',
-  //     headers: myHeaders,
-  //     redirect: 'follow'
-  //   };
-    
-  // const response = await fetchWithTimeout(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-  //     so: so_temp, 
-  //     dispositivo: dispositivo_temp,
-  //     metadato: metadato,
-  //     criterio: criterioTemp.join(','),
-  //     navegador: navegador_temp
-  // }) }`, requestOptions, 25000); // Aquí hemos establecido un tiempo de espera de 15 segundos (15000 milisegundos)
+  //   so: so_temp, 
+  //   dispositivo: dispositivo_temp,
+  //   metadato: metadato,
+  //   criterio: criterioTemp.join(','),
+  //   navegador: navegador_temp
+  // }) }`, requestOptions);
+  // const data = await response.json();
+  // dataUsuarios.value = data;
+  document.querySelector('.totalPart').style.opacity = "0.4";
+  let nextpage = 1;
+  let batchSize = 1000;
+  
+  while (true) {
+    const response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+        so: so_temp, 
+        dispositivo: dispositivo_temp,
+        metadato: metadato,
+        criterio: criterioTemp.join(','),
+        navegador: navegador_temp,
+        limit: batchSize,
+        page: nextpage
+    }) }`, requestOptions); // Aquí hemos establecido un tiempo de espera de 15 segundos (15000 milisegundos)
 
-  // if (response.status === 200) {
-  //     const data = await response.json();
-  //     // dataUsuarios.value = data;
-  // } else {
-  //     console.error("Error en la solicitud:", response.status);
-  //     // Puedes manejar el error de acuerdo a tus necesidades
-  // }
+    if (response.status === 200) {
+        const data = await response.json();
+        console.log('data:',data);
+        dataUsuarios.value = data;
+        usuariosIDS.value = usuariosIDS.value.concat(data.usuarios);
+        console.log(usuariosIDS.value);
+
+        if (data.next === false) {
+          break;
+        }
+
+        nextpage += 1;
+
+        document.querySelector('.totalPart').style.opacity = "1";
+
+    } else {
+        console.error("Error en la solicitud:", response.status);
+    }
+
+  }
+  
 }
 
 const consentimiento = ref(false);
@@ -378,7 +397,8 @@ async function handleValidation(isValid, tabIndex) {
     var paises = [];
     for(var i in dataCountry.value){
       var ins = dataCountry.value[i];
-      paises.push({ title:ins.country, value:ins.country });
+      // paises.push({ title:ins.country, value:ins.country });
+      paises.push(ins.country);
     }
 
     // console.log(paises)
@@ -668,7 +688,7 @@ watch(() => selectedItem.value, (newValue, oldValue) => {
     }
     cityList.value = ciudadesSi;
 
-    // console.log(cityList.value)
+    console.log(cityList.value)
   }else{
     cityList.value = [];
     selectItemParticipantes.value = [];
@@ -717,10 +737,10 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(selectedItemCiudad.value != null){
-    loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
-    await generarOtrosValores();
+    // loadingPanel.value=true;
+    // await getUsuarios();
+    // loadingPanel.value=false;
+    // await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
   }
@@ -732,10 +752,10 @@ watch(async () => selectItemDispositivos.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(selectItemDispositivos.value != null){
-    loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
-    await generarOtrosValores();
+    // loadingPanel.value=true;
+    // await getUsuarios();
+    // loadingPanel.value=false;
+    // await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
   }
@@ -747,10 +767,10 @@ watch(async () => selectItemSO.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(selectItemSO.value != null){
-    loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
-    await generarOtrosValores();
+    // loadingPanel.value=true;
+    // await getUsuarios();
+    // loadingPanel.value=false;
+    // await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
   }
@@ -763,10 +783,10 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(selectItemNavegador.value != null){
-    loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
-    await generarOtrosValores();
+    // loadingPanel.value=true;
+    // await getUsuarios();
+    // loadingPanel.value=false;
+    // await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
   }
@@ -780,18 +800,16 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(metadatos.value != null){
-    loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
-    await generarOtrosValores();
+    // loadingPanel.value=true;
+    // await getUsuarios();
+    // loadingPanel.value=false;
+    // await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
   }
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
-
-
 
 // watch(async () => criterio.value, async  (newValue, oldValue) => {
 //   // console.log('Nuevo valor seleccionado:', newValue);
@@ -809,66 +827,14 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 // });
 
 
-/* NUEVO CODIGO */
+const calcularPartic = () => {
+  loadingPanel.value=true;
+  getUsuarios();
+  loadingPanel.value=false;
+  generarOtrosValores();
 
-const selectedCountry = ref('');
-const selectedCity = ref('');
-const countrySuggestions = ref([]);
-const citySuggestions = ref([]);
-let isSearching = false;
-let apiData = null; // Almacena los datos de la API
-
-const searchCountries = async () => {
-  isSearching = true;
-  if (!apiData) {
-    // Si no se han cargado los datos de la API, realiza la solicitud
-    try {
-      const response = await axios.get('https://ecuavisa-suscripciones.vercel.app/otros/obtener-paises-ciudades');
-      apiData = response.data;
-    } catch (error) {
-      console.error(error);
-    }
-  } 
-  countrySuggestions.value = apiData.filter(country => country.country.toLowerCase().includes(selectedCountry.value.toLowerCase()));
-
+  
 };
-
-const selectCountry = (country) => {
-  selectedCountry.value = country.country;
-  countrySuggestions.value = [];
-  selectedCity.value = '';
-  isSearching = false;
-};
-
-const searchCities = async () => {
-  isSearching = true;
-  citySuggestions.value = apiData
-    .filter(country => country.country.toLowerCase() === selectedCountry.value.toLowerCase())
-    .map(country => country.data)
-    .flat()
-    .filter(city => city.city.toLowerCase().includes(selectedCity.value.toLowerCase()));
-};
-
-const selectCity = (city) => {
-  selectedCity.value = city.city;
-  citySuggestions.value = [];
-  isSearching = false;
-};
-
-watch(() => selectedCountry, () => {
-  if (!selectedCountry.value) {
-    citySuggestions.value = [];
-  }
-  isSearching = selectedCountry.value !== '';
-  // console.log(selectedCountry.value);
-  searchCities();
-});
-
-onMounted(() => {
-  // Realiza la solicitud de la API cuando el componente se ha montado
-  searchCountries();
-});
-
 
 </script>
 
@@ -879,7 +845,7 @@ onMounted(() => {
         class="mt-0"
         cols="12"
         md="12"
-        lg="12"
+        lg="7"
       >
         <VTabs
           v-model="currentTab"
@@ -1254,33 +1220,33 @@ onMounted(() => {
                               </VRow>
                             </VCol>
                             <VCol cols="12" :class="criterio.includes('trazabilidads')?'':'d-none'">
-                              <VRow  >
-                                <VCol cols="12">
+                              <VRow no-gutters >
+                                <VCol cols="6">
                                   <VRow no-gutters>
-                                    <VCol cols="12" md="12" >
+                                    <!-- 👉 Email -->
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
                                       <label for="email">Países</label>
                                     </VCol>
 
-                                    <VCol cols="12" md="12" >
-                                    <!-- v-model="selectedItem" ´esto es parte de la propiedad de VSelect´ -->
-                                      <!-- <VSelect
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <VCombobox
                                         v-model="selectedItem"
                                         :items="countryList"
                                         class="pr-1"
                                         chips
                                         clearable
-                                      /> -->
-                                      <VTextField  v-model="selectedCountry" @input="searchCountries" placeholder="Buscar país" />
-                                      <VCard v-if="isSearching && countrySuggestions.length" class="minModal">
-                                        <li v-for="(country, index) in countrySuggestions.slice(0, 5)" :key="country.countryCode" @click="selectCountry(country)">
-                                          {{ country.country }}
-                                        </li>
-                                      </VCard>
+                                        :menu-props="{ maxHeight: '200' }"
+                                      />
                                     </VCol>
                                   </VRow>
                                 </VCol>
-
-                                <VCol cols="12">
+                                <VCol cols="6">
                                   <VRow no-gutters>
                                     <!-- 👉 Email -->
                                     <VCol
@@ -1294,8 +1260,9 @@ onMounted(() => {
                                       cols="12"
                                       md="12"
                                     >
-                                    <!-- v-model="selectedItemCiudad" ´esto es parte de la propiedad de VCombobox -->
-                                      <!-- <VCombobox
+
+                                      <VCombobox
+                                        v-model="selectedItemCiudad"
                                         multiple
                                         chips
                                         :items="cityList"
@@ -1307,15 +1274,9 @@ onMounted(() => {
                                         :hide-no-data="false"
                                         density="default"
                                         hint=""
+                                        :menu-props="{ maxHeight: '200' }"
                                         class="custom-combobox-ciudad"
-                                      /> -->
-
-                                      <VTextField  v-model="selectedCity" @input="searchCities" placeholder="Buscar ciudad" />
-                                      <VCard v-if="isSearching && citySuggestions.length" class="minModal">
-                                        <li v-for="(city, index) in citySuggestions.slice(0, 5)" :key="city.city" @click="selectCity(city)">
-                                          {{ city.city }}
-                                        </li>
-                                      </VCard>
+                                      />
 
                                       
                                     </VCol>
@@ -1502,16 +1463,10 @@ onMounted(() => {
 
                             <!-- 👉 User fullName -->
                             <h6 class="text-h6 mt-4">
-                              <div>
-                                <VBtn  color="warning" variant="tonal">
-                                    <VIcon
-                                    start
-                                      icon="tabler-refresh"
-                                    />
-                                    Refrescar los participantes
+                              <VBtn color="warning" variant="tonal" @click="calcularPartic()">
+                                  <VIcon start icon="tabler-refresh" />
+                                  Calcular participantes
                                   </VBtn>
-
-                              </div> 
                             </h6>
 
                             <!-- 👉 Role chip -->
@@ -1519,7 +1474,7 @@ onMounted(() => {
                               label
                               :color="'success'"
                               size="large"
-                              class="text-capitalize mt-4"
+                              class="text-capitalize mt-4 totalPart"
                             >
                               {{ dataUsuarios.total || "0" }}
                             </VChip>
@@ -1609,12 +1564,5 @@ onMounted(() => {
 .v-menu .v-select__slot {
   max-height: 10px; /* Ajusta el valor según tus necesidades */
   overflow-y: auto;
-}
-
-.minModal {
-  padding: 10px;
-}
-.minModal li {
-  list-style: none;
 }
 </style>
