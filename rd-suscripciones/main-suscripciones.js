@@ -540,6 +540,7 @@
 		//FIN DE ACTUALZIAR DATA
 
 		var dataPlanes = await cargarNombresYPlanes();
+		var productos = await dataPlanes.data;
 		const dataPaisesCiudades = await cargarPaisesYCiudad();
 		let dataReglas = null;
 
@@ -561,6 +562,13 @@
 					}
 
 					dataReglas = await cargarReglas(paisRegla, ciudadRegla, ECUAVISA_EC.USER_data("id"));
+
+					if(dataReglas.data < 1){
+						dataPlanes = await cargarNombresYPlanes();
+						productos = await dataPlanes.data;
+						await armarPlanes();
+						return false;
+					}
 					
 					for(var i in dataPlanes.data){
 						for(var j in dataPlanes.data[i].planes){
@@ -596,7 +604,6 @@
 			return false;
 		}
 
-		const productos = await dataPlanes.data;
 		const x_Token = await guardarTokenPago(await dataPlanes.token);
 
 		// Obtener referencias a los elementos del DOM
