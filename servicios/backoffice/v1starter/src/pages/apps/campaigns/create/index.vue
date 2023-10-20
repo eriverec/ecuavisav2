@@ -200,6 +200,9 @@ async function mergeAndRemoveDuplicates(groups) {
 }
 
 var nextpage = ref(1);
+var loadingDatosUsuarios = ref(false);
+var pararWhile = ref(false);
+const isFlatSnackbarVisible = ref({msj:"NA",resp:false})
 
 async function getUsuarios(){
   var ciudad = -1;
@@ -230,13 +233,13 @@ async function getUsuarios(){
     navegador_temp = selectItemNavegador.value || null;
   }
 
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-  };
+  // var myHeaders = new Headers();
+  // myHeaders.append("Content-Type", "application/json");
+  // var requestOptions = {
+  //   method: 'GET',
+  //   headers: myHeaders,
+  //   redirect: 'follow'
+  // };
   // console.log(pais || "-1")
   // alert(pais.length)
   // var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
@@ -248,30 +251,52 @@ async function getUsuarios(){
   // }) }`, requestOptions);
   // const data = await response.json();
   // dataUsuarios.value = data;
-  document.querySelector('.totalPart').style.opacity = "0.4";
+  // document.querySelector('.totalPart').style.opacity = "0.4";
 
-  let batchSize = 10;
-  var metadatosFetch = [];
-  // Realizar la solicitud a la URL
-  const response = await axios.get(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-      so: so_temp, 
-      dispositivo: dispositivo_temp,
-      metadato: metadato,
-      criterio: criterioTemp.join(','),
-      navegador: navegador_temp,
-      limit: batchSize,
-      page: nextpage.value
-  }) }`, {
-    timeout: (20 * 1000),
-  });
-  // Obtener el JSON de la respuesta
-  const json = response.data;
+  try{
 
-  if(json){
-      console.log(json);
+    let batchSize = 100;
+    var metadatosFetch = [];
+
+    while (true) {
+      // Realizar la solicitud a la URL
+      const response = await axios.get(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+          so: so_temp, 
+          dispositivo: dispositivo_temp,
+          metadato: metadato,
+          criterio: criterioTemp.join(','),
+          navegador: navegador_temp,
+          limit: batchSize,
+          page: nextpage.value
+      }) }`, {
+        timeout: (20 * 1000),
+      });
+      // Obtener el JSON de la respuesta
+      const json = response.data;
+
+      if(json){
+        if (json.usuarios.length == 0 || nextpage.value > 20 || pararWhile.value == true) {
+          break;
+        }
+
+        metadatosFetch.push(json.usuarios);
+        var listaUsuariosDepurada = await mergeAndRemoveDuplicates(metadatosFetch);
+        
+        dataUsuarios.value.total = listaUsuariosDepurada.length;
+        usuariosIDS.value = listaUsuariosDepurada; 
+      }
+
+      nextpage.value += 1;
+    }
+
+  } catch (error) {
+    loadingDatosUsuarios.value = false;
+    isFlatSnackbarVisible.value.resp = true;
+    isFlatSnackbarVisible.value.msj = error;
+    console.error(error);
   }
 
-  return true;
+  return false;
 }
 
 const consentimiento = ref(false);
@@ -826,9 +851,11 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
 const calcularPartic = async () => {
   // loadingPanel.value=true;
+  loadingDatosUsuarios.value = true;
   await getUsuarios();
   // loadingPanel.value=false;
   await generarOtrosValores();
+  loadingDatosUsuarios.value = false;
 };
 
 </script>
@@ -1458,10 +1485,22 @@ const calcularPartic = async () => {
 
                             <!-- 👉 User fullName -->
                             <h6 class="text-h6 mt-4">
-                              <VBtn color="warning" variant="tonal" @click="calcularPartic()">
-                                  <VIcon start icon="tabler-refresh" />
-                                    Calcular participantes
-                                  </VBtn>
+                              <VBtn
+                                class="btn-loading-cr"
+                                :loading="loadingDatosUsuarios"
+                                :disabled="loadingDatosUsuarios"
+                                color="warning"
+                                @click="calcularPartic()"
+                              >
+                                Grabar usuarios
+                                <template #loader>
+                                  <span>Buscando usuarios... </span>
+                                  <span class="custom-loader">
+                                    <VIcon icon="tabler-refresh" />
+                                  </span>
+                                </template>
+                              </VBtn>
+
                             </h6>
 
                             <!-- 👉 Role chip -->
@@ -1486,7 +1525,15 @@ const calcularPartic = async () => {
 
               
 
-              
+              <!-- flat snackbar -->
+              <VSnackbar
+                v-model="isFlatSnackbarVisible.resp"
+                location="top end"
+                variant="flat"
+                color="error"
+              >
+                {{isFlatSnackbarVisible.msj}}
+              </VSnackbar>
             </VWindow>
           </VCardText>
         </VCard>
@@ -1559,5 +1606,24 @@ const calcularPartic = async () => {
 .v-menu .v-select__slot {
   max-height: 10px; /* Ajusta el valor según tus necesidades */
   overflow-y: auto;
+}
+
+.custom-loader {
+  display: flex;
+  animation: loader 1s infinite;
+}
+
+@keyframes loader {
+  from {
+    transform: rotate(0);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.btn-loading-cr {
+    width: 275px;
 }
 </style>
