@@ -58,8 +58,8 @@ function recomendadasNavegacion(){
     
                   const cintilloImg = /*html*/ `
                 <h2 class="t_recom" style="color:${conColor};">${conTitulo}</h2>
-                <div class="c_azul_celeste_Desktop mb-4"><img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fcintillo_azul_celeste.svg" alt="line_bloque" width="100%" height="auto" title="Cintillo"></div>
-                <div class="c_azul_celeste_Mobile mb-4"><img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fcintillo_azul_celeste_mobile.svg" alt="line_bloque" width="100%" height="25px" title="Cintillo"></div>`;
+                <div class="c_azul_celeste_Desktop mb-4"><img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2FVector19.svg" alt="line_bloque" width="100%" height="auto" title="Cintillo"></div>
+                <div class="c_azul_celeste_Mobile mb-4"><img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2FVector19.svg" alt="line_bloque" width="100%" height="25px" title="Cintillo"></div>`;
     
                   textRec.innerHTML = cintilloImg;
     
