@@ -54,7 +54,7 @@
 
 /* INICIO TÍTULO */
 .text_recomendadas h2 {
-  display: inline-block;
+  /* display: inline-block;
   color: #2927b9 !important;
   font-family: 'Anek Malayalam';
   letter-spacing: -0.03em;
@@ -64,7 +64,16 @@
   line-height: 96px;
   margin-top: 0px;
   margin-top: 30px;
-  text-transform: lowercase;
+  text-transform: lowercase; */
+    color: #060127;
+    margin: 0;
+    font-weight: 700;
+    font-family: 'Archivo';
+    font-style: normal;
+    font-size: 40px;
+    line-height: 24px;
+    text-transform: uppercase;
+    margin-top: 1rem;
 }
 
 @media (max-width: 767px) {
