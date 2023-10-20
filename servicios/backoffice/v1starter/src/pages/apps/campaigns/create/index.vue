@@ -5,6 +5,7 @@ import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasLis
 const router = useRouter();
 import {FormWizard,TabContent} from "vue3-form-wizard";
 import 'vue3-form-wizard/dist/style.css'
+import { suppressDeprecationWarnings } from 'moment';
 const currentTab = ref('tab-lista');
 const checkbox = ref(false);
 const loadingWizard = ref(false);
@@ -110,6 +111,9 @@ const criterioList = [
   { title:'Dispositivos', value:'dispositivos' },
   { title:'Metadatos', value:'metadatos' },
   { title:'Plataforma', value:'plataforma' },
+  { title:'Intereses', value:'intereses' },
+  { title:'Sugerencias', value:'sugerencias' },
+
   // { title:'Navegador', value:'navegador' },
 ];//, { title:'Metadatos', value:'metadato' }
 
@@ -211,6 +215,8 @@ async function getUsuarios(){
 
   var so_temp = null;
   var dispositivo_temp = null;
+  var intereses_temp = null;
+  var sugerencias_temp = null;
   var navegador_temp = null;
   var metadato = null;
 
@@ -226,6 +232,14 @@ async function getUsuarios(){
 
   if(criterioTemp.includes("dispositivos")){
     dispositivo_temp = selectItemDispositivos.value || null;
+  }
+
+  if(criterioTemp.includes("intereses")){
+    intereses_temp= selectedInt.value || null;
+  }
+
+  if(criterioTemp.includes("sugerencias")){
+    sugerencias_temp = selectedSug.value || null;
   }
 
   if(criterioTemp.includes("plataforma")){
@@ -266,6 +280,8 @@ async function getUsuarios(){
           metadato: metadato,
           criterio: criterioTemp.join(','),
           navegador: navegador_temp,
+          intereses: intereses_temp,
+          sugerencias: sugerencias_temp,
           limit: batchSize,
           page: nextpage.value
       }) }`, {
@@ -275,7 +291,7 @@ async function getUsuarios(){
       const json = response.data;
 
       if(json){
-        if (json.usuarios.length == 0 || nextpage.value > 20 || pararWhile.value == true) {
+        if (json.usuarios.length == 0 || nextpage.value > 50 || pararWhile.value == true) {
           break;
         }
 
@@ -334,6 +350,8 @@ async function onComplete() {
 
   var so_temp = null;
   var dispositivo_temp = null;
+  var intereses_temp = null;
+  var sugerencias_temp = null;
   var metadato_temp = null;
   var navegador_temp = null;
 
@@ -357,6 +375,14 @@ async function onComplete() {
     dispositivo_temp = (selectItemDispositivos.value).join(',') || null;
   }
 
+  if(cri.includes("intereses")){
+    intereses_temp = (selectedInt.value).join(',') || null;
+  }
+
+  if(cri.includes("sugerencias")){
+    sugerencias_temp = (selectedSug.value).join(',') || null;
+  }
+
   if(cri.includes("plataforma")){
     so_temp = (selectItemSO.value).join(',') || null;
     navegador_temp = (selectItemNavegador.value).join(',') || null;
@@ -374,6 +400,8 @@ async function onComplete() {
             "country": pais,
             "city": ciudad || -1,
             "so": so_temp || null,
+            "intereses": intereses_temp || null,
+            "sugerencias": sugerencias_temp || null,
             "dispositivo": dispositivo_temp || null,
             "metadato": metadato_temp || null,
             "navegador": navegador_temp || null
@@ -857,6 +885,51 @@ const calcularPartic = async () => {
   await generarOtrosValores();
   loadingDatosUsuarios.value = false;
 };
+const interesesList = ref([]);
+const sugerenciasList = ref([]);
+
+const selectedInt = ref([]);
+const selectedSug = ref([]);
+
+const cargarDatosInteres = async () => {
+  try {
+    const response = await fetch('https://sugerencias-ecuavisa.vercel.app/intereses/get/all');
+    const data = await response.json();
+    
+    if (data.resp) {
+      // Mapear los títulos de los elementos en la lista
+      interesesList.value = data.data.map(item => item.title);
+    } else {
+      console.error('Error al cargar datos de la API');
+    }
+  } catch (error) {
+    console.error('Error en la solicitud a la API', error);
+  }
+};
+
+const cargarDatosSugerencias = async () => {
+  try {
+    const response = await fetch('https://sugerencias-ecuavisa.vercel.app/sugerencias/get/all');
+    const data = await response.json();
+    
+    if (data.resp) {
+      // Mapear los títulos de los elementos en la lista
+      sugerenciasList.value = data.data.map(item => item.title);
+    } else {
+      console.error('Error al cargar datos de la API');
+    }
+  } catch (error) {
+    console.error('Error en la solicitud a la API', error);
+  }
+};
+
+
+onMounted(() => {
+  cargarDatosInteres(); // Cargar datos de intereses al montar el componente
+  cargarDatosSugerencias(); // Cargar datos de sugerencias al montar el componente
+});
+
+
 
 </script>
 
@@ -1306,6 +1379,7 @@ const calcularPartic = async () => {
                                 </VCol>
                               </VRow>
                             </VCol>
+
                             <VCol cols="12" :class="criterio.includes('dispositivos')?'':'d-none'">
                               <VRow no-gutters >
                                 <VCol cols="12">
@@ -1363,12 +1437,12 @@ const calcularPartic = async () => {
                                       md="12"
                                     >
                                       <VSelect
-                                        v-model="selectItemSO"
-                                        :items="selectItemsListSO"
+                                        v-model="selectItemIntereses"
+                                        :items="selectItemsListIntereses"
                                         item-title="title"
                                         item-value="value"
                                         class="pr-1"
-                                        
+                                        :menu-props="{ maxHeight: '200' }"
                                         multiple
                                         clearable
                                       >
@@ -1414,6 +1488,61 @@ const calcularPartic = async () => {
                                 </VCol>
                               </VRow>
                             </VCol>
+
+                            <VCol cols="12" :class="criterio.includes('intereses')?'':'d-none'">
+                              <VRow no-gutters >
+                                <VCol cols="12">
+                                  <VRow no-gutters>
+                                    <!-- 👉 Email -->
+                                    <VCol
+                                      cols="12"
+                                      md="12"
+                                    >
+                                      <label for="email">Elige tu interés</label>
+                                    </VCol>
+ 
+                                    <VCol cols="12" md="12" >
+                                      <VCombobox
+                                        v-model="selectedInt"
+                                        :items="interesesList"
+                                        class="pr-1"
+                                        chips
+                                        multiple
+                                        clearable
+                                        :menu-props="{ maxHeight: '200' }"
+                                      />
+                                    </VCol>
+                                  </VRow>
+                                </VCol>
+                              </VRow>
+                            </VCol>
+
+                            
+                            <VCol cols="12" :class="criterio.includes('sugerencias')?'':'d-none'">
+                              <VRow no-gutters >
+                                <VCol cols="12">
+                                  <VRow no-gutters>
+                                    <!-- 👉 Email -->
+                                    <VCol cols="12" md="12" >
+                                      <label for="email">Elige la sugerencia</label>
+                                    </VCol>
+ 
+                                    <VCol cols="12" md="12" >
+                                      <VCombobox
+                                        v-model="selectedSug"
+                                        :items="sugerenciasList"
+                                        class="pr-1"
+                                        chips
+                                        multiple
+                                        clearable
+                                        :menu-props="{ maxHeight: '200' }"
+                                      />
+                                    </VCol>
+                                  </VRow>
+                                </VCol>
+                              </VRow>
+                            </VCol>
+                            
                             <VCol cols="12">
                               <VRow no-gutters>
                                 <!-- 👉 Email -->
@@ -1437,6 +1566,8 @@ const calcularPartic = async () => {
                                 </VCol>
                               </VRow>
                             </VCol>
+
+                           
 
                             <VCol cols="12" :class="selectItemParticipantes!='Otro'?'d-none':''">
                               <VRow no-gutters>
