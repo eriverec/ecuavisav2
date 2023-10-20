@@ -3,8 +3,10 @@ import { useRouter } from 'vue-router';
 import axios from "axios";
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
 const router = useRouter();
+import { ref, onBeforeMount } from 'vue';
 import {FormWizard,TabContent} from "vue3-form-wizard";
 import 'vue3-form-wizard/dist/style.css'
+import moment from 'moment';
 import { suppressDeprecationWarnings } from 'moment';
 const currentTab = ref('tab-lista');
 const checkbox = ref(false);
@@ -17,6 +19,21 @@ const cityList = ref([]);
 const countryList = ref([]);
 // const FormWizard = ref(false);
 // const TabContent = ref(false);
+
+const interesesList = ref([]);
+const sugerenciasList = ref([]);
+// const fechaIniFinList = ref([]);
+
+// const fechaIniFinList = ['1 dia','1 mes','3 meses'];
+
+// const fechaIniFinList = [
+//   { title:'1 mes', value:'trazabilidads' },
+//   { title:'2 meses', value:'dispositivos' },
+//   { title:'3 meses', value:'metadatos' }
+// ];
+
+const selectedInt = ref([]);
+const selectedSug = ref([]);
 
 const nombreCampania = ref('')
 const codigoExternoModel = ref('')
@@ -130,6 +147,7 @@ watch(posicion, value => {
     nextTick(() => posicion.value.pop())
 })
 
+
 watch(metadatos, value => {
   if (value.length > 5)
     nextTick(() => metadatos.value.pop())
@@ -208,6 +226,12 @@ var loadingDatosUsuarios = ref(false);
 var pararWhile = ref(false);
 const isFlatSnackbarVisible = ref({msj:"NA",resp:false})
 
+const fechaIniFinList = ['1 mes', '2 meses'];
+  const selectedfechaIniFin = ref('');
+  const fechaInicial = ref('');
+  const fechaActual = ref('');
+  const fechaFin = ref('');
+
 async function getUsuarios(){
   var ciudad = -1;
   var pais = -1;
@@ -217,6 +241,8 @@ async function getUsuarios(){
   var dispositivo_temp = null;
   var intereses_temp = null;
   var sugerencias_temp = null;
+  var fechai_temp = null;
+  var fechaf_temp =  null;
   var navegador_temp = null;
   var metadato = null;
 
@@ -267,6 +293,29 @@ async function getUsuarios(){
   // dataUsuarios.value = data;
   // document.querySelector('.totalPart').style.opacity = "0.4";
 
+  // Obtener la fecha actual
+  const fechaHoy = moment();
+  // Establecer fechaInicial como la fecha actual formateada en 'YYYY-MM-DD'
+ 
+  // Calcular la fecha 1 mes antes si se selecciona "1 mes"
+
+  if(selectedfechaIniFin.value === '1 mes'){
+    const fechaUnMesAntes = fechaHoy.clone().subtract(1, 'months');
+    fechaInicial.value = fechaUnMesAntes.format('YYYY-MM-DD');
+    fechaFin.value = fechaHoy.format('YYYY-MM-DD');
+    fechaActual.value = fechaHoy.format('YYYY-MM-DD');
+    console.log(fechaFin.value);
+  }
+
+  if(selectedfechaIniFin.value === '2 mes'){
+    const fechaUnMesAntes = fechaHoy.clone().subtract(2, 'months');
+    fechaInicial.value = fechaUnMesAntes.format('YYYY-MM-DD');
+    fechaFin.value = fechaHoy.format('YYYY-MM-DD');
+    fechaActual.value = fechaHoy.format('YYYY-MM-DD');
+    console.log(fechaFin.value);
+  }
+
+
   try{
 
     let batchSize = 100;
@@ -282,6 +331,8 @@ async function getUsuarios(){
           navegador: navegador_temp,
           intereses: intereses_temp,
           sugerencias: sugerencias_temp,
+          fechai: fechaInicial,
+          fechaf: fechaFin,
           limit: batchSize,
           page: nextpage.value
       }) }`, {
@@ -351,6 +402,8 @@ async function onComplete() {
   var so_temp = null;
   var dispositivo_temp = null;
   var intereses_temp = null;
+  var fechaf_temp = null;
+  var fechai_temp = null;
   var sugerencias_temp = null;
   var metadato_temp = null;
   var navegador_temp = null;
@@ -494,6 +547,11 @@ async function validateAsync() {
     alert("Debes añadir la posicion del ads");
     return false;
   }
+
+  // if(datesFIF.length < 1){
+  //   alert("Debes añadir la posicion del ads");
+  //   return false;
+  // }
 
   if(visibilidad.length < 1){
     alert("Debes añadir la La visibilidad en el sitio web");
@@ -885,11 +943,6 @@ const calcularPartic = async () => {
   await generarOtrosValores();
   loadingDatosUsuarios.value = false;
 };
-const interesesList = ref([]);
-const sugerenciasList = ref([]);
-
-const selectedInt = ref([]);
-const selectedSug = ref([]);
 
 const cargarDatosInteres = async () => {
   try {
@@ -928,6 +981,8 @@ onMounted(() => {
   cargarDatosInteres(); // Cargar datos de intereses al montar el componente
   cargarDatosSugerencias(); // Cargar datos de sugerencias al montar el componente
 });
+
+
 
 
 
@@ -1123,6 +1178,30 @@ onMounted(() => {
                                 :hide-no-data="false"
                                 hint=""
                               />
+                            </VCol>
+                          </VRow>
+                        </VCol>
+                        <VCol cols="6">
+                          <VRow no-gutters>
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+                              <label for="email">Criterio de Fecha</label>
+                            </VCol>
+
+                            <VCol cols="12" md="12" >
+
+                              <VCombobox
+                                v-model="selectedfechaIniFin"
+                                :items="fechaIniFinList"
+                                variant="outlined"
+                                label=""
+                                persistent-hint
+                                hide-selected
+                                hint=""
+                              />
+
                             </VCol>
                           </VRow>
                         </VCol>
