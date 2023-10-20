@@ -235,7 +235,7 @@ async function getUsuarios(){
             redirect: 'follow'
         };
 
-    const send = await fetch('https://ecuavisa-cupones.vercel.app/update', requestOptions);
+    const send = await fetch('https://ads-service.vercel.app/metadatos/usuarios/get/total', requestOptions);
     const respuesta = await send.json();    
 
     dataUsuarios.value = respuesta;
