@@ -1101,7 +1101,7 @@ onMounted(() => {
                               cols="12"
                               md="12"
                             >
-                              <label for="email">Búsqueda de udiencia por fecha</label>
+                              <label for="email">Búsqueda de audiencia por fecha</label>
                             </VCol>
 
                             <VCol cols="12" md="12" >
@@ -1360,7 +1360,7 @@ onMounted(() => {
                                   cols="12"
                                   md="12"
                                 >
-                                  <label for="email">Búsqueda de udiencia por fecha</label>
+                                  <label for="email">Búsqueda de audiencia por fecha</label>
                                 </VCol>
 
                                 <VCol cols="12" md="12" >
