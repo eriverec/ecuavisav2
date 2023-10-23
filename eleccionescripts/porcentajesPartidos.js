@@ -1,5 +1,5 @@
 // URL de la API
-const apiUrl = 'https://api-configuracion.vercel.app/web/data-sv';
+const apiUrl = 'https://script.googleusercontent.com/macros/echo?user_content_key=w92iEBKC8vQwmMSRBggfuX6IRXfWB9rqYkL6QSL4EYMVx97aNDVDT4NXKNlkXXUxFjP1cyojhJ3nehxLAHvBkHUCSuCpCVZam5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnNj6mStLV91FQ3L_-tYZFguE8mxVUlGxd4f7-KIqBZWZQ7yZc7utjIJY31GS_HzzPc0IwYdTPPDCQ74Sjkwr5njVLW7j7cYDrdz9Jw9Md8uu&lib=MgH1N6f4vGPDTfW1kGEEmVr4ZcExjOBYo';
 
 // Obtener referencia al elemento div
 const dataPorcentajeDiv = document.getElementById('dataPorcentaje');
@@ -132,7 +132,7 @@ function startCounterAnimation() {
 function eventoCharPie() {
 
     // Llamada a la API
-    fetch('https://api-configuracion.vercel.app/web/data-sv')
+    fetch('https://script.googleusercontent.com/macros/echo?user_content_key=w92iEBKC8vQwmMSRBggfuX6IRXfWB9rqYkL6QSL4EYMVx97aNDVDT4NXKNlkXXUxFjP1cyojhJ3nehxLAHvBkHUCSuCpCVZam5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnNj6mStLV91FQ3L_-tYZFguE8mxVUlGxd4f7-KIqBZWZQ7yZc7utjIJY31GS_HzzPc0IwYdTPPDCQ74Sjkwr5njVLW7j7cYDrdz9Jw9Md8uu&lib=MgH1N6f4vGPDTfW1kGEEmVr4ZcExjOBYo')
         .then(response => response.json())
         .then(data => {
             // Obtener los datos del objeto "porcentaje"
@@ -193,7 +193,7 @@ function eventoCharPie() {
 function eventoCharColumn() {
 
     // Llamada a la API
-    fetch('https://api-configuracion.vercel.app/web/data-sv')
+    fetch('https://script.googleusercontent.com/macros/echo?user_content_key=w92iEBKC8vQwmMSRBggfuX6IRXfWB9rqYkL6QSL4EYMVx97aNDVDT4NXKNlkXXUxFjP1cyojhJ3nehxLAHvBkHUCSuCpCVZam5_BxDlH2jW0nuo2oDemN9CCS2h10ox_1xSncGQajx_ryfhECjZEnNj6mStLV91FQ3L_-tYZFguE8mxVUlGxd4f7-KIqBZWZQ7yZc7utjIJY31GS_HzzPc0IwYdTPPDCQ74Sjkwr5njVLW7j7cYDrdz9Jw9Md8uu&lib=MgH1N6f4vGPDTfW1kGEEmVr4ZcExjOBYo')
         .then(response => response.json())
         .then(data => {
             // Obtener los datos del objeto "porcentaje"
