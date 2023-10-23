@@ -302,7 +302,7 @@ function eventoEnvivoManager() {
         console.error("Error al obtener los datos:", error);
       });
 
-    setTimeout(fetchHorarioEnvivo, 120000); //cada 2 minutos se actualiza
+    // setTimeout(fetchHorarioEnvivo, 120000); //comentado 23/octubre/2023 - 11:50AM
   }
 
   // Llamar a la función para obtener y procesar los datos inicialmente
