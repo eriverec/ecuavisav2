@@ -264,6 +264,7 @@ function recomendadasNavegacion(){
             } else {
               console.log("no has navegado lo suficiente");
               document.querySelector('.htmlRecomen.container .ring').remove();
+              htmlContainer.innerHTML = `<div class="alert alert-primary text-uppercase" role="alert">No ha navegado lo suficiente para generar este contenido!</div>`;
             }
     
     
