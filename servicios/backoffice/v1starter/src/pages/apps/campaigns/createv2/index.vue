@@ -241,12 +241,12 @@ async function getUsuarios(){
     dataUsuarios.value = respuesta;
     
   }else if(criterioTemp.includes("trazabilidads")){
-    console.log('envia geo')
+    
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
     var raw = JSON.stringify({pais: pais,
                               ciudad: ciudad  });
-    console.log('data a enviar',raw); 
+    //console.log('data a enviar',raw); 
         var requestOptions = {
             method: 'POST',
             headers: myHeaders,
@@ -260,7 +260,7 @@ async function getUsuarios(){
     dataUsuarios.value = respuesta;
   }
   else{
-    console.log('ciudad',ciudad);
+    
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   var requestOptions = {
