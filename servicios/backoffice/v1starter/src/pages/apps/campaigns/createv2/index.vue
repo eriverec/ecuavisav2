@@ -240,7 +240,27 @@ async function getUsuarios(){
 
     dataUsuarios.value = respuesta;
     
-  }else{
+  }else if(criterioTemp.includes("trazabilidads")){
+    console.log('envia geo')
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({pais: pais,
+                              ciudad: ciudad  });
+    console.log('data a enviar',raw); 
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+    const send = await fetch('https://ads-service.vercel.app/geolocalizacion/usuarios/get/total', requestOptions);
+    const respuesta = await send.json();    
+
+    dataUsuarios.value = respuesta;
+  }
+  else{
+    console.log('ciudad',ciudad);
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   var requestOptions = {
