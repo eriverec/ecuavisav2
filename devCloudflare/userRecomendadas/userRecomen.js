@@ -30,7 +30,8 @@ function recomendadasNavegacion(){
     
             if (data.resp === true) {
               console.log("si has navegado lo suficiente");
-              const randomItems = getRandomItems(apiData, 5);
+              // const randomItems = getRandomItems(apiData, 5);
+              const randomItems = apiData;
               htmlContainer.textContent = "";
     
               // Declarar e inicializar el contador
