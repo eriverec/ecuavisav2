@@ -22,7 +22,7 @@ function recomendadasNavegacion(){
       if(htmlContainer){
         htmlContainer.innerHTML = '<svg class="ring" viewBox="25 25 50 50" stroke-width="5"> <circle cx="50" cy="50" r="20"/></svg>';
     
-        fetch("https://servicio-de-actividad.vercel.app/recomendadas/"+wUserId)
+        fetch("https://servicio-de-actividad.vercel.app/recomendadasv2/"+wUserId)
           .then((response) => response.json())
           .then((data) => {
             // Obtener el contenido de la API
