@@ -8,7 +8,10 @@
 
 .contenedor_embed_radio{
   display: none;
+  text-align: center;
 }
+
+
 
 .c_azul_celeste_Desktop {
   display: none;
@@ -373,6 +376,7 @@
   letter-spacing: -0.03em;
   color: #2927B9;
   margin-bottom: 20px;
+  text-align: center;
 }
 
 .msp_radio .np__global_player span {
@@ -394,6 +398,10 @@
 @media (max-width: 600px) {
   .msp_radio .np__global_player .np__player_widget .np__elements_soundbadge .np__avatar_element {
     display: none !important;
+  }
+
+  .contenedor_embed_radio iframe{
+    width: 100%;
   }
 
   .msp_radio .np__global_player .np__player_widget .np__elements_play_controls {
