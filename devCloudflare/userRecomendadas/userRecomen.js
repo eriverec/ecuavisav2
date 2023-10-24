@@ -311,18 +311,18 @@ function recomendadasIntereses(){
   
   function eventoRecomendadasUserIn() {
     // Obtener la referencia al elemento contenedor
-    // const wUserId = localStorage.getItem("wylexUserId");
-    const wUserId = ECUAVISA_EC.USER_data("id");
-    // const wUserId = "81408";
+    // const wUserIdInt = localStorage.getItem("wylexUserId");
+    const wUserIdInt = ECUAVISA_EC.USER_data("id");
+    // const wUserIdInt = "81408";
   
   
-    if (wUserId) {
-      const htmlContainer = document.querySelector(".htmlRecomenIntereses");
-      // htmlContainer.textContent = "Cargando...";
-      if(htmlContainer){
-        htmlContainer.innerHTML = '<svg class="ring" viewBox="25 25 50 50" stroke-width="5"> <circle cx="50" cy="50" r="20"/></svg>';
+    if (wUserIdInt) {
+      const htmlContainerInt = document.querySelector(".htmlRecomenIntereses");
+      // htmlContainerInt.textContent = "Cargando...";
+      if(htmlContainerInt){
+        htmlContainerInt.innerHTML = '<svg class="ring" viewBox="25 25 50 50" stroke-width="5"> <circle cx="50" cy="50" r="20"/></svg>';
     
-        fetch("https://servicio-de-actividad.vercel.app/recomendadasIntereses/"+wUserId)
+        fetch("https://servicio-de-actividad.vercel.app/recomendadasIntereses/"+wUserIdInt)
           .then((response) => response.json())
           .then((data) => {
             // Obtener el contenido de la API
@@ -330,8 +330,8 @@ function recomendadasIntereses(){
     
             if (data.resp === true) {
               console.log("si has navegado lo suficiente");
-              const randomItems = getRandomItemsIn(apiData, 5);
-              htmlContainer.textContent = "";
+              const randomItems = apiData;
+              htmlContainerInt.textContent = "";
     
               // Declarar e inicializar el contador
               let contadorRec = 1;
@@ -402,7 +402,7 @@ function recomendadasIntereses(){
     
                       div_grid.innerHTML += htCont;
                     }
-                    htmlContainer.appendChild(div_grid);
+                    htmlContainerInt.appendChild(div_grid);
                   } else if (conStyle === "featured") {
                     console.log("si es featured");
                     const div_featured = document.createElement("div");
@@ -439,7 +439,7 @@ function recomendadasIntereses(){
                       div_featured.innerHTML += htCont;
                     }
     
-                    htmlContainer.appendChild(div_featured);
+                    htmlContainerInt.appendChild(div_featured);
                   } else if (conStyle === "swiper") {
                     //ESTO ES SWIPER
                     const div_grid = document.createElement("div");
@@ -553,13 +553,13 @@ function recomendadasIntereses(){
     
                       div_grid.innerHTML += htCont;
                     }
-                    htmlContainer.appendChild(div_grid);
+                    htmlContainerInt.appendChild(div_grid);
                     console.log("si es swipper");
                   } else {
                     console.log("no esta en ningun style");
                   }
     
-                  // htmlContainer.appendChild(div_grid);
+                  // htmlContainerInt.appendChild(div_grid);
                 })
                 .catch((error) => console.log(error));
             } else {
@@ -595,6 +595,7 @@ function recomendadasIntereses(){
   eventoRecomendadasUserIn();
 
 }  
+
 
 
 ECUAVISA_EC.ecuavisaScroll().then((e) => {
