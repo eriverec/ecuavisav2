@@ -15,6 +15,10 @@
   margin-top: 30px;
 }
 
+.RecomendadasIntereses_{
+  display: none;
+}
+
 .RecomendadasNavegacion_{
   /* display: none; */
 }
