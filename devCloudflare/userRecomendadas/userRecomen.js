@@ -300,9 +300,6 @@ function recomendadasNavegacion(){
 
 }
 
-recomendadasNavegacion();
-
-/* --------------------------- RECOMENDADAS POR INTERESES --------------------------- */
 function recomendadasIntereses(){
   function eliminarEtiquetasHTMLIn(texto) {
     // Eliminar todas las etiquetas HTML
@@ -354,17 +351,18 @@ function recomendadasIntereses(){
     
                   // Add the title above the items with an <h1> element
                   const divTitle = document.createElement("div");
-                  divTitle.classList.add("text_recomendadas");
+                  divTitle.classList.add("text_recomendadas_intereses");
                   conBase.appendChild(divTitle);
     
-                  const textRec = document.querySelector(".text_recomendadas");
+                  const textRec = document.querySelector(".text_recomendadas_intereses");
     
                   const cintilloImg = /*html*/ `
                 <h2 class="t_recom" style="color:${conColor};">${conTitulo}</h2>
-                <div class="c_azul_celeste_Desktop mb-4"><img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fcintillo_azul_celeste.svg" alt="line_bloque" width="100%" height="auto" title="Cintillo"></div>
-                <div class="c_azul_celeste_Mobile mb-4"><img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fcintillo_azul_celeste_mobile.svg" alt="line_bloque" width="100%" height="25px" title="Cintillo"></div>`;
+                <div class="c_azul_celeste_Desktop mb-4"><img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2FVector19.svg" alt="line_bloque" width="100%" height="auto" title="Cintillo"></div>
+                <div class="c_azul_celeste_Mobile mb-4"><img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2FVector19.svg" alt="line_bloque" width="100%" height="25px" title="Cintillo"></div>`;
+
+                textRec.innerHTML = cintilloImg;
     
-                  textRec.innerHTML = cintilloImg;
     
                   // console.log(conStyle);
                   if (conStyle === "grid") {
@@ -598,4 +596,10 @@ function recomendadasIntereses(){
 
 }  
 
-// recomendadasIntereses();
+
+ECUAVISA_EC.ecuavisaScroll().then((e) => {
+  if(e){
+    recomendadasNavegacion();  
+    recomendadasIntereses();
+  }
+});

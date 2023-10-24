@@ -53,7 +53,8 @@
 
 
 /* INICIO TÍTULO */
-.text_recomendadas h2 {
+.text_recomendadas h2,
+.text_recomendadas_intereses h2 {
   /* display: inline-block;
   color: #2927b9 !important;
   font-family: 'Anek Malayalam';
@@ -77,7 +78,8 @@
 }
 
 @media (max-width: 767px) {
-  .text_recomendadas h2 {
+  .text_recomendadas h2,
+  .text_recomendadas_intereses h2 {
     font-size: 38px;
     line-height: 35px;
   }
@@ -309,7 +311,8 @@
     width: 160px !important;
   }
 
-  .text_recomendadas h2 {
+  .text_recomendadas h2,
+  .text_recomendadas_intereses h2 {
     font-size: 70px;
   }
 }
@@ -325,7 +328,8 @@
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
-  .text_recomendadas h2 {
+  .text_recomendadas h2,
+  .text_recomendadas_intereses h2 {
     font-size: 55px;
     line-height: 60px;
   }
