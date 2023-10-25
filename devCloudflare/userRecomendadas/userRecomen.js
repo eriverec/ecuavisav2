@@ -596,11 +596,11 @@ function recomendadasIntereses(){
 
 }  
 
+//la fancion se ejetuca en global.js
 
-
-ECUAVISA_EC.ecuavisaScroll().then((e) => {
-  if(e){
-    recomendadasNavegacion();  
-    recomendadasIntereses();
-  }
-});
+// ECUAVISA_EC.ecuavisaScroll().then((e) => {
+//   if(e){
+//     recomendadasNavegacion();  
+//     recomendadasIntereses();
+//   }
+// });
