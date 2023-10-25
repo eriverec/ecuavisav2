@@ -220,13 +220,18 @@ async function getUsuarios(){
     so_temp = selectItemSO.value || null;
     navegador_temp = selectItemNavegador.value || null;
   }
-
-
-  if(criterioTemp.includes("metadatos")){
-
+  
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({metadatos: metadato});
+    var raw = JSON.stringify({
+      "metadato": metadato,
+      "criterio": criterioTemp,
+      "pais": pais,
+      "ciudad": ciudad,
+      "navegador": navegador_temp,
+      "os": so_temp,
+      "dispositivo": dispositivo_temp
+    });
 
         var requestOptions = {
             method: 'POST',
@@ -234,33 +239,15 @@ async function getUsuarios(){
             body: raw,
             redirect: 'follow'
         };
-
-    const send = await fetch('https://ads-service.vercel.app/metadatos/usuarios/get/total', requestOptions);
+    //console.log('data enviar ',raw);    
+    const send = await fetch('https://ads-service.vercel.app/campaign/v2/usuarios/get/user/total', requestOptions);
     const respuesta = await send.json();    
-
-    dataUsuarios.value = respuesta;
+    //console.log('resp',respuesta);    
+    dataUsuarios.value =respuesta;
+    //console.log('data total',dataUsuarios.value);
+  
     
-  }else if(criterioTemp.includes("trazabilidads")){
-    
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({pais: pais,
-                              ciudad: ciudad  });
-    //console.log('data a enviar',raw); 
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-
-    const send = await fetch('https://ads-service.vercel.app/geolocalizacion/usuarios/get/total', requestOptions);
-    const respuesta = await send.json();    
-
-    dataUsuarios.value = respuesta;
-  }
-  else{
-    
+  /*  
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   var requestOptions = {
@@ -295,7 +282,7 @@ async function getUsuarios(){
       console.error("Error en la solicitud:", response.status);
       // Puedes manejar el error de acuerdo a tus necesidades
   }
-  }
+  */
   
 }
 
