@@ -110,10 +110,77 @@ async function getTrazabilidad() {
 
   }
 }
+const currentPageRecomendada = ref(1);
+const notasRecomendadas = ref([]);
+const isLoadingRecomendada = ref(false);
+async function getNotasRecomendadas(){
+  try {
+    isLoadingRecomendada.value = true;
+    const consulta = await fetch('https://servicio-de-actividad.vercel.app/recomendadas/'+p.userData.wylexId);
+    const consultaJson = await consulta.json();
+    if(consultaJson.resp){
+      notasRecomendadas.value = consultaJson.data;
+    }
+    //console.log('recomendadas', consultaJson);
+    isLoadingRecomendada.value = false;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const paginatedRecomendadas = computed(() => {
+  const start = (currentPageRecomendada.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+
+  return notasRecomendadas.value.slice(start, end);
+});
+
+const nextPageRecomendada = () => {
+  if (currentPageRecomendada.value * itemsPerPage < notasRecomendadas.value.length) currentPageRecomendada.value++;
+};
+
+const prevPageRecomendada = () => {
+  if (currentPageRecomendada.value > 1) currentPageRecomendada.value--;
+};
+
+const currentPageNotasIntereses = ref(1);
+const notasIntereses = ref([]);
+const isLoadingNotasIntereses = ref(false);
+async function getNotasIntereses(){
+  try {
+    isLoadingNotasIntereses.value = true;
+    const consulta = await fetch('https://servicio-de-actividad.vercel.app/recomendadasIntereses/'+p.userData.wylexId);
+    const consultaJson = await consulta.json();
+    if(consultaJson.resp){
+      notasIntereses.value = consultaJson.data;
+    }
+    //console.log('NotasIntereses', consultaJson);
+    isLoadingNotasIntereses.value = false;
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+const paginatedNotasIntereses = computed(() => {
+  const start = (currentPageNotasIntereses.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+
+  return notasIntereses.value.slice(start, end);
+});
+
+const nextPageNotasIntereses = () => {
+  if (currentPageNotasIntereses.value * itemsPerPage < notasIntereses.value.length) currentPageNotasIntereses.value++;
+};
+
+const prevPageNotasIntereses = () => {
+  if (currentPageNotasIntereses.value > 1) currentPageNotasIntereses.value--;
+};
 
 onMounted(async () => {
   await getIntereses();
   await getTrazabilidad();
+  await getNotasRecomendadas();
+  await getNotasIntereses();
 });
 
 const paginatedTrazabilidad = computed(() => {
@@ -197,67 +264,6 @@ var timeSince = function (date) {
   } else return null;
 };
 
-//console.log(createD);
-/*
-const projects = [
-  {
-    logo: react,
-    name: 'BGC eCommerce App',
-    project: 'React Project',
-    totalTask: '122/240',
-    progress: 78,
-    hours: '18:42',
-  },
-  {
-    logo: figma,
-    name: 'Falcon Logo Design',
-    project: 'Figma Project',
-    totalTask: '09/56',
-    progress: 18,
-    hours: '20:42',
-  },
-  {
-    logo: vue,
-    name: 'Dashboard Design',
-    project: 'Vuejs Project',
-    totalTask: '290/320',
-    progress: 62,
-    hours: '120:87',
-  },
-  {
-    logo: xamarin,
-    name: 'Foodista mobile app',
-    project: 'Xamarin Project',
-    totalTask: '290/320',
-    progress: 8,
-    hours: '120:87',
-  },
-  {
-    logo: python,
-    name: 'Dojo Email App',
-    project: 'Python Project',
-    totalTask: '120/186',
-    progress: 49,
-    hours: '230:10',
-  },
-  {
-    logo: sketch,
-    name: 'Blockchain Website',
-    project: 'Sketch Project',
-    totalTask: '99/109',
-    progress: 92,
-    hours: '342:41',
-  },
-  {
-    logo: html5,
-    name: 'Hoffman Website',
-    project: 'HTML Project',
-    totalTask: '98/110',
-    progress: 88,
-    hours: '12:45',
-  },
-]
-*/
 const resolveUserProgressVariant = (progress) => {
   if (progress <= 25) return "error";
   if (progress > 25 && progress <= 50) return "warning";
@@ -354,6 +360,14 @@ const resolveUserProgressVariant = (progress) => {
             <VTab value="tab-trazabilidad">
               <VIcon size="16"  class="me-2" icon="tabler-binary-tree-2" />
               Trazabilidad
+            </VTab>
+            <VTab value="tab-notasRecomendadas">
+              <VIcon size="16"  class="me-2" icon="tabler-binary-tree-2" />
+              Notas recomendadas
+            </VTab>
+            <VTab value="tab-notasIntereses">
+              <VIcon size="16"  class="me-2" icon="tabler-binary-tree-2" />
+              Notas por intereses
             </VTab>
           </VTabs>
         </div>
@@ -485,6 +499,71 @@ const resolveUserProgressVariant = (progress) => {
                 </div>
               </VCardText>
               <div v-else>No existen datos de trazabilidad</div>
+
+            </VWindowItem>
+
+            <VWindowItem value="tab-notasRecomendadas">
+              <div v-if="isLoadingRecomendada">Cargando datos..</div>
+              <VCardText v-else-if="notasRecomendadas.length > 0">
+                <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                  <thead>
+                    <tr>
+                      <th scope="col">Título</th>
+                      
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr class="clickable" v-for="item in paginatedRecomendadas">
+                      <td class="text-high-emphasis">
+                        {{ item.title }}
+                      </td>
+                      
+
+                    </tr>
+                  </tbody>
+                </VTable>
+                <div class="d-flex align-center justify-space-between botonescurrentPage">
+                  <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageRecomendada" :disabled="currentPageRecomendada === 1"></VBtn>
+                  Página {{ currentPageRecomendada }}
+                  <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageRecomendada"
+                    :disabled="(currentPageRecomendada * itemsPerPage) >= notasRecomendadas.length">
+                  </VBtn>
+                </div>
+              </VCardText>
+              <div v-else>No ha navegado lo suficiente para recomendar notas</div>
+
+            </VWindowItem>
+
+            <VWindowItem value="tab-notasIntereses">
+              <div v-if="isLoadingNotasIntereses">Cargando datos..</div>
+              <VCardText v-else-if="notasIntereses.length > 0">
+                <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                  <thead>
+                    <tr>
+                      <th scope="col">Título</th>
+                      
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr class="clickable" v-for="item in paginatedNotasIntereses">
+                      <td class="text-high-emphasis">
+                        {{ item.title }}
+                      </td>
+                      
+                    </tr>
+                  </tbody>
+                </VTable>
+                <div class="d-flex align-center justify-space-between botonescurrentPage">
+                  <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageNotasIntereses" :disabled="currentPageNotasIntereses === 1"></VBtn>
+                  Página {{ currentPageNotasIntereses }}
+                  <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageNotasIntereses"
+                    :disabled="(currentPageNotasIntereses * itemsPerPage) >= notasIntereses.length">
+                  </VBtn>
+                </div>
+              </VCardText>
+              <div v-else>No existen notas para mostrar</div>
 
             </VWindowItem>
           </VWindow>

@@ -4,7 +4,6 @@ import UserBioPanel from '@/views/apps/user/view/UserBioPanel.vue'
 import UserNotifications from '@/views/apps/user/view/UserNotifications.vue'
 import UserSugerencias from '@/views/apps/user/view/UserSugerencias.vue'
 import UserTabOverview from '@/views/apps/user/view/UserTabOverview.vue'
-import UserTemas from '@/views/apps/user/view/UserTemas.vue'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import esLocale from "moment/locale/es"
@@ -48,6 +47,7 @@ const tabs = [
 const fetchId = () => {
 userListStore.fetchUser(Number(route.params.id)).then(response => {
   userData.value = response.data; 
+  console.log(response.data);
 })
 };
 watchEffect(fetchId); 
