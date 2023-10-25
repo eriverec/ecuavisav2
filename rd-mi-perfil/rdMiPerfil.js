@@ -1694,8 +1694,8 @@ var bloqueUsuarioIntereses = {
 
               for(var j in tema.data){
                   var interes = tema.data[j];
-                  interes["id"] = dat.id;
-                  interes["name"] = dat.__text;
+                  interes["id"] = interes.id;
+                  interes["name"] = interes.__text;
 
                   if(interes.publicado){ 
                     //${ ITER.FAVORITE.TOPICS.isFavorite(dat.id) ?'remove':''}
