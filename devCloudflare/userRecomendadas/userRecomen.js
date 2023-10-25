@@ -596,7 +596,7 @@ function recomendadasIntereses(){
 
 }  
 
-//la fancion se ejetuca en global.js
+//la funcion se ejetuca en global.js
 
 // ECUAVISA_EC.ecuavisaScroll().then((e) => {
 //   if(e){
