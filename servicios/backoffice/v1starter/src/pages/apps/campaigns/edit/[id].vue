@@ -136,6 +136,7 @@ watch(metadatos, value => {
 // onMounted(getMetadatos)
 onMounted(async()=>{
   loadComponent.value = true;
+  await getCountries();
   await getCampaignToEdit();
   await getMetadatos();
   loadComponent.value = false;
@@ -157,8 +158,87 @@ async function getCampaignToEdit(){
   if(campania.campaignTitle){
     nombreCampania.value = campania.campaignTitle;
   }
+
+  if(campania.type){
+    languages.value = campania.type;
+  }
+  
+  if(campania.coleccion){
+    criterio.value = campania.coleccion.split(',');
+  }
+  
+  if(campania.position){
+    posicion.value = campania.position.split(',');
+  }
+
+  if(campania.criterial.visibilitySection){
+    selectItemVisibilidad.value = campania.criterial.visibilitySection || "all";
+  }
+
+  if(campania.urls.html){
+    codigoExternoModel.value = campania.urls.html || "";
+  }
+
+  if(campania.criterial.metadato){
+    metadatos.value = campania.criterial.metadato.split(',');
+  }
+
+  if(campania.urls.url){
+    linkAds.value = campania.urls.url || "#";
+  }
+
+  if(campania.urls.img.escritorio){
+    linkImageEscritorio.value = campania.urls.img.escritorio || "";
+    linkImageMobile.value = campania.urls.img.mobile || "";
+  }
+
+  if(campania.criterial.country){
+    selectedItem.value = campania.criterial.country;
+  }
+
+  setTimeout(function(){
+    if(campania.criterial.city){
+      if(campania.criterial.city == -1){
+        selectedItemCiudad.value = campania.criterial.city;
+      }else{
+        console.log(campania.criterial.city.split(','))
+        selectedItemCiudad.value = campania.criterial.city.split(',');
+      }
+    }
+  }, 1500);
+
+  setTimeout(function(){
+      if(campania.participantes){
+        selectItemParticipantes.value = campania.participantes;
+      }
+
+      if(campania.otroValor){
+        numeroOtroUsuarios.value = campania.otroValor;
+      }
+  }, 2000);
+
+  setTimeout(function(){
+      if(campania.criterial.dispositivo){
+        selectItemDispositivos.value = campania.criterial.dispositivo.split(',');
+      }
+  }, 2500);
+
+  setTimeout(function(){
+      if(campania.criterial.navegador){
+        selectItemNavegador.value = campania.criterial.navegador.split(',');
+      }
+  }, 3000);
+
+  setTimeout(function(){
+      if(campania.criterial.so){
+        selectItemSO.value = campania.criterial.so.split(',');
+      }
+  }, 3500);
+
+
   
 
+  
 
   console.log('campaña a editar ',campania );
 }

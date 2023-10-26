@@ -701,7 +701,7 @@ function groupByTitleWithAttributes(arr) {
   return result;
 }
 
-watch(() => selectedItem.value, (newValue, oldValue) => {
+function ciudadesGetCountry(newValue) {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(selectedItem.value != null){
@@ -735,6 +735,10 @@ watch(() => selectedItem.value, (newValue, oldValue) => {
     cityList.value = [];
     selectItemParticipantes.value = [];
   }
+}
+
+watch(() => selectedItem.value, (newValue, oldValue) => {
+  ciudadesGetCountry(newValue)
 });
 
 function generateRandomIntegers(min, max, count) {
