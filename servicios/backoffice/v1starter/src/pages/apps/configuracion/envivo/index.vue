@@ -54,7 +54,8 @@ const diasTotales = [
 
 async function getConfig () {
     isLoading.value = true;
-    const consultaDesktop = await fetch('https://configuracion-service.vercel.app/configuracion/horarioEnvivo');
+    // const consultaDesktop = await fetch('https://configuracion-service.vercel.app/configuracion/horarioEnvivo');
+    const consultaDesktop = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioEnvivo');
     const data = await consultaDesktop.json();
     //console.log('dataRAW: ', data);
     estado.value = data.forzado; 
@@ -187,7 +188,8 @@ async function enviar (){
 				body: raw,
 				redirect: 'follow'
 		};
-		await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
+        // await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
+		await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=update`, requestOptions)
 		.then(response => response.json())
         .then(async(responseJson) => {
             console.log('respuesta POST ',responseJson);
@@ -224,7 +226,9 @@ var requestOptions = {
         body: raw,
         redirect: 'follow'
 };
-await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
+
+// await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
+await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=update`, requestOptions)
 .then(response => response.json())
 .then(async(responseJson) => {
     console.log('respuesta POST ',responseJson);
@@ -259,7 +263,9 @@ var requestOptions = {
         body: raw,
         redirect: 'follow'
 };
-await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
+
+// await fetch(`https://configuracion-service.vercel.app/update`, requestOptions)
+await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=update`, requestOptions)
 .then(response => response.json())
 .then(async(responseJson) => {
     console.log('respuesta POST ',responseJson);
