@@ -1,240 +1,196 @@
 <script setup>
-  import { useRouter } from 'vue-router';
-  import axios from "axios";
-  import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
-  const router = useRouter();
-  import { ref, onBeforeMount } from 'vue';
-  import {FormWizard,TabContent} from "vue3-form-wizard";
-  import 'vue3-form-wizard/dist/style.css'
-  import moment from 'moment';
-  import { suppressDeprecationWarnings } from 'moment';
-  const currentTab = ref('tab-lista');
-  const checkbox = ref(false);
-  const loadingWizard = ref(false);
-  const loadingPanel = ref(false);
-  const dataCampaigns = ref([]);
-  const dataCountry = ref([]);
-  // const modelPaises = ref(null);
-  const cityList = ref([]);
-  const countryList = ref([]);
-  // const FormWizard = ref(false);
-  // const TabContent = ref(false);
+import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
+import { useRouter } from 'vue-router';
+import { FormWizard, TabContent } from "vue3-form-wizard";
+import 'vue3-form-wizard/dist/style.css';
+const router = useRouter();
+const currentTab = ref('tab-lista');
+const checkbox = ref(false);
+const loadingWizard = ref(false);
+const loadingPanel = ref(false);
+const dataCampaigns = ref([]);
+const dataCountry = ref([]);
+// const modelPaises = ref(null);
+const cityList = ref([]);
+const countryList = ref([]);
+// const FormWizard = ref(false);
+// const TabContent = ref(false);
 
-  const interesesList = ref([]);
-  const sugerenciasList = ref([]);
-  // const fechaIniFinList = ref([]);
-
-  // const fechaIniFinList = ['1 dia','1 mes','3 meses'];
-
-  // const fechaIniFinList = [
-  //   { title:'1 mes', value:'trazabilidads' },
-  //   { title:'2 meses', value:'dispositivos' },
-  //   { title:'3 meses', value:'metadatos' }
-  // ];
-
-  const selectedInt = ref([]);
-  const selectedSug = ref([]);
-  const criterioFechas = ref({fechai:"", fechaf:""});
-
-  const nombreCampania = ref('')
-  const codigoExternoModel = ref('')
-  const linkAds = ref('')
-  const linkImageEscritorio = ref('')
-  const linkImageMobile = ref('');
-  const numeroOtroUsuarios = ref('');
-  const languages = ref([]);
-  const criterio = ref([]);
-  const posicion = ref([]);
-  const selectedItem = ref([]);
-  const selectedItemCiudad = ref([]);
-  const dataUsuarios = ref({});
-  const selectItemParticipantes = ref(null);
-  const selectItemsList = ref([{ title:'Otro', value: 'Otro' },{ title:'100', value: '100' }]);
-  const minValue = ref(1); // Valor mínimo permitido
-  const maxValue = ref(100); // Valor máximo permitido
-  const usuariosIDS = ref([]);
-
-  const search = ref(null)
+const nombreCampania = ref('')
+const codigoExternoModel = ref('')
+const linkAds = ref('')
+const linkImageEscritorio = ref('')
+const linkImageMobile = ref('');
+const numeroOtroUsuarios = ref('');
+const languages = ref([]);
+const criterio = ref([]);
+const posicion = ref([]);
+const selectedItem = ref([]);
+const selectedItemCiudad = ref([]);
+const dataUsuarios = ref({});
+const selectItemParticipantes = ref(null);
+const selectItemsList = ref([{ title:'Otro', value: 'Otro' },{ title:'100', value: '100' }]);
+const minValue = ref(1); // Valor mínimo permitido
+const maxValue = ref(100); // Valor máximo permitido
 
 
-  const metadatos = ref([]);
-  const metadatosItems = ref([]);
-  const searchMetadatos = ref([]);
-  const searchCiudades = ref([]);
-  const selectMetadatos = ref(null);
-  const categoriasListStore = useCategoriasListStore();
-  const fetchCategorias = async () => {
-    try {
-      const response = await categoriasListStore.fetchCategorias();
-      return response.data;
-    } catch (error) {
-      console.error(error);
-      return error;
-    }
-  };
+const search = ref(null)
 
-  const selectItemVisibilidad = ref([]);
-  const selectItemsListVisibilidad = ref([
-    { title:'Todo el sitio', value: 'all', avatar:"" },
-    { title:'Noticias', value: 'noticias', avatar:"" },
-    { title:'Comercial', value: 'comercial', avatar:"" },
-    { title:'Laboratorio', value: 'laboratorio', avatar:"" },
+
+const metadatos = ref([]);
+const metadatosItems = ref([]);
+const searchMetadatos = ref([]);
+const searchCiudades = ref([]);
+const selectMetadatos = ref(null);
+const categoriasListStore = useCategoriasListStore();
+const fetchCategorias = async () => {
+  try {
+    const response = await categoriasListStore.fetchCategorias();
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};
+
+const selectItemVisibilidad = ref([]);
+const selectItemsListVisibilidad = ref([
+  { title:'Todo el sitio', value: 'all', avatar:"" },
+  { title:'Noticias', value: 'noticias', avatar:"" },
+  { title:'Comercial', value: 'comercial', avatar:"" },
+  { title:'Laboratorio', value: 'laboratorio', avatar:"" },
+]);
+
+const selectItemDispositivos = ref([]);
+const selectItemsListDispositivos = ref([
+  { title:'Todos', value: '0', avatar:"mdi-cellphone-link" },
+  { title:'Escritorio', value: 'desktop', avatar:"mdi-laptop-chromebook" },
+  { title:'Móvil', value: 'movil', avatar:"mdi-cellphone-android" },
   ]);
 
-  const selectItemDispositivos = ref([]);
-  const selectItemsListDispositivos = ref([
-    { title:'Todos', value: '0', avatar:"mdi-cellphone-link" },
-    { title:'Escritorio', value: 'desktop', avatar:"mdi-laptop-chromebook" },
-    { title:'Móvil', value: 'movil', avatar:"mdi-cellphone-android" },
-    ]);
+const selectItemNavegador = ref([]);
+const selectItemsListNavegador = ref([
+  { title:'Todos', value: '0', avatar:"" },
+  { title:'Chrome', value: 'Chrome', avatar:"" },
+  { title:'Safari', value: 'Safari', avatar:"" },
+  { title:'Firefox', value: 'Firefox', avatar:""},
+  { title:'Otro', value: 'Otro', avatar:"" } ,
+  ]);
 
-  const selectItemNavegador = ref([]);
-  const selectItemsListNavegador = ref([
-    { title:'Todos', value: '0', avatar:"" },
-    { title:'Chrome', value: 'Chrome', avatar:"" },
-    { title:'Safari', value: 'Safari', avatar:"" },
-    { title:'Firefox', value: 'Firefox', avatar:""},
-    { title:'Otro', value: 'Otro', avatar:"" } ,
-    ]);
+const selectItemSO = ref([]);
+const selectItemsListSO = ref([
+  { title:'Todos', value: '0', avatar:"", navegador: [] },
+  { title:'Windows', value: 'Windows', avatar:"tabler-brand-windows", navegador: [{ title:'Chrome', value: 'Chrome' },{ title:'Firefox', value: 'Firefox' }] },
+  { title:'Mac OS', value: 'Mac OS', avatar:"tabler-brand-apple", navegador: [{ title:'Safari', value: 'Safari' },{ title:'Chrome', value: 'Chrome' }] },
+  { title:'Android', value: 'Android', avatar:"tabler-brand-android", navegador: [{ title:'Chrome', value: 'Chrome' },{ title:'Firefox', value: 'Firefox' }] },
+  { title:'Linux', value: 'Linux', avatar:"mdi-linux", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
+  { title:'Otro', value: 'Otro', avatar:"", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
+  ]);
 
-  const selectItemSO = ref([]);
-  const selectItemsListSO = ref([
-    { title:'Todos', value: '0', avatar:"", navegador: [] },
-    { title:'Windows', value: 'Windows', avatar:"tabler-brand-windows", navegador: [{ title:'Chrome', value: 'Chrome' },{ title:'Firefox', value: 'Firefox' }] },
-    { title:'Mac OS', value: 'Mac OS', avatar:"tabler-brand-apple", navegador: [{ title:'Safari', value: 'Safari' },{ title:'Chrome', value: 'Chrome' }] },
-    { title:'Android', value: 'Android', avatar:"tabler-brand-android", navegador: [{ title:'Chrome', value: 'Chrome' },{ title:'Firefox', value: 'Firefox' }] },
-    { title:'Linux', value: 'Linux', avatar:"mdi-linux", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
-    { title:'Otro', value: 'Otro', avatar:"", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
-    ]);
+const numeroRules = [
+  (v) => !!v || 'El número es requerido', // Verifica que no esté vacío
+  (v) => /^\d+$/.test(v) || 'Ingrese solo números', // Verifica que solo sean números
+  (v) => v >= minValue.value && v <= maxValue.value || 'Ingrese un número entre '+minValue.value+' y '+maxValue.value // Verifica el rango de valores
+];
 
-  const numeroRules = [
-    (v) => !!v || 'El número es requerido', // Verifica que no esté vacío
-    (v) => /^\d+$/.test(v) || 'Ingrese solo números', // Verifica que solo sean números
-    (v) => v >= minValue.value && v <= maxValue.value || 'Ingrese un número entre '+minValue.value+' y '+maxValue.value // Verifica el rango de valores
-  ];
+const languageList = [{
+  title:'Imágenes locales',
+  value:'imagen'
+},{
+  title:'Código HTML',
+  value:'html'
+},{
+  title:'Códigos ADS',
+  value:'script'
+}]
 
-  const languageList = [{
-    title:'Imágenes locales',
-    value:'imagen'
-  },{
-    title:'Código HTML',
-    value:'html'
-  },{
-    title:'Códigos ADS',
-    value:'script'
-  }]
+const criterioList = [
+  { title:'Geolocalización', value:'trazabilidads' },
+  { title:'Dispositivos', value:'dispositivos' },
+  { title:'Metadatos', value:'metadatos' },
+  { title:'Plataforma', value:'plataforma' },
+  // { title:'Navegador', value:'navegador' },
+];//, { title:'Metadatos', value:'metadato' }
 
-  const criterioList = [
-    { title:'Geolocalización', value:'trazabilidads' },
-    { title:'Dispositivos', value:'dispositivos' },
-    { title:'Metadatos', value:'metadatos' },
-    { title:'Plataforma', value:'plataforma' },
-    { title:'Intereses', value:'intereses' },
-    { title:'Sugerencias', value:'sugerencias' },
+const posicionList = [
+  // 'floating_ad',
+  'RDTop1',
+  'RDTop2',
+  'RDTop3',
+  'RDFloating',
+]
 
-    // { title:'Navegador', value:'navegador' },
-  ];//, { title:'Metadatos', value:'metadato' }
+watch(posicion, value => {
+  if (value.length > 1)
+    nextTick(() => posicion.value.pop())
+})
 
-  const posicionList = [
-    // 'floating_ad',
-    'RDTop1',
-    'RDTop2',
-    'RDTop3',
-    'RDFloating',
-  ]
-
-  watch(posicion, value => {
-    if (value.length > 1)
-      nextTick(() => posicion.value.pop())
-  })
+watch(metadatos, value => {
+  if (value.length > 5)
+    nextTick(() => metadatos.value.pop())
+})
 
 
-  watch(metadatos, value => {
-    if (value.length > 5)
-      nextTick(() => metadatos.value.pop())
-  })
+onMounted(getMetadatos)
 
+// async function getCampaigns(){
+//   var myHeaders = new Headers();
+//   myHeaders.append("Content-Type", "application/json");
+//   var requestOptions = {
+//     method: 'GET',
+//     headers: myHeaders,
+//     redirect: 'follow'
+//   };
+//   var response = await fetch(`https://ads-service.vercel.app/campaign/get/all`, requestOptions);
+//   const data = await response.json();
+//   dataCampaigns.value = data.data;
 
-  onMounted(getMetadatos)
+// }
 
-  // async function getCampaigns(){
-  //   var myHeaders = new Headers();
-  //   myHeaders.append("Content-Type", "application/json");
-  //   var requestOptions = {
-  //     method: 'GET',
-  //     headers: myHeaders,
-  //     redirect: 'follow'
-  //   };
-  //   var response = await fetch(`https://ads-service.vercel.app/campaign/get/all`, requestOptions);
-  //   const data = await response.json();
-  //   dataCampaigns.value = data.data;
-
-  // }
-
-  async function getCountries(){
-    var myHeaders = new Headers();
-    loadingPanel.value=true;
-    myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-    var response = await fetch(`https://ecuavisa-suscripciones.vercel.app/otros/obtener-paises-ciudades`, requestOptions);
-    const data = await response.json();
-    dataCountry.value = data;
-    loadingPanel.value=false;
-  }
-
-  async function getMetadatos(){
-    try {
-      var metadatosTemp = await fetchCategorias();
-
-      var metadatosList = [];
-      var metadatosListItems = [];
-      for(var i in metadatosTemp){
-        metadatosList.push({ title:metadatosTemp[i].__text, value:metadatosTemp[i].__text });
-        metadatosListItems.push(metadatosTemp[i].__text);
-      }
-      selectMetadatos.value = metadatosList;
-
-      metadatosListItems.slice().sort();
-
-      const arraySinDuplicados = metadatosListItems.filter((valor, indice, arreglo) => arreglo.indexOf(valor) === indice);
-
-      metadatosItems.value = arraySinDuplicados;
-
-    } catch (error) {
-        console.error("Error al listar todos los metadatos")
-    }
-  }
-
-  const fetchWithTimeout = (url, options, timeout = 10000) => {
-      return Promise.race([
-          fetch(url, options),
-          new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
-      ]);
+async function getCountries(){
+  var myHeaders = new Headers();
+  loadingPanel.value=true;
+  myHeaders.append("Content-Type", "application/json");
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
   };
+  var response = await fetch(`https://ecuavisa-suscripciones.vercel.app/otros/obtener-paises-ciudades`, requestOptions);
+  const data = await response.json();
+  dataCountry.value = data;
+  loadingPanel.value=false;
+}
 
-  async function mergeAndRemoveDuplicates(groups) {
-    const merged = [].concat(...groups); // Combina todos los grupos en una sola matriz.
-    const uniqueNumbers = [...new Set(merged)]; // Elimina duplicados.
-    return uniqueNumbers;
+async function getMetadatos(){
+  try {
+    var metadatosTemp = await fetchCategorias();
+
+    var metadatosList = [];
+    var metadatosListItems = [];
+    for(var i in metadatosTemp){
+      metadatosList.push({ title:metadatosTemp[i].__text, value:metadatosTemp[i].__text });
+      metadatosListItems.push(metadatosTemp[i].__text);
+    }
+    selectMetadatos.value = metadatosList;
+
+    metadatosListItems.slice().sort();
+
+    const arraySinDuplicados = metadatosListItems.filter((valor, indice, arreglo) => arreglo.indexOf(valor) === indice);
+
+    metadatosItems.value = arraySinDuplicados;
+
+  } catch (error) {
+      console.error("Error al listar todos los metadatos")
   }
+}
 
-  var nextpage = ref(1);
-  var loadingDatosUsuarios = ref(false);
-  var pararWhile = ref(false);
-  const isFlatSnackbarVisible = ref({msj:"NA",resp:false})
-
-  const fechaIniFinList = [
-    'Hoy','Hace una semana', '15 días atrás', '1 mes atrás'
-  ];
-
-  const selectedfechaIniFin = ref('Hoy');
-  const fechaInicial = ref(moment().format("YYYY-MM-DD"));
-  const fechaActual = ref('');
-  const fechaFin = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
+const fetchWithTimeout = (url, options, timeout = 10000) => {
+    return Promise.race([
+        fetch(url, options),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
+    ]);
+};
 
 async function getUsuarios(){
   var ciudad = -1;
@@ -243,10 +199,6 @@ async function getUsuarios(){
 
   var so_temp = null;
   var dispositivo_temp = null;
-  var intereses_temp = null;
-  var sugerencias_temp = null;
-  var fechai_temp = null;
-  var fechaf_temp =  null;
   var navegador_temp = null;
   var metadato = null;
 
@@ -264,26 +216,45 @@ async function getUsuarios(){
     dispositivo_temp = selectItemDispositivos.value || null;
   }
 
-  if(criterioTemp.includes("intereses")){
-    intereses_temp= selectedInt.value || null;
-  }
-
-  if(criterioTemp.includes("sugerencias")){
-    sugerencias_temp = selectedSug.value || null;
-  }
-
   if(criterioTemp.includes("plataforma")){
     so_temp = selectItemSO.value || null;
     navegador_temp = selectItemNavegador.value || null;
   }
+  
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+      "metadato": metadato,
+      "criterio": criterioTemp,
+      "pais": pais,
+      "ciudad": ciudad,
+      "navegador": navegador_temp,
+      "os": so_temp,
+      "dispositivo": dispositivo_temp
+    });
 
-  // var myHeaders = new Headers();
-  // myHeaders.append("Content-Type", "application/json");
-  // var requestOptions = {
-  //   method: 'GET',
-  //   headers: myHeaders,
-  //   redirect: 'follow'
-  // };
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+    //console.log('data enviar ',raw);    
+    const send = await fetch('https://ads-service.vercel.app/campaign/v2/usuarios/get/user/total', requestOptions);
+    const respuesta = await send.json();    
+    //console.log('resp',respuesta);    
+    dataUsuarios.value =respuesta;
+    //console.log('data total',dataUsuarios.value);
+  
+    
+  /*  
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
   // console.log(pais || "-1")
   // alert(pais.length)
   // var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
@@ -295,79 +266,24 @@ async function getUsuarios(){
   // }) }`, requestOptions);
   // const data = await response.json();
   // dataUsuarios.value = data;
-  // document.querySelector('.totalPart').style.opacity = "0.4";
 
-  // Obtener la fecha actual
-  // const fechaHoy = moment();
-  // Establecer fechaInicial como la fecha actual formateada en 'YYYY-MM-DD'
- 
-  // Calcular la fecha 1 mes antes si se selecciona "1 mes"
+  const response = await fetchWithTimeout(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+      so: so_temp, 
+      dispositivo: dispositivo_temp,
+      metadato: metadato,
+      criterio: criterioTemp.join(','),
+      navegador: navegador_temp
+  }) }`, requestOptions, 25000); // Aquí hemos establecido un tiempo de espera de 15 segundos (15000 milisegundos)
 
-  // if(selectedfechaIniFin.value === '1 mes'){
-  //   const fechaUnMesAntes = fechaHoy.clone().subtract(1, 'months');
-  //   fechaInicial.value = fechaUnMesAntes.format('YYYY-MM-DD');
-  //   fechaFin.value = fechaHoy.format('YYYY-MM-DD');
-  //   fechaActual.value = fechaHoy.format('YYYY-MM-DD');
-  //   console.log(fechaFin.value);
-  // }
-
-  // if(selectedfechaIniFin.value === '2 mes'){
-  //   const fechaUnMesAntes = fechaHoy.clone().subtract(2, 'months');
-  //   fechaInicial.value = fechaUnMesAntes.format('YYYY-MM-DD');
-  //   fechaFin.value = fechaHoy.format('YYYY-MM-DD');
-  //   fechaActual.value = fechaHoy.format('YYYY-MM-DD');
-  //   console.log(fechaFin.value);
-  // }
-
-
-  try{
-
-    let batchSize = 100;
-    var metadatosFetch = [];
-
-    while (true) {
-      // Realizar la solicitud a la URL
-      const response = await axios.get(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-          so: so_temp, 
-          dispositivo: dispositivo_temp,
-          metadato: metadato,
-          criterio: criterioTemp.join(','),
-          navegador: navegador_temp,
-          intereses: intereses_temp,
-          sugerencias: sugerencias_temp,
-          fechaf: fechaInicial.value,
-          fechai: fechaFin.value,
-          limit: batchSize,
-          page: nextpage.value
-      }) }`, {
-        timeout: (20 * 1000),
-      });
-      // Obtener el JSON de la respuesta
-      const json = response.data;
-
-      if(json){
-        if (json.usuarios.length == 0 || nextpage.value > 50 || pararWhile.value == true) {
-          break;
-        }
-
-        metadatosFetch.push(json.usuarios);
-        var listaUsuariosDepurada = await mergeAndRemoveDuplicates(metadatosFetch);
-        
-        dataUsuarios.value.total = listaUsuariosDepurada.length;
-        usuariosIDS.value = listaUsuariosDepurada; 
-      }
-
-      nextpage.value += 1;
-    }
-
-  } catch (error) {
-    loadingDatosUsuarios.value = false;
-    isFlatSnackbarVisible.value.resp = true;
-    isFlatSnackbarVisible.value.msj = error;
-    console.error(error);
+  if (response.status === 200) {
+      const data = await response.json();
+      dataUsuarios.value = data;
+  } else {
+      console.error("Error en la solicitud:", response.status);
+      // Puedes manejar el error de acuerdo a tus necesidades
   }
-
-  return false;
+  */
+  
 }
 
 const consentimiento = ref(false);
@@ -405,10 +321,6 @@ async function onComplete() {
 
   var so_temp = null;
   var dispositivo_temp = null;
-  var intereses_temp = null;
-  var fechaf_temp = null;
-  var fechai_temp = null;
-  var sugerencias_temp = null;
   var metadato_temp = null;
   var navegador_temp = null;
 
@@ -432,14 +344,6 @@ async function onComplete() {
     dispositivo_temp = (selectItemDispositivos.value).join(',') || null;
   }
 
-  if(cri.includes("intereses")){
-    intereses_temp = (selectedInt.value).join(',') || null;
-  }
-
-  if(cri.includes("sugerencias")){
-    sugerencias_temp = (selectedSug.value).join(',') || null;
-  }
-
   if(cri.includes("plataforma")){
     so_temp = (selectItemSO.value).join(',') || null;
     navegador_temp = (selectItemNavegador.value).join(',') || null;
@@ -457,12 +361,8 @@ async function onComplete() {
             "country": pais,
             "city": ciudad || -1,
             "so": so_temp || null,
-            "intereses": intereses_temp || null,
-            "sugerencias": sugerencias_temp || null,
             "dispositivo": dispositivo_temp || null,
             "metadato": metadato_temp || null,
-            "fechaf": fechaInicial.value || null,
-            "fechai": fechaFin.value || null,
             "navegador": navegador_temp || null
         },
         "coleccion": cri.join(','),
@@ -553,11 +453,6 @@ async function validateAsync() {
     alert("Debes añadir la posicion del ads");
     return false;
   }
-
-  // if(datesFIF.length < 1){
-  //   alert("Debes añadir la posicion del ads");
-  //   return false;
-  // }
 
   if(visibilidad.length < 1){
     alert("Debes añadir la La visibilidad en el sitio web");
@@ -851,10 +746,10 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(selectedItemCiudad.value != null){
-    // loadingPanel.value=true;
-    // await getUsuarios();
-    // loadingPanel.value=false;
-    // await generarOtrosValores();
+    loadingPanel.value=true;
+    await getUsuarios();
+    loadingPanel.value=false;
+    await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
   }
@@ -866,10 +761,10 @@ watch(async () => selectItemDispositivos.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(selectItemDispositivos.value != null){
-    // loadingPanel.value=true;
-    // await getUsuarios();
-    // loadingPanel.value=false;
-    // await generarOtrosValores();
+    loadingPanel.value=true;
+    await getUsuarios();
+    loadingPanel.value=false;
+    await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
   }
@@ -881,10 +776,10 @@ watch(async () => selectItemSO.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(selectItemSO.value != null){
-    // loadingPanel.value=true;
-    // await getUsuarios();
-    // loadingPanel.value=false;
-    // await generarOtrosValores();
+    loadingPanel.value=true;
+    await getUsuarios();
+    loadingPanel.value=false;
+    await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
   }
@@ -897,10 +792,10 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(selectItemNavegador.value != null){
-    // loadingPanel.value=true;
-    // await getUsuarios();
-    // loadingPanel.value=false;
-    // await generarOtrosValores();
+    loadingPanel.value=true;
+    await getUsuarios();
+    loadingPanel.value=false;
+    await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
   }
@@ -908,30 +803,16 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
 
-watch(async () => selectedfechaIniFin.value, async  (newValue, oldValue) => {
-  if('Hoy'){
-    fechaFin.value = moment().add(-1, 'days').format("YYYY-MM-DD");
-  }
-  if('Hace una semana'){
-    fechaFin.value = moment().add(-7, 'days').format("YYYY-MM-DD");
-  }
-  if('15 días atrás'){
-    fechaFin.value = moment().add(-15, 'days').format("YYYY-MM-DD");
-  }
-  if('1 mes atrás'){
-    fechaFin.value = moment().add(-30, 'days').format("YYYY-MM-DD");
-  }
-  console.log(fechaFin.value)
-});
+
 
 watch(async () => metadatos.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   if(metadatos.value != null){
-    // loadingPanel.value=true;
-    // await getUsuarios();
-    // loadingPanel.value=false;
-    // await generarOtrosValores();
+    loadingPanel.value=true;
+    await getUsuarios();
+    loadingPanel.value=false;
+    await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
   }
@@ -953,58 +834,6 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
 //   // selectItemsList.value = [100, 200, 1000, "Otro"];
 // });
-
-
-const calcularPartic = async () => {
-  // loadingPanel.value=true;
-  loadingDatosUsuarios.value = true;
-  await getUsuarios();
-  // loadingPanel.value=false;
-  await generarOtrosValores();
-  loadingDatosUsuarios.value = false;
-};
-
-const cargarDatosInteres = async () => {
-  try {
-    const response = await fetch('https://sugerencias-ecuavisa.vercel.app/intereses/get/all');
-    const data = await response.json();
-    
-    if (data.resp) {
-      // Mapear los títulos de los elementos en la lista
-      interesesList.value = data.data.map(item => item.title);
-    } else {
-      console.error('Error al cargar datos de la API');
-    }
-  } catch (error) {
-    console.error('Error en la solicitud a la API', error);
-  }
-};
-
-const cargarDatosSugerencias = async () => {
-  try {
-    const response = await fetch('https://sugerencias-ecuavisa.vercel.app/sugerencias/get/all');
-    const data = await response.json();
-    
-    if (data.resp) {
-      // Mapear los títulos de los elementos en la lista
-      sugerenciasList.value = data.data.map(item => item.title);
-    } else {
-      console.error('Error al cargar datos de la API');
-    }
-  } catch (error) {
-    console.error('Error en la solicitud a la API', error);
-  }
-};
-
-
-onMounted(() => {
-  cargarDatosInteres(); // Cargar datos de intereses al montar el componente
-  cargarDatosSugerencias(); // Cargar datos de sugerencias al montar el componente
-});
-
-
-
-
 
 </script>
 
@@ -1036,16 +865,16 @@ onMounted(() => {
         </VTabs>
 
         <VCard class="mt-5">
-          <VCardText>
+          <VCardText class="px-0">
             <VWindow v-model="currentTab">
               <VWindowItem value="tab-lista">
                 <div
                   class="d-flex flex-wrap py-4 gap-4 align-items-center"
                   style="justify-content: space-between;"
                 >
-                  <div>
+                  <div class="px-5">
                     <VCardTitle>
-                      Crear campañas --
+                      Crear campañas
                     </VCardTitle>
                     <VCardSubtitle> 
                       Elige la campaña sobre la que necesites información  
@@ -1057,7 +886,7 @@ onMounted(() => {
                 <!-- inicio lista de Módulos -->
                   
                 <form-wizard 
-                  :class="loadingPanel?'disabled':''"
+                  :class=" loadingPanel?'disabled':'' "
                   @on-complete="onComplete" 
                   @on-loading="setLoading"
                   color="#7367F0" 
@@ -1068,7 +897,7 @@ onMounted(() => {
                   backButtonText="Anterior"
                   finishButtonText="Crear campaña"
                 >
-                  <tab-content title="Detalles de la campaña" :before-change="validateAsync">
+                  <tab-content title="Detalles de la campaña" class="px-4" :before-change="validateAsync">
                    
                     <VRow class="pb-5">
                         <VCol cols="12">
@@ -1091,31 +920,6 @@ onMounted(() => {
                                 placeholder="Nombre de la campaña"
                                 persistent-placeholder
                               />
-                            </VCol>
-                          </VRow>
-                        </VCol>
-
-                        <VCol cols="6">
-                          <VRow no-gutters>
-                            <VCol
-                              cols="12"
-                              md="12"
-                            >
-                              <label for="email">Búsqueda de audiencia por fecha</label>
-                            </VCol>
-
-                            <VCol cols="12" md="12" >
-
-                              <VCombobox
-                                v-model="selectedfechaIniFin"
-                                :items="fechaIniFinList"
-                                variant="outlined"
-                                label=""
-                                persistent-hint
-                                hide-selected
-                                hint=""
-                              />
-
                             </VCol>
                           </VRow>
                         </VCol>
@@ -1195,7 +999,7 @@ onMounted(() => {
                           </VRow>
                         </VCol>
 
-                        <VCol cols="12">
+                        <VCol cols="6">
                           <VRow no-gutters>
                             <!-- 👉 Email -->
                             <VCol
@@ -1229,7 +1033,7 @@ onMounted(() => {
                       </VRow>
                   
                   </tab-content>
-                  <tab-content title="Inserción de código" :before-change="validateAsyncInsercion">
+                  <tab-content title="Inserción de código" class="px-4" :before-change="validateAsyncInsercion">
                     
                     <VRow class="pb-5">
                       <VCol cols="6">
@@ -1347,38 +1151,13 @@ onMounted(() => {
                   
 
                   </tab-content>
-                  <tab-content title="Criterio de búsqueda" :before-change="validateAsyncUsuarios">
+                  <tab-content title="Criterio de búsqueda"  class="px-4" :before-change="validateAsyncUsuarios">
                       
 
                       <VRow class="pb-5">
                         <VCol col="6">
                           
                           <VRow class="pb-5">
-                            <VCol cols="12">
-                              <VRow no-gutters>
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <label for="email">Búsqueda de audiencia por fecha</label>
-                                </VCol>
-
-                                <VCol cols="12" md="12" >
-
-                                  <VCombobox
-                                    v-model="selectedfechaIniFin"
-                                    :items="fechaIniFinList"
-                                    variant="outlined"
-                                    label=""
-                                    persistent-hint
-                                    hide-selected
-                                    hint=""
-                                  />
-
-                                </VCol>
-                              </VRow>
-                            </VCol>
-
                             <VCol cols="12" >
                               <VRow no-gutters>
                                 <!-- 👉 Email -->
@@ -1455,13 +1234,14 @@ onMounted(() => {
                                       cols="12"
                                       md="12"
                                     >
+
                                       <VCombobox
                                         v-model="selectedItem"
                                         :items="countryList"
                                         class="pr-1"
                                         chips
                                         clearable
-                                        :menu-props="{ maxHeight: '200' }"
+                                        :menu-props="{ maxHeight: '300' }"
                                       />
                                     </VCol>
                                   </VRow>
@@ -1486,15 +1266,9 @@ onMounted(() => {
                                         multiple
                                         chips
                                         :items="cityList"
-                                        variant="outlined"
-                                        label=""
-                                        persistent-hint
                                         v-model:search-input="searchCiudades"
-                                        hide-selected
                                         :hide-no-data="false"
-                                        density="default"
-                                        hint=""
-                                        :menu-props="{ maxHeight: '200' }"
+                                        :menu-props="{ maxHeight: '300' }"
                                         class="custom-combobox-ciudad"
                                       />
 
@@ -1504,7 +1278,6 @@ onMounted(() => {
                                 </VCol>
                               </VRow>
                             </VCol>
-
                             <VCol cols="12" :class="criterio.includes('dispositivos')?'':'d-none'">
                               <VRow no-gutters >
                                 <VCol cols="12">
@@ -1562,12 +1335,12 @@ onMounted(() => {
                                       md="12"
                                     >
                                       <VSelect
-                                        v-model="selectItemIntereses"
-                                        :items="selectItemsListIntereses"
+                                        v-model="selectItemSO"
+                                        :items="selectItemsListSO"
                                         item-title="title"
                                         item-value="value"
                                         class="pr-1"
-                                        :menu-props="{ maxHeight: '200' }"
+                                        
                                         multiple
                                         clearable
                                       >
@@ -1613,61 +1386,6 @@ onMounted(() => {
                                 </VCol>
                               </VRow>
                             </VCol>
-
-                            <VCol cols="12" :class="criterio.includes('intereses')?'':'d-none'">
-                              <VRow no-gutters >
-                                <VCol cols="12">
-                                  <VRow no-gutters>
-                                    <!-- 👉 Email -->
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-                                      <label for="email">Elige tu interés</label>
-                                    </VCol>
- 
-                                    <VCol cols="12" md="12" >
-                                      <VCombobox
-                                        v-model="selectedInt"
-                                        :items="interesesList"
-                                        class="pr-1"
-                                        chips
-                                        multiple
-                                        clearable
-                                        :menu-props="{ maxHeight: '200' }"
-                                      />
-                                    </VCol>
-                                  </VRow>
-                                </VCol>
-                              </VRow>
-                            </VCol>
-
-                            
-                            <VCol cols="12" :class="criterio.includes('sugerencias')?'':'d-none'">
-                              <VRow no-gutters >
-                                <VCol cols="12">
-                                  <VRow no-gutters>
-                                    <!-- 👉 Email -->
-                                    <VCol cols="12" md="12" >
-                                      <label for="email">Elige la sugerencia</label>
-                                    </VCol>
- 
-                                    <VCol cols="12" md="12" >
-                                      <VCombobox
-                                        v-model="selectedSug"
-                                        :items="sugerenciasList"
-                                        class="pr-1"
-                                        chips
-                                        multiple
-                                        clearable
-                                        :menu-props="{ maxHeight: '200' }"
-                                      />
-                                    </VCol>
-                                  </VRow>
-                                </VCol>
-                              </VRow>
-                            </VCol>
-                            
                             <VCol cols="12">
                               <VRow no-gutters>
                                 <!-- 👉 Email -->
@@ -1691,8 +1409,6 @@ onMounted(() => {
                                 </VCol>
                               </VRow>
                             </VCol>
-
-                           
 
                             <VCol cols="12" :class="selectItemParticipantes!='Otro'?'d-none':''">
                               <VRow no-gutters>
@@ -1741,22 +1457,7 @@ onMounted(() => {
 
                             <!-- 👉 User fullName -->
                             <h6 class="text-h6 mt-4">
-                              <VBtn
-                                class="btn-loading-cr"
-                                :loading="loadingDatosUsuarios"
-                                :disabled="loadingDatosUsuarios"
-                                color="warning"
-                                @click="calcularPartic()"
-                              >
-                                Grabar usuarios
-                                <template #loader>
-                                  <span>Buscando usuarios... </span>
-                                  <span class="custom-loader">
-                                    <VIcon icon="tabler-refresh" />
-                                  </span>
-                                </template>
-                              </VBtn>
-
+                              Usuarios participantes
                             </h6>
 
                             <!-- 👉 Role chip -->
@@ -1764,7 +1465,7 @@ onMounted(() => {
                               label
                               :color="'success'"
                               size="large"
-                              class="text-capitalize mt-4 totalPart"
+                              class="text-capitalize mt-4"
                             >
                               {{ dataUsuarios.total || "0" }}
                             </VChip>
@@ -1781,15 +1482,7 @@ onMounted(() => {
 
               
 
-              <!-- flat snackbar -->
-              <VSnackbar
-                v-model="isFlatSnackbarVisible.resp"
-                location="top end"
-                variant="flat"
-                color="error"
-              >
-                {{isFlatSnackbarVisible.msj}}
-              </VSnackbar>
+              
             </VWindow>
           </VCardText>
         </VCard>
@@ -1862,24 +1555,5 @@ onMounted(() => {
 .v-menu .v-select__slot {
   max-height: 10px; /* Ajusta el valor según tus necesidades */
   overflow-y: auto;
-}
-
-.custom-loader {
-  display: flex;
-  animation: loader 1s infinite;
-}
-
-@keyframes loader {
-  from {
-    transform: rotate(0);
-  }
-
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.btn-loading-cr {
-    width: 275px;
 }
 </style>
