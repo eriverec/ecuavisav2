@@ -1230,7 +1230,7 @@ button#btnSaveM {
   font-style: normal;
   font-weight: 700;
   font-size: 60px;
-  line-height: 28px;
+  line-height: 1;
   color: #060127;
 }
 
