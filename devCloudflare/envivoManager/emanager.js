@@ -1,7 +1,7 @@
 /*codigo-manager*/
 function eventRadioManager() {
-  // const apiUrl = "https://api-configuracion.vercel.app/web/horarioRadio";
-  const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioRadio";
+  const apiUrl = "https://api-configuracion.vercel.app/web/horarioRadio";
+  // const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioRadio";
   // const fechaActual = new Date();
   // const diaSemana = fechaActual.getDay();
   // const horaActual = fechaActual.getHours();
