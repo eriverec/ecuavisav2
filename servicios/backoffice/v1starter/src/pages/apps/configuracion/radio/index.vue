@@ -161,7 +161,7 @@ async function enviar (){
 		myHeaders.append("Content-Type", "application/json");
 		var raw = JSON.stringify(nuevaConfiguracion);
 		var requestOptions = {
-				method: 'PUT',
+				method: 'POST',
 				headers: myHeaders,
 				body: raw,
 				redirect: 'follow'
@@ -199,7 +199,7 @@ var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 var raw = JSON.stringify(nuevaConfiguracion);
 var requestOptions = {
-        method: 'PUT',
+        method: 'POST',
         headers: myHeaders,
         body: raw,
         redirect: 'follow'
@@ -235,7 +235,7 @@ var myHeaders = new Headers();
 myHeaders.append("Content-Type", "application/json");
 var raw = JSON.stringify(nuevaConfiguracion);
 var requestOptions = {
-        method: 'PUT',
+        method: 'POST',
         headers: myHeaders,
         body: raw,
         redirect: 'follow'
