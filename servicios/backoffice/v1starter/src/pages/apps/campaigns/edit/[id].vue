@@ -499,7 +499,7 @@ async function onComplete() {
     redirect: 'follow'
   };
   loadingPanel.value=true;
-  var response = await fetch(`https://ads-service.vercel.app/campaign/create`, requestOptions);
+  var response = await fetch(`https://ads-service.vercel.app/campaign/update/${route.params.id}`, requestOptions);
   const data = await response.json();
   if(data.resp){
     router.push('/apps/campaigns/list');
@@ -996,7 +996,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                 <!-- inicio lista de Módulos -->
                   
                 <form-wizard 
-                  :class=" loadingPanel?'disabled':'' "
+                  :class="loadComponent?'disabled':''"
                   @on-complete="onComplete" 
                   @on-loading="setLoading"
                   color="#7367F0" 
