@@ -499,6 +499,7 @@ async function onComplete() {
     redirect: 'follow'
   };
   loadingPanel.value=true;
+  loadComponent.value = true;
   var response = await fetch(`https://ads-service.vercel.app/campaign/update/${route.params.id}`, requestOptions);
   const data = await response.json();
   if(data.resp){
@@ -507,6 +508,7 @@ async function onComplete() {
     alert("Un error se presentó: "+data.error)
   };
   loadingPanel.value=false;
+  loadComponent.value = false;
 }
 
 async function handleValidation(isValid, tabIndex) {
