@@ -265,8 +265,8 @@ function recomendadasNavegacion(){
             } else {
               setTimeout(() => {
                 console.log("no has navegado lo suficiente");
-                document.querySelector('.htmlRecomen.container .ring').remove();
-                htmlContainer.innerHTML = `<div class="alert alert-primary text-uppercase" role="alert">No ha navegado lo suficiente para generar este contenido!</div>`;
+                document.querySelector('.htmlRecomen .ring').remove();
+                // htmlContainer.innerHTML = `<div class="alert alert-primary text-uppercase" role="alert">No ha navegado lo suficiente para generar este contenido!</div>`;
               }, 300);
               return false;
             }
@@ -477,12 +477,8 @@ function recomendadasIntereses(){
     
                       function swiperReco() {
                         const sw = document.querySelector(".htmlRecomenIntereses");
-                        const wra = document.querySelector(
-                          ".htmlRecomenIntereses .parent_swiper"
-                        );
-                        const slide = document.querySelectorAll(
-                          ".htmlRecomenIntereses .parent_swiper .article-rec"
-                        );
+                        const wra = document.querySelector(".htmlRecomenIntereses .parent_swiper");
+                        const slide = document.querySelectorAll(".htmlRecomenIntereses .parent_swiper .article-rec");
     
                         sw.classList.add("swiper");
                         wra.classList.add("swiper-wrapper");
@@ -564,9 +560,8 @@ function recomendadasIntereses(){
                 .catch((error) => console.log(error));
             } else {
               console.log("no has navegado lo suficiente");
-              document.querySelector('.htmlRecomenIntereses.container .ring').remove();
+              document.querySelector('.htmlRecomenIntereses .ring').remove();
             }
-    
     
           })
           .catch((error) => console.log(error));
