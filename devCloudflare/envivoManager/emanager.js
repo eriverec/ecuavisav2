@@ -1,6 +1,7 @@
 /*codigo-manager*/
 function eventRadioManager() {
-  const apiUrl = "https://api-configuracion.vercel.app/web/horarioRadio";
+  // const apiUrl = "https://api-configuracion.vercel.app/web/horarioRadio";
+  const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioRadio";
   // const fechaActual = new Date();
   // const diaSemana = fechaActual.getDay();
   // const horaActual = fechaActual.getHours();
@@ -164,7 +165,8 @@ function eventRadioManager() {
 }
 
 function eventoEnvivoManager() {
-  const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivo";
+  // const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivo";
+  const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioEnvivo";
   const enVivoRedy = document.querySelector('.enVivoRedy');
   const textIndicador = document.querySelector('.enVivoRedy .liveIndicator .enVivoText');
   const btnTelcomunidad = document.querySelector('#btnTelcomunidad');
@@ -310,7 +312,8 @@ function eventoEnvivoManager() {
 }
 
 function eventoEnvivoManagerQuito() {
-  const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivoQuito";
+  // const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivoQuito";
+  const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioEnvivoQuito";
   const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad_quito');
   const title_programa_quito = document.querySelector('.title_programa_quito');
   const playerembed_quito = document.querySelector('#playerembed_quito');
