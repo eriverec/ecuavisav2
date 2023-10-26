@@ -165,7 +165,10 @@ export default {
     return {
       fechai: "",
       fechaf: "",
+      fechaiN: "",
+      fechafN: "",
       getDataFetch: [],
+      dataOnlyGrafico: [],
       dataFormateada: [],
       getData: [],
       visita: true,
@@ -439,7 +442,7 @@ export default {
       });
 
 
-      console.log("prueba2", prueba2);
+      //console.log("prueba2", prueba2);
       var serieTotal = [];
 
       var dataFormat = [];
@@ -699,19 +702,23 @@ export default {
       await this.fetchFiltros();
       let fechai;
       let fechaf;
-      console.log('filtro def',this.filtroDefault );
+      //console.log('filtro def',this.filtroDefault );
+  
       if (!this.filtroDefault) {
         let formatI = moment().add(-3, 'days').format("MM-DD-YYYY");
         let formatF = moment().format("MM-DD-YYYY");
         this.fechaIngesada = String(formatI + ' a ' + formatF);
         fechai = moment().add(-1, 'days').format("MM-DD-YYYY");
         fechaf = moment().add(1, 'days').format("MM-DD-YYYY");
+        
       } else {
         let fechas = this.filtroDefault.fecha.split('a');
         fechai = moment(fechas[0]).add(+1, 'days').format('MM/DD/YYYY');
         fechaf = moment(fechas[1]).add(-1, 'days').format('MM/DD/YYYY');
         this.fechaIngesada = this.filtroDefault.fecha;
       }
+      
+    
      /* await this.resolveActividad();
       //var panelGrafico = document.querySelector("#apexchartscrejemplo");
       //panelGrafico.classList.add("disabled");
@@ -762,8 +769,8 @@ export default {
     },
 
     async getDataGrafico(fechai, fechaf) {
-      this.isLoading = true;
-      console.log('obteniendo datos..');
+      //this.isLoading = true;
+      //console.log('obteniendo datos..');
       var Arr = [];
       let page = 1;
       //let limit = 1000;
@@ -791,11 +798,11 @@ export default {
         this.getDataFetch = Array.from(Arr);
         this.dataFormateada = await this.getDataTrazabilidadFull2(Arr);
         page += 1;
-        ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
+        //ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
         this.emitData();
-        console.log('data',this.dataFormateada);
+        //console.log('data',this.dataFormateada);
       }
-      this.isLoading = false;
+      //this.isLoading = false;
 
       //return obtener;
       /*
@@ -852,23 +859,111 @@ export default {
       */
     },
     async resolveChart() {
+      
+      await this.getDataOnlyGrafico(this.fechaiN, this.fechafN);  
 
     if (this.selectedActividad == "visita") {
       this.visita = false;
       //this.isLoading = true;
-      await this.getDataTrazabilidadFull2(this.getDataFetch);
-      ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
+
+      //await this.getDataTrazabilidadFull2(this.getDataFetch);
+
+      //ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
       //this.isLoading = false;
       this.emitData();
     };
     if (this.selectedActividad == "sesion") {
       this.visita = true;
     // this.isLoading = true;
-      await this.getDataTrazabilidadFull2(this.getDataFetch);
-      ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
+
+      //await this.getDataTrazabilidadFull2(this.getDataFetch);
+
+      //ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
     // this.isLoading = false;
       this.emitData();
     };
+    },
+
+    async getDataOnlyGrafico(fechai, fechaf) {
+ 
+      this.isLoading = true;
+      let os = '';
+      let browser = '';
+      let dispositivo = '';
+      let actividad = '';
+
+      if (this.selectedOs == "Android" && this.selectedDispositivo == "movil") {
+       
+        dispositivo = this.selectedDispositivo;
+        os = 'Linux';
+
+      } else if (this.selectedOs == "Android" && this.selectedDispositivo == "desktop") {
+
+        os = 'x';
+        dispositivo = 'x';
+
+      } else if (this.selectedOs == "Linux" && this.selectedDispositivo == "desktop") {
+
+        os = 'Linux';
+        dispositivo = this.selectedDispositivo;
+
+      } else if (this.selectedOs == "Linux" && this.selectedDispositivo == "movil") {
+        
+        os = 'x';
+        dispositivo = 'x';
+        
+      } else if (this.selectedOs == "Linux" || this.selectedOs == "Android") {
+        os = 'x';
+      }
+      else {
+        if (this.selectedOs !== "") {
+          if (this.selectedOs !== "todos") {
+  
+            os = this.selectedOs;
+
+          }
+        }
+        if (this.selectedDispositivo !== "") {
+  
+          dispositivo = this.selectedDispositivo;
+
+        }
+      }
+
+      if (this.selectedBrowser !== "") {
+        if (this.selectedBrowser !== "todos") {
+
+          browser = this.selectedBrowser;
+
+        }
+      }
+      actividad = this.selectedActividad;
+      var raw = JSON.stringify({
+        "fechai": fechai,
+        "fechaf": fechaf,
+        "os": os,
+        "browser": browser,
+        "dispositivo": dispositivo,
+        "actividad": actividad
+      });
+
+      console.log('data enviar ', raw);
+
+      var resp = await fetch(`https://servicio-de-actividad.vercel.app/dispositivos/grafico/v3`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: raw
+      });
+      var obtener = await resp.json();
+      console.log('data Obtenida n',obtener);
+      this.dataOnlyGrafico = obtener.data;
+      let dataFormated = [obtener.data];
+      //console.log('res fetch',this.getDataFetch)
+      ApexCharts.exec("crejemplo", "updateSeries", dataFormated);
+      this.isLoading = false;
+      return obtener.data;
     },
 
     async obtenerFechaDispositivos(selectedDates, dateStr, instance) {
@@ -878,11 +973,16 @@ export default {
     if (selectedDates.length > 1) {
       this.fechai = moment(selectedDates[0]).add(+1, 'days').format('MM/DD/YYYY');
       this.fechaf = moment(selectedDates[1]).add(-1, 'days').format('MM/DD/YYYY');
+
+      this.fechaiN = moment(selectedDates[0]).format('MM/DD/YYYY');
+      this.fechafN = moment(selectedDates[1]).format('MM/DD/YYYY');
       //var panelGrafico = document.querySelector("#apexchartscrejemplo");
       //panelGrafico.classList.add("disabled");
       //console.log('fecha ingresada',this.fechaIngesada)
       //console.log(typeof this.fechaIngesada);
     // this.isLoading = true;
+      
+      await this.getDataOnlyGrafico(this.fechaiN, this.fechafN);  
       await this.getDataGrafico(this.fechai, this.fechaf);
     // this.isLoading = false;
       //panelGrafico.classList.remove("disabled");
