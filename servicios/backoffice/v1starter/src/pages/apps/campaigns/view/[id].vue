@@ -228,6 +228,7 @@ computed: {
     async obtenerDetalles() {
       const respuesta = await fetch(`https://ads-service.vercel.app/campaign/${this.id}/user`); 
       const datos = await respuesta.json();
+      // console.log(datos)
       this.suggestion = datos[0];
     },
     // metodo que exporta a csv los registros obtenidos
@@ -235,7 +236,7 @@ computed: {
       let csvContent = "data:text/csv;charset=utf-8,";
       csvContent += [
         ["firstname", "last_name", "email"].join(","),
-        ...this.suggestion.userId.map(user => [user.firstname, user.last_name, user.email].join(","))
+        ...this.suggestion.userId.map(user => [user.wylexId, user.firstname, user.last_name, user.email].join(","))
       ].join("\n");
 
       const encodedUri = encodeURI(csvContent);
