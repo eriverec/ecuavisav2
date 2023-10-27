@@ -35,6 +35,7 @@ export default [
       { title: 'Visitas', to: 'apps-visitas-list' },
       { title: 'Metadatos', to: 'apps-metadatos' },
       { title: 'Dispositivos', to: 'apps-dispositivos' },
+      { title: 'Recomendaciones', to: 'apps-recomendaciones' },
 
       // modulos por salir
       //{ title: 'Trazabilidad usuarios', to: 'apps-trazabilidad-users' },
