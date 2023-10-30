@@ -60,8 +60,12 @@ onMounted(async() => {
     <VCol cols="12" md="6">
       <VCard>
         <VCardItem class="d-flex flex-wrap justify-space-between gap-4">
-            <VCardTitle>Recomendaciones por navegación</VCardTitle>
-            <VCardSubtitle>Categoría de dispositivos de los últimos 7 días</VCardSubtitle>
+            <div class="d-flex">
+              <div class="descripcion">
+                <VCardTitle>Las 5 secciones que más navegan <br>los usuarios</VCardTitle>
+                <VCardSubtitle>Datos desde: {{fechaIni}} hasta {{fechaFin}}</VCardSubtitle>
+              </div>
+            </div>
 
             <template #append>
               <div class="date-picker-wrapper" style="width: 250px;">
@@ -88,6 +92,6 @@ onMounted(async() => {
         </VCardText>
       </VCard>
     </VCol>
-    
+
   </VRow>
 </template>

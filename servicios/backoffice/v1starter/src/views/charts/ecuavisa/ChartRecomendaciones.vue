@@ -10,6 +10,7 @@
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
   const isLoading = ref(false);
+  const uniqueKey = ref(0);
 
   const props = defineProps({
     fechaIni: String,
@@ -59,7 +60,7 @@
         dataLabels: { 
           enabled: true
         },
-        colors: ['#00cfe8'],   
+        colors: ['#00cfe8','#fdd835'],   
         plotOptions: {
           bar: {
             borderRadius: 0,
@@ -96,11 +97,12 @@
         minHeight: 300,
       }
 
+
     return {series: [seriesFormat], options: options, intereses: categoriesRaw};
   });
 
   async function getChart(fechaIni, fechaFin) {
-    await fetch(`https://servicio-de-actividad.vercel.app/grafico/metadato/seccion/10?fechai=${fechaIni}&fechaf=${fechaFin}`)
+    await fetch(`https://servicio-de-actividad.vercel.app/grafico/metadato/seccion/5?fechai=${fechaIni}&fechaf=${fechaFin}`)
       .then(response => response.json())
       .then(data => {
         if(data.resp){
@@ -117,6 +119,7 @@
     isLoading.value = true;
     await getChart(newProps.fechaIni, newProps.fechaFin);
     isLoading.value = false;
+      // console.log(resolveData.value.options, resolveData.value.series)
     // Realiza cualquier acción adicional que desees aquí, por ejemplo, actualizar el componente ChartRecomendaciones
   });
 
@@ -126,6 +129,7 @@
   <VRow>
     <VCol cols="12" md="12" :class="isLoading?'disabled':''">
         <VueApexCharts
+          :key="uniqueKey"
           type="bar"
           :options="resolveData.options"
           :series="resolveData.series"
