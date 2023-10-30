@@ -13,7 +13,7 @@
 
     <VCol sm="4" cols="12">
       <div class="date-picker-wrapper" style="width: 100%;">
-        <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngresada"
+        <!-- <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngresada"
           show-current="true" @on-change="obtenerPorFechaMeta" :config="{
             position: 'auto right',
             mode: 'range',
@@ -21,7 +21,7 @@
             dateFormat: 'm-d-Y',
             maxDate: new Date(),
             reactive: true
-          }" />
+          }" /> -->
       </div>
     </VCol>
     <VCol sm="3" cols="12">
@@ -47,13 +47,14 @@
           <div class="d-none">No se encontraron datos, selecciona otros filtros</div>
 
           <div>
-            <VueApexCharts id="crejemplo" type="bar" height="500" :options="chartOptions" :series="chartSeries" />
+            <!-- <VueApexCharts id="crejemplo" type="bar" height="500" :options="chartOptions" :series="chartSeries" /> -->
           </div>
         </VCardText>
       </div>
     </div>
 
   </div>
+  <div id="chart"></div>
 </template>
   
 <style>
@@ -87,20 +88,13 @@ import axios from 'axios';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 import VueApexCharts from 'vue3-apexcharts';
+import ApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 const fechaIngresada = ref('');
 const fechaIni = ref('');
 const fechaFin = ref('');
-
-const initData = () => {
-  let fechai = moment().subtract(2, 'days').format("DD-MM-YYYY").toString();
-  let fechaf = moment().format("DD-MM-YYYY").toString();
-  fechaIni.value = fechai;
-  fechaFin.value = fechaf;
-  fechaIngresada.value = fechai + ' a ' + fechaf;
-}
 
 
 const colorVariables = themeColors => {
@@ -116,98 +110,42 @@ const colorVariables = themeColors => {
 const vuetifyTheme = useTheme();
 const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value);
 
-// console.log(fechaIngresada.value);
-const chartOptions = ref({
+// Datos de la API
+const apiUrl = 'https://servicio-de-actividad.vercel.app/grafico/metadato/subseccion/10?fechai=2023-10-27&fechaf=2023-10-29';
 
-  chart: {
-    // type: 'bar',
-    toolbar: { show: false },
-  },
-  plotOptions: {
-    bar: {
-      borderRadius: 4,
-      horizontal: false,
-    }
-  },
-  dataLabels: { enabled: true },
-  xaxis: {
-    axisBorder: { show: false },
-    axisTicks: { color: themeBorderColor },
-    labels: {
-      style: { colors: themeDisabledTextColor },
-    },
-    categories: [],
-  },
-  yaxis: {
-    labels: {
-      style: { colors: themeDisabledTextColor },
-    },
-  },
-  grid: {
-    show: true,
-    borderColor: themeDisabledTextColor,
-    padding: {
-      top: -10,
+// Datos del gráfico
+const chartData = ref({
+  options: {
+    chart: {
+      type: 'bar',
     },
     xaxis: {
-      lines: { show: true },
+      categories: [],
     },
   },
+  series: [
+    {
+      name: 'Total',
+      data: [],
+    },
+  ],
 });
 
-const chartSeries = ref([
-  {
-    name: 'Total',
-    data: [],
-  },
-]);
-
-const obtenerCategorias = (data) => {
-  return data.map(item => item.name);
-};
-
-
-const obtenerFechaDispositivos = async () => {
-  // Construir la URL de la API con las fechas seleccionadas por el usuario
-  const url = `https://servicio-de-actividad.vercel.app/grafico/metadato/seccion/10?fechai=${(fechaIni.value)}&fechaf=${fechaFin.value}`;
-  console.log("obtenerFechaDispositivos:", url);
-
-  try {
-    const response = await axios.get(url);
-
-    const data = response.data.data;
-    const categories = obtenerCategorias(data);
-    const totals = data.map(item => item.total);
-
-    chartOptions.value.xaxis.categories = categories;
-    chartSeries.value[0].data = totals;
-  } catch (error) {
-    console.error('Error al obtener los datos de la API:', error);
-  }
-};
-
-async function obtenerPorFechaMeta(selectedDates) {
-  try {
-    if (selectedDates.length > 1) {
-      // currentPage.value = 1;
-      let fechaI = moment(selectedDates[0]).format('YYYY-MM-DD');
-      let fechaF = moment(selectedDates[1]).format('YYYY-MM-DD');
-      fechaIni.value = fechaI;
-      fechaFin.value = fechaF;
-      await obtenerFechaDispositivos(fechaI, fechaF);
-      //panelGrafico.classList.remove("disabled");                       
-    }
-  } catch (error) {
-    console.error(error);
-  }
-}
-
-// Observar cambios en la fecha seleccionada
-// watch(fechaIngresada, obtenerFechaDispositivos);
-
+// Hacer la solicitud GET a la API y actualizar los datos del gráfico
 onMounted(async () => {
-  initData();
-  await obtenerFechaDispositivos();
+  try {
+    const response = await axios.get(apiUrl);
+    const data = response.data.data;
+    
+    chartData.value.options.xaxis.categories = data.map((item) => item.name);
+    chartData.value.series[0].data = data.map((item) => item.total);
+    
+    // Crear el gráfico Apex Chart
+    const chart = new VueApexCharts(document.querySelector('#chart'), chartData.value.options);
+    chart.render();
+  } catch (error) {
+    console.error('Error al obtener datos de la API', error);
+  }
 });
 
 </script>
