@@ -40,7 +40,7 @@
 
     let dataRaw = Array.from(dataChart.value);
     const seriesFormat = {
-        name: 'Nivel de interés',
+        name: 'Interacciones de usuarios',
         data: []
     };
 

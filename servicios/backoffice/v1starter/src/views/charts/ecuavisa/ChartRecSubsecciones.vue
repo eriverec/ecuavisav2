@@ -40,7 +40,7 @@
 
     let dataRaw = Array.from(dataChart.value);
     const seriesFormat = {
-        name: 'Nivel de interés',
+        name: 'Interacciones de usuarios',
         data: []
     };
 
@@ -60,7 +60,7 @@
         dataLabels: { 
           enabled: true
         },
-        colors: ['#00cfe8','#fdd835'],   
+        colors: ['#7365ed','#fdd835'],   
         plotOptions: {
           bar: {
             borderRadius: 0,

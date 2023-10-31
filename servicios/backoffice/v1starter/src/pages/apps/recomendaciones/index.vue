@@ -23,6 +23,7 @@ const fechaFinSub = ref('');
 
 const fechaIniMeta = ref('');
 const fechaFinMeta = ref('');
+const modelItemsSeccion = ref({ title:'Todos', value:'0' });
 
 async function obtenerPorFechaMeta(selectedDates) {
   try {
@@ -103,11 +104,12 @@ onMounted(async () => {
   initDataMeta();
 });
 const items = [
-  'Noticias',
-  'Estadio',
-  'Entretenimiento',
-  'Mundo',
-  'Estilo'
+  { title:'Todos', value:'0' },
+  { title:'Noticias', value:'noticias' },
+  { title:'Estadio', value:'estadio' },
+  { title:'Entretenimiento', value:'entretenimiento' },
+  { title:'Mundo', value:'mundo' },
+  // { title:'Estilo', value:'estilo' }
 ]
 
 </script>
@@ -161,7 +163,7 @@ const items = [
         <VCardItem class="d-flex flex-wrap justify-space-between gap-4">
           <div class="d-flex">
             <div class="descripcion">
-              <VCardTitle>Las 5 subsecciones que más navegan <br>los usuarios</VCardTitle>
+              <VCardTitle>Las 5 subsecciones que <br> más navegan los usuarios</VCardTitle>
               <VCardSubtitle>Datos desde: {{ fechaIni }} hasta {{ fechaFin }}</VCardSubtitle>
             </div>
           </div>
@@ -210,14 +212,14 @@ const items = [
                   maxDate: new Date(),
                   reactive: true
                 }" />
-              <VSelect class="mt-3" :items="items" label="Noticias" />
+              <VSelect class="mt-3" :items="items" label="Secciones" v-model="modelItemsSeccion" />
 
             </div>
           </template>
         </VCardItem>
 
         <VCardText>
-          <ChartRecMeta :fechaIniMeta="fechaIniMeta" :fechaFinMeta="fechaFinMeta" />
+          <ChartRecMeta :fechaIniMeta="fechaIniMeta" :fechaFinMeta="fechaFinMeta" :modelItemsSeccion="modelItemsSeccion" />
         </VCardText>
       </VCard>
     </VCol>

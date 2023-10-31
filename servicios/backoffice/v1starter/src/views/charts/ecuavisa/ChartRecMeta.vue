@@ -15,6 +15,7 @@
   const props = defineProps({
     fechaIniMeta: String,
     fechaFinMeta: String,
+    modelItemsSeccion: String,
   });
 
   const dataChart = ref([]);
@@ -40,7 +41,7 @@
 
     let dataRaw = Array.from(dataChart.value);
     const seriesFormat = {
-        name: 'Nivel de interés',
+        name: 'Interacciones de usuarios',
         data: []
     };
 
@@ -55,20 +56,17 @@
         chart: {
           parentHeightOffset: 0,
           toolbar: { show: false },
-          height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6)?400:500
+          height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6)?400:700
         },
         dataLabels: { 
           enabled: true
         },
-        colors: ['#00cfe8','#fdd835'],   
+        colors: ['#ed8936','#fdd835'],   
         plotOptions: {
           bar: {
             borderRadius: 0,
-            barHeight: '30%',
-            horizontal: (
-              ((seriesFormat.data.length > 0 && seriesFormat.data.length < 4) || seriesFormat.data.length > 10 )
-              || isMobile
-            ),
+            barHeight: '40%',
+            horizontal: true,
             startingShape: 'rounded',
           },
         },
@@ -101,8 +99,14 @@
     return {series: [seriesFormat], options: options, intereses: categoriesRaw};
   });
 
-  async function getChart(fechaIniMeta, fechaFinMeta) {
-    await fetch(`https://servicio-de-actividad.vercel.app/grafico/metadato/getmetadato/5?fechai=${fechaIniMeta}&fechaf=${fechaFinMeta}&seccion=estadio`)
+  async function getChart(fechaIniMeta, fechaFinMeta, seccion) {
+    var link = `https://servicio-de-actividad.vercel.app/grafico/metadato/getmetadato/10?fechai=${fechaIniMeta}&fechaf=${fechaFinMeta}`;
+
+    if(seccion.value != 0 && seccion != 0){
+      link += `&seccion=${seccion}`;
+    }
+
+    await fetch(link)
       .then(response => response.json())
       .then(data => {
         if(data.resp){
@@ -117,7 +121,7 @@
   watch(props, async (newProps, oldProps) => {
     // Imprime las nuevas fechas
     isLoading.value = true;
-    await getChart(newProps.fechaIniMeta, newProps.fechaFinMeta);
+    await getChart(newProps.fechaIniMeta, newProps.fechaFinMeta, newProps.modelItemsSeccion);
     isLoading.value = false;
       // console.log(resolveData.value.options, resolveData.value.series)
     // Realiza cualquier acción adicional que desees aquí, por ejemplo, actualizar el componente ChartRecomendaciones
