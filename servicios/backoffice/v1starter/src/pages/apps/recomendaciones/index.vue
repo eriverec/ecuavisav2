@@ -85,6 +85,25 @@ const items = [
   // { title:'Estilo', value:'estilo' }
 ]
 
+const buttonClicked  = ref("grafico");
+const onButtonClicked = () => {
+  // console.log('Botón clickeado');
+  buttonClicked.value = "btn";
+  setTimeout(function(){
+    buttonClicked.value = "no-btn";
+  }, 1000);
+  // Realiza otras acciones aquí
+};
+
+// const clickSeccion = () => {
+//   // const dataToSend = {
+//   //   fecha: selectedfechaIniFin.value,
+//   //   criterio: 'seccion',
+//   //   datei: fechaIni.value,
+//   //   datef: fechaFin.value
+//   // };
+//   // console.log(dataToSend);
+// };
 
 watch(async () => selectedfechaIniFin.value, async () => {
   let selectedCombo = selectedfechaIniFin.value
@@ -109,6 +128,8 @@ watch(async () => selectedfechaIniFin.value, async () => {
     fechaFin.value = moment().format("YYYY-MM-DD");
     // console.log(fechaIni.value +'--a--'+ fechaFin.value )
   }
+
+  buttonClicked.value = "grafico";
 });
 
 watch(async () => fechaIngresadaMetadato.value, async () => {
@@ -129,6 +150,12 @@ watch(async () => fechaIngresadaMetadato.value, async () => {
     fechaIniMeta.value = moment().add(-30, 'days').format("YYYY-MM-DD");
     fechaFinMeta.value = moment().format("YYYY-MM-DD");
   }
+
+  metaClicked.value = "grafico";
+});
+
+watch(async () => modelItemsSeccion.value, async () => {
+  metaClicked.value = "grafico";
 });
 
 watch(async () => fechaIngresadaSubseccion.value, async () => {
@@ -149,6 +176,7 @@ watch(async () => fechaIngresadaSubseccion.value, async () => {
     fechaIniSub.value = moment().add(-30, 'days').format("YYYY-MM-DD");
     fechaFinSub.value = moment().format("YYYY-MM-DD");
   }
+  subClicked.value = "grafico";
 });
 
 watch(async () => fechaIngresadaPais.value, async () => {
@@ -169,47 +197,56 @@ watch(async () => fechaIngresadaPais.value, async () => {
     fechaIniPais.value = moment().add(-30, 'days').format("YYYY-MM-DD");
     fechaFinPais.value = moment().format("YYYY-MM-DD");
   }
+  paisClicked.value = "grafico";
 });
 
+watch(async () => modelItemsSeccionPais.value, async () => {
+  paisClicked.value = "grafico";
+});
 
-const clickSeccion = () => {
-  const dataToSend = {
-    fecha: selectedfechaIniFin.value,
-    criterio: 'seccion',
-    datei: fechaIni.value,
-    datef: fechaFin.value
-  };
-  console.log(dataToSend);
-};
-
+const subClicked  = ref("grafico");
 const clickSub = () => {
-  const dataToSend = {
-    fecha: fechaIngresadaSubseccion.value,
-    criterio: 'subseccion',
-    datei: fechaIniSub.value,
-    datef: fechaFinSub.value
-  };
-  console.log(dataToSend);
+  // const dataToSend = {
+  //   fecha: fechaIngresadaSubseccion.value,
+  //   criterio: 'subseccion',
+  //   datei: fechaIniSub.value,
+  //   datef: fechaFinSub.value
+  // };
+  // console.log(dataToSend);
+  subClicked.value = "btn";
+  setTimeout(function(){
+    subClicked.value = "no-btn";
+  }, 1000);
 };
 
+const metaClicked  = ref("grafico");
 const clickMeta = () => {
-  const dataToSend = {
-    fecha: fechaIngresadaMetadato.value,
-    criterio: 'metadatos',
-    datei: fechaIniMeta.value,
-    datef: fechaFinMeta.value
-  };
-  console.log(dataToSend);
+  // const dataToSend = {
+  //   fecha: fechaIngresadaMetadato.value,
+  //   criterio: 'metadatos',
+  //   datei: fechaIniMeta.value,
+  //   datef: fechaFinMeta.value
+  // };
+  // console.log(dataToSend);
+  metaClicked.value = "btn";
+  setTimeout(function(){
+    metaClicked.value = "no-btn";
+  }, 1000);
 };
 
+const paisClicked  = ref("grafico");
 const clickPais = () => {
-  const dataToSend = {
-    fecha: fechaIngresadaPais.value,
-    criterio: 'pais',
-    datei: fechaIniPais.value,
-    datef: fechaFinPais.value
-  };
-  console.log(dataToSend);
+  // const dataToSend = {
+  //   fecha: fechaIngresadaPais.value,
+  //   criterio: 'pais',
+  //   datei: fechaIniPais.value,
+  //   datef: fechaFinPais.value
+  // };
+  // console.log(dataToSend);
+  paisClicked.value = "btn";
+  setTimeout(function(){
+    paisClicked.value = "no-btn";
+  }, 1000);
 };
 
 </script>
@@ -237,30 +274,31 @@ const clickPais = () => {
         <VCardItem class="header_card_item">
           <div class="d-flex">
             <div class="descripcion">
-              <VCardTitle>Las 5 secciones que más navegan <br>los usuarios</VCardTitle>
+              <VCardTitle>Las 5 secciones que más navegan los usuarios</VCardTitle>
               <VCardSubtitle>Datos desde: {{ fechaIni }} hasta {{ fechaFin }}</VCardSubtitle>
             </div>
           </div>
 
           <template #append>
             <div class="date-picker-wrapper" >
-              <VBtn icon color="success" variant="tonal" @click="clickSeccion">
+              <VBtn icon color="success" variant="tonal" @click="onButtonClicked">
                 <VIcon size="22" icon="tabler-download" />
               </VBtn>
-
             </div>
           </template>
         </VCardItem>
 
         <VCardItem class="pt-0">
-          <div class="date-picker-wrapper" style="width: 250px;">
-            <VCombobox v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="" persistent-hint
-              hide-selected hint="" />
+          <div class="bg-ecuavisa py-2">
+            <div class="date-picker-wrapper" style="width: 250px;">
+              <VCombobox v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
+                hide-selected hint="" />
+            </div>
           </div>
         </VCardItem>
 
         <VCardText>
-          <ChartRecomendaciones :fechaIni="fechaIni" :fechaFin="fechaFin" />
+          <ChartRecomendaciones :fechaIni="fechaIni" :fechaFin="fechaFin" :buttonClicked="buttonClicked" />
         </VCardText>
       </VCard>
     </VCol>
@@ -270,7 +308,7 @@ const clickPais = () => {
         <VCardItem class="header_card_item">
           <div class="d-flex">
             <div class="descripcion">
-              <VCardTitle>Las 5 subsecciones que <br> más navegan los usuarios</VCardTitle>
+              <VCardTitle>Las 5 subsecciones que más navegan los usuarios</VCardTitle>
               <VCardSubtitle>Datos desde: {{ fechaIni }} hasta {{ fechaFin }}</VCardSubtitle>
             </div>
           </div>
@@ -287,14 +325,17 @@ const clickPais = () => {
         </VCardItem>
 
         <VCardItem class="pt-0">
-          <div class="date-picker-wrapper" style="width: 250px;">
-            <VCombobox v-model="fechaIngresadaSubseccion" :items="fechaIniFinList" variant="outlined" label=""
-                persistent-hint hide-selected hint="" />
+          <div class="bg-ecuavisa py-2">
+            <div class="date-picker-wrapper" style="width: 250px;">
+              <VCombobox v-model="fechaIngresadaSubseccion" :items="fechaIniFinList" variant="outlined" label="Fecha"
+                  persistent-hint hide-selected hint="" />
+            </div>
           </div>
+          
         </VCardItem>
 
         <VCardText>
-          <ChartRecSubsecciones :fechaIniSub="fechaIniSub" :fechaFinSub="fechaFinSub" />
+          <ChartRecSubsecciones :fechaIniSub="fechaIniSub" :fechaFinSub="fechaFinSub" :subClicked="subClicked" />
         </VCardText>
       </VCard>
     </VCol>
@@ -304,7 +345,7 @@ const clickPais = () => {
         <VCardItem class="header_card_item">
           <div class="d-flex">
             <div class="descripcion">
-              <VCardTitle>Los metadatos que más navegan <br>los usuarios</VCardTitle>
+              <VCardTitle>Los metadatos que más navegan los usuarios</VCardTitle>
               <VCardSubtitle>Datos desde: {{ fechaIni }} hasta {{ fechaFin }}</VCardSubtitle>
             </div>
           </div>
@@ -319,17 +360,19 @@ const clickPais = () => {
         </VCardItem>
 
         <VCardItem class="pt-0">
-          <div class="date-picker-wrapper" style="width: 250px;">
-            <VCombobox v-model="fechaIngresadaMetadato" :items="fechaIniFinList" variant="outlined" label=""
-                persistent-hint hide-selected hint="" />
-              <VSelect class="mt-3" :items="items" label="Secciones" v-model="modelItemsSeccion" />
+          <div class="date-picker-wrapper d-flex gap-4 py-2" style="width: 295px;">
+
+            <VCombobox v-model="fechaIngresadaMetadato" :items="fechaIniFinList" variant="outlined" label="Fecha"
+                 hide-selected  />
+            
+            <VSelect class="" :items="items" label="Secciones" v-model="modelItemsSeccion" />
 
           </div>
         </VCardItem>
 
         <VCardText>
           <ChartRecMeta :fechaIniMeta="fechaIniMeta" :fechaFinMeta="fechaFinMeta"
-            :modelItemsSeccion="modelItemsSeccion" />
+            :modelItemsSeccion="modelItemsSeccion" :metaClicked="metaClicked" />
         </VCardText>
       </VCard>
     </VCol>
@@ -339,7 +382,7 @@ const clickPais = () => {
         <VCardItem class="header_card_item">
           <div class="d-flex">
             <div class="descripcion">
-              <VCardTitle>Los paises que más navegan los usuarios</VCardTitle>
+              <VCardTitle>Países que más navegan los usuarios por sección</VCardTitle>
               <VCardSubtitle>Datos desde: {{ fechaIni }} hasta {{ fechaFin }}</VCardSubtitle>
             </div>
           </div>
@@ -349,25 +392,35 @@ const clickPais = () => {
               <VBtn icon color="success" variant="tonal" @click="clickPais">
                 <VIcon size="22" icon="tabler-download" />
               </VBtn>
-
             </div>
           </template>
         </VCardItem>
 
-        <VCardItem class="pt-0">
-          <div class="date-picker-wrapper" style="width: 250px;">
-            <VCombobox v-model="fechaIngresadaPais" :items="fechaIniFinList" variant="outlined" label="" persistent-hint
+        <VCardItem class="pt-0 py-2">
+          <div class="date-picker-wrapper d-flex gap-4 py-2" style="width: 295px;">
+            <VCombobox v-model="fechaIngresadaPais" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
                 hide-selected hint="" />
-              <VSelect class="mt-3" :items="items" label="Secciones" v-model="modelItemsSeccionPais" />
+              <VSelect class="" :items="items" label="Secciones" v-model="modelItemsSeccionPais" />
           </div>
         </VCardItem>
 
-        <VCardText>
+        <VCardText class="py-3">
           <ChartRecPais :fechaIniPais="fechaIniPais" :fechaFinPais="fechaFinPais"
-            :modelItemsSeccionPais="modelItemsSeccionPais" />
+            :modelItemsSeccionPais="modelItemsSeccionPais" :paisClicked="paisClicked" />
         </VCardText>
       </VCard>
     </VCol>
 
   </VRow>
 </template>
+
+<style type="text/css">
+  /*.bg-ecuavisa {
+      background: rgb(var(--v-theme-background));
+      padding: 12px;
+      border-radius: 7px;
+  }
+  .date-picker-wrapper {
+      background: rgb(var(--v-theme-surface));
+  }*/
+</style>

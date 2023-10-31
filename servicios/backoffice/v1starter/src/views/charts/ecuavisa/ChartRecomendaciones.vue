@@ -15,6 +15,7 @@
   const props = defineProps({
     fechaIni: String,
     fechaFin: String,
+    buttonClicked: String
   });
 
   const dataChart = ref([]);
@@ -114,15 +115,78 @@
       });
   }
 
+  function convertToCSV(objArray) {
+    var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+    var str = "";
+
+    for (var i = 0; i < array.length; i++) {
+      var line = "";
+      for (var index in array[i]) {
+        if (line != "") line += ",";
+
+        line += array[i][index];
+      }
+
+      str += line + "\r\n";
+    }
+
+    return str;
+  }
+
+  async function exportCSVFile(headers, items, fileTitle) {
+    if (headers) {
+      items.unshift(headers);
+    }
+
+    var jsonObject = JSON.stringify(items);
+
+    var csv = convertToCSV(jsonObject);
+    var exportedFilenmae = fileTitle + ".csv" || "export.csv";
+    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+
+    if (navigator.msSaveBlob) {
+      // IE 10+
+      navigator.msSaveBlob(blob, exportedFilenmae);
+    } else {
+      var link = document.createElement("a");
+      if (link.download !== undefined) {
+        // feature detection
+        // Browsers that support HTML5 download attribute
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", exportedFilenmae);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  }
+
+  async function downloadFull () {
+    let headers = {
+      name: "name",
+      total: "total"
+    };
+    let doc = [];
+    doc = Array.from(dataChart.value);
+    let title = `recomendaciones-${props.fechaIni}-${props.fechaFin}`;
+    await exportCSVFile(headers, doc, title);
+  };
+
   watch(props, async (newProps, oldProps) => {
     // Imprime las nuevas fechas
-    isLoading.value = true;
-    await getChart(newProps.fechaIni, newProps.fechaFin);
-    isLoading.value = false;
-      // console.log(resolveData.value.options, resolveData.value.series)
-    // Realiza cualquier acción adicional que desees aquí, por ejemplo, actualizar el componente ChartRecomendaciones
+    if(newProps.buttonClicked == "btn"){
+      await downloadFull();
+    }
+    
+    if(newProps.buttonClicked == "grafico"){
+      isLoading.value = true;
+      await getChart(newProps.fechaIni, newProps.fechaFin);
+      isLoading.value = false;
+    }
+    
   });
-
 
 </script>
 <template>

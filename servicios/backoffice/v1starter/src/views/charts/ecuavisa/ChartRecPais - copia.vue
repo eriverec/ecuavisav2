@@ -2,6 +2,7 @@
   import VueApexCharts from 'vue3-apexcharts';
   import { hexToRgb } from '@layouts/utils';
   import { useTheme } from 'vuetify';
+  import PolarAreaChart from '@core/libs/chartjs/components/PolarAreaChart'
 
   import Moment from 'moment';
   import { extendMoment } from 'moment-range';
@@ -15,14 +16,35 @@
   const props = defineProps({
     fechaIniPais: String,
     fechaFinPais: String,
-    paisClicked: String,
     modelItemsSeccionPais: String,
+    paisClicked: String,
   });
 
   const dataChart = ref([]);
 
   const isMobile = window.innerWidth <= 768;
   const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
+
+  const chartJsCustomColors = {
+    white: '#fff',
+    yellow: '#ffe802',
+    primary: '#836af9',
+    areaChartBlue: '#2c9aff',
+    barChartYellow: '#ffcf5c',
+    polarChartGrey: '#4f5d70',
+    polarChartInfo: '#299aff',
+    lineChartYellow: '#d4e157',
+    polarChartGreen: '#28dac6',
+    lineChartPrimary: '#9e69fd',
+    lineChartWarning: '#ff9800',
+    horizontalBarInfo: '#26c6da',
+    polarChartWarning: '#ff8131',
+    scatterChartGreen: '#28c76f',
+    warningShade: '#ffbd1f',
+    areaChartBlueLight: '#84d0ff',
+    areaChartGreyLight: '#edf1f4',
+    scatterChartWarning: '#ff9f43',
+  }
 
   // 👉 Colors variables
   const colorVariables = themeColors => {
@@ -31,74 +53,88 @@
     const themeBorderColor = `rgba(${hexToRgb(String(themeColors.variables['border-color']))},${themeColors.variables['border-opacity']})`
     const themePrimaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['high-emphasis-opacity']})`
     
-    return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
+    return { labelColor: themeDisabledTextColor, borderColor: themeBorderColor, legendColor: themeSecondaryTextColor }
   }
 
   const vuetifyTheme = useTheme();
 
-  const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value);
+  const { legendColor } = colorVariables(vuetifyTheme.current.value);
 
-  const resolveData = computed(() => {
+  const chartConfig = computed(() => {
 
     let dataRaw = Array.from(dataChart.value);
-    const seriesFormat = {
-        name: 'Interacciones de usuarios',
-        data: []
-    };
+    var paisRaw = [];
+    var valorRaw = [];
+    var total = 0;
 
-    const categoriesRaw = [];
-    for (let i in dataRaw) {
-        let num = parseInt(dataRaw[i].total);
-        seriesFormat.data.push(num);
-        categoriesRaw.push(dataRaw[i].name);   
+    for (var i in dataRaw) {
+        var num = parseInt(dataRaw[i].total);
+        // console.log(num)
+        // valorRaw.push(num);
+        total += num;
+        paisRaw.push(dataRaw[i].name); 
     }
 
-    const options= {
-        chart: {
-          parentHeightOffset: 0,
-          toolbar: { show: false },
-          height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6)?400:700
-        },
-        dataLabels: { 
-          enabled: true
-        },
-        colors: ['#ff4949'],   
-        plotOptions: {
-          bar: {
-            borderRadius: 0,
-            barHeight: '40%',
-            horizontal: true,
-            startingShape: 'rounded',
-          },
-        },
-        grid: {
-          borderColor: themeBorderColor,
-          xaxis: {
-            lines: { show: true },
-          },
-          padding: {
-            top: -10,
-          },
-        },
-        yaxis: {
-          labels: {
-            style: { colors: themeDisabledTextColor },
-          },
-        },
-        xaxis: {
-          axisBorder: { show: false },
-          axisTicks: { color: themeBorderColor },
-          categories: categoriesRaw,
-          labels: {
-            style: { colors: themeDisabledTextColor },
-          },
-        },
-        minHeight: 300,
-      }
+    for (var i in dataRaw) {
+        var num = parseInt(dataRaw[i].total);
+        // console.log(num)
+        valorRaw.push(((num*100)/total).toFixed(2));
+        // total += num;
+        // paisRaw.push(dataRaw[i].name); 
+    }
 
 
-    return {series: [seriesFormat], options: options, intereses: categoriesRaw};
+    // console.log(valorRaw)
+
+    const data = {
+      labels: paisRaw,
+      datasets: [{
+        borderWidth: 0,
+        label: 'Population (millions)',
+        data: valorRaw,
+        backgroundColor: [
+          chartJsCustomColors.primary,
+          chartJsCustomColors.yellow,
+          chartJsCustomColors.polarChartWarning,
+          chartJsCustomColors.polarChartInfo,
+          chartJsCustomColors.polarChartGrey,
+          chartJsCustomColors.polarChartGreen,
+        ],
+      }],
+    }
+
+    const config = {
+      responsive: true,
+      maintainAspectRatio: false,
+      animation: { duration: 500 },
+      layout: {
+        padding: {
+          top: -5,
+          bottom: -45,
+        },
+      },
+      scales: {
+        r: {
+          grid: { display: false },
+          ticks: { display: false },
+        },
+      },
+      plugins: {
+        legend: {
+          position: 'right',
+          labels: {
+            padding: 25,
+            boxWidth: 9,
+            color: legendColor,
+            usePointStyle: true,
+          },
+        },
+      },
+    };
+    return {data:data, config};
   });
+
+  
 
   async function getChart(fechaIniPais, fechaFinPais, seccion) {
     var link = `https://servicio-de-actividad.vercel.app/grafico/metadato/getpais/10?fechai=${fechaIniPais}&fechaf=${fechaFinPais}`;
@@ -174,23 +210,20 @@
     };
     let doc = [];
     doc = Array.from(dataChart.value);
-    let title = `pais-${props.fechaIniPais}-${props.fechaFinPais}`;
+    let title = `recomendaciones-${props.fechaIni}-${props.fechaFin}`;
     await exportCSVFile(headers, doc, title);
   };
 
   watch(props, async (newProps, oldProps) => {
-
     if(newProps.paisClicked == "btn"){
       await downloadFull();
     }
-
     if(newProps.paisClicked == "grafico"){
       // Imprime las nuevas fechas
       isLoading.value = true;
       await getChart(newProps.fechaIniPais, newProps.fechaFinPais, newProps.modelItemsSeccionPais);
       isLoading.value = false;
     }
-    
       // console.log(resolveData.value.options, resolveData.value.series)
     // Realiza cualquier acción adicional que desees aquí, por ejemplo, actualizar el componente ChartRecomendaciones
   });
@@ -200,11 +233,10 @@
 <template>
   <VRow>
     <VCol cols="12" md="12" :class="isLoading?'disabled':''">
-        <VueApexCharts
-          :key="uniqueKey"
-          type="bar"
-          :options="resolveData.options"
-          :series="resolveData.series"
+        <PolarAreaChart
+          :height="400"
+          :chart-data="chartConfig.data"
+          :chart-options="chartConfig.config"
         />
     </VCol>
   </VRow>
