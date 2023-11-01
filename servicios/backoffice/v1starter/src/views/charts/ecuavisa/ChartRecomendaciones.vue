@@ -188,6 +188,12 @@
     
   });
 
+  onMounted(async () => {
+    isLoading.value = true;
+    await getChart(props.fechaIni, props.fechaFin);
+    isLoading.value = false;
+  });
+
 </script>
 <template>
   <VRow>

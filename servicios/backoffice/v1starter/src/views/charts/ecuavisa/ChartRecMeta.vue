@@ -196,6 +196,12 @@
     // Realiza cualquier acción adicional que desees aquí, por ejemplo, actualizar el componente ChartRecomendaciones
   });
 
+  onMounted(async () => {
+    isLoading.value = true;
+    await getChart(props.fechaIniMeta, props.fechaFinMeta, props.modelItemsSeccion);
+    isLoading.value = false;
+  });
+
 
 </script>
 <template>

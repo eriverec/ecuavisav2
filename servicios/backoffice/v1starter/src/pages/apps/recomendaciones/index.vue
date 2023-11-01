@@ -19,17 +19,17 @@ const fechaIngresadaMetadato = ref('Hoy');
 const fechaIngresadaPais = ref('Hoy');
 const selectedfechaIniFin = ref('Hoy');
 
-const fechaIni = ref('');
-const fechaFin = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
+const fechaIni = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
+const fechaFin = ref(moment().format("YYYY-MM-DD"));
 
-const fechaIniSub = ref('');
-const fechaFinSub = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
+const fechaIniSub = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
+const fechaFinSub = ref(moment().format("YYYY-MM-DD"));
 
-const fechaIniMeta = ref('');
-const fechaFinMeta = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
+const fechaIniMeta = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
+const fechaFinMeta = ref(moment().format("YYYY-MM-DD"));
 
-const fechaIniPais = ref('');
-const fechaFinPais = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
+const fechaIniPais = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
+const fechaFinPais = ref(moment().format("YYYY-MM-DD"));
 
 const modelItemsSeccion = ref({ title: 'Todos', value: '0' });
 const modelItemsSeccionPais = ref({ title: 'Todos', value: '0' });
@@ -40,7 +40,7 @@ const fechaIniFinList = [
 
 const initData = () => {
   let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");
-  let fechaf = moment().add(-1, 'days').format("YYYY-MM-DD");
+  let fechaf = moment().format("YYYY-MM-DD");
   fechaIni.value = fechai;
   fechaFin.value = fechaf;
   fechaIngresada.value = fechai + ' a ' + fechaf;
@@ -48,7 +48,7 @@ const initData = () => {
 
 const initDataSub = () => {
   let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");
-  let fechaf = moment().add(-1, 'days').format("YYYY-MM-DD");
+  let fechaf = moment().format("YYYY-MM-DD");
   fechaIniSub.value = fechai;
   fechaFinSub.value = fechaf;
   fechaIngresada.value = fechai + ' a ' + fechaf;
@@ -56,7 +56,7 @@ const initDataSub = () => {
 
 const initDataMeta = () => {
   let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");
-  let fechaf = moment().add(-1, 'days').format("YYYY-MM-DD");
+  let fechaf = moment().format("YYYY-MM-DD");
   fechaIniMeta.value = fechai;
   fechaFinMeta.value = fechaf;
   fechaIngresada.value = fechai + ' a ' + fechaf;
@@ -64,7 +64,7 @@ const initDataMeta = () => {
 
 const initDataPais = () => {
   let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");
-  let fechaf = moment().add(-1, 'days').format("YYYY-MM-DD");
+  let fechaf = moment().format("YYYY-MM-DD");
   fechaIniPais.value = fechai;
   fechaFinPais.value = fechaf;
   fechaIngresada.value = fechai + ' a ' + fechaf;
@@ -110,8 +110,7 @@ watch(async () => selectedfechaIniFin.value, async () => {
   // console.log("selectedCombo:",selectedCombo);
   if (selectedCombo === 'Hoy') {
     fechaIni.value = moment().add(-1, 'days').format("YYYY-MM-DD");
-    fechaFin.value = moment().add(-1, 'days').format("YYYY-MM-DD");
-    // console.log(fechaIni.value +'--a--'+ fechaFin.value )
+    fechaFin.value = moment().format("YYYY-MM-DD");
   }
   if (selectedCombo === 'Hace una semana') {
     fechaIni.value = moment().add(-7, 'days').format("YYYY-MM-DD");
@@ -136,7 +135,7 @@ watch(async () => fechaIngresadaMetadato.value, async () => {
   let selectedCombo = fechaIngresadaMetadato.value
   if (selectedCombo === 'Hoy') {
     fechaIniMeta.value = moment().add(-1, 'days').format("YYYY-MM-DD");
-    fechaFinMeta.value = moment().add(-1, 'days').format("YYYY-MM-DD");
+    fechaFinMeta.value = moment().format("YYYY-MM-DD");
   }
   if (selectedCombo === 'Hace una semana') {
     fechaIniMeta.value = moment().add(-7, 'days').format("YYYY-MM-DD");
@@ -162,7 +161,7 @@ watch(async () => fechaIngresadaSubseccion.value, async () => {
   let selectedCombo = fechaIngresadaSubseccion.value
   if (selectedCombo === 'Hoy') {
     fechaIniSub.value = moment().add(-1, 'days').format("YYYY-MM-DD");
-    fechaFinSub.value = moment().add(-1, 'days').format("YYYY-MM-DD");
+    fechaFinSub.value = moment().format("YYYY-MM-DD");
   }
   if (selectedCombo === 'Hace una semana') {
     fechaIniSub.value = moment().add(-7, 'days').format("YYYY-MM-DD");
@@ -183,7 +182,7 @@ watch(async () => fechaIngresadaPais.value, async () => {
   let selectedCombo = fechaIngresadaPais.value
   if (selectedCombo === 'Hoy') {
     fechaIniPais.value = moment().add(-1, 'days').format("YYYY-MM-DD");
-    fechaFinPais.value = moment().add(-1, 'days').format("YYYY-MM-DD");
+    fechaFinPais.value = moment().format("YYYY-MM-DD");
   }
   if (selectedCombo === 'Hace una semana') {
     fechaIniPais.value = moment().add(-7, 'days').format("YYYY-MM-DD");

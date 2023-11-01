@@ -228,6 +228,11 @@
     // Realiza cualquier acción adicional que desees aquí, por ejemplo, actualizar el componente ChartRecomendaciones
   });
 
+  onMounted(async () => {
+    isLoading.value = true;
+    await getChart(props.fechaIniPais, props.fechaFinPais, props.modelItemsSeccionPais);
+    isLoading.value = false;
+  });
 
 </script>
 <template>
