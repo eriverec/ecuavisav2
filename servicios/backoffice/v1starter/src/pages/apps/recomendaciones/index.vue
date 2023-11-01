@@ -308,7 +308,7 @@ const clickPais = () => {
           <div class="d-flex">
             <div class="descripcion">
               <VCardTitle>Las 5 subsecciones que más navegan los usuarios</VCardTitle>
-              <VCardSubtitle>Datos desde: {{ fechaIni }} hasta {{ fechaFin }}</VCardSubtitle>
+              <VCardSubtitle>Datos desde: {{ fechaIniSub }} hasta {{ fechaFinSub }}</VCardSubtitle>
             </div>
           </div>
 
@@ -345,7 +345,7 @@ const clickPais = () => {
           <div class="d-flex">
             <div class="descripcion">
               <VCardTitle>Los metadatos que más navegan los usuarios</VCardTitle>
-              <VCardSubtitle>Datos desde: {{ fechaIni }} hasta {{ fechaFin }}</VCardSubtitle>
+              <VCardSubtitle>Datos desde: {{ fechaIniMeta }} hasta {{ fechaFinMeta }}</VCardSubtitle>
             </div>
           </div>
 
@@ -382,7 +382,7 @@ const clickPais = () => {
           <div class="d-flex">
             <div class="descripcion">
               <VCardTitle>Países que más navegan los usuarios por sección</VCardTitle>
-              <VCardSubtitle>Datos desde: {{ fechaIni }} hasta {{ fechaFin }}</VCardSubtitle>
+              <VCardSubtitle>Datos desde: {{ fechaIniPais }} hasta {{ fechaFinPais }}</VCardSubtitle>
             </div>
           </div>
 
