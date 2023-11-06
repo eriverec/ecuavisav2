@@ -214,17 +214,16 @@ function eventoEnvivoManager() {
                   }
                 }
                 if (programasHoy.length > 0) {
-                  if (fondito__) {
-                    fondito__.style.display = "none";
-                  }
                   programasHoy.forEach(programa => {
                     if (title_programa) {
                       title_programa.innerHTML = programa;
                       title_programa.style.display = 'block';
                     }
-                    if (playerembed && fondito__) {
-                      playerembed.style.display = 'block';
+                    if (fondito__) {
                       fondito__.style.display = "none";
+                    }
+                    if (playerembed) {
+                      playerembed.style.display = 'block';
                       if (!document.querySelector('#playerembed iframe')) {
                         if (playerembed) {
                           playerembed.innerHTML = htmlIframe;
@@ -245,12 +244,14 @@ function eventoEnvivoManager() {
                     title_programa.innerHTML = '';
                     title_programa.style.display = 'none';
                   }
-                  if (playerembed && fondito__) {
+                  if(fondito__){
+                    fondito__.style.display = "block";
+                  }
+                  if (playerembed) {
                     playerembed.style.display = 'none';
                     if (document.querySelector('#playerembed iframe')) {
                       document.querySelector('#playerembed iframe').remove();
                     }
-                    fondito__.style.display = "block";
                   }
                   if (enVivoRedy) {
                     enVivoRedy.style.display = 'none';
@@ -304,7 +305,7 @@ function eventoEnvivoManager() {
         console.error("Error al obtener los datos:", error);
       });
 
-    // setTimeout(fetchHorarioEnvivo, 120000); //comentado 23/octubre/2023 - 11:50AM
+    setTimeout(fetchHorarioEnvivo, 60000); //comentado 23/octubre/2023 - 11:50AM
   }
 
   // Llamar a la función para obtener y procesar los datos inicialmente
@@ -460,7 +461,7 @@ function eventoEnvivoManagerQuito() {
         console.error("Error al obtener los datos:", error);
       });
 
-    setTimeout(fetchHorarioEnvivoQuito, 60000); //cada 2 minutos se actualiza
+    setTimeout(fetchHorarioEnvivoQuito, 120000); //cada 2 minutos se actualiza
   }
 
   // Llamar a la función para obtener y procesar los datos inicialmente
