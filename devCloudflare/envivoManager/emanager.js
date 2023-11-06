@@ -340,7 +340,7 @@ function eventoEnvivoManagerQuito() {
 
         // console.log(`${horaActual}:${minutosActuales} uio`);
 
-        console.log(data.horarios);
+        // console.log(data.horarios); // imprimir los horarios en la consola
 
         if (!forzado) {
           for (const dia of data.horarios) {
