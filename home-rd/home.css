@@ -5,6 +5,10 @@
   opacity: 0 !important;
 }
 
+.pud_desktop {
+  height: auto;
+}
+
 @-webkit-keyframes fadeIn{0%{opacity: 0}to{opacity: 1}}@keyframes fadeIn{0%{opacity: 0}to{opacity: 1}}
 
 .container-logo-movil a.header-logo {
