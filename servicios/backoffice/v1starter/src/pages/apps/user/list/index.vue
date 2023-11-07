@@ -856,6 +856,9 @@ const resolveFechaSelected = (fechas) => {
 </script>
 
 <style>
+th.col-cr:hover {
+    background-color: #f2f2f21f;
+}
 @media screen and (max-width: 1500px) and (min-width: 1280px) {
   .tarjeta {
     width: 185px;
