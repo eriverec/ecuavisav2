@@ -1197,9 +1197,7 @@ th.col-cr:hover {
                       size="30"
                     />
                     <div class="d-flex flex-column">
-                      <span class="text-capitalize text-base">{{
-                        user.provider
-                      }}</span>
+                      <span class="text-capitalize text-base vamosss"> {{user.provider.replace('app-client-email', 'App-Email').replace('app-client-google', 'App-Google').replace('app-client-facebook', 'App-Facebook').replace('app-client-apple', 'App-Apple')}}</span>
                     </div>
                   </div>
                 </td>
@@ -1389,7 +1387,7 @@ th.col-cr:hover {
   th.col-cr {
     cursor: pointer;
 }
-th.col-cr:hover {
+.v-theme--light th.col-cr:hover {
     background-color: #f2f2f2;
 }
   .row-cr {
