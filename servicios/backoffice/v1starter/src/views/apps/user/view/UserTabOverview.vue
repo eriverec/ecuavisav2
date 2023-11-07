@@ -217,49 +217,74 @@ const formatDate = function (date) {
 
 var timeSince = function (date) {
   if (date) {
-    if (typeof date !== 'object') {
-      date = new Date(date);
-    }
-
-
-    var seconds = Math.floor((new Date() - date) / 1000);
-
-    var intervalType;
-
-    var interval = Math.floor(seconds / 31536000);
-    if (interval >= 1) {
-      intervalType = 'año';
+    const fechaActual = moment(); 
+    const fechaInicial = moment(date, 'YYYY-MM-DD HH:mm:ss');
+    const segundosTranscurridos = fechaActual.diff(fechaInicial, 'seconds');
+    if (segundosTranscurridos < 60 && segundosTranscurridos > -1) {
+      return 'Hace ' + segundosTranscurridos + ' segundos';
+      // return { cantidad: segundosTranscurridos, tipo: 'segundos' };
     } else {
-      interval = Math.floor(seconds / 2592000);
-      if (interval >= 1) {
-        intervalType = 'mes';
+      const minutosTranscurridos = fechaActual.diff(fechaInicial, 'minutes');
+
+      if (minutosTranscurridos < 60 && minutosTranscurridos > -1) {
+        return 'Hace ' + minutosTranscurridos + ' minutos';
+        // return { cantidad: minutosTranscurridos, tipo: 'minutos' };
       } else {
-        interval = Math.floor(seconds / 86400);
-        if (interval >= 1) {
-          intervalType = 'día';
+        const horasTranscurridas = fechaActual.diff(fechaInicial, 'hours');
+
+        if (horasTranscurridas < 24 && horasTranscurridas > -1) {
+          return 'Hace ' + horasTranscurridas + ' horas';
+          // return { cantidad: horasTranscurridas, tipo: 'horas' };
         } else {
-          interval = Math.floor(seconds / 3600);
-          if (interval >= 1) {
-            intervalType = "hora";
-          } else {
-            interval = Math.floor(seconds / 60);
-            if (interval >= 1) {
-              intervalType = "minuto";
-            } else {
-              interval = seconds;
-              intervalType = "segundo";
-            }
-          }
+          const diasTranscurridos = fechaActual.diff(fechaInicial, 'days');
+          // return { cantidad: diasTranscurridos, tipo: 'días' };
+          return 'Hace ' + diasTranscurridos + ' días';
         }
       }
     }
+    // if (typeof date !== 'object') {
+    //   date = new Date(date);
+    // }
 
-    if (interval > 1 || interval === 0) {
-      if (intervalType == "mes") { intervalType += 'es'; }
-      else { intervalType += 's'; }
-    }
 
-    return 'Hace ' + interval + ' ' + intervalType;
+    // var seconds = Math.floor((new Date() - date) / 1000);
+
+    // var intervalType;
+
+    // var interval = Math.floor(seconds / 31536000);
+    // if (interval >= 1) {
+    //   intervalType = 'año';
+    // } else {
+    //   interval = Math.floor(seconds / 2592000);
+    //   if (interval >= 1) {
+    //     intervalType = 'mes';
+    //   } else {
+    //     interval = Math.floor(seconds / 86400);
+    //     if (interval >= 1) {
+    //       intervalType = 'día';
+    //     } else {
+    //       interval = Math.floor(seconds / 3600);
+    //       if (interval >= 1) {
+    //         intervalType = "hora";
+    //       } else {
+    //         interval = Math.floor(seconds / 60);
+    //         if (interval >= 1) {
+    //           intervalType = "minuto";
+    //         } else {
+    //           interval = seconds;
+    //           intervalType = "segundo";
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+
+    // if (interval > 1 || interval === 0) {
+    //   if (intervalType == "mes") { intervalType += 'es'; }
+    //   else { intervalType += 's'; }
+    // }
+
+    return 'Hace un momento';
 
   } else return null;
 };
