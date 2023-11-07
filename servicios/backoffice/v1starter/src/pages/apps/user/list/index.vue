@@ -939,7 +939,7 @@ const resolveFechaSelected = (fechas) => {
                 />
               </VCol>
 
-              <VCol cols="12" sm="4">
+              <VCol cols="12" sm="4" style="display: none;">
                 <VSelect
                   v-model="selectedBoletin"
                   label="Boletín"
