@@ -115,12 +115,13 @@ const reloadP = () =>  {
       cols="12"
       md="7"
       lg="12"
+      style="display: none;"
     >
     <UserNotifications/>
-    
+    <UserSugerencias/>
   </VCol>
   
-    <UserSugerencias/>
+    
     
     
  

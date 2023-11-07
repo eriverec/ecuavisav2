@@ -1236,6 +1236,8 @@ const resolveFechaSelected = (fechas) => {
                 <!-- 👉 Newsletter -->
                 <td>
                   <VChip
+                  style="display: none;"
+                  disabled
                     label
                     :color="resolveUserStatusVariant(user.newsletter_opt_in)"
                     size="small"
@@ -1243,6 +1245,7 @@ const resolveFechaSelected = (fechas) => {
                   >
                     {{ user.newsletter_opt_in }}
                   </VChip>
+                  <small>En desarrollo</small>
                 </td>
 
                 <!-- 👉 Actions -->
@@ -1263,7 +1266,7 @@ const resolveFechaSelected = (fechas) => {
                     <VIcon size="22" icon="tabler-trash" />
                   </VBtn>
 
-                  <VBtn icon size="x-small" color="default" variant="text">
+                  <VBtn icon size="x-small" color="default" variant="text" style="display: none;">
                     <VIcon size="22" icon="tabler-dots-vertical" />
 
                     <VMenu activator="parent">

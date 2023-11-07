@@ -276,7 +276,7 @@ const resolveUserRoleVariant = role => {
               </VListItemTitle>
             </VListItem>
 
-            <VListItem>
+            <VListItem style="display: none;">
               <VListItemTitle>
                 <h6 class="text-base font-weight-semibold">
                   Prefijo teléfono:
