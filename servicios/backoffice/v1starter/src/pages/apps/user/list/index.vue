@@ -855,28 +855,6 @@ const resolveFechaSelected = (fechas) => {
 };
 </script>
 
-<style>
-th.col-cr:hover {
-    background-color: #f2f2f21f;
-}
-@media screen and (max-width: 1500px) and (min-width: 1280px) {
-  .tarjeta {
-    width: 185px;
-  }
-  svg {
-   display: none;
-  }
-}
-
-@media screen and (max-width: 3000px) and (min-width: 1501px) {
-  .tarjeta {
-    width: 215px;
-  }
- 
-}
-
-</style>
-
 <template>
   <section>
     <VRow>
@@ -1372,8 +1350,13 @@ th.col-cr:hover {
   </section>
 </template>
 
+<style>
+
+
+</style>
+
 <style lang="scss">
-  .sort-icon {
+.sort-icon {
   display: inline-block;
   width: 20px;
   height: 20px;
@@ -1387,10 +1370,15 @@ th.col-cr:hover {
   th.col-cr {
     cursor: pointer;
 }
-.v-theme--light th.col-cr:hover {
-    background-color: #f2f2f2;
+
+th.col-cr:hover {
+  background-color: #f2f2f21f;
 }
-  .row-cr {
+
+.v-theme--light th.col-cr:hover {
+  background-color: #f2f2f2;
+}
+.row-cr {
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -1430,5 +1418,22 @@ svg {
 .loaded {
   opacity: 0;
   z-index: -1;
+}
+
+
+@media screen and (max-width: 1500px) and (min-width: 1280px) {
+  .tarjeta {
+    width: 185px;
+  }
+  svg {
+   display: none;
+  }
+}
+
+@media screen and (max-width: 3000px) and (min-width: 1501px) {
+  .tarjeta {
+    width: 215px;
+  }
+ 
 }
 </style>
