@@ -2434,6 +2434,7 @@ INICIO - BLOQUE - MUNDO
   position: absolute;
   top: 0;
   z-index: 9;
+  width: 100%;
 }
 
 .HOME_MENU_RD .bloque_estadio_2 {
