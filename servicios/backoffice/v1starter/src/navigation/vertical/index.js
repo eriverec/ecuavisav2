@@ -31,10 +31,10 @@ export default [
     title: 'Trazabilidad',
     icon: { icon: 'tabler-database' },
     children: [
-      { title: 'Lista de Usuarios', to: 'apps-trazabilidad-list' },
+      // { title: 'Lista de Usuarios', to: 'apps-trazabilidad-list' },
       { title: 'Visitas', to: 'apps-visitas-list' },
       { title: 'Metadatos', to: 'apps-metadatos' },
-      { title: 'Dispositivos', to: 'apps-dispositivos' },
+      // { title: 'Dispositivos', to: 'apps-dispositivos' },
       { title: 'Recomendaciones', to: 'apps-recomendaciones' },
 
       // modulos por salir
@@ -80,16 +80,16 @@ export default [
     ],
   },
 
-  {
-    title: 'Campañas / Ads',
-    icon: { icon: 'tabler-ad' },
-    children: [
-      { title: 'Lista de campañas', to: 'apps-campaigns-list' },
-      { title: 'Crear campaña', to: 'apps-campaigns-create' },
-      { title: 'Posiciones', to: 'apps-campaigns-ads-ubicaciones' },
+  // {
+  //   title: 'Campañas / Ads',
+  //   icon: { icon: 'tabler-ad' },
+  //   children: [
+  //     { title: 'Lista de campañas', to: 'apps-campaigns-list' },
+  //     { title: 'Crear campaña', to: 'apps-campaigns-create' },
+  //     { title: 'Posiciones', to: 'apps-campaigns-ads-ubicaciones' },
       
-    ],
-  },
+  //   ],
+  // },
 
   //########################
   // módulos no visibles
