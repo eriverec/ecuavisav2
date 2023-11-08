@@ -232,7 +232,7 @@ const userListMeta = [
   .tarjeta {
     width: 185px;
   }
-  svg {
+  .tarjeta svg {
    display: none;
   }
 }
