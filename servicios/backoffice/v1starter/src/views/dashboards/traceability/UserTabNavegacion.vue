@@ -1,7 +1,7 @@
 <script setup>
 import { useTheme } from 'vuetify';
-
 import CrmActivityTimeline from '@/views/dashboards/traceability/UserTabNavegacionTimeline.vue';
+import { useSelectCalendar } from "@/views/apps/otros/useSelectCalendar.js";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -17,9 +17,7 @@ const fecha = ref({
 });
 
 const selectedfechaIniFin = ref('Hoy');
-const fechaIniFinList = [
-  'Hoy','Hace 3 días', 'Hace 5 días'
-];
+const fechaIniFinList = useSelectCalendar();
 
 // fecha.value = {
 //   i: ref(moment().add(-1, 'days')),

@@ -3,6 +3,7 @@ import ChartRecomendaciones from "@/views/charts/ecuavisa/ChartRecomendaciones.v
 import ChartRecSubsecciones from "@/views/charts/ecuavisa/ChartRecSubsecciones.vue";
 import ChartRecMeta from "@/views/charts/ecuavisa/ChartRecMeta.vue";
 import ChartRecPais from "@/views/charts/ecuavisa/ChartRecPais.vue";
+import { useSelectCalendar } from "@/views/apps/otros/useSelectCalendar.js";
 
 // import ChartRecSubsecccion from "@/views/charts/apex-chart/ChartRecSubsecccion.vue";
 
@@ -34,9 +35,7 @@ const fechaFinPais = ref(moment().format("YYYY-MM-DD"));
 const modelItemsSeccion = ref({ title: 'Todos', value: '0' });
 const modelItemsSeccionPais = ref({ title: 'Todos', value: '0' });
 
-const fechaIniFinList = [
-  'Hoy', 'Hace una semana', '15 días atrás', '1 mes atrás'
-];
+const fechaIniFinList = useSelectCalendar();
 
 const initData = () => {
   let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");

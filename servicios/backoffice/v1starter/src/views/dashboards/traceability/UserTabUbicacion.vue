@@ -1,4 +1,5 @@
 <script setup>
+import { useSelectCalendar } from "@/views/apps/otros/useSelectCalendar.js";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -19,9 +20,7 @@ const fecha = ref({
 });
 
 const selectedfechaIniFin = ref('Hoy');
-const fechaIniFinList = [
-  'Hoy','Hace 3 días', 'Hace 5 días'
-];
+const fechaIniFinList = useSelectCalendar();
 
 async function fetchData() {
   try {
