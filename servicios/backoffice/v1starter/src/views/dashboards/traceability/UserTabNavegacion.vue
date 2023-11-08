@@ -8,13 +8,23 @@ import esLocale from "moment/locale/es";
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 const vuetifyTheme = useTheme();
-const fecha = ref({});
-fecha.value = {
-  i: moment().add(-5, 'days'),
+const loadingData = ref(false);
+
+const fecha = ref({
+  i: moment().add(-1, 'days'),
   f: moment(),
-}
+  title:"hoy"
+});
 
+const selectedfechaIniFin = ref('Hoy');
+const fechaIniFinList = [
+  'Hoy','Hace 3 días', 'Hace 5 días'
+];
 
+// fecha.value = {
+//   i: ref(moment().add(-1, 'days')),
+//   f: ref(moment())),
+// };
 // const url = 'https://servicio-de-actividad.vercel.app/actividad/all';
 
 const urlCounts = ref([]);
@@ -82,6 +92,7 @@ async function fetchData() {
     // urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
   } catch (error) {
     console.error(error);
+    loadingData.value = false;
   }
 }
 
@@ -109,7 +120,9 @@ async function accionBackoffice (){
 }
 
 onMounted(async ()=>{
+  loadingData.value = true;
   await fetchData();
+  loadingData.value = false;
   await accionBackoffice();
 });
 
@@ -127,15 +140,82 @@ const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
 };
 
+watch(async () => selectedfechaIniFin.value, async () => {
+  let selectedCombo = selectedfechaIniFin.value
+  // console.log("selectedCombo:",selectedCombo);
+  if (selectedCombo === 'Hoy') {
+    fecha.value = {
+      i: moment().add(-1, 'days'),
+      f: moment(),
+      title:"hoy"
+    };
+
+  }
+  if (selectedCombo === 'Hace 3 días') {
+    fecha.value = {
+      i: moment().add(-3, 'days'),
+      f: moment(),
+      title:"hace 3 días"
+    };
+    // console.log(fechaIni.value +'--a--'+ fechaFin.value )
+  }
+  if (selectedCombo === 'Hace 5 días') {
+    fecha.value = {
+      i: moment().add(-5, 'days'),
+      f: moment(),
+      title:"hace 5 días"
+    };
+
+    // fechaIni.value = moment().add(-15, 'days').format("YYYY-MM-DD");
+    // fechaFin.value = moment().format("YYYY-MM-DD");
+    // console.log(fechaIni.value +'--a--'+ fechaFin.value )
+  }
+  if (selectedCombo === '1 mes atrás') {
+    fecha.value = {
+      i: moment().add(-30, 'days'),
+      f: moment(),
+      title:"hace 1 mes atrás"
+    };
+    // fechaIni.value = moment().add(-30, 'days').format("YYYY-MM-DD");
+    // fechaFin.value = moment().format("YYYY-MM-DD");
+    // console.log(fechaIni.value +'--a--'+ fechaFin.value )
+  }
+
+  loadingData.value = true;
+  await fetchData();
+  loadingData.value = false;
+});
+
 </script>
 
 <template>
   <VRow>
     <VCol lg="12" cols="12" sm="6">
+      <VDialog v-model="loadingData" width="300">
+              <VCard color="primary" width="300">
+                <VCardText class="pt-3">
+                  Espere porfavor, obteniendo registros.. {{ totalCount }}
+                  <VProgressLinear indeterminate color="white" class="mb-0" />
+                </VCardText>
+              </VCard>
+            </VDialog>
       <VCard>
-        <VCardItem class="pb-sm-0">
-          <VCardTitle>Páginas más vistas de los útimos 5 días</VCardTitle>
-          <VCardSubtitle>Un total de {{ totalCount }} registros, mostrando data desde {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
+        <VCardItem class="header_card_item">
+          <div class="d-flex">
+            <div class="descripcion">
+              <VCardTitle>Páginas más vistas {{fecha.title}}</VCardTitle>
+              <VCardSubtitle>Un total de {{ totalCount }} registros, mostrando data desde {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
+            </div>
+          </div>
+
+          <template #append>
+            <div class="bg-ecuavisa py-2">
+              <div class="date-picker-wrapper" style="width: 250px;">
+                <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
+                  hide-selected hint="" />
+              </div>
+            </div>
+          </template>
         </VCardItem>
 
         <VCardText v-if="isLoading">Cargando datos...</VCardText>
