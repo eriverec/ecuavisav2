@@ -162,10 +162,10 @@ const tabs = [
     icon: 'tabler-devices',
     title: 'Dispositivos',
   },
-  {
-    icon: 'tabler-hand-click',
-    title: 'Intereses',
-  }
+  // {
+  //   icon: 'tabler-hand-click',
+  //   title: 'Intereses',
+  // }
 ]
 
 
