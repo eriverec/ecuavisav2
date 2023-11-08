@@ -21,7 +21,7 @@ export default [
       icon: { icon: 'tabler-database' },
       // to: { name: 'apps-trazabilidad-list' },
       children: [
-        { title: 'Lista de Usuarios', to: 'apps-trazabilidad-list' },
+        // { title: 'Lista de Usuarios', to: 'apps-trazabilidad-list' },
         // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
         // modulos por salir 
         // { title: 'Dispositivos', to: 'apps-dispositivos' },
