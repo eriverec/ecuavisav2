@@ -178,9 +178,9 @@
                           {{ user.title || user.url }}
                         </h4>
                       </div>
-                      <p class="mb-1">{{ user.fecha }} {{ user.hora }}</p>
+                      <p class="mb-0">{{ user.fecha }} {{ user.hora }}</p>
                       <!-- <p class="mb-1">{{ unirFechaHora(user.fecha, user.hora) }}</p> -->
-                      <span>{{ timeSince(`${user.fecha} ${user.hora}`,index)}}</span>
+                      <span style="font-size:12px">{{ timeSince(`${user.fecha} ${user.hora}`,index)}}</span>
 
                     </VTimelineItem>
 
@@ -924,22 +924,22 @@ const unirFechaHora = (fecha, hora) => {
 var timeSince = function (date,index) {
   const dat =  JSON.stringify(ultimasVisitas.value);
   const valData = JSON.parse(dat)  
-  console.log(JSON.parse(dat).length);
+  // console.log(JSON.parse(dat).length);
 
   if (date) {
 
     if(index == valData.length - 1){
-      console.log(index == valData.length);
+      // console.log(index == valData.length);
       return '';
     }
 
     const sumIndex = valData[index*1+1];  
-    console.log("sumIndex:",sumIndex,index*1+1,index == valData.length);
+    // console.log("sumIndex:",sumIndex,index*1+1,index == valData.length);
 
-    const fechaActual = moment(date, 'DD/MM/YYYY HH:mm:ss');
-    const fechaFinal = moment(`${sumIndex.fecha} ${sumIndex.hora}`, 'DD/MM/YYYY HH:mm:ss');
+    const fechaFinal = moment(date, 'DD/MM/YYYY HH:mm:ss');
+    const fechaActual = moment(`${sumIndex.fecha} ${sumIndex.hora}`, 'DD/MM/YYYY HH:mm:ss');
 
-    console.log(`${sumIndex.fecha}`);
+    // console.log(`${sumIndex.fecha}`);
 
     // console.log("fechaActual:",fechaActual);
     // console.log("fechaFinal:",fechaFinal);
@@ -964,7 +964,8 @@ var timeSince = function (date,index) {
         } else {
           const diasTranscurridos = fechaActual.diff(fechaFinal, 'days');
           // return { cantidad: diasTranscurridos, tipo: 'días' };
-          return 'Hace ' + diasTranscurridos + ' días';
+          // return 'Hace ' + diasTranscurridos + ' días';
+          return 'Hace mucho tiempo';
         }
       }
     }
