@@ -4,59 +4,78 @@
   @change="porVisita" 
   label="Por Visita"
   ></v-switch>--->
+  <VCardItem class="header_card_item">
+        <div class="d-flex">
+          <div class="descripcion">
+            <VCardTitle>Resumen de Tecnología</VCardTitle>
+            <VCardSubtitle>Categoría de dispositivos, mostrando data desde {{ selectedFecha.i.format("YYYY-MM-DD") }} hasta {{ selectedFecha.f.format("YYYY-MM-DD") }}</VCardSubtitle>
+          </div>
+        </div>
 
-  <VBtnToggle
-    density="compact"
-    color="primary"
-    variant="outlined"
-    divided
-  >
-    <VBtn v-on:click="formatActividadGrafico" class="btn-check">Por páginas vistas</VBtn>
-    <VBtn v-on:click="formatVisitaGrafico" >Por Sesión</VBtn>
-  </VBtnToggle>
+      <template #append>
+        <div class="bg-ecuavisa py-2">
+          <div class="date-picker-wrapper" style="width: 250px;">
+            <VCombobox :disabled="isLoading" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
+              hide-selected hint="" />
+          </div>
+        </div>
+      </template>
+    </VCardItem>
+    <VCardText class="d-flex flex-wrap justify-space-between gap-4">
+      <VBtnToggle
+        density="compact"
+        color="primary"
+        variant="outlined"
+        divided
+      >
+        <VBtn v-on:click="formatActividadGrafico" class="btn-check">Por páginas vistas</VBtn>
+        <VBtn v-on:click="formatVisitaGrafico" >Por Sesión</VBtn>
+      </VBtnToggle>
 
-  <div class="date-picker-wrapper" style="width: 300px;">
-    <AppDateTimePicker
-      placeholder="Seleccionar un rango de fecha"
-      prepend-inner-icon="tabler-calendar"
-      density="compact"
-      @on-change="obtenerFechaDispositivos"
-      :config="{ 
-        position: 'auto right',
-        mode:'range',
-        altFormat: 'F j, Y',
-        dateFormat: 'm-d-Y',
-        maxDate: new Date()
-      }"
-    />
-  </div>
-  <div :class="classLoading">
-    <div class="v-row">
-      <div class="v-col-9">
-        <VCardText>
-          <VueApexCharts
-            id="crejemplo"
-            type="area"
-            height="400"
-            :options="chartConfig"
-            :series="series"
-            @click="handleBarClick"
-          />
-        </VCardText>
+      <!-- <div class="date-picker-wrapper" style="width: 300px;">
+        <AppDateTimePicker
+          placeholder="Seleccionar un rango de fecha"
+          prepend-inner-icon="tabler-calendar"
+          density="compact"
+          @on-change="obtenerFechaDispositivos"
+          :config="{ 
+            position: 'auto right',
+            mode:'range',
+            altFormat: 'F j, Y',
+            dateFormat: 'm-d-Y',
+            maxDate: new Date()
+          }"
+        />
+      </div> -->
+      <div :class="classLoading">
+        <div class="v-row">
+          <div class="v-col-9">
+            <VCardText>
+              <VueApexCharts
+                id="crejemplo"
+                type="area"
+                height="400"
+                :options="chartConfig"
+                :series="series"
+                @click="handleBarClick"
+              />
+            </VCardText>
+          </div>
+          <div class="v-col-3" style="align-items: center;display: flex;">
+            <VCardText>
+              <VueApexCharts
+                type="donut"
+                height="410"
+                :options="chartConfigDonut"
+                :series="chartOptions.series"
+              />
+            </VCardText>
+          </div>
+        </div>
+        
       </div>
-      <div class="v-col-3" style="align-items: center;display: flex;">
-        <VCardText>
-          <VueApexCharts
-            type="donut"
-            height="410"
-            :options="chartConfigDonut"
-            :series="chartOptions.series"
-          />
-        </VCardText>
-      </div>
-    </div>
-    
-  </div>
+  </VCardText>
+
 </template>
 
 <style>
@@ -77,12 +96,15 @@
 </style>
 
 <script>
+
+
+  import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
   import { hexToRgb } from '@layouts/utils';
-import Moment from 'moment';
-import { extendMoment } from 'moment-range';
-import esLocale from "moment/locale/es";
-import VueApexCharts from 'vue3-apexcharts';
-import { useTheme } from 'vuetify';
+  import Moment from 'moment';
+  import { extendMoment } from 'moment-range';
+  import esLocale from "moment/locale/es";
+  import VueApexCharts from 'vue3-apexcharts';
+  import { useTheme } from 'vuetify';
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
 
@@ -125,6 +147,9 @@ import { useTheme } from 'vuetify';
     },
     data() {
       return {
+        selectedFecha:useSelectValueCalendar("Ayer"),
+        selectedfechaIniFin:"Ayer",
+        fechaIniFinList:[],
         fechai:"",
         fechaf:"",
         getDataFetch:[],
@@ -497,14 +522,19 @@ import { useTheme } from 'vuetify';
         return grafico.sort((a, b) => (b.total - a.total));
       },
       async getInitGraficoDispositivos(){
-        var fechai = moment().add(-6, 'days').format("MM/DD/YYYY");
-        var fechaf = moment().add(1, 'days').format("MM/DD/YYYY");
+        // var fechai = moment().add(-6, 'days').format("MM/DD/YYYY");
+        // var fechaf = moment().add(1, 'days').format("MM/DD/YYYY");
         //var panelGrafico = document.querySelector("#apexchartscrejemplo");
         //panelGrafico.classList.add("disabled");
 
+        this.selectedFecha = useSelectValueCalendar("Ayer");
+        // console.log(selected)
+        this.fechai = this.selectedFecha.i.format("MM/DD/YYYY");
+        this.fechaf = this.selectedFecha.f.format("MM/DD/YYYY");
+
         this.isLoading = true;
 
-        this.getData = await this.getDataGrafico(fechai, fechaf);
+        this.getData = await this.getDataGrafico(this.fechai, this.fechaf);
         //panelGrafico.classList.remove("disabled");
 
         this.isLoading = false;
@@ -625,10 +655,37 @@ import { useTheme } from 'vuetify';
       }
     },
     async mounted() {
+      this.selectedFecha = useSelectValueCalendar("Ayer");
+      const valoresItemsCalendar = useSelectValueCalendar();
+      this.fechaIniFinList = useSelectCalendar();
+
       var resp = await this.getInitGraficoDispositivos();
     },
     updated() {
       //console.log("El DOM ha sido actualizado");
+    },
+
+    watch: {
+      async selectedfechaIniFin(newFecha, oldFecha) {
+        this.selectedFecha = useSelectValueCalendar(newFecha);
+        // console.log(selected)
+        this.fechai = this.selectedFecha.i.format("MM/DD/YYYY");
+        this.fechaf = this.selectedFecha.f.format("MM/DD/YYYY");
+        
+        // this.fechai = moment(selectedDates[0]).format('MM/DD/YYYY');
+        // this.fechaf = moment(selectedDates[1]).format('MM/DD/YYYY');
+        //var panelGrafico = document.querySelector("#apexchartscrejemplo");
+        //panelGrafico.classList.add("disabled");
+
+        this.isLoading = true;
+        this.getData = await this.getDataGrafico(this.fechai, this.fechaf);
+        this.isLoading = false;
+        //panelGrafico.classList.remove("disabled");
+        this.formatGraficoDonutSesion();
+        this.dataFormateada = await this.getDataTrazabilidad(this.getData);
+        ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
+        this.formatGraficoDonutVisita();
+      }
     }
   }
 </script>

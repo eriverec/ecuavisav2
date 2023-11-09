@@ -1,5 +1,5 @@
 <script setup>
-import { useSelectCalendar } from "@/views/apps/otros/useSelectCalendar.js";
+import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -13,10 +13,12 @@ const activeIndex = ref(0); // Inicialmente, el primer tab está activado
 const orderField = ref("");
 const orderAsc = ref(true);
 
+const valoresHoy = useSelectValueCalendar(); //DEFAULT HOY
+
 const fecha = ref({
-  i: ref(moment().add(-1, 'days')),
-  f: ref(moment()),
-  title:"hoy"
+  i: valoresHoy.i,
+  f: valoresHoy.f,
+  title: valoresHoy.title
 });
 
 const selectedfechaIniFin = ref('Hoy');
@@ -75,49 +77,17 @@ const sortedCities = computed(() => {
 });
 
 watch(async () => selectedfechaIniFin.value, async () => {
-  let selectedCombo = selectedfechaIniFin.value
-  // console.log("selectedCombo:",selectedCombo);
-  if (selectedCombo === 'Hoy') {
-    fecha.value = {
-      i: moment().add(-1, 'days'),
-      f: moment(),
-      title:"hoy"
-    };
-
-  }
-  if (selectedCombo === 'Hace 3 días') {
-    fecha.value = {
-      i: moment().add(-3, 'days'),
-      f: moment(),
-      title:"hace 3 días"
-    };
-    // console.log(fechaIni.value +'--a--'+ fechaFin.value )
-  }
-  if (selectedCombo === 'Hace 5 días') {
-    fecha.value = {
-      i: moment().add(-5, 'days'),
-      f: moment(),
-      title:"hace 5 días"
-    };
-
-    // fechaIni.value = moment().add(-15, 'days').format("YYYY-MM-DD");
-    // fechaFin.value = moment().format("YYYY-MM-DD");
-    // console.log(fechaIni.value +'--a--'+ fechaFin.value )
-  }
-  if (selectedCombo === '1 mes atrás') {
-    fecha.value = {
-      i: moment().add(-30, 'days'),
-      f: moment(),
-      title:"hace 1 mes atrás"
-    };
-    // fechaIni.value = moment().add(-30, 'days').format("YYYY-MM-DD");
-    // fechaFin.value = moment().format("YYYY-MM-DD");
-    // console.log(fechaIni.value +'--a--'+ fechaFin.value )
+  let selectedCombo = useSelectValueCalendar(selectedfechaIniFin.value);
+  fecha.value = {
+      i: selectedCombo.i,
+      f: selectedCombo.f,
+      title: selectedCombo.title
   }
 
   isLoading.value = true;
   await fetchData();
   isLoading.value = false;
+
 });
 </script>
 

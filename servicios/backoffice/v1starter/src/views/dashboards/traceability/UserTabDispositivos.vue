@@ -47,13 +47,7 @@ getData();
     <!-- 👉  Area chart -->
     <VCol cols="12">
       <VCard>
-        <VCardText class="d-flex flex-wrap justify-space-between gap-4">
-          <VCardItem class="pt-0 pb-0">
-            <VCardTitle>Resumen de Tecnología</VCardTitle>
-            <VCardSubtitle>Categoría de dispositivos de los últimos 7 días</VCardSubtitle>
-          </VCardItem>
-          <ChartAreaDispositivosFecha />
-        </VCardText>
+        <ChartAreaDispositivosFecha />
       </VCard>
     </VCol>
 
@@ -81,7 +75,7 @@ getData();
             />
         </div>
 
-        <VTable class="text-no-wrap w-100 px-4">
+        <VTable class="text-no-wrap w-100">
           <thead>
             <tr>
               <th scope="col">NAVEGADOR</th>
@@ -158,14 +152,15 @@ getData();
   <EnableOneTimePasswordDialog v-model:isDialogVisible="isTwoFactorDialogOpen" :mobile-number="smsVerificationNumber" />
 </template>
 <script>
-
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
+import { ref, watch } from 'vue';  // Importa ref y watch desde Vue 3
 //alert(moment(new Date(), "YYYY-MM-DD").format('YYYY-MM-DD'))
 export default {
   data() {
     return {
-      fechaInicio: "",
+      
+      fechaInicio: null,
       fechaFin: "",
       datos: [],
       datosFiltrados: [],
@@ -254,6 +249,8 @@ export default {
     },
   },
   mounted() {
+    
+
     this.filtrarDatos([]);
     this.accionBackoffice();
   },

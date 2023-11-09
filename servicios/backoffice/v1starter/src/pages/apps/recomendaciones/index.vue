@@ -3,7 +3,7 @@ import ChartRecomendaciones from "@/views/charts/ecuavisa/ChartRecomendaciones.v
 import ChartRecSubsecciones from "@/views/charts/ecuavisa/ChartRecSubsecciones.vue";
 import ChartRecMeta from "@/views/charts/ecuavisa/ChartRecMeta.vue";
 import ChartRecPais from "@/views/charts/ecuavisa/ChartRecPais.vue";
-import { useSelectCalendar } from "@/views/apps/otros/useSelectCalendar.js";
+import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
 
 // import ChartRecSubsecccion from "@/views/charts/apex-chart/ChartRecSubsecccion.vue";
 
@@ -14,23 +14,25 @@ import esLocale from "moment/locale/es";
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 
+const valoresHoy = useSelectValueCalendar(); //DEFAULT HOY
+
 const fechaIngresada = ref('');
 const fechaIngresadaSubseccion = ref('Hoy');
 const fechaIngresadaMetadato = ref('Hoy');
 const fechaIngresadaPais = ref('Hoy');
 const selectedfechaIniFin = ref('Hoy');
 
-const fechaIni = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
-const fechaFin = ref(moment().format("YYYY-MM-DD"));
+const fechaIni = ref(valoresHoy.i.format("YYYY-MM-DD"));
+const fechaFin = ref(valoresHoy.f.format("YYYY-MM-DD"));
 
-const fechaIniSub = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
-const fechaFinSub = ref(moment().format("YYYY-MM-DD"));
+const fechaIniSub = ref(valoresHoy.i.format("YYYY-MM-DD"));
+const fechaFinSub = ref(valoresHoy.f.format("YYYY-MM-DD"));
 
-const fechaIniMeta = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
-const fechaFinMeta = ref(moment().format("YYYY-MM-DD"));
+const fechaIniMeta = ref(valoresHoy.i.format("YYYY-MM-DD"));
+const fechaFinMeta = ref(valoresHoy.f.format("YYYY-MM-DD"));
 
-const fechaIniPais = ref(moment().add(-1, 'days').format("YYYY-MM-DD"));
-const fechaFinPais = ref(moment().format("YYYY-MM-DD"));
+const fechaIniPais = ref(valoresHoy.i.format("YYYY-MM-DD"));
+const fechaFinPais = ref(valoresHoy.f.format("YYYY-MM-DD"));
 
 const modelItemsSeccion = ref({ title: 'Todos', value: '0' });
 const modelItemsSeccionPais = ref({ title: 'Todos', value: '0' });
@@ -38,35 +40,36 @@ const modelItemsSeccionPais = ref({ title: 'Todos', value: '0' });
 const fechaIniFinList = useSelectCalendar();
 
 const initData = () => {
-  let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");
-  let fechaf = moment().format("YYYY-MM-DD");
-  fechaIni.value = fechai;
-  fechaFin.value = fechaf;
-  fechaIngresada.value = fechai + ' a ' + fechaf;
+  // let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");
+  // let fechaf = moment().format("YYYY-MM-DD");
+  // fechaIni.value = fechai;
+  // fechaFin.value = fechaf;
+
+  fechaIngresada.value = fechaIni.value + ' a ' + fechaFin.value;
 }
 
 const initDataSub = () => {
-  let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");
-  let fechaf = moment().format("YYYY-MM-DD");
-  fechaIniSub.value = fechai;
-  fechaFinSub.value = fechaf;
-  fechaIngresada.value = fechai + ' a ' + fechaf;
+  // let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");
+  // let fechaf = moment().format("YYYY-MM-DD");
+  // fechaIniSub.value = fechai;
+  // fechaFinSub.value = fechaf;
+  fechaIngresada.value = fechaIniSub.value + ' a ' + fechaFinSub.value;
 }
 
 const initDataMeta = () => {
-  let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");
-  let fechaf = moment().format("YYYY-MM-DD");
-  fechaIniMeta.value = fechai;
-  fechaFinMeta.value = fechaf;
-  fechaIngresada.value = fechai + ' a ' + fechaf;
+  // let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");
+  // let fechaf = moment().format("YYYY-MM-DD");
+  // fechaIniMeta.value = fechai;
+  // fechaFinMeta.value = fechaf;
+  fechaIngresada.value = fechaIniMeta.value + ' a ' + fechaFinMeta.value;
 }
 
 const initDataPais = () => {
-  let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");
-  let fechaf = moment().format("YYYY-MM-DD");
-  fechaIniPais.value = fechai;
-  fechaFinPais.value = fechaf;
-  fechaIngresada.value = fechai + ' a ' + fechaf;
+  // let fechai = moment().add(-1, 'days').format("YYYY-MM-DD");
+  // let fechaf = moment().format("YYYY-MM-DD");
+  // fechaIniPais.value = fechai;
+  // fechaFinPais.value = fechaf;
+  fechaIngresada.value = fechaIniPais.value + ' a ' + fechaFinPais.value;
 }
 
 onMounted(async () => {
@@ -105,49 +108,16 @@ const onButtonClicked = () => {
 // };
 
 watch(async () => selectedfechaIniFin.value, async () => {
-  let selectedCombo = selectedfechaIniFin.value
-  // console.log("selectedCombo:",selectedCombo);
-  if (selectedCombo === 'Hoy') {
-    fechaIni.value = moment().add(-1, 'days').format("YYYY-MM-DD");
-    fechaFin.value = moment().format("YYYY-MM-DD");
-  }
-  if (selectedCombo === 'Hace una semana') {
-    fechaIni.value = moment().add(-7, 'days').format("YYYY-MM-DD");
-    fechaFin.value = moment().format("YYYY-MM-DD");
-    // console.log(fechaIni.value +'--a--'+ fechaFin.value )
-  }
-  if (selectedCombo === '15 días atrás') {
-    fechaIni.value = moment().add(-15, 'days').format("YYYY-MM-DD");
-    fechaFin.value = moment().format("YYYY-MM-DD");
-    // console.log(fechaIni.value +'--a--'+ fechaFin.value )
-  }
-  if (selectedCombo === '1 mes atrás') {
-    fechaIni.value = moment().add(-30, 'days').format("YYYY-MM-DD");
-    fechaFin.value = moment().format("YYYY-MM-DD");
-    // console.log(fechaIni.value +'--a--'+ fechaFin.value )
-  }
-
+  let selectedCombo = useSelectValueCalendar(selectedfechaIniFin.value);
+  fechaIni.value = selectedCombo.i.format("YYYY-MM-DD");
+  fechaFin.value = selectedCombo.f.format("YYYY-MM-DD");
   buttonClicked.value = "grafico";
 });
 
 watch(async () => fechaIngresadaMetadato.value, async () => {
-  let selectedCombo = fechaIngresadaMetadato.value
-  if (selectedCombo === 'Hoy') {
-    fechaIniMeta.value = moment().add(-1, 'days').format("YYYY-MM-DD");
-    fechaFinMeta.value = moment().format("YYYY-MM-DD");
-  }
-  if (selectedCombo === 'Hace una semana') {
-    fechaIniMeta.value = moment().add(-7, 'days').format("YYYY-MM-DD");
-    fechaFinMeta.value = moment().format("YYYY-MM-DD");
-  }
-  if (selectedCombo === '15 días atrás') {
-    fechaIniMeta.value = moment().add(-15, 'days').format("YYYY-MM-DD");
-    fechaFinMeta.value = moment().format("YYYY-MM-DD");
-  }
-  if (selectedCombo === '1 mes atrás') {
-    fechaIniMeta.value = moment().add(-30, 'days').format("YYYY-MM-DD");
-    fechaFinMeta.value = moment().format("YYYY-MM-DD");
-  }
+  let selectedCombo = useSelectValueCalendar(fechaIngresadaMetadato.value);
+  fechaIniMeta.value = selectedCombo.i.format("YYYY-MM-DD");
+  fechaFinMeta.value = selectedCombo.f.format("YYYY-MM-DD");
 
   metaClicked.value = "grafico";
 });
@@ -157,44 +127,19 @@ watch(async () => modelItemsSeccion.value, async () => {
 });
 
 watch(async () => fechaIngresadaSubseccion.value, async () => {
-  let selectedCombo = fechaIngresadaSubseccion.value
-  if (selectedCombo === 'Hoy') {
-    fechaIniSub.value = moment().add(-1, 'days').format("YYYY-MM-DD");
-    fechaFinSub.value = moment().format("YYYY-MM-DD");
-  }
-  if (selectedCombo === 'Hace una semana') {
-    fechaIniSub.value = moment().add(-7, 'days').format("YYYY-MM-DD");
-    fechaFinSub.value = moment().format("YYYY-MM-DD");
-  }
-  if (selectedCombo === '15 días atrás') {
-    fechaIniSub.value = moment().add(-15, 'days').format("YYYY-MM-DD");
-    fechaFinSub.value = moment().format("YYYY-MM-DD");
-  }
-  if (selectedCombo === '1 mes atrás') {
-    fechaIniSub.value = moment().add(-30, 'days').format("YYYY-MM-DD");
-    fechaFinSub.value = moment().format("YYYY-MM-DD");
-  }
+  let selectedCombo = useSelectValueCalendar(fechaIngresadaSubseccion.value);
+  fechaIniSub.value = selectedCombo.i.format("YYYY-MM-DD");
+  fechaFinSub.value = selectedCombo.f.format("YYYY-MM-DD");
+
+  
   subClicked.value = "grafico";
 });
 
 watch(async () => fechaIngresadaPais.value, async () => {
-  let selectedCombo = fechaIngresadaPais.value
-  if (selectedCombo === 'Hoy') {
-    fechaIniPais.value = moment().add(-1, 'days').format("YYYY-MM-DD");
-    fechaFinPais.value = moment().format("YYYY-MM-DD");
-  }
-  if (selectedCombo === 'Hace una semana') {
-    fechaIniPais.value = moment().add(-7, 'days').format("YYYY-MM-DD");
-    fechaFinPais.value = moment().format("YYYY-MM-DD");
-  }
-  if (selectedCombo === '15 días atrás') {
-    fechaIniPais.value = moment().add(-15, 'days').format("YYYY-MM-DD");
-    fechaFinPais.value = moment().format("YYYY-MM-DD");
-  }
-  if (selectedCombo === '1 mes atrás') {
-    fechaIniPais.value = moment().add(-30, 'days').format("YYYY-MM-DD");
-    fechaFinPais.value = moment().format("YYYY-MM-DD");
-  }
+  let selectedCombo = useSelectValueCalendar(fechaIngresadaPais.value);
+  fechaIniPais.value = selectedCombo.i.format("YYYY-MM-DD");
+  fechaFinPais.value = selectedCombo.f.format("YYYY-MM-DD");
+
   paisClicked.value = "grafico";
 });
 

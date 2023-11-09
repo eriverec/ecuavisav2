@@ -150,6 +150,11 @@ userListStore.fetchUser(Number(route.params.id)).then(response => {
 })
 
 const tabs = [
+  
+  {
+    icon: 'tabler-devices',
+    title: 'Dispositivos',
+  },
   {
     icon: 'tabler-activity-heartbeat',
     title: 'Navegación',
@@ -157,10 +162,6 @@ const tabs = [
   {
     icon: 'tabler-map-2',
     title: 'Ubicaciones',
-  },
-  {
-    icon: 'tabler-devices',
-    title: 'Dispositivos',
   },
   // {
   //   icon: 'tabler-hand-click',
@@ -324,7 +325,11 @@ const userListMeta = [
         class="mt-6 disable-tab-transition"
         :touch="false"
       >
-      <!-- NAVEGACION -->
+        <!-- DISPOSITIVOS -->
+        <VWindowItem>
+          <UserTabDispositivos />
+        </VWindowItem>
+        <!-- NAVEGACION -->
         <VWindowItem>
           <UserTabNavegacion />
         </VWindowItem>
@@ -333,10 +338,6 @@ const userListMeta = [
           <UserTabUbicacion />
         </VWindowItem>
 
-        <!-- DISPOSITIVOS -->
-        <VWindowItem>
-          <UserTabDispositivos />
-        </VWindowItem>
 
         <!-- INTERESES -->
         <VWindowItem>
