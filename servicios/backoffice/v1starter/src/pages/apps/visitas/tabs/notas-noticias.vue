@@ -115,7 +115,7 @@ const prevPage = () => {
 };
 
 const initData = () => {
-  let fechai = moment().subtract(7, 'days').format("DD-MM-YYYY").toString();
+  let fechai = moment().subtract(1, 'days').format("DD-MM-YYYY").toString();
   let fechaf = moment().format("DD-MM-YYYY").toString();
   fechaIni.value = fechai;
   fechaFin.value = fechaf;
