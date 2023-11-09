@@ -54,14 +54,33 @@ getData();
     <VCol cols="12">
       <!-- 👉 Recent devices -->
       <VCard>
-        <VCardText class="d-flex flex-wrap justify-space-between gap-4" id="id-card-actividad">
+        <VCardItem class="header_card_item">
+            <div class="d-flex">
+              <div class="descripcion">
+                <VCardTitle>Plataformas</VCardTitle>
+                <VCardSubtitle>Registro de actividad de los últimos  dispositivos.<br>mostrando data desde {{ selectedFecha.i.format("YYYY-MM-DD") }} hasta {{ selectedFecha.f.format("YYYY-MM-DD") }}</VCardSubtitle>
+              </div>
+            </div>
+
+          <template #append>
+            <div class="bg-ecuavisa py-2">
+              <div class="date-picker-wrapper" style="width: 250px;">
+                <VCombobox :disabled="isLoading" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
+                  hide-selected hint="" />
+              </div>
+            </div>
+          </template>
+        </VCardItem>
+
+
+        <VCardText class="d-flex flex-wrap justify-space-between gap-4" id="id-card-actividad"><!-- 
           <VCardItem class="pt-0 pb-0">
             <VCardTitle>Plataformas</VCardTitle>
             <VCardSubtitle> Registro de actividad de los últimos  dispositivos</VCardSubtitle>
-          </VCardItem>
+          </VCardItem> -->
           
           <!-- <input type="text" id="date-picker" ref="datePicker" /> -->
-          <div class="date-picker-wrapper" style="width: 233px">
+          <!-- <div class="date-picker-wrapper" style="width: 233px">
             <AppDateTimePicker id="date-picker" placeholder="Seleccionar una fecha" prepend-inner-icon="tabler-calendar"
               density="compact" 
               @on-change="filtrarDatos"
@@ -73,7 +92,7 @@ getData();
                 maxDate: new Date()
               }"
             />
-        </div>
+        </div> -->
 
         <VTable class="text-no-wrap w-100">
           <thead>
@@ -152,19 +171,22 @@ getData();
   <EnableOneTimePasswordDialog v-model:isDialogVisible="isTwoFactorDialogOpen" :mobile-number="smsVerificationNumber" />
 </template>
 <script>
-const moment = extendMoment(Moment);
-moment.locale('es', [esLocale]);
-import { ref, watch } from 'vue';  // Importa ref y watch desde Vue 3
+  import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
+  const moment = extendMoment(Moment);
+  moment.locale('es', [esLocale]);
+  import { ref, watch } from 'vue';  // Importa ref y watch desde Vue 3
 //alert(moment(new Date(), "YYYY-MM-DD").format('YYYY-MM-DD'))
 export default {
   data() {
     return {
-      
+      selectedFecha:useSelectValueCalendar("Hoy"),
+      selectedfechaIniFin:"Hoy",
       fechaInicio: null,
-      fechaFin: "",
+      fechaFin: null,
       datos: [],
       datosFiltrados: [],
       datosGrouped: [],
+      isLoading: true,
       currentPage: 1,
       itemsPerPage: 10,
       totalPaginas: 0,
@@ -248,11 +270,16 @@ export default {
       return this.datosGrouped.slice(start, end);
     },
   },
-  mounted() {
-    
+  async mounted() {
+    this.selectedFecha = useSelectValueCalendar("Hoy");
+    this.fechaIniFinList = useSelectCalendar();
 
-    this.filtrarDatos([]);
+    // this.filtrarDatos([]);
+    this.fechaInicio = this.selectedFecha.i.format("MM/DD/YYYY");
+    this.fechaFin = this.selectedFecha.f.format("MM/DD/YYYY");
+    this.getData = await this.obtenerDatos(this.fechaInicio, this.fechaFin);
     this.accionBackoffice();
+    this.isLoading = false;
   },
   methods: {
     async obtenerDatos(fechai, fechaf) {
@@ -278,33 +305,33 @@ export default {
       carActividad.classList.remove("disabled");
       return datos.data;
     },
-    filtrarDatos(selectedDates, dateStr, instance) {
-      var fechaInicio;
-      var fechaFin;
-      var existe = false;
+    // filtrarDatos(selectedDates, dateStr, instance) {
+    //   var fechaInicio;
+    //   var fechaFin;
+    //   var existe = false;
 
-      if(selectedDates.length > 1){
-        fechaInicio = moment(selectedDates[0], "YYYY-MM-DD").format("MM/DD/YYYY");
-        fechaFin = moment(selectedDates[1], "YYYY-MM-DD").format("MM/DD/YYYY");
-        existe = true;
-      }
+    //   if(selectedDates.length > 1){
+    //     fechaInicio = moment(selectedDates[0], "YYYY-MM-DD").format("MM/DD/YYYY");
+    //     fechaFin = moment(selectedDates[1], "YYYY-MM-DD").format("MM/DD/YYYY");
+    //     existe = true;
+    //   }
 
-      if(selectedDates.length == 0){
-        fechaInicio = moment(new Date(), "YYYY-MM-DD").add(-7, 'days').format("MM/DD/YYYY");
-        fechaFin = moment(new Date(), "YYYY-MM-DD").format("MM/DD/YYYY");
-        existe = true;
-      }
+    //   if(selectedDates.length == 0){
+    //     fechaInicio = moment(new Date(), "YYYY-MM-DD").add(-7, 'days').format("MM/DD/YYYY");
+    //     fechaFin = moment(new Date(), "YYYY-MM-DD").format("MM/DD/YYYY");
+    //     existe = true;
+    //   }
 
-      if(existe){
-        var carActividad = document.querySelector("#id-card-actividad");
-        carActividad.classList.add("disabled");
-        this.obtenerDatos(fechaInicio, fechaFin);
-        //const inicio = (this.currentPage - 1) * this.itemsPerPage;
-        //const fin = inicio + this.itemsPerPage;
-        //this.datosFiltrados = datosFiltrados.slice(inicio, fin);
-        //this.totalPaginas = Math.ceil(datosFiltrados.length / this.itemsPerPage);
-      }
-    },
+    //   if(existe){
+    //     var carActividad = document.querySelector("#id-card-actividad");
+    //     carActividad.classList.add("disabled");
+    //     this.obtenerDatos(fechaInicio, fechaFin);
+    //     //const inicio = (this.currentPage - 1) * this.itemsPerPage;
+    //     //const fin = inicio + this.itemsPerPage;
+    //     //this.datosFiltrados = datosFiltrados.slice(inicio, fin);
+    //     //this.totalPaginas = Math.ceil(datosFiltrados.length / this.itemsPerPage);
+    //   }
+    // },
     async accionBackoffice (){
       let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
       let userData = JSON.parse(localStorage.getItem('userData'));
@@ -328,5 +355,23 @@ export default {
     }
     }
   },
+
+  watch: {
+    async selectedfechaIniFin(newFecha, oldFecha) {
+      this.selectedFecha = useSelectValueCalendar(newFecha);
+      // console.log(selected)
+      this.fechaInicio = this.selectedFecha.i.format("MM/DD/YYYY");
+      this.fechaFin = this.selectedFecha.f.format("MM/DD/YYYY");
+      
+      // this.fechai = moment(selectedDates[0]).format('MM/DD/YYYY');
+      // this.fechaf = moment(selectedDates[1]).format('MM/DD/YYYY');
+      //var panelGrafico = document.querySelector("#apexchartscrejemplo");
+      //panelGrafico.classList.add("disabled");
+
+      this.isLoading = true;
+      this.getData = await this.obtenerDatos(this.fechaInicio, this.fechaFin);
+      this.isLoading = false;
+    }
+  }
 };
 </script>

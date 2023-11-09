@@ -947,25 +947,36 @@ var timeSince = function (date,index) {
     const segundosTranscurridos = fechaActual.diff(fechaFinal, 'seconds');
 
     if (segundosTranscurridos < 60 && segundosTranscurridos > -1) {
-      return 'Hace ' + segundosTranscurridos + ' segundos';
+      // return 'Hace ' + segundosTranscurridos + ' segundos';
+      return `Usuario conectado, durante ${segundosTranscurridos} segundo(s)`;
       // return { cantidad: segundosTranscurridos, tipo: 'segundos' };
     } else {
       const minutosTranscurridos = fechaActual.diff(fechaFinal, 'minutes');
 
       if (minutosTranscurridos < 60 && minutosTranscurridos > -1) {
-        return 'Hace ' + minutosTranscurridos + ' minutos';
+
+        if(minutosTranscurridos > 30){
+          return `Usuario desconectado, duración ${minutosTranscurridos} minuto(s)`;
+        }
+
+        // return 'Hace ' + minutosTranscurridos + ' minutos';
+        if(minutosTranscurridos < 2){
+          return `Usuario conectado, durante ${minutosTranscurridos} minuto`;
+        }
+        return `Usuario conectado, durante ${minutosTranscurridos} minutos`;
         // return { cantidad: minutosTranscurridos, tipo: 'minutos' };
       } else {
         const horasTranscurridas = fechaActual.diff(fechaFinal, 'hours');
 
         if (horasTranscurridas < 24 && horasTranscurridas > -1) {
-          return 'Hace ' + horasTranscurridas + ' horas';
+          // return 'Hace ' + horasTranscurridas + ' horas';
+          return `Usuario desconectado, duración ${horasTranscurridas} hora(s)`;
           // return { cantidad: horasTranscurridas, tipo: 'horas' };
         } else {
           const diasTranscurridos = fechaActual.diff(fechaFinal, 'days');
           // return { cantidad: diasTranscurridos, tipo: 'días' };
           // return 'Hace ' + diasTranscurridos + ' días';
-          return 'Hace mucho tiempo';
+          return `Usuario desconectado, duración ${diasTranscurridos} día(s)`;
         }
       }
     }

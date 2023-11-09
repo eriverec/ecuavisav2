@@ -1,4 +1,5 @@
 <script setup>
+import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
 import chartMetadatos from "@/views/charts/apex-chart/ChartMetadatos.vue";
 import ApexCharts from 'apexcharts';
 import Moment from 'moment';
@@ -36,6 +37,17 @@ const searchQuery = ref('');
 const metaRaw = ref([]);
 const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
 const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
+
+const valoresHoy = useSelectValueCalendar(); //DEFAULT HOY
+
+const fecha = ref({
+  i: valoresHoy.i,
+  f: valoresHoy.f,
+  title: valoresHoy.title
+});
+
+const selectedfechaIniFin = ref('Hoy');
+const fechaIniFinList = useSelectCalendar();
 
 function mergeAndSum(obj1, obj2) {
   const merged = {};
@@ -137,11 +149,11 @@ async function getMetadatos(fechai = '', fechaf = '') {
 }
 
 const initData = () => {
-  let fechai = moment().subtract(7, 'days').format("DD-MM-YYYY").toString();
-  let fechaf = moment().format("DD-MM-YYYY").toString();
-  fechaIni.value = fechai;
-  fechaFin.value = fechaf;
-  fechaIngresada.value = fechai + ' a ' + fechaf;
+  // let fechai = moment().subtract(7, 'days').format("DD-MM-YYYY").toString();
+  // let fechaf = moment().format("DD-MM-YYYY").toString();
+  // fechaIni.value = fechai;
+  // fechaFin.value = fechaf;
+  fechaIngresada.value = fechaIni.value + ' a ' + fechaFin.value;
 }
 
 async function accionBackoffice (logData){
@@ -163,6 +175,21 @@ async function accionBackoffice (logData){
 
 onMounted(async() => {
   initData();
+
+  let selectedCombo = useSelectValueCalendar(selectedfechaIniFin.value);
+  fecha.value = {
+      i: selectedCombo.i,
+      f: selectedCombo.f,
+      title: selectedCombo.title
+  }
+
+  currentPage.value = 1;
+  let fechaI = selectedCombo.i.format('YYYY-MM-DD');
+  let fechaF = selectedCombo.i.format('YYYY-MM-DD');
+  fechaIni.value = fechaI;
+  fechaFin.value = fechaF;
+  await getMetadatos(fechaI, fechaF);
+
   await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "trazabilidad-metadatos",
@@ -313,17 +340,34 @@ async function resolveVisitas(titulo) {
         let horaFinal = horaFix[0] + ':' + horaFix[1] + ':' + horaFix[2];
         let fullFecha = fechaFormat + ' ' + horaFinal.trim();
         let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
+        // console.log(fecha, fechaIni.value == fechaFin.value, fechaIni.value, moment(fecha, "DD-MM-YYYY").format("YYYY-MM-DD") == fechaIni.value)
 
-        let data = {
-          userId: p.userId,
-          first_name: user.first_name,
-          last_name: user.last_name,
-          fecha: fechaFormat,
-          fullFecha: fullFechaFormat,
-          hora: horaFinal,
-          visitas: p.visitas
+        if( fechaIni.value == fechaFin.value ){
+          if(moment(fecha, "DD-MM-YYYY").format("YYYY-MM-DD") == fechaIni.value){
+            let data = {
+              userId: p.userId,
+              first_name: user.first_name,
+              last_name: user.last_name,
+              fecha: fechaFormat,
+              fullFecha: fullFechaFormat,
+              hora: horaFinal,
+              visitas: p.visitas
+            }
+            arrayFiltro.push(data);
+          }
+        }else{
+          let data = {
+            userId: p.userId,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            fecha: fechaFormat,
+            fullFecha: fullFechaFormat,
+            hora: horaFinal,
+            visitas: p.visitas
+          }
+          arrayFiltro.push(data);
         }
-        arrayFiltro.push(data);
+        
       }
 
       arrayFiltro.sort((a, b) => {
@@ -335,9 +379,13 @@ async function resolveVisitas(titulo) {
       ultimasVisitas.value = arrayFiltro;
       ultimasVisitasVisible.value = true;
       isLoading.value = false;
-    })
-    .catch(error => { return console.error(error) });
+    }).catch(error => { 
+      isLoading.value = false;
+      return console.error(error) 
+    });
+
   await recuperarURLPorTemas(titulo);
+
 }
 
 const paginatedVisitas = computed(() => {
@@ -610,7 +658,24 @@ async function downloadSelection() {
 
 };
 
+watch(async () => selectedfechaIniFin.value, async () => {
 
+  isLoading.value = true;
+  let selectedCombo = useSelectValueCalendar(selectedfechaIniFin.value);
+  fecha.value = {
+      i: selectedCombo.i,
+      f: selectedCombo.f,
+      title: selectedCombo.title
+  }
+
+  currentPage.value = 1;
+  let fechaI = selectedCombo.i.format('YYYY-MM-DD');
+  let fechaF = selectedCombo.i.format('YYYY-MM-DD');
+  fechaIni.value = fechaI;
+  fechaFin.value = fechaF;
+  await getMetadatos(fechaI, fechaF);
+
+});
 
 </script>
 
@@ -660,9 +725,9 @@ async function downloadSelection() {
 
 
 
-              <VCardText class="d-flex flex-wrap justify-space-between gap-4">
+              <!-- <VCardText class="d-flex flex-wrap justify-space-between gap-4"> -->
 
-                <VCardItem class="pb-sm-0 pl-0 pt-0">
+                <!-- <VCardItem class="pb-sm-0 pl-0 pt-0">
                   <VCardTitle>Metadatos</VCardTitle>
                   <VCardSubtitle>Un total de {{ metadatos.length }} registros</VCardSubtitle>
                 </VCardItem>
@@ -678,7 +743,7 @@ async function downloadSelection() {
                       reactive: true
 
                     }" />
-                </div>
+                </div> -->
                 <!-- botonera de filtros guardados ##estado desactivado##-->
                 <!--
         <VCol cols="12">
@@ -697,7 +762,25 @@ async function downloadSelection() {
 
     </VCol>
   -->
-              </VCardText>
+              <VCardItem class="header_card_item">
+                <div class="d-flex">
+                  <div class="descripcion">
+                    <VCardTitle>Metadatos, Un total de {{ metadatos.length }} registros</VCardTitle>
+                    <VCardSubtitle>Mostrando data desde {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
+                  </div>
+                </div>
+
+                <template #append>
+                  <div class="bg-ecuavisa py-2">
+                    <div class="date-picker-wrapper" style="width: 250px;">
+                      <VCombobox :disabled="isLoading" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
+                        hide-selected hint="" />
+                    </div>
+                  </div>
+                </template>
+              </VCardItem>
+
+              <!-- </VCardText> -->
               <VCardText class="d-flex flex-wrap gap-4">
                 <div style="width: 15rem">
                   <VTextField v-model="searchQuery" placeholder="Buscar..." density="compact" />
