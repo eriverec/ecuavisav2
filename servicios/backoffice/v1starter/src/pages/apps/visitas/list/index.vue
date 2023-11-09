@@ -928,7 +928,7 @@ var timeSince = function (date,index) {
 
   if (date) {
 
-    if(index == valData.length){
+    if(index == valData.length - 1){
       console.log(index == valData.length);
       return '';
     }
