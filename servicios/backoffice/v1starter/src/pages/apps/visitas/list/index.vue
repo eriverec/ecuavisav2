@@ -9,7 +9,7 @@
       <div @click="selectTab(5)" :class="{ active: selectedTab === 5 }">Entretenimiento</div>
       <div @click="selectTab(6)" :class="{ active: selectedTab === 6 }">Estilo</div>
       <div @click="selectTab(7)" :class="{ active: selectedTab === 7 }">Programas</div>
-      <div @click="selectTab(8)" :class="{ active: selectedTab === 8 }">Lo Último</div>
+      <!-- <div @click="selectTab(8)" :class="{ active: selectedTab === 8 }">Lo Último</div> -->
     </div>
     <div class="tab-content">
       <div v-if="selectedTab === 0" class="tab-item">
@@ -216,9 +216,9 @@
       <div v-if="selectedTab === 7" class="tab-item">
         <notasProgramas />
       </div>
-      <div v-if="selectedTab === 8" class="tab-item">
+      <!-- <div v-if="selectedTab === 8" class="tab-item">
         <notasLoUltimo />
-      </div>
+      </div> -->
 
     </div>
   </div>
@@ -955,14 +955,14 @@ var timeSince = function (date,index) {
 
       if (minutosTranscurridos < 60 && minutosTranscurridos > -1) {
 
-        if(minutosTranscurridos > 30){
-          return `Usuario desconectado, duración ${minutosTranscurridos} minuto(s)`;
-        }
+        // if(minutosTranscurridos > 30){
+        //   return `Usuario desconectado, duración ${minutosTranscurridos} minuto(s)`;
+        // }
 
-        // return 'Hace ' + minutosTranscurridos + ' minutos';
-        if(minutosTranscurridos < 2){
-          return `Usuario conectado, durante ${minutosTranscurridos} minuto`;
-        }
+        // // return 'Hace ' + minutosTranscurridos + ' minutos';
+        // if(minutosTranscurridos < 2){
+        //   return `Usuario conectado, durante ${minutosTranscurridos} minuto`;
+        // }
         return `Usuario conectado, durante ${minutosTranscurridos} minutos`;
         // return { cantidad: minutosTranscurridos, tipo: 'minutos' };
       } else {
@@ -970,13 +970,13 @@ var timeSince = function (date,index) {
 
         if (horasTranscurridas < 24 && horasTranscurridas > -1) {
           // return 'Hace ' + horasTranscurridas + ' horas';
-          return `Usuario desconectado, duración ${horasTranscurridas} hora(s)`;
+          return `Usuario conectado, duración ${horasTranscurridas} hora(s)`;
           // return { cantidad: horasTranscurridas, tipo: 'horas' };
         } else {
           const diasTranscurridos = fechaActual.diff(fechaFinal, 'days');
           // return { cantidad: diasTranscurridos, tipo: 'días' };
           // return 'Hace ' + diasTranscurridos + ' días';
-          return `Usuario desconectado, duración ${diasTranscurridos} día(s)`;
+          return `Usuario conectado, duración ${diasTranscurridos} día(s)`;
         }
       }
     }

@@ -387,7 +387,7 @@ const resolveUltimasVisitasUser = (first, last) => {
     }
   }
 
-  arrayFiltro.sort((a, b) => {
+  arrayFiltro.sort((b, a) => {
     var timestampA = new Date(a.fullFecha);
     var timestampB = new Date(b.fullFecha);
     return timestampB - timestampA;
@@ -399,6 +399,52 @@ const resolveUltimasVisitasUser = (first, last) => {
   ultimasVisitasVisible.value = true;
 }
 
+
+var timeSince = function (date,index) {
+    const dat =  JSON.stringify(ultimasVisitas.value);
+    const valData = JSON.parse(dat);
+  
+    if (date) {
+  
+      if(index == valData.length - 1){
+        return '';
+      }
+  
+      const sumIndex = valData[index*1+1];
+  
+      const fechaFinal = moment(date, 'DD/MM/YYYY HH:mm:ss');
+      const fechaActual = moment(`${sumIndex.fecha} ${sumIndex.hora}`, 'DD/MM/YYYY HH:mm:ss');
+      const segundosTranscurridos = fechaActual.diff(fechaFinal, 'seconds');
+  
+      if (segundosTranscurridos < 60 && segundosTranscurridos > -1) {
+        // return 'Hace ' + segundosTranscurridos + ' segundos';
+        return `Usuario conectado, durante ${segundosTranscurridos} segundo(s)`;
+        // return { cantidad: segundosTranscurridos, tipo: 'segundos' };
+      } else {
+        const minutosTranscurridos = fechaActual.diff(fechaFinal, 'minutes');
+  
+        if (minutosTranscurridos < 60 && minutosTranscurridos > -1) {
+          return `Usuario conectado, durante ${minutosTranscurridos} minutos`;
+          // return { cantidad: minutosTranscurridos, tipo: 'minutos' };
+        } else {
+          const horasTranscurridas = fechaActual.diff(fechaFinal, 'hours');
+  
+          if (horasTranscurridas < 24 && horasTranscurridas > -1) {
+            // return 'Hace ' + horasTranscurridas + ' horas';
+            return `Usuario conectado, duración ${horasTranscurridas} hora(s)`;
+            // return { cantidad: horasTranscurridas, tipo: 'horas' };
+          } else {
+            const diasTranscurridos = fechaActual.diff(fechaFinal, 'days');
+            // return { cantidad: diasTranscurridos, tipo: 'días' };
+            // return 'Hace ' + diasTranscurridos + ' días';
+            return `Usuario conectado, duración ${diasTranscurridos} día(s)`;
+          }
+        }
+      }
+      return 'Hace un momento';
+  
+    } else return null;
+  };
 </script>
 
 <template>
@@ -531,17 +577,14 @@ const resolveUltimasVisitasUser = (first, last) => {
           </VCardItem>
           <VCardText>
             <VTimeline density="compact" align="start" truncate-line="both" class="v-timeline-density-compact">
-              <VTimelineItem dot-color="primary" size="x-small" v-for="user in ultimasVisitas">
+              <VTimelineItem dot-color="primary" size="x-small" v-for="user,index in ultimasVisitas">
                 <div class="d-flex justify-space-between align-center flex-wrap">
                   <h4 class="text-base font-weight-semibold me-1">
                     {{ user.title || user.url }}
                   </h4>
-
-
                 </div>
-
                 <p class="mb-1">{{ user.fecha }} {{ user.hora }}</p>
-
+                <span style="font-size:12px">{{ timeSince(`${user.fecha} ${user.hora}`,index)}}</span>
               </VTimelineItem>
 
             </VTimeline>
