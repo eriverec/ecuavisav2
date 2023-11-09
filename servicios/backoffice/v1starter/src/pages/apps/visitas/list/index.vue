@@ -929,11 +929,12 @@ var timeSince = function (date,index) {
   if (date) {
 
     if(index == valData.length){
+      console.log(index == valData.length);
       return '';
     }
 
     const sumIndex = valData[index*1+1];  
-    console.log("sumIndex:",sumIndex,index*1+1);
+    console.log("sumIndex:",sumIndex,index*1+1,index == valData.length);
 
     const fechaActual = moment(date, 'DD/MM/YYYY HH:mm:ss');
     const fechaFinal = moment(`${sumIndex.fecha} ${sumIndex.hora}`, 'DD/MM/YYYY HH:mm:ss');
