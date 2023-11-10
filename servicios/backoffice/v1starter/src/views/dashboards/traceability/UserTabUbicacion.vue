@@ -89,6 +89,10 @@ watch(async () => selectedfechaIniFin.value, async () => {
   isLoading.value = false;
 
 });
+
+const sortedCitiesByLength = computed(() => {
+  return sortedCities.value.slice().sort((a, b) => b.data.length - a.data.length);
+});
 </script>
 
 <template>
@@ -116,7 +120,7 @@ watch(async () => selectedfechaIniFin.value, async () => {
       <VList class="card-list" v-else>
         <VExpansionPanels variant="accordion" v-model="activeIndex">
           <VExpansionPanel
-            v-for="country in sortedCities"
+            v-for="country in sortedCitiesByLength"
             :key="country.country"
           >
             <VExpansionPanelTitle class="d-flex flex-wrap justify-space-between gap-4">
