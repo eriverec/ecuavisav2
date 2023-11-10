@@ -1,5 +1,5 @@
 <script setup>
-  import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
+  import { useSelectCalendar, useSelectValueCalendar, getTranscursoDeFechas } from "@/views/apps/otros/useSelectCalendar.js";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -439,38 +439,38 @@ var timeSince = function (date,index) {
   
       const sumIndex = valData[index*1+1];  
       // console.log("sumIndex:",sumIndex,index*1+1,index == valData.length);
+      return getTranscursoDeFechas(`${sumIndex.fecha} ${sumIndex.hora}`, date, valData[index*1]);
+      // const fechaFinal = moment(date, 'DD/MM/YYYY HH:mm:ss');
+      // const fechaActual = moment(`${sumIndex.fecha} ${sumIndex.hora}`, 'DD/MM/YYYY HH:mm:ss');
   
-      const fechaFinal = moment(date, 'DD/MM/YYYY HH:mm:ss');
-      const fechaActual = moment(`${sumIndex.fecha} ${sumIndex.hora}`, 'DD/MM/YYYY HH:mm:ss');
+      // const segundosTranscurridos = fechaActual.diff(fechaFinal, 'seconds');
   
-      const segundosTranscurridos = fechaActual.diff(fechaFinal, 'seconds');
+      // if (segundosTranscurridos < 60 && segundosTranscurridos > -1) {
+      //   // return 'Hace ' + segundosTranscurridos + ' segundos';
+      //   return `Usuario conectado, durante ${segundosTranscurridos} segundo(s)`;
+      //   // return { cantidad: segundosTranscurridos, tipo: 'segundos' };
+      // } else {
+      //   const minutosTranscurridos = fechaActual.diff(fechaFinal, 'minutes');
   
-      if (segundosTranscurridos < 60 && segundosTranscurridos > -1) {
-        // return 'Hace ' + segundosTranscurridos + ' segundos';
-        return `Usuario conectado, durante ${segundosTranscurridos} segundo(s)`;
-        // return { cantidad: segundosTranscurridos, tipo: 'segundos' };
-      } else {
-        const minutosTranscurridos = fechaActual.diff(fechaFinal, 'minutes');
+      //   if (minutosTranscurridos < 60 && minutosTranscurridos > -1) {
+      //     return `Usuario conectado, durante ${minutosTranscurridos} minutos`;
+      //     // return { cantidad: minutosTranscurridos, tipo: 'minutos' };
+      //   } else {
+      //     const horasTranscurridas = fechaActual.diff(fechaFinal, 'hours');
   
-        if (minutosTranscurridos < 60 && minutosTranscurridos > -1) {
-          return `Usuario conectado, durante ${minutosTranscurridos} minutos`;
-          // return { cantidad: minutosTranscurridos, tipo: 'minutos' };
-        } else {
-          const horasTranscurridas = fechaActual.diff(fechaFinal, 'hours');
-  
-          if (horasTranscurridas < 24 && horasTranscurridas > -1) {
-            // return 'Hace ' + horasTranscurridas + ' horas';
-            return `Usuario conectado, duración ${horasTranscurridas} hora(s)`;
-            // return { cantidad: horasTranscurridas, tipo: 'horas' };
-          } else {
-            const diasTranscurridos = fechaActual.diff(fechaFinal, 'days');
-            // return { cantidad: diasTranscurridos, tipo: 'días' };
-            // return 'Hace ' + diasTranscurridos + ' días';
-            return `Usuario conectado, duración ${diasTranscurridos} día(s)`;
-          }
-        }
-      }
-      return 'Hace un momento';
+      //     if (horasTranscurridas < 24 && horasTranscurridas > -1) {
+      //       // return 'Hace ' + horasTranscurridas + ' horas';
+      //       return `Usuario conectado, duración ${horasTranscurridas} hora(s)`;
+      //       // return { cantidad: horasTranscurridas, tipo: 'horas' };
+      //     } else {
+      //       const diasTranscurridos = fechaActual.diff(fechaFinal, 'days');
+      //       // return { cantidad: diasTranscurridos, tipo: 'días' };
+      //       // return 'Hace ' + diasTranscurridos + ' días';
+      //       return `Usuario conectado, duración ${diasTranscurridos} día(s)`;
+      //     }
+      //   }
+      // }
+      // return 'Hace un momento';
   
     } else return null;
   };

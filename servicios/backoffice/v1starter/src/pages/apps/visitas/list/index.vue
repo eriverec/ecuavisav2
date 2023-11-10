@@ -352,7 +352,7 @@ tr.clickable.active {
 </style>
   
 <script setup>
-  import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
+  import { useSelectCalendar, useSelectValueCalendar,getTranscursoDeFechas } from "@/views/apps/otros/useSelectCalendar.js";
   import notasDrivers from '@/pages/apps/visitas/tabs/notas-drivers.vue';
   import notasEntretenimiento from '@/pages/apps/visitas/tabs/notas-entretenimiento.vue';
   import notasEstadio from '@/pages/apps/visitas/tabs/notas-estadio.vue';
@@ -984,51 +984,53 @@ tr.clickable.active {
       const sumIndex = valData[index*1+1];  
       // console.log("sumIndex:",sumIndex,index*1+1,index == valData.length);
 
-      const fechaFinal = moment(date, 'DD/MM/YYYY HH:mm:ss');
-      const fechaActual = moment(`${sumIndex.fecha} ${sumIndex.hora}`, 'DD/MM/YYYY HH:mm:ss');
+      return getTranscursoDeFechas(`${sumIndex.fecha} ${sumIndex.hora}`, date, valData[index*1]);
 
-      // console.log(`${sumIndex.fecha}`);
+      // const fechaFinal = moment(date, 'DD/MM/YYYY HH:mm:ss');
+      // const fechaActual = moment(`${sumIndex.fecha} ${sumIndex.hora}`, 'DD/MM/YYYY HH:mm:ss');
 
-      // console.log("fechaActual:",fechaActual);
-      // console.log("fechaFinal:",fechaFinal);
+      // // console.log(`${sumIndex.fecha}`);
 
-      const segundosTranscurridos = fechaActual.diff(fechaFinal, 'seconds');
+      // // console.log("fechaActual:",fechaActual);
+      // // console.log("fechaFinal:",fechaFinal);
 
-      if (segundosTranscurridos < 60 && segundosTranscurridos > -1) {
-        // return 'Hace ' + segundosTranscurridos + ' segundos';
-        return `Usuario conectado, durante ${segundosTranscurridos} segundo(s)`;
-        // return { cantidad: segundosTranscurridos, tipo: 'segundos' };
-      } else {
-        const minutosTranscurridos = fechaActual.diff(fechaFinal, 'minutes');
+      // const segundosTranscurridos = fechaActual.diff(fechaFinal, 'seconds');
 
-        if (minutosTranscurridos < 60 && minutosTranscurridos > -1) {
+      // if (segundosTranscurridos < 60 && segundosTranscurridos > -1) {
+      //   // return 'Hace ' + segundosTranscurridos + ' segundos';
+      //   return `Usuario conectado, durante ${segundosTranscurridos} segundo(s)`;
+      //   // return { cantidad: segundosTranscurridos, tipo: 'segundos' };
+      // } else {
+      //   const minutosTranscurridos = fechaActual.diff(fechaFinal, 'minutes');
 
-          // if(minutosTranscurridos > 30){
-          //   return `Usuario desconectado, duración ${minutosTranscurridos} minuto(s)`;
-          // }
+      //   if (minutosTranscurridos < 60 && minutosTranscurridos > -1) {
 
-          // // return 'Hace ' + minutosTranscurridos + ' minutos';
-          // if(minutosTranscurridos < 2){
-          //   return `Usuario conectado, durante ${minutosTranscurridos} minuto`;
-          // }
-          return `Usuario conectado, durante ${minutosTranscurridos} minutos`;
-          // return { cantidad: minutosTranscurridos, tipo: 'minutos' };
-        } else {
-          const horasTranscurridas = fechaActual.diff(fechaFinal, 'hours');
+      //     // if(minutosTranscurridos > 30){
+      //     //   return `Usuario desconectado, duración ${minutosTranscurridos} minuto(s)`;
+      //     // }
 
-          if (horasTranscurridas < 24 && horasTranscurridas > -1) {
-            // return 'Hace ' + horasTranscurridas + ' horas';
-            return `Usuario conectado, duración ${horasTranscurridas} hora(s)`;
-            // return { cantidad: horasTranscurridas, tipo: 'horas' };
-          } else {
-            const diasTranscurridos = fechaActual.diff(fechaFinal, 'days');
-            // return { cantidad: diasTranscurridos, tipo: 'días' };
-            // return 'Hace ' + diasTranscurridos + ' días';
-            return `Usuario conectado, duración ${diasTranscurridos} día(s)`;
-          }
-        }
-      }
-      return 'Hace un momento';
+      //     // // return 'Hace ' + minutosTranscurridos + ' minutos';
+      //     // if(minutosTranscurridos < 2){
+      //     //   return `Usuario conectado, durante ${minutosTranscurridos} minuto`;
+      //     // }
+      //     return `Usuario conectado, durante ${minutosTranscurridos} minutos`;
+      //     // return { cantidad: minutosTranscurridos, tipo: 'minutos' };
+      //   } else {
+      //     const horasTranscurridas = fechaActual.diff(fechaFinal, 'hours');
+
+      //     if (horasTranscurridas < 24 && horasTranscurridas > -1) {
+      //       // return 'Hace ' + horasTranscurridas + ' horas';
+      //       return `Usuario conectado, duración ${horasTranscurridas} hora(s)`;
+      //       // return { cantidad: horasTranscurridas, tipo: 'horas' };
+      //     } else {
+      //       const diasTranscurridos = fechaActual.diff(fechaFinal, 'days');
+      //       // return { cantidad: diasTranscurridos, tipo: 'días' };
+      //       // return 'Hace ' + diasTranscurridos + ' días';
+      //       return `Usuario conectado, duración ${diasTranscurridos} día(s)`;
+      //     }
+      //   }
+      // }
+      // return 'Hace un momento';
 
     } else return null;
   };
