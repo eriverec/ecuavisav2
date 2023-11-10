@@ -8,7 +8,7 @@ const moment = extendMoment(Moment);
 
 const cities = ref([]);
 const isLoading = ref(true);
-const activeIndex = ref(0); // Inicialmente, el primer tab está activado
+const activeIndex = ref(); // Inicialmente, el primer tab está activado
 
 const orderField = ref("");
 const orderAsc = ref(true);
@@ -123,12 +123,14 @@ const sortedCitiesByLength = computed(() => {
             v-for="country in sortedCitiesByLength"
             :key="country.country"
           >
-            <VExpansionPanelTitle class="d-flex flex-wrap justify-space-between gap-4">
-              <div>
-                <VAvatar class="ava" size="34" :image=" 'https://flagcdn.com/w320/' + country.countryCode.toLowerCase() + '.png' " /> {{ country.country }} 
-              </div>
-              <div style="" :class="`d-flex align-center text-secondary`">
-                <VChip label>{{ country.data.length }} {{ country.data.length > 1?"Ciudades":"Ciudad" }} </VChip>
+            <VExpansionPanelTitle class="d-flex justify-space-between gap-4">
+              <div class="title-pais">
+                <div>
+                  <VAvatar class="ava" size="34" :image=" 'https://flagcdn.com/w320/' + country.countryCode.toLowerCase() + '.png' " /> {{ country.country }} 
+                </div>
+                <div style="cursor: pointer;" :class="`d-flex align-center text-secondary`">
+                  <VChip style="cursor: pointer;" label>{{ country.data.length }} {{ country.data.length > 1?"Ciudades":"Ciudad" }} </VChip>
+                </div>
               </div>
             </VExpansionPanelTitle>
             <VExpansionPanelText>
@@ -184,5 +186,11 @@ const sortedCitiesByLength = computed(() => {
 
 .ava {
   margin-inline-end: 16px;
+}
+.title-pais {
+    width: 88%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 </style>

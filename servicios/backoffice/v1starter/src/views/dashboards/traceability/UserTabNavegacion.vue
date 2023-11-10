@@ -156,14 +156,7 @@ watch(async () => selectedfechaIniFin.value, async () => {
 <template>
   <VRow>
     <VCol lg="12" cols="12" sm="6">
-      <VDialog v-model="loadingData" width="300">
-              <VCard color="primary" width="300">
-                <VCardText class="pt-3">
-                  Espere porfavor, obteniendo registros.. {{ totalCount }}
-                  <VProgressLinear indeterminate color="white" class="mb-0" />
-                </VCardText>
-              </VCard>
-            </VDialog>
+      
       <VCard>
         <VCardItem class="header_card_item">
           <div class="d-flex">

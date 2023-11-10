@@ -1,32 +1,44 @@
 <script setup>
-import Moment from 'moment';
-import { extendMoment } from 'moment-range';
-import esLocale from "moment/locale/es";
-const moment = extendMoment(Moment);
-moment.locale('es', [esLocale]);
-const fechaIni = ref('');
-const fechaFin = ref('');
-const fechaIngresada = ref('');
-const isLoading = ref(false);
-const driversRaw = ref([]);
-const drivers = ref([]);
-const currentPage = ref(1);
-const itemsPerPage = 8;
-const rawData = ref([]);
-const totalCount = computed(() => drivers.value.length);
-const titleSelected = ref('');
-const ultimosUsuarios = ref([]);
-const ultimosUsuariosVisible = ref(false);
-const ultimosUsuariosDownload = ref([]);
-const titulo = ref('');
-const ultimasVisitas = ref([]);
-const ultimasVisitasVisible = ref(false);
-const userSelected = ref('');
-const searchQuery = ref('');
-const selectedRow = ref(null);
-const selectedRowUser = ref(null);
-const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
-const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
+  import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
+  import Moment from 'moment';
+  import { extendMoment } from 'moment-range';
+  import esLocale from "moment/locale/es";
+  const moment = extendMoment(Moment);
+  moment.locale('es', [esLocale]);
+  const fechaIni = ref('');
+  const fechaFin = ref('');
+  const fechaIngresada = ref('');
+  const isLoading = ref(false);
+  const driversRaw = ref([]);
+  const drivers = ref([]);
+  const currentPage = ref(1);
+  const itemsPerPage = 8;
+  const rawData = ref([]);
+  const totalCount = computed(() => drivers.value.length);
+  const titleSelected = ref('');
+  const ultimosUsuarios = ref([]);
+  const ultimosUsuariosVisible = ref(false);
+  const ultimosUsuariosDownload = ref([]);
+  const titulo = ref('');
+  const ultimasVisitas = ref([]);
+  const ultimasVisitasVisible = ref(false);
+  const userSelected = ref('');
+  const searchQuery = ref('');
+  const selectedRow = ref(null);
+  const selectedRowUser = ref(null);
+  const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
+  const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
+
+  const valoresHoy = useSelectValueCalendar(); //DEFAULT HOY
+
+  const fecha = ref({
+    i: valoresHoy.i,
+    f: valoresHoy.f,
+    title: valoresHoy.title
+  });
+
+  const selectedfechaIniFin = ref('Hoy');
+  const fechaIniFinList = useSelectCalendar();
 
 async function getDrivers(fechai = '', fechaf = '') {
   isLoading.value = true;
@@ -114,11 +126,12 @@ const prevPage = () => {
 };
 
 const initData = () => {
-  let fechai = moment().subtract(7, 'days').format("DD-MM-YYYY").toString();
-  let fechaf = moment().format("DD-MM-YYYY").toString();
-  fechaIni.value = fechai;
-  fechaFin.value = fechaf;
-  fechaIngresada.value = fechai + ' a ' + fechaf;
+  // let fechai = moment().subtract(7, 'days').format("DD-MM-YYYY").toString();
+  // let fechaf = moment().format("DD-MM-YYYY").toString();
+  // fechaIni.value = fechai;
+  // fechaFin.value = fechaf;
+  // fechaIngresada.value = fechai + ' a ' + fechaf;
+  fechaIngresada.value = fechaIni.value + ' a ' + fechaFin.value;
 }
 
 async function accionBackoffice (logData){
@@ -139,7 +152,22 @@ async function accionBackoffice (logData){
 };
 
 onMounted(async() => {
+  let selectedCombo = useSelectValueCalendar(selectedfechaIniFin.value);
+  fecha.value = {
+      i: selectedCombo.i,
+      f: selectedCombo.f,
+      title: selectedCombo.title
+  }
+
+  currentPage.value = 1;
+  let fechaI = selectedCombo.i.format('MM/DD/YYYY');
+  let fechaF = selectedCombo.i.format('MM/DD/YYYY');
+  fechaIni.value = fechaI;
+  fechaFin.value = fechaF;
+
   initData();
+  await getDrivers(fechaI, fechaF);
+
   await accionBackoffice({
    "usuario": userBackoffice.value.email,   
    "pagina": "trazabilidad-visitas-list-notasDrivers",
@@ -463,19 +491,55 @@ var timeSince = function (date,index) {
 
   } else return null;
 };
+
+  watch(async () => selectedfechaIniFin.value, async () => {
+    isLoading.value = true;
+    let selectedCombo = useSelectValueCalendar(selectedfechaIniFin.value);
+
+    fecha.value = {
+        i: selectedCombo.i,
+        f: selectedCombo.f,
+        title: selectedCombo.title
+    }
+    let fechaI = selectedCombo.i.format('MM/DD/YYYY');
+    let fechaF = selectedCombo.i.format('MM/DD/YYYY');
+
+    fechaIni.value = fechaI;
+    fechaFin.value = fechaF;
+
+    await getDrivers(fechaI, fechaF);
+  });
 </script>
 
 <template>
   <VRow>
     <VCol lg="12" cols="12">
       <VCard>
+        <VCardItem class="header_card_item">
+          <div class="d-flex">
+            <div class="descripcion">
+              <VCardTitle>Páginas más vistas</VCardTitle>
+              <VCardSubtitle>Un total de {{ totalCount }} registros, mostrando data desde {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
+            </div>
+          </div>
+
+          <template #append>
+            <div class="bg-ecuavisa py-2">
+              <div class="date-picker-wrapper" style="width: 250px;">
+                <VCombobox :disabled="isLoading" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
+                  hide-selected hint="" />
+              </div>
+            </div>
+          </template>
+        </VCardItem>
+
         <VCardText class="d-flex flex-wrap justify-space-between gap-4">
-          <VCardItem class="pb-sm-0">
+          <VCardItem class="pb-sm-0" style="display: none;">
             <VCardTitle>Páginas más vistas </VCardTitle>
             <VCardSubtitle>Un total de {{ totalCount }} registros</VCardSubtitle>
           </VCardItem>
 
-          <div class="date-picker-wrapper" style="width: 300px;" v-if="!isLoading">
+          <div class="date-picker-wrapper" style="width: 300px;display: none;" v-if="!isLoading">
             <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngresada"
               show-current=true @on-change="obtenerPorFecha" :config="{
                 position: 'auto right',
