@@ -97,13 +97,13 @@ watch(async () => selectedfechaIniFin.value, async () => {
         <div class="d-flex">
           <div class="descripcion">
             <VCardTitle>Resumen de datos demográficos de {{fecha.title}}</VCardTitle>
-            <VCardSubtitle>Un total de {{ sortedCities.length }} registros, mostrando data desde {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
+            <VCardSubtitle>Un total de {{ sortedCities.length }} registros, mostrando data desde <br> {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
           </div>
         </div>
 
         <template #append>
           <div class="bg-ecuavisa py-2">
-            <div class="date-picker-wrapper" style="width: 250px;">
+            <div class="date-picker-wrapper" style="width: 100%;">
               <VCombobox :disabled="isLoading" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
                 hide-selected hint="" />
             </div>

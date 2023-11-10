@@ -1,10 +1,9 @@
 <script setup>
-import { useTheme } from 'vuetify';
-import CrmActivityTimeline from '@/views/dashboards/traceability/UserTabNavegacionTimeline.vue';
 import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
+import { useTheme } from 'vuetify';
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 const vuetifyTheme = useTheme();
@@ -170,13 +169,13 @@ watch(async () => selectedfechaIniFin.value, async () => {
           <div class="d-flex">
             <div class="descripcion">
               <VCardTitle>Páginas más vistas {{fecha.title}}</VCardTitle>
-              <VCardSubtitle>Un total de {{ totalCount }} registros, mostrando data desde {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
+              <VCardSubtitle>Un total de {{ totalCount }} registros, mostrando data desde <br> {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
             </div>
           </div>
 
           <template #append>
             <div class="bg-ecuavisa py-2">
-              <div class="date-picker-wrapper" style="width: 250px;">
+              <div class="date-picker-wrapper" style="width: 100%;">
                 <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
                   hide-selected hint="" />
               </div>
