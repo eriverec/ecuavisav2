@@ -1025,10 +1025,12 @@ h2.temas_estilo {
 
 img.sepMobile {
   display: none;
+  height: auto;
 }
 
 img.sepDesk {
   max-width: 100%;
+  height: auto;
 }
 
 .port3 {
