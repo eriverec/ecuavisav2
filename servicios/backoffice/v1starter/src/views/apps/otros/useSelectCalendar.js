@@ -61,17 +61,32 @@ export const useSelectValueCalendar = (selectedCombo = "Hoy") => {
   };
 }
 
-export const getTranscursoDeFechas = (fechai, fechaf, pagina) => {
+export const getTranscursoDeFechas = (fechai, fechaf, pagina, pagina_old = null) => {
   const fechaFinal = moment(fechaf, 'DD/MM/YYYY HH:mm:ss');
   const fechaActual = moment(fechai, 'DD/MM/YYYY HH:mm:ss');
 
   const segundosTranscurridos = fechaActual.diff(fechaFinal, 'seconds');
 
+  // let texto_pagina = "";
+  // if(pagina_old){
+  //   if(pagina.title == pagina_old.title){
+  //     texto_pagina = "Usuario se mantiene en la misma página";
+  //   }
+  // }
+
   if (segundosTranscurridos < 60 && segundosTranscurridos > -1) {
     // return 'Hace ' + segundosTranscurridos + ' segundos';
+
     if(segundosTranscurridos < 5){
       return `El usuario recargó la página`;
     }
+    
+    // if(pagina_old){
+    //   if(pagina.title == pagina_old.title){
+    //     return "El usuario se mantiene en la misma página";
+    //   }
+    // }
+
     return `Usuario conectado, durante ${segundosTranscurridos} segundo(s)`;
     // return { cantidad: segundosTranscurridos, tipo: 'segundos' };
   } else {
@@ -79,14 +94,32 @@ export const getTranscursoDeFechas = (fechai, fechaf, pagina) => {
 
     if (minutosTranscurridos < 60 && minutosTranscurridos > -1) {
 
-      if(minutosTranscurridos > 30){
+      if(minutosTranscurridos > 30 && pagina.title.includes("En Vivo") == false){
         return `Usuario desconectado, duración ${minutosTranscurridos} minuto(s)`;
       }
 
       // // return 'Hace ' + minutosTranscurridos + ' minutos';
       if(minutosTranscurridos < 2){
+
+        // if(pagina_old){
+        //   if(pagina.title == pagina_old.title){
+        //     return "El usuario se mantiene en la misma página";
+        //   }
+        // }
+
         return `Usuario conectado, durante ${minutosTranscurridos} minuto`;
       }
+
+      if(minutosTranscurridos > 30 && pagina.title.includes("En Vivo") == true){
+        // if(pagina_old){
+        //   if(pagina.title == pagina_old.title){
+        //     return "El usuario se mantiene en la misma página";
+        //   }
+        // }
+
+        return `Usuario conectado, duración ${minutosTranscurridos} minuto(s)`;
+      }
+
       return `Usuario conectado, durante ${minutosTranscurridos} minutos`;
       // return { cantidad: minutosTranscurridos, tipo: 'minutos' };
     } else {
@@ -99,6 +132,11 @@ export const getTranscursoDeFechas = (fechai, fechaf, pagina) => {
         }
 
         if(horasTranscurridas < 7 && pagina.title.includes("En Vivo") == true){
+          // if(pagina_old){
+          //   if(pagina.title == pagina_old.title){
+          //     return "El usuario se mantiene en la misma página";
+          //   }
+          // }
           return `Usuario conectado al en vivo, duración ${horasTranscurridas} hora(s)`;
         }
 

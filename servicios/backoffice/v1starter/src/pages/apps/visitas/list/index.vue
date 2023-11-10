@@ -984,7 +984,13 @@ tr.clickable.active {
       const sumIndex = valData[index*1+1];  
       // console.log("sumIndex:",sumIndex,index*1+1,index == valData.length);
 
-      return getTranscursoDeFechas(`${sumIndex.fecha} ${sumIndex.hora}`, date, valData[index*1]);
+      if(index > 0){
+        return getTranscursoDeFechas(`${sumIndex.fecha} ${sumIndex.hora}`, date, valData[index*1], valData[index*1 - 1]);
+      }else{
+        return getTranscursoDeFechas(`${sumIndex.fecha} ${sumIndex.hora}`, date, valData[index*1]);
+      }
+
+      
 
       // const fechaFinal = moment(date, 'DD/MM/YYYY HH:mm:ss');
       // const fechaActual = moment(`${sumIndex.fecha} ${sumIndex.hora}`, 'DD/MM/YYYY HH:mm:ss');
