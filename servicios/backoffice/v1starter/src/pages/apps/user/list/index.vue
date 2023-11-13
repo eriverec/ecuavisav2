@@ -96,7 +96,8 @@ const fetchUsers = () => {
       const ha = JSON.stringify(users.value)
       const he = JSON.parse(ha);
       const dataReal = JSON.stringify(users.value.map(user => user.email), null, 2);
-      console.log(dataReal);
+     
+      // console.log(dataReal);
 
       /*CODIGO */
       fetch("https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php")
@@ -116,24 +117,36 @@ const fetchUsers = () => {
           })
             .then((response) => response.json())
             .then((result) => {
-              console.log("result",result);
-              // Validar cada elemento en el resultado
-               // Validar el resultado para cada correo
-               Object.keys(result).forEach((email) => {
-                    const emailData = result[email];
-                    console.log(email);
-                    if (emailData[0].book_id) {
-                        // El correo tiene al menos un item
-                        console.log(`Correo ${email} tiene datos.`);
-                        // console.log(emailData.length);
-                        // Puedes acceder a los detalles del item con emailData[0]
-                        
-                        console.log(emailData);
-                    } else {
-                        // El correo no tiene datos
-                        // console.log(`Correo ${email} no tiene datos.`);
+              // console.log("result",result);
+              // console.log("users",users.value);
+
+              const dataTemp = users.value;
+
+              dataTemp.forEach((email) => {
+                // console.log(email.email);
+                const senEmail = email.email
+                email.newsletter_opt_in = false;
+                Object.keys(result).forEach((emailSendpulse) => {
+                    const emailData = result[emailSendpulse];
+                    if (emailSendpulse.toLowerCase() == senEmail.toLowerCase() ) {
+                      email.newsletter_opt_in = true;
                     }
                 });
+
+              });
+
+              users.value = dataTemp;
+
+              const geTrue = document.querySelectorAll('.listadoGen .itemListado .lis_true');
+              const geFalse = document.querySelectorAll('.listadoGen .itemListado .lis_false');
+
+              for(var gT of geTrue){
+                gT.style.display = "block";
+              }
+              for(var gF of geFalse){
+                gF.style.display = "none";
+              }
+           
             })
             .catch((error) => console.log("error", error));
         })
@@ -1183,7 +1196,7 @@ const resolveFechaSelected = (fechas) => {
             </thead>
             <!-- 👉 table body -->
             <tbody>
-              <tr
+              <tr class="listadoGen"
                 v-for="user in users"
                 :key="user.wylexId"
                 style="height: 3.75rem"
@@ -1263,18 +1276,18 @@ const resolveFechaSelected = (fechas) => {
                 </td>
 
                 <!-- 👉 Newsletter -->
-                <td>
+                <td class="itemListado">
                   <VChip
-                  style="display: none;"
-                  disabled
                     label
                     :color="resolveUserStatusVariant(user.newsletter_opt_in)"
                     size="small"
                     class="text-capitalize"
                   >
-                    {{ user.newsletter_opt_in }}
+                   
+                    <span class="lis_true" style="display:none;"> {{ user.newsletter_opt_in }} </span>
+                    <span class="lis_false">Cargando...</span>
                   </VChip>
-                  <small>En desarrollo</small>
+                  <!-- <small>En desarrollo</small> -->
                 </td>
 
                 <!-- 👉 Actions -->
