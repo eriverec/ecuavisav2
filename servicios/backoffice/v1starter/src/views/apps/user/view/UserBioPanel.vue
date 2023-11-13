@@ -172,6 +172,48 @@ const resolveUserRoleVariant = role => {
   }
 }
 */
+
+const valLetter = ref('');
+const dataNewsLetter = ref('');
+
+onMounted(async () => {
+  try {
+    // Obtener el token
+    const responseToken = await fetch("https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php");
+    const token = await responseToken.text();
+    const email_ = props.userData.email;
+
+    // Obtener los detalles del correo electrónico
+    const responseDetails = await fetch(`https://api.sendpulse.com/emails/${email_}/details`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: "Bearer " + token,
+      },
+      redirect: "follow",
+    });
+
+    const result = await responseDetails.json();
+
+    // Obtener el valor de valLetter
+    const valLetterValue = result.map(user => user.list_name);
+
+    // Verificar si hay más de un elemento en la lista
+    
+    // Asignar el valor a la variable reactiva
+    valLetter.value = valLetterValue;
+    // console.log(valLetter.value);
+    if (valLetter.value.length >= 1) {
+      dataNewsLetter.value = "True";
+    }else{
+      dataNewsLetter.value = "False";
+      return false;
+    }
+  } catch (error) {
+    console.error("Error:", error);
+  }
+});
+
 </script>
 
 <template>
@@ -226,7 +268,9 @@ const resolveUserRoleVariant = role => {
               <h6 class="text-base font-weight-semibold">
                 Newsletter
               </h6>
-              <span class="text-sm">{{ props.userData.newsletter_opt_in }}</span>
+              <!-- <span class="text-sm">{{ props.userData.newsletter_opt_in }}</span> -->
+                  <span id="newsletter_list_user" class="text-body-2 ">{{ dataNewsLetter }}</span>
+
             </div>
           </div>
 
@@ -256,6 +300,20 @@ const resolveUserRoleVariant = role => {
 
           <!-- 👉 User Details list -->
           <VList class="card-list mt-2">
+            <VListItem>
+              <VListItemTitle class="item_news">
+                <h6 class="text-base font-weight-semibold">
+                  Newsletter:
+                  <!-- <span id="newsletter_list_user" class="text-body-2 ">{{ valLetter }}</span> -->
+                  <span class="text-body-2">
+                    <VChip v-if="valLetter.length" class="block_news" v-for="(item, index) in valLetter" :key="index">
+                      {{ item }}
+                    </VChip>
+                    <div v-else > <VChip>Cargando...</VChip></div>
+                  </span>
+                </h6>
+              </VListItemTitle>
+            </VListItem>
             <VListItem>
               <VListItemTitle>
                 <h6 class="text-base font-weight-semibold">
@@ -505,5 +563,16 @@ const resolveUserRoleVariant = role => {
 
 .text-capitalize {
   text-transform: capitalize !important;
+}
+
+</style>
+
+<style scoped>
+.item_news {
+  white-space: initial ;
+}
+
+.block_news {
+  margin: 5px 5px;
 }
 </style>

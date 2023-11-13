@@ -93,6 +93,56 @@ const fetchUsers = () => {
     })
     .then((response) => {
       users.value = response.data.users;
+      const ha = JSON.stringify(users.value)
+      const he = JSON.parse(ha);
+      const dataReal = JSON.stringify(users.value.map(user => user.email), null, 2);
+      console.log(dataReal);
+
+      /*CODIGO */
+      fetch("https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php")
+        .then(function (response) {
+          return response.text();
+        })
+        .then(function (token) {
+
+          fetch(`https://api.sendpulse.com/emails`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: "Bearer " + token,
+            },
+            body: JSON.stringify({ emails: dataReal }),
+            redirect: "follow",
+          })
+            .then((response) => response.json())
+            .then((result) => {
+              console.log("result",result);
+              // Validar cada elemento en el resultado
+               // Validar el resultado para cada correo
+               Object.keys(result).forEach((email) => {
+                    const emailData = result[email];
+                    console.log(email);
+                    if (emailData[0].book_id) {
+                        // El correo tiene al menos un item
+                        console.log(`Correo ${email} tiene datos.`);
+                        // console.log(emailData.length);
+                        // Puedes acceder a los detalles del item con emailData[0]
+                        
+                        console.log(emailData);
+                    } else {
+                        // El correo no tiene datos
+                        // console.log(`Correo ${email} no tiene datos.`);
+                    }
+                });
+            })
+            .catch((error) => console.log("error", error));
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+        /*CODIGO */
+
+
       totalPage.value = response.data.totalPage;
       sectionLoaded();
     })
