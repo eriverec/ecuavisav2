@@ -39,6 +39,7 @@ const fecha = ref({
 const selectedfechaIniFin = ref('Hoy');
 const fechaIniFinList = useSelectCalendar();
 
+
 async function getDrivers(fechai = '', fechaf = '') {
   isLoading.value = true;
   const navArray = [];
@@ -57,7 +58,7 @@ async function getDrivers(fechai = '', fechaf = '') {
     redirect: 'follow'
   };
 
-  await fetch('https://servicio-de-actividad.vercel.app/actividad/seccion/full/Tendencias', requestOptions)
+  await fetch('https://servicio-de-actividad.vercel.app/actividad/seccion/full/Noticias', requestOptions)
     .then(response => response.json())
     .then(data => {
 
@@ -125,7 +126,7 @@ const prevPage = () => {
 };
 
 const initData = () => {
-  // let fechai = moment().subtract(7, 'days').format("DD-MM-YYYY").toString();
+  // let fechai = moment().subtract(1, 'days').format("DD-MM-YYYY").toString();
   // let fechaf = moment().format("DD-MM-YYYY").toString();
   // fechaIni.value = fechai;
   // fechaFin.value = fechaf;
@@ -166,11 +167,12 @@ onMounted(async() => {
 
   initData();
   await getDrivers(fechaI, fechaF);
+
   await accionBackoffice({
             "usuario": userBackoffice.value.email,   
-            "pagina": "trazabilidad-visitas-list-notasEstilo",
+            "pagina": "trazabilidad-visitas-list-notasNoticias",
             "fecha": dateNowF.value
-					});
+  });
 });
 
 const searchData = () => {
@@ -354,13 +356,12 @@ async function downloadSelection() {
   };
   let doc = [];
   doc = Array.from(ultimosUsuariosDownload.value);
-  let title = "estilo_ultimos_usuarios_" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
+  let title = "noticias_ultimos_usuarios_" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
   //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
-
   await accionBackoffice({
    "usuario": userBackoffice.value.email,   
-   "pagina": "trazabilidad-visitas-list-notasEstilo",
+   "pagina": "trazabilidad-visitas-list-notasNoticias",
    "accion": "export",
    "fecha": dateNowF.value
 	});    
@@ -369,60 +370,28 @@ async function downloadSelection() {
 };
 
 function agruparPorTitulo(registros) {
-  const grupos = [];
-  let grupoActual = null;
+  const grupos = {};
 
   registros.forEach((registro, index) => {
-    if (index === 0 || registro.title !== registros[index - 1].title) {
-      // Si es el primer registro o el título es diferente al anterior
-      grupoActual = {
-        title: registro.title,
-        url: registro.url,
-        fecha: registro.fecha,
-        hora: registro.hora,
-        fullFecha: registro.fullFecha,
-        data: [registro],
-      };
-
-      grupos.push(grupoActual);
-    } else {
-      // Si el título es igual al anterior, agrégalo al grupo actual
-      grupoActual.data.push(registro);
-    }
+    // if(index != 0){
+      // console.log(index)
+      if (grupos.hasOwnProperty(registro.title)) {
+        grupos[registro.title].data.push(registro);
+      } else {
+        grupos[registro.title] = {
+          title: registro.title,
+          url: registro.url,
+          fecha: registro.fecha,
+          hora: registro.hora,
+          data: [registro]
+        };
+      }
+    // }
   });
 
-  return grupos;
-}
+  const resultado = Object.values(grupos);
 
-var nuevaLista = function(json = {}){
-  const { data, index } = json;
-  var lista = [];
-  var todoLista = ultimasVisitas.value;
-  var todoListaTamanio = todoLista.length;
-
-  for(var i in data){
-    const fecha = `${data[i].fecha} ${data[i].hora}`;
-    const tiempoTimeline = timeSince({
-      "fecha":fecha,
-      "indice": i,
-      "indiceDelTotal": index,
-      "dataTotal": todoLista,
-      "tamanioTotal": todoListaTamanio,
-      "dataActual": data,
-      "objectoActual": null,
-    });
-
-    const title = `${tiempoTimeline.tiempoTranscurrido}`;
-
-    lista.push({
-      title: title,
-      fechai: tiempoTimeline.fechai,
-      fechaf: tiempoTimeline.fechaf
-    });
-  }
-  // console.log(lista);
-  return lista;
-
+  return resultado;
 }
 
 const resolveUltimasVisitasUser = (first, last) => {
@@ -477,43 +446,58 @@ const resolveUltimasVisitasUser = (first, last) => {
   });
 
   //console.log('Sorted F',arrayFiltro);
-  // ultimasVisitas.value = arrayFiltro.slice(0, 10);
+  // console.log(agruparPorTitulo(arrayFiltro))
   ultimasVisitas.value = agruparPorTitulo(arrayFiltro);
 
   ultimasVisitasVisible.value = true;
 }
 
-var timeSince = function (json_data = {}) {
-    const {fecha, indice, dataActual, dataTotal, indiceDelTotal, tamanioTotal, objectoActual = null} = json_data;
-    const dat =  JSON.stringify(dataActual);
+
+var timeSince = function (date,index) {
+    const dat =  JSON.stringify(ultimasVisitas.value);
     const valData = JSON.parse(dat);
-
-    if(valData.length - 1 > indice){
-      const sumIndex = valData[indice*1+1];
-      const fechaSiguiente = `${sumIndex.fecha} ${sumIndex.hora}`;
-      return getTranscursoDeFechas(fechaSiguiente, fecha, valData[indice], sumIndex);
-    }
-
-    var objetoTotal = {};
-    var fechaSiguienteTotal = null;
-    if(tamanioTotal - 1 > indiceDelTotal){
-      objetoTotal = dataTotal[indiceDelTotal*1+1];
-      fechaSiguienteTotal = `${objetoTotal.fecha} ${objetoTotal.hora}`;
-    }
-
-    if(tamanioTotal - 1 == indiceDelTotal && valData.length - 1 == indice){
-      // console.log(indiceDelTotal, dataTotal.length)
-      return {
-        tiempoTranscurrido: "Fin de la navegación",
-        fechai: fecha,
-        fechaf:null,
-        tipo: ""
+  
+    if (date) {
+  
+      if(index == valData.length - 1){
+        return '';
       }
-    }
-
-    // `${valData[valData.length - 1].fecha} ${valData[valData.length - 1].hora}`
-    return getTranscursoDeFechas(fechaSiguienteTotal,fecha, dataTotal[indiceDelTotal], dataTotal[indiceDelTotal*1+1]);
-    
+  
+      const sumIndex = valData[index*1+1];
+      return getTranscursoDeFechas(`${sumIndex.fecha} ${sumIndex.hora}`, date, valData[index*1]);
+  
+      // const fechaFinal = moment(date, 'DD/MM/YYYY HH:mm:ss');
+      // const fechaActual = moment(`${sumIndex.fecha} ${sumIndex.hora}`, 'DD/MM/YYYY HH:mm:ss');
+      // const segundosTranscurridos = fechaActual.diff(fechaFinal, 'seconds');
+  
+      // if (segundosTranscurridos < 60 && segundosTranscurridos > -1) {
+      //   // return 'Hace ' + segundosTranscurridos + ' segundos';
+      //   return `Usuario conectado, durante ${segundosTranscurridos} segundo(s)`;
+      //   // return { cantidad: segundosTranscurridos, tipo: 'segundos' };
+      // } else {
+      //   const minutosTranscurridos = fechaActual.diff(fechaFinal, 'minutes');
+  
+      //   if (minutosTranscurridos < 60 && minutosTranscurridos > -1) {
+      //     return `Usuario conectado, durante ${minutosTranscurridos} minutos`;
+      //     // return { cantidad: minutosTranscurridos, tipo: 'minutos' };
+      //   } else {
+      //     const horasTranscurridas = fechaActual.diff(fechaFinal, 'hours');
+  
+      //     if (horasTranscurridas < 24 && horasTranscurridas > -1) {
+      //       // return 'Hace ' + horasTranscurridas + ' horas';
+      //       return `Usuario conectado, duración ${horasTranscurridas} hora(s)`;
+      //       // return { cantidad: horasTranscurridas, tipo: 'horas' };
+      //     } else {
+      //       const diasTranscurridos = fechaActual.diff(fechaFinal, 'days');
+      //       // return { cantidad: diasTranscurridos, tipo: 'días' };
+      //       // return 'Hace ' + diasTranscurridos + ' días';
+      //       return `Usuario conectado, duración ${diasTranscurridos} día(s)`;
+      //     }
+      //   }
+      // }
+      // return 'Hace un momento';
+  
+    } else return null;
   };
 
   watch(async () => selectedfechaIniFin.value, async () => {
@@ -688,51 +672,64 @@ var timeSince = function (json_data = {}) {
                   <h4 class="text-base font-weight-semibold me-1">
                     {{ user.title || user.url }}
                   </h4>
+
                 </div>
-                <VCard
-                  class=""
-                  variant="text"
+
+                <p class="mb-0">{{ user.fecha }} {{ user.hora }}</p>
+                <span style="font-size:12px;display: block;margin-bottom: 10px;">
+                  {{ timeSince(`${user.fecha} ${user.hora}`,index)}}
+                </span>
+                <br>
+
+                <VTimeline
+                  side="end"
+                  align="start"
+                  truncate-line="both"
+                  density="compact"
+                  class="v-timeline-density-compact"
                 >
-                  <VCardText>
+                  <!-- SECTION Timeline Item: Flight -->
+                  <VTimelineItem
+                    dot-color="info"
+                    size="x-small"
+                    v-for="un,index_2 in user.data"
+                  >
 
-                    <!-- 👉 Person -->
-                    <div class="d-flex justify-space-between align-center">
-                      <VTimeline
-                        side="end"
-                        align="start"
-                        truncate-line="both"
-                        density="compact"
-                        class="v-timeline-density-compact timeline-2"
-                      >
-                        <!-- SECTION Timeline Item: Flight -->
-                        <VTimelineItem
-                          dot-color="info"
-                          size="x-small"
-                          v-for="un,index_2 in nuevaLista({data:user.data, index})"
-                        >
-                          <div class="d-flex justify-space-between align-center flex-wrap">
-                            <h4 class="text-base font-weight-semibold me-1">
-                              {{ un.fechai }}
-                            </h4>
-                          </div>
-                          <!-- 👉 Content -->
-                          <p class="mt-0 mb-0">
-                            {{ un.title }}
-                          </p>
-                            <!-- 👉 Divider -->
-                            <VDivider />
-                          <small style="font-size:10px;font-style: italic;">{{un.fechai}} {{un.fechaf ? 'hasta '+un.fechaf: ''}}</small>
-                        </VTimelineItem>
-                        <!-- !SECTION -->
+                    <!-- 👉 Content -->
+                    <p class="mb-1">
+                      <span>{{un.fecha}} {{un.hora}}</span>
+                      <VIcon
+                        size="20"
+                        icon="tabler-arrow-right"
+                        class="mx-2"
+                      />
+                      <span>Heathrow Airport, London</span>
+                    </p>
 
-                        
-                      </VTimeline>
-                    </div>
-                  </VCardText>
-                </VCard>
+                    <p class="mb-2">
+                      6:30 AM
+                    </p>
 
+                    <a
+                      href="#"
+                      class="d-flex align-center"
+                    >
+                      <VIcon
+                        color="primary"
+                        icon="tabler-link"
+                        size="18"
+                        class="me-1"
+                      />
+                      <h6 class="text-primary font-weight-semibold text-sm">
+                        booking-card.pdf
+                      </h6>
+                    </a>
+                  </VTimelineItem>
+                  <!-- !SECTION -->
+
+                  
+                </VTimeline>
               </VTimelineItem>
-
             </VTimeline>
           </VCardText>
         </VCard>
@@ -757,6 +754,10 @@ tr.clickable.active {
   cursor: pointer;
 }
 
+.v-card-title{
+  white-space: initial;
+}
+
 td span {
   display: block;
   max-width: 300px;
@@ -764,9 +765,6 @@ td span {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
-}
-.v-card-title{
-  white-space: initial;
 }
 
 

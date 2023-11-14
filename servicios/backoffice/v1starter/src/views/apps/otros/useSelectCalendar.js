@@ -61,7 +61,7 @@ export const useSelectValueCalendar = (selectedCombo = "Hoy") => {
   };
 }
 
-export const getTranscursoDeFechas = (fechai, fechaf, pagina, pagina_old = null) => {
+export const getTranscursoDeFechas = (fechai, fechaf, pagina, pagina_next = null) => {
   const fechaFinal = moment(fechaf, 'DD/MM/YYYY HH:mm:ss');
   const fechaActual = moment(fechai, 'DD/MM/YYYY HH:mm:ss');
 
@@ -75,85 +75,239 @@ export const getTranscursoDeFechas = (fechai, fechaf, pagina, pagina_old = null)
   // }
 
   if (segundosTranscurridos < 60 && segundosTranscurridos > -1) {
-    // return 'Hace ' + segundosTranscurridos + ' segundos';
+    if(segundosTranscurridos < 50){
+      if(segundosTranscurridos==0){
+        return  {
+          tiempoTranscurrido: `El usuario recargó la página`,
+          fechai:fechaf,
+          fechaf:fechai,
+          tipo: ""
+        }
+      }
 
-    if(segundosTranscurridos < 5){
-      return `El usuario recargó la página`;
+      if(pagina_next){
+        if(pagina_next.title.includes(pagina.title)){
+          return  {
+            tiempoTranscurrido: `El usuario recargó la página luego de ${segundosTranscurridos} segundos`,
+            fechai:fechaf,
+            fechaf:fechai,
+            tipo: ""
+          }
+        }else{
+          return  {
+            tiempoTranscurrido: `El usuario tuvo una actividad de ${segundosTranscurridos} segundos y luego cambió de página`,
+            fechai:fechaf,
+            fechaf:fechai,
+            tipo: ""
+          }
+        }
+      }
     }
-    
-    // if(pagina_old){
-    //   if(pagina.title == pagina_old.title){
-    //     return "El usuario se mantiene en la misma página";
-    //   }
-    // }
 
-    return `Usuario conectado, durante ${segundosTranscurridos} segundo(s)`;
-    // return { cantidad: segundosTranscurridos, tipo: 'segundos' };
-  } else {
+    return  {
+      tiempoTranscurrido: `El usuario tuvo una actividad de ${segundosTranscurridos} segundos`,
+      fechai:fechaf,
+      fechaf:fechai,
+      tipo: "Segundos"
+    }
+  }else{
     const minutosTranscurridos = fechaActual.diff(fechaFinal, 'minutes');
-
     if (minutosTranscurridos < 60 && minutosTranscurridos > -1) {
+      var title = `El usuario tuvo una actividad de ${minutosTranscurridos} ${minutosTranscurridos>1?"minutos":"minuto"}`;
 
-      if(minutosTranscurridos > 30 && pagina.title.includes("En Vivo") == false){
-        return `Usuario desconectado, duración ${minutosTranscurridos} minuto(s)`;
+      if(minutosTranscurridos > 11){
+        title = `El usuario tuvo una actividad de 10 minutos y una inactividad de ${minutosTranscurridos - 10} minutos`;
+        
+        if(pagina.title.includes("En Vivo")){
+          title = `El usuario navegó en el envivo, durante ${minutosTranscurridos} ${minutosTranscurridos>1?"minutos":"minuto"}`;
+        }
       }
 
-      // // return 'Hace ' + minutosTranscurridos + ' minutos';
-      if(minutosTranscurridos < 2){
-
-        // if(pagina_old){
-        //   if(pagina.title == pagina_old.title){
-        //     return "El usuario se mantiene en la misma página";
-        //   }
-        // }
-
-        return `Usuario conectado, durante ${minutosTranscurridos} minuto`;
+      if(pagina_next){
+        if(pagina_next.title.includes(pagina.title)){
+          return  {
+            tiempoTranscurrido: `El usuario recargó la página luego de ${minutosTranscurridos} ${minutosTranscurridos>1?"minutos":"minuto"}`,
+            fechai:fechaf,
+            fechaf:fechai,
+            tipo: ""
+          }
+        }
       }
 
-      if(minutosTranscurridos > 30 && pagina.title.includes("En Vivo") == true){
-        // if(pagina_old){
-        //   if(pagina.title == pagina_old.title){
-        //     return "El usuario se mantiene en la misma página";
-        //   }
-        // }
-
-        return `Usuario conectado, duración ${minutosTranscurridos} minuto(s)`;
+      return  {
+        tiempoTranscurrido: `${title}`,
+        fechai:fechaf,
+        fechaf:fechai,
+        tipo: "Minutos"
       }
 
-      return `Usuario conectado, durante ${minutosTranscurridos} minutos`;
-      // return { cantidad: minutosTranscurridos, tipo: 'minutos' };
-    } else {
+    }else{
       const horasTranscurridas = fechaActual.diff(fechaFinal, 'hours');
 
       if (horasTranscurridas < 24 && horasTranscurridas > -1) {
-
-        if(horasTranscurridas < 2 && pagina.title.includes("En Vivo") == false){
-          return `Usuario desconectado, duración ${horasTranscurridas} hora(s)`;
+        const horasTemp = parseInt(moment.duration(minutosTranscurridos - 10, 'minutes').asHours());
+        var title = ``;
+        if(horasTemp > 0){
+          title = `El usuario tuvo una actividad de 10 minutos y una inactividad aproximadamente de ${horasTemp} ${horasTemp > 1 ? `horas`:`hora`} `;
+        }else{
+          title = `El usuario tuvo una actividad de 10 minutos y una inactividad aproximadamente de ${minutosTranscurridos - 10} minutos`;
         }
 
-        if(horasTranscurridas < 7 && pagina.title.includes("En Vivo") == true){
-          // if(pagina_old){
-          //   if(pagina.title == pagina_old.title){
-          //     return "El usuario se mantiene en la misma página";
-          //   }
-          // }
-          return `Usuario conectado al en vivo, duración ${horasTranscurridas} hora(s)`;
+        if(horasTemp < 5){
+          if(pagina.title.includes("En Vivo")){
+            title = `El usuario navegó en el envivo, durante ${horasTemp} ${horasTemp>0?"horas":"hora"}`;
+          }
         }
 
-        // return 'Hace ' + horasTranscurridas + ' horas';
-        return `Usuario desconectado, duración ${horasTranscurridas} hora(s)`;
-        // return { cantidad: horasTranscurridas, tipo: 'horas' };
+        if(pagina_next){
+          if(pagina_next.title.includes(pagina.title)){
+            return  {
+              tiempoTranscurrido: `El usuario recargó la página luego de ${horasTemp} ${horasTemp > 1 ? `horas`:`hora`}`,
+              fechai:fechaf,
+              fechaf:fechai,
+              tipo: ""
+            }
+          }
+        }
+
+        // if(minutosTranscurridos > 11 && minutosTranscurridos < 61){
+        //   title = `El usuario tuvo una actividad de 10 minutos y una inactividad de ${ minutosTranscurridos - 10 } minutos`;
+        // }
+
+        // if(minutosTranscurridos > 11 && minutosTranscurridos > 60){
+        //   title = `El usuario tuvo una actividad de 10 minutos y una inactividad de ${moment.duration(minutosTranscurridos - 10, 'minutes').asHours()} horas`;
+        // }
+
+        return  {
+          tiempoTranscurrido: title,
+          fechai:fechaf,
+          fechaf:fechai,
+          tipo: "Horas"
+        }
+
       } else {
         const diasTranscurridos = fechaActual.diff(fechaFinal, 'days');
-        // return { cantidad: diasTranscurridos, tipo: 'días' };
-        // return 'Hace ' + diasTranscurridos + ' días';
-        if(diasTranscurridos > 1){
-          return `Usuario desconectado, duración ${diasTranscurridos} día(s)`;
+
+        const diasTemp = parseInt(moment.duration(minutosTranscurridos - 10, 'minutes').asDays());
+        const horasTemp = parseInt(moment.duration(minutosTranscurridos - 10, 'minutes').asHours());
+
+        var title = ``;
+        if(diasTemp > 0){
+          title = `El usuario tuvo una actividad de 10 minutos y una inactividad aproximadamente de ${diasTemp} ${diasTemp > 1 ? `días`:`día`} `;
+        }else{
+          title = `El usuario tuvo una actividad de 10 minutos y una inactividad aproximadamente de ${horasTemp} horas`;
         }
-        return `Usuario desconectado, duración ${diasTranscurridos} día(s)`;
+
+        if(horasTemp > 5){
+          if(pagina.title.includes("En Vivo | Ecuavisa")){
+            title = `El usuario navegó en el envivo, tuvo una actividad de más de 5 horas`;
+          }
+        }
+
+        if(pagina_next){
+          if(pagina_next.title.includes(pagina.title)){
+            return  {
+              tiempoTranscurrido: `El usuario recargó la página luego de ${diasTemp} ${diasTemp > 1 ? `días`:`día`}`,
+              fechai:fechaf,
+              fechaf:fechai,
+              tipo: ""
+            }
+          }
+        }
+
+        return  {
+          tiempoTranscurrido: title,
+          fechai:fechaf,
+          fechaf:fechai,
+          tipo: "Días"
+        }
       }
     }
+    
   }
-  return 'Hace un momento';
+
+  
+
+  // if (segundosTranscurridos < 60 && segundosTranscurridos > -1) {
+  //   // return 'Hace ' + segundosTranscurridos + ' segundos';
+
+  //   if(segundosTranscurridos < 5){
+  //     return `El usuario recargó la página`;
+  //   }
+    
+  //   // if(pagina_old){
+  //   //   if(pagina.title == pagina_old.title){
+  //   //     return "El usuario se mantiene en la misma página";
+  //   //   }
+  //   // }
+
+  //   return `Usuario conectado, durante ${segundosTranscurridos} segundo(s)`;
+  //   // return { cantidad: segundosTranscurridos, tipo: 'segundos' };
+  // } else {
+  //   const minutosTranscurridos = fechaActual.diff(fechaFinal, 'minutes');
+
+  //   if (minutosTranscurridos < 60 && minutosTranscurridos > -1) {
+
+  //     if(minutosTranscurridos > 30 && pagina.title.includes("En Vivo") == false){
+  //       return `Usuario desconectado, duración ${minutosTranscurridos} minuto(s)`;
+  //     }
+
+  //     // // return 'Hace ' + minutosTranscurridos + ' minutos';
+  //     if(minutosTranscurridos < 2){
+
+  //       // if(pagina_old){
+  //       //   if(pagina.title == pagina_old.title){
+  //       //     return "El usuario se mantiene en la misma página";
+  //       //   }
+  //       // }
+
+  //       return `Usuario conectado, durante ${minutosTranscurridos} minuto`;
+  //     }
+
+  //     if(minutosTranscurridos > 30 && pagina.title.includes("En Vivo") == true){
+  //       // if(pagina_old){
+  //       //   if(pagina.title == pagina_old.title){
+  //       //     return "El usuario se mantiene en la misma página";
+  //       //   }
+  //       // }
+
+  //       return `Usuario conectado, duración ${minutosTranscurridos} minuto(s)`;
+  //     }
+
+  //     return `Usuario conectado, durante ${minutosTranscurridos} minutos`;
+  //     // return { cantidad: minutosTranscurridos, tipo: 'minutos' };
+  //   } else {
+  //     const horasTranscurridas = fechaActual.diff(fechaFinal, 'hours');
+
+  //     if (horasTranscurridas < 24 && horasTranscurridas > -1) {
+
+  //       if(horasTranscurridas < 2 && pagina.title.includes("En Vivo") == false){
+  //         return `Usuario desconectado, duración ${horasTranscurridas} hora(s)`;
+  //       }
+
+  //       if(horasTranscurridas < 7 && pagina.title.includes("En Vivo") == true){
+  //         // if(pagina_old){
+  //         //   if(pagina.title == pagina_old.title){
+  //         //     return "El usuario se mantiene en la misma página";
+  //         //   }
+  //         // }
+  //         return `Usuario conectado al en vivo, duración ${horasTranscurridas} hora(s)`;
+  //       }
+
+  //       // return 'Hace ' + horasTranscurridas + ' horas';
+  //       return `Usuario desconectado, duración ${horasTranscurridas} hora(s)`;
+  //       // return { cantidad: horasTranscurridas, tipo: 'horas' };
+  //     } else {
+  //       const diasTranscurridos = fechaActual.diff(fechaFinal, 'days');
+  //       // return { cantidad: diasTranscurridos, tipo: 'días' };
+  //       // return 'Hace ' + diasTranscurridos + ' días';
+  //       if(diasTranscurridos > 1){
+  //         return `Usuario desconectado, duración ${diasTranscurridos} día(s)`;
+  //       }
+  //       return `Usuario desconectado, duración ${diasTranscurridos} día(s)`;
+  //     }
+  //   }
+  // }
+  // return 'Hace un momento';
 
 }
