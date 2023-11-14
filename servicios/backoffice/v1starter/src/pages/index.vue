@@ -7,7 +7,8 @@ import UserTabNavegacion from '@/views/dashboards/traceability/UserTabNavegacion
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
-import { ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
+
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 
@@ -161,7 +162,7 @@ const tabs = [
 ]
 
 
-
+// realtime adicionado
 countUsers();
 const userListMeta = [
 {
@@ -217,7 +218,35 @@ const userListMeta = [
   },
 ];
 
+const entries = ref([])
+    const realtime = ref(false)
+    let intervalId = null
 
+    const fetchEntries = async () => {
+      const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?grouped')
+      const data = await response.json()
+      entries.value = data
+    }
+
+    const toggleRealtime = () => {
+      realtime.value = !realtime.value
+      if (realtime.value) {
+        intervalId = setInterval(fetchEntries, 5000)
+      } else {
+        clearInterval(intervalId)
+      }
+    }
+
+    onMounted(() => {
+      // intervalId = setInterval(fetchEntries, 5000)
+    })
+
+    onUnmounted(() => {
+      clearInterval(intervalId)
+    })
+
+    // return { entries, toggleRealtime }
+// fin  realtime adicionado
 </script>
 <style>
 @media screen and (max-width: 1500px) and (min-width: 1280px) {
@@ -308,6 +337,28 @@ const userListMeta = [
       <VCol class="d-flex" cols="12" sm="6">
         <UserTabUbicacion />
       </VCol>
+
+      <VCol class="d-flex" cols="12" sm="6">
+        <div>
+        Realtime
+          <VSwitch v-model="realtime" @click="toggleRealtime">Desactivar Realtime</VSwitch>
+          <ul>
+            <li v-for="entry in entries" :key="entry.url">
+              {{ entry.url }} con el número de visitas:  {{ entry.visits }}
+            </li>
+          </ul>
+        </div>
+      </VCol>
     </VRow>
   </section>
 </template>
+
+<script>
+
+
+// export default {
+  // setup() {
+
+  // }
+// }
+</script>
