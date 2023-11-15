@@ -343,8 +343,8 @@ const entries = ref([])
         Realtime
           <VSwitch v-model="realtime" @click="toggleRealtime">Desactivar Realtime</VSwitch>
           <ul>
-            <li v-for="entry in entries" :key="entry.url">
-              {{ entry.url }} con el número de visitas:  {{ entry.visits }}
+            <li v-for="entry in entries" :key="entry.title">
+              {{ entry.title }} con el número de visitas:  {{ entry.visits }}
             </li>
           </ul>
         </div>
