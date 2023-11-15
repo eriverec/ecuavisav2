@@ -218,6 +218,9 @@ const userListMeta = [
   },
 ];
 
+
+const isListVisible = ref(false);
+
 const entries = ref([])
     const realtime = ref(false)
     let intervalId = null
@@ -228,14 +231,26 @@ const entries = ref([])
       entries.value = data
     }
 
+    // const toggleRealtime = () => {
+    //   realtime.value = !realtime.value
+    //   if (realtime.value) {
+    //     intervalId = setInterval(fetchEntries, 5000)
+    //   } else {
+    //     clearInterval(intervalId)
+    //   }
+    // }
+
     const toggleRealtime = () => {
-      realtime.value = !realtime.value
-      if (realtime.value) {
-        intervalId = setInterval(fetchEntries, 5000)
-      } else {
-        clearInterval(intervalId)
-      }
-    }
+            realtime.value = !realtime.value;
+            isListVisible.value = !isListVisible.value; // nuevo
+            if (realtime.value) {
+              fetchEntries(); // nuevo
+              intervalId = setInterval(fetchEntries, 5000);
+            } else {
+              clearInterval(intervalId);
+            }
+    };
+
 
     onMounted(() => {
       // intervalId = setInterval(fetchEntries, 5000)
@@ -245,9 +260,17 @@ const entries = ref([])
       clearInterval(intervalId)
     })
 
+    const goToLink = (link) => {
+        window.open(link, '_blank');
+      };
+        
     // return { entries, toggleRealtime }
 // fin  realtime adicionado
+
 </script>
+
+
+
 <style>
 @media screen and (max-width: 1500px) and (min-width: 1280px) {
   .tarjeta {
@@ -265,6 +288,18 @@ const entries = ref([])
  
 }
 
+@media screen and (max-width: 600px) and (min-width: 300px) {
+  
+  #dash
+  .v-card-title {
+        font-size: 18px;
+    }
+
+ 
+}
+
+
+
 #navegacion
 .v-card-text {
     padding: 0px;
@@ -272,6 +307,12 @@ const entries = ref([])
 
 .botonescurrentPage {
     padding: 20px;
+}
+
+
+.switch {
+    margin-left: 20px;
+    margin-bottom: 5px;
 }
 </style>
 
@@ -327,18 +368,76 @@ const entries = ref([])
   </VCol>
     </VRow>
 
-    <VRow>
+    <VRow id="dash">
       <!-- Columna de Navegación -->
       <VCol class="d-flex" id="navegacion" cols="12" sm="6">
         <UserTabNavegacion />
+        
       </VCol>
+       
 
       <!-- Columna de Ubicaciones -->
       <VCol class="d-flex" cols="12" sm="6">
         <UserTabUbicacion />
       </VCol>
 
-      <VCol class="d-flex" cols="12" sm="6">
+      <!-- Columna de Realtime -->
+      <VCol class="" id="navegacion" cols="12" sm="12"> 
+
+        <VCardItem class="header_card_item">
+        <div class="d-flex">
+            <div class="descripcion" cols="12" sm="6">
+              <VCardTitle>Realtime páginas visitadas</VCardTitle>
+            
+            </div>
+            <div cols="12" sm="6" class="switch">
+             
+              <VSwitch v-model="realtime" @click="toggleRealtime">Desactivar Realtime</VSwitch>
+            </div>
+          </div>
+        </VCardItem>
+
+          
+
+  <VList
+  v-if="isListVisible.valueOf"
+  lines="two"
+  border
+  >
+  <template v-for="(entry, index) in entries" :key="entry.title">
+
+      <VListItem>
+        
+        <VListItemTitle>
+          {{ entry.title }}
+        </VListItemTitle>
+        <VListItemSubtitle class="mt-1">
+          <!-- <VBadge
+            dot
+            location="start center"
+            offset-x="2"
+            :color="resolveStatusColor[user.status]"
+            class="me-3"
+          >
+            <span class="ms-4">{{ user.status }}</span>
+          </VBadge> -->
+
+          <span class="text-xs">Número de visitas: {{ entry.visits }}</span>
+        </VListItemSubtitle>
+
+        <template #append>
+          <VBtn size="small" @click="goToLink(entry.visits)">
+            Ir a link
+          </VBtn>
+        </template>
+      </VListItem>
+      <VDivider v-if="index !== entries.length - 1" />
+    </template>
+  </VList>
+      
+    </VCol>
+
+      <!-- <VCol class="d-flex" cols="12" sm="6">
         <div>
         Realtime
           <VSwitch v-model="realtime" @click="toggleRealtime">Desactivar Realtime</VSwitch>
@@ -348,9 +447,14 @@ const entries = ref([])
             </li>
           </ul>
         </div>
-      </VCol>
+      </VCol> -->
     </VRow>
   </section>
+
+
+
+
+  
 </template>
 
 <script>
