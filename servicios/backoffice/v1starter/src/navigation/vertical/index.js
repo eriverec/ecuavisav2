@@ -80,16 +80,16 @@ export default [
     ],
   },
 
-  // {
-  //   title: 'Campañas / Ads',
-  //   icon: { icon: 'tabler-ad' },
-  //   children: [
-  //     { title: 'Lista de campañas', to: 'apps-campaigns-list' },
-  //     { title: 'Crear campaña', to: 'apps-campaigns-create' },
-  //     { title: 'Posiciones', to: 'apps-campaigns-ads-ubicaciones' },
+  {
+    title: 'Campañas / Ads',
+    icon: { icon: 'tabler-ad' },
+    children: [
+      { title: 'Lista de campañas', to: 'apps-campaigns-list' },
+      { title: 'Crear campaña', to: 'apps-campaigns-create' },
+      { title: 'Posiciones', to: 'apps-campaigns-ads-ubicaciones' },
       
-  //   ],
-  // },
+    ],
+  },
 
   //########################
   // módulos no visibles

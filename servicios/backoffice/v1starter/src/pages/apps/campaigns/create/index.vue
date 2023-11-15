@@ -63,14 +63,14 @@ const selectItemsListVisibilidad = ref([
 
 const selectItemDispositivos = ref([]);
 const selectItemsListDispositivos = ref([
-  { title:'Todos', value: '0', avatar:"mdi-cellphone-link" },
+  // { title:'Todos', value: '0', avatar:"mdi-cellphone-link" },
   { title:'Escritorio', value: 'desktop', avatar:"mdi-laptop-chromebook" },
   { title:'Móvil', value: 'movil', avatar:"mdi-cellphone-android" },
   ]);
 
 const selectItemNavegador = ref([]);
 const selectItemsListNavegador = ref([
-  { title:'Todos', value: '0', avatar:"" },
+  // { title:'Todos', value: '0', avatar:"" },
   { title:'Chrome', value: 'Chrome', avatar:"" },
   { title:'Safari', value: 'Safari', avatar:"" },
   { title:'Firefox', value: 'Firefox', avatar:""},
@@ -79,12 +79,12 @@ const selectItemsListNavegador = ref([
 
 const selectItemSO = ref([]);
 const selectItemsListSO = ref([
-  { title:'Todos', value: '0', avatar:"", navegador: [] },
+  // { title:'Todos', value: '0', avatar:"", navegador: [] },
   { title:'Windows', value: 'Windows', avatar:"tabler-brand-windows", navegador: [{ title:'Chrome', value: 'Chrome' },{ title:'Firefox', value: 'Firefox' }] },
   { title:'Mac OS', value: 'Mac OS', avatar:"tabler-brand-apple", navegador: [{ title:'Safari', value: 'Safari' },{ title:'Chrome', value: 'Chrome' }] },
   { title:'Android', value: 'Android', avatar:"tabler-brand-android", navegador: [{ title:'Chrome', value: 'Chrome' },{ title:'Firefox', value: 'Firefox' }] },
   { title:'Linux', value: 'Linux', avatar:"mdi-linux", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
-  { title:'Otro', value: 'Otro', avatar:"", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
+  { title:'Otro', value: 'Otro', avatar:"mdi-account", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
   ]);
 
 const numeroRules = [
@@ -775,14 +775,10 @@ watch(async () => selectItemDispositivos.value,async  (newValue, oldValue) => {
 watch(async () => selectItemSO.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
-  if(selectItemSO.value != null){
-    loadingPanel.value=true;
+  loadingPanel.value=true;
     await getUsuarios();
     loadingPanel.value=false;
     await generarOtrosValores();
-  }else{
-    dataUsuarios.value = {};
-  }
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });

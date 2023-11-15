@@ -24,7 +24,7 @@
                 <VCol md="6" lg="12" cols="12">
                   <VAlert color="success" variant="tonal">
                     <VRow no-gutters>
-                      <VCol cols="12" sm="8" md="12" lg="8" order="2" order-lg="1">
+                      <VCol cols="12" sm="6" md="12" lg="6" order="2" order-lg="1">
                         <VCardItem>
                           <VCardTitle>{{suggestion.campaignTitle}}</VCardTitle>
                         </VCardItem>
@@ -64,7 +64,7 @@
                         </VCardText>
                       </VCol>
 
-                      <VCol cols="12" sm="4" md="12" lg="4" order="1" order-lg="2" class="member-pricing-bg text-center">
+                      <VCol cols="12" sm="3" md="12" lg="3" order="1" order-lg="2" class="member-pricing-bg text-center">
                         <div class="membership-pricing d-flex flex-column align-center py-14 h-100 justify-center">
                             <VCardTitle>Estado:</VCardTitle>
                             <VSwitch :disabled="switchOnDisabled" :loading="switchOnDisabled?'warning':false" v-model="suggestion.statusCampaign" @change="handleSwitchChange(index)" />
@@ -79,6 +79,50 @@
                                 </VChip>
                             </sup> -->
                             
+                          
+                        </div>
+                      </VCol>
+
+                      <VCol cols="12" sm="3" md="12" lg="3" order="1" order-lg="2" class="member-pricing-bg text-center">
+                        <div class="membership-pricing d-flex flex-column py-14">
+                            <VCardTitle style="text-align: left;">Subir CSV:</VCardTitle>
+                            <div style="width:100%;text-align: left;">
+                              <VFileInput
+                                v-model="files_csv"
+                                :loading="files_loading"
+                                :disabled="files_loading"
+                                accept=".csv"
+                                placeholder="Subir tu archivo CSV de usuarios"
+                                label="Subir tu CSV"
+                                prepend-icon="tabler-paperclip"
+                                @change="handleFileChange"
+                              >
+                                <template #selection="{ fileNames }">
+                                  <template
+                                    v-for="fileName in fileNames"
+                                    :key="fileName"
+                                  >
+                                    <VChip
+                                      label
+                                      size="small"
+                                      variant="outlined"
+                                      color="primary"
+                                      class="me-2"
+                                    >
+                                      {{ fileName }}
+                                    </VChip>
+                                  </template>
+                                </template>
+                              </VFileInput>
+                              <p v-if="files_loading">
+                                <small style="color:#000">
+                                  Subiendo usuarios, {{files_csv_mensaje}} <v-icon x-large class="rotate">
+                                                      mdi-loading
+                                                    </v-icon> 
+                                  
+                                </small>
+                              </p>
+                            </div>
                           
                         </div>
                       </VCol>
@@ -136,6 +180,7 @@
 
 <script>
 import { useRoute } from 'vue-router';
+import Papa from 'papaparse';
 const route = useRoute();
 const currentTab = ref('tab-detalles')
 
@@ -148,6 +193,12 @@ export default {
   data() {
     return {
       datos: [],
+      files_csv:[],
+      files_csv_mensaje:"",
+      usuarios_traidos_del_csv:[],
+      files_loading:false,
+      csvData: [],
+      csvHeaders: [],
       switchOnDisabled: false,
       suggestion: {
         _id: "",
@@ -197,6 +248,14 @@ computed: {
 
 
   methods: {
+    dividirArray(original, tamano = 500) {
+      const resultado = [];
+      for (let i = 0; i < original.length; i += tamano) {
+        const trozo = original.slice(i, i + tamano);
+        resultado.push(trozo);
+      }
+      return resultado;
+    },
     //método que obtiene los detalles de la campaña y el listado de usuarios
     async handleSwitchChange(index) {
       console.log(this.suggestion.statusCampaign)
@@ -235,7 +294,7 @@ computed: {
     exportToCSV() {
       let csvContent = "data:text/csv;charset=utf-8,";
       csvContent += [
-        ["firstname", "last_name", "email"].join(","),
+        ["id", "firstname", "last_name", "email"].join(","),
         ...this.suggestion.userId.map(user => [user.wylexId, user.firstname, user.last_name, user.email].join(","))
       ].join("\n");
 
@@ -247,7 +306,91 @@ computed: {
 
       link.click(); // This will download the data file named "usuarios.csv".
     },
+    async handleUpdateUserCSV(page, users) {
+      var jsonEnviar = {
+            users: users
+      }
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify(jsonEnviar),
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://ads-service.vercel.app/campaign/users/update/${this.suggestion._id}/${page}`, requestOptions);
+      const data = await response.json();
+      if(data.resp){
+        return true;
+      }else{
+        // alert("Un error se presentó: "+data.error);
+        return false;
+      };
+    },
+    async handleFileChange(event) {
+      const file = event.target.files[0];
+      if (file) {
+        // Verifica que el archivo sea de tipo CSV
+        if (file.name.endsWith('.csv')) {
+          this.files_loading = true;
+          Papa.parse(file, {
+            header: true,
+            dynamicTyping: true,
+            complete: async (result) => {
+              this.csvData = result.data;
+              this.csvHeaders = result.meta.fields;
+
+              var dataNormal = [];
+              for(var i in this.csvData){
+                if(!this.csvData[i].hasOwnProperty('id')){
+                  alert('Error al subir el archivo, no tiene un formato válido.');
+                  return false;
+                  break; // Detener el bucle
+                }
+                dataNormal.push(this.csvData[i]["id"]);
+              }
+
+              this.usuarios_traidos_del_csv = this.dividirArray(dataNormal);
+              var totalUsuarios = 0;
+              for(var i in this.usuarios_traidos_del_csv){
+                const usuarios = this.usuarios_traidos_del_csv[i];
+                totalUsuarios+= usuarios.length;
+
+                this.files_csv_mensaje = `${totalUsuarios}/${dataNormal.length}`;
+
+                var respUpdate = await this.handleUpdateUserCSV(i, usuarios);
+                if (!respUpdate) {
+                  alert('Error al actualizar. Porfavor subir de nuevo el archivo.');
+                  break; // Detener el bucle
+                }
+              }
+
+              this.files_loading = false;
+              this.files_csv = [];
+              this.obtenerDetalles();
+            },
+          });
+        } else {
+          alert('Por favor, selecciona un archivo CSV.');
+        }
+      }
+    },
   },
 };
 </script>
 
+<style>
+.rotate {
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+</style>
