@@ -86,14 +86,14 @@
                       <VCol cols="12" sm="3" md="12" lg="3" order="1" order-lg="2" class="member-pricing-bg text-center">
                         <div class="membership-pricing d-flex flex-column py-14">
                             <VCardTitle style="text-align: left;">Subir CSV:</VCardTitle>
-                            <div style="width:100%;text-align: left;">
+                            <div style="width:100%;">
                               <VFileInput
                                 v-model="files_csv"
                                 :loading="files_loading"
                                 :disabled="files_loading"
                                 accept=".csv"
                                 placeholder="Subir tu archivo CSV de usuarios"
-                                label="Subir tu CSV"
+                                label="Subir tu archivo CSV de usuarios"
                                 prepend-icon="tabler-paperclip"
                                 @change="handleFileChange"
                               >
@@ -114,8 +114,9 @@
                                   </template>
                                 </template>
                               </VFileInput>
+                              <small class="py-2" style="font-size:10px;color:#000;text-align: right;width: 100%;display: block;">Máximo de usuarios permitidos 30 mil.</small>
                               <p v-if="files_loading">
-                                <small style="color:#000">
+                                <small style="color:#000;text-align: left;width: 100%">
                                   Subiendo usuarios, {{files_csv_mensaje}} <v-icon x-large class="rotate">
                                                       mdi-loading
                                                     </v-icon> 
@@ -352,12 +353,16 @@ computed: {
               }
 
               this.usuarios_traidos_del_csv = this.dividirArray(dataNormal);
+              if(dataNormal.length > 30000){
+                alert('Error al subir el archivo, la cantidad de usuarios no debe pasar de 30 mil.');
+                return false;
+              }
               var totalUsuarios = 0;
               for(var i in this.usuarios_traidos_del_csv){
                 const usuarios = this.usuarios_traidos_del_csv[i];
                 totalUsuarios+= usuarios.length;
 
-                this.files_csv_mensaje = `${totalUsuarios}/${dataNormal.length}`;
+                this.files_csv_mensaje = `${totalUsuarios} de ${dataNormal.length}`;
 
                 var respUpdate = await this.handleUpdateUserCSV(i, usuarios);
                 if (!respUpdate) {
