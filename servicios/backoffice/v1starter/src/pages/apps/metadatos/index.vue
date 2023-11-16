@@ -126,7 +126,9 @@ async function getMetadatos(fechai = '', fechaf = '') {
       break;
     }
 
-    metadatosFetch = mergeAndSum(metadatosFetch, data.data);
+    const listadoDepurado = data.data.filter(item => item.vocname !== "ecv_author" || item._id == "Redacción");
+
+    metadatosFetch = mergeAndSum(metadatosFetch, listadoDepurado);
 
     metaRaw.value = await sortByVariable(Object.values(metadatosFetch), "navegaciones", "desc");
     metadatos.value = await sortByVariable(Object.values(metadatosFetch), "navegaciones", "desc");
