@@ -60,34 +60,42 @@ function mergeAndSum(obj1, obj2) {
   return result;
 }
 
-async function fetchData() {
+async function fetchData(tipoSlect = "Hoy") {
   try {
     var metadatosFetch = [];
     let skip = 1;
     let batchSize = 700;
     isLoading.value = false;
-    while (true) {
 
-      const response = await fetch(`https://servicio-de-actividad.vercel.app/paginas/vistas/v2/all?${ new URLSearchParams({ 
-        fechai: (fecha.value.i).format('MM-DD-YYYY'), 
-        fechaf: (fecha.value.f).format('MM-DD-YYYY'),
-        limit: batchSize,
-        page: skip
-      })}`);
-      const data = await response.json();
-      // if (true) {
-      if (data.data.length === 0) {
-        break;
+    if(tipoSlect == "Hoy"){
+      const response = await fetch(`https://api-configuracion.vercel.app/configuracion-optimizacion/masvistos-hoy`);
+        const data = await response.json();
+        metadatosFetch = mergeAndSum(metadatosFetch, data.data);
+        urlCounts.value = Array.from(metadatosFetch.sort((a, b) => b.count - a.count));
+    }else{
+      while (true) {
+        const response = await fetch(`https://servicio-de-actividad.vercel.app/paginas/vistas/v2/all?${ new URLSearchParams({ 
+          fechai: (fecha.value.i).format('MM-DD-YYYY'), 
+          fechaf: (fecha.value.f).format('MM-DD-YYYY'),
+          limit: batchSize,
+          page: skip
+        })}`);
+
+        const data = await response.json();
+        // if (true) {
+        if (data.data.length === 0) {
+          break;
+        }
+        // console.log("Nombre: ",skip, metadatosFetch)
+        metadatosFetch = mergeAndSum(metadatosFetch, data.data);
+        urlCounts.value = Array.from(metadatosFetch.sort((a, b) => b.count - a.count));
+        // urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
+        skip += 1;
       }
-      // console.log("Nombre: ",skip, metadatosFetch)
-      metadatosFetch = mergeAndSum(metadatosFetch, data.data);
-      urlCounts.value = Array.from(metadatosFetch.sort((a, b) => b.count - a.count));
-      // urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
-      skip += 1;
     }
-
-    
     // urlCounts.value.sort((a, b) => b.count - a.count); // Ordenar los datos
+    loadingData.value = false;
+
   } catch (error) {
     console.error(error);
     loadingData.value = false;
@@ -147,7 +155,7 @@ watch(async () => selectedfechaIniFin.value, async () => {
   }
 
   loadingData.value = true;
-  await fetchData();
+  await fetchData(selectedfechaIniFin.value);
   loadingData.value = false;
 });
 
