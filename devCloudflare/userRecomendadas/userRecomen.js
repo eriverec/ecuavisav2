@@ -599,3 +599,8 @@ function recomendadasIntereses(){
 //     recomendadasIntereses();
 //   }
 // });
+
+
+setTimeout(() => {
+  recomendadasNavegacion();
+}, 300);
