@@ -305,6 +305,9 @@ const entries = ref([])
     padding: 0px;
 }
 
+#realtime .v-card-item { 
+ padding: 1px;
+}
 .botonescurrentPage {
     padding: 20px;
 }
@@ -382,7 +385,7 @@ const entries = ref([])
       </VCol>
 
       <!-- Columna de Realtime -->
-      <VCol class="" id="navegacion" cols="12" sm="12"> 
+      <VCol class="" id="realtime" cols="12" sm="12"> 
 
         <VCardItem class="header_card_item">
         <div class="d-flex">
@@ -426,7 +429,7 @@ const entries = ref([])
         </VListItemSubtitle>
 
         <template #append>
-          <VBtn size="small" @click="goToLink(entry.visits)">
+          <VBtn size="small" @click="goToLink(entry.url)">
             Ir a link
           </VBtn>
         </template>
