@@ -91,8 +91,11 @@ watch(async () => selectedfechaIniFin.value, async () => {
 });
 
 const sortedCitiesByLength = computed(() => {
-  return sortedCities.value.slice().sort((a, b) => b.data.length - a.data.length);
+  var listaTemp = sortedCities.value = sortedCities.value.slice().sort((a, b) => b.data.length - a.data.length);
+
+  return listaTemp.slice(0, 25);
 });
+
 </script>
 
 <template>
