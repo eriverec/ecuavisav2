@@ -161,6 +161,15 @@ export const getTranscursoDeFechas = (fechai, fechaf, pagina, pagina_next = null
 
         if(pagina_next){
           if(pagina_next.title.includes(pagina.title)){
+            if(horasTemp > 8){
+              return  {
+                tiempoTranscurrido: `El usuario recargó la página`,
+                fechai:fechaf,
+                fechaf:fechai,
+                tipo: ""
+              }
+            }
+
             return  {
               tiempoTranscurrido: `El usuario recargó la página luego de ${horasTemp} ${horasTemp > 1 ? `horas`:`hora`}`,
               fechai:fechaf,
