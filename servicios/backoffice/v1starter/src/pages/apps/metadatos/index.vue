@@ -126,7 +126,7 @@ async function getMetadatos(fechai = '', fechaf = '') {
       break;
     }
 
-    const listadoDepurado = data.data.filter(item => item.vocname !== "ecv_author" || item._id == "Redacción");
+    const listadoDepurado = data.data.filter(item => item.vocname !== "ecv_author" && item._id != "Abdón rodríguez" && item._id != "Verónica yépez" && item._id != "David muñoz" && item._id != "Gisella rojas" && item._id != "María del cisne guamán");
 
     metadatosFetch = mergeAndSum(metadatosFetch, listadoDepurado);
 
