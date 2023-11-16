@@ -126,8 +126,10 @@ async function getMetadatos(fechai = '', fechaf = '') {
       break;
     }
 
-    const listadoDepurado = data.data.filter(item => item.vocname !== "ecv_author" && item._id != "Abdón rodríguez" && item._id != "Verónica yépez" && item._id != "David muñoz" && item._id != "Gisella rojas" && item._id != "María del cisne guamán");
-
+    const listadoDepurado = data.data.filter(item => (
+        item.vocname !== "ecv_author" && 
+        item.vocname != "usuarios_ecuavisa"
+      ));
     metadatosFetch = mergeAndSum(metadatosFetch, listadoDepurado);
 
     metaRaw.value = await sortByVariable(Object.values(metadatosFetch), "navegaciones", "desc");
@@ -135,6 +137,7 @@ async function getMetadatos(fechai = '', fechaf = '') {
     // metadatosFetch.push(...data.data);
     skip += 1;
   }
+    console.log(metadatos.value)
 
 
   // isLoading.value = false;
