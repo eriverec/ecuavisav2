@@ -5,6 +5,10 @@
   opacity: 0 !important;
 }
 
+.htmlRecomen{
+  display: none;
+}
+
 .pud_desktop {
   height: auto;
 }
