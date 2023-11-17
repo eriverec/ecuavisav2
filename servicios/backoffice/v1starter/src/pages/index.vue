@@ -310,11 +310,18 @@ const entries = ref([])
     padding: 0px;
 }
 
+.botonescurrentPage {
+    padding: 20px;
+}
+
+
 #realtime .v-card-item { 
  padding: 1px;
 }
-.botonescurrentPage {
-    padding: 20px;
+
+
+#realtime .v-list-item-title { 
+ font-size: 13px;
 }
 
 
@@ -389,16 +396,19 @@ const entries = ref([])
       </VCol>
 
       <!-- Columna de Realtime -->
-      <VCol class="d-flex" id="realtime" cols="12" sm="12"> 
+      <VCol class="d-flex" id="realtime" cols="12" sm="6"> 
 
         <VCard class="px-4 py-4 v-col-12">
           <VCardItem class="header_card_item pb-4">
-            <div class="d-flex">
+            <div class="d-flex pr-5" style="justify-content: space-between;">
               <div class="descripcion" cols="12" sm="6">
-                <VCardTitle >Páginas más vistas del sitio en tiempo real</VCardTitle>
-                <VCardSubtitle cols="12">Tiempo promedio de actualización 4 segundos, con un muestreo de 50 visitas </VCardSubtitle>
+                <VCardTitle >Visitas del sitio en tiempo real</VCardTitle>
+                <VCardSubtitle cols="12">Tiempo promedio de actualización <br>4 segundos, con un muestreo de 50 visitas </VCardSubtitle>
               </div>
-              <VSwitch class="mt-n4" v-model="realtime" @click="toggleRealtime"></VSwitch>
+              <div class="">
+                <VSwitch  class="mt-n4 pt-5" v-model="realtime" @click="toggleRealtime"></VSwitch>
+              </div>
+              
             </div>
           </VCardItem>
           <VCardText class="px-0" v-if="isListVisible.valueOf">
@@ -424,7 +434,11 @@ const entries = ref([])
                     </VListItemSubtitle>
 
                     <template #append>
-                      <VBtn size="small" @click="goToLink(entry.url)"> Visitar Link </VBtn>
+                      <VBtn size="small" @click="goToLink(entry.url)">
+                        <VIcon
+                    
+                        icon="mdi-link-variant"
+                      /> </VBtn>
                     </template>
                   </VListItem>
                   <VDivider v-if="index !== entries.length - 1" />
@@ -434,6 +448,59 @@ const entries = ref([])
         </VCard> 
       </VCol>
 
+      <!--Columna de Registros de muestreo-->
+
+      <VCol class="d-flex" id="realtime" cols="12" sm="6"> 
+
+<VCard class="px-4 py-4 v-col-12">
+  <VCardItem class="header_card_item pb-4">
+    <div class="d-flex pr-5" style="justify-content: space-between;">
+      <div class="descripcion" cols="12" sm="6">
+        <VCardTitle >Registros en tiempo real</VCardTitle>
+        <VCardSubtitle cols="12">Tiempo promedio de actualización: <br>xx segundos, con un muestreo de xx visitas </VCardSubtitle>
+      </div>
+      <div class="">
+        <VSwitch  class="mt-n4 pt-5" v-model="realtime" @click="toggleRealtime"></VSwitch>
+      </div>
+      
+    </div>
+  </VCardItem>
+  <VCardText class="px-0" v-if="isListVisible.valueOf">
+    <VList lines="two" border >
+      <template v-for="(entry, index) in entries" :key="entry.title">
+
+          <VListItem>
+            <VListItemTitle>
+              {{ entry.title }}
+            </VListItemTitle>
+            <VListItemSubtitle class="mt-1">
+              <!-- <VBadge
+                dot
+                location="start center"
+                offset-x="2"
+                :color="resolveStatusColor[user.status]"
+                class="me-3"
+              >
+                <span class="ms-4">{{ user.status }}</span>
+              </VBadge> -->
+
+              <span class="text-xs">Visitas: {{ entry.visits }}</span>
+            </VListItemSubtitle>
+
+            <template #append>
+              <VBtn size="small" @click="goToLink(entry.url)">
+                <VIcon
+            
+                icon="mdi-link-variant"
+              /> </VBtn>
+            </template>
+          </VListItem>
+          <VDivider v-if="index !== entries.length - 1" />
+        </template>
+    </VList>
+  </VCardText>
+</VCard> 
+</VCol>
       <!-- <VCol class="d-flex" cols="12" sm="6">
         <div>
         Realtime
