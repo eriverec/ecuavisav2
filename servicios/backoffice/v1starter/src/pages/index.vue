@@ -391,7 +391,7 @@ const entries = ref([])
       <!-- Columna de Realtime -->
       <VCol class="d-flex" id="realtime" cols="12" sm="12"> 
 
-        <VCard cols="12" class="px-4 py-4">
+        <VCard class="px-4 py-4 v-col-12">
           <VCardItem class="header_card_item pb-4">
             <div class="d-flex">
               <div class="descripcion" cols="12" sm="6">
