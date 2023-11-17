@@ -67,8 +67,21 @@ async function fetchData(tipoSlect = "Hoy") {
     let batchSize = 700;
     isLoading.value = false;
 
-    if(tipoSlect == "Hoy"){
-      const response = await fetch(`https://api-configuracion.vercel.app/configuracion-optimizacion/masvistos-hoy`);
+    if(tipoSlect == "Hoy" || tipoSlect== "Ayer" || tipoSlect== "Hace una semana"){
+      var tipoConsulta = "";
+      if(tipoSlect == "Hoy"){
+        tipoConsulta = "hoy";
+      }
+
+      if(tipoSlect == "Ayer"){
+        tipoConsulta = "ayer";
+      }
+
+      if(tipoSlect == "Hace una semana"){
+        tipoConsulta = "hace-una-semana";
+      }
+
+      const response = await fetch(`https://api-configuracion.vercel.app/configuracion-optimizacion/masvistos-${tipoConsulta}`);
         const data = await response.json();
         metadatosFetch = mergeAndSum(metadatosFetch, data.data);
         urlCounts.value = Array.from(metadatosFetch.sort((a, b) => b.count - a.count));
@@ -163,7 +176,7 @@ watch(async () => selectedfechaIniFin.value, async () => {
 
 <template>
   <VRow>
-    <VCol lg="12" cols="12" sm="6">
+    <VCol lg="12" cols="12" sm="12">
       
       <VCard>
         <VCardItem class="header_card_item">
