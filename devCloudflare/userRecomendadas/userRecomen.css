@@ -1,5 +1,10 @@
 /*general*/
 
+.htmlRecomen {
+  margin-top: 50px;
+}
+
+
 .htmlRecomen .ring, 
 .htmlRecomenIntereses .ring {
   --uib-size: 40px;
@@ -493,11 +498,11 @@
   height: 12px !important;
 }
 
-@media (max-width: 767px) {
+/* @media (max-width: 767px) {
   .swiper-backface-hidden{
     padding-right: 1rem;
     padding-left: 1rem;
   }
-}
+} */
 
 /* FIN - ESTILO SWIPER */

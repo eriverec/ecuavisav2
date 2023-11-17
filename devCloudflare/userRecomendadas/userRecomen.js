@@ -244,7 +244,7 @@ function recomendadasNavegacion(){
                           } else {
                             swiperReco();
                           }
-                        }, 100);
+                        }, 50);
                       }
     
                       $(document).ready(function () {

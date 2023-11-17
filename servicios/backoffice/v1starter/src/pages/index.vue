@@ -230,7 +230,11 @@ const entries = ref([])
       const data = await response.json()
       entries.value = data
     }
-
+    const resetEntries = async () => {
+      const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/reset.php')
+      // const data = await response.json()
+      console.log("se reseteó el módulo correctamente")
+    }
     // const toggleRealtime = () => {
     //   realtime.value = !realtime.value
     //   if (realtime.value) {
@@ -245,8 +249,9 @@ const entries = ref([])
             isListVisible.value = !isListVisible.value; // nuevo
             if (realtime.value) {
               fetchEntries(); // nuevo
-              intervalId = setInterval(fetchEntries, 5000);
+              intervalId = setInterval(fetchEntries, 3500);
             } else {
+              resetEntries();
               clearInterval(intervalId);
             }
     };
@@ -372,12 +377,11 @@ const entries = ref([])
     </VRow>
 
     <VRow id="dash">
-      <!-- Columna de Navegación -->
+      <!-- Columna de Navegación & Realtimee -->
       <VCol class="d-flex" id="navegacion" cols="12" sm="6">
         <UserTabNavegacion />
         
       </VCol>
-       
 
       <!-- Columna de Ubicaciones -->
       <VCol class="d-flex" cols="12" sm="6">
@@ -385,60 +389,50 @@ const entries = ref([])
       </VCol>
 
       <!-- Columna de Realtime -->
-      <VCol class="" id="realtime" cols="12" sm="12"> 
+      <VCol class="d-flex" id="realtime" cols="12" sm="12"> 
 
-        <VCardItem class="header_card_item">
-        <div class="d-flex">
-            <div class="descripcion" cols="12" sm="6">
-              <VCardTitle>Realtime páginas visitadas</VCardTitle>
-            
+        <VCard class="px-4 py-4 v-col-12">
+          <VCardItem class="header_card_item pb-4">
+            <div class="d-flex">
+              <div class="descripcion" cols="12" sm="6">
+                <VCardTitle >Páginas más vistas del sitio en tiempo real</VCardTitle>
+                <VCardSubtitle cols="12">Tiempo promedio de actualización 4 segundos, con un muestreo de 50 visitas </VCardSubtitle>
+              </div>
+              <VSwitch class="mt-n4" v-model="realtime" @click="toggleRealtime"></VSwitch>
             </div>
-            <div cols="12" sm="6" class="switch">
-             
-              <VSwitch v-model="realtime" @click="toggleRealtime">Desactivar Realtime</VSwitch>
-            </div>
-          </div>
-        </VCardItem>
+          </VCardItem>
+          <VCardText class="px-0" v-if="isListVisible.valueOf">
+            <VList lines="two" border >
+              <template v-for="(entry, index) in entries" :key="entry.title">
 
-          
+                  <VListItem>
+                    <VListItemTitle>
+                      {{ entry.title }}
+                    </VListItemTitle>
+                    <VListItemSubtitle class="mt-1">
+                      <!-- <VBadge
+                        dot
+                        location="start center"
+                        offset-x="2"
+                        :color="resolveStatusColor[user.status]"
+                        class="me-3"
+                      >
+                        <span class="ms-4">{{ user.status }}</span>
+                      </VBadge> -->
 
-  <VList
-  v-if="isListVisible.valueOf"
-  lines="two"
-  border
-  >
-  <template v-for="(entry, index) in entries" :key="entry.title">
+                      <span class="text-xs">Visitas: {{ entry.visits }}</span>
+                    </VListItemSubtitle>
 
-      <VListItem>
-        
-        <VListItemTitle>
-          {{ entry.title }}
-        </VListItemTitle>
-        <VListItemSubtitle class="mt-1">
-          <!-- <VBadge
-            dot
-            location="start center"
-            offset-x="2"
-            :color="resolveStatusColor[user.status]"
-            class="me-3"
-          >
-            <span class="ms-4">{{ user.status }}</span>
-          </VBadge> -->
-
-          <span class="text-xs">Número de visitas: {{ entry.visits }}</span>
-        </VListItemSubtitle>
-
-        <template #append>
-          <VBtn size="small" @click="goToLink(entry.url)">
-            Ir a link
-          </VBtn>
-        </template>
-      </VListItem>
-      <VDivider v-if="index !== entries.length - 1" />
-    </template>
-  </VList>
-      
-    </VCol>
+                    <template #append>
+                      <VBtn size="small" @click="goToLink(entry.url)"> Visitar Link </VBtn>
+                    </template>
+                  </VListItem>
+                  <VDivider v-if="index !== entries.length - 1" />
+                </template>
+            </VList>
+          </VCardText>
+        </VCard> 
+      </VCol>
 
       <!-- <VCol class="d-flex" cols="12" sm="6">
         <div>
