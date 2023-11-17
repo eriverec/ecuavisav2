@@ -238,13 +238,13 @@ function recomendadasNavegacion(){
                       }
     
                       function sGoHReco() {
-                        // setTimeout(function () {
+                        setTimeout(function () {
                           if (typeof Swiper === "undefined") {
                             sGoHReco();
                           } else {
                             swiperReco();
                           }
-                        // }, 100);
+                        }, 50);
                       }
     
                       $(document).ready(function () {
