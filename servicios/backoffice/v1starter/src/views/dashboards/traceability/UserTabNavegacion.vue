@@ -67,7 +67,7 @@ async function fetchData(tipoSlect = "Hoy") {
     let batchSize = 700;
     isLoading.value = false;
 
-    if(tipoSlect == "Hoy" || tipoSlect== "Ayer" || tipoSlect== "Hace una semana"){
+    if(tipoSlect == "Hoy" || tipoSlect== "Ayer" || tipoSlect== "Hace una semana" || tipoSlect== "15 días atrás"){
       var tipoConsulta = "";
       if(tipoSlect == "Hoy"){
         tipoConsulta = "hoy";
@@ -79,6 +79,10 @@ async function fetchData(tipoSlect = "Hoy") {
 
       if(tipoSlect == "Hace una semana"){
         tipoConsulta = "hace-una-semana";
+      }
+
+      if(tipoSlect == "15 días atrás"){
+        tipoConsulta = "hace-15-dias";
       }
 
       const response = await fetch(`https://api-configuracion.vercel.app/configuracion-optimizacion/masvistos-${tipoConsulta}`);
