@@ -1,7 +1,7 @@
 function reveal() {
   var reveals = document.querySelectorAll(".bloque_list_finano .noticias article");
 
-  for (var i = 0; i < reveals.length; i++) {
+  for (var i = 2; i < reveals.length; i++) {
     var windowHeight = window.innerHeight;
     var elementTop = reveals[i].getBoundingClientRect().top;
     var elementVisible = 150;
