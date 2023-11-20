@@ -1,3 +1,8 @@
+// Agregar la clase "active" a los dos primeros elementos
+var reveals = document.querySelectorAll(".bloque_list_finano .noticias article");
+reveals[0].classList.add("active");
+reveals[1].classList.add("active");
+
 function reveal() {
   var reveals = document.querySelectorAll(".bloque_list_finano .noticias article");
 
