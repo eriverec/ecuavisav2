@@ -1,11 +1,30 @@
 /**/
 
+@import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+
 @font-face {
   font-family: Newake;
   src: url('https://assets.website-files.com/61533d613dcc08110a994088/6246f0f60f40b03956489f86_Newake-Font-Regular.ttf') format('truetype'), url('https://assets.website-files.com/61533d613dcc08110a994088/6246f04eb2a60ea384bbad96_Newake-Font-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap
+}
+
+:root {
+  --dark-slate-blue: #6b5980;
+  --thistle: #cfbdea;
+  --pale-goldenrod: #fef2b6;
+  --black: #1d1d1d;
+  --dark-green: #2c5b33;
+  --black-2: #1b1b1b;
+  --thistle-2: #d2c0e4;
+  --lime-green: #60d070;
+  --plum: #a18db4;
+}
+
+body{
+  font-family: 'Archivo', sans-serif;
 }
 
 .header_portada {
@@ -21,6 +40,7 @@
   text-transform: uppercase;
   font-family: Newake, sans-serif;
   align-self: flex-start;
+  color: #fff;
 }
 
 .header_portada .hp_2 {
@@ -31,6 +51,7 @@
   text-transform: uppercase;
   font-family: Newake, sans-serif;
   align-self: flex-end;
+  color: #fff;
 }
 
 @keyframes slideInLeft {
@@ -85,20 +106,19 @@
 
 }
 
-.bloque_list_finano .noticias article:hover .subheadline {
+.bloque_list_finano .noticias article:hover .subheadline h3 {
   opacity: 1;
   transform: translate3d(1rem, 1rem, 0) scale3d(1, 1, 1) rotateX(0deg) rotateY(0deg) rotateZ(0deg) skew(0deg, 0deg);
   opacity: 1;
 
 }
 
-.bloque_list_finano .noticias article .subheadline {
+.bloque_list_finano .noticias article .subheadline h3 {
   opacity: 0;
   z-index: 5;
   width: 80%;
   background-color: #fff;
   padding: 1.5rem;
-  font-family: Inter, sans-serif;
   font-size: 1.25rem;
   position: absolute;
   top: -1%;
@@ -140,41 +160,72 @@
   min-height: 90vmin;
   background-color: #391818;
   background-image: radial-gradient(circle farthest-corner at 50% 50%, #6b5980, #1d1d1d);
+  padding-bottom: 25px;
 }
 
-.home-subhead{
+.home-subhead {
   max-width: 40%;
-    color: #d2c0e4;
-    letter-spacing: 1px;
-    text-transform: uppercase;
-    margin-top: 0;
-    margin-bottom: 0;
-    font-size: 2rem;
-    font-weight: 400;
-    line-height: 1.2;
+  color: #d2c0e4;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  margin-top: 0;
+  margin-bottom: 0;
+  font-size: 2rem;
+  font-weight: 400;
+  line-height: 1.2;
 }
 
-.home-subfooter{
+.home-subfooter {
   max-width: 48rem;
-    color: #fff;
-    text-align: left;
-    text-indent: 7rem;
-    text-transform: uppercase;
-    flex-direction: column;
-    align-items: flex-end;
-    margin-left: auto;
-    font-family: Inter,sans-serif;
-    font-size: 1.25rem;
-    font-weight: 400;
-    display: flex;
+  color: #fff;
+  text-align: left;
+  text-indent: 7rem;
+  text-transform: uppercase;
+  flex-direction: column;
+  align-items: flex-end;
+  margin-left: auto;
+  font-size: 1.25rem;
+  font-weight: 400;
+  display: flex;
 }
 
 .fda_cabecera {
-  border: 1px solid var(--thistle-2);
+  border: 1px solid #d2c0e4;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
   display: flex;
+}
+
+.header_fda {
+  padding-top: 25px;
+  padding-bottom: 25px;
+}
+
+.fda_cabecera a:nth-child(1) {
+  width: 3rem;
+  height: 3rem;
+  color: #d2c0e4;
+  background-color: transparent;
+  justify-content: center;
+  align-items: center;
+  transition: all .2s;
+  display: flex;
+  border-right: 1px solid #d2c0e4;
+}
+
+.fda_cabecera a:nth-child(2) {}
+
+.fda_cabecera a:nth-child(3) {
+  width: 3rem;
+  height: 3rem;
+  color: #d2c0e4;
+  background-color: transparent;
+  justify-content: center;
+  align-items: center;
+  transition: all .2s;
+  display: flex;
+  border-left: 1px solid #d2c0e4;
 }
 
 
@@ -183,12 +234,33 @@
   .bloque_list_finano .noticias {
     grid-column-gap: 5rem;
   }
+
+  .header_portada .hp_1,
+  .header_portada .hp_2 {
+    font-size: 7rem;
+  }
+
+  #head-001 {
+    min-height: auto;
+  }
+
+
 }
 
 
 @media screen and (max-width: 767px) {
   .bloque_list_finano .noticias {
     grid-column-gap: 3rem;
+  }
+
+  .header_portada .hp_1,
+  .header_portada .hp_2 {
+    font-size: 4rem;
+  }
+
+  .home-subhead,
+  .home-subfooter {
+    font-size: 1rem;
   }
 }
 
