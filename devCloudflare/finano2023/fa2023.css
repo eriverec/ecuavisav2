@@ -8,22 +8,29 @@
   font-display: swap
 }
 
+.header_portada {
+  display: flex;
+  flex-direction: column;
+}
+
 .header_portada .hp_1 {
   letter-spacing: 2px;
-  font-size: 17rem;
+  font-size: 10rem;
   font-weight: 400;
   line-height: 1;
   text-transform: uppercase;
   font-family: Newake, sans-serif;
+  align-self: flex-start;
 }
 
 .header_portada .hp_2 {
   letter-spacing: 2px;
-  font-size: 17rem;
+  font-size: 10rem;
   font-weight: 400;
   line-height: 1;
   text-transform: uppercase;
   font-family: Newake, sans-serif;
+  align-self: flex-end;
 }
 
 @keyframes slideInLeft {
@@ -125,6 +132,51 @@
   transform: translateY(0);
   opacity: 1;
 }
+
+
+/*cabecera*/
+
+#head-001 {
+  min-height: 90vmin;
+  background-color: #391818;
+  background-image: radial-gradient(circle farthest-corner at 50% 50%, #6b5980, #1d1d1d);
+}
+
+.home-subhead{
+  max-width: 40%;
+    color: #d2c0e4;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 2rem;
+    font-weight: 400;
+    line-height: 1.2;
+}
+
+.home-subfooter{
+  max-width: 48rem;
+    color: #fff;
+    text-align: left;
+    text-indent: 7rem;
+    text-transform: uppercase;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-left: auto;
+    font-family: Inter,sans-serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    display: flex;
+}
+
+.fda_cabecera {
+  border: 1px solid var(--thistle-2);
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  display: flex;
+}
+
 
 
 @media screen and (max-width: 991px) {
