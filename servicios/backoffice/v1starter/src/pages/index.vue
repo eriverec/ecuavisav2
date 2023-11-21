@@ -46,6 +46,38 @@ const isLoading = ref(true);
 
 // 👉 Fetching users
 
+const horaVariable1 = '15:16:34';
+const horaAct = moment().format('HH:mm:ss'); // Hora actual
+const resultadoResta = restarHoras(horaVariable1, horaAct);
+// Función para restar horas
+function restarHoras(hora1, hora2) {
+  const formato = 'HH:mm:ss';
+  const diff = moment(hora2, formato).diff(moment(hora1, formato)); 
+  const duracion = moment.utc(diff);
+  let resultado = '';
+
+  const horas = duracion.hours();
+  if (horas > 0) {
+    resultado += `${horas} ${horas === 1 ? 'hora' : 'horas'}`;
+  }
+
+  const minutos = duracion.minutes();
+  if (minutos > 0 && horas > 0) {
+    // resultado += ` y ${minutos} ${minutos === 1 ? 'minuto' : 'minutos'}`;
+    resultado += '';
+
+  } else if (minutos > 0) {
+    resultado += `${minutos} ${minutos === 1 ? 'minuto' : 'minutos'}`;
+  }
+
+  if (resultado === '') {
+    resultado = 'menos de un minuto'; // O cualquier otro mensaje que desees
+  }
+
+  // const resultado = moment.utc(diff).format(formato);
+  return resultado.trim();
+}
+
 const countUsers = () => {
   userListStore
     .countUsers()
@@ -235,7 +267,7 @@ const isListVisible = ref(false);
     const fetchRegisters = async () => {
       const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?entries')
       const data = await response.json()
-      registers.value = data
+      registers.value = data;
     }
     
     const resetEntries = async () => {
@@ -488,6 +520,9 @@ const isListVisible = ref(false);
             </VListItemTitle>
             <VListItemSubtitle class="mt-1">
               <span class="text-xs">Id de Usuario: {{ register.userId }}</span>
+              <span class="text-xs"></span>
+              <VChip class="mx-2" color="success">hace {{restarHoras(register.hora, horaAct) }}</VChip>
+
             </VListItemSubtitle>
 
             <template #append>
