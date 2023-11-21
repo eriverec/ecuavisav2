@@ -23,7 +23,7 @@
   --plum: #a18db4;
 }
 
-body{
+body {
   font-family: 'Archivo', sans-serif;
 }
 
@@ -113,6 +113,46 @@ body{
 
 }
 
+#head-001 a,
+#content-002 a{
+  text-decoration: none;
+}
+
+.bloque_list_finano .noticias article:nth-child(2n) {
+  margin-top: 6rem;
+}
+
+.bloque_list_finano .noticias article .byline-fda {
+  
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+  
+  display: flex;
+}
+
+.bloque_list_finano .noticias article .byline-fda a{
+  color: #000;
+  text-transform: uppercase;
+  font-size: .875rem;
+  font-weight: 500;
+}
+
+
+.bloque_list_finano .noticias article .headline h3 {
+  width: 70%;
+  letter-spacing: 1px;
+  text-indent: 3rem;
+  text-transform: uppercase;
+  font-size: 2rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #000;
+  cursor: pointer;
+  font-family: Newake,sans-serif;
+}
+
 .bloque_list_finano .noticias article .subheadline h3 {
   opacity: 0;
   z-index: 5;
@@ -155,6 +195,13 @@ body{
 
 
 /*cabecera*/
+
+#content-002 {
+  background-image: url('https://assets-global.website-files.com/627baf6…/627bb65…_down-margin-black.svg'), linear-gradient(to bottom, var(--thistle), var(--pale-goldenrod));
+  background-position: 50% -33px, 0 0;
+  background-repeat: no-repeat, repeat;
+  background-size: auto, auto;
+}
 
 #head-001 {
   min-height: 90vmin;
