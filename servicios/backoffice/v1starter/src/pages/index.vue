@@ -487,25 +487,12 @@ const isListVisible = ref(false);
               {{ register.title }}
             </VListItemTitle>
             <VListItemSubtitle class="mt-1">
-              <!-- <VBadge
-                dot
-                location="start center"
-                offset-x="2"
-                :color="resolveStatusColor[user.status]"
-                class="me-3"
-              >
-                <span class="ms-4">{{ user.status }}</span>
-              </VBadge> -->
-
-              <span class="text-xs">Visitas: {{ register.userId }}</span>
+              <span class="text-xs">Id de Usuario: {{ register.userId }}</span>
             </VListItemSubtitle>
 
             <template #append>
               <VBtn size="small" @click="goToLink(register.url)">
-                <VIcon
-            
-                icon="mdi-link-variant"
-              /> </VBtn>
+                <VIcon icon="mdi-link-variant" /> </VBtn>
             </template>
           </VListItem>
           <VDivider v-if="index !== register.length - 1" />
