@@ -406,6 +406,9 @@ body {
   .bloque_list_finano .noticias article:nth-child(2n) {
     margin-top: initial;
   }
+  .modal-content{
+    margin: 20px;
+  }
 }
 
 @media screen and (max-width: 479px) {
