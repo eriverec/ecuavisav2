@@ -34,6 +34,7 @@ body {
 .header_portada {
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 
 .header_portada .hp_1 {
