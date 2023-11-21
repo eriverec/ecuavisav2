@@ -35,6 +35,7 @@
   const fechaFin = ref('');
   const ultimosUsuariosVisible = ref(false);
   const ultimasVisitasVisible = ref(false);
+  const ultimasUsuariosLoading = ref(false);
   const titulo = ref('');
   const filtrosVisitas = ref([]);
   const filtroSelected = ref({});
@@ -81,11 +82,28 @@
     }
   }
 
-  async function fetchData(fechai, fechaf) {
+  async function fetchData(fechai, fechaf, tipoSlect= "Hoy") {
     isLoading.value = true;
     const navArray = [];
+
+    var tipoConsulta = "";
+    if(tipoSlect == "Hoy"){
+      tipoConsulta = "hoy";
+    }
+
+    if(tipoSlect == "Ayer"){
+      tipoConsulta = "ayer";
+    }
+
+    if(tipoSlect == "Hace una semana"){
+      tipoConsulta = "hace-una-semana";
+    }
+
+    if(tipoSlect == "15 días atrás"){
+      tipoConsulta = "hace-15-dias";
+    }
     
-    await fetch('https://api-configuracion.vercel.app/configuracion-optimizacion/visitas-hoy')
+    await fetch(`https://api-configuracion.vercel.app/configuracion-optimizacion/visitas-${tipoConsulta}`)
       .then(response => response.json())
       .then(async response => {
         let array = response.data;
@@ -114,6 +132,7 @@
       // urlRaw.value.sort((a, b) => b.count - a.count);
       urlCounts.value = Array.from(navArray);
       urlCounts.value.sort((a, b) => b.count - a.count);
+      urlRaw.value = urlCounts.value;
 
       isLoading.value = false;
 
@@ -291,6 +310,7 @@
   const searchTitle = () => {
     if (searchQuery.value !== '') {
       currentPage.value = 1;
+
       const normalizedsearchQuery = searchQuery.value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
 
       const filtered = urlRaw.value.filter((item) => {
@@ -303,22 +323,28 @@
   };
 
   const resetTitle = () => {
+    currentPage.value = 1;
+    searchQuery.value = '';
+
+    ultimasVisitasVisible.value = false;
+    ultimosUsuariosVisible.value = false;
+
+    urlCounts.value = urlRaw.value;
+
     if (searchQuery.value !== '') {
-      currentPage.value = 1;
-      searchQuery.value = '';
-      ultimasVisitasVisible.value = false;
-      ultimosUsuariosVisible.value = false;
-      urlCounts.value = urlRaw.value;
+
+      
     }
   };
 
   const resetUrl = () => {
+    currentPage.value = 1;
+    searchQueryUrl.value = '';
+    ultimasVisitasVisible.value = false;
+    ultimosUsuariosVisible.value = false;
+    urlCounts.value = urlRaw.value;
     if (searchQueryUrl.value !== '') {
-      currentPage.value = 1;
-      searchQueryUrl.value = '';
-      ultimasVisitasVisible.value = false;
-      ultimosUsuariosVisible.value = false;
-      urlCounts.value = urlRaw.value;
+      
     }
   };
 
@@ -328,6 +354,8 @@
     titleSelected.value = title;
     selectedRow.value = title;
     ultimasVisitasVisible.value = false;
+    ultimosUsuariosVisible.value = true;
+    ultimasUsuariosLoading.value=true;
 
     setTimeout(() => {
       const targetElement = document.getElementById('target'); // ID del elemento al que quieres hacer scroll
@@ -341,7 +369,7 @@
 
     const arrayFiltro = [];
 
-    await fetch('https://servicio-de-actividad.vercel.app/backoffice/visitas/paginas/title/'+title+'?fechaf='+fecha.value.f.format("MM/DD/YYYY")+'&fechai='+fecha.value.i.format("MM/DD/YYYY")+'&page=1&limit=900')
+    await fetch('https://servicio-de-actividad.vercel.app/backoffice/visitas/paginas/title/'+title+'?fechaf='+fecha.value.f.format("MM/DD/YYYY")+'&fechai='+fecha.value.i.format("MM/DD/YYYY")+'&page=1&limit=500')
       .then(response => response.json())
       .then(async response => {
         let array = response.data;
@@ -451,7 +479,8 @@
     //console.log('ultimosUsuarios',ultimosUsuarios.value);
 
     ultimosUsuariosDownload.value = resultado.map(({ first_name, last_name, fecha, hora, cantidad, title, url }) => ({ first_name, last_name, fecha, hora, cantidad, title, url }));
-    ultimosUsuariosVisible.value = true;
+    
+    ultimasUsuariosLoading.value = false;
     titulo.value = title;
   };
 
@@ -483,7 +512,8 @@
 
   const resolveUltimasVisitasUser = async (user = {}) => {
     // first, last
-    console.log(user)
+    // console.log(user)
+
     var first = user.first_name;
     var last = user.last_name;
     selectedRowUser.value = user.userId;
@@ -496,7 +526,7 @@
     userSelected.value = first + ' ' + last;
     let fullNameViene = first + ' ' + last;
 
-    await fetch('https://servicio-de-actividad.vercel.app/backoffice/visitas/paginas/navegacion/'+user.userId+'?fechaf='+fecha.value.f.format("MM/DD/YYYY")+'&fechai='+fecha.value.i.format("MM/DD/YYYY")+'&page=1&limit=900')
+    await fetch('https://servicio-de-actividad.vercel.app/backoffice/visitas/paginas/navegacion/'+user.userId+'?fechaf='+fecha.value.f.format("MM/DD/YYYY")+'&fechai='+fecha.value.i.format("MM/DD/YYYY")+'&page=1&limit=500')
     .then(response => response.json())
     .then(async response => {
       let array = response.data;
@@ -589,11 +619,9 @@
 
     //console.log('Sorted F',arrayFiltro);
     // ultimasVisitas.value = arrayFiltro.slice(0, 10);
-        console.log(arrayFiltro)
+        // console.log(arrayFiltro)
 
     ultimasVisitas.value = agruparPorTitulo(arrayFiltro);
-
-
 
     ultimasVisitasVisible.value = true;
   }
@@ -761,7 +789,7 @@
     fechaIni.value = fechaI;
     fechaFin.value = fechaF;
 
-    await fetchData(fechaI, fechaF);
+    await fetchData(fechaI, fechaF, selectedfechaIniFin.value);
   });
   </script>
     
@@ -942,7 +970,10 @@
                     </thead>
 
                     <tbody>
-                      <tr class="clickable" v-for="user in ultimosUsuarios"
+                      <tr v-if="ultimasUsuariosLoading">
+                        <td colspan="4" style="text-align: center;">Cargando datos...</td>
+                      </tr>
+                      <tr v-else class="clickable" v-for="user in ultimosUsuarios"
                         :class="{ active: user.userId === selectedRowUser }"
                         @click="resolveUltimasVisitasUser(user)">
                         <td class="text-high-emphasis">
@@ -958,7 +989,9 @@
                           {{ user.hora }}
                         </td>
                       </tr>
+                      
                     </tbody>
+
                   </VTable>
                 </VCardItem>
               </VCard>
@@ -973,6 +1006,7 @@
                 </VCardItem>
                 <VCardText>
                   <VTimeline density="compact" align="start" truncate-line="both" class="v-timeline-density-compact">
+
                     <VTimelineItem dot-color="primary" size="x-small" v-for="user, index in ultimasVisitas">
                       <div class="d-flex justify-space-between align-center flex-wrap">
                         <h4 class="text-base font-weight-semibold me-1">
