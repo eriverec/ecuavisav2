@@ -97,7 +97,7 @@ body {
   display: flex;
   grid-row-gap: 30px;
   padding-top: 50px;
-
+  padding-bottom: 100px;
 }
 
 
@@ -244,6 +244,7 @@ body {
   justify-content: space-between;
   align-items: center;
   display: flex;
+  background-color: rgba(27, 27, 27, 0.9);
 }
 
 .header_fda {
@@ -261,6 +262,11 @@ body {
   transition: all .2s;
   display: flex;
   border-right: 1px solid #d2c0e4;
+  background-image: url("https://www.ecuavisa.com/base-portlet/webrsrc/ctxvar/c4dfeea6-9638-4d43-b549-7eca2ab57634.png");
+  background-size: 40px;
+  background-repeat: no-repeat;
+  background-position-y: center;
+  background-position-x: center;
 }
 
 
