@@ -221,7 +221,8 @@ const userListMeta = [
 
 const isListVisible = ref(false);
 
-const entries = ref([])
+    const entries = ref([])
+    const registers = ref([])
     const realtime = ref(false)
     let intervalId = null
 
@@ -230,6 +231,13 @@ const entries = ref([])
       const data = await response.json()
       entries.value = data
     }
+
+    const fetchRegisters = async () => {
+      const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?entries')
+      const data = await response.json()
+      registers.value = data
+    }
+    
     const resetEntries = async () => {
       const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/reset.php')
       // const data = await response.json()
@@ -248,8 +256,13 @@ const entries = ref([])
             realtime.value = !realtime.value;
             isListVisible.value = !isListVisible.value; // nuevo
             if (realtime.value) {
-              fetchEntries(); // nuevo
-              intervalId = setInterval(fetchEntries, 3500);
+              function juntas (){
+                fetchEntries(); // nuevo
+                fetchRegisters(); // nuevo
+              }
+                
+
+              intervalId = setInterval(juntas, 3500);
             } else {
               resetEntries();
               clearInterval(intervalId);
@@ -467,11 +480,11 @@ const entries = ref([])
   </VCardItem>
   <VCardText class="px-0" v-if="isListVisible.valueOf">
     <VList lines="two" border >
-      <template v-for="(entry, index) in entries" :key="entry.title">
+      <template v-for="(register, index) in registers" :key="register.title">
 
           <VListItem>
             <VListItemTitle>
-              {{ entry.title }}
+              {{ register.title }}
             </VListItemTitle>
             <VListItemSubtitle class="mt-1">
               <!-- <VBadge
@@ -484,18 +497,18 @@ const entries = ref([])
                 <span class="ms-4">{{ user.status }}</span>
               </VBadge> -->
 
-              <span class="text-xs">Visitas: {{ entry.visits }}</span>
+              <span class="text-xs">Visitas: {{ register.userId }}</span>
             </VListItemSubtitle>
 
             <template #append>
-              <VBtn size="small" @click="goToLink(entry.url)">
+              <VBtn size="small" @click="goToLink(register.url)">
                 <VIcon
             
                 icon="mdi-link-variant"
               /> </VBtn>
             </template>
           </VListItem>
-          <VDivider v-if="index !== entries.length - 1" />
+          <VDivider v-if="index !== register.length - 1" />
         </template>
     </VList>
   </VCardText>
