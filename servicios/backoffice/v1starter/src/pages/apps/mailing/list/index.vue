@@ -58,7 +58,7 @@ const linkForzadoList = ref([
   {
     "id":"655e5a43de6d5e1206632e25",
     "name":"Boletín diario 5pm",
-    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-diario/forzado.php"
+    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-diario-5pm/forzado.php"
   }
 ]);
 
