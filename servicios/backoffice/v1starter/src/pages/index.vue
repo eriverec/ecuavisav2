@@ -1,5 +1,7 @@
 <script setup>
-
+import VueApexCharts from 'vue3-apexcharts';
+import { hexToRgb } from '@layouts/utils';
+  import { useTheme } from 'vuetify';
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 import UserTabUbicacion from '@/views/dashboards/traceability/UserTabUbicacion.vue';
 // import UserTabDispositivos from '@/views/dashboards/traceability/UserTabDispositivos.vue';
@@ -10,7 +12,7 @@ import esLocale from "moment/locale/es";
 import { onMounted, onUnmounted, ref } from "vue";
 
 const moment = extendMoment(Moment);
-    moment.locale('es', [esLocale]);
+moment.locale('es', [esLocale]);
 
 const userListStore = useUserListStore();
 const totalUsers = ref(0);
@@ -42,6 +44,8 @@ const percentAppFacebook = ref(0);
 const percentAppGoogle = ref(0);
 const percentAppApple = ref(0);
 
+const dataChart = ref([]);
+console.log(dataChart.value);
 const isLoading = ref(true);
 
 // 👉 Fetching users
@@ -52,7 +56,7 @@ const resultadoResta = restarHoras(horaVariable1, horaAct);
 // Función para restar horas
 function restarHoras(hora1, hora2) {
   const formato = 'HH:mm:ss';
-  const diff = moment(hora2, formato).diff(moment(hora1, formato)); 
+  const diff = moment(hora2, formato).diff(moment(hora1, formato));
   const duracion = moment.utc(diff);
   let resultado = '';
 
@@ -92,7 +96,7 @@ const countUsers = () => {
       const pAppG = ref(0);
       const pAppA = ref(0);
 
-      totalUsers.value = (response.data.totalEmail) + (response.data.totalFacebook) + (response.data.totalGoogle)  + (response.data.totalApple);
+      totalUsers.value = (response.data.totalEmail) + (response.data.totalFacebook) + (response.data.totalGoogle) + (response.data.totalApple);
       totalEmail.value = response.data.totalEmail;
       totalFacebook.value = response.data.totalFacebook;
       totalGoogle.value = response.data.totalGoogle;
@@ -104,9 +108,9 @@ const countUsers = () => {
       totalAppFacebook.value = response.data.totalAppFacebook;
       totalAppGoogle.value = response.data.totalAppGoogle;
       totalAppApple.value = response.data.totalAppApple;
-      
+
       let total = totalUsers.value;
-      
+
       let totalApp = totalAppUsers.value;
 
       totalDevicesUser.value = (response.data.totalEmail) + (response.data.totalFacebook) + (response.data.totalGoogle) + (totalApp);
@@ -115,29 +119,29 @@ const countUsers = () => {
       totalDevicesGoogle.value = (response.data.totalGoogle) + (response.data.totalAppGoogle);
       totalDevicesApple.value = (response.data.totalApple) + (response.data.totalAppApple);
 
-      pE.value = (totalEmail.value * 100 ) / total;
+      pE.value = (totalEmail.value * 100) / total;
       percentEmail.value = Math.round((pE.value + Number.EPSILON) * 100) / 100;
 
-      pF.value = (totalFacebook.value * 100 ) / total;
+      pF.value = (totalFacebook.value * 100) / total;
       percentFacebook.value = Math.round((pF.value + Number.EPSILON) * 100) / 100;
 
-      pG.value = (totalGoogle.value * 100 ) / total;
+      pG.value = (totalGoogle.value * 100) / total;
       percentGoogle.value = Math.round((pG.value + Number.EPSILON) * 100) / 100;
 
-      pA.value = (totalApple.value * 100 ) / total;
+      pA.value = (totalApple.value * 100) / total;
       percentApple.value = Math.round((pA.value + Number.EPSILON) * 100) / 100;
 
       //DATOS DE APP
-      pAppE.value = (totalAppEmail.value * 100 ) / totalApp;
+      pAppE.value = (totalAppEmail.value * 100) / totalApp;
       percentAppEmail.value = Math.round((pAppE.value + Number.EPSILON) * 100) / 100;
 
-      pAppF.value = (totalAppFacebook.value * 100 ) / totalApp;
+      pAppF.value = (totalAppFacebook.value * 100) / totalApp;
       percentAppFacebook.value = Math.round((pAppF.value + Number.EPSILON) * 100) / 100;
 
-      pAppG.value = (totalAppGoogle.value * 100 ) / totalApp;
+      pAppG.value = (totalAppGoogle.value * 100) / totalApp;
       percentAppGoogle.value = Math.round((pAppG.value + Number.EPSILON) * 100) / 100;
 
-      pAppA.value = (totalAppApple.value * 100 ) / totalApp;
+      pAppA.value = (totalAppApple.value * 100) / totalApp;
       percentAppApple.value = Math.round((pAppA.value + Number.EPSILON) * 100) / 100;
 
       isLoading.value = false;
@@ -149,27 +153,27 @@ const countUsers = () => {
       console.error(error);
     });
 };
-async function accionBackoffice (){
+async function accionBackoffice() {
   let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
   let userData = JSON.parse(localStorage.getItem('userData'));
-  if(userData.email !== 'admin@demo.com' ){
-  var myHeaders = new Headers();
-				myHeaders.append("Content-Type", "application/json");
-			var log = JSON.stringify({
-            "usuario": userData.email,   
-            "pagina": "dashboard",
-            "fecha": dateNow
-					});
-			var requestOptions = {
-				method: 'POST',
-				headers: myHeaders,
-				body: log,
-				redirect: 'follow'
-			};
-			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
-			.then(response =>{			
-			}).catch(error => console.log('error', error));
-    }
+  if (userData.email !== 'admin@demo.com') {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var log = JSON.stringify({
+      "usuario": userData.email,
+      "pagina": "dashboard",
+      "fecha": dateNow
+    });
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: log,
+      redirect: 'follow'
+    };
+    await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+      .then(response => {
+      }).catch(error => console.log('error', error));
+  }
 }
 
 const route = useRoute()
@@ -181,8 +185,8 @@ userListStore.fetchUser(Number(route.params.id)).then(response => {
 })
 
 const tabs = [
-  
- 
+
+
   {
     icon: 'tabler-activity-heartbeat',
     title: 'Navegación',
@@ -197,16 +201,16 @@ const tabs = [
 // realtime adicionado
 countUsers();
 const userListMeta = [
-{
-  icon: '<svg xmlns="http://www.w3.org/2000/svg" style="width: 1rem; height: 1rem;" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="#7367f0" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4Z"/></svg>',
-  color: "primary",
-  title: "Total de Usuarios",
-  stats: totalUsers ,
-  percentage: null ,
-  percentageApp: null, 
-  subtitle: totalAppUsers,
-  total: totalDevicesUser
-},
+  {
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" style="width: 1rem; height: 1rem;" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><path fill="#7367f0" d="M12 4a4 4 0 0 1 4 4a4 4 0 0 1-4 4a4 4 0 0 1-4-4a4 4 0 0 1 4-4m0 10c4.42 0 8 1.79 8 4v2H4v-2c0-2.21 3.58-4 8-4Z"/></svg>',
+    color: "primary",
+    title: "Total de Usuarios",
+    stats: totalUsers,
+    percentage: null,
+    percentageApp: null,
+    subtitle: totalAppUsers,
+    total: totalDevicesUser
+  },
 
   {
     icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 33.39 14" width="1rem" height="1rem"><g id="Capa_2" data-name="Capa 2"><g id="logo"><path d="M14.19,12.16a1.66,1.66,0,0,0-1.66-1.66H1.66a1.66,1.66,0,0,0,0,3.32H12.53A1.66,1.66,0,0,0,14.19,12.16Z" style="fill:#7367f0"/><path d="M32.52.19a1.68,1.68,0,0,0-2.25.68L25.09,9.14,20.23.77A1.72,1.72,0,0,0,18.77.08H7.82a1.66,1.66,0,0,0,0,3.32h9.53a1,1,0,0,1,.78.36l5.39,9.3a1.71,1.71,0,0,0,.71.75,1.66,1.66,0,0,0,2.25-.68L33.19,2.44A1.67,1.67,0,0,0,32.52.19Z" style="fill:#7367f0"/><path d="M19.25,13.83a1.65,1.65,0,0,0,.79-2.2s-2.38-4-3.24-5.74a1.12,1.12,0,0,0-1-.63H4.48a1.66,1.66,0,0,0,0,3.32H14a.65.65,0,0,1,.58.29C15.41,10.55,17,13,17,13.05A1.65,1.65,0,0,0,19.25,13.83Z" style="fill:#7367f0"/></g></g></svg>',
@@ -214,7 +218,7 @@ const userListMeta = [
     title: "Total con Email",
     stats: totalEmail,
     percentage: percentEmail,
-    percentageApp: percentAppEmail, 
+    percentageApp: percentAppEmail,
     subtitle: totalAppEmail,
     total: totalDevicesEmail
   },
@@ -224,7 +228,7 @@ const userListMeta = [
     title: "Total con Facebook",
     stats: totalFacebook,
     percentage: percentFacebook,
-    percentageApp: percentAppFacebook, 
+    percentageApp: percentAppFacebook,
     subtitle: totalAppFacebook,
     total: totalDevicesFacebook
   },
@@ -234,7 +238,7 @@ const userListMeta = [
     title: "Total con Google",
     stats: totalGoogle,
     percentage: percentGoogle,
-    percentageApp: percentAppGoogle, 
+    percentageApp: percentAppGoogle,
     subtitle: totalAppGoogle,
     total: totalDevicesGoogle
   },
@@ -244,7 +248,7 @@ const userListMeta = [
     title: "Total con Apple",
     stats: totalApple,
     percentage: percentApple,
-    percentageApp: percentAppApple, 
+    percentageApp: percentAppApple,
     subtitle: totalAppApple,
     total: totalDevicesApple
   },
@@ -253,68 +257,155 @@ const userListMeta = [
 
 const isListVisible = ref(false);
 
-    const entries = ref([])
-    const registers = ref([])
-    const realtime = ref(false)
-    let intervalId = null
+const registers = ref([])
+const realtime = ref(false)
+let intervalId = null
+const entries = ref([]);
 
-    const fetchEntries = async () => {
-      const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?grouped')
-      const data = await response.json()
-      entries.value = data
-    }
+const fetchEntries = async () => {
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?grouped')
+  const data = await response.json()
+  entries.value = data;
+  dataChart.value = data.slice(0, 5);
 
-    const fetchRegisters = async () => {
-      const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?entries')
-      const data = await response.json()
-      registers.value = data;
-    }
+  // console.log(entriesGraf.value);
+}
+
+/* */
+ // 👉 Colors variables
+ const colorVariables = themeColors => {
+    const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
+    const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`
+    const themeBorderColor = `rgba(${hexToRgb(String(themeColors.variables['border-color']))},${themeColors.variables['border-opacity']})`
+    const themePrimaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['high-emphasis-opacity']})`
     
-    const resetEntries = async () => {
-      const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/reset.php')
-      // const data = await response.json()
-      console.log("se reseteó el módulo correctamente")
+    return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
+  }
+
+  const vuetifyTheme = useTheme();
+
+  const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value);
+
+const resolveData = computed(() => {
+
+  let dataRaw = Array.from(dataChart.value);
+  const seriesFormat = {
+    name: 'Interacciones de usuarios',
+    data: []
+  };
+
+  const categoriesRaw = [];
+  for (let i in dataRaw) {
+    let num = parseInt(dataRaw[i].visits);
+    seriesFormat.data.push(num);
+    categoriesRaw.push(dataRaw[i].title);
+  }
+
+  const options = {
+    chart: {
+      parentHeightOffset: 0,
+      toolbar: { show: false },
+      height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6) ? 400 : 700
+    },
+    dataLabels: {
+      enabled: true
+    },
+    // colors: ['#ed8936', '#fdd835'],
+    plotOptions: {
+      bar: {
+        borderRadius: 0,
+        barHeight: '40%',
+        horizontal: true,
+        startingShape: 'rounded',
+      },
+    },
+    grid: {
+      borderColor: themeBorderColor,
+      xaxis: {
+        lines: { show: true },
+      },
+      padding: {
+        top: -10,
+      },
+    },
+    yaxis: {
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+    },
+    xaxis: {
+      axisBorder: { show: false },
+      axisTicks: { color: themeBorderColor },
+      categories: categoriesRaw,
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+    },
+    minHeight: 300,
+  }
+
+
+  return { series: [seriesFormat], options: options, intereses: categoriesRaw };
+});
+
+
+
+
+
+
+const fetchRegisters = async () => {
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?entries')
+  const data = await response.json()
+  registers.value = data;
+}
+
+const resetEntries = async () => {
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/reset.php')
+  // const data = await response.json()
+  console.log("se reseteó el módulo correctamente")
+}
+// const toggleRealtime = () => {
+//   realtime.value = !realtime.value
+//   if (realtime.value) {
+//     intervalId = setInterval(fetchEntries, 5000)
+//   } else {
+//     clearInterval(intervalId)
+//   }
+// }
+
+const toggleRealtime = () => {
+  realtime.value = !realtime.value;
+  isListVisible.value = !isListVisible.value; // nuevo
+
+  if (realtime.value) {
+    function juntas() {
+      fetchEntries(); // nuevo
+      fetchRegisters(); // nuevo
+      
     }
-    // const toggleRealtime = () => {
-    //   realtime.value = !realtime.value
-    //   if (realtime.value) {
-    //     intervalId = setInterval(fetchEntries, 5000)
-    //   } else {
-    //     clearInterval(intervalId)
-    //   }
-    // }
-
-    const toggleRealtime = () => {
-            realtime.value = !realtime.value;
-            isListVisible.value = !isListVisible.value; // nuevo
-            if (realtime.value) {
-              function juntas (){
-                fetchEntries(); // nuevo
-                fetchRegisters(); // nuevo
-              }
-                
-
-              intervalId = setInterval(juntas, 3500);
-            } else {
-              resetEntries();
-              clearInterval(intervalId);
-            }
-    };
 
 
-    onMounted(() => {
-      // intervalId = setInterval(fetchEntries, 5000)
-    })
+    intervalId = setInterval(juntas, 3500);
+  } else {
+    resetEntries();
+    clearInterval(intervalId);
+  }
+};
 
-    onUnmounted(() => {
-      clearInterval(intervalId)
-    })
 
-    const goToLink = (link) => {
-        window.open(link, '_blank');
-      };
-        
-    // return { entries, toggleRealtime }
+onMounted(() => {
+  // intervalId = setInterval(fetchEntries, 5000)
+})
+
+onUnmounted(() => {
+  clearInterval(intervalId)
+})
+
+const goToLink = (link) => {
+  window.open(link, '_blank');
+};
+
+// return { entries, toggleRealtime }
 // fin  realtime adicionado
 
 </script>
@@ -326,8 +417,9 @@ const isListVisible = ref(false);
   .tarjeta {
     width: 185px;
   }
+
   .tarjeta svg {
-   display: none;
+    display: none;
   }
 }
 
@@ -335,44 +427,42 @@ const isListVisible = ref(false);
   .tarjeta {
     width: 215px;
   }
- 
+
 }
 
 @media screen and (max-width: 600px) and (min-width: 300px) {
-  
-  #dash
-  .v-card-title {
-        font-size: 18px;
-    }
 
- 
+  #dash .v-card-title {
+    font-size: 18px;
+  }
+
+
 }
 
 
 
-#navegacion
-.v-card-text {
-    padding: 0px;
+#navegacion .v-card-text {
+  padding: 0px;
 }
 
 .botonescurrentPage {
-    padding: 20px;
+  padding: 20px;
 }
 
 
-#realtime .v-card-item { 
- padding: 1px;
+#realtime .v-card-item {
+  padding: 1px;
 }
 
 
-#realtime .v-list-item-title { 
- font-size: 13px;
+#realtime .v-list-item-title {
+  font-size: 13px;
 }
 
 
 .switch {
-    margin-left: 20px;
-    margin-bottom: 5px;
+  margin-left: 20px;
+  margin-bottom: 5px;
 }
 </style>
 
@@ -381,58 +471,55 @@ const isListVisible = ref(false);
 <template>
   <section>
     <VRow>
-      <VCol class="mr-6"
-    
-    v-for="meta in userListMeta"
-    :key="meta.title"
-    cols="12"
-    sm="12"
-    lg="2"
-  >
+      <VCol class="mr-6" v-for="meta in userListMeta" :key="meta.title" cols="12" sm="12" lg="2">
 
-  
-  <VCard class="col-12 col-sm- col-lg-2 tarjeta" >
-<VCardText class="d-flex justify-space-between" style="font-size:11px;">
-<div>
-  <span>{{ meta.title }}</span>
-  <div>
-    <div class="d-flex align-center gap-2 my-1">
-      <svg xmlns="http://www.w3.org/2000/svg" color="#7367F0" width="18" height="18" viewBox="0 0 256 256"><path fill="currentColor" d="M245.11 60.68c-7.65-13.19-27.84-16.16-58.5-8.66A95.93 95.93 0 0 0 32 128a98 98 0 0 0 .78 12.31C5.09 169 5.49 186 10.9 195.32C16 204.16 26.64 208 40.64 208a124.11 124.11 0 0 0 28.79-4A95.93 95.93 0 0 0 224 128a97.08 97.08 0 0 0-.77-12.25c12.5-13 20.82-25.35 23.65-35.92c1.95-7.32 1.36-13.76-1.77-19.15ZM128 48a80.11 80.11 0 0 1 78 62.2c-17.06 16.06-40.15 32.53-62.07 45.13c-27.55 15.81-51.45 25.67-70.51 31.07A79.94 79.94 0 0 1 128 48ZM24.74 187.29c-1.46-2.51-.65-7.24 2.22-13a79.05 79.05 0 0 1 10.29-15.05a96 96 0 0 0 18 31.32c-17.25 2.9-28.01 1.05-30.51-3.27ZM128 208a79.45 79.45 0 0 1-38.56-9.94a370 370 0 0 0 62.43-28.86c21.58-12.39 40.68-25.82 56.07-39.08A80.07 80.07 0 0 1 128 208ZM231.42 75.69c-1.7 6.31-6.19 13.53-12.63 21.13a95.69 95.69 0 0 0-18-31.35c14.21-2.35 27.37-2.17 30.5 3.24c.9 1.57.95 3.92.13 6.98Z"/></svg>
-<!-- Ícono para "Web" -->
-      <label class="text-primary">Web:</label>  {{ meta.stats }}
-      <span class="text-success" :hidden="meta.percentage ? false : true " >({{ meta.percentage }}%) </span>
-    </div>
-    <div class="d-flex align-center gap-2 my-1">
-      <svg xmlns="http://www.w3.org/2000/svg" color="#7367F0" width="18" height="18" viewBox="0 0 24 24"><path fill="currentColor" d="m17.578 4.432l-2-1.05C13.822 2.461 12.944 2 12 2s-1.822.46-3.578 1.382l-.321.169l8.923 5.099l4.016-2.01c-.646-.732-1.688-1.279-3.462-2.21Zm4.17 3.532l-3.998 2V13a.75.75 0 0 1-1.5 0v-2.287l-3.5 1.75v9.441c.718-.179 1.535-.607 2.828-1.286l2-1.05c2.151-1.129 3.227-1.693 3.825-2.708c.597-1.014.597-2.277.597-4.8v-.117c0-1.893 0-3.076-.252-3.978ZM11.25 21.904v-9.44l-8.998-4.5C2 8.866 2 10.05 2 11.941v.117c0 2.525 0 3.788.597 4.802c.598 1.015 1.674 1.58 3.825 2.709l2 1.049c1.293.679 2.11 1.107 2.828 1.286ZM2.96 6.641l9.04 4.52l3.411-1.705l-8.886-5.078l-.103.054c-1.773.93-2.816 1.477-3.462 2.21Z"/></svg>
-<!-- Ícono para "App" -->
-      <label class="text-primary">App:</label> {{ meta.subtitle }} <span class="text-success" :hidden="meta.percentageApp ? false : true " >({{ meta.percentageApp }}%) </span>
-    </div>
-    <div class="d-flex align-center gap-2 my-1">
-      <svg xmlns="http://www.w3.org/2000/svg" color="#7367F0" width="18" height="18" viewBox="0 0 26 26"><path fill="currentColor" d="M12.906-.031a1 1 0 0 0-.125.031A1 1 0 0 0 12 1v1H3a3 3 0 0 0-3 3v13c0 1.656 1.344 3 3 3h9v.375l-5.438 2.719a1.006 1.006 0 0 0 .875 1.812L12 23.625V24a1 1 0 1 0 2 0v-.375l4.563 2.281a1.006 1.006 0 0 0 .875-1.812L14 21.375V21h9c1.656 0 3-1.344 3-3V5a3 3 0 0 0-3-3h-9V1a1 1 0 0 0-1.094-1.031zM2 5h22v13H2V5zm18.875 1a1 1 0 0 0-.594.281L17 9.563L14.719 7.28a1 1 0 0 0-1.594.219l-2.969 5.188l-1.219-3.063a1 1 0 0 0-1.656-.344l-3 3a1.016 1.016 0 1 0 1.439 1.44l1.906-1.906l1.438 3.562a1 1 0 0 0 1.812.125l3.344-5.844l2.062 2.063a1 1 0 0 0 1.438 0l4-4A1 1 0 0 0 20.875 6z"/></svg>
-<!-- Ícono para "Total" -->
-      <label class="text-primary">Total:</label> {{ meta.total }}
-    </div>
-  </div>
-</div>
-<VAvatar
-  rounded
-  variant="tonal"
-  :color="meta.color"
-  v-html="meta.icon"
-   max-width="100%"
-/>
 
-</VCardText>
-</VCard>
+        <VCard class="col-12 col-sm- col-lg-2 tarjeta">
+          <VCardText class="d-flex justify-space-between" style="font-size:11px;">
+            <div>
+              <span>{{ meta.title }}</span>
+              <div>
+                <div class="d-flex align-center gap-2 my-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" color="#7367F0" width="18" height="18" viewBox="0 0 256 256">
+                    <path fill="currentColor"
+                      d="M245.11 60.68c-7.65-13.19-27.84-16.16-58.5-8.66A95.93 95.93 0 0 0 32 128a98 98 0 0 0 .78 12.31C5.09 169 5.49 186 10.9 195.32C16 204.16 26.64 208 40.64 208a124.11 124.11 0 0 0 28.79-4A95.93 95.93 0 0 0 224 128a97.08 97.08 0 0 0-.77-12.25c12.5-13 20.82-25.35 23.65-35.92c1.95-7.32 1.36-13.76-1.77-19.15ZM128 48a80.11 80.11 0 0 1 78 62.2c-17.06 16.06-40.15 32.53-62.07 45.13c-27.55 15.81-51.45 25.67-70.51 31.07A79.94 79.94 0 0 1 128 48ZM24.74 187.29c-1.46-2.51-.65-7.24 2.22-13a79.05 79.05 0 0 1 10.29-15.05a96 96 0 0 0 18 31.32c-17.25 2.9-28.01 1.05-30.51-3.27ZM128 208a79.45 79.45 0 0 1-38.56-9.94a370 370 0 0 0 62.43-28.86c21.58-12.39 40.68-25.82 56.07-39.08A80.07 80.07 0 0 1 128 208ZM231.42 75.69c-1.7 6.31-6.19 13.53-12.63 21.13a95.69 95.69 0 0 0-18-31.35c14.21-2.35 27.37-2.17 30.5 3.24c.9 1.57.95 3.92.13 6.98Z" />
+                  </svg>
+                  <!-- Ícono para "Web" -->
+                  <label class="text-primary">Web:</label> {{ meta.stats }}
+                  <span class="text-success" :hidden="meta.percentage ? false : true">({{ meta.percentage }}%) </span>
+                </div>
+                <div class="d-flex align-center gap-2 my-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" color="#7367F0" width="18" height="18" viewBox="0 0 24 24">
+                    <path fill="currentColor"
+                      d="m17.578 4.432l-2-1.05C13.822 2.461 12.944 2 12 2s-1.822.46-3.578 1.382l-.321.169l8.923 5.099l4.016-2.01c-.646-.732-1.688-1.279-3.462-2.21Zm4.17 3.532l-3.998 2V13a.75.75 0 0 1-1.5 0v-2.287l-3.5 1.75v9.441c.718-.179 1.535-.607 2.828-1.286l2-1.05c2.151-1.129 3.227-1.693 3.825-2.708c.597-1.014.597-2.277.597-4.8v-.117c0-1.893 0-3.076-.252-3.978ZM11.25 21.904v-9.44l-8.998-4.5C2 8.866 2 10.05 2 11.941v.117c0 2.525 0 3.788.597 4.802c.598 1.015 1.674 1.58 3.825 2.709l2 1.049c1.293.679 2.11 1.107 2.828 1.286ZM2.96 6.641l9.04 4.52l3.411-1.705l-8.886-5.078l-.103.054c-1.773.93-2.816 1.477-3.462 2.21Z" />
+                  </svg>
+                  <!-- Ícono para "App" -->
+                  <label class="text-primary">App:</label> {{ meta.subtitle }} <span class="text-success"
+                    :hidden="meta.percentageApp ? false : true">({{ meta.percentageApp }}%) </span>
+                </div>
+                <div class="d-flex align-center gap-2 my-1">
+                  <svg xmlns="http://www.w3.org/2000/svg" color="#7367F0" width="18" height="18" viewBox="0 0 26 26">
+                    <path fill="currentColor"
+                      d="M12.906-.031a1 1 0 0 0-.125.031A1 1 0 0 0 12 1v1H3a3 3 0 0 0-3 3v13c0 1.656 1.344 3 3 3h9v.375l-5.438 2.719a1.006 1.006 0 0 0 .875 1.812L12 23.625V24a1 1 0 1 0 2 0v-.375l4.563 2.281a1.006 1.006 0 0 0 .875-1.812L14 21.375V21h9c1.656 0 3-1.344 3-3V5a3 3 0 0 0-3-3h-9V1a1 1 0 0 0-1.094-1.031zM2 5h22v13H2V5zm18.875 1a1 1 0 0 0-.594.281L17 9.563L14.719 7.28a1 1 0 0 0-1.594.219l-2.969 5.188l-1.219-3.063a1 1 0 0 0-1.656-.344l-3 3a1.016 1.016 0 1 0 1.439 1.44l1.906-1.906l1.438 3.562a1 1 0 0 0 1.812.125l3.344-5.844l2.062 2.063a1 1 0 0 0 1.438 0l4-4A1 1 0 0 0 20.875 6z" />
+                  </svg>
+                  <!-- Ícono para "Total" -->
+                  <label class="text-primary">Total:</label> {{ meta.total }}
+                </div>
+              </div>
+            </div>
+            <VAvatar rounded variant="tonal" :color="meta.color" v-html="meta.icon" max-width="100%" />
 
-  </VCol>
+          </VCardText>
+        </VCard>
+
+      </VCol>
     </VRow>
 
     <VRow id="dash">
       <!-- Columna de Navegación & Realtimee -->
       <VCol class="d-flex" id="navegacion" cols="12" sm="6">
         <UserTabNavegacion />
-        
+
       </VCol>
 
       <!-- Columna de Ubicaciones -->
@@ -441,31 +528,33 @@ const isListVisible = ref(false);
       </VCol>
 
       <!-- Columna de Realtime -->
-      <VCol class="d-flex" id="realtime" cols="12" sm="6"> 
+      <VCol class="d-flex" id="realtime" cols="12" sm="6">
 
         <VCard class="px-4 py-4 v-col-12">
           <VCardItem class="header_card_item pb-4">
             <div class="d-flex pr-5" style="justify-content: space-between;">
               <div class="descripcion" cols="12" sm="6">
-                <VCardTitle >Visitas del sitio en tiempo real</VCardTitle>
-                <VCardSubtitle cols="12">Tiempo promedio de actualización <br>4 segundos, con un muestreo de 50 visitas </VCardSubtitle>
+                <VCardTitle>Visitas del sitio en tiempo real</VCardTitle>
+                <VCardSubtitle cols="12">Tiempo promedio de actualización <br>4 segundos, con un muestreo de 50 visitas
+                </VCardSubtitle>
               </div>
               <div class="">
-                <VSwitch  class="mt-n4 pt-5" v-model="realtime" @click="toggleRealtime"></VSwitch>
+                <VSwitch class="mt-n4 pt-5" v-model="realtime" @click="toggleRealtime"></VSwitch>
               </div>
-              
+
             </div>
           </VCardItem>
           <VCardText class="px-0" v-if="isListVisible.valueOf">
-            <VList lines="two" border >
+            <VueApexCharts style="display: none;" class="graficoRealTime" type="bar" :options="resolveData.options" :series="resolveData.series" />
+            <VList lines="two" border class="BORDER--">
               <template v-for="(entry, index) in entries" :key="entry.title">
 
-                  <VListItem>
-                    <VListItemTitle>
-                      {{ entry.title }}
-                    </VListItemTitle>
-                    <VListItemSubtitle class="mt-1">
-                      <!-- <VBadge
+                <VListItem>
+                  <VListItemTitle>
+                    {{ entry.title }}
+                  </VListItemTitle>
+                  <VListItemSubtitle class="mt-1">
+                    <!-- <VBadge
                         dot
                         location="start center"
                         offset-x="2"
@@ -475,67 +564,67 @@ const isListVisible = ref(false);
                         <span class="ms-4">{{ user.status }}</span>
                       </VBadge> -->
 
-                      <span class="text-xs">Visitas: {{ entry.visits }}</span>
-                    </VListItemSubtitle>
+                    <span class="text-xs">Visitas: {{ entry.visits }}</span>
+                  </VListItemSubtitle>
 
-                    <template #append>
-                      <VBtn size="small" @click="goToLink(entry.url)">
-                        <VIcon
-                    
-                        icon="mdi-link-variant"
-                      /> </VBtn>
-                    </template>
-                  </VListItem>
-                  <VDivider v-if="index !== entries.length - 1" />
-                </template>
+                  <template #append>
+                    <VBtn size="small" @click="goToLink(entry.url)">
+                      <VIcon icon="mdi-link-variant" />
+                    </VBtn>
+                  </template>
+                </VListItem>
+                <VDivider v-if="index !== entries.length - 1" />
+              </template>
             </VList>
           </VCardText>
-        </VCard> 
+        </VCard>
       </VCol>
 
       <!--Columna de Registros de muestreo-->
 
-      <VCol class="d-flex" id="realtime" cols="12" sm="6"> 
+      <VCol class="d-flex" id="realtime" cols="12" sm="6">
 
-<VCard class="px-4 py-4 v-col-12">
-  <VCardItem class="header_card_item pb-4">
-    <div class="d-flex pr-5" style="justify-content: space-between;">
-      <div class="descripcion" cols="12" sm="6">
-        <VCardTitle >Registros en tiempo real</VCardTitle>
-        <VCardSubtitle cols="12">Tiempo promedio de actualización: <br>xx segundos, con un muestreo de xx visitas </VCardSubtitle>
-      </div>
-      <div class="">
-        <VSwitch  class="mt-n4 pt-5" v-model="realtime" @click="toggleRealtime"></VSwitch>
-      </div>
-      
-    </div>
-  </VCardItem>
-  <VCardText class="px-0" v-if="isListVisible.valueOf">
-    <VList lines="two" border >
-      <template v-for="(register, index) in registers" :key="register.title">
+        <VCard class="px-4 py-4 v-col-12">
+          <VCardItem class="header_card_item pb-4">
+            <div class="d-flex pr-5" style="justify-content: space-between;">
+              <div class="descripcion" cols="12" sm="6">
+                <VCardTitle>Registros en tiempo real</VCardTitle>
+                <VCardSubtitle cols="12">Tiempo promedio de actualización: <br>xx segundos, con un muestreo de xx visitas
+                </VCardSubtitle>
+              </div>
+              <div class="">
+                <VSwitch class="mt-n4 pt-5" v-model="realtime" @click="toggleRealtime"></VSwitch>
+              </div>
 
-          <VListItem>
-            <VListItemTitle>
-              {{ register.title }}
-            </VListItemTitle>
-            <VListItemSubtitle class="mt-1">
-              <span class="text-xs">Id de Usuario: {{ register.userId }}</span>
-              <span class="text-xs"></span>
-              <VChip class="mx-2" color="success">hace {{restarHoras(register.hora, horaAct) }}</VChip>
+            </div>
+          </VCardItem>
+          <VCardText class="px-0" v-if="isListVisible.valueOf">
+            <VList lines="two" border>
+              <template v-for="(register, index) in registers" :key="register.title">
 
-            </VListItemSubtitle>
+                <VListItem>
+                  <VListItemTitle>
+                    {{ register.title }}
+                  </VListItemTitle>
+                  <VListItemSubtitle class="mt-1">
+                    <span class="text-xs">Id de Usuario: {{ register.userId }}</span>
+                    <span class="text-xs"></span>
+                    <VChip class="mx-2" color="success">hace {{ restarHoras(register.hora, horaAct) }}</VChip>
 
-            <template #append>
-              <VBtn size="small" @click="goToLink(register.url)">
-                <VIcon icon="mdi-link-variant" /> </VBtn>
-            </template>
-          </VListItem>
-          <VDivider v-if="index !== register.length - 1" />
-        </template>
-    </VList>
-  </VCardText>
-</VCard> 
-</VCol>
+                  </VListItemSubtitle>
+
+                  <template #append>
+                    <VBtn size="small" @click="goToLink(register.url)">
+                      <VIcon icon="mdi-link-variant" />
+                    </VBtn>
+                  </template>
+                </VListItem>
+                <VDivider v-if="index !== register.length - 1" />
+              </template>
+            </VList>
+          </VCardText>
+        </VCard>
+      </VCol>
       <!-- <VCol class="d-flex" cols="12" sm="6">
         <div>
         Realtime
@@ -549,19 +638,14 @@ const isListVisible = ref(false);
       </VCol> -->
     </VRow>
   </section>
-
-
-
-
-  
 </template>
 
 <script>
 
 
 // export default {
-  // setup() {
+// setup() {
 
-  // }
+// }
 // }
 </script>
