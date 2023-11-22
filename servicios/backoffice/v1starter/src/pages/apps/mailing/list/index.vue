@@ -47,13 +47,18 @@ const linkForzado = ref(false);
 const linkForzadoList = ref([
   {
     "id":"64f9f5225c4a279b69ff2ac8",
-    "name":"Boletín diario",
+    "name":"Boletín diario 7am",
     "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-diario/forzado.php"
   },
   {
     "id":"64f9f5455c4a279b69ff2aca",
     "name":"Newsletter Opinión",
     "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/opinion/forzado.php"
+  },
+  {
+    "id":"655e5a43de6d5e1206632e25",
+    "name":"Boletín diario 5pm",
+    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-diario/forzado.php"
   }
 ]);
 
