@@ -209,7 +209,7 @@ body {
 /*cabecera*/
 
 #content-002 {
-  background-image: url('https://assets-global.website-files.com/627baf6…/627bb65…_down-margin-black.svg'), linear-gradient(to bottom, var(--thistle), var(--pale-goldenrod));
+  background-image: linear-gradient(to bottom, var(--thistle), var(--pale-goldenrod));
   background-position: 50% -33px, 0 0;
   background-repeat: no-repeat, repeat;
   background-size: auto, auto;
