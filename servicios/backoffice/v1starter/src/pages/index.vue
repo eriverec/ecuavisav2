@@ -511,7 +511,7 @@ const goToLink = (link) => {
           <VCardItem class="header_card_item pb-4">
             <div class="d-flex pr-5" style="justify-content: space-between;">
               <div class="descripcion" cols="12" sm="6">
-                <VCardTitle>Visitas del sitio en tiempo real</VCardTitle>
+                <VCardTitle>Visitas de usuarios reistrados en tiempo real</VCardTitle>
                 <VCardSubtitle cols="12">Tiempo de actualización: 30 segundos
                 </VCardSubtitle>
               </div>
@@ -570,7 +570,7 @@ const goToLink = (link) => {
           <VCardItem class="header_card_item pb-4">
             <div class="d-flex pr-5" style="justify-content: space-between;">
               <div class="descripcion" cols="12" sm="6">
-                <VCardTitle>Dispositivos Realtime</VCardTitle>
+                <VCardTitle>Tiempo Real de Dispositivos(dev)</VCardTitle>
                 <VCardSubtitle cols="12">WIDGET EN DESARROLLO
                 </VCardSubtitle>
               </div>
