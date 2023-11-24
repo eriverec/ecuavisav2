@@ -325,7 +325,7 @@ let intervalId = null
 const entries = ref([]);
 
 const fetchEntries = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?grouped')
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?grouped=10')
   const data = await response.json()
   entries.value = data;
   dataChart.value = data.slice(0, 5);
