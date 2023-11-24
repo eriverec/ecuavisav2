@@ -27,7 +27,7 @@ const fechaIniFinList = useSelectCalendar();
 
 const urlCounts = ref([]);
 const isLoading = ref(true);
-const itemsPerPage = 25;
+const itemsPerPage = 20;
 const currentPage = ref(1);
 const totalCount = computed(() => urlCounts.value.length);
 
