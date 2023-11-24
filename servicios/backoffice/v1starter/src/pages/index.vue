@@ -1,9 +1,9 @@
 <script setup>
-import VueApexCharts from 'vue3-apexcharts';
-import { hexToRgb } from '@layouts/utils';
-  import { useTheme } from 'vuetify';
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 import UserTabUbicacion from '@/views/dashboards/traceability/UserTabUbicacion.vue';
+import { hexToRgb } from '@layouts/utils';
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
 // import UserTabDispositivos from '@/views/dashboards/traceability/UserTabDispositivos.vue';
 import UserTabNavegacion from '@/views/dashboards/traceability/UserTabNavegacion.vue';
 import Moment from 'moment';
@@ -81,7 +81,30 @@ function restarHoras(hora1, hora2) {
   // const resultado = moment.utc(diff).format(formato);
   return resultado.trim();
 }
+async function accionBackoffice() {
+  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
+  let userData = JSON.parse(localStorage.getItem('userData'));
+  if (userData.email !== 'admin@demo.com') {
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var log = JSON.stringify({
+      "usuario": userData.email,
+      "pagina": "dashboard",
+      "fecha": dateNow
+    });
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: log,
+      redirect: 'follow'
+    };
+    await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
+      .then(response => {
+      }).catch(error => console.log('error', error));
+  }
+}
 
+// data de cards superiores
 const countUsers = () => {
   userListStore
     .countUsers()
@@ -153,29 +176,6 @@ const countUsers = () => {
       console.error(error);
     });
 };
-async function accionBackoffice() {
-  let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
-  let userData = JSON.parse(localStorage.getItem('userData'));
-  if (userData.email !== 'admin@demo.com') {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var log = JSON.stringify({
-      "usuario": userData.email,
-      "pagina": "dashboard",
-      "fecha": dateNow
-    });
-    var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: log,
-      redirect: 'follow'
-    };
-    await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
-      .then(response => {
-      }).catch(error => console.log('error', error));
-  }
-}
-
 const route = useRoute()
 const userData = ref()
 const userTab = ref(null)
@@ -184,21 +184,6 @@ userListStore.fetchUser(Number(route.params.id)).then(response => {
   userData.value = response.data
 })
 
-const tabs = [
-
-
-  {
-    icon: 'tabler-activity-heartbeat',
-    title: 'Navegación',
-  },
-  {
-    icon: 'tabler-map-2',
-    title: 'Ubicaciones',
-  },
-]
-
-
-// realtime adicionado
 countUsers();
 const userListMeta = [
   {
@@ -253,23 +238,7 @@ const userListMeta = [
     total: totalDevicesApple
   },
 ];
-
-
-const isListVisible = ref(false);
-
-const registers = ref([])
-const realtime = ref(false)
-let intervalId = null
-const entries = ref([]);
-
-const fetchEntries = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?grouped')
-  const data = await response.json()
-  entries.value = data;
-  dataChart.value = data.slice(0, 5);
-
-  // console.log(entriesGraf.value);
-}
+// Fin data de cards superiores
 
 /* */
  // 👉 Colors variables
@@ -343,15 +312,25 @@ const resolveData = computed(() => {
     },
     minHeight: 300,
   }
-
-
   return { series: [seriesFormat], options: options, intereses: categoriesRaw };
 });
 
 
+// realtimme procesos 
 
+const isListVisible = ref(false);
+const registers = ref([])
+const realtime = ref(false)
+let intervalId = null
+const entries = ref([]);
 
-
+const fetchEntries = async () => {
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?grouped')
+  const data = await response.json()
+  entries.value = data;
+  dataChart.value = data.slice(0, 5);
+  // console.log(entriesGraf.value);
+}
 
 const fetchRegisters = async () => {
   const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?entries')
@@ -380,11 +359,9 @@ const toggleRealtime = () => {
   if (realtime.value) {
     function juntas() {
       fetchEntries(); // nuevo
-      fetchRegisters(); // nuevo
+      // fetchRegisters(); // nuevo
       
     }
-
-
     intervalId = setInterval(juntas, 3500);
   } else {
     resetEntries();
@@ -535,7 +512,7 @@ const goToLink = (link) => {
             <div class="d-flex pr-5" style="justify-content: space-between;">
               <div class="descripcion" cols="12" sm="6">
                 <VCardTitle>Visitas del sitio en tiempo real</VCardTitle>
-                <VCardSubtitle cols="12">Tiempo promedio de actualización <br>4 segundos, con un muestreo de 50 visitas
+                <VCardSubtitle cols="12">Tiempo de actualización: 30 segundos
                 </VCardSubtitle>
               </div>
               <div class="">
@@ -584,21 +561,27 @@ const goToLink = (link) => {
 
       <VCol class="d-flex" id="realtime" cols="12" sm="6">
 
+
+
         <VCard class="px-4 py-4 v-col-12">
+
+
+          
           <VCardItem class="header_card_item pb-4">
             <div class="d-flex pr-5" style="justify-content: space-between;">
               <div class="descripcion" cols="12" sm="6">
-                <VCardTitle>Registros en tiempo real</VCardTitle>
-                <VCardSubtitle cols="12">Tiempo promedio de actualización: <br>xx segundos, con un muestreo de xx visitas
+                <VCardTitle>Dispositivos Realtime</VCardTitle>
+                <VCardSubtitle cols="12">WIDGET EN DESARROLLO
                 </VCardSubtitle>
               </div>
               <div class="">
-                <VSwitch class="mt-n4 pt-5" v-model="realtime" @click="toggleRealtime"></VSwitch>
+                <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
               </div>
 
             </div>
           </VCardItem>
-          <VCardText class="px-0" v-if="isListVisible.valueOf">
+          <iframe src="https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/pie.html" width="100%" height="100%" frameborder="0"></iframe>
+          <!--<VCardText class="px-0 d-none" v-if="isListVisible.valueOf">
             <VList lines="two" border>
               <template v-for="(register, index) in registers" :key="register.title">
 
@@ -622,7 +605,9 @@ const goToLink = (link) => {
                 <VDivider v-if="index !== register.length - 1" />
               </template>
             </VList>
-          </VCardText>
+          </VCardText> -->
+
+        
         </VCard>
       </VCol>
       <!-- <VCol class="d-flex" cols="12" sm="6">
