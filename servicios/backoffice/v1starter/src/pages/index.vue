@@ -45,7 +45,10 @@ const percentAppGoogle = ref(0);
 const percentAppApple = ref(0);
 
 const dataChart = ref([]);
-console.log(dataChart.value);
+const dataDevice = ref([]);
+const dataMetadato = ref([]);
+const dataSection = ref([]);
+
 const isLoading = ref(true);
 
 // 👉 Fetching users
@@ -241,19 +244,19 @@ const userListMeta = [
 // Fin data de cards superiores
 
 /* */
- // 👉 Colors variables
- const colorVariables = themeColors => {
-    const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
-    const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`
-    const themeBorderColor = `rgba(${hexToRgb(String(themeColors.variables['border-color']))},${themeColors.variables['border-opacity']})`
-    const themePrimaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['high-emphasis-opacity']})`
-    
-    return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
-  }
+// 👉 Colors variables
+const colorVariables = themeColors => {
+  const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
+  const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`
+  const themeBorderColor = `rgba(${hexToRgb(String(themeColors.variables['border-color']))},${themeColors.variables['border-opacity']})`
+  const themePrimaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['high-emphasis-opacity']})`
 
-  const vuetifyTheme = useTheme();
+  return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
+}
 
-  const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value);
+const vuetifyTheme = useTheme();
+
+const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value);
 
 const resolveData = computed(() => {
 
@@ -279,15 +282,31 @@ const resolveData = computed(() => {
     dataLabels: {
       enabled: true
     },
-    // colors: ['#ed8936', '#fdd835'],
+    legend: {
+      position: 'top',
+      horizontalAlign: 'left',
+      offsetX: 40,
+      show: false
+    },
+    colors: ['#d4526e', '#13d8aa'],
     plotOptions: {
       bar: {
         borderRadius: 0,
-        barHeight: '40%',
+        barHeight: '70%',
         horizontal: true,
+        distributed: true,
         startingShape: 'rounded',
       },
     },
+    // title: {
+    //   text: 'Visitas por Páginas',
+    //   style: {
+    //     fontSize: '16px',
+    //     fontWeight: 'bold',
+    //     fontFamily: undefined,
+    //     color: themeDisabledTextColor
+    //   },
+    // },
     grid: {
       borderColor: themeBorderColor,
       xaxis: {
@@ -315,8 +334,227 @@ const resolveData = computed(() => {
   return { series: [seriesFormat], options: options, intereses: categoriesRaw };
 });
 
+const resolveDevice = computed(() => {
+
+  let dataRaw = Array.from(dataDevice.value);
+  const seriesFormat = {
+    name: 'Device',
+    data: []
+  };
+
+  const categoriesRaw = [];
+  for (let i in dataRaw) {
+    let num = parseInt(dataRaw[i].visits);
+    seriesFormat.data.push(num);
+    categoriesRaw.push(dataRaw[i].name);
+  }
+
+  const options = {
+    chart: {
+      // type: 'pie',
+      // parentHeightOffset: 0,
+      // toolbar: { show: false },
+      // height: 400
+    },
+    dataLabels: {
+      enabled: true,
+      style: {
+        fontSize: '16px',
+        fontFamily: 'Helvetica, Arial, sans-serif',
+        fontWeight: 'bold',
+        colors: ['#fff']
+      },
+    },
+    legend: {
+      position: 'bottom',
+      horizontalAlign: 'center',
+      offsetX: 40,
+      show: true,
+      labels: {
+        colors: themeDisabledTextColor,
+        useSeriesColors: false
+      },
+    },
+    // plotOptions: {},
+    // title: {
+    //   text: 'Visitas por Dispositivos',
+    //   align: 'center',
+    //   style: {
+    //     fontSize: '16px',
+    //     fontWeight: 'bold',
+    //     fontFamily: 'Helvetica, Arial, sans-serif',
+    //     color: themeDisabledTextColor
+    //   },
+    // },
+    yaxis: {
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+    },
+    colors: ['#33b2df', '#546E7A'],
+    labels: categoriesRaw,
+  }
+  return { series: seriesFormat.data, options: options };
+});
+
+const resolveMetadato = computed(() => {
+
+  let dataRaw = Array.from(dataMetadato.value);
+  const seriesFormat = {
+    name: 'Metadato',
+    data: []
+  };
+
+  const categoriesRaw = [];
+  for (let i in dataRaw) {
+    let num = parseInt(dataRaw[i].visits);
+    seriesFormat.data.push(num);
+    categoriesRaw.push(dataRaw[i].name);
+  }
+
+  const options = {
+    chart: {
+      parentHeightOffset: 0,
+      toolbar: { show: false },
+      height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6) ? 400 : 700
+    },
+    dataLabels: {
+      enabled: true
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'left',
+      offsetX: 40,
+      show: false
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 0,
+        barHeight: '70%',
+        horizontal: true,
+        distributed: true,
+        startingShape: 'rounded',
+      },
+    },
+    grid: {
+      borderColor: themeBorderColor,
+      xaxis: {
+        lines: { show: true },
+      },
+      padding: {
+        top: -10,
+      },
+    },
+    // title: {
+    //   text: 'Visitas por Metadatos',
+    //   style: {
+    //     fontSize: '16px',
+    //     fontWeight: 'bold',
+    //     fontFamily: undefined,
+    //     color: themeDisabledTextColor
+    //   },
+    // },
+    yaxis: {
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+    },
+    colors: ['#A5978B', '#2b908f'],
+    xaxis: {
+      axisBorder: { show: false },
+      axisTicks: { color: themeBorderColor },
+      categories: categoriesRaw,
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+    },
+    minHeight: 300,
+  }
+  return { series: [seriesFormat], options: options, intereses: categoriesRaw };
+});
+
+const resolveSection = computed(() => {
+
+  let dataRaw = Array.from(dataSection.value);
+  const seriesFormat = {
+    name: 'Seccion',
+    data: []
+  };
+
+  const categoriesRaw = [];
+  for (let i in dataRaw) {
+    let num = parseInt(dataRaw[i].visits);
+    seriesFormat.data.push(num);
+    categoriesRaw.push(dataRaw[i].name);
+  }
+
+  const options = {
+    chart: {
+      parentHeightOffset: 0,
+      toolbar: { show: false },
+      height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6) ? 400 : 700
+    },
+    dataLabels: {
+      enabled: true
+    },
+    legend: {
+      position: 'top',
+      horizontalAlign: 'left',
+      offsetX: 40,
+      show: false
+    },
+    plotOptions: {
+      bar: {
+        borderRadius: 0,
+        barHeight: '70%',
+        horizontal: true,
+        distributed: true,
+        startingShape: 'rounded',
+      },
+    },
+    grid: {
+      borderColor: themeBorderColor,
+      xaxis: {
+        lines: { show: true },
+      },
+      padding: {
+        top: -10,
+      },
+    },
+    // title: {
+    //   text: 'Visitas por Secciones',
+    //   style: {
+    //     fontSize: '16px',
+    //     fontWeight: 'bold',
+    //     fontFamily: undefined,
+    //     color: themeDisabledTextColor
+    //   },
+    // },
+    yaxis: {
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+    },
+    colors: ['#f48024', '#69d2e7'],
+    xaxis: {
+      axisBorder: { show: false },
+      axisTicks: { color: themeBorderColor },
+      categories: categoriesRaw,
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+    },
+    minHeight: 300,
+  }
+  return { series: [seriesFormat], options: options, intereses: categoriesRaw };
+});
+
 
 // realtimme procesos 
+const entriesLength = ref(false);
+const deviceLength = ref(false);
+const metadatoLength = ref(false);
+const sectionLength = ref(false);
 
 const isListVisible = ref(false);
 const registers = ref([])
@@ -324,12 +562,48 @@ const realtime = ref(false)
 let intervalId = null
 const entries = ref([]);
 
+
+// Grafico Devise
+const fetchDevice = async () => {
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?device')
+  const data = await response.json();
+  dataDevice.value = data.slice(0, 5);
+  if (dataDevice.value.length > 0) {
+    deviceLength.value = true;
+  }
+}
+
+
 const fetchEntries = async () => {
   const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?grouped=10')
   const data = await response.json()
   entries.value = data;
   dataChart.value = data.slice(0, 5);
-  // console.log(entriesGraf.value);
+  if (dataChart.value.length > 0) {
+    entriesLength.value = true;
+  }
+}
+
+// Grafico Metadatos
+const fetchMetadato = async () => {
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?metadato')
+  const data = await response.json();
+  dataMetadato.value = data.slice(0, 5);
+  // console.log(dataMetadato.value);
+  if (dataMetadato.value.length > 0) {
+    metadatoLength.value = true;
+  }
+}
+
+// Grafico Section
+const fetchSection = async () => {
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?section')
+  const data = await response.json();
+  dataSection.value = data.slice(0, 5);
+  // console.log(dataMetadato.value);
+  if (dataMetadato.value.length > 0) {
+    sectionLength.value = true;
+  }
 }
 
 const fetchRegisters = async () => {
@@ -355,12 +629,14 @@ const resetEntries = async () => {
 const toggleRealtime = () => {
   realtime.value = !realtime.value;
   isListVisible.value = !isListVisible.value; // nuevo
-
   if (realtime.value) {
     function juntas() {
       fetchEntries(); // nuevo
+      fetchDevice();
+      fetchMetadato();
+      fetchSection();
       // fetchRegisters(); // nuevo
-      
+
     }
     intervalId = setInterval(juntas, 3500);
   } else {
@@ -370,9 +646,7 @@ const toggleRealtime = () => {
 };
 
 
-onMounted(() => {
-  // intervalId = setInterval(fetchEntries, 5000)
-})
+
 
 onUnmounted(() => {
   clearInterval(intervalId)
@@ -511,7 +785,7 @@ const goToLink = (link) => {
           <VCardItem class="header_card_item pb-4">
             <div class="d-flex pr-5" style="justify-content: space-between;">
               <div class="descripcion" cols="12" sm="6">
-                <VCardTitle>Visitas de usuarios reistrados en tiempo real</VCardTitle>
+                <VCardTitle>Visitas de usuarios registrados en tiempo real</VCardTitle>
                 <VCardSubtitle cols="12">Tiempo de actualización: 30 segundos
                 </VCardSubtitle>
               </div>
@@ -522,8 +796,7 @@ const goToLink = (link) => {
             </div>
           </VCardItem>
           <VCardText class="px-0" v-if="isListVisible.valueOf">
-            <VueApexCharts style="display: none;" class="graficoRealTime" type="bar" :options="resolveData.options" :series="resolveData.series" />
-            <VList lines="two" border class="BORDER--">
+            <VList v-if="entriesLength" lines="two" border class="BORDER--">
               <template v-for="(entry, index) in entries" :key="entry.title">
 
                 <VListItem>
@@ -553,34 +826,34 @@ const goToLink = (link) => {
                 <VDivider v-if="index !== entries.length - 1" />
               </template>
             </VList>
+
+            <div v-else></div>
           </VCardText>
         </VCard>
       </VCol>
 
       <!--Columna de Registros de muestreo-->
 
-      <VCol class="d-flex" id="realtime" cols="12" sm="6">
+      <VCol class="dere__" id="realtime" cols="12" sm="6">
 
 
 
-        <VCard class="px-4 py-4 v-col-12">
-
-
-          
+        <VCard class="px-4 py-4 v-col-12 mb-5">
           <VCardItem class="header_card_item pb-4">
             <div class="d-flex pr-5" style="justify-content: space-between;">
               <div class="descripcion" cols="12" sm="6">
-                <VCardTitle>Tiempo Real de Dispositivos(dev)</VCardTitle>
-                <VCardSubtitle cols="12">WIDGET EN DESARROLLO
-                </VCardSubtitle>
+                <VCardTitle>Tiempo Real por Dispositivos</VCardTitle>
               </div>
-              <div class="">
+              <!-- <div class="">
                 <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
-              </div>
+              </div> -->
 
             </div>
           </VCardItem>
-          <iframe src="https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/pie.html" width="100%" height="100%" frameborder="0"></iframe>
+          <!-- <iframe src="https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/pie.html" width="100%"
+            height="100%" frameborder="0"></iframe> -->
+
+          <VueApexCharts v-if="deviceLength" type="pie" :options="resolveDevice.options" :series="resolveDevice.series" />
           <!--<VCardText class="px-0 d-none" v-if="isListVisible.valueOf">
             <VList lines="two" border>
               <template v-for="(register, index) in registers" :key="register.title">
@@ -607,7 +880,49 @@ const goToLink = (link) => {
             </VList>
           </VCardText> -->
 
-        
+
+        </VCard>
+        <VCard class="px-4 py-4 v-col-12 mb-5">
+          <VCardItem class="header_card_item pb-4">
+            <div class="d-flex pr-5" style="justify-content: space-between;">
+              <div class="descripcion" cols="12" sm="6">
+                <VCardTitle>Tiempo Real por Páginas</VCardTitle>
+              </div>
+
+            </div>
+          </VCardItem>
+          <VueApexCharts v-if="entriesLength" class="graficoRealTime" type="bar" :options="resolveData.options"
+            :series="resolveData.series" />
+        </VCard>
+
+        <VCard class="px-4 py-4 v-col-12 mb-5">
+          <VCardItem class="header_card_item pb-4">
+            <div class="d-flex pr-5" style="justify-content: space-between;">
+              <div class="descripcion" cols="12" sm="6">
+                <VCardTitle>Tiempo Real por Metadatos</VCardTitle>
+                <VCardSubtitle cols="12">WIDGET EN DESARROLLO
+                </VCardSubtitle>
+              </div>
+
+            </div>
+          </VCardItem>
+          <!-- <VueApexCharts v-if="metadatoLength" type="bar" :options="resolveMetadato.options"
+            :series="resolveMetadato.series" /> -->
+        </VCard>
+
+        <VCard class="px-4 py-4 v-col-12 mb-5">
+          <VCardItem class="header_card_item pb-4">
+            <div class="d-flex pr-5" style="justify-content: space-between;">
+              <div class="descripcion" cols="12" sm="6">
+                <VCardTitle>Tiempo Real por Secciones</VCardTitle>
+                <VCardSubtitle cols="12">WIDGET EN DESARROLLO
+                </VCardSubtitle>
+              </div>
+            </div>
+          </VCardItem>
+
+          <!-- <VueApexCharts v-if="sectionLength" type="bar" :options="resolveSection.options"
+            :series="resolveSection.series" /> -->
         </VCard>
       </VCol>
       <!-- <VCol class="d-flex" cols="12" sm="6">
