@@ -277,7 +277,7 @@ const resolveData = computed(() => {
     chart: {
       parentHeightOffset: 0,
       toolbar: { show: false },
-      height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6) ? 400 : 700
+      height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6) ? 600 : 700
     },
     dataLabels: {
       enabled: true
@@ -561,13 +561,14 @@ const registers = ref([])
 const realtime = ref(false)
 let intervalId = null
 const entries = ref([]);
-
+const totalVisits = ref(0);
+const sumV = ref(0);
 
 // Grafico Devise
 const fetchDevice = async () => {
   const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?device')
   const data = await response.json();
-  dataDevice.value = data.slice(0, 5);
+  dataDevice.value = data.slice(0, 10);
   if (dataDevice.value.length > 0) {
     deviceLength.value = true;
   }
@@ -578,7 +579,12 @@ const fetchEntries = async () => {
   const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?grouped=10')
   const data = await response.json()
   entries.value = data;
-  dataChart.value = data.slice(0, 5);
+  dataChart.value = data.slice(0, 10);
+  const ty = (entries.value).map((item) => (
+    totalVisits.value = JSON.parse(item.visits)
+  ));
+  sumV.value = ty.reduce((acc, item) => acc + item, 0);
+  // console.log(sumV.value);
   if (dataChart.value.length > 0) {
     entriesLength.value = true;
   }
@@ -588,7 +594,7 @@ const fetchEntries = async () => {
 const fetchMetadato = async () => {
   const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?metadato')
   const data = await response.json();
-  dataMetadato.value = data.slice(0, 5);
+  dataMetadato.value = data.slice(0, 10);
   // console.log(dataMetadato.value);
   if (dataMetadato.value.length > 0) {
     metadatoLength.value = true;
@@ -599,7 +605,7 @@ const fetchMetadato = async () => {
 const fetchSection = async () => {
   const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?section')
   const data = await response.json();
-  dataSection.value = data.slice(0, 5);
+  dataSection.value = data.slice(0, 10);
   // console.log(dataMetadato.value);
   if (dataMetadato.value.length > 0) {
     sectionLength.value = true;
@@ -710,6 +716,11 @@ const goToLink = (link) => {
   font-size: 13px;
 }
 
+.text-sum{
+  font-size: 60px;
+  font-weight: bold;
+  letter-spacing: 2px;
+}
 
 .switch {
   margin-left: 20px;
@@ -796,9 +807,13 @@ const goToLink = (link) => {
             </div>
           </VCardItem>
           <VCardText class="px-0" v-if="isListVisible.valueOf">
+            <div class="mb-5 d-flex justify-center align-center flex-column">
+              <span class="text-sum text-success d-none"> {{ sumV }}</span>
+              <span class="d-none">Números de usuarios totales</span> 
+            </div>
+            
             <VList v-if="entriesLength" lines="two" border class="BORDER--">
               <template v-for="(entry, index) in entries" :key="entry.title">
-
                 <VListItem>
                   <VListItemTitle>
                     {{ entry.title }}
@@ -853,7 +868,7 @@ const goToLink = (link) => {
           <!-- <iframe src="https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/pie.html" width="100%"
             height="100%" frameborder="0"></iframe> -->
 
-          <VueApexCharts v-if="deviceLength" type="pie" :options="resolveDevice.options" :series="resolveDevice.series" />
+          <VueApexCharts v-if="sumV != 0" type="pie" :options="resolveDevice.options" :series="resolveDevice.series" />
           <!--<VCardText class="px-0 d-none" v-if="isListVisible.valueOf">
             <VList lines="two" border>
               <template v-for="(register, index) in registers" :key="register.title">
@@ -891,7 +906,7 @@ const goToLink = (link) => {
 
             </div>
           </VCardItem>
-          <VueApexCharts v-if="entriesLength" class="graficoRealTime" type="bar" :options="resolveData.options"
+          <VueApexCharts v-if="sumV != 0" class="graficoRealTime" type="bar" :options="resolveData.options"
             :series="resolveData.series" />
         </VCard>
 
@@ -900,14 +915,12 @@ const goToLink = (link) => {
             <div class="d-flex pr-5" style="justify-content: space-between;">
               <div class="descripcion" cols="12" sm="6">
                 <VCardTitle>Tiempo Real por Metadatos</VCardTitle>
-                <VCardSubtitle cols="12">WIDGET EN DESARROLLO
-                </VCardSubtitle>
               </div>
 
             </div>
           </VCardItem>
-          <!-- <VueApexCharts v-if="metadatoLength" type="bar" :options="resolveMetadato.options"
-            :series="resolveMetadato.series" /> -->
+          <VueApexCharts v-if="sumV != 0" type="bar" :options="resolveMetadato.options"
+            :series="resolveMetadato.series" />
         </VCard>
 
         <VCard class="px-4 py-4 v-col-12 mb-5">
@@ -915,14 +928,12 @@ const goToLink = (link) => {
             <div class="d-flex pr-5" style="justify-content: space-between;">
               <div class="descripcion" cols="12" sm="6">
                 <VCardTitle>Tiempo Real por Secciones</VCardTitle>
-                <VCardSubtitle cols="12">WIDGET EN DESARROLLO
-                </VCardSubtitle>
               </div>
             </div>
           </VCardItem>
 
-          <!-- <VueApexCharts v-if="sectionLength" type="bar" :options="resolveSection.options"
-            :series="resolveSection.series" /> -->
+          <VueApexCharts v-if="sumV != 0" type="bar" :options="resolveSection.options"
+            :series="resolveSection.series" />
         </VCard>
       </VCol>
       <!-- <VCol class="d-flex" cols="12" sm="6">
