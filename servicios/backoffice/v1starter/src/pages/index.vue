@@ -367,7 +367,7 @@ const resolveDevice = computed(() => {
     },
     legend: {
       position: 'bottom',
-      horizontalAlign: 'center',
+      horizontalAlign: 'left',
       offsetX: 40,
       show: true,
       labels: {
@@ -716,8 +716,8 @@ const goToLink = (link) => {
   font-size: 13px;
 }
 
-.text-sum{
-  font-size: 60px;
+.text-sum {
+  font-size: 75px;
   font-weight: bold;
   letter-spacing: 2px;
 }
@@ -776,7 +776,31 @@ const goToLink = (link) => {
 
       </VCol>
     </VRow>
+       <!--<VCardText class="px-0 d-none" v-if="isListVisible.valueOf">
+            <VList lines="two" border>
+              <template v-for="(register, index) in registers" :key="register.title">
 
+                <VListItem>
+                  <VListItemTitle>
+                    {{ register.title }}
+                  </VListItemTitle>
+                  <VListItemSubtitle class="mt-1">
+                    <span class="text-xs">Id de Usuario: {{ register.userId }}</span>
+                    <span class="text-xs"></span>
+                    <VChip class="mx-2" color="success">hace {{ restarHoras(register.hora, horaAct) }}</VChip>
+
+                  </VListItemSubtitle>
+
+                  <template #append>
+                    <VBtn size="small" @click="goToLink(register.url)">
+                      <VIcon icon="mdi-link-variant" />
+                    </VBtn>
+                  </template>
+                </VListItem>
+                <VDivider v-if="index !== register.length - 1" />
+              </template>
+            </VList>
+          </VCardText> -->
     <VRow id="dash">
       <!-- Columna de Navegación & Realtimee -->
       <VCol class="d-flex" id="navegacion" cols="12" sm="6">
@@ -807,11 +831,8 @@ const goToLink = (link) => {
             </div>
           </VCardItem>
           <VCardText class="px-0" v-if="isListVisible.valueOf">
-            <div class="mb-5 d-flex justify-center align-center flex-column">
-              <span class="text-sum text-success d-none"> {{ sumV }}</span>
-              <span class="d-none">Números de usuarios totales</span> 
-            </div>
-            
+
+
             <VList v-if="entriesLength" lines="two" border class="BORDER--">
               <template v-for="(entry, index) in entries" :key="entry.title">
                 <VListItem>
@@ -851,90 +872,108 @@ const goToLink = (link) => {
 
       <VCol class="dere__" id="realtime" cols="12" sm="6">
 
-
-
-        <VCard class="px-4 py-4 v-col-12 mb-5">
-          <VCardItem class="header_card_item pb-4">
-            <div class="d-flex pr-5" style="justify-content: space-between;">
-              <div class="descripcion" cols="12" sm="6">
-                <VCardTitle>Tiempo Real por Dispositivos</VCardTitle>
-              </div>
-              <!-- <div class="">
+        <VRow>
+          <VCol cols="12" sm="6">
+            <VCard class="px-4 py-4 v-col-12  h-100">
+              <VCardItem class="header_card_item pb-4">
+                <div class="d-flex pr-5" style="justify-content: space-between;">
+                  <div class="descripcion">
+                    <VCardTitle>Tiempo Real por Dispositivos</VCardTitle>
+                  </div>
+                  <!-- <div class="">
                 <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
               </div> -->
 
-            </div>
-          </VCardItem>
-          <!-- <iframe src="https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/pie.html" width="100%"
+                </div>
+              </VCardItem>
+              <!-- <iframe src="https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/pie.html" width="100%"
             height="100%" frameborder="0"></iframe> -->
 
-          <VueApexCharts v-if="sumV != 0" type="pie" :options="resolveDevice.options" :series="resolveDevice.series" />
-          <!--<VCardText class="px-0 d-none" v-if="isListVisible.valueOf">
-            <VList lines="two" border>
-              <template v-for="(register, index) in registers" :key="register.title">
-
-                <VListItem>
-                  <VListItemTitle>
-                    {{ register.title }}
-                  </VListItemTitle>
-                  <VListItemSubtitle class="mt-1">
-                    <span class="text-xs">Id de Usuario: {{ register.userId }}</span>
-                    <span class="text-xs"></span>
-                    <VChip class="mx-2" color="success">hace {{ restarHoras(register.hora, horaAct) }}</VChip>
-
-                  </VListItemSubtitle>
-
-                  <template #append>
-                    <VBtn size="small" @click="goToLink(register.url)">
-                      <VIcon icon="mdi-link-variant" />
-                    </VBtn>
-                  </template>
-                </VListItem>
-                <VDivider v-if="index !== register.length - 1" />
-              </template>
-            </VList>
-          </VCardText> -->
+              <VueApexCharts v-if="sumV != 0" type="pie" :options="resolveDevice.options"
+                :series="resolveDevice.series" />
+       
 
 
-        </VCard>
-        <VCard class="px-4 py-4 v-col-12 mb-5">
-          <VCardItem class="header_card_item pb-4">
-            <div class="d-flex pr-5" style="justify-content: space-between;">
-              <div class="descripcion" cols="12" sm="6">
-                <VCardTitle>Tiempo Real por Páginas</VCardTitle>
+            </VCard>
+          </VCol>
+
+          <VCol cols="12" sm="6">
+            <VCard class="px-4 py-4 v-col-12  h-100" >
+              <VCardItem class="header_card_item pb-4">
+                <div class="d-flex pr-5" style="justify-content: space-between;">
+                  <div class="descripcion" cols="12" sm="6">
+                    <VCardTitle>Total de usuarios activos</VCardTitle>
+                  </div>
+                </div>
+              </VCardItem>
+              <div v-if="sumV != 0" class="mb-5 d-flex justify-center align-center flex-column">
+                <span class="text-sum text-success"> {{ sumV }}</span>
+                <span class="">Suma de los registros.</span>
               </div>
 
-            </div>
-          </VCardItem>
-          <VueApexCharts v-if="sumV != 0" class="graficoRealTime" type="bar" :options="resolveData.options"
-            :series="resolveData.series" />
-        </VCard>
+            </VCard>
+          </VCol>
 
-        <VCard class="px-4 py-4 v-col-12 mb-5">
-          <VCardItem class="header_card_item pb-4">
-            <div class="d-flex pr-5" style="justify-content: space-between;">
-              <div class="descripcion" cols="12" sm="6">
-                <VCardTitle>Tiempo Real por Metadatos</VCardTitle>
-              </div>
+        </VRow>
 
-            </div>
-          </VCardItem>
-          <VueApexCharts v-if="sumV != 0" type="bar" :options="resolveMetadato.options"
-            :series="resolveMetadato.series" />
-        </VCard>
 
-        <VCard class="px-4 py-4 v-col-12 mb-5">
-          <VCardItem class="header_card_item pb-4">
-            <div class="d-flex pr-5" style="justify-content: space-between;">
-              <div class="descripcion" cols="12" sm="6">
-                <VCardTitle>Tiempo Real por Secciones</VCardTitle>
-              </div>
-            </div>
-          </VCardItem>
 
-          <VueApexCharts v-if="sumV != 0" type="bar" :options="resolveSection.options"
-            :series="resolveSection.series" />
-        </VCard>
+        <VRow>
+          <VCol cols="12" sm="12">
+            <VCard class="px-4 py-4 v-col-12 mb-3 mt-3">
+              <VCardItem class="header_card_item pb-4">
+                <div class="d-flex pr-5" style="justify-content: space-between;">
+                  <div class="descripcion" cols="12" sm="6">
+                    <VCardTitle>Tiempo Real por Páginas</VCardTitle>
+                  </div>
+    
+                </div>
+              </VCardItem>
+              <VueApexCharts v-if="sumV != 0" class="graficoRealTime" type="bar" :options="resolveData.options"
+                :series="resolveData.series" />
+            </VCard>
+          </VCol>
+        </VRow>
+
+
+
+
+        <VRow>
+          <VCol cols="12" sm="6">
+            <VCard class="px-4 py-4 v-col-12 mb-5">
+              <VCardItem class="header_card_item pb-4">
+                <div class="d-flex pr-5" style="justify-content: space-between;">
+                  <div class="descripcion" cols="12" sm="6">
+                    <VCardTitle>Tiempo Real por Metadatos</VCardTitle>
+                  </div>
+
+                </div>
+              </VCardItem>
+              <VueApexCharts v-if="sumV != 0" type="bar" :options="resolveMetadato.options"
+                :series="resolveMetadato.series" />
+            </VCard>
+          </VCol>
+
+          <VCol cols="12" sm="6">
+            <VCard class="px-4 py-4 v-col-12 mb-5">
+              <VCardItem class="header_card_item pb-4">
+                <div class="d-flex pr-5" style="justify-content: space-between;">
+                  <div class="descripcion" cols="12" sm="6">
+                    <VCardTitle>Tiempo Real por Secciones</VCardTitle>
+                  </div>
+                </div>
+              </VCardItem>
+
+              <VueApexCharts v-if="sumV != 0" type="bar" :options="resolveSection.options"
+                :series="resolveSection.series" />
+            </VCard>
+          </VCol>
+
+        </VRow>
+
+
+
+
       </VCol>
       <!-- <VCol class="d-flex" cols="12" sm="6">
         <div>
