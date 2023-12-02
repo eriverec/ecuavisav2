@@ -576,6 +576,15 @@ const fetchDevice = async () => {
   }
 }
 
+function contarSecuencial(limite, tiempoTotal) {
+  const intervalo = tiempoTotal / limite;
+
+  for (let i = 0; i <= limite; i++) {
+    setTimeout(() => {
+      sumV.value = i;
+    }, i * intervalo);
+  }
+}
 
 const fetchEntries = async () => {
   const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?grouped=10')
@@ -585,7 +594,12 @@ const fetchEntries = async () => {
   const ty = (entries.value).map((item) => (
     totalVisits.value = JSON.parse(item.visits)
   ));
-  sumV.value = ty.reduce((acc, item) => acc + item, 0);
+  var totalTemSumV = ty.reduce((acc, item) => acc + item, 0);
+  if(sumV.value != totalTemSumV){
+    contarSecuencial(totalTemSumV, 2000)
+  }
+  
+  // sumV.value = ty.reduce((acc, item) => acc + item, 0);
   // console.log(sumV.value);
   if (dataChart.value.length > 0) {
     entriesLength.value = true;
@@ -883,6 +897,8 @@ const goToLink = (link) => {
             </VList>
 
             <div v-else></div>
+
+
           </VCardText>
         </VCard>
       </VCol>
