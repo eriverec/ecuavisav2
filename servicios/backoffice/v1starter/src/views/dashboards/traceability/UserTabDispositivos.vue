@@ -51,7 +51,7 @@ getData();
       </VCard>
     </VCol>
 
-    <VCol cols="12">
+    <VCol cols="12"  style="display: none;">
       <!-- 👉 Recent devices -->
       <VCard>
         <VCardItem class="header_card_item">
@@ -271,15 +271,15 @@ export default {
     },
   },
   async mounted() {
-    this.selectedFecha = useSelectValueCalendar("Hoy");
-    this.fechaIniFinList = useSelectCalendar();
+    // this.selectedFecha = useSelectValueCalendar("Hoy");
+    // this.fechaIniFinList = useSelectCalendar();
 
-    // this.filtrarDatos([]);
-    this.fechaInicio = this.selectedFecha.i.format("MM/DD/YYYY");
-    this.fechaFin = this.selectedFecha.f.format("MM/DD/YYYY");
-    this.getData = await this.obtenerDatos(this.fechaInicio, this.fechaFin);
-    this.accionBackoffice();
-    this.isLoading = false;
+    // // this.filtrarDatos([]);
+    // this.fechaInicio = this.selectedFecha.i.format("MM/DD/YYYY");
+    // this.fechaFin = this.selectedFecha.f.format("MM/DD/YYYY");
+    // this.getData = await this.obtenerDatos(this.fechaInicio, this.fechaFin);
+    // this.accionBackoffice();
+    // this.isLoading = false;
   },
   methods: {
     async obtenerDatos(fechai, fechaf) {

@@ -6,22 +6,24 @@ const vuetifyTheme = useTheme()
 
 const series = [{
   data: [
-    2000,
-    2000,
-    4000,
-    4000,
-    3050,
-    3050,
-    2000,
-    2000,
-    3050,
-    3050,
-    4700,
-    4700,
-    2750,
-    2750,
-    5700,
-    5700,
+    2,
+    3,
+    4,
+    41,
+    14,
+    24,
+    34,
+    43,
+    66,
+    2,
+    3,
+    4,
+    41,
+    14,
+    24,
+    34,
+    43,
+    66,
   ],
 }]
 
@@ -34,7 +36,7 @@ const chartOptions = computed(() => {
       toolbar: false,
     },
     markers: { strokeColor: 'transparent' },
-    dataLabels: { enabled: false },
+    dataLabels: { enabled: true },
     grid: {
       show: false,
       padding: {
@@ -67,8 +69,8 @@ const chartOptions = computed(() => {
     },
     yaxis: {
       labels: { show: false },
-      min: 1000,
-      max: 6000,
+      // min: 1,
+      // max: 66,
       tickAmount: 5,
     },
     tooltip: { enabled: false },
@@ -145,7 +147,7 @@ const projectStatus = [
       <VueApexCharts
         :options="chartOptions"
         :series="series"
-        height="247"
+        height="227"
       />
 
       <VList class="card-list">

@@ -50,11 +50,11 @@
       <div :class="classLoading">
         <div class="v-row">
           <div class="v-col-9">
-            <VCardText>
+            <VCardText class=" px-0 mx-0">
               <VueApexCharts
                 id="crejemplo"
                 type="area"
-                height="400"
+                height="300"
                 :options="chartConfig"
                 :series="series"
                 @click="handleBarClick"
@@ -65,7 +65,7 @@
             <VCardText>
               <VueApexCharts
                 type="donut"
-                height="410"
+                height="310"
                 :options="chartConfigDonut"
                 :series="chartOptions.series"
               />

@@ -6,6 +6,8 @@ import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
 // import UserTabDispositivos from '@/views/dashboards/traceability/UserTabDispositivos.vue';
 import UserTabNavegacion from '@/views/dashboards/traceability/UserTabNavegacion.vue';
+import CrmProjectStatus from '@/views/dashboards/crm/CrmProjectStatus.vue';
+import CrmSalesAreaCharts from '@/views/dashboards/crm/CrmSalesAreaCharts.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -566,7 +568,7 @@ const sumV = ref(0);
 
 // Grafico Devise
 const fetchDevice = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?device')
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?device')
   const data = await response.json();
   dataDevice.value = data.slice(0, 10);
   if (dataDevice.value.length > 0) {
@@ -576,7 +578,7 @@ const fetchDevice = async () => {
 
 
 const fetchEntries = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?grouped=10')
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?grouped=10')
   const data = await response.json()
   entries.value = data;
   dataChart.value = data.slice(0, 10);
@@ -592,7 +594,7 @@ const fetchEntries = async () => {
 
 // Grafico Metadatos
 const fetchMetadato = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?metadato')
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?metadato')
   const data = await response.json();
   dataMetadato.value = data.slice(0, 10);
   // console.log(dataMetadato.value);
@@ -603,7 +605,7 @@ const fetchMetadato = async () => {
 
 // Grafico Section
 const fetchSection = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?section')
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?section')
   const data = await response.json();
   dataSection.value = data.slice(0, 10);
   // console.log(dataMetadato.value);
@@ -613,7 +615,7 @@ const fetchSection = async () => {
 }
 
 const fetchRegisters = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show.php?entries')
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?entries')
   const data = await response.json()
   registers.value = data;
 }
@@ -802,6 +804,23 @@ const goToLink = (link) => {
             </VList>
           </VCardText> -->
     <VRow id="dash">
+      <!-- 👉 Project Status -->
+    <!-- <VCol
+      cols="12"
+      md="7"
+    >
+      <CrmProjectStatus />
+    </VCol>
+
+    <VCol
+      cols="12"
+      md="12"
+      sm="5"
+      lg="5"
+    >
+      <CrmSalesAreaCharts />
+    </VCol> -->
+
       <!-- Columna de Navegación & Realtimee -->
       <VCol class="d-flex" id="navegacion" cols="12" sm="6">
         <UserTabNavegacion />
