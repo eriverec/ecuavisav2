@@ -12,6 +12,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 import { onMounted, onUnmounted, ref } from "vue";
+import axios from 'axios';
 
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
@@ -50,6 +51,7 @@ const dataChart = ref([]);
 const dataDevice = ref([]);
 const dataMetadato = ref([]);
 const dataSection = ref([]);
+const dataGeneral = ref([]);
 
 const isLoading = ref(true);
 
@@ -551,6 +553,105 @@ const resolveSection = computed(() => {
   return { series: [seriesFormat], options: options, intereses: categoriesRaw };
 });
 
+const chartSeries = ref([]);
+const chartOptions = ref({
+  chart: {
+    parentHeightOffset: 0,
+    toolbar: { show: false },
+    height: 400,
+  },
+
+  dataLabels: { enabled: true },
+  legend: { position: 'top', horizontalAlign: 'left', offsetX: 40, show: false },
+  plotOptions: { bar: { horizontal: true, startingShape: 'rounded' } },
+  grid: { borderColor: '#e0e0e0', padding: { top: -10 } },
+  yaxis: { labels: { style: { colors: '#888' } } },
+  colors: ['#f48024'],
+  xaxis: { type: 'datetime', labels: { style: { colors: '#888' } } },
+  minHeight: 300,
+});
+
+onMounted(async () => {
+  // try {
+  //   const response = await axios.get('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime=10');
+  //   const apiData = response.data;
+  //   console.log(apiData);
+
+  //   const seriesData = Object.entries(apiData).map(([timestamp, value]) => [new Date(timestamp).getTime(), value]);
+
+  //   chartSeries.value = [{ name: 'Seccion', data: seriesData }];
+  // } catch (error) {
+  //   console.error('Error fetching data:', error);
+  // }
+});
+
+// const resolveGeneral = computed(() => {
+
+//   let dataRaw = Array.from(dataGeneral.value);
+//   const seriesFormat = {
+//     name: 'Seccion',
+//     data: []
+//   };
+
+//   const categoriesRaw = [];
+//   for (let i in dataRaw) {
+//     let num = parseInt(dataRaw[i].visits);
+//     seriesFormat.data.push(num);
+//     categoriesRaw.push(dataRaw[i].name);
+//   }
+
+//   const options = {
+//     chart: {
+//       parentHeightOffset: 0,
+//       toolbar: { show: false },
+//       height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6) ? 400 : 700
+//     },
+//     dataLabels: {
+//       enabled: true
+//     },
+//     legend: {
+//       position: 'top',
+//       horizontalAlign: 'left',
+//       offsetX: 40,
+//       show: false
+//     },
+//     plotOptions: {
+//       bar: {
+//         borderRadius: 0,
+//         barHeight: '70%',
+//         horizontal: true,
+//         distributed: true,
+//         startingShape: 'rounded',
+//       },
+//     },
+//     grid: {
+//       borderColor: themeBorderColor,
+//       xaxis: {
+//         lines: { show: true },
+//       },
+//       padding: {
+//         top: -10,
+//       },
+//     },
+//     yaxis: {
+//       labels: {
+//         style: { colors: themeDisabledTextColor },
+//       },
+//     },
+//     colors: ['#f48024', '#69d2e7'],
+//     xaxis: {
+//       axisBorder: { show: false },
+//       axisTicks: { color: themeBorderColor },
+//       categories: categoriesRaw,
+//       labels: {
+//         style: { colors: themeDisabledTextColor },
+//       },
+//     },
+//     minHeight: 300,
+//   }
+//   return { series: [seriesFormat], options: options, intereses: categoriesRaw };
+// });
+
 
 // realtimme procesos 
 const entriesLength = ref(false);
@@ -565,6 +666,56 @@ let intervalId = null
 const entries = ref([]);
 const totalVisits = ref(0);
 const sumV = ref(0);
+
+
+// Grafico general tiempo
+const fetchGeneral = async () => {
+  // const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime=10')
+  // const data = await response.json();
+  // dataGeneral.value = data;
+
+  const response = await axios.get('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime=10');
+  const apiData = response.data;
+  dataGeneral.value = apiData;
+  // console.log(apiData);
+
+  const seriesData = Object.entries(apiData).map(([timestamp, value]) => {
+    const time = timestamp.split(' ')[1];
+    const [hour, minute] = time.split(':');
+    const timestampInMilliseconds = new Date(0, 0, 0, hour, minute).getTime();
+    return [timestampInMilliseconds, value];
+  });
+  chartSeries.value = [{ name: 'Seccion', data: seriesData }];
+
+  console.log(seriesData);
+
+
+  // [moment(timestamp).format('HH:mm'), value]);
+  // {
+
+  //   var fecha = new Date(timestamp);
+  //   var hora = fecha.getHours();
+  //   var minutos = fecha.getMinutes();
+
+  //   // Formatear la hora y minutos según tus necesidades
+  //   var horaFormateada = hora < 10 ? "0" + hora : hora;
+  //   var minutosFormateados = minutos < 10 ? "0" + minutos : minutos;
+
+  //   var horaCompleta = horaFormateada + ":" + minutosFormateados;
+  //   console.log(horaCompleta);
+  //   return horaCompleta
+  //   // [new Date(horaCompleta).getTime(), value]
+
+  // });
+
+
+
+
+  // if (dataDevice.value.length > 0) {
+  //   deviceLength.value = true;
+  // }
+}
+
 
 // Grafico Devise
 const fetchDevice = async () => {
@@ -606,7 +757,7 @@ const fetchEntries = async () => {
   if (sumV.value !== totalTemSumV) {
     contarSecuencial(sumV.value, totalTemSumV, 2000);
   }
-  
+
   // sumV.value = ty.reduce((acc, item) => acc + item, 0);
   // console.log(sumV.value);
   if (dataChart.value.length > 0) {
@@ -665,6 +816,7 @@ const toggleRealtime = () => {
       fetchDevice();
       fetchMetadato();
       fetchSection();
+      fetchGeneral();
       // fetchRegisters(); // nuevo
 
     }
@@ -800,7 +952,7 @@ const goToLink = (link) => {
 
       </VCol>
     </VRow>
-       <!--<VCardText class="px-0 d-none" v-if="isListVisible.valueOf">
+    <!--<VCardText class="px-0 d-none" v-if="isListVisible.valueOf">
             <VList lines="two" border>
               <template v-for="(register, index) in registers" :key="register.title">
 
@@ -827,7 +979,7 @@ const goToLink = (link) => {
           </VCardText> -->
     <VRow id="dash">
       <!-- 👉 Project Status -->
-    <!-- <VCol
+      <!-- <VCol
       cols="12"
       md="7"
     >
@@ -916,6 +1068,26 @@ const goToLink = (link) => {
       <VCol class="dere__" id="realtime" cols="12" sm="6">
 
         <VRow>
+          <VCol cols="12" sm="12" class="d-none">
+            <VCard class="px-4 py-4 v-col-12  h-100">
+              <VCardItem class="header_card_item pb-4">
+                <div class="d-flex pr-5" style="justify-content: space-between;">
+                  <div class="descripcion">
+                    <VCardTitle>Tiempo Real - General</VCardTitle>
+                  </div>
+                  <!-- <div class="">
+                <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
+              </div> -->
+
+                </div>
+              </VCardItem>
+
+              <VueApexCharts v-if="sumV != 0" type="bar" :options="chartOptions" :series="chartSeries" />
+
+            </VCard>
+          </VCol>
+
+
           <VCol cols="12" sm="6">
             <VCard class="px-4 py-4 v-col-12  h-100">
               <VCardItem class="header_card_item pb-4">
@@ -934,14 +1106,14 @@ const goToLink = (link) => {
 
               <VueApexCharts v-if="sumV != 0" type="pie" :options="resolveDevice.options"
                 :series="resolveDevice.series" />
-       
+
 
 
             </VCard>
           </VCol>
 
           <VCol cols="12" sm="6">
-            <VCard class="px-4 py-4 v-col-12  h-100" >
+            <VCard class="px-4 py-4 v-col-12  h-100">
               <VCardItem class="header_card_item pb-4">
                 <div class="d-flex pr-5" style="justify-content: space-between;">
                   <div class="descripcion" cols="12" sm="6">
@@ -969,7 +1141,7 @@ const goToLink = (link) => {
                   <div class="descripcion" cols="12" sm="6">
                     <VCardTitle>Tiempo Real por Páginas</VCardTitle>
                   </div>
-    
+
                 </div>
               </VCardItem>
               <VueApexCharts v-if="sumV != 0" class="graficoRealTime" type="bar" :options="resolveData.options"
