@@ -52,6 +52,7 @@ const dataDevice = ref([]);
 const dataMetadato = ref([]);
 const dataSection = ref([]);
 const dataGeneral = ref([]);
+const totalPagesVisits = ref(0);
 
 const isLoading = ref(true);
 
@@ -677,6 +678,7 @@ const fetchGeneral = async () => {
   const response = await axios.get('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime=10');
   const apiData = response.data;
   dataGeneral.value = apiData;
+
   // console.log(apiData);
 
   const seriesData = Object.entries(apiData).map(([timestamp, value]) => {
@@ -764,6 +766,10 @@ const fetchEntries = async () => {
     // contarSecuencial(sumV.value, totalTemSumV, 2000);
   }
 
+  // totalPagesVisits.value = data.reduce((total, item) => total + item.visits, 0);
+
+  // console.log(data)
+
   // sumV.value = ty.reduce((acc, item) => acc + item, 0);
   // console.log(sumV.value);
   if (dataChart.value.length > 0) {
@@ -822,7 +828,7 @@ const toggleRealtime = () => {
       fetchDevice();
       fetchMetadato();
       fetchSection();
-      fetchGeneral();
+      // fetchGeneral();
       fetchConteov2();
       // fetchRegisters(); // nuevo
 
@@ -890,7 +896,7 @@ const goToLink = (link) => {
 }
 
 
-#realtime .v-card-item {
+/*#realtime .v-card-item {
   padding: 1px;
 }
 
@@ -899,15 +905,17 @@ const goToLink = (link) => {
   font-size: 13px;
 }
 
-.text-sum {
-  font-size: 75px;
-  font-weight: bold;
-  letter-spacing: 2px;
-}
+
 
 .switch {
   margin-left: 20px;
   margin-bottom: 5px;
+}*/
+
+.text-sum {
+  font-size: 75px;
+  font-weight: bold;
+  letter-spacing: 2px;
 }
 </style>
 
@@ -1018,14 +1026,14 @@ const goToLink = (link) => {
 
         <VCard class="px-4 py-4 v-col-12">
           <VCardItem class="header_card_item pb-4">
-            <div class="d-flex pr-5" style="justify-content: space-between;">
+            <div class="d-flex pr-0" style="justify-content: space-between;">
               <div class="descripcion" cols="12" sm="6">
                 <VCardTitle>Visitas de usuarios registrados en tiempo real</VCardTitle>
                 <VCardSubtitle cols="12">Tiempo de actualización: 30 segundos
                 </VCardSubtitle>
               </div>
-              <div class="">
-                <VSwitch class="mt-n4 pt-5" v-model="realtime" @click="toggleRealtime"></VSwitch>
+              <div class="pt-5 pr-3">
+                <VSwitch class="mt-n4 " v-model="realtime" @click="toggleRealtime"></VSwitch>
               </div>
 
             </div>
@@ -1075,23 +1083,21 @@ const goToLink = (link) => {
       <VCol class="dere__" id="realtime" cols="12" sm="6">
 
         <VRow>
-          <VCol cols="12" sm="12" class="d-none">
-            <VCard class="px-4 py-4 v-col-12  h-100">
+          <VCol cols="12" sm="12" class="">
+            <CrmProjectStatus :realtime="realtime" :usuarios="sumV" :totalPagesVisits="totalPagesVisits" />
+            <!-- <VCard class="px-4 py-4 v-col-12  h-100">
               <VCardItem class="header_card_item pb-4">
                 <div class="d-flex pr-5" style="justify-content: space-between;">
                   <div class="descripcion">
                     <VCardTitle>Tiempo Real - General</VCardTitle>
                   </div>
-                  <!-- <div class="">
-                <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
-              </div> -->
 
                 </div>
               </VCardItem>
 
               <VueApexCharts v-if="sumV != 0" type="bar" :options="chartOptions" :series="chartSeries" />
 
-            </VCard>
+            </VCard> -->
           </VCol>
 
 
