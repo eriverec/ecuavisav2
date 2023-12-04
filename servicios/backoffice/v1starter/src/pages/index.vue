@@ -576,14 +576,21 @@ const fetchDevice = async () => {
   }
 }
 
-function contarSecuencial(limite, tiempoTotal) {
-  const intervalo = tiempoTotal / limite;
+function contarSecuencial(inicio, fin, tiempoTotal) {
+  const intervalo = tiempoTotal / Math.abs(fin - inicio);
+  const incremento = inicio < fin ? 1 : -1;
+  let contador = inicio;
 
-  for (let i = 0; i <= limite; i++) {
-    setTimeout(() => {
-      sumV.value = i;
-    }, i * intervalo);
-  }
+  const realizarConteo = () => {
+    sumV.value = contador;
+
+    if ((incremento > 0 && contador < fin) || (incremento < 0 && contador > fin)) {
+      contador += incremento;
+      setTimeout(realizarConteo, intervalo);
+    }
+  };
+
+  realizarConteo();
 }
 
 const fetchEntries = async () => {
@@ -595,8 +602,9 @@ const fetchEntries = async () => {
     totalVisits.value = JSON.parse(item.visits)
   ));
   var totalTemSumV = ty.reduce((acc, item) => acc + item, 0);
-  if(sumV.value != totalTemSumV){
-    contarSecuencial(totalTemSumV, 2000)
+
+  if (sumV.value !== totalTemSumV) {
+    contarSecuencial(sumV.value, totalTemSumV, 2000);
   }
   
   // sumV.value = ty.reduce((acc, item) => acc + item, 0);
