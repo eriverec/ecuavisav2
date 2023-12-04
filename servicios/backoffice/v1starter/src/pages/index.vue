@@ -687,7 +687,7 @@ const fetchGeneral = async () => {
   });
   chartSeries.value = [{ name: 'Seccion', data: seriesData }];
 
-  console.log(seriesData);
+  // console.log(seriesData);
 
 
   // [moment(timestamp).format('HH:mm'), value]);
@@ -727,13 +727,19 @@ const fetchDevice = async () => {
   }
 }
 
+const fetchConteov2 = async () => {
+  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupUsers')
+  const data = await response.json();
+  sumV.value = data.length;
+}
+
 function contarSecuencial(inicio, fin, tiempoTotal) {
   const intervalo = tiempoTotal / Math.abs(fin - inicio);
   const incremento = inicio < fin ? 1 : -1;
   let contador = inicio;
 
   const realizarConteo = () => {
-    sumV.value = contador;
+    // sumV.value = contador;
 
     if ((incremento > 0 && contador < fin) || (incremento < 0 && contador > fin)) {
       contador += incremento;
@@ -755,7 +761,7 @@ const fetchEntries = async () => {
   var totalTemSumV = ty.reduce((acc, item) => acc + item, 0);
 
   if (sumV.value !== totalTemSumV) {
-    contarSecuencial(sumV.value, totalTemSumV, 2000);
+    // contarSecuencial(sumV.value, totalTemSumV, 2000);
   }
 
   // sumV.value = ty.reduce((acc, item) => acc + item, 0);
@@ -817,6 +823,7 @@ const toggleRealtime = () => {
       fetchMetadato();
       fetchSection();
       fetchGeneral();
+      fetchConteov2();
       // fetchRegisters(); // nuevo
 
     }
