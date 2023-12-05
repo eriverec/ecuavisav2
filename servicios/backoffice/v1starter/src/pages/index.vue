@@ -5,14 +5,13 @@ import { hexToRgb } from '@layouts/utils';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
 // import UserTabDispositivos from '@/views/dashboards/traceability/UserTabDispositivos.vue';
-import UserTabNavegacion from '@/views/dashboards/traceability/UserTabNavegacion.vue';
 import CrmProjectStatus from '@/views/dashboards/crm/CrmProjectStatus.vue';
-import CrmSalesAreaCharts from '@/views/dashboards/crm/CrmSalesAreaCharts.vue';
+import UserTabNavegacion from '@/views/dashboards/traceability/UserTabNavegacion.vue';
+import axios from 'axios';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 import { onMounted, onUnmounted, ref } from "vue";
-import axios from 'axios';
 
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
@@ -1166,7 +1165,7 @@ const goToLink = (link) => {
 
 
 
-        <VRow>
+        <VRow class="d-none">
           <VCol cols="12" sm="6">
             <VCard class="px-4 py-4 v-col-12 mb-5">
               <VCardItem class="header_card_item pb-4">
