@@ -340,6 +340,20 @@ const resolveData = computed(() => {
 
 const resolveDevice = computed(() => {
 
+  const currentTheme = vuetifyTheme.current.value.colors
+  const variableTheme = vuetifyTheme.current.value.variables
+  const labelSuccessColor = `rgba(${ hexToRgb(currentTheme.success) },0.2)`
+  const headingColor = `rgba(${ hexToRgb(currentTheme['on-background']) },${ variableTheme['high-emphasis-opacity'] })`
+
+  const chartColors = {
+    donut: {
+      series1: currentTheme.success,
+      series2: '#28c76fb3',
+      series3: '#28c76f80',
+      series4: labelSuccessColor,
+    },
+  }
+
   let dataRaw = Array.from(dataDevice.value);
   const seriesFormat = {
     name: 'Device',
@@ -353,50 +367,155 @@ const resolveDevice = computed(() => {
     categoriesRaw.push(dataRaw[i].name);
   }
 
+  // const options = {
+  //   chart: {
+  //     parentHeightOffset: 0,
+  //     type: 'donut',
+  //   },
+  //   dataLabels: {
+  //     enabled: true,
+  //     style: {
+  //       fontSize: '16px',
+  //       fontFamily: 'Helvetica, Arial, sans-serif',
+  //       fontWeight: 'bold',
+  //       colors: ['#fff']
+  //     },
+  //   },
+  //   legend: {
+  //     position: 'bottom',
+  //     horizontalAlign: 'left',
+  //     offsetX: 40,
+  //     show: true,
+  //     labels: {
+  //       colors: themeDisabledTextColor,
+  //       useSeriesColors: false
+  //     },
+  //   },
+  //   // plotOptions: {},
+  //   // title: {
+  //   //   text: 'Visitas por Dispositivos',
+  //   //   align: 'center',
+  //   //   style: {
+  //   //     fontSize: '16px',
+  //   //     fontWeight: 'bold',
+  //   //     fontFamily: 'Helvetica, Arial, sans-serif',
+  //   //     color: themeDisabledTextColor
+  //   //   },
+  //   // },
+  //   yaxis: {
+  //     labels: {
+  //       style: { colors: themeDisabledTextColor },
+  //     },
+  //   },
+  //   colors: ['#33b2df', '#546E7A'],
+  //   labels: categoriesRaw,
+  // }
+
   const options = {
     chart: {
-      // type: 'pie',
-      // parentHeightOffset: 0,
-      // toolbar: { show: false },
-      // height: 400
+      parentHeightOffset: 0,
+      type: 'donut',
     },
+    labels: categoriesRaw,
+    colors: [
+      "#7365ed",
+      "#9d92f2",
+      chartColors.donut.series3,
+      chartColors.donut.series4,
+    ],
+    stroke: { width: 0 },
     dataLabels: {
-      enabled: true,
-      style: {
-        fontSize: '16px',
-        fontFamily: 'Helvetica, Arial, sans-serif',
-        fontWeight: 'bold',
-        colors: ['#fff']
+      enabled: false,
+      formatter(val) {
+        return `${ parseInt(val) }%`
       },
     },
     legend: {
       position: 'bottom',
-      horizontalAlign: 'left',
-      offsetX: 40,
+      horizontalAlign: 'center',
+      offsetX: 0,
+      // width: 300,
+      markers:{
+        width:7,
+        height:7
+      },
       show: true,
+      formatter: function(seriesName, opts) {
+          return [seriesName, " <br> ", `<div style="font-size:20px;color:#000">${opts.w.globals.series[opts.seriesIndex]} <small style="font-size:14px">visitas</small></div>`]
+      },
       labels: {
         colors: themeDisabledTextColor,
         useSeriesColors: false
       },
     },
-    // plotOptions: {},
-    // title: {
-    //   text: 'Visitas por Dispositivos',
-    //   align: 'center',
-    //   style: {
-    //     fontSize: '16px',
-    //     fontWeight: 'bold',
-    //     fontFamily: 'Helvetica, Arial, sans-serif',
-    //     color: themeDisabledTextColor
-    //   },
-    // },
-    yaxis: {
-      labels: {
-        style: { colors: themeDisabledTextColor },
+    tooltip: { 
+      theme: false,
+      custom: function({series, seriesIndex, dataPointIndex, w}) {
+        // series[seriesIndex]
+        return `<div class="tooltip-content">
+          <div class="tooltip-body">
+            <div class="tooltip-title">
+              En los últimos 15 minutos
+            </div>
+            <div class="tooltip-subtitle">
+              Usuarios
+            </div>
+            <div class="tooltip-data-flex">
+              <div class="tooltip-data-title">
+                ${w.config.labels[seriesIndex]}
+              </div>
+              <div class="tooltip-data-value">
+                ${series[seriesIndex]} visitas
+              </div>
+            </div>
+          </div>
+        </div>`
+      }
+    },
+    // tooltip: { theme: true },
+    grid: {
+      padding: {
+        top: 15,
+        right: -20,
+        left: -20,
       },
     },
-    colors: ['#33b2df', '#546E7A'],
-    labels: categoriesRaw,
+    states: { hover: { filter: { type: 'none' } } },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '70%',
+          labels: {
+            show: false,
+            value: {
+              fontSize: '1.375rem',
+              fontFamily: 'Public Sans',
+              color: headingColor,
+              fontWeight: 600,
+              offsetY: -15,
+              formatter(val) {
+                return `${ parseInt(val) }%`
+              },
+            },
+            name: {
+              offsetY: 20,
+              fontFamily: 'Public Sans',
+            },
+            total: {
+              show: false,
+              showAlways: false,
+              color: currentTheme.success,
+              fontSize: '.8125rem',
+              label: 'Total',
+              fontFamily: 'Public Sans',
+              formatter() {
+                return '184'
+              },
+            },
+          },
+        },
+      },
+    },
   }
   return { series: seriesFormat.data, options: options };
 });
@@ -572,6 +691,7 @@ const chartOptions = ref({
 });
 
 onMounted(async () => {
+  // fetchDevice();
   // try {
   //   const response = await axios.get('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime=10');
   //   const apiData = response.data;
@@ -832,7 +952,7 @@ const toggleRealtime = () => {
       // fetchRegisters(); // nuevo
 
     }
-    intervalId = setInterval(juntas, 3500);
+    intervalId = setInterval(juntas, 15000);
   } else {
     resetEntries();
     clearInterval(intervalId);
@@ -916,6 +1036,41 @@ const goToLink = (link) => {
   font-weight: bold;
   letter-spacing: 2px;
 }
+
+.tooltip-content{
+  background-color: #fff;
+  padding: 15px 15px;
+  border-radius: 10px;
+}
+
+.tooltip-title{
+  font-size: 12px;
+  line-height: 1.2;
+  color: #949494;
+  margin-bottom: 10px;
+  font-weight: 400;
+}
+
+.tooltip-subtitle{
+  color: #949494;
+  font-size: 12px;
+}
+
+.tooltip-data-flex{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tooltip-data-title, .tooltip-data-value{
+  font-size: 11px;
+  color: #000;
+}
+
+.tooltip-data-value{
+  font-size: 14px;
+}
 </style>
 
 
@@ -924,8 +1079,6 @@ const goToLink = (link) => {
   <section>
     <VRow>
       <VCol class="mr-6" v-for="meta in userListMeta" :key="meta.title" cols="12" sm="12" lg="2">
-
-
         <VCard class="col-12 col-sm- col-lg-2 tarjeta">
           <VCardText class="d-flex justify-space-between" style="font-size:11px;">
             <div>
@@ -963,161 +1116,129 @@ const goToLink = (link) => {
 
           </VCardText>
         </VCard>
-
       </VCol>
     </VRow>
-    <!--<VCardText class="px-0 d-none" v-if="isListVisible.valueOf">
-            <VList lines="two" border>
-              <template v-for="(register, index) in registers" :key="register.title">
-
-                <VListItem>
-                  <VListItemTitle>
-                    {{ register.title }}
-                  </VListItemTitle>
-                  <VListItemSubtitle class="mt-1">
-                    <span class="text-xs">Id de Usuario: {{ register.userId }}</span>
-                    <span class="text-xs"></span>
-                    <VChip class="mx-2" color="success">hace {{ restarHoras(register.hora, horaAct) }}</VChip>
-
-                  </VListItemSubtitle>
-
-                  <template #append>
-                    <VBtn size="small" @click="goToLink(register.url)">
-                      <VIcon icon="mdi-link-variant" />
-                    </VBtn>
-                  </template>
-                </VListItem>
-                <VDivider v-if="index !== register.length - 1" />
-              </template>
-            </VList>
-          </VCardText> -->
-    <VRow id="dash">
-      <!-- 👉 Project Status -->
-      <!-- <VCol
-      cols="12"
-      md="7"
-    >
-      <CrmProjectStatus />
-    </VCol>
-
-    <VCol
-      cols="12"
-      md="12"
-      sm="5"
-      lg="5"
-    >
-      <CrmSalesAreaCharts />
-    </VCol> -->
-
-      <!-- Columna de Navegación & Realtimee -->
+    <VRow class="mt-3">
       <VCol class="d-flex" id="navegacion" cols="12" sm="6">
         <UserTabNavegacion />
-
       </VCol>
-
       <!-- Columna de Ubicaciones -->
       <VCol class="d-flex" cols="12" sm="6">
         <UserTabUbicacion />
       </VCol>
+    </VRow>
+    <VRow id="dash">
+      <VCol class="dere__" cols="12" sm="6">
+        <VRow>
+          <VCol class="" id="realtime" cols="12" sm="12">
+            <VCard class="px-4 py-4 v-col-12">
+              <VCardItem class="header_card_item pb-4">
+                <div class="d-flex pr-0" style="justify-content: space-between;">
+                  <div class="descripcion" cols="12" sm="6">
+                    <VCardTitle>Visitas de usuarios registrados en tiempo real</VCardTitle>
+                    <VCardSubtitle cols="12">Tiempo de actualización: 30 segundos
+                    </VCardSubtitle>
+                  </div>
+                  <div class="pt-5 pr-3">
+                    <VSwitch class="mt-n4 " v-model="realtime" @click="toggleRealtime"></VSwitch>
+                  </div>
 
-      <!-- Columna de Realtime -->
-      <VCol class="d-flex" id="realtime" cols="12" sm="6">
-
-        <VCard class="px-4 py-4 v-col-12">
-          <VCardItem class="header_card_item pb-4">
-            <div class="d-flex pr-0" style="justify-content: space-between;">
-              <div class="descripcion" cols="12" sm="6">
-                <VCardTitle>Visitas de usuarios registrados en tiempo real</VCardTitle>
-                <VCardSubtitle cols="12">Tiempo de actualización: 30 segundos
-                </VCardSubtitle>
-              </div>
-              <div class="pt-5 pr-3">
-                <VSwitch class="mt-n4 " v-model="realtime" @click="toggleRealtime"></VSwitch>
-              </div>
-
-            </div>
-          </VCardItem>
-          <VCardText class="px-0" v-if="isListVisible.valueOf">
+                </div>
+              </VCardItem>
+              <VCardText class="px-0" v-if="isListVisible.valueOf">
 
 
-            <VList v-if="entriesLength" lines="two" border class="BORDER--">
-              <template v-for="(entry, index) in entries.slice(0, 10)" :key="entry.title">
-                <VListItem>
-                  <VListItemTitle>
-                    {{ entry.title }}
-                  </VListItemTitle>
-                  <VListItemSubtitle class="mt-1">
-                    <span class="text-xs">Visitas: {{ entry.visits }}</span>
-                  </VListItemSubtitle>
+                <VList v-if="entriesLength" lines="two" border class="BORDER--">
+                  <template v-for="(entry, index) in entries.slice(0, 10)" :key="entry.title">
+                    <VListItem>
+                      <VListItemTitle>
+                        {{ entry.title }}
+                      </VListItemTitle>
+                      <VListItemSubtitle class="mt-1">
+                        <span class="text-xs">Visitas: {{ entry.visits }}</span>
+                      </VListItemSubtitle>
 
-                  <template #append>
-                    <VBtn size="small" @click="goToLink(entry.url)">
-                      <VIcon icon="mdi-link-variant" />
+                      <template #append>
+                        <VBtn size="small" @click="goToLink(entry.url)">
+                          <VIcon icon="mdi-link-variant" />
+                        </VBtn>
+                      </template>
+                    </VListItem>
+                    <VDivider v-if="index !== entries.length - 1" />
+                  </template>
+                  <!-- <VBtn class="m-auto d-block m-4" variant="outlined" color="success" size="small" @click="loadMore">
+                    Cargar más
+                  </VBtn> -->
+                  <VDialog v-if="entriesLength" v-model="isDialogVisible" width="500">
+                  <!-- Activator -->
+                  <template #activator="{ props }">
+                    <VBtn variant="outlined" color="success" style="margin: auto;" class="my-4 d-block" v-bind="props">
+                      Ver registros completos
                     </VBtn>
                   </template>
-                </VListItem>
-                <VDivider v-if="index !== entries.length - 1" />
-              </template>
-              <!-- <VBtn class="m-auto d-block m-4" variant="outlined" color="success" size="small" @click="loadMore">
-                Cargar más
-              </VBtn> -->
-              <VDialog v-if="entriesLength" v-model="isDialogVisible" width="500">
-              <!-- Activator -->
-              <template #activator="{ props }">
-                <VBtn variant="outlined" color="success" style="margin: auto;" class="my-4 d-block" v-bind="props">
-                  Ver registros completos
-                </VBtn>
-              </template>
 
-              <!-- Dialog close btn -->
-              <DialogCloseBtn variant="outlined" color="success" @click="isDialogVisible = !isDialogVisible" />
+                  <!-- Dialog close btn -->
+                  <DialogCloseBtn variant="outlined" color="success" @click="isDialogVisible = !isDialogVisible" />
 
-              <!-- Dialog Content -->
-              <VCard title="Registros completos">
-                <VCardText>
-                  <VList v-if="entriesLength" lines="two" border class="BORDER--">
-                    <template v-for="(entry, index) in entries" :key="entry.title">
-                      <VListItem>
-                        <VListItemTitle>
-                          {{ entry.title }}
-                        </VListItemTitle>
-                        <VListItemSubtitle class="mt-1">
-                          <span class="text-xs">Visitas: {{ entry.visits }}</span>
-                        </VListItemSubtitle>
+                  <!-- Dialog Content -->
+                  <VCard title="Registros completos">
+                    <VCardText>
+                      <VList v-if="entriesLength" lines="two" border class="BORDER--">
+                        <template v-for="(entry, index) in entries" :key="entry.title">
+                          <VListItem>
+                            <VListItemTitle>
+                              {{ entry.title }}
+                            </VListItemTitle>
+                            <VListItemSubtitle class="mt-1">
+                              <span class="text-xs">Visitas: {{ entry.visits }}</span>
+                            </VListItemSubtitle>
 
-                        <template #append>
-                          <VBtn size="small" @click="goToLink(entry.url)">
-                            <VIcon icon="mdi-link-variant" />
-                          </VBtn>
+                            <template #append>
+                              <VBtn size="small" @click="goToLink(entry.url)">
+                                <VIcon icon="mdi-link-variant" />
+                              </VBtn>
+                            </template>
+                          </VListItem>
+                          <VDivider v-if="index !== entries.length - 1" />
                         </template>
-                      </VListItem>
-                      <VDivider v-if="index !== entries.length - 1" />
-                    </template>
-                  </VList>
-                </VCardText>
+                      </VList>
+                    </VCardText>
 
 
-              </VCard>
-            </VDialog>
-            </VList>
-            
-            <!-- Botón "Leer más" -->
+                  </VCard>
+                </VDialog>
+                </VList>
+                
+                <!-- Botón "Leer más" -->
 
 
-            <!-- <div v-else></div> -->
+                <!-- <div v-else></div> -->
 
 
-          </VCardText>
-        </VCard>
+              </VCardText>
+            </VCard>
+          </VCol>
+          <VCol class="" cols="12" sm="12">
+            <VCard class="px-4 py-4 v-col-12 mb-3">
+              <VCardItem class="header_card_item pb-4">
+                <div class="d-flex pr-5" style="justify-content: space-between;">
+                  <div class="descripcion" cols="12" sm="6">
+                    <VCardTitle>Tiempo Real por Páginas</VCardTitle>
+                  </div>
+
+                </div>
+              </VCardItem>
+              <VueApexCharts v-if="sumV != 0" class="graficoRealTime" type="bar" :options="resolveData.options"
+                :series="resolveData.series" />
+            </VCard>
+          </VCol>
+        </VRow>
       </VCol>
-
-      <!--Columna de Registros de muestreo-->
-
-      <VCol class="dere__" id="realtime" cols="12" sm="6">
-
+      <!-- Columna de Ubicaciones -->
+      <VCol cols="12" sm="6">
         <VRow>
           <VCol cols="12" sm="12" class="">
-            <CrmProjectStatus :realtime="realtime" :usuarios="sumV" :totalPagesVisits="totalPagesVisits" />
+            <CrmProjectStatus :realtime="realtime" :usuarios="sumV" :totalPagesVisits="totalPagesVisits" :entries="entries" />
             <!-- <VCard class="px-4 py-4 v-col-12  h-100">
               <VCardItem class="header_card_item pb-4">
                 <div class="d-flex pr-5" style="justify-content: space-between;">
@@ -1132,14 +1253,13 @@ const goToLink = (link) => {
 
             </VCard> -->
           </VCol>
-
-
           <VCol cols="12" sm="6">
-            <VCard class="px-4 py-4 v-col-12  h-100">
+            <VCard class="px-0 py-0 v-col-12 pb-5">
               <VCardItem class="header_card_item pb-4">
-                <div class="d-flex pr-5" style="justify-content: space-between;">
+                <div class="d-flex pr-0" style="justify-content: space-between;">
                   <div class="descripcion">
-                    <VCardTitle>Tiempo Real por Dispositivos</VCardTitle>
+                    <VCardTitle>Categoría de dispositivos <br></VCardTitle>
+                    <small class="mt-3">En los últimos 15 minutos</small>
                   </div>
                   <!-- <div class="">
                 <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
@@ -1148,13 +1268,14 @@ const goToLink = (link) => {
                 </div>
               </VCardItem>
               <!-- <iframe src="https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/pie.html" width="100%"
-            height="100%" frameborder="0"></iframe> -->
+            height="100%" frameborder="0"></iframe>  -->
 
-              <VueApexCharts v-if="sumV != 0" type="pie" :options="resolveDevice.options"
-                :series="resolveDevice.series" />
-
-
-
+              <VueApexCharts v-if="sumV != 0"
+                :options="resolveDevice.options"
+                :series="resolveDevice.series" 
+                :height="247"
+                width="100%"
+              />
             </VCard>
           </VCol>
 
@@ -1174,33 +1295,7 @@ const goToLink = (link) => {
 
             </VCard>
           </VCol>
-
-        </VRow>
-
-
-
-        <VRow>
-          <VCol cols="12" sm="12">
-            <VCard class="px-4 py-4 v-col-12 mb-3 mt-3">
-              <VCardItem class="header_card_item pb-4">
-                <div class="d-flex pr-5" style="justify-content: space-between;">
-                  <div class="descripcion" cols="12" sm="6">
-                    <VCardTitle>Tiempo Real por Páginas</VCardTitle>
-                  </div>
-
-                </div>
-              </VCardItem>
-              <VueApexCharts v-if="sumV != 0" class="graficoRealTime" type="bar" :options="resolveData.options"
-                :series="resolveData.series" />
-            </VCard>
-          </VCol>
-        </VRow>
-
-
-
-
-        <VRow class="d-none">
-          <VCol cols="12" sm="6">
+          <VCol cols="12" sm="6" class="d-none">
             <VCard class="px-4 py-4 v-col-12 mb-5">
               <VCardItem class="header_card_item pb-4">
                 <div class="d-flex pr-5" style="justify-content: space-between;">
@@ -1215,7 +1310,7 @@ const goToLink = (link) => {
             </VCard>
           </VCol>
 
-          <VCol cols="12" sm="6">
+          <VCol cols="12" sm="6" class="d-none">
             <VCard class="px-4 py-4 v-col-12 mb-5">
               <VCardItem class="header_card_item pb-4">
                 <div class="d-flex pr-5" style="justify-content: space-between;">
@@ -1229,24 +1324,8 @@ const goToLink = (link) => {
                 :series="resolveSection.series" />
             </VCard>
           </VCol>
-
         </VRow>
-
-
-
-
       </VCol>
-      <!-- <VCol class="d-flex" cols="12" sm="6">
-        <div>
-        Realtime
-          <VSwitch v-model="realtime" @click="toggleRealtime">Desactivar Realtime</VSwitch>
-          <ul>
-            <li v-for="entry in entries" :key="entry.title">
-              {{ entry.title }} con el número de visitas:  {{ entry.visits }}
-            </li>
-          </ul>
-        </div>
-      </VCol> -->
     </VRow>
   </section>
 </template>

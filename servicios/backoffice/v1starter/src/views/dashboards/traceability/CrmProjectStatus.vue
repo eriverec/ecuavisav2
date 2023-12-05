@@ -10,6 +10,7 @@
   moment.locale('es', [esLocale]);
 
   const dataChart = ref([]);
+  const sumTotal = ref([]);
 
   const isMobile = window.innerWidth <= 768;
 
@@ -19,6 +20,7 @@
   const props = defineProps({
     realtime: Boolean,
     usuarios: String,
+    entries: Object,
     totalPagesVisits: String,
   });
 
@@ -193,21 +195,24 @@ const projectStatus = [
             />
           </template>
           <VListItemTitle class="font-weight-medium">
-            {{props.totalPagesVisits}}
+            {{props.entries.length}} páginas diferentes visitadas
           </VListItemTitle>
           <VListItemSubtitle class="opacity-100 text-disabled">
-            Páginas de ecuavisa.com visitadas durante 20 min.
+            Páginas de ecuavisa.com visitadas durante 15 min.
           </VListItemSubtitle>
 
           <template #append>
-            <div title="Usuarios activos">
+            <div title="Usuarios activos" class="d-flex">
               <VAvatar
                 color="success"
                 variant="tonal"
                 rounded
                 icon="mdi-account-multiple"
               />
-              <span class="text-success ml-4">{{props.usuarios}}</span>
+              <div style="text-align: center;display: flex;flex-direction: column;align-items: center;justify-content: center;" class="ml-3">
+                <span style="text-align: center;line-height: 1.2" class="text-success">{{props.usuarios}}</span>
+                <small class="text-success" style="font-size: 10px;">activos</small>
+              </div>
             </div>
             
           </template>
