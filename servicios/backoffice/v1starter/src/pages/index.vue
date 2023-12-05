@@ -441,7 +441,7 @@ const resolveDevice = computed(() => {
       },
       show: true,
       formatter: function(seriesName, opts) {
-          return [seriesName, " <br> ", `<div style="font-size:20px;color:#000">${opts.w.globals.series[opts.seriesIndex]} <small style="font-size:14px">visitas</small></div>`]
+          return [seriesName, " <br> ", `<div style="font-size:20px;color:rgba(var(--v-theme-on-background),var(--v-high-emphasis-opacity))">${opts.w.globals.series[opts.seriesIndex]} <small style="font-size:14px">visitas</small></div>`]
       },
       labels: {
         colors: themeDisabledTextColor,

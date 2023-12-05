@@ -183,7 +183,7 @@ const projectStatus = [
 
 <template>
   <VCard title="Visitas en tiempo real">
-    <VCardText>
+    <VCardText v-if="props.realtime">
       <VList class="card-list">
         <VListItem>
           <template #prepend>
