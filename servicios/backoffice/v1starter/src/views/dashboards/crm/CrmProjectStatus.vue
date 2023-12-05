@@ -14,7 +14,7 @@
   const isMobile = window.innerWidth <= 768;
 
   const vuetifyTheme = useTheme();
-  const now = moment(); // fecha de hoy 
+  // console.log(now)
   
   const props = defineProps({
     realtime: Boolean,
@@ -34,10 +34,17 @@
     for (let i in dataRaw) {
         let num = parseInt(dataRaw[i].visits);
         seriesFormat.data.push(num);
-        // const end = moment(dataRaw[i].name+":00", "YYYYY-MM-DD hh:mm:00"); // fecha 1 de Enero de 2022
-        // const duration = moment.duration(now.diff(end));
-        var min = 20 - i;
-        categoriesRaw.push(min==0?`Ahora`:`Hace ${min} min`);   
+        const end = moment(dataRaw[i].name+":00", "YYYYY-MM-DD hh:mm:00"); // fecha 1 de Enero de 2022
+        var now = moment(); // fecha de hoy 
+        // console.log()
+        var duration = moment.duration(now.diff(end));
+        duration = parseInt(duration.asMinutes());
+        if(duration < 1){
+          duration = 0;
+        }
+        var min = duration;
+        // console.log(now - end, now, end)
+        categoriesRaw.push(min==0?`Ahora`:`Hace ${min} min, ${moment(dataRaw[i].name+":00", "YYYYY-MM-DD hh:mm:00").format("HH:mm")}`);   
 
         // console.log({
         //   name: `Hace ${20 - i} minuto(s)`,
@@ -103,7 +110,7 @@
     return {series: [seriesFormat], options: options, intereses: categoriesRaw};
   });
 
-var intervalId;
+var intervalId = null;
 
 async function getChart() {
   await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime`)
@@ -120,20 +127,40 @@ async function juntas() {
   await getChart();
 }
 
+var primeraVez = true;
+
 onMounted(async () => {
+  // await getChart();
   if(props.realtime){
-    intervalId = setInterval(juntas, 5000);
+    if(!intervalId){
+      if(primeraVez){
+        primeraVez = false;
+        juntas();
+      }else{
+        intervalId = setInterval(juntas, 20000);
+      }
+    }
+    
   }else{
     clearInterval(intervalId);
+    intervalId = null;
   }
 });
 
 watch(props, async (newProps, oldProps) => {
   // Imprime las nuevas fechas
   if(newProps.realtime){
-    intervalId = setInterval(juntas, 5000);
+    if(!intervalId){
+      if(primeraVez){
+        primeraVez = false;
+        juntas();
+      }else{
+        intervalId = setInterval(juntas, 20000);
+      }
+    }
   }else{
     clearInterval(intervalId);
+    intervalId = null;
   }
   
 });
