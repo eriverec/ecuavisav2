@@ -5,7 +5,7 @@ import { hexToRgb } from '@layouts/utils';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
 // import UserTabDispositivos from '@/views/dashboards/traceability/UserTabDispositivos.vue';
-import CrmProjectStatus from '@/views/dashboards/crm/CrmProjectStatus.vue';
+import CrmProjectStatus from '@/views/dashboards/traceability/CrmProjectStatus.vue';
 import UserTabNavegacion from '@/views/dashboards/traceability/UserTabNavegacion.vue';
 import axios from 'axios';
 import Moment from 'moment';
