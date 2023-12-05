@@ -667,6 +667,7 @@ const entries = ref([]);
 const totalVisits = ref(0);
 const sumV = ref(0);
 
+const isDialogVisible = ref(false)
 
 // Grafico general tiempo
 const fetchGeneral = async () => {
@@ -716,8 +717,6 @@ const fetchGeneral = async () => {
   //   deviceLength.value = true;
   // }
 }
-
-
 // Grafico Devise
 const fetchDevice = async () => {
   const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?device')
@@ -755,6 +754,7 @@ const fetchEntries = async () => {
   const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?grouped=10')
   const data = await response.json()
   entries.value = data;
+  // console.log(entries.value);
   dataChart.value = data.slice(0, 10);
   const ty = (entries.value).map((item) => (
     totalVisits.value = JSON.parse(item.visits)
@@ -1041,22 +1041,12 @@ const goToLink = (link) => {
 
 
             <VList v-if="entriesLength" lines="two" border class="BORDER--">
-              <template v-for="(entry, index) in entries" :key="entry.title">
+              <template v-for="(entry, index) in entries.slice(0, 10)" :key="entry.title">
                 <VListItem>
                   <VListItemTitle>
                     {{ entry.title }}
                   </VListItemTitle>
                   <VListItemSubtitle class="mt-1">
-                    <!-- <VBadge
-                        dot
-                        location="start center"
-                        offset-x="2"
-                        :color="resolveStatusColor[user.status]"
-                        class="me-3"
-                      >
-                        <span class="ms-4">{{ user.status }}</span>
-                      </VBadge> -->
-
                     <span class="text-xs">Visitas: {{ entry.visits }}</span>
                   </VListItemSubtitle>
 
@@ -1068,9 +1058,53 @@ const goToLink = (link) => {
                 </VListItem>
                 <VDivider v-if="index !== entries.length - 1" />
               </template>
-            </VList>
+              <!-- <VBtn class="m-auto d-block m-4" variant="outlined" color="success" size="small" @click="loadMore">
+                Cargar más
+              </VBtn> -->
+              <VDialog v-if="entriesLength" v-model="isDialogVisible" width="500">
+              <!-- Activator -->
+              <template #activator="{ props }">
+                <VBtn variant="outlined" color="success" style="margin: auto;" class="my-4 d-block" v-bind="props">
+                  Ver registros completos
+                </VBtn>
+              </template>
 
-            <div v-else></div>
+              <!-- Dialog close btn -->
+              <DialogCloseBtn variant="outlined" color="success" @click="isDialogVisible = !isDialogVisible" />
+
+              <!-- Dialog Content -->
+              <VCard title="Registros completos">
+                <VCardText>
+                  <VList v-if="entriesLength" lines="two" border class="BORDER--">
+                    <template v-for="(entry, index) in entries" :key="entry.title">
+                      <VListItem>
+                        <VListItemTitle>
+                          {{ entry.title }}
+                        </VListItemTitle>
+                        <VListItemSubtitle class="mt-1">
+                          <span class="text-xs">Visitas: {{ entry.visits }}</span>
+                        </VListItemSubtitle>
+
+                        <template #append>
+                          <VBtn size="small" @click="goToLink(entry.url)">
+                            <VIcon icon="mdi-link-variant" />
+                          </VBtn>
+                        </template>
+                      </VListItem>
+                      <VDivider v-if="index !== entries.length - 1" />
+                    </template>
+                  </VList>
+                </VCardText>
+
+
+              </VCard>
+            </VDialog>
+            </VList>
+            
+            <!-- Botón "Leer más" -->
+
+
+            <!-- <div v-else></div> -->
 
 
           </VCardText>
