@@ -938,24 +938,34 @@ const resetEntries = async () => {
 //   }
 // }
 
+var primeraVez = true;
+
+
+
 const toggleRealtime = () => {
   realtime.value = !realtime.value;
   isListVisible.value = !isListVisible.value; // nuevo
-  if (realtime.value) {
-    function juntas() {
-      fetchEntries(); // nuevo
-      fetchDevice();
-      fetchMetadato();
-      fetchSection();
-      // fetchGeneral();
-      fetchConteov2();
-      // fetchRegisters(); // nuevo
+  function juntas() {
+    fetchEntries(); // nuevo
+    fetchDevice();
+    fetchMetadato();
+    fetchSection();
+    // fetchGeneral();
+    fetchConteov2();
+    // fetchRegisters(); // nuevo
 
-    }
+  }
+  
+  if (realtime.value) {
     intervalId = setInterval(juntas, 15000);
   } else {
     resetEntries();
     clearInterval(intervalId);
+  }
+
+  if(primeraVez){
+    primeraVez = false;
+    juntas();
   }
 };
 
