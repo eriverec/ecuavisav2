@@ -1305,7 +1305,7 @@ const goToLink = (link) => {
 
             </VCard>
           </VCol>
-          <VCol cols="12" sm="6" class="d-none">
+          <VCol cols="12" sm="12" class="">
             <VCard class="px-4 py-4 v-col-12 mb-5">
               <VCardItem class="header_card_item pb-4">
                 <div class="d-flex pr-5" style="justify-content: space-between;">
@@ -1320,7 +1320,7 @@ const goToLink = (link) => {
             </VCard>
           </VCol>
 
-          <VCol cols="12" sm="6" class="d-none">
+          <VCol cols="12" sm="12" class="">
             <VCard class="px-4 py-4 v-col-12 mb-5">
               <VCardItem class="header_card_item pb-4">
                 <div class="d-flex pr-5" style="justify-content: space-between;">
