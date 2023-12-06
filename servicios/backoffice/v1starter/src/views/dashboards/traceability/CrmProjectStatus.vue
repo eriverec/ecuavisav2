@@ -68,7 +68,7 @@
       grid: {
         show: false,
         padding: {
-          left: 0,
+          left: -58,
           right: 0,
         },
       },
