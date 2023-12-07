@@ -503,13 +503,13 @@ function pintarModalDOM(){
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Mi Modal</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Formulario</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
           <div class="mb-3">
             <label for="telefono_form" class="form-label">Telefono</label>
-            <input type="email" class="form-control" id="telefono_form" placeholder="34">
+            <input type="email" class="form-control" id="telefono_form" placeholder="0978665419">
           </div>
         
           <div class="mb-3">
