@@ -486,3 +486,79 @@ if (ECUAVISA_EC.login()) {
 
 // eventRadioManager();
 
+
+
+
+/* +++++++++++++++++++++
+ +++++EVENTO MODAL++++ 
++++++++++++++++++++++ */
+
+
+
+
+// Crear un elemento div para contener el modal
+function pintarModalDOM(){
+  const modalTempForm = `
+    <div class="modal fade modalDinamGlobal" id="modalContent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Mi Modal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="telefono_form" class="form-label">Telefono</label>
+            <input type="email" class="form-control" id="telefono_form" placeholder="34">
+          </div>
+        
+          <div class="mb-3">
+            <label for="telefono_form" class="form-label">Genero</label>
+            <select class="form-select" aria-label="Default select example">
+              <option selected>...</option>
+              <option value="1">Masculino</option>
+              <option value="2">Femenino</option>
+            </select>
+          </div>
+
+          <div class="mb-3">
+            <label for="fnacimiento_form" class="form-label">Fecha de nacimiento</label>
+            <input type="email" class="form-control" id="fnacimiento_form" placeholder="DD/MM/YYYY">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button> -->
+          <button type="button" id="sendform" class="btn btn-primary">Enviar</button>
+        </div>
+      </div>
+    </div>
+    </div>
+  `;
+  const modalContainer = document.createElement('div');
+  modalContainer.innerHTML = modalTempForm;
+  document.body.appendChild(modalContainer);
+
+}
+
+function bootstrapJS() {
+  const scriptBoostrap = document.createElement("script");
+  scriptBoostrap.setAttribute('src', `https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js`);
+  document.body.appendChild(scriptBoostrap);
+}
+
+function eventModal() {
+  const modalContent = new bootstrap.Modal(document.getElementById('modalContent'));
+  modalContent.show();
+}
+
+pintarModalDOM();
+bootstrapJS();
+
+setTimeout(() => {
+  // eventModal();
+}, 300);
+
+// document.getElementById('mostrarModal').addEventListener('click', function () {
+//   eventModal();
+// });
+
