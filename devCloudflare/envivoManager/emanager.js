@@ -509,11 +509,11 @@ function pintarModalDOM(){
         <div class="modal-body">
           <div class="mb-3">
             <label for="telefono_form" class="form-label">Telefono</label>
-            <input type="email" class="form-control" id="telefono_form" placeholder="0978665419">
+            <input type="number" class="form-control" id="telefono_form" placeholder="0978665419">
           </div>
         
           <div class="mb-3">
-            <label for="telefono_form" class="form-label">Genero</label>
+            <label for="genero_form" class="form-label">Genero</label>
             <select class="form-select" aria-label="Default select example">
               <option selected>...</option>
               <option value="1">Masculino</option>
@@ -523,7 +523,7 @@ function pintarModalDOM(){
 
           <div class="mb-3">
             <label for="fnacimiento_form" class="form-label">Fecha de nacimiento</label>
-            <input type="email" class="form-control" id="fnacimiento_form" placeholder="DD/MM/YYYY">
+            <input type="date" class="form-control" id="fnacimiento_form" placeholder="DD/MM/YYYY">
           </div>
         </div>
         <div class="modal-footer">
@@ -551,8 +551,19 @@ function eventModal() {
   modalContent.show();
 }
 
-pintarModalDOM();
-bootstrapJS();
+function onEvent(){
+  pintarModalDOM();
+  bootstrapJS();
+}
+
+//el usuario debe de estar logueado
+if(ECUAVISA_EC.login()) {
+  window.addEventListener('scroll', onEvent);
+  window.addEventListener('mousemove', onEvent);
+}
+
+
+
 
 setTimeout(() => {
   // eventModal();
