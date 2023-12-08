@@ -6,7 +6,7 @@ function eventRadioManager() {
   // const diaSemana = fechaActual.getDay();
   // const horaActual = fechaActual.getHours();
   // const minutosActuales = fechaActual.getMinutes();
-  const diasSemanaTexto = ["Domingo","Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado" ];
+  const diasSemanaTexto = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
 
   const fechaActual = new Date();
   fechaActual.setUTCHours(fechaActual.getUTCHours() - 5); // Ajustar a la zona horaria de UTC-5 (Ecuador).
@@ -78,14 +78,14 @@ function eventRadioManager() {
                   // Obtener el elemento <div> con el atributo data-id
                   var divdataid = document.querySelector('[data-id="643823bbf3b3410854ba942b"]');
 
-                  if(divdataid){
+                  if (divdataid) {
                     // Obtener el elemento <script> dentro del <div>
                     var scriptElement = divdataid.querySelector('script');
                     var scriptSrc = scriptElement.getAttribute('src');
                     var resultElement = document.createElement('script');
-                    resultElement.setAttribute('src',scriptSrc);
+                    resultElement.setAttribute('src', scriptSrc);
                     document.body.appendChild(resultElement);
-                  } 
+                  }
 
                 }
               });
@@ -138,14 +138,14 @@ function eventRadioManager() {
           // Obtener el elemento <div> con el atributo data-id
           var divdataid = document.querySelector('[data-id="643823bbf3b3410854ba942b"]');
 
-          if(divdataid){
+          if (divdataid) {
             // Obtener el elemento <script> dentro del <div>
             var scriptElement = divdataid.querySelector('script');
             var scriptSrc = scriptElement.getAttribute('src');
             var resultElement = document.createElement('script');
-            resultElement.setAttribute('src',scriptSrc);
+            resultElement.setAttribute('src', scriptSrc);
             document.body.appendChild(resultElement);
-          } 
+          }
 
         }
 
@@ -173,7 +173,7 @@ function eventoEnvivoManager() {
   const title_programa = document.querySelector('.title_programa');
   const playerembed = document.querySelector('#playerembed');
   const fondito__ = document.querySelector('#fondito__');
-  
+
   function fetchHorarioEnvivo() {
     fetch(apiUrl)
       .then(response => response.json())
@@ -244,7 +244,7 @@ function eventoEnvivoManager() {
                     title_programa.innerHTML = '';
                     title_programa.style.display = 'none';
                   }
-                  if(fondito__){
+                  if (fondito__) {
                     fondito__.style.display = "block";
                   }
                   if (playerembed) {
@@ -260,7 +260,7 @@ function eventoEnvivoManager() {
                     btnTelcomunidad.style.display = "none";
                   }
                 }
-              }else { }
+              } else { }
             } else {
               if (fondito__) { fondito__.style.display = "block"; }
               if (title_programa) {
@@ -272,7 +272,7 @@ function eventoEnvivoManager() {
                 if (document.querySelector('#playerembed iframe')) {
                   document.querySelector('#playerembed iframe').remove();
                 }
-  
+
               }
               if (enVivoRedy) { enVivoRedy.style.display = 'none'; }
             }
@@ -280,7 +280,7 @@ function eventoEnvivoManager() {
         } else {
           const dataTitulo = data.forzado.titulo;
           const datalabel = data.forzado.label;
-  
+
           if (title_programa) {
             title_programa.innerHTML = dataTitulo;
           }
@@ -290,14 +290,14 @@ function eventoEnvivoManager() {
               playerembed.innerHTML = htmlIframe;
             }
           }
-  
+
           if (playerembed && fondito__) {
             textIndicador.innerHTML = datalabel;
             playerembed.style.display = 'block';
             fondito__.style.display = "none";
           }
           if (enVivoRedy) { enVivoRedy.style.display = 'flex'; }
-  
+
           console.log("Forzado:", forzado);
         }
       })
@@ -476,7 +476,7 @@ eventoEnvivoManager();
 
 if (ECUAVISA_EC.login()) {
   eventRadioManager();
-}else{
+} else {
   const txtBase = document.querySelector('#no_transmision__');
   if (txtBase) {
     txtBase.style.display = "block";
@@ -497,7 +497,7 @@ if (ECUAVISA_EC.login()) {
 
 
 // Crear un elemento div para contener el modal
-function pintarModalDOM(){
+function pintarModalDOM() {
   const modalTempForm = `
     <div class="modal fade modalDinamGlobal" id="modalContent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -540,6 +540,9 @@ function pintarModalDOM(){
 
 }
 
+// let scrollExecuted = false;
+let mousemoveExecuted = false;
+
 function bootstrapJS() {
   const scriptBoostrap = document.createElement("script");
   scriptBoostrap.setAttribute('src', `https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js`);
@@ -551,14 +554,19 @@ function eventModal() {
   modalContent.show();
 }
 
-function onEvent(){
-  pintarModalDOM();
-  bootstrapJS();
+function onEvent() {
+  if (!mousemoveExecuted) {
+    pintarModalDOM();
+    bootstrapJS();
+    console.log("Se movio el mouse");
+    mousemoveExecuted = true;
+  }
+
 }
 
 //el usuario debe de estar logueado
-if(ECUAVISA_EC.login()) {
-  window.addEventListener('scroll', onEvent);
+if (ECUAVISA_EC.login()) {
+  // window.addEventListener('scroll', onEvent);
   window.addEventListener('mousemove', onEvent);
 }
 
