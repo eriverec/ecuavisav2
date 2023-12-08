@@ -498,6 +498,7 @@ if (ECUAVISA_EC.login()) {
 
 // Crear un elemento div para contener el modal
 function pintarModalDOM() {
+  const modalTelefono = ECUAVISA_EC.USER_data("phone_number")
   const modalTempForm = `
     <div class="modal fade modalDinamGlobal" id="modalContent" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -509,7 +510,7 @@ function pintarModalDOM() {
         <div class="modal-body">
           <div class="mb-3">
             <label for="telefono_form" class="form-label">Telefono</label>
-            <input type="number" class="form-control" id="telefono_form" placeholder="0978665419">
+            <input type="number" value="${modalTelefono != null ? modalTelefono : '' }" class="form-control" id="telefono_form" placeholder="0978665419">
           </div>
         
           <div class="mb-3">
@@ -539,6 +540,9 @@ function pintarModalDOM() {
   document.body.appendChild(modalContainer);
 
 }
+
+
+
 
 // let scrollExecuted = false;
 let mousemoveExecuted = false;
