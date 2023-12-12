@@ -443,7 +443,7 @@ const resolveDevice = computed(() => {
       },
       show: true,
       formatter: function (seriesName, opts) {
-        return [seriesName, " <br> ", `<div style="font-size:20px;color:rgba(var(--v-theme-on-background),var(--v-high-emphasis-opacity))">${opts.w.globals.series[opts.seriesIndex]} <small style="font-size:14px">visitas</small></div>`]
+        return [seriesName, " <br> ", `<div style="font-size:20px;color:rgba(var(--v-theme-on-background),var(--v-high-emphasis-opacity))">${opts.w.globals.series[opts.seriesIndex]} <small style="font-size:14px">usuarios</small></div>`]
       },
       labels: {
         colors: themeDisabledTextColor,
@@ -1047,6 +1047,7 @@ const goToLink = (link) => {
   font-size: 75px;
   font-weight: bold;
   letter-spacing: 2px;
+  margin-top: -35px;
 }
 
 .tooltip-content {
@@ -1145,6 +1146,121 @@ const goToLink = (link) => {
       </VCol>
     </VRow>
     <VRow id="dash">
+
+
+      <!--Izquierda-->
+      <VCol cols="12" sm="6">
+        <VRow>
+
+          
+          <VCol cols="12" sm="12" class="">
+            <CrmProjectStatus :realtime="realtime" :usuarios="sumV" :totalPagesVisits="totalPagesVisits"
+              :entries="entries" />
+            <!-- <VCard class="px-4 py-4 v-col-12  h-100">
+              <VCardItem class="header_card_item pb-4">
+                <div class="d-flex pr-5" style="justify-content: space-between;">
+                  <div class="descripcion">
+                    <VCardTitle>Tiempo Real - General</VCardTitle>
+                  </div>
+
+                </div>
+              </VCardItem>
+
+              <VueApexCharts v-if="sumV != 0" type="bar" :options="chartOptions" :series="chartSeries" />
+
+            </VCard> -->
+          </VCol>
+          <VCol cols="12" sm="6">
+            <VCard class="px-0 py-0 v-col-12 pb-5">
+              <VCardItem class="header_card_item pb-4">
+                <div class="d-flex pr-0" style="justify-content: space-between;">
+                  <div class="descripcion">
+                    <VCardTitle>Categoría de dispositivos <br></VCardTitle>
+                    <small class="mt-3">En los últimos 15 minutos</small>
+                  </div>
+                  <!-- <div class="">
+                    <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
+                  </div> -->
+
+                </div>
+              </VCardItem>
+              <!-- <iframe src="https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/pie.html" width="100%"
+            height="100%" frameborder="0"></iframe>  -->
+
+              <VueApexCharts v-if="sumV != 0" :options="resolveDevice.options" :series="resolveDevice.series"
+                :height="247" width="100%" />
+            </VCard>
+          </VCol>
+
+          <VCol cols="12" sm="6">
+            <VCard class="px-1 py-1 v-col-12  h-100">
+              <VCardItem class="header_card_item pb-1">
+                <div class="d-flex pr-1" style="justify-content: space-between;">
+                  <div class="descripcion">
+                    <VCardTitle>Usuarios activos<br></VCardTitle>
+                    <small class="mt-3">En los últimos 15 minutos</small>
+                  </div>
+
+                  
+                </div>
+
+                
+
+              </VCardItem>
+              <div v-if="sumV != 0" class="mb-5 d-flex justify-center align-center flex-column">
+                <span class="text-sum text-success" cols="12" sm="6">
+                  <VAvatar
+                        color="success"
+                        variant="tonal"
+                        rounded
+                        icon="mdi-account-multiple"
+                        class="mt-3"
+                      />
+                    </span>
+                <span class="text-sum text-success" cols="12" sm="6"> {{ sumV }}</span>
+                
+                <span class="">Total de registros</span>
+              </div>
+
+            </VCard>
+          </VCol>
+          <VCol cols="12" sm="12" class="">
+            <VCard class="px-4 py-4 v-col-12 mb-5">
+              <VCardItem class="header_card_item pb-4">
+                <div class="d-flex pr-5" style="justify-content: space-between;">
+                  <div class="descripcion" cols="12" sm="6">
+                    <VCardTitle>Tiempo Real por Metadatos</VCardTitle>
+                  </div>
+
+                </div>
+              </VCardItem>
+              <VueApexCharts v-if="sumV != 0" type="bar" :options="resolveMetadato.options"
+                :series="resolveMetadato.series" />
+            </VCard>
+          </VCol>
+
+          <VCol cols="12" sm="12" class="">
+            <VCard class="px-4 py-4 v-col-12 mb-5">
+              <VCardItem class="header_card_item pb-4">
+                <div class="d-flex pr-5" style="justify-content: space-between;">
+                  <div class="descripcion" cols="12" sm="6">
+                    <VCardTitle>Tiempo Real por Secciones</VCardTitle>
+                  </div>
+                </div>
+              </VCardItem>
+
+              <VueApexCharts v-if="sumV != 0" type="bar" :options="resolveSection.options"
+                :series="resolveSection.series" />
+            </VCard>
+          </VCol>
+        </VRow>
+      </VCol>
+
+
+
+
+
+      <!--Derecha-->
       <VCol class="dere__" cols="12" sm="6">
         <VRow>
           <VCol class="" id="realtime" cols="12" sm="12">
@@ -1153,7 +1269,7 @@ const goToLink = (link) => {
                 <div class="d-flex pr-0" style="justify-content: space-between;">
                   <div class="descripcion" cols="12" sm="6">
                     <VCardTitle>Visitas de usuarios registrados en tiempo real</VCardTitle>
-                    <VCardSubtitle cols="12">Tiempo de actualización: 30 segundos
+                    <VCardSubtitle cols="12">En los últimos 15 minutos
                     </VCardSubtitle>
                   </div>
                   <div class="pt-5 pr-3">
@@ -1251,95 +1367,10 @@ const goToLink = (link) => {
           </VCol>
         </VRow>
       </VCol>
-      <!-- Columna de Ubicaciones -->
-      <VCol cols="12" sm="6">
-        <VRow>
-          <VCol cols="12" sm="12" class="">
-            <CrmProjectStatus :realtime="realtime" :usuarios="sumV" :totalPagesVisits="totalPagesVisits"
-              :entries="entries" />
-            <!-- <VCard class="px-4 py-4 v-col-12  h-100">
-              <VCardItem class="header_card_item pb-4">
-                <div class="d-flex pr-5" style="justify-content: space-between;">
-                  <div class="descripcion">
-                    <VCardTitle>Tiempo Real - General</VCardTitle>
-                  </div>
+      
 
-                </div>
-              </VCardItem>
-
-              <VueApexCharts v-if="sumV != 0" type="bar" :options="chartOptions" :series="chartSeries" />
-
-            </VCard> -->
-          </VCol>
-          <VCol cols="12" sm="6">
-            <VCard class="px-0 py-0 v-col-12 pb-5">
-              <VCardItem class="header_card_item pb-4">
-                <div class="d-flex pr-0" style="justify-content: space-between;">
-                  <div class="descripcion">
-                    <VCardTitle>Categoría de dispositivos <br></VCardTitle>
-                    <small class="mt-3">En los últimos 15 minutos</small>
-                  </div>
-                  <!-- <div class="">
-                <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
-              </div> -->
-
-                </div>
-              </VCardItem>
-              <!-- <iframe src="https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/pie.html" width="100%"
-            height="100%" frameborder="0"></iframe>  -->
-
-              <VueApexCharts v-if="sumV != 0" :options="resolveDevice.options" :series="resolveDevice.series"
-                :height="247" width="100%" />
-            </VCard>
-          </VCol>
-
-          <VCol cols="12" sm="6">
-            <VCard class="px-4 py-4 v-col-12  h-100">
-              <VCardItem class="header_card_item pb-4">
-                <div class="d-flex pr-5" style="justify-content: space-between;">
-                  <div class="descripcion" cols="12" sm="6">
-                    <VCardTitle>Total de usuarios activos</VCardTitle>
-                  </div>
-                </div>
-              </VCardItem>
-              <div v-if="sumV != 0" class="mb-5 d-flex justify-center align-center flex-column">
-                <span class="text-sum text-success"> {{ sumV }}</span>
-                <span class="">Suma de los registros.</span>
-              </div>
-
-            </VCard>
-          </VCol>
-          <VCol cols="12" sm="12" class="">
-            <VCard class="px-4 py-4 v-col-12 mb-5">
-              <VCardItem class="header_card_item pb-4">
-                <div class="d-flex pr-5" style="justify-content: space-between;">
-                  <div class="descripcion" cols="12" sm="6">
-                    <VCardTitle>Tiempo Real por Metadatos</VCardTitle>
-                  </div>
-
-                </div>
-              </VCardItem>
-              <VueApexCharts v-if="sumV != 0" type="bar" :options="resolveMetadato.options"
-                :series="resolveMetadato.series" />
-            </VCard>
-          </VCol>
-
-          <VCol cols="12" sm="12" class="">
-            <VCard class="px-4 py-4 v-col-12 mb-5">
-              <VCardItem class="header_card_item pb-4">
-                <div class="d-flex pr-5" style="justify-content: space-between;">
-                  <div class="descripcion" cols="12" sm="6">
-                    <VCardTitle>Tiempo Real por Secciones</VCardTitle>
-                  </div>
-                </div>
-              </VCardItem>
-
-              <VueApexCharts v-if="sumV != 0" type="bar" :options="resolveSection.options"
-                :series="resolveSection.series" />
-            </VCard>
-          </VCol>
-        </VRow>
-      </VCol>
+      
+     
     </VRow>
   </section>
 </template>
