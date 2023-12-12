@@ -1,6 +1,8 @@
 <script setup>
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 import UserTabUbicacion from '@/views/dashboards/traceability/UserTabUbicacion.vue';
+import GraficoUser from '@/views/dashboards/traceability/graficoUser.vue';
+
 import { hexToRgb } from '@layouts/utils';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
@@ -342,8 +344,8 @@ const resolveDevice = computed(() => {
 
   const currentTheme = vuetifyTheme.current.value.colors
   const variableTheme = vuetifyTheme.current.value.variables
-  const labelSuccessColor = `rgba(${ hexToRgb(currentTheme.success) },0.2)`
-  const headingColor = `rgba(${ hexToRgb(currentTheme['on-background']) },${ variableTheme['high-emphasis-opacity'] })`
+  const labelSuccessColor = `rgba(${hexToRgb(currentTheme.success)},0.2)`
+  const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
 
   const chartColors = {
     donut: {
@@ -427,7 +429,7 @@ const resolveDevice = computed(() => {
     dataLabels: {
       enabled: false,
       formatter(val) {
-        return `${ parseInt(val) }%`
+        return `${parseInt(val)}%`
       },
     },
     legend: {
@@ -435,22 +437,22 @@ const resolveDevice = computed(() => {
       horizontalAlign: 'center',
       offsetX: 0,
       // width: 300,
-      markers:{
-        width:7,
-        height:7
+      markers: {
+        width: 7,
+        height: 7
       },
       show: true,
-      formatter: function(seriesName, opts) {
-          return [seriesName, " <br> ", `<div style="font-size:20px;color:rgba(var(--v-theme-on-background),var(--v-high-emphasis-opacity))">${opts.w.globals.series[opts.seriesIndex]} <small style="font-size:14px">visitas</small></div>`]
+      formatter: function (seriesName, opts) {
+        return [seriesName, " <br> ", `<div style="font-size:20px;color:rgba(var(--v-theme-on-background),var(--v-high-emphasis-opacity))">${opts.w.globals.series[opts.seriesIndex]} <small style="font-size:14px">visitas</small></div>`]
       },
       labels: {
         colors: themeDisabledTextColor,
         useSeriesColors: false
       },
     },
-    tooltip: { 
+    tooltip: {
       theme: false,
-      custom: function({series, seriesIndex, dataPointIndex, w}) {
+      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         // series[seriesIndex]
         return `<div class="tooltip-content">
           <div class="tooltip-body">
@@ -494,7 +496,7 @@ const resolveDevice = computed(() => {
               fontWeight: 600,
               offsetY: -15,
               formatter(val) {
-                return `${ parseInt(val) }%`
+                return `${parseInt(val)}%`
               },
             },
             name: {
@@ -955,7 +957,7 @@ const toggleRealtime = () => {
     // fetchRegisters(); // nuevo
 
   }
-  
+
   if (realtime.value) {
     intervalId = setInterval(juntas, 15000);
   } else {
@@ -963,7 +965,7 @@ const toggleRealtime = () => {
     clearInterval(intervalId);
   }
 
-  if(primeraVez){
+  if (primeraVez) {
     primeraVez = false;
     juntas();
   }
@@ -1047,13 +1049,13 @@ const goToLink = (link) => {
   letter-spacing: 2px;
 }
 
-.tooltip-content{
+.tooltip-content {
   background-color: #fff;
   padding: 15px 15px;
   border-radius: 10px;
 }
 
-.tooltip-title{
+.tooltip-title {
   font-size: 12px;
   line-height: 1.2;
   color: #949494;
@@ -1061,24 +1063,25 @@ const goToLink = (link) => {
   font-weight: 400;
 }
 
-.tooltip-subtitle{
+.tooltip-subtitle {
   color: #949494;
   font-size: 12px;
 }
 
-.tooltip-data-flex{
+.tooltip-data-flex {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 10px;
 }
 
-.tooltip-data-title, .tooltip-data-value{
+.tooltip-data-title,
+.tooltip-data-value {
   font-size: 11px;
   color: #000;
 }
 
-.tooltip-data-value{
+.tooltip-data-value {
   font-size: 14px;
 }
 </style>
@@ -1128,13 +1131,17 @@ const goToLink = (link) => {
         </VCard>
       </VCol>
     </VRow>
+    <div class="mt-3">
+      <GraficoUser class="grafico_user" style="display: none;" />
+    </div>
     <VRow class="mt-3">
       <VCol class="d-flex" id="navegacion" cols="12" sm="6">
         <UserTabNavegacion />
       </VCol>
       <!-- Columna de Ubicaciones -->
-      <VCol class="d-flex" cols="12" sm="6">
+      <VCol class="d-flex " cols="12" sm="6">
         <UserTabUbicacion />
+
       </VCol>
     </VRow>
     <VRow id="dash">
@@ -1180,45 +1187,45 @@ const goToLink = (link) => {
                     Cargar más
                   </VBtn> -->
                   <VDialog v-if="entriesLength" v-model="isDialogVisible" width="500">
-                  <!-- Activator -->
-                  <template #activator="{ props }">
-                    <VBtn variant="outlined" color="success" style="margin: auto;" class="my-4 d-block" v-bind="props">
-                      Ver registros completos
-                    </VBtn>
-                  </template>
+                    <!-- Activator -->
+                    <template #activator="{ props }">
+                      <VBtn variant="outlined" color="success" style="margin: auto;" class="my-4 d-block" v-bind="props">
+                        Ver registros completos
+                      </VBtn>
+                    </template>
 
-                  <!-- Dialog close btn -->
-                  <DialogCloseBtn variant="outlined" color="success" @click="isDialogVisible = !isDialogVisible" />
+                    <!-- Dialog close btn -->
+                    <DialogCloseBtn variant="outlined" color="success" @click="isDialogVisible = !isDialogVisible" />
 
-                  <!-- Dialog Content -->
-                  <VCard title="Registros completos">
-                    <VCardText>
-                      <VList v-if="entriesLength" lines="two" border class="BORDER--">
-                        <template v-for="(entry, index) in entries" :key="entry.title">
-                          <VListItem>
-                            <VListItemTitle>
-                              {{ entry.title }}
-                            </VListItemTitle>
-                            <VListItemSubtitle class="mt-1">
-                              <span class="text-xs">Visitas: {{ entry.visits }}</span>
-                            </VListItemSubtitle>
+                    <!-- Dialog Content -->
+                    <VCard title="Registros completos">
+                      <VCardText>
+                        <VList v-if="entriesLength" lines="two" border class="BORDER--">
+                          <template v-for="(entry, index) in entries" :key="entry.title">
+                            <VListItem>
+                              <VListItemTitle>
+                                {{ entry.title }}
+                              </VListItemTitle>
+                              <VListItemSubtitle class="mt-1">
+                                <span class="text-xs">Visitas: {{ entry.visits }}</span>
+                              </VListItemSubtitle>
 
-                            <template #append>
-                              <VBtn size="small" @click="goToLink(entry.url)">
-                                <VIcon icon="mdi-link-variant" />
-                              </VBtn>
-                            </template>
-                          </VListItem>
-                          <VDivider v-if="index !== entries.length - 1" />
-                        </template>
-                      </VList>
-                    </VCardText>
+                              <template #append>
+                                <VBtn size="small" @click="goToLink(entry.url)">
+                                  <VIcon icon="mdi-link-variant" />
+                                </VBtn>
+                              </template>
+                            </VListItem>
+                            <VDivider v-if="index !== entries.length - 1" />
+                          </template>
+                        </VList>
+                      </VCardText>
 
 
-                  </VCard>
-                </VDialog>
+                    </VCard>
+                  </VDialog>
                 </VList>
-                
+
                 <!-- Botón "Leer más" -->
 
 
@@ -1248,7 +1255,8 @@ const goToLink = (link) => {
       <VCol cols="12" sm="6">
         <VRow>
           <VCol cols="12" sm="12" class="">
-            <CrmProjectStatus :realtime="realtime" :usuarios="sumV" :totalPagesVisits="totalPagesVisits" :entries="entries" />
+            <CrmProjectStatus :realtime="realtime" :usuarios="sumV" :totalPagesVisits="totalPagesVisits"
+              :entries="entries" />
             <!-- <VCard class="px-4 py-4 v-col-12  h-100">
               <VCardItem class="header_card_item pb-4">
                 <div class="d-flex pr-5" style="justify-content: space-between;">
@@ -1280,12 +1288,8 @@ const goToLink = (link) => {
               <!-- <iframe src="https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/pie.html" width="100%"
             height="100%" frameborder="0"></iframe>  -->
 
-              <VueApexCharts v-if="sumV != 0"
-                :options="resolveDevice.options"
-                :series="resolveDevice.series" 
-                :height="247"
-                width="100%"
-              />
+              <VueApexCharts v-if="sumV != 0" :options="resolveDevice.options" :series="resolveDevice.series"
+                :height="247" width="100%" />
             </VCard>
           </VCol>
 
