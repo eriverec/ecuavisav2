@@ -467,7 +467,7 @@ const resolveDevice = computed(() => {
                 ${w.config.labels[seriesIndex]}
               </div>
               <div class="tooltip-data-value">
-                ${series[seriesIndex]} visitas
+                ${series[seriesIndex]} usuarios
               </div>
             </div>
           </div>
@@ -1214,7 +1214,7 @@ const goToLink = (link) => {
                         variant="tonal"
                         rounded
                         icon="mdi-account-multiple"
-                        class="mt-3"
+                        class="mt-5"
                       />
                     </span>
                 <span class="text-sum text-success" cols="12" sm="6"> {{ sumV }}</span>
