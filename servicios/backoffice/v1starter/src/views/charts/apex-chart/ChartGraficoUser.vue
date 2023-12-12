@@ -1001,7 +1001,7 @@ export default {
         // this.isLoading = true;
 
         await this.getDataOnlyGrafico(this.fechaiN, this.fechafN);
-        await this.getDataGrafico(this.fechai, this.fechaf);
+        // await this.getDataGrafico(this.fechai, this.fechaf);
         // this.isLoading = false;
         //panelGrafico.classList.remove("disabled");
         //await this.getDataTrazabilidadFull2(this.getDataFetch);
