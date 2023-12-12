@@ -1133,7 +1133,7 @@ const goToLink = (link) => {
       </VCol>
     </VRow>
     <div class="mt-3">
-      <GraficoUser class="grafico_user" style="display: none;" />
+      <!-- <GraficoUser class="grafico_user" /> -->
     </div>
     <VRow class="mt-3">
       <VCol class="d-flex" id="navegacion" cols="12" sm="6">
