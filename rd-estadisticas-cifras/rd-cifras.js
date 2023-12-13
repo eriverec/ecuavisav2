@@ -96,11 +96,11 @@ function eventLigaPro() {
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
               
           <li class="nav-item" role="presentation">
+            <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+          </li>
+          <li class="nav-item" role="presentation">
               <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
           </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-              </li>
               <li class="nav-item" role="presentation">
                 <a class="nav-link" href="/deportes/champions/tablaposiciones">Champions League</a>
               </li> 
@@ -214,10 +214,10 @@ function eventLibertadores() {
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
           <li class="nav-item" role="presentation">
-              <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+          <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
           </li>
           <li class="nav-item" role="presentation">
-              <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+              <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
           </li>
           <li class="nav-item" role="presentation">
             <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
@@ -329,14 +329,14 @@ function eventSudamericana() {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
       <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
+      
+      <li class="nav-item" role="presentation">
+      <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+      </li>
+      
       <li class="nav-item" role="presentation">
           <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
       </li>
-
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-      </li>
-
       <li class="nav-item" role="presentation">
         <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
       </li> 
@@ -448,14 +448,14 @@ function eventPremierLeague() {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
       <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
-
+      
       <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+      <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
       </li>
-
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-      </li>
+      
+            <li class="nav-item" role="presentation">
+                <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+            </li>
 
       <li class="nav-item" role="presentation">
         <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
@@ -565,12 +565,12 @@ function eventLaLigaEspañola() {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
       <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
+      
+      <li class="nav-item" role="presentation">
+      <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+      </li>
       <li class="nav-item" role="presentation">
           <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
-      </li>
-
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
       </li>
 
       <li class="nav-item" role="presentation">
@@ -683,10 +683,10 @@ function eventMLS() {
       htmlContent = /*html*/ `        
       <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+      <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
       </li>
       <li class="nav-item" role="presentation">
-        <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+          <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
       </li>
       <li class="nav-item" role="presentation">
         <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
@@ -800,11 +800,11 @@ function eventLeaguesCup() {
       <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
       </li>
       <li class="nav-item" role="presentation">
-        <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
-      </li> 
-      <li class="nav-item" role="presentation">
           <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
       </li>
+      <li class="nav-item" role="presentation">
+        <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
+      </li> 
       <li class="nav-item" role="presentation">
           <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
       </li>
@@ -910,13 +910,13 @@ function eventEliminatorios() {
       htmlContent = /*html*/ `        
       <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
 
-        <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
-        </li>
-
-        <li class="nav-item" role="presentation">
-          <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-        </li>
+      
+      <li class="nav-item" role="presentation">
+      <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+      </li>
+      <li class="nav-item" role="presentation">
+          <a class="nav-link active" id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+      </li>
 
         <li class="nav-item" role="presentation">
           <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
@@ -1035,10 +1035,10 @@ function eventChampions() {
       htmlContent = /*html*/ `        
       <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
       <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+      <a class="nav-link"  href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
       </li>
       <li class="nav-item" role="presentation">
-      <a class="nav-link"  href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
+          <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
       </li>
       <li class="nav-item" role="presentation">
         <a class="nav-link active"  href="/deportes/champions/tablaposiciones">Champions League</a>
