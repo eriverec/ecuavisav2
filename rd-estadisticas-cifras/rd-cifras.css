@@ -51,6 +51,7 @@
 @media (max-width: 600px) {
   .banner_mov {
       display: block;
+      margin: auto;
   }
 
   .banner_desk {
