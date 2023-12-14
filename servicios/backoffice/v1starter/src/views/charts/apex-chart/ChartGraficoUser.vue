@@ -322,6 +322,11 @@ export default {
             //this.ctx.xaxis.categories[dataPointIndex] 
             var value = series[seriesIndex][dataPointIndex];
             var text = w.config.visita ? "Sesiones" : "Páginas visitadas";
+
+            var data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
+
+            console.log(data);
+
             if (value < 2) {
               text = w.config.visita ? "Sesión" : "Página visitada";
             }
