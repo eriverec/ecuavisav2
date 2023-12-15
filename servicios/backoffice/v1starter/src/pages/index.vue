@@ -1091,9 +1091,13 @@ const goToLink = (link) => {
   margin-left: 20px;
   margin-bottom: 5px;
 }*/
-.graficoRealTime .apexcharts-canvas{
+/* .graficoRealTime .apexcharts-canvas{
   height: 700px !important;
-}
+} */
+
+/* .graficoRealTime .apexcharts-canvas svg {
+  height: 700px !important;
+} */
 
 .text-sum {
   font-size: 75px;
