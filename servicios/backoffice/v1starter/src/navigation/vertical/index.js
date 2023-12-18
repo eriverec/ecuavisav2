@@ -72,7 +72,8 @@ export default [
     icon: { icon: 'tabler-mail' },
     children: [
       { title: 'Editar Newsletter', to: 'apps-mailing-tabs-edit' },
-      { title: 'Forzar Newsletter', to: 'apps-mailing-forzado' }
+      { title: 'Forzar Newsletter', to: 'apps-mailing-forzado' },
+      // { title: 'Churnrate', to: 'apps-mailing-churnrate' }
 
       // { title: 'Ads Ubicaciones', to: 'apps-miecuavisa-ads-ubicaciones' },
       // { title: 'Eventos', to: 'apps-configuracion-add' },

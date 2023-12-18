@@ -267,6 +267,7 @@ const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme
 const resolveData = computed(() => {
 
   let dataRaw = Array.from(dataChart.value);
+  console.log(dataRaw);
   const seriesFormat = {
     name: 'Interacciones de usuarios',
     data: []
@@ -279,20 +280,17 @@ const resolveData = computed(() => {
     categoriesRaw.push(dataRaw[i].title);
   }
 
-  const hu = "url"
-
   const options = {
     chart: {
       parentHeightOffset: 0,
       toolbar: { show: false },
       events: {
         dataPointSelection: function (event, chartContext, config) {
-          var categoriaSeleccionada = chartContext.w.globals.labels[config.dataPointIndex];
-          var serieSeleccionada = chartContext.w.globals.series[config.seriesIndex][config.dataPointIndex];
-
-          console.log(serieSeleccionada);
-          // var url = "https://www.ejemplo.com"; 
-          // window.open(url, '_blank');
+          // var categoriaSeleccionada = chartContext.w.globals.labels[config.dataPointIndex];
+          // var serieSeleccionada = chartContext.w.globals.series[config.seriesIndex][config.dataPointIndex];
+          const selectedUrl = dataRaw[config.dataPointIndex].url;
+          redirectToUrl(selectedUrl);
+          console.log(selectedUrl);
         }
       },
       // height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6) ? 600 : 700
@@ -308,9 +306,6 @@ const resolveData = computed(() => {
       offsetX: 40,
       show: false
     },
-
-
-
     tooltip: {
       shared: false,
       enabled: false,
@@ -339,11 +334,6 @@ const resolveData = computed(() => {
         fontSize: "12px",
         fontFamily: undefined,
       },
-      /*y: {
-        formatter: function(value, { series, seriesIndex, dataPointIndex, w }) {
-          return 'Ventas: $' + value
-        }
-      },*/
     },
     colors: ['#d4526e', '#13d8aa'],
     plotOptions: {
@@ -380,6 +370,7 @@ const resolveData = computed(() => {
     minHeight: 700,
   }
   return { series: [seriesFormat], options: options, intereses: categoriesRaw };
+  function redirectToUrl(url) { window.open(url, '_blank'); }
 });
 
 const resolveDevice = computed(() => {
@@ -568,7 +559,7 @@ const resolveMetadato = computed(() => {
 
   let dataRaw = Array.from(dataMetadato.value);
 
-  console.log(dataRaw);
+  // console.log(dataRaw);
   const seriesFormat = {
     name: 'Metadato',
     data: []
@@ -576,10 +567,10 @@ const resolveMetadato = computed(() => {
 
   const categoriesRaw = [];
   for (let i in dataRaw) {
-    if (dataRaw[i].name !== "REDACCIÓN" && 
-    dataRaw[i].name !== "KEVIN VERDEZOTO" && 
-    dataRaw[i].name !== "ABDÓN RODRÍGUEZ" && 
-    dataRaw[i].name !== "MARLENE ASTUDILLO"){
+    if (dataRaw[i].name !== "REDACCIÓN" &&
+      dataRaw[i].name !== "KEVIN VERDEZOTO" &&
+      dataRaw[i].name !== "ABDÓN RODRÍGUEZ" &&
+      dataRaw[i].name !== "MARLENE ASTUDILLO") {
       let num = parseInt(dataRaw[i].visits);
       seriesFormat.data.push(num);
       categoriesRaw.push(dataRaw[i].name);
@@ -981,8 +972,6 @@ const resetEntries = async () => {
 // }
 
 var primeraVez = true;
-
-
 
 const toggleRealtime = () => {
   realtime.value = !realtime.value;
@@ -1411,8 +1400,8 @@ const goToLink = (link) => {
 
                 </div>
               </VCardItem>
-              <VueApexCharts hieght="700" style="min-height:700px!important;" v-if="sumV != 0" class="graficoRealTime" type="bar" :options="resolveData.options"
-                :series="resolveData.series" />
+              <VueApexCharts hieght="700" style="min-height:700px!important;" v-if="sumV != 0" class="graficoRealTime"
+                type="bar" :options="resolveData.options" :series="resolveData.series" />
             </VCard>
           </VCol>
         </VRow>
