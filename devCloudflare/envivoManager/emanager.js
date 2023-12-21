@@ -350,7 +350,6 @@ function eventoEnvivoManagerQuito() {
               if (dia.dia === diaSemana) {
                 // console.log(dia.dia);
                 let programasHoy = [];
-                console.log(programasHoy);
                 for (const hora of dia.horas) {
                   if (hora.estadoHorario) {
                     const inicioHora = parseInt(hora.inicio.split(":")[0]);
