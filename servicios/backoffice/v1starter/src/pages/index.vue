@@ -2,6 +2,7 @@
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 import UserTabUbicacion from '@/views/dashboards/traceability/UserTabUbicacion.vue';
 import GraficoUser from '@/views/dashboards/traceability/graficoUser.vue';
+import GraficoUserNEW from '@/views/dashboards/traceability/graficoUserNEW.vue';
 
 import { hexToRgb } from '@layouts/utils';
 import VueApexCharts from 'vue3-apexcharts';
@@ -1178,7 +1179,7 @@ const goToLink = (link) => {
       </VCol>
     </VRow>
     <div class="mt-3">
-      <!-- <GraficoUser class="grafico_user" /> -->
+      <!-- <GraficoUserNEW class="grafico_user" /> -->
     </div>
     <VRow class="mt-3">
       <VCol class="d-flex" id="navegacion" cols="12" sm="6">
