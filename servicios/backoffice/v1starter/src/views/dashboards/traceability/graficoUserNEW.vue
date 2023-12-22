@@ -30,6 +30,9 @@ let formatI = moment().add(-3, 'days').format("MM-DD-YYYY");
 let formatF = moment().format("MM-DD-YYYY");
 const fechaIngesada = ref(String(formatI + ' a ' + formatF))
 
+const fechai = ref('2023-12-10');
+const fechaf = ref('2023-12-20');
+
 const resolveData = computed(() => {
   let dataRaw = Array.from(dataChart.value);
 
@@ -55,7 +58,6 @@ const resolveData = computed(() => {
     // console.log(dataRaw[i].x)
     categoriesRaw.push(`${(dataRaw[i].x)}`);
   }
-
 
   const currentTheme = vuetifyTheme.current.value.colors
 
@@ -109,13 +111,10 @@ const resolveData = computed(() => {
   return { series: [seriesFormat], options: options, intereses: categoriesRaw };
 });
 
-const fechai = '2023-12-10';
-const fechaf = '2023-12-20';
-
 
 // URL de la API
 async function getChart() {
-  await fetch(`https://mongo-users-drab.vercel.app/usuario/agrupados?fechai=${fechai}&fechaf=${fechaf}`)
+  await fetch(`https://mongo-users-drab.vercel.app/usuario/agrupados?fechai=${fechai.value}&fechaf=${fechaf.value}`)
     .then(response => response.json())
     .then(data => {
       dataChart.value = data.data;
@@ -133,8 +132,8 @@ onMounted(async () => {
 
 const  obtenerFecha  = async (selectedDates, dateStr, instance) => {
     // Actualizar fechai y fechaf
-    // fechai = moment(selectedDates[0]).format('MM/DD/YYYY');
-    // fechaf = moment(selectedDates[1]).format('MM/DD/YYYY');
+    fechai.value = moment(selectedDates[0]).format('YYYY/MM/DD');
+    fechaf.value = moment(selectedDates[1]).format('YYYY/MM/DD');
 
     // Volver a obtener el gráfico con las nuevas fechas
     await getChart();
