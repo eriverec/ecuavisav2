@@ -491,7 +491,7 @@ const resolveDevice = computed(() => {
         return `<div class="tooltip-content">
           <div class="tooltip-body">
             <div class="tooltip-title">
-              En los últimos 15 minutos
+              En los últimos 30 minutos
             </div>
             <div class="tooltip-subtitle">
               Usuarios
@@ -1222,7 +1222,7 @@ const goToLink = (link) => {
                 <div class="d-flex pr-0" style="justify-content: space-between;">
                   <div class="descripcion">
                     <VCardTitle>Categoría de dispositivos <br></VCardTitle>
-                    <small class="mt-3">En los últimos 15 minutos</small>
+                    <small class="mt-3">En los últimos 30 minutos</small>
                   </div>
                   <!-- <div class="">
                     <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
@@ -1244,7 +1244,7 @@ const goToLink = (link) => {
                 <div class="d-flex pr-1" style="justify-content: space-between;">
                   <div class="descripcion">
                     <VCardTitle>Usuarios activos<br></VCardTitle>
-                    <small class="mt-3">En los últimos 15 minutos</small>
+                    <small class="mt-3">En los últimos 30 minutos</small>
                   </div>
 
 
@@ -1309,7 +1309,7 @@ const goToLink = (link) => {
                 <div class="d-flex pr-0" style="justify-content: space-between;">
                   <div class="descripcion" cols="12" sm="6">
                     <VCardTitle>Visitas de usuarios registrados en tiempo real</VCardTitle>
-                    <VCardSubtitle cols="12">En los últimos 15 minutos
+                    <VCardSubtitle cols="12">En los últimos 30 minutos
                     </VCardSubtitle>
                   </div>
                   <div class="pt-5 pr-3">

@@ -198,7 +198,7 @@ const projectStatus = [
             {{props.entries.length}} páginas diferentes visitadas
           </VListItemTitle>
           <VListItemSubtitle class="opacity-100 text-disabled">
-            Páginas de ecuavisa.com visitadas durante 15 min.
+            Páginas de ecuavisa.com visitadas durante 30 min.
           </VListItemSubtitle>
 
           <template #append>
