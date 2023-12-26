@@ -1179,7 +1179,15 @@ const goToLink = (link) => {
       </VCol>
     </VRow>
     <div class="mt-3">
-      <!-- <GraficoUserNEW class="grafico_user" /> -->
+    <!-- <VCard>
+      <VCardItem class="header_card_item"> 
+        <VCardTitle>Estadisticas por agrupación de usuarios</VCardTitle>
+      </VCardItem>
+      <VCardText>
+        <GraficoUserNEW class="grafico_user" />
+
+      </VCardText>
+    </VCard> -->
     </div>
     <VRow class="mt-3">
       <VCol class="d-flex" id="navegacion" cols="12" sm="6">

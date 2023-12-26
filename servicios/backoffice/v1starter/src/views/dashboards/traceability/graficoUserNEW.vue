@@ -9,7 +9,9 @@
         maxDate: new Date(),
         reactive: true
       }" />
-    <VueApexCharts type="area" height="200" :options="resolveData.options" :series="resolveData.series" />
+    <!--  -->
+    <div v-if="dataChart.length == 0" class="pt-6 pb-6 text-center">Cargando...</div>
+    <VueApexCharts v-else type="area" height="200" :options="resolveData.options" :series="resolveData.series" />
   </div>
 </template>
 <script setup>
@@ -30,13 +32,24 @@ let formatI = moment().add(-3, 'days').format("MM-DD-YYYY");
 let formatF = moment().format("MM-DD-YYYY");
 const fechaIngesada = ref(String(formatI + ' a ' + formatF))
 
-const fechai = ref('2023-12-10');
-const fechaf = ref('2023-12-20');
+// const fechai = ref('2023-12-10');
+// const fechaf = ref('2023-12-20');
+
+const fechai = ref(moment().add(-3, 'days').format("YYYY-MM-DD"));
+const fechaf = ref(moment().format("YYYY-MM-DD"));
+
+// const act = moment().add(-3, 'days').format("YYYY-MM-DD");
+// const fin = moment().format("YYYY-MM-DD");
+
+// console.log("act",act,fin);
+
+const dataGG = ref([]);
 
 const resolveData = computed(() => {
   let dataRaw = Array.from(dataChart.value);
+  dataGG.value = dataRaw
 
-  console.log("dataRaw:", dataRaw);
+  console.log("dataRaw:", dataChart.value);
   const seriesFormat = {
     name: 'Visitas',
     data: []
@@ -70,14 +83,28 @@ const resolveData = computed(() => {
     dataLabels: { enabled: false },
     grid: {
       show: false,
+      strokeDashArray: 0,
+      borderColor: '#90a4ae82',
+      xaxis: {
+        lines: {
+          show: false
+        }
+      },
+      yaxis: {
+        lines: {
+          show: false
+        }
+      },
       padding: {
-        left: -58,
+        left: -8,
         right: 0,
       },
     },
     stroke: {
       width: 3,
       curve: 'straight',
+      show: true,
+      curve: 'smooth',
     },
     colors: [currentTheme.warning],
     fill: {
@@ -130,14 +157,14 @@ onMounted(async () => {
   await getChart();
 });
 
-const  obtenerFecha  = async (selectedDates, dateStr, instance) => {
-    // Actualizar fechai y fechaf
-    fechai.value = moment(selectedDates[0]).format('YYYY/MM/DD');
-    fechaf.value = moment(selectedDates[1]).format('YYYY/MM/DD');
+const obtenerFecha = async (selectedDates, dateStr, instance) => {
+  // Actualizar fechai y fechaf
+  fechai.value = moment(selectedDates[0]).format('YYYY-MM-DD');
+  fechaf.value = moment(selectedDates[1]).format('YYYY-MM-DD');
 
-    // Volver a obtener el gráfico con las nuevas fechas
-    await getChart();
-    console.log("Rango seleccionado:", dateStr);
+  // Volver a obtener el gráfico con las nuevas fechas
+  await getChart();
+  console.log("Rango seleccionado:", dateStr);
 };
 
 </script>
