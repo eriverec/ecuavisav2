@@ -268,3 +268,7 @@
     max-width: 500px;
     margin: auto;
 }
+
+.publicidad_desktop .publicidad{
+  display: none;
+}
