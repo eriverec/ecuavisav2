@@ -2,6 +2,7 @@
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 import UserTabUbicacion from '@/views/dashboards/traceability/UserTabUbicacion.vue';
 import GraficoUser from '@/views/dashboards/traceability/graficoUser.vue';
+import GraficoUserNEW from '@/views/dashboards/traceability/graficoUserNEW.vue';
 
 import { hexToRgb } from '@layouts/utils';
 import VueApexCharts from 'vue3-apexcharts';
@@ -267,6 +268,7 @@ const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme
 const resolveData = computed(() => {
 
   let dataRaw = Array.from(dataChart.value);
+  console.log(dataRaw);
   const seriesFormat = {
     name: 'Interacciones de usuarios',
     data: []
@@ -283,7 +285,18 @@ const resolveData = computed(() => {
     chart: {
       parentHeightOffset: 0,
       toolbar: { show: false },
-      height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6) ? 600 : 700
+      events: {
+        dataPointSelection: function (event, chartContext, config) {
+          // var categoriaSeleccionada = chartContext.w.globals.labels[config.dataPointIndex];
+          // var serieSeleccionada = chartContext.w.globals.series[config.seriesIndex][config.dataPointIndex];
+          const selectedUrl = dataRaw[config.dataPointIndex].url;
+          redirectToUrl(selectedUrl);
+          console.log(selectedUrl);
+        }
+      },
+      // height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6) ? 600 : 700
+      height: 700
+
     },
     dataLabels: {
       enabled: true
@@ -293,6 +306,35 @@ const resolveData = computed(() => {
       horizontalAlign: 'left',
       offsetX: 40,
       show: false
+    },
+    tooltip: {
+      shared: false,
+      enabled: false,
+      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        //this.ctx.xaxis.categories[dataPointIndex] 
+        var value = series[seriesIndex][dataPointIndex];
+        var text = w.config.visita ? "Sesiones" : "Interaciones de usuarios";
+        if (value < 2) {
+          text = w.config.visita ? "Sesión" : "Interación del usuario";
+        }
+        return '<div class="custom-tooltip">' +
+          '<span class="title">Titulo:</span>' +
+          '<span class="value">' + w.globals.categoryLabels[dataPointIndex] + '</span>' +
+          '<br>' +
+          //'<span class="title">Ventas:</span>' +
+          '<span class="value">' + value + " " + text + '</span>' +
+          '</div>'
+      },
+      fixed: {
+        enabled: false,
+        position: 'topCenter',
+        offsetX: 20,
+        offsetY: 0,
+      },
+      style: {
+        fontSize: "12px",
+        fontFamily: undefined,
+      },
     },
     colors: ['#d4526e', '#13d8aa'],
     plotOptions: {
@@ -304,15 +346,6 @@ const resolveData = computed(() => {
         startingShape: 'rounded',
       },
     },
-    // title: {
-    //   text: 'Visitas por Páginas',
-    //   style: {
-    //     fontSize: '16px',
-    //     fontWeight: 'bold',
-    //     fontFamily: undefined,
-    //     color: themeDisabledTextColor
-    //   },
-    // },
     grid: {
       borderColor: themeBorderColor,
       xaxis: {
@@ -335,9 +368,10 @@ const resolveData = computed(() => {
         style: { colors: themeDisabledTextColor },
       },
     },
-    minHeight: 300,
+    minHeight: 700,
   }
   return { series: [seriesFormat], options: options, intereses: categoriesRaw };
+  function redirectToUrl(url) { window.open(url, '_blank'); }
 });
 
 const resolveDevice = computed(() => {
@@ -525,6 +559,8 @@ const resolveDevice = computed(() => {
 const resolveMetadato = computed(() => {
 
   let dataRaw = Array.from(dataMetadato.value);
+
+  // console.log(dataRaw);
   const seriesFormat = {
     name: 'Metadato',
     data: []
@@ -532,9 +568,14 @@ const resolveMetadato = computed(() => {
 
   const categoriesRaw = [];
   for (let i in dataRaw) {
-    let num = parseInt(dataRaw[i].visits);
-    seriesFormat.data.push(num);
-    categoriesRaw.push(dataRaw[i].name);
+    if (dataRaw[i].name !== "REDACCIÓN" &&
+      dataRaw[i].name !== "KEVIN VERDEZOTO" &&
+      dataRaw[i].name !== "ABDÓN RODRÍGUEZ" &&
+      dataRaw[i].name !== "MARLENE ASTUDILLO") {
+      let num = parseInt(dataRaw[i].visits);
+      seriesFormat.data.push(num);
+      categoriesRaw.push(dataRaw[i].name);
+    }
   }
 
   const options = {
@@ -570,15 +611,6 @@ const resolveMetadato = computed(() => {
         top: -10,
       },
     },
-    // title: {
-    //   text: 'Visitas por Metadatos',
-    //   style: {
-    //     fontSize: '16px',
-    //     fontWeight: 'bold',
-    //     fontFamily: undefined,
-    //     color: themeDisabledTextColor
-    //   },
-    // },
     yaxis: {
       labels: {
         style: { colors: themeDisabledTextColor },
@@ -942,8 +974,6 @@ const resetEntries = async () => {
 
 var primeraVez = true;
 
-
-
 const toggleRealtime = () => {
   realtime.value = !realtime.value;
   isListVisible.value = !isListVisible.value; // nuevo
@@ -1016,7 +1046,17 @@ const goToLink = (link) => {
 
 }
 
+/* .graficoRealTime {
+  height: 700px;
+  min-height: 700px;
+} */
 
+
+
+/* #graficoRealTime .apexcharts-tooltip {
+  white-space: pre-wrap !important;
+  max-width: 900px;
+} */
 
 #navegacion .v-card-text {
   padding: 0px;
@@ -1037,11 +1077,17 @@ const goToLink = (link) => {
 }
 
 
-
 .switch {
   margin-left: 20px;
   margin-bottom: 5px;
 }*/
+/* .graficoRealTime .apexcharts-canvas{
+  height: 700px !important;
+} */
+
+/* .graficoRealTime .apexcharts-canvas svg {
+  height: 700px !important;
+} */
 
 .text-sum {
   font-size: 75px;
@@ -1133,7 +1179,7 @@ const goToLink = (link) => {
       </VCol>
     </VRow>
     <div class="mt-3">
-      <!-- <GraficoUser class="grafico_user" /> -->
+      <!-- <GraficoUserNEW class="grafico_user" /> -->
     </div>
     <VRow class="mt-3">
       <VCol class="d-flex" id="navegacion" cols="12" sm="6">
@@ -1152,7 +1198,7 @@ const goToLink = (link) => {
       <VCol cols="12" sm="6">
         <VRow>
 
-          
+
           <VCol cols="12" sm="12" class="">
             <CrmProjectStatus :realtime="realtime" :usuarios="sumV" :totalPagesVisits="totalPagesVisits"
               :entries="entries" />
@@ -1201,24 +1247,18 @@ const goToLink = (link) => {
                     <small class="mt-3">En los últimos 15 minutos</small>
                   </div>
 
-                  
+
                 </div>
 
-                
+
 
               </VCardItem>
               <div v-if="sumV != 0" class="mb-5 d-flex justify-center align-center flex-column">
                 <span class="text-sum text-success" cols="12" sm="6">
-                  <VAvatar
-                        color="success"
-                        variant="tonal"
-                        rounded
-                        icon="mdi-account-multiple"
-                        class="mt-5"
-                      />
-                    </span>
+                  <VAvatar color="success" variant="tonal" rounded icon="mdi-account-multiple" class="mt-5" />
+                </span>
                 <span class="text-sum text-success" cols="12" sm="6"> {{ sumV }}</span>
-                
+
                 <span class="">Total de registros</span>
               </div>
 
@@ -1361,16 +1401,16 @@ const goToLink = (link) => {
 
                 </div>
               </VCardItem>
-              <VueApexCharts v-if="sumV != 0" class="graficoRealTime" type="bar" :options="resolveData.options"
-                :series="resolveData.series" />
+              <VueApexCharts hieght="700" style="min-height:700px!important;" v-if="sumV != 0" class="graficoRealTime"
+                type="bar" :options="resolveData.options" :series="resolveData.series" />
             </VCard>
           </VCol>
         </VRow>
       </VCol>
-      
 
-      
-     
+
+
+
     </VRow>
   </section>
 </template>

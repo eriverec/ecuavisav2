@@ -1,21 +1,4 @@
 <template>
-  <!--<v-switch
-    id="switch-visita"
-    @change="porVisita" 
-    label="Por Visita"
-    ></v-switch>--->
-
-  <!--  <VBtnToggle
-      density="compact"
-      color="primary"
-      variant="outlined"
-      divided
-    >
-      <VBtn v-on:click="formatActividadGrafico" class="btn-check">Por páginas vistas</VBtn>
-      <VBtn v-on:click="formatVisitaGrafico" >Por Sesión</VBtn>
-    </VBtnToggle>--->
-
-
   <VRow>
     <VCol cols="12">
       <VBtnToggle class="d-none" v-model="btnFiltros" color="primary" variant="outlined" divided>
@@ -30,18 +13,9 @@
       <VSelect v-model="selectedDispositivo" :items="itemDispositivos" label="Dispositivos"
         @update:modelValue="resolveChart" :disabled="isLoading" />
     </VCol>
-    <!-- <VCol sm="4" cols="12">
-      <VSelect v-model="selectedActividad" :items="itemActividad" label="Actividad" @update:modelValue="resolveChart" :disabled="isLoading"/>
-    </VCol>
-    <VCol sm="4" cols="12">
-      <VSelect v-model="selectedOs" :items="itemOs" label="Sistema operativo" @update:modelValue="resolveChart" :disabled="isLoading" />
-    </VCol>
-    <VCol sm="4" cols="12">
-      <VSelect v-model="selectedBrowser" :items="itemBrowser" label="Browser" @update:modelValue="resolveChart" :disabled="isLoading" />
-    </VCol> -->
 
     <VCol sm="4" cols="12">
-      <div class="date-picker-wrapper" style="width: 100%;">
+      <div class="date-picker-wrapper hola-fecha" style="width: 100%;">
         <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngesada"
           show-current=true @on-change="obtenerFechaDispositivos" :config="{
             position: 'auto right',
@@ -187,70 +161,6 @@ export default {
         series: [],
         labels: [],
       },
-      itemActividad: [
-        {
-          title: "Por sesión",
-          value: "sesion",
-        },
-        {
-          title: "Por páginas vistas",
-          value: "visita",
-        },],
-      itemDispositivos: [
-        {
-          title: "Movil",
-          value: "movil",
-        },
-        {
-          title: "Desktop",
-          value: "desktop",
-        }
-      ],
-      itemOs: [
-        {
-          title: "Windows",
-          value: "Windows",
-        },
-        {
-          title: "Mac OS",
-          value: "Mac OS",
-        },
-        {
-          title: "Linux",
-          value: "Linux",
-        },
-        {
-          title: "Android",
-          value: "Android",
-        },
-        {
-          title: "Todos",
-          value: "todos",
-        }
-
-      ],
-      itemBrowser: [
-        {
-          title: "Chrome",
-          value: "Chrome",
-        },
-        {
-          title: "Safari",
-          value: "Safari",
-        },
-        {
-          title: "Firefox",
-          value: "Firefox",
-        },
-        {
-          title: "Todos",
-          value: "todos",
-        }
-      ],
-      selectedActividad: "sesion",
-      selectedDispositivo: "",
-      selectedOs: "todos",
-      selectedBrowser: "todos",
       fechaIngesada: "",
       activityData: [],
       filtrosDispositivos: [],
@@ -322,6 +232,11 @@ export default {
             //this.ctx.xaxis.categories[dataPointIndex] 
             var value = series[seriesIndex][dataPointIndex];
             var text = w.config.visita ? "Sesiones" : "Páginas visitadas";
+
+            var data = w.globals.initialSeries[seriesIndex].data[dataPointIndex];
+
+            // console.log(data);
+
             if (value < 2) {
               text = w.config.visita ? "Sesión" : "Página visitada";
             }
@@ -627,12 +542,12 @@ export default {
       /*
       if(dataGroupBrowser.length === 0){
         //console.log("vacio")
-        divText.classList.remove('d-none');
+        divText.classList.remover('d-none');
         divGraf.classList.add('d-none');
       }else{
         //console.log("lleno");
         divText.classList.add('d-none');
-        divGraf.classList.remove('d-none');
+        divGraf.classList.remover('d-none');
       }
       */
 
@@ -814,90 +729,23 @@ export default {
         }
         Arr.push(...data);
         this.getDataFetch = Array.from(Arr);
-        this.dataFormateada = await this.getDataTrazabilidadFull2(Arr);
+        // this.dataFormateada = await this.getDataTrazabilidadFull2(Arr);
         page += 1;
         //ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
         this.emitData();
         //console.log('data',this.dataFormateada);
       }
-      //this.isLoading = false;
 
-      //return obtener;
-      /*
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-
-      var fechasCount = JSON.stringify({
-        "fechai": fechai,
-        "fechaf": fechaf
-      });
-
-      var requestOptions = {
-        method: 'POST',
-        headers: myHeaders,
-        body: fechasCount,
-        redirect: 'follow'
-      };
-
-      const resp = await fetch('https://servicio-de-actividad.vercel.app/count', requestOptions)
-        .then(response => response.text())
-        .then(async count => {
-          let pages = parseInt(count);
-          const fullArray = [];
-
-          var myHeaders2 = new Headers();
-          myHeaders2.append("Content-Type", "application/json");
-
-          for (let i = 1; i < pages + 1; i++) {
-            var fechasFetch = JSON.stringify({
-              "fechai": fechai,
-              "fechaf": fechaf,
-              "page": i
-            });
-            var requestOptions2 = {
-              method: 'POST',
-              headers: myHeaders2,
-              body: fechasFetch,
-              redirect: 'follow'
-            };
-            await fetch('https://servicio-de-actividad.vercel.app/dispositivos/full', requestOptions2)
-              .then(response => response.json())
-              .then(async response => {
-                let array = Array.from(response.grafico);
-                array.forEach(e => fullArray.push(e));
-              }).catch((error) => { return error });
-          }
-
-          return fullArray;
-        }).catch((error) => { return error });
-      let obtener = resp;
-      this.getDataFetch = obtener;
-
-      return obtener;
-      */
     },
     async resolveChart() {
-
       await this.getDataOnlyGrafico(this.fechaiN, this.fechafN);
 
       if (this.selectedActividad == "visita") {
         this.visita = false;
-        //this.isLoading = true;
-
-        //await this.getDataTrazabilidadFull2(this.getDataFetch);
-
-        //ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
-        //this.isLoading = false;
         this.emitData();
       };
       if (this.selectedActividad == "sesion") {
         this.visita = true;
-        // this.isLoading = true;
-
-        //await this.getDataTrazabilidadFull2(this.getDataFetch);
-
-        //ApexCharts.exec("crejemplo", "updateSeries", this.dataFormateada);
-        // this.isLoading = false;
         this.emitData();
       };
     },
@@ -965,16 +813,17 @@ export default {
         "actividad": actividad
       });
 
-      console.log('data enviar ', raw);
+      // console.log('data enviar ', raw);
 
-      var resp = await fetch(`https://servicio-de-actividad.vercel.app/dispositivos/grafico/v3`, {
-        method: 'POST',
+      var resp = await fetch(`https://mongo-users-drab.vercel.app/usuario/agrupados?fechai=${fechai}&fechaf=${fechaf}`, {
+        method: 'GET',
         headers: {
           "Content-Type": "application/json",
         },
-        body: raw
+        // body: raw
       });
       var obtener = await resp.json();
+      console.log("obtener", obtener.data);
       // console.log('data Obtenida n', obtener);
       this.dataOnlyGrafico = obtener.data;
       let dataFormated = [obtener.data];
@@ -1003,7 +852,7 @@ export default {
         await this.getDataOnlyGrafico(this.fechaiN, this.fechafN);
         // await this.getDataGrafico(this.fechai, this.fechaf);
         // this.isLoading = false;
-        //panelGrafico.classList.remove("disabled");
+        //panelGrafico.classList.remover("disabled");
         //await this.getDataTrazabilidadFull2(this.getDataFetch);
       }
     },
