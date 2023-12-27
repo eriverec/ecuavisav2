@@ -3277,7 +3277,8 @@ INICIO - BLOQUE - ESTILO
   text-align: center;
   background: #1B2692;
   color: white;
-  padding: 30px 45px;
+  /* padding: 30px 45px; */
+  width: 265px;
 }
 
 .HOME_MENU_RD .portada-agenda .MUL_TIT_INF2 .text_block .fecha_agenda .agenda_dia h2,
