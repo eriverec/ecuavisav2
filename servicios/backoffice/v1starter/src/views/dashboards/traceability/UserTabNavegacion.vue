@@ -19,6 +19,9 @@ const fecha = ref({
 const selectedfechaIniFin = ref('Hoy');
 const fechaIniFinList = useSelectCalendar();
 
+// obtenemoms el rol para verificarlo
+const rol = localStorage.getItem('role');
+
 // fecha.value = {
 //   i: ref(moment().add(-1, 'days')),
 //   f: ref(moment())),

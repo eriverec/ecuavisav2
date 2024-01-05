@@ -1,8 +1,6 @@
 <script setup>
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 import UserTabUbicacion from '@/views/dashboards/traceability/UserTabUbicacion.vue';
-import GraficoUser from '@/views/dashboards/traceability/graficoUser.vue';
-import GraficoUserNEW from '@/views/dashboards/traceability/graficoUserNEW.vue';
 
 import { hexToRgb } from '@layouts/utils';
 import VueApexCharts from 'vue3-apexcharts';
@@ -1199,9 +1197,8 @@ const goToLink = (link) => {
 
       </VCol>
     </VRow>
-    <VRow id="dash">
-
-
+    
+    <VRow id="dash"  v-if="rol== 'administrador'" ><!-- validamos si es administrador para mostrar el realtime -->
       <!--Izquierda-->
       <VCol cols="12" sm="6">
         <VRow>

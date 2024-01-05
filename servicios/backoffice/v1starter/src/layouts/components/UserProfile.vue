@@ -13,6 +13,9 @@ const ability = useAppAbility()
 const userData = JSON.parse(localStorage.getItem('userData') || 'null')
 const role = localStorage.getItem('role');
 
+// obtenemoms el rol para verificarlo
+const rol = localStorage.getItem('role');
+
 async function logout () {
   await accionBackoffice();
   // Remove "userData" from localStorage
@@ -77,7 +80,8 @@ async function accionBackoffice (){
         location="bottom end"
         offset="14px"
       >
-        <VList>
+        
+        <VList v-if="rol== 'administrador'"><!-- validación si es administrador para el panel de opciones  -->
           <!-- 👉 User Avatar & Name -->
           <VListItem>
             <template #prepend>
