@@ -17,6 +17,9 @@ import { onMounted, onUnmounted, ref } from "vue";
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 
+// obtenemoms el rol para verificarlo
+const rol = localStorage.getItem('role');
+
 const userListStore = useUserListStore();
 const totalUsers = ref(0);
 const totalAppUsers = ref(0);
