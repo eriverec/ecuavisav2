@@ -57,12 +57,10 @@ function calcularDiferencia(horaInicio, horaFin) {
     const horas = Math.floor(diferencia / 3600);
     const minutos = Math.floor((diferencia % 3600) / 60);
     const segundos = diferencia % 60;
-    if (horas.length > 0){
+    if (minutos.length > 0){
       return `${horas} horas, ${minutos} minutos y ${segundos} segundos`;
-    } else if (minutos.length > 0){
+    }else {
       return `${minutos} minutos y ${segundos} segundos`;
-    }else{
-      return `${horas} horas, ${minutos} minutos y ${segundos} segundos`;
     }
     
   }
@@ -75,7 +73,7 @@ function calcularDiferencia(horaInicio, horaFin) {
     
     <VRow>
       <VCol class="mt-0" cols="12" md="12" lg="12" >
-        <VTabs v-model="currentTab" class="v-tabs-pill " >
+        <VTabs v-model="currentTab" class="v-tabs-pill d-none" >
           <VTab value="tab-lista" class=" " >  Listado </VTab>
           <VTab value="tab-agregar" class=" " > Estadísticas </VTab>
         </VTabs>
@@ -119,7 +117,7 @@ function calcularDiferencia(horaInicio, horaFin) {
                       <template #append>
                         <div class="espacio-right-2">
                           
-                          <VBtn icon size="x-small" color="info" variant="text" >
+                          <VBtn icon size="x-small" color="info" variant="text" href="{{ c.url }}" target="_blank" >
                           <!-- <RouterLink :to="{ name: 'apps-campaigns-edit-id', params: { id: c._id }, }" class="font-weight-medium user-list-name" >
                             --> <VIcon size="22" icon="tabler-eye" /> 
                           <!--</RouterLink> -->
