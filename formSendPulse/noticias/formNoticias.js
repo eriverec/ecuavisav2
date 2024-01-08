@@ -35,6 +35,7 @@ armarFormulario();
 setTimeout(() => {
   const embedsend = document.createElement('iframe');
   embedsend.setAttribute('src', 'https://ecuavisadev.netlify.app/formSendPulse/noticias/formNoticias.html');
+  embedsend.setAttribute('title', 'Formulario de suscripciones para noticias EcuavisaEC');
   embedsend.setAttribute('frameborder', '0');
   embedsend.setAttribute('scrolling', 'no');
   embedsend.setAttribute('allowtransparency', 'true');

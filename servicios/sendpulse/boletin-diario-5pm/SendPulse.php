@@ -273,7 +273,7 @@ class SendPulse {
 
     	$tokenSendPulse = [
     		"fecha" => date('Y-m-d H:i:s', time()),
-    		"token" => null
+    		"token" => ""
     	];
 
     	$credenciales = [
@@ -283,7 +283,10 @@ class SendPulse {
 		];
 
     	if(isset($this->dataJsonNewsletter->data->tokenSendPulse->fecha)){
-    		if($this->ctrFunciones->calcularTiempoTranscurridoEnMinutos($this->dataJsonNewsletter->data->tokenSendPulse->fecha) > 30){
+    		if(
+    			$this->ctrFunciones->calcularTiempoTranscurridoEnMinutos($this->dataJsonNewsletter->data->tokenSendPulse->fecha) > 30
+    			|| !isset($this->dataJsonNewsletter->data->tokenSendPulse->token)
+    		){
     			//CREAS TOKEN
     			$tokenJson = $this->getApiMethodPost("https://api.sendpulse.com/oauth/access_token", $credenciales);
 
@@ -293,7 +296,21 @@ class SendPulse {
 	    			"tokenSendPulse" => $tokenSendPulse
 	    		]);
     		}else{
-    			return $this->dataJsonNewsletter->data->tokenSendPulse->token;
+    			if($this->dataJsonNewsletter->data->tokenSendPulse->token == null || $this->dataJsonNewsletter->data->tokenSendPulse->token == ""){
+    				//CREAS TOKEN
+	    			$tokenJson = $this->getApiMethodPost("https://api.sendpulse.com/oauth/access_token", $credenciales);
+
+					$tokenSendPulse["token"] = json_decode($tokenJson)->access_token;
+					
+		    		$tokenJson = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
+		    			"tokenSendPulse" => $tokenSendPulse
+		    		]);
+
+		    		return $tokenSendPulse["token"];
+    			}else{
+    				return $this->dataJsonNewsletter->data->tokenSendPulse->token;
+    			}
+    			
     		}
     	}else{
     		//CREAS TOKEN
