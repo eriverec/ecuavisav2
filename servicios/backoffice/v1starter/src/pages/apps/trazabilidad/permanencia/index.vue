@@ -15,8 +15,8 @@ const disabledViewList = ref(false);
 
 
 onMounted(getCampaigns)
-
-async function getCampaigns(page = (moment('2024-01-04').format('YYYY-MM-DD')), limit= 10){
+// para definir una fecha especifica se la coloca dentro de moment así -- moment('2024-01-04').format('YYYY-MM-DD')
+async function getCampaigns(page = (moment().format('YYYY-MM-DD')), limit= 10){
   try {
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
