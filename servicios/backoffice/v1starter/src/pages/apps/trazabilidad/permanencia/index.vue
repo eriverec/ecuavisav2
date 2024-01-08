@@ -62,7 +62,7 @@ function calcularDiferencia(horaInicio, horaFin) {
     } else if (minutos.length > 0){
       return `${minutos} minutos y ${segundos} segundos`;
     }else{
-      return `${segundos} segundos`;
+      return `${horas} horas, ${minutos} minutos y ${segundos} segundos`;
     }
     
   }
