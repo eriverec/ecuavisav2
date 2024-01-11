@@ -1,4 +1,5 @@
 <script setup>
+import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
 import Moment from 'moment'; // para las fechas
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -11,11 +12,24 @@ const disabledViewList = ref(false);
 const currentPage = ref(1); // Página actual
 const perPage = ref(20); // Registros por página
 
+const loadingData = ref(false);
+const valoresHoy = useSelectValueCalendar(); //DEFAULT HOY
+const fecha = ref({
+  i: valoresHoy.i,
+  f: valoresHoy.f,
+  title: valoresHoy.title || "hoy"
+});
+
+const selectedfechaIniFin = ref('Hoy');
+const fechaIniFinList = useSelectCalendar();
+
 onMounted(getCampaigns)
 // para definir una fecha especifica se la coloca dentro de moment así -- moment('2024-01-04').format('YYYY-MM-DD')
-async function getCampaigns(page = (moment().format('YYYY-MM-DD')), limit= 10){
+async function getCampaigns(options = {}){
   try {
-      var response = await fetch(`https://servicio-permanencia.vercel.app/get/document/${page}/${page}`);
+      const {fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')), limit = 10} = options;
+
+      var response = await fetch(`https://servicio-permanencia.vercel.app/get/document/${fechai}/${fechaf}`);
       const data = await response.json();
       dataRegistros.value = data.data;
   } catch (error) {
@@ -52,6 +66,31 @@ function calcularDiferencia(horaInicio, horaFin) {
       return `${horas} horas, ${minutos} minutos y ${segundos} segundos`;
   }
 
+const obtenerFechaDispositivos = async function(selectedDates, dateStr, instance){
+  //var respJson = await nuevoArchivoJson(archivoJson);
+  if(selectedDates.length > 1){
+    console.log(selectedDates)
+  }
+}
+
+/*COMBO EVENTO*/
+watch(async () => selectedfechaIniFin.value, async () => {
+  let selectedCombo = useSelectValueCalendar(selectedfechaIniFin.value);
+  fecha.value = {
+      i: selectedCombo.i,
+      f: selectedCombo.f,
+      title: selectedCombo.title
+  }
+
+  loadingData.value = true;
+  await getCampaigns({
+    limit:10,
+    fechai: selectedCombo.i.format("YYYY-MM-DD"),
+    fechaf: selectedCombo.f.format("YYYY-MM-DD")
+  });
+  loadingData.value = false;
+});
+
 </script>
 
 <template>
@@ -67,8 +106,36 @@ function calcularDiferencia(horaInicio, horaFin) {
           <VCardText>
             <VWindow v-model="currentTab">
               <VWindowItem value="tab-lista">
-                <div class="d-flex flex-wrap py-4 gap-4 align-items-center" style="justify-content: space-between;" >
-                  <div>
+                <VCardItem class="header_card_item px-3">
+                  <div class="d-flex">
+                    <div class="descripcion">
+                      <VCardTitle>Permanencia de usuarios del día de, {{fecha.title}}</VCardTitle>
+                      <VCardSubtitle>Muestra el tiempo que ha permanecido un usuario registrado en las páginas de ecuavisa.com.<br>Un total de {{ totalCount }} registros, mostrando data desde, {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
+                    </div>
+                  </div>
+
+                  <template #append>
+                    <div class="bg-ecuavisa py-2">
+                      <div class="date-picker-wrapper" style="width: 150px;">
+                        <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
+                          hide-selected hint="" />
+
+                        <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngesada"
+                          show-current=true @on-change="obtenerFechaDispositivos" style="display: none;" :config="{
+                            position: 'auto right',
+                            mode: 'range',
+                            altFormat: 'F j, Y',
+                            dateFormat: 'm-d-Y',
+                            maxDate: new Date(),
+                            reactive: true
+
+                          }" />
+                      </div>
+                    </div>
+                  </template>
+                </VCardItem>
+                <div class="d-flex flex-wrap py-0 gap-4 align-items-center" style="justify-content: space-between;;" >
+                  <div style="display: none">
                     <VCardTitle>
                       Permanencia de usuarios del día de hoy
                     </VCardTitle>
