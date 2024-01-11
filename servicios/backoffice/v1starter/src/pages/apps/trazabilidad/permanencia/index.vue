@@ -169,7 +169,7 @@ watch(async () => selectSeccion.value, async () => {
                     
                   </template>
                   <div class="bg-ecuavisa py-4 d-flex gap-4">
-                    <div class="date-picker-wrappe" style="width: 150px;">
+                    <div class="date-picker-wrappe" style="width: 190px;">
                       <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
                         hide-selected hint="" />
 
