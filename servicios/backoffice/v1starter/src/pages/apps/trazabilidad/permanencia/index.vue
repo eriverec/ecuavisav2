@@ -23,15 +23,43 @@ const fecha = ref({
 const selectedfechaIniFin = ref('Hoy');
 const fechaIniFinList = useSelectCalendar();
 
+const selectSeccion = ref('');
+const itemsSeccion = ref([]);
+
+
 onMounted(getCampaigns)
 // para definir una fecha especifica se la coloca dentro de moment así -- moment('2024-01-04').format('YYYY-MM-DD')
 async function getCampaigns(options = {}){
   try {
-      const {fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')), limit = 10} = options;
-
-      var response = await fetch(`https://servicio-permanencia.vercel.app/get/document/${fechai}/${fechaf}`);
+      const {tipo = "fecha", section="",fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')), limit = 10} = options;
+      var response = await fetch(`https://servicio-permanencia.vercel.app/get/section/${fechai}/${fechaf}?section=${section}`);
       const data = await response.json();
+
       dataRegistros.value = data.data;
+
+      // Utilizar un conjunto (Set) para almacenar secciones únicas
+      const seccionesUnicas = new Set();
+
+      // Filtrar secciones únicas y crear un nuevo arreglo
+      const secciones = data.data
+        .map(item => item.section)
+        .filter(seccion => {
+          if (!seccionesUnicas.has(seccion)) {
+            seccionesUnicas.add(seccion);
+            return true;
+          }
+          return false;
+        })
+        .map(seccion => {
+          if(seccion.includes("-1")){
+            return { title: "Otros", value: seccion }
+          }
+          return { title: seccion, value: seccion }
+        });
+      if(tipo=="fecha"){
+        itemsSeccion.value = secciones;
+        selectSeccion.value = "";
+      }
   } catch (error) {
       return console.error(error.message);    
   }
@@ -75,6 +103,7 @@ const obtenerFechaDispositivos = async function(selectedDates, dateStr, instance
 
 /*COMBO EVENTO*/
 watch(async () => selectedfechaIniFin.value, async () => {
+  console.log(selectedfechaIniFin.value)
   let selectedCombo = useSelectValueCalendar(selectedfechaIniFin.value);
   fecha.value = {
       i: selectedCombo.i,
@@ -85,8 +114,30 @@ watch(async () => selectedfechaIniFin.value, async () => {
   loadingData.value = true;
   await getCampaigns({
     limit:10,
-    fechai: selectedCombo.i.format("YYYY-MM-DD"),
-    fechaf: selectedCombo.f.format("YYYY-MM-DD")
+    fechai: fecha.value.i.format("YYYY-MM-DD"),
+    fechaf: fecha.value.f.format("YYYY-MM-DD"),
+    tipo:"fecha"
+  });
+  loadingData.value = false;
+
+  // itemsSeccion.value = [{title:"sds",value:"wddw"}]
+});
+
+/*COMBO SECCION*/
+watch(async () => selectSeccion.value, async () => {
+  const section = selectSeccion.value;
+  // Utilizar un conjunto (Set) para almacenar valores únicos
+  const valoresUnicos = new Set(section.map(item => item.value));
+
+  // Convertir el conjunto a un array y unir los valores con coma
+  const stringFinal = [...valoresUnicos].join(', ');
+  loadingData.value = true;
+  await getCampaigns({
+    limit: 10,
+    fechai: fecha.value.i.format("YYYY-MM-DD"),
+    fechaf: fecha.value.f.format("YYYY-MM-DD"),
+    section:stringFinal,
+    tipo:"section"
   });
   loadingData.value = false;
 });
@@ -115,24 +166,31 @@ watch(async () => selectedfechaIniFin.value, async () => {
                   </div>
 
                   <template #append>
-                    <div class="bg-ecuavisa py-2">
-                      <div class="date-picker-wrapper" style="width: 150px;">
-                        <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
-                          hide-selected hint="" />
-
-                        <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngesada"
-                          show-current=true @on-change="obtenerFechaDispositivos" style="display: none;" :config="{
-                            position: 'auto right',
-                            mode: 'range',
-                            altFormat: 'F j, Y',
-                            dateFormat: 'm-d-Y',
-                            maxDate: new Date(),
-                            reactive: true
-
-                          }" />
-                      </div>
-                    </div>
+                    
                   </template>
+                  <div class="bg-ecuavisa py-4 d-flex gap-4">
+                    <div class="date-picker-wrappe" style="width: 150px;">
+                      <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
+                        hide-selected hint="" />
+
+                      <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngesada"
+                        show-current=true @on-change="obtenerFechaDispositivos" style="display: none;" :config="{
+                          position: 'auto right',
+                          mode: 'range',
+                          altFormat: 'F j, Y',
+                          dateFormat: 'm-d-Y',
+                          maxDate: new Date(),
+                          reactive: true
+
+                        }" />
+                    </div>
+
+                    <div style="width: 230px;">
+                      <VCombobox clearable multiple density="compact" :disabled="loadingData" v-model="selectSeccion" :items="itemsSeccion" variant="outlined" label="Seleccionar secciones" persistent-hint
+                        hide-selected hint="" />
+                    </div>
+                    
+                  </div>
                 </VCardItem>
                 <div class="d-flex flex-wrap py-0 gap-4 align-items-center" style="justify-content: space-between;;" >
                   <div style="display: none">
@@ -155,7 +213,7 @@ watch(async () => selectedfechaIniFin.value, async () => {
                   <VList lines="two" border  v-if="dataRegistros.length > 0">
                   <template v-for="(c, index) in paginatedData" :key="index" >
                     <VListItem :disabled="disabledViewList">
-                      <VListItemTitle> {{ c.user.first_name }} {{ c.user.last_name }} <VChip> estuvo {{ calcularDiferencia(c.inicio,c.fin) }}  </VChip> </VListItemTitle>
+                      <VListItemTitle> {{ c.user.first_name || "Not Found" }} {{ c.user.last_name || "" }} <VChip> estuvo {{ calcularDiferencia(c.inicio,c.fin) }}  </VChip> </VListItemTitle>
                       <VListItemSubtitle class="mt-1" title="Estado de campaña">
                         <span class="text-xs text-primary pl-2"> <VIcon icon="mdi-web" />: {{ c.title }} </span>
                       </VListItemSubtitle>
@@ -174,7 +232,7 @@ watch(async () => selectedfechaIniFin.value, async () => {
                 </div>
                 <!-- fin lista usuarios -->
                 <!-- Paginación -->
-                <VPagination v-model="currentPage" :length="totalPages" />
+                <VPagination v-model="currentPage" :length="totalPages" :total-visible="7" />
               </VWindowItem>
             </VWindow>
           </VCardText>
