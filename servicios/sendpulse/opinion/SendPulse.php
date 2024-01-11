@@ -422,7 +422,7 @@ class SendPulse {
 		$primeraParte = $partesPath[0];
 		$tituloSubseccion = $primeraParte;
 
-		$descripcion = $value->description->__text;
+		$descripcion = isset($value->description->__text)?$value->description->__text:"";
 		$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
 		$descripcion = substr($descripcion_formateado, 0, 290).'...';
 		$descripcionFinal = str_replace('<a ', '<a style="color: #444;" ', $descripcion);
