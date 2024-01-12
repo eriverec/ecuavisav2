@@ -404,50 +404,6 @@ const resolveDevice = computed(() => {
     categoriesRaw.push(dataRaw[i].name);
   }
 
-  // const options = {
-  //   chart: {
-  //     parentHeightOffset: 0,
-  //     type: 'donut',
-  //   },
-  //   dataLabels: {
-  //     enabled: true,
-  //     style: {
-  //       fontSize: '16px',
-  //       fontFamily: 'Helvetica, Arial, sans-serif',
-  //       fontWeight: 'bold',
-  //       colors: ['#fff']
-  //     },
-  //   },
-  //   legend: {
-  //     position: 'bottom',
-  //     horizontalAlign: 'left',
-  //     offsetX: 40,
-  //     show: true,
-  //     labels: {
-  //       colors: themeDisabledTextColor,
-  //       useSeriesColors: false
-  //     },
-  //   },
-  //   // plotOptions: {},
-  //   // title: {
-  //   //   text: 'Visitas por Dispositivos',
-  //   //   align: 'center',
-  //   //   style: {
-  //   //     fontSize: '16px',
-  //   //     fontWeight: 'bold',
-  //   //     fontFamily: 'Helvetica, Arial, sans-serif',
-  //   //     color: themeDisabledTextColor
-  //   //   },
-  //   // },
-  //   yaxis: {
-  //     labels: {
-  //       style: { colors: themeDisabledTextColor },
-  //     },
-  //   },
-  //   colors: ['#33b2df', '#546E7A'],
-  //   labels: categoriesRaw,
-  // }
-
   const options = {
     chart: {
       parentHeightOffset: 0,
@@ -489,7 +445,8 @@ const resolveDevice = computed(() => {
       theme: false,
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
         // series[seriesIndex]
-        return `<div class="tooltip-content">
+        return `
+        <div class="tooltip-content">
           <div class="tooltip-body">
             <div class="tooltip-title">
               En los últimos 30 minutos
@@ -509,7 +466,6 @@ const resolveDevice = computed(() => {
         </div>`
       }
     },
-    // tooltip: { theme: true },
     grid: {
       padding: {
         top: 15,
@@ -679,15 +635,6 @@ const resolveSection = computed(() => {
         top: -10,
       },
     },
-    // title: {
-    //   text: 'Visitas por Secciones',
-    //   style: {
-    //     fontSize: '16px',
-    //     fontWeight: 'bold',
-    //     fontFamily: undefined,
-    //     color: themeDisabledTextColor
-    //   },
-    // },
     yaxis: {
       labels: {
         style: { colors: themeDisabledTextColor },
@@ -725,88 +672,6 @@ const chartOptions = ref({
   minHeight: 300,
 });
 
-onMounted(async () => {
-  // fetchDevice();
-  // try {
-  //   const response = await axios.get('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime=10');
-  //   const apiData = response.data;
-  //   console.log(apiData);
-
-  //   const seriesData = Object.entries(apiData).map(([timestamp, value]) => [new Date(timestamp).getTime(), value]);
-
-  //   chartSeries.value = [{ name: 'Seccion', data: seriesData }];
-  // } catch (error) {
-  //   console.error('Error fetching data:', error);
-  // }
-});
-
-// const resolveGeneral = computed(() => {
-
-//   let dataRaw = Array.from(dataGeneral.value);
-//   const seriesFormat = {
-//     name: 'Seccion',
-//     data: []
-//   };
-
-//   const categoriesRaw = [];
-//   for (let i in dataRaw) {
-//     let num = parseInt(dataRaw[i].visits);
-//     seriesFormat.data.push(num);
-//     categoriesRaw.push(dataRaw[i].name);
-//   }
-
-//   const options = {
-//     chart: {
-//       parentHeightOffset: 0,
-//       toolbar: { show: false },
-//       height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6) ? 400 : 700
-//     },
-//     dataLabels: {
-//       enabled: true
-//     },
-//     legend: {
-//       position: 'top',
-//       horizontalAlign: 'left',
-//       offsetX: 40,
-//       show: false
-//     },
-//     plotOptions: {
-//       bar: {
-//         borderRadius: 0,
-//         barHeight: '70%',
-//         horizontal: true,
-//         distributed: true,
-//         startingShape: 'rounded',
-//       },
-//     },
-//     grid: {
-//       borderColor: themeBorderColor,
-//       xaxis: {
-//         lines: { show: true },
-//       },
-//       padding: {
-//         top: -10,
-//       },
-//     },
-//     yaxis: {
-//       labels: {
-//         style: { colors: themeDisabledTextColor },
-//       },
-//     },
-//     colors: ['#f48024', '#69d2e7'],
-//     xaxis: {
-//       axisBorder: { show: false },
-//       axisTicks: { color: themeBorderColor },
-//       categories: categoriesRaw,
-//       labels: {
-//         style: { colors: themeDisabledTextColor },
-//       },
-//     },
-//     minHeight: 300,
-//   }
-//   return { series: [seriesFormat], options: options, intereses: categoriesRaw };
-// });
-
 
 // realtimme procesos 
 const entriesLength = ref(false);
@@ -843,34 +708,6 @@ const fetchGeneral = async () => {
     return [timestampInMilliseconds, value];
   });
   chartSeries.value = [{ name: 'Seccion', data: seriesData }];
-
-  // console.log(seriesData);
-
-
-  // [moment(timestamp).format('HH:mm'), value]);
-  // {
-
-  //   var fecha = new Date(timestamp);
-  //   var hora = fecha.getHours();
-  //   var minutos = fecha.getMinutes();
-
-  //   // Formatear la hora y minutos según tus necesidades
-  //   var horaFormateada = hora < 10 ? "0" + hora : hora;
-  //   var minutosFormateados = minutos < 10 ? "0" + minutos : minutos;
-
-  //   var horaCompleta = horaFormateada + ":" + minutosFormateados;
-  //   console.log(horaCompleta);
-  //   return horaCompleta
-  //   // [new Date(horaCompleta).getTime(), value]
-
-  // });
-
-
-
-
-  // if (dataDevice.value.length > 0) {
-  //   deviceLength.value = true;
-  // }
 }
 // Grafico Devise
 const fetchDevice = async () => {
@@ -920,12 +757,6 @@ const fetchEntries = async () => {
     // contarSecuencial(sumV.value, totalTemSumV, 2000);
   }
 
-  // totalPagesVisits.value = data.reduce((total, item) => total + item.visits, 0);
-
-  // console.log(data)
-
-  // sumV.value = ty.reduce((acc, item) => acc + item, 0);
-  // console.log(sumV.value);
   if (dataChart.value.length > 0) {
     entriesLength.value = true;
   }
@@ -964,14 +795,7 @@ const resetEntries = async () => {
   // const data = await response.json()
   console.log("se reseteó el módulo correctamente")
 }
-// const toggleRealtime = () => {
-//   realtime.value = !realtime.value
-//   if (realtime.value) {
-//     intervalId = setInterval(fetchEntries, 5000)
-//   } else {
-//     clearInterval(intervalId)
-//   }
-// }
+
 
 var primeraVez = true;
 
@@ -1001,10 +825,6 @@ const toggleRealtime = () => {
     juntas();
   }
 };
-
-
-
-
 onUnmounted(() => {
   clearInterval(intervalId)
 })
@@ -1025,7 +845,6 @@ const goToLink = (link) => {
   .tarjeta {
     width: 185px;
   }
-
   .tarjeta svg {
     display: none;
   }
@@ -1035,22 +854,20 @@ const goToLink = (link) => {
   .tarjeta {
     width: 215px;
   }
-
 }
 
 @media screen and (max-width: 600px) and (min-width: 300px) {
-
   #dash .v-card-title {
     font-size: 18px;
   }
-
-
 }
 
-/* .graficoRealTime {
+/*
+.graficoRealTime {
   height: 700px;
   min-height: 700px;
-} */
+} 
+*/
 
 
 
@@ -1423,12 +1240,3 @@ const goToLink = (link) => {
   </section>
 </template>
 
-<script>
-
-
-// export default {
-// setup() {
-
-// }
-// }
-</script>
