@@ -17,14 +17,23 @@ const valoresHoy = useSelectValueCalendar(); //DEFAULT HOY
 const fecha = ref({
   i: valoresHoy.i,
   f: valoresHoy.f,
-  title: valoresHoy.title || "hoy"
+  title: "hoy"
 });
 
 const selectedfechaIniFin = ref('Hoy');
 const fechaIniFinList = useSelectCalendar();
 
+const selectOrder = ref('');
 const selectSeccion = ref('');
 const itemsSeccion = ref([]);
+const itemsOrder = ref([
+                        {title:'Ordenar ASC por nombre de usuario',value:1},
+                        {title:'Ordenar DESC por nombre de usuario',value:2},
+                        {title:'Ordenar ASC por fecha de registro',value:3},
+                        {title:'Ordenar DESC por fecha de registro',value:4},
+                        {title:'Ordenar ASC por tiempo de permanecia',value:5},
+                        {title:'Ordenar DESC por tiempo de permanecia',value:6},
+                      ]);
 
 
 onMounted(getCampaigns)
@@ -59,6 +68,7 @@ async function getCampaigns(options = {}){
       if(tipo=="fecha"){
         itemsSeccion.value = secciones;
         selectSeccion.value = "";
+        selectOrder.value = "";
       }
   } catch (error) {
       return console.error(error.message);    
@@ -103,12 +113,11 @@ const obtenerFechaDispositivos = async function(selectedDates, dateStr, instance
 
 /*COMBO EVENTO*/
 watch(async () => selectedfechaIniFin.value, async () => {
-  console.log(selectedfechaIniFin.value)
   let selectedCombo = useSelectValueCalendar(selectedfechaIniFin.value);
   fecha.value = {
       i: selectedCombo.i,
       f: selectedCombo.f,
-      title: selectedCombo.title
+      title: selectedfechaIniFin.value
   }
 
   loadingData.value = true;
@@ -142,6 +151,35 @@ watch(async () => selectSeccion.value, async () => {
   loadingData.value = false;
 });
 
+function comparador(opcion) {
+  switch (opcion) {
+    case 1:
+      return (a, b) => a.user.first_name > b.user.first_name ? 1 : -1;
+    case 2:
+      return (a, b) => b.user.first_name > a.user.first_name ? 1 : -1;
+    case 3:
+      return (a, b) => new Date(a.timestamp) - new Date(b.timestamp);
+    case 4:
+      return (a, b) => new Date(b.timestamp) - new Date(a.timestamp);
+    case 5:
+      return (a, b) => a.seconds - b.seconds;
+    case 6:
+      return (a, b) => b.seconds - a.seconds;
+    default:
+      return null;
+  }
+}
+
+/*COMBO SECCION*/
+watch(async () => selectOrder.value, async () => {
+  const seleccion = selectOrder.value.value;
+  const opcionSeleccionada = seleccion; // Puedes cambiar esto según la opción seleccionada
+
+  const datos = dataRegistros.value;
+  const datosOrdenados = [...datos].sort(comparador(opcionSeleccionada));
+  dataRegistros.value = datosOrdenados;
+});
+
 </script>
 
 <template>
@@ -160,7 +198,7 @@ watch(async () => selectSeccion.value, async () => {
                 <VCardItem class="header_card_item px-3">
                   <div class="d-flex">
                     <div class="descripcion">
-                      <VCardTitle>Permanencia de usuarios del día de, {{fecha.title}}</VCardTitle>
+                      <VCardTitle>Permanencia de usuarios, {{fecha.title}}</VCardTitle>
                       <VCardSubtitle>Muestra el tiempo que ha permanecido un usuario registrado en las páginas de ecuavisa.com.<br>Un total de {{ totalCount }} registros, mostrando data desde, {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
                     </div>
                   </div>
@@ -185,8 +223,13 @@ watch(async () => selectSeccion.value, async () => {
                         }" />
                     </div>
 
-                    <div style="width: 230px;">
+                    <div style="min-width: 230px;width: auto;">
                       <VCombobox clearable multiple density="compact" :disabled="loadingData" v-model="selectSeccion" :items="itemsSeccion" variant="outlined" label="Seleccionar secciones" persistent-hint
+                        hide-selected hint="" />
+                    </div>
+
+                    <div style="min-width: 230px;width: auto;display: none;">
+                      <VCombobox clearable density="compact" :disabled="loadingData" v-model="selectOrder" :items="itemsOrder" variant="outlined" label="Ordenar registros" persistent-hint
                         hide-selected hint="" />
                     </div>
                     
