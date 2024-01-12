@@ -7,6 +7,7 @@ const moment = extendMoment(Moment);
 const valoresFechas = [
   {
     name:"Hoy",
+    limit:2000,
     config:{
       title: "hoy",
       i: moment(),
@@ -15,6 +16,7 @@ const valoresFechas = [
   },
   {
     name:"Ayer",
+    limit:4000,
     config:{
       i: moment().add(-1, 'days'),
       f: moment().add(-1, 'days'),
@@ -23,6 +25,7 @@ const valoresFechas = [
   },
   {
     name:"Hace una semana",
+    limit:5000,
     config:{
       i: moment().add(-7, 'days'),
       f: moment(),
@@ -31,6 +34,7 @@ const valoresFechas = [
   },
   {
     name:"15 días atrás",
+    limit:6000,
     config:{
       i: moment().add(-15, 'days'),
       f: moment(),
@@ -52,6 +56,8 @@ export const useSelectValueCalendar = (selectedCombo = "Hoy") => {
   if(fechaEncontrada){
     return {
       i: fechaEncontrada.config.i,
+      title: fechaEncontrada.title,
+      limit: fechaEncontrada.limit,
       f: fechaEncontrada.config.f
     }
   }

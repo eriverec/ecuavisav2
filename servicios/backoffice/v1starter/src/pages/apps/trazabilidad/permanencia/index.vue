@@ -3,6 +3,9 @@ import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/us
 import Moment from 'moment'; // para las fechas
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
+import { hexToRgb } from '@layouts/utils';
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 const currentTab = ref('tab-lista');
@@ -22,17 +25,19 @@ const fecha = ref({
 
 const selectedfechaIniFin = ref('Hoy');
 const fechaIniFinList = useSelectCalendar();
+const limit = ref(valoresHoy.limit);
 
 const selectOrder = ref('');
 const selectSeccion = ref('');
 const itemsSeccion = ref([]);
+const groupSectionChartPieData = ref([]);
 const itemsOrder = ref([
                         {title:'Ordenar ASC por nombre de usuario',value:1},
                         {title:'Ordenar DESC por nombre de usuario',value:2},
                         {title:'Ordenar ASC por fecha de registro',value:3},
                         {title:'Ordenar DESC por fecha de registro',value:4},
-                        {title:'Ordenar ASC por tiempo de permanecia',value:5},
-                        {title:'Ordenar DESC por tiempo de permanecia',value:6},
+                        {title:'Ordenar ASC por tiempo de permanencia',value:5},
+                        {title:'Ordenar DESC por tiempo de permanencia',value:6},
                       ]);
 
 
@@ -40,8 +45,8 @@ onMounted(getCampaigns)
 // para definir una fecha especifica se la coloca dentro de moment así -- moment('2024-01-04').format('YYYY-MM-DD')
 async function getCampaigns(options = {}){
   try {
-      const {tipo = "fecha", section="",fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')), limit = 10} = options;
-      var response = await fetch(`https://servicio-permanencia.vercel.app/get/section/${fechai}/${fechaf}?section=${section}`);
+      const {tipo = "fecha", section="",fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')), limit = 2000} = options;
+      var response = await fetch(`https://servicio-permanencia.vercel.app/get/section/${fechai}/${fechaf}?section=${section}&limit=${limit}`);
       const data = await response.json();
 
       dataRegistros.value = data.data;
@@ -65,6 +70,37 @@ async function getCampaigns(options = {}){
           }
           return { title: seccion, value: seccion }
         });
+
+        const resultadoAgrupado = data.data.reduce((acumulador, actual) => {
+          const sectionActual = actual.section;
+          const indexEnAcumulador = acumulador.findIndex(item => item.section === sectionActual);
+
+          if (indexEnAcumulador === -1) {
+            acumulador.push({
+              section: sectionActual,
+              total: 1,
+              sumSeconds: actual.seconds,
+              porcentaje: 0, // Inicializamos el porcentaje en 0
+              promedio: 0, // Inicializamos el promedio en 0
+            });
+          } else {
+            acumulador[indexEnAcumulador].total += 1;
+            acumulador[indexEnAcumulador].sumSeconds += actual.seconds;
+          }
+
+          return acumulador;
+        }, []);
+
+        // Calculamos el porcentaje para cada elemento
+        const totalRegistros = data.data.length;
+
+        resultadoAgrupado.forEach(elemento => {
+          elemento.porcentaje = (elemento.total / totalRegistros) * 100;
+          elemento.promedio = elemento.sumSeconds / elemento.total;
+        });
+
+        groupSectionChartPieData.value = resultadoAgrupado;
+
       if(tipo=="fecha"){
         itemsSeccion.value = secciones;
         selectSeccion.value = "";
@@ -120,12 +156,15 @@ watch(async () => selectedfechaIniFin.value, async () => {
       title: selectedfechaIniFin.value
   }
 
+  limit.value = selectedCombo.limit;
+
   loadingData.value = true;
   await getCampaigns({
     limit:10,
     fechai: fecha.value.i.format("YYYY-MM-DD"),
     fechaf: fecha.value.f.format("YYYY-MM-DD"),
-    tipo:"fecha"
+    tipo:"fecha",
+    limit: limit.value
   });
   loadingData.value = false;
 
@@ -146,6 +185,7 @@ watch(async () => selectSeccion.value, async () => {
     fechai: fecha.value.i.format("YYYY-MM-DD"),
     fechaf: fecha.value.f.format("YYYY-MM-DD"),
     section:stringFinal,
+    limit: limit.value,
     tipo:"section"
   });
   loadingData.value = false;
@@ -180,6 +220,256 @@ watch(async () => selectOrder.value, async () => {
   dataRegistros.value = datosOrdenados;
 });
 
+// 👉 Colors variables
+const colorVariables = themeColors => {
+  const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
+  const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`
+  const themeBorderColor = `rgba(${hexToRgb(String(themeColors.variables['border-color']))},${themeColors.variables['border-opacity']})`
+  const themePrimaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['high-emphasis-opacity']})`
+
+  return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
+}
+
+const vuetifyTheme = useTheme();
+
+const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value);
+
+/*GRÁFICO DE PIE*/
+
+function formatearTiempo(valorSegundos) {
+  if (typeof valorSegundos !== 'number' || isNaN(valorSegundos)) {
+    return 'El valor no es un número válido.';
+  }
+
+  let resultado;
+  let tipo;
+
+  if (valorSegundos < 60) {
+    resultado = valorSegundos;
+    tipo = 'segundos';
+  } else if (valorSegundos < 3600) {
+    resultado = valorSegundos / 60;
+    tipo = 'minutos';
+  } else {
+    resultado = valorSegundos / 3600;
+    tipo = 'horas';
+  }
+
+  return `${parseInt(resultado)} ${tipo}`;
+}
+
+const resolveDevice = computed(() => {
+
+  const currentTheme = vuetifyTheme.current.value.colors
+  const variableTheme = vuetifyTheme.current.value.variables
+  const labelSuccessColor = `rgba(${hexToRgb(currentTheme.success)},0.2)`
+  const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
+
+  const chartColors = {
+    donut: {
+      series1: currentTheme.success,
+      series2: '#28c76fb3',
+      series3: '#28c76f80',
+      series4: labelSuccessColor,
+    },
+  }
+
+  let dataRaw = Array.from(groupSectionChartPieData.value);
+  const seriesFormat = {
+    name: 'Device',
+    data: []
+  };
+
+  const categoriesRaw = [];
+  for (let i in dataRaw) {
+    let num = parseInt(dataRaw[i].porcentaje);
+    seriesFormat.data.push(num);
+    categoriesRaw.push(dataRaw[i].section);
+  }
+
+  // const options = {
+  //   chart: {
+  //     parentHeightOffset: 0,
+  //     type: 'donut',
+  //   },
+  //   dataLabels: {
+  //     enabled: true,
+  //     style: {
+  //       fontSize: '16px',
+  //       fontFamily: 'Helvetica, Arial, sans-serif',
+  //       fontWeight: 'bold',
+  //       colors: ['#fff']
+  //     },
+  //   },
+  //   legend: {
+  //     position: 'bottom',
+  //     horizontalAlign: 'left',
+  //     offsetX: 40,
+  //     show: true,
+  //     labels: {
+  //       colors: themeDisabledTextColor,
+  //       useSeriesColors: false
+  //     },
+  //   },
+  //   // plotOptions: {},
+  //   // title: {
+  //   //   text: 'Visitas por Dispositivos',
+  //   //   align: 'center',
+  //   //   style: {
+  //   //     fontSize: '16px',
+  //   //     fontWeight: 'bold',
+  //   //     fontFamily: 'Helvetica, Arial, sans-serif',
+  //   //     color: themeDisabledTextColor
+  //   //   },
+  //   // },
+  //   yaxis: {
+  //     labels: {
+  //       style: { colors: themeDisabledTextColor },
+  //     },
+  //   },
+  //   colors: ['#33b2df', '#546E7A'],
+  //   labels: categoriesRaw,
+  // }
+
+  const options = {
+    chart: {
+      parentHeightOffset: 0,
+      type: 'donut',
+    },
+    labels: categoriesRaw,
+    colors: [
+      "#7365ed",
+      "#9d92f2",
+      "#ff7f50", // Naranja claro
+      "#ffd700", // Amarillo
+      "#ff6347", // Rojo coral
+      "#00ff00", // Verde lima
+      "#ffa500", // Naranja
+      "#ffd800", // Amarillo intenso
+      "#ff4500", // Rojo oscuro
+      "#32cd32", // Verde esmeralda
+      "#ff1493", // Rosa brillante
+      "#00fa9a", // Verde medio
+      "#ff69b4", // Rosa claro
+      "#9932cc", // Púrpura
+      "#ff8c00", // Naranja oscuro
+      "#8b008b", // Magenta oscuro
+      "#8a2be2", // Azul violeta
+    ],
+    stroke: { width: 0 },
+    dataLabels: {
+      enabled: false,
+      formatter(val) {
+        return `${parseInt(val)}%`
+      },
+    },
+    legend: {
+      position: 'bottom',
+      horizontalAlign: 'center',
+      offsetX: 0,
+      // width: 300,
+      markers: {
+        width: 7,
+        height: 7
+      },
+      show: true,
+      formatter: function (seriesName, opts) {
+        return [seriesName, " <br> ", `<div style="margin-top:10px;font-size:20px;color:rgba(var(--v-theme-on-background),var(--v-high-emphasis-opacity))">${opts.w.globals.series[opts.seriesIndex]}%<small style="font-size:14px"></small></div>`]
+      },
+      labels: {
+        colors: themeDisabledTextColor,
+        useSeriesColors: false
+      },
+    },
+    tooltip: {
+      theme: false,
+      custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        // series[seriesIndex]
+        return `<div class="tooltip-content">
+          <div class="tooltip-body">
+            <div class="tooltip-title">
+              Permanencia de ${fecha.value.title}<br>
+              <small>Muestra de ${limit.value} registros</small>
+            </div>
+            <div class="tooltip-subtitle">
+              Sección
+            </div>
+            <div class="tooltip-data-flex">
+              <div class="tooltip-data-title">
+                ${w.config.labels[seriesIndex]}
+              </div>
+              <div class="tooltip-data-value">
+                ${series[seriesIndex]}%
+              </div>
+            </div>
+            <div class="tooltip-data-flex">
+              <div class="tooltip-data-title">
+                Visitas
+              </div>
+              <div class="tooltip-data-value">
+                ${dataRaw[seriesIndex].total}
+              </div>
+            </div>
+            <div class="tooltip-data-flex">
+              <div class="tooltip-data-title">
+                Tiempo promedio
+              </div>
+              <div class="tooltip-data-value">
+                ${formatearTiempo(dataRaw[seriesIndex].promedio)} 
+              </div>
+            </div>
+          </div>
+        </div>`
+      }
+    },
+    // tooltip: { theme: true },
+    grid: {
+      padding: {
+        top: 15,
+        right: -20,
+        left: -20,
+      },
+    },
+    states: { hover: { filter: { type: 'none' } } },
+    plotOptions: {
+      pie: {
+        donut: {
+          size: '60%',
+          labels: {
+            show: false,
+            value: {
+              fontSize: '1.375rem',
+              fontFamily: 'Public Sans',
+              color: headingColor,
+              fontWeight: 600,
+              offsetY: -15,
+              formatter(val) {
+                return `${parseInt(val)}%`
+              },
+            },
+            name: {
+              offsetY: 20,
+              fontFamily: 'Public Sans',
+            },
+            total: {
+              show: false,
+              showAlways: false,
+              color: currentTheme.success,
+              fontSize: '.8125rem',
+              label: 'Total',
+              fontFamily: 'Public Sans',
+              formatter() {
+                return '184'
+              },
+            },
+          },
+        },
+      },
+    },
+  }
+  return { series: seriesFormat.data, options: options };
+});
+
 </script>
 
 <template>
@@ -200,6 +490,7 @@ watch(async () => selectOrder.value, async () => {
                     <div class="descripcion">
                       <VCardTitle>Permanencia de usuarios, {{fecha.title}}</VCardTitle>
                       <VCardSubtitle>Muestra el tiempo que ha permanecido un usuario registrado en las páginas de ecuavisa.com.<br>Un total de {{ totalCount }} registros, mostrando data desde, {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
+                      <VCardSubtitle>Muestreo de datos: {{limit}} registros</VCardSubtitle>
                     </div>
                   </div>
 
@@ -228,7 +519,7 @@ watch(async () => selectOrder.value, async () => {
                         hide-selected hint="" />
                     </div>
 
-                    <div style="min-width: 230px;width: auto;display: none;">
+                    <div style="min-width: 230px;width: auto;">
                       <VCombobox clearable density="compact" :disabled="loadingData" v-model="selectOrder" :items="itemsOrder" variant="outlined" label="Ordenar registros" persistent-hint
                         hide-selected hint="" />
                     </div>
@@ -252,26 +543,48 @@ watch(async () => selectOrder.value, async () => {
                       <VListItemTitle> <div class="loading">Cargando información</div> </VListItemTitle>
                     </VListItem>
                   </VList>
-                  <!-- listado de datos -->
-                  <VList lines="two" border  v-if="dataRegistros.length > 0">
-                  <template v-for="(c, index) in paginatedData" :key="index" >
-                    <VListItem :disabled="disabledViewList">
-                      <VListItemTitle> {{ c.user.first_name || "Not Found" }} {{ c.user.last_name || "" }} <VChip> estuvo {{ calcularDiferencia(c.inicio,c.fin) }}  </VChip> </VListItemTitle>
-                      <VListItemSubtitle class="mt-1" title="Estado de campaña">
-                        <span class="text-xs text-primary pl-2"> <VIcon icon="mdi-web" />: {{ c.title }} </span>
-                      </VListItemSubtitle>
+                  <VRow>
+                    <VCol cols="12" sm="4" class="">
+                      <VCard class="px-2 py-2 pb-5 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
+                        <VCardItem class="header_card_item pb-4">
+                          <div class="d-flex pr-0" style="justify-content: space-between;">
+                            <div class="descripcion">
+                              <VCardTitle>Tiempo de permanencia<br></VCardTitle>
+                              <small class="mt-3">Agrupados por sección, número de muestra: {{limit}} registros</small>
+                            </div>
+                            <!-- <div class="">
+                              <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
+                            </div> -->
 
-                      <template #append>
-                        <div class="espacio-right-2">
-                          <VBtn icon size="x-small" color="info" variant="text" :href="c.url" target="_blank" >
-                            <VIcon size="22" icon="tabler-eye" /> 
-                          </VBtn>
-                        </div>
-                      </template>
-                    </VListItem>
-                    <VDivider v-if="index !== dataRegistros.length - 1" />
-                  </template>
-                </VList>
+                          </div>
+                        </VCardItem>
+                        <VueApexCharts v-if="sumV != 0" :options="resolveDevice.options" :series="resolveDevice.series" :height="480" width="100%" />
+                      </VCard>
+                    </VCol>
+                    <VCol cols="12" sm="8" class="">
+                      <!-- listado de datos -->
+                      <VList lines="two" border  v-if="dataRegistros.length > 0">
+                        <template v-for="(c, index) in paginatedData" :key="index" >
+                          <VListItem :disabled="disabledViewList">
+                            <VListItemTitle> {{ c.user.first_name || "Not Found" }} {{ c.user.last_name || "" }} <VChip> estuvo {{ calcularDiferencia(c.inicio,c.fin) }}  </VChip> </VListItemTitle>
+                            <VListItemSubtitle class="mt-1" title="Estado de campaña">
+                              <span class="text-xs text-primary pl-2"> <VIcon icon="mdi-web" />: {{ c.title }} </span>
+                            </VListItemSubtitle>
+
+                            <template #append>
+                              <div class="espacio-right-2">
+                                <VBtn icon size="x-small" color="info" variant="text" :href="c.url" target="_blank" >
+                                  <VIcon size="22" icon="tabler-eye" /> 
+                                </VBtn>
+                              </div>
+                            </template>
+                          </VListItem>
+                          <VDivider v-if="index !== dataRegistros.length - 1" />
+                        </template>
+                      </VList>
+                    </VCol>
+                  </VRow>
+                  
                 </div>
                 <!-- fin lista usuarios -->
                 <!-- Paginación -->
@@ -287,3 +600,13 @@ watch(async () => selectOrder.value, async () => {
 
 
 
+<style>
+  .apexcharts-legend-series{
+    transition: 1s ease all;
+    padding: 5px;
+    border-radius: 7px;
+  }
+  .apexcharts-legend-series:hover{
+    background-color: #e9e9ea;
+  }
+</style>
