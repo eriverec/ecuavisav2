@@ -10,6 +10,7 @@ const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 const currentTab = ref('tab-lista');
 const dataRegistros = ref([]);
+const dataRegistrosBackup = ref([]);
 const disabledViewList = ref(false);
 
 const currentPage = ref(1); // Página actual
@@ -28,16 +29,31 @@ const fechaIniFinList = useSelectCalendar();
 const limit = ref(valoresHoy.limit);
 
 const selectOrder = ref('');
+const selectGroup = ref('');
 const selectSeccion = ref('');
 const itemsSeccion = ref([]);
 const groupSectionChartPieData = ref([]);
-const itemsOrder = ref([
+
+const optionOrderNormal = [
                         {title:'Ordenar ASC por nombre de usuario',value:1},
                         {title:'Ordenar DESC por nombre de usuario',value:2},
                         {title:'Ordenar ASC por fecha de registro',value:3},
                         {title:'Ordenar DESC por fecha de registro',value:4},
                         {title:'Ordenar ASC por tiempo de permanencia',value:5},
                         {title:'Ordenar DESC por tiempo de permanencia',value:6},
+                      ];
+const optionOrderGroup = [
+                        {title:'Ordenar ASC por nombre de página',value:7},
+                        {title:'Ordenar DESC por nombre de página',value:8},
+                        {title:'Ordenar ASC por tiempo promedio',value:9},
+                        {title:'Ordenar DESC por tiempo promedio',value:10},
+                        {title:'Ordenar ASC por visitas',value:11},
+                        {title:'Ordenar DESC por visitas',value:12},
+                      ];
+
+const itemsOrder = ref(optionOrderNormal);
+const itemsGroup = ref([
+                        {title:'Agrupar por página',value:1}
                       ]);
 
 
@@ -50,6 +66,7 @@ async function getCampaigns(options = {}){
       const data = await response.json();
 
       dataRegistros.value = data.data;
+      dataRegistrosBackup.value = data.data;
 
       // Utilizar un conjunto (Set) para almacenar secciones únicas
       const seccionesUnicas = new Set();
@@ -71,35 +88,59 @@ async function getCampaigns(options = {}){
           return { title: seccion, value: seccion }
         });
 
-        const resultadoAgrupado = data.data.reduce((acumulador, actual) => {
-          const sectionActual = actual.section;
-          const indexEnAcumulador = acumulador.findIndex(item => item.section === sectionActual);
+      const resultadoAgrupado = data.data.reduce((acumulador, actual) => {
+        const sectionActual = actual.section;
+        const indexEnAcumulador = acumulador.findIndex(item => item.section === sectionActual);
 
-          if (indexEnAcumulador === -1) {
-            acumulador.push({
-              section: sectionActual,
-              total: 1,
-              sumSeconds: actual.seconds,
-              porcentaje: 0, // Inicializamos el porcentaje en 0
-              promedio: 0, // Inicializamos el promedio en 0
-            });
-          } else {
-            acumulador[indexEnAcumulador].total += 1;
-            acumulador[indexEnAcumulador].sumSeconds += actual.seconds;
-          }
+        if (indexEnAcumulador === -1) {
+          acumulador.push({
+            section: sectionActual,
+            total: 1,
+            sumSeconds: actual.seconds,
+            porcentaje: 0, // Inicializamos el porcentaje en 0
+            promedio: 0, // Inicializamos el promedio en 0
+          });
+        } else {
+          acumulador[indexEnAcumulador].total += 1;
+          acumulador[indexEnAcumulador].sumSeconds += actual.seconds;
+        }
 
-          return acumulador;
-        }, []);
+        return acumulador;
+      }, []);
 
-        // Calculamos el porcentaje para cada elemento
-        const totalRegistros = data.data.length;
+      // var sumatotal = 0;
+      // var sumatotal2 = 0;
+      
 
-        resultadoAgrupado.forEach(elemento => {
-          elemento.porcentaje = (elemento.total / totalRegistros) * 100;
-          elemento.promedio = elemento.sumSeconds / elemento.total;
-        });
 
-        groupSectionChartPieData.value = resultadoAgrupado;
+      // Calculamos el porcentaje para cada elemento
+      const totalRegistros = data.data.length;
+
+      resultadoAgrupado.forEach(elemento => {
+        elemento.porcentaje = (elemento.total / totalRegistros) * 100;
+        elemento.promedio = elemento.sumSeconds / elemento.total;
+      });
+
+      groupSectionChartPieData.value = resultadoAgrupado;
+
+      // console.log(resultadoAgrupadoPorTitle)
+
+      // var sumattt = 0;
+      // var sumattt2 = 0;
+
+      // resultadoAgrupado.forEach(elemento => {
+      //   if(elemento.section.includes("Envivo")){
+      //     console.log(elemento)
+      //   }
+      // });
+
+      // resultadoAgrupadoPorTitle.forEach(elemento => {
+      //   if(elemento.title.includes("En Vivo | Ecuavisa")){
+      //     console.log(elemento)
+      //   }
+      // });
+
+      // console.log(sumattt, totalRegistros, sumattt2)
 
       if(tipo=="fecha"){
         itemsSeccion.value = secciones;
@@ -123,14 +164,14 @@ function changePage(pageNumber) {
   currentPage.value = pageNumber;
 }
 
-function calcularDiferencia(horaInicio, horaFin) {
-    const inicio = horaInicio.split(':');
-    const fin = horaFin.split(':');
-    // Convertir horas y minutos a segundos
-    const segundosInicio = parseInt(inicio[0]) * 3600 + parseInt(inicio[1]) * 60 + parseInt(inicio[2]);
-    const segundosFin = parseInt(fin[0]) * 3600 + parseInt(fin[1]) * 60 + parseInt(fin[2]);
-    // Calcular la diferencia en segundos
-    let diferencia = segundosFin - segundosInicio;
+function calcularDiferencia(diferencia) {
+    // const inicio = horaInicio.split(':');
+    // const fin = horaFin.split(':');
+    // // Convertir horas y minutos a segundos
+    // const segundosInicio = parseInt(inicio[0]) * 3600 + parseInt(inicio[1]) * 60 + parseInt(inicio[2]);
+    // const segundosFin = parseInt(fin[0]) * 3600 + parseInt(fin[1]) * 60 + parseInt(fin[2]);
+    // // Calcular la diferencia en segundos
+    // let diferencia = segundosFin - segundosInicio;
     // Si la diferencia es negativa, sumamos 24 horas (en segundos)
     if (diferencia < 0) { diferencia += 24 * 3600; }
     // Convertir la diferencia en segundos a horas, minutos y segundos
@@ -167,6 +208,7 @@ watch(async () => selectedfechaIniFin.value, async () => {
     limit: limit.value
   });
   loadingData.value = false;
+  selectGroup.value = null
 
   // itemsSeccion.value = [{title:"sds",value:"wddw"}]
 });
@@ -189,6 +231,7 @@ watch(async () => selectSeccion.value, async () => {
     tipo:"section"
   });
   loadingData.value = false;
+  selectGroup.value = null;
 });
 
 function comparador(opcion) {
@@ -198,26 +241,104 @@ function comparador(opcion) {
     case 2:
       return (a, b) => b.user.first_name > a.user.first_name ? 1 : -1;
     case 3:
-      return (a, b) => new Date(a.timestamp) - new Date(b.timestamp);
+      return (a, b) => new Date(a.timestamp.replace(/(\d{2})\/(\d{1,2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/,"$2/$1/$3 $4")) - new Date(b.timestamp.replace(/(\d{2})\/(\d{1,2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/,"$2/$1/$3 $4"));
     case 4:
-      return (a, b) => new Date(b.timestamp) - new Date(a.timestamp);
+      return (a, b) => new Date(b.timestamp.replace(/(\d{2})\/(\d{1,2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/,"$2/$1/$3 $4")) - new Date(a.timestamp.replace(/(\d{2})\/(\d{1,2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/,"$2/$1/$3 $4"));
     case 5:
       return (a, b) => a.seconds - b.seconds;
     case 6:
       return (a, b) => b.seconds - a.seconds;
+    //Item Group
+    case 7:
+      return (a, b) => a.title > b.title ? 1 : -1;
+    case 8:
+      return (a, b) => b.title > a.title ? 1 : -1;
+    case 9:
+      return (a, b) => a.promedio - b.promedio;
+    case 10:
+      return (a, b) => b.promedio - a.promedio;
+    case 11:
+      return (a, b) => a.total - b.total;
+    case 12:
+      return (a, b) => b.total - a.total;
     default:
       return null;
   }
 }
 
-/*COMBO SECCION*/
+/*COMBO ORDENAR*/
 watch(async () => selectOrder.value, async () => {
-  const seleccion = selectOrder.value.value;
-  const opcionSeleccionada = seleccion; // Puedes cambiar esto según la opción seleccionada
-
   const datos = dataRegistros.value;
-  const datosOrdenados = [...datos].sort(comparador(opcionSeleccionada));
-  dataRegistros.value = datosOrdenados;
+  if(selectOrder.value){
+    const seleccion = selectOrder.value.value;
+    const opcionSeleccionada = seleccion; // Puedes cambiar esto según la opción seleccionada
+
+    
+    const datosOrdenados = [...datos].sort(comparador(opcionSeleccionada));
+    dataRegistros.value = datosOrdenados;
+  }else{
+    selectGroup.value = null;
+    const datosOrdenados = [...datos].sort(comparador(4));
+    dataRegistros.value = datosOrdenados;
+  }
+  
+});
+
+
+/*COMBO AGRUPAR*/
+function agrupador(opcion) {
+  const datos = Array.from(dataRegistros.value);
+  switch (opcion) {
+    case 1:
+      const resultadoAgrupadoPorTitle = datos.reduce((acumulador, actual) => {
+        const indexEnAcumulador = acumulador.findIndex(item => item.title === actual.title);
+        
+        // if(actual.title.includes("Los guías penitenciarios")){
+        //   console.log(actual.seconds, actual)
+        // }
+        if (indexEnAcumulador === -1) {
+          acumulador.push({
+            title: actual.title,
+            promedio: actual.seconds,
+            section: actual.section,
+            total: 1,
+            url: actual.url,
+            sumSeconds: actual.seconds,
+            data: [actual],
+          });
+          // console.log(actual.title)
+        } else {
+          acumulador[indexEnAcumulador].promedio =
+            (acumulador[indexEnAcumulador].promedio * acumulador[indexEnAcumulador].data.length + actual.seconds) /
+            (acumulador[indexEnAcumulador].data.length + 1);
+          acumulador[indexEnAcumulador].sumSeconds += actual.seconds;
+          acumulador[indexEnAcumulador].data.push(actual);
+          acumulador[indexEnAcumulador].total += 1;
+          // console.log(sumatotal2++)
+        }
+
+        return acumulador;
+      }, []);
+      return resultadoAgrupadoPorTitle;
+    default:
+      return null;
+  }
+}
+
+watch(async () => selectGroup.value, async () => {
+  const datos = selectGroup.value;
+  if(selectGroup.value){
+    const seleccion = selectGroup.value.value;
+    const opcionSeleccionada = seleccion; // Puedes cambiar esto según la opción seleccionada
+    const datosOrdenados = agrupador(opcionSeleccionada);
+    dataRegistros.value = datosOrdenados;
+    itemsOrder.value = optionOrderGroup;
+    // console.log(datosOrdenados)
+  }else{
+    dataRegistros.value = dataRegistrosBackup.value;
+    itemsOrder.value = optionOrderNormal;
+  }
+  
 });
 
 // 👉 Colors variables
@@ -238,6 +359,11 @@ const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme
 
 function formatearTiempo(valorSegundos) {
   if (typeof valorSegundos !== 'number' || isNaN(valorSegundos)) {
+    return 'El valor no es un número válido.';
+  }
+
+  if(valorSegundos < 0){
+    console.log(valorSegundos)
     return 'El valor no es un número válido.';
   }
 
@@ -523,6 +649,11 @@ const resolveDevice = computed(() => {
                       <VCombobox clearable density="compact" :disabled="loadingData" v-model="selectOrder" :items="itemsOrder" variant="outlined" label="Ordenar registros" persistent-hint
                         hide-selected hint="" />
                     </div>
+
+                    <div style="min-width: 230px;width: auto;">
+                      <VCombobox clearable density="compact" :disabled="loadingData" v-model="selectGroup" :items="itemsGroup" variant="outlined" label="Agrupar registros" persistent-hint
+                        hide-selected hint="" />
+                    </div>
                     
                   </div>
                 </VCardItem>
@@ -562,33 +693,141 @@ const resolveDevice = computed(() => {
                       </VCard>
                     </VCol>
                     <VCol cols="12" sm="8" class="">
-                      <!-- listado de datos -->
-                      <VList lines="two" border  v-if="dataRegistros.length > 0">
-                        <template v-for="(c, index) in paginatedData" :key="index" >
-                          <VListItem :disabled="disabledViewList">
-                            <VListItemTitle> {{ c.user.first_name || "Not Found" }} {{ c.user.last_name || "" }} <VChip> estuvo {{ calcularDiferencia(c.inicio,c.fin) }}  </VChip> </VListItemTitle>
-                            <VListItemSubtitle class="mt-1" title="Estado de campaña">
-                              <span class="text-xs text-primary pl-2"> <VIcon icon="mdi-web" />: {{ c.title }} </span>
-                            </VListItemSubtitle>
+                      <div  v-if="selectGroup">
+                        <!-- SECTION Table -->
+                        <VTable class="text-no-wrap invoice-list-table">
+                          <!-- 👉 Table head -->
+                          <thead class="text-uppercase">
+                            <tr>
 
-                            <template #append>
-                              <div class="espacio-right-2">
+                              <th scope="col">
+                                Página
+                              </th>
+
+
+                              <th scope="col">
+                                Sección
+                              </th>
+
+                              <th
+                                scope="col"
+                                class="text-center"
+                              >
+                                Tiempo promedio
+                              </th>
+
+                              <th
+                                scope="col"
+                                class="text-center"
+                              >
+                                Visitas
+                              </th>
+
+                              <th scope="col">
+                                Acción
+                              </th>
+                            </tr>
+                          </thead>
+
+                          <!-- 👉 Table Body -->
+                          <tbody>
+                            <tr
+                              v-for="(c, index) in paginatedData" :key="index"
+                              style="height: 3.75rem;"
+                            >
+                              <!-- 👉 Page name -->
+                              <td style="min-width: 17rem;max-width: 17rem;">
+                                <VCardTitle :title="c.title" style="font-size: 18px;">
+                                  <small>{{ c.title }}</small>
+                                </VCardTitle>
+                                
+                              </td>
+
+                              <!-- 👉 Section -->
+                              <td>
+                                {{c.section}}
+                              </td>
+
+                              <!-- 👉 Promedio -->
+                              <td class="text-center">
+                                <VChip
+                                  label
+                                  v-bind="{
+                                    status: 'Paid',
+                                    chip: { color: 'success' },
+                                  }"
+                                  size="small"
+                                >
+                                  {{ formatearTiempo(parseInt(c.promedio)) }}
+                                </VChip>
+                              </td>
+                              <td class="text-center">
+                                <VChip
+                                  label
+                                  v-bind="{
+                                    status: 'Paid',
+                                    chip: { color: 'success' },
+                                  }"
+                                  size="small"
+                                >
+                                  {{c.total}} visitas
+                                </VChip>
+                              </td>
+
+                              <!-- 👉 Actions -->
+                              <td class="text-center" style="width: 5rem;">
                                 <VBtn icon size="x-small" color="info" variant="text" :href="c.url" target="_blank" >
                                   <VIcon size="22" icon="tabler-eye" /> 
                                 </VBtn>
-                              </div>
-                            </template>
-                          </VListItem>
-                          <VDivider v-if="index !== dataRegistros.length - 1" />
-                        </template>
-                      </VList>
+                              </td>
+                            </tr>
+                          </tbody>
+
+                          <!-- 👉 table footer  -->
+                          <tfoot v-show="!paginatedData.length">
+                            <tr>
+                              <td
+                                colspan="8"
+                                class="text-center text-body-1"
+                              >
+                                No data available
+                              </td>
+                            </tr>
+                          </tfoot>
+                        </VTable>
+                        <!-- !SECTION -->
+                      </div>
+                      <div v-else>
+                        <!-- listado de datos -->
+                        <VList lines="two" border  v-if="dataRegistros.length > 0">
+                          <template v-for="(c, index) in paginatedData" :key="index" >
+                            <VListItem :disabled="disabledViewList">
+                              <VListItemTitle> {{ c.user.first_name || "Not Found" }} {{ c.user.last_name || "" }} <VChip> estuvo {{ calcularDiferencia(c.seconds) }}  </VChip> </VListItemTitle>
+                              <VListItemSubtitle class="mt-1" title="Estado de campaña">
+                                <span class="text-xs text-primary pl-2"> <VIcon icon="mdi-web" />: {{ c.title }} </span>
+                              </VListItemSubtitle>
+
+                              <template #append>
+                                <div class="espacio-right-2">
+                                  <VBtn icon size="x-small" color="info" variant="text" :href="c.url" target="_blank" >
+                                    <VIcon size="22" icon="tabler-eye" /> 
+                                  </VBtn>
+                                </div>
+                              </template>
+                            </VListItem>
+                            <VDivider v-if="index !== dataRegistros.length - 1" />
+                          </template>
+                        </VList>
+                      </div>
+                      
+                      <!-- Paginación -->
+                      <VPagination class="mt-5" v-model="currentPage" :length="totalPages" :total-visible="7" />
                     </VCol>
                   </VRow>
                   
                 </div>
                 <!-- fin lista usuarios -->
-                <!-- Paginación -->
-                <VPagination v-model="currentPage" :length="totalPages" :total-visible="7" />
+                
               </VWindowItem>
             </VWindow>
           </VCardText>
