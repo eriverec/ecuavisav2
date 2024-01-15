@@ -695,7 +695,8 @@ const resolveDevice = computed(() => {
                     <VCol cols="12" sm="8" class="">
                       <div  v-if="selectGroup">
                         <!-- SECTION Table -->
-                        <VTable class="text-no-wrap invoice-list-table">
+                        Aquí estarán los registros agrupados
+                        <VTable class="text-no-wrap invoice-list-table" style="display:none">
                           <!-- 👉 Table head -->
                           <thead class="text-uppercase">
                             <tr>
