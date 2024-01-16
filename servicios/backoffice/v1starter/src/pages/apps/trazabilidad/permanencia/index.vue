@@ -53,6 +53,16 @@ const optionOrderGroup = [
                         {title:'Ordenar DESC por visitas',value:12},
                       ];
 
+const selectedOptionperPage = ref(
+  { title: perPage.value, value: perPage.value }
+)
+
+const itemsPage = [{ title: '10', value: 10 },
+  { title: '30', value: 30 },
+  { title: '50', value: 50 },
+  { title: '100', value: 100 },
+  { title: '200', value: 200 }]
+
 const itemsOrder = ref(optionOrderNormal);
 const itemsGroup = ref([
                         {title:'Agrupar por página',value:1}
@@ -60,6 +70,101 @@ const itemsGroup = ref([
 
 
 onMounted(getCampaigns)
+
+function formatSecciones(data){
+  // Utilizar un conjunto (Set) para almacenar secciones únicas
+  const seccionesUnicas = new Set();
+
+  // Filtrar secciones únicas y crear un nuevo arreglo
+  return data.data
+    .map(item => item.section)
+    .filter(seccion => {
+      if (!seccionesUnicas.has(seccion)) {
+        seccionesUnicas.add(seccion);
+        return true;
+      }
+      return false;
+    })
+    .map(seccion => {
+      if(seccion.includes("-1")){
+        return { title: "Otros", value: seccion }
+      }
+      return { title: seccion, value: seccion }
+    }); 
+}
+
+function formatGroupSeccionesChart(data){
+  const resultadoAgrupado = data.data.reduce((acumulador, actual) => {
+    const sectionActual = actual.section;
+    const indexEnAcumulador = acumulador.findIndex(item => item.section === sectionActual);
+
+    if (indexEnAcumulador === -1) {
+      acumulador.push({
+        section: sectionActual,
+        total: 1,
+        sumSeconds: actual.seconds,
+        porcentaje: 0, // Inicializamos el porcentaje en 0
+        promedio: 0, // Inicializamos el promedio en 0
+      });
+    } else {
+      acumulador[indexEnAcumulador].total += 1;
+      acumulador[indexEnAcumulador].sumSeconds += actual.seconds;
+    }
+
+    return acumulador;
+  }, []);
+  // Calculamos el porcentaje para cada elemento
+  const totalRegistros = data.data.length;
+
+  resultadoAgrupado.forEach(elemento => {
+    elemento.porcentaje = parseFloat((elemento.total / totalRegistros) * 100).toFixed(2);
+    elemento.promedio = elemento.sumSeconds / elemento.total;
+  });
+  return resultadoAgrupado;
+}
+
+function formatGroupSubSeccionesChart(data){
+  const resultadoAgrupadoSubSection = data.data.reduce((acumulador, actual) => {
+      const subSectionActual = actual.subsection;
+      const indexEnAcumulador = acumulador.findIndex(item => item.subsection === subSectionActual);
+
+      if (indexEnAcumulador === -1) {
+        acumulador.push({
+          subsection: subSectionActual,
+          total: 1,
+          sumSeconds: actual.seconds,
+          porcentaje: 0, // Inicializamos el porcentaje en 0
+          promedio: 0, // Inicializamos el promedio en 0
+        });
+      } else {
+        acumulador[indexEnAcumulador].total += 1;
+        acumulador[indexEnAcumulador].sumSeconds += actual.seconds;
+      }
+
+      return acumulador;
+    }, []).reduce((acumulador, reg) => {
+      if(reg.subsection){
+        const regTem = { 
+            porcentaje: reg.porcentaje, 
+            promedio: reg.promedio,
+            subsection: reg.subsection, 
+            sumSeconds: reg.sumSeconds, 
+            total: reg.total
+        };
+
+        acumulador.push(regTem);
+      }
+      return acumulador;
+  }, []);
+  // Calculamos el porcentaje para cada elemento
+  const totalRegistrosSubSeccion = resultadoAgrupadoSubSection.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
+  resultadoAgrupadoSubSection.forEach(elemento => {
+    elemento.porcentaje = parseFloat((elemento.total / totalRegistrosSubSeccion) * 100).toFixed(2);
+    elemento.promedio = elemento.sumSeconds / elemento.total;
+  });
+  return resultadoAgrupadoSubSection;
+}
+
 // para definir una fecha especifica se la coloca dentro de moment así -- moment('2024-01-04').format('YYYY-MM-DD')
 async function getCampaigns(options = {}){
   try {
@@ -67,123 +172,20 @@ async function getCampaigns(options = {}){
       var response = await fetch(`https://servicio-permanencia.vercel.app/get/section/${fechai}/${fechaf}?section=${section}&limit=${limit}`);
       const data = await response.json();
 
+      data.data.forEach(elemento => {
+        elemento["date"] = moment(elemento.timestamp, "dd/mm/YYYY, HH:mm:ss").format("YYYY-MM-DD");
+      });
+
       dataRegistros.value = data.data;
       dataRegistrosBackup.value = data.data;
 
-      // Utilizar un conjunto (Set) para almacenar secciones únicas
-      const seccionesUnicas = new Set();
-
       // Filtrar secciones únicas y crear un nuevo arreglo
-      const secciones = data.data
-        .map(item => item.section)
-        .filter(seccion => {
-          if (!seccionesUnicas.has(seccion)) {
-            seccionesUnicas.add(seccion);
-            return true;
-          }
-          return false;
-        })
-        .map(seccion => {
-          if(seccion.includes("-1")){
-            return { title: "Otros", value: seccion }
-          }
-          return { title: seccion, value: seccion }
-        });
+      const secciones = formatSecciones(data);
 
-      const resultadoAgrupado = data.data.reduce((acumulador, actual) => {
-        const sectionActual = actual.section;
-        const indexEnAcumulador = acumulador.findIndex(item => item.section === sectionActual);
+      groupSubSectionChartPieData.value = formatGroupSubSeccionesChart(data);
 
-        if (indexEnAcumulador === -1) {
-          acumulador.push({
-            section: sectionActual,
-            total: 1,
-            sumSeconds: actual.seconds,
-            porcentaje: 0, // Inicializamos el porcentaje en 0
-            promedio: 0, // Inicializamos el promedio en 0
-          });
-        } else {
-          acumulador[indexEnAcumulador].total += 1;
-          acumulador[indexEnAcumulador].sumSeconds += actual.seconds;
-        }
+      groupSectionChartPieData.value = formatGroupSeccionesChart(data);
 
-        return acumulador;
-      }, []);
-
-      const resultadoAgrupadoSubSection = data.data.reduce((acumulador, actual) => {
-          const subSectionActual = actual.subsection;
-          const indexEnAcumulador = acumulador.findIndex(item => item.subsection === subSectionActual);
-
-          if (indexEnAcumulador === -1) {
-            acumulador.push({
-              subsection: subSectionActual,
-              total: 1,
-              sumSeconds: actual.seconds,
-              porcentaje: 0, // Inicializamos el porcentaje en 0
-              promedio: 0, // Inicializamos el promedio en 0
-            });
-          } else {
-            acumulador[indexEnAcumulador].total += 1;
-            acumulador[indexEnAcumulador].sumSeconds += actual.seconds;
-          }
-
-          return acumulador;
-        }, []).reduce((acumulador, reg) => {
-          if(reg.subsection){
-            const regTem = { 
-                porcentaje: reg.porcentaje, 
-                promedio: reg.promedio,
-                subsection: reg.subsection, 
-                sumSeconds: reg.sumSeconds, 
-                total: reg.total
-            };
-
-            acumulador.push(regTem);
-          }
-          return acumulador;
-      }, []);
-      // Calculamos el porcentaje para cada elemento
-      const totalRegistrosSubSeccion = resultadoAgrupadoSubSection.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
-      resultadoAgrupadoSubSection.forEach(elemento => {
-        elemento.porcentaje = parseFloat((elemento.total / totalRegistrosSubSeccion) * 100).toFixed(2);
-        elemento.promedio = elemento.sumSeconds / elemento.total;
-      });
-
-      groupSubSectionChartPieData.value = resultadoAgrupadoSubSection;
-
-      // var sumatotal = 0;
-      // var sumatotal2 = 0;
-      
-
-
-      // Calculamos el porcentaje para cada elemento
-      const totalRegistros = data.data.length;
-
-      resultadoAgrupado.forEach(elemento => {
-        elemento.porcentaje = parseFloat((elemento.total / totalRegistros) * 100).toFixed(2);
-        elemento.promedio = elemento.sumSeconds / elemento.total;
-      });
-
-      groupSectionChartPieData.value = resultadoAgrupado;
-
-      // console.log(resultadoAgrupadoPorTitle)
-
-      // var sumattt = 0;
-      // var sumattt2 = 0;
-
-      // resultadoAgrupado.forEach(elemento => {
-      //   if(elemento.section.includes("Envivo")){
-      //     console.log(elemento)
-      //   }
-      // });
-
-      // resultadoAgrupadoPorTitle.forEach(elemento => {
-      //   if(elemento.title.includes("En Vivo | Ecuavisa")){
-      //     console.log(elemento)
-      //   }
-      // });
-
-      // console.log(sumattt, totalRegistros, sumattt2)
 
       if(tipo=="fecha"){
         itemsSeccion.value = secciones;
@@ -327,11 +329,24 @@ watch(async () => selectOrder.value, async () => {
   
 });
 
+const countAndFilterData = (data) => {
+  const counts = {};
+  return data.filter(item => {
+    const date = item.date;
+    if (!counts[date]) {
+      counts[date] = 1;
+      return true;
+    }
+    counts[date]++;
+    return false;
+  }).map(item => ({ date: item.date, total: counts[item.date] }));
+};
 
 /*COMBO AGRUPAR*/
 function agrupador(opcion) {
   const datos = Array.from(dataRegistros.value);
   switch (opcion) {
+    //AGRUPAR POR TITULO DE PAGINA
     case 1:
       const resultadoAgrupadoPorTitle = datos.reduce((acumulador, actual) => {
         const indexEnAcumulador = acumulador.findIndex(item => item.title === actual.title);
@@ -363,6 +378,50 @@ function agrupador(opcion) {
         return acumulador;
       }, []);
       return resultadoAgrupadoPorTitle;
+    //AGRUPAR POR CATEGORÍA
+    case 2:
+      const resultadoAgrupadoPorSection = datos.reduce((acumulador, actual) => {
+        const indexEnAcumulador = acumulador.findIndex(item => item.section === actual.section);
+        
+        // if(actual.title.includes("Los guías penitenciarios")){
+        //   console.log(actual.seconds, actual)
+        // }
+        if (indexEnAcumulador === -1) {
+          acumulador.push({
+            title: actual.title,
+            date: actual.date,
+            promedio: actual.seconds,
+            section: actual.section,
+            total: 1,
+            url: actual.url,
+            sumSeconds: actual.seconds,
+            data: [actual],
+          });
+          // console.log(actual.title)
+        } else {
+          acumulador[indexEnAcumulador].promedio =
+            (acumulador[indexEnAcumulador].promedio * acumulador[indexEnAcumulador].data.length + actual.seconds) /
+            (acumulador[indexEnAcumulador].data.length + 1);
+          acumulador[indexEnAcumulador].sumSeconds += actual.seconds;
+          acumulador[indexEnAcumulador].data.push(actual);
+          acumulador[indexEnAcumulador].total += 1;
+          // console.log(sumatotal2++)
+        }
+
+        return acumulador;
+      }, []);
+      // Ordenar el array de datos por fecha
+      resultadoAgrupadoPorSection.forEach(item => {
+        if (item.data) {
+          item.data.sort((a, b) => {
+            const dateA = new Date(a.date);
+            const dateB = new Date(b.date);
+            return dateA - dateB;
+          });
+          item.data = countAndFilterData(item.data);
+        }
+      });
+      return resultadoAgrupadoPorSection;
     default:
       return null;
   }
@@ -504,6 +563,12 @@ const resolveDevice = computed(() => {
     chart: {
       parentHeightOffset: 0,
       type: 'donut',
+      events: {
+        dataPointSelection: function (event, chartContext, config) {
+          // console.log(config.w.config)
+          // alert('Clic en ' + config.w.config.labels[config.dataPointIndex]);
+        }
+      }
     },
     labels: categoriesRaw,
     colors: [
@@ -710,50 +775,6 @@ const resolveDeviceGroupSubSection = computed(() => {
     categoriesRaw.push(dataRaw[i].subsection);
   }
 
-  // const options = {
-  //   chart: {
-  //     parentHeightOffset: 0,
-  //     type: 'donut',
-  //   },
-  //   dataLabels: {
-  //     enabled: true,
-  //     style: {
-  //       fontSize: '16px',
-  //       fontFamily: 'Helvetica, Arial, sans-serif',
-  //       fontWeight: 'bold',
-  //       colors: ['#fff']
-  //     },
-  //   },
-  //   legend: {
-  //     position: 'bottom',
-  //     horizontalAlign: 'left',
-  //     offsetX: 40,
-  //     show: true,
-  //     labels: {
-  //       colors: themeDisabledTextColor,
-  //       useSeriesColors: false
-  //     },
-  //   },
-  //   // plotOptions: {},
-  //   // title: {
-  //   //   text: 'Visitas por Dispositivos',
-  //   //   align: 'center',
-  //   //   style: {
-  //   //     fontSize: '16px',
-  //   //     fontWeight: 'bold',
-  //   //     fontFamily: 'Helvetica, Arial, sans-serif',
-  //   //     color: themeDisabledTextColor
-  //   //   },
-  //   // },
-  //   yaxis: {
-  //     labels: {
-  //       style: { colors: themeDisabledTextColor },
-  //     },
-  //   },
-  //   colors: ['#33b2df', '#546E7A'],
-  //   labels: categoriesRaw,
-  // }
-
   const options = {
     chart: {
       parentHeightOffset: 0,
@@ -847,7 +868,7 @@ const resolveDeviceGroupSubSection = computed(() => {
         return [seriesName, " <br> ", `<div style="margin-top:10px;font-size:17px;color:rgba(var(--v-theme-on-background),var(--v-high-emphasis-opacity))">${opts.w.globals.series[opts.seriesIndex]}%<small style="font-size:14px"></small></div>`]
       },
       labels: {
-        colors: themeDisabledTextColor,
+        colors: headingColor,
         useSeriesColors: false
       },
     },
@@ -938,6 +959,217 @@ const resolveDeviceGroupSubSection = computed(() => {
     },
   }
   return { series: seriesFormat.data, options: options };
+});
+
+/*COMBO SELECT PERPAGE*/
+watch(async () => selectedOptionperPage.value, async () => {
+  const datos = selectedOptionperPage.value;
+  if(selectedOptionperPage.value){
+    const seleccion = selectedOptionperPage.value.value;
+    perPage.value = seleccion;
+
+  }
+});
+
+
+const resolveDeviceTimeLine = computed(() => {
+
+  const currentTheme = vuetifyTheme.current.value.colors
+  const variableTheme = vuetifyTheme.current.value.variables
+  const labelSuccessColor = `rgba(${hexToRgb(currentTheme.success)},0.2)`
+  const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
+
+  const chartColors = {
+    donut: {
+      series1: currentTheme.success,
+      series2: '#28c76fb3',
+      series3: '#28c76f80',
+      series4: labelSuccessColor,
+    },
+  }
+
+  let dataRaw = Array.from(groupSubSectionChartPieData.value);
+  console.log(agrupador(2))
+  const seriesFormat = {
+    name: 'Device',
+    data: []
+  };
+
+  const categoriesRaw = [];
+  for (let i in dataRaw) {
+    let num = parseFloat(dataRaw[i].porcentaje);
+    seriesFormat.data.push(num);
+    categoriesRaw.push(dataRaw[i].subsection);
+  }
+
+  const options = {
+    chart: {
+      parentHeightOffset: 0,
+      type: 'area',
+      stacked: false,
+      height: 350,
+      zoom: {
+        enabled: false
+      },
+      toolbar:{
+        show: false
+      }
+    },
+    // labels: categoriesRaw,
+    dataLabels: {
+      enabled: false
+    },
+    colors: [
+      "#173F5F",
+      "#00fa9a", // Verde medio
+      "#7365ed",
+      "#ff69b4", // Rosa claro
+      "#000f08",
+      "#32cd32", // Verde esmeralda
+      "#136f63", // Naranja claro
+      "#ffd700", // Amarillo
+      "#ff4500", // Rojo oscuro
+      "#ff0000", // Rojo
+      "#ff8c00", // Naranja oscuro
+      "#ffff00", // Amarillo
+      "#8b4513", // Marrón
+      "#0000ff", // Azul
+      "#8a2be2", // Azul violeta
+      "#ffa500", // Naranja
+      "#ffd800", // Amarillo intenso
+      "#ff1493", // Rosa brillante
+      "#9932cc", // Púrpura
+      "#ff8c00", // Naranja oscuro
+      "#8b008b", // Magenta oscuro
+      "#8a2be2", // Azul violeta
+    ],
+    fill: {
+      type: 'gradient',
+      gradient: {
+          shadeIntensity: 1,
+          inverseColors: false,
+          opacityFrom: 0.45,
+          opacityTo: 0.05,
+          stops: [20, 100, 100, 100]
+        },
+    },
+    yaxis: {
+      labels: {
+          style: {
+              // colors: headingColor,
+            colors: headingColor,
+            useSeriesColors: false
+          },
+          offsetX: 0,
+          formatter: function(val) {
+            return (val).toFixed(2);
+          },
+      },
+      axisBorder: {
+          show: false,
+      },
+      axisTicks: {
+          show: false
+      }
+    },
+    xaxis: {
+      type: 'datetime',
+      // tickAmount: 8,
+      // min: new Date("01/01/2014").getTime(),
+      // max: new Date("01/20/2014").getTime(),
+      labels: {
+          style: {
+              // colors: headingColor,
+            colors: headingColor,
+            useSeriesColors: false
+          },
+          rotate: -15,
+          rotateAlways: true,
+          formatter: function(val, timestamp) {
+            return moment(new Date(timestamp)).format("DD MMM YYYY")
+        }
+      }
+    },
+    tooltip: {
+      shared: true
+    },
+    legend: {
+      labels: {
+        colors: headingColor,
+        useSeriesColors: false
+      },
+      position: 'top',
+      horizontalAlign: 'right',
+      offsetX: -10
+    }
+  }
+
+  return { series: [{
+          name: 'PRODUCT A',
+          data: [
+    
+    [
+        1389052800000,
+        500
+    ],
+    [
+        1389139200000,
+        61413854
+    ],
+    [
+        1389225600000,
+        82177211
+    ],
+    [
+        1389312000000,
+        103762210
+    ],
+    [
+        1389398400000,
+        84381072
+    ],
+    [
+        1389484800000,
+        400
+    ],
+    [
+        1389571200000,
+        65531790
+    ]
+]
+        }, {
+          name: 'PRODUCT B',
+          data: [
+    [
+        1388620800000,
+        50000000
+    ],
+    [
+        1388707200000,
+        60379978
+    ],
+    [
+        1388793600000,
+        40493749
+    ],
+    [
+        1388880000000,
+        60785250
+    ],
+    [
+        1388966400000,
+        67391904
+    ],
+    [
+        1389052800000,
+        61576838
+    ],
+    [
+        1389139200000,
+        61413854
+    ]
+]
+        }], options: options };
 });
 
 </script>
@@ -1054,7 +1286,7 @@ const resolveDeviceGroupSubSection = computed(() => {
 
                               </div>
                             </VCardItem>
-                            <VueApexCharts v-if="sumV != 0" :options="resolveDevice.options" :series="resolveDevice.series" :height="475" width="100%" />
+                            <VueApexCharts :options="resolveDevice.options" :series="resolveDevice.series" :height="475" width="100%" />
                           </VCard>
                         </VWindowItem>
                         <VWindowItem>
@@ -1071,13 +1303,27 @@ const resolveDeviceGroupSubSection = computed(() => {
 
                               </div>
                             </VCardItem>
-                            <VueApexCharts v-if="sumV != 0" :options="resolveDeviceGroupSubSection.options" :series="resolveDeviceGroupSubSection.series" :height="475" width="100%" />
+                            <VueApexCharts :options="resolveDeviceGroupSubSection.options" :series="resolveDeviceGroupSubSection.series" :height="475" width="100%" />
                           </VCard>
                         </VWindowItem>
                       </VWindow>
                       
                     </VCol>
                     <VCol cols="12" sm="8" class="">
+                      <div class="item-limit">
+                        <label>Mostrar</label>
+                        <VSelect style="min-width: 90px;"
+                          v-model="selectedOptionperPage"
+                          :items="itemsPage"
+                          item-title="title"
+                          item-value="value"
+                          label=""
+                          persistent-hint
+                          return-object
+                          single-line
+                        />
+                        <label>registros</label>
+                      </div>
                       <div  v-if="selectGroup">
                         <!-- SECTION Table -->
                         <VTable class="text-no-wrap invoice-list-table">
@@ -1208,6 +1454,24 @@ const resolveDeviceGroupSubSection = computed(() => {
                       <!-- Paginación -->
                       <VPagination class="mt-5" v-model="currentPage" :length="totalPages" :total-visible="7" />
                     </VCol>
+
+                    <VCol cols="12" sm="12" class="" style="display: none;">
+                      <VCard class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
+                        <VCardItem class="header_card_item pb-0">
+                          <div class="d-flex pr-0" style="justify-content: space-between;">
+                            <div class="descripcion">
+                              <VCardTitle>Tiempo de permanencia <br>por subsección<br></VCardTitle>
+                              <small class="mt-3">Este informe se basa en una muestra de {{limit}} registros</small>
+                            </div>
+                            <!-- <div class="">
+                              <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
+                            </div> -->
+
+                          </div>
+                        </VCardItem>
+                        <VueApexCharts :options="resolveDeviceTimeLine.options" :series="resolveDeviceTimeLine.series" :height="475" width="100%" />
+                      </VCard>
+                    </VCol>
                   </VRow>
                   
                 </div>
@@ -1232,5 +1496,14 @@ const resolveDeviceGroupSubSection = computed(() => {
   }
   .apexcharts-legend-series:hover{
     background-color: #e9e9ea;
+  }
+
+  .item-limit{
+    max-width: 210px;
+    display: flex;
+    font-size: 15px;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
   }
 </style>
