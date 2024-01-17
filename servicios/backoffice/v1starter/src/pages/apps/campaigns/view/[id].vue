@@ -1,4 +1,34 @@
+
 <template>
+  <VDialog
+    v-model="isDialogVisibleDelete"
+    persistent
+    class="v-dialog-sm"
+  >
+
+    <!-- Dialog close btn -->
+    <DialogCloseBtn @click="isDialogVisibleDelete = !isDialogVisibleDelete" />
+
+    <!-- Dialog Content -->
+    <VCard title="¿Desea eliminar el usuario?">
+      <VCardText>
+        Al eliminarlo no podrá recuperarlo
+      </VCardText>
+
+      <VCardText class="d-flex justify-end gap-3 flex-wrap">
+        <VBtn :disabled="disabledBtnDialog"
+          color="secondary"
+          variant="tonal"
+          @click="isDialogVisibleDelete = false"
+        >
+          No, cerrar
+        </VBtn>
+        <VBtn :disabled="disabledBtnDialog" @click="eliminarRegistroDialog">
+          Si, eliminar
+        </VBtn>
+      </VCardText>
+    </VCard>
+  </VDialog>
   <section>
     <VRow>
       <VCol class="mt-6" cols="12" md="12" lg="12">
@@ -40,18 +70,8 @@
                               <VIcon color="primary" icon="tabler-user" size="22"/>
                               <span class="ms-3">{{suggestion.userId.length}} usuarios</span>
                             </p>
-                          
-                            <VBtn class="mt-4" color="success" size="small" @click="exportToCSV">Descargar Usuarios<VIcon end icon="tabler-download" /></VBtn>
-                          </div>
 
-                          <VDivider
-                            v-if="$vuetify.display.smAndUp"
-                            vertical
-                            inset
-                          />
-
-                          <div class="ms-auto ps-4">
-                            <p class="d-flex align-center mb-6">
+                            <p class="d-flex align-center mb-6 mt-6">
                               <VIcon color="primary" icon="mdi-page-layout-header-footer" size="22"/>
                               <span class="ms-3">Posición: {{suggestion.position}}</span>
                             </p>
@@ -60,30 +80,28 @@
                               <VIcon color="primary" icon="mdi-calendar-month-outline" size="22"/>
                               <span class="ms-3">{{suggestion.created_at}}</span>
                             </p>
+                            
+                            <VBtn class="mt-4" color="success" @click="exportToCSV">Exportar usuarios<VIcon end icon="tabler-download" /></VBtn>
                           </div>
+
+                          <VDivider
+                            v-if="$vuetify.display.smAndUp"
+                            vertical
+                            inset
+                          />
                         </VCardText>
                       </VCol>
 
-                      <VCol cols="12" sm="3" md="12" lg="3" order="1" order-lg="2" class="member-pricing-bg text-center">
+                      <!-- <VCol cols="12" sm="3" md="12" lg="3" order="1" order-lg="2" class="member-pricing-bg text-center">
                         <div class="membership-pricing d-flex flex-column align-center py-14 h-100 justify-center">
                             <VCardTitle>Estado:</VCardTitle>
                             <VSwitch :disabled="switchOnDisabled" :loading="switchOnDisabled?'warning':false" v-model="suggestion.statusCampaign" @change="handleSwitchChange(index)" />
-                            <!-- <sup class="text-h2 font-weight-medium">
-                                <VChip v-if="suggestion.statusCampaign" color="success">
-                                    <VIcon start size="60" icon="mdi-toggle-switch"/>
-                                    ACTIVA
-                                </VChip>
-                                <VChip v-else>
-                                    <VIcon start size="60" icon="mdi-toggle-switch-off"/>
-                                    INACTIVA
-                                </VChip>
-                            </sup> -->
                             
                           
                         </div>
-                      </VCol>
+                      </VCol> -->
 
-                      <VCol cols="12" sm="3" md="12" lg="3" order="1" order-lg="2" class="member-pricing-bg text-center">
+                      <VCol cols="12" sm="6" md="12" lg="6" order="2" order-lg="2" class="member-pricing-bg text-center">
                         <div class="membership-pricing d-flex flex-column py-14">
                             <VCardTitle style="text-align: left;">Subir CSV:</VCardTitle>
                             <div style="width:100%;">
@@ -115,6 +133,7 @@
                                 </template>
                               </VFileInput>
                               <small class="py-2" style="font-size:10px;color:#000;text-align: right;width: 100%;display: block;">Máximo de usuarios permitidos 30 mil.</small>
+
                               <p v-if="files_loading">
                                 <small style="color:#000;text-align: left;width: 100%">
                                   Subiendo usuarios, {{files_csv_mensaje}} <v-icon x-large class="rotate">
@@ -123,8 +142,13 @@
                                   
                                 </small>
                               </p>
+                              <div style="display: block;text-align: left;max-width: 300px;">
+                                  <VBtn class="mt-4" color="success" href="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/usuarios-ejemplo.csv"
+      target="_blank">Ver ejemplo importación<VIcon end icon="tabler-download" /></VBtn>
+                                <br>
+                                <small style="text-align:left;line-height: 1.2;display: block;margin-top: 10px;">Los usuarios incluidos en este archivo de importación deben estar registrados en el sitio web.</small>
+                              </div>
                             </div>
-                          
                         </div>
                       </VCol>
                     </VRow>
@@ -134,13 +158,13 @@
               </VWindowItem>
 
               <VWindowItem value="tab-usuarios">
-                <VCardTitle>Esta es la lista de usuarios de la campaña "{{suggestion.campaignTitle}}":</VCardTitle>
+                <VCardTitle class="px-0">Esta es la lista de usuarios de la campaña "{{suggestion.campaignTitle}}":</VCardTitle>
                 <VCardSubtitle></VCardSubtitle>
 
                 <!-- Campo de búsqueda -->
                 <VRow justify="space-between" class="my-4">
                   <VCol cols="4">
-                    <VTextField append-inner-icon="tabler-user-search" v-model="filter" label="Buscar usuarios"/>
+                    <VTextField append-inner-icon="tabler-user-search" @input="filtrarUsuarios" v-model="filter" label="Buscar usuarios"/>
                   </VCol>
                   <VCol cols="auto">
                     <VBtn color="info" @click="exportToCSV">Descargar Usuarios<VIcon end icon="tabler-download" /></VBtn>
@@ -157,7 +181,22 @@
                       <VListItemSubtitle class="mt-1" color="info"> 
                         <span class="text-xs text-disabled"> Correo: {{ user.email }}</span>
                       </VListItemSubtitle>
-
+                      <template #append>
+                        <div class="espacio-right-2">
+                          <VBtn
+                            icon
+                            size="x-small"
+                            color="error"
+                            variant="text"
+                            @click="eliminarRegistro(user.wylexId)"
+                          >
+                            <VIcon
+                              size="22"
+                              icon="tabler-trash"
+                            />
+                          </VBtn>
+                        </div>
+                      </template>
                     </VListItem>
                   </template>
                 </VList>
@@ -198,9 +237,11 @@ export default {
       files_csv_mensaje:"",
       usuarios_traidos_del_csv:[],
       files_loading:false,
+      isDialogVisibleDelete:false,
       csvData: [],
       csvHeaders: [],
       switchOnDisabled: false,
+      disabledBtnDialog: false,
       suggestion: {
         _id: "",
         campaignTitle: "",
@@ -219,36 +260,124 @@ export default {
       currentPage: 1,
       usersPerPage: 10,
       currentUsers: "",
-      filter: "" // Agregar un modelo de datos para el filtro
+      usuariosSearch:[],
+      filter: "", // Agregar un modelo de datos para el filtro
+      userIdSelected:0,
     };
   },
   watch: {
   },
-  mounted() {
-    this.obtenerDetalles();
+  async mounted() {
+    await this.obtenerDetalles();
+
+    const usuarios = this.suggestion.userId;
+    this.usuariosSearch = usuarios;
+    console.log(usuarios.length)
   },
 
 computed: {
   totalPages() {
-    return Math.ceil(this.filteredUsers.length / this.usersPerPage);
+    return Math.ceil(this.usuariosSearch.length / this.usersPerPage);
   },
   currentUsers() {
     const start = (this.currentPage - 1) * this.usersPerPage;
     const end = start + this.usersPerPage;
-    return this.filteredUsers.slice(start, end);
+    return this.usuariosSearch.slice(start, end);
   },
   // Agregar una función computada para los usuarios filtrados
   filteredUsers() {
-    return this.suggestion.userId.filter(user => {
-      return user.firstname.toLowerCase().includes(this.filter.toLowerCase()) ||
-             user.last_name.toLowerCase().includes(this.filter.toLowerCase()) ||
-             user.email.toLowerCase().includes(this.filter.toLowerCase()); // Agregar filtro por correo electrónico
-    });
+    // const usuarios = this.suggestion.userId;
+    // const search = this.filter.toLowerCase();
+
+    // const resultados = usuarios.filter(usuario => {
+    //     const nombreCompleto = `${usuario.firstname} ${usuario.last_name}`.toLowerCase();
+
+    //     // Verificar coincidencia en nombres o apellidos
+    //     if (nombreCompleto.includes(search)) {
+    //         return true;
+    //     }
+
+    //     // Verificar coincidencia en otros campos (excepto "wylexId")
+    //     return Object.keys(usuario).some(key => {
+    //         return key !== "wylexId" && usuario[key].toLowerCase().includes(search);
+    //     });
+    // });
+
+    // this.usuariosSearch = resultados || usuarios;
+
+    // // 'resultados' ahora contendrá los usuarios que coinciden con la búsqueda
+
+    // return resultados || usuarios;
+    // return this.suggestion.userId.filter(user => {
+    //   return user.firstname.toLowerCase().includes(this.filter.toLowerCase()) ||
+    //          user.last_name.toLowerCase().includes(this.filter.toLowerCase()) ||
+    //          user.email.toLowerCase().includes(this.filter.toLowerCase()); // Agregar filtro por correo electrónico
+    // });
   }
 },
 
 
   methods: {
+    eliminarRegistro(userId) {
+      const idCampaing = this.id;
+      this.userIdSelected = userId;
+      this.isDialogVisibleDelete = true;
+      
+    },
+    async eliminarRegistroDialog() {
+      this.disabledBtnDialog = true;
+      const idCampaing = this.id;
+      const userId = this.userIdSelected;
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        "userId": userId
+      });
+
+      var requestOptions = {
+        method: 'DELETE',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://ads-service.vercel.app/campaign/delete-user/${idCampaing}`, requestOptions);
+      const data = await response.json();
+      if(data.resp){
+        await this.obtenerDetalles();
+        alert("Usuario eliminado")
+        this.isDialogVisibleDelete = false;
+
+        const usuarios = this.suggestion.userId;
+        this.usuariosSearch = usuarios;
+      }else{
+        alert("Usuario no eliminado")
+        this.isDialogVisibleDelete = false;
+      }
+      
+      this.disabledBtnDialog = false;
+    },
+    filtrarUsuarios() {
+      const usuarios = this.suggestion.userId;
+      const search = this.filter.toLowerCase();
+
+      const resultados = usuarios.filter(usuario => {
+          const nombreCompleto = `${usuario.firstname} ${usuario.last_name}`.toLowerCase();
+
+          // Verificar coincidencia en nombres o apellidos
+          if (nombreCompleto.includes(search)) {
+              return true;
+          }
+
+          // Verificar coincidencia en otros campos (excepto "wylexId")
+          return Object.keys(usuario).some(key => {
+              return key !== "wylexId" && usuario[key].toLowerCase().includes(search);
+          });
+      });
+
+      this.usuariosSearch = resultados || usuarios;
+    },
     dividirArray(original, tamano = 500) {
       const resultado = [];
       for (let i = 0; i < original.length; i += tamano) {

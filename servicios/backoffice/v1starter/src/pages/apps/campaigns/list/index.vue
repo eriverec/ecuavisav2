@@ -250,7 +250,12 @@ const handleSwitchChange = async (index) => {
 
                         <span class="text-xs text-disabled">
                           <i>
-                            Creado: {{ moment(c.created_at).format("YYYY-MM-DD HH:mm:ss") }}
+                            {{ moment(c.created_at).format("YYYY-MM-DD, HH:mm:ss") }}
+                          </i>
+                          |
+                          <i>
+                            Tipo de contenido: 
+                            <b>{{ c.type }}</b>
                           </i>
                         </span>
 
