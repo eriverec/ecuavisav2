@@ -1,6 +1,8 @@
 
 <template>
-  <VDialog
+  
+  <section>
+    <VDialog
     v-model="isDialogVisibleDelete"
     persistent
     class="v-dialog-sm"
@@ -29,7 +31,6 @@
       </VCardText>
     </VCard>
   </VDialog>
-  <section>
     <VRow>
       <VCol class="mt-6" cols="12" md="12" lg="12">
 
