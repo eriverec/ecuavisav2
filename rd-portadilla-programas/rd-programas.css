@@ -1321,3 +1321,18 @@ body:not(body.webkit.ltr) .u-mas-visto-1 {
       margin-bottom: 0px!important;
   }
 }
+
+
+@media (max-width: 320px){
+  .icono-programas .iconPlay{
+    height: 25px;
+    width: 25px;
+    top: 35% !important;
+  }
+  .bloque-programas .media_block .text_block .headline h1, 
+  .bloque-programas .media_block .text_block .headline h2{
+    font-size: 15px;
+  }
+  
+
+}
