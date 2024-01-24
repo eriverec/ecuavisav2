@@ -3,6 +3,56 @@
   
   <section>
     <VDialog
+    v-model="isDialogSearchUser"
+    persistent
+    class="v-dialog-lg"
+  >
+
+    <!-- Dialog close btn -->
+    <DialogCloseBtn @click="isDialogSearchUser = !isDialogSearchUser" />
+
+    <!-- Dialog Content -->
+    <VCard title="Lista de usuarios">
+      <VCardText>
+        <VTextField :disabled="isLoadingDialogUser" append-inner-icon="tabler-user-search" type="text"  @input="handleInput" label="Buscar por correo, teléfono o nombre" placeholder="Buscar usuarios" />
+        <br>
+        <VTable style="width: 100%;" class="text-no-wrap tableNavegacion mb-5" hover="true">
+          <thead>
+            <tr>
+              <th scope="col">Usuario</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Agregar</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr 
+              v-if="dataUsers.length > 0"
+              v-for="item in filteredDataUsers" 
+              :key="item.userId" 
+              class="" 
+            >
+              <td>
+                {{ (item.last_name+' '+item.first_name).length > 25 ? (item.last_name+' '+item.first_name).substring(0, 25) + "..." : (item.last_name+' '+item.first_name) }}
+              </td>
+              <td class="text-medium-emphasis">
+                {{ item.email }}
+              </td>
+              <td class="text-medium-emphasis">
+                <VBtn :disabled="isLoadingDialogUser" class="mt-4" color="success" @click="resolveUsuario(item)" icon="mdi-plus-circle-outline" variant="text"></VBtn>
+              </td>
+
+            </tr>
+            <tr v-else>
+              <td colspan="3">No hay datos</td>
+            </tr>
+          </tbody>
+        </VTable>
+      </VCardText>
+    </VCard>
+  </VDialog>
+
+    <VDialog
     v-model="isDialogVisibleDelete"
     persistent
     class="v-dialog-sm"
@@ -12,9 +62,9 @@
     <DialogCloseBtn @click="isDialogVisibleDelete = !isDialogVisibleDelete" />
 
     <!-- Dialog Content -->
-    <VCard title="¿Desea eliminar el usuario?">
+    <VCard :title="'¿Desea eliminar el usuario #'+userIdSelected+'?'">
       <VCardText>
-        Al eliminarlo no podrá recuperarlo
+        Eliminarás el usuario del listado para esta campaña
       </VCardText>
 
       <VCardText class="d-flex justify-end gap-3 flex-wrap">
@@ -105,7 +155,7 @@
                       <VCol cols="12" sm="6" md="12" lg="6" order="2" order-lg="2" class="member-pricing-bg text-center">
                         <div class="membership-pricing d-flex flex-column py-14">
                             <VCardTitle style="text-align: left;">Subir CSV:</VCardTitle>
-                            <div style="width:100%;">
+                            <div style="width:100%;" class="pr-4">
                               <VFileInput
                                 v-model="files_csv"
                                 :loading="files_loading"
@@ -133,7 +183,7 @@
                                   </template>
                                 </template>
                               </VFileInput>
-                              <small class="py-2" style="font-size:10px;color:#000;text-align: right;width: 100%;display: block;">Máximo de usuarios permitidos 30 mil.</small>
+                              <small class="py-2" style="font-size:10px;color:#000;text-align: right;width: 100%;display: block;">Máximo de usuarios permitidos 30000</small>
 
                               <p v-if="files_loading">
                                 <small style="color:#000;text-align: left;width: 100%">
@@ -164,11 +214,17 @@
 
                 <!-- Campo de búsqueda -->
                 <VRow justify="space-between" class="my-4">
-                  <VCol cols="4">
-                    <VTextField append-inner-icon="tabler-user-search" @input="filtrarUsuarios" v-model="filter" label="Buscar usuarios"/>
+                  <VCol cols="3">
+                    <div class="">
+                      <VTextField append-inner-icon="tabler-user-search" @input="filtrarUsuarios" v-model="filter" label="Buscar usuarios dentro del listado"/>
+                      
+                    </div>
                   </VCol>
                   <VCol cols="auto">
-                    <VBtn color="info" @click="exportToCSV">Descargar Usuarios<VIcon end icon="tabler-download" /></VBtn>
+                    <div class="d-flex gap-3 flex-wrap">
+                      <VBtn color="info" @click="exportToCSV">Descargar Usuarios<VIcon end icon="tabler-download" /></VBtn>
+                      <VBtn color="success" @click="add_user">Añadir usuarios<VIcon end icon="mdi-account-plus" /></VBtn>
+                    </div>
                   </VCol>
                 </VRow>
 
@@ -235,10 +291,14 @@ export default {
     return {
       datos: [],
       files_csv:[],
+      isLoadingDialogUser:false,
       files_csv_mensaje:"",
       usuarios_traidos_del_csv:[],
       files_loading:false,
       isDialogVisibleDelete:false,
+      searchQuery:"",
+      dataUsers:[],
+      isDialogSearchUser:false,
       csvData: [],
       csvHeaders: [],
       switchOnDisabled: false,
@@ -261,6 +321,7 @@ export default {
       currentPage: 1,
       usersPerPage: 10,
       currentUsers: "",
+      timeoutId: null,
       usuariosSearch:[],
       filter: "", // Agregar un modelo de datos para el filtro
       userIdSelected:0,
@@ -270,55 +331,110 @@ export default {
   },
   async mounted() {
     await this.obtenerDetalles();
+    await this.obtenerDataUsers();
 
     const usuarios = this.suggestion.userId;
     this.usuariosSearch = usuarios;
     console.log(usuarios.length)
   },
 
-computed: {
-  totalPages() {
-    return Math.ceil(this.usuariosSearch.length / this.usersPerPage);
+  computed: {
+    totalPages() {
+      return Math.ceil(this.usuariosSearch.length / this.usersPerPage);
+    },
+    currentUsers() {
+      const start = (this.currentPage - 1) * this.usersPerPage;
+      const end = start + this.usersPerPage;
+      return this.usuariosSearch.slice(start, end);
+    },
+    // Agregar una función computada para los usuarios filtrados
+    filteredUsers() {
+      // const usuarios = this.suggestion.userId;
+      // const search = this.filter.toLowerCase();
+
+      // const resultados = usuarios.filter(usuario => {
+      //     const nombreCompleto = `${usuario.firstname} ${usuario.last_name}`.toLowerCase();
+
+      //     // Verificar coincidencia en nombres o apellidos
+      //     if (nombreCompleto.includes(search)) {
+      //         return true;
+      //     }
+
+      //     // Verificar coincidencia en otros campos (excepto "wylexId")
+      //     return Object.keys(usuario).some(key => {
+      //         return key !== "wylexId" && usuario[key].toLowerCase().includes(search);
+      //     });
+      // });
+
+      // this.usuariosSearch = resultados || usuarios;
+
+      // // 'resultados' ahora contendrá los usuarios que coinciden con la búsqueda
+
+      // return resultados || usuarios;
+      // return this.suggestion.userId.filter(user => {
+      //   return user.firstname.toLowerCase().includes(this.filter.toLowerCase()) ||
+      //          user.last_name.toLowerCase().includes(this.filter.toLowerCase()) ||
+      //          user.email.toLowerCase().includes(this.filter.toLowerCase()); // Agregar filtro por correo electrónico
+      // });
+    },
+    filteredDataUsers(){
+      return this.dataUsers;
+    }
   },
-  currentUsers() {
-    const start = (this.currentPage - 1) * this.usersPerPage;
-    const end = start + this.usersPerPage;
-    return this.usuariosSearch.slice(start, end);
-  },
-  // Agregar una función computada para los usuarios filtrados
-  filteredUsers() {
-    // const usuarios = this.suggestion.userId;
-    // const search = this.filter.toLowerCase();
-
-    // const resultados = usuarios.filter(usuario => {
-    //     const nombreCompleto = `${usuario.firstname} ${usuario.last_name}`.toLowerCase();
-
-    //     // Verificar coincidencia en nombres o apellidos
-    //     if (nombreCompleto.includes(search)) {
-    //         return true;
-    //     }
-
-    //     // Verificar coincidencia en otros campos (excepto "wylexId")
-    //     return Object.keys(usuario).some(key => {
-    //         return key !== "wylexId" && usuario[key].toLowerCase().includes(search);
-    //     });
-    // });
-
-    // this.usuariosSearch = resultados || usuarios;
-
-    // // 'resultados' ahora contendrá los usuarios que coinciden con la búsqueda
-
-    // return resultados || usuarios;
-    // return this.suggestion.userId.filter(user => {
-    //   return user.firstname.toLowerCase().includes(this.filter.toLowerCase()) ||
-    //          user.last_name.toLowerCase().includes(this.filter.toLowerCase()) ||
-    //          user.email.toLowerCase().includes(this.filter.toLowerCase()); // Agregar filtro por correo electrónico
-    // });
-  }
-},
-
 
   methods: {
+    add_user(){
+      this.isDialogSearchUser = true;
+    },
+    async resolveUsuario(item){
+      var myHeaders = new Headers();
+      const idCampaing = this.id;
+      myHeaders.append("Content-Type", "application/json");
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        body: JSON.stringify({
+          userId: item.wylexId
+        }),
+        redirect: 'follow'
+      };
+
+      this.isLoadingDialogUser = true;
+
+      var response = await fetch(`https://ads-service.vercel.app/campaign/add-user/${idCampaing}`, requestOptions);
+      const data = await response.json();
+      await this.obtenerDetalles();
+
+      this.isLoadingDialogUser = false;
+      this.isDialogSearchUser = false;
+
+      if(data.resp){
+
+      }
+
+    },
+    handleInput(event) {
+      console.log(event.target.value);
+      clearTimeout(this.timeoutId);
+      this.timeoutId = setTimeout(() => {
+        this.filtrarUsuariosUser(event.target.value);
+      }, 1000); // Espera 1000 milisegundos antes de realizar la llamada
+    },
+    async filtrarUsuariosUser(textoBusqueda) {
+      try {
+        this.isLoadingDialogUser = true;
+        const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${encodeURIComponent(textoBusqueda)}`);
+        const data = await response.json();
+        // Manejar la respuesta de la API según tus necesidades
+        this.dataUsers = data.data
+        this.isLoadingDialogUser = false;
+
+        // console.log(data.data);
+      } catch (error) {
+        // Manejar errores en la llamada a la API
+        console.error(error);
+      }
+    },
     eliminarRegistro(userId) {
       const idCampaing = this.id;
       this.userIdSelected = userId;
@@ -389,7 +505,7 @@ computed: {
     },
     //método que obtiene los detalles de la campaña y el listado de usuarios
     async handleSwitchChange(index) {
-      console.log(this.suggestion.statusCampaign)
+      // console.log(this.suggestion.statusCampaign)
       this.switchOnDisabled = true;
       var jsonEnviar = {
             status:this.suggestion.statusCampaign
@@ -414,6 +530,12 @@ computed: {
       };
       this.switchOnDisabled = false;
 
+    },
+    async obtenerDataUsers() {
+      const respuesta = await fetch(`https://ads-service.vercel.app/busqueda/user/`); 
+      const datos = await respuesta.json();
+      // console.log(datos)
+      this.dataUsers = datos.data;
     },
     async obtenerDetalles() {
       const respuesta = await fetch(`https://ads-service.vercel.app/campaign/${this.id}/user`); 

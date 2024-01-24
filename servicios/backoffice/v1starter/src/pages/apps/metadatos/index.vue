@@ -690,7 +690,7 @@ watch(async () => selectedfechaIniFin.value, async () => {
       <VTab value="tab-meta-data">
         Trazabilidad
       </VTab>
-      <VTab value="account-details  " style="display: none;">
+      <VTab value="account-details" style="display: none;">
         Temas destacados
       </VTab>
       <!-- <VTab value="account-details">
