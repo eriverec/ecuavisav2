@@ -2,6 +2,23 @@
 <template>
   
   <section>
+    <!-- flat snackbar -->
+    <VSnackbar
+      v-model="isFlatSnackRespUserAddAndDelete"
+      location="bottom start"
+      variant="flat"
+      color="success"
+    >
+      Usuario agregado.
+    </VSnackbar>
+    <VSnackbar
+      v-model="isFlatSnackRespUserDelete"
+      location="bottom start"
+      variant="flat"
+      color="success"
+    >
+      Usuario eliminado.
+    </VSnackbar>
     <VDialog
     v-model="isDialogSearchUser"
     persistent
@@ -13,8 +30,14 @@
 
     <!-- Dialog Content -->
     <VCard title="Lista de usuarios">
+      <VCardSubtitle class="pl-6 mb-3">
+        Solo se obtendrá los 20 primeros registros de acuerdo a la búsqueda.
+      </VCardSubtitle>
       <VCardText>
         <VTextField :disabled="isLoadingDialogUser" append-inner-icon="tabler-user-search" type="text"  @input="handleInput" label="Buscar por correo, teléfono o nombre" placeholder="Buscar usuarios" />
+        <VChip color="error" v-if="labelError.visible" class="mt-2">
+          Error: {{labelError.mensaje}}
+        </VChip>
         <br>
         <VTable style="width: 100%;" class="text-no-wrap tableNavegacion mb-5" hover="true">
           <thead>
@@ -91,7 +114,8 @@
 
         <VCard class="mt-5">
           <VCardText>
-            <VWindow v-model="currentTab">
+            <div v-if="isLoadingContent">Cargando datos, espere...</div>
+            <VWindow v-if="!isLoadingContent" v-model="currentTab">
               <VWindowItem value="tab-detalles">
                 <div class="d-flex flex-wrap py-4 gap-4 align-items-center" style="justify-content: space-between;">
                   <div>
@@ -195,7 +219,7 @@
                               </p>
                               <div style="display: block;text-align: left;max-width: 300px;">
                                   <VBtn class="mt-4" color="success" href="https://estadisticas.ecuavisa.com/sites/gestor/Recursos/usuarios-ejemplo.csv"
-      target="_blank">Ver ejemplo importación<VIcon end icon="tabler-download" /></VBtn>
+      target="_blank">Ver ejemplo de importación<VIcon end icon="tabler-download" /></VBtn>
                                 <br>
                                 <small style="text-align:left;line-height: 1.2;display: block;margin-top: 10px;">Los usuarios incluidos en este archivo de importación deben estar registrados en el sitio web.</small>
                               </div>
@@ -291,7 +315,10 @@ export default {
     return {
       datos: [],
       files_csv:[],
+      isFlatSnackRespUserAddAndDelete:false,
+      isFlatSnackRespUserDelete:false,
       isLoadingDialogUser:false,
+      isLoadingContent:false,
       files_csv_mensaje:"",
       usuarios_traidos_del_csv:[],
       files_loading:false,
@@ -320,6 +347,10 @@ export default {
       currentTab: 'tab-detalles',
       currentPage: 1,
       usersPerPage: 10,
+      labelError:{
+        mensaje: "",
+        visible: false
+      },
       currentUsers: "",
       timeoutId: null,
       usuariosSearch:[],
@@ -330,8 +361,11 @@ export default {
   watch: {
   },
   async mounted() {
+    this.isLoadingContent = true;
     await this.obtenerDetalles();
-    await this.obtenerDataUsers();
+    this.isLoadingContent = false;
+
+    
 
     const usuarios = this.suggestion.userId;
     this.usuariosSearch = usuarios;
@@ -383,8 +417,11 @@ export default {
   },
 
   methods: {
-    add_user(){
+    async add_user(){
       this.isDialogSearchUser = true;
+      this.isLoadingDialogUser = true;
+      await this.obtenerDataUsers();
+      this.isLoadingDialogUser = false;
     },
     async resolveUsuario(item){
       var myHeaders = new Headers();
@@ -409,7 +446,7 @@ export default {
       this.isDialogSearchUser = false;
 
       if(data.resp){
-
+        this.isFlatSnackRespUserAddAndDelete = true;
       }
 
     },
@@ -425,9 +462,16 @@ export default {
         this.isLoadingDialogUser = true;
         const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${encodeURIComponent(textoBusqueda)}`);
         const data = await response.json();
-        // Manejar la respuesta de la API según tus necesidades
-        this.dataUsers = data.data
         this.isLoadingDialogUser = false;
+        // Manejar la respuesta de la API según tus necesidades
+
+        if(!data.resp){
+          this.labelError.mensaje = data.error;
+          this.labelError.visible = true;
+        }else{
+          this.dataUsers = data.data
+          this.labelError.visible = false;
+        }
 
         // console.log(data.data);
       } catch (error) {
@@ -463,7 +507,7 @@ export default {
       const data = await response.json();
       if(data.resp){
         await this.obtenerDetalles();
-        alert("Usuario eliminado")
+        this.isFlatSnackRespUserDelete = true;
         this.isDialogVisibleDelete = false;
 
         const usuarios = this.suggestion.userId;
