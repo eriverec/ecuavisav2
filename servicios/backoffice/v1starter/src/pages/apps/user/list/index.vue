@@ -911,8 +911,8 @@ const onFormUsersDeleteReset = () => {
 
 const resolveFechaSelected = (fechas) => {
   if(fechas.length > 1){
-    fechai.value = fechas[0].toString();
-    fechaf.value = fechas[1].toString();
+    fechai.value = `${moment(fechas[0]).format("YYYY-MM-DD")}T00:00:00Z`;
+    fechaf.value = `${moment(fechas[1]).format("YYYY-MM-DD")}T23:59:59Z`;
     console.log("fechas", fechas);
   } 
 };

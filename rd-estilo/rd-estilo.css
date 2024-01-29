@@ -1490,3 +1490,22 @@ img.sepDesk {
     display: none;
 }
 /*FIN QUITAR LA SECCIÓN MÁS DESTACADAS, TANTO EN MOBILE COMO ESCRITORIO*/
+
+
+@media (max-width: 320px){
+  .portada-estilo .headline h1, 
+  .portada-estilo .headline h2{
+    font-size: 25px;
+    line-height: 30px;
+  }
+
+  .sec-titulo .headline h2{
+    font-size: 17px;
+    line-height: 22px;
+  }
+
+  .sec-titulo.notas-estilo-mobile .noticias .article .media_block{
+    gap: 25px;
+  }
+}
+
