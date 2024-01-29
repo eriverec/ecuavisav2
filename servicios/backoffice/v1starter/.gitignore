@@ -13,6 +13,7 @@ node_modules
 dist
 dist-ssr
 *.local
+yarn.lock
 
 /cypress/videos/
 /cypress/screenshots/
