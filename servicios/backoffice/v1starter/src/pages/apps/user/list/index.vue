@@ -43,6 +43,7 @@ const percentAppGoogle = ref(0);
 const percentAppApple = ref(0);
 
 const users = ref([]);
+const usersTotalBackup = ref([]);
 const percentEmail = ref(0);
 const percentFacebook = ref(0);
 const percentGoogle = ref(0);
@@ -93,6 +94,7 @@ const fetchUsers = () => {
     })
     .then((response) => {
       users.value = response.data.users;
+      usersTotalBackup.value = response.data.totalUsers;
       const ha = JSON.stringify(users.value)
       const he = JSON.parse(ha);
       const dataReal = JSON.stringify(users.value.map(user => user.email), null, 2);
@@ -404,7 +406,7 @@ const paginationData = computed(() => {
     : 0;
   const lastIndex = users.value.length + (page.value - 1) * rowPerPage.value;
   
-  return `Showing ${firstIndex} to ${lastIndex} of ${totalUsers.value} entries`;
+  return `Showing ${firstIndex} to ${lastIndex} of ${usersTotalBackup.value} entries`;
 });
 
 async function addNewUser (userData){
