@@ -212,7 +212,7 @@ function eventoEnvivoManager() {
                         if (iframeIndividual2) {
                           newValueIframe(iframeIndividual2);
                         }
-                        console.log("yaaa-arriba", iframeIndividual);
+                        // console.log("yaaa-arriba", iframeIndividual);
                       }
                     }
                   }
@@ -237,7 +237,6 @@ function eventoEnvivoManager() {
                           // console.log("yaaa-abajo", iframeIndividual);
                           if (iframeIndividual != '') {
                             console.log("si hay iframe individual", iframeIndividual);
-
                             setTimeout(() => {
                               playerembed.innerHTML = iframeIndividual;
                             }, 1000);
