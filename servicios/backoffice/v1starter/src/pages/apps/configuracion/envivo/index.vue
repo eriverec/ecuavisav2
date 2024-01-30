@@ -590,7 +590,7 @@ const pusher = () => {
 																	/>
 																</td>
 																<td class="py-4">
-																	<div class="d-flex gap-4 py-4">
+																	<div class="d-flex align-center gap-4 py-4">
 																		
 																		<VSwitch
 																			v-model="hora.estadoHorario"
