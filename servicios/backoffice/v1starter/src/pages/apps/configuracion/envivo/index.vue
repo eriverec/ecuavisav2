@@ -617,7 +617,7 @@ const pusher = () => {
 																			><VIcon v-bind="props" icon="tabler-adjustments-horizontal"></VIcon
 																		></VBtn>
 																	      </template>
-																	      <span> Agregar Player Personalizado</span>
+																	      <span> Agregar Player Personalizado a este horario específico</span>
 																	    </VTooltip>
 																	    <!-- boton para modificar player custom -->
 																	    <VTooltip v-if="hora.iframe" location="top">
