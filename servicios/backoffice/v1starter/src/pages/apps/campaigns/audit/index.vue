@@ -17,6 +17,7 @@
   });
   const loadingData = ref(false);
   const loadingCombo = ref(false);
+  const isFullLoading = ref(false);
   const disabledViewList = ref(false);
   const selectedfechaIniFin = ref('Hoy');
   const fechaIniFinList = useSelectCalendar();
@@ -33,6 +34,7 @@
   const selecMultipleCampaign = ref(null);
 
   const dataRegistros = ref([]);
+  const dataRegistrosExport = ref([]);
   const dataCampaigns = ref([]);
   const dataChart_1 = ref([]);
   const dataChart_2 = ref([]);
@@ -65,15 +67,141 @@
 
   const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value);
 
+  async function downloadFull () {
+    isFullLoading.value = true;
+    await exportarDataAudit();
+
+    let headers = {
+      pagina: "title",
+      url: "url",
+      type: "type",
+      created_at: "created_at",
+      user_email: "user_email",
+      user_last_name: "user_last_name",
+      user_firstname: "user_firstname",
+      campaign_idCampaign: "campaign_idCampaign",
+      campaign_title: "campaign_title",
+      campaign_position: "campaign_position"
+    };
+
+    let doc = dataRegistrosExport.value || [];
+    let title = "campaigns_full";
+
+    await exportCSVFile(headers, doc, title);
+
+    isFullLoading.value = false;
+  };
+
+  async function convertToCSV(objArray) {
+    var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+    var str = "";
+
+    for (var i = 0; i < array.length; i++) {
+      var line = "";
+      for (var index in array[i]) {
+        if (line != "") line += ",";
+
+        line += array[i][index];
+      }
+
+      str += line + "\r\n";
+    }
+
+    return str;
+  }
+
+  async function exportCSVFile(headers, items, fileTitle) {
+    if (headers) {
+      items.unshift(headers);
+    }
+
+    // Convert Object to JSON
+    var jsonObject = JSON.stringify(items);
+
+    var csv = await convertToCSV(jsonObject);
+
+    var exportedFilenmae = fileTitle + ".csv" || "export.csv";
+
+    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    if (navigator.msSaveBlob) {
+      // IE 10+
+      navigator.msSaveBlob(blob, exportedFilenmae);
+    } else {
+      var link = document.createElement("a");
+      if (link.download !== undefined) {
+        // feature detection
+        // Browsers that support HTML5 download attribute
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", exportedFilenmae);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  }
+
+  async function exportarDataAudit(){
+    dataRegistrosExport.value = [];
+    let skip = 1;
+    let batchSize = 7000;
+
+    while (true) {
+      const batchRegister = await getDataAuditoria({
+        tipo: "all",
+        fechai: fecha.value.i.format("YYYY-MM-DD"),
+        fechaf: fecha.value.f.format("YYYY-MM-DD"), 
+        limit: batchSize, 
+        page: skip, 
+        exportar:true
+      });
+
+      if (batchRegister.length === 0) {
+        break;
+      }
+      dataRegistrosExport.value.push(...batchRegister);
+      skip += 1;
+      // console.log(dataRegistrosExport.value)
+    }
+
+    const registrosDepurado = dataRegistrosExport.value.reduce((acumulador, actual) => {
+      acumulador.push({
+        title: actual.title,
+        url: actual.url,
+        type: actual.type,
+        created_at: actual.created_at,
+        user_email: actual.firstUser.email,
+        user_last_name: actual.firstUser.last_name,
+        user_firstname: actual.firstUser.firstname,
+        campaign_idCampaign: actual.idCampaign._id,
+        campaign_title: actual.idCampaign.title,
+        campaign_position: actual.idCampaign.position,
+      });
+
+      return acumulador;
+
+    }, []);
+
+    dataRegistrosExport.value = registrosDepurado;
+
+
+    return true;
+  }
+
   async function getDataAuditoria(options = {}){
     try {
-        const {tipo = "all",fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')), limit = 10} = options;
+        const {tipo = "all",fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')), limit = 10, page=1, exportar=false} = options;
 
-        var response = await fetch(`https://ads-service.vercel.app/campaigns-historical/events/${tipo}?fechai=${fechai}&fechaf=${fechaf}&page=1&limit=${limit}&idCampaign=&userId=`);
+        var response = await fetch(`https://ads-service.vercel.app/campaigns-historical/events/${tipo}?fechai=${fechai}&fechaf=${fechaf}&page=${page}&limit=${limit}&idCampaign=&userId=`);
         const data = await response.json();
 
-        dataRegistros.value = data.data;
-        dataRegistrosBackup.value = data.data;
+        if(!exportar){
+          dataRegistros.value = data.data;
+          dataRegistrosBackup.value = data.data;
+        }else{
+          return data.data;
+        }
 
     } catch (error) {
         return console.error(error.message);    
@@ -525,9 +653,9 @@
               <div class="tooltip-title">
                 ${w.config.xaxis.categories[dataPointIndex]}
               </div>
-              <div class="tooltip-subtitle">
+              <!--<div class="tooltip-subtitle">
                 Campaña
-              </div>
+              </div>-->
               <div class="tooltip-data-flex">
                 <div class="tooltip-data-title">
                   ${w.config.series[seriesIndex].name}
@@ -584,69 +712,162 @@
     <VRow>
       <VCol class="mt-0" cols="12" md="6" lg="8" >
         <VCard class="px-2 py-2">
-            <VCardItem class="header_card_item py-0 pt-4">
+            <VCardItem class="header_card_item py-0 pt-4 align-start">
               <div class="d-flex pr-0" style="justify-content: space-between;">
                 <div class="descripcion">
-                  <VCardTitle class="pb-2">Auditoría de eventos por página</VCardTitle>
+                  <VCardTitle class="pb-2">Auditoría de eventos</VCardTitle>
                   <VCardSubtitle>*Mostrando data desde, {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
                   <VCardSubtitle>*Este informe se basa en una muestra de {{limit}} registros</VCardSubtitle>
                 </div>
               </div>
-              <div class="bg-ecuavisa py-4 d-flex gap-4">
-                  <div class="date-picker-wrappe" style="min-width: 90px;">
-                    <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
-                  </div>
-                  <div style="min-width: 230px;width: auto;">
-                    <VCombobox clearable density="compact" :disabled="loadingData" v-model="selecTypeEvent" :items="itemsTypeEvent" variant="outlined" label="Buscar por evento" persistent-hint
-                      hide-selected hint="" />
-                  </div>
-              </div>
-              <VDivider class="my-5" />
-              <div class="item-limit">
-                <label>Mostrar</label>
-                <VSelect style="min-width: 90px;"
-                  v-model="selectedOptionperPage"
-                  :items="itemsPage"
-                  item-title="title"
-                  item-value="value"
-                  label=""
-                  persistent-hint
-                  return-object
-                  single-line
-                />
-                <label>registros</label>
-              </div>
+
+              <template #append>
+                    <VBtn               
+                      variant="tonal"
+                      color="success"
+                      prepend-icon="tabler-screen-share"
+                      @click="downloadFull"
+                      :loading="isFullLoading"
+                      :disabled="isFullLoading"
+                    >
+                      <span>Exportar búsqueda</span>
+                      <VTooltip 
+                    open-on-click
+                    :open-on-hover="false"                                                      
+                    location="top"
+                    activator="parent"
+                    no-click-animation
+                    :disabled="!isFullLoading"
+                      >
+                      <span>Esta carga puede demorar hasta 12 minutos, espere por favor</span>
+                    </VTooltip>     
+
+                    </VBtn> 
+              </template>
             </VCardItem>
               <!-- listado de datos -->
               <div class="px-5 py-2">
-                <VList lines="two" border  v-if="dataRegistros.length > 0" class="p-0 m-0">
-                  <template v-for="(c, index) in paginatedData" :key="index" >
-                    <VListItem :disabled="disabledViewList" class="py-1">
-                      <VListItemTitle>{{ c.title }} </VListItemTitle>
-                      <VListItemSubtitle class="mt-1" title="Estado de campaña">
-                        <span class="text-xs text-primary pl-2"> 
-                          <VIcon icon="mdi-user" /> {{ c.firstUser.firstname || "Not Found" }} {{ c.firstUser.last_name || "" }}, 
-                          <VChip size="x-small"> Creado: {{ moment(c.created_at).format("YYYY-MM-DD, HH:mm:ss") }} </VChip>, 
-                          <VChip color="success">
-                            event: {{c.type}}
-                          </VChip>
-                          <VChip color="warning">
-                            Campaña: {{c.idCampaign.title}}
-                          </VChip>
-                        </span>
-                      </VListItemSubtitle>
+                <div class="bg-ecuavisa py-4 d-flex gap-4 flex-wrap">
+                    <div class="date-picker-wrappe" style="min-width: 90px;width: auto;">
+                      <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
+                    </div>
+                    <div style="min-width: 230px;width: auto;">
+                      <VCombobox clearable density="compact" :disabled="loadingData" v-model="selecTypeEvent" :items="itemsTypeEvent" variant="outlined" label="Buscar por evento" persistent-hint
+                        hide-selected hint="" />
+                    </div>
+                </div>
+                <VDivider class="my-5" />
+                <div class="item-limit">
+                  <label>Mostrar</label>
+                  <VSelect style="min-width: 90px;"
+                    v-model="selectedOptionperPage"
+                    :items="itemsPage"
+                    item-title="title"
+                    item-value="value"
+                    label=""
+                    persistent-hint
+                    return-object
+                    single-line
+                  />
+                  <label>registros</label>
+                </div>
+                <VTable class="text-no-wrap invoice-list-table" :disabled="disabledViewList">
+                  <!-- 👉 Table head -->
+                  <thead class="text-uppercase">
+                    <tr>
 
-                      <template #append>
-                        <div class="espacio-right-2">
-                          <VBtn icon size="x-small" color="info" variant="text" :href="c.url" target="_blank" >
-                            <VIcon size="22" icon="mdi-link-variant" /> 
-                          </VBtn>
-                        </div>
-                      </template>
-                    </VListItem>
-                    <VDivider v-if="index !== dataRegistros.length - 1" />
-                  </template>
-                </VList>
+                      <th scope="col">
+                        Item
+                      </th>
+
+
+                      <th scope="col">
+                        Página
+                      </th>
+
+                      <th
+                        scope="col"
+                        class="text-center"
+                      >
+                        Evento
+                      </th>
+
+                      <th scope="col">
+                        Campaña
+                      </th>
+
+                      <th
+                        scope="col"
+                        class="text-left"
+                      >
+                        Creación
+                      </th>
+
+                      <th scope="col">
+                        Acción
+                      </th>
+                    </tr>
+                  </thead>
+
+                  <!-- 👉 Table Body -->
+                  <tbody>
+                    <tr
+                      v-for="(c, index) in paginatedData" :key="index"
+                      style="height: 3.75rem;"
+                    >
+                    <td class="text-center">
+                      {{index + 1}}
+                    </td>
+                      <!-- 👉 Page name -->
+                      <td style="min-width: 17rem;max-width: 17rem;text-align: left;">
+                        <VCardTitle :title="c.title" style="font-size: 18px;">
+                          <small>{{ c.title }}</small>
+                        </VCardTitle>
+                      </td>
+
+                      <td class="text-center">
+                        <VChip
+                          label
+                          v-bind="{
+                            status: 'Paid',
+                            chip: { color: 'success' },
+                          }"
+                          size="small"
+                        >
+                          {{ c.type }}
+                        </VChip>
+                      </td>
+                      <td class="text-center">
+                        {{c.idCampaign.title}}
+                      </td>
+                      <td>
+                        {{ moment(c.created_at).format("YYYY-MM-DD, HH:mm:ss") }}
+                      </td>
+
+                      <!-- 👉 Actions -->
+                      <td class="text-center" style="width: 5rem;">
+                        <VBtn icon size="x-small" color="info" variant="text" :href="c.url" target="_blank" >
+                          <VIcon size="22" icon="tabler-eye" /> 
+                        </VBtn>
+                      </td>
+                    </tr>
+                  </tbody>
+
+                  <!-- 👉 table footer  -->
+                  <tfoot v-show="!paginatedData.length">
+                    <tr>
+                      <td
+                        colspan="8"
+                        class="text-center text-body-1"
+                      >
+                        No data available
+                      </td>
+                    </tr>
+                  </tfoot>
+                </VTable>
+
+
+                
                 <!-- Paginación -->
                 <VPagination class="mt-5" v-model="currentPage" :length="totalPages" :total-visible="7" />
                 <br>
