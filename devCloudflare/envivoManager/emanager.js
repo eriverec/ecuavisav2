@@ -174,16 +174,15 @@ function eventoEnvivoManager() {
   const playerembed = document.querySelector('#playerembed');
   const fondito__ = document.querySelector('#fondito__');
 
+  var iframeIndividual = '';
+  function newValueIframe(x) {
+    iframeIndividual = x;
+  }
+
   function fetchHorarioEnvivo() {
     fetch(apiUrl)
       .then(response => response.json())
       .then(data => {
-        // const fechaActual = new Date();
-        // const diaSemana = fechaActual.getDay();
-        // const horaActual = fechaActual.getHours();
-        // const minutosActuales = fechaActual.getMinutes();
-        // const forzado = data.forzado.estado;
-        // const htmlIframe = data.html.value;
 
         const fechaActual = new Date();
         fechaActual.setUTCHours(fechaActual.getUTCHours() - 5); // Ajustar a la zona horaria de UTC-5 (Ecuador).
@@ -192,9 +191,7 @@ function eventoEnvivoManager() {
         const minutosActuales = (fechaActual.getUTCMinutes());
         const forzado = data.forzado.estado;
         const htmlIframe = data.html.value;
-
-        // console.log(`${horaActual}:${minutosActuales} gye`);
-
+        
         if (!forzado) {
           for (const dia of data.horarios) {
             if (dia.estadoDia) {
@@ -206,13 +203,21 @@ function eventoEnvivoManager() {
                     const inicioMinutos = parseInt(hora.inicio.split(":")[1]);
                     const finHora = parseInt(hora.fin.split(":")[0]);
                     const finMinutos = parseInt(hora.fin.split(":")[1]);
+                    
+                    
                     if (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) {
                       if (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos)) {
                         programasHoy.push(hora.tituloPrograma);
+                        var iframeIndividual2 = hora.iframe;
+                        if (iframeIndividual2) {
+                          newValueIframe(iframeIndividual2);
+                        }
+                        console.log("yaaa-arriba", iframeIndividual);
                       }
                     }
                   }
-                }
+                }                
+                
                 if (programasHoy.length > 0) {
                   programasHoy.forEach(programa => {
                     if (title_programa) {
@@ -226,7 +231,22 @@ function eventoEnvivoManager() {
                       playerembed.style.display = 'block';
                       if (!document.querySelector('#playerembed iframe')) {
                         if (playerembed) {
-                          playerembed.innerHTML = htmlIframe;
+                          // playerembed.innerHTML = htmlIframe;
+
+                          // iframeIndividual = iframeIndividual
+                          // console.log("yaaa-abajo", iframeIndividual);
+                          if (iframeIndividual != '') {
+                            console.log("si hay iframe individual", iframeIndividual);
+
+                            setTimeout(() => {
+                              playerembed.innerHTML = iframeIndividual;
+                            }, 1000);
+
+                          } else {
+                            console.log("no hay iframe individual");
+                            playerembed.innerHTML = htmlIframe;
+                            console.log(htmlIframe);
+                          }
                         }
                       }
                     }
