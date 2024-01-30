@@ -158,6 +158,13 @@ const addHora = (index) => {
 	horarios.value[index].horas.push(horaNuevo);
 };
 
+const addCustomPlayer = (index, indexEmbed) => { // esto agrega el campo de html a ese horario específico
+	let newIframe = {
+		iframe: "tu html aqui"
+	};
+	horarios.value[index].horas[indexEmbed].iframe = "Pon tu html aqui";
+};
+
 const elimHora = (index, indexHora) => {
 	horarios.value[index].horas.splice(indexHora, 1);
 };
@@ -600,6 +607,35 @@ const pusher = () => {
 																			@click="elimHora(index, indexHora)"
 																			><VIcon icon="tabler-trash"></VIcon
 																		></VBtn>
+																		<!-- boton para agregar player custom -->
+																		<VTooltip v-if="!hora.iframe" location="top">
+																	      <template #activator="{ props }">
+																	      	<VBtn
+																			v-if="horario.horas.length > 1"
+																			color="primary"
+																			@click="addCustomPlayer(index, indexHora)"
+																			><VIcon v-bind="props" icon="tabler-adjustments-horizontal"></VIcon
+																		></VBtn>
+																	      </template>
+																	      <span> Agregar Player Personalizado</span>
+																	    </VTooltip>
+																	    <!-- boton para modificar player custom -->
+																	    <VTooltip v-if="hora.iframe" location="top">
+																	      <template #activator="{ props }">
+																	      	<VBtn
+																			v-if="horario.horas.length > 1"
+																			color="success"
+																			@click="addCustomPlayer(index, indexEmbed)"
+																			><VIcon v-bind="props" icon="tabler-adjustments"></VIcon
+																		></VBtn>
+																	      </template>
+																	      <span>Modificar Player Personalizado - </span>
+																	    </VTooltip>
+
+																	    <VTextarea v-if="hora.iframe"
+																	        label="código de custom player" v-model="hora.iframe"
+																	        rows="3"
+																      	/>
 																	</div>
 																</td>
 															</tr>
