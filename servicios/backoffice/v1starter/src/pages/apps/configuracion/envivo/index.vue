@@ -541,10 +541,10 @@ const pusher = () => {
 															</tr>
 															<tr>
 																<th scope="col" style="width: 300px">Título</th>
-																<th scope="col" style="width: 170px">
+																<th scope="col" style="width: 120px">
 																	Hora de inicio
 																</th>
-																<th scope="col" style="width: 170px">
+																<th scope="col" style="width: 120px">
 																	Hora de fin
 																</th>
 																<th scope="col" class="d-flex gap-4 pb-4"></th>
@@ -591,14 +591,11 @@ const pusher = () => {
 																</td>
 																<td class="py-4">
 																	<div class="d-flex gap-4 py-4">
+																		
 																		<VSwitch
 																			v-model="hora.estadoHorario"
 																			color="success"
-																			:label="
-																				hora.estadoHorario == true
-																					? 'Horario activo'
-																					: 'Horario inactivo'
-																			"
+																			:label=" hora.estadoHorario == true ? 'ON' : 'OFF' "
 																		/>
 
 																		<VBtn
