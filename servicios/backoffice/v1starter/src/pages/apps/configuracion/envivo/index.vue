@@ -625,7 +625,6 @@ const pusher = () => {
 																	      	<VBtn
 																			v-if="horario.horas.length > 1"
 																			color="success"
-																			@click="addCustomPlayer(index, indexEmbed)"
 																			><VIcon v-bind="props" icon="tabler-adjustments"></VIcon
 																		></VBtn>
 																	      </template>
