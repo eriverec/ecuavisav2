@@ -56,9 +56,14 @@ const fetchCategorias = async () => {
 const selectItemVisibilidad = ref([]);
 const selectItemsListVisibilidad = ref([
   { title:'Todo el sitio', value: 'all', avatar:"" },
-  { title:'Noticias', value: 'noticias', avatar:"" },
-  { title:'Comercial', value: 'comercial', avatar:"" },
-  { title:'Laboratorio', value: 'laboratorio', avatar:"" },
+  { title:'Lo-ultimo', value: 'Lo-ultimo', avatar:"" },
+  { title:'Noticias', value: 'Noticias', avatar:"" },
+  { title:'Mundo', value: 'Mundo', avatar:"" },
+  { title:'Estadio', value: 'Mundo', avatar:"" },
+  { title:'Entretenimiento', value: 'Entretenimiento', avatar:"" },
+  { title:'Programas', value: 'Programas', avatar:"" },
+  { title:'Tendencias', value: 'Tendencias', avatar:"" },
+  { title:'Home', value: 'Home', avatar:"" },
 ]);
 
 const selectItemDispositivos = ref([]);

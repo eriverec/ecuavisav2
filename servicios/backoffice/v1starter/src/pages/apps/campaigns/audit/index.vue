@@ -777,7 +777,7 @@
                     <tr>
 
                       <th scope="col">
-                        Item
+                        N
                       </th>
 
 
@@ -847,7 +847,7 @@
                       <!-- 👉 Actions -->
                       <td class="text-center" style="width: 5rem;">
                         <VBtn icon size="x-small" color="info" variant="text" :href="c.url" target="_blank" >
-                          <VIcon size="22" icon="tabler-eye" /> 
+                          <VIcon size="22" icon="mdi-link-variant" /> 
                         </VBtn>
                       </td>
                     </tr>
@@ -897,7 +897,7 @@
             <VDivider class="my-5" />
           </VCardItem>
           <VueApexCharts v-if="resolveDeviceTimeLine.series.length > 0" :options="resolveDeviceTimeLine.options" :series="resolveDeviceTimeLine.series" :height="475" width="100%" />
-          <div class="px-4" v-if="resolveDeviceTimeLine.series.length < 1">No está existen datos para esta campaña {{selecCampaign?selecCampaign.title:""}}</div>
+          <div class="px-4" v-if="resolveDeviceTimeLine.series.length < 1">No existen datos para esta campaña <b>{{selecCampaign?selecCampaign.title:""}}</b></div>
         </VCard>
       </VCol>
       <VCol class="mt-0" cols="12" md="12" lg="12" >
