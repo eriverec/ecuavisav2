@@ -715,13 +715,14 @@
             <VCardItem class="header_card_item py-0 pt-4 align-start">
               <div class="d-flex pr-0" style="justify-content: space-between;">
                 <div class="descripcion">
-                  <VCardTitle class="pb-2">Auditoría de eventos</VCardTitle>
+                  <VCardTitle class="pb-2">Análisis de campañas</VCardTitle>
                   <VCardSubtitle>*Mostrando data desde, {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
-                  <VCardSubtitle>*Este informe se basa en una muestra de {{limit}} registros</VCardSubtitle>
+                  <VCardSubtitle>*Este informe muestra un límite máximo de {{limit}} registros</VCardSubtitle>
                 </div>
               </div>
 
               <template #append>
+                    
                     <VBtn               
                       variant="tonal"
                       color="success"
@@ -739,7 +740,7 @@
                     no-click-animation
                     :disabled="!isFullLoading"
                       >
-                      <span>Esta carga puede demorar hasta 12 minutos, espere por favor</span>
+                      <span>Esta acción traerá todos los registros de la búsqueda y la carga puede demorar hasta 12 minutos, espere por favor</span>
                     </VTooltip>     
 
                     </VBtn> 
@@ -782,7 +783,7 @@
 
 
                       <th scope="col">
-                        Página
+                        Título de Página
                       </th>
 
                       <th
@@ -793,18 +794,18 @@
                       </th>
 
                       <th scope="col">
-                        Campaña
+                       Nombre de Campaña
                       </th>
 
                       <th
                         scope="col"
                         class="text-left"
                       >
-                        Creación
+                        Fecha y hora de evento
                       </th>
 
                       <th scope="col">
-                        Acción
+                        Link
                       </th>
                     </tr>
                   </thead>
@@ -834,7 +835,7 @@
                           }"
                           size="small"
                         >
-                          {{ c.type }}
+                          <span v-if=" c.type == 'preview'">Impresión</span> <span v-else>{{ c.type }} </span> 
                         </VChip>
                       </td>
                       <td class="text-center">
@@ -879,8 +880,8 @@
           <VCardItem class="header_card_item pb-0">
             <div class="d-flex pr-0" style="justify-content: space-between;">
               <div class="descripcion">
-                <VCardTitle>Gráfico estadístico por campañas creada</VCardTitle>
-                <small class="mt-3">Informe agrupados por eventos de camapañas</small>
+                <VCardTitle>Gráficos de eventos</VCardTitle>
+                <small class="mt-3">Información en porcentajes por campaña seleccionada</small>
               </div>
               <!-- <div class="">
                 <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
@@ -905,8 +906,8 @@
           <VCardItem class="header_card_item pb-0">
             <div class="d-flex pr-0" style="justify-content: space-between;">
               <div class="descripcion">
-                <VCardTitle>Comparación de datos por campañas</VCardTitle>
-                <small class="mt-3">Informe para medir la visualización de una o varias campaña</small>
+                <VCardTitle>Comparativa de datos entre campañas</VCardTitle>
+                <small class="mt-3">Informe para medir el impacto que obtuvo una campaña frente a otra u otras campañas</small>
               </div>
               <!-- <div class="">
                 <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
