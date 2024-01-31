@@ -1,5 +1,6 @@
 <script setup>
   import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
+  import tabGroupTable from '@/views/apps/campaigns/tabGroupTable.vue';
   import { hexToRgb } from '@layouts/utils';
   import VueApexCharts from 'vue3-apexcharts';
   import { useTheme } from 'vuetify';
@@ -15,6 +16,8 @@
     f: valoresHoy.f,
     title: "hoy"
   });
+
+  const currentTabSectionData = ref(0)
   const loadingData = ref(false);
   const loadingCombo = ref(false);
   const isFullLoading = ref(false);
@@ -23,7 +26,7 @@
   const fechaIniFinList = useSelectCalendar();
   const limit = ref(valoresHoy.limit);
   const currentPage = ref(1); // Página actual
-  const perPage = ref(15); // Registros por página
+  const perPage = ref(7); // Registros por página
   const itemsTypeEvent = ref([
                         {title:'Todos los eventos',value:"all"},
                         {title:'Usuarios que vieron la publicidad',value:"preview"},
@@ -469,9 +472,9 @@
           height: 7
         },
         show: true,
-        formatter: function (seriesName, opts) {
-          return [seriesName, " <br> ", `<div style="margin-top:10px;font-size:17px;color:rgba(var(--v-theme-on-background),var(--v-high-emphasis-opacity))">${opts.w.globals.series[opts.seriesIndex]}%<small style="font-size:14px"></small></div>`]
-        },
+        // formatter: function (seriesName, opts) {
+        //   return [seriesName, " <br> ", `<div style="margin-top:10px;font-size:17px;color:rgba(var(--v-theme-on-background),var(--v-high-emphasis-opacity))">${opts.w.globals.series[opts.seriesIndex]}<small style="font-size:14px"></small></div>`]
+        // },
         labels: {
           colors: themeDisabledTextColor,
           useSeriesColors: false
@@ -709,44 +712,53 @@
 
 <template>
   <section>
+
+
     <VRow>
       <VCol class="mt-0" cols="12" md="6" lg="8" >
         <VCard class="px-2 py-2">
-            <VCardItem class="header_card_item py-0 pt-4 align-start">
-              <div class="d-flex pr-0" style="justify-content: space-between;">
-                <div class="descripcion">
-                  <VCardTitle class="pb-2">Análisis de campañas</VCardTitle>
-                  <VCardSubtitle>*Mostrando data desde, {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
-                  <VCardSubtitle>*Este informe muestra un límite máximo de {{limit}} registros</VCardSubtitle>
+          <VTabs v-model="currentTabSectionData" class="" >
+            <VTab class="" >Análisis de campañas</VTab>
+            <VTab class=" " >Análisis agrupada</VTab>
+          </VTabs>
+          <VDivider />
+          <VWindow v-model="currentTabSectionData">
+            <VWindowItem>
+              <VCardItem class="header_card_item py-0 pt-4 align-start">
+                <div class="d-flex pr-0" style="justify-content: space-between;">
+                  <div class="descripcion">
+                    <!-- <VCardTitle class="pb-2">Análisis de campañas</VCardTitle> -->
+                    <VCardSubtitle>*Mostrando data desde, {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
+                    <VCardSubtitle>*Este informe muestra un límite máximo de {{limit}} registros</VCardSubtitle>
+                  </div>
                 </div>
-              </div>
 
-              <template #append>
-                    
-                    <VBtn               
-                      variant="tonal"
-                      color="success"
-                      prepend-icon="tabler-screen-share"
-                      @click="downloadFull"
-                      :loading="isFullLoading"
-                      :disabled="isFullLoading"
-                    >
-                      <span>Exportar búsqueda</span>
-                      <VTooltip 
-                    open-on-click
-                    :open-on-hover="false"                                                      
-                    location="top"
-                    activator="parent"
-                    no-click-animation
-                    :disabled="!isFullLoading"
+                <template #append>
+                      
+                      <VBtn               
+                        variant="tonal"
+                        color="success"
+                        prepend-icon="tabler-screen-share"
+                        @click="downloadFull"
+                        :loading="isFullLoading"
+                        :disabled="isFullLoading"
                       >
-                      <span>Esta acción traerá todos los registros de la búsqueda y la carga puede demorar hasta 12 minutos, espere por favor</span>
-                    </VTooltip>     
+                        <span>Exportar búsqueda</span>
+                        <VTooltip 
+                      open-on-click
+                      :open-on-hover="false"                                                      
+                      location="top"
+                      activator="parent"
+                      no-click-animation
+                      :disabled="!isFullLoading"
+                        >
+                        <span>Esta acción traerá todos los registros de la búsqueda y la carga puede demorar hasta 12 minutos, espere por favor</span>
+                      </VTooltip>     
 
-                    </VBtn> 
-              </template>
-            </VCardItem>
-              <!-- listado de datos -->
+                      </VBtn> 
+                </template>
+              </VCardItem>
+                <!-- listado de datos -->
               <div class="px-5 py-2">
                 <div class="bg-ecuavisa py-4 d-flex gap-4 flex-wrap">
                     <div class="date-picker-wrappe" style="min-width: 90px;width: auto;">
@@ -873,7 +885,12 @@
                 <VPagination class="mt-5" v-model="currentPage" :length="totalPages" :total-visible="7" />
                 <br>
               </div>
-          </VCard>
+            </VWindowItem>
+            <VWindowItem>
+              <tabGroupTable :dataCampaigns="dataCampaigns"/>
+            </VWindowItem>
+          </VWindow>
+        </VCard>
       </VCol>
       <VCol class="mt-0" cols="12" md="6" lg="4" >
         <VCard class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
