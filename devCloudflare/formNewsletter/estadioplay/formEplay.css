@@ -128,7 +128,7 @@
 h2.newsletterh1 {
     display: flex;
     gap: 0px;
-    flex-direction: column;
+    flex-direction: row;
 }
 
 h2.newsletterh1 div {
