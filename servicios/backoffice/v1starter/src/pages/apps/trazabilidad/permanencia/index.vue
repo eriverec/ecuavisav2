@@ -967,7 +967,6 @@ watch(async () => selectedOptionperPage.value, async () => {
   if(selectedOptionperPage.value){
     const seleccion = selectedOptionperPage.value.value;
     perPage.value = seleccion;
-
   }
 });
 
