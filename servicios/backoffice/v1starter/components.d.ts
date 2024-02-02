@@ -9,6 +9,7 @@ declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     AppCardActions: typeof import('./src/@core/components/AppCardActions.vue')['default']
     AppCardCode: typeof import('./src/@core/components/AppCardCode.vue')['default']
+    AppDateRange: typeof import('./src/@core/components/AppDateRange.vue')['default']
     AppDateTimePicker: typeof import('./src/@core/components/AppDateTimePicker.vue')['default']
     AppOtpInput: typeof import('./src/@core/components/AppOtpInput.vue')['default']
     AppPricing: typeof import('./src/@core/components/AppPricing.vue')['default']
@@ -19,6 +20,7 @@ declare module '@vue/runtime-core' {
     CardStatisticsVertical: typeof import('./src/@core/components/CardStatisticsVertical.vue')['default']
     CardStatisticsVerticalSimple: typeof import('./src/@core/components/CardStatisticsVerticalSimple.vue')['default']
     ConfirmDialog: typeof import('./src/@core/components/ConfirmDialog.vue')['default']
+    copia: typeof import('./src/@core/components/AppDateTimePicker - copia.vue')['default']
     CustomizerSection: typeof import('./src/@core/components/CustomizerSection.vue')['default']
     DialogCloseBtn: typeof import('./src/@core/components/DialogCloseBtn.vue')['default']
     EditAddressDialog: typeof import('./src/@core/components/EditAddressDialog.vue')['default']

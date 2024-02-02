@@ -1,6 +1,5 @@
 <script setup>
   import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
-  import AppDateRange from '@core/components/AppDateRange.vue'
   import tabGroupTable from '@/views/apps/campaigns/tabGroupTable.vue';
   import { hexToRgb } from '@layouts/utils';
   import VueApexCharts from 'vue3-apexcharts';
@@ -8,7 +7,7 @@
   import Moment from 'moment';
   import { extendMoment } from 'moment-range';
   import esLocale from "moment/locale/es";
-
+  
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
 
@@ -414,7 +413,7 @@
               </template>
           </VCardItem>
           <div class="px-5 py-2">
-          	  <div class="bg-ecuavisa py-4 d-flex gap-4 flex-wrap">
+          	<div class="bg-ecuavisa py-4 d-flex gap-4 flex-wrap">
                   <div class="date-picker-wrappe" style="min-width: 90px;width: auto;">
                     <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
                   </div>
@@ -426,10 +425,6 @@
                       hide-selected hint="" />
                   </div>
               </div>
-              
-                  <div>
-                    <AppDateRange/>
-                  </div>
               <VDivider class="my-5" />
               <div class="item-limit">
                 <label>Mostrar</label>
