@@ -89,6 +89,7 @@ export default [
       { title: 'Lista de campañas', to: 'apps-campaigns-list' },
       { title: 'Crear campaña', to: 'apps-campaigns-create' },
       { title: 'Posiciones', to: 'apps-campaigns-ads-ubicaciones' },
+      { title: 'Datos y Auditoría', to: 'apps-campaigns-ads-audit' },
       
     ],
   },
