@@ -45,7 +45,7 @@
   line-height: 48px;
   padding-top: 15px;
   /* padding-bottom: 18px; */
-  max-width: 600px;
+  max-width: 100%;
 }
 .portada-estilo .noticias .article .text {
   font-size: 16px;
@@ -88,7 +88,7 @@
   bottom: 0;
   left: 0;
   right: 0;
-  padding-bottom: 2rem;
+  padding-bottom: 1rem;
   width: 100%;
 }
 .portada-estilo-mobile .headline h2 {
