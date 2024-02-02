@@ -552,7 +552,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   position: absolute;
   bottom: 0;
   padding: 3rem 1rem 1rem;
-  background-image: -webkit-linear-gradient(bottom, #060127 10%, #ffffff00 100%);
+  background-image: -webkit-linear-gradient(bottom, #060127 10%, #ffffff00 20%);
   left: 0;
   right: 0;
   border-radius: 5px;
