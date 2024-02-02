@@ -2852,7 +2852,7 @@ INICIO - BLOQUE - ESTILO
 }
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .multimedia img {
-  -webkit-mask-image: linear-gradient(to top, transparent 0, #2927B9 40%);
+  -webkit-mask-image: linear-gradient(to top, transparent 0, #2927B9 10%);
 }
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .multimedia img:hover {
