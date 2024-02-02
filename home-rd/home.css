@@ -2848,7 +2848,7 @@ INICIO - BLOQUE - ESTILO
 }
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div {
-  background-image: -webkit-linear-gradient(bottom, #2927B9 50%, white 90%);
+  background-image: -webkit-linear-gradient(bottom, #2927B9 10%, white 90%);
 }
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .multimedia img {
