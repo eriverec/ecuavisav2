@@ -176,13 +176,13 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .sliderVideos .multimedia .multimediaIconMacroWrapper a div {
-  background-image: linear-gradient(180deg, rgba(6, 2, 34, 0) 0%, rgba(6, 2, 34, 0.9) 80.47%);
+  background-image: linear-gradient(180deg, rgba(6, 2, 34, 0) 0%, rgba(6, 2, 34, 0.9) 10%);
   border-radius: 6px;
 }
 
 .sliderVideos .multimedia img {
   border-radius: 6px;
-  -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 60%);
+  -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 10%);
   height: 100% !important;
   object-fit: cover;
 }
@@ -336,11 +336,11 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .destacada-entretenimiento .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
-  -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 60%);
+  -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%);
 }
 
 .destacada-entretenimiento .IMG_SEC_TIT_TXT_PORTADA .multimediaIconMacroWrapper div {
-  background-image: -webkit-linear-gradient(bottom, #060127 50%, white 65%);
+  background-image: -webkit-linear-gradient(bottom, #060127 10%, white 65%);
 }
 
 .destacada-entretenimiento .media_block .text_block .headline {
@@ -356,7 +356,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .destacada-entretenimiento .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
-  -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 30%);
+  -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%);
   height: 220px !important;
   object-fit: cover;
 }
@@ -507,7 +507,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   position: absolute;
   bottom: 0;
   padding: 7rem 1rem 1.5rem;
-  background-image: -webkit-linear-gradient(bottom, #060127 50%, #ffffff00 100%);
+  background-image: -webkit-linear-gradient(bottom, #060127 10%, #ffffff00 100%);
   left: 0;
   right: 0;
 }
@@ -552,7 +552,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   position: absolute;
   bottom: 0;
   padding: 3rem 1rem 1rem;
-  background-image: -webkit-linear-gradient(bottom, #060127 20%, #ffffff00 100%);
+  background-image: -webkit-linear-gradient(bottom, #060127 10%, #ffffff00 100%);
   left: 0;
   right: 0;
   border-radius: 5px;
@@ -964,14 +964,14 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 .carrusel-programas .multimedia > div img,
 .rankSwiper .multimedia img,
 .tarjetaSwiper .multimedia > div img {
-    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 40%);
+    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%);
 }
 
 .carrusel-programas .multimedia > div img:hover,
 .tarjetaSwiper .media_block:hover .multimedia > div img,
 .rankSwiper .multimedia img:hover,
 .tarjetaSwiper .multimedia > div img:hover {
-    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 85%)!important;
+    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 15%)!important;
 }
 /*FIN AÑADIR DEGRADADO A TODOS LOS BLOQUES DE LAS NOTAS*/
 
@@ -1187,11 +1187,11 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
       background-color: var(--color-azul-oscuro);
       position: relative !important;
       border-radius: 5.0022px;
-      -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 40%);
+      -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%);
   }
 
   .u-t-comunidad img:hover {
-      -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 85%);
+      -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 15%);
   }
 
   .u-t-comunidad .multimediaIconMacroWrapper a > div {
@@ -1252,11 +1252,11 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
     background-color: var(--color-azul-oscuro);
     position: relative !important;
     border-radius: 5.0022px;
-    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 40%);
+    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%);
 }
 
 .u-t-comunidad-gye img:hover {
-    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 85%);
+    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 15%);
 }
 
 .u-t-comunidad-gye .multimediaIconMacroWrapper a > div {
