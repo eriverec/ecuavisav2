@@ -753,18 +753,19 @@ async function generarOtrosValores(){
 watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
-  if(selectedItemCiudad.value != null){
-    loadingPanel.value=true;
-    clearTimeout(timeoutId.value);
-    timeoutId.value = setTimeout(async () => {
-      await getUsuarios();
-      loadingPanel.value=false;
-    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
-    await generarOtrosValores();
-  }else{
-    dataUsuarios.value = {};
+  if(cityList.value.length > 1){
+    if(selectedItemCiudad.value != null){
+      loadingPanel.value=true;
+      clearTimeout(timeoutId.value);
+      timeoutId.value = setTimeout(async () => {
+        await getUsuarios();
+        loadingPanel.value=false;
+      }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
+      await generarOtrosValores();
+    }else{
+      dataUsuarios.value = {};
+    }
   }
-
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
 
