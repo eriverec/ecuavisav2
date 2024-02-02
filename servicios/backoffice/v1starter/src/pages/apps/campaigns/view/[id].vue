@@ -354,6 +354,7 @@ export default {
       },
       currentUsers: "",
       timeoutId: null,
+      timeoutId_2: null,
       cargandoData: false,
       usuariosSearch:[],
       filter: "", // Agregar un modelo de datos para el filtro
@@ -449,7 +450,7 @@ export default {
 
     },
     handleInput(event) {
-      console.log(event.target.value);
+      // console.log(event.target.value);
       clearTimeout(this.timeoutId);
       this.timeoutId = setTimeout(() => {
         this.filtrarUsuariosUser(event.target.value);
@@ -521,21 +522,24 @@ export default {
       const usuarios = this.suggestion.userId;
       const search = this.filter.toLowerCase();
 
-      const resultados = usuarios.filter(usuario => {
-          const nombreCompleto = `${usuario.firstname} ${usuario.last_name}`.toLowerCase();
+      clearTimeout(this.timeoutId_2);
+      this.timeoutId_2 = setTimeout(() => {
+        const resultados = usuarios.filter(usuario => {
+            const nombreCompleto = `${usuario.firstname} ${usuario.last_name}`.toLowerCase();
 
-          // Verificar coincidencia en nombres o apellidos
-          if (nombreCompleto.includes(search)) {
-              return true;
-          }
+            // Verificar coincidencia en nombres o apellidos
+            if (nombreCompleto.includes(search)) {
+                return true;
+            }
 
-          // Verificar coincidencia en otros campos (excepto "wylexId")
-          return Object.keys(usuario).some(key => {
-              return key !== "wylexId" && usuario[key].toLowerCase().includes(search);
-          });
-      });
+            // Verificar coincidencia en otros campos (excepto "wylexId")
+            return Object.keys(usuario).some(key => {
+                return key !== "wylexId" && usuario[key].toLowerCase().includes(search);
+            });
+        });
 
-      this.usuariosSearch = resultados || usuarios;
+        this.usuariosSearch = resultados || usuarios;
+      }, 1000); // Espera 1000 milisegundos antes de realizar la llamada
     },
     dividirArray(original, tamano = 500) {
       const resultado = [];
