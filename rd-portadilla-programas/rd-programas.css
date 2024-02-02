@@ -552,7 +552,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   position: absolute;
   bottom: 0;
   padding: 3rem 1rem 1rem;
-  background-image: -webkit-linear-gradient(bottom, #060127 10%, #ffffff00 20%);
+  background-image: -webkit-linear-gradient(bottom, #060127 0%, #ffffff00 20%);
   left: 0;
   right: 0;
   border-radius: 5px;
@@ -620,11 +620,11 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .programas-desktop .text_block {
-  padding: 3rem 62px 50px;
+  padding: 3rem 62px 10px;
 }
 
 .programas-desktop .noticias .article .media_block .text_block .headline {
-  max-width: 700px;
+  max-width: 100%;
 }
 
 .programas-desktop .noticias .article .media_block .text_block .headline h1,
