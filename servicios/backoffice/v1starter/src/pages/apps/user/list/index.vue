@@ -16,6 +16,7 @@ const searchQuery = ref("");
 const selectedProvider = ref("");
 const selectedBoletin = ref();
 const rowPerPage = ref(10);
+const rowPerPageExport = ref(15000);
 const page = ref(1);
 const totalPage = ref(1);
 const totalUsers = ref(0);
@@ -787,7 +788,7 @@ async function downloadSearch (){
   for (let i = 1; i < totalPage.value+1; i++) {
   await userListStore
     .fetchUsers({
-      pageSize: rowPerPage.value,
+      pageSize: rowPerPageExport.value,
       page: i,
       query: search.value,
       provider: selectedProvider.value,
@@ -799,27 +800,30 @@ async function downloadSearch (){
     })
     .then((response) => {
       let docRaw = response.data.users;
+      if(docRaw.length < 1){
+        i = totalPage.value + 1;
+      }
       docRaw.forEach((item) => {
-      doc.push({
-      wylexId: item.wylexId,
-      site: item.site,
-      email: item.email,
-      first_name: item.first_name,
-      last_name: item.last_name,
-      avatar: item.avatar,
-      created_at: moment(item.created_at).format('DD/MM/YYYY-HH:mm:ss'),
-      logged_at: moment(item.logged_at).format('DD/MM/YYYY-HH:mm:ss'),
-      country: item.country,
-      phone_prefix: item.phone_prefix,
-      phone_number: item.phone_number,
-      gender: item.gender,
-      birth_date: item.birth_date,
-      identification_type: item.identification_type,
-      identification_number: item.identification_number,
-      newsletter_opt_in: item.newsletter_opt_in,
-      provider: item.provider,
-    });   
-  });
+        doc.push({
+        wylexId: item.wylexId,
+        site: item.site,
+        email: item.email,
+        first_name: item.first_name,
+        last_name: item.last_name,
+        avatar: item.avatar,
+        created_at: moment(item.created_at).format('DD/MM/YYYY-HH:mm:ss'),
+        logged_at: moment(item.logged_at).format('DD/MM/YYYY-HH:mm:ss'),
+        country: item.country,
+        phone_prefix: item.phone_prefix,
+        phone_number: item.phone_number,
+        gender: item.gender,
+        birth_date: item.birth_date,
+        identification_type: item.identification_type,
+        identification_number: item.identification_number,
+        newsletter_opt_in: item.newsletter_opt_in,
+        provider: item.provider,
+      });   
+    });
     })
     .catch((error) => {
       console.error(error);
