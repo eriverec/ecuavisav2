@@ -22,6 +22,7 @@ const nombreCampania = ref('')
 const codigoExternoModel = ref('')
 const linkAds = ref('')
 const linkImageEscritorio = ref('')
+const timeoutId = ref(null);
 const linkImageMobile = ref('');
 const numeroOtroUsuarios = ref('');
 const languages = ref([]);
@@ -206,7 +207,7 @@ async function getCampaignToEdit(){
       if(campania.criterial.city == -1){
         selectedItemCiudad.value = campania.criterial.city;
       }else{
-        console.log(campania.criterial.city.split(','))
+        // console.log(campania.criterial.city.split(','))
         selectedItemCiudad.value = campania.criterial.city.split(',');
       }
     }
@@ -240,12 +241,11 @@ async function getCampaignToEdit(){
       }
   }, 3500);
 
-
-  
-
-  
-
-  console.log('campaña a editar ',campania );
+  dataUsuarios.value = {
+      "resp": true,
+      "total": campania.userId
+  };
+  // console.log('campaña a editar ',campania );
 }
 
 // async function getCampaigns(){
@@ -308,97 +308,103 @@ const fetchWithTimeout = (url, options, timeout = 10000) => {
 };
 
 async function getUsuarios(){
-  var ciudad = -1;
-  var pais = -1;
-  var criterioTemp = criterio.value;
+  try {
+    var ciudad = -1;
+    var pais = -1;
+    var criterioTemp = criterio.value;
 
-  var so_temp = null;
-  var dispositivo_temp = null;
-  var navegador_temp = null;
-  var metadato = null;
+    var so_temp = null;
+    var dispositivo_temp = null;
+    var navegador_temp = null;
+    var metadato = null;
 
-  if(criterioTemp.includes("metadatos") || criterioTemp.includes("trazabilidads")){
-    pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
-    ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
-    ciudad = (ciudad=="Todas las ciudes"?-1:ciudad);
-  }
+    if(criterioTemp.includes("metadatos") || criterioTemp.includes("trazabilidads")){
+      pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
+      ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
+      ciudad = (ciudad=="Todas las ciudes"?-1:ciudad);
+    }
 
-  if(criterioTemp.includes("metadatos")){
-    metadato = metadatos.value || null;
-  }
+    if(criterioTemp.includes("metadatos")){
+      metadato = metadatos.value || null;
+    }
 
-  if(criterioTemp.includes("dispositivos")){
-    dispositivo_temp = selectItemDispositivos.value || null;
-  }
+    if(criterioTemp.includes("dispositivos")){
+      dispositivo_temp = selectItemDispositivos.value || null;
+    }
 
-  if(criterioTemp.includes("plataforma")){
-    so_temp = selectItemSO.value || null;
-    navegador_temp = selectItemNavegador.value || null;
-  }
-  
+    if(criterioTemp.includes("plataforma")){
+      so_temp = selectItemSO.value || null;
+      navegador_temp = selectItemNavegador.value || null;
+    }
+    
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      var raw = JSON.stringify({
+        "metadato": metadato,
+        "criterio": criterioTemp,
+        "pais": pais,
+        "ciudad": ciudad,
+        "navegador": navegador_temp,
+        "os": so_temp,
+        "dispositivo": dispositivo_temp
+      });
+
+      var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+      };
+
+      //console.log('data enviar ',raw);    
+      const send = await fetch('https://ads-service.vercel.app/campaign/v2/usuarios/get/user/total', requestOptions);
+      const respuesta = await send.json();    
+      //console.log('resp',respuesta);    
+      dataUsuarios.value = respuesta;
+      //console.log('data total',dataUsuarios.value);
+    
+      
+    /*  
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({
-      "metadato": metadato,
-      "criterio": criterioTemp,
-      "pais": pais,
-      "ciudad": ciudad,
-      "navegador": navegador_temp,
-      "os": so_temp,
-      "dispositivo": dispositivo_temp
-    });
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+    // console.log(pais || "-1")
+    // alert(pais.length)
+    // var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+    //   so: so_temp, 
+    //   dispositivo: dispositivo_temp,
+    //   metadato: metadato,
+    //   criterio: criterioTemp.join(','),
+    //   navegador: navegador_temp
+    // }) }`, requestOptions);
+    // const data = await response.json();
+    // dataUsuarios.value = data;
 
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-    //console.log('data enviar ',raw);    
-    const send = await fetch('https://ads-service.vercel.app/campaign/v2/usuarios/get/user/total', requestOptions);
-    const respuesta = await send.json();    
-    //console.log('resp',respuesta);    
-    dataUsuarios.value =respuesta;
-    //console.log('data total',dataUsuarios.value);
-  
+    const response = await fetchWithTimeout(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+        so: so_temp, 
+        dispositivo: dispositivo_temp,
+        metadato: metadato,
+        criterio: criterioTemp.join(','),
+        navegador: navegador_temp
+    }) }`, requestOptions, 25000); // Aquí hemos establecido un tiempo de espera de 15 segundos (15000 milisegundos)
+
+    if (response.status === 200) {
+        const data = await response.json();
+        dataUsuarios.value = data;
+    } else {
+        console.error("Error en la solicitud:", response.status);
+        // Puedes manejar el error de acuerdo a tus necesidades
+    }
+    */
     
-  /*  
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-  };
-  // console.log(pais || "-1")
-  // alert(pais.length)
-  // var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-  //   so: so_temp, 
-  //   dispositivo: dispositivo_temp,
-  //   metadato: metadato,
-  //   criterio: criterioTemp.join(','),
-  //   navegador: navegador_temp
-  // }) }`, requestOptions);
-  // const data = await response.json();
-  // dataUsuarios.value = data;
-
-  const response = await fetchWithTimeout(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-      so: so_temp, 
-      dispositivo: dispositivo_temp,
-      metadato: metadato,
-      criterio: criterioTemp.join(','),
-      navegador: navegador_temp
-  }) }`, requestOptions, 25000); // Aquí hemos establecido un tiempo de espera de 15 segundos (15000 milisegundos)
-
-  if (response.status === 200) {
-      const data = await response.json();
-      dataUsuarios.value = data;
-  } else {
-      console.error("Error en la solicitud:", response.status);
-      // Puedes manejar el error de acuerdo a tus necesidades
+  } catch (error) {
+      console.error(error);
+      return false;
   }
-  */
-  
 }
 
 const consentimiento = ref(false);
@@ -864,8 +870,15 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
   // console.log('Valor anterior:', oldValue);
   if(selectedItemCiudad.value != null){
     loadingPanel.value=true;
-    await getUsuarios();
+
+    // console.log(1)
+
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
+      await getUsuarios();
+    }, 1500); // Espera 1000 milisegundos antes de realizar la llamada
     loadingPanel.value=false;
+
     await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
@@ -879,7 +892,14 @@ watch(async () => selectItemDispositivos.value,async  (newValue, oldValue) => {
   // console.log('Valor anterior:', oldValue);
   if(selectItemDispositivos.value != null){
     loadingPanel.value=true;
-    await getUsuarios();
+    
+    // console.log(2)
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
+      await getUsuarios();
+    }, 1500); // Espera 1000 milisegundos antes de realizar la llamada
+    loadingPanel.value=false;
+
     loadingPanel.value=false;
     await generarOtrosValores();
   }else{
@@ -893,7 +913,14 @@ watch(async () => selectItemSO.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   loadingPanel.value=true;
-  await getUsuarios();
+  
+  // console.log(3)
+  clearTimeout(timeoutId.value);
+  timeoutId.value = setTimeout(async () => {
+    await getUsuarios();
+  }, 1500); // Espera 1000 milisegundos antes de realizar la llamada
+  loadingPanel.value=false;
+
   loadingPanel.value=false;
   await generarOtrosValores();
 
@@ -906,7 +933,14 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
   // console.log('Valor anterior:', oldValue);
   if(selectItemNavegador.value != null){
     loadingPanel.value=true;
-    await getUsuarios();
+    
+    // console.log(4)
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
+      await getUsuarios();
+    }, 1500); // Espera 1000 milisegundos antes de realizar la llamada
+    loadingPanel.value=false;
+
     loadingPanel.value=false;
     await generarOtrosValores();
   }else{
@@ -923,7 +957,14 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
   // console.log('Valor anterior:', oldValue);
   if(metadatos.value != null){
     loadingPanel.value=true;
-    await getUsuarios();
+    
+    // console.log(5)
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
+      await getUsuarios();
+    }, 1500); // Espera 1000 milisegundos antes de realizar la llamada
+    loadingPanel.value=false;
+
     loadingPanel.value=false;
     await generarOtrosValores();
   }else{
