@@ -143,7 +143,8 @@
 
                             <p class="d-flex align-center mb-0">
                               <VIcon color="primary" icon="tabler-user" size="22"/>
-                              <span class="ms-3">{{suggestion.userId.length}} usuarios</span>
+                              <span class="ms-3" v-if="!cargandoData">{{suggestion.userId.length}} usuarios</span>
+                              <span class="ms-3" v-if="cargandoData">Cargando data...</span>
                             </p>
 
                             <p class="d-flex align-center mb-6 mt-6">
@@ -353,6 +354,7 @@ export default {
       },
       currentUsers: "",
       timeoutId: null,
+      cargandoData: false,
       usuariosSearch:[],
       filter: "", // Agregar un modelo de datos para el filtro
       userIdSelected:0,
@@ -361,11 +363,7 @@ export default {
   watch: {
   },
   async mounted() {
-    this.isLoadingContent = true;
     await this.obtenerDetalles();
-    this.isLoadingContent = false;
-
-    
 
     const usuarios = this.suggestion.userId;
     this.usuariosSearch = usuarios;
@@ -581,11 +579,40 @@ export default {
       // console.log(datos)
       this.dataUsers = datos.data;
     },
-    async obtenerDetalles() {
-      const respuesta = await fetch(`https://ads-service.vercel.app/campaign/${this.id}/user`); 
+    async getDetallesCampaign(data = {}) {
+      const { limit=20000, page=1 } = data;
+      const respuesta = await fetch(`https://ads-service.vercel.app/campaign/${this.id}/user/?limit=${limit}&page=${page}`); 
       const datos = await respuesta.json();
       // console.log(datos)
-      this.suggestion = datos[0];
+      return datos[0];
+    },
+    async obtenerDetalles() {
+
+      this.isLoadingContent = true;
+      this.cargandoData = true;
+      let skip = 1;
+      let batchSize = 20000;
+      let dataFull = [];
+
+      while (true) {
+        const batchRegister = await this.getDetallesCampaign({limit:batchSize,page:skip});
+
+        if (batchRegister.userId.length === 0) {
+          break;
+        }
+        if(skip == 1){
+          dataFull.push(...[batchRegister]);
+        }else{
+          dataFull[0].userId.push(...batchRegister.userId);
+        }
+        
+        
+        this.suggestion = dataFull[0];
+        this.isLoadingContent = false;
+        skip += 1;
+        // console.log(dataRegistrosGroupExport.value)
+      }
+      this.cargandoData = false;
     },
     // metodo que exporta a csv los registros obtenidos
     exportToCSV() {

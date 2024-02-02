@@ -48,7 +48,7 @@
     { title: perPage.value, value: perPage.value }
   )
 
-  const itemsPage = [{ title: '7', value: 7 },
+  const itemsPage = [{ title: '10', value: 10 },
     { title: '30', value: 30 },
     { title: '50', value: 50 },
     { title: '100', value: 100 },
@@ -202,6 +202,7 @@
         if(!exportar){
           dataRegistros.value = data.data;
           dataRegistrosBackup.value = data.data;
+          
         }else{
           return data.data;
         }
@@ -706,15 +707,6 @@
             data: dataRaw.map(s => s.click)
           }]//seriesFormat.data
     , options: options };
-  });
-
-  /*COMBO SELECT PERPAGE*/
-  watch(async () => selectedOptionperPage.value, async () => {
-    const datos = selectedOptionperPage.value;
-    if(selectedOptionperPage.value){
-      const seleccion = selectedOptionperPage.value.value;
-      perPage.value = seleccion;
-    }
   });
 
 </script>
