@@ -23,6 +23,7 @@ const codigoExternoModel = ref('')
 const linkAds = ref('')
 const linkImageEscritorio = ref('')
 const timeoutId = ref(null);
+const timeoutSegundos = 3000;
 const linkImageMobile = ref('');
 const numeroOtroUsuarios = ref('');
 const languages = ref([]);
@@ -876,8 +877,8 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
     clearTimeout(timeoutId.value);
     timeoutId.value = setTimeout(async () => {
       await getUsuarios();
-    }, 1500); // Espera 1000 milisegundos antes de realizar la llamada
-    loadingPanel.value=false;
+      loadingPanel.value=false;
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
 
     await generarOtrosValores();
   }else{
@@ -897,10 +898,9 @@ watch(async () => selectItemDispositivos.value,async  (newValue, oldValue) => {
     clearTimeout(timeoutId.value);
     timeoutId.value = setTimeout(async () => {
       await getUsuarios();
-    }, 1500); // Espera 1000 milisegundos antes de realizar la llamada
-    loadingPanel.value=false;
+      loadingPanel.value=false;
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
 
-    loadingPanel.value=false;
     await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
@@ -918,10 +918,9 @@ watch(async () => selectItemSO.value,async  (newValue, oldValue) => {
   clearTimeout(timeoutId.value);
   timeoutId.value = setTimeout(async () => {
     await getUsuarios();
-  }, 1500); // Espera 1000 milisegundos antes de realizar la llamada
-  loadingPanel.value=false;
+    loadingPanel.value=false;
+  }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
 
-  loadingPanel.value=false;
   await generarOtrosValores();
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
@@ -938,10 +937,9 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
     clearTimeout(timeoutId.value);
     timeoutId.value = setTimeout(async () => {
       await getUsuarios();
-    }, 1500); // Espera 1000 milisegundos antes de realizar la llamada
-    loadingPanel.value=false;
+      loadingPanel.value=false;
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
 
-    loadingPanel.value=false;
     await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
@@ -962,10 +960,9 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
     clearTimeout(timeoutId.value);
     timeoutId.value = setTimeout(async () => {
       await getUsuarios();
-    }, 1500); // Espera 1000 milisegundos antes de realizar la llamada
-    loadingPanel.value=false;
+      loadingPanel.value=false;
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
 
-    loadingPanel.value=false;
     await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
@@ -1621,7 +1618,8 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                               size="large"
                               class="text-capitalize mt-4"
                             >
-                              {{ dataUsuarios.total || "0" }}
+                              <small v-if="!loadingPanel">{{ dataUsuarios.total || "0" }}</small>
+                              <small v-if="loadingPanel">Cargando....</small>
                             </VChip>
                           </VCardText>
                         </VCol>

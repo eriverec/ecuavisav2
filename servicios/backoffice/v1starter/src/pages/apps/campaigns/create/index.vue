@@ -16,6 +16,9 @@ const countryList = ref([]);
 // const FormWizard = ref(false);
 // const TabContent = ref(false);
 
+const timeoutId = ref(null);
+const timeoutSegundos = 3000;
+
 const nombreCampania = ref('')
 const codigoExternoModel = ref('')
 const linkAds = ref('')
@@ -752,8 +755,11 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
   // console.log('Valor anterior:', oldValue);
   if(selectedItemCiudad.value != null){
     loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
+      await getUsuarios();
+      loadingPanel.value=false;
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
     await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
@@ -767,8 +773,11 @@ watch(async () => selectItemDispositivos.value,async  (newValue, oldValue) => {
   // console.log('Valor anterior:', oldValue);
   if(selectItemDispositivos.value != null){
     loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
+      await getUsuarios();
+      loadingPanel.value=false;
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
     await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
@@ -781,8 +790,11 @@ watch(async () => selectItemSO.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
+      await getUsuarios();
+      loadingPanel.value=false;
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
     await generarOtrosValores();
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
@@ -794,8 +806,11 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
   // console.log('Valor anterior:', oldValue);
   if(selectItemNavegador.value != null){
     loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
+      await getUsuarios();
+      loadingPanel.value=false;
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
     await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
@@ -811,8 +826,11 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
   // console.log('Valor anterior:', oldValue);
   if(metadatos.value != null){
     loadingPanel.value=true;
-    await getUsuarios();
-    loadingPanel.value=false;
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
+      await getUsuarios();
+      loadingPanel.value=false;
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
     await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
@@ -1271,6 +1289,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                                         :hide-no-data="false"
                                         :menu-props="{ maxHeight: '300' }"
                                         class="custom-combobox-ciudad"
+                                        :disabled="loadingPanel"
                                       />
 
                                       
@@ -1468,7 +1487,8 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                               size="large"
                               class="text-capitalize mt-4"
                             >
-                              {{ dataUsuarios.total || "0" }}
+                              <small v-if="!loadingPanel">{{ dataUsuarios.total || "0" }}</small>
+                              <small v-if="loadingPanel">Cargando....</small>
                             </VChip>
                           </VCardText>
                         </VCol>
