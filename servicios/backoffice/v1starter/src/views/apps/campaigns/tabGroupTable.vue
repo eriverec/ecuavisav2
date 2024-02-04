@@ -55,8 +55,12 @@
   });
 
   const props = defineProps({
-    dataCampaigns: Object
+    dataCampaigns: Object,
   });
+
+  const receiveTime = (time) => {
+    console.log('Received time:', time);
+  };
 
   const currentTabSectionData = ref(0)
   const loadingData = ref(false);
@@ -428,7 +432,7 @@
               </div>
               
                   <div>
-                    <AppDateRange/>
+                    <AppDateRange @get:dateCR="receiveTime"/>
                   </div>
               <VDivider class="my-5" />
               <div class="item-limit">
