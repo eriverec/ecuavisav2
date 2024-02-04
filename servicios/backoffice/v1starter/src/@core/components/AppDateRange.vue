@@ -41,13 +41,17 @@
     const datepicker = ref(null);
 
     const formatDate = "YYYY-MM-DD";
+    const dateValues = ref({
+        fechai:null,
+        fechaf:null,
+    });
     const formatDateLang = "dddd, DD [de] MMMM [de] YYYY";
     const fecha = ref({
         i:null,
         f:null,
         title:"",
     });
-    const btnsDate = ref([null, null, null, null, null, ]);
+    const btnsDate = ref([null, null, null, null, null, null]);
     const onRangeStart = (value) => {
         if(fecha.value.i){
             fecha.value.f = null;
@@ -69,13 +73,34 @@
     const onFormatDateSubmit = () => {
         var fi = moment(fecha.value.i);
         var ff = moment(fecha.value.f);
+        if(!isValidDaysLimit({fechai:fi,fechaf:ff})){
+            return false;
+        }
 
         fecha.value.title = `${fi.format(formatDateLang)} - ${ff.format(formatDateLang)}`;
         activeBtns(-1);
 
-        nextTick(() => {
-            emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
-        })
+        dateValues.value.fechai = fi;
+        dateValues.value.fechaf = ff;
+
+        // nextTick(() => {
+        //     emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
+        // })
+    }
+
+    const isValidDaysLimit = (json = {}) => {
+        const {fechai = null, fechaf} = json;
+        var fi = moment(fechai);
+        var ff = moment(fechaf);
+        if(ff.diff(fi, 'days') > 15){
+            if (datepicker) {
+                // Close the menu programmatically
+                datepicker.value.clearValue()
+            }
+            alert("No puede sobrepasar el límite de 15 días");
+            return false;
+        }
+        return true;
     }
 
     const activeBtns = (p) => {
@@ -108,9 +133,12 @@
         fecha.value.title = `${fi.format(formatDateLang)} - ${ff.format(formatDateLang)}`;
         activeBtns(0);
 
-        nextTick(() => {
-            emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
-        })
+        dateValues.value.fechai = fi;
+        dateValues.value.fechaf = ff;
+
+        // nextTick(() => {
+        //     emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
+        // })
 
         return [fi, ff];
     }
@@ -122,9 +150,12 @@
         fecha.value.title = `${fi.format(formatDateLang)} - ${ff.format(formatDateLang)}`;
         activeBtns(1);
 
-        nextTick(() => {
-            emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
-        })
+        dateValues.value.fechai = fi;
+        dateValues.value.fechaf = ff;
+
+        // nextTick(() => {
+        //     emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
+        // })
         return [fi, ff];
     }
 
@@ -135,9 +166,28 @@
         fecha.value.title = `${fi.format(formatDateLang)} - ${ff.format(formatDateLang)}`;
         activeBtns(2);
 
-        nextTick(() => {
-            emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
-        })
+        dateValues.value.fechai = fi;
+        dateValues.value.fechaf = ff;
+
+        // nextTick(() => {
+        //     emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
+        // })
+        return [fi, ff];
+    }
+
+    const hace15Funcion = () => {
+        var fi = moment().subtract(15, 'days');
+        var ff = moment();
+
+        fecha.value.title = `${fi.format(formatDateLang)} - ${ff.format(formatDateLang)}`;
+        activeBtns(5);
+
+        dateValues.value.fechai = fi;
+        dateValues.value.fechaf = ff;
+
+        // nextTick(() => {
+        //     emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
+        // })
         return [fi, ff];
     }
 
@@ -148,9 +198,12 @@
         fecha.value.title = `${fi.format(formatDateLang)} - ${ff.format(formatDateLang)}`;
         activeBtns(3);
 
-        nextTick(() => {
-            emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
-        })
+        dateValues.value.fechai = fi;
+        dateValues.value.fechaf = ff;
+
+        // nextTick(() => {
+        //     emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
+        // })
         return [fi, ff];
     }
 
@@ -161,10 +214,28 @@
         fecha.value.title = `${fi.format(formatDateLang)} - ${ff.format(formatDateLang)}`;
         activeBtns(4);
 
-        nextTick(() => {
-            emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
-        })
+        dateValues.value.fechai = fi;
+        dateValues.value.fechaf = ff;
+
+        // nextTick(() => {
+        //     emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
+        // })
         return [fi, ff];
+    }
+
+    const aplicarFechasSugmit = () => {
+        if(dateValues.value.fechai == null && dateValues.value.fechaf == null && fecha.value.i == null && fecha.value.f == null){
+            return false;
+        }else{
+            isDialogDateRange.value = false;
+            var fi = dateValues.value.fechai;
+            var ff = dateValues.value.fechaf;
+
+            nextTick(() => {
+                emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
+            })
+        }
+        
     }
 
     watch(async () => fecha.value.i, async () => {
@@ -197,9 +268,16 @@
     <VDialog v-model="isDialogDateRange" class="dialog-calendar" persistent max-width="750">
         <!-- Dialog Activator -->
         <template #activator="{ props }">
-          <VBtn v-bind="props" style="display: none;">
-            Open Dialog
-          </VBtn>
+            <div class="d-flex" style="flex-direction: column;display: none;">
+                <VBtn class="text-capitalize font-weight-normal" v-bind="props" color="primary">
+                  Seleccionar fecha
+                    <VIcon
+                    end
+                    icon="mdi-chevron-down"
+                  />
+                </VBtn>
+                <small v-if="fecha.title" style="font-size: 10px;" class="text-capitalize font-weight-light mt-1"> {{ fecha.title }} </small>
+            </div>
         </template>
 
         <!-- Dialog close btn -->
@@ -220,6 +298,9 @@
                     <VBtn @click="hace7Funcion" variant="text" :color="btnsDate[2]" block class="text-left text-capitalize font-weight-normal mb-2">
                       Hace 7 días
                     </VBtn>
+                    <VBtn @click="hace15Funcion" variant="text" :color="btnsDate[5]" block class="text-left text-capitalize font-weight-normal mb-2">
+                      Hace 15 días
+                    </VBtn>
                     <VBtn @click="esteMesFuncion" variant="text" :color="btnsDate[3]" block class="text-left text-capitalize font-weight-normal mb-2">
                       Este mes
                     </VBtn>
@@ -229,7 +310,7 @@
                 </div>
               </VCol>
               <VCol cols="12" sm="9" md="9" >
-                <VueDatePicker calendar-cell-class-name="dp-custom-cell-date" menu-class-name="dp-custom-menu-date" locale="es" v-model="date" ref="datepicker" range multi-calendars inline auto-apply :enable-time-picker="false" @range-start="onRangeStart" @range-end="onRangeEnd" :dark="isModeDarkDate=='dark'"></VueDatePicker>
+                <VueDatePicker :min-date="moment('2022-01-01')" :max-date="new Date()" calendar-cell-class-name="dp-custom-cell-date" menu-class-name="dp-custom-menu-date" locale="es" v-model="date" ref="datepicker" range multi-calendars inline auto-apply :enable-time-picker="false" @range-start="onRangeStart" @range-end="onRangeEnd" :dark="isModeDarkDate=='dark'"></VueDatePicker>
                 <!-- <AppDateTimePicker
                   prepend-inner-icon="tabler-calendar"
                   @on-change="obtenerFechaDispositivos"
@@ -252,12 +333,12 @@
             <VBtn
               variant="tonal"
               color="secondary"
-              @click="isDialogVisible = false"
+              @click="isDialogDateRange = false"
             >
-              Close
+              Cancelar
             </VBtn>
-            <VBtn @click="isDialogVisible = false">
-              Save
+            <VBtn @click="aplicarFechasSugmit">
+              Aplicar
             </VBtn>
           </VCardText>
         </VCard>

@@ -58,10 +58,6 @@
     dataCampaigns: Object,
   });
 
-  const receiveTime = (time) => {
-    console.log('Received time:', time);
-  };
-
   const currentTabSectionData = ref(0)
   const loadingData = ref(false);
   const loadingCombo = ref(false);
@@ -354,6 +350,30 @@
     loadingData.value = false;
   });
 
+  const receiveTime = async (time) => {
+    // console.log('Received time:', time);
+
+    let selectedCombo = time;
+    fecha.value = {
+        i: moment(selectedCombo[0]),
+        f: moment(selectedCombo[1]),
+        title: "Fecha personalizada"
+    }
+
+    limit.value = 8000;
+
+    if(selecCampaign.value){
+      loadingData.value = true;
+      await getDataAuditoriaGroupPage({
+        fechai: fecha.value.i.format("YYYY-MM-DD"),
+        fechaf: fecha.value.f.format("YYYY-MM-DD"),
+        limit: limit.value,
+        idCampaign: selecCampaign.value.value
+      });
+      loadingData.value = false;
+    }
+  };
+
   /*COMBO SELECT PERPAGE*/
   watch(async () => selectedOptionperPage.value, async () => {
     const datos = selectedOptionperPage.value;
@@ -420,6 +440,7 @@
           <div class="px-5 py-2">
           	  <div class="bg-ecuavisa py-4 d-flex gap-4 flex-wrap">
                   <div class="date-picker-wrappe" style="min-width: 90px;width: auto;">
+                    <!-- <AppDateRange @get:dateCR="receiveTime"/> -->
                     <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
                   </div>
                   <div style="min-width: 230px;width: auto;">
@@ -430,10 +451,6 @@
                       hide-selected hint="" />
                   </div>
               </div>
-              
-                  <div>
-                    <AppDateRange @get:dateCR="receiveTime"/>
-                  </div>
               <VDivider class="my-5" />
               <div class="item-limit">
                 <label>Mostrar</label>
