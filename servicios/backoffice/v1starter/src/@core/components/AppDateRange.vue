@@ -7,6 +7,7 @@
     import { useThemeConfig } from '@core/composable/useThemeConfig'
     const { theme } = useThemeConfig()
     const vuetifyTheme = useTheme()
+    const fechaText = ref("")
     const vuetifyThemesName = Object.keys(vuetifyTheme.themes.value);
 
     const moment = extendMoment(Moment);
@@ -250,6 +251,10 @@
         }
     });
 
+    watch(async () => fecha.value.title, async () => {
+        fechaText.value = `${dateValues.value.fechai.format(formatDate)}, ${dateValues.value.fechaf.format(formatDate)}`;
+    });
+
 
 
     const updateThemeClassInCalendar = activeTheme => {
@@ -268,14 +273,24 @@
     <VDialog v-model="isDialogDateRange" class="dialog-calendar" persistent max-width="750">
         <!-- Dialog Activator -->
         <template #activator="{ props }">
-            <div class="d-flex" style="flex-direction: column;display: none;">
-                <VBtn class="text-capitalize font-weight-normal" v-bind="props" color="primary">
+            <div class="d-flex" style="flex-direction: column;">
+                <VTextField
+                    style="min-width: 240px;width: auto;"
+                    v-bind="props"
+                    v-model="fechaText"
+                    prepend-inner-icon="mdi-calendar-month"
+                    label="Seleccione una fecha"
+                    placeholder="Ingrese una fecha"
+                />
+
+                <!-- <VBtn class="text-capitalize font-weight-normal" v-bind="props" color="primary">
                   Seleccionar fecha
                     <VIcon
                     end
                     icon="mdi-chevron-down"
                   />
-                </VBtn>
+                </VBtn> -->
+
                 <small v-if="fecha.title" style="font-size: 10px;" class="text-capitalize font-weight-light mt-1"> {{ fecha.title }} </small>
             </div>
         </template>

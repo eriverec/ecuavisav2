@@ -440,8 +440,8 @@
           <div class="px-5 py-2">
           	  <div class="bg-ecuavisa py-4 d-flex gap-4 flex-wrap">
                   <div class="date-picker-wrappe" style="min-width: 90px;width: auto;">
-                    <!-- <AppDateRange @get:dateCR="receiveTime"/> -->
-                    <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
+                    <AppDateRange @get:dateCR="receiveTime"/>
+                    <!-- <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint hide-selected hint="" /> -->
                   </div>
                   <div style="min-width: 230px;width: auto;">
                     <VCombobox clearable density="compact" :disabled="loadingData" v-model="selecCampaign" :items="props.dataCampaigns" variant="outlined" label="Buscar por campaña" persistent-hint hide-selected hint="" />
