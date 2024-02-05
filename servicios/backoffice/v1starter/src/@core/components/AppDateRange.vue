@@ -232,6 +232,8 @@
             var fi = dateValues.value.fechai;
             var ff = dateValues.value.fechaf;
 
+            fechaText.value = `${dateValues.value.fechai.format(formatDate)}, ${dateValues.value.fechaf.format(formatDate)}`;
+
             nextTick(() => {
                 emit('get:dateCR', [fi.format(formatDate), ff.format(formatDate)])
             })
@@ -251,12 +253,6 @@
         }
     });
 
-    watch(async () => fecha.value.title, async () => {
-        fechaText.value = `${dateValues.value.fechai.format(formatDate)}, ${dateValues.value.fechaf.format(formatDate)}`;
-    });
-
-
-
     const updateThemeClassInCalendar = activeTheme => {
         isModeDarkDate.value = activeTheme;
     }
@@ -265,8 +261,6 @@
     onMounted(() => {
       updateThemeClassInCalendar(vuetifyTheme.name.value)
     })
-
-
 
 </script>
 <template>
@@ -291,7 +285,7 @@
                   />
                 </VBtn> -->
 
-                <small v-if="fecha.title" style="font-size: 10px;" class="text-capitalize font-weight-light mt-1"> {{ fecha.title }} </small>
+                <small v-if="fecha.title" style="font-size: 10px;" class="text-capitalize font-weight-light mt-1"> {{ fechaText }} </small>
             </div>
         </template>
 
