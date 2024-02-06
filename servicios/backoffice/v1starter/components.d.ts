@@ -20,7 +20,6 @@ declare module '@vue/runtime-core' {
     CardStatisticsVertical: typeof import('./src/@core/components/CardStatisticsVertical.vue')['default']
     CardStatisticsVerticalSimple: typeof import('./src/@core/components/CardStatisticsVerticalSimple.vue')['default']
     ConfirmDialog: typeof import('./src/@core/components/ConfirmDialog.vue')['default']
-    copia: typeof import('./src/@core/components/AppDateTimePicker - copia.vue')['default']
     CustomizerSection: typeof import('./src/@core/components/CustomizerSection.vue')['default']
     DialogCloseBtn: typeof import('./src/@core/components/DialogCloseBtn.vue')['default']
     EditAddressDialog: typeof import('./src/@core/components/EditAddressDialog.vue')['default']

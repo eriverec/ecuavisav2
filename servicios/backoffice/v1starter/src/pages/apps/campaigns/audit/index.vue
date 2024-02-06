@@ -331,6 +331,28 @@
     loadingData.value = false;
   });
 
+  const receiveTime = async (time) => {
+    // console.log('Received time:', time);
+
+    let selectedCombo = time;
+    fecha.value = {
+        i: moment(selectedCombo[0]),
+        f: moment(selectedCombo[1]),
+        title: "Fecha personalizada"
+    }
+
+    limit.value = 8000;
+
+    loadingData.value = true;
+    await getDataAuditoria({
+      fechai: fecha.value.i.format("YYYY-MM-DD"),
+      fechaf: fecha.value.f.format("YYYY-MM-DD"),
+      limit: limit.value,
+      tipo: selecTypeEvent.value?selecTypeEvent.value.value: "all"
+    });
+    loadingData.value = false;
+  };
+
   /*COMBO selecCampaign*/
   watch(async () => selecCampaign.value, async () => {
 
@@ -763,7 +785,8 @@
               <div class="px-5 py-2">
                 <div class="bg-ecuavisa py-4 d-flex gap-4 flex-wrap">
                     <div class="date-picker-wrappe" style="min-width: 90px;width: auto;">
-                      <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
+                      <AppDateRange @get:dateCR="receiveTime"/>
+                      <!-- <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint hide-selected hint="" /> -->
                     </div>
                     <div style="min-width: 230px;width: auto;">
                       <VCombobox clearable density="compact" :disabled="loadingData" v-model="selecTypeEvent" :items="itemsTypeEvent" variant="outlined" label="Buscar por evento" persistent-hint
