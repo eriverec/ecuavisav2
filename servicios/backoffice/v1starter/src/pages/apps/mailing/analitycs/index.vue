@@ -12,6 +12,7 @@
             </div>
           </VCardText>
           <VCardText v-else>Cargando...</VCardText>
+          
         </VCard>
       </VCol>
 
@@ -38,8 +39,12 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, reactive } from 'vue';
 // import { VDialogTransition } from 'vuetify/lib/components';
+
+// Define the data and options as reactive properties
+// import { reactive } from 'vue';
+
 
 const tokenUrl = 'https://api.sendpulse.com/oauth/access_token';
 const clientId = 'c79f7382012df0ea4c6fa37afec6374e';
@@ -48,9 +53,6 @@ const formattedCampaigns = ref([]);
 const selectedCampaignId = ref(null);
 const loading = ref(false);
 const formattedCodes = ref([]);
-const resultadoCalculo = ref('0');
-const seExplain = ref('1');
-const valorIni = ref('');
 const msjRes = ref('');
 
 const campaignData = ref([]); // información de la  campaña
