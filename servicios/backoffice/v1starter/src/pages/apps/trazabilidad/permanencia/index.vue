@@ -37,41 +37,41 @@ const groupSectionChartPieData = ref([]);
 const groupSubSectionChartPieData = ref([]);
 
 const optionOrderNormal = [
-                        {title:'Ordenar ASC por nombre de usuario',value:1},
-                        {title:'Ordenar DESC por nombre de usuario',value:2},
-                        {title:'Ordenar ASC por fecha de registro',value:3},
-                        {title:'Ordenar DESC por fecha de registro',value:4},
-                        {title:'Ordenar ASC por tiempo de permanencia',value:5},
-                        {title:'Ordenar DESC por tiempo de permanencia',value:6},
-                      ];
+  { title: 'Ordenar ASC por nombre de usuario', value: 1 },
+  { title: 'Ordenar DESC por nombre de usuario', value: 2 },
+  { title: 'Ordenar ASC por fecha de registro', value: 3 },
+  { title: 'Ordenar DESC por fecha de registro', value: 4 },
+  { title: 'Ordenar ASC por tiempo de permanencia', value: 5 },
+  { title: 'Ordenar DESC por tiempo de permanencia', value: 6 },
+];
 const optionOrderGroup = [
-                        {title:'Ordenar ASC por nombre de página',value:7},
-                        {title:'Ordenar DESC por nombre de página',value:8},
-                        {title:'Ordenar ASC por tiempo promedio',value:9},
-                        {title:'Ordenar DESC por tiempo promedio',value:10},
-                        {title:'Ordenar ASC por visitas',value:11},
-                        {title:'Ordenar DESC por visitas',value:12},
-                      ];
+  { title: 'Ordenar ASC por nombre de página', value: 7 },
+  { title: 'Ordenar DESC por nombre de página', value: 8 },
+  { title: 'Ordenar ASC por tiempo promedio', value: 9 },
+  { title: 'Ordenar DESC por tiempo promedio', value: 10 },
+  { title: 'Ordenar ASC por visitas', value: 11 },
+  { title: 'Ordenar DESC por visitas', value: 12 },
+];
 
 const selectedOptionperPage = ref(
   { title: perPage.value, value: perPage.value }
 )
 
 const itemsPage = [{ title: '10', value: 10 },
-  { title: '30', value: 30 },
-  { title: '50', value: 50 },
-  { title: '100', value: 100 },
-  { title: '200', value: 200 }]
+{ title: '30', value: 30 },
+{ title: '50', value: 50 },
+{ title: '100', value: 100 },
+{ title: '200', value: 200 }]
 
 const itemsOrder = ref(optionOrderNormal);
 const itemsGroup = ref([
-                        {title:'Agrupar por página',value:1}
-                      ]);
+  { title: 'Agrupar por página', value: 1 }
+]);
 
 
 onMounted(getCampaigns)
 
-function formatSecciones(data){
+function formatSecciones(data) {
   // Utilizar un conjunto (Set) para almacenar secciones únicas
   const seccionesUnicas = new Set();
 
@@ -86,14 +86,14 @@ function formatSecciones(data){
       return false;
     })
     .map(seccion => {
-      if(seccion.includes("-1")){
+      if (seccion.includes("-1")) {
         return { title: "Otros", value: seccion }
       }
       return { title: seccion, value: seccion }
-    }); 
+    });
 }
 
-function formatGroupSeccionesChart(data){
+function formatGroupSeccionesChart(data) {
   const resultadoAgrupado = data.data.reduce((acumulador, actual) => {
     const sectionActual = actual.section;
     const indexEnAcumulador = acumulador.findIndex(item => item.section === sectionActual);
@@ -123,38 +123,38 @@ function formatGroupSeccionesChart(data){
   return resultadoAgrupado;
 }
 
-function formatGroupSubSeccionesChart(data){
+function formatGroupSubSeccionesChart(data) {
   const resultadoAgrupadoSubSection = data.data.reduce((acumulador, actual) => {
-      const subSectionActual = actual.subsection;
-      const indexEnAcumulador = acumulador.findIndex(item => item.subsection === subSectionActual);
+    const subSectionActual = actual.subsection;
+    const indexEnAcumulador = acumulador.findIndex(item => item.subsection === subSectionActual);
 
-      if (indexEnAcumulador === -1) {
-        acumulador.push({
-          subsection: subSectionActual,
-          total: 1,
-          sumSeconds: actual.seconds,
-          porcentaje: 0, // Inicializamos el porcentaje en 0
-          promedio: 0, // Inicializamos el promedio en 0
-        });
-      } else {
-        acumulador[indexEnAcumulador].total += 1;
-        acumulador[indexEnAcumulador].sumSeconds += actual.seconds;
-      }
+    if (indexEnAcumulador === -1) {
+      acumulador.push({
+        subsection: subSectionActual,
+        total: 1,
+        sumSeconds: actual.seconds,
+        porcentaje: 0, // Inicializamos el porcentaje en 0
+        promedio: 0, // Inicializamos el promedio en 0
+      });
+    } else {
+      acumulador[indexEnAcumulador].total += 1;
+      acumulador[indexEnAcumulador].sumSeconds += actual.seconds;
+    }
 
-      return acumulador;
-    }, []).reduce((acumulador, reg) => {
-      if(reg.subsection){
-        const regTem = { 
-            porcentaje: reg.porcentaje, 
-            promedio: reg.promedio,
-            subsection: reg.subsection, 
-            sumSeconds: reg.sumSeconds, 
-            total: reg.total
-        };
+    return acumulador;
+  }, []).reduce((acumulador, reg) => {
+    if (reg.subsection) {
+      const regTem = {
+        porcentaje: reg.porcentaje,
+        promedio: reg.promedio,
+        subsection: reg.subsection,
+        sumSeconds: reg.sumSeconds,
+        total: reg.total
+      };
 
-        acumulador.push(regTem);
-      }
-      return acumulador;
+      acumulador.push(regTem);
+    }
+    return acumulador;
   }, []);
   // Calculamos el porcentaje para cada elemento
   const totalRegistrosSubSeccion = resultadoAgrupadoSubSection.reduce((accumulator, currentValue) => accumulator + currentValue.total, 0);
@@ -166,34 +166,34 @@ function formatGroupSubSeccionesChart(data){
 }
 
 // para definir una fecha especifica se la coloca dentro de moment así -- moment('2024-01-04').format('YYYY-MM-DD')
-async function getCampaigns(options = {}){
+async function getCampaigns(options = {}) {
   try {
-      const {tipo = "fecha", section="",fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')), limit = 2000} = options;
-      var response = await fetch(`https://servicio-permanencia.vercel.app/get/section/${fechai}/${fechaf}?section=${section}&limit=${limit}`);
-      const data = await response.json();
+    const { tipo = "fecha", section = "", fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')), limit = 2000 } = options;
+    var response = await fetch(`https://servicio-permanencia.vercel.app/get/section/${fechai}/${fechaf}?section=${section}&limit=${limit}`);
+    const data = await response.json();
 
-      data.data.forEach(elemento => {
-        elemento["date"] = moment(elemento.timestamp, "dd/mm/YYYY, HH:mm:ss").format("YYYY-MM-DD");
-      });
+    data.data.forEach(elemento => {
+      elemento["date"] = moment(elemento.timestamp, "dd/mm/YYYY, HH:mm:ss").format("YYYY-MM-DD");
+    });
 
-      dataRegistros.value = data.data;
-      dataRegistrosBackup.value = data.data;
+    dataRegistros.value = data.data;
+    dataRegistrosBackup.value = data.data;
 
-      // Filtrar secciones únicas y crear un nuevo arreglo
-      const secciones = formatSecciones(data);
+    // Filtrar secciones únicas y crear un nuevo arreglo
+    const secciones = formatSecciones(data);
 
-      groupSubSectionChartPieData.value = formatGroupSubSeccionesChart(data);
+    groupSubSectionChartPieData.value = formatGroupSubSeccionesChart(data);
 
-      groupSectionChartPieData.value = formatGroupSeccionesChart(data);
+    groupSectionChartPieData.value = formatGroupSeccionesChart(data);
 
 
-      if(tipo=="fecha"){
-        itemsSeccion.value = secciones;
-        selectSeccion.value = "";
-        selectOrder.value = "";
-      }
+    if (tipo == "fecha") {
+      itemsSeccion.value = secciones;
+      selectSeccion.value = "";
+      selectOrder.value = "";
+    }
   } catch (error) {
-      return console.error(error.message);    
+    return console.error(error.message);
   }
 }
 // Paginación de registros
@@ -210,25 +210,25 @@ function changePage(pageNumber) {
 }
 
 function calcularDiferencia(diferencia) {
-    // const inicio = horaInicio.split(':');
-    // const fin = horaFin.split(':');
-    // // Convertir horas y minutos a segundos
-    // const segundosInicio = parseInt(inicio[0]) * 3600 + parseInt(inicio[1]) * 60 + parseInt(inicio[2]);
-    // const segundosFin = parseInt(fin[0]) * 3600 + parseInt(fin[1]) * 60 + parseInt(fin[2]);
-    // // Calcular la diferencia en segundos
-    // let diferencia = segundosFin - segundosInicio;
-    // Si la diferencia es negativa, sumamos 24 horas (en segundos)
-    if (diferencia < 0) { diferencia += 24 * 3600; }
-    // Convertir la diferencia en segundos a horas, minutos y segundos
-    const horas = Math.floor(diferencia / 3600);
-    const minutos = Math.floor((diferencia % 3600) / 60);
-    const segundos = diferencia % 60;
-      return `${horas} horas, ${minutos} minutos y ${segundos} segundos`;
-  }
+  // const inicio = horaInicio.split(':');
+  // const fin = horaFin.split(':');
+  // // Convertir horas y minutos a segundos
+  // const segundosInicio = parseInt(inicio[0]) * 3600 + parseInt(inicio[1]) * 60 + parseInt(inicio[2]);
+  // const segundosFin = parseInt(fin[0]) * 3600 + parseInt(fin[1]) * 60 + parseInt(fin[2]);
+  // // Calcular la diferencia en segundos
+  // let diferencia = segundosFin - segundosInicio;
+  // Si la diferencia es negativa, sumamos 24 horas (en segundos)
+  if (diferencia < 0) { diferencia += 24 * 3600; }
+  // Convertir la diferencia en segundos a horas, minutos y segundos
+  const horas = Math.floor(diferencia / 3600);
+  const minutos = Math.floor((diferencia % 3600) / 60);
+  const segundos = diferencia % 60;
+  return `${horas} horas, ${minutos} minutos y ${segundos} segundos`;
+}
 
-const obtenerFechaDispositivos = async function(selectedDates, dateStr, instance){
+const obtenerFechaDispositivos = async function (selectedDates, dateStr, instance) {
   //var respJson = await nuevoArchivoJson(archivoJson);
-  if(selectedDates.length > 1){
+  if (selectedDates.length > 1) {
     console.log(selectedDates)
   }
 }
@@ -237,19 +237,19 @@ const obtenerFechaDispositivos = async function(selectedDates, dateStr, instance
 watch(async () => selectedfechaIniFin.value, async () => {
   let selectedCombo = useSelectValueCalendar(selectedfechaIniFin.value);
   fecha.value = {
-      i: selectedCombo.i,
-      f: selectedCombo.f,
-      title: selectedfechaIniFin.value
+    i: selectedCombo.i,
+    f: selectedCombo.f,
+    title: selectedfechaIniFin.value
   }
 
   limit.value = selectedCombo.limit;
 
   loadingData.value = true;
   await getCampaigns({
-    limit:10,
+    limit: 10,
     fechai: fecha.value.i.format("YYYY-MM-DD"),
     fechaf: fecha.value.f.format("YYYY-MM-DD"),
-    tipo:"fecha",
+    tipo: "fecha",
     limit: limit.value
   });
   loadingData.value = false;
@@ -271,9 +271,9 @@ watch(async () => selectSeccion.value, async () => {
     limit: 10,
     fechai: fecha.value.i.format("YYYY-MM-DD"),
     fechaf: fecha.value.f.format("YYYY-MM-DD"),
-    section:stringFinal,
+    section: stringFinal,
     limit: limit.value,
-    tipo:"section"
+    tipo: "section"
   });
   loadingData.value = false;
   selectGroup.value = null;
@@ -286,9 +286,9 @@ function comparador(opcion) {
     case 2:
       return (a, b) => b.user.first_name > a.user.first_name ? 1 : -1;
     case 3:
-      return (a, b) => new Date(a.timestamp.replace(/(\d{2})\/(\d{1,2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/,"$2/$1/$3 $4")) - new Date(b.timestamp.replace(/(\d{2})\/(\d{1,2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/,"$2/$1/$3 $4"));
+      return (a, b) => new Date(a.timestamp.replace(/(\d{2})\/(\d{1,2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/, "$2/$1/$3 $4")) - new Date(b.timestamp.replace(/(\d{2})\/(\d{1,2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/, "$2/$1/$3 $4"));
     case 4:
-      return (a, b) => new Date(b.timestamp.replace(/(\d{2})\/(\d{1,2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/,"$2/$1/$3 $4")) - new Date(a.timestamp.replace(/(\d{2})\/(\d{1,2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/,"$2/$1/$3 $4"));
+      return (a, b) => new Date(b.timestamp.replace(/(\d{2})\/(\d{1,2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/, "$2/$1/$3 $4")) - new Date(a.timestamp.replace(/(\d{2})\/(\d{1,2})\/(\d{4}), (\d{2}:\d{2}:\d{2})/, "$2/$1/$3 $4"));
     case 5:
       return (a, b) => a.seconds - b.seconds;
     case 6:
@@ -314,19 +314,19 @@ function comparador(opcion) {
 /*COMBO ORDENAR*/
 watch(async () => selectOrder.value, async () => {
   const datos = dataRegistros.value;
-  if(selectOrder.value){
+  if (selectOrder.value) {
     const seleccion = selectOrder.value.value;
     const opcionSeleccionada = seleccion; // Puedes cambiar esto según la opción seleccionada
 
-    
+
     const datosOrdenados = [...datos].sort(comparador(opcionSeleccionada));
     dataRegistros.value = datosOrdenados;
-  }else{
+  } else {
     selectGroup.value = null;
     const datosOrdenados = [...datos].sort(comparador(4));
     dataRegistros.value = datosOrdenados;
   }
-  
+
 });
 
 const countAndFilterData = (data) => {
@@ -350,7 +350,7 @@ function agrupador(opcion) {
     case 1:
       const resultadoAgrupadoPorTitle = datos.reduce((acumulador, actual) => {
         const indexEnAcumulador = acumulador.findIndex(item => item.title === actual.title);
-        
+
         // if(actual.title.includes("Los guías penitenciarios")){
         //   console.log(actual.seconds, actual)
         // }
@@ -382,7 +382,7 @@ function agrupador(opcion) {
     case 2:
       const resultadoAgrupadoPorSection = datos.reduce((acumulador, actual) => {
         const indexEnAcumulador = acumulador.findIndex(item => item.section === actual.section);
-        
+
         // if(actual.title.includes("Los guías penitenciarios")){
         //   console.log(actual.seconds, actual)
         // }
@@ -429,18 +429,18 @@ function agrupador(opcion) {
 
 watch(async () => selectGroup.value, async () => {
   const datos = selectGroup.value;
-  if(selectGroup.value){
+  if (selectGroup.value) {
     const seleccion = selectGroup.value.value;
     const opcionSeleccionada = seleccion; // Puedes cambiar esto según la opción seleccionada
     const datosOrdenados = agrupador(opcionSeleccionada);
     dataRegistros.value = datosOrdenados;
     itemsOrder.value = optionOrderGroup;
     // console.log(datosOrdenados)
-  }else{
+  } else {
     dataRegistros.value = dataRegistrosBackup.value;
     itemsOrder.value = optionOrderNormal;
   }
-  
+
 });
 
 // 👉 Colors variables
@@ -464,7 +464,7 @@ function formatearTiempo(valorSegundos) {
     return 'El valor no es un número válido.';
   }
 
-  if(valorSegundos < 0){
+  if (valorSegundos < 0) {
     console.log(valorSegundos)
     return 'El valor no es un número válido.';
   }
@@ -608,10 +608,10 @@ const resolveDevice = computed(() => {
       offsetX: 0,
       offsetY: 0,
       style: {
-          fontSize: '11px',
-          fontFamily: 'Helvetica, Arial, sans-serif',
-          fontWeight: 'bold',
-          colors: undefined
+        fontSize: '11px',
+        fontFamily: 'Helvetica, Arial, sans-serif',
+        fontWeight: 'bold',
+        colors: undefined
       },
       background: {
         enabled: true,
@@ -631,12 +631,12 @@ const resolveDevice = computed(() => {
         }
       },
       dropShadow: {
-          enabled: false,
-          top: 1,
-          left: 1,
-          blur: 1,
-          color: '#000',
-          opacity: 0.45
+        enabled: false,
+        top: 1,
+        left: 1,
+        blur: 1,
+        color: '#000',
+        opacity: 0.45
       }
     },
     legend: {
@@ -823,10 +823,10 @@ const resolveDeviceGroupSubSection = computed(() => {
       offsetX: 0,
       offsetY: 0,
       style: {
-          fontSize: '11px',
-          fontFamily: 'Helvetica, Arial, sans-serif',
-          fontWeight: 'bold',
-          colors: undefined
+        fontSize: '11px',
+        fontFamily: 'Helvetica, Arial, sans-serif',
+        fontWeight: 'bold',
+        colors: undefined
       },
       background: {
         enabled: true,
@@ -846,12 +846,12 @@ const resolveDeviceGroupSubSection = computed(() => {
         }
       },
       dropShadow: {
-          enabled: false,
-          top: 1,
-          left: 1,
-          blur: 1,
-          color: '#000',
-          opacity: 0.45
+        enabled: false,
+        top: 1,
+        left: 1,
+        blur: 1,
+        color: '#000',
+        opacity: 0.45
       }
     },
     legend: {
@@ -964,7 +964,7 @@ const resolveDeviceGroupSubSection = computed(() => {
 /*COMBO SELECT PERPAGE*/
 watch(async () => selectedOptionperPage.value, async () => {
   const datos = selectedOptionperPage.value;
-  if(selectedOptionperPage.value){
+  if (selectedOptionperPage.value) {
     const seleccion = selectedOptionperPage.value.value;
     perPage.value = seleccion;
   }
@@ -1010,7 +1010,7 @@ const resolveDeviceTimeLine = computed(() => {
       zoom: {
         enabled: false
       },
-      toolbar:{
+      toolbar: {
         show: false
       }
     },
@@ -1045,30 +1045,30 @@ const resolveDeviceTimeLine = computed(() => {
     fill: {
       type: 'gradient',
       gradient: {
-          shadeIntensity: 1,
-          inverseColors: false,
-          opacityFrom: 0.45,
-          opacityTo: 0.05,
-          stops: [20, 100, 100, 100]
-        },
+        shadeIntensity: 1,
+        inverseColors: false,
+        opacityFrom: 0.45,
+        opacityTo: 0.05,
+        stops: [20, 100, 100, 100]
+      },
     },
     yaxis: {
       labels: {
-          style: {
-              // colors: headingColor,
-            colors: headingColor,
-            useSeriesColors: false
-          },
-          offsetX: 0,
-          formatter: function(val) {
-            return (val).toFixed(2);
-          },
+        style: {
+          // colors: headingColor,
+          colors: headingColor,
+          useSeriesColors: false
+        },
+        offsetX: 0,
+        formatter: function (val) {
+          return (val).toFixed(2);
+        },
       },
       axisBorder: {
-          show: false,
+        show: false,
       },
       axisTicks: {
-          show: false
+        show: false
       }
     },
     xaxis: {
@@ -1077,15 +1077,15 @@ const resolveDeviceTimeLine = computed(() => {
       // min: new Date("01/01/2014").getTime(),
       // max: new Date("01/20/2014").getTime(),
       labels: {
-          style: {
-              // colors: headingColor,
-            colors: headingColor,
-            useSeriesColors: false
-          },
-          rotate: -15,
-          rotateAlways: true,
-          formatter: function(val, timestamp) {
-            return moment(new Date(timestamp)).format("DD MMM YYYY")
+        style: {
+          // colors: headingColor,
+          colors: headingColor,
+          useSeriesColors: false
+        },
+        rotate: -15,
+        rotateAlways: true,
+        formatter: function (val, timestamp) {
+          return moment(new Date(timestamp)).format("DD MMM YYYY")
         }
       }
     },
@@ -1103,72 +1103,74 @@ const resolveDeviceTimeLine = computed(() => {
     }
   }
 
-  return { series: [{
-          name: 'PRODUCT A',
-          data: [
-    
-    [
-        1389052800000,
-        500
-    ],
-    [
-        1389139200000,
-        61413854
-    ],
-    [
-        1389225600000,
-        82177211
-    ],
-    [
-        1389312000000,
-        103762210
-    ],
-    [
-        1389398400000,
-        84381072
-    ],
-    [
-        1389484800000,
-        400
-    ],
-    [
-        1389571200000,
-        65531790
-    ]
-]
-        }, {
-          name: 'PRODUCT B',
-          data: [
-    [
-        1388620800000,
-        50000000
-    ],
-    [
-        1388707200000,
-        60379978
-    ],
-    [
-        1388793600000,
-        40493749
-    ],
-    [
-        1388880000000,
-        60785250
-    ],
-    [
-        1388966400000,
-        67391904
-    ],
-    [
-        1389052800000,
-        61576838
-    ],
-    [
-        1389139200000,
-        61413854
-    ]
-]
-        }], options: options };
+  return {
+    series: [{
+      name: 'PRODUCT A',
+      data: [
+
+        [
+          1389052800000,
+          500
+        ],
+        [
+          1389139200000,
+          61413854
+        ],
+        [
+          1389225600000,
+          82177211
+        ],
+        [
+          1389312000000,
+          103762210
+        ],
+        [
+          1389398400000,
+          84381072
+        ],
+        [
+          1389484800000,
+          400
+        ],
+        [
+          1389571200000,
+          65531790
+        ]
+      ]
+    }, {
+      name: 'PRODUCT B',
+      data: [
+        [
+          1388620800000,
+          50000000
+        ],
+        [
+          1388707200000,
+          60379978
+        ],
+        [
+          1388793600000,
+          40493749
+        ],
+        [
+          1388880000000,
+          60785250
+        ],
+        [
+          1388966400000,
+          67391904
+        ],
+        [
+          1389052800000,
+          61576838
+        ],
+        [
+          1389139200000,
+          61413854
+        ]
+      ]
+    }], options: options
+  };
 });
 
 </script>
@@ -1176,10 +1178,10 @@ const resolveDeviceTimeLine = computed(() => {
 <template>
   <section>
     <VRow>
-      <VCol class="mt-0" cols="12" md="12" lg="12" >
-        <VTabs v-model="currentTab" class="v-tabs-pill d-none" >
-          <VTab value="tab-lista" class=" " >  Listado </VTab>
-          <VTab value="tab-agregar" class=" " > Estadísticas </VTab>
+      <VCol class="mt-0" cols="12" md="12" lg="12">
+        <VTabs v-model="currentTab" class="v-tabs-pill d-none">
+          <VTab value="tab-lista" class=" "> Listado </VTab>
+          <VTab value="tab-agregar" class=" "> Estadísticas </VTab>
         </VTabs>
 
         <VCard class="mt-5">
@@ -1189,20 +1191,22 @@ const resolveDeviceTimeLine = computed(() => {
                 <VCardItem class="header_card_item px-3">
                   <div class="d-flex">
                     <div class="descripcion">
-                      <VCardTitle class="pb-2">Permanencia de usuarios, {{fecha.title}}</VCardTitle>
-                      <VCardSubtitle>*Muestra el tiempo que ha permanecido un usuario registrado en las páginas de ecuavisa.com.</VCardSubtitle>
-                      <VCardSubtitle>*Mostrando data desde, {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
-                      <VCardSubtitle>*Este informe se basa en una muestra de {{limit}} registros</VCardSubtitle>
+                      <VCardTitle class="pb-2">Permanencia de usuarios, {{ fecha.title }}</VCardTitle>
+                      <VCardSubtitle>*Muestra el tiempo que ha permanecido un usuario registrado en las páginas de
+                        ecuavisa.com.</VCardSubtitle>
+                      <VCardSubtitle>*Mostrando data desde, {{ fecha.i.format('YYYY-MM-DD') }} hasta
+                        {{ fecha.f.format('YYYY-MM-DD') }}</VCardSubtitle>
+                      <VCardSubtitle>*Este informe se basa en una muestra de {{ limit }} registros</VCardSubtitle>
                     </div>
                   </div>
                   <VDivider class="my-5" />
                   <template #append>
-                    
+
                   </template>
-                  <div class="bg-ecuavisa py-4 d-flex gap-4">
+                  <div class="bg-ecuavisa py-4 d-flex gap-4 flex-wrap">
                     <div class="date-picker-wrappe" style="width: 190px;">
-                      <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
-                        hide-selected hint="" />
+                      <VCombobox :disabled="loadingData" v-model="selectedfechaIniFin" :items="fechaIniFinList"
+                        variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
 
                       <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngesada"
                         show-current=true @on-change="obtenerFechaDispositivos" style="display: none;" :config="{
@@ -1217,67 +1221,212 @@ const resolveDeviceTimeLine = computed(() => {
                     </div>
 
                     <div style="min-width: 230px;width: auto;">
-                      <VCombobox clearable multiple density="compact" :disabled="loadingData" v-model="selectSeccion" :items="itemsSeccion" variant="outlined" label="Seleccionar secciones" persistent-hint
+                      <VCombobox clearable multiple density="compact" :disabled="loadingData" v-model="selectSeccion"
+                        :items="itemsSeccion" variant="outlined" label="Seleccionar secciones" persistent-hint
                         hide-selected hint="" />
                     </div>
 
                     <div style="min-width: 230px;width: auto;">
-                      <VCombobox clearable density="compact" :disabled="loadingData" v-model="selectOrder" :items="itemsOrder" variant="outlined" label="Ordenar registros" persistent-hint
-                        hide-selected hint="" />
+                      <VCombobox clearable density="compact" :disabled="loadingData" v-model="selectOrder"
+                        :items="itemsOrder" variant="outlined" label="Ordenar registros" persistent-hint hide-selected
+                        hint="" />
                     </div>
 
                     <div style="min-width: 230px;width: auto;">
-                      <VCombobox clearable density="compact" :disabled="loadingData" v-model="selectGroup" :items="itemsGroup" variant="outlined" label="Agrupar registros" persistent-hint
-                        hide-selected hint="" />
+                      <VCombobox clearable density="compact" :disabled="loadingData" v-model="selectGroup"
+                        :items="itemsGroup" variant="outlined" label="Agrupar registros" persistent-hint hide-selected
+                        hint="" />
                     </div>
-                    
+
                   </div>
                 </VCardItem>
-                <div class="d-flex flex-wrap py-0 gap-4 align-items-center" style="justify-content: space-between;;" >
+                <div class="d-flex flex-wrap py-0 gap-4 align-items-center" style="justify-content: space-between;;">
                   <div style="display: none">
                     <VCardTitle>
                       Permanencia de usuarios del día de hoy
                     </VCardTitle>
-                    <VCardSubtitle>Muestra el tiempo que ha permanecido un usuario registrado en las páginas de ecuavisa.com  </VCardSubtitle>
+                    <VCardSubtitle>Muestra el tiempo que ha permanecido un usuario registrado en las páginas de
+                      ecuavisa.com </VCardSubtitle>
                   </div>
                 </div>
                 <!-- inicio lista de Módulos -->
-                
+
                 <div class="px-4">
                   <!-- preloader -->
-                  <VList lines="two" border v-if="dataRegistros.length < 1">
-                    <VListItem>
-                      <VListItemTitle> <div class="loading">Cargando información</div> </VListItemTitle>
-                    </VListItem>
-                  </VList>
+
                   <VRow>
-                    <VCol cols="12" sm="4" class="">
-                      <VTabs
-                        v-model="currentTabSectionSubSection"
-                        class="v-tabs-pill"
-                      >
+                    <VCol cols="12" sm="12" class="">
+                      <VTabs v-model="currentTabSectionSubSection" class="v-tabs-pill">
                         <VTab>
-                          <VIcon
-                            start
-                            icon="mdi-chart-pie"
-                          /> Sección
+                          <VIcon start icon="mdi-format-list-bulleted" /> Lista
                         </VTab>
                         <VTab>
-                          <VIcon
-                            start
-                            icon="mdi-chart-scatterplot-hexbin"
-                          /> SubSección
+                          <VIcon start icon="mdi-chart-scatterplot-hexbin" /> Estadisticas
                         </VTab>
                       </VTabs>
                       <br>
                       <VWindow v-model="currentTabSectionSubSection">
                         <VWindowItem>
-                          <VCard class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
+                          <VList lines="two" border v-if="dataRegistros.length < 1">
+                            <VListItem>
+                              <VListItemTitle>
+                                <div class="loading">Cargando información</div>
+                              </VListItemTitle>
+                            </VListItem>
+                          </VList>
+                          <VCol cols="12" sm="12" class="">
+                            <div class="item-limit">
+                              <label>Mostrar</label>
+                              <VSelect style="min-width: 90px;" v-model="selectedOptionperPage" :items="itemsPage"
+                                item-title="title" item-value="value" label="" persistent-hint return-object
+                                single-line />
+                              <label>registros</label>
+                            </div>
+                            <div v-if="selectGroup">
+                              <!-- SECTION Table -->
+                              <VTable class="text-no-wrap invoice-list-table">
+                                <!-- 👉 Table head -->
+                                <thead class="text-uppercase">
+                                  <tr>
+
+                                    <th scope="col">
+                                      Página
+                                    </th>
+
+
+                                    <th scope="col">
+                                      Sección
+                                    </th>
+
+                                    <th scope="col" class="text-center">
+                                      Tiempo promedio
+                                    </th>
+
+                                    <th scope="col" class="text-center">
+                                      Visitas
+                                    </th>
+
+                                    <th scope="col">
+                                      Acción
+                                    </th>
+                                  </tr>
+                                </thead>
+
+                                <!-- 👉 Table Body -->
+                                <tbody>
+                                  <tr v-for="(c, index) in paginatedData" :key="index" style="height: 3.75rem;">
+                                    <!-- 👉 Page name -->
+                                    <td style="min-width: 17rem;max-width: 17rem;">
+                                      <VCardTitle :title="c.title" style="font-size: 18px;">
+                                        <small>{{ c.title }}</small>
+                                      </VCardTitle>
+
+                                    </td>
+
+                                    <!-- 👉 Section -->
+                                    <td>
+                                      {{ c.section }}
+                                    </td>
+
+                                    <!-- 👉 Promedio -->
+                                    <td class="text-center">
+                                      <VChip label v-bind="{
+                                        status: 'Paid',
+                                        chip: { color: 'success' },
+                                      }" size="small">
+                                        {{ formatearTiempo(parseInt(c.promedio)) }}
+                                      </VChip>
+                                    </td>
+                                    <td class="text-center">
+                                      <VChip label v-bind="{
+                                        status: 'Paid',
+                                        chip: { color: 'success' },
+                                      }" size="small">
+                                        {{ c.total }} visitas
+                                      </VChip>
+                                    </td>
+
+                                    <!-- 👉 Actions -->
+                                    <td class="text-center" style="width: 5rem;">
+                                      <VBtn icon size="x-small" color="info" variant="text" :href="c.url" target="_blank">
+                                        <VIcon size="22" icon="tabler-eye" />
+                                      </VBtn>
+                                    </td>
+                                  </tr>
+                                </tbody>
+
+                                <!-- 👉 table footer  -->
+                                <tfoot v-show="!paginatedData.length">
+                                  <tr>
+                                    <td colspan="8" class="text-center text-body-1">
+                                      No data available
+                                    </td>
+                                  </tr>
+                                </tfoot>
+                              </VTable>
+                              <!-- !SECTION -->
+                            </div>
+                            <div v-else>
+                              <!-- listado de datos -->
+                              <VList lines="two" border v-if="dataRegistros.length > 0">
+                                <template v-for="(c, index) in paginatedData" :key="index">
+                                  <VListItem :disabled="disabledViewList">
+                                    <VListItemTitle> {{ c.user.first_name || "Not Found" }} {{ c.user.last_name || "" }}
+                                      <VChip> estuvo {{ calcularDiferencia(c.seconds) }} </VChip>
+                                    </VListItemTitle>
+                                    <VListItemSubtitle class="mt-1" title="Estado de campaña">
+                                      <span class="text-xs text-primary pl-2">
+                                        <VIcon icon="mdi-web" />: {{ c.title }}
+                                      </span>
+                                    </VListItemSubtitle>
+
+                                    <template #append>
+                                      <div class="espacio-right-2">
+                                        <VBtn icon size="x-small" color="info" variant="text" :href="c.url"
+                                          target="_blank">
+                                          <VIcon size="22" icon="tabler-eye" />
+                                        </VBtn>
+                                      </div>
+                                    </template>
+                                  </VListItem>
+                                  <VDivider v-if="index !== dataRegistros.length - 1" />
+                                </template>
+                              </VList>
+                            </div>
+
+                            <!-- Paginación -->
+                            <VPagination class="mt-5" v-model="currentPage" :length="totalPages" :total-visible="7" />
+                          </VCol>
+
+                          <VCol cols="12" sm="12" class="" style="display: none;">
+                            <VCard
+                              class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
+                              <VCardItem class="header_card_item pb-0">
+                                <div class="d-flex pr-0" style="justify-content: space-between;">
+                                  <div class="descripcion">
+                                    <VCardTitle>Tiempo de permanencia <br>por subsección<br></VCardTitle>
+                                    <small class="mt-3">Este informe se basa en una muestra de {{ limit }}
+                                      registros</small>
+                                  </div>
+                                  <!-- <div class="">
+                              <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
+                            </div> -->
+
+                                </div>
+                              </VCardItem>
+                              <VueApexCharts :options="resolveDeviceTimeLine.options"
+                                :series="resolveDeviceTimeLine.series" :height="475" width="100%" />
+                            </VCard>
+                          </VCol>
+                        </VWindowItem>
+                        <VWindowItem>
+                          <VCard
+                            class="px-0 py-0 pb-4 v-card--flat mb-4 v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
                             <VCardItem class="header_card_item pb-0">
                               <div class="d-flex pr-0" style="justify-content: space-between;">
                                 <div class="descripcion">
                                   <VCardTitle>Tiempo de permanencia<br> por sección</VCardTitle>
-                                  <small class="mt-3">Este informe se basa en una muestra de {{limit}} registros</small>
+                                  <small class="mt-3">Este informe se basa en una muestra de {{ limit }} registros</small>
                                 </div>
                                 <!-- <div class="">
                                   <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
@@ -1285,16 +1434,16 @@ const resolveDeviceTimeLine = computed(() => {
 
                               </div>
                             </VCardItem>
-                            <VueApexCharts :options="resolveDevice.options" :series="resolveDevice.series" :height="475" width="100%" />
+                            <VueApexCharts :options="resolveDevice.options" :series="resolveDevice.series" :height="475"
+                              width="100%" />
                           </VCard>
-                        </VWindowItem>
-                        <VWindowItem>
-                          <VCard class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
+                          <VCard
+                            class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
                             <VCardItem class="header_card_item pb-0">
                               <div class="d-flex pr-0" style="justify-content: space-between;">
                                 <div class="descripcion">
                                   <VCardTitle>Tiempo de permanencia <br>por subsección<br></VCardTitle>
-                                  <small class="mt-3">Este informe se basa en una muestra de {{limit}} registros</small>
+                                  <small class="mt-3">Este informe se basa en una muestra de {{ limit }} registros</small>
                                 </div>
                                 <!-- <div class="">
                                   <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
@@ -1302,180 +1451,19 @@ const resolveDeviceTimeLine = computed(() => {
 
                               </div>
                             </VCardItem>
-                            <VueApexCharts :options="resolveDeviceGroupSubSection.options" :series="resolveDeviceGroupSubSection.series" :height="475" width="100%" />
+                            <VueApexCharts :options="resolveDeviceGroupSubSection.options"
+                              :series="resolveDeviceGroupSubSection.series" :height="475" width="100%" />
                           </VCard>
                         </VWindowItem>
                       </VWindow>
-                      
-                    </VCol>
-                    <VCol cols="12" sm="8" class="">
-                      <div class="item-limit">
-                        <label>Mostrar</label>
-                        <VSelect style="min-width: 90px;"
-                          v-model="selectedOptionperPage"
-                          :items="itemsPage"
-                          item-title="title"
-                          item-value="value"
-                          label=""
-                          persistent-hint
-                          return-object
-                          single-line
-                        />
-                        <label>registros</label>
-                      </div>
-                      <div  v-if="selectGroup">
-                        <!-- SECTION Table -->
-                        <VTable class="text-no-wrap invoice-list-table">
-                          <!-- 👉 Table head -->
-                          <thead class="text-uppercase">
-                            <tr>
 
-                              <th scope="col">
-                                Página
-                              </th>
-
-
-                              <th scope="col">
-                                Sección
-                              </th>
-
-                              <th
-                                scope="col"
-                                class="text-center"
-                              >
-                                Tiempo promedio
-                              </th>
-
-                              <th
-                                scope="col"
-                                class="text-center"
-                              >
-                                Visitas
-                              </th>
-
-                              <th scope="col">
-                                Acción
-                              </th>
-                            </tr>
-                          </thead>
-
-                          <!-- 👉 Table Body -->
-                          <tbody>
-                            <tr
-                              v-for="(c, index) in paginatedData" :key="index"
-                              style="height: 3.75rem;"
-                            >
-                              <!-- 👉 Page name -->
-                              <td style="min-width: 17rem;max-width: 17rem;">
-                                <VCardTitle :title="c.title" style="font-size: 18px;">
-                                  <small>{{ c.title }}</small>
-                                </VCardTitle>
-                                
-                              </td>
-
-                              <!-- 👉 Section -->
-                              <td>
-                                {{c.section}}
-                              </td>
-
-                              <!-- 👉 Promedio -->
-                              <td class="text-center">
-                                <VChip
-                                  label
-                                  v-bind="{
-                                    status: 'Paid',
-                                    chip: { color: 'success' },
-                                  }"
-                                  size="small"
-                                >
-                                  {{ formatearTiempo(parseInt(c.promedio)) }}
-                                </VChip>
-                              </td>
-                              <td class="text-center">
-                                <VChip
-                                  label
-                                  v-bind="{
-                                    status: 'Paid',
-                                    chip: { color: 'success' },
-                                  }"
-                                  size="small"
-                                >
-                                  {{c.total}} visitas
-                                </VChip>
-                              </td>
-
-                              <!-- 👉 Actions -->
-                              <td class="text-center" style="width: 5rem;">
-                                <VBtn icon size="x-small" color="info" variant="text" :href="c.url" target="_blank" >
-                                  <VIcon size="22" icon="tabler-eye" /> 
-                                </VBtn>
-                              </td>
-                            </tr>
-                          </tbody>
-
-                          <!-- 👉 table footer  -->
-                          <tfoot v-show="!paginatedData.length">
-                            <tr>
-                              <td
-                                colspan="8"
-                                class="text-center text-body-1"
-                              >
-                                No data available
-                              </td>
-                            </tr>
-                          </tfoot>
-                        </VTable>
-                        <!-- !SECTION -->
-                      </div>
-                      <div v-else>
-                        <!-- listado de datos -->
-                        <VList lines="two" border  v-if="dataRegistros.length > 0">
-                          <template v-for="(c, index) in paginatedData" :key="index" >
-                            <VListItem :disabled="disabledViewList">
-                              <VListItemTitle> {{ c.user.first_name || "Not Found" }} {{ c.user.last_name || "" }} <VChip> estuvo {{ calcularDiferencia(c.seconds) }}  </VChip> </VListItemTitle>
-                              <VListItemSubtitle class="mt-1" title="Estado de campaña">
-                                <span class="text-xs text-primary pl-2"> <VIcon icon="mdi-web" />: {{ c.title }} </span>
-                              </VListItemSubtitle>
-
-                              <template #append>
-                                <div class="espacio-right-2">
-                                  <VBtn icon size="x-small" color="info" variant="text" :href="c.url" target="_blank" >
-                                    <VIcon size="22" icon="tabler-eye" /> 
-                                  </VBtn>
-                                </div>
-                              </template>
-                            </VListItem>
-                            <VDivider v-if="index !== dataRegistros.length - 1" />
-                          </template>
-                        </VList>
-                      </div>
-                      
-                      <!-- Paginación -->
-                      <VPagination class="mt-5" v-model="currentPage" :length="totalPages" :total-visible="7" />
                     </VCol>
 
-                    <VCol cols="12" sm="12" class="" style="display: none;">
-                      <VCard class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
-                        <VCardItem class="header_card_item pb-0">
-                          <div class="d-flex pr-0" style="justify-content: space-between;">
-                            <div class="descripcion">
-                              <VCardTitle>Tiempo de permanencia <br>por subsección<br></VCardTitle>
-                              <small class="mt-3">Este informe se basa en una muestra de {{limit}} registros</small>
-                            </div>
-                            <!-- <div class="">
-                              <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
-                            </div> -->
-
-                          </div>
-                        </VCardItem>
-                        <VueApexCharts :options="resolveDeviceTimeLine.options" :series="resolveDeviceTimeLine.series" :height="475" width="100%" />
-                      </VCard>
-                    </VCol>
                   </VRow>
-                  
+
                 </div>
                 <!-- fin lista usuarios -->
-                
+
               </VWindowItem>
             </VWindow>
           </VCardText>
@@ -1488,21 +1476,24 @@ const resolveDeviceTimeLine = computed(() => {
 
 
 <style>
-  .apexcharts-legend-series{
-    transition: 1s ease all;
-    padding: 5px;
-    border-radius: 7px;
-  }
-  .apexcharts-legend-series:hover{
-    background-color: #e9e9ea;
-  }
+.apexcharts-legend-series {
+  transition: 1s ease all;
+  padding: 5px;
+  border-radius: 7px;
+}
 
-  .item-limit{
-    max-width: 210px;
-    display: flex;
-    font-size: 15px;
-    align-items: center;
-    gap: 5px;
-    margin-bottom: 10px;
-  }
+
+
+.apexcharts-legend-series:hover {
+  background-color: #8c8c8c3b;
+}
+
+.item-limit {
+  max-width: 210px;
+  display: flex;
+  font-size: 15px;
+  align-items: center;
+  gap: 5px;
+  margin-bottom: 10px;
+}
 </style>
