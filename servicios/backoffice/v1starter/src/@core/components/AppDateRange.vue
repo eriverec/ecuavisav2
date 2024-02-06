@@ -9,8 +9,8 @@
     const vuetifyTheme = useTheme()
     const fechaText = ref("")
     const vuetifyThemesName = Object.keys(vuetifyTheme.themes.value);
-
     const moment = extendMoment(Moment);
+    const isSnackbarVisible = ref(false);
     // moment.locale('es', [esLocale]);
 
     moment.lang('es', {
@@ -89,16 +89,19 @@
         // })
     }
 
+    
+    
     const isValidDaysLimit = (json = {}) => {
-        const {fechai = null, fechaf} = json;
-        var fi = moment(fechai);
-        var ff = moment(fechaf);
+      const {fechai = null, fechaf} = json;
+      var fi = moment(fechai);
+      var ff = moment(fechaf);
         if(ff.diff(fi, 'days') > 15){
             if (datepicker) {
                 // Close the menu programmatically
                 datepicker.value.clearValue()
             }
-            alert("No puede sobrepasar el límite de 15 días");
+            // alert("No puede sobrepasar el límite de 15 días");
+            isSnackbarVisible.value = true;
             return false;
         }
         return true;
@@ -264,6 +267,9 @@
 
 </script>
 <template>
+  <VSnackbar v-model="isSnackbarVisible" :timeout="5000" location="top" variant="flat" color="warning">
+    No puede sobrepasar el límite de 15 días
+  </VSnackbar>
     <VDialog v-model="isDialogDateRange" class="dialog-calendar" persistent max-width="750">
         <!-- Dialog Activator -->
         <template #activator="{ props }">
