@@ -18,7 +18,7 @@
 .estilo-principal .multimedia img,
 .estilo-principal-desktop .multimedia img {
 
-  -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%) !important;
+/*  -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%) !important;*/
 }
 
 .portada-estilo .multimediaIconMacroWrapper {
@@ -27,11 +27,11 @@
 
 }
 .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
-  height: 582px !important;
+  height: 600px !important;
   object-fit: cover;
 }
 .portada-estilo .noticias .article .multimedia .multimediaIconMacroWrapper a div {
-  height: 582px !important;
+  height: 600px !important;
   object-fit: cover;
   margin-top: -1px;
 }
@@ -58,7 +58,7 @@
 .portada-estilo .article-section a {
   font-family: 'Mattone 150';
   font-weight: 600;
-  color: #23DCD1;
+  color: #2927B9;
   text-transform: uppercase;
   font-size: 16px;
   line-height: 17px;
@@ -73,7 +73,7 @@
 }
 .portada-estilo .media_block {
   position: relative;
-  background: #060127;
+/*  background: #060127;*/
 }
 .estilo-principal .headline h2 {
   color: white;
@@ -84,7 +84,7 @@
   font-weight: 600;
 }
 .portada-estilo .text_block {
-  position: absolute;
+/*  position: absolute;*/
   bottom: 0;
   left: 0;
   right: 0;
@@ -92,7 +92,7 @@
   width: 100%;
 }
 .portada-estilo-mobile .headline h2 {
-  color: white;
+  color: #000;
   font-family: 'Archivo';
   font-style: normal;
   font-weight: 700;
@@ -104,10 +104,10 @@
   font-family: 'Archivo';
   font-size: 16px;
   font-style: normal;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 26px;
-  max-width: 600px;
-  color: #d5d5d5;
+/*  max-width: 600px;*/
+  color: #000;
 }
 
 .portada-estilo-mobile .date {
@@ -206,7 +206,7 @@
 }
 
 .portada-estilo .text_block {
-  margin-top: -1px;
+  margin-top: 15px;
 }
 .note-pierdas .multimedia .cutlineShow>div {
   padding-top: 0px !important;
@@ -908,9 +908,9 @@ h2.temas_estilo {
   color: #1fc0bb;
   font-weight: 100;
 }
-.port3 .article-section a {
+/*.port3 .article-section a {
   display: none;
-}
+}*/
 .port3 .text {
   font-family: 'Archivo';
   font-weight: 300;
@@ -1033,9 +1033,9 @@ img.sepDesk {
   height: auto;
 }
 
-.port3 {
+/*.port3 {
   border-top: 16px solid #2927B9;
-}
+}*/
 .mas_temas_2_desktop .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -1049,6 +1049,7 @@ img.sepDesk {
 }
 .notas-estilo-mobile {
   margin-bottom: 40px;
+  margin-top: 30px;
 }
 
 .sec-titulo.notas-estilo-mobile .noticias .article .media_block{
