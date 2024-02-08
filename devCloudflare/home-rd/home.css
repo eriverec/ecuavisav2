@@ -117,6 +117,15 @@
 }
 
 /**Inicio estadio portada**/
+
+.bloque_estadio_1 .headline a h2, .bloque_estadio_1 .headline a {
+    color: #ffffff;
+    font-family: 'Archivo';
+    font-style: normal;
+    line-height: 1.2;
+    font-weight: 700;
+}
+
 .bloque_estadio_1 .rd-h3 {
     color: #FFFFFF;
     font-size: 14px;
@@ -124,6 +133,7 @@
     line-height: 1.5;
     display: block;
 }
+
 /**Fin estadio portada**/
 
 .div__hide {
