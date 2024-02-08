@@ -116,6 +116,12 @@
   margin-bottom: 0.5rem;
 }
 
+/**Inicio estadio portada**/
+.bloque_estadio_1 .rd-h3 {
+    color: white;
+}
+/**Fin estadio portada**/
+
 .div__hide {
   display: none !important;
 }
@@ -1023,8 +1029,6 @@ Cambio de tamaño de imagen grande izq
   }
 
   /**Fin seccion informativos*/
-
-
   .HOME_MENU_RD .notas-1-p-ap .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
     height: 100% !important;
   }
