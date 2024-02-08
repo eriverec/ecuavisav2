@@ -19,6 +19,7 @@ const urlsCifras = [
 ];
 
 const currentUrl = window.location.pathname;
+const dhd = "";
 
 for (const urlObj of urlsCifras) {
   if (currentUrl === urlObj.mainUrl) {
