@@ -2433,7 +2433,11 @@ INICIO - BLOQUE - MUNDO
 }
 
 .HOME_MENU_RD .cintillo-rd-estadio {
-  margin: 30px 0;
+  margin: 20px 0;
+}
+
+.HOME_MENU_RD .line_estadio img {
+  height: auto;
 }
 
 .HOME_MENU_RD .cintillo-rd-estadio img {
