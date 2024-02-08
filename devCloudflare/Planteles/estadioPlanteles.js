@@ -5,7 +5,7 @@ const urlsCifras = [
     subUrl: {
       name: "Barcelona",
       agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/sudamericana/pages/es/agenda.html",
-      iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.sudamericana&lang=es_LA&page=posiciones",
+      planteles: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.sudamericana&lang=es_LA&page=posiciones",
     },
   },
   {
@@ -13,7 +13,7 @@ const urlsCifras = [
     subUrl: {
       name: "Calendario",
       agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/sudamericana/pages/es/agenda.html",
-      iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.sudamericana&lang=es_LA&page=fixture",
+      planteles: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.sudamericana&lang=es_LA&page=fixture",
     },
   }
 ];
