@@ -35,7 +35,15 @@ const fecha = ref({
   title: "hoy"
 });
 
+const fechaGraficos_2 = ref({
+  i: valoresHoy.i,
+  f: valoresHoy.f,
+  title: "hoy"
+});
+
 const selectedfechaIniFin = ref('Hoy');
+const selectComboTotales = ref('Ayer');
+
 const fechaIniFinList = useSelectCalendar();
 const limit = ref(valoresHoy.limit);
 const currentTabSectionSubSection = ref(0)
@@ -81,7 +89,24 @@ const itemsGroup = ref([
 
 
 onMounted(getCampaigns)
-onMounted(getChartLineTimeViews)
+
+onMounted(async () =>{
+  let selectedCombo = useSelectValueCalendar("Ayer");
+  fechaGraficos_2.value = {
+    i: selectedCombo.i,
+    f: selectedCombo.f,
+    title: selectComboTotales.value
+  }
+
+  loadingData.value = true;
+
+  await getChartLineTimeViews({
+    fechai: fechaGraficos_2.value.i.format("YYYY-MM-DD"),
+    fechaf: fechaGraficos_2.value.f.format("YYYY-MM-DD")
+  });
+
+  loadingData.value = false;
+})
 
 function formatSecciones(data) {
   // Utilizar un conjunto (Set) para almacenar secciones únicas
@@ -265,14 +290,6 @@ watch(async () => selectedfechaIniFin.value, async () => {
     limit: limit.value
   });
 
-  await getChartLineTimeViews({
-    limit: 10,
-    fechai: fecha.value.i.format("YYYY-MM-DD"),
-    fechaf: fecha.value.f.format("YYYY-MM-DD"),
-    tipo: "fecha",
-    limit: limit.value
-  });
-
   loadingData.value = false;
   selectGroup.value = null
 
@@ -298,6 +315,29 @@ watch(async () => selectSeccion.value, async () => {
   });
   loadingData.value = false;
   selectGroup.value = null;
+});
+
+watch(async () => selectComboTotales.value, async () => {
+  let selectedCombo = useSelectValueCalendar(selectComboTotales.value);
+  fechaGraficos_2.value = {
+    i: selectedCombo.i,
+    f: selectedCombo.f,
+    title: selectComboTotales.value
+  }
+
+  limit.value = selectedCombo.limit;
+
+  loadingData.value = true;
+
+  await getChartLineTimeViews({
+    fechai: fechaGraficos_2.value.i.format("YYYY-MM-DD"),
+    fechaf: fechaGraficos_2.value.f.format("YYYY-MM-DD"),
+  });
+
+  loadingData.value = false;
+  selectGroup.value = null
+
+  // itemsSeccion.value = [{title:"sds",value:"wddw"}]
 });
 
 function comparador(opcion) {
@@ -1176,6 +1216,364 @@ const resolveDeviceTimeLine = computed(() => {
   };
 });
 
+const resolveDeviceTimeLinePromedioSection = computed(() => {
+
+  const currentTheme = vuetifyTheme.current.value.colors
+  const variableTheme = vuetifyTheme.current.value.variables
+  const labelSuccessColor = `rgba(${hexToRgb(currentTheme.success)},0.2)`
+  const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
+
+  const chartColors = {
+    donut: {
+      series1: currentTheme.success,
+      series2: '#28c76fb3',
+      series3: '#28c76f80',
+      series4: labelSuccessColor,
+    },
+  }
+
+  let dataRaw = Array.from(dataRegistrosChartViews.value);
+
+  const transformedData = {};
+  dataRaw.forEach(item => {
+      item.data.forEach(subitem => {
+          if (!transformedData[subitem.section]) {
+              transformedData[subitem.section] = {
+                  name: subitem.section,
+                  data: []
+              };
+          }
+          transformedData[subitem.section].data.push([
+              moment(item.fecha).add(1, 'days').valueOf(),
+              parseFloat((subitem.promedioSegundos / 60).toFixed(2))
+          ]);
+      });
+  });
+
+  const result = Object.values(transformedData);
+  // console.log(result)
+
+  // console.log(agrupador(2))
+  // const seriesFormat = {
+  //   name: 'Device',
+  //   data: []
+  // };
+
+  // const categoriesRaw = [];
+  // for (let i in dataRaw) {
+  //   let num = parseFloat(dataRaw[i].porcentaje);
+  //   seriesFormat.data.push(num);
+  //   categoriesRaw.push(dataRaw[i].subsection);
+  // }
+
+  const options = {
+    chart: {
+      parentHeightOffset: 0,
+      type: 'area',
+      stacked: false,
+      height: 350,
+      zoom: {
+        enabled: false
+      },
+      toolbar: {
+        show: false
+      }
+    },
+    // labels: categoriesRaw,
+    dataLabels: {
+      enabled: true,
+      formatter: function (value, { seriesIndex, dataPointIndex, w }) {
+        // // Obtén el valor de la barra actual
+        // const barValue = w.config.series[seriesIndex];
+        return `${value} min`;
+
+        // // Define el umbral para mostrar el dataLabel (ajusta según tus necesidades)
+        // const umbral = 5; // Por ejemplo, mostrar solo si el valor es mayor al 5%
+
+        // // Mostrar el valor solo si supera el umbral
+        // return barValue > umbral ? `${barValue}%` : '';
+      }
+    },
+    colors: [
+      "#173F5F",
+      "#00fa9a", // Verde medio
+      "#7365ed",
+      "#ff69b4", // Rosa claro
+      "#000f08",
+      "#32cd32", // Verde esmeralda
+      "#136f63", // Naranja claro
+      "#ffd700", // Amarillo
+      "#ff4500", // Rojo oscuro
+      "#ff0000", // Rojo
+      "#ff8c00", // Naranja oscuro
+      "#ffff00", // Amarillo
+      "#8b4513", // Marrón
+      "#0000ff", // Azul
+      "#8a2be2", // Azul violeta
+      "#ffa500", // Naranja
+      "#ffd800", // Amarillo intenso
+      "#ff1493", // Rosa brillante
+      "#9932cc", // Púrpura
+      "#ff8c00", // Naranja oscuro
+      "#8b008b", // Magenta oscuro
+      "#8a2be2", // Azul violeta
+    ],
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shadeIntensity: 1,
+        inverseColors: false,
+        opacityFrom: 0.45,
+        opacityTo: 0.05,
+        stops: [20, 100, 100, 100]
+      },
+    },
+    yaxis: {
+      title: {
+        text: 'Tiempo promedio en minutos',
+        style: {
+          color: headingColor,
+          useSeriesColors: false
+        }
+      },
+      labels: {
+        style: {
+          // colors: headingColor,
+          colors: headingColor,
+          useSeriesColors: false
+        },
+        offsetX: 0,
+        formatter: function (val) {
+          return `${(val).toFixed(2)} min`;
+        },
+      },
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false
+      }
+    },
+    xaxis: {
+      type: 'datetime',
+      tickAmount: dataRaw.length - 1,
+      // min: new Date("01/01/2014").getTime(),
+      // max: new Date("01/07/2014").getTime(),
+      labels: {
+        style: {
+          // colors: headingColor,
+          colors: headingColor,
+          useSeriesColors: false
+        },
+        rotate: -15,
+        rotateAlways: true,
+        formatter: function (val, timestamp) {
+          const fechaTimeZone = convertirTimestamp(timestamp).format("DD MMM YYYY");
+          // console.log(fechaTimeZone, timestamp)
+          return fechaTimeZone;
+        }
+      }
+    },
+    tooltip: {
+      shared: true
+    },
+    legend: {
+      labels: {
+        colors: headingColor,
+        useSeriesColors: false
+      },
+      position: 'top',
+      horizontalAlign: 'right',
+      offsetX: -10
+    }
+  }
+
+  return {
+    series: result, options: options
+  };
+});
+
+const resolveDeviceTimeLineTotales = computed(() => {
+
+  const currentTheme = vuetifyTheme.current.value.colors
+  const variableTheme = vuetifyTheme.current.value.variables
+  const labelSuccessColor = `rgba(${hexToRgb(currentTheme.success)},0.2)`
+  const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
+
+  const chartColors = {
+    donut: {
+      series1: currentTheme.success,
+      series2: '#28c76fb3',
+      series3: '#28c76f80',
+      series4: labelSuccessColor,
+    },
+  }
+
+  let dataRaw = Array.from(dataRegistrosChartViews.value);
+
+  const transformedData = {};
+
+  dataRaw.forEach(item => {
+      item.data.forEach(subitem => {
+          const timestamp = moment(item.fecha).add(1, 'days').valueOf();
+          if (!transformedData[timestamp]) {
+              transformedData[timestamp] = 0;
+          }
+          transformedData[timestamp] += subitem.totalVistas;
+      });
+  });
+
+  const result = [{
+      name: 'Total de visitas',
+      data: Object.entries(transformedData).map(([timestamp, totalVistas]) => [
+          parseInt(timestamp),
+          totalVistas
+      ])
+  }];
+
+  // const result = Object.values(transformedData);
+  // console.log(result)
+
+  // console.log(agrupador(2))
+  // const seriesFormat = {
+  //   name: 'Device',
+  //   data: []
+  // };
+
+  // const categoriesRaw = [];
+  // for (let i in dataRaw) {
+  //   let num = parseFloat(dataRaw[i].porcentaje);
+  //   seriesFormat.data.push(num);
+  //   categoriesRaw.push(dataRaw[i].subsection);
+  // }
+
+  const options = {
+    chart: {
+      parentHeightOffset: 0,
+      type: 'area',
+      stacked: false,
+      height: 350,
+      zoom: {
+        enabled: false
+      },
+      toolbar: {
+        show: false
+      }
+    },
+    // labels: categoriesRaw,
+    dataLabels: {
+      enabled: true,
+      formatter: function (value, { seriesIndex, dataPointIndex, w }) {
+        // // Obtén el valor de la barra actual
+        // const barValue = w.config.series[seriesIndex];
+        return `${value} visitas`;
+
+        // // Define el umbral para mostrar el dataLabel (ajusta según tus necesidades)
+        // const umbral = 5; // Por ejemplo, mostrar solo si el valor es mayor al 5%
+
+        // // Mostrar el valor solo si supera el umbral
+        // return barValue > umbral ? `${barValue}%` : '';
+      }
+    },
+    colors: [
+      "#173F5F",
+      "#00fa9a", // Verde medio
+      "#7365ed",
+      "#ff69b4", // Rosa claro
+      "#000f08",
+      "#32cd32", // Verde esmeralda
+      "#136f63", // Naranja claro
+      "#ffd700", // Amarillo
+      "#ff4500", // Rojo oscuro
+      "#ff0000", // Rojo
+      "#ff8c00", // Naranja oscuro
+      "#ffff00", // Amarillo
+      "#8b4513", // Marrón
+      "#0000ff", // Azul
+      "#8a2be2", // Azul violeta
+      "#ffa500", // Naranja
+      "#ffd800", // Amarillo intenso
+      "#ff1493", // Rosa brillante
+      "#9932cc", // Púrpura
+      "#ff8c00", // Naranja oscuro
+      "#8b008b", // Magenta oscuro
+      "#8a2be2", // Azul violeta
+    ],
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shadeIntensity: 1,
+        inverseColors: false,
+        opacityFrom: 0.45,
+        opacityTo: 0.05,
+        stops: [20, 100, 100, 100]
+      },
+    },
+    yaxis: {
+      title: {
+        text: 'Visitas totales',
+        style: {
+          color: headingColor,
+          useSeriesColors: false
+        }
+      },
+      labels: {
+        style: {
+          // colors: headingColor,
+          colors: headingColor,
+          useSeriesColors: false
+        },
+        offsetX: 0,
+        formatter: function (val) {
+          return `${(val).toFixed(0)} visitas`;
+        },
+      },
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false
+      }
+    },
+    xaxis: {
+      type: 'datetime',
+      tickAmount: dataRaw.length - 1,
+      // min: new Date("01/01/2014").getTime(),
+      // max: new Date("01/07/2014").getTime(),
+      labels: {
+        style: {
+          // colors: headingColor,
+          colors: headingColor,
+          useSeriesColors: false
+        },
+        rotate: -15,
+        rotateAlways: true,
+        formatter: function (val, timestamp) {
+          const fechaTimeZone = convertirTimestamp(timestamp).format("DD MMM YYYY");
+          // console.log(fechaTimeZone, timestamp)
+          return fechaTimeZone;
+        }
+      }
+    },
+    tooltip: {
+      shared: true
+    },
+    legend: {
+      labels: {
+        colors: headingColor,
+        useSeriesColors: false
+      },
+      position: 'top',
+      horizontalAlign: 'right',
+      offsetX: -10
+    }
+  }
+
+  return {
+    series: result, options: options
+  };
+});
+
 </script>
 
 <template>
@@ -1449,17 +1847,75 @@ const resolveDeviceTimeLine = computed(() => {
                                 <VCardItem class="header_card_item pb-0">
                                   <div class="d-flex pr-0" style="justify-content: space-between;">
                                     <div class="descripcion">
-                                      <VCardTitle>Visitas por sección</VCardTitle>
-                                      <small class="mt-3">Mostrando data desde, {{ fecha.i.format('YYYY-MM-DD') }} hasta {{ fecha.f.format('YYYY-MM-DD') }}</small>
+                                      <VCardTitle>Totales por visitas</VCardTitle>
+                                      <small class="mt-3">Mostrando data desde, {{ fechaGraficos_2.i.format('YYYY-MM-DD') }} hasta {{ fechaGraficos_2.f.format('YYYY-MM-DD') }}</small>
                                     </div>
                                     <!-- <div class="">
                                 <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
                               </div> -->
 
                                   </div>
+                                  <template #append>
+                                    <div class="date-picker-wrapper" style="min-width:200px;width: auto;max-width: 100%;">
+                                      <VCombobox :disabled="loadingData" v-model="selectComboTotales" :items="fechaIniFinList"
+                        variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
+                                    </div>
+                                  </template>
+                                </VCardItem>
+                                <VueApexCharts :options="resolveDeviceTimeLineTotales.options"
+                                  :series="resolveDeviceTimeLineTotales.series" :height="475" width="100%" />
+                              </VCard>
+                            </VCol>
+                            <VCol cols="12" sm="12" class="" style="">
+                              <VCard
+                                class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
+                                <VCardItem class="header_card_item pb-0">
+                                  <div class="d-flex pr-0" style="justify-content: space-between;">
+                                    <div class="descripcion">
+                                      <VCardTitle>Visitas por sección</VCardTitle>
+                                      <small class="mt-3">Mostrando data desde, {{ fechaGraficos_2.i.format('YYYY-MM-DD') }} hasta {{ fechaGraficos_2.f.format('YYYY-MM-DD') }}</small>
+                                    </div>
+                                    <!-- <div class="">
+                                <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
+                              </div> -->
+
+                                  </div>
+
+                                  <template #append>
+                                    <div class="date-picker-wrapper" style="min-width:200px;width: auto;max-width: 100%;">
+                                      <VCombobox :disabled="loadingData" v-model="selectComboTotales" :items="fechaIniFinList"
+                        variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
+                                    </div>
+                                  </template>
                                 </VCardItem>
                                 <VueApexCharts :options="resolveDeviceTimeLine.options"
                                   :series="resolveDeviceTimeLine.series" :height="475" width="100%" />
+                              </VCard>
+                            </VCol>
+                            <VCol cols="12" sm="12" class="" style="">
+                              <VCard
+                                class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
+                                <VCardItem class="header_card_item pb-0">
+                                  <div class="d-flex pr-0" style="justify-content: space-between;">
+                                    <div class="descripcion">
+                                      <VCardTitle>Tiempo promedio por sección</VCardTitle>
+                                      <small class="mt-3">Mostrando data desde, {{ fechaGraficos_2.i.format('YYYY-MM-DD') }} hasta {{ fechaGraficos_2.f.format('YYYY-MM-DD') }}</small>
+                                    </div>
+                                    <!-- <div class="">
+                                <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
+                              </div> -->
+
+                                  </div>
+
+                                  <template #append>
+                                    <div class="date-picker-wrapper" style="min-width:200px;width: auto;max-width: 100%;">
+                                      <VCombobox :disabled="loadingData" v-model="selectComboTotales" :items="fechaIniFinList"
+                        variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
+                                    </div>
+                                  </template>
+                                </VCardItem>
+                                <VueApexCharts :options="resolveDeviceTimeLinePromedioSection.options"
+                                  :series="resolveDeviceTimeLinePromedioSection.series" :height="475" width="100%" />
                               </VCard>
                             </VCol>
                           </VRow>
