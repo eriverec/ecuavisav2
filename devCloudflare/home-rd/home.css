@@ -118,7 +118,11 @@
 
 /**Inicio estadio portada**/
 .bloque_estadio_1 .rd-h3 {
-    color: white;
+    color: #FFFFFF;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.5;
+    display: block;
 }
 /**Fin estadio portada**/
 
