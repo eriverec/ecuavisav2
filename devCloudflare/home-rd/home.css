@@ -1021,13 +1021,13 @@ Cambio de tamaño de imagen grande izq
 
   .sliderVideos .ms-visto-ec:nth-child(2) .multimedia img {
     border-radius: 6px;
-    -webkit-mask-image: linear-gradient(to top, #00000000 0, #242424 10%);
+/*    -webkit-mask-image: linear-gradient(to top, #00000000 0, #242424 10%);*/
     height: 100% !important;
     object-fit: cover;
   }
 
   .sliderVideos .ms-visto-ec:nth-child(2) .multimedia img:hover {
-    -webkit-mask-image: linear-gradient(to top, #00000000 0, #242424 15%);
+/*    -webkit-mask-image: linear-gradient(to top, #00000000 0, #242424 15%);*/
   }
 
   .sliderVideos .ms-visto-ec .multimedia>div::after {
@@ -1890,9 +1890,8 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .sliderVideos .text_block {
-  position: absolute;
-  bottom: 0;
-  padding: 0.7rem;
+/*  position: absolute;*/
+  padding: 19px 0;
 }
 
 .sliderVideos .article-section a {
@@ -1914,13 +1913,13 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
 .sliderVideos .multimedia img {
   border-radius: 6px;
-  -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 10%);
+/*  -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 10%);*/
   height: 100% !important;
   object-fit: cover;
 }
 
 .sliderVideos .multimedia img:hover {
-  -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 15%);
+/*  -webkit-mask-image: linear-gradient(to top, #0000002e 0, #242424 15%);*/
 
 }
 
@@ -2197,12 +2196,12 @@ INICIO - BLOQUE - MUNDO
 
   .sliderVideos .ms-visto-ec:nth-child(2) .multimedia img {
     border-radius: 6px;
-    -webkit-mask-image: linear-gradient(to top, #00000000 0, #242424 10%);
+/*    -webkit-mask-image: linear-gradient(to top, #00000000 0, #242424 10%);*/
     height: 100% !important;
     object-fit: cover;
   }
   .sliderVideos .ms-visto-ec:nth-child(2) .multimedia img:hover { 
-    -webkit-mask-image: linear-gradient(to top, #00000000 0, #242424 15%);
+/*    -webkit-mask-image: linear-gradient(to top, #00000000 0, #242424 15%);*/
   }
 
   .sliderVideos .ms-visto-ec .multimedia>div::after {
@@ -3070,7 +3069,7 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .text_block {
 /*  position: absolute;*/
   bottom: 0;
-  padding: 0.5rem 1rem;
+  padding: 19px 0;
   width: 100%;
   min-height: 75px;
 }
@@ -3149,13 +3148,14 @@ INICIO - BLOQUE - ESTILO
   font-weight: 500;
   line-height: 22px;
   margin-top: -5px;
+  display: none;
 }
 
 .HOME_MENU_RD .lista-bloque-programas .noticias .article .media_block .text_block .section {
 
   font-weight: 600 !important;
   color: #23DCD1 !important;
-  /* display: block !important; */
+   display: block !important; 
 }
 
 .HOME_MENU_RD .teaser-viewer-title-rd a {
