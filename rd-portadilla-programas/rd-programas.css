@@ -938,6 +938,15 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
     min-height: 110px;
   }
 
+  .icono-programas .noticias article .text_block{
+    margin-top: 19px;
+  }
+
+  .icono-programas .noticias article .media_block .inf2 .date{
+    font-size: 14px;
+  font-weight: 600;
+  }
+
   #navegacion .title h2 {
     font-size: 20px;
   }
@@ -995,6 +1004,13 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   .bloque-programas .media_block .text_block .headline h1,
   .bloque-programas .media_block .text_block .headline h2 {
     font-size: 16px;
+    font-family: Archivo;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: left;
+    color: #000;
   }
 
   /* TARJETAS SWIPER DESTACADAS */
