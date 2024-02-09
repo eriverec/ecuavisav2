@@ -20,6 +20,19 @@
 }*/
 
 
+.u-t-comunidad .iconPlay, .u-t-comunidad-gye .iconPlay  {
+  background-image: url('https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg');
+  height: 30px;
+  width: 30px ;
+  background-size: contain;
+  position: absolute;
+  top: 0 !important;
+  left: auto !important;
+  right: 0 !important;
+  margin: 15px;
+}
+
+
 .row>* {
   padding-right: 1rem;
   padding-left: 1rem;
@@ -79,6 +92,46 @@
   margin-top: 30px;
   margin-bottom: 20px;
   font-family: 'Anek Malayalam';
+}
+
+.icono-carrusel .noticias article .media_block .headline h2{
+  font-family: Archivo;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #000;
+}
+
+.icono-carrusel .noticias article .media_block .text_block{
+  margin-top: 19px;
+}
+
+.icono-carrusel .noticias article .media_block .inf2 .date{
+  font-family: Archivo;
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #000;
+
+}
+.icono-programas .noticias article .media_block .headline h2{
+  font-size: 34px;
+  line-height: 38px;
+  text-transform: initial;
+}
+
+.icono-programas .noticias article .media_block .inf2 .date{
+  font-family: Archivo;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #000;
 }
 
 .estilo_separadorDesktop,
@@ -536,26 +589,27 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   top: 60%;
 }
 
-.bloque-programas .media_block .text_block .headline h1,
+/*.bloque-programas .media_block .text_block .headline h1,
 .bloque-programas .media_block .text_block .headline h2 {
   color: white;
   font-size: 34px;
   font-family: 'Archivo';
   font-weight: 700;
-}
+}*/
 
 .bloque-programas .media_block {
   position: relative;
 }
 
 .bloque-programas .text_block {
-  position: absolute;
+/*  position: absolute;*/
   bottom: 0;
-  padding: 3rem 1rem 1rem;
-  background-image: -webkit-linear-gradient(bottom, #060127 0%, #ffffff00 20%);
+/*  padding: 3rem 1rem 1rem;*/
+/*  background-image: -webkit-linear-gradient(bottom, #060127 0%, #ffffff00 20%);*/
   left: 0;
   right: 0;
   border-radius: 5px;
+/*  margin-top: 19px;*/
 }
 
 .principalSwiper .teaser-viewer-title h2 {
@@ -620,19 +674,19 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .programas-desktop .text_block {
-  padding: 3rem 62px 10px;
+  padding: 19px 0;
 }
 
 .programas-desktop .noticias .article .media_block .text_block .headline {
   max-width: 100%;
 }
 
-.programas-desktop .noticias .article .media_block .text_block .headline h1,
+/*.programas-desktop .noticias .article .media_block .text_block .headline h1,
 .programas-desktop .noticias .article .media_block .text_block .headline h2 {
-  font-size: 42px!important;
-  line-height: 48px!important;
+  font-size: 34px!important;
+  line-height: 38px!important;
   text-transform: initial;
-}
+}*/
 
 .bloque-programas .media_block .text_block .inf2,
 .programas-desktop .noticias .article .media_block .text_block .inf2 {
@@ -663,13 +717,13 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 .bloque-programas .media_block .text_block .headline h3,
 .bloque-programas .media_block .text_block .headline h2,
 .programas-desktop .media_block .text_block .headline h1 {
-  color: white;
-  font-size: var(--rd-size-20);
-  font-family: 'Anek Malayalam';
+  color: #000;
+  font-family: 'Archivo';
   font-weight: 600;
   padding-top: .5rem;
   text-transform: initial;
   line-height: 0.9em;
+  display: block;
 }
 
 /* .bloque-programas .media_block .text_block .article-section {
@@ -677,12 +731,13 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 } */
 .bloque-programas .media_block .text_block .article-section a,
 .destacada-entretenimiento .media_block .text_block .article-section a {
-  color: #23dcd1;
+  color: #2927b9;
   text-transform: uppercase;
   font-family: 'mattone 150';
   font-weight: 600;
-  font-size: 11px;
+  font-size: 13px;
   line-height: 16px;
+  display: block;
 }
 
 .bloque-programas .media_block .text_block .subheadline {
@@ -759,15 +814,17 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
 /* INICIO ÍCONO DE VIDEOS*/
 .icono-programas .iconPlay {
-  background-image: url("https://ecuavisadev.netlify.app/grilla/bloque/assets/Play.svg");
-  height: 48px;
-  width: 48px;
+  background-image: url("https://ecuavisadev.netlify.app/home-rd/assets/iconplayrd.svg");
+  height: 30px;
+  width: 30px;
   background-size: contain;
   position: absolute;
-  top: 40% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%);
+  top: 0 !important;
+  left: auto !important;
+  right: 0 !important;
+  /* transform: translate(-50%, -50%); */
   z-index: 9;
+  margin: 15px;
 }
 
 .icono-carrusel .iconPlay {
@@ -818,11 +875,11 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 
 @media (min-width: 991px) {
 
-  .icono-programas .iconPlay {
+/*  .icono-programas .iconPlay {
     position: initial;
     transform: initial;
     margin-bottom: 20px;
-  }
+  }*/
 
 
 }
@@ -954,6 +1011,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 .rankSwiper .multimedia > div,
 .tarjetaSwiper .multimedia > div {
     background: #060127;
+    border-radius: 4px;
 }
 
 .carrusel-programas .text_block,
@@ -964,14 +1022,14 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 .carrusel-programas .multimedia > div img,
 .rankSwiper .multimedia img,
 .tarjetaSwiper .multimedia > div img {
-    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%);
+/*    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%);*/
 }
 
 .carrusel-programas .multimedia > div img:hover,
 .tarjetaSwiper .media_block:hover .multimedia > div img,
 .rankSwiper .multimedia img:hover,
 .tarjetaSwiper .multimedia > div img:hover {
-    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 15%)!important;
+/*    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 15%)!important;*/
 }
 /*FIN AÑADIR DEGRADADO A TODOS LOS BLOQUES DE LAS NOTAS*/
 
@@ -1102,7 +1160,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 /*FIN QUITAR LA SECCIÓN MÁS DESTACADAS, TANTO EN MOBILE COMO ESCRITORIO*/
 
 /*Comunidades*/
-.iconPlay.bottom, .iconPlay.left, .iconPlay {
+/*.iconPlay.bottom, .iconPlay.left, .iconPlay {
     top: 20px!important;
     left: auto!important;
     background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos/play-icon-white.svg);
@@ -1110,7 +1168,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
     stroke: white;
     width: 30px;
     height: 30px;
-}
+}*/
 
 #main-content .swiper-pagination-bullet-active {
     opacity: var(--swiper-pagination-bullet-opacity, 1);
@@ -1132,7 +1190,7 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 #main-content .u-t-comunidad article.article{
-    background-color: var(--color-azul-oscuro);
+/*    background-color: var(--color-azul-oscuro);*/
     border-radius: 5.0022px;
   }
 
@@ -1157,22 +1215,28 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
   }
   
   #main-content .u-t-comunidad article.article{
-    background-color: var(--color-azul-oscuro)
+/*    background-color: var(--color-azul-oscuro)*/
   }
 
 .u-t-comunidad .text_block {
-    position: absolute;
-    bottom: 0;
-    padding-left: 10px;
-    padding-right: 10px;
+/*    position: absolute;*/
+  /*  padding-left: 10px;
+    padding-right: 10px;*/
     padding-bottom: 12px;
+    margin-top: 19px;
   }
 
   .u-t-comunidad a,
   .u-t-comunidad h3,
   .u-t-comunidad h2{
-    color: #fff;
-    font-size: 15px;
+    color: #000;
+    font-family: Archivo;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: left;
+
   }
 
   .u-t-comunidad img {
@@ -1186,27 +1250,33 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
       max-width: 100%!important;
       background-color: var(--color-azul-oscuro);
       position: relative !important;
-      border-radius: 5.0022px;
-      -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%);
+      border-radius: 4px;
+/*      -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%);*/
   }
 
-  .u-t-comunidad img:hover {
+/*  .u-t-comunidad img:hover {
       -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 15%);
   }
-
+*/
   .u-t-comunidad .multimediaIconMacroWrapper a > div {
       padding-top: 0px!important;
   }
   
   .u-t-comunidad .date{
-    color: #23DCD1;
-    font-size: 10px;
+    color: #2927b9;
     font-weight: 400;
+    font-family: Archivo;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: left;
+
   }
 
 #main-content .u-t-comunidad-gye article.article{
-  background-color: var(--color-azul-oscuro);
-  border-radius: 5.0022px;
+/*  background-color: var(--color-azul-oscuro);*/
+  border-radius: 4px;
 }
 
 .u-t-comunidad-gye .swiper-wrapper {
@@ -1222,22 +1292,29 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 #main-content .u-t-comunidad-gye article.article{
-  background-color: var(--color-azul-oscuro)
+/*  background-color: var(--color-azul-oscuro)*/
 }
 
 .u-t-comunidad-gye .text_block {
-  position: absolute;
-  bottom: 0;
-  padding-left: 10px;
-  padding-right: 10px;
+/*  position: absolute;*/
+/*  bottom: 0;*/
+/*  padding-left: 10px;
+  padding-right: 10px;*/
   padding-bottom: 12px;
+  margin-top: 19px;
 }
 
 .u-t-comunidad-gye a,
 .u-t-comunidad-gye h3,
 .u-t-comunidad-gye h2{
-  color: #fff;
-  font-size: 15px;
+  color: #000;
+  font-family: Archivo;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+
 }
 
 .u-t-comunidad-gye img {
@@ -1251,12 +1328,12 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
     max-width: 100%!important;
     background-color: var(--color-azul-oscuro);
     position: relative !important;
-    border-radius: 5.0022px;
-    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%);
+    border-radius: 4px;
+/*    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 10%);*/
 }
 
 .u-t-comunidad-gye img:hover {
-    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 15%);
+/*    -webkit-mask-image: linear-gradient(to top, transparent 0, #060127 15%);*/
 }
 
 .u-t-comunidad-gye .multimediaIconMacroWrapper a > div {
@@ -1264,9 +1341,15 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .u-t-comunidad-gye .date{
-  color: #23DCD1;
-  font-size: 10px;
-  font-weight: 400;
+
+    color: #2927b9;
+    font-weight: 400;
+    font-family: Archivo;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 18px;
+    letter-spacing: 0em;
+    text-align: left;
 }
 .u-t-comunidad .text_block {
   padding-bottom: 20px;
