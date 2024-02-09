@@ -212,20 +212,29 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .sliderVideos .text_block {
-  position: absolute;
-  bottom: 0;
-  padding: 0.7rem;
+/*  position: absolute;*/
+/*  bottom: 0;*/
+  padding: 19px 0;
 }
 
 .sliderVideos .article-section a {
+  color: #2927b9;
+  text-transform: uppercase;
+  font-family: 'Mattone 150';
   font-weight: 600;
-  color: #23DCD1;
+  font-size: 13px;
+  line-height: 16px;
   display: block;
 }
 
 .sliderVideos .headline h3 {
-  color: var(--bs-white);
-  font-size: var(--rd-size-16);
+  font-family: Archivo;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 18px;
+  letter-spacing: 0em;
+  text-align: left;
+  color: #000;
 }
 
 .sliderVideos .multimedia .multimediaIconMacroWrapper a div {
@@ -292,13 +301,14 @@ INICIO - BLOQUE - VIDEOS MAS VISTOS
 }
 
 .rankSwiper .media_block .rd_date ul li {
-  color: #c7c7c7;
+  color: #000;
+  font-family: Archivo;
   font-size: 14px;
   text-overflow: ellipsis;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   font-style: normal;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 22px;
   margin-top: -5px;
 }
