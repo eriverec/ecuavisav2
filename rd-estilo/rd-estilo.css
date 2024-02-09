@@ -1213,13 +1213,13 @@ img.sepDesk {
 */
 
 @media (min-width: 1400px) {
-  .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
+ /* .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
     height: 100% !important;
   }
 
   .portada-estilo .noticias .article .multimedia .multimediaIconMacroWrapper a div {
     height: 100% !important;
-  }
+  }*/
 }
 
 /* @media (min-width: 1200px) {
