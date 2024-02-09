@@ -1246,25 +1246,25 @@ img.sepDesk {
   }
 
   .portada-estilo .text_block {
-    background: #2927B9;
-    margin-top: -1px;
+/*    background: #2927B9;*/
+/*    margin-top: -1px;*/
     position: initial;
     /*padding-bottom: 1rem;*/
-    padding: 16px 16px 1rem;
+/*    padding: 16px 16px 1rem;*/
   }
 
-  .portada-estilo-mobile .headline h2 {
+/*  .portada-estilo-mobile .headline h2 {
     color: #fff;
   }
 
   .portada-estilo-mobile .subheadline .rd-h3 {
     color: #fff;
 
-  }
+  }*/
 
 
   .portada-estilo-mobile .article-section a {
-    color: #23DCD1;
+/*    color: #23DCD1;*/
     text-transform: uppercase;
     font-family: 'Mattone 150';
     font-weight: 600;
@@ -1405,7 +1405,7 @@ img.sepDesk {
   .portada-estilo .headline h2 {
     font-size: 32px;
     line-height: 38px;
-    color: #fff;
+/*    color: #fff;*/
   }
 
   .ecv_relacionadas_2022 .recomendadas-rd {
@@ -1516,6 +1516,11 @@ img.sepDesk {
   .notas-estilo-mobile{
     padding-right: 0;
     padding-left: 0;
+  }
+
+  .portada-estilo .text_block{
+    padding-right: 12px;
+    padding-left: 12px;
   }
 
   .portada-estilo .noticias .article .multimedia .multimediaIconMacroWrapper a div {
