@@ -2496,12 +2496,12 @@ INICIO - BLOQUE - MUNDO
 
 .HOME_MENU_RD .bloque_estadio_2 .noticias .article .media_block .text_block .headline a h3 {
   font-size: var(--rd-size-20);
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   color: white;
-  font-family: 'Alfa Slab One';
+  font-family: 'Archivo';
   font-style: normal;
-  font-weight: 400;
-  line-height: 28px;
+  font-weight: 700;
+  line-height: 23px;
 
 }
 
@@ -2592,9 +2592,9 @@ INICIO - BLOQUE - MUNDO
 
 .HOME_MENU_RD .bloque_estadio_2_m .noticias .article .media_block .text_block .headline a h2 {
   font-size: var(--rd-size-16);
-  text-transform: uppercase;
+  /* text-transform: uppercase; */
   color: white;
-  font-family: 'Alfa Slab One';
+  font-family: 'Archivo';
   line-height: 20px;
 }
 
@@ -2629,8 +2629,8 @@ INICIO - BLOQUE - MUNDO
   .HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .text_block .headline a h3 {
     font-size: var(--rd-size-18);
     color: #fff;
-    font-family: 'Alfa Slab One';
-    text-transform: uppercase;
+    font-family: 'Archivo';
+    /* text-transform: uppercase; */
   }
 
   .HOME_MENU_RD .cintillo-rd-estadio img {
