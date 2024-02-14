@@ -2392,6 +2392,13 @@ INICIO - BLOQUE - MUNDO
     object-fit: cover;
 }
 
+.HOME_MENU_RD .bloque_estadio_1 .noticias .article .multimedia .multimediaIconMacroWrapper .cutlineShow div {
+  padding-top: 60.00%;
+    height: 600px !important;
+    width: 100% !important;
+    object-fit: cover;
+}
+
 .bloque_estadio_2 .text_block {
   padding: 30px 0;
 }
@@ -3447,6 +3454,7 @@ height: 600px !important;
   right: 0px;
   left: 10px;
   bottom: 20px;
+  z-index: 9;
 }
 
 /*Pautas digitales*/
