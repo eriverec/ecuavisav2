@@ -51,7 +51,7 @@ function masVistoEstilo() {
   var masvistoestilo = new Swiper(tabsContent, {
     slidesPerView: 1,
     slidesPerColumn: 2,
-    spaceBetween: 10,
+    spaceBetween: 30,
     pagination: {
       el: '.swiper-pagination',
       clickable: true,
