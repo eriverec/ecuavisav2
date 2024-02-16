@@ -1060,11 +1060,19 @@ h2.temas_estilo {
 
 .mas_temas_2_desktop .noticias .article {
   border-top: 1px solid #2927B9;
-  border-bottom: 1px solid #2927B9;
+  /* border-bottom: 1px solid #2927B9; */
   height: 100%;
   padding: 34px 0;
   display: flex;
   align-items: center;
+}
+
+.mas_temas_2_desktop .noticias .article:nth-child(3){
+border-bottom: 1px solid #2927B9;
+}
+
+.mas_temas_2_desktop .noticias .article:nth-child(4){
+border-bottom: 1px solid #2927B9;
 }
 
 .mas_temas_2_desktop .noticias .article .media_block .text_block .headline h2 {
@@ -1106,7 +1114,7 @@ img.sepDesk {
 .mas_temas_2_desktop .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  column-gap: 40px;
 }
 
 .mas_temas_2_desktop .noticias .article .media_block {
