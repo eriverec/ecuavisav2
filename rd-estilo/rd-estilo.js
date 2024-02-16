@@ -134,7 +134,7 @@ function sGoEstiloSect() {
     if (typeof Swiper === "undefined") {
       sGoEstiloSect();
     } else {
-      noTePierdas();
+      // noTePierdas();
       masVistoEstilo();
       masVistoEstiloCurio();
     }
