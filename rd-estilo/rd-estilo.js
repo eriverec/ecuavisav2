@@ -48,6 +48,10 @@ function masVistoEstilo() {
     agendaDeskSliders.classList.add('swiper-slide');
   }
 
+  var dpagination = document.createElement("div");
+  dpagination.classList = "swiper-pagination";
+  tabsContent.appendChild(dpagination);
+
   var masvistoestilo = new Swiper(tabsContent, {
     slidesPerView: 1,
     slidesPerColumn: 2,
