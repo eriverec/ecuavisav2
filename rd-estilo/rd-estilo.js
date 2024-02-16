@@ -38,17 +38,11 @@ function noTePierdas() {
 function masVistoEstilo() {
 
   const tabsContent = document.querySelectorAll('.carrusel-programas .iter-tabview-content')[1];
-  const agendaDeskWraper = document.querySelectorAll('.carrusel-programas .iter-tabview-content-item');
+  const agendaDeskWraper = document.querySelector('.carrusel-programas .iter-tabview-content-item');
   const agendaDeskSlider = document.querySelectorAll('.carrusel-programas .iter-tabview-content-item .element');
 
-
-  for (const tSwa of tabsContent) {
-    tSwa.classList.add('swiper');
-  }
-
-  for (const tWra of agendaDeskWraper) {
-    tWra.classList.add('swiper-wrapper');
-  }
+  tabsContent.classList.add('swiper');
+  agendaDeskWraper.classList.add('swiper-wrapper');
 
   for (const agendaDeskSliders of agendaDeskSlider) {
     agendaDeskSliders.classList.add('swiper-slide');
@@ -86,6 +80,7 @@ function masVistoEstilo() {
 
  
 }
+
 
 
 
