@@ -34,6 +34,7 @@ export default [
     children: [
       // { title: 'Lista de Usuarios', to: 'apps-trazabilidad-list' },
       { title: 'Visitas', to: 'apps-visitas-list' },
+      { title: 'Permanencia', to: 'apps-trazabilidad-permanencia' },
       { title: 'Metadatos', to: 'apps-metadatos' },
       // { title: 'Dispositivos', to: 'apps-dispositivos' },
       { title: 'Recomendaciones', to: 'apps-recomendaciones' },
@@ -89,7 +90,7 @@ export default [
       { title: 'Lista de campañas', to: 'apps-campaigns-list' },
       { title: 'Crear campaña', to: 'apps-campaigns-create' },
       { title: 'Posiciones', to: 'apps-campaigns-ads-ubicaciones' },
-      { title: 'Datos y Auditoría', to: 'apps-campaigns-audit' },
+      { title: 'Analítica', to: 'apps-campaigns-audit' },
       
     ],
   },
