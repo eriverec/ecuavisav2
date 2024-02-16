@@ -14,7 +14,7 @@
   bottom: initial;
 }
 
-.carrusel-programas {
+.carrusel-programas .stats-viewer.iter-widget.iter-component {
   display: none;
 }
 
