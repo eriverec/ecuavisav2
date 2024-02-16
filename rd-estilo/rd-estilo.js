@@ -127,20 +127,34 @@ function masVistoEstiloCurio() {
  
 }
 
-
-
-function sGoEstiloSect() {
-  setTimeout(function () {
-    if (typeof Swiper === "undefined") {
-      sGoEstiloSect();
-    } else {
-      // noTePierdas();
-      masVistoEstilo();
-      masVistoEstiloCurio();
-    }
-  }, 400);
-}
-
-$(document).ready(function () {
-  sGoEstiloSect();
+ECUAVISA_EC.initDomVariable(`.carrusel-programas .iter-tabview-content-item .element`).then(() => {
+  ECUAVISA_EC.swiperInit().then(() => {
+    // noTePierdas();
+    masVistoEstilo();
+    masVistoEstiloCurio();
+  })
 });
+
+
+
+
+
+// function sGoEstiloSect() {
+//   setTimeout(function () {
+//     if (typeof Swiper === "undefined") {
+//       sGoEstiloSect();
+//     } else {
+//       // noTePierdas();
+//       masVistoEstilo();
+//       masVistoEstiloCurio();
+//     }
+//   }, 400);
+// }
+
+// $(document).ready(function () {
+//   sGoEstiloSect();
+// });
+
+
+
+
