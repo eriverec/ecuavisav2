@@ -3,9 +3,9 @@ import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/us
 
 import Moment from 'moment-timezone';
 
+import { hexToRgb } from '@layouts/utils';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
-import { hexToRgb } from '@layouts/utils';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
 const moment = extendMoment(Moment);
@@ -1574,6 +1574,56 @@ const resolveDeviceTimeLineTotales = computed(() => {
   };
 });
 
+import { computed, reactive, ref } from 'vue';
+    
+    const data = ref([]);
+    
+    // Simula la llamada a la API y la asignación de datos
+    fetch('https://servicio-permanencia.vercel.app/get/document/2024-01-12/2024-01-12')
+    .then(response => response.json())
+    .then(dataFromApi => {
+      data.value = dataFromApi.data;
+    });
+    
+    const groupedData = computed(() => {
+      const ranges = {
+        '0 a 30 segundos': { total: 0, urls: {} },
+        '30 segundos a 1 minuto': { total: 0, urls: {} },
+        '1 a 5 minutos': { total: 0, urls: {} },
+        '5 a 10 minutos': { total: 0, urls: {} },
+        '10 a 30 minutos': { total: 0, urls: {} },
+        '30 minutos en adelante': { total: 0, urls: {} }
+      };
+      
+      data.value.forEach(user => {
+        let range;
+        const seconds = user.seconds;
+        if (seconds <= 30) range = '0 a 30 segundos';
+        else if (seconds <= 60) range = '30 segundos a 1 minuto';
+        else if (seconds <= 300) range = '1 a 5 minutos';
+        else if (seconds <= 600) range = '5 a 10 minutos';
+        else if (seconds <= 1800) range = '10 a 30 minutos';
+        else range = '30 minutos en adelante';
+        
+        if (!ranges[range].urls[user.url]) {
+          ranges[range].urls[user.url] = [];
+        }
+        ranges[range].urls[user.url].push(user);
+        ranges[range].total++;
+      });
+      return ranges;
+    });
+    
+    const isCollapsed = reactive({});
+    
+    const toggleCollapse = (key) => {
+      if (isCollapsed[key] === undefined) {
+        isCollapsed[key] = true;
+      } else {
+        isCollapsed[key] = !isCollapsed[key];
+      }
+    };
+
 </script>
 
 <template>
@@ -1664,6 +1714,9 @@ const resolveDeviceTimeLineTotales = computed(() => {
                         <VTab>
                           <VIcon start icon="mdi-chart-scatterplot-hexbin" /> Estadisticas
                         </VTab>
+                        <VTab>
+                          <VIcon start icon="mdi-clock-time-eight-outline" /> Agrupación por tiempo
+                        </VTab>
                       </VTabs>
                       <br>
                       <VWindow v-model="currentTabSectionSubSection">
@@ -1751,7 +1804,7 @@ const resolveDeviceTimeLineTotales = computed(() => {
                                       <!-- 👉 Actions -->
                                       <td class="text-center" style="width: 5rem;">
                                         <VBtn icon size="x-small" color="info" variant="text" :href="c.url" target="_blank">
-                                          <VIcon size="22" icon="tabler-eye" />
+                                          <VIcon size="22" icon="mdi-link-variant" />
                                         </VBtn>
                                       </td>
                                     </tr>
@@ -1786,7 +1839,12 @@ const resolveDeviceTimeLineTotales = computed(() => {
                                         <div class="espacio-right-2">
                                           <VBtn icon size="x-small" color="info" variant="text" :href="c.url"
                                             target="_blank">
-                                            <VIcon size="22" icon="tabler-eye" />
+                                            <VIcon size="22" icon="mdi-link-variant" />
+                                          </VBtn>
+
+                                          <VBtn icon size="x-small" color="info" variant="text" :href="'/apps/user/view/'+ c.user.userId"
+                                            target="_blank">
+                                            <VIcon size="22" icon="mdi-account-outline" />
                                           </VBtn>
                                         </div>
                                       </template>
@@ -1920,6 +1978,30 @@ const resolveDeviceTimeLineTotales = computed(() => {
                             </VCol>
                           </VRow>
                         </VWindowItem>
+                        <WindowItem>
+
+                          <VList lines="two" border v-for="(groups, range) in groupedData" :key="range">
+                            <VListItem >
+                              <VListItemTitle @click="toggleCollapse(range)">
+                                {{ range }}: {{ groups.total }} usuario(s)
+                              </VListItemTitle>
+                              <div v-if="isCollapsed[range]">
+                                                    <div v-for="(users, url) in groups.urls" :key="url">
+                                                      <button class="btn btn-secondary my-2" type="button" @click="toggleCollapse(url)">
+                                                        {{ url }} ({{ users.length }} usuario(s))
+                                                      </button>
+                                                      <ul class="list-group" v-show="isCollapsed[url]">
+                                                        <li class="list-group-item" v-for="user in users" :key="user.id">
+                                                          {{ user.user.first_name }} - {{ user.seconds }} segundos
+                                                        </li>
+                                                      </ul>
+                                                    </div>
+                                                  </div>
+                            </VListItem>
+                          </VList>
+
+
+                        </WindowItem>
                       </VWindow>
 
                     </VCol>
