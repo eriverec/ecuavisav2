@@ -16,7 +16,7 @@ const searchQuery = ref("");
 const selectedProvider = ref("");
 const selectedBoletin = ref();
 const rowPerPage = ref(10);
-const rowPerPageExport = ref(15000);
+const rowPerPageExport = ref(2200);
 const page = ref(1);
 const totalPage = ref(1);
 const totalUsers = ref(0);
@@ -785,8 +785,9 @@ async function downloadSearch (){
     provider: "provider",
   };
   let doc = [];
-  for (let i = 1; i < totalPage.value+1; i++) {
-  await userListStore
+  var totalPageTemp = totalPage.value;
+  for (let i = 1; i < totalPageTemp + 1; i++) {
+    await userListStore
     .fetchUsers({
       pageSize: rowPerPageExport.value,
       page: i,
@@ -800,9 +801,16 @@ async function downloadSearch (){
     })
     .then((response) => {
       let docRaw = response.data.users;
+
+      if(i==1){
+        totalPageTemp = response.data.totalPage + 1;
+        console.log(totalPageTemp)
+      }
+
       if(docRaw.length < 1){
         i = totalPage.value + 1;
       }
+
       docRaw.forEach((item) => {
         doc.push({
         wylexId: item.wylexId,
