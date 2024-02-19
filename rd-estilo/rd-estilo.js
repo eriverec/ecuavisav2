@@ -130,8 +130,8 @@ function masVistoEstiloCurio() {
 ECUAVISA_EC.initDomVariable(`.carrusel-programas .iter-tabview-content-item .element`).then(() => {
   ECUAVISA_EC.swiperInit().then(() => {
     // noTePierdas();
-    masVistoEstilo();
-    masVistoEstiloCurio();
+    // masVistoEstilo();
+    // masVistoEstiloCurio();
   })
 });
 
