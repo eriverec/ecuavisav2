@@ -2390,6 +2390,7 @@ INICIO - BLOQUE - MUNDO
   height: 600px !important;
     width: 100% !important;
     object-fit: cover;
+    object-position: top;
 }
 
 .HOME_MENU_RD .bloque_estadio_1 .noticias .article .multimedia .multimediaIconMacroWrapper .cutlineShow div {
@@ -2897,6 +2898,7 @@ height: 600px !important;
     width: 100% !important;
     object-fit: cover;
     padding-top: 0 !important;
+    object-position: top;
 }
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .multimedia img:hover {
