@@ -2820,8 +2820,6 @@ BLOQUE - CULTURA
     margin-bottom: 0.5rem;
     display: block;
   }
-
-
 }
 
 .nota-principal-bloque-cultura>section:nth-child(1)>article>div:nth-child(1)>div:nth-child(1)>div:nth-child(2) {
@@ -3012,6 +3010,10 @@ height: 600px !important;
     margin-bottom: 20px;
   }
 
+  .BLOQUE__NOTICIAS .nota-principal-bloque-mobile .BLOQUE_SEC_TIT_IMG_TXT{
+    margin-bottom: 25px;
+  }
+
   .bloque_estilo_bg>div:nth-child(1)>div:nth-child(2)>div:nth-child(1) {
     padding: 0px;
     margin: 0px;
@@ -3020,8 +3022,6 @@ height: 600px !important;
   .bloque_estilo_bg>div:nth-child(1)>div:nth-child(2) {
     padding: 0;
   }
-
-
 
   .HOME_MENU_RD .lista-bloque-estilo {
     padding: 0 60px;
