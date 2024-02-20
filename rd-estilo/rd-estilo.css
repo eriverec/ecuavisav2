@@ -1432,10 +1432,17 @@ img.sepDesk {
     display: none !important;
   }
 
+  .portada-estilo-mobile .subheadline .rd-h3{
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 26px;
+  }
+
   .portada-estilo .headline h1,
   .portada-estilo .headline h2 {
-    font-size: 32px;
-    line-height: 38px;
+    font-size: 22px;
+    line-height: 28px;
+    font-weight: 700;
 /*    color: #fff;*/
   }
 
