@@ -45,8 +45,13 @@
 
 
               </VTable>
-              <VPagination v-if="total > limit" v-model="page" size="small" :total-visible="5" :length="total"
-                @update:model-value="updatePage" />
+              <VPagination 
+              v-if="total > limit" 
+              v-model="page" 
+              size="small" 
+              :total-visible="5" 
+              :length="totalPages"
+              @update:model-value="updatePage" />
 
             </div>
             <div v-else>No hay datos</div>
@@ -92,7 +97,7 @@ const page = ref(1);
 const limit = ref(10); // Esto debería coincidir con el límite establecido por la API
 const total = ref(0);
 const selectedUserDetails = ref(null);
-// const totalPages = computed(() => Math.ceil(total.value / limit.value));
+const totalPages = computed(() => Math.ceil(total.value / limit.value));
 
 const startSearch = () => {
   page.value = 1; // Reinicia la página a 1 al realizar una nueva búsqueda
