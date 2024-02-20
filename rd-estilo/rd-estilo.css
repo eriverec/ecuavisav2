@@ -32,12 +32,10 @@
 }
 
 .portada-estilo .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a img {
-  height: 600px !important;
   object-fit: cover;
 }
 
 .portada-estilo .noticias .article .multimedia .multimediaIconMacroWrapper a div {
-  height: 600px !important;
   object-fit: cover;
   margin-top: -1px;
 }
