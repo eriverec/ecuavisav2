@@ -1,43 +1,34 @@
 <template>
   <section>
+
+
     <VRow>
-      <VCol cols="12">
-        <VCard title="Recompesas">
-          <!-- <VCardSubtitle> Busca los usuarios por nombres, apellidos y emails </VCardSubtitle> -->
+      <VCol cols="7">
+        <VCard class="mt-4" title="Recompensas" style="height: 100%;">
           <VCardText>
             <div class="d-flex gap-4">
               <VTextField v-model="searchTerm" @keyup.enter="startSearch" style="max-width: 400px;" label="Buscar..." />
               <!-- <VBtn @click="startSearch" color="primary">
                 Buscar
               </VBtn> -->
-    
+
               <VBtn :loading="loadings[0]" :disabled="loadings[0]" color="primary" size="small" icon="tabler-search"
                 @click="startSearch" />
             </div>
-    
-          </VCardText>
-        </VCard>
-
-      </VCol>
-    </VRow>
-
-    <VRow v-if="searchResults.length > 0">
-      <VCol cols="7">
-        <VCard class="mt-4" title="Resultado de la búsqueda" style="height: 100%;">
-          <VCardText>
-
             <div v-if="loading" style="height: 400px;" class="d-flex align-center justify-center ">Cargando...</div>
             <div v-else-if="searchResults.length > 0">
-              <VTable style="width: 100%;" class="text-no-wrap tableNavegacion mb-5" hover="true">
+              <VTable style="width: 100%;" class="text-no-wrap tableNavegacion mb-5 mt-5" hover="true">
                 <thead>
                   <tr>
-                    <th scope="col">Usuario</th>
-                    <th scope="col">Correo</th>
+                    <th scope="col">USUARIO</th>
+                    <th scope="col">CORREO</th>
                   </tr>
                 </thead>
 
                 <tbody>
-                  <tr v-for="user in searchResults" :key="user._id" class="" @click="handleUserClick(user.wylexId)">
+                  <tr v-for="user in searchResults" :key="user._id"
+                    :class="{ 'opacity-50': userClicked && userClickedId === user.wylexId }"
+                    @click="handleUserClick(user.wylexId)">
                     <td>
                       {{ (user.last_name + ' ' + user.first_name).length > 25 ? (user.last_name + ' ' +
                         user.first_name).substring(0,
@@ -57,7 +48,7 @@
                 @update:model-value="updatePage" />
 
             </div>
-            <div v-else>No hay datos</div>
+            <!-- <div class="mt-4" v-else>No hay datos</div> -->
 
 
 
@@ -65,11 +56,12 @@
         </VCard>
 
       </VCol>
-      <div v-if="cargandoUser" class="d-flex align-center justify-center ">Cargando...</div>
-      <VCol cols="5" v-else-if="selectedUserDetails">
+      <!-- <div v-if="cargandoUser" class="d-flex align-center justify-center ">Cargando...</div> -->
+      <VCol cols="5" v-if="selectedUserDetails">
         <VCard class="mt-4" title="Información detalla" style="height: 100%;">
           <VCardText>
-            <div >
+            <div v-if="cargandoUser" class="d-flex align-center justify-center ">Cargando...</div>
+            <div v-else-if="selectedUserDetails">
               <ul>
                 <li v-for="(item, index) in selectedUserDetails.data" :key="index">
                   <p>{{ item.title }}</p>
@@ -77,10 +69,13 @@
                 </li>
               </ul>
             </div>
+            <div v-else>No se encontro información</div>
           </VCardText>
         </VCard>
+
       </VCol>
-      <div v-else>No se encontro información</div>
+      <!-- <div v-else>No se encontro información</div> -->
+
     </VRow>
 
 
@@ -88,11 +83,23 @@
   </section>
 
   <!-- SnackBar -->
-  <VSnackbar v-model="isSnackbarVisible"  location="top" color="error">
+  <VSnackbar v-model="isSnackbarVisible" location="top" color="error">
     No se han encontrado resultados
   </VSnackbar>
-</template>
 
+  <!-- SnackBar -->
+  <VSnackbar v-model="isSnackbarDetails" location="top" color="error">
+    No se encontro información
+  </VSnackbar>
+</template>
+<style>
+.opacity-50 {
+  /* opacity: 0.5; */
+  background-color: #00000012;
+ 
+}
+
+</style>
 <script setup>
 import { ref } from 'vue';
 
@@ -106,7 +113,11 @@ const total = ref(0);
 const selectedUserDetails = ref(null);
 const loadings = ref([]);
 const totalPages = computed(() => Math.ceil(total.value / limit.value));
-const isSnackbarVisible = ref(false)
+const isSnackbarVisible = ref(false);
+const isSnackbarDetails = ref(false);
+const userClicked = ref(false);
+const userClickedId = ref(null);
+
 
 const startSearch = () => {
   loadings.value[0] = true;
@@ -145,7 +156,8 @@ const updatePage = (newPage) => {
 
 const handleUserClick = async (wylexId) => {
   cargandoUser.value = true;
-
+  userClicked.value = true;
+  userClickedId.value = wylexId;
   try {
     const response = await fetch(`https://servicio-de-actividad.vercel.app/recomendadasv2/${wylexId}`);
     const data = await response.json();
@@ -153,13 +165,14 @@ const handleUserClick = async (wylexId) => {
       selectedUserDetails.value = data;
     } else {
       selectedUserDetails.value = null;
+      isSnackbarDetails.value = true;
     }
   } catch (error) {
     console.error('Error al obtener detalles del usuario:', error);
     selectedUserDetails.value = null;
   } finally {
     cargandoUser.value = false;
-
+    // userClicked.value = false;
   }
 };
 </script>
