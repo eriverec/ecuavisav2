@@ -1,21 +1,29 @@
 <template>
   <section>
-    <VCard title="Recompesas">
-      <!-- <VCardSubtitle> Busca los usuarios por nombres, apellidos y emails </VCardSubtitle> -->
-      <VCardText>
-        <div class="d-flex gap-4">
-          <VTextField v-model="searchTerm" @keyup.enter="startSearch" style="max-width: 400px;" label="Buscar..." />
-          <VBtn @click="startSearch" color="primary">
-            Buscar
-          </VBtn>
-        </div>
-
-      </VCardText>
-    </VCard>
-
     <VRow>
+      <VCol cols="12">
+        <VCard title="Recompesas">
+          <!-- <VCardSubtitle> Busca los usuarios por nombres, apellidos y emails </VCardSubtitle> -->
+          <VCardText>
+            <div class="d-flex gap-4">
+              <VTextField v-model="searchTerm" @keyup.enter="startSearch" style="max-width: 400px;" label="Buscar..." />
+              <!-- <VBtn @click="startSearch" color="primary">
+                Buscar
+              </VBtn> -->
+    
+              <VBtn :loading="loadings[0]" :disabled="loadings[0]" color="primary" size="small" icon="tabler-search"
+                @click="startSearch" />
+            </div>
+    
+          </VCardText>
+        </VCard>
+
+      </VCol>
+    </VRow>
+
+    <VRow v-if="searchResults.length > 0">
       <VCol cols="7">
-        <VCard class="mt-4" title="Resultado de la búsqueda">
+        <VCard class="mt-4" title="Resultado de la búsqueda" style="height: 100%;">
           <VCardText>
 
             <div v-if="loading" style="height: 400px;" class="d-flex align-center justify-center ">Cargando...</div>
@@ -45,13 +53,8 @@
 
 
               </VTable>
-              <VPagination 
-              v-if="total > limit" 
-              v-model="page" 
-              size="small" 
-              :total-visible="5" 
-              :length="totalPages"
-              @update:model-value="updatePage" />
+              <VPagination v-if="total > limit" v-model="page" size="small" :total-visible="5" :length="totalPages"
+                @update:model-value="updatePage" />
 
             </div>
             <div v-else>No hay datos</div>
@@ -62,11 +65,11 @@
         </VCard>
 
       </VCol>
-      <VCol cols="5">
-        <VCard class="mt-4" title="Información detalla">
+      <div v-if="cargandoUser" class="d-flex align-center justify-center ">Cargando...</div>
+      <VCol cols="5" v-else-if="selectedUserDetails">
+        <VCard class="mt-4" title="Información detalla" style="height: 100%;">
           <VCardText>
-            <div v-if="cargandoUser" class="d-flex align-center justify-center ">Cargando...</div>
-            <div v-else-if="selectedUserDetails">
+            <div >
               <ul>
                 <li v-for="(item, index) in selectedUserDetails.data" :key="index">
                   <p>{{ item.title }}</p>
@@ -74,14 +77,20 @@
                 </li>
               </ul>
             </div>
-            <div v-else>No se encontro información</div>
           </VCardText>
         </VCard>
-
       </VCol>
+      <div v-else>No se encontro información</div>
     </VRow>
 
+
+
   </section>
+
+  <!-- SnackBar -->
+  <VSnackbar v-model="isSnackbarVisible"  location="top" color="error">
+    No se han encontrado resultados
+  </VSnackbar>
 </template>
 
 <script setup>
@@ -91,15 +100,16 @@ const searchTerm = ref('');
 const searchResults = ref([]);
 const loading = ref(false);
 const cargandoUser = ref(false);
-
-
 const page = ref(1);
-const limit = ref(10); // Esto debería coincidir con el límite establecido por la API
+const limit = ref(10);
 const total = ref(0);
 const selectedUserDetails = ref(null);
+const loadings = ref([]);
 const totalPages = computed(() => Math.ceil(total.value / limit.value));
+const isSnackbarVisible = ref(false)
 
 const startSearch = () => {
+  loadings.value[0] = true;
   page.value = 1; // Reinicia la página a 1 al realizar una nueva búsqueda
   search();
 };
@@ -117,11 +127,14 @@ const search = async () => {
     } else {
       searchResults.value = [];
       total.value = 0;
+      console.log("no hay nada para mostrar");
+      isSnackbarVisible.value = true;
     }
   } catch (error) {
     console.error('Error al realizar la búsqueda:', error);
   } finally {
     loading.value = false;
+    loadings.value[0] = false;
   }
 };
 
