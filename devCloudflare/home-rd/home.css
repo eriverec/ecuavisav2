@@ -2533,9 +2533,9 @@ INICIO - BLOQUE - MUNDO
 .HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block {
   position: relative;
   display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 30px;
-    align-items: center;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: center;
 }
 
 .HOME_MENU_RD .bloque_estadio_1 .noticias .article .media_block .line_estadio img {
@@ -2668,8 +2668,8 @@ INICIO - BLOQUE - MUNDO
   line-height: 20px;
 }
 
-@media (max-width: 1024px){
-  .bloque_estadio_1 .headline a h2{
+@media (max-width: 1024px) {
+  .bloque_estadio_1 .headline a h2 {
     font-size: 22px;
     line-height: 28px;
   }
@@ -2943,13 +2943,19 @@ INICIO - BLOQUE - ESTILO
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block {
   position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 30px;
+  align-items: center;
 }
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block .headline a h3 {
   /* font-size: 28px; */
-  font-size: 34px;
+  font-size: 36px;
   color: white;
   font-weight: 700;
+
+  line-height: 44px;
 }
 
 
@@ -2957,7 +2963,7 @@ INICIO - BLOQUE - ESTILO
   font-size: 20px;
   color: #fff;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 300;
   line-height: 27px;
   letter-spacing: -0.025em;
 }
@@ -2973,19 +2979,15 @@ INICIO - BLOQUE - ESTILO
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .multimedia .multimediaIconMacroWrapper a div {
   background-image: -webkit-linear-gradient(bottom, #2927B9 10%, white 90%);
 
-  height: 600px !important;
   width: 100% !important;
   object-fit: cover;
-  padding-top: 0 !important;
 }
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .multimedia img {
   /*  -webkit-mask-image: linear-gradient(to top, transparent 0, #2927B9 10%);*/
-  height: 600px !important;
+  
   width: 100% !important;
   object-fit: cover;
-  padding-top: 0 !important;
-  object-position: top;
 }
 
 .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .multimedia img:hover {
@@ -3075,6 +3077,11 @@ INICIO - BLOQUE - ESTILO
     font-size: var(--rd-size-14);
   }
 
+  .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block .headline a h3{
+    font-size: var(--rd-size-22);
+    line-height: 30px;
+  }
+
   .HOME_MENU_RD .lista-bloque-estilo {
     padding: 0 25px;
   }
@@ -3088,6 +3095,12 @@ INICIO - BLOQUE - ESTILO
     font-size: 16px;
     line-height: 26px;
     margin-bottom: 20px;
+  }
+
+  .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block{
+    display: grid;
+    grid-template-columns: none;
+    gap: 20px;
   }
 
   .BLOQUE__NOTICIAS .nota-principal-bloque-mobile .BLOQUE_SEC_TIT_IMG_TXT {
@@ -3119,7 +3132,6 @@ INICIO - BLOQUE - ESTILO
 
   .HOME_MENU_RD .bloque_estilo_1 .noticias .article .media_block .text_block {
     padding: 12px 12px;
-    width: 430px;
     max-width: 100%;
   }
 
