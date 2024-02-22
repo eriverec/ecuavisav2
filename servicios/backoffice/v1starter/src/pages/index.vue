@@ -147,11 +147,12 @@ const countUsers = () => {
 
       let totalApp = totalAppUsers.value;
 
-      totalDevicesUser.value = (response.data.totalEmail) + (response.data.totalFacebook) + (response.data.totalGoogle) + (totalApp);
       totalDevicesEmail.value = (response.data.totalEmail) + (response.data.totalAppEmail);
       totalDevicesFacebook.value = (response.data.totalFacebook) + (response.data.totalAppFacebook);
       totalDevicesGoogle.value = (response.data.totalGoogle) + (response.data.totalAppGoogle);
       totalDevicesApple.value = (response.data.totalApple) + (response.data.totalAppApple);
+
+      totalDevicesUser.value = (totalDevicesEmail.value) + (totalDevicesFacebook.value) + (totalDevicesGoogle.value) + (totalDevicesApple.value);
 
       pE.value = (totalEmail.value * 100) / total;
       percentEmail.value = Math.round((pE.value + Number.EPSILON) * 100) / 100;
