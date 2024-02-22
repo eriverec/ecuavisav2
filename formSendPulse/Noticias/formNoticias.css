@@ -78,6 +78,12 @@
 }
 
 
+@media (min-width: 767px) and (max-width: 991px){
+  .newsletter_rd_noticias .newsContenido .news_line_left img {
+    display: none;
+  }
+}
+
 @media (min-width: 768px) and (max-width: 993px) {
   .newsletter_rd_noticias .info-formulario .news-texto-rd .newsletterh1{
     font-size: 55px;
