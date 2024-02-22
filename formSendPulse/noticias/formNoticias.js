@@ -38,6 +38,7 @@ setTimeout(() => {
   embedsend.setAttribute('title', 'Formulario de suscripciones para noticias EcuavisaEC');
   embedsend.setAttribute('frameborder', '0');
   embedsend.setAttribute('scrolling', 'no');
+  embedsend.setAttribute('width', '100%');
   embedsend.setAttribute('allowtransparency', 'true');
   var selecEmbed = document.querySelector('.esendpulseNoticias');
   selecEmbed.appendChild(embedsend);
