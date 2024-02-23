@@ -21,6 +21,10 @@
   --animate-repeat: 1
 }
 
+#iter-footer-wrapper{
+  margin-top: 0;
+}
+
 .ly-header .header-logo {
   background-image: url("https://www.ecuavisa.com/base-portlet/webrsrc/ctxvar/05a63cf2-e0fc-4f88-b67f-1a749aeebf02.png");
 }
