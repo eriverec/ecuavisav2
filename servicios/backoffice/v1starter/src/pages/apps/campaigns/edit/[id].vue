@@ -524,7 +524,7 @@ async function onComplete() {
 }
 
 async function handleValidation(isValid, tabIndex) {
-  if(tabIndex == 1 && isValid == true && dataCountry.value.length < 1){
+  if(tabIndex == 1 && isValid == true){
     await getCountries();
 
     var paises = [];
@@ -534,7 +534,6 @@ async function handleValidation(isValid, tabIndex) {
       paises.push(ins.country);
     }
 
-    // console.log(paises)
     countryList.value = paises;
 
   }
@@ -877,8 +876,8 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
 
       clearTimeout(timeoutId.value);
       timeoutId.value = setTimeout(async () => {
-        await getUsuarios();
-        loadingPanel.value=false;
+        const resp = await getUsuarios();
+        loadingPanel.value = false;
       }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
 
       await generarOtrosValores();
