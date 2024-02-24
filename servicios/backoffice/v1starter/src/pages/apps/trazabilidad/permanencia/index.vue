@@ -1689,6 +1689,8 @@ import { computed, reactive, ref } from 'vue';
                         hint="" />
                     </div>
 
+                    
+
                   </div>
                 </VCardItem>
                 <div class="d-flex flex-wrap py-0 gap-4 align-items-center" style="justify-content: space-between;;">
@@ -1978,7 +1980,7 @@ import { computed, reactive, ref } from 'vue';
                             </VCol>
                           </VRow>
                         </VWindowItem>
-                        <WindowItem>
+                        <VWindowItem>
 
                           <VList lines="two" border v-for="(groups, range) in groupedData" :key="range">
                             <VListItem >
@@ -1986,7 +1988,7 @@ import { computed, reactive, ref } from 'vue';
                                 {{ range }}: {{ groups.total }} usuario(s)
                               </VListItemTitle>
                               <div v-if="isCollapsed[range]">
-                                                    <div v-for="(users, url) in groups.urls" :key="url">
+                                  <div v-for="(users, url) in groups.urls" :key="url">
                                                       <button class="btn btn-secondary my-2" type="button" @click="toggleCollapse(url)">
                                                         {{ url }} ({{ users.length }} usuario(s))
                                                       </button>
@@ -1995,13 +1997,13 @@ import { computed, reactive, ref } from 'vue';
                                                           {{ user.user.first_name }} - {{ user.seconds }} segundos
                                                         </li>
                                                       </ul>
-                                                    </div>
-                                                  </div>
+                                  </div>
+                                </div>
                             </VListItem>
                           </VList>
 
 
-                        </WindowItem>
+                        </VWindowItem>
                       </VWindow>
 
                     </VCol>
