@@ -77,6 +77,9 @@
   width: 100%;
 }
 
+.newsletter_rd_noticias .newsContenido .news-texto-rd {
+  max-width: 80%;
+}
 
 @media (min-width: 767px) and (max-width: 991px){
   .newsletter_rd_noticias .newsContenido .news_line_left img {
