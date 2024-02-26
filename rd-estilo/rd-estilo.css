@@ -1403,6 +1403,9 @@ img.sepDesk {
     padding-right: 0 !important;
     padding-left: 0 !important;
   }
+  .bloque-programas .media_block .text_block .headline h3 {
+    font-size: 18px;
+}
 
 }
 
