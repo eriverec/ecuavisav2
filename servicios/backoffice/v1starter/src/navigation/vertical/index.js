@@ -99,7 +99,7 @@ export default [
   //   title: 'Recompensas',
   //   icon: { icon: 'tabler-award-filled' },
   //   children: [
-  //     { title: 'Historial', to: 'apps-recompensas' },
+  //     { title: 'Historial', to: 'apps-reglasYDesafios-recompensas' },
       
   //   ],
   // },
