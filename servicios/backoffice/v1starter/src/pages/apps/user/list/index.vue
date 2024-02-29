@@ -328,14 +328,9 @@ const reset = () => {
   fetchUsers();
 };
 
-watchEffect(watchEffect(()=>{
-  if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
-    return true;
-  }else{
-    fetchUsers();
-  }
-}));
+onMounted(async () => {
+  fetchUsers();
+});
 
 watch(async () => page.value, async (newValue, oldValue) => {
   if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
@@ -345,6 +340,22 @@ watch(async () => page.value, async (newValue, oldValue) => {
   // if (page.value > totalPage.value) {
   //   page.value = totalPage.value
   // };
+  fetchUsers();
+});
+
+watch(async () => rowPerPage.value, async (newValue, oldValue) => {
+  if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
+    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
+    return false;
+  }
+  fetchUsers();
+});
+
+watch(async () => selectedProvider.value, async (newValue, oldValue) => {
+  if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
+    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
+    return false;
+  }
   fetchUsers();
 });
 
