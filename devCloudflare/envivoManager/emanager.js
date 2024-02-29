@@ -239,6 +239,10 @@ function eventoEnvivoManager() {
                             console.log("si hay iframe individual", iframeIndividual);
                             setTimeout(() => {
                               playerembed.innerHTML = iframeIndividual;
+                              const iframe = document.getElementById("vrudo");
+                              const src = iframe.src;
+                              const separator = src.indexOf("?") > -1 ? "&" : "?";
+                              iframe.src = src + separator + "user=" + ECUAVISA_EC.USER_data('id');
                             }, 1000);
 
                           } else {
