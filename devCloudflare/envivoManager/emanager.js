@@ -244,10 +244,10 @@ function eventoEnvivoManager() {
                           } else {
                             console.log("no hay iframe individual");
                             playerembed.innerHTML = htmlIframe;
-                            // const iframe = document.getElementById("vrudo");
-                            // const src = iframe.src;
-                            // const separator = src.indexOf("?") > -1 ? "&" : "?";
-                            // iframe.src = src + separator + "user=" + ECUAVISA_EC.USER_data('id');
+                            const iframe = document.getElementById("vrudo");
+                            const src = iframe.src;
+                            const separator = src.indexOf("?") > -1 ? "&" : "?";
+                            iframe.src = src + separator + "user=" + ECUAVISA_EC.USER_data('id');
                             console.log(htmlIframe);
                           }
                         }
