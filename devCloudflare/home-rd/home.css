@@ -1311,7 +1311,7 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .ecuador_list_1x2 .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 40px;
+  gap: 20px;
 }
 
 .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .headline a h2 {
@@ -1338,7 +1338,7 @@ INICIO - BLOQUE - ECUADOR
 .HOME_MENU_RD .nota-principal-bloque .noticias .article .media_block {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  gap: 20px;
   align-items: center;
 }
 
@@ -2067,7 +2067,7 @@ INICIO - BLOQUE - MUNDO
 .HOME_MENU_RD .lista-bloque-1x4 .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  column-gap: 30px;
+  column-gap: 20px;
 }
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article:nth-child(1) {
@@ -2538,7 +2538,7 @@ INICIO - BLOQUE - MUNDO
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  gap: 20px;
   align-items: center;
 }
 
@@ -2740,7 +2740,7 @@ BLOQUE - CULTURA
 .HOME_MENU_RD .nota-principal-bloque-cultura .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  gap: 20px;
 }
 
 .HOME_MENU_RD .nota-principal-bloque-cultura .noticias .article .text_block .headline a h3 {
@@ -2772,7 +2772,7 @@ BLOQUE - CULTURA
 .HOME_MENU_RD .bloque_cultura_2 .noticias {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  column-gap: 30px;
+  column-gap: 20px;
 }
 
 .HOME_MENU_RD .bloque_cultura_2 .noticias .article .media_block {
@@ -2949,7 +2949,7 @@ INICIO - BLOQUE - ESTILO
   position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 30px;
+  gap: 20px;
   align-items: center;
 }
 
