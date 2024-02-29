@@ -5,6 +5,9 @@ export const useUserListStore = defineStore('UserListStore', {
   actions: {
     // 👉 Fetch users data
     fetchUsers(params) { return axios.get('https://usuarios-backoffice.vercel.app/all', { params }) },
+    /*************CREADO EL 29 DE FEBRERO DEL 2024 - CR*************/
+    fetchUsers_v2(params) { return axios.get('https://usuarios-backoffice.vercel.app/export', { params }) },
+    /*************CREADO EL 29 DE FEBRERO DEL 2024 - CR*************/
 
     countPageUsers() { return axios.get('https://usuarios-backoffice.vercel.app/count') },
 

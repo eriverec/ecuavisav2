@@ -3,13 +3,13 @@ import AddNewUserDrawer from "@/views/apps/user/list/AddNewUserDrawer.vue";
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 import { avatarText } from "@core/utils/formatters";
 
-import Moment from 'moment-timezone';
+import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 
+
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
-moment.tz.setDefault('America/Guayaquil');
 
 const userListStore = useUserListStore();
 const searchQuery = ref("");
@@ -19,7 +19,6 @@ const rowPerPage = ref(10);
 const rowPerPageExport = ref(2200);
 const page = ref(1);
 const totalPage = ref(1);
-const docsExportNumberLength = ref({tamanioActual:0, tamanioTotal:0});
 const totalUsers = ref(0);
 const totalAppUsers = ref(0);
 
@@ -28,32 +27,6 @@ const totalDevicesEmail = ref(0);
 const totalDevicesFacebook = ref(0);
 const totalDevicesGoogle = ref(0);
 const totalDevicesApple = ref(0);
-
-const headersGlobal = ref({
-  _id: "_id",
-  wylexId: "wylexId",
-  site: "site",
-  site_id: "site_id",
-  email: "email",
-  first_name: "first_name",
-  last_name: "last_name",
-  avatar: "avatar",
-  created_at: "created_at",
-  logged_at: "logged_at",
-  logged_at_site: "logged_at_site",
-  updated_at: "updated_at",
-  validated_at: "validated_at",
-  banned_at: "banned_at",
-  country: "country",
-  phone_prefix: "phone_prefix",
-  phone_number: "phone_number",
-  gender: "gender",
-  birth_date: "birth_date",
-  identification_type: "identification_type",
-  identification_number: "identification_number",
-  newsletter_opt_in: "newsletter_opt_in",
-  provider: "provider",
-});
 
 const totalFacebook = ref(0);
 const totalGoogle = ref(0);
@@ -88,12 +61,6 @@ const fechai = ref('');
 const fechaf = ref('');
 const fechaIngesada = ref('');
 const isSearchLoading = ref(false);
-
-const disabledBtnExportAll = ref(false);
-const disabledBtnExportSection = ref(false);
-const disabledBtnExportSearch = ref(false);
-const disabledPagination = ref(false);
-
 const sectionLoading = () => {
   isLoaded.value = false;
   isLoading.value = true;
@@ -103,14 +70,6 @@ const sectionLoaded = () => {
   isLoaded.value = true;
   isLoading.value = false;
 };
-
-const sectionDisabled = (disabled = false) => {
-  disabledBtnExportAll.value = disabled;
-  disabledBtnExportSection.value = disabled;
-  disabledBtnExportSearch.value = disabled;
-  disabledPagination.value = disabled;
-};
-
 const isFullLoading = ref(false);
 const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
 const dateNow = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
@@ -121,14 +80,9 @@ const router = useRouter();
 // 👉 Fetching users
 const fetchUsers = () => {
   try {
-
-    if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-      alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
-      return true;
-    }
-
-    sectionLoading();
-    userListStore.fetchUsers_v2({
+  sectionLoading();
+  userListStore
+    .fetchUsers({
       pageSize: rowPerPage.value,
       page: page.value,
       query: search.value,
@@ -296,10 +250,6 @@ const countUsers = () => {
 countUsers();
 
 const searchUsers = () => {
-  if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
-    return true;
-  }
   if (searchQuery.value) {
     page.value = 1;
     totalPage.value = 1;
@@ -309,11 +259,6 @@ const searchUsers = () => {
 };
 
 const reset = () => {
-  if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
-    return true;
-  }
-
   page.value = 1;
   totalPage.value = 1;
   selectedBoletin.value = "";
@@ -323,40 +268,19 @@ const reset = () => {
   fechai.value = "";
   fechaf.value = "";
   fechaIngesada.value = "";
+
   fetchUsers();
 };
 
-watchEffect(watchEffect(()=>{
-  if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
-    return true;
-  }else{
-    fetchUsers();
-  }
-}));
-
-watch(async () => page.value, async (newValue, oldValue) => {
-  if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
-    return false;
-  }
-  // if (page.value > totalPage.value) {
-  //   page.value = totalPage.value
-  // };
-  fetchUsers();
-});
-
-const handlePaginationClick = async () => {
-  
-};
+watchEffect(fetchUsers);
 
 // 👉 watching current page
-// watchEffect(() => {
-  
-//   // console.log("watch totalPageValue", totalPage.value);
-// });
+watchEffect(() => {
+  if (page.value > totalPage.value) page.value = totalPage.value;
+  //console.log("watch totalPageValue", totalPage.value);
+});
 
-async function accionBackoffice(logData){
+async function accionBackoffice (logData){
   if(userBackoffice.value.email !== 'admin@demo.com' ){
   var myHeaders = new Headers();
 				myHeaders.append("Content-Type", "application/json");
@@ -474,9 +398,9 @@ const resolveUserStatusVariant = (stat) => {
 const isAddNewUserDrawerVisible = ref(false);
 
 // 👉 watching current page
-// watchEffect(() => {
-//   if (page.value > totalPage.value) page.value = totalPage.value;
-// });
+watchEffect(() => {
+  if (page.value > totalPage.value) page.value = totalPage.value;
+});
 
 // 👉 Computing pagination data
 const paginationData = computed(() => {
@@ -681,216 +605,256 @@ function exportCSVFile(headers, items, fileTitle) {
   }
 }
 
-async function fetchFullUsers(){
-    docsExportNumberLength.value = {
-      tamanioActual : 0,
-      tamanioTotal : 0
-    };
+async function fetchFullUsers (){
 
-    usersFull.value = [];
+await userListStore
+      .countPageUsers()
+      .then(async(response) => {
 
-    var pages = 1;
-    for (let i = 1; i < pages + 1; i++) {
-      await userListStore.fetchUsers_v2({
-        todaBase: 1,
-        pageSize: rowPerPageExport.value,
-        page: i,
-        query: "",
-        provider: "",
-        news: "",
-        sort: (sortDesc.value?-1:1),
-        columnSort: "",
-        fechai: "",
-        fechaf: "",
-      }).then((res) => {
-        let array = Array.from(res.data.users);
-        const totalUser = res.data.totalUsers;
-
-        if(i==1){
-          pages = res.data.totalPage + 1;
-        }
-
-        if(array.length < 1){
-          i = pages.value + 2;
-        }
-
-        array.forEach((item) => {
-          let newItem = {}; // Nuevo objeto para cada elemento de array
-          // Recorremos las claves de headers
-          for (let key in headersGlobal.value) {
-            // Verificamos si la clave existe en item y la agregamos al nuevo objeto
-            if (item.hasOwnProperty(key)) {
-              newItem[key] = item[key];
-            }
-          }
-          // Agregamos el nuevo objeto a usersFull.value
-          usersFull.value.push(newItem);
+      let pages = Number(response.data);
+      for (let i = 1; i < pages+1; i++) {
+        await userListStore.fetchFullUsers(i).then((res) => {   
+        
+          console.log('res',res.data)
+          let array = Array.from(res.data);
+          
+          array.forEach((item) => {
+            usersFull.value.push({
+              _id: item._id,
+              wylexId: item.wylexId,
+              site: item.site,
+              site_id: item.site_id,
+              email: item.email,
+              // contraseña: item.contraseña,
+              first_name: item.first_name,
+              last_name: item.last_name,
+              avatar: item.avatar,
+              // created_at: item.created_at,
+              // logged_at: item.logged_at,
+              created_at: moment(item.created_at).format('DD/MM/YYYY-HH:mm:ss'),
+              logged_at: moment(item.logged_at).format('DD/MM/YYYY-HH:mm:ss'),
+              logged_at_site: item.logged_at_site,
+              updated_at: item.updated_at,
+              validated_at: item.validated_at,
+              banned_at: item.banned_at,
+              country: item.country,
+              phone_prefix: item.phone_prefix,
+              phone_number: item.phone_number,
+              gender: item.gender,
+              birth_date: item.birth_date,
+              identification_type: item.identification_type,
+              identification_number: item.identification_number,
+              newsletter_opt_in: item.newsletter_opt_in,
+              provider: item.provider,
+            });
+          });
+          usersFull.value.sort((a, b) => moment(b.created_at, 'DD/MM/YYYY-HH:mm:ss').diff(moment(a.created_at, 'DD/MM/YYYY-HH:mm:ss')));
         });
-
-        docsExportNumberLength.value.tamanioActual = usersFull.value.length;
-        if(docsExportNumberLength.value.tamanioTotal == 0){
-          docsExportNumberLength.value.tamanioTotal = totalUser;
-        }
-
-        usersFull.value.sort((a, b) => moment(b.created_at, 'DD/MM/YYYY-HH:mm:ss').diff(moment(a.created_at, 'DD/MM/YYYY-HH:mm:ss')));
-      });
-    }
-    
-    isFullLoading.value=false;
+      }
+      
+      isFullLoading.value=false;
+    }).catch((error) => {
+      console.error(error);
+    });
 };
 //onMounted(fetchFullUsers);
 
 async function downloadFull () {
-  try {
-    sectionDisabled(true);
-    isFullLoading.value=true;
-    await fetchFullUsers();
-    isFullLoading.value=false;
+      isFullLoading.value=true;
+      await fetchFullUsers();
+      isFullLoading.value=false;
+       //console.log('usersFull.value',usersFull.value);
+      let headers = {
+        _id: "_id",
+        wylexId: "wylexId",
+        site: "site",
+        site_id: "site_id",
+        email: "email",
+        first_name: "first_name",
+        last_name: "last_name",
+        avatar: "avatar",
+        created_at: "created_at",
+        logged_at: "logged_at",
+        logged_at_site: "logged_at_site",
+        updated_at: "updated_at",
+        validated_at: "validated_at",
+        banned_at: "banned_at",
+        country: "country",
+        phone_prefix: "phone_prefix",
+        phone_number: "phone_number",
+        gender: "gender",
+        birth_date: "birth_date",
+        identification_type: "identification_type",
+        identification_number: "identification_number",
+        newsletter_opt_in: "newsletter_opt_in",
+        provider: "provider",
+      };
+      let doc = [];
+      doc = usersFull.value
+      let title = "users_full";
+      //console.log("usersFull", usersFull.value);
+      //console.log("doc", doc);
+      //if(usersFull.length > totalUsers){
+      await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "lista-usuarios",
+            "accion": "descarga-completa",
+            "fecha": dateNow.value
+					});  
+      exportCSVFile(headers, doc, title);
+     // }
 
-    let doc = [];
-    doc = usersFull.value
-    let title = "users_full";
-    //console.log("usersFull", usersFull.value);
-    //console.log("doc", doc);
-    //if(usersFull.length > totalUsers){
-    await accionBackoffice({
-      "usuario": userBackoffice.value.email,   
-      "pagina": "lista-usuarios",
-      "accion": "descarga-completa",
-      "fecha": dateNow.value
-    });  
-    exportCSVFile(headersGlobal.value, doc, title);
-    sectionDisabled(false);
-   // }
-  } catch (error) {
-      console.log(error)
-      alert("Existe un error al intentar exportar la data, intente nuevamente");
-      sectionDisabled(false);
-  }
 };
 
-async function downloadSection(){
-  try {
-    sectionDisabled(true);
+async function downloadSection (){
+  let headers = {
+    wylexId: "wylexId",
+    site: "site",
+    email: "email",
+    first_name: "first_name",
+    last_name: "last_name",
+    avatar: "avatar",
+    created_at: "created",
+    logged_at: "last_session",
+    country: "country",
+    phone_prefix: "phone_prefix",
+    phone_number: "phone_number",
+    gender: "gender",
+    birth_date: "birth_date",
+    identification_type: "identification_type",
+    identification_number: "identification_number",
+    newsletter_opt_in: "newsletter_opt_in",
+    provider: "provider",
+  };
+  let doc = [];
+  let docRaw = Array.from(users.value);
 
-    let doc = [];
-    let docRaw = Array.from(users.value);
+  let firstIndex = users.value.length
+    ? (page.value - 1) * rowPerPage.value + 1
+    : 0;
+  let lastIndex = users.value.length + (page.value - 1) * rowPerPage.value;
+  //console.log("usersValue ", users.value.length);
+  let title = "users_section_" + firstIndex + "_" + lastIndex;
+  docRaw.forEach((item) => {
+    doc.push({
+      wylexId: item.wylexId,
+      site: item.site,
+      email: item.email,
+      first_name: item.first_name,
+      last_name: item.last_name,
+      avatar: item.avatar,
+      created_at: moment(item.created_at).format('DD/MM/YYYY-HH:mm:ss'),
+      logged_at: moment(item.logged_at).format('DD/MM/YYYY-HH:mm:ss'),
+      country: item.country,
+      phone_prefix: item.phone_prefix,
+      phone_number: item.phone_number,
+      gender: item.gender,
+      birth_date: item.birth_date,
+      identification_type: item.identification_type,
+      identification_number: item.identification_number,
+      newsletter_opt_in: item.newsletter_opt_in,
+      provider: item.provider,
+    });
+  });
+  await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "lista-usuarios",
+            "accion": "descarga-seccion",
+            "fecha": dateNow.value
+					});
+  exportCSVFile(headers, doc, title);
+};
 
-    let firstIndex = users.value.length
-      ? (page.value - 1) * rowPerPage.value + 1
-      : 0;
+async function downloadSearch (){
+  isSearchLoading.value = true;
+  let headers = {
+    wylexId: "wylexId",
+    site: "site",
+    email: "email",
+    first_name: "first_name",
+    last_name: "last_name",
+    avatar: "avatar",
+    created_at: "created",
+    logged_at: "last_session",
+    country: "country",
+    phone_prefix: "phone_prefix",
+    phone_number: "phone_number",
+    gender: "gender",
+    birth_date: "birth_date",
+    identification_type: "identification_type",
+    identification_number: "identification_number",
+    newsletter_opt_in: "newsletter_opt_in",
+    provider: "provider",
+  };
+  let doc = [];
+  var totalPageTemp = totalPage.value;
+  for (let i = 1; i < totalPageTemp + 1; i++) {
+    await userListStore
+    .fetchUsers({
+      pageSize: rowPerPageExport.value,
+      page: i,
+      query: search.value,
+      provider: selectedProvider.value,
+      news: selectedBoletin.value,
+      sort: (sortDesc.value?-1:1),
+      columnSort: sortBy.value,
+      fechai: fechai.value && fechaf.value? fechai.value:'',
+      fechaf: fechai.value && fechaf.value? fechaf.value:'',
+    })
+    .then((response) => {
+      let docRaw = response.data.users;
 
-    let lastIndex = users.value.length + (page.value - 1) * rowPerPage.value;
-    //console.log("usersValue ", users.value.length);
-    let title = "users_section_" + firstIndex + "_" + lastIndex;
-
-    docRaw.forEach((item) => {
-      let newItem = {}; // Nuevo objeto para cada elemento de docRaw
-      // Recorremos las claves de headers
-      for (let key in headersGlobal.value) {
-        // Verificamos si la clave existe en item y la agregamos al nuevo objeto
-        if (item.hasOwnProperty(key)) {
-          newItem[key] = item[key];
-        }
+      if(i==1){
+        totalPageTemp = response.data.totalPage + 1;
+        console.log(totalPageTemp)
       }
-      // Agregamos el nuevo objeto a doc
-      doc.push(newItem);
+
+      if(docRaw.length < 1){
+        i = totalPage.value + 1;
+      }
+
+      docRaw.forEach((item) => {
+        doc.push({
+        wylexId: item.wylexId,
+        site: item.site,
+        email: item.email,
+        first_name: item.first_name,
+        last_name: item.last_name,
+        avatar: item.avatar,
+        created_at: moment(item.created_at).format('DD/MM/YYYY-HH:mm:ss'),
+        logged_at: moment(item.logged_at).format('DD/MM/YYYY-HH:mm:ss'),
+        country: item.country,
+        phone_prefix: item.phone_prefix,
+        phone_number: item.phone_number,
+        gender: item.gender,
+        birth_date: item.birth_date,
+        identification_type: item.identification_type,
+        identification_number: item.identification_number,
+        newsletter_opt_in: item.newsletter_opt_in,
+        provider: item.provider,
+      });   
     });
-
-    await accionBackoffice({
-      "usuario": userBackoffice.value.email,   
-      "pagina": "lista-usuarios",
-      "accion": "descarga-seccion",
-      "fecha": dateNow.value
+    })
+    .catch((error) => {
+      console.error(error);
     });
-    exportCSVFile(headersGlobal.value, doc, title);
-
-    sectionDisabled(false);
-  } catch (error) {
-      console.log(error)
-      alert("Existe un error al intentar exportar la data, intente nuevamente");
-      sectionDisabled(false);
   }
-};
-
-async function downloadSearch(){
-  try {
-    isSearchLoading.value = true;
-    sectionDisabled(true);
-    docsExportNumberLength.value = {
-      tamanioActual : 0,
-      tamanioTotal : 0
-    };
-    let doc = [];
-    var totalPageTemp = totalPage.value;
-    for (let i = 1; i < totalPageTemp + 1; i++) {
-      await userListStore.fetchUsers_v2({
-          todaBase:0,
-          pageSize: rowPerPageExport.value,
-          page: i,
-          query: search.value,
-          provider: selectedProvider.value,
-          news: selectedBoletin.value,
-          sort: (sortDesc.value?-1:1),
-          columnSort: sortBy.value,
-          fechai: fechai.value && fechaf.value? fechai.value:'',
-          fechaf: fechai.value && fechaf.value? fechaf.value:'',
-        }).then((response) => {
-          const docRaw = response.data.users;
-          const totalUser = response.data.totalUsers;
-
-
-          if(i==1){
-            totalPageTemp = response.data.totalPage + 1;
-          }
-
-          if(docRaw.length < 1){
-            i = totalPageTemp + 2;
-          }
-
-          docRaw.forEach((item) => {
-            let newItem = {}; // Nuevo objeto para cada elemento de docRaw
-            // Recorremos las claves de headers
-            for (let key in headersGlobal.value) {
-              // Verificamos si la clave existe en item y la agregamos al nuevo objeto
-              if (item.hasOwnProperty(key)) {
-                newItem[key] = item[key];
-              }
-            }
-            // Agregamos el nuevo objeto a doc
-            doc.push(newItem);
-          });
-
-          docsExportNumberLength.value.tamanioActual = doc.length;
-          if(docsExportNumberLength.value.tamanioTotal == 0){
-            docsExportNumberLength.value.tamanioTotal = totalUser;
-          }
-
-        }).catch((error) => {
-        console.error(error);
-      });
-    }
-    //console.log("usersValue ", users.value.length);
-    let title = "users_busqueda";
-    
-    await accionBackoffice({ "usuario": userBackoffice.value.email, "pagina": "lista-usuarios", "accion": "descarga-busqueda", "fecha": dateNow.value });
-    exportCSVFile(headersGlobal.value, doc, title);
-    
-    isSearchLoading.value = false;
-    sectionDisabled(false);
-  } catch (error) {
-      console.log(error)
-      alert("Existe un error al intentar exportar la data, intente nuevamente");
-      sectionDisabled(false);
-  }
+  //console.log("usersValue ", users.value.length);
+  let title = "users_busqueda";
+  
+  await accionBackoffice({
+            "usuario": userBackoffice.value.email,   
+            "pagina": "lista-usuarios",
+            "accion": "descarga-busqueda",
+            "fecha": dateNow.value
+					});
+  exportCSVFile(headers, doc, title);
+  isSearchLoading.value = false;
 };
 
 const sortTable = (column) => {
-  if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
-    return true;
-  }
-
+  //sectionLoading();
+  //sectionLoaded();
   if (sortBy.value === column) {
     sortDesc.value = !sortDesc.value;
   } else {
@@ -965,7 +929,7 @@ const resolveFechaSelected = (fechas) => {
   if(fechas.length > 1){
     fechai.value = `${moment(fechas[0]).format("YYYY-MM-DD")}T00:00:00Z`;
     fechaf.value = `${moment(fechas[1]).format("YYYY-MM-DD")}T23:59:59Z`;
-    fetchUsers();
+    console.log("fechas", fechas);
   } 
 };
 </script>
@@ -1048,22 +1012,21 @@ const resolveFechaSelected = (fechas) => {
               <div class="date-picker-wrapper" style="width: auto">
                 <AppDateTimePicker
         
-                  prepend-inner-icon="tabler-calendar"
-                  density="compact"
-                  v-model="fechaIngesada"
-                  show-current= true
-                  @on-change="resolveFechaSelected"
-                  :config="{ 
-                    position: 'auto right',
-                    mode:'range',
-                    altFormat: 'F j, Y',
-                    dateFormat: 'd-m-Y',
-                    maxDate: new Date(),
-                    minDate: new Date('2023-04-09'),
-                    reactive :true,
-                    clearable: true
-                    
-                  }"
+                prepend-inner-icon="tabler-calendar"
+                density="compact"
+                v-model="fechaIngesada"
+                show-current= true
+                @on-change="resolveFechaSelected"
+                :config="{ 
+                  position: 'auto right',
+                  mode:'range',
+                  altFormat: 'F j, Y',
+                  dateFormat: 'd-m-Y',
+                  maxDate: new Date(),
+                  reactive :true,
+                  clearable: true
+                  
+                }"
               />
              </div>
               </VCol>
@@ -1098,7 +1061,7 @@ const resolveFechaSelected = (fechas) => {
 
             <VSpacer />
 
-            <div class="d-flex align-init flex-wrap gap-2">
+            <div class="d-flex align-center flex-wrap gap-2">
               <!-- 👉 Search  -->
               <div style="width: 10rem">
                 <VTextField
@@ -1113,57 +1076,46 @@ const resolveFechaSelected = (fechas) => {
               <!-- 👉 Reset button -->
               <VBtn color="secondary" @click="reset"> Reiniciar </VBtn>
               <!-- 👉 Export button -->
-              <div class="d-flex flex-wrap flex-column">
-                <VBtn               
-                  variant="tonal"
-                  color="success"
-                  prepend-icon="tabler-screen-share"
-                  @click="downloadFull"
-                  :loading="isFullLoading"
-                  :disabled="disabledBtnExportAll"
+              
+              <VBtn               
+                variant="tonal"
+                color="success"
+                prepend-icon="tabler-screen-share"
+                @click="downloadFull"
+                :loading="isFullLoading"
+                :disabled="isFullLoading"
+              >
+                <span>Exportar Todo</span>
+                <VTooltip 
+              open-on-click
+              :open-on-hover="false"                                                      
+              location="top"
+              activator="parent"
+              no-click-animation
+              :disabled="!isFullLoading"
                 >
-                  <span>Exportar Todo</span>
-                  <VTooltip 
-                      open-on-click
-                      :open-on-hover="false"                                                      
-                      location="top"
-                      activator="parent"
-                      no-click-animation
-                      :disabled="!isFullLoading"
-                    >
-                    <span>Esta carga puede demorar hasta 12 minutos, espere por favor</span>
-                  </VTooltip>     
+                <span>Esta carga puede demorar hasta 12 minutos, espere por favor</span>
+              </VTooltip>     
 
-                </VBtn>
-                <small class="px-3 py-1" v-if="isFullLoading">
-                  Exportando {{ docsExportNumberLength.tamanioActual }} / {{ docsExportNumberLength.tamanioTotal }} registros
-                </small>   
-              </div>      
+              </VBtn>          
               <VBtn
                 variant="tonal"
                 color="success"
                 prepend-icon="tabler-screen-share"
                 @click="downloadSection"
-                :disabled="disabledBtnExportSection"
               >
                 Exportar sección
               </VBtn>
-              <div class="d-flex flex-wrap flex-column">
-                <VBtn
-                  variant="tonal"
-                  color="success"
-                  prepend-icon="tabler-screen-share"
-                  @click="downloadSearch"
-                  :loading="isSearchLoading"
-                  :disabled="disabledBtnExportSearch"
-                >
-                  Exportar búsqueda
-                </VBtn>
-                <small class="px-3 py-1" v-if="isSearchLoading">
-                  Exportando {{ docsExportNumberLength.tamanioActual }} / {{ docsExportNumberLength.tamanioTotal }} registros
-                </small>
-              </div>
-              
+              <VBtn
+                variant="tonal"
+                color="success"
+                prepend-icon="tabler-screen-share"
+                @click="downloadSearch"
+                :loading="isSearchLoading"
+                :disabled="isSearchLoading"
+              >
+                Exportar búsqueda
+              </VBtn>
 
               <!-- 👉 Add user button -->
               <VBtn
@@ -1179,7 +1131,7 @@ const resolveFechaSelected = (fechas) => {
           <div class="loader-section" :class="{ loaded: isLoaded }">
             <VProgressCircular indeterminate color="primary" />
           </div>
-          <VTable class="text-no-wrap" :class="{ loaded: isLoading }" :disabled="true">
+          <VTable class="text-no-wrap" :class="{ loaded: isLoading }">
             <!-- 👉 table head -->
             <thead :sort-by="sortBy" :sort-desc="sortDesc" @update:sort-by="updateSortBy" @update:sort-desc="updateSortDesc">
               <tr>
@@ -1312,7 +1264,7 @@ const resolveFechaSelected = (fechas) => {
                   <div class="d-flex align-center">
                     <div class="d-flex flex-column">
                       <span class="text-capitalize text-base">{{
-                        user.created_at != '' ? moment.utc(user.created_at).tz('America/Guayaquil').format('YYYY-MM-DD HH:mm:ss') :  ''
+                        user.created_at != '' ? moment(user.created_at).format('DD/MM/YYYY, HH:mm:ss') :  ''
                       }}</span>
                     </div>
                   </div>
@@ -1323,7 +1275,7 @@ const resolveFechaSelected = (fechas) => {
                   <div class="d-flex align-center">
                     <div class="d-flex flex-column">
                       <span class="text-capitalize text-base">{{
-                        user.logged_at != '' ? moment.utc(user.logged_at).tz('America/Guayaquil').format('YYYY-MM-DD HH:mm:ss') :  ''
+                        user.logged_at != '' ? moment(user.logged_at).format('DD/MM/YYYY, HH:mm:ss') :  ''
                       }}</span>
                     </div>
                   </div>
@@ -1421,8 +1373,6 @@ const resolveFechaSelected = (fechas) => {
               size="small"
               :total-visible="5"
               :length="totalPage"
-              :disabled= "disabledPagination"
-              @click="handlePaginationClick"
             />
           </VCardText>
 
