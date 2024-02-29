@@ -191,7 +191,7 @@ function eventoEnvivoManager() {
         const minutosActuales = (fechaActual.getUTCMinutes());
         const forzado = data.forzado.estado;
         const htmlIframe = data.html.value;
-        
+
         if (!forzado) {
           for (const dia of data.horarios) {
             if (dia.estadoDia) {
@@ -203,8 +203,8 @@ function eventoEnvivoManager() {
                     const inicioMinutos = parseInt(hora.inicio.split(":")[1]);
                     const finHora = parseInt(hora.fin.split(":")[0]);
                     const finMinutos = parseInt(hora.fin.split(":")[1]);
-                    
-                    
+
+
                     if (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) {
                       if (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos)) {
                         programasHoy.push(hora.tituloPrograma);
@@ -216,8 +216,8 @@ function eventoEnvivoManager() {
                       }
                     }
                   }
-                }                
-                
+                }
+
                 if (programasHoy.length > 0) {
                   programasHoy.forEach(programa => {
                     if (title_programa) {
@@ -244,6 +244,10 @@ function eventoEnvivoManager() {
                           } else {
                             console.log("no hay iframe individual");
                             playerembed.innerHTML = htmlIframe;
+                            const iframe = document.getElementById("vrudo");
+                            const src = iframe.src;
+                            const separator = src.indexOf("?") > -1 ? "&" : "?";
+                            iframe.src = src + separator + "user=" + ECUAVISA_EC.USER_data('id');
                             console.log(htmlIframe);
                           }
                         }
@@ -528,7 +532,7 @@ function pintarModalDOM() {
         <div class="modal-body">
           <div class="mb-3">
             <label for="telefono_form" class="form-label">Telefono</label>
-            <input type="number" value="${modalTelefono != null ? modalTelefono : '' }" class="form-control" id="telefono_form" placeholder="0978665419">
+            <input type="number" value="${modalTelefono != null ? modalTelefono : ''}" class="form-control" id="telefono_form" placeholder="0978665419">
           </div>
         
           <div class="mb-3">
