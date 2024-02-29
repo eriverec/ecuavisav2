@@ -53,6 +53,8 @@ const headersGlobal = ref({
   identification_number: "identification_number",
   newsletter_opt_in: "newsletter_opt_in",
   provider: "provider",
+  platform: "platform",
+  created_in_os: "created_in_os",
 });
 
 const totalFacebook = ref(0);
@@ -721,6 +723,8 @@ async function fetchFullUsers(){
             // Verificamos si la clave existe en item y la agregamos al nuevo objeto
             if (item.hasOwnProperty(key)) {
               newItem[key] = item[key];
+            }else{
+              newItem[key] = "";
             }
           }
           // Agregamos el nuevo objeto a usersFull.value
@@ -791,6 +795,8 @@ async function downloadSection(){
         // Verificamos si la clave existe en item y la agregamos al nuevo objeto
         if (item.hasOwnProperty(key)) {
           newItem[key] = item[key];
+        }else{
+          newItem[key] = "";
         }
       }
       // Agregamos el nuevo objeto a doc
@@ -855,6 +861,8 @@ async function downloadSearch(){
               // Verificamos si la clave existe en item y la agregamos al nuevo objeto
               if (item.hasOwnProperty(key)) {
                 newItem[key] = item[key];
+              }else{
+                newItem[key] = "";
               }
             }
             // Agregamos el nuevo objeto a doc
