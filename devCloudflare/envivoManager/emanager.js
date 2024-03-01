@@ -179,6 +179,7 @@ function eventoEnvivoManager() {
     iframeIndividual = x;
   }
 
+  //nueva funcion envivo 2024
   function paramUserVideo() {
     const iframe = document.getElementById("vrudo");
     const src = iframe.src;
