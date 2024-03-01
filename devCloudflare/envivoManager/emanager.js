@@ -179,6 +179,16 @@ function eventoEnvivoManager() {
     iframeIndividual = x;
   }
 
+  function paramUserVideo() {
+    const iframe = document.getElementById("vrudo");
+    const src = iframe.src;
+    const separator = src.indexOf("?") > -1 ? "&" : "?";
+    const valUser = ECUAVISA_EC.USER_data('id');
+    // Concatenar el valor del usuario y convertir todo a base64
+    var base64Params = btoa("user=" + valUser);
+    iframe.src = src + separator + base64Params;
+  }
+
   function fetchHorarioEnvivo() {
     fetch(apiUrl)
       .then(response => response.json())
@@ -239,19 +249,13 @@ function eventoEnvivoManager() {
                             console.log("si hay iframe individual", iframeIndividual);
                             setTimeout(() => {
                               playerembed.innerHTML = iframeIndividual;
-                              const iframe = document.getElementById("vrudo");
-                              const src = iframe.src;
-                              const separator = src.indexOf("?") > -1 ? "&" : "?";
-                              iframe.src = src + separator + "user=" + ECUAVISA_EC.USER_data('id');
+                              paramUserVideo();
                             }, 1000);
 
                           } else {
                             console.log("no hay iframe individual");
                             playerembed.innerHTML = htmlIframe;
-                            const iframe = document.getElementById("vrudo");
-                            const src = iframe.src;
-                            const separator = src.indexOf("?") > -1 ? "&" : "?";
-                            iframe.src = src + separator + "user=" + ECUAVISA_EC.USER_data('id');
+                            paramUserVideo();
                             console.log(htmlIframe);
                           }
                         }
