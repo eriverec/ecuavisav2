@@ -43,6 +43,10 @@ const tipoItems = [
     {
         title: 'Opciones',
         value: 'opciones'
+    },
+    {
+        title: 'Votación',
+        value: 'votacion'
     }
 ];
 
@@ -171,10 +175,16 @@ function eliminarOpcion (index, index1){
 
 function resolveOpciones(index, tipo){
     preguntas.value[index].opciones = [];
+    if (!preguntas.value[index].hasOwnProperty('respuesta')) {
+        preguntas.value[index].respuesta = "";
+    }
     
     if(tipo == "opciones")
     {
         preguntas.value[index].opciones.push('', '');
+    }else if(tipo == "votacion"){
+        preguntas.value[index].opciones.push('', '');   
+        delete preguntas.value[index].respuesta;     
     }
           
 }
@@ -546,11 +556,11 @@ async function deleteConfirmed() {
                                                 <VSelect class="mt-2" v-model="p.tipo" label="Tipo" :items="tipoItems" @update:model-value="resolveOpciones(index, p.tipo)" />        
                                             </VCol> 
 
-                                            <VCol cols="12">
-                                                <VTextField :class="p.tipo== 'opciones'?'mt-2':'my-2'" v-model="p.respuesta" label="Respuesta" placeholder="Escriba la respuesta" />
+                                            <VCol cols="12" v-if= "p.tipo != 'votacion'">
+                                                <VTextField  :class="p.tipo== 'opciones'?'mt-2':'my-2'" v-model="p.respuesta" label="Respuesta" placeholder="Escriba la respuesta" />
                                             </VCol>
 
-                                            <VCol v-if="p.tipo == 'opciones'" cols="12" class="d-flex">
+                                            <VCol v-if="p.tipo == 'opciones'|| p.tipo == 'votacion'" cols="12" class="d-flex">
                                             <div class="d-flex align-content-end flex-wrap">Opciones</div>
                                                                 
                                             <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="resolveAñadirOpcion(index)" >
@@ -558,9 +568,9 @@ async function deleteConfirmed() {
                                             </VBtn>                                                                     
                                           
                                             </VCol>    
-                                            <VDivider v-if="p.tipo == 'opciones' && p.opciones.length > 0" />
+                                            <VDivider v-if="(p.tipo == 'opciones' || p.tipo == 'votacion') && p.opciones.length > 0" />
 
-                                            <div v-if="p.tipo == 'opciones'" v-for="(o, index1) in p.opciones" cols="12" > 
+                                            <div v-if="p.tipo == 'opciones'|| p.tipo == 'votacion'" v-for="(o, index1) in p.opciones" cols="12" > 
                                                                               
                                                 <VCardText class="text-center ml-4 my-4">
                                                     <VRow>
