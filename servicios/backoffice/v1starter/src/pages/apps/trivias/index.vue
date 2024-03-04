@@ -126,6 +126,17 @@ const configSnackbar = ref({
 
 
     //------FUNCIONES
+
+function copyUrl(id){
+    navigator.clipboard.writeText('https://ecuavisa-desafio-trivias.vercel.app/trivia/get/' + id); 
+
+    configSnackbar.value = {
+    message: "Enlace copiado en el portapapeles",
+    timeout: 1000,
+    type: "success",
+    model: true
+    };  
+}    
 function validarArreglo(arreglo) {
     for (let i = 0; i < arreglo.length; i++) {
         let objeto = arreglo[i];
@@ -431,7 +442,7 @@ async function deleteConfirmed() {
         
            
 
-            <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :color="configSnackbar.type">
+            <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
                 {{ configSnackbar.message }}
             </VSnackbar>
 
@@ -463,7 +474,8 @@ async function deleteConfirmed() {
                         <thead>
                             <tr>   
                             <th scope="col">Nombre</th>
-                            <th scope="col">Id de regla</th>    
+                            <th scope="col">Id de regla</th>  
+                            <th scope="col">Endpoint</th>  
                             <th scope="col">Acciones</th>                                                   
                             </tr>
                         </thead>
@@ -475,7 +487,12 @@ async function deleteConfirmed() {
                             </td>     
                             <td class="text-medium-emphasis">
                                 {{ item.idRegla}}
-                            </td>                         
+                            </td>    
+                            <td class="text-medium-emphasis">
+                                <VBtn variant="text" icon  @click="copyUrl(item._id)">
+                                    <VIcon size="22" icon="tabler-clipboard" />
+                                </VBtn>
+                            </td>                        
                             <td class="text-medium-emphasis">
                                 <VBtn color="success" variant="text" icon  @click="onEdit(item._id)">
                                     <VIcon size="22" icon="tabler-edit" />
