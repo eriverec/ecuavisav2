@@ -1,46 +1,94 @@
 <script setup>
-import { onMounted } from 'vue';
+import { ref } from 'vue';
 import 'vue3-form-wizard/dist/style.css';
 
-const dataTrivias = ref([]);
-const isLoading = ref(false);
-const isLoading2 = ref(false);
+const searchTerm = ref('');
+const searchResults = ref([]);
+const loading = ref(false);
+const cargandoUser = ref(false);
+const page = ref(1);
+const limit = ref(10);
+const total = ref(0);
+const selectedUserDetails = ref(null);
+const loadings = ref([]);
+const totalPages = computed(() => Math.ceil(total.value / limit.value));
 
-async function getTrivias (){
-    try {
-      isLoading.value = true;  
-      const consulta = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/all/get');
-      const consultaJson = await consulta.json();
-      dataTrivias.value = consultaJson.data;             
-      isLoading.value = false; 
-    } catch (error) {
-        console.error(error.message);
-    }
-} 
+const userClicked = ref(false);
+const userClickedId = ref(null);
 
+const nombreFullUserSelected = ref('');
 
-onMounted(async()=>{
-    isLoading2.value = true;
-    await getTrivias();
-    isLoading2.value = false;
-})
+const resultadoVisible = ref(false);
+const busquedaUserVisible = ref(false);
 
-const itemsPerPage = 20;
-const currentPage = ref(1);
+//------------------- FUNCIONES
 
-const paginatedTrivias = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-
-  return dataTrivias.value.slice(start, end);
-});
-
-const nextPage = () => {
-  if (currentPage.value * itemsPerPage < dataTrivias.value.length) currentPage.value++;
+const startSearch = () => {
+  busquedaUserVisible.value = true;
+  resultadoVisible.value = false;
+  selectedUserDetails.value = null;
+  loadings.value[0] = true;
+  page.value = 1; // Reinicia la página a 1 al realizar una nueva búsqueda
+  search();
 };
 
-const prevPage = () => {
-  if (currentPage.value > 1) currentPage.value--;
+const search = async () => {
+  loading.value = true;
+  // searchResults.value = [];
+  try {
+    // const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${searchTerm.value}`);
+    const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${searchTerm.value}&page=${page.value}&limit=${limit.value}`);
+    const data = await response.json();
+    if (data.resp) {
+      searchResults.value = data.data;
+      total.value = data.total;
+    } else {
+      searchResults.value = [];
+      total.value = 0;
+      console.log("no hay nada para mostrar");
+      //isSnackbarVisible.value = true;
+    }
+  } catch (error) {
+    console.error('Error al realizar la búsqueda:', error);
+  } finally {
+    loading.value = false;
+    loadings.value[0] = false;
+  }
+};
+
+const updatePage = (newPage) => {
+  page.value = newPage;
+  search();
+};
+
+
+
+
+const handleUserClick = async (wylexId, nombre, apellido) => {
+
+  nombreFullUserSelected.value = (apellido + ' ' + nombre).length > 25 ? 
+  (apellido + ' ' +nombre).substring(0,25) + "..." : (apellido + ' ' + nombre);
+  resultadoVisible.value = true;
+  cargandoUser.value = true;
+  userClicked.value = true;
+  userClickedId.value = wylexId;
+  try {
+    const response = await fetch(`https://ecuavisa-desafio-trivias.vercel.app/triviaUsuario/get/usuario/${wylexId}`);
+    const data = await response.json();
+    if (data.resp && data.data.length > 0) {
+      selectedUserDetails.value = data;
+      
+    } else {
+      selectedUserDetails.value = null;
+      //isSnackbarDetails.value = true;
+    }
+  } catch (error) {
+    console.error('Error al obtener detalles del usuario:', error);
+    selectedUserDetails.value = null;
+  } finally {
+    cargandoUser.value = false;
+    // userClicked.value = false;
+  }
 };
 
 
@@ -49,53 +97,95 @@ const prevPage = () => {
 <template>
     <section>
         
-            <VDialog v-model="isLoading2" persistent no-click-animation width="300">
-                <VCardText class="pt-3 text-center">
-                    <v-progress-circular indeterminate color="primary"></v-progress-circular>
-                </VCardText>
-            </VDialog>
+      <VRow>
+      <VCol cols="7">
+        <VCard class="mt-4 px-2" :class="total > limit ? '' : 'pb-4'" title="Buscar respuestas por usuario" >
+          <VCardText>
+            <div class="d-flex gap-4">
+              <VTextField v-model="searchTerm" @keyup.enter="startSearch" style="max-width: 400px;" label="Buscar..." />
+              <!-- <VBtn @click="startSearch" color="primary">
+                Buscar
+              </VBtn> -->
 
-            <VRow>
-                <VCol cols="12" sm="12" lg="12">
-                    <VCard>
-                    <VCardTitle class="pt-4 pl-6">Listado de trivias</VCardTitle>   
-                                   
-                    <VCardItem v-if="isLoading">
-                    Cargando datos... 
-                    </VCardItem>   
-                    <VCardItem v-else>
-                    <VTable class="text-no-wrap tableNavegacion mb-5">
-                        <thead>
-                            <tr>   
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Id de regla</th>                                                 
-                            </tr>
-                        </thead>
+              <VBtn :loading="loadings[0]" :disabled="loadings[0]" color="primary" size="small" icon="tabler-search"
+                @click="startSearch" />
+            </div>
+            <div v-if="busquedaUserVisible && loading" style="height: 400px;" class="d-flex align-center justify-center ">Cargando...</div>
+            <div v-else-if="busquedaUserVisible && searchResults.length > 0">
+              <VTable style="width: 100%;" class="text-no-wrap tableNavegacion mb-5 mt-5" hover="true">
+                <thead>
+                  <tr >
+                    <th scope="col">USUARIO</th>
+                    <th scope="col">CORREO</th>
+                  </tr>
+                </thead>
 
-                        <tbody>
-                            <tr v-for="item in paginatedTrivias">
-                            <td class="text-medium-emphasis">
-                                {{ item.nombre}}
-                            </td>     
-                            <td class="text-medium-emphasis">
-                                {{ item.idRegla}}
-                            </td>                         
-                            </tr>
-                        </tbody>
-                    </VTable>
-                    <div class="d-flex align-center justify-space-between botonescurrentPage">
-                    <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
-                    Página {{ currentPage }}
-                    <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
-                        :disabled="(currentPage * itemsPerPage) >= dataTrivias.length">
-                    </VBtn>
-                    </div>
-                    </VCardItem>  
-                    
-                    </VCard>
-                </VCol>
-              
-            </VRow>
+                <tbody>
+                  <tr v-for="user in searchResults" :key="user._id"
+                    :class="{ 'opacity-50': userClicked && userClickedId === user.wylexId }"
+                    @click="handleUserClick(user.wylexId, user.first_name, user.last_name)" class="clickable">
+                    <td>
+                      {{ (user.last_name + ' ' + user.first_name).length > 25 ? (user.last_name + ' ' +
+                        user.first_name).substring(0,
+                          25) + "..." : (user.last_name + ' ' + user.first_name) }}
+                    </td>
+                    <td class="text-medium-emphasis">
+                      {{ user.email }}
+                    </td>
+
+                  </tr>
+
+                </tbody>
+
+
+              </VTable>
+              <VPagination v-if="total > limit" v-model="page" size="small" :total-visible="5" :length="totalPages"
+                @update:model-value="updatePage" class="mb-4"/>
+
+            </div>
+            <div class="mt-4" v-else-if="busquedaUserVisible && searchResults.length === 0 ">No se han encontrado datos.</div>
+            
+
+
+          </VCardText>
+        </VCard>
+
+      </VCol>
+      <!-- <div v-if="cargandoUser" class="d-flex align-center justify-center ">Cargando...</div> -->
+      <VCol cols="5" v-if="resultadoVisible">
+        <VCard class="mt-4" :title="selectedUserDetails? 'Resultados de ' + nombreFullUserSelected: 'Resultados'" >
+          <VCardText>
+            <div v-if="cargandoUser" class="ml-4 mb-4">Cargando...</div>
+            <div v-else-if="selectedUserDetails">
+              <VTable class="text-no-wrap tableNavegacion mb-5">
+                          <thead>
+                              <tr>   
+                              <th scope="col">Nombre de trivia</th>
+                              <th scope="col">Respuesta</th>                                                 
+                              </tr>
+                          </thead>
+
+                          <tbody>
+                              <tr v-for="(item, index) in selectedUserDetails.data" :key="index">
+                              <td class="text-medium-emphasis">
+                                  {{ item.nombre}}
+                              </td>     
+                              <td class="text-medium-emphasis">
+                                  {{ item.respuesta}}
+                              </td>                         
+                              </tr>
+                          </tbody>
+                      </VTable>
+                      
+            </div>
+            <div class="ml-4 mb-4" v-else>No se encontro información</div>
+          </VCardText>
+        </VCard>
+
+      </VCol>
+      <!-- <div v-else>No se encontro información</div> -->
+
+    </VRow>
 
             
       
@@ -105,7 +195,12 @@ const prevPage = () => {
 </template>
 
 <style>  
+ .opacity-50 {
+  /* opacity: 0.5; */
+  background-color: #00000012;
  
+}
+
 .clickable {
   cursor: pointer;
 }
