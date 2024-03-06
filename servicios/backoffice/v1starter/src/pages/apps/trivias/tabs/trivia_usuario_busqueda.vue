@@ -98,7 +98,7 @@ const handleUserClick = async (wylexId, nombre, apellido) => {
     <section>
         
       <VRow>
-      <VCol cols="7">
+      <VCol cols="7" class="container">
         <VCard class="mt-4 px-2" :class="total > limit ? '' : 'pb-4'" title="Buscar respuestas por usuario" >
           <VCardText>
             <div class="d-flex gap-4">
@@ -152,7 +152,7 @@ const handleUserClick = async (wylexId, nombre, apellido) => {
 
       </VCol>
       <!-- <div v-if="cargandoUser" class="d-flex align-center justify-center ">Cargando...</div> -->
-      <VCol cols="5" v-if="resultadoVisible">
+      <VCol cols="5" class="container" v-if="resultadoVisible">
         <VCard class="mt-4" :title="selectedUserDetails? 'Resultados de ' + nombreFullUserSelected: 'Resultados'" >
           <VCardText>
             <div v-if="cargandoUser" class="ml-4 mb-4">Cargando...</div>
