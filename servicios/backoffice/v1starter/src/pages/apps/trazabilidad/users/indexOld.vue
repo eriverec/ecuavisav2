@@ -35,23 +35,9 @@ const fechaFinal = ref('');
 const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
 const userBackoffice = ref(JSON.parse(localStorage.getItem('userData')));
 
-const page = ref(1);
-const limit = ref(10);
-const total = ref(0);
-const totalPages = computed(() => Math.ceil(total.value / limit.value));
-
-const updatePage = async (newPage) => {
-  page.value = newPage;
-  await searchUsers();
-};
-
 async function searchUsers() {
     isLoading.value = true;
     isLoaded.value = false;
-    rawData.value = [];
-    actividadVisible.value=false;
-    ultimasVisitasPagVisible.value=false;
-    /*
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -65,15 +51,12 @@ async function searchUsers() {
       body: query,
       redirect: 'follow'
     };        
-    */
     const navArray = []; 
-    await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${searchQuery.value}&page=${page.value}&limit=${limit.value}`)
+    await fetch('https://servicio-de-actividad.vercel.app/actividad/full/extra',requestOptions)
     .then(response => response.json())
     .then(resp => { 
-      //let inicio = resp.data;
-      //rawData.value = resp.data;
-
-      /*
+      let inicio = resp.data;
+      rawData.value = resp.data;
       let grupos = {};
 
       inicio.forEach(obj => {
@@ -88,9 +71,7 @@ async function searchUsers() {
       });
 
       let resultado = Object.values(grupos);
-
-      */
-      usersData.value = resp.data;
+      usersData.value = resultado;
 
       isLoading.value = false;
       isLoaded.value = true;
@@ -113,29 +94,21 @@ const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
 };
 
-const resolveActividad =async (wylexId ,first, last)=>{
-  try{
-
-  const response = await fetch('https://servicio-de-actividad.vercel.app/actividad/full/extra/v2/'+wylexId);
-  const data = await response.json();
-  if (!data.resp) {
-    console.log("No hay nada para mostrar");
-        
-  } else {     
-    rawData.value = data.data;    
-  
-
+const resolveActividad =(first, last)=>{
   fechaIngresada.value = '';
-  const inicio = rawData.value.map(({country, navigationRecord})=>{ 
-  return {country, navigationRecord};
+  const inicio = rawData.value.map(({first_name, last_name, country, navigationRecord})=>{ 
+  return {first_name, last_name, country, navigationRecord};
   });
   
+
   const arrayFiltro = [];
-
   userSelected.value = first+' '+last;
-
+  let fullNameViene = first+' '+last;
+  //console.log('name',fullNameViene);
+  //console.log('inicio' ,inicio); 
   for (let p of inicio) {
-    
+    let fullName = p.first_name+' '+p.last_name;
+    if (fullName == fullNameViene) { 
     for (let i of p.navigationRecord) {
       
           var allowedDateFormats = ['DD/MM/YYYY', 'DD/M/YYYY', 'M/DD/YYYY', 'YYYY-MM-DD', 'DD-MM-YYYY' , 'D/M/YYYY' ];    
@@ -151,8 +124,8 @@ const resolveActividad =async (wylexId ,first, last)=>{
           let fullFechaFormat = moment(fullFecha, allowedFullDateFormats, true).format();
 
           let data = {
-              first_name: first,
-              last_name: last,
+              first_name: p.first_name,
+              last_name: p.last_name,
               url: i.url,
               title: i.title,
               fecha: fechaFormat,
@@ -163,7 +136,7 @@ const resolveActividad =async (wylexId ,first, last)=>{
           }
           arrayFiltro.push(data);
         }
-      
+      }
   }
 
   arrayFiltro.sort((a, b) => {
@@ -201,11 +174,6 @@ const resolveActividad =async (wylexId ,first, last)=>{
   //console.log('actividadUser',actividadUser.value);
   actividadUserRaw.value = arrayFiltro;      
   actividadVisible.value = true;
-  }
-
-  } catch (error) {
-    console.error('Error al buscar la actividad del usuario', error);
-  }
 }
 
 const resolveActividadFecha =(dates)=>{
@@ -294,15 +262,15 @@ onMounted(async()=>{
 const resolveVisitas = (title) =>{
   titleSelected.value = title;
 
-  let resultado = rawData.value;
-  /*
+  let resultado = [];
+  
   for (let a of rawData.value) {
     let clave = a.first_name + ' ' + a.last_name;
     if(clave == userSelected.value){
       resultado.push(a);
     }
   }
-  */
+  
   const inicio = resultado.map(({device, country, navigationRecord})=>{ 
   return {device, country, navigationRecord};
   });
@@ -489,7 +457,7 @@ async function downloadSelection () {
             </thead>
 
             <tbody>
-              <tr v-for="item  in usersData" class="clickable" @click="resolveActividad(item.wylexId, item.first_name, item.last_name)">
+              <tr v-for="item  in paginatedData" class="clickable" @click="resolveActividad(item.first_name, item.last_name)">
                 <td >
                   
                    {{ item.first_name }} {{ item.last_name }}
@@ -502,10 +470,17 @@ async function downloadSelection () {
               </tr>
             </tbody>
           </VTable>
-          <VPagination v-if="total > limit" v-model="page" size="small" :total-visible="10" :length="totalPages"
-                @update:model-value="updatePage" class="mb-4"/>
+          <div class="d-flex align-center justify-space-between botonescurrentPage">
+            <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
+            Página {{ currentPage }}
+            <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
+              :disabled="(currentPage * itemsPerPage) >= usersData.length">
+            </VBtn>
+            
+       
+          </div>
 
-          </VCardText>
+        </VCardText>
       
       </VCard>
       
