@@ -8,6 +8,11 @@ const isLoading = ref(false);
 const currentTab = ref('tab-vista');
 const searchTerm = ref('');
 
+const configSnackbar = ref({
+    message: "Datos guardados",
+    type: "success",
+    model: false
+});
 async function getTrivias (){
     try {
       isLoading.value = true;  
@@ -27,6 +32,17 @@ onMounted(async()=>{
 })
 
 //------------------- FUNCIONES  ---------------------
+
+function copyUrl(id){
+    navigator.clipboard.writeText('https://ecuavisa-desafio-trivias.vercel.app/trivia/get/' + id); 
+
+    configSnackbar.value = {
+    message: "Enlace copiado en el portapapeles",
+    timeout: 1000,
+    type: "success",
+    model: true
+    };  
+}   
 
 const reset = async () => {
   searchTerm.value = '';
@@ -99,6 +115,11 @@ const prevPage = () => {
 
               <VRow>
                   <VCol cols="12" sm="12" lg="12">
+                    
+                     <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
+                          {{ configSnackbar.message }}
+                      </VSnackbar>
+
                       <VCard class="mt-4">
                       <VCardTitle class="pt-4 pl-6">Listado de trivias</VCardTitle>   
                       <VCardItem>
@@ -122,7 +143,8 @@ const prevPage = () => {
                           <thead>
                               <tr>   
                               <th scope="col">Nombre</th>
-                              <th scope="col">Id de regla</th>                                                 
+                              <th scope="col">Id de regla</th> 
+                              <th scope="col">Endpoint</th>                                                                             
                               </tr>
                           </thead>
 
@@ -133,7 +155,12 @@ const prevPage = () => {
                               </td>     
                               <td class="text-medium-emphasis">
                                   {{ item.idRegla}}
-                              </td>                         
+                              </td>  
+                              <td class="text-medium-emphasis">
+                                <VBtn variant="text" icon  @click="copyUrl(item._id)">
+                                    <VIcon size="22" icon="tabler-clipboard" />
+                                </VBtn>
+                            </td>                       
                               </tr>
                           </tbody>
                       </VTable>
