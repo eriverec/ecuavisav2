@@ -32,33 +32,51 @@
 
       </VCard>
 
+
+
     </VCol>
     <VCol cols="12" md="7" lg="7">
-      <VCard title="Últimos 5 registros">
+      <VCard class="mb-4 text-uppercase" title="Listado de registros">
+      </VCard>
+      <div v-if="cargando">Cargando...</div>
+      <VCard class="mb-4" v-else :title="item.retoAssignment" :subtitle="moment(item.created_at).format('D/M/YYYY - HH:mm')" v-for="item in historico"
+        :key="item._id">
         <VCardText>
 
-          <div v-if="cargando">Cargando...</div>
-          <VTimeline v-else side="end" align="start" truncate-line="both" density="compact"
-            class="v-timeline-density-compact">
-            <VTimelineItem :dot-color="randomColor()" size="x-small" v-for="item in historico" :key="item._id">
-              <!-- 👉 Header -->
-              <div class="d-flex justify-space-between">
-                <h6 class="text-base font-weight-semibold me-3">
-                  {{ item.retoAssignment }}
-                </h6>
-                <span class="text-sm text-disabled">{{ moment(item.created_at).format('D/M/YYYY - HH:mm')  }}</span>
-              </div>
+          <!-- 👉 Header -->
+          <div class="d-flex justify-space-between">
+            <span class="text-sm text-disabled">{{  }}</span>
+          </div>
 
-              <!-- 👉 Content -->
-              <p class="mb-1">
-                ID: {{ item.userId }}
-              </p>
-              <div class="d-flex align-center parent_img">
-                <VAvatar v-for="file in item.files" :key="file" :size="100" :image="urlBaseFiles + file" class="me-3" />
+          <!-- <div class="d-flex align-center parent_img">
+            <div class="items-img " >
+              <VAvatar :size="100" :image="urlBaseFiles + file" class="me-3" />
+              <VBtn icon="tabler-x" size="x-small" color="error" @click="handleImageClick(urlBaseFiles + file)" />
+            </div>
+          </div> -->
+
+
+
+          <VSlideGroup show-arrows mandatory>
+            <!-- 👉 slider more -->
+            <VSlideGroupItem v-for="file in item.files" :key="file">
+              <div style=" width: 110px;height: 94px; position: relative;"
+                class="d-flex flex-column justify-center align-center rounded me-6">
+                <VAvatar rounded size="88" color="default" variant="tonal" class="text-disabled">
+                  <div>
+                    <VAvatar :size="100" :image="urlBaseFiles + file" class="me-3 items-img" />
+                  </div>
+                </VAvatar>
+                <VBtn class="btn_delete_img" icon="tabler-x" size="x-small" color="error"
+                  @click="handleImageClick(urlBaseFiles + file)" />
               </div>
-            </VTimelineItem>
-          </VTimeline>
+            </VSlideGroupItem>
+          </VSlideGroup>
         </VCardText>
+
+        <VBtn block  class="rounded-t-0" @click="handleDeleteClick(item._id)">
+          Eliminar
+        </VBtn>
 
       </VCard>
 
@@ -66,6 +84,10 @@
   </VRow>
   <VSnackbar v-model="isSnackbarVisible" location="top" color="success">
     Enviado!
+  </VSnackbar>
+
+  <VSnackbar v-model="isRegistroEliminado" location="top" color="success">
+    Registro eliminado!
   </VSnackbar>
 
   <VSnackbar v-model="isSnackbarError" location="top" color="error">
@@ -76,6 +98,17 @@
 <style>
 .v-img__img--contain {
   object-fit: cover !important;
+}
+
+.items-img {
+  border-radius: 0px !important;
+}
+
+
+.btn_delete_img {
+  position: absolute;
+  top: 0;
+  right: 0;
 }
 </style>
 
@@ -89,6 +122,8 @@ const historico = ref([]);
 let files = [];
 const isSnackbarVisible = ref(false);
 const isSnackbarError = ref(false);
+const isRegistroEliminado = ref(false);
+
 const rules = [fileList => !fileList || !fileList.length || fileList[0].size < 1500000 || '¡El tamaño del avatar debe ser inferior a 1.5 MB!']
 const loadings = ref([]);
 const cargando = ref(true);
@@ -116,6 +151,48 @@ async function fetchHistorico() {
 }
 
 onMounted(fetchHistorico);
+
+// Función para manejar el clic en el botón de eliminación de imagen
+const handleImageClick = async (src) => {
+  try {
+    const response = await fetch('https://servicio-niveles-puntuacion.vercel.app/historico/delete-file/', {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ ruta_archivo: src })
+    });
+    if (response.ok) {
+      console.log('Imagen eliminada exitosamente');
+      console.log(src);
+      // Actualizar el historial después de eliminar la imagen
+      fetchHistorico();
+    } else {
+      console.error('Error al eliminar la imagen');
+    }
+  } catch (error) {
+    console.error('Error en la solicitud:', error);
+  }
+}
+
+// Función para manejar el clic en el botón de eliminación de registro completo
+const handleDeleteClick = async (_id) => {
+  try {
+    const response = await fetch(`https://servicio-niveles-puntuacion.vercel.app/historico/delete/${_id}`, {
+      method: 'DELETE'
+    });
+    if (response.ok) {
+      console.log('Registro eliminado exitosamente');
+      isRegistroEliminado.value = true
+      // Actualizar el historial después de eliminar el registro
+      fetchHistorico();
+    } else {
+      console.error('Error al eliminar el registro');
+    }
+  } catch (error) {
+    console.error('Error en la solicitud:', error);
+  }
+}
 
 function handleFileUpload(event) {
   const fileList = event.target.files;
