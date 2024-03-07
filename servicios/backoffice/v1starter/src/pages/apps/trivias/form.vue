@@ -40,6 +40,7 @@ const reset = async () => {
   formVisible.value = false;
   busquedaTriviaVisible.value = false;
   searchTerm.value = '';
+  dataTriviaSelected.value = null;
 }
 
 const startSearch = () => {
@@ -71,7 +72,7 @@ const search = async () => {
 };
 
 const handleUserClick = async (id, title) => {
-
+  dataTriviaSelected.value = null;
   triviaSelected.value = title;
   formVisible.value = true;
   triviaLoading.value = true;
@@ -82,10 +83,12 @@ const handleUserClick = async (id, title) => {
     if (data.resp && data.data) {
       dataTriviaSelectedCorrect.value = data.data;
       let dataTrivia = data.data;
-      console.log(dataTrivia.preguntas);
+      //console.log(dataTrivia.preguntas);
+      /*
       dataTrivia.preguntas.forEach(pregunta => {
         pregunta.respuesta = '';
       });
+      */
       dataTriviaSelected.value = dataTrivia;
 
       
@@ -101,7 +104,39 @@ const handleUserClick = async (id, title) => {
   }
 };
 
+function validarArreglo(arreglo) {
+    for (let i = 0; i < arreglo.length; i++) {
+        let objeto = arreglo[i];
+        for (let propiedad in objeto) {
+            if (objeto.hasOwnProperty(propiedad)) {
+                // Verificar si la propiedad es opciones
+                if (propiedad === 'opciones') {
+                    if (!objeto[propiedad].every(opcion => opcion.trim() !== '')) {
+                        return false;
+                    }
+                } else {
+                    if (objeto[propiedad].trim() === '') {
+                        return false;
+                    }
+                }
+            }
+        }
+    }
+    return true;
+};
 
+async function onComplete(){
+
+  let preguntas = dataTriviaSelected.value.preguntas;
+  if (!validarArreglo(preguntas)) {
+        configSnackbar.value = {
+                    message: "Debe llenar todos los campos",
+                    type: "error",
+                    model: true
+                };
+        return false;
+  } 
+}
 
 
 </script>
@@ -222,12 +257,7 @@ const handleUserClick = async (id, title) => {
                                     <VDivider class="mt-6" v-if="index != dataTriviaSelected.preguntas.length-1" />
                                   </VCol>                    
                                 </VRow>
-                                <!-- 👉 Submit and Cancel -->
-                                <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
-                                    <VBtn type="submit"> Completar </VBtn>
-
-                                    
-                                </VCol>
+                                
                             </VRow>
                         </VForm>
                         </VCardText>
