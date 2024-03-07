@@ -5,8 +5,8 @@ import 'vue3-form-wizard/dist/style.css';
 const dataTrivias = ref([]);
 const isLoading = ref(false);
 const isLoading2 = ref(false);
-const dataPaquetes = ref([]);
-
+const reglasLoading = ref(false);
+const idReglas = ref([]);
 
 async function getTrivias (){
     try {
@@ -20,20 +20,22 @@ async function getTrivias (){
     }
 } 
 
-const idReglas = [
-    {
-        title: 'Regla 1',   
-        value: '1'
-    },
-    {
-        title: 'Regla 2',
-        value: '2'
-    },
-    {
-        title: 'Regla 3',
-        value: '3'      
+async function getReglas (){
+    try {      
+      reglasLoading.value = true;  
+      const consulta = await fetch('https://servicio-desafios.vercel.app/desafios');
+      const consultaJson = await consulta.json();
+      idReglas.value = consultaJson.data.map(({tituloDesafio, _id})=>({
+        title: tituloDesafio,
+        value: _id
+      }));
+         
+      reglasLoading.value = false;                
+    } catch (error) {
+        console.error(error.message);
     }
-];
+} 
+
 
 const tipoItems = [
     {
@@ -50,33 +52,11 @@ const tipoItems = [
     }
 ];
 
-async function getPaquetes (){
-    try {  
-      
-      const consulta = await fetch('https://ecuavisa-modulos.vercel.app/paquete');
-      const consultaJson = await consulta.json();
-
-      let paquetesRaw = Array.from(consultaJson.data);
-      let items = [];
-      for(const item of paquetesRaw){
-            let data = {
-                title: item.nombre,
-                value: item._id
-            }
-            items.push(data);
-       }
-      dataPaquetes.value = items;  
-      //dataPaquetesRaw.value = consultaJson.data;
-          
-    } catch (error) {
-        console.error(error.message);
-    }
-} 
 
 onMounted(async()=>{
     isLoading2.value = true;
     await getTrivias();
-    //await getPaisesCiudades();
+    await getReglas();
     isLoading2.value = false;
 })
 
