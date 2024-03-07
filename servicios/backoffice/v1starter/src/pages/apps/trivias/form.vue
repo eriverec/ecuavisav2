@@ -1,4 +1,5 @@
 <script setup>
+import { onMounted } from 'vue';
 import 'vue3-form-wizard/dist/style.css';
 
 const dataTrivias = ref([]);
@@ -16,36 +17,56 @@ const configSnackbar = ref({
     model: false
 });
 
-const itemsPerPage = 8;
-const currentPage = ref(1);
-
-const paginatedTrivias = computed(() => {
-  const start = (currentPage.value - 1) * itemsPerPage;
-  const end = start + itemsPerPage;
-
-  return dataTrivias.value.slice(start, end);
-});
-
-const nextPage = () => {
-  if (currentPage.value * itemsPerPage < dataTrivias.value.length) currentPage.value++;
-};
-
-const prevPage = () => {
-  if (currentPage.value > 1) currentPage.value--;
-};
+const page = ref(1);
+const limit = ref(10);
+const total = ref(0);
+const totalPages = computed(() => Math.ceil(total.value / limit.value));
 
 //------------------- FUNCIONES  ---------------------
+
+const updatePage = (newPage) => {
+  page.value = newPage;
+  search();
+};
+
+
+const getTrivias = async () => {
+  isLoading.value = true;
+  try {
+    
+    const response = await fetch(`https://ecuavisa-desafio-trivias.vercel.app/trivia/all/get?page=${page.value}&limit=${limit.value}`);
+    const data = await response.json();
+    if (data.resp) {
+      console.log(data.data);
+      dataTrivias.value = data.data;
+      
+    } else {
+      dataTrivias.value = [];   
+      console.log("no hay nada para mostrar");
+      //isSnackbarVisible.value = true;
+    }
+  } catch (error) {
+    console.error('Error al realizar la búsqueda:', error);
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+onMounted(async()=>{
+    await getTrivias();
+})
 
 const reset = async () => {
   formVisible.value = false;
   busquedaTriviaVisible.value = false;
   searchTerm.value = '';
+  page.value = 1;
   dataTriviaSelected.value = null;
 }
 
 const startSearch = () => {
   formVisible.value = false;
-  currentPage.value = 1; 
+  page.value = 1;
   search();
   busquedaTriviaVisible.value = true;
 };
@@ -54,7 +75,7 @@ const search = async () => {
   isLoading.value = true;
   try {
     
-    const response = await fetch(`https://ecuavisa-desafio-trivias.vercel.app/trivia/search/name?nombre=${searchTerm.value}`);
+    const response = await fetch(`https://ecuavisa-desafio-trivias.vercel.app/trivia/search/name?nombre=${searchTerm.value}&page=${page.value}&limit=${limit.value}`);
     const data = await response.json();
     if (data.resp) {
       dataTrivias.value = data.data;
@@ -164,10 +185,10 @@ async function onComplete(){
                       </VCardItem>  
                                  
                       
-                      <VCardItem v-if="isLoading && busquedaTriviaVisible">
+                      <VCardItem v-if="isLoading">
                       Cargando datos... 
                       </VCardItem>   
-                      <VCardItem v-else-if="!isLoading && busquedaTriviaVisible && dataTrivias.length > 0">
+                      <VCardItem v-else-if="!isLoading && dataTrivias.length > 0">
                        
                       <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
                           <thead>
@@ -179,7 +200,7 @@ async function onComplete(){
                           </thead>
 
                           <tbody>
-                              <tr v-for="item in paginatedTrivias" @click="handleUserClick(item._id, item.nombre)" class="clickable">
+                              <tr v-for="item in dataTrivias" @click="handleUserClick(item._id, item.nombre)" class="clickable">
                               <td class="text-medium-emphasis">
                                   {{ item.nombre}}
                               </td>     
@@ -189,15 +210,11 @@ async function onComplete(){
                               </tr>
                           </tbody>
                       </VTable>
-                      <div class="d-flex align-center justify-space-between botonescurrentPage">
-                      <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
-                      Página {{ currentPage }}
-                      <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
-                          :disabled="(currentPage * itemsPerPage) >= dataTrivias.length">
-                      </VBtn>
-                      </div>
+                      <VPagination v-if="total > limit" v-model="page" size="small" :total-visible="5" :length="totalPages"
+                        @update:model-value="updatePage" class="mb-4"/>
+
                       </VCardItem>  
-                      <VCardItem v-if="!isLoading && busquedaTriviaVisible && dataTrivias.length === 0">
+                      <VCardItem v-if="!isLoading && dataTrivias.length === 0">
                       No se han encontrado datos
                       </VCardItem>  
                       
