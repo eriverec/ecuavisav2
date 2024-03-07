@@ -47,14 +47,14 @@ const handlePaginationClick = async () => {
   // Aquí puedes realizar las acciones que deseas cuando se hace clic en la paginación
   // console.log('Se hizo clic en la paginación'+currentPage.value);
   disabledPagination.value = true;
-  await getCampaigns(currentPage.value)
+  await getDesafio(currentPage.value)
   disabledPagination.value = false;
 };
 
 // Función para manejar el cambio de paginación
 const eliminarRegistro = async (id) => {
   isDialogVisibleDelete.value = true;
-  idCampaign.value = id;
+  idDesafio.value = id;
   // console.log(id)
 };
 
@@ -71,11 +71,11 @@ const eliminarRegistroSi = async () => {
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://ads-service.vercel.app/campaign/delete/${idCampaign.value}`, requestOptions);
+      var response = await fetch(`https://servicio-desafios.vercel.app/desafios/${idDesafio.value}`, requestOptions);
       const data = await response.json();
 
       disabledViewList.value = false;
-      await getCampaigns(currentPage.value);
+      await getDesafio(currentPage.value);
 
   } catch (error) {
       return console.error(error.message);    
@@ -85,7 +85,7 @@ const eliminarRegistroSi = async () => {
 const handleSwitchChange = async (index) => {
   const desafio = dataDesafio.value[index];
   const id = desafio._id;
-  const estado = desafio.statusCampaign;
+  const estado = desafio.statusDesafio;
   switchOnDisabled.value = true;
   var jsonEnviar = {
         status: estado
@@ -100,13 +100,13 @@ const handleSwitchChange = async (index) => {
     redirect: 'follow'
   };
 
-  var response = await fetch(`https://ads-service.vercel.app/campaign/update/status/${id}`, requestOptions);
+  var response = await fetch(`https://servicio-desafios.vercel.app/desafios/${id}`, requestOptions);
   const data = await response.json();
   if(data.resp){
-    // alert("Registro guardado");
+    // alert("Desafío editado correctamente");
   }else{
     alert("Un error se presentó: "+data.error);
-    campaign.statusCampaign = !campaign.statusCampaign;
+    desafio.statusDesafio = !desafio.statusDesafio;
   };
   switchOnDisabled.value = false;
   // Realiza las operaciones necesarias con el ID y el estado
@@ -137,7 +137,7 @@ const handleSwitchChange = async (index) => {
             variant="tonal"
             @click="isDialogVisibleDelete = false"
           >
-            No, Cerrar
+            No, cerrar
           </VBtn>
           <VBtn @click="eliminarRegistroSi">
             Si, eliminar
@@ -152,23 +152,7 @@ const handleSwitchChange = async (index) => {
         md="12"
         lg="12"
       >
-        <VTabs
-          v-model="currentTab"
-          class="v-tabs-pill  d-none"
-        >
-          <VTab
-            value="tab-lista"
-            class=" d-none"
-          >
-            Listado
-          </VTab>
-          <VTab
-            value="tab-agregar"
-            class=" d-none"
-          >
-            Estadísticas
-          </VTab>
-        </VTabs>
+    
 
         <VCard class="mt-5">
           <VCardText>
@@ -218,11 +202,11 @@ const handleSwitchChange = async (index) => {
                           
                         </div>
                       </VListItemTitle>
-                      <VListItemSubtitle class="mt-1" title="Estado de campaña">
+                      <VListItemSubtitle class="mt-1" title="Estado del Desafío">
                         <div class="switch-estatus" style="margin-bottom:-10px">
                           <VSwitch :disabled="switchOnDisabled" :loading="switchOnDisabled?'warning':false" :color="desafio.statusDesafio?'success':'error'" v-model="desafio.statusDesafio" size="x-small" class="custom-vswitch" @change="handleSwitchChange(index)" />
                           <VChip
-                            title="Publicidad pausada"
+                            title="Desafío desactivado"
                             v-if="desafio.statusDesafio != true"
                             size="x-small"
                             label
@@ -231,7 +215,7 @@ const handleSwitchChange = async (index) => {
                             <span style="font-weight:medium">{{ desafio.statusDesafio?'Activo':'Inactivo' }}</span>
                           </VChip>
 
-                          <small title="Publicidad activa, iniciada" color="success" v-if="desafio.statusDesafio == true">
+                          <small title="Desafío activo" color="success" v-if="desafio.statusDesafio == true">
                             <span style="font-weight:medium">{{ desafio.statusDesafio?'Activo':'Inactivo' }}</span>
                           </small>
                         </div>
@@ -282,7 +266,7 @@ const handleSwitchChange = async (index) => {
                             variant="text"
                             color="default"
                             size="x-small"
-                            :to="{ name: 'apps-campaigns-view-id', params: { id: desafio._id } }"
+                            :to="{ name: 'apps-reglasYDesafios-GestionDesafios-view-id', params: { id: desafio._id } }"
                           >
                             <VIcon
                               :size="22"
