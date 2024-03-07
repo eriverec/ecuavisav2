@@ -7,23 +7,14 @@
             <VTextField prepend-icon="tabler-user" label="ID del Usuario" id="userId" v-model="userId" type="text"
               required />
             <br>
+     
+            <VCombobox label="Desafios" prepend-icon="tabler-list" v-model="selectedItem"
+              :items="desafios.map(desafio => desafio.tituloDesafio)"  @update:modelValue="handleSelectionChange" />
+            <br>
             <VFileInput :rules="rules" accept="image/png, image/jpeg, image/webp" label="Sube tus imágenes" type="file"
               multiple @change="handleFileUpload" required />
-            <!-- <label for="idRegla">ID Regla:</label>
-            <input id="idRegla" v-model="idRegla" type="text" >
-            <br>
-            <label for="retoAssignment">retoAssignment</label>
-            <input id="retoAssignment" v-model="retoAssignment" type="text" >
-            <br>
-            <label for="reference">reference</label>
-            <input id="reference" v-model="reference" type="text" >
-            <br>
-            <label for="provider">provider</label>
-            <input id="provider" v-model="provider" type="text" >
-            <br> -->
-            <br>
-            <!-- <button type="submit">Enviar</button> -->
 
+            <br>
             <VBtn variant="tonal" type="submit" :loading="loadings[0]" :disabled="loadings[0]" color="success">
               Enviar
             </VBtn>
@@ -39,13 +30,13 @@
       <VCard class="mb-4 text-uppercase" title="Listado de registros">
       </VCard>
       <div v-if="cargando">Cargando...</div>
-      <VCard class="mb-4" v-else :title="item.retoAssignment" :subtitle="moment(item.created_at).format('D/M/YYYY - HH:mm')" v-for="item in historico"
-        :key="item._id">
+      <VCard class="mb-4" v-else :title="item.retoAssignment"
+        :subtitle="moment(item.created_at).format('D/M/YYYY - HH:mm')" v-for="item in historico" :key="item._id">
         <VCardText>
 
           <!-- 👉 Header -->
           <div class="d-flex justify-space-between">
-            <span class="text-sm text-disabled">{{  }}</span>
+            <span class="text-sm text-disabled">{{ }}</span>
           </div>
 
           <!-- <div class="d-flex align-center parent_img">
@@ -74,7 +65,7 @@
           </VSlideGroup>
         </VCardText>
 
-        <VBtn block  class="rounded-t-0" @click="handleDeleteClick(item._id)">
+        <VBtn block class="rounded-t-0" @click="handleDeleteClick(item._id)">
           Eliminar
         </VBtn>
 
@@ -123,6 +114,35 @@ let files = [];
 const isSnackbarVisible = ref(false);
 const isSnackbarError = ref(false);
 const isRegistroEliminado = ref(false);
+
+const selectedItem = ref('');
+const desafios = ref([]);
+const selectedDesafioId = ref('');
+const selectedDesafioTitulo = ref('');
+
+// Función para obtener los desafíos desde el endpoint
+async function fetchDesafios() {
+  try {
+    const response = await fetch("https://servicio-desafios.vercel.app/desafios");
+    const data = await response.json();
+    desafios.value = data.data;
+  } catch (error) {
+    console.error("Error al obtener los desafíos:", error);
+  }
+}
+
+// Llamar a la función de obtener desafíos al montar el componente
+onMounted(fetchDesafios);
+
+// Función para manejar el cambio de selección en el combo box
+const handleSelectionChange = (selectedItem) => {
+  const selectedDesafio = desafios.value.find(desafio => desafio.tituloDesafio === selectedItem);
+  if (selectedDesafio) {
+    selectedDesafioId.value = selectedDesafio._id;
+    selectedDesafioTitulo.value = selectedDesafio.tituloDesafio;
+    console.log(selectedDesafioId.value);
+  }
+}
 
 const rules = [fileList => !fileList || !fileList.length || fileList[0].size < 1500000 || '¡El tamaño del avatar debe ser inferior a 1.5 MB!']
 const loadings = ref([]);
@@ -202,10 +222,12 @@ function handleFileUpload(event) {
 async function handleSubmit() {
   const formData = new FormData();
   formData.append('userId', userId.value);
-  formData.append('idRegla', '65df97a116ad3aa303920ee9');
-  formData.append('retoAssignment', 'Responde una TRIVIA en Votaciones (Sobre Ecuador)');
+  formData.append('idRegla', selectedDesafioId.value);
+  formData.append('retoAssignment', selectedDesafioTitulo.value);
   formData.append('reference', 'app-live-10min');
   formData.append('provider', 'app web nevera');
+
+  console.log(selectedDesafioTitulo.value);
 
   loadings.value[0] = true;
   files.forEach(file => {
@@ -221,6 +243,7 @@ async function handleSubmit() {
       console.log('Datos enviados exitosamente');
       isSnackbarVisible.value = true;
       userId.value = '';
+      selectedItem.value = '';
       files = [];
       fetchHistorico();
 
