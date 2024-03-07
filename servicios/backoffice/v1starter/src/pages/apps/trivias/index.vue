@@ -183,6 +183,7 @@ function resolveOpciones(index, tipo){
 const paquetesOptions = ref('Todos los productos');
 
 function resetForm(){
+    closeReglaForm();
     nombre.value = '';
     idRegla.value = '';
     preguntas.value = [
@@ -199,12 +200,98 @@ function resetForm(){
 
 function closeDiag(){
     resetForm(); 
+    closeReglaForm();
     isDialogActive.value = false;
+}
+
+const reglaFormVisible = ref(false);
+const frecuenciaDesafio = ref('');
+const frecuenciaValor = ref(null);
+const tituloDesafio = ref('');
+const descripcionDesafio = ref('');
+const statusDesafio = ref(true);
+const tituloSticker = ref('');
+const URLSticker = ref('');
+
+function closeReglaForm(){
+    reglaFormVisible.value = false;  
+    frecuenciaDesafio.value = '';
+    frecuenciaValor.value = null;
+    tituloDesafio.value = '';
+    descripcionDesafio.value = '';
+    statusDesafio.value = true;
+    tituloSticker.value = '';
+    URLSticker.value = '';
+}
+function addRegla(){
+    reglaFormVisible.value = true;  
+    frecuenciaDesafio.value = '';
+    frecuenciaValor.value = null;
+    tituloDesafio.value = '';
+    descripcionDesafio.value = '';
+    statusDesafio.value = true;
+    tituloSticker.value = '';
+    URLSticker.value = '';
+}
+
+async function crearRegla(){
+    if ( !frecuenciaDesafio.value || frecuenciaValor.value == null || !tituloDesafio.value || !descripcionDesafio.value || 
+    !tituloSticker.value || !URLSticker.value) {
+        configSnackbar.value = {
+                    message: "Llenar todos los campos para crear la regla",
+                    type: "error",
+                    model: true
+                };
+        return false;
+    }
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    
+    let jsonEnviar ={
+            "frecuenciaDesafio": frecuenciaDesafio.value,
+            "frecuenciaValor": frecuenciaValor.value,
+            "tituloDesafio": tituloDesafio.value,
+            "descripcionDesafio": descripcionDesafio.value,
+            "statusDesafio": statusDesafio.value,
+            "tituloSticker": tituloSticker.value,
+            "URLSticker": URLSticker.value  
+        }
+
+        var raw = JSON.stringify(jsonEnviar);
+
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+
+        const send = await fetch('https://servicio-desafios.vercel.app/add', requestOptions);
+        const respuesta = await send.json();
+        if (respuesta.resp) {
+            configSnackbar.value = {
+                message: "Regla creada correctamente",
+                type: "success",
+                model: true
+            };
+            await getReglas();
+            closeReglaForm();
+        } else {
+            configSnackbar.value = {
+                message: respuesta.mensaje,
+                type: "error",
+                model: true
+            };
+            console.error(respuesta.error);
+            return false;
+
+        }
 }
 
 // ----------ADD-------------
 async function onAdd(){
     isLoading2.value = true;
+    closeReglaForm();
     resetForm(); 
     accionForm.value = 'add';
     isDialogActive.value = true;
@@ -216,6 +303,7 @@ const idToEdit = ref('');
 
 async function onEdit(id){
     isLoading2.value = true;
+    closeReglaForm();
     resetForm();     
     accionForm.value = 'edit';
     const consulta = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/get/' + id);
@@ -524,16 +612,69 @@ async function deleteConfirmed() {
                             <VRow class="d-flex flex-wrap justify-center gap-4">
                                 <VRow>
                                                                     
-                                    <VCol cols="8" >
+                                    <VCol cols="12" >
                                         <VTextField v-model="nombre" label="Nombre" placeholder="Nombre de la trivia" />
                                     </VCol>
 
-                                    <VCol cols="4" >
+                                    <VCol cols="6" >
                                         <VSelect v-model="idRegla" label="Id de regla" :items="idReglas" />
                                     </VCol>
-                                                                                              
+                                    
+                                    <VCol cols="6" class="d-flex">
+                                                           
+                                        <VBtn class="mr-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="addRegla" >
+                                        Crear regla
+                                        </VBtn>                                                                     
+                                        
+                                    </VCol>
+
+                                    
+                                    <VDivider v-if="reglaFormVisible"/>  
+
+                                    <VRow v-if="reglaFormVisible" class="d-flex my-4">
+                                    <VCol cols="12" >
+                                        <h4>Crear regla</h4>
+                                    </VCol>    
+
+                                    <VCol cols="6" >
+                                        <VTextField v-model="frecuenciaDesafio" label="Frecuencia de desafio" />
+                                    </VCol>
+
+                                    <VCol cols="6" >
+                                        <VTextField v-model="frecuenciaValor" label="Frecuencia de valor" type="number"  />
+                                    </VCol>
+
+                                    <VCol cols="12" >
+                                        <VTextField v-model="tituloDesafio" label="Título del desafío" />
+                                    </VCol>
+
+                                    <VCol cols="12" >
+                                        <VTextField v-model="descripcionDesafio" label="Descripción del desafío" />
+                                    </VCol>
+
+                                    <VCol cols="6" >
+                                        <VSwitch v-model="statusDesafio" label="Estatus del desafío" />
+                                    </VCol>
+
+                                    <VCol cols="6" >
+                                        <VTextField v-model="tituloSticker" label="Título del sticker" />
+                                    </VCol>
+
+                                    <VCol cols="12" >
+                                        <VTextField v-model="URLSticker" label="URL del sticker" />
+                                    </VCol>
+
+                                    <VDivider class="mt-4" v-if="reglaFormVisible"/>  
+                                        <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
+                                        <VBtn @click="crearRegla"> Crear regla </VBtn>
+
+                                        <VBtn color="secondary" variant="tonal" @click="closeReglaForm">
+                                            Cancelar
+                                        </VBtn>
+                                        </VCol>
+                                    </VRow>
                                     <VCol cols="12" class="d-flex">
-                                        <div class="d-flex align-content-end flex-wrap">Preguntas</div>
+                                        <div class="d-flex align-content-end flex-wrap"><h4>Preguntas</h4></div>
                                                              
                                         <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="resolveAñadirPregunta" >
                                         Añadir pregunta
@@ -558,7 +699,7 @@ async function deleteConfirmed() {
                                             </VCol>
 
                                             <VCol v-if="p.tipo == 'opciones'|| p.tipo == 'votacion'" cols="12" class="d-flex">
-                                            <div class="d-flex align-content-end flex-wrap">Opciones</div>
+                                            <div class="d-flex align-content-end flex-wrap"><h4>Opciones</h4></div>
                                                                 
                                             <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="resolveAñadirOpcion(index)" >
                                             Añadir opción
