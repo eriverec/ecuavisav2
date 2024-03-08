@@ -8,7 +8,6 @@ const moment = extendMoment(Moment);
 const currentTab = ref('tab-lista');
 const checkbox = ref(1);
 const dataDesafio = ref([]);
-const currentPage = ref(1);
 const totalRegistros = ref(1);
 const totalRegistrosHtml = ref(1);
 const idCampaign = ref("");
@@ -43,6 +42,7 @@ onMounted(getDesafio)
 
 async function getDesafio(page = 1, limit= 10){
   try {
+      currentPage.value = 1;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -63,13 +63,23 @@ async function getDesafio(page = 1, limit= 10){
   }
 }
 
-// Función para manejar el cambio de paginación
-const handlePaginationClick = async () => {
-  // Aquí puedes realizar las acciones que deseas cuando se hace clic en la paginación
-  // console.log('Se hizo clic en la paginación'+currentPage.value);
-  disabledPagination.value = true;
-  await getDesafio(currentPage.value)
-  disabledPagination.value = false;
+// Funciones para manejar el cambio de paginación
+const itemsPerPage = 8;
+const currentPage = ref(1);
+
+const paginatedDesafios = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+
+  return dataDesafio.value.slice(start, end);
+});
+
+const nextPage = () => {
+  if (currentPage.value * itemsPerPage < dataDesafio.value.length) currentPage.value++;
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
 };
 
 // Función para manejar el cambio de paginación
@@ -106,17 +116,18 @@ const eliminarRegistroSi = async () => {
 */
 const handleSwitchChange = async (index) => {
   const desafio = dataDesafio.value[index];
+  
   const id = desafio._id;
   const estado = desafio.statusDesafio;
   switchOnDisabled.value = true;
   var jsonEnviar = {
-        status: estado
+      statusDesafio: estado
   }
 
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   var requestOptions = {
-    method: 'POST',
+    method: 'PUT',
     headers: myHeaders,
     body: JSON.stringify(jsonEnviar),
     redirect: 'follow'
@@ -402,7 +413,7 @@ async function deleteConfirmed() {
 
                   <VList lines="two" border  v-if="dataDesafio.length > 0">
                   <template
-                    v-for="(desafio, index) of dataDesafio"
+                    v-for="(desafio, index) of paginatedDesafios"
                     :key="index"
                   >
                     <VListItem :disabled="disabledViewList">
@@ -475,13 +486,13 @@ async function deleteConfirmed() {
                   </template>
                 </VList>
                 
-                <VPagination
-                    :disabled="disabledPagination"
-                    v-model="currentPage"
-                    :length="totalRegistros"
-                    class="mt-4"
-                    @click="handlePaginationClick"
-                  />
+                <div class="d-flex align-center justify-space-between botonescurrentPage">
+                    <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
+                    Página {{ currentPage }}
+                    <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
+                        :disabled="(currentPage * itemsPerPage) >= dataDesafio.length">
+                    </VBtn>
+                </div>
                 </div>
                 <!-- fin lista usuarios -->
 
