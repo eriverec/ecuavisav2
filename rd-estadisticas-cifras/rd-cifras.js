@@ -243,6 +243,9 @@ function eventLibertadores() {
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                      <a href="/deportes/copa-libertadores/tablaposiciones" class="nav-link ${currentUrl === uLibertadoresTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                  </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/copa-libertadores/calendario" class="nav-link ${currentUrl === uLibertadoresCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
                       </li>
@@ -251,9 +254,6 @@ function eventLibertadores() {
                       </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/copa-libertadores/planteles" class="nav-link ${currentUrl === uLibertadoresPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
-                      </li>
-                      <li class="nav-item" role="presentation">
-                          <a href="/deportes/copa-libertadores/tablaposiciones" class="nav-link ${currentUrl === uLibertadoresTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                   </ul>
                   <div class="tab-content" id="myTabContent">
@@ -362,6 +362,9 @@ function eventSudamericana() {
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
                     
+                  <li class="nav-item" role="presentation">
+                      <a href="/deportes/copa-sudamericana/tablaposiciones" class="nav-link ${currentUrl === usudamericanaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                  </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/copa-sudamericana/calendario" class="nav-link ${currentUrl === usudamericanaCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
                       </li>
@@ -370,9 +373,6 @@ function eventSudamericana() {
                       </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/copa-sudamericana/planteles" class="nav-link ${currentUrl === usudamericanaPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
-                      </li>
-                      <li class="nav-item" role="presentation">
-                          <a href="/deportes/copa-sudamericana/tablaposiciones" class="nav-link ${currentUrl === usudamericanaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                   </ul>
                   <div class="tab-content" id="myTabContent">
@@ -482,6 +482,9 @@ function eventPremierLeague() {
               <div class="" id="ligapro" role="tabpanel">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                      <a href="/deportes/premierleague/tablaposiciones" class="nav-link ${currentUrl === upremierleagueTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                  </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/premierleague/calendario" class="nav-link ${currentUrl === upremierleagueCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
                       </li>
@@ -490,9 +493,6 @@ function eventPremierLeague() {
                       </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/premierleague/planteles" class="nav-link ${currentUrl === upremierleaguePlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
-                      </li>
-                      <li class="nav-item" role="presentation">
-                          <a href="/deportes/premierleague/tablaposiciones" class="nav-link ${currentUrl === upremierleagueTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                   </ul>
                   <div class="tab-content" id="myTabContent">
@@ -598,7 +598,9 @@ function eventLaLigaEspañola() {
               <div class="" id="ligapro" role="tabpanel">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
-                      
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/liga-espanola/tablaposiciones" class="nav-link ${currentUrl === uligaespanolaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                      </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/liga-espanola/calendario" class="nav-link ${currentUrl === uligaespanolaCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
                       </li>
@@ -608,9 +610,7 @@ function eventLaLigaEspañola() {
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/liga-espanola/planteles" class="nav-link ${currentUrl === uligaespanolaPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
                       </li>
-                      <li class="nav-item" role="presentation">
-                          <a href="/deportes/liga-espanola/tablaposiciones" class="nav-link ${currentUrl === uligaespanolaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
-                      </li>
+                      
                   </ul>
                   <div class="tab-content" id="myTabContent">
                       <div class="" id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
@@ -712,7 +712,9 @@ function eventMLS() {
               <div role="tabpanel">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
-                      
+                      <li class="nav-item" role="presentation">
+                          <a href="/deportes/mls/tablaposiciones" class="nav-link ${currentUrl === uMLSTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                      </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/mls/calendario" class="nav-link ${currentUrl === uMLSCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
                       </li>
@@ -722,9 +724,7 @@ function eventMLS() {
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/mls/planteles" class="nav-link ${currentUrl === uMLSPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
                       </li>
-                      <li class="nav-item" role="presentation">
-                          <a href="/deportes/mls/tablaposiciones" class="nav-link ${currentUrl === uMLSTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
-                      </li>
+                      
                   </ul>
                   <div class="tab-content" id="myTabContent">
                       <div class="" id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
@@ -826,6 +826,9 @@ function eventLeaguesCup() {
               <div role="tabpanel">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
+                  <li class="nav-item" role="presentation">
+                      <a href="/deportes/leaguescup/tablaposiciones" class="nav-link ${currentUrl === uleaguescupTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                  </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/leaguescup/calendario" class="nav-link ${currentUrl === uleaguescupCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
                       </li>
@@ -834,9 +837,6 @@ function eventLeaguesCup() {
                       </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/leaguescup/planteles" class="nav-link ${currentUrl === uleaguescupPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
-                      </li>
-                      <li class="nav-item" role="presentation">
-                          <a href="/deportes/leaguescup/tablaposiciones" class="nav-link ${currentUrl === uleaguescupTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                   </ul>
                   <div class="tab-content" id="myTabContent">
@@ -950,11 +950,11 @@ function eventEliminatorios() {
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
                       
+                  <li class="nav-item" role="presentation">
+                      <a href="/deportes/eliminatorias-conmebol/tablaposiciones" class="nav-link ${currentUrl === ueliminatoriasConmebolTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                  </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/eliminatorias-conmebol/calendario" class="nav-link ${currentUrl === ueliminatoriasConmebolCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
-                      </li>
-                      <li class="nav-item" role="presentation">
-                          <a href="/deportes/eliminatorias-conmebol/tablaposiciones" class="nav-link ${currentUrl === ueliminatoriasConmebolTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                       </li>
                       <li class="nav-item" role="presentation">
                           <a href="/deportes/eliminatorias-conmebol/goleadores" class="nav-link ${currentUrl === ueliminatoriasConmebolGoleadores ? "active" : ""} " id="Goleadores-tab" >Goleadores</a>
