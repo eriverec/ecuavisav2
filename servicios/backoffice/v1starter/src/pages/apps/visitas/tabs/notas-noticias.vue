@@ -161,7 +161,7 @@ onMounted(async() => {
 
   currentPage.value = 1;
   let fechaI = selectedCombo.i.format('MM/DD/YYYY');
-  let fechaF = selectedCombo.i.format('MM/DD/YYYY');
+  let fechaF = selectedCombo.f.format('MM/DD/YYYY');
   fechaIni.value = fechaI;
   fechaFin.value = fechaF;
 
@@ -530,7 +530,7 @@ const resolveUltimasVisitasUser = (first, last) => {
         title: selectedCombo.title
     }
     let fechaI = selectedCombo.i.format('MM/DD/YYYY');
-    let fechaF = selectedCombo.i.format('MM/DD/YYYY');
+    let fechaF = selectedCombo.f.format('MM/DD/YYYY');
 
     fechaIni.value = fechaI;
     fechaFin.value = fechaF;
