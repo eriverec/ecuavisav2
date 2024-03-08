@@ -1,78 +1,4 @@
 <template>
-  <VRow>
-    <VCol cols="12" md="5" lg="5">
-      <VCard title="Formulario de imágenes">
-        <VCardText>
-          <form @submit.prevent="handleSubmit">
-            <VTextField prepend-icon="tabler-user" label="ID del Usuario" id="userId" v-model="userId" type="text"
-              required />
-            <br>
-     
-            <VCombobox label="Desafios" prepend-icon="tabler-list" v-model="selectedItem"
-              :items="desafios.map(desafio => desafio.tituloDesafio)"  @update:modelValue="handleSelectionChange" />
-            <br>
-            <VFileInput :rules="rules" accept="image/png, image/jpeg, image/webp" label="Sube tus imágenes" type="file"
-              multiple @change="handleFileUpload" required />
-
-            <br>
-            <VBtn variant="tonal" type="submit" :loading="loadings[0]" :disabled="loadings[0]" color="success">
-              Enviar
-            </VBtn>
-          </form>
-        </VCardText>
-
-      </VCard>
-
-
-
-    </VCol>
-    <VCol cols="12" md="7" lg="7">
-      <VCard class="mb-4 text-uppercase" title="Listado de registros">
-      </VCard>
-      <div v-if="cargando">Cargando...</div>
-      <VCard class="mb-4" v-else :title="item.retoAssignment"
-        :subtitle="moment(item.created_at).format('D/M/YYYY - HH:mm')" v-for="item in historico" :key="item._id">
-        <VCardText>
-
-          <!-- 👉 Header -->
-          <div class="d-flex justify-space-between">
-            <span class="text-sm text-disabled">{{ }}</span>
-          </div>
-
-          <!-- <div class="d-flex align-center parent_img">
-            <div class="items-img " >
-              <VAvatar :size="100" :image="urlBaseFiles + file" class="me-3" />
-              <VBtn icon="tabler-x" size="x-small" color="error" @click="handleImageClick(urlBaseFiles + file)" />
-            </div>
-          </div> -->
-
-
-
-          <VSlideGroup show-arrows mandatory>
-            <!-- 👉 slider more -->
-            <VSlideGroupItem v-for="file in item.files" :key="file">
-              <div style=" width: 110px;height: 94px; position: relative;"
-                class="d-flex flex-column justify-center align-center rounded me-6">
-                <VAvatar rounded size="88" color="default" variant="tonal" class="text-disabled">
-                  <div>
-                    <VAvatar :size="100" :image="urlBaseFiles + file" class="me-3 items-img" />
-                  </div>
-                </VAvatar>
-                <VBtn class="btn_delete_img" icon="tabler-x" size="x-small" color="error"
-                  @click="handleImageClick(urlBaseFiles + file)" />
-              </div>
-            </VSlideGroupItem>
-          </VSlideGroup>
-        </VCardText>
-
-        <VBtn block class="rounded-t-0" @click="handleDeleteClick(item._id)">
-          Eliminar
-        </VBtn>
-
-      </VCard>
-
-    </VCol>
-  </VRow>
   <VSnackbar v-model="isSnackbarVisible" location="top" color="success">
     Enviado!
   </VSnackbar>
@@ -84,6 +10,100 @@
   <VSnackbar v-model="isSnackbarError" location="top" color="error">
     Error al enviar datos
   </VSnackbar>
+  <VDialog v-model="dialog" max-width="500">
+    <v-card>
+      <v-card-title>¿Estás seguro de eliminar la imagen?</v-card-title>
+      <v-card-actions>
+        <v-btn text @click="deleteImage">Sí</v-btn>
+        <v-btn color="red darken-1" text @click="dialog = false">No</v-btn>
+      </v-card-actions>
+    </v-card>
+  </VDialog>
+  <VRow>
+    <VCol cols="12" md="12" lg="12">
+      <VCard title="Formulario de imágenes" class="card_form">
+        <VCardText>
+          <form @submit.prevent="handleSubmit">
+            <VTextField prepend-icon="tabler-user" label="ID del Usuario" id="userId" v-model="userId" type="text"
+              required />
+            <br>
+
+            <VCombobox label="Desafios" prepend-icon="tabler-list" v-model="selectedItem"
+              :items="desafios.map(desafio => desafio.tituloDesafio)" @update:modelValue="handleSelectionChange" />
+            <br>
+            <VFileInput :rules="rules" accept="image/png, image/jpeg, image/webp" label="Sube tus imágenes" type="file"
+              multiple @change="handleFileUpload" required />
+
+            <br>
+            <div style=" display: flex;justify-content: flex-end;">
+              <VBtn variant="tonal" type="submit" :loading="loadings[0]" :disabled="loadings[0]" color="success">
+                Enviar
+              </VBtn>
+
+            </div>
+          </form>
+        </VCardText>
+
+      </VCard>
+
+
+
+    </VCol>
+    <VCol cols="12" md="12" lg="12">
+      <h2 class="mb-3">Listado
+        <p class="font-weight-medium text-base text-subtitle-2">
+          Un total de {{ totalText }} registros
+        </p>
+      </h2>
+      <div v-if="cargando">Cargando...</div>
+      <div v-else class="list_items_registros">
+        <VCard class="mb-4" :title="item.retoAssignment" :subtitle="moment(item.created_at).format('D/M/YYYY - HH:mm')"
+          v-for="item in historico" :key="item._id">
+          <VCardText>
+
+            <!-- 👉 Header -->
+            <div class="d-flex justify-space-between">
+              <span class="text-sm text-disabled">{{ }}</span>
+            </div>
+
+            <!-- <div class="d-flex align-center parent_img">
+              <div class="items-img " >
+                <VAvatar :size="100" :image="urlBaseFiles + file" class="me-3" />
+                <VBtn icon="tabler-x" size="x-small" color="error" @click="handleImageClick(urlBaseFiles + file)" />
+              </div>
+            </div> -->
+
+
+
+            <VSlideGroup show-arrows mandatory>
+              <!-- 👉 slider more -->
+              <VSlideGroupItem v-for="file in item.files" :key="file">
+                <div style=" width: 110px;height: 94px; position: relative;"
+                  class="d-flex flex-column justify-center align-center rounded me-6">
+                  <VAvatar rounded size="88" color="default" variant="tonal" class="text-disabled">
+                    <div>
+                      <VAvatar :size="100" :image="urlBaseFiles + file" class="me-3 items-img" />
+                    </div>
+                  </VAvatar>
+                  <VBtn class="btn_delete_img" icon="tabler-x" size="x-small" color="secondary"
+                    @click="handleImageClick(urlBaseFiles + file)" />
+                </div>
+              </VSlideGroupItem>
+            </VSlideGroup>
+          </VCardText>
+
+          <VBtn icon="tabler-trash" block color="error" class="rounded-t-0 btn_delete_item"
+            @click="handleDeleteClick(item._id)" />
+
+        </VCard>
+
+      </div>
+      <VPagination v-if="total > limit" v-model="page" size="small" :total-visible="4" :length="totalPages"
+        @update:model-value="updatePage" />
+
+    </VCol>
+  </VRow>
+
 </template>
 
 <style>
@@ -91,15 +111,54 @@
   object-fit: cover !important;
 }
 
+
+.btn_delete_item {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: auto;
+  border-radius: 0 0px 0px 20px;
+}
+
+.list_items_registros {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  column-gap: 15px;
+  margin-bottom: 20px;
+}
+
 .items-img {
   border-radius: 0px !important;
 }
 
+.card_form {
+  max-width: 500px;
+  margin: auto;
+
+}
 
 .btn_delete_img {
   position: absolute;
   top: 0;
   right: 0;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
 }
 </style>
 
@@ -119,6 +178,27 @@ const selectedItem = ref('');
 const desafios = ref([]);
 const selectedDesafioId = ref('');
 const selectedDesafioTitulo = ref('');
+const selectedImage = ref('');
+const dialog = ref(false);
+
+//paginador
+const page = ref(1);
+const limit = ref(6);
+const total = ref(0);
+const totalText = ref(0);
+const totalPages = computed(() => Math.ceil(total.value / limit.value));
+
+const updatePage = (newPage) => {
+  page.value = newPage;
+  fetchHistorico();
+};
+
+
+// Función para manejar el clic en la imagen
+const handleImageClick = (file) => {
+  selectedImage.value = file;
+  dialog.value = true; // Abre el modal al hacer clic en la imagen
+}
 
 // Función para obtener los desafíos desde el endpoint
 async function fetchDesafios() {
@@ -149,20 +229,13 @@ const loadings = ref([]);
 const cargando = ref(true);
 const urlBaseFiles = "https://phpstack-1011861-4362286.cloudwaysapps.com/uploads";
 
-const randomColor = () => {
-  const letters = '0123456789ABCDEF';
-  let color = '#';
-  for (let i = 0; i < 6; i++) {
-    color += letters[Math.floor(Math.random() * 16)];
-  }
-  return color;
-};
-
 async function fetchHistorico() {
   try {
-    const response = await fetch("https://servicio-niveles-puntuacion.vercel.app/historico/all");
+    const response = await fetch(`https://servicio-niveles-puntuacion.vercel.app/historico/all?&page=${page.value}&limit=${limit.value}`);
     const data = await response.json();
-    historico.value = data.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at)).slice(0, 5);
+    historico.value = data.data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+    total.value = data.total;
+    totalText.value = data.total;
     cargando.value = false;
   } catch (error) {
     console.error("Error al obtener el historial:", error);
@@ -173,7 +246,8 @@ async function fetchHistorico() {
 onMounted(fetchHistorico);
 
 // Función para manejar el clic en el botón de eliminación de imagen
-const handleImageClick = async (src) => {
+const deleteImage = async () => {
+  const src = selectedImage.value;
   try {
     const response = await fetch('https://servicio-niveles-puntuacion.vercel.app/historico/delete-file/', {
       method: 'DELETE',
@@ -193,6 +267,7 @@ const handleImageClick = async (src) => {
   } catch (error) {
     console.error('Error en la solicitud:', error);
   }
+  dialog.value = false;
 }
 
 // Función para manejar el clic en el botón de eliminación de registro completo
