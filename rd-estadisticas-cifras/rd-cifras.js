@@ -99,25 +99,25 @@ function eventLigaPro() {
             <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
           </li>
           <li class="nav-item" role="presentation">
-              <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/calendario">Eliminatorias</a>
+              <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/tablaposiciones">Eliminatorias</a>
           </li>
               <li class="nav-item" role="presentation">
                 <a class="nav-link" href="/deportes/champions/tablaposiciones">Champions League</a>
               </li> 
               <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/calendario">Copa Libertadores</a>
+                  <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/tablaposiciones">Copa Libertadores</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/calendario" >Copa Sudamericana</a>
+                  <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/tablaposiciones" >Copa Sudamericana</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/premierleague/calendario" >Premier League</a>
+                  <a class="nav-link" id="" href="/deportes/premierleague/tablaposiciones" >Premier League</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/liga-espanola/calendario">Liga Española</a>
+                  <a class="nav-link" id="" href="/deportes/liga-espanola/tablaposiciones">Liga Española</a>
               </li>
               <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/mls/calendario">MLS</a>
+                  <a class="nav-link" id="" href="/deportes/mls/tablaposiciones">MLS</a>
               </li>
               
           </ul>
