@@ -6,7 +6,6 @@ const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 
 const currentTab = ref('tab-lista');
-const isDialogVisibleDelete = ref(false);
 const checkbox = ref(1);
 const dataDesafio = ref([]);
 const currentPage = ref(1);
@@ -16,6 +15,28 @@ const idCampaign = ref("");
 const disabledPagination = ref(false);
 const disabledViewList = ref(false);
 const switchOnDisabled = ref(false);
+
+
+const isDialogActive = ref(false);
+const accionForm = ref('');
+
+const nombre = ref('');
+
+const frecuenciaDesafio = ref('');
+const frecuenciaValor = ref(null);
+const tituloDesafio = ref('');
+const descripcionDesafio = ref('');
+const statusDesafio = ref(true);
+const tituloSticker = ref('');
+const URLSticker = ref('');
+
+const idToEdit = ref('');
+
+const configSnackbar = ref({
+    message: "Datos guardados",
+    type: "success",
+    model: false
+});
 
 
 onMounted(getDesafio)
@@ -52,6 +73,7 @@ const handlePaginationClick = async () => {
 };
 
 // Función para manejar el cambio de paginación
+/*
 const eliminarRegistro = async (id) => {
   isDialogVisibleDelete.value = true;
   idDesafio.value = id;
@@ -81,7 +103,7 @@ const eliminarRegistroSi = async () => {
       return console.error(error.message);    
   }
 };
-
+*/
 const handleSwitchChange = async (index) => {
   const desafio = dataDesafio.value[index];
   const id = desafio._id;
@@ -112,10 +134,199 @@ const handleSwitchChange = async (index) => {
   // Realiza las operaciones necesarias con el ID y el estado
 };
 
+//FUNCIONES FORM
+function resetForm(){
+    frecuenciaDesafio.value = '';
+    frecuenciaValor.value = null;
+    tituloDesafio.value = '';
+    descripcionDesafio.value = '';
+    statusDesafio.value = true;
+    tituloSticker.value = '';
+    URLSticker.value = '';
+  
+}
+function closeDiag(){
+    resetForm(); 
+    isDialogActive.value = false;
+}
+
+//ADD
+async function onAdd(){     
+    resetForm(); 
+    accionForm.value = 'add';
+    isDialogActive.value = true;
+}
+
+//EDIT
+async function onEdit(id){
+    
+    resetForm();     
+    accionForm.value = 'edit';
+    const consulta = await fetch('https://servicio-desafios.vercel.app/desafios/' + id);
+    const consultaJson = await consulta.json();
+    const data = consultaJson.data;
+    //console.log(paquete);
+    idToEdit.value = data._id;
+    nombre.value = data.tituloDesafio;
+    frecuenciaDesafio.value = data.frecuenciaDesafio;
+    frecuenciaValor.value = data.frecuenciaValor;
+    tituloDesafio.value = data.tituloDesafio;
+    descripcionDesafio.value = data.descripcionDesafio;
+    statusDesafio.value = data.statusDesafio;
+    tituloSticker.value = data.tituloSticker;
+    URLSticker.value = data.URLSticker;
+
+    isDialogActive.value = true;  
+}
+
+//SEND
+
+async function onComplete(){
+
+  if ( !frecuenciaDesafio.value || frecuenciaValor.value == null || !tituloDesafio.value || !descripcionDesafio.value || 
+    !tituloSticker.value || !URLSticker.value) {
+        configSnackbar.value = {
+                    message: "Llenar todos los campos para crear el desafío",
+                    type: "error",
+                    model: true
+                };
+        return false;
+    }
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  if (accionForm.value === 'add') {
+
+    let jsonEnviar ={
+            "frecuenciaDesafio": frecuenciaDesafio.value,
+            "frecuenciaValor": frecuenciaValor.value,
+            "tituloDesafio": tituloDesafio.value,
+            "descripcionDesafio": descripcionDesafio.value,
+            "statusDesafio": statusDesafio.value,
+            "tituloSticker": tituloSticker.value,
+            "URLSticker": URLSticker.value  
+    }
+
+    var raw = JSON.stringify(jsonEnviar);
+
+    var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+    };
+
+    const send = await fetch('https://servicio-desafios.vercel.app/add', requestOptions);
+    const respuesta = await send.json();
+    if (respuesta.resp) {
+            configSnackbar.value = {
+                message: "Desafío creada correctamente",
+                type: "success",
+                model: true
+            };
+            
+    } else {
+            configSnackbar.value = {
+                message: respuesta.mensaje,
+                type: "error",
+                model: true
+            };
+            console.error(respuesta.error);
+            return false;
+
+    }
+}else if(accionForm.value === 'edit'){
+
+  let jsonEnviar ={
+            "frecuenciaDesafio": frecuenciaDesafio.value,
+            "frecuenciaValor": frecuenciaValor.value,
+            "tituloDesafio": tituloDesafio.value,
+            "descripcionDesafio": descripcionDesafio.value,
+            "statusDesafio": statusDesafio.value,
+            "tituloSticker": tituloSticker.value,
+            "URLSticker": URLSticker.value  
+    }
+
+    var raw = JSON.stringify(jsonEnviar);
+
+    var requestOptions = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+    };
+
+    const send = await fetch('https://servicio-desafios.vercel.app/desafios/' + idToEdit.value, requestOptions);
+    const respuesta = await send.json();
+    if (respuesta.resp) {
+            configSnackbar.value = {
+                message: "Desafío actualizado correctamente",
+                type: "success",
+                model: true
+            };
+            
+    } else {
+            configSnackbar.value = {
+                message: respuesta.mensaje,
+                type: "error",
+                model: true
+            };
+            console.error(respuesta.error);
+            return false;
+
+    }
+}
+await getDesafio();
+isDialogActive.value = false;
+
+}
+
+// DELETE
+
+const isDialogVisibleDelete = ref(false);
+const idToDelete = ref('');
+
+function onDelete(id) {    
+    isDialogVisibleDelete.value = true;
+    idToDelete.value = id;   
+}
+
+async function deleteConfirmed() {
+    
+    var requestOptions = {
+        method: 'DELETE',
+        redirect: 'follow'
+    };
+
+    const deleted = await fetch('https://servicio-desafios.vercel.app/desafios/' + idToDelete.value, requestOptions);
+    const respuesta = await deleted.json();
+    if (respuesta.resp) {
+        configSnackbar.value = {
+            message: "Desafío eliminado correctamente",
+            type: "success",
+            model: true
+        };
+    } else {
+        configSnackbar.value = {
+            message: respuesta.mensaje,
+            type: "error",
+            model: true
+        };
+    }
+    await getDesafio();
+    isDialogVisibleDelete.value = false;
+
+}
+
 </script>
 
 <template>
   <section>
+
+    <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
+                {{ configSnackbar.message }}
+    </VSnackbar>
+    
     <VDialog
       v-model="isDialogVisibleDelete"
       persistent
@@ -139,7 +350,7 @@ const handleSwitchChange = async (index) => {
           >
             No, cerrar
           </VBtn>
-          <VBtn @click="eliminarRegistroSi">
+          <VBtn @click="deleteConfirmed">
             Si, eliminar
           </VBtn>
         </VCardText>
@@ -174,7 +385,7 @@ const handleSwitchChange = async (index) => {
                 <!-- inicio lista de Módulos -->
                   
                 <div class="px-4">
-                  <VBtn color="primary" class="mb-4" :to="{ name: 'apps-campaigns-create' }">
+                  <VBtn color="primary" class="mb-4" @click="onAdd">
                     Nuevo desafío
                     <VIcon
                       :size="22"
@@ -228,24 +439,8 @@ const handleSwitchChange = async (index) => {
                       <template #append>
                         <div class="espacio-right-2">
                           
-                          <VBtn
-                            icon
-                            size="x-small"
-                            color="info"
-                            variant="text"
-                          >
-                          <RouterLink
-                            :to="{
-                              name: 'apps-campaigns-edit-id',
-                              params: { id: desafio._id },
-                            }"
-                            class="font-weight-medium user-list-name"
-                            >
-                            <VIcon
-                              size="22"
-                              icon="tabler-edit"
-                            />
-                          </RouterLink>
+                          <VBtn color="success" variant="text" icon  @click="onEdit(desafio._id)">
+                                    <VIcon size="22" icon="tabler-edit" />
                           </VBtn>
 
                           <VBtn
@@ -253,7 +448,7 @@ const handleSwitchChange = async (index) => {
                             size="x-small"
                             color="error"
                             variant="text"
-                            @click="eliminarRegistro(desafio._id)"
+                            @click="onDelete(desafio._id)"
                           >
                             <VIcon
                               size="22"
@@ -289,6 +484,68 @@ const handleSwitchChange = async (index) => {
                   />
                 </div>
                 <!-- fin lista usuarios -->
+
+                <VDialog v-model="isDialogActive" persistent no-click-animation max-width="800">
+
+                  <!-- Dialog close btn -->
+                  <DialogCloseBtn @click="closeDiag" />
+
+                  <VCard  class="pa-sm-14 pa-5">
+                      <VCardItem class="text-center">
+                          <VCardTitle class="text-h5 mb-3">
+                              {{ accionForm === "add" || accionForm === "duplicate" ? "Nuevo desafío" : "Editar " + nombre }}
+                          </VCardTitle>
+                      </VCardItem>
+
+                      <VCardText>
+
+                          <!-- 👉 Form -->
+                          <VForm class="mt-6" @submit.prevent="onComplete">
+                              <VRow class="d-flex flex-wrap justify-center gap-4">
+                                  <VRow>
+                                                                                                         
+                                      <VCol cols="6" >
+                                          <VTextField v-model="frecuenciaDesafio" label="Frecuencia de desafio" />
+                                      </VCol>
+
+                                      <VCol cols="6" >
+                                          <VTextField v-model="frecuenciaValor" label="Frecuencia de valor" type="number"  />
+                                      </VCol>
+
+                                      <VCol cols="12" >
+                                          <VTextField v-model="tituloDesafio" label="Título del desafío" />
+                                      </VCol>
+
+                                      <VCol cols="12" >
+                                          <VTextField v-model="descripcionDesafio" label="Descripción del desafío" />
+                                      </VCol>
+
+                                      <VCol cols="6" >
+                                          <VSwitch v-model="statusDesafio" label="Estatus del desafío" />
+                                      </VCol>
+
+                                      <VCol cols="6" >
+                                          <VTextField v-model="tituloSticker" label="Título del sticker" />
+                                      </VCol>
+
+                                      <VCol cols="12" >
+                                          <VTextField v-model="URLSticker" label="URL del sticker" />
+                                      </VCol>
+                                                        
+                                  </VRow>
+                                  <!-- 👉 Submit and Cancel -->
+                                  <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
+                                      <VBtn type="submit"> Guardar </VBtn>
+
+                                      <VBtn color="secondary" variant="tonal" @click="closeDiag">
+                                          Cancelar
+                                      </VBtn>
+                                  </VCol>
+                              </VRow>
+                          </VForm>
+                      </VCardText>
+                  </VCard>
+                  </VDialog>
               </VWindowItem>
 
               
