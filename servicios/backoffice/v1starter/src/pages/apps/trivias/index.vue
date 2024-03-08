@@ -117,6 +117,17 @@ function copyUrl(id){
     model: true
     };  
 }    
+
+function copyUrlRespuesta(id){
+    navigator.clipboard.writeText('https://ecuavisa-desafio-trivias.vercel.app/triviaUsuario/create/idTrivia/' + id); 
+
+    configSnackbar.value = {
+    message: "Enlace copiado en el portapapeles",
+    timeout: 1000,
+    type: "success",
+    model: true
+    };  
+}    
 function validarArreglo(arreglo) {
     for (let i = 0; i < arreglo.length; i++) {
         let objeto = arreglo[i];
@@ -544,6 +555,7 @@ async function deleteConfirmed() {
                             <th scope="col">Nombre</th>
                             <th scope="col">Id de regla</th>  
                             <th scope="col">Endpoint</th>  
+                            <th scope="col">Enviar respuesta</th>
                             <th scope="col">Acciones</th>                                                   
                             </tr>
                         </thead>
@@ -560,7 +572,12 @@ async function deleteConfirmed() {
                                 <VBtn variant="text" icon  @click="copyUrl(item._id)">
                                     <VIcon size="22" icon="tabler-clipboard" />
                                 </VBtn>
-                            </td>                        
+                            </td>    
+                            <td class="text-medium-emphasis">
+                                <VBtn variant="text" icon  @click="copyUrlRespuesta(item._id)">
+                                    <VIcon size="22" icon="tabler-clipboard" />
+                                </VBtn>
+                            </td>                     
                             <td class="text-medium-emphasis">
                                 <VBtn color="success" variant="text" icon  @click="onEdit(item._id)">
                                     <VIcon size="22" icon="tabler-edit" />
