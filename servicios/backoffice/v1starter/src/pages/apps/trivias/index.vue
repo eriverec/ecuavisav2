@@ -298,7 +298,31 @@ async function crearRegla(){
 
         }
 }
+// ----------RESPUESTAS DE USUARIOS-------------
 
+const respuestasUsuarios = ref([]);
+const respuestasUsuariosVisible = ref(false);
+const nombreTriviaSelected = ref('');
+const nombreUsuarioVisible = ref([]);
+
+async function mostrarRespuestasUsuarios (idTrivia, nombre){
+    isLoading2.value = true;
+    nombreUsuarioVisible.value = [];
+    nombreTriviaSelected.value = nombre;
+    const consulta = await fetch('https://ecuavisa-desafio-trivias.vercel.app/triviaUsuario/get/trivia/' + idTrivia);
+    const consultaJson = await consulta.json();
+    respuestasUsuarios.value = consultaJson.data;   
+    respuestasUsuariosVisible.value = true;
+    isLoading2.value = false;
+}
+
+
+async function mostrarNombreUsuario(id, index){
+    const dataUser = await fetch('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id=' + id);
+    const dataUserJson = await dataUser.json();
+    respuestasUsuarios.value[index].nombre = dataUserJson.first_name + ' ' + dataUserJson.last_name;
+    nombreUsuarioVisible.value.push(index);
+}
 // ----------ADD-------------
 async function onAdd(){
     isLoading2.value = true;
@@ -556,6 +580,7 @@ async function deleteConfirmed() {
                             <th scope="col">Id de regla</th>  
                             <th scope="col">Endpoint</th>  
                             <th scope="col">Enviar respuesta</th>
+                            <th scope="col">Respuestas</th>
                             <th scope="col">Acciones</th>                                                   
                             </tr>
                         </thead>
@@ -577,7 +602,12 @@ async function deleteConfirmed() {
                                 <VBtn variant="text" icon  @click="copyUrlRespuesta(item._id)">
                                     <VIcon size="22" icon="tabler-clipboard" />
                                 </VBtn>
-                            </td>                     
+                            </td>     
+                            <td class="text-medium-emphasis">
+                                <VBtn variant="text" icon  @click="mostrarRespuestasUsuarios(item._id, item.nombre)">
+                                    <VIcon size="22" icon="tabler-eye" />
+                                </VBtn>
+                            </td>                  
                             <td class="text-medium-emphasis">
                                 <VBtn color="success" variant="text" icon  @click="onEdit(item._id)">
                                     <VIcon size="22" icon="tabler-edit" />
@@ -603,6 +633,48 @@ async function deleteConfirmed() {
                         :disabled="(currentPage * itemsPerPage) >= dataTrivias.length">
                     </VBtn>
                     </div>
+                    </VCardItem>  
+                    
+                    </VCard>
+                </VCol>
+
+                <VCol v-if="respuestasUsuariosVisible" cols="12" sm="12" lg="12">
+                    <VCard>
+                    <VCardTitle class="pt-4 pl-6">Respuestas de {{ nombreTriviaSelected }}</VCardTitle>   
+
+                   
+                    <VCardItem v-if="respuestasUsuarios.length > 0">
+                    <VTable class="text-no-wrap tableNavegacion mb-5">
+                        <thead>
+                            <tr>   
+                            <th scope="col">Id</th>                      
+                            <th scope="col">Respuesta</th>  
+                                                                            
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr v-for="(item, index) in respuestasUsuarios">
+                            <td class="text-medium-emphasis">
+                                {{ item.idUsuario}}
+                                
+                                <VBtn v-if="!nombreUsuarioVisible.includes(index)" variant="text" icon  @click="mostrarNombreUsuario(item.idUsuario, index)">
+                                    <VIcon size="22" icon="tabler-eye" />
+                                </VBtn>
+                                <span class="ml-3">{{ item.nombre}}</span>
+                               
+                            </td>                           
+                            <td class="text-medium-emphasis">
+                                {{ item.respuesta}}
+                            </td> 
+                                
+                            </tr>
+                        </tbody>
+                    </VTable>
+                    
+                    </VCardItem>  
+                    <VCardItem v-else-if="respuestasUsuarios.length == 0">
+                    No se han encontrado datos                                
                     </VCardItem>  
                     
                     </VCard>
