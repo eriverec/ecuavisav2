@@ -642,7 +642,49 @@ async function deleteConfirmed() {
                     <VCard>
                     <VCardTitle class="pt-4 pl-6">Respuestas de {{ nombreTriviaSelected }}</VCardTitle>   
 
-                   
+                    <VCardItem v-if="respuestasUsuarios.length > 0">
+                        <div class="respuesta-card mb-4 w-100" v-for="(item, index) in respuestasUsuarios">
+                            <div class="d-flex align-center gap-4 mt-6 ml-4 mb-2">                      
+                                <div><h4>Id del Usuario:</h4></div>                    
+                                <div>
+                                    <h4>{{ item.idUsuario }}</h4>
+                                </div>               
+                                <div>
+                                    <VBtn v-if="!nombreUsuarioVisible.includes(index)" variant="text" icon  @click="mostrarNombreUsuario(item.idUsuario, index)">
+                                        <VIcon size="22" icon="tabler-eye" />
+                                    </VBtn>
+                                    
+                                        <h4 v-if="item.nombre" class="ml-3"> Nombre: &nbsp;&nbsp; {{item.nombre}}</h4>
+                                    
+                                </div>              
+                            </div>
+                                
+                            <VTable class="text-no-wrap tableNavegacion mb-5">
+                                    <thead>
+                                        <tr>   
+                                        <th scope="col">Pregunta</th>                      
+                                        <th scope="col">Respuesta</th>  
+                                                                                        
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr v-for="(r, index) in item.respuesta">
+                                        <td class="text-medium-emphasis">
+                                            {{ r.pregunta}}                              
+                                        </td>                           
+                                        <td class="text-medium-emphasis">
+                                            {{ r.respuesta}}
+                                        </td> 
+                                            
+                                        </tr>
+                                    </tbody>
+                            </VTable>
+
+                        </div>
+                        
+                    </VCardItem>
+                   <!--
                     <VCardItem v-if="respuestasUsuarios.length > 0">
                     <VTable class="text-no-wrap tableNavegacion mb-5">
                         <thead>
@@ -665,14 +707,37 @@ async function deleteConfirmed() {
                                
                             </td>                           
                             <td class="text-medium-emphasis">
-                                {{ item.respuesta}}
+                                <VTable class="text-no-wrap tableNavegacion mb-5">
+                                    <thead>
+                                        <tr>   
+                                        <th scope="col">Pregunta</th>                      
+                                        <th scope="col">Respuesta</th>  
+                                                                                        
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <tr v-for="(r, index) in item.respuesta">
+                                        <td class="text-medium-emphasis">
+                                            {{ r.pregunta}}                              
+                                        </td>                           
+                                        <td class="text-medium-emphasis">
+                                            {{ r.respuesta}}
+                                        </td> 
+                                            
+                                        </tr>
+                                    </tbody>
+                                </VTable>
+                                
                             </td> 
                                 
                             </tr>
                         </tbody>
                     </VTable>
                     
-                    </VCardItem>  
+                    </VCardItem> 
+                    --> 
+
                     <VCardItem v-else-if="respuestasUsuarios.length == 0">
                     No se han encontrado datos                                
                     </VCardItem>  
@@ -864,6 +929,12 @@ async function deleteConfirmed() {
  
 .clickable {
   cursor: pointer;
+}
+
+.respuesta-card {
+    border: 3px solid rgba(var(--v-border-color), var(--v-hover-opacity));; 
+    border-radius: 6px; 
+    background-color: transparent; 
 }
 
 .item-cards {
