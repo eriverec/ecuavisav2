@@ -50,7 +50,7 @@ async function getDesafio(page = 1, limit= 10){
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://servicio-desafios.vercel.app/desafios`, requestOptions);
+      var response = await fetch(`https://servicio-niveles-puntuacion.vercel.app/historico/list-reglas-por-carpetas`, requestOptions);
       const data = await response.json();
 
       dataDesafio.value = data.data;
@@ -78,37 +78,6 @@ const nextPage = () => {
 
 const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
-};
-
-const handleSwitchChange = async (index) => {
-  const desafio = dataDesafio.value[index];
-  
-  const id = desafio._id;
-  const estado = desafio.statusDesafio;
-  switchOnDisabled.value = true;
-  var jsonEnviar = {
-      statusDesafio: estado
-  }
-
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  var requestOptions = {
-    method: 'PUT',
-    headers: myHeaders,
-    body: JSON.stringify(jsonEnviar),
-    redirect: 'follow'
-  };
-
-  var response = await fetch(`https://servicio-desafios.vercel.app/desafios/${id}`, requestOptions);
-  const data = await response.json();
-  if(data.resp){
-    // alert("Desafío editado correctamente");
-  }else{
-    alert("Un error se presentó: "+data.error);
-    desafio.statusDesafio = !desafio.statusDesafio;
-  };
-  switchOnDisabled.value = false;
-  // Realiza las operaciones necesarias con el ID y el estado
 };
 
 
@@ -193,7 +162,7 @@ const handleSwitchChange = async (index) => {
                       <VListItemSubtitle>Título</VListItemSubtitle>
                       <VListItemTitle>
                         <div class="nombre-desafio">
-                          {{desafio.tituloDesafio }}
+                          {{desafio.titulo }}
                         </div>
                       </VListItemTitle>
                       <template #append>
@@ -201,7 +170,7 @@ const handleSwitchChange = async (index) => {
                             <VBtn
                               variant="tonal"
                               size="small"
-                              :to="{ name: 'apps-reglasYDesafios-gestorArchivos-view-id', params: { id: desafio._id } }"
+                              :to="{ name: 'apps-reglasYDesafios-gestorArchivos-view-id', params: { id: desafio.id } }"
                             >
                             <VIcon
                               :size="22"
