@@ -74,7 +74,7 @@ async function accionBackoffice (){
 
 onMounted(async ()=>{
   await fetchData();
-  await accionBackoffice();
+  //await accionBackoffice();
 });
 
 const paginatedUrlCounts = computed(() => {

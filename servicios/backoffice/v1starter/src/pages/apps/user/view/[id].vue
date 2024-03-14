@@ -68,13 +68,13 @@ async function accionBackoffice (logData){
 			}).catch(error => console.log('error', error));
 		}
 };
-
+/*
 accionBackoffice({
   "usuario": userBackoffice.value.email,   
   "pagina": "lista-usuarios-usuario"+route.params.id,
   "fecha": dateNowF.value
 })
-
+*/
 
 
 var timeoutID;

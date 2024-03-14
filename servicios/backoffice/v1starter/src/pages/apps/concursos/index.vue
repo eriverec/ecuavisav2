@@ -4,7 +4,6 @@ import TriviaParticipantes from '@/pages/apps/concursos/tabs/participantes.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
-import { onMounted } from 'vue';
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 const userTab = ref(null)
@@ -23,7 +22,9 @@ const tabsTrivia = [
   //   title: 'Extras',
   // }
 ]
-onMounted(accionBackoffice)
+
+//onMounted(accionBackoffice)
+
 async function accionBackoffice (){
   let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();
   let userData = JSON.parse(localStorage.getItem('userData'));

@@ -174,9 +174,11 @@ import ChartAreaDispositivosFecha from "@/views/charts/apex-chart/ChartDispositi
   <!-- <EnableOneTimePasswordDialog v-model:isDialogVisible="isTwoFactorDialogOpen" :mobile-number="smsVerificationNumber" />-->
 </template>
 <script>
+import { logAction } from '@/middleware/activityLogger';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
+
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 //alert(moment(new Date(), "YYYY-MM-DD").format('YYYY-MM-DD'))
@@ -349,11 +351,13 @@ export default {
   },
   async mounted() {
     //this.filtrarDatos([]);
+    /*
     await this.accionBackoffice({
       "usuario": this.userBackoffice.email,   
       "pagina": "trazabilidad-dispositivos",
       "fecha": this.dateNowF
     });
+    */
   },
   methods: {
     //resolveActivity() {
@@ -368,7 +372,7 @@ export default {
     resolveActividadUser(first, last){
 
       const arrayI = JSON.parse(JSON.stringify(this.dataN));
-      console.log('arrayI',arrayI);
+      //console.log('arrayI',arrayI);
       const inicio = [];
       arrayI.forEach(e => {
         let data = {
@@ -379,7 +383,7 @@ export default {
         inicio.push(data);
       });
 
-      console.log('inicio',inicio);
+      //console.log('inicio',inicio);
 
       const arrayFiltro = [];
       this.userSelected = first + ' ' + last;
@@ -515,13 +519,15 @@ export default {
     };
 
     let title = "usuarios_dispositivos";
-
+    logAction("export");
+    /*
     await this.accionBackoffice({
     "usuario": this.userBackoffice.email,   
     "pagina": "trazabilidad-dispositivos",
     "accion": "export",
     "fecha": this.dateNowF
     });  
+    */
     //if(usersFull.length > totalUsers){
     //console.log("arrayExport", arrayExport);
     this.exportCSVFile(headers, arrayExport, title);

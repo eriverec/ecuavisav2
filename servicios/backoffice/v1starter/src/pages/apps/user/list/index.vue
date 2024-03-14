@@ -1,10 +1,10 @@
-<script setup>
+<script setup>logAction
+import { logAction } from '@/middleware/activityLogger';
 import AddNewUserDrawer from "@/views/apps/user/list/AddNewUserDrawer.vue";
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 import { avatarText } from "@core/utils/formatters";
-
-import Moment from 'moment-timezone';
 import { extendMoment } from 'moment-range';
+import Moment from 'moment-timezone';
 import esLocale from "moment/locale/es";
 
 const moment = extendMoment(Moment);
@@ -369,6 +369,7 @@ const handlePaginationClick = async () => {
 //   // console.log("watch totalPageValue", totalPage.value);
 // });
 
+/*
 async function accionBackoffice(logData){
   if(userBackoffice.value.email !== 'admin@demo.com' ){
   var myHeaders = new Headers();
@@ -390,6 +391,7 @@ accionBackoffice({
             "pagina": "lista-usuarios",
             "fecha": dateNow.value
 					});
+*/
 
 // 👉 search filters
 const listProvider = [
@@ -502,6 +504,8 @@ const paginationData = computed(() => {
 });
 
 async function addNewUser (userData){
+  logAction("agregar", userData);
+  /*
   await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "lista-usuarios",
@@ -509,6 +513,7 @@ async function addNewUser (userData){
             "data": userData,
             "fecha": dateNow.value
 					});  
+  */        
   userListStore.addUser(userData);
 
   // refetch User
@@ -768,12 +773,15 @@ async function downloadFull () {
     //console.log("usersFull", usersFull.value);
     //console.log("doc", doc);
     //if(usersFull.length > totalUsers){
+    logAction('descarga-completa');  
+    /*  
     await accionBackoffice({
       "usuario": userBackoffice.value.email,   
       "pagina": "lista-usuarios",
       "accion": "descarga-completa",
       "fecha": dateNow.value
     });  
+    */
     exportCSVFile(headersGlobal.value, doc, title);
     sectionDisabled(false);
    // }
@@ -813,13 +821,15 @@ async function downloadSection(){
       // Agregamos el nuevo objeto a doc
       doc.push(newItem);
     });
-
+    logAction('descarga-seccion'); 
+    /*
     await accionBackoffice({
       "usuario": userBackoffice.value.email,   
       "pagina": "lista-usuarios",
       "accion": "descarga-seccion",
       "fecha": dateNow.value
     });
+    */
     exportCSVFile(headersGlobal.value, doc, title);
 
     sectionDisabled(false);
@@ -891,8 +901,8 @@ async function downloadSearch(){
     }
     //console.log("usersValue ", users.value.length);
     let title = "users_busqueda";
-    
-    await accionBackoffice({ "usuario": userBackoffice.value.email, "pagina": "lista-usuarios", "accion": "descarga-busqueda", "fecha": dateNow.value });
+    logAction('descarga-busqueda');
+    //await accionBackoffice({ "usuario": userBackoffice.value.email, "pagina": "lista-usuarios", "accion": "descarga-busqueda", "fecha": dateNow.value });
     exportCSVFile(headersGlobal.value, doc, title);
     
     isSearchLoading.value = false;

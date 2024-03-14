@@ -10,7 +10,7 @@ const currentTab = ref('tab-lista')
       <VCol class="mt-6" cols="12" md="12" lg="12">
 
         <VTabs v-model="currentTab" class="v-tabs-pill">
-          <VTab value="tab-lista" @click="accionBackoffice('interesesSugerencias-listaSugerencias-listado')">Listado</VTab>
+          <VTab value="tab-lista">Listado</VTab>
           <VTab value="tab-agregar">Estadísticas</VTab>
           <!-- <VTab>Tab Three</VTab> -->
         </VTabs>
@@ -228,8 +228,8 @@ export default {
   },
   async mounted() {
     this.authorizedCheck();
-    await this.accionBackoffice("interesesSugerencias-listaSugerencias");
-    await this.accionBackoffice("interesesSugerencias-listaSugerencias-listado");
+    //await this.accionBackoffice("interesesSugerencias-listaSugerencias");
+    //await this.accionBackoffice("interesesSugerencias-listaSugerencias-listado");
     this.obtenerDatos();
   },
   methods: {

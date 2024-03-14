@@ -351,7 +351,7 @@ export default {
     this.params["idTrivia"] = this.selectedTrivia.value;
     await this.fetchData();
     this.initChart();
-    await this.accionBackoffice();
+    //await this.accionBackoffice();
   },
 };
 </script>

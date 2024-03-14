@@ -1,4 +1,5 @@
 <script setup>
+import { logAction } from '@/middleware/activityLogger';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -141,11 +142,13 @@ async function accionBackoffice (logData){
 
 onMounted(async() => {
   initData();
+  /*
   await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "trazabilidad-visitas-list-notasLoultimo",
             "fecha": dateNowF.value
 					});
+          */
 });
 
 const searchData = () => {
@@ -332,12 +335,15 @@ async function downloadSelection() {
   let title = "lo_ultimo_ultimos_usuarios_" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
   //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
+  logAction("export-notasLoultimo");  
+  /*
   await accionBackoffice({
    "usuario": userBackoffice.value.email,   
    "pagina": "trazabilidad-visitas-list-notasLoultimo",
    "accion": "export",
    "fecha": dateNowF.value
 	});    
+  /*
 
   exportCSVFile(headers, doc, title);
   // }

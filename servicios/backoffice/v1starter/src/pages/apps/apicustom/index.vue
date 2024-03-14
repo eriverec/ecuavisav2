@@ -1,9 +1,11 @@
 <script setup>
+import { logAction } from '@/middleware/activityLogger';
 import { requiredValidator } from '@validators';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 import { onMounted } from "vue";
+
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 const router = useRouter();
@@ -75,11 +77,13 @@ async function fetchConfiguraciones (){
 onMounted(async()=>{
     await fetchConfiguraciones();
     authorizedCheck();
+    /*
     await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "apicustom",
             "fecha": dateNowF.value
 					});	
+    */                
 })
 
 const authorizedCheck = () => {
@@ -358,7 +362,8 @@ async function onAddConfiguracionSubmit () {
 		}).catch(error => console.log('error', error));
         
         //console.log('nuevaConfiguracion',nuevaConfiguracion.value);
-
+        logAction("agregar", nuevaConfiguracion.value);
+        /*
         await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "apicustom",
@@ -366,7 +371,7 @@ async function onAddConfiguracionSubmit () {
             "data": nuevaConfiguracion.value,
             "fecha": dateNowF.value
 					});	
-
+        */            
         await fetchConfiguraciones();
         seccionesForm.value = [];   
         nuevaConfiguracion.value = {
@@ -700,6 +705,8 @@ async function onEditConfiguracionSubmit () {
         
         console.log('editConfiguracion',editConfiguracion.value);
 
+        logAction("editar", editConfiguracion.value);
+        /*
         await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "apicustom",
@@ -707,7 +714,7 @@ async function onEditConfiguracionSubmit () {
             "data": editConfiguracion.value,
             "fecha": dateNowF.value
 		});	
-
+        */
         await fetchConfiguraciones();
         seccionesFormEdit.value = [];   
         editConfiguracion.value = {
@@ -733,6 +740,8 @@ const onDeleteConfiguracionSend = async() => {
         .then(data => {})
         .catch(error => {console.error(error)});   
 
+    logAction("borrar", {key: key});    
+    /*
     await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "apicustom",
@@ -740,6 +749,7 @@ const onDeleteConfiguracionSend = async() => {
             "data": {key: key},
             "fecha": dateNowF.value
 	});	    
+    */
     isOnDeleteConfiguracionConfirmActive.value = false;  
     configOnDelete.value = '';  
     await fetchConfiguraciones();  	

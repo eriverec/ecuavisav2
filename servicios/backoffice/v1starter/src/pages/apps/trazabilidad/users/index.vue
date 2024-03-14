@@ -1,4 +1,5 @@
 <script setup>
+import { logAction } from '@/middleware/activityLogger';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -281,7 +282,7 @@ async function accionBackoffice (logData){
 			}).catch(error => console.log('error', error));
 		}
 };
-
+/*
 onMounted(async()=>{
   await accionBackoffice({
             "usuario": userBackoffice.value.email,   
@@ -289,7 +290,7 @@ onMounted(async()=>{
             "fecha": dateNowF.value
   });
 });
-
+*/
 
 const resolveVisitas = (title) =>{
   titleSelected.value = title;
@@ -435,12 +436,15 @@ async function downloadSelection () {
   let title = "ultimos_usuarios_"+titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
   //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
+  logAction("export", userData);  
+  /*
   await accionBackoffice({
    "usuario": userBackoffice.value.email,   
    "pagina": "trazabilidad-users",
    "accion": "export",
    "fecha": dateNowF.value
 	});    
+  */
   exportCSVFile(headers, doc, title);
  // }
 

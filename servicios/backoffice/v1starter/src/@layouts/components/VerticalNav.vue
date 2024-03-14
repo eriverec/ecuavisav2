@@ -1,14 +1,15 @@
 <script setup>
+import { logAction } from '@/middleware/activityLogger'
 import { initialAbility } from '@/plugins/casl/ability'
 import { useAppAbility } from '@/plugins/casl/useAppAbility'
 import {
-injectionKeyIsVerticalNavHovered,
-useLayouts,
+  injectionKeyIsVerticalNavHovered,
+  useLayouts,
 } from '@layouts'
 import {
-VerticalNavGroup,
-VerticalNavLink,
-VerticalNavSectionTitle,
+  VerticalNavGroup,
+  VerticalNavLink,
+  VerticalNavSectionTitle,
 } from '@layouts/components'
 import { config } from '@layouts/config'
 import Moment from 'moment'
@@ -82,7 +83,8 @@ const ability = useAppAbility()
 const userData = JSON.parse(localStorage.getItem('userData') || 'null')
 
 async function logout (){
-  await accionBackoffice();
+  logAction("logout");
+  //await accionBackoffice();
   // Remove "userData" from localStorage
   localStorage.removeItem('userData')
 

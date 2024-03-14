@@ -1,5 +1,4 @@
 <script setup>
-import axios from '@axios';
 
 const tabActual = ref('tab-lista')
 const isDialogVisible = ref(false)
@@ -294,7 +293,7 @@ export default {
   	},
 	async mounted() {
 		this.obtenerDatos();
-		await this.accionBackoffice();
+		//await this.accionBackoffice();
 	},
 
 	methods: {

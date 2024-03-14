@@ -38,6 +38,7 @@ import ChartGraficoUser from "@/views/charts/apex-chart/ChartGraficoUser.vue";
   <!-- <EnableOneTimePasswordDialog v-model:isDialogVisible="isTwoFactorDialogOpen" :mobile-number="smsVerificationNumber" />-->
 </template>
 <script>
+import { logAction } from '@/middleware/activityLogger';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -213,11 +214,13 @@ export default {
   },
   async mounted() {
     //this.filtrarDatos([]);
+    /*
     await this.accionBackoffice({
       "usuario": this.userBackoffice.email,   
       "pagina": "trazabilidad-dispositivos",
       "fecha": this.dateNowF
     });
+    */
   },
   methods: {
     //resolveActivity() {
@@ -379,13 +382,15 @@ export default {
     };
 
     let title = "usuarios_dispositivos";
-
+    logAction("export");
+    /*
     await this.accionBackoffice({
     "usuario": this.userBackoffice.email,   
     "pagina": "trazabilidad-dispositivos",
     "accion": "export",
     "fecha": this.dateNowF
     });  
+    */
     //if(usersFull.length > totalUsers){
     //console.log("arrayExport", arrayExport);
     this.exportCSVFile(headers, arrayExport, title);

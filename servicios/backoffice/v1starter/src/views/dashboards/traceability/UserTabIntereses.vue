@@ -192,7 +192,7 @@ async function accionBackoffice (){
 onMounted(async () =>{
   await getData();
   await getDataSecciones();
-  await accionBackoffice();
+  //await accionBackoffice();
 });
 
 </script>

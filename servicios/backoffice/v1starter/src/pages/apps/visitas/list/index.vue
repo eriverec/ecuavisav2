@@ -1,20 +1,20 @@
 
   
 <script setup>
-  import { useSelectCalendar, useSelectValueCalendar,getTranscursoDeFechas } from "@/views/apps/otros/useSelectCalendar.js";
-  import notasDrivers from '@/pages/apps/visitas/tabs/notas-drivers.vue';
-  import notasEntretenimiento from '@/pages/apps/visitas/tabs/notas-entretenimiento.vue';
-  import notasEstadio from '@/pages/apps/visitas/tabs/notas-estadio.vue';
-  import notasEstilo from '@/pages/apps/visitas/tabs/notas-estilo.vue';
-  import notasLoUltimo from '@/pages/apps/visitas/tabs/notas-loultimo.vue';
-  import notasMundo from '@/pages/apps/visitas/tabs/notas-mundo.vue';
-  import notasNoticias from '@/pages/apps/visitas/tabs/notas-noticias.vue';
-  import notasProgramas from '@/pages/apps/visitas/tabs/notas-programas.vue';
-  import Moment from 'moment';
-  import { extendMoment } from 'moment-range';
-  import esLocale from "moment/locale/es";
-  import { onMounted } from 'vue';
-  import { useTheme } from 'vuetify';
+  import { logAction } from '@/middleware/activityLogger';
+import notasDrivers from '@/pages/apps/visitas/tabs/notas-drivers.vue';
+import notasEntretenimiento from '@/pages/apps/visitas/tabs/notas-entretenimiento.vue';
+import notasEstadio from '@/pages/apps/visitas/tabs/notas-estadio.vue';
+import notasEstilo from '@/pages/apps/visitas/tabs/notas-estilo.vue';
+import notasMundo from '@/pages/apps/visitas/tabs/notas-mundo.vue';
+import notasNoticias from '@/pages/apps/visitas/tabs/notas-noticias.vue';
+import notasProgramas from '@/pages/apps/visitas/tabs/notas-programas.vue';
+import { getTranscursoDeFechas, useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+import { onMounted } from 'vue';
+import { useTheme } from 'vuetify';
   const vuetifyTheme = useTheme()
   // const tabvisitas = ref(0);
   const moment = extendMoment(Moment);
@@ -270,12 +270,13 @@
     fechaFin.value = fechaF;
 
     initData();
-
+    /*
     await accionBackoffice({
      "usuario": userBackoffice.value.email,   
      "pagina": "trazabilidad-visitas-list",
       "fecha": dateNowF.value
             });
+    */
   });
 
   const paginatedUrlCounts = computed(() => {
@@ -692,12 +693,16 @@
     let title = "ultimos_usuarios_" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
     //console.log("doc", doc);
     //if(usersFull.length > totalUsers){
+
+    logAction("export");
+    /*
     await accionBackoffice({
      "usuario": userBackoffice.value.email,   
      "pagina": "trazabilidad-visitas-list",
      "accion": "export",
      "fecha": dateNowF.value
     });  
+    */
     exportCSVFile(headers, doc, title);
     // }
 

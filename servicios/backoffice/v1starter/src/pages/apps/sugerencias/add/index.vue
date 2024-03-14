@@ -83,7 +83,7 @@ export default {
   },
   async mounted() {
     this.authorizedCheck();
-    await this.accionBackoffice();
+    //await this.accionBackoffice();
   },
   methods: {
 

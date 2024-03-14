@@ -12,7 +12,7 @@ import axios from 'axios';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
-import { onMounted, onUnmounted, ref } from "vue";
+import { onUnmounted, ref } from "vue";
 
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
@@ -181,7 +181,7 @@ const countUsers = () => {
 
       isLoading.value = false;
 
-      accionBackoffice();
+      //accionBackoffice();
 
     })
     .catch((error) => {

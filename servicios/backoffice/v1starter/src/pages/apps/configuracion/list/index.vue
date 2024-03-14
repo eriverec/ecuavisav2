@@ -132,7 +132,7 @@ export default {
   async mounted() {
     this.authorizedCheck();
     this.obtenerDatos();
-    await this.accionBackoffice();
+    //await this.accionBackoffice();
   },
   methods: {
     async clicka(){

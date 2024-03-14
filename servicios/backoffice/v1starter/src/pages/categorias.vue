@@ -1,4 +1,5 @@
 <script setup>
+import { logAction } from '@/middleware/activityLogger';
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
 import chartIntereses from "@/views/charts/apex-chart/ChartInteresesAnalytics.vue";
 import Moment from 'moment';
@@ -64,7 +65,7 @@ async function accionBackoffice (logData){
 			}).catch(error => console.log('error', error));
 		}
 };
-
+/*
 async function accionBackofficeList (){
 	await accionBackoffice({
             "usuario": userBackoffice.value.email,   
@@ -72,6 +73,7 @@ async function accionBackofficeList (){
             "fecha": dateNowF.value
 					});
 };
+
 
 async function accionBackofficeInit (){
 	await accionBackoffice({
@@ -87,7 +89,7 @@ async function accionBackofficeInit (){
 };
 
 accionBackofficeInit();
-				
+*/				
 
 totalPages.value = computed(() => {
 	return Math.ceil(categorias.value.length / itemsPerPage.value);
@@ -148,7 +150,8 @@ async function onFormCategoriasSubmit (id){
 	console.log(objectUpd);
 	 
     arrayFinal[index] = data; 
-
+	logAction("editar", {id: objectOg.id,...objectUpd});
+	/*
 	await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "interesesSugerencias-listaIntereses-listado",
@@ -156,7 +159,7 @@ async function onFormCategoriasSubmit (id){
 			"data": {id: objectOg.id,...objectUpd},
             "fecha": dateNowF.value
 					});	
-
+	*/				
 	var myHeaders = new Headers();
 		myHeaders.append("Content-Type", "application/json");
 
@@ -272,7 +275,7 @@ var filteredData = computed(() => {
 		<VRow>
 			<VCol class="mt-6" cols="12" md="12" lg="12">
 				<VTabs v-model="currentTab" class="v-tabs-pill">
-						<VTab value="tab-lista" @click="accionBackofficeList()">Listado</VTab>
+						<VTab value="tab-lista">Listado</VTab>
 						<VTab value="tab-estadistica">Estadísticas</VTab>
 						<!-- <VTab>Tab Three</VTab> -->
 						</VTabs>

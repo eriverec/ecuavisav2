@@ -1,4 +1,5 @@
 <script setup>
+import { logAction } from '@/middleware/activityLogger';
 import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
 import chartMetadatos from "@/views/charts/apex-chart/ChartMetadatos.vue";
 import ApexCharts from 'apexcharts';
@@ -194,12 +195,13 @@ onMounted(async() => {
   fechaIni.value = fechaI;
   fechaFin.value = fechaF;
   await getMetadatos(fechaI, fechaF);
-
+  /*
   await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "trazabilidad-metadatos",
             "fecha": dateNowF.value
   });
+  */
 });
 
 const searchMeta = () => {
@@ -647,13 +649,15 @@ async function downloadSelection() {
   };
 
   let title = "ultimas_visitas_metadatos" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
-
+  logAction("export");
+  /*
   await accionBackoffice({
    "usuario": userBackoffice.value.email,   
    "pagina": "trazabilidad-metadatos",
    "accion": "export",
    "fecha": dateNowF.value
 	});  
+  */
   //if(usersFull.length > totalUsers){
   //console.log("arrayExport", arrayExport);
   exportCSVFile(headers, arrayExport, title);

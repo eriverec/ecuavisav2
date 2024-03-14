@@ -1,4 +1,5 @@
 <script setup>
+import { logAction } from '@/middleware/activityLogger';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -133,11 +134,13 @@ async function accionBackoffice (logData){
 
 onMounted(async() => {
   initData();
+  /*
   await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "trazabilidad-notasRecomendadas",
             "fecha": dateNowF.value
   });
+  */
 });
 
 const paginatedRecomendadas = computed(() => {
@@ -299,12 +302,15 @@ async function downloadUsuarios() {
   let title = "usuarios_" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
   //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
+  logAction("export");  
+  /*
   await accionBackoffice({
    "usuario": userBackoffice.value.email,   
    "pagina": "trazabilidad-notasRecomendadas",
    "accion": "export",
    "fecha": dateNowF.value
 	});    
+  */
   exportCSVFile(headers, doc, title);
   // }
 

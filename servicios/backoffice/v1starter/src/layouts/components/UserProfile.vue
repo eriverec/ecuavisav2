@@ -1,11 +1,11 @@
 <script setup>
-import avatar5 from '@/assets/images/avatars/logox108.png'
-
-import { initialAbility } from '@/plugins/casl/ability'
-import { useAppAbility } from '@/plugins/casl/useAppAbility'
-import Moment from 'moment'
-import { extendMoment } from 'moment-range'
-import esLocale from "moment/locale/es"
+import avatar5 from '@/assets/images/avatars/logox108.png';
+import { logAction } from '@/middleware/activityLogger';
+import { initialAbility } from '@/plugins/casl/ability';
+import { useAppAbility } from '@/plugins/casl/useAppAbility';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 const router = useRouter()
@@ -17,7 +17,8 @@ const role = localStorage.getItem('role');
 const rol = localStorage.getItem('role');
 
 async function logout () {
-  await accionBackoffice();
+  logAction("logout");
+  //await accionBackoffice();
   // Remove "userData" from localStorage
   localStorage.removeItem('userData')
 

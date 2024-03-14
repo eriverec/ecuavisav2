@@ -1,8 +1,10 @@
 <script setup>
+import { logAction } from '@/middleware/activityLogger';
 import { useBannersListStore } from "@/views/apps/miecuavisa/useBannersListStore";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
+
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 const categoriasListStore = useBannersListStore();
@@ -62,11 +64,13 @@ async function accionBackoffice (logData){
 			}).catch(error => console.log('error', error));
     }
 }
+/*
 accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "ecuavisa.com-bannerSlider",
             "fecha": dateNow.value
 					});
+          */
 
 watchEffect(fetchCategorias);
 
@@ -98,6 +102,8 @@ async function onFormDelete (data, eliminar=false) {
       dataBanners = data;
       return false;
     }
+    logAction("editar", data);
+    /*
     await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "ecuavisa.com-bannerSlider",
@@ -105,6 +111,7 @@ async function onFormDelete (data, eliminar=false) {
             "data": data,
             "fecha": dateNow.value
 		}); 
+    */
     isDialogVisible.value = false;
     data = dataBanners;
     isCategoriasEditVisible.value = false;
@@ -169,6 +176,9 @@ async function onFormCategoriasSubmit(id) {
         alert("Ocurrió un error al guardar el registro")
         console.log('error', error)
       }); 
+
+    logAction("editar", data);
+    /*  
     await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "ecuavisa.com-bannerSlider",
@@ -176,6 +186,7 @@ async function onFormCategoriasSubmit(id) {
             "data": data,
             "fecha": dateNow.value
 		}); 
+    */
 };
 
 const onFormCategoriasReset = () => {

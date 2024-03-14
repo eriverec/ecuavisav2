@@ -1,8 +1,9 @@
 <script setup>
-  import { useSelectCalendar, useSelectValueCalendar, getTranscursoDeFechas } from "@/views/apps/otros/useSelectCalendar.js";
-  import Moment from 'moment';
-  import { extendMoment } from 'moment-range';
-  import esLocale from "moment/locale/es";
+  import { logAction } from '@/middleware/activityLogger';
+import { getTranscursoDeFechas, useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
   const fechaIni = ref('');
@@ -167,12 +168,13 @@ onMounted(async() => {
 
   initData();
   await getDrivers(fechaI, fechaF);
-
+  /*
   await accionBackoffice({
    "usuario": userBackoffice.value.email,   
    "pagina": "trazabilidad-visitas-list-notasDrivers",
    "fecha": dateNowF.value
 	});
+  */
 });
 
 const searchData = () => {
@@ -360,13 +362,15 @@ async function downloadSelection() {
   let title = "drivers_ultimos_usuarios_" + titleSelected.value.replace(/[^A-Z0-9]+/ig, "_");
   //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
+  logAction("export-notasDrivers");
+  /*
   await accionBackoffice({
    "usuario": userBackoffice.value.email,   
    "pagina": "trazabilidad-visitas-list-notasDrivers",
    "accion": "export",
    "fecha": dateNowF.value
 	});  
-
+  */
   exportCSVFile(headers, doc, title);
   // }
 };

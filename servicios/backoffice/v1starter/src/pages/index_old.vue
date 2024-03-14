@@ -110,8 +110,8 @@ const countUsers = () => {
       percentAppApple.value = Math.round((pAppA.value + Number.EPSILON) * 100) / 100;
 
       isLoading.value = false;
-
-      accionBackoffice();
+      
+      //accionBackoffice();
 
     })
     .catch((error) => {

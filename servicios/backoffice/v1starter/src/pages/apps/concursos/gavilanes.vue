@@ -25,7 +25,7 @@ async function getUsuarios(){
 
 onMounted(async ()=>{
   await getUsuarios();
-  await accionBackoffice();
+  //await accionBackoffice();
 });
 
 async function accionBackoffice (){

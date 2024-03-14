@@ -149,7 +149,7 @@ onMounted(async ()=>{
   loadingData.value = true;
   await fetchData();
   loadingData.value = false;
-  await accionBackoffice();
+  //await accionBackoffice();
 });
 
 const paginatedUrlCounts = computed(() => {

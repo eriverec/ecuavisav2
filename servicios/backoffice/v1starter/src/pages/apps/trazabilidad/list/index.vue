@@ -20,7 +20,7 @@ const userej = [
 ]
 const currentTab = ref('tab-fieles')
 const tabItemContent = 'Candy canes donut chupa chups candy canes lemon drops oat cake wafer. <br> Second texto.'
-onMounted(accionBackoffice);
+//onMounted(accionBackoffice);
 
 async function accionBackoffice (){
   let dateNow = moment().format("DD/MM/YYYY HH:mm:ss").toString();

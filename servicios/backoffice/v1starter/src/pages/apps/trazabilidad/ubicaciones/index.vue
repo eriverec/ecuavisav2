@@ -1,7 +1,9 @@
 <script setup>
+import { logAction } from '@/middleware/activityLogger';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
+
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 
@@ -21,11 +23,13 @@ fecha.value = {
 }
 
 onMounted(async () => {
+  /*
     await accionBackoffice({
    "usuario": userBackoffice.value.email,   
    "pagina": "trazabilidad-ubicaciones",
     "fecha": dateNowF.value
 					});
+   */
     await getData();
     
 });
@@ -298,12 +302,16 @@ async function downloadPorPais() {
   let title = "usuarios_" + paisSelected.value.replace(/[^A-Z0-9]+/ig, "_");
   //console.log("doc", doc);
   //if(usersFull.length > totalUsers){
+
+  logAction("export-usersCountry");  
+  /*
   await accionBackoffice({
    "usuario": userBackoffice.value.email,   
    "pagina": "trazabilidad-ubicaciones-export-usersCountry",
    "accion": "export",
    "fecha": dateNowF.value
 	});  
+  */
   exportCSVFile(headers, doc, title);
   // }
 
@@ -323,12 +331,15 @@ doc = Array.from(cityUsers.value);
 let title = "usuarios_" + ciudadSelected.value.replace(/[^A-Z0-9]+/ig, "_");
 //console.log("doc", doc);
 //if(usersFull.length > totalUsers){
+logAction("export-usersCity");   
+/*
 await accionBackoffice({
  "usuario": userBackoffice.value.email,   
  "pagina": "trazabilidad-ubicaciones-export-usersCity",
  "accion": "export",
  "fecha": dateNowF.value
   });  
+  */
 exportCSVFile(headers, doc, title);
 // }
 

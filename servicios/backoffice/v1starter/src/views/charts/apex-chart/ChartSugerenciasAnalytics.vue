@@ -62,7 +62,7 @@ async function accionBackoffice (){
 }
 onMounted(async()=>{
   await fetchData();
-  await accionBackoffice();
+  //await accionBackoffice();
 });
 
 const getSelectedDates =(dates)=>{

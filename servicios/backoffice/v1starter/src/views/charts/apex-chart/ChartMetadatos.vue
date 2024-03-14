@@ -129,11 +129,13 @@ async function accionBackoffice (logData){
 
 onMounted(async() => {
   initData(true);
+  /*
   await accionBackoffice({
             "usuario": userBackoffice.value.email,   
             "pagina": "metadatos-temasDestacados",
             "fecha": dateNowF.value
   });
+  */
 });
 
 // 👉 Colors variables
