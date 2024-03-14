@@ -343,7 +343,7 @@ async function downloadSelection() {
    "accion": "export",
    "fecha": dateNowF.value
 	});    
-  /*
+  */
 
   exportCSVFile(headers, doc, title);
   // }
