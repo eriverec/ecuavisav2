@@ -88,6 +88,7 @@ disabledPaginationDesafiosUser.value = false;
 const handlePaginationClick = async () => {
 
   disabledPagination.value = true;
+  nombreUsuarioVisible.value = [];
   await getDesafios(currentPage.value)
   disabledPagination.value = false;
 };
