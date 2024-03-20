@@ -1049,6 +1049,10 @@ async function getChartLineTimeViews(options = {}) {
   }
 }
 
+// Función para obtener la fecha de mañana en formato YYYY-MM-DD
+function obtenerFechaManana() {
+    return moment().add(1, 'day').format('YYYY-MM-DD');
+}
 
 const resolveDeviceTimeLine = computed(() => {
 
@@ -1085,20 +1089,17 @@ const resolveDeviceTimeLine = computed(() => {
   });
 
   const result = Object.values(transformedData);
-  // console.log(result)
 
-  // console.log(agrupador(2))
-  // const seriesFormat = {
-  //   name: 'Device',
-  //   data: []
-  // };
+  if(selectComboTotales.value == "Hoy"){
+    // Iterar sobre cada sección en el arreglo result
+    result.forEach(seccion => {
+        // Obtener la fecha de mañana en formato YYYY-MM-DD
+        const fechaManana = obtenerFechaManana();
 
-  // const categoriesRaw = [];
-  // for (let i in dataRaw) {
-  //   let num = parseFloat(dataRaw[i].porcentaje);
-  //   seriesFormat.data.push(num);
-  //   categoriesRaw.push(dataRaw[i].subsection);
-  // }
+        // Agregar un nuevo elemento al arreglo data con la fecha de mañana y un valor de 0
+        seccion.data.push([moment(fechaManana).valueOf(), 0]);
+    });
+  }
 
   const options = {
     chart: {
@@ -1179,7 +1180,7 @@ const resolveDeviceTimeLine = computed(() => {
     },
     xaxis: {
       type: 'datetime',
-      tickAmount: dataRaw.length - 1,
+      tickAmount: result[0].data.length - 1,
       // min: new Date("01/01/2014").getTime(),
       // max: new Date("01/07/2014").getTime(),
       labels: {
@@ -1251,6 +1252,18 @@ const resolveDeviceTimeLinePromedioSection = computed(() => {
   });
 
   const result = Object.values(transformedData);
+
+  if(selectComboTotales.value == "Hoy"){
+    // Iterar sobre cada sección en el arreglo result
+    result.forEach(seccion => {
+        // Obtener la fecha de mañana en formato YYYY-MM-DD
+        const fechaManana = obtenerFechaManana();
+
+        // Agregar un nuevo elemento al arreglo data con la fecha de mañana y un valor de 0
+        seccion.data.push([moment(fechaManana).valueOf(), 0]);
+    });
+  }
+
   // console.log(result)
 
   // console.log(agrupador(2))
@@ -1356,7 +1369,7 @@ const resolveDeviceTimeLinePromedioSection = computed(() => {
     },
     xaxis: {
       type: 'datetime',
-      tickAmount: dataRaw.length - 1,
+      tickAmount: result[0].data.length - 1,
       // min: new Date("01/01/2014").getTime(),
       // max: new Date("01/07/2014").getTime(),
       labels: {
@@ -1430,6 +1443,17 @@ const resolveDeviceTimeLineTotales = computed(() => {
           totalVistas
       ])
   }];
+
+  if(selectComboTotales.value == "Hoy"){
+    // Iterar sobre cada sección en el arreglo result
+    result.forEach(seccion => {
+        // Obtener la fecha de mañana en formato YYYY-MM-DD
+        const fechaManana = obtenerFechaManana();
+
+        // Agregar un nuevo elemento al arreglo data con la fecha de mañana y un valor de 0
+        seccion.data.push([moment(fechaManana).valueOf(), 0]);
+    });
+  }
 
   // const result = Object.values(transformedData);
   // console.log(result)
@@ -1537,7 +1561,7 @@ const resolveDeviceTimeLineTotales = computed(() => {
     },
     xaxis: {
       type: 'datetime',
-      tickAmount: dataRaw.length - 1,
+      tickAmount: result[0].data.length - 1,
       // min: new Date("01/01/2014").getTime(),
       // max: new Date("01/07/2014").getTime(),
       labels: {
