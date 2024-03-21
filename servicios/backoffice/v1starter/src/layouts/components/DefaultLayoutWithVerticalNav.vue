@@ -172,7 +172,7 @@ if(rol== 'administrador'){
           @click="toggleVerticalOverlayNavActive(true)"
         >
           <VIcon
-            icon="tabler-menu-2"
+            icon="tabler-pin"
             size="24"
           />
         </VBtn>
