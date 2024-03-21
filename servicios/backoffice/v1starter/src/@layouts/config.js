@@ -1,5 +1,5 @@
-import { breakpointsVuetify } from '@vueuse/core'
 import { AppContentLayoutNav, ContentWidth, FooterType, NavbarType } from '@layouts/enums'
+import { breakpointsVuetify } from '@vueuse/core'
 
 export const config = {
   app: {
@@ -29,8 +29,8 @@ export const config = {
     chevronDown: { icon: 'tabler-chevron-down' },
     chevronRight: { icon: 'tabler-chevron-right' },
     close: { icon: 'tabler-x' },
-    verticalNavPinned: { icon: 'tabler-circle-dot' },
-    verticalNavUnPinned: { icon: 'tabler-circle' },
+    verticalNavPinned: { icon: 'tabler-arrow-bar-to-left' },
+    verticalNavUnPinned: { icon: 'tabler-arrow-bar-to-right' },
     sectionTitlePlaceholder: { icon: 'tabler-minus' },
   },
 }
