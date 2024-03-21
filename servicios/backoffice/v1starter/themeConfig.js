@@ -41,8 +41,8 @@ export const { themeConfig, layoutConfig } = defineThemeConfig({
     chevronDown: { icon: 'tabler-chevron-down' },
     chevronRight: { icon: 'tabler-chevron-right', size: 18 },
     close: { icon: 'tabler-x' },
-    verticalNavPinned: { icon: 'tabler-circle-dot' },
-    verticalNavUnPinned: { icon: 'tabler-circle' },
+    verticalNavPinned: { icon: 'tabler-pin' },
+    verticalNavUnPinned: { icon: 'tabler-pinned-off' },
     sectionTitlePlaceholder: { icon: 'tabler-separator' },
   },
 })
