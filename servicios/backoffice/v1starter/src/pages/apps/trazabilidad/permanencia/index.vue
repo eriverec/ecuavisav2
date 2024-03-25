@@ -106,6 +106,8 @@ onMounted(async () =>{
   });
 
   loadingData.value = false;
+  
+  currentTabSectionSubSection.value = "1";
 })
 
 function formatSecciones(data) {
@@ -1734,19 +1736,19 @@ import { computed, reactive, ref } from 'vue';
                   <VRow>
                     <VCol cols="12" sm="12" class="">
                       <VTabs v-model="currentTabSectionSubSection" class="v-tabs-pill">
-                        <VTab>
+                        <!-- <VTab key="0" value="0">
                           <VIcon start icon="mdi-format-list-bulleted" /> Lista
-                        </VTab>
-                        <VTab>
+                        </VTab> -->
+                        <VTab key="1" value="1">
                           <VIcon start icon="mdi-chart-scatterplot-hexbin" /> Estadisticas
                         </VTab>
-                        <VTab>
+                        <VTab key="2" value="2">
                           <VIcon start icon="mdi-clock-time-eight-outline" /> Agrupación por tiempo
                         </VTab>
                       </VTabs>
                       <br>
                       <VWindow v-model="currentTabSectionSubSection">
-                        <VWindowItem>
+                        <VWindowItem class="d-none" key="0" value="0">
                           <VList lines="two" border v-if="dataRegistros.length < 1">
                             <VListItem>
                               <VListItemTitle>
@@ -1885,7 +1887,7 @@ import { computed, reactive, ref } from 'vue';
                             </VCol>
                           </VRow>
                         </VWindowItem>
-                        <VWindowItem>
+                        <VWindowItem key="1" value="1">
                           <VRow>
                             <VCol cols="12" sm="12" class="">
                               <VCard
@@ -2004,7 +2006,7 @@ import { computed, reactive, ref } from 'vue';
                             </VCol>
                           </VRow>
                         </VWindowItem>
-                        <VWindowItem>
+                        <VWindowItem key="2" value="2">
 
                           <VList lines="two" border v-for="(groups, range) in groupedData" :key="range">
                             <VListItem >
