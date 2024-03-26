@@ -28,6 +28,7 @@ const descripcionDesafio = ref('');
 const statusDesafio = ref(true);
 const tituloSticker = ref('');
 const URLSticker = ref('');
+const categoriaDesafio = ref('');
 
 const idToEdit = ref('');
 
@@ -154,6 +155,7 @@ function resetForm(){
     statusDesafio.value = true;
     tituloSticker.value = '';
     URLSticker.value = '';
+    categoriaDesafio.value = '';
   
 }
 function closeDiag(){
@@ -186,6 +188,7 @@ async function onEdit(id){
     statusDesafio.value = data.statusDesafio;
     tituloSticker.value = data.tituloSticker;
     URLSticker.value = data.URLSticker;
+    categoriaDesafio.value = data.categorias;
 
     isDialogActive.value = true;  
 }
@@ -215,7 +218,8 @@ async function onComplete(){
             "descripcionDesafio": descripcionDesafio.value,
             "statusDesafio": statusDesafio.value,
             "tituloSticker": tituloSticker.value,
-            "URLSticker": URLSticker.value  
+            "URLSticker": URLSticker.value,
+            "categorias": categoriaDesafio.value  
     }
 
     var raw = JSON.stringify(jsonEnviar);
@@ -255,7 +259,9 @@ async function onComplete(){
             "descripcionDesafio": descripcionDesafio.value,
             "statusDesafio": statusDesafio.value,
             "tituloSticker": tituloSticker.value,
-            "URLSticker": URLSticker.value  
+            "URLSticker": URLSticker.value,
+            "categorias": categoriaDesafio.value 
+
     }
 
     var raw = JSON.stringify(jsonEnviar);
@@ -367,6 +373,29 @@ const diasTotales = [
 		value: 0,
 	},
 ];
+
+const categoriaItems = [
+  {
+    title: "Trivia",
+    value: "trivia",
+  },
+  {
+    title: "Tiempo",
+    value: "tiempo",
+  },
+  {
+    title: "Sobre ti",
+    value: "sobre_ti",
+  },
+  {
+    title: "Comparte",
+    value: "comparte",
+  },
+  {
+    title: "En vivo",
+    value: "en_vivo",
+  }
+]
 
 function onEditHorarios(horario, n, id){
   idToEdit.value = id;
@@ -694,65 +723,7 @@ async function onCompleteHorarios(){
                                       </VCol>
 
                                       <VCol cols="12" >
-                                          <VTextField v-model="descripcionDesafio" label="Descripción del desafío" />
-                                      </VCol>
-
-                                      <VCol cols="6" >
-                                          <VSwitch v-model="statusDesafio" label="Estatus del desafío" />
-                                      </VCol>
-
-                                      <VCol cols="6" >
-                                          <VTextField v-model="tituloSticker" label="Título del sticker" />
-                                      </VCol>
-
-                                      <VCol cols="12" >
-                                          <VTextField v-model="URLSticker" label="URL del sticker" />
-                                      </VCol>
-                                                        
-                                  </VRow>
-                                  <!-- 👉 Submit and Cancel -->
-                                  <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
-                                      <VBtn type="submit"> Guardar </VBtn>
-
-                                      <VBtn color="secondary" variant="tonal" @click="closeDiag">
-                                          Cancelar
-                                      </VBtn>
-                                  </VCol>
-                              </VRow>
-                          </VForm>
-                      </VCardText>
-                  </VCard>
-                  </VDialog>
-
-                  <VDialog v-model="isDialogActive" persistent no-click-animation max-width="800">
-
-                  <!-- Dialog close btn -->
-                  <DialogCloseBtn @click="closeDiag" />
-
-                  <VCard  class="pa-sm-14 pa-5">
-                      <VCardItem class="text-center">
-                          <VCardTitle class="text-h5 mb-3">
-                              {{ accionForm === "add" || accionForm === "duplicate" ? "Nuevo desafío" : "Editar " + nombre }}
-                          </VCardTitle>
-                      </VCardItem>
-
-                      <VCardText>
-
-                          <!-- 👉 Form -->
-                          <VForm class="mt-6" @submit.prevent="onComplete">
-                              <VRow class="d-flex flex-wrap justify-center gap-4">
-                                  <VRow>
-                                                                                                         
-                                      <VCol cols="6" >
-                                          <VTextField v-model="frecuenciaDesafio" label="Frecuencia de desafio" />
-                                      </VCol>
-
-                                      <VCol cols="6" >
-                                          <VTextField v-model="frecuenciaValor" label="Frecuencia de valor" type="number"  />
-                                      </VCol>
-
-                                      <VCol cols="12" >
-                                          <VTextField v-model="tituloDesafio" label="Título del desafío" />
+                                          <VSelect v-model="categoriaDesafio" :items="categoriaItems" label="Categoría del desafío" />
                                       </VCol>
 
                                       <VCol cols="12" >
@@ -785,7 +756,7 @@ async function onCompleteHorarios(){
                       </VCardText>
                   </VCard>
                   </VDialog>
-
+       
                   <!-- 👉 HORARIOS -->
                   <VDialog v-model="isDialogVisibleHorario" persistent no-click-animation max-width="1200">
 
