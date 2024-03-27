@@ -794,14 +794,14 @@ class SendPulse
 	private function getUltimaSeccion($data)
 	{
 		$html = '';
-		$html .= '<table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_48" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#2927b9; margin:0; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top"><p style="line-height:1;margin: 10px 0 0px;font-size:inherit;color:#2927b9;font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif;text-align:center;font-weight:normal;padding:0" align="center"><strong><span style="font-size: 20px;">También te puede interesar</span></strong></p><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table>';
+		$html .= '<table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_48" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#FF25A6; margin:0; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top"><p style="line-height:1;margin: 15px 10px;font-size:inherit;color:#FF25A6;font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif;text-align:center;font-weight:normal;padding:0" align="center"><strong><span style="font-size: 20px;">También te puede interesar</span></strong></p><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table>';
 		for ($i = 0; $i < count($data); $i++) {
 			$b = $data[$i];
 			// echo json_encode($b['subseccion']);
 
 			$html .= ' 
 			
-<table class="bloque_inferior_entre" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.5; width:100%" border="0" width="100%">
+<table class="bloque_inferior_entre" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin-top: 20px; font-size:14px; line-height:1.5; width:100%" border="0" width="100%">
 <tbody>
 	 <tr style="border-color:transparent">
 			<td style="border-collapse:collapse; border-color:transparent; padding-left:15px; padding-right:15px; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top">
@@ -902,17 +902,17 @@ class SendPulse
 
 	private function btnVerMasNoticias()
 	{
-		return '<br><br><table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; margin-left:auto; margin-right:auto; width:auto !important; border-radius:5px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1;"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold;" href="https://www.ecuavisa.com/noticias/?utm_source=SendPulse&amp;utm_medium=SeccionPolitica&amp;utm_campaign=N_CodigoRojas&amp;utm_id=Newsletter">Ver otras noticias</a></td></tr></tbody></table></td></tr></tbody></table>';
+		return '<br><br><table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; margin-left:auto; margin-right:auto; width:auto !important; border-radius:2px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1;"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold;" href="https://www.ecuavisa.com/entretenimiento">Ver más noticias</a></td></tr></tbody></table></td></tr></tbody></table>';
 	}
 
 	private function btnVerArticulo($url)
 	{
-		return '<br><br><table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; margin-left:auto; margin-right:auto; width:auto !important; border-radius:5px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1;"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold;" href="'.$url.'">Seguir leyendo</a></td></tr></tbody></table></td></tr></tbody></table>';
+		return '<br><br><table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; margin-left:auto; margin-right:auto; width:auto !important; border-radius:2px; box-shadow:none; background:#FF25A6" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1;"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-size:16px; font-weight:bold;" href="'.$url.'">Seguir leyendo</a></td></tr></tbody></table></td></tr></tbody></table>';
 	}
 
 	private function btnVerMasNoticiasRow($link = "")
 	{
-		return '<table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; width:auto !important; border-radius:5px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style=" border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="' . ($link == "" ? "https://www.ecuavisa.com/noticias/?utm_source=SendPulse&amp;utm_medium=SeccionPolitica&amp;utm_campaign=N_CodigoRojas&amp;utm_id=Newsletter" : $link) . '">Seguir leyendo</a></td></tr></tbody></table></td></tr></tbody></table>';
+		return '<table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; width:auto !important; border-radius:2px; box-shadow:none; background:#FF25A6" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style=" border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="' . ($link == "" ? "https://www.ecuavisa.com/noticias/?utm_source=SendPulse&amp;utm_medium=SeccionPolitica&amp;utm_campaign=N_CodigoRojas&amp;utm_id=Newsletter" : $link) . '">Seguir leyendo</a></td></tr></tbody></table></td></tr></tbody></table>';
 	}
 
 	private function getDetallesNotaPrincial($list, $getNota)
@@ -922,37 +922,45 @@ class SendPulse
 		$getFristNota = $getNota[0][0];
 		// $bloque3 = $getNota[1];
 
+		
 		// echo count($bloque3);
 		$getOpinionesBloquesURLVar = $this->getOpinionesBloquesURL($list);
 		if (is_array($list)) {
+		
+	
+			$count = 0;
+			// foreach ($list as $key => $value) {
+			// 	if ($count < 2 && isset($value->name) && $value->name === 'Text') {
+			// 		echo $value->__text . "\n";
+			// 		$count++;
+			// 	}
+			// }
+
+			// echo "El número de elementos con name 'Text' es: $count";
+	
 			foreach ($list as $key => $value) {
-				if ($value->name == "Headline") {
-					$titulo = $value->__text; //'.$getFristNota["subseccion"]["link"].'
 
-					/*<a style="text-decoration:none;color: #311db3;font-weight: 700;font-size: 18px;" href="#">
-												<p style="padding:0px;margin:0px">OPINIÓN</p>
-											</a>*/
-
-					/*<tr>
-										<td style="padding: 10px;padding-left: 20px;padding-right: 20px;padding-top: 20px;padding-bottom: 0px;">
-											<p style="text-decoration:none;color: #311db3;font-weight: 700;font-size: 18px;padding:0px;margin:0px">
-												OPINIÓN
-											</p>
-										<td>
-									<tr>*/
+				if ($count < 2 && isset($value->name) && $value->name === 'Text') {
 					$content[] = '
-											<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
-												
+                    <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;font-weight: 400;" border="0" width="100%">
+			        	<tr>
+			        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
+			        			<div>' . $value->__text . '</div>
+			        		<td>
+			        	<tr>
+			        </table>';
+					// echo $value->__text . "\n";
+					$count++;
+				}
+
+				if ($value->name == "Headline") {
+					$titulo = $value->__text;
+					$content[] = '
+								<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
 									<tr>
 										<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
 											<a style="text-decoration:none;color: #FF25A6;" href="' . $getFristNota["link"] . '">
-												<h1 style="margin-top: 0px;
-													padding-bottom:5px;
-													color:#FF25A6;
-												font-size: 30px;
-												line-height: 1.2;
-												margin-bottom: 0px;
-										 ">' . $value->__text . '</h1>
+												<h1 class="be_titulo_principal" style="margin-top: 0px;padding-bottom:5px;color:#FF25A6;font-size: 30px;line-height: 1.2;margin-bottom: 0px; ">' . $value->__text . '</h1>
 											</a>
 										<td>
 									<tr>
@@ -966,15 +974,15 @@ class SendPulse
 				    </a>
                     ';
 				}
-				if ($value->name == "Subheadline") {
-					$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
-				        	<tr>
-				        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
-				        			<small>' . $value->__text . '</small>
-				        		<td>
-				        	<tr>
-			        	</table>';
-				}
+				// if ($value->name == "Subheadline") {
+				// 	$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
+				//         	<tr>
+				//         		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
+				//         			<small>' . $value->__text . '</small>
+				//         		<td>
+				//         	<tr>
+			  //       	</table>';
+				// }
 				if ($value->name == "Quotecv") {
 					$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px;line-height:1.2;width:100%;padding-left: 20px;padding-right: 20px;display: block;" border="0" width="100%">
 					   <tbody>
@@ -1109,16 +1117,16 @@ class SendPulse
 			        </table>
                     ';
 				}
-				if ($value->name == "Text") {
-					$content[] = '
-                    <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;font-weight: 400;" border="0" width="100%">
-			        	<tr>
-			        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
-			        			<div>' . $value->__text . '</div>
-			        		<td>
-			        	<tr>
-			        </table>';
-				}
+				// if ($value->name == "Text") {
+				// 	$content[] = '
+        //             <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;font-weight: 400;" border="0" width="100%">
+			  //       	<tr>
+			  //       		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
+			  //       			<div>' . $value->__text . '</div>
+			  //       		<td>
+			  //       	<tr>
+			  //       </table>';
+				// }
 				if ($value->name == "h2" || $value->name == "H2") {
 					$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
 			        	<tr>
@@ -1147,33 +1155,6 @@ class SendPulse
                     </div>' . (isset($value->component) ? $this->getImgParrafo($value->component) : "") . '
                     </div>';
 				}
-				// if($value->name == "Youtube_Text"){
-				//     $youtubeId = $value->__text;
-				//     $youtubeThumbnail = 'https://img.youtube.com/vi/' . $youtubeId . '/maxresdefault.jpg';
-				//     $youtubeUrl = 'https://www.youtube.com/watch?v=' . $youtubeId;
-
-				//     $content[] = '<a target="_blank" href="'.$youtubeUrl.'">
-				//         <img width="70%" src="' . $youtubeThumbnail . '" alt="Video de YouTube">
-				//     </a>';;
-				// }
-				// if($value->name == "Twitter_Text"){
-				//     $url = $value->__text;
-				//     $lastPart = "";
-				//     if (filter_var($url, FILTER_VALIDATE_URL)) {
-				//         $parsedUrl = parse_url($url);
-				//         $path = $parsedUrl['path'];
-				//         $parts = explode('/', $path);
-				//         // $lastPart = end($parts);
-				//         $lastPart = $url;
-				//     } else {
-				//         $lastPart = 'https://twitter.com/ecuavisa/status/'.$url;
-				//     }
-				//     $content[] = '<div  style="display:block;width: 100%;text-align: center">
-				//     <a style="display:block;width: 100%;text-align: center" target="_blank" href="'.$lastPart.'">
-				//         <img width="40%" src="https://ecuavisapdfs.phpdemo.site/uploads/imagen-twitter.png" alt="Video de YouTube">
-				//     </a>
-				//     </div>';
-				// }
 				if ($value->name == "HTML_Text") {
 					$html = $value->__text;
 					if (preg_match('/<blockquote class="twitter-tweet">(.*?)<\/blockquote>/is', $html, $matches)) {
@@ -1224,10 +1205,6 @@ class SendPulse
 		// $this->jsonPDF[] = array("notasFinal" => $bloque3);
 		$this->jsonPDF[] = array("notaPrincipalTodosDatos" => $list);
 
-
-
-
-
 		return [$content, $titulo];
 	}
 
@@ -1249,6 +1226,24 @@ class SendPulse
 
 			return	$arr;
 	}
+
+
+	function eliminarTextRepetidos($arr) {
+    $primerText = true;
+
+    // Iterar sobre el array y eliminar los componentes Text repetidos
+    foreach ($arr as $key => $item) {
+        if ($item->name === "Text") {
+            if ($primerText) {
+                $primerText = false; // Marcar que ya se ha encontrado el primer Text
+            } else {
+                unset($arr[$key]); // Eliminar el componente Text adicional
+            }
+        }
+    }
+
+    return array_values($arr); // Reindexar el array para eliminar los índices vacíos
+}
 
 	public function getNotaPrincipalHTML($idarticle, $getFristNota)
 	{
