@@ -16,17 +16,17 @@ const listaDesafios = ref([]);
 async function getSemanas_desafios (){
     try {
       isLoading.value = true;  
-      const consulta = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/all/get');
+      const consulta = await fetch('https://servicio-desafios.vercel.app/semana/all/get');
       const consultaJson = await consulta.json();
 
       let dataRaw = Array.from(consultaJson.data); 
 
       dataSemanas.value = dataRaw.map(item => ({
             ...item,
-            fecha_inicio: moment(item.fecha_inicio).format("DD/MM/YYYY"),
-            fecha_fin: moment(item.fecha_fin).format("DD/MM/YYYY")
+            fecha_inicio: moment(item.fecha_inicio).utc().format("DD/MM/YYYY"),
+            fecha_fin: moment(item.fecha_fin).utc().format("DD/MM/YYYY")
       }));
-      
+      //console.log(dataSemanas.value);
       isLoading.value = false; 
     } catch (error) {
         console.error(error.message);
@@ -62,16 +62,17 @@ const paginatedSemanas = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
 
-  return listaDesafios.value.slice(start, end);
+  return dataSemanas.value.slice(start, end);
 });
 
 const nextPage = () => {
-  if (currentPage.value * itemsPerPage < listaDesafios.value.length) currentPage.value++;
+  if (currentPage.value * itemsPerPage < dataSemanas.value.length) currentPage.value++;
 };
 
 const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
 };
+
 
 // -------------------------------ACCIONES------------------------------------------
 const isDialogActive = ref(false);
@@ -85,7 +86,7 @@ const imagen_descriptiva = ref('');
 const desafios = ref([]);
 const fecha_inicio = ref('');
 const fecha_fin = ref('');
-const fechasRaw = ref([fecha_inicio, fecha_fin]);
+const fechaDisplay = ref('');
 
 const configSnackbar = ref({
     message: "Datos guardados",
@@ -101,11 +102,22 @@ function resetForm(){
     desafios.value = [];
     fecha_inicio.value = '';
     fecha_fin.value = '';
-    fechasRaw.value = [];  
+    fechaDisplay.value = '';
 } 
 function closeDiag(){
     resetForm(); 
     isDialogActive.value = false;
+}
+
+function obtenerFechas(selectedDates, dateStr, instance) {
+    
+    if (selectedDates.length > 1) {
+      //console.log(selectedDates);  
+      fecha_inicio.value = moment(selectedDates[0]).format('DD-MM-YYYY');
+      fecha_fin.value = moment(selectedDates[1]).format('DD-MM-YYYY');     
+      //console.log('format',fecha_inicio.value); 
+      //console.log('format',fecha_fin.value); 
+    }
 }
 
 // ----------ADD-------------
@@ -124,7 +136,7 @@ async function onEdit(id){
     isLoading2.value = true;
     resetForm();     
     accionForm.value = 'edit';
-    const consulta = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/get/' + id);
+    const consulta = await fetch('https://servicio-desafios.vercel.app/semana/get/' + id);
     const consultaJson = await consulta.json();
     const data = consultaJson.data;
     //console.log(paquete);
@@ -134,10 +146,10 @@ async function onEdit(id){
     descripcion.value = data.descripcion;
     imagen_descriptiva.value = data.imagen_descriptiva;
     desafios.value = data.desafios;
-    fecha_inicio.value = data.fecha_inicio;
-    fecha_fin.value = data.fecha_fin;
-    fechasRaw.value = [data.fecha_inicio,data.fecha_fin ];  
-
+    fecha_inicio.value = moment(data.fecha_inicio).utc().format("DD/MM/YYYY");
+    fecha_fin.value = moment(data.fecha_fin).utc().format("DD/MM/YYYY");
+    fechaDisplay.value = String(fecha_inicio.value + ' a ' + fecha_fin.value);
+     
     isLoading2.value = false;
     isDialogActive.value = true;  
 }
@@ -146,29 +158,30 @@ async function onEdit(id){
 
 async function onComplete(){
 
-    let preguntasEnviar = preguntas.value;
-           
-    //console.log('data a enviar',dataEnviar);  
-    let nombreValid = nombre.value;
-
-    if (!validarArreglo(preguntasEnviar) || !nombreValid || nombreValid == "" || !idRegla.value || idRegla.value == "") {
+    if(desafios.value.length == 0){
         configSnackbar.value = {
-                    message: "Debe llenar todos los campos",
-                    type: "error",
-                    model: true
-                };
-        return false;
-    } 
+                message: "Debe ingresar almenos 1 desafío",
+                type: "error",
+                model: true
+            };
+    }
 
+
+    //return console.log('datos enviar', jsonEnviar)
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     if (accionForm.value === 'add') {
 
+        
+
         let jsonEnviar ={
-            "idRegla": idRegla.value,
-            "nombre": nombre.value,
-            "preguntas": preguntasEnviar  
+            "titulo": titulo.value,
+            "descripcion": descripcion.value,
+            "imagen_descriptiva": imagen_descriptiva.value,
+            "desafios": desafios.value,
+            "fecha_inicio": fecha_inicio.value,
+            "fecha_fin": fecha_fin.value  
         }
 
         var raw = JSON.stringify(jsonEnviar);
@@ -180,11 +193,11 @@ async function onComplete(){
             redirect: 'follow'
         };
 
-        const send = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/create', requestOptions);
+        const send = await fetch('https://servicio-desafios.vercel.app/semana/create', requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
             configSnackbar.value = {
-                message: "Trivia creada correctamente",
+                message: "Semana de desafíos creada correctamente",
                 type: "success",
                 model: true
             };
@@ -202,10 +215,12 @@ async function onComplete(){
 
         let jsonEnviar ={
             "_id": idToEdit.value,
-            "idRegla": idRegla.value,
-            "nombre": nombre.value,
-            "nombreOld": nombreOld.value,
-            "preguntas": preguntasEnviar  
+            "titulo": titulo.value,
+            "descripcion": descripcion.value,
+            "imagen_descriptiva": imagen_descriptiva.value,
+            "desafios": desafios.value,
+            "fecha_inicio": fecha_inicio.value,
+            "fecha_fin": fecha_fin.value   
         }
 
         var raw = JSON.stringify(jsonEnviar);
@@ -216,11 +231,11 @@ async function onComplete(){
             body: raw,
             redirect: 'follow'
         };
-        const send = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/update', requestOptions);
+        const send = await fetch('https://servicio-desafios.vercel.app/semana/update', requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
             configSnackbar.value = {
-                message: "Trivia actualizada correctamente",
+                message: "Semana de desafíos actualizada correctamente",
                 type: "success",
                 model: true
             };
@@ -232,7 +247,7 @@ async function onComplete(){
             };
         }
     }
-    await getTrivias();
+    await getSemanas_desafios();
     isDialogActive.value = false;
 
 }
@@ -255,11 +270,11 @@ async function deleteConfirmed() {
         redirect: 'follow'
     };
 
-    const deleted = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/delete/' + idToDelete.value, requestOptions);
+    const deleted = await fetch('https://servicio-desafios.vercel.app/semana/delete/' + idToDelete.value, requestOptions);
     const respuesta = await deleted.json();
     if (respuesta.resp) {
         configSnackbar.value = {
-            message: "Trivia eliminada correctamente",
+            message: "Semana de desafío eliminada correctamente",
             type: "success",
             model: true
         };
@@ -270,7 +285,7 @@ async function deleteConfirmed() {
             model: true
         };
     }
-    await getTrivias();
+    await getSemanas_desafios();
     isDialogVisibleDelete.value = false;
     isLoading2.value = false;
 }
@@ -349,7 +364,7 @@ async function deleteConfirmed() {
                     <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
                     Página {{ currentPage }}
                     <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
-                        :disabled="(currentPage * itemsPerPage) >= listaDesafios.length">
+                        :disabled="(currentPage * itemsPerPage) >= dataSemanas.length">
                     </VBtn>
                     </div>
                     </VCardItem>  
@@ -367,7 +382,7 @@ async function deleteConfirmed() {
                 <VCard  class="pa-sm-14 pa-5">
                     <VCardItem class="text-center">
                         <VCardTitle class="text-h5 mb-3">
-                            {{ accionForm === "add" || accionForm === "duplicate" ? "Nueva trivia" : "Editar " + tituloSelected }}
+                            {{ accionForm === "add" || accionForm === "duplicate" ? "Nueva semana" : "Editar " + tituloSelected }}
                         </VCardTitle>
                     </VCardItem>
 
@@ -382,119 +397,38 @@ async function deleteConfirmed() {
                                         <VTextField v-model="titulo" label="Título" placeholder="Nombre de la trivia" />
                                     </VCol>
 
-                                    <VCol cols="6" >
-                                        <VSelect v-model="idRegla" label="Id de regla" :items="idReglas" />
-                                    </VCol>
-                                    
-                                    <VCol cols="6" class="d-flex">
-                                                           
-                                        <VBtn class="mr-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="addRegla" >
-                                        Crear regla
-                                        </VBtn>                                                                     
-                                        
-                                    </VCol>
-
-                                    
-                                    <VDivider v-if="reglaFormVisible"/>  
-
-                                    <VRow v-if="reglaFormVisible" class="d-flex my-4">
                                     <VCol cols="12" >
-                                        <h4>Crear regla</h4>
-                                    </VCol>    
-
-                                    <VCol cols="6" >
-                                        <VTextField v-model="frecuenciaDesafio" label="Frecuencia de desafio" />
-                                    </VCol>
-
-                                    <VCol cols="6" >
-                                        <VTextField v-model="frecuenciaValor" label="Frecuencia de valor" type="number"  />
+                                        <VTextField v-model="descripcion" label="Descripción" placeholder="Descripción de la trivia" />
                                     </VCol>
 
                                     <VCol cols="12" >
-                                        <VTextField v-model="tituloDesafio" label="Título del desafío" />
+                                        <VTextField v-model="imagen_descriptiva" label="Imágen descriptiva" placeholder="Imágen descriptiva" />
                                     </VCol>
-
-                                    <VCol cols="12" >
-                                        <VTextField v-model="descripcionDesafio" label="Descripción del desafío" />
-                                    </VCol>
-
-                                    <VCol cols="6" >
-                                        <VSwitch v-model="statusDesafio" label="Estatus del desafío" />
-                                    </VCol>
-
-                                    <VCol cols="6" >
-                                        <VTextField v-model="tituloSticker" label="Título del sticker" />
-                                    </VCol>
-
-                                    <VCol cols="12" >
-                                        <VTextField v-model="URLSticker" label="URL del sticker" />
-                                    </VCol>
-
-                                    <VDivider class="mt-4" v-if="reglaFormVisible"/>  
-                                        <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
-                                        <VBtn @click="crearRegla"> Crear regla </VBtn>
-
-                                        <VBtn color="secondary" variant="tonal" @click="closeReglaForm">
-                                            Cancelar
-                                        </VBtn>
-                                        </VCol>
-                                    </VRow>
-                                    <VCol cols="12" class="d-flex">
-                                        <div class="d-flex align-content-end flex-wrap"><h4>Preguntas</h4></div>
-                                                             
-                                        <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="resolveAñadirPregunta" >
-                                        Añadir pregunta
-                                        </VBtn>                                                                     
-                                        
-                                    </VCol>    
-                                    <VDivider/>
-                                    <div v-for="(p, index) in preguntas" cols="12" class="w-100 my-4 item-cards"> 
-                                        <VBtn v-if="preguntas.length > 1" class="ml-auto boton-eleminar-itemsCards" size="38" color="error" @click="eliminarPregunta(index)"><VIcon icon="tabler-x" size="22" /></VBtn>
-                                        
-                                        <VCardText>
-                                            <VCol cols="12">
-                                                <VTextField class="mt-2" v-model="p.pregunta" label="Pregunta" placeholder="Escriba la pregunta" />
-                                            </VCol>     
-                                            
-                                            <VCol cols="12" >
-                                                <VSelect class="mt-2" v-model="p.tipo" label="Tipo" :items="tipoItems" @update:model-value="resolveOpciones(index, p.tipo)" />        
-                                            </VCol> 
-
-                                            <VCol cols="12" v-if= "p.tipo != 'votacion'">
-                                                <VTextField  :class="p.tipo== 'opciones'?'mt-2':'my-2'" v-model="p.respuesta" label="Respuesta" placeholder="Escriba la respuesta" />
-                                            </VCol>
-
-                                            <VCol v-if="p.tipo == 'opciones'|| p.tipo == 'votacion'" cols="12" class="d-flex">
-                                            <div class="d-flex align-content-end flex-wrap"><h4>Opciones</h4></div>
-                                                                
-                                            <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="resolveAñadirOpcion(index)" >
-                                            Añadir opción
-                                            </VBtn>                                                                     
-                                          
-                                            </VCol>    
-                                            <VDivider v-if="(p.tipo == 'opciones' || p.tipo == 'votacion') && p.opciones.length > 0" />
-
-                                            <div v-if="p.tipo == 'opciones'|| p.tipo == 'votacion'" v-for="(o, index1) in p.opciones" cols="12" > 
-                                                                              
-                                                <VCardText class="text-center ml-4 my-4">
-                                                    <VRow>
-                                                    <VCol cols="8">
-                                                        <VTextField  v-model="p.opciones[index1]" :label="'Opción '+ (index1 + 1)" placeholder="Escriba la opción" />
-                                                    </VCol>
-                                                    <VCol cols="4" v-if="p.opciones.length > 2">
-                                                        <VBtn  size="38" color="error" @click="eliminarOpcion(index, index1)"><VIcon icon="tabler-x" size="22" /></VBtn> 
-                                                    </VCol>   
-                                                    </VRow>    
-                                                                                                      
-                                                </VCardText>  
-
-                                                
-                                                
-                                            </div>
-
-                                        </VCardText>   
+                                    <VCol cols="12">
+                                    <div class="mb-3">Seleccione el rango de fecha para la semana</div>    
+                                    <div class="date-picker-wrapper" style="width: 100%;">
+                                        <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaDisplay"
+                                        show-current=true @on-change="obtenerFechas" :config="{
+                                            position: 'auto right',
+                                            mode: 'range',
+                                            altFormat: 'F j, Y',
+                                            dateFormat: 'd-m-Y',
+                                            reactive: true
+                                        }" />
                                     </div>
-                                                       
+                                    </VCol>
+                                    <VCol class="mb-2" cols="12" >
+                                    <span>Seleccione los desafíos para la semana</span> 
+                                    </VCol>
+                                    <VCol style="margin-top: -1.5rem;" v-for="item in listaDesafios" cols="12">
+                                                         
+                                        <VCheckbox
+                                        v-model="desafios"
+                                        :label="item.title"
+                                        :value="item.value"
+                                        />
+                                        
+                                    </VCol>                                                      
                                 </VRow>
                                 <!-- 👉 Submit and Cancel -->
                                 <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
