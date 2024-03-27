@@ -46,6 +46,11 @@ const disabledForzado = ref(false);
 const linkForzado = ref(false);
 const linkForzadoList = ref([
   {
+    "id":"66043d5421c9f3dc3c353987",
+    "name":"Gente",
+    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-entretenimiento/forzado.php"
+  },
+  {
     "id":"64f9f5225c4a279b69ff2ac8",
     "name":"Boletín diario 7am",
     "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-diario/forzado.php"
