@@ -29,6 +29,7 @@ const statusDesafio = ref(true);
 const tituloSticker = ref('');
 const URLSticker = ref('');
 const categoriaDesafio = ref('');
+const fecha = ref('');
 
 const idToEdit = ref('');
 
@@ -481,7 +482,8 @@ const elimHora = (index, indexHora) => {
 async function onCompleteHorarios(){
 
   let jsonEnviar ={
-            "horarios": horarios.value
+            "horarios": horarios.value,
+            "fecha": fecha.value
   }
 
   //return console.log('enviando ',jsonEnviar);
@@ -787,7 +789,7 @@ async function onCompleteHorarios(){
                                     label="Día de la semana"
                                   />
                                 </VCol>
-                                <VCol cols="6" class="d-flex gap-4">
+                                <VCol cols="2" class="d-flex gap-4">
                                   <VBtn
                                     color="primary"
                                     @click="addDia()"
@@ -798,7 +800,17 @@ async function onCompleteHorarios(){
                                   
                                
                                 </VCol>
+                                <VCol cols="4" class="ml-4">
+                                  <AppDateTimePicker style="width: 300px;" prepend-inner-icon="tabler-calendar" density="compact" v-model="fecha"
+                                        show-current=true :config="{
+                                            position: 'auto right',
+                                            altFormat: 'F j, Y',
+                                            dateFormat: 'd-m-Y',
+                                            reactive: true
+                                        }" />
+                                </VCol>
                               </VCol>
+                              
                               <VCol cols="12">
                                 <VList class="card-list">
                                   <VExpansionPanels variant="accordion" multiple>
