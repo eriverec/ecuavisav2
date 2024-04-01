@@ -14,7 +14,8 @@ const idCampaign = ref("");
 const disabledPagination = ref(false);
 const disabledViewList = ref(false);
 const switchOnDisabled = ref(false);
-
+const isDialogVisibleVistaPreviaVideo = ref(false)
+const iframeOptions = ref(null)
 
 const isDialogActive = ref(false);
 const accionForm = ref('');
@@ -323,6 +324,15 @@ function onDelete(id) {
     idToDelete.value = id;   
 }
 
+function onView(data) {
+    iframeOptions.value = {
+      _id:data._id,
+      idVideo: data.idVideo,
+      urlContent: data.urlContent,
+    };
+    isDialogVisibleVistaPreviaVideo.value = true;
+}
+
 async function deleteConfirmed() {
     var requestOptions = {
         method: 'DELETE',
@@ -356,6 +366,38 @@ async function deleteConfirmed() {
     <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
                 {{ configSnackbar.message }}
     </VSnackbar>
+
+    <VDialog
+      v-model="isDialogVisibleVistaPreviaVideo"
+      width="500"
+    >
+      <!-- Activator -->
+      <template #activator="{ props }">
+        <VBtn v-bind="props">
+          Click Me
+        </VBtn>
+      </template>
+
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleVistaPreviaVideo = !isDialogVisibleVistaPreviaVideo" />
+
+      <!-- Dialog Content -->
+      <VCard :title="iframeOptions.idVideo">
+        <iframe
+          class="mt-3"
+          :title="'Video '+ iframeOptions.idVideo"
+          width="100%"
+          height="300"
+          :src="iframeOptions.urlContent"
+        ></iframe>
+
+        <VCardText class="d-flex justify-end">
+          <VBtn @click="isDialogVisibleVistaPreviaVideo = false">
+            Aceptar
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
     
     <VDialog
       v-model="isDialogVisibleDelete"
@@ -461,12 +503,27 @@ async function deleteConfirmed() {
 
                       <template #append>
                         <div class="espacio-right-2">
-                          
-                          <VBtn color="success" variant="text" icon  @click="onEdit(desafio._id)">
+                          <VBtn
+                            title="Ver vista previa del video"
+                            icon
+                            size="x-small"
+                            color="warning"
+                            variant="text"
+                            @click="onView(desafio)"
+                          >
+                            <VIcon
+                              size="22"
+                              icon="tabler-movie"
+                            />
+                          </VBtn>
+
+                          <VBtn 
+                            title="Editar registro" color="success" variant="text" icon  @click="onEdit(desafio._id)">
                             <VIcon size="22" icon="tabler-edit" />
                           </VBtn>
 
                           <VBtn
+                            title="Eliminar el registro"
                             icon
                             size="x-small"
                             color="error"
