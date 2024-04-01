@@ -398,10 +398,12 @@ const categoriaItems = [
   }
 ]
 
-function onEditHorarios(horario, n, id){
+function onEditHorarios(horario, n, id, fecha = ""){
+  console.log(fecha)
   idToEdit.value = id;
   horarios.value = horario;
   horariosRaw.value = horario; 
+  fecha.value = fecha || "";
   isDialogVisibleHorario.value = true;
   nombre.value = n;
 }
@@ -643,7 +645,7 @@ async function onCompleteHorarios(){
                       <template #append>
                         <div class="espacio-right-2">
                           
-                          <VBtn variant="text" icon  @click="onEditHorarios(desafio.horarios, desafio.tituloDesafio, desafio._id)">
+                          <VBtn variant="text" icon  @click="onEditHorarios(desafio.horarios, desafio.tituloDesafio, desafio._id, desafio.fecha)">
                                     <VIcon size="22" icon="tabler-calendar-time" />
                           </VBtn>
                           
@@ -801,7 +803,10 @@ async function onCompleteHorarios(){
                                
                                 </VCol>
                                 <VCol cols="4" class="ml-4">
-                                  <AppDateTimePicker style="width: 300px;" prepend-inner-icon="tabler-calendar" density="compact" v-model="fecha"
+                                  <AppDateTimePicker style="width: 300px;" 
+                                        prepend-inner-icon="tabler-calendar" 
+                                        density="compact" 
+                                        v-model="fecha"
                                         show-current=true :config="{
                                             position: 'auto right',
                                             altFormat: 'F j, Y',

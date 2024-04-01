@@ -495,7 +495,12 @@ async function deleteConfirmed() {
                                 size="20"
                                 icon="tabler-clock"
                               />
-                              <label>{{ desafio.tipoEval }}</label> <label v-if="desafio.tipoEval != 'full'">- {{ desafio.timeVal }} min</label>
+                              <label v-if="desafio.tipoEval != 'full'">
+                                <b>Permanencia: </b> {{ desafio.timeVal }} min
+                              </label>
+                              <label v-else>
+                                Ver todo el video
+                              </label>
                             </div>
                           </div>
                         </div>
