@@ -398,12 +398,12 @@ const categoriaItems = [
   }
 ]
 
-function onEditHorarios(horario, n, id, fecha = ""){
+function onEditHorarios(horario, n, id, f = ""){
   idToEdit.value = id;
   horarios.value = horario;
   horariosRaw.value = horario; 
-  if(fecha){
-    fecha.value = fecha || "";
+  if (f) {
+    fecha.value = f; // Asignar el valor de fecha si se proporciona
   }
   isDialogVisibleHorario.value = true;
   nombre.value = n;
