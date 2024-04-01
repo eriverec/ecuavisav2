@@ -29,6 +29,7 @@ const statusDesafio = ref(true);
 const tituloSticker = ref('');
 const URLSticker = ref('');
 const categoriaDesafio = ref('');
+const tipoModel = ref('');
 const fecha = ref('');
 
 const idToEdit = ref('');
@@ -157,6 +158,7 @@ function resetForm(){
     tituloSticker.value = '';
     URLSticker.value = '';
     categoriaDesafio.value = '';
+    tipoModel.value = '';
   
 }
 function closeDiag(){
@@ -190,6 +192,7 @@ async function onEdit(id){
     tituloSticker.value = data.tituloSticker;
     URLSticker.value = data.URLSticker;
     categoriaDesafio.value = data.categorias;
+    tipoModel.value = data.tipo;
 
     isDialogActive.value = true;  
 }
@@ -220,6 +223,7 @@ async function onComplete(){
             "statusDesafio": statusDesafio.value,
             "tituloSticker": tituloSticker.value,
             "URLSticker": URLSticker.value,
+            "tipo": tipoModel.value,
             "categorias": categoriaDesafio.value  
     }
 
@@ -261,7 +265,8 @@ async function onComplete(){
             "statusDesafio": statusDesafio.value,
             "tituloSticker": tituloSticker.value,
             "URLSticker": URLSticker.value,
-            "categorias": categoriaDesafio.value 
+            "categorias": categoriaDesafio.value,
+            "tipo": tipoModel.value 
 
     }
 
@@ -395,6 +400,33 @@ const categoriaItems = [
   {
     title: "En vivo",
     value: "en_vivo",
+  }
+]
+
+const tipoItems = [
+  {
+    title: "Trivia",
+    value: "Trivia",
+  },
+  {
+    title: "SubirFoto",
+    value: "SubirFoto",
+  },
+  {
+    title: "VideoConsumo",
+    value: "VideoConsumo",
+  },
+  {
+    title: "PerfilDatos",
+    value: "PerfilDatos",
+  },
+  {
+    title: "Compartir",
+    value: "Compartir",
+  },
+  {
+    title: "TriviaCodigo",
+    value: "TriviaCodigo",
   }
 ]
 
@@ -729,6 +761,10 @@ async function onCompleteHorarios(){
 
                                       <VCol cols="12" >
                                           <VSelect v-model="categoriaDesafio" :items="categoriaItems" label="Categoría del desafío" />
+                                      </VCol>
+
+                                      <VCol cols="12" >
+                                          <VSelect v-model="tipoModel" :items="tipoItems" label="Tipos del desafío" />
                                       </VCol>
 
                                       <VCol cols="12" >
