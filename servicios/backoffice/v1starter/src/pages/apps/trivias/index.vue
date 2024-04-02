@@ -52,6 +52,56 @@ const tipoItems = [
     }
 ];
 
+const categoriaItems = [
+  {
+    title: "Trivia",
+    value: "trivia",
+  },
+  {
+    title: "Tiempo",
+    value: "tiempo",
+  },
+  {
+    title: "Sobre ti",
+    value: "sobre_ti",
+  },
+  {
+    title: "Comparte",
+    value: "comparte",
+  },
+  {
+    title: "En vivo",
+    value: "en_vivo",
+  }
+]
+
+const tipoItemsDesafio = [
+  {
+    title: "Trivia",
+    value: "Trivia",
+  },
+  {
+    title: "SubirFoto",
+    value: "SubirFoto",
+  },
+  {
+    title: "VideoConsumo",
+    value: "VideoConsumo",
+  },
+  {
+    title: "PerfilDatos",
+    value: "PerfilDatos",
+  },
+  {
+    title: "Compartir",
+    value: "Compartir",
+  },
+  {
+    title: "TriviaCodigo",
+    value: "TriviaCodigo",
+  }
+]
+
 
 onMounted(async()=>{
     isLoading2.value = true;
@@ -208,7 +258,6 @@ function resetForm(){
   
 }
 
-
 function closeDiag(){
     resetForm(); 
     closeReglaForm();
@@ -219,6 +268,8 @@ const reglaFormVisible = ref(false);
 const frecuenciaDesafio = ref('');
 const frecuenciaValor = ref(null);
 const tituloDesafio = ref('');
+const categoriaDesafio = ref('');
+const tipoModel = ref('');
 const descripcionDesafio = ref('');
 const statusDesafio = ref(true);
 const tituloSticker = ref('');
@@ -229,6 +280,8 @@ function closeReglaForm(){
     frecuenciaDesafio.value = '';
     frecuenciaValor.value = null;
     tituloDesafio.value = '';
+    categoriaDesafio.value = '';
+    tipoModel.value = '';
     descripcionDesafio.value = '';
     statusDesafio.value = true;
     tituloSticker.value = '';
@@ -239,6 +292,8 @@ function addRegla(){
     frecuenciaDesafio.value = '';
     frecuenciaValor.value = null;
     tituloDesafio.value = '';
+    categoriaDesafio.value = '';
+    tipoModel.value = '';
     descripcionDesafio.value = '';
     statusDesafio.value = true;
     tituloSticker.value = '';
@@ -246,8 +301,13 @@ function addRegla(){
 }
 
 async function crearRegla(){
-    if ( !frecuenciaDesafio.value || frecuenciaValor.value == null || !tituloDesafio.value || !descripcionDesafio.value || 
-    !tituloSticker.value || !URLSticker.value) {
+    if ( !frecuenciaDesafio.value || 
+        frecuenciaValor.value == null || 
+        !tituloDesafio.value || 
+        !descripcionDesafio.value || 
+        !tipoModel.value || 
+        !categoriaDesafio.value || 
+        !tituloSticker.value || !URLSticker.value) {
         configSnackbar.value = {
                     message: "Llenar todos los campos para crear la regla",
                     type: "error",
@@ -262,6 +322,8 @@ async function crearRegla(){
             "frecuenciaDesafio": frecuenciaDesafio.value,
             "frecuenciaValor": frecuenciaValor.value,
             "tituloDesafio": tituloDesafio.value,
+            "tipo": tipoModel.value,
+            "categoria": categoriaDesafio.value,
             "descripcionDesafio": descripcionDesafio.value,
             "statusDesafio": statusDesafio.value,
             "tituloSticker": tituloSticker.value,
@@ -800,6 +862,14 @@ async function deleteConfirmed() {
 
                                     <VCol cols="12" >
                                         <VTextField v-model="tituloDesafio" label="Título del desafío" />
+                                    </VCol>
+
+                                    <VCol cols="12" >
+                                      <VSelect v-model="categoriaDesafio" :items="categoriaItems" label="Categoría del desafío" />
+                                    </VCol>
+
+                                    <VCol cols="12" >
+                                        <VSelect v-model="tipoModel" :items="tipoItemsDesafio" label="Tipos del desafío" />
                                     </VCol>
 
                                     <VCol cols="12" >
