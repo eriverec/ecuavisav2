@@ -37,6 +37,24 @@ async function getReglas (){
 } 
 
 
+const tipoSelectorItems = [{
+        title: 'PerfilSelectorNormal',   
+        value: 'PerfilSelectorNormal'
+    },
+    {
+        title: 'PerfilSelectorGenero',   
+        value: 'PerfilSelectorGenero'
+    },
+    {
+        title: 'PerfilselectorCiudad',
+        value: 'PerfilselectorCiudad'
+    },
+    {
+        title: 'PerfilselectorDeporte',
+        value: 'PerfilselectorDeporte'
+    }
+];
+
 const tipoItems = [
     {
         title: 'Texto',   
@@ -140,6 +158,7 @@ const preguntas  = ref([
     {
         pregunta: '',
         tipo: 'texto',
+        tipoSelector: 'PerfilSelectorNormal',
         respuesta: '',
         opciones: []
     }
@@ -182,7 +201,11 @@ function validarArreglo(arreglo) {
     for (let i = 0; i < arreglo.length; i++) {
         let objeto = arreglo[i];
         for (let propiedad in objeto) {
-            if (objeto.hasOwnProperty(propiedad)) {
+            if(!objeto.hasOwnProperty("tipoSelector")){
+                console.log("Falta seleccionar el campo tipoSelector")
+                return false;
+            }
+            if (objeto.hasOwnProperty(propiedad) && objeto.tipo != "votacion") {
                 // Verificar si la propiedad es opciones
                 if (propiedad === 'opciones') {
                     if (!objeto[propiedad].every(opcion => opcion.trim() !== '')) {
@@ -190,6 +213,9 @@ function validarArreglo(arreglo) {
                     }
                 } else {
                     if (objeto[propiedad].trim() === '') {
+                        // console.log(objeto)
+                        // console.log(propiedad)
+                        // console.log(objeto[propiedad].trim())
                         return false;
                     }
                 }
@@ -203,6 +229,7 @@ function resolveAñadirPregunta(){
     let nuevaPregunta = {
         pregunta: '',
         tipo: 'texto',
+        tipoSelector: 'PerfilSelectorNormal',
         respuesta: '',
         opciones: []
     };
@@ -231,8 +258,7 @@ function resolveOpciones(index, tipo){
         preguntas.value[index].respuesta = "";
     }
     
-    if(tipo == "opciones")
-    {
+    if(tipo == "opciones"){
         preguntas.value[index].opciones.push('', '');
     }else if(tipo == "votacion"){
         preguntas.value[index].opciones.push('', '');   
@@ -251,6 +277,7 @@ function resetForm(){
         {
             pregunta: '',
             tipo: 'texto',
+            tipoSelector: 'PerfilSelectorNormal',
             respuesta: '',
             opciones: []
         }
@@ -916,6 +943,10 @@ async function deleteConfirmed() {
                                             
                                             <VCol cols="12" >
                                                 <VSelect class="mt-2" v-model="p.tipo" label="Tipo" :items="tipoItems" @update:model-value="resolveOpciones(index, p.tipo)" />        
+                                            </VCol>  
+                                            
+                                            <VCol cols="12" >
+                                                <VSelect class="mt-2" v-model="p.tipoSelector" label="Tipo de selector" :items="tipoSelectorItems" />        
                                             </VCol> 
 
                                             <VCol cols="12" v-if= "p.tipo != 'votacion'">
