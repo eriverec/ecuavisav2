@@ -191,7 +191,7 @@ async function onEdit(id){
     statusDesafio.value = data.statusDesafio;
     tituloSticker.value = data.tituloSticker;
     URLSticker.value = data.URLSticker;
-    categoriaDesafio.value = data.categorias;
+    categoriaDesafio.value = data.categoria;
     tipoModel.value = data.tipo;
 
     isDialogActive.value = true;  
@@ -224,7 +224,7 @@ async function onComplete(){
             "tituloSticker": tituloSticker.value,
             "URLSticker": URLSticker.value,
             "tipo": tipoModel.value,
-            "categorias": categoriaDesafio.value  
+            "categoria": categoriaDesafio.value  
     }
 
     var raw = JSON.stringify(jsonEnviar);
@@ -265,7 +265,7 @@ async function onComplete(){
             "statusDesafio": statusDesafio.value,
             "tituloSticker": tituloSticker.value,
             "URLSticker": URLSticker.value,
-            "categorias": categoriaDesafio.value,
+            "categoria": categoriaDesafio.value,
             "tipo": tipoModel.value 
 
     }
