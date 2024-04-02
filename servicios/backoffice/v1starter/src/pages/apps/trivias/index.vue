@@ -38,19 +38,19 @@ async function getReglas (){
 
 
 const tipoSelectorItems = [{
-        title: 'PerfilSelectorNormal',   
-        value: 'PerfilSelectorNormal'
+        title: 'Sin selector',   
+        value: 'sinSelector'
     },
     {
-        title: 'PerfilSelectorGenero',   
+        title: 'Perfil Selector Género',   
         value: 'PerfilSelectorGenero'
     },
     {
-        title: 'PerfilselectorCiudad',
+        title: 'Perfil selector Ciudad',
         value: 'PerfilselectorCiudad'
     },
     {
-        title: 'PerfilselectorDeporte',
+        title: 'Perfil selector Deporte',
         value: 'PerfilselectorDeporte'
     }
 ];
@@ -158,7 +158,7 @@ const preguntas  = ref([
     {
         pregunta: '',
         tipo: 'texto',
-        tipoSelector: 'PerfilSelectorNormal',
+        tipoSelector: 'sinSelector',
         respuesta: '',
         opciones: []
     }
@@ -229,7 +229,7 @@ function resolveAñadirPregunta(){
     let nuevaPregunta = {
         pregunta: '',
         tipo: 'texto',
-        tipoSelector: 'PerfilSelectorNormal',
+        tipoSelector: 'sinSelector',
         respuesta: '',
         opciones: []
     };
@@ -277,7 +277,7 @@ function resetForm(){
         {
             pregunta: '',
             tipo: 'texto',
-            tipoSelector: 'PerfilSelectorNormal',
+            tipoSelector: 'sinSelector',
             respuesta: '',
             opciones: []
         }
