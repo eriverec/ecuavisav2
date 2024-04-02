@@ -11,7 +11,7 @@ const idReglas = ref([]);
 async function getTrivias (){
     try {
       isLoading.value = true;  
-      const consulta = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/all/get');
+      const consulta = await fetch('https://servicio-desafio-trivias.vercel.app/trivia/all/get');
       const consultaJson = await consulta.json();
       dataTrivias.value = consultaJson.data;             
       isLoading.value = false; 
@@ -177,7 +177,7 @@ const configSnackbar = ref({
     //------FUNCIONES
 
 function copyUrl(id){
-    navigator.clipboard.writeText('https://ecuavisa-desafio-trivias.vercel.app/trivia/get/' + id); 
+    navigator.clipboard.writeText('https://servicio-desafio-trivias.vercel.app/trivia/get/' + id); 
 
     configSnackbar.value = {
     message: "Enlace copiado en el portapapeles",
@@ -188,7 +188,7 @@ function copyUrl(id){
 }    
 
 function copyUrlRespuesta(id){
-    navigator.clipboard.writeText('https://ecuavisa-desafio-trivias.vercel.app/triviaUsuario/create/idTrivia/' + id); 
+    navigator.clipboard.writeText('https://servicio-desafio-trivias.vercel.app/triviaUsuario/create/idTrivia/' + id); 
 
     configSnackbar.value = {
     message: "Enlace copiado en el portapapeles",
@@ -398,7 +398,7 @@ async function mostrarRespuestasUsuarios (idTrivia, nombre){
     isLoading2.value = true;
     nombreUsuarioVisible.value = [];
     nombreTriviaSelected.value = nombre;
-    const consulta = await fetch('https://ecuavisa-desafio-trivias.vercel.app/triviaUsuario/get/trivia/' + idTrivia);
+    const consulta = await fetch('https://servicio-desafio-trivias.vercel.app/triviaUsuario/get/trivia/' + idTrivia);
     const consultaJson = await consulta.json();
     respuestasUsuarios.value = consultaJson.data;   
     respuestasUsuariosVisible.value = true;
@@ -430,7 +430,7 @@ async function onEdit(id){
     closeReglaForm();
     resetForm();     
     accionForm.value = 'edit';
-    const consulta = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/get/' + id);
+    const consulta = await fetch('https://servicio-desafio-trivias.vercel.app/trivia/get/' + id);
     const consultaJson = await consulta.json();
     const data = consultaJson.data;
     //console.log(paquete);
@@ -531,7 +531,7 @@ async function onComplete(){
             redirect: 'follow'
         };
 
-        const send = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/create', requestOptions);
+        const send = await fetch('https://servicio-desafio-trivias.vercel.app/trivia/create', requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
             configSnackbar.value = {
@@ -567,7 +567,7 @@ async function onComplete(){
             body: raw,
             redirect: 'follow'
         };
-        const send = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/update', requestOptions);
+        const send = await fetch('https://servicio-desafio-trivias.vercel.app/trivia/update', requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
             configSnackbar.value = {
@@ -606,7 +606,7 @@ async function deleteConfirmed() {
         redirect: 'follow'
     };
 
-    const deleted = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/delete/' + idToDelete.value, requestOptions);
+    const deleted = await fetch('https://servicio-desafio-trivias.vercel.app/trivia/delete/' + idToDelete.value, requestOptions);
     const respuesta = await deleted.json();
     if (respuesta.resp) {
         configSnackbar.value = {
