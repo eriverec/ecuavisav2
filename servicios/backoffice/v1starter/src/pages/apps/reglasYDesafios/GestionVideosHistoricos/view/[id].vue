@@ -112,38 +112,38 @@ export default {
   },
   data() {
     return {
-      datos: [],
-      files_csv:[],
-      isFlatSnackRespUserAddAndDelete:false,
-      isFlatSnackRespUserDelete:false,
-      isLoadingDialogUser:false,
-      isLoadingContent:false,
-      files_csv_mensaje:"",
-      usuarios_traidos_del_csv:[],
-      files_loading:false,
-      isDialogVisibleDelete:false,
-      searchQuery:"",
-      dataUsers:[],
-      isDialogSearchUser:false,
-      csvData: [],
-      csvHeaders: [],
-      switchOnDisabled: false,
-      disabledBtnDialog: false,
+      // datos: [],
+      // files_csv:[],
+      // isFlatSnackRespUserAddAndDelete:false,
+      // isFlatSnackRespUserDelete:false,
+      // isLoadingDialogUser:false,
+      isLoadingContent:true,
+      // files_csv_mensaje:"",
+      // usuarios_traidos_del_csv:[],
+      // files_loading:false,
+      // isDialogVisibleDelete:false,
+      // searchQuery:"",
+      // dataUsers:[],
+      // isDialogSearchUser:false,
+      // csvData: [],
+      // csvHeaders: [],
+      // switchOnDisabled: false,
+      // disabledBtnDialog: false,
       suggestion: {},
-      currentTab: 'tab-detalles',
-      currentPage: 1,
-      usersPerPage: 10,
-      labelError:{
-        mensaje: "",
-        visible: false
-      },
-      currentUsers: "",
-      timeoutId: null,
-      timeoutId_2: null,
-      cargandoData: false,
-      usuariosSearch:[],
-      filter: "", // Agregar un modelo de datos para el filtro
-      userIdSelected:0,
+      // currentTab: 'tab-detalles',
+      // currentPage: 1,
+      // usersPerPage: 10,
+      // labelError:{
+      //   mensaje: "",
+      //   visible: false
+      // },
+      // currentUsers: "",
+      // timeoutId: null,
+      // timeoutId_2: null,
+      // cargandoData: false,
+      // usuariosSearch:[],
+      // filter: "", // Agregar un modelo de datos para el filtro
+      // userIdSelected:0,
     };
   },
   watch: {
@@ -153,19 +153,19 @@ export default {
   },
 
   computed: {
-    totalPages() {
-      return Math.ceil(this.usuariosSearch.length / this.usersPerPage);
-    },
-    currentUsers() {
-      const start = (this.currentPage - 1) * this.usersPerPage;
-      const end = start + this.usersPerPage;
-      return this.usuariosSearch.slice(start, end);
-    },
+    // totalPages() {
+    //   return Math.ceil(this.usuariosSearch.length / this.usersPerPage);
+    // },
+    // currentUsers() {
+    //   const start = (this.currentPage - 1) * this.usersPerPage;
+    //   const end = start + this.usersPerPage;
+    //   return this.usuariosSearch.slice(start, end);
+    // },
     // Agregar una función computada para los usuarios filtrados
     
-    filteredDataUsers(){
-      return this.dataUsers;
-    }
+    // filteredDataUsers(){
+    //   return this.dataUsers;
+    // }
   },
 
   methods: {
