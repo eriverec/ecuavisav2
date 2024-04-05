@@ -32,7 +32,7 @@ class SendPulse
 		$this->typeProyect =  "Production"; //Production - Guzzle
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 5,
-			"folder" => "boletin-entretenimiento", // Guardado de img y json
+			"folder" => "boletin-estadio", // Guardado de img y json
 			"folderPrimary" => ($this->typeProyect == "Production" ? "sendpulse/sendpulsev3" : "sendpulse"),
 			"typeProyect" => $this->typeProyect
 		));
@@ -43,8 +43,8 @@ class SendPulse
 		$this->jsonPDF = [];
 
 		$this->contadorSolicitudes = 0; //DESFASE DE MINUTOS
-		$this->dataJsonNewsletter = $this->getAttrNewsletter("66043d5421c9f3dc3c353987"); //id del registro del mongo
-		$this->apiProtec = "https://www.ecuavisa.com/rss/boletin-entretenimiento.json";
+		$this->dataJsonNewsletter = $this->getAttrNewsletter("660f09cc2a53044cbb5c3495"); //id del registro del mongo
+		$this->apiProtec = "https://www.ecuavisa.com/rss/boletin-estadio.json";
 
 		// Crear un objeto DateTime con la fecha actual
 		$fecha = new DateTime();
@@ -109,7 +109,7 @@ class SendPulse
 		$logMessage = "[$fechaHoraActual] [$clienteInfo] [$functionName]: $dataAsString\n";
 		// Ruta del archivo de registro (puedes cambiarla según tus necesidades)
 		// $archivoLog = $this->archivoLog;
-		$archivoLog = 'entretenimiento_log.txt';
+		$archivoLog = 'estadio_log.txt';
 		// Guardar el mensaje de registro en el archivo
 		file_put_contents($archivoLog, $logMessage, FILE_APPEND);
 	}
@@ -126,14 +126,14 @@ class SendPulse
 	private function UTMLinks($id, $link)
 	{
 		$utm = [
-			"utm_source=SendPulse&utm_medium=bannerHeader&utm_campaign=N_Gente&utm_id=Newsletter", //0
-			"utm_source=SendPulse&utm_medium=NotaPrincipal&utm_campaign=N_Gente&utm_id=Newsletter", //1
-			/*"utm_source=SendPulse&utm_medium=es&utm_campaign=N_Gente&utm_id=Newsletter", 
-			"utm_source=SendPulse&utm_medium=noEs&utm_campaign=N_Gente&utm_id=Newsletter", 
-			"utm_source=SendPulse&utm_medium=noEs&utm_campaign=N_Gente&utm_id=Newsletter", 
-			"utm_source=SendPulse&utm_medium=Nota1&utm_campaign=N_Gente&utm_id=Newsletter", 
-			"utm_source=SendPulse&utm_medium=Nota2&utm_campaign=N_Gente&utm_id=Newsletter", 
-			"utm_source=SendPulse&utm_medium=Nota3&utm_campaign=N_Gente&utm_id=Newsletter" */
+			"utm_source=SendPulse&utm_medium=bannerHeader&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //0
+			"utm_source=SendPulse&utm_medium=SeccionPolitica&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //1
+			"utm_source=SendPulse&utm_medium=es&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //2
+			"utm_source=SendPulse&utm_medium=noEs&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //3
+			"utm_source=SendPulse&utm_medium=noEs&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //4
+			"utm_source=SendPulse&utm_medium=Nota1&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //5
+			"utm_source=SendPulse&utm_medium=Nota2&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //6
+			"utm_source=SendPulse&utm_medium=Nota3&utm_campaign=N_CodigoRojas&utm_id=Newsletter" //7
 		];
 
 		//utm_source_ecuavisa=Prueba
@@ -169,7 +169,7 @@ class SendPulse
 			return array("#2bb76b", $imagenes[0]);
 		}
 
-		$palabra = strtolower("entretenimiento");
+		$palabra = strtolower("estadio");
 		if (strpos(strtolower($frase), $palabra) !== false) {
 			return array("#ff006b", $imagenes[1]);
 		}
@@ -430,11 +430,16 @@ class SendPulse
 		// Dividir el path en partes usando el separador '/'
 		$partesPath = explode('/', trim($path, '/'));
 		// Obtener la primera parte del path
-		$primeraParte = $partesPath[0];
-		$segundaParte = $partesPath[0];
+		// $primeraParte = $partesPath[0];
+		// $segundaParte = $partesPath[0];
 
-		if(count($partesPath) > 0){
+		// Verificar si existe el segundo elemento en $partesPath
+		if(isset($partesPath[1])) {
+			// Si existe, retornar el segundo elemento
 			$primeraParte = $partesPath[1];
+		} else {
+			// Si no existe, retornar 0
+			$primeraParte = $partesPath[0];
 		}
 
 		$tituloSubseccion = $primeraParte;
@@ -449,8 +454,8 @@ class SendPulse
 			"descripcion" => $descripcionFinal,
 			"subseccion" => [
 				"titulo" => str_replace('-', ' ', strtoupper($tituloSubseccion)),
-				"link" => $linkSubseccion,
-				"sect" => str_replace('-', ' ', strtoupper($segundaParte))
+				"link" => $linkSubseccion
+				// "sect" => str_replace('-', ' ', strtoupper($segundaParte))
 			],
 			"image" => $image
 		];
@@ -621,7 +626,7 @@ class SendPulse
 		$existe = false;
 		$existeNoEs = false;
 		$existeEs = false;
-		$coloresList = ["#00a1d3", "#2927b9"];
+		$coloresList = ["#00a1d3", "#00C17C"];
 
 		if (is_array($list)) {
 			foreach ($list as $key => $value) {
@@ -797,52 +802,43 @@ class SendPulse
 	private function getUltimaSeccion($data)
 	{
 		$html = '';
-		$html .= '<table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_48" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#FF25A6; margin:0; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top"><p style="line-height:1;margin: 15px 10px;font-size:inherit;color:#FF25A6;font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif;text-align:center;font-weight:normal;padding:0" align="center"><strong><span style="font-size: 20px;">También te puede interesar</span></strong></p><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table>';
+		$html .= '<table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_48" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#2927B9; margin:0; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top"><p style="line-height:1;margin: 15px 10px;font-size:inherit;color:#2927B9;font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif;text-align:center;font-weight:normal;padding:0" align="center"><strong><span style="font-size: 20px;">También te puede interesar</span></strong></p><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table>';
 		for ($i = 0; $i < count($data); $i++) {
 			$b = $data[$i];
-			// echo json_encode($b['link']);
+			// echo json_encode($b['subseccion']);
 
-			
 			// $b = $data[$i];
 			// $b['subseccion']['sect'] = str_replace("Musica", "Música", $b['subseccion']['sect']);
-			
+
 			$originalString = $b['subseccion']['titulo'];
 			$modifiedString = str_replace(["MUSICA","TECNOLOGIA","TELEVISION"], ["MÚSICA","TECNOLOGÍA","TELEVISIÓN"], $originalString);
-			
-			$linkUtm = $b['link'].'?utm_source=SendPulse&utm_medium='.strtolower($originalString).'&utm_campaign=N_Gente&utm_id=Newsletter';
 
-			$color = ['#ff25a6','#FFB525'];
-			$lineaCintillo = ['https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fvectorrosado.png','https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fvectoramarillo.png'];
+
+			$color = ['#ff25a6','#00C17C'];
+			$lineaCintillo = ['https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fvectorrosado.png','https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2Fcintillo_azull_nl.png'];
 
 			$getColor = $color[1];
 			$getLinea = $lineaCintillo[1];
 
-			if($b['subseccion']['sect'] == "ENTRETENIMIENTO") {
-				$getColor = $color[0];
-				$getLinea = $lineaCintillo[0];
-			}
+			// if($b['subseccion']['sect'] == "deportes") {
+			// 	$getColor = $color[0];
+			// 	$getLinea = $lineaCintillo[0];
+			// }
 
 			$html .= ' 
 
-			<table class="bloque_inferior_entre" cellpadding="0" cellspacing="0" style="border-collapse:collapse; margin-top: 20px; font-size:14px; line-height:1.5; width:100%" border="0" width="100%">
+			<table class="bloque_inferior_entre" cellpadding="0" cellspacing="0" style="border-top: 2px solid #141061;border-collapse:collapse; margin-top: 20px; font-size:14px; line-height:1.5; width:100%" border="0" width="100%">
 			<tbody>
 				<tr style="border-color:transparent">
 						<td style="border-collapse:collapse; border-color:transparent; padding-left:15px; padding-right:15px; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top">
 							
-							<p style="line-height:inherit; margin:0 0 10px; font-size:inherit; color:'.$getColor.'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><span style="font-size: 14px;"><strong><a style="text-decoration:none; color:'.$getColor.';line-height: 1.4;" href="' . $b['subseccion']['link'] . '">' . $modifiedString . '</a></strong></span></p>
+							<p style="line-height:inherit; margin:0 0 10px; font-size:inherit; color:'.$getColor.'; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0">
+							<!--<span style="font-size: 14px;"><strong><a style="text-decoration:none; color:'.$getColor.';line-height: 1.4;" href="' . $b['subseccion']['link'] . '">' . $modifiedString . '</a></strong></span> -->
+							</p>
 				
 						</td>
 				</tr>
-				<tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
-					<td class="content-cell padding-top-0" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:0; padding-bottom:2px" valign="top">
-						<div id="wout_block_45_element_0" style="font-size:14px; line-height:1.5; width:100%; height:11; display:block;padding-bottom: 15px;" width="100%" height="11">
-								<img border="0" width="343" height="auto" class="desktop  sp-img " align="left" alt="El legado de Luis Tippán, uno de los más grandes íconos de la moda ecuatoriana" src="'.$getLinea.'" iout_block_45_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; margin:0; display:block; -ms-interpolation-mode:bicubic"><!--[if !mso]><!-->
-								<div style="font-size:14px; line-height:1.5; mso-hide:all"><img border="0" width="100%" height="auto" class="mobile  sp-img " align="left" alt="El legado de Luis Tippán, uno de los más grandes íconos de la moda ecuatoriana" src="'.$getLinea.'" iout_block_45_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:343px !important"></div>
-								<!--<![endif]-->
-						</div>
-						<div style="font-size:14px; line-height:1.5; clear:both"></div>
-					</td>
-			</tr>
+			
 			</tbody>
 			</table>
 
@@ -864,9 +860,9 @@ class SendPulse
 			                                       <tbody>
 			                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
 			                                             <td class="content-cell" width="220" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top">
-			                                                <p class="url_list_items" canonicalurl="' . $b['link'] . '" idart="5741040" style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-top: 5px;"><span style="font-size: 20px; color: #000000;"><strong><span mlnid="idcon1084747order30"><a class="__linkItems" href="'.$linkUtm.'" style="text-decoration:none; color:#000">
+			                                                <p canonicalurl="' . $b['link'] . '" idart="5741040" style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-top: 5px;"><span style="font-size: 20px; color: #000000;"><strong><span mlnid="idcon1084747order30"><a href="' . $b['link'] . '" style="text-decoration:none; color:#000">
 			                                                ' . $b['titulo'] . '</a></span></strong></span></p>
-			                                                ' . $this->btnVerMasNoticiasRow($linkUtm,$getColor) . '
+			                                                ' . $this->btnVerMasNoticiasRow($b['link'],$getColor) . '
 			                                                <div style="font-size:14px; line-height:1.2; clear:both"></div>
 			                                             </td>
 			                                          </tr>
@@ -888,7 +884,7 @@ class SendPulse
 			                                             <td class="content-cell" width="220" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:0px" valign="top">
 			                                                <div id="wout_block_27_element_0" style="font-size:14px; line-height:1.2; width:100%; height:145; display:block; text-align:center" width="100%" height="145" align="center">
 			                                                   <center>
-			                                                   	<a href="' .$linkUtm . '" style="text-decoration:none; color:#000">
+			                                                   	<a href="' . $b['link'] . '" style="text-decoration:none; color:#000">
 			                                                      <img border="0" width="220" height="auto" class="desktop  sp-img small_img " align="center" alt="' . $b['titulo'] . '" src="' . $b['image'] . '" iout_block_27_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; display:block; -ms-interpolation-mode:bicubic"><!--[if !mso]><!-->
 			                                                      <div style="font-size:14px; line-height:1.2; mso-hide:all"><img border="0" width="100%" height="auto" class="mobile  sp-img small_img " align="center" alt="' . $b['titulo'] . '" src="' . $b['image'] . '" iout_block_27_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:250px !important"></div>
 			                                                      <!--<![endif]-->
@@ -925,25 +921,33 @@ class SendPulse
 
 	private function btnVerMasNoticias()
 	{
-		return '<br><br><table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; margin-left:auto; margin-right:auto; width:auto !important; border-radius:2px; box-shadow:none; background:#141061" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1;"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold;" href="https://www.ecuavisa.com/entretenimiento?utm_source=SendPulse&utm_medium=footer&utm_campaign=N_Gentes&utm_id=Newsletter">Ver más noticias</a></td></tr></tbody></table></td></tr></tbody></table>';
+		return '<br><br><table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; margin-left:auto; margin-right:auto; width:auto !important; border-radius:2px; box-shadow:none; background:#00C17C" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1;"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold;" href="https://www.ecuavisa.com/estadio">Ver más noticias</a></td></tr></tbody></table></td></tr></tbody></table>';
 	}
 
 	private function btnVerArticulo($url)
 	{
-		return '<br><br><table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; margin-left:auto; margin-right:auto; width:auto !important; border-radius:2px; box-shadow:none; background:#FF25A6" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1;"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-size:16px; font-weight:bold;" href="'.$url.'">Seguir leyendo</a></td></tr></tbody></table></td></tr></tbody></table>';
+		return '<br><br><table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; margin-left:auto; margin-right:auto; width:auto !important; border-radius:2px; box-shadow:none; background:#00C17C" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1;"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-size:16px; font-weight:bold;" href="'.$url.'">Seguir leyendo</a></td></tr></tbody></table></td></tr></tbody></table>';
 	}
 
 	private function btnVerMasNoticiasRow($link = "", $getColor = "")
 	{
-		return '<table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; width:auto !important; border-radius:2px; box-shadow:none; background:'.$getColor.'" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style=" border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="' . ($link == "" ? "https://www.ecuavisa.com/noticias/?utm_source=SendPulse&amp;utm_medium=NotaPrincipal&amp;utm_campaign=N_Gente&amp;utm_id=Newsletter" : $link) . '">Seguir leyendo</a></td></tr></tbody></table></td></tr></tbody></table>';
+		return '<table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; width:auto !important; border-radius:2px; box-shadow:none; background:'.$getColor.'" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style=" border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="' . ($link == "" ? "https://www.ecuavisa.com/noticias/?utm_source=SendPulse&amp;utm_medium=SeccionPolitica&amp;utm_campaign=N_CodigoRojas&amp;utm_id=Newsletter" : $link) . '">Seguir leyendo</a></td></tr></tbody></table></td></tr></tbody></table>';
 	}
 
-	private function getDetallesNotaPrincial($list, $getNota)
+	private function getDetallesNotaPrincial($list, $getNota, $idarticle)
 	{
 		$content = [];
 		$titulo = "";
 		$getFristNota = $getNota[0][0];
 		// $bloque3 = $getNota[1];
+
+		$authorName = $this->getAuthorName($idarticle);
+    /*if ($authorName) {
+        // Muestra el nombre del autor
+        echo "Autor: $authorName";
+    } else {
+        echo "Autor no encontrado";
+    }*/
 
 		
 		// echo count($bloque3);
@@ -954,7 +958,7 @@ class SendPulse
 	
 			foreach ($list as $key => $value) {
 
-				if ($count < 2 && isset($value->name) && $value->name === 'Text') {
+				/*if ($count < 2 && isset($value->name) && $value->name === 'Text') {
 					$content[] = '
                     <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;font-weight: 400;" border="0" width="100%">
 			        	<tr>
@@ -964,9 +968,9 @@ class SendPulse
 			        	<tr>
 			        </table>';
 					$count++;
-				}
+				}*/
 
-				if ($value->name == "Headline") {
+				/*if ($value->name == "Headline") {
 					$titulo = $value->__text;
 					$content[] = '
 								<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;" border="0" width="100%">
@@ -978,15 +982,37 @@ class SendPulse
 										<td>
 									<tr>
 								</table>';
+				}*/
+
+				if ($value->name == "Text") {
+					$content[] = '
+                    <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;font-weight: 400;" border="0" width="100%">
+			        	<tr>
+			        		<td style="padding: 10px;padding-left: 50px;padding-right: 50px;">
+			        			<div>' . $value->__text . '</div>
+			        		<td>
+			        	<tr>
+			        </table>';
 				}
-				if ($value->name == "Image") {
+
+				if ($value->name == "Imagen_Newsletter") {
+					$content[] = '
+						<a style="text-decoration:none;color: black;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" href="' . $getFristNota["link"] . '">
+							<img width="200" style="width:100%;height:auto" src="' . $value->remoteContent->href . '" alt="Imagen principal">
+				    </a><div class="autorNewletter" style="font-size: 12px;padding-top: 10px;padding-left: 50px;padding-right: 50px;font-family: Lucida Grande, Lucida Sans Unicode, Lucida Sans, Geneva, Verdana, sans-serif;"> '. 
+						mb_strtoupper($authorName, 'UTF-8') .'</div>
+						<div class="autorNewletter" style="padding-bottom: 20px;padding-top: 3px;padding-left: 50px;padding-right: 50px;font-family: Lucida Grande, Lucida Sans Unicode, Lucida Sans, Geneva, Verdana, sans-serif;font-weight: 400;"> Periodista digital</div>';
+				}
+
+				/*if ($value->name == "Image") {
 					$content[] = '
                     <a style="text-decoration:none;color: black;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" href="' . $getFristNota["link"] . '">
                     	<img width="200" style="width:100%;height:auto" src="' . $value->remoteContent->href . '" alt="Imagen principal">
 
 				    </a>
                     ';
-				}
+				}*/
+
 				if ($count < 2 && isset($value->name) && $value->name === 'Image_Text') {
 					//echo json_encode($value->component);
 					//$content[] = '<img width="100%" style="height: 300px;" class="img-principal" src="'.$value->remoteContent->href.'">';
@@ -995,159 +1021,139 @@ class SendPulse
                     </div>' . (isset($value->component) ? $this->getImgParrafo($value->component) : "") . '
                     </div>';
 				}
-				// if ($value->name == "Subheadline") {
-				// 	$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
-				//         	<tr>
-				//         		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
-				//         			<small>' . $value->__text . '</small>
-				//         		<td>
-				//         	<tr>
-			  //       	</table>';
-				// }
-				// if ($value->name == "Quotecv") {
-				// 	$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px;line-height:1.2;width:100%;padding-left: 20px;padding-right: 20px;display: block;" border="0" width="100%">
-				// 	   <tbody>
-				// 	      <tr style="border-color:transparent">
-				// 	         <th width="55" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc no-responsive " align="left" valign="top">
-				// 	            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
-				// 	               <tbody>
-				// 	                  <tr style="border-color:transparent">
-				// 	                     <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
-				// 	                        <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_33_element_0" style="border-collapse:separate; font-size:14px; line-height:1.2; overflow:hidden">
-				// 	                           <tbody>
-				// 	                              <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
-				// 	                                 <td class="content-cell" width="25" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top">
-				// 	                                    <div id="wout_block_33_element_0" style="font-size:14px; line-height:1.2; width:100%; height:168.285714; display:block" width="100%" height="168.285714">
-				// 	                                       <img border="0" width="19" height="auto" class="desktop  sp-img small_img smallImg " align="right" alt="linea-vertical-opinion" src="https://s7844538.sendpul.se/files/emailservice/userfiles/f7d451814eb533de3f3b83b6f72ec10c7844538/linea-vertical-opinion.png" iout_block_33_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; margin:0; display:block; -ms-interpolation-mode:bicubic"><!--[if !mso]><!-->
-				// 	                                       <div style="font-size:14px; line-height:1.2; mso-hide:all"><img border="0" width="100%" height="auto" class="mobile  sp-img small_img smallImg " align="right" alt="linea-vertical-opinion" src="https://s7844538.sendpul.se/files/emailservice/userfiles/f7d451814eb533de3f3b83b6f72ec10c7844538/linea-vertical-opinion.png" iout_block_33_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:21px !important"></div>
-				// 	                                       <!--<![endif]-->
-				// 	                                    </div>
-				// 	                                    <div style="font-size:14px; line-height:1.2; clear:both"></div>
-				// 	                                 </td>
-				// 	                              </tr>
-				// 	                           </tbody>
-				// 	                        </table>
-				// 	                     </td>
-				// 	                  </tr>
-				// 	               </tbody>
-				// 	            </table>
-				// 	         </th>
-				// 	         <th width="445" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc no-responsive " align="left" valign="top">
-				// 	            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
-				// 	               <tbody>
-				// 	                  <tr style="border-color:transparent">
-				// 	                     <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
-				// 	                        <table class="separator" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size:14px; line-height:1.2; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; height:31px" height="31">
-				// 	                           <tbody>
-				// 	                              <tr style="border-color:transparent">
-				// 	                                 <td height="31" style="border-collapse:collapse; border-color:transparent"></td>
-				// 	                              </tr>
-				// 	                           </tbody>
-				// 	                        </table>
-				// 	                     </td>
-				// 	                  </tr>
-				// 	               </tbody>
-				// 	            </table>
-				// 	            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
-				// 	               <tbody>
-				// 	                  <tr style="border-color:transparent">
-				// 	                     <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
-				// 	                        <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_24" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#333; margin:0; overflow:hidden">
-				// 	                           <tbody>
-				// 	                              <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
-				// 	                                 <td class="content-cell padding-lr-0 padding-top-0 padding-bottom-0" width="430" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0; padding-right:15px; padding-top:0; padding-bottom:0" valign="top">
-				// 	                                    <p style="line-height:1.5; margin:0 0 10px; font-size:inherit; color:#333; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><strong><span style="font-size: 18px;">' . $value->__text . '</span></strong></p>
-				// 	                                    <div style="font-size:14px; line-height:1.2; clear:both"></div>
-				// 	                                 </td>
-				// 	                              </tr>
-				// 	                           </tbody>
-				// 	                        </table>
-				// 	                     </td>
-				// 	                  </tr>
-				// 	               </tbody>
-				// 	            </table>
-				// 	            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
-				// 	               <tbody>
-				// 	                  <tr style="border-color:transparent">
-				// 	                     <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
-				// 	                        <table class="separator" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size:14px; line-height:1.2; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; height:31px" height="31">
-				// 	                           <tbody>
-				// 	                              <tr style="border-color:transparent">
-				// 	                                 <td height="31" style="border-collapse:collapse; border-color:transparent"></td>
-				// 	                              </tr>
-				// 	                           </tbody>
-				// 	                        </table>
-				// 	                     </td>
-				// 	                  </tr>
-				// 	               </tbody>
-				// 	            </table>
-				// 	         </th>
-				// 	      </tr>
-				// 	   </tbody>
-				// 	</table>';
-				// 	// $content[] = '
-				// 	// <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
-				// 	// 	<tr>
-				// 	// 		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
-				// 	// 			<p style="display:block;
-				// 	//             	text-align: center;
-				// 	//             	font-weight: 700;
-				// 	//             	margin-top: 0px;
-				// 	//             	padding: 10px;
-				// 	//             	margin-bottom: 5px;font-style: italic;
-				// 	//                 color: #4a4663;
-				// 	//                 font-size: 12px;background-color:#EDF0F3;line-height: 1.2;">'.$value->__text.'</p>
-				// 	// 		<td>
-				// 	// 	<tr>
-				// 	// </table>
-				// 	// ';
-				// }
-				// if ($value->name == "Cita") {
-				// 	$content[] = '
-        //             <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
-			  //       	<tr>
-			  //       		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
-			  //       			<p style="display:block;
-        //                         	text-align: left;
-        //                         	font-weight: 700;
-        //                         	margin-top: 0px;
-        //                         	padding: 10px;
-        //                         	margin-bottom: 5px;font-style: italic;
-        //                             color: #4a4663;
-        //                             font-size: 12px;line-height: 1.2;">' . $value->__text . '</p>
-			  //       		<td>
-			  //       	<tr>
-			  //       </table>
-        //             ';
-				// }
-				// if ($value->name == "SabiasQue") {
-				// 	$content[] = '
-        //             <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
-			  //       	<tr>
-			  //       		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
-        //             			<div style="display:block;
-        //                         	text-align: center;
-        //                         	margin-top: 0px;
-        //                         	padding: 25px 10px;
-        //                         	margin-bottom: 5px;
-        //                             color: #fff;
-        //                             font-size: 12px;background-color:#2e22b6 "><b style="font-size: 17px;color:#23DCD1">¿SABÍAS QUE?</b><p style="font-style: italic;font-weight: 400;">' . $value->__text . '</p>
-        //                         </div>
-        //                     <td>
-			  //       	<tr>
-			  //       </table>
-        //             ';
-				// }
-				// if ($value->name == "Text") {
-				// 	$content[] = '
-        //             <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;font-weight: 400;" border="0" width="100%">
-			  //       	<tr>
-			  //       		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
-			  //       			<div>' . $value->__text . '</div>
-			  //       		<td>
-			  //       	<tr>
-			  //       </table>';
-				// }
+				/*SUBTITULO */
+				/*if ($value->name == "Subheadline") {
+					$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
+				        	<tr>
+				        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
+				        			<small>' . $value->__text . '</small>
+				        		<td>
+				        	<tr>
+			        	</table>';
+				}*/
+
+				/*Quotecv */
+				if ($value->name == "Quotecv") {
+					$content[] = '<table cellpadding="0" class="componente_quot" cellspacing="0" style="background: #060222;border-collapse:collapse;font-size:14px;line-height:1.2;width:100%;padding-left: 20px;padding-right: 20px;display: block;" border="0" width="100%">
+					   <tbody>
+					      <tr style="border-color:transparent">
+					         <th width="55" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc no-responsive " align="left" valign="top">
+					            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+					               <tbody>
+					                  <tr style="border-color:transparent">
+					                     <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+					                        <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_33_element_0" style="border-collapse:separate; font-size:14px; line-height:1.2; overflow:hidden">
+					                           <tbody>
+					                              <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
+					                                 <td class="content-cell" width="25" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top">
+					                                    <div id="wout_block_33_element_0" style="font-size:14px; line-height:1.2; width:100%; height:168.285714; display:block" width="100%" height="168.285714">
+					                                       <img border="0" width="19" height="auto" class="desktop  sp-img small_img smallImg " align="right" alt="linea-vertical-opinion" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FVector%206.png" iout_block_33_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; margin:0; display:block; -ms-interpolation-mode:bicubic"><!--[if !mso]><!-->
+					                                       <div style="font-size:14px; line-height:1.2; mso-hide:all"><img border="0" width="100%" height="auto" class="mobile  sp-img small_img smallImg " align="right" alt="linea-vertical-opinion" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FVector%206.png" iout_block_33_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:21px !important"></div>
+					                                       <!--<![endif]-->
+					                                    </div>
+					                                    <div style="font-size:14px; line-height:1.2; clear:both"></div>
+					                                 </td>
+					                              </tr>
+					                           </tbody>
+					                        </table>
+					                     </td>
+					                  </tr>
+					               </tbody>
+					            </table>
+					         </th>
+					         <th width="445" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc no-responsive " align="left" valign="top">
+					            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+					               <tbody>
+					                  <tr style="border-color:transparent">
+					                     <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+					                        <table class="separator" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size:14px; line-height:1.2; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; height:31px" height="31">
+					                           <tbody>
+					                              <tr style="border-color:transparent">
+					                                 <td height="31" style="border-collapse:collapse; border-color:transparent"></td>
+					                              </tr>
+					                           </tbody>
+					                        </table>
+					                     </td>
+					                  </tr>
+					               </tbody>
+					            </table>
+					            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+					               <tbody>
+					                  <tr style="border-color:transparent">
+					                     <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+					                        <table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_24" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#333; margin:0; overflow:hidden">
+					                           <tbody>
+					                              <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
+					                                 <td class="content-cell padding-lr-0 padding-top-0 padding-bottom-0" width="430" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0; padding-right:15px; padding-top:0; padding-bottom:0" valign="top">
+					                                    <p style="line-height:1.5; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><strong><span style="font-size: 22px;">' . $value->__text . '</span></strong></p>
+					                                    <div style="font-size:14px; line-height:1.2; clear:both"></div>
+					                                 </td>
+					                              </tr>
+					                           </tbody>
+					                        </table>
+					                     </td>
+					                  </tr>
+					               </tbody>
+					            </table>
+					            <table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0">
+					               <tbody>
+					                  <tr style="border-color:transparent">
+					                     <td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top">
+					                        <table class="separator" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:separate; font-size:14px; line-height:1.2; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; height:31px" height="31">
+					                           <tbody>
+					                              <tr style="border-color:transparent">
+					                                 <td height="31" style="border-collapse:collapse; border-color:transparent"></td>
+					                              </tr>
+					                           </tbody>
+					                        </table>
+					                     </td>
+					                  </tr>
+					               </tbody>
+					            </table>
+					         </th>
+					      </tr>
+					   </tbody>
+					</table>';
+					/*$content[] = '
+					<table  cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
+						<tr>
+							<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
+								<p style="display:block;
+					            	text-align: center;
+					            	font-weight: 700;
+					            	margin-top: 0px;
+					            	padding: 10px;
+					            	margin-bottom: 5px;font-style: italic;
+					                color: #4a4663;
+					                font-size: 12px;background-color:#EDF0F3;line-height: 1.2;">'.$value->__text.'</p>
+							<td>
+						<tr>
+					</table>
+					';*/
+				}
+				/*if ($value->name == "Cita") {$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%"><tr><td style="padding: 10px;padding-left: 20px;padding-right: 20px;"><p style="display:block; text-align: left; font-weight: 700; margin-top: 0px; padding: 10px;margin-bottom: 5px;font-style: italic;color: #4a4663;font-size: 12px;line-height: 1.2;">' . $value->__text . '</p><td><tr></table>';}*/
+
+
+				/*if ($value->name == "SabiasQue") {
+					$content[] = '
+                    <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
+			        	<tr>
+			        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
+                    			<div style="display:block;
+                                	text-align: center;
+                                	margin-top: 0px;
+                                	padding: 25px 10px;
+                                	margin-bottom: 5px;
+                                    color: #fff;
+                                    font-size: 12px;background-color:#2e22b6 "><b style="font-size: 17px;color:#23DCD1">¿SABÍAS QUE?</b><p style="font-style: italic;font-weight: 400;">' . $value->__text . '</p>
+                                </div>
+                            <td>
+			        	<tr>
+			        </table>
+                    ';
+				}*/
+
+			
 				// if ($value->name == "h2" || $value->name == "H2") {
 				// 	$content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
 			  //       	<tr>
@@ -1210,7 +1216,7 @@ class SendPulse
 
 			$content[] = $getOpinionesBloquesURLVar;
 			// $content[] = $this->getUltimaSeccion($bloque3);
-			$content[] = $this->btnVerArticulo($getFristNota["link"]);
+			// $content[] = $this->btnVerArticulo($getFristNota["link"]);
 
 		}
 
@@ -1241,7 +1247,6 @@ class SendPulse
 			return	$arr;
 	}
 
-
 	function eliminarTextRepetidos($arr) {
     $primerText = true;
 
@@ -1262,14 +1267,28 @@ class SendPulse
 	public function getNotaPrincipalHTML($idarticle, $getFristNota)
 	{
 		$value = $this->getArticle($idarticle);
-
-		$newLista = $this->ordenarElementoPorNombre($value->article->content->component, 'Headline', 0);
-
-		$data = $this->getDetallesNotaPrincial($newLista, $getFristNota);
+		$newLista = $this->ordenarElementoPorNombre($value->article->content->component, 'Imagen_Newsletter', 0);
+		$data = $this->getDetallesNotaPrincial($newLista, $getFristNota, $idarticle);
 
 
 		return $data;
 	}
+
+
+	public function getAuthorName($idarticle)
+	{
+			$article = $this->getArticle($idarticle);
+			
+			foreach ($article->article->metadata->vocabulary as $item) {
+					if ($item->name === 'Ecv_Author') {
+							return $item->category->name;
+					}
+			}
+			
+			return null; // Retorna null si no se encuentra el autor
+	}
+
+
 
 	private function htmlTemplate()
 	{
