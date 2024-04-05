@@ -126,14 +126,14 @@ class SendPulse
 	private function UTMLinks($id, $link)
 	{
 		$utm = [
-			"utm_source=SendPulse&utm_medium=bannerHeader&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //0
-			"utm_source=SendPulse&utm_medium=SeccionPolitica&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //1
-			"utm_source=SendPulse&utm_medium=es&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //2
-			"utm_source=SendPulse&utm_medium=noEs&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //3
-			"utm_source=SendPulse&utm_medium=noEs&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //4
-			"utm_source=SendPulse&utm_medium=Nota1&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //5
-			"utm_source=SendPulse&utm_medium=Nota2&utm_campaign=N_CodigoRojas&utm_id=Newsletter", //6
-			"utm_source=SendPulse&utm_medium=Nota3&utm_campaign=N_CodigoRojas&utm_id=Newsletter" //7
+			"utm_source=SendPulse&utm_medium=bannerHeader&utm_campaign=N_Estadio&utm_id=Newsletter", //0
+			"utm_source=SendPulse&utm_medium=NotaPrincipal&utm_campaign=N_Estadio&utm_id=Newsletter", //1
+			/*"utm_source=SendPulse&utm_medium=es&utm_campaign=N_CodigoRojas&utm_id=Newsletter", 
+			"utm_source=SendPulse&utm_medium=noEs&utm_campaign=N_CodigoRojas&utm_id=Newsletter", 
+			"utm_source=SendPulse&utm_medium=noEs&utm_campaign=N_CodigoRojas&utm_id=Newsletter", 
+			"utm_source=SendPulse&utm_medium=Nota1&utm_campaign=N_CodigoRojas&utm_id=Newsletter", 
+			"utm_source=SendPulse&utm_medium=Nota2&utm_campaign=N_CodigoRojas&utm_id=Newsletter", 
+			"utm_source=SendPulse&utm_medium=Nota3&utm_campaign=N_CodigoRojas&utm_id=Newsletter" */
 		];
 
 		//utm_source_ecuavisa=Prueba
@@ -813,6 +813,7 @@ class SendPulse
 			$originalString = $b['subseccion']['titulo'];
 			$modifiedString = str_replace(["MUSICA","TECNOLOGIA","TELEVISION"], ["MÚSICA","TECNOLOGÍA","TELEVISIÓN"], $originalString);
 
+			$linkUtm = $b['link'].'?utm_source=SendPulse&utm_medium='.strtolower($originalString).'&utm_campaign=N_Estadio&utm_id=Newsletter';
 
 			$color = ['#ff25a6','#00C17C'];
 			$lineaCintillo = ['https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fvectorrosado.png','https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2Fcintillo_azull_nl.png'];
@@ -860,9 +861,9 @@ class SendPulse
 			                                       <tbody>
 			                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
 			                                             <td class="content-cell" width="220" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top">
-			                                                <p canonicalurl="' . $b['link'] . '" idart="5741040" style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-top: 5px;"><span style="font-size: 20px; color: #000000;"><strong><span mlnid="idcon1084747order30"><a href="' . $b['link'] . '" style="text-decoration:none; color:#000">
+			                                                <p canonicalurl="' . $linkUtm . '" idart="5741040" style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-top: 5px;"><span style="font-size: 20px; color: #000000;"><strong><span mlnid="idcon1084747order30"><a href="' . $linkUtm . '" style="text-decoration:none; color:#000">
 			                                                ' . $b['titulo'] . '</a></span></strong></span></p>
-			                                                ' . $this->btnVerMasNoticiasRow($b['link'],$getColor) . '
+			                                                ' . $this->btnVerMasNoticiasRow($linkUtm,$getColor) . '
 			                                                <div style="font-size:14px; line-height:1.2; clear:both"></div>
 			                                             </td>
 			                                          </tr>
@@ -884,7 +885,7 @@ class SendPulse
 			                                             <td class="content-cell" width="220" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:0px" valign="top">
 			                                                <div id="wout_block_27_element_0" style="font-size:14px; line-height:1.2; width:100%; height:145; display:block; text-align:center" width="100%" height="145" align="center">
 			                                                   <center>
-			                                                   	<a href="' . $b['link'] . '" style="text-decoration:none; color:#000">
+			                                                   	<a href="' . $linkUtm . '" style="text-decoration:none; color:#000">
 			                                                      <img border="0" width="220" height="auto" class="desktop  sp-img small_img " align="center" alt="' . $b['titulo'] . '" src="' . $b['image'] . '" iout_block_27_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; display:block; -ms-interpolation-mode:bicubic"><!--[if !mso]><!-->
 			                                                      <div style="font-size:14px; line-height:1.2; mso-hide:all"><img border="0" width="100%" height="auto" class="mobile  sp-img small_img " align="center" alt="' . $b['titulo'] . '" src="' . $b['image'] . '" iout_block_27_element_0="" style="height:auto; line-height:100%; outline:0; text-decoration:none; border:0; -ms-interpolation-mode:bicubic; display:none; width:100%; max-width:250px !important"></div>
 			                                                      <!--<![endif]-->
@@ -921,7 +922,7 @@ class SendPulse
 
 	private function btnVerMasNoticias()
 	{
-		return '<br><br><table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; margin-left:auto; margin-right:auto; width:auto !important; border-radius:2px; box-shadow:none; background:#00C17C" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1;"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold;" href="https://www.ecuavisa.com/estadio">Ver más noticias</a></td></tr></tbody></table></td></tr></tbody></table>';
+		return '<br><br><table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; margin-left:auto; margin-right:auto; width:auto !important; border-radius:2px; box-shadow:none; background:#00C17C" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style="border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1;"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold;" href="https://www.ecuavisa.com/estadio?utm_source=SendPulse&utm_medium=footer&utm_campaign=N_Estadio&utm_id=Newsletter">Ver más noticias</a></td></tr></tbody></table></td></tr></tbody></table>';
 	}
 
 	private function btnVerArticulo($url)
