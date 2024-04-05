@@ -343,7 +343,7 @@ async function deleteConfirmed() {
 
 // ---------------- HORARIOS -----------------
 
-const diaSelected = ref("");
+const diaSelected = ref(null);
 const horarios = ref([]);
 const horariosRaw = ref([]);
 const isDialogVisibleHorario = ref(false);
@@ -430,10 +430,12 @@ const tipoItems = [
   }
 ]
 
-function onEditHorarios(horario, n, id, f = ""){
+function onEditHorarios(horario = [], n, id, f = ""){
+  
   idToEdit.value = id;
-  horarios.value = horario;
-  horariosRaw.value = horario; 
+  horarios.value = horario.slice();
+  horariosRaw.value = horario.slice(); 
+  diaSelected.value = null;
   if (f) {
     fecha.value = f; // Asignar el valor de fecha si se proporciona
   }
@@ -446,6 +448,7 @@ function closeDiagHorarios(){
   resetDiagHorarios();
 }
 function resetDiagHorarios (){
+  diaSelected.value = null;
   idToEdit.value = '';
   horarios.value = [];
   horariosRaw.value = [];
@@ -468,6 +471,7 @@ const diasDisponibles = computed(() => {
 	} else{
     diferencia = diasTotales;
   }
+  //console.log('dif', diferencia);
   return diferencia;
  
 });
@@ -479,7 +483,7 @@ function resolveDia(dia) {
 
   // ---------------- DIA ------------------
 const addDia = () => {
-	if (diaSelected.value) {
+	if (diaSelected.value !== null) {
 		let diaNuevo = {
 			dia: diaSelected.value,
 			estadoDia: true,
@@ -491,7 +495,7 @@ const addDia = () => {
 			],
 		};
 		horarios.value.push(diaNuevo);
-		diaSelected.value = "";
+		diaSelected.value = null;
 	}
 };
 
@@ -832,7 +836,7 @@ async function onCompleteHorarios(){
                                   <VBtn
                                     color="primary"
                                     @click="addDia()"
-                                    :disabled="diasDisponibles.length === 0 || !diaSelected"
+                                    :disabled="diasDisponibles.length === 0 || diaSelected == null"
                                   >
                                     Añadir día
                                   </VBtn>
