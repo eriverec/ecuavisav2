@@ -43,7 +43,7 @@ class SendPulse
 		$this->jsonPDF = [];
 
 		$this->contadorSolicitudes = 0; //DESFASE DE MINUTOS
-		$this->dataJsonNewsletter = $this->getAttrNewsletter("66043d5421c9f3dc3c353987"); //id del registro del mongo
+		$this->dataJsonNewsletter = $this->getAttrNewsletter("66146103d6d9f2e80323e95e"); //id del registro del mongo
 		$this->apiProtec = "https://www.ecuavisa.com/rss/boletin-ultima-hora.json";
 
 		// Crear un objeto DateTime con la fecha actual
