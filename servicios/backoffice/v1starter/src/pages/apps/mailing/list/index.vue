@@ -46,6 +46,11 @@ const disabledForzado = ref(false);
 const linkForzado = ref(false);
 const linkForzadoList = ref([
   {
+    "id":"66146103d6d9f2e80323e95e",
+    "name":"Última hora",
+    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-ultimahora/forzado.php"
+  },
+  {
     "id":"660f09cc2a53044cbb5c3495",
     "name":"Estadio",
     "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-estadio/forzado.php"
