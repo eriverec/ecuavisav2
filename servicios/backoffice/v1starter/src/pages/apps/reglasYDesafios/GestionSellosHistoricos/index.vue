@@ -9,7 +9,7 @@ const currentTab = ref('tab-lista');
 
 
 const datosUsuario = ref([]);
-const datosUsuarioLoading = ref(false);
+const datosUsuarioLoading = ref([]);
 const datosSellosLoading = ref(true);
 
 const semanaModel = ref('');
@@ -403,7 +403,7 @@ const idToDelete = ref('');
 
 async function viewUserData(semana) {
   const userId = semana.userId;
-  datosUsuarioLoading.value = true;
+  datosUsuarioLoading.value[userId.toString()] = true;
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
 
@@ -416,7 +416,7 @@ async function viewUserData(semana) {
   var response = await fetch(`https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id=${userId}`, requestOptions);
   const data = await response.json();
   datosUsuario.value[userId.toString()] = `${data.first_name} ${data.last_name} (${data.email})`;
-  datosUsuarioLoading.value = false;
+  datosUsuarioLoading.value[userId.toString()] = false;
 }
 
 watch(() => semanaModel.value, async (newValue, oldValue) => {
@@ -528,8 +528,8 @@ watch(() => semanaModel.value, async (newValue, oldValue) => {
                               <label class="pt-1 pl-2">{{ desafio.userId }}</label>
                               <VBtn title="Ver el nombre del usuario" 
                                 size="small"
-                                :loading="datosUsuarioLoading"
-                                :disabled="datosUsuarioLoading"
+                                :loading="datosUsuarioLoading[desafio.userId.toString()]"
+                                :disabled="datosUsuarioLoading[desafio.userId.toString()]"
                                 @click="viewUserData(desafio)" 
                                 v-if="!datosUsuario[desafio.userId.toString()]"
                                 icon="tabler-eye"
