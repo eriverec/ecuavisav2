@@ -1,0 +1,67 @@
+* {
+  font-family: 'Archivo', sans-serif;
+}
+
+.conetenedor__general {
+  position: relative;
+}
+
+.text_fuente {
+  text-align: center;
+  display: block;
+  font-weight: 500;
+  color: #6c757d !important;
+  margin: 25px 0;
+}
+
+.conetenedor__general .escrutadoElecciones {
+  position: absolute;
+  left: 0px;
+  /* bottom: -8px; */
+  background: #e43d3d;
+  color: #fff;
+  padding: 5px;
+}
+
+.conteo_votos{
+  display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.valor_procesadas {
+  color: #717171;
+  font-family: Archivo;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+}
+.valor_nulos {
+  color: #717171;
+  font-family: Archivo;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+}
+.valor_blancos {
+  color: #717171;
+  font-family: Archivo;
+  font-size: 36px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 20px;
+}
+
+
+
+.conetenedor__general .escrutadoElecciones p {
+  margin: 0;
+}
+
+@media (max-width: 767px) {
+  .conetenedor__general .escrutadoElecciones {
+    margin-bottom: -2px;
+  }
+}
