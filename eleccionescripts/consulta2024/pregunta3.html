@@ -27,7 +27,7 @@
     <script>
 
         // URL del endpoint
-    const apiUrl = "https://script.googleusercontent.com/macros/echo?user_content_key=H330iB_SoDFtZ9hA-DIvPFDbb6hcyV9RGnY-k-7ZI_qVbLTdDBzgLHYvpuQHYsLeDMVgNZLELamYfpzcU7-wvXgW9qx9o1H2OJmA1Yb3SEsKFZqtv3DaNYcMrmhZHmUMWojr9NvTBuBLhyHCd5hHa2x2LnKFYx7Xt5pOsGDJ-o2omGdJGRRSix-1AmDDRA4XlStZRiQb5R0BBQ5iYwxlTkhJqfXedoEr-Zfp9WhQCXIaj7sqyYO7OpylxCDdq3IBNRa8IdutaUyqbQCY0hYNm21KehrZOPC4&lib=MKzfoxib5zhlOtZwJ7n0XxL4ZcExjOBYo";
+    const apiUrl = "https://api-configuracion.vercel.app/web/el-consultapopular";
 
 // Elemento HTML donde se pintará la información
 const chartdivDatos = document.getElementById("chartdivDatos");
@@ -239,7 +239,7 @@ fetch(apiUrl)
 
       function getData() {
         let fetchRes = fetch(
-          "https://script.google.com/macros/s/AKfycbxLSJA-Xap8HR8pYBxNdRklAixx-Bg33Ml5EWJ2n7aPxqz5eie-Q0NKc-3_a8sl7yRnOA/exec?funcion=getConsultaPopular"
+          "https://api-configuracion.vercel.app/web/el-consultapopular"
         );
         // "https://script.google.com/macros/s/AKfycbxRYY3e5CT04dP8xqBBufGqx_FM8QJK4HQG0M3EIof5u5r-cJANbOW62SiA-HjqFae9/exec?funcion=TestgetCandidatosGYENew");
 

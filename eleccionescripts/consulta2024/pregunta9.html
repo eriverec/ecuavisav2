@@ -40,7 +40,7 @@
       .then(response => response.json())
       .then(data => {
         // Tomar el primer elemento del arreglo
-        const firstItem = data[4];
+        const firstItem = data[8];
 
         // Crear el fragmento HTML con los valores
         const htmlTemplate = `
@@ -86,7 +86,7 @@
     function setNewData(seteado) {
       var data = seteado;
 
-      var data = data[Object.keys(data)[4]];
+      var data = data[Object.keys(data)[8]];
 
       // data = JSON.parse(JSON.stringify(data).push('"year":""'));
       data = JSON.parse(
@@ -241,9 +241,7 @@
     }
 
     function getData() {
-      let fetchRes = fetch(
-        "https://api-configuracion.vercel.app/web/el-consultapopular"
-      );
+      let fetchRes = fetch("https://api-configuracion.vercel.app/web/el-consultapopular");
       // "https://script.google.com/macros/s/AKfycbxRYY3e5CT04dP8xqBBufGqx_FM8QJK4HQG0M3EIof5u5r-cJANbOW62SiA-HjqFae9/exec?funcion=TestgetCandidatosGYENew");
 
       // fetchRes is the promise to resolve
