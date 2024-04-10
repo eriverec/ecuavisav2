@@ -21,7 +21,7 @@
       <span class="escrutadoElecciones">Cargando...</span>
     </div>
     <span class="text_fuente">Fuente: CNE</span>
-    <div id="chartdivDatos" style="text-align: center;">Cargando...</div>
+    <!-- <div id="chartdivDatos" style="text-align: center;">Cargando...</div> -->
 
   </div>
 
@@ -33,45 +33,45 @@
     const apiUrl = "https://api-configuracion.vercel.app/web/el-consultapopular";
 
     // Elemento HTML donde se pintará la información
-    const chartdivDatos = document.getElementById("chartdivDatos");
+    // const chartdivDatos = document.getElementById("chartdivDatos");
 
-    // Realizar solicitud HTTP
-    fetch(apiUrl)
-      .then(response => response.json())
-      .then(data => {
-        // Tomar el primer elemento del arreglo
-        const firstItem = data[8];
+    // // Realizar solicitud HTTP
+    // fetch(apiUrl)
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     // Tomar el primer elemento del arreglo
+    //     const firstItem = data[8];
 
-        // Crear el fragmento HTML con los valores
-        const htmlTemplate = `
-          <div class="conteo_votos">
-            <div class="procesadas">
-              <div class="act-proc">
-                <h3> Escrutado:  </h3>
-                <div class="valor_procesadas">${firstItem.actasProcesadas}</div>
-              </div>
-            </div>
-            <div class="nulos">
-              <div class="vot-nulos">
-                <h3> Votos Nulos: </h3>
-                <div class="valor_nulos">${firstItem.votosNulos}</div>
-              </div>
-            </div>
-            <div class="blancos">
-              <div class="vot-blancos">
-                <h3> Votos en Blanco: </h3>
-                <div class="valor_blancos">${firstItem.votosBlancos}</div>
-              </div>
-            </div>
-          </div>
-        `;
+    //     // Crear el fragmento HTML con los valores
+    //     const htmlTemplate = `
+    //       <div class="conteo_votos">
+    //         <div class="procesadas">
+    //           <div class="act-proc">
+    //             <h3> Escrutado:  </h3>
+    //             <div class="valor_procesadas">${firstItem.actasProcesadas}</div>
+    //           </div>
+    //         </div>
+    //         <div class="nulos">
+    //           <div class="vot-nulos">
+    //             <h3> Votos Nulos: </h3>
+    //             <div class="valor_nulos">${firstItem.votosNulos}</div>
+    //           </div>
+    //         </div>
+    //         <div class="blancos">
+    //           <div class="vot-blancos">
+    //             <h3> Votos en Blanco: </h3>
+    //             <div class="valor_blancos">${firstItem.votosBlancos}</div>
+    //           </div>
+    //         </div>
+    //       </div>
+    //     `;
 
-        // Insertar el HTML en el elemento
-        chartdivDatos.innerHTML = htmlTemplate;
-      })
-      .catch(error => {
-        console.error("Error:", error);
-      });
+    //     // Insertar el HTML en el elemento
+    //     chartdivDatos.innerHTML = htmlTemplate;
+    //   })
+    //   .catch(error => {
+    //     console.error("Error:", error);
+    //   });
 
     // https://www.amcharts.com/docs/v5/getting-started/#Root_element
     var root = am5.Root.new("chart_cne");
