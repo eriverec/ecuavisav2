@@ -10,6 +10,10 @@ const currentTab = ref('tab-lista');
 
 const datosUsuario = ref([]);
 const datosUsuarioLoading = ref(false);
+const datosSellosLoading = ref(true);
+
+const semanaModel = ref('');
+const semanaItems = ref([]);
 
 const checkbox = ref(1);
 const dataDesafio = ref([]);
@@ -55,11 +59,38 @@ const tipoEvaluacionItems = [{
 }]
 
 onMounted(async ()=>{
-  await getDesafioVideos();
+  await getSemanas();
+  await getSellosHistoricos();
   // await getDesafio();
 })
 
-async function getDesafioVideos(page = 1, limit= 10){
+async function getSellosHistoricos(dataJson = {}){
+  try {
+      const { page = 1, limit= 200, idSemanaDesafio = "" } = dataJson;
+      datosSellosLoading.value = true;
+      currentPage.value = 1;
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://servicio-niveles-puntuacion.vercel.app/historico-sello/all?limit=${limit}&page=${page}&idSemanaDesafio=${idSemanaDesafio}`, requestOptions);
+      const data = await response.json();
+
+      dataDesafio.value = data.data;
+      
+      totalRegistros.value = Math.ceil(data.total / data.limit);
+      datosSellosLoading.value = false;
+  } catch (error) {
+      return console.error(error.message);    
+  }
+}
+
+async function getSemanas(page = 1, limit= 10){
   try {
       currentPage.value = 1;
       var myHeaders = new Headers();
@@ -71,12 +102,16 @@ async function getDesafioVideos(page = 1, limit= 10){
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://servicio-niveles-puntuacion.vercel.app/historico-sello/all?limit=20&page=1`, requestOptions);
+      var response = await fetch(`https://servicio-desafios.vercel.app/semana/all/get`, requestOptions);
       const data = await response.json();
 
-      dataDesafio.value = data.data;
-      
-      totalRegistros.value = Math.ceil(data.total / data.limit);
+      semanaItems.value = data.data.reduce((acumulador, actual) => {
+        acumulador.push({
+          title: `${actual.titulo}`,
+          value: actual._id,
+        });
+        return acumulador;
+      }, [])
   } catch (error) {
       return console.error(error.message);    
   }
@@ -154,7 +189,7 @@ const eliminarRegistroSi = async () => {
       const data = await response.json();
 
       disabledViewList.value = false;
-      await getDesafioVideos(currentPage.value);
+      await getSellosHistoricos(currentPage.value);
 
   } catch (error) {
       return console.error(error.message);    
@@ -315,7 +350,7 @@ const eliminarRegistroSi = async () => {
 
 //         }
 //     }
-//     await getDesafioVideos();
+//     await getSellosHistoricos();
 //     isDialogActive.value = false;
 // }
 
@@ -359,7 +394,7 @@ const idToDelete = ref('');
 //             model: true
 //         };
 //     }
-//     await getDesafioVideos();
+//     await getSellosHistoricos();
 //     isDialogVisibleDelete.value = false;
 // }
 
@@ -383,6 +418,12 @@ async function viewUserData(semana) {
   datosUsuario.value[userId.toString()] = `${data.first_name} ${data.last_name} (${data.email})`;
   datosUsuarioLoading.value = false;
 }
+
+watch(() => semanaModel.value, async (newValue, oldValue) => {
+  if(semanaModel.value){
+    await getSellosHistoricos({idSemanaDesafio:semanaModel.value});
+  }
+});
 
 </script>
 
@@ -431,10 +472,10 @@ async function viewUserData(semana) {
                           />
                         </VAvatar>
                         
-                        <v-select v-model="desafioModel" :items="desafioItems" label="Filtrar por semana" style="max-width: 400px;width: auto;">
+                        <v-select v-model="semanaModel" :items="semanaItems" label="Filtrar por semana" style="max-width: 400px;width: auto;">
                           <template #selection="{ item }">
                               <div>
-                                  {{ item.title }} - {{ item.value }}
+                                  {{ item.title }}
                               </div>
                           </template>
                           <template #item="{ item, props }">
@@ -449,7 +490,8 @@ async function viewUserData(semana) {
                       </v-select>
                     </VCol>
                   </VRow>
-                  <VList lines="two" border v-if="dataDesafio.length < 1">
+
+                  <VList lines="two" border v-if="datosSellosLoading">
                     <VListItem>
                       <VListItemTitle>
                         <div class="loading"></div>
@@ -457,7 +499,17 @@ async function viewUserData(semana) {
                     </VListItem>
                   </VList>
 
-                  <VList lines="two" border  v-if="dataDesafio.length > 0">
+                  
+
+                  <VList lines="two" border  v-if="!datosSellosLoading">
+                    <div v-if="dataDesafio.length < 1 && datosSellosLoading == false">
+                      <VListItem>
+                        <VListItemTitle>
+                          No hay datos que mostrar
+                        </VListItemTitle>
+                      </VListItem>
+                    </div>
+
                   <template
                     v-for="(desafio, index) of paginatedSellosHistoricos"
                     :key="index"
