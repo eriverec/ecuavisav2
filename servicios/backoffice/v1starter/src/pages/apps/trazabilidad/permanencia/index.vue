@@ -90,7 +90,7 @@ const itemsGroup = ref([
 
 onMounted(async () =>{
   await getCampaigns();
-  
+
   let selectedCombo = useSelectValueCalendar("Ayer");
   fechaGraficos_2.value = {
     i: selectedCombo.i,
@@ -1845,7 +1845,7 @@ import { computed, reactive, ref } from 'vue';
 
                           <VRow v-else>
                             <VCol cols="12" sm="12" class="">
-                              Cargando datos...
+                              Cargando gráficos...
                             </VCol>
                           </VRow>
                         </VWindowItem>
