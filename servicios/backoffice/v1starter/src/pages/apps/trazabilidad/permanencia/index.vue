@@ -1703,19 +1703,17 @@ import { computed, reactive, ref } from 'vue';
                         hide-selected hint="" />
                     </div>
 
-                    <div v-if="currentTabSectionSubSection != 0" style="min-width: 230px;width: auto;">
+                    <div class="d-none" v-if="currentTabSectionSubSection != 0" style="min-width: 230px;width: auto;">
                       <VCombobox clearable density="compact" :disabled="loadingData" v-model="selectOrder"
                         :items="itemsOrder" variant="outlined" label="Ordenar registros" persistent-hint hide-selected
                         hint="" />
                     </div>
 
-                    <div v-if="currentTabSectionSubSection != 0" style="min-width: 230px;width: auto;">
+                    <div class="d-none" v-if="currentTabSectionSubSection != 0" style="min-width: 230px;width: auto;">
                       <VCombobox clearable density="compact" :disabled="loadingData" v-model="selectGroup"
                         :items="itemsGroup" variant="outlined" label="Agrupar registros" persistent-hint hide-selected
                         hint="" />
                     </div>
-
-                    
 
                   </div>
                 </VCardItem>
