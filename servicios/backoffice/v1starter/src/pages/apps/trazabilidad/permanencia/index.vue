@@ -88,9 +88,9 @@ const itemsGroup = ref([
 ]);
 
 
-onMounted(getCampaigns)
-
 onMounted(async () =>{
+  await getCampaigns();
+  
   let selectedCombo = useSelectValueCalendar("Ayer");
   fechaGraficos_2.value = {
     i: selectedCombo.i,
@@ -1747,7 +1747,7 @@ import { computed, reactive, ref } from 'vue';
                       <br>
                       <VWindow v-model="currentTabSectionSubSection">
                         <VWindowItem key="0" value="0">
-                          <VRow v-if="groupSectionChartPieData.length > 0">
+                          <VRow v-if="dataRegistrosChartViews.length > 0">
                             <VCol cols="12" sm="12" class="">
                               <VCard
                                 class="px-0 py-0 pb-4 v-card--flat mb-4 v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
