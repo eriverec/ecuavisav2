@@ -16,8 +16,8 @@
 
 .conetenedor__general .escrutadoElecciones {
   position: absolute;
-  left: 0px;
-  /* bottom: -8px; */
+  right: 0px;
+  bottom: 28px;
   background: #e43d3d;
   color: #fff;
   padding: 5px;
@@ -27,6 +27,7 @@
   display: flex;
     align-items: center;
     justify-content: space-evenly;
+    margin-top: 50px;
 }
 
 .valor_procesadas {

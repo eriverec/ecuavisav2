@@ -21,9 +21,9 @@
       <span class="escrutadoElecciones">Cargando...</span>
     </div>
     <span class="text_fuente">Fuente: CNE</span>
-    <div id="chartdivDatos" style="text-align: center;">Cargando...</div>
-
+    
   </div>
+  <div id="chartdivDatos" style="text-align: center;">Cargando...</div>
 
   <script src="https://cdn.amcharts.com/lib/5/index.js"></script>
   <script src="https://cdn.amcharts.com/lib/5/xy.js"></script>
@@ -40,15 +40,15 @@
       .then(response => response.json())
       .then(data => {
         // Tomar el primer elemento del arreglo
-        const firstItem = data[10];
+        const firstItem = data[11];
 
         // Crear el fragmento HTML con los valores
         const htmlTemplate = `
           <div class="conteo_votos">
             <div class="procesadas">
               <div class="act-proc">
-                <h3> Escrutado:  </h3>
-                <div class="valor_procesadas">${firstItem.actasProcesadas}</div>
+                <h3> Actas procesadas:  </h3>
+                <div class="valor_procesadas">${firstItem.escrutado}</div>
               </div>
             </div>
             <div class="nulos">
@@ -104,7 +104,7 @@
       var divEscru = document.querySelector('.escrutadoElecciones');
       if (divEscru) {
         console.log('d:', tEscru);
-        divEscru.innerHTML = `<p>${tEscru}</p>`;
+        divEscru.innerHTML = `<p>Escrutado: ${tEscru}</p>`;
       }
 
       // console.log(data[Object.keys(data)[1]]);
