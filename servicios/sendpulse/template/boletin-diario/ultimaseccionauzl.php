@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <table width="100%" cellpadding="0" cellspacing="0" id="" style="border-collapse:separate; font-size:14px; line-height:1.5; overflow:hidden">
    <tbody>
       <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
-         <td class="content-cell" width="220" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px" valign="top">
+         <td class="content-cell" width="220" style="background-color: white;background: white;border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:2px; padding-right:2px; padding-top:2px; padding-bottom:2px" valign="top">
             <div id="" style="font-size:14px; line-height:1.5; width:100%; height:auto; display:block;" width="100%" height="165">
                <a class="link_img" href="<?= $datosRecibidos["link"] ?>" style="text-decoration:none; color:#0089bf; display:block;height: auto;width: 100%;padding-left: 0px;padding-right: 0px;">
                   <center>

@@ -46,7 +46,7 @@ const selectComboTotales = ref('Ayer');
 
 const fechaIniFinList = useSelectCalendar();
 const limit = ref(valoresHoy.limit);
-const currentTabSectionSubSection = ref("0")
+const currentTabSectionSubSection = ref(0)
 
 const selectOrder = ref('');
 const selectGroup = ref('');
@@ -107,7 +107,7 @@ onMounted(async () =>{
 
   loadingData.value = false;
   
-  // currentTabSectionSubSection.value = "1";
+  currentTabSectionSubSection.value = "1";
 })
 
 function formatSecciones(data) {
@@ -1703,13 +1703,13 @@ import { computed, reactive, ref } from 'vue';
                         hide-selected hint="" />
                     </div>
 
-                    <div v-if="currentTabSectionSubSection != 0" style="min-width: 230px;width: auto;">
+                    <div v-if="currentTabSectionSubSection != 1" style="min-width: 230px;width: auto;">
                       <VCombobox clearable density="compact" :disabled="loadingData" v-model="selectOrder"
                         :items="itemsOrder" variant="outlined" label="Ordenar registros" persistent-hint hide-selected
                         hint="" />
                     </div>
 
-                    <div v-if="currentTabSectionSubSection != 0" style="min-width: 230px;width: auto;">
+                    <div v-if="currentTabSectionSubSection != 1" style="min-width: 230px;width: auto;">
                       <VCombobox clearable density="compact" :disabled="loadingData" v-model="selectGroup"
                         :items="itemsGroup" variant="outlined" label="Agrupar registros" persistent-hint hide-selected
                         hint="" />
@@ -1736,11 +1736,11 @@ import { computed, reactive, ref } from 'vue';
                   <VRow>
                     <VCol cols="12" sm="12" class="">
                       <VTabs v-model="currentTabSectionSubSection" class="v-tabs-pill">
-                        <VTab key="0" value="0">
-                          <VIcon start icon="mdi-chart-scatterplot-hexbin" /> Estadisticas
-                        </VTab>
-                        <VTab class="d-none" key="1" value="1">
+                        <!-- <VTab key="0" value="0">
                           <VIcon start icon="mdi-format-list-bulleted" /> Lista
+                        </VTab> -->
+                        <VTab key="1" value="1">
+                          <VIcon start icon="mdi-chart-scatterplot-hexbin" /> Estadisticas
                         </VTab>
                         <VTab key="2" value="2">
                           <VIcon start icon="mdi-clock-time-eight-outline" /> Agrupación por tiempo
@@ -1748,110 +1748,7 @@ import { computed, reactive, ref } from 'vue';
                       </VTabs>
                       <br>
                       <VWindow v-model="currentTabSectionSubSection">
-                        <VWindowItem key="0" value="0">
-                          <VRow v-if="groupSectionChartPieData.length > 0">
-                            <VCol cols="12" sm="12" class="">
-                              <VCard
-                                class="px-0 py-0 pb-4 v-card--flat mb-4 v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
-                                <VCardItem class="header_card_item pb-0">
-                                  <div class="d-flex pr-0" style="justify-content: space-between;">
-                                    <div class="descripcion">
-                                      <VCardTitle>Tiempo de permanencia<br> por sección</VCardTitle>
-                                      <small class="mt-3">Este informe se basa en una muestra de {{ limit }} registros</small>
-                                    </div>
-                                    <!-- <div class="">
-                                      <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
-                                    </div> -->
-
-                                  </div>
-                                </VCardItem>
-                                <VueApexCharts :options="resolveDevice.options" :series="resolveDevice.series" :height="475"
-                                  width="100%" />
-                              </VCard>
-                            </VCol>
-                            <VCol cols="12" sm="12" class="">
-                              <VCard
-                                class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
-                                <VCardItem class="header_card_item pb-0">
-                                  <div class="d-flex pr-0" style="justify-content: space-between;">
-                                    <div class="descripcion">
-                                      <VCardTitle>Tiempo de permanencia <br>por subsección<br></VCardTitle>
-                                      <small class="mt-3">Este informe se basa en una muestra de {{ limit }} registros</small>
-                                    </div>
-                                    <!-- <div class="">
-                                      <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
-                                    </div> -->
-
-                                  </div>
-                                </VCardItem>
-                                <VueApexCharts :options="resolveDeviceGroupSubSection.options"
-                                  :series="resolveDeviceGroupSubSection.series" :height="475" width="100%" />
-                              </VCard>
-                            </VCol>
-                            <VCol cols="12" sm="12" class="" style="">
-                              <VCard class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
-                                <VCardItem class="header_card_item pb-0">
-                                  <div class="d-flex pr-0" style="justify-content: space-between;">
-                                    <div class="descripcion">
-                                      <VCardTitle>Totales por visitas</VCardTitle>
-                                      <small class="mt-3">Mostrando data desde, {{ fechaGraficos_2.i.format('YYYY-MM-DD') }} hasta {{ fechaGraficos_2.f.format('YYYY-MM-DD') }}</small>
-                                    </div>
-                                  </div>
-                                  <template #append>
-                                    <div class="date-picker-wrapper" style="min-width:200px;width: auto;max-width: 100%;">
-                                      <VCombobox :disabled="loadingData" v-model="selectComboTotales" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
-                                    </div>
-                                  </template>
-                                </VCardItem>
-                                <VueApexCharts :options="resolveDeviceTimeLineTotales.options" :series="resolveDeviceTimeLineTotales.series" :height="475" width="100%" />
-                              </VCard>
-                            </VCol>
-                            <VCol cols="12" sm="12" class="" style="">
-                              <VCard class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
-                                <VCardItem class="header_card_item pb-0">
-                                  <div class="d-flex pr-0" style="justify-content: space-between;">
-                                    <div class="descripcion">
-                                      <VCardTitle>Visitas por sección</VCardTitle>
-                                      <small class="mt-3">Mostrando data desde, {{ fechaGraficos_2.i.format('YYYY-MM-DD') }} hasta {{ fechaGraficos_2.f.format('YYYY-MM-DD') }}</small>
-                                    </div>
-                                  </div>
-
-                                  <template #append>
-                                    <div class="date-picker-wrapper" style="min-width:200px;width: auto;max-width: 100%;">
-                                      <VCombobox :disabled="loadingData" v-model="selectComboTotales" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
-                                    </div>
-                                  </template>
-                                </VCardItem>
-                                <VueApexCharts :options="resolveDeviceTimeLine.options" :series="resolveDeviceTimeLine.series" :height="475" width="100%" />
-                              </VCard>
-                            </VCol>
-                            <VCol cols="12" sm="12" class="" style="">
-                              <VCard class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
-                                <VCardItem class="header_card_item pb-0">
-                                  <div class="d-flex pr-0" style="justify-content: space-between;">
-                                    <div class="descripcion">
-                                      <VCardTitle>Tiempo promedio por sección</VCardTitle>
-                                      <small class="mt-3">Mostrando data desde, {{ fechaGraficos_2.i.format('YYYY-MM-DD') }} hasta {{ fechaGraficos_2.f.format('YYYY-MM-DD') }}</small>
-                                    </div>
-                                  </div>
-                                  <template #append>
-                                    <div class="date-picker-wrapper" style="min-width:200px;width: auto;max-width: 100%;">
-                                      <VCombobox :disabled="loadingData" v-model="selectComboTotales" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
-                                    </div>
-                                  </template>
-                                </VCardItem>
-                                <VueApexCharts :options="resolveDeviceTimeLinePromedioSection.options" :series="resolveDeviceTimeLinePromedioSection.series" :height="475" width="100%" />
-                              </VCard>
-                            </VCol>
-                          </VRow>
-
-                          <VRow v-else>
-                            <VCol cols="12" sm="12" class="">
-                              Cargando datos...
-                            </VCol>
-                          </VRow>
-                        </VWindowItem>
-                        <VWindowItem key="1" value="1">
+                        <VWindowItem class="d-none" key="0" value="0">
                           <VList lines="two" border v-if="dataRegistros.length < 1">
                             <VListItem>
                               <VListItemTitle>
@@ -1987,6 +1884,125 @@ import { computed, reactive, ref } from 'vue';
 
                               <!-- Paginación -->
                               <VPagination class="mt-5" v-model="currentPage" :length="totalPages" :total-visible="7" />
+                            </VCol>
+                          </VRow>
+                        </VWindowItem>
+                        <VWindowItem key="1" value="1">
+                          <VRow>
+                            <VCol cols="12" sm="12" class="">
+                              <VCard
+                                class="px-0 py-0 pb-4 v-card--flat mb-4 v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
+                                <VCardItem class="header_card_item pb-0">
+                                  <div class="d-flex pr-0" style="justify-content: space-between;">
+                                    <div class="descripcion">
+                                      <VCardTitle>Tiempo de permanencia<br> por sección</VCardTitle>
+                                      <small class="mt-3">Este informe se basa en una muestra de {{ limit }} registros</small>
+                                    </div>
+                                    <!-- <div class="">
+                                      <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
+                                    </div> -->
+
+                                  </div>
+                                </VCardItem>
+                                <VueApexCharts :options="resolveDevice.options" :series="resolveDevice.series" :height="475"
+                                  width="100%" />
+                              </VCard>
+                            </VCol>
+                            <VCol cols="12" sm="12" class="">
+                              <VCard
+                                class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
+                                <VCardItem class="header_card_item pb-0">
+                                  <div class="d-flex pr-0" style="justify-content: space-between;">
+                                    <div class="descripcion">
+                                      <VCardTitle>Tiempo de permanencia <br>por subsección<br></VCardTitle>
+                                      <small class="mt-3">Este informe se basa en una muestra de {{ limit }} registros</small>
+                                    </div>
+                                    <!-- <div class="">
+                                      <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
+                                    </div> -->
+
+                                  </div>
+                                </VCardItem>
+                                <VueApexCharts :options="resolveDeviceGroupSubSection.options"
+                                  :series="resolveDeviceGroupSubSection.series" :height="475" width="100%" />
+                              </VCard>
+                            </VCol>
+                            <VCol cols="12" sm="12" class="" style="">
+                              <VCard
+                                class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
+                                <VCardItem class="header_card_item pb-0">
+                                  <div class="d-flex pr-0" style="justify-content: space-between;">
+                                    <div class="descripcion">
+                                      <VCardTitle>Totales por visitas</VCardTitle>
+                                      <small class="mt-3">Mostrando data desde, {{ fechaGraficos_2.i.format('YYYY-MM-DD') }} hasta {{ fechaGraficos_2.f.format('YYYY-MM-DD') }}</small>
+                                    </div>
+                                    <!-- <div class="">
+                                <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
+                              </div> -->
+
+                                  </div>
+                                  <template #append>
+                                    <div class="date-picker-wrapper" style="min-width:200px;width: auto;max-width: 100%;">
+                                      <VCombobox :disabled="loadingData" v-model="selectComboTotales" :items="fechaIniFinList"
+                        variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
+                                    </div>
+                                  </template>
+                                </VCardItem>
+                                <VueApexCharts :options="resolveDeviceTimeLineTotales.options"
+                                  :series="resolveDeviceTimeLineTotales.series" :height="475" width="100%" />
+                              </VCard>
+                            </VCol>
+                            <VCol cols="12" sm="12" class="" style="">
+                              <VCard
+                                class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
+                                <VCardItem class="header_card_item pb-0">
+                                  <div class="d-flex pr-0" style="justify-content: space-between;">
+                                    <div class="descripcion">
+                                      <VCardTitle>Visitas por sección</VCardTitle>
+                                      <small class="mt-3">Mostrando data desde, {{ fechaGraficos_2.i.format('YYYY-MM-DD') }} hasta {{ fechaGraficos_2.f.format('YYYY-MM-DD') }}</small>
+                                    </div>
+                                    <!-- <div class="">
+                                <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
+                              </div> -->
+
+                                  </div>
+
+                                  <template #append>
+                                    <div class="date-picker-wrapper" style="min-width:200px;width: auto;max-width: 100%;">
+                                      <VCombobox :disabled="loadingData" v-model="selectComboTotales" :items="fechaIniFinList"
+                        variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
+                                    </div>
+                                  </template>
+                                </VCardItem>
+                                <VueApexCharts :options="resolveDeviceTimeLine.options"
+                                  :series="resolveDeviceTimeLine.series" :height="475" width="100%" />
+                              </VCard>
+                            </VCol>
+                            <VCol cols="12" sm="12" class="" style="">
+                              <VCard
+                                class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
+                                <VCardItem class="header_card_item pb-0">
+                                  <div class="d-flex pr-0" style="justify-content: space-between;">
+                                    <div class="descripcion">
+                                      <VCardTitle>Tiempo promedio por sección</VCardTitle>
+                                      <small class="mt-3">Mostrando data desde, {{ fechaGraficos_2.i.format('YYYY-MM-DD') }} hasta {{ fechaGraficos_2.f.format('YYYY-MM-DD') }}</small>
+                                    </div>
+                                    <!-- <div class="">
+                                <VSwitch class="mt-n4 pt-5" disabled @click="toggleRealtime"></VSwitch>
+                              </div> -->
+
+                                  </div>
+
+                                  <template #append>
+                                    <div class="date-picker-wrapper" style="min-width:200px;width: auto;max-width: 100%;">
+                                      <VCombobox :disabled="loadingData" v-model="selectComboTotales" :items="fechaIniFinList"
+                        variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
+                                    </div>
+                                  </template>
+                                </VCardItem>
+                                <VueApexCharts :options="resolveDeviceTimeLinePromedioSection.options"
+                                  :series="resolveDeviceTimeLinePromedioSection.series" :height="475" width="100%" />
+                              </VCard>
                             </VCol>
                           </VRow>
                         </VWindowItem>

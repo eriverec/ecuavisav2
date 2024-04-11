@@ -642,7 +642,7 @@ class SendPulse {
 	    	$ecuadorEsText.= '  <div style="display:block;text-align:left;padding-left:20px;padding-right:20px;padding-bottom:15px;padding-top:20px">
 			            		<p style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-bottom:10px">
 			            			<span style="font-size: 18px;color:#009DED">
-			            				<strong>Ecuador hoy es un mejor país por...</strong>
+			            				<b>Ecuador hoy es un mejor país por...</b>
 			            			</span>
 			            		</p>';
 			for ($i=1; $i < count($ecuadirEsList); $i++) {
@@ -688,7 +688,7 @@ class SendPulse {
 	    	$ecuadorNoEsText.= '  <div style="display:block;text-align:left;padding-left:20px;padding-right:20px;padding-bottom:15px;padding-top:20px">
 			            		<p style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:#fff; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-bottom:10px">
 			            			<span style="font-size: 18px;color:#009DED">
-			            				<strong>Ecuador hoy no es un mejor país por...</strong>
+			            				<b>Ecuador hoy no es un mejor país por...</b>
 			            			</span>
 			            		</p>';
 
@@ -774,9 +774,9 @@ class SendPulse {
 
     private function getUltimaSeccion($data){
     	$html = '';
-    	// $html .= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;padding-top:20px;display:block" border="0" width="100%"><tbody><tr style="border-color:transparent"><td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top"><table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%"><tbody><tr style="border-color:transparent"><th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top"><table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_48" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; margin:0; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top"><p style="line-height:1; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><span style="color: #000000;"><strong><span style="font-size: 18px;font-style: italic;">También te puede interesar...</span></strong></span></p><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table></td></tr></tbody></table>';
+    	// $html .= '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;padding-top:20px;display:block" border="0" width="100%"><tbody><tr style="border-color:transparent"><td style="border-collapse:collapse; border-color:transparent; padding-left:0; padding-right:0; padding-top:0; padding-bottom:0; vertical-align:top" border="0" cellpadding="0" cellspacing="0" valign="top"><table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%" border="0" width="100%"><tbody><tr style="border-color:transparent"><th width="500" style="border-color:transparent; font-weight:400; text-align:left; vertical-align:top" cellpadding="0" cellspacing="0" class="tc responsive " align="left" valign="top"><table border="0" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; border-top-right-radius:0; border-top-left-radius:0; border-bottom-left-radius:0; border-bottom-right-radius:0"><tbody><tr style="border-color:transparent"><td cellpadding="0" cellspacing="0" style="border-collapse:collapse; border-color:transparent; vertical-align:top" valign="top"><table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_48" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; margin:0; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top"><p style="line-height:1; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><span style="color: #000000;"><b><span style="font-size: 18px;font-style: italic;">También te puede interesar...</span></b></span></p><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table></td></tr></tbody></table></th></tr></tbody></table></td></tr></tbody></table>';
     	
-    	$html .= '<table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_48" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#2927b9; margin:0; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top"><p style="line-height:1;margin: 10px 0 0px;font-size:inherit;color:#2927b9;font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif;text-align:center;font-weight:normal;padding:0" align="center"><strong><span style="font-size: 20px;">También te puede interesar</span></strong></p><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table>';
+    	$html .= '<table width="100%" cellpadding="0" cellspacing="0" id="wout_block_out_block_48" style="border-collapse:separate; font-size:14px; line-height:1.2; text-color:black; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-weight:normal; color:#2927b9; margin:0; overflow:hidden"><tbody><tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif"><td class="content-cell" width="470" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top"><p style="line-height:1;margin: 10px 0 0px;font-size:inherit;color:#2927b9;font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif;text-align:center;font-weight:normal;padding:0" align="center"><b><span style="font-size: 20px;">También te puede interesar</span></b></p><div style="font-size:14px; line-height:1.2; clear:both"></div></td></tr></tbody></table>';
     	for ($i=0; $i < count($data) ; $i++) { 
     		$b = $data[$i];
 
@@ -796,8 +796,8 @@ class SendPulse {
 			                                       <tbody>
 			                                          <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
 			                                             <td class="content-cell" width="220" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:15px; padding-right:15px; padding-top:15px; padding-bottom:15px" valign="top">
-			                                                <p canonicalurl="'.$b['link'].'" idart="5741040" style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-top: 5px;"><span style="font-size: 20px; color: #000000;"><strong><span mlnid="idcon1084747order30"><a href="'.$b['link'].'" style="text-decoration:none; color:#000">
-			                                                '.$b['titulo'].'</a></span></strong></span></p>
+			                                                <p canonicalurl="'.$b['link'].'" idart="5741040" style="line-height:1.2; margin:0 0 10px; font-size:inherit; color:inherit; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0;padding-top: 5px;"><span style="font-size: 20px; color: #000000;"><b><span mlnid="idcon1084747order30"><a href="'.$b['link'].'" style="text-decoration:none; color:#000">
+			                                                '.$b['titulo'].'</a></span></b></span></p>
 			                                                '.$this->btnVerMasNoticiasRow($b['link']).'
 			                                                <div style="font-size:14px; line-height:1.2; clear:both"></div>
 			                                             </td>
@@ -900,18 +900,13 @@ class SendPulse {
                     	<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
                     		
 				        	<tr>
-				        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
-				        			<a style="text-decoration:none;color: black;" href="'.$getFristNota["link"].'">
-				        				<h1 style="margin-top: 0px;
-				        					padding-bottom:5px;
-				        					color:black;
-										    font-size: 30px;
-										    line-height: 1.2;
-										    margin-bottom: 0px;
-										 ">'.$value->__text.'</h1>
+				        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;font-size: 30px; line-height: 1.2; font-weight: 900; font-weight: bold;color:black;">
+				        			<a style="font-size: 30px; line-height: 1.2; font-weight: 900; font-weight: bold;text-decoration:none;color: black;" href="'.$getFristNota["link"].'">
+				        				<p style="margin-top: 0px; padding-bottom:5px; color:black; font-size: 30px; line-height: 1.2; font-weight: 900; font-weight: bold; margin-bottom: 0px;
+										 ">'.$value->__text.'</p>
 				        			</a>
-				        		<td>
-				        	<tr>
+				        		</td>
+				        	</tr>
 				        </table>';
                 }
                 if($value->name == "Subheadline"){
@@ -919,8 +914,8 @@ class SendPulse {
 				        	<tr>
 				        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
 				        			<small>'.$value->__text.'</small>
-				        		<td>
-				        	<tr>
+				        		</td>
+				        	</tr>
 			        	</table>';
                 }
                 if($value->name == "Quotecv"){
@@ -975,7 +970,7 @@ class SendPulse {
 					                           <tbody>
 					                              <tr class="content-row" style="border-color:transparent; color:#444; font-family:&quot;Segoe UI&quot;, Segoe, &quot;Avenir Next&quot;, &quot;Open Sans&quot;, Corbel, sans-serif">
 					                                 <td class="content-cell padding-lr-0 padding-top-0 padding-bottom-0" width="430" style="border-collapse:collapse; border-color:transparent; vertical-align:top; padding-left:0; padding-right:15px; padding-top:0; padding-bottom:0" valign="top">
-					                                    <p style="line-height:1.5; margin:0 0 10px; font-size:inherit; color:#333; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><strong><span style="font-size: 18px;">'.$value->__text.'</span></strong></p>
+					                                    <p style="line-height:1.5; margin:0 0 10px; font-size:inherit; color:#333; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-weight:normal; padding:0"><b><span style="font-size: 18px;">'.$value->__text.'</span></b></p>
 					                                    <div style="font-size:14px; line-height:1.2; clear:both"></div>
 					                                 </td>
 					                              </tr>
@@ -1026,16 +1021,9 @@ class SendPulse {
                     <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
 			        	<tr>
 			        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
-			        			<p style="display:block;
-                                	text-align: left;
-                                	font-weight: 700;
-                                	margin-top: 0px;
-                                	padding: 10px;
-                                	margin-bottom: 5px;font-style: italic;
-                                    color: #4a4663;
-                                    font-size: 12px;line-height: 1.2;">'.$value->__text.'</p>
-			        		<td>
-			        	<tr>
+			        			<p style="display:block; text-align: left; font-weight: 700; margin-top: 0px; padding: 10px; margin-bottom: 5px;font-style: italic; color: #4a4663; font-size: 12px;line-height: 1.2;">'.$value->__text.'</p>
+			        		</td>
+			        	</tr>
 			        </table>
                     ';
                 }
@@ -1052,8 +1040,8 @@ class SendPulse {
                                     color: #fff;
                                     font-size: 12px;background-color:#2e22b6 "><b style="font-size: 17px;color:#23DCD1">¿SABÍAS QUE?</b><p style="font-style: italic;font-weight: 400;">'.$value->__text.'</p>
                                 </div>
-                            <td>
-			        	<tr>
+                            </td>
+			        	</tr>
 			        </table>
                     ';
                 }
@@ -1061,18 +1049,18 @@ class SendPulse {
                     $content[] = '
                     <table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;font-weight: 400;" border="0" width="100%">
 			        	<tr>
-			        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">
+			        		<td style="padding-top: 10px;padding-bottom:10px;padding-left: 20px;padding-right: 20px;">
 			        			<div>'.$value->__text.'</div>
-			        		<td>
-			        	<tr>
+			        		</td>
+			        	</tr>
 			        </table>';
                 }
                 if($value->name == "h2" || $value->name == "H2"){
                     $content[] = '<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
 			        	<tr>
 			        		<td style="padding: 10px;padding-left: 20px;padding-right: 20px;">'."<h2 style='margin-bottom: 0px; padding-bottom: 0px;margin-top: 10px; padding-top: 10px;'>$value->__text</h2>".'
-			        		<td>
-			        	<tr>
+			        		</td>
+			        	</tr>
 			        </table>';
                 }
                 if($value->name == "bullet"){
@@ -1083,17 +1071,26 @@ class SendPulse {
 			        			<ul>
 								  <li>'.$value->__text.'</li>
 								</ul>
-			        		<td>
-			        	<tr>
+			        		</td>
+			        	</tr>
 			        </table>';
                 }
                 if($value->name == "Image_Text"){
-                //echo json_encode($value->component);
-                    //$content[] = '<img width="100%" style="height: 300px;" class="img-principal" src="'.$value->remoteContent->href.'">';
-                    $content[] = '<div style="margin-top: 10px;">
-                    '.'<div style="background-image: url('.$value->remoteContent->href.'); background-repeat: no-repeat; background-size: cover; width: 100%; height: 320px;">
-                    </div>'.(isset($value->component)?$this->getImgParrafo($value->component):"").'
-                    </div>';
+                	//echo json_encode($value->component);
+                    $content[] = '<table cellpadding="0" cellspacing="0" style="background:#ffff;background-color:#ffff;border-collapse:collapse;width:100%;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" border="0" width="100%">
+			        	<tr>
+			        		<td>
+						        <img width="100%" height="auto" style="height: auto;width: 100%;" class="desktop" align="center" alt="'.$titulo.'" src="'.$value->remoteContent->href.'">'.(isset($value->component)?$this->getImgParrafo($value->component):"").'
+			        		</td>
+			        	</tr>
+			        </table>';
+
+
+                    // $content[] = '<div style="margin-top: 10px;">
+                    // '.'<div style="background-image: url('.$value->remoteContent->href.'); background-repeat: no-repeat; background-size: cover; width: 100%; height: 320px;">
+                    // </div>'
+
+                    
                 }
                 // if($value->name == "Youtube_Text"){
                 //     $youtubeId = $value->__text;
@@ -1150,9 +1147,9 @@ class SendPulse {
                         //   echo "Clase: $class\n";
                         //   echo "Enlace: $permalink\n";
                           $content[] = '<div  style="display:block;width: 100%;text-align: center">
-                                <a style="display:block;width: 100%;text-align: center" target="_blank" href="'.$permalink.'">
-                                    <img width="40%" src="https://ecuavisapdfs.phpdemo.site/uploads/instagram.png" alt="Imagen de instagram">
-                                </a>
+	                                <a style="display:block;width: 100%;text-align: center" target="_blank" href="'.$permalink.'">
+	                                    <img width="40%" src="https://ecuavisapdfs.phpdemo.site/uploads/instagram.png" alt="Imagen de instagram">
+	                                </a>
                                 </div>';
                         } else {
                         //   echo "No se encontró ninguna coincidencia.\n";

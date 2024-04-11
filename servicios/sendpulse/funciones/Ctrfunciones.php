@@ -267,6 +267,10 @@ class Ctrfunciones {
 	    // Obtener el nombre de la imagen a partir de la URL
 	    $imageName = basename($url);
 	    $imageFilePath = $imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
+	    // Verificar si la imagen ya existe en la ruta
+	    if (file_exists($imageFilePath)) {
+	    	unlink($imageFilePath); // Eliminar la imagen si existe
+	    }
 
 	    // Verificar si la imagen ya existe en la ruta
 	    if (!file_exists($imageFilePath)) {
