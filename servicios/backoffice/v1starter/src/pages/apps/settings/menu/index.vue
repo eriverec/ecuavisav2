@@ -260,6 +260,14 @@ const currentTab_fidelizacion = ref(0)
 									        />
 													Archivos
 									      </VTab>
+
+									      <VTab class="mb-2">
+									        <VIcon
+									          start
+									          icon="mdi-weather-sunny"
+									        />
+													Sellos logrados
+									      </VTab>
 									    </VTabs>
 									    <VDivider vertical />
 
@@ -330,6 +338,19 @@ const currentTab_fidelizacion = ref(0)
 
 									        </p>
 									        <VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-reglasYDesafios-gestorArchivos', params: { id: 0 } }" >
+														Gestionar
+													</VBtn>
+									      </VWindowItem>
+
+									      <VWindowItem>
+									        <VCardTitle class="px-0 py-0">Gestor de sellos logrados</VCardTitle>
+													<VCardSubtitle class="px-0 py-0"> Organiza y Gestiona los sellos logrados de usuarios </VCardSubtitle>
+									
+									        <p class="pt-3">
+									          Verifica los sellos ganados de usuarios con su respectiva semana. 
+
+									        </p>
+									        <VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-reglasYDesafios-GestionSellosHistoricos', params: { id: 0 } }" >
 														Gestionar
 													</VBtn>
 									      </VWindowItem>
