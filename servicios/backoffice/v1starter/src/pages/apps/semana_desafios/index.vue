@@ -86,6 +86,7 @@ const imagen_descriptiva = ref('');
 const desafios = ref([]);
 const fecha_inicio = ref('');
 const fecha_fin = ref('');
+const urlPremio = ref('');
 const fechaDisplay = ref('');
 
 const configSnackbar = ref({
@@ -102,6 +103,7 @@ function resetForm(){
     desafios.value = [];
     fecha_inicio.value = '';
     fecha_fin.value = '';
+    urlPremio.value = '';
     fechaDisplay.value = '';
 } 
 function closeDiag(){
@@ -145,6 +147,7 @@ async function onEdit(id){
     titulo.value = data.titulo;
     descripcion.value = data.descripcion;
     imagen_descriptiva.value = data.imagen_descriptiva;
+    urlPremio.value = data.urlPremio;
     desafios.value = data.desafios;
     fecha_inicio.value = moment(data.fecha_inicio).utc().format("DD/MM/YYYY");
     fecha_fin.value = moment(data.fecha_fin).utc().format("DD/MM/YYYY");
@@ -179,6 +182,7 @@ async function onComplete(){
             "titulo": titulo.value,
             "descripcion": descripcion.value,
             "imagen_descriptiva": imagen_descriptiva.value,
+            "urlPremio": urlPremio.value,
             "desafios": desafios.value,
             "fecha_inicio": fecha_inicio.value,
             "fecha_fin": fecha_fin.value  
@@ -218,6 +222,7 @@ async function onComplete(){
             "titulo": titulo.value,
             "descripcion": descripcion.value,
             "imagen_descriptiva": imagen_descriptiva.value,
+            "urlPremio": urlPremio.value,
             "desafios": desafios.value,
             "fecha_inicio": fecha_inicio.value,
             "fecha_fin": fecha_fin.value   
@@ -403,6 +408,10 @@ async function deleteConfirmed() {
 
                                     <VCol cols="12" >
                                         <VTextField v-model="imagen_descriptiva" label="Imágen descriptiva" placeholder="Imágen descriptiva" />
+                                    </VCol>
+
+                                    <VCol cols="12" >
+                                        <VTextField v-model="urlPremio" label="Link del premio para la semana" placeholder="Link del premio para la semana" />
                                     </VCol>
                                     <VCol cols="12">
                                     <div class="mb-3">Seleccione el rango de fecha para la semana</div>    
