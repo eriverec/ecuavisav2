@@ -427,7 +427,7 @@ async function deleteConfirmed() {
                                         <VTextField v-model="urlPremio" label="Link del premio para la semana" placeholder="Link del premio para la semana" />
                                     </VCol>
                                     <VCol cols="12">
-                                    <div class="mb-1">Seleccione el rango de fecha para la semana</div>    
+                                    <div class="mb-3">Seleccione el rango de fecha para la semana</div>    
                                     <div class="date-picker-wrapper" style="width: 100%;">
                                         <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaDisplay"
                                         show-current=true @on-change="obtenerFechas" :config="{
@@ -439,10 +439,13 @@ async function deleteConfirmed() {
                                         }" />
                                     </div>
                                     </VCol>
+                                    <VCol class="mb-2" cols="12" >
+                                    <span>Seleccione los desafíos para la semana</span> 
+                                    </VCol>
 
                                     <VCol cols="12">
-                                        <span>Seleccione los desafíos para la semana</span> 
-                                        <v-select clearable chips multiple v-model="desafios" :items="listaDesafios"
+
+                                        <v-select clearable chips multiple v-model="desafios" :items="listaDesafios" label="Seleccione el desafío vinculado"
                                          :menu-props="{ maxHeight: '400' }"
                                         >
                                             <template #selection="{ item }">
@@ -450,27 +453,28 @@ async function deleteConfirmed() {
                                                     {{ item.title }} - {{ item.value }}
                                                 </div>
                                             </template>
-                                            <template #item="{ item, props, on }">
+                                            <template #item="{ item, props }">
                                                 <v-list-item v-bind="props">
                                                     <v-list-item-content>
                                                         <v-list-item-subtitle>
-                                                            <div class="d-flex">
-                                                                <VCheckbox v-if="desafios.includes(item.value)"
-                                                                  :model-value="disabledCheckbox = true"
-                                                                  readonly
-                                                                />
-                                                                <VCheckbox v-else
-                                                                  :model-value="disabledCheckbox = false"
-                                                                  readonly
-                                                                />
-                                                                <p class="pt-2">_id: {{ item.value }}</p>
-                                                            </div>
+                                                            <p>_id: {{ item.value }}</p>
                                                         </v-list-item-subtitle>
                                                     </v-list-item-content>
                                                 </v-list-item>
                                             </template>
                                         </v-select>
-                                    </VCol>                                                
+                                    </VCol>
+
+                                    <VCol style="margin-top: -1.5rem;" v-for="item in listaDesafios" cols="12">
+                                        
+
+                                        <VCheckbox
+                                            v-model="desafios"
+                                            :label="item.title"
+                                            :value="item.value"
+                                        />
+                                        
+                                    </VCol>                                                      
                                 </VRow>
                                 <!-- 👉 Submit and Cancel -->
                                 <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
