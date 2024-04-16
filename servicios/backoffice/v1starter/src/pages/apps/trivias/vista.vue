@@ -16,7 +16,7 @@ const configSnackbar = ref({
 async function getTrivias (){
     try {
       isLoading.value = true;  
-      const consulta = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/all/get');
+      const consulta = await fetch('https://ecuavisa-desafio-trivias.vercel.app/trivia/all/get?limit=100');
       const consultaJson = await consulta.json();
       dataTrivias.value = consultaJson.data;             
       isLoading.value = false; 

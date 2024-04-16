@@ -20,7 +20,7 @@ const configSnackbar = ref({
 });
 
 const page = ref(1);
-const limit = ref(10);
+const limit = ref(100);
 const total = ref(0);
 const totalPages = computed(() => Math.ceil(total.value / limit.value));
 
