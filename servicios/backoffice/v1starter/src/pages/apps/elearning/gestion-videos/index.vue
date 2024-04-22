@@ -7,7 +7,7 @@ const moment = extendMoment(Moment);
 
 const currentTab = ref('tab-lista');
 const checkbox = ref(1);
-const dataDesafio = ref([]);
+const dataVideoList = ref([]);
 const totalRegistros = ref(1);
 const totalRegistrosHtml = ref(1);
 const idCampaign = ref("");
@@ -22,18 +22,20 @@ const accionForm = ref('');
 
 const nombre = ref('');
 
-const idVideo = ref('');
-const timeVal = ref('');
+const idRudoModel = ref('');
+const duracionModel = ref('');
 const descripcionDesafio = ref('');
 const statusDesafio = ref(true);
 const tituloSticker = ref('');
 const URLSticker = ref('');
-const desafioModel = ref('');
-const tipoEvaluacion = ref('');
+const categoriaModel = ref('');
+const etiquetasModel = ref('');
+
+const tituloModel = ref(null);
+const descripcionModel = ref(null);
+const thumbnailModel = ref(null);
 
 const idToEdit = ref('');
-
-const desafioItems = ref([]);
 
 const configSnackbar = ref({
     message: "Datos guardados",
@@ -41,17 +43,18 @@ const configSnackbar = ref({
     model: false
 });
 
-const tipoEvaluacionItems = [{
-  title: "Definir un tiempo",
-  value: ""
+const etiquetasItems = ["Fitness", "Ejercicios", "Otros"];
+
+const categoriasItems = [{
+  title: "Cocina",
+  value: "Cocina"
 },{
-  title: "Ver todo el video",
-  value: "full"
-}]
+  title: "Deportes",
+  value: "Deportes"
+}];
 
 onMounted(async ()=>{
   await getDesafioVideos();
-  await getDesafio();
 })
 
 async function getDesafioVideos(page = 1, limit= 10){
@@ -66,40 +69,12 @@ async function getDesafioVideos(page = 1, limit= 10){
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://servicio-niveles-puntuacion.vercel.app/desafio-video-historico/all?limit=20000&page=1`, requestOptions);
+      var response = await fetch(`https://servicio-elearning.vercel.app/video/all?limit=200&page=1`, requestOptions);
       const data = await response.json();
 
-      dataDesafio.value = data.data;
+      dataVideoList.value = data.data;
       
       totalRegistros.value = Math.ceil(data.total / data.limit);
-  } catch (error) {
-      return console.error(error.message);    
-  }
-}
-
-async function getDesafio(page = 1, limit= 10){
-  try {
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
-      };
-
-      var response = await fetch(`https://servicio-desafios.vercel.app/desafios`, requestOptions);
-      const data = await response.json();
-
-      desafioItems.value = data.data.reduce((acumulador, actual) => {
-        acumulador.push({
-          title: `${actual.tituloDesafio}`,
-          value: actual._id,
-        });
-        return acumulador;
-      }, [])
-
-      // dataDesafio.value = data.data;
   } catch (error) {
       return console.error(error.message);    
   }
@@ -113,11 +88,11 @@ const paginatedDesafios = computed(() => {
   const start = (currentPage.value - 1) * itemsPerPage;
   const end = start + itemsPerPage;
 
-  return dataDesafio.value.slice(start, end);
+  return dataVideoList.value.slice(start, end);
 });
 
 const nextPage = () => {
-  if (currentPage.value * itemsPerPage < dataDesafio.value.length) currentPage.value++;
+  if (currentPage.value * itemsPerPage < dataVideoList.value.length) currentPage.value++;
 };
 
 const prevPage = () => {
@@ -158,7 +133,7 @@ const eliminarRegistroSi = async () => {
 */
 
 const handleSwitchChange = async (index) => {
-  const desafio = dataDesafio.value[index];
+  const desafio = dataVideoList.value[index];
   
   const id = desafio._id;
   const estado = desafio.statusDesafio;
@@ -191,10 +166,14 @@ const handleSwitchChange = async (index) => {
 //FUNCIONES FORM
 function resetForm(){
     idToEdit.value = "";
-    idVideo.value = "";
-    timeVal.value = "";
-    desafioModel.value = "";
-    tipoEvaluacion.value = "";
+    tituloModel.value = "";
+    idRudoModel.value = "";
+    duracionModel.value = "";
+    descripcionModel.value = "";
+    thumbnailModel.value = "";
+    duracionModel.value = "";
+    etiquetasModel.value = "";
+    categoriaModel.value = "";
   
 }
 function closeDiag(){
@@ -213,15 +192,20 @@ async function onAdd(){
 async function onEdit(id){
     resetForm();     
     accionForm.value = 'edit';
-    const consulta = await fetch('https://servicio-niveles-puntuacion.vercel.app/desafio-video-historico/get/' + id);
+    const consulta = await fetch('https://servicio-elearning.vercel.app/video/get/' + id);
     const consultaJson = await consulta.json();
-    const data = consultaJson.data[0];
-    //console.log(paquete);
+    const data = consultaJson.data;
+
     idToEdit.value = data._id;
-    idVideo.value = data.idVideo;
-    timeVal.value = data.timeVal;
-    desafioModel.value = data.idDesafio;
-    tipoEvaluacion.value = data.tipoEval;
+
+    tituloModel.value = data.titulo;
+    idRudoModel.value = data.idRudo;
+    duracionModel.value = data.duracion;
+    descripcionModel.value = data.descripcion;
+    thumbnailModel.value = data.thumbnail;
+    etiquetasModel.value = data.etiquetas;
+    categoriaModel.value = data.categoria;
+
     isDialogActive.value = true;  
 }
 
@@ -229,8 +213,11 @@ async function onEdit(id){
 
 async function onComplete(){
   if (
-        !desafioModel.value || 
-        !idVideo.value
+        !categoriaModel.value || 
+        !idRudoModel.value || 
+        !descripcionModel.value || 
+        !thumbnailModel.value || 
+        !duracionModel.value
       ){
         configSnackbar.value = {
             message: "Llenar todos los campos para crear el desafío",
@@ -244,10 +231,13 @@ async function onComplete(){
 
     if (accionForm.value === 'add') {
       let jsonEnviar = {
-              "idVideo": idVideo.value,
-              "timeVal": timeVal.value,
-              "idDesafio": desafioModel.value,
-              "tipoEval": tipoEvaluacion.value
+          "titulo": tituloModel.value,
+          "descripcion": descripcionModel.value,
+          "idRudo": idRudoModel.value,
+          "thumbnail": thumbnailModel.value,
+          "duracion": duracionModel.value,
+          "categoria": categoriaModel.value,
+          "etiquetas": etiquetasModel.value
       }
       var raw = JSON.stringify(jsonEnviar);
 
@@ -258,7 +248,7 @@ async function onComplete(){
               redirect: 'follow'
       };
 
-      const send = await fetch('https://servicio-niveles-puntuacion.vercel.app/desafio-video-historico/create', requestOptions);
+      const send = await fetch('https://servicio-elearning.vercel.app/video/create', requestOptions);
       const respuesta = await send.json();
       if (respuesta.resp) {
         configSnackbar.value = {
@@ -266,7 +256,6 @@ async function onComplete(){
             type: "success",
             model: true
         };
-              
       } else {
         configSnackbar.value = {
             message: respuesta.mensaje,
@@ -277,11 +266,14 @@ async function onComplete(){
         return false;
       }
     }else if(accionForm.value === 'edit'){
-      let jsonEnviar = {
-                "idVideo": idVideo.value,
-                "timeVal": timeVal.value,
-                "idDesafio": desafioModel.value,
-                "tipoEval": tipoEvaluacion.value
+        let jsonEnviar = {
+          "titulo": titulo.value,
+          "descripcion": descripcion.value,
+          "idRudo": idRudo.value,
+          "thumbnail": thumbnail.value,
+          "duracion": duracionModel.value,
+          "categoria": categoriaModel.value,
+          "etiquetas": etiquetasModel.value
         }
         var raw = JSON.stringify(jsonEnviar);
         var requestOptions = {
@@ -290,7 +282,7 @@ async function onComplete(){
                 body: raw,
                 redirect: 'follow'
         };
-        const send = await fetch('https://servicio-niveles-puntuacion.vercel.app/desafio-video-historico/update/' + idToEdit.value, requestOptions);
+        const send = await fetch('https://servicio-elearning.vercel.app/video/update/' + idToEdit.value, requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
                 configSnackbar.value = {
@@ -327,8 +319,8 @@ function onDelete(id) {
 function onView(data) {
     iframeOptions.value = {
       _id:data._id,
-      idVideo: data.idVideo,
-      urlContent: data.urlContent,
+      idRudoModel: data.idRudo,
+      urlContent: data.url,
     };
     isDialogVisibleVistaPreviaVideo.value = true;
 }
@@ -339,7 +331,7 @@ async function deleteConfirmed() {
         redirect: 'follow'
     };
 
-    const deleted = await fetch('https://servicio-niveles-puntuacion.vercel.app/desafio-video-historico/delete/' + idToDelete.value, requestOptions);
+    const deleted = await fetch('https://servicio-elearning.vercel.app/video/delete/' + idToDelete.value, requestOptions);
     const respuesta = await deleted.json();
     if (respuesta.resp) {
         configSnackbar.value = {
@@ -382,10 +374,10 @@ async function deleteConfirmed() {
       <DialogCloseBtn @click="isDialogVisibleVistaPreviaVideo = !isDialogVisibleVistaPreviaVideo" />
 
       <!-- Dialog Content -->
-      <VCard :title="iframeOptions.idVideo">
+      <VCard :title="iframeOptions.idRudoModel">
         <iframe
           class="mt-3"
-          :title="'Video '+ iframeOptions.idVideo"
+          :title="'Video '+ iframeOptions.idRudoModel"
           width="100%"
           height="300"
           :src="iframeOptions.urlContent"
@@ -464,7 +456,7 @@ async function deleteConfirmed() {
                       icon="tabler-plus"
                     />
                   </VBtn>
-                  <VList lines="two" border v-if="dataDesafio.length < 1">
+                  <VList lines="two" border v-if="dataVideoList.length < 1">
                     <VListItem>
                       <VListItemTitle>
                         <div class="loading"></div>
@@ -472,35 +464,54 @@ async function deleteConfirmed() {
                     </VListItem>
                   </VList>
 
-                  <VList lines="two" border  v-if="dataDesafio.length > 0">
+                  <VList lines="two" border  v-if="dataVideoList.length > 0">
                   <template
-                    v-for="(desafio, index) of paginatedDesafios"
+                    v-for="(video, index) of paginatedDesafios"
                     :key="index"
                   >
                     <VListItem :disabled="disabledViewList">
                       <VListItemTitle>
                         <div class="nombre-desafio d-flex flex-column">
-                          <small>Desafío</small>
-                          <label>{{ desafio.desafio[0].tituloDesafio }}</label>
+                          <small>Video</small>
+                          <label>{{ video.titulo }}</label>
                           <div class="content-items d-flex">
                             <div class="content-video">
                               <VIcon
                                 size="20"
                                 icon="tabler-video"
                               />
-                              <a class="pl-2" target="_blank" :href="desafio.urlContent">{{ desafio.idVideo }}</a>
+                              <a class="pl-2" target="_blank" :href="video.url">{{ video.idRudo }}</a>
                             </div>
                             <div class="content-time pl-3">
                               <VIcon
                                 size="20"
                                 icon="tabler-clock"
                               />
-                              <label v-if="desafio.tipoEval != 'full'">
-                                <b>Permanencia: </b> {{ desafio.timeVal }} min
-                              </label>
-                              <label v-else>
-                                Ver todo el video
-                              </label>
+                              <b>Duración: </b> {{ video.duracion }} min
+                            </div>
+
+                            <div class="content-time pl-3">
+                              <VIcon
+                                size="20"
+                                icon="mdi-animation"
+                              />
+                              <b>Categoría: </b> {{ video.categoria }}
+                            </div>
+
+                            <div class="content-time pl-3">
+                              <VIcon
+                                size="20"
+                                icon="mdi-thumb-up-outline"
+                              />
+                              {{ video.likes }}
+                            </div>
+
+                            <div class="content-time pl-3">
+                              <VIcon
+                                size="20"
+                                icon="mdi-thumb-down-outline"
+                              />
+                              {{ video.dislikes }}
                             </div>
                           </div>
                         </div>
@@ -514,7 +525,7 @@ async function deleteConfirmed() {
                             size="x-small"
                             color="warning"
                             variant="text"
-                            @click="onView(desafio)"
+                            @click="onView(video)"
                           >
                             <VIcon
                               size="22"
@@ -523,7 +534,7 @@ async function deleteConfirmed() {
                           </VBtn>
 
                           <VBtn 
-                            title="Editar registro" color="success" variant="text" icon  @click="onEdit(desafio._id)">
+                            title="Editar registro" color="success" variant="text" icon  @click="onEdit(video._id)">
                             <VIcon size="22" icon="tabler-edit" />
                           </VBtn>
 
@@ -533,7 +544,7 @@ async function deleteConfirmed() {
                             size="x-small"
                             color="error"
                             variant="text"
-                            @click="onDelete(desafio._id)"
+                            @click="onDelete(video._id)"
                           >
                             <VIcon
                               size="22"
@@ -546,7 +557,7 @@ async function deleteConfirmed() {
                             variant="text"
                             color="default"
                             size="x-small"
-                            :to="{ name: 'apps-reglasYDesafios-GestionVideosHistoricos-view-id', params: { id: desafio._id } }"
+                            :to="{ name: 'apps-elearning-gestion-videos-view-id', params: { id: video._id } }"
                           >
                             <VIcon
                               :size="22"
@@ -556,7 +567,7 @@ async function deleteConfirmed() {
                         </div>
                       </template>
                     </VListItem>
-                    <VDivider v-if="index !== dataDesafio.length - 1" />
+                    <VDivider v-if="index !== dataVideoList.length - 1" />
                   </template>
                 </VList>
                 
@@ -564,7 +575,7 @@ async function deleteConfirmed() {
                     <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
                     Página {{ currentPage }}
                     <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
-                        :disabled="(currentPage * itemsPerPage) >= dataDesafio.length">
+                        :disabled="(currentPage * itemsPerPage) >= dataVideoList.length">
                     </VBtn>
                 </div>
                 </div>
@@ -588,41 +599,39 @@ async function deleteConfirmed() {
                           <VForm class="mt-6" @submit.prevent="onComplete">
                               <VRow class="d-flex flex-wrap justify-center gap-4">
                                   <VRow>
+                                      <VCol cols="12">
+                                        <VTextField v-model="tituloModel" label="Título del video" />
+                                      </VCol>
 
-                                      <VCol cols="12" >
-                                          <v-select v-model="desafioModel" :items="desafioItems" label="Seleccione el desafío vinculado">
-                                            <template #selection="{ item }">
-                                                <div>
-                                                    {{ item.title }} - {{ item.value }}
-                                                </div>
-                                            </template>
-                                            <template #item="{ item, props }">
-                                                <v-list-item v-bind="props">
-                                                    <v-list-item-content>
-                                                        <v-list-item-subtitle>
-                                                            <p>_id: {{ item.value }}</p>
-                                                        </v-list-item-subtitle>
-                                                    </v-list-item-content>
-                                                </v-list-item>
-                                            </template>
-                                        </v-select>
+                                      <VCol cols="12">
+                                        <VTextField v-model="descripcionModel" label="Descripción" />
+                                      </VCol>
+                                      
+                                      <VCol cols="12">
+                                        <VTextField v-model="thumbnailModel" label="Imagen principal" />
                                       </VCol>
 
                                       <VCol cols="12" >
-                                          <VTextField v-model="idVideo" label="Id del video de RUDO" />
+                                          <VTextField v-model="idRudoModel" label="Id del video de RUDO" />
+                                      </VCol>
+
+                                      <VCol cols="12">
+                                        <VTextField v-model="duracionModel" label="Tiempo en minutos del video" type="number" />
                                       </VCol>
 
                                       <VCol cols="12" >
-                                          <VSelect 
+                                          <v-select v-model="categoriaModel" :items="categoriasItems" label="Seleccione la categoría del video" />
+                                      </VCol>
+
+                                      <VCol cols="12" >
+                                          <VCombobox 
                                           item-text="title"
                                           item-value="value"
-                                          v-model="tipoEvaluacion" 
-                                          :items="tipoEvaluacionItems" 
-                                          label="Tipo de evaluación" />
-                                      </VCol>
-
-                                      <VCol cols="12" v-if="tipoEvaluacion == ''">
-                                        <VTextField v-model="timeVal" label="Tiempo en minutos de vista para el video" type="number" />
+                                          v-model="etiquetasModel" 
+                                          :items="etiquetasItems"
+                                          chips
+                                          multiple
+                                          label="Etiquetas" />
                                       </VCol>
          
                                   </VRow>
