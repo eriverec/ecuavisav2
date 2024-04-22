@@ -597,13 +597,13 @@ async function deleteConfirmed() {
 
                           <!-- 👉 Form -->
                           <VForm class="mt-6" @submit.prevent="onComplete">
-                              <VRow class="d-flex flex-wrap justify-center gap-4">
+                              <VRow class="">
                                   <VRow>
-                                      <VCol cols="12">
+                                      <VCol cols="6">
                                         <VTextField v-model="tituloModel" label="Título del video" />
                                       </VCol>
 
-                                      <VCol cols="12">
+                                      <VCol cols="6">
                                         <VTextField v-model="descripcionModel" label="Descripción" />
                                       </VCol>
                                       
@@ -616,7 +616,7 @@ async function deleteConfirmed() {
                                       </VCol>
 
                                       <VCol cols="12">
-                                        <VTextField v-model="duracionModel" label="Tiempo en minutos del video" type="number" />
+                                        <VTextField v-model="duracionModel" label="Tiempo en minutos del video" suffix="minutos" append-inner-icon="tabler-clock" type="number" />
                                       </VCol>
 
                                       <VCol cols="12" >
