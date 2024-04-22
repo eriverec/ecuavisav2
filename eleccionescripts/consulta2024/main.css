@@ -17,8 +17,8 @@
 .conetenedor__general .escrutadoElecciones {
   position: absolute;
   right: 0px;
-  bottom: 28px;
-  background: #e43d3d;
+  bottom: -5px;
+/*  background: #e43d3d;*/
   color: #fff;
   padding: 5px;
 }
@@ -55,7 +55,11 @@
   line-height: 20px;
 }
 
-
+.items-resultado-p{
+    background: #e43d3d;
+    margin-bottom: 3px !important;
+    padding: 3px 8px;
+}
 
 .conetenedor__general .escrutadoElecciones p {
   margin: 0;
