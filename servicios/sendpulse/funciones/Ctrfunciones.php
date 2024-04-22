@@ -244,7 +244,9 @@ class Ctrfunciones {
 	}
 
     public function cropImagen($url = "", $newWidth = 600, $newHeight = 400, $compress= 75, $verticalPosition = 'arriba') {
-	    
+	    if($url == ""){
+	    	return "";
+	    }
 	    // $imagePath = './img/'.$this->folder.'/'; // Ruta donde se guardarán las imágenes
     	$imagePath = './img/';
 	    // Obtener la fecha actual

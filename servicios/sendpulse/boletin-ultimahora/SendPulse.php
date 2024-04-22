@@ -1,7 +1,7 @@
 <?php
 require '../vendor/autoload.php';
-// use GuzzleHttp\Client;
-// use GuzzleHttp\Psr7\Request;
+//use GuzzleHttp\Client;
+//use GuzzleHttp\Psr7\Request;
 class SendPulse
 {
 
@@ -934,6 +934,16 @@ class SendPulse
 		return '<table cellpadding="0" border="0" cellspacing="0" class="sp-button flat auto-width" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0; width:auto !important; border-radius:2px; box-shadow:none; background:'.$getColor.'" width="auto !important"><tbody><tr style="border-color:transparent"><td class="sp-button-text" style=" border-collapse:collapse; border-color:transparent; border-width:0; border-style:none; border:0; padding:0; align:center; border-radius:5px; width:auto; height:40px; vertical-align:middle; text-align:center" width="auto" height="40" valign="middle" align="center"><table cellpadding="0" border="0" cellspacing="0" width="100%" style="border-collapse:collapse; font-size:14px; line-height:1.2; border:0"><tbody><tr style="border-color:transparent"><td align="center" style="border-collapse:collapse; border-color:transparent; border:0; padding:0; line-height:1"><a style="text-decoration:none; color:#FFF; display:block; padding:12px 18px; font-family:&quot;Lucida Sans Unicode&quot;, &quot;Lucida Grande&quot;, sans-serif; font-family-short:lucida; font-size:16px; font-weight:bold" href="' . ($link == "" ? "https://www.ecuavisa.com/noticias/?utm_source=SendPulse&amp;utm_medium=SeccionPolitica&amp;utm_campaign=N_CodigoRojas&amp;utm_id=Newsletter" : $link) . '">Seguir leyendo</a></td></tr></tbody></table></td></tr></tbody></table>';
 	}
 
+	private function capturarURLDinamica($list){
+		$urlRedireccionNota = "#";
+		foreach ($list as $key => $value) {
+			if ($value->name == "URL") {
+				$urlRedireccionNota = $value->__text;
+			}
+		}
+		return 'https://www.'.$urlRedireccionNota.'?utm_source=SendPulse&utm_medium=NotaPrincipal&utm_campaign=N_Ultimahora&utm_id=Newsletter';
+	}
+
 	private function getDetallesNotaPrincial($list, $getNota, $idarticle)
 	{
 		$content = [];
@@ -942,19 +952,19 @@ class SendPulse
 		// $bloque3 = $getNota[1];
 
 		$authorName = $this->getAuthorName($idarticle);
-    /*if ($authorName) {
-        // Muestra el nombre del autor
-        echo "Autor: $authorName";
-    } else {
-        echo "Autor no encontrado";
-    }*/
-
+	    /*if ($authorName) {
+	        // Muestra el nombre del autor
+	        echo "Autor: $authorName";
+	    } else {
+	        echo "Autor no encontrado";
+	    }*/
 		
 		// echo count($bloque3);
 		$getOpinionesBloquesURLVar = $this->getOpinionesBloquesURL($list);
 		if (is_array($list)) {
 
 			$count = 0;
+	    	$urlLinkDinamico = $this->capturarURLDinamica($list);
 	
 			foreach ($list as $key => $value) {
 
@@ -987,7 +997,7 @@ class SendPulse
 								<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;" border="0" width="100%">
 									<tr>
 										<td style="padding: 10px;padding-left: 50px;padding-right: 50px;">
-											<a style="text-decoration:none;color: #000;" href="' . $getFristNota["link"] . '">
+											<a style="text-decoration:none;color: #000;" href="' . $urlLinkDinamico . '">
 												<h1 class="be_titulo_principal" style="margin-top: 0px;padding-bottom:5px;color:#000;font-size: 30px;font-weight: 900;line-height: 1.2;margin-bottom: 0px; ">' . $value->__text . '</h1>
 											</a>
 										<td>
@@ -998,16 +1008,16 @@ class SendPulse
 				if ($value->name == "Image") {
 					$content[] = '
 
-					<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;" border="0" width="100%">
-									<tr>
-										<td style="padding: 10px;padding-left: 50px;padding-right: 50px;">
-										<a style="text-decoration:none;color: black;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" href="' . $getFristNota["link"] . '">
-										<img width="200" style="width:100%;height:auto" src="' . $value->remoteContent->href . '" alt="Imagen principal">
+						<table cellpadding="0" cellspacing="0" style="border-collapse:collapse; font-size:14px; line-height:1.2; width:100%;" border="0" width="100%">
+							<tr>
+								<td style="padding: 10px;padding-left: 50px;padding-right: 50px;">
+								<a style="text-decoration:none;color: black;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" href="' . $getFristNota["link"] . '">
+								<img width="200" style="width:100%;height:auto" src="' . $value->remoteContent->href . '" alt="Imagen principal">
 
-											</a>
-										<td>
-									<tr>
-								</table>
+									</a>
+								<td>
+							<tr>
+						</table>
                     
                     ';
 				}
@@ -1085,10 +1095,8 @@ class SendPulse
 
 			$content[] = $getOpinionesBloquesURLVar;
 			// $content[] = $this->getUltimaSeccion($bloque3);
-			$content[] = $this->btnVerArticulo($getFristNota["link"]);
-
+			$content[] = $this->btnVerArticulo($urlLinkDinamico);
 		}
-
 
 		$this->jsonPDF[] = array("notaPrincipalDefault" => $getFristNota);
 		// $this->jsonPDF[] = array("notasFinal" => $bloque3);
