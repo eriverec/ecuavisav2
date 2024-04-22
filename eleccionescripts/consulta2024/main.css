@@ -67,6 +67,12 @@
 
 @media (max-width: 767px) {
   .conetenedor__general .escrutadoElecciones {
-    margin-bottom: -2px;
+    margin-bottom: -60px;
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: nowrap;
+    width: 100%;
   }
 }
