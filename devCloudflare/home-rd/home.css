@@ -3699,6 +3699,7 @@ BLOQUE DE COLUMNISTA - FIN
   .article-section.cint__envio a {
     /* margin-right: auto;
       width:auto; */
+      margin-top: 11px;
   }
 
   .article_envivo {
