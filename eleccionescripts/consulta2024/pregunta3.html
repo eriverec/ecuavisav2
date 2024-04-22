@@ -101,7 +101,7 @@
         var divEscru = document.querySelector('.escrutadoElecciones');
         if(divEscru){
           console.log('d:',tEscru);
-          divEscru.innerHTML = `<p>Escrutado: ${tEscru}</p>`; 
+          divEscru.innerHTML = `<p class="items-resultado-p">Votos nulos: ${data[0].votosNulos}</p><p class="items-resultado-p">Votos blancos: ${data[0].votosBlancos}</p>`;
         }
 
         // console.log(data[Object.keys(data)[1]]);
