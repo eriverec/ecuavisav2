@@ -4,7 +4,10 @@ function armarFormulario (){
   <div class="info-formulario">
     <div class="newsContenido">
       <div class="news_line_left">
-        <img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2FVector-vertical.svg" alt="line_left" width="33" height="400" title="separador vertical" />
+      <svg width="18px" width="24" height="418" viewBox="0 0 24 418" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M2.15918 415.555L2.15923 136.198C2.15923 135.849 2.34125 135.525 2.63947 135.343L21.1612 124.075C21.7941 123.69 21.8032 122.774 21.1781 122.377L2.62254 110.574C2.33398 110.391 2.15923 110.073 2.15923 109.731L2.15923 1.53141" stroke="#00C17C" stroke-width="3" stroke-linecap="round"/>
+      </svg>
+      
     </div>
     <div class="news_line_left mobile__">
         <img src="https://estadisticas.ecuavisa.com/sites/gestor/Newsletter%2FlineLeftNewsBlanco.svg" alt="line_left" width="22" height="473" title="separador blanco" />
@@ -19,7 +22,7 @@ function armarFormulario (){
               letter
           </div>
       </h2>
-        <h2>LO MEJOR DE ECUAVISA</h2>
+        <h2>LO MEJOR DE ESTADIO</h2>
         <p>Boletín diario y toda la programación con un solo click.</p>
         <!-- Subscription Form -->
         <div class="esendpulseEstadio"></div>
