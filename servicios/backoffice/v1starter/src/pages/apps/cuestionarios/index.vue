@@ -598,7 +598,7 @@ async function mostrarNombreUsuario(id, index){
                 <VCard  class="pa-sm-14 pa-5">
                     <VCardItem class="text-center">
                         <VCardTitle class="text-h5 mb-3">
-                            {{ accionForm === "add" ? "Nuevo cuestionario" : "Editar " + nombre }}
+                            {{ accionForm === "add" ? "Nuevo cuestionario" : "Editar " + titulo }}
                         </VCardTitle>
                     </VCardItem>
 
