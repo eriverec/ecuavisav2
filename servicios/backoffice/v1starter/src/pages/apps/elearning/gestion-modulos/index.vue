@@ -132,6 +132,7 @@ function resetForm(){
     duracionModel.value = "";
     videosModel.value = null;
     categoriaModel.value = "";
+    videosSelectList.value = [];
   
 }
 function closeDiag(){
@@ -221,7 +222,7 @@ async function onComplete(){
       let jsonEnviar = {
           "titulo": tituloModel.value,
           "descripcion": descripcionModel.value,
-          "videos": videosModel.value
+          "videos": obtenerValorYPosicion()
       }
       var raw = JSON.stringify(jsonEnviar);
 
@@ -266,7 +267,7 @@ async function onComplete(){
         const respuesta = await send.json();
         if (respuesta.resp) {
                 configSnackbar.value = {
-                    message: "Video desafío actualizado correctamente",
+                    message: "Registro actualizado correctamente",
                     type: "success",
                     model: true
                 };
@@ -610,7 +611,7 @@ async function deleteConfirmed() {
                                         <VTextField v-model="descripcionModel" label="Descripción" />
                                       </VCol>
 
-                                      <VCol cols="12" >
+                                      <VCol cols="12">
                                           <VSelect 
                                             item-text="title"
                                             item-value="value"
@@ -636,7 +637,7 @@ async function deleteConfirmed() {
                                           </VSelect>
                                       </VCol>
 
-                                      <VCol cols="12">
+                                      <VCol cols="12" v-if="videosModel">
                                         <VList
                                           lines="two"
                                           border

@@ -41,20 +41,6 @@
                             </tr>
                             <tr>
                               <td scope="col">
-                                <strong>idRudo</strong>
-                              </td>
-                              <td scope="col">
-                                <a class="pl-2" target="_blank" :href="suggestion.url">
-                                    <VIcon
-                                      size="20"
-                                      icon="tabler-link"
-                                    />
-                                  {{ suggestion.idRudo }}
-                                </a>
-                              </td>
-                            </tr>
-                            <tr>
-                              <td scope="col">
                                 <strong>Título</strong>
                               </td>
                               <td scope="col">
@@ -67,46 +53,6 @@
                               </td>
                               <td scope="col">
                                 {{ suggestion.descripcion }}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td scope="col">
-                                <strong>Tiempo de reproducción </strong>
-                              </td>
-                              <td scope="col">
-                                {{ suggestion.duracion }} min
-                              </td>
-                            </tr>
-                            <tr>
-                              <td scope="col">
-                                <strong>Categoría </strong>
-                              </td>
-                              <td scope="col">
-                                {{ suggestion.categoria }}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td scope="col">
-                                <strong>Etiquetas </strong>
-                              </td>
-                              <td scope="col">
-                                {{ suggestion.etiquetas.join(", ") }}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td scope="col">
-                                <strong>Módulos asignados </strong>
-                              </td>
-                              <td scope="col">
-                                {{ suggestion.modulos.join(", ") }}
-                              </td>
-                            </tr>
-                            <tr>
-                              <td scope="col">
-                                <strong>Imagen principal </strong>
-                              </td>
-                              <td scope="col">
-                                <img :src="suggestion.thumbnail" width="75" height="auto">
                               </td>
                             </tr>
                           </thead>
@@ -203,7 +149,7 @@ export default {
   methods: {
     //método que obtiene los detalles de la campaña y el listado de usuarios
     async getDetallesDesafio() {
-      const respuesta = await fetch(`https://servicio-elearning.vercel.app/curso/get/${this.id}`); 
+      const respuesta = await fetch(`https://servicio-elearning.vercel.app/modulo/get/${this.id}`); 
       const datos = await respuesta.json();
       this.suggestion = datos.data;
       this.isLoadingContent = false;

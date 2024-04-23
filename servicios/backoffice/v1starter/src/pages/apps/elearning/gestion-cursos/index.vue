@@ -21,6 +21,9 @@ const isDialogActive = ref(false);
 const accionForm = ref('');
 
 const nombre = ref('');
+const dataModuloModel = ref([]);
+const dataModuloItems = ref([]);
+const modulosSelectList = ref([]);
 
 const idRudoModel = ref('');
 const duracionModel = ref('');
@@ -54,6 +57,7 @@ const categoriasItems = [{
 }];
 
 onMounted(async ()=>{
+  await getModulos();
   await getGestionCursos();
 })
 
@@ -73,6 +77,35 @@ async function getGestionCursos(page = 1, limit= 10){
       const data = await response.json();
 
       dataVideoList.value = data.data;
+      
+      totalRegistros.value = Math.ceil(data.total / data.limit);
+  } catch (error) {
+      return console.error(error.message);    
+  }
+}
+
+async function getModulos(page = 1, limit= 10){
+  try {
+      currentPage.value = 1;
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://servicio-elearning.vercel.app/modulo/select?limit=200&page=1`, requestOptions);
+      const data = await response.json();
+
+      dataModuloItems.value = data.data.reduce((acumulador, actual) => {
+        acumulador.push({
+          title: `${actual.titulo}`,
+          value: actual._id,
+        });
+        return acumulador;
+      }, []);
       
       totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
@@ -110,6 +143,8 @@ function resetForm(){
     duracionModel.value = "";
     etiquetasModel.value = "";
     categoriaModel.value = "";
+    modulosSelectList.value = [];
+    dataModuloModel.value = null;
   
 }
 function closeDiag(){
@@ -122,6 +157,36 @@ async function onAdd(){
     resetForm(); 
     accionForm.value = 'add';
     isDialogActive.value = true;
+}
+
+function obtenerListaOrdenada(listaA, listaB) {
+    // Ordenar listaB por posición
+    listaB.sort((a, b) => a.posicion - b.posicion);
+
+    // Crear una lista vacía para almacenar el resultado
+    let resultado = [];
+
+    // Iterar sobre cada elemento de listaB
+    for (let i = 0; i < listaB.length; i++) {
+        // Encontrar el elemento correspondiente en listaA utilizando el _id
+        let elementoListaA = listaA.find(item => item === listaB[i]._id);
+
+        // Si se encuentra el elemento en listaA
+        if (elementoListaA) {
+            // Crear un nuevo objeto con el formato deseado y agregarlo a la lista resultado
+            resultado.push({ title: listaB[i].titulo, value: elementoListaA });
+        }
+    }
+
+    // Devolver la lista resultado
+    return resultado;
+}
+
+function filtrarDesafios(listaDesafios, elementos) {
+    const valoresDesafiosFiltrados = listaDesafios
+        .filter(desafio => elementos.includes(desafio.value))
+        .map(desafio => desafio.value);
+    return valoresDesafiosFiltrados;
 }
 
 //EDIT
@@ -142,7 +207,14 @@ async function onEdit(id){
     etiquetasModel.value = data.etiquetas;
     categoriaModel.value = data.categoria;
 
-    isDialogActive.value = true;  
+    dataModuloModel.value = filtrarDesafios(dataModuloItems.value, data.modulos.reduce((acumulador, actual) => {
+        acumulador.push(actual._id);
+        return acumulador;
+      }, []));
+
+    isDialogActive.value = true; 
+
+    modulosSelectList.value= obtenerListaOrdenada(dataModuloModel.value, data.modulos);
 }
 
 //SEND
@@ -173,7 +245,8 @@ async function onComplete(){
           "thumbnail": thumbnailModel.value,
           "duracion": duracionModel.value,
           "categoria": categoriaModel.value,
-          "etiquetas": etiquetasModel.value
+          "etiquetas": etiquetasModel.value,
+          "modulos": obtenerValorYPosicion()
       }
       var raw = JSON.stringify(jsonEnviar);
 
@@ -203,13 +276,14 @@ async function onComplete(){
       }
     }else if(accionForm.value === 'edit'){
         let jsonEnviar = {
-          "titulo": titulo.value,
-          "descripcion": descripcion.value,
-          "idRudo": idRudo.value,
-          "thumbnail": thumbnail.value,
+          "titulo": tituloModel.value,
+          "descripcion": descripcionModel.value,
+          "idRudo": idRudoModel.value,
+          "thumbnail": thumbnailModel.value,
           "duracion": duracionModel.value,
           "categoria": categoriaModel.value,
-          "etiquetas": etiquetasModel.value
+          "etiquetas": etiquetasModel.value,
+          "modulos": obtenerValorYPosicion()
         }
         var raw = JSON.stringify(jsonEnviar);
         var requestOptions = {
@@ -222,7 +296,7 @@ async function onComplete(){
         const respuesta = await send.json();
         if (respuesta.resp) {
                 configSnackbar.value = {
-                    message: "Video desafío actualizado correctamente",
+                    message: "Registro actualizado correctamente",
                     type: "success",
                     model: true
                 };
@@ -259,6 +333,80 @@ function onView(data) {
       urlContent: data.urlRudo,
     };
     isDialogVisibleVistaPreviaVideo.value = true;
+}
+
+// Función para inicializar la lista de videos seleccionados
+function inicializarVideosSelectList() {
+    const modulosItemsLocal = dataModuloItems.value;
+    const dataModuloItemsID = dataModuloModel.value;
+    if (dataModuloItemsID) {
+        //Si se selecciona nuevos elementos del select
+        if(modulosSelectList.value.length < dataModuloItemsID.length){
+          for(var j in modulosItemsLocal){
+            if(dataModuloItemsID[dataModuloItemsID.length - 1] == modulosItemsLocal[j].value){
+              modulosSelectList.value.push(modulosItemsLocal[j]);
+            }
+          }
+        }
+
+        //Si se elimina elementos del select
+        if(modulosSelectList.value.length > dataModuloItemsID.length){
+          // Filtrar los elementos de modulosSelectList.value que no están presentes en listaB
+          const elementosFaltantes = modulosSelectList.value.filter(itemA => !dataModuloItemsID.includes(itemA.value));
+
+          for(var i in elementosFaltantes){
+            for(var j in modulosSelectList.value){
+              if(elementosFaltantes[i].value == modulosSelectList.value[j].value){
+                modulosSelectList.value.splice(j, 1); // Eliminar el elemento en la posición j
+                break; // Salir del bucle una vez que se elimina el elemento
+              }
+            }
+          }
+        }
+    }
+}
+
+watch(async () => dataModuloModel.value, async () => {
+  if(dataModuloModel.value){
+    inicializarVideosSelectList()
+  }
+});
+
+function obtenerValorYPosicion() {
+    const lista = modulosSelectList.value;
+    // Crear un nuevo array para almacenar los objetos con el valor y la posición
+    const resultado = [];
+    // Iterar sobre la lista y agregar cada elemento al resultado con su valor y posición
+    lista.forEach((item, index) => {
+        resultado.push({ value: item.value, posicion: index });
+    });
+    // Devolver el array de objetos con el valor y la posición de cada elemento
+    return resultado;
+}
+
+function cambiarPosicion(valor, direccion) {
+    const lista = modulosSelectList.value;
+    // Buscar el índice del elemento con el valor especificado
+    const index = lista.findIndex(item => item.value === valor);
+    // Si no se encuentra el valor en la lista, salir de la función
+    if (index === -1) {
+        console.log("El valor especificado no se encontró en la lista.");
+        return;
+    }
+
+    // Si la dirección es "arriba" y el elemento no está en la primera posición, intercambiarlo con el elemento anterior
+    if (direccion === "arriba" && index > 0) {
+        [lista[index], lista[index - 1]] = [lista[index - 1], lista[index]];
+    } 
+    // Si la dirección es "abajo" y el elemento no está en la última posición, intercambiarlo con el elemento siguiente
+    else if (direccion === "abajo" && index < lista.length - 1) {
+        [lista[index], lista[index + 1]] = [lista[index + 1], lista[index]];
+    }
+    // Si la dirección es inválida, mostrar un mensaje de error
+    else {
+        console.log("La dirección especificada es inválida o el elemento está en el extremo de la lista.");
+        return;
+    }
 }
 
 async function deleteConfirmed() {
@@ -554,6 +702,82 @@ async function deleteConfirmed() {
                                           multiple
                                           label="Etiquetas" />
                                       </VCol>
+
+                                      <VCol cols="12" >
+                                          <VSelect 
+                                            item-text="title"
+                                            item-value="value"
+                                            v-model="dataModuloModel" 
+                                            :items="dataModuloItems"
+                                            chips
+                                            multiple
+                                            label="Videos educativos">
+                                            <template #selection="{ item }">
+                                                  <div>
+                                                      {{ item.title }} - {{ item.value }}
+                                                  </div>
+                                              </template>
+                                              <template #item="{ item, props }">
+                                                  <v-list-item v-bind="props">
+                                                      <v-list-item-content>
+                                                          <v-list-item-subtitle>
+                                                              <p>_id: {{ item.value }}</p>
+                                                          </v-list-item-subtitle>
+                                                      </v-list-item-content>
+                                                  </v-list-item>
+                                              </template>
+                                          </VSelect>
+                                      </VCol>
+
+                                      <VCol cols="12" v-if="dataModuloModel">
+                                        <VList
+                                          lines="two"
+                                          border
+                                        >
+                                          <template
+                                            v-for="(videoSelect, index) of modulosSelectList"
+                                            :key="videoSelect.value"
+                                          >
+                                            <VListItem>
+                                              <template #prepend>
+                                                <VIcon
+                                                  :size="35"
+                                                  icon="mdi-file-video"
+                                                  color="success"
+                                                />
+                                              </template>
+                                              <VListItemTitle>
+                                                {{ videoSelect.title }}
+                                              </VListItemTitle>
+                                              <VListItemSubtitle class="mt-1">
+                                                <VBadge
+                                                  dot
+                                                  location="start center"
+                                                  offset-x="2"
+                                                  color="success"
+                                                  class="me-3"
+                                                >
+                                                  <span class="ms-4">Video</span>
+                                                </VBadge>
+
+                                                <span class="text-xs text-disabled">{{ videoSelect.value }}</span>
+                                              </VListItemSubtitle>
+
+                                              <template #append>
+                                                <div class="btn-order" style="">
+                                                  <VBtn size="x-small" :disabled="index == 0" variant="text" @click="cambiarPosicion(videoSelect.value, 'arriba')">
+                                                    <VIcon :size="25" icon="mdi-arrow-up-bold-box" />
+                                                  </VBtn>
+                                                  <VBtn size="x-small" :disabled="index == modulosSelectList.length - 1" variant="text" @click="cambiarPosicion(videoSelect.value, 'abajo')">
+                                                    <VIcon :size="25" icon="mdi-arrow-down-bold-box" />
+                                                  </VBtn>
+                                                </div>
+                                              </template>
+                                            </VListItem>
+                                            <VDivider v-if="index !== modulosSelectList.length - 1" />
+                                          </template>
+                                        </VList>
+                                      </VCol>
          
                                   </VRow>
                                   <!-- 👉 Submit and Cancel -->
@@ -590,6 +814,12 @@ async function deleteConfirmed() {
 
 .flatpickr-calendar.open {     
   z-index: 10000;
+}
+  .btn-order {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
 }
 </style>
 

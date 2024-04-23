@@ -286,7 +286,7 @@ async function onComplete(){
         const respuesta = await send.json();
         if (respuesta.resp) {
                 configSnackbar.value = {
-                    message: "Video desafío actualizado correctamente",
+                    message: "Registro actualizado correctamente",
                     type: "success",
                     model: true
                 };
