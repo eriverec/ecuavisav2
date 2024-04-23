@@ -25,6 +25,9 @@ const dataModuloModel = ref([]);
 const dataModuloItems = ref([]);
 const modulosSelectList = ref([]);
 
+const dataCuestionarioModel = ref([]);
+const dataCuestionarioItems = ref([]);
+
 const idRudoModel = ref('');
 const duracionModel = ref('');
 const descripcionDesafio = ref('');
@@ -59,6 +62,7 @@ const categoriasItems = [{
 onMounted(async ()=>{
   await getModulos();
   await getGestionCursos();
+  await getCuestionario();
 })
 
 async function getGestionCursos(page = 1, limit= 10){
@@ -113,6 +117,35 @@ async function getModulos(page = 1, limit= 10){
   }
 }
 
+async function getCuestionario(page = 1, limit= 10){
+  try {
+      currentPage.value = 1;
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://e-learning-cuestionario.vercel.app/cuestionarios/all/get`, requestOptions);
+      const data = await response.json();
+
+      dataCuestionarioItems.value = data.data.reduce((acumulador, actual) => {
+        acumulador.push({
+          title: `${actual.titulo}`,
+          value: actual._id,
+        });
+        return acumulador;
+      }, []);
+      
+      totalRegistros.value = Math.ceil(data.total / data.limit);
+  } catch (error) {
+      return console.error(error.message);    
+  }
+}
+
 // Funciones para manejar el cambio de paginación
 const itemsPerPage = 8;
 const currentPage = ref(1);
@@ -145,6 +178,7 @@ function resetForm(){
     categoriaModel.value = "";
     modulosSelectList.value = [];
     dataModuloModel.value = null;
+    dataCuestionarioModel.value = null;
   
 }
 function closeDiag(){
@@ -206,6 +240,7 @@ async function onEdit(id){
     thumbnailModel.value = data.thumbnail;
     etiquetasModel.value = data.etiquetas;
     categoriaModel.value = data.categoria;
+    dataCuestionarioModel.value = data.cuestionario._id;
 
     dataModuloModel.value = filtrarDesafios(dataModuloItems.value, data.modulos.reduce((acumulador, actual) => {
         acumulador.push(actual._id);
@@ -225,6 +260,7 @@ async function onComplete(){
         !idRudoModel.value || 
         !descripcionModel.value || 
         !thumbnailModel.value || 
+        !dataCuestionarioModel.value || 
         !duracionModel.value
       ){
         configSnackbar.value = {
@@ -246,6 +282,7 @@ async function onComplete(){
           "duracion": duracionModel.value,
           "categoria": categoriaModel.value,
           "etiquetas": etiquetasModel.value,
+          "idCuestionario": dataCuestionarioModel.value,
           "modulos": obtenerValorYPosicion()
       }
       var raw = JSON.stringify(jsonEnviar);
@@ -281,6 +318,7 @@ async function onComplete(){
           "idRudo": idRudoModel.value,
           "thumbnail": thumbnailModel.value,
           "duracion": duracionModel.value,
+          "idCuestionario": dataCuestionarioModel.value,
           "categoria": categoriaModel.value,
           "etiquetas": etiquetasModel.value,
           "modulos": obtenerValorYPosicion()
@@ -676,11 +714,11 @@ async function deleteConfirmed() {
                                         <VTextField v-model="descripcionModel" label="Descripción" />
                                       </VCol>
                                       
-                                      <VCol cols="12">
+                                      <VCol cols="6">
                                         <VTextField v-model="thumbnailModel" label="Imagen principal" />
                                       </VCol>
 
-                                      <VCol cols="12" >
+                                      <VCol cols="6" >
                                           <VTextField v-model="idRudoModel" label="Id del curso de RUDO" />
                                       </VCol>
 
@@ -707,11 +745,35 @@ async function deleteConfirmed() {
                                           <VSelect 
                                             item-text="title"
                                             item-value="value"
+                                            v-model="dataCuestionarioModel" 
+                                            :items="dataCuestionarioItems"
+                                            label="Cuestionario educativos para al final del curso">
+                                            <template #selection="{ item }">
+                                                  <div>
+                                                      {{ item.title }} - {{ item.value }}
+                                                  </div>
+                                              </template>
+                                              <template #item="{ item, props }">
+                                                  <v-list-item v-bind="props">
+                                                      <v-list-item-content>
+                                                          <v-list-item-subtitle>
+                                                              <p>_id: {{ item.value }}</p>
+                                                          </v-list-item-subtitle>
+                                                      </v-list-item-content>
+                                                  </v-list-item>
+                                              </template>
+                                          </VSelect>
+                                      </VCol>
+
+                                      <VCol cols="12" >
+                                          <VSelect 
+                                            item-text="title"
+                                            item-value="value"
                                             v-model="dataModuloModel" 
                                             :items="dataModuloItems"
                                             chips
                                             multiple
-                                            label="Videos educativos">
+                                            label="Módulos educativos">
                                             <template #selection="{ item }">
                                                   <div>
                                                       {{ item.title }} - {{ item.value }}

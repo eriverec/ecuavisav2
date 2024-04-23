@@ -27,7 +27,7 @@
                 <VCol md="6" lg="12" cols="12">
                   <VAlert color="success" variant="tonal">
                     <VRow no-gutters>
-                      <VCol cols="12" sm="6" md="12" lg="12" order="2" order-lg="1">
+                      <VCol cols="12" sm="12" md="12" lg="12" order="2" order-lg="1">
                         <VTable class="text-no-wrap">
                           <!-- 👉 table head -->
                           <thead>
@@ -98,7 +98,27 @@
                                 <strong>Módulos asignados </strong>
                               </td>
                               <td scope="col">
-                                {{ suggestion.modulos.join(", ") }}
+                                  <VList>
+                                    <VListItem
+                                      v-for="(item, i) in suggestion.modulos"
+                                      :key="i"
+                                      :value="item"
+                                    >
+                                      <VListItemTitle v-text="item.titulo" />
+                                    </VListItem>
+                                  </VList>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td scope="col">
+                                <strong>Cuestionario asignado </strong>
+                              </td>
+                              <td scope="col">
+                                  <VList class="mt-5">
+                                    <VListItem>
+                                      <VListItemTitle v-text="suggestion.cuestionario.titulo" />
+                                    </VListItem>
+                                  </VList>
                               </td>
                             </tr>
                             <tr>
