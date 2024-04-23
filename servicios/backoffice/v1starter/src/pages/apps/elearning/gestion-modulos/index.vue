@@ -153,6 +153,29 @@ function filtrarDesafios(listaDesafios, elementos) {
     return valoresDesafiosFiltrados;
 }
 
+function obtenerListaOrdenada(listaA, listaB) {
+    // Ordenar listaB por posición
+    listaB.sort((a, b) => a.posicion - b.posicion);
+
+    // Crear una lista vacía para almacenar el resultado
+    let resultado = [];
+
+    // Iterar sobre cada elemento de listaB
+    for (let i = 0; i < listaB.length; i++) {
+        // Encontrar el elemento correspondiente en listaA utilizando el _id
+        let elementoListaA = listaA.find(item => item === listaB[i]._id);
+
+        // Si se encuentra el elemento en listaA
+        if (elementoListaA) {
+            // Crear un nuevo objeto con el formato deseado y agregarlo a la lista resultado
+            resultado.push({ title: listaB[i].titulo, value: elementoListaA });
+        }
+    }
+
+    // Devolver la lista resultado
+    return resultado;
+}
+
 //EDIT
 async function onEdit(id){
     resetForm();     
@@ -172,21 +195,8 @@ async function onEdit(id){
 
     isDialogActive.value = true; 
 
-    const videosItemsLocal = videosItems.value;
-    const videosItemsID = videosModel.value;
-    if (videosItemsID) {
-        videosSelectList.value = [];
-        //Si se selecciona nuevos elementos del select
-        if(videosSelectList.value.length < videosItemsID.length){
-          for(var i in videosItemsID){
-            for(var j in videosItemsLocal){
-              if(videosItemsID[i] == videosItemsLocal[j].value){
-                videosSelectList.value.push(videosItemsLocal[j]);
-              }
-            }
-          }
-        }
-    }
+    videosSelectList.value= obtenerListaOrdenada(videosModel.value, data.videos);
+
 }
 
 //SEND
