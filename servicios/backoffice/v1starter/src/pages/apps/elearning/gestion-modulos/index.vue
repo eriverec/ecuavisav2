@@ -32,6 +32,7 @@ const categoriaModel = ref('');
 const videosModel = ref(null);
 
 const tituloModel = ref(null);
+const videosSelectList = ref(null);
 const descripcionModel = ref(null);
 const thumbnailModel = ref(null);
 
@@ -45,8 +46,8 @@ const configSnackbar = ref({
 const videosItems = ref([]);
 
 onMounted(async ()=>{
-  await getGestionModulos();
   await getVideos();
+  await getGestionModulos();
 })
 
 async function getGestionModulos(page = 1, limit= 10){
@@ -226,7 +227,8 @@ async function onComplete(){
         let jsonEnviar = {
           "titulo": tituloModel.value,
           "descripcion": descripcionModel.value,
-          "videos": videosModel.value
+          "videos": videosModel.value,
+          "obtenerValorYPosicion": obtenerValorYPosicion(),
         }
         var raw = JSON.stringify(jsonEnviar);
         var requestOptions = {
@@ -278,6 +280,51 @@ function onView(data) {
     isDialogVisibleVistaPreviaVideo.value = true;
 }
 
+watch(async () => videosModel.value, async () => {
+  const videosItemsLocal = videosItems.value;
+  const videosItemsID = videosModel.value;
+  if(videosModel.value){
+    videosSelectList.value = videosItemsLocal.filter(itemA => videosItemsID.includes(itemA.value));
+  }
+});
+
+function obtenerValorYPosicion() {
+    const lista = videosSelectList.value;
+    // Crear un nuevo array para almacenar los objetos con el valor y la posición
+    const resultado = [];
+    // Iterar sobre la lista y agregar cada elemento al resultado con su valor y posición
+    lista.forEach((item, index) => {
+        resultado.push({ value: item.value, posicion: index });
+    });
+    // Devolver el array de objetos con el valor y la posición de cada elemento
+    return resultado;
+}
+
+function cambiarPosicion(valor, direccion) {
+    const lista = videosSelectList.value;
+    // Buscar el índice del elemento con el valor especificado
+    const index = lista.findIndex(item => item.value === valor);
+    // Si no se encuentra el valor en la lista, salir de la función
+    if (index === -1) {
+        console.log("El valor especificado no se encontró en la lista.");
+        return;
+    }
+
+    // Si la dirección es "arriba" y el elemento no está en la primera posición, intercambiarlo con el elemento anterior
+    if (direccion === "arriba" && index > 0) {
+        [lista[index], lista[index - 1]] = [lista[index - 1], lista[index]];
+    } 
+    // Si la dirección es "abajo" y el elemento no está en la última posición, intercambiarlo con el elemento siguiente
+    else if (direccion === "abajo" && index < lista.length - 1) {
+        [lista[index], lista[index + 1]] = [lista[index + 1], lista[index]];
+    }
+    // Si la dirección es inválida, mostrar un mensaje de error
+    else {
+        console.log("La dirección especificada es inválida o el elemento está en el extremo de la lista.");
+        return;
+    }
+}
+
 async function deleteConfirmed() {
     var requestOptions = {
         method: 'DELETE',
@@ -302,6 +349,8 @@ async function deleteConfirmed() {
     await getGestionModulos();
     isDialogVisibleDelete.value = false;
 }
+
+
 
 </script>
 
@@ -489,7 +538,7 @@ async function deleteConfirmed() {
                   <VCard  class="pa-sm-14 pa-5">
                       <VCardItem class="text-center">
                           <VCardTitle class="text-h5 mb-3">
-                              {{ accionForm === "add" || accionForm === "duplicate" ? "Crear registro" : "Editar " + nombre }}
+                              {{ accionForm === "add" || accionForm === "duplicate" ? "Crear registro" : "Editar: " + tituloModel }}
                           </VCardTitle>
                       </VCardItem>
 
@@ -532,6 +581,56 @@ async function deleteConfirmed() {
                                               </template>
                                           </VSelect>
                                       </VCol>
+
+                                      <VCol cols="12">
+                                        <VList
+                                          lines="two"
+                                          border
+                                        >
+                                          <template
+                                            v-for="(videoSelect, index) of videosSelectList"
+                                            :key="videoSelect.value"
+                                          >
+                                            <VListItem>
+                                              <template #prepend>
+                                                <VIcon
+                                                  :size="35"
+                                                  icon="mdi-file-video"
+                                                  color="success"
+                                                />
+                                              </template>
+                                              <VListItemTitle>
+                                                {{ videoSelect.title }}
+                                              </VListItemTitle>
+                                              <VListItemSubtitle class="mt-1">
+                                                <VBadge
+                                                  dot
+                                                  location="start center"
+                                                  offset-x="2"
+                                                  color="success"
+                                                  class="me-3"
+                                                >
+                                                  <span class="ms-4">Video</span>
+                                                </VBadge>
+
+                                                <span class="text-xs text-disabled">{{ videoSelect.value }}</span>
+                                              </VListItemSubtitle>
+
+                                              <template #append>
+                                                <div class="btn-order" style="">
+                                                  <VBtn size="x-small" :disabled="index == 0" variant="text" @click="cambiarPosicion(videoSelect.value, 'arriba')">
+                                                    <VIcon :size="25" icon="mdi-arrow-up-bold-box" />
+                                                  </VBtn>
+                                                  <VBtn size="x-small" :disabled="index == videosSelectList.length - 1" variant="text" @click="cambiarPosicion(videoSelect.value, 'abajo')">
+                                                    <VIcon :size="25" icon="mdi-arrow-down-bold-box" />
+                                                  </VBtn>
+                                                </div>
+                                              </template>
+                                            </VListItem>
+                                            <VDivider v-if="index !== videosSelectList.length - 1" />
+                                          </template>
+                                        </VList>
+                                      </VCol>
          
                                   </VRow>
                                   <!-- 👉 Submit and Cancel -->
@@ -568,6 +667,12 @@ async function deleteConfirmed() {
   .flatpickr-calendar.open {     
     z-index: 10000;
   }
+  .btn-order {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+}
 </style>
 
 <style scoped> 
