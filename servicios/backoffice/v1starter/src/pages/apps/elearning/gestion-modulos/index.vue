@@ -32,7 +32,7 @@ const categoriaModel = ref('');
 const videosModel = ref(null);
 
 const tituloModel = ref(null);
-const videosSelectList = ref(null);
+const videosSelectList = ref([]);
 const descripcionModel = ref(null);
 const thumbnailModel = ref(null);
 
@@ -170,7 +170,23 @@ async function onEdit(id){
         return acumulador;
       }, []));
 
-    isDialogActive.value = true;  
+    isDialogActive.value = true; 
+
+    const videosItemsLocal = videosItems.value;
+    const videosItemsID = videosModel.value;
+    if (videosItemsID) {
+        videosSelectList.value = [];
+        //Si se selecciona nuevos elementos del select
+        if(videosSelectList.value.length < videosItemsID.length){
+          for(var i in videosItemsID){
+            for(var j in videosItemsLocal){
+              if(videosItemsID[i] == videosItemsLocal[j].value){
+                videosSelectList.value.push(videosItemsLocal[j]);
+              }
+            }
+          }
+        }
+    }
 }
 
 //SEND
@@ -227,8 +243,7 @@ async function onComplete(){
         let jsonEnviar = {
           "titulo": tituloModel.value,
           "descripcion": descripcionModel.value,
-          "videos": videosModel.value,
-          "obtenerValorYPosicion": obtenerValorYPosicion(),
+          "videos": obtenerValorYPosicion()
         }
         var raw = JSON.stringify(jsonEnviar);
         var requestOptions = {
@@ -280,11 +295,40 @@ function onView(data) {
     isDialogVisibleVistaPreviaVideo.value = true;
 }
 
+// Función para inicializar la lista de videos seleccionados
+function inicializarVideosSelectList() {
+    const videosItemsLocal = videosItems.value;
+    const videosItemsID = videosModel.value;
+    if (videosItemsID) {
+        //Si se selecciona nuevos elementos del select
+        if(videosSelectList.value.length < videosItemsID.length){
+          for(var j in videosItemsLocal){
+            if(videosItemsID[videosItemsID.length - 1] == videosItemsLocal[j].value){
+              videosSelectList.value.push(videosItemsLocal[j]);
+            }
+          }
+        }
+
+        //Si se elimina elementos del select
+        if(videosSelectList.value.length > videosItemsID.length){
+          // Filtrar los elementos de videosSelectList.value que no están presentes en listaB
+          const elementosFaltantes = videosSelectList.value.filter(itemA => !videosItemsID.includes(itemA.value));
+
+          for(var i in elementosFaltantes){
+            for(var j in videosSelectList.value){
+              if(elementosFaltantes[i].value == videosSelectList.value[j].value){
+                videosSelectList.value.splice(j, 1); // Eliminar el elemento en la posición j
+                break; // Salir del bucle una vez que se elimina el elemento
+              }
+            }
+          }
+        }
+    }
+}
+
 watch(async () => videosModel.value, async () => {
-  const videosItemsLocal = videosItems.value;
-  const videosItemsID = videosModel.value;
   if(videosModel.value){
-    videosSelectList.value = videosItemsLocal.filter(itemA => videosItemsID.includes(itemA.value));
+    inicializarVideosSelectList()
   }
 });
 
