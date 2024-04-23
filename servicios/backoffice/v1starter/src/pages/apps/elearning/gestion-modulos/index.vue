@@ -29,7 +29,7 @@ const statusDesafio = ref(true);
 const tituloSticker = ref('');
 const URLSticker = ref('');
 const categoriaModel = ref('');
-const etiquetasModel = ref('');
+const videosModel = ref(null);
 
 const tituloModel = ref(null);
 const descripcionModel = ref(null);
@@ -42,22 +42,37 @@ const configSnackbar = ref({
     type: "success",
     model: false
 });
-
-const etiquetasItems = ["Fitness", "Ejercicios", "Otros"];
-
-const categoriasItems = [{
-  title: "Cocina",
-  value: "Cocina"
-},{
-  title: "Deportes",
-  value: "Deportes"
-}];
+const videosItems = ref([]);
 
 onMounted(async ()=>{
-  await getDesafioVideos();
+  await getGestionModulos();
+  await getVideos();
 })
 
-async function getDesafioVideos(page = 1, limit= 10){
+async function getGestionModulos(page = 1, limit= 10){
+  try {
+      currentPage.value = 1;
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://servicio-elearning.vercel.app/modulo/all?limit=200&page=1`, requestOptions);
+      const data = await response.json();
+
+      dataVideoList.value = data.data;
+      
+      totalRegistros.value = Math.ceil(data.total / data.limit);
+  } catch (error) {
+      return console.error(error.message);    
+  }
+}
+
+async function getVideos(page = 1, limit= 10){
   try {
       currentPage.value = 1;
       var myHeaders = new Headers();
@@ -72,7 +87,13 @@ async function getDesafioVideos(page = 1, limit= 10){
       var response = await fetch(`https://servicio-elearning.vercel.app/video/all?limit=200&page=1`, requestOptions);
       const data = await response.json();
 
-      dataVideoList.value = data.data;
+      videosItems.value = data.data.reduce((acumulador, actual) => {
+        acumulador.push({
+          title: `${actual.titulo}`,
+          value: actual._id,
+        });
+        return acumulador;
+      }, []);
       
       totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
@@ -99,70 +120,6 @@ const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
 };
 
-// Función para manejar el cambio de paginación
-/*
-const eliminarRegistro = async (id) => {
-  isDialogVisibleDelete.value = true;
-  idDesafio.value = id;
-  // console.log(id)
-};
-
-const eliminarRegistroSi = async () => {
-  try {
-      isDialogVisibleDelete.value = false;
-      disabledViewList.value = true;
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-
-      var requestOptions = {
-        method: 'DELETE',
-        headers: myHeaders,
-        redirect: 'follow'
-      };
-
-      var response = await fetch(`https://servicio-desafios.vercel.app/desafios/${idDesafio.value}`, requestOptions);
-      const data = await response.json();
-
-      disabledViewList.value = false;
-      await getDesafioVideos(currentPage.value);
-
-  } catch (error) {
-      return console.error(error.message);    
-  }
-};
-*/
-
-const handleSwitchChange = async (index) => {
-  const desafio = dataVideoList.value[index];
-  
-  const id = desafio._id;
-  const estado = desafio.statusDesafio;
-  switchOnDisabled.value = true;
-  var jsonEnviar = {
-      statusDesafio: estado
-  }
-
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  var requestOptions = {
-    method: 'PUT',
-    headers: myHeaders,
-    body: JSON.stringify(jsonEnviar),
-    redirect: 'follow'
-  };
-
-  var response = await fetch(`https://servicio-desafios.vercel.app/desafios/${id}`, requestOptions);
-  const data = await response.json();
-  if(data.resp){
-    // alert("Desafío editado correctamente");
-  }else{
-    alert("Un error se presentó: "+data.error);
-    desafio.statusDesafio = !desafio.statusDesafio;
-  };
-  switchOnDisabled.value = false;
-  // Realiza las operaciones necesarias con el ID y el estado
-};
-
 //FUNCIONES FORM
 function resetForm(){
     idToEdit.value = "";
@@ -172,7 +129,7 @@ function resetForm(){
     descripcionModel.value = "";
     thumbnailModel.value = "";
     duracionModel.value = "";
-    etiquetasModel.value = "";
+    videosModel.value = null;
     categoriaModel.value = "";
   
 }
@@ -188,23 +145,29 @@ async function onAdd(){
     isDialogActive.value = true;
 }
 
+function filtrarDesafios(listaDesafios, elementos) {
+    const valoresDesafiosFiltrados = listaDesafios
+        .filter(desafio => elementos.includes(desafio.value))
+        .map(desafio => desafio.value);
+    return valoresDesafiosFiltrados;
+}
+
 //EDIT
 async function onEdit(id){
     resetForm();     
     accionForm.value = 'edit';
-    const consulta = await fetch('https://servicio-elearning.vercel.app/video/get/' + id);
+    const consulta = await fetch('https://servicio-elearning.vercel.app/modulo/get/' + id);
     const consultaJson = await consulta.json();
     const data = consultaJson.data;
 
     idToEdit.value = data._id;
 
     tituloModel.value = data.titulo;
-    idRudoModel.value = data.idRudo;
-    duracionModel.value = data.duracion;
     descripcionModel.value = data.descripcion;
-    thumbnailModel.value = data.thumbnail;
-    etiquetasModel.value = data.etiquetas;
-    categoriaModel.value = data.categoria;
+    videosModel.value = filtrarDesafios(videosItems.value, data.videos.reduce((acumulador, actual) => {
+        acumulador.push(actual._id);
+        return acumulador;
+      }, []));
 
     isDialogActive.value = true;  
 }
@@ -213,11 +176,9 @@ async function onEdit(id){
 
 async function onComplete(){
   if (
-        !categoriaModel.value || 
-        !idRudoModel.value || 
+        !tituloModel.value || 
         !descripcionModel.value || 
-        !thumbnailModel.value || 
-        !duracionModel.value
+        !videosModel.value
       ){
         configSnackbar.value = {
             message: "Llenar todos los campos para crear el desafío",
@@ -233,11 +194,7 @@ async function onComplete(){
       let jsonEnviar = {
           "titulo": tituloModel.value,
           "descripcion": descripcionModel.value,
-          "idRudo": idRudoModel.value,
-          "thumbnail": thumbnailModel.value,
-          "duracion": duracionModel.value,
-          "categoria": categoriaModel.value,
-          "etiquetas": etiquetasModel.value
+          "videos": videosModel.value
       }
       var raw = JSON.stringify(jsonEnviar);
 
@@ -248,7 +205,7 @@ async function onComplete(){
               redirect: 'follow'
       };
 
-      const send = await fetch('https://servicio-elearning.vercel.app/video/create', requestOptions);
+      const send = await fetch('https://servicio-elearning.vercel.app/modulo/create', requestOptions);
       const respuesta = await send.json();
       if (respuesta.resp) {
         configSnackbar.value = {
@@ -267,13 +224,9 @@ async function onComplete(){
       }
     }else if(accionForm.value === 'edit'){
         let jsonEnviar = {
-          "titulo": titulo.value,
-          "descripcion": descripcion.value,
-          "idRudo": idRudo.value,
-          "thumbnail": thumbnail.value,
-          "duracion": duracionModel.value,
-          "categoria": categoriaModel.value,
-          "etiquetas": etiquetasModel.value
+          "titulo": tituloModel.value,
+          "descripcion": descripcionModel.value,
+          "videos": videosModel.value
         }
         var raw = JSON.stringify(jsonEnviar);
         var requestOptions = {
@@ -282,7 +235,7 @@ async function onComplete(){
                 body: raw,
                 redirect: 'follow'
         };
-        const send = await fetch('https://servicio-elearning.vercel.app/video/update/' + idToEdit.value, requestOptions);
+        const send = await fetch('https://servicio-elearning.vercel.app/modulo/update/' + idToEdit.value, requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
                 configSnackbar.value = {
@@ -302,7 +255,7 @@ async function onComplete(){
 
         }
     }
-    await getDesafioVideos();
+    await getGestionModulos();
     isDialogActive.value = false;
 }
 
@@ -320,7 +273,7 @@ function onView(data) {
     iframeOptions.value = {
       _id:data._id,
       idRudoModel: data.idRudo,
-      urlContent: data.url,
+      urlContent: data.urlRudo,
     };
     isDialogVisibleVistaPreviaVideo.value = true;
 }
@@ -331,7 +284,7 @@ async function deleteConfirmed() {
         redirect: 'follow'
     };
 
-    const deleted = await fetch('https://servicio-elearning.vercel.app/video/delete/' + idToDelete.value, requestOptions);
+    const deleted = await fetch('https://servicio-elearning.vercel.app/modulo/delete/' + idToDelete.value, requestOptions);
     const respuesta = await deleted.json();
     if (respuesta.resp) {
         configSnackbar.value = {
@@ -346,7 +299,7 @@ async function deleteConfirmed() {
             model: true
         };
     }
-    await getDesafioVideos();
+    await getGestionModulos();
     isDialogVisibleDelete.value = false;
 }
 
@@ -439,9 +392,9 @@ async function deleteConfirmed() {
                 >
                   <div>
                     <VCardTitle>
-                      Listado de videos educativos
+                      Listado de modulos E-Learning
                     </VCardTitle>
-                    <VCardSubtitle> Mantenimiento de videos que se enlazan con Desafíos </VCardSubtitle>
+                    <VCardSubtitle> Mantenimiento de modulos E-Learning </VCardSubtitle>
                   </div>
                 </div>
 
@@ -466,75 +419,22 @@ async function deleteConfirmed() {
 
                   <VList lines="two" border  v-if="dataVideoList.length > 0">
                   <template
-                    v-for="(video, index) of paginatedDesafios"
+                    v-for="(modulo, index) of paginatedDesafios"
                     :key="index"
                   >
                     <VListItem :disabled="disabledViewList">
                       <VListItemTitle>
                         <div class="nombre-desafio d-flex flex-column">
-                          <small>Video</small>
-                          <label>{{ video.titulo }}</label>
-                          <div class="content-items d-flex">
-                            <div class="content-video">
-                              <VIcon
-                                size="20"
-                                icon="tabler-video"
-                              />
-                              <a class="pl-2" target="_blank" :href="video.url">{{ video.idRudo }}</a>
-                            </div>
-                            <div class="content-time pl-3">
-                              <VIcon
-                                size="20"
-                                icon="tabler-clock"
-                              />
-                              <b>Duración: </b> {{ video.duracion }} min
-                            </div>
-
-                            <div class="content-time pl-3">
-                              <VIcon
-                                size="20"
-                                icon="mdi-animation"
-                              />
-                              <b>Categoría: </b> {{ video.categoria }}
-                            </div>
-
-                            <div class="content-time pl-3">
-                              <VIcon
-                                size="20"
-                                icon="mdi-thumb-up-outline"
-                              />
-                              {{ video.likes }}
-                            </div>
-
-                            <div class="content-time pl-3">
-                              <VIcon
-                                size="20"
-                                icon="mdi-thumb-down-outline"
-                              />
-                              {{ video.dislikes }}
-                            </div>
-                          </div>
+                          <small>Módulo</small>
+                          <label>{{ modulo.titulo }}</label>
+                          <small>{{ modulo.descripcion }}</small>
                         </div>
                       </VListItemTitle>
 
                       <template #append>
                         <div class="espacio-right-2">
-                          <VBtn
-                            title="Ver vista previa del video"
-                            icon
-                            size="x-small"
-                            color="warning"
-                            variant="text"
-                            @click="onView(video)"
-                          >
-                            <VIcon
-                              size="22"
-                              icon="tabler-movie"
-                            />
-                          </VBtn>
-
                           <VBtn 
-                            title="Editar registro" color="success" variant="text" icon  @click="onEdit(video._id)">
+                            title="Editar registro" color="success" variant="text" icon  @click="onEdit(modulo._id)">
                             <VIcon size="22" icon="tabler-edit" />
                           </VBtn>
 
@@ -544,7 +444,7 @@ async function deleteConfirmed() {
                             size="x-small"
                             color="error"
                             variant="text"
-                            @click="onDelete(video._id)"
+                            @click="onDelete(modulo._id)"
                           >
                             <VIcon
                               size="22"
@@ -557,7 +457,7 @@ async function deleteConfirmed() {
                             variant="text"
                             color="default"
                             size="x-small"
-                            :to="{ name: 'apps-elearning-gestion-videos-view-id', params: { id: video._id } }"
+                            :to="{ name: 'apps-elearning-gestion-modulos-view-id', params: { id: modulo._id } }"
                           >
                             <VIcon
                               :size="22"
@@ -600,38 +500,37 @@ async function deleteConfirmed() {
                               <VRow class="">
                                   <VRow>
                                       <VCol cols="6">
-                                        <VTextField v-model="tituloModel" label="Título del video" />
+                                        <VTextField v-model="tituloModel" label="Título del modulo" />
                                       </VCol>
 
                                       <VCol cols="6">
                                         <VTextField v-model="descripcionModel" label="Descripción" />
                                       </VCol>
-                                      
-                                      <VCol cols="12">
-                                        <VTextField v-model="thumbnailModel" label="Imagen principal" />
-                                      </VCol>
 
                                       <VCol cols="12" >
-                                          <VTextField v-model="idRudoModel" label="Id del video de RUDO" />
-                                      </VCol>
-
-                                      <VCol cols="12">
-                                        <VTextField v-model="duracionModel" label="Tiempo en minutos del video" suffix="minutos" append-inner-icon="tabler-clock" type="number" />
-                                      </VCol>
-
-                                      <VCol cols="12" >
-                                          <v-select v-model="categoriaModel" :items="categoriasItems" label="Seleccione la categoría del video" />
-                                      </VCol>
-
-                                      <VCol cols="12" >
-                                          <VCombobox 
-                                          item-text="title"
-                                          item-value="value"
-                                          v-model="etiquetasModel" 
-                                          :items="etiquetasItems"
-                                          chips
-                                          multiple
-                                          label="Etiquetas" />
+                                          <VSelect 
+                                            item-text="title"
+                                            item-value="value"
+                                            v-model="videosModel" 
+                                            :items="videosItems"
+                                            chips
+                                            multiple
+                                            label="Videos educativos">
+                                            <template #selection="{ item }">
+                                                  <div>
+                                                      {{ item.title }} - {{ item.value }}
+                                                  </div>
+                                              </template>
+                                              <template #item="{ item, props }">
+                                                  <v-list-item v-bind="props">
+                                                      <v-list-item-content>
+                                                          <v-list-item-subtitle>
+                                                              <p>_id: {{ item.value }}</p>
+                                                          </v-list-item-subtitle>
+                                                      </v-list-item-content>
+                                                  </v-list-item>
+                                              </template>
+                                          </VSelect>
                                       </VCol>
          
                                   </VRow>
@@ -657,19 +556,18 @@ async function deleteConfirmed() {
 </template>
 
 <style lang="scss">
+  .flat-picker-custom-style {
+    position: sticky;
+  }
 
-.flat-picker-custom-style {
-  position: sticky;
-}
+  .flatpickr-calendar{
+    position: fixed;
+    top: 0; 
+  }
 
-.flatpickr-calendar{
-  position: fixed;
-  top: 0; 
-}
-
-.flatpickr-calendar.open {     
-  z-index: 10000;
-}
+  .flatpickr-calendar.open {     
+    z-index: 10000;
+  }
 </style>
 
 <style scoped> 
