@@ -22,6 +22,19 @@ if(urlParamsGET.get('msjcodigorojas') != null){
   container.parentNode.insertBefore(newDiv, container);
 }
 
+if(urlParamsGET.get('msjopinionestadio') != null){
+  // Obtener la referencia del elemento container-lr
+  const container = document.querySelector('.inicio-registro .container-lr');
+  // Crear el nuevo div
+  const newDiv = document.createElement('div');
+  // Agregar la clase al nuevo div
+  newDiv.classList.add('mensaje_continuar_viendo');
+  // Agregar el contenido de texto al nuevo div
+  newDiv.innerHTML = 'Opinion Estadio <br> Continúa disfrutando el contenido inciando sesión';
+  // Insertar el nuevo div antes de container-lr
+  container.parentNode.insertBefore(newDiv, container);
+}
+
 if(urlParamsGET.get('msjenvivo') != null){
   // // Obtener la referencia del elemento container-lr
   // const container = document.querySelector('.inicio-registro .container-lr');
