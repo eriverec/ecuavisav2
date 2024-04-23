@@ -126,7 +126,7 @@
                                 <strong>Imagen principal </strong>
                               </td>
                               <td scope="col">
-                                <img :src="suggestion.thumbnail" width="75" height="auto">
+                                <img class="mt-5" :src="suggestion.thumbnail" width="175">
                               </td>
                             </tr>
                           </thead>

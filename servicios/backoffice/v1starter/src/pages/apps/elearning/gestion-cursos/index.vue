@@ -49,21 +49,60 @@ const configSnackbar = ref({
     model: false
 });
 
-const etiquetasItems = ["Fitness", "Ejercicios", "Otros"];
+const etiquetasItems = ref([]);
 
-const categoriasItems = [{
-  title: "Cocina",
-  value: "Cocina"
-},{
-  title: "Deportes",
-  value: "Deportes"
-}];
+const categoriasItems = ref([]);
 
 onMounted(async ()=>{
+  await getEtiquetas();
+  await getCategorias();
+
   await getModulos();
   await getGestionCursos();
   await getCuestionario();
 })
+
+async function getEtiquetas(page = 1, limit= 10){
+  try {
+      currentPage.value = 1;
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/elearning/etiqueta/listar.php`, requestOptions);
+      const data = await response.json();
+      etiquetasItems.value = data;
+      
+  } catch (error) {
+      return console.error(error.message);    
+  }
+}
+
+async function getCategorias(page = 1, limit= 10){
+  try {
+      currentPage.value = 1;
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/elearning/categoria/listar.php`, requestOptions);
+      const data = await response.json();
+      categoriasItems.value = data;
+      
+  } catch (error) {
+      return console.error(error.message);    
+  }
+}
 
 async function getGestionCursos(page = 1, limit= 10){
   try {
@@ -351,6 +390,10 @@ async function onComplete(){
         }
     }
     await getGestionCursos();
+
+    await getEtiquetas();
+    await getCategorias();
+  
     isDialogActive.value = false;
 }
 
