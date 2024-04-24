@@ -593,12 +593,12 @@ function onEvent() {
   if (!mousemoveExecuted) {
     pintarModalDOM();
     bootstrapJS();
-    console.log("Se movio el mouse");
+    // console.log("Se movio el mouse");
     mousemoveExecuted = true;
   }
 
 }
-
+bootstrapJS();
 //el usuario debe de estar logueado
 if (ECUAVISA_EC.login()) {
   // window.addEventListener('scroll', onEvent);
