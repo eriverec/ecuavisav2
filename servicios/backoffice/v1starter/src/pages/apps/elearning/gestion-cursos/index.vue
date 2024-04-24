@@ -1,9 +1,12 @@
 <script setup>
+import moduloTemplate from "@/views/apps/elearning/gestion-modulos/moduloTemplate.vue";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
+
+const isDialogVisibleAddModulo = ref(false)
 
 const currentTab = ref('tab-lista');
 const checkbox = ref(1);
@@ -216,7 +219,7 @@ function resetForm(){
     etiquetasModel.value = "";
     categoriaModel.value = "";
     modulosSelectList.value = [];
-    dataModuloModel.value = null;
+    dataModuloModel.value = [];
     dataCuestionarioModel.value = null;
   
 }
@@ -303,7 +306,7 @@ async function onComplete(){
         !duracionModel.value
       ){
         configSnackbar.value = {
-            message: "Llenar todos los campos para crear el desafío",
+            message: "Llenar todos los campos para crear el registro",
             type: "error",
             model: true
         };
@@ -337,7 +340,7 @@ async function onComplete(){
       const respuesta = await send.json();
       if (respuesta.resp) {
         configSnackbar.value = {
-            message: "Video desafío creada correctamente",
+            message: "Registro creado correctamente",
             type: "success",
             model: true
         };
@@ -515,6 +518,19 @@ async function deleteConfirmed() {
     isDialogVisibleDelete.value = false;
 }
 
+const receiveTime = async (data) => {
+  if(data.action == "modal"){
+    isDialogVisibleAddModulo.value = data.modalShow;
+  }
+
+  if(data.action == "add"){
+    await getModulos();
+    isDialogVisibleAddModulo.value = data.modalShow;
+    dataModuloModel.value.push(data.id);
+    inicializarVideosSelectList()
+  }
+};
+
 </script>
 
 <template>
@@ -523,6 +539,20 @@ async function deleteConfirmed() {
     <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
                 {{ configSnackbar.message }}
     </VSnackbar>
+
+
+    <VDialog
+      v-model="isDialogVisibleAddModulo"
+      width="600"
+    >
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleAddModulo = !isDialogVisibleAddModulo" />
+
+      <VCard>
+        <!-- Dialog Content -->
+        <moduloTemplate @get:eventModalCR="receiveTime" />
+      </VCard>
+    </VDialog>
 
     <VDialog
       v-model="isDialogVisibleVistaPreviaVideo"
@@ -770,7 +800,12 @@ async function deleteConfirmed() {
                                       </VCol>
 
                                       <VCol cols="12" >
-                                          <v-select v-model="categoriaModel" :items="categoriasItems" label="Seleccione la categoría del curso" />
+                                        <VCombobox 
+                                          v-model="categoriaModel" 
+                                          :items="categoriasItems" 
+                                          chips
+                                          label="Seleccione la categoría del video"
+                                          :menu-props="{ maxHeight: '300' }" />
                                       </VCol>
 
                                       <VCol cols="12" >
@@ -781,7 +816,8 @@ async function deleteConfirmed() {
                                           :items="etiquetasItems"
                                           chips
                                           multiple
-                                          label="Etiquetas" />
+                                          label="Etiquetas" 
+                                          :menu-props="{ maxHeight: '300' }"/>
                                       </VCol>
 
                                       <VCol cols="12" >
@@ -790,7 +826,8 @@ async function deleteConfirmed() {
                                             item-value="value"
                                             v-model="dataCuestionarioModel" 
                                             :items="dataCuestionarioItems"
-                                            label="Cuestionario educativos para al final del curso">
+                                            label="Cuestionario educativos para al final del curso"
+                                            :menu-props="{ maxHeight: '400' }">
                                             <template #selection="{ item }">
                                                   <div>
                                                       {{ item.title }} - {{ item.value }}
@@ -809,32 +846,40 @@ async function deleteConfirmed() {
                                       </VCol>
 
                                       <VCol cols="12" >
-                                          <VSelect 
-                                            item-text="title"
-                                            item-value="value"
-                                            v-model="dataModuloModel" 
-                                            :items="dataModuloItems"
-                                            chips
-                                            multiple
-                                            label="Módulos educativos">
-                                            <template #selection="{ item }">
-                                                  <div>
-                                                      {{ item.title }} - {{ item.value }}
-                                                  </div>
-                                              </template>
-                                              <template #item="{ item, props }">
-                                                  <v-list-item v-bind="props">
-                                                      <v-list-item-content>
-                                                          <v-list-item-subtitle>
-                                                              <p>_id: {{ item.value }}</p>
-                                                          </v-list-item-subtitle>
-                                                      </v-list-item-content>
-                                                  </v-list-item>
-                                              </template>
-                                          </VSelect>
+                                          <VRow>
+                                            <VCol cols="9" >
+                                              <VSelect 
+                                                item-text="title"
+                                                item-value="value"
+                                                v-model="dataModuloModel" 
+                                                :items="dataModuloItems"
+                                                chips
+                                                multiple
+                                                label="Módulos educativos"
+                                                :menu-props="{ maxHeight: '400' }">
+                                                <template #selection="{ item }">
+                                                      <div>
+                                                          {{ item.title }} - {{ item.value }}
+                                                      </div>
+                                                  </template>
+                                                  <template #item="{ item, props }">
+                                                      <v-list-item v-bind="props">
+                                                          <v-list-item-content>
+                                                              <v-list-item-subtitle>
+                                                                  <p>_id: {{ item.value }}</p>
+                                                              </v-list-item-subtitle>
+                                                          </v-list-item-content>
+                                                      </v-list-item>
+                                                  </template>
+                                              </VSelect>
+                                            </VCol>
+                                            <VCol cols="3" >
+                                              <VBtn title="Agregar módulo" block @click="isDialogVisibleAddModulo = true"> Agregar </VBtn>
+                                            </VCol>
+                                          </VRow>
                                       </VCol>
 
-                                      <VCol cols="12" v-if="dataModuloModel">
+                                      <VCol cols="12" v-if="dataModuloModel.length > 0">
                                         <VList
                                           lines="two"
                                           border
@@ -847,7 +892,7 @@ async function deleteConfirmed() {
                                               <template #prepend>
                                                 <VIcon
                                                   :size="35"
-                                                  icon="mdi-file-video"
+                                                  icon="mdi-sale"
                                                   color="success"
                                                 />
                                               </template>
@@ -862,7 +907,7 @@ async function deleteConfirmed() {
                                                   color="success"
                                                   class="me-3"
                                                 >
-                                                  <span class="ms-4">Video</span>
+                                                  <span class="ms-4">Módulo</span>
                                                 </VBadge>
 
                                                 <span class="text-xs text-disabled">{{ videoSelect.value }}</span>

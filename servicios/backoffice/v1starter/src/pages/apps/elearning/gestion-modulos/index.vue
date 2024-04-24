@@ -209,7 +209,7 @@ async function onComplete(){
         !videosModel.value
       ){
         configSnackbar.value = {
-            message: "Llenar todos los campos para crear el desafío",
+            message: "Llenar todos los campos para crear el registro",
             type: "error",
             model: true
         };
@@ -237,7 +237,7 @@ async function onComplete(){
       const respuesta = await send.json();
       if (respuesta.resp) {
         configSnackbar.value = {
-            message: "Video desafío creada correctamente",
+            message: "Registro creado correctamente",
             type: "success",
             model: true
         };
