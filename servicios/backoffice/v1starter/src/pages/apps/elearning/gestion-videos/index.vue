@@ -665,7 +665,10 @@ async function deleteConfirmed() {
                                           v-model="categoriaModel" 
                                           :items="categoriasItems" 
                                           chips
-                                          label="Seleccione la categoría del video" />
+                                          label="Seleccione la categoría del video"
+                                          :menu-props="{ maxHeight: '300' }" 
+                                          @keydown.enter.prevent="categoriaModel" 
+                                          />
                                       </VCol>
 
                                       <VCol cols="12" >
@@ -676,7 +679,8 @@ async function deleteConfirmed() {
                                             :items="etiquetasItems"
                                             chips
                                             multiple
-                                            label="Etiquetas"/>
+                                            label="Etiquetas"
+                                            :menu-props="{ maxHeight: '300' }" />
                                       </VCol>
          
                                   </VRow>

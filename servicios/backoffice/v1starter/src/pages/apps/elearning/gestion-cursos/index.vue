@@ -805,7 +805,9 @@ const receiveTime = async (data) => {
                                           :items="categoriasItems" 
                                           chips
                                           label="Seleccione la categoría del video"
-                                          :menu-props="{ maxHeight: '300' }" />
+                                          :menu-props="{ maxHeight: '300' }" 
+                                          @keydown.enter.prevent="categoriaModel"
+                                          />
                                       </VCol>
 
                                       <VCol cols="12" >
