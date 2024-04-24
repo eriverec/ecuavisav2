@@ -592,7 +592,7 @@ function eventModal() {
 function onEvent() {
   if (!mousemoveExecuted) {
     pintarModalDOM();
-    bootstrapJS();
+    // bootstrapJS();
     // console.log("Se movio el mouse");
     mousemoveExecuted = true;
   }
