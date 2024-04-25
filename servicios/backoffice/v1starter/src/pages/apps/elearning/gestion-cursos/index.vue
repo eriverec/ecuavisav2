@@ -3,6 +3,7 @@ import moduloTemplate from "@/views/apps/elearning/gestion-modulos/moduloTemplat
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
+import { parseISO } from 'date-fns';
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 
@@ -19,6 +20,13 @@ const disabledViewList = ref(false);
 const switchOnDisabled = ref(false);
 const isDialogVisibleVistaPreviaVideo = ref(false)
 const iframeOptions = ref(null)
+
+const fechaHoy = moment().format("YYYY-MM-DD");
+const fechaIFModel = ref({
+  fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
+  fechai: fechaHoy,
+  fechaf: fechaHoy
+})
 
 const isDialogActive = ref(false);
 const accionForm = ref('');
@@ -221,7 +229,11 @@ function resetForm(){
     modulosSelectList.value = [];
     dataModuloModel.value = [];
     dataCuestionarioModel.value = null;
-  
+    fechaIFModel.value = {
+      fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
+      fechai: fechaHoy,
+      fechaf: fechaHoy
+    }
 }
 function closeDiag(){
     resetForm(); 
@@ -289,6 +301,18 @@ async function onEdit(id){
         return acumulador;
       }, []));
 
+    if(data.fechai){
+      const fechasMongo = {
+        fechai: moment(data.fechai, "DD-MM-YYYY").format("YYYY-MM-DD"),
+        fechaf: moment(data.fechaf, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      }
+
+      fechaIFModel.value = {
+        fechasModel: [parseISO(fechasMongo.fechai), parseISO(fechasMongo.fechaf)],
+        fechai: data.fechai,
+        fechaf: data.fechaf
+      }
+    }
     isDialogActive.value = true; 
 
     modulosSelectList.value= obtenerListaOrdenada(dataModuloModel.value, data.modulos);
@@ -325,6 +349,8 @@ async function onComplete(){
           "categoria": categoriaModel.value,
           "etiquetas": etiquetasModel.value,
           "idCuestionario": dataCuestionarioModel.value,
+          "fechai": fechaIFModel.value.fechai,
+          "fechaf": fechaIFModel.value.fechaf,
           "modulos": obtenerValorYPosicion()
       }
       var raw = JSON.stringify(jsonEnviar);
@@ -363,6 +389,8 @@ async function onComplete(){
           "idCuestionario": dataCuestionarioModel.value,
           "categoria": categoriaModel.value,
           "etiquetas": etiquetasModel.value,
+          "fechai": fechaIFModel.value.fechai,
+          "fechaf": fechaIFModel.value.fechaf,
           "modulos": obtenerValorYPosicion()
         }
         var raw = JSON.stringify(jsonEnviar);
@@ -530,6 +558,13 @@ const receiveTime = async (data) => {
     inicializarVideosSelectList()
   }
 };
+
+function obtenerFechas(selectedDates, dateStr, instance) {
+    if (selectedDates.length > 1) {
+      fechaIFModel.value.fechai = moment(selectedDates[0]).format('DD-MM-YYYY');
+      fechaIFModel.value.fechaf = moment(selectedDates[1]).format('DD-MM-YYYY'); 
+    }
+}
 
 </script>
 
@@ -779,6 +814,24 @@ const receiveTime = async (data) => {
                           <VForm class="mt-6" @submit.prevent="onComplete">
                               <VRow class="">
                                   <VRow>
+                                      <VCol cols="12">
+                                          <AppDateTimePicker 
+                                            label="Fecha de inicio y fin del curso" 
+                                            prepend-inner-icon="tabler-calendar" 
+                                            density="compact" 
+                                            v-model="fechaIFModel.fechasModel"
+                                            show-current=true 
+                                            @on-change="obtenerFechas" 
+                                            :config="{
+                                                position: 'auto right',
+                                                mode: 'range',
+                                                altFormat: 'd F j, Y',
+                                                dateFormat: 'l, j \\d\\e F \\d\\e Y',
+                                                valueFormat: 'd-m-Y',
+                                                reactive: true
+                                            }" />
+                                      </VCol>
+
                                       <VCol cols="6">
                                         <VTextField v-model="tituloModel" label="Título del curso" />
                                       </VCol>
