@@ -512,7 +512,10 @@ async function deleteConfirmed() {
                     <VListItem :disabled="disabledViewList">
                       <VListItemTitle>
                         <div class="nombre-desafio d-flex flex-column">
-                          <small>Video</small>
+                          <div class="d-flex">
+                            <small>Video</small>
+                            <small class="text-disabled"><code class="p-0"><b>_id:</b>{{ video._id }}</code></small>
+                          </div>
                           <label>{{ video.titulo }}</label>
                           <span class="text-xs text-disabled">{{ video.descripcion }}</span>
                           <div class="content-items d-flex">

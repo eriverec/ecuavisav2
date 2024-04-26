@@ -735,7 +735,10 @@ function obtenerFechaVencimiento(selectedDates, dateStr, instance) {
                     <VListItem :disabled="disabledViewList">
                       <VListItemTitle>
                         <div class="nombre-desafio d-flex flex-column">
-                          <small>Curso</small>
+                          <div class="d-flex">
+                            <small>Curso</small>
+                            <small class="text-disabled"><code class="p-0"><b>_id:</b>{{ curso._id }}</code></small>
+                          </div>
                           <label>{{ curso.titulo }}</label>
                           <div class="content-items d-flex">
                             <div class="content-curso">
