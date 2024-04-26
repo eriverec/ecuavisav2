@@ -24,7 +24,18 @@ const iframeOptions = ref(null)
 const fechaHoy = moment().format("YYYY-MM-DD");
 const fechaIFModel = ref({
   fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
+  fechasVModel: [parseISO(fechaHoy)],
+  fechasVConfig: {
+      position: 'auto right',
+      mode: 'single',
+      minDate: parseISO(fechaHoy),
+      altFormat: 'd F j, Y',
+      dateFormat: 'l, j \\d\\e F \\d\\e Y',
+      valueFormat: 'd-m-Y',
+      reactive: true
+  },
   fechai: fechaHoy,
+  fechaV: fechaHoy,
   fechaf: fechaHoy
 })
 
@@ -231,7 +242,10 @@ function resetForm(){
     dataCuestionarioModel.value = null;
     fechaIFModel.value = {
       fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
+      fechasVModel: [parseISO(fechaHoy)],
+      fechasVConfig: fechaIFModel.value.fechasVConfig,
       fechai: fechaHoy,
+      fechaV: fechaHoy,
       fechaf: fechaHoy
     }
 }
@@ -305,13 +319,18 @@ async function onEdit(id){
       const fechasMongo = {
         fechai: moment(data.fechai, "DD-MM-YYYY").format("YYYY-MM-DD"),
         fechaf: moment(data.fechaf, "DD-MM-YYYY").format("YYYY-MM-DD"),
+        fechav: moment(data.fechaVencimiento, "DD-MM-YYYY").format("YYYY-MM-DD"),
       }
 
       fechaIFModel.value = {
         fechasModel: [parseISO(fechasMongo.fechai), parseISO(fechasMongo.fechaf)],
+        fechasVModel: [parseISO(fechasMongo.fechav)],
+        fechasVConfig: fechaIFModel.value.fechasVConfig,
         fechai: data.fechai,
+        fechaV: data.fechaVencimiento,
         fechaf: data.fechaf
       }
+      // fechaIFModel.value.fechasVConfig["minDate"] = 
     }
     isDialogActive.value = true; 
 
@@ -351,6 +370,7 @@ async function onComplete(){
           "idCuestionario": dataCuestionarioModel.value,
           "fechai": fechaIFModel.value.fechai,
           "fechaf": fechaIFModel.value.fechaf,
+          "fechaVencimiento": fechaIFModel.value.fechaV,
           "modulos": obtenerValorYPosicion()
       }
       var raw = JSON.stringify(jsonEnviar);
@@ -391,6 +411,7 @@ async function onComplete(){
           "etiquetas": etiquetasModel.value,
           "fechai": fechaIFModel.value.fechai,
           "fechaf": fechaIFModel.value.fechaf,
+          "fechaVencimiento": fechaIFModel.value.fechaV,
           "modulos": obtenerValorYPosicion()
         }
         var raw = JSON.stringify(jsonEnviar);
@@ -563,6 +584,17 @@ function obtenerFechas(selectedDates, dateStr, instance) {
     if (selectedDates.length > 1) {
       fechaIFModel.value.fechai = moment(selectedDates[0]).format('DD-MM-YYYY');
       fechaIFModel.value.fechaf = moment(selectedDates[1]).format('DD-MM-YYYY'); 
+    }
+
+    if(selectedDates.length == 2){
+      fechaIFModel.value.fechasVConfig["minDate"] = selectedDates[1];
+      fechaIFModel.value.fechasVModel = [selectedDates[1]];
+    }
+}
+
+function obtenerFechaVencimiento(selectedDates, dateStr, instance) {
+    if (selectedDates.length > 0) {
+      fechaIFModel.value.fechaV = moment(selectedDates[0]).format('DD-MM-YYYY');
     }
 }
 
@@ -830,6 +862,16 @@ function obtenerFechas(selectedDates, dateStr, instance) {
                                                 valueFormat: 'd-m-Y',
                                                 reactive: true
                                             }" />
+                                      </VCol>
+                                      <VCol cols="12">
+                                          <AppDateTimePicker 
+                                            label="Fecha de vencimiento" 
+                                            prepend-inner-icon="tabler-calendar" 
+                                            density="compact" 
+                                            v-model="fechaIFModel.fechasVModel"
+                                            show-current=true 
+                                            @on-change="obtenerFechaVencimiento" 
+                                            :config="fechaIFModel.fechasVConfig" />
                                       </VCol>
 
                                       <VCol cols="6">
