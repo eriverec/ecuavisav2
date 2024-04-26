@@ -330,7 +330,8 @@ async function onEdit(id){
         fechaV: data.fechaVencimiento,
         fechaf: data.fechaf
       }
-      // fechaIFModel.value.fechasVConfig["minDate"] = 
+
+      fechaIFModel.value.fechasVConfig["minDate"] = parseISO(fechasMongo.fechav);
     }
     isDialogActive.value = true; 
 
