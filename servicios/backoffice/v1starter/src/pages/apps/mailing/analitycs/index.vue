@@ -60,10 +60,7 @@
 <script setup>
 import { ref, onMounted, watch } from 'vue';
 import ApexChart from 'vue3-apexcharts';
-
-const tokenUrl = 'https://api.sendpulse.com/oauth/access_token';
-const clientId = 'c79f7382012df0ea4c6fa37afec6374e';
-const clientSecret = '164551af334e1ec93e1b3099afd93a88';
+import { getCampaigns, getCampaignStatistics } from './useSendPulse.js'; // Importo las funciones de getCampaigns y getCampaignStatistics
 
 const formattedCampaigns = ref([]);
 const selectedCampaignId = ref(null);
@@ -128,58 +125,23 @@ const serverErrorsOptions = ref({
 });
 const serverErrorsSeries = ref([{ data: [] }]);
 
-async function getAccessToken() {
-  try {
-    const response = await fetch(tokenUrl, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        grant_type: 'client_credentials',
-        client_id: clientId,
-        client_secret: clientSecret,
-      }),
-    });
-    const data = await response.json();
-    return data.access_token;
-  } catch (error) {
-    console.error('Error obteniendo el token de acceso:', error);
-    throw error;
-  }
-}
 
 onMounted(async () => {
   loading.value = true;
-  const accessToken = await getAccessToken();
-  const campaignsResponse = await fetch('https://api.sendpulse.com/campaigns?order=desc', {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  const campaignsData = await campaignsResponse.json();
-  formattedCampaigns.value = campaignsData.slice(0, 20).map(campaign => ({
-    id: campaign.id,
-    title: campaign.name,
-  }));
+  const campaigns = await getCampaigns(); // Llamada a la función getCampaigns
+  formattedCampaigns.value = campaigns;
   loading.value = false;
 });
 
 watch(selectedCampaignId, async (newVal) => {
   if (!newVal) return;
   loading.value = true;
-  const accessToken = await getAccessToken();
-  const statisticsResponse = await fetch(`https://api.sendpulse.com/campaigns/${newVal}`, {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  });
-  const statisticsData = await statisticsResponse.json();
-  statsList.value = statisticsData.statistics.general;
+  const campaign = await getCampaignStatistics(newVal); // Llamada a la función getCampaignStatistics
+  statsList.value = campaign.statistics.general;
   campaignInfo.value = {
-    sendDate: statisticsData.send_date,
-    permalink: statisticsData.permalink,
-    // Aquí puedes añadir más campos según necesites
+    sendDate: campaign.send_date,
+    permalink: campaign.permalink,
+    // ... (código omitido)
   };
   loading.value = false;
   updateChartData();
