@@ -1492,11 +1492,8 @@ const showForzadoSendDialog = async (id) => {
                   </VList>
 
                   <VList lines="two" border  v-if="dataNewsletter.length > 0">
-                  <template
-                    v-for="(c, index) of dataNewsletter"
-                    :key="index"
-                  >
-                    <VListItem :disabled="disabledViewList">
+                  <template v-for="(c, index) of dataNewsletter" :key="`item-${index}`" >
+                    <VListItem :disabled="disabledViewList" :class="`item-${c._id}`">
                       <VListItemTitle>
                         <h6 class="text-base" style="cursor: pointer;">
                           <div
@@ -1608,7 +1605,7 @@ const showForzadoSendDialog = async (id) => {
                         </div>
                       </template>
                     </VListItem>
-                    <VDivider v-if="index !== dataNewsletter.length - 1" />
+                    <VDivider :class="`xyz-${c._id}`" v-if="index !== dataNewsletter.length - 1" />
                   </template>
                 </VList>
                 <span class="text-sm text-disabled">
@@ -1632,7 +1629,14 @@ const showForzadoSendDialog = async (id) => {
   </section>
 </template>
 
-
+<style scoped>
+.item-663172463993551db1d50a76{
+  display: none;
+}
+.xyz-663172463993551db1d50a76{
+  border: none;
+}
+</style>
 
 <style >  
   .loading{

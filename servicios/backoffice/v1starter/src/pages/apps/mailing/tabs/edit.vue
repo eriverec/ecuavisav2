@@ -444,8 +444,8 @@ const onPreview = async (preview) => {
     <VRow class="d-flex">
       <VCol       
         cols="6"
-        class="container" 
         v-for=" item, index in dataNewsletter"
+        :class="`container itemc-${item._id}`" 
       >
         <VCard class="mt-5" :title="'Editar '+item.nombre">
               <VCardText>
@@ -857,6 +857,12 @@ const onPreview = async (preview) => {
   </section>
 
 </template>
+
+<style scoped>
+.itemc-663172463993551db1d50a76{
+  display: none;
+}
+</style>
 
 <style>
 @media screen and (max-width: 1000px) {
