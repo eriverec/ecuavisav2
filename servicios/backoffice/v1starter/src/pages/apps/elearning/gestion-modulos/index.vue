@@ -20,6 +20,9 @@ const iframeOptions = ref(null)
 const isDialogActive = ref(false);
 const accionForm = ref('');
 
+const dataCuestionarioModel = ref([]);
+const dataCuestionarioItems = ref([]);
+
 const nombre = ref('');
 
 const idRudoModel = ref('');
@@ -46,6 +49,7 @@ const configSnackbar = ref({
 const videosItems = ref([]);
 
 onMounted(async ()=>{
+  await getCuestionario();
   await getVideos();
   await getGestionModulos();
 })
@@ -66,6 +70,35 @@ async function getGestionModulos(page = 1, limit= 10){
       const data = await response.json();
 
       dataVideoList.value = data.data;
+      
+      totalRegistros.value = Math.ceil(data.total / data.limit);
+  } catch (error) {
+      return console.error(error.message);    
+  }
+}
+
+async function getCuestionario(page = 1, limit= 10){
+  try {
+      currentPage.value = 1;
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://e-learning-cuestionario.vercel.app/cuestionarios/all/get`, requestOptions);
+      const data = await response.json();
+
+      dataCuestionarioItems.value = data.data.reduce((acumulador, actual) => {
+        acumulador.push({
+          title: `${actual.titulo}`,
+          value: actual._id,
+        });
+        return acumulador;
+      }, []);
       
       totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
@@ -133,6 +166,7 @@ function resetForm(){
     videosModel.value = null;
     categoriaModel.value = "";
     videosSelectList.value = [];
+    dataCuestionarioModel.value = null;
   
 }
 function closeDiag(){
@@ -189,6 +223,10 @@ async function onEdit(id){
 
     tituloModel.value = data.titulo;
     descripcionModel.value = data.descripcion;
+    if(data.cuestionario){
+      dataCuestionarioModel.value = data.cuestionario._id;
+    }
+
     videosModel.value = filtrarDesafios(videosItems.value, data.videos.reduce((acumulador, actual) => {
         acumulador.push(actual._id);
         return acumulador;
@@ -222,6 +260,7 @@ async function onComplete(){
       let jsonEnviar = {
           "titulo": tituloModel.value,
           "descripcion": descripcionModel.value,
+          "idCuestionario": dataCuestionarioModel.value || null,
           "videos": obtenerValorYPosicion()
       }
       var raw = JSON.stringify(jsonEnviar);
@@ -254,6 +293,7 @@ async function onComplete(){
         let jsonEnviar = {
           "titulo": tituloModel.value,
           "descripcion": descripcionModel.value,
+          "idCuestionario": dataCuestionarioModel.value || null,
           "videos": obtenerValorYPosicion()
         }
         var raw = JSON.stringify(jsonEnviar);
@@ -612,6 +652,32 @@ async function deleteConfirmed() {
 
                                       <VCol cols="6">
                                         <VTextField v-model="descripcionModel" label="Descripción" />
+                                      </VCol>
+
+                                      <VCol cols="12" >
+                                          <VSelect 
+                                            item-text="title"
+                                            item-value="value"
+                                            v-model="dataCuestionarioModel" 
+                                            :items="dataCuestionarioItems"
+                                            label="Cuestionario educativos para al final del curso"
+                                            clearable
+                                            :menu-props="{ maxHeight: '400' }">
+                                            <template #selection="{ item }">
+                                                  <div>
+                                                      {{ item.title }} - {{ item.value }}
+                                                  </div>
+                                              </template>
+                                              <template #item="{ item, props }">
+                                                  <v-list-item v-bind="props">
+                                                      <v-list-item-content>
+                                                          <v-list-item-subtitle>
+                                                              <p>_id: {{ item.value }}</p>
+                                                          </v-list-item-subtitle>
+                                                      </v-list-item-content>
+                                                  </v-list-item>
+                                              </template>
+                                          </VSelect>
                                       </VCol>
 
                                       <VCol cols="12">

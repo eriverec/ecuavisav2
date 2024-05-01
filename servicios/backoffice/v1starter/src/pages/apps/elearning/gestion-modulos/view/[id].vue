@@ -17,7 +17,7 @@
               <VWindowItem value="tab-detalles">
                 <div class="d-flex flex-wrap py-4 gap-4 align-items-center" style="justify-content: space-between;">
                   <div>
-                    <VCardTitle>Información sobre el video: <b>"{{suggestion._id}}"</b>
+                    <VCardTitle>Información sobre el módulo: <b>"{{suggestion._id}}"</b>
                     </VCardTitle>
                     <VCardSubtitle> Detalles
                     </VCardSubtitle>
