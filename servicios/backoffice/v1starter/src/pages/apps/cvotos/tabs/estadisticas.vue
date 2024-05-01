@@ -120,8 +120,8 @@ export default {
     const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`;
 
     const columnColors = {
-      series1: '#826af9',
-      series2: '#d2b0ff',
+      series1: '#0A6847',
+      series2: '#7ABA78',
       bg: '#f8d3ff',
     };
 
@@ -256,7 +256,7 @@ export default {
       chartConfig.chartOptions.chart['height'] = 350;
       var seriesOptions = [
         {
-          name: "Num de usuarios que respondieron",
+          name: "Usuarios",
           data: chartConfig.series[0].data
         }
       ];

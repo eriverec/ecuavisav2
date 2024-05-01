@@ -23,6 +23,7 @@ const fetchData = async () => {
       name: item.data[0].name,
       lastname: item.data[0].lastname,
       telefono: item.data[0].telefono,
+      email: item.data[0].email,
       idTrivia: item.idTrivia,
       pregunta: trivia[0].pregunta,
       answers: trivia.map(ans => ans.respuesta),
@@ -62,6 +63,7 @@ onMounted(async() => {
 })
 
 const groupedData = computed(() => {
+  console.log(data);
   const byTrivia = data.reduce((acc, item) => {
     const key = item.idTrivia
     if (!acc[key]) {
@@ -73,12 +75,15 @@ const groupedData = computed(() => {
   const grouped = {}
   for (const key in byTrivia) {
     grouped[key] = byTrivia[key].reduce((acc, item) => {
+      
       const subkey = `${item.name}_${item.lastname}`
       if (!acc[subkey]) {
         acc[subkey] = {
           name: item.name,
           lastname: item.lastname,
           telefono: item.telefono,
+          email: item.email,
+
           answers: [],
           total: 0,
           counts: {}
@@ -119,8 +124,11 @@ const groupedData = computed(() => {
       <VCardItem class="pb-sm-0">
         <div class="d-flex justify-space-between">
             <VCardTitle>
-              <div>
+              <!-- <div>
                 <VChip label class="text-secundary">Trivia {{ id }} </VChip> {{ group[0].pregunta }} 
+              </div> -->
+              <div>
+                 {{ group[0].pregunta }} 
               </div>
             </VCardTitle>
           </div>
@@ -143,8 +151,10 @@ const groupedData = computed(() => {
                   <th>NOMBRE</th>
                   <th>APELLIDO</th>
                   <th>TELEFONO</th>
-                  <!-- <th>Respuestas</th> -->
-                  <th>TOTAL</th>
+                  <th>EMAIL</th>
+                  <th>Respuestas</th>
+
+                  <!-- <th>TOTAL</th> -->
   
                 </tr>
               </thead>
@@ -153,7 +163,9 @@ const groupedData = computed(() => {
                   <td class="font-weight-thin">{{ item.name }}</td>
                   <td class="font-weight-thin">{{ item.lastname }}</td>
                   <td class="font-weight-thin">{{ item.telefono }}</td>
-                  <!-- <td><ul><li v-for="(ans, i) in item.answers" :key="i">{{ ans }} {{ count }}</li></ul></td> -->
+                  <td class="font-weight-thin">{{ item.email }}</td>
+
+                  <td><ul><li v-for="(ans, i) in item.answers" :key="i">{{ ans }} {{ count }}</li></ul></td>
                   <!-- <td>
                     <ul>
                       <li v-for="(count, answer) in item.counts" :key="answer">
@@ -161,7 +173,7 @@ const groupedData = computed(() => {
                       </li>
                     </ul>
                   </td> -->
-                  <td class="font-weight-thin">{{ item.total }}</td>
+                  <!-- <td class="font-weight-thin">{{ item.total }}</td> -->
                 </tr>
               </tbody>
   
