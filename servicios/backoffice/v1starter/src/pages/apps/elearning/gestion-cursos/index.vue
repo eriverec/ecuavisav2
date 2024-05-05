@@ -47,8 +47,18 @@ const dataModuloModel = ref([]);
 const dataModuloItems = ref([]);
 const modulosSelectList = ref([]);
 
+const selectRefModulo = ref(null);
+const moduloModelLoading = ref(false);
+const searchModuloModel = ref(null)
+const moduloItemsCopy = ref([]);
+
 const dataCuestionarioModel = ref([]);
 const dataCuestionarioItems = ref([]);
+
+const selectRefCuestionario = ref(null);
+const cuestionarioModelLoading = ref(false);
+const searchCuestionarioModel = ref(null)
+const cuestionarioItemsCopy = ref([]);
 
 const idRudoModel = ref('');
 const duracionModel = ref('');
@@ -86,7 +96,6 @@ onMounted(async ()=>{
 
 async function getEtiquetas(page = 1, limit= 10){
   try {
-      currentPage.value = 1;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -107,7 +116,6 @@ async function getEtiquetas(page = 1, limit= 10){
 
 async function getCategorias(page = 1, limit= 10){
   try {
-      currentPage.value = 1;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -151,7 +159,7 @@ async function getGestionCursos(page = 1, limit= 10){
 
 async function getModulos(page = 1, limit= 10){
   try {
-      currentPage.value = 1;
+      moduloModelLoading.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -171,8 +179,9 @@ async function getModulos(page = 1, limit= 10){
         });
         return acumulador;
       }, []);
+      moduloItemsCopy.value = dataModuloItems.value;
+      moduloModelLoading.value = false;
       
-      totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
       return console.error(error.message);    
   }
@@ -180,7 +189,7 @@ async function getModulos(page = 1, limit= 10){
 
 async function getCuestionario(page = 1, limit= 10){
   try {
-      currentPage.value = 1;
+      cuestionarioModelLoading.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -200,8 +209,9 @@ async function getCuestionario(page = 1, limit= 10){
         });
         return acumulador;
       }, []);
+      cuestionarioItemsCopy.value = dataCuestionarioItems.value;
+      cuestionarioModelLoading.value = false;
       
-      totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
       return console.error(error.message);    
   }
@@ -599,6 +609,44 @@ function obtenerFechaVencimiento(selectedDates, dateStr, instance) {
     }
 }
 
+//Cuestionario
+watch(async () => searchCuestionarioModel.value, async () => {
+  if (!searchCuestionarioModel.value) {
+    dataCuestionarioItems.value = cuestionarioItemsCopy.value;
+  }else{
+    dataCuestionarioItems.value = cuestionarioItemsCopy.value.filter((video) => {
+      return (video.title.toLowerCase().indexOf(searchCuestionarioModel.value.toLowerCase()) > -1) || video.value.indexOf(searchCuestionarioModel.value) > -1;
+    });
+  }
+});
+
+watch(selectRefCuestionario, (active) => {
+  if(!active){
+    setTimeout(()=>{
+      searchCuestionarioModel.value = "";
+    }, 1000)
+  }
+});
+
+//Módulo
+watch(async () => searchModuloModel.value, async () => {
+  if (!searchModuloModel.value) {
+    dataModuloItems.value = moduloItemsCopy.value;
+  }else{
+    dataModuloItems.value = moduloItemsCopy.value.filter((video) => {
+      return (video.title.toLowerCase().indexOf(searchModuloModel.value.toLowerCase()) > -1) || video.value.indexOf(searchModuloModel.value) > -1;
+    });
+  }
+});
+
+watch(selectRefModulo, (active) => {
+  if(!active){
+    setTimeout(()=>{
+      searchModuloModel.value = "";
+    }, 1000)
+  }
+});
+
 </script>
 
 <template>
@@ -903,7 +951,7 @@ function obtenerFechaVencimiento(selectedDates, dateStr, instance) {
                                           v-model="categoriaModel" 
                                           :items="categoriasItems" 
                                           chips
-                                          label="Seleccione la categoría del video"
+                                          label="Seleccione la categoría del curso"
                                           :menu-props="{ maxHeight: '300' }" 
                                           @keydown.enter.prevent="categoriaModel"
                                           />
@@ -917,18 +965,31 @@ function obtenerFechaVencimiento(selectedDates, dateStr, instance) {
                                           :items="etiquetasItems"
                                           chips
                                           multiple
-                                          label="Etiquetas" 
+                                          label="Etiquetas del curso" 
                                           :menu-props="{ maxHeight: '300' }"/>
                                       </VCol>
 
                                       <VCol cols="12" >
-                                          <VSelect 
+                                          <VSelect
+                                            v-model:menu="selectRefCuestionario"
+                                            no-data-text="No existen cuestionario que mostrar"
+                                            append-icon="mdi-refresh"
+                                            @click:append="getCuestionario"
+                                            :disabled="cuestionarioModelLoading"
                                             item-text="title"
                                             item-value="value"
                                             v-model="dataCuestionarioModel" 
                                             :items="dataCuestionarioItems"
                                             label="Cuestionario educativos para al final del curso"
                                             :menu-props="{ maxHeight: '400' }">
+                                            <template v-slot:prepend-item>
+                                              <v-list-item>
+                                                <v-list-item-content>
+                                                  <VTextField v-model="searchCuestionarioModel" clearable placeholder="Buscar cuestionario"/>
+                                                </v-list-item-content>
+                                              </v-list-item>
+                                              <v-divider class="mt-2"></v-divider>
+                                            </template>
                                             <template #selection="{ item }">
                                                   <div>
                                                       {{ item.title }} - {{ item.value }}
@@ -949,7 +1010,12 @@ function obtenerFechaVencimiento(selectedDates, dateStr, instance) {
                                       <VCol cols="12" >
                                           <VRow>
                                             <VCol cols="9" >
-                                              <VSelect 
+                                              <VSelect
+                                                v-model:menu="selectRefModulo"
+                                                no-data-text="No existen módulo que mostrar"
+                                                append-icon="mdi-refresh"
+                                                @click:append="getModulos"
+                                                :disabled="moduloModelLoading"
                                                 item-text="title"
                                                 item-value="value"
                                                 v-model="dataModuloModel" 
@@ -958,6 +1024,14 @@ function obtenerFechaVencimiento(selectedDates, dateStr, instance) {
                                                 multiple
                                                 label="Módulos educativos"
                                                 :menu-props="{ maxHeight: '400' }">
+                                                <template v-slot:prepend-item>
+                                                  <v-list-item>
+                                                    <v-list-item-content>
+                                                      <VTextField v-model="searchModuloModel" clearable placeholder="Buscar módulo"/>
+                                                    </v-list-item-content>
+                                                  </v-list-item>
+                                                  <v-divider class="mt-2"></v-divider>
+                                                </template>
                                                 <template #selection="{ item }">
                                                       <div>
                                                           {{ item.title }} - {{ item.value }}

@@ -16,12 +16,19 @@ const disabledViewList = ref(false);
 const switchOnDisabled = ref(false);
 const isDialogVisibleVistaPreviaVideo = ref(false)
 const iframeOptions = ref(null)
+const searchVideoModel = ref(null)
 
 const isDialogActive = ref(false);
+const selectRefVideo = ref(null);
 const accionForm = ref('');
 
 const dataCuestionarioModel = ref([]);
 const dataCuestionarioItems = ref([]);
+
+const selectRefCuestionario = ref(null);
+const cuestionarioModelLoading = ref(false);
+const searchCuestionarioModel = ref(null)
+const cuestionarioItemsCopy = ref([]);
 
 const nombre = ref('');
 
@@ -33,6 +40,7 @@ const tituloSticker = ref('');
 const URLSticker = ref('');
 const categoriaModel = ref('');
 const videosModel = ref(null);
+const videosModelLoading = ref(false);
 
 const tituloModel = ref(null);
 const videosSelectList = ref([]);
@@ -47,6 +55,7 @@ const configSnackbar = ref({
     model: false
 });
 const videosItems = ref([]);
+const videosItemsCopy = ref([]);
 
 onMounted(async ()=>{
   await getCuestionario();
@@ -79,7 +88,7 @@ async function getGestionModulos(page = 1, limit= 10){
 
 async function getCuestionario(page = 1, limit= 10){
   try {
-      currentPage.value = 1;
+      cuestionarioModelLoading.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -99,8 +108,11 @@ async function getCuestionario(page = 1, limit= 10){
         });
         return acumulador;
       }, []);
+
+      cuestionarioItemsCopy.value = dataCuestionarioItems.value;
+
+      cuestionarioModelLoading.value = false;
       
-      totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
       return console.error(error.message);    
   }
@@ -108,7 +120,7 @@ async function getCuestionario(page = 1, limit= 10){
 
 async function getVideos(page = 1, limit= 10){
   try {
-      currentPage.value = 1;
+      videosModelLoading.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -128,8 +140,9 @@ async function getVideos(page = 1, limit= 10){
         });
         return acumulador;
       }, []);
-      
-      totalRegistros.value = Math.ceil(data.total / data.limit);
+
+      videosItemsCopy.value = videosItems.value;
+      videosModelLoading.value = false;
   } catch (error) {
       return console.error(error.message);    
   }
@@ -445,7 +458,42 @@ async function deleteConfirmed() {
     isDialogVisibleDelete.value = false;
 }
 
+watch(async () => searchVideoModel.value, async () => {
+  if (!searchVideoModel.value) {
+    videosItems.value = videosItemsCopy.value;
+  }else{
+    videosItems.value = videosItemsCopy.value.filter((video) => {
+      return (video.title.toLowerCase().indexOf(searchVideoModel.value.toLowerCase()) > -1) || video.value.indexOf(searchVideoModel.value) > -1;
+    });
+  }
+});
 
+watch(selectRefVideo, (active) => {
+  if(!active){
+    setTimeout(()=>{
+      searchVideoModel.value = "";
+    }, 1000)
+  }
+});
+
+//Cuestionario
+watch(async () => searchCuestionarioModel.value, async () => {
+  if (!searchCuestionarioModel.value) {
+    dataCuestionarioItems.value = cuestionarioItemsCopy.value;
+  }else{
+    dataCuestionarioItems.value = cuestionarioItemsCopy.value.filter((video) => {
+      return (video.title.toLowerCase().indexOf(searchCuestionarioModel.value.toLowerCase()) > -1) || video.value.indexOf(searchCuestionarioModel.value) > -1;
+    });
+  }
+});
+
+watch(selectRefCuestionario, (active) => {
+  if(!active){
+    setTimeout(()=>{
+      searchCuestionarioModel.value = "";
+    }, 1000)
+  }
+});
 
 </script>
 
@@ -656,13 +704,26 @@ async function deleteConfirmed() {
 
                                       <VCol cols="12" >
                                           <VSelect 
+                                            v-model:menu="selectRefCuestionario"
+                                            no-data-text="No existen cuestionario que mostrar"
+                                            append-icon="mdi-refresh"
                                             item-text="title"
                                             item-value="value"
                                             v-model="dataCuestionarioModel" 
                                             :items="dataCuestionarioItems"
+                                            :disabled="cuestionarioModelLoading"
                                             label="Cuestionario educativos para al final del curso"
-                                            clearable
+                                            clearable                                          
+                                            @click:append="getCuestionario"
                                             :menu-props="{ maxHeight: '400' }">
+                                            <template v-slot:prepend-item>
+                                              <v-list-item>
+                                                <v-list-item-content>
+                                                  <VTextField v-model="searchCuestionarioModel" clearable placeholder="Buscar cuestionario"/>
+                                                </v-list-item-content>
+                                              </v-list-item>
+                                              <v-divider class="mt-2"></v-divider>
+                                            </template>
                                             <template #selection="{ item }">
                                                   <div>
                                                       {{ item.title }} - {{ item.value }}
@@ -681,29 +742,44 @@ async function deleteConfirmed() {
                                       </VCol>
 
                                       <VCol cols="12">
-                                          <VSelect 
-                                            item-text="title"
-                                            item-value="value"
-                                            v-model="videosModel" 
-                                            :items="videosItems"
-                                            chips
-                                            multiple
-                                            label="Videos educativos">
-                                            <template #selection="{ item }">
-                                                  <div>
-                                                      {{ item.title }} - {{ item.value }}
-                                                  </div>
-                                              </template>
-                                              <template #item="{ item, props }">
-                                                  <v-list-item v-bind="props">
-                                                      <v-list-item-content>
-                                                          <v-list-item-subtitle>
-                                                              <p>_id: {{ item.value }}</p>
-                                                          </v-list-item-subtitle>
-                                                      </v-list-item-content>
-                                                  </v-list-item>
-                                              </template>
-                                          </VSelect>
+                                        <VSelect 
+                                          v-model:menu="selectRefVideo"
+                                          item-text="title"
+                                          item-value="value"
+                                          v-model="videosModel" 
+                                          :items="videosItems"
+                                          chips
+                                          multiple
+                                          attach
+                                          label="Videos educativos"
+                                          no-data-text="No existen videos que mostrar"
+                                          append-icon="mdi-refresh"
+                                          @click:append="getVideos"
+                                          :disabled="videosModelLoading"
+                                          :menu-props="{ maxHeight: '300' }">
+                                          <template v-slot:prepend-item>
+                                            <v-list-item>
+                                              <v-list-item-content>
+                                                <VTextField v-model="searchVideoModel" clearable placeholder="Buscar video"/>
+                                              </v-list-item-content>
+                                            </v-list-item>
+                                            <v-divider class="mt-2"></v-divider>
+                                          </template>
+                                          <template #selection="{ item }">
+                                                <div>
+                                                    {{ item.title }} - {{ item.value }}
+                                                </div>
+                                            </template>
+                                            <template #item="{ item, props }">
+                                                <v-list-item v-bind="props">
+                                                    <v-list-item-content>
+                                                        <v-list-item-subtitle>
+                                                            <p>_id: {{ item.value }}</p>
+                                                        </v-list-item-subtitle>
+                                                    </v-list-item-content>
+                                                </v-list-item>
+                                            </template>
+                                        </VSelect>
                                       </VCol>
 
                                       <VCol cols="12" v-if="videosModel">

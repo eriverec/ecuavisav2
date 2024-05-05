@@ -55,7 +55,6 @@ onMounted(async ()=>{
 
 async function getEtiquetas(page = 1, limit= 10){
   try {
-      currentPage.value = 1;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -76,7 +75,6 @@ async function getEtiquetas(page = 1, limit= 10){
 
 async function getCategorias(page = 1, limit= 10){
   try {
-      currentPage.value = 1;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 

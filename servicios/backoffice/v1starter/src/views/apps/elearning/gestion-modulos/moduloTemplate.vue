@@ -21,6 +21,19 @@ const iframeOptions = ref(null)
 const isDialogActive = ref(false);
 const accionForm = ref('');
 
+const selectRefCuestionario = ref(null);
+const cuestionarioModelLoading = ref(false);
+const searchCuestionarioModel = ref(null)
+const cuestionarioItemsCopy = ref([]);
+
+const dataCuestionarioModel = ref([]);
+const dataCuestionarioItems = ref([]);
+
+const selectRefVideo = ref(null);
+const videoModelLoading = ref(false);
+const searchVideoModel = ref(null)
+const videosItemsCopy = ref([]);
+
 const nombre = ref('');
 
 const idRudoModel = ref('');
@@ -51,14 +64,46 @@ const configSnackbar = ref({
 const videosItems = ref([]);
 
 onMounted(async ()=>{
+  await getCuestionario();
   await getVideos();
   onAdd();
   disabledText.value = false;
 });
 
+async function getCuestionario(page = 1, limit= 10){
+  try {
+      cuestionarioModelLoading.value = true;
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://e-learning-cuestionario.vercel.app/cuestionarios/all/get`, requestOptions);
+      const data = await response.json();
+
+      dataCuestionarioItems.value = data.data.reduce((acumulador, actual) => {
+        acumulador.push({
+          title: `${actual.titulo}`,
+          value: actual._id,
+        });
+        return acumulador;
+      }, []);
+
+      cuestionarioItemsCopy.value = dataCuestionarioItems.value;
+      cuestionarioModelLoading.value = false;
+      
+  } catch (error) {
+      return console.error(error.message);    
+  }
+}
+
 async function getVideos(page = 1, limit= 10){
   try {
-      currentPage.value = 1;
+      videoModelLoading.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -79,7 +124,8 @@ async function getVideos(page = 1, limit= 10){
         return acumulador;
       }, []);
       
-      totalRegistros.value = Math.ceil(data.total / data.limit);
+      videosItemsCopy.value = videosItems.value;
+      videoModelLoading.value = false;
   } catch (error) {
       return console.error(error.message);    
   }
@@ -114,6 +160,7 @@ function resetForm(){
     thumbnailModel.value = "";
     duracionModel.value = "";
     videosModel.value = null;
+    dataCuestionarioModel.value = null;
     categoriaModel.value = "";
     videosSelectList.value = [];
   
@@ -188,6 +235,7 @@ async function onComplete(){
         let jsonEnviar = {
             "titulo": tituloModel.value,
             "descripcion": descripcionModel.value,
+            "idCuestionario": dataCuestionarioModel.value || null,
             "videos": obtenerValorYPosicion()
         }
         var raw = JSON.stringify(jsonEnviar);
@@ -331,6 +379,43 @@ function cambiarPosicion(valor, direccion) {
 }
 
 
+
+watch(async () => searchVideoModel.value, async () => {
+  if (!searchVideoModel.value) {
+    videosItems.value = videosItemsCopy.value;
+  }else{
+    videosItems.value = videosItemsCopy.value.filter((video) => {
+      return (video.title.toLowerCase().indexOf(searchVideoModel.value.toLowerCase()) > -1) || video.value.indexOf(searchVideoModel.value) > -1;
+    });
+  }
+});
+
+watch(selectRefVideo, (active) => {
+  if(!active){
+    setTimeout(()=>{
+      searchVideoModel.value = "";
+    }, 1000)
+  }
+});
+
+//Cuestionario
+watch(async () => searchCuestionarioModel.value, async () => {
+  if (!searchCuestionarioModel.value) {
+    dataCuestionarioItems.value = cuestionarioItemsCopy.value;
+  }else{
+    dataCuestionarioItems.value = cuestionarioItemsCopy.value.filter((video) => {
+      return (video.title.toLowerCase().indexOf(searchCuestionarioModel.value.toLowerCase()) > -1) || video.value.indexOf(searchCuestionarioModel.value) > -1;
+    });
+  }
+});
+
+watch(selectRefCuestionario, (active) => {
+  if(!active){
+    setTimeout(()=>{
+      searchCuestionarioModel.value = "";
+    }, 1000)
+  }
+});
 </script>
 
 <template>
@@ -365,9 +450,52 @@ function cambiarPosicion(valor, direccion) {
                             <VCol cols="6">
                               <VTextField :disabled="disabledText" v-model="descripcionModel" label="Descripción" />
                             </VCol>
+                            <VCol cols="12" >
+                                <VSelect 
+                                  v-model:menu="selectRefCuestionario"
+                                  no-data-text="No existen cuestionario que mostrar"
+                                  append-icon="mdi-refresh"
+                                  item-text="title"
+                                  item-value="value"
+                                  v-model="dataCuestionarioModel" 
+                                  :items="dataCuestionarioItems"
+                                  :disabled="cuestionarioModelLoading"
+                                  label="Cuestionario educativos para al final del curso"
+                                  clearable                                          
+                                  @click:append="getCuestionario"
+                                  :menu-props="{ maxHeight: '400' }">
+                                  <template v-slot:prepend-item>
+                                    <v-list-item>
+                                      <v-list-item-content>
+                                        <VTextField v-model="searchCuestionarioModel" clearable placeholder="Buscar cuestionario"/>
+                                      </v-list-item-content>
+                                    </v-list-item>
+                                    <v-divider class="mt-2"></v-divider>
+                                  </template>
+                                  <template #selection="{ item }">
+                                        <div>
+                                            {{ item.title }} - {{ item.value }}
+                                        </div>
+                                    </template>
+                                    <template #item="{ item, props }">
+                                        <v-list-item v-bind="props">
+                                            <v-list-item-content>
+                                                <v-list-item-subtitle>
+                                                    <p>_id: {{ item.value }}</p>
+                                                </v-list-item-subtitle>
+                                            </v-list-item-content>
+                                        </v-list-item>
+                                    </template>
+                                </VSelect>
+                            </VCol>
                             <VCol cols="12">
                                 <VSelect
-                                  :disabled="disabledText" 
+                                  v-model:menu="selectRefVideo"
+                                  no-data-text="No existen videos que mostrar"
+                                  append-icon="mdi-refresh"
+                                  @click:append="getVideos"
+                                  :disabled="videoModelLoading"
+                                  :menu-props="{ maxHeight: '300' }"
                                   item-text="title"
                                   item-value="value"
                                   v-model="videosModel" 
@@ -375,6 +503,14 @@ function cambiarPosicion(valor, direccion) {
                                   chips
                                   multiple
                                   label="Videos educativos">
+                                  <template v-slot:prepend-item>
+                                    <v-list-item>
+                                      <v-list-item-content>
+                                        <VTextField v-model="searchVideoModel" clearable placeholder="Buscar video"/>
+                                      </v-list-item-content>
+                                    </v-list-item>
+                                    <v-divider class="mt-2"></v-divider>
+                                  </template>
                                   <template #selection="{ item }">
                                         <div>
                                             {{ item.title }} - {{ item.value }}
