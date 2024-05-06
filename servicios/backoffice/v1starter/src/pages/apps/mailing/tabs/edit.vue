@@ -10,6 +10,8 @@ const dataTemplateData = ref([]);
 const dataSenderEmailList = ref([]);
 const dataSenderEmailData = ref([]);
 
+const mensajeHorario = ref([]);
+
 const token_auth = ref('');
 
 const panelSendpulse = ref([])
@@ -28,6 +30,54 @@ onMounted(async()=>{
   await getListaPlantillasUser();
   await getListaSenderEmail();
 })
+
+function getMensajeHorario(value, value2){
+    if(value == 2){
+      // console.log(value2)
+      return 'El newsletter se enviará todos los días a las '+value2.horaModel.toString().padStart(2, '0')+':'+value2.minutoModel.toString().padStart(2, '0');
+    }
+    if(value == 3){
+      // console.log(value2)
+      return 'El newsletter se enviará el '+value2.diaModel.toString().padStart(2, '0')+' de cada mes, a las '+" "+value2.horaModel.toString().padStart(2, '0')+":"+value2.minutoModel.toString().padStart(2, '0');
+    }
+
+    if(value == 4){
+      // console.log(value2)
+      return 'El newsletter se enviará cada año, el '+value2.diaModel.toString().padStart(2, '0')+' de '+value2.mesModel.toString().padStart(2, '0')+" a las "+value2.horaModel.toString().padStart(2, '0')+":"+value2.minutoModel.toString().padStart(2, '0');
+    }
+
+    if(value == 5){
+      let diasString = value2.diaModel.join(",");
+      const ordenDias = {
+        "Lunes": 1,
+        "Martes": 2,
+        "Miércoles": 3,
+        "Jueves": 4,
+        "Viernes": 5
+      };
+      let diasArray = diasString.split(',');
+      diasArray.sort((a, b) => ordenDias[a] - ordenDias[b]);
+
+      let mesesString = value2.mesModel.join(",");
+      const ordenMeses = {
+        "Enero": 1, "Febrero": 2, "Marzo": 3, "Abril": 4, "Mayo": 5, "Junio": 6,
+        "Julio": 7, "Agosto": 8, "Septiembre": 9, "Octubre": 10, "Noviembre": 11, "Diciembre": 12
+      };
+      let mesesArray = mesesString.split(',');
+      mesesArray.sort((a, b) => ordenMeses[a] - ordenMeses[b]);
+
+      // Verificar si se cumplen todas las condiciones para mostrar el mensaje simplificado
+      if (diasArray.length === 5 && mesesArray.length === 12) {
+        return 'El newsletter se enviará de lunes a viernes, todos los meses del año, a las ' + value2.horaModel.toString().padStart(2, '0') + ':' + value2.minutoModel.toString().padStart(2, '0');
+      } else {
+        let diasOrdenadosString = diasArray.join(',');
+        let mesesOrdenadosString = mesesArray.join(',');
+
+        return 'El newsletter se enviará en los días de la semana: ' + diasOrdenadosString + ' para los meses de ' + mesesOrdenadosString + ' a las ' + value2.horaModel.toString().padStart(2, '0') + ':' + value2.minutoModel.toString().padStart(2, '0');
+      }
+
+    }
+  }
 
 async function getNewsletter(){
   try {
@@ -63,6 +113,8 @@ async function getNewsletter(){
       //totalRegistrosHtml.value = totalRegistro;
       //totalRegistros.value = Math.ceil(totalRegistro / limit);
 
+
+      mensajeHorario.value = [];
       for (const item of dataNewsletter.value){
     
      //console.log('config ',item);
@@ -102,6 +154,27 @@ async function getNewsletter(){
           }
           horarios.value.push(data);
           panelSendpulse.value.push(0);
+
+          var mensajeTemp = "";
+          const value2 = data.calendariosInputs[data.radios - 1];
+          if(data.radios == 2 && value2.horaModel && value2.minutoModel){
+            // console.log(value2)
+            mensajeTemp = (getMensajeHorario(data.radios, value2));
+          }
+          if(data.radios == 3 && value2.diaModel && value2.horaModel && value2.minutoModel){
+            mensajeTemp = (getMensajeHorario(data.radios, value2));
+          }
+
+          if(data.radios == 4 && value2.diaModel && value2.mesModel && value2.horaModel && value2.minutoModel){
+            mensajeTemp = (getMensajeHorario(data.radios, value2));
+          }
+
+          if(data.radios == 5 && value2.diaModel && value2.mesModel && value2.horaModel && value2.minutoModel){
+            mensajeTemp = (getMensajeHorario(data.radios, value2));
+          }
+          console.log(mensajeTemp, mensajeHorario.value)
+          mensajeHorario.value.push(mensajeTemp);
+
        
       }
       //console.log('horarios ',horarios.value);
@@ -566,6 +639,16 @@ const onPreview = async (preview) => {
                         md="12"
                       >
                         
+                      </VCol>
+                      <VCol cols="12" sm="6" md="12" >
+                        <VAlert
+                          v-if="mensajeHorario[index] && item._id != '64f9f5455c4a279b69ff2aca'"
+                          density="default"
+                          color="success"
+                          variant="tonal"
+                        >
+                          <VIcon icon="mdi-clock-time-eight-outline" /> {{mensajeHorario[index]}}
+                        </VAlert>
                       </VCol>
                     </VRow>
                   </VExpansionPanelText>
