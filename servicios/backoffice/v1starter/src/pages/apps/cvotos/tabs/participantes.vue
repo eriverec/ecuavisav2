@@ -63,7 +63,7 @@ onMounted(async() => {
 })
 
 const groupedData = computed(() => {
-  console.log(data);
+  // console.log(data);
   const byTrivia = data.reduce((acc, item) => {
     const key = item.idTrivia
     if (!acc[key]) {
@@ -133,18 +133,19 @@ const groupedData = computed(() => {
             </VCardTitle>
           </div>
           <div>
-            <!-- <aside class="d-flex justify-end">
-              <a :href="'https://showandevents-service.vercel.app/export/excel?idTrivia=' + id">
+          
+            <aside class="d-flex justify-end">
+              <a :href="'https://showandevents-service.vercel.app/export/excel?idTrivia=' + id + '&idProyecto=2'">
                 <VBtn size="small" class="me-3" variant="text" color="success" prepend-icon="tabler-download">
                   Excel
                 </VBtn>
               </a>
-              <a :href="'https://showandevents-service.vercel.app/export/csv?idTrivia=' + id">
+              <!-- <a :href="'https://showandevents-service.vercel.app/export/csv?idTrivia=' + id + '&idProyecto=2'">
                 <VBtn size="small" variant="text" color="primary" prepend-icon="tabler-download">
                   CSV
                 </VBtn>
-              </a>
-            </aside> -->
+              </a> -->
+            </aside>
             <VTable class="text-no-wrap w-100 px-4">
               <thead>
                 <tr>
