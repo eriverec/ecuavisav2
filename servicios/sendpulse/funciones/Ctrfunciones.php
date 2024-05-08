@@ -412,4 +412,10 @@ class Ctrfunciones {
 	    $horaActual = date('H:i:s');
 	    return ($horaActual >= $horaInicio && $horaActual <= $horaFin);
 	}
+
+	public function minificar_html($html) {
+	    $html = preg_replace('/\s+/', ' ', $html); // Eliminar espacios en blanco
+	    $html = preg_replace('/<!--(.|\s)*?-->/', '', $html); // Eliminar comentarios
+	    return $html;
+	}
 }

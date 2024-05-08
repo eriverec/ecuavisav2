@@ -1,7 +1,7 @@
 <?php
 require '../vendor/autoload.php';
-// use GuzzleHttp\Client;
-// use GuzzleHttp\Psr7\Request;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 class SendPulse {
 
 	private $token;
@@ -1217,7 +1217,7 @@ class SendPulse {
 		    $bodyContent = $matches[1];
 		}
 
-		return [$bodyContent, $notas];
+		return [$this->ctrFunciones->minificar_html($bodyContent), $notas];
     }
 
     private function armarCorreo($name, $body, $list_id){
@@ -1261,6 +1261,12 @@ class SendPulse {
 			$nombreNeswletter = $this->nombreNeswletter;
 			$list_id = $this->listaUsuario;
 
+			// Obtener longitud del texto en bytes
+			$tamanoBytes = strlen($bodyContent);
+
+			// Convertir a kilobytes
+			$tamanoKB = round($tamanoBytes / 1024, 2);
+
 			if(count($notas[0]) < 1){
 				echo json_encode(["resp" => false, "mensaje" => "Hay un erro no hay notas en la api"]);
 				exit();
@@ -1278,6 +1284,16 @@ class SendPulse {
 			echo '<b>Nombre de la plantilla: </b>'.$this->nombreNeswletter;
 			echo '<br>';
 			echo '<b>Número de solicitudes HTTP: </b>'.$this->contadorSolicitudes;
+			echo '<br>';
+			if($tamanoKB > 95 && $tamanoKB < 100){
+				echo '<b>Tamaño del boletín según su contenido: </b>'.$tamanoKB.'Kb, <b style="color:red">estás a punto de exceder el tamaño recomendado de 100Kb</b>';
+			}else{
+				if($tamanoKB > 99){
+					echo '<b>Tamaño del boletín según su contenido: </b>'.$tamanoKB.'Kb, <b style="color:red">el tamaño recomendado es de 100Kb</b>';
+				}else{
+					echo '<b>Tamaño del boletín según su contenido: </b>'.$tamanoKB.'Kb';
+				}
+			}
 			echo '</div>';
 			echo $bodyContent;
 			exit();
