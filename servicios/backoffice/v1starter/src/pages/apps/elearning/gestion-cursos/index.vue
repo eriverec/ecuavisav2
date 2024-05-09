@@ -318,7 +318,9 @@ async function onEdit(id){
     thumbnailModel.value = data.thumbnail;
     etiquetasModel.value = data.etiquetas;
     categoriaModel.value = data.categoria;
-    dataCuestionarioModel.value = data.cuestionario._id;
+    if(data.cuestionario){
+      dataCuestionarioModel.value = data.cuestionario._id;
+    }
 
     dataModuloModel.value = filtrarDesafios(dataModuloItems.value, data.modulos.reduce((acumulador, actual) => {
         acumulador.push(actual._id);
