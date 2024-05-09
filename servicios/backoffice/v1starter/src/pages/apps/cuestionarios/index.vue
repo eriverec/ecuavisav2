@@ -53,6 +53,8 @@ const titulo = ref('');
 const descripcion = ref('');
 const tags = ref([]);
 const puntosNecesarios = ref(null);
+const fechaLimite = ref('');
+const limiteTiempo = ref(null);
 const preguntas  = ref([
     {
         pregunta: '',
@@ -167,6 +169,8 @@ function resetForm(){
     descripcion.value = '';
     tags.value = [];
     puntosNecesarios.value = null;
+    fechaLimite.value = '';
+    limiteTiempo.value = null;
     preguntas.value = [
         {
             pregunta: '',
@@ -220,8 +224,12 @@ async function onComplete(){
 
     let preguntasEnviar = preguntas.value; 
     let tituloValid = titulo.value;
-    
-    if (!validarArreglo(preguntasEnviar) || !tituloValid || tituloValid == "" || !descripcion.value || tags.value.length == 0 || puntosNecesarios.value == null) {
+
+    if(!Array.isArray(tags.value) && tags.value != null && tags.value != ""){
+        tags.value = [tags.value];
+    }
+
+    if (!validarArreglo(preguntasEnviar) || !tituloValid || tituloValid == "" || !descripcion.value || tags.value.length == 0 || puntosNecesarios.value == null || fechaLimite.value == '' || limiteTiempo.value == null) {
         configSnackbar.value = {
                     message: "Debe llenar todos los campos",
                     type: "error",
@@ -247,7 +255,9 @@ async function onComplete(){
             "descripcion": descripcion.value,
             "tags": tags.value,
             "puntosNecesarios": puntosNecesarios.value,
-            "preguntas": preguntasFormated  
+            "preguntas": preguntasFormated,
+            "fechaLimite": fechaLimite.value,
+            "limiteTiempo": limiteTiempo.value 
         }
 
         var raw = JSON.stringify(jsonEnviar);
@@ -615,6 +625,14 @@ async function mostrarNombreUsuario(id, index){
 
                                     <VCol cols="6" >
                                         <VTextField v-model="puntosNecesarios" label="Puntos necesarios" type="number"/>
+                                    </VCol>
+
+                                    <VCol cols="6" >
+                                        <VTextField v-model="fechaLimite" label="Fecha límite" type="date"/>
+                                    </VCol>
+
+                                    <VCol cols="6" >
+                                        <VTextField v-model="limiteTiempo" label="Límite de tiempo" type="number"/>
                                     </VCol>
 
                                     <VCol cols="12" >
