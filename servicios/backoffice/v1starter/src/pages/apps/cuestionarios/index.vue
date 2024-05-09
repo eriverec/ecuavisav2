@@ -213,6 +213,8 @@ async function onEdit(id){
     descripcion.value = data.descripcion;
     puntosNecesarios.value = data.puntosNecesarios;
     preguntas.value = data.preguntas;
+    fechaLimite.value = data.fechaLimite;
+    limiteTiempo.value = data.limiteTiempo;
 
     isLoading2.value = false;
     isDialogActive.value = true;  
@@ -299,7 +301,9 @@ async function onComplete(){
             "descripcion": descripcion.value,
             "tags": tags.value,
             "puntosNecesarios": puntosNecesarios.value,
-            "preguntas": preguntasFormated   
+            "preguntas": preguntasFormated,
+            "fechaLimite": fechaLimite.value,
+            "limiteTiempo": limiteTiempo.value    
         }
 
         var raw = JSON.stringify(jsonEnviar);
