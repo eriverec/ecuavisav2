@@ -1,9 +1,9 @@
 <script setup>
 import moduloTemplate from "@/views/apps/elearning/gestion-modulos/moduloTemplate.vue";
+import { parseISO } from 'date-fns';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
-import { parseISO } from 'date-fns';
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 
@@ -72,6 +72,8 @@ const etiquetasModel = ref('');
 const tituloModel = ref(null);
 const descripcionModel = ref(null);
 const thumbnailModel = ref(null);
+const estadoModel = ref(true);
+
 
 const idToEdit = ref('');
 
@@ -250,6 +252,7 @@ function resetForm(){
     modulosSelectList.value = [];
     dataModuloModel.value = [];
     dataCuestionarioModel.value = null;
+    estadoModel.value = true;
     fechaIFModel.value = {
       fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
       fechasVModel: [parseISO(fechaHoy)],
@@ -318,6 +321,7 @@ async function onEdit(id){
     thumbnailModel.value = data.thumbnail;
     etiquetasModel.value = data.etiquetas;
     categoriaModel.value = data.categoria;
+    estadoModel.value = data.estado;
     if(data.cuestionario){
       dataCuestionarioModel.value = data.cuestionario._id;
     }
@@ -384,6 +388,7 @@ async function onComplete(){
           "fechai": fechaIFModel.value.fechai,
           "fechaf": fechaIFModel.value.fechaf,
           "fechaVencimiento": fechaIFModel.value.fechaV,
+          "estado": estadoModel.value,
           "modulos": obtenerValorYPosicion()
       }
       var raw = JSON.stringify(jsonEnviar);
@@ -425,6 +430,7 @@ async function onComplete(){
           "fechai": fechaIFModel.value.fechai,
           "fechaf": fechaIFModel.value.fechaf,
           "fechaVencimiento": fechaIFModel.value.fechaV,
+          "estado": estadoModel.value,
           "modulos": obtenerValorYPosicion()
         }
         var raw = JSON.stringify(jsonEnviar);
@@ -814,6 +820,24 @@ watch(selectRefModulo, (active) => {
                               <b>Categoría: </b> {{ curso.categoria }}
                             </div>
 
+                            <div class="d-flex flex-nowrap pl-3">     
+                              <VIcon
+                                size="20"
+                                icon="tabler-power"
+                              />                 
+                              <b>Estado: </b>                           
+                                <div class="ml-2" v-if="curso.estado">
+                                  <VChip color="success">
+                                    Activo
+                                  </VChip>
+                                </div>
+                                <div class="ml-2" v-else>
+                                  <VChip color="error">                              
+                                    Inactivo                                
+                                  </VChip>
+                                </div>                            
+                            </div>
+
                           </div>
                         </div>
                       </VListItemTitle>
@@ -917,7 +941,7 @@ watch(selectRefModulo, (active) => {
                                                 reactive: true
                                             }" />
                                       </VCol>
-                                      <VCol cols="12">
+                                      <VCol cols="6">
                                           <AppDateTimePicker 
                                             label="Fecha de vencimiento" 
                                             prepend-inner-icon="tabler-calendar" 
@@ -926,6 +950,10 @@ watch(selectRefModulo, (active) => {
                                             show-current=true 
                                             @on-change="obtenerFechaVencimiento" 
                                             :config="fechaIFModel.fechasVConfig" />
+                                      </VCol>
+
+                                      <VCol cols="6">
+                                        <VSwitch v-model="estadoModel" label="Estado del curso" />
                                       </VCol>
 
                                       <VCol cols="6">
