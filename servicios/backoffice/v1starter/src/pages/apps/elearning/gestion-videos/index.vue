@@ -654,7 +654,7 @@ async function deleteConfirmed() {
                                       </VCol>
 
                                       <VCol cols="12" >
-                                          <VTextField v-model="idRudoModel" label="Id del video de RUDO" />
+                                          <VTextField v-model="idRudoModel" label="Id video de RUDO" />
                                       </VCol>
 
                                       <VCol cols="12">

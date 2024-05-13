@@ -969,11 +969,11 @@ watch(selectRefModulo, (active) => {
                                       </VCol>
 
                                       <VCol cols="6" >
-                                          <VTextField v-model="idRudoModel" label="Id del curso de RUDO" />
+                                          <VTextField v-model="idRudoModel" label="Id video de RUDO" />
                                       </VCol>
 
                                       <VCol cols="12">
-                                        <VTextField v-model="duracionModel" label="Tiempo en minutos del curso" suffix="minutos" append-inner-icon="tabler-clock" type="number" />
+                                        <VTextField v-model="duracionModel" label="Tiempo que dura el curso" suffix="minutos" append-inner-icon="tabler-clock" type="number" />
                                       </VCol>
 
                                       <VCol cols="12" >
@@ -1010,7 +1010,7 @@ watch(selectRefModulo, (active) => {
                                             item-value="value"
                                             v-model="dataCuestionarioModel" 
                                             :items="dataCuestionarioItems"
-                                            label="Cuestionario educativos para al final del curso"
+                                            label="Cuestionario para al final del curso"
                                             :menu-props="{ maxHeight: '400' }">
                                             <template v-slot:prepend-item>
                                               <v-list-item>

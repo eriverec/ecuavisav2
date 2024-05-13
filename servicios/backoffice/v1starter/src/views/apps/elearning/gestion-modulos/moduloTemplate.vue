@@ -460,7 +460,7 @@ watch(selectRefCuestionario, (active) => {
                                   v-model="dataCuestionarioModel" 
                                   :items="dataCuestionarioItems"
                                   :disabled="cuestionarioModelLoading"
-                                  label="Cuestionario educativos para al final del curso"
+                                  label="Cuestionario para al final del módulo"
                                   clearable                                          
                                   @click:append="getCuestionario"
                                   :menu-props="{ maxHeight: '400' }">
