@@ -71,7 +71,7 @@ async function getVideosCompletadosGrafico(){
 }
 
 async function getCursosCompletadosGrafico(){
-  const consulta = await fetch("https://servicio-elearning.vercel.app/cursos_completados/get");
+  const consulta = await fetch("https://servicio-elearning.vercel.app/grafico/cursos_completados");
   const datos = await consulta.json();
   topCursosCompletados.value = datos.data;
 }
@@ -610,10 +610,10 @@ function prepareDataTopCursosCompletados(data) {
 
 function crearChartTopCursosCompletados(){
 
-  const chartData = prepareDataTopCursosCompletados(dataTemp).slice(0, 5);
+  const chartData = prepareDataTopCursosCompletados(topCursosCompletados.value).slice(0, 5);
   chartData.sort((a, b) => b.value - a.value);
 
-  console.log('data cursos completados', chartData);
+  //console.log('data cursos completados', chartData);
   const donutColors = {
     series1: '#fdd835',
     series2: '#00d4bd',
@@ -712,7 +712,7 @@ function crearChartTopCursosCompletados(){
 }
 
 function exportarTopCursosCompletados() {
-  const chartData = prepareDataTopVideosCompletados(dataTemp).slice(0, 5);
+  const chartData = prepareDataTopVideosCompletados(topCursosCompletados.value).slice(0, 5);
   chartData.sort((a, b) => b.value - a.value);
   
   let csvContent = "data:text/csv;charset=utf-8,";
