@@ -279,7 +279,7 @@
               >
                 <td>
                   {{ (item.last_name+' '+item.first_name).length > 25 ? (item.last_name+' '+item.first_name).substring(0, 25) + "..." : (item.last_name+' '+item.first_name) }}
-                  <br><b>_id: </b><small>{{ item._id }}</small>
+                  <br><b>_id: </b><small>{{ item.wylexId }}</small>
                 </td>
                 <td class="text-medium-emphasis">
                   {{ item.email }}
