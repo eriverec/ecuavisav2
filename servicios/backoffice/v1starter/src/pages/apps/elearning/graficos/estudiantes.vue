@@ -470,8 +470,33 @@ function prepareDataTopVideosCompletados(data) {
   }));
 } 
 
-function crearChartTopVideosCompletados(){
-  const chartData = prepareDataTopVideosCompletados(topVideosCompletados.value).slice(0, 5);
+const noDataVideosCompletados = ref(false);
+function crearChartTopVideosCompletados(fechai = null, fechaf = null){
+
+  var dataFormated;
+
+  if (fechai != null && fechaf != null) {
+    console.log(fechaf);
+    dataFormated = topVideosCompletados.value.map(obj => ({
+      ...obj,
+      videosCompletados: obj.videosCompletados.filter(video => {
+        console.log('video.created_at ', video.created_at);
+        const createdAt = new Date(video.created_at);
+        console.log('createdAt ', createdAt);
+        return createdAt >= fechai && createdAt <= fechaf;
+      })
+    })).filter(obj => obj.videosCompletados.length > 0);  
+  }else{
+    dataFormated = topVideosCompletados.value;
+  }
+  console.log('noDataVideosCompletados ', noDataVideosCompletados.value);
+  console.log('dataFormated', dataFormated);
+  if(dataFormated.length == 0){
+    noDataVideosCompletados.value = true;
+    chartTopVideosCompletados = null;
+    return;
+  }
+  const chartData = prepareDataTopVideosCompletados(dataFormated).slice(0, 5);
   chartData.sort((a, b) => b.value - a.value);
 
   const donutColors = {
@@ -566,9 +591,13 @@ function crearChartTopVideosCompletados(){
     ]
   };
 
-  //console.log('chartData', chartData);
-  chartTopVideosCompletados = new ApexCharts(document.querySelector('#chartTopVideosVistos'), chartOptions);
-  chartTopVideosCompletados.render();       
+  if(!chartTopVideosCompletados){
+    chartTopVideosCompletados = new ApexCharts(document.querySelector('#chartTopVideosVistos'), chartOptions);
+    chartTopVideosCompletados.render(); 
+  }else {
+    chartTopVideosCompletados.updateOptions(chartOptions);
+  }
+
 }
 
 function exportarTopVidesoCompletados() {
@@ -593,6 +622,16 @@ function exportarTopVidesoCompletados() {
   link.click();
 }
 
+function filtroFechaVideosCompletados(selectedDates, dateStr, instance) {
+  if (selectedDates.length > 1) {
+   // console.log('selectedDates ',selectedDates[0]);
+    var fechai = new Date(selectedDates[0]);
+    var fechaf = new Date(selectedDates[1]);
+    //console.log('fechaf ',fechaf);
+    crearChartTopVideosCompletados(fechai, fechaf);
+  }
+}
+
     // -------------------------------          Top cursos completados         ----------------------------------------
 var chartTopCursosCompletados;
 function prepareDataTopCursosCompletados(data) {
@@ -608,9 +647,22 @@ function prepareDataTopCursosCompletados(data) {
   }));
 } 
 
-function crearChartTopCursosCompletados(){
+function crearChartTopCursosCompletados(fechai = null, fechaf = null){
 
-  const chartData = prepareDataTopCursosCompletados(topCursosCompletados.value).slice(0, 5);
+  var dataFormated;
+
+  if (fechai != null && fechaf != null) {
+    console.log('fechaf ', fechaf);
+    dataFormated = topCursosCompletados.value.filter(item => {
+      const createdAt = new Date(moment(item.created_at, "YYYY-MM-DD").startOf('day').toDate());
+      console.log('conversion de created_at ',createdAt);
+      return createdAt >= fechai && createdAt <= fechaf;
+    });
+  }else{
+    dataFormated = topCursosCompletados.value;
+  }
+  
+  const chartData = prepareDataTopCursosCompletados(dataFormated).slice(0, 5);
   chartData.sort((a, b) => b.value - a.value);
 
   //console.log('data cursos completados', chartData);
@@ -707,8 +759,13 @@ function crearChartTopCursosCompletados(){
   };
 
   //console.log('chartData', chartData);
-  chartTopCursosCompletados = new ApexCharts(document.querySelector('#chartTopCursosVistos'), chartOptions);
-  chartTopCursosCompletados.render();       
+  if(!chartTopCursosCompletados){
+    chartTopCursosCompletados = new ApexCharts(document.querySelector('#chartTopCursosVistos'), chartOptions);
+    chartTopCursosCompletados.render(); 
+  }else {
+    chartTopCursosCompletados.updateOptions(chartOptions);
+  }
+        
 }
 
 function exportarTopCursosCompletados() {
@@ -733,6 +790,16 @@ function exportarTopCursosCompletados() {
   link.click();
 }
 
+function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
+  if (selectedDates.length > 1) {
+   // console.log('selectedDates ',selectedDates[0]);
+    var fechai = new Date(selectedDates[0]);
+    var fechaf = new Date(selectedDates[1]);
+    //console.log('fechaf ',fechaf);
+    crearChartTopCursosCompletados(fechai, fechaf);
+  }
+}
+
 </script>
 
 <template>
@@ -747,11 +814,11 @@ function exportarTopCursosCompletados() {
           
           <VCardItem >
             <VRow class="d-flex flex-wrap gap-4 mt-2">
-              <VCol cols="4">
+              <VCol cols="12" md="4">
                 <VSelect v-model="selectedOption" @update:modelValue="renderChartEstudiantes" :items="opcionesEstudiantes" label="Filtro" />
               </VCol>
 
-              <VCol cols="4">
+              <VCol cols="6" md="4">
                 <VBtn color="primary" @click="exportarEstudiantesCSV">Exportar</VBtn>
               </VCol>
             </VRow>
@@ -760,13 +827,13 @@ function exportarTopCursosCompletados() {
           </VCardItem>
           
             <div class="mt-6" id="chartEstudiantes" ></div>
-
+            
         </VCardText>
       </VCard>     
     </VCol>
 
     <VCol cols="12" md="6">
-      <VCard>
+      <VCard style="height: 600px;">
         <VCardText class="">
           <VCardItem class="pt-0">
             <div style="display: flex; flex-wrap: wrap;">
@@ -789,7 +856,7 @@ function exportarTopCursosCompletados() {
     </VCol>
 
     <VCol cols="12" md="6">
-      <VCard>
+      <VCard style="height: 600px;">
         <VCardText class="">
           <VCardItem class="pt-0">
             
@@ -806,17 +873,35 @@ function exportarTopCursosCompletados() {
             </div>
 
           </VCardItem>
-                  
-            <div class="mt-6" id="chartTopVideosVistos" ></div>
+
+          <VCardItem class="pt-0 mt-0">
+            <VRow class="d-flex flex-wrap gap-4 mt-0">
+              <VCol class="pt-0" cols="12" md="6">
+                <div class="date-picker-wrapper" style="width: 100%;">
+                                        <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact"
+                                        show-current=true @on-change="filtroFechaVideosCompletados" :config="{
+                                            position: 'auto right',
+                                            mode: 'range',
+                                            altFormat: 'F j, Y',
+                                            dateFormat: 'd-m-Y',
+                                            reactive: true
+                                        }" />
+                </div>
+              </VCol>
+            </VRow>
+          </VCardItem>
+                           
+            <div v-if="!noDataVideosCompletados" class="mt-6" id="chartTopVideosVistos" ></div>
+            <div class="text-center mt-6" v-else>No hay datos para mostrar</div>
 
         </VCardText>
       </VCard>
     </VCol>
 
     <VCol cols="12" md="6">
-      <VCard>
+      <VCard style="height: 600px;">
         <VCardText class="">
-          <VCardItem class="pt-0">
+          <VCardItem class="pt-0 pb-0">
             
             <div style="display: flex; flex-wrap: wrap;">
               <div style="width: max-content;">
@@ -830,6 +915,23 @@ function exportarTopCursosCompletados() {
               </div>
             </div>
 
+          </VCardItem>
+
+          <VCardItem class="pt-0 mt-0">
+            <VRow class="d-flex flex-wrap gap-4 mt-0">
+              <VCol class="pt-0" cols="12" md="6">
+                <div class="date-picker-wrapper" style="width: 100%;">
+                                        <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" 
+                                        show-current=true @on-change="filtroFechaCursosCompletados" :config="{
+                                            position: 'auto right',
+                                            mode: 'range',
+                                            altFormat: 'F j, Y',
+                                            dateFormat: 'd-m-Y',
+                                            reactive: true
+                                        }" />
+                </div>
+              </VCol>
+            </VRow>
           </VCardItem>
                   
             <div class="mt-6" id="chartTopCursosVistos" ></div>
