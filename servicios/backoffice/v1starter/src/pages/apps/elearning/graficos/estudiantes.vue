@@ -17,7 +17,7 @@ const colorVariables = themeColors => {
   const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`
   const themeBorderColor = `rgba(${hexToRgb(String(themeColors.variables['border-color']))},${themeColors.variables['border-opacity']})`
   const themePrimaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['high-emphasis-opacity']})`
-  
+
   return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
 }
 
@@ -36,62 +36,62 @@ const topVideosCompletados = ref([]);
 const topCursosCompletados = ref([]);
 
 var dataTemp = [
-        {
-            "userId": 191509,
-            "cursoId": "6626d013bdb9b474719e38d3",
-            "tituloCurso": "Diseño Web Profesional El Curso Completo, Práctico y desde 0"
-        },
-        {
-            "userId": 188450,
-            "cursoId": "66288f73e8540c5cb8f428a4",
-            "tituloCurso": "Primeros Auxilios con Gaby Díaz"
-        },
-        {
-            "userId": 185086,
-            "cursoId": "6626d013bdb9b474719e38d3",
-            "tituloCurso": "Diseño Web Profesional El Curso Completo, Práctico y desde 0"
-        },
-        {
-            "userId": 157280,
-            "cursoId": "6626d013bdb9b474719e38d3",
-            "tituloCurso": "Diseño Web Profesional El Curso Completo, Práctico y desde 0"
-        }
-    ]
+  {
+    "userId": 191509,
+    "cursoId": "6626d013bdb9b474719e38d3",
+    "tituloCurso": "Diseño Web Profesional El Curso Completo, Práctico y desde 0"
+  },
+  {
+    "userId": 188450,
+    "cursoId": "66288f73e8540c5cb8f428a4",
+    "tituloCurso": "Primeros Auxilios con Gaby Díaz"
+  },
+  {
+    "userId": 185086,
+    "cursoId": "6626d013bdb9b474719e38d3",
+    "tituloCurso": "Diseño Web Profesional El Curso Completo, Práctico y desde 0"
+  },
+  {
+    "userId": 157280,
+    "cursoId": "6626d013bdb9b474719e38d3",
+    "tituloCurso": "Diseño Web Profesional El Curso Completo, Práctico y desde 0"
+  }
+]
 
-async function getEstudiantesGrafico(){
+async function getEstudiantesGrafico() {
   const consulta = await fetch("https://servicio-elearning.vercel.app/grafico/students/curso");
   const datos = await consulta.json();
   estudiantesDatos.value = datos.data;
 }
 
-async function getVideosCompletadosGrafico(){
+async function getVideosCompletadosGrafico() {
   const consulta = await fetch("https://servicio-elearning.vercel.app/grafico/videos_completados");
   const datos = await consulta.json();
   topVideosCompletados.value = datos.data;
 }
 
-async function getCursosCompletadosGrafico(){
+async function getCursosCompletadosGrafico() {
   const consulta = await fetch("https://servicio-elearning.vercel.app/grafico/cursos_completados");
   const datos = await consulta.json();
   topCursosCompletados.value = datos.data;
 }
 
 
-onMounted(async() => { 
-    await getEstudiantesGrafico();
-    await getVideosCompletadosGrafico();
-    await getCursosCompletadosGrafico();
-    crearChartEstudiantes();
-    crearChartTopCursosInscritos();
-    crearChartTopVideosCompletados();
-    crearChartTopCursosCompletados();
+onMounted(async () => {
+  await getEstudiantesGrafico();
+  await getVideosCompletadosGrafico();
+  await getCursosCompletadosGrafico();
+  crearChartEstudiantes();
+  crearChartTopCursosInscritos();
+  crearChartTopVideosCompletados();
+  crearChartTopCursosCompletados();
 });
 
 // Gráficos de estudiantes
 
-var chartEstudiantes; 
+var chartEstudiantes;
 
-function crearChartEstudiantes(){
+function crearChartEstudiantes() {
   const chartData = prepareDataEstudiantes(estudiantesDatos.value, selectedOption.value);
 
   const scatterColors = {
@@ -102,75 +102,106 @@ function crearChartEstudiantes(){
   }
   const { themeSecondaryTextColor, themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value)
 
-  const chartOptions = {     
-        chart: {
-          toolbar: { show: false },
-          type: 'bar',
-          height: 500
-        },
-        legend: {    
-            markers: { offsetX: -3 },
-            labels: { colors: themeSecondaryTextColor },          
-        },
-        colors: [scatterColors.series1, scatterColors.series2, scatterColors.series3, scatterColors.series4],
-        plotOptions: {
-          bar: {
-            borderRadius: 1,
-            barHeight: '30%',
-            horizontal: false,
-            startingShape: 'rounded',
-          },
-        },
-        series:[{
-            name: 'Estudiantes',
-            data: chartData.map(item => parseInt(item.value))
-        }],
-        grid: {
-          borderColor: "#eee",
-          xaxis: {
-            lines: { show: false },
-          },
-          padding: {
-            top: -10,
-          },
-        },
-        xaxis: {
-          labels: {
-            style: { colors: themeDisabledTextColor },
-          },
-          categories: chartData.map(item => item.label)
-        },
-        yaxis: {
+  const chartOptions = {
+    chart: {
+      toolbar: { show: false },
+      type: 'bar',
+      height: 250,
 
-            axisBorder: { show: false },
-            axisTicks: { color: themeBorderColor },
-            crosshairs: {
-                stroke: { color: themeBorderColor },
-            },
-            labels: {
-              style: { colors: themeDisabledTextColor },
-              formatter: function(val) {
-                return val.toFixed(0);
-              }
-            }   
+    },
+
+    legend: {
+      markers: { offsetX: -3 },
+      labels: { colors: themeSecondaryTextColor },
+    },
+
+    colors: [scatterColors.series1, scatterColors.series2, scatterColors.series3, scatterColors.series4],
+
+    plotOptions: {
+      bar: {
+        borderRadius: 1,
+        // barHeight: '30%',
+        // horizontal: false,
+        startingShape: 'rounded',
+        columnWidth: '32%',
+        borderRadius: 4,
+        distributed: true,
+        dataLabels: { position: 'center' },
+      },
+    },
+
+    dataLabels: {
+      enabled: true,
+      offsetY: -25,
+      style: {
+        fontSize: '15px',
+        colors: [themeSecondaryTextColor],
+        fontWeight: '600',
+        fontFamily: 'Public Sans',
+      },
+    },
+
+    series: [{
+      name: 'Estudiantes',
+      data: chartData.map(item => parseInt(item.value))
+    }],
+
+    grid: {
+      show: true,
+      // borderColor: "#eee",
+      // xaxis: {
+      //   lines: { show: false },
+      // },
+      padding: {
+        top: 0,
+        bottom: 0,
+        left: -10,
+        right: -10,
+      },
+    },
+
+    xaxis: {
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+      categories: chartData.map(item => item.label)
+    },
+
+    yaxis: {
+
+      axisBorder: { show: false },
+      axisTicks: { color: themeBorderColor },
+      crosshairs: {
+        stroke: { color: themeBorderColor },
+      },
+      labels: {
+        offsetX: -15,
+        style: { colors: themeDisabledTextColor },
+        min: 0,
+        max: 60000,
+        tickAmount: 6,
+        formatter: function (val) {
+          return val.toFixed(0);
         }
+      }
+    }
   };
 
   //console.log('chartData', chartData);
- 
+
   chartEstudiantes = new ApexCharts(document.querySelector('#chartEstudiantes'), chartOptions);
-  chartEstudiantes.render();       
+  chartEstudiantes.render();
 }
 function renderChartEstudiantes() {
-    
+
   const chartData = prepareDataEstudiantes(estudiantesDatos.value, selectedOption.value);
   //console.log('ejecutando chart', chartData);
   const series = [{
-      name: 'Estudiantes',
-      data: chartData,
-      total: chartData.reduce((acc, item) => acc + item.y, 0)
+    name: 'Estudiantes',
+    data: chartData,
+    total: chartData.reduce((acc, item) => acc + item.y, 0)
   }];
-  
+
   const scatterColors = {
     series1: '#ff9f43',
     series2: '#7367f0',
@@ -179,63 +210,63 @@ function renderChartEstudiantes() {
   }
   const { themeSecondaryTextColor, themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value)
 
-  const chartOptions = {     
-        chart: {
-          toolbar: { show: false },
-          type: 'bar',
-          height: 500
-        },
-        legend: {   
-            markers: { offsetX: -3 },
-            labels: { colors: themeSecondaryTextColor },          
-        },
-        colors: [scatterColors.series1, scatterColors.series2, scatterColors.series3, scatterColors.series4],
-        plotOptions: {
-          bar: {
-            borderRadius: 1,
-            barHeight: '30%',
-            horizontal: false,
-            startingShape: 'rounded',
-          },
-        },
-        series:[{
-            name: 'Estudiantes',
-            data: chartData.map(item => parseInt(item.value))
-        }],
-        grid: {
-          borderColor: "#eee",
-          xaxis: {
-            lines: { show: false },
-          },
-          padding: {
-            top: -10,
-          },
-        },
-        xaxis: {
-          labels: {
-            style: { colors: themeDisabledTextColor },
-          },
-          categories: chartData.map(item => item.label)
-        },
-        yaxis: {
-            
-            axisBorder: { show: false },
-            axisTicks: { color: themeBorderColor },
-            crosshairs: {
-                stroke: { color: themeBorderColor },
-            },
-            labels: {
-              style: { colors: themeDisabledTextColor },
-              formatter: function(val) {
-                return val.toFixed(0);
-              }
-            }   
+  const chartOptions = {
+    chart: {
+      toolbar: { show: false },
+      type: 'bar',
+      height: 500
+    },
+    legend: {
+      markers: { offsetX: -3 },
+      labels: { colors: themeSecondaryTextColor },
+    },
+    colors: [scatterColors.series1, scatterColors.series2, scatterColors.series3, scatterColors.series4],
+    plotOptions: {
+      bar: {
+        borderRadius: 1,
+        barHeight: '30%',
+        horizontal: false,
+        startingShape: 'rounded',
+      },
+    },
+    series: [{
+      name: 'Estudiantes',
+      data: chartData.map(item => parseInt(item.value))
+    }],
+    grid: {
+      borderColor: "#eee",
+      xaxis: {
+        lines: { show: false },
+      },
+      padding: {
+        top: -10,
+      },
+    },
+    xaxis: {
+      labels: {
+        style: { colors: themeDisabledTextColor },
+      },
+      categories: chartData.map(item => item.label)
+    },
+    yaxis: {
+
+      axisBorder: { show: false },
+      axisTicks: { color: themeBorderColor },
+      crosshairs: {
+        stroke: { color: themeBorderColor },
+      },
+      labels: {
+        style: { colors: themeDisabledTextColor },
+        formatter: function (val) {
+          return val.toFixed(0);
         }
+      }
+    }
   };
 
   //console.log('chartData', chartData);
   chartEstudiantes.updateOptions(chartOptions);
-  
+
 }
 
 function prepareDataEstudiantes(data, option) {
@@ -328,10 +359,10 @@ function exportarEstudiantesCSV() {
 //------------------------------            Gráficos de totales         --------------------------------------------
 //------------------------------------------------------------------------------------------------------------------
 
-    // -------------------------------          Top Cursos Inscritos         --------------------------------------------
+// -------------------------------          Top Cursos Inscritos         --------------------------------------------
 var chartTopCursosInscritos;
 
-function crearChartTopCursosInscritos(){
+function crearChartTopCursosInscritos() {
   const chartData = prepareDataEstudiantes(estudiantesDatos.value, "curso").slice(0, 5);
   chartData.sort((a, b) => b.value - a.value);
 
@@ -344,7 +375,7 @@ function crearChartTopCursosInscritos(){
   }
 
   const { themeSecondaryTextColor, themePrimaryTextColor } = colorVariables(vuetifyTheme.current.value)
-  
+
   const chartOptions = {
     chart: {
       type: 'donut',
@@ -380,6 +411,16 @@ function crearChartTopCursosInscritos(){
             },
           },
         },
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      offsetY: -25,
+      style: {
+        fontSize: '13px',
+        colors: [themeSecondaryTextColor],
+        fontWeight: '500',
+        fontFamily: 'Public Sans',
       },
     },
     responsive: [
@@ -428,7 +469,7 @@ function crearChartTopCursosInscritos(){
 
   //console.log('chartData', chartData);
   chartTopCursosInscritos = new ApexCharts(document.querySelector('#chartTopCursosInscritos'), chartOptions);
-  chartTopCursosInscritos.render();       
+  chartTopCursosInscritos.render();
 }
 
 function exportarTopCursosInscritos() {
@@ -437,7 +478,7 @@ function exportarTopCursosInscritos() {
   let csvContent = "data:text/csv;charset=utf-8,";
   // Encabezado CSV
   csvContent += "Curso,Estudiantes\n";
-   // Agregar datos al contenido CSV
+  // Agregar datos al contenido CSV
   chartData.forEach(row => {
     csvContent += `${row.label.replace(/,/g, '')},${row.value}\n`;
   });
@@ -452,7 +493,7 @@ function exportarTopCursosInscritos() {
   link.click();
 }
 
-    // -------------------------------          Top videos completados         ----------------------------------------
+// -------------------------------          Top videos completados         ----------------------------------------
 
 var chartTopVideosCompletados;
 function prepareDataTopVideosCompletados(data) {
@@ -468,10 +509,10 @@ function prepareDataTopVideosCompletados(data) {
     label: data.find(item => item.videosCompletados.find(video => video._id === videoId)).videosCompletados.find(video => video._id === videoId).titulo,
     value: videoCounts[videoId]
   }));
-} 
+}
 
 const noDataVideosCompletados = ref(false);
-function crearChartTopVideosCompletados(fechai = null, fechaf = null){
+function crearChartTopVideosCompletados(fechai = null, fechaf = null) {
 
   var dataFormated;
 
@@ -485,13 +526,13 @@ function crearChartTopVideosCompletados(fechai = null, fechaf = null){
         console.log('createdAt ', createdAt);
         return createdAt >= fechai && createdAt <= fechaf;
       })
-    })).filter(obj => obj.videosCompletados.length > 0);  
-  }else{
+    })).filter(obj => obj.videosCompletados.length > 0);
+  } else {
     dataFormated = topVideosCompletados.value;
   }
   console.log('noDataVideosCompletados ', noDataVideosCompletados.value);
   console.log('dataFormated', dataFormated);
-  if(dataFormated.length == 0){
+  if (dataFormated.length == 0) {
     noDataVideosCompletados.value = true;
     chartTopVideosCompletados = null;
     return;
@@ -508,7 +549,7 @@ function crearChartTopVideosCompletados(fechai = null, fechaf = null){
   }
 
   const { themeSecondaryTextColor, themePrimaryTextColor } = colorVariables(vuetifyTheme.current.value)
-  
+
   const chartOptions = {
     chart: {
       type: 'donut',
@@ -544,7 +585,17 @@ function crearChartTopVideosCompletados(fechai = null, fechaf = null){
             },
           },
         },
-        
+
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      offsetY: -25,
+      style: {
+        fontSize: '13px',
+        colors: [themeSecondaryTextColor],
+        fontWeight: '500',
+        fontFamily: 'Public Sans',
       },
     },
     responsive: [
@@ -591,10 +642,10 @@ function crearChartTopVideosCompletados(fechai = null, fechaf = null){
     ]
   };
 
-  if(!chartTopVideosCompletados){
+  if (!chartTopVideosCompletados) {
     chartTopVideosCompletados = new ApexCharts(document.querySelector('#chartTopVideosVistos'), chartOptions);
-    chartTopVideosCompletados.render(); 
-  }else {
+    chartTopVideosCompletados.render();
+  } else {
     chartTopVideosCompletados.updateOptions(chartOptions);
   }
 
@@ -603,11 +654,11 @@ function crearChartTopVideosCompletados(fechai = null, fechaf = null){
 function exportarTopVidesoCompletados() {
   const chartData = prepareDataTopVideosCompletados(topVideosCompletados.value).slice(0, 5);
   chartData.sort((a, b) => b.value - a.value);
-  
+
   let csvContent = "data:text/csv;charset=utf-8,";
   // Encabezado CSV
   csvContent += "Video,Veces_visto\n";
-   // Agregar datos al contenido CSV
+  // Agregar datos al contenido CSV
   chartData.forEach(row => {
     csvContent += `${row.label.replace(/,/g, '')},${row.value}\n`;
   });
@@ -624,7 +675,7 @@ function exportarTopVidesoCompletados() {
 
 function filtroFechaVideosCompletados(selectedDates, dateStr, instance) {
   if (selectedDates.length > 1) {
-   // console.log('selectedDates ',selectedDates[0]);
+    // console.log('selectedDates ',selectedDates[0]);
     var fechai = new Date(selectedDates[0]);
     var fechaf = new Date(selectedDates[1]);
     //console.log('fechaf ',fechaf);
@@ -632,7 +683,7 @@ function filtroFechaVideosCompletados(selectedDates, dateStr, instance) {
   }
 }
 
-    // -------------------------------          Top cursos completados         ----------------------------------------
+// -------------------------------          Top cursos completados         ----------------------------------------
 var chartTopCursosCompletados;
 function prepareDataTopCursosCompletados(data) {
   //console.log('data Cursos Completados', data);
@@ -645,9 +696,9 @@ function prepareDataTopCursosCompletados(data) {
     label: data.find(item => item.cursoId === cursoId).tituloCurso,
     value: cursoCounts[cursoId]
   }));
-} 
+}
 
-function crearChartTopCursosCompletados(fechai = null, fechaf = null){
+function crearChartTopCursosCompletados(fechai = null, fechaf = null) {
 
   var dataFormated;
 
@@ -655,13 +706,13 @@ function crearChartTopCursosCompletados(fechai = null, fechaf = null){
     console.log('fechaf ', fechaf);
     dataFormated = topCursosCompletados.value.filter(item => {
       const createdAt = new Date(moment(item.created_at, "YYYY-MM-DD").startOf('day').toDate());
-      console.log('conversion de created_at ',createdAt);
+      console.log('conversion de created_at ', createdAt);
       return createdAt >= fechai && createdAt <= fechaf;
     });
-  }else{
+  } else {
     dataFormated = topCursosCompletados.value;
   }
-  
+
   const chartData = prepareDataTopCursosCompletados(dataFormated).slice(0, 5);
   chartData.sort((a, b) => b.value - a.value);
 
@@ -675,7 +726,7 @@ function crearChartTopCursosCompletados(fechai = null, fechaf = null){
   }
 
   const { themeSecondaryTextColor, themePrimaryTextColor } = colorVariables(vuetifyTheme.current.value)
-  
+
   const chartOptions = {
     chart: {
       type: 'donut',
@@ -711,7 +762,17 @@ function crearChartTopCursosCompletados(fechai = null, fechaf = null){
             },
           },
         },
-        
+
+      },
+    },
+    dataLabels: {
+      enabled: true,
+      offsetY: -25,
+      style: {
+        fontSize: '13px',
+        colors: [themeSecondaryTextColor],
+        fontWeight: '500',
+        fontFamily: 'Public Sans',
       },
     },
     responsive: [
@@ -759,23 +820,23 @@ function crearChartTopCursosCompletados(fechai = null, fechaf = null){
   };
 
   //console.log('chartData', chartData);
-  if(!chartTopCursosCompletados){
+  if (!chartTopCursosCompletados) {
     chartTopCursosCompletados = new ApexCharts(document.querySelector('#chartTopCursosVistos'), chartOptions);
-    chartTopCursosCompletados.render(); 
-  }else {
+    chartTopCursosCompletados.render();
+  } else {
     chartTopCursosCompletados.updateOptions(chartOptions);
   }
-        
+
 }
 
 function exportarTopCursosCompletados() {
   const chartData = prepareDataTopVideosCompletados(topCursosCompletados.value).slice(0, 5);
   chartData.sort((a, b) => b.value - a.value);
-  
+
   let csvContent = "data:text/csv;charset=utf-8,";
   // Encabezado CSV
   csvContent += "Cursos,Veces_finalizado\n";
-   // Agregar datos al contenido CSV
+  // Agregar datos al contenido CSV
   chartData.forEach(row => {
     csvContent += `${row.label.replace(/,/g, '')},${row.value}\n`;
   });
@@ -792,7 +853,7 @@ function exportarTopCursosCompletados() {
 
 function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
   if (selectedDates.length > 1) {
-   // console.log('selectedDates ',selectedDates[0]);
+    // console.log('selectedDates ',selectedDates[0]);
     var fechai = new Date(selectedDates[0]);
     var fechaf = new Date(selectedDates[1]);
     //console.log('fechaf ',fechaf);
@@ -803,143 +864,167 @@ function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
 </script>
 
 <template>
-    <VRow>
+  <VRow>
     <!-- 👉  Area chart -->
-    <VCol cols="12">
-      <VCard>
+    <VCol cols="12" md="6">
+      <VCard title="Métricas de estudiantes" subtitle="Medición del rendimiento estudiantil mediante análisis y datos">
+        <template #append>
+          <div class="mt-n4 me-n2">
+            <VBtn icon size="x-small" variant="plain" color="default">
+              <VIcon size="22" color="success" icon="tabler-download" @click="exportarEstudiantesCSV" />
+            </VBtn>
+          </div>
+        </template>
         <VCardText class="">
-          <VCardItem class="pt-0 pb-0">
-            <VCardTitle>Métricas de estudiantes</VCardTitle>
-          </VCardItem>
-          
-          <VCardItem >
+          <VCardItem class="py-0 px-0 ">
             <VRow class="d-flex flex-wrap gap-4 mt-2">
               <VCol cols="12" md="4">
-                <VSelect v-model="selectedOption" @update:modelValue="renderChartEstudiantes" :items="opcionesEstudiantes" label="Filtro" />
+                <VSelect v-model="selectedOption" @update:modelValue="renderChartEstudiantes"
+                  :items="opcionesEstudiantes" label="Filtro" />
               </VCol>
 
-              <VCol cols="6" md="4">
+              <!-- <VCol cols="6" md="4">
                 <VBtn color="primary" @click="exportarEstudiantesCSV">Exportar</VBtn>
-              </VCol>
+              </VCol> -->
             </VRow>
-            
+
 
           </VCardItem>
-          
-            <div class="mt-6" id="chartEstudiantes" ></div>
-            
-        </VCardText>
-      </VCard>     
-    </VCol>
 
-    <VCol cols="12" md="6">
-      <VCard style="height: 600px;">
-        <VCardText class="">
-          <VCardItem class="pt-0">
-            <div style="display: flex; flex-wrap: wrap;">
-              <div style="width: max-content;">
-                <VCardTitle>Cursos más tomados</VCardTitle>
-                
-              </div>
-              <div style="margin-left: auto; margin-bottom: 0.80rem;">
-                  <VBtn color="primary" @click="exportarTopCursosInscritos">
-                    Exportar
-                  </VBtn>
-              </div>
-            </div>
-          </VCardItem>
-                      
-            <div class="mt-6" id="chartTopCursosInscritos" ></div>
+          <div class="mt-6" id="chartEstudiantes"></div>
 
         </VCardText>
       </VCard>
     </VCol>
 
     <VCol cols="12" md="6">
-      <VCard style="height: 600px;">
+      <VCard title="Cursos más tomados" subtitle="Cursos demandados: aprendizaje popular en acción">
+        <template #append>
+          <div class="mt-n4 me-n2">
+            <VBtn icon size="x-small" variant="plain" color="default">
+              <VIcon size="22" color="success" icon="tabler-download" @click="exportarTopCursosInscritos" />
+            </VBtn>
+          </div>
+        </template>
         <VCardText class="">
-          <VCardItem class="pt-0">
-            
+          <!-- <VCardItem class="pt-0">
+            <div style="display: flex; flex-wrap: wrap;">
+              <div style="width: max-content;">
+
+              </div>
+              <div style="margin-left: auto; margin-bottom: 0.80rem;">
+                <VBtn color="primary" @click="exportarTopCursosInscritos">
+                  Exportar
+                </VBtn>
+              </div>
+            </div>
+          </VCardItem> -->
+
+          <div class="mt-6" id="chartTopCursosInscritos"></div>
+
+        </VCardText>
+      </VCard>
+    </VCol>
+
+    <VCol cols="12" md="6">
+      <VCard title="Videos más vistos" subtitle="Top vídeos en popularidad">
+        <template #append>
+          <div class="mt-n4 me-n2">
+            <VBtn icon size="x-small" variant="plain" color="default">
+              <VIcon size="22" color="success" icon="tabler-download" @click="exportarTopVidesoCompletados" />
+            </VBtn>
+          </div>
+        </template>
+        <VCardText class="">
+          <!-- <VCardItem class="pt-0">
+
             <div style="display: flex; flex-wrap: wrap;">
               <div style="width: max-content;">
                 <VCardTitle>Videos más vistos</VCardTitle>
-                
+
               </div>
               <div style="margin-left: auto; margin-bottom: 0.80rem;">
-                  <VBtn color="primary" @click="exportarTopVidesoCompletados">
-                    Exportar
-                  </VBtn>
+                <VBtn color="primary" @click="exportarTopVidesoCompletados">
+                  Exportar
+                </VBtn>
               </div>
             </div>
 
-          </VCardItem>
+          </VCardItem> -->
 
-          <VCardItem class="pt-0 mt-0">
+          <VCardItem class="py-0 px-0">
             <VRow class="d-flex flex-wrap gap-4 mt-0">
               <VCol class="pt-0" cols="12" md="6">
                 <div class="date-picker-wrapper" style="width: 100%;">
-                                        <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact"
-                                        show-current=true @on-change="filtroFechaVideosCompletados" :config="{
-                                            position: 'auto right',
-                                            mode: 'range',
-                                            altFormat: 'F j, Y',
-                                            dateFormat: 'd-m-Y',
-                                            reactive: true
-                                        }" />
+                  <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" show-current=true
+                    @on-change="filtroFechaVideosCompletados" :config="{
+                      position: 'auto right',
+                      mode: 'range',
+                      altFormat: 'F j, Y',
+                      dateFormat: 'd-m-Y',
+                      reactive: true
+                    }" />
                 </div>
               </VCol>
             </VRow>
           </VCardItem>
-                           
-            <div v-if="!noDataVideosCompletados" class="mt-6" id="chartTopVideosVistos" ></div>
-            <div class="text-center mt-6" v-else>No hay datos para mostrar</div>
+
+          <div v-if="!noDataVideosCompletados" class="mt-6" id="chartTopVideosVistos"></div>
+          <div class="text-center mt-6" v-else>No hay datos para mostrar</div>
 
         </VCardText>
       </VCard>
     </VCol>
 
     <VCol cols="12" md="6">
-      <VCard style="height: 600px;">
+      <VCard title="Cursos completados" subtitle="Éxito educativo: Cursos completados.">
+        <template #append>
+          <div class="mt-n4 me-n2">
+            <VBtn icon size="x-small" variant="plain" color="default">
+              <VIcon size="22" color="success" icon="tabler-download" @click="exportarTopCursosCompletados" />
+            </VBtn>
+          </div>
+        </template>
         <VCardText class="">
-          <VCardItem class="pt-0 pb-0">
-            
+          <!-- <VCardItem class="pt-0 pb-0">
+
             <div style="display: flex; flex-wrap: wrap;">
               <div style="width: max-content;">
                 <VCardTitle>Cursos completados</VCardTitle>
-                
+
               </div>
               <div style="margin-left: auto; margin-bottom: 0.80rem;">
-                  <VBtn color="primary" @click="exportarTopCursosCompletados">
-                    Exportar
-                  </VBtn>
+                <VBtn color="primary" @click="exportarTopCursosCompletados">
+                  Exportar
+                </VBtn>
               </div>
             </div>
 
-          </VCardItem>
+          </VCardItem> -->
 
-          <VCardItem class="pt-0 mt-0">
+          <VCardItem class="py-0 px-0">
             <VRow class="d-flex flex-wrap gap-4 mt-0">
               <VCol class="pt-0" cols="12" md="6">
                 <div class="date-picker-wrapper" style="width: 100%;">
-                                        <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" 
-                                        show-current=true @on-change="filtroFechaCursosCompletados" :config="{
-                                            position: 'auto right',
-                                            mode: 'range',
-                                            altFormat: 'F j, Y',
-                                            dateFormat: 'd-m-Y',
-                                            reactive: true
-                                        }" />
+                  <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" show-current=true
+                    @on-change="filtroFechaCursosCompletados" :config="{
+                      position: 'auto right',
+                      mode: 'range',
+                      altFormat: 'F j, Y',
+                      dateFormat: 'd-m-Y',
+                      reactive: true
+                    }" />
                 </div>
               </VCol>
             </VRow>
           </VCardItem>
-                  
-            <div class="mt-6" id="chartTopCursosVistos" ></div>
+
+          <div class="mt-6" id="chartTopCursosVistos"></div>
 
         </VCardText>
       </VCard>
     </VCol>
 
-    </VRow>
-    
-  </template>
+  </VRow>
+
+</template>
