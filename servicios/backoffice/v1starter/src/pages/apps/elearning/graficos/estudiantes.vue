@@ -1,4 +1,5 @@
 <script setup>
+import elearning_grafico_1 from '@/views/apps/elearning/graficos/elearning_grafico_1.vue'
 import ApexCharts from 'apexcharts';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -19,6 +20,24 @@ const colorVariables = themeColors => {
   const themePrimaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['high-emphasis-opacity']})`
 
   return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
+}
+
+const currentTheme = vuetifyTheme.current.value.colors
+const variableTheme = vuetifyTheme.current.value.variables
+const labelPrimaryColor = `rgba(${ hexToRgb(currentTheme.primary) },${ variableTheme['dragged-opacity'] })`
+const legendColor = `rgba(${ hexToRgb(currentTheme['on-background']) },${ variableTheme['high-emphasis-opacity'] })`
+const borderColor = `rgba(${ hexToRgb(String(variableTheme['border-color'])) },${ variableTheme['border-opacity'] })`
+const labelColor = `rgba(${ hexToRgb(currentTheme['on-surface']) },${ variableTheme['disabled-opacity'] })`
+const labelSuccessColor = `rgba(${hexToRgb(currentTheme.success)},0.2)`
+const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
+
+const chartColors = {
+  donut: {
+    series1: currentTheme.success,
+    series2: '#28c76fb3',
+    series3: '#28c76f80',
+    series4: labelSuccessColor,
+  },
 }
 
 const moment = extendMoment(Moment);
@@ -374,97 +393,183 @@ function crearChartTopCursosInscritos() {
     series5: '#ffa1a1',
   }
 
-  const { themeSecondaryTextColor, themePrimaryTextColor } = colorVariables(vuetifyTheme.current.value)
+  const { themeSecondaryTextColor, themePrimaryTextColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value)
 
   const chartOptions = {
     chart: {
+      parentHeightOffset: 0,
+      height: 380,
       type: 'donut',
-      height: 500
+      events: {
+        dataPointSelection: function (event, chartContext, config) {
+          // console.log(config.w.config)
+          // alert('Clic en ' + config.w.config.labels[config.dataPointIndex]);
+        }
+      }
     },
-    colors: [donutColors.series1, donutColors.series2, donutColors.series3, donutColors.series4],
-    legend: {
-      width: 250,
-      markers: { offsetX: -3 },
-      labels: { colors: themeSecondaryTextColor },
-    },
-    series: chartData.map(item => parseInt(item.value)),
-    labels: chartData.map(item => item.label),
-    plotOptions: {
-      pie: {
-        donut: {
-          labels: {
-            show: false,
-            name: {
-              fontSize: '1.5rem',
-            },
-            value: {
-              fontSize: '1.5rem',
-              color: themeSecondaryTextColor,
-              //formatter: val => `${parseInt(val, 10)}`,
-            },
-            total: {
-              show: true,
-              fontSize: '1.5rem',
-              //label: 'Operational',
-              //formatter: () => '31%',
-              color: themePrimaryTextColor,
-            },
-          },
+    colors: [
+      "#7365ed",
+      "#ff7f50", // Naranja claro
+      "#EE2E31", // Amarillo
+      "#ff6347", // Rojo coral
+      "#00fa9a", // Verde medio
+      "#ffa500", // Naranja
+      "#1D7874", // 
+      "#ff4500", // Rojo oscuro
+      "#32cd32", // Verde esmeralda
+      "#ff1493", // Rosa brillante
+      "#00fa9a", // Verde medio
+      "#ff69b4", // Rosa claro
+      "#9932cc", // Púrpura
+      "#ff8c00", // Naranja oscuro
+      "#8b008b", // Magenta oscuro
+      "#8a2be2", // Azul violeta
+    ],
+    stroke: { width: 0 },
+      dataLabels: {
+        enabled: true,
+        textAnchor: 'middle',
+        distributed: false,
+        offsetX: 0,
+        offsetY: 0,
+        style: {
+            fontSize: '15px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            fontWeight: 'bold',
+            colors: undefined
+        },
+        background: {
+          enabled: true,
+          foreColor: '#fff',
+          padding: 4,
+          borderRadius: 2,
+          borderWidth: 1,
+          borderColor: '#fff',
+          opacity: 1,
+          dropShadow: {
+            enabled: false,
+            top: 1,
+            left: 1,
+            blur: 1,
+            color: '#000',
+            opacity: 0.45
+          }
+        },
+        dropShadow: {
+            enabled: false,
+            top: 1,
+            left: 1,
+            blur: 1,
+            color: '#000',
+            opacity: 0.45
+        }
+      },
+      legend: {
+        position: 'bottom',
+        horizontalAlign: 'center',
+        offsetX: 0,
+        // width: 300,
+        markers: {
+          width: 7,
+          height: 7
+        },
+        show: true,
+        // formatter: function (seriesName, opts) {
+        //   return [seriesName, " <br> ", `<div style="margin-top:10px;font-size:17px;color:rgba(var(--v-theme-on-background),var(--v-high-emphasis-opacity))">${opts.w.globals.series[opts.seriesIndex]}<small style="font-size:14px"></small></div>`]
+        // },
+        labels: {
+          colors: themeDisabledTextColor,
+          useSeriesColors: false
         },
       },
-    },
-    dataLabels: {
-      enabled: true,
-      offsetY: -25,
-      style: {
-        fontSize: '13px',
-        colors: [themeSecondaryTextColor],
-        fontWeight: '500',
-        fontFamily: 'Public Sans',
+      tooltip: {
+        // theme: false,
+        // custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        //   // series[seriesIndex]
+        //   return `<div class="tooltip-content">
+        //     <div class="tooltip-body">
+        //       <div class="tooltip-title">
+        //         Permanencia de ${fecha.value.title}<br>
+        //         <small>Muestra de ${limit.value} registros</small>
+        //       </div>
+        //       <div class="tooltip-subtitle">
+        //         Sección
+        //       </div>
+        //       <div class="tooltip-data-flex">
+        //         <div class="tooltip-data-title">
+        //           ${w.config.labels[seriesIndex]}
+        //         </div>
+        //         <div class="tooltip-data-value">
+        //           ${series[seriesIndex]}%
+        //         </div>
+        //       </div>
+        //       <div class="tooltip-data-flex">
+        //         <div class="tooltip-data-title">
+        //           Visitas
+        //         </div>
+        //         <div class="tooltip-data-value">
+        //           ${dataRaw[seriesIndex].total}
+        //         </div>
+        //       </div>
+        //       <div class="tooltip-data-flex">
+        //         <div class="tooltip-data-title">
+        //           Tiempo promedio
+        //         </div>
+        //         <div class="tooltip-data-value">
+        //           ${formatearTiempo(dataRaw[seriesIndex].promedio)} 
+        //         </div>
+        //       </div>
+        //     </div>
+        //   </div>`
+        // }
       },
-    },
-    responsive: [
-      {
-        breakpoint: 992,
-        options: {
-          chart: {
-            height: 380,
-          },
-          legend: {
-            position: 'bottom',
-          },
+      // tooltip: { theme: true },
+      grid: {
+        padding: {
+          top: 15,
+          right: -20,
+          left: -20,
         },
       },
-      {
-        breakpoint: 576,
-        options: {
-          chart: {
-            height: 200,
-          },
-          legend: {
-            show: false,
-          },
-          plotOptions: {
-            pie: {
-              donut: {
-                labels: {
-                  show: true,
-                  name: {
-                    fontSize: '1rem',
-                  },
-                  value: {
-                    fontSize: '1rem',
-                  },
-                  total: {
-                    fontSize: '1rem',
-                  },
+      states: { hover: { filter: { type: 'none' } } },
+      plotOptions: {
+        pie: {
+          donut: {
+            size: '60%',
+            labels: {
+              show: false,
+              value: {
+                fontSize: '1.375rem',
+                fontFamily: 'Public Sans',
+                color: headingColor,
+                fontWeight: 600,
+                offsetY: -15,
+                formatter(val) {
+                  return `${parseInt(val)}%`
+                },
+              },
+              name: {
+                offsetY: 20,
+                fontFamily: 'Public Sans',
+              },
+              total: {
+                show: false,
+                showAlways: false,
+                color: currentTheme.success,
+                fontSize: '.8125rem',
+                label: 'Total',
+                fontFamily: 'Public Sans',
+                formatter() {
+                  return '184'
                 },
               },
             },
           },
         },
       },
-    ]
+    series: chartData.map(item => parseInt(item.value)),
+    labels: chartData.map(item => item.label),
+    
   };
 
   //console.log('chartData', chartData);
@@ -866,8 +971,9 @@ function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
 <template>
   <VRow>
     <!-- 👉  Area chart -->
-    <VCol cols="12" md="6">
-      <VCard title="Métricas de estudiantes" subtitle="Medición del rendimiento estudiantil mediante análisis y datos">
+    <VCol cols="12" md="8">
+      <elearning_grafico_1 />
+      <!-- <VCard title="Métricas de estudiantes" subtitle="Medición del rendimiento estudiantil mediante análisis y datos">
         <template #append>
           <div class="mt-n4 me-n2">
             <VBtn icon size="x-small" variant="plain" color="default">
@@ -883,9 +989,9 @@ function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
                   :items="opcionesEstudiantes" label="Filtro" />
               </VCol>
 
-              <!-- <VCol cols="6" md="4">
+              <VCol cols="6" md="4">
                 <VBtn color="primary" @click="exportarEstudiantesCSV">Exportar</VBtn>
-              </VCol> -->
+              </VCol>
             </VRow>
 
 
@@ -894,10 +1000,10 @@ function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
           <div class="mt-6" id="chartEstudiantes"></div>
 
         </VCardText>
-      </VCard>
+      </VCard> -->
     </VCol>
 
-    <VCol cols="12" md="6">
+    <VCol cols="12" md="4">
       <VCard title="Cursos más tomados" subtitle="Cursos demandados: aprendizaje popular en acción">
         <template #append>
           <div class="mt-n4 me-n2">
