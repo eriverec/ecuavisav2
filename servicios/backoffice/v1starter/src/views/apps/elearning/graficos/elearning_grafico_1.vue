@@ -9,6 +9,13 @@ import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
 import { hexToRgb } from '@layouts/utils'
 
+const selectRefModulo = ref(null);
+const moduloModelLoading = ref(false);
+const searchModuloModel = ref(null)
+const moduloItemsCopy = ref([]);
+const dataModuloModel = ref([]);
+const dataModuloItems = ref([]);
+const modulosSelectList = ref([]);
 
 const currentTab = ref(0)
 const loadingGrafico = ref(false)
@@ -88,15 +95,29 @@ const chartColors = {
 }
 onMounted(async ()=>{
   // setTimeout(async function(){
-  await getAlumnosRegistradosMes();
   await getCursoEstudiante();
   // currentTab.value = 0;
-  loadingGrafico.value = true;
   // }, 500);
+
+  for (var i = 2023; i <= 2034; i++) {
+    dataModuloItems.value.push({
+      title:i.toString(),
+      value:i.toString(),
+    });
+
+    moduloItemsCopy.value.push({
+      title:i.toString(),
+      value:i.toString(),
+    });
+
+    dataModuloModel.value = moment().format("YYYY").toString();
+  }
 })
 
-async function getAlumnosRegistradosMes(){
+async function getAlumnosRegistradosMes(anio = 2024 ) {
   try {
+      loadingGrafico.value = false;
+
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -106,7 +127,7 @@ async function getAlumnosRegistradosMes(){
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://servicio-elearning.vercel.app/grafico/students/mes/grouped`, requestOptions);
+      var response = await fetch(`https://servicio-elearning.vercel.app/grafico/students/mes/grouped?anio=${anio}`, requestOptions);
       const data = await response.json();
       if(data.resp){
         const categories = data.data.map(mes => {
@@ -134,6 +155,8 @@ async function getAlumnosRegistradosMes(){
       }else{
         alert("No se pudo cargar el gráfico, intente nuevamente")
       }
+
+      loadingGrafico.value = true
       
   } catch (error) {
       alert("No se pudo cargar el gráfico, intente nuevamente")
@@ -467,7 +490,7 @@ async function getExportarTopVidesoCompletados(json = {}){
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://servicio-elearning.vercel.app/grafico-export-all/students/mes/grouped?page=${page}&limit=${limit}`, requestOptions);
+      var response = await fetch(`https://servicio-elearning.vercel.app/grafico-export-all/students/mes/grouped?page=${page}&limit=${limit}&anio=${dataModuloModel.value}`, requestOptions);
       const data = await response.json();
 
       if(data.resp){
@@ -517,6 +540,11 @@ async function exportarTopVidesoCompletados() {
     page
   });
 
+  if(!data){
+    alert("No hay datos que exportar")
+    return true;
+  }
+
   while(true){
     page++;
 
@@ -537,6 +565,33 @@ async function exportarTopVidesoCompletados() {
   downloadCSV(csv, 'estudiantes_registrados.csv');
 
 }
+
+//Buscador anio
+
+watch(async () => dataModuloModel.value, async () => {
+  if (dataModuloModel.value) {
+    await getAlumnosRegistradosMes(dataModuloModel.value);
+  }
+});
+
+watch(async () => searchModuloModel.value, async () => {
+  if (!searchModuloModel.value) {
+    dataModuloItems.value = moduloItemsCopy.value;
+  }else{
+    dataModuloItems.value = moduloItemsCopy.value.filter((video) => {
+      return (video.title.toLowerCase().indexOf(searchModuloModel.value.toLowerCase()) > -1) || video.value.indexOf(searchModuloModel.value) > -1;
+    });
+  }
+});
+
+watch(selectRefModulo, (active) => {
+  if(!active){
+    setTimeout(()=>{
+      searchModuloModel.value = "";
+    }, 1000)
+  }
+});
+
 </script>
 
 <template>
@@ -545,7 +600,42 @@ async function exportarTopVidesoCompletados() {
     subtitle="Mira los alumnos registrados, cursos y logros"
   >
     <template #append>
-      <div class="mt-n4 me-n2">
+      <div class="mt-n4 me-n2 d-flex align-center">
+        <VSelect
+          class="mr-3"
+          style="min-width: 150px;"
+          v-model:menu="selectRefModulo"
+          no-data-text="No existen el año que deseas buscar"
+          :disabled="moduloModelLoading"
+          item-text="title"
+          item-value="value"
+          v-model="dataModuloModel" 
+          :items="dataModuloItems"
+          label="Filtrar por año"
+          :menu-props="{ maxHeight: '400' }">
+          <template v-slot:prepend-item>
+            <v-list-item>
+              <v-list-item-content>
+                <VTextField v-model="searchModuloModel" clearable placeholder="Buscar"/>
+              </v-list-item-content>
+            </v-list-item>
+            <v-divider class="mt-2"></v-divider>
+          </template>
+          <template #selection="{ item }">
+                <div>
+                    {{ item.title }}
+                </div>
+            </template>
+            <template #item="{ item, props }">
+                <v-list-item v-bind="props">
+                    <v-list-item-content>
+                        <v-list-item-subtitle>
+                            <p>_id: {{ item.value }}</p>
+                        </v-list-item-subtitle>
+                    </v-list-item-content>
+                </v-list-item>
+            </template>
+        </VSelect>
         <VBtn icon size="x-small" variant="plain" color="default" @click="exportarTopVidesoCompletados">
           <VIcon size="22" color="success" icon="tabler-download" />
         </VBtn>
