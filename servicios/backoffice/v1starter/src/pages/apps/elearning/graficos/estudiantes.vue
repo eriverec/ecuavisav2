@@ -1,5 +1,5 @@
 <script setup>
-import elearning_grafico_1 from '@/views/apps/elearning/graficos/elearning_grafico_1.vue'
+import elearning_grafico_1 from '@/views/apps/elearning/graficos/elearning_grafico_1.vue';
 import ApexCharts from 'apexcharts';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -77,6 +77,29 @@ var dataTemp = [
   }
 ]
 
+const headersGlobal = ref({
+  _id: "_id",
+  wylexId: "wylexId",
+  site: "site",
+  site_id: "site_id",
+  email: "email",
+  first_name: "first_name",
+  last_name: "last_name",
+  avatar: "avatar",
+  country: "country",
+  city: "city",
+  phone_prefix: "phone_prefix",
+  phone_number: "phone_number",
+  gender: "gender",
+  birth_date: "birth_date",
+  identification_type: "identification_type",
+  identification_number: "identification_number",
+  newsletter_opt_in: "newsletter_opt_in",
+  provider: "provider",
+  platform: "platform",
+  created_in_os: "created_in_os",
+});
+
 async function getEstudiantesGrafico() {
   const consulta = await fetch("https://servicio-elearning.vercel.app/grafico/students/curso");
   const datos = await consulta.json();
@@ -95,6 +118,104 @@ async function getCursosCompletadosGrafico() {
   topCursosCompletados.value = datos.data;
 }
 
+function renameField(obj, oldName, newName) {
+  if (obj.hasOwnProperty(oldName)) {
+    obj[newName] = obj[oldName];
+    delete obj[oldName];
+  }
+}
+
+async function getUsersData(ids) {
+  try {
+    const requestOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          ids: ids,
+          mode: "user"
+        })
+      };
+
+      const usersConsulta = await fetch('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/users/users_details/full/ids', requestOptions);
+      const users = await usersConsulta.json();
+      //console.log('users ',users);
+      const camposDeseados = [
+        '_id','wylexId','site','site_id','email','first_name','last_name','avatar','country','city','phone_prefix',
+        'phone_number','gender','birth_date','identification_type','identification_number','newsletter_opt_in','provider','platform','created_in_os'  
+      ];
+
+      const formattedData = users.data.map(obj => {
+        renameField(obj, 'userId', 'wylexId');
+        renameField(obj, 'birthDate', 'birth_date');
+        renameField(obj, 'telefono', 'phone_number');
+        renameField(obj, 'ciudad', 'city');
+        // Crear un nuevo objeto solo con los campos deseados y en el orden correcto
+        const newObj = {};
+        camposDeseados.forEach(field => {
+          // Asignar un valor vacío si el campo no está presente
+          newObj[field] = obj.hasOwnProperty(field) ? obj[field] : '';
+        });
+        return newObj;
+      });
+
+      return formattedData;
+  } catch (error) {
+    return console.error('Error al obtener los datos de los usuarios:', error);
+  }
+      
+}
+
+function convertToCSV(objArray) {
+  var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+  var str = "";
+
+  for (var i = 0; i < array.length; i++) {
+    var line = "";
+    for (var index in array[i]) {
+      if (line != "") line += ",";
+
+      line += array[i][index];
+    }
+
+    str += line + "\r\n";
+  }
+
+  return str;
+}
+
+function exportCSVFile(headers, items, fileTitle) {
+  if (headers && items[0].wylexId !== "wylexId") {
+    items.unshift(headers);
+  }
+
+  // Convert Object to JSON
+  var jsonObject = JSON.stringify(items);
+
+  var csv = convertToCSV(jsonObject);
+
+  var exportedFilenmae = fileTitle + ".csv" || "export.csv";
+
+  var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  if (navigator.msSaveBlob) {
+    // IE 10+
+    navigator.msSaveBlob(blob, exportedFilenmae);
+  } else {
+    var link = document.createElement("a");
+    if (link.download !== undefined) {
+      // feature detection
+      // Browsers that support HTML5 download attribute
+      var url = URL.createObjectURL(blob);
+      link.setAttribute("href", url);
+      link.setAttribute("download", exportedFilenmae);
+      link.style.visibility = "hidden";
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  }
+}
 
 onMounted(async () => {
   await getEstudiantesGrafico();
@@ -599,7 +720,7 @@ function exportarTopCursosInscritos() {
 }
 
 // -------------------------------          Top videos completados         ----------------------------------------
-
+const dataExportTopVideosCompletados = ref([]);
 var chartTopVideosCompletados;
 function prepareDataTopVideosCompletados(data) {
   //console.log('data videosCompletados', data);
@@ -635,13 +756,15 @@ function crearChartTopVideosCompletados(fechai = null, fechaf = null) {
   } else {
     dataFormated = topVideosCompletados.value;
   }
-  console.log('noDataVideosCompletados ', noDataVideosCompletados.value);
-  console.log('dataFormated', dataFormated);
+  //console.log('noDataVideosCompletados ', noDataVideosCompletados.value);
+  //console.log('dataFormated', dataFormated);
   if (dataFormated.length == 0) {
     noDataVideosCompletados.value = true;
     chartTopVideosCompletados = null;
     return;
   }
+
+  dataExportTopVideosCompletados.value = dataFormated;
   const chartData = prepareDataTopVideosCompletados(dataFormated).slice(0, 5);
   chartData.sort((a, b) => b.value - a.value);
 
@@ -778,6 +901,15 @@ function exportarTopVidesoCompletados() {
   link.click();
 }
 
+async function exportarUsuariosTopVideosCompletados() {
+  const userIds = dataExportTopVideosCompletados.value.map(item => item.userId);
+  //console.log('userIds ',[...new Set(userIds)]);
+  var usersData = await getUsersData([...new Set(userIds)]);
+  //return console.log('data ',usersData);
+  exportCSVFile(headersGlobal.value, usersData, 'usuarios_videos_completados');
+  
+}
+
 function filtroFechaVideosCompletados(selectedDates, dateStr, instance) {
   if (selectedDates.length > 1) {
     // console.log('selectedDates ',selectedDates[0]);
@@ -789,6 +921,7 @@ function filtroFechaVideosCompletados(selectedDates, dateStr, instance) {
 }
 
 // -------------------------------          Top cursos completados         ----------------------------------------
+const dataExportTopCursosCompletados = ref([]);
 var chartTopCursosCompletados;
 function prepareDataTopCursosCompletados(data) {
   //console.log('data Cursos Completados', data);
@@ -817,6 +950,8 @@ function crearChartTopCursosCompletados(fechai = null, fechaf = null) {
   } else {
     dataFormated = topCursosCompletados.value;
   }
+
+  dataExportTopCursosCompletados.value = dataFormated;
 
   const chartData = prepareDataTopCursosCompletados(dataFormated).slice(0, 5);
   chartData.sort((a, b) => b.value - a.value);
@@ -935,7 +1070,7 @@ function crearChartTopCursosCompletados(fechai = null, fechaf = null) {
 }
 
 function exportarTopCursosCompletados() {
-  const chartData = prepareDataTopVideosCompletados(topCursosCompletados.value).slice(0, 5);
+  const chartData = prepareDataTopVideosCompletados(dataExportTopCursosCompletados.value).slice(0, 5);
   chartData.sort((a, b) => b.value - a.value);
 
   let csvContent = "data:text/csv;charset=utf-8,";
@@ -954,6 +1089,13 @@ function exportarTopCursosCompletados() {
 
   // Simular clic en el enlace para iniciar la descarga
   link.click();
+}
+
+async function exportarUsuariosTopCursosCompletados() {
+  const userIds = dataExportTopCursosCompletados.value.map(item => item.userId);
+  var usersData = await getUsersData(userIds);
+  exportCSVFile(headersGlobal.value, usersData, 'usuarios_cursos_completados');
+  //return console.log('data ',usersData);
 }
 
 function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
@@ -1039,6 +1181,9 @@ function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
             <VBtn icon size="x-small" variant="plain" color="default">
               <VIcon size="22" color="success" icon="tabler-download" @click="exportarTopVidesoCompletados" />
             </VBtn>
+            <VBtn icon size="x-small" variant="plain" color="default">
+              <VIcon size="22" color="success" icon="tabler-users" @click="exportarUsuariosTopVideosCompletados" />
+            </VBtn>
           </div>
         </template>
         <VCardText class="">
@@ -1088,6 +1233,9 @@ function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
           <div class="mt-n4 me-n2">
             <VBtn icon size="x-small" variant="plain" color="default">
               <VIcon size="22" color="success" icon="tabler-download" @click="exportarTopCursosCompletados" />
+            </VBtn>
+            <VBtn icon size="x-small" variant="plain" color="default">
+              <VIcon size="22" color="success" icon="tabler-users" @click="exportarUsuariosTopCursosCompletados" />
             </VBtn>
           </div>
         </template>
