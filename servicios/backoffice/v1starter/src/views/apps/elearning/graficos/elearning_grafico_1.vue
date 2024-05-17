@@ -596,8 +596,8 @@ watch(selectRefModulo, (active) => {
 
 <template>
   <VCard
-    title="Reporte de alumnos"
-    subtitle="Mira los alumnos registrados, cursos y logros"
+    title="Usuarios registrados"
+    subtitle="Mira los usuarios registrados, cursos y logros"
   >
     <template #append>
       <div class="mt-n4 me-n2 d-flex align-center">
