@@ -140,6 +140,7 @@ async function getAlumnosRegistradosMes(){
       return console.error(error.message);    
   }
 }
+
 async function getCursoEstudiante(){
   try {
       var myHeaders = new Headers();
@@ -451,7 +452,91 @@ const chartConfigs = computed(() => {
       height:270
     },
   ]
-})
+});
+
+async function getExportarTopVidesoCompletados(json = {}){
+  try {
+      const { limit = 1000, page = 1 } = json;
+
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`https://servicio-elearning.vercel.app/grafico-export-all/students/mes/grouped?page=${page}&limit=${limit}`, requestOptions);
+      const data = await response.json();
+
+      if(data.resp){
+        return data.data.length < 1 ? null : data.data;
+      }else{
+        return null;
+      }
+      
+  } catch (error) {
+      console.log("No se pudo cargar el gráfico, intente nuevamente")
+      return null;    
+  }
+}
+
+function convertToCSV(array) {
+    const header = Object.keys(array[0]).join(','); // Obtener las claves del primer objeto para el encabezado
+    const rows = array.map(obj => Object.values(obj).join(',')); // Mapear cada objeto a una cadena de valores
+    return [header, ...rows].join('\n'); // Unir el encabezado y las filas con saltos de línea
+}
+
+function downloadCSV(csv, filename) {
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.setAttribute('hidden', '');
+    a.setAttribute('href', url);
+    a.setAttribute('download', filename);
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+async function exportarTopVidesoCompletados() {
+  if(currentTab.value == "0"){
+    //Para usuarios
+  }
+
+  if(currentTab.value == "1"){
+    //Para cursos
+  }
+  var limit = 1000;
+  var page = 1;
+  var dataGlobal = [];
+
+  var data = await getExportarTopVidesoCompletados({
+    limit,
+    page
+  });
+
+  while(true){
+    page++;
+
+    var dataTemp = await getExportarTopVidesoCompletados({
+      limit,
+      page
+    });
+
+    if(!dataTemp){
+      break;
+    }
+
+    data.push(...dataTemp);
+
+  }
+
+  const csv = convertToCSV(data);
+  downloadCSV(csv, 'estudiantes_registrados.csv');
+
+}
 </script>
 
 <template>
@@ -460,8 +545,11 @@ const chartConfigs = computed(() => {
     subtitle="Mira los alumnos registrados, cursos y logros"
   >
     <template #append>
-      <!-- <div class="mt-n4 me-n2">
-        <VBtn
+      <div class="mt-n4 me-n2">
+        <VBtn icon size="x-small" variant="plain" color="default" @click="exportarTopVidesoCompletados">
+          <VIcon size="22" color="success" icon="tabler-download" />
+        </VBtn>
+        <!-- <VBtn
           icon
           size="x-small"
           variant="plain"
@@ -482,8 +570,8 @@ const chartConfigs = computed(() => {
               </VListItem>
             </VList>
           </VMenu>
-        </VBtn>
-      </div> -->
+        </VBtn> -->
+      </div>
     </template>
 
     <VCardText>
