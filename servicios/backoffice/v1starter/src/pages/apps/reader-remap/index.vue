@@ -1,73 +1,4 @@
-<template>
-  <VCard class="mt-3">
-    <div class="form-container">
-      <h1 class="mb-3">Formulario Remap</h1>
-      <form @submit.prevent="submitForm">
-        <VRow>
-          <VCol cols="12">
-            <div class="form-group">
-              <VTextField label="Url" id="url" v-model="formData.url" required />
-            </div>
-          </VCol>
-
-          <VCol cols="6">
-            <div class="form-group">
-              <VTextField label="Key" id="key" v-model="formData.key" required />
-            </div>
-
-          </VCol>
-          <VCol cols="6">
-            <div class="form-group">
-              <VTextField label="Eliminar Atributos (separados por coma)" id="elimAttr" v-model="elimAttrInput" />
-            </div>
-
-          </VCol>
-
-          <VCol cols="6">
-            <div class="form-group">
-              <VTextField label="Reemplazar Atributos (buscar, reemplazar)" id="reemplazarAttr"
-                v-model="reemplazarAttrInput" />
-            </div>
-          </VCol>
-
-          <VCol cols="6">
-            <div class="form-group">
-              <VTextField label="Eliminar Elementos HTML" id="elimElementos" v-model="elimElementosInput" />
-            </div>
-
-          </VCol>
-        </VRow>
-
-        <button type="submit">Enviar</button>
-      </form>
-      <br>
-
-
-
-    </div>
-  </VCard>
-
-  <VCard v-if="elements.length > 0" class="mt-3">
-    <VCardText class=" flex-wrap justify-space-between gap-4">
-
-      <div  class="">
-        <h2>Respuesta:</h2>
-        <div v-for="(element, index) in elements" :key="index" :class="`element _it-${index}`">
-          <div v-html="element"></div>
-        </div>
-      </div>
-  
-    </VCardText>
-  </VCard>
-  <div v-if="error" class="error-container">
-    <p>{{ error }}</p>
-  </div>
-  
-</template>
-
 <script setup>
-import { ref } from 'vue'
-import axios from 'axios'
 
 const formData = ref({
   url: '',
@@ -103,10 +34,22 @@ const submitForm = async () => {
   formData.value.elimElementos = elimElementosInput.value.split(',').map(element => element.trim())
 
   try {
-    const response = await axios.post('https://jsonhtml-ecuavisa.vercel.app/read/remap_v2', formData.value)
-    console.log('Response:', response.data)
-    if (response.data && response.data.elements && response.data.elements.length > 0) {
-      elements.value = response.data.elements
+    const response = await fetch('https://jsonhtml-ecuavisa.vercel.app/read/remap_v2', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(formData.value),
+    })
+
+    if (!response.ok) {
+      throw new Error('Error en la solicitud')
+    }
+
+    const responseData = await response.json()
+    console.log('Response:', responseData)
+    if (responseData && responseData.elements && responseData.elements.length > 0) {
+      elements.value = responseData.elements
     } else {
       elements.value = []
       error.value = 'No se encontraron elementos'
@@ -119,6 +62,82 @@ const submitForm = async () => {
   }
 }
 </script>
+
+<template>
+  <section>
+    <VCard class="mt-3">
+      <div class="form-container">
+        <h1 class="mb-3">Formulario Remap</h1>
+        <VForm @submit.prevent="submitForm">
+          <VRow>
+            <VCol cols="12">
+              <div class="form-group">
+                <VTextField label="Url" id="url" v-model="formData.url" required />
+              </div>
+            </VCol>
+  
+            <VCol cols="6">
+              <div class="form-group">
+                <VTextField label="Key" id="key" v-model="formData.key" required />
+              </div>
+  
+            </VCol>
+            <VCol cols="6">
+              <div class="form-group">
+                <VTextField label="Eliminar Atributos (separados por coma)" id="elimAttr" v-model="elimAttrInput" />
+              </div>
+  
+            </VCol>
+  
+            <VCol cols="6">
+              <div class="form-group">
+                <VTextField label="Reemplazar Atributos (buscar, reemplazar)" id="reemplazarAttr"
+                  v-model="reemplazarAttrInput" />
+              </div>
+            </VCol>
+  
+            <VCol cols="6">
+              <div class="form-group">
+                <VTextField label="Eliminar Elementos HTML" id="elimElementos" v-model="elimElementosInput" />
+              </div>
+  
+            </VCol>
+          </VRow>
+  
+          <VBtn type="submit">
+            Enviar
+          </VBtn>
+        </VForm>
+        <br>
+  
+  
+  
+      </div>
+    </VCard>
+  
+    <VCard v-if="elements.length > 0" class="mt-3">
+      <VCardText class=" flex-wrap justify-space-between gap-4">
+  
+        <div class="">
+          <h2>Respuesta:</h2>
+          <div v-for="(element, index) in elements" :key="index" :class="`element _it-${index}`">
+            <div v-html="element"></div>
+          </div>
+        </div>
+  
+      </VCardText>
+    </VCard>
+    <div v-if="error" class="error-container">
+      <p>{{ error }}</p>
+    </div>
+
+
+  </section>  
+
+
+</template>
+
+
 
 <style scoped>
 .form-container {
