@@ -430,7 +430,7 @@ function prepareDataEstudiantes(data, option) {
     // Agrupar por curso y contar estudiantes
     const groupedByCourse = data.reduce((acc, student) => {
       student.cursoId.forEach(course => {
-        acc[course.titulo] = (acc[course.titulo] || 0) + 1;
+        acc[course.idCurso.titulo] = (acc[course.idCurso.titulo] || 0) + 1;
       });
       return acc;
     }, {});
