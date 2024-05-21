@@ -1,5 +1,6 @@
 <script setup>
 import elearning_grafico_1 from '@/views/apps/elearning/graficos/elearning_grafico_1.vue';
+import elearning_grafico_curso_por_dia from '@/views/apps/elearning/graficos/elearning_grafico_curso_por_dia.vue';
 import ApexCharts from 'apexcharts';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -1221,6 +1222,7 @@ function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
           </VCardItem>
 
           <div v-if="!noDataVideosCompletados" class="mt-6" id="chartTopVideosVistos"></div>
+
           <div class="text-center mt-6" v-else>No hay datos para mostrar</div>
 
         </VCardText>
@@ -1278,6 +1280,10 @@ function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
         </VCardText>
       </VCard>
     </VCol>
+
+    <!-- <VCol cols="12" md="12">
+      <elearning_grafico_curso_por_dia />
+    </VCol> -->
 
   </VRow>
 

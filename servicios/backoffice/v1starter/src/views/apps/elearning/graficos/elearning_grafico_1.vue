@@ -20,6 +20,8 @@ const modulosSelectList = ref([]);
 const currentTab = ref(0)
 const loadingGrafico = ref(false)
 const refVueApexChart = ref()
+const labelPrimaryColorGlobal = ref("")
+const currentThemeGlobal = ref("")
 
 const alumnosRegistrados = ref({
   categories:[],
@@ -63,7 +65,6 @@ const mesesMin = {
   "diciembre": "Dic"
 };
 
-const vuetifyTheme = useTheme()
 // 👉 Colors variables
 const colorVariables = themeColors => {
   const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
@@ -74,26 +75,26 @@ const colorVariables = themeColors => {
   return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
 }
 
+const vuetifyTheme = useTheme()
+
 const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value);
 
-const currentTheme = vuetifyTheme.current.value.colors
-const variableTheme = vuetifyTheme.current.value.variables
-const labelPrimaryColor = `rgba(${ hexToRgb(currentTheme.primary) },${ variableTheme['dragged-opacity'] })`
-const legendColor = `rgba(${ hexToRgb(currentTheme['on-background']) },${ variableTheme['high-emphasis-opacity'] })`
-const borderColor = `rgba(${ hexToRgb(String(variableTheme['border-color'])) },${ variableTheme['border-opacity'] })`
-const labelColor = `rgba(${ hexToRgb(currentTheme['on-surface']) },${ variableTheme['disabled-opacity'] })`
-const labelSuccessColor = `rgba(${hexToRgb(currentTheme.success)},0.2)`
-const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
+// const currentTheme = vuetifyTheme.current.value.colors
+// const variableTheme = vuetifyTheme.current.value.variables
+// const labelPrimaryColor = `rgba(${ hexToRgb(currentTheme.primary) },${ variableTheme['dragged-opacity'] })`
+// const legendColor = `rgba(${ hexToRgb(currentTheme['on-background']) },${ variableTheme['high-emphasis-opacity'] })`
+// const borderColor = `rgba(${ hexToRgb(String(variableTheme['border-color'])) },${ variableTheme['border-opacity'] })`
+// const labelColor = `rgba(${ hexToRgb(currentTheme['on-surface']) },${ variableTheme['disabled-opacity'] })`
+// const labelSuccessColor = `rgba(${hexToRgb(currentTheme.success)},0.2)`
+// const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
 
-const chartColors = {
-  donut: {
-    series1: currentTheme.success,
-    series2: '#28c76fb3',
-    series3: '#28c76f80',
-    series4: labelSuccessColor,
-  },
-}
 onMounted(async ()=>{
+  const currentThemeT = vuetifyTheme.current.value.colors
+  const variableThemeT = vuetifyTheme.current.value.variables
+  const labelPrimaryColorT = `rgba(${ hexToRgb(currentThemeT.primary) },${ variableThemeT['dragged-opacity'] })`
+
+  labelPrimaryColorGlobal.value = labelPrimaryColorT;
+  currentThemeGlobal.value = currentThemeT;
   // setTimeout(async function(){
   await getCursoEstudiante();
   // currentTab.value = 0;
@@ -140,9 +141,9 @@ async function getAlumnosRegistradosMes(anio = 2024 ) {
 
         const mesesSelectColorsStudents = data.data.map(mes => {
             if(mesesNum[mes.mes] == moment().format("MM")){
-              return currentTheme.primary;
+              return currentThemeGlobal.value.primary;
             }
-            return labelPrimaryColor;
+            return labelPrimaryColorGlobal.value;
         });
 
         alumnosRegistrados.value = {
@@ -207,6 +208,19 @@ async function getCursoEstudiante(){
 }
 
 const chartConfigs = computed(() => {
+  const currentTheme = vuetifyTheme.current.value.colors
+  const variableTheme = vuetifyTheme.current.value.variables
+  const labelSuccessColor = `rgba(${hexToRgb(currentTheme.success)},0.2)`
+  const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
+
+  const labelPrimaryColor = `rgba(${ hexToRgb(currentTheme.primary) },${ variableTheme['dragged-opacity'] })`
+  const legendColor = `rgba(${ hexToRgb(currentTheme['on-background']) },${ variableTheme['high-emphasis-opacity'] })`
+  const borderColor = `rgba(${ hexToRgb(String(variableTheme['border-color'])) },${ variableTheme['border-opacity'] })`
+  const labelColor = `rgba(${ hexToRgb(currentTheme['on-surface']) },${ variableTheme['disabled-opacity'] })`
+
+  labelPrimaryColorGlobal.value = labelPrimaryColor;
+  currentThemeGlobal.value = currentTheme;
+
   const colores = [
     currentTheme["grey-300"], // Rojo coral
     currentTheme.primary
