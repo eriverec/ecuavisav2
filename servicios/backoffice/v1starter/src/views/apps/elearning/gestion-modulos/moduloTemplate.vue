@@ -1,9 +1,13 @@
 <script setup>
+import moduloTemplate from "@/views/apps/elearning/gestion-videos/moduloTemplate.vue";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
+
+
+const isDialogVisibleAddVideo = ref(false)
 
 const currentTab = ref('tab-lista');
 const checkbox = ref(1);
@@ -416,6 +420,19 @@ watch(selectRefCuestionario, (active) => {
     }, 1000)
   }
 });
+
+const receiveTime = async (data) => {
+  if(data.action == "modal"){
+    isDialogVisibleAddVideo.value = data.modalShow;
+  }
+
+  if(data.action == "add"){
+    await getVideos();
+    isDialogVisibleAddVideo.value = data.modalShow;
+    videosModel.value.push(data.id);
+    inicializarVideosSelectList()
+  }
+};
 </script>
 
 <template>
@@ -424,6 +441,19 @@ watch(selectRefCuestionario, (active) => {
     <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
                 {{ configSnackbar.message }}
     </VSnackbar>
+
+    <VDialog
+      v-model="isDialogVisibleAddVideo"
+      width="600"
+    >
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleAddVideo = !isDialogVisibleAddVideo" />
+
+      <VCard>
+        <!-- Dialog Content -->
+        <moduloTemplate @get:eventModalCR="receiveTime" />
+      </VCard>
+    </VDialog>
 
     <VRow>
       <VCol
@@ -489,43 +519,51 @@ watch(selectRefCuestionario, (active) => {
                                 </VSelect>
                             </VCol>
                             <VCol cols="12">
-                                <VSelect
-                                  v-model:menu="selectRefVideo"
-                                  no-data-text="No existen videos que mostrar"
-                                  append-icon="mdi-refresh"
-                                  @click:append="getVideos"
-                                  :disabled="videoModelLoading"
-                                  :menu-props="{ maxHeight: '300' }"
-                                  item-text="title"
-                                  item-value="value"
-                                  v-model="videosModel" 
-                                  :items="videosItems"
-                                  chips
-                                  multiple
-                                  label="Videos educativos">
-                                  <template v-slot:prepend-item>
-                                    <v-list-item>
-                                      <v-list-item-content>
-                                        <VTextField v-model="searchVideoModel" clearable placeholder="Buscar video"/>
-                                      </v-list-item-content>
-                                    </v-list-item>
-                                    <v-divider class="mt-2"></v-divider>
-                                  </template>
-                                  <template #selection="{ item }">
-                                        <div>
-                                            {{ item.title }} - {{ item.value }}
-                                        </div>
-                                    </template>
-                                    <template #item="{ item, props }">
-                                        <v-list-item v-bind="props">
-                                            <v-list-item-content>
-                                                <v-list-item-subtitle>
-                                                    <p>_id: {{ item.value }}</p>
-                                                </v-list-item-subtitle>
-                                            </v-list-item-content>
+                              <VRow>
+                                  <VCol cols="9" >
+                                    <VSelect
+                                      v-model:menu="selectRefVideo"
+                                      no-data-text="No existen videos que mostrar"
+                                      append-icon="mdi-refresh"
+                                      @click:append="getVideos"
+                                      :disabled="videoModelLoading"
+                                      :menu-props="{ maxHeight: '300' }"
+                                      item-text="title"
+                                      item-value="value"
+                                      v-model="videosModel" 
+                                      :items="videosItems"
+                                      chips
+                                      multiple
+                                      label="Videos educativos">
+                                      <template v-slot:prepend-item>
+                                        <v-list-item>
+                                          <v-list-item-content>
+                                            <VTextField v-model="searchVideoModel" clearable placeholder="Buscar video"/>
+                                          </v-list-item-content>
                                         </v-list-item>
-                                    </template>
-                                </VSelect>
+                                        <v-divider class="mt-2"></v-divider>
+                                      </template>
+                                      <template #selection="{ item }">
+                                            <div>
+                                                {{ item.title }} - {{ item.value }}
+                                            </div>
+                                        </template>
+                                        <template #item="{ item, props }">
+                                            <v-list-item v-bind="props">
+                                                <v-list-item-content>
+                                                    <v-list-item-subtitle>
+                                                        <p>_id: {{ item.value }}</p>
+                                                    </v-list-item-subtitle>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </template>
+                                    </VSelect>
+                                  </VCol>
+                                  <VCol cols="3" >
+                                    <VBtn title="Agregar módulo" block @click="isDialogVisibleAddVideo = true"> Agregar </VBtn>
+                                  </VCol>
+                                </VRow>
+                                
                             </VCol>
                             <VCol cols="12" v-if="videosModel">
                               <VList
