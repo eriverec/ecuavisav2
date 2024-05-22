@@ -456,9 +456,9 @@ const resolveDeviceTimeLine = computed(() => {
         <div class="date-picker-wrapper" style="min-width:200px;width: auto;max-width: 100%;">
           <VCombobox :disabled="loadingData" v-model="selectComboTotales" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint hide-selected hint="" />
         </div>
-        <VBtn icon size="x-small" variant="plain" color="default" @click="exportarTopVidesoCompletados">
+        <!-- <VBtn icon size="x-small" variant="plain" color="default" @click="exportarTopVidesoCompletados">
           <VIcon size="22" color="success" icon="tabler-download" />
-        </VBtn>
+        </VBtn> -->
         <!-- <VBtn
           icon
           size="x-small"
