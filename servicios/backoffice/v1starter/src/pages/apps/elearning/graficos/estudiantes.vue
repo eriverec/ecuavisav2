@@ -1281,9 +1281,9 @@ function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
       </VCard>
     </VCol>
 
-    <!-- <VCol cols="12" md="12">
+    <VCol cols="12" md="12">
       <elearning_grafico_curso_por_dia />
-    </VCol> -->
+    </VCol>
 
   </VRow>
 

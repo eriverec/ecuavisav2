@@ -249,7 +249,7 @@ const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme
 async function getChartLineTimeViews(options = {}) {
   try {
     const { fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')) } = options;
-    var response = await fetch(`https://servicio-permanencia.vercel.app/chart/agrupacion/dias?fechai=${fechai}&?fechaf=${fechaf}`);
+    var response = await fetch(`https://servicio-elearning.vercel.app/grafico/estudiantes/ultimos_registros?fechai=${fechai}&?fechaf=${fechaf}`);
     const data = await response.json();
 
     if(data.resp){
@@ -286,15 +286,15 @@ const resolveDeviceTimeLine = computed(() => {
   const transformedData = {};
   dataRaw.forEach(item => {
       item.data.forEach(subitem => {
-          if (!transformedData[subitem.section]) {
-              transformedData[subitem.section] = {
-                  name: subitem.section,
+          if (!transformedData[subitem.curso]) {
+              transformedData[subitem.curso] = {
+                  name: subitem.curso,
                   data: []
               };
           }
-          transformedData[subitem.section].data.push([
+          transformedData[subitem.curso].data.push([
               moment(item.fecha).add(1, 'days').valueOf(),
-              subitem.totalVistas
+              subitem.totalRegistrados
           ]);
       });
   });
@@ -312,14 +312,21 @@ const resolveDeviceTimeLine = computed(() => {
     });
   }
 
-  // if(result.length < 1){
-  //   loadingGrafico.value = false
-  //   return {
-  //     series: [], options: {}
-  //   };
-  // }else{
-  //   loadingGrafico.value = true
-  // }
+  if(result.length < 1){
+    result.push({
+      "name": "",
+      "data": [
+          [
+              1716354000000,
+              0
+          ],
+          [
+              1716440400000,
+              0
+          ]
+      ]
+  })
+  }
 
   const options = {
     chart: {
