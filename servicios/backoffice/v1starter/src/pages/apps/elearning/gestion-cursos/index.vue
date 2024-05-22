@@ -8,6 +8,10 @@ const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 
 const isDialogVisibleAddModulo = ref(false)
+const eliminarDisabled = ref(false);
+
+const categoriaModelLoading = ref(false);
+const etiquetasModelLoading = ref(false);
 
 const currentTab = ref('tab-lista');
 const checkbox = ref(1);
@@ -98,6 +102,7 @@ onMounted(async ()=>{
 
 async function getEtiquetas(page = 1, limit= 10){
   try {
+      etiquetasModelLoading.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -110,7 +115,7 @@ async function getEtiquetas(page = 1, limit= 10){
       var response = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/elearning/etiqueta/listar.php`, requestOptions);
       const data = await response.json();
       etiquetasItems.value = data;
-      
+      etiquetasModelLoading.value = false;
   } catch (error) {
       return console.error(error.message);    
   }
@@ -118,6 +123,7 @@ async function getEtiquetas(page = 1, limit= 10){
 
 async function getCategorias(page = 1, limit= 10){
   try {
+      categoriaModelLoading.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -130,6 +136,7 @@ async function getCategorias(page = 1, limit= 10){
       var response = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/elearning/categoria/listar.php`, requestOptions);
       const data = await response.json();
       categoriasItems.value = data;
+      categoriaModelLoading.value = false;
       
   } catch (error) {
       return console.error(error.message);    
@@ -562,6 +569,7 @@ function cambiarPosicion(valor, direccion) {
 }
 
 async function deleteConfirmed() {
+    eliminarDisabled.value = true;
     var requestOptions = {
         method: 'DELETE',
         redirect: 'follow'
@@ -584,6 +592,7 @@ async function deleteConfirmed() {
     }
     await getGestionCursos();
     isDialogVisibleDelete.value = false;
+    eliminarDisabled.value = false;
 }
 
 const receiveTime = async (data) => {
@@ -733,7 +742,7 @@ watch(selectRefModulo, (active) => {
           >
             No, cerrar
           </VBtn>
-          <VBtn @click="deleteConfirmed">
+          <VBtn :disabled="eliminarDisabled" @click="deleteConfirmed">
             Si, eliminar
           </VBtn>
         </VCardText>
@@ -892,7 +901,7 @@ watch(selectRefModulo, (active) => {
                         </div>
                       </template>
                     </VListItem>
-                    <VDivider v-if="index !== dataVideoList.length - 1" />
+                    <VDivider v-if="index !== paginatedDesafios.length - 1" />
                   </template>
                 </VList>
                 
@@ -984,6 +993,9 @@ watch(selectRefModulo, (active) => {
                                           label="Seleccione la categoría del curso"
                                           :menu-props="{ maxHeight: '300' }" 
                                           @keydown.enter.prevent="categoriaModel"
+                                          :disabled="categoriaModelLoading"
+                                          append-icon="mdi-refresh"
+                                          @click:append="getCategorias"
                                           />
                                       </VCol>
 
@@ -996,7 +1008,10 @@ watch(selectRefModulo, (active) => {
                                           chips
                                           multiple
                                           label="Etiquetas del curso" 
-                                          :menu-props="{ maxHeight: '300' }"/>
+                                          :menu-props="{ maxHeight: '300' }"
+                                          :disabled="etiquetasModelLoading"
+                                          append-icon="mdi-refresh"
+                                          @click:append="getEtiquetas"/>
                                       </VCol>
 
                                       <VCol cols="12" >

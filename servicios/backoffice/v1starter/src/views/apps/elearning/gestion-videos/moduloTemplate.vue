@@ -9,9 +9,8 @@ const moment = extendMoment(Moment);
 const categoriaModelLoading = ref(false);
 const etiquetasModelLoading = ref(false);
 
-const eliminarDisabled = ref(false);
-
 const currentTab = ref('tab-lista');
+const disabledText = ref(true);
 const checkbox = ref(1);
 const dataVideoList = ref([]);
 const totalRegistros = ref(1);
@@ -53,10 +52,15 @@ const etiquetasItems = ref([]);
 
 const categoriasItems = ref([]);
 
+const emit = defineEmits([
+  'get:eventModalCR',
+])
+
 onMounted(async ()=>{
   await getEtiquetas();
   await getCategorias();
-  await getDesafioVideos();
+  onAdd();
+  disabledText.value = false;
 })
 
 async function getEtiquetas(page = 1, limit= 10){
@@ -226,6 +230,12 @@ function resetForm(){
 function closeDiag(){
     resetForm(); 
     isDialogActive.value = false;
+    nextTick(() => {
+        emit('get:eventModalCR', {
+          modalShow:false,
+          action:"modal"
+        })
+    })
 }
 
 //ADD
@@ -273,6 +283,7 @@ async function onComplete(){
         };
         return false;
     }
+    disabledText.value = true;
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -312,6 +323,17 @@ async function onComplete(){
         console.error(respuesta.error);
         return false;
       }
+
+      isDialogActive.value = false;
+      disabledText.value = false;
+
+      nextTick(() => {
+          emit('get:eventModalCR', {
+            modalShow:false,
+            id: respuesta.id,
+            action:"add"
+          })
+      })
     }else if(accionForm.value === 'edit'){
         let jsonEnviar = {
           "titulo": tituloModel.value,
@@ -375,7 +397,6 @@ function onView(data) {
 }
 
 async function deleteConfirmed() {
-    eliminarDisabled.value = true;
     var requestOptions = {
         method: 'DELETE',
         redirect: 'follow'
@@ -398,7 +419,6 @@ async function deleteConfirmed() {
     }
     await getDesafioVideos();
     isDialogVisibleDelete.value = false;
-    eliminarDisabled.value = false;
 }
 
 </script>
@@ -465,7 +485,7 @@ async function deleteConfirmed() {
           >
             No, cerrar
           </VBtn>
-          <VBtn :disabled="eliminarDisabled" @click="deleteConfirmed">
+          <VBtn @click="deleteConfirmed">
             Si, eliminar
           </VBtn>
         </VCardText>
@@ -473,253 +493,84 @@ async function deleteConfirmed() {
     </VDialog>
     <VRow>
       <VCol
-        class="mt-0"
         cols="12"
         md="12"
         lg="12"
       >
-    
+        <VCardItem class="text-center">
+            <VCardTitle class="text-h5 mb-3">
+                {{ accionForm === "add" || accionForm === "duplicate" ? "Crear video" : "Editar " + nombre }}
+            </VCardTitle>
+        </VCardItem>
 
-        <VCard class="mt-5">
-          <VCardText>
-            <VWindow v-model="currentTab">
-              <VWindowItem value="tab-lista">
-                <div
-                  class="d-flex flex-wrap py-4 gap-4 align-items-center"
-                  style="justify-content: space-between;"
-                >
-                  <div>
-                    <VCardTitle>
-                      Listado de videos educativos
-                    </VCardTitle>
-                    <VCardSubtitle> Mantenimiento de videos que se enlazan con Desafíos </VCardSubtitle>
-                  </div>
-                </div>
+        <VCardText>
+            <div class="px-4">
+              <!-- 👉 Form -->
+              <VForm class="mt-6" @submit.prevent="onComplete">
+                <VRow class="">
+                    <VRow>
+                        <VCol cols="6">
+                          <VTextField :disabled="disabledText" v-model="tituloModel" label="Título del video" />
+                        </VCol>
 
-                
-                <!-- inicio lista de Módulos -->
-                  
-                <div class="px-4">
-                  <VBtn color="primary" class="mb-4" @click="onAdd">
-                    Crear registro
-                    <VIcon
-                      :size="22"
-                      icon="tabler-plus"
-                    />
-                  </VBtn>
-                  <VList lines="two" border v-if="dataVideoList.length < 1">
-                    <VListItem>
-                      <VListItemTitle>
-                        <div class="loading"></div>
-                      </VListItemTitle>
-                    </VListItem>
-                  </VList>
+                        <VCol cols="6">
+                          <VTextField :disabled="disabledText" v-model="descripcionModel" label="Descripción" />
+                        </VCol>
+                        
+                        <VCol cols="6">
+                          <VTextField :disabled="disabledText" v-model="thumbnailModel" label="Imagen principal" />
+                        </VCol>
 
-                  <VList lines="two" border  v-if="dataVideoList.length > 0">
-                  <template
-                    v-for="(video, index) of paginatedDesafios"
-                    :key="index"
-                  >
-                    <VListItem :disabled="disabledViewList">
-                      <VListItemTitle>
-                        <div class="nombre-desafio d-flex flex-column">
-                          <div class="d-flex">
-                            <small>Video</small>
-                            <small class="text-disabled"><code class="p-0"><b>_id:</b>{{ video._id }}</code></small>
-                          </div>
-                          <label>{{ video.titulo }}</label>
-                          <span class="text-xs text-disabled">{{ video.descripcion }}</span>
-                          <div class="content-items d-flex">
-                            <div class="content-video">
-                              <VIcon
-                                size="20"
-                                icon="tabler-video"
-                              />
-                              <a class="pl-2" target="_blank" :href="video.url">{{ video.idRudo }}</a>
-                            </div>
-                            <div class="content-time pl-3">
-                              <VIcon
-                                size="20"
-                                icon="tabler-clock"
-                              />
-                              <b>Duración: </b> {{ video.duracion }} min
-                            </div>
+                        <VCol cols="6" >
+                            <VTextField :disabled="disabledText" v-model="idRudoModel" label="Id video de RUDO" />
+                        </VCol>
 
-                            <div class="content-time pl-3">
-                              <VIcon
-                                size="20"
-                                icon="mdi-animation"
-                              />
-                              <b>Categoría: </b> {{ video.categoria }}
-                            </div>
+                        <VCol cols="12">
+                          <VTextField :disabled="disabledText" v-model="duracionModel" label="Tiempo en minutos del video" suffix="minutos" append-inner-icon="tabler-clock" type="number" />
+                        </VCol>
 
-                            <div class="content-time pl-3">
-                              <VIcon
-                                size="20"
-                                icon="mdi-thumb-up-outline"
-                              />
-                              {{ video.likes }}
-                            </div>
-
-                            <div class="content-time pl-3">
-                              <VIcon
-                                size="20"
-                                icon="mdi-thumb-down-outline"
-                              />
-                              {{ video.dislikes }}
-                            </div>
-                          </div>
-                        </div>
-                      </VListItemTitle>
-
-                      <template #append>
-                        <div class="espacio-right-2">
-                          <VBtn
-                            title="Ver vista previa del video"
-                            icon
-                            size="x-small"
-                            color="warning"
-                            variant="text"
-                            @click="onView(video)"
-                          >
-                            <VIcon
-                              size="22"
-                              icon="tabler-movie"
+                        <VCol cols="12" >
+                            <VCombobox 
+                            v-model="categoriaModel" 
+                            :items="categoriasItems" 
+                            chips
+                            label="Seleccione la categoría del video"
+                            :menu-props="{ maxHeight: '300' }" 
+                            @keydown.enter.prevent="categoriaModel"
+                            :disabled="categoriaModelLoading"
+                            append-icon="mdi-refresh"
+                            @click:append="getCategorias"
                             />
-                          </VBtn>
+                        </VCol>
 
-                          <VBtn 
-                            title="Editar registro" color="success" variant="text" icon  @click="onEdit(video._id)">
-                            <VIcon size="22" icon="tabler-edit" />
-                          </VBtn>
+                        <VCol cols="12" >
+                            <VCombobox 
+                              item-text="title"
+                              item-value="value"
+                              v-model="etiquetasModel" 
+                              :items="etiquetasItems"
+                              chips
+                              multiple
+                              label="Etiquetas"
+                              :menu-props="{ maxHeight: '300' }"
+                              :disabled="etiquetasModelLoading"
+                              append-icon="mdi-refresh"
+                              @click:append="getEtiquetas" />
+                        </VCol>
 
-                          <VBtn
-                            title="Eliminar el registro"
-                            icon
-                            size="x-small"
-                            color="error"
-                            variant="text"
-                            @click="onDelete(video._id)"
-                          >
-                            <VIcon
-                              size="22"
-                              icon="tabler-trash"
-                            />
-                          </VBtn>
-
-                          <VBtn
-                            icon
-                            variant="text"
-                            color="default"
-                            size="x-small"
-                            :to="{ name: 'apps-elearning-gestion-videos-view-id', params: { id: video._id } }"
-                          >
-                            <VIcon
-                              :size="22"
-                              icon="tabler-eye"
-                            />
-                          </VBtn>
-                        </div>
-                      </template>
-                    </VListItem>
-                    <VDivider v-if="index !== paginatedDesafios.length - 1" />
-                  </template>
-                </VList>
-                
-                <div class="d-flex align-center justify-space-between botonescurrentPage">
-                    <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
-                    Página {{ currentPage }}
-                    <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
-                        :disabled="(currentPage * itemsPerPage) >= dataVideoList.length">
-                    </VBtn>
-                </div>
-                </div>
-                <!-- fin lista usuarios -->
-
-                <VDialog v-model="isDialogActive" persistent no-click-animation max-width="800">
-
-                  <!-- Dialog close btn -->
-                  <DialogCloseBtn @click="closeDiag" />
-
-                  <VCard  class="pa-sm-14 pa-5">
-                      <VCardItem class="text-center">
-                          <VCardTitle class="text-h5 mb-3">
-                              {{ accionForm === "add" || accionForm === "duplicate" ? "Crear registro" : "Editar " + nombre }}
-                          </VCardTitle>
-                      </VCardItem>
-
-                      <VCardText>
-
-                          <!-- 👉 Form -->
-                          <VForm class="mt-6" @submit.prevent="onComplete">
-                              <VRow class="">
-                                  <VRow>
-                                      <VCol cols="6">
-                                        <VTextField v-model="tituloModel" label="Título del video" />
-                                      </VCol>
-
-                                      <VCol cols="6">
-                                        <VTextField v-model="descripcionModel" label="Descripción" />
-                                      </VCol>
-                                      
-                                      <VCol cols="12">
-                                        <VTextField v-model="thumbnailModel" label="Imagen principal" />
-                                      </VCol>
-
-                                      <VCol cols="12" >
-                                          <VTextField v-model="idRudoModel" label="Id video de RUDO" />
-                                      </VCol>
-
-                                      <VCol cols="12">
-                                        <VTextField v-model="duracionModel" label="Tiempo en minutos del video" suffix="minutos" append-inner-icon="tabler-clock" type="number" />
-                                      </VCol>
-
-                                      <VCol cols="12" >
-                                          <VCombobox 
-                                          v-model="categoriaModel" 
-                                          :items="categoriasItems" 
-                                          chips
-                                          label="Seleccione la categoría del video"
-                                          :menu-props="{ maxHeight: '300' }" 
-                                          @keydown.enter.prevent="categoriaModel"
-                                          :disabled="categoriaModelLoading"
-                                          append-icon="mdi-refresh"
-                                          @click:append="getCategorias"
-                                          />
-                                      </VCol>
-
-                                      <VCol cols="12" >
-                                          <VCombobox 
-                                            item-text="title"
-                                            item-value="value"
-                                            v-model="etiquetasModel" 
-                                            :items="etiquetasItems"
-                                            chips
-                                            multiple
-                                            label="Etiquetas"
-                                            :menu-props="{ maxHeight: '300' }"
-                                            :disabled="etiquetasModelLoading"
-                                            append-icon="mdi-refresh"
-                                            @click:append="getEtiquetas" />
-                                      </VCol>
-         
-                                  </VRow>
-                                  <!-- 👉 Submit and Cancel -->
-                                  <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
-                                      <VBtn type="submit"> Guardar </VBtn>
-                                      <VBtn color="secondary" variant="tonal" @click="closeDiag">
-                                          Cancelar
-                                      </VBtn>
-                                  </VCol>
-                              </VRow>
-                          </VForm>
-                      </VCardText>
-                  </VCard>
-                </VDialog>
-              </VWindowItem>
-            </VWindow>
-          </VCardText>
-        </VCard>
+                    </VRow>
+                    <!-- 👉 Submit and Cancel -->
+                    <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
+                        <VBtn type="submit" :disabled="disabledText"> Guardar </VBtn>
+                        <VBtn color="secondary" :disabled="disabledText" variant="tonal" @click="closeDiag">
+                            Cancelar
+                        </VBtn>
+                    </VCol>
+                </VRow>
+            </VForm>
+            </div>
+            
+        </VCardText>
       </VCol>
     </VRow>
   </section>
