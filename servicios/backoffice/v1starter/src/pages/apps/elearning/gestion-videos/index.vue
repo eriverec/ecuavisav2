@@ -39,7 +39,7 @@ const etiquetasModel = ref('');
 
 const tituloModel = ref(null);
 const descripcionModel = ref(null);
-const thumbnailModel = ref(null);
+const thumbnailModel = ref("https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg");
 
 const idToEdit = ref('');
 
@@ -217,7 +217,7 @@ function resetForm(){
     idRudoModel.value = "";
     duracionModel.value = "";
     descripcionModel.value = "";
-    thumbnailModel.value = "";
+    thumbnailModel.value = "https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg";
     duracionModel.value = "";
     etiquetasModel.value = "";
     categoriaModel.value = "";
@@ -249,7 +249,8 @@ async function onEdit(id){
     idRudoModel.value = data.idRudo;
     duracionModel.value = data.duracion;
     descripcionModel.value = data.descripcion;
-    thumbnailModel.value = data.thumbnail;
+    thumbnailModel.value = "https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg";
+    // thumbnailModel.value = data.thumbnail;
     etiquetasModel.value = data.etiquetas;
     categoriaModel.value = data.categoria;
 
@@ -662,9 +663,9 @@ async function deleteConfirmed() {
                                         <VTextField v-model="descripcionModel" label="Descripción" />
                                       </VCol>
                                       
-                                      <VCol cols="12">
+                                      <!-- <VCol cols="12">
                                         <VTextField v-model="thumbnailModel" label="Imagen principal" />
-                                      </VCol>
+                                      </VCol> -->
 
                                       <VCol cols="12" >
                                           <VTextField v-model="idRudoModel" label="Id video de RUDO" />
