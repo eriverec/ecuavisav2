@@ -973,9 +973,10 @@ watch(selectRefModulo, (active) => {
                                         <VTextField v-model="descripcionModel" label="Descripción" />
                                       </VCol>
                                       
-                                      <VCol cols="6">
+                                      <VCol class="img-preview-container" cols="6">
                                         <VTextField v-model="thumbnailModel" label="Imagen principal" />
-                                      </VCol>
+                                        <img v-if="thumbnailModel" class="img-preview" :src="thumbnailModel">
+                                      </VCol>     
 
                                       <VCol cols="6" >
                                           <VTextField v-model="idRudoModel" label="Id video de RUDO" />
@@ -1259,5 +1260,13 @@ watch(selectRefModulo, (active) => {
     justify-content: flex-start;
     gap: 0;
     padding-left: 5px;
+}
+.img-preview {
+  margin-top: 0.5rem;
+  width: 100%;
+  height: 100%;
+}
+.img-preview-container {
+  height: fit-content;
 }
 </style>
