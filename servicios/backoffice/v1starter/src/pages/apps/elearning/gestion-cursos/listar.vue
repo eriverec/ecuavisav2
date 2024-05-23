@@ -13,6 +13,8 @@ const eliminarDisabled = ref(false);
 const categoriaModelLoading = ref(false);
 const etiquetasModelLoading = ref(false);
 
+let files = [];
+
 const currentTab = ref('tab-lista');
 const checkbox = ref(1);
 const dataVideoList = ref([]);
@@ -368,7 +370,7 @@ async function onComplete(){
         !categoriaModel.value || 
         !idRudoModel.value || 
         !descripcionModel.value || 
-        !thumbnailModel.value || 
+        files.length == 0 || 
         !dataCuestionarioModel.value || 
         !duracionModel.value
       ){
@@ -400,14 +402,23 @@ async function onComplete(){
       }
       var raw = JSON.stringify(jsonEnviar);
 
-      var requestOptions = {
-              method: 'POST',
-              headers: myHeaders,
-              body: raw,
-              redirect: 'follow'
-      };
+      const formData = new FormData();
+      // Añadir los campos de jsonEnviar al FormData
+      formData.append("raw", raw);
 
-      const send = await fetch('https://servicio-elearning.vercel.app/curso/create', requestOptions);
+      files.forEach(file => {
+        formData.append('files', file);
+      });
+
+      var requestOptions = {
+        method: 'POST',
+        // headers: myHeaders,
+        body: formData,
+        // redirect: 'follow'
+      };
+      console.log(files)
+
+      const send = await fetch('https://servicio-elearning.vercel.app/curso/create/file', requestOptions);
       const respuesta = await send.json();
       if (respuesta.resp) {
         configSnackbar.value = {
@@ -663,6 +674,11 @@ watch(selectRefModulo, (active) => {
     }, 1000)
   }
 });
+
+function handleFileUpload(event) {
+  const fileList = event.target.files;
+  files = Array.from(fileList);
+}
 
 </script>
 
@@ -976,8 +992,19 @@ watch(selectRefModulo, (active) => {
                                       </VCol>
                                       
                                       <VCol class="img-preview-container" cols="6">
-                                        <VTextField v-model="thumbnailModel" label="Imagen principal" />
-                                        <img v-if="thumbnailModel" class="img-preview" :src="thumbnailModel">
+                                        <VFileInput
+                                          :rules="thumbnailModel"
+                                          @change="handleFileUpload" 
+                                          required
+                                          label="Subir una imagen principal"
+                                          accept="image/png, image/jpeg, image/bmp"
+                                          placeholder="Pick an avatar"
+                                          prepend-icon="tabler-camera"
+                                        />
+
+                                        <!-- <VTextField v-model="thumbnailModel" label="Imagen principal" /> -->
+                                        
+                                        <!-- <img v-if="thumbnailModel" class="img-preview" :src="thumbnailModel"> -->
                                       </VCol>     
 
                                       <VCol cols="6" >

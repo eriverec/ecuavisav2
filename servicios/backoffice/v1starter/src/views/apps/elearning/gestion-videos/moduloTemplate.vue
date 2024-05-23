@@ -434,6 +434,7 @@ async function deleteConfirmed() {
     <VDialog
       v-model="isDialogVisibleVistaPreviaVideo"
       width="500"
+      persistent
     >
       <!-- Activator -->
       <template #activator="{ props }">

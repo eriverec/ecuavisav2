@@ -445,6 +445,7 @@ const receiveTime = async (data) => {
     <VDialog
       v-model="isDialogVisibleAddVideo"
       width="600"
+      persistent
     >
       <!-- Dialog close btn -->
       <DialogCloseBtn @click="isDialogVisibleAddVideo = !isDialogVisibleAddVideo" />
