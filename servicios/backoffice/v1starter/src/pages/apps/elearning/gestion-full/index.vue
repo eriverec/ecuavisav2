@@ -11,22 +11,22 @@ const currentStep = ref(0);
 const steps = [
   {
     title: 'Crear curso',
-    icon: 'tabler-file-description',
+    icon: 'tabler-certificate',
     //subtitle: 'Setup account details',
   },
   {
     title: 'Crear módulo',
-    icon: 'tabler-user',
+    icon: 'tabler-file',
     //subtitle: 'Add personal info',
   },
   {
     title: 'Crear video',
-    icon: 'tabler-link',
+    icon: 'tabler-video',
     //subtitle: 'Add social links',
   },
   {
     title: 'Crear cuestionario',
-    icon: 'tabler-link',
+    icon: 'tabler-clipboard-text',
     //subtitle: 'Add social links',
   }
 ]    
@@ -392,7 +392,6 @@ const selectRefVideoModulo = ref(null);
 
 const dataCuestionarioModuloModel = ref([]);
 
-const idRudoModel = ref('');
 const duracionModel = ref('');
 const categoriaModel = ref('');
 const videosModuloModel = ref([]);
@@ -498,9 +497,29 @@ function cambiarPosicionModulo(valor, direccion) {
     }
 }
 
+function obtenerValorYPosicionModulo() {
+    const lista = videosSelectListModulo.value;
+    // Crear un nuevo array para almacenar los objetos con el valor y la posición
+    const resultado = [];
+    // Iterar sobre la lista y agregar cada elemento al resultado con su valor y posición
+    lista.forEach((item, index) => {
+        resultado.push({ value: item.value, posicion: index });
+    });
+    // Devolver el array de objetos con el valor y la posición de cada elemento
+    return resultado;
+}
+
 
 //-----------------------------------------------VIDEOS-----------------------------------------------
 //----------------------------------------------------------------------------------------------------
+const idVideoRudoModel = ref('');
+const duracionVideoModel = ref('');
+const categoriaVideoModel = ref('');
+const etiquetasVideoModel = ref('');
+
+const tituloVideoModel = ref(null);
+const descripcionVideoModel = ref(null);
+const thumbnailVideoModel = ref("https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg");
 
 async function getDesafioVideos(){
   try {
@@ -522,9 +541,96 @@ async function getDesafioVideos(){
       return console.error(error.message);    
   }
 }
+//-------------------------------------------CUESTIONARIO---------------------------------------------
+//----------------------------------------------------------------------------------------------------
+const tituloCuestionario = ref('');
+const descripcionCuestionario = ref('');
+const tagsCuestionario = ref([]);
+const puntosNecesariosCuestionario = ref(null);
+const fechaLimiteCuestionario = ref('');
+const limiteTiempoCuestionario = ref(null);
+const preguntasCuestionario  = ref([
+    {
+        pregunta: '',
+        puntaje: null,
+        respuesta: '',
+        opciones: ['','']
+    }
+]);
 
+//------FUNCIONES
+const tag = ref('');
 
+function addTag() {
+    tagsCuestionario.value.push(tag.value);
+    tag.value = '';
+}
+
+function eliminarTag(index) {
+    tagsCuestionario.value.splice(index, 1);
+    tag.value = '';
+}
+
+function resetTag() {
+    tagsCuestionario.value = [];
+    tag.value = '';
+}
+
+function validarArreglo(arreglo) {
+    if (arreglo.length === 0) {
+        return false;
+    }
+
+    for (let i = 0; i < arreglo.length; i++) {
+        const pregunta = arreglo[i];
+        
+        // Verificar si cada campo está lleno y no es null
+        if (!pregunta.pregunta || pregunta.pregunta.trim() === '' ||
+            pregunta.puntaje === null ||
+            !pregunta.respuesta || pregunta.respuesta.trim() === '' ||
+            !pregunta.opciones || pregunta.opciones.length < 2) {
+            return false;
+        }
+
+        // Verificar si el arreglo de opciones tiene al menos 2 elementos no vacíos
+        const opcionesLlenas = pregunta.opciones.filter(opcion => opcion && opcion.trim() !== '');
+        if (opcionesLlenas.length < 2) {
+            return false;
+        }
+    }
+
+    return true;
+}
+function resolveAddPregunta(){   
+    //console.log("select" , tipoCondicion.value);
+    let nuevaPregunta = {
+        pregunta: '',
+        puntaje: null,
+        respuesta: '',
+        opciones: ['','']
+    };
+       
+    preguntasCuestionario.value.push(nuevaPregunta);
+}    
+function resolveAñadirOpcion(index){
+    
+    //console.log("select" , tipoCondicion.value);
+    let nuevaOpcion = '';
+       
+    preguntasCuestionario.value[index].opciones.push(nuevaOpcion);
+}
+
+function eliminarPregunta (index){
+    preguntasCuestionario.value.splice(index, 1);
+}
+
+function eliminarOpcion (index, index1){
+    preguntasCuestionario.value[index].opciones.splice(index1, 1);
+}
+//-----------------------------------------------SEND-------------------------------------------------
+//----------------------------------------------------------------------------------------------------
 async function onComplete() {
+  //Validar curso
   if (
         !categoriaCursoModel.value || 
         !idCursoRudoModel.value || 
@@ -534,13 +640,66 @@ async function onComplete() {
         !duracionCursoModel.value
       ){
         configSnackbar.value = {
-            message: "Llenar todos los campos para crear el registro",
+            message: "Llenar todos los campos del curso para crear el registro",
             type: "error",
             model: true
         };
         return false;
     }
+  //Validar modulo  
+  if (
+        !tituloModuloModel.value || 
+        !descripcionModuloModel.value || 
+        !videosModuloModel.value
+      ){
+        configSnackbar.value = {
+            message: "Llenar todos los campos del módulo para crear el registro",
+            type: "error",
+            model: true
+        };
+        return false;
+    }
+  //Validar video  
+  if (
+        !categoriaVideoModel.value || 
+        !idVideoRudoModel.value || 
+        !descripcionVideoModel.value || 
+        !thumbnailVideoModel.value || 
+        !duracionVideoModel.value
+      ){
+        configSnackbar.value = {
+            message: "Llenar todos los campos del video para crear el registro",
+            type: "error",
+            model: true
+        };
+        return false;
+    }  
+    //Validar cuestionario
+    let preguntasEnviar = preguntasCuestionario.value; 
+    let tituloValid = tituloCuestionario.value;
 
+    if(!Array.isArray(tagsCuestionario.value) && tagsCuestionario.value != null && tagsCuestionario.value != ""){
+        tagsCuestionario.value = [tagsCuestionario.value];
+    }
+
+    if (!validarArreglo(preguntasEnviar) || !tituloValid || tituloValid == "" || !descripcionCuestionario.value || tagsCuestionario.value.length == 0
+     || puntosNecesariosCuestionario.value == null || fechaLimiteCuestionario.value == '' || limiteTiempoCuestionario.value == null) {
+        configSnackbar.value = {
+                    message: "Debe llenar todos los campos del cuestionario",
+                    type: "error",
+                    model: true
+                };
+        return false;
+    } 
+
+    puntosNecesariosCuestionario.value = parseInt(puntosNecesariosCuestionario.value);
+
+    let preguntasFormated = preguntasEnviar.map(item => ({
+    ...item, 
+    puntaje: parseInt(item.puntaje) 
+    })); 
+
+    //JSONS para crear registro
     let jsonEnviarCurso = {
           "titulo": tituloCursoModel.value,
           "descripcion": descripcionCursoModel.value,
@@ -555,11 +714,113 @@ async function onComplete() {
           "fechaVencimiento": fechaIFModel.value.fechaV,
           "estado": estadoCursoModel.value,
           "modulos": obtenerValorYPosicionCurso()
-      }  
+    }  
 
-      console.log(jsonEnviarCurso);
+    let jsonEnviarModulo = {
+          "titulo": tituloModuloModel.value,
+          "descripcion": descripcionModuloModel.value,
+          "idCuestionario": dataCuestionarioModuloModel.value || null,
+          "videos": obtenerValorYPosicionModulo()
+    }
+
+    let jsonEnviarVideo = {
+          "titulo": tituloVideoModel.value,
+          "descripcion": descripcionVideoModel.value,
+          "idRudo": idVideoRudoModel.value,
+          "thumbnail": thumbnailVideoModel.value,
+          "duracion": duracionVideoModel.value,
+          "categoria": categoriaVideoModel.value,
+          "etiquetas": etiquetasVideoModel.value
+    }
+
+    let jsonEnviarCuestionario ={
+            "titulo": tituloCuestionario.value,
+            "descripcion": descripcionCuestionario.value,
+            "tags": tagsCuestionario.value,
+            "puntosNecesarios": puntosNecesariosCuestionario.value,
+            "preguntas": preguntasFormated,
+            "fechaLimite": fechaLimiteCuestionario.value,
+            "limiteTiempo": limiteTiempoCuestionario.value 
+        }
+
+    console.log('curso nuevo',jsonEnviarCurso);
+    console.log('modulo nuevo',jsonEnviarModulo);
+    console.log('video nuevo',jsonEnviarVideo);
+    console.log('cuestionario nuevo',jsonEnviarCuestionario);
+    //location.reload();
+    //return;
+    const sendCurso = await fetch('https://servicio-elearning.vercel.app/curso/create', {
+              method: 'POST',
+              headers: myHeaders,
+              body: JSON.stringify(jsonEnviarCurso),
+              redirect: 'follow'
+      });
+    const sendModulo = await fetch('https://servicio-elearning.vercel.app/modulo/create', {
+              method: 'POST',
+              headers: myHeaders,
+              body: JSON.stringify(jsonEnviarModulo),
+              redirect: 'follow'
+      });
+    const sendVideo = await fetch('https://servicio-elearning.vercel.app/video/create', {
+              method: 'POST',
+              headers: myHeaders,
+              body: JSON.stringify(jsonEnviarVideo),
+              redirect: 'follow'
+      });  
+    const sendCuestionario = await fetch('https://e-learning-cuestionario.vercel.app/cuestionarios/create', {
+              method: 'POST',
+              headers: myHeaders,
+              body: JSON.stringify(jsonEnviarCuestionario),
+              redirect: 'follow'
+      });  
+
+    const respuestaCurso = await sendCurso.json();  
+    const respuestaModulo = await sendModulo.json();
+    const respuestaVideo = await sendVideo.json(); 
+    const respuestaCuestionario = await sendCuestionario.json();  
 
     
+    if (respuestaCurso.resp && respuestaModulo.resp && respuestaVideo.resp && respuestaCuestionario.resp) {
+            configSnackbar.value = {
+                message: "Registros creados correctamente",
+                type: "success",
+                model: true
+            };
+            setTimeout(location.reload(), 1500);
+
+    } else if(!respuestaCurso.resp) {
+            configSnackbar.value = {
+                message: respuestaCurso.mensaje,
+                type: "error",
+                model: true
+            };
+            console.error(respuestaCurso.error);
+            return false;
+    } else if(!respuestaModulo.resp) {
+            configSnackbar.value = {
+                message: respuestaModulo.mensaje,
+                type: "error",
+                model: true
+            };
+            console.error(respuestaModulo.error);
+            return false;
+    } else if(!respuestaVideo.resp) {
+            configSnackbar.value = {
+                message: respuestaVideo.mensaje,
+                type: "error",
+                model: true
+            };
+            console.error(respuestaVideo.error);
+            return false;
+    } else if(!respuestaCuestionario.resp) {
+            configSnackbar.value = {
+                message: respuestaCuestionario.mensaje,
+                type: "error",
+                model: true
+            };
+            console.error(respuestaCuestionario.error);
+            return false;
+    }
 }
 </script>
 
@@ -585,7 +846,7 @@ async function onComplete() {
         </VCardText>
       </VCol>
       <!-- Stepper Content -->
-      <VCol class="pr-5" cols="12" md="8">
+      <VCol class="pr-10" cols="12" md="8">
         <VCardText>
           <VForm @submit.prevent="onComplete">
             <div v-if="currentStep === 0">
@@ -938,7 +1199,164 @@ async function onComplete() {
             <div v-if="currentStep === 2">
               <!-- Step 3 Content -->
               <VRow>
-                <!-- Add your step 3 content here -->
+                <VCol cols="12">
+                  <h6 class="text-h6 font-weight-medium">Crear el video</h6>
+                </VCol>
+                                      <VCol cols="6">
+                                        <VTextField v-model="tituloVideoModel" label="Título del video" />
+                                      </VCol>
+
+                                      <VCol cols="6">
+                                        <VTextField v-model="descripcionVideoModel" label="Descripción" />
+                                      </VCol>
+                                      
+                                      <!-- <VCol cols="12">
+                                        <VTextField v-model="thumbnailModel" label="Imagen principal" />
+                                      </VCol> -->
+
+                                      <VCol cols="12" >
+                                          <VTextField v-model="idVideoRudoModel" label="Id video de RUDO" />
+                                      </VCol>
+
+                                      <VCol cols="12">
+                                        <VTextField v-model="duracionVideoModel" label="Tiempo en minutos del video" suffix="minutos" append-inner-icon="tabler-clock" type="number" />
+                                      </VCol>
+
+                                      <VCol cols="12" >
+                                          <VCombobox 
+                                          v-model="categoriaVideoModel" 
+                                          :items="categoriasItems" 
+                                          chips
+                                          label="Seleccione la categoría del video"
+                                          :menu-props="{ maxHeight: '300' }" 
+                                          @keydown.enter.prevent="categoriaVideoModel"
+                                          :disabled="categoriaModelLoading"
+                                          append-icon="mdi-refresh"
+                                          @click:append="getCategorias"
+                                          />
+                                      </VCol>
+
+                                      <VCol cols="12" >
+                                          <VCombobox 
+                                            item-text="title"
+                                            item-value="value"
+                                            v-model="etiquetasVideoModel" 
+                                            :items="etiquetasItems"
+                                            chips
+                                            multiple
+                                            label="Etiquetas"
+                                            :menu-props="{ maxHeight: '300' }"
+                                            :disabled="etiquetasModelLoading"
+                                            append-icon="mdi-refresh"
+                                            @click:append="getEtiquetas" />
+                                      </VCol>
+         
+                                
+              </VRow>
+            </div>
+            <div v-if="currentStep === 3">
+              <!-- Step 4 Content -->
+              <VRow>
+                <VRow>
+                  <VCol cols="12">
+                  <h6 class="text-h6 font-weight-medium">Crear el cuestionario</h6>
+                  </VCol>
+                                                                    
+                                                                    <VCol cols="6" >
+                                                                        <VTextField v-model="tituloCuestionario" label="Título" placeholder="Título del cuestionario" />
+                                                                    </VCol>
+                                
+                                                                    <VCol cols="6" >
+                                                                        <VTextField v-model="puntosNecesariosCuestionario" label="Puntos necesarios" type="number"/>
+                                                                    </VCol>
+                                
+                                                                    <VCol cols="6" >
+                                                                        <VTextField v-model="fechaLimiteCuestionario" label="Fecha límite" type="date"/>
+                                                                    </VCol>
+                                
+                                                                    <VCol cols="6" >
+                                                                        <VTextField v-model="limiteTiempoCuestionario" label="Límite de tiempo" type="number"/>
+                                                                    </VCol>
+                                
+                                                                    <VCol cols="12" >
+                                                                        <VTextField v-model="descripcionCuestionario" label="Descripción" placeholder="Descripción del cuestionario"/>
+                                                                    </VCol>
+                                                             
+                                                                    <VCol cols="12" >
+                                                                        <p><h4>Ingrese los Tags</h4></p>
+                                                                        <div class="d-flex flex-wrap gap-1 items-center mb-2">
+                                                                            <p class="my-1"><h5>Tags: </h5></p>
+                                                                            <VChip v-for="(tag, index) in tagsCuestionario" :key="tag" class="custom-chip" title="Eliminar tag" color="success" closable @click:close="eliminarTag(index)">
+                                                                                {{ tag }}
+                                                                            </VChip>
+                                                                        </div>
+                                                                        <div class="d-flex flex-nowrap gap-2 items-center mb-2">
+                                                                            <VTextField v-model="tag" label="Ingrese un tag" /> 
+                                                                            <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="addTag" >
+                                                                            Añadir tag
+                                                                            </VBtn>
+                                                                            <VBtn class="ml-auto" color="primary" variant="tonal" @click="resetTag" >
+                                                                                <VIcon icon="tabler-refresh" size="22" />
+                                                                            </VBtn>
+                                                                        </div>
+                                                                        
+                                                                    </VCol>
+                                                             
+                                                                    <VCol cols="12" class="d-flex">
+                                                                        <div class="d-flex align-content-end flex-wrap"><h4>Preguntas</h4></div>
+                                                                                             
+                                                                        <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="resolveAddPregunta" >
+                                                                        Añadir pregunta
+                                                                        </VBtn>                                                                     
+                                                                        
+                                                                    </VCol>    
+                                                                    <VDivider/>
+                                                                    <div v-for="(p, index) in preguntasCuestionario" cols="12" class="w-100 my-4 item-cards"> 
+                                                                        <VBtn v-if="preguntasCuestionario.length > 1" class="ml-auto boton-eleminar-itemsCards" size="38" color="error" @click="eliminarPregunta(index)"><VIcon icon="tabler-x" size="22" /></VBtn>
+                                                                        
+                                                                        <VCardText>
+                                                                            <VCol cols="12">
+                                                                                <VTextField class="mt-2" v-model="p.pregunta" label="Pregunta" placeholder="Escriba la pregunta" />
+                                                                            </VCol>     
+                                                                            
+                                                                            <VCol cols="12" >
+                                                                                <VTextField class="mt-2" v-model="p.puntaje" label="Puntaje" type="number"/>        
+                                                                            </VCol>  
+                                                                            
+                                                                            <VCol cols="12" >
+                                                                                <VTextField  v-model="p.respuesta" label="Respuesta" placeholder="Escriba la respuesta" />
+                                                                            </VCol>
+                                
+                                                                            <VCol cols="12" class="d-flex">
+                                                                                <div class="d-flex align-content-end flex-wrap"><h4>Opciones</h4></div>
+                                                                                                    
+                                                                                <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="resolveAñadirOpcion(index)" >
+                                                                                Añadir opción
+                                                                                </VBtn>                                                                     
+                                                                          
+                                                                            </VCol>    
+                                                                            <VDivider v-if="p.opciones.length > 0" />
+                                
+                                                                            <div v-for="(o, index1) in p.opciones" cols="12" > 
+                                                                                                              
+                                                                                <VCardText class="text-center ml-4 my-4">
+                                                                                    <VRow>
+                                                                                    <VCol cols="8">
+                                                                                        <VTextField  v-model="p.opciones[index1]" :label="'Opción '+ (index1 + 1)" placeholder="Escriba la opción" />
+                                                                                    </VCol>
+                                                                                    <VCol cols="4" v-if="p.opciones.length > 2">
+                                                                                        <VBtn  size="38" color="error" @click="eliminarOpcion(index, index1)"><VIcon icon="tabler-x" size="22" /></VBtn> 
+                                                                                    </VCol>   
+                                                                                    </VRow>    
+                                                                                                                                      
+                                                                                </VCardText>  
+                                           
+                                                                            </div>
+                                
+                                                                        </VCardText>   
+                                                                    </div>
+                                                                                       
+                                                                </VRow>
               </VRow>
             </div>
             <!-- Add more steps here as needed -->
