@@ -13,6 +13,9 @@ const eliminarDisabled = ref(false);
 const categoriaModelLoading = ref(false);
 const etiquetasModelLoading = ref(false);
 
+const editingImage = ref(false); // Modo de edición de imagen
+const isEditing = ref(false); // Indica si estamos editando
+
 let files = [];
 
 const currentTab = ref('tab-lista');
@@ -262,6 +265,7 @@ function resetForm(){
     dataModuloModel.value = [];
     dataCuestionarioModel.value = null;
     estadoModel.value = true;
+    cambioImagen.value = false;
     fechaIFModel.value = {
       fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
       fechasVModel: [parseISO(fechaHoy)],
@@ -327,7 +331,10 @@ async function onEdit(id){
     idRudoModel.value = data.idRudo;
     duracionModel.value = data.duracion;
     descripcionModel.value = data.descripcion;
-    thumbnailModel.value = data.thumbnail;
+
+    // thumbnailModel.value = data.thumbnail;
+    initializeEditMode(data.thumbnail)
+
     etiquetasModel.value = data.etiquetas;
     categoriaModel.value = data.categoria;
     estadoModel.value = data.estado;
@@ -370,10 +377,16 @@ async function onComplete(){
         !categoriaModel.value || 
         !idRudoModel.value || 
         !descripcionModel.value || 
-        files.length == 0 || 
+        files.value.length == 0 || 
         !dataCuestionarioModel.value || 
         !duracionModel.value
       ){
+    // console.log(categoriaModel.value)
+    // console.log(idRudoModel.value)
+    // console.log(descripcionModel.value)
+    // console.log(files.value.length)
+    // console.log(dataCuestionarioModel.value)
+    // console.log(duracionModel.value)
         configSnackbar.value = {
             message: "Llenar todos los campos para crear el registro",
             type: "error",
@@ -389,7 +402,7 @@ async function onComplete(){
           "titulo": tituloModel.value,
           "descripcion": descripcionModel.value,
           "idRudo": idRudoModel.value,
-          "thumbnail": thumbnailModel.value,
+          // "thumbnail": thumbnailModel.value,
           "duracion": duracionModel.value,
           "categoria": categoriaModel.value,
           "etiquetas": etiquetasModel.value,
@@ -440,25 +453,37 @@ async function onComplete(){
           "titulo": tituloModel.value,
           "descripcion": descripcionModel.value,
           "idRudo": idRudoModel.value,
-          "thumbnail": thumbnailModel.value,
+          // "thumbnail": thumbnailModel.value,
           "duracion": duracionModel.value,
           "idCuestionario": dataCuestionarioModel.value,
           "categoria": categoriaModel.value,
           "etiquetas": etiquetasModel.value,
           "fechai": fechaIFModel.value.fechai,
           "fechaf": fechaIFModel.value.fechaf,
+          "editImage": cambioImagen.value,
           "fechaVencimiento": fechaIFModel.value.fechaV,
           "estado": estadoModel.value,
           "modulos": obtenerValorYPosicion()
         }
         var raw = JSON.stringify(jsonEnviar);
+
+        const formData = new FormData();
+        // Añadir los campos de jsonEnviar al FormData
+        formData.append("raw", raw);
+
+        files.value.forEach(file => {
+          formData.append('files', file);
+        });
+
         var requestOptions = {
-                method: 'POST',
-                headers: myHeaders,
-                body: raw,
-                redirect: 'follow'
+          method: 'POST',
+          // headers: myHeaders,
+          body: formData,
+          // redirect: 'follow'
         };
-        const send = await fetch('https://servicio-elearning.vercel.app/curso/update/' + idToEdit.value, requestOptions);
+        console.log(files.value)
+
+        const send = await fetch('https://servicio-elearning.vercel.app/curso/update-file/' + idToEdit.value, requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
                 configSnackbar.value = {
@@ -675,10 +700,41 @@ watch(selectRefModulo, (active) => {
   }
 });
 
-function handleFileUpload(event) {
+// function handleFileUpload(event) {
+//   const fileList = event.target.files;
+//   files = Array.from(fileList);
+// }
+
+// Función para cambiar a modo de edición de imagen
+const editImage = () => {
+  editingImage.value = true;
+};
+
+const imageUrl = ref(''); // URL de la imagen existente (se llenará al editar)
+const cambioImagen = ref(false); // URL de la imagen existente (se llenará al editar)
+
+// Función para manejar la selección de archivos
+const handleFileUpload = (event) => {
   const fileList = event.target.files;
-  files = Array.from(fileList);
-}
+  files.value = Array.from(fileList);
+  cambioImagen.value = true;
+
+  // Actualizar la URL de la imagen para la previsualización
+  // if (files.value.length > 0) {
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     imageUrl.value = reader.result;
+  //   };
+  //   reader.readAsDataURL(files.value[0]);
+  // }
+};
+
+// Función para inicializar el componente en modo de edición
+const initializeEditMode = (existingImageUrl) => {
+  imageUrl.value = existingImageUrl;
+  isEditing.value = true;
+  editingImage.value = false;
+};
 
 </script>
 
@@ -992,7 +1048,12 @@ function handleFileUpload(event) {
                                       </VCol>
                                       
                                       <VCol class="img-preview-container" cols="6">
+                                        <div v-if="isEditing && !editingImage">
+                                          <img :src="imageUrl" alt="Imagen actual" class="image-preview" />
+                                          <v-btn @click="editImage">Cambiar imagen</v-btn>
+                                        </div>
                                         <VFileInput
+                                          v-else
                                           :rules="thumbnailModel"
                                           @change="handleFileUpload" 
                                           required
@@ -1224,7 +1285,10 @@ function handleFileUpload(event) {
 </style>
 
 <style scoped> 
- 
+ .image-preview {
+  max-width: 100%;
+  height: auto;
+}
   .loading{
     border:2px solid #7367F0;
     width: 20px;
