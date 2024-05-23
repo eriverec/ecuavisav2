@@ -31,8 +31,10 @@ const isDialogVisibleVistaPreviaVideo = ref(false)
 const iframeOptions = ref(null)
 
 const fechaHoy = moment().format("YYYY-MM-DD");
+const yesterday = moment().subtract(1, 'days').format("YYYY-MM-DD");
+
 const fechaIFModel = ref({
-  fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
+  fechasModel: [parseISO(yesterday), parseISO(fechaHoy)],
   fechasVModel: [parseISO(fechaHoy)],
   fechasVConfig: {
       position: 'auto right',
@@ -267,7 +269,7 @@ function resetForm(){
     estadoModel.value = true;
     cambioImagen.value = false;
     fechaIFModel.value = {
-      fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
+      fechasModel: [parseISO(yesterday), parseISO(fechaHoy)],
       fechasVModel: [parseISO(fechaHoy)],
       fechasVConfig: fechaIFModel.value.fechasVConfig,
       fechai: fechaHoy,
@@ -373,6 +375,15 @@ async function onEdit(id){
 //SEND
 
 async function onComplete(){
+  if(!files.value){
+    configSnackbar.value = {
+        message: "Llenar todos los campos para crear el registro",
+        type: "error",
+        model: true
+    };
+    return false;
+  }
+
   if (
         !categoriaModel.value || 
         !idRudoModel.value || 

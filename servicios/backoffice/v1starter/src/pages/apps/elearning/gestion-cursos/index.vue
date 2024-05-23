@@ -26,8 +26,10 @@ const isDialogVisibleVistaPreviaVideo = ref(false)
 const iframeOptions = ref(null)
 
 const fechaHoy = moment().format("YYYY-MM-DD");
+const yesterday = moment().subtract(1, 'days').format("YYYY-MM-DD");
+
 const fechaIFModel = ref({
-  fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
+  fechasModel: [parseISO(yesterday), parseISO(fechaHoy)],
   fechasVModel: [parseISO(fechaHoy)],
   fechasVConfig: {
       position: 'auto right',
@@ -261,7 +263,7 @@ function resetForm(){
     dataCuestionarioModel.value = null;
     estadoModel.value = true;
     fechaIFModel.value = {
-      fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
+      fechasModel: [parseISO(yesterday), parseISO(fechaHoy)],
       fechasVModel: [parseISO(fechaHoy)],
       fechasVConfig: fechaIFModel.value.fechasVConfig,
       fechai: fechaHoy,
