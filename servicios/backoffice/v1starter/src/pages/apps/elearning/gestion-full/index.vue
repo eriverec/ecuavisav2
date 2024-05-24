@@ -15,14 +15,14 @@ const steps = [
     //subtitle: 'Setup account details',
   },
   {
-    title: 'Crear módulo',
-    icon: 'tabler-file',
-    //subtitle: 'Add personal info',
-  },
-  {
     title: 'Crear video',
     icon: 'tabler-video',
     //subtitle: 'Add social links',
+  },
+  {
+    title: 'Crear módulo',
+    icon: 'tabler-file',
+    //subtitle: 'Add personal info',
   },
   {
     title: 'Crear cuestionario',
@@ -162,13 +162,15 @@ async function getModulos(){
       var response = await fetch(`https://servicio-elearning.vercel.app/modulo/select?limit=200&page=1`, requestOptions);
       const data = await response.json();
 
-      dataModuloItems.value = data.data.reduce((acumulador, actual) => {
+      modulosRaw.value = data.data.reduce((acumulador, actual) => {
         acumulador.push({
           title: `${actual.titulo}`,
           value: actual._id,
         });
         return acumulador;
       }, []);
+      dataModuloItems.value = deepClone(modulosRaw.value);
+      modulosFull.value = deepClone(data.data);
       moduloItemsCopy.value = dataModuloItems.value;
       moduloModelLoading.value = false;
       
@@ -405,6 +407,16 @@ const thumbnailModel = ref(null);
 const videosItems = ref([]);
 const videosItemsCopy = ref([]);
 
+function deepClone(o) {
+  const output = Array.isArray(o) ? [] : {};
+  
+  for (let i in o) {
+    const value = o[i];   
+    output[i] = value !== null && typeof value === 'object' ? deepClone(value) : value;
+  }
+  return output;
+}
+
 async function getVideos(){
   try {
       videosModelLoading.value = true;
@@ -420,7 +432,7 @@ async function getVideos(){
       var response = await fetch(`https://servicio-elearning.vercel.app/video/all?limit=200&page=1`, requestOptions);
       const data = await response.json();
 
-      videosItems.value = data.data.reduce((acumulador, actual) => {
+      videosRaw.value = data.data.reduce((acumulador, actual) => {
         acumulador.push({
           title: `${actual.titulo}`,
           value: actual._id,
@@ -428,6 +440,8 @@ async function getVideos(){
         return acumulador;
       }, []);
 
+      videosItems.value = deepClone(videosRaw.value);
+      videosFull.value = deepClone(data.data);
       videosItemsCopy.value = videosItems.value;
       videosModelLoading.value = false;
   } catch (error) {
@@ -439,7 +453,8 @@ async function getVideos(){
 function inicializarVideosSelectListModulo() {
     const videosItemsLocal = videosItems.value;
     const videosItemsID = videosModuloModel.value;
-    if (videosItemsID) {
+    //console.log("videosModuloModel", videosModuloModel.value);
+    if (videosItemsID && videosItemsID.length > 0) {
         //Si se selecciona nuevos elementos del select
         if(videosSelectListModulo.value.length < videosItemsID.length){
           for(var j in videosItemsLocal){
@@ -452,7 +467,7 @@ function inicializarVideosSelectListModulo() {
         //Si se elimina elementos del select
         if(videosSelectListModulo.value.length > videosItemsID.length){
           // Filtrar los elementos de videosSelectList.value que no están presentes en listaB
-          const elementosFaltantes = videosSelectList.value.filter(itemA => !videosItemsID.includes(itemA.value));
+          const elementosFaltantes = videosSelectListModulo.value.filter(itemA => !videosItemsID.includes(itemA.value));
 
           for(var i in elementosFaltantes){
             for(var j in videosSelectListModulo.value){
@@ -627,6 +642,212 @@ function eliminarPregunta (index){
 function eliminarOpcion (index, index1){
     preguntasCuestionario.value[index].opciones.splice(index1, 1);
 }
+//-----------------------------------------------LOCAL------------------------------------------------
+//----------------------------------------------------------------------------------------------------
+
+
+const modulosRaw = ref([]);
+
+const modulosFull = ref([]);
+const modulosGeneradosLocal = ref([]);
+const modulosGeneradosLocalFull = ref([]);
+
+const videosRaw = ref([]);
+
+const videosFull = ref([]);
+const videosGeneradosLocal = ref([]);
+const videosGeneradosLocalFull = ref([]);
+
+const cursoLocal = ref({});
+
+
+const codigosGenerados = new Set();
+function generarCodigoAleatorioUnico(longitud) {
+    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    const caracteresLength = caracteres.length;
+
+    let codigo;
+    do {
+        let resultado = '';
+        for (let i = 0; i < longitud; i++) {
+            resultado += caracteres.charAt(Math.floor(Math.random() * caracteresLength));
+        }
+        codigo = resultado;
+    } while (codigosGenerados.has(codigo));
+
+    codigosGenerados.add(codigo);
+    return codigo;
+}
+
+function obtenerValorYPosicionLocal(lista) {
+    //const lista = modulosSelectListCurso.value;
+    // Crear un nuevo array para almacenar los objetos con el valor y la posición
+    const resultado = [];
+    // Iterar sobre la lista y agregar cada elemento al resultado con su valor y posición
+    lista.forEach((item, index) => {
+        resultado.push({ value: item.value, posicion: index });
+    });
+    // Devolver el array de objetos con el valor y la posición de cada elemento
+    return resultado;
+}
+
+function resetFormVideo(){
+  idVideoRudoModel.value = null;
+  duracionVideoModel.value = null;
+  categoriaVideoModel.value = '';
+  etiquetasVideoModel.value = '';
+  tituloVideoModel.value = null;
+  descripcionVideoModel.value = null;
+}
+
+function guardarLocalVideo (){
+  if (
+        !categoriaVideoModel.value || 
+        !idVideoRudoModel.value || 
+        !descripcionVideoModel.value || 
+        !thumbnailVideoModel.value || 
+        !duracionVideoModel.value
+      ){
+        configSnackbar.value = {
+            message: "Llenar todos los campos para crear el video",
+            type: "error",
+            model: true
+        };
+        return false;
+    }  
+  var id = generarCodigoAleatorioUnico(10);  
+  videosFull.value.push({
+    _id: id,
+    titulo: tituloVideoModel.value,
+    descripcion: descripcionVideoModel.value,
+    idRudo: idVideoRudoModel.value,
+    thumbnail: thumbnailVideoModel.value,
+    duracion: duracionVideoModel.value,
+    categoria: categoriaVideoModel.value,
+    etiquetas: etiquetasVideoModel.value
+  });
+
+  videosItems.value.push({
+    title: tituloVideoModel.value,
+    value: id
+  });
+
+  videosGeneradosLocal.value.push({
+    titulo: tituloVideoModel.value,
+    descripcion: descripcionVideoModel.value,
+    idRudo: idVideoRudoModel.value,
+    thumbnail: thumbnailVideoModel.value,
+    duracion: duracionVideoModel.value,
+    categoria: categoriaVideoModel.value,
+    etiquetas: etiquetasVideoModel.value    
+  });
+
+  console.log("videosGeneradosLocal", videosGeneradosLocal.value);
+  resetFormVideo()
+}
+function resetFormModulo(){
+  tituloModuloModel.value = null;
+  dataCuestionarioModuloModel.value = null;
+  descripcionModuloModel.value = null;
+  videosModuloModel.value = [];
+  videosSelectListModulo.value = [];	
+}
+function guardarLocalModulo (){
+  if (
+        !tituloModuloModel.value || 
+        !descripcionModuloModel.value || 
+        !videosModuloModel.value
+      ){
+        configSnackbar.value = {
+            message: "Llenar todos los campos para crear el módulo",
+            type: "error",
+            model: true
+        };
+        return false;
+    }
+    var id = generarCodigoAleatorioUnico(10);
+    modulosFull.value.push({
+      _id: id,
+      titulo: tituloModuloModel.value,
+      descripcion: descripcionModuloModel.value,
+      idCuestionario: dataCuestionarioModuloModel.value || null,
+      videos: obtenerValorYPosicionModulo()
+    });
+
+    dataModuloItems.value.push({
+      title: tituloModuloModel.value,
+      value: id
+    });
+
+    modulosGeneradosLocal.value.push({
+      titulo: tituloModuloModel.value,
+      descripcion: descripcionModuloModel.value,
+      idCuestionario: dataCuestionarioModuloModel.value || null,
+      videos: obtenerValorYPosicionModulo()
+    });
+
+    console.log("modulosGeneradosLocal", modulosGeneradosLocal.value);
+    resetFormModulo();
+}
+
+async function onApply() {
+  //Validar curso
+  if (
+        !categoriaCursoModel.value || 
+        !idCursoRudoModel.value || 
+        !descripcionCursoModel.value || 
+        !thumbnailCursoModel.value || 
+        !dataCuestionarioCursoModel.value || 
+        !duracionCursoModel.value
+      ){
+        configSnackbar.value = {
+            message: "Llenar todos los campos del curso para crear el registro",
+            type: "error",
+            model: true
+        };
+        return false;
+    }
+
+    console.log("modulosFull" , modulosFull.value);
+    console.log("videosFull" , videosFull.value);
+    var modulosSelected = obtenerValorYPosicionCurso();
+    console.log("modulosSelected" , modulosSelected);
+    var modulosResult = modulosFull.value.filter(fullItem => 
+      modulosSelected.some(selectedItem => selectedItem.value === fullItem._id)
+    );
+
+    var videosSelected =  modulosResult.map(item => item.videos.map(video => video.value));
+    console.log("videosSelected" , videosSelected);
+    var videosResult = videosFull.value.filter(fullItem =>
+      videosSelected.some(selectedItem => selectedItem.value === fullItem._id)
+    );
+
+    console.log("videosResult" , videosResult);
+
+    modulosResult.videos = videosResult;
+
+
+    let curso = {
+          titulo: tituloCursoModel.value,
+          descripcion: descripcionCursoModel.value,
+          idRudo: idCursoRudoModel.value,
+          thumbnail: thumbnailCursoModel.value,
+          duracion: duracionCursoModel.value,
+          categoria: categoriaCursoModel.value,
+          etiquetas: etiquetasCursoModel.value,
+          idCuestionario: dataCuestionarioCursoModel.value,
+          fechai: fechaIFModel.value.fechai,
+          fechaf: fechaIFModel.value.fechaf,
+          fechaVencimiento: fechaIFModel.value.fechaV,
+          estado: estadoCursoModel.value,
+          modulos: modulosResult
+    }  
+
+    cursoLocal.value = curso;   
+    console.log("curso" , cursoLocal.value);
+}
+
+
 //-----------------------------------------------SEND-------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 async function onComplete() {
@@ -850,7 +1071,7 @@ async function onComplete() {
         <VCardText>
           <VForm @submit.prevent="onComplete">
             <div v-if="currentStep === 0">
-              <!-- Step 1 Content -->
+              <!-- Curso -->
               <VRow>
                 <VCol cols="12">
                   <h6 class="text-h6 font-weight-medium">Crear el curso</h6>
@@ -1044,10 +1265,74 @@ async function onComplete() {
               </VRow>
             </div>
             <div v-if="currentStep === 1">
-              <!-- Step 2 Content -->
+              <!-- Video -->
               <VRow>
-                <VCol cols="12">
+                <VCol class="d-flex justify-space-between" cols="12">
+                  <h6 class="text-h6 font-weight-medium">Crear el video</h6>
+                  <VBtn @click="guardarLocalVideo">
+                    Guardar
+                  </VBtn>
+                </VCol>
+                                      <VCol cols="6">
+                                        <VTextField v-model="tituloVideoModel" label="Título del video" />
+                                      </VCol>
+
+                                      <VCol cols="6">
+                                        <VTextField v-model="descripcionVideoModel" label="Descripción" />
+                                      </VCol>
+                                      
+                                      <!-- <VCol cols="12">
+                                        <VTextField v-model="thumbnailModel" label="Imagen principal" />
+                                      </VCol> -->
+
+                                      <VCol cols="12" >
+                                          <VTextField v-model="idVideoRudoModel" label="Id video de RUDO" />
+                                      </VCol>
+
+                                      <VCol cols="12">
+                                        <VTextField v-model="duracionVideoModel" label="Tiempo en minutos del video" suffix="minutos" append-inner-icon="tabler-clock" type="number" />
+                                      </VCol>
+
+                                      <VCol cols="12" >
+                                          <VCombobox 
+                                          v-model="categoriaVideoModel" 
+                                          :items="categoriasItems" 
+                                          chips
+                                          label="Seleccione la categoría del video"
+                                          :menu-props="{ maxHeight: '300' }" 
+                                          @keydown.enter.prevent="categoriaVideoModel"
+                                          :disabled="categoriaModelLoading"
+                                          append-icon="mdi-refresh"
+                                          @click:append="getCategorias"
+                                          />
+                                      </VCol>
+
+                                      <VCol cols="12" >
+                                          <VCombobox 
+                                            item-text="title"
+                                            item-value="value"
+                                            v-model="etiquetasVideoModel" 
+                                            :items="etiquetasItems"
+                                            chips
+                                            multiple
+                                            label="Etiquetas"
+                                            :menu-props="{ maxHeight: '300' }"
+                                            :disabled="etiquetasModelLoading"
+                                            append-icon="mdi-refresh"
+                                            @click:append="getEtiquetas" />
+                                      </VCol>
+         
+                                
+              </VRow>
+            </div>
+            <div v-if="currentStep === 2">
+              <!-- Modulo -->
+              <VRow>
+                <VCol class="d-flex justify-space-between" cols="12">
                   <h6 class="text-h6 font-weight-medium">Crear el módulo</h6>
+                  <VBtn @click="guardarLocalModulo">
+                    Guardar
+                  </VBtn>
                 </VCol>
                                   <VRow>
                                       <VCol cols="6">
@@ -1196,66 +1481,8 @@ async function onComplete() {
                                   </VRow>                         
                               </VRow>
             </div>
-            <div v-if="currentStep === 2">
-              <!-- Step 3 Content -->
-              <VRow>
-                <VCol cols="12">
-                  <h6 class="text-h6 font-weight-medium">Crear el video</h6>
-                </VCol>
-                                      <VCol cols="6">
-                                        <VTextField v-model="tituloVideoModel" label="Título del video" />
-                                      </VCol>
-
-                                      <VCol cols="6">
-                                        <VTextField v-model="descripcionVideoModel" label="Descripción" />
-                                      </VCol>
-                                      
-                                      <!-- <VCol cols="12">
-                                        <VTextField v-model="thumbnailModel" label="Imagen principal" />
-                                      </VCol> -->
-
-                                      <VCol cols="12" >
-                                          <VTextField v-model="idVideoRudoModel" label="Id video de RUDO" />
-                                      </VCol>
-
-                                      <VCol cols="12">
-                                        <VTextField v-model="duracionVideoModel" label="Tiempo en minutos del video" suffix="minutos" append-inner-icon="tabler-clock" type="number" />
-                                      </VCol>
-
-                                      <VCol cols="12" >
-                                          <VCombobox 
-                                          v-model="categoriaVideoModel" 
-                                          :items="categoriasItems" 
-                                          chips
-                                          label="Seleccione la categoría del video"
-                                          :menu-props="{ maxHeight: '300' }" 
-                                          @keydown.enter.prevent="categoriaVideoModel"
-                                          :disabled="categoriaModelLoading"
-                                          append-icon="mdi-refresh"
-                                          @click:append="getCategorias"
-                                          />
-                                      </VCol>
-
-                                      <VCol cols="12" >
-                                          <VCombobox 
-                                            item-text="title"
-                                            item-value="value"
-                                            v-model="etiquetasVideoModel" 
-                                            :items="etiquetasItems"
-                                            chips
-                                            multiple
-                                            label="Etiquetas"
-                                            :menu-props="{ maxHeight: '300' }"
-                                            :disabled="etiquetasModelLoading"
-                                            append-icon="mdi-refresh"
-                                            @click:append="getEtiquetas" />
-                                      </VCol>
-         
-                                
-              </VRow>
-            </div>
             <div v-if="currentStep === 3">
-              <!-- Step 4 Content -->
+              <!-- Cuestionario -->
               <VRow>
                 <VRow>
                   <VCol cols="12">
@@ -1362,6 +1589,9 @@ async function onComplete() {
             <!-- Add more steps here as needed -->
             <!-- Stepper Controls -->
             <VCol cols="12" class="d-flex flex-wrap justify-center gap-4 mt-8">
+              <VBtn style="margin-left: auto;" @click="onApply">
+                    Aplicar
+              </VBtn>
               <VBtn color="secondary" :disabled="currentStep === 0" @click="currentStep--">
                 <VIcon icon="tabler-arrow-left" start class="flip-in-rtl" /> Anterior
               </VBtn>
