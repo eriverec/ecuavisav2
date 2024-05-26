@@ -8,6 +8,7 @@ const moment = extendMoment(Moment);
 
 
 const isDialogVisibleAddVideo = ref(false)
+const isDialogVisibleEditVideo = ref(false)
 
 const currentTab = ref('tab-lista');
 const checkbox = ref(1);
@@ -60,6 +61,11 @@ const emit = defineEmits([
   'get:eventModalCR',
 ])
 
+const props = defineProps({
+  action: String,
+  idModulo: String
+});
+
 const configSnackbar = ref({
     message: "Datos guardados",
     type: "success",
@@ -70,7 +76,12 @@ const videosItems = ref([]);
 onMounted(async ()=>{
   await getCuestionario();
   await getVideos();
-  onAdd();
+  if(props.action == "add"){
+    await onAdd();
+  }else{
+    await onEdit(props.idModulo)
+  }
+
   disabledText.value = false;
 });
 
@@ -124,6 +135,7 @@ async function getVideos(page = 1, limit= 10){
         acumulador.push({
           title: `${actual.titulo}`,
           value: actual._id,
+          bloqueado: actual.bloqueado || true,
         });
         return acumulador;
       }, []);
@@ -185,6 +197,7 @@ async function onAdd(){
     resetForm(); 
     accionForm.value = 'add';
     isDialogActive.value = true;
+    return true;
 }
 
 
@@ -210,12 +223,44 @@ function obtenerListaOrdenada(listaA, listaB) {
         // Si se encuentra el elemento en listaA
         if (elementoListaA) {
             // Crear un nuevo objeto con el formato deseado y agregarlo a la lista resultado
-            resultado.push({ title: listaB[i].titulo, value: elementoListaA });
+            resultado.push({ 
+              title: listaB[i].titulo,
+              bloqueado: listaB[i].hasOwnProperty("bloqueado")?listaB[i].bloqueado: true,
+              value: elementoListaA 
+            });
         }
     }
 
     // Devolver la lista resultado
     return resultado;
+}
+//EDIT
+async function onEdit(id){
+    resetForm();     
+    accionForm.value = 'edit';
+    const consulta = await fetch('https://servicio-elearning.vercel.app/modulo/get/' + id);
+    const consultaJson = await consulta.json();
+    const data = consultaJson.data;
+
+    idToEdit.value = data._id;
+
+    tituloModel.value = data.titulo;
+    descripcionModel.value = data.descripcion;
+    if(data.cuestionario){
+      dataCuestionarioModel.value = data.cuestionario._id;
+    }
+
+    videosModel.value = filtrarDesafios(videosItems.value, data.videos.reduce((acumulador, actual) => {
+        acumulador.push(actual._id);
+        return acumulador;
+      }, []));
+
+    isDialogActive.value = true; 
+
+    videosSelectList.value= obtenerListaOrdenada(videosModel.value, data.videos);
+
+    return true;
+
 }
 
 //SEND
@@ -259,6 +304,14 @@ async function onComplete(){
               type: "success",
               model: true
           };
+
+          nextTick(() => {
+              emit('get:eventModalCR', {
+                modalShow:false,
+                id: respuesta.id,
+                action:"add"
+              })
+          })
         } else {
           configSnackbar.value = {
               message: respuesta.mensaje,
@@ -266,19 +319,58 @@ async function onComplete(){
               model: true
           };
           console.error(respuesta.error);
-          return false;
         }
         isDialogActive.value = false;
         disabledText.value = false;
+        return false;
+      }else if(accionForm.value === 'edit'){
+        let jsonEnviar = {
+          "titulo": tituloModel.value,
+          "descripcion": descripcionModel.value,
+          "idCuestionario": dataCuestionarioModel.value || null,
+          "videos": obtenerValorYPosicion()
+        }
+        var raw = JSON.stringify(jsonEnviar);
+        var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+        };
+        const send = await fetch('https://servicio-elearning.vercel.app/modulo/update/' + idToEdit.value, requestOptions);
+        const respuesta = await send.json();
+        if (respuesta.resp) {
+            configSnackbar.value = {
+                message: "Registro actualizado correctamente",
+                type: "success",
+                model: true
+            };
 
-        nextTick(() => {
-            emit('get:eventModalCR', {
-              modalShow:false,
-              id: respuesta.id,
-              action:"add"
+            nextTick(() => {
+                emit('get:eventModalCR', {
+                  modalShow:false,
+                  data: respuesta,
+                  action:"edit"
+                })
             })
-        })
-      }
+                
+        } else {
+            configSnackbar.value = {
+                message: respuesta.mensaje,
+                type: "error",
+                model: true
+            };
+            console.error(respuesta.error);
+
+        }
+
+        isDialogActive.value = false;
+        disabledText.value = false;
+
+        // await getVideos();
+        // await getEtiquetas();
+        // await getCategorias();
+    }
   } catch (error) {
       configSnackbar.value = {
           message: error.message,
@@ -351,7 +443,11 @@ function obtenerValorYPosicion() {
     const resultado = [];
     // Iterar sobre la lista y agregar cada elemento al resultado con su valor y posición
     lista.forEach((item, index) => {
-        resultado.push({ value: item.value, posicion: index });
+        resultado.push({ 
+          value: item.value, 
+          posicion: index,
+          bloqueado: item.bloqueado 
+        });
     });
     // Devolver el array de objetos con el valor y la posición de cada elemento
     return resultado;
@@ -424,6 +520,7 @@ watch(selectRefCuestionario, (active) => {
 const receiveTime = async (data) => {
   if(data.action == "modal"){
     isDialogVisibleAddVideo.value = data.modalShow;
+    isDialogVisibleEditVideo.value = data.modalShow;
   }
 
   if(data.action == "add"){
@@ -432,7 +529,28 @@ const receiveTime = async (data) => {
     videosModel.value.push(data.id);
     inicializarVideosSelectList()
   }
+
+  if(data.action == "edit"){
+    await getVideos();
+    isDialogVisibleEditVideo.value = data.modalShow;
+    inicializarVideosSelectList()
+  }
 };
+
+//Switch
+const handleSwitchChange = async (video, index) => {
+  const bloqueado = !videosSelectList.value[index].bloqueado;
+  videosSelectList.value[index].bloqueado = bloqueado;
+  console.log(videosSelectList.value[index])
+};
+
+const idVideoEdit = ref("");
+
+const editarVideo = (video) => {
+  idVideoEdit.value = video;
+  isDialogVisibleEditVideo.value = true;
+}
+
 </script>
 
 <template>
@@ -441,6 +559,20 @@ const receiveTime = async (data) => {
     <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
                 {{ configSnackbar.message }}
     </VSnackbar>
+
+    <VDialog
+      v-model="isDialogVisibleEditVideo"
+      width="600"
+      persistent
+    >
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleEditVideo = !isDialogVisibleEditVideo" />
+
+      <VCard>
+        <!-- Dialog Content -->
+        <moduloTemplate @get:eventModalCR="receiveTime" action="edit" :idVideo="idVideoEdit" />
+      </VCard>
+    </VDialog>
 
     <VDialog
       v-model="isDialogVisibleAddVideo"
@@ -452,7 +584,7 @@ const receiveTime = async (data) => {
 
       <VCard>
         <!-- Dialog Content -->
-        <moduloTemplate @get:eventModalCR="receiveTime" />
+        <moduloTemplate @get:eventModalCR="receiveTime" action="add" />
       </VCard>
     </VDialog>
 
@@ -466,7 +598,7 @@ const receiveTime = async (data) => {
         <VCard  class="px-5 py-4">
             <VCardItem class="text-center">
                 <VCardTitle class="text-h5 mb-3">
-                    Crear módulo
+                    {{ accionForm == "add"? "Crear módulo":"Editar módulo" }}
                 </VCardTitle>
             </VCardItem>
             <VCardText>
@@ -583,10 +715,11 @@ const receiveTime = async (data) => {
                                         color="success"
                                       />
                                     </template>
-                                    <VListItemTitle>
+                                    <VListItemTitle :class="videoSelect.bloqueado?'disabled':''">
                                       {{ videoSelect.title }}
                                     </VListItemTitle>
-                                    <VListItemSubtitle class="mt-1">
+                                    <VListItemSubtitle :class="videoSelect.bloqueado?'disabled':''">
+
                                       <VBadge
                                         dot
                                         location="start center"
@@ -596,19 +729,34 @@ const receiveTime = async (data) => {
                                       >
                                         <span class="ms-4">Video</span>
                                       </VBadge>
-
                                       <span class="text-xs text-disabled">{{ videoSelect.value }}</span>
+
                                     </VListItemSubtitle>
 
                                     <template #append>
-                                      <div class="btn-order" style="">
-                                        <VBtn size="x-small" :disabled="index == 0" variant="text" @click="cambiarPosicion(videoSelect.value, 'arriba')">
-                                          <VIcon :size="25" icon="mdi-arrow-up-bold-box" />
-                                        </VBtn>
-                                        <VBtn size="x-small" :disabled="index == videosSelectList.length - 1" variant="text" @click="cambiarPosicion(videoSelect.value, 'abajo')">
-                                          <VIcon :size="25" icon="mdi-arrow-down-bold-box" />
-                                        </VBtn>
+                                      <div class="content-order pl-4">
+                                        <div class="content-edit">
+                                          <VBtn class="px-0 btn-editar" size="x-small" :title="videoSelect.bloqueado?'Desbloquear video':'Bloquear video'" variant="text" @click="handleSwitchChange(videoSelect, index)">
+                                            <VIcon top :size="25" icon="tabler-lock" title="Video bloqueado" color="error" v-if="videoSelect.bloqueado" />
+                                            <VIcon top :size="25" icon="tabler-lock-open" title="Video público" color="success" v-else />
+                                          </VBtn>
+                                          <VBtn style="margin-top: -10px;" class="px-0 btn-editar" size="x-small" variant="text" @click="editarVideo(videoSelect.value)">
+                                            <div class="content-btn">
+                                              <VIcon top :size="25" icon="tabler-edit" title="Video público" color="primary" />
+                                              Editar
+                                            </div>
+                                          </VBtn>
+                                        </div>
+                                        <div class="btn-order" style="">
+                                          <VBtn size="x-small" class="px-1" :disabled="index == 0" variant="text" @click="cambiarPosicion(videoSelect.value, 'arriba')">
+                                            <VIcon :size="25" icon="mdi-arrow-up-bold-box" />
+                                          </VBtn>
+                                          <VBtn size="x-small" class="px-1" :disabled="index == videosSelectList.length - 1" variant="text" @click="cambiarPosicion(videoSelect.value, 'abajo')">
+                                            <VIcon :size="25" icon="mdi-arrow-down-bold-box" />
+                                          </VBtn>
+                                        </div>
                                       </div>
+                                      
                                     </template>
                                   </VListItem>
                                   <VDivider v-if="index !== videosSelectList.length - 1" />
@@ -654,7 +802,37 @@ const receiveTime = async (data) => {
 </style>
 
 <style scoped> 
- 
+  .content-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 7px !important;
+  }
+
+  /*.content-edit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+      text-align: center;
+      color: rgb(var(--v-theme-primary));
+  }*/
+
+  .content-order {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      justify-content: center;
+  }
+  .switch-estatus {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0;
+      padding-left: 5px;
+  }
+
   .loading{
     border:2px solid #7367F0;
     width: 20px;

@@ -8,6 +8,7 @@ const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 
 const isDialogVisibleAddModulo = ref(false)
+const isDialogVisibleEditModulo = ref(false)
 const eliminarDisabled = ref(false);
 
 const categoriaModelLoading = ref(false);
@@ -375,6 +376,15 @@ async function onEdit(id){
 //SEND
 
 async function onComplete(){
+  if(!fileInputIsValid.value){
+    configSnackbar.value = {
+        message: "La imagen supera el tamaño máximo de 1MB",
+        type: "error",
+        model: true
+    };
+    return false;
+  }
+
   if(!files.value){
     configSnackbar.value = {
         message: "Llenar todos los campos para crear el registro",
@@ -492,7 +502,6 @@ async function onComplete(){
           body: formData,
           // redirect: 'follow'
         };
-        console.log(files.value)
 
         const send = await fetch('https://servicio-elearning.vercel.app/curso/update-file/' + idToEdit.value, requestOptions);
         const respuesta = await send.json();
@@ -645,12 +654,19 @@ async function deleteConfirmed() {
 const receiveTime = async (data) => {
   if(data.action == "modal"){
     isDialogVisibleAddModulo.value = data.modalShow;
+    isDialogVisibleEditModulo.value = data.modalShow;
   }
 
   if(data.action == "add"){
     await getModulos();
     isDialogVisibleAddModulo.value = data.modalShow;
     dataModuloModel.value.push(data.id);
+    inicializarVideosSelectList()
+  }
+
+  if(data.action == "edit"){
+    await getModulos();
+    isDialogVisibleEditModulo.value = data.modalShow;
     inicializarVideosSelectList()
   }
 };
@@ -723,10 +739,36 @@ const editImage = () => {
 
 const imageUrl = ref(''); // URL de la imagen existente (se llenará al editar)
 const cambioImagen = ref(false); // URL de la imagen existente (se llenará al editar)
+// Referencia para el VFileInput
+const fileInputRef = ref(null);
+const fileInputIsValid = ref(true);
+
+const rules = [fileList => !fileList || !fileList.length || fileList[0].size <= 1000000 || 'La imagen no debe superar a 1 MB!']
+
 
 // Función para manejar la selección de archivos
 const handleFileUpload = (event) => {
   const fileList = event.target.files;
+  // Aplicar las reglas de validación
+  fileInputIsValid.value = true;
+  const maxSizeMB = 1; // Tamaño máximo en MB
+  const maxSizeBytes = maxSizeMB * 1024 * 1024; // Convertir a bytes
+
+
+  // Verificar el tamaño de cada archivo
+  for (let file of fileList) {
+    if (file.size > maxSizeBytes) {
+      configSnackbar.value = {
+          message: `El archivo ${file.name} excede el tamaño máximo de ${maxSizeMB}MB.`,
+          type: "error",
+          model: true
+      };
+      fileInputIsValid.value = false;
+      return false; // Salir de la función sin asignar los archivos
+    }
+  }
+
+
   files.value = Array.from(fileList);
   cambioImagen.value = true;
 
@@ -747,6 +789,13 @@ const initializeEditMode = (existingImageUrl) => {
   editingImage.value = false;
 };
 
+const idModuloEdit = ref("");
+
+const editarModulo = (modulo) => {
+  idModuloEdit.value = modulo;
+  isDialogVisibleEditModulo.value = true;
+}
+
 </script>
 
 <template>
@@ -756,10 +805,23 @@ const initializeEditMode = (existingImageUrl) => {
                 {{ configSnackbar.message }}
     </VSnackbar>
 
+    <VDialog
+      v-model="isDialogVisibleEditModulo"
+      width="700"
+      persistent
+    >
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleEditModulo = !isDialogVisibleEditModulo" />
+
+      <VCard>
+        <!-- Dialog Content -->
+        <moduloTemplate action="edit" :idModulo="idModuloEdit" @get:eventModalCR="receiveTime" />
+      </VCard>
+    </VDialog>
 
     <VDialog
       v-model="isDialogVisibleAddModulo"
-      width="600"
+      width="700"
       persistent
     >
       <!-- Dialog close btn -->
@@ -767,7 +829,7 @@ const initializeEditMode = (existingImageUrl) => {
 
       <VCard>
         <!-- Dialog Content -->
-        <moduloTemplate @get:eventModalCR="receiveTime" />
+        <moduloTemplate action="add" @get:eventModalCR="receiveTime" />
       </VCard>
     </VDialog>
 
@@ -1005,7 +1067,7 @@ const initializeEditMode = (existingImageUrl) => {
                   <!-- Dialog close btn -->
                   <DialogCloseBtn @click="closeDiag" />
 
-                  <VCard  class="pa-sm-14 pa-5">
+                  <VCard  class="pa-sm-4 pa-4">
                       <VCardItem class="text-center">
                           <VCardTitle class="text-h5 mb-3">
                               {{ accionForm === "add" || accionForm === "duplicate" ? "Crear registro" : "Editar " + nombre }}
@@ -1065,7 +1127,9 @@ const initializeEditMode = (existingImageUrl) => {
                                         </div>
                                         <VFileInput
                                           v-else
-                                          :rules="thumbnailModel"
+                                          ref="fileInputRef"
+                                          v-model="thumbnailModel"
+                                          :rules="rules"
                                           @change="handleFileUpload" 
                                           required
                                           label="Subir una imagen principal"
@@ -1073,6 +1137,7 @@ const initializeEditMode = (existingImageUrl) => {
                                           placeholder="Pick an avatar"
                                           prepend-icon="tabler-camera"
                                         />
+                                        <small class="text-disabled">El tamaño máx de imagen es 1MB.</small>
 
                                         <!-- <VTextField v-model="thumbnailModel" label="Imagen principal" /> -->
                                         
@@ -1236,13 +1301,22 @@ const initializeEditMode = (existingImageUrl) => {
                                               </VListItemSubtitle>
 
                                               <template #append>
-                                                <div class="btn-order" style="">
-                                                  <VBtn size="x-small" :disabled="index == 0" variant="text" @click="cambiarPosicion(videoSelect.value, 'arriba')">
-                                                    <VIcon :size="25" icon="mdi-arrow-up-bold-box" />
-                                                  </VBtn>
-                                                  <VBtn size="x-small" :disabled="index == modulosSelectList.length - 1" variant="text" @click="cambiarPosicion(videoSelect.value, 'abajo')">
-                                                    <VIcon :size="25" icon="mdi-arrow-down-bold-box" />
-                                                  </VBtn>
+                                                <div class="content-order">
+                                                  <div class="content-edit">
+                                                    <VBtn class="px-0 btn-editar" size="x-small" variant="text" @click="editarModulo(videoSelect.value)">
+                                                      <VIcon top :size="25" icon="tabler-edit" />
+                                                      Editar
+                                                    </VBtn>
+                                                    
+                                                  </div>
+                                                  <div class="btn-order" style="">
+                                                    <VBtn class="px-1" size="x-small" :disabled="index == 0" variant="text" @click="cambiarPosicion(videoSelect.value, 'arriba')">
+                                                      <VIcon :size="25" icon="mdi-arrow-up-bold-box" />
+                                                    </VBtn>
+                                                    <VBtn class="px-1" size="x-small" :disabled="index == modulosSelectList.length - 1" variant="text" @click="cambiarPosicion(videoSelect.value, 'abajo')">
+                                                      <VIcon :size="25" icon="mdi-arrow-down-bold-box" />
+                                                    </VBtn>
+                                                  </div>
                                                 </div>
                                               </template>
                                             </VListItem>
@@ -1296,6 +1370,22 @@ const initializeEditMode = (existingImageUrl) => {
 </style>
 
 <style scoped> 
+  .content-edit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+      text-align: center;
+      color: rgb(var(--v-theme-primary));
+  }
+
+  .content-order {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    justify-content: center;
+}
+
  .image-preview {
   max-width: 100%;
   height: auto;

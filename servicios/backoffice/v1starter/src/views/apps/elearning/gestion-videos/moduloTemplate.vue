@@ -42,6 +42,11 @@ const thumbnailModel = ref("https://estadisticas.ecuavisa.com/sites/gestor/Recur
 
 const idToEdit = ref('');
 
+const props = defineProps({
+  action: String,
+  idVideo: String
+});
+
 const configSnackbar = ref({
     message: "Datos guardados",
     type: "success",
@@ -59,7 +64,11 @@ const emit = defineEmits([
 onMounted(async ()=>{
   await getEtiquetas();
   await getCategorias();
-  onAdd();
+  if(props.action == "add"){
+    await onAdd();
+  }else{
+    await onEdit(props.idVideo)
+  }
   disabledText.value = false;
 })
 
@@ -355,27 +364,32 @@ async function onComplete(){
         const send = await fetch('https://servicio-elearning.vercel.app/video/update/' + idToEdit.value, requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
-                configSnackbar.value = {
-                    message: "Registro actualizado correctamente",
-                    type: "success",
-                    model: true
-                };
-                
+            configSnackbar.value = {
+                message: "Registro actualizado correctamente",
+                type: "success",
+                model: true
+            };
+            nextTick(() => {
+                emit('get:eventModalCR', {
+                  modalShow:false,
+                  data: respuesta,
+                  action:"edit"
+                })
+            })    
         } else {
-                configSnackbar.value = {
-                    message: respuesta.mensaje,
-                    type: "error",
-                    model: true
-                };
-                console.error(respuesta.error);
-                return false;
-
+            configSnackbar.value = {
+                message: respuesta.mensaje,
+                type: "error",
+                model: true
+            };
+            console.error(respuesta.error);
         }
     }
-    await getDesafioVideos();
-    await getEtiquetas();
-    await getCategorias();
+    // await getDesafioVideos();
+    // await getEtiquetas();
+    // await getCategorias();
     isDialogActive.value = false;
+    return false;
 }
 
 // DELETE
