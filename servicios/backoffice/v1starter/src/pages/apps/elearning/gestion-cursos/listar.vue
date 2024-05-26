@@ -268,7 +268,13 @@ function resetForm(){
     dataModuloModel.value = [];
     dataCuestionarioModel.value = null;
     estadoModel.value = true;
+
     cambioImagen.value = false;
+    editingImage.value = false;
+    isEditing.value = false;
+    thumbnailModel.value = [];
+    files.value = null;
+
     fechaIFModel.value = {
       fechasModel: [parseISO(yesterday), parseISO(fechaHoy)],
       fechasVModel: [parseISO(fechaHoy)],
@@ -385,20 +391,63 @@ async function onComplete(){
     return false;
   }
 
-  if(!files.value){
-    configSnackbar.value = {
-        message: "Llenar todos los campos para crear el registro",
-        type: "error",
-        model: true
-    };
-    return false;
+  // console.log(files.value)
+  // console.log(cambioImagen.value)
+  // console.log(editingImage.value)
+
+  if(accionForm.value == 'add'){
+    if(!files.value){
+      configSnackbar.value = {
+          message: "Llenar todos los campos para crear",
+          type: "error",
+          model: true
+      };
+      return false;
+    }
   }
 
+  if(accionForm.value == 'edit'){
+    if(isEditing.value){
+      if(editingImage.value){
+        if(!files.value){
+          configSnackbar.value = {
+              message: "Llenar todos los campos para editar",
+              type: "error",
+              model: true
+          };
+          return false;
+        }
+      }
+    }
+  }
+
+
+  // if(!isEditing.value){
+  //   //Si la accion es crear
+  //   if(!files.value){
+  //     configSnackbar.value = {
+  //         message: "Llenar todos los campos para crear",
+  //         type: "error",
+  //         model: true
+  //     };
+  //     return false;
+  //   }
+  // }else{
+  //   if(!files.value){
+  //     configSnackbar.value = {
+  //         message: "Llenar todos los campos para editar",
+  //         type: "error",
+  //         model: true
+  //     };
+  //     return false;
+  //   }
+  // }
+  
   if (
         !categoriaModel.value || 
         !idRudoModel.value || 
         !descripcionModel.value || 
-        files.value.length == 0 || 
+        // files.value.length == 0 || 
         !dataCuestionarioModel.value || 
         !duracionModel.value
       ){
@@ -409,7 +458,7 @@ async function onComplete(){
     // console.log(dataCuestionarioModel.value)
     // console.log(duracionModel.value)
         configSnackbar.value = {
-            message: "Llenar todos los campos para crear el registro",
+            message: "Llenar todos los campos",
             type: "error",
             model: true
         };
@@ -492,9 +541,14 @@ async function onComplete(){
         // Añadir los campos de jsonEnviar al FormData
         formData.append("raw", raw);
 
-        files.value.forEach(file => {
-          formData.append('files', file);
-        });
+        if(cambioImagen.value){
+          files.value.forEach(file => {
+            formData.append('files', file);
+          });
+        }else{
+          formData.append('files', "");
+        }
+        
 
         var requestOptions = {
           method: 'POST',
