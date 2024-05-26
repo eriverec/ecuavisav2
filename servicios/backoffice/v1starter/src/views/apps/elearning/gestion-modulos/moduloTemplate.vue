@@ -55,6 +55,8 @@ const videosSelectList = ref([]);
 const descripcionModel = ref(null);
 const thumbnailModel = ref(null);
 
+const defaultVideoBloqueado = false;
+
 const idToEdit = ref('');
 
 const emit = defineEmits([
@@ -135,7 +137,7 @@ async function getVideos(page = 1, limit= 10){
         acumulador.push({
           title: `${actual.titulo}`,
           value: actual._id,
-          bloqueado: actual.bloqueado || true,
+          bloqueado: actual.bloqueado || defaultVideoBloqueado,
         });
         return acumulador;
       }, []);
@@ -225,7 +227,7 @@ function obtenerListaOrdenada(listaA, listaB) {
             // Crear un nuevo objeto con el formato deseado y agregarlo a la lista resultado
             resultado.push({ 
               title: listaB[i].titulo,
-              bloqueado: listaB[i].hasOwnProperty("bloqueado")?listaB[i].bloqueado: true,
+              bloqueado: listaB[i].hasOwnProperty("bloqueado")?listaB[i].bloqueado: defaultVideoBloqueado,
               value: elementoListaA 
             });
         }
@@ -735,7 +737,7 @@ const editarVideo = (video) => {
 
                                     <template #append>
                                       <div class="content-order pl-4">
-                                        <div class="content-edit">
+                                        <div class="content-edit d-none">
                                           <VBtn class="px-0 btn-editar" size="x-small" :title="videoSelect.bloqueado?'Desbloquear video':'Bloquear video'" variant="text" @click="handleSwitchChange(videoSelect, index)">
                                             <VIcon top :size="25" icon="tabler-lock" title="Video bloqueado" color="error" v-if="videoSelect.bloqueado" />
                                             <VIcon top :size="25" icon="tabler-lock-open" title="Video público" color="success" v-else />
