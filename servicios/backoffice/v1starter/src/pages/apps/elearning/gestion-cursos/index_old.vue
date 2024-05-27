@@ -8,16 +8,10 @@ const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 
 const isDialogVisibleAddModulo = ref(false)
-const isDialogVisibleEditModulo = ref(false)
 const eliminarDisabled = ref(false);
 
 const categoriaModelLoading = ref(false);
 const etiquetasModelLoading = ref(false);
-
-const editingImage = ref(false); // Modo de edición de imagen
-const isEditing = ref(false); // Indica si estamos editando
-
-let files = [];
 
 const currentTab = ref('tab-lista');
 const checkbox = ref(1);
@@ -268,13 +262,6 @@ function resetForm(){
     dataModuloModel.value = [];
     dataCuestionarioModel.value = null;
     estadoModel.value = true;
-
-    cambioImagen.value = false;
-    editingImage.value = false;
-    isEditing.value = false;
-    thumbnailModel.value = [];
-    files.value = null;
-
     fechaIFModel.value = {
       fechasModel: [parseISO(yesterday), parseISO(fechaHoy)],
       fechasVModel: [parseISO(fechaHoy)],
@@ -340,10 +327,7 @@ async function onEdit(id){
     idRudoModel.value = data.idRudo;
     duracionModel.value = data.duracion;
     descripcionModel.value = data.descripcion;
-
-    // thumbnailModel.value = data.thumbnail;
-    initializeEditMode(data.thumbnail)
-
+    thumbnailModel.value = data.thumbnail;
     etiquetasModel.value = data.etiquetas;
     categoriaModel.value = data.categoria;
     estadoModel.value = data.estado;
@@ -382,83 +366,16 @@ async function onEdit(id){
 //SEND
 
 async function onComplete(){
-  if(!fileInputIsValid.value){
-    configSnackbar.value = {
-        message: "La imagen supera el tamaño máximo de 1MB",
-        type: "error",
-        model: true
-    };
-    return false;
-  }
-
-  // console.log(files.value)
-  // console.log(cambioImagen.value)
-  // console.log(editingImage.value)
-
-  if(accionForm.value == 'add'){
-    if(!files.value){
-      configSnackbar.value = {
-          message: "Llenar todos los campos para crear",
-          type: "error",
-          model: true
-      };
-      return false;
-    }
-  }
-
-  if(accionForm.value == 'edit'){
-    if(isEditing.value){
-      if(editingImage.value){
-        if(!files.value){
-          configSnackbar.value = {
-              message: "Llenar todos los campos para editar",
-              type: "error",
-              model: true
-          };
-          return false;
-        }
-      }
-    }
-  }
-
-
-  // if(!isEditing.value){
-  //   //Si la accion es crear
-  //   if(!files.value){
-  //     configSnackbar.value = {
-  //         message: "Llenar todos los campos para crear",
-  //         type: "error",
-  //         model: true
-  //     };
-  //     return false;
-  //   }
-  // }else{
-  //   if(!files.value){
-  //     configSnackbar.value = {
-  //         message: "Llenar todos los campos para editar",
-  //         type: "error",
-  //         model: true
-  //     };
-  //     return false;
-  //   }
-  // }
-  
   if (
         !categoriaModel.value || 
         !idRudoModel.value || 
         !descripcionModel.value || 
-        // files.value.length == 0 || 
+        !thumbnailModel.value || 
         !dataCuestionarioModel.value || 
         !duracionModel.value
       ){
-    // console.log(categoriaModel.value)
-    // console.log(idRudoModel.value)
-    // console.log(descripcionModel.value)
-    // console.log(files.value.length)
-    // console.log(dataCuestionarioModel.value)
-    // console.log(duracionModel.value)
         configSnackbar.value = {
-            message: "Llenar todos los campos",
+            message: "Llenar todos los campos para crear el registro",
             type: "error",
             model: true
         };
@@ -472,7 +389,7 @@ async function onComplete(){
           "titulo": tituloModel.value,
           "descripcion": descripcionModel.value,
           "idRudo": idRudoModel.value,
-          // "thumbnail": thumbnailModel.value,
+          "thumbnail": thumbnailModel.value,
           "duracion": duracionModel.value,
           "categoria": categoriaModel.value,
           "etiquetas": etiquetasModel.value,
@@ -485,23 +402,14 @@ async function onComplete(){
       }
       var raw = JSON.stringify(jsonEnviar);
 
-      const formData = new FormData();
-      // Añadir los campos de jsonEnviar al FormData
-      formData.append("raw", raw);
-
-      files.forEach(file => {
-        formData.append('files', file);
-      });
-
       var requestOptions = {
-        method: 'POST',
-        // headers: myHeaders,
-        body: formData,
-        // redirect: 'follow'
+              method: 'POST',
+              headers: myHeaders,
+              body: raw,
+              redirect: 'follow'
       };
-      console.log(files)
 
-      const send = await fetch('https://servicio-elearning.vercel.app/curso/create/file', requestOptions);
+      const send = await fetch('https://servicio-elearning.vercel.app/curso/create', requestOptions);
       const respuesta = await send.json();
       if (respuesta.resp) {
         configSnackbar.value = {
@@ -523,41 +431,25 @@ async function onComplete(){
           "titulo": tituloModel.value,
           "descripcion": descripcionModel.value,
           "idRudo": idRudoModel.value,
-          // "thumbnail": thumbnailModel.value,
+          "thumbnail": thumbnailModel.value,
           "duracion": duracionModel.value,
           "idCuestionario": dataCuestionarioModel.value,
           "categoria": categoriaModel.value,
           "etiquetas": etiquetasModel.value,
           "fechai": fechaIFModel.value.fechai,
           "fechaf": fechaIFModel.value.fechaf,
-          "editImage": cambioImagen.value,
           "fechaVencimiento": fechaIFModel.value.fechaV,
           "estado": estadoModel.value,
           "modulos": obtenerValorYPosicion()
         }
         var raw = JSON.stringify(jsonEnviar);
-
-        const formData = new FormData();
-        // Añadir los campos de jsonEnviar al FormData
-        formData.append("raw", raw);
-
-        if(cambioImagen.value){
-          files.value.forEach(file => {
-            formData.append('files', file);
-          });
-        }else{
-          formData.append('files', "");
-        }
-        
-
         var requestOptions = {
-          method: 'POST',
-          // headers: myHeaders,
-          body: formData,
-          // redirect: 'follow'
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
         };
-
-        const send = await fetch('https://servicio-elearning.vercel.app/curso/update-file/' + idToEdit.value, requestOptions);
+        const send = await fetch('https://servicio-elearning.vercel.app/curso/update/' + idToEdit.value, requestOptions);
         const respuesta = await send.json();
         if (respuesta.resp) {
                 configSnackbar.value = {
@@ -708,19 +600,12 @@ async function deleteConfirmed() {
 const receiveTime = async (data) => {
   if(data.action == "modal"){
     isDialogVisibleAddModulo.value = data.modalShow;
-    isDialogVisibleEditModulo.value = data.modalShow;
   }
 
   if(data.action == "add"){
     await getModulos();
     isDialogVisibleAddModulo.value = data.modalShow;
     dataModuloModel.value.push(data.id);
-    inicializarVideosSelectList()
-  }
-
-  if(data.action == "edit"){
-    await getModulos();
-    isDialogVisibleEditModulo.value = data.modalShow;
     inicializarVideosSelectList()
   }
 };
@@ -781,75 +666,6 @@ watch(selectRefModulo, (active) => {
   }
 });
 
-// function handleFileUpload(event) {
-//   const fileList = event.target.files;
-//   files = Array.from(fileList);
-// }
-
-// Función para cambiar a modo de edición de imagen
-const editImage = () => {
-  editingImage.value = true;
-};
-
-const imageUrl = ref(''); // URL de la imagen existente (se llenará al editar)
-const cambioImagen = ref(false); // URL de la imagen existente (se llenará al editar)
-// Referencia para el VFileInput
-const fileInputRef = ref(null);
-const fileInputIsValid = ref(true);
-
-const rules = [fileList => !fileList || !fileList.length || fileList[0].size <= 1000000 || 'La imagen no debe superar a 1 MB!']
-
-
-// Función para manejar la selección de archivos
-const handleFileUpload = (event) => {
-  const fileList = event.target.files;
-  // Aplicar las reglas de validación
-  fileInputIsValid.value = true;
-  const maxSizeMB = 1; // Tamaño máximo en MB
-  const maxSizeBytes = maxSizeMB * 1024 * 1024; // Convertir a bytes
-
-
-  // Verificar el tamaño de cada archivo
-  for (let file of fileList) {
-    if (file.size > maxSizeBytes) {
-      configSnackbar.value = {
-          message: `El archivo ${file.name} excede el tamaño máximo de ${maxSizeMB}MB.`,
-          type: "error",
-          model: true
-      };
-      fileInputIsValid.value = false;
-      return false; // Salir de la función sin asignar los archivos
-    }
-  }
-
-
-  files.value = Array.from(fileList);
-  cambioImagen.value = true;
-
-  // Actualizar la URL de la imagen para la previsualización
-  // if (files.value.length > 0) {
-  //   const reader = new FileReader();
-  //   reader.onload = () => {
-  //     imageUrl.value = reader.result;
-  //   };
-  //   reader.readAsDataURL(files.value[0]);
-  // }
-};
-
-// Función para inicializar el componente en modo de edición
-const initializeEditMode = (existingImageUrl) => {
-  imageUrl.value = existingImageUrl;
-  isEditing.value = true;
-  editingImage.value = false;
-};
-
-const idModuloEdit = ref("");
-
-const editarModulo = (modulo) => {
-  idModuloEdit.value = modulo;
-  isDialogVisibleEditModulo.value = true;
-}
-
 </script>
 
 <template>
@@ -859,23 +675,10 @@ const editarModulo = (modulo) => {
                 {{ configSnackbar.message }}
     </VSnackbar>
 
-    <VDialog
-      v-model="isDialogVisibleEditModulo"
-      width="700"
-      persistent
-    >
-      <!-- Dialog close btn -->
-      <DialogCloseBtn @click="isDialogVisibleEditModulo = !isDialogVisibleEditModulo" />
-
-      <VCard>
-        <!-- Dialog Content -->
-        <moduloTemplate action="edit" :idModulo="idModuloEdit" @get:eventModalCR="receiveTime" />
-      </VCard>
-    </VDialog>
 
     <VDialog
       v-model="isDialogVisibleAddModulo"
-      width="700"
+      width="600"
       persistent
     >
       <!-- Dialog close btn -->
@@ -883,7 +686,7 @@ const editarModulo = (modulo) => {
 
       <VCard>
         <!-- Dialog Content -->
-        <moduloTemplate action="add" @get:eventModalCR="receiveTime" />
+        <moduloTemplate @get:eventModalCR="receiveTime" />
       </VCard>
     </VDialog>
 
@@ -1121,7 +924,7 @@ const editarModulo = (modulo) => {
                   <!-- Dialog close btn -->
                   <DialogCloseBtn @click="closeDiag" />
 
-                  <VCard  class="pa-sm-4 pa-4">
+                  <VCard  class="pa-sm-14 pa-5">
                       <VCardItem class="text-center">
                           <VCardTitle class="text-h5 mb-3">
                               {{ accionForm === "add" || accionForm === "duplicate" ? "Crear registro" : "Editar " + nombre }}
@@ -1175,27 +978,8 @@ const editarModulo = (modulo) => {
                                       </VCol>
                                       
                                       <VCol class="img-preview-container" cols="6">
-                                        <div v-if="isEditing && !editingImage">
-                                          <img :src="imageUrl" alt="Imagen actual" class="image-preview" />
-                                          <v-btn @click="editImage">Cambiar imagen</v-btn>
-                                        </div>
-                                        <VFileInput
-                                          v-else
-                                          ref="fileInputRef"
-                                          v-model="thumbnailModel"
-                                          :rules="rules"
-                                          @change="handleFileUpload" 
-                                          required
-                                          label="Subir una imagen principal"
-                                          accept="image/png, image/jpeg, image/bmp"
-                                          placeholder="Pick an avatar"
-                                          prepend-icon="tabler-camera"
-                                        />
-                                        <small class="text-disabled">El tamaño máx de imagen es 1MB.</small>
-
-                                        <!-- <VTextField v-model="thumbnailModel" label="Imagen principal" /> -->
-                                        
-                                        <!-- <img v-if="thumbnailModel" class="img-preview" :src="thumbnailModel"> -->
+                                        <VTextField v-model="thumbnailModel" label="Imagen principal" />
+                                        <img v-if="thumbnailModel" class="img-preview" :src="thumbnailModel">
                                       </VCol>     
 
                                       <VCol cols="6" >
@@ -1355,22 +1139,13 @@ const editarModulo = (modulo) => {
                                               </VListItemSubtitle>
 
                                               <template #append>
-                                                <div class="content-order">
-                                                  <div class="content-edit">
-                                                    <VBtn class="px-0 btn-editar" size="x-small" variant="text" @click="editarModulo(videoSelect.value)">
-                                                      <VIcon top :size="25" icon="tabler-edit" />
-                                                      Editar
-                                                    </VBtn>
-                                                    
-                                                  </div>
-                                                  <div class="btn-order" style="">
-                                                    <VBtn class="px-1" size="x-small" :disabled="index == 0" variant="text" @click="cambiarPosicion(videoSelect.value, 'arriba')">
-                                                      <VIcon :size="25" icon="mdi-arrow-up-bold-box" />
-                                                    </VBtn>
-                                                    <VBtn class="px-1" size="x-small" :disabled="index == modulosSelectList.length - 1" variant="text" @click="cambiarPosicion(videoSelect.value, 'abajo')">
-                                                      <VIcon :size="25" icon="mdi-arrow-down-bold-box" />
-                                                    </VBtn>
-                                                  </div>
+                                                <div class="btn-order" style="">
+                                                  <VBtn size="x-small" :disabled="index == 0" variant="text" @click="cambiarPosicion(videoSelect.value, 'arriba')">
+                                                    <VIcon :size="25" icon="mdi-arrow-up-bold-box" />
+                                                  </VBtn>
+                                                  <VBtn size="x-small" :disabled="index == modulosSelectList.length - 1" variant="text" @click="cambiarPosicion(videoSelect.value, 'abajo')">
+                                                    <VIcon :size="25" icon="mdi-arrow-down-bold-box" />
+                                                  </VBtn>
                                                 </div>
                                               </template>
                                             </VListItem>
@@ -1424,26 +1199,7 @@ const editarModulo = (modulo) => {
 </style>
 
 <style scoped> 
-  .content-edit {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      font-size: 12px;
-      text-align: center;
-      color: rgb(var(--v-theme-primary));
-  }
-
-  .content-order {
-    display: flex;
-    align-items: center;
-    gap: 0;
-    justify-content: center;
-}
-
- .image-preview {
-  max-width: 100%;
-  height: auto;
-}
+ 
   .loading{
     border:2px solid #7367F0;
     width: 20px;
