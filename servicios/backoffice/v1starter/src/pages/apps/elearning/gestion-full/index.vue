@@ -1129,7 +1129,7 @@ async function onComplete() {
             <div v-for="(step, index) in steps" :key="index" @click="currentStep = index" :class="['stepper-step', { active: currentStep === index }]">
               <VIcon :icon="step.icon" class="stepper-icon" />
               <div>
-                <div class="stepper-title">{{ step.title }}j</div>            
+                <div class="stepper-title">{{ step.title }}</div>            
               </div>
             </div>
           </div>

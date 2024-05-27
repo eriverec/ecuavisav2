@@ -737,7 +737,7 @@ const editarVideo = (video) => {
 
                                     <template #append>
                                       <div class="content-order pl-4">
-                                        <div class="content-edit d-none">
+                                        <div class="content-edit">
                                           <VBtn class="px-0 btn-editar" size="x-small" :title="videoSelect.bloqueado?'Desbloquear video':'Bloquear video'" variant="text" @click="handleSwitchChange(videoSelect, index)">
                                             <VIcon top :size="25" icon="tabler-lock" title="Video bloqueado" color="error" v-if="videoSelect.bloqueado" />
                                             <VIcon top :size="25" icon="tabler-lock-open" title="Video público" color="success" v-else />
