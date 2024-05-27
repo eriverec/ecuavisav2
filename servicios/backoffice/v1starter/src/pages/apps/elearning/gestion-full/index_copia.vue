@@ -32,18 +32,6 @@ const steps = [
 ]    
 // --------------------------------------- CURSOS ------------------------------------------
 // -----------------------------------------------------------------------------------------
-
-/*FILE INPUT*/
-const editingImage = ref(false); // Modo de edición de imagen
-const isEditing = ref(false); // Indica si estamos editando
-let files = [];
-const imageUrl = ref(''); // URL de la imagen existente (se llenará al editar)
-const cambioImagen = ref(false); // URL de la imagen existente (se llenará al editar)
-const fileInputRef = ref(null);// Referencia para el VFileInput
-const fileInputIsValid = ref(true);
-const rules = [fileList => !fileList || !fileList.length || fileList[0].size <= 1000000 || 'La imagen no debe superar a 1 MB!']
-/*FILE INPUT*/
-
 const isDialogVisibleAddModulo = ref(false)
 
 const categoriaModelLoading = ref(false);
@@ -92,7 +80,7 @@ const etiquetasCursoModel = ref('');
 
 const tituloCursoModel = ref(null);
 const descripcionCursoModel = ref(null);
-const thumbnailCursoModel = ref([]);
+const thumbnailCursoModel = ref(null);
 const estadoCursoModel = ref(true);
 
 
@@ -397,54 +385,6 @@ function obtenerValorYPosicionCurso() {
     // Devolver el array de objetos con el valor y la posición de cada elemento
     return resultado;
 }
-
-/*FILE INPUT*/
-// Función para cambiar a modo de edición de imagen
-const editImage = () => {
-  editingImage.value = true;
-};
-
-// Función para manejar la selección de archivos
-const handleFileUpload = (event) => {
-  const fileList = event.target.files;
-  // Aplicar las reglas de validación
-  fileInputIsValid.value = true;
-  const maxSizeMB = 1; // Tamaño máximo en MB
-  const maxSizeBytes = maxSizeMB * 1024 * 1024; // Convertir a bytes
-
-  // Verificar el tamaño de cada archivo
-  for (let file of fileList) {
-    if (file.size > maxSizeBytes) {
-      configSnackbar.value = {
-          message: `El archivo ${file.name} excede el tamaño máximo de ${maxSizeMB}MB.`,
-          type: "error",
-          model: true
-      };
-      fileInputIsValid.value = false;
-      return false; // Salir de la función sin asignar los archivos
-    }
-  }
-
-  files.value = Array.from(fileList);
-  cambioImagen.value = true;
-
-  // Actualizar la URL de la imagen para la previsualización
-  // if (files.value.length > 0) {
-  //   const reader = new FileReader();
-  //   reader.onload = () => {
-  //     imageUrl.value = reader.result;
-  //   };
-  //   reader.readAsDataURL(files.value[0]);
-  // }
-};
-
-// Función para inicializar el componente en modo de edición
-const initializeEditMode = (existingImageUrl) => {
-  imageUrl.value = existingImageUrl;
-  isEditing.value = true;
-  editingImage.value = false;
-};
-/*FILE INPUT*/
 
 // --------------------------------------- MODULOS ------------------------------------------
 // -----------------------------------------------------------------------------------------
@@ -985,7 +925,7 @@ async function onComplete() {
           "titulo": tituloCursoModel.value,
           "descripcion": descripcionCursoModel.value,
           "idRudo": idCursoRudoModel.value,
-          // "thumbnail": thumbnailCursoModel.value,
+          "thumbnail": thumbnailCursoModel.value,
           "duracion": duracionCursoModel.value,
           "categoria": categoriaCursoModel.value,
           "etiquetas": etiquetasCursoModel.value,
@@ -996,14 +936,6 @@ async function onComplete() {
           "estado": estadoCursoModel.value,
           "modulos": obtenerValorYPosicionCurso()
     }  
-    var rawCurso = JSON.stringify(jsonEnviarCurso);
-    const formDataCurso = new FormData();
-    // Añadir los campos de jsonEnviar al FormData
-    formDataCurso.append("raw", rawCurso);
-
-    files.forEach(file => {
-      formDataCurso.append('files', file);
-    });
 
     let jsonEnviarModulo = {
           "titulo": tituloModuloModel.value,
@@ -1038,12 +970,11 @@ async function onComplete() {
     console.log('cuestionario nuevo',jsonEnviarCuestionario);
     //location.reload();
     //return;
-    const sendCurso = await fetch('https://servicio-elearning.vercel.app/curso/create/file', {
+    const sendCurso = await fetch('https://servicio-elearning.vercel.app/curso/create', {
               method: 'POST',
-              // headers: myHeaders,
-              // body: JSON.stringify(jsonEnviarCurso),
-              body: formDataCurso,
-              // redirect: 'follow'
+              headers: myHeaders,
+              body: JSON.stringify(jsonEnviarCurso),
+              redirect: 'follow'
       });
     const sendModulo = await fetch('https://servicio-elearning.vercel.app/modulo/create', {
               method: 'POST',
@@ -1129,7 +1060,7 @@ async function onComplete() {
             <div v-for="(step, index) in steps" :key="index" @click="currentStep = index" :class="['stepper-step', { active: currentStep === index }]">
               <VIcon :icon="step.icon" class="stepper-icon" />
               <div>
-                <div class="stepper-title">{{ step.title }}j</div>            
+                <div class="stepper-title">{{ step.title }}</div>            
               </div>
             </div>
           </div>
@@ -1182,25 +1113,8 @@ async function onComplete() {
                   <VTextField v-model="descripcionCursoModel" label="Descripción" />
                 </VCol>
                 <VCol class="img-preview-container" cols="6">
-                  <div v-if="isEditing && !editingImage">
-                    <img :src="imageUrl" alt="Imagen actual" class="image-preview" />
-                    <v-btn @click="editImage">Cambiar imagen</v-btn>
-                  </div>
-                  <VFileInput
-                    v-else
-                    ref="fileInputRef"
-                    v-model="thumbnailCursoModel"
-                    :rules="rules"
-                    @change="handleFileUpload" 
-                    required
-                    label="Subir una imagen principal"
-                    accept="image/png, image/jpeg, image/bmp"
-                    placeholder="Pick an avatar"
-                    prepend-icon="tabler-camera"
-                  />
-                  <small class="text-disabled">El tamaño máx de imagen es 1MB.</small>
-                  <!-- <VTextField v-model="thumbnailCursoModel" label="Imagen principal" /> -->
-                  <!-- <img v-if="thumbnailCursoModel" class="img-preview" :src="thumbnailCursoModel"> -->
+                  <VTextField v-model="thumbnailCursoModel" label="Imagen principal" />
+                  <img v-if="thumbnailCursoModel" class="img-preview" :src="thumbnailCursoModel">
                 </VCol>
                 <VCol cols="6">
                   <VTextField v-model="idCursoRudoModel" label="Id video de RUDO" />
@@ -1699,11 +1613,6 @@ async function onComplete() {
 </template>
 
 <style>  
-
-  .image-preview {
-  max-width: 100%;
-  height: auto;
-}
  
 .clickable {
   cursor: pointer;
