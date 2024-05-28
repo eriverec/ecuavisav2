@@ -1,4 +1,4 @@
-<script setup>logAction
+<script setup>
 import { logAction } from '@/middleware/activityLogger';
 import AddNewUserDrawer from "@/views/apps/user/list/AddNewUserDrawer.vue";
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
