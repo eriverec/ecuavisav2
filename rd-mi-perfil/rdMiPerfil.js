@@ -1839,7 +1839,7 @@ function cambiarNombre() {
         localStorage.wylexFirstName = first_name;
         localStorage.wylexLastName  = last_name;
 
-        alert("Tados los datos fueron guardados");
+        alert("Todos los datos fueron guardados");
         location.reload();
       } else {
         alert(result.msj);

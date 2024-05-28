@@ -1,9 +1,14 @@
 <script setup>
+import moduloTemplate from "@/views/apps/elearning/gestion-videos/moduloTemplate.vue";
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
+
+
+const isDialogVisibleAddVideo = ref(false)
+const isDialogVisibleEditVideo = ref(false)
 
 const currentTab = ref('tab-lista');
 const checkbox = ref(1);
@@ -50,11 +55,18 @@ const videosSelectList = ref([]);
 const descripcionModel = ref(null);
 const thumbnailModel = ref(null);
 
+const defaultVideoBloqueado = false;
+
 const idToEdit = ref('');
 
 const emit = defineEmits([
   'get:eventModalCR',
 ])
+
+const props = defineProps({
+  action: String,
+  idModulo: String
+});
 
 const configSnackbar = ref({
     message: "Datos guardados",
@@ -66,7 +78,12 @@ const videosItems = ref([]);
 onMounted(async ()=>{
   await getCuestionario();
   await getVideos();
-  onAdd();
+  if(props.action == "add"){
+    await onAdd();
+  }else{
+    await onEdit(props.idModulo)
+  }
+
   disabledText.value = false;
 });
 
@@ -97,6 +114,11 @@ async function getCuestionario(page = 1, limit= 10){
       cuestionarioModelLoading.value = false;
       
   } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar los cuestionarios, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
       return console.error(error.message);    
   }
 }
@@ -120,6 +142,7 @@ async function getVideos(page = 1, limit= 10){
         acumulador.push({
           title: `${actual.titulo}`,
           value: actual._id,
+          bloqueado: actual.bloqueado || defaultVideoBloqueado,
         });
         return acumulador;
       }, []);
@@ -127,6 +150,11 @@ async function getVideos(page = 1, limit= 10){
       videosItemsCopy.value = videosItems.value;
       videoModelLoading.value = false;
   } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar los videos, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
       return console.error(error.message);    
   }
 }
@@ -181,6 +209,7 @@ async function onAdd(){
     resetForm(); 
     accionForm.value = 'add';
     isDialogActive.value = true;
+    return true;
 }
 
 
@@ -206,12 +235,52 @@ function obtenerListaOrdenada(listaA, listaB) {
         // Si se encuentra el elemento en listaA
         if (elementoListaA) {
             // Crear un nuevo objeto con el formato deseado y agregarlo a la lista resultado
-            resultado.push({ title: listaB[i].titulo, value: elementoListaA });
+            resultado.push({ 
+              title: listaB[i].titulo,
+              bloqueado: listaB[i].hasOwnProperty("bloqueado")?listaB[i].bloqueado: defaultVideoBloqueado,
+              value: elementoListaA 
+            });
         }
     }
 
     // Devolver la lista resultado
     return resultado;
+}
+//EDIT
+async function onEdit(id){
+    try{
+      resetForm();     
+      accionForm.value = 'edit';
+      const consulta = await fetch('https://servicio-elearning.vercel.app/modulo/get/' + id);
+      const consultaJson = await consulta.json();
+      const data = consultaJson.data;
+
+      idToEdit.value = data._id;
+
+      tituloModel.value = data.titulo;
+      descripcionModel.value = data.descripcion;
+      if(data.cuestionario){
+        dataCuestionarioModel.value = data.cuestionario._id;
+      }
+
+      videosModel.value = filtrarDesafios(videosItems.value, data.videos.reduce((acumulador, actual) => {
+          acumulador.push(actual._id);
+          return acumulador;
+        }, []));
+
+      isDialogActive.value = true; 
+
+      videosSelectList.value= obtenerListaOrdenada(videosModel.value, data.videos);
+
+      return true;
+    } catch (error) {
+        configSnackbar.value = {
+            message: "No se pudo recuperar los datos para editar, recargue de nuevo.",
+            type: "error",
+            model: true
+        };
+        return console.error(error.message);    
+    }
 }
 
 //SEND
@@ -255,6 +324,14 @@ async function onComplete(){
               type: "success",
               model: true
           };
+
+          nextTick(() => {
+              emit('get:eventModalCR', {
+                modalShow:false,
+                id: respuesta.id,
+                action:"add"
+              })
+          })
         } else {
           configSnackbar.value = {
               message: respuesta.mensaje,
@@ -262,19 +339,58 @@ async function onComplete(){
               model: true
           };
           console.error(respuesta.error);
-          return false;
         }
         isDialogActive.value = false;
         disabledText.value = false;
+        return false;
+      }else if(accionForm.value === 'edit'){
+        let jsonEnviar = {
+          "titulo": tituloModel.value,
+          "descripcion": descripcionModel.value,
+          "idCuestionario": dataCuestionarioModel.value || null,
+          "videos": obtenerValorYPosicion()
+        }
+        var raw = JSON.stringify(jsonEnviar);
+        var requestOptions = {
+                method: 'POST',
+                headers: myHeaders,
+                body: raw,
+                redirect: 'follow'
+        };
+        const send = await fetch('https://servicio-elearning.vercel.app/modulo/update/' + idToEdit.value, requestOptions);
+        const respuesta = await send.json();
+        if (respuesta.resp) {
+            configSnackbar.value = {
+                message: "Registro actualizado correctamente",
+                type: "success",
+                model: true
+            };
 
-        nextTick(() => {
-            emit('get:eventModalCR', {
-              modalShow:false,
-              id: respuesta.id,
-              action:"add"
+            nextTick(() => {
+                emit('get:eventModalCR', {
+                  modalShow:false,
+                  data: respuesta,
+                  action:"edit"
+                })
             })
-        })
-      }
+                
+        } else {
+            configSnackbar.value = {
+                message: respuesta.mensaje,
+                type: "error",
+                model: true
+            };
+            console.error(respuesta.error);
+
+        }
+
+        isDialogActive.value = false;
+        disabledText.value = false;
+
+        // await getVideos();
+        // await getEtiquetas();
+        // await getCategorias();
+    }
   } catch (error) {
       configSnackbar.value = {
           message: error.message,
@@ -347,7 +463,11 @@ function obtenerValorYPosicion() {
     const resultado = [];
     // Iterar sobre la lista y agregar cada elemento al resultado con su valor y posición
     lista.forEach((item, index) => {
-        resultado.push({ value: item.value, posicion: index });
+        resultado.push({ 
+          value: item.value, 
+          posicion: index,
+          bloqueado: item.bloqueado 
+        });
     });
     // Devolver el array de objetos con el valor y la posición de cada elemento
     return resultado;
@@ -416,14 +536,77 @@ watch(selectRefCuestionario, (active) => {
     }, 1000)
   }
 });
+
+const receiveTime = async (data) => {
+  if(data.action == "modal"){
+    isDialogVisibleAddVideo.value = data.modalShow;
+    isDialogVisibleEditVideo.value = data.modalShow;
+  }
+
+  if(data.action == "add"){
+    await getVideos();
+    isDialogVisibleAddVideo.value = data.modalShow;
+    videosModel.value.push(data.id);
+    inicializarVideosSelectList()
+  }
+
+  if(data.action == "edit"){
+    await getVideos();
+    isDialogVisibleEditVideo.value = data.modalShow;
+    inicializarVideosSelectList()
+  }
+};
+
+//Switch
+const handleSwitchChange = async (video, index) => {
+  const bloqueado = !videosSelectList.value[index].bloqueado;
+  videosSelectList.value[index].bloqueado = bloqueado;
+  console.log(videosSelectList.value[index])
+};
+
+const idVideoEdit = ref("");
+
+const editarVideo = (video) => {
+  idVideoEdit.value = video;
+  isDialogVisibleEditVideo.value = true;
+}
+
 </script>
 
 <template>
   <section>
 
-    <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
+    <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 4000" :color="configSnackbar.type">
                 {{ configSnackbar.message }}
     </VSnackbar>
+
+    <VDialog
+      v-model="isDialogVisibleEditVideo"
+      width="600"
+      persistent
+    >
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleEditVideo = !isDialogVisibleEditVideo" />
+
+      <VCard>
+        <!-- Dialog Content -->
+        <moduloTemplate @get:eventModalCR="receiveTime" action="edit" :idVideo="idVideoEdit" />
+      </VCard>
+    </VDialog>
+
+    <VDialog
+      v-model="isDialogVisibleAddVideo"
+      width="600"
+      persistent
+    >
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleAddVideo = !isDialogVisibleAddVideo" />
+
+      <VCard>
+        <!-- Dialog Content -->
+        <moduloTemplate @get:eventModalCR="receiveTime" action="add" />
+      </VCard>
+    </VDialog>
 
     <VRow>
       <VCol
@@ -432,10 +615,24 @@ watch(selectRefCuestionario, (active) => {
         md="12"
         lg="12"
       >
-        <VCard  class="px-5 py-4">
+        <div style="height: 300px;" class="d-flex align-center" v-if="disabledText">
+          <VCard width="300" class="mx-auto mt-5 mb-5" color="primary">
+            <VCardText 
+              class="pt-3"
+            >
+              Cargando datos... espere
+              <VProgressLinear
+                indeterminate
+                color="white"
+                class="mb-0"
+              />
+            </VCardText>
+          </VCard>
+        </div>
+        <VCard v-else class="px-5 py-4">
             <VCardItem class="text-center">
                 <VCardTitle class="text-h5 mb-3">
-                    Crear módulo
+                    {{ accionForm == "add"? "Crear módulo":"Editar módulo" }}
                 </VCardTitle>
             </VCardItem>
             <VCardText>
@@ -489,43 +686,51 @@ watch(selectRefCuestionario, (active) => {
                                 </VSelect>
                             </VCol>
                             <VCol cols="12">
-                                <VSelect
-                                  v-model:menu="selectRefVideo"
-                                  no-data-text="No existen videos que mostrar"
-                                  append-icon="mdi-refresh"
-                                  @click:append="getVideos"
-                                  :disabled="videoModelLoading"
-                                  :menu-props="{ maxHeight: '300' }"
-                                  item-text="title"
-                                  item-value="value"
-                                  v-model="videosModel" 
-                                  :items="videosItems"
-                                  chips
-                                  multiple
-                                  label="Videos educativos">
-                                  <template v-slot:prepend-item>
-                                    <v-list-item>
-                                      <v-list-item-content>
-                                        <VTextField v-model="searchVideoModel" clearable placeholder="Buscar video"/>
-                                      </v-list-item-content>
-                                    </v-list-item>
-                                    <v-divider class="mt-2"></v-divider>
-                                  </template>
-                                  <template #selection="{ item }">
-                                        <div>
-                                            {{ item.title }} - {{ item.value }}
-                                        </div>
-                                    </template>
-                                    <template #item="{ item, props }">
-                                        <v-list-item v-bind="props">
-                                            <v-list-item-content>
-                                                <v-list-item-subtitle>
-                                                    <p>_id: {{ item.value }}</p>
-                                                </v-list-item-subtitle>
-                                            </v-list-item-content>
+                              <VRow>
+                                  <VCol cols="9" >
+                                    <VSelect
+                                      v-model:menu="selectRefVideo"
+                                      no-data-text="No existen videos que mostrar"
+                                      append-icon="mdi-refresh"
+                                      @click:append="getVideos"
+                                      :disabled="videoModelLoading"
+                                      :menu-props="{ maxHeight: '300' }"
+                                      item-text="title"
+                                      item-value="value"
+                                      v-model="videosModel" 
+                                      :items="videosItems"
+                                      chips
+                                      multiple
+                                      label="Videos educativos">
+                                      <template v-slot:prepend-item>
+                                        <v-list-item>
+                                          <v-list-item-content>
+                                            <VTextField v-model="searchVideoModel" clearable placeholder="Buscar video"/>
+                                          </v-list-item-content>
                                         </v-list-item>
-                                    </template>
-                                </VSelect>
+                                        <v-divider class="mt-2"></v-divider>
+                                      </template>
+                                      <template #selection="{ item }">
+                                            <div>
+                                                {{ item.title }} - {{ item.value }}
+                                            </div>
+                                        </template>
+                                        <template #item="{ item, props }">
+                                            <v-list-item v-bind="props">
+                                                <v-list-item-content>
+                                                    <v-list-item-subtitle>
+                                                        <p>_id: {{ item.value }}</p>
+                                                    </v-list-item-subtitle>
+                                                </v-list-item-content>
+                                            </v-list-item>
+                                        </template>
+                                    </VSelect>
+                                  </VCol>
+                                  <VCol cols="3" >
+                                    <VBtn title="Agregar módulo" block @click="isDialogVisibleAddVideo = true"> Agregar </VBtn>
+                                  </VCol>
+                                </VRow>
+                                
                             </VCol>
                             <VCol cols="12" v-if="videosModel">
                               <VList
@@ -544,10 +749,11 @@ watch(selectRefCuestionario, (active) => {
                                         color="success"
                                       />
                                     </template>
-                                    <VListItemTitle>
+                                    <VListItemTitle :class="videoSelect.bloqueado?'disabled':''">
                                       {{ videoSelect.title }}
                                     </VListItemTitle>
-                                    <VListItemSubtitle class="mt-1">
+                                    <VListItemSubtitle :class="videoSelect.bloqueado?'disabled':''">
+
                                       <VBadge
                                         dot
                                         location="start center"
@@ -557,19 +763,34 @@ watch(selectRefCuestionario, (active) => {
                                       >
                                         <span class="ms-4">Video</span>
                                       </VBadge>
-
                                       <span class="text-xs text-disabled">{{ videoSelect.value }}</span>
+
                                     </VListItemSubtitle>
 
                                     <template #append>
-                                      <div class="btn-order" style="">
-                                        <VBtn size="x-small" :disabled="index == 0" variant="text" @click="cambiarPosicion(videoSelect.value, 'arriba')">
-                                          <VIcon :size="25" icon="mdi-arrow-up-bold-box" />
-                                        </VBtn>
-                                        <VBtn size="x-small" :disabled="index == videosSelectList.length - 1" variant="text" @click="cambiarPosicion(videoSelect.value, 'abajo')">
-                                          <VIcon :size="25" icon="mdi-arrow-down-bold-box" />
-                                        </VBtn>
+                                      <div class="content-order pl-4">
+                                        <div class="content-edit">
+                                          <VBtn class="px-0 btn-editar" size="x-small" :title="videoSelect.bloqueado?'Desbloquear video':'Bloquear video'" variant="text" @click="handleSwitchChange(videoSelect, index)">
+                                            <VIcon top :size="25" icon="tabler-lock" title="Video bloqueado" color="error" v-if="videoSelect.bloqueado" />
+                                            <VIcon top :size="25" icon="tabler-lock-open" title="Video público" color="success" v-else />
+                                          </VBtn>
+                                          <VBtn style="margin-top: -10px;" class="px-0 btn-editar" size="x-small" variant="text" @click="editarVideo(videoSelect.value)">
+                                            <div class="content-btn">
+                                              <VIcon top :size="25" icon="tabler-edit" title="Video público" color="primary" />
+                                              Editar
+                                            </div>
+                                          </VBtn>
+                                        </div>
+                                        <div class="btn-order" style="">
+                                          <VBtn size="x-small" class="px-1" :disabled="index == 0" variant="text" @click="cambiarPosicion(videoSelect.value, 'arriba')">
+                                            <VIcon :size="25" icon="mdi-arrow-up-bold-box" />
+                                          </VBtn>
+                                          <VBtn size="x-small" class="px-1" :disabled="index == videosSelectList.length - 1" variant="text" @click="cambiarPosicion(videoSelect.value, 'abajo')">
+                                            <VIcon :size="25" icon="mdi-arrow-down-bold-box" />
+                                          </VBtn>
+                                        </div>
                                       </div>
+                                      
                                     </template>
                                   </VListItem>
                                   <VDivider v-if="index !== videosSelectList.length - 1" />
@@ -615,7 +836,37 @@ watch(selectRefCuestionario, (active) => {
 </style>
 
 <style scoped> 
- 
+  .content-btn {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      font-size: 7px !important;
+  }
+
+  /*.content-edit {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      font-size: 12px;
+      text-align: center;
+      color: rgb(var(--v-theme-primary));
+  }*/
+
+  .content-order {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      justify-content: center;
+  }
+  .switch-estatus {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 0;
+      padding-left: 5px;
+  }
+
   .loading{
     border:2px solid #7367F0;
     width: 20px;

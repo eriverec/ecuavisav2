@@ -5,6 +5,12 @@ import esLocale from "moment/locale/es";
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 
+
+const categoriaModelLoading = ref(false);
+const etiquetasModelLoading = ref(false);
+
+const eliminarDisabled = ref(false);
+
 const currentTab = ref('tab-lista');
 const checkbox = ref(1);
 const dataVideoList = ref([]);
@@ -33,7 +39,7 @@ const etiquetasModel = ref('');
 
 const tituloModel = ref(null);
 const descripcionModel = ref(null);
-const thumbnailModel = ref(null);
+const thumbnailModel = ref("https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg");
 
 const idToEdit = ref('');
 
@@ -55,6 +61,7 @@ onMounted(async ()=>{
 
 async function getEtiquetas(page = 1, limit= 10){
   try {
+      etiquetasModelLoading.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -67,6 +74,7 @@ async function getEtiquetas(page = 1, limit= 10){
       var response = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/elearning/etiqueta/listar.php`, requestOptions);
       const data = await response.json();
       etiquetasItems.value = data;
+      etiquetasModelLoading.value = false;
       
   } catch (error) {
       return console.error(error.message);    
@@ -75,6 +83,8 @@ async function getEtiquetas(page = 1, limit= 10){
 
 async function getCategorias(page = 1, limit= 10){
   try {
+
+      categoriaModelLoading.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -87,6 +97,7 @@ async function getCategorias(page = 1, limit= 10){
       var response = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/elearning/categoria/listar.php`, requestOptions);
       const data = await response.json();
       categoriasItems.value = data;
+      categoriaModelLoading.value = false;
       
   } catch (error) {
       return console.error(error.message);    
@@ -206,7 +217,7 @@ function resetForm(){
     idRudoModel.value = "";
     duracionModel.value = "";
     descripcionModel.value = "";
-    thumbnailModel.value = "";
+    thumbnailModel.value = "https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg";
     duracionModel.value = "";
     etiquetasModel.value = "";
     categoriaModel.value = "";
@@ -238,7 +249,8 @@ async function onEdit(id){
     idRudoModel.value = data.idRudo;
     duracionModel.value = data.duracion;
     descripcionModel.value = data.descripcion;
-    thumbnailModel.value = data.thumbnail;
+    thumbnailModel.value = "https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg";
+    // thumbnailModel.value = data.thumbnail;
     etiquetasModel.value = data.etiquetas;
     categoriaModel.value = data.categoria;
 
@@ -364,6 +376,7 @@ function onView(data) {
 }
 
 async function deleteConfirmed() {
+    eliminarDisabled.value = true;
     var requestOptions = {
         method: 'DELETE',
         redirect: 'follow'
@@ -386,6 +399,7 @@ async function deleteConfirmed() {
     }
     await getDesafioVideos();
     isDialogVisibleDelete.value = false;
+    eliminarDisabled.value = false;
 }
 
 </script>
@@ -452,7 +466,7 @@ async function deleteConfirmed() {
           >
             No, cerrar
           </VBtn>
-          <VBtn @click="deleteConfirmed">
+          <VBtn :disabled="eliminarDisabled" @click="deleteConfirmed">
             Si, eliminar
           </VBtn>
         </VCardText>
@@ -609,7 +623,7 @@ async function deleteConfirmed() {
                         </div>
                       </template>
                     </VListItem>
-                    <VDivider v-if="index !== dataVideoList.length - 1" />
+                    <VDivider v-if="index !== paginatedDesafios.length - 1" />
                   </template>
                 </VList>
                 
@@ -649,9 +663,9 @@ async function deleteConfirmed() {
                                         <VTextField v-model="descripcionModel" label="Descripción" />
                                       </VCol>
                                       
-                                      <VCol cols="12">
+                                      <!-- <VCol cols="12">
                                         <VTextField v-model="thumbnailModel" label="Imagen principal" />
-                                      </VCol>
+                                      </VCol> -->
 
                                       <VCol cols="12" >
                                           <VTextField v-model="idRudoModel" label="Id video de RUDO" />
@@ -668,7 +682,10 @@ async function deleteConfirmed() {
                                           chips
                                           label="Seleccione la categoría del video"
                                           :menu-props="{ maxHeight: '300' }" 
-                                          @keydown.enter.prevent="categoriaModel" 
+                                          @keydown.enter.prevent="categoriaModel"
+                                          :disabled="categoriaModelLoading"
+                                          append-icon="mdi-refresh"
+                                          @click:append="getCategorias"
                                           />
                                       </VCol>
 
@@ -681,7 +698,10 @@ async function deleteConfirmed() {
                                             chips
                                             multiple
                                             label="Etiquetas"
-                                            :menu-props="{ maxHeight: '300' }" />
+                                            :menu-props="{ maxHeight: '300' }"
+                                            :disabled="etiquetasModelLoading"
+                                            append-icon="mdi-refresh"
+                                            @click:append="getEtiquetas" />
                                       </VCol>
          
                                   </VRow>
