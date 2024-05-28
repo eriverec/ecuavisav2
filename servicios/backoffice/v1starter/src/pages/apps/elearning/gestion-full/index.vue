@@ -105,6 +105,8 @@ const configSnackbar = ref({
 const etiquetasItems = ref([]);
 const categoriasItems = ref([]);
 
+const cuestionariosRaw = ref([]);
+
 onMounted(async ()=>{
   await getEtiquetas();
   await getCategorias();
@@ -206,6 +208,7 @@ async function getCuestionario(page = 1, limit= 10){
       var response = await fetch(`https://e-learning-cuestionario.vercel.app/cuestionarios/all/get`, requestOptions);
       const data = await response.json();
 
+      cuestionariosRaw.value = data.data;
       dataCuestionarioItems.value = data.data.reduce((acumulador, actual) => {
         acumulador.push({
           title: `${actual.titulo}`,
@@ -272,7 +275,7 @@ function obtenerListaOrdenada(listaA, listaB) {
 function inicializarVideosSelectListCurso() {
     const modulosItemsLocal = dataModuloItems.value;
     const dataModuloItemsID = dataModuloCursoModel.value;
-    if (dataModuloItemsID) {
+    
         //Si se selecciona nuevos elementos del select
         if(modulosSelectListCurso.value.length < dataModuloItemsID.length){
           for(var j in modulosItemsLocal){
@@ -296,7 +299,7 @@ function inicializarVideosSelectListCurso() {
             }
           }
         }
-    }
+    
 }
 
 watch(async () => dataModuloCursoModel.value, async () => {
@@ -513,8 +516,7 @@ async function getVideos(){
 function inicializarVideosSelectListModulo() {
     const videosItemsLocal = videosItems.value;
     const videosItemsID = videosModuloModel.value;
-    //console.log("videosModuloModel", videosModuloModel.value);
-    if (videosItemsID && videosItemsID.length > 0) {
+    
         //Si se selecciona nuevos elementos del select
         if(videosSelectListModulo.value.length < videosItemsID.length){
           for(var j in videosItemsLocal){
@@ -528,6 +530,7 @@ function inicializarVideosSelectListModulo() {
         if(videosSelectListModulo.value.length > videosItemsID.length){
           // Filtrar los elementos de videosSelectList.value que no están presentes en listaB
           const elementosFaltantes = videosSelectListModulo.value.filter(itemA => !videosItemsID.includes(itemA.value));
+          console.log("elementosFaltantes ", elementosFaltantes);
 
           for(var i in elementosFaltantes){
             for(var j in videosSelectListModulo.value){
@@ -538,7 +541,7 @@ function inicializarVideosSelectListModulo() {
             }
           }
         }
-    }
+    
 }
 
 watch(async () => videosModuloModel.value, async () => {
@@ -702,6 +705,14 @@ function eliminarPregunta (index){
 function eliminarOpcion (index, index1){
     preguntasCuestionario.value[index].opciones.splice(index1, 1);
 }
+
+function filtrarDesafios(listaDesafios, elementos) {
+    const valoresDesafiosFiltrados = listaDesafios
+        .filter(desafio => elementos.includes(desafio.value))
+        .map(desafio => desafio.value);
+    return valoresDesafiosFiltrados;
+}
+
 //-----------------------------------------------LOCAL------------------------------------------------
 //----------------------------------------------------------------------------------------------------
 
@@ -718,7 +729,7 @@ const videosFull = ref([]);
 const videosGeneradosLocal = ref([]);
 const videosGeneradosLocalFull = ref([]);
 
-const cursoLocal = ref({});
+const cursoLocal = ref(null);
 
 
 const codigosGenerados = new Set();
@@ -750,7 +761,11 @@ function obtenerValorYPosicionLocal(lista) {
     // Devolver el array de objetos con el valor y la posición de cada elemento
     return resultado;
 }
+// --------------------- Video Local --------------------
 
+const accionVideoLocal = ref('add');
+const idToEditVideoLocal = ref('');
+const tituloVideoOnEdit = ref('');
 function resetFormVideo(){
   idVideoRudoModel.value = null;
   duracionVideoModel.value = null;
@@ -758,6 +773,37 @@ function resetFormVideo(){
   etiquetasVideoModel.value = '';
   tituloVideoModel.value = null;
   descripcionVideoModel.value = null;
+}
+
+function onEditVideoLocal(id){
+  accionVideoLocal.value = 'edit';
+  idToEditVideoLocal.value = id;
+  const video = videosFull.value.find(video => video._id == id);
+
+  tituloVideoOnEdit.value = video.titulo;
+
+  idVideoRudoModel.value = video.idRudo;
+  duracionVideoModel.value = video.duracion;
+  categoriaVideoModel.value = video.categoria;
+  etiquetasVideoModel.value = video.etiquetas;
+  tituloVideoModel.value = video.titulo;
+  thumbnailVideoModel.value = video.thumbnail;
+  descripcionVideoModel.value = video.descripcion;
+}
+
+function cancelarEditVideoLocal(){
+  accionVideoLocal.value = 'add';
+  idToEditVideoLocal.value = '';
+  tituloVideoOnEdit.value = '';
+  resetFormVideo();
+}
+
+function onDeleteVideoLocal(id){
+  videosFull.value = videosFull.value.filter(video => video._id != id);
+  videosItems.value = videosItems.value.filter(video => video.value != id);
+  videosGeneradosLocal.value = videosGeneradosLocal.value.filter(video => video._id != id);
+  videosModuloModel.value = [];
+  videosSelectListModulo.value = [];	
 }
 
 function guardarLocalVideo (){
@@ -775,42 +821,135 @@ function guardarLocalVideo (){
         };
         return false;
     }  
-  var id = generarCodigoAleatorioUnico(10);  
-  videosFull.value.push({
-    _id: id,
-    titulo: tituloVideoModel.value,
-    descripcion: descripcionVideoModel.value,
-    idRudo: idVideoRudoModel.value,
-    thumbnail: thumbnailVideoModel.value,
-    duracion: duracionVideoModel.value,
-    categoria: categoriaVideoModel.value,
-    etiquetas: etiquetasVideoModel.value
-  });
+    if(accionVideoLocal.value == 'add'){
+      var id = generarCodigoAleatorioUnico(10);  
+      videosFull.value.push({
+        _id: id,
+        titulo: tituloVideoModel.value,
+        descripcion: descripcionVideoModel.value,
+        idRudo: idVideoRudoModel.value,
+        thumbnail: thumbnailVideoModel.value,
+        duracion: duracionVideoModel.value,
+        categoria: categoriaVideoModel.value,
+        etiquetas: etiquetasVideoModel.value
+      });
 
-  videosItems.value.push({
-    title: tituloVideoModel.value,
-    value: id
-  });
+      videosItems.value.push({
+        title: tituloVideoModel.value,
+        value: id
+      });
 
-  videosGeneradosLocal.value.push({
-    titulo: tituloVideoModel.value,
-    descripcion: descripcionVideoModel.value,
-    idRudo: idVideoRudoModel.value,
-    thumbnail: thumbnailVideoModel.value,
-    duracion: duracionVideoModel.value,
-    categoria: categoriaVideoModel.value,
-    etiquetas: etiquetasVideoModel.value    
-  });
+      videosGeneradosLocal.value.push({
+        _id: id,
+        titulo: tituloVideoModel.value,
+        descripcion: descripcionVideoModel.value,
+        idRudo: idVideoRudoModel.value,
+        thumbnail: thumbnailVideoModel.value,
+        duracion: duracionVideoModel.value,
+        categoria: categoriaVideoModel.value,
+        etiquetas: etiquetasVideoModel.value    
+      });
+    }else{
+      const videoFull = videosFull.value.find(video => video._id === idToEditVideoLocal.value);
+      videoFull.titulo = tituloVideoModel.value;
+      videoFull.descripcion = descripcionVideoModel.value;
+      videoFull.idRudo = idVideoRudoModel.value;
+      videoFull.thumbnail = thumbnailVideoModel.value;
+      videoFull.duracion = duracionVideoModel.value;
+      videoFull.categoria = categoriaVideoModel.value;
+      videoFull.etiquetas = etiquetasVideoModel.value;
 
+      const videoItem = videosItems.value.find(video => video.value === idToEditVideoLocal.value);
+      videoItem.title = tituloVideoModel.value;
+
+      const videoLocal = videosGeneradosLocal.value.find(video => video._id === idToEditVideoLocal.value);
+      videoLocal.titulo = tituloVideoModel.value;
+      videoLocal.descripcion = descripcionVideoModel.value;
+      videoLocal.idRudo = idVideoRudoModel.value;
+      videoLocal.thumbnail = thumbnailVideoModel.value;
+      videoLocal.duracion = duracionVideoModel.value;
+      videoLocal.categoria = categoriaVideoModel.value;
+      videoLocal.etiquetas = etiquetasVideoModel.value;
+
+      
+    }
+  accionVideoLocal.value = 'add';  
+
+  console.log("videosFull", videosFull.value);
   console.log("videosGeneradosLocal", videosGeneradosLocal.value);
-  resetFormVideo()
+  console.log("videosItems", videosItems.value);
+  
+  resetFormVideo();
 }
+
+// Funciones para manejar el cambio de paginación
+const itemsPerPageVideoLocal = 5;
+const currentPageVideoLocal = ref(1);
+
+const paginatedVideosLocal = computed(() => {
+  const start = (currentPageVideoLocal.value - 1) * itemsPerPageVideoLocal;
+  const end = start + itemsPerPageVideoLocal;
+
+  return videosGeneradosLocal.value.slice(start, end);
+});
+
+const nextPageVideoLocal = () => {
+  if (currentPageVideoLocal.value * itemsPerPageVideoLocal < videosGeneradosLocal.value.length) currentPageVideoLocal.value++;
+};
+
+const prevPageVideoLocal = () => {
+  if (currentPageVideoLocal.value > 1) currentPageVideoLocal.value--;
+};
+
+
+//------------------------- Modulo local -------------------------
+
+const accionModuloLocal = ref('add');
+const idToEditModuloLocal = ref('');
+const tituloModuloOnEdit = ref('');
 function resetFormModulo(){
   tituloModuloModel.value = null;
   dataCuestionarioModuloModel.value = null;
   descripcionModuloModel.value = null;
   videosModuloModel.value = [];
   videosSelectListModulo.value = [];	
+}
+
+function onEditModuloLocal(id){
+  accionModuloLocal.value = 'edit';
+  idToEditModuloLocal.value = id;
+  const modulo = modulosFull.value.find(modulo => modulo._id === id);
+
+  tituloModuloOnEdit.value = modulo.titulo;
+
+  tituloModuloModel.value = modulo.titulo;
+  dataCuestionarioModuloModel.value = modulo.idCuestionario;
+  descripcionModuloModel.value = modulo.descripcion;
+  console.log('modulo.videos ',modulo.videos);
+  videosModuloModel.value = filtrarDesafios(videosItems.value, modulo.videos.reduce((acumulador, actual) => {
+        acumulador.push(actual.value);
+        return acumulador;
+  }, []));
+  console.log("videosModuloModelOnEdit", videosModuloModel.value);
+  videosSelectListModulo.value = obtenerListaOrdenada(videosModuloModel.value, modulo.videos);
+  console.log("videosSelectListModuloOnEdit", videosSelectListModulo.value);
+  
+}
+
+function cancelarEditModuloLocal(){
+  accionModuloLocal.value = 'add';
+  idToEditModuloLocal.value = '';
+  tituloModuloOnEdit.value = '';
+  resetFormModulo();
+}
+
+function onDeleteModuloLocal(id){
+  //console.log('id para borrar', id);
+  modulosFull.value = modulosFull.value.filter(modulo => modulo._id != id);
+  modulosGeneradosLocal.value = modulosGeneradosLocal.value.filter(modulo => modulo._id != id);
+  dataModuloItems.value = dataModuloItems.value.filter(modulo => modulo.value != id);
+  dataModuloCursoModel.value = [];
+  modulosSelectListCurso.value = [];	
 }
 function guardarLocalModulo (){
   if (
@@ -825,31 +964,73 @@ function guardarLocalModulo (){
         };
         return false;
     }
-    var id = generarCodigoAleatorioUnico(10);
-    modulosFull.value.push({
-      _id: id,
-      titulo: tituloModuloModel.value,
-      descripcion: descripcionModuloModel.value,
-      idCuestionario: dataCuestionarioModuloModel.value || null,
-      videos: obtenerValorYPosicionModulo()
-    });
+    if(accionModuloLocal.value == 'add'){
+      var id = generarCodigoAleatorioUnico(10);
+      modulosFull.value.push({
+        _id: id,
+        titulo: tituloModuloModel.value,
+        descripcion: descripcionModuloModel.value,
+        idCuestionario: dataCuestionarioModuloModel.value || null,
+        videos: obtenerValorYPosicionModulo()
+      });
 
-    dataModuloItems.value.push({
-      title: tituloModuloModel.value,
-      value: id
-    });
+      dataModuloItems.value.push({
+        title: tituloModuloModel.value,
+        value: id
+      });
 
-    modulosGeneradosLocal.value.push({
-      titulo: tituloModuloModel.value,
-      descripcion: descripcionModuloModel.value,
-      idCuestionario: dataCuestionarioModuloModel.value || null,
-      videos: obtenerValorYPosicionModulo()
-    });
+      modulosGeneradosLocal.value.push({
+        _id: id,
+        titulo: tituloModuloModel.value,
+        descripcion: descripcionModuloModel.value,
+        idCuestionario: dataCuestionarioModuloModel.value || null,
+        videos: obtenerValorYPosicionModulo()
+      });
+    }else{
+      const moduloFull = modulosFull.value.find(modulo => modulo._id === idToEditModuloLocal.value);
+      moduloFull.titulo = tituloModuloModel.value;
+      moduloFull.descripcion = descripcionModuloModel.value;
+      moduloFull.idCuestionario = dataCuestionarioModuloModel.value || null;
+      moduloFull.videos = obtenerValorYPosicionModulo();
 
+      const moduloItem = dataModuloItems.value.find(modulo => modulo.value === idToEditModuloLocal.value);
+      moduloItem.title = tituloModuloModel.value;
+
+      const moduloLocal = modulosGeneradosLocal.value.find(modulo => modulo._id === idToEditModuloLocal.value);
+      moduloLocal.titulo = tituloModuloModel.value;
+      moduloLocal.descripcion = descripcionModuloModel.value;
+      moduloLocal.idCuestionario = dataCuestionarioModuloModel.value || null;
+      moduloLocal.videos = obtenerValorYPosicionModulo();
+    }
+    accionModuloLocal.value = 'add';
+
+    console.log("modulosFull", modulosFull.value);
     console.log("modulosGeneradosLocal", modulosGeneradosLocal.value);
+    console.log("modulosItems", dataModuloItems.value);
     resetFormModulo();
 }
+// Funciones para manejar el cambio de paginación módulos
 
+const itemsPerPageModuloLocal = 5;
+const currentPageModuloLocal = ref(1);
+
+const paginatedModuloLocal = computed(() => {
+  const start = (currentPageModuloLocal.value - 1) * itemsPerPageModuloLocal;
+  const end = start + itemsPerPageModuloLocal;
+
+  return modulosGeneradosLocal.value.slice(start, end);
+});
+
+const nextPageModuloLocal = () => {
+  if (currentPageModuloLocal.value * itemsPerPageModuloLocal < modulosGeneradosLocal.value.length) currentPageModuloLocal.value++;
+};
+
+const prevPageModuloLocal = () => {
+  if (currentPageModuloLocal.value > 1) currentPageModuloLocal.value--;
+};
+
+
+// -------------------------- Aplicar cambios de curso en local --------------------------
 async function onApply() {
   //Validar curso
   if (
@@ -861,7 +1042,7 @@ async function onApply() {
         !duracionCursoModel.value
       ){
         configSnackbar.value = {
-            message: "Llenar todos los campos del curso para crear el registro",
+            message: "Llenar todos los campos del curso para mostrar la previsualización",
             type: "error",
             model: true
         };
@@ -870,21 +1051,21 @@ async function onApply() {
 
     console.log("modulosFull" , modulosFull.value);
     console.log("videosFull" , videosFull.value);
-    var modulosSelected = obtenerValorYPosicionCurso();
+    var modulosSelected = deepClone(obtenerValorYPosicionCurso());
     console.log("modulosSelected" , modulosSelected);
-    var modulosResult = modulosFull.value.filter(fullItem => 
+    var modulosFullClone = deepClone(modulosFull.value);
+    var modulosResult = modulosFullClone.filter(fullItem => 
       modulosSelected.some(selectedItem => selectedItem.value === fullItem._id)
     );
+    cuestionariosRaw
+    for (let modulo of modulosResult) {
+      modulo.videos = modulo.videos.map(video => 
+        videosFull.value.find(fullItem => fullItem._id === video.value)
+      );
 
-    var videosSelected =  modulosResult.map(item => item.videos.map(video => video.value));
-    console.log("videosSelected" , videosSelected);
-    var videosResult = videosFull.value.filter(fullItem =>
-      videosSelected.some(selectedItem => selectedItem.value === fullItem._id)
-    );
+      modulo.idCuestionario = cuestionariosRaw.value.find(fullItem => fullItem._id === modulo.idCuestionario);
+    }
 
-    console.log("videosResult" , videosResult);
-
-    modulosResult.videos = videosResult;
 
 
     let curso = {
@@ -895,7 +1076,7 @@ async function onApply() {
           duracion: duracionCursoModel.value,
           categoria: categoriaCursoModel.value,
           etiquetas: etiquetasCursoModel.value,
-          idCuestionario: dataCuestionarioCursoModel.value,
+          idCuestionario: cuestionariosRaw.value.find(fullItem => fullItem._id === dataCuestionarioCursoModel.value),
           fechai: fechaIFModel.value.fechai,
           fechaf: fechaIFModel.value.fechaf,
           fechaVencimiento: fechaIFModel.value.fechaV,
@@ -1352,12 +1533,127 @@ async function onComplete() {
             </div>
             <div v-if="currentStep === 1">
               <!-- Video -->
+              <div class="px-4 mb-6" v-if="videosGeneradosLocal.length > 0">
+                 
+                  <VList lines="two" border >
+                  <template
+                    v-for="(video, index) of paginatedVideosLocal"
+                    :key="index"
+                  >
+                    <VListItem :disabled="disabledViewList">
+                      <VListItemTitle>
+                        <div class="nombre-desafio d-flex flex-column">
+                          <div class="d-flex">
+                            <small>Video</small>
+                            <small class="text-disabled"><code class="p-0"><b>_id:</b>{{ video._id }}</code></small>
+                          </div>
+                          <label>{{ video.titulo }}</label>
+                          <span class="text-xs text-disabled">{{ video.descripcion }}</span>
+                          <div class="content-items d-flex">
+                            <div class="content-video">
+                              <VIcon
+                                size="20"
+                                icon="tabler-video"
+                              />
+                              <a class="pl-2" target="_blank" :href="video.url">{{ video.idRudo }}</a>
+                            </div>
+                            <div class="content-time pl-3">
+                              <VIcon
+                                size="20"
+                                icon="tabler-clock"
+                              />
+                              <b>Duración: </b> {{ video.duracion }} min
+                            </div>
+
+                            <div class="content-time pl-3">
+                              <VIcon
+                                size="20"
+                                icon="mdi-animation"
+                              />
+                              <b>Categoría: </b> {{ video.categoria }}
+                            </div>
+                       
+                          </div>
+                        </div>
+                      </VListItemTitle>
+
+                      <template #append>
+                        <div class="espacio-right-2">
+                          <!--
+                          <VBtn
+                            title="Ver vista previa del video"
+                            icon
+                            size="x-small"
+                            color="warning"
+                            variant="text"
+                            @click="onView(video)"
+                          >
+                            <VIcon
+                              size="22"
+                              icon="tabler-movie"
+                            />
+                          </VBtn>
+                          -->
+                          <VBtn 
+                            title="Editar registro" color="success" variant="text" icon  @click="onEditVideoLocal(video._id)">
+                            <VIcon size="22" icon="tabler-edit" />
+                          </VBtn>
+
+                          <VBtn
+                            title="Eliminar el registro"
+                            icon
+                            size="x-small"
+                            color="error"
+                            variant="text"
+                            @click="onDeleteVideoLocal(video._id)"
+                          >
+                            <VIcon
+                              size="22"
+                              icon="tabler-trash"
+                            />
+                          </VBtn>
+                          <!--
+                          <VBtn
+                            icon
+                            variant="text"
+                            color="default"
+                            size="x-small"
+                            :to="{ name: 'apps-elearning-gestion-videos-view-id', params: { id: video._id } }"
+                          >
+                            <VIcon
+                              :size="22"
+                              icon="tabler-eye"
+                            />
+                          </VBtn>
+                          -->
+                        </div>
+                      </template>
+                    </VListItem>
+                    <VDivider v-if="index !== paginatedVideosLocal.length - 1" />
+                  </template>
+                </VList>
+                
+                <div class="d-flex align-center justify-space-between botonescurrentPage">
+                    <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageVideoLocal" :disabled="currentPageVideoLocal === 1"></VBtn>
+                    Página {{ currentPageVideoLocal }}
+                    <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageVideoLocal"
+                        :disabled="(currentPageVideoLocal * itemsPerPageVideoLocal) >= videosGeneradosLocal.length">
+                    </VBtn>
+                </div>
+                <VDivider/>
+                </div>
+              
               <VRow>
                 <VCol class="d-flex justify-space-between" cols="12">
-                  <h6 class="text-h6 font-weight-medium">Crear el video</h6>
-                  <VBtn @click="guardarLocalVideo">
-                    Guardar
-                  </VBtn>
+                  <h6 class="text-h6 font-weight-medium">{{accionVideoLocal == 'add'? 'Crear el video' : 'Editar '+tituloVideoOnEdit}}</h6>
+                  <div class="d-flex gap-2">
+                    <VBtn @click="guardarLocalVideo">
+                      Guardar
+                    </VBtn>
+                    <VBtn v-if="accionVideoLocal != 'add'" color="error" @click="cancelarEditVideoLocal">
+                      Cancelar
+                    </VBtn>
+                  </div>
                 </VCol>
                                       <VCol cols="6">
                                         <VTextField v-model="tituloVideoModel" label="Título del video" />
@@ -1413,12 +1709,86 @@ async function onComplete() {
             </div>
             <div v-if="currentStep === 2">
               <!-- Modulo -->
+              <div class="px-4 mb-6" v-if="modulosGeneradosLocal.length > 0">
+                 
+                 <VList lines="two" border >
+                 <template
+                   v-for="(modulo, index) of paginatedModuloLocal"
+                   :key="index"
+                 >
+                   <VListItem :disabled="disabledViewList">
+                     <VListItemTitle>
+                       <div class="nombre-desafio d-flex flex-column">
+                         <div class="d-flex">
+                           <small>Módulo</small>
+                           <small class="text-disabled"><code class="p-0"><b>_id:</b>{{ modulo._id }}</code></small>
+                         </div>
+                         <label>{{ modulo.titulo }}</label>
+                         <small class="mr-2">{{ modulo.descripcion }}</small> 
+                       </div>
+                     </VListItemTitle>
+
+                     <template #append>
+                       <div class="espacio-right-2">
+                         <VBtn 
+                           title="Editar registro" color="success" variant="text" icon  @click="onEditModuloLocal(modulo._id)">
+                           <VIcon size="22" icon="tabler-edit" />
+                         </VBtn>
+
+                         <VBtn
+                           title="Eliminar el registro"
+                           icon
+                           size="x-small"
+                           color="error"
+                           variant="text"
+                           @click="onDeleteModuloLocal(modulo._id)"
+                         >
+                           <VIcon
+                             size="22"
+                             icon="tabler-trash"
+                           />
+                         </VBtn>
+                         <!---
+                         <VBtn
+                           icon
+                           variant="text"
+                           color="default"
+                           size="x-small"
+                           :to="{ name: 'apps-elearning-gestion-modulos-view-id', params: { id: modulo._id } }"
+                         >
+                           <VIcon
+                             :size="22"
+                             icon="tabler-eye"
+                           />
+                         </VBtn>
+                         -->
+                       </div>
+                     </template>
+                   </VListItem>
+                   <VDivider v-if="index !== modulosGeneradosLocal.length - 1" />
+                 </template>
+               </VList>
+               
+               <div class="d-flex align-center justify-space-between botonescurrentPage">
+                   <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageModuloLocal" :disabled="currentPageModuloLocal === 1"></VBtn>
+                   Página {{ currentPageModuloLocal }}
+                   <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageModuloLocal"
+                       :disabled="(currentPageModuloLocal * itemsPerPageModuloLocal) >= modulosGeneradosLocal.length">
+                   </VBtn>
+               </div>
+               <VDivider/>
+               </div>
               <VRow>
                 <VCol class="d-flex justify-space-between" cols="12">
-                  <h6 class="text-h6 font-weight-medium">Crear el módulo</h6>
-                  <VBtn @click="guardarLocalModulo">
-                    Guardar
-                  </VBtn>
+                  <h6 class="text-h6 font-weight-medium">{{ accionModuloLocal == 'add'? 'Crear el módulo' : 'Editar '+tituloModuloOnEdit }}</h6>
+                  <div class="d-flex gap-2">
+                    <VBtn @click="guardarLocalModulo">
+                      Guardar
+                    </VBtn>
+                    <VBtn v-if="accionModuloLocal != 'add'" color="error" @click="cancelarEditModuloLocal">
+                      Cancelar
+                    </VBtn>
+                  </div>
                 </VCol>
                                   <VRow>
                                       <VCol cols="6">
@@ -1675,7 +2045,7 @@ async function onComplete() {
             <!-- Add more steps here as needed -->
             <!-- Stepper Controls -->
             <VCol cols="12" class="d-flex flex-wrap justify-center gap-4 mt-8">
-              <VBtn style="margin-left: auto;" @click="onApply">
+              <VBtn v-if="currentStep === 0" style="margin-left: auto;" @click="onApply">
                     Aplicar
               </VBtn>
               <VBtn color="secondary" :disabled="currentStep === 0" @click="currentStep--">
@@ -1694,6 +2064,76 @@ async function onComplete() {
       </VCol>
     </VRow>
   </VCard>
+
+  <VCard class="mt-4" v-if="cursoLocal != null">
+    
+    <VCardTitle class="mt-2">Vista previa del curso</VCardTitle>
+    <VCardText>{{cursoLocal.title}}</VCardText>  
+    <VCardItem>
+      <span class="curso_titulo">{{ cursoLocal.titulo }}</span>
+      <VExpansionPanels multiple class="paneles-modulos mt-4" style="padding-right: 0px; padding-left: 0px">
+        <VExpansionPanel
+          v-for="(modulo, indexModulo) in cursoLocal.modulos"
+          :key="modulo"
+        >
+        <VDivider v-if="indexModulo !== 0"/>
+          <VExpansionPanelTitle class="d-flex flex-column gap-2" style="padding-right: 0%; padding-left: 0%">
+            <span class="modulo_titulo ml-4 mr-auto"><h3>{{ modulo.titulo }}</h3></span>
+            <span class="modulo_descripcion ml-4 mr-auto texto-subtitulos">{{ modulo.descripcion }}</span>
+            <VChip class="modulo-chip mr-4 ml-auto"><h5>Complete todos los items</h5></VChip>      
+          </VExpansionPanelTitle>
+          <VExpansionPanelText style="padding-right: 0%; padding-left: 0%">
+            <VDivider />
+            <div v-for="(video, index) in modulo.videos">
+              <div class="d-flex flex-column gap-2 px-4 py-4 ">
+                <div>
+                  <VIcon icon="tabler-video" class="" />
+                  <span class="ml-1"> {{ '- '+ video.titulo }}</span>
+                </div>
+                
+                <span class="texto-descripcion">Ver</span>
+              </div>      
+              <VDivider style="margin-right: 0%; margin-left: 0%"/>
+            </div>
+            <div class="d-flex flex-column gap-2 px-4 py-2">
+              <div class="d-flex">
+                <div class="icon-svg-title svg-verde">
+						    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M96 80c0-26.5 21.5-48 48-48H432c26.5 0 48 21.5 48 48V384H96V80zm313 47c-9.4-9.4-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L409 161c9.4-9.4 9.4-24.6 0-33.9zM0 336c0-26.5 21.5-48 48-48H64V416H512V288h16c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V336z"/></svg>
+                </div>
+                <span class="ml-2"> {{ ' - '+modulo.idCuestionario.titulo }}</span>
+              </div>  
+              <div class="d-flex">
+                <span class="texto-descripcion">Obtener al menos {{ modulo.idCuestionario.puntosNecesarios }} pts</span>
+                <span class="ml-auto texto-descripcion">
+                  {{ ( Math.floor(modulo.idCuestionario.limiteTiempo / 60)== 0? '': Math.floor(modulo.idCuestionario.limiteTiempo / 60) + 'm ') + (modulo.idCuestionario.limiteTiempo % 60 == 0? '': modulo.idCuestionario.limiteTiempo % 60+ 's ' )}}
+                </span>
+              </div>
+            </div>
+
+       
+          </VExpansionPanelText>
+        </VExpansionPanel>
+      </VExpansionPanels>
+
+      <div class="container-cuestionario-final mt-4">
+        <div class="d-flex flex-column gap-2 px-4 pt-4 pb-6">
+              <div class="d-flex">
+                <div class="icon-svg-title svg-verde">
+						    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M96 80c0-26.5 21.5-48 48-48H432c26.5 0 48 21.5 48 48V384H96V80zm313 47c-9.4-9.4-24.6-9.4-33.9 0l-111 111-47-47c-9.4-9.4-24.6-9.4-33.9 0s-9.4 24.6 0 33.9l64 64c9.4 9.4 24.6 9.4 33.9 0L409 161c9.4-9.4 9.4-24.6 0-33.9zM0 336c0-26.5 21.5-48 48-48H64V416H512V288h16c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V336z"/></svg>
+                </div>
+                <span class="ml-2"> {{ ' - '+cursoLocal.idCuestionario.titulo }}</span>
+              </div>  
+              <div class="d-flex">
+                <span class="texto-descripcion">Obtener al menos {{ cursoLocal.idCuestionario.puntosNecesarios }} pts</span>
+                <span class="ml-auto texto-descripcion">
+                  {{ ( Math.floor(cursoLocal.idCuestionario.limiteTiempo / 60)== 0? '': Math.floor(cursoLocal.idCuestionario.limiteTiempo / 60) + 'm ') + (cursoLocal.idCuestionario.limiteTiempo % 60 == 0? '': cursoLocal.idCuestionario.limiteTiempo % 60+ 's ' )}}
+                </span>
+              </div>
+        </div>     
+      </div>
+    </VCardItem>
+  </VCard>
+
                     
     </section>
 </template>
@@ -1771,7 +2211,7 @@ async function onComplete() {
 }
 .stepper-step.active,
 .stepper-step:hover {
-  background-color: #3a3f51;
+  background-color: rgb(var(--v-theme-primary));
 }
 .stepper-icon {
   width: 36px;
@@ -1785,10 +2225,47 @@ async function onComplete() {
 .stepper-title {
   font-size: 16px;
   font-weight: 500;
+  color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
 }
 .stepper-description {
   font-size: 12px;
-  color: #b0b0b0;
+  color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
 }
+.icon-svg-title.svg-verde{
+	width: 22px;
+	fill: #97B770;
+}
+.v-expansion-panel-text__wrapper {
+  padding-left: 0px;
+  padding-right: 0px;
+
+}
+.curso_titulo{
+  font-size: 25px;
+  font-weight: 600;
+  color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
+}
+.texto-subtitulos{
+  font-weight: 200;
+  font-size: 14px;
+  color: rgba(var(--v-theme-on-background), var(--v-medium-emphasis-opacity));
+}
+.texto-descripcion {
+  font-size: 12px;
+  color: rgba(var(--v-theme-on-background), var(--v-disabled-opacity));
+}
+.v-expansion-panel__shadow {
+  display: none;
+}
+.paneles-modulos {
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)); 
+  border-radius: 4px; 
+}
+.container-cuestionario-final {
+  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)); 
+  border-radius: 4px;
+}
+
+
 
 </style>
