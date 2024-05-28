@@ -544,7 +544,7 @@
                 prepend-icon="tabler-screen-share"
                 @click="downloadFull"
               >
-                Exportar usuarios
+                Exportar búsqueda
               </VBtn>
               <small class="px-0 py-1 text-disabled" v-if="isFullLoading">
                 Exportando {{ docsExportNumberLength.tamanioActual }} / {{ docsExportNumberLength.tamanioTotal }} registros
@@ -554,7 +554,7 @@
               
             </div>
           </VCardText>
-        <small class="text-disabled">Se a filtrado usuarios del curso <b>{{ dataCurso.length > 0 ? dataCurso.filter(c => modelCurso.includes(c.value))[0].title: "" }}</b> , desde {{fechaIFModel.fechai}} hasta {{fechaIFModel.fechaf}}</small>
+        <small class="text-disabled">Se ha filtrado usuarios del curso <b>{{ dataCurso.length > 0 ? dataCurso.filter(c => modelCurso.includes(c.value))[0].title: "" }}</b> , desde {{fechaIFModel.fechai}} hasta {{fechaIFModel.fechaf}} con un total de {{totalRegistros}} registros</small>
         <VCard class="mt-1">
             <VTable class="text-no-wrap">
               <!-- 👉 table head -->
