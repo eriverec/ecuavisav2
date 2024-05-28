@@ -90,6 +90,11 @@ async function getEtiquetas(page = 1, limit= 10){
       etiquetasModelLoading.value = false;
       
   } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar las etiquetas, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
       return console.error(error.message);    
   }
 }
@@ -113,6 +118,11 @@ async function getCategorias(page = 1, limit= 10){
       categoriaModelLoading.value = false;
       
   } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar las categorías, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
       return console.error(error.message);    
   }
 }
@@ -136,6 +146,11 @@ async function getDesafioVideos(page = 1, limit= 10){
       
       totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar los videos, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
       return console.error(error.message);    
   }
 }
@@ -192,37 +207,6 @@ const eliminarRegistroSi = async () => {
 };
 */
 
-const handleSwitchChange = async (index) => {
-  const desafio = dataVideoList.value[index];
-  
-  const id = desafio._id;
-  const estado = desafio.statusDesafio;
-  switchOnDisabled.value = true;
-  var jsonEnviar = {
-      statusDesafio: estado
-  }
-
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  var requestOptions = {
-    method: 'PUT',
-    headers: myHeaders,
-    body: JSON.stringify(jsonEnviar),
-    redirect: 'follow'
-  };
-
-  var response = await fetch(`https://servicio-desafios.vercel.app/desafios/${id}`, requestOptions);
-  const data = await response.json();
-  if(data.resp){
-    // alert("Desafío editado correctamente");
-  }else{
-    alert("Un error se presentó: "+data.error);
-    desafio.statusDesafio = !desafio.statusDesafio;
-  };
-  switchOnDisabled.value = false;
-  // Realiza las operaciones necesarias con el ID y el estado
-};
-
 //FUNCIONES FORM
 function resetForm(){
     idToEdit.value = "";
@@ -256,24 +240,33 @@ async function onAdd(){
 
 //EDIT
 async function onEdit(id){
-    resetForm();     
-    accionForm.value = 'edit';
-    const consulta = await fetch('https://servicio-elearning.vercel.app/video/get/' + id);
-    const consultaJson = await consulta.json();
-    const data = consultaJson.data;
+    try{
+      resetForm();     
+      accionForm.value = 'edit';
+      const consulta = await fetch('https://servicio-elearning.vercel.app/video/get/' + id);
+      const consultaJson = await consulta.json();
+      const data = consultaJson.data;
 
-    idToEdit.value = data._id;
+      idToEdit.value = data._id;
 
-    tituloModel.value = data.titulo;
-    idRudoModel.value = data.idRudo;
-    duracionModel.value = data.duracion;
-    descripcionModel.value = data.descripcion;
-    // thumbnailModel.value = data.thumbnail;
-    thumbnailModel.value = "https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg";
-    etiquetasModel.value = data.etiquetas;
-    categoriaModel.value = data.categoria;
+      tituloModel.value = data.titulo;
+      idRudoModel.value = data.idRudo;
+      duracionModel.value = data.duracion;
+      descripcionModel.value = data.descripcion;
+      // thumbnailModel.value = data.thumbnail;
+      thumbnailModel.value = "https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg";
+      etiquetasModel.value = data.etiquetas;
+      categoriaModel.value = data.categoria;
 
-    isDialogActive.value = true;  
+      isDialogActive.value = true;  
+    } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar los datos para editar, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
+      return console.error(error.message);    
+    }
 }
 
 //SEND
@@ -441,7 +434,7 @@ async function deleteConfirmed() {
 <template>
   <section>
 
-    <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
+    <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 4000" :color="configSnackbar.type">
                 {{ configSnackbar.message }}
     </VSnackbar>
 
@@ -508,85 +501,97 @@ async function deleteConfirmed() {
       </VCard>
     </VDialog>
     <VRow>
-      <VCol
-        cols="12"
-        md="12"
-        lg="12"
-      >
-        <VCardItem class="text-center">
-            <VCardTitle class="text-h5 mb-3">
-                {{ accionForm === "add" || accionForm === "duplicate" ? "Crear video" : "Editar " + nombre }}
-            </VCardTitle>
-        </VCardItem>
+      <VCol cols="12" md="12"  lg="12" >
+          <div style="height: 300px;" class="d-flex align-center" v-if="disabledText">
+            <VCard width="300" class="mx-auto mt-5 mb-5" color="primary">
+              <VCardText 
+                class="pt-3"
+              >
+                Cargando datos... espere
+                <VProgressLinear
+                  indeterminate
+                  color="white"
+                  class="mb-0"
+                />
+              </VCardText>
+            </VCard>
+          </div>
+         <VCard v-else class="px-2 py-2">
+            <VCardItem class="text-center">
+                <VCardTitle class="text-h5 mb-3">
+                    {{ accionForm === "add" || accionForm === "duplicate" ? "Crear video" : "Editar video" + nombre }}
+                </VCardTitle>
+            </VCardItem>
 
-        <VCardText>
-            <div class="px-4">
-              <!-- 👉 Form -->
-              <VForm class="mt-6" @submit.prevent="onComplete">
-                <VRow class="">
-                    <VRow>
-                        <VCol cols="6">
-                          <VTextField :disabled="disabledText" v-model="tituloModel" label="Título del video" />
+            <VCardText>
+                <div class="px-4">
+                  <!-- 👉 Form -->
+                  <VForm class="mt-6" @submit.prevent="onComplete">
+                    <VRow class="">
+                        <VRow>
+                            <VCol cols="6">
+                              <VTextField :disabled="disabledText" v-model="tituloModel" label="Título del video" />
+                            </VCol>
+
+                            <VCol cols="6">
+                              <VTextField :disabled="disabledText" v-model="descripcionModel" label="Descripción" />
+                            </VCol>
+                            
+                            <!-- <VCol cols="6">
+                              <VTextField :disabled="disabledText" v-model="thumbnailModel" label="Imagen principal" />
+                            </VCol> -->
+
+                            <VCol cols="12" >
+                                <VTextField :disabled="disabledText" v-model="idRudoModel" label="Id video de RUDO" />
+                            </VCol>
+
+                            <VCol cols="12">
+                              <VTextField :disabled="disabledText" v-model="duracionModel" label="Tiempo en minutos del video" suffix="minutos" append-inner-icon="tabler-clock" type="number" />
+                            </VCol>
+
+                            <VCol cols="12" >
+                                <VCombobox 
+                                v-model="categoriaModel" 
+                                :items="categoriasItems" 
+                                chips
+                                label="Seleccione la categoría del video"
+                                :menu-props="{ maxHeight: '300' }" 
+                                @keydown.enter.prevent="categoriaModel"
+                                :disabled="categoriaModelLoading"
+                                append-icon="mdi-refresh"
+                                @click:append="getCategorias"
+                                />
+                            </VCol>
+
+                            <VCol cols="12" >
+                                <VCombobox 
+                                  item-text="title"
+                                  item-value="value"
+                                  v-model="etiquetasModel" 
+                                  :items="etiquetasItems"
+                                  chips
+                                  multiple
+                                  label="Etiquetas"
+                                  :menu-props="{ maxHeight: '300' }"
+                                  :disabled="etiquetasModelLoading"
+                                  append-icon="mdi-refresh"
+                                  @click:append="getEtiquetas" />
+                            </VCol>
+
+                        </VRow>
+                        <!-- 👉 Submit and Cancel -->
+                        <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
+                            <VBtn type="submit" :disabled="disabledText"> Guardar </VBtn>
+                            <VBtn color="secondary" :disabled="disabledText" variant="tonal" @click="closeDiag">
+                                Cancelar
+                            </VBtn>
                         </VCol>
-
-                        <VCol cols="6">
-                          <VTextField :disabled="disabledText" v-model="descripcionModel" label="Descripción" />
-                        </VCol>
-                        
-                        <!-- <VCol cols="6">
-                          <VTextField :disabled="disabledText" v-model="thumbnailModel" label="Imagen principal" />
-                        </VCol> -->
-
-                        <VCol cols="12" >
-                            <VTextField :disabled="disabledText" v-model="idRudoModel" label="Id video de RUDO" />
-                        </VCol>
-
-                        <VCol cols="12">
-                          <VTextField :disabled="disabledText" v-model="duracionModel" label="Tiempo en minutos del video" suffix="minutos" append-inner-icon="tabler-clock" type="number" />
-                        </VCol>
-
-                        <VCol cols="12" >
-                            <VCombobox 
-                            v-model="categoriaModel" 
-                            :items="categoriasItems" 
-                            chips
-                            label="Seleccione la categoría del video"
-                            :menu-props="{ maxHeight: '300' }" 
-                            @keydown.enter.prevent="categoriaModel"
-                            :disabled="categoriaModelLoading"
-                            append-icon="mdi-refresh"
-                            @click:append="getCategorias"
-                            />
-                        </VCol>
-
-                        <VCol cols="12" >
-                            <VCombobox 
-                              item-text="title"
-                              item-value="value"
-                              v-model="etiquetasModel" 
-                              :items="etiquetasItems"
-                              chips
-                              multiple
-                              label="Etiquetas"
-                              :menu-props="{ maxHeight: '300' }"
-                              :disabled="etiquetasModelLoading"
-                              append-icon="mdi-refresh"
-                              @click:append="getEtiquetas" />
-                        </VCol>
-
                     </VRow>
-                    <!-- 👉 Submit and Cancel -->
-                    <VCol cols="12" class="d-flex flex-wrap justify-center gap-4">
-                        <VBtn type="submit" :disabled="disabledText"> Guardar </VBtn>
-                        <VBtn color="secondary" :disabled="disabledText" variant="tonal" @click="closeDiag">
-                            Cancelar
-                        </VBtn>
-                    </VCol>
-                </VRow>
-            </VForm>
-            </div>
-            
-        </VCardText>
+                </VForm>
+                </div>
+                
+            </VCardText>
+         </VCard>
       </VCol>
     </VRow>
   </section>

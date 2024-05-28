@@ -125,6 +125,11 @@ async function getEtiquetas(page = 1, limit= 10){
       etiquetasItems.value = data;
       etiquetasModelLoading.value = false;
   } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar las etiquetas, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
       return console.error(error.message);    
   }
 }
@@ -147,6 +152,11 @@ async function getCategorias(page = 1, limit= 10){
       categoriaModelLoading.value = false;
       
   } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar las categorías, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
       return console.error(error.message);    
   }
 }
@@ -170,6 +180,11 @@ async function getGestionCursos(page = 1, limit= 10){
       
       totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar los cursos, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
       return console.error(error.message);    
   }
 }
@@ -200,6 +215,11 @@ async function getModulos(page = 1, limit= 10){
       moduloModelLoading.value = false;
       
   } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar los módulos, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
       return console.error(error.message);    
   }
 }
@@ -230,6 +250,11 @@ async function getCuestionario(page = 1, limit= 10){
       cuestionarioModelLoading.value = false;
       
   } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar los cuestionarios, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
       return console.error(error.message);    
   }
 }
@@ -328,55 +353,64 @@ function filtrarDesafios(listaDesafios, elementos) {
 
 //EDIT
 async function onEdit(id){
-    resetForm();     
-    accionForm.value = 'edit';
-    const consulta = await fetch('https://servicio-elearning.vercel.app/curso/get/' + id);
-    const consultaJson = await consulta.json();
-    const data = consultaJson.data;
+    try{
+      resetForm();     
+      accionForm.value = 'edit';
+      const consulta = await fetch('https://servicio-elearning.vercel.app/curso/get/' + id);
+      const consultaJson = await consulta.json();
+      const data = consultaJson.data;
 
-    idToEdit.value = data._id;
+      idToEdit.value = data._id;
 
-    tituloModel.value = data.titulo;
-    idRudoModel.value = data.idRudo;
-    duracionModel.value = data.duracion;
-    descripcionModel.value = data.descripcion;
+      tituloModel.value = data.titulo;
+      idRudoModel.value = data.idRudo;
+      duracionModel.value = data.duracion;
+      descripcionModel.value = data.descripcion;
 
-    // thumbnailModel.value = data.thumbnail;
-    initializeEditMode(data.thumbnail)
+      // thumbnailModel.value = data.thumbnail;
+      initializeEditMode(data.thumbnail)
 
-    etiquetasModel.value = data.etiquetas;
-    categoriaModel.value = data.categoria;
-    estadoModel.value = data.estado;
-    if(data.cuestionario){
-      dataCuestionarioModel.value = data.cuestionario._id;
-    }
-
-    dataModuloModel.value = filtrarDesafios(dataModuloItems.value, data.modulos.reduce((acumulador, actual) => {
-        acumulador.push(actual._id);
-        return acumulador;
-      }, []));
-
-    if(data.fechai){
-      const fechasMongo = {
-        fechai: moment(data.fechai, "DD-MM-YYYY").format("YYYY-MM-DD"),
-        fechaf: moment(data.fechaf, "DD-MM-YYYY").format("YYYY-MM-DD"),
-        fechav: moment(data.fechaVencimiento, "DD-MM-YYYY").format("YYYY-MM-DD"),
+      etiquetasModel.value = data.etiquetas;
+      categoriaModel.value = data.categoria;
+      estadoModel.value = data.estado;
+      if(data.cuestionario){
+        dataCuestionarioModel.value = data.cuestionario._id;
       }
 
-      fechaIFModel.value = {
-        fechasModel: [parseISO(fechasMongo.fechai), parseISO(fechasMongo.fechaf)],
-        fechasVModel: [parseISO(fechasMongo.fechav)],
-        fechasVConfig: fechaIFModel.value.fechasVConfig,
-        fechai: data.fechai,
-        fechaV: data.fechaVencimiento,
-        fechaf: data.fechaf
+      dataModuloModel.value = filtrarDesafios(dataModuloItems.value, data.modulos.reduce((acumulador, actual) => {
+          acumulador.push(actual._id);
+          return acumulador;
+        }, []));
+
+      if(data.fechai){
+        const fechasMongo = {
+          fechai: moment(data.fechai, "DD-MM-YYYY").format("YYYY-MM-DD"),
+          fechaf: moment(data.fechaf, "DD-MM-YYYY").format("YYYY-MM-DD"),
+          fechav: moment(data.fechaVencimiento, "DD-MM-YYYY").format("YYYY-MM-DD"),
+        }
+
+        fechaIFModel.value = {
+          fechasModel: [parseISO(fechasMongo.fechai), parseISO(fechasMongo.fechaf)],
+          fechasVModel: [parseISO(fechasMongo.fechav)],
+          fechasVConfig: fechaIFModel.value.fechasVConfig,
+          fechai: data.fechai,
+          fechaV: data.fechaVencimiento,
+          fechaf: data.fechaf
+        }
+
+        fechaIFModel.value.fechasVConfig["minDate"] = parseISO(fechasMongo.fechav);
       }
+      isDialogActive.value = true; 
 
-      fechaIFModel.value.fechasVConfig["minDate"] = parseISO(fechasMongo.fechav);
+      modulosSelectList.value= obtenerListaOrdenada(dataModuloModel.value, data.modulos);
+    } catch (error) {
+        configSnackbar.value = {
+            message: "No se pudo recuperar los datos para editar, recargue de nuevo.",
+            type: "error",
+            model: true
+        };
+        return console.error(error.message);    
     }
-    isDialogActive.value = true; 
-
-    modulosSelectList.value= obtenerListaOrdenada(dataModuloModel.value, data.modulos);
 }
 
 //SEND
@@ -1124,7 +1158,7 @@ const editarModulo = (modulo) => {
                   <VCard  class="pa-sm-4 pa-4">
                       <VCardItem class="text-center">
                           <VCardTitle class="text-h5 mb-3">
-                              {{ accionForm === "add" || accionForm === "duplicate" ? "Crear registro" : "Editar " + nombre }}
+                              {{ accionForm === "add" || accionForm === "duplicate" ? "Crear registro" : "Editar registro " + nombre }}
                           </VCardTitle>
                       </VCardItem>
 
@@ -1236,41 +1270,50 @@ const editarModulo = (modulo) => {
                                       </VCol>
 
                                       <VCol cols="12" >
-                                          <VSelect
-                                            v-model:menu="selectRefCuestionario"
-                                            no-data-text="No existen cuestionario que mostrar"
-                                            append-icon="mdi-refresh"
-                                            @click:append="getCuestionario"
-                                            :disabled="cuestionarioModelLoading"
-                                            item-text="title"
-                                            item-value="value"
-                                            v-model="dataCuestionarioModel" 
-                                            :items="dataCuestionarioItems"
-                                            label="Cuestionario para al final del curso"
-                                            :menu-props="{ maxHeight: '400' }">
-                                            <template v-slot:prepend-item>
-                                              <v-list-item>
-                                                <v-list-item-content>
-                                                  <VTextField v-model="searchCuestionarioModel" clearable placeholder="Buscar cuestionario"/>
-                                                </v-list-item-content>
-                                              </v-list-item>
-                                              <v-divider class="mt-2"></v-divider>
-                                            </template>
-                                            <template #selection="{ item }">
-                                                  <div>
-                                                      {{ item.title }} - {{ item.value }}
-                                                  </div>
-                                              </template>
-                                              <template #item="{ item, props }">
-                                                  <v-list-item v-bind="props">
-                                                      <v-list-item-content>
-                                                          <v-list-item-subtitle>
-                                                              <p>_id: {{ item.value }}</p>
-                                                          </v-list-item-subtitle>
-                                                      </v-list-item-content>
+                                          <VRow>
+                                            <VCol cols="9" >
+                                              <VSelect
+                                                v-model:menu="selectRefCuestionario"
+                                                no-data-text="No existen cuestionario que mostrar"
+                                                append-icon="mdi-refresh"
+                                                @click:append="getCuestionario"
+                                                :disabled="cuestionarioModelLoading"
+                                                item-text="title"
+                                                item-value="value"
+                                                v-model="dataCuestionarioModel" 
+                                                :items="dataCuestionarioItems"
+                                                label="Cuestionario para al final del curso"
+                                                :menu-props="{ maxHeight: '400' }">
+                                                <template v-slot:prepend-item>
+                                                  <v-list-item>
+                                                    <v-list-item-content>
+                                                      <VTextField v-model="searchCuestionarioModel" clearable placeholder="Buscar cuestionario"/>
+                                                    </v-list-item-content>
                                                   </v-list-item>
-                                              </template>
-                                          </VSelect>
+                                                  <v-divider class="mt-2"></v-divider>
+                                                </template>
+                                                <template #selection="{ item }">
+                                                      <div>
+                                                          {{ item.title }} - {{ item.value }}
+                                                      </div>
+                                                  </template>
+                                                  <template #item="{ item, props }">
+                                                      <v-list-item v-bind="props">
+                                                          <v-list-item-content>
+                                                              <v-list-item-subtitle>
+                                                                  <p>_id: {{ item.value }}</p>
+                                                              </v-list-item-subtitle>
+                                                          </v-list-item-content>
+                                                      </v-list-item>
+                                                  </template>
+                                              </VSelect>
+                                            </VCol>
+                                            <VCol cols="3" >
+                                              <VBtn title="Agregar cuestionario" block target="_blank" :to="{ name: 'apps-cuestionarios', params: { id: 0 } }"> 
+                                                Agregar 
+                                              </VBtn>
+                                            </VCol>
+                                          </VRow>
                                       </VCol>
 
                                       <VCol cols="12" >
@@ -1288,7 +1331,7 @@ const editarModulo = (modulo) => {
                                                 :items="dataModuloItems"
                                                 chips
                                                 multiple
-                                                label="Módulos educativos"
+                                                label="Seleccionar el módulo para el curso"
                                                 :menu-props="{ maxHeight: '400' }">
                                                 <template v-slot:prepend-item>
                                                   <v-list-item>
@@ -1423,7 +1466,23 @@ const editarModulo = (modulo) => {
 }
 </style>
 
-<style scoped> 
+<style scoped>
+  /*.v-overlay__scrim {
+      pointer-events: auto;
+      background: rgb(255 255 255);
+      border-radius: inherit;
+      bottom: 0;
+      left: 0;
+      opacity: 100%;
+      position: fixed;
+      right: 0;
+      top: 0;
+      background-image: url(https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Ffondo-backoffice-prueba-2.png);
+      background-position: left;
+      background-repeat: no-repeat;
+      background-size: cover;
+  }*/
+
   .content-edit {
       display: flex;
       flex-direction: column;

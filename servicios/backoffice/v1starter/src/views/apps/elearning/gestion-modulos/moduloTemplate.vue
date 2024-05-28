@@ -114,6 +114,11 @@ async function getCuestionario(page = 1, limit= 10){
       cuestionarioModelLoading.value = false;
       
   } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar los cuestionarios, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
       return console.error(error.message);    
   }
 }
@@ -145,6 +150,11 @@ async function getVideos(page = 1, limit= 10){
       videosItemsCopy.value = videosItems.value;
       videoModelLoading.value = false;
   } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar los videos, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
       return console.error(error.message);    
   }
 }
@@ -238,31 +248,39 @@ function obtenerListaOrdenada(listaA, listaB) {
 }
 //EDIT
 async function onEdit(id){
-    resetForm();     
-    accionForm.value = 'edit';
-    const consulta = await fetch('https://servicio-elearning.vercel.app/modulo/get/' + id);
-    const consultaJson = await consulta.json();
-    const data = consultaJson.data;
+    try{
+      resetForm();     
+      accionForm.value = 'edit';
+      const consulta = await fetch('https://servicio-elearning.vercel.app/modulo/get/' + id);
+      const consultaJson = await consulta.json();
+      const data = consultaJson.data;
 
-    idToEdit.value = data._id;
+      idToEdit.value = data._id;
 
-    tituloModel.value = data.titulo;
-    descripcionModel.value = data.descripcion;
-    if(data.cuestionario){
-      dataCuestionarioModel.value = data.cuestionario._id;
+      tituloModel.value = data.titulo;
+      descripcionModel.value = data.descripcion;
+      if(data.cuestionario){
+        dataCuestionarioModel.value = data.cuestionario._id;
+      }
+
+      videosModel.value = filtrarDesafios(videosItems.value, data.videos.reduce((acumulador, actual) => {
+          acumulador.push(actual._id);
+          return acumulador;
+        }, []));
+
+      isDialogActive.value = true; 
+
+      videosSelectList.value= obtenerListaOrdenada(videosModel.value, data.videos);
+
+      return true;
+    } catch (error) {
+        configSnackbar.value = {
+            message: "No se pudo recuperar los datos para editar, recargue de nuevo.",
+            type: "error",
+            model: true
+        };
+        return console.error(error.message);    
     }
-
-    videosModel.value = filtrarDesafios(videosItems.value, data.videos.reduce((acumulador, actual) => {
-        acumulador.push(actual._id);
-        return acumulador;
-      }, []));
-
-    isDialogActive.value = true; 
-
-    videosSelectList.value= obtenerListaOrdenada(videosModel.value, data.videos);
-
-    return true;
-
 }
 
 //SEND
@@ -558,7 +576,7 @@ const editarVideo = (video) => {
 <template>
   <section>
 
-    <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
+    <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 4000" :color="configSnackbar.type">
                 {{ configSnackbar.message }}
     </VSnackbar>
 
@@ -597,7 +615,21 @@ const editarVideo = (video) => {
         md="12"
         lg="12"
       >
-        <VCard  class="px-5 py-4">
+        <div style="height: 300px;" class="d-flex align-center" v-if="disabledText">
+          <VCard width="300" class="mx-auto mt-5 mb-5" color="primary">
+            <VCardText 
+              class="pt-3"
+            >
+              Cargando datos... espere
+              <VProgressLinear
+                indeterminate
+                color="white"
+                class="mb-0"
+              />
+            </VCardText>
+          </VCard>
+        </div>
+        <VCard v-else class="px-5 py-4">
             <VCardItem class="text-center">
                 <VCardTitle class="text-h5 mb-3">
                     {{ accionForm == "add"? "Crear módulo":"Editar módulo" }}
