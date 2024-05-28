@@ -1,7 +1,3 @@
-
-
-
-
 <template>
   <div>
     <AppDateTimePicker
@@ -38,66 +34,90 @@
       </tbody>
     </table>
 
-    <div>Total de registros: {{ totalRegistros }}</div>
+    <div>{{ totalRegistrosHtml }}</div>
 
     <VPagination
       :total-visible="5"
       v-model="currentPage"
       :length="totalRegistros"
       class="mt-4"
-      @click.native="handlePaginationClick"
+      @click="handlePaginationClick"
     />
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 
 const fechaIngresada = ref(null);
 const data = ref([]);
 const currentPage = ref(1);
-const totalRegistros = ref(0);
+const totalRegistros = ref(1);
 const itemsPerPage = 10;
+const totalRegistrosHtml = ref(1);
+const paginatedData = ref([]);
 
-
-const paginatedData = computed(() => {
-  if (data.value && data.value.length > 0) {
-    const startIndex = (currentPage.value - 1) * itemsPerPage;
-    const endIndex = startIndex + itemsPerPage;
-    return data.value.slice(startIndex, endIndex);
-  } else {
-    return [];
-  }
+const fechaIngesada = ref({
+  start: new Date(new Date().setDate(new Date().getDate() - 5)).toISOString().slice(0, 10), // 3 días antes de la fecha actual
+  end: new Date().toISOString().slice(0, 10) // Fecha actual
 });
 
-const handlePaginationClick = (page) => {
-  console.log(page);
-  currentPage.value = page;
-  fetchData();
+onMounted(() => {
+  // getCampaigns(1, 10, fechaIngesada.value.start, fechaIngesada.value.end);
+  fetchData(currentPage.value, 10,fechaIngesada.value.start, fechaIngesada.value.end);
+});
+
+
+
+// const paginatedData = computed(() => {
+//   const startIndex = (currentPage.value - 1) * itemsPerPage;
+//   const endIndex = startIndex + itemsPerPage;
+//   return data.value.slice(startIndex, endIndex);
+// });
+
+// const handlePaginationClick = (page) => {
+//   currentPage.value = page;
+//   console.log(currentPage.value);
+// };
+
+const handlePaginationClick = async () => {
+  await fetchData(currentPage.value, 10, fechaIngesada.value.start, fechaIngesada.value.end);
+
 };
 
 const resolveFechaSelected = (fechas) => {
   if (fechas && fechas.length === 2) {
-    const [fechaInicial, fechaFinal] = fechas;
-    const fechaInicialFormateada = fechaInicial.toISOString().split('T')[0];
-    const fechaFinalFormateada = fechaFinal.toISOString().split('T')[0];
-    fechaIngresada.value = fechas;
-    fetchData(fechaInicialFormateada, fechaFinalFormateada);
+    const [start, end] = fechas;
+
+    fechaIngesada.value = {
+      start: start.toISOString().split('T')[0],
+      end: end.toISOString().split('T')[0],
+    };
+
+    // const fechaInicialFormateada = fechaInicial.toISOString().split('T')[0];
+    // const fechaFinalFormateada = fechaFinal.toISOString().split('T')[0];
+    fetchData(currentPage.value, 10,fechaIngesada.value.start, fechaIngesada.value.end);
   }
 };
 
-const fetchData = async (fechaInicial = '2024-05-22', fechaFinal = '2024-05-27') => {
-  const url = `https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechaInicial}&fechaf=${fechaFinal}&limit=500&page=${currentPage.value}&idCurso=664e32d4fa50c162c4a2e5c8`;
+const fetchData = async (page = 1, limit = 10, fechaInicial, fechaFinal) => {
+  const url = `https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechaInicial}&fechaf=${fechaFinal}&limit=${limit}&page=${page}&idCurso=664e32d4fa50c162c4a2e5c8`;
 
   try {
     const response = await fetch(url);
     const jsonData = await response.json();
     data.value = jsonData.data;
-    totalRegistros.value = jsonData.total;
+    totalRegistrosHtml.value = jsonData.total;
+    paginatedData.value = jsonData.data;
+    // totalRegistros.value = jsonData.total;
+    totalRegistros.value = Math.ceil(jsonData.total / jsonData.limit);
+    console.log(jsonData.limit);
+    console.log(jsonData.total);
+
   } catch (error) {
     console.error('Error al obtener los datos:', error);
   }
 };
 
-fetchData();
+
 </script>
