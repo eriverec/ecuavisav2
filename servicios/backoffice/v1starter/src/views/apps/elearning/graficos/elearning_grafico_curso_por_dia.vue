@@ -293,7 +293,8 @@ const resolveDeviceTimeLine = computed(() => {
               };
           }
           transformedData[subitem.curso].data.push([
-              moment(item.fecha).add(1, 'days').valueOf(),
+              // moment(item.fecha).add(1, 'days').valueOf(),
+              moment(item.fecha).valueOf(),
               subitem.totalRegistrados
           ]);
       });
