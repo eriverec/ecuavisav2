@@ -1,8 +1,17 @@
+
+
+
+
 <template>
   <div>
-
-    <AppDateTimePicker style="width: 400px;" prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngesada" show-current=true
-      @on-change="resolveFechaSelected" :config="{
+    <AppDateTimePicker
+      style="width: 400px"
+      prepend-inner-icon="tabler-calendar"
+      density="compact"
+      v-model="fechaIngresada"
+      show-current
+      @on-change="resolveFechaSelected"
+      :config="{
         position: 'auto right',
         mode: 'range',
         altFormat: 'F j, Y',
@@ -10,139 +19,85 @@
         maxDate: new Date(),
         minDate: new Date('2023-04-09'),
         reactive: true,
-        clearable: true
+        clearable: true,
+      }"
+    />
 
-      }" />
-
-
-    <VTable class="text-no-wrap tableNavegacion mt-5 mb-5">
+    <table>
       <thead>
         <tr>
-          <th scope="col">Nombre</th>
-          <th scope="col">Apellido</th>
-          <th scope="col">Correo</th>
-
+          <th>First Name</th>
+          <th>Last Name</th>
         </tr>
       </thead>
-
       <tbody>
-        <tr v-for="(user, index) of dataCampaigns" :key="index">
-          <td class="text-medium-emphasis">
-            {{ user.first_name }}
-          </td>
-          <td class="text-medium-emphasis">
-            {{ user.last_name }}
-          </td>
-          <td class="text-medium-emphasis">
-            {{ user.email }}
-          </td>
+        <tr v-for="item in paginatedData" :key="item._id">
+          <td>{{ item.first_name }}</td>
+          <td>{{ item.last_name }}</td>
         </tr>
       </tbody>
-    </VTable>
+    </table>
 
+    <div>Total de registros: {{ totalRegistros }}</div>
 
-    <span class="text-sm text-disabled">
-      Total de registros {{ totalRegistrosHtml }}
-    </span>
-
-    <VPagination :total-visible="5" v-model="currentPage" :length="totalRegistros" class="mt-4"
-      @click="handlePaginationClick" />
-
+    <VPagination
+      :total-visible="5"
+      v-model="currentPage"
+      :length="totalRegistros"
+      class="mt-4"
+      @click.native="handlePaginationClick"
+    />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, computed } from 'vue';
+import { ref, computed } from 'vue';
 
+const fechaIngresada = ref(null);
+const data = ref([]);
 const currentPage = ref(1);
-const totalRegistros = ref(1);
-const totalRegistrosHtml = ref(1);
-const dataCampaigns = ref([]);
-
-import { extendMoment } from 'moment-range';
-import Moment from 'moment-timezone';
-import esLocale from "moment/locale/es";
-
-const moment = extendMoment(Moment);
-moment.locale('es', [esLocale]);
-moment.tz.setDefault('America/Guayaquil');
-
-const fechaIngesada = ref({
-  start: new Date(new Date().setDate(new Date().getDate() - 5)).toISOString().slice(0, 10), // 3 días antes de la fecha actual
-  end: new Date().toISOString().slice(0, 10) // Fecha actual
-});
-
-// onMounted(getCampaigns)
-
-onMounted(() => {
-  getCampaigns(1, 10, fechaIngesada.value.start, fechaIngesada.value.end);
-});
-
-async function getCampaigns(page = 1, limit = 10, fechai, fechaf) {
-  try {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-
-    // https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=2024-05-22&fechaf=2024-05-27&limit=500&page=1&idCurso=664e32d4fa50c162c4a2e5c8
-    var response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechai}&fechaf=${fechaf}&page=${page}&limit=${limit}&idCurso=664e32d4fa50c162c4a2e5c8`, requestOptions);
-    const data = await response.json();
-
-    console.log(data);
-
-    dataCampaigns.value = data.data;
-    totalRegistrosHtml.value = data.total;
-    totalRegistros.value = Math.ceil(data.total / limit);
-  } catch (error) {
-    return console.error(error.message);
-  }
-}
-
-const handlePaginationClick = async () => {
-  await getCampaigns(currentPage.value, 10, fechaIngesada.value.start, fechaIngesada.value.end);
-
-};
-
-// const search = () => {
-//   currentPage.value = 1; // Reset current page to 1 when searching
-//   getCampaigns(currentPage.value, 10, fechaIngesada.value.start, fechaIngesada.value.end);
-// };
-
-// const filteredUsers = computed(() => {
-//   return dataCampaigns.value.filter(user => {
-//     return user.first_name.toLowerCase().includes(searchTerm.value.toLowerCase()) || user.last_name.toLowerCase().includes(searchTerm.value.toLowerCase());
-//   });
-// });
+const totalRegistros = ref(0);
+const itemsPerPage = 10;
 
 
-const resolveFechaSelected = async (fechaSeleccionada) => {
-
-  if (typeof fechaSeleccionada === 'string') {
-    const [start, end] = fechaSeleccionada.split(' a ');
-
-    fechaIngesada.value = {
-      start: moment(start, 'DD-MM-YYYY').format('YYYY-MM-DD'),
-      end: moment(end, 'DD-MM-YYYY').format('YYYY-MM-DD'),
-    };
-
-    await getCampaigns(1, 10, fechaIngesada.value.start, fechaIngesada.value.end);
+const paginatedData = computed(() => {
+  if (data.value && data.value.length > 0) {
+    const startIndex = (currentPage.value - 1) * itemsPerPage;
+    const endIndex = startIndex + itemsPerPage;
+    return data.value.slice(startIndex, endIndex);
   } else {
-    console.error('El valor de fechaSeleccionada no es una cadena de texto');
+    return [];
   }
+});
 
-  console.log(fechaIngesada.value);
+const handlePaginationClick = (page) => {
+  console.log(page);
+  currentPage.value = page;
+  fetchData();
 };
 
-// const resolveFechaSelected = (fechaSeleccionada) => {
-//   fechaIngesada.value = fechaSeleccionada;
-//   // console.log(fechaIngesada.value);
+const resolveFechaSelected = (fechas) => {
+  if (fechas && fechas.length === 2) {
+    const [fechaInicial, fechaFinal] = fechas;
+    const fechaInicialFormateada = fechaInicial.toISOString().split('T')[0];
+    const fechaFinalFormateada = fechaFinal.toISOString().split('T')[0];
+    fechaIngresada.value = fechas;
+    fetchData(fechaInicialFormateada, fechaFinalFormateada);
+  }
+};
 
-//   console.log(fechaIngesada.value.start);
-//   // getCampaigns(currentPage.value, 10, fechaIngesada.value.start, fechaIngesada.value.end);
-// };
+const fetchData = async (fechaInicial = '2024-05-22', fechaFinal = '2024-05-27') => {
+  const url = `https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechaInicial}&fechaf=${fechaFinal}&limit=500&page=${currentPage.value}&idCurso=664e32d4fa50c162c4a2e5c8`;
+
+  try {
+    const response = await fetch(url);
+    const jsonData = await response.json();
+    data.value = jsonData.data;
+    totalRegistros.value = jsonData.total;
+  } catch (error) {
+    console.error('Error al obtener los datos:', error);
+  }
+};
+
+fetchData();
 </script>
