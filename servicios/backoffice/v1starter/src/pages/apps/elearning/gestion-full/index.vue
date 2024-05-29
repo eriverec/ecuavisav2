@@ -6,7 +6,7 @@ import esLocale from "moment/locale/es";
 import 'vue3-form-wizard/dist/style.css';
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
-
+    
 const currentStep = ref(0);
 const steps = [
   {
@@ -36,7 +36,7 @@ const steps = [
 /*FILE INPUT*/
 const editingImage = ref(false); // Modo de edición de imagen
 const isEditing = ref(false); // Indica si estamos editando
-let files = [];
+var files = [];
 const imageUrl = ref(''); // URL de la imagen existente (se llenará al editar)
 const cambioImagen = ref(false); // URL de la imagen existente (se llenará al editar)
 const fileInputRef = ref(null);// Referencia para el VFileInput
@@ -50,6 +50,7 @@ const categoriaModelLoading = ref(false);
 const etiquetasModelLoading = ref(false);
 
 const fechaHoy = moment().format("YYYY-MM-DD");
+const fechaHoyFormated = moment().format("DD-MM-YYYY");
 const fechaIFModel = ref({
   fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
   fechasVModel: [parseISO(fechaHoy)],
@@ -62,9 +63,9 @@ const fechaIFModel = ref({
       valueFormat: 'd-m-Y',
       reactive: true
   },
-  fechai: fechaHoy,
-  fechaV: fechaHoy,
-  fechaf: fechaHoy
+  fechai: fechaHoyFormated,
+  fechaV: fechaHoyFormated,
+  fechaf: fechaHoyFormated
 })
 
 
@@ -241,9 +242,9 @@ function resetForm(){
       fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
       fechasVModel: [parseISO(fechaHoy)],
       fechasVConfig: fechaIFModel.value.fechasVConfig,
-      fechai: fechaHoy,
-      fechaV: fechaHoy,
-      fechaf: fechaHoy
+      fechai: fechaHoyFormated,
+      fechaV: fechaHoyFormated,
+      fechaf: fechaHoyFormated
     }
 }
 
@@ -423,12 +424,24 @@ const handleFileUpload = (event) => {
           type: "error",
           model: true
       };
+      thumbnailCursoModel.value = [];
       fileInputIsValid.value = false;
-      return false; // Salir de la función sin asignar los archivos
+      return false; 
+    }
+    if(file.type !== 'image/jpeg'){
+      configSnackbar.value = {
+          message: `El archivo ${file.name} debe ser un JPG válido`,
+          type: "error",
+          model: true
+      };
+      thumbnailCursoModel.value = [];
+      fileInputIsValid.value = false;
+      return false; 
     }
   }
 
-  files.value = Array.from(fileList);
+  files = Array.from(fileList);
+  console.log(files);
   cambioImagen.value = true;
 
   // Actualizar la URL de la imagen para la previsualización
@@ -875,9 +888,9 @@ function guardarLocalVideo (){
     }
   accionVideoLocal.value = 'add';  
 
-  console.log("videosFull", videosFull.value);
-  console.log("videosGeneradosLocal", videosGeneradosLocal.value);
-  console.log("videosItems", videosItems.value);
+  //console.log("videosFull", videosFull.value);
+  //console.log("videosGeneradosLocal", videosGeneradosLocal.value);
+  //console.log("videosItems", videosItems.value);
   
   resetFormVideo();
 }
@@ -925,14 +938,14 @@ function onEditModuloLocal(id){
   tituloModuloModel.value = modulo.titulo;
   dataCuestionarioModuloModel.value = modulo.idCuestionario;
   descripcionModuloModel.value = modulo.descripcion;
-  console.log('modulo.videos ',modulo.videos);
+  //console.log('modulo.videos ',modulo.videos);
   videosModuloModel.value = filtrarDesafios(videosItems.value, modulo.videos.reduce((acumulador, actual) => {
         acumulador.push(actual.value);
         return acumulador;
   }, []));
-  console.log("videosModuloModelOnEdit", videosModuloModel.value);
+  //console.log("videosModuloModelOnEdit", videosModuloModel.value);
   videosSelectListModulo.value = obtenerListaOrdenada(videosModuloModel.value, modulo.videos);
-  console.log("videosSelectListModuloOnEdit", videosSelectListModulo.value);
+  //console.log("videosSelectListModuloOnEdit", videosSelectListModulo.value);
   
 }
 
@@ -1004,9 +1017,9 @@ function guardarLocalModulo (){
     }
     accionModuloLocal.value = 'add';
 
-    console.log("modulosFull", modulosFull.value);
-    console.log("modulosGeneradosLocal", modulosGeneradosLocal.value);
-    console.log("modulosItems", dataModuloItems.value);
+    //console.log("modulosFull", modulosFull.value);
+    //console.log("modulosGeneradosLocal", modulosGeneradosLocal.value);
+    //console.log("modulosItems", dataModuloItems.value);
     resetFormModulo();
 }
 // Funciones para manejar el cambio de paginación módulos
@@ -1031,6 +1044,7 @@ const prevPageModuloLocal = () => {
 
 
 // -------------------------- Aplicar cambios de curso en local --------------------------
+const cursoFormatedEnvio = ref(null);
 async function onApply() {
   //Validar curso
   if (
@@ -1042,17 +1056,17 @@ async function onApply() {
         !duracionCursoModel.value
       ){
         configSnackbar.value = {
-            message: "Llenar todos los campos del curso para mostrar la previsualización",
+            message: "Llenar todos los campos del curso para aplciar cambios",
             type: "error",
             model: true
         };
         return false;
     }
 
-    console.log("modulosFull" , modulosFull.value);
-    console.log("videosFull" , videosFull.value);
+    //console.log("modulosFull" , modulosFull.value);
+    //console.log("videosFull" , videosFull.value);
     var modulosSelected = deepClone(obtenerValorYPosicionCurso());
-    console.log("modulosSelected" , modulosSelected);
+    //console.log("modulosSelected" , modulosSelected);
     var modulosFullClone = deepClone(modulosFull.value);
     var modulosResult = modulosFullClone.filter(fullItem => 
       modulosSelected.some(selectedItem => selectedItem.value === fullItem._id)
@@ -1072,7 +1086,7 @@ async function onApply() {
           titulo: tituloCursoModel.value,
           descripcion: descripcionCursoModel.value,
           idRudo: idCursoRudoModel.value,
-          thumbnail: thumbnailCursoModel.value,
+          //thumbnail: thumbnailCursoModel.value,
           duracion: duracionCursoModel.value,
           categoria: categoriaCursoModel.value,
           etiquetas: etiquetasCursoModel.value,
@@ -1084,14 +1098,275 @@ async function onApply() {
           modulos: modulosResult
     }  
 
-    cursoLocal.value = curso;   
-    console.log("curso" , cursoLocal.value);
+    let cursoEnvio = {
+          titulo: tituloCursoModel.value,
+          descripcion: descripcionCursoModel.value,
+          idRudo: idCursoRudoModel.value,
+          //thumbnail: thumbnailCursoModel.value,
+          duracion: duracionCursoModel.value,
+          categoria: categoriaCursoModel.value,
+          etiquetas: etiquetasCursoModel.value,
+          idCuestionario: dataCuestionarioCursoModel.value,
+          fechai: fechaIFModel.value.fechai,
+          fechaf: fechaIFModel.value.fechaf,
+          fechaVencimiento: fechaIFModel.value.fechaV,
+          estado: estadoCursoModel.value,
+          modulos: obtenerValorYPosicionCurso()
+    }  
+
+    cursoLocal.value = curso; 
+    cursoFormatedEnvio.value = cursoEnvio;
+    //console.log("cursoLocal" , cursoLocal.value);
 }
 
 
 //-----------------------------------------------SEND-------------------------------------------------
 //----------------------------------------------------------------------------------------------------
+const creandoRegistros = ref(false);
+function validarFecha(fecha) {
+    // Define el formato de fecha esperado
+    const formato = 'DD-MM-YYYY';
+    
+    // Intenta analizar la fecha en el formato especificado
+    const fechaValida = moment(fecha, formato, true);
+
+    // Verifica si la fecha analizada es válida y coincide exactamente con el formato especificado
+    if (fechaValida.isValid() && fechaValida.format(formato) === fecha) {
+        return true;
+    } else {
+        return false;
+    }
+}
 async function onComplete() {
+  
+  //Validar archivos
+  if (files.length == 0) {
+    configSnackbar.value = {
+            message: "Debe subir una imágen JPG",
+            type: "error",
+            model: true
+    };
+    return false;
+  }
+  //Validar curso
+  if(cursoLocal.value == null || !cursoLocal.value){
+    configSnackbar.value = {
+            message: "Debe darle click a aplicar para crear los registros",
+            type: "error",
+            model: true
+        };
+        return false;
+  }
+  //Validar cuestionario
+  let preguntasEnviar = preguntasCuestionario.value; 
+    let tituloValid = tituloCuestionario.value;
+
+  if(!Array.isArray(tagsCuestionario.value) && tagsCuestionario.value != null && tagsCuestionario.value != ""){
+      tagsCuestionario.value = [tagsCuestionario.value];
+  }
+
+  if (!validarArreglo(preguntasEnviar) || !tituloValid || tituloValid == "" || !descripcionCuestionario.value || tagsCuestionario.value.length == 0
+     || puntosNecesariosCuestionario.value == null || fechaLimiteCuestionario.value == '' || limiteTiempoCuestionario.value == null) {
+    configSnackbar.value = {
+                    message: "Debe llenar todos los campos del cuestionario",
+                    type: "error",
+                    model: true
+    };
+    return false;
+  }
+  puntosNecesariosCuestionario.value = parseInt(puntosNecesariosCuestionario.value);
+
+  var preguntasFormated = preguntasEnviar.map(item => ({
+    ...item, 
+    puntaje: parseInt(item.puntaje) 
+  })); 
+
+  creandoRegistros.value = true;
+  configSnackbar.value = {
+            message: "Creando los registros, espere por favor",
+            type: "primary",
+            model: true,
+            location: "center",
+            timeout: 3000
+  };
+
+  const myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+
+  try {
+     
+    //Paso 1: Crear videos
+    var idsVideosCreados = [];
+    for (let video of videosGeneradosLocal.value) {
+      let jsonEnviarVideo = {
+            "titulo": video.titulo,
+            "descripcion": video.descripcion,
+            "idRudo": video.idRudo,
+            "thumbnail": video.thumbnail,
+            "duracion": video.duracion,
+            "categoria": video.categoria,
+            "etiquetas": video.etiquetas
+      }
+      const sendVideo = await fetch('https://servicio-elearning.vercel.app/video/create', {
+                method: 'POST',
+                headers: myHeaders,
+                body: JSON.stringify(jsonEnviarVideo),
+                redirect: 'follow'
+      }); 
+
+      if (!sendVideo.ok) {
+        const errorText = await sendVideo.text();
+        throw new Error(`Error al crear video: ${sendVideo.status} ${sendVideo.statusText} - ${errorText}`);
+      }
+      const respuestaVideo = await sendVideo.json(); 
+      
+      idsVideosCreados.push({
+        _id: respuestaVideo.id,
+        idLocal: video._id
+      });
+    }
+    
+    console.log('idsVideosCreados', idsVideosCreados);
+    //Fin de crear videos
+
+    //Paso 2: Reemplazar ids locales de videos en módulos
+    var modulosGenerados = deepClone(modulosGeneradosLocal.value);
+    for(let modulo of modulosGenerados){
+      for (let i = 0; i < modulo.videos.length; i++) {
+        let videoEncontrado = idsVideosCreados.find(item => item.idLocal == modulo.videos[i].value);      
+          if (videoEncontrado) {
+            modulo.videos[i].value = videoEncontrado._id;          
+          }
+          //console.log('videoEncontrado', videoEncontrado);
+        
+      }
+    }
+    console.log('modulosGeneradosLocal', modulosGeneradosLocal.value);
+    console.log('modulosGenerados idsVideos reemplazados', modulosGenerados);
+
+    //Fin de Reemplazar ids locales de videos en módulos
+
+    //Paso 3 :Crear módulos
+    var idsModulosCreados = [];
+    for(let modulo of modulosGenerados){
+      let jsonEnviarModulo = {
+          "titulo": modulo.titulo,
+          "descripcion": modulo.descripcion,
+          "idCuestionario": modulo.idCuestionario || null,
+          "videos": modulo.videos
+      }
+      const sendModulo = await fetch('https://servicio-elearning.vercel.app/modulo/create', {
+              method: 'POST',
+              headers: myHeaders,
+              body: JSON.stringify(jsonEnviarModulo),
+              redirect: 'follow'
+      });
+      if (!sendModulo.ok) {
+        const errorText = await sendModulo.text();
+        throw new Error(`Error al crear módulo: ${sendModulo.status} ${sendModulo.statusText} - ${errorText}`);
+      }
+      const respuestaModulo = await sendModulo.json();
+
+      idsModulosCreados.push({
+        _id: respuestaModulo.id,
+        idLocal: modulo._id
+      });
+    }
+    console.log('idsModulosCreados', idsModulosCreados);
+    //Fin de Crear módulos
+
+    //Paso 4: Reemplazar ids locales de modulos en el curso
+    var cursoFinal = deepClone(cursoFormatedEnvio.value);
+    for (let i = 0; i < cursoFinal.modulos.length; i++) {
+      let moduloEncontrado = idsModulosCreados.find(item => item.idLocal == cursoFinal.modulos[i].value);
+      if (moduloEncontrado) {
+        cursoFinal.modulos[i].value = moduloEncontrado._id;
+      }
+    }
+    console.log('cursoAntes', cursoFormatedEnvio.value);
+    console.log('cursoFinal', cursoFinal);
+    //Fin de Reemplazar ids locales de modulos en el curso
+
+    //Paso 5: Crear el curso
+    let jsonEnviarCurso = {
+          "titulo": cursoFinal.titulo,
+          "descripcion": cursoFinal.descripcion,
+          "idRudo": cursoFinal.idRudo,
+          // "thumbnail": thumbnailCursoModel.value,
+          "duracion": cursoFinal.duracion,
+          "categoria": cursoFinal.categoria,
+          "etiquetas": cursoFinal.etiquetas,
+          "idCuestionario": cursoFinal.idCuestionario,
+          "fechai": cursoFinal.fechai,
+          "fechaf": cursoFinal.fechai,
+          "fechaVencimiento": cursoFinal.fechaVencimiento,
+          "estado": cursoFinal.estado,
+          "modulos": cursoFinal.modulos
+    }  
+    var rawCurso = JSON.stringify(jsonEnviarCurso);
+    const formDataCurso = new FormData();
+    formDataCurso.append("raw", rawCurso);
+
+    files.forEach(file => {
+      formDataCurso.append('files', file);
+    });
+    const sendCurso = await fetch('https://servicio-elearning.vercel.app/curso/create/file', {
+              method: 'POST',
+              // headers: myHeaders,
+              // body: JSON.stringify(jsonEnviarCurso),
+              body: formDataCurso,
+              // redirect: 'follow'
+    });
+    if (!sendCurso.ok) {
+      const errorText = await sendCurso.text();
+      throw new Error(`Error al crear curso: ${sendCurso.status} ${sendCurso.statusText} - ${errorText}`);
+    }
+    const respuestaCurso = await sendCurso.json();
+    console.log('respuestaCurso', respuestaCurso);
+    //Fin de Crear el curso
+
+    //Paso 6: Crear cuestionario
+    let jsonEnviarCuestionario ={
+            "titulo": tituloCuestionario.value,
+            "descripcion": descripcionCuestionario.value,
+            "tags": tagsCuestionario.value,
+            "puntosNecesarios": puntosNecesariosCuestionario.value,
+            "preguntas": preguntasFormated,
+            "fechaLimite": fechaLimiteCuestionario.value,
+            "limiteTiempo": limiteTiempoCuestionario.value 
+    }
+    //console.log('jsonEnviarCuestionario', jsonEnviarCuestionario);
+    
+    const sendCuestionario = await fetch('https://e-learning-cuestionario.vercel.app/cuestionarios/create', {
+              method: 'POST',
+              headers: myHeaders,
+              body: JSON.stringify(jsonEnviarCuestionario),
+              redirect: 'follow'
+    });
+    if (!sendCuestionario.ok) {
+      const errorText = await sendCuestionario.text();
+      throw new Error(`Error al crear cuestionario: ${sendCuestionario.status} ${sendCuestionario.statusText} - ${errorText}`);
+    }
+    const respuestaCuestionario = await sendCuestionario.json();
+    console.log('respuestaCuestionario', respuestaCuestionario);
+    
+    
+    //Fin de Crear cuestionario
+    
+  } catch (error) {
+    creandoRegistros.value = false;
+    return console.error('Se ha producido un error al guardar los registros', error.toString());
+  }
+  creandoRegistros.value = false;
+  configSnackbar.value = {
+            message: "Se han creado los registros correctamente",
+            type: "success",
+            model: true,
+  };
+  
+}
+
+async function onCompleteOld() {
   //Validar curso
   if (
         !categoriaCursoModel.value || 
@@ -1211,7 +1486,7 @@ async function onComplete() {
             "preguntas": preguntasFormated,
             "fechaLimite": fechaLimiteCuestionario.value,
             "limiteTiempo": limiteTiempoCuestionario.value 
-        }
+    }
 
     console.log('curso nuevo',jsonEnviarCurso);
     console.log('modulo nuevo',jsonEnviarModulo);
@@ -1225,13 +1500,13 @@ async function onComplete() {
               // body: JSON.stringify(jsonEnviarCurso),
               body: formDataCurso,
               // redirect: 'follow'
-      });
+    });
     const sendModulo = await fetch('https://servicio-elearning.vercel.app/modulo/create', {
               method: 'POST',
               headers: myHeaders,
               body: JSON.stringify(jsonEnviarModulo),
               redirect: 'follow'
-      });
+    });
     const sendVideo = await fetch('https://servicio-elearning.vercel.app/video/create', {
               method: 'POST',
               headers: myHeaders,
@@ -1297,8 +1572,8 @@ async function onComplete() {
 
 <template>
     <section>
-        
-        <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :timeout="configSnackbar.timeout || 2500" :color="configSnackbar.type">
+        <div v-if="creandoRegistros" id="overlay"></div>
+        <VSnackbar v-model="configSnackbar.model" :location="configSnackbar.location ||'top end'" variant="flat" :timeout="configSnackbar.timeout || 2500" :color="configSnackbar.type">
             {{ configSnackbar.message }}
         </VSnackbar>
         <VCard>
@@ -2265,7 +2540,14 @@ async function onComplete() {
   border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)); 
   border-radius: 4px;
 }
-
-
+#overlay {
+    position: fixed;       
+    top: 0;                
+    left: 0;               
+    width: 100%;           
+    height: 100%;          
+    background-color: rgba(0, 0, 0, 0.2); /* Color de fondo negro con transparencia del 20% */
+    z-index: 1000;         
+}
 
 </style>
