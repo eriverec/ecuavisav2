@@ -1197,7 +1197,10 @@ async function onComplete() {
      
     //Paso 1: Crear videos
     var idsVideosCreados = [];
-    for (let video of videosGeneradosLocal.value) {
+    var modulosGenerados; 
+
+    if(videosGeneradosLocal.value.length > 0){
+      for (let video of videosGeneradosLocal.value) {
       let jsonEnviarVideo = {
             "titulo": video.titulo,
             "descripcion": video.descripcion,
@@ -1225,12 +1228,14 @@ async function onComplete() {
         idLocal: video._id
       });
     }
-    
     console.log('idsVideosCreados', idsVideosCreados);
     //Fin de crear videos
 
-    //Paso 2: Reemplazar ids locales de videos en módulos
-    var modulosGenerados = deepClone(modulosGeneradosLocal.value);
+    var idsModulosCreados = [];
+    
+    if(modulosGeneradosLocal.value.length > 0){
+      //Paso 2: Reemplazar ids locales de videos en módulos
+    modulosGenerados = deepClone(modulosGeneradosLocal.value);
     for(let modulo of modulosGenerados){
       for (let i = 0; i < modulo.videos.length; i++) {
         let videoEncontrado = idsVideosCreados.find(item => item.idLocal == modulo.videos[i].value);      
@@ -1246,34 +1251,37 @@ async function onComplete() {
 
     //Fin de Reemplazar ids locales de videos en módulos
 
-    //Paso 3 :Crear módulos
-    var idsModulosCreados = [];
-    for(let modulo of modulosGenerados){
-      let jsonEnviarModulo = {
-          "titulo": modulo.titulo,
-          "descripcion": modulo.descripcion,
-          "idCuestionario": modulo.idCuestionario || null,
-          "videos": modulo.videos
-      }
-      const sendModulo = await fetch('https://servicio-elearning.vercel.app/modulo/create', {
-              method: 'POST',
-              headers: myHeaders,
-              body: JSON.stringify(jsonEnviarModulo),
-              redirect: 'follow'
-      });
-      if (!sendModulo.ok) {
-        const errorText = await sendModulo.text();
-        throw new Error(`Error al crear módulo: ${sendModulo.status} ${sendModulo.statusText} - ${errorText}`);
-      }
-      const respuestaModulo = await sendModulo.json();
+      //Paso 3 :Crear módulos
+      
+      for(let modulo of modulosGenerados){
+        let jsonEnviarModulo = {
+            "titulo": modulo.titulo,
+            "descripcion": modulo.descripcion,
+            "idCuestionario": modulo.idCuestionario || null,
+            "videos": modulo.videos
+        }
+        const sendModulo = await fetch('https://servicio-elearning.vercel.app/modulo/create', {
+                method: 'POST',
+                headers: myHeaders,
+                body: JSON.stringify(jsonEnviarModulo),
+                redirect: 'follow'
+        });
+        if (!sendModulo.ok) {
+          const errorText = await sendModulo.text();
+          throw new Error(`Error al crear módulo: ${sendModulo.status} ${sendModulo.statusText} - ${errorText}`);
+        }
+        const respuestaModulo = await sendModulo.json();
 
-      idsModulosCreados.push({
-        _id: respuestaModulo.id,
-        idLocal: modulo._id
-      });
+        idsModulosCreados.push({
+          _id: respuestaModulo.id,
+          idLocal: modulo._id
+        });
+      }
+      console.log('idsModulosCreados', idsModulosCreados);
+      //Fin de Crear módulos
+      }
     }
-    console.log('idsModulosCreados', idsModulosCreados);
-    //Fin de Crear módulos
+  
 
     //Paso 4: Reemplazar ids locales de modulos en el curso
     var cursoFinal = deepClone(cursoFormatedEnvio.value);
