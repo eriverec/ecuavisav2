@@ -25,18 +25,20 @@
   const moduloModelLoading = ref(true);
   const searchModuloModel  = ref("");
   const isFullLoading = ref(false);
+
+  const fechaFin = moment().format("YYYY-MM-DD");
+  const fechaInicio = moment().subtract(30, 'days').format("YYYY-MM-DD");
+
   const fecha = ref({
-    inicio: moment().format("YYYY-MM-DD"),
-    fin:  moment().format("YYYY-MM-DD")
+    inicio: fechaInicio,
+    fin: fechaFin
   });
+
   const configSnackbar = ref({
       message: "Datos guardados",
       type: "success",
       model: false
   });
-
-  const fechaHoy = moment().format("YYYY-MM-DD");
-  const yesterday = moment().subtract(1, 'days').format("YYYY-MM-DD");
 
   const headersGlobal = ref({
     _id: "_id",
@@ -71,20 +73,20 @@
   });
 
   const fechaIFModel = ref({
-    fechasModel: [parseISO(yesterday), parseISO(fechaHoy)],
-    fechasVModel: [parseISO(fechaHoy)],
+    fechasModel: [parseISO(fechaInicio), parseISO(fechaFin)],
+    fechasVModel: [parseISO(fechaFin)],
     fechasVConfig: {
         position: 'auto right',
         mode: 'single',
-        minDate: parseISO(fechaHoy),
+        minDate: parseISO(fechaFin),
         altFormat: 'd F j, Y',
         dateFormat: 'l, j \\d\\e F \\d\\e Y',
         valueFormat: 'd-m-Y',
         reactive: true
     },
-    fechai: fechaHoy,
-    fechaV: fechaHoy,
-    fechaf: fechaHoy
+    fechai: fechaInicio,
+    fechaV: fechaFin,
+    fechaf: fechaFin
   })
 
   // 👉 watching current page
