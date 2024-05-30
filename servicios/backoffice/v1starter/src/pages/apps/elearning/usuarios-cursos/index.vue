@@ -22,8 +22,8 @@
   const dataCurso = ref("");
   const dataCursoCopy = ref("");
   const selectRefModulo = ref(null);
-  const moduloModelLoading = ref(true);
-  const searchModuloModel  = ref("");
+  const cursoModelLoading = ref(true);
+  const searchCursoModel  = ref("");
   const isFullLoading = ref(false);
 
   const fechaFin = moment().format("YYYY-MM-DD");
@@ -112,7 +112,7 @@
   })
 
   onMounted(async () => {
-    await getModulos();
+    await getCursosAll();
     await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
   });
 
@@ -156,9 +156,9 @@
   }
 
   //Curso
-  async function getModulos(page = 1, limit= 10){
+  async function getCursosAll(page = 1, limit= 10){
     try {
-        moduloModelLoading.value = true;
+        cursoModelLoading.value = true;
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
@@ -181,7 +181,7 @@
         dataCursoCopy.value = dataCurso.value;
         modelCurso.value = dataCurso.value[0].value;
 
-        moduloModelLoading.value = false;
+        cursoModelLoading.value = false;
         
     } catch (error) {
         configSnackbar.value = {
@@ -193,12 +193,12 @@
     }
   }
 
-  watch(async () => searchModuloModel.value, async () => {
-    if (!searchModuloModel.value) {
+  watch(async () => searchCursoModel.value, async () => {
+    if (!searchCursoModel.value) {
       dataCurso.value = dataCursoCopy.value;
     }else{
       dataCurso.value = dataCursoCopy.value.filter((c) => {
-        return (c.title.toLowerCase().indexOf(searchModuloModel.value.toLowerCase()) > -1) || c.value.indexOf(searchModuloModel.value) > -1;
+        return (c.title.toLowerCase().indexOf(searchCursoModel.value.toLowerCase()) > -1) || c.value.indexOf(searchCursoModel.value) > -1;
       });
     }
   });
@@ -206,7 +206,7 @@
   watch(selectRefModulo, (active) => {
     if(!active){
       setTimeout(()=>{
-        searchModuloModel.value = "";
+        searchCursoModel.value = "";
       }, 1000)
     }
   });
@@ -477,7 +477,7 @@
                 class="bg-white"
                 v-model:menu="selectRefModulo"
                 no-data-text="No existen curso que mostrar"
-                :disabled="moduloModelLoading"
+                :disabled="cursoModelLoading"
                 item-text="title"
                 item-value="value"
                 v-model="modelCurso" 
@@ -489,7 +489,7 @@
                 <template v-slot:prepend-item>
                   <v-list-item>
                     <v-list-item-content>
-                      <VTextField v-model="searchModuloModel" clearable placeholder="Buscar curso"/>
+                      <VTextField v-model="searchCursoModel" clearable placeholder="Buscar curso"/>
                     </v-list-item-content>
                   </v-list-item>
                   <v-divider class="mt-2"></v-divider>

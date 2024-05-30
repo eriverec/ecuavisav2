@@ -95,6 +95,20 @@ export default [
     ],
   },
 
+  {
+    title: 'Gestión E-learning',
+    icon: { icon: 'tabler-notes' },
+    children: [
+      { title: 'Gestión de cursos', to: 'apps-elearning-gestion-cursos' },
+      { title: 'Gestión de módulos', to: 'apps-elearning-gestion-modulos' },
+      { title: 'Gestión de videos', to: 'apps-elearning-gestion-videos' },
+      { title: 'Gestión de cuestionarios', to: 'apps-cuestionarios' },
+      { title: 'G. Usuarios registrados', to: 'apps-elearning-usuarios-cursos' },
+      // { title: 'Gráficos', to: 'apps-elearning-graficos-estudiantes' },
+      
+    ],
+  },
+
   // {
   //   title: 'Recompensas',
   //   icon: { icon: 'tabler-award-filled' },
