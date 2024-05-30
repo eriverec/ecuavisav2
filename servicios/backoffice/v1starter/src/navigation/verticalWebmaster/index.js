@@ -90,11 +90,11 @@ export default [
       title: 'Gestión E-learning',
       icon: { icon: 'tabler-notes' },
       children: [
-        { title: 'Gestión de cursos', to: 'apps-elearning-gestion-cursos' },
-        { title: 'Gestión de módulos', to: 'apps-elearning-gestion-modulos' },
-        { title: 'Gestión de videos', to: 'apps-elearning-gestion-videos' },
-        { title: 'Gestión de cuestionarios', to: 'apps-cuestionarios' },
-        { title: 'G. Usuarios registrados', to: 'apps-elearning-usuarios-cursos' },
+        { title: 'Cursos', to: 'apps-elearning-gestion-cursos' },
+        { title: 'Módulos', to: 'apps-elearning-gestion-modulos' },
+        { title: 'Videos', to: 'apps-elearning-gestion-videos' },
+        { title: 'Cuestionarios', to: 'apps-cuestionarios' },
+        { title: 'Usuarios registrados', to: 'apps-elearning-usuarios-cursos' },
         // { title: 'Gráficos', to: 'apps-elearning-graficos-estudiantes' },
         
       ],
