@@ -6,7 +6,7 @@ const currentTab_cursos = ref(0)
 <template>
 							<VWindowItem value="tab-cursos">
 								<div class="py-5 gap-4 align-items-center">   
-									<VCardTitle >Módulos de Fidelización</VCardTitle>
+									<VCardTitle >Módulos de Cursos</VCardTitle>
 								</div>
 								<!-- content here -->
 								<VRow>
