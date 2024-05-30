@@ -20,12 +20,17 @@ const steps = [
     //subtitle: 'Add social links',
   },
   {
+    title: 'Crear cuestionario',
+    icon: 'tabler-clipboard-text',
+    //subtitle: 'Add social links',
+  },
+  {
     title: 'Crear módulo',
     icon: 'tabler-file',
     //subtitle: 'Add personal info',
   },
   {
-    title: 'Crear cuestionario',
+    title: 'Cuestionario Final',
     icon: 'tabler-clipboard-text',
     //subtitle: 'Add social links',
   }
@@ -1991,6 +1996,111 @@ async function onCompleteOld() {
               </VRow>
             </div>
             <div v-if="currentStep === 2">
+              <!-- Cuestionario -->
+              <VRow>
+                <VRow>
+                  <VCol cols="12">
+                  <h6 class="text-h6 font-weight-medium">Crear el cuestionario</h6>
+                  </VCol>
+                                                                    
+                    <VCol cols="6" >
+                        <VTextField v-model="tituloCuestionario" label="Título" placeholder="Título del cuestionario" />
+                    </VCol>
+
+                    <VCol cols="6" >
+                        <VTextField v-model="puntosNecesariosCuestionario" label="Puntos necesarios" type="number"/>
+                    </VCol>
+
+                    <VCol cols="6" >
+                        <VTextField v-model="fechaLimiteCuestionario" label="Fecha límite" type="date"/>
+                    </VCol>
+
+                    <VCol cols="6" >
+                        <VTextField v-model="limiteTiempoCuestionario" label="Límite de tiempo" type="number"/>
+                    </VCol>
+
+                    <VCol cols="12" >
+                        <VTextField v-model="descripcionCuestionario" label="Descripción" placeholder="Descripción del cuestionario"/>
+                    </VCol>
+            
+                    <VCol cols="12" >
+                        <p><h4>Ingrese los Tags</h4></p>
+                        <div class="d-flex flex-wrap gap-1 items-center mb-2">
+                            <p class="my-1"><h5>Tags: </h5></p>
+                            <VChip v-for="(tag, index) in tagsCuestionario" :key="tag" class="custom-chip" title="Eliminar tag" color="success" closable @click:close="eliminarTag(index)">
+                                {{ tag }}
+                            </VChip>
+                        </div>
+                        <div class="d-flex flex-nowrap gap-2 items-center mb-2">
+                            <VTextField v-model="tag" label="Ingrese un tag" /> 
+                            <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="addTag" >
+                            Añadir tag
+                            </VBtn>
+                            <VBtn class="ml-auto" color="primary" variant="tonal" @click="resetTag" >
+                                <VIcon icon="tabler-refresh" size="22" />
+                            </VBtn>
+                        </div>
+                        
+                    </VCol>
+            
+                    <VCol cols="12" class="d-flex">
+                        <div class="d-flex align-content-end flex-wrap"><h4>Preguntas</h4></div>
+                                            
+                        <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="resolveAddPregunta" >
+                        Añadir pregunta
+                        </VBtn>                                                                     
+                        
+                    </VCol>    
+                    <VDivider/>
+                    <div v-for="(p, index) in preguntasCuestionario" cols="12" class="w-100 my-4 item-cards"> 
+                        <VBtn v-if="preguntasCuestionario.length > 1" class="ml-auto boton-eleminar-itemsCards" size="38" color="error" @click="eliminarPregunta(index)"><VIcon icon="tabler-x" size="22" /></VBtn>
+                        
+                        <VCardText>
+                            <VCol cols="12">
+                                <VTextField class="mt-2" v-model="p.pregunta" label="Pregunta" placeholder="Escriba la pregunta" />
+                            </VCol>     
+                            
+                            <VCol cols="12" >
+                                <VTextField class="mt-2" v-model="p.puntaje" label="Puntaje" type="number"/>        
+                            </VCol>  
+                            
+                            <VCol cols="12" >
+                                <VTextField  v-model="p.respuesta" label="Respuesta" placeholder="Escriba la respuesta" />
+                            </VCol>
+
+                            <VCol cols="12" class="d-flex">
+                                <div class="d-flex align-content-end flex-wrap"><h4>Opciones</h4></div>
+                                                    
+                                <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="resolveAñadirOpcion(index)" >
+                                Añadir opción
+                                </VBtn>                                                                     
+                          
+                            </VCol>    
+                            <VDivider v-if="p.opciones.length > 0" />
+
+                            <div v-for="(o, index1) in p.opciones" cols="12" > 
+                                                              
+                                <VCardText class="text-center ml-4 my-4">
+                                    <VRow>
+                                    <VCol cols="8">
+                                        <VTextField  v-model="p.opciones[index1]" :label="'Opción '+ (index1 + 1)" placeholder="Escriba la opción" />
+                                    </VCol>
+                                    <VCol cols="4" v-if="p.opciones.length > 2">
+                                        <VBtn  size="38" color="error" @click="eliminarOpcion(index, index1)"><VIcon icon="tabler-x" size="22" /></VBtn> 
+                                    </VCol>   
+                                    </VRow>    
+                                                                                      
+                                </VCardText>  
+
+                            </div>
+
+                        </VCardText>   
+                    </div>
+                                      
+                </VRow>
+              </VRow>
+            </div>
+            <div v-if="currentStep === 3">
               <!-- Modulo -->
               <div class="px-4 mb-6" v-if="modulosGeneradosLocal.length > 0">
                  
@@ -2220,112 +2330,11 @@ async function onCompleteOld() {
                                   </VRow>                         
                               </VRow>
             </div>
-            <div v-if="currentStep === 3">
-              <!-- Cuestionario -->
-              <VRow>
-                <VRow>
-                  <VCol cols="12">
-                  <h6 class="text-h6 font-weight-medium">Crear el cuestionario</h6>
-                  </VCol>
-                                                                    
-                                                                    <VCol cols="6" >
-                                                                        <VTextField v-model="tituloCuestionario" label="Título" placeholder="Título del cuestionario" />
-                                                                    </VCol>
-                                
-                                                                    <VCol cols="6" >
-                                                                        <VTextField v-model="puntosNecesariosCuestionario" label="Puntos necesarios" type="number"/>
-                                                                    </VCol>
-                                
-                                                                    <VCol cols="6" >
-                                                                        <VTextField v-model="fechaLimiteCuestionario" label="Fecha límite" type="date"/>
-                                                                    </VCol>
-                                
-                                                                    <VCol cols="6" >
-                                                                        <VTextField v-model="limiteTiempoCuestionario" label="Límite de tiempo" type="number"/>
-                                                                    </VCol>
-                                
-                                                                    <VCol cols="12" >
-                                                                        <VTextField v-model="descripcionCuestionario" label="Descripción" placeholder="Descripción del cuestionario"/>
-                                                                    </VCol>
-                                                             
-                                                                    <VCol cols="12" >
-                                                                        <p><h4>Ingrese los Tags</h4></p>
-                                                                        <div class="d-flex flex-wrap gap-1 items-center mb-2">
-                                                                            <p class="my-1"><h5>Tags: </h5></p>
-                                                                            <VChip v-for="(tag, index) in tagsCuestionario" :key="tag" class="custom-chip" title="Eliminar tag" color="success" closable @click:close="eliminarTag(index)">
-                                                                                {{ tag }}
-                                                                            </VChip>
-                                                                        </div>
-                                                                        <div class="d-flex flex-nowrap gap-2 items-center mb-2">
-                                                                            <VTextField v-model="tag" label="Ingrese un tag" /> 
-                                                                            <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="addTag" >
-                                                                            Añadir tag
-                                                                            </VBtn>
-                                                                            <VBtn class="ml-auto" color="primary" variant="tonal" @click="resetTag" >
-                                                                                <VIcon icon="tabler-refresh" size="22" />
-                                                                            </VBtn>
-                                                                        </div>
-                                                                        
-                                                                    </VCol>
-                                                             
-                                                                    <VCol cols="12" class="d-flex">
-                                                                        <div class="d-flex align-content-end flex-wrap"><h4>Preguntas</h4></div>
-                                                                                             
-                                                                        <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="resolveAddPregunta" >
-                                                                        Añadir pregunta
-                                                                        </VBtn>                                                                     
-                                                                        
-                                                                    </VCol>    
-                                                                    <VDivider/>
-                                                                    <div v-for="(p, index) in preguntasCuestionario" cols="12" class="w-100 my-4 item-cards"> 
-                                                                        <VBtn v-if="preguntasCuestionario.length > 1" class="ml-auto boton-eleminar-itemsCards" size="38" color="error" @click="eliminarPregunta(index)"><VIcon icon="tabler-x" size="22" /></VBtn>
-                                                                        
-                                                                        <VCardText>
-                                                                            <VCol cols="12">
-                                                                                <VTextField class="mt-2" v-model="p.pregunta" label="Pregunta" placeholder="Escriba la pregunta" />
-                                                                            </VCol>     
-                                                                            
-                                                                            <VCol cols="12" >
-                                                                                <VTextField class="mt-2" v-model="p.puntaje" label="Puntaje" type="number"/>        
-                                                                            </VCol>  
-                                                                            
-                                                                            <VCol cols="12" >
-                                                                                <VTextField  v-model="p.respuesta" label="Respuesta" placeholder="Escriba la respuesta" />
-                                                                            </VCol>
-                                
-                                                                            <VCol cols="12" class="d-flex">
-                                                                                <div class="d-flex align-content-end flex-wrap"><h4>Opciones</h4></div>
-                                                                                                    
-                                                                                <VBtn class="ml-auto" color="primary" prepend-icon="tabler-plus" variant="tonal" @click="resolveAñadirOpcion(index)" >
-                                                                                Añadir opción
-                                                                                </VBtn>                                                                     
-                                                                          
-                                                                            </VCol>    
-                                                                            <VDivider v-if="p.opciones.length > 0" />
-                                
-                                                                            <div v-for="(o, index1) in p.opciones" cols="12" > 
-                                                                                                              
-                                                                                <VCardText class="text-center ml-4 my-4">
-                                                                                    <VRow>
-                                                                                    <VCol cols="8">
-                                                                                        <VTextField  v-model="p.opciones[index1]" :label="'Opción '+ (index1 + 1)" placeholder="Escriba la opción" />
-                                                                                    </VCol>
-                                                                                    <VCol cols="4" v-if="p.opciones.length > 2">
-                                                                                        <VBtn  size="38" color="error" @click="eliminarOpcion(index, index1)"><VIcon icon="tabler-x" size="22" /></VBtn> 
-                                                                                    </VCol>   
-                                                                                    </VRow>    
-                                                                                                                                      
-                                                                                </VCardText>  
-                                           
-                                                                            </div>
-                                
-                                                                        </VCardText>   
-                                                                    </div>
-                                                                                       
-                                                                </VRow>
-              </VRow>
-            </div>
             <!-- Add more steps here as needed -->
+            <div v-if="currentStep === 3">
+              <!-- Cuestionario Final -->
+              
+            </div>
             <!-- Stepper Controls -->
             <VCol cols="12" class="d-flex flex-wrap justify-center gap-4 mt-8">
               <VBtn v-if="currentStep === 0" style="margin-left: auto;" @click="onApply">
