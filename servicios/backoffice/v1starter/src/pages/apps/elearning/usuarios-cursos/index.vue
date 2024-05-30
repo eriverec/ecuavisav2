@@ -26,6 +26,14 @@
   const searchCursoModel  = ref("");
   const isFullLoading = ref(false);
 
+  /*Variables de búsqueda*/
+  const modelSearch = ref(null);
+  const btnDisabled = ref({
+    loading: false,
+    disabled:false
+  });
+  /*Variables de búsqueda*/
+
   const fechaFin = moment().format("YYYY-MM-DD");
   const fechaInicio = moment().subtract(30, 'days').format("YYYY-MM-DD");
 
@@ -108,7 +116,12 @@
     const firstIndex = dataUsuarios.value.length ? (currentPage.value) * rowPerPage.value : 0
     const lastIndex = dataUsuarios.value.length + (currentPage.value) * rowPerPage.value
     
-    return `Mostrando ${ firstIndex } de ${ lastIndex } de ${ totalRegistros.value } registros `
+    // return `Mostrando ${ firstIndex } de ${ lastIndex } de ${ totalRegistros.value } registros `
+    // console.log(rowPerPage.value)
+    if(totalRegistros.value < rowPerPage.value){
+      return `Mostrandos ${ totalRegistros.value } de ${ totalRegistros.value } registros `
+    }
+    return `Mostrando ${ firstIndex } de ${ totalRegistros.value } registros `
   })
 
   onMounted(async () => {
@@ -116,7 +129,7 @@
     await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
   });
 
-  async function getUsuarios(page = 1, limit = 10, fechai, fechaf, idCurso) {
+  async function getUsuarios(page = 1, limit = 10, fechai, fechaf, idCurso, search="") {
     try {
       if(!idCurso){
         return false;
@@ -130,7 +143,7 @@
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechai}&fechaf=${fechaf}&page=${page}&limit=${limit}&idCurso=${idCurso}`, requestOptions);
+      var response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechai}&fechaf=${fechaf}&page=${page}&limit=${limit}&idCurso=${idCurso}&search=${search}`, requestOptions);
       const data = await response.json();
 
       if(data.resp){
@@ -244,7 +257,7 @@
 
   const usersFull = ref([]);
 
-  async function getUsuariosExportar(page = 1, limit = 10, fechai, fechaf, idCurso) {
+  async function getUsuariosExportar(page = 1, limit = 10, fechai, fechaf, idCurso, search = "") {
     try {
       if(!idCurso){
         return false;
@@ -258,7 +271,7 @@
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechai}&fechaf=${fechaf}&page=${page}&limit=${limit}&idCurso=${idCurso}`, requestOptions);
+      var response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechai}&fechaf=${fechaf}&page=${page}&limit=${limit}&idCurso=${idCurso}&search=${search}`, requestOptions);
       const data = await response.json();
 
       if(data.resp){
@@ -319,7 +332,8 @@
         500,
         fecha.value.inicio, 
         fecha.value.fin, 
-        modelCurso.value
+        modelCurso.value,
+        modelSearch.value || ""
       ).then((res) => {
 
         let array = res.data;
@@ -410,7 +424,7 @@
     }
   }
 
-  async function downloadFull () {
+  async function downloadSearch () {
     try {
       if(dataUsuarios.value.length < 1){
          configSnackbar.value = {
@@ -426,7 +440,7 @@
 
       let doc = [];
       doc = usersFull.value
-      let title = "users_full";
+      let title = "users_search_curso";
 
       logAction('descarga-completa'); 
 
@@ -442,6 +456,46 @@
         return false;
     }
   };
+
+  //Código para realizar la búsqueda
+  const buscarUsuario = async (e) =>{
+    const search = modelSearch.value || "";
+    currentPage.value = 1;
+
+    btnDisabled.value ={
+      loading: true,
+      disabled: true
+    };
+
+    if(!search){
+      await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value, "");
+    }else{
+      await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value, search);
+    }
+    
+    btnDisabled.value ={
+      loading: false,
+      disabled: false
+    };
+  }
+
+  watch(modelSearch, async () => {
+    if(!modelSearch.value){
+      currentPage.value = 1;
+      btnDisabled.value ={
+        loading: true,
+        disabled: true
+      };
+
+      await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value, "");
+      
+      btnDisabled.value ={
+        loading: false,
+        disabled: false
+      };
+    }
+  });
+  //Código para realizar la búsqueda
 </script>
 
 <template>
@@ -461,101 +515,120 @@
         lg="12"
       >
         <h1>Exportación de usuarios suscritos a un curso</h1>
-        <VCardText class="d-flex py-4 gap-4 px-0">
-            <div class="me-3 d-flex gap-4" >
+        <VCardText class="d-flex py-4 gap-4 px-0 flex-wrap">
+          <div class="me-3 d-flex gap-4" >
+            <VSelect
+              class="bg-white"
+              v-model="rowPerPage"
+              density="compact"
+              variant="outlined"
+              :items="[10, 20, 30, 50]"
+            />
 
-              <VSelect
-                class="bg-white"
-                v-model="rowPerPage"
-                density="compact"
-                variant="outlined"
-                :items="[10, 20, 30, 50]"
-              />
-
-              <VSelect
-                style="width: 18rem;"
-                class="bg-white"
-                v-model:menu="selectRefModulo"
-                no-data-text="No existen curso que mostrar"
-                :disabled="cursoModelLoading"
-                item-text="title"
-                item-value="value"
-                v-model="modelCurso" 
-                :items="dataCurso"
-                chips
-                clearable
-                label="Seleccionar el módulo para el curso"
-                :menu-props="{ maxHeight: '400' }">
-                <template v-slot:prepend-item>
-                  <v-list-item>
-                    <v-list-item-content>
-                      <VTextField v-model="searchCursoModel" clearable placeholder="Buscar curso"/>
-                    </v-list-item-content>
-                  </v-list-item>
-                  <v-divider class="mt-2"></v-divider>
+            <VSelect
+              style="width: 18rem;"
+              class="bg-white"
+              v-model:menu="selectRefModulo"
+              no-data-text="No existen curso que mostrar"
+              :disabled="cursoModelLoading"
+              item-text="title"
+              item-value="value"
+              v-model="modelCurso" 
+              :items="dataCurso"
+              chips
+              clearable
+              label="Seleccionar el módulo para el curso"
+              :menu-props="{ maxHeight: '400' }">
+              <template v-slot:prepend-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <VTextField v-model="searchCursoModel" clearable placeholder="Buscar curso"/>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider class="mt-2"></v-divider>
+              </template>
+              <template #selection="{ item }">
+                    <div>
+                        {{ item.title }}
+                    </div>
                 </template>
-                <template #selection="{ item }">
-                      <div>
-                          {{ item.title }}
-                      </div>
-                  </template>
-                  <template #item="{ item, props }">
-                      <v-list-item v-bind="props">
-                          <v-list-item-content>
-                              <v-list-item-subtitle>
-                                  <p>_id: {{ item.value }}</p>
-                              </v-list-item-subtitle>
-                          </v-list-item-content>
-                      </v-list-item>
-                  </template>
-              </VSelect>
+                <template #item="{ item, props }">
+                    <v-list-item v-bind="props">
+                        <v-list-item-content>
+                            <v-list-item-subtitle>
+                                <p>_id: {{ item.value }}</p>
+                            </v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                </template>
+            </VSelect>
 
-              <AppDateTimePicker 
-                class="bg-white"
-                style="width: 25rem;"
-                label="Fecha de inicio y fin del curso" 
-                prepend-inner-icon="tabler-calendar" 
-                density="compact" 
-                v-model="fechaIFModel.fechasModel"
-                show-current=true 
-                @on-change="obtenerFechas" 
-                :config="{
-                    position: 'auto right',
-                    mode: 'range',
-                    altFormat: 'd F j, Y',
-                    maxDate: new Date,
-                    dateFormat: 'l, j \\d\\e F \\d\\e Y',
-                    valueFormat: 'd-m-Y',
-                    reactive: true
-                }" />
+            <AppDateTimePicker 
+              class="bg-white"
+              style="width: 25rem;"
+              label="Fecha de inicio y fin del curso" 
+              prepend-inner-icon="tabler-calendar" 
+              density="compact" 
+              v-model="fechaIFModel.fechasModel"
+              show-current=true 
+              @on-change="obtenerFechas" 
+              :config="{
+                  position: 'auto right',
+                  mode: 'range',
+                  altFormat: 'd F j, Y',
+                  maxDate: new Date,
+                  dateFormat: 'l, j \\d\\e F \\d\\e Y',
+                  valueFormat: 'd-m-Y',
+                  reactive: true
+              }" />
 
-            </div>
+          </div>
 
-            <VSpacer />
+          <VSpacer />
 
-            <div class="app-user-search-filter d-flex align-top justify-content-flex-end flex-wrap gap-4">
-              <!-- 👉 Search  -->
-              
+          <div class="app-user-search-filter d-flex align-top justify-content-flex-end flex-wrap flex-column gap-0">
+            <!-- 👉 Search  -->
+            
 
-              <!-- 👉 Export button -->
-              <VBtn
-                :loading="isFullLoading"
-                :disabled="isFullLoading"
-                variant="tonal"
-                color="success"
-                prepend-icon="tabler-screen-share"
-                @click="downloadFull"
-              >
-                Exportar búsqueda
-              </VBtn>
-              <small class="px-0 py-1 text-disabled" v-if="isFullLoading">
-                Exportando {{ docsExportNumberLength.tamanioActual }} / {{ docsExportNumberLength.tamanioTotal }} registros
-              </small>  
+            <!-- 👉 Export button -->
+            <VBtn
+              :loading="isFullLoading"
+              :disabled="isFullLoading"
+              variant="tonal"
+              color="success"
+              prepend-icon="tabler-screen-share"
+              @click="downloadSearch"
+            >
+              Exportar búsqueda
+            </VBtn>
+            <small class="px-0 py-1 text-disabled" v-if="isFullLoading">
+              Exportando {{ docsExportNumberLength.tamanioActual }} / {{ docsExportNumberLength.tamanioTotal }} registros
+            </small> 
+          </div>
+        </VCardText>
 
-              <!-- 👉 Add user button -->
-              
-            </div>
-          </VCardText>
+
+        <!-- 👉 Add user button -->
+        <VRow class="pb-3 d-none">
+          <VCol cols="12" sm="2" lg="2" >
+            <VRow>
+              <VCol cols="10" sm="10" lg="10" >
+                <VTextField class="bg-white" v-model="modelSearch" label="Buscar...." type="text" clearable />
+              </VCol>
+              <VCol cols="2" sm="2" lg="2" >
+                <VBtn :loading="btnDisabled.loading" :disabled="btnDisabled.disabled" title="Buscar usuario" block @click="buscarUsuario">
+                  <VIcon
+                    :size="25"
+                    icon="tabler-search"
+                  />
+                </VBtn>
+              </VCol>
+            </VRow>
+          </VCol>
+          <VCol cols="3" sm="3" lg="3" >
+          </VCol>
+        </VRow>
+
         <small class="text-disabled">Se ha filtrado usuarios del curso <b>{{ dataCurso.length > 0 ? dataCurso.filter(c => modelCurso.includes(c.value))[0].title: "" }}</b> , desde {{fechaIFModel.fechai}} hasta {{fechaIFModel.fechaf}} con un total de {{totalRegistros}} registros</small>
         <VCard class="mt-1">
             <VTable class="text-no-wrap">
