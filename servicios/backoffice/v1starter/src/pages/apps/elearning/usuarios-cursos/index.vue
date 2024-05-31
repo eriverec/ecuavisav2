@@ -32,7 +32,7 @@
     loading: false,
     disabled:false
   });
-  /*Variables de búsqueda*/
+  /*Variables de búsqueda */
 
   const fechaFin = moment().format("YYYY-MM-DD");
   const fechaInicio = moment().subtract(30, 'days').format("YYYY-MM-DD");
