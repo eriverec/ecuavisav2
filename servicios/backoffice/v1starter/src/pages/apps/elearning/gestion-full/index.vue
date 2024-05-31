@@ -35,6 +35,16 @@ const steps = [
     //subtitle: 'Add social links',
   }
 ]    
+
+function deepClone(o) {
+  const output = Array.isArray(o) ? [] : {};
+  
+  for (let i in o) {
+    const value = o[i];   
+    output[i] = value !== null && typeof value === 'object' ? deepClone(value) : value;
+  }
+  return output;
+}
 // --------------------------------------- CURSOS ------------------------------------------
 // -----------------------------------------------------------------------------------------
 
@@ -83,7 +93,7 @@ const moduloModelLoading = ref(false);
 const searchModuloModel = ref(null)
 const moduloItemsCopy = ref([]);
 
-const dataCuestionarioCursoModel = ref([]);
+const dataCuestionarioCursoModel = ref(null);
 const dataCuestionarioItems = ref([]);
 
 const selectRefCuestionarioCurso = ref(null);
@@ -111,7 +121,6 @@ const configSnackbar = ref({
 const etiquetasItems = ref([]);
 const categoriasItems = ref([]);
 
-const cuestionariosRaw = ref([]);
 
 onMounted(async ()=>{
   await getEtiquetas();
@@ -214,14 +223,18 @@ async function getCuestionario(page = 1, limit= 10){
       var response = await fetch(`https://e-learning-cuestionario.vercel.app/cuestionarios/all/get`, requestOptions);
       const data = await response.json();
 
-      cuestionariosRaw.value = data.data;
-      dataCuestionarioItems.value = data.data.reduce((acumulador, actual) => {
+      
+      cuestionariosRaw.value = data.data.reduce((acumulador, actual) => {
         acumulador.push({
           title: `${actual.titulo}`,
           value: actual._id,
         });
         return acumulador;
       }, []);
+
+      dataCuestionarioItems.value = deepClone(cuestionariosRaw.value);
+      cuestionariosFull.value = deepClone(data.data);
+
       cuestionarioItemsCopy.value = dataCuestionarioItems.value;
       cuestionarioModelLoading.value = false;
       
@@ -488,16 +501,6 @@ const thumbnailModel = ref(null);
 const videosItems = ref([]);
 const videosItemsCopy = ref([]);
 
-function deepClone(o) {
-  const output = Array.isArray(o) ? [] : {};
-  
-  for (let i in o) {
-    const value = o[i];   
-    output[i] = value !== null && typeof value === 'object' ? deepClone(value) : value;
-  }
-  return output;
-}
-
 async function getVideos(){
   try {
       videosModelLoading.value = true;
@@ -733,23 +736,6 @@ function filtrarDesafios(listaDesafios, elementos) {
 
 //-----------------------------------------------LOCAL------------------------------------------------
 //----------------------------------------------------------------------------------------------------
-
-
-const modulosRaw = ref([]);
-
-const modulosFull = ref([]);
-const modulosGeneradosLocal = ref([]);
-const modulosGeneradosLocalFull = ref([]);
-
-const videosRaw = ref([]);
-
-const videosFull = ref([]);
-const videosGeneradosLocal = ref([]);
-const videosGeneradosLocalFull = ref([]);
-
-const cursoLocal = ref(null);
-
-
 const codigosGenerados = new Set();
 function generarCodigoAleatorioUnico(longitud) {
     const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
@@ -779,7 +765,203 @@ function obtenerValorYPosicionLocal(lista) {
     // Devolver el array de objetos con el valor y la posición de cada elemento
     return resultado;
 }
+
+function removeElementById(array, key, value) {
+    if (!Array.isArray(array)) {
+      console.error("El valor proporcionado no es un array.");
+      return;
+    }
+
+    for (let i = array.length - 1; i >= 0; i--) {
+      if (array[i][key] === value) {
+        array.splice(i, 1);
+        //console.log(`Elemento con ${key} = ${value} eliminado.`);
+      }
+    }
+  }
+// --------------------- Cuestionario Local --------------------
+//--------------------------------------------------------------
+const cuestionariosRaw = ref([]);
+
+const cuestionariosFull = ref([]);
+const cuestionariosGeneradosLocal = ref([]);
+
+const accionCuestionarioLocal = ref('add');
+const idToEditCuestionarioLocal = ref('');
+const tituloCuestionarioOnEdit = ref('');
+function resetFormCuestionario(){
+  tituloCuestionario.value = '';
+  descripcionCuestionario.value = '';
+  tagsCuestionario.value = [];
+  puntosNecesariosCuestionario.value = null;
+  fechaLimiteCuestionario.value = '';
+  limiteTiempoCuestionario.value = null;
+  preguntasCuestionario.value = [
+        {
+            pregunta: '',
+            puntaje: null,
+            respuesta: '',
+            opciones: ['','']
+        }
+  ]
+  tag.value = '';    
+}
+
+function onEditCuestionarioLocal(id){
+  accionCuestionarioLocal.value = 'edit';
+  idToEditCuestionarioLocal.value = id;
+  const cuestionario = cuestionariosFull.value.find(cuestionario => cuestionario._id == id);
+
+  tituloCuestionarioOnEdit.value = cuestionario.titulo;
+
+  tituloCuestionario.value = cuestionario.titulo;
+  tagsCuestionario.value = cuestionario.tags;
+  descripcionCuestionario.value = cuestionario.descripcion;
+  puntosNecesariosCuestionario.value = cuestionario.puntosNecesarios;
+  preguntasCuestionario.value = cuestionario.preguntas;
+  fechaLimiteCuestionario.value = cuestionario.fechaLimite;
+  limiteTiempoCuestionario.value = cuestionario.limiteTiempo;
+}
+
+function cancelarEditCuestionarioLocal(){
+  accionCuestionarioLocal.value = 'add';
+  idToEditCuestionarioLocal.value = '';
+  tituloCuestionarioOnEdit.value = '';
+  resetFormCuestionario();
+}
+
+function onDeleteCuestionarioLocal(id){
+
+  if(dataCuestionarioModuloModel.value == id){
+    dataCuestionarioModuloModel.value = null;
+  }
+  if(dataCuestionarioCursoModel.value == id){
+    dataCuestionarioCursoModel.value = null;
+  }
+  removeElementById(cuestionariosFull.value, '_id', id);
+  removeElementById(dataCuestionarioItems.value, 'value', id);
+  removeElementById(cuestionariosGeneradosLocal.value, '_id', id);
+  console.log('cuestionariosFull on elim',cuestionariosFull.value);
+  console.log('cuestionariosGeneradosLocal on elim',cuestionariosGeneradosLocal.value);
+  console.log('dataCuestionarioItems on elim',dataCuestionarioItems.value);
+}
+
+function guardarLocalCuestionario (){
+
+  let preguntasEnviar = preguntasCuestionario.value; 
+  let tituloValid = tituloCuestionario.value;
+
+  if(!Array.isArray(tagsCuestionario.value) && tagsCuestionario.value != null && tagsCuestionario.value != ""){
+      tagsCuestionario.value = [tagsCuestionario.value];
+  }
+
+  if (!validarArreglo(preguntasEnviar) || !tituloValid || tituloValid == "" || !descripcionCuestionario.value || tagsCuestionario.value.length == 0
+     || puntosNecesariosCuestionario.value == null || fechaLimiteCuestionario.value == '' || limiteTiempoCuestionario.value == null) {
+    configSnackbar.value = {
+                    message: "Debe llenar todos los campos del cuestionario",
+                    type: "error",
+                    model: true
+    };
+    return false;
+  }
+  puntosNecesariosCuestionario.value = parseInt(puntosNecesariosCuestionario.value);
+
+  var preguntasFormated = preguntasEnviar.map(item => ({
+    ...item, 
+    puntaje: parseInt(item.puntaje) 
+  })); 
+
+
+  if(accionVideoLocal.value == 'add'){
+    var id = generarCodigoAleatorioUnico(10);  
+    cuestionariosFull.value.push({
+      _id: id,
+      titulo: tituloCuestionario.value,
+      descripcion: descripcionCuestionario.value,
+      tags: tagsCuestionario.value,
+      puntosNecesarios: puntosNecesariosCuestionario.value,
+      preguntas: preguntasFormated,
+      fechaLimite: fechaLimiteCuestionario.value,
+      limiteTiempo: limiteTiempoCuestionario.value 
+    });
+
+    dataCuestionarioItems.value.push({
+      title: tituloCuestionario.value,
+      value: id
+    });
+
+    cuestionariosGeneradosLocal.value.push({
+      _id: id,
+      titulo: tituloCuestionario.value,
+      descripcion: descripcionCuestionario.value,
+      tags: tagsCuestionario.value,
+      puntosNecesarios: puntosNecesariosCuestionario.value,
+      preguntas: preguntasFormated,
+      fechaLimite: fechaLimiteCuestionario.value,
+      limiteTiempo: limiteTiempoCuestionario.value    
+    });
+  }else{
+    const cuestionarioFull = cuestionariosFull.value.find(cuestionario => cuestionario._id == idToEditCuestionarioLocal.value);
+    cuestionarioFull.titulo = tituloCuestionario.value;
+    cuestionarioFull.descripcion = descripcionCuestionario.value;
+    cuestionarioFull.tags = tagsCuestionario.value;
+    cuestionarioFull.puntosNecesarios = puntosNecesariosCuestionario.value;
+    cuestionarioFull.preguntas = preguntasFormated;
+    cuestionarioFull.fechaLimite = fechaLimiteCuestionario.value;
+    cuestionarioFull.limiteTiempo = limiteTiempoCuestionario.value;
+
+    const cuestionarioItem = dataCuestionarioItems.value.find(cuestionario => cuestionario.value == idToEditCuestionarioLocal.value);
+    cuestionarioItem.title = tituloCuestionario.value;
+
+    const cuestionarioLocal = cuestionariosGeneradosLocal.value.find(cuestionario => cuestionario._id == idToEditCuestionarioLocal.value);
+    cuestionarioLocal.titulo = tituloCuestionario.value;
+    cuestionarioLocal.descripcion = descripcionCuestionario.value;
+    cuestionarioLocal.tags = tagsCuestionario.value;
+    cuestionarioLocal.puntosNecesarios = puntosNecesariosCuestionario.value;
+    cuestionarioLocal.preguntas = preguntasFormated;
+    cuestionarioLocal.fechaLimite = fechaLimiteCuestionario.value;
+    cuestionarioLocal.limiteTiempo = limiteTiempoCuestionario.value;
+
+  }
+  accionCuestionarioLocal.value = 'add';  
+
+  console.log("cuestionariosFull", cuestionariosFull.value);
+  console.log("cuestionariosGeneradosLocal", cuestionariosGeneradosLocal.value);
+  console.log("cuestionarioItems", dataCuestionarioItems.value);
+  
+  resetFormCuestionario();
+}
+
+// Funciones para manejar el cambio de paginación
+const itemsPerPageCuestionarioLocal = 5;
+const currentPageCuestionarioLocal = ref(1);
+
+const paginatedCuestionariosLocal = computed(() => {
+  const start = (currentPageCuestionarioLocal.value - 1) * itemsPerPageCuestionarioLocal;
+  const end = start + itemsPerPageCuestionarioLocal;
+
+  return cuestionariosGeneradosLocal.value.slice(start, end);
+});
+
+const nextPageCuestionarioLocal = () => {
+  if (currentPageCuestionarioLocal.value * itemsPerPageCuestionarioLocal < cuestionariosGeneradosLocal.value.length) currentPageCuestionarioLocal.value++;
+};
+
+const prevPageCuestionarioLocal = () => {
+  if (currentPageCuestionarioLocal.value > 1) currentPageCuestionarioLocal.value--;
+};
+
+
+//----------------------- Fin cuestionario local ---------------
+//---------------------------------------------------------------
+
+
 // --------------------- Video Local --------------------
+//-------------------------------------------------------
+const videosRaw = ref([]);
+
+const videosFull = ref([]);
+const videosGeneradosLocal = ref([]);
 
 const accionVideoLocal = ref('add');
 const idToEditVideoLocal = ref('');
@@ -817,9 +999,9 @@ function cancelarEditVideoLocal(){
 }
 
 function onDeleteVideoLocal(id){
-  videosFull.value = videosFull.value.filter(video => video._id != id);
-  videosItems.value = videosItems.value.filter(video => video.value != id);
-  videosGeneradosLocal.value = videosGeneradosLocal.value.filter(video => video._id != id);
+  removeElementById(videosFull.value, '_id', id);
+  removeElementById(videosItems.value, 'value', id);
+  removeElementById(videosGeneradosLocal.value, '_id', id);
   videosModuloModel.value = [];
   videosSelectListModulo.value = [];	
 }
@@ -868,7 +1050,7 @@ function guardarLocalVideo (){
         etiquetas: etiquetasVideoModel.value    
       });
     }else{
-      const videoFull = videosFull.value.find(video => video._id === idToEditVideoLocal.value);
+      const videoFull = videosFull.value.find(video => video._id == idToEditVideoLocal.value);
       videoFull.titulo = tituloVideoModel.value;
       videoFull.descripcion = descripcionVideoModel.value;
       videoFull.idRudo = idVideoRudoModel.value;
@@ -877,10 +1059,10 @@ function guardarLocalVideo (){
       videoFull.categoria = categoriaVideoModel.value;
       videoFull.etiquetas = etiquetasVideoModel.value;
 
-      const videoItem = videosItems.value.find(video => video.value === idToEditVideoLocal.value);
+      const videoItem = videosItems.value.find(video => video.value == idToEditVideoLocal.value);
       videoItem.title = tituloVideoModel.value;
 
-      const videoLocal = videosGeneradosLocal.value.find(video => video._id === idToEditVideoLocal.value);
+      const videoLocal = videosGeneradosLocal.value.find(video => video._id == idToEditVideoLocal.value);
       videoLocal.titulo = tituloVideoModel.value;
       videoLocal.descripcion = descripcionVideoModel.value;
       videoLocal.idRudo = idVideoRudoModel.value;
@@ -918,9 +1100,15 @@ const nextPageVideoLocal = () => {
 const prevPageVideoLocal = () => {
   if (currentPageVideoLocal.value > 1) currentPageVideoLocal.value--;
 };
+//------------------------ Fin Video Local -----------------------
+//----------------------------------------------------------------
 
+//------------------------- Módulo local -------------------------
+//----------------------------------------------------------------
+const modulosRaw = ref([]);
 
-//------------------------- Modulo local -------------------------
+const modulosFull = ref([]);
+const modulosGeneradosLocal = ref([]);
 
 const accionModuloLocal = ref('add');
 const idToEditModuloLocal = ref('');
@@ -962,10 +1150,11 @@ function cancelarEditModuloLocal(){
 }
 
 function onDeleteModuloLocal(id){
-  //console.log('id para borrar', id);
-  modulosFull.value = modulosFull.value.filter(modulo => modulo._id != id);
-  modulosGeneradosLocal.value = modulosGeneradosLocal.value.filter(modulo => modulo._id != id);
-  dataModuloItems.value = dataModuloItems.value.filter(modulo => modulo.value != id);
+
+  removeElementById(modulosFull.value, '_id', id);
+  removeElementById(modulosGeneradosLocal.value, '_id', id);
+  removeElementById(dataModuloItems.value, 'value', id);
+  
   dataModuloCursoModel.value = [];
   modulosSelectListCurso.value = [];	
 }
@@ -1005,16 +1194,16 @@ function guardarLocalModulo (){
         videos: obtenerValorYPosicionModulo()
       });
     }else{
-      const moduloFull = modulosFull.value.find(modulo => modulo._id === idToEditModuloLocal.value);
+      const moduloFull = modulosFull.value.find(modulo => modulo._id == idToEditModuloLocal.value);
       moduloFull.titulo = tituloModuloModel.value;
       moduloFull.descripcion = descripcionModuloModel.value;
       moduloFull.idCuestionario = dataCuestionarioModuloModel.value || null;
       moduloFull.videos = obtenerValorYPosicionModulo();
 
-      const moduloItem = dataModuloItems.value.find(modulo => modulo.value === idToEditModuloLocal.value);
+      const moduloItem = dataModuloItems.value.find(modulo => modulo.value == idToEditModuloLocal.value);
       moduloItem.title = tituloModuloModel.value;
 
-      const moduloLocal = modulosGeneradosLocal.value.find(modulo => modulo._id === idToEditModuloLocal.value);
+      const moduloLocal = modulosGeneradosLocal.value.find(modulo => modulo._id == idToEditModuloLocal.value);
       moduloLocal.titulo = tituloModuloModel.value;
       moduloLocal.descripcion = descripcionModuloModel.value;
       moduloLocal.idCuestionario = dataCuestionarioModuloModel.value || null;
@@ -1046,82 +1235,96 @@ const nextPageModuloLocal = () => {
 const prevPageModuloLocal = () => {
   if (currentPageModuloLocal.value > 1) currentPageModuloLocal.value--;
 };
-
+// ----------------------- Fin Módulo Local ----------------------
+//----------------------------------------------------------------
 
 // -------------------------- Aplicar cambios de curso en local --------------------------
+//----------------------------------------------------------------------------------------
+const cursoLocal = ref(null);
 const cursoFormatedEnvio = ref(null);
 async function onApply() {
-  //Validar curso
-  if (
-        !categoriaCursoModel.value || 
-        !idCursoRudoModel.value || 
-        !descripcionCursoModel.value || 
-        !thumbnailCursoModel.value || 
-        !dataCuestionarioCursoModel.value || 
-        !duracionCursoModel.value
-      ){
-        configSnackbar.value = {
-            message: "Llenar todos los campos del curso para aplciar cambios",
-            type: "error",
-            model: true
-        };
-        return false;
-    }
+  try {
+    
+    var modulos = obtenerValorYPosicionCurso();
+    //Validar curso
+    if (
+          !tituloCursoModel.value ||
+          !categoriaCursoModel.value || 
+          !idCursoRudoModel.value || 
+          !descripcionCursoModel.value || 
+          !thumbnailCursoModel.value || 
+          !dataCuestionarioCursoModel.value || 
+          !duracionCursoModel.value || 
+          modulos.length == 0
+        ){
+          configSnackbar.value = {
+              message: "Llenar todos los campos del curso para ver el preview",
+              type: "error",
+              model: true
+          };
+          return false;
+      }
 
-    //console.log("modulosFull" , modulosFull.value);
-    //console.log("videosFull" , videosFull.value);
-    var modulosSelected = deepClone(obtenerValorYPosicionCurso());
-    //console.log("modulosSelected" , modulosSelected);
-    var modulosFullClone = deepClone(modulosFull.value);
-    var modulosResult = modulosFullClone.filter(fullItem => 
-      modulosSelected.some(selectedItem => selectedItem.value === fullItem._id)
-    );
-    cuestionariosRaw
-    for (let modulo of modulosResult) {
-      modulo.videos = modulo.videos.map(video => 
-        videosFull.value.find(fullItem => fullItem._id === video.value)
+      //console.log("modulosFull" , modulosFull.value);
+      //console.log("videosFull" , videosFull.value);
+      var modulosSelected = deepClone(modulos);
+      //console.log("modulosSelected" , modulosSelected);
+      var modulosFullClone = deepClone(modulosFull.value);
+      var modulosResult = modulosFullClone.filter(fullItem => 
+        modulosSelected.some(selectedItem => selectedItem.value === fullItem._id)
       );
+      
+      for (let modulo of modulosResult) {
+        modulo.videos = modulo.videos.map(video => 
+          videosFull.value.find(fullItem => fullItem._id === video.value)
+        );
 
-      modulo.idCuestionario = cuestionariosRaw.value.find(fullItem => fullItem._id === modulo.idCuestionario);
-    }
+        modulo.idCuestionario = cuestionariosFull.value.find(fullItem => fullItem._id === modulo.idCuestionario);
+      }
 
+      let curso = {
+            titulo: tituloCursoModel.value,
+            descripcion: descripcionCursoModel.value,
+            idRudo: idCursoRudoModel.value,
+            //thumbnail: thumbnailCursoModel.value,
+            duracion: duracionCursoModel.value,
+            categoria: categoriaCursoModel.value,
+            etiquetas: etiquetasCursoModel.value,
+            idCuestionario: cuestionariosFull.value.find(fullItem => fullItem._id === dataCuestionarioCursoModel.value),
+            fechai: fechaIFModel.value.fechai,
+            fechaf: fechaIFModel.value.fechaf,
+            fechaVencimiento: fechaIFModel.value.fechaV,
+            estado: estadoCursoModel.value,
+            modulos: modulosResult
+      }  
 
+      let cursoEnvio = {
+            titulo: tituloCursoModel.value,
+            descripcion: descripcionCursoModel.value,
+            idRudo: idCursoRudoModel.value,
+            //thumbnail: thumbnailCursoModel.value,
+            duracion: duracionCursoModel.value,
+            categoria: categoriaCursoModel.value,
+            etiquetas: etiquetasCursoModel.value,
+            idCuestionario: dataCuestionarioCursoModel.value,
+            fechai: fechaIFModel.value.fechai,
+            fechaf: fechaIFModel.value.fechaf,
+            fechaVencimiento: fechaIFModel.value.fechaV,
+            estado: estadoCursoModel.value,
+            modulos: obtenerValorYPosicionCurso()
+      }  
 
-    let curso = {
-          titulo: tituloCursoModel.value,
-          descripcion: descripcionCursoModel.value,
-          idRudo: idCursoRudoModel.value,
-          //thumbnail: thumbnailCursoModel.value,
-          duracion: duracionCursoModel.value,
-          categoria: categoriaCursoModel.value,
-          etiquetas: etiquetasCursoModel.value,
-          idCuestionario: cuestionariosRaw.value.find(fullItem => fullItem._id === dataCuestionarioCursoModel.value),
-          fechai: fechaIFModel.value.fechai,
-          fechaf: fechaIFModel.value.fechaf,
-          fechaVencimiento: fechaIFModel.value.fechaV,
-          estado: estadoCursoModel.value,
-          modulos: modulosResult
-    }  
-
-    let cursoEnvio = {
-          titulo: tituloCursoModel.value,
-          descripcion: descripcionCursoModel.value,
-          idRudo: idCursoRudoModel.value,
-          //thumbnail: thumbnailCursoModel.value,
-          duracion: duracionCursoModel.value,
-          categoria: categoriaCursoModel.value,
-          etiquetas: etiquetasCursoModel.value,
-          idCuestionario: dataCuestionarioCursoModel.value,
-          fechai: fechaIFModel.value.fechai,
-          fechaf: fechaIFModel.value.fechaf,
-          fechaVencimiento: fechaIFModel.value.fechaV,
-          estado: estadoCursoModel.value,
-          modulos: obtenerValorYPosicionCurso()
-    }  
-
-    cursoLocal.value = curso; 
-    cursoFormatedEnvio.value = cursoEnvio;
-    //console.log("cursoLocal" , cursoLocal.value);
+      cursoLocal.value = curso; 
+      //cursoFormatedEnvio.value = cursoEnvio;
+      //console.log("cursoLocal" , cursoLocal.value);
+  } catch (error) {
+    console.error(error.toString());
+    configSnackbar.value = {
+        message: 'Error al mostrar el preview',
+        type: "error",
+        model: true
+    };
+  }
 }
 
 
@@ -1154,38 +1357,43 @@ async function onComplete() {
     return false;
   }
   //Validar curso
-  if(cursoLocal.value == null || !cursoLocal.value){
-    configSnackbar.value = {
-            message: "Debe darle click a aplicar para crear los registros",
+  var modulos = obtenerValorYPosicionCurso();
+  if (
+        !categoriaCursoModel.value || 
+        !idCursoRudoModel.value || 
+        !descripcionCursoModel.value || 
+        !thumbnailCursoModel.value || 
+        !dataCuestionarioCursoModel.value || 
+        !duracionCursoModel.value ||
+        modulos.length == 0
+      ){
+        configSnackbar.value = {
+            message: "Debe llenar todos los campos del curso",
             type: "error",
             model: true
         };
         return false;
-  }
-  //Validar cuestionario
-  let preguntasEnviar = preguntasCuestionario.value; 
-    let tituloValid = tituloCuestionario.value;
+    }
 
-  if(!Array.isArray(tagsCuestionario.value) && tagsCuestionario.value != null && tagsCuestionario.value != ""){
-      tagsCuestionario.value = [tagsCuestionario.value];
-  }
+    var cursoEnvio = {
+          titulo: tituloCursoModel.value,
+          descripcion: descripcionCursoModel.value,
+          idRudo: idCursoRudoModel.value,
+          //thumbnail: thumbnailCursoModel.value,
+          duracion: duracionCursoModel.value,
+          categoria: categoriaCursoModel.value,
+          etiquetas: etiquetasCursoModel.value,
+          idCuestionario: dataCuestionarioCursoModel.value,
+          fechai: fechaIFModel.value.fechai,
+          fechaf: fechaIFModel.value.fechaf,
+          fechaVencimiento: fechaIFModel.value.fechaV,
+          estado: estadoCursoModel.value,
+          modulos: modulos
+    }  
+    cursoFormatedEnvio.value = cursoEnvio;
 
-  if (!validarArreglo(preguntasEnviar) || !tituloValid || tituloValid == "" || !descripcionCuestionario.value || tagsCuestionario.value.length == 0
-     || puntosNecesariosCuestionario.value == null || fechaLimiteCuestionario.value == '' || limiteTiempoCuestionario.value == null) {
-    configSnackbar.value = {
-                    message: "Debe llenar todos los campos del cuestionario",
-                    type: "error",
-                    model: true
-    };
-    return false;
-  }
-  puntosNecesariosCuestionario.value = parseInt(puntosNecesariosCuestionario.value);
-
-  var preguntasFormated = preguntasEnviar.map(item => ({
-    ...item, 
-    puntaje: parseInt(item.puntaje) 
-  })); 
-
+  //Fin de validaciones---------------------------------------------------
+  
   creandoRegistros.value = true;
   configSnackbar.value = {
             message: "Creando los registros, espere por favor",
@@ -1200,7 +1408,7 @@ async function onComplete() {
 
   try {
      
-    //Paso 1: Crear videos
+    //Paso 1: Crear videos------------------------------------------------
     var idsVideosCreados = [];
     var modulosGenerados; 
 
@@ -1234,30 +1442,82 @@ async function onComplete() {
       });
     }
     console.log('idsVideosCreados', idsVideosCreados);
-    //Fin de crear videos
+    //Fin de crear videos------------------------------------
 
-    var idsModulosCreados = [];
     
-    if(modulosGeneradosLocal.value.length > 0){
-      //Paso 2: Reemplazar ids locales de videos en módulos
-    modulosGenerados = deepClone(modulosGeneradosLocal.value);
-    for(let modulo of modulosGenerados){
-      for (let i = 0; i < modulo.videos.length; i++) {
-        let videoEncontrado = idsVideosCreados.find(item => item.idLocal == modulo.videos[i].value);      
-          if (videoEncontrado) {
-            modulo.videos[i].value = videoEncontrado._id;          
-          }
-          //console.log('videoEncontrado', videoEncontrado);
-        
+
+    //Paso 2: Cuestionarios-----------------------------------
+    var idsCuestionariosCreados = [];
+    if(cuestionariosGeneradosLocal.value.length > 0){
+
+      for(let cuestionario of cuestionariosGeneradosLocal.value){
+
+        let jsonEnviarCuestionario ={
+            "titulo": cuestionario.titulo,
+            "descripcion": cuestionario.descripcion,
+            "tags": cuestionario.tags,
+            "puntosNecesarios": cuestionario.puntosNecesarios,
+            "preguntas": cuestionario.preguntas,
+            "fechaLimite": cuestionario.fechaLimite,
+            "limiteTiempo": cuestionario.limiteTiempo 
+        }
+
+        const sendCuestionario = await fetch('https://e-learning-cuestionario.vercel.app/cuestionarios/create', {
+              method: 'POST',
+              headers: myHeaders,
+              body: JSON.stringify(jsonEnviarCuestionario),
+              redirect: 'follow'
+        });
+        if (!sendCuestionario.ok) {
+          const errorText = await sendCuestionario.text();
+          throw new Error(`Error al crear cuestionario: ${sendCuestionario.status} ${sendCuestionario.statusText} - ${errorText}`);
+        }
+
+        const respuestaCuestionario = await sendCuestionario.json();
+
+        idsCuestionariosCreados.push({
+        _id: respuestaCuestionario.id,
+        idLocal: cuestionario._id
+      });
       }
     }
-    console.log('modulosGeneradosLocal', modulosGeneradosLocal.value);
-    console.log('modulosGenerados idsVideos reemplazados', modulosGenerados);
+    console.log('idsCuestionariosCreados', idsCuestionariosCreados);
 
-    //Fin de Reemplazar ids locales de videos en módulos
+    //Paso 3: Módulos-----------------------------------
+    var idsModulosCreados = [];
+    if(modulosGeneradosLocal.value.length > 0){
 
-      //Paso 3 :Crear módulos
-      
+      //Paso 3.1: Reemplazar ids locales de videos en módulos
+      modulosGenerados = deepClone(modulosGeneradosLocal.value);
+      for(let modulo of modulosGenerados){
+        for (let i = 0; i < modulo.videos.length; i++) {
+          let videoEncontrado = idsVideosCreados.find(item => item.idLocal == modulo.videos[i].value);      
+            if (videoEncontrado) {
+              modulo.videos[i].value = videoEncontrado._id;          
+            }
+          
+        }
+      }
+      //console.log('modulosGeneradosLocal', modulosGeneradosLocal.value);
+      //console.log('modulosGenerados idsVideos reemplazados', modulosGenerados);
+
+      //Fin de Reemplazar ids locales de videos en módulos
+
+      //Paso 3.2: Reemplazar ids locales de cuestionarios en módulos
+      for(let modulo of modulosGenerados){    
+         
+        let cuestionarioEncontrado = idsCuestionariosCreados.find(item => item.idLocal == modulo.idCuestionario);      
+        if (cuestionarioEncontrado) {
+          modulo.idCuestionario = cuestionarioEncontrado._id;          
+        }
+        
+      }
+      console.log('modulosGeneradosLocal raw', modulosGeneradosLocal.value);
+      console.log('modulosGenerados ids reemplazados', modulosGenerados);
+
+      //Fin de Reemplazar ids locales de cuestionarios en módulos
+
+      //Paso 3.3: Crear módulos     
       for(let modulo of modulosGenerados){
         let jsonEnviarModulo = {
             "titulo": modulo.titulo,
@@ -1282,13 +1542,15 @@ async function onComplete() {
           idLocal: modulo._id
         });
       }
-      console.log('idsModulosCreados', idsModulosCreados);
+      //console.log('idsModulosCreados', idsModulosCreados);
+
       //Fin de Crear módulos
       }
     }
-  
+    //Fin de Módulos-----------------------------------
 
     //Paso 4: Reemplazar ids locales de modulos en el curso
+
     var cursoFinal = deepClone(cursoFormatedEnvio.value);
     for (let i = 0; i < cursoFinal.modulos.length; i++) {
       let moduloEncontrado = idsModulosCreados.find(item => item.idLocal == cursoFinal.modulos[i].value);
@@ -1298,9 +1560,24 @@ async function onComplete() {
     }
     console.log('cursoAntes', cursoFormatedEnvio.value);
     console.log('cursoFinal', cursoFinal);
-    //Fin de Reemplazar ids locales de modulos en el curso
 
-    //Paso 5: Crear el curso
+    //Fin de Reemplazar id locales de modulos en el curso
+
+    console.log('cursoFinal raw', cursoFinal);  
+
+    //Paso 5: Reemplazar id local de cuestionario en el curso
+    let cuestionarioEncontradoCurso = idsCuestionariosCreados.find(item => item.idLocal == cursoFinal.idCuestionario);
+    if (cuestionarioEncontradoCurso) {
+      cursoFinal.idCuestionario = cuestionarioEncontradoCurso._id;          
+    }
+        
+    
+    console.log('cursoFinal id reemplazado', cursoFinal);
+ 
+    //Fin de Reemplazar id local de cuestionario en el curso
+
+    //Paso 6: Crear el curso
+
     let jsonEnviarCurso = {
           "titulo": cursoFinal.titulo,
           "descripcion": cursoFinal.descripcion,
@@ -1337,34 +1614,6 @@ async function onComplete() {
     const respuestaCurso = await sendCurso.json();
     console.log('respuestaCurso', respuestaCurso);
     //Fin de Crear el curso
-
-    //Paso 6: Crear cuestionario
-    let jsonEnviarCuestionario ={
-            "titulo": tituloCuestionario.value,
-            "descripcion": descripcionCuestionario.value,
-            "tags": tagsCuestionario.value,
-            "puntosNecesarios": puntosNecesariosCuestionario.value,
-            "preguntas": preguntasFormated,
-            "fechaLimite": fechaLimiteCuestionario.value,
-            "limiteTiempo": limiteTiempoCuestionario.value 
-    }
-    //console.log('jsonEnviarCuestionario', jsonEnviarCuestionario);
-    
-    const sendCuestionario = await fetch('https://e-learning-cuestionario.vercel.app/cuestionarios/create', {
-              method: 'POST',
-              headers: myHeaders,
-              body: JSON.stringify(jsonEnviarCuestionario),
-              redirect: 'follow'
-    });
-    if (!sendCuestionario.ok) {
-      const errorText = await sendCuestionario.text();
-      throw new Error(`Error al crear cuestionario: ${sendCuestionario.status} ${sendCuestionario.statusText} - ${errorText}`);
-    }
-    const respuestaCuestionario = await sendCuestionario.json();
-    console.log('respuestaCuestionario', respuestaCuestionario);
-    
-    
-    //Fin de Crear cuestionario
     
   } catch (error) {
     creandoRegistros.value = false;
@@ -1705,118 +1954,8 @@ async function onCompleteOld() {
                     @click:append="getEtiquetas"
                   />
                 </VCol>
-                <VCol cols="12">
-                  <VSelect
-                    v-model:menu="selectRefCuestionarioCurso"
-                    no-data-text="No existen cuestionario que mostrar"
-                    append-icon="mdi-refresh"
-                    @click:append="getCuestionario"
-                    :disabled="cuestionarioModelLoading"
-                    item-text="title"
-                    item-value="value"
-                    v-model="dataCuestionarioCursoModel" 
-                    :items="dataCuestionarioItems"
-                    label="Cuestionario para al final del curso"
-                    :menu-props="{ maxHeight: '400' }">
-                    <template v-slot:prepend-item>
-                      <VListItem>
-                        <VListItemContent>
-                          <VTextField v-model="searchCuestionarioModel" clearable placeholder="Buscar cuestionario"/>
-                        </VListItemContent>
-                      </VListItem>
-                      <VDivider class="mt-2"></VDivider>
-                    </template>
-                    <template #selection="{ item }">
-                      <div>
-                        {{ item.title }} - {{ item.value }}
-                      </div>
-                    </template>
-                    <template #item="{ item, props }">
-                      <VListItem v-bind="props">
-                        <VListItemContent>
-                          <VListItemSubtitle>
-                            <p>_id: {{ item.value }}</p>
-                          </VListItemSubtitle>
-                        </VListItemContent>
-                      </VListItem>
-                    </template>
-                  </VSelect>
-                </VCol>
-                <VCol cols="12">
-                  <VRow>
-                    <VCol cols="12">
-                      <VSelect
-                        v-model:menu="selectRefModuloCurso"
-                        no-data-text="No existen módulo que mostrar"
-                        append-icon="mdi-refresh"
-                        @click:append="getModulos"
-                        :disabled="moduloModelLoading"
-                        item-text="title"
-                        item-value="value"
-                        v-model="dataModuloCursoModel" 
-                        :items="dataModuloItems"
-                        chips
-                        multiple
-                        label="Módulos educativos"
-                        :menu-props="{ maxHeight: '400' }">
-                        <template v-slot:prepend-item>
-                          <VListItem>
-                            <VListItemContent>
-                              <VTextField v-model="searchModuloModel" clearable placeholder="Buscar módulo"/>
-                            </VListItemContent>
-                          </VListItem>
-                          <VDivider class="mt-2"></VDivider>
-                        </template>
-                        <template #selection="{ item }">
-                          <div>
-                            {{ item.title }} - {{ item.value }}
-                          </div>
-                        </template>
-                        <template #item="{ item, props }">
-                          <VListItem v-bind="props">
-                            <VListItemContent>
-                              <VListItemSubtitle>
-                                <p>_id: {{ item.value }}</p>
-                              </VListItemSubtitle>
-                            </VListItemContent>
-                          </VListItem>
-                        </template>
-                      </VSelect>
-                    </VCol>
-                    
-                  </VRow>
-                </VCol>
-                <VCol cols="12" v-if="dataModuloCursoModel.length > 0">
-                  <VList lines="two" border>
-                    <template v-for="(videoSelect, index) of modulosSelectListCurso" :key="videoSelect.value">
-                      <VListItem>
-                        <template #prepend>
-                          <VIcon :size="35" icon="mdi-sale" color="success" />
-                        </template>
-                        <VListItemTitle>
-                          {{ videoSelect.title }}
-                        </VListItemTitle>
-                        <VListItemSubtitle class="mt-1">
-                          <VBadge dot location="start center" offset-x="2" color="success" class="me-3">
-                            <span class="ms-4">Módulo</span>
-                          </VBadge>
-                          <span class="text-xs text-disabled">{{ videoSelect.value }}</span>
-                        </VListItemSubtitle>
-                        <template #append>
-                          <div class="btn-order" style="">
-                            <VBtn size="x-small" :disabled="index == 0" variant="text" @click="cambiarPosicion(videoSelect.value, 'arriba')">
-                              <VIcon :size="25" icon="mdi-arrow-up-bold-box" />
-                            </VBtn>
-                            <VBtn size="x-small" :disabled="index == modulosSelectListCurso.length - 1" variant="text" @click="cambiarPosicion(videoSelect.value, 'abajo')">
-                              <VIcon :size="25" icon="mdi-arrow-down-bold-box" />
-                            </VBtn>
-                          </div>
-                        </template>
-                      </VListItem>
-                      <VDivider v-if="index !== modulosSelectListCurso.length - 1" />
-                    </template>
-                  </VList>
-                </VCol>
+                
+                
               </VRow>
             </div>
             <div v-if="currentStep === 1">
@@ -1996,12 +2135,60 @@ async function onCompleteOld() {
               </VRow>
             </div>
             <div v-if="currentStep === 2">
+
               <!-- Cuestionario -->
+
+              <div class="mb-2" v-if="cuestionariosGeneradosLocal.length > 0">
+                <VTable class="text-no-wrap tableNavegacion mb-5">
+                        <thead>
+                            <tr>   
+                            <th scope="col">Título</th>
+                            <th scope="col">Descripción</th>             
+                            <th scope="col">Acciones</th>                                                   
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr v-for="item in paginatedCuestionariosLocal">
+                            <td class="text-medium-emphasis">
+                                {{ item.titulo}}
+                            </td>     
+                            <td class="text-medium-emphasis">
+                                {{ item.descripcion}}
+                            </td>                 
+                            <td class="text-medium-emphasis">
+                                <VBtn color="success" variant="text" icon  @click="onEditCuestionarioLocal(item._id)">
+                                    <VIcon size="22" icon="tabler-edit" />
+                                </VBtn>
+
+                                <VBtn icon  color="error" variant="text" @click="onDeleteCuestionarioLocal(item._id)">
+                                    <VIcon size="22" icon="tabler-trash" />
+                                </VBtn>
+                            </td>             
+                            </tr>
+                        </tbody>
+                    </VTable>
+                    <div class="d-flex align-center justify-space-between botonescurrentPage">
+                    <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageCuestionarioLocal" :disabled="currentPageCuestionarioLocal === 1"></VBtn>
+                    Página {{ currentPageCuestionarioLocal }}
+                    <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageCuestionarioLocal"
+                        :disabled="(currentPageCuestionarioLocal * itemsPerPageCuestionarioLocal) >= cuestionariosGeneradosLocal.length">
+                    </VBtn>
+                    </div>
+              </div>
               <VRow>
                 <VRow>
-                  <VCol cols="12">
-                  <h6 class="text-h6 font-weight-medium">Crear el cuestionario</h6>
-                  </VCol>
+                  <VCol class="d-flex justify-space-between ml-1" cols="12">
+                  <h6 class="text-h6 font-weight-medium">{{ accionCuestionarioLocal == 'add'? 'Crear el cuestionario' : 'Editar '+tituloCuestionarioOnEdit }}</h6>
+                  <div class="d-flex gap-2">
+                    <VBtn @click="guardarLocalCuestionario">
+                      Guardar
+                    </VBtn>
+                    <VBtn v-if="accionCuestionarioLocal != 'add'" color="error" @click="cancelarEditCuestionarioLocal">
+                      Cancelar
+                    </VBtn>
+                  </div>
+                </VCol>
                                                                     
                     <VCol cols="6" >
                         <VTextField v-model="tituloCuestionario" label="Título" placeholder="Título del cuestionario" />
@@ -2102,7 +2289,7 @@ async function onCompleteOld() {
             </div>
             <div v-if="currentStep === 3">
               <!-- Modulo -->
-              <div class="px-4 mb-6" v-if="modulosGeneradosLocal.length > 0">
+              <div class="px-2 mb-6" v-if="modulosGeneradosLocal.length > 0">
                  
                  <VList lines="two" border >
                  <template
@@ -2171,8 +2358,13 @@ async function onCompleteOld() {
                </div>
                <VDivider/>
                </div>
-              <VRow>
-                <VCol class="d-flex justify-space-between" cols="12">
+
+               
+
+              <!-- Form modulo -->
+
+              <VRow >
+                <VCol class="d-flex justify-space-between ml-1" cols="12">
                   <h6 class="text-h6 font-weight-medium">{{ accionModuloLocal == 'add'? 'Crear el módulo' : 'Editar '+tituloModuloOnEdit }}</h6>
                   <div class="d-flex gap-2">
                     <VBtn @click="guardarLocalModulo">
@@ -2183,7 +2375,7 @@ async function onCompleteOld() {
                     </VBtn>
                   </div>
                 </VCol>
-                                  <VRow>
+                                  <VRow class="ml-1">
                                       <VCol cols="6">
                                         <VTextField v-model="tituloModuloModel" label="Título del modulo" />
                                       </VCol>
@@ -2329,16 +2521,141 @@ async function onCompleteOld() {
          
                                   </VRow>                         
                               </VRow>
+                              <VDivider class="mt-10"/>
+                              <!-- Selector modulo de curso -->
+
+               <VRow class="mt-2">
+                <VCol cols="12">
+                  <h6 class="text-h6 font-weight-medium">Módulos educativos del curso</h6>
+                </VCol>  
+               <VCol cols="12">
+                  <VRow>
+                    <VCol cols="12">
+                      <VSelect
+                        v-model:menu="selectRefModuloCurso"
+                        no-data-text="No existen módulo que mostrar"
+                        append-icon="mdi-refresh"
+                        @click:append="getModulos"
+                        :disabled="moduloModelLoading"
+                        item-text="title"
+                        item-value="value"
+                        v-model="dataModuloCursoModel" 
+                        :items="dataModuloItems"
+                        chips
+                        multiple
+                        label="Módulos educativos"
+                        :menu-props="{ maxHeight: '400' }">
+                        <template v-slot:prepend-item>
+                          <VListItem>
+                            <VListItemContent>
+                              <VTextField v-model="searchModuloModel" clearable placeholder="Buscar módulo"/>
+                            </VListItemContent>
+                          </VListItem>
+                          <VDivider class="mt-2"></VDivider>
+                        </template>
+                        <template #selection="{ item }">
+                          <div>
+                            {{ item.title }} - {{ item.value }}
+                          </div>
+                        </template>
+                        <template #item="{ item, props }">
+                          <VListItem v-bind="props">
+                            <VListItemContent>
+                              <VListItemSubtitle>
+                                <p>_id: {{ item.value }}</p>
+                              </VListItemSubtitle>
+                            </VListItemContent>
+                          </VListItem>
+                        </template>
+                      </VSelect>
+                    </VCol>
+                    
+                  </VRow>
+                </VCol>
+                <VCol cols="12" v-if="dataModuloCursoModel.length > 0">
+                  <VList lines="two" border>
+                    <template v-for="(videoSelect, index) of modulosSelectListCurso" :key="videoSelect.value">
+                      <VListItem>
+                        <template #prepend>
+                          <VIcon :size="35" icon="mdi-sale" color="success" />
+                        </template>
+                        <VListItemTitle>
+                          {{ videoSelect.title }}
+                        </VListItemTitle>
+                        <VListItemSubtitle class="mt-1">
+                          <VBadge dot location="start center" offset-x="2" color="success" class="me-3">
+                            <span class="ms-4">Módulo</span>
+                          </VBadge>
+                          <span class="text-xs text-disabled">{{ videoSelect.value }}</span>
+                        </VListItemSubtitle>
+                        <template #append>
+                          <div class="btn-order" style="">
+                            <VBtn size="x-small" :disabled="index == 0" variant="text" @click="cambiarPosicion(videoSelect.value, 'arriba')">
+                              <VIcon :size="25" icon="mdi-arrow-up-bold-box" />
+                            </VBtn>
+                            <VBtn size="x-small" :disabled="index == modulosSelectListCurso.length - 1" variant="text" @click="cambiarPosicion(videoSelect.value, 'abajo')">
+                              <VIcon :size="25" icon="mdi-arrow-down-bold-box" />
+                            </VBtn>
+                          </div>
+                        </template>
+                      </VListItem>
+                      <VDivider v-if="index !== modulosSelectListCurso.length - 1" />
+                    </template>
+                  </VList>
+                </VCol>
+              </VRow>
+              
             </div>
             <!-- Add more steps here as needed -->
-            <div v-if="currentStep === 3">
+            <div v-if="currentStep === 4">
               <!-- Cuestionario Final -->
-              
+              <VRow>
+                <VCol cols="12">
+                  <h6 class="text-h6 font-weight-medium">Cuestionario final del curso</h6>
+                </VCol>
+                <VCol cols="12">
+                  <VSelect
+                    v-model:menu="selectRefCuestionarioCurso"
+                    no-data-text="No existen cuestionario que mostrar"
+                    append-icon="mdi-refresh"
+                    @click:append="getCuestionario"
+                    :disabled="cuestionarioModelLoading"
+                    item-text="title"
+                    item-value="value"
+                    v-model="dataCuestionarioCursoModel" 
+                    :items="dataCuestionarioItems"
+                    label="Cuestionario para el final del curso"
+                    :menu-props="{ maxHeight: '400' }">
+                    <template v-slot:prepend-item>
+                      <VListItem>
+                        <VListItemContent>
+                          <VTextField v-model="searchCuestionarioModel" clearable placeholder="Buscar cuestionario"/>
+                        </VListItemContent>
+                      </VListItem>
+                      <VDivider class="mt-2"></VDivider>
+                    </template>
+                    <template #selection="{ item }">
+                      <div>
+                        {{ item.title }} - {{ item.value }}
+                      </div>
+                    </template>
+                    <template #item="{ item, props }">
+                      <VListItem v-bind="props">
+                        <VListItemContent>
+                          <VListItemSubtitle>
+                            <p>_id: {{ item.value }}</p>
+                          </VListItemSubtitle>
+                        </VListItemContent>
+                      </VListItem>
+                    </template>
+                  </VSelect>
+                </VCol>
+              </VRow>
             </div>
             <!-- Stepper Controls -->
             <VCol cols="12" class="d-flex flex-wrap justify-center gap-4 mt-8">
-              <VBtn v-if="currentStep === 0" style="margin-left: auto;" @click="onApply">
-                    Aplicar
+              <VBtn v-if="currentStep === 4" style="margin-left: auto;" @click="onApply">
+                Preview
               </VBtn>
               <VBtn color="secondary" :disabled="currentStep === 0" @click="currentStep--">
                 <VIcon icon="tabler-arrow-left" start class="flip-in-rtl" /> Anterior
