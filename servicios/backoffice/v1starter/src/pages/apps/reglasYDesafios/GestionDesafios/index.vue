@@ -400,6 +400,27 @@ const categoriaItems = [
   {
     title: "En vivo",
     value: "en_vivo",
+  },
+
+  {
+    title: "CONFIRMA LA CONFIRMACIÓN",
+    value: "confirmalaconfirmacion",
+  },
+  {
+    title: "AHÍ TE QUIERO VER",
+    value: "ahitequierover",
+  },
+  {
+    title: "QUÉ TIRO CONTIGO",
+    value: "quetirocontigo",
+  },
+  {
+    title: "LA YAPA",
+    value: "layapa",
+  },
+  {
+    title: "PONTE LAS PILAS",
+    value: "pontelaspilas",
   }
 ]
 
