@@ -404,23 +404,23 @@ const categoriaItems = [
 
   {
     title: "CONFIRMA LA CONFIRMACIÓN",
-    value: "confirmalaconfirmacion",
+    value: "confirma_la_confirmacion",
   },
   {
     title: "AHÍ TE QUIERO VER",
-    value: "ahitequierover",
+    value: "ahi_te_quierover",
   },
   {
     title: "QUÉ TIRO CONTIGO",
-    value: "quetirocontigo",
+    value: "que_tiro_contigo",
   },
   {
     title: "LA YAPA",
-    value: "layapa",
+    value: "la_yapa",
   },
   {
     title: "PONTE LAS PILAS",
-    value: "pontelaspilas",
+    value: "ponte_las_pilas",
   }
 ]
 
