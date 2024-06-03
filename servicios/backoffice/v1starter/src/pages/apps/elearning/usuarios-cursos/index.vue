@@ -32,7 +32,7 @@
     loading: false,
     disabled:false
   });
-  /*Variables de búsqueda */
+  /*Variables de búsqueda*/
 
   const fechaFin = moment().format("YYYY-MM-DD");
   const fechaInicio = moment().subtract(30, 'days').format("YYYY-MM-DD");
@@ -295,6 +295,18 @@
     }
   }
 
+  function eliminarDuplicadosPorWylexId(array) {
+      const vistos = new Set();
+      return array.filter(item => {
+          if (vistos.has(item.wylexId)) {
+              return false; // Eliminar duplicado
+          } else {
+              vistos.add(item.wylexId);
+              return true; // Mantener el primer encuentro
+          }
+      });
+  }
+
   async function fetchFullUsers(){
     if(!modelCurso.value){
       configSnackbar.value = {
@@ -313,7 +325,55 @@
     usersFull.value = [];
 
     var pages = 1;
-    for (let i = 1; i < pages + 1; i++) {
+    while(true){
+      const res = await getUsuariosExportar(
+        pages,
+        500,
+        fecha.value.inicio, 
+        fecha.value.fin, 
+        modelCurso.value,
+        modelSearch.value || ""
+      );
+
+      const array = res.data;
+      const totalUser = res.total;
+
+      // if(i==1){
+      //   pages = res.total + 1;
+      // }
+
+      // if(array.length < 1){
+      //   i = pages + 2;
+      // }
+
+      array.forEach((item) => {
+        let newItem = {}; // Nuevo objeto para cada elemento de array
+        // Recorremos las claves de headers
+        for (let key in headersGlobal.value) {
+          // Verificamos si la clave existe en item y la agregamos al nuevo objeto
+          if (item.hasOwnProperty(key)) {
+            newItem[key] = item[key];
+          }else{
+            newItem[key] = "";
+          }
+        }
+        // Agregamos el nuevo objeto a usersFull.value
+        usersFull.value.push(newItem);
+      });
+
+      docsExportNumberLength.value.tamanioActual = usersFull.value.length;
+      docsExportNumberLength.value.tamanioTotal = totalUser;
+
+      usersFull.value.sort((a, b) => moment(b.created_at, 'DD/MM/YYYY-HH:mm:ss').diff(moment(a.created_at, 'DD/MM/YYYY-HH:mm:ss')));
+
+      pages++;
+
+      if(array.length < 1){
+        break;
+      }
+    }
+
+    // for (let i = 1; i < pages + 1; i++) {
       // {
       //   todaBase: 1,
       //   pageSize: rowPerPageExport.value,
@@ -327,49 +387,8 @@
       //   fechaf: "",
       // }
 
-      await getUsuariosExportar(
-        i,
-        500,
-        fecha.value.inicio, 
-        fecha.value.fin, 
-        modelCurso.value,
-        modelSearch.value || ""
-      ).then((res) => {
-
-        let array = res.data;
-        const totalUser = res.total;
-
-        if(i==1){
-          pages = res.total + 1;
-        }
-
-        if(array.length < 1){
-          i = pages + 2;
-        }
-
-        array.forEach((item) => {
-          let newItem = {}; // Nuevo objeto para cada elemento de array
-          // Recorremos las claves de headers
-          for (let key in headersGlobal.value) {
-            // Verificamos si la clave existe en item y la agregamos al nuevo objeto
-            if (item.hasOwnProperty(key)) {
-              newItem[key] = item[key];
-            }else{
-              newItem[key] = "";
-            }
-          }
-          // Agregamos el nuevo objeto a usersFull.value
-          usersFull.value.push(newItem);
-        });
-
-        docsExportNumberLength.value.tamanioActual = usersFull.value.length;
-        if(docsExportNumberLength.value.tamanioTotal == 0){
-          docsExportNumberLength.value.tamanioTotal = totalUser;
-        }
-
-        usersFull.value.sort((a, b) => moment(b.created_at, 'DD/MM/YYYY-HH:mm:ss').diff(moment(a.created_at, 'DD/MM/YYYY-HH:mm:ss')));
-      });
-    }
+      
+    // }
 
     return true;
   };
@@ -444,7 +463,8 @@
 
       logAction('descarga-completa'); 
 
-      exportCSVFile(headersGlobal.value, doc, title);
+      console.log(doc)
+      exportCSVFile(headersGlobal.value, eliminarDuplicadosPorWylexId(doc), title);
 
     } catch (error) {
         console.log(error)
