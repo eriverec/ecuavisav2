@@ -581,8 +581,10 @@ let mousemoveExecuted = false;
 function bootstrapJS() {
   if(ECUAVISA_EC){
     //No queremos que bootstrap js se agregue en mi perfil, por que ya se está agregando en esa página, con esto se bloquea el script solo en mi perfil
+    const bloquearUrl_2 = ECUAVISA_EC.verificarURLActual({url:"https://www.ecuavisa.com/servicios/perfil"});//Verifica si la url actual corresponde a la mandada como parámetro
     const bloquearUrl = ECUAVISA_EC.verificarURLActual({url:"https://www.ecuavisa.com/servicios/perfil/"});//Verifica si la url actual corresponde a la mandada como parámetro
-    if(bloquearUrl){
+    
+    if(bloquearUrl || bloquearUrl_2){
       return true;
     }
     //No queremos que bootstrap js se agregue en mi perfil, por que ya se está agregando en esa página, con esto se bloquea el script solo en mi perfil
