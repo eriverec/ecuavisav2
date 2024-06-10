@@ -104,7 +104,7 @@ export default [
       { title: 'Videos', to: 'apps-elearning-gestion-videos' },
       { title: 'Cuestionarios', to: 'apps-cuestionarios' },
       { title: 'Usuarios registrados', to: 'apps-elearning-usuarios-cursos' },
-      // { title: 'Gráficos', to: 'apps-elearning-graficos-estudiantes' },
+      { title: 'Analítica', to: 'apps-elearning-graficos-estudiantes' },
       
     ],
   },
