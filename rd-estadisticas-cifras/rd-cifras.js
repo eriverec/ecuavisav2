@@ -189,6 +189,10 @@ function eventLigaPro() {
   const uLigaProGoleadores = "/deportes/liga-pro-serie-a-ecuador/goleadores";
   const uLigaProPlanteles = "/deportes/liga-pro-serie-a-ecuador/planteles";
 
+  setTimeout(() => {
+    createNav('copa-america');
+  }, 200);
+
   // const uee = document.querySelector('.cintillo-rd h1');
   // if(currentUrl === uLigaProCalendario){
   //   uee.innerHTML = "LigaPro - Calendario"
@@ -217,37 +221,7 @@ function eventLigaPro() {
     if (currentUrl === urlObj.mainUrl) {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
-          <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-                <a class="nav-link" id="copaam-tab" href="/deportes/copa-america/tablaposiciones">Copa América</a>
-              </li>
-              
-          <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-          </li>
-          <li class="nav-item" role="presentation">
-              <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/tablaposiciones">Eliminatorias</a>
-          </li>
-              <li class="nav-item" role="presentation">
-                <a class="nav-link" href="/deportes/champions/tablaposiciones">Champions League</a>
-              </li> 
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/tablaposiciones">Copa Libertadores</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/tablaposiciones" >Copa Sudamericana</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/premierleague/tablaposiciones" >Premier League</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/liga-espanola/tablaposiciones">Liga Española</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/mls/tablaposiciones">MLS</a>
-              </li>
-              
-          </ul>
+         <div id="nav-container"></div>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
