@@ -25,6 +25,25 @@ function createNav(activeTabId) {
   navContainer.innerHTML = navHtml;
 }
 
+//FUNCION PARA HACER SCROLL HORIZONTAL AUTOMATICO DE ACUERDO A LA CLASE ACTIVE
+setTimeout(() => {
+  var activeNavItem = document.querySelector("#nav-container .nav-link.active");
+  if (activeNavItem) {
+    var contTabs = document.querySelector("#nav-container #myTab");
+    if (contTabs) {
+      contTabs.scrollLeft = activeNavItem.offsetLeft - (contTabs.offsetWidth - activeNavItem.offsetWidth) / 2;
+      console.log("si encontro la clase myTab");
+      // for (const sst of contTabs){
+      //   console.log('for ejecutado scroll horizontal');
+      // }
+    }else{
+      console.log("no encontro la clase myTab");
+    }
+  }else{
+    console.log("no se contro el #nav-container .nav-link.active");
+  }
+}, 500);
+
 
 function eventCopaAmerica() {
   const urlsCifras = [
@@ -1118,22 +1137,7 @@ if (window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a
 
 } else { console.log("no esta validado dicha url"); }
 
-//FUNCION PARA HACER SCROLL HORIZONTAL AUTOMATICO DE ACUERDO A LA CLASE ACTIVE
-setTimeout(() => {
-  var activeNavItem = document.querySelector(".nav-link.active");
-  if (activeNavItem) {
-    var contTabs = document.getElementById("myTab");
-    if (contTabs) {
-      contTabs.scrollLeft = activeNavItem.offsetLeft - (contTabs.offsetWidth - activeNavItem.offsetWidth) / 2;
-      console.log("si encontro la clase myTab");
-      // for (const sst of contTabs){
-      //   console.log('for ejecutado scroll horizontal');
-      // }
-    }else{
-      console.log("no encontro la clase myTab");
-    }
-  }
-}, 250);
+
 
 
 
