@@ -190,7 +190,7 @@ function eventLigaPro() {
   const uLigaProPlanteles = "/deportes/liga-pro-serie-a-ecuador/planteles";
 
   setTimeout(() => {
-    createNav('copa-america');
+    createNav('ligapro');
   }, 200);
 
   // const uee = document.querySelector('.cintillo-rd h1');
