@@ -308,41 +308,16 @@ function eventLibertadores() {
   const uLibertadoresGoleadores = "/deportes/copa-libertadores/goleadores";
   const uLibertadoresPlanteles = "/deportes/copa-libertadores/planteles";
 
+  setTimeout(() => {
+    createNav('copa-libertadores');
+  }, 200);
+
   // Recorrer el objeto urlsCifras
   for (const urlObj of urlsCifras) {
     if (currentUrl === urlObj.mainUrl) {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
-          <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
-             <li class="nav-item" role="presentation">
-                <a class="nav-link" id="copaam-tab" href="/deportes/copa-america/tablaposiciones">Copa América</a>
-              </li>
-          <li class="nav-item" role="presentation">
-          <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-          </li>
-          <li class="nav-item" role="presentation">
-              <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/tablaposiciones">Eliminatorias</a>
-          </li>
-          <li class="nav-item" role="presentation">
-            <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
-          </li> 
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="copali-tab" href="/deportes/copa-libertadores/tablaposiciones">Copa Libertadores</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/tablaposiciones" >Copa Sudamericana</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/premierleague/tablaposiciones" >Premier League</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/liga-espanola/tablaposiciones">Liga Española</a>
-              </li>
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/mls/tablaposiciones">MLS</a>
-              </li>
-              
-          </ul>
+          <div id="nav-container"></div>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
@@ -427,43 +402,16 @@ function eventSudamericana() {
   const usudamericanaGoleadores = "/deportes/copa-sudamericana/goleadores";
   const usudamericanaPlanteles = "/deportes/copa-sudamericana/planteles";
 
+  setTimeout(() => {
+    createNav('copa-sudamericana');
+  }, 200);
+
   // Recorrer el objeto urlsCifras
   for (const urlObj of urlsCifras) {
     if (currentUrl === urlObj.mainUrl) {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
-      <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
-      
-         <li class="nav-item" role="presentation">
-                <a class="nav-link" id="copaam-tab" href="/deportes/copa-america/tablaposiciones">Copa América</a>
-              </li>
-      <li class="nav-item" role="presentation">
-      <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-      </li>
-      
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/tablaposiciones">Eliminatorias</a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
-      </li> 
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/tablaposiciones">Copa Libertadores</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link active " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/tablaposiciones" >Copa Sudamericana</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link" id="" href="/deportes/premierleague/tablaposiciones" >Premier League</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link" id="" href="/deportes/liga-espanola/tablaposiciones">Liga Española</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link" id="" href="/deportes/mls/tablaposiciones">MLS</a>
-      </li>
-      
-  </ul>
+      <div id="nav-container"></div>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
@@ -549,46 +497,16 @@ function eventPremierLeague() {
   const upremierleagueGoleadores = "/deportes/premierleague/goleadores";
   const upremierleaguePlanteles = "/deportes/premierleague/planteles";
 
+  setTimeout(() => {
+    createNav('premierleague');
+  }, 200);
+
   // Recorrer el objeto urlsCifras
   for (const urlObj of urlsCifras) {
     if (currentUrl === urlObj.mainUrl) {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
-      <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
-
-         <li class="nav-item" role="presentation">
-                <a class="nav-link" id="copaam-tab" href="/deportes/copa-america/tablaposiciones">Copa América</a>
-              </li>
-      
-      <li class="nav-item" role="presentation">
-      <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-      </li>
-      
-            <li class="nav-item" role="presentation">
-                <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/tablaposiciones">Eliminatorias</a>
-            </li>
-
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
-      </li> 
-
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/tablaposiciones">Copa Libertadores</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/tablaposiciones" >Copa Sudamericana</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="" href="/deportes/premierleague/tablaposiciones" >Premier League</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link" id="" href="/deportes/liga-espanola/tablaposiciones">Liga Española</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link" id="" href="/deportes/mls/tablaposiciones">MLS</a>
-      </li>
-      
-  </ul>
+          <div id="nav-container"></div>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
@@ -670,45 +588,16 @@ function eventLaLigaEspañola() {
   const uligaespanolaGoleadores = "/deportes/liga-espanola/goleadores";
   const uligaespanolaPlanteles = "/deportes/liga-espanola/planteles";
 
+  setTimeout(() => {
+    createNav('liga-espanola');
+  }, 200);
+
   // Recorrer el objeto urlsCifras
   for (const urlObj of urlsCifras) {
     if (currentUrl === urlObj.mainUrl) {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
-      <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
-
-         <li class="nav-item" role="presentation">
-                <a class="nav-link" id="copaam-tab" href="/deportes/copa-america/tablaposiciones">Copa América</a>
-              </li>
-      
-      <li class="nav-item" role="presentation">
-      <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/tablaposiciones">Eliminatorias</a>
-      </li>
-
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
-      </li> 
-
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/tablaposiciones">Copa Libertadores</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/tablaposiciones" >Copa Sudamericana</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link" id="" href="/deportes/premierleague/tablaposiciones" >Premier League</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="" href="/deportes/liga-espanola/tablaposiciones">Liga Española</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link" id="" href="/deportes/mls/tablaposiciones">MLS</a>
-      </li>
-      
-  </ul>
+     <div id="nav-container"></div>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
@@ -791,38 +680,16 @@ function eventMLS() {
   const uMLSGoleadores = "/deportes/mls/goleadores";
   const uMLSPlanteles = "/deportes/mls/planteles";
 
+  setTimeout(() => {
+    createNav('mls');
+  }, 200);
+
   // Recorrer el objeto urlsCifras
   for (const urlObj of urlsCifras) {
     if (currentUrl === urlObj.mainUrl) {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
-      <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
-      <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/tablaposiciones">Eliminatorias</a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
-      </li> 
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/tablaposiciones">Copa Libertadores</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/tablaposiciones" >Copa Sudamericana</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link" id="" href="/deportes/premierleague/tablaposiciones" >Premier League</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link" id="" href="/deportes/liga-espanola/tablaposiciones">Liga Española</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="" href="/deportes/mls/tablaposiciones">MLS</a>
-      </li>
-      
-  </ul>
+          <div id="nav-container"></div>
           <div class="tab-content" id="myTabContent">
               <div role="tabpanel">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
@@ -1018,46 +885,16 @@ function eventEliminatorios() {
   const ueliminatoriasConmebolGoleadores = "/deportes/eliminatorias-conmebol/goleadores";
   const ueliminatoriasConmebolPlanteles = "/deportes/eliminatorias-conmebol/planteles";
 
+  setTimeout(() => {
+    createNav('eliminatorias');
+  }, 200);
+
   // Recorrer el objeto urlsCifras
   for (const urlObj of urlsCifras) {
     if (currentUrl === urlObj.mainUrl) {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
-      <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
-
-      
-      <li class="nav-item" role="presentation">
-      <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link active" id="" href="/deportes/eliminatorias-conmebol/tablaposiciones">Eliminatorias</a>
-      </li>
-
-        <li class="nav-item" role="presentation">
-          <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
-        </li> 
-
-        <li class="nav-item" role="presentation">
-            <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/tablaposiciones">Copa Libertadores</a>
-        </li>
-
-        <li class="nav-item" role="presentation">
-            <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/tablaposiciones" >Copa Sudamericana</a>
-        </li>
-
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="" href="/deportes/premierleague/tablaposiciones" >Premier League</a>
-        </li>
-
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="" href="/deportes/liga-espanola/tablaposiciones">Liga Española</a>
-        </li>
-
-        <li class="nav-item" role="presentation">
-            <a class="nav-link" id="" href="/deportes/mls/tablaposiciones">MLS</a>
-        </li>
-      
-      </ul>
+          <div id="nav-container"></div>
 
           <div class="tab-content" id="myTabContent">
               <div role="tabpanel">
@@ -1142,38 +979,16 @@ function eventChampions() {
   const uchampionsGoleadores = "/deportes/champions/goleadores";
   const uchampionsPlanteles = "/deportes/champions/planteles";
 
+  setTimeout(() => {
+    createNav('champions');
+  }, 200);
+
   // Recorrer el objeto urlsCifras
   for (const urlObj of urlsCifras) {
     if (currentUrl === urlObj.mainUrl) {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
-      <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
-      <li class="nav-item" role="presentation">
-      <a class="nav-link"  href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/tablaposiciones">Eliminatorias</a>
-      </li>
-      <li class="nav-item" role="presentation">
-        <a class="nav-link active"  href="/deportes/champions/tablaposiciones">Champions League</a>
-      </li> 
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="copali-tab" href="/deportes/copa-libertadores/tablaposiciones">Copa Libertadores</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/tablaposiciones" >Copa Sudamericana</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link" id="" href="/deportes/premierleague/tablaposiciones" >Premier League</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link" id="" href="/deportes/liga-espanola/tablaposiciones">Liga Española</a>
-      </li>
-      <li class="nav-item" role="presentation">
-          <a class="nav-link" id="" href="/deportes/mls/tablaposiciones">MLS</a>
-      </li>
-      
-  </ul>
+          <div id="nav-container"></div>
           <div class="tab-content" id="myTabContent">
               <div role="tabpanel">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
