@@ -194,7 +194,7 @@ function resetForm(){
     idVideo.value = "";
     timeVal.value = "";
     desafioModel.value = "";
-    tipoEvaluacion.value = "";
+    tipoEvaluacion.value = "time";
   
 }
 function closeDiag(){
@@ -621,7 +621,7 @@ async function deleteConfirmed() {
                                           label="Tipo de evaluación" />
                                       </VCol>
 
-                                      <VCol cols="12" v-if="tipoEvaluacion == ''">
+                                      <VCol cols="12" v-if="tipoEvaluacion != 'full'">
                                         <VTextField v-model="timeVal" label="Tiempo en minutos de vista para el video" type="number" />
                                       </VCol>
          
