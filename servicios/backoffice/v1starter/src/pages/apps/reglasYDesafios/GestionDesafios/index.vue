@@ -824,12 +824,12 @@ async function onCompleteHorarios(){
                   </VDialog>
        
                   <!-- 👉 HORARIOS -->
-                  <VDialog v-model="isDialogVisibleHorario" persistent no-click-animation max-width="1200">
+                  <VDialog v-model="isDialogVisibleHorario" persistent no-click-animation max-width="800">
 
                   <!-- Dialog close btn -->
                   <DialogCloseBtn @click="closeDiagHorarios" />
 
-                  <VCard  class="pa-sm-14 pa-5">
+                  <VCard  class="py-4 p-0">
                       <VCardItem class="text-center">
                           <VCardTitle class="text-h5">
                               {{ "Editar horarios de " + nombre }}
@@ -847,24 +847,27 @@ async function onCompleteHorarios(){
                               >
                                 <VCol cols="4">
                                   <VSelect
+                                    clearable
                                     v-model="diaSelected"
                                     :items="diasDisponibles"
                                     :disabled="diasDisponibles.length === 0"
                                     label="Día de la semana"
                                   />
                                 </VCol>
-                                <VCol cols="2" class="d-flex gap-4">
+                                <VCol cols="3" class="d-flex gap-0 flex-column">
                                   <VBtn
                                     color="primary"
                                     @click="addDia()"
-                                    :disabled="diasDisponibles.length === 0 || diaSelected == null"
+                                    :disabled="horarios.length == 1 || diasDisponibles.length === 0 || diaSelected == null"
                                   >
                                     Añadir día
                                   </VBtn>
-                                  
+                                  <small v-if="horarios.length == 1 && diaSelected != null" class="text-error mt-1" style="font-size: 10px;">
+                                    Solo puede seleccionar 1 día
+                                  </small>
                                
                                 </VCol>
-                                <VCol cols="4" class="ml-4">
+                                <VCol cols="4" class="ml-4 d-none">
                                   <AppDateTimePicker style="width: 300px;" 
                                         prepend-inner-icon="tabler-calendar" 
                                         density="compact" 
