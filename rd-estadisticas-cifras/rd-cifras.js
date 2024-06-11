@@ -1,3 +1,31 @@
+function createNav(activeTabId) {
+  const tabs = [
+    { id: 'copa-america', href: '/deportes/copa-america/tablaposiciones', text: 'Copa América' },
+    { id: 'ligapro', href: '/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador', text: 'LigaPro' },
+    { id: 'eliminatorias', href: '/deportes/eliminatorias-conmebol/tablaposiciones', text: 'Eliminatorias' },
+    { id: 'champions', href: '/deportes/champions/tablaposiciones', text: 'Champions League' },
+    { id: 'copa-libertadores', href: '/deportes/copa-libertadores/tablaposiciones', text: 'Copa Libertadores' },
+    { id: 'copa-sudamericana', href: '/deportes/copa-sudamericana/tablaposiciones', text: 'Copa Sudamericana' },
+    { id: 'premierleague', href: '/deportes/premierleague/tablaposiciones', text: 'Premier League' },
+    { id: 'liga-espanola', href: '/deportes/liga-espanola/tablaposiciones', text: 'Liga Española' },
+    { id: 'mls', href: '/deportes/mls/tablaposiciones', text: 'MLS' }
+  ];
+
+  const navHtml = `
+      <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
+          ${tabs.map(tab => `
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link ${tab.id === activeTabId ? 'active' : ''}" id="${tab.id}" href="${tab.href}">${tab.text}</a>
+              </li>
+          `).join('')}
+      </ul>
+  `;
+
+  const navContainer = document.getElementById('nav-container');
+  navContainer.innerHTML = navHtml;
+}
+
+
 function eventCopaAmerica() {
   const urlsCifras = [
     {
@@ -29,7 +57,7 @@ function eventCopaAmerica() {
       subUrl: {
         name: "Planteles",
         agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/copaamerica/pages/es/agenda.html",
-        iframe: "",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3//minapp/page/page.html?channel=deportes.futbol.copaamerica&lang=es_LA&page=planteles",
       },
     },
   ];
@@ -44,50 +72,15 @@ function eventCopaAmerica() {
   const uCopaAmericaGoleadores = "/deportes/copa-america/goleadores";
   const uCopaAmericaPlanteles = "/deportes/copa-america/planteles";
 
+  createNav('copa-america');
+ 
   // Recorrer el objeto urlsCifras
   for (const urlObj of urlsCifras) {
     if (currentUrl === urlObj.mainUrl) {
       // Generar el contenido HTML usando un template string
-      htmlContent =`        
-          <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
+      htmlContent = `
 
-              <li class="nav-item" role="presentation">
-                <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-              </li>
-
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/tablaposiciones">Eliminatorias</a>
-              </li>
-
-              <li class="nav-item" role="presentation">
-                <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
-              </li> 
-
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="copali-tab" href="/deportes/copa-libertadores/tablaposiciones">Copa Libertadores</a>
-              </li>
-
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="copaam-tab" href="/deportes/copa-america/tablaposiciones">Copa América</a>
-              </li>
-
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/tablaposiciones" >Copa Sudamericana</a>
-              </li>
-
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/premierleague/tablaposiciones" >Premier League</a>
-              </li>
-
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/liga-espanola/tablaposiciones">Liga Española</a>
-              </li>
-
-              <li class="nav-item" role="presentation">
-                  <a class="nav-link" id="" href="/deportes/mls/tablaposiciones">MLS</a>
-              </li>
-              
-          </ul>
+         <div id="nav-container"></div>
           <div class="tab-content" id="myTabContent">
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
@@ -121,7 +114,7 @@ function eventCopaAmerica() {
   }
   // Agregar el contenido HTML al cuerpo del documento
   const skk = document.querySelector(".contenido_dinamico__copaamerica");
-  if(skk){
+  if (skk) {
     skk.innerHTML = htmlContent;
   }
 }
@@ -179,11 +172,11 @@ function eventLigaPro() {
         iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.ecuador&lang=es_LA&page=planteles",
       },
     },
-   
+
   ];
 
   const currentUrl = window.location.pathname;
-    
+
   // Variable para almacenar el contenido HTML
   let htmlContent = "";
 
@@ -223,6 +216,9 @@ function eventLigaPro() {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
+          <li class="nav-item" role="presentation">
+                <a class="nav-link" id="copaam-tab" href="/deportes/copa-america/tablaposiciones">Copa América</a>
+              </li>
               
           <li class="nav-item" role="presentation">
             <a class="nav-link active" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
@@ -283,9 +279,9 @@ function eventLigaPro() {
     }
   }
   // Agregar el contenido HTML al cuerpo del documento
-  
+
   const skk = document.querySelector(".contenido_dinamico__ligapro");
-  if(skk){
+  if (skk) {
     skk.innerHTML = htmlContent;
   }
 }
@@ -342,6 +338,9 @@ function eventLibertadores() {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
+             <li class="nav-item" role="presentation">
+                <a class="nav-link" id="copaam-tab" href="/deportes/copa-america/tablaposiciones">Copa América</a>
+              </li>
           <li class="nav-item" role="presentation">
           <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
           </li>
@@ -401,7 +400,7 @@ function eventLibertadores() {
   }
   // Agregar el contenido HTML al cuerpo del documento
   const skk = document.querySelector(".contenido_dinamico__libertadores");
-  if(skk){
+  if (skk) {
     skk.innerHTML = htmlContent;
   }
 }
@@ -459,6 +458,9 @@ function eventSudamericana() {
       htmlContent = /*html*/ `        
       <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
       
+         <li class="nav-item" role="presentation">
+                <a class="nav-link" id="copaam-tab" href="/deportes/copa-america/tablaposiciones">Copa América</a>
+              </li>
       <li class="nav-item" role="presentation">
       <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
       </li>
@@ -520,7 +522,7 @@ function eventSudamericana() {
   }
   // Agregar el contenido HTML al cuerpo del documento
   const skk = document.querySelector(".contenido_dinamico__sudamericana");
-  if(skk){
+  if (skk) {
     skk.innerHTML = htmlContent;
   }
 }
@@ -577,6 +579,10 @@ function eventPremierLeague() {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
       <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
+
+         <li class="nav-item" role="presentation">
+                <a class="nav-link" id="copaam-tab" href="/deportes/copa-america/tablaposiciones">Copa América</a>
+              </li>
       
       <li class="nav-item" role="presentation">
       <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
@@ -637,7 +643,7 @@ function eventPremierLeague() {
   }
   // Agregar el contenido HTML al cuerpo del documento
   const skk = document.querySelector(".contenido_dinamico__premierleague");
-  if(skk){
+  if (skk) {
     skk.innerHTML = htmlContent;
   }
 }
@@ -694,6 +700,10 @@ function eventLaLigaEspañola() {
       // Generar el contenido HTML usando un template string
       htmlContent = /*html*/ `        
       <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
+
+         <li class="nav-item" role="presentation">
+                <a class="nav-link" id="copaam-tab" href="/deportes/copa-america/tablaposiciones">Copa América</a>
+              </li>
       
       <li class="nav-item" role="presentation">
       <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
@@ -754,7 +764,7 @@ function eventLaLigaEspañola() {
   }
   // Agregar el contenido HTML al cuerpo del documento
   const skk = document.querySelector(".contenido_dinamico__espana");
-  if(skk){
+  if (skk) {
     skk.innerHTML = htmlContent;
   }
 }
@@ -868,7 +878,7 @@ function eventMLS() {
   }
   // Agregar el contenido HTML al cuerpo del documento
   const skk = document.querySelector(".contenido_dinamico__mls");
-  if(skk){
+  if (skk) {
     skk.innerHTML = htmlContent;
   }
 }
@@ -981,7 +991,7 @@ function eventLeaguesCup() {
   }
   // Agregar el contenido HTML al cuerpo del documento
   const skk = document.querySelector(".contenido_dinamico__leaguescup");
-  if(skk){
+  if (skk) {
     skk.innerHTML = htmlContent;
   }
 }
@@ -1105,7 +1115,7 @@ function eventEliminatorios() {
   }
   // Agregar el contenido HTML al cuerpo del documento
   const skk = document.querySelector(".contenido_dinamico__eliminatorias");
-  if(skk){
+  if (skk) {
     skk.innerHTML = htmlContent;
   }
 }
@@ -1219,110 +1229,110 @@ function eventChampions() {
   }
   // Agregar el contenido HTML al cuerpo del documento
   const skk = document.querySelector(".contenido_dinamico__champions");
-  if(skk){
+  if (skk) {
     skk.innerHTML = htmlContent;
   }
 }
 
-if (window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" || 
-window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/calendario" || 
-window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/goleadores" || 
-window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/planteles"|| 
-window.location.pathname === "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador" ||
-window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador/etapa-2") {
+if (window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador" ||
+  window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/calendario" ||
+  window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/goleadores" ||
+  window.location.pathname === "/deportes/liga-pro-serie-a-ecuador/planteles" ||
+  window.location.pathname === "/deportes/tabla-acumulada/liga-pro/serie-a-ecuador" ||
+  window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador/etapa-2") {
   setTimeout(() => {
     eventLigaPro();
   }, 200);
 
 
-} else if (window.location.pathname === "/deportes/copa-libertadores/tablaposiciones" || 
-  window.location.pathname === "/deportes/copa-libertadores/calendario" || 
-  window.location.pathname === "/deportes/copa-libertadores/goleadores" || 
+} else if (window.location.pathname === "/deportes/copa-libertadores/tablaposiciones" ||
+  window.location.pathname === "/deportes/copa-libertadores/calendario" ||
+  window.location.pathname === "/deportes/copa-libertadores/goleadores" ||
   window.location.pathname === "/deportes/copa-libertadores/planteles") {
   setTimeout(() => {
     eventLibertadores();
   }, 200);
 
 
-} else if (window.location.pathname === "/deportes/copa-america/tablaposiciones" || 
-  window.location.pathname === "/deportes/copa-america/calendario" || 
-  window.location.pathname === "/deportes/copa-america/goleadores" || 
+} else if (window.location.pathname === "/deportes/copa-america/tablaposiciones" ||
+  window.location.pathname === "/deportes/copa-america/calendario" ||
+  window.location.pathname === "/deportes/copa-america/goleadores" ||
   window.location.pathname === "/deportes/copa-america/planteles") {
   setTimeout(() => {
     eventCopaAmerica();
   }, 200);
 
 
-} else if (window.location.pathname === "/deportes/copa-sudamericana/tablaposiciones" || 
-window.location.pathname === "/deportes/copa-sudamericana/calendario" || 
-window.location.pathname === "/deportes/copa-sudamericana/goleadores" || 
-window.location.pathname === "/deportes/copa-sudamericana/planteles") {
+} else if (window.location.pathname === "/deportes/copa-sudamericana/tablaposiciones" ||
+  window.location.pathname === "/deportes/copa-sudamericana/calendario" ||
+  window.location.pathname === "/deportes/copa-sudamericana/goleadores" ||
+  window.location.pathname === "/deportes/copa-sudamericana/planteles") {
   setTimeout(() => {
     eventSudamericana();
   }, 200);
 
 
-} else if (window.location.pathname === "/deportes/premierleague/tablaposiciones" || 
-window.location.pathname === "/deportes/premierleague/calendario" || 
-window.location.pathname === "/deportes/premierleague/goleadores" || 
-window.location.pathname === "/deportes/premierleague/planteles") {
+} else if (window.location.pathname === "/deportes/premierleague/tablaposiciones" ||
+  window.location.pathname === "/deportes/premierleague/calendario" ||
+  window.location.pathname === "/deportes/premierleague/goleadores" ||
+  window.location.pathname === "/deportes/premierleague/planteles") {
   setTimeout(() => {
     eventPremierLeague();
   }, 200);
 
 
-} else if (window.location.pathname === "/deportes/liga-espanola/tablaposiciones" || 
-window.location.pathname === "/deportes/liga-espanola/calendario" || 
-window.location.pathname === "/deportes/liga-espanola/goleadores" || 
-window.location.pathname === "/deportes/liga-espanola/planteles") {
+} else if (window.location.pathname === "/deportes/liga-espanola/tablaposiciones" ||
+  window.location.pathname === "/deportes/liga-espanola/calendario" ||
+  window.location.pathname === "/deportes/liga-espanola/goleadores" ||
+  window.location.pathname === "/deportes/liga-espanola/planteles") {
   setTimeout(() => {
     eventLaLigaEspañola();
   }, 200);
 
 
-} else if (window.location.pathname === "/deportes/mls/tablaposiciones" || 
-window.location.pathname === "/deportes/mls/calendario" || 
-window.location.pathname === "/deportes/mls/goleadores" || 
-window.location.pathname === "/deportes/mls/planteles") {
+} else if (window.location.pathname === "/deportes/mls/tablaposiciones" ||
+  window.location.pathname === "/deportes/mls/calendario" ||
+  window.location.pathname === "/deportes/mls/goleadores" ||
+  window.location.pathname === "/deportes/mls/planteles") {
   setTimeout(() => {
     eventMLS();
   }, 200);
 
 
-} else if (window.location.pathname === "/deportes/leaguescup/tablaposiciones" || 
-window.location.pathname === "/deportes/leaguescup/calendario" || 
-window.location.pathname === "/deportes/leaguescup/goleadores" || 
-window.location.pathname === "/deportes/leaguescup/planteles") {
+} else if (window.location.pathname === "/deportes/leaguescup/tablaposiciones" ||
+  window.location.pathname === "/deportes/leaguescup/calendario" ||
+  window.location.pathname === "/deportes/leaguescup/goleadores" ||
+  window.location.pathname === "/deportes/leaguescup/planteles") {
   setTimeout(() => {
     // eventLeaguesCup();
   }, 200);
 
 
-} else if (window.location.pathname === "/deportes/eliminatorias-conmebol/tablaposiciones" || 
-window.location.pathname === "/deportes/eliminatorias-conmebol/calendario" || 
-window.location.pathname === "/deportes/eliminatorias-conmebol/goleadores" || 
-window.location.pathname === "/deportes/eliminatorias-conmebol/planteles") {
+} else if (window.location.pathname === "/deportes/eliminatorias-conmebol/tablaposiciones" ||
+  window.location.pathname === "/deportes/eliminatorias-conmebol/calendario" ||
+  window.location.pathname === "/deportes/eliminatorias-conmebol/goleadores" ||
+  window.location.pathname === "/deportes/eliminatorias-conmebol/planteles") {
   setTimeout(() => {
     eventEliminatorios();
   }, 200);
 
- } else if (window.location.pathname === "/deportes/champions/tablaposiciones" || 
-  window.location.pathname === "/deportes/champions/calendario" || 
-  window.location.pathname === "/deportes/champions/goleadores" || 
+} else if (window.location.pathname === "/deportes/champions/tablaposiciones" ||
+  window.location.pathname === "/deportes/champions/calendario" ||
+  window.location.pathname === "/deportes/champions/goleadores" ||
   window.location.pathname === "/deportes/champions/planteles") {
   setTimeout(() => {
     eventChampions();
   }, 200);
 
 
-} else { console.log("no esta validado dicha url");}
+} else { console.log("no esta validado dicha url"); }
 
 //FUNCION PARA HACER SCROLL HORIZONTAL AUTOMATICO DE ACUERDO A LA CLASE ACTIVE
 setTimeout(() => {
   var activeNavItem = document.querySelector(".nav-link.active");
   if (activeNavItem) {
     var contTabs = document.getElementById("myTab");
-    if(contTabs){
+    if (contTabs) {
       contTabs.scrollLeft = activeNavItem.offsetLeft - (contTabs.offsetWidth - activeNavItem.offsetWidth) / 2;
       // for (const sst of contTabs){
       //   console.log('for ejecutado scroll horizontal');
@@ -1334,21 +1344,21 @@ setTimeout(() => {
 
 
 /* ------------------- editar los height del segundo iframe de arriba oara abajo--------------------- */
-if(window.location.pathname === "/deportes/copa-sudamericana/planteles"){
+if (window.location.pathname === "/deportes/copa-sudamericana/planteles") {
   setTimeout(() => {
     var iframe = document.querySelector('iframe[title="iframe_sudamericana_calendario"]');
     iframe.setAttribute('height', '400');
   }, 600);
 }
 
-if(window.location.pathname === "/deportes/eliminatorias-conmebol/calendario"){
+if (window.location.pathname === "/deportes/eliminatorias-conmebol/calendario") {
   setTimeout(() => {
     var iframe = document.querySelector('iframe[title="iframe_eliminatorias_calendario"]');
     iframe.setAttribute('height', '400');
   }, 600);
 }
 
-if (window.location.pathname === "/deportes/copa-libertadores/calendario"){
+if (window.location.pathname === "/deportes/copa-libertadores/calendario") {
   setTimeout(() => {
     var iframe = document.querySelector('iframe[title="iframe_libertadores_calendario"]');
     iframe.setAttribute('height', '400');
