@@ -40,8 +40,19 @@ const configSnackbar = ref({
     model: false
 });
 
+const dataDesafioRaw = ref([]);
 
-onMounted(getDesafio)
+onMounted(getDesafio);
+
+function deepClone(o) {
+  const output = Array.isArray(o) ? [] : {};
+  
+  for (let i in o) {
+    const value = o[i];   
+    output[i] = value !== null && typeof value === 'object' ? deepClone(value) : value;
+  }
+  return output;
+}
 
 async function getDesafio(page = 1, limit= 10){
   try {
@@ -59,6 +70,8 @@ async function getDesafio(page = 1, limit= 10){
       const data = await response.json();
 
       dataDesafio.value = data.data;
+
+      dataDesafioRaw.value = deepClone(data.data);
       
       totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
@@ -147,6 +160,29 @@ const handleSwitchChange = async (index) => {
   switchOnDisabled.value = false;
   // Realiza las operaciones necesarias con el ID y el estado
 };
+
+const searchTerm = ref('');
+
+function search(){
+  if(searchTerm.value != ''){
+    currentPage.value = 1;
+    const normalizedsearchQuery = searchTerm.value.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();;
+
+    const filteredDesafio = dataDesafio.value.filter((item) => {
+      const normalizedItemName = item.tituloDesafio.normalize('NFD').replace(/\p{Diacritic}/gu, '').toLowerCase().trim();
+      return normalizedItemName.includes(normalizedsearchQuery);
+    });
+
+    dataDesafio.value = filteredDesafio;
+
+  }
+}
+
+function reiniciar(){
+  searchTerm.value = '';
+  currentPage.value = 1;
+  dataDesafio.value = deepClone(dataDesafioRaw.value);
+}
 
 //FUNCIONES FORM
 function resetForm(){
@@ -649,13 +685,36 @@ async function onCompleteHorarios(){
                 <!-- inicio lista de Módulos -->
                   
                 <div class="px-4">
-                  <VBtn color="primary" class="mb-4" @click="onAdd">
-                    Nuevo desafío
-                    <VIcon
-                      :size="22"
-                      icon="tabler-plus"
-                    />
-                  </VBtn>
+
+                  <div class="d-flex justify-space-between mb-4">
+
+                    <div class="d-flex gap-2">
+                      <VTextField v-model="searchTerm" label="Buscar desafíos" style="width: 300px;"></VTextField>
+                      <VBtn color="primary" prepend-icon="tabler-search" @click="search">
+                          Buscar        
+                      </VBtn>
+
+                      <VBtn color="primary" @click="reiniciar">
+                          <VIcon
+                            :size="22"
+                            icon="tabler-refresh"
+                          />
+                        </VBtn>
+                    </div>
+
+                    <VBtn color="primary" @click="onAdd">
+                      Nuevo desafío
+                      <VIcon
+                        :size="22"
+                        icon="tabler-plus"
+                      />
+                    </VBtn>
+
+                      
+
+                  </div>
+                  
+                  
                   <VList lines="two" border v-if="dataDesafio.length < 1">
                     <VListItem>
                       <VListItemTitle>
