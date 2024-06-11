@@ -72,7 +72,9 @@ function eventCopaAmerica() {
   const uCopaAmericaGoleadores = "/deportes/copa-america/goleadores";
   const uCopaAmericaPlanteles = "/deportes/copa-america/planteles";
 
-  createNav('copa-america');
+  setTimeout(() => {
+    createNav('copa-america');
+  }, 200);
  
   // Recorrer el objeto urlsCifras
   for (const urlObj of urlsCifras) {
