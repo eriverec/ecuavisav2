@@ -48,29 +48,41 @@ function eventCopaAmerica() {
   for (const urlObj of urlsCifras) {
     if (currentUrl === urlObj.mainUrl) {
       // Generar el contenido HTML usando un template string
-      htmlContent = /*html*/ `        
+      htmlContent =`        
           <ul class="nav nav-pills navCentral" id="myTab" role="tablist">
-          <li class="nav-item" role="presentation">
-            <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
-          </li>
-          <li class="nav-item" role="presentation">
-              <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/tablaposiciones">Eliminatorias</a>
-          </li>
-          <li class="nav-item" role="presentation">
-            <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
-          </li> 
+
               <li class="nav-item" role="presentation">
-                  <a class="nav-link active" id="copali-tab" href="/deportes/copa-libertadores/tablaposiciones">Copa Libertadores</a>
+                <a class="nav-link" id="ligapro-tab" href="/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador">LigaPro</a>
               </li>
+
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link " id="" href="/deportes/eliminatorias-conmebol/tablaposiciones">Eliminatorias</a>
+              </li>
+
+              <li class="nav-item" role="presentation">
+                <a class="nav-link" id="ligapro-tab" href="/deportes/champions/tablaposiciones">Champions League</a>
+              </li> 
+
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link" id="copali-tab" href="/deportes/copa-libertadores/tablaposiciones">Copa Libertadores</a>
+              </li>
+
+              <li class="nav-item" role="presentation">
+                  <a class="nav-link active" id="copaam-tab" href="/deportes/copa-america/tablaposiciones">Copa América</a>
+              </li>
+
               <li class="nav-item" role="presentation">
                   <a class="nav-link " id="copaSudamericana-tab" href="/deportes/copa-sudamericana/tablaposiciones" >Copa Sudamericana</a>
               </li>
+
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/premierleague/tablaposiciones" >Premier League</a>
               </li>
+
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/liga-espanola/tablaposiciones">Liga Española</a>
               </li>
+
               <li class="nav-item" role="presentation">
                   <a class="nav-link" id="" href="/deportes/mls/tablaposiciones">MLS</a>
               </li>
@@ -81,16 +93,16 @@ function eventCopaAmerica() {
                   <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>                   
                   <ul class="nav nav-pills navChilds" id="myTab" role="tablist">
                   <li class="nav-item" role="presentation">
-                      <a href="/deportes/copa-libertadores/tablaposiciones" class="nav-link ${currentUrl === uCopaAmericaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
+                      <a href="/deportes/copa-america/tablaposiciones" class="nav-link ${currentUrl === uCopaAmericaTabla ? "active" : ""}" id="Posiciones-tab" >Posiciones</a>
                   </li>
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/copa-libertadores/calendario" class="nav-link ${currentUrl === uCopaAmericaCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
+                          <a href="/deportes/copa-america/calendario" class="nav-link ${currentUrl === uCopaAmericaCalendario ? "active" : ""} " id="Fixture-tab">Calendario</a>
                       </li>
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/copa-libertadores/goleadores" class="nav-link ${currentUrl === uCopaAmericaGoleadores ? "active" : ""} " id="Goleadores-tab" >Goleadores</a>
+                          <a href="/deportes/copa-america/goleadores" class="nav-link ${currentUrl === uCopaAmericaGoleadores ? "active" : ""} " id="Goleadores-tab" >Goleadores</a>
                       </li>
                       <li class="nav-item" role="presentation">
-                          <a href="/deportes/copa-libertadores/planteles" class="nav-link ${currentUrl === uCopaAmericaPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
+                          <a href="/deportes/copa-america/planteles" class="nav-link ${currentUrl === uCopaAmericaPlanteles ? "active" : ""} " id="Planteles-tab" >Planteles</a>
                       </li>
                   </ul>
                   <div class="tab-content" id="myTabContent">
