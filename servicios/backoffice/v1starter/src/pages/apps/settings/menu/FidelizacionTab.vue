@@ -43,13 +43,13 @@ const currentTab_fidelizacion = ref(0)
 													Videos Consumos
 									      </VTab>
 
-									      <VTab class="mb-2">
+									      <!-- <VTab class="mb-2">
 									        <VIcon
 									          start
 									          icon="mdi-folder-multiple"
 									        />
 													Archivos
-									      </VTab>
+									      </VTab> -->
 
 									      <VTab class="mb-2">
 									        <VIcon
@@ -62,62 +62,113 @@ const currentTab_fidelizacion = ref(0)
 									    <VDivider vertical />
 
 									    <VWindow v-model="currentTab_fidelizacion" class="ms-3" >
-									      <VWindowItem>
-								      		<VCardTitle class="px-0 py-0">Gestionar desafíos</VCardTitle>
-													<VCardSubtitle class="px-0 py-0"> Gestiona tus desafíos semanales </VCardSubtitle>
-									  			
-									        <p class="pt-3">
-									          El módulo "Desafíos" te permite gestionar los desafíos de una semana definida. Desde este módulo, puedes crear nuevos desafíos, establecer la hora y las fechas de cada uno, así como editar o eliminar los desafíos existentes. 
-									          Mantén un control preciso sobre tus desafíos semanales y mantén tu rutina organizada con esta útil herramienta de gestión.
-									        </p>
-
-									        <VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-reglasYDesafios-GestionDesafios', params: { id: 0 } }" >
-														Gestionar
+										<!-- DESAFÍOS -->
+											<VWindowItem>
+												<VRow>
+												<!-- texto, título y subtítulo -->
+												<VCol cols="12" sm="6" class="d-flex flex-column align-items-start justify-content-center">
+													<VCardTitle class="px-0 py-0 mb-2">Gestionar "Desafíos"</VCardTitle>
+													<VCardSubtitle class="px-0 py-0 mb-2">Gestiona tus desafíos semanales</VCardSubtitle>
+													<p class="pt-3 text-left">
+													El módulo "Desafíos" te permite gestionar los desafíos de una semana definida. Desde este módulo, puedes crear nuevos desafíos, establecer la hora y las fechas de cada uno, así como editar o eliminar los desafíos existentes. 
+													Mantén un control preciso sobre tus desafíos semanales y mantén tu rutina organizada con esta útil herramienta de gestión.
+													</p>
+													
+													<VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-reglasYDesafios-GestionDesafios', params: { id: 0 } }">
+													Gestionar
 													</VBtn>
-									      </VWindowItem>
+												</VCol>
+												
+												<!-- GIF -->
+												<VCol cols="12" sm="6" class="text-center">
+											
+													<img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Ffidelizacion%2FDESAFIO.gif" alt="Ejemplo de Desafío" style="width: 55%; max-width: 100%;" />
+												</VCol>
+												</VRow>
+											</VWindowItem>
+											
+										<!--SEMANA DASAFIOS--->
 
-									      <VWindowItem>
-									        <VCardTitle class="px-0 py-0">Gestionar semanas desafíos</VCardTitle>
-													<VCardSubtitle class="px-0 py-0"> Organiza tus desafíos por semana </VCardSubtitle>
-									  			
-									        <p class="pt-3">
-									          El módulo de "Semanas de Desafíos" te permite administrar y organizar las semanas en las que tendrán lugar tus desafíos. Aquí podrás definir las semanas específicas en las que se llevarán a cabo tus desafíos y asociar múltiples desafíos a cada semana. Mantén un registro ordenado de tus desafíos 
-									        	semanales y planifica tus actividades con facilidad utilizando esta útil herramienta de gestión.
-									        </p>
-									        <VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-semana_desafios', params: { id: 0 } }" >
-														Gestionar
+										<VWindowItem>
+												<VRow>
+												<!-- texto, título y subtítulo -->
+												<VCol cols="12" sm="6" class="d-flex flex-column align-items-start justify-content-center">
+													<VCardTitle class="px-0 py-0 mb-2">Gestiona "Semanas de Desafíos"</VCardTitle>
+													<VCardSubtitle class="px-0 py-0 mb-2">Organiza tus desafíos por semana</VCardSubtitle>
+													<p class="pt-3 text-left">
+														El módulo de "Semanas de Desafíos" te permite administrar y organizar las semanas en las que tendrán lugar tus desafíos. Aquí podrás definir las semanas específicas en las que se llevarán a cabo tus desafíos y asociar múltiples desafíos a cada semana. Mantén un registro ordenado de tus desafíos 
+														semanales y planifica tus actividades con facilidad utilizando esta útil herramienta de gestión.
+													</p>
+													
+													<VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-semana_desafios', params: { id: 0 } }">
+													Gestionar
 													</VBtn>
-									      </VWindowItem>
+												</VCol>
+												
+												<!-- GIF -->
+												<VCol cols="12" sm="6" class="text-center">
+											
+													<img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Ffidelizacion%2FSEMANA-DESAFIO.gif" alt="Semana de Desafíos" style="width: 55%; max-width: 100%;" />
+												</VCol>
+												</VRow>
+										</VWindowItem>
 
-									      <VWindowItem>
-									        <VCardTitle class="px-0 py-0">Gestionar de Trivias</VCardTitle>
-													<VCardSubtitle class="px-0 py-0"> Trivias </VCardSubtitle>
-									
-									        <p class="pt-3">
-									          El módulo de Trivias se integra estrechamente con el módulo de Desafíos. Aquí puedes crear trivias que complementan tus desafíos principales. 
+									   <!--TRIVIAS-->
+
+									   <VWindowItem>
+												<VRow>
+												<!-- texto, título y subtítulo -->
+												<VCol cols="12" sm="6" class="d-flex flex-column align-items-start justify-content-center">
+													<VCardTitle class="px-0 py-0 mb-2">Gestiona "Trvias"</VCardTitle>
+													<VCardSubtitle class="px-0 py-0 mb-2">Crea y gestiona las trivias para cada desafío</VCardSubtitle>
+													<p class="pt-3 text-left">
+														El módulo de Trivias se integra estrechamente con el módulo de Desafíos. Aquí puedes crear trivias que complementan tus desafíos principales. 
 									          Desde preguntas de opción múltiple hasta verdadero o falso, este módulo te permite personalizar el tipo de trivia que deseas incluir en tus desafíos.
-									        </p>
-									        <VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-trivias', params: { id: 0 } }" >
-														Gestionar
+													</p>
+													
+													<VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-trivias', params: { id: 0 } }">
+													Gestionar
 													</VBtn>
-									      </VWindowItem>
+												</VCol>
+												
+												<!-- GIF -->
+												<VCol cols="12" sm="6" class="text-center">
+											
+													<img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Ffidelizacion%2FTRIVIAS.gif" alt="Tipos de trivias disponibles" style="width: 55%; max-width: 100%;" />
+												</VCol>
+												</VRow>
+										</VWindowItem>
 
-									      <VWindowItem>
-									        <VCardTitle class="px-0 py-0">Gestionar de Video Consumo</VCardTitle>
-													<VCardSubtitle class="px-0 py-0"> Controla tu Tiempo de Visualización con el Módulo de Video Consumo </VCardSubtitle>
-									
-									        <p class="pt-3">
-									          El módulo de Video Consumo te permite gestionar y monitorear el tiempo de visualización de 
-									          videos dentro de tus desafíos. Con este módulo, puedes establecer desafíos específicos que 
+										<!--VIDEOS CONSUMO-->
+									   
+										<VWindowItem>
+												<VRow>
+												<!-- texto, título y subtítulo -->
+												<VCol cols="12" sm="6" class="d-flex flex-column align-items-start justify-content-center">
+													<VCardTitle class="px-0 py-0 mb-2">Gestiona "Video Consumo"</VCardTitle>
+													<VCardSubtitle class="px-0 py-0 mb-2">Controla el tiempo de visualización con el Módulo de Video Consumo</VCardSubtitle>
+													<p class="pt-3 text-left">
+														El módulo de Video Consumo te permite gestionar y monitorear el tiempo de visualización de 
+									          videos dentro de tus desafíos. <br>on este módulo, puedes establecer desafíos específicos que 
 									          requieren que los participantes vean videos durante ciertos períodos de tiempo. 
 									          Por ejemplo, podrías crear desafíos que incentiven a los usuarios a ver un video completo durante al menos 2 minutos. 
-									          Con esta funcionalidad, puedes medir y recompensar el tiempo dedicado a la visualización de contenido multimedia, lo que garantiza un compromiso efectivo con tus actividades y desafíos.
-									        </p>
-									        <VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-reglasYDesafios-GestionVideosHistoricos', params: { id: 0 } }" >
-														Gestionar
+									          <br>Con esta funcionalidad, puedes medir y recompensar el tiempo dedicado a la visualización de contenido multimedia, lo que garantiza un compromiso efectivo con tus actividades y desafíos.
+													</p>
+													
+													<VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-reglasYDesafios-GestionVideosHistoricos', params: { id: 0 } }">
+													Gestionar
 													</VBtn>
-									      </VWindowItem>
+												</VCol>
+												
+												<!-- GIF -->
+												<VCol cols="12" sm="6" class="text-center">
+											
+													<img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Ffidelizacion%2FVIDEOS-CONSUMO.gif" alt="Proceso de Ver video" style="width: 55%; max-width: 100%;" />
+												</VCol>
+												</VRow>
+										</VWindowItem>
 
+<!-- 									  
 									      <VWindowItem>
 									        <VCardTitle class="px-0 py-0">Gestor de Archivos subidos por los usuarios</VCardTitle>
 													<VCardSubtitle class="px-0 py-0"> Organiza y Gestiona Archivos con el Módulo de Archivos </VCardSubtitle>
@@ -130,20 +181,33 @@ const currentTab_fidelizacion = ref(0)
 									        <VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-reglasYDesafios-gestorArchivos', params: { id: 0 } }" >
 														Gestionar
 													</VBtn>
-									      </VWindowItem>
+									      </VWindowItem> -->
 
-									      <VWindowItem>
-									        <VCardTitle class="px-0 py-0">Gestor de sellos logrados</VCardTitle>
-													<VCardSubtitle class="px-0 py-0"> Organiza y Gestiona los sellos logrados de usuarios </VCardSubtitle>
-									
-									        <p class="pt-3">
-									          Verifica los sellos ganados de usuarios con su respectiva semana. 
+										<!--SELLOS LOGRADOS-->
 
-									        </p>
-									        <VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-reglasYDesafios-GestionSellosHistoricos', params: { id: 0 } }" >
-														Gestionar
+										<VWindowItem>
+												<VRow>
+												<!-- texto, título y subtítulo -->
+												<VCol cols="12" sm="6" class="d-flex flex-column align-items-start justify-content-center">
+													<VCardTitle class="px-0 py-0 mb-2">Gestiona los Sellos Logrados</VCardTitle>
+													<VCardSubtitle class="px-0 py-0 mb-2">Organiza y Gestiona los sellos logrados de usuarios</VCardSubtitle>
+													<p class="pt-3 text-left">
+														Verifica los sellos ganados de usuarios con su respectiva semana. 
+													</p>
+													
+													<VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-reglasYDesafios-GestionSellosHistoricos', params: { id: 0 } }">
+													Gestionar
 													</VBtn>
-									      </VWindowItem>
+												</VCol>
+												
+												<!-- GIF -->
+												<VCol cols="12" sm="6" class="text-center">
+											
+													<img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Ffidelizacion%2FSELLOS-LOGRADOS.jpg" alt="Pantalla de Stickers y Tarjetas obtenidas" style="width: 55%; max-width: 100%;" />
+												</VCol>
+												</VRow>
+										</VWindowItem>
+									 
 									    </VWindow>
 									  </div>
 									</VCol>
