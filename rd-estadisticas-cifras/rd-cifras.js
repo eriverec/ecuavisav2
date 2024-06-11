@@ -1125,12 +1125,15 @@ setTimeout(() => {
     var contTabs = document.getElementById("myTab");
     if (contTabs) {
       contTabs.scrollLeft = activeNavItem.offsetLeft - (contTabs.offsetWidth - activeNavItem.offsetWidth) / 2;
+      console.log("si encontro la clase myTab");
       // for (const sst of contTabs){
       //   console.log('for ejecutado scroll horizontal');
       // }
+    }else{
+      console.log("no encontro la clase myTab");
     }
   }
-}, 200);
+}, 250);
 
 
 
