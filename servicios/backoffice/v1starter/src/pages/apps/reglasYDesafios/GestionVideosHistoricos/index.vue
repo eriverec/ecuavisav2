@@ -43,7 +43,7 @@ const configSnackbar = ref({
 
 const tipoEvaluacionItems = [{
   title: "Definir un tiempo",
-  value: ""
+  value: "time"
 },{
   title: "Ver todo el video",
   value: "full"
