@@ -1,6 +1,6 @@
 function createNav(activeTabId) {
   const tabs = [
-    // { id: 'copa-america', href: '/deportes/copa-america/tablaposiciones', text: 'Copa América' },
+    { id: 'copa-america', href: '/deportes/copa-america/tablaposiciones', text: 'Copa América' },
     { id: 'ligapro', href: '/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador', text: 'LigaPro' },
     { id: 'eliminatorias', href: '/deportes/eliminatorias-conmebol/tablaposiciones', text: 'Eliminatorias' },
     { id: 'champions', href: '/deportes/champions/tablaposiciones', text: 'Champions League' },
