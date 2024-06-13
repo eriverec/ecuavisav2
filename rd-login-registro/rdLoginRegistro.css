@@ -888,3 +888,7 @@ form i {
 .br__apple{
   display: block!important;
 }
+
+.br-facebook{
+  display: none;
+}
