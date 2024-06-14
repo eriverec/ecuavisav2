@@ -42,7 +42,10 @@ const configSnackbar = ref({
 
 const dataDesafioRaw = ref([]);
 
-onMounted(getDesafio);
+onMounted(async ()=>{
+  await getCategoria();
+  await getDesafio();
+});
 
 function deepClone(o) {
   const output = Array.isArray(o) ? [] : {};
@@ -227,7 +230,10 @@ async function onEdit(id){
     statusDesafio.value = data.statusDesafio;
     tituloSticker.value = data.tituloSticker;
     URLSticker.value = data.URLSticker;
-    categoriaDesafio.value = data.categoria;
+    if(data.categoria){
+      categoriaDesafio.value = data.categoria._id;
+    }
+    
     tipoModel.value = data.tipo;
 
     isDialogActive.value = true;  
@@ -416,49 +422,83 @@ const diasTotales = [
 	},
 ];
 
-const categoriaItems = [
-  {
-    title: "Trivia",
-    value: "trivia",
-  },
-  {
-    title: "Tiempo",
-    value: "tiempo",
-  },
-  {
-    title: "Sobre ti",
-    value: "sobre_ti",
-  },
-  {
-    title: "Comparte",
-    value: "comparte",
-  },
-  {
-    title: "En vivo",
-    value: "en_vivo",
-  },
+const disabledCategoria = ref([]);
 
-  {
-    title: "CONFIRMA LA CONFIRMACIÓN",
-    value: "confirma_la_confirmacion",
-  },
-  {
-    title: "AHÍ TE QUIERO VER",
-    value: "ahi_te_quierover",
-  },
-  {
-    title: "QUÉ TIRO CONTIGO",
-    value: "que_tiro_contigo",
-  },
-  {
-    title: "LA YAPA",
-    value: "la_yapa",
-  },
-  {
-    title: "PONTE LAS PILAS",
-    value: "ponte_las_pilas",
+const categoriaItems = ref([])
+// [
+//   {
+//     title: "Trivia",
+//     value: "trivia",
+//   },
+//   {
+//     title: "Tiempo",
+//     value: "tiempo",
+//   },
+//   {
+//     title: "Sobre ti",
+//     value: "sobre_ti",
+//   },
+//   {
+//     title: "Comparte",
+//     value: "comparte",
+//   },
+//   {
+//     title: "En vivo",
+//     value: "en_vivo",
+//   },
+
+//   {
+//     title: "CONFIRMA LA CONFIRMACIÓN",
+//     value: "confirma_la_confirmacion",
+//   },
+//   {
+//     title: "AHÍ TE QUIERO VER",
+//     value: "ahi_te_quierover",
+//   },
+//   {
+//     title: "QUÉ TIRO CONTIGO",
+//     value: "que_tiro_contigo",
+//   },
+//   {
+//     title: "LA YAPA",
+//     value: "la_yapa",
+//   },
+//   {
+//     title: "PONTE LAS PILAS",
+//     value: "ponte_las_pilas",
+//   }
+// ]
+
+const getCategoria = async function(){
+  try{
+    disabledCategoria.value = true;
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+
+    var response = await fetch(`https://servicio-niveles-puntuacion.vercel.app/categoria/all?limit=100&page=1`, requestOptions);
+    const data = await response.json();
+
+    categoriaItems.value = data.data.reduce((acumulador, actual) => {
+        acumulador.push({
+          title: `${actual.title}`,
+          value: actual._id,
+        });
+        return acumulador;
+      }, []);;
+    
+    disabledCategoria.value = false;
+  }catch (error) {
+      disabledCategoria.value = false;
+      alert("Error: "+error.message);
+      return null;    
   }
-]
+}
 
 const tipoItems = [
   {
@@ -844,7 +884,7 @@ async function onCompleteHorarios(){
                                       </VCol>
 
                                       <VCol cols="12" >
-                                          <VSelect v-model="categoriaDesafio" :items="categoriaItems" label="Categoría del desafío" />
+                                          <VSelect :disabled="disabledCategoria" v-model="categoriaDesafio" :items="categoriaItems" label="Categoría del desafío" />
                                       </VCol>
 
                                       <VCol cols="12" >
