@@ -937,7 +937,7 @@ class SendPulse
 	private function capturarURLDinamica($list){
 		$urlRedireccionNota = "#";
 		foreach ($list as $key => $value) {
-			if ($value->name == "URL") {
+			if ($value->name == "URL" && isset($value->__text)) {
 				$urlRedireccionNota = $value->__text;
 			}
 		}

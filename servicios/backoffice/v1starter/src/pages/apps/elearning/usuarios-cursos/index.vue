@@ -10,6 +10,9 @@
   moment.locale('es', [esLocale]);
   moment.tz.setDefault('America/Guayaquil');
 
+  const tipoModel = ref("Fecha");
+  const tipoItems = ref(null);
+
   // const limit = ref(10);
   // const page = ref(1);
   const totalRegistros = ref(0);
@@ -34,6 +37,16 @@
   });
   /*Variables de búsqueda*/
 
+  /*VIDEOS*/
+  const searchVideoModel = ref(null)
+  const selectRefVideo = ref(null);
+  const videosModel = ref(null);
+  const videosModelLoading = ref(false);
+  const videosItems = ref([]);
+  const videosItemsCopy = ref([]);
+  /*VIDEOS*/
+
+  const loadingUsuarios = ref(false);
   const fechaFin = moment().format("YYYY-MM-DD");
   const fechaInicio = moment().subtract(30, 'days').format("YYYY-MM-DD");
 
@@ -47,6 +60,9 @@
       type: "success",
       model: false
   });
+
+  const urlApiExport = ref("");
+  const urlTitleExport = ref("curso_fecha");
 
   const headersGlobal = ref({
     _id: "_id",
@@ -80,7 +96,7 @@
     birthDate:"birthDate"
   });
 
-  const fechaIFModel = ref({
+  const optionsDefaultDate = {
     fechasModel: [parseISO(fechaInicio), parseISO(fechaFin)],
     fechasVModel: [parseISO(fechaFin)],
     fechasVConfig: {
@@ -95,7 +111,9 @@
     fechai: fechaInicio,
     fechaV: fechaFin,
     fechaf: fechaFin
-  })
+  };
+
+  const fechaIFModel = ref(optionsDefaultDate)
 
   // 👉 watching current page
 
@@ -126,14 +144,61 @@
 
   onMounted(async () => {
     await getCursosAll();
-    await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
+    //await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
   });
+
+  async function getVideos(page = 1, limit= 10, idCurso = null){
+    try {
+        videosModelLoading.value = true;
+        if(!modelCurso.value){
+          videosItems.value = [];
+          videosModel.value = null;
+          videosModelLoading.value = false;
+          return [];
+        }
+
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+
+        var requestOptions = {
+          method: 'GET',
+          headers: myHeaders,
+          redirect: 'follow'
+        };
+
+        var response = await fetch(`https://servicio-elearning.vercel.app/curso/videos/${modelCurso.value}`, requestOptions);
+        const data = await response.json();
+
+        videosItems.value = data.data.reduce((acumulador, actual) => {
+          acumulador.push({
+            title: `${actual.titulo}`,
+            value: actual._id,
+          });
+          return acumulador;
+        }, []);
+
+        videosItemsCopy.value = videosItems.value;
+        videosModelLoading.value = false;
+    } catch (error) {
+        return console.error(error.message);    
+    }
+  }
 
   async function getUsuarios(page = 1, limit = 10, fechai, fechaf, idCurso, search="") {
     try {
       if(!idCurso){
         return false;
       }
+
+      if(!videosModel.value && tipoModel.value == "Video"){
+         configSnackbar.value = {
+            message: "No se pudo seleccionar el video.",
+            type: "error",
+            model: true
+        };
+        return false;
+      }
+      loadingUsuarios.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -143,7 +208,33 @@
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechai}&fechaf=${fechaf}&page=${page}&limit=${limit}&idCurso=${idCurso}&search=${search}`, requestOptions);
+      // var response = null;
+
+      if(tipoModel.value == "Fecha"){
+        urlApiExport.value = `https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechai}&fechaf=${fechaf}&idCurso=${idCurso}&search=${search}`;
+        urlTitleExport.value = "curso_fecha";
+        // response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechai}&fechaf=${fechaf}&page=${page}&limit=${limit}&idCurso=${idCurso}&search=${search}`, requestOptions);
+        console.log(1)
+      }
+      //Si la fecha es null y no está seleccionado la fecha, tiene q traer toda la data
+      if(tipoModel.value == "Curso"){
+        urlTitleExport.value = "curso_todos";
+        urlApiExport.value = `https://servicio-elearning.vercel.app/grafico/exportar/usuarios/all-registrados?idCurso=${idCurso}&search=${search}`;
+
+        // response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/all-registrados?page=${page}&limit=${limit}&idCurso=${idCurso}&search=${search}`, requestOptions);
+        console.log(2)
+      }
+
+      //Si se selecciona el video trae la data pero solo los usuarios por video seleccionado
+      if(tipoModel.value == "Video"){
+        urlTitleExport.value = "curso_video";
+        urlApiExport.value = `https://servicio-elearning.vercel.app/grafico/exportar/usuarios/all-registrados-video?idCurso=${idCurso}&idVideo=${videosModel.value}`;
+        
+        // response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/all-registrados-video?page=${page}&limit=${limit}&idCurso=${idCurso}&idVideo=${videosModel.value}`, requestOptions);
+        console.log(3)
+      }
+      
+      var response = await fetch(`${urlApiExport.value}&page=${page}&limit=${limit}`, requestOptions);
       const data = await response.json();
 
       if(data.resp){
@@ -156,14 +247,17 @@
             type: "error",
             model: true
         };
+        loadingUsuarios.value = false;
         return false;
       }
+      loadingUsuarios.value = false;
     } catch (error) {
       configSnackbar.value = {
           message: "No se pudo recuperar los usuarios, recargue de nuevo.",
           type: "error",
           model: true
       };
+      loadingUsuarios.value = false;
       return console.error(error.message);
     }
   }
@@ -193,6 +287,8 @@
         }, []);
         dataCursoCopy.value = dataCurso.value;
         modelCurso.value = dataCurso.value[0].value;
+
+        await getVideos();
 
         cursoModelLoading.value = false;
         
@@ -229,11 +325,16 @@
       currentPage.value = 1;
       await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
     }
+    await getVideos();
   });
+
+  const existeFecha = ref(true);
 
   //Fechas
   async function obtenerFechas(selectedDates, dateStr, instance) {
       if (selectedDates.length > 1) {
+        videosModel.value = null;
+        existeFecha.value = true;
         currentPage.value = 1;
         fechaIFModel.value.fechai = moment(selectedDates[0]).format('DD-MM-YYYY');
         fechaIFModel.value.fechaf = moment(selectedDates[1]).format('DD-MM-YYYY'); 
@@ -243,11 +344,17 @@
       }
 
       if(selectedDates.length == 2){
+        videosModel.value = null;
         fechaIFModel.value.fechasVConfig["minDate"] = selectedDates[1];
         fechaIFModel.value.fechasVModel = [selectedDates[1]];
+        existeFecha.value = true;
       }
 
-      
+      if(selectedDates.length == 0){
+        existeFecha.value = false;
+        await getUsuarios(currentPage.value, rowPerPage.value, null, null, modelCurso.value);
+      }
+
   }
 
   const docsExportNumberLength = ref({
@@ -271,7 +378,9 @@
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechai}&fechaf=${fechaf}&page=${page}&limit=${limit}&idCurso=${idCurso}&search=${search}`, requestOptions);
+      // var response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechai}&fechaf=${fechaf}&page=${page}&limit=${limit}&idCurso=${idCurso}&search=${search}`, requestOptions);
+      var response = await fetch(`${urlApiExport.value}&page=${page}&limit=${limit}`, requestOptions);
+      
       const data = await response.json();
 
       if(data.resp){
@@ -282,6 +391,7 @@
             type: "error",
             model: true
         };
+        isFullLoading.value = false;
         return null;
       }
     } catch (error) {
@@ -291,6 +401,7 @@
           model: true
       };
       console.error(error.message);
+      isFullLoading.value = false;
       return null;
     }
   }
@@ -443,6 +554,33 @@
     }
   }
 
+  function generateSlug(text) {
+      // Crear un mapa de caracteres con tilde y ñ a sus reemplazos
+      const map = {
+          'á': 'a',
+          'é': 'e',
+          'í': 'i',
+          'ó': 'o',
+          'ú': 'u',
+          'Á': 'A',
+          'É': 'E',
+          'Í': 'I',
+          'Ó': 'O',
+          'Ú': 'U',
+          'ñ': 'n',
+          'Ñ': 'N'
+      };
+
+      // Reemplazar cada carácter del mapa en el texto
+      const slug = text.split('').map(char => map[char] || char).join('');
+
+      // Convertir a minúsculas, eliminar caracteres no deseados y reemplazar espacios por guiones
+      return slug.toLowerCase()
+                 .replace(/[^a-z0-9\s-]/g, '') // Eliminar caracteres que no sean letras, números, espacios o guiones
+                 .replace(/\s+/g, '-')         // Reemplazar espacios por guiones
+                 .replace(/-+/g, '-')+"-"+moment().format("YYYY-MM-DD-HH-mm-ss");         // Reemplazar múltiples guiones por uno solo
+  }
+
   async function downloadSearch () {
     try {
       if(dataUsuarios.value.length < 1){
@@ -459,11 +597,18 @@
 
       let doc = [];
       doc = usersFull.value
-      let title = "users_search_curso";
+      var title = `${urlTitleExport.value}-`;
+
+      if(urlTitleExport.value == "curso_fecha" || urlTitleExport.value == "curso_todos"){
+        title += generateSlug(dataCurso.value.filter(c => modelCurso.value.includes(c.value))[0].title);
+      }
+
+      if(urlTitleExport.value == "curso_video"){
+        title += generateSlug(videosItems.value.filter(c => videosModel.value == c.value)[0].title);
+      }
 
       logAction('descarga-completa'); 
 
-      console.log(doc)
       exportCSVFile(headersGlobal.value, eliminarDuplicadosPorWylexId(doc), title);
 
     } catch (error) {
@@ -516,10 +661,59 @@
     }
   });
   //Código para realizar la búsqueda
+
+  /*video*/
+  watch(async () => searchVideoModel.value, async () => {
+    if (!searchVideoModel.value) {
+      videosItems.value = videosItemsCopy.value;
+    }else{
+      videosItems.value = videosItemsCopy.value.filter((video) => {
+        return (video.title.toLowerCase().indexOf(searchVideoModel.value.toLowerCase()) > -1) || video.value.indexOf(searchVideoModel.value) > -1;
+      });
+    }
+  });
+
+  watch(selectRefVideo, (active) => {
+    if(!active){
+      setTimeout(()=>{
+        searchVideoModel.value = "";
+      }, 1000)
+    }
+  });
+
+  watch(videosModel, async () => {
+    currentPage.value = 1;
+    if(!videosModel.value){//Si es null
+      if(existeFecha.value){
+        fechaIFModel.value.fechasModel = optionsDefaultDate.fechasModel;
+        await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
+      }else{
+        await getUsuarios(currentPage.value, rowPerPage.value, null, null, modelCurso.value);
+      }
+    }else{
+      await getUsuarios(currentPage.value, rowPerPage.value, null, null, modelCurso.value);
+    }
+    
+  });
+
+  watch(tipoModel, async () => {
+    currentPage.value = 1;
+    if(tipoModel.value){
+      if(tipoModel.value == "Video"){
+        if(videosItems.value.length > 0){
+          videosModel.value = videosItems.value[0].value;
+        }
+      }
+
+      await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
+    }
+  });
+  /*video*/
 </script>
 
 <template>
   <section>
+
     <VSnackbar 
       v-model="configSnackbar.model" 
       location="top end" 
@@ -535,7 +729,7 @@
         lg="12"
       >
         <h1>Exportación de usuarios suscritos a un curso</h1>
-        <VCardText class="d-flex py-4 gap-4 px-0 flex-wrap">
+        <VCardText class="d-flex py-4 gap-4 px-0 flex-wrap" style="align-items: flex-start;">
           <div class="me-3 d-flex gap-4" >
             <VSelect
               class="bg-white"
@@ -546,7 +740,18 @@
             />
 
             <VSelect
-              style="width: 18rem;"
+              label="Exportar por"
+              item-text="title"
+              item-value="value"
+              class="bg-white"
+              density="compact"
+              v-model="tipoModel"
+              variant="outlined"
+              :items="['Fecha', 'Curso', 'Video']"
+            />
+
+            <VSelect
+              style="width: 16rem;"
               class="bg-white"
               v-model:menu="selectRefModulo"
               no-data-text="No existen curso que mostrar"
@@ -556,7 +761,6 @@
               v-model="modelCurso" 
               :items="dataCurso"
               chips
-              clearable
               label="Seleccionar el módulo para el curso"
               :menu-props="{ maxHeight: '400' }">
               <template v-slot:prepend-item>
@@ -583,9 +787,49 @@
                 </template>
             </VSelect>
 
-            <AppDateTimePicker 
+            <VSelect 
+              v-if="tipoModel=='Video'"
+              style="width: 17rem;"
               class="bg-white"
-              style="width: 25rem;"
+              v-model:menu="selectRefVideo"
+              item-text="title"
+              item-value="value"
+              v-model="videosModel" 
+              :items="videosItems"
+              chips
+              attach
+              label="Videos del curso seleccionado"
+              no-data-text="No existen videos que mostrar"
+              :disabled="videosModelLoading"
+              :menu-props="{ maxHeight: '300' }">
+              <template v-slot:prepend-item>
+                <v-list-item>
+                  <v-list-item-content>
+                    <VTextField v-model="searchVideoModel" clearable placeholder="Buscar video"/>
+                  </v-list-item-content>
+                </v-list-item>
+                <v-divider class="mt-2"></v-divider>
+              </template>
+              <template #selection="{ item }">
+                    <div>
+                        {{ item.title }} - {{ item.value }}
+                    </div>
+                </template>
+                <template #item="{ item, props }">
+                    <v-list-item v-bind="props">
+                        <v-list-item-content>
+                            <v-list-item-subtitle>
+                                <p>_id: {{ item.value }}</p>
+                            </v-list-item-subtitle>
+                        </v-list-item-content>
+                    </v-list-item>
+                </template>
+            </VSelect>
+            <AppDateTimePicker 
+              v-if="tipoModel=='Fecha'"
+              clearable
+              class="bg-white"
+              style="width: 19rem;"
               label="Fecha de inicio y fin del curso" 
               prepend-inner-icon="tabler-calendar" 
               density="compact" 
@@ -613,13 +857,15 @@
             <!-- 👉 Export button -->
             <VBtn
               :loading="isFullLoading"
-              :disabled="isFullLoading"
+              :disabled="isFullLoading || loadingUsuarios"
               variant="tonal"
               color="success"
               prepend-icon="tabler-screen-share"
               @click="downloadSearch"
             >
-              Exportar búsqueda
+              <span style="curso:pointer" v-if="tipoModel=='Fecha'" class="px-0 py-p m-0">Exportar búsqueda</span>
+              <span style="curso:pointer" v-if="tipoModel=='Curso'" class="px-0 py-p m-0">Exportar curso</span>
+              <span style="curso:pointer" v-if="tipoModel=='Video'" class="px-0 py-p m-0">Exportar búsqueda</span>
             </VBtn>
             <small class="px-0 py-1 text-disabled" v-if="isFullLoading">
               Exportando {{ docsExportNumberLength.tamanioActual }} / {{ docsExportNumberLength.tamanioTotal }} registros
@@ -649,7 +895,16 @@
           </VCol>
         </VRow>
 
-        <small class="text-disabled">Se ha filtrado usuarios del curso <b>{{ dataCurso.length > 0 ? dataCurso.filter(c => modelCurso.includes(c.value))[0].title: "" }}</b> , desde {{fechaIFModel.fechai}} hasta {{fechaIFModel.fechaf}} con un total de {{totalRegistros}} registros</small>
+        <small v-if="!videosModel" class="text-disabled">Se ha filtrado usuarios del curso <b>{{ 
+            modelCurso? (dataCurso.length > 0 ? dataCurso.filter(c => modelCurso.includes(c.value))[0].title: "" ) :""
+          }}</b> , desde {{fechaIFModel.fechai}} hasta {{fechaIFModel.fechaf}} con un total de {{totalRegistros}} registros
+        </small>
+
+        <small v-else class="text-disabled">Se ha filtrado usuarios del curso <b>{{ 
+            modelCurso? (dataCurso.length > 0 ? dataCurso.filter(c => modelCurso.includes(c.value))[0].title: "" ) :""
+          }}</b> , sobre el video de <b>{{ videosItems.filter(c => videosModel == c.value)[0].title }}</b> con un total de {{totalRegistros}} registros
+        </small>
+        
         <VCard class="mt-1">
             <VTable class="text-no-wrap">
               <!-- 👉 table head -->
@@ -676,7 +931,7 @@
                 </tr>
               </thead>
               <!-- 👉 table body -->
-              <tbody>
+              <tbody v-if="loadingUsuarios==false">
                 <tr
                   v-for="user in dataUsuarios"
                   :key="user._id"
@@ -793,13 +1048,24 @@
               </tbody>
 
               <!-- 👉 table footer  -->
-              <tfoot v-show="!dataUsuarios.length">
+              <tfoot v-show="!dataUsuarios.length && loadingUsuarios == false">
                 <tr>
                   <td
                     colspan="7"
                     class="text-center"
                   >
                     No hay datos que mostrar
+                  </td>
+                </tr>
+              </tfoot>
+
+              <tfoot v-show="loadingUsuarios">
+                <tr>
+                  <td
+                    colspan="7"
+                    class="text-center"
+                  >
+                    Cargando datos, por favor espere un momento...
                   </td>
                 </tr>
               </tfoot>
