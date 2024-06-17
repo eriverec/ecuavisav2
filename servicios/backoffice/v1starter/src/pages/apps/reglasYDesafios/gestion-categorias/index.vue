@@ -377,8 +377,9 @@ async function deleteDetalleVoto() {
 
 
                 <VCol cols="6">
-                  <VAvatar class="img-e-a">
-                    <VImg  :src="image" />
+                  <VAvatar rounded="sm" class="img-e-a">
+                    <VImg v-if="image" :src="image" />
+                    <div v-else>Previsualizar la Imagen</div>
                   </VAvatar>
                 </VCol>
 
