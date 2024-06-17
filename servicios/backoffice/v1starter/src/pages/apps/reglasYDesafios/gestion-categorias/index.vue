@@ -15,7 +15,7 @@ const configSnackbar = ref({
   model: false
 });
 
-async function getDesafios(page = 1, limit = 10) {
+async function getDesafios(page = 1, limit = 5) {
   try {
     isLoading.value = true;
     const consulta = await fetch(`https://servicio-niveles-puntuacion.vercel.app/categoria/all?page=${page}&limit=${limit}`);
@@ -54,13 +54,7 @@ const totalRegistrosDesafiosUser = ref(1);
 const currentPageDesafiosUser = ref(1);
 
 
-async function onClickDesafiosUser(id) {
-  const dataUser = await fetch('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id=' + id);
-  const dataUserJson = await dataUser.json();
-  userSelected.value.nombre = dataUserJson.first_name + ' ' + dataUserJson.last_name;
-  userSelected.value.id = id;
-  await getDesafiosUser(id);
-}
+
 async function getDesafiosUser(id, page = 1, limit = 10) {
   try {
     isLoadingDesafiosUser.value = true;
@@ -94,57 +88,8 @@ const handlePaginationClick = async () => {
   disabledPagination.value = false;
 };
 
-async function mostrarNombreUsuario(id, index) {
-  const dataUser = await fetch('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id=' + id);
-  const dataUserJson = await dataUser.json();
-  dataDesafios.value[index].nombre = dataUserJson.first_name + ' ' + dataUserJson.last_name;
-  nombreUsuarioVisible.value.push(index);
-}
 
-function copyUrl(id) {
-  navigator.clipboard.writeText('https://ecuavisa-desafio-trivias.vercel.app/trivia/get/' + id);
-
-  configSnackbar.value = {
-    message: "Enlace copiado en el portapapeles",
-    timeout: 1000,
-    type: "success",
-    model: true
-  };
-}
-
-const reset = async () => {
-  searchTerm.value = '';
-  await getTrivias();
-}
-
-const startSearch = () => {
-  currentPage.value = 1;
-  search();
-};
-
-const search = async () => {
-  isLoading.value = true;
-
-  try {
-
-    const response = await fetch(`https://ecuavisa-desafio-trivias.vercel.app/trivia/search/name?nombre=${searchTerm.value}`);
-    const data = await response.json();
-    if (data.resp) {
-      dataTrivias.value = data.data;
-
-    } else {
-      dataTrivias.value = [];
-      console.log("no hay nada para mostrar");
-      //isSnackbarVisible.value = true;
-    }
-  } catch (error) {
-    console.error('Error al realizar la búsqueda:', error);
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const itemsPerPage = 20;
+const itemsPerPage = 5;
 
 
 const paginatedTrivias = computed(() => {
@@ -189,6 +134,13 @@ async function onEditDetalleVoto(id) {
   image.value = detalle.image;
 }
 
+async function onAddDetalleVoto() {
+  formAccion.value = 'agregar'
+  title.value = '';
+  image.value = '';
+  isDialogActive.value = true;
+}
+
 
 async function onSubmit() {
 
@@ -210,20 +162,20 @@ async function onSubmit() {
       body: raw,
       redirect: 'follow'
     };
-    const send = await fetch('https://ecuavisa-servicio-votacion.vercel.app/detalle/insert', requestOptions);
+    const send = await fetch('https://servicio-niveles-puntuacion.vercel.app/categoria/create', requestOptions);
     const respuesta = await send.json();
     if (respuesta.resp) {
-      // configSnackbar.value = {
-      //   message: "Detalle de voto creado correctamente",
-      //   type: "success",
-      //   model: true
-      // };
+      configSnackbar.value = {
+        message: "Creado correctamente",
+        type: "success",
+        model: true
+      };
     } else {
-      // configSnackbar.value = {
-      //   message: respuesta.mensaje,
-      //   type: "error",
-      //   model: true
-      // };
+      configSnackbar.value = {
+        message: respuesta.mensaje,
+        type: "error",
+        model: true
+      };
     }
 
   } else if (formAccion.value === 'editar') {
@@ -247,22 +199,57 @@ async function onSubmit() {
     const respuesta = await send.json();
     console.log(respuesta);
     if (respuesta.resp) {
-      // configSnackbar.value = {
-      //   message: "Detalle de voto editado correctamente",
-      //   type: "success",
-      //   model: true
-      // };
+      configSnackbar.value = {
+        message: "Editado correctamente",
+        type: "success",
+        model: true
+      };
     } else {
-      // configSnackbar.value = {
-      //   message: respuesta.mensaje,
-      //   type: "error",
-      //   model: true
-      // };
+      configSnackbar.value = {
+        message: respuesta.mensaje,
+        type: "error",
+        model: true
+      };
     }
 
   }
-  // isDialogActive.value = false;
-  // await onInit();
+  isDialogActive.value = false;
+  await getDesafios();
+}
+
+
+// -------------------------------DELETE-----------------------------------//
+const isDialogVisibleDelete = ref(false);
+const idToDelete = ref('');
+
+function onDelete(id) {
+  isDialogVisibleDelete.value = true;
+  idToDelete.value = id;
+}
+
+async function deleteDetalleVoto() {
+  var requestOptions = {
+    method: 'DELETE',
+    redirect: 'follow'
+  };
+
+  const deleted = await fetch('https://servicio-niveles-puntuacion.vercel.app/categoria/delete/' + idToDelete.value, requestOptions);
+  const respuesta = await deleted.json();
+  if (respuesta.resp) {
+    configSnackbar.value = {
+      message: "Eliminado correctamente",
+      type: "success",
+      model: true
+    };
+  } else {
+    configSnackbar.value = {
+      message: respuesta.mensaje,
+      type: "error",
+      model: true
+    };
+  }
+  await getDesafios();
+  isDialogVisibleDelete.value = false;
 }
 
 
@@ -271,8 +258,11 @@ async function onSubmit() {
 
 <template>
   <section>
+    <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat" :color="configSnackbar.type">
+      {{ configSnackbar.message }}
+    </VSnackbar>
     <VRow>
-      <VCol class="mt-6" cols="12" md="12" lg="12">
+      <VCol class="" cols="12" md="12" lg="12">
 
         <VRow>
           <VCol cols="12" sm="12" lg="12">
@@ -285,6 +275,13 @@ async function onSubmit() {
             <VCard class="mt-4">
               <VCardTitle class="pt-4 pl-6">Listado Categorias</VCardTitle>
 
+
+              <VCardItem>
+                <VBtn prepend-icon="tabler-user-plus" color="success" variant="tonal" class="ml-auto"
+                  @click="onAddDetalleVoto">Agregar</VBtn>
+
+              </VCardItem>
+
               <VCardItem v-if="isLoading">
                 Cargando datos...
               </VCardItem>
@@ -295,7 +292,7 @@ async function onSubmit() {
                     <tr>
                       <th scope="col">Titulo</th>
                       <th scope="col">Imagen</th>
-                      <th scope="col">Estado</th>
+                      <th scope="col">Acción</th>
                     </tr>
                   </thead>
 
@@ -321,8 +318,7 @@ async function onSubmit() {
                             <VIcon size="22" icon="tabler-pencil" />
 
                           </VBtn>
-                          <VBtn icon size="x-small" color="default" variant="text"
-                            @click="onConfirmUsersDeleteActive(user.wylexId)">
+                          <VBtn icon size="x-small" color="default" variant="text" @click="onDelete(item._id)">
                             <VIcon size="22" icon="tabler-trash" />
                           </VBtn>
                         </div>
@@ -332,7 +328,7 @@ async function onSubmit() {
                     </tr>
                   </tbody>
                 </VTable>
-                <VPagination :disabled="disabledPagination" v-model="currentPage" :length="totalRegistros" class="mt-4"
+                <VPagination size="small" :disabled="disabledPagination" v-model="currentPage" :length="totalRegistros" class="mt-4"
                   @click="handlePaginationClick" />
               </VCardItem>
               <VCardItem v-if="!isLoading && dataDesafios.length === 0">
@@ -342,44 +338,7 @@ async function onSubmit() {
             </VCard>
           </VCol>
 
-          <VCol v-if="isDesafiosUserVisible == true" cols="12" sm="12" lg="12">
-            <VCard>
-              <VCardTitle class="pt-4 pl-6">Desafíos de {{ userSelected.nombre }}</VCardTitle>
-
-              <VCardItem v-if="desafiosUser.length > 0">
-
-                <VTable class="text-no-wrap tableNavegacion mb-5">
-                  <thead>
-                    <tr>
-                      <th scope="col">Desafío</th>
-                      <th scope="col">Estado</th>
-
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    <tr v-for="(r, index) in desafiosUser">
-                      <td class="text-medium-emphasis">
-                        {{ r.idDesafio }}
-                      </td>
-                      <td class="text-medium-emphasis">
-                        {{ r.estadoDesafio }}
-                      </td>
-
-                    </tr>
-                  </tbody>
-                </VTable>
-                <VPagination :disabled="disabledPaginationDesafiosUser" v-model="currentPageDesafiosUser"
-                  :length="totalRegistrosDesafiosUser" class="mt-4" @click="handlePaginationClickDesafiosUser" />
-
-              </VCardItem>
-              <VCardItem v-else-if="desafiosUser.length == 0">
-                No se han encontrado datos
-              </VCardItem>
-
-            </VCard>
-          </VCol>
-
+  
         </VRow>
 
       </VCol>
@@ -424,6 +383,30 @@ async function onSubmit() {
               </VCol>
             </VRow>
           </VForm>
+        </VCardText>
+      </VCard>
+    </VDialog>
+
+
+
+    <VDialog v-model="isDialogVisibleDelete" persistent class="v-dialog-sm">
+
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleDelete = !isDialogVisibleDelete" />
+
+      <!-- Dialog Content -->
+      <VCard title="Eliminar registro">
+        <VCardText>
+          ¿Desea eliminar el registro?
+        </VCardText>
+
+        <VCardText class="d-flex justify-end gap-3 flex-wrap">
+          <VBtn color="secondary" variant="tonal" @click="isDialogVisibleDelete = false">
+            No, Cerrar
+          </VBtn>
+          <VBtn @click="deleteDetalleVoto">
+            Si, eliminar
+          </VBtn>
         </VCardText>
       </VCard>
     </VDialog>
