@@ -218,6 +218,13 @@ async function onSubmit() {
 }
 
 
+function resetForm() {
+  isDialogActive.value = false;
+  title.value = '';
+  image.value = '';
+}
+
+
 // -------------------------------DELETE-----------------------------------//
 const isDialogVisibleDelete = ref(false);
 const idToDelete = ref('');
@@ -328,8 +335,8 @@ async function deleteDetalleVoto() {
                     </tr>
                   </tbody>
                 </VTable>
-                <VPagination size="small" :disabled="disabledPagination" v-model="currentPage" :length="totalRegistros" class="mt-4"
-                  @click="handlePaginationClick" />
+                <VPagination size="small" :disabled="disabledPagination" v-model="currentPage" :length="totalRegistros"
+                  class="mt-4" @click="handlePaginationClick" />
               </VCardItem>
               <VCardItem v-if="!isLoading && dataDesafios.length === 0">
                 No se han encontrado datos
@@ -338,7 +345,7 @@ async function deleteDetalleVoto() {
             </VCard>
           </VCol>
 
-  
+
         </VRow>
 
       </VCol>
@@ -365,11 +372,14 @@ async function deleteDetalleVoto() {
                 <!-- 👉 Nombre -->
                 <VCol cols="6">
                   <VTextField v-model="title" label="Nombre" />
+                  <VTextField class="mt-4" v-model="image" label="URL de la Imágen" />
                 </VCol>
 
 
-                <VCol cols="12">
-                  <VTextField v-model="image" label="Imágen" />
+                <VCol cols="6">
+                  <VAvatar class="img-e-a">
+                    <VImg  :src="image" />
+                  </VAvatar>
                 </VCol>
 
               </VRow>
@@ -416,6 +426,11 @@ async function deleteDetalleVoto() {
 </template>
 
 <style>
+
+.img-e-a {
+  width: 100% !important;
+  height: 100px !important;
+}
 .clickable {
   cursor: pointer;
 }
