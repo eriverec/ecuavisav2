@@ -27,6 +27,14 @@ const currentTab_fidelizacion = ref(0)
 													Semanas desafíos
 									      </VTab>
 
+												<VTab class="mb-2">
+									        <VIcon
+									          start
+									          icon="mdi-chemical-weapon"
+									        />
+													Categorías
+									      </VTab>
+
 									      <VTab class="mb-2">
 									        <VIcon
 									          start
@@ -109,6 +117,31 @@ const currentTab_fidelizacion = ref(0)
 												<VCol cols="12" sm="6" class="text-center">
 											
 													<img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Ffidelizacion%2FSEMANA-DESAFIO.gif" alt="Semana de Desafíos" style="width: 55%; max-width: 100%;" />
+												</VCol>
+												</VRow>
+										</VWindowItem>
+
+
+										<!-- CATEGORIAS -->
+										<VWindowItem>
+												<VRow>
+												<!-- texto, título y subtítulo -->
+												<VCol cols="12" sm="6" class="d-flex flex-column align-items-start justify-content-center">
+													<VCardTitle class="px-0 py-0 mb-2">Gestiona las categorías</VCardTitle>
+													<!-- <VCardSubtitle class="px-0 py-0 mb-2">Organiza tus desafíos por semana</VCardSubtitle> -->
+													<p class="pt-3 text-left">
+														Definir los objetivos específicos para cada categoría y las reglas que los participantes deben seguir. Esto puede incluir metas diarias o semanales, criterios de evaluación y pautas para la participación.
+													</p>
+													
+													<VBtn class="mt-0" variant="tonal" :to="{ name: 'apps-reglasYDesafios-gestion-categorias', params: { id: 0 } }">
+													Gestionar
+													</VBtn>
+												</VCol>
+												
+												<!-- GIF -->
+												<VCol cols="12" sm="6" class="text-center">
+											
+													<img src="https://estadisticas.ecuavisa.com/sites/gestor/Recursos%2Fcategoria.png" alt="Categorías" style="width: 55%; max-width: 100%;" />
 												</VCol>
 												</VRow>
 										</VWindowItem>
