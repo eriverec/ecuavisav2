@@ -30,7 +30,7 @@ const currentTab_fidelizacion = ref(0)
 												<VTab class="mb-2">
 									        <VIcon
 									          start
-									          icon="mdi-chemical-weapon"
+									          icon="mdi-category"
 									        />
 													Categorías
 									      </VTab>
