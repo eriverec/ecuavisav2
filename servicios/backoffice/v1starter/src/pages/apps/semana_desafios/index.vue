@@ -13,6 +13,9 @@ const isLoading2 = ref(false);
 const reglasLoading = ref(false);
 const listaDesafios = ref([]);
 
+const switchOnDisabled = ref(false);
+const repechajeModel = ref(false);
+
 async function getSemanas_desafios (){
     try {
       isLoading.value = true;  
@@ -105,6 +108,7 @@ function resetForm(){
     fecha_fin.value = '';
     urlPremio.value = '';
     fechaDisplay.value = '';
+    repechajeModel.value = false;
 } 
 function closeDiag(){
     resetForm(); 
@@ -158,6 +162,8 @@ async function onEdit(id){
     imagen_descriptiva.value = data.imagen_descriptiva;
     urlPremio.value = data.urlPremio;
 
+    repechajeModel.value = data.repechaje || false;
+
     desafios.value = filtrarDesafios(listaDesafios.value, data.desafios);
 
     fecha_inicio.value = moment(data.fecha_inicio).utc().format("DD/MM/YYYY");
@@ -195,6 +201,7 @@ async function onComplete(){
             "imagen_descriptiva": imagen_descriptiva.value,
             "urlPremio": urlPremio.value,
             "desafios": desafios.value,
+            "repechaje": repechajeModel.value,
             "fecha_inicio": fecha_inicio.value,
             "fecha_fin": fecha_fin.value  
         }
@@ -234,6 +241,7 @@ async function onComplete(){
             "_id": idToEdit.value,
             "titulo": titulo.value,
             "descripcion": descripcion.value,
+            "repechaje": repechajeModel.value,
             "imagen_descriptiva": imagen_descriptiva.value,
             "urlPremio": urlPremio.value,
             "desafios": desafios.value,
@@ -307,6 +315,9 @@ async function deleteConfirmed() {
     isDialogVisibleDelete.value = false;
     isLoading2.value = false;
 }
+
+
+/*-----------------------------------------------------*/
 
 </script>
 
@@ -410,6 +421,13 @@ async function deleteConfirmed() {
                         <VForm class="mt-6" @submit.prevent="onComplete">
                             <VRow class="d-flex flex-wrap justify-center gap-4">
                                 <VRow>
+
+                                    <VCol cols="12" >
+                                        <label>Indenfica si la semana es de repechaje</label>
+                                        <div class="switch-estatus" style="margin-bottom:-10px">
+                                          <VSwitch :disabled="switchOnDisabled" :loading="switchOnDisabled?'warning':false" color="success" v-model="repechajeModel" size="x-small" class="custom-vswitch" @change="handleSwitchChange(index)" />
+                                        </div>
+                                    </VCol>
                                                                     
                                     <VCol cols="12" >
                                         <VTextField v-model="titulo" label="Título" placeholder="Nombre de la trivia" />
