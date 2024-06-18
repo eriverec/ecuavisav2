@@ -1,3 +1,12 @@
+/*ADD-META APPID FACEBBOK
+@CR- 2024-06-18 - YYYY-MM-DD*/
+var meta = document.createElement('meta');
+meta.setAttribute('property', 'fb:app_id');
+meta.setAttribute('content', '354219384051587');
+document.getElementsByTagName('head')[0].appendChild(meta);
+/*ADD-META APPID FACEBBOK
+@CR- 2024-06-18 - YYYY-MM-DD*/
+
 var URL_principal_G = "https://www.ecuavisa.com/";
 var URL_login_G = "https://www.ecuavisa.com/servicios/login";
 var URL_perfil_G = "https://www.ecuavisa.com/servicios/perfil";
