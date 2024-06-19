@@ -531,7 +531,7 @@ async function deleteConfirmed() {
     </section>
 </template>
 
-<style>  
+<style scoped>  
  
 .clickable {
   cursor: pointer;

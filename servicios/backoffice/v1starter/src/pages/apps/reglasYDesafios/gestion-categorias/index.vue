@@ -426,7 +426,7 @@ async function deleteDetalleVoto() {
   </section>
 </template>
 
-<style>
+<style scoped>
 
 .img-e-a {
   width: 100% !important;
