@@ -1002,7 +1002,7 @@ class SendPulse
 							<img width="200" style="width:100%;height:auto" src="' . $value->remoteContent->href . '" alt="Imagen principal">
 				    </a><div class="autorNewletter" style="font-size: 12px;padding-top: 10px;padding-left: 50px;padding-right: 50px;font-family: Lucida Grande, Lucida Sans Unicode, Lucida Sans, Geneva, Verdana, sans-serif;"> '. 
 						mb_strtoupper($authorName, 'UTF-8') .'</div>
-						<div class="autorNewletter" style="padding-bottom: 20px;padding-top: 3px;padding-left: 50px;padding-right: 50px;font-family: Lucida Grande, Lucida Sans Unicode, Lucida Sans, Geneva, Verdana, sans-serif;font-weight: 400;"> Periodista digital</div>';
+						<div class="autorNewletter" style="padding-bottom: 20px;padding-top: 3px;padding-left: 50px;padding-right: 50px;font-family: Lucida Grande, Lucida Sans Unicode, Lucida Sans, Geneva, Verdana, sans-serif;font-weight: 400;"> Editor de Deportes</div>';
 				}
 
 				/*if ($value->name == "Image") {

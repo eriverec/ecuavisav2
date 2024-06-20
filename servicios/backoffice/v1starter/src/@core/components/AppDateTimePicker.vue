@@ -298,9 +298,9 @@ input[altinputclass="inlinePicker"] {
     font-weight: 300;
   }
 
-  &.open {
+  /*&.open {
     z-index: 1051;
-  }
+  }*/
 
   &.hasTime.open {
     .flatpickr-time {

@@ -581,8 +581,8 @@ async function deleteConfirmed() {
     min-width: 100px;  
   }
 }
-.open.flatpickr-calendar {
+/*.open.flatpickr-calendar {
     z-index: 100000;
-}
+}*/
 
 </style>
