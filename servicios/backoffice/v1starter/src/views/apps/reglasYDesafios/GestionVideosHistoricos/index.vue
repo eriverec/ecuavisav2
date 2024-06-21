@@ -77,8 +77,11 @@ async function getDesafioVideos(page = 1, limit = 10) {
   }
 }
 
+const disabledDesafio = ref(false);
+
 async function getDesafio(page = 1, limit = 10) {
   try {
+    disabledDesafio.value = true;
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -91,13 +94,15 @@ async function getDesafio(page = 1, limit = 10) {
     var response = await fetch(`https://servicio-desafios.vercel.app/desafios`, requestOptions);
     const data = await response.json();
 
-    desafioItems.value = data.data.reduce((acumulador, actual) => {
+    desafioItems.value = data.data.filter(desafio => desafio.tipo === 'VideoConsumo' ).reduce((acumulador, actual) => {
       acumulador.push({
         title: `${actual.tituloDesafio}`,
         value: actual._id,
       });
       return acumulador;
     }, [])
+
+    disabledDesafio.value = false;
 
     // dataDesafio.value = data.data;
   } catch (error) {
@@ -521,8 +526,8 @@ async function deleteConfirmed() {
                           <VRow>
 
                             <VCol cols="12">
-                              <v-select v-model="desafioModel" :items="desafioItems"
-                                label="Seleccione el desafío vinculado">
+                              <v-select :disabled="disabledDesafio" v-model="desafioModel" :items="desafioItems"
+                                label="Seleccione el desafío vinculado" append-icon="mdi-refresh" @click:append="getDesafio" >
                                 <template #selection="{ item }">
                                   <div>
                                     {{ item.title }} - {{ item.value }}

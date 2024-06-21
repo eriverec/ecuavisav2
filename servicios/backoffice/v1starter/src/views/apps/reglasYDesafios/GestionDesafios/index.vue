@@ -42,7 +42,12 @@ const configSnackbar = ref({
 
 const dataDesafioRaw = ref([]);
 
+const dataSemanas = ref([]);
+const semanasList = ref([]);
+const semanaFilterSelected = ref('');
+
 onMounted(async () => {
+  await getSemanas_desafios();
   await getCategoria();
   await getDesafio();
 });
@@ -55,6 +60,29 @@ function deepClone(o) {
     output[i] = value !== null && typeof value === 'object' ? deepClone(value) : value;
   }
   return output;
+}
+
+async function getSemanas_desafios() {
+    try {
+        const consulta = await fetch('https://servicio-desafios.vercel.app/semana/all/get');
+        const consultaJson = await consulta.json();
+
+        let dataRaw = Array.from(consultaJson.data);
+
+        semanasList.value = dataRaw.map(item => ({
+            value: item._id.toString(),
+            title: item.titulo,
+        }));
+
+        dataSemanas.value = dataRaw.map(item => ({
+            _id: item._id.toString(),
+            titulo: item.titulo,
+            desafios: item.desafios.map(desafio => desafio.toString()),
+        }));
+        //console.log(dataSemanas.value);
+    } catch (error) {
+        console.error(error.message);
+    }
 }
 
 async function getDesafio(page = 1, limit = 10) {
@@ -72,13 +100,26 @@ async function getDesafio(page = 1, limit = 10) {
     var response = await fetch(`https://servicio-desafios.vercel.app/desafios`, requestOptions);
     const data = await response.json();
 
-    dataDesafio.value = data.data;
+    var result = data.data.map(desafio => {
+    
+      var semanasDelDesafio = dataSemanas.value.filter(semana => semana.desafios.includes(desafio._id.toString())).map(semana => ({
+          idSemana: semana._id,
+          titulo: semana.titulo
+      }));
+        
+      return {
+          ...desafio,
+          semanas: semanasDelDesafio
+      };
+    });
 
-    dataDesafioRaw.value = deepClone(data.data);
+    dataDesafio.value = result;
+
+    dataDesafioRaw.value = deepClone(result);
 
     totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
-    return console.error(error.message);
+    return console.error(error);
   }
 }
 
@@ -181,9 +222,21 @@ function search() {
   }
 }
 
+function filtrarPorSemana() {
+  if(semanaFilterSelected.value != '' || semanaFilterSelected.value != null){
+    currentPage.value = 1;
+    var filteredResult = dataDesafioRaw.value.filter(desafio => 
+        desafio.semanas.some(semana => semana.idSemana === semanaFilterSelected.value)
+    );
+     
+    dataDesafio.value = filteredResult;
+  }
+}
+
 function reiniciar() {
   searchTerm.value = '';
   currentPage.value = 1;
+  semanaFilterSelected.value = '';
   dataDesafio.value = deepClone(dataDesafioRaw.value);
 }
 
@@ -243,7 +296,7 @@ async function onEdit(id) {
 
 async function onComplete() {
 
-  if (!frecuenciaDesafio.value || frecuenciaValor.value == null || !tituloDesafio.value || !descripcionDesafio.value ||
+  if (!tituloDesafio.value || !descripcionDesafio.value ||
     !tituloSticker.value || !URLSticker.value) {
     configSnackbar.value = {
       message: "Llenar todos los campos para crear el desafío",
@@ -258,8 +311,8 @@ async function onComplete() {
   if (accionForm.value === 'add') {
 
     let jsonEnviar = {
-      "frecuenciaDesafio": frecuenciaDesafio.value,
-      "frecuenciaValor": frecuenciaValor.value,
+      //"frecuenciaDesafio": frecuenciaDesafio.value,
+      //"frecuenciaValor": frecuenciaValor.value,
       "tituloDesafio": tituloDesafio.value,
       "descripcionDesafio": descripcionDesafio.value,
       "statusDesafio": statusDesafio.value,
@@ -705,11 +758,13 @@ async function onCompleteHorarios() {
 
               <div class="d-flex justify-space-between mb-4">
 
-                <div class="d-flex gap-2">
+                <div class="d-flex mt-2 gap-2">
                   <VTextField v-model="searchTerm" label="Buscar desafíos" style="width: 300px;"></VTextField>
                   <VBtn color="primary" prepend-icon="tabler-search" @click="search">
                     Buscar
                   </VBtn>
+
+                  <VSelect v-model="semanaFilterSelected" :items="semanasList" label="Semana" style="width: 300px;" @update:model-value="filtrarPorSemana"></VSelect>
 
                   <VBtn color="primary" @click="reiniciar">
                     <VIcon :size="22" icon="tabler-refresh" />
@@ -745,20 +800,33 @@ async function onCompleteHorarios() {
                       </div>
                     </VListItemTitle>
                     <VListItemSubtitle class="mt-1" title="Estado del Desafío">
-                      <div class="switch-estatus" style="margin-bottom:-10px">
-                        <VSwitch :disabled="switchOnDisabled" :loading="switchOnDisabled ? 'warning' : false"
-                          :color="desafio.statusDesafio ? 'success' : 'error'" v-model="desafio.statusDesafio"
-                          size="x-small" class="custom-vswitch" @change="handleSwitchChange(index)" />
-                        <VChip title="Desafío desactivado" v-if="desafio.statusDesafio != true" size="x-small" label
-                          color="error">
-                          <span style="font-weight:medium">{{ desafio.statusDesafio ? 'Activo' : 'Inactivo' }}</span>
-                        </VChip>
+                      <div class="d-flex gap-4">
+                        <div class="switch-estatus" style="margin-bottom:-10px">
+                          <VSwitch :disabled="switchOnDisabled" :loading="switchOnDisabled ? 'warning' : false"
+                            :color="desafio.statusDesafio ? 'success' : 'error'" v-model="desafio.statusDesafio"
+                            size="x-small" class="custom-vswitch" @change="handleSwitchChange(index)" />
+                          <VChip title="Desafío desactivado" v-if="desafio.statusDesafio != true" size="x-small" label
+                            color="error">
+                            <span style="font-weight:medium">{{ desafio.statusDesafio ? 'Activo' : 'Inactivo' }}</span>
+                          </VChip>
 
-                        <small title="Desafío activo" color="success" v-if="desafio.statusDesafio == true">
-                          <span style="font-weight:medium">{{ desafio.statusDesafio ? 'Activo' : 'Inactivo' }}</span>
-                        </small>
-                      </div>
+                          <small title="Desafío activo" color="success" v-if="desafio.statusDesafio == true">
+                            <span style="font-weight:medium">{{ desafio.statusDesafio ? 'Activo' : 'Inactivo' }}</span>
+                          </small>
+                        </div>
 
+                        <div class="d-flex gap-2 mt-2">
+                          <div v-for="semana of desafio.semanas">
+                            <VChip title="Desafío desactivado" size="x-small" label color="default">
+                              <div class="d-flex gap-2">
+                                <span style="font-weight:medium">{{ semana.idSemana }}</span>
+                                <span style="font-weight:medium">{{ semana.titulo }}</span>
+                              </div>
+                            </VChip>
+                          </div>
+                        </div>
+
+                      </div>    
 
 
 
@@ -819,7 +887,7 @@ async function onCompleteHorarios() {
                   <VForm class="mt-6" @submit.prevent="onComplete">
                     <VRow class="d-flex flex-wrap justify-center gap-4">
                       <VRow>
-
+                        <!-- 
                         <VCol cols="6">
                           <VTextField v-model="frecuenciaDesafio" label="Frecuencia de desafio" />
                         </VCol>
@@ -827,14 +895,14 @@ async function onCompleteHorarios() {
                         <VCol cols="6">
                           <VTextField v-model="frecuenciaValor" label="Frecuencia de valor" type="number" />
                         </VCol>
-
+                        -->
                         <VCol cols="12">
                           <VTextField v-model="tituloDesafio" label="Título del desafío" />
                         </VCol>
 
                         <VCol cols="12">
                           <VSelect :disabled="disabledCategoria" v-model="categoriaDesafio" :items="categoriaItems"
-                            label="Categoría del desafío" />
+                            label="Categoría del desafío" append-icon="mdi-refresh" @click:append="getCategoria" />
                         </VCol>
 
                         <VCol cols="12">

@@ -36,8 +36,11 @@ async function getSemanas_desafios() {
     }
 }
 
+const disabledDesafios = ref(false);
+
 async function getDesafios() {
     try {
+        disabledDesafios.value = true;
         reglasLoading.value = true;
         const consulta = await fetch('https://servicio-desafios.vercel.app/desafios');
         const consultaJson = await consulta.json();
@@ -45,6 +48,8 @@ async function getDesafios() {
             title: tituloDesafio,
             value: _id
         }));
+
+        disabledDesafios.value = false;
 
     } catch (error) {
         console.error(error.message);
@@ -468,8 +473,8 @@ async function deleteConfirmed() {
 
                                 <VCol cols="12">
                                     <span>Seleccione los desafíos para la semana</span>
-                                    <v-select clearable chips multiple v-model="desafios" :items="listaDesafios"
-                                        :menu-props="{ maxHeight: '400' }">
+                                    <v-select clearable chips multiple v-model="desafios" :disabled="disabledDesafios" :items="listaDesafios"
+                                        :menu-props="{ maxHeight: '400' }" append-icon="mdi-refresh" @click:append="getDesafios">
                                         <template #selection="{ item }">
                                             <div>
                                                 {{ item.title }} - {{ item.value }}

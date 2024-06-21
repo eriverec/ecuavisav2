@@ -3,16 +3,31 @@ import { onMounted } from 'vue';
 import 'vue3-form-wizard/dist/style.css';
 
 const dataTrivias = ref([]);
+const dataTriviasRaw = ref([]);
 const isLoading = ref(false);
 const isLoading2 = ref(false);
 const reglasLoading = ref(false);
 const idReglas = ref([]);
+
+
+const desafioFilterSelected = ref('');
+function deepClone(o) {
+  const output = Array.isArray(o) ? [] : {};
+
+  for (let i in o) {
+    const value = o[i];
+    output[i] = value !== null && typeof value === 'object' ? deepClone(value) : value;
+  }
+  return output;
+}
 
 async function getTrivias() {
     try {
         isLoading.value = true;
         const consulta = await fetch('https://servicio-desafio-trivias.vercel.app/trivia/all/get?limit=100');
         const consultaJson = await consulta.json();
+
+        dataTriviasRaw.value = deepClone(consultaJson.data);
         dataTrivias.value = consultaJson.data;
         isLoading.value = false;
     } catch (error) {
@@ -20,20 +35,42 @@ async function getTrivias() {
     }
 }
 
+const disabledReglas = ref(false);
+
 async function getReglas() {
     try {
+        disabledReglas.value = true;
         reglasLoading.value = true;
         const consulta = await fetch('https://servicio-desafios.vercel.app/desafios');
         const consultaJson = await consulta.json();
-        idReglas.value = consultaJson.data.map(({ tituloDesafio, _id }) => ({
+
+        idReglas.value = consultaJson.data.filter(desafio => desafio.tipo === 'Trivia' || desafio.tipo === 'TriviaCodigo').map(({ tituloDesafio, _id }) => ({
             title: tituloDesafio,
             value: _id
         }));
 
         reglasLoading.value = false;
+        disabledReglas.value = false;
     } catch (error) {
         console.error(error.message);
     }
+}
+
+function filtrarPorDesafio() {
+  if(desafioFilterSelected.value != '' || desafioFilterSelected.value != null){
+    currentPage.value = 1;
+    var filteredResult = dataTriviasRaw.value.filter(trivia => 
+         trivia.idRegla == desafioFilterSelected.value
+    );
+     
+    dataTrivias.value = filteredResult;
+  }
+}
+
+function reiniciar() {
+  currentPage.value = 1;
+  desafioFilterSelected.value = '';
+  dataTrivias.value = deepClone(dataTriviasRaw.value);
 }
 
 
@@ -650,9 +687,15 @@ async function deleteConfirmed() {
               
                  
 
-                    <VCardText style="margin-bottom: -2rem;">
+                    <VCardText>
                         <div class="d-flex flex-wrap gap-4">
-                            <VBtn prepend-icon="tabler-plus" color="success" variant="tonal" class="ml-auto mb-4"
+                            <VSelect v-model="desafioFilterSelected" :items="idReglas" label="Desafío" style="width: 200px;" @update:model-value="filtrarPorDesafio"></VSelect>
+
+                            <VBtn color="primary" @click="reiniciar">
+                                <VIcon :size="22" icon="tabler-refresh" />
+                            </VBtn>
+
+                            <VBtn prepend-icon="tabler-plus" color="success" variant="tonal" class=""
                                 @click="onAdd">
                                 Nueva trivia
                             </VBtn>
@@ -866,7 +909,7 @@ async function deleteConfirmed() {
                                 </VCol>
 
                                 <VCol cols="6">
-                                    <VSelect v-model="idRegla" label="Id de regla" :items="idReglas" />
+                                    <VSelect :disabled="disabledReglas" v-model="idRegla" label="Id de regla" :items="idReglas" append-icon="mdi-refresh" @click:append="getReglas" />
                                 </VCol>
 
                                 <VCol cols="6" class="d-flex">

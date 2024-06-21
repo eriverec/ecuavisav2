@@ -1,11 +1,11 @@
 <script setup>
 // import FidelizacionTab from './FidelizacionTab.vue';
-import GestionDesafios from "@/views/apps/reglasYDesafios/GestionDesafios/index.vue";
-import GestionSemanas from "@/views/apps/reglasYDesafios/GestionSemanas/index.vue";
 import GestionCategorias from "@/views/apps/reglasYDesafios/GestionCategorias/index.vue";
+import GestionDesafios from "@/views/apps/reglasYDesafios/GestionDesafios/index.vue";
+import GestionSellosHistoricos from "@/views/apps/reglasYDesafios/GestionSellosHistoricos/index.vue";
+import GestionSemanas from "@/views/apps/reglasYDesafios/GestionSemanas/index.vue";
 import GestionTrivias from "@/views/apps/reglasYDesafios/GestionTrivias/index.vue";
 import GestionVideosHistoricos from "@/views/apps/reglasYDesafios/GestionVideosHistoricos/index.vue";
-import GestionSellosHistoricos from "@/views/apps/reglasYDesafios/GestionSellosHistoricos/index.vue";
 
 
 const tabActual = ref('tab-lista')
@@ -54,11 +54,12 @@ const currentTab_fidelizacion = ref(0)
                       <VIcon start icon="mdi-file-video" />
                       Videos Consumos
                     </VTab>
-
+                    <!--  
                     <VTab class="mb-2">
                       <VIcon start icon="mdi-weather-sunny" />
                       Sellos logrados
                     </VTab>
+                    -->
                   </VTabs>
                   <VDivider vertical />
 
