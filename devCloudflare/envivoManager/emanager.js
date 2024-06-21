@@ -573,23 +573,93 @@ function pintarModalDOM() {
 }
 
 
+/*
+CODIGO FONDITO BANNER COPA AMERICA - INICIO - 21-06-2024
+*/
+const apiUrl = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/time/index.php';
 
+// Función para verificar la condición de fecha y hora
+function verificarFechaHora(fecha, hora) {
+  const fechaHora = new Date(`${fecha}T${hora}`);
+  const fechaActual = new Date();
+
+  if (fecha === '2024-06-22') {
+    const inicioRango1 = new Date('2024-06-22T17:00:00');
+    const finRango1 = new Date('2024-06-22T19:00:00');
+    return fechaHora >= inicioRango1 && fechaHora <= finRango1;
+  }
+
+  if (fecha === '2024-06-26') {
+    const inicioRango2 = new Date('2024-06-26T17:00:00');
+    const finRango2 = new Date('2024-06-26T19:00:00');
+    return fechaHora >= inicioRango2 && fechaHora <= finRango2;
+  }
+
+  if (fecha === '2024-06-30') {
+    const inicioRango3 = new Date('2024-06-30T19:00:00');
+    const finRango3 = new Date('2024-06-30T21:00:00');
+    return fechaHora >= inicioRango3 && fechaHora <= finRango3;
+  }
+
+  if (fecha === '2024-07-09') {
+    const inicioRango4 = new Date('2024-06-30T19:00:00');
+    const finRango4 = new Date('2024-06-30T21:00:00');
+    return fechaHora >= inicioRango4 && fechaHora <= finRango4;
+  }
+
+  if (fecha === '2024-07-14') {
+    const inicioRango5 = new Date('2024-06-30T19:00:00');
+    const finRango5 = new Date('2024-06-30T21:00:00');
+    return fechaHora >= inicioRango5 && fechaHora <= finRango5;
+  }
+
+  console.log("NO ES LA FECHA NI HORA DE LA COPA AMERICA");
+  return false;
+
+}
+
+// Función para actualizar el contenido del div
+function actualizarDiv() {
+  const div = document.getElementById('fondito___');
+  const nuevoContenido = `
+     <a href="https://play.google.com/store/apps/details?id=com.digitalproserver.ecuavisa&hl=es_EC&gl=US">
+         <img class="fondoCopaAmerica" width="400" height="500" id="fondito__" src="https://www.ecuavisa.com/binrepository/900x1125/75c0/750d1125/none/11705/DHQV/afiche_1594879_20240620163409.jpg" alt="claqueta">
+     </a>
+ `;
+  div.outerHTML = nuevoContenido;
+}
+
+// Realizar la solicitud a la API 
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    const { fecha, hora } = data;
+    if (verificarFechaHora(fecha, hora)) {
+      actualizarDiv();
+    }
+  })
+  .catch(error => console.error('Error al obtener datos de la API:', error));
+
+/*
+ CODIGO FONDITO BANNER COPA AMERICA - FIN - 21-06-2024
+ */
 
 // let scrollExecuted = false;
 let mousemoveExecuted = false;
 
 function bootstrapJS() {
-  if(ECUAVISA_EC){
+  if (ECUAVISA_EC) {
     //No queremos que bootstrap js se agregue en mi perfil, por que ya se está agregando en esa página, con esto se bloquea el script solo en mi perfil
-    const bloquearUrl_2 = ECUAVISA_EC.verificarURLActual({url:"https://www.ecuavisa.com/servicios/perfil"});//Verifica si la url actual corresponde a la mandada como parámetro
-    const bloquearUrl = ECUAVISA_EC.verificarURLActual({url:"https://www.ecuavisa.com/servicios/perfil/"});//Verifica si la url actual corresponde a la mandada como parámetro
-    
-    if(bloquearUrl || bloquearUrl_2){
+    const bloquearUrl_2 = ECUAVISA_EC.verificarURLActual({ url: "https://www.ecuavisa.com/servicios/perfil" });//Verifica si la url actual corresponde a la mandada como parámetro
+    const bloquearUrl = ECUAVISA_EC.verificarURLActual({ url: "https://www.ecuavisa.com/servicios/perfil/" });//Verifica si la url actual corresponde a la mandada como parámetro
+
+    if (bloquearUrl || bloquearUrl_2) {
       return true;
     }
     //No queremos que bootstrap js se agregue en mi perfil, por que ya se está agregando en esa página, con esto se bloquea el script solo en mi perfil
   }
-  
+
   const scriptBoostrap = document.createElement("script");
   scriptBoostrap.setAttribute('src', `https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js`);
   document.body.appendChild(scriptBoostrap);
