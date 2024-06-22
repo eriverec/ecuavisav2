@@ -623,7 +623,7 @@ function actualizarDiv() {
   const div = document.getElementById('fondito___');
   const nuevoContenido = `
      <a href="https://play.google.com/store/apps/details?id=com.digitalproserver.ecuavisa&hl=es_EC&gl=US">
-         <img class="fondoCopaAmerica" width="400" height="500" id="fondito__" src="https://estadisticas.ecuavisa.com/sites/default/files/2022-12/ecuavisacom.jpg" alt="claqueta">
+         <img class="fondoCopaAmerica" width="400" height="500" id="fondito__" src="https://estadisticas.ecuavisa.com/sites/gestor/Banner%2FAAB_player1.jpg" alt="claqueta">
      </a>
  `;
   div.outerHTML = nuevoContenido;
