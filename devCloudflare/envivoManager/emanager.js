@@ -580,7 +580,7 @@ const apiUrl = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/time/index.
 
 // Función para verificar la condición de fecha y hora
 function verificarFechaHora(fecha, hora) {
-  const fechaHora = new Date('${fecha}T${hora}');
+  const fechaHora = new Date(`${fecha}T${hora}`);
   const fechaActual = new Date();
 
   if (fecha === '2024-06-22') {
