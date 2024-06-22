@@ -580,7 +580,7 @@ const apiUrl = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/time/index.
 
 // Función para verificar la condición de fecha y hora
 function verificarFechaHora(fecha, hora) {
-  const fechaHora = new Date(`${fecha}T${hora}`);
+  const fechaHora = new Date('${fecha}T${hora}');
   const fechaActual = new Date();
 
   if (fecha === '2024-06-22') {
@@ -621,11 +621,11 @@ function verificarFechaHora(fecha, hora) {
 // Función para actualizar el contenido del div
 function actualizarDiv() {
   const div = document.getElementById('fondito___');
-  const nuevoContenido = `
+  const nuevoContenido = '
      <a href="https://play.google.com/store/apps/details?id=com.digitalproserver.ecuavisa&hl=es_EC&gl=US">
          <img class="fondoCopaAmerica" width="400" height="500" id="fondito__" src="https://estadisticas.ecuavisa.com/sites/gestor/Banner%2FAAB_player1.jpg" alt="claqueta">
      </a>
- `;
+ ';
   div.outerHTML = nuevoContenido;
 }
 
