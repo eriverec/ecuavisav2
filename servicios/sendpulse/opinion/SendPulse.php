@@ -874,14 +874,14 @@ class SendPulse {
         $getOpinionesBloquesURLVar = $this->getOpinionesBloquesURL($list);
         if(is_array($list)){
             foreach ($list as $key => $value) {
-                if($value->name == "Image"){
-                    $content[] = '
-                    <a style="text-decoration:none;color: black;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" href="'.$getFristNota["link"].'">
-                    	<img width="200" style="width:100%;height:auto" src="'.$value->remoteContent->href.'" alt="Imagen de twitter">
+                // if($value->name == "Image"){
+                //     $content[] = '
+                //     <a style="text-decoration:none;color: black;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" href="'.$getFristNota["link"].'">
+                //     	<img width="200" style="width:100%;height:auto" src="'.$value->remoteContent->href.'" alt="Imagen de twitter">
 
-				    </a>
-                    ';
-                }
+				    		// 		</a>
+                //     ';
+                // }
                 if($value->name == "Headline"){
                     $titulo = $value->__text;//'.$getFristNota["subseccion"]["link"].'
 
