@@ -601,15 +601,22 @@ function verificarFechaHora(fecha, hora) {
     return fechaHora >= inicioRango3 && fechaHora <= finRango3;
   }
 
+  //PARTIDO DE CUARTOS - ECUADOR VS ARGENTINA 
+  if (fecha === '2024-07-04') {
+    const inicioRango6 = new Date('2024-07-04T20:00:00');
+    const finRango6 = new Date('2024-07-04T22:00:00');
+    return fechaHora >= inicioRango6 && fechaHora <= finRango6;
+  }
+
   if (fecha === '2024-07-09') {
-    const inicioRango4 = new Date('2024-06-30T19:00:00');
-    const finRango4 = new Date('2024-06-30T21:00:00');
+    const inicioRango4 = new Date('2024-07-09T19:00:00');
+    const finRango4 = new Date('2024-07-09T21:00:00');
     return fechaHora >= inicioRango4 && fechaHora <= finRango4;
   }
 
   if (fecha === '2024-07-14') {
-    const inicioRango5 = new Date('2024-06-30T19:00:00');
-    const finRango5 = new Date('2024-06-30T21:00:00');
+    const inicioRango5 = new Date('2024-07-14T19:00:00');
+    const finRango5 = new Date('2024-07-14T21:00:00');
     return fechaHora >= inicioRango5 && fechaHora <= finRango5;
   }
 
