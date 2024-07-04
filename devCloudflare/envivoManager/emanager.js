@@ -603,8 +603,8 @@ function verificarFechaHora(fecha, hora) {
 
   //PARTIDO DE CUARTOS - ECUADOR VS ARGENTINA 
   if (fecha === '2024-07-04') {
-    const inicioRango6 = new Date('2024-07-04T10:00:00');
-    const finRango6 = new Date('2024-07-04T11:00:00');
+    const inicioRango6 = new Date('2024-07-04T20:00:00');
+    const finRango6 = new Date('2024-07-04T22:00:00');
     return fechaHora >= inicioRango6 && fechaHora <= finRango6;
   }
 
