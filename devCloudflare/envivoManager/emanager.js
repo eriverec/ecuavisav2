@@ -629,8 +629,24 @@ function verificarFechaHora(fecha, hora) {
 function actualizarDiv() {
   if(document.querySelector("#fondito__")){
     const div = document.getElementById('fondito__');
+    
+    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
+    var URL = "https://play.google.com/store/apps/details?id=com.digitalproserver.ecuavisa&hl=es_EC&gl=US";
+    // Detectar iOS
+    if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+        URL = "https://apps.apple.com/ec/app/ecuavisa-play/id6465450289";
+    }
+
+    // Detectar Android
+    if (/android/i.test(userAgent)) {
+        // return 'Android';
+    }
+
+    // No es iOS ni Android
+    // return 'Otro';
+
     const nuevoContenido = `
-       <a href="https://play.google.com/store/apps/details?id=com.digitalproserver.ecuavisa&hl=es_EC&gl=US">
+       <a href="${URL}">
            <img class="fondoCopaAmerica" width="400" height="500" id="fondito__" src="https://estadisticas.ecuavisa.com/sites/gestor/Banner%2FAAB_player1.jpg" alt="claqueta">
        </a>
    `;
