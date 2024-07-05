@@ -655,18 +655,18 @@ function actualizarDiv() {
 }
 
 // Realizar la solicitud a la API 
-// fetch(apiUrl)
-//   .then(response => response.json())
-//   .then(data => {
-//     console.log(data);
-//     const { fecha, hora } = data;
-//     if (verificarFechaHora(fecha, hora)) {
-//       actualizarDiv();
-//     }
-//   })
-//   .catch(error => console.error('Error al obtener datos de la API:', error));
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {
+    console.log(data);
+    const { fecha, hora } = data;
+    if (verificarFechaHora(fecha, hora)) {
+      actualizarDiv();
+    }
+  })
+  .catch(error => console.error('Error al obtener datos de la API:', error));
 
-actualizarDiv();
+// actualizarDiv();
 
 /*
  CODIGO FONDITO BANNER COPA AMERICA - FIN - 21-06-2024
