@@ -766,7 +766,7 @@ function crearChartTopVideosCompletados(fechai = null, fechaf = null) {
   }
 
   dataExportTopVideosCompletados.value = dataFormated;
-  const chartData = prepareDataTopVideosCompletados(dataFormated).slice(0, 5);
+  const chartData = prepareDataTopVideosCompletados(dataFormated).slice(0, 15);
   chartData.sort((a, b) => b.value - a.value);
 
   const donutColors = {
