@@ -6,6 +6,10 @@ html {
 
 }
 
+#iter-footer-wrapper{
+  margin-top: 0px !important;
+}
+
 .headerBloque {
   background: #2a2a2a;
   padding: 20px 0;
@@ -613,6 +617,14 @@ footer {
   .cardSwiper {
     font-size: 16px;
     line-height: 18px;
+  }
+
+  .cabecera-bloque_logo{
+    width: 50px;
+  }
+
+  .headerBloque{
+    padding: 10px 0;
   }
 
   .bloqueLogosMarcas img{
