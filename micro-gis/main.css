@@ -2,10 +2,13 @@
 body,
 html {
   font-family: "Archivo", sans-serif;
+  scroll-behavior: smooth;
+
 }
 
 .headerBloque {
   background: #2a2a2a;
+  padding: 20px 0;
 }
 
 .cabecera-bloque {
@@ -42,17 +45,48 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 5px;
 }
 
 .cardSwiper img {
-  width: 170px;
+  width: 100px;
 }
 
 .carrusel-bloque .swiper-slide {
   background: #4c4c4c;
   color: #fff;
   border-radius: 15px;
-  padding: 35px;
+  padding: 15px;
+}
+
+
+.carrusel-bloque .swiper-pagination-bullet {
+  background: #D8BA9E !important;
+  opacity: 1 !important;
+}
+
+.carrusel-bloque .swiper-pagination-bullet-active {
+  background: #D74A2F !important;
+}
+
+.carrusel-bloque .swiper-pagination-bullet {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+
+.carrusel-bloque-dos .swiper-pagination-bullet {
+  background: #D8BA9E !important;
+  opacity: 1 !important;
+}
+
+.carrusel-bloque-dos .swiper-pagination-bullet-active {
+  background: #D74A2F !important;
+}
+
+.carrusel-bloque-dos .swiper-pagination-bullet {
+  width: 18px !important;
+  height: 18px !important;
 }
 
 .cardSwiper .bgProv {
@@ -65,9 +99,14 @@ html {
 }
 
 .carrusel-bloque .swiper-slide-next {
-  transform: scale(1.2) !important;
+  transform: scale(1.13) !important;
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
+
+.tercerTema .texto-bloque_tres {
+  color: #fff;
+}
+
 
 
 .bgNegro {
@@ -110,7 +149,33 @@ html {
   padding: 0 100px;
 }
 
-.bgGris{
+.bloqueSoloText {
+  margin-top: 60px;
+}
+
+.bloqueTextVideo {
+  margin-top: 100px;
+}
+
+.verse-player-embed {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  max-width: 100%;
+}
+
+.verse-player-embed iframe,
+.verse-player-embed object,
+.verse-player-embed embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.bgGris {
   background: #f7f7f7;
 }
 
@@ -132,6 +197,64 @@ html {
   line-height: 60px;
   padding-right: 10px;
 }
+
+.bloqueTextComillas {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bloque-flourish .flourish-embed {
+  box-shadow: 1px 2px 5px -1px;
+}
+
+.textComillas {
+  position: absolute;
+  max-width: 600px;
+  font-size: 30px;
+  font-style: italic;
+  font-weight: 200;
+  line-height: 45px;
+  text-align: left;
+}
+
+.swPatentDos {
+  padding-bottom: 70px !important;
+}
+
+.swPatentDos img {
+  border-radius: 15px;
+}
+
+.textUnEsp {
+  font-size: 30px;
+  font-weight: 700;
+  line-height: 23px;
+  color: #fff;
+}
+
+.lineSeparador{
+  border: 2px solid #ccc;
+}
+
+.textAcom {
+  font-size: 30px;
+  font-weight: 700;
+color: #fff;
+}
+
+.bloqueLogosMarcas{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+}
+
+.bloqueLogosMarcas img {
+  width: 300px;
+}
+
 
 /* FOOTER */
 
@@ -167,6 +290,8 @@ footer {
   letter-spacing: -0.025em;
   color: #2927b9;
 }
+
+
 
 .consulta_interes .text_click {
   font-weight: 600;
@@ -273,6 +398,8 @@ footer {
 .footer-distributed .footer-right {
   width: 100%;
 }
+
+
 
 /* Footer links */
 .footer-distributed .footer-links {
@@ -397,15 +524,24 @@ footer {
 
 
 @media (max-width: 1200px) {
-  .cartelUno span{
+  .cartelUno span {
     font-size: 35px;
   }
 }
 
 @media (max-width: 991px) {
-  .cartelUno span{
-    font-size: 30px;
+  .cartelUno span {
+    font-size: 18px;
+    line-height: 20px;
     padding: 0 40px;
+  }
+
+  .cartelUno img{
+    height: 180px;
+  }
+
+  .carrusel-bloque .swiper-slide-next {
+    transform: scale(1) !important;
   }
 }
 
@@ -414,6 +550,10 @@ footer {
 @media (max-width: 768px) {
   .footer-distributed {
     font: bold 10px sans-serif;
+  }
+
+  .cardSwiper img {
+    width: 100px;
   }
 
   .footer-distributed .footer-links a:before {
@@ -464,9 +604,44 @@ footer {
     font-size: 15px;
     line-height: 20px;
   }
+
+
 }
 
+
+@media (max-width: 767px) {
+  .cardSwiper {
+    font-size: 16px;
+    line-height: 18px;
+  }
+
+  .bloqueLogosMarcas img{
+    width: 100%;
+  }
+
+  .textAcom {
+    font-size: 18px;
+  } 
+
+  .textUnEsp {
+    font-size: 18px;
+  }
+
+  .carrusel-bloque .swiper-slide {
+    padding: 16px;
+  }
+
+  .textComillas {
+    max-width: 300px;
+    font-size: 19px;
+    line-height: 22px;
+  }
+
+}
+
+
 @media (max-width: 600px) {
+
   .footer-distributed .footer-links a {
     font-size: 16px;
   }
