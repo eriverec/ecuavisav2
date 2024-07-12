@@ -6,6 +6,12 @@ html {
 
 }
 
+#temauno,
+#temados,
+#tematres{
+  background: #f6f6f6;
+}
+
 .max900 {
   max-width: 900px;
   margin: auto;
@@ -166,7 +172,7 @@ html {
   font-weight: 800;
   line-height: 44px;
   text-align: center;
-  color: #4A2C10;
+  color: #333;
   padding: 0 100px;
 }
 
@@ -759,6 +765,9 @@ footer {
   .swiper-slide-next {
     transform: scale(1) !important;
     transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+  .max900 {
+    max-width: 700px;
   }
 }
 
