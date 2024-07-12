@@ -11,20 +11,17 @@ var swiper = new Swiper(".swPatent", {
     640: {
       slidesPerView: 2,
       initialSlide: 1,
-
-      spaceBetween: 50,
+      spaceBetween: 20,
     },
     768: {
       slidesPerView: 2.5,
       initialSlide: 1,
-
       spaceBetween: 20,
     },
     1024: {
-      slidesPerView: 3,
+      slidesPerView: 2.5,
       initialSlide: 1,
-
-      spaceBetween: 40,
+      spaceBetween: 20,
     },
 
   },
