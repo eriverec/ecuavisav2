@@ -103,7 +103,7 @@ html {
 }
 
 .carrusel-bloque .swiper-slide-next {
-  transform: scale(1.13) !important;
+  transform: scale(1.4) !important;
   transition: transform 0.5s ease, opacity 0.5s ease;
 }
 

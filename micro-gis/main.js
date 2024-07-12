@@ -16,7 +16,7 @@ var swiper = new Swiper(".swPatent", {
     },
     1024: {
       slidesPerView: 3,
-      spaceBetween: 50,
+      spaceBetween: 100,
     },
     1440: {
       slidesPerView: 3,
