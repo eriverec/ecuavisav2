@@ -1,6 +1,8 @@
 var swiper = new Swiper(".swPatent", {
   slidesPerView: 1.3,
   spaceBetween: 20,
+  centeredSlides: true,
+  initialSlide: 0,
   pagination: {
     el: ".swiper-pagination",
     clickable: true,
@@ -8,19 +10,21 @@ var swiper = new Swiper(".swPatent", {
   breakpoints: {
     640: {
       slidesPerView: 2,
+      initialSlide: 1,
+
       spaceBetween: 50,
     },
     768: {
       slidesPerView: 2.5,
+      initialSlide: 1,
+
       spaceBetween: 20,
     },
     1024: {
       slidesPerView: 3,
-      spaceBetween: 100,
-    },
-    1440: {
-      slidesPerView: 3,
-      spaceBetween: 50,
+      initialSlide: 1,
+
+      spaceBetween: 40,
     },
 
   },
@@ -29,22 +33,27 @@ var swiper = new Swiper(".swPatent", {
 var swiperDos = new Swiper(".swPatentDos", {
   slidesPerView: 1.3,
   spaceBetween: 20,
+  initialSlide: 0,
+  centeredSlides: true,
   pagination: {
     el: ".swiper-pagination",
     clickable: true,
   },
   breakpoints: {
     640: {
-      slidesPerView: 3,
-      spaceBetween: 50,
+      slidesPerView: 2.5,
+      initialSlide: 1,
+      spaceBetween: 20,
     },
     768: {
-      slidesPerView: 3,
+      slidesPerView: 2.5,
+      initialSlide: 1,
       spaceBetween: 20,
     },
     1024: {
-      slidesPerView: 4,
-      spaceBetween: 50,
+      slidesPerView: 3.5,
+      initialSlide: 1,
+      spaceBetween: 20,
     },
   },
 });

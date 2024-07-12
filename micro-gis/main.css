@@ -6,7 +6,14 @@ html {
 
 }
 
-#iter-footer-wrapper{
+.max900 {
+  max-width: 900px;
+  margin: auto;
+  padding: 0 12px;
+}
+
+
+#iter-footer-wrapper {
   margin-top: 0px !important;
 }
 
@@ -41,7 +48,7 @@ html {
 }
 
 .swPatent {
-  padding: 70px 0 !important;
+  padding-bottom: 70px !important;
 }
 
 
@@ -102,9 +109,19 @@ html {
   margin-bottom: 10px;
 }
 
-.carrusel-bloque .swiper-slide-next {
-  transform: scale(1.4) !important;
+.carrusel-bloque .swiper-slide-active {
+  /* transform: scale(1.4) !important; */
   transition: transform 0.5s ease, opacity 0.5s ease;
+  height: 250px;
+  display: flex;
+}
+
+.carrusel-bloque .swiper-slide-active .cardSwiper img {
+  width: 130px;
+}
+
+.carrusel-bloque .swiper-wrapper {
+  align-items: center;
 }
 
 .tercerTema .texto-bloque_tres {
@@ -238,17 +255,17 @@ html {
   color: #fff;
 }
 
-.lineSeparador{
+.lineSeparador {
   border: 2px solid #ccc;
 }
 
 .textAcom {
   font-size: 30px;
   font-weight: 700;
-color: #fff;
+  color: #fff;
 }
 
-.bloqueLogosMarcas{
+.bloqueLogosMarcas {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -540,7 +557,7 @@ footer {
     padding: 0 40px;
   }
 
-  .cartelUno img{
+  .cartelUno img {
     height: 180px;
   }
 
@@ -619,21 +636,21 @@ footer {
     line-height: 18px;
   }
 
-  .cabecera-bloque_logo{
+  .cabecera-bloque_logo {
     width: 50px;
   }
 
-  .headerBloque{
+  .headerBloque {
     padding: 10px 0;
   }
 
-  .bloqueLogosMarcas img{
+  .bloqueLogosMarcas img {
     width: 100%;
   }
 
   .textAcom {
     font-size: 18px;
-  } 
+  }
 
   .textUnEsp {
     font-size: 18px;
