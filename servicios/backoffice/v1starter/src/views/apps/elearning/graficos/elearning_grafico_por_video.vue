@@ -40,6 +40,7 @@ const dataDeviceGlobalSelected = ref({
 const disabledViewList = ref(false);
 
 const loadingData = ref(false);
+const totalRegistrados = ref(0);
 
 onMounted(async () =>{
   setTimeout(function(){
@@ -64,6 +65,8 @@ const fetchDevice = async (idCurso = "664e32d4fa50c162c4a2e5c8") => {
     const response = await fetch('https://servicio-elearning.vercel.app/grafico/get-web-registered/'+idCurso)
     const data = await response.json();
     dataDevice.value = data.data;
+    totalRegistrados.value = data.totalCurso;
+
     await getModulosAll();
   } catch (error) {
     alert("Existe un error, intente nuevamente");
@@ -391,10 +394,10 @@ async function actualizarValoresTabla(moduloM){
   const videos = respuesta.videos;
 
   // Calcula el total de usuarios
-  let totalUsuarios = 0;
-  videos.forEach(data => {
-      totalUsuarios += data.usuarios;
-  });
+  let totalUsuarios = totalRegistrados.value * 1;
+  // videos.forEach(data => {
+  //     totalUsuarios += data.usuarios;
+  // });
 
   // Agrega la nueva clave 'porcentaje' a cada objeto
   videos.forEach(data => {
@@ -897,6 +900,7 @@ async function getUsuariosExportar(page = 1, limit = 10, fechai, fechaf, idCurso
                 </template>
             </VSelect>
         </div>
+        <small>Este curso tiene un total de {{ totalRegistrados }} usuarios registrados.</small>
         <VList
           class="mt-2"
           lines="two"
