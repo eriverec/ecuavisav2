@@ -3,7 +3,7 @@ body,
 html {
   font-family: "Archivo", sans-serif;
   scroll-behavior: smooth;
-
+  font-size: 20px;
 }
 
 #temauno,
@@ -168,7 +168,7 @@ html {
 
 .cartelUno span {
   position: absolute;
-  font-size: 43px;
+  font-size: 35px;
   font-weight: 800;
   line-height: 44px;
   text-align: center;
@@ -280,6 +280,10 @@ html {
 
 .bloqueLogosMarcas img {
   width: 300px;
+}
+
+.bloqueVideos iframe {
+  height: 500px;
 }
 
 
@@ -676,6 +680,10 @@ footer {
 
 
 @media (max-width: 600px) {
+
+  .comillas_ img{
+    height: 300px;
+  }
 
   .footer-distributed .footer-links a {
     font-size: 16px;
