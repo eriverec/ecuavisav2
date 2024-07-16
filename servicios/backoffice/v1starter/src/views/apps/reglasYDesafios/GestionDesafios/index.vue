@@ -30,6 +30,8 @@ const tituloSticker = ref('');
 const URLSticker = ref('');
 const categoriaDesafio = ref('');
 const tipoModel = ref('');
+const leyenda = ref('');
+
 const fecha = ref('');
 
 const idToEdit = ref('');
@@ -246,6 +248,7 @@ function resetForm() {
   frecuenciaValor.value = null;
   tituloDesafio.value = '';
   descripcionDesafio.value = '';
+  leyenda.value = '';
   statusDesafio.value = true;
   tituloSticker.value = '';
   URLSticker.value = '';
@@ -280,6 +283,7 @@ async function onEdit(id) {
   frecuenciaValor.value = data.frecuenciaValor;
   tituloDesafio.value = data.tituloDesafio;
   descripcionDesafio.value = data.descripcionDesafio;
+  leyenda.value = data.leyenda;
   statusDesafio.value = data.statusDesafio;
   tituloSticker.value = data.tituloSticker;
   URLSticker.value = data.URLSticker;
@@ -296,8 +300,7 @@ async function onEdit(id) {
 
 async function onComplete() {
 
-  if (!tituloDesafio.value || !descripcionDesafio.value ||
-    !tituloSticker.value || !URLSticker.value) {
+  if (!tituloDesafio.value || !descripcionDesafio.value || !leyenda.value || !tituloSticker.value || !URLSticker.value) {
     configSnackbar.value = {
       message: "Llenar todos los campos para crear el desafío",
       type: "error",
@@ -315,6 +318,7 @@ async function onComplete() {
       //"frecuenciaValor": frecuenciaValor.value,
       "tituloDesafio": tituloDesafio.value,
       "descripcionDesafio": descripcionDesafio.value,
+      "leyenda": leyenda.value,
       "statusDesafio": statusDesafio.value,
       "tituloSticker": tituloSticker.value,
       "URLSticker": URLSticker.value,
@@ -357,6 +361,7 @@ async function onComplete() {
       "frecuenciaValor": frecuenciaValor.value,
       "tituloDesafio": tituloDesafio.value,
       "descripcionDesafio": descripcionDesafio.value,
+      "leyenda": leyenda.value,
       "statusDesafio": statusDesafio.value,
       "tituloSticker": tituloSticker.value,
       "URLSticker": URLSticker.value,
@@ -907,6 +912,10 @@ async function onCompleteHorarios() {
 
                         <VCol cols="12">
                           <VSelect v-model="tipoModel" :items="tipoItems" label="Tipos del desafío" />
+                        </VCol>
+
+                        <VCol cols="12">
+                          <VTextField v-model="leyenda" label="Leyenda" />
                         </VCol>
 
                         <VCol cols="12">

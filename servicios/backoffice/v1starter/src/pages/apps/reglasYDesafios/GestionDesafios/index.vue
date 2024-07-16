@@ -24,6 +24,7 @@ const nombre = ref('');
 const frecuenciaDesafio = ref('');
 const frecuenciaValor = ref(null);
 const tituloDesafio = ref('');
+const leyenda = ref('');
 const descripcionDesafio = ref('');
 const statusDesafio = ref(true);
 const tituloSticker = ref('');
@@ -192,6 +193,7 @@ function resetForm(){
     frecuenciaDesafio.value = '';
     frecuenciaValor.value = null;
     tituloDesafio.value = '';
+    leyenda.value = '';
     descripcionDesafio.value = '';
     statusDesafio.value = true;
     tituloSticker.value = '';
@@ -226,6 +228,7 @@ async function onEdit(id){
     frecuenciaDesafio.value = data.frecuenciaDesafio;
     frecuenciaValor.value = data.frecuenciaValor;
     tituloDesafio.value = data.tituloDesafio;
+    leyenda.value = data.leyenda;
     descripcionDesafio.value = data.descripcionDesafio;
     statusDesafio.value = data.statusDesafio;
     tituloSticker.value = data.tituloSticker;
@@ -243,7 +246,7 @@ async function onEdit(id){
 
 async function onComplete(){
 
-  if ( !frecuenciaDesafio.value || frecuenciaValor.value == null || !tituloDesafio.value || !descripcionDesafio.value || 
+  if ( !frecuenciaDesafio.value || frecuenciaValor.value == null || !tituloDesafio.value || !leyenda.value || !descripcionDesafio.value || 
     !tituloSticker.value || !URLSticker.value) {
         configSnackbar.value = {
                     message: "Llenar todos los campos para crear el desafío",
@@ -261,6 +264,7 @@ async function onComplete(){
             "frecuenciaDesafio": frecuenciaDesafio.value,
             "frecuenciaValor": frecuenciaValor.value,
             "tituloDesafio": tituloDesafio.value,
+            "leyenda": leyenda.value,
             "descripcionDesafio": descripcionDesafio.value,
             "statusDesafio": statusDesafio.value,
             "tituloSticker": tituloSticker.value,
@@ -303,6 +307,7 @@ async function onComplete(){
             "frecuenciaDesafio": frecuenciaDesafio.value,
             "frecuenciaValor": frecuenciaValor.value,
             "tituloDesafio": tituloDesafio.value,
+            "leyenda": leyenda.value,
             "descripcionDesafio": descripcionDesafio.value,
             "statusDesafio": statusDesafio.value,
             "tituloSticker": tituloSticker.value,
@@ -889,6 +894,10 @@ async function onCompleteHorarios(){
 
                                       <VCol cols="12" >
                                           <VSelect v-model="tipoModel" :items="tipoItems" label="Tipos del desafío" />
+                                      </VCol>
+
+                                      <VCol cols="12" >
+                                          <VTextField v-model="leyenda" label="Leyenda" />
                                       </VCol>
 
                                       <VCol cols="12" >
