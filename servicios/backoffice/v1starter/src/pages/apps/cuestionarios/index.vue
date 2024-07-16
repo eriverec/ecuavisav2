@@ -240,11 +240,11 @@ async function onComplete(){
         return false;
     } 
 
-    puntosNecesarios.value = parseInt(puntosNecesarios.value);
+    puntosNecesarios.value = parseFloat(puntosNecesarios.value).toFixed(2);
 
     let preguntasFormated = preguntasEnviar.map(item => ({
     ...item, 
-    puntaje: parseInt(item.puntaje) 
+    puntaje: parseFloat(item.puntaje).toFixed(2)
     })); 
 
     var myHeaders = new Headers();
@@ -440,7 +440,7 @@ async function mostrarNombreUsuario(id, index){
                         <thead>
                             <tr>   
                             <th scope="col">Título</th>
-                            <th scope="col">Descripción</th>  
+                            <th scope="col" style="width: 200px;">Descripción</th>  
                             <th scope="col">Endpoint</th>  
                             <th scope="col">Enviar respuesta</th>
                             <th scope="col">Respuestas</th>
@@ -453,7 +453,7 @@ async function mostrarNombreUsuario(id, index){
                             <td class="text-medium-emphasis">
                                 {{ item.titulo}}
                             </td>     
-                            <td class="text-medium-emphasis">
+                            <td class="text-medium-emphasis" style="min-width: 200px;">
                                 {{ item.descripcion}}
                             </td>    
                             <td class="text-medium-emphasis">
@@ -636,7 +636,7 @@ async function mostrarNombreUsuario(id, index){
                                     </VCol>
 
                                     <VCol cols="6" >
-                                        <VTextField v-model="limiteTiempo" label="Límite de tiempo" type="number"/>
+                                        <VTextField v-model="limiteTiempo" label="Límite de tiempo en segundos" type="number"/>
                                     </VCol>
 
                                     <VCol cols="12" >
