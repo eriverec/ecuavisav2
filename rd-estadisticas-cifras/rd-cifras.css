@@ -2,6 +2,10 @@
   padding-top: 0px;
 }
 
+.contenido_dinamico__paris2024 #main-content iframe {
+  height: 1100px;
+}
+
 .nav-pills.s_acumulada .nav-link{
   display: inline-block;
   padding: 13px 13px 10px 13px;
@@ -74,6 +78,9 @@
       height: 300px;
       /* object-fit: cover; */
       background-position: center;
+  }
+  .contenido_dinamico__paris2024 #main-content iframe {
+    height: 1430px;
   }
 }
 

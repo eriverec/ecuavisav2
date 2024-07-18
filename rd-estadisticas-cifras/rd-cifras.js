@@ -131,9 +131,6 @@ function eventParis2024() {
   const skk = document.querySelector(".contenido_dinamico__paris2024");
   if (skk) {
     skk.innerHTML = htmlContent;
-    setTimeout(() => {
-      iResizer ();
-    }, 1200);
   }
 }
 
