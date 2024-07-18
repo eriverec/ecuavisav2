@@ -117,7 +117,7 @@ function eventParis2024() {
               <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
                 <section>
                   <section class="wrapper" id="main-content">
-                    <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>        
+                    <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="1100px" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>        
                   </section>
                 </section>
               </div>
