@@ -52,6 +52,10 @@ const tipoSelectorItems = [{
     {
         title: 'Perfil selector Deporte',
         value: 'PerfilselectorDeporte'
+    },
+    {
+        title: 'Perfil selector Fecha de Nacimiento',
+        value: 'PerfilselectorFechaNacimiento'
     }
 ];
 
