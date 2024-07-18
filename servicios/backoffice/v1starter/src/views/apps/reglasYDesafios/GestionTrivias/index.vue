@@ -44,7 +44,7 @@ async function getReglas() {
         const consulta = await fetch('https://servicio-desafios.vercel.app/desafios');
         const consultaJson = await consulta.json();
 
-        idReglas.value = consultaJson.data.filter(desafio => desafio.tipo === 'Trivia' || desafio.tipo === 'TriviaCodigo').map(({ tituloDesafio, _id }) => ({
+        idReglas.value = consultaJson.data.filter(desafio => desafio.tipo === 'Trivia' || desafio.tipo === 'PerfilDatos' || desafio.tipo === 'TriviaCodigo').map(({ tituloDesafio, _id }) => ({
             title: tituloDesafio,
             value: _id
         }));
@@ -89,7 +89,11 @@ const tipoSelectorItems = [{
 {
     title: 'Perfil selector Deporte',
     value: 'PerfilselectorDeporte'
-}
+},
+    {
+        title: 'Perfil selector Fecha de Nacimiento',
+        value: 'PerfilselectorFechaNacimiento'
+    }
 ];
 
 const tipoItems = [
