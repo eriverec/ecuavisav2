@@ -133,7 +133,7 @@ function eventParis2024() {
     skk.innerHTML = htmlContent;
     setTimeout(() => {
       iResizer ();
-    }, 1000);
+    }, 1200);
   }
 }
 
