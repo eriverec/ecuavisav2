@@ -1,6 +1,6 @@
 function createNav(activeTabId) {
   const tabs = [
-    { id: 'copa-america', href: '/deportes/copa-america/tablaposiciones', text: 'Copa América' },
+    { id: 'paris-2024', href: '/juegos-olimpicos-paris-2024-calendario-medallero', text: 'París 2024' },
     { id: 'ligapro', href: '/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador', text: 'LigaPro' },
     { id: 'eliminatorias', href: '/deportes/eliminatorias-conmebol/tablaposiciones', text: 'Eliminatorias' },
     { id: 'champions', href: '/deportes/champions/tablaposiciones', text: 'Champions League' },
@@ -8,7 +8,8 @@ function createNav(activeTabId) {
     { id: 'copa-sudamericana', href: '/deportes/copa-sudamericana/tablaposiciones', text: 'Copa Sudamericana' },
     { id: 'premierleague', href: '/deportes/premierleague/tablaposiciones', text: 'Premier League' },
     { id: 'liga-espanola', href: '/deportes/liga-espanola/tablaposiciones', text: 'Liga Española' },
-    { id: 'mls', href: '/deportes/mls/tablaposiciones', text: 'MLS' }
+    { id: 'mls', href: '/deportes/mls/tablaposiciones', text: 'MLS' },
+    { id: 'copa-america', href: '/deportes/copa-america/tablaposiciones', text: 'Copa América' },
   ];
 
   const navHtml = `
@@ -36,14 +37,105 @@ setTimeout(() => {
       // for (const sst of contTabs){
       //   console.log('for ejecutado scroll horizontal');
       // }
-    }else{
+    } else {
       console.log("no encontro la clase myTab");
     }
-  }else{
+  } else {
     console.log("no se contro el #nav-container .nav-link.active");
   }
+
+  
 }, 500);
 
+
+function iResizer (){
+  var ifResizer = document.createElement("script");
+  ifResizer.setAttribute('src', 'https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/assets/libs/iframeResizer/iframeResizer.min.js');
+  document.head.appendChild(ifResizer);
+  setTimeout(() => {
+    iFrameResize({ "scrolling": false, "checkOrigin": false }, "iframe");
+  }, 200);
+}
+
+
+
+function eventParis2024() {
+  const urlsCifras = [
+    {
+      mainUrl: "/juegos-olimpicos-paris-2024-calendario-medallero",
+      subUrl: {
+        name: "Posiciones",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/jjoo/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3//minapp/page/page.html?channel=deportes.futbol.copaamerica&lang=es_LA&page=posiciones",
+      },
+    },
+    /*
+    {
+      mainUrl: "/deportes/copa-america/calendario",
+      subUrl: {
+        name: "Calendario",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/copaamerica/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3//minapp/page/page.html?channel=deportes.futbol.copaamerica&lang=es_LA&page=fixture",
+      },
+    },
+    {
+      mainUrl: "/deportes/copa-america/goleadores",
+      subUrl: {
+        name: "Goleadores",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/copaamerica/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3//minapp/page/page.html?channel=deportes.futbol.copaamerica&lang=es_LA&page=goleadores",
+      },
+    },
+    {
+      mainUrl: "/deportes/copa-america/planteles",
+      subUrl: {
+        name: "Planteles",
+        agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/copaamerica/pages/es/agenda.html",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3//minapp/page/page.html?channel=deportes.futbol.copaamerica&lang=es_LA&page=planteles",
+      },
+    },
+    */
+  ];
+
+  const currentUrl = window.location.pathname;
+
+  // Variable para almacenar el contenido HTML
+  let htmlContent = "";
+
+  setTimeout(() => {
+    createNav('paris-2024');
+  }, 200);
+
+  // Recorrer el objeto urlsCifras
+  for (const urlObj of urlsCifras) {
+    if (currentUrl === urlObj.mainUrl) {
+      // Generar el contenido HTML usando un template string
+
+      htmlContent = `
+         <div id="nav-container"></div>
+          <div class="tab-content" id="myTabContent">
+              <div class="" id="ligapro" role="tabpanel" aria-labelledby="ligapro-tab">
+                <section>
+                  <section class="wrapper" id="main-content">
+                    <iframe title="ifr_Posiciones" src="${urlObj.subUrl.agenda}" width="100%" height="180" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;" class=""></iframe>        
+                  </section>
+                </section>
+              </div>
+          </div>
+      `;
+
+      break; // Detener el bucle una vez que se encuentra una coincidencia
+    }
+  }
+  // Agregar el contenido HTML al cuerpo del documento
+  const skk = document.querySelector(".contenido_dinamico__paris2024");
+  if (skk) {
+    skk.innerHTML = htmlContent;
+    setTimeout(() => {
+      iResizer ();
+    }, 1000);
+  }
+}
 
 function eventCopaAmerica() {
   const urlsCifras = [
@@ -94,7 +186,7 @@ function eventCopaAmerica() {
   setTimeout(() => {
     createNav('copa-america');
   }, 200);
- 
+
   // Recorrer el objeto urlsCifras
   for (const urlObj of urlsCifras) {
     if (currentUrl === urlObj.mainUrl) {
@@ -1070,6 +1162,11 @@ if (window.location.pathname === "/deportes/tabla-de-posiciones/liga-pro/serie-a
   window.location.pathname === "/deportes/copa-america/planteles") {
   setTimeout(() => {
     eventCopaAmerica();
+  }, 200);
+
+} else if (window.location.pathname === "/juegos-olimpicos-paris-2024-calendario-medallero") {
+  setTimeout(() => {
+    eventParis2024();
   }, 200);
 
 
