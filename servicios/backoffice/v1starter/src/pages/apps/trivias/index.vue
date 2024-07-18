@@ -209,7 +209,7 @@ function validarArreglo(arreglo) {
                 console.log("Falta seleccionar el campo tipoSelector")
                 return false;
             }
-            if (objeto.hasOwnProperty(propiedad) && objeto.tipo != "votacion") {
+            if (objeto.hasOwnProperty(propiedad) && objeto.tipo != "votacion" && objeto.tipo != "texto") {
                 // Verificar si la propiedad es opciones
                 if (propiedad === 'opciones') {
                     if (!objeto[propiedad].every(opcion => opcion.trim() !== '')) {
