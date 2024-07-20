@@ -6,10 +6,61 @@ html {
   font-size: 20px;
 }
 
+.colorNegro {
+  color: #2A2A2A;
+}
+
+.colorBlanco {
+  color: #ffffff;
+}
+
+.piedefotouno {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 23px;
+  text-align: center;
+  display: block;
+  margin-top: 5px;
+}
+
+.postapertura p {
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 23px;
+  padding: 0 76px;
+}
+
+.textPinche {
+  font-size: 24px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 23px;
+  background: #D74A2F;
+  padding: 14px;
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.fotos_1 img {
+  
+  border-radius: 30px;
+}
+
+.textPinche:hover {
+  color: #ffffff;
+}
+
+
 #temauno,
 #temados,
-#tematres{
+#tematres {
   background: #f6f6f6;
+}
+
+
+.cabecera-bloque_menu .dropdown-item {
+  white-space: normal !important;
 }
 
 .max900 {
@@ -26,6 +77,9 @@ html {
 .headerBloque {
   background: #2a2a2a;
   padding: 20px 0;
+  position: fixed;
+  width: 100%;
+  z-index: 99999;
 }
 
 .cabecera-bloque {
@@ -51,6 +105,11 @@ html {
 /*APERTURA*/
 .portada-video video {
   width: 100%;
+  margin-top: 70px;
+}
+
+.portada-video.movil {
+  display: none;
 }
 
 .swPatent {
@@ -106,6 +165,36 @@ html {
   height: 18px !important;
 }
 
+
+.carrusel-bloque-tres .swiper-pagination-bullet {
+  background: #D8BA9E !important;
+  opacity: 1 !important;
+}
+
+.carrusel-bloque-tres .swiper-pagination-bullet-active {
+  background: #D74A2F !important;
+}
+
+.carrusel-bloque-tres .swiper-pagination-bullet {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+
+.carrusel-bloque-cuatro .swiper-pagination-bullet {
+  background: #D8BA9E !important;
+  opacity: 1 !important;
+}
+
+.carrusel-bloque-cuatro .swiper-pagination-bullet-active {
+  background: #D74A2F !important;
+}
+
+.carrusel-bloque-cuatro .swiper-pagination-bullet {
+  width: 18px !important;
+  height: 18px !important;
+}
+
 .cardSwiper .bgProv {
   display: inline-block;
   background: #d8ba9e;
@@ -126,6 +215,8 @@ html {
   width: 130px;
 }
 
+
+
 .carrusel-bloque .swiper-wrapper {
   align-items: center;
 }
@@ -134,7 +225,13 @@ html {
   color: #fff;
 }
 
+.tercerTema {
+  padding-top: 50px;
+}
 
+.videosderudo #vrudo{
+  border: 10px solid #D8BA9E;
+}
 
 .bgNegro {
   background: #2a2a2a;
@@ -151,6 +248,16 @@ html {
 
 .rasgosUno img {
   vertical-align: super;
+}
+
+.rasgosDos {
+  display: flex;
+  margin-bottom: -5px;
+}
+
+.rasgosDos img {
+  vertical-align: super;
+  transform: rotate(180deg);
 }
 
 .cartelUno {
@@ -210,6 +317,20 @@ html {
   margin-top: -65px;
 }
 
+.badge_ {
+  background: #d8ba9e;
+  color: #2a2a2a;
+  font-weight: 700;
+  padding: 3px;
+}
+
+.badge_na {
+  background: #D74A2F;
+  color: #ffffff;
+  font-weight: 700;
+  padding: 3px;
+}
+
 /* .texto-blque_uno p::first-letter {
   text-transform: uppercase;
   font-weight: 800;
@@ -223,6 +344,7 @@ html {
   display: block;
   line-height: 60px;
   padding-right: 10px;
+  color: #d8ba9e;
 }
 
 .bloqueTextComillas {
@@ -245,6 +367,25 @@ html {
   line-height: 45px;
   text-align: left;
 }
+
+
+.swPatentTres {
+  padding-bottom: 70px !important;
+}
+
+.swPatentTres img {
+  border-radius: 15px;
+}
+
+.swPatentCuatro {
+  padding-bottom: 70px !important;
+}
+
+.swPatentCuatro img {
+  border-radius: 15px;
+}
+
+
 
 .swPatentDos {
   padding-bottom: 70px !important;
@@ -646,6 +787,12 @@ footer {
     line-height: 18px;
   }
 
+  .portada-video video {
+
+    height: 100vh;
+    object-fit: cover;
+  }
+
   .cabecera-bloque_logo {
     width: 50px;
   }
@@ -681,7 +828,7 @@ footer {
 
 @media (max-width: 600px) {
 
-  .comillas_ img{
+  .comillas_ img {
     height: 300px;
   }
 
@@ -774,6 +921,7 @@ footer {
     transform: scale(1) !important;
     transition: transform 0.5s ease, opacity 0.5s ease;
   }
+
   .max900 {
     max-width: 700px;
   }
