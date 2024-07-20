@@ -87,6 +87,10 @@ const tipoSelectorItems = [{
     value: 'PerfilselectorCiudad'
 },
 {
+    title: 'Perfil selector Provincia',
+    value: 'PerfilselectorProvincia'
+},
+{
     title: 'Perfil selector Deporte',
     value: 'PerfilselectorDeporte'
 },
