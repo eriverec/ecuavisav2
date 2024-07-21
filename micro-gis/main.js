@@ -121,22 +121,31 @@ var swiperFooter = new Swiper(".revistaSwiper", {
 });
 
 
-function updateVideoSource() {
-  var videoElement = document.getElementById('myVideo');
-  var sourceElement = document.getElementById('videoSource');
 
-  if (window.innerWidth <= 767) { // Si el ancho de la ventana es menor o igual a 768px (típico de dispositivos móviles)
-    sourceElement.src = 'https://estadisticas.ecuavisa.com/sites/gis/Story%20IG.mp4';
-  } 
 
-  videoElement.load(); // Recarga el video para aplicar el nuevo src
+function isMobile() {
+  return /Mobi|Android/i.test(navigator.userAgent);
 }
 
-// Llama a la función cuando la página se carga por primera vez
-window.onload = updateVideoSource;
+function isTablet() {
+  return /Tablet|iPad/i.test(navigator.userAgent);
+}
 
-// Llama a la función cada vez que se redimensiona la ventana
-window.onresize = updateVideoSource;
+function setVideoSource() {
+  var videoSource = document.getElementById('videoSource');
+  if (isMobile()) {
+    videoSource.src = 'https://estadisticas.ecuavisa.com/sites/gis/Story%20IG.mp4';
+  } else if (isTablet()) {
+    videoSource.src = 'https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4';
+  } else {
+    videoSource.src = 'https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4';
+  }
+  document.getElementById('myVideo').load();
+}
+
+// Call the function on page load
+window.onload = setVideoSource;
+
 
 
 /* CARGAR LOS VIDEOS DESPUES DEL EVENTO DEL USUARIO */

@@ -4,6 +4,7 @@ html {
   font-family: "Archivo", sans-serif;
   scroll-behavior: smooth;
   font-size: 20px;
+  line-height: 23px;
 }
 
 .colorNegro {
@@ -40,10 +41,15 @@ html {
   padding: 14px;
   color: #ffffff;
   text-decoration: none;
+  text-align: center;
+}
+
+.primerPortadaMovil{
+  display: none;
 }
 
 .fotos_1 img {
-  
+
   border-radius: 30px;
 }
 
@@ -63,10 +69,18 @@ html {
   white-space: normal !important;
 }
 
+
+
 .max900 {
   max-width: 900px;
   margin: auto;
   padding: 0 12px;
+
+  width: 100%;
+  padding-right: var(--bs-gutter-x, .75rem);
+  padding-left: var(--bs-gutter-x, .75rem);
+  margin-right: auto;
+  margin-left: auto;
 }
 
 
@@ -207,7 +221,7 @@ html {
 .carrusel-bloque .swiper-slide-active {
   /* transform: scale(1.4) !important; */
   transition: transform 0.5s ease, opacity 0.5s ease;
-  height: 250px;
+  height: 350px;
   display: flex;
 }
 
@@ -229,7 +243,7 @@ html {
   padding-top: 50px;
 }
 
-.videosderudo #vrudo{
+.videoBorder {
   border: 10px solid #D8BA9E;
 }
 
@@ -258,6 +272,10 @@ html {
 .rasgosDos img {
   vertical-align: super;
   transform: rotate(180deg);
+}
+
+.flamp_mobile {
+  display: none;
 }
 
 .cartelUno {
@@ -312,6 +330,9 @@ html {
 .bgGris {
   background: #f7f7f7;
 }
+.videovertical{
+  height: -webkit-fill-available;
+}
 
 .graficoDos {
   margin-top: -65px;
@@ -322,6 +343,10 @@ html {
   color: #2a2a2a;
   font-weight: 700;
   padding: 3px;
+}
+
+.diagramaMovil{
+  display: none;
 }
 
 .badge_na {
@@ -777,6 +802,10 @@ footer {
     line-height: 20px;
   }
 
+  .postapertura p {
+    padding: 0 40px;
+  }
+
 
 }
 
@@ -785,6 +814,56 @@ footer {
   .cardSwiper {
     font-size: 16px;
     line-height: 18px;
+  }
+
+  .fotos_1 img {
+    border-radius: 20px;
+  }
+
+  .carrusel-bloque .swiper-slide-active .cardSwiper img {
+    width: 100px;
+  }
+  .primerPortadaDesk{
+    display: none;
+  }
+
+  .primerPortadaMovil{
+    display: block;
+  }
+
+  .diagramaMovil{
+    display: block;
+  }
+
+   .diagramaDesk{
+    display: none;
+  }
+
+  .cardSwiper .bgProv{
+    font-size: 18px;
+  }
+
+  .carrusel-bloque .swiper-slide {
+    height: 300px;
+    display: flex;
+  }
+
+  .imgGrid1x2 img {
+    width: 100%;
+    height: auto;
+  }
+
+  .postapertura p {
+    padding: 0 30px;
+  }
+
+  .flamp_mobile {
+    display: block;
+    height: 450px;
+  }
+
+  .flamp_deskop {
+    display: none;
   }
 
   .portada-video video {
