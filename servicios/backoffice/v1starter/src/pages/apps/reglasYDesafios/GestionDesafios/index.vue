@@ -84,7 +84,7 @@ async function getDesafio(page = 1, limit= 30){
 }
 
 // Funciones para manejar el cambio de paginación
-const itemsPerPage = 8;
+const itemsPerPage = 30;
 const currentPage = ref(1);
 
 const paginatedDesafios = computed(() => {
