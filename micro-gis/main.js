@@ -148,27 +148,27 @@ window.onload = setVideoSource;
 
 
 
-document.addEventListener('DOMContentLoaded', function() {
-  const links = document.querySelectorAll('.menu_global a[href*="#"]');
-  let currentActiveLink = null;
 
-  for (const link of links) {
-    link.addEventListener('click', function(event) {
-      const target = document.querySelector(this.hash);
-      if (target) {
-        event.preventDefault();
-        const top = target.offsetTop - 50; // Ajusta la posición superior (resta 50px)
-        window.scrollTo({
-          top: top,
-          behavior: 'smooth'
-        });
+const links = document.querySelectorAll('.menu_global a[href*="#"]');
+let currentActiveLink = null;
 
-        if (currentActiveLink) {
-          currentActiveLink.classList.remove('active');
-        }
-        currentActiveLink = this;
-        this.classList.add('active');
+for (const link of links) {
+  link.addEventListener('click', function (event) {
+    const target = document.querySelector(this.hash);
+    if (target) {
+      event.preventDefault();
+      const top = target.offsetTop - 50; // Ajusta la posición superior (resta 50px)
+      window.scrollTo({
+        top: top,
+        behavior: 'smooth'
+      });
+
+      if (currentActiveLink) {
+        currentActiveLink.classList.remove('active');
       }
-    });
-  }
-});
+      currentActiveLink = this;
+      this.classList.add('active');
+    }
+  });
+}
+
