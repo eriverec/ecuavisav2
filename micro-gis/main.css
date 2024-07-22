@@ -289,7 +289,7 @@ html {
 
 .enlace-navegacion.active {
   color: #D8BA9E; /* Color blanco al seleccionar */
-  text-decoration: underline; /* Decoración de subrayado */
+  text-decoration: none; /* Decoración de subrayado */
 }
 
 .cabecera-bloque_menu .dropdown-item:focus, 
