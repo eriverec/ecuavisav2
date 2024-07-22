@@ -19,8 +19,8 @@
 <body>
 
 
-<!-- HEADER -->
-  <div class="headerBloque">
+  <!-- HEADER -->
+  <div class="headerBloque" id="inicio">
     <div class="cabecera-bloque max900">
       <span class="cabecera-bloque_menu">
 
@@ -37,9 +37,14 @@
             </svg>
           </button>
           <ul class="dropdown-menu menu_global" aria-labelledby="dropdownMenuButton1">
+            <li><a class="dropdown-item enlace-navegacion" href="#inicio">Inicio | Introducción </a></li>
             <li><a class="dropdown-item enlace-navegacion" href="#empresas-del-narco" >Empresas del narco para lavar dinero</a></li>
-            <li><a class="dropdown-item enlace-navegacion" href="#empresas-para-cubrir-la-logistica-del-narcotrafico" >Empresas para cubrir la logística del narcotráfico</a></li>
-            <li><a class="dropdown-item enlace-navegacion" href="#de-lider-social-a-miembro-de-los-tiguerones">De 'líder social' a miembro de los Tiguerones</a></li>
+
+            <li><a class="dropdown-item enlace-navegacion"
+                href="#empresas-para-cubrir-la-logistica-del-narcotrafico">Empresas para cubrir la logística del
+                narcotráfico</a></li>
+            <li><a class="dropdown-item enlace-navegacion" href="#de-lider-social-a-miembro-de-los-tiguerones">De 'líder
+                social' a miembro de los Tiguerones</a></li>
           </ul>
         </div>
 
@@ -62,15 +67,17 @@
 
       <div class="portada-video bgNegro">
 
-        <video id="myVideo" autoplay loop muted>
-          <source id="videoSource" src="" type="video/mp4">
+        <video id="myVideo" class="headerDesk" autoplay loop muted>
+          <source  id="videoSource" src="https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
+
+        <img class="headerMovil" src="https://estadisticas.ecuavisa.com/sites/gis/Header%20Mo%CC%81vil.gif" alt="ecuavisado">
       </div>
 
       <div class="bgNegro ">
 
-        <div class="texto-blque_uno max900 py-5">
+        <div class="texto-blque_uno max900 py-3">
 
           <div class="postapertura mb-5 position-relative d-flex justify-content-center align-items-center">
             <img class="flamp_deskop" width="100%" height="200"
@@ -91,7 +98,7 @@
             múltiples instituciones del Estado ha convertido al país en un paraíso para los 'narcoempresarios'.
 
           </p>
-          <p class="mt-5">
+          <p style="margin-top: 27px;">
             Lejos de ser casos puntuales, esta investigación de Ecuavisa y CONNECTAS ha comprobado un patrón extendido
             en el país. El equipo elaboró una base de datos con el cruce de información oficial: se identificaron 41
             empresas activas*. De estas, 20 están registradas a nombre de miembros de bandas narcodelictivas, mientras
@@ -103,7 +110,7 @@
 
 
         <!-- BLOQUE CARRUSEL -->
-        <div class="carrusel-bloque my-5">
+        <div class="carrusel-bloque my-3">
           <!-- Swiper -->
           <div class="swiper swPatent">
             <div class="swiper-wrapper">
@@ -213,11 +220,13 @@
           </p>
           <!-- MAPA CONCEPTUAL -->
           <div>
-            <img class="my-5 diagramaDesk" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fdiagrama874y834.webp"
-              width="100%" alt="ecuavisa">
+            <img class="my-5 diagramaDesk"
+              src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fdiagrama874y834.webp" width="100%"
+              alt="ecuavisa">
 
-            <img class="my-5 diagramaMovil" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fdiagrama%20vertical.png"
-              width="100%" alt="ecuavisa">
+            <img class="my-5 diagramaMovil"
+              src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fdiagrama%20vertical.png" width="100%"
+              alt="ecuavisa">
 
           </div>
 
@@ -279,7 +288,31 @@
 
           <!-- BLOQUE PINCHE AQUI -->
           <div class="d-flex justify-content-center align-items-center my-5 ">
-            <a class="textPinche" href="#">Clic aquí para consultar la metodología de la base de datos</a>
+            <div class="textPinche" data-bs-toggle="modal" data-bs-target="#exampleModal">
+              <img class="coverNaranjaDesk" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FGroup%20600.png" alt="ecuavisa">
+              <img class="coverNaranjaMovil" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FGroup%2039504.png">
+              <span style="position: absolute; padding: 0px 20px;">
+                Clic aquí para consultar la metodología de la base de datos
+              </span>
+            </div>
+          </div>
+
+
+          
+          <!-- Modal -->
+          <div class="modal fade modalMetodologia" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLabel">Metodología de la base de datos</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  Para elaborar esta base de datos, la investigación revisó los nombres de la lista de los más buscados, objetivos militares, cabecillas detenidos por la Policía y Fuerzas Armadas, así como informes del OECO, los cuales se cruzaron con los portales oficiales de Supercías y del Sercop. De las 44 empresas activas, 13 ya han sido identificadas por las autoridades. Para acceder a la base de datos completa, escriba a <a href="mailto:ecuador@connectas.com">ecuador@connectas.com</a> 
+                </div>
+              
+              </div>
+            </div>
           </div>
 
 
@@ -314,12 +347,12 @@
         </span>
       </div>
       <div class="graficoDos">
-        <img class="primerPortadaDesk" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcontratacionpublica.webp"
-          srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcontratacionpublica.webp 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcontratacionpublica.webp 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcontratacionpublica.webp 346w"
+        <img class="primerPortadaDesk" src="https://estadisticas.ecuavisa.com/sites/gis/animacion-2.gif"
+          srcset="https://estadisticas.ecuavisa.com/sites/gis/animacion-2.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/animacion-2.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/animacion-2.gif 346w"
           width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
 
-          <img class="primerPortadaMovil" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FIMG_8435%201.webp"
-          srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FIMG_8435%201.webp 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FIMG_8435%201.webp 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FIMG_8435%201.webp 346w"
+        <img class="primerPortadaMovil" src="https://estadisticas.ecuavisa.com/sites/gis/animacion-2-vert.gif"
+          srcset="https://estadisticas.ecuavisa.com/sites/gis/animacion-2-vert.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/animacion-2-vert.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/animacion-2-vert.gif 346w"
           width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
       </div>
 
@@ -347,11 +380,13 @@
           <span class="badge_na">Arkhe Proyectos y Construcciones S.A.S.</span>
         </p>
 
-        <img width="100%" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FMask%20group.webp"
+        <img width="100%" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fnegrotuupedate.png"
           alt="ecuavisa">
 
 
-        <span class="piedefotouno">Fotografía tomada por Ecuavisa y CONNECTAS el pasado 25 de junio de 2024.</span>
+        <span class="piedefotouno">Foto de Alias Negro Tulio y su esposa Alexandra E., tomada el pasado 1 de junio,
+          quienes presuntamente están implicados en varios delitos de terrorismo en Durán. Fuente: Policía
+          Nacional.</span>
 
 
         <p class="my-5">
@@ -362,11 +397,16 @@
           en la lista de proveedores.
         </p>
 
-        <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Falertabanner.webp"
+        <img class="videoBorder" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Falertabanner.webp"
           srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Falertabanner.webp 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Falertabanner.webp 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Falertabanner.webp 346w"
           width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
 
-        <span class="piedefotouno">Fotografía tomada por Ecuavisa y CONNECTAS el pasado 25 de junio de 2024.</span>
+        <span class="piedefotouno">
+          <a class="text-dark"
+            href="https://www.compraspublicas.gob.ec/ProcesoContratacion/compras/PC/resumenAdjudicacion.cpe?solicitud=-HHXWul22UwKSkwdFdHbCaJFf97yjN6X46GLU3asrg8,">
+            Captura tomada del Portal web del Sercop.
+          </a>
+        </span>
 
         <p class="mt-4">
           La empresa domiciliada en Durán, uno de los cantones más violentos de Ecuador, donde se mantiene una
@@ -435,7 +475,7 @@
 
             </div>
           </div>
-          <span class="piedefotouno">Fotografía tomada por Ecuavisa y CONNECTAS el pasado 25 de junio de 2024.</span>
+          <span class="piedefotouno">Fotografías tomadas del parque Cooperativa 28 de agosto, ubicada en la ciudadela El Recreo, por ECUAVISA y CONNECTAS el pasado 25 de junio de 2024.</span>
 
           <div class="swiper-pagination"></div>
         </div>
@@ -487,9 +527,16 @@
 
 
 
-        <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcontratovigpromax.webp"
+        <img class="videoBorder" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcontratovigpromax.webp"
           srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcontratovigpromax.webp 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcontratovigpromax.webp 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcontratovigpromax.webp 346w"
           width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+
+          <span class="piedefotouno">
+            <a class="text-dark"
+              href="https://www.compraspublicas.gob.ec/ProcesoContratacion/compras/EC/resumenContractual1.cpe?idSoliCompra=w1xcJa77z9G9XHvd27MWVaHVdgrLTgdGQHGXnuqEwUM,&cnt=rGBV3D1yVt-Ax8aFCudGFYPS4TlwQnmVMo0FXTVXZP8,&contratoId=qC4Ok8ixDdDuLb3qdWC8njU9Fb3-Kv9m20GOhJPbKH8,">
+              Captura tomada del Portal web del Sercop
+            </a>
+          </span>
 
 
 
@@ -533,7 +580,7 @@
           eran legales y tenían permisos de una empresa de seguridad contratada para custodiar al capo.
         </p>
 
-        <video class="videoBorder" width="100%" controls>
+        <video class="videoBorder" width="100%" autoplay muted loop controls>
           <source id="videoSource" src="https://estadisticas.ecuavisa.com/sites/gis/bS5qyC_1080.mp4" type="video/mp4">
           Your browser does not support the video tag.
         </video>
@@ -602,12 +649,12 @@
 
 
 
-        <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FMask%20group%20(1).webp"
-          srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FMask%20group%20(1).webp 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FMask%20group%20(1).webp 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FMask%20group%20(1).webp 346w"
+        <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fhomecabezas.png"
+          srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fhomecabezas.png 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fhomecabezas.png 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fhomecabezas.png 346w"
           width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
 
 
-        <span class="piedefotouno">Captura tomada de video Atacames al Mundo Noticias, evento donde Homero Cabeza fue
+        <span class="piedefotouno">Captura tomada de video <a class="text-dark" href="https://www.facebook.com/watch/?v=849979612417397">Atacames al Mundo Noticias</a> , evento donde Homero Cabeza fue
           anfitrión de la Primera Mesa Ganadera Nacional y Feria Agro-Productiva en 2020.</span>
 
 
@@ -723,17 +770,19 @@
         </span>
       </div>
       <div class="graficoDos">
-        <img class="primerPortadaDesk" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fsegundotemabanner.webp"
-          srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fsegundotemabanner.webp 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fsegundotemabanner.webp 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fsegundotemabanner.webp 346w"
+        <img class="primerPortadaDesk"
+          src="https://estadisticas.ecuavisa.com/sites/gis/Animacion-1.gif"
+          srcset="https://estadisticas.ecuavisa.com/sites/gis/Animacion-1.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-1.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-1.gif 346w"
           width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
 
-          <img class="primerPortadaMovil" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FIMG_8430%201.webp"
-          srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FIMG_8430%201.webp 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FIMG_8430%201.webp 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FIMG_8430%201.webp 346w"
+        <img class="primerPortadaMovil"
+          src="https://estadisticas.ecuavisa.com/sites/gis/Animacion-1-vert.gif"
+          srcset="https://estadisticas.ecuavisa.com/sites/gis/Animacion-1-vert.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-1-vert.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-1-vert.gif 346w"
           width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
       </div>
 
 
-
+|
       <div class="texto-bloque_tres max900 my-5">
 
         <p>Para el exdirectivo de la UAFE, el narcotráfico, a diferencia de la corrupción, opera como <span
@@ -963,13 +1012,13 @@
     </section>
 
 
-    
+
     <div class="rasgosDos">
       <img width="100%" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FScreenshot_89.jpg"
-      alt="ecuavisa">
+        alt="ecuavisa">
     </div>
-    
-    
+
+
     <!-- TERCER TEMA -->
     <section class="tercerTema bgNegro" id="de-lider-social-a-miembro-de-los-tiguerones">
 
@@ -980,12 +1029,14 @@
         <span>De 'líder social' a miembro de los Tiguerones</span>
       </div>
       <div class="graficoDos">
-        <img class="primerPortadaDesk" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Ftercertemabanner.webp"
-          srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Ftercertemabanner.webp 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Ftercertemabanner.webp 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Ftercertemabanner.webp 346w"
+        <img class="primerPortadaDesk"
+          src="https://estadisticas.ecuavisa.com/sites/gis/Animacion-3.gif"
+          srcset="https://estadisticas.ecuavisa.com/sites/gis/Animacion-3.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-3.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-3.gif 346w"
           width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
 
-          <img class="primerPortadaMovil" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FIMG_843176tasa1.webp"
-          srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FIMG_843176tasa1.webp 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FIMG_843176tasa1.webp 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FIMG_843176tasa1.webp 346w"
+        <img class="primerPortadaMovil"
+          src="https://estadisticas.ecuavisa.com/sites/gis/Animacion-3-vert.gif"
+          srcset="https://estadisticas.ecuavisa.com/sites/gis/Animacion-3-vert.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-3-vert.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-3-vert.gif 346w"
           width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
       </div>
 
@@ -1008,10 +1059,12 @@
 
           <!-- video por pasar -->
 
-          <video class="videoBorder" width="100%" controls>
+          <video class="videoBorder" width="100%" muted autoplay loop controls>
             <source id="videoSource" src="https://estadisticas.ecuavisa.com/sites/gis/bS5wmg_1080.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
+
+          <span class="piedefotouno">Fragmento de video capturado durante el momento en que hombres armados irrumpieron en TC Televisión en enero de 2024.</span>
 
           <p class="mt-3">
             En Esmeraldas, provincia fronteriza en el norte del país y bastión de Los Tiguerones, el padre del
@@ -1058,10 +1111,12 @@
 
           </div> -->
 
-          <video class="videoBorder" width="100%" controls>
+          <video class="videoBorder mt-4" width="100%" muted autoplay loop controls>
             <source id="videoSource" src="https://estadisticas.ecuavisa.com/sites/gis/bS5qxH_1080.mp4" type="video/mp4">
             Your browser does not support the video tag.
           </video>
+
+          <span class="piedefotouno">Fragmento de video tomado de Televistazo cuando el padre de Negro Willy fue detenido el 17 de octubre de 2022.</span>
 
 
 
@@ -1106,8 +1161,8 @@
 
 
 
-          <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Ffototaigris.webp"
-            srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Ffototaigris.webp 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Ffototaigris.webp 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Ffototaigris.webp 346w"
+          <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Ftaxgrisss.png"
+            srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Ftaxgrisss.png 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Ftaxgrisss.png 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Ftaxgrisss.png 346w"
             width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
           <span class="piedefotouno">Foto tomada por ECUAVISA y CONNECTAS del local de la presunta víctima de extorsión
             en Esmeraldas.</span>
@@ -1177,8 +1232,9 @@
             <div class="row">
 
               <div class="col-md-6 col-xs-12">
-                <video class="videoBorder videovertical" width="100%" id="" controls>
-                  <source id="videoSource" src="https://estadisticas.ecuavisa.com/sites/gis/TIGER.mp4" type="video/mp4">
+                <video class="videoBorder videovertical" width="100%" id=""  muted autoplay loop controls>
+                  <source id="videoSource" src="https://estadisticas.ecuavisa.com/sites/gis/bS5V2K_1920.mp4"
+                    type="video/mp4">
                   Your browser does not support the video tag.
                 </video>
               </div>
@@ -1294,7 +1350,7 @@
   </div>
 
   <!-- FOOTER -->
-<footer>
+  <footer>
     <div class="container">
       <div>
         <div class="logo-footer">
@@ -1483,7 +1539,7 @@
 
 
 
-  
+
   <script src="https://kit.fontawesome.com/66aa7c98b3.js" crossorigin="anonymous"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>

@@ -147,7 +147,7 @@ function setVideoSource() {
 // Call the function on page load
 // window.onload = setVideoSource;
 
-setVideoSource();
+// setVideoSource();
 
 
 const links = document.querySelectorAll('.menu_global a[href*="#"]');
