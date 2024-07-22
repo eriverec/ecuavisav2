@@ -58,7 +58,7 @@ function deepClone(o) {
   return output;
 }
 
-async function getDesafio(page = 1, limit= 10){
+async function getDesafio(page = 1, limit= 30){
   try {
       currentPage.value = 1;
       var myHeaders = new Headers();
