@@ -148,38 +148,27 @@ window.onload = setVideoSource;
 
 
 
-/* CARGAR LOS VIDEOS DESPUES DEL EVENTO DEL USUARIO */
+document.addEventListener('DOMContentLoaded', function() {
+  const links = document.querySelectorAll('.menu_global a[href*="#"]');
+  let currentActiveLink = null;
 
+  for (const link of links) {
+    link.addEventListener('click', function(event) {
+      const target = document.querySelector(this.hash);
+      if (target) {
+        event.preventDefault();
+        const top = target.offsetTop - 50; // Ajusta la posición superior (resta 50px)
+        window.scrollTo({
+          top: top,
+          behavior: 'smooth'
+        });
 
-// document.addEventListener('DOMContentLoaded', (event) => {
-//   let hasScrolled = false;
-//   let hasMovedMouse = false;
-//   let iframeLoaded = false;
-
-//   function checkToLoadIframe() {
-//       if (hasScrolled && hasMovedMouse && !iframeLoaded) {
-//           iframeLoaded = true;
-
-//           const iframe = document.querySelector('.videosderudo #vrudo');
-//           iframe.src = "//rudo.video/vod/bS5qxH";
-
-//           // Remover los listeners después de cargar el iframe
-//           window.removeEventListener('scroll', onScroll);
-//           window.removeEventListener('mousemove', onMouseMove);
-//           console.log("video rudo cargado");
-//       }
-//   }
-
-//   function onScroll() {
-//       hasScrolled = true;
-//       checkToLoadIframe();
-//   }
-
-//   function onMouseMove() {
-//       hasMovedMouse = true;
-//       checkToLoadIframe();
-//   }
-
-//   window.addEventListener('scroll', onScroll);
-//   window.addEventListener('mousemove', onMouseMove);
-// });
+        if (currentActiveLink) {
+          currentActiveLink.classList.remove('active');
+        }
+        currentActiveLink = this;
+        this.classList.add('active');
+      }
+    });
+  }
+});

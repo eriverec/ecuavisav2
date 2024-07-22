@@ -22,6 +22,12 @@ html {
   text-align: center;
   display: block;
   margin-top: 5px;
+  padding: 0 12px;
+  width: 100%;
+  padding-right: var(--bs-gutter-x, .75rem);
+  padding-left: var(--bs-gutter-x, .75rem);
+  margin-right: auto;
+  margin-left: auto;
 }
 
 .postapertura p {
@@ -68,6 +74,16 @@ html {
 .cabecera-bloque_menu .dropdown-item {
   white-space: normal !important;
 }
+
+
+/* .swPatentTres .swiper-wrapper .swiper-slide.swiper-slide-active:first-child{
+  margin-left: 60px !important;
+}
+
+.swPatentTres .swiper-wrapper .swiper-slide:last-child{
+  margin-right: 60px !important;
+} */
+
 
 
 
@@ -255,6 +271,33 @@ html {
   color: #fff;
 }
 
+.cabecera-bloque_menu .dropdown-menu{
+  background: #2b2b2b !important;
+  min-width: 20rem !important;
+}
+
+.cabecera-bloque_menu  .dropdown-item.active, 
+.cabecera-bloque_menu  .dropdown-item:active{
+  background-color: transparent !important;
+  color: #D8BA9E !important;
+}
+
+.cabecera-bloque_menu .dropdown-item {
+  color: #ffffff !important;
+  margin-bottom: 10px;
+}
+
+.enlace-navegacion.active {
+  color: #D8BA9E; /* Color blanco al seleccionar */
+  text-decoration: underline; /* Decoración de subrayado */
+}
+
+.cabecera-bloque_menu .dropdown-item:focus, 
+.cabecera-bloque_menu .dropdown-item:hover{
+  background-color: #393939 !important;
+}
+
+
 .texto-blque_dos {
   color: #fff;
   padding-bottom: 80px;
@@ -342,7 +385,7 @@ html {
   background: #d8ba9e;
   color: #2a2a2a;
   font-weight: 700;
-  padding: 3px;
+  padding: 0 3px;
 }
 
 .diagramaMovil{
@@ -353,7 +396,7 @@ html {
   background: #D74A2F;
   color: #ffffff;
   font-weight: 700;
-  padding: 3px;
+  padding: 0 3px;
 }
 
 /* .texto-blque_uno p::first-letter {
@@ -814,6 +857,10 @@ footer {
   .cardSwiper {
     font-size: 16px;
     line-height: 18px;
+  }
+
+  .cabecera-bloque_menu .dropdown-menu{
+    min-width: 10rem !important;
   }
 
   .fotos_1 img {
