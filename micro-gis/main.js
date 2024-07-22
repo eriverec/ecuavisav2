@@ -135,6 +135,7 @@ function setVideoSource() {
   var videoSource = document.getElementById('videoSource');
   if (isMobile()) {
     videoSource.src = 'https://estadisticas.ecuavisa.com/sites/gis/Story%20IG.mp4';
+    console.log("movil");
   } else if (isTablet()) {
     videoSource.src = 'https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4';
   } else {
@@ -144,9 +145,9 @@ function setVideoSource() {
 }
 
 // Call the function on page load
-window.onload = setVideoSource;
+// window.onload = setVideoSource;
 
-
+setVideoSource();
 
 
 const links = document.querySelectorAll('.menu_global a[href*="#"]');
