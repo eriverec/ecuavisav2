@@ -96,7 +96,6 @@ html {
   color: #ffffff;
 }
 
-
 #temauno,
 #temados,
 #tematres {
@@ -930,7 +929,7 @@ footer {
   .coverNaranjaMovil {
     display: block;
     max-width: 500px;
-    height: 116px;
+    height: 146px;
     width: 100%;
   }
 
@@ -938,7 +937,9 @@ footer {
     display: none;
   }
 
-
+  .textPinche span {
+    padding: 0px 40px !important;
+  }
 
   .portada-video video {
     width: 100%;
