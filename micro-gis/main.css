@@ -110,7 +110,17 @@ html {
 } */
 
 
+.max1070{
+  max-width: 1070px;
+  margin: auto;
+  padding: 0 12px;
 
+  width: 100%;
+  padding-right: var(--bs-gutter-x, .75rem);
+  padding-left: var(--bs-gutter-x, .75rem);
+  margin-right: auto;
+  margin-left: auto;
+}
 
 .max900 {
   max-width: 900px;
@@ -432,13 +442,16 @@ html {
   font-weight: 800;
   font-size: 100px;
 } */
+.text_principal{
+  padding: 0 65px;
+}
 
 .letraGrande {
-  font-size: 80px;
+  font-size: 115px;
   font-weight: 800;
   float: left;
   display: block;
-  line-height: 60px;
+  line-height: 80px;
   padding-right: 10px;
   color: #d8ba9e;
 }
