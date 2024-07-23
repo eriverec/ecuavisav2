@@ -368,8 +368,9 @@ async function deleteConfirmed() {
 
                         <tbody>
                             <tr v-for="item in paginatedSemanas">
-                            <td class="text-medium-emphasis">
+                            <td class="text-medium-emphasis d-flex flex-column py-2" style="height: 55px;">
                                 {{ item.titulo}}
+                                <small>{{ item.descripcion}}</small>
                             </td>     
                             <td class="text-medium-emphasis">
                                 {{ item.fecha_inicio}}
