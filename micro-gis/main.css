@@ -25,14 +25,14 @@ html {
   line-height: 23px;
   text-align: center;
   display: block;
-  margin-top: 25px;
+  margin-top: 5px;
   padding: 0 12px;
   width: 100%;
   padding-right: var(--bs-gutter-x, .75rem);
   padding-left: var(--bs-gutter-x, .75rem);
   margin-right: auto;
   margin-left: auto;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
 }
 
 .modalMetodologia .modal-content {
