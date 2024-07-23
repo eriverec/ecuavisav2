@@ -25,14 +25,14 @@ html {
   line-height: 23px;
   text-align: center;
   display: block;
-  margin-top: 5px;
+  margin-top: 25px;
   padding: 0 12px;
   width: 100%;
   padding-right: var(--bs-gutter-x, .75rem);
   padding-left: var(--bs-gutter-x, .75rem);
   margin-right: auto;
   margin-left: auto;
-  margin-bottom: 2rem;
+  margin-bottom: 1rem;
 }
 
 .modalMetodologia .modal-content {
@@ -190,10 +190,6 @@ html {
   gap: 25px;
 }
 
-.cardSwiper p{
-  height: 80px;
-}
-
 .cardSwiper img {
   width: 100px;
 }
@@ -306,9 +302,10 @@ html {
   color: #fff;
 }
 
-.texto-bloque_tres{
-  margin-top: 3rem;
+.texto-bloque_tres .swiper-slide{
+  margin-right: 45px;
 }
+
 .cabecera-bloque_menu .dropdown-menu {
   background: #2b2b2b !important;
   min-width: 20rem !important;
@@ -467,6 +464,10 @@ html {
   justify-content: center;
 }
 
+.bloque-flourish{
+  margin-top: 3rem;
+}
+
 .bloque-flourish .flourish-embed {
   box-shadow: 1px 2px 5px -1px;
 }
@@ -480,7 +481,6 @@ html {
   line-height: 45px;
   text-align: left;
 }
-
 
 .swPatentTres {
   padding-bottom: 70px !important;
@@ -497,8 +497,6 @@ html {
 .swPatentCuatro img {
   border-radius: 15px;
 }
-
-
 
 .swPatentDos {
   padding-bottom: 70px !important;
@@ -577,8 +575,6 @@ footer {
   color: #2927b9;
 }
 
-
-
 .consulta_interes .text_click {
   font-weight: 600;
   font-size: 11px;
@@ -607,9 +603,7 @@ footer {
 
 .revistas-desktop {
   overflow: hidden;
-
 }
-
 
 .revistas-desktop {
   margin: 0rem auto;
@@ -668,7 +662,6 @@ footer {
   display: none;
 }
 
-
 .footer-ecv22 {
   background: #060222;
 }
@@ -677,7 +670,6 @@ footer {
   width: 100%;
   padding-top: 10px;
 }
-
 
 /* Footer links */
 .footer-distributed .footer-left,
@@ -1026,7 +1018,9 @@ footer {
   }
   .texto-blque_dos{
     margin-top: 0rem;
-
+  }
+  .bloque-flourish{
+    margin-top: 0rem;
   }
 
 }
