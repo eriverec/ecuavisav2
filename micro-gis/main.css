@@ -32,6 +32,7 @@ html {
   padding-left: var(--bs-gutter-x, .75rem);
   margin-right: auto;
   margin-left: auto;
+  margin-bottom: 2rem;
 }
 
 .modalMetodologia .modal-content {
@@ -95,6 +96,9 @@ html {
   background: #f6f6f6;
 }
 
+#empresas-del-narco{
+  background: #f7f7f7;
+}
 
 .cabecera-bloque_menu .dropdown-item {
   white-space: normal !important;
@@ -108,7 +112,6 @@ html {
 .swPatentTres .swiper-wrapper .swiper-slide:last-child{
   margin-right: 60px !important;
 } */
-
 
 .max1070{
   max-width: 1070px;
@@ -133,7 +136,6 @@ html {
   margin-right: auto;
   margin-left: auto;
 }
-
 
 #iter-footer-wrapper {
   margin-top: 0px !important;
@@ -181,12 +183,15 @@ html {
   padding-bottom: 70px !important;
 }
 
-
 .cardSwiper {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 5px;
+  gap: 25px;
+}
+
+.cardSwiper p{
+  height: 80px;
 }
 
 .cardSwiper img {
@@ -197,9 +202,8 @@ html {
   background: #4c4c4c;
   color: #fff;
   border-radius: 15px;
-  padding: 15px;
+  padding: 30px;
 }
-
 
 .carrusel-bloque .swiper-pagination-bullet {
   background: #D8BA9E !important;
@@ -215,7 +219,6 @@ html {
   height: 18px !important;
 }
 
-
 .carrusel-bloque-dos .swiper-pagination-bullet {
   background: #D8BA9E !important;
   opacity: 1 !important;
@@ -230,7 +233,6 @@ html {
   height: 18px !important;
 }
 
-
 .carrusel-bloque-tres .swiper-pagination-bullet {
   background: #D8BA9E !important;
   opacity: 1 !important;
@@ -244,7 +246,6 @@ html {
   width: 18px !important;
   height: 18px !important;
 }
-
 
 .carrusel-bloque-cuatro .swiper-pagination-bullet {
   background: #D8BA9E !important;
@@ -280,8 +281,6 @@ html {
   width: 130px;
 }
 
-
-
 .carrusel-bloque .swiper-wrapper {
   align-items: center;
 }
@@ -296,6 +295,7 @@ html {
 
 .videoBorder {
   border: 10px solid #D8BA9E;
+  margin-top: 1.5rem;
 }
 
 .bgNegro {
@@ -306,6 +306,9 @@ html {
   color: #fff;
 }
 
+.texto-bloque_tres{
+  margin-top: 3rem;
+}
 .cabecera-bloque_menu .dropdown-menu {
   background: #2b2b2b !important;
   min-width: 20rem !important;
@@ -338,6 +341,7 @@ html {
 .texto-blque_dos {
   color: #fff;
   padding-bottom: 80px;
+  margin-top: 2rem;
 }
 
 .rasgosUno img {
@@ -1016,6 +1020,13 @@ footer {
     max-width: 300px;
     font-size: 19px;
     line-height: 22px;
+  }
+  .text_principal{
+    padding: 0px;
+  }
+  .texto-blque_dos{
+    margin-top: 0rem;
+
   }
 
 }
