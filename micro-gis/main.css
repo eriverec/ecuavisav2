@@ -291,7 +291,6 @@ html {
 
 .videoBorder {
   border: 10px solid #D8BA9E;
-  margin-top: 1.5rem;
 }
 
 .bgNegro {
@@ -834,6 +833,14 @@ footer {
     font: bold 10px sans-serif;
   }
 
+  .carrusel-bloque .swiper-slide-active .cardSwiper img{
+    width: 100px;
+  }
+
+  .carrusel-bloque .swiper-slide{
+    padding: 10px;
+  }
+
   .cardSwiper img {
     width: 100px;
   }
@@ -910,6 +917,13 @@ footer {
 
   .headerDesk {
     display: none;
+  }
+
+
+
+  .portada-video video {
+    width: 100%;
+    margin-top: 0;
   }
 
   .headerMovil {
