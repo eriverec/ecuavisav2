@@ -7,6 +7,10 @@ html {
   line-height: 23px;
 }
 
+.cargandoVideos{
+  text-align: center;
+  padding: 100px 0;
+}
 
 .colorNegro {
   color: #2A2A2A;

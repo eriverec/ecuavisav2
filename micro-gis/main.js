@@ -27,6 +27,17 @@ function SwiperPatent() {
 
     },
   });
+  const carv = document.querySelector('.cargandoVideos');
+  const swBlo = document.querySelector('.carrusel-bloque');
+
+  
+  if(carv){
+    carv.style.display = "none";
+  }
+
+  if(swBlo){
+    swBlo.classList.remove('d-none');
+  }
 }
 
 
