@@ -823,6 +823,14 @@ footer {
     height: 180px;
   }
 
+  .carrusel-bloque .swiper-slide{
+    padding: 10px;
+  }
+
+  .carrusel-bloque .swiper-slide-active .cardSwiper img{
+    width: 100px;
+  }
+
   .carrusel-bloque .swiper-slide-next {
     transform: scale(1) !important;
   }
