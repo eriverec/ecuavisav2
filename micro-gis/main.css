@@ -812,6 +812,7 @@ footer {
 }
 
 @media (max-width: 991px) {
+  
   .cartelUno span {
     font-size: 18px;
     line-height: 20px;
@@ -830,6 +831,9 @@ footer {
 
 
 @media (max-width: 768px) {
+  .text_principal{
+    padding: 0px;
+  }
   .footer-distributed {
     font: bold 10px sans-serif;
   }
