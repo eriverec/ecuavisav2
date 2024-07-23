@@ -908,6 +908,10 @@ footer {
     line-height: 18px;
   }
 
+  .ocultarImagenMovil {
+    display: none;
+  }
+
   .coverNaranjaMovil {
     display: block;
     max-width: 500px;
