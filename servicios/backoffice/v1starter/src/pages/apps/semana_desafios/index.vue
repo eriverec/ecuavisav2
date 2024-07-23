@@ -41,9 +41,10 @@ async function getDesafios (){
       reglasLoading.value = true;  
       const consulta = await fetch('https://servicio-desafios.vercel.app/desafios');
       const consultaJson = await consulta.json();
-      listaDesafios.value = consultaJson.data.map(({tituloDesafio, _id})=>({
+      listaDesafios.value = consultaJson.data.map(({tituloDesafio, _id, descripcionDesafio})=>({
         title: tituloDesafio,
-        value: _id
+        value: _id,
+        descripcionDesafio
       }));
                       
     } catch (error) {
@@ -481,7 +482,10 @@ async function deleteConfirmed() {
                                                                   :model-value="disabledCheckbox = false"
                                                                   readonly
                                                                 />
-                                                                <p class="pt-2">_id: {{ item.value }}</p>
+                                                                <div class="d-flex flex-column">
+                                                                    <div style="max-width: 300px;font-size: 13px;line-height: 1.2" class="py-0 my-0 mb-1">{{ item.raw.descripcionDesafio }}</div>
+                                                                    <p class="pb-0 mb-0" style="font-size: 10px;">_id: {{ item.value }}</p>
+                                                                </div>
                                                             </div>
                                                         </v-list-item-subtitle>
                                                     </v-list-item-content>

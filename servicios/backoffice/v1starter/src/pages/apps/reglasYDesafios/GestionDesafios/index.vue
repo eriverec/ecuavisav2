@@ -776,12 +776,12 @@ async function onCompleteHorarios(){
                     <VListItem :disabled="disabledViewList">
                       <VListItemTitle>
                         <div class="nombre-desafio">
-                          {{desafio.tituloDesafio }}
-                          
-                          
+                          {{desafio.tituloDesafio }} - <VIcon size="20" icon="tabler-photo" /> {{desafio.tituloSticker }}
                         </div>
                       </VListItemTitle>
                       <VListItemSubtitle class="mt-1" title="Estado del Desafío">
+                        <small>{{desafio.descripcionDesafio}}</small><br>
+                        <small><b>Día: </b>{{ (desafio && desafio.horarios && desafio.horarios.length > 0 && desafio.horarios[0].dia ? diasTotales.find(e => desafio.horarios[0].dia == e.value).title : '') }}</small>
                         <div class="switch-estatus" style="margin-bottom:-10px">
                           <VSwitch :disabled="switchOnDisabled" :loading="switchOnDisabled?'warning':false" :color="desafio.statusDesafio?'success':'error'" v-model="desafio.statusDesafio" size="x-small" class="custom-vswitch" @change="handleSwitchChange(index)" />
                           <VChip

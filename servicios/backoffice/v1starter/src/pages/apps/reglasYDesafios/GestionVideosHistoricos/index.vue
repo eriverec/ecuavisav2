@@ -69,7 +69,20 @@ async function getDesafioVideos(page = 1, limit= 10){
       var response = await fetch(`https://servicio-niveles-puntuacion.vercel.app/desafio-video-historico/all?limit=20000&page=1`, requestOptions);
       const data = await response.json();
 
-      dataDesafio.value = data.data;
+      dataDesafio.value = data.data.reduce((acumulador, actual) => {
+        if(actual.desafio.length > 0){
+          acumulador.push(actual);
+        }else{
+          actual["desafio"] = [{
+            "tituloDesafio": "",
+            "tituloSticker": "",
+            "URLSticker": ""
+          }]
+          acumulador.push(actual);
+        }
+        
+        return acumulador;
+      }, [])
       
       totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
@@ -95,6 +108,7 @@ async function getDesafio(page = 1, limit= 10){
         acumulador.push({
           title: `${actual.tituloDesafio}`,
           value: actual._id,
+          descripcionDesafio: actual.descripcionDesafio,
         });
         return acumulador;
       }, [])
@@ -482,6 +496,7 @@ async function deleteConfirmed() {
                         <div class="nombre-desafio d-flex flex-column">
                           <small>Desafío</small>
                           <label>{{ desafio.desafio[0].tituloDesafio }}</label>
+                          <small>{{ desafio.desafio[0].tituloSticker }}</small>
                           <div class="content-items d-flex">
                             <div class="content-video">
                               <VIcon
@@ -590,21 +605,31 @@ async function deleteConfirmed() {
                                   <VRow>
 
                                       <VCol cols="12" >
-                                          <v-select v-model="desafioModel" :items="desafioItems" label="Seleccione el desafío vinculado">
+                                          <v-select 
+                                            no-data-text="No existen desafíos que mostrar"
+                                            append-icon="mdi-refresh"
+                                            @click:append="getDesafio"
+                                            item-text="title"
+                                            item-value="value"
+                                            v-model="desafioModel" 
+                                            :items="desafioItems" 
+                                            :menu-props="{ maxHeight: '400' }"
+                                            label="Seleccione el desafío vinculado">
                                             <template #selection="{ item }">
-                                                <div>
-                                                    {{ item.title }} - {{ item.value }}
-                                                </div>
-                                            </template>
-                                            <template #item="{ item, props }">
-                                                <v-list-item v-bind="props">
-                                                    <v-list-item-content>
-                                                        <v-list-item-subtitle>
-                                                            <p>_id: {{ item.value }}</p>
-                                                        </v-list-item-subtitle>
-                                                    </v-list-item-content>
-                                                </v-list-item>
-                                            </template>
+                                                  <div>
+                                                      {{ item.title }} - {{ item.value }}
+                                                  </div>
+                                              </template>
+                                              <template #item="{ item, props }">
+                                                  <v-list-item v-bind="props">
+                                                      <v-list-item-content class="border-1">
+                                                          <v-list-item-subtitle class="d-flex flex-column">
+                                                              <div style="max-width: 300px;font-size: 13px;line-height: 1.2" class="py-0 my-0 mb-1">{{ item.raw.descripcionDesafio }}</div>
+                                                              <p class="pb-0 mb-0" style="font-size: 10px;">_id: {{ item.value }}</p>
+                                                          </v-list-item-subtitle>
+                                                      </v-list-item-content>
+                                                  </v-list-item>
+                                              </template>
                                         </v-select>
                                       </VCol>
 

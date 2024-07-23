@@ -20,14 +20,15 @@ async function getTrivias (){
     }
 } 
 
-async function getReglas (){
+async function getReglas(){
     try {      
       reglasLoading.value = true;  
       const consulta = await fetch('https://servicio-desafios.vercel.app/desafios');
       const consultaJson = await consulta.json();
-      idReglas.value = consultaJson.data.map(({tituloDesafio, _id})=>({
+      idReglas.value = consultaJson.data.map(({tituloDesafio, _id, descripcionDesafio})=>({
         title: tituloDesafio,
-        value: _id
+        value: _id,
+        descripcionDesafio
       }));
          
       reglasLoading.value = false;                
@@ -868,7 +869,34 @@ async function deleteConfirmed() {
                                     </VCol>
 
                                     <VCol cols="6" >
-                                        <VSelect v-model="idRegla" label="Id de regla" :items="idReglas" />
+                                        <VSelect
+                                            no-data-text="No existen desafíos que mostrar"
+                                            append-icon="mdi-refresh"
+                                            @click:append="getReglas"
+                                            item-text="title"
+                                            item-value="value"
+                                            v-model="idRegla" 
+                                            :items="idReglas"
+                                            label="Id regla/desafío"
+                                            :menu-props="{ maxHeight: '400' }">
+                                            <template #selection="{ item }">
+                                                  <div>
+                                                      {{ item.title }} - {{ item.value }}
+                                                  </div>
+                                              </template>
+                                              <template #item="{ item, props }">
+                                                  <v-list-item v-bind="props">
+                                                      <v-list-item-content class="border-1">
+                                                          <v-list-item-subtitle class="d-flex flex-column">
+                                                              <div style="max-width: 300px;font-size: 13px;line-height: 1.2" class="py-0 my-0 mb-1">{{ item.raw.descripcionDesafio }}</div>
+                                                              <p class="pb-0 mb-0" style="font-size: 10px;">_id: {{ item.value }}</p>
+                                                          </v-list-item-subtitle>
+                                                      </v-list-item-content>
+                                                  </v-list-item>
+                                              </template>
+                                        </VSelect>
+
+                                        <!-- <VSelect v-model="idRegla" label="Id de regla" :items="idReglas" /> -->
                                     </VCol>
                                     
                                     <VCol cols="6" class="d-flex">
