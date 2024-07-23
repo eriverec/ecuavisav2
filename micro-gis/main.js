@@ -55,33 +55,51 @@ var swiperDos = new Swiper(".swPatentDos", {
   },
 });
 
-var swiperDos = new Swiper(".swPatentTres", {
-  slidesPerView: 1.3,
-  spaceBetween: 20,
-  initialSlide: 0,
-  centeredSlides: true,
-  pagination: {
-    el: ".swiper-pagination",
-    clickable: true,
-  },
-  breakpoints: {
-    640: {
-      slidesPerView: 2.5,
-      initialSlide: 1,
-      spaceBetween: 20,
+function SwiperAgendaMobile() {
+  var swiperDos = new Swiper(".swPatentTres", {
+    slidesPerView: 1.3,
+    spaceBetween: 20,
+    initialSlide: 0,
+    centeredSlides: true,
+    pagination: {
+      el: ".swiper-pagination",
+      clickable: true,
     },
-    768: {
-      slidesPerView: 2.5,
-      initialSlide: 1,
-      spaceBetween: 20,
+    breakpoints: {
+      640: {
+        slidesPerView: 2.5,
+        initialSlide: 1,
+        spaceBetween: 20,
+      },
+      768: {
+        slidesPerView: 2.5,
+        initialSlide: 1,
+        spaceBetween: 20,
+      },
+      1024: {
+        slidesPerView: 2.5,
+        initialSlide: 1,
+        spaceBetween: 20,
+      },
     },
-    1024: {
-      slidesPerView: 2.5,
-      initialSlide: 1,
-      spaceBetween: 20,
-    },
-  },
+  });
+
+}
+
+function sGoMobile() {
+  setTimeout(function () {
+    if (typeof Swiper === "undefined") {
+      sGoMobile();
+    } else {
+     SwiperAgendaMobile();
+    }
+  }, 400);
+}
+
+$(document).ready(function () {
+  sGoMobile();
 });
+
 
 var swiperDos = new Swiper(".swPatentCuatro", {
   slidesPerView: 1.3,
