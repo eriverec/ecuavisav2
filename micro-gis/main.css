@@ -945,7 +945,7 @@ footer {
 
   .headerMovil {
     display: block;
-    height: 100vh;
+    /* height: 100vh; */
     object-fit: cover;
     width: 100%;
   }
@@ -1012,7 +1012,7 @@ footer {
 
   .portada-video video {
 
-    height: 100vh;
+    /* height: 100vh; */
     object-fit: cover;
   }
 
