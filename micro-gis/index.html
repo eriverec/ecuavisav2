@@ -27,8 +27,8 @@
         <span class="cabecera-bloque_menu">
 
           <div class="dropdown">
-            <button class="btn btn-link dropdown-toggle" type="button" id="dropdownMenuButton1"
-              data-bs-toggle="dropdown" aria-expanded="false">
+            <button title="menu" aria-label="menu" class="btn btn-link dropdown-toggle" type="button"
+              id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-menu-2" width="35" height="35"
                 viewBox="0 0 24 24" stroke-width="1.5" stroke="#fff" fill="none" stroke-linecap="round"
                 stroke-linejoin="round">
@@ -39,21 +39,26 @@
               </svg>
             </button>
             <ul class="dropdown-menu menu_global" aria-labelledby="dropdownMenuButton1">
-              <li><a class="dropdown-item enlace-navegacion" href="#inicio">Inicio | Introducción </a></li>
-              <li><a class="dropdown-item enlace-navegacion" href="#empresas-del-narco">Empresas del narco para lavar
+              <li><a aria-label="inicio" class="dropdown-item enlace-navegacion" href="#inicio">Inicio | Introducción
+                </a></li>
+              <li><a aria-label="Empresas del narco para lavar
+                dinero" class="dropdown-item enlace-navegacion" href="#empresas-del-narco">Empresas del narco para
+                  lavar
                   dinero</a></li>
 
-              <li><a class="dropdown-item enlace-navegacion"
+              <li><a aria-label="Empresas para cubrir la logistica del
+                narcotrafico" class="dropdown-item enlace-navegacion"
                   href="#empresas-para-cubrir-la-logistica-del-narcotrafico">Empresas para cubrir la logística del
                   narcotráfico</a></li>
-              <li><a class="dropdown-item enlace-navegacion" href="#de-lider-social-a-miembro-de-los-tiguerones">De
+              <li><a aria-label="De lidersocial a miembro de los Tiguerones" class="dropdown-item enlace-navegacion"
+                  href="#de-lider-social-a-miembro-de-los-tiguerones">De
                   'líder
-                  social' a miembro de los Tiguerones</a></li>
+                  social' a miembro de los Tiguerones</a></li>
             </ul>
           </div>
 
         </span>
-        <a href="https://www.ecuavisa.com">
+        <a aria-label="ecuavisa" href="https://www.ecuavisa.com">
           <img class="cabecera-bloque_logo"
             src="https://www.ecuavisa.com/base-portlet/webrsrc/ctxvar/c4dfeea6-9638-4d43-b549-7eca2ab57634.png"
             alt="ecuavisa">
@@ -67,34 +72,21 @@
 
       <div class="portada-video bgNegro">
 
-        <!-- <video id="myVideo" class="headerDesk" autoplay loop muted playsinline>
+        <video id="headerVideo" data-video="true" loop muted autoplay
+          class="headerDesk FullSize--basic ObjectFit--cover" playsinline
+          data-landscape="https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4"
+          data-landscape-focal="50% 50%"
+          data-portrait="https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4" data-portrait-focal="50% 50%"
+          data-type="video/mp4" tabindex="0" data-object-fit="cover" data-object-position="50% 50%"
+          style="object-position: 50% 50%; opacity: 1;">
           <source id="videoSource" src="https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4"
             type="video/mp4">
-          Your browser does not support the video tag.
-        </video> -->
+        </video>
 
-        <!-- <video id="myVideo" class="headerMovil" autoplay loop muted playsinline>
-          <source id="videoSource" src="https://estadisticas.ecuavisa.com/sites/gis/Header%20Vertical.mp4"
-            type="video/mp4">
-          Your browser does not support the video tag.
-        </video> -->
-
-
-        <video id="headerVideo" data-video="true" loop muted autoplay class="headerDesk FullSize--basic ObjectFit--cover" playsinline data-landscape="https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4" data-landscape-focal="50% 50%" data-portrait="https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4" data-portrait-focal="50% 50%" data-type="video/mp4" tabindex="0" data-object-fit="cover" data-object-position="50% 50%" style="object-position: 50% 50%; opacity: 1;">
-          <source id="videoSource" src="https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4" type="video/mp4"></video>
-
-          <img class="headerMovil" width="100%" 
-          src="https://estadisticas.ecuavisa.com/sites/gis/headerverticaloriginal.gif"
-          data-src="https://estadisticas.ecuavisa.com/sites/gis/headerverticaloriginal.gif"
-          data-srcset="https://estadisticas.ecuavisa.com/sites/gis/headerverticaloriginal.gif 2x, https://estadisticas.ecuavisa.com/sites/gis/headerverticaloriginal.gif 1x"
+        <img class="headerMovil" width="100%" src="https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif"
+          data-src="https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif"
+          data-srcset="https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif 2x, https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif 1x"
           alt="ecuavisa">
-
-          
-
-
-          <!-- <video id="" data-video="true" loop muted autoplay class="headerMovil FullSize--basic ObjectFit--cover" playsinline data-landscape="https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4" data-landscape-focal="50% 50%" data-portrait="https://estadisticas.ecuavisa.com/sites/gis/Header%20Vertical.mp4" data-portrait-focal="50% 50%" data-type="video/mp4" tabindex="0" data-object-fit="cover" data-object-position="50% 50%" style="object-position: 50% 50%; opacity: 1;">
-            <source id="" src="https://estadisticas.ecuavisa.com/sites/gis/Header%20Vertical.mp4" type="video/mp4"></video> -->
-
 
       </div>
 
@@ -103,10 +95,14 @@
         <div class="texto-blque_uno max900 py-3">
 
           <div class="postapertura mb-5 position-relative d-flex justify-content-center align-items-center">
-            <img class="flamp_deskop" width="100%" height="200"
-              src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FDesign.png" alt="ecuavisa">
-            <img class="flamp_mobile" width="100%" height="auto"
-              src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2F763b7gcunfdfur.png" alt="ecuavisa">
+            <img class="flamp_deskop lazy" width="100%" height="200"
+              src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FDesign.png" alt="ecuavisa"
+              data-src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FDesign.png"
+              data-srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FDesign.png 2x, https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FDesign.png 1x" />
+            <img class="flamp_mobile lazy" width="100%" height="auto"
+              src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2F763b7gcunfdfur.png" alt="ecuavisa"
+              data-src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2F763b7gcunfdfur.png"
+              data-srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2F763b7gcunfdfur.png 2x, https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2F763b7gcunfdfur.png 1x" />
             <p class="position-absolute m-0 colorNegro">Las redes empresariales creadas por los narcotraficantes en
               Ecuador para lavar dinero y facilitar el tráfico de drogas, tienen tan débil control de las autoridades
               que pese a que son conocidos procesos en su contra, estas compañías participan en contratos con el Estado,
@@ -288,9 +284,11 @@
 
           <div class="videoBloqueIframe">
 
-            <div class='verse-player-embed'><iframe loading="lazy"
+            <div class='verse-player-embed'>
+              <iframe loading="lazy" title="reacciones-sobre-el-numero-de-casos-identificados-por-la-uafe"
                 src='https://www.verse.com/stories/65868-reacciones-sobre-el-numero-de-casos-identificados-por-la-uafe/'
-                allow='autoplay' frameborder='0' allowfullscreen></iframe></div>
+                allow='autoplay' frameborder='0' allowfullscreen></iframe>
+            </div>
 
           </div>
 
@@ -314,10 +312,13 @@
           <!-- BLOQUE PINCHE AQUI -->
           <div class="d-flex justify-content-center align-items-center my-5 ">
             <div class="textPinche" data-bs-toggle="modal" data-bs-target="#exampleModal">
-              <img class="coverNaranjaDesk"
-                src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FGroup%20600.png" alt="ecuavisa">
-              <img class="coverNaranjaMovil"
-                src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FGroup%2039504.png">
+
+              <img class="coverNaranjaDesk" width="705" height="63"
+                src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FGroup%20600.png" alt="ecuavisa" />
+
+              <img class="coverNaranjaMovil" width="500" height="146"
+                src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FGroup%2039504.png" alt="ecuavisa" />
+
               <span style="position: absolute; padding: 0px 20px;">
                 Clic aquí para consultar la metodología de la base de datos
               </span>
@@ -340,7 +341,8 @@
                   objetivos militares, cabecillas detenidos por la Policía y Fuerzas Armadas, así como informes del
                   OECO, los cuales se cruzaron con los portales oficiales de Supercías y del Sercop. De las 44 empresas
                   activas, 13 ya han sido identificadas por las autoridades. Para acceder a la base de datos completa,
-                  escriba a <a href="mailto:ecuador@connectas.com">ecuador@connectas.com</a>
+                  escriba a <a aria-label="ecuador@connectas.com"
+                    href="mailto:ecuador@connectas.com">ecuador@connectas.com</a>
                 </div>
 
               </div>
@@ -376,21 +378,21 @@
 
       <div class="cartelUno max900">
 
-        <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png"
-          srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png 346w"
-          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+        <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png" width="100%" height="auto"
+          alt="ecuavisa" title="ecuavisa" />
         <span>
           Empresas del narco para lavar dinero: contratos con el Estado y más
         </span>
       </div>
-      <div class="graficoDos">
-        <img class="primerPortadaDesk" src="https://estadisticas.ecuavisa.com/sites/gis/animacion-2.gif"
-          srcset="https://estadisticas.ecuavisa.com/sites/gis/animacion-2.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/animacion-2.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/animacion-2.gif 346w"
-          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
 
-        <img class="primerPortadaMovil" src="https://estadisticas.ecuavisa.com/sites/gis/animacion-2-vert.gif"
-          srcset="https://estadisticas.ecuavisa.com/sites/gis/animacion-2-vert.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/animacion-2-vert.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/animacion-2-vert.gif 346w"
-          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+      <div class="cartelMobile max900">
+        <img width="346" height="121"
+          src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FT%C3%ADtulo%201.webp" alt="ecuavisa">
+      </div>
+
+
+      <div class="graficoDos portadaPrimerTema">
+
       </div>
 
 
@@ -440,12 +442,13 @@
           en la lista de proveedores.
         </p>
 
-        <img class="videoBorder" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FScreenshot%202024-07-20%20at%2013.44.20%201.webp"
+        <img class="videoBorder"
+          src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FScreenshot%202024-07-20%20at%2013.44.20%201.webp"
           srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FScreenshot%202024-07-20%20at%2013.44.20%201.webp 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FScreenshot%202024-07-20%20at%2013.44.20%201.webp 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FScreenshot%202024-07-20%20at%2013.44.20%201.webp 346w"
           width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
 
         <span class="piedefotouno">
-          <a class="text-dark"
+          <a aria-label="Captura tomada del Portal web del Sercop" class="text-dark"
             href="https://www.compraspublicas.gob.ec/ProcesoContratacion/compras/PC/resumenAdjudicacion.cpe?solicitud=-HHXWul22UwKSkwdFdHbCaJFf97yjN6X46GLU3asrg8,">
             Captura tomada del Portal web del Sercop.
           </a>
@@ -576,7 +579,7 @@
           width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
 
         <span class="piedefotouno">
-          <a class="text-dark"
+          <a class="text-dark" aria-label="Captura tomada del Portal web del Sercop"
             href="https://www.compraspublicas.gob.ec/ProcesoContratacion/compras/EC/resumenContractual1.cpe?idSoliCompra=w1xcJa77z9G9XHvd27MWVaHVdgrLTgdGQHGXnuqEwUM,&cnt=rGBV3D1yVt-Ax8aFCudGFYPS4TlwQnmVMo0FXTVXZP8,&contratoId=qC4Ok8ixDdDuLb3qdWC8njU9Fb3-Kv9m20GOhJPbKH8,">
             Captura tomada del Portal web del Sercop
           </a>
@@ -603,7 +606,7 @@
           contribuyente y, además, no tener inhabilidades como sentencias vigentes. Bajo esos parámetros, alias El
           Marino tenía luz verde para ser proveedor del Estado, aunque fue condenado a un año de prisión en 2011 por
           posesión de armas y en 2018 enfrentó cargos por asesinato, pero fue sobreseído . Actualmente figura en la
-          lista de los más buscados difundida este año por el Gobierno .
+          lista de los más buscados difundida este año por el Gobierno.
         </p>
 
         <p>
@@ -634,8 +637,8 @@
 
           <div class="col-md-6 col-6 mt-2">
 
-            <img class="" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fassets-rd_armasdefuego.webp" width="100%"
-              alt="ecuavisa" title="ecuavisa" />
+            <img class="" src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fassets-rd_armasdefuego.webp"
+              width="100%" alt="ecuavisa" title="ecuavisa" />
 
           </div>
 
@@ -699,7 +702,7 @@
           width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
 
 
-        <span class="piedefotouno">Captura tomada de video <a class="text-dark"
+        <span class="piedefotouno">Captura tomada de video <a aria-label="Atacames al Mundo Noticias" class="text-dark"
             href="https://www.facebook.com/watch/?v=849979612417397">Atacames al Mundo Noticias</a> , evento donde
           Homero Cabeza fue
           anfitrión de la Primera Mesa Ganadera Nacional y Feria Agro-Productiva en 2020.</span>
@@ -781,7 +784,7 @@
       </div>
 
       <div class="max900 mt-3">
-        <iframe loading="lazy"
+        <iframe loading="lazy" title="ecuavisa"
           src='https://cdn.knightlab.com/libs/timeline3/latest/embed/index.html?source=1gGySv0_jdVmeQNcYA-jEmwHjYSz1fCuoeVDe5VXbRCA&font=Default&lang=en&initial_zoom=2&height=650'
           width='100%' height='650' webkitallowfullscreen mozallowfullscreen allowfullscreen frameborder='0'></iframe>
       </div>
@@ -809,21 +812,18 @@
     <!-- SEGUNDO TEMA -->
     <section id="empresas-para-cubrir-la-logistica-del-narcotrafico">
       <div class="cartelUno max900">
-        <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png"
-          srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png 346w"
-          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+        <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png" width="100%" height="auto"
+          alt="ecuavisa" title="ecuavisa" />
         <span>
           Empresas para cubrir la logística del narcotráfico
         </span>
       </div>
-      <div class="graficoDos">
-        <img class="primerPortadaDesk" src="https://estadisticas.ecuavisa.com/sites/gis/Animacion-1.gif"
-          srcset="https://estadisticas.ecuavisa.com/sites/gis/Animacion-1.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-1.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-1.gif 346w"
-          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+      <div class="cartelMobile max900">
+        <img width="346" height="121"
+          src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FT%C3%ADtulo%202.webp" alt="ecuavisa">
+      </div>
+      <div class="graficoDos portadaSegundoTema">
 
-        <img class="primerPortadaMovil" src="https://estadisticas.ecuavisa.com/sites/gis/Animacion-1-vert.gif"
-          srcset="https://estadisticas.ecuavisa.com/sites/gis/Animacion-1-vert.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-1-vert.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-1-vert.gif 346w"
-          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
       </div>
 
 
@@ -1067,19 +1067,16 @@
     <section class="tercerTema bgNegro" id="de-lider-social-a-miembro-de-los-tiguerones">
 
       <div class="cartelUno max900">
-        <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png"
-          srcset="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png 519w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png 433w,https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png 346w"
-          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+        <img src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fcarteluno.png" width="100%" height="auto"
+          alt="ecuavisa" title="ecuavisa" />
         <span>De 'líder social' a miembro de los Tiguerones</span>
       </div>
-      <div class="graficoDos">
-        <img class="primerPortadaDesk" src="https://estadisticas.ecuavisa.com/sites/gis/Animacion-3.gif"
-          srcset="https://estadisticas.ecuavisa.com/sites/gis/Animacion-3.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-3.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-3.gif 346w"
-          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+      <div class="cartelMobile max900">
+        <img width="346" height="121"
+          src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FT%C3%ADtulo%203.webp" alt="ecuavisa">
+      </div>
+      <div class="graficoDos portadaTercerTema">
 
-        <img class="primerPortadaMovil" src="https://estadisticas.ecuavisa.com/sites/gis/Animacion-3-vert.gif"
-          srcset="https://estadisticas.ecuavisa.com/sites/gis/Animacion-3-vert.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-3-vert.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-3-vert.gif 346w"
-          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
       </div>
 
       <div class="bgNegro">
@@ -1368,27 +1365,26 @@
 
     <!-- ESPECIAL -->
 
-    <section class=" ">
+    <section>
       <div class="bgNegro py-5">
         <div class="max900">
-          <div class="text-center textUnEsp ">Un especial de:</div>
-          <div class="bloqueLogosMarcas ">
-            <a href="#">
+          <div class="text-center textUnEsp">Un especial de:</div>
+          <div class="bloqueLogosMarcas">
+            <div>
               <img width="100%" height="auto"
                 src="https://www.ecuavisa.com/base-portlet/webrsrc/ctxvar/05a63cf2-e0fc-4f88-b67f-1a749aeebf02.png"
-                alt="ecuavisa">
-            </a>
-            <a href="#">
+                alt="ecuavisa" />
+            </div>
+            <div>
               <img width="100%" height="auto"
-                src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FLayer_1.png" alt="">
-            </a>
+                src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FLayer_1.png" alt="ecuavisa" />
+            </div>
           </div>
 
         </div>
         <div class="d-flex flex-column justify-content-center align-items-center textAcom max900 my-5">
           <span>Acompañamiento editorial:</span>
           <span>Equipo CONNECTAS</span>
-
         </div>
 
       </div>
@@ -1599,7 +1595,60 @@
   <!-- <script src="https://ecuavisadev.netlify.app/micro-gis/main.js"></script> -->
   <script src="main.js"></script>
 
-  
+
+  <script>
+
+
+
+    let scrollHandler = function () {
+      // Primer tema
+      document.querySelector('.portadaPrimerTema').innerHTML = `
+      <img class="primerPortadaDesk" src="https://estadisticas.ecuavisa.com/sites/gis/animacion-2.gif"
+          srcset="https://estadisticas.ecuavisa.com/sites/gis/animacion-2.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/animacion-2.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/animacion-2.gif 346w"
+          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+      <img class="primerPortadaMovil" src="https://estadisticas.ecuavisa.com/sites/gis/animacion-2-vert.gif"
+          srcset="https://estadisticas.ecuavisa.com/sites/gis/animacion-2-vert.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/animacion-2-vert.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/animacion-2-vert.gif 346w"
+          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+  `;
+
+      // Segundo tema
+      document.querySelector('.portadaSegundoTema').innerHTML = `
+      <img class="primerPortadaDesk" src="https://estadisticas.ecuavisa.com/sites/gis/Animacion-1.gif"
+          srcset="https://estadisticas.ecuavisa.com/sites/gis/Animacion-1.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-1.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-1.gif 346w"
+          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+      <img class="primerPortadaMovil" src="https://estadisticas.ecuavisa.com/sites/gis/Animacion-1-vert.gif"
+          srcset="https://estadisticas.ecuavisa.com/sites/gis/Animacion-1-vert.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-1-vert.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-1-vert.gif 346w"
+          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+  `;
+
+      // Tercer tema
+      document.querySelector('.portadaTercerTema').innerHTML = `
+      <img class="primerPortadaDesk" src="https://estadisticas.ecuavisa.com/sites/gis/Animacion-3.gif"
+          srcset="https://estadisticas.ecuavisa.com/sites/gis/Animacion-3.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-3.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-3.gif 346w"
+          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+      <img class="primerPortadaMovil" src="https://estadisticas.ecuavisa.com/sites/gis/Animacion-3-vert.gif"
+          srcset="https://estadisticas.ecuavisa.com/sites/gis/Animacion-3-vert.gif 519w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-3-vert.gif 433w,https://estadisticas.ecuavisa.com/sites/gis/Animacion-3-vert.gif 346w"
+          width="100%" height="auto" sizes="100vw" alt="ecuavisa" title="ecuavisa" />
+  `;
+
+
+      // DIFERIR LOS IFRAMES FLOURISH
+
+
+
+
+
+
+      // Detener el evento de scroll después de una vez
+      window.removeEventListener('scroll', scrollHandler);
+    };
+
+    window.addEventListener('scroll', scrollHandler);
+
+
+  </script>
+
+
   <script>
     var swiperFooter = new Swiper(".revistaSwiper", {
       slidesPerView: 1,
@@ -1609,6 +1658,7 @@
         clickable: true,
       },
     });
+
   </script>
 </body>
 

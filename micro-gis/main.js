@@ -30,12 +30,12 @@ function SwiperPatent() {
   const carv = document.querySelector('.cargandoVideos');
   const swBlo = document.querySelector('.carrusel-bloque');
 
-  
-  if(carv){
+
+  if (carv) {
     carv.style.display = "none";
   }
 
-  if(swBlo){
+  if (swBlo) {
     swBlo.classList.remove('d-none');
   }
 }
@@ -203,6 +203,9 @@ for (const link of links) {
 
 
 
+
+
+
 // document.addEventListener('DOMContentLoaded', function() {
 //   // Verifica si la pantalla tiene un ancho menor a 768px (considerado como móvil)
 //   if (window.innerWidth < 768) {
@@ -221,3 +224,6 @@ for (const link of links) {
 //       video.load();
 //   }
 // });
+
+
+
