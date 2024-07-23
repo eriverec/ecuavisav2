@@ -212,5 +212,12 @@ document.addEventListener('DOMContentLoaded', function() {
       source.src = 'https://estadisticas.ecuavisa.com/sites/gis/Header%20Vertical.mp4';
       // Recarga el video para que el cambio surta efecto
       video.load();
+  }else{
+    var video = document.getElementById('headerVideo');
+      var source = document.getElementById('videoSource');
+      // Cambia el src del video
+      source.src = 'https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4';
+      // Recarga el video para que el cambio surta efecto
+      video.load();
   }
 });
