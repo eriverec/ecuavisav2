@@ -25,6 +25,9 @@ html {
 .headerMovil {
   display: none;
 }
+.posterPreMovil{
+  display: none;
+}
 
 .piedefotouno {
   font-size: 13px;
@@ -974,6 +977,13 @@ footer {
     /* height: 100vh; */
     object-fit: cover;
     width: 100%;
+    position: absolute;
+    z-index: 1;
+    top: 70px;
+  }
+
+  .posterPreMovil{
+    display: block;
   }
 
   .coverNaranjaDesk {

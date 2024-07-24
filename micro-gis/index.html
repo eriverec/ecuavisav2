@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css">
   <!-- <link rel="stylesheet" href="https://ecuavisadev.netlify.app/micro-gis/main.css"> -->
   <link rel="stylesheet" href="main.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" /> -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100..900;1,100..900&display=swap"
@@ -83,10 +83,16 @@
             type="video/mp4">
         </video>
 
-        <img class="headerMovil" width="100%" src="https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif"
-          data-src="https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif"
-          data-srcset="https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif 2x, https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif 1x"
-          alt="ecuavisa">
+        <div class="posterPreMovil">
+          <img style="margin-top: 69px;" class="" width="100%"
+            src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FposterVertical.webp" alt="ecuador">
+          <div class="cargarPosterGif">
+
+          </div>
+
+
+        </div>
+
 
       </div>
 
@@ -282,13 +288,9 @@
 
 
 
-          <div class="videoBloqueIframe">
+          <div class="videoBloqueIframe embedverseplayer">
 
-            <div class='verse-player-embed'>
-              <iframe loading="lazy" title="reacciones-sobre-el-numero-de-casos-identificados-por-la-uafe"
-                src='https://www.verse.com/stories/65868-reacciones-sobre-el-numero-de-casos-identificados-por-la-uafe/'
-                allow='autoplay' frameborder='0' allowfullscreen></iframe>
-            </div>
+
 
           </div>
 
@@ -682,9 +684,11 @@
           suspensión.
         </p>
 
-        <div class="flourish-embed flourish-chart" data-src="visualisation/18663225">
-          <script src="https://public.flourish.studio/resources/embed.js"></script>
+        <div class="primerEmbed">
+          <div class="flourish-embed flourish-chart" data-src="visualisation/18663225">
+          </div>
         </div>
+
 
         <p>
           El permiso de porte de arma sigue vigente para Vigpromax CIA LTDA, que lo obtuvo el 30 de noviembre de 2022,
@@ -760,7 +764,6 @@
 
       <div class="bloque-flourish max900 my-5">
         <div class="flourish-embed flourish-chart" data-src="visualisation/18585453">
-          <script src="https://public.flourish.studio/resources/embed.js"></script>
         </div>
       </div>
 
@@ -783,10 +786,8 @@
           sentencias por lavado de activos.</p>
       </div>
 
-      <div class="max900 mt-3">
-        <iframe loading="lazy" title="ecuavisa"
-          src='https://cdn.knightlab.com/libs/timeline3/latest/embed/index.html?source=1gGySv0_jdVmeQNcYA-jEmwHjYSz1fCuoeVDe5VXbRCA&font=Default&lang=en&initial_zoom=2&height=650'
-          width='100%' height='650' webkitallowfullscreen mozallowfullscreen allowfullscreen frameborder='0'></iframe>
+      <div class="max900 mt-3 iframeknightlab">
+
       </div>
 
       <div class="texto-bloque_tres py-5 max900">
@@ -911,7 +912,6 @@
 
 
           <div class="flourish-embed flourish-chart" data-src="visualisation/18626398">
-            <script src="https://public.flourish.studio/resources/embed.js"></script>
           </div>
         </div>
 
@@ -946,7 +946,6 @@
 
         <div class="bloque-flourish mb-5">
           <div class="flourish-embed flourish-chart" data-src="visualisation/18669124">
-            <script src="https://public.flourish.studio/resources/embed.js"></script>
           </div>
         </div>
 
@@ -1590,13 +1589,23 @@
   <script src="https://kit.fontawesome.com/66aa7c98b3.js" crossorigin="anonymous"></script>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+  <!-- <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script> -->
 
   <!-- <script src="https://ecuavisadev.netlify.app/micro-gis/main.js"></script> -->
   <script src="main.js"></script>
 
 
   <script>
+
+    setTimeout(() => {
+         /* Diferir Portada Movil*/
+         document.querySelector('.cargarPosterGif').innerHTML = `
+       <img class="headerMovil" width="100%" src="https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif"
+            data-src="https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif"
+            data-srcset="https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif 2x, https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif 1x"
+            alt="ecuavisa">
+        `;
+    }, 200);
 
 
 
@@ -1634,8 +1643,45 @@
 
       // DIFERIR LOS IFRAMES FLOURISH
 
+      function flourishPublic() {
+        const scriptFlourish = document.createElement('script');
+        scriptFlourish.src = 'https://public.flourish.studio/resources/embed.js';
+        document.head.appendChild(scriptFlourish);
+      }
+
+      function swiperSource() {
+        const swipelem = document.createElement('link');
+        swipelem.href = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css';
+        swipelem.setAttribute('rel', 'stylesheet')
+        document.head.appendChild(swipelem);
+
+        const swijs = document.createElement('script');
+        swijs.src = 'https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js';
+        document.head.appendChild(swijs);
+      }
+
+      /* Embed knightlab*/
+      document.querySelector('.iframeknightlab').innerHTML = `
+       <iframe loading="lazy" title="ecuavisa"
+          src='https://cdn.knightlab.com/libs/timeline3/latest/embed/index.html?source=1gGySv0_jdVmeQNcYA-jEmwHjYSz1fCuoeVDe5VXbRCA&font=Default&lang=en&initial_zoom=2&height=650'
+          width='100%' height='650' webkitallowfullscreen mozallowfullscreen allowfullscreen frameborder='0'></iframe>
+        `;
 
 
+      /* Embed Verse Player*/
+      document.querySelector('.embedverseplayer').innerHTML = `
+       <div class='verse-player-embed'>
+              <iframe loading="lazy" title="reacciones-sobre-el-numero-de-casos-identificados-por-la-uafe"
+                src='https://www.verse.com/stories/65868-reacciones-sobre-el-numero-de-casos-identificados-por-la-uafe/'
+                allow='autoplay' frameborder='0' allowfullscreen></iframe>
+            </div>
+        `;
+
+   
+
+      swiperSource();
+
+      flourishPublic();
 
 
 
@@ -1650,13 +1696,29 @@
 
 
   <script>
-    var swiperFooter = new Swiper(".revistaSwiper", {
-      slidesPerView: 1,
-      spaceBetween: 20,
-      pagination: {
-        el: ".swiper-pagination",
-        clickable: true,
-      },
+    function swfooter() {
+      var swiperFooter = new Swiper(".revistaSwiper", {
+        slidesPerView: 1,
+        spaceBetween: 20,
+        pagination: {
+          el: ".swiper-pagination",
+          clickable: true,
+        },
+      });
+    }
+
+    function sGofo() {
+      setTimeout(function () {
+        if (typeof Swiper === "undefined") {
+          sGofo();
+        } else {
+          swfooter();
+        }
+      }, 400);
+    }
+
+    $(document).ready(function () {
+      sGofo();
     });
 
   </script>
