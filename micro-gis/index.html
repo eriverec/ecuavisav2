@@ -72,15 +72,20 @@
 
       <div class="portada-video bgNegro">
 
-        <video id="headerVideo" data-video="true" loop muted autoplay
+        <!-- <video id="headerVideo" data-video="true" loop muted autoplay
           class="headerDesk FullSize--basic ObjectFit--cover" playsinline
           data-landscape="https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4"
           data-landscape-focal="50% 50%"
           data-portrait="https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4" data-portrait-focal="50% 50%"
           data-type="video/mp4" tabindex="0" data-object-fit="cover" data-object-position="50% 50%"
           style="object-position: 50% 50%; opacity: 1;">
-          <source id="videoSource" src="https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4"
+          <source id="videoSource" src=""
             type="video/mp4">
+        </video> -->
+
+        <video class="headerDesk lazy" autoplay muted loop playsinline
+          poster="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2Fportadadesktop.webp">
+          <source data-src="https://estadisticas.ecuavisa.com/sites/gis/Header_animacion.mp4" type="video/mp4">
         </video>
 
         <div class="posterPreMovil">
@@ -1597,15 +1602,53 @@
 
   <script>
 
-    setTimeout(() => {
-         /* Diferir Portada Movil*/
-         document.querySelector('.cargarPosterGif').innerHTML = `
-       <img class="headerMovil" width="100%" src="https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif"
-            data-src="https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif"
-            data-srcset="https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif 2x, https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif 1x"
-            alt="ecuavisa">
-        `;
-    }, 200);
+
+    // CARGAR EL GIF DESPUES DE LA CARGA
+    window.addEventListener('load', function () {
+      // Crear el elemento de imagen
+      var img = document.createElement('img');
+      img.className = 'headerMovil';
+      img.width = '100%';
+      img.src = 'https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif';
+      img.alt = 'ecuavisa';
+
+      setTimeout(() => {
+        // Añadir la imagen al contenedor
+        document.querySelector('.cargarPosterGif').appendChild(img);
+      }, 500);
+
+    });
+
+
+
+
+    // LAZY PARA LOS VIDEOS SOURCE
+    document.addEventListener("DOMContentLoaded", function () {
+      var lazyVideos = [].slice.call(document.querySelectorAll("video.lazy"));
+
+      if ("IntersectionObserver" in window) {
+        var lazyVideoObserver = new IntersectionObserver(function (entries, observer) {
+          entries.forEach(function (video) {
+            if (video.isIntersecting) {
+              for (var source in video.target.children) {
+                var videoSource = video.target.children[source];
+                if (typeof videoSource.tagName === "string" && videoSource.tagName === "SOURCE") {
+                  videoSource.src = videoSource.dataset.src;
+                }
+              }
+
+              video.target.load();
+              video.target.classList.remove("lazy");
+              lazyVideoObserver.unobserve(video.target);
+            }
+          });
+        });
+
+        lazyVideos.forEach(function (lazyVideo) {
+          lazyVideoObserver.observe(lazyVideo);
+        });
+      }
+    });
 
 
 
@@ -1677,7 +1720,7 @@
             </div>
         `;
 
-   
+
 
       swiperSource();
 
