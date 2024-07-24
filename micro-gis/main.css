@@ -986,7 +986,7 @@ footer {
     display: block;
   }
   .posterPreMovil iframe{
-    height: 100vh !important;
+    height: 665px !important;
   }
 
   .coverNaranjaDesk {
@@ -1177,6 +1177,10 @@ footer {
   .footer-distributed .footer-links a:before {
     padding-left: 15px;
     padding-right: 15px;
+  }
+
+  .posterPreMovil iframe{
+    height: 615px !important
   }
 }
 
