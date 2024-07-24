@@ -89,11 +89,14 @@
         </video>
 
         <div class="posterPreMovil">
-          <img style="margin-top: 69px;" class="" width="100%"
+          <!-- <img style="margin-top: 69px;" class="" width="100%"
             src="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd%2FposterVertical.webp" alt="ecuador">
           <div class="cargarPosterGif">
 
-          </div>
+          </div> -->
+
+
+          <iframe style="height: 90vh;" src="http://localhost/ecuavisav2/micro-gis/headermobile.html" title="iFrame" width="100%" height="auto" scrolling="no" frameborder="no" allow="fullscreen"></iframe>
 
 
         </div>
@@ -1604,20 +1607,20 @@
 
 
     // CARGAR EL GIF DESPUES DE LA CARGA
-    window.addEventListener('load', function () {
-      // Crear el elemento de imagen
-      var img = document.createElement('img');
-      img.className = 'headerMovil';
-      img.width = '100%';
-      img.src = 'https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif';
-      img.alt = 'ecuavisa';
+    // window.addEventListener('load', function () {
+    //   // Crear el elemento de imagen
+    //   var img = document.createElement('img');
+    //   img.className = 'headerMovil';
+    //   img.width = '100%';
+    //   img.src = 'https://estadisticas.ecuavisa.com/sites/gis/mobile_baja.gif';
+    //   img.alt = 'ecuavisa';
 
-      setTimeout(() => {
-        // Añadir la imagen al contenedor
-        document.querySelector('.cargarPosterGif').appendChild(img);
-      }, 500);
+    //   setTimeout(() => {
+    //     // Añadir la imagen al contenedor
+    //     document.querySelector('.cargarPosterGif').appendChild(img);
+    //   }, 500);
 
-    });
+    // });
 
 
 
