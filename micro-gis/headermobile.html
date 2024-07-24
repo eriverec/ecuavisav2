@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gis</title>
+  <style>
+    body{
+      margin: 0;
+      padding: 0;
+    }
+    .headerMovil {
+      display: block;
+      object-fit: cover;
+      width: 100%;
+      position: absolute;
+      z-index: 1;
+      top: 0px;
+    }
+  </style>
+</head>
+
+<body>
+
+
+  <!-- HEADER -  APERTURA-->
+  <div>
+
+
+    <div class="portada-video">
+      <div class="posterPreMovil">
+        <video width="100%" class="lazy" autoplay muted loop playsinline
+          poster="https://estadisticas.ecuavisa.com/sites/gestor/assets-rd/posterVertical.webp">
+          <source data-src="https://estadisticas.ecuavisa.com/sites/gis/Header%20Vertical.mp4" type="video/mp4">
+        </video>
+      </div>
+    </div>
+  </div>
+
+
+
+  <script>
+
+    // LAZY PARA LOS VIDEOS SOURCE
+    document.addEventListener("DOMContentLoaded", function () {
+      var lazyVideos = [].slice.call(document.querySelectorAll("video.lazy"));
+
+      if ("IntersectionObserver" in window) {
+        var lazyVideoObserver = new IntersectionObserver(function (entries, observer) {
+          entries.forEach(function (video) {
+            if (video.isIntersecting) {
+              for (var source in video.target.children) {
+                var videoSource = video.target.children[source];
+                if (typeof videoSource.tagName === "string" && videoSource.tagName === "SOURCE") {
+                  videoSource.src = videoSource.dataset.src;
+                }
+              }
+
+              video.target.load();
+              video.target.classList.remove("lazy");
+              lazyVideoObserver.unobserve(video.target);
+            }
+          });
+        });
+
+        lazyVideos.forEach(function (lazyVideo) {
+          lazyVideoObserver.observe(lazyVideo);
+        });
+      }
+    });
+
+
+
+
+  </script>
+
+</body>
+
+</html>
