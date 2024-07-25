@@ -7,9 +7,20 @@ html {
   line-height: 23px;
 }
 
+.clicIniciarVideo {
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 23px;
+  text-align: right;
+  display: inline-block;
+  background: #d74a2f;
+  padding: 5px 20px;
+  font-style: italic;
+  position: absolute;
+  right: 60px;
+}
 
-
-.cargandoVideos{
+.cargandoVideos {
   text-align: center;
   padding: 100px 0;
 }
@@ -25,7 +36,8 @@ html {
 .headerMovil {
   display: none;
 }
-.posterPreMovil{
+
+.posterPreMovil {
   display: none;
 }
 
@@ -105,8 +117,9 @@ html {
   background: #f6f6f6;
 }
 
-#empresas-del-narco{
-  background: #f7f7f7;
+#empresas-del-narco,
+#empresas-para-cubrir-la-logistica-del-narcotrafico {
+  background: #f4f4f4;
 }
 
 .cabecera-bloque_menu .dropdown-item {
@@ -122,7 +135,7 @@ html {
   margin-right: 60px !important;
 } */
 
-.max1070{
+.max1070 {
   max-width: 1070px;
   margin: auto;
   padding: 0 12px;
@@ -310,7 +323,7 @@ html {
   color: #fff;
 }
 
-.texto-bloque_tres .swiper-slide{
+.texto-bloque_tres .swiper-slide {
   margin-right: 45px;
 }
 
@@ -375,7 +388,7 @@ html {
   position: relative;
 }
 
-.cartelMobile{
+.cartelMobile {
   display: none;
 }
 
@@ -437,7 +450,7 @@ html {
 .badge_ {
   background: #d8ba9e;
   color: #2a2a2a;
-  font-weight: 700;
+  /* font-weight: 700; */
   padding: 0 3px;
 }
 
@@ -448,7 +461,7 @@ html {
 .badge_na {
   background: #D74A2F;
   color: #ffffff;
-  font-weight: 700;
+  /* font-weight: 700; */
   padding: 0 3px;
 }
 
@@ -457,7 +470,7 @@ html {
   font-weight: 800;
   font-size: 100px;
 } */
-.text_principal{
+.text_principal {
   padding: 0 65px;
 }
 
@@ -478,7 +491,7 @@ html {
   justify-content: center;
 }
 
-.bloque-flourish{
+.bloque-flourish {
   margin-top: 3rem;
 }
 
@@ -822,7 +835,7 @@ footer {
 }
 
 @media (max-width: 991px) {
-  
+
   .cartelUno span {
     font-size: 18px;
     line-height: 20px;
@@ -833,11 +846,11 @@ footer {
     height: 120px;
   }
 
-  .carrusel-bloque .swiper-slide{
+  .carrusel-bloque .swiper-slide {
     padding: 10px;
   }
 
-  .carrusel-bloque .swiper-slide-active .cardSwiper img{
+  .carrusel-bloque .swiper-slide-active .cardSwiper img {
     width: 100px;
   }
 
@@ -849,18 +862,19 @@ footer {
 
 
 @media (max-width: 768px) {
-  .text_principal{
+  .text_principal {
     padding: 0px;
   }
+
   .footer-distributed {
     font: bold 10px sans-serif;
   }
 
-  .carrusel-bloque .swiper-slide-active .cardSwiper img{
+  .carrusel-bloque .swiper-slide-active .cardSwiper img {
     width: 100px;
   }
 
-  .carrusel-bloque .swiper-slide{
+  .carrusel-bloque .swiper-slide {
     padding: 10px;
   }
 
@@ -931,7 +945,7 @@ footer {
     line-height: 18px;
   }
 
-  .cartelUno{
+  .cartelUno {
     display: none;
   }
 
@@ -942,7 +956,7 @@ footer {
     justify-content: center;
     position: relative;
   }
-  
+
   .cartelMobile img {
     max-width: 100%;
     height: auto;
@@ -982,10 +996,11 @@ footer {
     top: 70px;
   }
 
-  .posterPreMovil{
+  .posterPreMovil {
     display: block;
   }
-  .posterPreMovil iframe{
+
+  .posterPreMovil iframe {
     height: 665px !important;
   }
 
@@ -1084,13 +1099,16 @@ footer {
     font-size: 19px;
     line-height: 22px;
   }
-  .text_principal{
+
+  .text_principal {
     padding: 0px;
   }
-  .texto-blque_dos{
+
+  .texto-blque_dos {
     margin-top: 0rem;
   }
-  .bloque-flourish{
+
+  .bloque-flourish {
     margin-top: 0rem;
   }
 
@@ -1101,6 +1119,15 @@ footer {
 
   .comillas_ img {
     height: 300px;
+  }
+
+  .clicIniciarVideo {
+    font-size: 10px;
+    line-height: 14px;
+  }
+
+  .clicIniciarVideo svg {
+    width: 10px;
   }
 
   .footer-distributed .footer-links a {
@@ -1179,8 +1206,8 @@ footer {
     padding-right: 15px;
   }
 
-  .posterPreMovil iframe{
-    height: 615px !important
+  .posterPreMovil iframe {
+    height: 640px !important
   }
 }
 
@@ -1196,6 +1223,8 @@ footer {
     transform: scale(1) !important;
     transition: transform 0.5s ease, opacity 0.5s ease;
   }
+
+
 
   .max900 {
     max-width: 700px;
