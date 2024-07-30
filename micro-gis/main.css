@@ -13,11 +13,16 @@ html {
   line-height: 23px;
   text-align: right;
   display: inline-block;
-  background: #d74a2f;
+  background: #D24428;
   padding: 5px 20px;
   font-style: italic;
   position: absolute;
   right: 60px;
+}
+
+.diagramaDesk{
+  height: auto;
+  width: 100%;
 }
 
 .cargandoVideos {
@@ -68,6 +73,16 @@ html {
   line-height: 23px;
   padding: 0 76px;
 }
+
+.postapertura h1 {
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 700;
+  line-height: 23px;
+  padding: 0 76px;
+}
+
+
 
 .modalMetodologia .btn-close {
   opacity: 1 !important;
@@ -459,7 +474,7 @@ html {
 }
 
 .badge_na {
-  background: #D74A2F;
+  background: #D44126;
   color: #ffffff;
   /* font-weight: 700; */
   padding: 0 3px;
@@ -931,7 +946,8 @@ footer {
     line-height: 20px;
   }
 
-  .postapertura p {
+  .postapertura p,
+  .postapertura h1 {
     padding: 0 40px;
   }
 
@@ -1051,7 +1067,8 @@ footer {
     margin-top: 44px;
   }
 
-  .postapertura p {
+  .postapertura p,
+  .postapertura h1 {
     padding: 0 30px;
   }
 
@@ -1200,10 +1217,16 @@ footer {
   }
 }
 
+
 @media (max-width: 411px) {
   .footer-distributed .footer-links a:before {
     padding-left: 15px;
     padding-right: 15px;
+  }
+
+  .postapertura p,
+  .postapertura h1 {
+    font-size: 16px;
   }
 
   .posterPreMovil iframe {
