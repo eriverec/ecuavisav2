@@ -35,18 +35,6 @@ function hideBlock() {
   }
 }
 
-
-setTimeout(function () {
-  getNameTag();
-  hideBlock();
-  //remueve la clase en página de metadatos
-  $('.invisible2').removeClass('invisible2');
-  // remueve bloque duplicadas en autores como bbc etc 
-
-}, 300)
-
-
-
 function removeDuplicateInfo () {
   setTimeout(function () {
    if (typeof Swiper === "undefined") {
@@ -59,4 +47,36 @@ function removeDuplicateInfo () {
    }
   }, 400) ; 
 }
-removeDuplicateInfo();
+
+if(ECUAVISA_EC){
+  ECUAVISA_EC.initDomVariable('.categoryListBlock .categoryList article').then((e) => {
+        if(e){
+            // Selecciona el contenedor de los artículos
+            const categoryList = document.querySelector('.categoryListBlock .categoryList');
+            
+            // Si el contenedor existe
+            if (categoryList) {
+                // Obtén todos los artículos dentro del contenedor
+                const articles = categoryList.querySelectorAll('article');
+
+                // Si hay más de un artículo, elimina todos excepto el primero
+                for (let i = 1; i < articles.length; i++) {
+                    categoryList.removeChild(articles[i]);
+                }
+            }
+
+            //Iniciar componentes:
+
+            setTimeout(function () {
+              getNameTag();
+              hideBlock();
+              //remueve la clase en página de metadatos
+              $('.invisible2').removeClass('invisible2');
+              // remueve bloque duplicadas en autores como bbc etc 
+
+            }, 300)
+
+            removeDuplicateInfo();
+        }
+    })
+}
