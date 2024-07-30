@@ -505,3 +505,8 @@ div#r03c01 {
     display: initial!important;
 }
 /*CSS QUE MUESTRA BLOQUES CUANDO EL JAVASCRIPT ESTÁ BLOQUEADO EN EL NAVEGADOR*/
+
+/*Eliminar el doble título de algunos metadatos*/
+.categoryListBlock .categoryList article:nth-child(n+2) {
+  display: none;
+}
