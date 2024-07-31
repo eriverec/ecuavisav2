@@ -205,87 +205,76 @@ async function obtenerDesafios(ids) {
   })
 
   onMounted(async () => {
-    // await getCursosAll();
-    //await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
-    
-    cursoModelLoading.value = true;
-    semanasItems.value = await obtenerSemanas();
-    cursoModelLoading.value = false;
-  });
+  cursoModelLoading.value = true;
+  semanasItems.value = await obtenerSemanas();
+  cursoModelLoading.value = false;
+});
 
   
   watch(modelCurso, async (newValue) => {
-    if (newValue) {
-        const semanaSeleccionada = semanasItems.value.find(semana => semana.value === newValue);
-        if (semanaSeleccionada && semanaSeleccionada.desafios) {
-            desafiosItems.value = await obtenerDesafios(semanaSeleccionada.desafios);
-        }
-    } else {
-        desafiosItems.value = [];
+  if (newValue) {
+    currentPage.value = 1;
+    const semanaSeleccionada = semanasItems.value.find(semana => semana.value === newValue);
+    if (semanaSeleccionada && semanaSeleccionada.desafios) {
+      desafiosItems.value = await obtenerDesafios(semanaSeleccionada.desafios);
     }
+    await getUsuarios(currentPage.value, rowPerPage.value, newValue);
+  } else {
+    desafiosItems.value = [];
+    dataUsuarios.value = [];
+  }
 });
   
 
 
 
-  async function getUsuarios(page = 1, limit = 10, fechai, fechaf, idCurso, search="") {
-    try {
-      if(!idCurso){
-        return false;
-      }
-
-      loadingUsuarios.value = true;
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
-      };
-
-      // var response = null;
-
-      
-      //Si la fecha es null y no está seleccionado la fecha, tiene q traer toda la data
-      if(tipoModel.value == "Curso"){
-        urlTitleExport.value = "curso_todos";
-        // urlApiExport.value = `https://servicio-elearning.vercel.app/grafico/exportar/usuarios/all-registrados?idCurso=${idCurso}&search=${search}`;
-
-        urlApiExport.value = `https://servicio-elearning.vercel.app/grafico/exportar/usuarios/all-registrados?idCurso=${idCurso}&search=${search}`;
-
-        // response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/all-registrados?page=${page}&limit=${limit}&idCurso=${idCurso}&search=${search}`, requestOptions);
-        console.log(2)
-      }
-      
-      var response = await fetch(`https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/660388b691a7cd331a1a0645/null?page=1&limit=10`, requestOptions);
-      const data = await response.json();
-
-      if(data.resp){
-        dataUsuarios.value = data.data;
-        totalRegistros.value = data.total;
-        totalPage.value = Math.ceil(data.total / data.limit);
-        // console.log(data.data)
-      }else{
-        configSnackbar.value = {
-            message: "No se pudo recuperar los usuarios, recargue de nuevo.",
-            type: "error",
-            model: true
-        };
-        loadingUsuarios.value = false;
-        return false;
-      }
-      loadingUsuarios.value = false;
-    } catch (error) {
-      configSnackbar.value = {
-          message: "No se pudo recuperar los usuarios, recargue de nuevo.",
-          type: "error",
-          model: true
-      };
-      loadingUsuarios.value = false;
-      return console.error(error.message);
+  async function getUsuarios(page = 1, limit = 10, idSemana, idDesafio = null) {
+  try {
+    if (!idSemana) {
+      return false;
     }
+
+    loadingUsuarios.value = true;
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+
+    let url = `https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio || 'null'}?page=${page}&limit=${limit}`;
+
+    var response = await fetch(url, requestOptions);
+    const data = await response.json();
+
+    if (data.resp) {
+      // Ajustamos la estructura de los datos para que sea más fácil de manejar en la tabla
+      dataUsuarios.value = data.data.map(item => ({
+        ...item.userId,
+        subscribed: item.subscribed
+      }));
+      totalRegistros.value = data.total;
+      totalPage.value = Math.ceil(data.total / data.limit);
+    } else {
+      configSnackbar.value = {
+        message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+        type: "error",
+        model: true
+      };
+    }
+    loadingUsuarios.value = false;
+  } catch (error) {
+    configSnackbar.value = {
+      message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+      type: "error",
+      model: true
+    };
+    loadingUsuarios.value = false;
+    console.error(error.message);
   }
+}
 
 
   watch(async () => searchCursoModel.value, async () => {
@@ -485,10 +474,12 @@ async function obtenerDesafios(ids) {
     }
   });
 
-  watch(videosModel, async () => {
+  watch(videosModel, async (newValue) => {
+  if (newValue && modelCurso.value) {
     currentPage.value = 1;
-      await getUsuarios(currentPage.value, rowPerPage.value, null, null, modelCurso.value);
-  });
+    await getUsuarios(currentPage.value, rowPerPage.value, modelCurso.value, newValue);
+  }
+});
 
   
 </script>
