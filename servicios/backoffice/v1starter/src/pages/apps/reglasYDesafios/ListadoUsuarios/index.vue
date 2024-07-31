@@ -205,7 +205,7 @@ async function obtenerDesafios(ids) {
   })
 
   onMounted(async () => {
-    await getCursosAll();
+    // await getCursosAll();
     //await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
     
     cursoModelLoading.value = true;
@@ -227,42 +227,6 @@ async function obtenerDesafios(ids) {
   
 
 
-  async function getVideos(page = 1, limit= 10, idCurso = null){
-    try {
-        videosModelLoading.value = true;
-        if(!modelCurso.value){
-          videosItems.value = [];
-          videosModel.value = null;
-          videosModelLoading.value = false;
-          return [];
-        }
-
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
-
-        var requestOptions = {
-          method: 'GET',
-          headers: myHeaders,
-          redirect: 'follow'
-        };
-
-        var response = await fetch(`https://servicio-elearning.vercel.app/curso/videos/${modelCurso.value}`, requestOptions);
-        const data = await response.json();
-
-        videosItems.value = data.data.reduce((acumulador, actual) => {
-          acumulador.push({
-            title: `${actual.titulo}`,
-            value: actual._id,
-          });
-          return acumulador;
-        }, []);
-
-        videosItemsCopy.value = videosItems.value;
-        videosModelLoading.value = false;
-    } catch (error) {
-        return console.error(error.message);    
-    }
-  }
 
   async function getUsuarios(page = 1, limit = 10, fechai, fechaf, idCurso, search="") {
     try {
@@ -270,14 +234,6 @@ async function obtenerDesafios(ids) {
         return false;
       }
 
-      if(!videosModel.value && tipoModel.value == "Video"){
-         configSnackbar.value = {
-            message: "No se pudo seleccionar el video.",
-            type: "error",
-            model: true
-        };
-        return false;
-      }
       loadingUsuarios.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -294,28 +250,22 @@ async function obtenerDesafios(ids) {
       //Si la fecha es null y no está seleccionado la fecha, tiene q traer toda la data
       if(tipoModel.value == "Curso"){
         urlTitleExport.value = "curso_todos";
+        // urlApiExport.value = `https://servicio-elearning.vercel.app/grafico/exportar/usuarios/all-registrados?idCurso=${idCurso}&search=${search}`;
+
         urlApiExport.value = `https://servicio-elearning.vercel.app/grafico/exportar/usuarios/all-registrados?idCurso=${idCurso}&search=${search}`;
 
         // response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/all-registrados?page=${page}&limit=${limit}&idCurso=${idCurso}&search=${search}`, requestOptions);
         console.log(2)
       }
-
-      //Si se selecciona el video trae la data pero solo los usuarios por video seleccionado
-      if(tipoModel.value == "Video"){
-        urlTitleExport.value = "curso_video";
-        urlApiExport.value = `https://servicio-elearning.vercel.app/grafico/exportar/usuarios/all-registrados-video?idCurso=${idCurso}&idVideo=${videosModel.value}`;
-        
-        // response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/all-registrados-video?page=${page}&limit=${limit}&idCurso=${idCurso}&idVideo=${videosModel.value}`, requestOptions);
-        console.log(3)
-      }
       
-      var response = await fetch(`${urlApiExport.value}&page=${page}&limit=${limit}`, requestOptions);
+      var response = await fetch(`https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/660388b691a7cd331a1a0645/null?page=1&limit=10`, requestOptions);
       const data = await response.json();
 
       if(data.resp){
         dataUsuarios.value = data.data;
         totalRegistros.value = data.total;
         totalPage.value = Math.ceil(data.total / data.limit);
+        // console.log(data.data)
       }else{
         configSnackbar.value = {
             message: "No se pudo recuperar los usuarios, recargue de nuevo.",
@@ -337,47 +287,7 @@ async function obtenerDesafios(ids) {
     }
   }
 
-  //Curso
-  async function getCursosAll(page = 1, limit= 10){
-    try {
-        cursoModelLoading.value = true;
-        var myHeaders = new Headers();
-        myHeaders.append("Content-Type", "application/json");
 
-        var requestOptions = {
-          method: 'GET',
-          headers: myHeaders,
-          redirect: 'follow'
-        };
-
-        var response = await fetch(`https://servicio-elearning.vercel.app/curso/all?limit=200&page=1`, requestOptions);
-        const data = await response.json();
-
-        dataCurso.value = data.data.reduce((acumulador, actual) => {
-          acumulador.push({
-            title: `${actual.titulo}`,
-            value: actual._id,
-          });
-          return acumulador;
-        }, []);
-        dataCursoCopy.value = dataCurso.value;
-        modelCurso.value = dataCurso.value[0].value;
-
-        await getVideos();
-
-        cursoModelLoading.value = false;
-        
-    } catch (error) {
-        configSnackbar.value = {
-            message: "No se pudo recuperar los cursos, recargue de nuevo.",
-            type: "error",
-            model: true
-        };
-        return console.error(error.message);    
-    }
-  }
-
- 
   watch(async () => searchCursoModel.value, async () => {
     if (!searchCursoModel.value) {
       dataCurso.value = dataCursoCopy.value;
@@ -388,101 +298,19 @@ async function obtenerDesafios(ids) {
     }
   });
 
-  watch(selectRefModulo, (active) => {
-    if(!active){
-      setTimeout(()=>{
-        searchCursoModel.value = "";
-      }, 1000)
-    }
-  });
 
   watch(modelCurso, async () => {
     if(modelCurso.value){
       currentPage.value = 1;
       await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
     }
-    await getVideos();
   });
 
   const existeFecha = ref(true);
 
 
-
-  //Fechas
-  async function obtenerFechas(selectedDates, dateStr, instance) {
-      if (selectedDates.length > 1) {
-        videosModel.value = null;
-        existeFecha.value = true;
-        currentPage.value = 1;
-        fechaIFModel.value.fechai = moment(selectedDates[0]).format('DD-MM-YYYY');
-        fechaIFModel.value.fechaf = moment(selectedDates[1]).format('DD-MM-YYYY'); 
-        fecha.value.inicio = moment(fechaIFModel.value.fechai, "DD-MM-YYYY").format('YYYY-MM-DD');
-        fecha.value.fin = moment(fechaIFModel.value.fechaf, "DD-MM-YYYY").format('YYYY-MM-DD')
-        await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
-      }
-
-      if(selectedDates.length == 2){
-        videosModel.value = null;
-        fechaIFModel.value.fechasVConfig["minDate"] = selectedDates[1];
-        fechaIFModel.value.fechasVModel = [selectedDates[1]];
-        existeFecha.value = true;
-      }
-
-      if(selectedDates.length == 0){
-        existeFecha.value = false;
-        await getUsuarios(currentPage.value, rowPerPage.value, null, null, modelCurso.value);
-      }
-
-  }
-
-  const docsExportNumberLength = ref({
-    tamanioActual : 0,
-    tamanioTotal : 0
-  });
-
   const usersFull = ref([]);
 
-  async function getUsuariosExportar(page = 1, limit = 10, fechai, fechaf, idCurso, search = "") {
-    try {
-      if(!idCurso){
-        return false;
-      }
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-
-      var requestOptions = {
-        method: 'GET',
-        headers: myHeaders,
-        redirect: 'follow'
-      };
-
-      // var response = await fetch(`https://servicio-elearning.vercel.app/grafico/exportar/usuarios/registrados?fechai=${fechai}&fechaf=${fechaf}&page=${page}&limit=${limit}&idCurso=${idCurso}&search=${search}`, requestOptions);
-      var response = await fetch(`${urlApiExport.value}&page=${page}&limit=${limit}`, requestOptions);
-      
-      const data = await response.json();
-
-      if(data.resp){
-        return data;
-      }else{
-        configSnackbar.value = {
-            message: "No se pudo recuperar los usuarios, recargue de nuevo.",
-            type: "error",
-            model: true
-        };
-        isFullLoading.value = false;
-        return null;
-      }
-    } catch (error) {
-      configSnackbar.value = {
-          message: "No se pudo recuperar los usuarios, recargue de nuevo.",
-          type: "error",
-          model: true
-      };
-      console.error(error.message);
-      isFullLoading.value = false;
-      return null;
-    }
-  }
 
   function eliminarDuplicadosPorWylexId(array) {
       const vistos = new Set();
@@ -514,70 +342,7 @@ async function obtenerDesafios(ids) {
     usersFull.value = [];
 
     var pages = 1;
-    while(true){
-      const res = await getUsuariosExportar(
-        pages,
-        500,
-        fecha.value.inicio, 
-        fecha.value.fin, 
-        modelCurso.value,
-        modelSearch.value || ""
-      );
-
-      const array = res.data;
-      const totalUser = res.total;
-
-      // if(i==1){
-      //   pages = res.total + 1;
-      // }
-
-      // if(array.length < 1){
-      //   i = pages + 2;
-      // }
-
-      array.forEach((item) => {
-        let newItem = {}; // Nuevo objeto para cada elemento de array
-        // Recorremos las claves de headers
-        for (let key in headersGlobal.value) {
-          // Verificamos si la clave existe en item y la agregamos al nuevo objeto
-          if (item.hasOwnProperty(key)) {
-            newItem[key] = item[key];
-          }else{
-            newItem[key] = "";
-          }
-        }
-        // Agregamos el nuevo objeto a usersFull.value
-        usersFull.value.push(newItem);
-      });
-
-      docsExportNumberLength.value.tamanioActual = usersFull.value.length;
-      docsExportNumberLength.value.tamanioTotal = totalUser;
-
-      usersFull.value.sort((a, b) => moment(b.created_at, 'DD/MM/YYYY-HH:mm:ss').diff(moment(a.created_at, 'DD/MM/YYYY-HH:mm:ss')));
-
-      pages++;
-
-      if(array.length < 1){
-        break;
-      }
-    }
-
-    // for (let i = 1; i < pages + 1; i++) {
-      // {
-      //   todaBase: 1,
-      //   pageSize: rowPerPageExport.value,
-      //   page: i,
-      //   query: "",
-      //   provider: "",
-      //   news: "",
-      //   sort: (sortDesc.value?-1:1),
-      //   columnSort: "",
-      //   fechai: "",
-      //   fechaf: "",
-      // }
-
-      
-    // }
+    // EXPORTAR USUARIOS GET
 
     return true;
   };
@@ -659,46 +424,7 @@ async function obtenerDesafios(ids) {
                  .replace(/-+/g, '-')+"-"+moment().format("YYYY-MM-DD-HH-mm-ss");         // Reemplazar múltiples guiones por uno solo
   }
 
-  async function downloadSearch () {
-    try {
-      if(dataUsuarios.value.length < 1){
-         configSnackbar.value = {
-            message: "No hay datos que exportar.",
-            type: "error",
-            model: true
-        };
-        return false;
-      }
-      isFullLoading.value=true;
-      await fetchFullUsers();
-      isFullLoading.value=false;
-
-      let doc = [];
-      doc = usersFull.value
-      var title = `${urlTitleExport.value}-`;
-
-      if(urlTitleExport.value == "curso_fecha" || urlTitleExport.value == "curso_todos"){
-        title += generateSlug(dataCurso.value.filter(c => modelCurso.value.includes(c.value))[0].title);
-      }
-
-      if(urlTitleExport.value == "curso_video"){
-        title += generateSlug(videosItems.value.filter(c => videosModel.value == c.value)[0].title);
-      }
-
-      logAction('descarga-completa'); 
-
-      exportCSVFile(headersGlobal.value, eliminarDuplicadosPorWylexId(doc), title);
-
-    } catch (error) {
-        console.log(error)
-        configSnackbar.value = {
-            message: "No se pudo recuperar los datos de usuario, recargue de nuevo.",
-            type: "error",
-            model: true
-        };
-        return false;
-    }
-  };
+  // DOWNLOAD SEARCH
 
   //Código para realizar la búsqueda
   const buscarUsuario = async (e) =>{
@@ -761,32 +487,10 @@ async function obtenerDesafios(ids) {
 
   watch(videosModel, async () => {
     currentPage.value = 1;
-    if(!videosModel.value){//Si es null
-      if(existeFecha.value){
-        fechaIFModel.value.fechasModel = optionsDefaultDate.fechasModel;
-        await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
-      }else{
-        await getUsuarios(currentPage.value, rowPerPage.value, null, null, modelCurso.value);
-      }
-    }else{
       await getUsuarios(currentPage.value, rowPerPage.value, null, null, modelCurso.value);
-    }
-    
   });
 
-  watch(tipoModel, async () => {
-    currentPage.value = 1;
-    if(tipoModel.value){
-      if(tipoModel.value == "Video"){
-        if(videosItems.value.length > 0){
-          videosModel.value = videosItems.value[0].value;
-        }
-      }
-
-      await getUsuarios(currentPage.value, rowPerPage.value, fecha.value.inicio, fecha.value.fin, modelCurso.value);
-    }
-  });
-  /*video*/
+  
 </script>
 
 <template>
@@ -816,9 +520,7 @@ async function obtenerDesafios(ids) {
               variant="outlined"
               :items="[10, 20, 30, 50]"
             />
-
             
-
             <VSelect
               style="width: 16rem;"
               class="bg-white"
@@ -831,16 +533,7 @@ async function obtenerDesafios(ids) {
               :items="semanasItems"
               chips
               label="Seleccionar la semana de desafíos"
-              
               :menu-props="{ maxHeight: '400' }">
-              <!-- <template v-slot:prepend-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <VTextField v-model="searchCursoModel" clearable placeholder="Buscar semana"/>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider class="mt-2"></v-divider>
-              </template> -->
               <template #selection="{ item }">
                 <div>
                   {{ item.title }}
@@ -856,95 +549,32 @@ async function obtenerDesafios(ids) {
                 </v-list-item>
               </template>
             </VSelect>
-
-    <VSelect
-      v-if="desafiosItems.length > 0"
-      style="width: 16rem;"
-      class="bg-white"
-      v-model="videosModel"
-      :items="desafiosItems"
-      item-text="title"
-      item-value="value"
-      chips
-      label="Seleccionar desafío"
-      :menu-props="{ maxHeight: '400' }"
-    />
-
-            <VSelect 
-              v-if="tipoModel=='Video'"
-              style="width: 17rem;"
+            <VSelect
+              v-if="desafiosItems.length > 0"
+              style="width: 16rem;"
               class="bg-white"
-              v-model:menu="selectRefVideo"
+              v-model="videosModel"
+              :items="desafiosItems"
               item-text="title"
               item-value="value"
-              v-model="videosModel" 
-              :items="videosItems"
               chips
-              attach
-              label="Desafíos de la semana"
-              no-data-text="No existen desafíos que mostrar"
-              :disabled="videosModelLoading"
-              :menu-props="{ maxHeight: '300' }">
-              <template v-slot:prepend-item>
-                <v-list-item>
-                  <v-list-item-content>
-                    <VTextField v-model="searchVideoModel" clearable placeholder="Buscar desafío"/>
-                  </v-list-item-content>
-                </v-list-item>
-                <v-divider class="mt-2"></v-divider>
-              </template>
-              <template #selection="{ item }">
-                    <div>
-                        {{ item.title }} - {{ item.value }}
-                    </div>
-                </template>
-                <template #item="{ item, props }">
-                    <v-list-item v-bind="props">
-                        <v-list-item-content>
-                            <v-list-item-subtitle>
-                                <p>_id: {{ item.value }}</p>
-                            </v-list-item-subtitle>
-                        </v-list-item-content>
-                    </v-list-item>
-                </template>
-            </VSelect>
-            <AppDateTimePicker 
-              v-if="tipoModel=='Fecha'"
-              clearable
-              class="d-none"
-              style="width: 19rem;"
-              label="Fecha de inicio y fin del curso" 
-              prepend-inner-icon="tabler-calendar" 
-              density="compact" 
-              v-model="fechaIFModel.fechasModel"
-              show-current=true 
-              @on-change="obtenerFechas" 
-              :config="{
-                  position: 'auto right',
-                  mode: 'range',
-                  altFormat: 'd F j, Y',
-                  maxDate: new Date,
-                  dateFormat: 'l, j \\d\\e F \\d\\e Y',
-                  valueFormat: 'd-m-Y',
-                  reactive: true
-              }" />
-
+              label="Seleccionar desafío"
+              :menu-props="{ maxHeight: '400' }"
+            />
           </div>
 
           <VSpacer />
 
           <div class="app-user-search-filter d-flex align-top justify-content-flex-end flex-wrap flex-column gap-0">
             <!-- 👉 Search  -->
-            
-
-            <!-- 👉 Export button -->
+            <!-- 👉 Export button @click="downloadSearch"-->
             <VBtn
               :loading="isFullLoading"
               :disabled="isFullLoading || loadingUsuarios"
               variant="tonal"
               color="success"
               prepend-icon="tabler-screen-share"
-              @click="downloadSearch"
+              
             >
               <span style="curso:pointer" v-if="tipoModel=='Fecha'" class="px-0 py-p m-0">Exportar búsqueda</span>
               <span style="curso:pointer" v-if="tipoModel=='Curso'" class="px-0 py-p m-0">Exportar curso</span>
@@ -956,28 +586,6 @@ async function obtenerDesafios(ids) {
           </div>
         </VCardText>
 
-
-        <!-- 👉 Add user button -->
-        <VRow class="pb-3 d-none">
-          <VCol cols="12" sm="2" lg="2" >
-            <VRow>
-              <VCol cols="10" sm="10" lg="10" >
-                <VTextField class="bg-white" v-model="modelSearch" label="Buscar...." type="text" clearable />
-              </VCol>
-              <VCol cols="2" sm="2" lg="2" >
-                <VBtn :loading="btnDisabled.loading" :disabled="btnDisabled.disabled" title="Buscar usuario" block @click="buscarUsuario">
-                  <VIcon
-                    :size="25"
-                    icon="tabler-search"
-                  />
-                </VBtn>
-              </VCol>
-            </VRow>
-          </VCol>
-          <VCol cols="3" sm="3" lg="3" >
-          </VCol>
-        </VRow>
-
         <small v-if="!videosModel" class="text-disabled">Se ha filtrado usuarios de de <b>{{ 
             modelCurso? (dataCurso.length > 0 ? dataCurso.filter(c => modelCurso.includes(c.value))[0].title: "" ) :""
           }}</b> , desde {{fechaIFModel.fechai}} hasta {{fechaIFModel.fechaf}} con un total de {{totalRegistros}} registros
@@ -987,7 +595,7 @@ async function obtenerDesafios(ids) {
             modelCurso? (dataCurso.length > 0 ? dataCurso.filter(c => modelCurso.includes(c.value))[0].title: "" ) :""
           }}</b> , sobre el video de <b>{{ videosItems.filter(c => videosModel == c.value)[0].title }}</b> con un total de {{totalRegistros}} registros
         </small>
-        
+        <!-- Tabla -->
         <VCard class="mt-1">
             <VTable class="text-no-wrap">
               <!-- 👉 table head -->
@@ -1172,26 +780,4 @@ async function obtenerDesafios(ids) {
     </VRow>
   </section>
 </template>
-<style lang="scss">
-  .app-user-search-filter {
-    /*inline-size: 31.6rem;*/
-  }
 
-  .text-capitalize {
-    text-transform: capitalize;
-  }
-
-  .user-list-name:not(:hover) {
-    color: rgba(var(--v-theme-on-background), var(--v-high-emphasis-opacity));
-  }
-
-  .bg-white .v-field{
-    background-color: rgb(var(--v-theme-surface));
-    border-radius: 6px;
-
-  }
-
-  .justify-content-flex-end{
-    justify-content: flex-end;
-  }
-</style>
