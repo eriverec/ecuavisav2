@@ -1,5 +1,4 @@
 <script setup>
-import { logAction } from '@/middleware/activityLogger';
 import { avatarText } from '@core/utils/formatters';
 import { parseISO } from 'date-fns';
 import { extendMoment } from 'moment-range';
@@ -257,13 +256,14 @@ async function obtenerDesafios(ids) {
       }));
       totalRegistros.value = data.total;
       totalPage.value = Math.ceil(data.total / data.limit);
-    } else {
-      configSnackbar.value = {
-        message: "No se pudo recuperar los usuarios, recargue de nuevo.",
-        type: "error",
-        model: true
-      };
-    }
+    } 
+    // else {
+    //   configSnackbar.value = {
+    //     message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+    //     type: "error",
+    //     model: true
+    //   };
+    // }
     loadingUsuarios.value = false;
   } catch (error) {
     configSnackbar.value = {
@@ -565,12 +565,14 @@ async function obtenerDesafios(ids) {
               variant="tonal"
               color="success"
               prepend-icon="tabler-screen-share"
+              class="d-none"
               
             >
               <span style="curso:pointer" v-if="tipoModel=='Fecha'" class="px-0 py-p m-0">Exportar búsqueda</span>
               <span style="curso:pointer" v-if="tipoModel=='Curso'" class="px-0 py-p m-0">Exportar curso</span>
               <span style="curso:pointer" v-if="tipoModel=='Video'" class="px-0 py-p m-0">Exportar búsqueda</span>
-            </VBtn>
+            </VBtn> 
+            
             <small class="px-0 py-1 text-disabled" v-if="isFullLoading">
               Exportando {{ docsExportNumberLength.tamanioActual }} / {{ docsExportNumberLength.tamanioTotal }} registros
             </small> 
@@ -687,44 +689,10 @@ async function obtenerDesafios(ids) {
                       />
                     </VBtn>
 
-                    <VBtn
-                      disabled="true"
-                      icon
-                      size="x-small"
-                      color="default"
-                      variant="text"
-                    >
-                      <VIcon
-                        size="22"
-                        icon="tabler-trash"
-                      />
-                    </VBtn>
+                   
+                      
 
-                    <VBtn
-                      disabled="true"
-                      icon
-                      size="x-small"
-                      color="default"
-                      variant="text"
-                    >
-                      <VIcon
-                        size="22"
-                        icon="tabler-dots-vertical"
-                      />
-
-                      <VMenu activator="parent">
-                        <VList>
-                          <VListItem
-                            title="View"
-                            :to="{ name: 'apps-user-view-id', params: { id: user.wylexId } }"
-                          />
-                          <VListItem
-                            title="Suspend"
-                            href="javascript:void(0)"
-                          />
-                        </VList>
-                      </VMenu>
-                    </VBtn>
+                   
                   </td>
                 </tr>
               </tbody>
