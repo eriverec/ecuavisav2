@@ -53,7 +53,62 @@ async function obtenerSemanas() {
         return [];
     }
 }
+// Agregar esta nueva función en la sección de <script setup>
+async function exportarTodosRegistros() {
+  isFullLoading.value = true;
+  try {
+    const fechaInicio = moment().subtract(1, 'year').format('YYYY-MM-DD'); // Un año atrás
+    const fechaFin = moment().format('YYYY-MM-DD'); // Hoy
+    
+    const url = `https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-suscritos/?fechai=${fechaInicio}&fechaf=${fechaFin}`;
+    
+    const response = await fetch(url);
+    const data = await response.json();
+    
+    if (data && Array.isArray(data.data)) {
+      const csvContent = [
+        ["Nombres", "Email", "Teléfono", "Fecha de Nacimiento", "Ciudad", "Fecha de Registro"],
+        ...data.data.map(user => [
+          `${user.first_name} ${user.last_name}`,
+          user.email,
+          user.telefono || user.phone_number || 'N/A',
+          user.birthDate || user.birth_date || 'N/A',
+          user.ciudad || 'N/A',
+          moment(user.created_at).format("YYYY-MM-DD HH:mm:ss")
+        ])
+      ].map(e => e.join(",")).join("\n");
 
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement("a");
+      if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", `todos_usuarios_registrados_${moment().format("YYYYMMDD_HHmmss")}.csv`);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+
+      configSnackbar.value = {
+        message: "Exportación de todos los registros completada con éxito.",
+        type: "success",
+        model: true
+      };
+    } else {
+      throw new Error("Datos no válidos recibidos del servidor");
+    }
+  } catch (error) {
+    console.error('Error al exportar todos los registros:', error);
+    configSnackbar.value = {
+      message: "Error al exportar todos los registros. Por favor, intente de nuevo.",
+      type: "error",
+      model: true
+    };
+  } finally {
+    isFullLoading.value = false;
+  }
+}
 // Función para obtener los desafíos
 async function obtenerDesafios(ids) {
     const url = 'https://servicio-desafios.vercel.app/desafios/search/ids';
@@ -136,17 +191,24 @@ watch(rowPerPage, () => {
   getUsuarios(currentPage.value, rowPerPage.value, modelCurso.value, videosModel.value)
 })
 
+// Modificar el watcher de modelCurso
 watch(modelCurso, async (newValue) => {
   if (newValue) {
     currentPage.value = 1
     const semanaSeleccionada = semanasItems.value.find(semana => semana.value === newValue)
     if (semanaSeleccionada && semanaSeleccionada.desafios) {
-      desafiosItems.value = await obtenerDesafios(semanaSeleccionada.desafios)
+      const desafiosObtenidos = await obtenerDesafios(semanaSeleccionada.desafios)
+      desafiosItems.value = [
+        // { title: "Todos", value: null },
+        ...desafiosObtenidos
+      ]
     }
+    videosModel.value = null // Resetear la selección de desafío
     await getUsuarios(currentPage.value, rowPerPage.value, newValue)
   } else {
     desafiosItems.value = []
     dataUsuarios.value = []
+    videosModel.value = null
   }
 })
 
@@ -270,7 +332,7 @@ async function exportarDatos() {
             />
             
             <VSelect
-              style="width: 16rem;"
+              style="width: 15rem;"
               class="bg-white"
               v-model:menu="selectRefModulo"
               no-data-text="No existen semanas que mostrar"
@@ -298,7 +360,7 @@ async function exportarDatos() {
             
             <VSelect
               v-if="desafiosItems.length > 0"
-              style="width: 16rem;"
+              style="width: 12rem;"
               class="bg-white"
               v-model="videosModel"
               :items="desafiosItems"
@@ -307,12 +369,29 @@ async function exportarDatos() {
               chips
               label="Seleccionar desafío"
               :menu-props="{ maxHeight: '400' }"
-            />
+            >
+              <template #selection="{ item }">
+                <div>{{ item.title }}</div>
+              </template>
+            </VSelect>
           </div>
 
           <VSpacer />
 
-          <div class="app-user-search-filter d-flex align-top justify-content-flex-end flex-wrap flex-column gap-0">
+          <div class="app-user-search-filter d-flex align-top">
+          
+            <VBtn
+              :loading="isFullLoading"
+              :disabled="isFullLoading || loadingUsuarios"
+              variant="tonal"
+              color="info"
+              class="mr-3"
+              prepend-icon="tabler-database-export"
+              @click="exportarTodosRegistros"
+            >
+              Exportar todo
+            </VBtn>
+
             <VBtn
               :loading="isFullLoading"
               :disabled="isFullLoading || loadingUsuarios"
@@ -321,8 +400,9 @@ async function exportarDatos() {
               prepend-icon="tabler-screen-share"
               @click="exportarDatos"
             >
-              Exportar datos
+              Exportar selección
             </VBtn>
+          
           </div>
         </VCardText>
 
