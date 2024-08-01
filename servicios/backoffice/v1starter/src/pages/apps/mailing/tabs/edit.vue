@@ -23,6 +23,19 @@ dataHorariosModel.value = [
 
 const horarios = ref([]);
 
+const linkForzadoList = ref([
+  {
+    "id":"66146103d6d9f2e80323e95e",
+    "name":"Última hora",
+    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-ultimahora/forzado.php"
+  },
+  {
+    "id":"64f9f5455c4a279b69ff2aca",
+    "name":"Newsletter Opinión",
+    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/opinion/forzado.php"
+  }
+]);
+
 onMounted(async()=>{
   await getNewsletter();
   await sendpulseAuth();
@@ -480,10 +493,115 @@ const onPreview = async (preview) => {
   iframePreview.value = preview;
 };
 
+
+const isDialogForzado = ref(false);
+const btnClickForzado = ref(null);
+const disabledForzado = ref(false);
+const linkForzado = ref(false);
+const accion = ref('')
+
+const forzadoClick = async () => {
+  try {
+      isDialogForzado.value = false;
+      disabledViewList.value = true;
+
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'POST',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(linkForzado.value, requestOptions);
+      const data = await response.json();
+      if(data.hasOwnProperty('resp')){
+        if(data.resp){
+          configSnackbar.value = {
+            message:"Newsletter creado y enviado",
+            type:"success",
+            model:true
+          };
+        }else{
+          configSnackbar.value = {
+            message:"Un error se presentó: "+data.message,
+            type:"error",
+            model:true
+          };
+        }
+      }else{
+        configSnackbar.value = {
+          message:"Un error se presentó: "+JSON.stringify(data),
+          type:"error",
+          model:true
+        };
+      }
+      
+      disabledViewList.value = false;
+  } catch (error) {
+      return console.error(error.message);    
+  }
+};
+
+const showForzadoSendDialog = async (id) => {
+  const ins = linkForzadoList.value.find(objeto => objeto.id === id);
+  if(ins){
+    if(ins.forzado != ''){
+      isDialogForzado.value = true;
+      accion.value = "forzado";
+      linkForzado.value = ins.forzado;
+    }
+  }else{
+    alert("El forzado no está configurado")
+  }
+}
+
+
+const showForzadoBtn = (id) => {
+  const ins = linkForzadoList.value.find(objeto => objeto.id === id);
+  // console.log(id, ins)
+  if(ins){
+    return true;
+  }else{
+    return false;
+  }
+}
+
 </script>
 
 <template>
   <section>
+    <VDialog
+        v-model="isDialogForzado"
+        persistent
+        class="v-dialog-sm"
+      >
+
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogForzado = !isDialogForzado" />
+
+      <!-- Dialog Content -->
+      <VCard title="Forzado">
+        <VCardText>
+          ¿Desea enviar el Newsletter ahora?
+        </VCardText>
+
+        <VCardText class="d-flex justify-end gap-3 flex-wrap">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            @click="isDialogForzado = false"
+          >
+            No, enviar
+          </VBtn>
+          <VBtn @click="forzadoClick">
+            Si, enviar
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
+
     <!-- tonal snackbar -->
     <VSnackbar
       v-model="configSnackbar.model"
@@ -658,6 +776,16 @@ const onPreview = async (preview) => {
               </VExpansionPanels>
               </VCardText>
               <VCardText class="d-flex justify-end flex-wrap gap-3">
+              <VBtn
+                v-if="showForzadoBtn(item._id) == true"
+                :disabled="disabledForzado"
+                :title="'Envío forzado: '+item.nombre"
+                class=""
+                @click="showForzadoSendDialog(item._id)"
+              >
+              Enviar forzado <VIcon size="22" icon="mdi-email-fast-outline" />
+              </VBtn>
+
               <VBtn @click="onPreview(item.preview)">
                 Vista previa
               </VBtn>
