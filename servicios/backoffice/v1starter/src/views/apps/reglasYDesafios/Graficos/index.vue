@@ -353,7 +353,7 @@ const expenseRationChartConfig = computed(() => getDonutChartConfig(vuetifyTheme
                         <div class="d-flex flex-column">
                           <VBtn color="success" size="small"
                             @click="downloadSearch(index, semanaSeleccionada, desafio.idDesafio)"
-                            :loading="cargandoDescarga[desafio.idDesafio]">
+                            :loading="cargandoDescarga[desafio.idDesafio]" :disabled="cargandoDescarga[desafio.idDesafio]">
                             <VIcon size="20" icon="tabler-download" />
                             CSV
                           </VBtn>
