@@ -1,8 +1,8 @@
 <script setup>
-import { ref, onMounted } from 'vue';
 import axios from 'axios';
-import VueApexCharts from 'vue3-apexcharts'
-import { useTheme } from 'vuetify'
+import { onMounted, ref } from 'vue';
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
 
 const semanas = ref([]);
 const semanaSeleccionada = ref('');
@@ -11,7 +11,10 @@ const items = ref([]);
 const totalUsuarios = ref([]);
 const series = ref([]);
 const desafios = ref([]);
-const cargando = ref(true); // Añadir estado de carga
+const cargando = ref(true);
+const registrosExportados = ref({});
+const totalRegistros = ref({});
+const cargandoDescarga = ref({});
 
 const obtenerSemanas = async () => {
   // cargando.value = true; // Iniciar carga
@@ -75,10 +78,40 @@ const obtenerTotalUsuarios = async () => {
   }
 };
 
+const obtenerTotalRegistros = async (idSemana, idDesafio) => {
+  try {
+    const response = await axios.get(`https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio}?page=1&limit=10`);
+    totalRegistros.value[idDesafio] = response.data.total;
+    registrosExportados.value[idDesafio] = 10;
+  } catch (error) {
+    console.error('Error al obtener el total de registros:', error);
+  }
+};
+
 
 const downloadSearch = async (index, idSemana, idDesafio) => {
+  cargandoDescarga.value[idDesafio] = true;
   try {
-    const response = await axios.get(`https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio}?page=1&limit=10000`);
+    // Cargar los primeros 3 registros
+    await obtenerTotalRegistros(idSemana, idDesafio);
+
+    // Simular la exportación en lotes de 10, actualizando el contador cada vez
+    let contador = 0;
+    const intervalo = setInterval(() => {
+      contador += 10; // Incrementar en lotes de 10
+      registrosExportados.value[idDesafio] = Math.min(contador, totalRegistros.value[idDesafio]);
+
+      if (contador >= totalRegistros.value[idDesafio]) {
+        clearInterval(intervalo); // Detener el intervalo cuando se alcanza el total
+      }
+    }, 100); // Actualizar cada 100 milisegundos
+
+    // Descargar todos los registros
+    const response = await axios.get(`https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio}?page=1&limit=${totalRegistros.value[idDesafio]}`);
+
+
+
+
 
     const csvData = response.data.data.map(item => {
       const user = item.userId;
@@ -99,8 +132,13 @@ const downloadSearch = async (index, idSemana, idDesafio) => {
       link.click();
       document.body.removeChild(link);
     }
+
+    // Resetear el contador de registros exportados
+    registrosExportados.value[idDesafio] = null;
   } catch (error) {
     console.error('Error al descargar los datos:', error);
+  } finally {
+    cargandoDescarga.value[idDesafio] = false;
   }
 };
 
@@ -286,22 +324,18 @@ const expenseRationChartConfig = computed(() => getDonutChartConfig(vuetifyTheme
                 <template v-for="(desafio, index) in desafios" :key="index">
                   <VListItem>
                     <template #prepend>
-                      <VAvatar rounded="sm" size="x-large"  class="">
+                      <VAvatar rounded="sm" size="x-large" class="">
                         <!-- <VIcon size="50" icon="tabler-video" /> -->
                         <VImg :src="desafio.URLSticker" />
                       </VAvatar>
                     </template>
                     <div style="width: 86%;">
                       <VListItemTitle>
-                         <VChip label size="x-small">
+                        <VChip label size="x-small">
                           {{ desafio.nombreDia }}
                         </VChip>
                         {{ desafio.tituloDesafio }} - {{ desafio.tituloSticker }}
                       </VListItemTitle>
-                      <VListItemSubtitle class="">
-                        
-                        <small></small>
-                      </VListItemSubtitle>
                       <VListItemSubtitle class=""
                         style="width: 100%;display: block;text-wrap: wrap;line-height: normal;">
                         <small>{{ desafio.leyenda }}</small>
@@ -310,12 +344,25 @@ const expenseRationChartConfig = computed(() => getDonutChartConfig(vuetifyTheme
                     </div>
 
                     <template #append>
-                      <div class="d-flex flex-column">
-                        <VBtn color="success" size="small"
-                          @click="downloadSearch(index, semanaSeleccionada, desafio.idDesafio)">
-                          <VIcon size="20" icon="tabler-download" />
-                          CSV
-                        </VBtn>
+                      <div class="d-flex gap-5">
+                        <div>
+                          <VListItemTitle>
+                            {{ desafio.total }}
+                          </VListItemTitle>
+                        </div>
+                        <div class="d-flex flex-column">
+                          <VBtn color="success" size="small"
+                            @click="downloadSearch(index, semanaSeleccionada, desafio.idDesafio)"
+                            :loading="cargandoDescarga[desafio.idDesafio]">
+                            <VIcon size="20" icon="tabler-download" />
+                            CSV
+                          </VBtn>
+                          <VChip v-if="registrosExportados[desafio.idDesafio]" size="x-small" class="mt-1">
+                            Exportando {{ registrosExportados[desafio.idDesafio] }} / {{
+                              totalRegistros[desafio.idDesafio] }} registros
+                          </VChip>
+                        </div>
+
                       </div>
                     </template>
 
