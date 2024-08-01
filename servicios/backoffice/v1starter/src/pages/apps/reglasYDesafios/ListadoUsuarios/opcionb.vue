@@ -228,7 +228,10 @@ const paginationData = computed(() => {
 // Lifecycle hooks
 onMounted(async () => {
   cursoModelLoading.value = true
-  semanasItems.value = await obtenerSemanas()
+  semanasItems.value = await obtenerSemanas();
+  setTimeout(function(){
+    modelCurso.value = semanasItems.value[0].value;
+  }, 700);
   cursoModelLoading.value = false
 })
 
