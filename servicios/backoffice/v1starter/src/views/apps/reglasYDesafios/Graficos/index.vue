@@ -67,9 +67,20 @@ const obtenerTotalUsuarios = async () => {
     // Ordenar los desafíos por día de la semana
     desafios.value.sort((a, b) => a.dia - b.dia);
 
+    console.log(desafios.value);
+
     totalUsuarios.value = response.data.data.map(item => item.total);
-    series.value = totalUsuarios.value;
-    labels.value = desafios.value.map(item => item.tituloDesafio);
+
+
+    /*van en el grafico */
+    // series.value = totalUsuarios.value;
+    series.value = desafios.value.map((ev)=> ev.total);
+    console.log("series:", series.value);
+    // labels.value = desafios.value.map(item => item.tituloDesafio);
+    labels.value = desafios.value.map((ev)=> ev.tituloDesafio);
+    console.log("labels:", labels.value);
+    /*van en el grafico */
+
 
   } catch (error) {
     console.error('Error al obtener el total de usuarios:', error);
@@ -344,10 +355,13 @@ const expenseRationChartConfig = computed(() => getDonutChartConfig(vuetifyTheme
                     </div>
 
                     <template #append>
-                      <div class="d-flex gap-5">
+                      <div class="d-flex gap-5 justify-center align-center">
                         <div>
                           <VListItemTitle>
-                            {{ desafio.total }}
+                            <div class="d-flex justify-center align-center">
+                              <VIcon size="18" icon="tabler-user" />
+                              {{ desafio.total }}
+                            </div>
                           </VListItemTitle>
                         </div>
                         <div class="d-flex flex-column">
