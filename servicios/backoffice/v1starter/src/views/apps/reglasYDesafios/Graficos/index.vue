@@ -67,7 +67,7 @@ const obtenerTotalUsuarios = async () => {
     // Ordenar los desafíos por día de la semana
     desafios.value.sort((a, b) => a.dia - b.dia);
 
-    console.log(desafios.value);
+
 
     totalUsuarios.value = response.data.data.map(item => item.total);
 
@@ -75,10 +75,10 @@ const obtenerTotalUsuarios = async () => {
     /*van en el grafico */
     // series.value = totalUsuarios.value;
     series.value = desafios.value.map((ev)=> ev.total);
-    console.log("series:", series.value);
+
     // labels.value = desafios.value.map(item => item.tituloDesafio);
     labels.value = desafios.value.map((ev)=> ev.tituloDesafio);
-    console.log("labels:", labels.value);
+  
     /*van en el grafico */
 
 
