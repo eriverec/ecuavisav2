@@ -44,7 +44,10 @@ const obtenerTotalUsuarios = async () => {
     //   data: desafios.value.map(ev => ev.total)
     // }];
 
-    labels.value = desafios.value.map(ev => ev.descripcion);
+    labels.value = desafios.value.map(ev => ev.titulo);
+    // labels.value = ["ECUAVISADOS"];
+
+    // console.log(labels.value)
 
     // Inicializar cargandoDescarga para cada desafío
     desafios.value.forEach(desafio => {
@@ -53,10 +56,25 @@ const obtenerTotalUsuarios = async () => {
 
 
     // Modificar la estructura de series para tener cada barra como una serie separada
-    series.value = desafios.value.map(ev => ({
-      name: ev.titulo,
-      data: [ev.total]
-    }));
+    // series.value = desafios.value.map(ev => ({
+    //   name: ev.titulo,
+    //   data: [ev.total]
+    // }));
+
+    // desafios.value.map(ev => ({
+    //   name: ev.titulo,
+    //   data: [ev.total]
+    // }));
+
+
+    series.value = [
+      {
+        name: "Semana 1",
+        data: desafios.value.map(e => e.total)
+      }
+    ]
+
+    console.log(series.value)
     // labels.value = desafios.value.map(ev => ev.titulo);
 
 
@@ -105,7 +123,7 @@ const descargarCSV = async (idSemanaDesafio) => {
 
 // Array de colores para las barras
 const colores = [
-  "#00CED1", "#00fa9a", "#7365ed", "#ff69b4", "#000f08",
+  "#826af9","#d2b0ff", "#2bc732", "#1c227b", "#fdc001", "#4682B4",
   "#FFA500", "#800080", "#008080", "#FF4500", "#4682B4",
   "#FF1493", "#32CD32", "#FF6347", "#00CED1", "#8B4513"
 ];
@@ -132,39 +150,44 @@ const borderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${v
 const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`
 
 // Función para configurar el gráfico de barras horizontales
-const getBarChartConfig = theme => {
+const getBarChartConfig = themeColors => {
+  const columnColors = {
+    series1: '#826af9',
+    series2: '#d2b0ff',
+    bg: '#f8d3ff',
+  }
+  const { themeSecondaryTextColor, themeBorderColor, themeDisabledTextColor } = colorVariables(themeColors)
   return {
     chart: {
       type: 'bar',
-      height: 350,
+      height: 410,
       toolbar: {
         show: false
       },
     },
     colors: colores,
-    fill: {
-      opacity: .9
+    fill: { 
+      opacity: 0.7
     },
 
     tooltip: {
-      y: {
-        formatter: function (val) {
-          return val + " Visitas"
-        }
-      },
+      // y: {
+      //   formatter: function (val) {
+      //     return val + " Visitas"
+      //   }
+      // },
       theme: false,
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+        console.log(series, seriesIndex, dataPointIndex, w)
         return `<div class="tooltip-content">
             <div class="tooltip-body">
               <div class="tooltip-title">
-                <span class="tooltip-data-value">${w.config.series[seriesIndex].name} </span>
-                   <br/>
-                ${w.config.xaxis.categories[seriesIndex]}
+                <span class="tooltip-data-value"> ${w.config.xaxis.categories[dataPointIndex]}  </span>
               </div>
               <div class="tooltip-data-flex">
                 <div class="tooltip-data-title">
                  <!-- ${w.config.series[seriesIndex].name}-->
-                 Total de usuarios
+                 Usuarios con el sticker:
                 </div>
                 <div class="tooltip-data-value">
                  ${series[seriesIndex][dataPointIndex]}
@@ -176,30 +199,34 @@ const getBarChartConfig = theme => {
     },
     plotOptions: {
       bar: {
-        borderRadius: 10,
-        horizontal: true,
+        // borderRadius: 20,
+        horizontal: false,
+        //columnWidth: '50%', // Adjust the column width to add spacing between bars
+        //endingShape: 'rounded', // Optional: to give bars rounded ends
+        columnWidth: '70%',
+        // barHeight: '50%',
         // distributed: true,
-        dataLabels: {
-          total: {
-            enabled: true,
-            offsetX: 0,
-            style: {
-              fontSize: '13px',
-              fontWeight: 900
-            }
-          }
-        }
+        // dataLabels: {
+        //   total: {
+        //     enabled: true,
+        //     offsetX: 0,
+        //     style: {
+        //       fontSize: '13px',
+        //       fontWeight: 900
+        //     }
+        //   }
+        // }
       }
     },
     grid: {
-          show: true,
-          padding: {
-            top: 0,
-            bottom: 0,
-            left: 0,
-            right: 0,
-          },
-        },
+      show: true,
+      padding: {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+      },
+    },
     dataLabels: {
       enabled: true,
       textAnchor: 'start',
@@ -208,34 +235,37 @@ const getBarChartConfig = theme => {
         const un = `${val}`
         return  un;
       },
-      dropShadow: { enabled: true },
+      // dropShadow: { enabled: true },
       style: {
-        fontSize: '15px',
-        colors: [legendColor],
-        fontWeight: '600',
+        fontSize: '14px',
+        colors: ["#fff"],
+        fontWeight: '400',
         fontFamily: 'Public Sans',
       },
     },
     xaxis: {
       categories: labels.value,
+      labels: {
+          show: true // This hides the x-axis labels
+      },
     },
 
     legend: {
       show: true,
       position: 'bottom',
-      labels: { colors: theme.colors['text-secondary'] },
+      labels: { colors: themeColors.colors['text-secondary'] },
     },
     yaxis: {
       title: {
-        text: 'Semanas de desafíos',
+        text: 'Usuarios que ganaron sus stickers por semana',
         style: {
-          fontSize: '16px',
+          fontSize: '12px',
           fontFamily: 'Public Sans',
           color: labelColor
         }
       },
       labels: {
-        show: false,
+        show: true,
         // offsetX: -15,
         style: {
           fontSize: '14px',
@@ -293,7 +323,10 @@ const barChartConfig = computed(() => getBarChartConfig(vuetifyTheme.current.val
           <VCardTitle class="ps-0 pb-0 d-flex align-center gap-2">
             <VIcon size="25" icon="tabler-database" /> Tasa de finalización semanal
           </VCardTitle>
-          <div class="py-9">
+          <small>
+            Usuarios que tienen sus stickers, ganados por semana.
+          </small>
+          <div class="py-4">
             <VueApexCharts type="bar" height="410" :options="barChartConfig" :series="series" />
           </div>
         </VCol>
@@ -303,19 +336,19 @@ const barChartConfig = computed(() => getBarChartConfig(vuetifyTheme.current.val
           <VCardTitle class="ps-0 pb-0 d-flex align-center gap-2">
             <VIcon size="25" icon="tabler-calendar-week" /> Semanas
           </VCardTitle>
-          <div class="bloquesemanas py-9">
+          <div class="bloquesemanas py-4">
             <div v-for="sem in desafios" :key="sem.idSemanaDesafio"
-              class="py-5 px-3 d-flex justify-center align-center flex-column text-center border border-1 rounded">
+              class="py-5 px-2 d-flex justify-center align-center flex-column text-center border border-1 rounded">
 
-              <h3>{{ sem.titulo }}</h3>
+              <h4 class="pb-3">{{ sem.titulo }}</h4>
 
               <span>{{ sem.descripcion }}</span>
 
-              <img width="100" :src="`${sem.imagen_descriptiva}`" :alt="`${sem.titulo}`">
+              <img width="100" class="opcion_semanas my-2 rounded" :src="`${sem.imagen_descriptiva}`" :alt="`${sem.titulo}`">
 
               <VBtn @click="descargarCSV(sem.idSemanaDesafio)" :loading="cargandoDescarga[sem.idSemanaDesafio]"
                 :disabled="cargandoDescarga[sem.idSemanaDesafio]" size="small" color="success" variant="tonal">
-                Descargar
+                Descargar ({{sem.total}})
               </VBtn>
 
 
@@ -346,6 +379,10 @@ const barChartConfig = computed(() => getBarChartConfig(vuetifyTheme.current.val
 </template>
 
 <style>
+  img.opcion_semanas {
+    background-color: #a1a1a130;
+}
+
 .v-theme--dark .apexcharts-legend-text {
   color: #fff !important;
 }
