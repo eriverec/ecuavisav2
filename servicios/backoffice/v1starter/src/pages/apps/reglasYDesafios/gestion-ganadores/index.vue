@@ -61,9 +61,9 @@
                             <VTextField label="Teléfono" v-model="newWinner.telephone" density="compact" />
                           </VCol>
                         </VForm>
-                        
+
                       </VCardText>
-                      
+
                       <VCardText class="d-flex justify-end">
                         <VBtn @click="sendData">Enviar</VBtn>
                       </VCardText>
@@ -126,14 +126,17 @@
 
                       <!-- 👉 Actions -->
                       <td class="text-center" style="width: 5rem">
-                        <VBtn icon size="x-small" color="default" variant="text">
+                        <VBtn icon size="x-small" color="default" variant="text"
+                          @click="deleteWinner(semana.name, winner.id)">
+                          <VIcon size="22" color="error" icon="tabler-trash" />
                         </VBtn>
+                        <VAlert v-if="error" type="error" class="mt-4">
+                          {{ error }}
+                        </VAlert>
 
-                        <VBtn icon size="x-small" color="default" variant="text">
-                          <VIcon size="22" icon="tabler-trash" />
-                        </VBtn>
-
-
+                        <VOverlay :model-value="isLoading" class="align-center justify-center">
+                          <VProgressCircular indeterminate size="64" />
+                        </VOverlay>
                       </td>
                     </tr>
                   </tbody>
@@ -146,13 +149,6 @@
         </VList>
       </VCardText>
     </VCard>
-
-
-
-
-
-
-
 
   </section>
 </template>
@@ -176,7 +172,11 @@ const data = ref([]);
 const weekOptions = ref([]);
 const searchQuery = ref('');
 const isDialogVisible = ref(false);
-const weekNameSelect = ref('') 
+const weekNameSelect = ref('');
+
+const isLoading = ref(false);
+const error = ref(null);
+
 // Nuevo ganador
 const newWinner = ref({
   id: '',
@@ -227,13 +227,11 @@ const handleClick = (weekName) => {
   console.log(`Nombre de la semana actual: ${weekNameSelect.value}`);
 };
 
-
-
 // Función para enviar datos
 const sendData = async () => {
   // Identificar la semana seleccionada
   const weekToUpdate = data.value.find(semana => semana.name === weekNameSelect.value);
-  console.log('weekToUpdate',weekToUpdate);
+  console.log('weekToUpdate', weekToUpdate);
   isDialogVisible.value = false;
 
   if (weekToUpdate) {
@@ -247,7 +245,7 @@ const sendData = async () => {
         }
       });
       console.log(response.data);
-      
+
     } catch (error) {
       console.error('Error sending data:', error);
     }
@@ -263,7 +261,38 @@ const sendData = async () => {
   }
 };
 
+const deleteWinner = async (weekName, winnerId) => {
+  if (confirm('¿Estás seguro de que quieres eliminar este ganador?')) {
+    // Encuentra la semana correcta
+    const weekToUpdate = data.value.find(semana => semana.name === weekName);
 
+    isLoading.value = true;
+    error.value = null;
+
+    try {
+      if (weekToUpdate) {
+        weekToUpdate.winners = weekToUpdate.winners.filter(winner => winner.id !== winnerId);
+        try {
+          // Envía los datos actualizados al servidor
+          const response = await axios.post('https://estadisticas.ecuavisa.com/sites/gestor/Tools/ecuavisados/ganador/ganador/add.php', data.value, {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+          console.log('Ganador eliminado:', response.data);
+        } catch (error) {
+          console.error('Error al eliminar ganador:', error);
+        }
+      }
+      isLoading.value = false;
+    } catch (err) {
+      console.error('Error al eliminar ganador:', err);
+      error.value = 'Hubo un error al eliminar el ganador. Por favor, intenta de nuevo.';
+      isLoading.value = false;
+
+    }
+  }
+};
 
 onMounted(() => {
   fetchData();
