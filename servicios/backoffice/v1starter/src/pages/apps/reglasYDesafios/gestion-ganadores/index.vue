@@ -30,7 +30,7 @@
                   <VDialog v-model="isDialogVisible" width="500">
                     <!-- Activator -->
                     <template #activator="{ props }">
-                      <VBtn @click="handleClick(semana.name)" v-bind="props" color="success"> Agregar </VBtn>
+                      <VBtn @click="handleClick(semana.name)" v-bind="props" color="success"> Agregar ganador </VBtn>
 
                     </template>
 
@@ -40,32 +40,74 @@
                     <!-- Dialog Content -->
                     <VCard :title="`Agregar ganador de la ${weekNameSelect}`">
                       <VCardText>
+                        <div class="d-flex gap-4 align-center">
+                          <VTextField v-model="searchTerm" @keyup.enter="startSearch($event)" style="max-width: 400px;"
+                            label="Buscar..." />
+                          <!-- <VBtn @click="startSearch" color="primary">
+                            Buscar
+                          </VBtn> -->
+
+                          <VBtn :loading="loadings[0]" :disabled="loadings[0]" color="primary" size="small"
+                            icon="tabler-search" @click="startSearch" />
+                          <VBtn color="secondary" variant="text" size="small" @click="clearSearchData">
+                            <VIcon start icon="tabler-restore" />
+                            Resetear
+                          </VBtn>
+                        </div>
                         <VForm ref="form">
                           <!-- <VCol cols="12">
                             <VSelect :items="weekOptions" v-model="selectedWeek" label="Seleccionar Semana"
                               density="compact" />
                           </VCol> -->
-                          <VCol cols="12">
-                            <VTextField label="ID" v-model="newWinner.id" density="compact" />
-                          </VCol>
-                          <VCol cols="12">
-                            <VTextField label="Nombre" v-model="newWinner.name" density="compact" />
-                          </VCol>
-                          <VCol cols="12">
-                            <VTextField label="Apellido" v-model="newWinner.surname" density="compact" />
-                          </VCol>
-                          <VCol cols="12">
-                            <VTextField label="Correo Electrónico" v-model="newWinner.email" density="compact" />
-                          </VCol>
-                          <VCol cols="12">
-                            <VTextField label="Teléfono" v-model="newWinner.telephone" density="compact" />
-                          </VCol>
+                          <!-- Lista de usuarios seleccionados -->
+                          <div v-if="selectedUsers.length > 0" class="mt-4">
+                            <h3>Usuarios seleccionados para guardar:</h3>
+                            <VChip v-for="user in selectedUsers" :key="user._id" class="ma-1" color="success" closable
+                              @click:close="selectUser(user)">
+                              {{ user.last_name + ' ' + user.first_name }}
+                            </VChip>
+                          </div>
+                          <div v-if="loading" style="height: 400px;" class="d-flex align-center justify-center ">
+                            Cargando...</div>
+                          <div v-else-if="searchResults.length > 0">
+                            <VTable style="width: 100%;" class="text-no-wrap tableNavegacion mb-5 mt-5" hover="true">
+                              <thead>
+                                <tr>
+                                  <th scope="col">USUARIO</th>
+                                  <th scope="col">CORREO</th>
+                                </tr>
+                              </thead>
+
+                              <tbody>
+                                <tr v-for="user in searchResults" :key="user._id"
+                                  :class="{ 'opacity-50': userClicked && userClickedId === user.wylexId }"
+                                  @click="selectUser(user)">
+                                  <td>
+                                    {{ (user.last_name + ' ' + user.first_name).length > 25 ? (user.last_name + ' ' +
+                                      user.first_name).substring(0,
+                                        25) + "..." : (user.last_name + ' ' + user.first_name) }}
+                                  </td>
+                                  <td class="text-medium-emphasis">
+                                    {{ user.email }}
+                                  </td>
+                                </tr>
+
+                              </tbody>
+
+
+                            </VTable>
+                            <VPagination v-if="total > limit" v-model="page" size="small" :total-visible="5"
+                              :length="totalPages" @update:model-value="updatePage" />
+
+                          </div>
+
                         </VForm>
 
                       </VCardText>
 
                       <VCardText class="d-flex justify-end">
-                        <VBtn @click="sendData">Enviar</VBtn>
+                        <div v-if="selectedUsers.length === 0"></div>
+                        <VBtn v-else size="small" @click="sendData" :disabled="selectedUsers.length === 0">Guardar</VBtn>
                       </VCardText>
                     </VCard>
                   </VDialog>
@@ -150,6 +192,16 @@
       </VCardText>
     </VCard>
 
+
+    <!-- SnackBar -->
+    <VSnackbar v-model="isSnackbarVisible" location="top" color="error">
+      No se han encontrado resultados
+    </VSnackbar>
+
+    <!-- SnackBar -->
+  <VSnackbar v-model="isSnackbarExito" location="top" color="success">
+    Información guardada con éxito
+  </VSnackbar>
   </section>
 </template>
 
@@ -232,11 +284,18 @@ const sendData = async () => {
   // Identificar la semana seleccionada
   const weekToUpdate = data.value.find(semana => semana.name === weekNameSelect.value);
   console.log('weekToUpdate', weekToUpdate);
-  isDialogVisible.value = false;
 
-  if (weekToUpdate) {
-    // Añadir el nuevo ganador a la lista de ganadores de la semana seleccionada
-    weekToUpdate.winners.push({ ...newWinner.value });
+  if (weekToUpdate && selectedUsers.value.length > 0) {
+
+    const newWinners = selectedUsers.value.map(user => ({
+      id: user.wylexId,
+      name: user.first_name,
+      surname: user.last_name,
+      email: user.email,
+      telephone: user.phone || ''
+    }));
+
+    weekToUpdate.winners = [...weekToUpdate.winners, ...newWinners];
 
     try {
       const response = await axios.post('https://estadisticas.ecuavisa.com/sites/gestor/Tools/ecuavisados/ganador/ganador/add.php', data.value, {
@@ -245,6 +304,10 @@ const sendData = async () => {
         }
       });
       console.log(response.data);
+      // Limpiar datos después de enviar
+      clearSearchData();
+      isDialogVisible.value = false;
+      isSnackbarExito.value = true;
 
     } catch (error) {
       console.error('Error sending data:', error);
@@ -293,6 +356,74 @@ const deleteWinner = async (weekName, winnerId) => {
     }
   }
 };
+
+const searchTerm = ref('');
+const searchResults = ref([]);
+const isSnackbarVisible = ref(false);
+const isSnackbarExito = ref(false);
+const loading = ref(false);
+const loadings = ref([]);
+const page = ref(1);
+const limit = ref(5);
+const total = ref(0);
+const totalPages = computed(() => Math.ceil(total.value / limit.value));
+const selectedUsers = ref([]);
+
+const startSearch = (event) => {
+  if (event) {
+    event.preventDefault(); // Previene el comportamiento por defecto
+  }
+  loadings.value[0] = true;
+  page.value = 1; // Reinicia la página a 1 al realizar una nueva búsqueda
+  searchResults.value = []; // Limpiar resultados anteriores
+  search();
+};
+
+const clearSearchData = () => {
+  searchTerm.value = '';
+  searchResults.value = [];
+  selectedUsers.value = [];
+};
+
+const search = async () => {
+  loading.value = true;
+  // searchResults.value = [];
+  try {
+    // const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${searchTerm.value}`);
+    const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${searchTerm.value}&page=${page.value}&limit=${limit.value}`);
+    const data = await response.json();
+    if (data.resp) {
+      searchResults.value = data.data;
+      total.value = data.total;
+    } else {
+      searchResults.value = [];
+      total.value = 0;
+      console.log("no hay nada para mostrar");
+      isSnackbarVisible.value = true;
+    }
+  } catch (error) {
+    console.error('Error al realizar la búsqueda:', error);
+  } finally {
+    loading.value = false;
+    loadings.value[0] = false;
+  }
+};
+
+const selectUser = (user) => {
+  const index = selectedUsers.value.findIndex(u => u._id === user._id);
+  if (index === -1) {
+    selectedUsers.value.push(user);
+  } else {
+    selectedUsers.value.splice(index, 1);
+  }
+};
+
+const updatePage = (newPage) => {
+  page.value = newPage;
+  search();
+};
+
+
 
 onMounted(() => {
   fetchData();
