@@ -60,22 +60,44 @@ async function exportarTodosRegistros() {
     const fechaInicio = moment().subtract(1, 'year').format('YYYY-MM-DD'); // Un año atrás
     const fechaFin = moment().format('YYYY-MM-DD'); // Hoy
     
-    const url = `https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-suscritos/?fechai=${fechaInicio}&fechaf=${fechaFin}`;
+    var page = 1;
+    var limit = 500;
+    var usuarios = [];
+    while(true){
+      const url = `https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-suscritos/?page=${page}&fechai=${fechaInicio}&fechaf=${fechaFin}&limit=${limit}`;
     
-    const response = await fetch(url);
-    const data = await response.json();
+      const response = await fetch(url);
+      const data = await response.json();
+
+      const batchQuery = data.data;
+      if (batchQuery.length === 0) {
+          break;
+      }
+      usuarios.push(...batchQuery);
+      page += 1;
+    }
     
-    if (data && Array.isArray(data.data)) {
+    
+    if (usuarios && Array.isArray(usuarios)) {
+      const headUser = ["_id","wylexId", "site", "site_id", "email", "first_name", "last_name","avatar","created_at","logged_at","logged_at_site","updated_at","validated_at","banned_at","country","phone_prefix","phone_number","gender","birth_date","identification_type","identification_number","newsletter_opt_in","provider","platform","created_in_os","created_at_suscriber_course","ciudad","telefono","birthDate","fecha_suscripcion_ecuavisados"];
+
       const csvContent = [
-        ["Nombres", "Email", "Teléfono", "Fecha de Nacimiento", "Ciudad", "Fecha de Registro"],
-        ...data.data.map(user => [
-          `${user.first_name} ${user.last_name}`,
-          user.email,
-          user.telefono || user.phone_number || 'N/A',
-          user.birthDate || user.birth_date || 'N/A',
-          user.ciudad || 'N/A',
-          moment(user.created_at).format("YYYY-MM-DD HH:mm:ss")
-        ])
+        headUser,
+        ...usuarios.map(user => {
+          var users = []
+          for(var i in headUser){
+            if("fecha_suscripcion_ecuavisados" == headUser[i]){
+              users.push(moment(user.subscribed).format("YYYY-MM-DD HH:mm:ss"));
+            }else{
+              users.push(user.userId[headUser[i]]);
+            }
+            
+
+            
+          }
+
+          return users;
+        })
       ].map(e => e.join(",")).join("\n");
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -268,17 +290,24 @@ async function exportarDatos() {
       page++
     }
 
-    const csvContent = [
-      ["Nombres", "Email", "Teléfono", "Fecha de Nacimiento", "Ciudad", "Fecha de Registro"],
-      ...allData.map(user => [
-        `${user.first_name} ${user.last_name}`,
-        user.email,
-        user.telefono || user.phone_number || 'N/A',
-        user.birthDate || user.birth_date || 'N/A',
-        user.ciudad || 'N/A',
-        moment(user.subscribed).format("YYYY-MM-DD HH:mm:ss")
-      ])
-    ].map(e => e.join(",")).join("\n")
+    const headUser = ["_id","wylexId", "site", "site_id", "email", "first_name", "last_name","avatar","created_at","logged_at","logged_at_site","updated_at","validated_at","banned_at","country","phone_prefix","phone_number","gender","birth_date","identification_type","identification_number","newsletter_opt_in","provider","platform","created_in_os","created_at_suscriber_course","ciudad","telefono","birthDate","fecha_suscripcion_ecuavisados"];
+
+      const csvContent = [
+        headUser,
+        ...allData.map(user => {
+          var users = []
+          for(var i in headUser){
+            if("fecha_suscripcion_ecuavisados" == headUser[i]){
+              users.push(moment(user.subscribed).format("YYYY-MM-DD HH:mm:ss"));
+            }else{
+              users.push(user[headUser[i]]);
+            }
+            
+          }
+
+          return users;
+        })
+      ].map(e => e.join(",")).join("\n");
 
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
     const link = document.createElement("a")
@@ -392,7 +421,7 @@ async function exportarDatos() {
               prepend-icon="tabler-database-export"
               @click="exportarTodosRegistros"
             >
-              Exportar todo
+              Exportar usuarios registrados
             </VBtn>
 
             <VBtn
