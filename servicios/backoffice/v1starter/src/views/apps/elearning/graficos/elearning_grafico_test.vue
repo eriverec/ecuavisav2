@@ -207,7 +207,7 @@ const resolveDevice = computed(() => {
       position: 'right',
       horizontalAlign: 'left',
       offsetX: 0,
-      width: 190,
+      width: 310,
       // height:200,
       markers: {
         width: 7,
@@ -215,7 +215,7 @@ const resolveDevice = computed(() => {
       },
       show: true,
       formatter: function (seriesName, opts) {
-        return [seriesName, " <br> ", `<div style="font-size:17px;color:${headingColor}">${opts.w.globals.series[opts.seriesIndex]} <small style="font-size:13px">usuarios</small></div>`]
+        return [seriesName, " <br> ", `<div style="font-size:17px;color:${headingColor}">${opts.w.globals.series[opts.seriesIndex]} <small style="font-size:13px">usuarios en el cual <b>${testTotalPorUsuario.value[opts.seriesIndex].cuestionario.noAprobados}</b> usuario(s) no pasó</small></div>`]
       },
       labels: {
         colors: themeDisabledTextColor_c,
@@ -863,7 +863,7 @@ async function getUsuariosExportar(page = 1, limit = 10, fechai, fechaf, idcuest
     <!-- <iframe src="https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/pie.html" width="100%"
   height="100%" frameborder="0"></iframe>  -->
     <VRow class="pb-5">
-      <VCol cols="12" md="5">
+      <VCol cols="12" md="6">
         <div class="ps-5">
           <VCardTitle class="ps-0 pb-0">Análisis de cursos sobre los test:</VCardTitle>
           <small>{{ cursoTitle.title }}</small>
@@ -874,7 +874,7 @@ async function getUsuariosExportar(page = 1, limit = 10, fechai, fechaf, idcuest
 
         </div>
       </VCol>
-      <VCol cols="12" md="7">
+      <VCol cols="12" md="6">
         <VCardTitle class="ps-0 pb-4">
           Filtros <VIcon
                     size="20"
