@@ -2,6 +2,7 @@
 import elearning_grafico_1 from '@/views/apps/elearning/graficos/elearning_grafico_1.vue';
 import elearning_grafico_curso_por_dia from '@/views/apps/elearning/graficos/elearning_grafico_curso_por_dia.vue';
 import elearning_grafico_por_video from '@/views/apps/elearning/graficos/elearning_grafico_por_video.vue';
+import elearning_grafico_test from '@/views/apps/elearning/graficos/elearning_grafico_test.vue';
 import ApexCharts from 'apexcharts';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -1286,6 +1287,10 @@ function filtroFechaCursosCompletados(selectedDates, dateStr, instance) {
 
     <VCol cols="12" md="12">
       <elearning_grafico_por_video />
+    </VCol>
+
+    <VCol cols="12" md="12">
+      <elearning_grafico_test />
     </VCol>
 
     <VCol cols="12" md="12">
