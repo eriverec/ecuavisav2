@@ -64,7 +64,7 @@ async function exportarTodosRegistros() {
     var limit = 500;
     var usuarios = [];
     while(true){
-      const url = `https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-suscritos/?page=${page}&fechai=${fechaInicio}&fechaf=${fechaFin}&limit=${limit}`;
+      const url = `https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-suscritos/?page=${page}&fechai=${fechaInicio}&fechaf=${fechaFin}&limit=${limit}`;
     
       const response = await fetch(url);
       const data = await response.json();
@@ -175,7 +175,7 @@ async function getUsuarios(page = 1, limit = 10, idSemana, idDesafio = null) {
       redirect: 'follow'
     };
 
-    let url = `https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio || 'null'}?page=${page}&limit=${limit}`;
+    let url = `https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio || 'null'}?page=${page}&limit=${limit}`;
 
     var response = await fetch(url, requestOptions);
     const data = await response.json();
@@ -275,7 +275,7 @@ async function exportarDatos() {
 
   try {
     while (true) {
-      const url = `https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${modelCurso.value}/${videosModel.value || 'null'}?page=${page}&limit=${limit}`
+      const url = `https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${modelCurso.value}/${videosModel.value || 'null'}?page=${page}&limit=${limit}`
       const response = await fetch(url)
       const data = await response.json()
 

@@ -54,7 +54,7 @@ const obtenerTotalUsuarios = async () => {
   if (!semanaSeleccionada.value) return;
 
   try {
-    const response = await axios.get(`https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-semana/${semanaSeleccionada.value}`);
+    const response = await axios.get(`https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-semana/${semanaSeleccionada.value}`);
 
 
     desafios.value = response.data.data.map(item => ({
@@ -91,7 +91,7 @@ const obtenerTotalUsuarios = async () => {
 
 const obtenerTotalRegistros = async (idSemana, idDesafio) => {
   try {
-    const response = await axios.get(`https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio}?page=1&limit=10`);
+    const response = await axios.get(`https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio}?page=1&limit=10`);
     totalRegistros.value[idDesafio] = response.data.total;
     registrosExportados.value[idDesafio] = 10;
   } catch (error) {
@@ -118,7 +118,7 @@ const downloadSearch = async (index, idSemana, idDesafio) => {
     }, 100); // Actualizar cada 100 milisegundos
 
     // Descargar todos los registros
-    const response = await axios.get(`https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio}?page=1&limit=${totalRegistros.value[idDesafio]}`);
+    const response = await axios.get(`https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio}?page=1&limit=${totalRegistros.value[idDesafio]}`);
 
 
 

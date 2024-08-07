@@ -243,7 +243,7 @@ async function obtenerDesafios(ids) {
       redirect: 'follow'
     };
 
-    let url = `https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio || 'null'}?page=${page}&limit=${limit}`;
+    let url = `https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio || 'null'}?page=${page}&limit=${limit}`;
 
     var response = await fetch(url, requestOptions);
     const data = await response.json();

@@ -22,7 +22,7 @@ const obtenerTotalUsuarios = async () => {
   // if (!semanaSeleccionada.value) return;
 
   try {
-    const response = await axios.get(`https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-agrupado-x-semana`);
+    const response = await axios.get(`https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-agrupado-x-semana`);
 
     desafios.value = response.data.data.map(item => ({
       ...item.semana[0],
@@ -91,7 +91,7 @@ onMounted(obtenerTotalUsuarios);
 const descargarCSV = async (idSemanaDesafio) => {
   cargandoDescarga.value[idSemanaDesafio] = true;
   try {
-    const response = await axios.get(`https://servicios-ecuavisa.vercel.app/grafico-backoffice/usuarios-x-semana-listado/${idSemanaDesafio}?page=1&limit=20`);
+    const response = await axios.get(`https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-semana-listado/${idSemanaDesafio}?page=1&limit=20`);
     const data = response.data.data;
 
     // Convertir los datos a CSV
