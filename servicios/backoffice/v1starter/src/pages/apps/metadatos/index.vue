@@ -138,7 +138,7 @@ async function getMetadatos(fechai = '', fechaf = '') {
     // metadatosFetch.push(...data.data);
     skip += 1;
   }
-    console.log(metadatos.value)
+    // console.log(metadatos.value)
 
 
   // isLoading.value = false;
@@ -194,7 +194,11 @@ onMounted(async() => {
   let fechaF = selectedCombo.i.format('YYYY-MM-DD');
   fechaIni.value = fechaI;
   fechaFin.value = fechaF;
+
+
+  isLoading.value = true;
   await getMetadatos(fechaI, fechaF);
+  isLoading.value = false;
   /*
   await accionBackoffice({
             "usuario": userBackoffice.value.email,   
@@ -249,7 +253,10 @@ async function obtenerPorFechaMeta(selectedDates) {
       let fechaF = moment(selectedDates[1]).format('YYYY-MM-DD');
       fechaIni.value = fechaI;
       fechaFin.value = fechaF;
+
+      isLoading.value = true;
       await getMetadatos(fechaI, fechaF);
+      isLoading.value = false;
       //panelGrafico.classList.remove("disabled");                       
     }
   } catch (error) {
@@ -668,8 +675,6 @@ async function downloadSelection() {
 };
 
 watch(async () => selectedfechaIniFin.value, async () => {
-
-  isLoading.value = true;
   let selectedCombo = useSelectValueCalendar(selectedfechaIniFin.value);
   fecha.value = {
       i: selectedCombo.i,
@@ -682,8 +687,10 @@ watch(async () => selectedfechaIniFin.value, async () => {
   let fechaF = selectedCombo.i.format('YYYY-MM-DD');
   fechaIni.value = fechaI;
   fechaFin.value = fechaF;
-  await getMetadatos(fechaI, fechaF);
 
+  isLoading.value = true;
+  await getMetadatos(fechaI, fechaF);
+  isLoading.value = false;
 });
 
 </script>
