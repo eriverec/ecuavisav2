@@ -44,11 +44,24 @@ const tabs = [
 ]
 */
 
+const configSnackbar = ref({
+    message: "Datos guardados",
+    type: "success",
+    model: false
+});
+
 const fetchId = () => {
-userListStore.fetchUser(Number(route.params.id)).then(response => {
-  userData.value = response.data; 
-  console.log(response.data);
-})
+  userListStore.fetchUser(Number(route.params.id)).then(response => {
+    userData.value = response.data; 
+    console.log(response.data);
+  }).catch(error => {
+    configSnackbar.value = {
+        message: "No se pudo recuperar el usuario, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
+  })
 };
 watchEffect(fetchId); 
 
@@ -65,7 +78,9 @@ async function accionBackoffice (logData){
 			};
 			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
 			.then(response =>{			
-			}).catch(error => console.log('error', error));
+			}).catch(error => {
+        console.log('error', error)
+      });
 		}
 };
 /*
@@ -92,85 +107,95 @@ const reloadP = () =>  {
 </script>
 
 <template>
-  <VRow v-if="userData">
-    <VCol
-      cols="12"
-      md="5"
-      lg="4"
-    >
-      <UserBioPanel :user-data="userData"
-      @reload = "delayed"/>
+  <section>
+    <VSnackbar 
+      v-model="configSnackbar.model" 
+      location="top end" 
+      variant="flat" 
+      :timeout="configSnackbar.timeout || 2000" 
+      :color="configSnackbar.type">
+        {{ configSnackbar.message }}
+      </VSnackbar>
+    <VRow v-if="userData">
+      <VCol
+        cols="12"
+        md="5"
+        lg="4"
+      >
+        <UserBioPanel :user-data="userData"
+        @reload = "delayed"/>
+      </VCol>
+
+      <VCol
+        cols="12"
+        md="7"
+        lg="8"
+      >
+      <UserTabOverview :user-data="userData"/>
+      <!-- <UserTemas /> -->
     </VCol>
 
     <VCol
-      cols="12"
-      md="7"
-      lg="8"
-    >
-    <UserTabOverview :user-data="userData"/>
-    <!-- <UserTemas /> -->
-  </VCol>
-
-  <VCol
-      cols="12"
-      md="7"
-      lg="12"
-      style="display: none;"
-    >
-    <UserNotifications/>
-    <UserSugerencias/>
-  </VCol>
-  
-    
-    
-    
- 
-    <!--
-      <VTabs
-        v-model="userTab"
-        class="v-tabs-pill"
+        cols="12"
+        md="7"
+        lg="12"
+        style="display: none;"
       >
-        <VTab
-          v-for="tab in tabs"
-          :key="tab.icon"
-        >
-          <VIcon
-            :size="18"
-            :icon="tab.icon"
-            class="me-1"
-          />
-          <span>{{ tab.title }}</span>
-        </VTab>
-      </VTabs>
--->
-<!--
-      <VWindow
-        v-model="userTab"
-        class="mt-6 disable-tab-transition"
-        :touch="false"
-      >
-        <VWindowItem>
-          <UserTabOverview />
-        </VWindowItem>
-      </VWindow>
-
-        <VWindowItem>
-          <UserTabSecurity />
-        </VWindowItem>
-
-        <VWindowItem>
-          <UserTabBillingsPlans />
-        </VWindowItem>
-
-        <VWindowItem>
-          <UserTabNotifications />
-        </VWindowItem>
-
-        <VWindowItem>
-          <UserTabConnections />
-        </VWindowItem>
-      </VWindow>
-    -->
+      <UserNotifications/>
+      <UserSugerencias/>
+    </VCol>
+    
+      
+      
+      
    
-  </VRow>
+      <!--
+        <VTabs
+          v-model="userTab"
+          class="v-tabs-pill"
+        >
+          <VTab
+            v-for="tab in tabs"
+            :key="tab.icon"
+          >
+            <VIcon
+              :size="18"
+              :icon="tab.icon"
+              class="me-1"
+            />
+            <span>{{ tab.title }}</span>
+          </VTab>
+        </VTabs>
+  -->
+  <!--
+        <VWindow
+          v-model="userTab"
+          class="mt-6 disable-tab-transition"
+          :touch="false"
+        >
+          <VWindowItem>
+            <UserTabOverview />
+          </VWindowItem>
+        </VWindow>
+
+          <VWindowItem>
+            <UserTabSecurity />
+          </VWindowItem>
+
+          <VWindowItem>
+            <UserTabBillingsPlans />
+          </VWindowItem>
+
+          <VWindowItem>
+            <UserTabNotifications />
+          </VWindowItem>
+
+          <VWindowItem>
+            <UserTabConnections />
+          </VWindowItem>
+        </VWindow>
+      -->
+     
+    </VRow>
+  </section>
 </template>

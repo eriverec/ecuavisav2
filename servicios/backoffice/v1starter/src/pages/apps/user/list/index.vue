@@ -29,6 +29,12 @@ const totalDevicesFacebook = ref(0);
 const totalDevicesGoogle = ref(0);
 const totalDevicesApple = ref(0);
 
+const configSnackbar = ref({
+    message: "Datos guardados",
+    type: "success",
+    model: false
+});
+
 const headersGlobal = ref({
   _id: "_id",
   wylexId: "wylexId",
@@ -125,7 +131,13 @@ const fetchUsers = () => {
   try {
 
     if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-      alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
+      configSnackbar.value = {
+          message: "Existe una exportación en curso, por favor espere antes de realizar un filtro",
+          type: "error",
+          timeout: 4000,
+          model: true
+      };
+      // alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
       return true;
     }
 
@@ -199,9 +211,23 @@ const fetchUsers = () => {
               }
            
             })
-            .catch((error) => console.log("error", error));
+            .catch((error) => {
+              configSnackbar.value = {
+                  message: "No se pudo vincular el usuario con el de sendpulse, por favor intente nuevamente.",
+                  type: "error",
+                  timeout: 4000,
+                  model: true
+              };
+              console.log("error", error)
+            });
         })
         .catch(function (error) {
+          configSnackbar.value = {
+              message: "No se pudo crear el token de sendpulse, por favor intente nuevamente.",
+              type: "error",
+              timeout: 4000,
+              model: true
+          };
           console.log(error);
         });
         /*CODIGO */
@@ -215,6 +241,12 @@ const fetchUsers = () => {
     });
        
   } catch (error) {
+    configSnackbar.value = {
+        message: "No se pudo recuperar los usuarios, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
     console.error(error);
   }
 };
@@ -299,7 +331,13 @@ countUsers();
 
 const searchUsers = () => {
   if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
+    configSnackbar.value = {
+        message: "Existe una exportación en curso, por favor espere antes de realizar un filtro",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
+    // alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
     return true;
   }
   if (searchQuery.value) {
@@ -312,7 +350,13 @@ const searchUsers = () => {
 
 const reset = () => {
   if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
+    configSnackbar.value = {
+        message: "Existe una exportación en curso, por favor espere antes de realizar un filtro",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
+    // alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
     return true;
   }
 
@@ -334,7 +378,13 @@ onMounted(async () => {
 
 watch(async () => page.value, async (newValue, oldValue) => {
   if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
+    configSnackbar.value = {
+        message: "Existe una exportación en curso, por favor espere antes de realizar un filtro",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
+    // alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
     return false;
   }
   // if (page.value > totalPage.value) {
@@ -345,7 +395,13 @@ watch(async () => page.value, async (newValue, oldValue) => {
 
 watch(async () => rowPerPage.value, async (newValue, oldValue) => {
   if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
+    configSnackbar.value = {
+        message: "Existe una exportación en curso, por favor espere antes de realizar un filtro",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
+    // alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
     return false;
   }
   fetchUsers();
@@ -353,7 +409,13 @@ watch(async () => rowPerPage.value, async (newValue, oldValue) => {
 
 watch(async () => selectedProvider.value, async (newValue, oldValue) => {
   if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
+    configSnackbar.value = {
+        message: "Existe una exportación en curso, por favor espere antes de realizar un filtro",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
+    // alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
     return false;
   }
   fetchUsers();
@@ -787,7 +849,13 @@ async function downloadFull () {
    // }
   } catch (error) {
       console.log(error)
-      alert("Existe un error al intentar exportar la data, intente nuevamente");
+      configSnackbar.value = {
+          message: "Existe un error al intentar exportar la data, intente nuevamente",
+          type: "error",
+          timeout: 4000,
+          model: true
+      };
+      // alert("Existe un error al intentar exportar la data, intente nuevamente");
       sectionDisabled(false);
   }
 };
@@ -835,7 +903,13 @@ async function downloadSection(){
     sectionDisabled(false);
   } catch (error) {
       console.log(error)
-      alert("Existe un error al intentar exportar la data, intente nuevamente");
+      configSnackbar.value = {
+          message: "Existe un error al intentar exportar la data, intente nuevamente",
+          type: "error",
+          timeout: 4000,
+          model: true
+      };
+      // alert("Existe un error al intentar exportar la data, intente nuevamente");
       sectionDisabled(false);
   }
 };
@@ -909,14 +983,26 @@ async function downloadSearch(){
     sectionDisabled(false);
   } catch (error) {
       console.log(error)
-      alert("Existe un error al intentar exportar la data, intente nuevamente");
+      configSnackbar.value = {
+          message: "Existe un error al intentar exportar la data, intente nuevamente",
+          type: "error",
+          timeout: 4000,
+          model: true
+      };
+      // alert("Existe un error al intentar exportar la data, intente nuevamente");
       sectionDisabled(false);
   }
 };
 
 const sortTable = (column) => {
   if(disabledBtnExportAll.value == true && disabledBtnExportSection.value == true && disabledBtnExportSearch.value == true){
-    alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
+    configSnackbar.value = {
+        message: "Existe una exportación en curso, por favor espere antes de realizar un filtro",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
+    // alert("Existe una exportación en curso, por favor espere antes de realizar un filtro");
     return true;
   }
 
@@ -946,7 +1032,15 @@ async function onConfirmUsersDeleteActive (id){
         .then(data => {
         deleteShowUsers.value = data;   
     })
-    .catch(error => {return error});
+    .catch(error => {
+      configSnackbar.value = {
+          message: "No se pudo eliminar el usuario, por favor intente nuevamente.",
+          type: "error",
+          timeout: 4000,
+          model: true
+      };
+      return error;
+    });
     isUsersDeleteConfirmVisible.value = true;  
 }
 
@@ -964,14 +1058,30 @@ async function onFormUsersDeleteSend  (){
         .then(data => {     
         return true;             
     })
-    .catch(error => {return error}); 
+    .catch(error => {
+      configSnackbar.value = {
+          message: "No se pudo eliminar el usuario, por favor intente nuevamente.",
+          type: "error",
+          timeout: 4000,
+          model: true
+      };
+      return error
+    }); 
 
   await fetch('https://servicio-delete.vercel.app/delete?id='+id,requestOptions)
         .then(response => response.json())
         .then(data => {
         return true;             
     })
-    .catch(error => {return error});   
+    .catch(error => {
+      configSnackbar.value = {
+          message: "No se pudo eliminar el usuario, por favor intente nuevamente.",
+          type: "error",
+          timeout: 4000,
+          model: true
+      };
+      return error
+    });   
     isUsersDeleteConfirmVisible.value = false;  
     deleteShowUsers.value = {};  
     fetchUsers(); 
@@ -1001,6 +1111,14 @@ const resolveFechaSelected = (fechas) => {
 
 <template>
   <section>
+    <VSnackbar 
+    v-model="configSnackbar.model" 
+    location="top end" 
+    variant="flat" 
+    :timeout="configSnackbar.timeout || 2000" 
+    :color="configSnackbar.type">
+      {{ configSnackbar.message }}
+    </VSnackbar>
     <VRow>
       <VCol class="mr-6"
     

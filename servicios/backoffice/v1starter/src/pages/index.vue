@@ -17,6 +17,12 @@ import { onUnmounted, ref } from "vue";
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 
+const configSnackbar = ref({
+    message: "Datos guardados",
+    type: "success",
+    model: false
+});
+
 // obtenemoms el rol para verificarlo
 const rol = localStorage.getItem('role');
 
@@ -194,7 +200,14 @@ const userTab = ref(null)
 
 userListStore.fetchUser(Number(route.params.id)).then(response => {
   userData.value = response.data
-})
+}).catch(error => {
+  configSnackbar.value = {
+      message: "No se pudo recuperar los usuarios, por favor intente nuevamente.",
+      type: "error",
+      timeout: 4000,
+      model: true
+  };
+});
 
 countUsers();
 const userListMeta = [
@@ -692,38 +705,65 @@ const isDialogVisible = ref(false)
 
 // Grafico general tiempo
 const fetchGeneral = async () => {
-  // const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime=10')
-  // const data = await response.json();
-  // dataGeneral.value = data;
+  try{
+    // const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime=10')
+    // const data = await response.json();
+    // dataGeneral.value = data;
 
-  const response = await axios.get('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime=10');
-  const apiData = response.data;
-  dataGeneral.value = apiData;
+    const response = await axios.get('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime=10');
+    const apiData = response.data;
+    dataGeneral.value = apiData;
 
-  // console.log(apiData);
+    // console.log(apiData);
 
-  const seriesData = Object.entries(apiData).map(([timestamp, value]) => {
-    const time = timestamp.split(' ')[1];
-    const [hour, minute] = time.split(':');
-    const timestampInMilliseconds = new Date(0, 0, 0, hour, minute).getTime();
-    return [timestampInMilliseconds, value];
-  });
-  chartSeries.value = [{ name: 'Seccion', data: seriesData }];
+    const seriesData = Object.entries(apiData).map(([timestamp, value]) => {
+      const time = timestamp.split(' ')[1];
+      const [hour, minute] = time.split(':');
+      const timestampInMilliseconds = new Date(0, 0, 0, hour, minute).getTime();
+      return [timestampInMilliseconds, value];
+    });
+    chartSeries.value = [{ name: 'Seccion', data: seriesData }];
+  }catch(error){
+    configSnackbar.value = {
+        message: "No se pudo recuperar los datos de RealTime, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
+  }
 }
 // Grafico Devise
 const fetchDevice = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?device')
-  const data = await response.json();
-  dataDevice.value = data.slice(0, 10);
-  if (dataDevice.value.length > 0) {
-    deviceLength.value = true;
+  try{
+    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?device')
+    const data = await response.json();
+    dataDevice.value = data.slice(0, 10);
+    if (dataDevice.value.length > 0) {
+      deviceLength.value = true;
+    }
+  }catch(error){
+    configSnackbar.value = {
+        message: "No se pudo recuperar los datos de RealTime, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
   }
 }
 
 const fetchConteov2 = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupUsers')
-  const data = await response.json();
-  sumV.value = data.length;
+  try{
+    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupUsers')
+    const data = await response.json();
+    sumV.value = data.length;
+  }catch(error){
+    configSnackbar.value = {
+        message: "No se pudo recuperar los datos de RealTime, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
+  }
 }
 
 function contarSecuencial(inicio, fin, tiempoTotal) {
@@ -744,57 +784,106 @@ function contarSecuencial(inicio, fin, tiempoTotal) {
 }
 
 const fetchEntries = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?grouped=10')
-  const data = await response.json()
-  entries.value = data;
-  // console.log(entries.value);
-  dataChart.value = data.slice(0, 10);
-  const ty = (entries.value).map((item) => (
-    totalVisits.value = JSON.parse(item.visits)
-  ));
-  var totalTemSumV = ty.reduce((acc, item) => acc + item, 0);
+  try{
+    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?grouped=10')
+    const data = await response.json()
+    entries.value = data;
+    // console.log(entries.value);
+    dataChart.value = data.slice(0, 10);
+    const ty = (entries.value).map((item) => (
+      totalVisits.value = JSON.parse(item.visits)
+    ));
+    var totalTemSumV = ty.reduce((acc, item) => acc + item, 0);
 
-  if (sumV.value !== totalTemSumV) {
-    // contarSecuencial(sumV.value, totalTemSumV, 2000);
-  }
+    if (sumV.value !== totalTemSumV) {
+      // contarSecuencial(sumV.value, totalTemSumV, 2000);
+    }
 
-  if (dataChart.value.length > 0) {
-    entriesLength.value = true;
+    if (dataChart.value.length > 0) {
+      entriesLength.value = true;
+    }
+  }catch(error){
+    configSnackbar.value = {
+        message: "No se pudo recuperar los datos de RealTime, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
   }
+  
 }
 
 // Grafico Metadatos
 const fetchMetadato = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?metadato')
-  const data = await response.json();
-  dataMetadato.value = data.slice(0, 10);
-  // console.log(dataMetadato.value);
-  if (dataMetadato.value.length > 0) {
-    metadatoLength.value = true;
+  try{
+    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?metadato')
+    const data = await response.json();
+    dataMetadato.value = data.slice(0, 10);
+    // console.log(dataMetadato.value);
+    if (dataMetadato.value.length > 0) {
+      metadatoLength.value = true;
+    }
+  }catch(error){
+    configSnackbar.value = {
+        message: "No se pudo recuperar los datos de RealTime, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
   }
 }
 
 // Grafico Section
 const fetchSection = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?section')
-  const data = await response.json();
-  dataSection.value = data.slice(0, 10);
-  // console.log(dataMetadato.value);
-  if (dataMetadato.value.length > 0) {
-    sectionLength.value = true;
+  try{
+    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?section')
+    const data = await response.json();
+    dataSection.value = data.slice(0, 10);
+    // console.log(dataMetadato.value);
+    if (dataMetadato.value.length > 0) {
+      sectionLength.value = true;
+    }
+  }catch(error){
+    configSnackbar.value = {
+        message: "No se pudo recuperar los datos de RealTime, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
   }
+  
 }
 
 const fetchRegisters = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?entries')
-  const data = await response.json()
-  registers.value = data;
+  try{
+    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?entries')
+    const data = await response.json()
+    registers.value = data;
+  }catch(error){
+    configSnackbar.value = {
+        message: "No se pudo recuperar los datos de RealTime, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
+  }
+  
 }
 
 const resetEntries = async () => {
-  const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/reset.php')
-  // const data = await response.json()
-  console.log("se reseteó el módulo correctamente")
+  try{
+    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/reset.php')
+    // const data = await response.json()
+    console.log("se reseteó el módulo correctamente")
+  }catch(error){
+    configSnackbar.value = {
+        message: "No se pudo recuperar los datos de RealTime, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
+  }
+  
 }
 
 
@@ -956,6 +1045,15 @@ const goToLink = (link) => {
 
 <template>
   <section>
+    <VSnackbar 
+    v-model="configSnackbar.model" 
+    location="top end" 
+    variant="flat" 
+    :timeout="configSnackbar.timeout || 2000" 
+    :color="configSnackbar.type">
+      {{ configSnackbar.message }}
+    </VSnackbar>
+
     <VRow>
       <VCol class="mr-6" v-for="meta in userListMeta" :key="meta.title" cols="12" sm="12" lg="2">
         <VCard class="col-12 col-sm- col-lg-2 tarjeta">
