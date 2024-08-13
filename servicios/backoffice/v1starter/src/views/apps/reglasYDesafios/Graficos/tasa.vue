@@ -74,7 +74,6 @@ const obtenerTotalUsuarios = async () => {
       }
     ]
 
-    console.log(series.value)
     // labels.value = desafios.value.map(ev => ev.titulo);
 
 
@@ -178,7 +177,7 @@ const getBarChartConfig = themeColors => {
       // },
       theme: false,
       custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-        console.log(series, seriesIndex, dataPointIndex, w)
+        // console.log(series, seriesIndex, dataPointIndex, w)
         return `<div class="tooltip-content">
             <div class="tooltip-body">
               <div class="tooltip-title">

@@ -109,6 +109,18 @@ export default [
     ],
   },
 
+  {
+    title: 'Ecuavisados',
+    icon: { icon: 'tabler-bulb' },
+    children: [
+      { title: 'Fidelización', to: 'apps-reglasYDesafios-gestion-full' },
+      { title: 'Analítica', to: 'apps-reglasYDesafios-analitica' },
+      { title: 'Ganadores', to: 'apps-reglasYDesafios-gestion-ganadores' },
+
+      
+    ],
+  },
+
   // {
   //   title: 'Recompensas',
   //   icon: { icon: 'tabler-award-filled' },

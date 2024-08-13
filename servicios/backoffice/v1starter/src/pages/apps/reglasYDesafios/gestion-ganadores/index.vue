@@ -245,7 +245,6 @@ const fetchData = async () => {
   try {
     const response = await axios.get('https://estadisticas.ecuavisa.com/sites/gestor/Tools/ecuavisados/ganador/ganador/listar_backoffice.php');
     data.value = response.data;
-    console.log(data.value);
 
     // Llenar weekOptions con los nombres de las semanas
     weekOptions.value = data.value.map(semana => semana.name);
@@ -276,14 +275,14 @@ const filteredWinners = (winners) => {
 // Función para manejar el clic en el botón
 const handleClick = (weekName) => {
   weekNameSelect.value = weekName
-  console.log(`Nombre de la semana actual: ${weekNameSelect.value}`);
+  // console.log(`Nombre de la semana actual: ${weekNameSelect.value}`);
 };
 
 // Función para enviar datos
 const sendData = async () => {
   // Identificar la semana seleccionada
   const weekToUpdate = data.value.find(semana => semana.name === weekNameSelect.value);
-  console.log('weekToUpdate', weekToUpdate);
+  // console.log('weekToUpdate', weekToUpdate);
 
   if (weekToUpdate && selectedUsers.value.length > 0) {
 
@@ -303,7 +302,7 @@ const sendData = async () => {
           'Content-Type': 'application/json'
         }
       });
-      console.log(response.data);
+      // console.log(response.data);
       // Limpiar datos después de enviar
       clearSearchData();
       isDialogVisible.value = false;
@@ -342,7 +341,7 @@ const deleteWinner = async (weekName, winnerId) => {
               'Content-Type': 'application/json'
             }
           });
-          console.log('Ganador eliminado:', response.data);
+          // console.log('Ganador eliminado:', response.data);
         } catch (error) {
           console.error('Error al eliminar ganador:', error);
         }
@@ -398,7 +397,6 @@ const search = async () => {
     } else {
       searchResults.value = [];
       total.value = 0;
-      console.log("no hay nada para mostrar");
       isSnackbarVisible.value = true;
     }
   } catch (error) {
