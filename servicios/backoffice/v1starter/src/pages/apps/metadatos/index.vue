@@ -47,6 +47,12 @@ const fecha = ref({
   title: valoresHoy.title
 });
 
+const configSnackbar = ref({
+    message: "Datos guardados",
+    type: "success",
+    model: false
+});
+
 const selectedfechaIniFin = ref('Hoy');
 const fechaIniFinList = useSelectCalendar();
 
@@ -97,60 +103,69 @@ async function sortByVariable(data, variableName, order = 'asc') {
 }
 
 async function getMetadatos(fechai = '', fechaf = '') {
-  // isLoading.value = true;
-  /*
-  if(!fechai && !fechaf){
-    fechai = moment().subtract(7, 'days').format("YYYY-MM-DD").toString();
-    fechaf = moment().format("YYYY-MM-DD").toString();
+  try{
+    // isLoading.value = true;
+    /*
+    if(!fechai && !fechaf){
+      fechai = moment().subtract(7, 'days').format("YYYY-MM-DD").toString();
+      fechaf = moment().format("YYYY-MM-DD").toString();
 
-    let formatedI = moment(fechai).format("DD-MM-YYYY").toString();
-    let formatedF = moment(fechaf).format("DD-MM-YYYY").toString();
+      let formatedI = moment(fechai).format("DD-MM-YYYY").toString();
+      let formatedF = moment(fechaf).format("DD-MM-YYYY").toString();
 
-    fechaIngresada.value = formatedI + ' a ' + formatedF;
-  }*/
+      fechaIngresada.value = formatedI + ' a ' + formatedF;
+    }*/
 
-  var metadatosFetch = [];
-  let skip = 1;
-  let batchSize = 700;
+    var metadatosFetch = [];
+    let skip = 1;
+    let batchSize = 700;
 
-  while (true) {
-    // const batchTrazabilidad = await getAllPaginasSesionesHome(fechai, fechaf, batchSize, skip);
-    const response = await fetch('https://servicio-de-actividad.vercel.app/meta/all/?' + new URLSearchParams({ 
-      fechai: fechai, 
-      fechaf: fechaf,
-      limit: batchSize,
-      page: skip
-    }));
-    const data = await response.json();
-    // console.log("Nombre: ",skip, data.data.length)
-    if (data.data.length === 0) {
-      break;
+    while (true) {
+      // const batchTrazabilidad = await getAllPaginasSesionesHome(fechai, fechaf, batchSize, skip);
+      const response = await fetch('https://servicio-de-actividad.vercel.app/meta/all/?' + new URLSearchParams({ 
+        fechai: fechai, 
+        fechaf: fechaf,
+        limit: batchSize,
+        page: skip
+      }));
+      const data = await response.json();
+      // console.log("Nombre: ",skip, data.data.length)
+      if (data.data.length === 0) {
+        break;
+      }
+
+      const listadoDepurado = data.data.filter(item => (
+          item.vocname !== "ecv_author" && 
+          item.vocname != "usuarios_ecuavisa"
+        ));
+      metadatosFetch = mergeAndSum(metadatosFetch, listadoDepurado);
+
+      metaRaw.value = await sortByVariable(Object.values(metadatosFetch), "navegaciones", "desc");
+      metadatos.value = await sortByVariable(Object.values(metadatosFetch), "navegaciones", "desc");
+      // metadatosFetch.push(...data.data);
+      skip += 1;
     }
+      // console.log(metadatos.value)
 
-    const listadoDepurado = data.data.filter(item => (
-        item.vocname !== "ecv_author" && 
-        item.vocname != "usuarios_ecuavisa"
-      ));
-    metadatosFetch = mergeAndSum(metadatosFetch, listadoDepurado);
 
-    metaRaw.value = await sortByVariable(Object.values(metadatosFetch), "navegaciones", "desc");
-    metadatos.value = await sortByVariable(Object.values(metadatosFetch), "navegaciones", "desc");
-    // metadatosFetch.push(...data.data);
-    skip += 1;
+    // isLoading.value = false;
+
+    // await fetch('https://servicio-de-actividad.vercel.app/meta/all/?' + new URLSearchParams({ fechai: fechai, fechaf: fechaf }))
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     metaRaw.value = data.data;
+    //     metadatos.value = data.data;
+    //     isLoading.value = false;
+    //   })
+    //   .catch(error => { return error });
+  }catch(error){
+    configSnackbar.value = {
+        message: "No se pudo recuperar los datos, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
   }
-    // console.log(metadatos.value)
-
-
-  // isLoading.value = false;
-
-  // await fetch('https://servicio-de-actividad.vercel.app/meta/all/?' + new URLSearchParams({ fechai: fechai, fechaf: fechaf }))
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     metaRaw.value = data.data;
-  //     metadatos.value = data.data;
-  //     isLoading.value = false;
-  //   })
-  //   .catch(error => { return error });
 
 }
 
@@ -175,7 +190,9 @@ async function accionBackoffice (logData){
 			};
 			await fetch(`https://servicio-logs.vercel.app/accion`, requestOptions)
 			.then(response =>{			
-			}).catch(error => console.log('error', error));
+			}).catch(error => {
+        console.log('error', error)
+      });
 		}
 };
 
@@ -319,7 +336,15 @@ async function recuperarURLPorTemas(titulo) {
       
       isLoading.value = false;
     })
-    .catch(error => { return console.error(error) });
+    .catch(error => { 
+      configSnackbar.value = {
+          message: "No se pudo recuperar los datos de navegación, por favor intente nuevamente.",
+          type: "error",
+          timeout: 4000,
+          model: true
+      };
+      return console.error(error) 
+    });
 }
 
 async function resolveVisitas(titulo) {
@@ -395,6 +420,12 @@ async function resolveVisitas(titulo) {
       isLoading.value = false;
     }).catch(error => { 
       isLoading.value = false;
+      configSnackbar.value = {
+          message: "No se pudo recuperar los datos de navegación de usuarios, por favor intente nuevamente.",
+          type: "error",
+          timeout: 4000,
+          model: true
+      };
       return console.error(error) 
     });
 
@@ -495,6 +526,12 @@ async function resolveUsuario(id, nombre, apellido) {
 
     }
   } catch (error) {
+    configSnackbar.value = {
+          message: "No se pudo recuperar los datos de navegación para usuarios agrupados, por favor intente nuevamente.",
+          type: "error",
+          timeout: 4000,
+          model: true
+      };
     console.error(error)
   }
   await fetch(`https://servicio-de-actividad.vercel.app/meta/navegation/${id}?fechai=${fechaIni.value}&fechaf=${fechaFin.value}`)
@@ -557,7 +594,15 @@ async function resolveUsuario(id, nombre, apellido) {
       actividadUsuarioVisible.value = true;
       isLoading.value = false;
     })
-    .catch(error => { return console.error(error) });
+    .catch(error => { 
+      configSnackbar.value = {
+          message: "No se pudo recuperar los datos de navegación por metadatos, por favor intente nuevamente.",
+          type: "error",
+          timeout: 4000,
+          model: true
+      };
+      return console.error(error) 
+    });
 }
 
 
@@ -696,407 +741,417 @@ watch(async () => selectedfechaIniFin.value, async () => {
 </script>
 
 <template>
-  <div title="Metadatos, navegación de usuarios">
-    <VTabs v-model="tab">
-      <VTab value="tab-meta-data">
-        Trazabilidad
-      </VTab>
-      <VTab value="account-details" style="display: none;">
-        Temas destacados
-      </VTab>
-      <!-- <VTab value="account-details">
-        Account Details
-      </VTab>
-      <VTab value="social-links">
-        Social Links
-      </VTab> -->
-    </VTabs>
+  <section>
+    <VSnackbar 
+    v-model="configSnackbar.model" 
+    location="top end" 
+    variant="flat" 
+    :timeout="configSnackbar.timeout || 2000" 
+    :color="configSnackbar.type">
+      {{ configSnackbar.message }}
+    </VSnackbar>
+    <div title="Metadatos, navegación de usuarios">
+      <VTabs v-model="tab">
+        <VTab value="tab-meta-data">
+          Trazabilidad
+        </VTab>
+        <VTab value="account-details" style="display: none;">
+          Temas destacados
+        </VTab>
+        <!-- <VTab value="account-details">
+          Account Details
+        </VTab>
+        <VTab value="social-links">
+          Social Links
+        </VTab> -->
+      </VTabs>
 
 
-    <br>
+      <br>
 
-    <VWindow v-model="tab">
-      <VWindowItem value="tab-meta-data">
+      <VWindow v-model="tab">
+        <VWindowItem value="tab-meta-data">
 
-        <VRow>
-          <VCol lg="6" cols="12" sm="6">
-            <!-- <VDialog v-model="isLoading" width="300">
-              <VCard color="primary" width="300">
-                <VCardText class="pt-3">
-                  Espere porfavor, obteniendo registros.. {{ metadatos.length }}
-                  <VProgressLinear indeterminate color="white" class="mb-0" />
+          <VRow>
+            <VCol lg="6" cols="12" sm="6">
+              <!-- <VDialog v-model="isLoading" width="300">
+                <VCard color="primary" width="300">
+                  <VCardText class="pt-3">
+                    Espere porfavor, obteniendo registros.. {{ metadatos.length }}
+                    <VProgressLinear indeterminate color="white" class="mb-0" />
+                  </VCardText>
+                </VCard>
+              </VDialog> -->
+
+              <VDialog v-model="isLoading" width="300">
+                <VCardText class="pt-3 text-center">
+                  <v-progress-circular indeterminate color="primary"></v-progress-circular>
                 </VCardText>
-              </VCard>
-            </VDialog> -->
-
-            <VDialog v-model="isLoading" width="300">
-              <VCardText class="pt-3 text-center">
-                <v-progress-circular indeterminate color="primary"></v-progress-circular>
-              </VCardText>
-            </VDialog>
+              </VDialog>
 
 
 
-            <VCard>
+              <VCard>
 
 
 
-              <!-- <VCardText class="d-flex flex-wrap justify-space-between gap-4"> -->
+                <!-- <VCardText class="d-flex flex-wrap justify-space-between gap-4"> -->
 
-                <!-- <VCardItem class="pb-sm-0 pl-0 pt-0">
-                  <VCardTitle>Metadatos</VCardTitle>
-                  <VCardSubtitle>Un total de {{ metadatos.length }} registros</VCardSubtitle>
-                </VCardItem>
+                  <!-- <VCardItem class="pb-sm-0 pl-0 pt-0">
+                    <VCardTitle>Metadatos</VCardTitle>
+                    <VCardSubtitle>Un total de {{ metadatos.length }} registros</VCardSubtitle>
+                  </VCardItem>
 
-                <div class="date-picker-wrapper" style="width: 300px;" v-if="!isLoading">
-                  <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngresada"
-                    show-current=true @on-change="obtenerPorFechaMeta" :config="{
-                      position: 'auto right',
-                      mode: 'range',
-                      altFormat: 'F j, Y',
-                      dateFormat: 'd-m-Y',
-                      maxDate: new Date(),
-                      reactive: true
+                  <div class="date-picker-wrapper" style="width: 300px;" v-if="!isLoading">
+                    <AppDateTimePicker prepend-inner-icon="tabler-calendar" density="compact" v-model="fechaIngresada"
+                      show-current=true @on-change="obtenerPorFechaMeta" :config="{
+                        position: 'auto right',
+                        mode: 'range',
+                        altFormat: 'F j, Y',
+                        dateFormat: 'd-m-Y',
+                        maxDate: new Date(),
+                        reactive: true
 
-                    }" />
-                </div> -->
-                <!-- botonera de filtros guardados ##estado desactivado##-->
-                <!--
-        <VCol cols="12">
-  
-  <VBtnToggle v-if="!isLoading"   
-        v-model="btnFiltros"
-        color="primary"
-        class="d-none"
-        divided
-      >
-   <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosVisitas">
-    {{ item.nombre }}
-   </VBtn>
+                      }" />
+                  </div> -->
+                  <!-- botonera de filtros guardados ##estado desactivado##-->
+                  <!--
+          <VCol cols="12">
+    
+    <VBtnToggle v-if="!isLoading"   
+          v-model="btnFiltros"
+          color="primary"
+          class="d-none"
+          divided
+        >
+     <VBtn :value="item._id" @click="resolveFiltroSelection(item._id)" v-for="item  in filtrosVisitas">
+      {{ item.nombre }}
+     </VBtn>
 
-   </VBtnToggle>
+     </VBtnToggle>
 
-    </VCol>
-  -->
-              <VCardItem class="header_card_item">
-                <div class="d-flex">
-                  <div class="descripcion">
-                    <VCardTitle>Metadatos, Un total de {{ metadatos.length }} registros</VCardTitle>
-                    <VCardSubtitle>Mostrando data desde {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
-                  </div>
-                </div>
-
-                <template #append>
-                  <div class="bg-ecuavisa py-2">
-                    <div class="date-picker-wrapper" style="width: 250px;">
-                      <VCombobox :disabled="isLoading" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
-                        hide-selected hint="" />
+      </VCol>
+    -->
+                <VCardItem class="header_card_item">
+                  <div class="d-flex">
+                    <div class="descripcion">
+                      <VCardTitle>Metadatos, Un total de {{ metadatos.length }} registros</VCardTitle>
+                      <VCardSubtitle>Mostrando data desde {{fecha.i.format('YYYY-MM-DD')}} hasta {{fecha.f.format('YYYY-MM-DD')}}</VCardSubtitle>
                     </div>
                   </div>
-                </template>
-              </VCardItem>
 
-              <!-- </VCardText> -->
-              <VCardText class="d-flex flex-wrap gap-4">
-                <div style="width: 15rem">
-                  <VTextField v-model="searchQuery" placeholder="Buscar..." density="compact" />
-                </div>
-                <!-- 👉 Search button -->
-                <VBtn prepend-icon="tabler-search" @click="searchMeta">
-                  Buscar
-                </VBtn>
-                <VBtn @click="reset">
-                  Reiniciar
-                </VBtn>
-              </VCardText>
+                  <template #append>
+                    <div class="bg-ecuavisa py-2">
+                      <div class="date-picker-wrapper" style="width: 250px;">
+                        <VCombobox :disabled="isLoading" v-model="selectedfechaIniFin" :items="fechaIniFinList" variant="outlined" label="Fecha" persistent-hint
+                          hide-selected hint="" />
+                      </div>
+                    </div>
+                  </template>
+                </VCardItem>
 
-              <VCardText>
-                <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
-                  <thead>
-                    <tr>
-                      <th scope="col">TÍTULO DE PÁGINA</th>
-                      <th scope="col">VISITAS</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    <tr v-for="item  in paginatedMeta" class="clickable" :class="{ active: item._id === selectedRow }"
-                      @click="resolveVisitas(item._id)">
-                      <td>
-                        {{ item._id }}
-                      </td>
-
-                      <td class="text-medium-emphasis">
-                        {{ item.navegaciones }}
-                      </td>
-                    </tr>
-                  </tbody>
-                </VTable>
-                <div class="d-flex align-center justify-space-between botonescurrentPage">
-                  <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
-                  Página {{ currentPage }}
-                  <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
-                    :disabled="(currentPage * itemsPerPage) >= metadatos.length">
+                <!-- </VCardText> -->
+                <VCardText class="d-flex flex-wrap gap-4">
+                  <div style="width: 15rem">
+                    <VTextField v-model="searchQuery" placeholder="Buscar..." density="compact" />
+                  </div>
+                  <!-- 👉 Search button -->
+                  <VBtn prepend-icon="tabler-search" @click="searchMeta">
+                    Buscar
                   </VBtn>
-                </div>
-
-              </VCardText>
-            </VCard>
-          </VCol>
-          <VCol lg="6" cols="12" sm="6">
-            <!-- trazabilidad independiente -->
-            <VExpandTransition>
-              <VCard v-show="ultimasVisitasVisible">
+                  <VBtn @click="reset">
+                    Reiniciar
+                  </VBtn>
+                </VCardText>
 
                 <VCardText>
-                  <div class="tab-titles">
-                    <div @click="selectTabMeta(0)" :class="{ active: selectedTabMeta === 0 }">Últimas Visitas</div>
-                    <div @click="selectTabMeta(1)" :class="{ active: selectedTabMeta === 1 }">Url</div>
-                  </div>
-                  <div class="tab-content">
-                    <br>
-                    <div v-if="selectedTabMeta === 0" class="tab-item">
-                      <div style="display: flex; flex-wrap: wrap;">
-                        <div style="width: max-content;">
-                          <VCardTitle>
-                            Visitantes en: <b>{{ titleSelected }}</b>
+                  <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                    <thead>
+                      <tr>
+                        <th scope="col">TÍTULO DE PÁGINA</th>
+                        <th scope="col">VISITAS</th>
+                      </tr>
+                    </thead>
 
-                          </VCardTitle>
-                          <VCardSubtitle style="margin-top: -10px;font-size: 12px;">
-                            Datos desde {{ fechaIni }} hasta {{ fechaFin }}
-                          </VCardSubtitle>
-                        </div>
-                        <div style="margin-left: auto; margin-bottom: 0.80rem;">
-                          <VBtn color="primary" @click="downloadSelection">
-                            Exportar
-                          </VBtn>
-                        </div>
-                      </div>
-                      <div>
-                        <!-- max-height: 520px;overflow: auto; -->
-                        <div style="">
-                          <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
-                            <thead>
-                              <tr>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Visitas</th>
-                                <th scope="col">Hora</th>
-                              </tr>
-                            </thead>
+                    <tbody>
+                      <tr v-for="item  in paginatedMeta" class="clickable" :class="{ active: item._id === selectedRow }"
+                        @click="resolveVisitas(item._id)">
+                        <td>
+                          {{ item._id }}
+                        </td>
 
-                            <tbody>
-                              <tr class="clickable" :class="{ active: user.userId === selectedRowUser }"
-                                v-for="user in paginatedVisitas"
-                                @click="resolveUsuario(user.userId, user.first_name, user.last_name)">
-                                <td class="text-high-emphasis">
-                                  {{ user.first_name }} {{ user.last_name }}
-                                </td>
-                                <td class="text-medium-emphasis">
-                                  {{ user.fecha }}
-                                </td>
-                                <td class="text-medium-emphasis">
-                                  {{ user.visitas }}
-                                </td>
-                                <td class="text-medium-emphasis">
-                                  {{ user.hora }}
-                                </td>
-                              </tr>
-                            </tbody>
-                          </VTable>
-                        </div>
-                        <div class="d-flex align-center justify-space-between botonescurrentPage">
-                          <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageV" :disabled="currentPageV === 1">
-                          </VBtn>
-                          Página {{ currentPageV }}
-                          <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageV"
-                            :disabled="(currentPageV * itemsPerPage) >= ultimasVisitas.length">
-                          </VBtn>
-                        </div>
-                      </div>
-                    </div>
-                    <div v-if="selectedTabMeta === 1" class="tab-item">
-                      <div style="display: flex; flex-wrap: wrap;">
-                        <div style="width: max-content;">
-                          <VCardTitle>
-                            URLs de: <b>{{ titleSelected }}</b>
-
-                          </VCardTitle>
-                          <VCardSubtitle style="margin-top: -10px;font-size: 12px;">
-                            Datos desde {{ fechaIni }} hasta {{ fechaFin }}
-                          </VCardSubtitle>
-                        </div>
-                        <!-- <div style="margin-left: auto; margin-bottom: 0.80rem;">
-                          <VBtn color="primary" @click="downloadSelection">
-                            Exportar
-                          </VBtn>
-                        </div> -->
-                      </div>
-                      <div>
-                        <!-- max-height: 520px;overflow: auto; -->
-                        <div style="">
-                          <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
-                            <thead>
-                              <tr>
-                                <th scope="col">Nombre</th>
-                                <th scope="col">Fecha</th>
-                                <th scope="col">Hora</th>
-                              </tr>
-                            </thead>
-                            <tbody>
-                              <tr 
-                                v-if="datosURLTemas.length > 0"
-                                v-for="item in paginatedMetas" 
-                                :key="item.id" 
-                              >
-                                <td>
-                                  <a style="" target="_blank" :href="item.url" class="d-flex align-center">
-                                    <VIcon color="primary" icon="tabler-link" size="18" class="me-1" />
-                                    <!-- <h6 class="text-primary font-weight-semibold text-sm">
-                                      {{ item.title }}
-                                    </h6> -->
-                                    <small class="url-temas" style="margin-left:-12px">
-                                      {{ item.url.replace(/https:\/\/www\.ecuavisa\.com/g, "") }}
-                                    </small>
-                                  </a>
-                                </td>
-                                <td class="text-medium-emphasis">
-                                  {{ item.fechaRaw }}
-                                </td>
-                                <td class="text-medium-emphasis">
-                                  {{ item.hora }}
-                                </td>
-                              </tr>
-                              <tr v-else>
-                                <td colspan="3">No hay datos</td>
-                              </tr>
-                            </tbody>
-                          </VTable>
-                        </div>
-                        <div class="d-flex align-center justify-space-between botonescurrentPage">
-                          <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageT" :disabled="currentPageT === 1">
-                          </VBtn>
-                          Página {{ currentPageT }}
-                          <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageT"
-                            :disabled="(currentPageT * itemsPerPage) >= datosURLTemas.length">
-                          </VBtn>
-                        </div>
-                      </div>
-                    </div>
+                        <td class="text-medium-emphasis">
+                          {{ item.navegaciones }}
+                        </td>
+                      </tr>
+                    </tbody>
+                  </VTable>
+                  <div class="d-flex align-center justify-space-between botonescurrentPage">
+                    <VBtn icon="tabler-arrow-big-left-lines" @click="prevPage" :disabled="currentPage === 1"></VBtn>
+                    Página {{ currentPage }}
+                    <VBtn icon="tabler-arrow-big-right-lines" @click="nextPage"
+                      :disabled="(currentPage * itemsPerPage) >= metadatos.length">
+                    </VBtn>
                   </div>
 
                 </VCardText>
-
-
               </VCard>
-            </VExpandTransition>
-          </VCol>
-          <VCol lg="6" cols="12" sm="6">
-            <!-- trazabilidad independiente -->
-            <VExpandTransition id="actividadusuario">
-              <VCard v-show="actividadUsuarioVisible">
-                <VCardItem>
-                  <VCardTitle>
-                    Actividad del usuario <b>{{ userSelected }}</b>
-                  </VCardTitle>
-                  <VCardSubtitle style="margin-top: -2px;font-size: 12px;">
-                    Datos desde {{ fechaIni }} hasta {{ fechaFin }}
-                  </VCardSubtitle>
-                </VCardItem>
+            </VCol>
+            <VCol lg="6" cols="12" sm="6">
+              <!-- trazabilidad independiente -->
+              <VExpandTransition>
+                <VCard v-show="ultimasVisitasVisible">
 
-                <VCardText v-if="actividadUsuario.length > 0">
-                  <VTimeline density="compact" align="start" truncate-line="both" class="v-timeline-density-compact">
-                    <VTimelineItem :dot-color="user.title === titleSelected ? 'success' : 'primary'" size="x-small"
-                      v-for="user in verMas ? actividadUsuarioFull : actividadUsuario">
-                      <div class="d-flex justify-space-between align-center flex-wrap">
-                        <h4 class="text-base font-weight-semibold me-1">
-                          {{ user.title || user.url }}
-                        </h4>
-                        <small><b>Tipo: </b>{{ user.tipo }}</small>
-                      </div>
-
-                      <p class="mb-1">{{ user.fecha }} {{ user.hora }}</p>
-                      <div style="display:flex; gap: 20px;">
-                        <a target="_blank" :href="user.url" class="d-flex align-center">
-                          <VIcon color="primary" icon="tabler-link" size="18" class="me-1" />
-                          <h6 class="text-primary font-weight-semibold text-sm">
-
-                            <!-- {{ user.tipo=="Nota"?"Ir a la nota":"Ir a la sección" }} -->
-                            {{ user.tipo == "Nota" ? "Visitar en la web" : "Ir a la sección" }}
-
-                          </h6>
-                        </a>
-                        <a style="display: none!important;" v-if="user.tipo == 'Nota'" target="_blank"
-                          :href="(user.url).replace(/\/[^\/]*$/, '')" class="d-flex align-center">
-                          <VIcon color="primary" icon="tabler-link" size="18" class="me-1" />
-                          <h6 class="text-primary font-weight-semibold text-sm">
-
-                            Ir a la sección
-
-                          </h6>
-                        </a>
-                      </div>
+                  <VCardText>
+                    <div class="tab-titles">
+                      <div @click="selectTabMeta(0)" :class="{ active: selectedTabMeta === 0 }">Últimas Visitas</div>
+                      <div @click="selectTabMeta(1)" :class="{ active: selectedTabMeta === 1 }">Url</div>
+                    </div>
+                    <div class="tab-content">
                       <br>
-                      <VDivider />
+                      <div v-if="selectedTabMeta === 0" class="tab-item">
+                        <div style="display: flex; flex-wrap: wrap;">
+                          <div style="width: max-content;">
+                            <VCardTitle>
+                              Visitantes en: <b>{{ titleSelected }}</b>
 
-                    </VTimelineItem>
+                            </VCardTitle>
+                            <VCardSubtitle style="margin-top: -10px;font-size: 12px;">
+                              Datos desde {{ fechaIni }} hasta {{ fechaFin }}
+                            </VCardSubtitle>
+                          </div>
+                          <div style="margin-left: auto; margin-bottom: 0.80rem;">
+                            <VBtn color="primary" @click="downloadSelection">
+                              Exportar
+                            </VBtn>
+                          </div>
+                        </div>
+                        <div>
+                          <!-- max-height: 520px;overflow: auto; -->
+                          <div style="">
+                            <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Nombre</th>
+                                  <th scope="col">Fecha</th>
+                                  <th scope="col">Visitas</th>
+                                  <th scope="col">Hora</th>
+                                </tr>
+                              </thead>
 
-                  </VTimeline>
-                  <br>
-                  <div style="text-align: center;">
-                    <VBtn v-if="!verMas && actividadUsuarioFull.length > 10" color="primary" @click="verMas = true">Ver
-                      más</VBtn>
-                    <VBtn v-if="verMas && actividadUsuarioFull.length > 10" color="primary" @click="verMas = false">Ver
-                      menos</VBtn>
-                  </div>
-                </VCardText>
-                <VCardText v-else>No existen datos</VCardText>
-              </VCard>
-            </VExpandTransition>
-          </VCol>
+                              <tbody>
+                                <tr class="clickable" :class="{ active: user.userId === selectedRowUser }"
+                                  v-for="user in paginatedVisitas"
+                                  @click="resolveUsuario(user.userId, user.first_name, user.last_name)">
+                                  <td class="text-high-emphasis">
+                                    {{ user.first_name }} {{ user.last_name }}
+                                  </td>
+                                  <td class="text-medium-emphasis">
+                                    {{ user.fecha }}
+                                  </td>
+                                  <td class="text-medium-emphasis">
+                                    {{ user.visitas }}
+                                  </td>
+                                  <td class="text-medium-emphasis">
+                                    {{ user.hora }}
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </VTable>
+                          </div>
+                          <div class="d-flex align-center justify-space-between botonescurrentPage">
+                            <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageV" :disabled="currentPageV === 1">
+                            </VBtn>
+                            Página {{ currentPageV }}
+                            <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageV"
+                              :disabled="(currentPageV * itemsPerPage) >= ultimasVisitas.length">
+                            </VBtn>
+                          </div>
+                        </div>
+                      </div>
+                      <div v-if="selectedTabMeta === 1" class="tab-item">
+                        <div style="display: flex; flex-wrap: wrap;">
+                          <div style="width: max-content;">
+                            <VCardTitle>
+                              URLs de: <b>{{ titleSelected }}</b>
 
-          <VCol lg="6" cols="12" sm="6">
-            <!-- trazabilidad independiente -->
-            <VExpandTransition>
-              <VCard v-show="actividadUsuarioVisible">
-                <VCardItem>
-                  <VCardTitle>
-                    Temas de mayor navegación del usuario: <b>{{ userSelected }}</b>
-                  </VCardTitle>
+                            </VCardTitle>
+                            <VCardSubtitle style="margin-top: -10px;font-size: 12px;">
+                              Datos desde {{ fechaIni }} hasta {{ fechaFin }}
+                            </VCardSubtitle>
+                          </div>
+                          <!-- <div style="margin-left: auto; margin-bottom: 0.80rem;">
+                            <VBtn color="primary" @click="downloadSelection">
+                              Exportar
+                            </VBtn>
+                          </div> -->
+                        </div>
+                        <div>
+                          <!-- max-height: 520px;overflow: auto; -->
+                          <div style="">
+                            <VTable class="text-no-wrap tableNavegacion mb-5" hover="true">
+                              <thead>
+                                <tr>
+                                  <th scope="col">Nombre</th>
+                                  <th scope="col">Fecha</th>
+                                  <th scope="col">Hora</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <tr 
+                                  v-if="datosURLTemas.length > 0"
+                                  v-for="item in paginatedMetas" 
+                                  :key="item.id" 
+                                >
+                                  <td>
+                                    <a style="" target="_blank" :href="item.url" class="d-flex align-center">
+                                      <VIcon color="primary" icon="tabler-link" size="18" class="me-1" />
+                                      <!-- <h6 class="text-primary font-weight-semibold text-sm">
+                                        {{ item.title }}
+                                      </h6> -->
+                                      <small class="url-temas" style="margin-left:-12px">
+                                        {{ item.url.replace(/https:\/\/www\.ecuavisa\.com/g, "") }}
+                                      </small>
+                                    </a>
+                                  </td>
+                                  <td class="text-medium-emphasis">
+                                    {{ item.fechaRaw }}
+                                  </td>
+                                  <td class="text-medium-emphasis">
+                                    {{ item.hora }}
+                                  </td>
+                                </tr>
+                                <tr v-else>
+                                  <td colspan="3">No hay datos</td>
+                                </tr>
+                              </tbody>
+                            </VTable>
+                          </div>
+                          <div class="d-flex align-center justify-space-between botonescurrentPage">
+                            <VBtn icon="tabler-arrow-big-left-lines" @click="prevPageT" :disabled="currentPageT === 1">
+                            </VBtn>
+                            Página {{ currentPageT }}
+                            <VBtn icon="tabler-arrow-big-right-lines" @click="nextPageT"
+                              :disabled="(currentPageT * itemsPerPage) >= datosURLTemas.length">
+                            </VBtn>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
 
-                  <VCardSubtitle style="margin-top: -2px;font-size: 12px;">
-                    Datos desde {{ fechaIni }} hasta {{ fechaFin }}
-                  </VCardSubtitle>
-                </VCardItem>
-                <VCardText>
-                  <!-- <chartMetadatos /> -->
-                  <div id="chart"></div>
-
-                  <!-- <VueApexCharts type="line" height="400" :options="chartOptions" :series="series" /> -->
-                </VCardText>
-              </VCard>
-            </VExpandTransition>
-          </VCol>
-        </VRow>
+                  </VCardText>
 
 
+                </VCard>
+              </VExpandTransition>
+            </VCol>
+            <VCol lg="6" cols="12" sm="6">
+              <!-- trazabilidad independiente -->
+              <VExpandTransition id="actividadusuario">
+                <VCard v-show="actividadUsuarioVisible">
+                  <VCardItem>
+                    <VCardTitle>
+                      Actividad del usuario <b>{{ userSelected }}</b>
+                    </VCardTitle>
+                    <VCardSubtitle style="margin-top: -2px;font-size: 12px;">
+                      Datos desde {{ fechaIni }} hasta {{ fechaFin }}
+                    </VCardSubtitle>
+                  </VCardItem>
 
-      </VWindowItem>
+                  <VCardText v-if="actividadUsuario.length > 0">
+                    <VTimeline density="compact" align="start" truncate-line="both" class="v-timeline-density-compact">
+                      <VTimelineItem :dot-color="user.title === titleSelected ? 'success' : 'primary'" size="x-small"
+                        v-for="user in verMas ? actividadUsuarioFull : actividadUsuario">
+                        <div class="d-flex justify-space-between align-center flex-wrap">
+                          <h4 class="text-base font-weight-semibold me-1">
+                            {{ user.title || user.url }}
+                          </h4>
+                          <small><b>Tipo: </b>{{ user.tipo }}</small>
+                        </div>
 
-      <VWindowItem value="account-details">
-        <chartMetadatos />
-      </VWindowItem>
-      <!-- <VWindowItem value="account-details">
-            Soy detalis  ssss
-          </VWindowItem>
+                        <p class="mb-1">{{ user.fecha }} {{ user.hora }}</p>
+                        <div style="display:flex; gap: 20px;">
+                          <a target="_blank" :href="user.url" class="d-flex align-center">
+                            <VIcon color="primary" icon="tabler-link" size="18" class="me-1" />
+                            <h6 class="text-primary font-weight-semibold text-sm">
 
-          <VWindowItem value="social-links">
-            Soy social sdddsdd
-          </VWindowItem> -->
-    </VWindow>
+                              <!-- {{ user.tipo=="Nota"?"Ir a la nota":"Ir a la sección" }} -->
+                              {{ user.tipo == "Nota" ? "Visitar en la web" : "Ir a la sección" }}
+
+                            </h6>
+                          </a>
+                          <a style="display: none!important;" v-if="user.tipo == 'Nota'" target="_blank"
+                            :href="(user.url).replace(/\/[^\/]*$/, '')" class="d-flex align-center">
+                            <VIcon color="primary" icon="tabler-link" size="18" class="me-1" />
+                            <h6 class="text-primary font-weight-semibold text-sm">
+
+                              Ir a la sección
+
+                            </h6>
+                          </a>
+                        </div>
+                        <br>
+                        <VDivider />
+
+                      </VTimelineItem>
+
+                    </VTimeline>
+                    <br>
+                    <div style="text-align: center;">
+                      <VBtn v-if="!verMas && actividadUsuarioFull.length > 10" color="primary" @click="verMas = true">Ver
+                        más</VBtn>
+                      <VBtn v-if="verMas && actividadUsuarioFull.length > 10" color="primary" @click="verMas = false">Ver
+                        menos</VBtn>
+                    </div>
+                  </VCardText>
+                  <VCardText v-else>No existen datos</VCardText>
+                </VCard>
+              </VExpandTransition>
+            </VCol>
+
+            <VCol lg="6" cols="12" sm="6">
+              <!-- trazabilidad independiente -->
+              <VExpandTransition>
+                <VCard v-show="actividadUsuarioVisible">
+                  <VCardItem>
+                    <VCardTitle>
+                      Temas de mayor navegación del usuario: <b>{{ userSelected }}</b>
+                    </VCardTitle>
+
+                    <VCardSubtitle style="margin-top: -2px;font-size: 12px;">
+                      Datos desde {{ fechaIni }} hasta {{ fechaFin }}
+                    </VCardSubtitle>
+                  </VCardItem>
+                  <VCardText>
+                    <!-- <chartMetadatos /> -->
+                    <div id="chart"></div>
+
+                    <!-- <VueApexCharts type="line" height="400" :options="chartOptions" :series="series" /> -->
+                  </VCardText>
+                </VCard>
+              </VExpandTransition>
+            </VCol>
+          </VRow>
 
 
-  </div>
+
+        </VWindowItem>
+
+        <VWindowItem value="account-details">
+          <chartMetadatos />
+        </VWindowItem>
+        <!-- <VWindowItem value="account-details">
+              Soy detalis  ssss
+            </VWindowItem>
+
+            <VWindowItem value="social-links">
+              Soy social sdddsdd
+            </VWindowItem> -->
+      </VWindow>
+
+
+    </div>
+  </section>
 </template>
 
 <script>

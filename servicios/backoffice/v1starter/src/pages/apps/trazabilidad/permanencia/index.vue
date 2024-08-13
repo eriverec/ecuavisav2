@@ -21,6 +21,7 @@ const convertirTimestamp = (timestamp) => {
 const currentTab = ref('tab-lista');
 const dataRegistros = ref([]);
 const dataRegistrosChartViews = ref([]);
+const loading_content = ref(true);
 const dataRegistrosBackup = ref([]);
 const disabledViewList = ref(false);
 
@@ -33,6 +34,12 @@ const fecha = ref({
   i: valoresHoy.i,
   f: valoresHoy.f,
   title: "hoy"
+});
+
+const configSnackbar = ref({
+    message: "Datos guardados",
+    type: "success",
+    model: false
 });
 
 const fechaGraficos_2 = ref({
@@ -232,6 +239,12 @@ async function getCampaigns(options = {}) {
       selectOrder.value = "";
     }
   } catch (error) {
+    configSnackbar.value = {
+        message: "No se pudo recuperar los datos de la sección, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
     return console.error(error.message);
   }
 }
@@ -1039,14 +1052,22 @@ watch(async () => currentTabSectionSubSection.value, async () => {
 
 async function getChartLineTimeViews(options = {}) {
   try {
+    loading_content.value = true;
     const { fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')) } = options;
     var response = await fetch(`https://servicio-permanencia.vercel.app/chart/agrupacion/dias?fechai=${fechai}&?fechaf=${fechaf}`);
     const data = await response.json();
 
     if(data.resp){
       dataRegistrosChartViews.value = data.data;
+      loading_content.value = false;
     }
   } catch (error) {
+    configSnackbar.value = {
+        message: "No se pudo recuperar los datos del gráfico por día, por favor intente nuevamente.",
+        type: "error",
+        timeout: 4000,
+        model: true
+    };
     return console.error(error.message);
   }
 }
@@ -1609,6 +1630,13 @@ import { computed, reactive, ref } from 'vue';
     .then(response => response.json())
     .then(dataFromApi => {
       data.value = dataFromApi.data;
+    }).catch(error=>{
+      configSnackbar.value = {
+          message: "No se pudo recuperar los datos, por favor intente nuevamente.",
+          type: "error",
+          timeout: 4000,
+          model: true
+      };
     });
     
     const groupedData = computed(() => {
@@ -1654,6 +1682,14 @@ import { computed, reactive, ref } from 'vue';
 
 <template>
   <section>
+    <VSnackbar 
+    v-model="configSnackbar.model" 
+    location="top end" 
+    variant="flat" 
+    :timeout="configSnackbar.timeout || 2000" 
+    :color="configSnackbar.type">
+      {{ configSnackbar.message }}
+    </VSnackbar>
     <VRow>
       <VCol class="mt-0" cols="12" md="12" lg="12">
         <VTabs v-model="currentTab" class="v-tabs-pill d-none">
@@ -1747,7 +1783,7 @@ import { computed, reactive, ref } from 'vue';
                       <br>
                       <VWindow v-model="currentTabSectionSubSection">
                         <VWindowItem key="0" value="0">
-                          <VRow v-if="dataRegistrosChartViews.length > 0">
+                          <VRow v-if="dataRegistrosChartViews.length > 0 && loading_content == false">
                             <VCol cols="12" sm="12" class="">
                               <VCard
                                 class="px-0 py-0 pb-4 v-card--flat mb-4 v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
@@ -1843,9 +1879,15 @@ import { computed, reactive, ref } from 'vue';
                             </VCol>
                           </VRow>
 
-                          <VRow v-else>
+                          <VRow v-if="dataRegistrosChartViews.length == 0 && loading_content == true">
                             <VCol cols="12" sm="12" class="">
                               Cargando gráficos...
+                            </VCol>
+                          </VRow>
+
+                          <VRow v-if="dataRegistrosChartViews.length < 1 && loading_content == false">
+                            <VCol cols="12" sm="12" class="">
+                              No existen datos que mostrar
                             </VCol>
                           </VRow>
                         </VWindowItem>
