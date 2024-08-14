@@ -96,7 +96,6 @@ const paisesItems = ref([]);
 
 async function getPaisesCiudades (){
     try {  
-      
       // const consulta = await fetch('https://ads-service.vercel.app/campaign/get/all/paisesyciudad');
       const consulta = await fetch('https://ecuavisa-suscripciones.vercel.app/otros/obtener-paises-ciudades');
       const consultaJson = await consulta.json();
