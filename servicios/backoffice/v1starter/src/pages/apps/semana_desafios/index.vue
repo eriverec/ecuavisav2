@@ -16,6 +16,38 @@ const listaDesafios = ref([]);
 const switchOnDisabled = ref(false);
 const repechajeModel = ref(false);
 
+const diasTotales = [
+    {
+        title: "Lunes",
+        value: 1,
+    },
+    {
+        title: "Martes",
+        value: 2,
+    },
+    {
+        title: "Miércoles",
+        value: 3,
+    },
+    {
+        title: "Jueves",
+        value: 4,
+    },
+    {
+        title: "Viernes",
+        value: 5,
+    },
+
+    {
+        title: "Sábado",
+        value: 6,
+    },
+    {
+        title: "Domingo",
+        value: 0,
+    },
+];
+
 async function getSemanas_desafios (){
     try {
       isLoading.value = true;  
@@ -41,11 +73,25 @@ async function getDesafios (){
       reglasLoading.value = true;  
       const consulta = await fetch('https://servicio-desafios.vercel.app/desafios');
       const consultaJson = await consulta.json();
-      listaDesafios.value = consultaJson.data.map(({tituloDesafio, _id, descripcionDesafio})=>({
-        title: tituloDesafio,
-        value: _id,
-        descripcionDesafio
-      }));
+      listaDesafios.value = consultaJson.data.map(({tituloDesafio, _id, descripcionDesafio, horarios = null, tituloSticker, categoria = null})=>{
+        var categoriaText = categoria ? categoria.title : ""; 
+        // console.log(diasTotales.filter((item) => horarios[0].dia === item.value)[0].title)
+        // console.log(horarios)
+        var diaNum = 0;
+        if(horarios){
+            if(horarios.length > 0){
+                diaNum = horarios[0].dia;
+            }
+        }
+        return {
+            title: `${tituloDesafio} - ${categoriaText}`,
+            value: _id,
+            descripcionDesafio,
+            tituloSticker,
+            dia: diasTotales.filter((item) => diaNum === item.value)[0].title
+            // dia: horarios[0].dia
+          }
+      });
                       
     } catch (error) {
         console.error(error.message);
@@ -462,14 +508,21 @@ async function deleteConfirmed() {
 
                                     <VCol cols="12">
                                         <span>Seleccione los desafíos para la semana</span> 
-                                        <v-select clearable chips multiple v-model="desafios" :items="listaDesafios"
-                                         :menu-props="{ maxHeight: '400' }"
+                                        <v-select 
+                                        clearable 
+                                        chips 
+                                        multiple 
+                                        v-model="desafios" 
+                                        :items="listaDesafios"
+                                        :menu-props="{ maxHeight: '400' }"
+                                        item-text="title"
+                                        item-value="value"
                                         >
                                             <template #selection="{ item }">
-                                                <div>
-                                                    {{ item.title }} - {{ item.value }}
-                                                </div>
-                                            </template>
+                                              <div>
+                                                  {{ item.title }} - {{ item.value }}
+                                              </div>
+                                          </template>
                                             <template #item="{ item, props, on }">
                                                 <v-list-item v-bind="props">
                                                     <v-list-item-content>
@@ -485,6 +538,8 @@ async function deleteConfirmed() {
                                                                 />
                                                                 <div class="d-flex flex-column">
                                                                     <div style="max-width: 300px;font-size: 13px;line-height: 1.2" class="py-0 my-0 mb-1">{{ item.raw.descripcionDesafio }}</div>
+                                                                    <p class="pb-0 mb-0" style="font-size: 10px;"><b>Día:</b> {{ item.raw.dia }}</p>
+                                                                    <p class="pb-0 mb-0" style="font-size: 10px;"><b>Tarjeta:</b> {{ item.raw.tituloSticker }}</p>
                                                                     <p class="pb-0 mb-0" style="font-size: 10px;">_id: {{ item.value }}</p>
                                                                 </div>
                                                             </div>
