@@ -7,11 +7,11 @@
         "type": "iframe"
       },
       "profile": {
-        "url": "https://rudo.video/live/ecuavisa",
+        "url": "https://rudo.video/live/ecuavisaqo",
         "type": "iframe"
       },
       "contact": {
-        "url": "https://rudo.video/live/ecuavisa",
+        "url": "https://rudo.video/live/ecuavisa2",
         "type": "iframe"
       }
     };
