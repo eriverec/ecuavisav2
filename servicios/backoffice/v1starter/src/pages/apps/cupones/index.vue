@@ -141,10 +141,10 @@ const matchItems = [
         title: "Coinciden todas",
         value: "all"
     },
-    {
-        title: "Coincide alguna",
-        value: "some"
-    }
+    // {
+    //     title: "Coincide alguna",
+    //     value: "some"
+    // }
 ]
 
 const tipoCondicionItems = [
