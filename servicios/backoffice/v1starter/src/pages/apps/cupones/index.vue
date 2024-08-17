@@ -157,14 +157,14 @@ const tipoCondicionItems = [
         title: "País",
         value: "pais"
     },
-    {
-        title: "Grupo de usuarios",
-        value: "grupo_usuarios"
-    },
-    {
-        title: "Proveedores",
-        value: "proveedor"
-    },
+    // {
+    //     title: "Grupo de usuarios",
+    //     value: "grupo_usuarios"
+    // },
+    // {
+    //     title: "Proveedores",
+    //     value: "proveedor"
+    // },
 ]
 
 const condicionItems = [
@@ -183,14 +183,14 @@ const usuariosItems = [
         title: "Todos",
         value: "todos"
     },
-    {
-        title: "Usuarios nuevos",
-        value: "nuevos"
-    },
-    {
-        title: "Suscritos",
-        value: "suscritos"
-    }
+    // {
+    //     title: "Usuarios nuevos",
+    //     value: "nuevos"
+    // },
+    // {
+    //     title: "Suscritos",
+    //     value: "suscritos"
+    // }
 ]
 
 const proveedorItems = ["apple", "google", "facebook", "email"  ]
