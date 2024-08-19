@@ -15,7 +15,7 @@ const dataUsuarios = ref([])
 const filteredUsuarios = ref([])
 const currentPage = ref(1)
 const totalPage = ref(0)
-const rowPerPage = ref(3)
+const rowPerPage = ref(10)
 const loadingUsuarios = ref(false)
 const isFullLoading = ref(false)
 const searchQuery = ref('')
@@ -208,7 +208,7 @@ async function exportarDatos() {
               v-model="rowPerPage"
               density="compact"
               variant="outlined"
-              :items="[3, 20, 30, 50]"
+              :items="[10, 20, 30, 50]"
             />
             
             <VTextField
