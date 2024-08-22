@@ -548,7 +548,7 @@ const headersGlobal = ref({
   provider: "provider",
   platform: "platform",
   created_in_os: "created_in_os",
-  created_at_suscriber_course:"created_at_suscriber_course",
+  created_at_test:"created_at_test",
   ciudad:"ciudad",
   telefono:"telefono",
   birthDate:"birthDate",
@@ -584,9 +584,12 @@ async function getUsuariosExportar(page = 1, limit = 10, fechai, fechaf, idcuest
       var response = await fetch(`${urlApiExport.value}/${idcuestionario}?page=${page}&limit=${limit}`, requestOptions);
       
       var data = await response.json();
+      var data_copy = data.data;
 
       for(var i in data.data){
         if(data.data[i].hasOwnProperty("user")){
+          data.data[i]["created_at_test"] = data_copy[i].created_at;
+          
           Object.entries(data.data[i].user).forEach(([key, value]) => {
             data.data[i][key] = value;
           });
@@ -603,6 +606,7 @@ async function getUsuariosExportar(page = 1, limit = 10, fechai, fechaf, idcuest
           });
 
           data.data[i]["paso_test"] = false;
+          data.data[i]["created_at_test"] = "";
         }
       }
 
