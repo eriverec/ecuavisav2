@@ -68,7 +68,7 @@
         container.innerHTML = ''; // Elimina el texto de carga
         if (selectedTabContent.type === "iframe") {
           const iframe = `
-                          <iframe width="100%" height="400" src="${selectedTabContent.url}" frameborder="0"></iframe>
+                          <iframe width="100%" height="400" src="${selectedTabContent.url}" frameborder="0" title="player">Player </iframe>
                       `;
           container.innerHTML = iframe;
         } else if (selectedTabContent.type === "image") {
