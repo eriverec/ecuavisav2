@@ -18,6 +18,8 @@ const totalPage = ref(0)
 const rowPerPage = ref(10)
 const loadingUsuarios = ref(false)
 const isFullLoading = ref(false)
+const isLoadingExport = ref(false)
+
 const searchQuery = ref('')
 const configSnackbar = ref({
   message: "Datos guardados",
@@ -27,7 +29,7 @@ const configSnackbar = ref({
 
 // Función para obtener usuarios de una página específica
 async function getUsuariosPage(page, limit) {
-  const url = `https://servicios-ecuavisa-suscripciones.vercel.app/suscriptor/all?page=${page}&limit=${limit}`;
+  const url = `https://servicios-ecuavisa-suscripciones.vercel.app/suscripciones/all?page=${page}&limit=${limit}`;
   const response = await fetch(url);
   const data = await response.json();
   return data.resp ? data : null;
@@ -126,7 +128,7 @@ async function getAllUsuariosForExport() {
 // Función para exportar datos
 async function exportarDatos() {
   try {
-    isFullLoading.value = true;
+    isLoadingExport.value = true;
     const allUsers = await getAllUsuariosForExport();
     
     // Definir las columnas del CSV
@@ -182,7 +184,7 @@ async function exportarDatos() {
       model: true
     };
   } finally {
-    isFullLoading.value = false;
+    isLoadingExport.value = false;
   }
 }
 </script>
@@ -237,8 +239,8 @@ async function exportarDatos() {
 
           <div class="app-user-search-filter d-flex align-top">
             <VBtn
-              :loading="isFullLoading"
-              :disabled="isFullLoading || loadingUsuarios"
+              :loading="isLoadingExport"
+              :disabled="isLoadingExport || loadingUsuarios"
               variant="tonal"
               color="success"
               prepend-icon="tabler-screen-share"
@@ -266,7 +268,11 @@ async function exportarDatos() {
                 <td>{{ item.user[0].first_name }}</td>
                 <td>{{ item.user[0].last_name }}</td>
                 <td>{{ item.user[0].email }}</td>
-                <td>{{ item.estado ? 'Activo' : 'Inactivo' }}</td>
+                <td>
+                  <VChip :color="item.estado ? 'success' : 'error'">
+                    {{ item.estado ? 'Activo' : 'Inactivo' }}
+                  </VChip>
+                </td>
                 <td>{{ item.idMediopago }}</td>
                 <td class="text-center" style="width: 5rem;">
                   <VBtn icon size="x-small" color="default" variant="text" :to="{ name: 'apps-user-view-id', params: { id: item.user[0].wylexId } }">
