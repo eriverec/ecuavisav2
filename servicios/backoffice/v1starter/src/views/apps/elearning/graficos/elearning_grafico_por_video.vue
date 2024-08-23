@@ -524,6 +524,7 @@ const headersGlobal = ref({
   platform: "platform",
   created_in_os: "created_in_os",
   created_at_suscriber_course:"created_at_suscriber_course",
+  created_at_video_view:"created_at_video_view",
   ciudad:"ciudad",
   telefono:"telefono",
   birthDate:"birthDate"
