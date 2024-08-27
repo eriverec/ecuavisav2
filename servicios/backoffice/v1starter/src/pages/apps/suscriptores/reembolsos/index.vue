@@ -144,7 +144,6 @@ async function exportarDatos() {
       'Nombre',
       'Apellido',
       'Email',
-      'Estado',
       'ID Transacción',
       'Nombre de Paquete'
     ];
@@ -158,9 +157,8 @@ async function exportarDatos() {
         item.user.first_name,
         item.user.last_name,
         item.user.email,
-        item.estado ? 'Activo' : 'Inactivo',
         item.transaction_id,
-        item.product_description
+        item.transaction[0].transaction.product_description //revisar los registros si estan dentro de []
       ];
       csvContent += row.join(',') + '\n';
     });
