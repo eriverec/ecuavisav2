@@ -8,7 +8,7 @@ const moment = extendMoment(Moment)
 moment.locale('es', [esLocale])
 moment.tz.setDefault('America/Guayaquil')
 
-// Referencias reactivas
+// Referencias
 const totalRegistros = ref(0)
 const dataReembolsos = ref([])
 const filteredReembolsos = ref([])
@@ -26,23 +26,64 @@ const configSnackbar = ref({
   model: false
 })
 
-//Funcion para alerta de OK
+// Estado seleccionado (2 - pendiente por defecto)
+const selectedState = ref('2')
 
-// Dentro de <script setup>
-function mostrarAlertaTransactionId(transactionId, endpointId) {
-  alert(`Transacción procesada: ${transactionId}\nID de la solicitud: ${endpointId}`);
+// Lista de estados
+const stateOptions = [
+  { value: '2', text: 'Pendiente' },
+  { value: '1', text: 'Proceso terminado' },
+  { value: '3', text: 'Rechazado' },
+  { value: '0', text: 'Sin proceso' }
+]
+
+// Alert para procesar reembolso
+
+async function procesarDevolucion(transactionId) {
+  const confirmacion = window.confirm(`¿Procesar devolución (${transactionId})?`);
+  
+  if (confirmacion) {
+    try {
+      const response = await fetch('https://servicios-ecuavisa-suscripciones.vercel.app/reembolso/backoffice-user/accept', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ transaction_id: transactionId }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Error al procesar la devolución');
+      }
+
+      const data = await response.json();
+      
+      configSnackbar.value = {
+        message: 'Devolución procesada exitosamente',
+        type: 'success',
+        model: true
+      };
+      
+      getAllReembolsos();
+    } catch (error) {
+      console.error('Error al procesar la devolución:', error);
+      
+      configSnackbar.value = {
+        message: 'Ocurrió un error al procesar la devolución',
+        type: 'error',
+        model: true
+      };
+    }
+  }
 }
 
-
-// Función para obtener reembolsos de una página específica
-async function getReembolsosPage(page, limit) {
-  const url = `https://servicios-ecuavisa-suscripciones.vercel.app/reembolso/backoffice/solicitudes-list?estado=2&page=${page}&limit=${limit}`;
+async function getReembolsosPage(page, limit, estado) {
+  const url = `https://servicios-ecuavisa-suscripciones.vercel.app/reembolso/backoffice/solicitudes-list?estado=${estado}&page=${page}&limit=${limit}`;
   const response = await fetch(url);
   const data = await response.json();
   return data.resp ? data : null;
 }
 
-// Función para obtener todos los reembolsos
 async function getAllReembolsos() {
   loadingReembolsos.value = true;
   try {
@@ -51,7 +92,7 @@ async function getAllReembolsos() {
     let hasMoreData = true;
 
     while (hasMoreData) {
-      const data = await getReembolsosPage(page, 100); // Usamos un límite más alto para reducir el número de llamadas
+      const data = await getReembolsosPage(page, 100, selectedState.value);
       if (data && data.data && data.data.length > 0) {
         allReembolsos = [...allReembolsos, ...data.data];
         page++;
@@ -76,7 +117,6 @@ async function getAllReembolsos() {
   }
 }
 
-// Función para buscar reembolsos
 function buscarReembolsos() {
   isFullLoading.value = true;
   const query = searchQuery.value.toLowerCase();
@@ -95,7 +135,11 @@ watch(rowPerPage, () => {
   totalPage.value = Math.ceil(filteredReembolsos.value.length / rowPerPage.value);
 })
 
-// Computed properties
+watch(selectedState, (newValue) => {
+  getAllReembolsos();
+})
+
+// Computed
 const paginationData = computed(() => {
   const firstIndex = filteredReembolsos.value.length ? (currentPage.value - 1) * rowPerPage.value + 1 : 0;
   const lastIndex = Math.min(firstIndex + rowPerPage.value - 1, filteredReembolsos.value.length);
@@ -113,14 +157,13 @@ onMounted(() => {
   getAllReembolsos();
 })
 
-// Función para obtener todos los reembolsos para exportación
 async function getAllReembolsosForExport() {
   let allReembolsos = [];
   let page = 1;
   let hasMoreData = true;
 
   while (hasMoreData) {
-    const data = await getReembolsosPage(page, 100); // Usamos un límite más alto para reducir el número de llamadas
+    const data = await getReembolsosPage(page, 100, selectedState.value);
     if (data && data.data && data.data.length > 0) {
       allReembolsos = [...allReembolsos, ...data.data];
       page++;
@@ -132,13 +175,11 @@ async function getAllReembolsosForExport() {
   return allReembolsos;
 }
 
-// Función para exportar datos
 async function exportarDatos() {
   try {
     isLoadingExport.value = true;
     const allReembolsos = await getAllReembolsosForExport();
     
-    // Definir las columnas del CSV
     const columns = [
       'ID',
       'Nombre',
@@ -148,7 +189,6 @@ async function exportarDatos() {
       'Nombre de Paquete'
     ];
 
-    // Crear el contenido del CSV
     let csvContent = columns.join(',') + '\n';
 
     allReembolsos.forEach(item => {
@@ -158,12 +198,11 @@ async function exportarDatos() {
         item.user.last_name,
         item.user.email,
         item.transaction_id,
-        item.transaction[0].transaction.product_description //revisar los registros si estan dentro de []
+        item.transaction[0].transaction.product_description
       ];
       csvContent += row.join(',') + '\n';
     });
 
-    // Crear y descargar el archivo CSV
     const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
     const link = document.createElement('a');
     if (link.download !== undefined) {
@@ -218,6 +257,18 @@ async function exportarDatos() {
               :items="[10, 20, 30, 50]"
             />
             
+            <VSelect
+              v-model="selectedState"
+              :items="stateOptions"
+              item-title="text"
+              item-value="value"
+              label="Estado"
+              density="compact"
+              variant="outlined"
+              style="width: 200px;"
+              @update:model-value="getAllReembolsos"
+            />
+            
             <VTextField
               v-model="searchQuery"
               label="Buscar por nombre o apellido"
@@ -236,8 +287,6 @@ async function exportarDatos() {
             >
               Buscar
             </VBtn>
-
-
           </div>
 
           <VSpacer />
@@ -270,19 +319,19 @@ async function exportarDatos() {
             </thead>
             <tbody v-if="!loadingReembolsos">
               <tr v-for="item in paginatedReembolsos" :key="item._id" style="height: 3.75rem;">
-                <td>{{ item.user.first_name }}</td> <!-- Cambiado de item.user[0].first_name -->
-                <td>{{ item.user.last_name }}</td> <!-- Cambiado de item.user[0].last_name -->
-                <td>{{ item.user.email }}</td> <!-- Cambiado de item.user[0].email -->
-                <td>{{ item.transaction[0].transaction.id }}</td> <!-- Acceso al transaction_id -->
-                <td>{{ item.transaction[0].transaction.product_description }}</td> <!-- Acceso al product_description -->
+                <td>{{ item.user.first_name }}</td>
+                <td>{{ item.user.last_name }}</td>
+                <td>{{ item.user.email }}</td>
+                <td>{{ item.transaction[0].transaction.id }}</td>
+                <td>{{ item.transaction[0].transaction.product_description }}</td>
   
-
-              <td class="text-center" style="width: 5rem;">
-                  <VBtn icon size="x-small" color="default" variant="text" @click="mostrarAlertaTransactionId(item.transaction_id, item._id)">
+                <td class="text-center" style="width: 5rem;">
+                  <VBtn v-if="selectedState === '2'" icon size="x-small" color="default" variant="text" @click="procesarDevolucion(item.transaction_id)">
                     <VIcon size="22" icon="mdi-credit-card-refund" />
                   </VBtn>
+                  <VIcon v-else-if="selectedState === '1'" size="22" icon="mdi-check-circle" color="success" />
+                  <VIcon v-else-if="selectedState === '3'" size="22" icon="mdi-close-circle" color="error" />
                 </td>
-
               </tr>
             </tbody>
             <tfoot v-show="!paginatedReembolsos.length && !loadingReembolsos">
