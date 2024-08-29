@@ -77,6 +77,28 @@ async function procesarDevolucion(transactionId) {
   }
 }
 
+
+// Función para formatear la fecha
+function formatDate(dateString) {
+  return moment(dateString).format('DD/MM/YYYY HH:mm:ss');
+}
+
+// Nueva función para rechazar devolución
+function rechazarDevolucion(transactionId) {
+  const confirmacion = window.confirm(`¿Rechazar devolución (${transactionId})?`);
+  
+  if (confirmacion) {
+    // Aquí iría la lógica para rechazar la devolución cuando tengas el endpoint
+    console.log(`Rechazando devolución: ${transactionId}`);
+    // Por ahora, solo mostramos un mensaje de éxito
+    configSnackbar.value = {
+      message: 'Devolución rechazada exitosamente',
+      type: 'success',
+      model: true
+    };
+  }
+}
+
 async function getReembolsosPage(page, limit, estado) {
   const url = `https://servicios-ecuavisa-suscripciones.vercel.app/reembolso/backoffice/solicitudes-list?estado=${estado}&page=${page}&limit=${limit}`;
   const response = await fetch(url);
@@ -150,6 +172,22 @@ const paginatedReembolsos = computed(() => {
   const start = (currentPage.value - 1) * rowPerPage.value;
   const end = start + rowPerPage.value;
   return filteredReembolsos.value.slice(start, end);
+})
+
+// Nuevo computed para el mensaje cuando no hay datos
+const noDataMessage = computed(() => {
+  switch (selectedState.value) {
+    case '2':
+      return "No hay reembolsos pendientes que mostrar. Escoge otro estado.";
+    case '1':
+      return "No hay reembolsos procesados que mostrar. Escoge otro estado.";
+    case '3':
+      return "No hay reembolsos rechazados que mostrar. Escoge otro estado.";
+    case '0':
+      return "No hay reembolsos sin proceso que mostrar. Escoge otro estado.";
+    default:
+      return "No hay datos que mostrar";
+  }
 })
 
 // Lifecycle hooks
@@ -313,6 +351,7 @@ async function exportarDatos() {
                 <th scope="col">Apellido</th>
                 <th scope="col">Email</th>
                 <th scope="col">ID Transacción</th>
+                <th scope="col">Fecha de solicitud</th>
                 <th scope="col">Nombre de Paquete</th>
                 <th scope="col">Acciones</th>
               </tr>
@@ -323,12 +362,17 @@ async function exportarDatos() {
                 <td>{{ item.user.last_name }}</td>
                 <td>{{ item.user.email }}</td>
                 <td>{{ item.transaction[0].transaction.id }}</td>
+                <td>{{ formatDate(item.created_at) }}</td>
                 <td>{{ item.transaction[0].transaction.product_description }}</td>
-  
                 <td class="text-center" style="width: 5rem;">
-                  <VBtn v-if="selectedState === '2'" icon size="x-small" color="default" variant="text" @click="procesarDevolucion(item.transaction_id)">
-                    <VIcon size="22" icon="mdi-credit-card-refund" />
-                  </VBtn>
+                  <template v-if="selectedState === '2'">
+                    <VBtn icon size="x-small" color="default" variant="text" @click="procesarDevolucion(item.transaction_id)">
+                      <VIcon size="22" icon="mdi-credit-card-refund" />
+                    </VBtn>
+                    <VBtn icon size="x-small" color="error" variant="text" @click="rechazarDevolucion(item.transaction_id)">
+                      <VIcon size="22" icon="mdi-close" />
+                    </VBtn>
+                  </template>
                   <VIcon v-else-if="selectedState === '1'" size="22" icon="mdi-check-circle" color="success" />
                   <VIcon v-else-if="selectedState === '3'" size="22" icon="mdi-close-circle" color="error" />
                 </td>
@@ -336,12 +380,12 @@ async function exportarDatos() {
             </tbody>
             <tfoot v-show="!paginatedReembolsos.length && !loadingReembolsos">
               <tr>
-                <td colspan="6" class="text-center">No hay datos que mostrar</td>
+                <td colspan="7" class="text-center">{{ noDataMessage }}</td>
               </tr>
             </tfoot>
             <tfoot v-show="loadingReembolsos">
               <tr>
-                <td colspan="6" class="text-center">Cargando datos, por favor espere un momento...</td>
+                <td colspan="7" class="text-center">Cargando datos, por favor espere un momento...</td>
               </tr>
             </tfoot>
           </VTable>
