@@ -26,6 +26,7 @@ const configSnackbar = ref({
   model: false
 })
 
+
 // Estado seleccionado (2 - pendiente por defecto)
 const selectedState = ref('2')
 
@@ -38,25 +39,33 @@ const stateOptions = [
 ]
 
 // Alert para procesar reembolso
-
+// Función para procesar devolución
 async function procesarDevolucion(transactionId) {
+  console.log('Iniciando proceso de devolución:', transactionId);
   const confirmacion = window.confirm(`¿Procesar devolución (${transactionId})?`);
   
   if (confirmacion) {
     try {
-      const response = await fetch('https://servicios-ecuavisa-suscripciones.vercel.app/reembolso/backoffice-user/accept', {
+      console.log('Enviando solicitud de procesamiento al servidor...');
+      const response = await fetch('https://servicios-ecuavisa-suscripciones.vercel.app/reembolso/backoffice-user/accept-custom', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ transaction_id: transactionId }),
+        body: JSON.stringify({ 
+          transaction_id: transactionId,
+          estado_reembolso: '1'  // '1' para proceso terminado
+        }),
       });
 
+      console.log('Respuesta recibida:', response);
+
       if (!response.ok) {
-        throw new Error('Error al procesar la devolución');
+        throw new Error(`Error al procesar la devolución: ${response.status} ${response.statusText}`);
       }
 
       const data = await response.json();
+      console.log('Datos de respuesta:', data);
       
       configSnackbar.value = {
         message: 'Devolución procesada exitosamente',
@@ -66,10 +75,10 @@ async function procesarDevolucion(transactionId) {
       
       getAllReembolsos();
     } catch (error) {
-      console.error('Error al procesar la devolución:', error);
+      console.error('Error detallado al procesar la devolución:', error);
       
       configSnackbar.value = {
-        message: 'Ocurrió un error al procesar la devolución',
+        message: `Error al procesar la devolución: ${error.message}`,
         type: 'error',
         model: true
       };
@@ -77,27 +86,57 @@ async function procesarDevolucion(transactionId) {
   }
 }
 
+// Función para rechazar devolución
+async function rechazarDevolucion(transactionId) {
+  console.log('Iniciando rechazo de devolución:', transactionId);
+  const confirmacion = window.confirm(`¿Rechazar devolución (${transactionId})?`);
+  
+  if (confirmacion) {
+    try {
+      console.log('Enviando solicitud de rechazo al servidor...');
+      const response = await fetch('https://servicios-ecuavisa-suscripciones.vercel.app/reembolso/backoffice-user/accept-custom', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ 
+          transaction_id: transactionId,
+          estado_reembolso: '3'  // '3' para rechazado
+        }),
+      });
 
+      console.log('Respuesta recibida:', response);
+
+      if (!response.ok) {
+        throw new Error(`Error al rechazar la devolución: ${response.status} ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      console.log('Datos de respuesta:', data);
+      
+      configSnackbar.value = {
+        message: 'Devolución rechazada exitosamente',
+        type: 'success',
+        model: true
+      };
+      
+      getAllReembolsos();
+    } catch (error) {
+      console.error('Error detallado al rechazar la devolución:', error);
+      
+      configSnackbar.value = {
+        message: `Error al rechazar la devolución: ${error.message}`,
+        type: 'error',
+        model: true
+      };
+    }
+  }
+}
 // Función para formatear la fecha
 function formatDate(dateString) {
   return moment(dateString).format('DD/MM/YYYY HH:mm:ss');
 }
 
-// Nueva función para rechazar devolución
-function rechazarDevolucion(transactionId) {
-  const confirmacion = window.confirm(`¿Rechazar devolución (${transactionId})?`);
-  
-  if (confirmacion) {
-    // Aquí iría la lógica para rechazar la devolución cuando tengas el endpoint
-    console.log(`Rechazando devolución: ${transactionId}`);
-    // Por ahora, solo mostramos un mensaje de éxito
-    configSnackbar.value = {
-      message: 'Devolución rechazada exitosamente',
-      type: 'success',
-      model: true
-    };
-  }
-}
 
 async function getReembolsosPage(page, limit, estado) {
   const url = `https://servicios-ecuavisa-suscripciones.vercel.app/reembolso/backoffice/solicitudes-list?estado=${estado}&page=${page}&limit=${limit}`;
@@ -281,7 +320,7 @@ async function exportarDatos() {
       :color="configSnackbar.type">
       {{ configSnackbar.message }}
     </VSnackbar>
-    
+        
     <VRow>
       <VCol cols="12" sm="12" lg="12">
         <h1>Listado de Reembolsos</h1>
@@ -370,8 +409,9 @@ async function exportarDatos() {
                       <VIcon size="22" icon="mdi-credit-card-refund" />
                     </VBtn>
                     <VBtn icon size="x-small" color="error" variant="text" @click="rechazarDevolucion(item.transaction_id)">
-                      <VIcon size="22" icon="mdi-close" />
-                    </VBtn>
+                        <VIcon size="22" icon="mdi-close" />
+                      </VBtn>
+              
                   </template>
                   <VIcon v-else-if="selectedState === '1'" size="22" icon="mdi-check-circle" color="success" />
                   <VIcon v-else-if="selectedState === '3'" size="22" icon="mdi-close-circle" color="error" />
