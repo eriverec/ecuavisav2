@@ -1,11 +1,6 @@
 <template>
   <section>
-    <VSnackbar
-      v-model="success"
-      color="success"
-      transition="scale-transition"
-      location="top center"
-    >
+    <VSnackbar v-model="success" color="success" transition="scale-transition" location="top center">
       <h3>Se ha guardado la configuración exitosamente</h3>
     </VSnackbar>
 
@@ -21,111 +16,75 @@
         </VRow>
 
         <VTabs v-model="activeTab">
-          <VTab
-            v-for="(player, index) in players"
-            :key="index"
-            :value="index"
-          >
+          <VTab v-for="(player, index) in players" :key="index" :value="index">
             {{ player.name || `Reproductor ${index + 1}` }}
           </VTab>
         </VTabs>
 
         <VWindow v-model="activeTab">
-          <VWindowItem
-            v-for="(player, index) in players"
-            :key="index"
-            :value="index"
-          >
+          <VWindowItem v-for="(player, index) in players" :key="index" :value="index">
             <VCard flat>
               <VCardTitle>
                 Configuración de {{ player.name || `Reproductor ${index + 1}` }}
-                <VBtn
-                  icon
-                  small
-                  color="error"
-                  class="float-right"
-                  @click="removePlayer(index)"
-                >
+                <VBtn icon small color="error" class="float-right" @click="removePlayer(index)">
                   <VIcon>mdi-delete</VIcon>
                 </VBtn>
               </VCardTitle>
               <VCardText>
-                <VTextField
-                  v-model="player.name"
-                  label="Nombre del reproductor"
-                />
-                <VTextarea
-                  v-model="player.iframe"
-                  label="Código iframe"
-                  rows="3"
-                />
-                <VSwitch
-                  v-model="player.forzado"
-                  label="Activar forzado"
-                />
-                <VTextField
-                  v-if="player.forzado"
-                  v-model="player.tituloForzado"
-                  label="Título forzado"
-                />
-                <VTextField
-                  v-if="player.forzado"
-                  v-model="player.labelForzado"
-                  label="Label forzado"
-                />
+                <VRow>
+                  <VCol cols="6">
+                    <VTextField class="mb-5" v-model="player.name" label="Nombre del reproductor" />
+
+                  </VCol>
+                  <VCol cols="3">
+                    <VTextField class="mb-5" v-model="player.subtituloFecha" label="Subtitulo Fecha" />
+
+                  </VCol>
+                  <VCol cols="3">
+                    <VTextField class="mb-5" v-model="player.subtituloHora" label="Subtitulo Hora" />
+
+                  </VCol>
+                </VRow>
+
+
+                <VTextarea v-model="player.iframe" label="Código iframe" rows="3" />
+                <VSwitch v-model="player.playerActivo" label="Activar Player" />
+                <VSwitch v-model="player.forzado" label="Activar forzado" />
+                <VTextField v-if="player.forzado" v-model="player.tituloForzado" label="Título forzado" />
+                <VTextField v-if="player.forzado" v-model="player.labelForzado" label="Label forzado" />
 
                 <VDivider class="my-4" />
 
-                <h3>Configuración de Horarios</h3>
+                <h3 class="mb-5">Configuración de Horarios</h3>
+
+
+                
 
                 <VRow>
                   <VCol cols="4">
-                    <VSelect
-                      v-model="diaSelected"
-                      :items="diasDisponibles(player)"
-                      label="Día de la semana"
-                    />
+                    <VSelect v-model="diaSelected" :items="diasDisponibles(player)" label="Día de la semana" />
                   </VCol>
                   <VCol cols="8">
-                    <VBtn
-                      color="primary"
-                      @click="addDia(player)"
-                      :disabled="!diaSelected"
-                    >
+                    <VBtn color="primary" @click="addDia(player)" :disabled="!diaSelected">
                       Añadir día
                     </VBtn>
                   </VCol>
                 </VRow>
 
                 <VExpansionPanels>
-                  <VExpansionPanel
-                    v-for="(horario, indexDia) in player.horarios"
-                    :key="indexDia"
-                  >
+                  <VExpansionPanel v-for="(horario, indexDia) in player.horarios" :key="indexDia">
                     <VExpansionPanelTitle>
                       {{ resolveDia(horario.dia) }}
-                      <VChip
-                        :color="horario.estadoDia ? 'success' : 'warning'"
-                        class="ml-2"
-                      >
+                      <VChip :color="horario.estadoDia ? 'success' : 'warning'" class="ml-2">
                         {{ horario.estadoDia ? "Activo" : "Inactivo" }}
                       </VChip>
                     </VExpansionPanelTitle>
                     <VExpansionPanelText>
-                      <VSwitch
-                        v-model="horario.estadoDia"
-                        label="Activar día"
-                      />
-                      <VBtn
-                        color="primary"
-                        @click="addHora(player, indexDia)"
-                      >
+                      <VSwitch v-model="horario.estadoDia" label="Activar día" />
+                      <VBtn color="primary" @click="addHora(player, indexDia)">
                         Añadir hora
                       </VBtn>
-                      <VBtn
-                        color="error"
-                        @click="elimDia(player, indexDia)"
-                      >
+                      <VBtn color="error" @click="elimDia(player, indexDia)">
                         Eliminar día
                       </VBtn>
                       <VTable>
@@ -138,32 +97,18 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr
-                            v-for="(hora, indexHora) in horario.horas"
-                            :key="indexHora"
-                          >
+                          <tr v-for="(hora, indexHora) in horario.horas" :key="indexHora">
                             <td>
                               <VTextField v-model="hora.tituloPrograma" />
                             </td>
                             <td>
-                              <VTextField
-                                v-model="hora.inicio"
-                                type="time"
-                              />
+                              <VTextField v-model="hora.inicio" type="time" />
                             </td>
                             <td>
-                              <VTextField
-                                v-model="hora.fin"
-                                type="time"
-                              />
+                              <VTextField v-model="hora.fin" type="time" />
                             </td>
                             <td>
-                              <VBtn
-                                icon
-                                small
-                                color="error"
-                                @click="elimHora(player, indexDia, indexHora)"
-                              >
+                              <VBtn icon small color="error" @click="elimHora(player, indexDia, indexHora)">
                                 <VIcon>mdi-delete</VIcon>
                               </VBtn>
                             </td>
@@ -180,11 +125,7 @@
 
         <VRow class="mt-4">
           <VCol cols="12">
-            <VBtn
-              color="success"
-              @click="enviar"
-              :loading="isLoading"
-            >
+            <VBtn color="success" @click="enviar" :loading="isLoading">
               Guardar Configuración
             </VBtn>
           </VCol>
@@ -295,7 +236,7 @@ async function enviar() {
     const config = {
       players: players.value
     };
-    
+
     const response = await fetch(
       "https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/player/config.php?api=update",
       {
@@ -309,8 +250,9 @@ async function enviar() {
         }),
       }
     );
-    
+
     const result = await response.json();
+    console.log("result", result);
     if (result === "Configuración actualizada correctamente") {
       success.value = true;
     }
