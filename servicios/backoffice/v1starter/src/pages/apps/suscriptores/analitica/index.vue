@@ -1,5 +1,6 @@
 <script setup>
-	import analitica_grafico_1 from '@/views/apps/suscripciones/analitica_grafico_1.vue'
+	import analitica_grafico_1 from '@/views/apps/suscripciones/analitica_grafico_1.vue';
+	import analitica_grafico_2_pago_dia from '@/views/apps/suscripciones/analitica_grafico_2_pago_dia.vue';
 	import Moment from 'moment';
 	import { extendMoment } from 'moment-range';
 	import esLocale from "moment/locale/es";
@@ -34,6 +35,16 @@
         lg="6"
       >
       	<analitica_grafico_1 />
+
+    	</VCol>
+
+    	<VCol
+        class="mt-0"
+        cols="12"
+        md="12"
+        lg="6"
+      >
+      	<analitica_grafico_2_pago_dia />
 
     	</VCol>
     </VRow>
