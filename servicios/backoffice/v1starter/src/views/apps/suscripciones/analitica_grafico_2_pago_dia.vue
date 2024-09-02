@@ -1,7 +1,7 @@
 <script setup>
   import Moment from 'moment';
-  import { extendMoment } from 'moment-range';
-  import esLocale from "moment/locale/es";
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
 
@@ -130,9 +130,9 @@
   }
 
   // GRAFICO
-  import VueApexCharts from 'vue3-apexcharts'
-  import { useTheme } from 'vuetify'
-  import { hexToRgb } from '@layouts/utils'
+  import { hexToRgb } from '@layouts/utils';
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
 
   // 👉 Colors variables
   const colorVariables = themeColors => {
@@ -336,6 +336,7 @@
                 :items="selectAnio"
                 label="Filtro de año" 
                 :menu-props="{ maxHeight: '300' }"
+                class="d-none"
               />
               <VSelect
                   style="width: 275px;"
