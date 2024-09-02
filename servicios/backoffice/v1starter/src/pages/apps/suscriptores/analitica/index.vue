@@ -1,9 +1,12 @@
 <script setup>
-	import analitica_grafico_1 from '@/views/apps/suscripciones/analitica_grafico_1.vue';
-	import analitica_grafico_2_pago_dia from '@/views/apps/suscripciones/analitica_grafico_2_pago_dia.vue';
-	import Moment from 'moment';
-	import { extendMoment } from 'moment-range';
-	import esLocale from "moment/locale/es";
+import analitica_grafico_1 from '@/views/apps/suscripciones/analitica_grafico_1.vue';
+import analitica_grafico_2_pago_dia from '@/views/apps/suscripciones/analitica_grafico_2_pago_dia.vue';
+import analitica_grafico_barras_pagos from '@/views/apps/suscripciones/analitica_grafico_barras_pagos.vue';
+import analitica_grafico_barras_suscritos from '@/views/apps/suscripciones/analitica_grafico_barras_suscritos.vue';
+import analitica_grafico_suscritos_dia from '@/views/apps/suscripciones/analitica_grafico_suscritos_dia.vue';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
 	const moment = extendMoment(Moment);
 	moment.locale('es', [esLocale]);
 
@@ -47,6 +50,44 @@
       	<analitica_grafico_2_pago_dia />
 
     	</VCol>
+    </VRow>
+
+	<VRow>
+    	<VCol
+        class="mt-0"
+        cols="12"
+        md="12"
+        lg="6"
+      >
+      	<analitica_grafico_barras_pagos />
+
+    	</VCol>
+
+		<VCol
+        class="mt-0"
+        cols="12"
+        md="12"
+        lg="6"
+      >
+      	<analitica_grafico_barras_suscritos />
+
+    	</VCol>
+
+    </VRow>
+
+	<VRow>
+    	<VCol
+        class="mt-0"
+        cols="12"
+        md="12"
+        lg="6"
+      >
+      	<analitica_grafico_suscritos_dia />
+
+    	</VCol>
+
+		
+
     </VRow>
 	</section>
 </template>
