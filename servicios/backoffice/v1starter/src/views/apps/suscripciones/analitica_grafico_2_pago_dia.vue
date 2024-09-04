@@ -1,7 +1,8 @@
 <script setup>
-  import Moment from 'moment';
+import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
+import { ref } from 'vue';
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
 
@@ -40,7 +41,63 @@ import esLocale from "moment/locale/es";
   const paqueteModelLoading = ref(false);
   const searchPaqueteModel = ref(null);
 
+  // btn descargar
   const btnLoadingDescargar = ref(false);
+
+// async function descargarReporte() {
+//   try {
+//     btnLoadingDescargar.value = true;
+
+//     const endpoint = 'https://servicios-ecuavisa-suscripciones.vercel.app/backoffice-grafico/descargar/pagos-realizados-agrupados-por-mes-anio';
+//     const params = {
+//       anio: '2024',
+//       mes: '08',
+//       idPaquete: '651c9d012ff9fa09a75e6c16',
+//       page: 1,
+//       limit: 100,
+//     };
+
+//     const response = await axios.get(endpoint, { params });
+
+//     if (response.data.resp) {
+//       const data = response.data.data;
+//       const csvContent = generarCSV(data);
+//       descargarArchivo(csvContent, 'pagos-realizados.csv');
+//     } else {
+//       console.error('Error al obtener los datos del endpoint.');
+//     }
+//   } catch (error) {
+//     console.error('Error al descargar el reporte:', error);
+//   } finally {
+//     btnLoadingDescargar.value = false;
+//   }
+// }
+
+// function generarCSV(data) {
+//   const headers = ['idSuscripciones', 'created_at', 'pago', 'transaction_id', 'dev_reference', 'product_description', 'trace_number', 'lot_number', 'wylexId', 'email', 'first_name', 'last_name', 'fecha'];
+//   let csvContent = `${headers.join(',')}\n`;
+
+//   for (const item of data) {
+//     const { idSuscripciones, created_at, pago, transaction_id, dev_reference, product_description, trace_number, lot_number, user, fecha } = item;
+//     const { wylexId, email, first_name, last_name } = user;
+//     const row = [idSuscripciones, created_at, pago, transaction_id, dev_reference, product_description, trace_number, lot_number, wylexId, email, first_name, last_name, fecha];
+//     csvContent += `${row.join(',')}\n`;
+//   }
+
+//   return csvContent;
+// }
+
+// function descargarArchivo(content, filename) {
+//   const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+//   const url = URL.createObjectURL(blob);
+//   const link = document.createElement('a');
+//   link.setAttribute('href', url);
+//   link.setAttribute('download', filename);
+//   document.body.appendChild(link);
+//   link.click();
+//   document.body.removeChild(link);
+// }
+//fin btn descargar
 
   const graficoDisabled = ref(false);
   const dataGrafico = ref([]);
@@ -318,13 +375,10 @@ import { useTheme } from 'vuetify';
                 :loading="btnLoadingDescargar"
                 :disabled="btnLoadingDescargar"
                 color="primary"
-                @click=""
+                @click="descargarReporte"
               >
                 Descargar
-                <VIcon
-                  end
-                  icon="tabler-cloud-download"
-                />
+                <VIcon end icon="tabler-cloud-download" />
               </VBtn>
             </template>
           </VCardItem>
