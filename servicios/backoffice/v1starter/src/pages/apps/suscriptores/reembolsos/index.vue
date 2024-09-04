@@ -47,7 +47,7 @@ async function procesarDevolucion(transactionId) {
   if (confirmacion) {
     try {
       console.log('Enviando solicitud de procesamiento al servidor...');
-      const response = await fetch('https://servicios-ecuavisa-suscripciones.vercel.app/reembolso/backoffice-user/accept-custom', {
+      const response = await fetch('https://servicios-ecuavisa-suscripciones.vercel.app/reembolso/backoffice-user/accept', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
