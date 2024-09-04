@@ -666,10 +666,10 @@ import esLocale from "moment/locale/es";
           <VCardItem>
             <div class="p-0 d-flex flex-column align-items-start">
               <VCardTitle>
-                Por año.<br>Ventas realizadas agrupadas por meses.
+                Por año.<br>Reembolsos realizados agrupados por meses.
               </VCardTitle>
               <VCardSubtitle>
-                Debes seleccionar el año y el paquete para ver los resultados<br> de ventas en suscripciones.
+                Debes seleccionar el paquete para ver los resultados<br> de reembolsos.
               </VCardSubtitle>
             </div>
             <template #append>
