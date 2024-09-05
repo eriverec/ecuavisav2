@@ -139,6 +139,8 @@ async function exportarDatos() {
       'Email',
       'Estado',
       'ID Medio Pago',
+      'País',
+      'Ciudad',
       'Fecha de Creación'
     ];
 
@@ -153,6 +155,8 @@ async function exportarDatos() {
         item.user[0].email,
         item.estado ? 'Activo' : 'Inactivo',
         item.idMediopago,
+        item.billing_details.pais,
+        item.billing_details.ciudad,
         moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')
       ];
       csvContent += row.join(',') + '\n';
