@@ -195,13 +195,96 @@ export default {
       chartConfig.value.options.xaxis.categories = datos.map(item => item.fecha)
     }
 
-    const descargarDatos = () => {
-      // Implementar lógica de descarga
+    const descargarDatos = async () => {
       btnLoadingDescargar.value = true
-      setTimeout(() => {
+      try {
+        const response = await axios.get(`https://servicios-ecuavisa-suscripciones.vercel.app/backoffice-grafico/descargar/suscripciones-realizados-activas-agrupados-por-dia`, {
+          params: {
+            anio: anioSeleccionado.value,
+            mes: mesSeleccionado.value,
+            idPaquete: idPaquete,
+            estado: 7,
+            page: 1,
+            limit: 100
+          },
+          responseType: 'json'
+        })
+
+        if (response.data && response.data.resp && Array.isArray(response.data.data)) {
+          const csvData = generarCSV(response.data.data)
+          const blob = new Blob([csvData], { type: 'text/csv;charset=utf-8;' })
+          const url = window.URL.createObjectURL(blob)
+          const link = document.createElement('a')
+          link.href = url
+          link.setAttribute('download', `suscripciones_diarias_${anioSeleccionado.value}_${mesSeleccionado.value}.csv`)
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+
+          mostrarSnackbar('Datos descargados exitosamente', 'success')
+        } else {
+          throw new Error('Formato de respuesta inválido')
+        }
+      } catch (error) {
+        console.error('Error al descargar los datos:', error)
+        mostrarSnackbar('Error al descargar los datos', 'error')
+      } finally {
         btnLoadingDescargar.value = false
-        mostrarSnackbar('Datos descargados exitosamente', 'success')
-      }, 2000)
+      }
+    }
+
+    const generarCSV = (data) => {
+      const headers = [
+        'periodicidad', 'estado', 'tipo_frecuencia_usuario', 'created_at',
+        'wylexId', 'email', 'first_name', 'last_name', 'country', 'phone_number',
+        'birth_date', 'provider', 'ciudad', 'telefono',
+        'package_details_fechaInicio', 'package_details_fechaBaja', 'package_details_prox_pago',
+        'package_details_valorPagar', 'package_details_precio_promocion',
+        'billing_details_nombres', 'billing_details_email', 'billing_details_apellidos',
+        'billing_details_cedula', 'billing_details_telefono', 'billing_details_pais',
+        'billing_details_ciudad', 'billing_details_direccion',
+        'fecha', 'estado_text'
+      ]
+
+      let csvContent = headers.join(',') + '\n'
+
+      data.forEach(item => {
+        const row = [
+          item.periodicidad,
+          item.estado,
+          item.tipo_frecuencia_usuario,
+          item.created_at,
+          item.user.wylexId,
+          item.user.email,
+          item.user.first_name,
+          item.user.last_name,
+          item.user.country,
+          item.user.phone_number,
+          item.user.birth_date,
+          item.user.provider,
+          item.user.ciudad,
+          item.user.telefono,
+          item.package_details_fechaInicio,
+          item.package_details_fechaBaja,
+          item.package_details_prox_pago,
+          item.package_details_valorPagar,
+          item.package_details_precio_promocion,
+          item.billing_details_nombres,
+          item.billing_details_email,
+          item.billing_details_apellidos,
+          item.billing_details_cedula,
+          item.billing_details_telefono,
+          item.billing_details_pais,
+          item.billing_details_ciudad,
+          item.billing_details_direccion,
+          item.fecha,
+          item.estado_text
+        ].map(field => `"${field}"`).join(',')
+
+        csvContent += row + '\n'
+      })
+
+      return csvContent
     }
 
     const mostrarSnackbar = (mensaje, color = 'success') => {
