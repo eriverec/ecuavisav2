@@ -15,6 +15,8 @@
           </VCol>
         </VRow>
 
+   
+
         <VTabs v-model="activeTab">
           <VTab v-for="(player, index) in players" :key="index" :value="index">
             {{ player.name || `Reproductor ${index + 1}` }}
