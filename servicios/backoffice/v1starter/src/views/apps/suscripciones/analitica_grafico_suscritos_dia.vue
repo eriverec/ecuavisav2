@@ -169,7 +169,7 @@ export default {
             anio: anioSeleccionado.value,
             mes: mesSeleccionado.value,
             idPaquete: idPaquete,
-            estado: 7
+            estado: 3
           }
         })
         if (response.data.resp && Array.isArray(response.data.data)) {
