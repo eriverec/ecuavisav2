@@ -24,6 +24,7 @@ const totalPage = ref(0)
 const rowPerPage = ref(10)
 const loadingTransactions = ref(false)
 const searchQuery = ref('')
+const isDownloading = ref(false);
 
 // Agregar estas nuevas referencias reactivas
 const selectedTransaction = ref(null)
@@ -38,7 +39,9 @@ async function getTransactions(page, limit) {
   try {
     const url = `https://servicios-ecuavisa-suscripciones.vercel.app/backoffice/transaction-all?page=${page}&limit=${limit}`
     const response = await fetch(url)
-    const data = await response.json()
+    const data = await response.json();
+
+    console.log(data);
 
     if (data.resp) {
       const allTransactions = [];
@@ -55,8 +58,8 @@ async function getTransactions(page, limit) {
 
       // Ordenar por fecha de pago descendente
       allTransactions.sort((a, b) => {
-        const dateA = a.transaction && a.transaction.payment_date ? new Date(a.transaction.payment_date) : new Date(0)
-        const dateB = b.transaction && b.transaction.payment_date ? new Date(b.transaction.payment_date) : new Date(0)
+        const dateA = a.transaction && a.created_at ? new Date(a.created_at) : new Date(0)
+        const dateB = b.transaction && b.created_at ? new Date(b.created_at) : new Date(0)
         return dateB - dateA
       })
 
@@ -81,10 +84,10 @@ function searchTransactions() {
     const trans = Array.isArray(item.transaction) ? item.transaction[0] : item.transaction
 
     return (user?.first_name?.toLowerCase().includes(query)) ||
-           (user?.last_name?.toLowerCase().includes(query)) ||
-           (user?._id?.toLowerCase().includes(query)) ||
-           (user?.email?.toLowerCase().includes(query)) ||
-           (trans?.id?.toLowerCase().includes(query))
+      (user?.last_name?.toLowerCase().includes(query)) ||
+      (user?._id?.toLowerCase().includes(query)) ||
+      (user?.email?.toLowerCase().includes(query)) ||
+      (trans?.id?.toLowerCase().includes(query))
   })
   currentPage.value = 1
   totalPage.value = Math.ceil(filteredTransactions.value.length / rowPerPage.value)
@@ -152,8 +155,8 @@ function downloadExcel() {
   const rows = [
     ['Factura'],
     ['Número de factura', trans?.id || 'N/A'],
-    ['Fecha de emisión', formatDateCSV(trans?.payment_date)]   ,
-    ['Fecha de vencimiento', formatDateCSV(trans?.payment_date)],
+    ['Fecha de emisión', formatDateCSV(transaction.created_at)],
+    ['Fecha de vencimiento', formatDateCSV(transaction.created_at)],
     [],
     ['Facturado a'],
     ['Nombre', `${user?.first_name || ''} ${user?.last_name || ''}`],
@@ -190,6 +193,117 @@ function downloadExcel() {
   }
 }
 
+// Definimos la variable con los datos de las tarjetas
+const cardTypes = {
+  ex: 'Exito',
+  ak: 'Alkosto',
+  cd: 'Codensa',
+  sx: 'Sodexo',
+  ol: 'Olimpica',
+  ep: 'EPM',
+  csd: 'Colsubsidio',
+  bbva: 'BBVA',
+  cmr: 'Falabella',
+  cn: 'Carnet',
+  cs: 'Credisensa',
+  so: 'Solidario',
+  up: 'Union Pay',
+  el: 'Elo',
+  jc: 'JCB',
+  au: 'Aura',
+  hpc: 'Hipercard',
+  vi: 'Visa',
+  mc: 'Mastercard',
+  ax: 'American Express',
+  di: 'Diners',
+  dc: 'Discover',
+  ms: 'Maestro'
+};
+
+// Función para obtener el nombre completo de la tarjeta
+const getCardTypeName = (code) => {
+  return cardTypes[code] || code || 'N/A';
+};
+
+async function downloadCSV() {
+  isDownloading.value = true
+  let allTransactions = []
+  let currentPage = 1
+  const limit = 20
+  
+  try {
+    while (true) {
+      const url = `https://servicios-ecuavisa-suscripciones.vercel.app/backoffice/transaction-all?page=${currentPage}&limit=${limit}`
+      const response = await fetch(url)
+      const data = await response.json()
+      
+      if (!data.resp || (!data.transacciones_realizadas.length && !data.transacciones_fallidas.length)) {
+        break
+      }
+      
+      allTransactions = allTransactions.concat(data.transacciones_realizadas, data.transacciones_fallidas)
+      currentPage++
+    }
+    
+    const csvContent = generateCSV(allTransactions)
+    downloadFile(csvContent, 'transacciones.csv')
+  } catch (error) {
+    console.error('Error al descargar el CSV:', error)
+    // Aquí puedes manejar el error, por ejemplo, mostrando una notificación al usuario
+  } finally {
+    isDownloading.value = false
+  }
+}
+
+function generateCSV(transactions) {
+  const headers = [
+    'Nombre', 'Apellido', 'Email', 'ID Transacción', 'Banco',
+    'Tipo Tarjeta', 'Paquete', 'Fecha de Pago', 'Precio con IVA', 'Estado'
+  ]
+  
+  const rows = transactions.map(item => {
+    const user = Array.isArray(item.user) ? item.user[0] : item.user
+    const trans = item.transaction
+    return [
+      user?.first_name || 'N/A',
+      user?.last_name || 'N/A',
+      user?.email || 'N/A',
+      trans?.id || 'N/A',
+      item.card_details?.bank_name || 'N/A',
+      getCardTypeName(item.card_details?.type),
+      item.paquete?.nombre || 'N/A',
+      item.created_at ? moment(item.created_at).format('DD-MM-YYYY HH:mm:ss') : 'N/A',
+      trans?.amount || 'N/A',
+      trans?.status_detail == '3' ? 'Realizada' : 'Fallida'
+    ]
+  })
+  
+  return [headers, ...rows].map(row => row.join(',')).join('\n')
+}
+
+function downloadFile(content, fileName) {
+  const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' })
+  const link = document.createElement('a')
+  if (link.download !== undefined) {
+    const url = URL.createObjectURL(blob)
+    link.setAttribute('href', url)
+    link.setAttribute('download', fileName)
+    link.style.visibility = 'hidden'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+}
+
+// Función para calcular los totales
+function calculateTotals() {
+  totalTransactions.value = transactions.value.length
+  activeUsers.value = transactions.value.filter(t => 
+    t.transaction && t.transaction.status_detail === '3'
+  ).length
+}
+
+
 // Lifecycle hooks
 onMounted(() => {
   getTransactions(1, 100)  // Inicialmente cargamos 100 transacciones
@@ -203,26 +317,37 @@ onMounted(() => {
     <VRow>
       <VCol cols="12" sm="12" lg="12">
         <h1>Listado de Transaciones Totales</h1>
+    
+
+
+
         <VCardText class="d-flex py-4 gap-4 px-0 flex-wrap" style="align-items: flex-start;">
           <div class="me-3 d-flex gap-4">
             <VSelect class="bg-white" v-model="rowPerPage" density="compact" variant="outlined"
               :items="[10, 20, 30, 50]" />
 
-            <div>
               <VTextField v-model="searchQuery" label="Buscar..." prepend-inner-icon="mdi-magnify" single-line
-                hide-details @keyup.enter="buscarUsuarios" style="width: 300px;" />
-                
-              </div>
-              
-              
-              
-            </div>
-            
-            <VSpacer />
-            
-            
-          </VCardText>
-          <h6 class="text-caption text-secondary font-weight-semibold">Puedes filtrar por nombre, apellido, email, id de usuario y id de transacción</h6>
+              hide-details @keyup.enter="buscarUsuarios" style="width: 300px;" />
+
+          </div>
+
+          <VSpacer />
+
+          <div class="app-user-search-filter d-flex align-top">
+
+            <VBtn @click="downloadCSV" variant="tonal"
+              color="success"
+              prepend-icon="tabler-screen-share" :loading="isDownloading">
+              Exportar datos
+            </VBtn>
+
+          </div>
+        </VCardText>
+
+
+
+        <h6 class="text-caption text-secondary font-weight-semibold">Puedes filtrar por nombre, apellido, email, id de
+          usuario y id de transacción</h6>
 
         <VCard class="mt-1">
           <VTable class="text-no-wrap">
@@ -232,8 +357,11 @@ onMounted(() => {
                 <th scope="col">Apellido</th>
                 <th scope="col">Email</th>
                 <th scope="col">ID Transacción</th>
+                <th scope="col">Banco</th>
+                <th scope="col">Tipo Tarjeta</th>
                 <th scope="col">Paquete</th>
                 <th scope="col">Fecha de Pago</th>
+                <th scope="col">Precio con iva</th>
                 <th scope="col">Estado</th>
                 <th scope="col">Acción</th>
 
@@ -246,13 +374,20 @@ onMounted(() => {
                 <td>{{ (Array.isArray(item.user) ? item.user[0]?.last_name : item.user?.last_name) || 'N/A' }}</td>
                 <td>{{ (Array.isArray(item.user) ? item.user[0]?.email : item.user?.email) || 'N/A' }}</td>
                 <td>{{ item.transaction?.id || 'N/A' }}</td>
+
+                <td>{{ item.card_details?.bank_name || 'N/A' }}</td>
+
+                <td>{{ getCardTypeName(item.card_details?.type) }}</td>
+
+
                 <td>{{ item.paquete?.nombre || 'N/A' }}</td>
-                <td>{{ item.transaction?.payment_date ? moment(item.transaction.payment_date).format('DD-MM-YYYY HH:mm:ss') :
+                <td>{{ item.created_at ? moment(item.created_at).format('DD-MM-YYYY HH:mm:ss') :
                   'N/A' }}
                 </td>
+                <td>${{ item.transaction.amount }}</td>
                 <td>
-                  <VChip :color="item.estado === 'Realizado' ? 'success' : 'error'">
-                    {{ item.estado }}
+                  <VChip :color="item.transaction.status_detail == '3' ? 'success' : 'error'">
+                    {{ item.transaction.status_detail == '3' ? 'Realizada' : 'Fallida' }}
                   </VChip>
                 </td>
 

@@ -73,7 +73,7 @@ async function getAllUsuarios() {
 function buscarUsuarios() {
   isFullLoading.value = true;
   const query = searchQuery.value.toLowerCase();
-  filteredUsuarios.value = dataUsuarios.value.filter(item => 
+  filteredUsuarios.value = dataUsuarios.value.filter(item =>
     item.user[0].first_name.toLowerCase().includes(query) ||
     item.user[0].last_name.toLowerCase().includes(query)
   );
@@ -100,8 +100,6 @@ const paginatedUsuarios = computed(() => {
   const end = start + rowPerPage.value;
   return filteredUsuarios.value.slice(start, end);
 })
-
-console.log(paginatedUsuarios);
 
 // Lifecycle hooks
 onMounted(() => {
@@ -132,7 +130,7 @@ async function exportarDatos() {
   try {
     isLoadingExport.value = true;
     const allUsers = await getAllUsuariosForExport();
-    
+
     // Definir las columnas del CSV
     const columns = [
       'ID',
@@ -150,7 +148,7 @@ async function exportarDatos() {
     // Crear el contenido del CSV
     let csvContent = columns.join(',') + '\n';
 
-    
+
     allUsers.forEach(item => {
       const createdAt = new Date(item.created_at);
       const formattedDate = createdAt.toISOString().replace('T', ' ').substr(0, 19);
@@ -199,48 +197,62 @@ async function exportarDatos() {
     isLoadingExport.value = false;
   }
 }
+
+const cardTypes = {
+  ex: 'Exito',
+  ak: 'Alkosto',
+  cd: 'Codensa',
+  sx: 'Sodexo',
+  ol: 'Olimpica',
+  ep: 'EPM',
+  csd: 'Colsubsidio',
+  bbva: 'BBVA',
+  cmr: 'Falabella',
+  cn: 'Carnet',
+  cs: 'Credisensa',
+  so: 'Solidario',
+  up: 'Union Pay',
+  el: 'Elo',
+  jc: 'JCB',
+  au: 'Aura',
+  hpc: 'Hipercard',
+  vi: 'Visa',
+  mc: 'Mastercard',
+  ax: 'American Express',
+  di: 'Diners',
+  dc: 'Discover',
+  ms: 'Maestro'
+};
+
+
+// Función para obtener el nombre completo de la tarjeta
+const getCardTypeName = (code) => {
+  return cardTypes[code] || code || 'N/A';
+};
+
+
 </script>
 
 <template>
   <section>
-    <VSnackbar 
-      v-model="configSnackbar.model" 
-      location="top end" 
-      variant="flat" 
-      :timeout="configSnackbar.timeout || 2000" 
-      :color="configSnackbar.type">
+    <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat"
+      :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
       {{ configSnackbar.message }}
     </VSnackbar>
-    
+
     <VRow>
       <VCol cols="12" sm="12" lg="12">
         <h1>Listado de Usuarios Suscritos</h1>
         <VCardText class="d-flex py-4 gap-4 px-0 flex-wrap" style="align-items: flex-start;">
           <div class="me-3 d-flex gap-4">
-            <VSelect
-              class="bg-white"
-              v-model="rowPerPage"
-              density="compact"
-              variant="outlined"
-              :items="[10, 20, 30, 50]"
-            />
-            
-            <VTextField
-              v-model="searchQuery"
-              label="Buscar por nombre o apellido"
-              prepend-inner-icon="mdi-magnify"
-              single-line
-              hide-details
-              @keyup.enter="buscarUsuarios"
-              style="width: 300px;"
-            />
-            
-            <VBtn
-              color="primary"
-              :loading="isFullLoading"
-              :disabled="isFullLoading || loadingUsuarios"
-              @click="buscarUsuarios"
-            >
+            <VSelect class="bg-white" v-model="rowPerPage" density="compact" variant="outlined"
+              :items="[10, 20, 30, 50]" />
+
+            <VTextField v-model="searchQuery" label="Buscar por nombre o apellido" prepend-inner-icon="mdi-magnify"
+              single-line hide-details @keyup.enter="buscarUsuarios" style="width: 300px;" />
+
+            <VBtn color="primary" :loading="isFullLoading" :disabled="isFullLoading || loadingUsuarios"
+              @click="buscarUsuarios">
               Buscar
             </VBtn>
 
@@ -250,14 +262,8 @@ async function exportarDatos() {
           <VSpacer />
 
           <div class="app-user-search-filter d-flex align-top">
-            <VBtn
-              :loading="isLoadingExport"
-              :disabled="isLoadingExport || loadingUsuarios"
-              variant="tonal"
-              color="success"
-              prepend-icon="tabler-screen-share"
-              @click="exportarDatos"
-            >
+            <VBtn :loading="isLoadingExport" :disabled="isLoadingExport || loadingUsuarios" variant="tonal"
+              color="success" prepend-icon="tabler-screen-share" @click="exportarDatos">
               Exportar datos
             </VBtn>
           </div>
@@ -271,6 +277,8 @@ async function exportarDatos() {
                 <th scope="col">Apellido</th>
                 <th scope="col">Email</th>
                 <th scope="col">Estado</th>
+                <th scope="col">Pagos</th>
+
                 <th scope="col">Pais</th>
                 <th scope="col">Ciudad</th>
                 <th scope="col">Fecha de suscripcion</th>
@@ -288,13 +296,23 @@ async function exportarDatos() {
                     {{ item.estado == "3" ? 'Activo' : 'Inactivo' }}
                   </VChip>
                 </td>
+
+                <td>
+                  <ul>
+                    <li style="list-style: circle;"  v-for="pago in item.pagos_tarjetas" :key="pago.transaction.transaction_id">
+                      {{ pago.card_details.bank_name || 'N/A' }} ({{ getCardTypeName(pago.card_details.type) }})
+                    </li>
+                  </ul >
+                </td>
+
                 <td>{{ item.billing_details.pais }}</td>
                 <td>{{ item.billing_details.ciudad }}</td>
-                <td>{{ moment(item.billing_details.created_at).format('DD/MM/YYYY HH:mm:ss')  }}</td>
+                <td>{{ moment(item.billing_details.created_at).format('DD/MM/YYYY HH:mm:ss') }}</td>
 
                 <!-- <td>{{ item.idMediopago }}</td> -->
                 <td class="text-center" style="width: 5rem;">
-                  <VBtn icon size="x-small" color="default" variant="text" :to="{ name: 'apps-user-view-id', params: { id: item.user[0].wylexId } }">
+                  <VBtn icon size="x-small" color="default" variant="text"
+                    :to="{ name: 'apps-user-view-id', params: { id: item.user[0].wylexId } }">
                     <VIcon size="22" icon="tabler-eye" />
                   </VBtn>
                 </td>
@@ -314,12 +332,7 @@ async function exportarDatos() {
           <VDivider />
           <VCardText class="d-flex align-center flex-wrap justify-space-between gap-4 py-3 px-5">
             <span class="text-sm text-disabled">{{ paginationData }}</span>
-            <VPagination
-              v-model="currentPage"
-              size="small"
-              :total-visible="5"
-              :length="totalPage"
-            />
+            <VPagination v-model="currentPage" size="small" :total-visible="5" :length="totalPage" />
           </VCardText>
         </VCard>
       </VCol>
@@ -328,5 +341,4 @@ async function exportarDatos() {
 </template>
 
 <style lang="scss">
-// ... (mantener los estilos existentes)
-</style>
+// ... (mantener los estilos existentes)</style>
