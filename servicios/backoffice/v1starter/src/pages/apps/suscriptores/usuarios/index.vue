@@ -305,7 +305,7 @@ async function exportarDatos() {
                 <td colspan="6" class="text-center">No hay datos que mostrar</td>
               </tr>
             </tfoot>
-            <tfoot>
+            <tfoot v-show="loadingUsuarios">
               <tr>
                 <td colspan="8" class="text-center">Cargando datos, por favor espere un momento...</td>
               </tr>
