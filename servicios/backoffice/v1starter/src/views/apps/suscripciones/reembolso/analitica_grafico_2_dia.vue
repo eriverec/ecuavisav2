@@ -98,6 +98,23 @@ import esLocale from "moment/locale/es";
   const selectModelAnio = ref(2024);
   const selectAnio = [2025, 2024, 2023, 2022];
 
+  const selectMes = [
+    {"title":'Enero',"value":"01"},
+    {"title":'Febrero',"value":"02"},
+    {"title":'Marzo',"value":"03"},
+    {"title":'Abril',"value":"04"},
+    {"title":'Mayo',"value":"05"},
+    {"title":'Junio',"value":"06"},
+    {"title":'Julio',"value":"07"},
+    {"title":'Agosto',"value":"08"},
+    {"title":'Septiembre',"value":"09"},
+    {"title":'Octubre',"value":"10"},
+    {"title":'Noviembre',"value":"11"},
+    {"title":'Diciembre',"value":"12"}
+  ];
+  const mesHoy = moment().format("MM");
+  const selectModelMes = ref(mesHoy);
+
   const selectModelPaquete = ref(null);
   const selectItemsPaquete = ref([]);
   const selectItemsPaqueteCopy = ref([]);
@@ -166,7 +183,7 @@ import esLocale from "moment/locale/es";
 
   async function getDataGrafico(json = {}){
     try {
-      const { anio = null, idPaquete = null } = json;
+      const { anio = null, idPaquete = null, mes = null, estado = 1 } = json;
 
       graficoDisabled.value = true;
       var myHeaders = new Headers();
@@ -178,7 +195,7 @@ import esLocale from "moment/locale/es";
         redirect: 'follow'
       };
 
-      var response = await fetch(`${dominio}/backoffice-grafico/reembolsos-realizados-agrupados-por-mes?anio=${anio}&idPaquete=${idPaquete}`, requestOptions);
+      var response = await fetch(`${dominio}/backoffice-grafico/reembolsos-realizados-agrupados-por-dia?estado=${estado}&mes=${mes}&anio=${anio}&idPaquete=${idPaquete}`, requestOptions);
       const data = await response.json();
 
       dataGrafico.value = data.data;
@@ -221,14 +238,11 @@ import esLocale from "moment/locale/es";
     const { themeSecondaryTextColor, themeBorderColor, themeDisabledTextColor } = colorVariables(themeColors)
     
     const seriesTemp = [];
-    for(var i in mesesDelAnio){
-      const mes = mesesDelAnio[i];
-      const data_temp = dataGrafico.value.find(e => e.mes_text.toLowerCase() == mes.toLowerCase());
-      if(data_temp){
-        seriesTemp.push(data_temp.reembolsos);
-      }else{
-        seriesTemp.push(0);
-      }
+    const seriesTempCategorias = [];
+    for(var i in dataGrafico.value){
+      const dias = dataGrafico.value[i];
+      seriesTemp.push(dias.reembolsos);
+      seriesTempCategorias.push(dias.fecha);
     }
 
     return {
@@ -236,7 +250,77 @@ import esLocale from "moment/locale/es";
         chart: {
           parentHeightOffset: 0,
           toolbar: { show: false },
+          type: 'bar',
         },
+        plotOptions: {
+          bar: {
+            borderRadius: 10,
+            dataLabels: {
+              position: 'top', // top, center, bottom
+            },
+          }
+        },
+        dataLabels: { 
+          enabled: false,
+          formatter(val) {
+            return `${ val } $`
+          },
+          offsetY: -20,
+        },
+        xaxis: {
+          axisBorder: { show: false },
+          axisTicks: { color: themeBorderColor, show: false },
+          crosshairs: {
+            stroke: { color: themeBorderColor },
+            fill: {
+              type: 'gradient',
+              gradient: {
+                colorFrom: '#D8E3F0',
+                colorTo: '#BED1E6',
+                stops: [0, 100],
+                opacityFrom: 0.4,
+                opacityTo: 0.5,
+              }
+            }
+          },
+          tooltip: {
+            enabled: false,
+          },
+          labels: {
+            style: { colors: themeDisabledTextColor },
+          },
+          // categories: mesesDelAnio,
+          categories: seriesTempCategorias,
+          position: 'top',
+        },
+        yaxis: {
+          axisBorder: {
+            show: false
+          },
+          axisTicks: {
+            show: false,
+          },
+          title: {
+            text: 'Num. Reembolsos',
+            style: {
+                fontSize: '11px',
+                fontFamily: 'Public Sans',
+                color: themeDisabledTextColor
+            }
+          },
+          labels: {
+            style: { colors: themeDisabledTextColor },
+          },
+        },
+        // title: {
+        //   text: 'Monthly Inflation in Argentina, 2002',
+        //   floating: true,
+        //   offsetY: 330,
+        //   align: 'center',
+        //   style: {
+        //     color: '#444'
+        //   }
+        // },
         tooltip: {
           y: {
             formatter: function (val) {
@@ -246,11 +330,11 @@ import esLocale from "moment/locale/es";
           theme: false,
           custom: function ({ series, seriesIndex, dataPointIndex, w }) {
             // series[seriesIndex]
-            // console.log(w.globals.categoryLabels[dataPointIndex])
+            // console.log(w.globals.labels[dataPointIndex])
             return `<div class="tooltip-content">
               <div class="tooltip-body">
                 <div class="tooltip-title">
-                  ${w.globals.categoryLabels[dataPointIndex]}
+                  ${moment(w.globals.labels[dataPointIndex], "YYYY-MM-DD").format("MMM Do dddd YYYY")}
                 </div>
                 <!--<div class="tooltip-subtitle">
                   Campaña
@@ -266,12 +350,6 @@ import esLocale from "moment/locale/es";
               </div>
             </div>`
           }
-        },
-        dataLabels: { 
-          enabled: false,
-          formatter(val) {
-            return `${ val } $`
-          },
         },
         stroke: {
           show: false,
@@ -302,37 +380,10 @@ import esLocale from "moment/locale/es";
             lines: { show: true },
           },
         },
-        yaxis: {
-          title: {
-            text: 'Num. Reembolsos',
-            style: {
-                fontSize: '11px',
-                fontFamily: 'Public Sans',
-                color: themeDisabledTextColor
-            }
-          },
-          labels: {
-            style: { colors: themeDisabledTextColor },
-          },
-        },
-        xaxis: {
-          tooltip: {
-            enabled: false,
-          },
-          axisBorder: { show: false },
-          axisTicks: { color: themeBorderColor },
-          crosshairs: {
-            stroke: { color: themeBorderColor },
-          },
-          labels: {
-            style: { colors: themeDisabledTextColor },
-          },
-          categories: mesesDelAnio,
-        },
       },
       series: [
         {
-          name: 'Reembolsos',
+          name: 'Reembolsos realizados',
           data: seriesTemp
         }
       ]
@@ -352,18 +403,30 @@ import esLocale from "moment/locale/es";
   })
 
   watch(async () => selectModelAnio.value, async () => {
-    if (selectModelAnio.value && selectModelPaquete.value) {
+    if (selectModelAnio.value && selectModelPaquete.value && selectModelMes.value) {
       await getDataGrafico({
         anio: selectModelAnio.value,
+        mes:selectModelMes.value,
         idPaquete:selectModelPaquete.value
       });
     }
   });
 
   watch(async () => selectModelPaquete.value, async () => {
-    if (selectModelPaquete.value && selectModelAnio.value) {
+    if (selectModelPaquete.value && selectModelAnio.value && selectModelMes.value) {
       await getDataGrafico({
         anio: selectModelAnio.value,
+        mes:selectModelMes.value,
+        idPaquete:selectModelPaquete.value
+      });
+    }
+  });
+
+  watch(async () => selectModelMes.value, async () => {
+    if (selectModelAnio.value && selectModelPaquete.value && selectModelMes.value) {
+      await getDataGrafico({
+        anio: selectModelAnio.value,
+        mes:selectModelMes.value,
         idPaquete:selectModelPaquete.value
       });
     }
@@ -371,8 +434,8 @@ import esLocale from "moment/locale/es";
 
   // DESCARGAR
   const dataFullExportar = ref([]);
-  const urlApiExport = ref(dominio + "/backoffice-grafico/descargar/reembolsos-realizados-agrupados-por-mes");
-  const urlTitleExport = ref("reembolsos_realizados");
+  const urlApiExport = ref(dominio + "/backoffice-grafico/descargar/reembolsos-realizados-agrupados-por-dia");
+  const urlTitleExport = ref("reembolsos_realizados_dia");
 
   const docsExportNumberLength = ref({
     tamanioActual : 0,
@@ -469,7 +532,7 @@ import esLocale from "moment/locale/es";
   }
 
   // PASO 3
-  async function getDataExportarServer(page = 1, limit = 10, estado = 1, idPaquete = null, anio = 2024) {
+  async function getDataExportarServer(page = 1, limit = 10, estado = 1, idPaquete = null, anio = 2024, mes = null) {
     try {
 
       if(!idPaquete){
@@ -485,7 +548,7 @@ import esLocale from "moment/locale/es";
         redirect: 'follow'
       };
 
-      var response = await fetch(`${urlApiExport.value}?page=${page}&limit=${limit}&anio=${anio}&idPaquete=${idPaquete}&estado=${estado}`, requestOptions);
+      var response = await fetch(`${urlApiExport.value}?page=${page}&limit=${limit}&anio=${anio}&mes=${mes}&idPaquete=${idPaquete}&estado=${estado}`, requestOptions);
       
       const data = await response.json();
 
@@ -537,12 +600,14 @@ import esLocale from "moment/locale/es";
     var estado = 1;
     var anio = 2024;
     var idPaquete = selectModelPaquete.value;
+    var mes = selectModelMes.value;
     var pages = 1;
     while(true){
       const res = await getDataExportarServer(
         pages,
         500,
         estado,
+        mes,
         idPaquete,
         anio
       );
@@ -669,7 +734,7 @@ import esLocale from "moment/locale/es";
           <VCardItem>
             <div class="p-0 d-flex flex-column align-items-start">
               <VCardTitle>
-                Año {{selectModelAnio}}.<br>Reembolsos realizados agrupados por meses.
+                Año {{selectModelAnio}}.<br>Reembolsos realizados por día.
               </VCardTitle>
               <VCardSubtitle>
                 Debes seleccionar el paquete para ver los resultados<br> de reembolsos.
@@ -704,6 +769,15 @@ import esLocale from "moment/locale/es";
                 label="Filtro de año" 
                 :menu-props="{ maxHeight: '300' }"
                 class="d-none"
+              />
+              <VSelect
+                style="width: 45px;"
+                v-model="selectModelMes" 
+                :items="selectMes"
+                label="Filtro de mes" 
+                item-text="title"
+                item-value="value"
+                :menu-props="{ maxHeight: '300' }"
               />
               <VSelect
                   style="width: 275px;"
@@ -745,7 +819,7 @@ import esLocale from "moment/locale/es";
             <div v-if="isLoading">Cargando datos...</div>
             <div v-else>
               <VueApexCharts
-                type="area"
+                type="bar"
                 height="300"
                 :options="chartConfig.config"
                 :series="chartConfig.series"
