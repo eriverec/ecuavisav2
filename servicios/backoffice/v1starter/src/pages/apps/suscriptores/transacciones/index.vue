@@ -347,7 +347,7 @@ onMounted(() => {
 
                 <VListItem>
                   <div class="d-flex justify-space-between align-center">
-                    <VListItemTitle>Descripción del Producto</VListItemTitle>
+                    <VListItemTitle>Producto</VListItemTitle>
                     <VListItemSubtitle>{{ selectedTransaction.paquete?.nombre || 'N/A' }}</VListItemSubtitle>
                   </div>
                 </VListItem>

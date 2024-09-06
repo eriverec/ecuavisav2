@@ -274,7 +274,7 @@ async function exportarDatos() {
                 <th scope="col">Pais</th>
                 <th scope="col">Ciudad</th>
                 <th scope="col">Fecha de suscripcion</th>
-                <th scope="col">ID Medio Pago</th>
+                <!-- <th scope="col">ID Medio Pago</th> -->
                 <th scope="col">Acciones</th>
               </tr>
             </thead>
@@ -284,15 +284,15 @@ async function exportarDatos() {
                 <td>{{ item.user[0].last_name }}</td>
                 <td>{{ item.user[0].email }}</td>
                 <td>
-                  <VChip :color="item.estado ? 'success' : 'error'">
-                    {{ item.estado ? 'Activo' : 'Inactivo' }}
+                  <VChip :color="item.estado == '3' ? 'success' : 'error'">
+                    {{ item.estado == "3" ? 'Activo' : 'Inactivo' }}
                   </VChip>
                 </td>
                 <td>{{ item.billing_details.pais }}</td>
                 <td>{{ item.billing_details.ciudad }}</td>
                 <td>{{ moment(item.billing_details.created_at).format('DD/MM/YYYY HH:mm:ss')  }}</td>
 
-                <td>{{ item.idMediopago }}</td>
+                <!-- <td>{{ item.idMediopago }}</td> -->
                 <td class="text-center" style="width: 5rem;">
                   <VBtn icon size="x-small" color="default" variant="text" :to="{ name: 'apps-user-view-id', params: { id: item.user[0].wylexId } }">
                     <VIcon size="22" icon="tabler-eye" />
