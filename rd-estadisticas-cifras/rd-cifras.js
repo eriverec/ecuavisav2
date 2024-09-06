@@ -1,6 +1,6 @@
 function createNav(activeTabId) {
   const tabs = [
-    { id: 'paris-2024', href: '/juegos-olimpicos-paris-2024-calendario-medallero', text: 'París 2024' },
+    // { id: 'paris-2024', href: '/juegos-olimpicos-paris-2024-calendario-medallero', text: 'París 2024' },
     { id: 'ligapro', href: '/deportes/tabla-de-posiciones/liga-pro/serie-a-ecuador', text: 'LigaPro' },
     { id: 'eliminatorias', href: '/deportes/eliminatorias-conmebol/tablaposiciones', text: 'Eliminatorias' },
     { id: 'champions', href: '/deportes/champions/tablaposiciones', text: 'Champions League' },

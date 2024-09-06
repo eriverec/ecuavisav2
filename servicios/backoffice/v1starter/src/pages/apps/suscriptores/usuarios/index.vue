@@ -101,6 +101,8 @@ const paginatedUsuarios = computed(() => {
   return filteredUsuarios.value.slice(start, end);
 })
 
+console.log(paginatedUsuarios);
+
 // Lifecycle hooks
 onMounted(() => {
   getAllUsuarios();
@@ -141,13 +143,17 @@ async function exportarDatos() {
       'ID Medio Pago',
       'País',
       'Ciudad',
-      'Fecha de Creación'
+      'Fecha de suscripcion',
+      'Hora de suscripcion'
     ];
 
     // Crear el contenido del CSV
     let csvContent = columns.join(',') + '\n';
 
+    
     allUsers.forEach(item => {
+      const createdAt = new Date(item.created_at);
+      const formattedDate = createdAt.toISOString().replace('T', ' ').substr(0, 19);
       const row = [
         item._id,
         item.user[0].first_name,
@@ -157,7 +163,9 @@ async function exportarDatos() {
         item.idMediopago,
         item.billing_details.pais,
         item.billing_details.ciudad,
-        moment(item.created_at).format('YYYY-MM-DD HH:mm:ss')
+        moment(item.billing_details.created_at).format('DD/MM/YYYY'),
+        moment(item.billing_details.created_at).format('HH:mm:ss')
+
       ];
       csvContent += row.join(',') + '\n';
     });
@@ -263,6 +271,9 @@ async function exportarDatos() {
                 <th scope="col">Apellido</th>
                 <th scope="col">Email</th>
                 <th scope="col">Estado</th>
+                <th scope="col">Pais</th>
+                <th scope="col">Ciudad</th>
+                <th scope="col">Fecha de suscripcion</th>
                 <th scope="col">ID Medio Pago</th>
                 <th scope="col">Acciones</th>
               </tr>
@@ -277,6 +288,10 @@ async function exportarDatos() {
                     {{ item.estado ? 'Activo' : 'Inactivo' }}
                   </VChip>
                 </td>
+                <td>{{ item.billing_details.pais }}</td>
+                <td>{{ item.billing_details.ciudad }}</td>
+                <td>{{ moment(item.billing_details.created_at).format('DD/MM/YYYY HH:mm:ss')  }}</td>
+
                 <td>{{ item.idMediopago }}</td>
                 <td class="text-center" style="width: 5rem;">
                   <VBtn icon size="x-small" color="default" variant="text" :to="{ name: 'apps-user-view-id', params: { id: item.user[0].wylexId } }">
