@@ -29,7 +29,7 @@ const configSnackbar = ref({
 
 // Función para obtener usuarios de una página específica
 async function getUsuariosPage(page, limit) {
-  const url = `https://servicios-ecuavisa-suscripciones.vercel.app/suscripciones/all?page=${page}&limit=${limit}`;
+  const url = `https://ecuavisa-suscripciones.vercel.app/suscripciones/all?page=${page}&limit=${limit}`;
   const response = await fetch(url);
   const data = await response.json();
   return data.resp ? data : null;

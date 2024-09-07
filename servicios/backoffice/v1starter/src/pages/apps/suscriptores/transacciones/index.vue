@@ -37,7 +37,7 @@ const isModalOpen = ref(false)
 async function getTransactions(page, limit) {
   loadingTransactions.value = true
   try {
-    const url = `https://servicios-ecuavisa-suscripciones.vercel.app/backoffice/transaction-all?page=${page}&limit=${limit}`
+    const url = `https://ecuavisa-suscripciones.vercel.app/backoffice/transaction-all?page=${page}&limit=${limit}`
     const response = await fetch(url)
     const data = await response.json();
 
@@ -233,7 +233,7 @@ async function downloadCSV() {
   
   try {
     while (true) {
-      const url = `https://servicios-ecuavisa-suscripciones.vercel.app/backoffice/transaction-all?page=${currentPage}&limit=${limit}`
+      const url = `https://ecuavisa-suscripciones.vercel.app/backoffice/transaction-all?page=${currentPage}&limit=${limit}`
       const response = await fetch(url)
       const data = await response.json()
       
