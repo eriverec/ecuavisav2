@@ -22,6 +22,7 @@ export default [
     children: [
       { title: 'Usuarios', to: 'apps-suscriptores-usuarios' },
       { title: 'Transacciones', to: 'apps-suscriptores-transacciones' },
+      { title: 'Analítica', to: 'apps-suscriptores-analitica' },
       { title: 'Reembolsos', to: 'apps-suscriptores-reembolsos' },
       { title: 'Players', to: 'apps-configuracion-suscripciones-player' },
       { title: 'Paquetes', to: 'apps-paquetes' },
