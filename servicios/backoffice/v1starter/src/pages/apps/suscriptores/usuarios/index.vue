@@ -73,9 +73,17 @@ async function getAllUsuarios() {
 function buscarUsuarios() {
   isFullLoading.value = true;
   const query = searchQuery.value.toLowerCase();
-  filteredUsuarios.value = dataUsuarios.value.filter(item =>
-    item.user[0].first_name.toLowerCase().includes(query) ||
-    item.user[0].last_name.toLowerCase().includes(query)
+
+  filteredUsuarios.value = dataUsuarios.value.filter(item => {
+    if (item.user && item.user.length > 0) {
+
+      const firstName = item.user[0].first_name.toLowerCase();
+      const lastName = item.user[0].last_name.toLowerCase();
+
+      return firstName.includes(query) || lastName.includes(query);
+    }
+    return false;
+  }
   );
   currentPage.value = 1;
   totalPage.value = Math.ceil(filteredUsuarios.value.length / rowPerPage.value);
@@ -154,9 +162,9 @@ async function exportarDatos() {
       const formattedDate = createdAt.toISOString().replace('T', ' ').substr(0, 19);
       const row = [
         item._id,
-        item.user[0].first_name,
-        item.user[0].last_name,
-        item.user[0].email,
+        item.user && item.user.length > 0 ? item.user[0].first_name : 'N/A',
+        item.user && item.user.length > 0 ? item.user?.[0].last_name : 'N/A',
+        item.user && item.user.length > 0 ? item.user?.[0].email : 'N/A',
         item.estado ? 'Activo' : 'Inactivo',
         item.idMediopago,
         item.billing_details.pais,
@@ -288,9 +296,10 @@ const getCardTypeName = (code) => {
             </thead>
             <tbody v-if="!loadingUsuarios">
               <tr v-for="item in paginatedUsuarios" :key="item._id" style="height: 3.75rem;">
-                <td>{{ item.user[0].first_name }}</td>
-                <td>{{ item.user[0].last_name }}</td>
-                <td>{{ item.user[0].email }}</td>
+
+                <td>{{ item.user && item.user.length > 0 ? item.user[0].first_name : 'N/A' }} </td>
+                <td>{{ item.user && item.user.length > 0 ? item.user[0].last_name : 'N/A' }}</td>
+                <td>{{ item.user && item.user.length > 0 ? item.user[0].email : 'N/A' }}</td>
                 <td>
                   <VChip :color="item.estado == '3' ? 'success' : 'error'">
                     {{ item.estado == "3" ? 'Activo' : 'Inactivo' }}
@@ -299,10 +308,11 @@ const getCardTypeName = (code) => {
 
                 <td>
                   <ul>
-                    <li style="list-style: circle;"  v-for="pago in item.pagos_tarjetas" :key="pago.transaction.transaction_id">
+                    <li style="list-style: circle;" v-for="pago in item.pagos_tarjetas"
+                      :key="pago.transaction.transaction_id">
                       {{ pago.card_details.bank_name || 'N/A' }} ({{ getCardTypeName(pago.card_details.type) }})
                     </li>
-                  </ul >
+                  </ul>
                 </td>
 
                 <td>{{ item.billing_details.pais }}</td>
@@ -312,7 +322,7 @@ const getCardTypeName = (code) => {
                 <!-- <td>{{ item.idMediopago }}</td> -->
                 <td class="text-center" style="width: 5rem;">
                   <VBtn icon size="x-small" color="default" variant="text"
-                    :to="{ name: 'apps-user-view-id', params: { id: item.user[0].wylexId } }">
+                    :to="{ name: 'apps-user-view-id', params: { id: item.user && item.user.length > 0 ? item.user[0].wylexId : '0' } }">
                     <VIcon size="22" icon="tabler-eye" />
                   </VBtn>
                 </td>
@@ -320,7 +330,7 @@ const getCardTypeName = (code) => {
             </tbody>
             <tfoot v-show="!paginatedUsuarios.length && !loadingUsuarios">
               <tr>
-                <td colspan="6" class="text-center">No hay datos que mostrar</td>
+                <td colspan="9" class="text-center">No hay datos que mostrar</td>
               </tr>
             </tfoot>
             <tfoot v-show="loadingUsuarios">
