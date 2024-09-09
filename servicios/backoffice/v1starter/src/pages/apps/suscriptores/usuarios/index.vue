@@ -4,6 +4,7 @@ import { ref, watch, computed, onMounted } from 'vue'
 import { extendMoment } from 'moment-range'
 import Moment from 'moment-timezone'
 import esLocale from "moment/locale/es"
+import Datos from '@/views/apps/suscripciones/datos.vue';
 
 const moment = extendMoment(Moment)
 moment.locale('es', [esLocale])
@@ -114,6 +115,82 @@ onMounted(() => {
   getAllUsuarios();
 })
 
+const cardTypes = {
+  ex: 'Exito',
+  ak: 'Alkosto',
+  cd: 'Codensa',
+  sx: 'Sodexo',
+  ol: 'Olimpica',
+  ep: 'EPM',
+  csd: 'Colsubsidio',
+  bbva: 'BBVA',
+  cmr: 'Falabella',
+  cn: 'Carnet',
+  cs: 'Credisensa',
+  so: 'Solidario',
+  up: 'Union Pay',
+  el: 'Elo',
+  jc: 'JCB',
+  au: 'Aura',
+  hpc: 'Hipercard',
+  vi: 'Visa',
+  mc: 'Mastercard',
+  ax: 'American Express',
+  di: 'Diners',
+  dc: 'Discover',
+  ms: 'Maestro'
+};
+
+
+// Función para obtener el nombre completo de la tarjeta
+const getCardTypeName = (code) => {
+  return cardTypes[code] || code || 'N/A';
+};
+
+
+const estadosUsuario = {
+  0: "Esperando para ser Pagada",
+  1: "Se requiere verificación, por favor revise la sección de Verificar",
+  2: "Pagada Parcialmente",
+  3: "Pagada",
+  4: "En Disputa",
+  5: "Sobrepagada",
+  6: "Fraude",
+  7: "Reverso",
+  8: "Contracargo",
+  9: "Rechazada por el procesador",
+  10: "Error en el sistema",
+  11: "Fraude detectado por Nuvei",
+  12: "Blacklist de Nuvei",
+  13: "Tiempo de tolerancia",
+  14: "Expirada por Nuvei",
+  15: "Expirado por el carrier",
+  16: "Rechazado por Nuvei",
+  17: "Abandonada por Nuvei",
+  18: "Abandonada por el cliente",
+  19: "Código de autorización invalido",
+  20: "Código de autorización expirado",
+  21: "Fraude Nuvei - Reverso pendiente",
+  22: "AuthCode Inválido - Reverso pendiente",
+  23: "AuthCode Expirado - Reverso pendiente",
+  24: "Fraude Nuvei - Reverso solicitado",
+  25: "AuthCode Inválido - Reverso solicitado",
+  26: "AuthCode Expirado - Reverso solicitado",
+  27: "Comercio - Reverso pendiente",
+  28: "Comercio - Reverso solicitado",
+  29: "Anulada",
+  30: "Transacción asentada (solo para Ecuador)",
+  31: "Esperando OTP",
+  32: "OTP validado correctamente",
+  33: "OTP no validado",
+  34: "Reverso parcial",
+  35: "Método 3DS solicitado, esperando para continuar",
+  36: "Desafío 3DS solicitado, esperando el CRES",
+  37: "Rechazada por 3DS",
+  47: "Validación de CPF fallida",
+  48: "Autenticado por 3DS"
+};
+
 // Función para obtener todos los usuarios para exportación
 async function getAllUsuariosForExport() {
   let allUsers = [];
@@ -146,7 +223,7 @@ async function exportarDatos() {
       'Apellido',
       'Email',
       'Estado',
-      'ID Medio Pago',
+      'Pagos',
       'País',
       'Ciudad',
       'Fecha de suscripcion',
@@ -160,13 +237,20 @@ async function exportarDatos() {
     allUsers.forEach(item => {
       const createdAt = new Date(item.created_at);
       const formattedDate = createdAt.toISOString().replace('T', ' ').substr(0, 19);
+      
+      const pagosTarjetas = item.pagos_tarjetas.map(pago => 
+        `${pago.card_details.bank_name || 'N/A'} (${ getCardTypeName(pago.card_details.type) || 'N/A'})`
+      ).join(' - ');
+      
+      
       const row = [
         item._id,
         item.user && item.user.length > 0 ? item.user[0].first_name : 'N/A',
         item.user && item.user.length > 0 ? item.user?.[0].last_name : 'N/A',
         item.user && item.user.length > 0 ? item.user?.[0].email : 'N/A',
-        item.estado ? 'Activo' : 'Inactivo',
-        item.idMediopago,
+        //item.estado ? 'Activo' : 'Inactivo',
+        estadosUsuario[item.estado] || 'Estado desconocido',
+         pagosTarjetas,
         item.billing_details.pais,
         item.billing_details.ciudad,
         moment(item.billing_details.created_at).format('DD/MM/YYYY'),
@@ -206,43 +290,14 @@ async function exportarDatos() {
   }
 }
 
-const cardTypes = {
-  ex: 'Exito',
-  ak: 'Alkosto',
-  cd: 'Codensa',
-  sx: 'Sodexo',
-  ol: 'Olimpica',
-  ep: 'EPM',
-  csd: 'Colsubsidio',
-  bbva: 'BBVA',
-  cmr: 'Falabella',
-  cn: 'Carnet',
-  cs: 'Credisensa',
-  so: 'Solidario',
-  up: 'Union Pay',
-  el: 'Elo',
-  jc: 'JCB',
-  au: 'Aura',
-  hpc: 'Hipercard',
-  vi: 'Visa',
-  mc: 'Mastercard',
-  ax: 'American Express',
-  di: 'Diners',
-  dc: 'Discover',
-  ms: 'Maestro'
-};
 
-
-// Función para obtener el nombre completo de la tarjeta
-const getCardTypeName = (code) => {
-  return cardTypes[code] || code || 'N/A';
-};
 
 
 </script>
 
 <template>
   <section>
+    <!-- <Datos /> -->
     <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat"
       :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
       {{ configSnackbar.message }}
@@ -302,7 +357,7 @@ const getCardTypeName = (code) => {
                 <td>{{ item.user && item.user.length > 0 ? item.user[0].email : 'N/A' }}</td>
                 <td>
                   <VChip :color="item.estado == '3' ? 'success' : 'error'">
-                    {{ item.estado == "3" ? 'Activo' : 'Inactivo' }}
+                   {{ estadosUsuario[item.estado] || 'Estado desconocido' }}
                   </VChip>
                 </td>
 
@@ -349,6 +404,3 @@ const getCardTypeName = (code) => {
     </VRow>
   </section>
 </template>
-
-<style lang="scss">
-// ... (mantener los estilos existentes)</style>
