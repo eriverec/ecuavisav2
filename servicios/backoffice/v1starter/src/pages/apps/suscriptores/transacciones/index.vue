@@ -333,7 +333,7 @@ onMounted(() => {
 
           <VSpacer />
 
-          <div class="app-user-search-filter d-flex align-top">
+          <!-- <div class="app-user-search-filter d-flex align-top">
 
             <VBtn @click="downloadCSV" variant="tonal"
               color="success"
@@ -341,7 +341,7 @@ onMounted(() => {
               Exportar datos
             </VBtn>
 
-          </div>
+          </div> -->
         </VCardText>
 
 
