@@ -411,12 +411,12 @@ onMounted(() => {
             </tbody>
             <tfoot v-show="!paginatedTransactions.length && !loadingTransactions">
               <tr>
-                <td colspan="7" class="text-center">No hay datos que mostrar</td>
+                <td colspan="11" class="text-center">No hay datos que mostrar</td>
               </tr>
             </tfoot>
             <tfoot v-show="loadingTransactions">
               <tr>
-                <td colspan="7" class="text-center">Cargando datos, por favor espere un momento...</td>
+                <td colspan="11" class="text-center">Cargando datos, por favor espere un momento...</td>
               </tr>
             </tfoot>
           </VTable>
