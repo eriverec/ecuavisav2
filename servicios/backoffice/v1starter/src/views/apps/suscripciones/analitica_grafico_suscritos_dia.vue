@@ -164,7 +164,7 @@ export default {
     const obtenerDatos = async () => {
       isLoading.value = true
       try {
-        const response = await axios.get(`https://servicios-ecuavisa-suscripciones.vercel.app/backoffice-grafico/suscripciones-realizados-activas-agrupados-por-dia`, {
+        const response = await axios.get(`https://ecuavisa-suscripciones.vercel.app/backoffice-grafico/suscripciones-realizados-activas-agrupados-por-dia`, {
           params: {
             anio: anioSeleccionado.value,
             mes: mesSeleccionado.value,
@@ -198,7 +198,7 @@ export default {
     const descargarDatos = async () => {
       btnLoadingDescargar.value = true
       try {
-        const response = await axios.get(`https://servicios-ecuavisa-suscripciones.vercel.app/backoffice-grafico/descargar/suscripciones-realizados-activas-agrupados-por-dia`, {
+        const response = await axios.get(`https://ecuavisa-suscripciones.vercel.app/backoffice-grafico/descargar/suscripciones-realizados-activas-agrupados-por-dia`, {
           params: {
             anio: anioSeleccionado.value,
             mes: mesSeleccionado.value,
