@@ -190,7 +190,7 @@
   }
 
   // PASO 3
-  async function getDataExportarServer(page = 1, limit = 10, estado = 1) {
+  async function getDataExportarServer(page = 1, limit = 100, estado = 1) {
     try {
 
       if(!fechas.value.fechai){
