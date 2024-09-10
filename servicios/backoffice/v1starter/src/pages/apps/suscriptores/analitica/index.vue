@@ -4,6 +4,7 @@ import analitica_grafico_2_pago_dia from '@/views/apps/suscripciones/analitica_g
 import analitica_grafico_barras_pagos from '@/views/apps/suscripciones/analitica_grafico_barras_pagos.vue';
 import analitica_grafico_barras_suscritos from '@/views/apps/suscripciones/analitica_grafico_barras_suscritos.vue';
 import analitica_grafico_suscritos_dia from '@/views/apps/suscripciones/analitica_grafico_suscritos_dia.vue';
+import Datos from '@/views/apps/suscripciones/datos.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -29,6 +30,7 @@ import esLocale from "moment/locale/es";
 			:color="configSnackbar.type">
         {{ configSnackbar.message }}
     </VSnackbar>
+		<Datos />
 
     <VRow>
     	<VCol
