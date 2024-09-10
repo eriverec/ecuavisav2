@@ -297,7 +297,7 @@ async function exportarDatos() {
 
 <template>
   <section>
-    <!-- <Datos /> -->
+    <Datos />
     <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat"
       :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
       {{ configSnackbar.message }}
@@ -305,8 +305,8 @@ async function exportarDatos() {
 
     <VRow>
       <VCol cols="12" sm="12" lg="12">
-        <h1>Listado de Usuarios Suscritos</h1>
-        <VCardText class="d-flex py-4 gap-4 px-0 flex-wrap" style="align-items: flex-start;">
+        <VCard title="Listado de Usuarios Suscritos">
+          <VCardText class="d-flex py-4 gap-4  flex-wrap" style="align-items: flex-start;">
           <div class="me-3 d-flex gap-4">
             <VSelect class="bg-white" v-model="rowPerPage" density="compact" variant="outlined"
               :items="[10, 20, 30, 50]" />
@@ -331,9 +331,8 @@ async function exportarDatos() {
             </VBtn>
           </div>
         </VCardText>
-
-        <VCard class="mt-1">
-          <VTable class="text-no-wrap">
+        <VDivider />
+        <VTable class="text-no-wrap">
             <thead>
               <tr>
                 <th scope="col">Nombre</th>
@@ -390,7 +389,7 @@ async function exportarDatos() {
             </tfoot>
             <tfoot v-show="loadingUsuarios">
               <tr>
-                <td colspan="8" class="text-center">Cargando datos, por favor espere un momento...</td>
+                <td colspan="9" class="text-center">Cargando datos, por favor espere un momento...</td>
               </tr>
             </tfoot>
           </VTable>
@@ -399,7 +398,9 @@ async function exportarDatos() {
             <span class="text-sm text-disabled">{{ paginationData }}</span>
             <VPagination v-model="currentPage" size="small" :total-visible="5" :length="totalPage" />
           </VCardText>
+
         </VCard>
+
       </VCol>
     </VRow>
   </section>
