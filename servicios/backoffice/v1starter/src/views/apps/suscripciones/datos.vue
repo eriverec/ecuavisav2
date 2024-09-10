@@ -52,7 +52,7 @@ const getEcuadorDate = (date) => {
 const getWeekRange = (weekOffset = 0) => {
   const start = moment().add(weekOffset, 'weeks').startOf('isoWeek');
   const end = moment().add(weekOffset, 'weeks').endOf('isoWeek');
-  return `${start.format('D')} al ${end.format('D')} de ${end.format('MMMM YYYY')}`;
+  return `${start.format('D')} al ${end.format('D')} de ${end.format('MMM YYYY')}`;
 }
 
 const isThisWeek = (date) => {
