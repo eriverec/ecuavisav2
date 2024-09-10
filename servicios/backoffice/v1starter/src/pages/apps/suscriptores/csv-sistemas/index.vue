@@ -350,7 +350,7 @@
     <VRow>
       <VCol
         class="mt-0"
-        cols="6"
+        cols="12"
         md="6"
         lg="6"
       >
