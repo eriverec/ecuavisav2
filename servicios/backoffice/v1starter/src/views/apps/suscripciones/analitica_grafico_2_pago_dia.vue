@@ -85,7 +85,7 @@ export default {
       { value: 12, label: 'Diciembre' }
     ];
 
-    const apiDomain = 'https://servicios-ecuavisa-suscripciones.vercel.app';
+    const apiDomain = 'https://ecuavisa-suscripciones.vercel.app';
     const anio = 2024;
     const idPaquete = '651c9d012ff9fa09a75e6c16';
 

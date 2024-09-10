@@ -7,7 +7,7 @@ import { ref } from 'vue';
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
 
-  const dominio = "https://servicios-ecuavisa-suscripciones.vercel.app";
+  const dominio = "https://ecuavisa-suscripciones.vercel.app";
 
   const configSnackbar = ref({
       message: "Datos guardados",

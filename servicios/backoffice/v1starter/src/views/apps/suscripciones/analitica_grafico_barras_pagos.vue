@@ -73,7 +73,7 @@ export default {
   setup() {
     const chart = ref(null)
     const chartInstance = ref(null)
-    const dominio = ref('https://servicios-ecuavisa-suscripciones.vercel.app/')
+    const dominio = ref('https://ecuavisa-suscripciones.vercel.app/')
     const anioSeleccionado = ref(new Date().getFullYear().toString())
     const aniosDisponibles = ref([])
     const idPaquete = '651c9d012ff9fa09a75e6c16' // ID del paquete quemado en el código
