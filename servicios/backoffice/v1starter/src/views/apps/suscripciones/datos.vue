@@ -45,6 +45,12 @@ const usuariosInactivos = computed(() => {
   return data.value.filter(usuario => usuario.estado != 3).length
 })
 
+const isInWeek = (date, weekOffset = 0) => {
+  const start = moment().add(weekOffset, 'weeks').startOf('isoWeek');
+  const end = moment().add(weekOffset, 'weeks').endOf('isoWeek');
+  return moment(date).isBetween(start, end, null, '[]');
+}
+
 const getEcuadorDate = (date) => {
   return new Date(date.toLocaleString('en-US', { timeZone: 'America/Guayaquil' }))
 }
@@ -70,17 +76,15 @@ const isLastWeek = (date) => {
 }
 
 const nuevosUsuariosSemanaActual = computed(() => {
-  return data.value.filter(usuario => {
-    const createdDate = getEcuadorDate(new Date(usuario.created_at))
-    return isThisWeek(createdDate)
-  }).length
+  return data.value.filter(usuario => 
+    usuario.estado === 3 && isInWeek(usuario.created_at)
+  ).length
 })
 
 const nuevosUsuariosSemanaAnterior = computed(() => {
-  return data.value.filter(usuario => {
-    const createdDate = getEcuadorDate(new Date(usuario.created_at))
-    return isLastWeek(createdDate)
-  }).length
+  return data.value.filter(usuario => 
+    usuario.estado === 3 && isInWeek(usuario.created_at, -1)
+  ).length
 })
 
 const semanaActual = computed(() => getWeekRange())
