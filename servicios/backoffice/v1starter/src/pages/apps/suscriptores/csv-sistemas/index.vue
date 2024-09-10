@@ -396,7 +396,7 @@
                 <hr>
                 <small class="py-3">
                   <b>Fecha inicio: </b> {{ fechas.fechai }}<br>
-                  <b>Fecha inicio: </b> {{ fechas.fechaf }}
+                  <b>Fecha final: </b> {{ fechas.fechaf }}
                 </small>
             </div>
 
