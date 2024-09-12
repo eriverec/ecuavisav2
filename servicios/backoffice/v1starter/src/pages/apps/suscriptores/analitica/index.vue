@@ -46,6 +46,18 @@ import esLocale from "moment/locale/es";
       	<analitica_suscripciones />
 
     	</VCol> -->
+      
+      <VCol
+        class="mt-0"
+        cols="12"
+        md="12"
+        lg="6"
+      >
+        <analitica_grafico_barras_semana_dia />
+
+      </VCol>
+
+
 
 			<VCol
         class="mt-0"
@@ -68,15 +80,7 @@ import esLocale from "moment/locale/es";
     	</VCol>
 
 
-      <VCol
-        class="mt-0"
-        cols="12"
-        md="12"
-        lg="6"
-      >
-        <analitica_grafico_barras_semana_dia />
-
-      </VCol>
+      
 
 
 

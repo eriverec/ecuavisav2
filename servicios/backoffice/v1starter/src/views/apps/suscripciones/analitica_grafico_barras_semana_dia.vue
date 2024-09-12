@@ -13,13 +13,14 @@
           :items="availableYears"
           label="Filtrar por año"
           style="max-width: 200px;"
+          class="d-none"
         />
         <VSpacer />
         <VBtn
           prepend-icon="tabler-download"
           variant="outlined"
           color="default"
-          class="ml-2"
+          class="ml-2 d-none"
         >
           Descargar
         </VBtn>
