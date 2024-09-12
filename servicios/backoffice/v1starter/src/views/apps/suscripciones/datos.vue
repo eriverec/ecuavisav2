@@ -76,13 +76,13 @@ const isLastWeek = (date) => {
 }
 
 const nuevosUsuariosSemanaActual = computed(() => {
-  return data.value.filter(usuario => 
+  return data.value.filter(usuario =>
     usuario.estado === 3 && isInWeek(usuario.created_at)
   ).length
 })
 
 const nuevosUsuariosSemanaAnterior = computed(() => {
-  return data.value.filter(usuario => 
+  return data.value.filter(usuario =>
     usuario.estado === 3 && isInWeek(usuario.created_at, -1)
   ).length
 })
@@ -96,74 +96,118 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="d-flex gap-4">
-    <VCard class="mb-4" style="width: 300px;">
-      <VCardText class="d-flex justify-space-between">
-        <div>
-          <p v-if="loading">Cargando...</p>
-          <p v-else-if="error">Error: {{ error }}</p>
-          <div v-else>
-            <span class="text-h56">Total de usuarios</span>
-            <!-- <span>Total de usuarios activos:</span> -->
+  <div class="">
+    <VRow>
+      <VCol cols="12" md="12" lg="4">
+        <VCard  style="height: 150px;" >
+          <VCardText class="d-flex justify-space-between">
             <div>
-              <div class="d-flex align-center gap-2 my-1">
-                <label class="text-primary">Registrados:</label> {{ totalRecords }}
+              <p v-if="loading">Cargando...</p>
+              <p v-else-if="error">Error: {{ error }}</p>
+              <div v-else>
+                <span class="text-h56">Total de usuarios</span>
+                <!-- <span>Total de usuarios activos:</span> -->
+                <div>
+                  <div class="d-flex align-center gap-2 my-1">
+                    <label class="text-primary">Registrados:</label> {{ totalRecords }}
+                  </div>
+                  <div class="d-flex align-center gap-2 my-1">
+                    <label class="text-primary">Pagados:</label> {{ usuariosActivos }}
+                  </div>
+                  <div class="d-flex align-center gap-2 my-1">
+                    <label class="text-primary">Errores:</label> {{ usuariosInactivos }}
+                  </div>
+                </div>
               </div>
-              <div class="d-flex align-center gap-2 my-1">
-                <label class="text-primary">Pagados:</label> {{ usuariosActivos }}
-              </div>
-              <div class="d-flex align-center gap-2 my-1">
-                <label class="text-primary">Errores:</label> {{ usuariosInactivos }}
-              </div>
+
             </div>
-          </div>
+            <VAvatar variant="tonal" color="success">
+              <VIcon size="20" icon="tabler-user" />
+            </VAvatar>
 
-        </div>
-        <VAvatar variant="tonal" color="success">
-          <VIcon size="20" icon="tabler-user" />
-        </VAvatar>
+          </VCardText>
+        </VCard>
 
-      </VCardText>
-    </VCard>
-
-    <VCard class="mb-4" style="width: 300px;">
-      <VCardText class="d-flex justify-space-between">
-        <div>
-          <p v-if="loading">Cargando...</p>
-          <p v-else-if="error">Error: {{ error }}</p>
-          <div v-else>
-            <span class="text-h56">Registrados por semana</span>
-            <!-- <span>Total de usuarios activos:</span> -->
+      </VCol>
+      <VCol cols="12" md="12" lg="4">
+        <VCard  style="height: 150px;" >
+          <VCardText class="d-flex justify-space-between">
             <div>
-              <div class="d-flex align-center gap-2 my-1">
-                <label class="text-primary">Actual:</label> {{ nuevosUsuariosSemanaActual }}
-                <VAvatar size="x-small" variant="tonal" color="secondary">
-                  <VIcon size="20" icon="tabler-info-circle" />
-                  <VTooltip activator="parent" location="top">
-                    {{ semanaActual }}
-                </VTooltip>
-                </VAvatar>
+              <p v-if="loading">Cargando...</p>
+              <p v-else-if="error">Error: {{ error }}</p>
+              <div v-else>
+                <span class="text-h56">Registrados por semana</span>
+                <!-- <span>Total de usuarios activos:</span> -->
+                <div>
+                  <div class="d-flex align-center gap-2 my-1">
+                    <label class="text-primary">Actual:</label> {{ nuevosUsuariosSemanaActual }}
+                    <VAvatar size="x-small" variant="tonal" color="secondary">
+                      <VIcon size="20" icon="tabler-info-circle" />
+                      <VTooltip activator="parent" location="top">
+                        {{ semanaActual }}
+                      </VTooltip>
+                    </VAvatar>
+                  </div>
+                  <div class="d-flex align-center gap-2 my-1">
+                    <label class="text-primary">Anterior:</label> {{ nuevosUsuariosSemanaAnterior }}
+                    <VAvatar size="x-small" variant="tonal" color="secondary">
+                      <VIcon size="20" icon="tabler-info-circle" />
+                      <VTooltip activator="parent" location="top">
+                        {{ semanaAnterior }}
+                      </VTooltip>
+                    </VAvatar>
+                  </div>
+                </div>
               </div>
-              <div class="d-flex align-center gap-2 my-1">
-                <label class="text-primary">Anterior:</label> {{ nuevosUsuariosSemanaAnterior }}
-                <VAvatar size="x-small" variant="tonal" color="secondary">
-                  <VIcon size="20" icon="tabler-info-circle" />
-                  <VTooltip activator="parent" location="top">
-                    {{ semanaAnterior }}
-                </VTooltip>
-                </VAvatar>
-              </div>
+
             </div>
-          </div>
 
-        </div>
+            <VAvatar variant="tonal" color="warning">
+              <VIcon size="20" icon="tabler-calendar" />
+            </VAvatar>
 
-        <VAvatar variant="tonal" color="warning">
-          <VIcon size="20" icon="tabler-calendar" />
-        </VAvatar>
+          </VCardText>
+        </VCard>
+      </VCol>
+      <VCol cols="12" md="12" lg="4">
 
-      </VCardText>
-    </VCard>
+        <VCard  style="height: 150px;" >
+          <VCardText class="d-flex justify-space-between">
+            <div>
+              <p v-if="loading">Cargando...</p>
+              <p v-else-if="error">Error: {{ error }}</p>
+              <div v-else>
+                <span class="text-h56">Reembolsos</span>
+                <!-- <span>Total de usuarios activos:</span> -->
+                <div>
+                  <div class="d-flex align-center gap-2 my-1">
+                    <label class="text-primary">Completados:</label> 00
+                    
+                  </div>
+                  <div class="d-flex align-center gap-2 my-1">
+                    <label class="text-primary">Rechazados:</label> 00
+                   
+                  </div>
+                  <div class="d-flex align-center gap-2 my-1">
+                    <label class="text-primary">Pendientes:</label> 00
+                   
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+            <VAvatar variant="tonal" color="primary">
+              <VIcon size="20" icon="tabler-rotate-2" />
+            </VAvatar>
+
+          </VCardText>
+        </VCard>
+      </VCol>
+    </VRow>
+
+
+
 
   </div>
 </template>
