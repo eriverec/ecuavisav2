@@ -5,7 +5,7 @@ import analitica_grafico_barras_pagos from '@/views/apps/suscripciones/analitica
 import analitica_grafico_barras_suscritos from '@/views/apps/suscripciones/analitica_grafico_barras_suscritos.vue';
 import analitica_grafico_suscritos_dia from '@/views/apps/suscripciones/analitica_grafico_suscritos_dia.vue';
 import analitica_suscripciones from '@/views/apps/suscripciones/analitica_suscripciones.vue';
-
+import analitica_grafico_barras_semana_dia from '@/views/apps/suscripciones/analitica_grafico_barras_semana_dia.vue';
 import Datos from '@/views/apps/suscripciones/datos.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -66,6 +66,17 @@ import esLocale from "moment/locale/es";
       	<analitica_grafico_2_pago_dia />
 
     	</VCol>
+
+
+      <VCol
+        class="mt-0"
+        cols="12"
+        md="12"
+        lg="6"
+      >
+        <analitica_grafico_barras_semana_dia />
+
+      </VCol>
 
 
 
