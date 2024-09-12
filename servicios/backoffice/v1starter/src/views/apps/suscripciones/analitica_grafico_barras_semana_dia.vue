@@ -4,7 +4,7 @@
       Usuarios registrados
     </VCardTitle>
     <VCardSubtitle>
-      Mira los usuarios registrados, cursos y logros
+      Suscripciones de la semana separadas por día
     </VCardSubtitle>
     <VCardText>
       <div class="d-flex align-center mb-4">
