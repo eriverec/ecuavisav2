@@ -1,11 +1,28 @@
 <template>
+
+
   <VCard>
-    <VCardTitle>
-      Usuarios registrados
-    </VCardTitle>
-    <VCardSubtitle>
-      Suscripciones de la semana separadas por día
-    </VCardSubtitle>
+    <VCardItem>
+            <div class="p-0 d-flex flex-column align-items-start">
+        <VCardTitle>
+          Usuarios registrados
+        </VCardTitle>
+        <VCardSubtitle>
+          Suscripciones de la semana separadas por día
+        </VCardSubtitle>
+            </div>
+            <template #append>
+              <!-- <VBtn
+                  :loading="btnLoadingDescargar"
+                  :disabled="btnLoadingDescargar"
+                  color="primary"
+                  @click="descargarReporte"
+                >
+                  Descargar
+                  <VIcon end icon="tabler-cloud-download" />
+                </VBtn> -->
+            </template>
+          </VCardItem>
     <VCardText>
       <div class="d-flex align-center mb-4">
         <VSelect
@@ -36,11 +53,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import VueApexCharts from 'vue3-apexcharts'
 import axios from 'axios'
 import moment from 'moment'
 import 'moment/locale/es'
+import { computed, onMounted, ref } from 'vue'
+import VueApexCharts from 'vue3-apexcharts'
 
 moment.locale('es')
 
