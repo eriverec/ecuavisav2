@@ -90,8 +90,41 @@ const nuevosUsuariosSemanaAnterior = computed(() => {
 const semanaActual = computed(() => getWeekRange())
 const semanaAnterior = computed(() => getWeekRange(-1))
 
+// Nuevas variables y funciones para reembolsos
+const reembolsosData = ref([])
+const loadingReembolsos = ref(true)
+const errorReembolsos = ref(null)
+
+const fetchReembolsosData = async () => {
+  try {
+    loadingReembolsos.value = true
+    const fechaInicio = '2023-09-01'
+    const fechaFin = moment().format('YYYY-MM-DD')
+    const response = await fetch(`https://ecuavisa-suscripciones.vercel.app/backoffice-grafico/total-reembolsos-por-fecha?fechai=${fechaInicio}&fechaf=${fechaFin}&idPaquete=651c9d012ff9fa09a75e6c16`)
+    if (!response.ok) {
+      throw new Error('Error al obtener datos de reembolsos')
+    }
+    const jsonData = await response.json()
+    reembolsosData.value = jsonData.data
+  } catch (err) {
+    errorReembolsos.value = err.message
+  } finally {
+    loadingReembolsos.value = false
+  }
+}
+
+const reembolsosCompletados = computed(() => {
+  const completados = reembolsosData.value.find(item => item.estado === 1)
+  return completados ? completados.total : 0
+})
+
+const totalReembolsos = computed(() => {
+  return reembolsosData.value.reduce((total, item) => total + item.total, 0)
+})
+
 onMounted(() => {
   fetchData()
+  fetchReembolsosData()
 })
 </script>
 
@@ -99,48 +132,44 @@ onMounted(() => {
   <div class="">
     <VRow>
       <VCol cols="12" md="12" lg="4">
-        <VCard  style="height: 150px;" >
+        <VCard style="height: 150px;">
           <VCardText class="d-flex justify-space-between">
             <div>
               <p v-if="loading">Cargando...</p>
               <p v-else-if="error">Error: {{ error }}</p>
               <div v-else>
-                <span class="text-h56">Total de usuarios</span>
-                <!-- <span>Total de usuarios activos:</span> -->
+                <span class="text-h56">Usuarios Suscritos</span>
                 <div>
                   <div class="d-flex align-center gap-2 my-1">
-                    <label class="text-primary">Registrados:</label> {{ totalRecords }}
+                    <label class="text-primary">Suscripciónes activas:</label> {{ usuariosActivos }}
                   </div>
                   <div class="d-flex align-center gap-2 my-1">
-                    <label class="text-primary">Pagados:</label> {{ usuariosActivos }}
+                    <label class="text-primary">Suscripciones Fallidas:</label> {{ usuariosInactivos }}
                   </div>
                   <div class="d-flex align-center gap-2 my-1">
-                    <label class="text-primary">Errores:</label> {{ usuariosInactivos }}
+                    <label class="text-primary">Total Procesados:</label> {{ totalRecords }}
                   </div>
                 </div>
               </div>
-
             </div>
             <VAvatar variant="tonal" color="success">
               <VIcon size="20" icon="tabler-user" />
             </VAvatar>
-
           </VCardText>
         </VCard>
-
       </VCol>
+      
       <VCol cols="12" md="12" lg="4">
-        <VCard  style="height: 150px;" >
+        <VCard style="height: 150px;">
           <VCardText class="d-flex justify-space-between">
             <div>
               <p v-if="loading">Cargando...</p>
               <p v-else-if="error">Error: {{ error }}</p>
               <div v-else>
-                <span class="text-h56">Registrados por semana</span>
-                <!-- <span>Total de usuarios activos:</span> -->
+                <span class="text-h56">Registros Semanales</span>
                 <div>
                   <div class="d-flex align-center gap-2 my-1">
-                    <label class="text-primary">Actual:</label> {{ nuevosUsuariosSemanaActual }}
+                    <label class="text-primary">Semana Actual:</label> {{ nuevosUsuariosSemanaActual }}
                     <VAvatar size="x-small" variant="tonal" color="secondary">
                       <VIcon size="20" icon="tabler-info-circle" />
                       <VTooltip activator="parent" location="top">
@@ -149,7 +178,7 @@ onMounted(() => {
                     </VAvatar>
                   </div>
                   <div class="d-flex align-center gap-2 my-1">
-                    <label class="text-primary">Anterior:</label> {{ nuevosUsuariosSemanaAnterior }}
+                    <label class="text-primary">Semana Anterior:</label> {{ nuevosUsuariosSemanaAnterior }}
                     <VAvatar size="x-small" variant="tonal" color="secondary">
                       <VIcon size="20" icon="tabler-info-circle" />
                       <VTooltip activator="parent" location="top">
@@ -159,55 +188,41 @@ onMounted(() => {
                   </div>
                 </div>
               </div>
-
             </div>
-
             <VAvatar variant="tonal" color="warning">
               <VIcon size="20" icon="tabler-calendar" />
             </VAvatar>
-
           </VCardText>
         </VCard>
       </VCol>
-      <VCol cols="12" md="12" lg="4">
 
-        <VCard  style="height: 150px;" >
+      <VCol cols="12" md="12" lg="4">
+        <VCard style="height: 150px;">
           <VCardText class="d-flex justify-space-between">
             <div>
-              <p v-if="loading">Cargando...</p>
-              <p v-else-if="error">Error: {{ error }}</p>
+              <p v-if="loadingReembolsos">Cargando reembolsos...</p>
+              <p v-else-if="errorReembolsos">Error: {{ errorReembolsos }}</p>
               <div v-else>
                 <span class="text-h56">Reembolsos</span>
-                <!-- <span>Total de usuarios activos:</span> -->
                 <div>
                   <div class="d-flex align-center gap-2 my-1">
-                    <label class="text-primary">Completados:</label> 00
-                    
+                    <label class="text-primary">Completados:</label> {{ reembolsosCompletados }}
                   </div>
                   <div class="d-flex align-center gap-2 my-1">
-                    <label class="text-primary">Rechazados:</label> 00
-                   
+                    <label class="text-primary">Pendientes:</label> 0
                   </div>
                   <div class="d-flex align-center gap-2 my-1">
-                    <label class="text-primary">Pendientes:</label> 00
-                   
+                    <label class="text-primary">Total de Solicitudes:</label> {{ totalReembolsos }}
                   </div>
                 </div>
               </div>
-
             </div>
-
             <VAvatar variant="tonal" color="primary">
               <VIcon size="20" icon="tabler-rotate-2" />
             </VAvatar>
-
           </VCardText>
         </VCard>
       </VCol>
     </VRow>
-
-
-
-
   </div>
 </template>

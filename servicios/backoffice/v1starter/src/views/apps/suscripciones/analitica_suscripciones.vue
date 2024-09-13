@@ -283,7 +283,7 @@ const chartConfigs = computed(() => {
 
   return [
     {
-      title: 'Suscriptores',
+      title: 'Suscriptores/mes',
       icon: 'tabler-users',
       chartOptions: {
         chart: {
@@ -624,12 +624,12 @@ const isMonthSelectorVisible = computed(() => currentTab.value === 1 || currentT
 
 <template>
   <section>
-    <VCard>
+    <!-- <VCard> -->
       <VCardItem>
-        <VCardTitle>
+        <VCardTitle class="d-none">
           Usuarios registrados por mes en el 2024.
         </VCardTitle>
-        <VCardSubtitle>
+        <VCardSubtitle class="d-none">
           Se muestran los suscritos por mes
         </VCardSubtitle>
       </VCardItem>
@@ -682,6 +682,6 @@ const isMonthSelectorVisible = computed(() => currentTab.value === 1 || currentT
           :height="chartConfigs[Number(currentTab)].height" class="mt-3" />
 
       </VCardText>
-    </VCard>
+    <!-- </VCard> -->
   </section>
 </template>

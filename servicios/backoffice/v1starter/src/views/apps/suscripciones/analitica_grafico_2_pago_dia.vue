@@ -12,10 +12,10 @@
           <VCardItem>
             <div class="p-0 d-flex flex-column align-items-start">
               <VCardTitle>
-                Ventas agrupadas por día
+                Ventas totales por día
               </VCardTitle>
-              <VCardSubtitle>
-                Escoja un mes para ver las ventas diarias y suma total.
+              <VCardSubtitle class="mb-5">
+                Escoja un mes para ver por día la cantidad <br> de pagos realizados y la suma de ingresos total.
               </VCardSubtitle>
             </div>
             <template #append>
@@ -32,8 +32,8 @@
           </VCardItem>
 
           <VCardText>
-            <div class="p-0 mt-0 mb-3 d-flex align-items-center flex-wrap gap-3">
-                      <VSelect
+            <div class="pb-5 mt-0 mb-3 d-flex align-items-center flex-wrap gap-3">
+                      <VSelect class="mb-3"
                           v-model="selectedMonth"
                           :items="months"
                           label="Mes"

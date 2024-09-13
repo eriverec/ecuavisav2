@@ -382,12 +382,14 @@ import { useTheme } from 'vuetify';
         
         <VCard>
           <VCardItem>
-            <div class="p-0 d-flex flex-column align-items-start">
+            <div class="p-0 pb-5 d-flex flex-column align-items-start">
               <VCardTitle>
-                Por año.<br>Ventas realizadas agrupadas por meses.
+                <!-- Por año.<br> -->
+                Ventas totales de cada mes.
               </VCardTitle>
               <VCardSubtitle>
-                Debes seleccionar el año y el paquete para ver los resultados<br> de ventas en suscripciones.
+                Muestra el valor total de ingresos de cada mes
+                <!-- <br> de ventas en suscripciones. -->
               </VCardSubtitle>
             </div>
             <template #append>
@@ -412,7 +414,7 @@ import { useTheme } from 'vuetify';
                 :menu-props="{ maxHeight: '300' }"
                 class="d-none"
               />
-              <VSelect
+              <VSelect class="d-none"
                   style="width: 275px;"
                   v-model:menu="selectRefPaquete"
                   no-data-text="No existen paquetes que mostrar"

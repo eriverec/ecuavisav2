@@ -17,10 +17,11 @@
           <VCardItem>
             <div class="p-0 d-flex flex-column align-items-start">
               <VCardTitle>
-                Por año y mes.<br>Ventas de paquetes agrupadas.
+                <!-- Por año y mes. -->
+                Ventas de paquetes agrupadas<br> por mes el 2024.
               </VCardTitle>
               <VCardSubtitle>
-                Se muestran las ventas de paquetes <br> del año 2024.
+                Se muestran el total de de paquetes contratados <br> y el total de ingresos de cada mes.
               </VCardSubtitle>
             </div>
             <template #append>

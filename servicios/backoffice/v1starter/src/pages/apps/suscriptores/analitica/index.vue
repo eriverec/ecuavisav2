@@ -28,38 +28,38 @@
             <VWindow v-model="tabActual" >
               <!-- Tab General -->
               <VWindowItem value="tab-general" >
-                <VCardTitle class="datos-titulo">Datos generales</VCardTitle>
+                <VCardTitle class="datos-titulo">Métricas de suscripciones generales</VCardTitle>
                 <VCardSubtitle class="mb-5 datos-subt">Analíticas de suscripciones y pagos por mes y año.</VCardSubtitle>
                
                   <VRow>
 
-                  <VCol
-                    class="mt-0"
-                    cols="12"
-                    md="12"
-                    lg="12"
-                  >
+                  <VCol class="mt-0" cols="12" md="12" lg="12" >
                     <analitica_suscripciones />
+                  </VCol>
 
-                  </VCol> 
                   <VCol cols="12" md="6" lg="6">
                     <analitica_grafico_barras_semana_dia />
                   </VCol>
-                  <VCol cols="12" md="6" lg="6">
-                    <analitica_grafico_1 />
-                  </VCol>
+
                   <VCol cols="12" md="6" lg="6">
                     <analitica_grafico_2_pago_dia />
                   </VCol>
+
+                  <VCol cols="12" md="6" lg="6">
+                    <analitica_grafico_1 />
+                  </VCol>
+
                   <VCol cols="12" md="6" lg="6">
                     <analitica_grafico_barras_pagos />
                   </VCol>
-                  <VCol cols="12" md="6" lg="6">
+
+                  <!-- <VCol cols="12" md="6" lg="6" >
                     <analitica_grafico_barras_suscritos />
-                  </VCol>
-                  <VCol cols="12" md="6" lg="6">
+                  </VCol> -->
+
+                  <!-- <VCol cols="12" md="6" lg="6">
                     <analitica_grafico_suscritos_dia />
-                  </VCol>
+                  </VCol> -->
                 </VRow>
                
                 
@@ -67,7 +67,7 @@
 
               <!-- Tab Reembolsos -->
               <VWindowItem value="tab-reembolsos">
-                <VCardTitle class="datos-titulo">Datos de Reembolsos</VCardTitle>
+                <VCardTitle class="datos-titulo">Métricas de Reembolsos</VCardTitle>
                 <VCardSubtitle class="mb-5 datos-subt">Analíticas de reembolsos por mes y año</VCardSubtitle>
           
                   <VRow>
