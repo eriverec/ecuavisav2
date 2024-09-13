@@ -23,7 +23,7 @@
           </VTab>
         </VTabs>
 
-        <VCard class="mt-5" style="background-color: #f2f2f2;">
+        <VCard class="mt-5 card">
           <VCardText>
             <VWindow v-model="tabActual" >
               <!-- Tab General -->
