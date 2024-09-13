@@ -1,6 +1,6 @@
 <script setup>
-import analitica_grafico_1 from '@/views/apps/suscripciones/reembolso/analitica_grafico_1.vue';
-import analitica_grafico_2_dia from '@/views/apps/suscripciones/reembolso/analitica_grafico_2_dia.vue';
+import r_analitica_grafico_1 from '@/views/apps/suscripciones/reembolso/r_analitica_grafico_1.vue';
+import r_analitica_grafico_2_dia from '@/views/apps/suscripciones/reembolso/r_analitica_grafico_2_dia.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -36,7 +36,7 @@ import esLocale from "moment/locale/es";
 	        lg="6"
 	    >
 
-      		<analitica_grafico_1 />
+      		<r_analitica_grafico_1 />
 
     	</VCol>
 
@@ -47,7 +47,7 @@ import esLocale from "moment/locale/es";
 	        lg="6"
 	    >
 
-      		<analitica_grafico_2_dia />
+      		<r_analitica_grafico_2_dia />
 
     	</VCol>
 
