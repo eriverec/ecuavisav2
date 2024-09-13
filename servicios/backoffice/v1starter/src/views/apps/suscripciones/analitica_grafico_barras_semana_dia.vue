@@ -8,7 +8,7 @@
           Usuarios registrados
         </VCardTitle>
         <VCardSubtitle>
-          Suscripciones de la semana separadas por día
+          Estadística de suscriptores de la semana actual
         </VCardSubtitle>
             </div>
             <template #append>
