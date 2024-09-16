@@ -39,6 +39,32 @@ const mesesOptions = [
   { value: '12', text: 'Diciembre' }
 ];
 
+const cardTypes = {
+  ex: 'Exito',
+  ak: 'Alkosto',
+  cd: 'Codensa',
+  sx: 'Sodexo',
+  ol: 'Olimpica',
+  ep: 'EPM',
+  csd: 'Colsubsidio',
+  bbva: 'BBVA',
+  cmr: 'Falabella',
+  cn: 'Carnet',
+  cs: 'Credisensa',
+  so: 'Solidario',
+  up: 'Union Pay',
+  el: 'Elo',
+  jc: 'JCB',
+  au: 'Aura',
+  hpc: 'Hipercard',
+  vi: 'Visa',
+  mc: 'Mastercard',
+  ax: 'American Express',
+  di: 'Diners',
+  dc: 'Discover',
+  ms: 'Maestro'
+};
+
 const mesesMin = {
   "enero": "Ene", "febrero": "Feb", "marzo": "Mar", "abril": "Abr",
   "mayo": "May", "junio": "Jun", "julio": "Jul", "agosto": "Ago",
@@ -130,6 +156,15 @@ const obtenerDatosTarjeta = async () => {
   }
 };
 
+const camposOmitidos = [
+  'package_details_precio_promocion',
+  'package_details_ciclos_promocion',
+  'package_details_ciclo_promocion_actual',
+  'billing_details_ndireccion_opcional',
+  'user',
+  'package_details_fechaBaja'
+];
+
 const descargarDatos = async () => {
   loadingGrafico.value = true;
   try {
@@ -149,7 +184,16 @@ const descargarDatos = async () => {
       });
 
       if (response.data.resp && Array.isArray(response.data.data)) {
-        allData = allData.concat(response.data.data);
+        // Filtrar los campos omitidos de cada objeto antes de agregarlo a allData
+        const filteredData = response.data.data.map(item => {
+          const filteredItem = { ...item };
+          camposOmitidos.forEach(campo => delete filteredItem[campo]);
+          if (filteredItem.card_details_type) {
+            filteredItem.card_details_type = cardTypes[filteredItem.card_details_type.toLowerCase()] || filteredItem.card_details_type;
+          }
+          return filteredItem;
+        });
+        allData = allData.concat(filteredData);
         if (response.data.data.length < 50) {
           hasMoreData = false;
         } else {
@@ -176,8 +220,24 @@ const descargarDatos = async () => {
 };
 
 const convertToCSV = (data) => {
-  const header = Object.keys(data[0]).join(',');
-  const rows = data.map(obj => Object.values(obj).map(value => `"${value}"`).join(','));
+  // Filtrar las claves para excluir los campos omitidos
+  const keys = Object.keys(data[0]).filter(key => !camposOmitidos.includes(key));
+  
+  const header = keys.join(',');
+  const rows = data.map(obj => 
+    keys.map(key => {
+      let value = obj[key];
+      if (key === 'card_details_type') {
+        value = cardTypes[value.toLowerCase()] || value;
+      }
+      // Manejar valores que puedan contener comas o comillas
+      if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
+        value = `"${value.replace(/"/g, '""')}"`;
+      }
+      return value;
+    }).join(',')
+  );
+  
   return [header, ...rows].join('\n');
 };
 
@@ -242,31 +302,7 @@ const hexToRgb = (hex) => {
   return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : null;
 };
 
-const cardTypes = {
-  ex: 'Exito',
-  ak: 'Alkosto',
-  cd: 'Codensa',
-  sx: 'Sodexo',
-  ol: 'Olimpica',
-  ep: 'EPM',
-  csd: 'Colsubsidio',
-  bbva: 'BBVA',
-  cmr: 'Falabella',
-  cn: 'Carnet',
-  cs: 'Credisensa',
-  so: 'Solidario',
-  up: 'Union Pay',
-  el: 'Elo',
-  jc: 'JCB',
-  au: 'Aura',
-  hpc: 'Hipercard',
-  vi: 'Visa',
-  mc: 'Mastercard',
-  ax: 'American Express',
-  di: 'Diners',
-  dc: 'Discover',
-  ms: 'Maestro'
-};
+
 
 const chartConfigs = computed(() => {
   const currentTheme = vuetifyTheme.current.value.colors;

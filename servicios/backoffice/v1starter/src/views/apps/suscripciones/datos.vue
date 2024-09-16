@@ -206,13 +206,13 @@ onMounted(() => {
                 <span class="text-h56">Reembolsos</span>
                 <div>
                   <div class="d-flex align-center gap-2 my-1">
-                    <label class="text-primary">Completados:</label> {{ reembolsosCompletados }}
+                    <label class="text-primary">Solicitudes:</label> {{ totalReembolsos }}
                   </div>
                   <div class="d-flex align-center gap-2 my-1">
                     <label class="text-primary">Pendientes:</label> 0
                   </div>
                   <div class="d-flex align-center gap-2 my-1">
-                    <label class="text-primary">Total de Solicitudes:</label> {{ totalReembolsos }}
+                    <label class="text-primary">Completados:</label> {{ reembolsosCompletados }}
                   </div>
                 </div>
               </div>
