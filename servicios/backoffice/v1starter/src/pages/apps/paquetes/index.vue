@@ -10,7 +10,9 @@ const dataGrupos = ref([]);
 const gruposItems = ref([]);
 const sitiosItems = ref([]);
 const sitiosRaw = ref([]);
-const urlDom = "https://ecuavisa-suscripciones.vercel.app";
+// dom prueba
+const urlDom = "https://servicios-ecuavisa-suscripciones.vercel.app";
+// const urlDom = "https://ecuavisa-suscripciones.vercel.app";
 
 async function getPaquetes (){
     try {
@@ -141,6 +143,17 @@ const cambioPlanItems = [
   }
 ]
 
+const paqueteInternacionalItems = [
+  {
+    title: "Si",
+    value: true
+  },
+  {
+    title: "No",
+    value: false
+  }
+]
+
 const paqueteCortesiaItems = [
   {
     title: "Si",
@@ -183,13 +196,14 @@ const sitio = ref('');
 const activoDesde = ref('');
 const activoHasta = ref('');
 const color = ref('');
-const destaque = ref('');
+const destaque = ref('No aplica');
 const clasesCss = ref('');
 
 const url_imagen = ref('');
 const visibilidad = ref('');
 const cambioPlan = ref('');
 const paqueteCortesia = ref(false);
+const paqueteInternacional = ref(false);
 const direccionCompra = ref('');
 const descripcionCustom = ref('');
 //const caracteristicas = ref([]);
@@ -240,15 +254,16 @@ function resetForm(){
     activoDesde.value = '';
     activoHasta.value = '';
     color.value = '';
-    destaque.value = '';
+    destaque.value = 'No aplica';
     clasesCss.value = '';
     caracteristicasSelected.value = [];
 
     url_imagen.value ='';
-    visibilidad.value = '';
-    cambioPlan.value = '';
+    visibilidad.value = 'Visible';
+    cambioPlan.value = 'bloquear';
     paqueteCortesia.value =false;
-    direccionCompra.value = '';
+    paqueteInternacional.value = "No";
+    direccionCompra.value = 'no solicitar';
     descripcionCustom.value = '';
 }
 
@@ -344,6 +359,7 @@ async function onEditPaquete(id){
     visibilidad.value = paquete.visibilidad;
     cambioPlan.value = paquete.cambioPlan;
     paqueteCortesia.value = paquete.paqueteCortesia;
+    paqueteInternacional.value = paquete.paqueteInternacional;
     direccionCompra.value = paquete.direccionCompra;
     descripcionCustom.value = paquete.descripcionCustom;
 
@@ -380,6 +396,7 @@ async function onComplete(){
         "visibilidad" : visibilidad.value,
         "cambioPlan" : cambioPlan.value,
         "paqueteCortesia" : paqueteCortesia.value,
+        "paqueteInternacional" : paqueteInternacional.value,
         "direccionCompra" : direccionCompra.value,
         "descripcionCustom" : descripcionCustom.value  
         }
@@ -431,6 +448,7 @@ async function onComplete(){
         "visibilidad" : visibilidad.value,
         "cambioPlan" : cambioPlan.value,
         "paqueteCortesia" : paqueteCortesia.value,
+        "paqueteInternacional" : paqueteInternacional.value,
         "direccionCompra" : direccionCompra.value,
         "descripcionCustom" : descripcionCustom.value
         }
@@ -758,15 +776,15 @@ async function deletePaquete() {
                             <VCol
                               cols="6"
                               md="6"
-                              class="smContainer"
+                              class="smContainer d-none"
                             >
                             
                                 <VSelect v-model="destaque" label="Destaque" :items="destaqueItems" />
                             </VCol>
 
                             <VCol
-                              cols="6"
-                              md="6"
+                              cols="12"
+                              md="12"
                               class="mdContainer"
                             >
                                 <VTextField
@@ -788,6 +806,18 @@ async function deletePaquete() {
                             </VCol>
 
                             <VCol cols="6" md="6" class="lgContainer">
+                                <span>¿Es un paquete internacional?</span>  
+                                <VRadioGroup v-model="paqueteInternacional">
+                                  <VRadio
+                                    v-for="(paqCor,indexPc) in paqueteInternacionalItems"
+                                    :key="indexPc"
+                                    :label="paqCor.title"
+                                    :value="paqCor.title"
+                                  />
+                                </VRadioGroup>
+                            </VCol>
+
+                            <VCol cols="6" md="6" class="lgContainer d-none">
                                 <span>Cambio de plan</span>  
                                 <VRadioGroup v-model="cambioPlan">
                                   <VRadio
@@ -799,19 +829,19 @@ async function deletePaquete() {
                                 </VRadioGroup>
                             </VCol>
 
-                            <VCol cols="6" md="6" class="lgContainer">
-                            <span>¿Es un paquete de cortesía?</span>  
-                            <VRadioGroup v-model="paqueteCortesia">
-                              <VRadio
-                                v-for="(paqCor,indexPc) in paqueteCortesiaItems"
-                                :key="indexPc"
-                                :label="paqCor.title"
-                                :value="paqCor.value"
-                              />
-                            </VRadioGroup>
+                            <VCol cols="6" md="6" class="lgContainer d-none">
+                                <span>¿Es un paquete de cortesía?</span>  
+                                <VRadioGroup v-model="paqueteCortesia">
+                                  <VRadio
+                                    v-for="(paqCor,indexPc) in paqueteCortesiaItems"
+                                    :key="indexPc"
+                                    :label="paqCor.title"
+                                    :value="paqCor.value"
+                                  />
+                                </VRadioGroup>
                             </VCol>
 
-                            <VCol cols="6" md="6" class="lgContainer">
+                            <VCol cols="6" md="6" class="lgContainer d-none">
                             <span>¿Solicitar dirección durante la compra?</span>  
                             <VRadioGroup v-model="direccionCompra">
                               <VRadio
