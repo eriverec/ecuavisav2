@@ -1,7 +1,7 @@
 <template>
   <section>
     <VSnackbar v-model="success" color="success" transition="scale-transition" location="top center">
-      <h3>Se ha guardado la configuración exitosamente</h3>
+      <h3>Se ha guardado la configuración correctamente</h3>
     </VSnackbar>
 
     <VCard class="mt-5" title="Configuración de Reproductores">
