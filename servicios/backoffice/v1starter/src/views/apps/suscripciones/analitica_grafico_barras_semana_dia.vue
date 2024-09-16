@@ -1,5 +1,9 @@
 <template>
   <VCard>
+    <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat"
+      :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
+      {{ configSnackbar.message }}
+    </VSnackbar>
     <VCardItem>
       <div class="p-0 d-flex flex-column align-items-start">
         <VCardTitle>
@@ -10,12 +14,7 @@
         </VCardSubtitle>
       </div>
       <template #append>
-        <VBtn
-          :loading="btnLoadingDescargar"
-          :disabled="btnLoadingDescargar"
-          color="primary"
-          @click="descargarReporte"
-        >
+        <VBtn :loading="btnLoadingDescargar" :disabled="btnLoadingDescargar" color="primary" @click="descargarReporte">
           Descargar
           <VIcon end icon="tabler-cloud-download" />
         </VBtn>
@@ -23,19 +22,12 @@
     </VCardItem>
     <VCardText>
       <div class="d-flex align-center mb-4">
-        <VSelect
-          v-model="selectedWeek"
-          :items="weekOptions"
-          label="Seleccionar semana"
-          style="width: 100%;"
-        />
+        <VSelect v-model="selectedWeek" :items="weekOptions" label="Seleccionar semana" style="width: 100%;" />
       </div>
-      <VueApexCharts
-        type="bar"
-        height="400"
-        :options="chartOptions"
-        :series="chartSeries"
-      />
+      <div v-if="datosVacios" class="text-start mt-5 mb-5">
+      No hay datos disponibles para la semana seleccionado.
+      </div>
+      <VueApexCharts type="bar" height="400" :options="chartConfigs[0].chartOptions" :series="chartSeries" />
     </VCardText>
   </VCard>
 </template>
@@ -46,12 +38,15 @@ import axios from 'axios'
 import moment from 'moment'
 import 'moment/locale/es'
 import { computed, onMounted, ref, watch } from 'vue'
+import { useTheme } from 'vuetify';
 import VueApexCharts from 'vue3-apexcharts'
 
 moment.locale('es')
 
 const DOMAIN = 'https://ecuavisa-suscripciones.vercel.app'
 const ID_PAQUETE = '651c9d012ff9fa09a75e6c16'
+const vuetifyTheme = useTheme();
+const datosVacios = ref(false);
 
 const selectedWeek = ref('current')
 const weekOptions = [
@@ -61,9 +56,15 @@ const weekOptions = [
 const subscriptionData = ref([])
 const btnLoadingDescargar = ref(false)
 
+const configSnackbar = ref({
+  message: "Datos guardados",
+  type: "success",
+  model: false
+})
+
 const fetchData = async () => {
   const { startOfWeek, endOfWeek } = getWeekDates()
-  
+
   try {
     const response = await axios.get(`${DOMAIN}/backoffice-grafico/suscripciones-activas-por-dia-filtro-fechas`, {
       params: {
@@ -72,7 +73,8 @@ const fetchData = async () => {
         fechaf: endOfWeek.format('YYYY-MM-DD')
       }
     })
-    subscriptionData.value = response.data.data
+    subscriptionData.value = response.data.data;
+    datosVacios.value = subscriptionData.value.every(d => d === 0);
   } catch (error) {
     console.error('Error fetching data:', error)
   }
@@ -98,59 +100,123 @@ const chartSeries = computed(() => [{
   })
 }])
 
-const chartOptions = computed(() => ({
-  chart: {
-    type: 'bar',
-    toolbar: {
-      show: false
-    },
-  },
-  plotOptions: {
-    bar: {
-      borderRadius: 4,
-      columnWidth: '60%',
-    }
-  },
-  dataLabels: {
-    enabled: true,
-    formatter: function (val) {
-      return val || '0'
-    },
-    style: {
-      fontSize: '12px',
-      colors: ['#304758']
-    }
-  },
-  colors: weekDays.value.map(day => 
-    day.isSame(moment(), 'day') ? '#7367F0' : '#E0E0E0'
-  ),
-  xaxis: {
-    categories: weekDays.value.map(day => day.format('ddd DD/MM').charAt(0).toUpperCase() + day.format('ddd DD/MM').slice(1)),
-    labels: {
-      style: {
-        colors: '#909399',
-        fontSize: '12px'
+const diasSemana = {
+  0: 'Dom',
+  1: 'Lun',
+  2: 'Mar',
+  3: 'Mié',
+  4: 'Jue',
+  5: 'Vie',
+  6: 'Sáb'
+}
+
+const chartConfigs = computed(() => {
+
+  const hexToRgb = (hex) => {
+    const shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
+    hex = hex.replace(shorthandRegex, (m, r, g, b) => r + r + g + g + b + b);
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result ? `${parseInt(result[1], 16)},${parseInt(result[2], 16)},${parseInt(result[3], 16)}` : null;
+  };
+
+  const currentTheme = vuetifyTheme.current.value.colors;
+  const variableTheme = vuetifyTheme.current.value.variables;
+  const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`;
+  const legendColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`;
+  const borderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${variableTheme['border-opacity']})`;
+  const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`;
+
+  return [
+    {
+      chartOptions: {
+        chart: {
+          type: 'bar',
+          parentHeightOffset: 0,
+          toolbar: {
+            show: false
+          },
+        },
+        plotOptions: {
+          bar: {
+            borderRadius: 4,
+            columnWidth: '60%',
+            startingShape: 'rounded',
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          formatter: function (val) {
+            return val || '0'
+          },
+          style: {
+            fontSize: '15px',
+            colors: [legendColor],
+            fontWeight: '600',
+            fontFamily: 'Public Sans',
+          },
+        },
+        legend: { show: false },
+        colors: weekDays.value.map(day =>
+          day.isSame(moment(), 'day') ? '#7367F0' : '#7367F0'
+        ),
+        xaxis: {
+          categories: weekDays.value.map(day => {
+            const diaSemana = diasSemana[day.format('d')]
+            const fecha = day.format('DD/MM')
+            return `${diaSemana} ${fecha}`
+          }),
+          axisBorder: {
+            show: true,
+            color: borderColor,
+          },
+          axisTicks: { show: true },
+          labels: {
+            style: {
+              colors: labelColor,
+              fontSize: '11px',
+              fontFamily: 'Public Sans',
+            },
+          },
+        },
+        grid: {
+          show: true,
+          borderColor: borderColor,
+          xaxis: {
+            lines: { show: true },
+          },
+        },
+        yaxis: {
+          title: {
+            text: 'Usuarios registrados',
+            style: {
+              fontSize: '14px',
+              fontFamily: 'Public Sans',
+              color: labelColor
+            }
+          },
+          labels: {
+            formatter: function (val) {
+              return val.toFixed(0)
+            },
+            style: {
+              fontSize: '14px',
+              colors: labelColor,
+              fontFamily: 'Public Sans',
+            },
+          }
+        },
+        tooltip: {
+          y: {
+            formatter: function (val) {
+              return val
+            }
+          }
+        }
       }
     }
-  },
-  yaxis: {
-    title: {
-      text: 'Usuarios registrados'
-    },
-    labels: {
-      formatter: function (val) {
-        return val.toFixed(0)
-      }
-    }
-  },
-  tooltip: {
-    y: {
-      formatter: function (val) {
-        return val
-      }
-    }
-  }
-}))
+  ];
+
+})
 
 const descargarReporte = async () => {
   btnLoadingDescargar.value = true
@@ -162,7 +228,7 @@ const descargarReporte = async () => {
         fechai: startOfWeek.format('YYYY-MM-DD'),
         fechaf: endOfWeek.format('YYYY-MM-DD'),
         page: 1,
-        limit: 10000 
+        limit: 10000
       }
     })
 
@@ -172,9 +238,14 @@ const descargarReporte = async () => {
         const itemDate = moment(item.fecha)
         return itemDate.isBetween(startOfWeek, endOfWeek, null, '[]')
       })
+      console.log(filteredData);
 
       if (filteredData.length === 0) {
-        console.warn('No se encontraron registros para la semana seleccionada.')
+        configSnackbar.value = {
+          message: "No se encontraron registros para la semana seleccionada",
+          type: "error",
+          model: true
+        };
         return
       }
 

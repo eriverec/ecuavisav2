@@ -31,7 +31,7 @@
                 <VCardTitle class="datos-titulo">Métricas de suscripciones generales</VCardTitle>
                 <VCardSubtitle class="mb-5 datos-subt">Analíticas de suscripciones y pagos por mes y año.</VCardSubtitle>
                
-                  <VRow>
+                  <VRow class="ml-2 mr-2 mb-2">
 
                   <VCol class="mt-0" cols="12" md="12" lg="12" >
                     <analitica_suscripciones />
@@ -70,7 +70,7 @@
                 <VCardTitle class="datos-titulo">Métricas de Reembolsos</VCardTitle>
                 <VCardSubtitle class="mb-5 datos-subt">Analíticas de reembolsos por mes y año</VCardSubtitle>
           
-                  <VRow>
+                  <VRow class="ml-2 mr-2 mb-2">
                     <VCol cols="12" md="6" lg="6">
                       <r_analitica_grafico_1 />
                     </VCol>
