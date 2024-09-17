@@ -26,7 +26,6 @@ const configSnackbar = ref({
   model: false
 })
 
-
 // Estado seleccionado (2 - pendiente por defecto)
 const selectedState = ref('2')
 
@@ -132,40 +131,36 @@ async function rechazarDevolucion(transactionId) {
     }
   }
 }
+
 // Función para formatear la fecha
 function formatDate(dateString) {
   return moment(dateString).format('DD/MM/YYYY HH:mm:ss');
 }
 
-
-async function getReembolsosPage(page, limit, estado) {
-  const url = `https://ecuavisa-suscripciones.vercel.app/reembolso/backoffice/solicitudes-list?estado=${estado}&page=${page}&limit=${limit}`;
+async function getReembolsosPage(estado) {
+  const url = `https://ecuavisa-suscripciones.vercel.app/reembolso/backoffice/solicitudes-list?estado=${estado}&page=1&limit=1000`;
   const response = await fetch(url);
   const data = await response.json();
   return data.resp ? data : null;
 }
 
 async function getAllReembolsos() {
+  if (loadingReembolsos.value) return; 
+  
   loadingReembolsos.value = true;
   try {
-    let allReembolsos = [];
-    let page = 1;
-    let hasMoreData = true;
-
-    while (hasMoreData) {
-      const data = await getReembolsosPage(page, 100, selectedState.value);
-      if (data && data.data && data.data.length > 0) {
-        allReembolsos = [...allReembolsos, ...data.data];
-        page++;
-      } else {
-        hasMoreData = false;
-      }
+    const data = await getReembolsosPage(selectedState.value);
+    if (data && data.data) {
+      dataReembolsos.value = data.data;
+      filteredReembolsos.value = data.data;
+      totalRegistros.value = data.data.length;
+      updatePagination();
+    } else {
+      dataReembolsos.value = [];
+      filteredReembolsos.value = [];
+      totalRegistros.value = 0;
+      updatePagination();
     }
-
-    dataReembolsos.value = allReembolsos;
-    filteredReembolsos.value = allReembolsos;
-    totalRegistros.value = allReembolsos.length;
-    totalPage.value = Math.ceil(allReembolsos.length / rowPerPage.value);
   } catch (error) {
     console.error('Error al obtener los datos:', error);
     configSnackbar.value = {
@@ -178,6 +173,12 @@ async function getAllReembolsos() {
   }
 }
 
+function updatePagination() {
+  totalPage.value = Math.ceil(filteredReembolsos.value.length / rowPerPage.value);
+  currentPage.value = Math.min(currentPage.value, totalPage.value);
+  if (currentPage.value === 0 && totalPage.value > 0) currentPage.value = 1;
+}
+
 function buscarReembolsos() {
   isFullLoading.value = true;
   const query = searchQuery.value.toLowerCase();
@@ -185,22 +186,20 @@ function buscarReembolsos() {
     item.user.first_name.toLowerCase().includes(query) ||
     item.user.last_name.toLowerCase().includes(query)
   );
-  currentPage.value = 1;
-  totalPage.value = Math.ceil(filteredReembolsos.value.length / rowPerPage.value);
+  updatePagination();
   isFullLoading.value = false;
 }
 
 // Watchers
-watch(rowPerPage, () => {
-  currentPage.value = 1;
-  totalPage.value = Math.ceil(filteredReembolsos.value.length / rowPerPage.value);
+watch(rowPerPage, updatePagination)
+
+watch(selectedState, (newValue, oldValue) => {
+  if (newValue !== oldValue) {
+    getAllReembolsos();
+  }
 })
 
-watch(selectedState, (newValue) => {
-  getAllReembolsos();
-})
-
-// Computed
+// Computed properties
 const paginationData = computed(() => {
   const firstIndex = filteredReembolsos.value.length ? (currentPage.value - 1) * rowPerPage.value + 1 : 0;
   const lastIndex = Math.min(firstIndex + rowPerPage.value - 1, filteredReembolsos.value.length);
@@ -213,7 +212,7 @@ const paginatedReembolsos = computed(() => {
   return filteredReembolsos.value.slice(start, end);
 })
 
-// Nuevo computed para el mensaje cuando no hay datos
+// Mensaje cuando no hay datos
 const noDataMessage = computed(() => {
   switch (selectedState.value) {
     case '2':
@@ -229,33 +228,15 @@ const noDataMessage = computed(() => {
   }
 })
 
-// Lifecycle hooks
+
 onMounted(() => {
   getAllReembolsos();
 })
 
-async function getAllReembolsosForExport() {
-  let allReembolsos = [];
-  let page = 1;
-  let hasMoreData = true;
-
-  while (hasMoreData) {
-    const data = await getReembolsosPage(page, 100, selectedState.value);
-    if (data && data.data && data.data.length > 0) {
-      allReembolsos = [...allReembolsos, ...data.data];
-      page++;
-    } else {
-      hasMoreData = false;
-    }
-  }
-
-  return allReembolsos;
-}
-
 async function exportarDatos() {
   try {
     isLoadingExport.value = true;
-    const allReembolsos = await getAllReembolsosForExport();
+    const allReembolsos = dataReembolsos.value; 
     
     const columns = [
       'ID',
@@ -275,7 +256,7 @@ async function exportarDatos() {
         item.user.last_name,
         item.user.email,
         item.transaction_id,
-        item.transaction[0].transaction.product_description
+        item.transaction[0]?.transaction?.product_description || 'N/A'
       ];
       csvContent += row.join(',') + '\n';
     });
@@ -343,7 +324,6 @@ async function exportarDatos() {
               density="compact"
               variant="outlined"
               style="width: 200px;"
-              @update:model-value="getAllReembolsos"
             />
             
             <VTextField
@@ -395,35 +375,34 @@ async function exportarDatos() {
                 <th scope="col">Acciones</th>
               </tr>
             </thead>
-            <tbody v-if="!loadingReembolsos">
+            <tbody v-if="!loadingReembolsos && paginatedReembolsos.length > 0">
               <tr v-for="item in paginatedReembolsos" :key="item._id" style="height: 3.75rem;">
                 <td>{{ item.user.first_name }}</td>
                 <td>{{ item.user.last_name }}</td>
                 <td>{{ item.user.email }}</td>
-                <td>{{ item.transaction[0].transaction.id }}</td>
+                <td>{{ item.transaction_id }}</td>
                 <td>{{ formatDate(item.created_at) }}</td>
-                <td>{{ item.transaction[0].transaction.product_description }}</td>
+                <td>{{ item.transaction[0]?.transaction?.product_description || 'N/A' }}</td>
                 <td class="text-center" style="width: 5rem;">
                   <template v-if="selectedState === '2'">
                     <VBtn icon size="x-small" color="default" variant="text" @click="procesarDevolucion(item.transaction_id)">
                       <VIcon size="22" icon="mdi-credit-card-refund" />
                     </VBtn>
                     <VBtn icon size="x-small" color="error" variant="text" @click="rechazarDevolucion(item.transaction_id)">
-                        <VIcon size="22" icon="mdi-close" />
-                      </VBtn>
-              
+                      <VIcon size="22" icon="mdi-close" />
+                    </VBtn>
                   </template>
                   <VIcon v-else-if="selectedState === '1'" size="22" icon="mdi-check-circle" color="success" />
                   <VIcon v-else-if="selectedState === '3'" size="22" icon="mdi-close-circle" color="error" />
                 </td>
               </tr>
             </tbody>
-            <tfoot v-show="!paginatedReembolsos.length && !loadingReembolsos">
+            <tfoot v-if="!loadingReembolsos && paginatedReembolsos.length === 0">
               <tr>
                 <td colspan="7" class="text-center">{{ noDataMessage }}</td>
               </tr>
             </tfoot>
-            <tfoot v-show="loadingReembolsos">
+            <tfoot v-if="loadingReembolsos">
               <tr>
                 <td colspan="7" class="text-center">Cargando datos, por favor espere un momento...</td>
               </tr>
