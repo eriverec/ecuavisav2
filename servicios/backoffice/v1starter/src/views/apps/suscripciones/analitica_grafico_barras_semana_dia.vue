@@ -25,9 +25,9 @@
         <VSelect v-model="selectedWeek" :items="weekOptions" label="Seleccionar semana" style="width: 100%;" />
       </div>
       <div v-if="datosVacios" class="text-start mt-5 mb-5">
-      No hay datos disponibles para la semana seleccionado.
+      No hay datos disponibles para la semana o el paquete seleccionado.
       </div>
-      <VueApexCharts type="bar" height="400" :options="chartConfigs[0].chartOptions" :series="chartSeries" />
+      <VueApexCharts v-else type="bar" height="400" :options="chartConfigs[0].chartOptions" :series="chartSeries" />
     </VCardText>
   </VCard>
 </template>
@@ -40,11 +40,12 @@ import 'moment/locale/es'
 import { computed, onMounted, ref, watch } from 'vue'
 import { useTheme } from 'vuetify';
 import VueApexCharts from 'vue3-apexcharts'
+import { usePaqueteStore } from '@/views/apps/suscripciones/paqueteStore';
 
 moment.locale('es')
 
 const DOMAIN = 'https://ecuavisa-suscripciones.vercel.app'
-const ID_PAQUETE = '651c9d012ff9fa09a75e6c16'
+const { idPaquete } = usePaqueteStore();
 const vuetifyTheme = useTheme();
 const datosVacios = ref(false);
 
@@ -68,7 +69,7 @@ const fetchData = async () => {
   try {
     const response = await axios.get(`${DOMAIN}/backoffice-grafico/suscripciones-activas-por-dia-filtro-fechas`, {
       params: {
-        idPaquete: ID_PAQUETE,
+        idPaquete: idPaquete.value,
         fechai: startOfWeek.format('YYYY-MM-DD'),
         fechaf: endOfWeek.format('YYYY-MM-DD')
       }
@@ -224,7 +225,7 @@ const descargarReporte = async () => {
     const { startOfWeek, endOfWeek } = getWeekDates()
     const response = await axios.get(`${DOMAIN}/backoffice-grafico/suscripciones-activas-por-dia-filtro-fechas-descargar`, {
       params: {
-        idPaquete: ID_PAQUETE,
+        idPaquete: idPaquete.value,
         fechai: startOfWeek.format('YYYY-MM-DD'),
         fechaf: endOfWeek.format('YYYY-MM-DD'),
         page: 1,
@@ -294,8 +295,7 @@ const descargarReporte = async () => {
   }
 }
 
-
-watch(selectedWeek, () => {
+watch([selectedWeek, idPaquete], () => {
   fetchData()
 })
 

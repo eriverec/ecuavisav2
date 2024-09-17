@@ -8,7 +8,7 @@
         lg="12"
       >
         
-        <VCard>
+        <VCard >
           <VCardItem>
             <div class="p-0 d-flex flex-column align-items-start">
               <VCardTitle>
@@ -19,7 +19,7 @@
               </VCardSubtitle>
             </div>
             <template #append>
-              <VBtn
+              <!-- <VBtn
                   :loading="btnLoadingDescargar"
                   :disabled="btnLoadingDescargar"
                   color="primary"
@@ -27,7 +27,7 @@
                 >
                   Descargar
                   <VIcon end icon="tabler-cloud-download" />
-                </VBtn>
+                </VBtn> -->
             </template>
           </VCardItem>
 
@@ -46,6 +46,10 @@
               
             </div>
             <div v-if="isLoading">Cargando datos...</div>
+            <div v-else-if="datosVacios" class="text-center">
+              {{ mensajeError }}
+            </div>
+            
             <div v-else>
               <canvas ref="chartCanvas"></canvas>
             </div>
@@ -62,7 +66,7 @@
 import axios from 'axios';
 import Chart from 'chart.js/auto';
 import { onMounted, ref, watch } from 'vue';
-
+import { usePaqueteStore } from '@/views/apps/suscripciones/paqueteStore';
 
 export default {
   name: 'PagosGrafico',
@@ -87,24 +91,37 @@ export default {
 
     const apiDomain = 'https://ecuavisa-suscripciones.vercel.app';
     const anio = 2024;
-    const idPaquete = '651c9d012ff9fa09a75e6c16';
+    const { idPaquete } = usePaqueteStore();
+    const datosVacios = ref(false);
+    const mensajeError = ref('');
 
     const fetchData = async () => {
+      datosVacios.value = false;
+      mensajeError.value = '';
       try {
         const response = await axios.get(`${apiDomain}/backoffice-grafico/pagos-realizados-agrupados-por-mes-anio`, {
           params: {
             anio,
             mes: selectedMonth.value.toString().padStart(2, '0'),
-            idPaquete
+            idPaquete: idPaquete.value,
           }
         });
 
         if (response.data.resp) {
-          updateChart(response.data.data);
+          if (response.data.data.length === 0) {
+            datosVacios.value = true;
+            mensajeError.value = 'No se encontraron datos para el mes y paquete seleccionados.';
+          } else {
+            updateChart(response.data.data);
+          }
         } else {
+          datosVacios.value = true;
+          mensajeError.value = 'Error en la respuesta de la API. Por favor, intente de nuevo más tarde.';
           console.error('Error en la respuesta de la API');
         }
       } catch (error) {
+        datosVacios.value = true;
+        mensajeError.value = 'Error al obtener los datos. Por favor, intente de nuevo más tarde.';
         console.error('Error al obtener datos:', error);
       }
     };
@@ -183,7 +200,8 @@ async function descargarReporte() {
       params: {
         anio,
         mes: selectedMonth.value.toString().padStart(2, '0'),
-        idPaquete
+        idPaquete: idPaquete.value,
+
      
        }
     });
@@ -234,13 +252,15 @@ function descargarArchivo(content, filename) {
       fetchData();
     });
 
-    watch(selectedMonth, () => {
+    watch([selectedMonth,idPaquete], () => {
       fetchData();
     });
 
     return {
       chartCanvas,
       selectedMonth,
+      datosVacios,
+      mensajeError,
       months,
       fetchData
     };

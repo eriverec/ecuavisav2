@@ -7,6 +7,7 @@ import axios from 'axios';
 import { extendMoment } from 'moment-range'
 import Moment from 'moment-timezone'
 import esLocale from "moment/locale/es"
+import { usePaqueteStore } from '@/views/apps/suscripciones/paqueteStore';
 
 const moment = extendMoment(Moment)
 moment.locale('es', [esLocale])
@@ -17,11 +18,14 @@ const activeTab = ref('0');
 const anioSeleccionado = ref(new Date().getFullYear().toString());
 const aniosDisponibles = ref([]);
 const dominio = ref('https://ecuavisa-suscripciones.vercel.app/');
-const idPaquete = '651c9d012ff9fa09a75e6c16';
+const { idPaquete } = usePaqueteStore();
 const refVueApexChart = ref()
 const loadingGrafico = ref(false)
 const currentTab = ref(0)
 const datosVacios = ref(false);
+const noHayDatos = ref(false);
+const mensajeError = ref('');
+const chartKey = ref(0);
 
 const mesSeleccionado = ref(moment().format('MM'));
 const mesesOptions = [
@@ -93,17 +97,26 @@ const obtenerDatos = async () => {
   try {
     const response = await axios.get(`${dominio.value}backoffice-grafico/suscripciones-realizados-activas-agrupados-por-mes`, {
       params: {
-        idPaquete: idPaquete,
+        idPaquete: idPaquete.value,
         anio: anioSeleccionado.value
       }
     });
     if (response.data.resp && Array.isArray(response.data.data)) {
+      if (response.data.data.length === 0) {
+        datosVacios.value = true;
+        mensajeError.value = 'No se encontraron datos para el paquete seleccionado.';
+        return [];
+      }
+      datosVacios.value = false;
+      mensajeError.value = '';
       return response.data.data.map(item => ({
         ...item,
         mes_text: item.mes_text.toLowerCase()
       }));
     } else {
       console.error('Formato de respuesta inesperado:', response.data);
+      datosVacios.value = true;
+      mensajeError.value = 'Error en el formato de respuesta del servidor.';
       return [];
     }
   } catch (error) {
@@ -118,15 +131,25 @@ const obtenerDatosBanco = async () => {
       params: {
         anio: anioSeleccionado.value,
         mes: mesSeleccionado.value, // Esto podría ser dinámico si lo necesitas
-        idPaquete: idPaquete
+        idPaquete: idPaquete.value,
       }
     });
     if (response.data.resp && Array.isArray(response.data.data)) {
+      if (response.data.data.length === 0) {
+        datosVacios.value = true;
+        mensajeError.value = 'No se encontraron datos de bancos para el paquete seleccionado.';
+        return;
+      }
+      datosVacios.value = false;
+      mensajeError.value = '';
       const datosOrdenados = response.data.data.sort((a, b) => b.reembolsos - a.reembolsos);
       bancoData.value.nombresBanco = datosOrdenados.map(item => item.nombreBanco);
       bancoData.value.reembolsos = datosOrdenados.map(item => item.reembolsos);
     } else {
       console.error('Formato de respuesta inesperado:', response.data);
+      datosVacios.value = true;
+      mensajeError.value = 'Error en el formato de respuesta del servidor para datos de bancos.';
+
     }
   } catch (error) {
     console.error('Error al obtener los datos del banco:', error);
@@ -139,10 +162,17 @@ const obtenerDatosTarjeta = async () => {
       params: {
         anio: anioSeleccionado.value,
         mes: mesSeleccionado.value,
-        idPaquete: idPaquete
+        idPaquete: idPaquete.value
       }
     });
     if (response.data.resp && Array.isArray(response.data.data)) {
+      if (response.data.data.length === 0) {
+        datosVacios.value = true;
+        mensajeError.value = 'No se encontraron datos de tarjetas para el paquete seleccionado.';
+        return;
+      }
+      datosVacios.value = false;
+      mensajeError.value = '';
       const datosOrdenados = response.data.data.sort((a, b) => b.total - a.total);
 
       tarjetaData.value.nombresBanco = datosOrdenados.map(item => item.nombreBanco);
@@ -150,6 +180,9 @@ const obtenerDatosTarjeta = async () => {
       tarjetaData.value.total = datosOrdenados.map(item => item.total);
     } else {
       console.error('Formato de respuesta inesperado:', response.data);
+      datosVacios.value = true;
+      mensajeError.value = 'Error en el formato de respuesta del servidor para datos de tarjetas.';
+
     }
   } catch (error) {
     console.error('Error al obtener los datos de tarjetas:', error);
@@ -177,7 +210,7 @@ const descargarDatos = async () => {
         params: {
           anio: anioSeleccionado.value,
           mes: mesSeleccionado.value,
-          idPaquete: idPaquete,
+          idPaquete: idPaquete.value,
           page: page,
           limit: 50
         }
@@ -268,16 +301,21 @@ const actualizarGrafico = async () => {
       });
 
       datosVacios.value = datosPorMes.value.every(d => d === 0);
+      if (datosVacios.value) {
+        mensajeError.value = 'No se encontraron suscripciones para el paquete seleccionado.';
+      }
 
     } else if (currentTab.value === 1) {
       await obtenerDatosBanco();
-      datosVacios.value = bancoData.value.reembolsos.length === 0;
+      // datosVacios.value = bancoData.value.reembolsos.length === 0;
 
     } else if (currentTab.value === 2) {
       await obtenerDatosTarjeta();
-      datosVacios.value = tarjetaData.value.total.length === 0;
+      // datosVacios.value = tarjetaData.value.total.length === 0;
 
     }
+
+    chartKey.value += 1;
 
   } finally { }
 };
@@ -288,11 +326,18 @@ onMounted(() => {
 });
 
 watch(actualizarGrafico);
-watch(anioSeleccionado, actualizarGrafico);
-watch(mesSeleccionado, () => {
-  if (currentTab.value === 1 || currentTab.value === 2) {
-    actualizarGrafico();
-  }
+watch([idPaquete, anioSeleccionado, mesSeleccionado], () => {
+  // Limpiar datos antes de actualizar
+  datosPorMes.value = [];
+  bancoData.value = { nombresBanco: [], reembolsos: [] };
+  tarjetaData.value = { nombresBanco: [], tipoTarjeta: [], total: [] };
+  
+  actualizarGrafico();
+});
+
+watch(currentTab, () => {
+  chartKey.value += 1;
+  actualizarGrafico();
 });
 
 const hexToRgb = (hex) => {
@@ -660,7 +705,7 @@ const isMonthSelectorVisible = computed(() => currentTab.value === 1 || currentT
 
 <template>
   <section>
-    <!-- <VCard> -->
+    <VCard class="mt-2" >
       <VCardItem>
         <VCardTitle class="d-none">
           Usuarios registrados por mes en el 2024.
@@ -709,15 +754,17 @@ const isMonthSelectorVisible = computed(() => currentTab.value === 1 || currentT
         <!-- Mostrar mensaje si los datos están vacíos -->
         <div v-if="datosVacios" class="text-start mt-5 mb-5">
 
-          No hay datos disponibles para el mes seleccionado.
+          {{ mensajeError }}
+
+          <!-- No hay datos disponibles para el mes seleccionado. -->
 
         </div>
 
-        <VueApexCharts v-else ref="refVueApexChart" :key="currentTab"
+        <VueApexCharts v-else ref="refVueApexChart" :key="`chart-${chartKey}-${currentTab}`"
           :options="chartConfigs[Number(currentTab)].chartOptions" :series="chartConfigs[Number(currentTab)].series"
           :height="chartConfigs[Number(currentTab)].height" class="mt-3" />
 
       </VCardText>
-    <!-- </VCard> -->
+    </VCard>
   </section>
 </template>
