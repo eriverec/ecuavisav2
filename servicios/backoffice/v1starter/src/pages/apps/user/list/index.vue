@@ -711,22 +711,28 @@ const userListMeta = [
   },
 
 ]*/
-function convertToCSV(objArray) {
-  var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
-  var str = "";
+ function convertToCSV(objArray) {
+    var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+    var str = "";
 
-  for (var i = 0; i < array.length; i++) {
-    var line = "";
-    for (var index in array[i]) {
-      if (line != "") line += ",";
+    for (var i = 0; i < array.length; i++) {
+        var line = "";
+        for (var index in array[i]) {
+            if (line != "") line += ",";
 
-      line += array[i][index];
+            // Envolver valores que contienen comas entre comillas dobles
+            var value = array[i][index];
+            if (typeof value === "string" && value.includes(",")) {
+                value = `"${value}"`;
+            }
+
+            line += value;
+        }
+
+        str += line + "\r\n";
     }
 
-    str += line + "\r\n";
-  }
-
-  return str;
+    return str;
 }
 
 function exportCSVFile(headers, items, fileTitle) {
