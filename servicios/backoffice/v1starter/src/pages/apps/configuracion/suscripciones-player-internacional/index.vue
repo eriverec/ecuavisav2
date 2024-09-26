@@ -215,7 +215,7 @@ async function getConfig() {
   isLoading.value = true;
   try {
     const response = await fetch(
-      "https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/player/config2.php?api=web&key=premiunPlayer1"
+      "https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/player/config2.php?api=web&key=premiunPlayerInternacional"
     );
     const data = await response.json();
     players.value = data.players || [];
@@ -247,7 +247,7 @@ async function enviar() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          key: "premiunPlayer1",
+          key: "premiunPlayerInternacional",
           estructura: config
         }),
       }
