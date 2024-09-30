@@ -74,6 +74,7 @@
     telefono:"telefono",
     birthDate:"birthDate"
   });
+
   const dataUsuarios = ref([]);
   const copyDataUsuarios = ref([]);
 
@@ -86,7 +87,7 @@
     fechai: fecha.value.inicio,
     fechaf: fecha.value.fin,
     country:"Ecuador",
-    city:"Quito",
+    city:"Guayaquil",
     device:"movil",
     os:"Linux",
     browser:"Chrome",
@@ -114,13 +115,33 @@
   // Fin  Variables para usuarios
 
   //Ciudades y países
-  const modelPais = ref("Ecuador");
+  const modelPais = ref(filters.value.country);
   const dataPaises = ref([]);
   const dataAllPaises = ref([]);
+  const searchPaisModel = ref(null);
+  const selectRefPais = ref(null);
 
-  const modelCiudad = ref("Guayaquil");
+  const modelCiudad = ref(filters.value.city);
   const dataCiudades = ref([]);
+  const dataAllCiudades = ref([]);
+  const searchCiudadModel = ref(null);
+  const selectRefCiudad = ref(null);
   //Fin ciudades y paises
+
+  //Dispositivos
+  const modelDevice = ref(filters.value.device);
+  const dataDevices = ref(["desktop", "movil"]);
+  //Fin Dispositivos
+
+  //Navegador
+  const modelBrowser = ref(filters.value.browser);
+  const dataBrowser = ref(["Chrome", "Safari", "Firefox", "Otro"]);
+  //Fin Navegador
+
+  //OS
+  const modelOS = ref(filters.value.os);
+  const dataOS = ref(["Windows", "Mac OS", "Android", "Linux", "Otro"]);
+  //Fin OS
 
   // Variables de la tabla
   const rowPerPage = ref(10);
@@ -213,7 +234,7 @@
         }
       });
 
-      console.log(dataCiudades.value)
+      dataAllCiudades.value = dataCiudades.value;
 
       return true;
 
@@ -296,6 +317,386 @@
 
   }
   //Fin de compónentes de fechas
+
+  //Eventos para buscador de países
+  watch(modelPais, async () => {
+    if(modelPais.value){
+      dataCiudades.value = dataAllPaises.value.find(e => e.country == modelPais.value).data.map(e => {
+        return {
+          title: e.city,
+          value: e.city
+        }
+      });
+
+      dataAllCiudades.value = dataCiudades.value;
+      modelCiudad.value = dataCiudades.value[0].value;
+    }
+  });
+
+  watch(async () => searchPaisModel.value, async () => {
+    const allPaisesTemp = dataAllPaises.value.map(e => {
+      return {
+        title: e.country,
+        value: e.country
+      }
+    });
+
+    if (!searchPaisModel.value) {
+      dataPaises.value = allPaisesTemp;
+    }else{
+      dataPaises.value = allPaisesTemp.filter((c) => {
+        return (c.title.toLowerCase().indexOf(searchPaisModel.value.toLowerCase()) > -1) || c.value.indexOf(searchPaisModel.value) > -1;
+      });
+    }
+  });
+
+  watch(selectRefPais, (active) => {
+    if(!active){
+      setTimeout(()=>{
+        searchPaisModel.value = "";
+      }, 1000)
+    }
+  });
+  //Fin eventos para buscador de países
+
+  //Inicio eventos para buscador de ciudad
+  watch(async () => searchCiudadModel.value, async () => {
+    const allPaisesTemp = dataAllCiudades.value;
+
+    if (!searchCiudadModel.value) {
+      dataCiudades.value = allPaisesTemp;
+    }else{
+      dataCiudades.value = allPaisesTemp.filter((c) => {
+        return (c.title.toLowerCase().indexOf(searchCiudadModel.value.toLowerCase()) > -1) || c.value.indexOf(searchCiudadModel.value) > -1;
+      });
+    }
+  });
+
+  watch(selectRefCiudad, (active) => {
+    if(!active){
+      setTimeout(()=>{
+        searchCiudadModel.value = "";
+      }, 1000)
+    }
+  });
+
+  watch(modelCiudad, async () => {
+    if(modelCiudad.value){
+      pageUsuarios.value = 1;
+      filters.value["country"] = modelPais.value;
+      filters.value["city"] = modelCiudad.value;
+      await getUsuarios();
+    }
+  });
+
+  watch(modelDevice, async () => {
+    if(modelDevice.value){
+      if(modelDevice.value == "movil"){
+        modelBrowser.value = "Safari";
+        dataBrowser.value = ["Chrome", "Safari", "Firefox", "Otro"];
+        modelOS.value = "Linux";
+        dataOS.value = ["Windows", "Mac OS", "Android", "Linux", "Otro"];
+      }else{
+        modelBrowser.value = "Chrome";
+        dataBrowser.value = ["Chrome", "Firefox", "Otro"];
+        modelOS.value = "Windows";
+        dataOS.value = ["Windows", "Mac OS", "Linux", "Otro"];
+      }
+      pageUsuarios.value = 1;
+      filters.value["device"] = modelDevice.value;
+      //await getUsuarios();
+    }
+  });
+
+  watch(modelBrowser, async () => {
+    if(modelBrowser.value){
+      pageUsuarios.value = 1;
+      filters.value["browser"] = modelBrowser.value;
+      await getUsuarios();
+    }
+  });
+
+  watch(modelOS, async () => {
+    if(modelOS.value){
+      pageUsuarios.value = 1;
+      filters.value["os"] = modelOS.value;
+      await getUsuarios();
+    }
+  });
+  //Fin eventos para buscador de ciudad
+
+  // DESCARGAR
+  const btnLoadingDescargar = ref(false);
+  const dataFullExportar = ref([]);
+  const urlTitleExport = ref("trazabilidad_usuarios");
+
+  const docsExportNumberLength = ref({
+    tamanioActual : 0,
+    tamanioTotal : 0
+  });
+
+  // PASO 7
+  function convertToCSV(objArray) {
+      var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+      var str = "";
+
+      for (var i = 0; i < array.length; i++) {
+          var line = "";
+          for (var index in array[i]) {
+              if (line != "") line += ",";
+
+              // Envolver valores que contienen comas entre comillas dobles
+              var value = array[i][index];
+              if (typeof value === "string" && value.includes(",")) {
+                  value = `"${value}"`;
+              }
+
+              line += value;
+          }
+
+          str += line + "\r\n";
+      }
+
+      return str;
+  }
+
+  // PASO 6
+  function exportCSVFile(headers, items, fileTitle) {
+    // if (headers && items[0].wylexId !== "wylexId") {
+    //   items.unshift(headers);
+    // }
+
+    items.unshift(headers);
+
+    // Convert Object to JSON
+    var jsonObject = JSON.stringify(items);
+
+    var csv = convertToCSV(jsonObject);
+
+    var exportedFilenmae = fileTitle + ".csv" || "export.csv";
+
+    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    if (navigator.msSaveBlob) {
+      // IE 10+
+      navigator.msSaveBlob(blob, exportedFilenmae);
+    } else {
+      var link = document.createElement("a");
+      if (link.download !== undefined) {
+        // feature detection
+        // Browsers that support HTML5 download attribute
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", exportedFilenmae);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  }
+
+  // PASO 5
+  function generateSlug(text) {
+      // Crear un mapa de caracteres con tilde y ñ a sus reemplazos
+      const map = {
+          'á': 'a',
+          'é': 'e',
+          'í': 'i',
+          'ó': 'o',
+          'ú': 'u',
+          'Á': 'A',
+          'É': 'E',
+          'Í': 'I',
+          'Ó': 'O',
+          'Ú': 'U',
+          'ñ': 'n',
+          'Ñ': 'N'
+      };
+
+      // Reemplazar cada carácter del mapa en el texto
+      const slug = text.split('').map(char => map[char] || char).join('');
+
+      // Convertir a minúsculas, eliminar caracteres no deseados y reemplazar espacios por guiones
+      return slug.toLowerCase()
+                 .replace(/[^a-z0-9\s-]/g, '') // Eliminar caracteres que no sean letras, números, espacios o guiones
+                 .replace(/\s+/g, '-')         // Reemplazar espacios por guiones
+                 .replace(/-+/g, '-')+"-"+moment().format("YYYY-MM-DD-HH-mm-ss");         // Reemplazar múltiples guiones por uno solo
+  }
+
+  // PASO 3
+  async function getDataExportarServer(page = 1, limit = 10) {
+    try {
+
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      const paramsQuery = Object.fromEntries(
+        Object.entries(filters.value).filter(([_, valor]) => valor != null && valor !== '' && valor !== undefined)
+      );
+
+      paramsQuery.page = page;
+      paramsQuery.limit = limit;
+
+      const queryString = new URLSearchParams(paramsQuery).toString();
+
+      
+      var response = await fetch(`${urlApiExport.value}/backoffice/trazabilidad-usuario?${queryString}`, requestOptions);
+      
+      const data = await response.json();
+
+      if(data.resp){
+        return data;
+      }else{
+        configSnackbar.value = {
+            message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+            type: "error",
+            model: true
+        };
+        btnLoadingDescargar.value = false;
+        return null;
+      }
+    } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
+      console.error(error.message);
+      btnLoadingDescargar.value = false;
+      return null;
+    }
+  }
+
+  // PASO 4
+  function eliminarDuplicadosPorWylexId(array) {
+      const vistos = new Set();
+      return array.filter(item => {
+          if (vistos.has(item.wylexId)) {
+              return false; // Eliminar duplicado
+          } else {
+              vistos.add(item.wylexId);
+              return true; // Mantener el primer encuentro
+          }
+      });
+  }
+
+  // PASO 2
+  async function fetchFullDescargar(){
+
+    docsExportNumberLength.value = {
+      tamanioActual : 0,
+      tamanioTotal : 0
+    };
+
+    dataFullExportar.value = [];
+    var pages = 1;
+    while(true){
+      const res = await getDataExportarServer(
+        pages,
+        500
+      );
+
+      const responseData = res.data;
+      const totalDataExportar = "-";
+
+      for(var keyUsuarioReembolso in responseData){
+        const reembolsosData = responseData[keyUsuarioReembolso];
+        const usuariosReembolsos = reembolsosData.user || {};
+
+        // Nuevo objeto para cada elemento de responseData
+        let newItem = {}; 
+
+        // Recorremos las claves de usuarios
+        for (let key in headersGlobal.value) {
+            // Verificamos si la clave existe en item y la agregamos al nuevo objeto
+            if (usuariosReembolsos.hasOwnProperty(key)) {
+              newItem[key] = usuariosReembolsos[key];
+            }else{
+              newItem[key] = "";
+            }
+        }
+
+        // for (let key in reembolsosData) {
+        //     // Verificamos si la clave existe en item y la agregamos al nuevo objeto
+        //     if(key != "user"){
+
+        //       if (key == "created_at") {
+        //         newItem["reembolso_created_at"] = reembolsosData[key];
+        //       }else{
+        //         if (key == "estado") {
+        //           newItem["reembolso_estado"] = reembolsosData[key];
+        //         }else{
+        //           newItem[key] = reembolsosData[key];
+        //         }
+        //       }
+
+        //       if (key == "billing_details_direccion") {
+        //         newItem["billing_details_direccion"] = reembolsosData[key];
+        //       }
+
+        //     }
+        // }
+
+        // newItem["reembolso_created_at"] = reembolsosData.created_at;
+        // newItem["reembolso_estado"] = reembolsosData.estado;
+        // newItem["created_at_reembolso"] = reembolsosData.created_at;
+        
+        // Agregamos el nuevo objeto a dataFullExportar.value
+        dataFullExportar.value.push(newItem);
+      }
+
+      // responseData.forEach((usuariosReembolsos) => {
+        
+      // });
+
+      docsExportNumberLength.value.tamanioActual = eliminarDuplicadosPorWylexId(dataFullExportar.value).length;
+      docsExportNumberLength.value.tamanioTotal = totalDataExportar;
+
+      // dataFullExportar.value.sort((a, b) => moment(b.created_at_reembolso, 'DD/MM/YYYY-HH:mm:ss').diff(moment(a.created_at_reembolso, 'DD/MM/YYYY-HH:mm:ss')));
+
+      pages++;
+
+      if(responseData.length < 1){
+        break;
+      }
+    }
+
+    // console.log(dataFullExportar.value)
+
+    return true;
+  };
+
+  // PASO 1
+  async function downloadSearch() {
+    try {
+
+      btnLoadingDescargar.value=true;
+      await fetchFullDescargar();
+      btnLoadingDescargar.value=false;
+
+      let doc = [];
+      doc = dataFullExportar.value
+      var title = `${urlTitleExport.value}-`+ generateSlug(`${filters.value.fechai} hasta ${filters.value.fechai}`);
+
+      exportCSVFile(headersGlobal.value, eliminarDuplicadosPorWylexId(doc), title);
+
+    } catch (error) {
+        console.log(error)
+        configSnackbar.value = {
+            message: "No se pudo recuperar los datos de registros para exportar, recargue de nuevo.",
+            type: "error",
+            model: true
+        };
+        return false;
+    }
+  };
+  // FIN DESCARGAR
 </script>
 <template>
   <section>
@@ -310,8 +711,8 @@
     <VRow>
       <VCol cols="12" sm="12" lg="12" >
         <VCard class="mb-4" title="Filtros">
-          <VCardText class="d-flex gap-4 flex-wrap" style="align-items: flex-start;">
-            <div class="AppDateTimePicker-cr">
+          <VCardText class="d-flex gap-2 flex-wrap" style="align-items: flex-start;">
+            <div class="AppDateTimePicker-cr my-2">
               <AppDateTimePicker 
                 clearable
                 class="bg-white"
@@ -331,6 +732,113 @@
                     valueFormat: 'd-m-Y',
                     reactive: true
                 }" />
+            </div>
+            <div class="mx-1 my-2" style="min-width: 120px;">
+              <VSelect 
+                label="País" 
+                class="bg-white" 
+                v-model="modelPais" 
+                density="compact" 
+                variant="outlined"
+                no-data-text="No existen datos que mostrar"
+                :items="dataPaises"
+                v-model:menu="selectRefPais"
+                :menu-props="{ maxHeight: '400' }" >
+                <template v-slot:prepend-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <VTextField v-model="searchPaisModel" clearable placeholder="Buscar dato"/>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2"></v-divider>
+                  </template>
+                    <template #selection="{ item }">
+                        <div>
+                            {{ item.title }}
+                        </div>
+                    </template>
+                    <template #item="{ item, props }">
+                        <v-list-item v-bind="props">
+                            <v-list-item-content>
+                                <v-list-item-subtitle>
+                                    <p>{{ item.value }}</p>
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </template>
+                </VSelect>
+            </div>
+
+            <div class="mx-1 my-2" style="width: 155px;">
+              <VSelect 
+                label="Ciudades" 
+                class="bg-white" 
+                v-model="modelCiudad" 
+                density="compact" 
+                variant="outlined"
+                no-data-text="No existen datos que mostrar"
+                :items="dataCiudades"
+                v-model:menu="selectRefCiudad"
+                :menu-props="{ maxHeight: '400' }" >
+                <template v-slot:prepend-item>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <VTextField v-model="searchCiudadModel" clearable placeholder="Buscar dato"/>
+                      </v-list-item-content>
+                    </v-list-item>
+                    <v-divider class="mt-2"></v-divider>
+                  </template>
+                    <template #selection="{ item }">
+                        <div>
+                            {{ item.title }}
+                        </div>
+                    </template>
+                    <template #item="{ item, props }">
+                        <v-list-item v-bind="props">
+                            <v-list-item-content>
+                                <v-list-item-subtitle>
+                                    <p>{{ item.value }}</p>
+                                </v-list-item-subtitle>
+                            </v-list-item-content>
+                        </v-list-item>
+                    </template>
+                </VSelect>
+            </div>
+
+            <div class="mx-1 my-2" style="width: 145px;">
+              <VSelect 
+                label="Dispositivos" 
+                class="bg-white" 
+                v-model="modelDevice" 
+                density="compact" 
+                variant="outlined"
+                no-data-text="No existen datos que mostrar"
+                :items="dataDevices"
+                :menu-props="{ maxHeight: '400' }" />
+            </div>
+
+            <div class="mx-1 my-2" style="width: 135px;">
+              <VSelect 
+                label="Navegadores" 
+                class="bg-white" 
+                v-model="modelBrowser" 
+                density="compact" 
+                variant="outlined"
+                no-data-text="No existen datos que mostrar"
+                :items="dataBrowser"
+                :menu-props="{ maxHeight: '400' }" />
+            </div>
+
+            <div class="mx-1 my-2" style="min-width: 115px;">
+              <VSelect 
+                label="OS" 
+                class="bg-white" 
+                v-model="modelOS" 
+                density="compact" 
+                variant="outlined"
+                no-data-text="No existen datos que mostrar"
+                :items="dataOS"
+                :menu-props="{ maxHeight: '400' }" />
             </div>
           </VCardText>
         </VCard>
@@ -353,12 +861,23 @@
                   :items="[10, 20, 30, 50]" />
               </div>
               <VSpacer />
-              <div class="app-user-search-filter d-flex align-top">
-                <VBtn :loading="isLoadingExport" :disabled="isLoadingExport || loadingUsuarios" variant="tonal"
-                  color="success" prepend-icon="tabler-screen-share" @click="exportarDatos">
-                  Exportar datos
+              <div class="d-flex align-top justify-content-flex-end flex-wrap flex-column gap-0">
+                <VBtn
+                  :loading="btnLoadingDescargar"
+                  :disabled="btnLoadingDescargar"
+                  color="primary"
+                  @click="downloadSearch"
+                >
+                  Descargar
+                  <VIcon
+                    end
+                    icon="tabler-cloud-download"
+                  />
                 </VBtn>
-              </div>
+                <small class="px-0 py-1 text-disabled" v-if="btnLoadingDescargar">
+                  Exportando {{ docsExportNumberLength.tamanioActual }} / {{ docsExportNumberLength.tamanioTotal }} registros
+                </small>
+              </div> 
             </VCardText>
             <VDivider />
             <VTable class="text-no-wrap">
@@ -367,6 +886,15 @@
                 <tr>
                   <th scope="col">
                     Nombres
+                  </th>
+                  <th scope="col">
+                    Teléfono
+                  </th>
+                  <th scope="col">
+                    País
+                  </th>
+                  <th scope="col">
+                    Ciudad
                   </th>
                 </tr>
               </thead>
@@ -408,9 +936,15 @@
                   </td>
 
                   <!-- 👉 Fecha de nacimiento -->
-                  <!-- <td>
-                    <span class="text-base">{{ user.birthDate }}</span>
-                  </td> -->
+                  <td>
+                    <span class="text-base">{{ user.user.phone_number }}</span>
+                  </td>
+                  <td>
+                    <span class="text-base">{{ filters.country }}</span>
+                  </td>
+                  <td>
+                    <span class="text-base">{{ filters.city }}</span>
+                  </td>
                 </tr>
               </tbody>
 
