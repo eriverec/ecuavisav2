@@ -65,26 +65,26 @@ function deepClone(o) {
 }
 
 async function getSemanas_desafios() {
-    try {
-        const consulta = await fetch('https://servicio-desafios.vercel.app/semana/all/get');
-        const consultaJson = await consulta.json();
+  try {
+    const consulta = await fetch('https://servicio-desafios.vercel.app/semana/all/get');
+    const consultaJson = await consulta.json();
 
-        let dataRaw = Array.from(consultaJson.data);
+    let dataRaw = Array.from(consultaJson.data);
 
-        semanasList.value = dataRaw.map(item => ({
-            value: item._id.toString(),
-            title: item.titulo,
-        }));
+    semanasList.value = dataRaw.map(item => ({
+      value: item._id.toString(),
+      title: item.titulo,
+    }));
 
-        dataSemanas.value = dataRaw.map(item => ({
-            _id: item._id.toString(),
-            titulo: item.titulo,
-            desafios: item.desafios.map(desafio => desafio.toString()),
-        }));
-        //console.log(dataSemanas.value);
-    } catch (error) {
-        console.error(error.message);
-    }
+    dataSemanas.value = dataRaw.map(item => ({
+      _id: item._id.toString(),
+      titulo: item.titulo,
+      desafios: item.desafios.map(desafio => desafio.toString()),
+    }));
+    //console.log(dataSemanas.value);
+  } catch (error) {
+    console.error(error.message);
+  }
 }
 
 async function getDesafio(page = 1, limit = 10) {
@@ -103,15 +103,15 @@ async function getDesafio(page = 1, limit = 10) {
     const data = await response.json();
 
     var result = data.data.map(desafio => {
-    
+
       var semanasDelDesafio = dataSemanas.value.filter(semana => semana.desafios.includes(desafio._id.toString())).map(semana => ({
-          idSemana: semana._id,
-          titulo: semana.titulo
+        idSemana: semana._id,
+        titulo: semana.titulo
       }));
-        
+
       return {
-          ...desafio,
-          semanas: semanasDelDesafio
+        ...desafio,
+        semanas: semanasDelDesafio
       };
     });
 
@@ -225,12 +225,12 @@ function search() {
 }
 
 function filtrarPorSemana() {
-  if(semanaFilterSelected.value != '' || semanaFilterSelected.value != null){
+  if (semanaFilterSelected.value != '' || semanaFilterSelected.value != null) {
     currentPage.value = 1;
-    var filteredResult = dataDesafioRaw.value.filter(desafio => 
-        desafio.semanas.some(semana => semana.idSemana === semanaFilterSelected.value)
+    var filteredResult = dataDesafioRaw.value.filter(desafio =>
+      desafio.semanas.some(semana => semana.idSemana === semanaFilterSelected.value)
     );
-     
+
     dataDesafio.value = filteredResult;
   }
 }
@@ -754,7 +754,7 @@ async function onCompleteHorarios() {
 
         <VWindow v-model="currentTab">
           <VWindowItem value="tab-lista">
-       
+
 
 
             <!-- inicio lista de Módulos -->
@@ -769,21 +769,22 @@ async function onCompleteHorarios() {
                     Buscar
                   </VBtn>
 
-                  <VSelect v-model="semanaFilterSelected" :items="semanasList" label="Semana" style="width: 300px;" @update:model-value="filtrarPorSemana"></VSelect>
+                  <VSelect v-model="semanaFilterSelected" :items="semanasList" label="Semana" style="width: 300px;"
+                    @update:model-value="filtrarPorSemana"></VSelect>
 
                   <VBtn color="primary" @click="reiniciar">
                     <VIcon :size="22" icon="tabler-refresh" />
                   </VBtn>
                 </div>
 
-                <VBtn color="primary" @click="onAdd">
-                  Nuevo desafío
-                  <VIcon :size="22" icon="tabler-plus" />
-                </VBtn>
-
 
 
               </div>
+
+              <VBtn class="mb-4" color="success" variant="tonal" @click="onAdd">
+                Nuevo desafío
+                <VIcon :size="22" icon="tabler-plus" />
+              </VBtn>
 
 
               <VList lines="two" border v-if="dataDesafio.length < 1">
@@ -796,46 +797,57 @@ async function onCompleteHorarios() {
 
               <VList lines="two" border v-if="dataDesafio.length > 0">
                 <template v-for="(desafio, index) of paginatedDesafios" :key="index">
-                  <VListItem :disabled="disabledViewList">
-                    <VListItemTitle>
-                      <div class="nombre-desafio">
-                        {{ desafio.tituloDesafio }}
 
+                  <VListItem :disabled="disabledViewList">
+                    <div class="d-flex gap-2">
+                      <img width="50" :src="desafio.URLSticker" alt="">
+                      <div>
+                        <VListItemTitle>
+                          <div class="nombre-desafio">
+                            {{ desafio.tituloDesafio }}
+                          </div>
+                          <div class="text-caption v-card-subtitle px-0">
+                            {{ desafio.categoria.title }}
+                          </div>
+                        </VListItemTitle>
+                        <VListItemSubtitle class="mt-1" title="Estado del Desafío">
+                          <div class="d-flex gap-4">
+                            <div class="switch-estatus" style="margin-bottom:-10px">
+                              <VSwitch :disabled="switchOnDisabled" :loading="switchOnDisabled ? 'warning' : false"
+                                :color="desafio.statusDesafio ? 'success' : 'error'" v-model="desafio.statusDesafio"
+                                size="x-small" class="custom-vswitch" @change="handleSwitchChange(index)" />
+                              <VChip title="Desafío desactivado" v-if="desafio.statusDesafio != true" size="x-small"
+                                label color="error">
+                                <span style="font-weight:medium">{{ desafio.statusDesafio ? 'Activo' : 'Inactivo'
+                                  }}</span>
+                              </VChip>
+
+                              <small title="Desafío activo" color="success" v-if="desafio.statusDesafio == true">
+                                <span style="font-weight:medium">{{ desafio.statusDesafio ? 'Activo' : 'Inactivo'
+                                  }}</span>
+                              </small>
+                            </div>
+
+                            <div class="d-flex gap-2 mt-2">
+                              <div v-for="semana of desafio.semanas">
+                                <VChip title="Desafío desactivado" size="x-small" label color="default">
+                                  <div class="d-flex gap-2">
+                                    <span style="font-weight:medium">{{ semana.idSemana }}</span>
+                                    <span style="font-weight:medium">{{ semana.titulo }}</span>
+                                  </div>
+                                </VChip>
+                              </div>
+                            </div>
+
+                          </div>
+
+
+
+                        </VListItemSubtitle>
 
                       </div>
-                    </VListItemTitle>
-                    <VListItemSubtitle class="mt-1" title="Estado del Desafío">
-                      <div class="d-flex gap-4">
-                        <div class="switch-estatus" style="margin-bottom:-10px">
-                          <VSwitch :disabled="switchOnDisabled" :loading="switchOnDisabled ? 'warning' : false"
-                            :color="desafio.statusDesafio ? 'success' : 'error'" v-model="desafio.statusDesafio"
-                            size="x-small" class="custom-vswitch" @change="handleSwitchChange(index)" />
-                          <VChip title="Desafío desactivado" v-if="desafio.statusDesafio != true" size="x-small" label
-                            color="error">
-                            <span style="font-weight:medium">{{ desafio.statusDesafio ? 'Activo' : 'Inactivo' }}</span>
-                          </VChip>
 
-                          <small title="Desafío activo" color="success" v-if="desafio.statusDesafio == true">
-                            <span style="font-weight:medium">{{ desafio.statusDesafio ? 'Activo' : 'Inactivo' }}</span>
-                          </small>
-                        </div>
-
-                        <div class="d-flex gap-2 mt-2">
-                          <div v-for="semana of desafio.semanas">
-                            <VChip title="Desafío desactivado" size="x-small" label color="default">
-                              <div class="d-flex gap-2">
-                                <span style="font-weight:medium">{{ semana.idSemana }}</span>
-                                <span style="font-weight:medium">{{ semana.titulo }}</span>
-                              </div>
-                            </VChip>
-                          </div>
-                        </div>
-
-                      </div>    
-
-
-
-                    </VListItemSubtitle>
+                    </div>
 
                     <template #append>
                       <div class="espacio-right-2">
@@ -852,14 +864,15 @@ async function onCompleteHorarios() {
                         <VBtn icon size="x-small" color="error" variant="text" @click="onDelete(desafio._id)">
                           <VIcon size="22" icon="tabler-trash" />
                         </VBtn>
-<!-- 
-                        <VBtn icon variant="text" color="default" size="x-small"
-                          :to="{ name: 'apps-reglasYDesafios-GestionDesafios-view-id', params: { id: desafio._id } }">
-                          <VIcon :size="22" icon="tabler-eye" />
-                        </VBtn> -->
+                        <!-- 
+                          <VBtn icon variant="text" color="default" size="x-small"
+                            :to="{ name: 'apps-reglasYDesafios-GestionDesafios-view-id', params: { id: desafio._id } }">
+                            <VIcon :size="22" icon="tabler-eye" />
+                          </VBtn> -->
                       </div>
                     </template>
                   </VListItem>
+
                   <VDivider v-if="index !== dataDesafio.length - 1" />
                 </template>
               </VList>
@@ -1002,12 +1015,12 @@ async function onCompleteHorarios() {
                                 <h3>{{ resolveDia(horario.dia) }}</h3>
                                 <VChip :color="horario.estadoDia == true ? 'success' : 'warning'
                                   " class="mr-4">{{
-                                            horario.estadoDia == true ? "Activo" : "Inactivo"
-                                          }}
+                                    horario.estadoDia == true ? "Activo" : "Inactivo"
+                                  }}
                                 </VChip>
                                 <VSwitch v-model="horario.estadoDia" color="success" :label="horario.estadoDia == true
-                                    ? 'Día activo'
-                                    : 'Día inactivo'
+                                  ? 'Día activo'
+                                  : 'Día inactivo'
                                   " />
                               </VExpansionPanelTitle>
                               <VExpansionPanelText class="d-flex flex-wrap justify-space-between">
