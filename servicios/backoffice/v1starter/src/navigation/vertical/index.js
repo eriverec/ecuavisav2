@@ -25,7 +25,7 @@ export default [
       { title: 'Analítica', to: 'apps-suscriptores-analitica' },
       { title: 'Reembolsos', to: 'apps-suscriptores-reembolsos' },
       { title: 'Players', to: 'apps-configuracion-suscripciones-player' },
-      // { title: 'Players Internacional', to: 'apps-configuracion-suscripciones-player-internacional' },
+      { title: 'Players Internacional', to: 'apps-configuracion-suscripciones-player-internacional' },
       { title: 'Paquetes', to: 'apps-paquetes' },
     ],
   },
