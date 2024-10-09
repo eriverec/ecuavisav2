@@ -1,7 +1,7 @@
 <script setup>
   import Moment from 'moment';
-import { extendMoment } from 'moment-range';
-import esLocale from "moment/locale/es";
+  import { extendMoment } from 'moment-range';
+  import esLocale from "moment/locale/es";
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
 

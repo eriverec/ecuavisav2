@@ -1,18 +1,76 @@
 <script setup>
 import axios from 'axios';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+const moment = extendMoment(Moment);
+moment.locale('es', [esLocale]);
 import { onMounted, ref } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
 
 const semanas = ref([]);
 const semanaSeleccionada = ref('');
+const platformModel = ref('0');
+const platformList = [{
+  title:"Todos",
+  value: "0"
+},{
+  title:"Web",
+  value: "web"
+},{
+  title:"IOs",
+  value:"ios"
+},{
+  title:"Android",
+  value: "android"
+}];
+
+const configSnackbar = ref({
+    message: "Datos guardados",
+    type: "success",
+    model: false
+});
+
+const headersGlobal = ref({
+  _id: "ID",
+  wylexId: "WylexId",
+  // site: "site",
+  // site_id: "site_id",
+  email: "Email",
+  first_name: "Nombre",
+  last_name: "Apellido",
+  // avatar: "avatar",
+  // created_at: "created_at",
+  // logged_at: "logged_at",
+  // logged_at_site: "logged_at_site",
+  // updated_at: "updated_at",
+  // validated_at: "validated_at",
+  // banned_at: "banned_at",
+  country: "Pais",
+  phone_prefix: "Prefijo",
+  phone_number: "Teléfono1",
+  // gender: "gender",
+  // birth_date: "birth_date",
+  // identification_type: "identification_type",
+  // identification_number: "identification_number",
+  // newsletter_opt_in: "newsletter_opt_in",
+  provider: "Proveedor",
+  // platform: "platform",
+  // created_in_os: "created_in_os",
+  ciudad:"Ciudad",
+  // telefono:"telefono",
+  // birthDate:"birthDate",
+  platform_desafio:"platform_desafio"
+});
+
 const labels = ref([]);
 const items = ref([]);
 const totalUsuarios = ref([]);
 const series = ref([]);
 const desafios = ref([]);
 const cargando = ref(true);
-const registrosExportados = ref({});
+const registrosExportados = ref(null);
 const totalRegistros = ref({});
 const cargandoDescarga = ref({});
 
@@ -54,7 +112,7 @@ const obtenerTotalUsuarios = async () => {
   if (!semanaSeleccionada.value) return;
 
   try {
-    const response = await axios.get(`https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-semana/${semanaSeleccionada.value}`);
+    const response = await axios.get(`https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-semana/${semanaSeleccionada.value}?platform=${platformModel.value}`);
 
 
     desafios.value = response.data.data.map(item => ({
@@ -89,71 +147,279 @@ const obtenerTotalUsuarios = async () => {
   }
 };
 
-const obtenerTotalRegistros = async (idSemana, idDesafio) => {
-  try {
-    const response = await axios.get(`https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio}?page=1&limit=10`);
-    totalRegistros.value[idDesafio] = response.data.total;
-    registrosExportados.value[idDesafio] = 10;
-  } catch (error) {
-    console.error('Error al obtener el total de registros:', error);
-  }
-};
 
+// DESCARGAR
+  const btnLoadingDescargar = ref(false);
+  const dataFullExportar = ref([]);
+  const urlApiExport = ref("https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/");
+  const urlTitleExport = ref("usuarios_desafio_");
 
-const downloadSearch = async (index, idSemana, idDesafio) => {
-  cargandoDescarga.value[idDesafio] = true;
-  try {
-    // Cargar los primeros 3 registros
-    await obtenerTotalRegistros(idSemana, idDesafio);
+  const docsExportNumberLength = ref({
+    tamanioActual : 0,
+    tamanioTotal : 0
+  });
 
-    // Simular la exportación en lotes de 10, actualizando el contador cada vez
-    let contador = 0;
-    const intervalo = setInterval(() => {
-      contador += 10; // Incrementar en lotes de 10
-      registrosExportados.value[idDesafio] = Math.min(contador, totalRegistros.value[idDesafio]);
+  // PASO 7
+  function convertToCSV(objArray) {
+      var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+      var str = "";
 
-      if (contador >= totalRegistros.value[idDesafio]) {
-        clearInterval(intervalo); // Detener el intervalo cuando se alcanza el total
+      for (var i = 0; i < array.length; i++) {
+          var line = "";
+          for (var index in array[i]) {
+              if (line != "") line += ",";
+
+              // Envolver valores que contienen comas entre comillas dobles
+              var value = array[i][index];
+              if (typeof value === "string" && value.includes(",")) {
+                  value = `"${value}"`;
+              }
+
+              line += value;
+          }
+
+          str += line + "\r\n";
       }
-    }, 100); // Actualizar cada 100 milisegundos
 
-    // Descargar todos los registros
-    const response = await axios.get(`https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-desafio-listado/${idSemana}/${idDesafio}?page=1&limit=${totalRegistros.value[idDesafio]}`);
+      return str;
+  }
 
+  // PASO 6
+  function exportCSVFile(headers, items, fileTitle) {
+    // if (headers && items[0].wylexId !== "wylexId") {
+    //   items.unshift(headers);
+    // }
 
+    items.unshift(headers);
+    console.log("items", items)
 
+    // Convert Object to JSON
+    var jsonObject = JSON.stringify(items);
 
+    var csv = convertToCSV(jsonObject);
 
-    const csvData = response.data.data.map(item => {
-      const user = item.userId;
-      return `${user._id},${user.wylexId},${user.email},${user.first_name},${user.last_name},${user.phone_prefix},${user.phone_number},${user.telefono},${user.provider},${user.country},${user.ciudad || ''}`;
-    }).join('\n');
+    var exportedFilenmae = fileTitle + ".csv" || "export.csv";
 
-    const headers = 'ID,WylexId,Email,Nombre,Apellido,Prefijo,Teléfono1,Teléfono2,Proveedor,Pais,Ciudad\n';
-    const csvContent = headers + csvData;
+    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    if (navigator.msSaveBlob) {
+      // IE 10+
+      navigator.msSaveBlob(blob, exportedFilenmae);
+    } else {
+      var link = document.createElement("a");
+      if (link.download !== undefined) {
+        // feature detection
+        // Browsers that support HTML5 download attribute
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", exportedFilenmae);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  }
 
-    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    if (link.download !== undefined) {
-      const url = URL.createObjectURL(blob);
-      link.setAttribute('href', url);
-      link.setAttribute('download', `usuarios_desafio_${idDesafio}.csv`);
-      link.style.visibility = 'hidden';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+  // PASO 5
+  function generateSlug(text) {
+      // Crear un mapa de caracteres con tilde y ñ a sus reemplazos
+      const map = {
+          'á': 'a',
+          'é': 'e',
+          'í': 'i',
+          'ó': 'o',
+          'ú': 'u',
+          'Á': 'A',
+          'É': 'E',
+          'Í': 'I',
+          'Ó': 'O',
+          'Ú': 'U',
+          'ñ': 'n',
+          'Ñ': 'N'
+      };
+
+      // Reemplazar cada carácter del mapa en el texto
+      const slug = text.split('').map(char => map[char] || char).join('');
+
+      // Convertir a minúsculas, eliminar caracteres no deseados y reemplazar espacios por guiones
+      return slug.toLowerCase()
+                 .replace(/[^a-z0-9\s-]/g, '') // Eliminar caracteres que no sean letras, números, espacios o guiones
+                 .replace(/\s+/g, '-')         // Reemplazar espacios por guiones
+                 .replace(/-+/g, '-')+"-"+moment().format("YYYY-MM-DD-HH-mm-ss");         // Reemplazar múltiples guiones por uno solo
+  }
+
+  // PASO 3
+  async function getDataExportarServer(page = 1, limit = 10, platform = 0, idSemana = null, idDesafio = null) {
+    try {
+
+      if(!idSemana){
+        return false;
+      }
+
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      var response = await fetch(`${urlApiExport.value}${idSemana}/${idDesafio}?page=${page}&limit=${limit}&platform=${platform}`, requestOptions);
+      
+      const data = await response.json();
+
+      if(data.resp){
+        return data;
+      }else{
+        configSnackbar.value = {
+            message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+            type: "error",
+            model: true
+        };
+        btnLoadingDescargar.value = false;
+        return null;
+      }
+    } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
+      console.error(error.message);
+      btnLoadingDescargar.value = false;
+      return null;
+    }
+  }
+
+  // PASO 4
+  function eliminarDuplicadosPorWylexId(array) {
+      const vistos = new Set();
+      return array.filter(item => {
+          if (vistos.has(item.wylexId)) {
+              return false; // Eliminar duplicado
+          } else {
+              vistos.add(item.wylexId);
+              return true; // Mantener el primer encuentro
+          }
+      });
+  }
+
+  // PASO 2
+  async function fetchFullDescargar(idSemana, idDesafio){
+
+    docsExportNumberLength.value = {
+      tamanioActual : 0,
+      tamanioTotal : 0
+    };
+
+    dataFullExportar.value = [];
+    var platform = platformModel.value;
+    var idSemana = idSemana;
+    var idDesafio = idDesafio;
+    var pages = 1;
+    while(true){
+      const res = await getDataExportarServer(
+        pages,
+        500,
+        platform,
+        idSemana,
+        idDesafio
+      );
+
+      const responseData = res.data;
+      const totalDataExportar = "-";
+
+      for(var keyUsuarioDesafio in responseData){
+        const desafioData = responseData[keyUsuarioDesafio];
+        const usuariosDesafios = desafioData.userId || {};
+
+        // Nuevo objeto para cada elemento de responseData
+        let newItem = {}; 
+
+        // Recorremos las claves de usuarios
+        for (let key in headersGlobal.value) {
+            // Verificamos si la clave existe en item y la agregamos al nuevo objeto
+            if (usuariosDesafios.hasOwnProperty(key)) {
+              newItem[key] = usuariosDesafios[key];
+            }else{
+              newItem[key] = "";
+            }
+        }
+
+        for (let key in desafioData) {
+            // Verificamos si la clave existe en item y la agregamos al nuevo objeto
+            if(key != "userId"){
+
+              if (key == "platform_desafio") {
+                newItem["platform_desafio"] = desafioData[key];
+              }
+
+            }
+        }
+
+        // newItem["reembolso_created_at"] = desafioData.created_at;
+        // newItem["reembolso_estado"] = desafioData.estado;
+        // newItem["created_at_reembolso"] = desafioData.created_at;
+        
+        // Agregamos el nuevo objeto a dataFullExportar.value
+        dataFullExportar.value.push(newItem);
+      }
+
+      // responseData.forEach((usuariosDesafios) => {
+        
+      // });
+
+      docsExportNumberLength.value.tamanioActual = dataFullExportar.value.length;
+      docsExportNumberLength.value.tamanioTotal = totalDataExportar;
+
+      dataFullExportar.value.sort((a, b) => moment(b.created_at_reembolso, 'DD/MM/YYYY-HH:mm:ss').diff(moment(a.created_at_reembolso, 'DD/MM/YYYY-HH:mm:ss')));
+
+      pages++;
+
+      if(responseData.length < 1){
+        break;
+      }
     }
 
-    // Resetear el contador de registros exportados
-    registrosExportados.value[idDesafio] = null;
-  } catch (error) {
-    console.error('Error al descargar los datos:', error);
-  } finally {
-    cargandoDescarga.value[idDesafio] = false;
-  }
-};
+    // console.log(dataFullExportar.value)
 
-onMounted(obtenerSemanas);
+    return true;
+  };
+
+  // PASO 1
+  async function downloadSearch(index, idSemana, idDesafio) {
+    try {
+
+      registrosExportados.value = idDesafio;
+
+      btnLoadingDescargar.value=true;
+      await fetchFullDescargar(idSemana, idDesafio);
+      btnLoadingDescargar.value=false;
+
+
+      let doc = [];
+      doc = dataFullExportar.value
+      
+      var title = `${urlTitleExport.value}_platform_`+generateSlug(platformModel.value);
+
+      exportCSVFile(headersGlobal.value, eliminarDuplicadosPorWylexId(doc), title);
+
+      registrosExportados.value = 0;
+
+    } catch (error) {
+        console.log(error)
+        configSnackbar.value = {
+            message: "No se pudo recuperar los datos de registros para exportar, recargue de nuevo.",
+            type: "error",
+            model: true
+        };
+        return false;
+    }
+  };
+  // FIN DESCARGAR
+
+  onMounted(obtenerSemanas);
 
 // 👉 Colors variables
 const colorVariables = themeColors => {
@@ -278,11 +544,17 @@ const expenseRationChartConfig = computed(() => getDonutChartConfig(vuetifyTheme
 
 </script>
 
-
-
 <template>
-
-  <VCard class="v-col-12 pb-5 pt-5">
+  <section>
+    <VSnackbar 
+      v-model="configSnackbar.model" 
+      location="top end" 
+      variant="flat" 
+      :timeout="configSnackbar.timeout || 2000" 
+      :color="configSnackbar.type">
+        {{ configSnackbar.message }}
+    </VSnackbar>
+    <VCard class="v-col-12 pb-5 pt-5">
     <VCardItem>
       <VRow class="pb-5">
         <VCol cols="12" md="5">
@@ -317,7 +589,7 @@ const expenseRationChartConfig = computed(() => getDonutChartConfig(vuetifyTheme
                   </VListItem>
                 </template>
               </VSelect>
-
+              <VSelect v-model="platformModel" :items="platformList" label="Filtro por dispositivo" item-title="title" item-value="value" @update:model-value="obtenerTotalUsuarios" />
             </div>
             <div class="py-9 d-block" v-if="cargando">
               <VProgressCircular indeterminate color="primary" />
@@ -367,13 +639,12 @@ const expenseRationChartConfig = computed(() => getDonutChartConfig(vuetifyTheme
                         <div class="d-flex flex-column">
                           <VBtn color="success" size="small"
                             @click="downloadSearch(index, semanaSeleccionada, desafio.idDesafio)"
-                            :loading="cargandoDescarga[desafio.idDesafio]" :disabled="cargandoDescarga[desafio.idDesafio]">
+                            :loading="registrosExportados == desafio.idDesafio" :disabled="btnLoadingDescargar">
                             <VIcon size="20" icon="tabler-download" />
                             CSV
                           </VBtn>
-                          <VChip v-if="registrosExportados[desafio.idDesafio]" size="x-small" class="mt-1">
-                            Exportando {{ registrosExportados[desafio.idDesafio] }} / {{
-                              totalRegistros[desafio.idDesafio] }} registros
+                          <VChip v-if="registrosExportados == desafio.idDesafio" size="x-small" class="mt-1">
+                            Exportando {{ docsExportNumberLength.tamanioActual }}
                           </VChip>
                         </div>
 
@@ -391,15 +662,9 @@ const expenseRationChartConfig = computed(() => getDonutChartConfig(vuetifyTheme
 
     </VCardItem>
   </VCard>
+  </section>
+  
 
-
-  <div>
-
-
-
-
-
-  </div>
 </template>
 
 <style>
