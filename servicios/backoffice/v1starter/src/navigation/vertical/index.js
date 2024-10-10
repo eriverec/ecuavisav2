@@ -78,6 +78,7 @@ export default [
     children: [
       { title: 'Módulos', to: 'apps-configuracion-list' },
       { title: 'Banner Slider', to: 'apps-miecuavisa-list' },
+      // { title: 'Modal Ondemand', to: 'apps-miecuavisa-ondemand' },
 
       // { title: 'Ads Ubicaciones', to: 'apps-miecuavisa-ads-ubicaciones' },
       // { title: 'Eventos', to: 'apps-configuracion-add' },

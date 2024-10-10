@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Actualizar JSON Modal</title>
+</head>
+
+<body>
+  <div id="modal">
+    <h3>Estado:
+      <label class="switch">
+        <input type="checkbox" id="estadoSwitch">
+        <span class="slider round"></span>
+      </label>
+    </h3>
+    <p>Contenido: <input type="text" id="contenidoInput" value="" /></p>
+    <p>URL: <input type="text" id="urlInput" value="" /></p>
+  </div>
+
+  <button id="updateBtn">Actualizar Modal</button>
+
+
+  <script>
+    // Función para obtener los datos del JSON
+    function fetchData() {
+      fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/modalondemand/getData.php')  // Cambia con la ruta real de tu archivo PHP
+        .then(response => response.json())
+        .then(data => {
+          console.log(data);
+          // Actualizar los campos dinámicos con los valores recibidos del JSON
+          document.getElementById('estadoSwitch').checked = data.data.estado === "true";
+          document.getElementById('contenidoInput').value = data.data.contenido;
+          document.getElementById('urlInput').value = data.data.url;
+        })
+        .catch(error => console.error('Error fetching data:', error));
+    }
+
+    // Llamar a la función al cargar la página
+    document.addEventListener('DOMContentLoaded', fetchData);
+
+    // Función para actualizar los datos
+    document.getElementById('updateBtn').addEventListener('click', () => {
+      const newEstado = document.getElementById('estadoSwitch').checked ? "true" : "false";
+      const newContenido = document.getElementById('contenidoInput').value;
+      const newUrl = document.getElementById('urlInput').value;
+
+      const newData = {
+        key: "modalondemand",
+        data: {
+          estado: newEstado,
+          contenido: newContenido,
+          url: newUrl
+        }
+      };
+
+      fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/modalondemand/index.php', {  // Cambia con la ruta real de tu archivo PHP
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(newData)
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log("data", data);
+          if (data.success) {
+            fetchData(); // Refrescar los datos después de la actualización
+          } else {
+            console.error('Error actualizando:', data.error);
+          }
+        })
+        .catch(error => console.error('Error updating data:', error));
+    });
+  </script>
+<style>
+  /* Estilos para el switch (opcional) */
+  .switch {
+      position: relative;
+      display: inline-block;
+      width: 34px;
+      height: 20px;
+  }
+
+  .switch input { 
+      opacity: 0;
+      width: 0;
+      height: 0;
+  }
+
+  .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      transition: .4s;
+      border-radius: 20px;
+  }
+
+  .slider:before {
+      position: absolute;
+      content: "";
+      height: 14px;
+      width: 14px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+  }
+
+  input:checked + .slider {
+      background-color: #2196F3;
+  }
+
+  input:checked + .slider:before {
+      transform: translateX(14px);
+  }
+
+  .slider.round {
+      border-radius: 34px;
+  }
+</style>
+
+</body>
+
+
+</html>
