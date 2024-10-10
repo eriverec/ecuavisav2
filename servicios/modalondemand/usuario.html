@@ -46,7 +46,7 @@
                 if (estado === "true" ) {
                     console.log("Estado: true");
                     if(url === currentUrl){
-                    console.log("url validad");
+                    console.log("url valida");
                         const modalHTML = createModal(contenido);
     
                         // Insertar el modal directamente en el body
@@ -58,7 +58,7 @@
                         modal.show();
 
                     }else{
-                    console.log("url no validad");
+                    console.log("url no valida");
                     }
                 }else{
                     console.log("Estado: false");
@@ -68,7 +68,8 @@
     }
 
     // Ejecutar la función al cargar la página
-    document.addEventListener("DOMContentLoaded", fetchDataAndShowModal);
+    // document.addEventListener("DOMContentLoaded", fetchDataAndShowModal);
+    fetchDataAndShowModal();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>

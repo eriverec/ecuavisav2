@@ -1,4 +1,16 @@
 <?php
+
+// Manejo de las solicitudes OPTIONS (preflight)
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    // Configurar los encabezados para CORS en la solicitud preflight
+    header('Access-Control-Allow-Origin: *');
+    header('Access-Control-Allow-Methods: POST, GET, OPTIONS');
+    header('Access-Control-Allow-Headers: Origin, Content-Type, X-Auth-Token, Authorization');
+    header('Access-Control-Max-Age: 86400'); // Cache para preflight por un día
+    exit(0); // Terminar el script aquí para las solicitudes OPTIONS
+}
+
+
 // Permitir solicitudes POST desde cualquier origen y configurar los encabezados para CORS
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: POST');
