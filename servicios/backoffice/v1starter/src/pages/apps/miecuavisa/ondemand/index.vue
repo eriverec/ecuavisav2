@@ -1,43 +1,46 @@
 <template>
-
-<VSnackbar
-      :timeout="2000"
-      v-model="isSave"
-      color="success"
-      transition="scale-transition"
-      location="top end"
-    >
-      Datos actualizados correctamente
-    </VSnackbar>
-
-  <VCard class="mt-5 card" title="Modal Omdemand" subtitle="Ecuavisa">
-    <VCardText>
-      <VRow class="ml-2 mr-2 mb-2">
-        <VCol cols="12" md="6" lg="6">
-          <VRow id="modal">
-            <VCol cols="12">
-              <VSwitch v-model="estado" :label="capitalizedLabel(estado)" />
+  <div>
+    <VSnackbar
+          :timeout="2000"
+          v-model="isSave"
+          color="success"
+          transition="scale-transition"
+          location="top end"
+        >
+          Datos actualizados correctamente
+        </VSnackbar>
+    
+      <VCard class="mt-5 card" title="Modal Omdemand" subtitle="Ecuavisa">
+        <VCardText>
+          <VRow class="ml-2 mr-2 mb-2">
+            <VCol cols="12" md="6" lg="6">
+              <VRow id="modal">
+                <VCol cols="12">
+                  <VSwitch v-model="estado" :label="capitalizedLabel(estado)" />
+                </VCol>
+                <VCol cols="12">
+                  <VTextarea  label="Contenido del modal" type="text" v-model="contenido" />
+                </VCol>
+                <VCol cols="12">
+                  <VTextarea  label="URL" type="text" v-model="url" />
+                </VCol>
+                <VCol cols="12">
+                  <VBtn @click="updateData" color="success" variant="tonal">
+                    Guardar
+                  </VBtn>
+                </VCol>
+              </VRow>
             </VCol>
-            <VCol cols="12">
-              <VTextarea  label="Contenido del modal" type="text" v-model="contenido" />
-            </VCol>
-            <VCol cols="12">
-              <VTextarea  label="URL" type="text" v-model="url" />
-            </VCol>
-            <VCol cols="12">
-              <VBtn @click="updateData" color="success" variant="tonal">
-                Guardar
-              </VBtn>
-            </VCol>
+    
+            <VCol cols="12" md="6" lg="6"></VCol>
+    
           </VRow>
-        </VCol>
+    
+        </VCardText>
+      </VCard>
 
-        <VCol cols="12" md="6" lg="6"></VCol>
+  </div>
 
-      </VRow>
-
-    </VCardText>
-  </VCard>
 </template>
 
 <script setup>
