@@ -9,6 +9,7 @@ import { onMounted, ref } from 'vue';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
 
+const currentTab = ref(0)
 const semanas = ref([]);
 const semanaSeleccionada = ref('');
 const platformModel = ref('0');
@@ -540,7 +541,48 @@ const getDonutChartConfig = theme => {
   }
 }
 
-const expenseRationChartConfig = computed(() => getDonutChartConfig(vuetifyTheme.current.value))
+const expenseRationChartConfig = computed(() => getDonutChartConfig(vuetifyTheme.current.value));
+
+
+async function downloadUsersNoDesafios(idSemana, idDesafio) {
+  try {
+
+    btnLoadingDescargar.value = true;
+    registrosExportados.value = idDesafio;
+
+    // axios.get('https://servicio-desafios-neon.vercel.app/historicodls/usuariosSinDesafio/'+idDesafio+'/download', { responseType: 'blob' })
+    axios.get('https://servicio-desafios-neon.vercel.app/lista-usuarios/no-participantes/'+idDesafio+'/download', { responseType: 'blob' })
+    .then(response => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement('a');
+      link.href = url;
+      link.setAttribute('download', 'usuarios_no_desafio_'+idDesafio+'.csv'); // Nombre del archivo descargado
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Actualizar el estado una vez terminada la descarga
+      setTimeout(() => {
+        btnLoadingDescargar.value = false;
+        registrosExportados.value = 0;
+      }, 100); // Esperar un poco antes de deshabilitar el botón
+    })
+    .catch(error => {
+      console.error('Error al descargar el archivo:', error);
+      this.downloading = false;
+    });
+
+
+  } catch (error) {
+      console.log(error)
+      configSnackbar.value = {
+          message: "No se pudo recuperar los datos de registros para exportar, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
+      return false;
+  }
+};
 
 </script>
 
@@ -578,83 +620,170 @@ const expenseRationChartConfig = computed(() => getDonutChartConfig(vuetifyTheme
             <VIcon size="25" icon="tabler-filter" />
             Filtros
 
-            <div class="d-flex flex-wrap gap-3 mt-5">
-              <VSelect v-model="semanaSeleccionada" :items="items" label="Semana" item-title="title" item-value="value"
-                @update:model-value="obtenerTotalUsuarios">
-                <template v-slot:item="{ props, item }">
-                  <VListItem v-bind="props" :title="item.raw.title">
-                    <template v-slot:subtitle>
-                      {{ item.raw.description }}
-                    </template>
-                  </VListItem>
-                </template>
-              </VSelect>
-              <VSelect v-model="platformModel" :items="platformList" label="Filtro por dispositivo" item-title="title" item-value="value" @update:model-value="obtenerTotalUsuarios" />
-            </div>
             <div class="py-9 d-block" v-if="cargando">
               <VProgressCircular indeterminate color="primary" />
               <span class="ml-2">Cargando datos...</span>
             </div>
             <div class="py-9 d-block" v-else-if="desafios.length === 0">
+              <div class="d-flex flex-wrap gap-3 mb-5">
+                <VSelect v-model="semanaSeleccionada" :items="items" label="Semana" item-title="title" item-value="value"
+                  @update:model-value="obtenerTotalUsuarios">
+                  <template v-slot:item="{ props, item }">
+                    <VListItem v-bind="props" :title="item.raw.title">
+                      <template v-slot:subtitle>
+                        {{ item.raw.description }}
+                      </template>
+                    </VListItem>
+                  </template>
+                </VSelect>
+              </div>
               No hay datos para mostrar
             </div>
             <div v-else class="mt-9">
-              <VCardTitle class="ps-0 pb-0">
-                <VIcon size="25" icon="tabler-notes" />
-                Listado de Desafío
-              </VCardTitle>
-              <VList class="mt-2" lines="two" border>
-                <template v-for="(desafio, index) in desafios" :key="index">
-                  <VListItem>
-                    <template #prepend>
-                      <VAvatar rounded="sm" size="x-large" class="">
-                        <!-- <VIcon size="50" icon="tabler-video" /> -->
-                        <VImg :src="desafio.URLSticker" />
-                      </VAvatar>
-                    </template>
-                    <div style="width: 86%;">
-                      <VListItemTitle>
-                        <VChip label size="x-small">
-                          {{ desafio.nombreDia }}
-                        </VChip>
-                        {{ desafio.tituloDesafio }} - {{ desafio.tituloSticker }}
-                      </VListItemTitle>
-                      <VListItemSubtitle class=""
-                        style="width: 100%;display: block;text-wrap: wrap;line-height: normal;">
-                        <small>{{ desafio.leyenda }}</small>
-                      </VListItemSubtitle>
-
-                    </div>
-
-                    <template #append>
-                      <div class="d-flex gap-5 justify-center align-center">
-                        <div>
+              <VTabs
+                v-model="currentTab"
+                class="v-tabs-pill"
+              >
+                <VTab class="d-flex flex-column">
+                  <VIcon size="25" icon="tabler-notes" />
+                  Desafíos cumplidos
+                </VTab>
+                <VTab>
+                  <VIcon size="25" icon="tabler-notes" />
+                  Desafíos no cumplidos
+                </VTab>
+              </VTabs>
+              <VWindow v-model="currentTab">
+                <VWindowItem key="0" class="p-4" style="padding-top: 25px;">
+                  <div class="d-flex flex-wrap gap-3 mb-5">
+                    <VSelect v-model="semanaSeleccionada" :items="items" label="Semana" item-title="title" item-value="value"
+                      @update:model-value="obtenerTotalUsuarios">
+                      <template v-slot:item="{ props, item }">
+                        <VListItem v-bind="props" :title="item.raw.title">
+                          <template v-slot:subtitle>
+                            {{ item.raw.description }}
+                          </template>
+                        </VListItem>
+                      </template>
+                    </VSelect>
+                    <VSelect v-model="platformModel" :items="platformList" label="Filtro por dispositivo" item-title="title" item-value="value" @update:model-value="obtenerTotalUsuarios" />
+                  </div>
+                  <label style="font-size: 17px"> Usuarios que han cumplido los desafíos </label>
+                  <VList class="mt-2" lines="two" border>
+                    <template v-for="(desafio, index) in desafios" :key="index">
+                      <VListItem>
+                        <template #prepend>
+                          <VAvatar rounded="sm" size="x-large" class="">
+                            <!-- <VIcon size="50" icon="tabler-video" /> -->
+                            <VImg :src="desafio.URLSticker" />
+                          </VAvatar>
+                        </template>
+                        <div style="width: 86%;">
                           <VListItemTitle>
-                            <div class="d-flex justify-center align-center">
-                              <VIcon size="18" icon="tabler-user" />
-                              {{ desafio.total }}
-                            </div>
+                            <VChip label size="x-small">
+                              {{ desafio.nombreDia }}
+                            </VChip>
+                            {{ desafio.tituloDesafio }} - {{ desafio.tituloSticker }}
                           </VListItemTitle>
-                        </div>
-                        <div class="d-flex flex-column">
-                          <VBtn color="success" size="small"
-                            @click="downloadSearch(index, semanaSeleccionada, desafio.idDesafio)"
-                            :loading="registrosExportados == desafio.idDesafio" :disabled="btnLoadingDescargar">
-                            <VIcon size="20" icon="tabler-download" />
-                            CSV
-                          </VBtn>
-                          <VChip v-if="registrosExportados == desafio.idDesafio" size="x-small" class="mt-1">
-                            Exportando {{ docsExportNumberLength.tamanioActual }}
-                          </VChip>
+                          <VListItemSubtitle class=""
+                            style="width: 100%;display: block;text-wrap: wrap;line-height: normal;">
+                            <small>{{ desafio.leyenda }}</small>
+                          </VListItemSubtitle>
+
                         </div>
 
-                      </div>
+                        <template #append>
+                          <div class="d-flex gap-5 justify-center align-center">
+                            <div>
+                              <VListItemTitle>
+                                <div class="d-flex justify-center align-center">
+                                  <VIcon size="18" icon="tabler-user" />
+                                  {{ desafio.total }}
+                                </div>
+                              </VListItemTitle>
+                            </div>
+                            <div class="d-flex flex-column">
+                              <VBtn color="success" size="small"
+                                @click="downloadSearch(index, semanaSeleccionada, desafio.idDesafio)"
+                                :loading="registrosExportados == desafio.idDesafio" :disabled="btnLoadingDescargar">
+                                <VIcon size="20" icon="tabler-download" />
+                                CSV
+                              </VBtn>
+                              <VChip v-if="registrosExportados == desafio.idDesafio" size="x-small" class="mt-1">
+                                Exportando {{ docsExportNumberLength.tamanioActual }}
+                              </VChip>
+                            </div>
+
+                          </div>
+                        </template>
+
+                      </VListItem>
+
                     </template>
+                  </VList>
 
-                  </VListItem>
+                </VWindowItem>
+                <VWindowItem key="1" class="p-4" style="padding-top: 25px;">
+                  <div class="d-flex flex-wrap gap-3 mb-5">
+                    <VSelect v-model="semanaSeleccionada" :items="items" label="Semana" item-title="title" item-value="value"
+                      @update:model-value="obtenerTotalUsuarios">
+                      <template v-slot:item="{ props, item }">
+                        <VListItem v-bind="props" :title="item.raw.title">
+                          <template v-slot:subtitle>
+                            {{ item.raw.description }}
+                          </template>
+                        </VListItem>
+                      </template>
+                    </VSelect>
+                  </div>
+                  <label style="font-size: 17px"> Usuarios que no realizaron los desafíos </label>
+                  <VList class="mt-2" lines="two" border>
+                    <template v-for="(desafio, index) in desafios" :key="index">
+                      <VListItem>
+                        <template #prepend>
+                          <VAvatar rounded="sm" size="x-large" class="">
+                            <!-- <VIcon size="50" icon="tabler-video" /> -->
+                            <VImg :src="desafio.URLSticker" />
+                          </VAvatar>
+                        </template>
+                        <div style="width: 86%;">
+                          <VListItemTitle>
+                            <VChip label size="x-small">
+                              {{ desafio.nombreDia }}
+                            </VChip>
+                            {{ desafio.tituloDesafio }} - {{ desafio.tituloSticker }}
+                          </VListItemTitle>
+                          <VListItemSubtitle class=""
+                            style="width: 100%;display: block;text-wrap: wrap;line-height: normal;">
+                            <small>{{ desafio.leyenda }}</small>
+                          </VListItemSubtitle>
 
-                </template>
-              </VList>
+                        </div>
+
+                        <template #append>
+                          <div class="d-flex gap-5 justify-center align-center">
+                            <div class="d-flex flex-column">
+                              <VBtn color="success" size="small"
+                                @click="downloadUsersNoDesafios(semanaSeleccionada, desafio.idDesafio)"
+                                :loading="registrosExportados == desafio.idDesafio" :disabled="btnLoadingDescargar">
+                                <VIcon size="20" icon="tabler-download" />
+                                Descargar
+                              </VBtn>
+                              <VChip v-if="registrosExportados == desafio.idDesafio" size="x-small" style="text-center" class="text-center mt-1">
+                                Exportando...
+                              </VChip>
+                            </div>
+
+                          </div>
+                        </template>
+
+                      </VListItem>
+
+                    </template>
+                  </VList>
+
+                </VWindowItem>
+              </VWindow>
             </div>
           </VCardTitle>
         </VCol>
