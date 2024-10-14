@@ -90,8 +90,22 @@ onMounted(obtenerTotalUsuarios);
 const descargarCSV = async (idSemanaDesafio) => {
   cargandoDescarga.value[idSemanaDesafio] = true;
   try {
-    const response = await axios.get(`https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-semana-listado/${idSemanaDesafio}?page=1&limit=20`);
-    const data = response.data.data;
+
+    let skip = 1;
+    let batchSize = 7000;
+    let data = [];
+
+    while (true) {
+      const batchRegister = await axios.get(`https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/usuarios-x-semana-listado/${idSemanaDesafio}?page=${skip}&limit=${batchSize}`);
+
+      if (batchRegister.data.data.length === 0) {
+        break;
+      }
+
+      data.push(...batchRegister.data.data);
+      skip += 1;
+      // console.log(dataRegistrosExport.value)
+    }
 
     // Convertir los datos a CSV
     const csvContent = [
