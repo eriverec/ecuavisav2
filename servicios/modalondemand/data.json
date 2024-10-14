@@ -1,8 +1,12 @@
 {
     "key": "modalondemand",
     "data": {
-        "estado": "true",
-        "contenido": "version 3",
-        "url": "\/ecuavisav2\/servicios\/modalondemand\/usuario.html"
+        "estado": "false",
+        "contenido": "version 234 <b>vamos</b> \n\n<p>URL: <input type=\"text\" /></p>",
+        "url": [
+            "/tendencias/redes/que-paso-india-prohibir-tiktok-4-anos-DX7246454",
+            "https://otraurl.com",
+            "https://masurl.com"
+        ]
     }
 }
