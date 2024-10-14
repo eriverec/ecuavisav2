@@ -70,6 +70,7 @@ const items = ref([]);
 const totalUsuarios = ref([]);
 const series = ref([]);
 const desafios = ref([]);
+const desafiosPorSemana = ref([]);
 const cargando = ref(true);
 const registrosExportados = ref(null);
 const totalRegistros = ref({});
@@ -140,6 +141,7 @@ const obtenerTotalUsuarios = async () => {
   
     /*van en el grafico */
 
+    await getDesafiosPorSemana(semanaSeleccionada.value);
 
   } catch (error) {
     console.error('Error al obtener el total de usuarios:', error);
@@ -148,7 +150,30 @@ const obtenerTotalUsuarios = async () => {
   }
 };
 
+//Obtener los desafíos por semana
+const getDesafiosPorSemana = async (idSemana) => {
+  try {
+    const response = await axios.get(`https://servicio-niveles-puntuacion.vercel.app/grafico-backoffice/get-desafios-por-semana/${idSemana}`);
 
+    desafiosPorSemana.value = response.data.data.map(item => ({
+      ...item,
+      idDesafio: item._id,
+      nombreDia: obtenerNombreDia(parseInt(item.horarios[0].dia))
+    }));
+
+    // Ordenar los desafíos por día de la semana
+    desafiosPorSemana.value.sort((a, b) => a.horarios[0].dia - b.horarios[0].dia);
+
+    return true;    
+
+  } catch (error) {
+    console.error('Error al obtener el total de usuarios:', error);
+  } finally {
+    cargando.value = false; // Finalizar carga
+  }
+};
+
+//Fin obtener los desafíos por semana
 // DESCARGAR
   const btnLoadingDescargar = ref(false);
   const dataFullExportar = ref([]);
@@ -738,7 +763,7 @@ async function downloadUsersNoDesafios(idSemana, idDesafio) {
                   </div>
                   <label style="font-size: 17px"> Usuarios que no realizaron los desafíos </label>
                   <VList class="mt-2" lines="two" border>
-                    <template v-for="(desafio, index) in desafios" :key="index">
+                    <template v-for="(desafio, index) in desafiosPorSemana" :key="index">
                       <VListItem>
                         <template #prepend>
                           <VAvatar rounded="sm" size="x-large" class="">
