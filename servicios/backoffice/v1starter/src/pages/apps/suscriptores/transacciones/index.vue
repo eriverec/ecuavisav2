@@ -30,7 +30,64 @@ const isDownloading = ref(false);
 const selectedTransaction = ref(null)
 const isModalOpen = ref(false)
 
+const buscarErrorPaymentez = function (num_error){
+    const listaError = {
+        "0" : "Esperando pago.",
+        "1" : "Se requiere verificación, consulte la sección Verificación.",
+        "2" : "Pagado parcialmente",
+        "3" : "Pagado.",
+        "4" : "En disputa.",
+        "5" : "Pagado en exceso",
+        "6" : "Fraude.",
+        "7" : "Reembolso.",
+        "8" : "Contracargo",
+        "9" : "Rechazado por el transportista.",
+        "10" : "Error del sistema.",
+        "11" : "Fraude Nuvei.",
+        "12" : "Lista negra de Nuvei.",
+        "13" : "Tolerancia del tiempo.",
+        "14" : "Caducado por Nuvei",
+        "15" : "Caducado por el transportista.",
+        "16" : "Rechazado por Nuvei",
+        "17" : "Abandonado por Nuvei",
+        "18" : "Abandonado por el cliente",
+        "19" : "Código de autorización no válido.",
+        "20" : "El código de autorización expiró.",
+        "21" : "Fraude Nuvei - Reembolso pendiente.",
+        "22" : "Código de autenticación no válido: reembolso pendiente.",
+        "23" : "El código de autenticación expiró: reembolso pendiente.",
+        "24" : "Fraude Nuvei: reembolso solicitado.",
+        "25" : "Código de autenticación no válido: reembolso solicitado.",
+        "26" : "El código de autenticación expiró: se solicitó un reembolso.",
+        "27" : "Comerciante - Reembolso pendiente.",
+        "28" : "Comerciante: reembolso solicitado.",
+        "29" : "Anulado.",
+        "30" : "Transacción asentada (solo Ecuador).",
+        "31" : "Esperando OTP.",
+        "32" : "OTP successfully validated.",
+        "33" : "OTP no validada.",
+        "34" : "Partial refund.",
+        "35" : "Método 3DS solicitado, esperando continuar.",
+        "36" : "Desafío 3DS solicitado, esperando CRES.",
+        "37" : "Rechazado por 3DS.",
+        "47" : "Falla en la validación del CPF.",
+        "48" : "Autenticado por 3DS",
+    };
 
+    if(!listaError.hasOwnProperty(num_error)){
+        return {
+            estado_suscripcion:0,
+            num_error,
+            msj: "No encontrado"
+        }
+    }
+
+    return {
+        estado_suscripcion: num_error == 3 ? 1 : 0,
+        num_error,
+        msj: listaError[num_error]
+    }
+}
 
 
 // Función para obtener transacciones
@@ -41,10 +98,8 @@ async function getTransactions(page, limit) {
     const response = await fetch(url)
     const data = await response.json();
 
-    console.log(data);
-
     if (data.resp) {
-      const allTransactions = [];
+      var allTransactions = [];
 
       // Procesar transacciones no fallidas
       if (Array.isArray(data.transacciones_realizadas)) {
@@ -62,6 +117,8 @@ async function getTransactions(page, limit) {
         const dateB = b.transaction && b.created_at ? new Date(b.created_at) : new Date(0)
         return dateB - dateA
       })
+
+      allTransactions = eliminarDuplicados(allTransactions);
 
       transactions.value = allTransactions
       filteredTransactions.value = allTransactions
@@ -220,16 +277,36 @@ const cardTypes = {
   ms: 'Maestro'
 };
 
+const allTransactions = ref([]);
+
 // Función para obtener el nombre completo de la tarjeta
 const getCardTypeName = (code) => {
   return cardTypes[code] || code || 'N/A';
 };
 
+const eliminarDuplicados = (registros) => {
+  // Crear un objeto para rastrear los IDs de transacción únicos
+  const idsUnicos = new Set();
+
+  // Filtrar el array para mantener solo el primer registro con cada transaction.id
+  const resultado = registros.filter(item => {
+    const idTransaccion = item.transaction.id;
+    
+    if (!idsUnicos.has(idTransaccion)) {
+      idsUnicos.add(idTransaccion);
+      return true;  // Deja el primer registro
+    }
+    return false;  // Ignora los duplicados
+  });
+
+  return resultado;
+}
+
 async function downloadCSV() {
   isDownloading.value = true
-  let allTransactions = []
+  allTransactions.value = []
   let currentPage = 1
-  const limit = 20
+  const limit = 500
   
   try {
     while (true) {
@@ -241,11 +318,11 @@ async function downloadCSV() {
         break
       }
       
-      allTransactions = allTransactions.concat(data.transacciones_realizadas, data.transacciones_fallidas)
+      allTransactions.value = eliminarDuplicados(allTransactions.value.concat(data.transacciones_realizadas, data.transacciones_fallidas))
       currentPage++
     }
     
-    const csvContent = generateCSV(allTransactions)
+    const csvContent = generateCSV(allTransactions.value);
     downloadFile(csvContent, 'transacciones.csv')
   } catch (error) {
     console.error('Error al descargar el CSV:', error)
@@ -270,11 +347,12 @@ function generateCSV(transactions) {
       user?.email || 'N/A',
       trans?.id || 'N/A',
       item.card_details?.bank_name || 'N/A',
-      getCardTypeName(item.card_details?.type),
+      getCardTypeName(item.card_details?.type.toLowerCase()),
       item.paquete?.nombre || 'N/A',
       item.created_at ? moment(item.created_at).format('DD-MM-YYYY HH:mm:ss') : 'N/A',
       trans?.amount || 'N/A',
-      trans?.status_detail == '3' ? 'Realizada' : 'Fallida'
+      // trans?.status_detail == '3' ? 'Realizada' : 'Fallida'
+      buscarErrorPaymentez(trans?.status_detail).msj
     ]
   })
   
@@ -306,7 +384,7 @@ function calculateTotals() {
 
 // Lifecycle hooks
 onMounted(() => {
-  getTransactions(1, 100)  // Inicialmente cargamos 100 transacciones
+  getTransactions(1, 10000)  // Inicialmente cargamos 100 transacciones
 })
 </script>
 
@@ -333,15 +411,15 @@ onMounted(() => {
 
           <VSpacer />
 
-          <!-- <div class="app-user-search-filter d-flex align-top">
+          <div class="app-user-search-filter d-flex align-top flex-column">
 
             <VBtn @click="downloadCSV" variant="tonal"
               color="success"
               prepend-icon="tabler-screen-share" :loading="isDownloading">
               Exportar datos
             </VBtn>
-
-          </div> -->
+            <small v-if="isDownloading">Descargando {{allTransactions.length}} registros</small>
+          </div>
         </VCardText>
 
 
@@ -377,7 +455,7 @@ onMounted(() => {
 
                 <td>{{ item.card_details?.bank_name || 'N/A' }}</td>
 
-                <td>{{ getCardTypeName(item.card_details?.type) }}</td>
+                <td>{{ getCardTypeName(item.card_details?.type.toLowerCase()) }}</td>
 
 
                 <td>{{ item.paquete?.nombre || 'N/A' }}</td>
@@ -387,7 +465,7 @@ onMounted(() => {
                 <td>${{ item.transaction.amount }}</td>
                 <td>
                   <VChip :color="item.transaction.status_detail == '3' ? 'success' : 'error'">
-                    {{ item.transaction.status_detail == '3' ? 'Realizada' : 'Fallida' }}
+                    {{ buscarErrorPaymentez(item.transaction.status_detail).msj }}
                   </VChip>
                 </td>
 
@@ -465,8 +543,8 @@ onMounted(() => {
                   <div class="d-flex justify-space-between align-center">
                     <VListItemTitle>Estado</VListItemTitle>
                     <VListItemSubtitle>
-                      <VChip :color="selectedTransaction.estado === 'Realizado' ? 'success' : 'error'">
-                        {{ selectedTransaction.estado }}
+                      <VChip :color="selectedTransaction.transaction.status_detail === 3 ? 'success' : 'error'">
+                        {{ buscarErrorPaymentez(selectedTransaction.transaction.status_detail).msj }}
                       </VChip>
                     </VListItemSubtitle>
 
