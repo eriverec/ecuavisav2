@@ -10,66 +10,67 @@
 <body>
 
    <script>
-    // URL actual del usuario.html
     const currentUrl = window.location.pathname; // Cambia esto si es necesario
 
-    // Función para crear el modal con template strings
-    function createModal(contenido) {
-        return `
-            <div class="modal fade" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="dynamicModalLabel">Modal Dinámico</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            ${contenido}
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                        </div>
+// Función para crear el modal con template strings
+function createModal(contenido) {
+    console.log("EJECUTADO ONDEMAND");
+    return `
+        <!-- <div class="modal fade d-none" id="dynamicModal" tabindex="-1" aria-labelledby="dynamicModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="dynamicModalLabel">Modal Dinámico</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        ${contenido}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                     </div>
                 </div>
             </div>
-        `;
-    }
+        </div> -->
+        
+    `;
+}
 
-    // Función para obtener los datos del JSON y mostrar el modal si aplica
-    function fetchDataAndShowModal() {
-        fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/modalondemand/getData.php')
-            .then(response => response.json())
-            .then(data => {
-                const { estado, contenido, url } = data.data;
+// Función para obtener los datos del JSON y mostrar el modal si aplica
+function fetchDataAndShowModal() {
+    fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/modalondemand/getData.php')
+        .then(response => response.json())
+        .then(data => {
+            const { estado, contenido, url } = data.data;
 
-                // Mostrar el modal solo si el estado es 'true' y la URL coincide
-                if (estado === "true" ) {
-                    console.log("Estado: true");
-                    if(url === currentUrl){
-                    console.log("url valida");
-                        const modalHTML = createModal(contenido);
-    
-                        // Insertar el modal directamente en el body
-                        document.body.insertAdjacentHTML('beforeend', modalHTML);
+            // Mostrar el modal solo si el estado es 'true' y la URL coincide
+            if (estado === "true" ) {
+                console.log("Estado: true");
+                if(Array.isArray(url) && url.includes(currentUrl)){
+                console.log("url valida");
+                    const modalHTML = createModal(contenido);
+
+                    // Insertar el modal directamente en el body
+                    document.body.insertAdjacentHTML('beforeend', modalHTML);
 
 
-                        // Mostrar el modal usando Bootstrap
-                        const modal = new bootstrap.Modal(document.getElementById('dynamicModal'));
-                        modal.show();
+                    // Mostrar el modal usando Bootstrap
+                    const modal = new bootstrap.Modal(document.getElementById('dynamicModal'));
+                    modal.show();
 
-                    }else{
-                    console.log("url no valida");
-                    }
                 }else{
-                    console.log("Estado: false");
+                console.log("url no valida");
                 }
-            })
-            .catch(error => console.error('Error fetching data:', error));
-    }
+            }else{
+                console.log("Estado: false");
+            }
+        })
+        .catch(error => console.error('Error fetching data:', error));
+}
 
-    // Ejecutar la función al cargar la página
-    // document.addEventListener("DOMContentLoaded", fetchDataAndShowModal);
-    fetchDataAndShowModal();
+// Ejecutar la función al cargar la página
+// document.addEventListener("DOMContentLoaded", fetchDataAndShowModal);
+fetchDataAndShowModal();
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
 </body>

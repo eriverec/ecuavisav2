@@ -1,0 +1,24 @@
+{
+  "modals": [
+    {
+      "estado": "false",
+      "titulo": "primer titulo",
+      "contenido": "version 234 <b>vamos</b> \n\n<p>URL: <input type=\"text\" /></p>",
+      "url": [
+        "/tendencias/redes/que-paso-india-prohibir-tiktok-4-anos-DX7246454",
+        "https://otraurl.com",
+        "https://masurl.com"
+      ]
+    },
+    {
+      "estado": "false",
+      "titulo": "segundo titulo",
+      "contenido": "version 234 <b>vamos</b> \n\n<p>URL: <input type=\"text\" /></p>",
+      "url": [
+        "/tendencias/redes/que-paso-india-prohibir-tiktok-4-anos-DX7246454",
+        "https://otraurl.com",
+        "https://masurl.com"
+      ]
+    }
+  ]
+}
