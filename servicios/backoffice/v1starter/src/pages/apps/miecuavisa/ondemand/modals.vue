@@ -17,13 +17,16 @@
     <VExpansionPanels class="mt-5 mb-5">
       <VExpansionPanel v-for="(modal, index) in modals" :key="index" :value="index">
         <VExpansionPanelTitle>
-          <VBtn icon size="small" color="error" class="float-right mr-2 mb-0 botonDelete" @click="deleteModal(index)">
+          <VBtn icon size="small" variant="text" color="error" class="float-right mr-2 mb-0 botonDelete" @click="deleteModal(index)">
             <VIcon>mdi-delete</VIcon>
           </VBtn>
           <span class="text-uppercase">
             {{ modal.titulo || `Modal ${index + 1}` }}
 
           </span>
+          <VChip v-if="modal.estado" class="cls_estado" label color="success">Activo</VChip>
+          <VChip v-else class="cls_estado" label color="error">Inactivo</VChip>
+
         </VExpansionPanelTitle>
         <VExpansionPanelText>
           <VCard flat>
@@ -159,5 +162,12 @@ const capitalizedLabel = (estado) => {
 .listUrls .v-chip {
   white-space: normal;
   height: auto;
+}
+
+.cls_estado {
+  font-style: italic;
+  font-size: small;
+  font-weight: 500;
+  margin: 0 5px;
 }
 </style>
