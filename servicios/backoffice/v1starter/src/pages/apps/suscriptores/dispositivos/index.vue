@@ -12,14 +12,13 @@
       
       <p class="ingresa mb-4">Ingresa la cantidad de dispositivos permitidos:</p>
       
-      <div class="d-flex align-center">
+      <div class="d-flex align-center input-group">
         <VTextField
           v-model="numeroDispositivos"
           label="Número de dispositivos"
           type="text"
           class="mr-2"
-          style="width: 200px;"
-          density="compact"
+          hide-details
         />
         <VTooltip location="top">
           <template #activator="{ props }">
@@ -36,7 +35,7 @@
         <VBtn
           @click="actualizarDispositivos"
           color="primary"
-          density="compact"
+          class="custom-btn"
         >
           Actualizar
         </VBtn>
@@ -87,13 +86,29 @@ export default {
 
 <style scoped>
 .gestionador-dispositivos {
-  /* max-width: 600px; */
   margin: 0 auto;
   padding: 20px;
 }
 
 .ingresa {
- font-size: 17px;
- color: #7367F0;
+  font-size: 17px;
+  color: #7367F0;
+}
+
+.input-group {
+  max-width: 50%;
+}
+
+.v-text-field {
+  width: 200px;
+}
+
+:deep(.v-field__input) {
+  padding-top: 8px !important;
+  padding-bottom: 8px !important;
+}
+
+.custom-btn {
+  height: 43px;
 }
 </style>
