@@ -47,20 +47,14 @@
                 {{ dispositivo.ip_dispositivo }}
               </td>      
               <td class="text-medium-emphasis">
-                <VTooltip location="top">
-                  <template #activator="{ props }">
-                    <VBtn 
-                      icon 
-                      color="error" 
-                      variant="text" 
-                      v-bind="props"
-                      @click="eliminarSesion(dispositivo.ip_dispositivo)"
-                    >
-                      <VIcon size="22" icon="tabler-trash" />
-                    </VBtn>
-                  </template>
-                  <span>Eliminar este dispositivo</span>
-                </VTooltip>
+                <VBtn 
+                  icon 
+                  color="error" 
+                  variant="text" 
+                  @click="eliminarSesion(dispositivo.ip_dispositivo)"
+                >
+                  <VIcon size="22" icon="tabler-trash" />
+                </VBtn>
               </td>             
             </tr>
           </tbody>
@@ -71,13 +65,11 @@
 </template>
 
 <script setup>
-import { useToast } from '@core/composable/useToast';
 import axios from 'axios';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
-const toast = useToast();
 const usuario = ref({});
 const dispositivos = ref([]);
 const userId = Number(route.params.id);
@@ -91,7 +83,6 @@ const obtenerUsuario = async () => {
     dispositivos.value = response.data.data.dispositivos;
   } catch (error) {
     console.error(error);
-    mostrarAlerta('Error al obtener los datos del usuario', 'error');
   }
 };
 
@@ -101,10 +92,8 @@ const eliminarTodasSesiones = async () => {
       `https://ecuavisa-suscripciones.vercel.app/dispositivo/web-cerrar-sesion-all/${userId}`
     );
     obtenerUsuario();
-    mostrarAlerta('Todas las sesiones han sido eliminadas', 'success');
   } catch (error) {
     console.error(error);
-    mostrarAlerta('Error al eliminar todas las sesiones', 'error');
   }
 };
 
@@ -115,19 +104,9 @@ const eliminarSesion = async (ip) => {
       { ip }
     );
     obtenerUsuario();
-    mostrarAlerta('Sesión eliminada correctamente', 'success');
   } catch (error) {
     console.error(error);
-    mostrarAlerta('Error al eliminar la sesión', 'error');
   }
-};
-
-const mostrarAlerta = (mensaje, tipo) => {
-  toast({
-    title: tipo === 'success' ? 'Éxito' : 'Error',
-    text: mensaje,
-    variant: tipo,
-  });
 };
 
 const obtenerIconoNavegador = (navegador) => {
