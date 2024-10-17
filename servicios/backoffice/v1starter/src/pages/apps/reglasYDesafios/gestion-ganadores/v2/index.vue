@@ -85,14 +85,16 @@
   const modelSemana = ref(null);
   const modelTipoGanador = ref("diario");
   const dataTipoGanador = [{
-    title:"Semanal",
-    value:"semanal",
-  },{
-    title:"Diario",
+    title:"Ganador Diario",
     value:"diario",
+  },{
+    title:"Ganador Semanal",
+    value:"semanal",
   }];
 
   const isLoadingSemana = ref(false);
+  const copyDataAll = ref([]);
+  const copyDataAll_2 = ref([]);
 
   async function getSemanas(){
       try {
@@ -101,13 +103,26 @@
         const consulta = await fetch('https://servicio-desafios.vercel.app/semana/all/get');
         const consultaJson = await consulta.json();
 
-        let dataRaw = Array.from(consultaJson.data); 
+        let dataRaw = Array.from(consultaJson.data);
 
-        dataSemanas.value = dataRaw.map(item => ({
+        var data_new = dataRaw.filter(item => {
+          return item.repechaje == false;
+        });
+
+        data_new = data_new.map(item => ({
               title: item.titulo,
               descripcion: item.descripcion,
               value: item.descripcion.split(" ")[1]
-        })).sort((a, b) => a.value - b.value);
+        }))
+        .sort((a, b) => a.value - b.value);
+
+        data_new.push({
+          title: "Ganador final",
+          descripcion: "Ganador final",
+          value: 5
+        });
+
+        dataSemanas.value = data_new;
 
         isLoadingSemana.value = false;
       } catch (error) {
@@ -130,9 +145,49 @@
   const Getganadores = async () => {
     try {
       const response = await axios.get('https://estadisticas.ecuavisa.com/sites/gestor/Tools/ecuavisados/ganador_v2/ajax/listar_backoffice.php');
-      dataGanadores.value = response.data.data;
 
-      console.log(dataGanadores.value)
+      copyDataAll.value = response.data.data;
+      copyDataAll_2.value = response.data.data;
+
+      const groupedData = response.data.data.reduce((result, item) => {
+          // Si no existe la semana en el resultado, la inicializamos con un objeto vacío
+          if (!result[item.semana]) {
+              result[item.semana] = {};
+          }
+
+          // Si no existe el tipo dentro de la semana, lo inicializamos con un array vacío
+          if (!result[item.semana][item.tipo]) {
+              result[item.semana][item.tipo] = [];
+          }
+
+          // Añadimos el objeto actual al array correspondiente a la semana y tipo
+          result[item.semana][item.tipo].push(item);
+
+          return result;
+      }, {});
+      // console.log(groupedData)
+
+      const newData = [];
+
+      Object.entries(groupedData).forEach(([key, value]) => {
+        
+        const ganadores_semanales = value.hasOwnProperty("semanal") ? value.semanal : [];
+        const ganadores_diarios = value.hasOwnProperty("diario") ? value.diario : [];
+        const semana = key;
+
+        newData.push({
+          ganadores_semanales,
+          ganadores_diarios,
+          semana
+        })
+
+      });
+
+      dataGanadores.value = newData;
+
+      panelSemana.value = 0;
+      currentTab.value[1] = 0;
+
 
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -217,6 +272,77 @@
 
   // Panel semanal
   const panelSemana = ref(0)
+  const isLoading = ref(false)
+  const currentTab = ref({})
+
+  // Eliminar ganador
+
+  const error = ref(null);
+
+  const deleteWinner = async (winnerId) => {
+    if (confirm('¿Estás seguro de que quieres eliminar este ganador?')) {
+      // Encuentra la semana correcta
+
+      isLoading.value = true;
+      error.value = null;
+
+      try {
+
+        // Envía los datos actualizados al servidor
+        const response = await axios.post('https://estadisticas.ecuavisa.com/sites/gestor/Tools/ecuavisados/ganador_v2/ajax/ajaxGanador.php', {
+          "action":"elim",
+          "id": winnerId,
+        } , {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        });
+
+        await Getganadores()
+
+        isLoading.value = false;
+        isDialogBusquedaVisible.value = false;
+
+        console.log('Ganador eliminado:', response.data);
+      } catch (error) {
+        console.error('Error al eliminar ganador:', error);
+        error.value = 'Hubo un error al eliminar el ganador. Por favor, intenta de nuevo.';
+        isLoading.value = false;
+      }
+      
+    }
+  };
+
+  // Buscar ganadores
+
+  const searchQuery = ref("");
+  const searchGanadores = ref([]);
+
+  const isDialogBusquedaVisible = ref(false)
+
+  function buscarGanador(){
+    isDialogBusquedaVisible.value = true;
+
+    if (!searchQuery.value) {
+      searchGanadores.value = [];
+    }
+
+    const query = searchQuery.value.trim().toLowerCase();
+
+    searchGanadores.value = copyDataAll.value.filter(winner =>
+      winner.name.toLowerCase().includes(query) ||
+      winner.last_name.toLowerCase().includes(query) ||
+      winner.email.toLowerCase().includes(query) ||
+      winner.id.includes(query)
+    );
+  }
+
+  watch(isDialogBusquedaVisible, (value) => {
+    if(!value){
+      copyDataAll.value = copyDataAll_2.value;
+      searchQuery.value = "";
+    }
+  });
 
   onMounted(async()=>{
     await getSemanas()
@@ -237,6 +363,99 @@
       :color="configSnackbar.type">
         {{ configSnackbar.message }}
     </VSnackbar>
+
+    <VDialog
+      v-model="isDialogBusquedaVisible"
+      width="700"
+    >
+
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogBusquedaVisible = !isDialogBusquedaVisible" />
+
+      <!-- Dialog Content -->
+      <VCard :title="'Resultado de la búsqueda: '+ searchQuery.trim()">
+        <VCardText>
+          <VTable class="text-no-wrap tabla_ganadores table-sm">
+            <thead>
+              <tr>
+                <th scope="col" class="col-cr" title="click para ordenar">
+                  <div class="row-cr">
+                    <div>
+                      Nombres
+                    </div>
+                  </div>
+                </th>
+                <th scope="col" class="col-cr" title="click para ordenar">
+                  <div class="row-cr">
+                    <div>Correo</div>
+                  </div>
+                </th>
+                <th scope="col" class="col-cr" title="click para ordenar">
+                  <div class="row-cr">
+                    <div>Semana</div>
+                  </div>
+                </th>
+                <th scope="col" class="col-cr" title="click para ordenar">
+                  <div class="row-cr">
+                    <div>Tipo</div>
+                  </div>
+                </th>
+
+                <th scope="col">Acciones</th>
+              </tr>
+            </thead>
+            <tbody v-if="searchGanadores.length > 0">
+              <tr class="listadoGen" v-for="ganadores in searchGanadores" :key="ganadores.id"
+                style="height: 3.75rem">
+                <!-- 👉 nombre -->
+                <td>
+                  <span class="text-sm">{{ ganadores.name }} {{ ganadores.last_name }}</span>
+                </td>
+
+                <!-- 👉 email -->
+                <td>
+                  <span class="text-sm">{{ ganadores.email.toLowerCase() }}</span>
+                </td>
+
+                <!-- 👉 telefono -->
+                <td>
+                  <span class="text-base">Semana {{ ganadores.semana == "5" ? "Final(Ganador final)" : ganadores.semana }}</span>
+                </td>
+                <td>
+                  <span class="text-base">{{ ganadores.tipo }}</span>
+                </td>
+
+                <!-- 👉 Actions -->
+                <td class="text-center" style="width: 5rem">
+                  <VBtn icon size="x-small" color="default" variant="text"
+                    @click="deleteWinner(ganadores.id)">
+                    <VIcon size="22" color="error" icon="tabler-trash" />
+                  </VBtn>
+                  <VAlert v-if="error" type="error" class="mt-4">
+                    {{ error }}
+                  </VAlert>
+
+                  <VOverlay :model-value="isLoading" class="align-center justify-center">
+                    <VProgressCircular indeterminate size="64" />
+                  </VOverlay>
+                </td>
+              </tr>
+            </tbody>
+
+            <tfoot v-else>
+              <tr>
+                <td colspan="5" class="text-center">No hay datos</td>
+              </tr>
+            </tfoot>
+          </VTable>
+        </VCardText>
+        <VCardText class="d-flex justify-end">
+          <VBtn @click="isDialogBusquedaVisible = false">
+            Cerrar
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
 
     <VDialog
       v-model="dialogFormAgregarGanador"
@@ -358,7 +577,7 @@
                         item-value="value"
                         v-model="modelTipoGanador" 
                         :items="dataTipoGanador"
-                        label="Seleccionar el tipo de ganador"
+                        label="Tipo de ganador"
                         class="mt-2"
                         :menu-props="{ maxHeight: '400' }"/>
                     </VCol>
@@ -398,16 +617,180 @@
           </VCardItem>
 
           <VCardText>
+            <div class="hoItems d-flex gap-4 mb-5" style="max-width: 500px;">
+
+              <VTextField v-model="searchQuery" placeholder="Buscar..." density="compact" label="Buscar por nombre o correo"/>
+
+              <VBtn color="primary" @click="buscarGanador">
+                Buscar ganador
+              </VBtn>
+
+            </div>
             <VExpansionPanels variant="accordion" v-model="panelSemana">
                 <VExpansionPanel
-                  v-for="item in 4"
-                  :key="item"
+                  v-for="ganador in dataGanadores"
+                  :key="ganador.semana"
                 >
                   <VExpansionPanelTitle>
-                    Semana {{ item }}
+                    Semana {{ ganador.semana == 5 ? "Final (Ganador final)" : ganador.semana }}
                   </VExpansionPanelTitle>
                   <VExpansionPanelText>
-                    Sweet roll ice cream chocolate bar. Ice cream croissant sugar plum I love cupcake gingerbread liquorice cake. Bonbon tart caramels marshmallow chocolate cake icing icing danish pie.
+                    
+                    <VTabs
+                      v-model="currentTab[ganador.semana]"
+                      class="v-tabs-pill"
+                    >
+                      <VTab>Ganadores diarios</VTab>
+                      <VTab>Ganadores semanales</VTab>
+                    </VTabs>
+
+                    <VCard class="mt-5">
+                      <VCardText>
+                        <VWindow v-model="currentTab[ganador.semana]">
+                          <VWindowItem>
+                            
+                            <VTable class="text-no-wrap tabla_ganadores">
+                              <thead>
+                                <tr>
+                                  <th scope="col" class="col-cr" title="click para ordenar">
+                                    <div class="row-cr">
+                                      <div>
+                                        Nombres
+                                      </div>
+                                    </div>
+                                  </th>
+                                  <th scope="col" class="col-cr" title="click para ordenar">
+                                    <div class="row-cr">
+                                      <div>Correo</div>
+                                    </div>
+                                  </th>
+                                  <th scope="col" class="col-cr" title="click para ordenar">
+                                    <div class="row-cr">
+                                      <div>Telefono</div>
+                                    </div>
+                                  </th>
+
+                                  <th scope="col">Acciones</th>
+                                </tr>
+                              </thead>
+                              <tbody v-if="ganador.ganadores_diarios.length > 0">
+                                <tr class="listadoGen" v-for="ganadores_diarios in ganador.ganadores_diarios" :key="ganadores_diarios.id"
+                                  style="height: 3.75rem">
+                                  <!-- 👉 nombre -->
+                                  <td>
+                                    <span class="text-sm">{{ ganadores_diarios.name }} {{ ganadores_diarios.last_name }}</span>
+                                  </td>
+
+                                  <!-- 👉 email -->
+                                  <td>
+                                    <span class="text-sm">{{ ganadores_diarios.email.toLowerCase() }}</span>
+                                  </td>
+
+                                  <!-- 👉 telefono -->
+                                  <td>
+                                    <span class="text-base">{{ ganadores_diarios.telephone }}</span>
+                                  </td>
+
+                                  <!-- 👉 Actions -->
+                                  <td class="text-center" style="width: 5rem">
+                                    <VBtn icon size="x-small" color="default" variant="text"
+                                      @click="deleteWinner(ganadores_diarios.id)">
+                                      <VIcon size="22" color="error" icon="tabler-trash" />
+                                    </VBtn>
+                                    <VAlert v-if="error" type="error" class="mt-4">
+                                      {{ error }}
+                                    </VAlert>
+
+                                    <VOverlay :model-value="isLoading" class="align-center justify-center">
+                                      <VProgressCircular indeterminate size="64" />
+                                    </VOverlay>
+                                  </td>
+                                </tr>
+                              </tbody>
+
+                              <tfoot v-else>
+                                <tr>
+                                  <td colspan="4" class="text-center">No hay datos</td>
+                                </tr>
+                              </tfoot>
+                            </VTable>
+
+
+                          </VWindowItem>
+                          <VWindowItem>
+                            
+                            <VTable class="text-no-wrap tabla_ganadores">
+                              <thead>
+                                <tr>
+                                  <th scope="col" class="col-cr" title="click para ordenar">
+                                    <div class="row-cr">
+                                      <div>
+                                        Nombres
+                                      </div>
+                                    </div>
+                                  </th>
+                                  <th scope="col" class="col-cr" title="click para ordenar">
+                                    <div class="row-cr">
+                                      <div>Correo</div>
+                                    </div>
+                                  </th>
+                                  <th scope="col" class="col-cr" title="click para ordenar">
+                                    <div class="row-cr">
+                                      <div>Telefono</div>
+                                    </div>
+                                  </th>
+
+                                  <th scope="col">Acciones</th>
+                                </tr>
+                              </thead>
+                              <tbody v-if="ganador.ganadores_semanales.length > 0">
+                                <tr class="listadoGen" v-for="ganadores_diarios in ganador.ganadores_semanales" :key="ganadores_diarios.id"
+                                  style="height: 3.75rem">
+                                  <!-- 👉 nombre -->
+                                  <td>
+                                    <span class="text-sm">{{ ganadores_diarios.name }} {{ ganadores_diarios.last_name }}</span>
+                                  </td>
+
+                                  <!-- 👉 email -->
+                                  <td>
+                                    <span class="text-sm">{{ ganadores_diarios.email.toLowerCase() }}</span>
+                                  </td>
+
+                                  <!-- 👉 telefono -->
+                                  <td>
+                                    <span class="text-base">{{ ganadores_diarios.telephone }}</span>
+                                  </td>
+
+                                  <!-- 👉 Actions -->
+                                  <td class="text-center" style="width: 5rem">
+                                    <VBtn icon size="x-small" color="default" variant="text"
+                                      @click="deleteWinner(ganadores_diarios.id)">
+                                      <VIcon size="22" color="error" icon="tabler-trash" />
+                                    </VBtn>
+                                    <VAlert v-if="error" type="error" class="mt-4">
+                                      {{ error }}
+                                    </VAlert>
+
+                                    <VOverlay :model-value="isLoading" class="align-center justify-center">
+                                      <VProgressCircular indeterminate size="64" />
+                                    </VOverlay>
+                                  </td>
+                                </tr>
+                              </tbody>
+
+                              <tfoot v-else>
+                                <tr>
+                                  <td colspan="4" class="text-center">No hay datos</td>
+                                </tr>
+                              </tfoot>
+                            </VTable>
+
+
+                          </VWindowItem>
+                        </VWindow>
+                      </VCardText>
+                    </VCard>
+
                   </VExpansionPanelText>
                 </VExpansionPanel>
               </VExpansionPanels>
