@@ -369,6 +369,7 @@
 
           <VCardText>
             <div class="d-flex align-top justify-content-flex-end flex-wrap flex-column gap-0 mb-5">
+              
               <VCombobox 
                 v-model="comboFechaModel" 
                 :items="comboFechaItems" 
@@ -376,11 +377,12 @@
                 :menu-props="{ maxHeight: '300' }" 
                 :disabled="btnLoadingDescargar"
                 />
+
               <AppDateTimePicker 
                 label="Fecha de inicio y fin del curso" 
                 prepend-inner-icon="tabler-calendar" 
                 density="compact" 
-                class="d-none"
+                class=""
                 v-model="selectModelFechas"
                 show-current=true 
                 @on-change="obtenerFechas" 
@@ -390,7 +392,8 @@
                     altFormat: 'd F j, Y',
                     dateFormat: 'l, j \\d\\e F \\d\\e Y',
                     valueFormat: 'd-m-Y',
-                    reactive: true
+                    reactive: true,
+                    maxDate: new Date()
                 }" />
                 <small class="mb-2">La hora para las fechas serán 17:30</small>
                 <hr>
