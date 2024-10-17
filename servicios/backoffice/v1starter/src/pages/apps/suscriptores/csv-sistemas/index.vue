@@ -48,13 +48,18 @@
 
   function obtenerFechas(selectedDates, dateStr, instance) {
       if (selectedDates.length > 1) {
-        fechas.value.fechai = moment(selectedDates[0]).format('YYYY-MM-DD');
-        fechas.value.fechaf = moment(selectedDates[1]).format('YYYY-MM-DD'); 
+        fechas.value.fechai = moment(selectedDates[0]).format('YYYY-MM-DD') + " 17:30:00";
+        fechas.value.fechaf = moment(selectedDates[1]).format('YYYY-MM-DD') + " 17:30:00";
+
+        if(moment(selectedDates[0]).format('YYYY-MM-DD') == moment(selectedDates[1]).format('YYYY-MM-DD')){
+          fechas.value.fechai = moment(selectedDates[0]).format('YYYY-MM-DD') + " 17:30:00";
+          fechas.value.fechaf = moment(selectedDates[1]).subtract(-1, 'days').format('YYYY-MM-DD') + " 17:30:00";
+        }
       }
 
       if(selectedDates.length == 1){
-        fechas.value.fechai = yesterday;
-        fechas.value.fechaf = fechaHoy;
+        fechas.value.fechai = moment(selectedDates[0]).format('YYYY-MM-DD') + " 17:30:00";
+        fechas.value.fechaf = moment(selectedDates[0]).subtract(-1, 'days').format('YYYY-MM-DD') + " 17:30:00";
       }
   }
 
@@ -371,6 +376,7 @@
             <div class="d-flex align-top justify-content-flex-end flex-wrap flex-column gap-0 mb-5">
               
               <VCombobox 
+                class="d-none"
                 v-model="comboFechaModel" 
                 :items="comboFechaItems" 
                 label="Seleccione la fecha"
@@ -382,7 +388,7 @@
                 label="Fecha de inicio y fin del curso" 
                 prepend-inner-icon="tabler-calendar" 
                 density="compact" 
-                class=""
+                class="mb-3"
                 v-model="selectModelFechas"
                 show-current=true 
                 @on-change="obtenerFechas" 
