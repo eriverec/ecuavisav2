@@ -385,7 +385,7 @@ async function exportarDatos() {
                 <td class="text-center" style="width: 5rem;">
                   <VBtn icon size="x-small" color="default" variant="text"
                     :to="{ name: 'apps-suscriptores-userdevice-id', params: { id: item.user && item.user.length > 0 ? item.user[0].wylexId : '0' } }">
-                    <VIcon size="22" icon="tabler-devices-question" />
+                    <VIcon size="22" icon="tabler-devices" />
                   </VBtn>
                 </td>
               </tr>
