@@ -94,6 +94,6 @@ export default {
 
 .ingresa {
  font-size: 17px;
- color: #7367F0
+ color: #7367F0;
 }
 </style>
