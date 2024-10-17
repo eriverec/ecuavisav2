@@ -348,9 +348,9 @@ async function exportarDatos() {
                 <th scope="col">Email</th>
                 <!-- <th scope="col">Estado</th>
                 <th scope="col">Pagos</th> -->
-
+<!-- 
                 <th scope="col">Pais</th>
-                <th scope="col">Ciudad</th>
+                <th scope="col">Ciudad</th> -->
                 <!-- <th scope="col">Fecha de suscripcion</th> -->
                 <!-- <th scope="col">ID Medio Pago</th> -->
                 <th scope="col">Ver dispositivos</th>
@@ -376,9 +376,9 @@ async function exportarDatos() {
                     </li>
                   </ul>
                 </td> -->
-
+<!-- 
                 <td>{{ item.billing_details.pais }}</td>
-                <td>{{ item.billing_details.ciudad }}</td>
+                <td>{{ item.billing_details.ciudad }}</td> -->
                 <!-- <td>{{ moment(item.billing_details.created_at).format('DD/MM/YYYY HH:mm:ss') }}</td> -->
 
                 <!-- <td>{{ item.idMediopago }}</td> -->
