@@ -47,7 +47,7 @@
 
                   </div>
                 </VCol>
-                <VCol cols="12">
+                <VCol cols="2">
                   <VSwitch v-model="modal.estado" inset :label="capitalizedLabel(modal.estado)" />
                 </VCol>
 
