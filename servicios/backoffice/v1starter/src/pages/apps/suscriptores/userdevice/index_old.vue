@@ -43,7 +43,7 @@ async function getAllUsuarios() {
     let hasMoreData = true;
 
     while (hasMoreData) {
-      const data = await getUsuariosPage(page, 100);
+      const data = await getUsuariosPage(page, 100); // Usamos un límite más alto para reducir el número de llamadas
       if (data && data.data && data.data.length > 0) {
         allUsers = [...allUsers, ...data.data];
         page++;
@@ -53,9 +53,9 @@ async function getAllUsuarios() {
     }
 
     dataUsuarios.value = allUsers;
-    filteredUsuarios.value = removeDuplicateUsers(allUsers);
-    totalRegistros.value = filteredUsuarios.value.length;
-    totalPage.value = Math.ceil(filteredUsuarios.value.length / rowPerPage.value);
+    filteredUsuarios.value = allUsers;
+    totalRegistros.value = allUsers.length;
+    totalPage.value = Math.ceil(allUsers.length / rowPerPage.value);
   } catch (error) {
     console.error('Error al obtener los usuarios:', error);
     configSnackbar.value = {
@@ -68,35 +68,22 @@ async function getAllUsuarios() {
   }
 }
 
-// Función para remover usuarios duplicados
-function removeDuplicateUsers(users) {
-  const uniqueUsers = new Map();
-  users.forEach(item => {
-    if (item.user && item.user.length > 0) {
-      const email = item.user[0].email;
-      if (!uniqueUsers.has(email)) {
-        uniqueUsers.set(email, item);
-      }
-    }
-  });
-  return Array.from(uniqueUsers.values());
-}
-
 // Función para buscar usuarios
 function buscarUsuarios() {
   isFullLoading.value = true;
   const query = searchQuery.value.toLowerCase();
 
-  const filteredUsers = dataUsuarios.value.filter(item => {
+  filteredUsuarios.value = dataUsuarios.value.filter(item => {
     if (item.user && item.user.length > 0) {
+
       const firstName = item.user[0].first_name.toLowerCase();
       const lastName = item.user[0].last_name.toLowerCase();
+
       return firstName.includes(query) || lastName.includes(query);
     }
     return false;
-  });
-
-  filteredUsuarios.value = removeDuplicateUsers(filteredUsers);
+  }
+  );
   currentPage.value = 1;
   totalPage.value = Math.ceil(filteredUsuarios.value.length / rowPerPage.value);
   isFullLoading.value = false;
@@ -126,6 +113,31 @@ onMounted(() => {
   getAllUsuarios();
 })
 
+const cardTypes = {
+  ex: 'Exito',
+  ak: 'Alkosto',
+  cd: 'Codensa',
+  sx: 'Sodexo',
+  ol: 'Olimpica',
+  ep: 'EPM',
+  csd: 'Colsubsidio',
+  bbva: 'BBVA',
+  cmr: 'Falabella',
+  cn: 'Carnet',
+  cs: 'Credisensa',
+  so: 'Solidario',
+  up: 'Union Pay',
+  el: 'Elo',
+  jc: 'JCB',
+  au: 'Aura',
+  hpc: 'Hipercard',
+  vi: 'Visa',
+  mc: 'Mastercard',
+  ax: 'American Express',
+  di: 'Diners',
+  dc: 'Discover',
+  ms: 'Maestro'
+};
 
 
 // Función para obtener el nombre completo de la tarjeta
@@ -134,6 +146,49 @@ const getCardTypeName = (code) => {
 };
 
 
+const estadosUsuario = {
+  0: "Esperando para ser Pagada",
+  1: "Se requiere verificación, por favor revise la sección de Verificar",
+  2: "Pagada Parcialmente",
+  3: "Pagada",
+  4: "En Disputa",
+  5: "Sobrepagada",
+  6: "Fraude",
+  7: "Reverso",
+  8: "Contracargo",
+  9: "Rechazada por el procesador",
+  10: "Error en el sistema",
+  11: "Fraude detectado por Nuvei",
+  12: "Blacklist de Nuvei",
+  13: "Tiempo de tolerancia",
+  14: "Expirada por Nuvei",
+  15: "Expirado por el carrier",
+  16: "Rechazado por Nuvei",
+  17: "Abandonada por Nuvei",
+  18: "Abandonada por el cliente",
+  19: "Código de autorización invalido",
+  20: "Código de autorización expirado",
+  21: "Fraude Nuvei - Reverso pendiente",
+  22: "AuthCode Inválido - Reverso pendiente",
+  23: "AuthCode Expirado - Reverso pendiente",
+  24: "Fraude Nuvei - Reverso solicitado",
+  25: "AuthCode Inválido - Reverso solicitado",
+  26: "AuthCode Expirado - Reverso solicitado",
+  27: "Comercio - Reverso pendiente",
+  28: "Comercio - Reverso solicitado",
+  29: "Anulada",
+  30: "Transacción asentada (solo para Ecuador)",
+  31: "Esperando OTP",
+  32: "OTP validado correctamente",
+  33: "OTP no validado",
+  34: "Reverso parcial",
+  35: "Método 3DS solicitado, esperando para continuar",
+  36: "Desafío 3DS solicitado, esperando el CRES",
+  37: "Rechazada por 3DS",
+  47: "Validación de CPF fallida",
+  48: "Autenticado por 3DS"
+};
+
 // Función para obtener todos los usuarios para exportación
 async function getAllUsuariosForExport() {
   let allUsers = [];
@@ -141,7 +196,7 @@ async function getAllUsuariosForExport() {
   let hasMoreData = true;
 
   while (hasMoreData) {
-    const data = await getUsuariosPage(page, 100);
+    const data = await getUsuariosPage(page, 100); // Usamos un límite más alto para reducir el número de llamadas
     if (data && data.data && data.data.length > 0) {
       allUsers = [...allUsers, ...data.data];
       page++;
@@ -150,7 +205,7 @@ async function getAllUsuariosForExport() {
     }
   }
 
-  return removeDuplicateUsers(allUsers);
+  return allUsers;
 }
 
 // Función para exportar datos
@@ -165,21 +220,40 @@ async function exportarDatos() {
       'Nombre',
       'Apellido',
       'Email',
+      // 'Estado',
+      // 'Pagos',
       'País',
       'Ciudad'
+      // 'Fecha de suscripcion',
+      // 'Hora de suscripcion'
     ];
 
     // Crear el contenido del CSV
     let csvContent = columns.join(',') + '\n';
 
+
     allUsers.forEach(item => {
+      const createdAt = new Date(item.created_at);
+      const formattedDate = createdAt.toISOString().replace('T', ' ').substr(0, 19);
+      
+      const pagosTarjetas = item.pagos_tarjetas.map(pago => 
+        `${pago.card_details.bank_name || 'N/A'} (${ getCardTypeName(pago.card_details.type) || 'N/A'})`
+      ).join(' - ');
+      
+      
       const row = [
         item._id,
         item.user && item.user.length > 0 ? item.user[0].first_name : 'N/A',
-        item.user && item.user.length > 0 ? item.user[0].last_name : 'N/A',
-        item.user && item.user.length > 0 ? item.user[0].email : 'N/A',
+        item.user && item.user.length > 0 ? item.user?.[0].last_name : 'N/A',
+        item.user && item.user.length > 0 ? item.user?.[0].email : 'N/A',
+        //item.estado ? 'Activo' : 'Inactivo',
+        estadosUsuario[item.estado] || 'Estado desconocido',
+         pagosTarjetas,
         item.billing_details.pais,
-        item.billing_details.ciudad
+        item.billing_details.ciudad,
+        moment(item.billing_details.created_at).format('DD/MM/YYYY'),
+        moment(item.billing_details.created_at).format('HH:mm:ss')
+
       ];
       csvContent += row.join(',') + '\n';
     });
@@ -213,57 +287,101 @@ async function exportarDatos() {
     isLoadingExport.value = false;
   }
 }
+
+
+
+
 </script>
 
 <template>
   <section>
+    <!-- <Datos />
+    <VSnackbar v-model="configSnackbar.model" location="top end" variant="flat"
+      :timeout="configSnackbar.timeout || 2000" :color="configSnackbar.type">
+      {{ configSnackbar.message }}
+    </VSnackbar> -->
+
     <VRow>
       <VCol cols="12" sm="12" lg="12">
         <VCard style="padding:25px;">
           <VCardTitle>
-            <VIcon
-              icon="tabler-devices"
-              color="primary"
-              size="24"
-              class="me-2"
-            />
-            <span class="text-primary">Ver dispositivos</span>
-            <span class="text-medium-emphasis"> de usuarios suscritos</span>
-          </VCardTitle>
-          <VCardText class="d-flex py-4 gap-4 flex-wrap" style="align-items: flex-start;">
-            <div class="me-3 d-flex gap-4">
-              <VSelect class="bg-white" v-model="rowPerPage" density="compact" variant="outlined"
-                :items="[10, 20, 30, 50]" />
+      <VIcon
+        icon="tabler-devices"
+        color="primary"
+        size="24"
+        class="me-2"
+      />
+      <span class="text-primary">Ver dispositivos</span>
+      <span class="text-medium-emphasis"> de usuarios suscritos</span>
+    </VCardTitle>
+          <VCardText class="d-flex py-4 gap-4  flex-wrap" style="align-items: flex-start;">
+          <div class="me-3 d-flex gap-4">
+            <VSelect class="bg-white" v-model="rowPerPage" density="compact" variant="outlined"
+              :items="[10, 20, 30, 50]" />
 
-              <VTextField v-model="searchQuery" label="Buscar por nombre o apellido" prepend-inner-icon="mdi-magnify"
-                single-line hide-details @keyup.enter="buscarUsuarios" style="width: 300px;" />
+            <VTextField v-model="searchQuery" label="Buscar por nombre o apellido" prepend-inner-icon="mdi-magnify"
+              single-line hide-details @keyup.enter="buscarUsuarios" style="width: 300px;" />
 
-              <VBtn color="primary" :loading="isFullLoading" :disabled="isFullLoading || loadingUsuarios"
-                @click="buscarUsuarios">
-                Buscar
-              </VBtn>
-            </div>
+            <VBtn color="primary" :loading="isFullLoading" :disabled="isFullLoading || loadingUsuarios"
+              @click="buscarUsuarios">
+              Buscar
+            </VBtn>
 
-            <VSpacer />
 
-            <div class="app-user-search-filter d-flex align-top">
-            </div>
-          </VCardText>
-          <VDivider />
-          <VTable class="text-no-wrap">
+          </div>
+
+          <VSpacer />
+
+          <div class="app-user-search-filter d-flex align-top">
+            <!-- <VBtn :loading="isLoadingExport" :disabled="isLoadingExport || loadingUsuarios" variant="tonal"
+              color="success" prepend-icon="tabler-screen-share" @click="exportarDatos">
+              Exportar datos
+            </VBtn> -->
+          </div>
+        </VCardText>
+        <VDivider />
+        <VTable class="text-no-wrap">
             <thead>
               <tr>
                 <th scope="col">Nombre</th>
                 <th scope="col">Apellido</th>
                 <th scope="col">Email</th>
+                <!-- <th scope="col">Estado</th>
+                <th scope="col">Pagos</th> -->
+<!-- 
+                <th scope="col">Pais</th>
+                <th scope="col">Ciudad</th> -->
+                <!-- <th scope="col">Fecha de suscripcion</th> -->
+                <!-- <th scope="col">ID Medio Pago</th> -->
                 <th scope="col">Ver dispositivos</th>
               </tr>
             </thead>
             <tbody v-if="!loadingUsuarios">
               <tr v-for="item in paginatedUsuarios" :key="item._id" style="height: 3.75rem;">
+
                 <td>{{ item.user && item.user.length > 0 ? item.user[0].first_name : 'N/A' }} </td>
                 <td>{{ item.user && item.user.length > 0 ? item.user[0].last_name : 'N/A' }}</td>
                 <td>{{ item.user && item.user.length > 0 ? item.user[0].email : 'N/A' }}</td>
+                <!-- <td>
+                  <VChip :color="item.estado == '3' ? 'success' : 'error'">
+                   {{ estadosUsuario[item.estado] || 'Estado desconocido' }}
+                  </VChip>
+                </td>
+
+                <td>
+                  <ul>
+                    <li style="list-style: circle;" v-for="pago in item.pagos_tarjetas"
+                      :key="pago.transaction.transaction_id">
+                      {{ pago.card_details.bank_name || 'N/A' }} ({{ getCardTypeName(pago.card_details.type) }})
+                    </li>
+                  </ul>
+                </td> -->
+<!-- 
+                <td>{{ item.billing_details.pais }}</td>
+                <td>{{ item.billing_details.ciudad }}</td> -->
+                <!-- <td>{{ moment(item.billing_details.created_at).format('DD/MM/YYYY HH:mm:ss') }}</td> -->
+
+                <!-- <td>{{ item.idMediopago }}</td> -->
                 <td class="text-center" style="width: 5rem;">
                   <VBtn icon size="x-small" color="default" variant="text"
                     :to="{ name: 'apps-suscriptores-userdevice-id', params: { id: item.user && item.user.length > 0 ? item.user[0].wylexId : '0' } }">
@@ -274,12 +392,12 @@ async function exportarDatos() {
             </tbody>
             <tfoot v-show="!paginatedUsuarios.length && !loadingUsuarios">
               <tr>
-                <td colspan="4" class="text-center">No hay datos que mostrar</td>
+                <td colspan="9" class="text-center">No hay datos que mostrar</td>
               </tr>
             </tfoot>
             <tfoot v-show="loadingUsuarios">
               <tr>
-                <td colspan="4" class="text-center">Cargando datos, por favor espere un momento...</td>
+                <td colspan="9" class="text-center">Cargando datos, por favor espere un momento...</td>
               </tr>
             </tfoot>
           </VTable>
@@ -288,7 +406,9 @@ async function exportarDatos() {
             <span class="text-sm text-disabled">{{ paginationData }}</span>
             <VPagination v-model="currentPage" size="small" :total-visible="5" :length="totalPage" />
           </VCardText>
+
         </VCard>
+
       </VCol>
     </VRow>
   </section>
