@@ -137,6 +137,12 @@
     }
   });
 
+  watch(modelSemana, (value) => {
+    if(value == 5){
+      modelTipoGanador.value = "diario"
+    }
+  });
+
   // Listar ganadores
   const dataGanadores = ref([]);
   const loadingGanadores = ref(false);
@@ -538,7 +544,7 @@
 
                 <div class="content-form mt-5">
                   <VRow>
-                    <VCol cols="12" md="7" lg="7">
+                    <VCol cols="12" :md="modelSemana==5?'12':'7'" :lg="modelSemana==5?'12':'7'">
                       <VSelect
                         style="width: 100%;"
                         no-data-text="No existen semanas que mostrar"
@@ -568,7 +574,7 @@
                           </template>
                       </VSelect>
                     </VCol>
-                    <VCol cols="12" md="5" lg="5">
+                    <VCol cols="12" md="5" lg="5" :class="modelSemana==5?'d-none':''">
                       <VSelect
                         style="width: 100%;"
                         no-data-text="Error intente de nuevo"
@@ -640,8 +646,8 @@
                       v-model="currentTab[ganador.semana]"
                       class="v-tabs-pill"
                     >
-                      <VTab>Ganadores diarios</VTab>
-                      <VTab>Ganadores semanales</VTab>
+                      <VTab>{{ ganador.semana == 5 ? "Ganador final" : "Ganadores diarios" }}</VTab>
+                      <VTab :class="ganador.semana == 5 ? 'd-none': ''" >Ganadores semanales</VTab>
                     </VTabs>
 
                     <VCard class="mt-5">
