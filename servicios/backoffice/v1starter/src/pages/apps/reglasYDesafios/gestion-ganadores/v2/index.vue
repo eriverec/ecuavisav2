@@ -647,7 +647,7 @@
                       class="v-tabs-pill"
                     >
                       <VTab>{{ ganador.semana == 5 ? "Ganador final" : "Ganadores diarios" }}</VTab>
-                      <VTab :class="ganador.semana == 5 ? 'd-none': ''" >Ganadores semanales</VTab>
+                      <VTab :class="ganador.semana == 5 ? 'd-none': ''" >Ganadores de la semana</VTab>
                     </VTabs>
 
                     <VCard class="mt-5">
