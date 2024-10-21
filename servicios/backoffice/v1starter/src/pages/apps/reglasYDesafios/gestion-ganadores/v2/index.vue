@@ -419,7 +419,7 @@
 
                 <!-- 👉 telefono -->
                 <td>
-                  <span class="text-base">Semana {{ ganadores.semana == "5" ? "Final(Ganador final)" : ganadores.semana }}</span>
+                  <span class="text-base">{{ ganadores.semana == "5" ? "Ganador final" : "Semana "+ ganadores.semana }}</span>
                 </td>
                 <td>
                   <span class="text-base">{{ ganadores.tipo }}</span>
@@ -632,7 +632,7 @@
                   :key="ganador.semana"
                 >
                   <VExpansionPanelTitle>
-                    Semana {{ ganador.semana == 5 ? "Final (Ganador final)" : ganador.semana }}
+                    {{ ganador.semana == 5 ? "Ganador final" : "Semana "+ganador.semana }}
                   </VExpansionPanelTitle>
                   <VExpansionPanelText>
                     
