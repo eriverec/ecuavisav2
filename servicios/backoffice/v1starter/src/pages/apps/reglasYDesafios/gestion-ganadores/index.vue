@@ -229,7 +229,7 @@
         action,
         tipo,
         semana:weekToUpdate,
-        telephone: user.phone || ''
+        telephone: user.phone_number || ''
       }));
 
       console.log(newWinners[0])
