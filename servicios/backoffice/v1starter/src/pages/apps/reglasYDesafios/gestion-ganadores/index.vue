@@ -370,6 +370,10 @@
         {{ configSnackbar.message }}
     </VSnackbar>
 
+    <VOverlay :model-value="isLoading" class="align-center justify-center">
+      <VProgressCircular indeterminate size="64" />
+    </VOverlay>
+
     <VDialog
       v-model="isDialogBusquedaVisible"
       width="700"
@@ -440,10 +444,6 @@
                   <VAlert v-if="error" type="error" class="mt-4">
                     {{ error }}
                   </VAlert>
-
-                  <VOverlay :model-value="isLoading" class="align-center justify-center">
-                    <VProgressCircular indeterminate size="64" />
-                  </VOverlay>
                 </td>
               </tr>
             </tbody>
