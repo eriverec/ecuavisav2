@@ -18,7 +18,7 @@
         </VCard>
 
       </VCol>
-      <VCol cols="12" md="6">
+      <!-- <VCol cols="12" md="6">
         <VCard class="mt-5 card" title="Actualizar Player Internacional" >
     
           <VCardText>
@@ -34,7 +34,7 @@
           </VCardText>
         </VCard>
 
-      </VCol>
+      </VCol> -->
     </VRow>
 
 
