@@ -1,8 +1,8 @@
 <script setup>
 
-import FidelizacionTab from './FidelizacionTab.vue'
-import CursosTab from './CursosTab.vue'
-import PrincipalTab from './PrincipalTab.vue'
+import CursosTab from './CursosTab.vue';
+import FidelizacionTab from './FidelizacionTab.vue';
+import PrincipalTab from './PrincipalTab.vue';
 
 const tabActual = ref('tab-lista')
 const isDialogVisible = ref(false)
@@ -20,7 +20,7 @@ const isDialogVisible = ref(false)
 					<VTab value="tab-mail" ><VIcon icon="tabler-mail" class="pe-1" size="25" />Newsletter</VTab>
 					<VTab value="tab-tools" ><VIcon icon="mdi-tools" class="pe-1" size="25" />Utilidades</VTab>
 					<VTab value="tab-fidelizacion" ><VIcon icon="mdi-currency-sign" class="pe-1" size="25" />Fidelización</VTab>
-					<VTab value="tab-cursos" ><VIcon icon="mdi-currency-sign" class="pe-1" size="25" />Cursos</VTab>
+					
 				</VTabs>
 
 				<VCard class="mt-5">
@@ -162,8 +162,7 @@ const isDialogVisible = ref(false)
 							<!-- $$$$$$$$$$$$$ tab5 $$$$$$$$$$$$$$ -->
 							<FidelizacionTab />
 
-							<!-- $$$$$$$$$$$$$ tab6 $$$$$$$$$$$$$$ -->
-							<CursosTab />
+							
 						</VWindow>
 					</VCardText>
 				</VCard>
