@@ -28,6 +28,8 @@ export default [
       { title: 'Players Internacional', to: 'apps-configuracion-suscripciones-player-internacional' }, 
       { title: 'Características', to: 'apps-caracteristicas' },
       { title: 'Paquetes', to: 'apps-paquetes' },
+      { title: 'Gestión de conexiones', to: 'apps-suscriptores-userdevice' },
+      { title: 'Límite de dispositivos', to: 'apps-suscriptores-dispositivos' },
     ],
   },
 
