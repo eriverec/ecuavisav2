@@ -600,3 +600,31 @@ if(new URLSearchParams(window.location.search).get('test')){
   var btnApple = document.querySelector(".br__apple");
   btnApple.style.display = "block";
 }
+
+
+
+// MENSAJE DESPUES DE LOS INTENTOS DE VER EL ENVIVO SIN SESIÓN 
+
+
+// Verifica si existe la clave "loginMsg" en localStorage
+if (localStorage.getItem("loginMsg") || localStorage.getItem("loginMsg ")) {
+  // Crea un elemento div con el mensaje
+  const mensaje = document.createElement("div");
+  mensaje.textContent = localStorage.getItem("loginMsg");
+    if (mensaje.textContent){
+    }else{ mensaje.textContent = localStorage.getItem("loginMsg "); }
+  mensaje.className = "alert alert-warning alert-dismissible fade show";
+
+  // Agrega el elemento div al contenedor con clase ".inicio-registro"
+  const contenedor = document.querySelector(".inicio-registro");
+  contenedor.appendChild(mensaje);
+
+  // Agrega botón para cerrar el mensaje (opcional)
+  const botonCerrar = document.createElement("button");
+  botonCerrar.type = "button";
+  botonCerrar.className = "btn-close";
+  botonCerrar.dataset.bsDismiss = "alert";
+  mensaje.appendChild(botonCerrar);
+} else {
+  console.log("Sin mensaje");
+}
