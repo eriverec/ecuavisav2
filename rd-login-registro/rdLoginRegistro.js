@@ -606,23 +606,26 @@ if(new URLSearchParams(window.location.search).get('test')){
 // MENSAJE DESPUES DE LOS INTENTOS DE VER EL ENVIVO SIN SESIÓN 
 
 
-// Verifica si existe la clave "loginMsg" en localStorage
+
+
 if (localStorage.getItem("loginMsg") || localStorage.getItem("loginMsg ")) {
   // Crea un elemento div con el mensaje
   const mensaje = document.createElement("div");
   mensaje.textContent = localStorage.getItem("loginMsg");
-    if (mensaje.textContent){
-    }else{ mensaje.textContent = localStorage.getItem("loginMsg "); }
-  mensaje.className = "alert alert-warning alert-dismissible fade show";
+  if (!mensaje.textContent) {
+    mensaje.textContent = localStorage.getItem("loginMsg ");
+  }
+  mensaje.className = "alert alert-warning alert-dismissible fade show aviso-msj";
 
-  // Agrega el elemento div al contenedor con clase ".inicio-registro"
-  const contenedor = document.querySelector(".inicio-registro");
-  contenedor.appendChild(mensaje);
+  const elementoReferencia = document.getElementById("inicio-registro");
+  
+  // Inserta el mensaje al inicio
+  elementoReferencia.parentNode.insertBefore(mensaje, elementoReferencia);
 
-  // Agrega botón para cerrar el mensaje (opcional)
+  // Agrega botón para cerrar el mensaje
   const botonCerrar = document.createElement("button");
   botonCerrar.type = "button";
-  botonCerrar.className = "btn-close";
+  botonCerrar.className = "btn-closeMsj";
   botonCerrar.dataset.bsDismiss = "alert";
   mensaje.appendChild(botonCerrar);
 } else {

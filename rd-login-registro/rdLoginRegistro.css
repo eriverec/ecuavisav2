@@ -892,3 +892,30 @@ form i {
 /*.br-facebook{
   display: none;
 }*/
+
+
+/*MENSAJE REDIRECCION EN VIVO*/
+.aviso-msj {
+  text-align: center;
+  width: 50%;
+  margin: auto;
+  margin-top: 25px;
+  font-size: 25px;
+  color: #ffffff;
+  background-color: #f1561e;
+}
+
+@media screen and (max-width: 768px) {
+  .aviso-msj {
+      width: 70%;
+      font-size: 22px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  .aviso-msj {
+      width: calc(100% - 30px); /* 100% con 15px de margen a cada lado */
+      margin: 15px auto;
+      font-size: 18px;
+  }
+}
