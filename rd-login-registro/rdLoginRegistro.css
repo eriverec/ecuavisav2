@@ -902,9 +902,7 @@ form i {
   margin-top: 25px;
   font-size: 24px;
   color: #ffffff;
-  /* background-color: #ffb251; */
-  background-image: linear-gradient(to bottom, #ffb251, #ff6f3b);
-
+  background-color: #ff6f3b;
   font-family: 'Anek Malayalam';
   font-style: normal;
   font-weight: 600;
