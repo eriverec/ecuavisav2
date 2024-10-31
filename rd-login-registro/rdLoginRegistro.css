@@ -897,12 +897,27 @@ form i {
 /*MENSAJE REDIRECCION EN VIVO*/
 .aviso-msj {
   text-align: center;
-  width: 50%;
+  width: 100%;
   margin: auto;
   margin-top: 25px;
-  font-size: 25px;
+  font-size: 24px;
   color: #ffffff;
-  background-color: #f1561e;
+  /* background-color: #ffb251; */
+  background-image: linear-gradient(to bottom, #ffb251, #ff6f3b);
+
+  font-family: 'Anek Malayalam';
+  font-style: normal;
+  font-weight: 600;
+}
+
+.btn-closeMsj {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+  margin: 15px;
+  padding: 0.15rem 0.15rem;
+  display: none;
 }
 
 @media screen and (max-width: 768px) {

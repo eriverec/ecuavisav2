@@ -622,7 +622,7 @@ if (localStorage.getItem("loginMsg") || localStorage.getItem("loginMsg ")) {
   // Agrega botón para cerrar el mensaje (opcional)
   const botonCerrar = document.createElement("button");
   botonCerrar.type = "button";
-  botonCerrar.className = "btn-close";
+  botonCerrar.className = "btn-closeMsj";
   botonCerrar.dataset.bsDismiss = "alert";
   mensaje.appendChild(botonCerrar);
 
