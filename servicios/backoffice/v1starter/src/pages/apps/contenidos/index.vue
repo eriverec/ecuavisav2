@@ -31,73 +31,46 @@
               />
             </VCol>
 
-            <!-- Configuración de Visitantes -->
-            <VCol cols="12">
-              <VDivider class="mb-3"/>
-              <h3 class="text-h6 mb-3">Configuración de Visitantes</h3>
-              <VRow>
-                <VCol cols="12" md="4">
+            <VCol cols="12" md="4" v-for="(item, index) in [
+              {
+                title: 'Visitantes',
+                switchModel: 'activeLimitVisitors',
+                switchLabel: 'Activar límite de visitantes',
+                textModel: 'limitVisitors',
+                textLabel: 'Límite de visitantes'
+              },
+              {
+                title: 'Usuarios Registrados',
+                switchModel: 'activeRegisteredVisitor',
+                switchLabel: 'Activar límite de usuarios registrados',
+                textModel: 'limitRegisteredVisitors',
+                textLabel: 'Límite de usuarios registrados'
+              },
+              {
+                title: 'Suscriptores',
+                switchModel: 'activeLimitSuscribers',
+                switchLabel: 'Activar límite de suscriptores',
+                textModel: 'limitSuscribers',
+                textLabel: 'Límite de suscriptores'
+              }
+            ]" :key="index">
+              <VCard>
+                <VCardTitle class="text-h6">{{ item.title }}</VCardTitle>
+                <VCardText>
+                  <VDivider class="mb-3"/>
                   <VSwitch
-                    v-model="config.activeLimitVisitors"
-                    label="Activar límite de visitantes"
+                    v-model="config[item.switchModel]"
+                    :label="item.switchLabel"
                   />
-                </VCol>
-                <VCol cols="12" md="8">
                   <VTextField
-                    v-model.number="config.limitVisitors"
+                    v-model.number="config[item.textModel]"
                     type="number"
-                    label="Límite de visitantes"
-                    :disabled="!config.activeLimitVisitors"
+                    :label="item.textLabel"
+                    :disabled="!config[item.switchModel]"
                     min="0"
                   />
-                </VCol>
-              </VRow>
-            </VCol>
-
-            <!-- Configuración de Usuarios Registrados -->
-            <VCol cols="12">
-              <VDivider class="mb-3"/>
-              <h3 class="text-h6 mb-3">Configuración de Usuarios Registrados</h3>
-              <VRow>
-                <VCol cols="12" md="4">
-                  <VSwitch
-                    v-model="config.activeRegisteredVisitor"
-                    label="Activar límite de usuarios registrados"
-                  />
-                </VCol>
-                <VCol cols="12" md="8">
-                  <VTextField
-                    v-model.number="config.limitRegisteredVisitors"
-                    type="number"
-                    label="Límite de usuarios registrados"
-                    :disabled="!config.activeRegisteredVisitor"
-                    min="0"
-                  />
-                </VCol>
-              </VRow>
-            </VCol>
-
-            <!-- Configuración de Suscriptores -->
-            <VCol cols="12">
-              <VDivider class="mb-3"/>
-              <h3 class="text-h6 mb-3">Configuración de Suscriptores</h3>
-              <VRow>
-                <VCol cols="12" md="4">
-                  <VSwitch
-                    v-model="config.activeLimitSuscribers"
-                    label="Activar límite de suscriptores"
-                  />
-                </VCol>
-                <VCol cols="12" md="8">
-                  <VTextField
-                    v-model.number="config.limitSuscribers"
-                    type="number"
-                    label="Límite de suscriptores"
-                    :disabled="!config.activeLimitSuscribers"
-                    min="0"
-                  />
-                </VCol>
-              </VRow>
+                </VCardText>
+              </VCard>
             </VCol>
 
             <!-- Mensajes -->
