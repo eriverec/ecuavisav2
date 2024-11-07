@@ -14,15 +14,15 @@
 
         <form @submit.prevent="updateConfig">
           <VRow>
-            <VCol cols="12" md="6">
+            <VCol cols="12" md="12">
               <VTextField
                 v-model="config.name"
-                label="Nombre de la Configuración"
+                label="Nombre de la configuración del límite"
                 required
               />
             </VCol>
             
-            <VCol cols="12" md="6">
+            <VCol cols="12" md="6" class="d-none">
               <VSelect
                 v-model="config.contentType"
                 label="Tipo de Contenido"
