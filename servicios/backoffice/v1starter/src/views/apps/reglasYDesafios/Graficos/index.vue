@@ -62,7 +62,8 @@ const headersGlobal = ref({
   ciudad:"Ciudad",
   // telefono:"telefono",
   // birthDate:"birthDate",
-  platform_desafio:"platform_desafio"
+  platform_desafio:"platform_desafio",
+  created_at_desafio:"created_at_desafio"
 });
 
 const labels = ref([]);
@@ -379,6 +380,10 @@ const getDesafiosPorSemana = async (idSemana) => {
 
               if (key == "platform_desafio") {
                 newItem["platform_desafio"] = desafioData[key];
+              }
+              
+              if (key == "created_at_desafio") {
+                newItem["created_at_desafio"] = desafioData[key];
               }
 
             }
