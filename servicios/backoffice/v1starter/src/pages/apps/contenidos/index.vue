@@ -31,6 +31,52 @@
               />
             </VCol>
 
+            <!-- Configuración por Sección / URL -->
+            <VCol cols="12">
+              <VCard>
+                <VCardTitle class="text-h6 font-weight-normal">
+                  Configuración por Sección / URL
+                </VCardTitle>
+                <VCardText>
+                  <VDivider class="mb-3"/>
+                  <VRow>
+                    <VCol cols="12" md="6">
+                      <div class="d-flex flex-column gap-3">
+                        <VSwitch
+                          v-model="config.switchSection"
+                          label="Por sección"
+                        />
+                        <VTextField
+                          v-if="config.switchSection"
+                          v-model="config.sectionName"
+                          label="Nombre de la sección"
+                          placeholder="Ejemplo: noticias, deportes, etc."
+                          @input="capitalizeSectionName"
+                        />
+                      </div>
+                    </VCol>
+                    
+                    <VCol cols="12" md="6">
+                      <div class="d-flex flex-column gap-3">
+                        <VSwitch
+                          v-model="config.switchUrl"
+                          label="Por URL"
+                        />
+                        <VTextField
+                          v-if="config.switchUrl"
+                          v-model="config.UrlName"
+                          label="URL"
+                          placeholder="https://www.ecuavisa.com/ejemplo"
+                          :rules="[v => !config.switchUrl || (v && isValidUrl(v)) || 'Por favor ingrese una URL válida']"
+                        />
+                      </div>
+                    </VCol>
+                  </VRow>
+                </VCardText>
+              </VCard>
+            </VCol>
+
+            <!-- Configuración de Límites -->
             <VCol cols="12" md="4" v-for="(item, index) in [
               {
                 title: 'Visitantes',
@@ -73,21 +119,32 @@
               </VCard>
             </VCol>
 
-            <!-- Mensajes -->
-            <VCol cols="12" md="6">
-              <VTextarea
-                v-model="config.messageToInviteRegister"
-                label="Mensaje para invitar a registrarse"
-                rows="4"
-              />
-            </VCol>
-
-            <VCol cols="12" md="6">
-              <VTextarea
-                v-model="config.messageToInviteSuscribers"
-                label="Mensaje para invitar a suscribirse"
-                rows="4"
-              />
+            <!-- Mensajes HTML -->
+            <VCol cols="12">
+              <VCard>
+                <VCardTitle class="text-h6 font-weight-normal">
+                  Configuración HTML a mostrar
+                </VCardTitle>
+                <VCardText>
+                  <VDivider class="mb-3"/>
+                  <VRow>
+                    <VCol cols="12" md="6">
+                      <VTextarea
+                        v-model="config.messageToInviteRegister"
+                        label="Mensaje para invitar a registrarse"
+                        rows="4"
+                      />
+                    </VCol>
+                    <VCol cols="12" md="6">
+                      <VTextarea
+                        v-model="config.messageToInviteSuscribers"
+                        label="Mensaje para invitar a suscribirse"
+                        rows="4"
+                      />
+                    </VCol>
+                  </VRow>
+                </VCardText>
+              </VCard>
             </VCol>
           </VRow>
 
@@ -153,7 +210,11 @@ const config = ref({
   activeLimitSuscribers: false,
   limitSuscribers: 0,
   messageToInviteRegister: '',
-  messageToInviteSuscribers: ''
+  messageToInviteSuscribers: '',
+  switchSection: false,
+  sectionName: '',
+  switchUrl: false,
+  UrlName: ''
 });
 
 const snackbar = ref({
@@ -164,12 +225,40 @@ const snackbar = ref({
 
 const baseUrl = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/contenidoLimits/config_contenido.php';
 
+// Inicial en mayúscula
+const capitalizeWords = (string) => {
+  if (!string) return '';
+  return string
+    .toLowerCase()
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ');
+};
+
+const capitalizeSectionName = (event) => {
+  if (config.value.sectionName) {
+    config.value.sectionName = capitalizeWords(config.value.sectionName);
+  }
+};
+
+const isValidUrl = (url) => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
+};
+
 const updateConfig = async () => {
   loading.value = true;
   error.value = null;
 
   try {
-    // Preparar los datos en formato JSON
+    if (config.value.switchUrl && !isValidUrl(config.value.UrlName)) {
+      throw new Error('Por favor ingrese una URL válida');
+    }
+
     const jsonData = {
       name: config.value.name,
       contentType: config.value.contentType,
@@ -180,7 +269,11 @@ const updateConfig = async () => {
       activeLimitSuscribers: config.value.activeLimitSuscribers,
       limitSuscribers: parseInt(config.value.limitSuscribers),
       messageToInviteRegister: config.value.messageToInviteRegister,
-      messageToInviteSuscribers: config.value.messageToInviteSuscribers
+      messageToInviteSuscribers: config.value.messageToInviteSuscribers,
+      switchSection: config.value.switchSection,
+      sectionName: capitalizeWords(config.value.sectionName),
+      switchUrl: config.value.switchUrl,
+      UrlName: config.value.UrlName
     };
 
     console.log('Datos a enviar:', jsonData);
@@ -188,11 +281,10 @@ const updateConfig = async () => {
     const response = await axios({
       method: 'POST',
       url: `${baseUrl}?action=update`,
-      data: jsonData, // Axios automáticamente convierte el objeto a JSON
+      data: jsonData,
       headers: {
         'Accept': '*',
         'Content-Type': 'application/json',
-        
       }
     });
 
@@ -240,7 +332,11 @@ const getConfig = async () => {
         activeLimitSuscribers: data.activeLimitSuscribers === true || data.activeLimitSuscribers === 'true',
         limitSuscribers: parseInt(data.limitSuscribers) || 0,
         messageToInviteRegister: data.messageToInviteRegister || '',
-        messageToInviteSuscribers: data.messageToInviteSuscribers || ''
+        messageToInviteSuscribers: data.messageToInviteSuscribers || '',
+        switchSection: data.switchSection === true || data.switchSection === 'true',
+        sectionName: capitalizeWords(data.sectionName || ''),
+        switchUrl: data.switchUrl === true || data.switchUrl === 'true',
+        UrlName: data.UrlName || ''
       };
       
       showSnackbar('Configuración cargada correctamente', 'success');
@@ -280,5 +376,13 @@ onMounted(() => {
 
 .gap-4 {
   gap: 1rem;
+}
+
+.gap-3 {
+  gap: 0.75rem;
+}
+
+.font-weight-bold {
+  font-weight: 700 !important;
 }
 </style>
