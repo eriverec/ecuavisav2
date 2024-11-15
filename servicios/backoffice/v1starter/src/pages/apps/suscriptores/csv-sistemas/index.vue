@@ -240,13 +240,13 @@
   }
 
   // PASO 4
-  function eliminarDuplicadosPorWylexId(array) {
+  function eliminarDuplicadosPorTransaction_id(array) {
       const vistos = new Set();
       return array.filter(item => {
-          if (vistos.has(item.wylexId)) {
+          if (vistos.has(item.transaction_id)) {
               return false; // Eliminar duplicado
           } else {
-              vistos.add(item.wylexId);
+              vistos.add(item.transaction_id);
               return true; // Mantener el primer encuentro
           }
       });
@@ -327,7 +327,7 @@
       doc = dataFullExportar.value;
       var title = `${urlTitleExport.value}`+ generateSlug(fechas.value.fechai)+"_hasta_"+ generateSlug(fechas.value.fechaf);
 
-      exportCSVFile(headersGlobal.value, eliminarDuplicadosPorWylexId(doc), title);
+      exportCSVFile(headersGlobal.value, eliminarDuplicadosPorTransaction_id(doc), title);
 
     } catch (error) {
         console.log(error)
