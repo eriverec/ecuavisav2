@@ -251,10 +251,10 @@ async function exportarDatos() {
 
     allReembolsos.forEach(item => {
       const row = [
-        item._id,
-        item.user.first_name,
-        item.user.last_name,
-        item.user.email,
+        item._id || 'N/A',
+        item.user.first_name || 'N/A',
+        item.user.last_name || 'N/A',
+        item.user.email || 'N/A',
         item.transaction_id,
         item.transaction[0]?.transaction?.product_description || 'N/A'
       ];
@@ -377,9 +377,9 @@ async function exportarDatos() {
             </thead>
             <tbody v-if="!loadingReembolsos && paginatedReembolsos.length > 0">
               <tr v-for="item in paginatedReembolsos" :key="item._id" style="height: 3.75rem;">
-                <td>{{ item.user.first_name }}</td>
-                <td>{{ item.user.last_name }}</td>
-                <td>{{ item.user.email }}</td>
+                <td>{{ (item.hasOwnProperty("user") ? item.user.first_name: "usuario eliminado") }}</td>
+                <td>{{ (item.hasOwnProperty("user") ? item.user.last_name: "usuario eliminado") }}</td>
+                <td>{{ (item.hasOwnProperty("user") ? item.user.email: "usuario eliminado") }}</td>
                 <td>{{ item.transaction_id }}</td>
                 <td>{{ formatDate(item.created_at) }}</td>
                 <td>{{ item.transaction[0]?.transaction?.product_description || 'N/A' }}</td>
