@@ -90,7 +90,7 @@
                 <VCol cols="12" v-if="!config.switchGlobal">
                   <VCard>
                     <VCardTitle class="text-h6 font-weight-normal">
-                      Configuración por Sección / URL
+                      Configuración por Secciones / URL
                     </VCardTitle>
                     <VCardText>
                       <VDivider class="mb-3"/>
@@ -103,7 +103,7 @@
                             />
                             <div v-if="config.switchSection">
                               <div class="mb-3">
-                                <label class="text-subtitle-1 mb-2 d-block">Secciones incluidas</label>
+                                <label class="text-subtitle-1 mb-2 d-block">Secciones y/o subsecciones incluidas</label>
                                 <div class="d-flex flex-wrap gap-2 mb-2">
                                   <VChip
                                     v-for="(section, sIndex) in config.include_sections"
@@ -124,7 +124,7 @@
                               </div>
                               
                               <div>
-                                <label class="text-subtitle-1 mb-2 d-block">Secciones excluidas</label>
+                                <label class="text-subtitle-1 mb-2 d-block">Secciones y/o subsecciones excluidas</label>
                                 <div class="d-flex flex-wrap gap-2 mb-2">
                                   <VChip
                                     v-for="(section, sIndex) in config.exclude_sections"
