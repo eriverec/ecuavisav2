@@ -1,12 +1,13 @@
 <template>
   <div>
+    <!-- Botón para crear nuevo límite -->
     <VBtn
       color="primary"
       class="mb-4"
       prepend-icon="mdi-plus"
       @click="createNewConfig"
     >
-      Crear nueva Regla
+      Crear Nueva Regla
     </VBtn>
 
     <!-- Tabs -->
@@ -18,7 +19,7 @@
     >
       <VTab
         v-for="(config, index) in configurations"
-        :key="index"
+        :key="config.id"
         :value="index"
       >
         {{ config.name }}
@@ -36,7 +37,7 @@
     <VWindow v-model="activeTab">
       <VWindowItem
         v-for="(config, index) in configurations"
-        :key="index"
+        :key="config.id"
         :value="index"
       >
         <VCard class="mt-5" :title="config.name">
@@ -224,7 +225,7 @@
                   :loading="loading"
                   :disabled="loading"
                 >
-                  Guardar Configuración
+                  Guardar regla
                 </VBtn>
                 
                 <VBtn 
@@ -294,6 +295,14 @@ const newExcludeSection = ref('');
 const activeTab = ref(0);
 const configurations = ref([]);
 
+// Función para generar ID basado en fecha y número aleatorio
+const generateSimpleId = () => {
+  const date = new Date();
+  const dateStr = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
+  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  return `config_${dateStr}_${random}`; // Ejemplo: config_20231115_001
+};
+
 const deleteDialog = ref({
   show: false,
   index: null
@@ -332,6 +341,7 @@ const snackbar = ref({
 const baseUrl = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/contenidoLimits/config_contenido.php';
 
 const getEmptyConfig = () => ({
+  id: generateSimpleId(),
   name: 'Nueva configuración',
   contentType: 'Article',
   activeLimitVisitors: false,
@@ -365,14 +375,30 @@ const confirmDeleteConfig = (index) => {
 const deleteConfig = async () => {
   if (deleteDialog.value.index !== null) {
     try {
-      // Aquí iría la llamada al backend para eliminar la configuración
       configurations.value.splice(deleteDialog.value.index, 1);
-      showSnackbar('Configuración eliminada correctamente', 'success');
-      if (activeTab.value >= configurations.value.length) {
-        activeTab.value = Math.max(0, configurations.value.length - 1);
+      
+      // Actualizar todas las configuraciones después de eliminar
+      const response = await axios({
+        method: 'POST',
+        url: `${baseUrl}?action=update`,
+        data: configurations.value,
+        headers: {
+          'Accept': '*',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.data && response.data.success) {
+        showSnackbar('Configuración eliminada correctamente', 'success');
+        if (activeTab.value >= configurations.value.length) {
+          activeTab.value = Math.max(0, configurations.value.length - 1);
+        }
+      } else {
+        throw new Error('Error al eliminar la configuración');
       }
     } catch (err) {
       showSnackbar('Error al eliminar la configuración', 'error');
+      console.error('Error:', err);
     }
     deleteDialog.value.show = false;
   }
@@ -451,36 +477,15 @@ const updateConfig = async (index) => {
   error.value = null;
 
   try {
-    // Validar la URL de la configuración actual
     const currentConfig = configurations.value[index];
     if (currentConfig.switchUrl && !isValidUrl(currentConfig.UrlName)) {
       throw new Error('Por favor ingrese una URL válida');
     }
 
-    
-    const allConfigs = configurations.value.map(config => ({
-      name: config.name,
-      contentType: config.contentType,
-      activeLimitVisitors: config.activeLimitVisitors,
-      limitVisitors: parseInt(config.limitVisitors),
-      activeRegisteredVisitor: config.activeRegisteredVisitor,
-      limitRegisteredVisitors: parseInt(config.limitRegisteredVisitors),
-      activeLimitSuscribers: config.activeLimitSuscribers,
-      limitSuscribers: parseInt(config.limitSuscribers),
-      messageToInviteRegister: config.messageToInviteRegister,
-      messageToInviteSuscribers: config.messageToInviteSuscribers,
-      switchGlobal: config.switchGlobal,
-      switchSection: config.switchSection,
-      include_sections: config.include_sections,
-      exclude_sections: config.exclude_sections,
-      switchUrl: config.switchUrl,
-      UrlName: config.UrlName
-    }));
-
     const response = await axios({
       method: 'POST',
       url: `${baseUrl}?action=update`,
-      data: allConfigs, 
+      data: configurations.value,
       headers: {
         'Accept': '*',
         'Content-Type': 'application/json',
@@ -515,10 +520,10 @@ const getConfig = async () => {
     });
     
     if (response.data && response.data.success && response.data.data) {
-      // array de configuraciones
       const configsData = Array.isArray(response.data.data) ? response.data.data : [response.data.data];
       
       configurations.value = configsData.map(data => ({
+        id: data.id || generateSimpleId(),
         name: data.name || '',
         contentType: data.contentType || 'Article',
         activeLimitVisitors: data.activeLimitVisitors === true || data.activeLimitVisitors === 'true',
@@ -562,7 +567,6 @@ onMounted(() => {
   getConfig();
 });
 </script>
-
 
 
 <style scoped>
