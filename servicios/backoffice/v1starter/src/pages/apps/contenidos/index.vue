@@ -1,14 +1,37 @@
 <template>
   <div>
-    <!-- Botón para crear nuevo límite -->
     <VBtn
       color="primary"
-      class="mb-4"
+      class="mb-4 text-uppercase"
       prepend-icon="mdi-plus"
-      @click="createNewConfig"
+      @click="showCreateConfigDialog"
+  
     >
       Crear Nueva Regla
     </VBtn>
+
+    <VDialog v-model="createDialog.show" max-width="500px">
+      <VCard>
+        <VCardTitle class="text-uppercase">Crear nueva regla</VCardTitle>
+        <VCardText>
+          <VSelect
+            v-model="createDialog.selectedType"
+            label="Tipo de Contenido"
+            :items="getAvailableContentTypes()"
+            required
+          />
+        </VCardText>
+        <VCardActions>
+          <VSpacer />
+          <VBtn color="primary" variant="text" @click="createNewConfig">
+            Crear
+          </VBtn>
+          <VBtn color="error" variant="text" @click="createDialog.show = false">
+            Cancelar
+          </VBtn>
+        </VCardActions>
+      </VCard>
+    </VDialog>
 
     <!-- Tabs -->
     <VTabs
@@ -21,6 +44,7 @@
         v-for="(config, index) in configurations"
         :key="config.id"
         :value="index"
+        :disabled="isTabDisabled(config)"
       >
         {{ config.name }}
         <VBtn
@@ -30,6 +54,7 @@
           variant="text"
           class="ml-2"
           @click.stop="confirmDeleteConfig(index)"
+          :disabled="isTabDisabled(config)"
         />
       </VTab>
     </VTabs>
@@ -54,7 +79,7 @@
 
             <form @submit.prevent="updateConfig(index)">
               <VRow>
-                <VCol cols="12" md="12">
+                <VCol cols="12" md="6">
                   <VTextField
                     v-model="config.name"
                     label="Nombre de la configuración del límite"
@@ -62,25 +87,38 @@
                   />
                 </VCol>
                 
-                <VCol cols="12" md="6" class="d-none">
+                <VCol cols="12" md="6">
                   <VSelect
                     v-model="config.contentType"
                     label="Tipo de Contenido"
-                    :items="['Article', 'Video', 'Gallery']"
+                    :items="['Article', 'Live']"
                     required
+                    :disabled="isContentTypeDisabled(config)"
                   />
                 </VCol>
 
                 <!-- Switch Global -->
                 <VCol cols="12">
                   <VCard>
-                    <VCardTitle class="text-h6 font-weight-normal">
+                    <VCardTitle class="text-h6 font-weight-normal d-flex align-center">
                       ¿Será un límite global?
+                      <VTooltip location="top">
+                        <template v-slot:activator="{ props }">
+                          <VIcon
+                            v-bind="props"
+                            icon="mdi-information"
+                            color="primary"
+                            class="ml-2"
+                          />
+                        </template>
+                        Mientras esto se encuentre activo, no se validará ninguna regla adicional del mismo tipo de contenido
+                      </VTooltip>
                     </VCardTitle>
                     <VCardText>
                       <VSwitch
                         v-model="config.switchGlobal"
                         label="Activar en todo el sitio"
+                        @update:model-value="handleGlobalSwitch($event, config)"
                       />
                     </VCardText>
                   </VCard>
@@ -90,12 +128,17 @@
                 <VCol cols="12" v-if="!config.switchGlobal">
                   <VCard>
                     <VCardTitle class="text-h6 font-weight-normal">
-                      Configuración por Secciones / URL
+                      Configuración por {{ config.contentType === 'Live' ? 'URL' : 'Secciones / URL' }}
                     </VCardTitle>
                     <VCardText>
                       <VDivider class="mb-3"/>
                       <VRow>
-                        <VCol cols="12" md="6">
+                        <!-- Secciones - Solo visible para Article -->
+                        <VCol
+                          v-if="config.contentType !== 'Live'"
+                          cols="12"
+                          md="6"
+                        >
                           <div class="d-flex flex-column gap-3">
                             <VSwitch
                               v-model="config.switchSection"
@@ -147,8 +190,13 @@
                           </div>
                         </VCol>
                         
-                        <VCol cols="12" md="6">
-                          <div class="d-flex flex-column gap-3">
+                        <!-- URL - Centrado cuando es Live -->
+                        <VCol
+                          cols="12"
+                          :md="config.contentType === 'Live' ? 12 : 6"
+                          :class="{ 'text-left': config.contentType === 'Live' }"
+                        >
+                          <div class="d-flex flex-column gap-3" :class="{ 'align-left': config.contentType === 'Live' }">
                             <VSwitch
                               v-model="config.switchUrl"
                               label="Por URL"
@@ -159,6 +207,7 @@
                               label="URL"
                               placeholder="https://www.ecuavisa.com/ejemplo"
                               :rules="[v => !config.switchUrl || (v && isValidUrl(v)) || 'Por favor ingrese una URL válida']"
+                              :class="config.contentType === 'Live' ? 'w-50' : ''"
                             />
                           </div>
                         </VCol>
@@ -224,6 +273,7 @@
                   variant="tonal"
                   :loading="loading"
                   :disabled="loading"
+                  class="text-uppercase"
                 >
                   Guardar regla
                 </VBtn>
@@ -234,6 +284,7 @@
                   @click="getConfig"
                   :loading="loading"
                   :disabled="loading"
+                  class="text-uppercase"
                 >
                   Recargar Datos
                 </VBtn>
@@ -244,7 +295,7 @@
       </VWindowItem>
     </VWindow>
 
-    <!-- Diálogo de confirmación para eliminar -->
+    <!-- confirmación para eliminar -->
     <VDialog v-model="deleteDialog.show" max-width="500px">
       <VCard>
         <VCardTitle>Confirmar eliminación</VCardTitle>
@@ -263,7 +314,25 @@
       </VCard>
     </VDialog>
 
-    <!-- Snackbar -->
+    <!-- confirmación para activar global -->
+    <VDialog v-model="globalConfirmDialog.show" max-width="500px">
+      <VCard>
+        <VCardTitle>Confirmar activación global</VCardTitle>
+        <VCardText>
+          Mientras esto se encuentre activo, no se validará ninguna regla adicional del mismo tipo de contenido.
+        </VCardText>
+        <VCardActions>
+          <VSpacer />
+          <VBtn color="primary" variant="text" @click="confirmGlobalSwitch">
+            Confirmar
+          </VBtn>
+          <VBtn color="error" variant="text" @click="cancelGlobalSwitch">
+            Cancelar
+          </VBtn>
+        </VCardActions>
+      </VCard>
+    </VDialog>
+
     <VSnackbar
       v-model="snackbar.show"
       :color="snackbar.color"
@@ -286,7 +355,7 @@
 
 <script setup>
 import axios from 'axios';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const loading = ref(false);
 const error = ref(null);
@@ -295,18 +364,42 @@ const newExcludeSection = ref('');
 const activeTab = ref(0);
 const configurations = ref([]);
 
-// Función para generar ID basado en fecha y número aleatorio
-const generateSimpleId = () => {
-  const date = new Date();
-  const dateStr = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
-  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
-  return `config_${dateStr}_${random}`; // Ejemplo: config_20231115_001
-};
+const createDialog = ref({
+  show: false,
+  selectedType: 'Live'
+});
+
+const globalConfirmDialog = ref({
+  show: false,
+  config: null,
+  previousValue: false
+});
 
 const deleteDialog = ref({
   show: false,
   index: null
 });
+
+const snackbar = ref({
+  show: false,
+  message: '',
+  color: 'success'
+});
+
+
+const hasGlobalArticleRule = computed(() => {
+  return configurations.value.some(config => 
+    config.switchGlobal && config.contentType === 'Article'
+  );
+});
+
+const globalArticleConfigId = computed(() => {
+  const config = configurations.value.find(config => 
+    config.switchGlobal && config.contentType === 'Article'
+  );
+  return config ? config.id : null;
+});
+
 
 const limitItems = [
   {
@@ -332,13 +425,15 @@ const limitItems = [
   }
 ];
 
-const snackbar = ref({
-  show: false,
-  message: '',
-  color: 'success'
-});
-
 const baseUrl = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/contenidoLimits/config_contenido.php';
+
+
+const generateSimpleId = () => {
+  const date = new Date();
+  const dateStr = `${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}`;
+  const random = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  return `config_${dateStr}_${random}`;
+};
 
 const getEmptyConfig = () => ({
   id: generateSimpleId(),
@@ -360,50 +455,77 @@ const getEmptyConfig = () => ({
   UrlName: ''
 });
 
+
+const showCreateConfigDialog = () => {
+  createDialog.value.selectedType = hasGlobalArticleRule.value ? 'Live' : 'Article';
+  createDialog.value.show = true;
+};
+
+const getAvailableContentTypes = () => {
+  if (hasGlobalArticleRule.value) {
+    return ['Live'];
+  }
+  return ['Article', 'Live'];
+};
+
 const createNewConfig = () => {
-  configurations.value.push(getEmptyConfig());
+  const newConfig = getEmptyConfig();
+  newConfig.contentType = createDialog.value.selectedType;
+  configurations.value.push(newConfig);
   activeTab.value = configurations.value.length - 1;
+  createDialog.value.show = false;
 };
 
-const confirmDeleteConfig = (index) => {
-  deleteDialog.value = {
-    show: true,
-    index
-  };
+// Funciones de validación
+const isTabDisabled = (config) => {
+  // Solo deshabilitar si es Article y no es la regla global activa
+  return hasGlobalArticleRule.value && 
+         config.contentType === 'Article' && 
+         config.id !== globalArticleConfigId.value;
 };
 
-const deleteConfig = async () => {
-  if (deleteDialog.value.index !== null) {
-    try {
-      configurations.value.splice(deleteDialog.value.index, 1);
-      
-      // Actualizar todas las configuraciones después de eliminar
-      const response = await axios({
-        method: 'POST',
-        url: `${baseUrl}?action=update`,
-        data: configurations.value,
-        headers: {
-          'Accept': '*',
-          'Content-Type': 'application/json',
-        }
-      });
+const isContentTypeDisabled = (config) => {
+  return config.switchGlobal || 
+         (hasGlobalArticleRule.value && config.contentType === 'Article');
+};
 
-      if (response.data && response.data.success) {
-        showSnackbar('Configuración eliminada correctamente', 'success');
-        if (activeTab.value >= configurations.value.length) {
-          activeTab.value = Math.max(0, configurations.value.length - 1);
-        }
-      } else {
-        throw new Error('Error al eliminar la configuración');
-      }
-    } catch (err) {
-      showSnackbar('Error al eliminar la configuración', 'error');
-      console.error('Error:', err);
-    }
-    deleteDialog.value.show = false;
+const isValidUrl = (url) => {
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
   }
 };
 
+const handleGlobalSwitch = (value, config) => {
+  if (value && config.contentType === 'Article') {
+    globalConfirmDialog.value = {
+      show: true,
+      config,
+      previousValue: !value
+    };
+  }
+};
+
+const confirmGlobalSwitch = async () => {
+  const { config } = globalConfirmDialog.value;
+  if (config) {
+    config.switchGlobal = true;
+    await updateConfig(configurations.value.findIndex(c => c.id === config.id));
+  }
+  globalConfirmDialog.value.show = false;
+};
+
+const cancelGlobalSwitch = () => {
+  const { config, previousValue } = globalConfirmDialog.value;
+  if (config) {
+    config.switchGlobal = previousValue;
+  }
+  globalConfirmDialog.value.show = false;
+};
+
+// Funciones para el manejo de secciones
 const capitalizeWords = (string) => {
   if (!string) return '';
   return string
@@ -444,6 +566,7 @@ const removeSection = (configIndex, section, type) => {
   }
 };
 
+// Funciones para limpieza de datos
 const cleanArrayData = (data) => {
   if (!data) return [];
   if (typeof data === 'string') {
@@ -463,12 +586,69 @@ const cleanArrayData = (data) => {
   return [];
 };
 
-const isValidUrl = (url) => {
-  try {
-    new URL(url);
-    return true;
-  } catch {
-    return false;
+// Funciones CRUD
+const confirmDeleteConfig = (index) => {
+  const config = configurations.value[index];
+  
+  // Permitir eliminar si:
+  // 1. No hay regla global de Article, o
+  // 2. Es la regla global de Article, o
+  // 3. Es una regla de otro tipo (no Article)
+  if (!hasGlobalArticleRule.value || 
+      config.id === globalArticleConfigId.value || 
+      config.contentType !== 'Article') {
+    deleteDialog.value = {
+      show: true,
+      index
+    };
+  }
+};
+
+const deleteConfig = async () => {
+  if (deleteDialog.value.index !== null) {
+    try {
+      const configToDelete = configurations.value[deleteDialog.value.index];
+      
+      if (configToDelete.switchGlobal && configToDelete.contentType === 'Article') {
+        const confirmed = await new Promise(resolve => {
+          if (confirm('Esta es una configuración global. ¿Está seguro de eliminarla?')) {
+            resolve(true);
+          } else {
+            resolve(false);
+          }
+        });
+        
+        if (!confirmed) {
+          deleteDialog.value.show = false;
+          return;
+        }
+      }
+
+      configurations.value.splice(deleteDialog.value.index, 1);
+      
+      const response = await axios({
+        method: 'POST',
+        url: `${baseUrl}?action=update`,
+        data: configurations.value,
+        headers: {
+          'Accept': '*',
+          'Content-Type': 'application/json',
+        }
+      });
+
+      if (response.data && response.data.success) {
+        showSnackbar('Configuración eliminada correctamente', 'success');
+        if (activeTab.value >= configurations.value.length) {
+          activeTab.value = Math.max(0, configurations.value.length - 1);
+        }
+      } else {
+        throw new Error('Error al eliminar la configuración');
+      }
+    } catch (err) {
+      showSnackbar('Error al eliminar la configuración', 'error');
+      console.error('Error:', err);
+    }
+    deleteDialog.value.show = false;
   }
 };
 
@@ -478,6 +658,17 @@ const updateConfig = async (index) => {
 
   try {
     const currentConfig = configurations.value[index];
+    
+    if (currentConfig.switchGlobal && currentConfig.contentType === 'Article') {
+      const otherGlobalArticle = configurations.value.find((config, i) => 
+        i !== index && config.switchGlobal && config.contentType === 'Article'
+      );
+      
+      if (otherGlobalArticle) {
+        throw new Error('Ya existe una configuración global para artículos');
+      }
+    }
+
     if (currentConfig.switchUrl && !isValidUrl(currentConfig.UrlName)) {
       throw new Error('Por favor ingrese una URL válida');
     }
@@ -568,7 +759,6 @@ onMounted(() => {
 });
 </script>
 
-
 <style scoped>
 .v-divider {
   border-color: rgba(var(--v-border-color), 0.12);
@@ -611,5 +801,149 @@ onMounted(() => {
 
 .ma-1 {
   margin: 0.25rem;
+}
+
+.ml-2 {
+  margin-left: 0.5rem;
+}
+
+.d-flex.align-center {
+  align-items: center;
+}
+
+/* Estilos para el modo Live */
+.text-center {
+  text-align: center;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.w-50 {
+  width: 50% !important;
+  margin: 0 auto;
+}
+
+/* Estilos para el tooltip */
+.v-tooltip {
+  border-radius: 4px;
+  color: white;
+  font-size: 0.875rem;
+  padding: 5px 8px;
+}
+
+/* Estilos para los diálogos */
+.v-dialog {
+  border-radius: 4px;
+  box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2),
+              0 24px 38px 3px rgba(0, 0, 0, 0.14),
+              0 9px 46px 8px rgba(0, 0, 0, 0.12);
+}
+
+/* elementos deshabilitados */
+.v-btn--disabled,
+.v-tab--disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+
+.v-card {
+  transition: box-shadow 0.3s ease;
+}
+
+/* .v-card:hover {
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16),
+              0 3px 6px rgba(0, 0, 0, 0.23);
+} */
+
+/* Estilos para los chips */
+.v-chip {
+  transition: all 0.3s ease;
+}
+
+.v-chip:hover {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+
+.v-btn {
+  text-transform: none;
+  letter-spacing: 0.5px;
+}
+
+
+.v-text-field .v-input__slot {
+  transition: border-color 0.3s ease;
+}
+
+.v-text-field--focused .v-input__slot {
+  border-color: var(--v-primary-base);
+}
+
+
+.v-switch {
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+
+form {
+  max-width: 100%;
+}
+
+
+.error-text {
+  color: rgb(var(--v-error));
+  font-size: 0.875rem;
+  margin-top: 4px;
+}
+
+/* Estilos para los contenedores flexibles */
+.d-flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
+}
+
+/* Estilos para espaciado */
+.mt-4 {
+  margin-top: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1rem;
+}
+
+.mb-3 {
+  margin-bottom: 0.75rem;
+}
+
+/* Estilos responsivos */
+@media (max-width: 960px) {
+  .w-50 {
+    width: 75% !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .w-50 {
+    width: 100% !important;
+  }
+  
+  .v-col-12 {
+    padding: 8px;
+  }
+  
+  .gap-4 {
+    gap: 0.5rem;
+  }
 }
 </style>
