@@ -30,6 +30,7 @@ export default [
       { title: 'Paquetes', to: 'apps-paquetes' },
       { title: 'Gestión de conexiones', to: 'apps-suscriptores-userdevice' },
       { title: 'Límite de dispositivos', to: 'apps-suscriptores-dispositivos' },
+      { title: 'Previa Players', to: 'apps-suscriptores-time-player' },
     ],
   },
 
