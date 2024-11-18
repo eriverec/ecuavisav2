@@ -170,6 +170,7 @@ function eventoEnvivoManager() {
   const enVivoRedy = document.querySelector('.enVivoRedy');
   const textIndicador = document.querySelector('.enVivoRedy .liveIndicator .enVivoText');
   const btnTelcomunidad = document.querySelector('#btnTelcomunidad');
+  const btnTelevistazo7pm = document.querySelector('#btnTelevistazo7pm');
   const title_programa = document.querySelector('.title_programa');
   const playerembed = document.querySelector('#playerembed');
   const fondito__ = document.querySelector('#fondito__');
@@ -270,6 +271,13 @@ function eventoEnvivoManager() {
                         btnTelcomunidad.style.display = "block";
                       }
                     }
+
+                    //Televistazo 7PM - nuevo requerimiento.
+                    if (programa === "Televistazo 7PM") {
+                      if (btnTelevistazo7pm) {
+                        btnTelevistazo7pm.style.display = "block";
+                      }
+                    }
                   });
                 } else {
                   if (title_programa) {
@@ -290,6 +298,10 @@ function eventoEnvivoManager() {
                   }
                   if (btnTelcomunidad) {
                     btnTelcomunidad.style.display = "none";
+                  }
+
+                  if (btnTelevistazo7pm) {
+                    btnTelevistazo7pm.style.display = "none";
                   }
                 }
               } else { }
