@@ -54,12 +54,11 @@
             :disabled="isTabDisabled(config)"
             class="d-flex align-center"
           >
-            <VIcon 
-              class="drag-handle mr-2 cursor-move" 
-              size="small"
-            >
-              mdi-drag
-            </VIcon>
+          <VIcon 
+            class="drag-handle mr-2 cursor-move" 
+            size="large"
+            icon="mdi-drag-horizontal"
+          />
             {{ config.name }}
             <VBtn
               icon="mdi-delete"
