@@ -15,6 +15,7 @@ const moment = extendMoment(Moment)
 moment.locale('es', [esLocale])
 
 const theme = useTheme()
+const isDark = computed(() => theme.current.value.dark)
 
 const userData = ref({
   anonimos: 0,
@@ -24,12 +25,84 @@ const userData = ref({
 })
 
 const dateRange = ref({
-  start: moment().subtract(7, 'days').format('YYYY-MM-DD'),
+  start: moment().startOf('month').format('YYYY-MM-DD'),
   end: moment().format('YYYY-MM-DD')
 })
 
 const rules = ref([])
 const selectedRule = ref(null)
+const chartKey = ref(0)
+
+const chartOptions = computed(() => ({
+  chart: {
+    type: 'pie',
+    height: 350,
+    foreColor: isDark.value ? '#FFFFFF' : '#000000',
+    background: 'transparent',
+    animations: {
+      enabled: true,
+      speed: 300,
+      animateGradually: {
+        enabled: true,
+        delay: 150
+      },
+      dynamicAnimation: {
+        enabled: true,
+        speed: 350
+      }
+    }
+  },
+  labels: ['Anónimos', 'Registrados', 'Suscritos'],
+  colors: ['#969696', '#2927B9', '#FCD206'],
+  legend: {
+    position: 'bottom',
+    labels: {
+      colors: isDark.value ? '#FFFFFF' : '#000000'
+    }
+  },
+  stroke: { width: 0 },
+  dataLabels: {
+    enabled: true,
+    formatter: (val) => `${Math.round(val)}%`,
+    textAnchor: 'middle',
+    style: {
+      fontSize: '14px',
+      fontFamily: 'inherit',
+      fontWeight: 'normal',
+      colors: [isDark.value ? '#FFFFFF' : '#000000']
+    },
+    background: {
+      enabled: false,
+      dropShadow: {
+        enabled: false
+      }
+    },
+    dropShadow: {
+      enabled: false
+    }
+  },
+  tooltip: {
+    theme: isDark.value ? 'dark' : 'light'
+  },
+  responsive: [{
+    breakpoint: 480,
+    options: {
+      chart: { width: 200 },
+      legend: { position: 'bottom' }
+    }
+  }]
+}))
+
+const chartSeries = computed(() => {
+  const total = userData.value.anonimos + userData.value.registrados + userData.value.suscritos
+  if (total === 0) return [0, 0, 0]
+  
+  return [
+    (userData.value.anonimos / total) * 100,
+    (userData.value.registrados / total) * 100,
+    (userData.value.suscritos / total) * 100
+  ]
+})
 
 const fetchRules = async () => {
   try {
@@ -46,59 +119,11 @@ const fetchRules = async () => {
   }
 }
 
-const chartOptions = computed(() => ({
-  chart: {
-    type: 'pie',
-    height: 350,
-    toolbar: { show: false },
-  },
-  labels: ['Anónimos', 'Registrados', 'Suscritos'],
-  colors: ['#969696', '#2927B9', '#FCD206'], 
-  legend: {
-    position: 'bottom',
-    labels: {
-      colors: theme?.current?.value?.colors?.text?.primary || '#000000'
-    },
-  },
-  stroke: { width: 0 },
-  dataLabels: {
-    enabled: true,
-    formatter: (val) => `${Math.round(val)}%`,
-  },
-  plotOptions: {
-    pie: {
-      donut: {
-        labels: {
-          show: false, 
-        },
-      },
-    },
-  },
-  responsive: [{
-    breakpoint: 480,
-    options: {
-      chart: { width: 200 },
-      legend: { position: 'bottom' },
-    },
-  }],
-}))
-
-const chartSeries = computed(() => {
-  const total = userData.value.anonimos + userData.value.registrados + userData.value.suscritos
-  if (total === 0) return [0, 0, 0]
-  
-  return [
-    (userData.value.anonimos / total) * 100,
-    (userData.value.registrados / total) * 100,
-    (userData.value.suscritos / total) * 100
-  ]
-})
-
 const fetchData = async () => {
   if (!selectedRule.value?.id) return
 
   try {
-    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
+    const baseUrl = 'http://localhost:8088/content-access/config'
     const url = `${baseUrl}/${selectedRule.value.id}?startDate=${dateRange.value.start}&endDate=${dateRange.value.end}`
     
     const response = await axios.get(url)
@@ -113,6 +138,7 @@ const fetchData = async () => {
                            (metrics.registrado?.usuariosUnicos || 0) +
                            (metrics.suscrito?.usuariosUnicos || 0)
       }
+      chartKey.value += 1
     }
   } catch (error) {
     console.error('Error al obtener datos:', error)
@@ -123,9 +149,8 @@ const downloadData = async (tipo) => {
   if (!selectedRule.value?.id) return
 
   try {
-    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
+    const baseUrl = 'http://localhost:8088/content-access/config'
     const url = `${baseUrl}/${selectedRule.value.id}/tipo/${tipo}?format=csv&startDate=${dateRange.value.start}&endDate=${dateRange.value.end}`
-    console.log('URL de descarga:', url)
     
     const response = await axios.get(url, { responseType: 'blob' })
     
@@ -145,9 +170,8 @@ const downloadAllData = async () => {
   if (!selectedRule.value?.id) return
 
   try {
-    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
+    const baseUrl = 'http://localhost:8088/content-access/config'
     const url = `${baseUrl}/${selectedRule.value.id}/todos?format=csv&startDate=${dateRange.value.start}&endDate=${dateRange.value.end}`
-    console.log('URL de descarga todos:', url)
     
     const response = await axios.get(url, { responseType: 'blob' })
     
@@ -169,8 +193,8 @@ watch([dateRange, selectedRule], () => {
   }
 }, { deep: true })
 
-onMounted(() => {
-  fetchRules()
+onMounted(async () => {
+  await fetchRules()
 })
 </script>
 
@@ -178,60 +202,46 @@ onMounted(() => {
   <VRow>
     <!-- Selector de Regla -->
     <VCol cols="12" class="mb-6">
-      <VCard>
-        <VCardTitle class="text-h5 pt-4 pb-2">
-          Escoge regla de Límite de contenido
-        </VCardTitle>
-        <VCardText>
-          <VSelect
-            v-model="selectedRule"
-            :items="rules"
-            item-title="name"
-            item-value="id"
-            return-object
-            class="mb-4"
-            hide-details
-          />
-        </VCardText>
-      </VCard>
+      <VCardTitle class="text-h5 pt-4 pb-2">
+        Escoge regla de Límite de contenido
+      </VCardTitle>
+      <VSelect
+        v-model="selectedRule"
+        :items="rules"
+        item-title="name"
+        item-value="id"
+        return-object
+        class="mb-4"
+        hide-details
+      />
     </VCol>
 
     <!-- Título principal -->
-    <VCol cols="12" class="mb-1 d-flex align-items-center justify-content-center bg-light pl-8">
-      <div class="d-inline-flex align-items-center">
-        <span class="text-h5 mr-2">Estadísticas de:</span>
-        <div v-if="selectedRule" class="text-h5" style="color:#7367f0;">
-          {{ selectedRule.name }}
-        </div>
-      </div>
+    <VCol cols="12" class="mb-6">
+      <div class="text-h5 text-center">Estadísticas por Tipo de Usuario</div>
     </VCol>
 
-
-    <!-- Selector de Fechas -->
+    <!--  Fechas -->
     <VCol cols="12" class="mb-6">
-      <VCard>
-        <VCardText>
-          <VRow>
-            <VCol cols="12" sm="6">
-              <VTextField
-                v-model="dateRange.start"
-                label="Fecha Inicio"
-                type="date"
-                :max="dateRange.end"
-              />
-            </VCol>
-            <VCol cols="12" sm="6">
-              <VTextField
-                v-model="dateRange.end"
-                label="Fecha Fin"
-                type="date"
-                :min="dateRange.start"
-                :max="moment().format('YYYY-MM-DD')"
-              />
-            </VCol>
-          </VRow>
-        </VCardText>
-      </VCard>
+      <VRow>
+        <VCol cols="12" sm="6">
+          <VTextField
+            v-model="dateRange.start"
+            label="Fecha Inicio"
+            type="date"
+            :max="dateRange.end"
+          />
+        </VCol>
+        <VCol cols="12" sm="6">
+          <VTextField
+            v-model="dateRange.end"
+            label="Fecha Fin"
+            type="date"
+            :min="dateRange.start"
+            :max="moment().format('YYYY-MM-DD')"
+          />
+        </VCol>
+      </VRow>
     </VCol>
 
     <!-- Gráfico y Estadísticas -->
@@ -239,118 +249,121 @@ onMounted(() => {
       <VRow>
         <!-- Gráfico de Pastel -->
         <VCol cols="12" md="6">
-          <VCard>
-            <VCardTitle class="pl-6 pt-4">
-              Distribución de Usuarios
-              <div v-if="selectedRule" class="text-subtitle-2">
-                {{ selectedRule.name }}
-              </div>
-            </VCardTitle>
-            <VCardText>
-              <VueApexCharts
-                v-if="chartSeries.length > 0"
-                type="pie"
-                :options="chartOptions"
-                :series="chartSeries"
-                height="350"
-              />
-            </VCardText>
-          </VCard>
+          <div class="text-h6 mb-4">
+            Distribución de Usuarios
+            <div v-if="selectedRule" class="text-subtitle-2">
+              {{ selectedRule.name }}
+            </div>
+          </div>
+          <VueApexCharts
+            :key="chartKey"
+            type="pie"
+            :options="chartOptions"
+            :series="chartSeries"
+            height="350"
+          />
         </VCol>
 
         <!-- Estadísticas y Botones -->
         <VCol cols="12" md="6">
-          <VCard>
-            <VCardTitle class="pl-6 pt-4">
-              Detalles por Tipo de Usuario
-            </VCardTitle>
-            <VCardText>
-              <VRow>
-                <!-- Anónimos -->
-                <VCol cols="12" sm="4">
-                  <VCard variant="flat" class="text-center pa-2 stat-card">
-                    <VIcon 
-                      icon="mdi-account-outline" 
-                      size="x-large" 
-                      class="mb-2" 
-                      :color="'#969696'"
-                    />
-                    <div class="text-caption mb-1">Anónimos</div>
-                    <div class="text-h6 mb-2">{{ userData.anonimos }}</div>
-                    <VBtn
-                      size="small"
-                      variant="flat"
-                      :color="'#f2f2f2'"
-                      @click="downloadData('anonimo')"
-                      class="mt-2"
-                    >
-                      <VIcon icon="mdi-download" size="small" class="me-1" />
-                      Descargar
-                    </VBtn>
-                  </VCard>
-                </VCol>
+          <div class="text-h6 mb-4">Detalles por Tipo de Usuario</div>
+          <VRow>
+            <!-- Anónimos -->
+            <VCol cols="12" sm="4">
+              <div class="stat-card">
+                <VIcon 
+                  icon="mdi-account-outline" 
+                  size="x-large" 
+                  class="mb-2" 
+                  :color="'#969696'"
+                />
+                <div class="text-caption mb-1">Anónimos</div>
+                <div class="text-h6 mb-2">{{ userData.anonimos }}</div>
+                <VBtn
+                  size="small"
+                  variant="flat"
+                  :color="isDark ? 'grey-darken-3' : 'grey-lighten-3'"
+                  class="download-btn"
+                  @click="downloadData('anonimo')"
+                >
+                  <VIcon 
+                    icon="mdi-download" 
+                    size="small" 
+                    class="me-1"
+                  />
+                  Descargar
+                </VBtn>
+              </div>
+            </VCol>
 
-                <!-- Registrados -->
-                <VCol cols="12" sm="4">
-                  <VCard variant="flat" class="text-center pa-2 stat-card">
-                    <VIcon 
-                      icon="mdi-account" 
-                      size="x-large" 
-                      class="mb-2" 
-                      :color="'#2927B9'"
-                    />
-                    <div class="text-caption mb-1">Registrados</div>
-                    <div class="text-h6 mb-2">{{ userData.registrados }}</div>
-                    <VBtn
-                      size="small"
-                      variant="flat"
-                      :color="'#f2f2f2'"
-                      @click="downloadData('registrado')"
-                      class="mt-2"
-                    >
-                      <VIcon icon="mdi-download" size="small" class="me-1" />
-                      Descargar
-                    </VBtn>
-                  </VCard>
-                </VCol>
+            <!-- Registrados -->
+            <VCol cols="12" sm="4">
+              <div class="stat-card">
+                <VIcon 
+                  icon="mdi-account" 
+                  size="x-large" 
+                  class="mb-2" 
+                  :color="'#2927B9'"
+                />
+                <div class="text-caption mb-1">Registrados</div>
+                <div class="text-h6 mb-2">{{ userData.registrados }}</div>
+                <VBtn
+                  size="small"
+                  variant="flat"
+                  :color="isDark ? 'grey-darken-3' : 'grey-lighten-3'"
+                  class="download-btn"
+                  @click="downloadData('registrado')"
+                >
+                  <VIcon 
+                    icon="mdi-download" 
+                    size="small" 
+                    class="me-1"
+                  />
+                  Descargar
+                </VBtn>
+              </div>
+            </VCol>
 
-                <!-- Suscritos -->
-                <VCol cols="12" sm="4">
-                  <VCard variant="flat" class="text-center pa-2 stat-card">
-                    <VIcon 
-                      icon="mdi-star" 
-                      size="x-large" 
-                      class="mb-2" 
-                      :color="'#FCD206'"
-                    />
-                    <div class="text-caption mb-1">Suscritos</div>
-                    <div class="text-h6 mb-2">{{ userData.suscritos }}</div>
-                    <VBtn
-                      size="small"
-                      variant="flat"
-                      :color="'#f2f2f2'"
-                      @click="downloadData('suscrito')"
-                      class="mt-2"
-                    >
-                      <VIcon icon="mdi-download" size="small" class="me-1" />
-                      Descargar
-                    </VBtn>
-                  </VCard>
-                </VCol>
-              </VRow>
+            <!-- Suscritos -->
+            <VCol cols="12" sm="4">
+              <div class="stat-card">
+                <VIcon 
+                  icon="mdi-star" 
+                  size="x-large" 
+                  class="mb-2" 
+                  :color="'#FCD206'"
+                />
+                <div class="text-caption mb-1">Suscritos</div>
+                <div class="text-h6 mb-2">{{ userData.suscritos }}</div>
+                <VBtn
+                  size="small"
+                  variant="flat"
+                  :color="isDark ? 'grey-darken-3' : 'grey-lighten-3'"
+                  class="download-btn"
+                  @click="downloadData('suscrito')"
+                >
+                  <VIcon 
+                    icon="mdi-download" 
+                    size="small" 
+                    class="me-1"
+                  />
+                  Descargar
+                </VBtn>
+              </div>
+            </VCol>
+          </VRow>
 
-              <!-- Botón Descargar Todos -->
-              <VBtn
-                block
-                color="primary"
-                class="mt-6"
-                @click="downloadAllData"
-              >
-                <VIcon icon="mdi-download" class="me-2" />
-                DESCARGAR TODOS
-              </VBtn>
-            </VCardText>
-          </VCard>
+          <!-- Botón Descargar Todos -->
+          <VBtn
+            block
+            :color="isDark ? 'white' : 'primary'"
+            :class="isDark ? 'text-primary' : 'text-white'"
+            class="mt-6"
+            @click="downloadAllData"
+          >
+            <VIcon icon="mdi-download" class="me-2" />
+            DESCARGAR TODOS
+          </VBtn>
         </VCol>
       </VRow>
     </VCol>
@@ -359,13 +372,24 @@ onMounted(() => {
 
 <style scoped>
 .stat-card {
-  border: 1px solid #e0e0e0;
+  border: 1px solid v-bind('isDark ? "#424242" : "#e0e0e0"');
   border-radius: 8px;
-  transition: all 0.3s ease;
+  padding: 16px;
+  text-align: center;
+  height: 100%;
+  transition: transform 0.2s;
 }
 
 .stat-card:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+.download-btn {
+  width: 100%;
+  box-shadow: none !important;
+}
+
+:deep(.apexcharts-text tspan) {
+  fill: v-bind('isDark ? "#FFFFFF" : "#000000"') !important;
 }
 </style>
