@@ -39,6 +39,7 @@ const chartOptions = computed(() => ({
     height: 350,
     foreColor: isDark.value ? '#FFFFFF' : '#000000',
     background: 'transparent',
+    fontFamily: 'Public Sans, sans-serif',
     animations: {
       enabled: true,
       speed: 300,
@@ -58,17 +59,22 @@ const chartOptions = computed(() => ({
     position: 'bottom',
     labels: {
       colors: isDark.value ? '#FFFFFF' : '#000000'
-    }
+    },
+    fontFamily: 'Public Sans, sans-serif',
+    fontSize: '14px',
+    
   },
   stroke: { width: 0 },
   dataLabels: {
     enabled: true,
     formatter: (val) => `${Math.round(val)}%`,
     textAnchor: 'middle',
+    distributed: true,
+    offsetY: 0,
     style: {
-      fontSize: '14px',
-      fontFamily: 'inherit',
-      fontWeight: 'normal',
+      fontSize: '18px',
+      fontFamily: 'Public Sans, sans-serif',
+      fontWeight: '600',
       colors: [isDark.value ? '#FFFFFF' : '#000000']
     },
     background: {
@@ -82,7 +88,29 @@ const chartOptions = computed(() => ({
     }
   },
   tooltip: {
-    theme: isDark.value ? 'dark' : 'light'
+    enabled: true,
+    theme: isDark.value ? 'dark' : 'light',
+    style: {
+      fontSize: '14px',
+      fontFamily: 'Public Sans, sans-serif'
+    },
+    y: {
+      formatter: function(value, { seriesIndex }) {
+        const usuarios = [
+          userData.value.anonimos,
+          userData.value.registrados, 
+          userData.value.suscritos
+        ][seriesIndex]
+        return `${usuarios} usuarios`
+      }
+    }
+  },
+  plotOptions: {
+    pie: {
+      dataLabels: {
+        offset: -20,
+      }
+    }
   },
   responsive: [{
     breakpoint: 480,
@@ -394,7 +422,7 @@ onMounted(async () => {
 .download-btn {
   width: 100%;
   box-shadow: none !important;
-  border-color: #969696;
+  border-color: #dbdbdb;
   border-width: 1px;
 }
 
