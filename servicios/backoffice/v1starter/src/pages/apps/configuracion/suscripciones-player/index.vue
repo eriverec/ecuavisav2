@@ -14,141 +14,121 @@
             </VBtn>
           </VCol>
         </VRow>
-
-  
       </VCardText>
     </VCard>
 
-
-
     <VExpansionPanels class="mt-5">
-      <VExpansionPanel v-for="(player, index) in players" :key="index" :value="index">
-        <VExpansionPanelTitle>
-          <VBtn icon size="small" color="error" class="float-right mb-0" @click="removePlayer(index)">
-            <VIcon>mdi-delete</VIcon>
-          </VBtn>
-          {{ player.name || `Reproductor ${index + 1}`  }}
-
-          <VChip :color="player.playerActivo ? 'success' : 'error'" class="ml-2">
-            {{ player.playerActivo ? "Activo" : "Inactivo" }}
-          </VChip>
-        </VExpansionPanelTitle>
-        <VExpansionPanelText>
-          <VCard flat>
-            <VCardTitle>
-              Configuración de {{ player.name || `Reproductor ${index + 1}` }}
-
-            </VCardTitle>
-            <VCardText>
-              <VRow>
-                <VCol cols="6">
-                  <VTextField class="mb-5" v-model="player.name" label="Nombre del reproductor" />
-
-                </VCol>
-                <VCol cols="3">
-                  <VTextField class="mb-5" v-model="player.subtituloFecha" label="Subtitulo Fecha" />
-
-                </VCol>
-                <VCol cols="3">
-                  <VTextField class="mb-5" v-model="player.subtituloHora" label="Subtitulo Hora" />
-
-                </VCol>
-              </VRow>
-
-
-              <VTextarea v-model="player.iframe" label="Código iframe" rows="3" />
-              <VSwitch v-model="player.playerActivo" label="Activar Player" />
-              <VSwitch v-model="player.forzado" label="Activar forzado" />
-              <VTextField v-if="player.forzado" v-model="player.tituloForzado" label="Título forzado" />
-              <VTextField v-if="player.forzado" v-model="player.labelForzado" label="Label forzado" />
-
-              <VDivider class="my-4" />
-
-              <h3 class="mb-5">Configuración de Horarios</h3>
-
-
-
-
-              <VRow>
-                <VCol cols="4">
-                  <VSelect v-model="diaSelected" :items="diasDisponibles(player)" label="Día de la semana" />
-                </VCol>
-                <VCol cols="8">
-                  <VBtn color="primary" @click="addDia(player)" :disabled="!diaSelected">
-                    Añadir día
+      <Draggable v-model="players" tag="div" item-key="index" @end="onDragEnd">
+        <template #item="{ element, index }">
+          <VExpansionPanel :key="index" :value="index">
+            <VExpansionPanelTitle>
+              {{ element.name || `Reproductor ${index + 1}` }}
+              <VSwitch style="padding: 0 10px;" v-model="element.playerActivo" label="" />
+            </VExpansionPanelTitle>
+            <VExpansionPanelText>
+              <VCard flat>
+                <VCardTitle>
+                  Configuración de {{ element.name || `Reproductor ${index + 1}` }}
+                  <VBtn icon size="small" color="error" class="float-right mb-0" @click="removePlayer(index)">
+                    <VIcon>mdi-delete</VIcon>
                   </VBtn>
-                </VCol>
-              </VRow>
-
-              <VExpansionPanels>
-                <VExpansionPanel v-for="(horario, indexDia) in player.horarios" :key="indexDia">
-                  <VExpansionPanelTitle>
-                    {{ resolveDia(horario.dia) }}
-                    <VChip :color="horario.estadoDia ? 'success' : 'warning'" class="ml-2">
-                      {{ horario.estadoDia ? "Activo" : "Inactivo" }}
-                    </VChip>
-                  </VExpansionPanelTitle>
-                  <VExpansionPanelText>
-                    <VSwitch v-model="horario.estadoDia" label="Activar día" />
-                    <VBtn color="primary" @click="addHora(player, indexDia)">
-                      Añadir hora
-                    </VBtn>
-                    <VBtn color="error" @click="elimDia(player, indexDia)">
-                      Eliminar día
-                    </VBtn>
-                    <VTable>
-                      <thead>
-                        <tr>
-                          <th>Título</th>
-                          <th>Inicio</th>
-                          <th>Fin</th>
-                          <th>Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr v-for="(hora, indexHora) in horario.horas" :key="indexHora">
-                          <td>
-                            <VTextField v-model="hora.tituloPrograma" />
-                          </td>
-                          <td>
-                            <VTextField v-model="hora.inicio" type="time" />
-                          </td>
-                          <td>
-                            <VTextField v-model="hora.fin" type="time" />
-                          </td>
-                          <td>
-                            <VBtn icon small color="error" @click="elimHora(player, indexDia, indexHora)">
-                              <VIcon>mdi-delete</VIcon>
-                            </VBtn>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </VTable>
-                  </VExpansionPanelText>
-                </VExpansionPanel>
-              </VExpansionPanels>
-            </VCardText>
-          </VCard>
-
-        </VExpansionPanelText>
-      </VExpansionPanel>
+                </VCardTitle>
+                <VCardText>
+                  <VRow>
+                    <VCol cols="6">
+                      <VTextField class="mb-5" v-model="element.name" label="Nombre del reproductor" />
+                    </VCol>
+                    <VCol cols="3">
+                      <VTextField class="mb-5" v-model="element.subtituloFecha" label="Subtitulo Fecha" />
+                    </VCol>
+                    <VCol cols="3">
+                      <VTextField class="mb-5" v-model="element.subtituloHora" label="Subtitulo Hora" />
+                    </VCol>
+                  </VRow>
+                  <VTextarea v-model="element.iframe" label="Código iframe" rows="3" />
+                  <VSwitch v-model="element.forzado" label="Activar forzado" />
+                  <VTextField v-if="element.forzado" v-model="element.tituloForzado" label="Título forzado" />
+                  <VTextField v-if="element.forzado" v-model="element.labelForzado" label="Label forzado" />
+                  <VDivider class="my-4" />
+                  <h3 class="mb-5">Configuración de Horarios</h3>
+                  <VRow>
+                    <VCol cols="4">
+                      <VSelect v-model="diaSelected" :items="diasDisponibles(element)" label="Día de la semana" />
+                    </VCol>
+                    <VCol cols="8">
+                      <VBtn color="primary" @click="addDia(element)" :disabled="!diaSelected">
+                        Añadir día
+                      </VBtn>
+                    </VCol>
+                  </VRow>
+                  <VExpansionPanels>
+                    <VExpansionPanel v-for="(horario, indexDia) in element.horarios" :key="indexDia">
+                      <VExpansionPanelTitle>
+                        {{ resolveDia(horario.dia) }}
+                        <VChip :color="horario.estadoDia ? 'success' : 'warning'" class="ml-2">
+                          {{ horario.estadoDia ? "Activo" : "Inactivo" }}
+                        </VChip>
+                      </VExpansionPanelTitle>
+                      <VExpansionPanelText>
+                        <VSwitch v-model="horario.estadoDia" label="Activar día" />
+                        <VBtn color="primary" @click="addHora(element, indexDia)">
+                          Añadir hora
+                        </VBtn>
+                        <VBtn color="error" @click="elimDia(element, indexDia)">
+                          Eliminar día
+                        </VBtn>
+                        <VTable>
+                          <thead>
+                            <tr>
+                              <th>Título</th>
+                              <th>Inicio</th>
+                              <th>Fin</th>
+                              <th>Acciones</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr v-for="(hora, indexHora) in horario.horas" :key="indexHora">
+                              <td>
+                                <VTextField v-model="hora.tituloPrograma" />
+                              </td>
+                              <td>
+                                <VTextField v-model="hora.inicio" type="time" />
+                              </td>
+                              <td>
+                                <VTextField v-model="hora.fin" type="time" />
+                              </td>
+                              <td>
+                                <VBtn icon small color="error" @click="elimHora(element, indexDia, indexHora)">
+                                  <VIcon>mdi-delete</VIcon>
+                                </VBtn>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </VTable>
+                      </VExpansionPanelText>
+                    </VExpansionPanel>
+                  </VExpansionPanels>
+                </VCardText>
+              </VCard>
+            </VExpansionPanelText>
+          </VExpansionPanel>
+        </template>
+      </Draggable>
     </VExpansionPanels>
 
     <VRow class="m-5 d-inline">
-          <VCol cols="12" class="text-end">
-            <VBtn color="success" @click="enviar" :loading="isLoading">
-              Guardar Configuración
-            </VBtn>
-          </VCol>
-        </VRow>
-
-
-
+      <VCol cols="12" class="text-end">
+        <VBtn color="success" @click="enviar" :loading="isLoading">
+          Guardar Configuración
+        </VBtn>
+      </VCol>
+    </VRow>
   </section>
 </template>
 
 <script setup>
 import { ref, computed } from 'vue';
+import Draggable from 'vuedraggable';
 
 const isLoading = ref(false);
 const success = ref(false);
@@ -221,6 +201,10 @@ function elimHora(player, indexDia, indexHora) {
   player.horarios[indexDia].horas.splice(indexHora, 1);
 }
 
+function onDragEnd() {
+  // Aquí puedes agregar cualquier lógica adicional que necesites después de que se complete el arrastrar y soltar
+}
+
 async function getConfig() {
   isLoading.value = true;
   try {
@@ -283,5 +267,9 @@ getConfig();
 .v-btn {
   margin-right: 8px;
   margin-bottom: 8px;
+}
+
+.v-expansion-panels {
+  display: block;
 }
 </style>
