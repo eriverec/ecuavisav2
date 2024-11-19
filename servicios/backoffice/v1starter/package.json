@@ -42,6 +42,7 @@
         "vue3-apexcharts": "^1.4.1",
         "vue3-form-wizard": "^0.2.1",
         "vue3-perfect-scrollbar": "^1.6.0",
+        "vuedraggable": "^4.1.0",
         "vuetify": "3.0.0",
         "vuetify-datetime-picker": "^2.1.1",
         "webfontloader": "^1.6.28",

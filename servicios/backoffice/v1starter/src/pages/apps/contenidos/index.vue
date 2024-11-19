@@ -5,7 +5,6 @@
       class="mb-4 text-uppercase"
       prepend-icon="mdi-plus"
       @click="showCreateConfigDialog"
-  
     >
       Crear Nueva Regla
     </VBtn>
@@ -33,30 +32,47 @@
       </VCard>
     </VDialog>
 
-    <!-- Tabs -->
+    <!-- Tabs con Drag & Drop -->
     <VTabs
       v-model="activeTab"
       color="primary"
       align-tabs="start"
       class="mb-4"
     >
-      <VTab
-        v-for="(config, index) in configurations"
-        :key="config.id"
-        :value="index"
-        :disabled="isTabDisabled(config)"
+      <draggable 
+        v-model="configurations" 
+        :component-data="{ name: 'v-tabs-bar' }"
+        handle=".drag-handle"
+        @end="handleDragEnd"
+        item-key="id"
+        class="d-flex"
       >
-        {{ config.name }}
-        <VBtn
-          icon="mdi-delete"
-          size="small"
-          color="error"
-          variant="text"
-          class="ml-2"
-          @click.stop="confirmDeleteConfig(index)"
-          :disabled="isTabDisabled(config)"
-        />
-      </VTab>
+        <template #item="{ element: config, index }">
+          <VTab
+            :key="config.id"
+            :value="index"
+            :disabled="isTabDisabled(config)"
+            class="d-flex align-center"
+          >
+            <VIcon 
+              class="drag-handle mr-2 cursor-move" 
+              size="small"
+            >
+              mdi-drag
+            </VIcon>
+            {{ config.name }}
+            <VBtn
+              icon="mdi-delete"
+              size="small"
+              color="error"
+              variant="text"
+              class="ml-2"
+              @click.stop="confirmDeleteConfig(index)"
+              :disabled="isTabDisabled(config)"
+            />
+          </VTab>
+        </template>
+      </draggable>
     </VTabs>
 
     <VWindow v-model="activeTab">
@@ -190,7 +206,7 @@
                           </div>
                         </VCol>
                         
-                        <!-- URL - Centrado cuando es Live -->
+                        <!-- URL -->
                         <VCol
                           cols="12"
                           :md="config.contentType === 'Live' ? 12 : 6"
@@ -295,7 +311,7 @@
       </VWindowItem>
     </VWindow>
 
-    <!-- confirmación para eliminar -->
+    <!-- Diálogo de confirmación para eliminar -->
     <VDialog v-model="deleteDialog.show" max-width="500px">
       <VCard>
         <VCardTitle>Confirmar eliminación</VCardTitle>
@@ -314,7 +330,7 @@
       </VCard>
     </VDialog>
 
-    <!-- confirmación para activar global -->
+    <!-- Diálogo de confirmación para activar global -->
     <VDialog v-model="globalConfirmDialog.show" max-width="500px">
       <VCard>
         <VCardTitle>Confirmar activación global</VCardTitle>
@@ -356,6 +372,7 @@
 <script setup>
 import axios from 'axios';
 import { computed, onMounted, ref } from 'vue';
+import draggable from 'vuedraggable';
 
 const loading = ref(false);
 const error = ref(null);
@@ -363,6 +380,8 @@ const newIncludeSection = ref('');
 const newExcludeSection = ref('');
 const activeTab = ref(0);
 const configurations = ref([]);
+
+const baseUrl = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/contenidoLimits/config_contenido.php';
 
 const createDialog = ref({
   show: false,
@@ -386,7 +405,29 @@ const snackbar = ref({
   color: 'success'
 });
 
-
+const limitItems = [
+  {
+    title: 'Visitas anónimas',
+    switchModel: 'activeLimitVisitors',
+    switchLabel: 'Activar límite para visitantes anónimos',
+    textModel: 'limitVisitors',
+    textLabel: 'Límite de visitas anónimas'
+  },
+  {
+    title: 'Usuarios registrados',
+    switchModel: 'activeRegisteredVisitor',
+    switchLabel: 'Activar límite para usuarios registrados',
+    textModel: 'limitRegisteredVisitors',
+    textLabel: 'Límite para usuarios registrados'
+  },
+  {
+    title: 'Suscriptores',
+    switchModel: 'activeLimitSuscribers',
+    switchLabel: 'Activar límite de suscriptores',
+    textModel: 'limitSuscribers',
+    textLabel: 'Límite para suscriptores'
+  }
+];
 const hasGlobalArticleRule = computed(() => {
   return configurations.value.some(config => 
     config.switchGlobal && config.contentType === 'Article'
@@ -399,34 +440,6 @@ const globalArticleConfigId = computed(() => {
   );
   return config ? config.id : null;
 });
-
-
-const limitItems = [
-  {
-    title: 'Visitantes',
-    switchModel: 'activeLimitVisitors',
-    switchLabel: 'Activar límite de visitantes',
-    textModel: 'limitVisitors',
-    textLabel: 'Límite de visitantes'
-  },
-  {
-    title: 'Usuarios Registrados',
-    switchModel: 'activeRegisteredVisitor',
-    switchLabel: 'Activar límite de usuarios registrados',
-    textModel: 'limitRegisteredVisitors',
-    textLabel: 'Límite de usuarios registrados'
-  },
-  {
-    title: 'Suscriptores',
-    switchModel: 'activeLimitSuscribers',
-    switchLabel: 'Activar límite de suscriptores',
-    textModel: 'limitSuscribers',
-    textLabel: 'Límite de suscriptores'
-  }
-];
-
-const baseUrl = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/contenidoLimits/config_contenido.php';
-
 
 const generateSimpleId = () => {
   const date = new Date();
@@ -455,7 +468,6 @@ const getEmptyConfig = () => ({
   UrlName: ''
 });
 
-
 const showCreateConfigDialog = () => {
   createDialog.value.selectedType = hasGlobalArticleRule.value ? 'Live' : 'Article';
   createDialog.value.show = true;
@@ -478,7 +490,6 @@ const createNewConfig = () => {
 
 // Funciones de validación
 const isTabDisabled = (config) => {
-  // Solo deshabilitar si es Article y no es la regla global activa
   return hasGlobalArticleRule.value && 
          config.contentType === 'Article' && 
          config.id !== globalArticleConfigId.value;
@@ -523,6 +534,34 @@ const cancelGlobalSwitch = () => {
     config.switchGlobal = previousValue;
   }
   globalConfirmDialog.value.show = false;
+};
+
+// Función para manejar el final del drag & drop
+const handleDragEnd = async () => {
+  try {
+    loading.value = true;
+    
+    const response = await axios({
+      method: 'POST',
+      url: `${baseUrl}?action=update`,
+      data: configurations.value,
+      headers: {
+        'Accept': '*',
+        'Content-Type': 'application/json',
+      }
+    });
+
+    if (response.data && response.data.success) {
+      showSnackbar('Orden actualizado correctamente', 'success');
+    } else {
+      throw new Error('Error al actualizar el orden');
+    }
+  } catch (err) {
+    console.error('Error al actualizar el orden:', err);
+    showSnackbar('Error al actualizar el orden', 'error');
+  } finally {
+    loading.value = false;
+  }
 };
 
 // Funciones para el manejo de secciones
@@ -590,10 +629,6 @@ const cleanArrayData = (data) => {
 const confirmDeleteConfig = (index) => {
   const config = configurations.value[index];
   
-  // Permitir eliminar si:
-  // 1. No hay regla global de Article, o
-  // 2. Es la regla global de Article, o
-  // 3. Es una regla de otro tipo (no Article)
   if (!hasGlobalArticleRule.value || 
       config.id === globalArticleConfigId.value || 
       config.contentType !== 'Article') {
@@ -780,6 +815,30 @@ onMounted(() => {
   gap: 0.5rem;
 }
 
+.cursor-move {
+  cursor: move;
+}
+
+.drag-handle {
+  cursor: move;
+  opacity: 0.5;
+  transition: opacity 0.2s;
+}
+
+.drag-handle:hover {
+  opacity: 1;
+}
+
+.sortable-drag {
+  opacity: 0.5;
+  background: var(--v-primary-lighten-4);
+}
+
+.sortable-ghost {
+  opacity: 0.5;
+  background: var(--v-primary-lighten-5);
+}
+
 .font-weight-bold {
   font-weight: 700 !important;
 }
@@ -811,7 +870,6 @@ onMounted(() => {
   align-items: center;
 }
 
-/* Estilos para el modo Live */
 .text-center {
   text-align: center;
 }
@@ -825,7 +883,6 @@ onMounted(() => {
   margin: 0 auto;
 }
 
-/* Estilos para el tooltip */
 .v-tooltip {
   border-radius: 4px;
   color: white;
@@ -833,7 +890,6 @@ onMounted(() => {
   padding: 5px 8px;
 }
 
-/* Estilos para los diálogos */
 .v-dialog {
   border-radius: 4px;
   box-shadow: 0 11px 15px -7px rgba(0, 0, 0, 0.2),
@@ -841,24 +897,16 @@ onMounted(() => {
               0 9px 46px 8px rgba(0, 0, 0, 0.12);
 }
 
-/* elementos deshabilitados */
 .v-btn--disabled,
 .v-tab--disabled {
   opacity: 0.6;
   pointer-events: none;
 }
 
-
 .v-card {
   transition: box-shadow 0.3s ease;
 }
 
-/* .v-card:hover {
-  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16),
-              0 3px 6px rgba(0, 0, 0, 0.23);
-} */
-
-/* Estilos para los chips */
 .v-chip {
   transition: all 0.3s ease;
 }
@@ -867,12 +915,10 @@ onMounted(() => {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-
 .v-btn {
   text-transform: none;
   letter-spacing: 0.5px;
 }
-
 
 .v-text-field .v-input__slot {
   transition: border-color 0.3s ease;
@@ -882,17 +928,14 @@ onMounted(() => {
   border-color: var(--v-primary-base);
 }
 
-
 .v-switch {
   margin-top: 4px;
   margin-bottom: 4px;
 }
 
-
 form {
   max-width: 100%;
 }
-
 
 .error-text {
   color: rgb(var(--v-error));
@@ -900,7 +943,6 @@ form {
   margin-top: 4px;
 }
 
-/* Estilos para los contenedores flexibles */
 .d-flex {
   display: flex;
 }
@@ -913,7 +955,6 @@ form {
   flex-wrap: wrap;
 }
 
-/* Estilos para espaciado */
 .mt-4 {
   margin-top: 1rem;
 }
@@ -926,7 +967,6 @@ form {
   margin-bottom: 0.75rem;
 }
 
-/* Estilos responsivos */
 @media (max-width: 960px) {
   .w-50 {
     width: 75% !important;
