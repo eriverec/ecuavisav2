@@ -123,7 +123,7 @@ const fetchData = async () => {
   if (!selectedRule.value?.id) return
 
   try {
-    const baseUrl = 'http://localhost:8088/content-access/config'
+    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
     const url = `${baseUrl}/${selectedRule.value.id}?startDate=${dateRange.value.start}&endDate=${dateRange.value.end}`
     
     const response = await axios.get(url)
@@ -149,7 +149,7 @@ const downloadData = async (tipo) => {
   if (!selectedRule.value?.id) return
 
   try {
-    const baseUrl = 'http://localhost:8088/content-access/config'
+    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
     const url = `${baseUrl}/${selectedRule.value.id}/tipo/${tipo}?format=csv&startDate=${dateRange.value.start}&endDate=${dateRange.value.end}`
     
     const response = await axios.get(url, { responseType: 'blob' })
@@ -170,7 +170,7 @@ const downloadAllData = async () => {
   if (!selectedRule.value?.id) return
 
   try {
-    const baseUrl = 'http://localhost:8088/content-access/config'
+    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
     const url = `${baseUrl}/${selectedRule.value.id}/todos?format=csv&startDate=${dateRange.value.start}&endDate=${dateRange.value.end}`
     
     const response = await axios.get(url, { responseType: 'blob' })
@@ -202,7 +202,7 @@ onMounted(async () => {
   <VRow>
     <!-- Selector de Regla -->
     <VCol cols="12" class="mb-6">
-      <VCardTitle class="text-h5 pt-4 pb-2">
+      <VCardTitle class="text-h6 pb-2">
         Escoge regla de Límite de contenido
       </VCardTitle>
       <VSelect
@@ -217,9 +217,16 @@ onMounted(async () => {
     </VCol>
 
     <!-- Título principal -->
-    <VCol cols="12" class="mb-6">
-      <div class="text-h5 text-center">Estadísticas por Tipo de Usuario</div>
-    </VCol>
+    
+    <VCol cols="12" class="mb-6 d-flex align-items-center justify-content-center py-3 px-3 bg-light">
+        <div class="d-inline-flex align-items-center">
+          <span class="text-h5 mr-2">Estadísticas de:</span>
+          <div v-if="selectedRule" class="text-h5" style="color:#7367f0;">
+            {{ selectedRule.name }}
+          </div>
+        </div>
+      </VCol>
+
 
     <!--  Fechas -->
     <VCol cols="12" class="mb-6">
@@ -387,9 +394,17 @@ onMounted(async () => {
 .download-btn {
   width: 100%;
   box-shadow: none !important;
+  border-color: #969696;
+  border-width: 1px;
 }
 
 :deep(.apexcharts-text tspan) {
   fill: v-bind('isDark ? "#FFFFFF" : "#000000"') !important;
+}
+
+.v-card-title {
+   
+   padding: 0rem; 
+   
 }
 </style>
