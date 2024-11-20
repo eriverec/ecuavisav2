@@ -575,8 +575,6 @@ setTimeout(() => {
   verificarHorarioEnvivo();
 }, 500);
 
-// Verificar el horario cada minuto para asegurarse de que esté actualizado
-setInterval(verificarHorarioEnvivo, 60000);
 
 /* +++++++++++++++++++++
  +++++ FIN //HORARIO NUEVO PARA EL REPRESISE DE TELEVISTAZO 7PM - ENVIVO++++ 
