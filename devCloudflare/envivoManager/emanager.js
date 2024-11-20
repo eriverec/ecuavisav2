@@ -529,7 +529,7 @@ if (ECUAVISA_EC.login()) {
 
 // eventRadioManager();
 
-
+//HORARIO NUEVO PARA EL REPRESISE DE TELEVISTAZO 7PM
 function verificarHorario() {
   var horarios = [
       { iniHor: "22:00", finHor: "23:59" },
