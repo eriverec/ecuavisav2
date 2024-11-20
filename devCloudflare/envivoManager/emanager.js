@@ -529,7 +529,11 @@ if (ECUAVISA_EC.login()) {
 
 // eventRadioManager();
 
-//HORARIO NUEVO PARA EL REPRESISE DE TELEVISTAZO 7PM - ENVIVO
+
+
+/* +++++++++++++++++++++
+ +++++ INIOIO//HORARIO NUEVO PARA EL REPRESISE DE TELEVISTAZO 7PM - ENVIVO++++ 
++++++++++++++++++++++ */
 function verificarHorarioEnvivo() {
   var horarios = [
       { iniHor: "22:00", finHor: "23:59" },
@@ -574,9 +578,17 @@ setTimeout(() => {
 // Verificar el horario cada minuto para asegurarse de que esté actualizado
 setInterval(verificarHorarioEnvivo, 60000);
 
+/* +++++++++++++++++++++
+ +++++ FIN //HORARIO NUEVO PARA EL REPRESISE DE TELEVISTAZO 7PM - ENVIVO++++ 
++++++++++++++++++++++ */
 
 
-//HORARIO NUEVO PARA EL REPRESISE DE TELEVISTAZO 7PM - REPRISE LANDING
+
+/* +++++++++++++++++++++
+ +++++ INICIO//HORARIO NUEVO PARA EL REPRESISE DE TELEVISTAZO 7PM - REPRISE LANDING++++ 
++++++++++++++++++++++ */
+
+
 
 function verificarHorario() {
   var horarios = [
@@ -648,6 +660,10 @@ if (window.location.pathname === '/envivo/televistazo7pm') {
   }, 1000);
 
 }
+
+/* +++++++++++++++++++++
+ +++++FIN//HORARIO NUEVO PARA EL REPRESISE DE TELEVISTAZO 7PM - REPRISE LANDING++++ 
++++++++++++++++++++++ */
 
 
 
