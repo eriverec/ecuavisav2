@@ -17,15 +17,15 @@
     <VExpansionPanels class="mt-5 mb-5">
       <VExpansionPanel v-for="(modal, index) in modals" :key="index" :value="index">
         <VExpansionPanelTitle>
-          <VBtn icon size="small" variant="text" color="error" class="float-right mr-2 mb-0 botonDelete" @click="deleteModal(index)">
-            <VIcon>mdi-delete</VIcon>
-          </VBtn>
+
           <span class="text-uppercase">
             {{ modal.titulo || `Modal ${index + 1}` }}
 
           </span>
-          <VChip v-if="modal.estado" class="cls_estado" label color="success">Activo</VChip>
-          <VChip v-else class="cls_estado" label color="error">Inactivo</VChip>
+          <!-- <VChip v-if="modal.estado" class="cls_estado" label color="success">Activo</VChip>
+          <VChip v-else class="cls_estado" label color="error">Inactivo</VChip> -->
+
+          <VSwitch class="mx-5" v-model="modal.estado" inset :label="capitalizedLabel(modal.estado)" />
 
         </VExpansionPanelTitle>
         <VExpansionPanelText>
@@ -48,8 +48,19 @@
                   </div>
                 </VCol>
                 <VCol cols="2">
-                  <VSwitch v-model="modal.estado" inset :label="capitalizedLabel(modal.estado)" />
+                  <!-- <VSwitch v-model="modal.estado" inset :label="capitalizedLabel(modal.estado)" /> -->
+                  <!-- <VBtn icon size="lg" variant="text" color="error" class="float-right my-3 mr-2 mb-0 botonDelete"
+                    >
+                    <VIcon>mdi-delete</VIcon>
+                  </VBtn> -->
+
+                  <VBtn color="error" variant="text" @click="deleteModal(index)" >
+                    <VIcon start icon="tabler-trash" />Eliminar
+                  </VBtn>
+
                 </VCol>
+
+
 
               </VRow>
 
@@ -110,10 +121,17 @@ const addModal = () => {
   });
 };
 
+
 // Función para borrar un modal por su índice
 const deleteModal = (index) => {
-  modals.value.splice(index, 1);
+  if (confirm('¿Estás seguro de que deseas eliminar este modal')) {
+    modals.value.splice(index, 1);
+    setTimeout(async () => {
+      await updateData()
+    }, 500);
+  }
 };
+
 
 // Función para eliminar una URL de un modal específico
 const removeUrl = (modalIndex, urlItem) => {
