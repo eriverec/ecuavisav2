@@ -564,9 +564,9 @@ function verificarHorarioEnvivo() {
   });
 
   if (dentroDelRango) {
-      btnTelevistazo.style.display = 'block';
+    btnTelevistazo ? btnTelevistazo.style.display = 'block' : '' ;
   } else {
-      btnTelevistazo.style.display = 'none';
+    btnTelevistazo ? btnTelevistazo.style.display = 'none': '';
   }
 }
 
@@ -644,12 +644,12 @@ function verificarHorario() {
   
     if (dentroDeRango) {
         // Dentro de alguno de los rangos horarios
-        contenido_visible_player.style.display = 'block';
-        fondito.style.display = 'none';
+        contenido_visible_player ? contenido_visible_player.style.display = 'block' : '';
+        fondito ? fondito.style.display = 'none' : ''; 
     } else {
         // Fuera de todos los rangos horarios
-        contenido_visible_player.style.display = 'none';
-        fondito.style.display = 'block';
+        contenido_visible_player ? contenido_visible_player.style.display = 'none' : '' ;
+        fondito ? fondito.style.display = 'block' : '' ;
     }
 }
 
