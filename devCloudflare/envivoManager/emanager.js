@@ -530,6 +530,50 @@ if (ECUAVISA_EC.login()) {
 // eventRadioManager();
 
 
+function verificarHorario() {
+  var horarios = [
+      { iniHor: "22:00", finHor: "23:59" },
+      { iniHor: "00:00", finHor: "01:00" }
+  ];
+
+  var btnTelevistazo = document.getElementById('btnTelevistazo7pm');
+  var ahora = new Date();
+  var horaActual = ahora.toLocaleTimeString('es-EC', { hour12: false, hour: '2-digit', minute: '2-digit' });
+
+  var dentroDelRango = false;
+
+  horarios.forEach(function(rango) {
+      var iniHor = rango.iniHor;
+      var finHor = rango.finHor;
+
+      if (iniHor <= finHor) {
+          // Rango normal (no cruza la medianoche)
+          if (horaActual >= iniHor && horaActual <= finHor) {
+              dentroDelRango = true;
+          }
+      } else {
+          // Rango que cruza la medianoche
+          if (horaActual >= iniHor || horaActual <= finHor) {
+              dentroDelRango = true;
+          }
+      }
+  });
+
+  if (dentroDelRango) {
+      btnTelevistazo.style.display = 'block';
+  } else {
+      btnTelevistazo.style.display = 'none';
+  }
+}
+
+// Verificar el horario al cargar la página
+setTimeout(() => {
+  verificarHorario();
+}, 500);
+
+// Verificar el horario cada minuto para asegurarse de que esté actualizado
+setInterval(verificarHorario, 60000);
+
 
 
 /* +++++++++++++++++++++
