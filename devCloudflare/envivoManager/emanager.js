@@ -529,8 +529,8 @@ if (ECUAVISA_EC.login()) {
 
 // eventRadioManager();
 
-//HORARIO NUEVO PARA EL REPRESISE DE TELEVISTAZO 7PM
-function verificarHorario() {
+//HORARIO NUEVO PARA EL REPRESISE DE TELEVISTAZO 7PM - ENVIVO
+function verificarHorarioEnvivo() {
   var horarios = [
       { iniHor: "22:00", finHor: "23:59" },
       { iniHor: "00:00", finHor: "01:00" }
@@ -568,11 +568,87 @@ function verificarHorario() {
 
 // Verificar el horario al cargar la página
 setTimeout(() => {
-  verificarHorario();
+  verificarHorarioEnvivo();
 }, 500);
 
 // Verificar el horario cada minuto para asegurarse de que esté actualizado
-setInterval(verificarHorario, 60000);
+setInterval(verificarHorarioEnvivo, 60000);
+
+
+
+//HORARIO NUEVO PARA EL REPRESISE DE TELEVISTAZO 7PM - REPRISE LANDING
+
+if (window.location.pathname === '/envivo/televistazo7pm') {
+  
+  function verificarHorario() {
+    var horarios = [
+        { iniHor: "21:00", finHor: "23:59" },
+        { iniHor: "00:00", finHor: "01:00" }, // Rango59 que cruza la medianoche
+        // Agrega más rangos horarios si es necesario
+    ];
+    // Obtener la hora actual en Ecuador
+    const horaEcuador = new Date().toLocaleString("en-US", {timeZone: "America/Guayaquil"});
+    const hora = new Date(horaEcuador);
+    console.log("horario actual", hora);
+    
+    // Obtener hora y minutos actuales
+    const horaActual = hora.getHours();
+    const minutosActual = hora.getMinutes();
+    
+    // Convertir la hora actual a minutos
+    const tiempoActualEnMinutos = horaActual * 60 + minutosActual;
+    
+    // Obtener los elementos del DOM
+    const contenido_visible_player = document.querySelector('.contenido_visible_player');
+    const fondito = document.querySelector('#fondito__reprise');
+    
+    // Verificar si estamos dentro de alguno de los rangos horarios
+    let dentroDeRango = false;
+    
+    for (let i = 0; i < horarios.length; i++) {
+        const { iniHor, finHor } = horarios[i];
+        
+        // Convertir las variables de horario a horas y minutos
+        const [horaInicio, minutoInicio] = iniHor.split(":").map(Number);
+        const [horaFin, minutoFin] = finHor.split(":").map(Number);
+        
+        // Convertir todo a minutos para comparar
+        const inicioEnMinutos = horaInicio * 60 + minutoInicio;
+        const finEnMinutos = horaFin * 60 + minutoFin;
+        
+        // Verificar si el rango cruza la medianoche
+        if (inicioEnMinutos > finEnMinutos) {
+            // Rango que cruza la medianoche
+            if (tiempoActualEnMinutos >= inicioEnMinutos || tiempoActualEnMinutos <= finEnMinutos) {
+                dentroDeRango = true;
+                break;
+            }
+        } else {
+            // Rango normal
+            if (tiempoActualEnMinutos >= inicioEnMinutos && tiempoActualEnMinutos <= finEnMinutos) {
+                dentroDeRango = true;
+                break;
+            }
+        }
+    }
+    
+      if (dentroDeRango) {
+          // Dentro de alguno de los rangos horarios
+          contenido_visible_player.style.display = 'block';
+          fondito.style.display = 'none';
+      } else {
+          // Fuera de todos los rangos horarios
+          contenido_visible_player.style.display = 'none';
+          fondito.style.display = 'block';
+      }
+  }
+
+  // Ejecutar la función inmediatamente
+  setTimeout(() => {
+    verificarHorario();
+  }, 1000);
+
+}
 
 
 
