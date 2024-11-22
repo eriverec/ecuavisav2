@@ -19,10 +19,13 @@
         <VExpansionPanelTitle>
 
           <span class="text-uppercase">
-            {{ modal.titulo || `Modal ${index + 1}` }}
+            <VChip class="mr-2" variant="outlined" color="primary">
+              {{ `Modal ${index + 1}` }}
+            </VChip>
+            {{ modal.titulo || `Título` }}
 
           </span>
-        
+
 
           <VSwitch class="mx-5" v-model="modal.estado" inset :label="capitalizedLabel(modal.estado)" />
 
@@ -41,76 +44,37 @@
                 <VCol cols="12">
                   <div class="demo-space-x">
 
-                    <VCombobox class="listUrls" v-model="modal.url" multiple chips :items="modal.url" variant="outlined"
+                    <VCombobox class="listUrls" closable-chips clear-icon="tabler-circle-x" v-model="modal.url" multiple chips :items="modal.url" variant="outlined"
                       label="URLS" />
-
                   </div>
                 </VCol>
 
                 <VCol cols="6">
-   
-
-                  <VCombobox
-                    label="País"
-                    chips
-                    v-model="modal.selectedCountry"
-                    :items="countries"
-                    item-title="country"
-                    item-value="countryCode"
-                    :hide-no-data="false"
-                    :menu-props="{ maxHeight: '300' }"
-                    @update:model-value="updateCities(index)"
-                    return-object
-                    clearable
-                  />
+                  <VCombobox label="País" chips v-model="modal.selectedCountry" :items="countries" item-title="country"
+                    item-value="countryCode" :hide-no-data="false" :menu-props="{ maxHeight: '300' }"
+                    @update:model-value="updateCities(index)" return-object clearable />
 
                 </VCol>
                 <VCol cols="6">
 
                   <!-- Modifica el VCombobox de Ciudad así: -->
-                  <VCombobox
-                      label="Ciudad"
-                      chips
-                      multiple
-                      v-model="modal.selectedCities"
-                      :items="modal.availableCities"
-                      item-title="city"
-                      item-value="city"
-                      :hide-no-data="false"
-                      :menu-props="{ maxHeight: '300' }"
-                      :disabled="!modal.selectedCountry"
-                      return-object
-                      clearable
-                      @update:model-value="handleCityChange(index)"
-                    />
-         
-
+                  <VCombobox label="Ciudad" closable-chips clear-icon="tabler-circle-x" chips multiple v-model="modal.selectedCities" :items="modal.availableCities" item-title="city" item-value="city" :hide-no-data="false" :menu-props="{ maxHeight: '300' }"
+                    :disabled="!modal.selectedCountry" return-object clearable
+                    @update:model-value="handleCityChange(index)" />
 
                 </VCol>
                 <VCol cols="2">
-                
-
-                  <VBtn color="error" variant="text" @click="deleteModal(index)" >
+                  <VBtn color="error" variant="text" @click="deleteModal(index)">
                     <VIcon start icon="tabler-trash" />Eliminar
                   </VBtn>
-
                 </VCol>
-
-
-
-
-
               </VRow>
-
-
-
             </VCardText>
           </VCard>
 
         </VExpansionPanelText>
       </VExpansionPanel>
     </VExpansionPanels>
-
 
     <div class="d-flex" style="justify-content: flex-end;">
       <VBtn @click="updateData" color="success" variant="tonal">
@@ -196,7 +160,7 @@ const fetchData = async () => {
         const country = countries.value.find(c => c.countryCode === modalData.selectedCountry.countryCode);
         if (country) {
           modalData.availableCities = country.data;
-          
+
           // Si hay ciudades guardadas, las cargamos como objetos completos
           if (modal.cities && Array.isArray(modal.cities)) {
             modalData.selectedCities = modal.cities.map(savedCity => {
