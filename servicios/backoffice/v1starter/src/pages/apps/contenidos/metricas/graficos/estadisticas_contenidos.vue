@@ -1,6 +1,5 @@
 <script setup>
 import axios from 'axios'
-import { debounce } from 'lodash'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import esLocale from "moment/locale/es"
@@ -19,12 +18,15 @@ const theme = useTheme()
 const isDark = computed(() => theme.current.value.dark)
 
 const state = ref({
+  // Datos de usuario
   userData: {
     anonimos: 0,
     registrados: 0,
     suscritos: 0,
     totalUsuariosUnicos: 0,
   },
+  
+  // Datos de estadísticas
   statsData: {
     secciones: [],
     subsecciones: [],
@@ -32,28 +34,43 @@ const state = ref({
       totalVisitas: 0
     }
   },
+  
+  // Rango de fechas
   dateRange: {
     start: moment().startOf('month').format('YYYY-MM-DD'),
     end: moment().format('YYYY-MM-DD')
   },
+  
+  // Reglas y selecciones
   rules: [],
   selectedRule: null,
-  activeTab: 'registrado',
-  activeInnerTab: 'secciones',
   selectedSection: null,
   selectedSubsection: null,
+  selectedUrl: null,
+  
+  // Estados de pestañas
+  activeTab: 'registrado',
+  activeInnerTab: 'secciones',
+  
+  // Datos de URLs
   urlsData: {
     totalUrls: 0,
     urls: []
   },
+  
+  // Datos de visitantes
   visitantesData: [],
+  
+  // Estados de control y carga
   isLoadingUrls: false,
-  hasLoadedInitialData: false,
   showVisitantesModal: false,
-  selectedUrl: null,
-  chartKey: 0
+  chartKey: 0,
+  
+  // Flags de control de carga y selección
+  initialLoadComplete: false,    // Controla si ya se realizó la carga inicial de datos
+  selectedSectionSet: false,     // Controla si ya se estableció la sección inicial
+  loadingVisitantes: null,       // Controla qué URL está cargando visitantes
 })
-
 const shouldShowSections = computed(() => 
   state.value.statsData.secciones.length > 1
 )
@@ -109,27 +126,28 @@ const filteredUrls = computed(() => {
 
   if (!currentSection) return []
 
-  return state.value.urlsData.urls
+  // Creamos un Map para agrupar URLs más eficientemente
+  const urlMap = new Map()
+  
+  state.value.urlsData.urls
     .filter(url => {
       if (url.seccion !== currentSection) return false
-      
       if (state.value.selectedSubsection === 'notas-sin-subseccion') {
         return !url.subseccion || url.subseccion.trim() === ''
       }
-      
       return state.value.selectedSubsection ? 
         url.subseccion === state.value.selectedSubsection : true
     })
-    .reduce((acc, url) => {
-      const existing = acc.find(item => item.url === url.url)
-      if (existing) {
-        existing.visitas++
+    .forEach(url => {
+      const key = url.url
+      if (urlMap.has(key)) {
+        urlMap.get(key).visitas++
       } else {
-        acc.push({ ...url, visitas: 1 })
+        urlMap.set(key, { ...url, visitas: 1 })
       }
-      return acc
-    }, [])
-    .sort((a, b) => b.visitas - a.visitas)
+    })
+
+  return Array.from(urlMap.values()).sort((a, b) => b.visitas - a.visitas)
 })
 
 const showNoDataMessage = computed(() => {
@@ -149,18 +167,14 @@ const noDataMessage = computed(() => {
     'No hay URLs disponibles'
 })
 
-
 const fetchData = async () => {
   if (!state.value.selectedRule?.id) return
 
   try {
     const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
-    const urlUsers = `${baseUrl}/${state.value.selectedRule.id}?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}`
-    const urlStats = `${baseUrl}/${state.value.selectedRule.id}/secciones-stats?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&format=json`
-    
     const [responseUsers, responseStats] = await Promise.all([
-      axios.get(urlUsers),
-      axios.get(urlStats)
+      axios.get(`${baseUrl}/${state.value.selectedRule.id}?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}`),
+      axios.get(`${baseUrl}/${state.value.selectedRule.id}/secciones-stats?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&format=json`)
     ])
     
     if (responseUsers.data.resp && responseUsers.data.data?.metricasPorTipoUsuario) {
@@ -176,48 +190,57 @@ const fetchData = async () => {
 
     if (responseStats.data) {
       state.value.statsData = responseStats.data
-      if (state.value.statsData.secciones.length === 1) {
-        state.value.selectedSection = state.value.statsData.secciones[0].seccion
-      }
+      
+      // Ordenamos y seleccionamos la sección con más visitas
+      const seccionesOrdenadas = state.value.statsData.secciones
+        .sort((a, b) => {
+          const totalA = a.porTipoUsuario[state.value.activeTab] || 0
+          const totalB = b.porTipoUsuario[state.value.activeTab] || 0
+          return totalB - totalA
+        })
+
+      state.value.selectedSection = seccionesOrdenadas[0]?.seccion || null
       state.value.chartKey++
     }
 
-    // Fetch URLs solo si no se han cargado inicialmente
-    if (!state.value.hasLoadedInitialData) {
+    // Solo hacemos el fetch inicial de URLs, los cambios posteriores se manejan en el watcher
+    if (!state.value.initialLoadComplete) {
       await fetchUrlsByType()
+      state.value.initialLoadComplete = true
     }
   } catch (error) {
     console.error('Error al obtener datos:', error)
   }
 }
 
-const debouncedFetchUrls = debounce(async () => {
-  state.value.isLoadingUrls = true
-  try {
-    await fetchUrlsByType()
-  } finally {
-    state.value.isLoadingUrls = false
-  }
-}, 300)
-
-const fetchUrlsByType = async () => {
+const fetchUrlsByType = async (skipLoadingState = false) => {
   if (!state.value.selectedRule?.id) return
+  
+  if (!skipLoadingState) {
+    state.value.isLoadingUrls = true
+  }
   
   try {
     const url = `https://restriccion-contenido.vercel.app/content-access/config/${state.value.selectedRule.id}/urls/tipo-usuario/${state.value.activeTab}?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&format=json`
+    
     const response = await axios.get(url)
     if (response.data) {
-      state.value.urlsData = response.data
-      state.value.hasLoadedInitialData = true
+      state.value.urlsData = {
+        ...response.data,
+        urls: response.data.urls?.map(url => ({
+          ...url,
+          visitas: 1
+        })) || []
+      }
     }
-    return response.data
   } catch (error) {
     console.error('Error al obtener URLs:', error)
-    throw error
+  } finally {
+    if (!skipLoadingState) {
+      state.value.isLoadingUrls = false
+    }
   }
 }
-
-
 const pieChartOptions = computed(() => ({
   chart: {
     type: 'pie',
@@ -331,16 +354,45 @@ const barChartSeries = computed(() => [{
   data: state.value.statsData.subsecciones.map(sub => sub.total)
 }])
 
-watch(
-  [() => state.value.dateRange, () => state.value.selectedRule],
-  () => {
-    if (state.value.selectedRule?.id) {
-      fetchData()
-    }
-  },
-  { deep: true }
-)
+// Optimizamos los watchers
+watch(() => state.value.selectedRule, (newRule) => {
+  if (newRule?.id) {
+    state.value.initialLoadComplete = false
+    state.value.selectedSection = null
+    fetchData()
+  }
+}, { immediate: false })
 
+// Optimizamos el watcher de activeTab para evitar llamadas duplicadas
+watch(() => state.value.activeTab, async () => {
+  // Actualizamos la sección seleccionada basada en los datos actuales
+  const seccionesOrdenadas = state.value.statsData.secciones
+    .sort((a, b) => {
+      const totalA = a.porTipoUsuario[state.value.activeTab] || 0
+      const totalB = b.porTipoUsuario[state.value.activeTab] || 0
+      return totalB - totalA
+    })
+
+  const nuevaSeccion = seccionesOrdenadas[0]?.seccion || null
+  
+  // Solo actualizamos si hay cambios reales
+  if (state.value.selectedSection !== nuevaSeccion) {
+    state.value.selectedSection = nuevaSeccion
+  }
+
+  state.value.selectedSubsection = null
+  state.value.activeInnerTab = 'secciones'
+  
+  // Solo hacemos una llamada a fetchUrlsByType
+  await fetchUrlsByType()
+}, { immediate: false })
+
+// Simplificamos el watcher de dateRange y selectedRule
+watch([() => state.value.dateRange, () => state.value.selectedRule], () => {
+  if (state.value.selectedRule?.id) {
+    fetchData()
+  }
+}, { deep: true })
 watch(
   () => state.value.activeTab,
   async () => {
@@ -816,74 +868,87 @@ onMounted(async () => {
                 </VWindowItem>
 
                 <!-- Tab de URLs -->
-                <VWindowItem value="urls">
-                  <div v-if="state.isLoadingUrls" class="d-flex justify-center pa-4">
-                    <VProgressCircular
-                      indeterminate
-                      color="primary"
-                    ></VProgressCircular>
-                  </div>
-                  <VList v-if="filteredUrls.length">
-                    <VListItem
-                      v-for="(url, index) in filteredUrls"
-                      :key="index"
-                      class="url-item"
-                    >
-                      <VListItemTitle class="text-body-2">
-                        <span class="text-truncate">
-                          {{ url.url }}
-                        </span>
-                      </VListItemTitle>
-                      <VListItemSubtitle class="d-flex align-center flex-wrap gap-2 mt-2">
-                        <VChip
-                          size="small"
-                          color="primary"
-                          variant="outlined"
-                        >
-                          {{ url.visitas }} visitas
-                        </VChip>
-                        <template v-if="state.activeTab !== 'registrado'">
-                          <VBtn
-                            size="small"
-                            variant="text"
-                            color="primary"
-                            @click="state.selectedUrl = url.url; fetchUrlVisitantes(url.url)"
-                          >
-                            <VIcon size="small" class="me-1">mdi-eye</VIcon>
-                            Ver
-                          </VBtn>
-
-                          <VBtn
-                            size="small"
-                            variant="text"
-                            color="primary"
-                            @click="downloadUrlVisitantes(url.url)"
-                          >
-                            <VIcon size="small" class="me-1">mdi-download</VIcon>
-                            Descargar
-                          </VBtn>
-                          <VBtn
-                            size="small"
-                            variant="text"
-                            color="primary"
-                            @click="copyToClipboard(url.url)"
-                          >
-                            <VIcon size="small" class="me-1">mdi-content-copy</VIcon>
-                            Copiar
-                          </VBtn>
-                        </template>
-                      </VListItemSubtitle>
-                    </VListItem>
-                  </VList>
-                  <VAlert
-                    v-else-if="showNoDataMessage"
-                    type="info"
-                    variant="tonal"
-                    class="mt-2"
-                  >
-                    {{ noDataMessage }}
-                  </VAlert>
-                </VWindowItem>
+                <!-- Reemplaza la sección de URLs en el template -->
+<VWindowItem value="urls">
+  <VCard flat>
+    <VCardText>
+      <div v-if="state.isLoadingUrls" class="d-flex justify-center pa-4">
+        <VProgressCircular
+          indeterminate
+          color="primary"
+          :size="32"
+          :width="3"
+        />
+      </div>
+      
+      <div v-else>
+        <VList v-if="filteredUrls.length">
+          <VListItem
+            v-for="(url, index) in filteredUrls"
+            :key="index"
+            class="url-item"
+          >
+            <VListItemTitle class="text-body-2 d-flex align-center justify-space-between">
+              <div class="text-truncate flex-grow-1">
+                {{ url.url }}
+              </div>
+              <VChip
+                size="small"
+                color="primary"
+                variant="outlined"
+                class="ms-2"
+              >
+                {{ url.visitas }} visitas
+              </VChip>
+            </VListItemTitle>
+            
+            <VListItemSubtitle class="d-flex align-center flex-wrap gap-2 mt-2">
+              <template v-if="state.activeTab !== 'anonimo'">
+                <VBtn
+                  size="small"
+                  variant="text"
+                  color="primary"
+                  :loading="state.loadingVisitantes === url.url"
+                  @click="fetchUrlVisitantes(url.url)"
+                >
+                  <VIcon size="small" class="me-1">mdi-eye</VIcon>
+                  Ver
+                </VBtn>
+                <VBtn
+                  size="small"
+                  variant="text"
+                  color="primary"
+                  @click="downloadUrlVisitantes(url.url)"
+                >
+                  <VIcon size="small" class="me-1">mdi-download</VIcon>
+                  Descargar
+                </VBtn>
+                <VBtn
+                  size="small"
+                  variant="text"
+                  color="primary"
+                  @click="copyToClipboard(url.url)"
+                >
+                  <VIcon size="small" class="me-1">mdi-content-copy</VIcon>
+                  Copiar
+                </VBtn>
+              </template>
+            </VListItemSubtitle>
+          </VListItem>
+        </VList>
+        
+        <VAlert
+          v-else
+          type="info"
+          variant="tonal"
+          class="mt-2"
+        >
+          {{ noDataMessage }}
+        </VAlert>
+      </div>
+    </VCardText>
+  </VCard>
+</VWindowItem>
               </VWindow>
             </VCardText>
           </VCard>
