@@ -5,12 +5,7 @@ import EstadisticasContenido from '@/pages/apps/contenidos/metricas/graficos/est
 <template>
   <VRow>
     <VCol cols="12">
-      <VCard>
-        <!-- <VCardTitle>Estadísticas por regla de Límites de contenido</VCardTitle> -->
-        <VCardText>
-          <EstadisticasContenido />
-        </VCardText>
-      </VCard>
+      <EstadisticasContenido />
     </VCol>
   </VRow>
 </template>
