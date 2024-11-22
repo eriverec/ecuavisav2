@@ -69,20 +69,20 @@
 
                   <!-- Modifica el VCombobox de Ciudad así: -->
                   <VCombobox
-                      label="Ciudad"
-                      chips
-                      multiple
-                      v-model="modal.selectedCities"
-                      :items="modal.availableCities"
-                      item-title="city"
-                      item-value="city"
-                      :hide-no-data="false"
-                      :menu-props="{ maxHeight: '300' }"
-                      :disabled="!modal.selectedCountry"
-                      return-object
-                      clearable
-                      @update:model-value="handleCityChange(index)"
-                    />
+                    label="Ciudad"
+                    chips
+                    v-model="modal.selectedCity"
+                    :items="modal.availableCities"
+                    item-title="city"
+                    item-value="city"
+                    :hide-no-data="false"
+                    :menu-props="{ maxHeight: '300' }"
+                    :disabled="!modal.selectedCountry"
+                    @update:model-value="handleCityChange(index)"
+                    return-object
+                    clearable
+                  />
+
          
 
 
@@ -142,11 +142,9 @@ const fetchCountriesAndCities = async () => {
   }
 };
 
-// Actualiza la función handleCityChange si es necesario
 const handleCityChange = (modalIndex) => {
-  const modal = modals.value[modalIndex];
-  // Aseguramos que las ciudades disponibles estén cargadas
-  if (modal.selectedCountry && (!modal.availableCities || modal.availableCities.length === 0)) {
+  if (!modals.value[modalIndex].selectedCity) {
+    // Si se limpió la ciudad, actualizamos las ciudades disponibles
     updateCities(modalIndex);
   }
 };
@@ -158,14 +156,14 @@ const updateCities = (modalIndex) => {
     const country = countries.value.find(c => c.countryCode === selectedCountry.countryCode);
     if (country) {
       modals.value[modalIndex].availableCities = country.data;
-      // Mantenemos solo las ciudades del país seleccionado
-      modals.value[modalIndex].selectedCities = modals.value[modalIndex].selectedCities.filter(
-        city => city.countryCode === selectedCountry.countryCode
-      );
+      // Solo resetear la ciudad si no hay una selección actual
+      if (!modals.value[modalIndex].selectedCity) {
+        modals.value[modalIndex].selectedCity = null;
+      }
     }
   } else {
     modals.value[modalIndex].availableCities = [];
-    modals.value[modalIndex].selectedCities = [];
+    modals.value[modalIndex].selectedCity = null;
   }
 };
 
@@ -177,48 +175,32 @@ const fetchData = async () => {
   try {
     const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/modalondemand/v2/getData.php');
     const data = await response.json();
-    modals.value = data.modals.map(modal => {
-      const modalData = {
-        estado: modal.estado === "true",
-        titulo: modal.titulo,
-        contenido: modal.contenido,
-        url: modal.url || [],
-        selectedCountry: modal.paisCode ? {
-          country: modal.pais,
-          countryCode: modal.paisCode
-        } : null,
-        selectedCities: [],  // Lo inicializamos vacío
-        availableCities: []
-      };
+    modals.value = data.modals.map(modal => ({
+      estado: modal.estado === "true",
+      titulo: modal.titulo,
+      contenido: modal.contenido,
+      url: modal.url || [],
+      selectedCountry: modal.paisCode  ? {
+        country: modal.pais,
+        countryCode: modal.paisCode
+      } : null,
+      selectedCity: modal.ciudad ? {
+        city: modal.ciudad,
+        countryCode: modal.city?.countryCode
+      } : null,
+      availableCities: []
+    }));
 
-      // Si hay un país seleccionado, cargamos sus ciudades disponibles
-      if (modalData.selectedCountry) {
-        const country = countries.value.find(c => c.countryCode === modalData.selectedCountry.countryCode);
-        if (country) {
-          modalData.availableCities = country.data;
-          
-          // Si hay ciudades guardadas, las cargamos como objetos completos
-          if (modal.cities && Array.isArray(modal.cities)) {
-            modalData.selectedCities = modal.cities.map(savedCity => {
-              // Buscamos la ciudad en las ciudades disponibles para obtener el objeto completo
-              const fullCityData = country.data.find(c => c.city === savedCity.city);
-              return fullCityData || savedCity; // Si no se encuentra, usamos los datos guardados
-            });
-          }
-        }
-      }
-
-      return modalData;
-    });
+ 
   } catch (error) {
     console.error('Error fetching data:', error);
   }
 };
 
 // Llamar a la función al montar el componente
-onMounted(async () => {
-  await fetchCountriesAndCities(); // Primero cargamos los países
-  await fetchData(); // Luego cargamos los datos de los modales
+onMounted(() => {
+  fetchCountriesAndCities();
+  fetchData();
 });
 
 // Función para agregar un nuevo modal
@@ -229,7 +211,7 @@ const addModal = () => {
     contenido: '',
     url: [],
     selectedCountry: null,
-    selectedCities: [],
+    selectedCity: null,
     availableCities: []
   });
 };
@@ -255,18 +237,21 @@ const removeUrl = (modalIndex, urlItem) => {
 const updateData = async () => {
   const newData = {
     key: "modalondemand",
-    modals: modals.value.map(modal => ({
-      estado: modal.estado ? "true" : "false",
-      titulo: modal.titulo,
-      contenido: modal.contenido,
-      url: modal.url,
-      paisCode: modal.selectedCountry?.countryCode || '',
-      pais: modal.selectedCountry?.country || '',
-      cities: modal.selectedCities.map(city => ({
-        city: city.city,
-        countryCode: city.countryCode
-      }))
-    }))
+    modals: modals.value.map(modal => {
+      return {
+        estado: modal.estado ? "true" : "false",
+        titulo: modal.titulo,
+        contenido: modal.contenido,
+        url: modal.url,
+        paisCode: modal.selectedCountry?.countryCode || '',
+        pais: modal.selectedCountry?.country || '',
+        ciudad: modal.selectedCity?.city || '',
+        city: modal.selectedCity ? {
+          city: modal.selectedCity.city,
+          countryCode: modal.selectedCity.countryCode
+        } : null
+      };
+    })
   };
 
   try {
