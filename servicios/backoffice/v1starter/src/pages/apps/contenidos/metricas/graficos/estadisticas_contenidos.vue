@@ -18,7 +18,7 @@ const theme = useTheme()
 const isDark = computed(() => theme.current.value.dark)
 
 const state = ref({
-  // Datos de usuario
+
   userData: {
     anonimos: 0,
     registrados: 0,
@@ -26,7 +26,7 @@ const state = ref({
     totalUsuariosUnicos: 0,
   },
   
-  // Datos de estadísticas
+
   statsData: {
     secciones: [],
     subsecciones: [],
@@ -34,42 +34,40 @@ const state = ref({
       totalVisitas: 0
     }
   },
-  
-  // Rango de fechas
+
   dateRange: {
     start: moment().startOf('month').format('YYYY-MM-DD'),
     end: moment().format('YYYY-MM-DD')
   },
   
-  // Reglas y selecciones
+ 
   rules: [],
   selectedRule: null,
   selectedSection: null,
   selectedSubsection: null,
   selectedUrl: null,
   
-  // Estados de pestañas
+ 
   activeTab: 'registrado',
   activeInnerTab: 'secciones',
   
-  // Datos de URLs
+
   urlsData: {
     totalUrls: 0,
     urls: []
   },
   
-  // Datos de visitantes
+
   visitantesData: [],
   
-  // Estados de control y carga
   isLoadingUrls: false,
   showVisitantesModal: false,
   chartKey: 0,
   
-  // Flags de control de carga y selección
-  initialLoadComplete: false,    // Controla si ya se realizó la carga inicial de datos
-  selectedSectionSet: false,     // Controla si ya se estableció la sección inicial
-  loadingVisitantes: null,       // Controla qué URL está cargando visitantes
+
+  initialLoadComplete: false,   
+  selectedSectionSet: false,     
+  loadingVisitantes: null,       
 })
 const shouldShowSections = computed(() => 
   state.value.statsData.secciones.length > 1
@@ -126,7 +124,7 @@ const filteredUrls = computed(() => {
 
   if (!currentSection) return []
 
-  // Creamos un Map para agrupar URLs más eficientemente
+
   const urlMap = new Map()
   
   state.value.urlsData.urls
@@ -190,35 +188,36 @@ const fetchData = async () => {
 
     if (responseStats.data) {
       state.value.statsData = responseStats.data
-      
-      // Ordenamos y seleccionamos la sección con más visitas
-      const seccionesOrdenadas = state.value.statsData.secciones
-        .sort((a, b) => {
-          const totalA = a.porTipoUsuario[state.value.activeTab] || 0
-          const totalB = b.porTipoUsuario[state.value.activeTab] || 0
-          return totalB - totalA
-        })
-
-      state.value.selectedSection = seccionesOrdenadas[0]?.seccion || null
+      updateSelectedSection()
       state.value.chartKey++
-    }
 
-    // Solo hacemos el fetch inicial de URLs, los cambios posteriores se manejan en el watcher
-    if (!state.value.initialLoadComplete) {
-      await fetchUrlsByType()
-      state.value.initialLoadComplete = true
+      // Solo fetching URLs en carga inicial
+      if (!state.value.initialLoadComplete) {
+        await fetchUrlsByType()
+        state.value.initialLoadComplete = true
+      }
     }
   } catch (error) {
     console.error('Error al obtener datos:', error)
   }
 }
 
-const fetchUrlsByType = async (skipLoadingState = false) => {
+
+const updateSelectedSection = () => {
+  const seccionesOrdenadas = [...state.value.statsData.secciones].sort((a, b) => {
+    const totalA = a.porTipoUsuario[state.value.activeTab] || 0
+    const totalB = b.porTipoUsuario[state.value.activeTab] || 0
+    return totalB - totalA
+  })
+  
+  state.value.selectedSection = seccionesOrdenadas[0]?.seccion || null
+}
+
+
+const fetchUrlsByType = async () => {
   if (!state.value.selectedRule?.id) return
   
-  if (!skipLoadingState) {
-    state.value.isLoadingUrls = true
-  }
+  state.value.isLoadingUrls = true
   
   try {
     const url = `https://restriccion-contenido.vercel.app/content-access/config/${state.value.selectedRule.id}/urls/tipo-usuario/${state.value.activeTab}?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&format=json`
@@ -236,11 +235,11 @@ const fetchUrlsByType = async (skipLoadingState = false) => {
   } catch (error) {
     console.error('Error al obtener URLs:', error)
   } finally {
-    if (!skipLoadingState) {
-      state.value.isLoadingUrls = false
-    }
+    state.value.isLoadingUrls = false
   }
 }
+
+
 const pieChartOptions = computed(() => ({
   chart: {
     type: 'pie',
@@ -354,68 +353,38 @@ const barChartSeries = computed(() => [{
   data: state.value.statsData.subsecciones.map(sub => sub.total)
 }])
 
-// Optimizamos los watchers
-watch(() => state.value.selectedRule, (newRule) => {
-  if (newRule?.id) {
+watch(() => state.value.selectedRule, (newRule, oldRule) => {
+  if (newRule?.id && newRule.id !== oldRule?.id) {
     state.value.initialLoadComplete = false
     state.value.selectedSection = null
     fetchData()
   }
-}, { immediate: false })
+})
 
-// Optimizamos el watcher de activeTab para evitar llamadas duplicadas
-watch(() => state.value.activeTab, async () => {
-  // Actualizamos la sección seleccionada basada en los datos actuales
-  const seccionesOrdenadas = state.value.statsData.secciones
-    .sort((a, b) => {
-      const totalA = a.porTipoUsuario[state.value.activeTab] || 0
-      const totalB = b.porTipoUsuario[state.value.activeTab] || 0
-      return totalB - totalA
-    })
 
-  const nuevaSeccion = seccionesOrdenadas[0]?.seccion || null
-  
-  // Solo actualizamos si hay cambios reales
-  if (state.value.selectedSection !== nuevaSeccion) {
-    state.value.selectedSection = nuevaSeccion
-  }
+watch(() => state.value.activeTab, async (newTab, oldTab) => {
+  if (newTab === oldTab) return
 
   state.value.selectedSubsection = null
   state.value.activeInnerTab = 'secciones'
   
-  // Solo hacemos una llamada a fetchUrlsByType
+ 
+  updateSelectedSection()
+  
+
   await fetchUrlsByType()
-}, { immediate: false })
+}, { flush: 'post' })
 
-// Simplificamos el watcher de dateRange y selectedRule
-watch([() => state.value.dateRange, () => state.value.selectedRule], () => {
-  if (state.value.selectedRule?.id) {
-    fetchData()
-  }
-}, { deep: true })
-watch(
-  () => state.value.activeTab,
-  async () => {
-    if (state.value.statsData.secciones.length) {
-      if (!state.value.selectedSection) {
-        state.value.selectedSection = state.value.statsData.secciones[0].seccion
-      }
-    }
-    state.value.selectedSubsection = null
-    state.value.activeInnerTab = 'secciones'
-    await fetchUrlsByType()
-  }
-)
 
-watch(
-  () => state.value.activeInnerTab,
-  () => {
-    if (state.value.activeInnerTab === 'secciones') {
-      state.value.selectedSubsection = null
+watch([() => state.value.dateRange.start, () => state.value.dateRange.end], 
+  ([newStart, newEnd], [oldStart, oldEnd]) => {
+    if (newStart === oldStart && newEnd === oldEnd) return
+    if (state.value.selectedRule?.id) {
+      state.value.initialLoadComplete = false
+      fetchData()
     }
   }
 )
-
 const showUrlsForSubsection = (subseccion) => {
   state.value.selectedSubsection = subseccion
   state.value.activeInnerTab = 'urls'
@@ -504,7 +473,7 @@ const copyToClipboard = async (url) => {
   }
 }
 
-// Lifecycle hooks
+
 onMounted(async () => {
   await fetchRules()
 })
@@ -562,7 +531,7 @@ onMounted(async () => {
       </VRow>
     </VCol>
 
-    <!-- Título -->
+   
     <VCol cols="12" class="mb-6 d-flex align-items-center justify-content-center py-3 px-3">
       <div class="d-inline-flex align-items-center text-center">
         <div class="text-h5 mb-4 text-center">Estadísticas de: </div>
@@ -868,87 +837,88 @@ onMounted(async () => {
                 </VWindowItem>
 
                 <!-- Tab de URLs -->
-                <!-- Reemplaza la sección de URLs en el template -->
-<VWindowItem value="urls">
-  <VCard flat>
-    <VCardText>
-      <div v-if="state.isLoadingUrls" class="d-flex justify-center pa-4">
-        <VProgressCircular
-          indeterminate
-          color="primary"
-          :size="32"
-          :width="3"
-        />
-      </div>
-      
-      <div v-else>
-        <VList v-if="filteredUrls.length">
-          <VListItem
-            v-for="(url, index) in filteredUrls"
-            :key="index"
-            class="url-item"
-          >
-            <VListItemTitle class="text-body-2 d-flex align-center justify-space-between">
-              <div class="text-truncate flex-grow-1">
-                {{ url.url }}
-              </div>
-              <VChip
-                size="small"
-                color="primary"
-                variant="outlined"
-                class="ms-2"
-              >
-                {{ url.visitas }} visitas
-              </VChip>
-            </VListItemTitle>
-            
-            <VListItemSubtitle class="d-flex align-center flex-wrap gap-2 mt-2">
-              <template v-if="state.activeTab !== 'anonimo'">
-                <VBtn
-                  size="small"
-                  variant="text"
-                  color="primary"
-                  :loading="state.loadingVisitantes === url.url"
-                  @click="fetchUrlVisitantes(url.url)"
-                >
-                  <VIcon size="small" class="me-1">mdi-eye</VIcon>
-                  Ver
-                </VBtn>
-                <VBtn
-                  size="small"
-                  variant="text"
-                  color="primary"
-                  @click="downloadUrlVisitantes(url.url)"
-                >
-                  <VIcon size="small" class="me-1">mdi-download</VIcon>
-                  Descargar
-                </VBtn>
-                <VBtn
-                  size="small"
-                  variant="text"
-                  color="primary"
-                  @click="copyToClipboard(url.url)"
-                >
-                  <VIcon size="small" class="me-1">mdi-content-copy</VIcon>
-                  Copiar
-                </VBtn>
-              </template>
-            </VListItemSubtitle>
-          </VListItem>
-        </VList>
-        
-        <VAlert
-          v-else
-          type="info"
-          variant="tonal"
-          class="mt-2"
-        >
-          {{ noDataMessage }}
-        </VAlert>
-      </div>
-    </VCardText>
-  </VCard>
-</VWindowItem>
+
+                <VWindowItem value="urls">
+                  <VCard flat>
+                    <VCardText>
+                      <div v-if="state.isLoadingUrls" class="d-flex justify-center pa-4">
+                        <VProgressCircular
+                          indeterminate
+                          color="primary"
+                          :size="32"
+                          :width="3"
+                        />
+                      </div>
+                      
+                      <div v-else>
+                        <VList v-if="filteredUrls.length">
+                          <VListItem
+                            v-for="(url, index) in filteredUrls"
+                            :key="index"
+                            class="url-item"
+                          >
+                            <VListItemTitle class="text-body-2 d-flex align-center justify-space-between">
+                              <div class="text-truncate flex-grow-1">
+                                {{ url.url }}
+                              </div>
+                            
+                            </VListItemTitle>
+                            
+                            <VListItemSubtitle class="d-flex align-center flex-wrap gap-2 mt-2">
+                              <template v-if="state.activeTab !== 'anonimo'">
+                                <VChip
+                                size="small"
+                                color="primary"
+                                variant="outlined"
+                                class="ms-2"
+                              >
+                                {{ url.visitas }} visitas
+                              </VChip>
+                                <VBtn
+                                  size="small"
+                                  variant="text"
+                                  color="primary"
+                                  :loading="state.loadingVisitantes === url.url"
+                                  @click="fetchUrlVisitantes(url.url)"
+                                >
+                                  <VIcon size="small" class="me-1">mdi-eye</VIcon>
+                                  Ver
+                                </VBtn>
+                                <VBtn
+                                  size="small"
+                                  variant="text"
+                                  color="primary"
+                                  @click="downloadUrlVisitantes(url.url)"
+                                >
+                                  <VIcon size="small" class="me-1">mdi-download</VIcon>
+                                  Descargar
+                                </VBtn>
+                                <VBtn
+                                  size="small"
+                                  variant="text"
+                                  color="primary"
+                                  @click="copyToClipboard(url.url)"
+                                >
+                                  <VIcon size="small" class="me-1">mdi-content-copy</VIcon>
+                                  Copiar
+                                </VBtn>
+                              </template>
+                            </VListItemSubtitle>
+                          </VListItem>
+                        </VList>
+                        
+                        <VAlert
+                          v-else
+                          type="info"
+                          variant="tonal"
+                          class="mt-2"
+                        >
+                          {{ noDataMessage }}
+                        </VAlert>
+                      </div>
+                    </VCardText>
+                  </VCard>
+                </VWindowItem>
               </VWindow>
             </VCardText>
           </VCard>
