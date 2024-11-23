@@ -2090,8 +2090,7 @@ INICIO - BLOQUE - MUNDO
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 30px;
+  grid-template-columns: 3fr 1fr;
   column-gap: 22px;
 }
 
@@ -2127,7 +2126,7 @@ INICIO - BLOQUE - MUNDO
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
-    gap: 0px;
+    /* gap: 0px; */
     grid-template-columns: 3fr 1fr;
     margin: 1rem 0;
     padding-top: 10px;
