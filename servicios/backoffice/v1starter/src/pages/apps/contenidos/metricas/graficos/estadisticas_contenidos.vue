@@ -117,7 +117,32 @@ const getSortedSubsections = computed(() => {
   return subsecciones
 })
 
+const getCurrentMonthRange = () => {
+  const start = moment().startOf('month').format('YYYY-MM-DD')
+  const end = moment().endOf('month').format('YYYY-MM-DD')
+  return { start, end }
+}
 
+
+const filtroFechaRango = async (selectedDates, dateStr, instance) => {
+  if (selectedDates.length > 1) {
+    const fechaInicio = moment(selectedDates[0]).format('YYYY-MM-DD')
+    const fechaFin = moment(selectedDates[1]).format('YYYY-MM-DD')
+    
+    state.value.dateRange = {
+      start: fechaInicio,
+      end: fechaFin
+    }
+
+    if (state.value.selectedRule?.id) {
+      state.value.initialLoadComplete = false
+      await Promise.all([
+        fetchData(),
+        fetchCiudadesData()
+      ])
+    }
+  }
+}
 const filteredUrls = computed(() => {
   if (!state.value.urlsData.urls?.length) return []
   
@@ -194,7 +219,6 @@ const fetchData = async () => {
       updateSelectedSection()
       state.value.chartKey++
 
-      // Solo fetching URLs en carga inicial
       if (!state.value.initialLoadComplete) {
         await fetchUrlsByType()
         state.value.initialLoadComplete = true
@@ -358,6 +382,121 @@ const barChartSeries = computed(() => [{
   data: state.value.statsData.subsecciones.map(sub => sub.total)
 }])
 
+const barChartCiudadesOptions = computed(() => ({
+  chart: {
+    type: 'bar',
+    height: 350,
+    foreColor: isDark.value ? '#FFFFFF' : '#000000',
+    background: 'transparent',
+    fontFamily: 'Public Sans, sans-serif',
+    toolbar: { show: false }
+  },
+  plotOptions: {
+    bar: {
+      horizontal: false,
+      columnWidth: '55%',
+      borderRadius: 4,
+      distributed: true 
+    },
+  },
+  dataLabels: {
+    enabled: true,
+    formatter: (val) => Math.round(val),
+    style: {
+      fontSize: '14px',
+      fontFamily: 'Public Sans, sans-serif',
+      colors: ['#fff']
+    }
+  },
+  xaxis: {
+    categories: state.value.ciudadesData?.ciudades?.map(ciudad => ciudad.ciudad) || [],
+    labels: {
+      style: {
+        colors: isDark.value ? '#FFFFFF' : '#000000'
+      },
+      rotate: -45,
+      trim: true
+    }
+  },
+  yaxis: {
+    title: {
+      text: 'Número de usuarios',
+      style: {
+        color: isDark.value ? '#FFFFFF' : '#000000'
+      }
+    },
+    labels: {
+      formatter: (val) => Math.round(val),
+      style: {
+        colors: isDark.value ? '#FFFFFF' : '#000000'
+      }
+    }
+  },
+  tooltip: {
+    y: {
+      formatter: (val, { dataPointIndex }) => {
+        const ciudad = state.value.ciudadesData?.ciudades[dataPointIndex]
+        return `Usuarios: ${val}\nAccesos totales: ${ciudad?.totalAccesos || 0}`
+      }
+    }
+  },
+  legend: {
+    show: false
+  },
+  colors: ['#FF9F43', '#7367F0', '#28C76F', '#EA5455', '#00CFE8'] 
+}))
+
+const barChartCiudadesSeries = computed(() => [{
+  name: 'Usuarios',
+  data: state.value.ciudadesData?.ciudades?.map(ciudad => ciudad.totalUsuarios) || []
+}])
+
+
+state.value.ciudadesData = {
+  estadisticasGenerales: {
+    totalCiudades: 0,
+    totalUsuariosUnicos: 0,
+    totalAccesos: 0
+  },
+  ciudades: []
+}
+
+// Obtener datos de ciudades
+const fetchCiudadesData = async () => {
+  if (!state.value.selectedRule?.id) return
+  
+  try {
+    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
+    const url = `${baseUrl}/${state.value.selectedRule.id}/ciudades/${state.value.activeTab}/?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}`
+    
+    const response = await axios.get(url)
+    if (response.data) {
+      state.value.ciudadesData = {
+        estadisticasGenerales: response.data.estadisticasGenerales,
+        ciudades: response.data.ciudades.sort((a, b) => b.totalUsuarios - a.totalUsuarios)
+      }
+      state.value.chartKey++
+    }
+  } catch (error) {
+    console.error('Error al obtener datos de ciudades:', error)
+  }
+}
+
+
+watch(() => state.value.activeTab, async (newTab, oldTab) => {
+  if (newTab === oldTab) return
+
+  state.value.selectedSubsection = null
+  state.value.activeInnerTab = 'secciones'
+  
+  updateSelectedSection()
+  await Promise.all([
+    fetchUrlsByType(),
+    fetchCiudadesData() 
+  ])
+}, { flush: 'post' })
+
+
 watch(() => state.value.selectedRule, (newRule, oldRule) => {
   if (newRule?.id && newRule.id !== oldRule?.id) {
     state.value.initialLoadComplete = false
@@ -381,12 +520,15 @@ watch(() => state.value.activeTab, async (newTab, oldTab) => {
 }, { flush: 'post' })
 
 
+
+
 watch([() => state.value.dateRange.start, () => state.value.dateRange.end], 
   ([newStart, newEnd], [oldStart, oldEnd]) => {
     if (newStart === oldStart && newEnd === oldEnd) return
     if (state.value.selectedRule?.id) {
       state.value.initialLoadComplete = false
       fetchData()
+      fetchCiudadesData()
     }
   }
 )
@@ -478,9 +620,37 @@ const copyToClipboard = async (url) => {
   }
 }
 
+const isDownloading = ref(false)
+
+const downloadSubsecciones = async () => {
+  try {
+    isDownloading.value = true
+    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
+    const url = `${baseUrl}/${state.value.selectedRule.id}/urls/subsecciones?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&format=csv`
+    
+    const response = await fetch(url)
+    
+    if (!response.ok) throw new Error('Error en la descarga')
+    
+    const blob = await response.blob()
+    const downloadUrl = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = downloadUrl
+    a.download = `subsecciones_${state.value.selectedRule.name}_${state.value.dateRange.start}_${state.value.dateRange.end}.csv`
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(downloadUrl)
+    document.body.removeChild(a)
+  } catch (error) {
+    console.log('Error al descargar:', error)
+  } finally {
+    isDownloading.value = false
+  }
+}
 
 onMounted(async () => {
-  await fetchRules();
+  await fetchRules()
+  await fetchCiudadesData()
 })
 
 </script>
@@ -512,27 +682,30 @@ onMounted(async () => {
               <!-- Selector de Fechas -->
               <VCol cols="12" md="6">
                 <label class="mb-2 d-block">Escoge rango de fechas:</label>
-                <VRow>
-                  <VCol cols="6" class="pe-1">
-                    <VTextField
-                      v-model="state.dateRange.start"
-                      type="date"
-                      hide-details
-                      density="compact"
-                      :max="state.dateRange.end"
-                    />
-                  </VCol>
-                  <VCol cols="6" class="ps-1">
-                    <VTextField
-                      v-model="state.dateRange.end"
-                      type="date"
-                      hide-details
-                      density="compact"
-                      :min="state.dateRange.start"
-                      :max="moment().format('YYYY-MM-DD')"
-                    />
-                  </VCol>
-                </VRow>
+                <div class="date-picker-wrapper" style="width: 100%;">
+                  <AppDateTimePicker 
+                    prepend-inner-icon="tabler-calendar" 
+                    density="compact" 
+                    :show-current="true"
+                    @on-change="filtroFechaRango" 
+                    :config="{
+                      position: 'auto right',
+                      mode: 'range',
+                      altFormat: 'F j, Y',
+                      dateFormat: 'd-m-Y',
+                      defaultDate: '', 
+                      maxDate: 'today',
+                      showMonths: 1,
+                      locale: {
+                        rangeSeparator: ' al '
+                      },
+                      noCalendar: false, 
+                      enableTime: false, 
+                      wrap: true 
+                    }" 
+                    placeholder="Selecciona un rango de fechas"
+                  />
+                </div>
               </VCol>
             </VRow>
         </VCardText>
@@ -683,7 +856,7 @@ onMounted(async () => {
         <VCol cols="12" md="8">
           <VCard class="h-100">
             <VCardItem class="header_card_item">
-              <div>
+              <div col="12" md="6">
                 <div class="descripcion">
                   <VCardTitle>Secciones visitadas</VCardTitle>
                   <VCardSubtitle class="d-flex">
@@ -711,7 +884,7 @@ onMounted(async () => {
         <VCol cols="12" md="12">
           <VCard class="h-100">
             <VCardItem class="header_card_item">
-              <div>
+              <div class="d-flex justify-space-between align-center w-100">
                 <div class="descripcion">
                   <VCardTitle>Subsecciones visitadas</VCardTitle>
                   <VCardSubtitle class="d-flex">
@@ -721,6 +894,15 @@ onMounted(async () => {
                     </div>
                   </VCardSubtitle>
                 </div>
+                <VBtn
+                  icon
+                  color="primary"
+                  variant="text"
+                  @click="downloadSubsecciones"
+                  :loading="isDownloading"
+                >
+                  <VIcon icon="mdi-download" />
+                </VBtn>
               </div>
             </VCardItem>
             <VCardText>
@@ -973,6 +1155,10 @@ onMounted(async () => {
             </VCardText>
           </VCard>
         </VCol>
+
+        
+
+        
       </VRow>
     </VCol>
 
@@ -1124,5 +1310,43 @@ onMounted(async () => {
 
 :deep(.apexcharts-menu-icon) {
   display: none !important;
+}
+
+.stats-card {
+  background-color: v-bind('isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)"');
+  border-radius: 8px;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.stats-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px v-bind('isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"');
+}
+
+.stats-card .v-icon {
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.stats-card:hover .v-icon {
+  opacity: 1;
+}
+
+.date-picker-wrapper {
+  :deep(.v-field__input) {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}
+
+:deep(.selected) {
+  background: #7367f0 !important;
+  border-color: #7367f0 !important;
+}
+
+:deep(.flatpickr-day.inRange) {
+  background: #7367f014 !important;
+  border-color: #7367f014 !important;
+  box-shadow: -5px 0 0 #7367f014, 5px 0 0 #7367f014;
 }
 </style>
