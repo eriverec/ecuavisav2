@@ -1327,6 +1327,11 @@ INICIO - BLOQUE - ECUADOR
   padding: 30px 0;
 }
 
+.HOME_MENU_RD .ecuador_list_1x2 .noticias .article:nth-child(3),
+.HOME_MENU_RD .ecuador_list_1x2 .noticias .article:nth-child(4){
+  border-bottom: 1px solid #2927b9;
+}
+
 .HOME_MENU_RD .ecuador_list_1x2 .noticias .article .text_block .section {
   color: var(--rd-section);
   font-weight: 500;
@@ -1551,6 +1556,10 @@ BLOQUE - TE EXPLICO LA NOTICIA
 
 
 @media (max-width: 767px) {
+  .HOME_MENU_RD .ecuador_list_1x2 .noticias .article:nth-child(3){
+    border-bottom: 1px solid transparent;
+  }
+
   .HOME_MENU_RD .ecuador_list_1x2 .noticias .article {
     padding: 5px 0;
   }
