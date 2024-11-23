@@ -1010,7 +1010,7 @@ Cambio de tamaño de imagen grande izq
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .BLOQUE_SEC_TIT_IMG .text_block .headline {
-    max-width: 330px;
+    /* max-width: 330px; */
     padding-top: 10px;
   }
 
@@ -2092,6 +2092,7 @@ INICIO - BLOQUE - MUNDO
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 30px;
+  column-gap: 22px;
 }
 
 .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .text_block .section {
@@ -2133,7 +2134,7 @@ INICIO - BLOQUE - MUNDO
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .BLOQUE_SEC_TIT_IMG .text_block .headline {
-    max-width: 330px;
+    /* max-width: 330px; */
     padding-top: 10px;
   }
 
@@ -2185,7 +2186,7 @@ INICIO - BLOQUE - MUNDO
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .BLOQUE_SEC_TIT_IMG .text_block .headline {
-    max-width: 330px;
+    /* max-width: 330px; */
     padding-top: 10px;
   }
 
