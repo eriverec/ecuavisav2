@@ -39,36 +39,57 @@
                   <VTextField label="Titulo" v-model="modal.titulo" />
                 </VCol>
                 <VCol cols="12">
-                  <VTextarea label="Contenido del modal" type="text" v-model="modal.contenido" />
+                  <VTextarea rows="20" label="Contenido del modal" type="text" v-model="modal.contenido" />
                 </VCol>
                 <VCol cols="12">
                   <div class="demo-space-x">
 
-                    <VCombobox class="listUrls" closable-chips clear-icon="tabler-circle-x" v-model="modal.url" multiple chips :items="modal.url" variant="outlined"
-                      label="URLS" />
+                    <VCombobox class="listUrls" closable-chips clear-icon="tabler-circle-x" v-model="modal.url" multiple
+                      chips :items="modal.url" variant="outlined" label="URLS" />
                   </div>
                 </VCol>
 
-                <VCol cols="6">
-                  <VCombobox label="País" chips v-model="modal.selectedCountry" :items="countries" item-title="country"
-                    item-value="countryCode" :hide-no-data="false" :menu-props="{ maxHeight: '300' }"
-                    @update:model-value="updateCities(index)" return-object clearable />
+                <VCol cols="12">
+                  <VSwitch class="" v-model="modal.region" inset label="Región" />
 
                 </VCol>
-                <VCol cols="6">
 
-                  <!-- Modifica el VCombobox de Ciudad así: -->
-                  <VCombobox label="Ciudad" closable-chips clear-icon="tabler-circle-x" chips multiple v-model="modal.selectedCities" :items="modal.availableCities" item-title="city" item-value="city" :hide-no-data="false" :menu-props="{ maxHeight: '300' }"
-                    :disabled="!modal.selectedCountry" return-object clearable
-                    @update:model-value="handleCityChange(index)" />
 
-                </VCol>
-                <VCol cols="2">
-                  <VBtn color="error" variant="text" @click="deleteModal(index)">
-                    <VIcon start icon="tabler-trash" />Eliminar
-                  </VBtn>
-                </VCol>
+
               </VRow>
+
+
+
+
+                <VRow v-if="modal.region">
+
+                  <VCol cols="6">
+
+                    <VCombobox label="País" chips v-model="modal.selectedCountry" :items="countries"
+                      item-title="country" item-value="countryCode" :hide-no-data="false"
+                      :menu-props="{ maxHeight: '300' }" @update:model-value="updateCities(index)" return-object
+                      clearable />
+
+                  </VCol>
+
+                  <VCol cols="6">
+
+                    <!-- Modifica el VCombobox de Ciudad así: -->
+                    <VCombobox label="Ciudad" closable-chips clear-icon="tabler-circle-x" chips multiple
+                      v-model="modal.selectedCities" :items="modal.availableCities" item-title="city" item-value="city"
+                      :hide-no-data="false" :menu-props="{ maxHeight: '300' }" :disabled="!modal.selectedCountry"
+                      return-object clearable @update:model-value="handleCityChange(index)" />
+                  </VCol>
+                    <VCol cols="2">
+                      <VBtn color="error" variant="text" @click="deleteModal(index)">
+                        <VIcon start icon="tabler-trash" />Eliminar
+                      </VBtn>
+                    </VCol>
+                </VRow>
+
+
+
+
             </VCardText>
           </VCard>
 
@@ -144,6 +165,7 @@ const fetchData = async () => {
     modals.value = data.modals.map(modal => {
       const modalData = {
         estado: modal.estado === "true",
+        region: modal.region === "true",
         titulo: modal.titulo,
         contenido: modal.contenido,
         url: modal.url || [],
@@ -189,6 +211,7 @@ onMounted(async () => {
 const addModal = () => {
   modals.value.push({
     estado: false,
+    region: false,
     titulo: '',
     contenido: '',
     url: [],
@@ -221,6 +244,7 @@ const updateData = async () => {
     key: "modalondemand",
     modals: modals.value.map(modal => ({
       estado: modal.estado ? "true" : "false",
+      region: modal.region ? "true" : "false",
       titulo: modal.titulo,
       contenido: modal.contenido,
       url: modal.url,
