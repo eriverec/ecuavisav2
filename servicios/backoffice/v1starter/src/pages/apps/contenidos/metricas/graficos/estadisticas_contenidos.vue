@@ -19,8 +19,28 @@ moment.locale('es', [esLocale])
 const theme = useTheme()
 const isDark = computed(() => theme.current.value.dark)
 
-const state = ref({
 
+const loadingStates = ref({
+  urls: false,
+  ciudades: false,
+  stats: false
+})
+
+const dataCache = ref({
+  navigation: {
+    anonimo: null,
+    registrado: null,
+    suscrito: null
+  },
+  cities: {
+    anonimo: null,
+    registrado: null,
+    suscrito: null
+  }
+})
+
+
+const state = ref({
   userData: {
     anonimos: 0,
     registrados: 0,
@@ -28,7 +48,6 @@ const state = ref({
     totalUsuariosUnicos: 0,
   },
   
-
   statsData: {
     secciones: [],
     subsecciones: [],
@@ -42,46 +61,185 @@ const state = ref({
     end: moment().format('YYYY-MM-DD')
   },
   
- 
   rules: [],
   selectedRule: null,
   selectedSection: null,
   selectedSubsection: null,
   selectedUrl: null,
   
- 
-  activeTab: 'registrado',
+  activeNavigationTab: 'registrado',  
+  activeCiudadesTab: 'registrado',    
   activeInnerTab: 'secciones',
   
-
   urlsData: {
     totalUrls: 0,
     urls: []
   },
   
-
   visitantesData: [],
   
   isLoadingUrls: false,
   showVisitantesModal: false,
   chartKey: 0,
   
-
   initialLoadComplete: false,   
   selectedSectionSet: false,     
   loadingVisitantes: null,       
+
+  ciudadesData: {
+    estadisticasGenerales: {
+      totalCiudades: 0,
+      totalUsuariosUnicos: 0,
+      totalAccesos: 0
+    },
+    ciudades: []
+  }
 })
+
+// Cargar datos de navegación
+const loadNavigationData = async (tab, forceReload = false) => {
+  if (!state.value.selectedRule?.id) return
+  
+
+  if (!forceReload && dataCache.value.navigation[tab]) {
+    state.value.urlsData = dataCache.value.navigation[tab]
+    updateSelectedSection()
+    return
+  }
+
+  loadingGlobal.value = true
+  
+  try {
+    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
+    const [responseStats, responseUrls] = await Promise.all([
+      axios.get(`${baseUrl}/${state.value.selectedRule.id}/secciones-stats?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&format=json`),
+      axios.get(`${baseUrl}/${state.value.selectedRule.id}/urls/tipo-usuario/${tab}?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&format=json`)
+    ])
+
+    if (responseStats.data) {
+      state.value.statsData = responseStats.data
+      updateSelectedSection()
+      state.value.chartKey++
+    }
+
+    if (responseUrls.data) {
+      const urlsData = {
+        ...responseUrls.data,
+        urls: responseUrls.data.urls?.map(url => ({
+          ...url,
+          visitas: 1
+        })) || []
+      }
+      dataCache.value.navigation[tab] = urlsData
+      state.value.urlsData = urlsData
+    }
+
+  } catch (error) {
+    console.error('Error cargando datos de navegación:', error)
+  } finally {
+    loadingGlobal.value = false
+  }
+}
+
+// Cargar datos de ciudades
+const loadCitiesData = async (tab, forceReload = false) => {
+  if (!state.value.selectedRule?.id) return
+
+  if (!forceReload && dataCache.value.cities[tab]) {
+    state.value.ciudadesData = dataCache.value.cities[tab]
+    return
+  }
+
+  try {
+    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
+    const response = await axios.get(
+      `${baseUrl}/${state.value.selectedRule.id}/ciudades/${tab}/?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}`
+    )
+
+    if (response.data) {
+      const ciudadesData = {
+        estadisticasGenerales: response.data.estadisticasGenerales,
+        ciudades: response.data.ciudades.sort((a, b) => b.totalUsuarios - a.totalUsuarios)
+      }
+      dataCache.value.cities[tab] = ciudadesData
+      state.value.ciudadesData = ciudadesData
+      state.value.chartKey++
+    }
+  } catch (error) {
+    console.error('Error cargando datos de ciudades:', error)
+  }
+}
+
+watch(() => state.value.activeNavigationTab, async (newTab, oldTab) => {
+  if (newTab === oldTab) return
+
+  state.value.selectedSubsection = null
+  state.value.activeInnerTab = 'secciones'
+  
+  await loadNavigationData(newTab)
+}, { flush: 'post' })
+
+watch(() => state.value.activeCiudadesTab, async (newTab, oldTab) => {
+  if (newTab === oldTab) return
+  await loadCitiesData(newTab)
+})
+
+const loadDataForTab = async (tab, forceReload = false) => {
+  if (!state.value.selectedRule?.id) return
+
+  if (!forceReload && dataCache.value[tab]) {
+    state.value.urlsData = dataCache.value[tab]
+    return
+  }
+
+  loadingStates.value = {
+    urls: true,
+    ciudades: true,
+    stats: true
+  }
+
+  try {
+
+    await Promise.all([
+      fetchUrlsByType(),
+      fetchCiudadesData(),
+      fetchData()
+    ])
+
+  
+    state.value.activeCiudadesTab = tab
+  } catch (error) {
+    console.error('Error cargando datos:', error)
+  } finally {
+    loadingStates.value = {
+      urls: false,
+      ciudades: false,
+      stats: false
+    }
+  }
+}
+
 const shouldShowSections = computed(() => 
   state.value.statsData.secciones.length > 1
 )
 
 const getSortedSections = computed(() => {
   if (!state.value.statsData.secciones.length) return []
-  return [...state.value.statsData.secciones].sort((a, b) => {
-    const totalA = a.porTipoUsuario[state.value.activeTab] || 0
-    const totalB = b.porTipoUsuario[state.value.activeTab] || 0
-    return totalB - totalA
+
+
+  const sectionVisits = {}
+  state.value.urlsData.urls?.forEach(url => {
+    if (url.seccion) {
+      sectionVisits[url.seccion] = (sectionVisits[url.seccion] || 0) + 1
+    }
   })
+
+  return [...state.value.statsData.secciones]
+    .map(seccion => ({
+      ...seccion,
+      totalVisitas: sectionVisits[seccion.seccion] || 0
+    }))
+    .sort((a, b) => b.totalVisitas - a.totalVisitas)
 })
 
 const getSortedSubsections = computed(() => {
@@ -94,12 +252,21 @@ const getSortedSubsections = computed(() => {
   
   let subsecciones = state.value.statsData.subsecciones
     .filter(sub => sub.seccion === currentSection)
-    .sort((a, b) => {
-      const totalA = a.porTipoUsuario[state.value.activeTab] || 0
-      const totalB = b.porTipoUsuario[state.value.activeTab] || 0
-      return totalB - totalA
-    })
+    .map(sub => {
+    
+      const visitasSubseccion = state.value.urlsData.urls?.filter(url => 
+        url.seccion === currentSection && 
+        url.subseccion === sub.subseccion
+      ).length || 0;
 
+      return {
+        ...sub,
+        totalVisitas: visitasSubseccion
+      }
+    })
+    .sort((a, b) => b.totalVisitas - a.totalVisitas)
+
+  // Agregar URLs sin subsección
   const urlsSinSubseccion = state.value.urlsData.urls?.filter(url => 
     url.seccion === currentSection && (!url.subseccion || url.subseccion.trim() === '')
   ) || []
@@ -108,9 +275,7 @@ const getSortedSubsections = computed(() => {
     subsecciones.push({
       seccion: currentSection,
       subseccion: 'notas-sin-subseccion',
-      porTipoUsuario: {
-        [state.value.activeTab]: urlsSinSubseccion.length
-      }
+      totalVisitas: urlsSinSubseccion.length
     })
   }
 
@@ -123,6 +288,17 @@ const getCurrentMonthRange = () => {
   return { start, end }
 }
 
+const getLastWeekRange = () => {
+  const fechaFin = moment()
+  const fechaInicio = moment().subtract(14, 'days') 
+  
+  return {
+    start: fechaInicio.format('YYYY-MM-DD'),
+    end: fechaFin.format('YYYY-MM-DD')
+  }
+}
+
+state.value.dateRange = getLastWeekRange()
 
 const filtroFechaRango = async (selectedDates, dateStr, instance) => {
   if (selectedDates.length > 1) {
@@ -136,13 +312,28 @@ const filtroFechaRango = async (selectedDates, dateStr, instance) => {
 
     if (state.value.selectedRule?.id) {
       state.value.initialLoadComplete = false
+     
+      dataCache.value = {
+        navigation: {
+          anonimo: null,
+          registrado: null,
+          suscrito: null
+        },
+        cities: {
+          anonimo: null,
+          registrado: null,
+          suscrito: null
+        }
+      }
+     
       await Promise.all([
-        fetchData(),
-        fetchCiudadesData()
+        loadNavigationData(state.value.activeNavigationTab, true),
+        loadCitiesData(state.value.activeCiudadesTab, true)
       ])
     }
   }
 }
+
 const filteredUrls = computed(() => {
   if (!state.value.urlsData.urls?.length) return []
   
@@ -150,7 +341,6 @@ const filteredUrls = computed(() => {
     (state.value.statsData.secciones.length === 1 ? state.value.statsData.secciones[0].seccion : null)
 
   if (!currentSection) return []
-
 
   const urlMap = new Map()
   
@@ -166,7 +356,9 @@ const filteredUrls = computed(() => {
     .forEach(url => {
       const key = url.url
       if (urlMap.has(key)) {
-        urlMap.get(key).visitas++
+        const existing = urlMap.get(key)
+        existing.visitas++
+        urlMap.set(key, existing)
       } else {
         urlMap.set(key, { ...url, visitas: 1 })
       }
@@ -218,11 +410,6 @@ const fetchData = async () => {
       state.value.statsData = responseStats.data
       updateSelectedSection()
       state.value.chartKey++
-
-      if (!state.value.initialLoadComplete) {
-        await fetchUrlsByType()
-        state.value.initialLoadComplete = true
-      }
     }
 
     loadingGlobal.value = false;
@@ -230,7 +417,6 @@ const fetchData = async () => {
     console.error('Error al obtener datos:', error)
   }
 }
-
 
 const updateSelectedSection = () => {
   const seccionesOrdenadas = [...state.value.statsData.secciones].sort((a, b) => {
@@ -242,9 +428,13 @@ const updateSelectedSection = () => {
   state.value.selectedSection = seccionesOrdenadas[0]?.seccion || null
 }
 
-
 const fetchUrlsByType = async () => {
   if (!state.value.selectedRule?.id) return
+  
+  if (dataCache.value[state.value.activeTab]) {
+    state.value.urlsData = dataCache.value[state.value.activeTab]
+    return
+  }
   
   state.value.isLoadingUrls = true
   
@@ -253,13 +443,16 @@ const fetchUrlsByType = async () => {
     
     const response = await axios.get(url)
     if (response.data) {
-      state.value.urlsData = {
+      const urlsData = {
         ...response.data,
         urls: response.data.urls?.map(url => ({
           ...url,
           visitas: 1
         })) || []
       }
+      
+      dataCache.value[state.value.activeTab] = urlsData
+      state.value.urlsData = urlsData
     }
   } catch (error) {
     console.error('Error al obtener URLs:', error)
@@ -268,7 +461,197 @@ const fetchUrlsByType = async () => {
   }
 }
 
+const fetchCiudadesData = async () => {
+  if (!state.value.selectedRule?.id) return
+  
+  try {
+    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
+    const url = `${baseUrl}/${state.value.selectedRule.id}/ciudades/${state.value.activeCiudadesTab}/?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}`
+    
+    const response = await axios.get(url)
+    if (response.data) {
+      state.value.ciudadesData = {
+        estadisticasGenerales: response.data.estadisticasGenerales,
+        ciudades: response.data.ciudades.sort((a, b) => b.totalUsuarios - a.totalUsuarios)
+      }
+      state.value.chartKey++
+    }
+  } catch (error) {
+    console.error('Error al obtener datos de ciudades:', error)
+  }
+}
 
+
+watch(() => state.value.activeTab, async (newTab, oldTab) => {
+  if (newTab === oldTab) return
+
+  state.value.selectedSubsection = null
+  state.value.activeInnerTab = 'secciones'
+  
+  updateSelectedSection()
+  await loadDataForTab(newTab)
+}, { flush: 'post' })
+
+
+watch(() => state.value.activeCiudadesTab, async (newTab, oldTab) => {
+  if (newTab === oldTab) return
+  await fetchCiudadesData()
+})
+
+watch(() => state.value.selectedRule, (newRule, oldRule) => {
+  if (newRule?.id && newRule.id !== oldRule?.id) {
+    state.value.initialLoadComplete = false
+    state.value.selectedSection = null
+    dataCache.value = {
+      navigation: {
+        anonimo: null,
+        registrado: null,
+        suscrito: null
+      },
+      cities: {
+        anonimo: null,
+        registrado: null,
+        suscrito: null
+      }
+    }
+    loadNavigationData(state.value.activeNavigationTab, true)
+    loadCitiesData(state.value.activeCiudadesTab, true)
+  }
+})
+
+watch([() => state.value.dateRange.start, () => state.value.dateRange.end], 
+  ([newStart, newEnd], [oldStart, oldEnd]) => {
+    if (newStart === oldStart && newEnd === oldEnd) return
+    
+    dataCache.value = {
+      anonimo: null,
+      registrado: null,
+      suscrito: null
+    }
+    
+    if (state.value.selectedRule?.id) {
+      state.value.initialLoadComplete = false
+      loadDataForTab(state.value.activeTab, true)
+    }
+  }
+)
+
+const showUrlsForSubsection = (subseccion) => {
+  state.value.selectedSubsection = subseccion
+  state.value.activeInnerTab = 'urls'
+}
+
+const fetchUrlVisitantes = async (url) => {
+  try {
+    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
+    const requestUrl = `${baseUrl}/${state.value.selectedRule.id}/url-visitantes?url=${encodeURIComponent(url)}&startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&typeUser=${state.value.activeNavigationTab}`
+    
+    const response = await axios.get(requestUrl)
+    state.value.visitantesData = response.data || []
+    state.value.showVisitantesModal = true
+  } catch (error) {
+    console.error('Error al obtener visitantes:', error)
+  }
+}
+const downloadUrlVisitantes = async (url) => {
+  if (!state.value.selectedRule?.id) return
+
+  try {
+    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
+    const downloadUrl = `${baseUrl}/${state.value.selectedRule.id}/url-visitantes?url=${encodeURIComponent(url)}&startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&typeUser=${state.value.activeTab}&format=csv`
+    
+    const response = await axios.get(downloadUrl, { responseType: 'blob' })
+    
+    const fileName = `visitantes_URL_${state.value.dateRange.start}_${state.value.dateRange.end}.csv`
+    
+    const blobUrl = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = blobUrl
+    link.setAttribute('download', fileName)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(blobUrl)
+  } catch (error) {
+    console.error('Error al descargar visitantes:', error)
+  }
+}
+
+const downloadData = async (tipo) => {
+  if (!state.value.selectedRule?.id) return
+
+  try {
+    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
+    const url = `${baseUrl}/${state.value.selectedRule.id}/tipo/${tipo}/urls?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&format=csv`
+    
+    const response = await axios.get(url, { responseType: 'blob' })
+    const fileName = `usuarios_${tipo}_${state.value.selectedRule.name}_${state.value.dateRange.start}_${state.value.dateRange.end}.csv`
+    
+    const blobUrl = window.URL.createObjectURL(new Blob([response.data]))
+    const link = document.createElement('a')
+    link.href = blobUrl
+    link.setAttribute('download', fileName)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    window.URL.revokeObjectURL(blobUrl)
+  } catch (error) {
+    console.error('Error al descargar datos:', error)
+  }
+}
+
+const fetchRules = async () => {
+  try {
+    const response = await axios.get('https://estadisticas.ecuavisa.com/sites/gestor/Tools/contenidoLimits/config_contenido.php')
+    if (response.data.success && response.data.data) {
+      state.value.rules = response.data.data
+      if (state.value.rules.length > 0) {
+        state.value.selectedRule = state.value.rules[0]
+        await loadDataForTab(state.value.activeTab, true)
+      }
+    }
+  } catch (error) {
+    console.error('Error al cargar las reglas:', error)
+  }
+}
+
+const copyToClipboard = async (url) => {
+  try {
+    await navigator.clipboard.writeText(url)
+  } catch (err) {
+    console.error('Error al copiar URL:', err)
+  }
+}
+
+const isDownloading = ref(false)
+
+const downloadSubsecciones = async () => {
+  try {
+    isDownloading.value = true
+    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
+    const url = `${baseUrl}/${state.value.selectedRule.id}/urls/subsecciones?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&format=csv`
+    
+    const response = await fetch(url)
+    
+    if (!response.ok) throw new Error('Error en la descarga')
+    
+    const blob = await response.blob()
+    const downloadUrl = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = downloadUrl
+    a.download = `subsecciones_${state.value.selectedRule.name}_${state.value.dateRange.start}_${state.value.dateRange.end}.csv`
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(downloadUrl)
+    document.body.removeChild(a)
+  } catch (error) {
+    console.log('Error al descargar:', error)
+  } finally {
+    isDownloading.value = false
+  }
+}
+
+// Opciones para los gráficos
 const pieChartOptions = computed(() => ({
   chart: {
     type: 'pie',
@@ -371,17 +754,6 @@ const barChartOptions = computed(() => ({
   colors: ['#7367F0']
 }))
 
-const pieChartSeries = computed(() => {
-  if (!state.value.statsData.secciones.length) return []
-  const total = state.value.statsData.estadisticasGenerales.totalVisitas
-  return state.value.statsData.secciones.map(seccion => (seccion.total / total) * 100)
-})
-
-const barChartSeries = computed(() => [{
-  name: 'Visitas',
-  data: state.value.statsData.subsecciones.map(sub => sub.total)
-}])
-
 const barChartCiudadesOptions = computed(() => ({
   chart: {
     type: 'bar',
@@ -446,215 +818,33 @@ const barChartCiudadesOptions = computed(() => ({
   colors: ['#FF9F43', '#7367F0', '#28C76F', '#EA5455', '#00CFE8'] 
 }))
 
+const pieChartSeries = computed(() => {
+  if (!state.value.statsData.secciones.length) return []
+  const total = state.value.statsData.estadisticasGenerales.totalVisitas
+  return state.value.statsData.secciones.map(seccion => (seccion.total / total) * 100)
+})
+
+const barChartSeries = computed(() => [{
+  name: 'Visitas',
+  data: state.value.statsData.subsecciones.map(sub => sub.total)
+}])
+
 const barChartCiudadesSeries = computed(() => [{
   name: 'Usuarios',
   data: state.value.ciudadesData?.ciudades?.map(ciudad => ciudad.totalUsuarios) || []
 }])
 
 
-state.value.ciudadesData = {
-  estadisticasGenerales: {
-    totalCiudades: 0,
-    totalUsuariosUnicos: 0,
-    totalAccesos: 0
-  },
-  ciudades: []
-}
-
-// Obtener datos de ciudades
-const fetchCiudadesData = async () => {
-  if (!state.value.selectedRule?.id) return
-  
-  try {
-    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
-    const url = `${baseUrl}/${state.value.selectedRule.id}/ciudades/${state.value.activeTab}/?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}`
-    
-    const response = await axios.get(url)
-    if (response.data) {
-      state.value.ciudadesData = {
-        estadisticasGenerales: response.data.estadisticasGenerales,
-        ciudades: response.data.ciudades.sort((a, b) => b.totalUsuarios - a.totalUsuarios)
-      }
-      state.value.chartKey++
-    }
-  } catch (error) {
-    console.error('Error al obtener datos de ciudades:', error)
-  }
-}
-
-
-watch(() => state.value.activeTab, async (newTab, oldTab) => {
-  if (newTab === oldTab) return
-
-  state.value.selectedSubsection = null
-  state.value.activeInnerTab = 'secciones'
-  
-  updateSelectedSection()
-  await Promise.all([
-    fetchUrlsByType(),
-    fetchCiudadesData() 
-  ])
-}, { flush: 'post' })
-
-
-watch(() => state.value.selectedRule, (newRule, oldRule) => {
-  if (newRule?.id && newRule.id !== oldRule?.id) {
-    state.value.initialLoadComplete = false
-    state.value.selectedSection = null
-    fetchData()
-  }
-})
-
-
-watch(() => state.value.activeTab, async (newTab, oldTab) => {
-  if (newTab === oldTab) return
-
-  state.value.selectedSubsection = null
-  state.value.activeInnerTab = 'secciones'
-  
- 
-  updateSelectedSection()
-  
-
-  await fetchUrlsByType()
-}, { flush: 'post' })
-
-
-
-
-watch([() => state.value.dateRange.start, () => state.value.dateRange.end], 
-  ([newStart, newEnd], [oldStart, oldEnd]) => {
-    if (newStart === oldStart && newEnd === oldEnd) return
-    if (state.value.selectedRule?.id) {
-      state.value.initialLoadComplete = false
-      fetchData()
-      fetchCiudadesData()
-    }
-  }
-)
-const showUrlsForSubsection = (subseccion) => {
-  state.value.selectedSubsection = subseccion
-  state.value.activeInnerTab = 'urls'
-}
-
-const fetchUrlVisitantes = async (url) => {
-  try {
-    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
-    const requestUrl = `${baseUrl}/${state.value.selectedRule.id}/url-visitantes?url=${encodeURIComponent(url)}&startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&typeUser=${state.value.activeTab}`
-    
-    const response = await axios.get(requestUrl)
-    state.value.visitantesData = response.data || []
-    state.value.showVisitantesModal = true
-  } catch (error) {
-    console.error('Error al obtener visitantes:', error)
-  }
-}
-
-const downloadUrlVisitantes = async (url) => {
-  if (!state.value.selectedRule?.id) return
-
-  try {
-    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
-    const downloadUrl = `${baseUrl}/${state.value.selectedRule.id}/url-visitantes?url=${encodeURIComponent(url)}&startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&typeUser=${state.value.activeTab}&format=csv`
-    
-    const response = await axios.get(downloadUrl, { responseType: 'blob' })
-    
-    const fileName = `visitantes_URL_${state.value.dateRange.start}_${state.value.dateRange.end}.csv`
-    
-    const blobUrl = window.URL.createObjectURL(new Blob([response.data]))
-    const link = document.createElement('a')
-    link.href = blobUrl
-    link.setAttribute('download', fileName)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(blobUrl)
-  } catch (error) {
-    console.error('Error al descargar visitantes:', error)
-  }
-}
-
-const downloadData = async (tipo) => {
-  if (!state.value.selectedRule?.id) return
-
-  try {
-    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
-    const url = `${baseUrl}/${state.value.selectedRule.id}/tipo/${tipo}/urls?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&format=csv`
-    
-    const response = await axios.get(url, { responseType: 'blob' })
-    const fileName = `usuarios_${tipo}_${state.value.selectedRule.name}_${state.value.dateRange.start}_${state.value.dateRange.end}.csv`
-    
-    const blobUrl = window.URL.createObjectURL(new Blob([response.data]))
-    const link = document.createElement('a')
-    link.href = blobUrl
-    link.setAttribute('download', fileName)
-    document.body.appendChild(link)
-    link.click()
-    document.body.removeChild(link)
-    window.URL.revokeObjectURL(blobUrl)
-  } catch (error) {
-    console.error('Error al descargar datos:', error)
-  }
-}
-
-const fetchRules = async () => {
-  try {
-    const response = await axios.get('https://estadisticas.ecuavisa.com/sites/gestor/Tools/contenidoLimits/config_contenido.php')
-    if (response.data.success && response.data.data) {
-      state.value.rules = response.data.data
-      if (state.value.rules.length > 0) {
-        state.value.selectedRule = state.value.rules[0]
-        await fetchData()
-      }
-    }
-  } catch (error) {
-    console.error('Error al cargar las reglas:', error)
-  }
-}
-
-const copyToClipboard = async (url) => {
-  try {
-    await navigator.clipboard.writeText(url)
-  } catch (err) {
-    console.error('Error al copiar URL:', err)
-  }
-}
-
-const isDownloading = ref(false)
-
-const downloadSubsecciones = async () => {
-  try {
-    isDownloading.value = true
-    const baseUrl = 'https://restriccion-contenido.vercel.app/content-access/config'
-    const url = `${baseUrl}/${state.value.selectedRule.id}/urls/subsecciones?startDate=${state.value.dateRange.start}&endDate=${state.value.dateRange.end}&format=csv`
-    
-    const response = await fetch(url)
-    
-    if (!response.ok) throw new Error('Error en la descarga')
-    
-    const blob = await response.blob()
-    const downloadUrl = window.URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = downloadUrl
-    a.download = `subsecciones_${state.value.selectedRule.name}_${state.value.dateRange.start}_${state.value.dateRange.end}.csv`
-    document.body.appendChild(a)
-    a.click()
-    window.URL.revokeObjectURL(downloadUrl)
-    document.body.removeChild(a)
-  } catch (error) {
-    console.log('Error al descargar:', error)
-  } finally {
-    isDownloading.value = false
-  }
-}
-
 onMounted(async () => {
   await fetchRules()
-  await fetchCiudadesData()
+  if (state.value.selectedRule?.id) {
+    await Promise.all([
+      loadNavigationData(state.value.activeNavigationTab, true),
+      loadCitiesData(state.value.activeCiudadesTab, true)
+    ])
+  }
 })
-
 </script>
-
 <template>
   <VRow>
     <VCol cols="12">
@@ -692,18 +882,21 @@ onMounted(async () => {
                       position: 'auto right',
                       mode: 'range',
                       altFormat: 'F j, Y',
-                      dateFormat: 'd-m-Y',
-                      defaultDate: '', 
+                      dateFormat: 'Y-m-d',
+                      defaultDate: [
+                        state.dateRange.start,
+                        state.dateRange.end
+                      ],
                       maxDate: 'today',
                       showMonths: 1,
                       locale: {
-                        rangeSeparator: ' al '
+                        rangeSeparator: ' al ',
+                        firstDayOfWeek: 1
                       },
-                      noCalendar: false, 
-                      enableTime: false, 
-                      wrap: true 
+                      noCalendar: false,
+                      enableTime: false,
+                      wrap: true
                     }" 
-                    placeholder="Selecciona un rango de fechas"
                   />
                 </div>
               </VCol>
@@ -935,18 +1128,18 @@ onMounted(async () => {
                 { value: 'suscrito', label: 'Suscritos' }
               ]"
               :key="index"
-              :color="state.activeTab === tipo.value ? 'primary' : 'secondary'"
-              :variant="state.activeTab === tipo.value ? 'elevated' : 'flat'"
+              :color="state.activeNavigationTab === tipo.value ? 'primary' : 'secondary'"
+              :variant="state.activeNavigationTab === tipo.value ? 'elevated' : 'flat'"
               size="lg"
               class="text-uppercase px-4 py-2"
-              @click="state.activeTab = tipo.value"
+              @click="state.activeNavigationTab = tipo.value"
             >
               {{ tipo.label }}
             </VBtn>
           </div>
 
           <VRow>
-            <!-- Lista de Secciones (condicional) -->
+            <!-- Lista de Top Secciones -->
             <VCol 
               v-if="shouldShowSections" 
               cols="12" 
@@ -978,7 +1171,7 @@ onMounted(async () => {
                         {{ seccion.seccion }}
                       </VListItemTitle>
                       <VListItemSubtitle>
-                        {{ seccion.porTipoUsuario[state.activeTab] || 0 }} visitas
+                        {{ seccion.totalVisitas }} visitas
                       </VListItemSubtitle>
                     </VListItem>
                   </VList>
@@ -1022,36 +1215,36 @@ onMounted(async () => {
                     <VWindowItem value="secciones">
                       <VList v-if="getSortedSubsections.length">
                         <VListItem
-                          v-for="(subseccion, index) in getSortedSubsections"
-                          :key="subseccion.subseccion"
-                        >
-                          <template v-slot:prepend>
-                            <VChip
-                              size="small"
-                              :color="subseccion.subseccion === 'notas-sin-subseccion' ? 'warning' : 'primary'"
-                              class="mr-2"
-                            >
-                              #{{ index + 1 }}
-                            </VChip>
-                          </template>
-                          
-                          <VListItemTitle class="d-flex align-center">
-                            <span class="flex-grow-1">
-                              {{ subseccion.subseccion === 'notas-sin-subseccion' ? 'Notas sin subsección' : (subseccion.subseccion || 'Sin subsección') }}
-                            </span>
-                            <VBtn
-                              icon
-                              variant="text"
-                              size="small"
-                              @click="showUrlsForSubsection(subseccion.subseccion)"
-                            >
-                              <VIcon>mdi-link-variant</VIcon>
-                            </VBtn>
-                          </VListItemTitle>
-                          <VListItemSubtitle>
-                            {{ subseccion.porTipoUsuario[state.activeTab] || 0 }} visitas
-                          </VListItemSubtitle>
-                        </VListItem>
+                            v-for="(subseccion, index) in getSortedSubsections"
+                            :key="subseccion.subseccion"
+                          >
+                            <template v-slot:prepend>
+                              <VChip
+                                size="small"
+                                :color="subseccion.subseccion === 'notas-sin-subseccion' ? 'warning' : 'primary'"
+                                class="mr-2"
+                              >
+                                #{{ index + 1 }}
+                              </VChip>
+                            </template>
+                            
+                            <VListItemTitle class="d-flex align-center">
+                              <span class="flex-grow-1">
+                                {{ subseccion.subseccion === 'notas-sin-subseccion' ? 'Notas sin subsección' : (subseccion.subseccion || 'Sin subsección') }}
+                              </span>
+                              <VBtn
+                                icon
+                                variant="text"
+                                size="small"
+                                @click="showUrlsForSubsection(subseccion.subseccion)"
+                              >
+                                <VIcon>mdi-link-variant</VIcon>
+                              </VBtn>
+                            </VListItemTitle>
+                            <VListItemSubtitle>
+                              {{ subseccion.totalVisitas }} visitas
+                            </VListItemSubtitle>
+                          </VListItem>
                       </VList>
                       <VAlert
                         v-else-if="showNoDataMessage"
@@ -1092,15 +1285,15 @@ onMounted(async () => {
                                 </VListItemTitle>
                                 
                                 <VListItemSubtitle class="d-flex align-center flex-wrap gap-2 mt-2">
-                                  <template v-if="state.activeTab !== 'anonimo'">
+                                  <template v-if="state.activeNavigationTab !== 'anonimo'">
                                     <VChip
-                                    size="small"
-                                    color="primary"
-                                    variant="outlined"
-                                    class="ms-2"
-                                  >
-                                    {{ url.visitas }} visitas
-                                  </VChip>
+                                      size="small"
+                                      color="primary"
+                                      variant="outlined"
+                                      class="ms-2"
+                                    >
+                                      {{ url.visitas }} visitas
+                                    </VChip>
                                     <VBtn
                                       size="small"
                                       variant="text"
@@ -1157,7 +1350,118 @@ onMounted(async () => {
         </VCol>
 
         
+      <!-- Ciudades-->
 
+        <VCol cols="12" class="d-none">
+          <VCard>
+            <VCardItem class="header_card_item">
+              <div class="descripcion">
+                <VCardTitle>Ciudades por tipo de usuario</VCardTitle>
+                <VCardSubtitle class="d-flex">
+                  <b class="mr-1">Regla seleccionada: </b> 
+                  <div v-if="state.selectedRule" style="color:#7367f0;">
+                    {{ state.selectedRule.name.toUpperCase() }}
+                  </div>
+                </VCardSubtitle>
+              </div>
+            </VCardItem>
+
+            <VCardText>
+              <!-- Tabs como botones -->
+              <div class="d-flex justify-center mb-4 gap-4">
+                <VBtn
+                  v-for="(tipo, index) in [
+                    { value: 'anonimo', label: 'Visitantes anónimos' },
+                    { value: 'registrado', label: 'Registrados' },
+                    { value: 'suscrito', label: 'Suscritos' }
+                  ]"
+                  :key="index"
+                  :color="state.activeCiudadesTab === tipo.value ? 'primary' : 'secondary'"
+                  :variant="state.activeCiudadesTab === tipo.value ? 'elevated' : 'flat'"
+                  size="lg"
+                  class="text-uppercase px-4 py-2"
+                  @click="state.activeCiudadesTab = tipo.value"
+                >
+                  {{ tipo.label }}
+                </VBtn>
+              </div>
+
+              <!-- Estadísticas generales en cards -->
+              <VRow class="mb-6">
+                <VCol cols="12" md="4">
+                  <VCard variant="flat" class="stats-card h-100">
+                    <VCardText class="text-center">
+                      <VIcon
+                        icon="mdi-map-marker-multiple"
+                        size="36"
+                        color="muted"
+                        class="mb-2"
+                      />
+                      <div class="text-h6 font-weight-bold mb-1">
+                        {{ state.ciudadesData.estadisticasGenerales.totalCiudades }}
+                      </div>
+                      <div class="text-subtitle-2">Ciudades totales</div>
+                    </VCardText>
+                  </VCard>
+                </VCol>
+
+                <VCol cols="12" md="4">
+                  <VCard variant="flat" class="stats-card h-100">
+                    <VCardText class="text-center">
+                      <VIcon
+                        icon="mdi-account-group"
+                        size="36"
+                        color="muted"
+                        class="mb-2"
+                      />
+                      <div class="text-h6 font-weight-bold mb-1">
+                        {{ state.ciudadesData.estadisticasGenerales.totalUsuariosUnicos }}
+                      </div>
+                      <div class="text-subtitle-2">Usuarios únicos</div>
+                    </VCardText>
+                  </VCard>
+                </VCol>
+
+                <VCol cols="12" md="4">
+                  <VCard variant="flat" class="stats-card h-100">
+                    <VCardText class="text-center">
+                      <VIcon
+                        icon="mdi-chart-timeline-variant"
+                        size="36"
+                        color="muted"
+                        class="mb-2"
+                      />
+                      <div class="text-h6 font-weight-bold mb-1">
+                        {{ state.ciudadesData.estadisticasGenerales.totalAccesos }}
+                      </div>
+                      <div class="text-subtitle-2">Total accesos</div>
+                    </VCardText>
+                  </VCard>
+                </VCol>
+              </VRow>
+
+              <!-- Mensaje cuando no hay datos -->
+              <VAlert
+                v-if="state.ciudadesData.ciudades.length === 0"
+                color="info"
+                variant="tonal"
+                class="mb-4"
+              >
+                No hay datos de ciudades disponibles para el período seleccionado
+              </VAlert>
+
+              <!-- Gráfico de barras -->
+              <VueApexCharts
+                v-else
+                :key="`ciudades-${state.chartKey}`"
+                type="bar"
+                :options="barChartCiudadesOptions"
+                :series="barChartCiudadesSeries"
+                height="350"
+              />
+            </VCardText>
+          </VCard>
+        </VCol>
         
       </VRow>
     </VCol>
@@ -1348,5 +1652,9 @@ onMounted(async () => {
   background: #7367f014 !important;
   border-color: #7367f014 !important;
   box-shadow: -5px 0 0 #7367f014, 5px 0 0 #7367f014;
+}
+
+:deep(.flatpickr-calendar) {
+  font-family: inherit;
 }
 </style>
