@@ -39,7 +39,7 @@
                   <VTextField label="Titulo" v-model="modal.titulo" />
                 </VCol>
                 <VCol cols="12">
-                  <VTextarea rows="20" label="Contenido del modal" type="text" v-model="modal.contenido" />
+                  <VTextarea rows="10" label="Contenido del modal" type="text" v-model="modal.contenido" />
                 </VCol>
                 <VCol cols="12">
                   <div class="demo-space-x">
@@ -80,11 +80,15 @@
                       :hide-no-data="false" :menu-props="{ maxHeight: '300' }" :disabled="!modal.selectedCountry"
                       return-object clearable @update:model-value="handleCityChange(index)" />
                   </VCol>
-                    <VCol cols="2">
-                      <VBtn color="error" variant="text" @click="deleteModal(index)">
-                        <VIcon start icon="tabler-trash" />Eliminar
-                      </VBtn>
-                    </VCol>
+                </VRow>
+                
+                <VRow>
+                  <VCol cols="2">
+                    <VBtn color="error" variant="text" @click="deleteModal(index)">
+                      <VIcon start icon="tabler-trash" />Eliminar
+                    </VBtn>
+                  </VCol>
+
                 </VRow>
 
 
@@ -240,6 +244,20 @@ const removeUrl = (modalIndex, urlItem) => {
 
 // Función para actualizar los datos
 const updateData = async () => {
+
+  // Validación de campos requeridos
+  const invalidModals = modals.value.filter(modal => {
+    if (modal.region) {
+      return !modal.selectedCountry || modal.selectedCities.length === 0;
+    }
+    return false;
+  });
+
+  if (invalidModals.length > 0) {
+    alert('Por favor complete los campos de País y Ciudad en los modales que tienen región activada');
+    return;
+  }
+
   const newData = {
     key: "modalondemand",
     modals: modals.value.map(modal => ({
