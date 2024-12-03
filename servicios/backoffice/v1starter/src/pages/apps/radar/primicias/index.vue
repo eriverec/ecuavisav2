@@ -20,12 +20,12 @@
   const processedData = computed(() => {
    const seen = new Set()
    return data.value.map(item => {
-     const isDuplicate = seen.has(item.titulo)
-     if (!isDuplicate) seen.add(item.titulo)
+     // const isDuplicate = seen.has(item.titulo)
+     // if (!isDuplicate) seen.add(item.titulo)
      return {
        ...item,
        subVertical: item.subVertical === 'NN' ? '' : item.subVertical,
-       isDuplicate
+       isDuplicate: false
      }
    })
   })
@@ -193,7 +193,7 @@
 
             <VList lines="two">
               <div v-if="filterTableItems(items, vertical).length">
-                <template v-for="item in filterTableItems(items, vertical)" :key="item.enlace">
+                <template v-for="item in filterTableItems(items, vertical)">
                   <VListItem>
                     <template #prepend>
 
