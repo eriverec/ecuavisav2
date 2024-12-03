@@ -1,5 +1,3 @@
-
-
 <script setup>
   import { ref, computed, onMounted } from 'vue'
   import moment from 'moment'
@@ -10,6 +8,7 @@
   const selectedItemPagina = ref(null)
 
   const itemsPagina = ref([]);
+  const ultimasNoticias = ref([]);
 
   const filterTableItems = (items, vertical) => {
     const tableSearch = tableSearches.value[vertical]?.toLowerCase() || ''
@@ -33,26 +32,41 @@
 
   const groupedData = computed(() => {
    return processedData.value.reduce((acc, item) => {
-     if (!item.isDuplicate) {
-       if (!acc[item.vertical]) acc[item.vertical] = []
-       acc[item.vertical].push(item)
-     }
-     return acc
+     // if (!item.isDuplicate) {
+     //   if (!acc[item.vertical]) acc[item.vertical] = []
+     //   acc[item.vertical].push(item)
+     // }
+      if (!acc[item.vertical]) acc[item.vertical] = []
+      acc[item.vertical].push(item)
+      return acc
    }, {})
   })
 
   const filteredData = computed(() => {
-    if (!searchTerm.value) return groupedData.value
+    var objeto = [];
 
-    return Object.entries(groupedData.value).reduce((acc, [vertical, items]) => {
-      const filtered = items.filter(item =>
-        item.titulo?.toLowerCase().includes(searchTerm.value?.toLowerCase() || '') || false
-      )
-      if (filtered.length) acc[vertical] = filtered
-      return acc
-    }, {})
+    if (!searchTerm.value){
+      objeto =  Object.entries(groupedData.value).reduce((acc, [vertical, items]) => {
+        if (selectedItemPagina.value.includes(vertical.toUpperCase())){
+           acc[vertical] = items
+        }
+        return acc
+      }, {})
+    }else{
+      objeto = Object.entries(groupedData.value).reduce((acc, [vertical, items]) => {
+        const filtered = items.filter(item =>
+          item.titulo?.toLowerCase().includes(searchTerm.value?.toLowerCase() || '') || false
+        )
+        if (filtered.length) acc[vertical] = filtered
+        return acc
+      }, {});
+    }
+
+    return {
+      'Últimas noticias': ultimasNoticias.value, 
+      ...objeto
+    };
   })
-
 
 
   const formatDate = (dateString) => {
@@ -63,9 +77,22 @@
     try {
       const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/modalondemand/radar/radarPrimicias.php')
       data.value = await response.json();
-      itemsPagina.value = Object.keys(filteredData.value).map(e => e.toUpperCase());
-      selectedItemPagina.value = itemsPagina.value.slice(0, 3);
 
+      // Ordenar por fecha de publicación (de mayor a menor)
+      const sortedItems = data.value.sort((a, b) => {
+        const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+        const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+        return dateB - dateA; // Mayor a menor
+      });
+
+      // Obtener los 20 primeros (en este caso es menos)
+      const top20Items = sortedItems.slice(0, 20);
+      // groupedData.value["Últimas noticias"] = top20Items;
+      ultimasNoticias.value = top20Items;
+
+
+      itemsPagina.value = Object.keys(groupedData.value).map(e => e.toUpperCase());
+      selectedItemPagina.value = itemsPagina.value.slice(0, 3);
 
     } catch (error) {
       console.error('Error fetching data:', error)
@@ -98,7 +125,7 @@
             <VTextField v-model="searchTerm" label="Buscar en todos los ártículos" prepend-inner-icon="tabler-search"
               density="compact" style="max-width: 300px" clearable />
           </div>
-          <div class="w-100 mt-4 d-none">
+          <div class="w-100 mt-4 ">
             <label>Filtrar por página</label>
             <VCombobox
               v-model="selectedItemPagina"
@@ -120,12 +147,15 @@
               <div class="d-flex gap-3">
                 <div class="d-flex flex-column" style="line-height: 1.3;">
                   {{ vertical.toUpperCase() }}
-                  <small style="font-size: 10px;">Página</small>
+                  <div class="d-flex gap-2 align-center mt-2">
+                    <small style="font-size: 10px;" v-if="vertical != 'Últimas noticias'">Página</small>
+                    <VChip size="x-small" color="primary">
+                      {{ items.length }} Artículo(s)
+                    </VChip>
+                  </div>
                 </div>
 
-                <VChip class="ml-2" size="small" color="primary">
-                  {{ items.length }} Artículo(s)
-                </VChip>
+                
               </div>
 
               <VTextField v-model="tableSearches[vertical]" :label="`Buscar en ${vertical.toUpperCase()}`"
@@ -134,7 +164,7 @@
 
             </div>
 
-
+            <small style="font-size: 13px;" v-if="vertical == 'Últimas noticias'">Información recopilada de todas las páginas</small>
           </VCardItem>
 
           <VDivider />
@@ -180,8 +210,11 @@
                     </VTooltip>
 
                     <VListItemSubtitle>
-                      <span class="text-xs">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
-                      <VChip v-if="item.subVertical" class="ml-2" size="small" color="success">{{ item.subVertical }}</VChip>
+                      <div class="d-flex gap-2 align-center">
+                        <span class="text-xs">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
+                        <VChip v-if="item.subVertical" class="ml-2" size="small" color="success">{{ item.subVertical }}</VChip>
+                      </div>
+                      <small style="font-size: 10px;" v-if="vertical == 'Últimas noticias'">Página: {{ item.vertical }}</small>
                     </VListItemSubtitle>
 
                     <template #append>
