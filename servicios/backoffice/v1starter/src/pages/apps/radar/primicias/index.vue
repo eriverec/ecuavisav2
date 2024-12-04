@@ -43,6 +43,18 @@
    }, {})
   })
 
+  const groupedDataSubSeccion = computed(() => {
+   return processedData.value.reduce((acc, item) => {
+     // if (!item.isDuplicate) {
+     //   if (!acc[item.vertical]) acc[item.vertical] = []
+     //   acc[item.vertical].push(item)
+     // }
+      if (!acc[item.subVertical]) acc[item.subVertical] = []
+      acc[item.subVertical].push(item)
+      return acc
+   }, {})
+  })
+
   const filteredData = computed(() => {
     var objeto = [];
 
@@ -105,12 +117,14 @@
     if(newValue.length > 0 && !itemsPagina.value.includes(newValue.at(-1))){
       newValue.pop();
       selectedItemPagina.value = newValue;
+    }else{
+      uniqueKey.value = Date.now();
     }
     // return false;
   })
 
 
-  ///////////////////
+  // INICIO DE GRÁFICOS
   import VueApexCharts from 'vue3-apexcharts';
   import { hexToRgb } from '@layouts/utils';
   import { useTheme } from 'vuetify';
@@ -221,7 +235,7 @@
           height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6)?300:300,
           events: {
             click: function(event, chartContext, opts) {
-              alert()
+              // alert()
               // const category = config.xaxis.categories[dataPointIndex];
               // const value = config.series[seriesIndex].data[dataPointIndex];
               // console.log(`Clicked on ${category} with value ${value}`);
@@ -347,25 +361,310 @@
 
   watch(currentTab, (newValue) => {
     uniqueKey.value = Date.now();
-    // return false;
+  })
+
+  // FIN DE GRÁFICOS
+
+  // INICIO DE EVENTO CLICK GRAFICO 1
+  const isDialogVisibleChart1 = ref({
+    modal: false,
+    search: null,
+    data:{
+      title: "",
+      items: []
+    }
   })
 
   const eventClick = function(event, chartContext, opts) {
-      // console.log(event, chartContext, opts)
-      // console.log(opts.dataPointIndex)
-      // console.log(opts.config.xaxis.categories)
-      if(opts.dataPointIndex > -1){
-        console.log(opts.config.xaxis.categories[opts.dataPointIndex])
-      }
-      // const category = config.xaxis.categories[dataPointIndex];
-      // const value = config.series[seriesIndex].data[dataPointIndex];
-      // console.log(`Clicked on ${category} with value ${value}`);
-      // Aquí puedes añadir tu lógica personalizada al hacer click en un punto
+    // console.log(event, chartContext, opts)
+    // console.log(opts.dataPointIndex)
+    // console.log(opts.config.xaxis.categories)
+    if(opts.dataPointIndex > -1){
+      console.log(opts.config.xaxis.categories[opts.dataPointIndex])
+      itemsForVertical(opts.config.xaxis.categories[opts.dataPointIndex])
     }
+    // const category = config.xaxis.categories[dataPointIndex];
+    // const value = config.series[seriesIndex].data[dataPointIndex];
+    // console.log(`Clicked on ${category} with value ${value}`);
+    // Aquí puedes añadir tu lógica personalizada al hacer click en un punto
+  }
+
+  const itemsForVertical = (verticalChart) => {
+    try{
+      // var objeto =  Object.entries(groupedData.value).reduce((acc, [vertical, items]) => {
+      //   if (vertical.toUpperCase() == verticalChart.toUpperCase()){
+      //      acc[vertical.toUpperCase()] = items
+      //   }
+      //   return acc
+      // }, {})
+      var objeto = [];
+      Object.keys(groupedData.value).forEach(element => {
+        if (element.toUpperCase() == verticalChart.toUpperCase()){
+          objeto = groupedData.value[element]
+        }
+      })
+      isDialogVisibleChart1.value.data.search = null;
+      isDialogVisibleChart1.value.data.items = objeto;
+      isDialogVisibleChart1.value.data.title = verticalChart;
+      isDialogVisibleChart1.value.modal = true;
+      console.log(objeto)
+      return objeto;
+    }catch(error){
+      return [];
+    }
+  }
+
+  const filteredDataModalChart1 = computed(() => {
+    if(!isDialogVisibleChart1.value.data.search){
+      return isDialogVisibleChart1.value.data.items;
+    }
+
+    const query = isDialogVisibleChart1.value.data.search.toLowerCase();
+    return isDialogVisibleChart1.value.data.items.filter(item =>
+      item.vertical.toLowerCase().includes(query) || 
+      item.titulo.toLowerCase().includes(query)
+    );
+  });
+
+  // FIN DE EVENTO CLICK GRAFICO 1
+
+  // INICIO DE EVENTO CLICK GRAFICO 2
+  const isDialogVisibleChart2 = ref({
+    modal: false,
+    search: null,
+    data:{
+      title: "",
+      items: []
+    }
+  })
+
+  const eventClick_2 = function(event, chartContext, opts) {
+    // console.log(event, chartContext, opts)
+    // console.log(opts.dataPointIndex)
+    if(opts.dataPointIndex > -1){
+      itemsForVertical_2(opts.config.xaxis.categories[opts.dataPointIndex])
+    }
+    // const category = config.xaxis.categories[dataPointIndex];
+    // const value = config.series[seriesIndex].data[dataPointIndex];
+    // console.log(`Clicked on ${category} with value ${value}`);
+    // Aquí puedes añadir tu lógica personalizada al hacer click en un punto
+  }
+
+  const itemsForVertical_2 = (verticalChart) => {
+    try{
+      // var objeto =  Object.entries(groupedData.value).reduce((acc, [vertical, items]) => {
+      //   if (vertical.toUpperCase() == verticalChart.toUpperCase()){
+      //      acc[vertical.toUpperCase()] = items
+      //   }
+      //   return acc
+      // }, {})
+      var objeto = [];
+      Object.keys(groupedDataSubSeccion.value).forEach(element => {
+        if (element.toUpperCase() == verticalChart.toUpperCase() || element.toUpperCase() == ""){
+          objeto = groupedDataSubSeccion.value[element]
+        }
+      })
+      isDialogVisibleChart2.value.data.search = null;
+      isDialogVisibleChart2.value.data.items = objeto;
+      isDialogVisibleChart2.value.data.title = verticalChart;
+      isDialogVisibleChart2.value.modal = true;
+      // console.log(objeto)
+      return objeto;
+    }catch(error){
+      return [];
+    }
+  }
+
+  const filteredDataModalChart2 = computed(() => {
+    if(!isDialogVisibleChart2.value.data.search){
+      return isDialogVisibleChart2.value.data.items;
+    }
+
+    const query = isDialogVisibleChart2.value.data.search.toLowerCase();
+    return isDialogVisibleChart2.value.data.items.filter(item =>
+      item.vertical.toLowerCase().includes(query) || 
+      item.titulo.toLowerCase().includes(query)
+    );
+  });
+
+  // FIN DE EVENTO CLICK GRAFICO 2
+
 </script>
 
 <template>
   <section class="sectionprimicias">
+    <VDialog
+      v-model="isDialogVisibleChart1.modal"
+      scrollable
+      max-width="650"
+    >
+
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleChart1.modal = !isDialogVisibleChart1.modal" />
+
+      <!-- Dialog Content -->
+      <VCard>
+        <VCardItem >
+          <div class="d-flex content-title flex-wrap">
+            <div class="d-flex gap-3">
+              <div class="d-flex flex-column" style="line-height: 1.3;">
+                <h3 class="h2">
+                  {{ isDialogVisibleChart1.data.title }}
+                </h3>
+                <div class="d-flex gap-2 align-center mt-2">
+                  <small style="font-size: 10px;">Página</small>
+                  <VChip size="x-small" color="primary">
+                    {{ filteredDataModalChart1.length }} Artículo(s)
+                  </VChip>
+                </div>
+              </div>
+
+              
+            </div>
+
+            <VTextField v-model="isDialogVisibleChart1.data.search" :label="`Buscar en ${isDialogVisibleChart1.data.title}`"
+              prepend-inner-icon="tabler-search" density="compact" style="max-width: 300px; padding: 0px 0;"
+              clearable />
+
+          </div>
+
+          <small style="font-size: 13px;" v-if="vertical == 'Últimas noticias'">Información recopilada de todas las páginas</small>
+        </VCardItem>
+        <VCardText style="max-height: 550px;">
+          <VList lines="two" class="py-4">
+            <div v-if="filteredDataModalChart1.length">
+              <template v-for="item in filteredDataModalChart1">
+                <VListItem>
+                  <template #prepend>
+
+                    <VIcon icon="tabler-news" size="32" />
+                  </template>
+
+                  <VTooltip location="top">
+                    <template v-slot:activator="{ props }">
+                      <VListItemTitle v-bind="props" class="text-truncate">
+                        {{ item.titulo }}
+                      </VListItemTitle>
+                    </template>
+                    <span>{{ item.titulo }}</span>
+                  </VTooltip>
+
+                  <VListItemSubtitle>
+                    <div class="d-flex gap-2 align-center">
+                      <span class="text-xs">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
+                      <VChip v-if="item.subVertical" class="ml-2" size="small" color="success">{{ item.subVertical }}</VChip>
+                    </div>
+                    <small style="font-size: 10px;" v-if="vertical == 'Últimas noticias'">Página: {{ item.vertical }}</small>
+                  </VListItemSubtitle>
+
+                  <template #append>
+                    <VBtn :href="item.enlace" target="_blank" icon variant="text" size="small">
+                      <VIcon icon="tabler-external-link" />
+                    </VBtn>
+                  </template>
+                </VListItem>
+              </template>
+
+            </div>
+            <div v-else>
+              <td colspan="4" class="no-results">No se encontraron resultados</td>
+            </div>
+          </VList>
+        </VCardText>
+
+        <VCardText class="py-4">
+          <VBtn class="my-4" @click="isDialogVisibleChart1.modal = false">
+            Cerrar modal.
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
+    <VDialog
+      v-model="isDialogVisibleChart2.modal"
+      scrollable
+      max-width="650"
+    >
+
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleChart2.modal = !isDialogVisibleChart2.modal" />
+
+      <!-- Dialog Content -->
+      <VCard>
+        <VCardItem >
+          <div class="d-flex content-title flex-wrap">
+            <div class="d-flex gap-3">
+              <div class="d-flex flex-column" style="line-height: 1.3;">
+                <h3 class="h2">
+                  {{ isDialogVisibleChart2.data.title }}
+                </h3>
+                <div class="d-flex gap-2 align-center mt-2">
+                  <small style="font-size: 10px;">Página</small>
+                  <VChip size="x-small" color="primary">
+                    {{ filteredDataModalChart2.length }} Artículo(s)
+                  </VChip>
+                </div>
+              </div>
+
+              
+            </div>
+
+            <VTextField v-model="isDialogVisibleChart2.data.search" :label="`Buscar en ${isDialogVisibleChart2.data.title}`"
+              prepend-inner-icon="tabler-search" density="compact" style="max-width: 300px; padding: 0px 0;"
+              clearable />
+
+          </div>
+
+          <small style="font-size: 13px;" v-if="vertical == 'Últimas noticias'">Información recopilada de todas las páginas</small>
+        </VCardItem>
+        <VCardText style="max-height: 550px;">
+          <VList lines="two" class="py-4">
+            <div v-if="filteredDataModalChart2.length">
+              <template v-for="item in filteredDataModalChart2">
+                <VListItem>
+                  <template #prepend>
+
+                    <VIcon icon="tabler-news" size="32" />
+                  </template>
+
+                  <VTooltip location="top">
+                    <template v-slot:activator="{ props }">
+                      <VListItemTitle v-bind="props" class="text-truncate">
+                        {{ item.titulo }}
+                      </VListItemTitle>
+                    </template>
+                    <span>{{ item.titulo }}</span>
+                  </VTooltip>
+
+                  <VListItemSubtitle>
+                    <div class="d-flex gap-2 align-center">
+                      <span class="text-xs">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
+                      <VChip v-if="item.subVertical" class="ml-2" size="small" color="success">{{ item.subVertical }}</VChip>
+                    </div>
+                    <small style="font-size: 10px;" v-if="vertical == 'Últimas noticias'">Página: {{ item.vertical }}</small>
+                  </VListItemSubtitle>
+
+                  <template #append>
+                    <VBtn :href="item.enlace" target="_blank" icon variant="text" size="small">
+                      <VIcon icon="tabler-external-link" />
+                    </VBtn>
+                  </template>
+                </VListItem>
+              </template>
+
+            </div>
+            <div v-else>
+              <td colspan="4" class="no-results">No se encontraron resultados</td>
+            </div>
+          </VList>
+        </VCardText>
+
+        <VCardText class="py-4">
+          <VBtn class="my-4" @click="isDialogVisibleChart1.modal = false">
+            Cerrar modal.
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
     <!-- Control Panel -->
     <VCard class="mb-4">
       <VCardText>
@@ -540,6 +839,7 @@
                   :key="uniqueKey"
                   :height="300"
                   type="bar"
+                  @click="eventClick_2"
                   :options="resolveData_2.options"
                   :series="resolveData_2.series"
                 />
