@@ -237,7 +237,7 @@
   watch(updateInterval, async () => {
     // Llamado recurrente cada segundo
     updateIntervalDisabled.value = true;
-    // await editCronUpdate();
+    await editCronUpdate();
     updateIntervalDisabled.value = false;
   })
 
