@@ -1,6 +1,12 @@
 <script setup>
+  import all_pages from '@/views/apps/radar/all_pages.vue';
   import { ref, computed, onMounted } from 'vue'
-  import moment from 'moment'
+  import Moment from 'moment';
+  import { extendMoment } from 'moment-range';
+  import esLocale from "moment/locale/es";
+
+  const moment = extendMoment(Moment);
+  moment.locale('es', [esLocale]);
 
   const data = ref([])
   const searchTerm = ref('')
@@ -10,6 +16,25 @@
   const itemsPagina = ref([]);
   const ultimasNoticias = ref([]);
   const currentTab = ref(0)
+
+  const lastUpdate = ref('--:--')
+  const nextUpdate = ref(null)
+  const horaActual = moment();
+
+  const updateInterval = ref(300)
+  const updateIntervalDisabled = ref(false)
+  const updateIntervals = [
+    { title: '5 minutos', value: 300 },
+    { title: '10 minutos', value: 60 * 10 },
+    { title: '15 minutos', value: 60 * 15 },
+  ]
+
+  const snackbar = ref({
+    show: false,
+    text: '',
+    color: 'success',
+    timeout: 3000
+  })
 
   const filterTableItems = (items, vertical) => {
     const tableSearch = tableSearches.value[vertical]?.toLowerCase() || ''
@@ -86,11 +111,16 @@
     return moment(dateString, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm')
   }
 
-  onMounted(async () => {
-    try {
-      const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/modalondemand/radar/radarPrimicias.php')
+  const principalData = async function(){
+    try{
+      const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/competencias/radar-digital/primicias/listar.php')
+      // const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/modalondemand/radar/radarPrimicias.php')
       // const response = await fetch('https://bigdata.ecuavisa.com:10003/api/v1/BA/ObtenerPublicacion?baseUrl=https%3A%2F%2Fwww.primicias.ec&maxPaginas=1')
-      data.value = await response.json();
+      const dataResp = await response.json();
+      data.value = dataResp.site;
+      lastUpdate.value = dataResp.startDate;
+      nextUpdate.value = dataResp.nextRefresh;
+      updateInterval.value = dataResp.minutes * 60;
 
       // Ordenar por fecha de publicación (de mayor a menor)
       const sortedItems = data.value.sort((a, b) => {
@@ -106,8 +136,21 @@
 
 
       itemsPagina.value = Object.keys(groupedData.value).map(e => e.toUpperCase());
-      selectedItemPagina.value = itemsPagina.value.slice(0, 3);
+      selectedItemPagina.value = itemsPagina.value.slice(0, 2);
+      return true;
+    }catch(error){
+      return null;
+    }
+  }
 
+
+  let timeoutId;
+
+  onMounted(async () => {
+    try {
+      await principalData();
+      // Llamado recurrente cada segundo
+      // timeoutId = setTimeout(() => checkRefreshTime(), 1000);
     } catch (error) {
       console.error('Error fetching data:', error)
     }
@@ -121,6 +164,81 @@
       uniqueKey.value = Date.now();
     }
     // return false;
+  })
+
+  async function checkRefreshTime() {
+      // Convertir strings a momentos
+      const refreshMinutes = (updateInterval.value + (1 * 60)) / 60;
+      const nextCronMoment = moment(nextUpdate.value);
+      const currentDateTimeMoment = moment();
+
+      // Calcular la diferencia en minutos entre la ejecución del cron y el tiempo actual
+      let minutesUntilNextExecution = 0;
+      if (nextCronMoment.isAfter(currentDateTimeMoment)) {
+          const diffInSeconds = nextCronMoment.diff(currentDateTimeMoment);
+          minutesUntilNextExecution = Math.floor(diffInSeconds / 60000);
+      }
+
+      // Comprobar si es hora de hacer el refresh
+      if (minutesUntilNextExecution <= refreshMinutes && minutesUntilNextExecution >= 0) {
+          // Si queremos detener el timeout en algún momento
+          clearTimeout(timeoutId);
+          // Hacer el refresh de la página
+          await principalData();
+          console.log("Es tiempo de hacer refresh")
+          // location.reload();
+      }
+  }
+
+  async function editCronUpdate() {
+    try{
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var raw = JSON.stringify({
+        "minutes": updateInterval.value / 60
+      });
+
+      var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+      };
+      //console.log('data enviar ',raw);    
+      const send = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/competencias/radar-digital/primicias/config.php', requestOptions);
+      const respuesta = await send.json();
+
+      if(respuesta.resp){
+        snackbar.value = {
+          show: true,
+          text: `Intervalo actualizado a ${updateInterval.value / 60} minutos`,
+          color: 'success'
+        }
+        await principalData();
+      }else{
+        snackbar.value = {
+          show: true,
+          text: `Ocurrió un error, intente nuevamente`,
+          color: 'error'
+        }
+      }
+      return true;
+    }catch(error){
+      snackbar.value = {
+          show: true,
+          text: `Ocurrió un error, intente nuevamente`,
+          color: 'error'
+        }
+      return null;
+    }
+  }
+
+  watch(updateInterval, async () => {
+    // Llamado recurrente cada segundo
+    updateIntervalDisabled.value = true;
+    // await editCronUpdate();
+    updateIntervalDisabled.value = false;
   })
 
 
@@ -404,7 +522,13 @@
         }
       })
       isDialogVisibleChart1.value.data.search = null;
-      isDialogVisibleChart1.value.data.items = objeto;
+
+      isDialogVisibleChart1.value.data.items = objeto.sort((a, b) => {
+        const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+        const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+        return dateB - dateA; // Mayor a menor
+      });
+
       isDialogVisibleChart1.value.data.title = verticalChart;
       isDialogVisibleChart1.value.modal = true;
       console.log(objeto)
@@ -422,6 +546,7 @@
     const query = isDialogVisibleChart1.value.data.search.toLowerCase();
     return isDialogVisibleChart1.value.data.items.filter(item =>
       item.vertical.toLowerCase().includes(query) || 
+      item.autor.toLowerCase().includes(query) || 
       item.titulo.toLowerCase().includes(query)
     );
   });
@@ -465,7 +590,11 @@
         }
       })
       isDialogVisibleChart2.value.data.search = null;
-      isDialogVisibleChart2.value.data.items = objeto;
+      isDialogVisibleChart2.value.data.items = objeto.sort((a, b) => {
+        const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+        const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+        return dateB - dateA; // Mayor a menor
+      });
       isDialogVisibleChart2.value.data.title = verticalChart;
       isDialogVisibleChart2.value.modal = true;
       // console.log(objeto)
@@ -483,6 +612,7 @@
     const query = isDialogVisibleChart2.value.data.search.toLowerCase();
     return isDialogVisibleChart2.value.data.items.filter(item =>
       item.vertical.toLowerCase().includes(query) || 
+      item.autor.toLowerCase().includes(query) || 
       item.titulo.toLowerCase().includes(query)
     );
   });
@@ -493,6 +623,14 @@
 
 <template>
   <section class="sectionprimicias">
+    <VSnackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      :timeout="snackbar.timeout"
+      location="top end"
+    >
+      {{ snackbar.text }}
+    </VSnackbar>
     <VDialog
       v-model="isDialogVisibleChart1.modal"
       scrollable
@@ -537,7 +675,18 @@
                 <VListItem>
                   <template #prepend>
 
-                    <VIcon icon="tabler-news" size="32" />
+                    <VAvatar
+                      v-if="item.picture"
+                      :image="item.picture"
+                      size="64"
+                      rounded
+                    />
+                    <VIcon
+                      v-else
+                      icon="tabler-news"
+                      size="32"
+                    />
+
                   </template>
 
                   <VTooltip location="top">
@@ -555,6 +704,13 @@
                       <VChip v-if="item.subVertical" class="ml-2" size="small" color="success">{{ item.subVertical }}</VChip>
                     </div>
                     <small style="font-size: 10px;" v-if="vertical == 'Últimas noticias'">Página: {{ item.vertical }}</small>
+                    <div title="Autor" class="align-center mt-1" v-if="item.autor" style="font-size: 12px;">
+                      <VIcon
+                        icon="tabler-user"
+                        size="15"
+                      />
+                      <small style="margin-top: 5px">{{ item.autor }}</small>
+                    </div>
                   </VListItemSubtitle>
 
                   <template #append>
@@ -622,8 +778,17 @@
               <template v-for="item in filteredDataModalChart2">
                 <VListItem>
                   <template #prepend>
-
-                    <VIcon icon="tabler-news" size="32" />
+                    <VAvatar
+                      v-if="item.picture"
+                      :image="item.picture"
+                      size="64"
+                      rounded
+                    />
+                    <VIcon
+                      v-else
+                      icon="tabler-news"
+                      size="32"
+                    />
                   </template>
 
                   <VTooltip location="top">
@@ -641,6 +806,13 @@
                       <VChip v-if="item.subVertical" class="ml-2" size="small" color="success">{{ item.subVertical }}</VChip>
                     </div>
                     <small style="font-size: 10px;" v-if="vertical == 'Últimas noticias'">Página: {{ item.vertical }}</small>
+                    <div title="Autor" class="align-center mt-1" v-if="item.autor" style="font-size: 12px;">
+                        <VIcon
+                          icon="tabler-user"
+                          size="15"
+                        />
+                        <small style="margin-top: 5px">{{ item.autor }}</small>
+                      </div>
                   </VListItemSubtitle>
 
                   <template #append>
@@ -666,10 +838,10 @@
       </VCard>
     </VDialog>
     <!-- Control Panel -->
-    <VCard class="mb-4">
+    <VCard class="mb-4" v-if="currentTab != 2">
       <VCardText>
         <div class="d-flex justify-content-between gap-1 flex-column">
-          <div class="d-flex align-end flex-wrap gap-4 w-100">
+          <div class="d-flex align-start flex-wrap gap-4 w-100">
             <div class="d-flex flex-column">
               <small>web</small>
               <h3 style="line-height: 1.3;">Primicias</h3>
@@ -679,6 +851,34 @@
             </VBtn>
             <VTextField v-model="searchTerm" label="Buscar en todos los ártículos" prepend-inner-icon="tabler-search"
               density="compact" style="max-width: 300px" clearable />
+
+              <VSelect
+                :disabled="updateIntervalDisabled"
+                v-model="updateInterval"
+                :items="updateIntervals"
+                label="Intervalo de actualización"
+                style="max-width: 200px"
+                density="compact"
+            />
+
+            <VSpacer />
+
+            <div class="d-flex align-center gap-2 flex-column">
+              <VChip
+                color="primary"
+                size="small"
+                prepend-icon="tabler-clock"
+              >
+                Última actualización: {{ lastUpdate }}
+              </VChip>
+              <VChip
+                color="success"
+                size="small"
+                prepend-icon="tabler-clock"
+              >
+                Próxima actualización: {{ nextUpdate }}
+              </VChip>
+            </div>
           </div>
           <div class="w-100 mt-4 ">
             <label>Filtrar por página</label>
@@ -698,6 +898,7 @@
     >
       <VTab>Listado de artículo</VTab>
       <VTab>Estadística</VTab>
+      <VTab>Últimas noticias</VTab>
     </VTabs>
 
     <VWindow v-model="currentTab">
@@ -764,9 +965,21 @@
                       <VListItem>
                         <template #prepend>
 
-                          <VIcon icon="tabler-news" size="32" />
+                          <VAvatar
+                            v-if="item.picture"
+                            :image="item.picture"
+                            size="64"
+                            rounded
+                          />
+                          <VIcon
+                            v-else
+                            icon="tabler-news"
+                            size="32"
+                          />
+                          
                         </template>
 
+                        <small style="font-size: 10px;" v-if="vertical == 'Últimas noticias'">Página: {{ item.vertical.toUpperCase() }}</small>
                         <VTooltip location="top">
                           <template v-slot:activator="{ props }">
                             <VListItemTitle v-bind="props" class="text-truncate">
@@ -778,10 +991,16 @@
 
                         <VListItemSubtitle>
                           <div class="d-flex gap-2 align-center">
-                            <span class="text-xs">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
+                            <span class="text-xs" title="Fecha de publicación">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
                             <VChip v-if="item.subVertical" class="ml-2" size="small" color="success">{{ item.subVertical }}</VChip>
                           </div>
-                          <small style="font-size: 10px;" v-if="vertical == 'Últimas noticias'">Página: {{ item.vertical }}</small>
+                          <div title="Autor" class="align-center mt-1" v-if="item.autor" style="font-size: 12px;">
+                            <VIcon
+                              icon="tabler-user"
+                              size="15"
+                            />
+                            <small style="margin-top: 5px">{{ item.autor }}</small>
+                          </div>
                         </VListItemSubtitle>
 
                         <template #append>
@@ -848,7 +1067,11 @@
           </VCol>
         </VRow>
       </VWindowItem>
-      
+      <VWindowItem
+        :key="2"
+      >
+        <all_pages/>
+      </VWindowItem>
     </VWindow>
             
 
