@@ -3,6 +3,7 @@
   import Moment from 'moment';
   import { extendMoment } from 'moment-range';
   import esLocale from "moment/locale/es";
+  import { reactive, watch } from 'vue';
 
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
@@ -13,6 +14,14 @@
     color: 'success',
     timeout: 3000
   })
+
+  const filtrosActivos = reactive({
+    busqueda: null,
+    sitio: null,
+    seccion: null,
+    subseccion: null,
+    disabled: false
+  });
 
   const data = ref([])
 
@@ -33,14 +42,36 @@
   const updateIntervalDisabled = ref(false)
   const tableSearches = ref({})
 
+
   const principalData = async function(){
     try{
       const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/competencias/radar-digital/primicias/listar.php')
       const dataResp = await response.json();
-      data.value = dataResp.site;
-      lastUpdate.value = dataResp.startDate;
-      nextUpdate.value = dataResp.nextRefresh;
-      updateInterval.value = dataResp.minutes * 60;
+
+      const stringJson = JSON.stringify(dataResp.site);
+      const primiciasList = JSON.parse(stringJson);
+      const elComercioList = JSON.parse(stringJson);
+
+
+      for (let i = 0; i < primiciasList.length; i++) {
+        primiciasList[i].sitio = "PRIMICIAS";
+        primiciasList[i].color = "primary";
+      }
+
+      for (let i = 0; i < elComercioList.length; i++) {
+        elComercioList[i].sitio = "EL COMERCIO";
+        elComercioList[i].color = "info";
+      }
+
+      data.value = [...primiciasList, ...elComercioList].sort((a, b) => {
+        const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+        const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+        return dateB - dateA; // Mayor a menor
+      });
+
+      // lastUpdate.value = dataResp.startDate;
+      // nextUpdate.value = dataResp.nextRefresh;
+      // updateInterval.value = dataResp.minutes * 60;
 
       // Ordenar por fecha de publicación (de mayor a menor)
       // const sortedItems = data.value.sort((a, b) => {
@@ -63,29 +94,46 @@
     }
   }
 
-  function getUniqueVerticals() {
+  function getUniqueVerticals(objeto = null) {
       // Usamos un Set para evitar duplicados
       const uniqueVerticals = new Set();
 
-      data.value.forEach(item => {
-          if (item.vertical) {
-              uniqueVerticals.add(item.vertical);
-          }
-      });
-
+      if(!objeto){
+        data.value.forEach(item => {
+            if (item.vertical) {
+                uniqueVerticals.add(item.vertical);
+            }
+        });
+      }else{
+        objeto.forEach(item => {
+            if (item.vertical) {
+                uniqueVerticals.add(item.vertical);
+            }
+        });
+      }
+      
       // Convertimos el Set en un array para retornar
       return Array.from(uniqueVerticals);
   }
 
-  function getUniqueSubVerticals() {
+  function getUniqueSubVerticals(objeto = null) {
       // Usamos un Set para evitar duplicados
       const uniqueVerticals = new Set();
 
-      data.value.forEach(item => {
-          if (item.subVertical) {
-              uniqueVerticals.add(item.subVertical);
-          }
-      });
+      if(!objeto){
+        data.value.forEach(item => {
+            if (item.subVertical) {
+                uniqueVerticals.add(item.subVertical);
+            }
+        });
+      }else{
+        objeto.forEach(item => {
+            if (item.subVertical) {
+                uniqueVerticals.add(item.subVertical);
+            }
+        });
+      }
+      
 
       // Convertimos el Set en un array para retornar
       return Array.from(uniqueVerticals);
@@ -97,6 +145,8 @@
 
       itemsSitioWebSeccion.value = getUniqueVerticals();
       itemsSitioWebSubSeccion.value = getUniqueSubVerticals();
+      docDataProcess()
+      // filteredData.value = processedData.value;
       // Llamado recurrente cada segundo
       // timeoutId = setTimeout(() => checkRefreshTime(), 1000);
     } catch (error) {
@@ -104,20 +154,22 @@
     }
   })
 
-  watch(selectedItemSeccion, (newValue) => {
-    if(newValue.length > 0 && !itemsSitioWebSeccion.value.includes(newValue.at(-1))){
+  watch(() => filtrosActivos.seccion, (newValue) => {
+    if (newValue.length > 0 && !itemsSitioWebSeccion.value.includes(newValue.at(-1))) {
       newValue.pop();
-      selectedItemSeccion.value = newValue;
     }
-    // return false;
+  });
+
+  watch(() => filtrosActivos.subseccion, (newValue) => {
+    if (newValue.length > 0 && !itemsSitioWebSubSeccion.value.includes(newValue.at(-1))) {
+      newValue.pop();
+    }
   })
 
-  watch(selectedItemSubSeccion, (newValue) => {
-    if(newValue.length > 0 && !itemsSitioWebSubSeccion.value.includes(newValue.at(-1))){
+  watch(() => filtrosActivos.sitio, (newValue) => {
+    if (newValue.length > 0 && !itemsSitioWeb.value.includes(newValue.at(-1))) {
       newValue.pop();
-      selectedItemSubSeccion.value = newValue;
     }
-    // return false;
   })
 
   const processedData = computed(() => {
@@ -133,29 +185,66 @@
    })
   })
 
-  const groupedData = computed(() => {
-   return processedData.value.reduce((acc, item) => {
-     // if (!item.isDuplicate) {
-     //   if (!acc[item.vertical]) acc[item.vertical] = []
-     //   acc[item.vertical].push(item)
-     // }
-      if (!acc[item.vertical]) acc[item.vertical] = []
-      acc[item.vertical].push(item)
-      return acc
-   }, {})
-  })
+  // const groupedData = computed(() => {
+  //  return processedData.value.reduce((acc, item) => {
+  //    // if (!item.isDuplicate) {
+  //    //   if (!acc[item.vertical]) acc[item.vertical] = []
+  //    //   acc[item.vertical].push(item)
+  //    // }
+  //     if (!acc[item.vertical]) acc[item.vertical] = []
+  //     acc[item.vertical].push(item)
+  //     return acc
+  //  }, {})
+  // })
 
-  const filteredData = computed(() => {
-    var objeto = [];
+  let lastResults = ref([]); // Mantener resultados previos
 
-    if (!buscar_dato.value){
-      objeto =  processedData.value;
-    }else{
-      objeto =  processedData.value;
-    }
+  // Variable para manejar el debounce
+  const debounceTimeout = ref(null);
 
-    return objeto;
-  })
+  // Lógica reactiva con debounce
+  watch(filtrosActivos, docDataProcess);
+
+  function docDataProcess(){
+    clearTimeout(debounceTimeout.value);
+
+    debounceTimeout.value = setTimeout(() => {
+      const query = filtrosActivos.busqueda?.toLowerCase() || '';
+      const sitio = filtrosActivos.sitio || [];
+      const secciones = filtrosActivos.seccion || [];
+      const subseccion = filtrosActivos.subseccion || [];
+
+      if(!query && sitio.length === 0 && secciones.length === 0 && subseccion.length === 0){
+        lastResults.value = processedData.value;
+      }else{
+        lastResults.value = processedData.value.filter(item => {
+          const matchesBusqueda = !query || 
+            item.vertical.toLowerCase().includes(query) || 
+            item.autor?.toLowerCase().includes(query) || 
+            item.titulo.toLowerCase().includes(query);
+
+          const matchesSitio = sitio.length === 0 || sitio.includes(item.sitio);
+          const matchesSecciones = secciones.length === 0 || secciones.includes(item.vertical);
+          const matchesSubseccion = subseccion.length === 0 || subseccion.includes(item.subVertical);
+
+          return matchesBusqueda && matchesSitio && matchesSecciones && matchesSubseccion;
+        }).sort((a, b) => {
+          const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+          const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+          return dateB - dateA; // Mayor a menor
+        });
+      }
+
+      // Actualizar items únicos para las secciones
+      // itemsSitioWebSeccion.value = getUniqueVerticals(lastResults.value);
+      // itemsSitioWebSubSeccion.value = getUniqueSubVerticals(lastResults.value);
+    }, 300); // 300 ms de debounce
+  }
+
+  // Computed para usar en el DOM
+  const filteredData = computed(() => lastResults.value);
+
+
 
   const formatDate = (dateString) => {
     return moment(dateString, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm')
@@ -181,11 +270,11 @@
             <div class="d-flex content-title flex-wrap">
               <div class="d-flex gap-3">
                 <div class="d-flex flex-column" style="line-height: 1.3;">
-                  Últimas noticas
+                  Últimas noticias
                   <div class="d-flex gap-2 align-center mt-2">
                     <small style="font-size: 10px;">Todas las páginas</small>
                     <VChip size="x-small" color="primary">
-                      100 Artículo(s)
+                      {{filteredData.length}} Artículo(s)
                     </VChip>
                   </div>
                 </div>
@@ -198,14 +287,14 @@
             <VRow class="mb-4">
               <VCol cols="12" md="12" :lg="12" class="pb-0">
                 <div class="w-100 mt-4 ">
-                  <VTextField v-model="buscar_dato" :label="`Buscar por, título, autor, sección, subsección`"
+                  <VTextField v-model="filtrosActivos.busqueda" :label="`Buscar por, título, autor, sección, subsección`"
                     prepend-inner-icon="tabler-search" density="compact" style=" padding: 0px 0;"
                     clearable />
                 </div>
                 <div class="w-100 mt-4 ">
                   <label>Filtrar por sitio web</label>
                   <VCombobox
-                    v-model="selectedItemSitioWeb"
+                    v-model="filtrosActivos.sitio"
                     :items="itemsSitioWeb"
                     multiple
                     chips
@@ -216,7 +305,7 @@
                 <div class="w-100 mt-4 ">
                   <label>Filtrar por Sección</label>
                   <VCombobox
-                    v-model="selectedItemSeccion"
+                    v-model="filtrosActivos.seccion"
                     :items="itemsSitioWebSeccion"
                     multiple
                     chips
@@ -227,7 +316,7 @@
                 <div class="w-100 mt-4 ">
                   <label>Filtrar por SubSección</label>
                   <VCombobox
-                    v-model="selectedItemSubSeccion"
+                    v-model="filtrosActivos.subseccion"
                     :items="itemsSitioWebSubSeccion"
                     multiple
                     chips
@@ -235,18 +324,16 @@
                 </div>
               </VCol>
             </VRow>
-            <VDivider />
-            <VList lines="two" class="board-content">
+            <VList lines="two" class="board-content" :disabled="filtrosActivos.disabled">
               <div v-if="filteredData.length">
-                <template v-for="item in filteredData">
-                  <VListItem>
+                <template v-for="(item, index) in filteredData">
+                  <VListItem class="py-4">
                     <template #prepend>
-
                       <VAvatar
-                        v-if="item.picture"
-                        :image="item.picture"
-                        size="64"
-                        rounded
+                          v-if="item.picture"
+                          :image="item.picture"
+                          size="64"
+                          rounded
                       />
                       <VIcon
                         v-else
@@ -256,7 +343,7 @@
                       
                     </template>
 
-                    <small style="font-size: 10px;" v-if="vertical == 'Últimas noticias'">Página: {{ item.vertical.toUpperCase() }}</small>
+                    <VChip class="mb-2" size="x-small" label :color="item.color" style="font-size: 10px;">{{ item.sitio }}</VChip>
                     <VTooltip location="top">
                       <template v-slot:activator="{ props }">
                         <VListItemTitle v-bind="props" class="text-truncate">
@@ -281,11 +368,17 @@
                     </VListItemSubtitle>
 
                     <template #append>
-                      <VBtn :href="item.enlace" target="_blank" icon variant="text" size="small">
-                        <VIcon icon="tabler-external-link" />
-                      </VBtn>
+                      <div class="d-flex align-center gap-2">
+                        <VBtn :href="item.enlace" target="_blank" icon variant="text" size="small">
+                          <VIcon icon="tabler-external-link" />
+                        </VBtn>
+                        <VBtn class="d-none" title="Click para ver el contenido de la nota" :disabled=" item.sitio !='PRIMICIAS' " :href="item.enlace" target="_blank" icon variant="tonal" size="small">
+                          <VIcon icon="tabler-list" />
+                        </VBtn>
+                      </div>
                     </template>
                   </VListItem>
+                  <VDivider v-if="index !== filteredData.length - 1" />
                 </template>
 
               </div>
