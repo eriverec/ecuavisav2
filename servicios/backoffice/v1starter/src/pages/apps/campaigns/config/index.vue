@@ -163,9 +163,16 @@ const fetchUrls = async () => {
         key: 'publicidad_urls'
       }
     })
+  
+    console.log('Response completa:', response)
+    console.log('Data:', response.data)
     
-    if (response.data && Array.isArray(response.data.data)) {
+  
+    if (response.data && response.data.data) {
       urls.value = response.data.data
+      console.log('URLs cargadas:', urls.value)
+    } else {
+      console.error('La respuesta no tiene la estructura esperada:', response.data)
     }
   } catch (error) {
     console.error('Error al cargar URLs:', error)
