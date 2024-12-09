@@ -1,8 +1,6 @@
 <script setup>
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
-// import { useRouter } from 'vue-router';
-import { computed, nextTick, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { FormWizard, TabContent } from "vue3-form-wizard";
 import 'vue3-form-wizard/dist/style.css';
 const router = useRouter();
@@ -31,7 +29,7 @@ const linkImageMobile = ref('');
 const numeroOtroUsuarios = ref('');
 const languages = ref([]);
 const criterio = ref([]);
-const posicion = ref([]);
+// const posicion = ref([]);
 const selectedItem = ref([]);
 const selectedItemCiudad = ref([]);
 const dataUsuarios = ref({});
@@ -132,17 +130,13 @@ const posicionList = [
   'RDFloating',
 ]
 
+// Cambiar posicion para que sea un solo valor en lugar de un array
+const posicion = ref('')
 
-watch(posicion, value => {
-  if (value.length > 1)
-    nextTick(() => posicion.value.pop())
-})
-
-const snackbar = ref({
-  show: false,
-  text: '',
-  color: 'success'
-});
+// watch(posicion, value => {
+//   if (value.length > 1)
+//     nextTick(() => posicion.value.pop())
+// })
 
 
 watch(metadatos, value => {
@@ -172,88 +166,102 @@ onMounted(async()=>{
     loadComponent.value = false;
   }
 })
-async function getCampaignToEdit() {
+async function getCampaignToEdit(){
   try {
-    // indicador de carga
-    loadingPanel.value = true;
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
     
-    const response = await fetch(`https://ads-service.vercel.app/campaign/get/edit/${route.params.id}/`, {
-      headers: { "Content-Type": "application/json" }
-    });
+    console.log("Obteniendo campaña ID:", route.params.id);
     
-    if (!response.ok) throw new Error('Error al obtener datos de la campaña');
-    
+    var response = await fetch(`https://ads-service.vercel.app/campaign/get/edit/${route.params.id}/`, requestOptions);
     const data = await response.json();
-    if (!data || data.length === 0) {
-      throw new Error('No se recibieron datos de la campaña');
+    
+    console.log("Respuesta del servidor:", data);
+    
+    if(!data || data.length === 0) {
+      console.error("No se recibieron datos de la campaña");
+      return;
     }
 
     const campania = data[0];
-    
+    console.log("Datos de la campaña:", campania);
+
+    // Cargar datos básicos
     nombreCampania.value = campania.campaignTitle || '';
     descripcionCampania.value = campania.description || '';
-
     languages.value = campania.type || '';
     criterio.value = campania.coleccion ? campania.coleccion.split(',') : [];
-    // posicion.value = campania.position ? campania.position.split(',')[0] : '';
-    posicion.value = campania.position ? campania.position.split(',') : [];
-    
+    posicion.value = campania.position ? campania.position.split(',')[0] : '';
+
     if(campania.criterial) {
+      // Cargar criterial
       selectItemVisibilidad.value = campania.criterial.visibilitySection || "all";
-      metadatos.value = campania.criterial.metadato ? campania.criterial.metadato.split(',') : [];
+      
+      if(campania.criterial.metadato) {
+        metadatos.value = campania.criterial.metadato.split(',');
+      }
     }
 
-    // Cargar URLs
     if(campania.urls) {
+      // Cargar URLs
       codigoExternoModel.value = campania.urls.html || "";
       linkAds.value = campania.urls.url || "#";
-      linkImageEscritorio.value = campania.urls.img?.escritorio || "";
-      linkImageMobile.value = campania.urls.img?.mobile || "";
+      
+      if(campania.urls.img) {
+        linkImageEscritorio.value = campania.urls.img.escritorio || "";
+        linkImageMobile.value = campania.urls.img.mobile || "";
+      }
     }
 
-    // Cargar datos de ubicación y participantes en paralelo
-    await Promise.all([
-      cargarDatosUbicacion(campania),
-      cargarDatosParticipantes(campania)
-    ]);
+    // Cargar datos de ubicación
+    if(campania.criterial?.country) {
+      selectedItem.value = campania.criterial.country;
+
+      // Esperar a que se carguen las ciudades
+      await new Promise(resolve => setTimeout(resolve, 1500));
+
+      if(campania.criterial.city) {
+        selectedItemCiudad.value = campania.criterial.city === -1 ? 
+          campania.criterial.city : 
+          campania.criterial.city.split(',');
+      }
+    }
+
+    // Cargar participantes
+    await new Promise(resolve => setTimeout(resolve, 2000));
+    selectItemParticipantes.value = campania.participantes || null;
+    numeroOtroUsuarios.value = campania.otroValor || '';
+
+    // Cargar dispositivos
+    if(campania.criterial?.dispositivo) {
+      await new Promise(resolve => setTimeout(resolve, 2500));
+      selectItemDispositivos.value = campania.criterial.dispositivo.split(',');
+    }
+
+    // Cargar navegador
+    if(campania.criterial?.navegador) {
+      await new Promise(resolve => setTimeout(resolve, 3000));
+      selectItemNavegador.value = campania.criterial.navegador.split(',');
+    }
+
+    // Cargar SO
+    if(campania.criterial?.so) {
+      await new Promise(resolve => setTimeout(resolve, 3500));
+      selectItemSO.value = campania.criterial.so.split(',');
+    }
+
+    dataUsuarios.value = {
+      "resp": true,
+      "total": campania.userId
+    };
 
   } catch (error) {
     console.error("Error al obtener la campaña:", error);
-    snackbar.value = {
-      show: true,
-      text: 'Error al cargar los datos de la campaña',
-      color: 'error'
-    };
-} finally {
-    loadingPanel.value = false;
-  }
-}
-
-async function cargarDatosUbicacion(campania) {
-  if(campania.criterial?.country) {
-    selectedItem.value = campania.criterial.country;
-    if(campania.criterial.city) {
-      selectedItemCiudad.value = campania.criterial.city === -1 ? 
-        campania.criterial.city : 
-        campania.criterial.city.split(',');
-    }
-  }
-}
-
-async function cargarDatosParticipantes(campania) {
-  selectItemParticipantes.value = campania.participantes || null;
-  numeroOtroUsuarios.value = campania.otroValor || '';
-
-  if(campania.criterial?.dispositivo) {
-    selectItemDispositivos.value = campania.criterial.dispositivo.split(',');
-  }
-
-  if(campania.criterial?.navegador) {
-    selectItemNavegador.value = campania.criterial.navegador.split(',');
-  }
-
-  if(campania.criterial?.so) {
-    selectItemSO.value = campania.criterial.so.split(',');
   }
 }
 // async function getCampaigns(){
@@ -435,93 +443,102 @@ function slugify(text) {
 }
 
 async function onComplete() {
-  try {
-    var name = nombreCampania.value;
-    var description = descripcionCampania.value;
-    var tipoContenido = languages.value;
-    var cri = criterio.value;
-    var po = posicion.value;
-    
-    console.log("Valores antes de enviar:", {
-      name,
-      description,
-      posicion: po
-    });
+  var name = nombreCampania.value;
+  var description = descripcionCampania.value;
+  var tipoContenido = languages.value;
+  var cri = criterio.value;
+  var po = posicion.value;
+  var script = codigoExternoModel.value || "";
+  var linksWeb = linkAds.value || "#";
+  var urlImagen_1 = linkImageEscritorio.value || "";
+  var urlImagen_2 = linkImageMobile.value || "";
+  var paises_temp = selectedItem.value;
 
-    var jsonEnviar = {
-      "campaignTitle": name,
-      "description": description,
-      "type": tipoContenido,
-      "criterial": {
-        "visibilitySection": selectItemVisibilidad.value,
-        "country": (selectedItem.value).length > 0 ? selectedItem.value : -1,
-        "city": (selectedItemCiudad.value).length > 0 ? (selectedItemCiudad.value).join(',') : -1,
-        "so": (selectItemSO.value)?.join(',') || null,
-        "dispositivo": (selectItemDispositivos.value)?.join(',') || null,
-        "metadato": (metadatos.value)?.join(',') || null,
-        "navegador": (selectItemNavegador.value)?.join(',') || null
-      },
-      "coleccion": cri.join(','),
-      "position": Array.isArray(po) ? po.join(",") : po, // Validamos si es array
-      "participantes": selectItemParticipantes.value,
-      "otroValor": numeroOtroUsuarios.value || null,
-      "urls": {
-        "url": linkAds.value || "#",
-        "img": {
-          "escritorio": linkImageEscritorio.value || "",
-          "mobile": linkImageMobile.value || ""
-        },
-        "html": codigoExternoModel.value || ""
-      },
-      "campaignSlug": slugify(name),
-      "statusCampaign": true
-    };
+  var ciudad = -1;
+  var pais = -1;
 
-    console.log("JSON a enviar:", jsonEnviar);
+  var so_temp = null;
+  var dispositivo_temp = null;
+  var metadato_temp = null;
+  var navegador_temp = null;
 
-    loadingPanel.value = true;
-    loadComponent.value = true;
 
-    const response = await fetch(`https://ads-service.vercel.app/campaign/update/${route.params.id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(jsonEnviar)
-    });
+  var ciudades_temp = selectedItemCiudad.value;
+  var participantes_temp = selectItemParticipantes.value;
+  var otroValor_temp = numeroOtroUsuarios.value;
 
-    const data = await response.json();
-    console.log("Respuesta del servidor:", data);
+  var visibilidad = selectItemVisibilidad.value;
 
-    if(data.resp){
-      snackbar.value = {
-        show: true,
-        text: 'Campaña editada exitosamente',
-        color: 'success'
-      };
-
-      setTimeout(() => {
-        router.push('/apps/campaigns/list');
-      }, 1500);
-    } else {
-      snackbar.value = {
-        show: true,
-        text: `Error: ${data.error || 'No se pudo actualizar la campaña'}`,
-        color: 'error'
-      };
-    }
-  } catch (error) {
-    console.error("Error al actualizar:", error);
-    snackbar.value = {
-      show: true,
-      text: 'Ocurrió un error al actualizar la campaña',
-      color: 'error'
-    };
-  } finally {
-    loadingPanel.value = false;
-    loadComponent.value = false;
+  if(cri.includes("metadatos") || cri.includes("trazabilidads")){
+    pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
+    ciudad = (selectedItemCiudad.value).length > 0 ? (selectedItemCiudad.value).join(',') : -1;
   }
+
+  if(cri.includes("metadatos")){
+    metadato_temp = (metadatos.value).join(',') || null;
+  }
+
+  if(cri.includes("dispositivos")){
+    dispositivo_temp = (selectItemDispositivos.value).join(',') || null;
+  }
+
+  if(cri.includes("plataforma")){
+    so_temp = (selectItemSO.value).join(',') || null;
+    navegador_temp = (selectItemNavegador.value).join(',') || null;
+  }
+
+  // var so_temp = selectItemSO.value;
+  // var dispositivo_temp = selectItemDispositivos.value;
+  // var navegador_temp = selectItemNavegador.value;
+
+  var jsonEnviar = {
+    "campaignTitle": name,
+    "description": description,
+    "type": tipoContenido,
+    "criterial": {
+      "visibilitySection": visibilidad,
+      "country": pais,
+      "city": ciudad || -1,
+      "so": so_temp || null,
+      "dispositivo": dispositivo_temp || null,
+      "metadato": metadato_temp || null,
+      "navegador": navegador_temp || null
+    },
+    "coleccion": cri.join(','),
+    "position": posicion.value,
+    "participantes": participantes_temp,
+    "otroValor": otroValor_temp,
+    "urls": {
+      "url": linksWeb,
+      "img": {
+        "escritorio": urlImagen_1,
+        "mobile": urlImagen_2
+      },
+      "html": script
+    },
+    "campaignSlug" : slugify(name)
+  }
+
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: JSON.stringify(jsonEnviar),
+    redirect: 'follow'
+  };
+  loadingPanel.value=true;
+  loadComponent.value = true;
+  var response = await fetch(`https://ads-service.vercel.app/campaign/update/${route.params.id}`, requestOptions);
+  const data = await response.json();
+  if(data.resp){
+    router.push('/apps/campaigns/list');
+  }else{
+    alert("Un error se presentó: "+data.error)
+  };
+  loadingPanel.value=false;
+  loadComponent.value = false;
 }
 
 async function handleValidation(isValid, tabIndex) {
@@ -992,24 +1009,6 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
 <template>
   <section>
-  <VSnackbar
-      v-model="snackbar.show"
-      :color="snackbar.color"
-      :timeout="2000"
-      location="top"
-      position="right"
-    >
-      {{ snackbar.text }}
-    </VSnackbar>
-    <VOverlay
-      :model-value="loadingPanel"
-      class="align-center justify-center"
-    >
-      <VProgressCircular
-        indeterminate
-        color="primary"
-      />
-    </VOverlay>
     <VRow>
       <VCol
         class="mt-0"
@@ -1196,24 +1195,17 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                               <label for="email">Posición</label>
                             </VCol>
                             <VCol cols="12" md="12">
-                              <VCombobox
-                                v-model="posicion"
-                                multiple
-                                chips
-                                :items="posicionList"
-                                variant="outlined"
-                                label=""
-                                persistent-hint
-                                v-model:search-input="search"
-                                hide-selected
-                                :hide-no-data="false"
-                                hint=""
-                            />
+                              <VSelect
+                                  v-model="posicion"
+                                  :items="posicionList"
+                                  variant="outlined"
+                                  persistent-hint
+                                  clearable
+                                  label="Selecciona la posición"
+                                />
                             </VCol>
                           </VRow>
                         </VCol>
-
-                        
                       </VRow>
                   
                   </tab-content>

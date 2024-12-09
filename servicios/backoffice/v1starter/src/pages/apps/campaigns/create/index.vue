@@ -1,5 +1,6 @@
 <script setup>
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
+import Papa from 'papaparse';
 import { useRouter } from 'vue-router';
 import { FormWizard, TabContent } from "vue3-form-wizard";
 import 'vue3-form-wizard/dist/style.css';
@@ -20,6 +21,7 @@ const timeoutId = ref(null);
 const timeoutSegundos = 3000;
 
 const nombreCampania = ref('')
+const descripcionCampania = ref('');
 const codigoExternoModel = ref('')
 const linkAds = ref('')
 const linkImageEscritorio = ref('')
@@ -95,11 +97,20 @@ const selectItemsListSO = ref([
   { title:'Otro', value: 'Otro', avatar:"mdi-account", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
   ]);
 
-const numeroRules = [
-  (v) => !!v || 'El número es requerido', // Verifica que no esté vacío
-  (v) => /^\d+$/.test(v) || 'Ingrese solo números', // Verifica que solo sean números
-  (v) => v >= minValue.value && v <= maxValue.value || 'Ingrese un número entre '+minValue.value+' y '+maxValue.value // Verifica el rango de valores
-];
+// const numeroRules = [
+//   (v) => !!v || 'El número es requerido', // Verifica que no esté vacío
+//   (v) => /^\d+$/.test(v) || 'Ingrese solo números', // Verifica que solo sean números
+//   (v) => v >= minValue.value && v <= maxValue.value || 'Ingrese un número entre '+minValue.value+' y '+maxValue.value // Verifica el rango de valores
+// ];
+
+const numeroRules = computed(() => [
+  (v) => (selectItemParticipantes.value === 'Otro' && !files_csv.value.length && !v) ? 'El número es requerido' : true,
+  (v) => /^\d+$/.test(v) || 'Ingrese solo números',
+  (v) => {
+    if (!dataUsuarios.value?.total) return true;
+    return v <= dataUsuarios.value.total || `El número no puede ser mayor a ${dataUsuarios.value.total}`;
+  }
+]);
 
 const languageList = [{
   title:'Imágenes locales',
@@ -128,6 +139,14 @@ const posicionList = [
   'RDFloating',
 ]
 
+// para añadir csv de usuarios
+const files_csv = ref([]);
+const files_loading = ref(false);
+const files_csv_mensaje = ref("");
+const usuarios_traidos_del_csv = ref([]);
+
+
+
 watch(posicion, value => {
   if (value.length > 1)
     nextTick(() => posicion.value.pop())
@@ -154,7 +173,105 @@ onMounted(getMetadatos)
 //   dataCampaigns.value = data.data;
 
 // }
+function dividirArray(original, tamano = 500) {
+  const resultado = [];
+  for (let i = 0; i < original.length; i += tamano) {
+    const trozo = original.slice(i, i + tamano);
+    resultado.push(trozo);
+  }
+  return resultado;
+}
 
+async function handleFileChange(event) {
+  const file = event.target.files[0];
+  if (!file) {
+    console.log('No se seleccionó archivo');
+    return;
+  }
+
+  if (!file.name.endsWith('.csv')) {
+    alert('Por favor, selecciona un archivo CSV.');
+    files_csv.value = [];
+    return;
+  }
+
+  try {
+    files_loading.value = true;
+    files_csv_mensaje.value = "Procesando archivo...";
+    console.log('Iniciando procesamiento de archivo:', file.name);
+
+    Papa.parse(file, {
+      header: true,
+      dynamicTyping: true,
+      complete: (result) => {
+        console.log('Archivo procesado:', result);
+        
+        try {
+          if (!result.data || !result.data.length) {
+            throw new Error('El archivo está vacío');
+          }
+
+          const csvData = result.data;
+          console.log('Datos CSV:', csvData[0]); // Log primera fila
+
+          // Validar formato del archivo
+          if (!csvData[0]?.id) {
+            throw new Error('El archivo no tiene un formato válido. Debe contener una columna "id".');
+          }
+
+          // Filtrar filas válidas
+          let dataNormal = csvData
+            .filter(row => row.id)
+            .map(row => row.id);
+
+          console.log('IDs procesados:', dataNormal.length);
+
+          // Validar límite de usuarios
+          if (dataNormal.length > 30000) {
+            throw new Error('La cantidad de usuarios no debe pasar de 30 mil.');
+          }
+
+          // Comparar con el número ingresado manualmente
+          const numeroIngresado = parseInt(numeroOtroUsuarios.value);
+          if (numeroIngresado && numeroIngresado !== dataNormal.length) {
+            if (confirm(`El número de usuarios ingresado (${numeroIngresado}) no coincide con los usuarios encontrados en el CSV (${dataNormal.length}). ¿Desea actualizar el número de usuarios?`)) {
+              numeroOtroUsuarios.value = dataNormal.length;
+            } else {
+              throw new Error('Operación cancelada por el usuario.');
+            }
+          }
+
+          usuarios_traidos_del_csv.value = dataNormal;
+          dataUsuarios.value = { total: dataNormal.length };
+          files_csv_mensaje.value = `${dataNormal.length} usuarios procesados`;
+          console.log('Procesamiento completado exitosamente');
+
+        } catch (error) {
+          console.error('Error en el procesamiento:', error);
+          alert(error.message);
+          files_csv.value = [];
+          files_csv_mensaje.value = "";
+        } finally {
+          files_loading.value = false;
+        }
+      },
+      error: (error) => {
+        console.error('Error al parsear CSV:', error);
+        alert('Error al procesar el archivo: ' + error.message);
+        files_loading.value = false;
+        files_csv.value = [];
+        files_csv_mensaje.value = "";
+      }
+    });
+
+  } catch (error) {
+    console.error('Error general:', error);
+    alert('Error al procesar el archivo: ' + error.message);
+    files_loading.value = false;
+    files_csv.value = [];
+    files_csv_mensaje.value = "";
+  }
+}
 async function getCountries(){
   var myHeaders = new Headers();
   loadingPanel.value=true;
@@ -315,6 +432,7 @@ function slugify(text) {
 
 async function onComplete() {
   var name = nombreCampania.value;
+  var description = descripcionCampania.value;
   var tipoContenido = languages.value;
   var cri = criterio.value;
   var po = posicion.value;
@@ -339,6 +457,8 @@ async function onComplete() {
 
   var visibilidad = selectItemVisibilidad.value;
 
+  let userIds = [];
+
   if(cri.includes("metadatos") || cri.includes("trazabilidads")){
     pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
     ciudad = (selectedItemCiudad.value).length > 0 ? (selectedItemCiudad.value).join(',') : -1;
@@ -357,36 +477,53 @@ async function onComplete() {
     navegador_temp = (selectItemNavegador.value).join(',') || null;
   }
 
+  if (participantes_temp === 'Todos') {
+    userIds = dataUsuarios.value.usuarios || []; // Usar los usuarios totales disponibles
+  } else if (participantes_temp === 'Otro') {
+    if (usuarios_traidos_del_csv.value.length > 0) {
+      // Si hay usuarios del CSV, usar esos
+      userIds = usuarios_traidos_del_csv.value;
+    } else {
+      // Si no hay CSV pero hay un número específico, usar el total de usuarios hasta ese número
+      const totalUsuarios = parseInt(numeroOtroUsuarios.value);
+      if (totalUsuarios > 0 && dataUsuarios.value.usuarios) {
+        userIds = dataUsuarios.value.usuarios.slice(0, totalUsuarios);
+      }
+    }
+  }
+
   // var so_temp = selectItemSO.value;
   // var dispositivo_temp = selectItemDispositivos.value;
   // var navegador_temp = selectItemNavegador.value;
 
   var jsonEnviar = {
-        "campaignTitle": name,
-        "type": tipoContenido,
-        "criterial": {
-            "visibilitySection": visibilidad,
-            "country": pais,
-            "city": ciudad || -1,
-            "so": so_temp || null,
-            "dispositivo": dispositivo_temp || null,
-            "metadato": metadato_temp || null,
-            "navegador": navegador_temp || null
-        },
-        "coleccion": cri.join(','),
-        "position": po.join(","),
-        "participantes": participantes_temp,
-        "otroValor": otroValor_temp,
-        "urls": {
-            "url": linksWeb,
-            "img": {
-                "escritorio": urlImagen_1,
-                "mobile": urlImagen_2
-            },
-            "html": script
-        },
-        "campaignSlug" : slugify(name)
-    }
+    "campaignTitle": name,
+    "description": description,
+    "type": tipoContenido,
+    "criterial": {
+      "visibilitySection": visibilidad,
+      "country": pais,
+      "city": ciudad || -1,
+      "so": so_temp || null,
+      "dispositivo": dispositivo_temp || null,
+      "metadato": metadato_temp || null,
+      "navegador": navegador_temp || null
+    },
+    "coleccion": cri.join(','),
+    "position": po.join(","),
+    "participantes": participantes_temp,
+    "otroValor": otroValor_temp,
+    "userId": userIds, // Array de usuarios determinado según la opción
+    "urls": {
+      "url": linksWeb,
+      "img": {
+        "escritorio": urlImagen_1,
+        "mobile": urlImagen_2
+      },
+      "html": script
+    },
+    "campaignSlug": slugify(name)
+  }
 
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -437,13 +574,19 @@ async function setLoading(value) {
 
 async function validateAsync() {
   var nombre = nombreCampania.value;
+  var descripcion = descripcionCampania.value;
   var tipoC = languages.value;
-  var crit = criterio.value;
+  var crit = criterio.value; // Agregamos esta línea
   var pos = posicion.value;
   var visibilidad = selectItemVisibilidad.value;
 
   if(nombre.length < 1 || nombre.trim() == ""){
     alert("Debes añadir un nombre de campaña");
+    return false;
+  }
+
+  if(descripcion.length < 1 || descripcion.trim() == ""){
+    alert("Debes añadir una descripción de campaña");
     return false;
   }
 
@@ -469,7 +612,6 @@ async function validateAsync() {
 
   return true;
 }
-
 async function validateAsyncInsercion() {
   var nombre = nombreCampania.value;
   var tipoC = languages.value;
@@ -917,32 +1059,42 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                   backButtonText="Anterior"
                   finishButtonText="Crear campaña"
                 >
-                  <tab-content title="Detalles de la campaña" class="px-4" :before-change="validateAsync">
-                   
+                <tab-content title="Detalles de la campaña" class="px-4" :before-change="validateAsync">
                     <VRow class="pb-5">
-                        <VCol cols="12">
-                          <VRow no-gutters>
-                            <!-- 👉 First Name -->
-                            <VCol
-                              cols="12"
-                              md="12"
-                            >
-                              <label for="nombreCampania">Nombre de la campaña</label>
-                            </VCol>
+                      <!-- Campo de nombre existente -->
+                      <VCol cols="12">
+                        <VRow no-gutters>
+                          <VCol cols="12" md="12">
+                            <label for="nombreCampania">Nombre de la campaña</label>
+                          </VCol>
+                          <VCol cols="12" md="12">
+                            <VTextField
+                              id="nombreCampania"
+                              v-model="nombreCampania"
+                              placeholder="Nombre de la campaña"
+                              persistent-placeholder
+                            />
+                          </VCol>
+                        </VRow>
+                      </VCol>
 
-                            <VCol
-                              cols="12"
-                              md="12"
-                            >
-                              <VTextField
-                                id="nombreCampania"
-                                v-model="nombreCampania"
-                                placeholder="Nombre de la campaña"
-                                persistent-placeholder
-                              />
-                            </VCol>
-                          </VRow>
-                        </VCol>
+                      <!-- campo de descripción -->
+                      <VCol cols="12">
+                        <VRow no-gutters>
+                          <VCol cols="12" md="12">
+                            <label for="descripcionCampania">Descripción de la campaña</label>
+                          </VCol>
+                          <VCol cols="12" md="12">
+                            <VTextarea
+                              id="descripcionCampania"
+                              v-model="descripcionCampania"
+                              placeholder="Ingrese una descripción para la campaña"
+                              persistent-placeholder
+                              rows="3"
+                            />
+                          </VCol>
+                        </VRow>
+                      </VCol>
 
                         <VCol cols="6">
                           <VRow no-gutters>
@@ -971,7 +1123,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
                         <VCol cols="6">
                           <VRow no-gutters>
-                            <!-- 👉 Email -->
+                     
                             <VCol
                               cols="12"
                               md="12"
@@ -996,7 +1148,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
                         <VCol cols="6">
                           <VRow no-gutters>
-                            <!-- 👉 Email -->
+                     
                             <VCol
                               cols="12"
                               md="12"
@@ -1021,7 +1173,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
                         <VCol cols="6">
                           <VRow no-gutters>
-                            <!-- 👉 Email -->
+                     
                             <VCol
                               cols="12"
                               md="12"
@@ -1455,6 +1607,64 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                                     :max="maxValue"
                                   />
                                 </VCol>
+
+                                <VCol cols="12" :class="selectItemParticipantes!='Otro'?'d-none':''">
+                                    <VRow no-gutters>
+                                      <VCol cols="12" md="12">
+                                        <label for="email">Escriba el número o suba un archivo CSV</label>
+                                      </VCol>
+
+                                      <VCol cols="12" md="6">
+                                        <VTextField
+                                          id="numero"
+                                          v-model="numeroOtroUsuarios"
+                                          placeholder="Escriba el número de participantes"
+                                          persistent-placeholder
+                                          :rules="numeroRules"
+                                          :disabled="files_loading"
+                                          :min="1"
+                                          :max="dataUsuarios.value?.total || undefined"
+                                        />
+                                      </VCol>
+
+                                      <VCol cols="12" md="6">
+                                        <VFileInput
+                                          v-model="files_csv"
+                                          :loading="files_loading"
+                                          :disabled="files_loading"
+                                          accept=".csv"
+                                          placeholder="Subir archivo CSV de usuarios"
+                                          label="Subir CSV de usuarios"
+                                          prepend-icon="tabler-paperclip"
+                                          @change="handleFileChange"
+                                        >
+                                          <template #selection="{ fileNames }">
+                                            <template v-for="fileName in fileNames" :key="fileName">
+                                              <VChip label size="small" variant="outlined" color="primary" class="me-2">
+                                                {{ fileName }}
+                                              </VChip>
+                                            </template>
+                                          </template>
+                                        </VFileInput>
+
+                                        <div v-if="files_loading || files_csv_mensaje" class="mt-2">
+                                          <VAlert :type="files_loading ? 'info' : 'success'" variant="tonal">
+                                            {{ files_csv_mensaje }}
+                                            <v-progress-circular
+                                              v-if="files_loading"
+                                              indeterminate
+                                              size="20"
+                                              class="ms-2"
+                                            ></v-progress-circular>
+                                          </VAlert>
+                                        </div>
+
+                                        <small class="py-2" style="font-size:10px;color:#000;text-align: right;width: 100%;display: block;">
+                                          Máximo de usuarios permitidos 30000
+                                        </small>
+                                      </VCol>
+                                    </VRow>
+                                  </VCol>
                               </VRow>
                             </VCol>
                           </VRow>
@@ -1577,5 +1787,18 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 .v-menu .v-select__slot {
   max-height: 10px; /* Ajusta el valor según tus necesidades */
   overflow-y: auto;
+}
+
+.rotate {
+  animation: rotate 2s linear infinite;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 </style>
