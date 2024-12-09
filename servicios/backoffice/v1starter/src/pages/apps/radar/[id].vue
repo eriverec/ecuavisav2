@@ -897,6 +897,9 @@
             <div class="d-flex flex-column">
               <small>web</small>
               <h3 style="line-height: 1.3;">{{idsName[route.params.id].title}}</h3>
+              <VChip size="x-small" color="primary">
+                {{ processedData.length }} Artículo(s)
+              </VChip>
             </div> 
             <VBtn :href="idsName[route.params.id].url" target="_blank" icon variant="text" size="small">
               <VIcon icon="tabler-external-link" />
