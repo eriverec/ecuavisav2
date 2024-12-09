@@ -298,6 +298,7 @@
                     :items="itemsSitioWeb"
                     multiple
                     chips
+                    :menu-props="{ maxHeight: '300' }"
                   />
                 </div>
               </VCol>
@@ -309,6 +310,7 @@
                     :items="itemsSitioWebSeccion"
                     multiple
                     chips
+                    :menu-props="{ maxHeight: '300' }"
                   />
                 </div>
               </VCol>
@@ -320,6 +322,7 @@
                     :items="itemsSitioWebSubSeccion"
                     multiple
                     chips
+                    :menu-props="{ maxHeight: '300' }"
                   />
                 </div>
               </VCol>

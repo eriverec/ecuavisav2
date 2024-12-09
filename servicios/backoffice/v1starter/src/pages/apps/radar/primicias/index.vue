@@ -44,17 +44,25 @@
   }
 
   const processedData = computed(() => {
-   const seen = new Set()
-   return data.value.map(item => {
-     // const isDuplicate = seen.has(item.titulo)
-     // if (!isDuplicate) seen.add(item.titulo)
-     return {
-       ...item,
-       subVertical: item.subVertical === 'NN' ? '' : item.subVertical,
-       isDuplicate: false
-     }
-   })
-  })
+    const seen = new Map();
+    
+    data.value.forEach(item => {
+      const existing = seen.get(item.enlace);
+      
+      if (!existing || (existing.picture === null && item.picture !== null)) {
+        // Si no existe o si el existente tiene picture null y el actual no lo tiene, actualizamos
+        seen.set(item.enlace, {
+          ...item,
+          subVertical: item.subVertical === 'NN' ? '' : item.subVertical,
+          isDuplicate: false
+        });
+      }
+    });
+
+    // Devolvemos los valores únicos como un array
+    return Array.from(seen.values());
+  });
+
 
   const groupedData = computed(() => {
    return processedData.value.reduce((acc, item) => {
@@ -123,7 +131,7 @@
       updateInterval.value = dataResp.minutes * 60;
 
       // Ordenar por fecha de publicación (de mayor a menor)
-      const sortedItems = data.value.sort((a, b) => {
+      const sortedItems = processedData.value.sort((a, b) => {
         const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
         const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
         return dateB - dateA; // Mayor a menor
@@ -370,7 +378,7 @@
             borderRadius: 0,
             barHeight: '30%',
             horizontal: (
-              ((seriesFormat.data.length > 0 && seriesFormat.data.length < 2) || seriesFormat.data.length > 10 )
+              ((seriesFormat.data.length > 0 && seriesFormat.data.length < 2) || seriesFormat.data.length > 15 )
               || isMobile
             ),
             startingShape: 'rounded',
@@ -887,6 +895,7 @@
               :items="itemsPagina"
               multiple
               chips
+              :menu-props="{ maxHeight: '300' }"
             />
           </div>
         </div>
