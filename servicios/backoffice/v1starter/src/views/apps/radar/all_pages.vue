@@ -27,7 +27,7 @@
 
   const buscar_dato = ref(null)
   const selectedItemSitioWeb = ref(null)
-  const itemsSitioWeb = ref(["PRIMICIAS", "EL COMERCIO"]);
+  const itemsSitioWeb = ref(["PRIMICIAS", "EL UNIVERSO"]);
 
   const selectedItemSeccion = ref(null)
   const itemsSitioWebSeccion = ref([]);
@@ -42,28 +42,47 @@
   const updateIntervalDisabled = ref(false)
   const tableSearches = ref({})
 
+  function replaceAmp(input) {
+    return input.replace(/&amp;/g, "&");
+  }
+
+  const primicias_data = async function(){
+    try{
+      const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/competencias/radar-digital/primicias/listar.php');
+      const dataResp = await response.json();
+      return dataResp.site;
+    }catch(error){
+      return null;
+    }
+  }
+
+  const el_universo_data = async function(){
+    try{
+      const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/competencias/radar-digital/el-universo/listar.php');
+      const dataResp = await response.json();
+      return dataResp.site;
+    }catch(error){
+      return null;
+    }
+  }
 
   const principalData = async function(){
     try{
-      const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/competencias/radar-digital/primicias/listar.php')
-      const dataResp = await response.json();
 
-      const stringJson = JSON.stringify(dataResp.site);
-      const primiciasList = JSON.parse(stringJson);
-      const elComercioList = JSON.parse(stringJson);
-
+      const primiciasList = await primicias_data() || [];;
+      const elUniersoList = await el_universo_data() || [];
 
       for (let i = 0; i < primiciasList.length; i++) {
         primiciasList[i].sitio = "PRIMICIAS";
         primiciasList[i].color = "primary";
       }
 
-      for (let i = 0; i < elComercioList.length; i++) {
-        elComercioList[i].sitio = "EL COMERCIO";
-        elComercioList[i].color = "info";
+      for (let i = 0; i < elUniersoList.length; i++) {
+        elUniersoList[i].sitio = "EL UNIVERSO";
+        elUniersoList[i].color = "info";
       }
 
-      data.value = [...primiciasList, ...elComercioList].sort((a, b) => {
+      data.value = [...primiciasList, ...elUniersoList].sort((a, b) => {
         const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
         const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
         return dateB - dateA; // Mayor a menor
@@ -173,17 +192,24 @@
   })
 
   const processedData = computed(() => {
-   const seen = new Set()
-   return data.value.map(item => {
-     // const isDuplicate = seen.has(item.titulo)
-     // if (!isDuplicate) seen.add(item.titulo)
-     return {
-       ...item,
-       subVertical: item.subVertical === 'NN' ? '' : item.subVertical,
-       isDuplicate: false
-     }
-   })
-  })
+    const seen = new Map();
+    
+    data.value.forEach(item => {
+      const existing = seen.get(item.enlace);
+      
+      if (!existing || (existing.picture === null && item.picture !== null)) {
+        // Si no existe o si el existente tiene picture null y el actual no lo tiene, actualizamos
+        seen.set(item.enlace, {
+          ...item,
+          subVertical: item.subVertical === 'NN' ? '' : item.subVertical,
+          isDuplicate: false
+        });
+      }
+    });
+
+    // Devolvemos los valores únicos como un array
+    return Array.from(seen.values());
+  });
 
   // const groupedData = computed(() => {
   //  return processedData.value.reduce((acc, item) => {
@@ -334,7 +360,7 @@
                     <template #prepend>
                       <VAvatar
                           v-if="item.picture"
-                          :image="item.picture"
+                          :image="replaceAmp(item.picture)"
                           size="64"
                           rounded
                       />
