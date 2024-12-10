@@ -471,7 +471,7 @@ async function onComplete() {
 
   loadingPanel.value = true;
   try {
-    var response = await fetch(`http://localhost:8080/campaign/create`, requestOptions);
+    var response = await fetch(`https://ads-service.vercel.app/campaign/create`, requestOptions);
     const data = await response.json();
     if(data.resp) {
       router.push('/apps/campaigns/list');
