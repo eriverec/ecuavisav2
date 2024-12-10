@@ -32,11 +32,21 @@ const criterio = ref([]);
 const posicion = ref([]);
 const selectedItem = ref([]);
 const selectedItemCiudad = ref([]);
-const dataUsuarios = ref({});
+// const dataUsuarios = ref({});
+const dataUsuarios = ref({
+  total: 0,
+  userIds: []
+});
+
 const selectItemParticipantes = ref(null);
-const selectItemsList = ref([{ title:'Otro', value: 'Otro' },{ title:'100', value: '100' }]);
+// const selectItemsList = ref([{ title:'Otro', value: 'Otro' },{ title:'100', value: '100' }]);
+const selectItemsList = ref([
+  { title:'Usuarios específicos', value: 'Usuarios específicos' },
+  { title:'Todos', value: 'Todos' }
+]);
 const minValue = ref(1); // Valor mínimo permitido
 const maxValue = ref(100); // Valor máximo permitido
+
 
 
 const search = ref(null)
@@ -146,7 +156,6 @@ const files_csv_mensaje = ref("");
 const usuarios_traidos_del_csv = ref([]);
 
 
-
 watch(posicion, value => {
   if (value.length > 1)
     nextTick(() => posicion.value.pop())
@@ -198,59 +207,51 @@ async function handleFileChange(event) {
   try {
     files_loading.value = true;
     files_csv_mensaje.value = "Procesando archivo...";
-    console.log('Iniciando procesamiento de archivo:', file.name);
 
     Papa.parse(file, {
       header: true,
-      dynamicTyping: true,
+      dynamicTyping: false,
       complete: (result) => {
-        console.log('Archivo procesado:', result);
-        
         try {
           if (!result.data || !result.data.length) {
             throw new Error('El archivo está vacío');
           }
 
           const csvData = result.data;
-          console.log('Datos CSV:', csvData[0]); // Log primera fila
-
-          // Validar formato del archivo
+          console.log('Datos CSV raw:', csvData);
+          
           if (!csvData[0]?.id) {
             throw new Error('El archivo no tiene un formato válido. Debe contener una columna "id".');
           }
 
-          // Filtrar filas válidas
+          // Filtramos y convertimos explícitamente a números
           let dataNormal = csvData
-            .filter(row => row.id)
-            .map(row => row.id);
+            .filter(row => row.id && row.id.trim() !== '')
+            .map(row => {
+              const parsedId = isNaN(row.id) ? row.id : parseInt(row.id);
+              return parsedId;
+            });
 
-          console.log('IDs procesados:', dataNormal.length);
+          console.log('IDs procesados:', dataNormal);
 
-          // Validar límite de usuarios
           if (dataNormal.length > 30000) {
             throw new Error('La cantidad de usuarios no debe pasar de 30 mil.');
           }
 
-          // Comparar con el número ingresado manualmente
-          const numeroIngresado = parseInt(numeroOtroUsuarios.value);
-          if (numeroIngresado && numeroIngresado !== dataNormal.length) {
-            if (confirm(`El número de usuarios ingresado (${numeroIngresado}) no coincide con los usuarios encontrados en el CSV (${dataNormal.length}). ¿Desea actualizar el número de usuarios?`)) {
-              numeroOtroUsuarios.value = dataNormal.length;
-            } else {
-              throw new Error('Operación cancelada por el usuario.');
-            }
+          if (dataNormal.length === 0) {
+            throw new Error('No se encontraron IDs válidos en el archivo.');
           }
 
           usuarios_traidos_del_csv.value = dataNormal;
-          dataUsuarios.value = { total: dataNormal.length };
-          files_csv_mensaje.value = `${dataNormal.length} usuarios procesados`;
-          console.log('Procesamiento completado exitosamente');
+          dataUsuarios.value = { total: dataNormal.length, usuarios: dataNormal };
+          files_csv_mensaje.value = `${dataNormal.length} usuarios procesados correctamente`;
 
         } catch (error) {
           console.error('Error en el procesamiento:', error);
           alert(error.message);
           files_csv.value = [];
           files_csv_mensaje.value = "";
+          usuarios_traidos_del_csv.value = [];
         } finally {
           files_loading.value = false;
         }
@@ -261,6 +262,7 @@ async function handleFileChange(event) {
         files_loading.value = false;
         files_csv.value = [];
         files_csv_mensaje.value = "";
+        usuarios_traidos_del_csv.value = [];
       }
     });
 
@@ -270,6 +272,7 @@ async function handleFileChange(event) {
     files_loading.value = false;
     files_csv.value = [];
     files_csv_mensaje.value = "";
+    usuarios_traidos_del_csv.value = [];
   }
 }
 async function getCountries(){
@@ -318,99 +321,44 @@ const fetchWithTimeout = (url, options, timeout = 10000) => {
 };
 
 async function getUsuarios(){
-  var ciudad = -1;
-  var pais = -1;
-  var criterioTemp = criterio.value;
-
-  var so_temp = null;
-  var dispositivo_temp = null;
-  var navegador_temp = null;
-  var metadato = null;
-
-  if(criterioTemp.includes("metadatos") || criterioTemp.includes("trazabilidads")){
-    pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
-    ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
-    ciudad = (ciudad=="Todas las ciudes"?-1:ciudad);
-  }
-
-  if(criterioTemp.includes("metadatos")){
-    metadato = metadatos.value || null;
-  }
-
-  if(criterioTemp.includes("dispositivos")){
-    dispositivo_temp = selectItemDispositivos.value || null;
-  }
-
-  if(criterioTemp.includes("plataforma")){
-    so_temp = selectItemSO.value || null;
-    navegador_temp = selectItemNavegador.value || null;
-  }
-  
+  try {
+    var criterioTemp = criterio.value;
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
+    
     var raw = JSON.stringify({
-      "metadato": metadato,
+      "metadato": (metadatos.value) || null,
       "criterio": criterioTemp,
-      "pais": pais,
-      "ciudad": ciudad,
-      "navegador": navegador_temp,
-      "os": so_temp,
-      "dispositivo": dispositivo_temp
+      "pais": (selectedItem.value?.length > 0) ? selectedItem.value : -1,
+      "ciudad": (selectedItemCiudad.value?.length > 0) ? selectedItemCiudad.value : -1,
+      "navegador": selectItemNavegador.value || null,
+      "os": selectItemSO.value || null,
+      "dispositivo": selectItemDispositivos.value || null
     });
 
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-    //console.log('data enviar ',raw);    
-    const send = await fetch('https://ads-service.vercel.app/campaign/v2/usuarios/get/user/total', requestOptions);
-    const respuesta = await send.json();    
-    //console.log('resp',respuesta);    
-    dataUsuarios.value =respuesta;
-    //console.log('data total',dataUsuarios.value);
-  
-    
-  /*  
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-  };
-  // console.log(pais || "-1")
-  // alert(pais.length)
-  // var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-  //   so: so_temp, 
-  //   dispositivo: dispositivo_temp,
-  //   metadato: metadato,
-  //   criterio: criterioTemp.join(','),
-  //   navegador: navegador_temp
-  // }) }`, requestOptions);
-  // const data = await response.json();
-  // dataUsuarios.value = data;
+    console.log("Parámetros de búsqueda:", raw);
 
-  const response = await fetchWithTimeout(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-      so: so_temp, 
-      dispositivo: dispositivo_temp,
-      metadato: metadato,
-      criterio: criterioTemp.join(','),
-      navegador: navegador_temp
-  }) }`, requestOptions, 25000); // Aquí hemos establecido un tiempo de espera de 15 segundos (15000 milisegundos)
+    const response = await fetch('https://ads-service.vercel.app/campaign/v2/usuarios/get/user/total', {
+      method: 'POST',
+      headers: myHeaders,
+      body: raw
+    });
 
-  if (response.status === 200) {
-      const data = await response.json();
-      dataUsuarios.value = data;
-  } else {
-      console.error("Error en la solicitud:", response.status);
-      // Puedes manejar el error de acuerdo a tus necesidades
+    const datos = await response.json();
+    console.log("Respuesta de usuarios:", datos);
+
+    dataUsuarios.value = {
+      total: datos.total || 0,
+      userIds: datos.userIds || []  // Asegúrate que el backend devuelve este campo
+    };
+
+    return true;
+  } catch (error) {
+    console.error("Error en getUsuarios:", error);
+    dataUsuarios.value = { total: 0, userIds: [] };
+    return false;
   }
-  */
-  
 }
-
 const consentimiento = ref(false);
 
 function slugify(text) {
@@ -441,60 +389,45 @@ async function onComplete() {
   var urlImagen_1 = linkImageEscritorio.value || "";
   var urlImagen_2 = linkImageMobile.value || "";
   var paises_temp = selectedItem.value;
-
   var ciudad = -1;
   var pais = -1;
-
   var so_temp = null;
   var dispositivo_temp = null;
   var metadato_temp = null;
   var navegador_temp = null;
-
-
-  var ciudades_temp = selectedItemCiudad.value;
-  var participantes_temp = selectItemParticipantes.value;
-  var otroValor_temp = numeroOtroUsuarios.value;
-
   var visibilidad = selectItemVisibilidad.value;
 
+  // Obtener los IDs basados en la selección
   let userIds = [];
+  if (selectItemParticipantes.value === 'Todos') {
+    userIds = dataUsuarios.value.usuarios || [];
+  } else if (selectItemParticipantes.value === 'Usuarios específicos') {
+    if (!usuarios_traidos_del_csv.value || !usuarios_traidos_del_csv.value.length) {
+      alert('No hay usuarios cargados del CSV');
+      return;
+    }
+    userIds = [...usuarios_traidos_del_csv.value];
+  }
 
-  if(cri.includes("metadatos") || cri.includes("trazabilidads")){
+  console.log('UserIds a enviar:', userIds);
+
+  if(cri.includes("metadatos") || cri.includes("trazabilidads")) {
     pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
     ciudad = (selectedItemCiudad.value).length > 0 ? (selectedItemCiudad.value).join(',') : -1;
   }
 
-  if(cri.includes("metadatos")){
+  if(cri.includes("metadatos")) {
     metadato_temp = (metadatos.value).join(',') || null;
   }
 
-  if(cri.includes("dispositivos")){
+  if(cri.includes("dispositivos")) {
     dispositivo_temp = (selectItemDispositivos.value).join(',') || null;
   }
 
-  if(cri.includes("plataforma")){
+  if(cri.includes("plataforma")) {
     so_temp = (selectItemSO.value).join(',') || null;
     navegador_temp = (selectItemNavegador.value).join(',') || null;
   }
-
-  if (participantes_temp === 'Todos') {
-    userIds = dataUsuarios.value.usuarios || []; // Usar los usuarios totales disponibles
-  } else if (participantes_temp === 'Otro') {
-    if (usuarios_traidos_del_csv.value.length > 0) {
-      // Si hay usuarios del CSV, usar esos
-      userIds = usuarios_traidos_del_csv.value;
-    } else {
-      // Si no hay CSV pero hay un número específico, usar el total de usuarios hasta ese número
-      const totalUsuarios = parseInt(numeroOtroUsuarios.value);
-      if (totalUsuarios > 0 && dataUsuarios.value.usuarios) {
-        userIds = dataUsuarios.value.usuarios.slice(0, totalUsuarios);
-      }
-    }
-  }
-
-  // var so_temp = selectItemSO.value;
-  // var dispositivo_temp = selectItemDispositivos.value;
-  // var navegador_temp = selectItemNavegador.value;
 
   var jsonEnviar = {
     "campaignTitle": name,
@@ -503,17 +436,17 @@ async function onComplete() {
     "criterial": {
       "visibilitySection": visibilidad,
       "country": pais,
-      "city": ciudad || -1,
-      "so": so_temp || null,
-      "dispositivo": dispositivo_temp || null,
-      "metadato": metadato_temp || null,
-      "navegador": navegador_temp || null
+      "city": ciudad,
+      "so": so_temp,
+      "dispositivo": dispositivo_temp,
+      "metadato": metadato_temp,
+      "navegador": navegador_temp
     },
     "coleccion": cri.join(','),
     "position": po.join(","),
-    "participantes": participantes_temp,
-    "otroValor": otroValor_temp,
-    "userId": userIds, // Array de usuarios determinado según la opción
+    "participantes": selectItemParticipantes.value,
+    "otroValor": userIds.length,
+    "userId": userIds,
     "urls": {
       "url": linksWeb,
       "img": {
@@ -523,7 +456,9 @@ async function onComplete() {
       "html": script
     },
     "campaignSlug": slugify(name)
-  }
+  };
+
+  console.log('JSON a enviar:', JSON.stringify(jsonEnviar, null, 2));
 
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -533,34 +468,22 @@ async function onComplete() {
     body: JSON.stringify(jsonEnviar),
     redirect: 'follow'
   };
-  loadingPanel.value=true;
-  var response = await fetch(`https://ads-service.vercel.app/campaign/create`, requestOptions);
-  const data = await response.json();
-  if(data.resp){
-    router.push('/apps/campaigns/list');
-  }else{
-    alert("Un error se presentó: "+data.error)
-  };
-  loadingPanel.value=false;
-}
 
-async function handleValidation(isValid, tabIndex) {
-  if(tabIndex == 1 && isValid == true && dataCountry.value.length < 1){
-    await getCountries();
-
-    var paises = [];
-    for(var i in dataCountry.value){
-      var ins = dataCountry.value[i];
-      // paises.push({ title:ins.country, value:ins.country });
-      paises.push(ins.country);
+  loadingPanel.value = true;
+  try {
+    var response = await fetch(`http://localhost:8080/campaign/create`, requestOptions);
+    const data = await response.json();
+    if(data.resp) {
+      router.push('/apps/campaigns/list');
+    } else {
+      alert("Un error se presentó: " + (data.error || 'Error desconocido'));
     }
-
-    // console.log(paises)
-    countryList.value = paises;
-
+  } catch (error) {
+    console.error('Error al crear campaña:', error);
+    alert("Error al crear la campaña: " + error.message);
+  } finally {
+    loadingPanel.value = false;
   }
-  // console.log('Tab: '+tabIndex+ ' valid: '+isValid)
-  return false;
 }
 
 async function handleValidationChange(prevIndex, nextIndex) {
@@ -682,32 +605,110 @@ async function validateAsyncCriterio() {
 const errorMessages = computed(() => numeroRules.map(rule => rule(numeroOtroUsuarios.value)).filter(Boolean));
 const hasErrors = computed(() => errorMessages.value.length > 0);
 
-async function validateAsyncUsuarios() {
-  var pais = selectedItem.value;
-  var ciudad = selectedItemCiudad.value;
+// async function validateAsyncUsuarios() {
+//   var pais = selectedItem.value;
+//   var ciudad = selectedItemCiudad.value;
 
-  // console.log(ciudad)
+//   // console.log(ciudad)
+//   var crit = criterio.value;
+//   var participantes = selectItemParticipantes.value;
+//   var numeroOtrosUsuarios = numeroOtroUsuarios.value;
+//   var dispositivos_temp = selectItemDispositivos.value;
+//   var metadatos_temp = metadatos.value;
+//   var selectItemSO_temp = selectItemSO.value;
+//   var selectItemNavegador_temp = selectItemNavegador.value;
+//   var selectedItem_temp = selectedItem.value;
+//   var selectedItemCiudad_temp = selectedItemCiudad.value;
+
+// // console.log(dispositivos_temp)
+
+//   // if(pais.length < 1 || pais == ""){
+//   //   alert("Debe ingresar el país");
+//   //   return false;
+//   // }
+
+//   // if(ciudad.length < 1 || ciudad == ""){
+//   //   alert("Debes ingresar la ciudad");
+//   //   return false;
+//   // }
+
+//   if(crit.includes("dispositivos")){
+//     if(dispositivos_temp.length < 1 || dispositivos_temp == ""){
+//       alert("Debe seleccionar un dispositivo");
+//       return false;
+//     }
+//   }
+
+//   if(crit.includes("metadatos")){
+//     if(metadatos_temp.length < 1 || metadatos_temp == ""){
+//       alert("Debe seleccionar al menos 1 metadato");
+//       return false;
+//     }
+//   }
+
+//   if(crit.includes("plataforma")){
+//     if(selectItemSO_temp.length < 1 || selectItemSO_temp == ""){
+//       alert("Debe seleccionar al menos 1 SO");
+//       return false;
+//     }
+
+//     if(selectItemNavegador_temp.length < 1 || selectItemNavegador_temp == ""){
+//       alert("Debe seleccionar al menos 1 Navegador");
+//       return false;
+//     }
+//   }
+
+//   if(crit.includes("trazabilidads")){
+//     if(selectedItem_temp.length < 1 || selectedItem_temp == ""){
+//       alert("Debe seleccionar al menos 1 país");
+//       return false;
+//     }
+
+//     if(selectedItemCiudad_temp.length < 1 || selectedItemCiudad_temp == ""){
+//       alert("Debe seleccionar al menos 1 ciudad");
+//       return false;
+//     }
+
+//   }
+
+//   if(crit.length < 1 || crit == ""){
+//     alert("Debes ingresar el criterio");
+//     return false;
+//   }
+
+//   if(participantes.length < 1 || participantes == ""){
+//     alert("Debes ingresar el número de participantes");
+//     return false;
+//   }
+
+//   if(participantes == 'Otro'){
+//     if(numeroOtrosUsuarios < 1 || numeroOtrosUsuarios == ""){
+//       alert("Debes ingresar el valor correspondiente para el número de participantes");
+//       return false;
+//     }
+
+//     // if(hasErrors){
+//     //   return false;
+//     // }
+
+//   }
+
+//   if(participantes == ''){
+//     alert("Debes seleccionar la cantidad de usuarios");
+//     return false;
+//   }
+//   return true;
+// }
+
+async function validateAsyncUsuarios() {
   var crit = criterio.value;
   var participantes = selectItemParticipantes.value;
-  var numeroOtrosUsuarios = numeroOtroUsuarios.value;
   var dispositivos_temp = selectItemDispositivos.value;
   var metadatos_temp = metadatos.value;
   var selectItemSO_temp = selectItemSO.value;
   var selectItemNavegador_temp = selectItemNavegador.value;
   var selectedItem_temp = selectedItem.value;
   var selectedItemCiudad_temp = selectedItemCiudad.value;
-
-// console.log(dispositivos_temp)
-
-  // if(pais.length < 1 || pais == ""){
-  //   alert("Debe ingresar el país");
-  //   return false;
-  // }
-
-  // if(ciudad.length < 1 || ciudad == ""){
-  //   alert("Debes ingresar la ciudad");
-  //   return false;
-  // }
 
   if(crit.includes("dispositivos")){
     if(dispositivos_temp.length < 1 || dispositivos_temp == ""){
@@ -745,7 +746,6 @@ async function validateAsyncUsuarios() {
       alert("Debe seleccionar al menos 1 ciudad");
       return false;
     }
-
   }
 
   if(crit.length < 1 || crit == ""){
@@ -758,29 +758,26 @@ async function validateAsyncUsuarios() {
     return false;
   }
 
-  if(participantes == 'Otro'){
-    if(numeroOtrosUsuarios < 1 || numeroOtrosUsuarios == ""){
-      alert("Debes ingresar el valor correspondiente para el número de participantes");
+  if (selectItemParticipantes.value === 'Usuarios específicos') {
+    if (!files_csv.value || files_csv.value.length === 0) {
+      alert("Debe subir un archivo CSV con los usuarios");
       return false;
     }
 
-    // if(hasErrors){
-    //   return false;
-    // }
-
+    if (!usuarios_traidos_del_csv.value || usuarios_traidos_del_csv.value.length === 0) {
+      alert("No se han procesado usuarios del CSV");
+      return false;
+    }
   }
 
-  if(participantes == ''){
-    alert("Debes seleccionar la cantidad de usuarios");
-    return false;
-  }
   return true;
 }
 
+
 function compareByTitle(a, b) {
-  if (a.title === "Todas las ciudes") {
+  if (a.title === "Todas las ciudades") {
     return -1; // El elemento "Todas las ciudes" se mantiene en el primer lugar
-  } else if (b.title === "Todas las ciudes") {
+  } else if (b.title === "Todas las ciudades") {
     return 1;
   } else {
     if (a.title < b.title) {
@@ -870,24 +867,15 @@ function generateRandomIntegers(min, max, count) {
 
   return randomIntegers;
 }
-
 async function generarOtrosValores(){
   maxValue.value = dataUsuarios.value.total;
   minValue.value = 1;
-  if(dataUsuarios.value.total < 100){
-    selectItemsList.value = [{ title:'Todos', value: 'Todos' },{ title:'Otro valor', value: 'Otro' }];
-  }else{
-    var numeros = generateRandomIntegers(100, dataUsuarios.value.total, 3);
-    var items = [];
-    items.push({ title:'Otro valor', value: 'Otro' });
-    if(dataUsuarios.value.total > 110){
-      for(var i in numeros){
-        items.push({ title:numeros[i], value: numeros[i] });
-      }
-    }
-    items.push({ title:'Todos', value: 'Todos' });
-    selectItemsList.value = items;
-  }
+  
+  // Simplificamos para mostrar solo las dos opciones que necesitamos
+  selectItemsList.value = [
+    { title: 'Usuarios específicos', value: 'Usuarios específicos' },
+    { title: 'Todos', value: 'Todos' }
+  ];
 
   return true;
 }
@@ -1583,90 +1571,65 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                               </VRow>
                             </VCol>
 
-                            <VCol cols="12" :class="selectItemParticipantes!='Otro'?'d-none':''">
-                              <VRow no-gutters>
-                                <!-- 👉 Email -->
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <label for="email">Escriba el número</label>
-                                </VCol>
-
-                                <VCol
-                                  cols="12"
-                                  md="12"
-                                >
-                                  <VTextField
-                                    id="numero"
-                                    v-model="numeroOtroUsuarios"
-                                    placeholder="Escriba el número de participantes"
-                                    persistent-placeholder
-                                    :rules="numeroRules"
-                                    :min="minValue"
-                                    :max="maxValue"
-                                  />
-                                </VCol>
-
-                                <VCol cols="12" :class="selectItemParticipantes!='Otro'?'d-none':''">
-                                    <VRow no-gutters>
-                                      <VCol cols="12" md="12">
-                                        <label for="email">Escriba el número o suba un archivo CSV</label>
-                                      </VCol>
-
-                                      <VCol cols="12" md="6">
-                                        <VTextField
-                                          id="numero"
-                                          v-model="numeroOtroUsuarios"
-                                          placeholder="Escriba el número de participantes"
-                                          persistent-placeholder
-                                          :rules="numeroRules"
-                                          :disabled="files_loading"
-                                          :min="1"
-                                          :max="dataUsuarios.value?.total || undefined"
-                                        />
-                                      </VCol>
-
-                                      <VCol cols="12" md="6">
-                                        <VFileInput
-                                          v-model="files_csv"
-                                          :loading="files_loading"
-                                          :disabled="files_loading"
-                                          accept=".csv"
-                                          placeholder="Subir archivo CSV de usuarios"
-                                          label="Subir CSV de usuarios"
-                                          prepend-icon="tabler-paperclip"
-                                          @change="handleFileChange"
-                                        >
-                                          <template #selection="{ fileNames }">
-                                            <template v-for="fileName in fileNames" :key="fileName">
-                                              <VChip label size="small" variant="outlined" color="primary" class="me-2">
-                                                {{ fileName }}
-                                              </VChip>
-                                            </template>
-                                          </template>
-                                        </VFileInput>
-
-                                        <div v-if="files_loading || files_csv_mensaje" class="mt-2">
-                                          <VAlert :type="files_loading ? 'info' : 'success'" variant="tonal">
-                                            {{ files_csv_mensaje }}
-                                            <v-progress-circular
-                                              v-if="files_loading"
-                                              indeterminate
-                                              size="20"
-                                              class="ms-2"
-                                            ></v-progress-circular>
-                                          </VAlert>
-                                        </div>
-
-                                        <small class="py-2" style="font-size:10px;color:#000;text-align: right;width: 100%;display: block;">
-                                          Máximo de usuarios permitidos 30000
-                                        </small>
-                                      </VCol>
-                                    </VRow>
+                            <VCol cols="12" :class="selectItemParticipantes!='Usuarios específicos'?'d-none':''">
+                                <VRow no-gutters>
+                                  <VCol cols="12" md="12">
+                                    <label class="mb-2">Subir archivo CSV con listado de usuarios</label>
+                                    <div class="text-body-2 text-grey-darken-1 mb-4">
+                                      El archivo CSV debe contener una columna "id" con los identificadores de los usuarios.
+                                      <VBtn
+                                        size="small"
+                                        variant="text"
+                                        color="primary"
+                                        class="ml-2"
+                                        href="/template-usuarios.csv"
+                                        download
+                                      >
+                                        Descargar plantilla CSV
+                                        <VIcon size="16" class="ml-1">mdi-download</VIcon>
+                                      </VBtn>
+                                    </div>
                                   </VCol>
-                              </VRow>
-                            </VCol>
+
+                                  <VCol cols="12" md="12">
+                                    <VFileInput
+                                      v-model="files_csv"
+                                      :loading="files_loading"
+                                      :disabled="files_loading"
+                                      accept=".csv"
+                                      placeholder="Subir archivo CSV de usuarios"
+                                      label="Subir CSV de usuarios"
+                                      prepend-icon="tabler-paperclip"
+                                      @change="handleFileChange"
+                                    >
+                                      <template #selection="{ fileNames }">
+                                        <template v-for="fileName in fileNames" :key="fileName">
+                                          <VChip label size="small" variant="outlined" color="primary" class="me-2">
+                                            {{ fileName }}
+                                          </VChip>
+                                        </template>
+                                      </template>
+                                    </VFileInput>
+
+                                    <div v-if="files_loading || files_csv_mensaje" class="mt-2">
+                                      <VAlert :type="files_loading ? 'info' : 'success'" variant="tonal">
+                                        {{ files_csv_mensaje }}
+                                        <v-progress-circular
+                                          v-if="files_loading"
+                                          indeterminate
+                                          size="20"
+                                          class="ms-2"
+                                        ></v-progress-circular>
+                                      </VAlert>
+                                    </div>
+
+                                    <small class="text-grey-darken-1 mt-2 d-block">
+                                      Máximo de usuarios permitidos: 30,000
+                                    </small>
+                                  </VCol>
+                                </VRow>
+                              </VCol>
+
                           </VRow>
 
                         </VCol>
