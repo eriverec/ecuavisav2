@@ -48,7 +48,7 @@
   // Observa cambios en el parámetro `id` y redirige si no es válido
   watch(() => route.params.id, (newId) => {
     idParamsEsValido.value = validIds.includes(newId);
-    if (!idParamsEsValido.value) {
+    if (route.path.startsWith('/apps/radar/primicias') && !idParamsEsValido.value) {
       router.replace('/404'); // Redirigir a la página 404
     }
   }, { immediate: true }); // Ejecutar también en la carga inicial

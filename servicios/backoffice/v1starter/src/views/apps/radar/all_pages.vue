@@ -177,6 +177,7 @@
     if (newValue.length > 0 && !itemsSitioWebSeccion.value.includes(newValue.at(-1))) {
       newValue.pop();
     }
+
   });
 
   watch(() => filtrosActivos.subseccion, (newValue) => {
@@ -189,6 +190,7 @@
     if (newValue.length > 0 && !itemsSitioWeb.value.includes(newValue.at(-1))) {
       newValue.pop();
     }
+
   })
 
   const processedData = computed(() => {
@@ -260,8 +262,19 @@
           return dateB - dateA; // Mayor a menor
         });
       }
+      // console.log(sitio.length)
+      // setTimeout(() => {
+      //   // Actualizar items únicos para las secciones
+      //   if(sitio.length == 0){
+      //     console.log(getUniqueVerticals(lastResults.value))
+      //     itemsSitioWebSeccion.value = getUniqueVerticals(lastResults.value);
+      //   }
 
-      // Actualizar items únicos para las secciones
+      //   if(secciones.length == 0){
+      //     itemsSitioWebSubSeccion.value = getUniqueSubVerticals(lastResults.value);
+      //   }
+      // }, 1000);
+      
       // itemsSitioWebSeccion.value = getUniqueVerticals(lastResults.value);
       // itemsSitioWebSubSeccion.value = getUniqueSubVerticals(lastResults.value);
     }, 300); // 300 ms de debounce
