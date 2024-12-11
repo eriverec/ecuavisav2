@@ -21,6 +21,10 @@ const countryList = ref([]);
 // const FormWizard = ref(false);
 // const TabContent = ref(false);
 
+// Añade estas referencias al inicio del script setup
+const participantesCount = ref(null);
+const userSelectionMethod = ref('criteria'); // 'criteria' o 'specific'
+
 const nombreCampania = ref('')
 const descripcionCampania = ref('')
 const codigoExternoModel = ref('')
@@ -468,92 +472,69 @@ function slugify(text) {
 
 async function onComplete() {
   try {
-    var name = nombreCampania.value;
-    var description = descripcionCampania.value;
-    var tipoContenido = languages.value;
-    var cri = criterio.value;
-    var po = posicion.value;
-    
-    console.log("Valores antes de enviar:", {
-      name,
-      description,
-      posicion: po
-    });
+    const userIds = userSelectionMethod.value === 'specific' ? 
+      campaignUsers.value.map(u => u.wylexId) : 
+      [];
 
-    var jsonEnviar = {
-      "campaignTitle": name,
-      "description": description,
-      "type": tipoContenido,
-      "criterial": {
-        "visibilitySection": selectItemVisibilidad.value,
-        "country": (selectedItem.value).length > 0 ? selectedItem.value : -1,
-        "city": (selectedItemCiudad.value).length > 0 ? (selectedItemCiudad.value).join(',') : -1,
-        "so": (selectItemSO.value)?.join(',') || null,
-        "dispositivo": (selectItemDispositivos.value)?.join(',') || null,
-        "metadato": (metadatos.value)?.join(',') || null,
-        "navegador": (selectItemNavegador.value)?.join(',') || null
+    const jsonEnviar = {
+      campaignTitle: nombreCampania.value,
+      description: descripcionCampania.value,
+      type: languages.value,
+      criterial: {
+        visibilitySection: selectItemVisibilidad.value,
+        country: selectedItem.value.length > 0 ? selectedItem.value : -1,
+        city: selectedItemCiudad.value.length > 0 ? selectedItemCiudad.value.join(',') : -1,
+        so: selectItemSO.value?.join(',') || null,
+        dispositivo: selectItemDispositivos.value?.join(',') || null,
+        metadato: metadatos.value?.join(',') || null,
+        navegador: selectItemNavegador.value?.join(',') || null
       },
-      "coleccion": cri.join(','),
-      "position": Array.isArray(po) ? po.join(",") : po, // Validamos si es array
-      "participantes": selectItemParticipantes.value,
-      "otroValor": numeroOtroUsuarios.value,
-      "userId": selectedUsers.value, // Agregar el array de usuarios seleccionado
-      "urls": {
-        "url": linkAds.value || "#",
-        "img": {
-          "escritorio": linkImageEscritorio.value || "",
-          "mobile": linkImageMobile.value || ""
+      coleccion: criterio.value.join(','),
+      position: Array.isArray(posicion.value) ? posicion.value.join(",") : posicion.value,
+      participantes: userSelectionMethod.value === 'specific' ? 'Usuarios específicos' : 'Por criterios',
+      otroValor: userSelectionMethod.value === 'specific' ? userIds.length : participantesCount.value,
+      userId: userSelectionMethod.value === 'specific' ? userIds : [],
+      urls: {
+        url: linkAds.value || "#",
+        img: {
+          escritorio: linkImageEscritorio.value || "",
+          mobile: linkImageMobile.value || ""
         },
-        "html": codigoExternoModel.value || ""
+        html: codigoExternoModel.value || ""
       },
-      "campaignSlug": slugify(name),
-      "statusCampaign": true
+      campaignSlug: slugify(nombreCampania.value)
     };
 
-    console.log("JSON a enviar:", jsonEnviar);
-
     loadingPanel.value = true;
-    loadComponent.value = true;
-
     const response = await fetch(`https://ads-service.vercel.app/campaign/update/${route.params.id}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json'
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(jsonEnviar)
     });
 
     const data = await response.json();
-    console.log("Respuesta del servidor:", data);
-
-    if(data.resp){
+    
+    if(data.resp) {
       snackbar.value = {
         show: true,
-        text: 'Campaña editada exitosamente',
+        text: 'Campaña actualizada exitosamente',
         color: 'success'
       };
-
-      setTimeout(() => {
-        router.push('/apps/campaigns/list');
-      }, 1500);
+      setTimeout(() => router.push('/apps/campaigns/list'), 1500);
     } else {
-      snackbar.value = {
-        show: true,
-        text: `Error: ${data.error || 'No se pudo actualizar la campaña'}`,
-        color: 'error'
-      };
+      throw new Error(data.error || 'Error al actualizar la campaña');
     }
   } catch (error) {
-    console.error("Error al actualizar:", error);
+    console.error('Error:', error);
     snackbar.value = {
       show: true,
-      text: 'Ocurrió un error al actualizar la campaña',
+      text: `Error: ${error.message}`,
       color: 'error'
     };
   } finally {
     loadingPanel.value = false;
-    loadComponent.value = false;
   }
 }
 
@@ -820,97 +801,53 @@ const errorMessages = computed(() => numeroRules.map(rule => rule(numeroOtroUsua
 const hasErrors = computed(() => errorMessages.value.length > 0);
 
 async function validateAsyncUsuarios() {
-  var pais = selectedItem.value;
-  var ciudad = selectedItemCiudad.value;
+  const crit = criterio.value;
+  
+  if(crit.length < 1) {
+    alert("Debes ingresar al menos un criterio");
+    return false;
+  }
 
-  // console.log(ciudad)
-  var crit = criterio.value;
-  var participantes = selectItemParticipantes.value;
-  var numeroOtrosUsuarios = numeroOtroUsuarios.value;
-  var dispositivos_temp = selectItemDispositivos.value;
-  var metadatos_temp = metadatos.value;
-  var selectItemSO_temp = selectItemSO.value;
-  var selectItemNavegador_temp = selectItemNavegador.value;
-  var selectedItem_temp = selectedItem.value;
-  var selectedItemCiudad_temp = selectedItemCiudad.value;
-
-// console.log(dispositivos_temp)
-
-  // if(pais.length < 1 || pais == ""){
-  //   alert("Debe ingresar el país");
-  //   return false;
-  // }
-
-  // if(ciudad.length < 1 || ciudad == ""){
-  //   alert("Debes ingresar la ciudad");
-  //   return false;
-  // }
-
-  if(crit.includes("dispositivos")){
-    if(dispositivos_temp.length < 1 || dispositivos_temp == ""){
+  if(userSelectionMethod.value === 'criteria') {
+    // Validaciones para selección por criterios
+    if(crit.includes("dispositivos") && (!selectItemDispositivos.value?.length)) {
       alert("Debe seleccionar un dispositivo");
       return false;
     }
-  }
 
-  if(crit.includes("metadatos")){
-    if(metadatos_temp.length < 1 || metadatos_temp == ""){
+    if(crit.includes("metadatos") && (!metadatos.value?.length)) {
       alert("Debe seleccionar al menos 1 metadato");
       return false;
     }
-  }
 
-  if(crit.includes("plataforma")){
-    if(selectItemSO_temp.length < 1 || selectItemSO_temp == ""){
-      alert("Debe seleccionar al menos 1 SO");
-      return false;
+    if(crit.includes("plataforma")) {
+      if(!selectItemSO.value?.length) {
+        alert("Debe seleccionar al menos 1 SO");
+        return false;
+      }
+      if(!selectItemNavegador.value?.length) {
+        alert("Debe seleccionar al menos 1 Navegador");
+        return false;
+      }
     }
 
-    if(selectItemNavegador_temp.length < 1 || selectItemNavegador_temp == ""){
-      alert("Debe seleccionar al menos 1 Navegador");
+    if(crit.includes("trazabilidads")) {
+      if(!selectedItem.value?.length) {
+        alert("Debe seleccionar al menos 1 país");
+        return false;
+      }
+      if(!selectedItemCiudad.value?.length) {
+        alert("Debe seleccionar al menos 1 ciudad");
+        return false;
+      }
+    }
+
+    if(!participantesCount.value) {
+      alert("Debe especificar el número de participantes");
       return false;
     }
   }
 
-  if(crit.includes("trazabilidads")){
-    if(selectedItem_temp.length < 1 || selectedItem_temp == ""){
-      alert("Debe seleccionar al menos 1 país");
-      return false;
-    }
-
-    if(selectedItemCiudad_temp.length < 1 || selectedItemCiudad_temp == ""){
-      alert("Debe seleccionar al menos 1 ciudad");
-      return false;
-    }
-
-  }
-
-  if(crit.length < 1 || crit == ""){
-    alert("Debes ingresar el criterio");
-    return false;
-  }
-
-  if(participantes.length < 1 || participantes == ""){
-    alert("Debes ingresar el número de participantes");
-    return false;
-  }
-
-  if(participantes == 'Otro'){
-    if(numeroOtrosUsuarios < 1 || numeroOtrosUsuarios == ""){
-      alert("Debes ingresar el valor correspondiente para el número de participantes");
-      return false;
-    }
-
-    // if(hasErrors){
-    //   return false;
-    // }
-
-  }
-
-  if(participantes == ''){
-    alert("Debes seleccionar la cantidad de usuarios");
-    return false;
-  }
   return true;
 }
 
@@ -955,41 +892,25 @@ function groupByTitleWithAttributes(arr) {
 }
 
 
-watch(() => selectedItem.value, (newValue, oldValue) => {
-  // console.log('Nuevo valor seleccionado:', newValue);
-  // console.log('Valor anterior:', oldValue);
-  // alert(selectedItem.value)
-  if(selectedItem.value != null){
-
-    selectedItemCiudad.value = [];
-    selectItemParticipantes.value = [];
-    var ciudades = [];
-    ciudades.push({ title: "Todas las ciudes", value: "0" });
-    for(var i in dataCountry.value){
-      var ins = dataCountry.value[i];
-      if(ins.country == newValue){
-        for(var j in ins.data){
-          var ins2 = ins.data[j];
-          ciudades.push({ title:ins2.city, value:ins2.city });
-        }
+watch([
+  selectedItemCiudad,
+  selectItemDispositivos,
+  selectItemSO,
+  selectItemNavegador,
+  metadatos
+], async () => {
+  if (!loadingPanel.value) {
+    loadingPanel.value = true;
+    try {
+      await getUsuarios();
+      if (dataUsuarios.value?.total) {
+        participantesCount.value = dataUsuarios.value.total;
       }
+    } finally {
+      loadingPanel.value = false;
     }
-
-    ciudades.sort(compareByTitle);
-    // console.log(Object.values(groupByTitle(ciudades)))
-    var ciudadesTemp_2 = Object.values(groupByTitleWithAttributes(ciudades));
-    var ciudadesSi = [];
-    for(var i in ciudadesTemp_2){
-      ciudadesSi.push(ciudadesTemp_2[i].title);
-    }
-    cityList.value = ciudadesSi;
-
-    console.log(cityList.value)
-  }else{
-    cityList.value = [];
-    selectItemParticipantes.value = [];
   }
-});
+}, { deep: true });
 
 function generateRandomIntegers(min, max, count) {
   const randomIntegers = [];
@@ -1734,7 +1655,26 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                               </VRow>
                             </VCol>
                           
-
+<VRow class="mb-4">
+  <VCol cols="12" md="6">
+    <VSelect
+      v-model="userSelectionMethod"
+      :items="[
+        { title: 'Por criterios', value: 'criteria' },
+        { title: 'Usuarios específicos', value: 'specific' }
+      ]"
+      label="Método de selección de usuarios"
+    />
+  </VCol>
+  <VCol cols="12" md="6" v-if="userSelectionMethod === 'criteria'">
+    <VTextField
+      v-model="participantesCount"
+      type="number"
+      label="Número de participantes"
+      :rules="[v => !!v || 'Este campo es requerido']"
+    />
+  </VCol>
+</VRow>
                           </VRow>
 
                         </VCol>
@@ -1810,9 +1750,11 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
         :users="campaignUsers"
         :campaign-title="nombreCampania"
         :users-per-page="10"
+        :campaign-id="route.params.id"
         @delete-user="handleDeleteUser"
         @add-user="handleAddUser"
         @export="handleExportUsers"
+        @close="refreshCampaignData"
       />
     </VCardText>
     <VCardActions>

@@ -61,7 +61,7 @@
 
         <VCol 
           cols="12" 
-          md="6"
+          md="4"
           class="board-container d-flex"
         >
           <VCard :loading="element.loading">
@@ -70,11 +70,7 @@
                 <VIcon icon="tabler-grip-vertical" class="me-2" />
                 <VCardTitle>
                   {{ element.title }}
-                  <VChip
-                    class="ml-2"
-                    size="small"
-                    color="primary"
-                  >
+                  <VChip class="ml-2" size="small" color="primary" >
                     {{ filteredArticles(element.key).length }}
                   </VChip>
                 </VCardTitle>
