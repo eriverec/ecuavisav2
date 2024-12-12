@@ -10,9 +10,10 @@ const dataGrupos = ref([]);
 const gruposItems = ref([]);
 const sitiosItems = ref([]);
 const sitiosRaw = ref([]);
+const urlRaw = ref(null);
 // dom prueba
-const urlDom = "https://servicios-ecuavisa-suscripciones.vercel.app";
-// const urlDom = "https://ecuavisa-suscripciones.vercel.app";
+const urlDom = "https://ecuavisa-suscripciones.vercel.app";
+// const urlDom = "http://localhost:8080";
 
 async function getPaquetes (){
     try {
@@ -67,7 +68,7 @@ async function getGrupos (){
 async function getSitios (){
     try {  
       
-      const consulta = await fetch('https://ecuavisa-suscripciones.vercel.app/sitio/all');
+      const consulta = await fetch(urlDom+'/sitio/all');
       const consultaJson = await consulta.json();
       sitiosRaw.value = consultaJson.data;     
 
@@ -259,6 +260,7 @@ function resetForm(){
     caracteristicasSelected.value = [];
 
     url_imagen.value ='';
+    urlRaw.value = '';
     visibilidad.value = 'Visible';
     cambioPlan.value = 'bloquear';
     paqueteCortesia.value =false;
@@ -356,6 +358,7 @@ async function onEditPaquete(id){
     caracteristicasSelected.value = paquete.caracteristicas;
     
     url_imagen.value = paquete.url_imagen;
+    urlRaw.value = paquete.url;
     visibilidad.value = paquete.visibilidad;
     cambioPlan.value = paquete.cambioPlan;
     paqueteCortesia.value = paquete.paqueteCortesia;
@@ -393,6 +396,7 @@ async function onComplete(){
         "clasesCss":  clasesCss.value,
         "caracteristicas": caracteristicasSelected.value,
         "url_imagen" : url_imagen.value,
+        "url": urlRaw.value,
         "visibilidad" : visibilidad.value,
         "cambioPlan" : cambioPlan.value,
         "paqueteCortesia" : paqueteCortesia.value,
@@ -445,6 +449,7 @@ async function onComplete(){
         "clasesCss":  clasesCss.value,
         "caracteristicas": caracteristicasSelected.value,
         "url_imagen" : url_imagen.value,
+        "url":urlRaw.value,
         "visibilidad" : visibilidad.value,
         "cambioPlan" : cambioPlan.value,
         "paqueteCortesia" : paqueteCortesia.value,
@@ -736,6 +741,16 @@ async function deletePaquete() {
                             >
                            
                                 <VSelect  v-model="sitio" label="Sitio" :items="sitiosItems" />  
+                            </VCol>
+                            <VCol
+                              cols="6"
+                              md="6"
+                              class=""
+                            >
+                                <VTextField
+                                    v-model="urlRaw"
+                                    label="Ingresa la url del paquete, si dispone"                                
+                                  />
                             </VCol>
                           </VRow>
 
