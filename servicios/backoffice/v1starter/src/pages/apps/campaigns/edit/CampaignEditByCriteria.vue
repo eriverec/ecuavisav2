@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, computed } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps({
   campaignData: {
@@ -288,6 +288,8 @@ onMounted(() => {
           <VBtn
             type="submit"
             color="primary"
+            id="guardacrit"
+            class="d-none"
             :loading="isLoading"
             :disabled="!selectedCountry && selectedDevices.includes('todos')"
           >

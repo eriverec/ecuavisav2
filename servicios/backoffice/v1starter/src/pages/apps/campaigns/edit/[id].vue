@@ -1,5 +1,5 @@
 <script setup>
-import { ref, watch, onMounted } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 import CampaignEditByCriteria from './CampaignEditByCriteria.vue'
 import CampaignEditByList from './CampaignEditByList.vue'
@@ -201,6 +201,53 @@ const handleBaseUpdate = async () => {
   }
 }
 
+// Guardar cambios de Criterios
+const handleSave = async () => {
+  document.getElementById('guardacrit')?.click()
+  try {
+    const updatedData = {
+      ...props.campaignData,
+      criterial: {
+        ...props.campaignData.criterial,
+        country: selectedCountry.value || -1,
+        city: selectedCities.value.includes('Todas las ciudades') ? -1 : selectedCities.value.join(','),
+        dispositivo: selectedDevices.value.includes('todos') ? null : selectedDevices.value.join(',')
+      }
+    }
+
+    const response = await fetch(`https://ads-service.vercel.app/campaign/update/${props.campaignData._id}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedData)
+    })
+
+    const data = await response.json()
+    if (data.resp) {
+      snackbar.value = {
+        show: true,
+        text: 'Criterios actualizados exitosamente',
+        color: 'success'
+      }
+      emit('update')
+    } else {
+      throw new Error(data.error || 'Error al actualizar')
+    }
+  } catch (error) {
+    snackbar.value = {
+      show: true,
+      text: 'Error al guardar los cambios',
+      color: 'error'
+    }
+  }
+}
+
+const handleAllSaves = async () => {
+  // await handleBaseUpdate() // no vale funcion
+  document.getElementById('guardacrit')?.click()
+}
+
 // Watch para mantener solo una posición seleccionada
 watch(posicion, (newVal) => {
   if (newVal.length > 1) {
@@ -212,171 +259,250 @@ onMounted(fetchCampaignData)
 </script>
 
 <template>
-  <section>
+  <div class="position-relative">
     <!-- Overlay de carga -->
-    <VOverlay
-      :model-value="isLoading"
-      class="align-center justify-center"
-    >
-      <VProgressCircular
-        indeterminate
-        color="primary"
-      />
+    <VOverlay :model-value="isLoading" class="align-center justify-center">
+      <VProgressCircular indeterminate color="primary" />
     </VOverlay>
 
     <!-- Snackbar para notificaciones -->
-    <VSnackbar
-      v-model="snackbar.show"
-      :color="snackbar.color"
-      :timeout="2000"
-      location="top"
-    >
+    <VSnackbar v-model="snackbar.show" :color="snackbar.color" :timeout="2000" location="top">
       {{ snackbar.text }}
     </VSnackbar>
 
-    <VCard class="mt-5">
-      <VCardText>
-        <!-- Configuración base de la campaña -->
-        <VForm @submit.prevent="handleBaseUpdate" class="mb-6">
-          <VRow>
-            <!-- Información básica -->
-            <VCol cols="12" md="6">
-              <VTextField
-                v-model="nombreCampania"
-                label="Nombre de la campaña"
-                required
-                placeholder="Ingrese el nombre de la campaña"
-              />
-            </VCol>
+    <VForm @submit.prevent="handleBaseUpdate">
+      <VRow>
+        <!-- Detalles de campaña-->
+        <VCol cols="12" md="6">
+          <VCard class="h-100">
+            <VCardTitle class="pa-4">
+              <VChip color="primary" label size="large" class="px-4 py-2 text-uppercase">
+                Detalles de Campaña
+              </VChip>
+            </VCardTitle>
+            <VCardText>
+              <VRow>
+                <!-- Nombre de la campaña -->
+                <VCol cols="6">
+                  <VRow no-gutters>
+                    <VCol cols="12" md="12">
+                      <label for="nombreCampania">Nombre de la campaña</label>
+                    </VCol>
+                    <VCol cols="12" md="12">
+                      <VTextField
+                        id="nombreCampania"
+                        v-model="nombreCampania"
+                        placeholder="Nombre de la campaña"
+                        persistent-placeholder
+                        required
+                      />
+                    </VCol>
+                  </VRow>
+                </VCol>
 
-            <VCol cols="12" md="6">
-              <VTextField
-                v-model="descripcionCampania"
-                label="Descripción"
-                placeholder="Descripción breve de la campaña"
-              />
-            </VCol>
+                <!-- Tipo de contenido -->
+                <VCol cols="6">
+                  <VRow no-gutters>
+                    <VCol cols="12" md="12">
+                      <label for="tipocontenido">Tipo de contenido</label>
+                    </VCol>
+                    <VCol cols="12" md="12">
+                      <VSelect
+                        v-model="tipoContenido"
+                        :items="tiposContenido"
+                        item-title="title"
+                        item-value="value"
+                        required
+                        clearable
+                        label=""
+                      />
+                    </VCol>
+                  </VRow>
+                </VCol>
 
-            <!-- Tipo de contenido -->
-            <VCol cols="12" md="4">
-              <VSelect
-                v-model="tipoContenido"
-                :items="tiposContenido"
-                label="Tipo de contenido"
-                required
-                item-title="title"
-                item-value="value"
-              />
-            </VCol>
+                <!-- Campo de descripción -->
+                <VCol cols="12">
+                  <VRow no-gutters>
+                    <VCol cols="12" md="12">
+                      <label for="descripcionCampania">Descripción de la campaña</label>
+                    </VCol>
+                    <VCol cols="12" md="12">
+                      <VTextField
+                        id="descripcionCampania"
+                        v-model="descripcionCampania"
+                        placeholder="Ingrese una descripción para la campaña"
+                        persistent-placeholder
+                      />
+                    </VCol>
+                  </VRow>
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
+        </VCol>
 
-            <!-- Visibilidad -->
-            <VCol cols="12" md="4">
-              <VSelect
-                v-model="visibilidadWeb"
-                :items="opcionesVisibilidad"
-                label="Visibilidad en el sitio"
-                required
-                item-title="title"
-                item-value="value"
-              />
-            </VCol>
+        <!-- Configuración de Contenido -->
+        <VCol cols="12" md="6">
+          <VCard class="h-100">
+            <VCardTitle class="pa-4">
+              <VChip color="primary" label size="large" class="px-4 py-2 text-uppercase">
+                Configuración de Contenido
+              </VChip>
+            </VCardTitle>
+            <VCardText>
+              <VRow class="pb-5">
+                <!-- Campos según tipo de contenido -->
+                <template v-if="tipoContenido === 'imagen'">
+                  <VCol cols="12">
+                    <VTextField
+                      v-model="linkAds"
+                      label="Link del ads"
+                      required
+                      placeholder="URL del anuncio"
+                    />
+                  </VCol>
 
-            <!-- Posición -->
-            <VCol cols="12" md="4">
-              <VSelect
-                v-model="posicion"
-                :items="posicionesDisponibles"
-                label="Posición"
-                required
-                chips
-                multiple
-              />
-            </VCol>
+                  <VCol cols="6">
+                    <VTextField
+                      v-model="linkImageEscritorio"
+                      label="URL imagen de escritorio"
+                      required
+                      placeholder="URL de la imagen para escritorio"
+                    />
+                  </VCol>
 
-            <!-- Campos según tipo de contenido -->
-            <template v-if="tipoContenido === 'imagen'">
-              <VCol cols="12">
-                <VTextField
-                  v-model="linkAds"
-                  label="Link del ads"
-                  required
-                  placeholder="URL del anuncio"
+                  <VCol cols="6">
+                    <VTextField
+                      v-model="linkImageMobile"
+                      label="URL imagen de móvil"
+                      required
+                      placeholder="URL de la imagen para móvil"
+                    />
+                  </VCol>
+                </template>
+
+                <template v-else-if="tipoContenido === 'html' || tipoContenido === 'script'">
+                  <VCol cols="12">
+                    <VTextarea
+                      v-model="codigoHtml"
+                      :label="tipoContenido === 'html' ? 'Código HTML' : 'Código ADS'"
+                      required
+                      rows="6"
+                      placeholder="Ingrese el código"
+                    />
+                  </VCol>
+                </template>
+              </VRow>
+            </VCardText>
+          </VCard>
+        </VCol>
+
+        <!-- Visibilidad en la web -->
+        <VCol cols="12">
+          <VCard>
+            <VCardTitle class="pa-4">
+              <VChip color="primary" label size="large" class="px-4 py-2 text-uppercase">
+                Visibilidad en la web
+              </VChip>
+            </VCardTitle>
+            <VCardText>
+              <VRow>
+                <!-- Escoge sección -->
+                <VCol cols="6">
+                  <VRow no-gutters>
+                    <VCol cols="12" md="12">
+                      <label for="visibilidad">Escoge una sección</label>
+                    </VCol>
+                    <VCol cols="12" md="12">
+                      <VSelect
+                        v-model="visibilidadWeb"
+                        :items="opcionesVisibilidad"
+                        item-title="title"
+                        item-value="value"
+                        required
+                        clearable
+                        label=""
+                      />
+                    </VCol>
+                  </VRow>
+                </VCol>
+
+                <!-- Posición -->
+                <VCol cols="6">
+                  <VRow no-gutters>
+                    <VCol cols="12" md="12">
+                      <label for="posicion">Posición</label>
+                    </VCol>
+                    <VCol cols="12" md="12">
+                      <VSelect
+                        v-model="posicion"
+                        :items="posicionesDisponibles"
+                        chips
+                        multiple
+                        clearable
+                        label=""
+                      />
+                    </VCol>
+                  </VRow>
+                </VCol>
+              </VRow>
+            </VCardText>
+          </VCard>
+        </VCol>
+
+        <!-- Target/Usuarios -->
+        <VCol cols="12">
+          <VCard>
+            <VCardTitle class="pa-4">
+              <VChip color="primary" label size="large" class="px-4 py-2 text-uppercase">
+                Target / Usuarios
+              </VChip>
+            </VCardTitle>
+            <VCardText>
+              <!-- Selector de modo de edición -->
+              <div class="d-flex justify-end mb-4">
+                <VSwitch
+                  v-model="editMode"
+                  :true-value="'criteria'"
+                  :false-value="'list'"
+                  :label="editMode === 'criteria' ? 'Por criterios' : 'Lista personalizada'"
+                  color="primary"
                 />
-              </VCol>
+              </div>
 
-              <VCol cols="12" md="6">
-                <VTextField
-                  v-model="linkImageEscritorio"
-                  label="URL imagen de escritorio"
-                  required
-                  placeholder="URL de la imagen para escritorio"
+              <!-- Componentes de edición -->
+              <VFadeTransition>
+                <CampaignEditByCriteria
+                  v-if="editMode === 'criteria' && campaignData"
+                  :campaign-data="campaignData"
+                  @update="fetchCampaignData"
                 />
-              </VCol>
-
-              <VCol cols="12" md="6">
-                <VTextField
-                  v-model="linkImageMobile"
-                  label="URL imagen de móvil"
-                  required
-                  placeholder="URL de la imagen para móvil"
+                <CampaignEditByList
+                  v-else-if="editMode === 'list' && campaignData"
+                  :campaign-data="campaignData"
+                  @update="fetchCampaignData"
                 />
-              </VCol>
-            </template>
+              </VFadeTransition>
+            </VCardText>
+          </VCard>
+        </VCol>
+      </VRow>
+    </VForm>
 
-            <template v-else-if="tipoContenido === 'html' || tipoContenido === 'script'">
-              <VCol cols="12">
-                <VTextarea
-                  v-model="codigoHtml"
-                  :label="tipoContenido === 'html' ? 'Código HTML' : 'Código ADS'"
-                  required
-                  rows="6"
-                  placeholder="Ingrese el código"
-                />
-              </VCol>
-            </template>
+    <!-- Botón flotante para guardar -->
+    <VBtn
+      type="submit"
+      class="save-button"
+      color="success"
+      icon="mdi-check"
+      size="large"
 
-            <!-- Botón guardar configuración base -->
-            <VCol cols="12" class="d-flex justify-end">
-              <VBtn
-                type="submit"
-                color="primary"
-                :loading="isLoading"
-              >
-                Guardar configuración base
-              </VBtn>
-            </VCol>
-          </VRow>
-        </VForm>
-
-        <VDivider class="mb-6" />
-
-        <!-- Selector de modo de edición -->
-        <div class="d-flex align-center mb-4">
-          <div class="me-4">Modo de edición de usuarios:</div>
-          <VSwitch
-            v-model="editMode"
-            :true-value="'criteria'"
-            :false-value="'list'"
-            :label="editMode === 'criteria' ? 'Por criterios' : 'Lista personalizada'"
-          />
-        </div>
-
-        <!-- Componentes de edición -->
-        <VFadeTransition>
-          <CampaignEditByCriteria
-            v-if="editMode === 'criteria' && campaignData"
-            :campaign-data="campaignData"
-            @update="fetchCampaignData"
-          />
-          <CampaignEditByList
-            v-else-if="editMode === 'list' && campaignData"
-            :campaign-data="campaignData"
-            @update="fetchCampaignData"
-          />
-        </VFadeTransition>
-      </VCardText>
-    </VCard>
-  </section>
+      @click="handleAllSaves"
+      style="position: fixed; bottom: 2rem; right: 2rem;"
+    >
+      <VIcon icon="tabler-device-floppy" />
+    </VBtn>
+  </div>
 </template>
 
 <style scoped>
