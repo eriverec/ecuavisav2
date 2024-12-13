@@ -523,21 +523,125 @@
             </VRow>
 
              <!-- Vista de modo personalizado -->
+      <!-- Reemplazar la sección de modo personalizado en la última tarjeta -->
       <VRow v-else>
-        <VCol cols="12">
-          <div class="d-flex flex-column align-center justify-center h-100">
-            <h3 class="mb-4">Personalizado</h3>
-            <VBtn 
-              color="primary"
-              @click="openModal"
-              :disabled="isPersonalizadoDisabled"
-            >
-              Añadir usuarios específicos
-            </VBtn>
-          </div>
-        </VCol>
-      </VRow>
+  <VCol cols="12">
+    <VSnackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      :timeout="2000"
+      location="top"
+    >
+      {{ snackbar.text }}
+    </VSnackbar>
 
+    <!-- Campo de búsqueda y botones -->
+    <VRow justify="space-between" class="mb-4">
+      <VCol cols="4">
+        <VTextField 
+          append-inner-icon="tabler-user-search" 
+          @input="filtrarUsuarios" 
+          v-model="filterLocal" 
+          label="Buscar usuarios dentro del listado"
+          density="compact"
+          :disabled="!hasUsers"
+        />
+      </VCol>
+      <VCol cols="auto">
+        <div class="d-flex gap-3 flex-wrap">
+          <VBtn 
+            color="info" 
+            @click="handleExport" 
+            size="small"
+            :disabled="!hasUsers"
+          >
+            Descargar Usuarios<VIcon end icon="tabler-download" />
+          </VBtn>
+          <VBtn 
+            color="success" 
+            @click="handleAddUser" 
+            size="small"
+            :disabled="!hasUsers"
+          >
+            Añadir usuarios<VIcon end icon="mdi-account-plus" />
+          </VBtn>
+          <VBtn 
+            color="primary" 
+            @click="triggerFileInput" 
+            size="small"
+            :loading="isUploading"
+          >
+            Importar CSV<VIcon end icon="mdi-file-upload" />
+          </VBtn>
+          <input
+            ref="fileInput"
+            type="file"
+            accept=".csv"
+            style="display: none"
+            @change="handleFileChange"
+          />
+        </div>
+      </VCol>
+    </VRow>
+
+    <!-- Lista de usuarios (visible solo cuando hay usuarios) -->
+    <div v-if="hasUsers">
+      <VList lines="two">
+        <template v-for="(user, index) in currentUsers" :key="index">
+          <VListItem border>
+            <VListItemTitle>
+              <span>{{ user.firstname || user.first_name }} {{ user.lastname || user.last_name }}</span>
+            </VListItemTitle>
+            <VListItemSubtitle class="mt-1">
+              <span class="text-xs text-disabled">Correo: {{ user.email }}</span>
+            </VListItemSubtitle>
+            <template #append>
+              <VBtn
+                icon
+                size="x-small"
+                color="error"
+                variant="text"
+                @click="handleDeleteUser(user.wylexId)"
+              >
+                <VIcon size="22" icon="tabler-trash" />
+              </VBtn>
+            </template>
+          </VListItem>
+        </template>
+      </VList>
+
+      <!-- Paginación -->
+      <div class="d-flex justify-center mt-4">
+        <VBtn 
+          variant="tonal" 
+          @click="currentPageLocal--" 
+          :disabled="currentPageLocal <= 1" 
+          size="small" 
+          color="primary"
+        >
+          <VIcon start icon="tabler-arrow-left" /> Anterior
+        </VBtn>
+        <VBtn 
+          variant="tonal" 
+          @click="currentPageLocal++" 
+          :disabled="currentPageLocal >= totalPages" 
+          size="small" 
+          color="primary" 
+          class="ms-3"
+        >
+          Siguiente <VIcon end icon="tabler-arrow-right" />
+        </VBtn>
+      </div>
+    </div>
+
+    <!-- Mensaje cuando no hay usuarios -->
+    <div v-else class="text-center pa-4">
+      <p class="text-medium-emphasis">No hay usuarios cargados. Por favor, importa un archivo CSV para comenzar.</p>
+    </div>
+
+    <!-- El resto del código del dialog permanece igual -->
+  </VCol>
+</VRow>
     </VCardText>
   </VCard>
 </VCol>
@@ -579,8 +683,10 @@
   
 <script setup>
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
+import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import 'vue3-form-wizard/dist/style.css';
+
 const router = useRouter();
 const currentTab = ref('tab-lista');
 const checkbox = ref(false);
@@ -831,12 +937,81 @@ async function getMetadatos(){
   }
 }
 
-const fetchWithTimeout = (url, options, timeout = 10000) => {
-    return Promise.race([
-        fetch(url, options),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
-    ]);
-};
+// const fetchWithTimeout = (url, options, timeout = 10000) => {
+//     return Promise.race([
+//         fetch(url, options),
+//         new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
+//     ]);
+// };
+
+async function fetchWithTimeout(url, options, timeout = 10000) {
+  try {
+    const controller = new AbortController();
+    const id = setTimeout(() => controller.abort(), timeout);
+    
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal
+    });
+    
+    clearTimeout(id);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    return await response.json();
+  } catch (error) {
+    if (error.name === 'AbortError') {
+      throw new Error('La solicitud tomó demasiado tiempo');
+    }
+    throw error;
+  }
+}
+
+// Actualizamos la función updateBulkUsers
+async function updateBulkUsers(userIds) {
+  try {
+    console.log('Iniciando actualización de usuarios:', {
+      tempCampaignId: tempCampaignId.value,
+      userIds: userIds
+    });
+
+    // Verificamos que tengamos un ID de campaña temporal
+    if (!tempCampaignId.value) {
+      throw new Error('No hay ID de campaña temporal');
+    }
+
+    // Verificamos que tengamos usuarios para agregar
+    if (!userIds || userIds.length === 0) {
+      throw new Error('No hay usuarios para agregar');
+    }
+
+    const response = await fetchWithTimeout(
+      `https://ads-service.vercel.app/campaign/v2/user/${tempCampaignId.value}`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          userIds: userIds
+        })
+      }
+    );
+
+    console.log('Respuesta del servidor:', response);
+
+    if (!response.resp) {
+      throw new Error(response.error || 'Error al agregar usuarios');
+    }
+
+    return response;
+  } catch (error) {
+    console.error('Error detallado:', error);
+    throw new Error(`Error al actualizar usuarios: ${error.message}`);
+  }
+}
 
 async function getUsuarios(){
   var ciudad = -1;
@@ -1051,7 +1226,8 @@ async function onComplete() {
   if (!validarFormulario()) {
     return;
   }
-  var jsonEnviar = {
+
+  const jsonEnviar = {
     "campaignTitle": nombreCampania.value,
     "description": descripcionCampania.value,
     "type": languages.value,
@@ -1070,7 +1246,9 @@ async function onComplete() {
     "position": posicion.value.join(","),
     "participantes": modoPersonalizado.value ? "personalizado" : "filtrado",
     "otroValor": dataUsuarios.value?.total || 0,
-    "userId": dataUsuarios.value?.userIds || [], 
+    "userId": modoPersonalizado.value ? 
+      (filteredUsers.value?.map(user => user.wylexId) || []) : 
+      (dataUsuarios.value?.userIds || []),
     "userIdRemove": [],
     "userIdAdd": [],
     "statusCampaign": true,
@@ -1082,7 +1260,8 @@ async function onComplete() {
       },
       "html": codigoExternoModel.value || ""
     },
-    "campaignSlug": slugify(nombreCampania.value)
+    "campaignSlug": slugify(nombreCampania.value),
+    "tempCampaignId": tempCampaignId.value // Incluimos el ID temporal
   };
 
   try {
@@ -1096,7 +1275,6 @@ async function onComplete() {
     });
 
     const data = await response.json();
-    console.log('Respuesta del servidor:', data); // Para debugging
     
     if (data.resp) {
       router.push('/apps/campaigns/list');
@@ -1517,5 +1695,253 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
 });
 
+// Agregar estas variables en la sección de variables ref
+const filterLocal = ref('');
+const currentPageLocal = ref(1);
+// const timeoutId = ref(null);
+const filteredUsers = ref([]);
+const showSearchDialog = ref(false);
+const searchQuery = ref('');
+const searchResults = ref([]);
+const isSearching = ref(false);
+const searchTimeout = ref(null);
+const loadingAdd = ref(false);
+const snackbar = ref({
+  show: false,
+  text: '',
+  color: 'success'
+});
+const usersData = ref([]); // Para almacenar la lista de usuarios
 
+// Agregar estos métodos
+async function refreshUserData() {
+  if (!tempCampaignId.value) return;
+  
+  try {
+    const response = await fetch(`https://ads-service.vercel.app/campaign/${tempCampaignId.value}/user`);
+    const data = await response.json();
+    if (data && data[0]) {
+      usersData.value = data[0].userId;
+      filteredUsers.value = data[0].userId;
+      // Actualizar dataUsuarios para mantener sincronización
+      dataUsuarios.value = {
+        ...dataUsuarios.value,
+        userIds: data[0].userId.map(user => user.wylexId)
+      };
+    }
+  } catch (error) {
+    console.error('Error al actualizar datos:', error);
+  }
+}
+
+async function handleAddSpecificUser(user) {
+  loadingAdd.value = true;
+  try {
+    const response = await fetch(`https://ads-service.vercel.app/campaign/add-user/${tempCampaignId.value}`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        userId: user.wylexId
+      })
+    });
+
+    const data = await response.json();
+    if (data.resp) {
+      snackbar.value = {
+        show: true,
+        text: 'Usuario agregado exitosamente',
+        color: 'success'
+      };
+      await refreshUserData();
+    } else {
+      throw new Error(data.error || 'Error al agregar usuario');
+    }
+  } catch (error) {
+    snackbar.value = {
+      show: true,
+      text: `Error: ${error.message}`,
+      color: 'error'
+    };
+  } finally {
+    loadingAdd.value = false;
+  }
+}
+
+
+// Agregar computed properties
+const totalPages = computed(() => {
+  return Math.ceil(filteredUsers.value.length / 10); // 10 usuarios por página
+});
+
+const currentUsers = computed(() => {
+  const start = (currentPageLocal.value - 1) * 10;
+  const end = start + 10;
+  return filteredUsers.value.slice(start, end);
+});
+
+
+// Agregar estas variables ref
+const tempCampaignId = ref('');
+
+// Función para generar ID temporal
+function generateTempId() {
+  return 'temp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+// Agregar watch para modoPersonalizado
+watch(() => modoPersonalizado.value, async (newValue) => {
+  if (newValue) {
+    if (!tempCampaignId.value) {
+      tempCampaignId.value = generateTempId();
+      console.log('ID temporal generado:', tempCampaignId.value);
+    }
+    await refreshUserData();
+  }
+});
+
+// Agregar estas variables ref
+const isUploading = ref(false);
+const fileInput = ref(null);
+
+// Agregar computed property para controlar la visibilidad de elementos
+const hasUsers = computed(() => {
+  return filteredUsers.value && filteredUsers.value.length > 0;
+});
+
+// Función para manejar el click en el botón de importar
+function triggerFileInput() {
+  if (fileInput.value) {
+    fileInput.value.click();
+  }
+}
+
+// Función actualizada para manejar el archivo CSV
+async function handleFileChange(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  if (!file.name.endsWith('.csv')) {
+    snackbar.value = {
+      show: true,
+      text: 'Por favor, selecciona un archivo CSV',
+      color: 'error'
+    };
+    event.target.value = '';
+    return;
+  }
+
+  isUploading.value = true;
+
+  try {
+    const Papa = (await import('papaparse')).default;
+
+    Papa.parse(file, {
+      header: true,
+      complete: async (result) => {
+        try {
+          if (!result.data || !result.data.length) {
+            throw new Error('El archivo está vacío');
+          }
+
+          console.log('Datos del CSV:', result.data);
+
+          const userIds = result.data
+            .filter(row => row.id && row.id.trim() !== '')
+            .map(row => parseInt(row.id))
+            .filter(id => !isNaN(id));
+
+          console.log('IDs filtrados:', userIds);
+
+          if (userIds.length === 0) {
+            throw new Error('No se encontraron IDs válidos en el archivo');
+          }
+
+          if (userIds.length > 30000) {
+            throw new Error('El máximo es 30,000 usuarios');
+          }
+
+          // Procesamos los usuarios en lotes de 1000 para evitar sobrecarga
+          const batchSize = 1000;
+          for (let i = 0; i < userIds.length; i += batchSize) {
+            const batch = userIds.slice(i, i + batchSize);
+            await updateBulkUsers(batch);
+            
+            // Actualizamos el progreso
+            snackbar.value = {
+              show: true,
+              text: `Procesando... ${Math.min((i + batchSize), userIds.length)} de ${userIds.length} usuarios`,
+              color: 'info'
+            };
+          }
+
+          snackbar.value = {
+            show: true,
+            text: `${userIds.length} usuarios procesados exitosamente`,
+            color: 'success'
+          };
+
+          await refreshUserData();
+        } catch (error) {
+          console.error('Error procesando archivo:', error);
+          snackbar.value = {
+            show: true,
+            text: `Error: ${error.message}`,
+            color: 'error'
+          };
+        }
+      },
+      error: (error) => {
+        console.error('Error parsing CSV:', error);
+        snackbar.value = {
+          show: true,
+          text: `Error al procesar el archivo: ${error.message}`,
+          color: 'error'
+        };
+      }
+    });
+  } catch (error) {
+    console.error('Error general:', error);
+    snackbar.value = {
+      show: true,
+      text: `Error: ${error.message}`,
+      color: 'error'
+    };
+  } finally {
+    isUploading.value = false;
+    event.target.value = '';
+  }
+}
+
+// Función de exportación actualizada
+async function handleExport() {
+  if (!hasUsers.value) return;
+
+  try {
+    const Papa = (await import('papaparse')).default;
+    
+    const csvData = Papa.unparse(filteredUsers.value.map(user => ({
+      id: user.wylexId,
+      nombre: `${user.firstname || user.first_name} ${user.lastname || user.last_name}`,
+      email: user.email
+    })));
+
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `usuarios_campana_${nombreCampania.value}_${new Date().toISOString()}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
+  } catch (error) {
+    snackbar.value = {
+      show: true,
+      text: 'Error al exportar usuarios',
+      color: 'error'
+    };
+  }
+}
 </script>
