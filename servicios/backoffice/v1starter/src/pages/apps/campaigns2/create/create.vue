@@ -16,6 +16,9 @@ const countryList = ref([]);
 // const FormWizard = ref(false);
 // const TabContent = ref(false);
 
+const timeoutId = ref(null);
+const timeoutSegundos = 3000;
+
 const nombreCampania = ref('')
 const codigoExternoModel = ref('')
 const linkAds = ref('')
@@ -32,16 +35,16 @@ const selectItemParticipantes = ref(null);
 const selectItemsList = ref([{ title:'Otro', value: 'Otro' },{ title:'100', value: '100' }]);
 const minValue = ref(1); // Valor mínimo permitido
 const maxValue = ref(100); // Valor máximo permitido
-const route = useRoute();
-const tamanioUsuarios = ref(0)
+
 
 const search = ref(null)
+
 
 const metadatos = ref([]);
 const metadatosItems = ref([]);
 const searchMetadatos = ref([]);
+const searchCiudades = ref([]);
 const selectMetadatos = ref(null);
-const loadComponent = ref(true);
 const categoriasListStore = useCategoriasListStore();
 const fetchCategorias = async () => {
   try {
@@ -56,21 +59,26 @@ const fetchCategorias = async () => {
 const selectItemVisibilidad = ref([]);
 const selectItemsListVisibilidad = ref([
   { title:'Todo el sitio', value: 'all', avatar:"" },
-  { title:'Noticias', value: 'noticias', avatar:"" },
-  { title:'Comercial', value: 'comercial', avatar:"" },
-  { title:'Laboratorio', value: 'laboratorio', avatar:"" },
+  { title:'Lo-ultimo', value: 'Lo-ultimo', avatar:"" },
+  { title:'Noticias', value: 'Noticias', avatar:"" },
+  { title:'Mundo', value: 'Mundo', avatar:"" },
+  { title:'Estadio', value: 'Mundo', avatar:"" },
+  { title:'Entretenimiento', value: 'Entretenimiento', avatar:"" },
+  { title:'Programas', value: 'Programas', avatar:"" },
+  { title:'Tendencias', value: 'Tendencias', avatar:"" },
+  { title:'Home', value: 'Home', avatar:"" },
 ]);
 
 const selectItemDispositivos = ref([]);
 const selectItemsListDispositivos = ref([
-  { title:'Todos', value: '0', avatar:"mdi-cellphone-link" },
+  // { title:'Todos', value: '0', avatar:"mdi-cellphone-link" },
   { title:'Escritorio', value: 'desktop', avatar:"mdi-laptop-chromebook" },
   { title:'Móvil', value: 'movil', avatar:"mdi-cellphone-android" },
   ]);
 
 const selectItemNavegador = ref([]);
 const selectItemsListNavegador = ref([
-  { title:'Todos', value: '0', avatar:"" },
+  // { title:'Todos', value: '0', avatar:"" },
   { title:'Chrome', value: 'Chrome', avatar:"" },
   { title:'Safari', value: 'Safari', avatar:"" },
   { title:'Firefox', value: 'Firefox', avatar:""},
@@ -79,12 +87,12 @@ const selectItemsListNavegador = ref([
 
 const selectItemSO = ref([]);
 const selectItemsListSO = ref([
-  { title:'Todos', value: '0', avatar:"", navegador: [] },
+  // { title:'Todos', value: '0', avatar:"", navegador: [] },
   { title:'Windows', value: 'Windows', avatar:"tabler-brand-windows", navegador: [{ title:'Chrome', value: 'Chrome' },{ title:'Firefox', value: 'Firefox' }] },
   { title:'Mac OS', value: 'Mac OS', avatar:"tabler-brand-apple", navegador: [{ title:'Safari', value: 'Safari' },{ title:'Chrome', value: 'Chrome' }] },
   { title:'Android', value: 'Android', avatar:"tabler-brand-android", navegador: [{ title:'Chrome', value: 'Chrome' },{ title:'Firefox', value: 'Firefox' }] },
   { title:'Linux', value: 'Linux', avatar:"mdi-linux", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
-  { title:'Otro', value: 'Otro', avatar:"", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
+  { title:'Otro', value: 'Otro', avatar:"mdi-account", navegador: [{ title:'Chrome', value: 'Chrome' }] } ,
   ]);
 
 const numeroRules = [
@@ -121,95 +129,17 @@ const posicionList = [
 ]
 
 watch(posicion, value => {
-  if(Array.isArray(value)){
-    if (value.length > 1)
-      nextTick(() => posicion.value.pop())
-  }
+  if (value.length > 1)
+    nextTick(() => posicion.value.pop())
 })
 
 watch(metadatos, value => {
-  if(Array.isArray(value)){
-    if (value.length > 5)
-      nextTick(() => metadatos.value.pop())
-  }
-})
-
-onMounted(async()=>{
-  loadComponent.value = true;
-  await getCampaignToEdit();
-  await getMetadatos();
-  loadComponent.value = false;
-  // await getCampaigns();
+  if (value.length > 5)
+    nextTick(() => metadatos.value.pop())
 })
 
 
-async function getCampaignToEdit(){
-  var myHeaders = new Headers();
-  myHeaders.append("Content-Type", "application/json");
-  var requestOptions = {
-    method: 'GET',
-    headers: myHeaders,
-    redirect: 'follow'
-  };
-  var response = await fetch(`https://ads-service.vercel.app/campaign/`+ route.params.id+ `/`, requestOptions);
-  const data = await response.json();
-  const dataCampaignToEdit = data[0];
-  console.log('campaña a editar ',dataCampaignToEdit );
-  await getCountries();
-  
-  nombreCampania.value = dataCampaignToEdit.campaignTitle;
-  languages.value = dataCampaignToEdit.type;
-  criterio.value = dataCampaignToEdit.coleccion.split(',');
-  posicion.value = dataCampaignToEdit.position.split(',');
-
-  if(dataCampaignToEdit.criterial.metadato){
-    metadatos.value = dataCampaignToEdit.criterial.metadato.split(',');
-  }
-  
-  codigoExternoModel.value = dataCampaignToEdit.urls.html || "";
-  linkAds.value = dataCampaignToEdit.urls.url || "#";
-  linkImageEscritorio.value = dataCampaignToEdit.urls.img.escritorio || "";
-  linkImageMobile.value = dataCampaignToEdit.urls.img.mobile || "";
-  selectedItem.value = dataCampaignToEdit.criterial.country;
-  // console.log(dataCampaignToEdit.criterial.city.split(',') ,"Ciudad")
-  selectItemVisibilidad.value = dataCampaignToEdit.criterial.visibilitySection || "all";
-  // console.log(dataCampaignToEdit)
-  tamanioUsuarios.value = dataCampaignToEdit.userId.length;
-
-  // alert(tamanioUsuarios.value)
-
-  setTimeout(function(){
-      if(dataCampaignToEdit.criterial.city != null && dataCampaignToEdit.criterial.city != -1){
-        selectedItemCiudad.value = dataCampaignToEdit.criterial.city.split(',');
-      }
-  }, 2000);
-
-  // selectedItemCiudad.value = dataCampaignToEdit.criterial.city.split(',');
-
-  setTimeout(function(){
-      selectItemParticipantes.value = dataCampaignToEdit.participantes;
-      numeroOtroUsuarios.value = dataCampaignToEdit.otroValor;
-      maxValue.value = dataCampaignToEdit.userId.length;//dataUsuarios.total || tamanioUsuarios;
-      // alert(dataCampaignToEdit.otroValor)
-  }, 2000);
-  
-  if(dataCampaignToEdit.criterial.dispositivo){
-    selectItemDispositivos.value = dataCampaignToEdit.criterial.dispositivo.split(',');
-  }
-
-  if(dataCampaignToEdit.criterial.navegador){
-    selectItemNavegador.value = dataCampaignToEdit.criterial.navegador.split(',');
-  }else{
-    // selectItemNavegador.value = [{ title:'Todos', value: '0', avatar:"", navegador: [] }]
-  }
-
-  if(dataCampaignToEdit.criterial.so){
-    selectItemSO.value = dataCampaignToEdit.criterial.so.split(',');
-  }else{
-    // selectItemSO.value = [{ title:'Todos', value: '0', avatar:"", navegador: [] }]
-  }
-  
-}
+onMounted(getMetadatos)
 
 // async function getCampaigns(){
 //   var myHeaders = new Headers();
@@ -226,7 +156,6 @@ async function getCampaignToEdit(){
 // }
 
 async function getCountries(){
-  
   var myHeaders = new Headers();
   loadingPanel.value=true;
   myHeaders.append("Content-Type", "application/json");
@@ -235,9 +164,8 @@ async function getCountries(){
     headers: myHeaders,
     redirect: 'follow'
   };
-  var response = await fetch(`https://ads-service.vercel.app/campaign/get/all/paisesyciudad`, requestOptions);
+  var response = await fetch(`https://ecuavisa-suscripciones.vercel.app/otros/obtener-paises-ciudades`, requestOptions);
   const data = await response.json();
-  
   dataCountry.value = data;
   loadingPanel.value=false;
 }
@@ -265,6 +193,13 @@ async function getMetadatos(){
   }
 }
 
+const fetchWithTimeout = (url, options, timeout = 10000) => {
+    return Promise.race([
+        fetch(url, options),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
+    ]);
+};
+
 async function getUsuarios(){
   var ciudad = -1;
   var pais = -1;
@@ -291,9 +226,36 @@ async function getUsuarios(){
 
   if(criterioTemp.includes("plataforma")){
     so_temp = selectItemSO.value || null;
-    navegador_temp = selectItemNavegador.value.join(',') || null;
+    navegador_temp = selectItemNavegador.value || null;
   }
+  
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var raw = JSON.stringify({
+      "metadato": metadato,
+      "criterio": criterioTemp,
+      "pais": pais,
+      "ciudad": ciudad,
+      "navegador": navegador_temp,
+      "os": so_temp,
+      "dispositivo": dispositivo_temp
+    });
 
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+    //console.log('data enviar ',raw);    
+    const send = await fetch('https://ads-service.vercel.app/campaign/v2/usuarios/get/user/total', requestOptions);
+    const respuesta = await send.json();    
+    //console.log('resp',respuesta);    
+    dataUsuarios.value =respuesta;
+    //console.log('data total',dataUsuarios.value);
+  
+    
+  /*  
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
   var requestOptions = {
@@ -303,15 +265,33 @@ async function getUsuarios(){
   };
   // console.log(pais || "-1")
   // alert(pais.length)
-  var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-    so: so_temp, 
-    dispositivo: dispositivo_temp,
-    metadato: metadato,
-    criterio: criterioTemp.join(','),
-    navegador: navegador_temp
-  }) }`, requestOptions);
-  const data = await response.json();
-  dataUsuarios.value = data;
+  // var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+  //   so: so_temp, 
+  //   dispositivo: dispositivo_temp,
+  //   metadato: metadato,
+  //   criterio: criterioTemp.join(','),
+  //   navegador: navegador_temp
+  // }) }`, requestOptions);
+  // const data = await response.json();
+  // dataUsuarios.value = data;
+
+  const response = await fetchWithTimeout(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+      so: so_temp, 
+      dispositivo: dispositivo_temp,
+      metadato: metadato,
+      criterio: criterioTemp.join(','),
+      navegador: navegador_temp
+  }) }`, requestOptions, 25000); // Aquí hemos establecido un tiempo de espera de 15 segundos (15000 milisegundos)
+
+  if (response.status === 200) {
+      const data = await response.json();
+      dataUsuarios.value = data;
+  } else {
+      console.error("Error en la solicitud:", response.status);
+      // Puedes manejar el error de acuerdo a tus necesidades
+  }
+  */
+  
 }
 
 const consentimiento = ref(false);
@@ -394,7 +374,7 @@ async function onComplete() {
             "navegador": navegador_temp || null
         },
         "coleccion": cri.join(','),
-        "position": po.join(','),
+        "position": po.join(","),
         "participantes": participantes_temp,
         "otroValor": otroValor_temp,
         "urls": {
@@ -417,30 +397,25 @@ async function onComplete() {
     redirect: 'follow'
   };
   loadingPanel.value=true;
-  
-  var response = await fetch(`https://ads-service.vercel.app/campaign/update/`+route.params.id, requestOptions);
+  var response = await fetch(`https://ads-service.vercel.app/campaign/create`, requestOptions);
   const data = await response.json();
   if(data.resp){
     router.push('/apps/campaigns/list');
   }else{
     alert("Un error se presentó: "+data.error)
   };
-  
   loadingPanel.value=false;
 }
 
-
 async function handleValidation(isValid, tabIndex) {
-   // alert(isValid+" "+tabIndex+" "+countryList.value.length)
-   // console.log(dataCountry.value)
-  if(tabIndex == 1 && isValid == true && (dataCountry.value.length < 2 || countryList.value.length < 1)){
-
+  if(tabIndex == 1 && isValid == true && dataCountry.value.length < 1){
     await getCountries();
 
     var paises = [];
     for(var i in dataCountry.value){
       var ins = dataCountry.value[i];
-      paises.push({ title:ins.country, value:ins.country });
+      // paises.push({ title:ins.country, value:ins.country });
+      paises.push(ins.country);
     }
 
     // console.log(paises)
@@ -465,7 +440,6 @@ async function validateAsync() {
   var tipoC = languages.value;
   var crit = criterio.value;
   var pos = posicion.value;
-
   var visibilidad = selectItemVisibilidad.value;
 
   if(nombre.length < 1 || nombre.trim() == ""){
@@ -701,9 +675,11 @@ function groupByTitleWithAttributes(arr) {
   return result;
 }
 
-function ciudadesGetCountry(newValue) {
+
+watch(() => selectedItem.value, (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
+  // alert(selectedItem.value)
   if(selectedItem.value != null){
 
     selectedItemCiudad.value = [];
@@ -731,14 +707,9 @@ function ciudadesGetCountry(newValue) {
 
     console.log(cityList.value)
   }else{
-    // selectedItemCiudad.value = [];
     cityList.value = [];
     selectItemParticipantes.value = [];
   }
-}
-
-watch(() => selectedItem.value, (newValue, oldValue) => {
-  ciudadesGetCountry(newValue)
 });
 
 function generateRandomIntegers(min, max, count) {
@@ -779,39 +750,39 @@ async function generarOtrosValores(){
   return true;
 }
 
-
 watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
-  if(!loadComponent.value){
+  if(cityList.value.length > 1){
     if(selectedItemCiudad.value != null){
       loadingPanel.value=true;
-      await getUsuarios();
-      loadingPanel.value=false;
+      clearTimeout(timeoutId.value);
+      timeoutId.value = setTimeout(async () => {
+        await getUsuarios();
+        loadingPanel.value=false;
+      }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
       await generarOtrosValores();
     }else{
       dataUsuarios.value = {};
     }
   }
-  
-
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
 
 watch(async () => selectItemDispositivos.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
-  if(!loadComponent.value){
-    if(selectItemDispositivos.value != null){
-      loadingPanel.value=true;
+  if(selectItemDispositivos.value != null){
+    loadingPanel.value=true;
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
       await getUsuarios();
       loadingPanel.value=false;
-      await generarOtrosValores();
-    }else{
-      dataUsuarios.value = {};
-    }
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
+    await generarOtrosValores();
+  }else{
+    dataUsuarios.value = {};
   }
-  
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
@@ -819,17 +790,13 @@ watch(async () => selectItemDispositivos.value,async  (newValue, oldValue) => {
 watch(async () => selectItemSO.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
-  if(!loadComponent.value){
-    if(selectItemSO.value != null){
-      loadingPanel.value=true;
+  loadingPanel.value=true;
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
       await getUsuarios();
       loadingPanel.value=false;
-      await generarOtrosValores();
-    }else{
-      dataUsuarios.value = {};
-    }
-  }
-  
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
+    await generarOtrosValores();
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
@@ -838,54 +805,52 @@ watch(async () => selectItemSO.value,async  (newValue, oldValue) => {
 watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
-  if(!loadComponent.value){
-    if(selectItemNavegador.value != null){
-      loadingPanel.value=true;
+  if(selectItemNavegador.value != null){
+    loadingPanel.value=true;
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
       await getUsuarios();
       loadingPanel.value=false;
-      await generarOtrosValores();
-    }else{
-      dataUsuarios.value = {};
-    }
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
+    await generarOtrosValores();
+  }else{
+    dataUsuarios.value = {};
   }
-  
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
+
+
 
 watch(async () => metadatos.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
-  if(!loadComponent.value){
-    if(metadatos.value != null){
-      loadingPanel.value=true;
+  if(metadatos.value != null){
+    loadingPanel.value=true;
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
       await getUsuarios();
       loadingPanel.value=false;
-      await generarOtrosValores();
-    }else{
-      dataUsuarios.value = {};
-    }
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
+    await generarOtrosValores();
+  }else{
+    dataUsuarios.value = {};
   }
-  
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
 
-
-// watch(async () => criterio.value,async  (newValue, oldValue) => {
+// watch(async () => criterio.value, async  (newValue, oldValue) => {
 //   // console.log('Nuevo valor seleccionado:', newValue);
 //   // console.log('Valor anterior:', oldValue);
-//   if(!loadComponent.value){
-//     if(criterio.value != null){
-//       loadingPanel.value=true;
-//       await getUsuarios();
-//       loadingPanel.value=false;
-//       await generarOtrosValores();
-//     }else{
-//       dataUsuarios.value = {};
-//     }
+//   if(criterio.value != null){
+//     loadingPanel.value=true;
+//     await getUsuarios();
+//     loadingPanel.value=false;
+//     await generarOtrosValores();
+//   }else{
+//     dataUsuarios.value = {};
 //   }
-  
 
 //   // selectItemsList.value = [100, 200, 1000, "Otro"];
 // });
@@ -899,7 +864,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
         class="mt-0"
         cols="12"
         md="12"
-        lg="8"
+        lg="7"
       >
         <VTabs
           v-model="currentTab"
@@ -920,16 +885,16 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
         </VTabs>
 
         <VCard class="mt-5">
-          <VCardText>
+          <VCardText class="px-0">
             <VWindow v-model="currentTab">
               <VWindowItem value="tab-lista">
                 <div
                   class="d-flex flex-wrap py-4 gap-4 align-items-center"
                   style="justify-content: space-between;"
                 >
-                  <div>
+                  <div class="px-5">
                     <VCardTitle>
-                      Editar la campaña: {{ nombreCampania }}
+                      Crear campañas
                     </VCardTitle>
                     <VCardSubtitle> 
                       Elige la campaña sobre la que necesites información  
@@ -941,7 +906,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                 <!-- inicio lista de Módulos -->
                   
                 <form-wizard 
-                  :class="loadingPanel?'disabled':''"
+                  :class=" loadingPanel?'disabled':'' "
                   @on-complete="onComplete" 
                   @on-loading="setLoading"
                   color="#7367F0" 
@@ -950,9 +915,9 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                   validate-on-back="true"
                   nextButtonText="Siguiente"
                   backButtonText="Anterior"
-                  finishButtonText="Editar campaña"
+                  finishButtonText="Crear campaña"
                 >
-                  <tab-content title="Detalles de la campaña" :before-change="validateAsync">
+                  <tab-content title="Detalles de la campaña" class="px-4" :before-change="validateAsync">
                    
                     <VRow class="pb-5">
                         <VCol cols="12">
@@ -1011,7 +976,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                               cols="12"
                               md="12"
                             >
-                              <label for="email">Criterio</label>
+                              <label for="email">Criterio de búsqueda</label>
                             </VCol>
 
                             <VCol
@@ -1028,6 +993,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                             </VCol>
                           </VRow>
                         </VCol>
+
                         <VCol cols="6">
                           <VRow no-gutters>
                             <!-- 👉 Email -->
@@ -1052,6 +1018,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                             </VCol>
                           </VRow>
                         </VCol>
+
                         <VCol cols="6">
                           <VRow no-gutters>
                             <!-- 👉 Email -->
@@ -1066,6 +1033,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                               cols="12"
                               md="12"
                             >
+
                               <VCombobox
                                 v-model="posicion"
                                 multiple
@@ -1085,7 +1053,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                       </VRow>
                   
                   </tab-content>
-                  <tab-content title="Inserción de código"  :before-change="validateAsyncInsercion">
+                  <tab-content title="Inserción de código" class="px-4" :before-change="validateAsyncInsercion">
                     
                     <VRow class="pb-5">
                       <VCol cols="6">
@@ -1203,7 +1171,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                   
 
                   </tab-content>
-                  <tab-content title="Criterio de búsqueda"  :before-change="validateAsyncUsuarios">
+                  <tab-content title="Criterio de búsqueda"  class="px-4" :before-change="validateAsyncUsuarios">
                       
 
                       <VRow class="pb-5">
@@ -1234,6 +1202,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                                 </VCol>
                               </VRow>
                             </VCol>
+
                             <VCol cols="12" :class="criterio.includes('metadatos')?'':'d-none'">
                               <VRow no-gutters >
                                 <VCol cols="12">
@@ -1285,12 +1254,14 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                                       cols="12"
                                       md="12"
                                     >
-                                      <VSelect
+
+                                      <VCombobox
                                         v-model="selectedItem"
                                         :items="countryList"
                                         class="pr-1"
                                         chips
                                         clearable
+                                        :menu-props="{ maxHeight: '300' }"
                                       />
                                     </VCol>
                                   </VRow>
@@ -1309,20 +1280,25 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                                       cols="12"
                                       md="12"
                                     >
-                                      <VSelect
-                                        :items="cityList"
+
+                                      <VCombobox
                                         v-model="selectedItemCiudad"
                                         multiple
                                         chips
-                                        clearable
-                                        class="pl-1"
+                                        :items="cityList"
+                                        v-model:search-input="searchCiudades"
+                                        :hide-no-data="false"
+                                        :menu-props="{ maxHeight: '300' }"
+                                        class="custom-combobox-ciudad"
+                                        :disabled="loadingPanel"
                                       />
+
+                                      
                                     </VCol>
                                   </VRow>
                                 </VCol>
                               </VRow>
                             </VCol>
-                            
                             <VCol cols="12" :class="criterio.includes('dispositivos')?'':'d-none'">
                               <VRow no-gutters >
                                 <VCol cols="12">
@@ -1512,12 +1488,9 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                               size="large"
                               class="text-capitalize mt-4"
                             >
-                              <!-- {{tamanioUsuarios.value}}  || tamanioUsuarios-->
-                              {{ dataUsuarios.total }} 
-                              
+                              <small v-if="!loadingPanel">{{ dataUsuarios.total || "0" }}</small>
+                              <small v-if="loadingPanel">Cargando....</small>
                             </VChip>
-                            
-
                           </VCardText>
                         </VCol>
                       </VRow>
@@ -1599,5 +1572,10 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
     -webkit-transform: rotate(360deg);
     transform: rotate(360deg);
   }
+}
+
+.v-menu .v-select__slot {
+  max-height: 10px; /* Ajusta el valor según tus necesidades */
+  overflow-y: auto;
 }
 </style>

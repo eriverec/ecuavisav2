@@ -19,7 +19,6 @@ const countryList = ref([]);
 // const TabContent = ref(false);
 
 const nombreCampania = ref('')
-const descripcionCampania = ref('')
 const codigoExternoModel = ref('')
 const linkAds = ref('')
 const linkImageEscritorio = ref('')
@@ -29,7 +28,7 @@ const linkImageMobile = ref('');
 const numeroOtroUsuarios = ref('');
 const languages = ref([]);
 const criterio = ref([]);
-// const posicion = ref([]);
+const posicion = ref([]);
 const selectedItem = ref([]);
 const selectedItemCiudad = ref([]);
 const dataUsuarios = ref({});
@@ -122,22 +121,18 @@ const criterioList = [
   // { title:'Navegador', value:'navegador' },
 ];//, { title:'Metadatos', value:'metadato' }
 
-
 const posicionList = [
+  // 'floating_ad',
   'RDTop1',
   'RDTop2',
   'RDTop3',
   'RDFloating',
 ]
 
-// Cambiar posicion para que sea un solo valor en lugar de un array
-const posicion = ref('')
-
-// watch(posicion, value => {
-//   if (value.length > 1)
-//     nextTick(() => posicion.value.pop())
-// })
-
+watch(posicion, value => {
+  if (value.length > 1)
+    nextTick(() => posicion.value.pop())
+})
 
 watch(metadatos, value => {
   if (value.length > 5)
@@ -147,123 +142,113 @@ watch(metadatos, value => {
 
 // onMounted(getMetadatos)
 onMounted(async()=>{
-  try {
-    loadComponent.value = true;
-    console.log("Iniciando carga de campaña...");
-    
-    const promises = [
-      getCountries(),
-      getCampaignToEdit(),
-      getMetadatos()
-    ];
-
-    await Promise.all(promises);
-    
-    console.log("Carga completa");
-  } catch (error) {
-    console.error("Error en mounted:", error);
-  } finally {
-    loadComponent.value = false;
-  }
+  loadComponent.value = true;
+  await getCountries();
+  await getCampaignToEdit();
+  await getMetadatos();
+  loadComponent.value = false;
+  // await getCampaigns();
 })
+
 async function getCampaignToEdit(){
-  try {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-    
-    console.log("Obteniendo campaña ID:", route.params.id);
-    
-    var response = await fetch(`https://ads-service.vercel.app/campaign/get/edit/${route.params.id}/`, requestOptions);
-    const data = await response.json();
-    
-    console.log("Respuesta del servidor:", data);
-    
-    if(!data || data.length === 0) {
-      console.error("No se recibieron datos de la campaña");
-      return;
-    }
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+  var response = await fetch(`https://ads-service.vercel.app/campaign/get/edit/`+ route.params.id+ `/`, requestOptions);
+  const data = await response.json();
+  const campania = data[0];
 
-    const campania = data[0];
-    console.log("Datos de la campaña:", campania);
+  if(campania.campaignTitle){
+    nombreCampania.value = campania.campaignTitle;
+  }
 
-    // Cargar datos básicos
-    nombreCampania.value = campania.campaignTitle || '';
-    descripcionCampania.value = campania.description || '';
-    languages.value = campania.type || '';
-    criterio.value = campania.coleccion ? campania.coleccion.split(',') : [];
-    posicion.value = campania.position ? campania.position.split(',')[0] : '';
+  if(campania.type){
+    languages.value = campania.type;
+  }
+  
+  if(campania.coleccion){
+    criterio.value = campania.coleccion.split(',');
+  }
+  
+  if(campania.position){
+    posicion.value = campania.position.split(',');
+  }
 
-    if(campania.criterial) {
-      // Cargar criterial
-      selectItemVisibilidad.value = campania.criterial.visibilitySection || "all";
-      
-      if(campania.criterial.metadato) {
-        metadatos.value = campania.criterial.metadato.split(',');
+  if(campania.criterial.visibilitySection){
+    selectItemVisibilidad.value = campania.criterial.visibilitySection || "all";
+  }
+
+  if(campania.urls.html){
+    codigoExternoModel.value = campania.urls.html || "";
+  }
+
+  if(campania.criterial.metadato){
+    metadatos.value = campania.criterial.metadato.split(',');
+  }
+
+  if(campania.urls.url){
+    linkAds.value = campania.urls.url || "#";
+  }
+
+  if(campania.urls.img.escritorio){
+    linkImageEscritorio.value = campania.urls.img.escritorio || "";
+    linkImageMobile.value = campania.urls.img.mobile || "";
+  }
+
+  if(campania.criterial.country){
+    selectedItem.value = campania.criterial.country;
+  }
+
+  setTimeout(function(){
+    if(campania.criterial.city){
+      if(campania.criterial.city == -1){
+        selectedItemCiudad.value = campania.criterial.city;
+      }else{
+        // console.log(campania.criterial.city.split(','))
+        selectedItemCiudad.value = campania.criterial.city.split(',');
       }
     }
+  }, 1500);
 
-    if(campania.urls) {
-      // Cargar URLs
-      codigoExternoModel.value = campania.urls.html || "";
-      linkAds.value = campania.urls.url || "#";
-      
-      if(campania.urls.img) {
-        linkImageEscritorio.value = campania.urls.img.escritorio || "";
-        linkImageMobile.value = campania.urls.img.mobile || "";
+  setTimeout(function(){
+      if(campania.participantes){
+        selectItemParticipantes.value = campania.participantes;
       }
-    }
 
-    // Cargar datos de ubicación
-    if(campania.criterial?.country) {
-      selectedItem.value = campania.criterial.country;
-
-      // Esperar a que se carguen las ciudades
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      if(campania.criterial.city) {
-        selectedItemCiudad.value = campania.criterial.city === -1 ? 
-          campania.criterial.city : 
-          campania.criterial.city.split(',');
+      if(campania.otroValor){
+        numeroOtroUsuarios.value = campania.otroValor;
       }
-    }
+  }, 2000);
 
-    // Cargar participantes
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    selectItemParticipantes.value = campania.participantes || null;
-    numeroOtroUsuarios.value = campania.otroValor || '';
+  setTimeout(function(){
+      if(campania.criterial.dispositivo){
+        selectItemDispositivos.value = campania.criterial.dispositivo.split(',');
+      }
+  }, 2500);
 
-    // Cargar dispositivos
-    if(campania.criterial?.dispositivo) {
-      await new Promise(resolve => setTimeout(resolve, 2500));
-      selectItemDispositivos.value = campania.criterial.dispositivo.split(',');
-    }
+  setTimeout(function(){
+      if(campania.criterial.navegador){
+        selectItemNavegador.value = campania.criterial.navegador.split(',');
+      }
+  }, 3000);
 
-    // Cargar navegador
-    if(campania.criterial?.navegador) {
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      selectItemNavegador.value = campania.criterial.navegador.split(',');
-    }
+  setTimeout(function(){
+      if(campania.criterial.so){
+        selectItemSO.value = campania.criterial.so.split(',');
+      }
+  }, 3500);
 
-    // Cargar SO
-    if(campania.criterial?.so) {
-      await new Promise(resolve => setTimeout(resolve, 3500));
-      selectItemSO.value = campania.criterial.so.split(',');
-    }
-
-    dataUsuarios.value = {
+  dataUsuarios.value = {
       "resp": true,
       "total": campania.userId
-    };
-
-  } catch (error) {
-    console.error("Error al obtener la campaña:", error);
-  }
+  };
+  // console.log('campaña a editar ',campania );
 }
+
 // async function getCampaigns(){
 //   var myHeaders = new Headers();
 //   myHeaders.append("Content-Type", "application/json");
@@ -444,7 +429,6 @@ function slugify(text) {
 
 async function onComplete() {
   var name = nombreCampania.value;
-  var description = descripcionCampania.value;
   var tipoContenido = languages.value;
   var cri = criterio.value;
   var po = posicion.value;
@@ -492,33 +476,31 @@ async function onComplete() {
   // var navegador_temp = selectItemNavegador.value;
 
   var jsonEnviar = {
-    "campaignTitle": name,
-    "description": description,
-    "type": tipoContenido,
-    "criterial": {
-      "visibilitySection": visibilidad,
-      "country": pais,
-      "city": ciudad || -1,
-      "so": so_temp || null,
-      "dispositivo": dispositivo_temp || null,
-      "metadato": metadato_temp || null,
-      "navegador": navegador_temp || null
-    },
-    "coleccion": cri.join(','),
-    "position": posicion.value,
-    "participantes": participantes_temp,
-    "otroValor": otroValor_temp,
-    "urls": {
-      "url": linksWeb,
-      "img": {
-        "escritorio": urlImagen_1,
-        "mobile": urlImagen_2
-      },
-      "html": script
-    },
-    "campaignSlug" : slugify(name)
-  }
-
+        "campaignTitle": name,
+        "type": tipoContenido,
+        "criterial": {
+            "visibilitySection": visibilidad,
+            "country": pais,
+            "city": ciudad || -1,
+            "so": so_temp || null,
+            "dispositivo": dispositivo_temp || null,
+            "metadato": metadato_temp || null,
+            "navegador": navegador_temp || null
+        },
+        "coleccion": cri.join(','),
+        "position": po.join(","),
+        "participantes": participantes_temp,
+        "otroValor": otroValor_temp,
+        "urls": {
+            "url": linksWeb,
+            "img": {
+                "escritorio": urlImagen_1,
+                "mobile": urlImagen_2
+            },
+            "html": script
+        },
+        "campaignSlug" : slugify(name)
+    }
 
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -570,8 +552,8 @@ async function setLoading(value) {
 
 async function validateAsync() {
   var nombre = nombreCampania.value;
-  var descripcion = descripcionCampania.value;
   var tipoC = languages.value;
+  var crit = criterio.value;
   var pos = posicion.value;
   var visibilidad = selectItemVisibilidad.value;
 
@@ -580,23 +562,23 @@ async function validateAsync() {
     return false;
   }
 
-  if(descripcion.length < 1 || descripcion.trim() == ""){
-    alert("Debes añadir una descripción de campaña");
-    return false;
-  }
-
   if(tipoC.length < 1){
     alert("Debes añadir un tipo de contenido");
     return false;
   }
 
-  if(!pos){ // Cambiar la validación de posición
-    alert("Debes añadir la posición del ads");
+  if(crit.length < 1){
+    alert("Debes añadir al menos un criterio");
+    return false;
+  }
+
+  if(pos.length < 1){
+    alert("Debes añadir la posicion del ads");
     return false;
   }
 
   if(visibilidad.length < 1){
-    alert("Debes añadir la visibilidad en el sitio web");
+    alert("Debes añadir la La visibilidad en el sitio web");
     return false;
   }
 
@@ -639,7 +621,7 @@ async function validateAsyncInsercion() {
 async function validateAsyncCriterio() {
   var nombre = nombreCampania.value;
   var tipoC = languages.value;
-  var crit = criterio.value;  
+  var crit = criterio.value;
   var pos = posicion.value;
   var codigoExterno = codigoExternoModel.value;
   var linkAdsL = linkAds.value;
@@ -1044,10 +1026,10 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                 >
                   <div class="px-5">
                     <VCardTitle>
-                      Edita campaña: {{ nombreCampania }}
+                      Crear campañas
                     </VCardTitle>
                     <VCardSubtitle> 
-                      Edita datos sobre la campaña seleccionada
+                      Elige la campaña sobre la que necesites información  
                     </VCardSubtitle>
                   </div>
                 </div>
@@ -1065,7 +1047,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                   validate-on-back="true"
                   nextButtonText="Siguiente"
                   backButtonText="Anterior"
-                  finishButtonText="Editar campaña"
+                  finishButtonText="Crear campaña"
                 >
                   <tab-content title="Detalles de la campaña" class="px-4" :before-change="validateAsync">
                    
@@ -1090,26 +1072,6 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                                 placeholder="Nombre de la campaña"
                                 persistent-placeholder
                               />
-                            </VCol>
-                          </VRow>
-                        </VCol>
-
-                        
-
-                        <VCol cols="12">
-                          <VRow no-gutters>
-                            <VCol cols="12" md="12">
-                              <label for="descripcionCampania">Descripción de la campaña</label>
-                            </VCol>
-                            <VCol cols="12" md="12">
-                              <VTextarea
-                                  id="descripcionCampania"
-                                  v-model="descripcionCampania"
-                                  placeholder="Ingrese una descripción para la campaña"
-                                  persistent-placeholder
-                                  rows="3"
-                                  :loading="loadComponent"
-                                />
                             </VCol>
                           </VRow>
                         </VCol>
@@ -1191,18 +1153,32 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
                         <VCol cols="6">
                           <VRow no-gutters>
-                            <VCol cols="12" md="12">
+                            <!-- 👉 Email -->
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
                               <label for="email">Posición</label>
                             </VCol>
-                            <VCol cols="12" md="12">
-                              <VSelect
-                                  v-model="posicion"
-                                  :items="posicionList"
-                                  variant="outlined"
-                                  persistent-hint
-                                  clearable
-                                  label="Selecciona la posición"
-                                />
+
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+
+                              <VCombobox
+                                v-model="posicion"
+                                multiple
+                                chips
+                                :items="posicionList"
+                                variant="outlined"
+                                label=""
+                                persistent-hint
+                                v-model:search-input="search"
+                                hide-selected
+                                :hide-no-data="false"
+                                hint=""
+                              />
                             </VCol>
                           </VRow>
                         </VCol>

@@ -1,11 +1,8 @@
 <script setup>
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
-// import { useRouter } from 'vue-router';
-import { computed, nextTick, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useRouter } from 'vue-router';
 import { FormWizard, TabContent } from "vue3-form-wizard";
 import 'vue3-form-wizard/dist/style.css';
-import UserList from './modal-usuarios.vue';
 const router = useRouter();
 const route = useRoute();
 const currentTab = ref('tab-lista');
@@ -21,12 +18,7 @@ const countryList = ref([]);
 // const FormWizard = ref(false);
 // const TabContent = ref(false);
 
-// Añade estas referencias al inicio del script setup
-const participantesCount = ref(null);
-const userSelectionMethod = ref('criteria'); // 'criteria' o 'specific'
-
 const nombreCampania = ref('')
-const descripcionCampania = ref('')
 const codigoExternoModel = ref('')
 const linkAds = ref('')
 const linkImageEscritorio = ref('')
@@ -129,52 +121,18 @@ const criterioList = [
   // { title:'Navegador', value:'navegador' },
 ];//, { title:'Metadatos', value:'metadato' }
 
-
 const posicionList = [
+  // 'floating_ad',
   'RDTop1',
   'RDTop2',
   'RDTop3',
   'RDFloating',
 ]
 
-// const showUserModal = ref(false);
-const selectedUsers = ref([]);
-const participantes = ref('');
-const otroValor = ref('');
-
-// const campaignUsers = ref([])  // Para almacenar la lista de usuarios
-const usersPerPage = ref(10)   // Users por página
-
-const isFlatSnackRespUserAddAndDelete = ref(false)
-const isFlatSnackRespUserDelete = ref(false)
-const isLoadingDialogUser = ref(false)
-
-
-const showUserModal = ref(false)
-const campaignUsers = ref([])
-
-// Funciones para el modal
-const openModal = () => {
-  console.log('Abriendo modal')
-  showUserModal.value = true
-}
-
-const closeModal = () => {
-  showUserModal.value = false
-}
-
-
 watch(posicion, value => {
   if (value.length > 1)
     nextTick(() => posicion.value.pop())
 })
-
-const snackbar = ref({
-  show: false,
-  text: '',
-  color: 'success'
-});
-
 
 watch(metadatos, value => {
   if (value.length > 5)
@@ -184,114 +142,113 @@ watch(metadatos, value => {
 
 // onMounted(getMetadatos)
 onMounted(async()=>{
-  try {
-    loadComponent.value = true;
-    console.log("Iniciando carga de campaña...");
-    
-    const promises = [
-      getCountries(),
-      getCampaignToEdit(),
-      getMetadatos()
-    ];
-
-    await Promise.all(promises);
-    
-    console.log("Carga completa");
-  } catch (error) {
-    console.error("Error en mounted:", error);
-  } finally {
-    loadComponent.value = false;
-  }
+  loadComponent.value = true;
+  await getCountries();
+  await getCampaignToEdit();
+  await getMetadatos();
+  loadComponent.value = false;
+  // await getCampaigns();
 })
-async function getCampaignToEdit() {
-  try {
-    loadingPanel.value = true;
-    
-    const response = await fetch(`https://ads-service.vercel.app/campaign/get/edit/${route.params.id}/`, {
-      headers: { "Content-Type": "application/json" }
-    });
-    
-    if (!response.ok) throw new Error('Error al obtener datos de la campaña');
-    
-    const data = await response.json();
-    if (!data || data.length === 0) {
-      throw new Error('No se recibieron datos de la campaña');
-    }
 
-    const campania = data[0];
-    
-    // Asignaciones básicas
-    nombreCampania.value = campania.campaignTitle || '';
-    descripcionCampania.value = campania.description || '';
-    languages.value = campania.type || '';
-    criterio.value = campania.coleccion ? campania.coleccion.split(',') : [];
-    posicion.value = campania.position ? campania.position.split(',') : [];
-    
-    // Asignar participantes y otroValor
-    participantes.value = campania.participantes || '';
-    otroValor.value = campania.otroValor || '';
-    
-    if(campania.criterial) {
-      selectItemVisibilidad.value = campania.criterial.visibilitySection || "all";
-      metadatos.value = campania.criterial.metadato ? campania.criterial.metadato.split(',') : [];
-    }
+async function getCampaignToEdit(){
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+  var response = await fetch(`https://ads-service.vercel.app/campaign/get/edit/`+ route.params.id+ `/`, requestOptions);
+  const data = await response.json();
+  const campania = data[0];
 
-    
-    // Cargar URLs
-    if(campania.urls) {
-      codigoExternoModel.value = campania.urls.html || "";
-      linkAds.value = campania.urls.url || "#";
-      linkImageEscritorio.value = campania.urls.img?.escritorio || "";
-      linkImageMobile.value = campania.urls.img?.mobile || "";
-    }
+  if(campania.campaignTitle){
+    nombreCampania.value = campania.campaignTitle;
+  }
 
-    // Cargar datos de ubicación y participantes en paralelo
-    await Promise.all([
-      cargarDatosUbicacion(campania),
-      cargarDatosParticipantes(campania)
-    ]);
-    
-  // Cargar usuarios si es necesario
-  if (campania.participantes === 'Usuarios específicos') {
-      const usersResponse = await fetch(`https://ads-service.vercel.app/campaign/${route.params.id}/user`);
-      const usersData = await usersResponse.json();
-      if (usersData && usersData[0]) {
-        campaignUsers.value = usersData[0].userId || [];
+  if(campania.type){
+    languages.value = campania.type;
+  }
+  
+  if(campania.coleccion){
+    criterio.value = campania.coleccion.split(',');
+  }
+  
+  if(campania.position){
+    posicion.value = campania.position.split(',');
+  }
+
+  if(campania.criterial.visibilitySection){
+    selectItemVisibilidad.value = campania.criterial.visibilitySection || "all";
+  }
+
+  if(campania.urls.html){
+    codigoExternoModel.value = campania.urls.html || "";
+  }
+
+  if(campania.criterial.metadato){
+    metadatos.value = campania.criterial.metadato.split(',');
+  }
+
+  if(campania.urls.url){
+    linkAds.value = campania.urls.url || "#";
+  }
+
+  if(campania.urls.img.escritorio){
+    linkImageEscritorio.value = campania.urls.img.escritorio || "";
+    linkImageMobile.value = campania.urls.img.mobile || "";
+  }
+
+  if(campania.criterial.country){
+    selectedItem.value = campania.criterial.country;
+  }
+
+  setTimeout(function(){
+    if(campania.criterial.city){
+      if(campania.criterial.city == -1){
+        selectedItemCiudad.value = campania.criterial.city;
+      }else{
+        // console.log(campania.criterial.city.split(','))
+        selectedItemCiudad.value = campania.criterial.city.split(',');
       }
     }
+  }, 1500);
 
-  } catch (error) {
-    console.error("Error al obtener la campaña:", error);
-  }
+  setTimeout(function(){
+      if(campania.participantes){
+        selectItemParticipantes.value = campania.participantes;
+      }
+
+      if(campania.otroValor){
+        numeroOtroUsuarios.value = campania.otroValor;
+      }
+  }, 2000);
+
+  setTimeout(function(){
+      if(campania.criterial.dispositivo){
+        selectItemDispositivos.value = campania.criterial.dispositivo.split(',');
+      }
+  }, 2500);
+
+  setTimeout(function(){
+      if(campania.criterial.navegador){
+        selectItemNavegador.value = campania.criterial.navegador.split(',');
+      }
+  }, 3000);
+
+  setTimeout(function(){
+      if(campania.criterial.so){
+        selectItemSO.value = campania.criterial.so.split(',');
+      }
+  }, 3500);
+
+  dataUsuarios.value = {
+      "resp": true,
+      "total": campania.userId
+  };
+  // console.log('campaña a editar ',campania );
 }
 
-async function cargarDatosUbicacion(campania) {
-  if(campania.criterial?.country) {
-    selectedItem.value = campania.criterial.country;
-    if(campania.criterial.city) {
-      selectedItemCiudad.value = campania.criterial.city === -1 ? 
-        campania.criterial.city : 
-        campania.criterial.city.split(',');
-    }
-  }
-}
-
-async function cargarDatosParticipantes(campania) {
-  selectItemParticipantes.value = campania.participantes || null;
-  numeroOtroUsuarios.value = campania.otroValor || '';
-
-  if(campania.criterial?.dispositivo) {
-    selectItemDispositivos.value = campania.criterial.dispositivo.split(',');
-  }
-
-  if(campania.criterial?.navegador) {
-    selectItemNavegador.value = campania.criterial.navegador.split(',');
-  }
-
-  if(campania.criterial?.so) {
-    selectItemSO.value = campania.criterial.so.split(',');
-  }
-}
 // async function getCampaigns(){
 //   var myHeaders = new Headers();
 //   myHeaders.append("Content-Type", "application/json");
@@ -471,71 +428,99 @@ function slugify(text) {
 }
 
 async function onComplete() {
-  try {
-    const userIds = userSelectionMethod.value === 'specific' ? 
-      campaignUsers.value.map(u => u.wylexId) : 
-      [];
+  var name = nombreCampania.value;
+  var tipoContenido = languages.value;
+  var cri = criterio.value;
+  var po = posicion.value;
+  var script = codigoExternoModel.value || "";
+  var linksWeb = linkAds.value || "#";
+  var urlImagen_1 = linkImageEscritorio.value || "";
+  var urlImagen_2 = linkImageMobile.value || "";
+  var paises_temp = selectedItem.value;
 
-    const jsonEnviar = {
-      campaignTitle: nombreCampania.value,
-      description: descripcionCampania.value,
-      type: languages.value,
-      criterial: {
-        visibilitySection: selectItemVisibilidad.value,
-        country: selectedItem.value.length > 0 ? selectedItem.value : -1,
-        city: selectedItemCiudad.value.length > 0 ? selectedItemCiudad.value.join(',') : -1,
-        so: selectItemSO.value?.join(',') || null,
-        dispositivo: selectItemDispositivos.value?.join(',') || null,
-        metadato: metadatos.value?.join(',') || null,
-        navegador: selectItemNavegador.value?.join(',') || null
-      },
-      coleccion: criterio.value.join(','),
-      position: Array.isArray(posicion.value) ? posicion.value.join(",") : posicion.value,
-      participantes: userSelectionMethod.value === 'specific' ? 'Usuarios específicos' : 'Por criterios',
-      otroValor: userSelectionMethod.value === 'specific' ? userIds.length : participantesCount.value,
-      userId: userSelectionMethod.value === 'specific' ? userIds : [],
-      urls: {
-        url: linkAds.value || "#",
-        img: {
-          escritorio: linkImageEscritorio.value || "",
-          mobile: linkImageMobile.value || ""
-        },
-        html: codigoExternoModel.value || ""
-      },
-      campaignSlug: slugify(nombreCampania.value)
-    };
+  var ciudad = -1;
+  var pais = -1;
 
-    loadingPanel.value = true;
-    const response = await fetch(`https://ads-service.vercel.app/campaign/update/${route.params.id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(jsonEnviar)
-    });
+  var so_temp = null;
+  var dispositivo_temp = null;
+  var metadato_temp = null;
+  var navegador_temp = null;
 
-    const data = await response.json();
-    
-    if(data.resp) {
-      snackbar.value = {
-        show: true,
-        text: 'Campaña actualizada exitosamente',
-        color: 'success'
-      };
-      setTimeout(() => router.push('/apps/campaigns/list'), 1500);
-    } else {
-      throw new Error(data.error || 'Error al actualizar la campaña');
-    }
-  } catch (error) {
-    console.error('Error:', error);
-    snackbar.value = {
-      show: true,
-      text: `Error: ${error.message}`,
-      color: 'error'
-    };
-  } finally {
-    loadingPanel.value = false;
+
+  var ciudades_temp = selectedItemCiudad.value;
+  var participantes_temp = selectItemParticipantes.value;
+  var otroValor_temp = numeroOtroUsuarios.value;
+
+  var visibilidad = selectItemVisibilidad.value;
+
+  if(cri.includes("metadatos") || cri.includes("trazabilidads")){
+    pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
+    ciudad = (selectedItemCiudad.value).length > 0 ? (selectedItemCiudad.value).join(',') : -1;
   }
+
+  if(cri.includes("metadatos")){
+    metadato_temp = (metadatos.value).join(',') || null;
+  }
+
+  if(cri.includes("dispositivos")){
+    dispositivo_temp = (selectItemDispositivos.value).join(',') || null;
+  }
+
+  if(cri.includes("plataforma")){
+    so_temp = (selectItemSO.value).join(',') || null;
+    navegador_temp = (selectItemNavegador.value).join(',') || null;
+  }
+
+  // var so_temp = selectItemSO.value;
+  // var dispositivo_temp = selectItemDispositivos.value;
+  // var navegador_temp = selectItemNavegador.value;
+
+  var jsonEnviar = {
+        "campaignTitle": name,
+        "type": tipoContenido,
+        "criterial": {
+            "visibilitySection": visibilidad,
+            "country": pais,
+            "city": ciudad || -1,
+            "so": so_temp || null,
+            "dispositivo": dispositivo_temp || null,
+            "metadato": metadato_temp || null,
+            "navegador": navegador_temp || null
+        },
+        "coleccion": cri.join(','),
+        "position": po.join(","),
+        "participantes": participantes_temp,
+        "otroValor": otroValor_temp,
+        "urls": {
+            "url": linksWeb,
+            "img": {
+                "escritorio": urlImagen_1,
+                "mobile": urlImagen_2
+            },
+            "html": script
+        },
+        "campaignSlug" : slugify(name)
+    }
+
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var requestOptions = {
+    method: 'POST',
+    headers: myHeaders,
+    body: JSON.stringify(jsonEnviar),
+    redirect: 'follow'
+  };
+  loadingPanel.value=true;
+  loadComponent.value = true;
+  var response = await fetch(`https://ads-service.vercel.app/campaign/update/${route.params.id}`, requestOptions);
+  const data = await response.json();
+  if(data.resp){
+    router.push('/apps/campaigns/list');
+  }else{
+    alert("Un error se presentó: "+data.error)
+  };
+  loadingPanel.value=false;
+  loadComponent.value = false;
 }
 
 async function handleValidation(isValid, tabIndex) {
@@ -561,144 +546,14 @@ async function handleValidationChange(prevIndex, nextIndex) {
   return false;
 }
 
-
-// Añadir estas referencias
-const isDialogSearchUser = ref(false)
-
-// Añade estas definiciones al inicio del script junto con los otros refs
-const labelError = ref({
-  mensaje: "",
-  visible: false
-});
-
-const dataUsers = ref([]);
-
-const handleAddUser = async () => {
-    
-  isDialogSearchUser.value = true
-  isLoadingDialogUser.value = true
-  
-  try {
-    const response = await fetch('https://ads-service.vercel.app/busqueda/user/')
-    const data = await response.json()
-    
-    if (data.resp) {
-      dataUsers.value = data.data
-      labelError.value.visible = false
-    } else {
-      labelError.value.mensaje = data.error
-      labelError.value.visible = true
-    }
-  } catch (error) {
-    console.log('Error al cargar usuarios:', error)
-    labelError.value.mensaje = 'Error al cargar usuarios'
-    labelError.value.visible = true
-  } finally {
-    isLoadingDialogUser.value = false
-  }
-}
-
-// Función para resolver la selección de un usuario
-const resolveUsuario = async (usuario) => {
-  try {
-    isLoadingDialogUser.value = true
-    const response = await fetch(`https://ads-service.vercel.app/campaign/add-user/${route.params.id}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        userId: usuario.wylexId
-      })
-    })
-
-    const data = await response.json()
-    if (data.resp) {
-      isFlatSnackRespUserAddAndDelete.value = true
-      await getCampaignToEdit() // Recargar los datos
-      isDialogSearchUser.value = false
-    }
-  } catch (error) {
-    console.error('Error al añadir usuario:', error)
-  } finally {
-    isLoadingDialogUser.value = false
-  }
-}
-
-// Función para filtrar usuarios en la búsqueda
-const handleInput = (event) => {
-  clearTimeout(timeoutId.value)
-  timeoutId.value = setTimeout(async () => {
-    try {
-      isLoadingDialogUser.value = true
-      const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${encodeURIComponent(event.target.value)}`)
-      const data = await response.json()
-      
-      if (data.resp) {
-        dataUsers.value = data.data
-        labelError.value.visible = false
-      } else {
-        labelError.value.mensaje = data.error
-        labelError.value.visible = true
-      }
-    } catch (error) {
-      console.error('Error al buscar usuarios:', error)
-    } finally {
-      isLoadingDialogUser.value = false
-    }
-  }, 1000)
-}
-
-const handleDeleteUser = async (userId) => {
-  try {
-    loadingPanel.value = true
-    const response = await fetch(`https://ads-service.vercel.app/campaign/delete-user/${route.params.id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ userId })
-    })
-
-    const data = await response.json()
-    if (data.resp) {
-      isFlatSnackRespUserDelete.value = true
-      // Recargar los datos
-      await getCampaignToEdit()
-    }
-  } catch (error) {
-    console.error('Error al eliminar usuario:', error)
-  } finally {
-    loadingPanel.value = false
-  }
-}
-
-const handleExportUsers = () => {
-  // Implementar la función de exportar
-  const csvContent = "data:text/csv;charset=utf-8,"
-    + [
-        ["id", "firstname", "last_name", "email"].join(","),
-        ...campaignUsers.value.map(user => 
-          [user.wylexId, user.firstname, user.last_name, user.email].join(",")
-        )
-    ].join("\n")
-
-  const encodedUri = encodeURI(csvContent)
-  const link = document.createElement("a")
-  link.setAttribute("href", encodedUri)
-  link.setAttribute("download", "usuarios.csv")
-  document.body.appendChild(link)
-  link.click()
-}
-
 async function setLoading(value) {
   loadingWizard.value = value
 }
 
 async function validateAsync() {
   var nombre = nombreCampania.value;
-  var descripcion = descripcionCampania.value;
   var tipoC = languages.value;
+  var crit = criterio.value;
   var pos = posicion.value;
   var visibilidad = selectItemVisibilidad.value;
 
@@ -707,23 +562,23 @@ async function validateAsync() {
     return false;
   }
 
-  if(descripcion.length < 1 || descripcion.trim() == ""){
-    alert("Debes añadir una descripción de campaña");
-    return false;
-  }
-
   if(tipoC.length < 1){
     alert("Debes añadir un tipo de contenido");
     return false;
   }
 
-  if(!pos){ // Cambiar la validación de posición
-    alert("Debes añadir la posición del ads");
+  if(crit.length < 1){
+    alert("Debes añadir al menos un criterio");
+    return false;
+  }
+
+  if(pos.length < 1){
+    alert("Debes añadir la posicion del ads");
     return false;
   }
 
   if(visibilidad.length < 1){
-    alert("Debes añadir la visibilidad en el sitio web");
+    alert("Debes añadir la La visibilidad en el sitio web");
     return false;
   }
 
@@ -766,7 +621,7 @@ async function validateAsyncInsercion() {
 async function validateAsyncCriterio() {
   var nombre = nombreCampania.value;
   var tipoC = languages.value;
-  var crit = criterio.value;  
+  var crit = criterio.value;
   var pos = posicion.value;
   var codigoExterno = codigoExternoModel.value;
   var linkAdsL = linkAds.value;
@@ -801,53 +656,97 @@ const errorMessages = computed(() => numeroRules.map(rule => rule(numeroOtroUsua
 const hasErrors = computed(() => errorMessages.value.length > 0);
 
 async function validateAsyncUsuarios() {
-  const crit = criterio.value;
-  
-  if(crit.length < 1) {
-    alert("Debes ingresar al menos un criterio");
-    return false;
-  }
+  var pais = selectedItem.value;
+  var ciudad = selectedItemCiudad.value;
 
-  if(userSelectionMethod.value === 'criteria') {
-    // Validaciones para selección por criterios
-    if(crit.includes("dispositivos") && (!selectItemDispositivos.value?.length)) {
+  // console.log(ciudad)
+  var crit = criterio.value;
+  var participantes = selectItemParticipantes.value;
+  var numeroOtrosUsuarios = numeroOtroUsuarios.value;
+  var dispositivos_temp = selectItemDispositivos.value;
+  var metadatos_temp = metadatos.value;
+  var selectItemSO_temp = selectItemSO.value;
+  var selectItemNavegador_temp = selectItemNavegador.value;
+  var selectedItem_temp = selectedItem.value;
+  var selectedItemCiudad_temp = selectedItemCiudad.value;
+
+// console.log(dispositivos_temp)
+
+  // if(pais.length < 1 || pais == ""){
+  //   alert("Debe ingresar el país");
+  //   return false;
+  // }
+
+  // if(ciudad.length < 1 || ciudad == ""){
+  //   alert("Debes ingresar la ciudad");
+  //   return false;
+  // }
+
+  if(crit.includes("dispositivos")){
+    if(dispositivos_temp.length < 1 || dispositivos_temp == ""){
       alert("Debe seleccionar un dispositivo");
       return false;
     }
+  }
 
-    if(crit.includes("metadatos") && (!metadatos.value?.length)) {
+  if(crit.includes("metadatos")){
+    if(metadatos_temp.length < 1 || metadatos_temp == ""){
       alert("Debe seleccionar al menos 1 metadato");
-      return false;
-    }
-
-    if(crit.includes("plataforma")) {
-      if(!selectItemSO.value?.length) {
-        alert("Debe seleccionar al menos 1 SO");
-        return false;
-      }
-      if(!selectItemNavegador.value?.length) {
-        alert("Debe seleccionar al menos 1 Navegador");
-        return false;
-      }
-    }
-
-    if(crit.includes("trazabilidads")) {
-      if(!selectedItem.value?.length) {
-        alert("Debe seleccionar al menos 1 país");
-        return false;
-      }
-      if(!selectedItemCiudad.value?.length) {
-        alert("Debe seleccionar al menos 1 ciudad");
-        return false;
-      }
-    }
-
-    if(!participantesCount.value) {
-      alert("Debe especificar el número de participantes");
       return false;
     }
   }
 
+  if(crit.includes("plataforma")){
+    if(selectItemSO_temp.length < 1 || selectItemSO_temp == ""){
+      alert("Debe seleccionar al menos 1 SO");
+      return false;
+    }
+
+    if(selectItemNavegador_temp.length < 1 || selectItemNavegador_temp == ""){
+      alert("Debe seleccionar al menos 1 Navegador");
+      return false;
+    }
+  }
+
+  if(crit.includes("trazabilidads")){
+    if(selectedItem_temp.length < 1 || selectedItem_temp == ""){
+      alert("Debe seleccionar al menos 1 país");
+      return false;
+    }
+
+    if(selectedItemCiudad_temp.length < 1 || selectedItemCiudad_temp == ""){
+      alert("Debe seleccionar al menos 1 ciudad");
+      return false;
+    }
+
+  }
+
+  if(crit.length < 1 || crit == ""){
+    alert("Debes ingresar el criterio");
+    return false;
+  }
+
+  if(participantes.length < 1 || participantes == ""){
+    alert("Debes ingresar el número de participantes");
+    return false;
+  }
+
+  if(participantes == 'Otro'){
+    if(numeroOtrosUsuarios < 1 || numeroOtrosUsuarios == ""){
+      alert("Debes ingresar el valor correspondiente para el número de participantes");
+      return false;
+    }
+
+    // if(hasErrors){
+    //   return false;
+    // }
+
+  }
+
+  if(participantes == ''){
+    alert("Debes seleccionar la cantidad de usuarios");
+    return false;
+  }
   return true;
 }
 
@@ -892,25 +791,41 @@ function groupByTitleWithAttributes(arr) {
 }
 
 
-watch([
-  selectedItemCiudad,
-  selectItemDispositivos,
-  selectItemSO,
-  selectItemNavegador,
-  metadatos
-], async () => {
-  if (!loadingPanel.value) {
-    loadingPanel.value = true;
-    try {
-      await getUsuarios();
-      if (dataUsuarios.value?.total) {
-        participantesCount.value = dataUsuarios.value.total;
+watch(() => selectedItem.value, (newValue, oldValue) => {
+  // console.log('Nuevo valor seleccionado:', newValue);
+  // console.log('Valor anterior:', oldValue);
+  // alert(selectedItem.value)
+  if(selectedItem.value != null){
+
+    selectedItemCiudad.value = [];
+    selectItemParticipantes.value = [];
+    var ciudades = [];
+    ciudades.push({ title: "Todas las ciudes", value: "0" });
+    for(var i in dataCountry.value){
+      var ins = dataCountry.value[i];
+      if(ins.country == newValue){
+        for(var j in ins.data){
+          var ins2 = ins.data[j];
+          ciudades.push({ title:ins2.city, value:ins2.city });
+        }
       }
-    } finally {
-      loadingPanel.value = false;
     }
+
+    ciudades.sort(compareByTitle);
+    // console.log(Object.values(groupByTitle(ciudades)))
+    var ciudadesTemp_2 = Object.values(groupByTitleWithAttributes(ciudades));
+    var ciudadesSi = [];
+    for(var i in ciudadesTemp_2){
+      ciudadesSi.push(ciudadesTemp_2[i].title);
+    }
+    cityList.value = ciudadesSi;
+
+    console.log(cityList.value)
+  }else{
+    cityList.value = [];
+    selectItemParticipantes.value = [];
   }
-}, { deep: true });
+});
 
 function generateRandomIntegers(min, max, count) {
   const randomIntegers = [];
@@ -1076,24 +991,6 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
 <template>
   <section>
-  <VSnackbar
-      v-model="snackbar.show"
-      :color="snackbar.color"
-      :timeout="2000"
-      location="top"
-      position="right"
-    >
-      {{ snackbar.text }}
-    </VSnackbar>
-    <VOverlay
-      :model-value="loadingPanel"
-      class="align-center justify-center"
-    >
-      <VProgressCircular
-        indeterminate
-        color="primary"
-      />
-    </VOverlay>
     <VRow>
       <VCol
         class="mt-0"
@@ -1129,10 +1026,10 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                 >
                   <div class="px-5">
                     <VCardTitle>
-                      Edita campaña: {{ nombreCampania }}
+                      Crear campañas
                     </VCardTitle>
                     <VCardSubtitle> 
-                      Edita datos sobre la campaña seleccionada
+                      Elige la campaña sobre la que necesites información  
                     </VCardSubtitle>
                   </div>
                 </div>
@@ -1150,7 +1047,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                   validate-on-back="true"
                   nextButtonText="Siguiente"
                   backButtonText="Anterior"
-                  finishButtonText="Editar campaña"
+                  finishButtonText="Crear campaña"
                 >
                   <tab-content title="Detalles de la campaña" class="px-4" :before-change="validateAsync">
                    
@@ -1179,29 +1076,9 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                           </VRow>
                         </VCol>
 
-                        
-
-                        <VCol cols="12">
-                          <VRow no-gutters>
-                            <VCol cols="12" md="12">
-                              <label for="descripcionCampania">Descripción de la campaña</label>
-                            </VCol>
-                            <VCol cols="12" md="12">
-                              <VTextarea
-                                  id="descripcionCampania"
-                                  v-model="descripcionCampania"
-                                  placeholder="Ingrese una descripción para la campaña"
-                                  persistent-placeholder
-                                  rows="3"
-                                  :loading="loadComponent"
-                                />
-                            </VCol>
-                          </VRow>
-                        </VCol>
-
                         <VCol cols="6">
                           <VRow no-gutters>
-                        
+                            <!-- 👉 Email -->
                             <VCol
                               cols="12"
                               md="12"
@@ -1276,10 +1153,19 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
                         <VCol cols="6">
                           <VRow no-gutters>
-                            <VCol cols="12" md="12">
+                            <!-- 👉 Email -->
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
                               <label for="email">Posición</label>
                             </VCol>
-                            <VCol cols="12" md="12">
+
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+
                               <VCombobox
                                 v-model="posicion"
                                 multiple
@@ -1292,12 +1178,10 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                                 hide-selected
                                 :hide-no-data="false"
                                 hint=""
-                            />
+                              />
                             </VCol>
                           </VRow>
                         </VCol>
-
-                        
                       </VRow>
                   
                   </tab-content>
@@ -1428,7 +1312,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                           <VRow class="pb-5">
                             <VCol cols="12" >
                               <VRow no-gutters>
-                             
+                                <!-- 👉 Email -->
                                 <VCol
                                   cols="12"
                                   md="12"
@@ -1654,69 +1538,92 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                                 </VCol>
                               </VRow>
                             </VCol>
-                          
-<VRow class="mb-4">
-  <VCol cols="12" md="6">
-    <VSelect
-      v-model="userSelectionMethod"
-      :items="[
-        { title: 'Por criterios', value: 'criteria' },
-        { title: 'Usuarios específicos', value: 'specific' }
-      ]"
-      label="Método de selección de usuarios"
-    />
-  </VCol>
-  <VCol cols="12" md="6" v-if="userSelectionMethod === 'criteria'">
-    <VTextField
-      v-model="participantesCount"
-      type="number"
-      label="Número de participantes"
-      :rules="[v => !!v || 'Este campo es requerido']"
-    />
-  </VCol>
-</VRow>
+                            <VCol cols="12">
+                              <VRow no-gutters>
+                                <!-- 👉 Email -->
+                                <VCol
+                                  cols="12"
+                                  md="12"
+                                >
+                                  <label for="email">Seleccionar participantes</label>
+                                </VCol>
+
+                                <VCol
+                                  cols="12"
+                                  md="12"
+                                >
+                                  <VSelect
+                                    :items="selectItemsList"
+                                    v-model="selectItemParticipantes"
+                                    chips
+                                    clearable
+                                  />
+                                </VCol>
+                              </VRow>
+                            </VCol>
+
+                            <VCol cols="12" :class="selectItemParticipantes!='Otro'?'d-none':''">
+                              <VRow no-gutters>
+                                <!-- 👉 Email -->
+                                <VCol
+                                  cols="12"
+                                  md="12"
+                                >
+                                  <label for="email">Escriba el número</label>
+                                </VCol>
+
+                                <VCol
+                                  cols="12"
+                                  md="12"
+                                >
+                                  <VTextField
+                                    id="numero"
+                                    v-model="numeroOtroUsuarios"
+                                    placeholder="Escriba el número de participantes"
+                                    persistent-placeholder
+                                    :rules="numeroRules"
+                                    :min="minValue"
+                                    :max="maxValue"
+                                  />
+                                </VCol>
+                              </VRow>
+                            </VCol>
                           </VRow>
 
                         </VCol>
                         <VCol col="6">
-          <VCardText class="d-flex align-center gap-4">
-            <div>
-              <div class="d-flex align-center mb-2">
-                <VIcon
-                  class="me-2"
-                  size="24"
-                  icon="tabler-users"
-                  color="primary"
-                />
-                <span class="text-h6 text-medium-emphasis">
-                  Usuarios participantes
-                </span>
-              </div>
+                          <VCardText class="text-center pt-15">
+                            <!-- 👉 Avatar -->
+                            <VAvatar
+                              rounded
+                              :size="120"
+                              color="primary"
+                              variant="tonal"
+                            >
+                              
+                              <VIcon
+                                :size="62"
+                                icon="tabler-users"
+                              />
+                            </VAvatar>
 
-              <div class="d-flex align-center gap-4">
-                <div class="text-h6 font-weight-medium text-success fondo-boton">
-                  <span v-if="!loadingPanel">
-                    {{ participantes === 'Usuarios específicos' 
-                      ? otroValor || "0"
-                      : dataUsuarios.total || "0" }}
-                  </span>
-                  <span v-if="loadingPanel">...</span>
-                </div>
+                            <!-- 👉 User fullName -->
+                            <h6 class="text-h6 mt-4">
+                              Usuarios participantes
+                            </h6>
 
-                <VBtn
-                        v-if="participantes === 'Usuarios específicos'"
-                        size="small"
-                        variant="tonal"
-                        color="secondary"
-                        @click="openModal"
-                        :disabled="loadingPanel"
-                      >
-                    Editar usuarios
-                  </VBtn>
-              </div>
-            </div>
-          </VCardText>
-        </VCol>
+                            <!-- 👉 Role chip -->
+                            <VChip
+                              label
+                              :color="'success'"
+                              size="large"
+                              class="text-capitalize mt-4"
+                            >
+                              <small v-if="!loadingPanel">{{ dataUsuarios.total || "0" }}</small>
+                              <small v-if="loadingPanel">Cargando....</small>
+                            </VChip>
+                          </VCardText>
+                        </VCol>
                       </VRow>
                   
                   </tab-content>
@@ -1735,106 +1642,6 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
       </VCol>
     </VRow>
   </section>
-
-  <!-- modal para editar users -->
-
-  <!-- Mantener el modal principal -->
-<VDialog
-  v-model="showUserModal"
-  max-width="900px"
-  persistent
->
-  <VCard>
-    <VCardText>
-      <UserList
-        :users="campaignUsers"
-        :campaign-title="nombreCampania"
-        :users-per-page="10"
-        :campaign-id="route.params.id"
-        @delete-user="handleDeleteUser"
-        @add-user="handleAddUser"
-        @export="handleExportUsers"
-        @close="refreshCampaignData"
-      />
-    </VCardText>
-    <VCardActions>
-      <VSpacer />
-      <VBtn
-        color="secondary"
-        variant="tonal"
-        @click="closeModal"
-      >
-        Cerrar
-      </VBtn>
-    </VCardActions>
-  </VCard>
-</VDialog>
-
-<!-- Agregar el diálogo de búsqueda justo después -->
-<VDialog
-  v-model="isDialogSearchUser"
-  persistent
-  class="v-dialog-lg"
->
-  <DialogCloseBtn @click="isDialogSearchUser = false" />
-  <VCard title="Lista de usuarios">
-    <VCardSubtitle class="pl-6 mb-3">
-      Solo se obtendrá los 20 primeros registros de acuerdo a la búsqueda.
-    </VCardSubtitle>
-    <VCardText>
-      <VTextField 
-        :disabled="isLoadingDialogUser" 
-        append-inner-icon="tabler-user-search" 
-        type="text"  
-        @input="handleInput" 
-        label="Buscar por correo, teléfono o nombre" 
-        placeholder="Buscar usuarios" 
-      />
-      <VChip color="error" v-if="labelError.visible" class="mt-2">
-        Error: {{labelError.mensaje}}
-      </VChip>
-      <br>
-      <VTable class="text-no-wrap tableNavegacion mb-5" hover>
-        <thead>
-          <tr>
-            <th scope="col">Usuario</th>
-            <th scope="col">Correo</th>
-            <th scope="col">Agregar</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr 
-            v-if="dataUsers.length > 0"
-            v-for="item in filteredDataUsers" 
-            :key="item.userId"
-          >
-            <td>
-              {{ (item.last_name+' '+item.first_name).length > 25 ? 
-                  (item.last_name+' '+item.first_name).substring(0, 25) + "..." : 
-                  (item.last_name+' '+item.first_name) }}
-            </td>
-            <td class="text-medium-emphasis">
-              {{ item.email }}
-            </td>
-            <td class="text-medium-emphasis">
-              <VBtn 
-                :disabled="isLoadingDialogUser" 
-                class="mt-4" 
-                color="success" 
-                @click="resolveUsuario(item)" 
-                icon="mdi-plus-circle-outline" 
-                variant="text"
-              />
-            </td>
-          </tr>
-          <tr v-else>
-            <td colspan="3">No hay datos</td>
-          </tr>
-        </tbody>
-      </VTable>
-    </VCardText>
-  </VCard>
-</VDialog>
 </template>
 
 
@@ -1902,12 +1709,4 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
   max-height: 10px; /* Ajusta el valor según tus necesidades */
   overflow-y: auto;
 }
-
-.fondo-boton {
-  background-color: #d4edda; 
-  padding: 8px 16px;
-  border-radius: 5px;
-  line-height: 24px;
-}
-
 </style>

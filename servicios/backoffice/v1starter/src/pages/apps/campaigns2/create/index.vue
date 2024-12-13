@@ -4,32 +4,30 @@ import { useRouter } from 'vue-router';
 import { FormWizard, TabContent } from "vue3-form-wizard";
 import 'vue3-form-wizard/dist/style.css';
 const router = useRouter();
-const route = useRoute();
 const currentTab = ref('tab-lista');
 const checkbox = ref(false);
 const loadingWizard = ref(false);
 const loadingPanel = ref(false);
 const dataCampaigns = ref([]);
 const dataCountry = ref([]);
-const loadComponent = ref(true);
 // const modelPaises = ref(null);
 const cityList = ref([]);
 const countryList = ref([]);
 // const FormWizard = ref(false);
 // const TabContent = ref(false);
 
+const timeoutId = ref(null);
+const timeoutSegundos = 3000;
+
 const nombreCampania = ref('')
-const descripcionCampania = ref('')
 const codigoExternoModel = ref('')
 const linkAds = ref('')
 const linkImageEscritorio = ref('')
-const timeoutId = ref(null);
-const timeoutSegundos = 3000;
 const linkImageMobile = ref('');
 const numeroOtroUsuarios = ref('');
 const languages = ref([]);
 const criterio = ref([]);
-// const posicion = ref([]);
+const posicion = ref([]);
 const selectedItem = ref([]);
 const selectedItemCiudad = ref([]);
 const dataUsuarios = ref({});
@@ -122,22 +120,18 @@ const criterioList = [
   // { title:'Navegador', value:'navegador' },
 ];//, { title:'Metadatos', value:'metadato' }
 
-
 const posicionList = [
+  // 'floating_ad',
   'RDTop1',
   'RDTop2',
   'RDTop3',
   'RDFloating',
 ]
 
-// Cambiar posicion para que sea un solo valor en lugar de un array
-const posicion = ref('')
-
-// watch(posicion, value => {
-//   if (value.length > 1)
-//     nextTick(() => posicion.value.pop())
-// })
-
+watch(posicion, value => {
+  if (value.length > 1)
+    nextTick(() => posicion.value.pop())
+})
 
 watch(metadatos, value => {
   if (value.length > 5)
@@ -145,125 +139,8 @@ watch(metadatos, value => {
 })
 
 
-// onMounted(getMetadatos)
-onMounted(async()=>{
-  try {
-    loadComponent.value = true;
-    console.log("Iniciando carga de campaña...");
-    
-    const promises = [
-      getCountries(),
-      getCampaignToEdit(),
-      getMetadatos()
-    ];
+onMounted(getMetadatos)
 
-    await Promise.all(promises);
-    
-    console.log("Carga completa");
-  } catch (error) {
-    console.error("Error en mounted:", error);
-  } finally {
-    loadComponent.value = false;
-  }
-})
-async function getCampaignToEdit(){
-  try {
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-    
-    console.log("Obteniendo campaña ID:", route.params.id);
-    
-    var response = await fetch(`https://ads-service.vercel.app/campaign/get/edit/${route.params.id}/`, requestOptions);
-    const data = await response.json();
-    
-    console.log("Respuesta del servidor:", data);
-    
-    if(!data || data.length === 0) {
-      console.error("No se recibieron datos de la campaña");
-      return;
-    }
-
-    const campania = data[0];
-    console.log("Datos de la campaña:", campania);
-
-    // Cargar datos básicos
-    nombreCampania.value = campania.campaignTitle || '';
-    descripcionCampania.value = campania.description || '';
-    languages.value = campania.type || '';
-    criterio.value = campania.coleccion ? campania.coleccion.split(',') : [];
-    posicion.value = campania.position ? campania.position.split(',')[0] : '';
-
-    if(campania.criterial) {
-      // Cargar criterial
-      selectItemVisibilidad.value = campania.criterial.visibilitySection || "all";
-      
-      if(campania.criterial.metadato) {
-        metadatos.value = campania.criterial.metadato.split(',');
-      }
-    }
-
-    if(campania.urls) {
-      // Cargar URLs
-      codigoExternoModel.value = campania.urls.html || "";
-      linkAds.value = campania.urls.url || "#";
-      
-      if(campania.urls.img) {
-        linkImageEscritorio.value = campania.urls.img.escritorio || "";
-        linkImageMobile.value = campania.urls.img.mobile || "";
-      }
-    }
-
-    // Cargar datos de ubicación
-    if(campania.criterial?.country) {
-      selectedItem.value = campania.criterial.country;
-
-      // Esperar a que se carguen las ciudades
-      await new Promise(resolve => setTimeout(resolve, 1500));
-
-      if(campania.criterial.city) {
-        selectedItemCiudad.value = campania.criterial.city === -1 ? 
-          campania.criterial.city : 
-          campania.criterial.city.split(',');
-      }
-    }
-
-    // Cargar participantes
-    await new Promise(resolve => setTimeout(resolve, 2000));
-    selectItemParticipantes.value = campania.participantes || null;
-    numeroOtroUsuarios.value = campania.otroValor || '';
-
-    // Cargar dispositivos
-    if(campania.criterial?.dispositivo) {
-      await new Promise(resolve => setTimeout(resolve, 2500));
-      selectItemDispositivos.value = campania.criterial.dispositivo.split(',');
-    }
-
-    // Cargar navegador
-    if(campania.criterial?.navegador) {
-      await new Promise(resolve => setTimeout(resolve, 3000));
-      selectItemNavegador.value = campania.criterial.navegador.split(',');
-    }
-
-    // Cargar SO
-    if(campania.criterial?.so) {
-      await new Promise(resolve => setTimeout(resolve, 3500));
-      selectItemSO.value = campania.criterial.so.split(',');
-    }
-
-    dataUsuarios.value = {
-      "resp": true,
-      "total": campania.userId
-    };
-
-  } catch (error) {
-    console.error("Error al obtener la campaña:", error);
-  }
-}
 // async function getCampaigns(){
 //   var myHeaders = new Headers();
 //   myHeaders.append("Content-Type", "application/json");
@@ -324,103 +201,97 @@ const fetchWithTimeout = (url, options, timeout = 10000) => {
 };
 
 async function getUsuarios(){
-  try {
-    var ciudad = -1;
-    var pais = -1;
-    var criterioTemp = criterio.value;
+  var ciudad = -1;
+  var pais = -1;
+  var criterioTemp = criterio.value;
 
-    var so_temp = null;
-    var dispositivo_temp = null;
-    var navegador_temp = null;
-    var metadato = null;
+  var so_temp = null;
+  var dispositivo_temp = null;
+  var navegador_temp = null;
+  var metadato = null;
 
-    if(criterioTemp.includes("metadatos") || criterioTemp.includes("trazabilidads")){
-      pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
-      ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
-      ciudad = (ciudad=="Todas las ciudes"?-1:ciudad);
-    }
+  if(criterioTemp.includes("metadatos") || criterioTemp.includes("trazabilidads")){
+    pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
+    ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
+    ciudad = (ciudad=="Todas las ciudes"?-1:ciudad);
+  }
 
-    if(criterioTemp.includes("metadatos")){
-      metadato = metadatos.value || null;
-    }
+  if(criterioTemp.includes("metadatos")){
+    metadato = metadatos.value || null;
+  }
 
-    if(criterioTemp.includes("dispositivos")){
-      dispositivo_temp = selectItemDispositivos.value || null;
-    }
+  if(criterioTemp.includes("dispositivos")){
+    dispositivo_temp = selectItemDispositivos.value || null;
+  }
 
-    if(criterioTemp.includes("plataforma")){
-      so_temp = selectItemSO.value || null;
-      navegador_temp = selectItemNavegador.value || null;
-    }
-    
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      var raw = JSON.stringify({
-        "metadato": metadato,
-        "criterio": criterioTemp,
-        "pais": pais,
-        "ciudad": ciudad,
-        "navegador": navegador_temp,
-        "os": so_temp,
-        "dispositivo": dispositivo_temp
-      });
-
-      var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow'
-      };
-
-      //console.log('data enviar ',raw);    
-      const send = await fetch('https://ads-service.vercel.app/campaign/v2/usuarios/get/user/total', requestOptions);
-      const respuesta = await send.json();    
-      //console.log('resp',respuesta);    
-      dataUsuarios.value = respuesta;
-      //console.log('data total',dataUsuarios.value);
-    
-      
-    /*  
+  if(criterioTemp.includes("plataforma")){
+    so_temp = selectItemSO.value || null;
+    navegador_temp = selectItemNavegador.value || null;
+  }
+  
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    var requestOptions = {
-      method: 'GET',
-      headers: myHeaders,
-      redirect: 'follow'
-    };
-    // console.log(pais || "-1")
-    // alert(pais.length)
-    // var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-    //   so: so_temp, 
-    //   dispositivo: dispositivo_temp,
-    //   metadato: metadato,
-    //   criterio: criterioTemp.join(','),
-    //   navegador: navegador_temp
-    // }) }`, requestOptions);
-    // const data = await response.json();
-    // dataUsuarios.value = data;
+    var raw = JSON.stringify({
+      "metadato": metadato,
+      "criterio": criterioTemp,
+      "pais": pais,
+      "ciudad": ciudad,
+      "navegador": navegador_temp,
+      "os": so_temp,
+      "dispositivo": dispositivo_temp
+    });
 
-    const response = await fetchWithTimeout(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
-        so: so_temp, 
-        dispositivo: dispositivo_temp,
-        metadato: metadato,
-        criterio: criterioTemp.join(','),
-        navegador: navegador_temp
-    }) }`, requestOptions, 25000); // Aquí hemos establecido un tiempo de espera de 15 segundos (15000 milisegundos)
-
-    if (response.status === 200) {
-        const data = await response.json();
-        dataUsuarios.value = data;
-    } else {
-        console.error("Error en la solicitud:", response.status);
-        // Puedes manejar el error de acuerdo a tus necesidades
-    }
-    */
+        var requestOptions = {
+            method: 'POST',
+            headers: myHeaders,
+            body: raw,
+            redirect: 'follow'
+        };
+    //console.log('data enviar ',raw);    
+    const send = await fetch('https://ads-service.vercel.app/campaign/v2/usuarios/get/user/total', requestOptions);
+    const respuesta = await send.json();    
+    //console.log('resp',respuesta);    
+    dataUsuarios.value =respuesta;
+    //console.log('data total',dataUsuarios.value);
+  
     
-  } catch (error) {
-      console.error(error);
-      return false;
+  /*  
+  var myHeaders = new Headers();
+  myHeaders.append("Content-Type", "application/json");
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+    redirect: 'follow'
+  };
+  // console.log(pais || "-1")
+  // alert(pais.length)
+  // var response = await fetch(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+  //   so: so_temp, 
+  //   dispositivo: dispositivo_temp,
+  //   metadato: metadato,
+  //   criterio: criterioTemp.join(','),
+  //   navegador: navegador_temp
+  // }) }`, requestOptions);
+  // const data = await response.json();
+  // dataUsuarios.value = data;
+
+  const response = await fetchWithTimeout(`https://ads-service.vercel.app/campaign/get/user/total/${pais}/${ciudad}?${ new URLSearchParams({ 
+      so: so_temp, 
+      dispositivo: dispositivo_temp,
+      metadato: metadato,
+      criterio: criterioTemp.join(','),
+      navegador: navegador_temp
+  }) }`, requestOptions, 25000); // Aquí hemos establecido un tiempo de espera de 15 segundos (15000 milisegundos)
+
+  if (response.status === 200) {
+      const data = await response.json();
+      dataUsuarios.value = data;
+  } else {
+      console.error("Error en la solicitud:", response.status);
+      // Puedes manejar el error de acuerdo a tus necesidades
   }
+  */
+  
 }
 
 const consentimiento = ref(false);
@@ -444,7 +315,6 @@ function slugify(text) {
 
 async function onComplete() {
   var name = nombreCampania.value;
-  var description = descripcionCampania.value;
   var tipoContenido = languages.value;
   var cri = criterio.value;
   var po = posicion.value;
@@ -492,33 +362,31 @@ async function onComplete() {
   // var navegador_temp = selectItemNavegador.value;
 
   var jsonEnviar = {
-    "campaignTitle": name,
-    "description": description,
-    "type": tipoContenido,
-    "criterial": {
-      "visibilitySection": visibilidad,
-      "country": pais,
-      "city": ciudad || -1,
-      "so": so_temp || null,
-      "dispositivo": dispositivo_temp || null,
-      "metadato": metadato_temp || null,
-      "navegador": navegador_temp || null
-    },
-    "coleccion": cri.join(','),
-    "position": posicion.value,
-    "participantes": participantes_temp,
-    "otroValor": otroValor_temp,
-    "urls": {
-      "url": linksWeb,
-      "img": {
-        "escritorio": urlImagen_1,
-        "mobile": urlImagen_2
-      },
-      "html": script
-    },
-    "campaignSlug" : slugify(name)
-  }
-
+        "campaignTitle": name,
+        "type": tipoContenido,
+        "criterial": {
+            "visibilitySection": visibilidad,
+            "country": pais,
+            "city": ciudad || -1,
+            "so": so_temp || null,
+            "dispositivo": dispositivo_temp || null,
+            "metadato": metadato_temp || null,
+            "navegador": navegador_temp || null
+        },
+        "coleccion": cri.join(','),
+        "position": po.join(","),
+        "participantes": participantes_temp,
+        "otroValor": otroValor_temp,
+        "urls": {
+            "url": linksWeb,
+            "img": {
+                "escritorio": urlImagen_1,
+                "mobile": urlImagen_2
+            },
+            "html": script
+        },
+        "campaignSlug" : slugify(name)
+    }
 
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");
@@ -529,8 +397,7 @@ async function onComplete() {
     redirect: 'follow'
   };
   loadingPanel.value=true;
-  loadComponent.value = true;
-  var response = await fetch(`https://ads-service.vercel.app/campaign/update/${route.params.id}`, requestOptions);
+  var response = await fetch(`https://ads-service.vercel.app/campaign/create`, requestOptions);
   const data = await response.json();
   if(data.resp){
     router.push('/apps/campaigns/list');
@@ -538,11 +405,10 @@ async function onComplete() {
     alert("Un error se presentó: "+data.error)
   };
   loadingPanel.value=false;
-  loadComponent.value = false;
 }
 
 async function handleValidation(isValid, tabIndex) {
-  if(tabIndex == 1 && isValid == true){
+  if(tabIndex == 1 && isValid == true && dataCountry.value.length < 1){
     await getCountries();
 
     var paises = [];
@@ -552,6 +418,7 @@ async function handleValidation(isValid, tabIndex) {
       paises.push(ins.country);
     }
 
+    // console.log(paises)
     countryList.value = paises;
 
   }
@@ -570,8 +437,8 @@ async function setLoading(value) {
 
 async function validateAsync() {
   var nombre = nombreCampania.value;
-  var descripcion = descripcionCampania.value;
   var tipoC = languages.value;
+  var crit = criterio.value;
   var pos = posicion.value;
   var visibilidad = selectItemVisibilidad.value;
 
@@ -580,23 +447,23 @@ async function validateAsync() {
     return false;
   }
 
-  if(descripcion.length < 1 || descripcion.trim() == ""){
-    alert("Debes añadir una descripción de campaña");
-    return false;
-  }
-
   if(tipoC.length < 1){
     alert("Debes añadir un tipo de contenido");
     return false;
   }
 
-  if(!pos){ // Cambiar la validación de posición
-    alert("Debes añadir la posición del ads");
+  if(crit.length < 1){
+    alert("Debes añadir al menos un criterio");
+    return false;
+  }
+
+  if(pos.length < 1){
+    alert("Debes añadir la posicion del ads");
     return false;
   }
 
   if(visibilidad.length < 1){
-    alert("Debes añadir la visibilidad en el sitio web");
+    alert("Debes añadir la La visibilidad en el sitio web");
     return false;
   }
 
@@ -639,7 +506,7 @@ async function validateAsyncInsercion() {
 async function validateAsyncCriterio() {
   var nombre = nombreCampania.value;
   var tipoC = languages.value;
-  var crit = criterio.value;  
+  var crit = criterio.value;
   var pos = posicion.value;
   var codigoExterno = codigoExternoModel.value;
   var linkAdsL = linkAds.value;
@@ -889,21 +756,16 @@ watch(async () => selectedItemCiudad.value,async  (newValue, oldValue) => {
   if(cityList.value.length > 1){
     if(selectedItemCiudad.value != null){
       loadingPanel.value=true;
-
-      // console.log(1)
-
       clearTimeout(timeoutId.value);
       timeoutId.value = setTimeout(async () => {
-        const resp = await getUsuarios();
-        loadingPanel.value = false;
+        await getUsuarios();
+        loadingPanel.value=false;
       }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
-
       await generarOtrosValores();
     }else{
       dataUsuarios.value = {};
     }
   }
-
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
 
@@ -912,14 +774,11 @@ watch(async () => selectItemDispositivos.value,async  (newValue, oldValue) => {
   // console.log('Valor anterior:', oldValue);
   if(selectItemDispositivos.value != null){
     loadingPanel.value=true;
-    
-    // console.log(2)
     clearTimeout(timeoutId.value);
     timeoutId.value = setTimeout(async () => {
       await getUsuarios();
       loadingPanel.value=false;
     }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
-
     await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
@@ -932,15 +791,12 @@ watch(async () => selectItemSO.value,async  (newValue, oldValue) => {
   // console.log('Nuevo valor seleccionado:', newValue);
   // console.log('Valor anterior:', oldValue);
   loadingPanel.value=true;
-  
-  // console.log(3)
-  clearTimeout(timeoutId.value);
-  timeoutId.value = setTimeout(async () => {
-    await getUsuarios();
-    loadingPanel.value=false;
-  }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
-
-  await generarOtrosValores();
+    clearTimeout(timeoutId.value);
+    timeoutId.value = setTimeout(async () => {
+      await getUsuarios();
+      loadingPanel.value=false;
+    }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
+    await generarOtrosValores();
 
   // selectItemsList.value = [100, 200, 1000, "Otro"];
 });
@@ -951,14 +807,11 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
   // console.log('Valor anterior:', oldValue);
   if(selectItemNavegador.value != null){
     loadingPanel.value=true;
-    
-    // console.log(4)
     clearTimeout(timeoutId.value);
     timeoutId.value = setTimeout(async () => {
       await getUsuarios();
       loadingPanel.value=false;
     }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
-
     await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
@@ -974,14 +827,11 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
   // console.log('Valor anterior:', oldValue);
   if(metadatos.value != null){
     loadingPanel.value=true;
-    
-    // console.log(5)
     clearTimeout(timeoutId.value);
     timeoutId.value = setTimeout(async () => {
       await getUsuarios();
       loadingPanel.value=false;
     }, timeoutSegundos); // Espera 1000 milisegundos antes de realizar la llamada
-
     await generarOtrosValores();
   }else{
     dataUsuarios.value = {};
@@ -1044,10 +894,10 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                 >
                   <div class="px-5">
                     <VCardTitle>
-                      Edita campaña: {{ nombreCampania }}
+                      Crear campañas
                     </VCardTitle>
                     <VCardSubtitle> 
-                      Edita datos sobre la campaña seleccionada
+                      Elige la campaña sobre la que necesites información  
                     </VCardSubtitle>
                   </div>
                 </div>
@@ -1056,7 +906,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                 <!-- inicio lista de Módulos -->
                   
                 <form-wizard 
-                  :class="loadComponent?'disabled':''"
+                  :class=" loadingPanel?'disabled':'' "
                   @on-complete="onComplete" 
                   @on-loading="setLoading"
                   color="#7367F0" 
@@ -1065,7 +915,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                   validate-on-back="true"
                   nextButtonText="Siguiente"
                   backButtonText="Anterior"
-                  finishButtonText="Editar campaña"
+                  finishButtonText="Crear campaña"
                 >
                   <tab-content title="Detalles de la campaña" class="px-4" :before-change="validateAsync">
                    
@@ -1090,26 +940,6 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                                 placeholder="Nombre de la campaña"
                                 persistent-placeholder
                               />
-                            </VCol>
-                          </VRow>
-                        </VCol>
-
-                        
-
-                        <VCol cols="12">
-                          <VRow no-gutters>
-                            <VCol cols="12" md="12">
-                              <label for="descripcionCampania">Descripción de la campaña</label>
-                            </VCol>
-                            <VCol cols="12" md="12">
-                              <VTextarea
-                                  id="descripcionCampania"
-                                  v-model="descripcionCampania"
-                                  placeholder="Ingrese una descripción para la campaña"
-                                  persistent-placeholder
-                                  rows="3"
-                                  :loading="loadComponent"
-                                />
                             </VCol>
                           </VRow>
                         </VCol>
@@ -1191,18 +1021,32 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
                         <VCol cols="6">
                           <VRow no-gutters>
-                            <VCol cols="12" md="12">
+                            <!-- 👉 Email -->
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
                               <label for="email">Posición</label>
                             </VCol>
-                            <VCol cols="12" md="12">
-                              <VSelect
-                                  v-model="posicion"
-                                  :items="posicionList"
-                                  variant="outlined"
-                                  persistent-hint
-                                  clearable
-                                  label="Selecciona la posición"
-                                />
+
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+
+                              <VCombobox
+                                v-model="posicion"
+                                multiple
+                                chips
+                                :items="posicionList"
+                                variant="outlined"
+                                label=""
+                                persistent-hint
+                                v-model:search-input="search"
+                                hide-selected
+                                :hide-no-data="false"
+                                hint=""
+                              />
                             </VCol>
                           </VRow>
                         </VCol>
@@ -1446,6 +1290,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
                                         :hide-no-data="false"
                                         :menu-props="{ maxHeight: '300' }"
                                         class="custom-combobox-ciudad"
+                                        :disabled="loadingPanel"
                                       />
 
                                       
