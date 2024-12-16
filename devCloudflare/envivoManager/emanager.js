@@ -562,9 +562,11 @@ function eventoEnvivoManagerQuito() {
 
 eventoEnvivoManager();
 
-setTimeout(() => {
-  eventoEnvivoManagerQuito();
-}, 300);
+if(ECUAVISA_EC.verificarURLActual({ url: "https://www.ecuavisa.com/envivo/quito" })){ // Solo se ejecuta en la página de envivo quito
+  setTimeout(() => {
+    eventoEnvivoManagerQuito();
+  }, 300);
+}
 
 
 if (ECUAVISA_EC.login()) {
