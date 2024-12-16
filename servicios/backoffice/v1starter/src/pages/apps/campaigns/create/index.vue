@@ -587,28 +587,30 @@
     <!-- Lista de usuarios (visible solo cuando hay usuarios) -->
     <div v-if="hasUsers">
       <VList lines="two">
-        <template v-for="(user, index) in currentUsers" :key="index">
-          <VListItem border>
-            <VListItemTitle>
-              <span>{{ user.firstname || user.first_name }} {{ user.lastname || user.last_name }}</span>
-            </VListItemTitle>
-            <VListItemSubtitle class="mt-1">
-              <span class="text-xs text-disabled">Correo: {{ user.email }}</span>
-            </VListItemSubtitle>
-            <template #append>
-              <VBtn
-                icon
-                size="x-small"
-                color="error"
-                variant="text"
-                @click="handleDeleteUser(user.wylexId)"
-              >
-                <VIcon size="22" icon="tabler-trash" />
-              </VBtn>
-            </template>
-          </VListItem>
-        </template>
-      </VList>
+  <VListItem
+    v-for="user in currentUsers"
+    :key="user.wylexId"
+    border
+  >
+    <VListItemTitle>
+      {{ user.firstname || user.first_name }} {{ user.lastname || user.last_name }}
+    </VListItemTitle>
+    <VListItemSubtitle class="mt-1">
+      <span class="text-xs text-disabled">{{ user.email }}</span>
+    </VListItemSubtitle>
+    <template #append>
+      <VBtn
+        icon
+        size="x-small"
+        color="error"
+        variant="text"
+        @click="handleDeleteUser(user.wylexId)"
+      >
+        <VIcon size="22" icon="tabler-trash" />
+      </VBtn>
+    </template>
+  </VListItem>
+</VList>
 
       <!-- Paginación -->
       <div class="d-flex justify-center mt-4">
@@ -712,23 +714,67 @@
     </VBtn>
   </div>
 
-  <VDialog
-    v-model="userModalOpen"
-    class="v-dialog-sm"
-    persistent
-  >
-    <VCard>
-      <VCardText class="pa-6">
-        <UserList
-          :campaign-id="tempCampaignId"
-          :campaign-title="nombreCampania"
-          :users-per-page="10"
-          @update:users="handleUserUpdate"
-          @close="userModalOpen = false"
-        />
-      </VCardText>
-    </VCard>
-  </VDialog>
+  <!-- Modal para agregar usuarios -->
+  <VDialog v-model="userModalOpen" max-width="800">
+  <VCard>
+    <VCardTitle class="d-flex justify-space-between align-center pa-4">
+      Buscar usuarios
+      <VBtn icon="mdi-close" variant="text" @click="userModalOpen = false" />
+    </VCardTitle>
+
+    <VCardText>
+      <VTextField
+        v-model="searchQuery"
+        label="Buscar por nombre o email (mínimo 4 caracteres)"
+        prepend-inner-icon="mdi-magnify"
+        :loading="isSearching"
+        clearable
+        class="mb-4"
+        @input="handleSearch"
+      />
+
+      <VList lines="two" v-if="searchResults.length > 0">
+        <VListItem
+          v-for="user in searchResults"
+          :key="user.wylexId"
+          border
+        >
+          <VListItemTitle>
+            {{ user.first_name }} {{ user.last_name }}
+          </VListItemTitle>
+          <VListItemSubtitle class="mt-1">
+            <span class="text-xs text-disabled">{{ user.email }}</span>
+          </VListItemSubtitle>
+          <template #append>
+            <VBtn
+              color="primary"
+              size="small"
+              @click="handleAddSpecificUser(user)"
+            >
+              Agregar
+            </VBtn>
+          </template>
+        </VListItem>
+      </VList>
+
+      <VAlert
+        v-else-if="searchQuery && !isSearching && searchQuery.length >= 4"
+        type="info"
+        class="mt-4"
+      >
+        No se encontraron resultados
+      </VAlert>
+      
+      <VAlert
+        v-else-if="searchQuery && searchQuery.length < 4"
+        type="info"
+        class="mt-4"
+      >
+        Ingresa al menos 4 caracteres para buscar
+      </VAlert>
+    </VCardText>
+  </VCard>
+</VDialog>
 </template>
   
 <script setup>
@@ -736,6 +782,14 @@ import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasLis
 import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import 'vue3-form-wizard/dist/style.css';
+
+const userModalOpen = ref(false)
+
+function handleAddUser() {
+  searchQuery.value = '' // Limpiar búsqueda anterior
+  searchResults.value = [] // Limpiar resultados anteriores
+  userModalOpen.value = true
+}
 
 const router = useRouter();
 const currentTab = ref('tab-lista');
@@ -746,6 +800,7 @@ const dataCampaigns = ref([]);
 const dataCountry = ref([]);
 const cityList = ref([]);
 const countryList = ref([]);
+
 
 const modoPersonalizado = ref(false);
 
@@ -1296,9 +1351,10 @@ async function onComplete() {
     "position": posicion.value.join(","),
     "participantes": modoPersonalizado.value ? "personalizado" : "filtrado",
     "otroValor": dataUsuarios.value?.total || 0,
-    "userId": modoPersonalizado.value ? 
-      (filteredUsers.value?.map(user => user.wylexId) || []) : 
-      (dataUsuarios.value?.userIds || []),
+    // "userId": modoPersonalizado.value ? 
+    //   (filteredUsers.value?.map(user => user.wylexId) || []) : 
+    //   (dataUsuarios.value?.userIds || []),
+    "userId": modoPersonalizado.value ? userIds.value : (dataUsuarios.value?.userIds || []),
     "userIdRemove": [],
     "userIdAdd": [],
     "statusCampaign": true,
@@ -1750,6 +1806,8 @@ const filterLocal = ref('');
 const currentPageLocal = ref(1);
 // const timeoutId = ref(null);
 const filteredUsers = ref([]);
+const userIds = ref([]); // Nuevo array para guardar solo los IDs
+
 const showSearchDialog = ref(false);
 const searchQuery = ref('');
 const searchResults = ref([]);
@@ -1761,6 +1819,8 @@ const snackbar = ref({
   text: '',
   color: 'success'
 });
+
+
 const usersData = ref([]); // Para almacenar la lista de usuarios
 
 // Agregar estos métodos
@@ -1784,41 +1844,42 @@ async function refreshUserData() {
   }
 }
 
-async function handleAddSpecificUser(user) {
-  loadingAdd.value = true;
-  try {
-    const response = await fetch(`https://ads-service.vercel.app/campaign/add-user/${tempCampaignId.value}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        userId: user.wylexId
-      })
-    });
+// Función para la búsqueda
+async function handleSearch() {
+  if (searchQuery.value.length < 4) return
 
-    const data = await response.json();
+  isSearching.value = true
+  try {
+    const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${encodeURIComponent(searchQuery.value)}`)
+    const data = await response.json()
+    
     if (data.resp) {
-      snackbar.value = {
-        show: true,
-        text: 'Usuario agregado exitosamente',
-        color: 'success'
-      };
-      await refreshUserData();
+      searchResults.value = data.data
     } else {
-      throw new Error(data.error || 'Error al agregar usuario');
+      searchResults.value = []
     }
   } catch (error) {
-    snackbar.value = {
-      show: true,
-      text: `Error: ${error.message}`,
-      color: 'error'
-    };
+    console.error('Error en búsqueda:', error)
+    searchResults.value = []
   } finally {
-    loadingAdd.value = false;
+    isSearching.value = false
   }
 }
 
+// Función para agregar usuario desde la búsqueda
+function handleAddSpecificUser(user) {
+  // Verificar si ya existe
+  if (!filteredUsers.value.some(u => u.wylexId === user.wylexId)) {
+    filteredUsers.value.push(user)
+    userIds.value.push(user.wylexId)
+    
+    snackbar.value = {
+      show: true,
+      text: 'Usuario agregado exitosamente',
+      color: 'success'
+    }
+  }
+}
 
 // Agregar computed properties
 const totalPages = computed(() => {
@@ -1826,11 +1887,20 @@ const totalPages = computed(() => {
 });
 
 const currentUsers = computed(() => {
-  const start = (currentPageLocal.value - 1) * 10;
-  const end = start + 10;
-  return filteredUsers.value.slice(start, end);
-});
-
+  const search = filterLocal.value.toLowerCase()
+  let filtered = filteredUsers.value
+  
+  if (search) {
+    filtered = filtered.filter(user => {
+      const fullName = `${user.first_name || ''} ${user.last_name || ''}`.toLowerCase()
+      const email = (user.email || '').toLowerCase()
+      return fullName.includes(search) || email.includes(search)
+    })
+  }
+  
+  const start = (currentPageLocal.value - 1) * 10
+  return filtered.slice(start, start + 10)
+})
 
 // Agregar estas variables ref
 const tempCampaignId = ref('');
@@ -1868,102 +1938,171 @@ function triggerFileInput() {
 }
 
 // Función actualizada para manejar el archivo CSV
+// async function handleFileChange(event) {
+//   const file = event.target.files[0];
+//   if (!file) return;
+
+//   if (!file.name.endsWith('.csv')) {
+//     snackbar.value = {
+//       show: true,
+//       text: 'Por favor, selecciona un archivo CSV',
+//       color: 'error'
+//     };
+//     event.target.value = '';
+//     return;
+//   }
+
+//   isUploading.value = true;
+
+//   try {
+//     const Papa = (await import('papaparse')).default;
+
+//     Papa.parse(file, {
+//       header: true,
+//       complete: async (result) => {
+//         try {
+//           if (!result.data || !result.data.length) {
+//             throw new Error('El archivo está vacío');
+//           }
+
+//           console.log('Datos del CSV:', result.data);
+
+//           const userIds = result.data
+//             .filter(row => row.id && row.id.trim() !== '')
+//             .map(row => parseInt(row.id))
+//             .filter(id => !isNaN(id));
+
+//           console.log('IDs filtrados:', userIds);
+
+//           if (userIds.length === 0) {
+//             throw new Error('No se encontraron IDs válidos en el archivo');
+//           }
+
+//           if (userIds.length > 30000) {
+//             throw new Error('El máximo es 30,000 usuarios');
+//           }
+
+//           // Procesamos los usuarios en lotes de 1000 para evitar sobrecarga
+//           const batchSize = 1000;
+//           for (let i = 0; i < userIds.length; i += batchSize) {
+//             const batch = userIds.slice(i, i + batchSize);
+//             await updateBulkUsers(batch);
+            
+//             // Actualizamos el progreso
+//             snackbar.value = {
+//               show: true,
+//               text: `Procesando... ${Math.min((i + batchSize), userIds.length)} de ${userIds.length} usuarios`,
+//               color: 'info'
+//             };
+//           }
+
+//           snackbar.value = {
+//             show: true,
+//             text: `${userIds.length} usuarios procesados exitosamente`,
+//             color: 'success'
+//           };
+
+//           await refreshUserData();
+//         } catch (error) {
+//           console.error('Error procesando archivo:', error);
+//           snackbar.value = {
+//             show: true,
+//             text: `Error: ${error.message}`,
+//             color: 'error'
+//           };
+//         }
+//       },
+//       error: (error) => {
+//         console.error('Error parsing CSV:', error);
+//         snackbar.value = {
+//           show: true,
+//           text: `Error al procesar el archivo: ${error.message}`,
+//           color: 'error'
+//         };
+//       }
+//     });
+//   } catch (error) {
+//     console.error('Error general:', error);
+//     snackbar.value = {
+//       show: true,
+//       text: `Error: ${error.message}`,
+//       color: 'error'
+//     };
+//   } finally {
+//     isUploading.value = false;
+//     event.target.value = '';
+//   }
+// }
+
+// Función actualizada para manejar el CSV
 async function handleFileChange(event) {
-  const file = event.target.files[0];
-  if (!file) return;
+  const file = event.target.files[0]
+  if (!file) return
 
   if (!file.name.endsWith('.csv')) {
     snackbar.value = {
       show: true,
       text: 'Por favor, selecciona un archivo CSV',
       color: 'error'
-    };
-    event.target.value = '';
-    return;
+    }
+    event.target.value = ''
+    return
   }
-
-  isUploading.value = true;
 
   try {
     const Papa = (await import('papaparse')).default;
 
     Papa.parse(file, {
       header: true,
-      complete: async (result) => {
+      complete: (results) => {
         try {
-          if (!result.data || !result.data.length) {
-            throw new Error('El archivo está vacío');
+          if (!results.data || !results.data.length) {
+            throw new Error('El archivo está vacío')
           }
 
-          console.log('Datos del CSV:', result.data);
-
-          const userIds = result.data
+          // Procesar los datos del CSV
+          const validUsers = results.data
             .filter(row => row.id && row.id.trim() !== '')
-            .map(row => parseInt(row.id))
-            .filter(id => !isNaN(id));
+            .map(row => ({
+              wylexId: parseInt(row.id),
+              firstname: row.firstname || '',
+              last_name: row.last_name || '',
+              email: row.email || ''
+            }))
+            .filter(user => !isNaN(user.wylexId))
 
-          console.log('IDs filtrados:', userIds);
-
-          if (userIds.length === 0) {
-            throw new Error('No se encontraron IDs válidos en el archivo');
+          if (validUsers.length === 0) {
+            throw new Error('No se encontraron usuarios válidos')
           }
 
-          if (userIds.length > 30000) {
-            throw new Error('El máximo es 30,000 usuarios');
-          }
-
-          // Procesamos los usuarios en lotes de 1000 para evitar sobrecarga
-          const batchSize = 1000;
-          for (let i = 0; i < userIds.length; i += batchSize) {
-            const batch = userIds.slice(i, i + batchSize);
-            await updateBulkUsers(batch);
-            
-            // Actualizamos el progreso
-            snackbar.value = {
-              show: true,
-              text: `Procesando... ${Math.min((i + batchSize), userIds.length)} de ${userIds.length} usuarios`,
-              color: 'info'
-            };
-          }
+          // Actualizar la lista de usuarios y los IDs
+          filteredUsers.value = validUsers
+          userIds.value = validUsers.map(user => user.wylexId)
 
           snackbar.value = {
             show: true,
-            text: `${userIds.length} usuarios procesados exitosamente`,
+            text: `${validUsers.length} usuarios cargados exitosamente`,
             color: 'success'
-          };
-
-          await refreshUserData();
+          }
         } catch (error) {
-          console.error('Error procesando archivo:', error);
           snackbar.value = {
             show: true,
-            text: `Error: ${error.message}`,
+            text: error.message,
             color: 'error'
-          };
+          }
         }
-      },
-      error: (error) => {
-        console.error('Error parsing CSV:', error);
-        snackbar.value = {
-          show: true,
-          text: `Error al procesar el archivo: ${error.message}`,
-          color: 'error'
-        };
       }
-    });
+    })
   } catch (error) {
-    console.error('Error general:', error);
     snackbar.value = {
       show: true,
       text: `Error: ${error.message}`,
       color: 'error'
-    };
+    }
   } finally {
-    isUploading.value = false;
-    event.target.value = '';
+    event.target.value = ''
   }
 }
-
 // Función de exportación actualizada
 async function handleExport() {
   if (!hasUsers.value) return;
@@ -1994,4 +2133,6 @@ async function handleExport() {
     };
   }
 }
+
+
 </script>
