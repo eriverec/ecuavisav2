@@ -191,12 +191,67 @@ function eventoEnvivoManager() {
     iframe.src = src + separator + base64Params;
   }
 
-  function fetchHorarioEnvivo() {
-    fetch(apiUrl)
-      .then(response => response.json())
-      .then(data => {
+  async function fetchHorarioEnvivoRespaldo() {
+    try{
+      // const response = await fetch(apiUrl, {
+      //   method: 'GET',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   timeout: 8000 // 8 segundos (en milisegundos)
+      // });
 
-        const fechaActual = new Date();
+      // if (!response.ok) {
+      //     console.error(`Error: Código de estado ${response.status}`);
+      //     return null;
+      // }
+      // const data = await response.json();
+      return {"html":{"value":"<iframe id=\"vrudo\" class=\"vrudo\" src=\"//rudo.video/live/ecuavisa\" width=\"600\" height=\"338\" allowfullscreen=\"true\" frameborder=\"0\" scrolling=\"no\" allow=\"autoplay; fullscreen\"></iframe>"},"forzado":{"estado":false,"titulo":"En Vivo","label":"En Vivo"},"horarios":[{"dia":0,"estadoDia":true,"horas":[{"tituloPrograma":"Hacia un nuevo estilo de vida","estadoHorario":true,"inicio":"08:30","fin":"09:30"},{"tituloPrograma":"Políticamente Correcto","estadoHorario":true,"inicio":"10:30","fin":"11:30"},{"tituloPrograma":"Tortugas Ninja 1","estadoHorario":true,"inicio":"15:00","fin":"17:00"},{"tituloPrograma":" Armageddon","estadoHorario":false,"inicio":"17:00","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:00"},{"tituloPrograma":"Políticamente Correcto","estadoHorario":false,"inicio":"20:00","fin":"20:50"},{"tituloPrograma":"Tarzan","estadoHorario":true,"inicio":"20:00","fin":"22:00"},{"tituloPrograma":"La Garciamanía","estadoHorario":true,"inicio":"22:00","fin":"23:59"}]},{"dia":1,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En Contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00"},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00"},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30","iframe":""},{"tituloPrograma":"Soy tu dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"Golden Boy ","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"Los García","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":2,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30","iframe":""},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00","iframe":""},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En Contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00","iframe":""},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00","iframe":""},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30"},{"tituloPrograma":"Soy tu dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"Golden Boy","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"Los García","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":3,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En Contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00","iframe":""},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00"},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el Dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30"},{"tituloPrograma":"Soy tu Dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"Golden Boy ","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"Los García","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":4,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En Contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00"},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00"},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el Dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30"},{"tituloPrograma":"Soy tu Dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"Golden Boy","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"Los García","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":5,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00"},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00"},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el Dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30"},{"tituloPrograma":"Soy tu Dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"GOLDEN BOY","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"LOS GARCÍA","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":6,"estadoDia":true,"horas":[{"tituloPrograma":"Especial Papa Francisco","estadoHorario":true,"inicio":"09:30","fin":"10:00"},{"tituloPrograma":"Misa de Acción de Gracias","estadoHorario":true,"inicio":"10:00","fin":"12:00"},{"tituloPrograma":"Little Rascals 2","estadoHorario":true,"inicio":"17:00","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"19:30"},{"tituloPrograma":"Bad Boys For Life","estadoHorario":true,"inicio":"19:30","fin":"21:30"},{"tituloPrograma":"Detonator","estadoHorario":true,"inicio":"21:30","fin":"23:30"},{"tituloPrograma":"Lo invisible","estadoHorario":true,"inicio":"23:30","fin":"23:59"}]}]};
+    }catch(error){
+      console.log(error);
+      return null;
+    }
+  }
+
+  async function fetchHorarioEnvivo() {
+    try{
+      const response = await fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        timeout: 8000 // 8 segundos (en milisegundos)
+      });
+
+      if (!response.ok) {
+          console.error(`Error: Código de estado ${response.status}`);
+          const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
+          procesosHorarioEnvivo(responseRespaldoData);
+
+          setTimeout(fetchHorarioEnvivo, 120000); //comentado 23/octubre/2023 - 11:50AM
+          return null;
+      }
+
+      const data = await response.json();
+      procesosHorarioEnvivo(data);
+
+      setTimeout(fetchHorarioEnvivo, 120000); //comentado 23/octubre/2023 - 11:50AM
+      return true;
+    }catch(error){
+      const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
+      console.log(responseRespaldoData)
+      procesosHorarioEnvivo(responseRespaldoData);
+
+      console.log(error);
+      setTimeout(fetchHorarioEnvivo, 120000); //comentado 23/octubre/2023 - 11:50AM
+      return null;
+    }
+  }
+
+  function procesosHorarioEnvivo(data){
+    try{
+      console.log("Entró", data)
+      const fechaActual = new Date();
         fechaActual.setUTCHours(fechaActual.getUTCHours() - 5); // Ajustar a la zona horaria de UTC-5 (Ecuador).
         const diaSemana = fechaActual.getUTCDay();
         const horaActual = (fechaActual.getUTCHours());
@@ -229,7 +284,7 @@ function eventoEnvivoManager() {
                     }
                   }
                 }
-
+                console.log("programasHoy", programasHoy)
                 if (programasHoy.length > 0) {
                   programasHoy.forEach(programa => {
                     if (title_programa) {
@@ -344,12 +399,10 @@ function eventoEnvivoManager() {
 
           console.log("Forzado:", forzado);
         }
-      })
-      .catch(error => {
-        console.error("Error al obtener los datos:", error);
-      });
-
-    setTimeout(fetchHorarioEnvivo, 120000); //comentado 23/octubre/2023 - 11:50AM
+    }catch(error){
+      console.log(error)
+      return null;
+    }
   }
 
   // Llamar a la función para obtener y procesar los datos inicialmente
