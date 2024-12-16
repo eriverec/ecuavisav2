@@ -164,38 +164,311 @@ function eventRadioManager() {
 
 }
 
+////////////////////////FUNCION QUE ABARCA EL PROCESO DEL ENVIVO Y EL ENVIVO QUITO
+function procesosHorarioEnvivo(json = {}){
+  var { data = null, apiUrl = "", enVivoRedy = null, textIndicador = null, btnTelcomunidad = null, btnTelevistazo7pm = null, title_programa = null, playerembed = null, fondito__ = null } = json;
+  try{
+
+    var iframeIndividual = '';
+    function newValueIframe(x) {
+      iframeIndividual = x;
+    }
+
+    //nueva funcion envivo 2024
+    function paramUserVideo() {
+      const iframe = document.getElementById("vrudo");
+      const src = iframe.src;
+      const separator = src.indexOf("?") > -1 ? "&" : "?";
+      const valUser = ECUAVISA_EC.USER_data('id');
+      // Concatenar el valor del usuario y convertir todo a base64
+      var base64Params = btoa("user=" + valUser);
+      iframe.src = src + separator + base64Params;
+    }
+
+    const fechaActual = new Date();
+    fechaActual.setUTCHours(fechaActual.getUTCHours() - 5); // Ajustar a la zona horaria de UTC-5 (Ecuador).
+    const diaSemana = fechaActual.getUTCDay();
+    const horaActual = (fechaActual.getUTCHours());
+    const minutosActuales = (fechaActual.getUTCMinutes());
+    const forzado = data.forzado.estado;
+    const htmlIframe = data.html.value;
+
+    if (!forzado) {
+      for (const dia of data.horarios) {
+        if (dia.estadoDia) {
+          if (dia.dia === diaSemana) {
+            let programasHoy = [];
+            for (const hora of dia.horas) {
+              if (hora.estadoHorario) {
+                const inicioHora = parseInt(hora.inicio.split(":")[0]);
+                const inicioMinutos = parseInt(hora.inicio.split(":")[1]);
+                const finHora = parseInt(hora.fin.split(":")[0]);
+                const finMinutos = parseInt(hora.fin.split(":")[1]);
+
+
+                if (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) {
+                  if (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos)) {
+                    programasHoy.push(hora.tituloPrograma);
+                    var iframeIndividual2 = hora.iframe;
+                    if (iframeIndividual2) {
+                      newValueIframe(iframeIndividual2);
+                    }
+                    // console.log("yaaa-arriba", iframeIndividual);
+                  }
+                }
+              }
+            }
+            console.log("programasHoy", programasHoy)
+            if (programasHoy.length > 0) {
+              programasHoy.forEach(programa => {
+                if (title_programa) {
+                  title_programa.innerHTML = programa;
+                  title_programa.style.display = 'block';
+                }
+                if (fondito__) {
+                  fondito__.style.display = "none";
+                }
+                if (playerembed) {
+                  playerembed.style.display = 'block';
+                  if (!playerembed?.querySelector('iframe')) {
+                    if (playerembed) {
+                      // playerembed.innerHTML = htmlIframe;
+
+                      // iframeIndividual = iframeIndividual
+                      // console.log("yaaa-abajo", iframeIndividual);
+                      if (iframeIndividual != '') {
+                        console.log("si hay iframe individual", iframeIndividual);
+                        setTimeout(() => {
+                          playerembed.innerHTML = iframeIndividual;
+                          paramUserVideo();
+                        }, 1000);
+
+                      } else {
+                        console.log("no hay iframe individual");
+                        playerembed.innerHTML = htmlIframe;
+                        paramUserVideo();
+                        console.log(htmlIframe);
+                      }
+                    }
+                  }
+                }
+                if (enVivoRedy) {
+                  enVivoRedy.style.display = 'flex';
+                }
+                if (programa === "Televistazo en la comunidad") {
+                  if (btnTelcomunidad) {
+                    btnTelcomunidad.style.display = "block";
+                  }
+                }
+
+                //Televistazo 7PM - nuevo requerimiento.
+                if (programa === "Televistazo 7PM") {
+                  if (btnTelevistazo7pm) {
+                    btnTelevistazo7pm.style.display = "block";
+                  }
+                }
+              });
+            } else {
+              if (title_programa) {
+                title_programa.innerHTML = '';
+                title_programa.style.display = 'none';
+              }
+              if (fondito__) {
+                fondito__.style.display = "block";
+              }
+              if (playerembed) {
+                playerembed.style.display = 'none';
+                if (playerembed?.querySelector('iframe')) {
+                  playerEmbed.querySelector('iframe').remove();
+                }
+              }
+              if (enVivoRedy) {
+                enVivoRedy.style.display = 'none';
+              }
+              if (btnTelcomunidad) {
+                btnTelcomunidad.style.display = "none";
+              }
+
+              if (btnTelevistazo7pm) {
+                btnTelevistazo7pm.style.display = "none";
+              }
+            }
+          } else { }
+        } else {
+          if (fondito__) { fondito__.style.display = "block"; }
+          if (title_programa) {
+            title_programa.innerHTML = '';
+            title_programa.style.display = 'none';
+          }
+          if (playerembed) {
+            playerembed.style.display = 'none';
+            if (playerembed?.querySelector('iframe')) {
+              playerEmbed.querySelector('iframe').remove();
+            }
+
+          }
+          if (enVivoRedy) { enVivoRedy.style.display = 'none'; }
+        }
+      }
+    } else {
+      const dataTitulo = data.forzado.titulo;
+      const datalabel = data.forzado.label;
+
+      if (title_programa) {
+        title_programa.innerHTML = dataTitulo;
+      }
+
+      if (!playerembed?.querySelector('iframe')) {
+        if (playerembed) {
+          playerembed.innerHTML = htmlIframe;
+        }
+      }
+
+      if (playerembed && fondito__) {
+        if(textIndicador){
+          textIndicador.innerHTML = datalabel;
+        }
+        
+        playerembed.style.display = 'block';
+        fondito__.style.display = "none";
+      }
+      if (enVivoRedy) { enVivoRedy.style.display = 'flex'; }
+
+      console.log("Forzado:", forzado);
+    }
+  }catch(error){
+    console.log(error)
+    return null;
+  }
+}
+////////////////////////FUNCION QUE ABARCA EL PROCESO DEL ENVIVO Y EL ENVIVO QUITO
+
 function eventoEnvivoManager() {
-  // const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivo";
-  const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioEnvivo";
-  const enVivoRedy = document.querySelector('.enVivoRedy');
-  const textIndicador = document.querySelector('.enVivoRedy .liveIndicator .enVivoText');
-  const btnTelcomunidad = document.querySelector('#btnTelcomunidad');
-  const btnTelevistazo7pm = document.querySelector('#btnTelevistazo7pm');
-  const title_programa = document.querySelector('.title_programa');
-  const playerembed = document.querySelector('#playerembed');
-  const fondito__ = document.querySelector('#fondito__');
+  try{
+    // const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivo";
+    const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioEnvivo";
+    const enVivoRedy = document.querySelector('.enVivoRedy');
+    const textIndicador = document.querySelector('.enVivoRedy .liveIndicator .enVivoText');
+    const btnTelcomunidad = document.querySelector('#btnTelcomunidad');
+    const btnTelevistazo7pm = document.querySelector('#btnTelevistazo7pm');
+    const title_programa = document.querySelector('.title_programa');
+    const playerembed = document.querySelector('#playerembed');
+    const fondito__ = document.querySelector('#fondito__');
+    const tiempoEsperaEnvivo = 120000;
 
-  var iframeIndividual = '';
-  function newValueIframe(x) {
-    iframeIndividual = x;
-  }
+    async function fetchHorarioEnvivoRespaldo() {
+      const variableRespaldo = {"html":{"value":"<iframe id=\"vrudo\" class=\"vrudo\" src=\"//rudo.video/live/ecuavisa\" width=\"600\" height=\"338\" allowfullscreen=\"true\" frameborder=\"0\" scrolling=\"no\" allow=\"autoplay; fullscreen\"></iframe>"},"forzado":{"estado":false,"titulo":"En Vivo","label":"En Vivo"},"horarios":[{"dia":0,"estadoDia":true,"horas":[{"tituloPrograma":"Hacia un nuevo estilo de vida","estadoHorario":true,"inicio":"08:30","fin":"09:30"},{"tituloPrograma":"Políticamente Correcto","estadoHorario":true,"inicio":"10:30","fin":"11:30"},{"tituloPrograma":"Tortugas Ninja 1","estadoHorario":true,"inicio":"15:00","fin":"17:00"},{"tituloPrograma":" Armageddon","estadoHorario":false,"inicio":"17:00","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:00"},{"tituloPrograma":"Políticamente Correcto","estadoHorario":false,"inicio":"20:00","fin":"20:50"},{"tituloPrograma":"Tarzan","estadoHorario":true,"inicio":"20:00","fin":"22:00"},{"tituloPrograma":"La Garciamanía","estadoHorario":true,"inicio":"22:00","fin":"23:59"}]},{"dia":1,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En Contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00"},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00"},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30","iframe":""},{"tituloPrograma":"Soy tu dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"Golden Boy ","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"Los García","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":2,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30","iframe":""},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00","iframe":""},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En Contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00","iframe":""},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00","iframe":""},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30"},{"tituloPrograma":"Soy tu dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"Golden Boy","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"Los García","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":3,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En Contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00","iframe":""},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00"},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el Dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30"},{"tituloPrograma":"Soy tu Dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"Golden Boy ","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"Los García","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":4,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En Contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00"},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00"},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el Dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30"},{"tituloPrograma":"Soy tu Dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"Golden Boy","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"Los García","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":5,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00"},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00"},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el Dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30"},{"tituloPrograma":"Soy tu Dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"GOLDEN BOY","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"LOS GARCÍA","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":6,"estadoDia":true,"horas":[{"tituloPrograma":"Especial Papa Francisco","estadoHorario":true,"inicio":"09:30","fin":"10:00"},{"tituloPrograma":"Misa de Acción de Gracias","estadoHorario":true,"inicio":"10:00","fin":"12:00"},{"tituloPrograma":"Little Rascals 2","estadoHorario":true,"inicio":"17:00","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"19:30"},{"tituloPrograma":"Bad Boys For Life","estadoHorario":true,"inicio":"19:30","fin":"21:30"},{"tituloPrograma":"Detonator","estadoHorario":true,"inicio":"21:30","fin":"23:30"},{"tituloPrograma":"Lo invisible","estadoHorario":true,"inicio":"23:30","fin":"23:59"}]}]};
+      
+      try{
+        const apiUrlRespaldo = `${ECUAVISA_EC.URL.dominioTemporal}horario/normal.php`;
+        const response = await fetch(apiUrlRespaldo, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          timeout: 8000 // 8 segundos (en milisegundos)
+        });
 
-  //nueva funcion envivo 2024
-  function paramUserVideo() {
-    const iframe = document.getElementById("vrudo");
-    const src = iframe.src;
-    const separator = src.indexOf("?") > -1 ? "&" : "?";
-    const valUser = ECUAVISA_EC.USER_data('id');
-    // Concatenar el valor del usuario y convertir todo a base64
-    var base64Params = btoa("user=" + valUser);
-    iframe.src = src + separator + base64Params;
+        if (!response.ok) {
+            console.error(`Error: Código de estado ${response.status}`);
+            return variableRespaldo;
+        }
+        const data = await response.json();
+        return data;
+      }catch(error){
+        console.log(error);
+        return variableRespaldo;
+      }
+    }
+
+    async function fetchHorarioEnvivo() {
+      try{
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          timeout: 8000 // 8 segundos (en milisegundos)
+        });
+
+        if (!response.ok) {
+            console.error(`Error: Código de estado ${response.status}`);
+            const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
+            
+            procesosHorarioEnvivo({
+              data: responseRespaldoData,
+              apiUrl,
+              enVivoRedy,
+              textIndicador,
+              btnTelcomunidad,
+              btnTelevistazo7pm,
+              title_programa,
+              playerembed,
+              fondito__,
+            });
+
+            setTimeout(fetchHorarioEnvivo, tiempoEsperaEnvivo); //comentado 23/octubre/2023 - 11:50AM
+            return null;
+        }
+
+        const data = await response.json();
+        procesosHorarioEnvivo({
+          data: data,
+          apiUrl,
+          enVivoRedy,
+          textIndicador,
+          btnTelcomunidad,
+          btnTelevistazo7pm,
+          title_programa,
+          playerembed,
+          fondito__,
+        });
+
+        setTimeout(fetchHorarioEnvivo, tiempoEsperaEnvivo); //comentado 23/octubre/2023 - 11:50AM
+        return true;
+      }catch(error){
+        const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
+
+        procesosHorarioEnvivo({
+          data: responseRespaldoData,
+          apiUrl,
+          enVivoRedy,
+          textIndicador,
+          btnTelcomunidad,
+          btnTelevistazo7pm,
+          title_programa,
+          playerembed,
+          fondito__,
+        });
+
+        console.log(error);
+        setTimeout(fetchHorarioEnvivo, tiempoEsperaEnvivo); //comentado 23/octubre/2023 - 11:50AM
+        return null;
+      }
+    }
+
+    // Llamar a la función para obtener y procesar los datos inicialmente
+    fetchHorarioEnvivo();
+  }catch(error){
+    console.log(error)
+    return null;
   }
+}
+
+function eventoEnvivoManagerQuito() {
+  // const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivoQuito";
+  const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioEnvivoQuito";
+  const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad_quito');
+  const title_programa_quito = document.querySelector('.title_programa_quito');
+  const playerembed_quito = document.querySelector('#playerembed_quito');
+  const fondito__quito = document.querySelector('#fondito__quito');
+  const tiempoEsperaEnvivo = 120000;
 
   async function fetchHorarioEnvivoRespaldo() {
-    const variableRespaldo = {"html":{"value":"<iframe id=\"vrudo\" class=\"vrudo\" src=\"//rudo.video/live/ecuavisa\" width=\"600\" height=\"338\" allowfullscreen=\"true\" frameborder=\"0\" scrolling=\"no\" allow=\"autoplay; fullscreen\"></iframe>"},"forzado":{"estado":false,"titulo":"En Vivo","label":"En Vivo"},"horarios":[{"dia":0,"estadoDia":true,"horas":[{"tituloPrograma":"Hacia un nuevo estilo de vida","estadoHorario":true,"inicio":"08:30","fin":"09:30"},{"tituloPrograma":"Políticamente Correcto","estadoHorario":true,"inicio":"10:30","fin":"11:30"},{"tituloPrograma":"Tortugas Ninja 1","estadoHorario":true,"inicio":"15:00","fin":"17:00"},{"tituloPrograma":" Armageddon","estadoHorario":false,"inicio":"17:00","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:00"},{"tituloPrograma":"Políticamente Correcto","estadoHorario":false,"inicio":"20:00","fin":"20:50"},{"tituloPrograma":"Tarzan","estadoHorario":true,"inicio":"20:00","fin":"22:00"},{"tituloPrograma":"La Garciamanía","estadoHorario":true,"inicio":"22:00","fin":"23:59"}]},{"dia":1,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En Contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00"},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00"},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30","iframe":""},{"tituloPrograma":"Soy tu dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"Golden Boy ","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"Los García","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":2,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30","iframe":""},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00","iframe":""},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En Contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00","iframe":""},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00","iframe":""},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30"},{"tituloPrograma":"Soy tu dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"Golden Boy","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"Los García","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":3,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En Contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00","iframe":""},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00"},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el Dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30"},{"tituloPrograma":"Soy tu Dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"Golden Boy ","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"Los García","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":4,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En Contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00"},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00"},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el Dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30"},{"tituloPrograma":"Soy tu Dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"Golden Boy","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"Los García","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":5,"estadoDia":true,"horas":[{"tituloPrograma":"En vivo","estadoHorario":true,"inicio":"00:00","fin":"01:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"06:55"},{"tituloPrograma":"Contacto Directo","estadoHorario":true,"inicio":"06:55","fin":"07:30"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Carita de Ángel","estadoHorario":true,"inicio":"09:00","fin":"10:30"},{"tituloPrograma":"En contacto","estadoHorario":true,"inicio":"10:30","fin":"13:00"},{"tituloPrograma":"Televistazo 13h00","estadoHorario":true,"inicio":"13:00","fin":"14:00"},{"tituloPrograma":"Los Hackers del Espectáculo","estadoHorario":true,"inicio":"14:00","fin":"15:30"},{"tituloPrograma":"Como dice el Dicho","estadoHorario":true,"inicio":"15:30","fin":"16:30","iframe":""},{"tituloPrograma":"Historias de la Virgen Morena","estadoHorario":true,"inicio":"16:30","fin":"17:30"},{"tituloPrograma":"Soy tu Dueña","estadoHorario":true,"inicio":"17:30","fin":"18:15","iframe":""},{"tituloPrograma":"Teresa","estadoHorario":true,"inicio":"18:15","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:30"},{"tituloPrograma":"GOLDEN BOY","estadoHorario":true,"inicio":"20:30","fin":"21:00"},{"tituloPrograma":"LOS GARCÍA","estadoHorario":true,"inicio":"21:00","fin":"23:00"},{"tituloPrograma":"Pasión de Gavilanes","estadoHorario":true,"inicio":"23:00","fin":"23:59"}]},{"dia":6,"estadoDia":true,"horas":[{"tituloPrograma":"Especial Papa Francisco","estadoHorario":true,"inicio":"09:30","fin":"10:00"},{"tituloPrograma":"Misa de Acción de Gracias","estadoHorario":true,"inicio":"10:00","fin":"12:00"},{"tituloPrograma":"Little Rascals 2","estadoHorario":true,"inicio":"17:00","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"19:30"},{"tituloPrograma":"Bad Boys For Life","estadoHorario":true,"inicio":"19:30","fin":"21:30"},{"tituloPrograma":"Detonator","estadoHorario":true,"inicio":"21:30","fin":"23:30"},{"tituloPrograma":"Lo invisible","estadoHorario":true,"inicio":"23:30","fin":"23:59"}]}]};
+    const variableRespaldo = {"html":{"value":"<iframe id=\"vrudo\" class=\"vrudo\" src=\"//rudo.video/live/ecuavisaqo\" width=\"600\" height=\"338\" allowfullscreen=\"true\" frameborder=\"0\" scrolling=\"no\" allow=\"autoplay; fullscreen\"></iframe>"},"forzado":{"estado":false,"titulo":"En vivo","label":"En Vivo"},"horarios":[{"dia":0,"estadoDia":false,"horas":[{"tituloPrograma":"Políticamente Correcto","estadoHorario":true,"inicio":"10:30","fin":"11:30"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:00"}]},{"dia":1,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":2,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":3,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":4,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":5,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":6,"estadoDia":false,"horas":[{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"19:30"}]}]};
     
     try{
-      const apiUrlRespaldo = `${ECUAVISA_EC.URL.dominioTemporal}horario/normal.php`;
+      const apiUrlRespaldo = `${ECUAVISA_EC.URL.dominioTemporal}horario/quito.php`;
       const response = await fetch(apiUrlRespaldo, {
         method: 'GET',
         headers: {
@@ -216,7 +489,7 @@ function eventoEnvivoManager() {
     }
   }
 
-  async function fetchHorarioEnvivo() {
+  async function fetchHorarioEnvivoQuito() {
     try{
       const response = await fetch(apiUrl, {
         method: 'GET',
@@ -229,348 +502,70 @@ function eventoEnvivoManager() {
       if (!response.ok) {
           console.error(`Error: Código de estado ${response.status}`);
           const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
-          procesosHorarioEnvivo(responseRespaldoData);
+          
+          procesosHorarioEnvivo({
+            data: responseRespaldoData,
+            apiUrl,
+            enVivoRedy: null,
+            textIndicador:null,
+            btnTelcomunidad: btnTelcomunidad_quito,
+            btnTelevistazo7pm: null,
+            title_programa:title_programa_quito,
+            playerembed:playerembed_quito,
+            fondito__:fondito__quito,
+          });
 
-          setTimeout(fetchHorarioEnvivo, 120000); //comentado 23/octubre/2023 - 11:50AM
+          setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo); //comentado 23/octubre/2023 - 11:50AM
           return null;
       }
 
       const data = await response.json();
-      procesosHorarioEnvivo(data);
+      
+      procesosHorarioEnvivo({
+        data: data,
+        apiUrl,
+        enVivoRedy: null,
+        textIndicador:null,
+        btnTelcomunidad: btnTelcomunidad_quito,
+        btnTelevistazo7pm: null,
+        title_programa:title_programa_quito,
+        playerembed:playerembed_quito,
+        fondito__:fondito__quito,
+      });
 
-      setTimeout(fetchHorarioEnvivo, 120000); //comentado 23/octubre/2023 - 11:50AM
+      setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo); //comentado 23/octubre/2023 - 11:50AM
       return true;
     }catch(error){
       const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
-      console.log(responseRespaldoData)
-      procesosHorarioEnvivo(responseRespaldoData);
 
-      console.log(error);
-      setTimeout(fetchHorarioEnvivo, 120000); //comentado 23/octubre/2023 - 11:50AM
-      return null;
-    }
-  }
-
-  function procesosHorarioEnvivo(data){
-    try{
-      const fechaActual = new Date();
-        fechaActual.setUTCHours(fechaActual.getUTCHours() - 5); // Ajustar a la zona horaria de UTC-5 (Ecuador).
-        const diaSemana = fechaActual.getUTCDay();
-        const horaActual = (fechaActual.getUTCHours());
-        const minutosActuales = (fechaActual.getUTCMinutes());
-        const forzado = data.forzado.estado;
-        const htmlIframe = data.html.value;
-
-        if (!forzado) {
-          for (const dia of data.horarios) {
-            if (dia.estadoDia) {
-              if (dia.dia === diaSemana) {
-                let programasHoy = [];
-                for (const hora of dia.horas) {
-                  if (hora.estadoHorario) {
-                    const inicioHora = parseInt(hora.inicio.split(":")[0]);
-                    const inicioMinutos = parseInt(hora.inicio.split(":")[1]);
-                    const finHora = parseInt(hora.fin.split(":")[0]);
-                    const finMinutos = parseInt(hora.fin.split(":")[1]);
-
-
-                    if (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) {
-                      if (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos)) {
-                        programasHoy.push(hora.tituloPrograma);
-                        var iframeIndividual2 = hora.iframe;
-                        if (iframeIndividual2) {
-                          newValueIframe(iframeIndividual2);
-                        }
-                        // console.log("yaaa-arriba", iframeIndividual);
-                      }
-                    }
-                  }
-                }
-                console.log("programasHoy", programasHoy)
-                if (programasHoy.length > 0) {
-                  programasHoy.forEach(programa => {
-                    if (title_programa) {
-                      title_programa.innerHTML = programa;
-                      title_programa.style.display = 'block';
-                    }
-                    if (fondito__) {
-                      fondito__.style.display = "none";
-                    }
-                    if (playerembed) {
-                      playerembed.style.display = 'block';
-                      if (!document.querySelector('#playerembed iframe')) {
-                        if (playerembed) {
-                          // playerembed.innerHTML = htmlIframe;
-
-                          // iframeIndividual = iframeIndividual
-                          // console.log("yaaa-abajo", iframeIndividual);
-                          if (iframeIndividual != '') {
-                            console.log("si hay iframe individual", iframeIndividual);
-                            setTimeout(() => {
-                              playerembed.innerHTML = iframeIndividual;
-                              paramUserVideo();
-                            }, 1000);
-
-                          } else {
-                            console.log("no hay iframe individual");
-                            playerembed.innerHTML = htmlIframe;
-                            paramUserVideo();
-                            console.log(htmlIframe);
-                          }
-                        }
-                      }
-                    }
-                    if (enVivoRedy) {
-                      enVivoRedy.style.display = 'flex';
-                    }
-                    if (programa === "Televistazo en la comunidad") {
-                      if (btnTelcomunidad) {
-                        btnTelcomunidad.style.display = "block";
-                      }
-                    }
-
-                    //Televistazo 7PM - nuevo requerimiento.
-                    if (programa === "Televistazo 7PM") {
-                      if (btnTelevistazo7pm) {
-                        btnTelevistazo7pm.style.display = "block";
-                      }
-                    }
-                  });
-                } else {
-                  if (title_programa) {
-                    title_programa.innerHTML = '';
-                    title_programa.style.display = 'none';
-                  }
-                  if (fondito__) {
-                    fondito__.style.display = "block";
-                  }
-                  if (playerembed) {
-                    playerembed.style.display = 'none';
-                    if (document.querySelector('#playerembed iframe')) {
-                      document.querySelector('#playerembed iframe').remove();
-                    }
-                  }
-                  if (enVivoRedy) {
-                    enVivoRedy.style.display = 'none';
-                  }
-                  if (btnTelcomunidad) {
-                    btnTelcomunidad.style.display = "none";
-                  }
-
-                  if (btnTelevistazo7pm) {
-                    btnTelevistazo7pm.style.display = "none";
-                  }
-                }
-              } else { }
-            } else {
-              if (fondito__) { fondito__.style.display = "block"; }
-              if (title_programa) {
-                title_programa.innerHTML = '';
-                title_programa.style.display = 'none';
-              }
-              if (playerembed) {
-                playerembed.style.display = 'none';
-                if (document.querySelector('#playerembed iframe')) {
-                  document.querySelector('#playerembed iframe').remove();
-                }
-
-              }
-              if (enVivoRedy) { enVivoRedy.style.display = 'none'; }
-            }
-          }
-        } else {
-          const dataTitulo = data.forzado.titulo;
-          const datalabel = data.forzado.label;
-
-          if (title_programa) {
-            title_programa.innerHTML = dataTitulo;
-          }
-
-          if (!document.querySelector('#playerembed iframe')) {
-            if (playerembed) {
-              playerembed.innerHTML = htmlIframe;
-            }
-          }
-
-          if (playerembed && fondito__) {
-            textIndicador.innerHTML = datalabel;
-            playerembed.style.display = 'block';
-            fondito__.style.display = "none";
-          }
-          if (enVivoRedy) { enVivoRedy.style.display = 'flex'; }
-
-          console.log("Forzado:", forzado);
-        }
-    }catch(error){
-      console.log(error)
-      return null;
-    }
-  }
-
-  // Llamar a la función para obtener y procesar los datos inicialmente
-  fetchHorarioEnvivo();
-}
-
-function eventoEnvivoManagerQuito() {
-  // const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivoQuito";
-  const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioEnvivoQuito";
-  const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad_quito');
-  const title_programa_quito = document.querySelector('.title_programa_quito');
-  const playerembed_quito = document.querySelector('#playerembed_quito');
-  const fondito__quito = document.querySelector('#fondito__quito');
-
-  function fetchHorarioEnvivoQuito() {
-    fetch(apiUrl)
-      .then(response => response.json())
-      .then(data => {
-        // const fechaActual = new Date();
-        // const diaSemana = fechaActual.getDay();
-        // const horaActual = fechaActual.getHours();
-        // const minutosActuales = fechaActual.getMinutes();
-        // const forzado = data.forzado.estado;
-        // const htmlIframe = data.html.value;
-
-        const fechaActual = new Date();
-        fechaActual.setUTCHours(fechaActual.getUTCHours() - 5);
-        const diaSemana = fechaActual.getUTCDay();
-        const horaActual = (fechaActual.getUTCHours());
-        const minutosActuales = (fechaActual.getUTCMinutes());
-        const forzado = data.forzado.estado;
-        const htmlIframe = data.html.value;
-
-        // console.log(`${horaActual}:${minutosActuales} uio`);
-
-        // console.log(data.horarios); // imprimir los horarios en la consola
-
-        if (!forzado) {
-          for (const dia of data.horarios) {
-            if (dia.estadoDia === true) {
-              // console.log("dia.estadoDia",dia.estadoDia);
-              if (dia.dia === diaSemana) {
-                // console.log(dia.dia);
-                let programasHoy = [];
-                for (const hora of dia.horas) {
-                  if (hora.estadoHorario) {
-                    const inicioHora = parseInt(hora.inicio.split(":")[0]);
-                    const inicioMinutos = parseInt(hora.inicio.split(":")[1]);
-                    const finHora = parseInt(hora.fin.split(":")[0]);
-                    const finMinutos = parseInt(hora.fin.split(":")[1]);
-                    if (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) {
-                      if (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos)) {
-                        programasHoy.push(hora.tituloPrograma);
-                      }
-                    }
-                  }
-                }
-                if (programasHoy.length > 0) {
-                  programasHoy.forEach(programa => {
-                    if (title_programa_quito) {
-                      title_programa_quito.innerHTML = programa;
-                      title_programa_quito.style.display = 'block';
-                    }
-                    if (fondito__quito) {
-                      fondito__quito.style.display = "none";
-                    }
-                    if (playerembed_quito) {
-                      playerembed_quito.style.display = 'block';
-                      if (!document.querySelector('#playerembed_quito iframe')) {
-                        if (playerembed_quito) {
-                          playerembed_quito.innerHTML = htmlIframe;
-                        }
-                      }
-                    }
-                    if (programa === "Televistazo en la comunidad") {
-                      if (btnTelcomunidad_quito) {
-                        btnTelcomunidad_quito.style.display = "block";
-                      }
-                    }
-                  });
-                } else {
-                  if (title_programa_quito) {
-                    title_programa_quito.innerHTML = '';
-                    title_programa_quito.style.display = 'none';
-                  }
-                  if (fondito__quito) {
-                    fondito__quito.style.display = "block";
-                  }
-                  if (playerembed_quito) {
-                    playerembed_quito.style.display = 'none';
-                    if (document.querySelector('#playerembed_quito iframe')) {
-                      document.querySelector('#playerembed_quito iframe').remove();
-                    }
-                  }
-                  if (btnTelcomunidad_quito) {
-                    btnTelcomunidad_quito.style.display = "none";
-                  }
-
-                }
-              }
-            }
-
-            if (dia.estadoDia === false) {
-              if (dia.dia === diaSemana) {
-                if (title_programa_quito) {
-                  title_programa_quito.innerHTML = '';
-                  title_programa_quito.style.display = 'none';
-                }
-                if (fondito__quito) {
-                  fondito__quito.style.display = "block";
-                }
-                if (playerembed_quito) {
-                  playerembed_quito.style.display = 'none';
-                  if (document.querySelector('#playerembed_quito iframe')) {
-                    document.querySelector('#playerembed_quito iframe').remove();
-                  }
-                }
-                if (btnTelcomunidad_quito) {
-                  btnTelcomunidad_quito.style.display = "none";
-                }
-              }
-            }
-
-          }
-        } else {
-          const dataTitulo = data.forzado.titulo;
-
-          if (title_programa_quito) {
-            title_programa_quito.innerHTML = dataTitulo;
-          }
-          if (!document.querySelector('#playerembed_quito iframe')) {
-            if (playerembed_quito) {
-              playerembed_quito.innerHTML = htmlIframe;
-            }
-          }
-          if (fondito__quito) {
-            fondito__quito.style.display = "none";
-          }
-
-          if (playerembed_quito) {
-            playerembed_quito.style.display = 'block';
-          }
-
-          if (btnTelcomunidad_quito) {
-            btnTelcomunidad_quito.style.display = "block";
-          }
-
-          console.log("Forzado:", forzado);
-        }
-      })
-      .catch(error => {
-        console.error("Error al obtener los datos:", error);
+      procesosHorarioEnvivo({
+        data: responseRespaldoData,
+        apiUrl,
+        enVivoRedy: null,
+        textIndicador:null,
+        btnTelcomunidad: btnTelcomunidad_quito,
+        btnTelevistazo7pm: null,
+        title_programa:title_programa_quito,
+        playerembed:playerembed_quito,
+        fondito__:fondito__quito,
       });
 
-    setTimeout(fetchHorarioEnvivoQuito, 120000); //cada 2 minutos se actualiza
+      console.log(error);
+      setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo); //comentado 23/octubre/2023 - 11:50AM
+      return null;
+    }
   }
 
   // Llamar a la función para obtener y procesar los datos inicialmente
   fetchHorarioEnvivoQuito();
 }
 
+eventoEnvivoManager();
+
 setTimeout(() => {
   eventoEnvivoManagerQuito();
 }, 300);
 
-eventoEnvivoManager();
 
 if (ECUAVISA_EC.login()) {
   eventRadioManager();
@@ -822,9 +817,6 @@ if (ECUAVISA_EC.login()) {
   // window.addEventListener('scroll', onEvent);
   window.addEventListener('mousemove', onEvent);
 }
-
-
-
 
 setTimeout(() => {
   // eventModal();
