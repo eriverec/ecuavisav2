@@ -25,6 +25,7 @@ const idCampaign = ref("");
 const disabledPagination = ref(false);
 const disabledViewList = ref(false);
 const switchOnDisabled = ref(false);
+const derviceExistData = ref(false);
 
 const banderas = {
   "Ecuador":"EC",
@@ -37,6 +38,7 @@ onMounted(getCampaigns)
 
 async function getCampaigns(page = 1, limit= 10, s= null){
   try {
+      derviceExistData.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
 
@@ -67,8 +69,11 @@ async function getCampaigns(page = 1, limit= 10, s= null){
       data.total = data.total * 1 + dataClone.length;
       totalRegistrosHtml.value = data.total;
       totalRegistros.value = Math.ceil(data.total / data.limit);
+      derviceExistData.value = false;
+      return true;
   } catch (error) {
-      return console.error(error.message);    
+    derviceExistData.value = false;
+    return console.error(error.message);    
   }
 }
 
@@ -490,16 +495,16 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                         style="max-width: 300px;"
                       />
                   </div>
-                  <VList lines="two" border v-if="dataCampaigns.length < 1">
+                  <VList lines="two" border v-if="derviceExistData">
                     <VListItem>
                       <VListItemTitle>
                         <div class="loading"></div>
                       </VListItemTitle>
                     </VListItem>
                   </VList>
-                  <VDivider />
+                  <VDivider v-if="!derviceExistData" />
                   <!-- SECTION Table -->
-                  <VTable class="text-no-wrap" v-if="dataCampaigns.length > 0">
+                  <VTable class="text-no-wrap" v-if="!derviceExistData">
                     <!-- 👉 Table head -->
                     <thead>
                       <tr>
@@ -721,13 +726,13 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                           colspan="8"
                           class="text-center text-body-1"
                         >
-                          No data available
+                          No hay registros que mostrar
                         </td>
                       </tr>
                     </tfoot>
                   </VTable>
                   <!-- !SECTION -->
-                  <VDivider v-show="dataCampaigns.length" />
+                  <VDivider v-show="dataCampaigns.length > 1 && !derviceExistData" />
                 <span class="text-sm text-disabled mt-4 d-block" v-show="dataCampaigns.length">
                   Total de registros {{ totalRegistrosHtml }}
                 </span>
