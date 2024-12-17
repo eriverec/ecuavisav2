@@ -1,10 +1,18 @@
 <script setup>
 import { getPaisConfig } from "@core/libs/campaigns/config";
+import debounce from 'lodash/debounce';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
+
+const snackbar = ref({
+  show: false,
+  text: '',
+  color: 'success',
+  timeout: 3000
+})
 
 const currentTab = ref('tab-lista');
 const isDialogVisibleDelete = ref(false);
@@ -27,7 +35,7 @@ const banderas = {
 
 onMounted(getCampaigns)
 
-async function getCampaigns(page = 1, limit= 10){
+async function getCampaigns(page = 1, limit= 10, s= null){
   try {
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -38,10 +46,25 @@ async function getCampaigns(page = 1, limit= 10){
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://ads-service.vercel.app/campaign/get/all?page=${page}&limit=${limit}`, requestOptions);
+      var response = await fetch(`https://ads-service.vercel.app/campaign/get/all?page=${page}&limit=${limit}`+ (s ? ("&s="+ s) : ""), requestOptions);
       const data = await response.json();
 
-      dataCampaigns.value = data.data;
+      for(var i in data.data){
+        data.data[i]["type_local"] = "server";
+      }
+
+      const dataClone = readRecords();
+      console.log("dataClone",dataClone)
+      for(var i in dataClone){
+        dataClone[i]["type_local"] = "local";
+      }
+      if(page == 1){
+        dataCampaigns.value = dataClone.concat(data.data);
+      }else{
+        dataCampaigns.value = data.data;
+      }
+      
+      data.total = data.total * 1 + dataClone.length;
       totalRegistrosHtml.value = data.total;
       totalRegistros.value = Math.ceil(data.total / data.limit);
   } catch (error) {
@@ -119,10 +142,257 @@ const handleSwitchChange = async (index) => {
   // Realiza las operaciones necesarias con el ID y el estado
 };
 
+/****************************************************************/
+/****************************************************************/
+// INICIO CRUD EN LOCALSTORAGE PARA EL DUPLICADO
+/****************************************************************/
+/****************************************************************/
+const isDialogVisibleClone = ref(false);
+
+const localStorageKey = "crudDataCampanias";
+
+// Inicializa el localStorage si no tiene datos
+if (!localStorage.getItem(localStorageKey)) {
+  localStorage.setItem(localStorageKey, JSON.stringify([]));
+}
+
+var newRecordModalObject = null;
+
+function openModal(newRecord) {
+  newRecordModalObject = newRecord;
+  isDialogVisibleClone.value = true;
+}
+
+const getUserIds = async (id, page = 1, limit = 10000) => {
+  try{
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+    var requestOptions = {
+      method: 'GET',
+      headers: myHeaders,
+      redirect: 'follow'
+    };
+
+    var response = await fetch(`https://ads-service.vercel.app/campaign/${id}/user-ids?limit=${limit}&page=${page}`, requestOptions);
+    const data = await response.json();
+    if(data && data.length > 0){
+      return data;
+    }else{
+      return [];
+    };
+  }catch(error){
+    return [];
+  }
+};
+
+// Funciones CRUD
+
+// Crear un nuevo registro
+async function createRecord() {
+  disabledViewList.value = true;
+  newRecordModalObject["statusCampaign"] = false;
+  newRecordModalObject["userId"] = [];
+  newRecordModalObject["created_at"] = moment();
+
+  let skip = 1;
+  let batchSize = 20000;
+  let dataFull = [];
+
+  while (true) {
+    const batchRegister = await getUserIds(newRecordModalObject._id, skip, batchSize);
+
+    if (batchRegister.length === 0) {
+      break;
+    }
+
+    dataFull.push(...batchRegister);
+    newRecordModalObject["userId"] = dataFull;
+
+    skip += 1;
+
+    console.log(dataFull.length)
+  }
+
+  newRecordModalObject["campaignTitle"] = `${newRecordModalObject["campaignTitle"]} ${moment().format("HHmmss")}`;
+
+  const newRecord = newRecordModalObject;
+
+  // Recuperar los datos existentes del localStorage o inicializar con un array vacío
+  const data = JSON.parse(localStorage.getItem(localStorageKey)) || [];
+
+  // Agregar el nuevo registro al inicio
+  data.unshift(newRecord);
+
+  // Actualizar el localStorage
+  localStorage.setItem(localStorageKey, JSON.stringify(data));
+
+  console.log("Registro creado:", newRecord);
+
+  // Actualizar el estado de la interfaz
+  isDialogVisibleClone.value = false;
+  snackbar.value = {
+    show: true,
+    text: `Registro duplicado`,
+    color: 'success'
+  };
+
+  // Llamar a la función para actualizar la vista y habilitar nuevamente la lista
+  await getCampaigns(1);
+  disabledViewList.value = false;
+}
+
+
+// Leer todos los registros
+function readRecords() {
+  return JSON.parse(localStorage.getItem(localStorageKey));
+}
+
+// Actualizar un registro existente por su índice
+function updateRecord(index, updatedRecord) {
+  const data = JSON.parse(localStorage.getItem(localStorageKey));
+  if (index >= 0 && index < data.length) {
+    data[index] = updatedRecord;
+    localStorage.setItem(localStorageKey, JSON.stringify(data));
+    console.log(`Registro en índice ${index} actualizado:`, updatedRecord);
+  } else {
+    console.error("Índice inválido.");
+  }
+}
+
+// Eliminar un registro por su índice
+async function deleteRecord(customIndex) {
+  disabledViewList.value = true;
+  
+  const data = JSON.parse(localStorage.getItem(localStorageKey)) || [];
+
+  // Buscar el índice basado en el identificador personalizado
+  const index = data.findIndex(record => record._id === customIndex);
+
+  if (index !== -1) {
+    // Eliminar el registro si se encuentra
+    const deletedRecord = data.splice(index, 1);
+    localStorage.setItem(localStorageKey, JSON.stringify(data));
+    console.log(`Registro eliminado con id ${customIndex}:`, deletedRecord[0]);
+    snackbar.value = {
+      show: true,
+      text: `Registro eliminado`,
+      color: 'success'
+    }
+  } else {
+    console.error(`No se encontró un registro con el id: ${customIndex}`);
+  }
+
+  await getCampaigns(1);
+
+  disabledViewList.value = false;
+}
+
+
+// Limpiar todos los registros
+function clearRecords() {
+  localStorage.setItem(localStorageKey, JSON.stringify([]));
+  console.log("Todos los registros han sido eliminados.");
+}
+
+// // Ejemplo de uso
+
+// // Crear registros
+// createRecord({ id: 1, nombre: "Producto 1", precio: 10.99 });
+// createRecord({ id: 2, nombre: "Producto 2", precio: 15.99 });
+
+// // Leer registros
+// console.log("Registros actuales:", readRecords());
+
+// // Actualizar un registro
+// updateRecord(0, { id: 1, nombre: "Producto Actualizado", precio: 12.99 });
+
+// // Eliminar un registro
+// deleteRecord(1);
+
+// // Leer nuevamente para verificar cambios
+// console.log("Registros después de los cambios:", readRecords());
+
+// // Limpiar todos los registros
+// clearRecords();
+
+/****************************************************************/
+/****************************************************************/
+// FIN CRUD EN LOCALSTORAGE PARA EL DUPLICADO
+/****************************************************************/
+/****************************************************************/
+
+
+/****************************************************************/
+/****************************************************************/
+// INICIO BUSCADOR
+/****************************************************************/
+/****************************************************************/
+
+const searchQuery = ref('');
+
+// Función para realizar la consulta
+const buscarUsuarios = async () => {
+  try {
+    const query = searchQuery.value?.toLowerCase();
+    disabledPagination.value = true;
+    await getCampaigns(1, 10, query); // Pasamos el término de búsqueda
+    disabledPagination.value = false;
+  } catch (error) {
+    console.error("Error en buscarUsuarios:", error);
+    return null;
+  }
+};
+
+// Crear una función con debounce
+const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retraso
+
+/****************************************************************/
+/****************************************************************/
+// FIN BUSCADOR
+/****************************************************************/
+/****************************************************************/
+
 </script>
 
 <template>
   <section>
+    <VSnackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      :timeout="snackbar.timeout"
+      location="top end"
+    >
+      {{ snackbar.text }}
+    </VSnackbar>
+    <VDialog
+      v-model="isDialogVisibleClone"
+      persistent
+      class="v-dialog-sm"
+    >
+
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleClone = !isDialogVisibleClone" />
+
+      <!-- Dialog Content -->
+      <VCard title="Clonar registro">
+        <VCardText>
+          ¿Desea clonar el registro?
+        </VCardText>
+
+        <VCardText class="d-flex justify-end gap-3 flex-wrap">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            @click="isDialogVisibleClone = false"
+          >
+            No, Cerrar
+          </VBtn>
+          <VBtn @click="createRecord()" :loading="disabledViewList" :disabled="disabledViewList">
+            Si, clonar registro
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
     <VDialog
       v-model="isDialogVisibleDelete"
       persistent
@@ -187,7 +457,7 @@ const handleSwitchChange = async (index) => {
                 >
                   <div>
                     <VCardTitle>
-                      Listado de campañas existentes
+                      Listado de campañas
                     </VCardTitle>
                     <VCardSubtitle> Elige la campaña sobre la que necesites información  </VCardSubtitle>
                   </div>
@@ -197,13 +467,29 @@ const handleSwitchChange = async (index) => {
                 <!-- inicio lista de Módulos -->
                   
                 <div class="px-4">
-                  <VBtn color="primary" class="mb-4" :to="{ name: 'apps-campaigns-create' }">
-                    Crear campaña
-                    <VIcon
-                      :size="22"
-                      icon="tabler-plus"
-                    />
-                  </VBtn>
+                  <div class="d-flex align-center gap-2">
+                    <VBtn color="primary" class="mb-4" :to="{ name: 'apps-campaigns-create' }">
+                      Crear campaña
+                      <VIcon
+                        :size="22"
+                        icon="tabler-plus"
+                      />
+                    </VBtn>
+                    <VSpacer />
+                     <VTextField
+                        clearable
+                        :disabled="disabledPagination"
+                        class="mb-4"
+                        v-model="searchQuery"
+                        label="Buscar por título o descripción"
+                        prepend-inner-icon="mdi-magnify"
+                        single-line
+                        hide-details
+                        @input="buscarUsuariosDebounced" 
+                        @click:clear="buscarUsuariosDebounced"
+                        style="max-width: 300px;"
+                      />
+                  </div>
                   <VList lines="two" border v-if="dataCampaigns.length < 1">
                     <VListItem>
                       <VListItemTitle>
@@ -211,114 +497,238 @@ const handleSwitchChange = async (index) => {
                       </VListItemTitle>
                     </VListItem>
                   </VList>
+                  <VDivider />
+                  <!-- SECTION Table -->
+                  <VTable class="text-no-wrap" v-if="dataCampaigns.length > 0">
+                    <!-- 👉 Table head -->
+                    <thead>
+                      <tr>
+                        <th
+                          scope="col"
+                          class="font-weight-semibold"
+                        >
+                          Estado
+                        </th>
+                        <th
+                          scope="col"
+                          class="font-weight-semibold"
+                        >
+                          Campaña
+                        </th>
+                        <th
+                          scope="col"
+                          class="font-weight-semibold"
+                        >
+                          Descripción
+                        </th>
+                        <th
+                          scope="col"
+                          class="font-weight-semibold"
+                        >
+                          Sector
+                        </th>
+                        <th
+                          scope="col"
+                          class="font-weight-semibold"
+                        >
+                          Num. Audiencia
+                        </th>
+                        <th
+                          scope="col"
+                          class="font-weight-semibold"
+                        >
+                          Tipo de contenido
+                        </th>
+                        <th
+                          scope="col"
+                          class="font-weight-semibold"
+                        >
+                          Acciones
+                        </th>
+                      </tr>
+                    </thead>
 
-                  <VList lines="two" border  v-if="dataCampaigns.length > 0">
-                  <template
-                    v-for="(c, index) of dataCampaigns"
-                    :key="index"
-                  >
-                    <VListItem :disabled="disabledViewList">
-                      <VListItemTitle>
-                        <div class="nombre-campania">
-                          {{ c.campaignTitle }}
-                          
-                          <div v-if="c.criterial.country != null && c.criterial.country != -1">
-                            <VAvatar :title="'Ubicación: '+c.criterial.country+', '+c.criterial.city" class="ava" size="24" :image=" 'https://flagcdn.com/w320/' + getPaisConfig(c.criterial.country)['alpha-2'].toLowerCase() + '.png' " />
+                    <!-- 👉 Table Body -->
+                    <tbody>
+                      <tr
+                        v-for="(c, index) of dataCampaigns"
+                        :key="index"
+                        style="height: 3.5rem;"
+                        :class="c.type_local != 'server' ? 'text-opacity-25':''"
+                      >
+                        
+
+                        <!-- 👉 Progress -->
+                        <td class="text-center" 
+                          style="width: 5.5rem;">
+                          <div :title="c.statusCampaign?'Activo':'Inactivo'" class="switch-estatus" style="margin-bottom:-10px">
+                            <VSwitch :disabled="switchOnDisabled || c.type_local == 'local'" :loading="switchOnDisabled?'warning':false" :color="c.statusCampaign?'success':'error'" v-model="c.statusCampaign" size="x-small" class="custom-vswitch" @change="handleSwitchChange(index)" />
+                            <VChip
+                              title="Publicidad pausada"
+                              v-if="c.statusCampaign != true"
+                              size="x-small"
+                              label
+                              color="error"
+                              class="d-none"
+                            >
+                              <span style="font-weight:medium">{{ c.statusCampaign?'Activo':'Inactivo' }}</span>
+                            </VChip>
+
+                            <small class="d-none" title="Publicidad activa, iniciada" color="success" v-if="c.statusCampaign == true">
+                              <span style="font-weight:medium">{{ c.statusCampaign?'Activo':'Inactivo' }}</span>
+                            </small>
+                          </div>
+                        </td>
+
+                        <!-- 👉 Name -->
+                        <td>
+                          <div class="d-flex text-xs align-center gap-3 pb-2">
+                            <div v-if="c.criterial.country != null && c.criterial.country != -1" class="d-flex flex-column gap-0 align-center mr-2">
+                              <VAvatar 
+                                :title="'Ubicación: '+c.criterial.country+', '+c.criterial.city" 
+                                class="" 
+                                size="24" 
+                                :image=" 'https://flagcdn.com/w320/' + getPaisConfig(c.criterial.country)['alpha-2'].toLowerCase() + '.png' " 
+                              />
+                              <small>{{getPaisConfig(c.criterial.country)['alpha-2']}}</small>
+                            </div>
+
+                            <div>
+                              <div style="font-size:10px" class="pt-2 text-primary" v-if="c.type_local != 'server'"><VIcon size="10" icon="mdi-warning" /> No guardado</div>
+                              <div class="active-opacity">
+                                <h6 class="text-base text-medium-emphasis font-weight-semibold">
+                                  {{ c.campaignTitle }}
+                                </h6>
+                                <span class="text-disabled" style="font-size: 12px;">{{ moment(c.created_at).format("YYYY-MM-DD, HH:mm:ss") }}</span>
+                              </div>
+                            </div>
+                          </div>
+                        </td>
+
+                        <td class="text-medium-emphasis active-opacity"
+                          style="width: 3.5rem;" >
+                          <span class="text-xs pl-2">
+                            {{ c.description }}
+                          </span>
+                        </td>
+
+                        <!-- 👉 Leader -->
+                        <td class="text-medium-emphasis">
+                          <div class=" active-opacity" v-if="c.criterial.country != null && c.criterial.country != -1">
                             <span class="text-xs text-disabled">
-                             <b>Sector: </b> {{c.criterial.country}}{{ c.criterial.city == "0" ? "": ", "+c.criterial.city }} 
+                              <VIcon icon="mdi-location" /> {{c.criterial.country}}{{ c.criterial.city == "0" ? "": ", "+c.criterial.city }} 
                             </span>
                           </div>
-                        </div>
-                      </VListItemTitle>
-                      <VListItemSubtitle class="mt-1" title="Estado de campaña">
-                        <div class="switch-estatus" style="margin-bottom:-10px">
-                          <VSwitch :disabled="switchOnDisabled" :loading="switchOnDisabled?'warning':false" :color="c.statusCampaign?'success':'error'" v-model="c.statusCampaign" size="x-small" class="custom-vswitch" @change="handleSwitchChange(index)" />
-                          <VChip
-                            title="Publicidad pausada"
-                            v-if="c.statusCampaign != true"
-                            size="x-small"
-                            label
-                            color="error"
-                          >
-                            <span style="font-weight:medium">{{ c.statusCampaign?'Activo':'Inactivo' }}</span>
-                          </VChip>
+                        </td>
 
-                          <small title="Publicidad activa, iniciada" color="success" v-if="c.statusCampaign == true">
-                            <span style="font-weight:medium">{{ c.statusCampaign?'Activo':'Inactivo' }}</span>
-                          </small>
-                        </div>
+                        <!-- 👉 Team -->
+                        <td class="text-medium-emphasis active-opacity">
+                          <span class="text-xs pl-2">
+                            <VIcon icon="mdi-account-group" />: {{ c.sizeUsersId }}
+                          </span>
+                        </td>
 
-                        <span class="text-xs text-disabled">
-                          <i>
-                            {{ moment(c.created_at).format("YYYY-MM-DD, HH:mm:ss") }}
-                          </i>
-                          |
-                          <i>
-                            Tipo de contenido: 
-                            <b>{{ c.type }}</b>
-                          </i>
-                        </span>
+                        <td class="text-medium-emphasis active-opacity">
+                          <span class="text-xs text-disabled">
+                            {{ c.type }}
+                          </span>
+                        </td>
 
-                        <span class="text-xs text-primary pl-2">
-                          <VIcon icon="mdi-account-group" />: {{ c.sizeUsersId }}
-                        </span>
-                      </VListItemSubtitle>
-
-                      <template #append>
-                        <div class="espacio-right-2">
-                          
+                        <!-- 👉 Actions -->
+                        <td
+                          class="text-center"
+                          style="width: 3.5rem;"
+                        >
                           <VBtn
                             icon
-                            size="x-small"
-                            color="info"
-                            variant="text"
-                          >
-                          <RouterLink
-                            :to="{
-                              name: 'apps-campaigns-edit-id',
-                              params: { id: c._id },
-                            }"
-                            class="font-weight-medium user-list-name"
-                            >
-                            <VIcon
-                              size="22"
-                              icon="tabler-edit"
-                            />
-                          </RouterLink>
-                          </VBtn>
-
-                          <VBtn
-                            icon
-                            size="x-small"
-                            color="error"
-                            variant="text"
-                            @click="eliminarRegistro(c._id)"
-                          >
-                            <VIcon
-                              size="22"
-                              icon="tabler-trash"
-                            />
-                          </VBtn>
-
-                          <VBtn
-                            icon
-                            variant="text"
+                            variant="plain"
                             color="default"
                             size="x-small"
-                            :to="{ name: 'apps-campaigns-view-id', params: { id: c._id } }"
                           >
                             <VIcon
+                              :title="c.campaignTitle"
                               :size="22"
-                              icon="tabler-eye"
+                              icon="tabler-dots-vertical"
                             />
+
+                            <VMenu activator="parent">
+                              <VList density="compact">
+                                <VListItem
+                                  v-if="c.type_local == 'server'"
+                                  :to="{
+                                    name: 'apps-campaigns-edit-id',
+                                    params: { id: c._id },
+                                  }"
+                                >
+                                  <VIcon size="15" class="mr-1" icon="mdi-edit" />
+                                  Editar campaña
+                                </VListItem>
+                                <VListItem
+                                  v-else
+                                  :to="{
+                                    name: 'apps-campaigns-edit-id',
+                                    params: { id: c._id },
+                                  }"
+                                >
+                                  <VIcon size="18" class="mr-1" icon="mdi-content-save-outline" />
+                                  Terminar de guardar la campaña
+                                </VListItem>
+                                <VListItem
+                                  v-if="c.type_local == 'server'"
+                                  href="#"
+                                  @click="openModal(c)"
+                                >
+                                  <VIcon size="15" class="mr-1" icon="mdi-content-copy" />
+                                  Clonar campaña
+                                </VListItem>
+                                <VListItem
+                                  v-if="c.type_local == 'server'"
+                                  :to="{ name: 'apps-campaigns-view-id', params: { id: c._id } }"
+                                >
+                                  <VIcon size="18" class="mr-1" icon="mdi-eye-outline" />
+                                  Ver campaña
+                                </VListItem>
+                                <VDivider />
+                                <VListItem
+                                  v-if="c.type_local == 'server'"
+                                  href="#"
+                                  @click="eliminarRegistro(c._id)"
+                                >
+                                  <VIcon size="18" class="mr-1" color="error" icon="mdi-trash-can-outline" />
+                                  Eliminar campaña
+                                </VListItem>
+                                <VListItem
+                                  v-else
+                                  href="#"
+                                  @click="deleteRecord(c._id)"
+                                >
+                                  <VIcon size="18" class="mr-1" color="error" icon="mdi-trash-can-outline" />
+                                  Eliminar campaña
+                                </VListItem>
+                              </VList>
+                            </VMenu>
                           </VBtn>
-                        </div>
-                      </template>
-                    </VListItem>
-                    <VDivider v-if="index !== dataCampaigns.length - 1" />
-                  </template>
-                </VList>
-                <span class="text-sm text-disabled">
+                        </td>
+
+                        
+                      </tr>
+                    </tbody>
+
+                    <!-- 👉 table footer  -->
+                    <tfoot v-show="!dataCampaigns.length">
+                      <tr>
+                        <td
+                          colspan="8"
+                          class="text-center text-body-1"
+                        >
+                          No data available
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </VTable>
+                  <!-- !SECTION -->
+                  <VDivider v-show="dataCampaigns.length" />
+                <span class="text-sm text-disabled mt-4 d-block" v-show="dataCampaigns.length">
                   Total de registros {{ totalRegistrosHtml }}
                 </span>
                 <VPagination
@@ -331,10 +741,6 @@ const handleSwitchChange = async (index) => {
                 </div>
                 <!-- fin lista usuarios -->
               </VWindowItem>
-
-              
-
-              
             </VWindow>
           </VCardText>
         </VCard>
@@ -346,6 +752,10 @@ const handleSwitchChange = async (index) => {
 
 
 <style scoped>  
+  .text-opacity-25 .active-opacity {
+      opacity: 0.4;
+  }
+
   .loading{
     border:2px solid #7367F0;
     width: 20px;
