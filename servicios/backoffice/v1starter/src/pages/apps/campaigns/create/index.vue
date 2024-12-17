@@ -701,8 +701,8 @@
     </VRow>
 
   
-    <!-- Botón flotante para guardar -->
-    <VBtn
+   <!-- Botón flotante para guardar -->
+   <VBtn
       class="save-button"
       color="success"
       icon="mdi-check"
@@ -712,69 +712,93 @@
     >
       <VIcon icon="tabler-device-floppy" />
     </VBtn>
-  </div>
 
-  <!-- Modal para agregar usuarios -->
-  <VDialog v-model="userModalOpen" max-width="800">
-  <VCard>
-    <VCardTitle class="d-flex justify-space-between align-center pa-4">
-      Buscar usuarios
-      <VBtn icon="mdi-close" variant="text" @click="userModalOpen = false" />
-    </VCardTitle>
+    <!-- Modal único para agregar usuarios -->
+    <VDialog 
+      v-model="userModalOpen" 
+      max-width="800"
+      :persistent="false"
+      @update:model-value="$event === false && (searchQuery = '', searchResults = [])"
+    >
+      <VCard>
+        <VCardTitle class="d-flex justify-space-between align-center pa-4">
+          Buscar usuarios
+          <VBtn icon="mdi-close" variant="text" @click="userModalOpen = false" />
+        </VCardTitle>
 
-    <VCardText>
-      <VTextField
-        v-model="searchQuery"
-        label="Buscar por nombre o email (mínimo 4 caracteres)"
-        prepend-inner-icon="mdi-magnify"
-        :loading="isSearching"
-        clearable
-        class="mb-4"
-        @input="handleSearch"
-      />
+        <VCardText>
+          <VTextField
+            v-model="searchQuery"
+            label="Buscar por nombre o email (mínimo 4 caracteres)"
+            prepend-inner-icon="mdi-magnify"
+            :loading="isSearching"
+            clearable
+            class="mb-4"
+            @input="handleSearch"
+          />
 
-      <VList lines="two" v-if="searchResults.length > 0">
-        <VListItem
-          v-for="user in searchResults"
-          :key="user.wylexId"
-          border
-        >
-          <VListItemTitle>
-            {{ user.first_name }} {{ user.last_name }}
-          </VListItemTitle>
-          <VListItemSubtitle class="mt-1">
-            <span class="text-xs text-disabled">{{ user.email }}</span>
-          </VListItemSubtitle>
-          <template #append>
-            <VBtn
-              color="primary"
-              size="small"
-              @click="handleAddSpecificUser(user)"
+          <VList lines="two" v-if="searchResults.length > 0">
+            <VListItem
+              v-for="user in searchResults"
+              :key="user.wylexId"
+              border
             >
-              Agregar
-            </VBtn>
-          </template>
-        </VListItem>
-      </VList>
+              <VListItemTitle>
+                {{ user.first_name }} {{ user.last_name }}
+              </VListItemTitle>
+              <VListItemSubtitle class="mt-1">
+                <span class="text-xs text-disabled">{{ user.email }}</span>
+              </VListItemSubtitle>
+              <template #append>
+                <VBtn
+                  color="primary"
+                  size="small"
+                  @click="handleAddSpecificUser(user)"
+                >
+                  Agregar
+                </VBtn>
+              </template>
+            </VListItem>
+          </VList>
 
-      <VAlert
-        v-else-if="searchQuery && !isSearching && searchQuery.length >= 4"
-        type="info"
-        class="mt-4"
-      >
-        No se encontraron resultados
-      </VAlert>
-      
-      <VAlert
-        v-else-if="searchQuery && searchQuery.length < 4"
-        type="info"
-        class="mt-4"
-      >
-        Ingresa al menos 4 caracteres para buscar
-      </VAlert>
-    </VCardText>
-  </VCard>
-</VDialog>
+          <VAlert
+            v-else-if="searchQuery && !isSearching && searchQuery.length >= 4"
+            type="info"
+            class="mt-4"
+          >
+            No se encontraron resultados
+          </VAlert>
+          
+          <VAlert
+            v-else-if="searchQuery && searchQuery.length < 4"
+            type="info"
+            class="mt-4"
+          >
+            Ingresa al menos 4 caracteres para buscar
+          </VAlert>
+        </VCardText>
+      </VCard>
+    </VDialog>
+
+    <!-- Input oculto para importar archivo -->
+    <input
+      ref="fileInput"
+      type="file"
+      accept=".csv"
+      style="display: none"
+      @change="handleFileChange"
+    />
+
+    <!-- Snackbar para notificaciones -->
+    <VSnackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      :timeout="2000"
+      location="top"
+    >
+      {{ snackbar.text }}
+    </VSnackbar>
+  </div>
 </template>
   
 <script setup>
@@ -785,25 +809,17 @@ import 'vue3-form-wizard/dist/style.css';
 
 const userModalOpen = ref(false)
 
-function handleAddUser() {
-  searchQuery.value = '' // Limpiar búsqueda anterior
-  searchResults.value = [] // Limpiar resultados anteriores
-  userModalOpen.value = true
-}
-
 const router = useRouter();
-const currentTab = ref('tab-lista');
-const checkbox = ref(false);
+// const currentTab = ref('tab-lista');
+// const checkbox = ref(false);
 const loadingWizard = ref(false);
 const loadingPanel = ref(false);
-const dataCampaigns = ref([]);
+// const dataCampaigns = ref([]);
 const dataCountry = ref([]);
 const cityList = ref([]);
 const countryList = ref([]);
 
-
 const modoPersonalizado = ref(false);
-
 
 const timeoutId = ref(null);
 const timeoutSegundos = 3000;
@@ -825,9 +841,7 @@ const selectItemsList = ref([{ title:'Otro', value: 'Otro' },{ title:'100', valu
 const minValue = ref(1); // Valor mínimo permitido
 const maxValue = ref(100); // Valor máximo permitido
 
-
 const search = ref(null)
-
 
 const metadatos = ref([]);
 const metadatosItems = ref([]);
@@ -928,28 +942,10 @@ watch(metadatos, value => {
     nextTick(() => metadatos.value.pop())
 })
 
-
-
 onMounted(async () => {
   await getCountries();
   await getMetadatos();
 });
-
-// antes: no valia listado paises
-// async function getCountries(){
-//   var myHeaders = new Headers();
-//   loadingPanel.value=true;
-//   myHeaders.append("Content-Type", "application/json");
-//   var requestOptions = {
-//     method: 'GET',
-//     headers: myHeaders,
-//     redirect: 'follow'
-//   };
-//   var response = await fetch(`https://ecuavisa-suscripciones.vercel.app/otros/obtener-paises-ciudades`, requestOptions);
-//   const data = await response.json();
-//   dataCountry.value = data;
-//   loadingPanel.value=false;
-// }
 
 async function getCountries() {
   try {
@@ -981,15 +977,12 @@ async function getCountries() {
   }
 }
 
-// Función para manejar la actualización de usuarios desde el UserList
-function handleUserUpdate(users) {
-  if (!dataUsuarios.value) {
-    dataUsuarios.value = {};
-  }
-
-  dataUsuarios.value.userIds = Array.isArray(users) ? users : [];
-  console.log('IDs de usuarios actualizados:', dataUsuarios.value.userIds);
+function handleAddUser() {
+  searchQuery.value = '' // Limpiar búsqueda anterior
+  searchResults.value = [] // Limpiar resultados anteriores
+  userModalOpen.value = true
 }
+
 
 // para mejorar la carga de ciudades
 watch(() => selectedItem.value, async (newValue) => {
@@ -1042,81 +1035,6 @@ async function getMetadatos(){
   }
 }
 
-// const fetchWithTimeout = (url, options, timeout = 10000) => {
-//     return Promise.race([
-//         fetch(url, options),
-//         new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), timeout))
-//     ]);
-// };
-
-async function fetchWithTimeout(url, options, timeout = 10000) {
-  try {
-    const controller = new AbortController();
-    const id = setTimeout(() => controller.abort(), timeout);
-    
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal
-    });
-    
-    clearTimeout(id);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-    
-    return await response.json();
-  } catch (error) {
-    if (error.name === 'AbortError') {
-      throw new Error('La solicitud tomó demasiado tiempo');
-    }
-    throw error;
-  }
-}
-
-// Actualizamos la función updateBulkUsers
-async function updateBulkUsers(userIds) {
-  try {
-    console.log('Iniciando actualización de usuarios:', {
-      tempCampaignId: tempCampaignId.value,
-      userIds: userIds
-    });
-
-    // Verificamos que tengamos un ID de campaña temporal
-    if (!tempCampaignId.value) {
-      throw new Error('No hay ID de campaña temporal');
-    }
-
-    // Verificamos que tengamos usuarios para agregar
-    if (!userIds || userIds.length === 0) {
-      throw new Error('No hay usuarios para agregar');
-    }
-
-    const response = await fetchWithTimeout(
-      `https://ads-service.vercel.app/campaign/v2/user/${tempCampaignId.value}`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          userIds: userIds
-        })
-      }
-    );
-
-    console.log('Respuesta del servidor:', response);
-
-    if (!response.resp) {
-      throw new Error(response.error || 'Error al agregar usuarios');
-    }
-
-    return response;
-  } catch (error) {
-    console.error('Error detallado:', error);
-    throw new Error(`Error al actualizar usuarios: ${error.message}`);
-  }
-}
 
 async function getUsuarios(){
   var ciudad = -1;
@@ -1194,109 +1112,8 @@ function slugify(text) {
     .replace(/-+$/, ''); // Remover guiones bajos al final
 }
 
-// async function onComplete() {
-//   var name = nombreCampania.value;
-//   var tipoContenido = languages.value;
-//   var cri = criterio.value;
-//   var po = posicion.value;
-//   var script = codigoExternoModel.value || "";
-//   var linksWeb = linkAds.value || "#";
-//   var urlImagen_1 = linkImageEscritorio.value || "";
-//   var urlImagen_2 = linkImageMobile.value || "";
-//   var paises_temp = selectedItem.value;
-
-//   var ciudad = -1;
-//   var pais = -1;
-
-//   var so_temp = null;
-//   var dispositivo_temp = null;
-//   var metadato_temp = null;
-//   var navegador_temp = null;
-
-
-//   var ciudades_temp = selectedItemCiudad.value;
-//   var participantes_temp = selectItemParticipantes.value;
-//   var otroValor_temp = numeroOtroUsuarios.value;
-
-//   var visibilidad = selectItemVisibilidad.value;
-
-//   if(cri.includes("metadatos") || cri.includes("trazabilidads")){
-//     pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
-//     ciudad = (selectedItemCiudad.value).length > 0 ? (selectedItemCiudad.value).join(',') : -1;
-//   }
-
-//   if(cri.includes("metadatos")){
-//     metadato_temp = (metadatos.value).join(',') || null;
-//   }
-
-//   if(cri.includes("dispositivos")){
-//     dispositivo_temp = (selectItemDispositivos.value).join(',') || null;
-//   }
-
-//   if(cri.includes("plataforma")){
-//     so_temp = (selectItemSO.value).join(',') || null;
-//     navegador_temp = (selectItemNavegador.value).join(',') || null;
-//   }
-
-//   // var so_temp = selectItemSO.value;
-//   // var dispositivo_temp = selectItemDispositivos.value;
-//   // var navegador_temp = selectItemNavegador.value;
-
-//   var jsonEnviar = {
-//       "campaignTitle": nombreCampania.value,
-//       "description": descripcionCampania.value,
-//       "type": languages.value,
-//       "criterial": {
-//         "visibilitySection": selectItemVisibilidad.value,
-//         "country": selectedItem.value || -1,
-//         "city": selectedItemCiudad.value?.includes('Todas las ciudades') ? 
-//           -1 : 
-//           selectedItemCiudad.value?.length > 0 ? selectedItemCiudad.value.join(',') : -1,
-//         "so": selectItemSO.value?.length > 0 ? selectItemSO.value.join(',') : null,
-//         "dispositivo": selectItemDispositivos.value?.length > 0 ? selectItemDispositivos.value.join(',') : null,
-//         "metadato": metadatos.value?.length > 0 ? metadatos.value.join(',') : null,
-//         "navegador": selectItemNavegador.value?.length > 0 ? selectItemNavegador.value.join(',') : null
-//       },
-//       "coleccion": criterio.value.join(','),
-//       "position": posicion.value.join(","),
-//       "participantes": tipoParticipantes,
-//       "otroValor": dataUsuarios.value.total,
-//       "userId": dataUsuarios.value.userIds, // Array de IDs de usuarios
-//       "userIdRemove": [],
-//       "userIdAdd": [],
-//       "statusCampaign": true,
-//       "urls": {
-//         "url": linkAds.value || "#",
-//         "img": {
-//           "escritorio": linkImageEscritorio.value || "",
-//           "mobile": linkImageMobile.value || ""
-//         },
-//         "html": codigoExternoModel.value || ""
-//       },
-//       "campaignSlug": slugify(nombreCampania.value)
-//     };
-
-//   var myHeaders = new Headers();
-//   myHeaders.append("Content-Type", "application/json");
-//   var requestOptions = {
-//     method: 'POST',
-//     headers: myHeaders,
-//     body: JSON.stringify(jsonEnviar),
-//     redirect: 'follow'
-//   };
-//   loadingPanel.value=true;
-//   var response = await fetch(`https://ads-service.vercel.app/campaign/create`, requestOptions);
-//   const data = await response.json();
-//   if(data.resp){
-//     router.push('/apps/campaigns/list');
-//   }else{
-//     alert("Un error se presentó: "+data.error)
-//   };
-//   loadingPanel.value=false;
-// }
 
 // Agregar esta función antes de onComplete
-
 function validarFormulario() {
   if (!nombreCampania.value) {
     alert("El nombre de la campaña es obligatorio");
@@ -1367,7 +1184,7 @@ async function onComplete() {
       "html": codigoExternoModel.value || ""
     },
     "campaignSlug": slugify(nombreCampania.value),
-    "tempCampaignId": tempCampaignId.value // Incluimos el ID temporal
+    // "tempCampaignId": tempCampaignId.value // Incluimos el ID temporal
   };
 
   try {
@@ -1395,218 +1212,8 @@ async function onComplete() {
   }
 }
 
-async function handleValidation(isValid, tabIndex) {
-  if(tabIndex == 1 && isValid == true && dataCountry.value.length < 1){
-    await getCountries();
-
-    var paises = [];
-    for(var i in dataCountry.value){
-      var ins = dataCountry.value[i];
-      // paises.push({ title:ins.country, value:ins.country });
-      paises.push(ins.country);
-    }
-
-    // console.log(paises)
-    countryList.value = paises;
-
-  }
-  // console.log('Tab: '+tabIndex+ ' valid: '+isValid)
-  return false;
-}
-
-async function handleValidationChange(prevIndex, nextIndex) {
-
-  return false;
-}
-
-async function setLoading(value) {
-  loadingWizard.value = value
-}
-
-async function validateAsync() {
-    var nombre = nombreCampania.value;
-    var descripcion = descripcionCampania.value;
-    var tipoC = languages.value;
-    var crit = criterio.value; // Agregamos esta línea
-    var pos = posicion.value;
-    var visibilidad = selectItemVisibilidad.value;
-  
-    if(nombre.length < 1 || nombre.trim() == ""){
-      alert("Debes añadir un nombre de campaña");
-      return false;
-    }
-  
-    if(descripcion.length < 1 || descripcion.trim() == ""){
-      alert("Debes añadir una descripción de campaña");
-      return false;
-    }
-  
-    if(tipoC.length < 1){
-      alert("Debes añadir un tipo de contenido");
-      return false;
-    }
-  
-    if(crit.length < 1){
-      alert("Debes añadir al menos un criterio");
-      return false;
-    }
-  
-    if(pos.length < 1){
-      alert("Debes añadir la posicion del ads");
-      return false;
-    }
-  
-    if(visibilidad.length < 1){
-      alert("Debes añadir la La visibilidad en el sitio web");
-      return false;
-    }
-  
-    return true;
-  }
-async function validateAsyncInsercion() {
-  var nombre = nombreCampania.value;
-  var tipoC = languages.value;
-  var crit = criterio.value;
-  var pos = posicion.value;
-  var codigoExterno = codigoExternoModel.value;
-  var linkAdsL = linkAds.value;
-  var linkImageEscritorioL = linkImageEscritorio.value;
-  var linkImageMobileL = linkImageMobile.value;
-
-  if(tipoC != "imagen"){
-    if(codigoExterno.length < 1 || codigoExterno == ""){
-      alert("Debe ingresar el código");
-      return false;
-    }
-  }else{
-    if(linkAdsL.length < 1 || linkAdsL == ""){
-      alert("Debe ingresar el link");
-      return false;
-    }
-    if(linkImageEscritorioL.length < 1 || linkImageEscritorioL == ""){
-      alert("Debe ingresar el link de la imagen para dispositivos de escritorio");
-      return false;
-    }
-    if(linkImageMobileL.length < 1 || linkImageMobileL == ""){
-      alert("Debe ingresar el link de la imagen para dispositivos responsive");
-      return false;
-    }
-  }
-
-  return true;
-}
-
-async function validateAsyncCriterio() {
-  var nombre = nombreCampania.value;
-  var tipoC = languages.value;
-  var crit = criterio.value;
-  var pos = posicion.value;
-  var codigoExterno = codigoExternoModel.value;
-  var linkAdsL = linkAds.value;
-  var linkImageEscritorioL = linkImageEscritorio.value;
-  var linkImageMobileL = linkImageMobile.value;
-
-  if(tipoC != "Local"){
-    if(codigoExterno.length < 1 || codigoExterno == ""){
-      alert("Debe ingresar el código");
-      return false;
-    }
-  }else{
-    if(linkAdsL.length < 1 || linkAdsL == ""){
-      alert("Debe ingresar el link");
-      return false;
-    }
-    if(linkImageEscritorioL.length < 1 || linkImageEscritorioL == ""){
-      alert("Debe ingresar el link de la imagen para dispositivos de escritorio");
-      return false;
-    }
-    if(linkImageMobileL.length < 1 || linkImageMobileL == ""){
-      alert("Debe ingresar el link de la imagen para dispositivos responsive");
-      return false;
-    }
-  }
-
-  return true;
-}
-
-
 const errorMessages = computed(() => numeroRules.map(rule => rule(numeroOtroUsuarios.value)).filter(Boolean));
-const hasErrors = computed(() => errorMessages.value.length > 0);
-
-async function validateAsyncUsuarios() {
-  var pais = selectedItem.value;
-  var ciudad = selectedItemCiudad.value;
-
-  // console.log(ciudad)
-  var crit = criterio.value;
-  var participantes = selectItemParticipantes.value;
-  var numeroOtrosUsuarios = numeroOtroUsuarios.value;
-  var dispositivos_temp = selectItemDispositivos.value;
-  var metadatos_temp = metadatos.value;
-  var selectItemSO_temp = selectItemSO.value;
-  var selectItemNavegador_temp = selectItemNavegador.value;
-  var selectedItem_temp = selectedItem.value;
-  var selectedItemCiudad_temp = selectedItemCiudad.value;
-
-
-  if(crit.includes("dispositivos")){
-    if(dispositivos_temp.length < 1 || dispositivos_temp == ""){
-      alert("Debe seleccionar un dispositivo");
-      return false;
-    }
-  }
-
-  if(crit.includes("metadatos")){
-    if(metadatos_temp.length < 1 || metadatos_temp == ""){
-      alert("Debe seleccionar al menos 1 metadato");
-      return false;
-    }
-  }
-
-  if(crit.includes("plataforma")){
-    if(selectItemSO_temp.length < 1 || selectItemSO_temp == ""){
-      alert("Debe seleccionar al menos 1 SO");
-      return false;
-    }
-
-    if(selectItemNavegador_temp.length < 1 || selectItemNavegador_temp == ""){
-      alert("Debe seleccionar al menos 1 Navegador");
-      return false;
-    }
-  }
-
-  if(crit.includes("trazabilidads")){
-    if(selectedItem_temp.length < 1 || selectedItem_temp == ""){
-      alert("Debe seleccionar al menos 1 país");
-      return false;
-    }
-
-    if(selectedItemCiudad_temp.length < 1 || selectedItemCiudad_temp == ""){
-      alert("Debe seleccionar al menos 1 ciudad");
-      return false;
-    }
-
-  }
-
-  if(participantes.length < 1 || participantes == ""){
-    alert("Debes ingresar el número de participantes");
-    return false;
-  }
-
-  if(participantes == 'Otro'){
-    if(numeroOtrosUsuarios < 1 || numeroOtrosUsuarios == ""){
-      alert("Debes ingresar el valor correspondiente para el número de participantes");
-      return false;
-    }
-
-  }
-
-  if(participantes == ''){
-    alert("Debes seleccionar la cantidad de usuarios");
-    return false;
-  }
-  return true;
-}
+// const hasErrors = computed(() => errorMessages.value.length > 0);
 
 function compareByTitle(a, b) {
   if (a.title === "Todas las ciudes") {
@@ -1783,8 +1390,6 @@ watch(async () => selectItemNavegador.value,async  (newValue, oldValue) => {
 
 });
 
-
-
 watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
   if(metadatos.value != null){
@@ -1801,7 +1406,7 @@ watch(async () => metadatos.value,async  (newValue, oldValue) => {
 
 });
 
-// Agregar estas variables en la sección de variables ref
+
 const filterLocal = ref('');
 const currentPageLocal = ref(1);
 // const timeoutId = ref(null);
@@ -1820,29 +1425,8 @@ const snackbar = ref({
   color: 'success'
 });
 
-
-const usersData = ref([]); // Para almacenar la lista de usuarios
-
-// Agregar estos métodos
-async function refreshUserData() {
-  if (!tempCampaignId.value) return;
-  
-  try {
-    const response = await fetch(`https://ads-service.vercel.app/campaign/${tempCampaignId.value}/user`);
-    const data = await response.json();
-    if (data && data[0]) {
-      usersData.value = data[0].userId;
-      filteredUsers.value = data[0].userId;
-      // Actualizar dataUsuarios para mantener sincronización
-      dataUsuarios.value = {
-        ...dataUsuarios.value,
-        userIds: data[0].userId.map(user => user.wylexId)
-      };
-    }
-  } catch (error) {
-    console.error('Error al actualizar datos:', error);
-  }
-}
+const isUploading = ref(false);
+const fileInput = ref(null);
 
 // Función para la búsqueda
 async function handleSearch() {
@@ -1881,7 +1465,7 @@ function handleAddSpecificUser(user) {
   }
 }
 
-// Agregar computed properties
+// computed properties
 const totalPages = computed(() => {
   return Math.ceil(filteredUsers.value.length / 10); // 10 usuarios por página
 });
@@ -1902,30 +1486,7 @@ const currentUsers = computed(() => {
   return filtered.slice(start, start + 10)
 })
 
-// Agregar estas variables ref
-const tempCampaignId = ref('');
-
-// Función para generar ID temporal
-function generateTempId() {
-  return 'temp_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
-}
-
-// Agregar watch para modoPersonalizado
-watch(() => modoPersonalizado.value, async (newValue) => {
-  if (newValue) {
-    if (!tempCampaignId.value) {
-      tempCampaignId.value = generateTempId();
-      console.log('ID temporal generado:', tempCampaignId.value);
-    }
-    await refreshUserData();
-  }
-});
-
-// Agregar estas variables ref
-const isUploading = ref(false);
-const fileInput = ref(null);
-
-// Agregar computed property para controlar la visibilidad de elementos
+// para controlar la visibilidad de elementos
 const hasUsers = computed(() => {
   return filteredUsers.value && filteredUsers.value.length > 0;
 });
@@ -1936,103 +1497,6 @@ function triggerFileInput() {
     fileInput.value.click();
   }
 }
-
-// Función actualizada para manejar el archivo CSV
-// async function handleFileChange(event) {
-//   const file = event.target.files[0];
-//   if (!file) return;
-
-//   if (!file.name.endsWith('.csv')) {
-//     snackbar.value = {
-//       show: true,
-//       text: 'Por favor, selecciona un archivo CSV',
-//       color: 'error'
-//     };
-//     event.target.value = '';
-//     return;
-//   }
-
-//   isUploading.value = true;
-
-//   try {
-//     const Papa = (await import('papaparse')).default;
-
-//     Papa.parse(file, {
-//       header: true,
-//       complete: async (result) => {
-//         try {
-//           if (!result.data || !result.data.length) {
-//             throw new Error('El archivo está vacío');
-//           }
-
-//           console.log('Datos del CSV:', result.data);
-
-//           const userIds = result.data
-//             .filter(row => row.id && row.id.trim() !== '')
-//             .map(row => parseInt(row.id))
-//             .filter(id => !isNaN(id));
-
-//           console.log('IDs filtrados:', userIds);
-
-//           if (userIds.length === 0) {
-//             throw new Error('No se encontraron IDs válidos en el archivo');
-//           }
-
-//           if (userIds.length > 30000) {
-//             throw new Error('El máximo es 30,000 usuarios');
-//           }
-
-//           // Procesamos los usuarios en lotes de 1000 para evitar sobrecarga
-//           const batchSize = 1000;
-//           for (let i = 0; i < userIds.length; i += batchSize) {
-//             const batch = userIds.slice(i, i + batchSize);
-//             await updateBulkUsers(batch);
-            
-//             // Actualizamos el progreso
-//             snackbar.value = {
-//               show: true,
-//               text: `Procesando... ${Math.min((i + batchSize), userIds.length)} de ${userIds.length} usuarios`,
-//               color: 'info'
-//             };
-//           }
-
-//           snackbar.value = {
-//             show: true,
-//             text: `${userIds.length} usuarios procesados exitosamente`,
-//             color: 'success'
-//           };
-
-//           await refreshUserData();
-//         } catch (error) {
-//           console.error('Error procesando archivo:', error);
-//           snackbar.value = {
-//             show: true,
-//             text: `Error: ${error.message}`,
-//             color: 'error'
-//           };
-//         }
-//       },
-//       error: (error) => {
-//         console.error('Error parsing CSV:', error);
-//         snackbar.value = {
-//           show: true,
-//           text: `Error al procesar el archivo: ${error.message}`,
-//           color: 'error'
-//         };
-//       }
-//     });
-//   } catch (error) {
-//     console.error('Error general:', error);
-//     snackbar.value = {
-//       show: true,
-//       text: `Error: ${error.message}`,
-//       color: 'error'
-//     };
-//   } finally {
-//     isUploading.value = false;
-//     event.target.value = '';
-//   }
-// }
 
 // Función actualizada para manejar el CSV
 async function handleFileChange(event) {
@@ -2133,6 +1597,5 @@ async function handleExport() {
     };
   }
 }
-
 
 </script>
