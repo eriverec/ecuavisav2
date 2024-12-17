@@ -168,7 +168,7 @@ function eventRadioManager() {
 function procesosHorarioEnvivo(json = {}){
   var { data = null, apiUrl = "", enVivoRedy = null, textIndicador = null, btnTelcomunidad = null, btnTelevistazo7pm = null, title_programa = null, playerembed = null, fondito__ = null } = json;
   try{
-
+    // console.log("playerembed", playerembed)
     var iframeIndividual = '';
     function newValueIframe(x) {
       iframeIndividual = x;
@@ -194,28 +194,24 @@ function procesosHorarioEnvivo(json = {}){
     const htmlIframe = data.html.value;
 
     if (!forzado) {
-      for (const dia of data.horarios) {
-        if (dia.estadoDia) {
+      const dia = data.horarios.find(e => e.dia == diaSemana);
+      console.log("dia", dia)
+      if (dia && dia.estadoDia) {
           if (dia.dia === diaSemana) {
             let programasHoy = [];
             for (const hora of dia.horas) {
-              if (hora.estadoHorario) {
-                const inicioHora = parseInt(hora.inicio.split(":")[0]);
-                const inicioMinutos = parseInt(hora.inicio.split(":")[1]);
-                const finHora = parseInt(hora.fin.split(":")[0]);
-                const finMinutos = parseInt(hora.fin.split(":")[1]);
+              if (!hora.estadoHorario) continue;
 
+              const [inicioHora, inicioMinutos] = hora.inicio.split(":").map(Number);
+              const [finHora, finMinutos] = hora.fin.split(":").map(Number);
 
-                if (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) {
-                  if (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos)) {
-                    programasHoy.push(hora.tituloPrograma);
-                    var iframeIndividual2 = hora.iframe;
-                    if (iframeIndividual2) {
-                      newValueIframe(iframeIndividual2);
-                    }
-                    // console.log("yaaa-arriba", iframeIndividual);
-                  }
-                }
+              const dentroDelHorario =
+                (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) &&
+                (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos));
+
+              if (dentroDelHorario) {
+                programasHoy.push(hora.tituloPrograma);
+                if (hora.iframe) newValueIframe(hora.iframe);
               }
             }
             console.log("programasHoy", programasHoy)
@@ -228,6 +224,26 @@ function procesosHorarioEnvivo(json = {}){
                 if (fondito__) {
                   fondito__.style.display = "none";
                 }
+
+                if (enVivoRedy) {
+                  enVivoRedy.style.display = 'flex';
+                }
+                // console.log("programa", programa)
+                if (programa === "Televistazo en la comunidad") {
+                    // console.log("btnTelcomunidad", btnTelcomunidad)
+                  if (btnTelcomunidad) {
+                    // console.log("btnTelcomunidad", btnTelcomunidad)
+                    btnTelcomunidad.style.display = "block";
+                  }
+                }
+
+                //Televistazo 7PM - nuevo requerimiento.
+                if (programa === "Televistazo 7PM") {
+                  if (btnTelevistazo7pm) {
+                    btnTelevistazo7pm.style.display = "block";
+                  }
+                }
+
                 if (playerembed) {
                   playerembed.style.display = 'block';
                   if (!playerembed?.querySelector('iframe')) {
@@ -237,34 +253,23 @@ function procesosHorarioEnvivo(json = {}){
                       // iframeIndividual = iframeIndividual
                       // console.log("yaaa-abajo", iframeIndividual);
                       if (iframeIndividual != '') {
-                        console.log("si hay iframe individual", iframeIndividual);
+                        console.log("si hay iframe individual");
                         setTimeout(() => {
                           playerembed.innerHTML = iframeIndividual;
                           paramUserVideo();
                         }, 1000);
+                        return true;
 
                       } else {
                         console.log("no hay iframe individual");
+                        // console.log("htmlIframe", htmlIframe)
+                        // console.log("playerembed", playerembed)
                         playerembed.innerHTML = htmlIframe;
                         paramUserVideo();
-                        console.log(htmlIframe);
+                        // console.log(htmlIframe);
+                        return true;
                       }
                     }
-                  }
-                }
-                if (enVivoRedy) {
-                  enVivoRedy.style.display = 'flex';
-                }
-                if (programa === "Televistazo en la comunidad") {
-                  if (btnTelcomunidad) {
-                    btnTelcomunidad.style.display = "block";
-                  }
-                }
-
-                //Televistazo 7PM - nuevo requerimiento.
-                if (programa === "Televistazo 7PM") {
-                  if (btnTelevistazo7pm) {
-                    btnTelevistazo7pm.style.display = "block";
                   }
                 }
               });
@@ -279,7 +284,7 @@ function procesosHorarioEnvivo(json = {}){
               if (playerembed) {
                 playerembed.style.display = 'none';
                 if (playerembed?.querySelector('iframe')) {
-                  playerEmbed.querySelector('iframe').remove();
+                  playerembed.querySelector('iframe').remove();
                 }
               }
               if (enVivoRedy) {
@@ -294,21 +299,20 @@ function procesosHorarioEnvivo(json = {}){
               }
             }
           } else { }
-        } else {
-          if (fondito__) { fondito__.style.display = "block"; }
-          if (title_programa) {
-            title_programa.innerHTML = '';
-            title_programa.style.display = 'none';
-          }
-          if (playerembed) {
-            playerembed.style.display = 'none';
-            if (playerembed?.querySelector('iframe')) {
-              playerEmbed.querySelector('iframe').remove();
-            }
-
-          }
-          if (enVivoRedy) { enVivoRedy.style.display = 'none'; }
+      } else {
+        if (fondito__) { fondito__.style.display = "block"; }
+        if (title_programa) {
+          title_programa.innerHTML = '';
+          title_programa.style.display = 'none';
         }
+        if (playerembed) {
+          playerembed.style.display = 'none';
+          if (playerembed?.querySelector('iframe')) {
+            playerembed.querySelector('iframe').remove();
+          }
+
+        }
+        if (enVivoRedy) { enVivoRedy.style.display = 'none'; }
       }
     } else {
       const dataTitulo = data.forzado.titulo;
