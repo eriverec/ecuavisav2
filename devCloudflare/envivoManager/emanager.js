@@ -462,7 +462,8 @@ function eventoEnvivoManager() {
 function eventoEnvivoManagerQuito() {
   // const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivoQuito";
   const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioEnvivoQuito";
-  const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad_quito');
+  // const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad_quito');
+  const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad');
   const title_programa_quito = document.querySelector('.title_programa_quito');
   const playerembed_quito = document.querySelector('#playerembed_quito');
   const fondito__quito = document.querySelector('#fondito__quito');
