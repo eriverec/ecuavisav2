@@ -1319,8 +1319,8 @@ function validarFormulario() {
   }
 
   if (!criterio.value?.length) {
-    alert("Debe seleccionar al menos un criterio");
-    return false;
+    // alert("Debe seleccionar al menos un criterio");
+    return true;
   }
 
   return true;
