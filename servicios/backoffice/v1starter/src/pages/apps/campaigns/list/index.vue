@@ -1,5 +1,7 @@
 <script setup>
 import { getPaisConfig } from "@core/libs/campaigns/config";
+import { useRouter } from 'vue-router';
+const router = useRouter()
 import debounce from 'lodash/debounce';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -242,8 +244,13 @@ async function createRecord() {
   };
 
   // Llamar a la función para actualizar la vista y habilitar nuevamente la lista
-  await getCampaigns(1);
-  disabledViewList.value = false;
+  // await getCampaigns(1);
+  // disabledViewList.value = false;
+
+  router.push({ 
+    name: 'apps-campaigns-duplicate-id', 
+    params: { id: newRecordModalObject._id }
+  })
 }
 
 
@@ -671,7 +678,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                                 <VListItem
                                   v-else
                                   :to="{
-                                    name: 'apps-campaigns-edit-id',
+                                    name: 'apps-campaigns-duplicate-id',
                                     params: { id: c._id },
                                   }"
                                 >
