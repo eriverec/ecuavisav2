@@ -87,7 +87,7 @@
           </VCardTitle>
           <VCardText>
             <VRow class="pb-5">
-              <VCol cols="6">
+              <!-- <VCol cols="6">
                 <VRow no-gutters>
                   <VCol cols="12" md="12">
                     <label for="tipocontenido">Tipo de contenido</label>
@@ -106,7 +106,7 @@
   
               <VCol cols="12">
                 <hr>
-              </VCol>
+              </VCol> -->
   
               <!-- Campo de código (visible cuando no es imagen) -->
               <VCol cols="12" :class="(languages=='imagen'?'d-none':'')">
@@ -248,70 +248,66 @@
   </VCol>
 <!-- Tarjeta de Target/Usuarios -->
 <VCol cols="12">
-  <VCard>
-    <VCardTitle class="pa-4">
-      <VChip
-        color="primary"
-        label
-        size="large"
-        class="px-4 py-2 text-uppercase"
-      >
-        Target / Usuarios
-      </VChip>
-    </VCardTitle>
-    <VCardText>
-      <div class="d-flex justify-end mb-4">
-        <VSwitch
-          v-model="modoPersonalizado"
-          color="primary"
-          label="Modo Personalizado"
-          hide-details
-        />
-      </div>
+    <VCard>
+      <VCardTitle class="pa-4">
+        <VChip color="primary" label size="large" class="px-4 py-2 text-uppercase">
+          Target / Usuarios
+        </VChip>
+      </VCardTitle>
+      <VCardText>
+        <div class="d-flex justify-start mb-4">
+          <VSwitch
+            v-model="modoPersonalizado"
+            color="primary"
+            label="Modo Personalizado"
+            hide-details
+          />
+        </div>
 
-      <!-- Contenido que cambia según el switch -->
-      <VRow v-if="!modoPersonalizado">
-        <VCol cols="12">
-          <h3 class="text-center">Filtrar en la plataforma</h3>
-          <p class="mb-5 text-center">usuarios registrados en ecuavisa.com</p>
+        <!-- Contenido que cambia según el switch -->
+        <VRow v-if="!modoPersonalizado">
+          <!-- Columna izquierda para filtros -->
+          <VCol cols="9">
+            <h3 class="text-h5">Filtrar en la plataforma</h3>
+            <p class="mb-5">usuarios registrados en ecuavisa.com</p>
 
-          <!-- Tabla de criterios -->
-          <VTable density="compact" class="border-transparent mb-4">
-            <tbody>
-              <tr>
-                <td class="border-transparent" style="width: 50%">
-                  <VCheckbox
-                    v-model="criterio"
-                    :label="criterioList[0].title"
-                    :value="criterioList[0].value"
-                  />
-                </td>
-                <td class="border-transparent" style="width: 50%">
-                  <VCheckbox
-                    v-model="criterio"
-                    :label="criterioList[1].title"
-                    :value="criterioList[1].value"
-                  />
-                </td>
-              </tr>
-              <tr>
-                <td class="border-transparent">
-                  <VCheckbox
-                    v-model="criterio"
-                    :label="criterioList[2].title"
-                    :value="criterioList[2].value"
-                  />
-                </td>
-                <td class="border-transparent">
-                  <VCheckbox
-                    v-model="criterio"
-                    :label="criterioList[3].title"
-                    :value="criterioList[3].value"
-                  />
-                </td>
-              </tr>
-            </tbody>
-          </VTable>
+            <!-- Tabla de criterios -->
+            <VTable density="compact" class="border-transparent mb-4">
+              <tbody>
+                <tr>
+                  <td class="border-transparent">
+                    <VCheckbox
+                      v-model="criterio"
+                      :label="criterioList[0].title"
+                      :value="criterioList[0].value"
+                    />
+                  </td>
+                  <td class="border-transparent">
+                    <VCheckbox
+                      v-model="criterio"
+                      :label="criterioList[1].title"
+                      :value="criterioList[1].value"
+                    />
+                  </td>
+                </tr>
+                <tr>
+                  <td class="border-transparent">
+                    <VCheckbox
+                      v-model="criterio"
+                      :label="criterioList[2].title"
+                      :value="criterioList[2].value"
+                    />
+                  </td>
+                  <td class="border-transparent">
+                    <VCheckbox
+                      v-model="criterio"
+                      :label="criterioList[3].title"
+                      :value="criterioList[3].value"
+                    />
+                  </td>
+                </tr>
+              </tbody>
+            </VTable>
 
                 <!-- Campos condicionales -->
                 <VCol cols="12" :class="criterio.includes('metadatos')?'':'d-none'">
@@ -519,183 +515,206 @@
                               </VRow>
                </VCol>
 
-              </VCol>
-            </VRow>
+          </VCol>
 
-             <!-- Vista de modo personalizado -->
-      <!-- Reemplazar la sección de modo personalizado en la última tarjeta -->
+              
+      <!-- Columna derecha para estadísticas -->
+      <VCol cols="3">
+            <VCard class="bg-light-success">
+              <VCardText>
+                <h3 class="text-h6 mb-4">Total de usuarios</h3>
+                <div class="d-flex align-center">
+                  <VIcon
+                    size="32"
+                    icon="mdi-account-group"
+                    color="success"
+                    class="me-2"
+                  />
+                  <div>
+                    <div class="text-h4 font-weight-bold text-center">
+                      {{ formattedUserCount }}
+                    </div>
+                  </div>
+                </div>
+              </VCardText>
+            </VCard>
+          </VCol>
+        </VRow>
+
+      <!-- Vista de modo personalizado -->
       <VRow v-else>
-  <VCol cols="12">
-    <VSnackbar
-      v-model="snackbar.show"
-      :color="snackbar.color"
-      :timeout="2000"
-      location="top"
-    >
-      {{ snackbar.text }}
-    </VSnackbar>
-
-    <!-- Campo de búsqueda y botones -->
-    <VRow justify="space-between" class="mb-4">
-      <VCol cols="4">
-        <VTextField 
-          append-inner-icon="tabler-user-search" 
-          @input="filtrarUsuarios" 
-          v-model="filterLocal" 
-          label="Buscar usuarios dentro del listado"
-          density="compact"
-          :disabled="!hasUsers"
-        />
-      </VCol>
-      <VCol cols="auto">
-        <div class="d-flex gap-3 flex-wrap">
-          <VBtn 
-            color="info" 
-            @click="handleExport" 
-            size="small"
-            :disabled="!hasUsers"
+        <VCol cols="12">
+          <VSnackbar
+            v-model="snackbar.show"
+            :color="snackbar.color"
+            :timeout="2000"
+            location="top"
           >
-            Descargar Usuarios<VIcon end icon="tabler-download" />
-          </VBtn>
-          <VBtn 
-            color="success" 
-            @click="handleAddUser" 
-            size="small"
-            
-          >
-            Añadir usuarios<VIcon end icon="mdi-account-plus" />
-          </VBtn>
-          <VBtn 
-            color="primary" 
-            @click="triggerFileInput" 
-            size="small"
-            :loading="isUploading"
-          >
-            Importar CSV<VIcon end icon="mdi-file-upload" />
-          </VBtn>
-          <input
-            ref="fileInput"
-            type="file"
-            accept=".csv"
-            style="display: none"
-            @change="handleFileChange"
-          />
-        </div>
-      </VCol>
-    </VRow>
+            {{ snackbar.text }}
+          </VSnackbar>
 
-    <!-- Lista de usuarios (visible solo cuando hay usuarios) -->
-    <div v-if="hasUsers">
-      <VList lines="two">
-  <VListItem
-    v-for="user in currentUsers"
-    :key="user.wylexId"
-    border
-  >
-    <VListItemTitle>
-      {{ user.firstname || user.first_name }} {{ user.lastname || user.last_name }}
-    </VListItemTitle>
-    <VListItemSubtitle class="mt-1">
-      <span class="text-xs text-disabled">{{ user.email }}</span>
-    </VListItemSubtitle>
-    <template #append>
-      <VBtn
-        icon
-        size="x-small"
-        color="error"
-        variant="text"
-        @click="handleDeleteUser(user.wylexId)"
-      >
-        <VIcon size="22" icon="tabler-trash" />
-      </VBtn>
-    </template>
-  </VListItem>
-</VList>
+          <!-- Campo de búsqueda y botones -->
+          <VRow justify="space-between" class="mb-4">
+            <VCol cols="4">
+              <VTextField 
+                append-inner-icon="tabler-user-search" 
+                @input="filtrarUsuarios" 
+                v-model="filterLocal" 
+                label="Buscar usuarios dentro del listado"
+                density="compact"
+                :disabled="!hasUsers"
+              />
+            </VCol>
+            <VCol cols="auto">
+              <div class="d-flex gap-3 flex-wrap">
+                <VBtn 
+                  color="info" 
+                  @click="handleExport" 
+                  size="small"
+                  :disabled="!hasUsers"
+                >
+                  Descargar Usuarios<VIcon end icon="tabler-download" />
+                </VBtn>
+                <VBtn 
+                  color="success" 
+                  @click="handleAddUser" 
+                  size="small"
+                  
+                >
+                  Añadir usuarios<VIcon end icon="mdi-account-plus" />
+                </VBtn>
+                <VBtn 
+                  color="primary" 
+                  @click="triggerFileInput" 
+                  size="small"
+                  :loading="isUploading"
+                >
+                  Importar CSV<VIcon end icon="mdi-file-upload" />
+                </VBtn>
+                <input
+                  ref="fileInput"
+                  type="file"
+                  accept=".csv"
+                  style="display: none"
+                  @change="handleFileChange"
+                />
+              </div>
+            </VCol>
+          </VRow>
 
-      <!-- Paginación -->
-      <div class="d-flex justify-center mt-4">
-        <VBtn 
-          variant="tonal" 
-          @click="currentPageLocal--" 
-          :disabled="currentPageLocal <= 1" 
-          size="small" 
-          color="primary"
+          <!-- Lista de usuarios (visible solo cuando hay usuarios) -->
+          <div v-if="hasUsers">
+            <VList lines="two">
+        <VListItem
+          v-for="user in currentUsers"
+          :key="user.wylexId"
+          border
         >
-          <VIcon start icon="tabler-arrow-left" /> Anterior
-        </VBtn>
-        <VBtn 
-          variant="tonal" 
-          @click="currentPageLocal++" 
-          :disabled="currentPageLocal >= totalPages" 
-          size="small" 
-          color="primary" 
-          class="ms-3"
-        >
-          Siguiente <VIcon end icon="tabler-arrow-right" />
-        </VBtn>
-      </div>
-    </div>
+          <VListItemTitle>
+            {{ user.firstname || user.first_name }} {{ user.lastname || user.last_name }}
+          </VListItemTitle>
+          <VListItemSubtitle class="mt-1">
+            <span class="text-xs text-disabled">{{ user.email }}</span>
+          </VListItemSubtitle>
+          <template #append>
+            <VBtn
+              icon
+              size="x-small"
+              color="error"
+              variant="text"
+              @click="handleDeleteUser(user.wylexId)"
+            >
+              <VIcon size="22" icon="tabler-trash" />
+            </VBtn>
+          </template>
+        </VListItem>
+      </VList>
 
-    <!-- Mensaje cuando no hay usuarios -->
-    <div v-else class="text-center pa-4">
-      <p class="text-medium-emphasis">No hay usuarios cargados. Por favor, importa un archivo CSV para comenzar.</p>
-    </div>
+            <!-- Paginación -->
+            <div class="d-flex justify-center mt-4">
+              <VBtn 
+                variant="tonal" 
+                @click="currentPageLocal--" 
+                :disabled="currentPageLocal <= 1" 
+                size="small" 
+                color="primary"
+              >
+                <VIcon start icon="tabler-arrow-left" /> Anterior
+              </VBtn>
+              <VBtn 
+                variant="tonal" 
+                @click="currentPageLocal++" 
+                :disabled="currentPageLocal >= totalPages" 
+                size="small" 
+                color="primary" 
+                class="ms-3"
+              >
+                Siguiente <VIcon end icon="tabler-arrow-right" />
+              </VBtn>
+            </div>
+          </div>
 
-    <!-- Modal de búsqueda -->
-    <VDialog v-model="showSearchDialog" max-width="800px">
-      <VCard>
-        <VCardTitle>Buscar Usuarios</VCardTitle>
-        <VCardText>
-          <VTextField
-            v-model="searchQuery"
-            @input="handleSearch"
-            label="Buscar por nombre, correo o teléfono (mínimo 4 caracteres)"
-            append-inner-icon="tabler-search"
-            :loading="isSearching"
-          />
-          
-          <VTable v-if="searchResults.length > 0">
-            <thead>
-              <tr>
-                <th>Nombre</th>
-                <th>Correo</th>
-                <th>Acciones</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="user in searchResults" :key="user.wylexId">
-                <td>{{ user.first_name }} {{ user.last_name }}</td>
-                <td>{{ user.email }}</td>
-                <td>
-                  <VBtn
-                    size="small"
-                    color="primary"
-                    @click="handleAddSpecificUser(user)"
-                    :loading="loadingAdd"
-                  >
-                    Agregar
-                  </VBtn>
-                </td>
-              </tr>
-            </tbody>
-          </VTable>
-        </VCardText>
-        <VCardActions>
-          <VSpacer />
-          <VBtn
-            color="primary"
-            text
-            @click="closeSearchDialog"
-          >
-            Cerrar
-          </VBtn>
-        </VCardActions>
-      </VCard>
-    </VDialog>
-  </VCol>
-</VRow>
+          <!-- Mensaje cuando no hay usuarios -->
+          <div v-else class="text-center pa-4">
+            <p class="text-medium-emphasis">No hay usuarios cargados. Por favor, importa un archivo CSV para comenzar.</p>
+          </div>
+
+          <!-- Modal de búsqueda -->
+          <VDialog v-model="showSearchDialog" max-width="800px">
+            <VCard>
+              <VCardTitle>Buscar Usuarios</VCardTitle>
+              <VCardText>
+                <VTextField
+                  v-model="searchQuery"
+                  @input="handleSearch"
+                  label="Buscar por nombre, correo o teléfono (mínimo 4 caracteres)"
+                  append-inner-icon="tabler-search"
+                  :loading="isSearching"
+                />
+                
+                <VTable v-if="searchResults.length > 0">
+                  <thead>
+                    <tr>
+                      <th>Nombre</th>
+                      <th>Correo</th>
+                      <th>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="user in searchResults" :key="user.wylexId">
+                      <td>{{ user.first_name }} {{ user.last_name }}</td>
+                      <td>{{ user.email }}</td>
+                      <td>
+                        <VBtn
+                          size="small"
+                          color="primary"
+                          @click="handleAddSpecificUser(user)"
+                          :loading="loadingAdd"
+                        >
+                          Agregar
+                        </VBtn>
+                      </td>
+                    </tr>
+                  </tbody>
+                </VTable>
+              </VCardText>
+              <VCardActions>
+                <VSpacer />
+                <VBtn
+                  color="primary"
+                  text
+                  @click="closeSearchDialog"
+                >
+                  Cerrar
+                </VBtn>
+              </VCardActions>
+            </VCard>
+          </VDialog>
+        </VCol>
+      </VRow>
     </VCardText>
   </VCard>
+
 </VCol>
 
     </VRow>
@@ -1088,10 +1107,17 @@ async function getUsuarios(){
     const respuesta = await send.json();    
     //console.log('resp',respuesta);    
     dataUsuarios.value =respuesta;
-    //console.log('data total',dataUsuarios.value);
+    console.log('data total',dataUsuarios.value);
 
   
 }
+
+// actualizar numero de usuarios
+const formattedUserCount = computed(() => {
+  const total = dataUsuarios.value?.total || 0
+  return new Intl.NumberFormat('es-ES').format(total)
+})
+
 
 const consentimiento = ref(false);
 
