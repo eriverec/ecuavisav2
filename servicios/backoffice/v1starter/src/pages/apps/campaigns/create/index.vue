@@ -1,5 +1,37 @@
 <template>
-    <div class="position-relative">
+  <div class="position-relative">
+    <VOverlay 
+      v-model="loadingPanel" 
+      class="align-center justify-center"
+      persistent
+      :opacity="0.8"
+    >
+      <VProgressCircular
+        indeterminate
+        color="primary"
+        size="64"
+      />
+    </VOverlay>
+
+    <!-- Snackbar -->
+    <VSnackbar
+      v-model="snackbar.show"
+      :color="snackbar.color"
+      :timeout="2000"
+      :location="snackbar.location || 'top'"
+    >
+      {{ snackbar.text }}
+      <template v-slot:actions>
+        <VBtn
+          color="white"
+          text
+          @click="snackbar.show = false"
+        >
+          Cerrar
+        </VBtn>
+      </template>
+    </VSnackbar>
+
       <VRow>
         <!-- Detalles de campaña-->
         <VCol cols="12" md="6">
@@ -819,6 +851,8 @@
     </VSnackbar>
   </div>
 </template>
+
+
   
 <script setup>
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
@@ -1138,8 +1172,6 @@ function slugify(text) {
     .replace(/-+$/, ''); // Remover guiones bajos al final
 }
 
-
-// Agregar esta función antes de onComplete
 function validarFormulario() {
   if (!nombreCampania.value) {
     alert("El nombre de la campaña es obligatorio");
@@ -1168,7 +1200,6 @@ function validarFormulario() {
 
   return true;
 }
-
 
 async function onComplete() {
   if (!validarFormulario()) {
@@ -1226,13 +1257,28 @@ async function onComplete() {
     const data = await response.json();
     
     if (data.resp) {
-      router.push('/apps/campaigns/list');
+      snackbar.value = {
+        show: true,
+        text: 'Campaña creada exitosamente',
+        color: 'success'
+      };
+      setTimeout(() => {
+        router.push('/apps/campaigns/list');
+      }, 2000);
     } else {
-      alert("Error al crear la campaña: " + (data.error || 'Error desconocido'));
+      snackbar.value = {
+        show: true,
+        text: "Error al crear la campaña: " + (data.error || 'Error desconocido'),
+        color: 'error'
+      };
     }
   } catch (error) {
     console.error("Error al crear la campaña:", error);
-    alert("Error al crear la campaña");
+    snackbar.value = {
+      show: true,
+      text: "Error al crear la campaña",
+      color: 'error'
+    };
   } finally {
     loadingPanel.value = false;
   }
@@ -1455,24 +1501,60 @@ const isUploading = ref(false);
 const fileInput = ref(null);
 
 // Función para la búsqueda
+// async function handleSearch() {
+//   if (searchQuery.value.length < 4) return
+
+//   isSearching.value = true
+//   try {
+//     const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${encodeURIComponent(searchQuery.value)}`)
+//     const data = await response.json()
+    
+//     if (data.resp) {
+//       searchResults.value = data.data
+//     } else {
+//       searchResults.value = []
+//     }
+//   } catch (error) {
+//     console.error('Error en búsqueda:', error)
+//     searchResults.value = []
+//   } finally {
+//     isSearching.value = false
+//   }
+// }
+
 async function handleSearch() {
   if (searchQuery.value.length < 4) return
 
-  isSearching.value = true
+  loadingPanel.value = true
   try {
     const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${encodeURIComponent(searchQuery.value)}`)
     const data = await response.json()
     
     if (data.resp) {
       searchResults.value = data.data
+      snackbar.value = {
+        show: true,
+        text: `Se encontraron ${data.data.length} resultados`,
+        color: 'info'
+      }
     } else {
       searchResults.value = []
+      snackbar.value = {
+        show: true,
+        text: 'No se encontraron resultados',
+        color: 'warning'
+      }
     }
   } catch (error) {
     console.error('Error en búsqueda:', error)
     searchResults.value = []
+    snackbar.value = {
+      show: true,
+      text: 'Error al realizar la búsqueda',
+      color: 'error'
+    }
   } finally {
-    isSearching.value = false
+    loadingPanel.value = false
   }
 }
 
@@ -1539,6 +1621,7 @@ async function handleFileChange(event) {
     return
   }
 
+  loadingPanel.value = true
   try {
     const Papa = (await import('papaparse')).default;
 
@@ -1550,7 +1633,6 @@ async function handleFileChange(event) {
             throw new Error('El archivo está vacío')
           }
 
-          // Procesar los datos del CSV
           const validUsers = results.data
             .filter(row => row.id && row.id.trim() !== '')
             .map(row => ({
@@ -1565,7 +1647,6 @@ async function handleFileChange(event) {
             throw new Error('No se encontraron usuarios válidos')
           }
 
-          // Actualizar la lista de usuarios y los IDs
           filteredUsers.value = validUsers
           userIds.value = validUsers.map(user => user.wylexId)
 
@@ -1590,6 +1671,7 @@ async function handleFileChange(event) {
       color: 'error'
     }
   } finally {
+    loadingPanel.value = false
     event.target.value = ''
   }
 }
@@ -1598,29 +1680,42 @@ async function handleExport() {
   if (!hasUsers.value) return;
 
   try {
+    loadingPanel.value = true;
     const Papa = (await import('papaparse')).default;
     
-    const csvData = Papa.unparse(filteredUsers.value.map(user => ({
-      id: user.wylexId,
-      nombre: `${user.firstname || user.first_name} ${user.lastname || user.last_name}`,
-      email: user.email
-    })));
+    const csvData = Papa.unparse({
+      fields: ['id', 'firstname', 'last_name', 'email'],
+      data: filteredUsers.value.map(user => ({
+        id: user.wylexId,
+        firstname: user.firstname || user.first_name || '',
+        last_name: user.lastname || user.last_name || '',
+        email: user.email || ''
+      }))
+    });
 
     const blob = new Blob([csvData], { type: 'text/csv' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `usuarios_campana_${nombreCampania.value}_${new Date().toISOString()}.csv`;
+    a.download = `usuarios_campana_${slugify(nombreCampania.value)}_${new Date().toISOString()}.csv`;
     document.body.appendChild(a);
     a.click();
     window.URL.revokeObjectURL(url);
     document.body.removeChild(a);
+
+    snackbar.value = {
+      show: true,
+      text: 'Usuarios exportados exitosamente',
+      color: 'success'
+    };
   } catch (error) {
     snackbar.value = {
       show: true,
       text: 'Error al exportar usuarios',
       color: 'error'
     };
+  } finally {
+    loadingPanel.value = false;
   }
 }
 
