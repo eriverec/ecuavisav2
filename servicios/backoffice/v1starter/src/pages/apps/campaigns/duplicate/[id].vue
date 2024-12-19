@@ -333,6 +333,11 @@
         return true;
       }
 
+      if(modoPersonalizado.value && userIds.value.length < 1){
+        alert("No hay usuarios que guardar, suba un archivo");
+        return false;
+      }
+
       return true;
     }catch(error){
       console.error(error);
@@ -638,6 +643,10 @@
   //     selectItemParticipantes.value = [];
   //   }
   // });
+
+  watch(modoPersonalizado, (newValue, oldValue) =>{
+    itemsModificados.value = true;
+  });
 
   watch(() => selectedItem.value, (newValue, oldValue) => {
     if(inicioWatchItemsSelected) return true;
