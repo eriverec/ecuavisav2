@@ -1,3 +1,133 @@
+<script>
+import { useRoute } from 'vue-router';
+
+export default {
+  setup() {
+    const route = useRoute()
+    return {
+        id: route.params.id
+    }
+},
+  
+  data() {
+    return {
+      isLoadingPosition: false,
+      isLoadingContent: false,
+      showDialog: false,
+      activeTab: 'resumen',
+      positionDetails: null,
+      suggestion: {
+        _id: "",
+        campaignTitle: "",
+        statusCampaign: true,
+        description: "",
+        participantes: "",
+        userIdSize: 0,
+        urls: {
+          html: "",
+          img: {
+            escritorio: "",
+            mobile: ""
+          }
+        },
+        criterial: {
+          visibilitySection: "",
+          country: [],
+          city: -1
+        },
+        type: "",
+        position: "",
+        created_at: ""
+      }
+    }
+  },
+
+  async mounted() {
+    console.log('ID en mounted:', this.id);
+    await this.obtenerDetalles();
+},
+
+  methods: {
+    formatDate(dateString) {
+      const date = new Date(dateString)
+      const day = date.getDate().toString().padStart(2, '0')
+      const month = (date.getMonth() + 1).toString().padStart(2, '0')
+      const year = date.getFullYear().toString().slice(-2)
+      return `${day}/${month}/${year}`
+    },
+
+    getPaisTexto(country) {
+      if (Array.isArray(country) && country.length === 0) {
+        return 'País no definido'
+      }
+      return country || 'País no definido'
+    },
+
+    getCiudadTexto(city) {
+      return city === -1 ? 'Todas las ciudades' : city
+    },
+
+    async getDetallesCampaign() {
+    try {
+        console.log('Intentando obtener datos para ID:', this.id);
+        const respuesta = await fetch(`https://ads-service.vercel.app/campaign/${this.id}`);
+        const datos = await respuesta.json();
+        console.log('Datos recibidos:', datos);
+        return datos;
+    } catch (error) {
+        console.error('Error al obtener detalles:', error);
+        return null;
+    }
+},
+
+async obtenerDetalles() {
+    this.isLoadingContent = true;
+    try {
+        const datos = await this.getDetallesCampaign();
+        console.log('Datos a asignar:', datos);
+        if (datos) {
+            // Si los datos vienen en un array, tomamos el primer elemento
+            this.suggestion = Array.isArray(datos) ? datos[0] : datos;
+        }
+    } catch (error) {
+        console.error('Error:', error);
+    } finally {
+        this.isLoadingContent = false;
+    }
+},
+    
+
+async showPositionDialog() {
+    this.isLoadingPosition = true;
+    this.showDialog = true; // Mostramos el diálogo inmediatamente
+    
+    try {
+        const response = await fetch('https://configuracion-service.vercel.app/configuracion/adsDesktop')
+        const data = await response.json()
+        
+        const positionValue = this.getPositionValue(this.suggestion.position)
+        this.positionDetails = data.data.find(item => item.value === positionValue)
+        
+    } catch (error) {
+        console.error('Error al cargar los detalles de la posición:', error)
+    } finally {
+        this.isLoadingPosition = false;
+    }
+},
+
+    getPositionValue(position) {
+      const positionMap = {
+        'RDTop1': 'fullBanner',
+        'RDTop2': 'adbox',
+        'RDTop3': 'takeover',
+        'RDFloating': 'zocalo'
+      }
+      return positionMap[position] || position
+    }
+  }
+}
+</script>
+
 <template>
   <section>
     <div class="fill-width">
@@ -10,7 +140,6 @@
         </div>
       </div>
 
-      <!--  tabs -->
       <div class="d-flex justify-center">
         <div style="width: 800px;">
           <VTabs v-model="activeTab" class="justify-center">
@@ -41,7 +170,7 @@
 
                 <VDivider />
 
-                 <!-- Descripción -->
+                <!-- Descripción -->
                 <VListItem>
                   <template v-slot:prepend>
                     <VIcon color="primary" icon="mdi-text-long" size="24" />
@@ -51,22 +180,6 @@
                 </VListItem>
 
                 <VDivider />
-
-                <!-- País/Ciudad -->
-                <VListItem>
-                  <template v-slot:prepend>
-                    <VIcon color="primary" icon="mdi-map-marker-radius" size="24" />
-                  </template>
-                  <VListItemTitle class="font-weight-bold text-body-1">País / Ciudad</VListItemTitle>
-                  <VListItemSubtitle class="mt-1">
-                    <span>{{ getPaisTexto(suggestion.criterial.country) }}</span>
-                    <span> / </span>
-                    <span>{{ getCiudadTexto(suggestion.criterial.city) }}</span>
-                  </VListItemSubtitle>
-                </VListItem>
-
-                <VDivider />
-
 
                 <!-- Tipo de Contenido -->
                 <VListItem>
@@ -117,6 +230,22 @@
                 </VListItem>
 
                 <VDivider />
+
+                <!-- País/Ciudad (condicional) -->
+                <template v-if="suggestion.participantes === 'filtrado'">
+                  <VListItem>
+                    <template v-slot:prepend>
+                      <VIcon color="primary" icon="mdi-map-marker-radius" size="24" />
+                    </template>
+                    <VListItemTitle class="font-weight-bold text-body-1">País / Ciudad</VListItemTitle>
+                    <VListItemSubtitle class="mt-1">
+                      <span>{{ getPaisTexto(suggestion.criterial.country) }}</span>
+                      <span> / </span>
+                      <span>{{ getCiudadTexto(suggestion.criterial.city) }}</span>
+                    </VListItemSubtitle>
+                  </VListItem>
+                  <VDivider />
+                </template>
 
                 <!-- Posición -->
                 <VListItem>
@@ -173,7 +302,7 @@
                     <VIcon color="primary" icon="mdi-account-group" size="24" />
                   </template>
                   <VListItemTitle class="font-weight-bold text-body-1">Total Usuarios</VListItemTitle>
-                  <VListItemSubtitle class="mt-1">{{ suggestion.userId.length }}</VListItemSubtitle>
+                  <VListItemSubtitle class="mt-1">{{ suggestion.userIdSize }}</VListItemSubtitle>
                 </VListItem>
               </VList>
             </div>
@@ -188,199 +317,48 @@
       </VWindow>
     </div>
 
-    <!--  imagen de posición -->
+    <!-- Diálogo para mostrar imagen de posición -->
     <VDialog
-      v-model="showDialog"
-      max-width="800"
-    >
-      <VCard>
-        <VCardTitle class="d-flex flex-column pa-4">
-          <div class="w-100 d-flex justify-end">
-            <VBtn
-              icon
-              color="grey"
-              variant="plain"
-              @click="showDialog = false"
-            >
-              <VIcon>mdi-close</VIcon>
-            </VBtn>
-          </div>
-          <div class="text-center w-100 mt-n6">
-            Imagen de la Posición
-          </div>
-        </VCardTitle>
-        <VCardText v-if="positionDetails" class="text-center">
-          <img 
-            :src="positionDetails.data.img" 
-            :alt="positionDetails.value"
-            class="position-image"
-          />
-        </VCardText>
-      </VCard>
-    </VDialog>
+  v-model="showDialog"
+  max-width="800"
+>
+  <VCard>
+    <VCardTitle class="d-flex flex-column pa-4">
+      <div class="w-100 d-flex justify-end">
+        <VBtn
+          icon
+          color="grey"
+          variant="plain"
+          @click="showDialog = false"
+        >
+          <VIcon>mdi-close</VIcon>
+        </VBtn>
+      </div>
+      <div class="text-center w-100 mt-n6">
+        Imagen de la Posición
+      </div>
+    </VCardTitle>
+    <VCardText class="text-center">
+      <!-- Loading -->
+      <div v-if="isLoadingPosition" class="d-flex justify-center align-center" style="min-height: 200px;">
+        <VProgressCircular
+          indeterminate
+          color="primary"
+        ></VProgressCircular>
+      </div>
+      
+      <!-- Imagen -->
+      <img 
+        v-else-if="positionDetails"
+        :src="positionDetails.data.img" 
+        :alt="positionDetails.value"
+        class="position-image"
+      />
+    </VCardText>
+  </VCard>
+</VDialog>
   </section>
 </template>
-
-
-<script>
-import { useRoute } from 'vue-router';
-
-export default {
-  setup() {
-    const route = useRoute()
-    const id = route.params.id
-    return { id }
-  },
-  
-  data() {
-    return {
-      isLoadingContent: false,
-      activeTab: 'resumen',
-      showDialog: false,
-      positionDetails: null,
-      suggestion: {
-        _id: "",
-        campaignTitle: "",
-        statusCampaign: true,
-        description: "",
-        urls: {
-          html: "",
-          img: {
-            escritorio: "",
-            mobile: ""
-          }
-        },
-        criterial: {
-          visibilitySection: "",
-          country: [],
-          city: -1
-        },
-        type: "",
-        position: "",
-        created_at: "",
-        userId: []
-      }
-    }
-  },
-
-  async mounted() {
-    await this.obtenerDetalles()
-  },
-
-  methods: {
-    formatDate(dateString) {
-      const date = new Date(dateString)
-      const day = date.getDate().toString().padStart(2, '0')
-      const month = (date.getMonth() + 1).toString().padStart(2, '0')
-      const year = date.getFullYear().toString().slice(-2)
-      return `${day}/${month}/${year}`
-    },
-
-    getPaisTexto(country) {
-      if (Array.isArray(country) && country.length === 0) {
-        return 'País no definido';
-      }
-      return country || 'País no definido';
-    },
-
-    getCiudadTexto(city) {
-      return city === -1 ? 'Todas las ciudades' : city;
-    },
-
-    async getDetallesCampaign(data = {}) {
-      const { limit = 20000, page = 1 } = data
-      const respuesta = await fetch(`https://ads-service.vercel.app/campaign/${this.id}/user/?limit=${limit}&page=${page}`)
-      const datos = await respuesta.json()
-      return datos[0]
-    },
-
-    // async obtenerDetalles() {
-    //   this.isLoadingContent = true
-    //   let skip = 1
-    //   let batchSize = 20000
-    //   let dataFull = []
-
-    //   while (true) {
-    //     const batchRegister = await this.getDetallesCampaign({
-    //       limit: batchSize,
-    //       page: skip
-    //     })
-
-    //     if (batchRegister.userId.length === 0) {
-    //       break
-    //     }
-
-    //     if (skip == 1) {
-    //       dataFull.push(...[batchRegister])
-    //     } else {
-    //       dataFull[0].userId.push(...batchRegister.userId)
-    //     }
-
-    //     this.suggestion = dataFull[0]
-    //     this.isLoadingContent = false
-    //     skip += 1
-    //   }
-    // },
-
-async obtenerDetalles() {
-      this.isLoadingContent = true
-      let skip = 1
-      let batchSize = 20000
-      let dataFull = []
-
-      while (true) {
-        const batchRegister = await this.getDetallesCampaign({
-          limit: batchSize,
-          page: skip
-        })
-
-        console.log('Datos recibidos:', batchRegister) // Para debug
-
-        if (batchRegister.userId.length === 0) {
-          break
-        }
-
-        if (skip == 1) {
-          dataFull.push(...[batchRegister])
-        } else {
-          dataFull[0].userId.push(...batchRegister.userId)
-        }
-
-        this.suggestion = dataFull[0]
-        console.log('Suggestion asignado:', this.suggestion) // Para debug
-        this.isLoadingContent = false
-        skip += 1
-      }
-},
-    async showPositionDialog() {
-      try {
-        const response = await fetch('https://configuracion-service.vercel.app/configuracion/adsDesktop')
-        const data = await response.json()
-        
-        const positionValue = this.getPositionValue(this.suggestion.position)
-        this.positionDetails = data.data.find(item => item.value === positionValue)
-        
-        if (this.positionDetails) {
-          this.showDialog = true
-        }
-      } catch (error) {
-        console.error('Error al cargar los detalles de la posición:', error)
-      }
-    },
-
-    getPositionValue(position) {
-      // Mapeo de posiciones
-      const positionMap = {
-        'RDTop1': 'fullBanner',
-        'RDTop2': 'adbox',
-        'RDTop3': 'takeover',
-        'RDFloating': 'zocalo'
-      }
-      return positionMap[position] || position
-    }
-}
-}
-</script>
 
 <style scoped>
 .fill-width {
