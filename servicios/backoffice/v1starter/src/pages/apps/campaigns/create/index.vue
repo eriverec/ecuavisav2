@@ -915,16 +915,29 @@ const fetchCategorias = async () => {
 const descripcionCampania = ref('');
 
 const selectItemVisibilidad = ref([]);
+// const selectItemsListVisibilidad = ref([
+//   { title:'Todo el sitio', value: 'all', avatar:"" },
+//   { title:'Lo-ultimo', value: 'Lo-ultimo', avatar:"" },
+//   { title:'Noticias', value: 'Noticias', avatar:"" },
+//   { title:'Mundo', value: 'Mundo', avatar:"" },
+//   { title:'Estadio', value: 'Mundo', avatar:"" },
+//   { title:'Entretenimiento', value: 'Entretenimiento', avatar:"" },
+//   { title:'Programas', value: 'Programas', avatar:"" },
+//   { title:'Tendencias', value: 'Tendencias', avatar:"" },
+//   { title:'Home', value: 'Home', avatar:"" },
+// ]);
+
 const selectItemsListVisibilidad = ref([
-  { title:'Todo el sitio', value: 'all', avatar:"" },
-  { title:'Lo-ultimo', value: 'Lo-ultimo', avatar:"" },
-  { title:'Noticias', value: 'Noticias', avatar:"" },
-  { title:'Mundo', value: 'Mundo', avatar:"" },
-  { title:'Estadio', value: 'Mundo', avatar:"" },
-  { title:'Entretenimiento', value: 'Entretenimiento', avatar:"" },
-  { title:'Programas', value: 'Programas', avatar:"" },
-  { title:'Tendencias', value: 'Tendencias', avatar:"" },
-  { title:'Home', value: 'Home', avatar:"" },
+  { title: 'Todo el sitio', value: 'all', avatar: '' },
+  { title: 'Lo-ultimo', value: 'Lo-ultimo', avatar: '' },
+  { title: 'Noticias', value: 'Noticias', avatar: '' },
+  { title: 'Mundo', value: 'Mundo', avatar: '' },
+  { title: 'Estadio', value: 'Estadio', avatar: '' },
+  { title: 'Entretenimiento', value: 'Entretenimiento', avatar: '' },
+  { title: 'Programas', value: 'Programas', avatar: '' },
+  { title: 'Tendencias', value: 'Tendencias', avatar: '' },
+  { title: 'La Noticia a Fondo', value: 'la-noticia-a-fondo', avatar: '' },
+  { title: 'Home', value: 'Home', avatar: '' },
 ]);
 
 const selectItemDispositivos = ref([]);
