@@ -41,16 +41,32 @@
 
                 <VDivider />
 
-                <!-- Descripción -->
+                 <!-- Descripción -->
                 <VListItem>
                   <template v-slot:prepend>
-                    <VIcon color="primary" icon="mdi-text-box-outline" size="24" />
+                    <VIcon color="primary" icon="mdi-text-long" size="24" />
                   </template>
                   <VListItemTitle class="font-weight-bold text-body-1">Descripción</VListItemTitle>
                   <VListItemSubtitle class="mt-1">{{ suggestion.description }}</VListItemSubtitle>
                 </VListItem>
 
                 <VDivider />
+
+                <!-- País/Ciudad -->
+                <VListItem>
+                  <template v-slot:prepend>
+                    <VIcon color="primary" icon="mdi-map-marker-radius" size="24" />
+                  </template>
+                  <VListItemTitle class="font-weight-bold text-body-1">País / Ciudad</VListItemTitle>
+                  <VListItemSubtitle class="mt-1">
+                    <span>{{ getPaisTexto(suggestion.criterial.country) }}</span>
+                    <span> / </span>
+                    <span>{{ getCiudadTexto(suggestion.criterial.city) }}</span>
+                  </VListItemSubtitle>
+                </VListItem>
+
+                <VDivider />
+
 
                 <!-- Tipo de Contenido -->
                 <VListItem>
@@ -260,6 +276,82 @@ export default {
       return `${day}/${month}/${year}`
     },
 
+    getPaisTexto(country) {
+      if (Array.isArray(country) && country.length === 0) {
+        return 'País no definido';
+      }
+      return country || 'País no definido';
+    },
+
+    getCiudadTexto(city) {
+      return city === -1 ? 'Todas las ciudades' : city;
+    },
+
+    async getDetallesCampaign(data = {}) {
+      const { limit = 20000, page = 1 } = data
+      const respuesta = await fetch(`https://ads-service.vercel.app/campaign/${this.id}/user/?limit=${limit}&page=${page}`)
+      const datos = await respuesta.json()
+      return datos[0]
+    },
+
+    // async obtenerDetalles() {
+    //   this.isLoadingContent = true
+    //   let skip = 1
+    //   let batchSize = 20000
+    //   let dataFull = []
+
+    //   while (true) {
+    //     const batchRegister = await this.getDetallesCampaign({
+    //       limit: batchSize,
+    //       page: skip
+    //     })
+
+    //     if (batchRegister.userId.length === 0) {
+    //       break
+    //     }
+
+    //     if (skip == 1) {
+    //       dataFull.push(...[batchRegister])
+    //     } else {
+    //       dataFull[0].userId.push(...batchRegister.userId)
+    //     }
+
+    //     this.suggestion = dataFull[0]
+    //     this.isLoadingContent = false
+    //     skip += 1
+    //   }
+    // },
+
+async obtenerDetalles() {
+      this.isLoadingContent = true
+      let skip = 1
+      let batchSize = 20000
+      let dataFull = []
+
+      while (true) {
+        const batchRegister = await this.getDetallesCampaign({
+          limit: batchSize,
+          page: skip
+        })
+
+        console.log('Datos recibidos:', batchRegister) // Para debug
+
+        if (batchRegister.userId.length === 0) {
+          break
+        }
+
+        if (skip == 1) {
+          dataFull.push(...[batchRegister])
+        } else {
+          dataFull[0].userId.push(...batchRegister.userId)
+        }
+
+        this.suggestion = dataFull[0]
+        console.log('Suggestion asignado:', this.suggestion) // Para debug
+        this.isLoadingContent = false
+        skip += 1
+      }
+},
     async showPositionDialog() {
       try {
         const response = await fetch('https://configuracion-service.vercel.app/configuracion/adsDesktop')
@@ -285,43 +377,8 @@ export default {
         'RDFloating': 'zocalo'
       }
       return positionMap[position] || position
-    },
-
-    async getDetallesCampaign(data = {}) {
-      const { limit = 20000, page = 1 } = data
-      const respuesta = await fetch(`https://ads-service.vercel.app/campaign/${this.id}/user/?limit=${limit}&page=${page}`)
-      const datos = await respuesta.json()
-      return datos[0]
-    },
-
-    async obtenerDetalles() {
-      this.isLoadingContent = true
-      let skip = 1
-      let batchSize = 20000
-      let dataFull = []
-
-      while (true) {
-        const batchRegister = await this.getDetallesCampaign({
-          limit: batchSize,
-          page: skip
-        })
-
-        if (batchRegister.userId.length === 0) {
-          break
-        }
-
-        if (skip == 1) {
-          dataFull.push(...[batchRegister])
-        } else {
-          dataFull[0].userId.push(...batchRegister.userId)
-        }
-
-        this.suggestion = dataFull[0]
-        this.isLoadingContent = false
-        skip += 1
-      }
     }
-  }
+}
 }
 </script>
 
