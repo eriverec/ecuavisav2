@@ -97,7 +97,6 @@ const eliminarRegistro = async (id) => {
 
 const eliminarRegistroSi = async () => {
   try {
-      isDialogVisibleDelete.value = false;
       disabledViewList.value = true;
       var myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -111,8 +110,10 @@ const eliminarRegistroSi = async () => {
       var response = await fetch(`https://ads-service.vercel.app/campaign/delete/${idCampaign.value}`, requestOptions);
       const data = await response.json();
 
-      disabledViewList.value = false;
       await getCampaigns(currentPage.value);
+
+      disabledViewList.value = false;
+      isDialogVisibleDelete.value = false;
 
   } catch (error) {
       return console.error(error.message);    
@@ -156,12 +157,7 @@ const handleSwitchChange = async (index) => {
 /****************************************************************/
 const isDialogVisibleClone = ref(false);
 
-const localStorageKey = "crudDataCampanias";
-
-// Inicializa el localStorage si no tiene datos
-if (!localStorage.getItem(localStorageKey)) {
-  localStorage.setItem(localStorageKey, JSON.stringify([]));
-}
+const localStorageKey = "crudCampaign";
 
 var newRecordModalObject = null;
 
@@ -193,9 +189,13 @@ const getUserIds = async (id, page = 1, limit = 10000) => {
 };
 
 // Funciones CRUD
-
+const compressList = (list) => list.join(','); // Comprimir a una cadena separada por comas
+const decompressList = (compressed) => compressed.split(',').map(Number); // Restaurar a array
 // Crear un nuevo registro
 async function createRecord() {
+  // Inicializa el localStorage si no tiene datos
+  const nameLocalStorage = `${localStorageKey}|${newRecordModalObject._id}`;
+
   disabledViewList.value = true;
   newRecordModalObject["statusCampaign"] = false;
   newRecordModalObject["userId"] = [];
@@ -213,25 +213,25 @@ async function createRecord() {
     }
 
     dataFull.push(...batchRegister);
-    newRecordModalObject["userId"] = dataFull;
 
     skip += 1;
 
     console.log(dataFull.length)
   }
 
+  newRecordModalObject["userId"] = compressList(dataFull);
   newRecordModalObject["campaignTitle"] = `${newRecordModalObject["campaignTitle"]} ${moment().format("HHmmss")}`;
 
   const newRecord = newRecordModalObject;
 
   // Recuperar los datos existentes del localStorage o inicializar con un array vacío
-  const data = JSON.parse(localStorage.getItem(localStorageKey)) || [];
+  // const data = JSON.parse(localStorage.getItem(nameLocalStorage)) || {};
 
   // Agregar el nuevo registro al inicio
-  data.unshift(newRecord);
+  // data.unshift(newRecord);
 
   // Actualizar el localStorage
-  localStorage.setItem(localStorageKey, JSON.stringify(data));
+  localStorage.setItem(nameLocalStorage, JSON.stringify(newRecord));
 
   console.log("Registro creado:", newRecord);
 
@@ -256,42 +256,32 @@ async function createRecord() {
 
 // Leer todos los registros
 function readRecords() {
-  return JSON.parse(localStorage.getItem(localStorageKey));
-}
-
-// Actualizar un registro existente por su índice
-function updateRecord(index, updatedRecord) {
-  const data = JSON.parse(localStorage.getItem(localStorageKey));
-  if (index >= 0 && index < data.length) {
-    data[index] = updatedRecord;
-    localStorage.setItem(localStorageKey, JSON.stringify(data));
-    console.log(`Registro en índice ${index} actualizado:`, updatedRecord);
-  } else {
-    console.error("Índice inválido.");
+  const data = [];
+  for(var i = 0; i < localStorage.length; i++) {              
+      var clave = localStorage.key(i);
+      if(clave.includes(localStorageKey)){
+          var nameV = clave.split("|")[0];
+          var valueD = localStorage.getItem(clave);
+          data.push(JSON.parse(valueD));
+      }
   }
+  data.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+  return data;
 }
 
 // Eliminar un registro por su índice
 async function deleteRecord(customIndex) {
   disabledViewList.value = true;
+
+  const nameLocalStorage = `${localStorageKey}|${customIndex}`;
+  if (localStorage.getItem( nameLocalStorage )) {
+    localStorage.removeItem( nameLocalStorage );
+  }
   
-  const data = JSON.parse(localStorage.getItem(localStorageKey)) || [];
-
-  // Buscar el índice basado en el identificador personalizado
-  const index = data.findIndex(record => record._id === customIndex);
-
-  if (index !== -1) {
-    // Eliminar el registro si se encuentra
-    const deletedRecord = data.splice(index, 1);
-    localStorage.setItem(localStorageKey, JSON.stringify(data));
-    console.log(`Registro eliminado con id ${customIndex}:`, deletedRecord[0]);
-    snackbar.value = {
-      show: true,
-      text: `Registro eliminado`,
-      color: 'success'
-    }
-  } else {
-    console.error(`No se encontró un registro con el id: ${customIndex}`);
+  snackbar.value = {
+    show: true,
+    text: `Registro eliminado`,
+    color: 'success'
   }
 
   await getCampaigns(1);
@@ -301,10 +291,10 @@ async function deleteRecord(customIndex) {
 
 
 // Limpiar todos los registros
-function clearRecords() {
-  localStorage.setItem(localStorageKey, JSON.stringify([]));
-  console.log("Todos los registros han sido eliminados.");
-}
+// function clearRecords() {
+//   localStorage.setItem(localStorageKey, JSON.stringify([]));
+//   console.log("Todos los registros han sido eliminados.");
+// }
 
 // // Ejemplo de uso
 
@@ -383,7 +373,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
     >
 
       <!-- Dialog close btn -->
-      <DialogCloseBtn @click="isDialogVisibleClone = !isDialogVisibleClone" />
+      <DialogCloseBtn @click="isDialogVisibleClone = !isDialogVisibleClone" :disabled="disabledViewList" />
 
       <!-- Dialog Content -->
       <VCard title="Clonar registro">
@@ -393,6 +383,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
 
         <VCardText class="d-flex justify-end gap-3 flex-wrap">
           <VBtn
+            :disabled="disabledViewList"
             color="secondary"
             variant="tonal"
             @click="isDialogVisibleClone = false"
@@ -428,7 +419,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
           >
             No, Cerrar
           </VBtn>
-          <VBtn @click="eliminarRegistroSi">
+          <VBtn @click="eliminarRegistroSi" :loading="disabledViewList" :disabled="disabledViewList">
             Si, eliminar
           </VBtn>
         </VCardText>
@@ -626,9 +617,17 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
 
                         <!-- 👉 Leader -->
                         <td class="text-medium-emphasis">
-                          <div class=" active-opacity" v-if="c.criterial.country != null && c.criterial.country != -1">
+                          <div class=" active-opacity" v-if="c.criterial.country != null && c.criterial.country != -1 && c.participantes != 'personalizado'">
+                            <span class="text-xs text-disabled" v-if="c.criterial.city != -1">
+                              <VIcon icon="mdi-location" /> {{c.criterial.country}},{{ c.criterial.city == "0" ? "": ", "+c.criterial.city }} 
+                            </span>
+                            <span class="text-xs text-disabled" v-else>
+                              <VIcon icon="mdi-location" /> {{c.criterial.country}}, Todas las ciudades
+                            </span>
+                          </div>
+                          <div class=" active-opacity" v-else>
                             <span class="text-xs text-disabled">
-                              <VIcon icon="mdi-location" /> {{c.criterial.country}}{{ c.criterial.city == "0" ? "": ", "+c.criterial.city }} 
+                              Audiencia personalizada
                             </span>
                           </div>
                         </td>
