@@ -56,28 +56,40 @@ export default {
       limit: valoresHoy.limit,
 
       suggestion: {
-        _id: "",
-        campaignTitle: "",
-        statusCampaign: true,
-        description: "",
-        participantes: "",
-        userIdSize: 0,
-        urls: {
-          html: "",
-          img: {
-            escritorio: "",
-            mobile: ""
-          }
-        },
-        criterial: {
-          visibilitySection: "",
-          country: [],
-          city: -1
-        },
-        type: "",
-        position: "",
-        created_at: ""
+  _id: "",
+  campaignTitle: "",
+  statusCampaign: true,
+  description: "",
+  participantes: "",
+  userIdSize: 0,
+  urls: {
+    html: "",
+    img: {
+      escritorio: "",
+      mobile: ""
+    }
+  },
+  criterial: {
+    visibilitySection: {
+      name: "",
+      params: {
+        landing: true,
+        root: true,
+        subsection: true,
+        all: true
       },
+      specificUrl: {
+        enabled: false,
+        url: ""
+      }
+    },
+    country: [],
+    city: -1
+  },
+  type: "",
+  position: "",
+  created_at: ""
+},
   
     loadingDownloadTable: [],
     loadingDownloadTableEnCurso: false,
@@ -615,7 +627,7 @@ export default {
                     <VIcon color="primary" icon="mdi-view-dashboard-outline" size="24" />
                   </template>
                   <VListItemTitle class="font-weight-bold text-body-1">Sección</VListItemTitle>
-                  <VListItemSubtitle class="mt-1">{{ suggestion.criterial.visibilitySection }}</VListItemSubtitle>
+                  <VListItemSubtitle class="mt-1">{{ suggestion.criterial.visibilitySection.name }}</VListItemSubtitle>
                 </VListItem>
 
                 <VDivider />
