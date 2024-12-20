@@ -590,7 +590,8 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                         <!-- 👉 Name -->
                         <td>
                           <div class="d-flex text-xs align-center gap-3 pb-2">
-                            <div v-if="c.criterial.country != null && c.criterial.country != -1" class="d-flex flex-column gap-0 align-center mr-2">
+                            
+                            <div v-if="(Array.isArray(c.criterial.country) ? c.criterial.country.length > 0 : true) && c.criterial.country != null && c.criterial.country != -1" class="d-flex flex-column gap-0 align-center mr-2">
                               <VAvatar 
                                 :title="'Ubicación: '+c.criterial.country+', '+c.criterial.city" 
                                 class="" 
@@ -599,6 +600,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                               />
                               <small>{{getPaisConfig(c.criterial.country)['alpha-2']}}</small>
                             </div>
+                            <VIcon v-else color="primary" size="25" icon="mdi-google-analytics" />
 
                             <div>
                               <div style="font-size:10px" class="pt-2 text-primary" v-if="c.type_local != 'server'"><VIcon size="10" icon="mdi-warning" /> No guardado</div>
