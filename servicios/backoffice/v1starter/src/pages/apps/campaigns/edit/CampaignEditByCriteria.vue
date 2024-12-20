@@ -4,8 +4,8 @@ import { computed, ref, watch } from 'vue'
 const props = defineProps({
   campaignData: {
     type: Object,
-    required: true
-  }
+    required: true,
+  },
 })
 
 const emit = defineEmits(['update'])
@@ -21,7 +21,7 @@ const citySearch = ref('')
 const snackbar = ref({
   show: false,
   text: '',
-  color: 'success'
+  color: 'success',
 })
 
 // Datos
@@ -33,7 +33,7 @@ const dataCountry = ref([])
 const deviceOptions = [
   { title: 'Todos los dispositivos', value: 'todos', avatar: 'mdi-devices' },
   { title: 'Escritorio', value: 'desktop', avatar: 'mdi-laptop-chromebook' },
-  { title: 'Móvil', value: 'movil', avatar: 'mdi-cellphone-android' }
+  { title: 'Móvil', value: 'movil', avatar: 'mdi-cellphone-android' },
 ]
 
 // Computed para filtrar ciudades
@@ -41,8 +41,9 @@ const filteredCities = computed(() => {
   if (!cityList.value.length) return []
   
   const search = citySearch.value.toLowerCase()
+  
   return cityList.value.filter(city => 
-    city.toLowerCase().includes(search) || city === 'Todas las ciudades'
+    city.toLowerCase().includes(search) || city === 'Todas las ciudades',
   )
 })
 
@@ -53,19 +54,21 @@ const totalUsers = ref(0)
 const fetchCountries = async () => {
   try {
     isLoading.value = true
+
     const response = await fetch('https://ecuavisa-suscripciones.vercel.app/otros/obtener-paises-ciudades')
     const data = await response.json()
+
     dataCountry.value = data
     countryList.value = data.map(country => ({
       title: country.country,
-      value: country.country
+      value: country.country,
     }))
   } catch (error) {
     console.error('Error al cargar países:', error)
     snackbar.value = {
       show: true,
       text: 'Error al cargar países',
-      color: 'error'
+      color: 'error',
     }
   } finally {
     isLoading.value = false
@@ -76,6 +79,7 @@ const fetchCountries = async () => {
 const loadCities = () => {
   if (!selectedCountry.value || !dataCountry.value.length) {
     cityList.value = []
+    
     return
   }
 
@@ -94,15 +98,15 @@ const fetchTotalUsers = async () => {
       criterio: ['dispositivos', 'trazabilidads'],
       pais: selectedCountry.value || -1,
       ciudad: selectedCities.value.includes('Todas las ciudades') ? -1 : selectedCities.value.join(','),
-      dispositivo: selectedDevices.value.includes('todos') ? null : selectedDevices.value.join(',')
+      dispositivo: selectedDevices.value.includes('todos') ? null : selectedDevices.value.join(','),
     }
 
     const response = await fetch('https://ads-service.vercel.app/campaign/v2/usuarios/get/user/total', {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     })
 
     const data = await response.json()
@@ -114,7 +118,7 @@ const fetchTotalUsers = async () => {
     snackbar.value = {
       show: true,
       text: 'Error al obtener total de usuarios',
-      color: 'error'
+      color: 'error',
     }
   } finally {
     isLoading.value = false
@@ -130,16 +134,16 @@ const handleSave = async () => {
         ...props.campaignData.criterial,
         country: selectedCountry.value || -1,
         city: selectedCities.value.includes('Todas las ciudades') ? -1 : selectedCities.value.join(','),
-        dispositivo: selectedDevices.value.includes('todos') ? null : selectedDevices.value.join(',')
-      }
+        dispositivo: selectedDevices.value.includes('todos') ? null : selectedDevices.value.join(','),
+      },
     }
 
     const response = await fetch(`https://ads-service.vercel.app/campaign/update/${props.campaignData._id}`, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json'
+        'Content-Type': 'application/json',
       },
-      body: JSON.stringify(updatedData)
+      body: JSON.stringify(updatedData),
     })
 
     const data = await response.json()
@@ -147,7 +151,7 @@ const handleSave = async () => {
       snackbar.value = {
         show: true,
         text: 'Criterios actualizados exitosamente',
-        color: 'success'
+        color: 'success',
       }
       emit('update')
     } else {
@@ -157,7 +161,7 @@ const handleSave = async () => {
     snackbar.value = {
       show: true,
       text: 'Error al guardar los cambios',
-      color: 'error'
+      color: 'error',
     }
   }
 }
@@ -205,7 +209,9 @@ onMounted(() => {
             class="me-2"
           />
           <div>
-            <div class="text-h6">Total de usuarios según criterios</div>
+            <div class="text-h6">
+              Total de usuarios según criterios
+            </div>
             <div class="text-h4 font-weight-bold">
               {{ totalUsers }}
             </div>
@@ -217,7 +223,10 @@ onMounted(() => {
     <VForm @submit.prevent="handleSave">
       <VRow>
         <!-- Dispositivos -->
-        <VCol cols="12" md="6">
+        <VCol
+          cols="12"
+          md="6"
+        >
           <VSelect
             v-model="selectedDevices"
             :items="deviceOptions"
@@ -239,7 +248,10 @@ onMounted(() => {
         </VCol>
 
         <!-- País -->
-        <VCol cols="12" md="6">
+        <VCol
+          cols="12"
+          md="6"
+        >
           <VSelect
             v-model="selectedCountry"
             :items="countryList"
@@ -252,7 +264,10 @@ onMounted(() => {
         </VCol>
 
         <!-- Ciudades -->
-        <VCol cols="12" md="12">
+        <VCol
+          cols="12"
+          md="12"
+        >
           <VCombobox
             v-model="selectedCities"
             :items="filteredCities"
@@ -284,11 +299,14 @@ onMounted(() => {
         </VCol>
 
         <!-- Botones de acción -->
-        <VCol cols="12" class="d-flex justify-end">
+        <VCol
+          cols="12"
+          class="d-flex justify-end"
+        >
           <VBtn
+            id="guardacrit"
             type="submit"
             color="primary"
-            id="guardacrit"
             class="d-none"
             :loading="isLoading"
             :disabled="!selectedCountry && selectedDevices.includes('todos')"
