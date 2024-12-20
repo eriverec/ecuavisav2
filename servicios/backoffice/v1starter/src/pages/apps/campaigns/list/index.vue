@@ -626,7 +626,10 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                               <VIcon icon="mdi-location" /> {{c.criterial.country}},{{ c.criterial.city == "0" ? "": ", "+c.criterial.city }} 
                             </span>
                             <span class="text-xs text-disabled" v-else>
-                              <VIcon icon="mdi-location" /> {{c.criterial.country}}, Todas las ciudades
+                              <VIcon icon="mdi-location" /> {{ 
+                                Array.isArray(c.criterial.country) ? 
+                                (c.criterial.country.length > 0 ? c.criterial.country.join(', ') : "No definido") : 
+                                c.criterial.country }}, Todas las ciudades
                             </span>
                           </div>
                           <div class=" active-opacity" v-else>
