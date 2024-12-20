@@ -289,6 +289,10 @@ async function deleteRecord(customIndex) {
   disabledViewList.value = false;
 }
 
+function isObject(variable) {
+  return variable.visibilitySection instanceof Object && variable.visibilitySection.constructor === Object;
+}
+
 
 // Limpiar todos los registros
 // function clearRecords() {
@@ -661,11 +665,10 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                               :size="22"
                               icon="tabler-dots-vertical"
                             />
-
                             <VMenu activator="parent">
                               <VList density="compact">
                                 <VListItem
-                                  v-if="c.type_local == 'server'"
+                                  v-if="c.type_local == 'server' && !isObject(c.criterial)"
                                   :to="{
                                     name: 'apps-campaigns-edit-id',
                                     params: { id: c._id },
@@ -675,7 +678,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                                   Editar campaña
                                 </VListItem>
                                 <VListItem
-                                  v-else
+                                  v-if="c.type_local == 'local' && !isObject(c.criterial)"
                                   :to="{
                                     name: 'apps-campaigns-duplicate-id',
                                     params: { id: c._id },
@@ -685,7 +688,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                                   Terminar de guardar la campaña
                                 </VListItem>
                                 <VListItem
-                                  v-if="c.type_local == 'server'"
+                                  v-if="c.type_local == 'server' && !isObject(c.criterial)"
                                   href="#"
                                   @click="openModal(c)"
                                 >
@@ -701,7 +704,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                                 </VListItem>
                                 <VDivider />
                                 <VListItem
-                                  v-if="c.type_local == 'server'"
+                                  v-if="c.type_local == 'server' && !isObject(c.criterial)"
                                   href="#"
                                   @click="eliminarRegistro(c._id)"
                                 >
