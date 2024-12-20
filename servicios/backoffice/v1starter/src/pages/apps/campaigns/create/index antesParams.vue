@@ -214,111 +214,70 @@
       <VCol cols="12">
         <VCard>
           <VCardTitle class="pa-4">
-            <VChip color="primary" label size="large" class="px-4 py-2 text-uppercase">
+            <VChip
+              color="primary"
+              label
+              size="large"
+              class="px-4 py-2 text-uppercase"
+            >
               Visibilidad en la web
             </VChip>
           </VCardTitle>
-          <VCardText>
-            <VRow>
-              <!-- Escoge sección -->
-              <VCol cols="6">
-                <VRow no-gutters>
-                  <VCol cols="12" md="12">
-                    <label for="tipocontenido">Escoge una sección</label>
-                  </VCol>
-                  <VCol cols="12" md="12">
-                    <VSelect
-                      v-model="selectItemVisibilidad"
-                      :items="selectItemsListVisibilidad"
-                      chips
-                      clearable
-                      label=""
-                      @update:model-value="handleSectionChange"
-                    />
-                  </VCol>
-                </VRow>
-              </VCol>
+      <VCardText>
+        <VRow>
+          <!-- Escoge sección -->
+          <VCol cols="6">
+                          <VRow no-gutters>
+            
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+                              <label for="tipocontenido">Escoge una sección</label>
+                            </VCol>
 
-              <!-- Posición -->
-              <VCol cols="6">
-                <VRow no-gutters>
-                  <VCol cols="12" md="12">
-                    <label for="email">Posición</label>
-                  </VCol>
-                  <VCol cols="12" md="12">
-                    <VCombobox
-                      v-model="posicion"
-                      multiple
-                      chips
-                      :items="posicionList"
-                      variant="outlined"
-                      label=""
-                      persistent-hint
-                      v-model:search-input="search"
-                      hide-selected
-                      :hide-no-data="false"
-                      hint=""
-                    />
-                  </VCol>
-                </VRow>
-              </VCol>
+                            <VCol
+                              cols="12"
+                              md="12"
+                            >
+                              <VSelect
+                                v-model="selectItemVisibilidad"
+                                :items="selectItemsListVisibilidad"
+                                chips
+                                clearable
+                                label=""
+                              />
+                            </VCol>
+                          </VRow>
+                        </VCol>
 
-              <!-- Opciones condicionales -->
-              <VCol v-if="showSectionOptions" cols="12">
-                <VRow no-gutters>
-                  <VCol cols="12" md="12">
-                    <label>Tipo de visualización</label>
-                  </VCol>
-                  <VCol cols="12" md="12">
-                    <div class="d-flex flex-column gap-2">
-                      <VCheckbox
-                        v-model="selectedVisibilityOptions"
-                        label="Solo página de categoría"
-                        value="landing"
-                        :disabled="urlEnabled"
-                      />
-                      <VCheckbox
-                        v-model="selectedVisibilityOptions"
-                        label="Notas en raíz"
-                        value="root"
-                        :disabled="urlEnabled"
-                      />
-                      <VCheckbox
-                        v-model="selectedVisibilityOptions"
-                        label="Notas con subsección"
-                        value="subsection"
-                        :disabled="urlEnabled"
-                      />
-                      <VCheckbox
-                        v-model="selectedVisibilityOptions"
-                        label="Toda la categoría"
-                        value="all"
-                        :disabled="urlEnabled"
-                      />
-                      <div class="d-flex align-center gap-4">
-                        <VCheckbox
-                          v-model="urlEnabled"
-                          label="URL específica"
-                          @update:model-value="handleUrlOptionChange"
-                        />
-                        <VTextField
-                          v-if="urlEnabled"
-                          v-model="specificUrl"
-                          label="URL específica"
-                          placeholder="https://ejemplo.com/seccion/subseccion"
-                          class="flex-grow-1"
-                          hide-details
-                        />
-                      </div>
-                    </div>
-                  </VCol>
-                </VRow>
+          <!-- Posición -->
+          <VCol cols="6">
+            <VRow no-gutters>
+              <VCol cols="12" md="12">
+                <label for="email">Posición</label>
+              </VCol>
+              <VCol cols="12" md="12">
+                <VCombobox
+                  v-model="posicion"
+                  multiple
+                  chips
+                  :items="posicionList"
+                  variant="outlined"
+                  label=""
+                  persistent-hint
+                  v-model:search-input="search"
+                  hide-selected
+                  :hide-no-data="false"
+                  hint=""
+                />
               </VCol>
             </VRow>
-          </VCardText>
-        </VCard>
-      </VCol>
-
+          </VCol>
+        </VRow>
+      </VCardText>
+    </VCard>
+  </VCol>
 <!-- Tarjeta de Target/Usuarios -->
 <VCol cols="12">
     <VCard>
@@ -953,35 +912,6 @@ const fetchCategorias = async () => {
   }
 };
 
-//nuevos campos de visibilidad en web
-const selectedVisibilityOptions = ref([]);
-const specificUrl = ref('');
-const showSectionOptions = ref(false);
-
-// Función para manejar el cambio de sección
-const handleSectionChange = (value) => {
-  showSectionOptions.value = value && value !== 'all';
-  // Resetear valores cuando se cambia la sección
-  selectedVisibilityOptions.value = [];
-  specificUrl.value = '';
-};
-
-// Función para manejar el cambio en la opción de URL específica
-const handleUrlOptionChange = (checked) => {
-  if (checked) {
-    // Si se selecciona opcion URL, deseleccionaa las demás
-    selectedVisibilityOptions.value = ['enabled'];
-  } else {
-    // Si se deselecciona opcion URL
-    selectedVisibilityOptions.value = selectedVisibilityOptions.value.filter(option => option !== 'enabled');
-    specificUrl.value = '';
-  }
-};
-
-
-
-//fin campos
-
 const descripcionCampania = ref('');
 
 const selectItemVisibilidad = ref([]);
@@ -1284,29 +1214,17 @@ function validarFormulario() {
   return true;
 }
 
-const onComplete = async () => {
-  if (!validarFormulario()) return;
-
-  const visibilitySection = {
-    name: selectItemVisibilidad.value,
-    params: {
-      landing: selectedVisibilityOptions.value.includes('landing'),
-      root: selectedVisibilityOptions.value.includes('root'),
-      subsection: selectedVisibilityOptions.value.includes('subsection'),
-      all: selectedVisibilityOptions.value.includes('all')
-    },
-    specificUrl: {
-      enabled: selectedVisibilityOptions.value.includes('enabled'),
-      url: selectedVisibilityOptions.value.includes('enabled') ? specificUrl.value : ''
-    }
-  };
+async function onComplete() {
+  if (!validarFormulario()) {
+    return;
+  }
 
   const jsonEnviar = {
     "campaignTitle": nombreCampania.value,
     "description": descripcionCampania.value,
     "type": languages.value,
     "criterial": {
-      "visibilitySection": selectItemVisibilidad.value === 'all' ? 'all' : visibilitySection,
+      "visibilitySection": selectItemVisibilidad.value,
       "country": selectedItem.value || -1,
       "city": selectedItemCiudad.value?.includes('Todas las ciudades') ? 
         -1 : 
