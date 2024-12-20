@@ -30,6 +30,7 @@ export default {
   },
   data() {
     return {
+      showContentDialog: false,
       isLoadingPosition: false,
       isLoadingContent: false,
       isFullLoading: false,
@@ -551,21 +552,43 @@ export default {
                   <template v-slot:prepend>
                     <VIcon color="primary" icon="mdi-file-code-outline" size="24" />
                   </template>
+                  
                   <VListItemTitle class="font-weight-bold text-body-1">
                     Tipo de Contenido
-                    <VTooltip location="end" class="large-tooltip">
-                      <template v-slot:activator="{ props }">
-                        <VIcon
-                          v-bind="props"
-                          color="info"
-                          icon="mdi-information"
-                          size="18"
-                          class="ms-2"
-                        />
-                      </template>
-                      <VCard>
-                        <VCardTitle class="text-subtitle-2">Contenido</VCardTitle>
-                        <VCardText>
+                    <VBtn
+                      icon
+                      variant="text"
+                      size="small"
+                      @click="showContentDialog = true"
+                    >
+                      <VIcon
+                        color="info"
+                        icon="mdi-eye"
+                        size="18"
+                        class="ms-2"
+                      />
+                    </VBtn>
+
+                    <VDialog
+                      v-model="showContentDialog"
+                      :scrim="true"
+                      width="400"
+                    >
+                      <VCard class="content-preview-card">
+                        <VCardTitle class="dialog-title pa-4">
+                          <div class="text-center text-h6 font-weight-bold w-100">Contenido</div>
+                          <VBtn
+                            icon
+                            variant="text"
+                            size="small"
+                            @click="showContentDialog = false"
+                            class="close-button"
+                          >
+                            <VIcon>mdi-close</VIcon>
+                          </VBtn>
+                        </VCardTitle>
+
+                        <VCardText class="pa-4">
                           <div v-if="suggestion.type === 'html'" class="content-preview">
                             <div v-html="suggestion.urls.html"></div>
                           </div>
@@ -573,13 +596,14 @@ export default {
                             <img 
                               :src="suggestion.urls.img.escritorio" 
                               alt="Contenido"
-                              style="max-width: 200px;"
+                              class="preview-image"
                             />
                           </div>
                         </VCardText>
                       </VCard>
-                    </VTooltip>
+                    </VDialog>
                   </VListItemTitle>
+                  
                   <VListItemSubtitle class="mt-1">{{ suggestion.type }}</VListItemSubtitle>
                 </VListItem>
 
@@ -900,8 +924,70 @@ export default {
   padding: 12px;
 }
 
-.large-tooltip {
-  max-width: 800px !important;
-  width: auto !important;
+
+.content-preview-card {
+  border-radius: 8px !important;
+  min-width: 500px !important;
+  min-height: 300px !important;
+  margin: 0 !important;
+  position: relative !important;
+}
+
+.dialog-title {
+  position: relative !important;
+  padding-top: 16px !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.close-button {
+  position: absolute !important;
+  right: 16px !important;
+  top: 12px !important;
+}
+
+.preview-image {
+  max-width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.content-preview {
+  max-height: 500px;
+  overflow-y: auto;
+}
+
+
+.content-dialog {
+  position: absolute !important;
+  margin-left: 16px !important;
+  margin-top: -30px !important;
+}
+
+.content-preview-card {
+  border-radius: 8px !important;
+  max-height: 80vh !important;
+  overflow-y: auto !important;
+}
+
+.dialog-title {
+  position: relative !important;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.close-button {
+  position: absolute !important;
+  right: 8px !important;
+  top: 8px !important;
+}
+
+.preview-image {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+}
+
+.content-preview {
+  width: 100%;
+  overflow-x: hidden;
 }
 </style>
