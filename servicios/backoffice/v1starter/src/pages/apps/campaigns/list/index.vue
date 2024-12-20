@@ -289,6 +289,10 @@ async function deleteRecord(customIndex) {
   disabledViewList.value = false;
 }
 
+function isObject(variable) {
+  return variable.visibilitySection instanceof Object && variable.visibilitySection.constructor === Object;
+}
+
 
 // Limpiar todos los registros
 // function clearRecords() {
@@ -586,7 +590,8 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                         <!-- 👉 Name -->
                         <td>
                           <div class="d-flex text-xs align-center gap-3 pb-2">
-                            <div v-if="c.criterial.country != null && c.criterial.country != -1" class="d-flex flex-column gap-0 align-center mr-2">
+                            
+                            <div v-if="(Array.isArray(c.criterial.country) ? c.criterial.country.length > 0 : true) && c.criterial.country != null && c.criterial.country != -1" class="d-flex flex-column gap-0 align-center mr-2">
                               <VAvatar 
                                 :title="'Ubicación: '+c.criterial.country+', '+c.criterial.city" 
                                 class="" 
@@ -595,6 +600,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                               />
                               <small>{{getPaisConfig(c.criterial.country)['alpha-2']}}</small>
                             </div>
+                            <VIcon v-else color="primary" size="25" icon="mdi-google-analytics" />
 
                             <div>
                               <div style="font-size:10px" class="pt-2 text-primary" v-if="c.type_local != 'server'"><VIcon size="10" icon="mdi-warning" /> No guardado</div>
@@ -622,7 +628,10 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                               <VIcon icon="mdi-location" /> {{c.criterial.country}},{{ c.criterial.city == "0" ? "": ", "+c.criterial.city }} 
                             </span>
                             <span class="text-xs text-disabled" v-else>
-                              <VIcon icon="mdi-location" /> {{c.criterial.country}}, Todas las ciudades
+                              <VIcon icon="mdi-location" /> {{ 
+                                Array.isArray(c.criterial.country) ? 
+                                (c.criterial.country.length > 0 ? c.criterial.country.join(', ') : "No definido") : 
+                                c.criterial.country }}, Todas las ciudades
                             </span>
                           </div>
                           <div class=" active-opacity" v-else>
@@ -661,11 +670,10 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                               :size="22"
                               icon="tabler-dots-vertical"
                             />
-
                             <VMenu activator="parent">
                               <VList density="compact">
                                 <VListItem
-                                  v-if="c.type_local == 'server'"
+                                  v-if="c.type_local == 'server' && !isObject(c.criterial)"
                                   :to="{
                                     name: 'apps-campaigns-edit-id',
                                     params: { id: c._id },
@@ -675,7 +683,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                                   Editar campaña
                                 </VListItem>
                                 <VListItem
-                                  v-else
+                                  v-if="c.type_local == 'local' && !isObject(c.criterial)"
                                   :to="{
                                     name: 'apps-campaigns-duplicate-id',
                                     params: { id: c._id },
@@ -685,7 +693,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                                   Terminar de guardar la campaña
                                 </VListItem>
                                 <VListItem
-                                  v-if="c.type_local == 'server'"
+                                  v-if="c.type_local == 'server' && !isObject(c.criterial)"
                                   href="#"
                                   @click="openModal(c)"
                                 >
@@ -701,7 +709,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                                 </VListItem>
                                 <VDivider />
                                 <VListItem
-                                  v-if="c.type_local == 'server'"
+                                  v-if="c.type_local == 'server' && !isObject(c.criterial)"
                                   href="#"
                                   @click="eliminarRegistro(c._id)"
                                 >
