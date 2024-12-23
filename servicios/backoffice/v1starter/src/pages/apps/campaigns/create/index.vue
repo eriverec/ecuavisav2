@@ -738,7 +738,16 @@
 
           <!-- Mensaje cuando no hay usuarios -->
           <div v-else class="text-center pa-4">
-            <p class="text-medium-emphasis">No hay usuarios cargados. Por favor, importa un archivo CSV para comenzar.</p>
+            <p class="text-medium-emphasis mb-4">No hay usuarios cargados. Por favor, importa un archivo CSV para comenzar.</p>
+            <VBtn
+              color="info"
+              variant="outlined"
+              size="small"
+              @click="downloadExample"
+              prepend-icon="mdi-file-download"
+            >
+              Descargar CSV de ejemplo
+            </VBtn>
           </div>
 
           <!-- Modal de búsqueda -->
@@ -846,6 +855,13 @@
             >
               <VListItemTitle>
                 {{ user.first_name }} {{ user.last_name }}
+                <VIcon
+                  v-if="isUserAdded(user)"
+                  color="success"
+                  class="ms-2"
+                  icon="mdi-check-circle"
+                  size="small"
+                />
               </VListItemTitle>
               <VListItemSubtitle class="mt-1">
                 <span class="text-xs text-disabled">{{ user.email }}</span>
@@ -855,8 +871,9 @@
                   color="primary"
                   size="small"
                   @click="handleAddSpecificUser(user)"
+                  :disabled="isUserAdded(user)"
                 >
-                  Agregar
+                  {{ isUserAdded(user) ? 'Agregado' : 'Agregar' }}
                 </VBtn>
               </template>
             </VListItem>
@@ -1137,6 +1154,29 @@ function handleAddUser() {
   userModalOpen.value = true
 }
 
+
+// Función para verificar si un usuario ya está agregado
+function isUserAdded(user) {
+  return filteredUsers.value.some(u => u.wylexId === user.wylexId);
+}
+
+// Función para descargar el CSV de ejemplo
+function downloadExample() {
+  const csvContent = `id,firstname,last_name,email
+107407,monica del rocio,torres guallpa,torresguallpa.1234@gmail.com
+100931,Amanda,Alvarado,electroautosgye@gmail.com
+76804,Sergio,Chacon,juvenalchacon72@gmail.com`;
+
+  const blob = new Blob([csvContent], { type: 'text/csv' });
+  const url = window.URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ejemplo_usuarios.csv';
+  document.body.appendChild(a);
+  a.click();
+  window.URL.revokeObjectURL(url);
+  document.body.removeChild(a);
+}
 
 // para mejorar la carga de ciudades
 watch(() => selectedItem.value, async (newValue) => {
