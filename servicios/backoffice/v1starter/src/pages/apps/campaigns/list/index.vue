@@ -673,7 +673,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                             <VMenu activator="parent">
                               <VList density="compact">
                                 <VListItem
-                                  v-if="c.type_local == 'server' && !isObject(c.criterial)"
+                                  v-if="c.type_local == 'server'"
                                   :to="{
                                     name: 'apps-campaigns-edit-id',
                                     params: { id: c._id },
@@ -683,7 +683,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                                   Editar campaña
                                 </VListItem>
                                 <VListItem
-                                  v-if="c.type_local == 'local' && !isObject(c.criterial)"
+                                  v-if="c.type_local == 'local'"
                                   :to="{
                                     name: 'apps-campaigns-duplicate-id',
                                     params: { id: c._id },
@@ -693,7 +693,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                                   Terminar de guardar la campaña
                                 </VListItem>
                                 <VListItem
-                                  v-if="c.type_local == 'server' && !isObject(c.criterial)"
+                                  v-if="c.type_local == 'server'"
                                   href="#"
                                   @click="openModal(c)"
                                 >
@@ -709,7 +709,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                                 </VListItem>
                                 <VDivider />
                                 <VListItem
-                                  v-if="c.type_local == 'server' && !isObject(c.criterial)"
+                                  v-if="c.type_local == 'server'"
                                   href="#"
                                   @click="eliminarRegistro(c._id)"
                                 >

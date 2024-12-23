@@ -1,8 +1,8 @@
 <script setup>
   import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
-  import { computed, ref, watch } from 'vue';
-  import { useRouter, useRoute } from 'vue-router';
-  import 'vue3-form-wizard/dist/style.css';
+import { computed, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
+import 'vue3-form-wizard/dist/style.css';
 
   const userModalOpen = ref(false)
 
@@ -58,6 +58,35 @@
       return error;
     }
   };
+
+  //nuevos campos de visibilidad en web
+  const selectedVisibilityOptions = ref([]);
+  const specificUrl = ref('');
+  const showSectionOptions = ref(false);
+
+  // Función para manejar el cambio de sección
+  const handleSectionChange = (value) => {
+    showSectionOptions.value = value && value !== 'all';
+    // Resetear valores cuando se cambia la sección
+    selectedVisibilityOptions.value = [];
+    specificUrl.value = '';
+  };
+
+  // Función para manejar el cambio en la opción de URL específica
+  const handleUrlOptionChange = (checked) => {
+    if (checked) {
+      // Si se selecciona opcion URL, deseleccionaa las demás
+      selectedVisibilityOptions.value = ['enabled'];
+    } else {
+      // Si se deselecciona opcion URL
+      selectedVisibilityOptions.value = selectedVisibilityOptions.value.filter(option => option !== 'enabled');
+      specificUrl.value = '';
+    }
+  };
+
+
+
+  //fin campos
 
   const descripcionCampania = ref('');
 
@@ -391,12 +420,26 @@
       loadingPanelDialog.value = true;
       textLoadingPanelDialog.value = `Procesando..`;
 
+      const visibilitySection = {
+        name: selectItemVisibilidad.value,
+        params: {
+          landing: selectedVisibilityOptions.value.includes('landing'),
+          root: selectedVisibilityOptions.value.includes('root'),
+          subsection: selectedVisibilityOptions.value.includes('subsection'),
+          all: selectedVisibilityOptions.value.includes('all')
+        },
+        specificUrl: {
+          enabled: selectedVisibilityOptions.value.includes('enabled'),
+          url: selectedVisibilityOptions.value.includes('enabled') ? specificUrl.value : ''
+        }
+      };
+
       const jsonEnviar = {
         "campaignTitle": nombreCampania.value,
         "description": descripcionCampania.value,
         // "type": languages.value,
         "criterial": {
-          "visibilitySection": selectItemVisibilidad.value,
+          "visibilitySection": selectItemVisibilidad.value === 'all' ? 'all' : visibilitySection,
           // "country": selectedItem.value || -1,
           // "city": selectedItemCiudad.value?.includes('Todas las ciudades') ? 
             // -1 : 
@@ -437,7 +480,7 @@
 
       snackbar.value = {
         show: true,
-        text: 'Campaña creada exitosamente',
+        text: 'Campaña editada exitosamente',
         color: 'success'
       };
 
@@ -948,7 +991,7 @@
 
   /****************************************************************/
   /****************************************************************/
-  // INICIO CRUD EN LOCALSTORAGE PARA EL DUPLICADO
+  // INICIO OBTENER LA CAMPAÑA
   /****************************************************************/
   /****************************************************************/
   const isDialogVisibleClone = ref(false);
@@ -1079,6 +1122,10 @@
     return listaFinal;
   }
 
+  function isObject(variable) {
+    return variable instanceof Object && variable.constructor === Object;
+  }
+
   onMounted(async () => {
     loadingPanel.value=true;
     const cloneCampaign = await readRecord();
@@ -1103,7 +1150,21 @@
       linkImageMobile.value = cloneCampaign?.urls?.img.mobile;
     }
 
-    selectItemVisibilidad.value = cloneCampaign?.criterial?.visibilitySection;
+    // selectItemVisibilidad.value = cloneCampaign?.criterial?.visibilitySection;
+    if(isObject(cloneCampaign?.criterial?.visibilitySection)){
+      selectItemVisibilidad.value = cloneCampaign?.criterial?.visibilitySection?.name;
+      handleSectionChange(selectItemVisibilidad.value)
+      selectedVisibilityOptions.value.push(cloneCampaign?.criterial?.visibilitySection?.params.landing ? 'landing' : '');
+      selectedVisibilityOptions.value.push(cloneCampaign?.criterial?.visibilitySection?.params.root ? 'root' : '');
+      selectedVisibilityOptions.value.push(cloneCampaign?.criterial?.visibilitySection?.params.subsection ? 'subsection' : '');
+      selectedVisibilityOptions.value.push(cloneCampaign?.criterial?.visibilitySection?.params.all ? 'all' : '');
+      selectedVisibilityOptions.value.push(cloneCampaign?.criterial?.visibilitySection?.specificUrl.enabled ? 'enabled' : '');
+
+      if(selectedVisibilityOptions.value.includes('enabled')){
+        specificUrl.value = cloneCampaign?.criterial?.visibilitySection?.specificUrl.url;
+      }
+    }
+
     posicion.value = cloneCampaign.position ? cloneCampaign?.position.split(',') : [];
     modoPersonalizado.value = cloneCampaign?.participantes == "personalizado";
     
@@ -1192,7 +1253,7 @@
 
   /****************************************************************/
   /****************************************************************/
-  // FIN CRUD EN LOCALSTORAGE PARA EL DUPLICADO
+  // FIN OBTENER LA CAMPAÑA
   /****************************************************************/
   /****************************************************************/
 
@@ -1441,562 +1502,601 @@
       <VCol cols="12">
         <VCard>
           <VCardTitle class="pa-4">
-            <VChip
-              color="primary"
-              label
-              size="large"
-              class="px-4 py-2 text-uppercase"
-            >
+            <VChip color="primary" label size="large" class="px-4 py-2 text-uppercase">
               Visibilidad en la web
             </VChip>
           </VCardTitle>
           <VCardSubtitle>
             <VIcon size="20" icon="mdi-info" /> Cambiar la posición puede afectar la lectura de las métricas en una campaña ya existente.
           </VCardSubtitle>
-      <VCardText>
-        <VRow>
-          <!-- Escoge sección -->
-          <VCol cols="6">
-                          <VRow no-gutters>
-            
-                            <VCol
-                              cols="12"
-                              md="12"
-                            >
-                              <label for="tipocontenido">Escoge una sección</label>
-                            </VCol>
-
-                            <VCol
-                              cols="12"
-                              md="12"
-                            >
-                              <VSelect
-                                v-model="selectItemVisibilidad"
-                                :items="selectItemsListVisibilidad"
-                                chips
-                                clearable
-                                label=""
-                              />
-                            </VCol>
-                          </VRow>
-                        </VCol>
-
-          <!-- Posición -->
-          <VCol cols="6">
-            <VRow no-gutters>
-              <VCol cols="12" md="12">
-                <label for="email">Posición</label>
+          <VCardText>
+            <VRow>
+              <!-- Escoge sección -->
+              <VCol cols="6">
+                <VRow no-gutters>
+                  <VCol cols="12" md="12">
+                    <label for="tipocontenido">Escoge una sección</label>
+                  </VCol>
+                  <VCol cols="12" md="12">
+                    <VSelect
+                      v-model="selectItemVisibilidad"
+                      :items="selectItemsListVisibilidad"
+                      chips
+                      clearable
+                      label=""
+                      @update:model-value="handleSectionChange"
+                    />
+                  </VCol>
+                </VRow>
               </VCol>
-              <VCol cols="12" md="12">
-                <VCombobox
-                  v-model="posicion"
-                  multiple
-                  chips
-                  :items="posicionList"
-                  variant="outlined"
-                  label=""
-                  persistent-hint
-                  v-model:search-input="search"
-                  hide-selected
-                  :hide-no-data="false"
-                  hint=""
-                />
+
+              <!-- Posición -->
+              <VCol cols="6">
+                <VRow no-gutters>
+                  <VCol cols="12" md="12">
+                    <label for="email">Posición</label>
+                  </VCol>
+                  <VCol cols="12" md="12">
+                    <VCombobox
+                      v-model="posicion"
+                      multiple
+                      chips
+                      :items="posicionList"
+                      variant="outlined"
+                      label=""
+                      persistent-hint
+                      v-model:search-input="search"
+                      hide-selected
+                      :hide-no-data="false"
+                      hint=""
+                    />
+                  </VCol>
+                </VRow>
+              </VCol>
+
+              <!-- Opciones condicionales -->
+              <VCol v-if="showSectionOptions" cols="12">
+                <VRow no-gutters>
+                  <VCol cols="12" md="12">
+                    <label>Tipo de visualización</label>
+                  </VCol>
+                  <VCol cols="12" md="12">
+                    <div class="d-flex flex-column gap-2">
+                      <VCheckbox
+                        v-model="selectedVisibilityOptions"
+                        label="Solo página de categoría"
+                        value="landing"
+                        :disabled="urlEnabled"
+                      />
+                      <VCheckbox
+                        v-model="selectedVisibilityOptions"
+                        label="Notas en raíz"
+                        value="root"
+                        :disabled="urlEnabled"
+                      />
+                      <VCheckbox
+                        v-model="selectedVisibilityOptions"
+                        label="Notas con subsección"
+                        value="subsection"
+                        :disabled="urlEnabled"
+                      />
+                      <VCheckbox
+                        v-model="selectedVisibilityOptions"
+                        label="Toda la categoría"
+                        value="all"
+                        :disabled="urlEnabled"
+                      />
+                      <div class="d-flex align-center gap-4">
+                        <VCheckbox
+                          v-model="urlEnabled"
+                          label="URL específica"
+                          @update:model-value="handleUrlOptionChange"
+                        />
+                        <VTextField
+                          v-if="urlEnabled"
+                          v-model="specificUrl"
+                          label="URL específica"
+                          placeholder="https://ejemplo.com/seccion/subseccion"
+                          class="flex-grow-1"
+                          hide-details
+                        />
+                      </div>
+                    </div>
+                  </VCol>
+                </VRow>
               </VCol>
             </VRow>
-          </VCol>
-        </VRow>
-      </VCardText>
-    </VCard>
-  </VCol>
-<!-- Tarjeta de Target/Usuarios -->
-<VCol cols="12" disabled>
-    <VCard>
-      <VCardTitle class="pa-4">
-        <VChip color="primary" label size="large" class="px-4 py-2 text-uppercase">
-          Target / Usuarios
-        </VChip>
-      </VCardTitle>
-      <VCardText>
-        <div class="d-flex justify-start mb-4">
-          <VSwitch
-            v-model="modoPersonalizado"
-            color="primary"
-            label="Modo Personalizado"
-            hide-details
-            disabled
-          />
-        </div>
-
-        <!-- Contenido que cambia según el switch -->
-        <VRow v-if="!modoPersonalizado">
-          <!-- Columna izquierda para filtros -->
-          <VCol cols="9">
-            <h3 class="text-h5 mb-4">Filtrar en la plataforma</h3>
-
-            <!-- Tabla de criterios -->
-            <VTable density="compact" class="border-transparent mb-4 ">
-              <tbody>
-                <tr>
-                  <td class="border-transparent">
-                    <VCheckbox
-                      disabled
-                      v-model="criterio"
-                      :label="criterioList[0].title"
-                      :value="criterioList[0].value"
-                    />
-                  </td>
-                  <td class="border-transparent">
-                    <VCheckbox
-                      disabled
-                      v-model="criterio"
-                      :label="criterioList[1].title"
-                      :value="criterioList[1].value"
-                    />
-                  </td>
-                </tr>
-                <tr>
-                  <td class="border-transparent">
-                    <VCheckbox
-                      disabled
-                      v-model="criterio"
-                      :label="criterioList[2].title"
-                      :value="criterioList[2].value"
-                    />
-                  </td>
-                  <td class="border-transparent">
-                    <VCheckbox
-                      disabled
-                      v-model="criterio"
-                      :label="criterioList[3].title"
-                      :value="criterioList[3].value"
-                    />
-                  </td>
-                </tr>
-              </tbody>
-            </VTable>
-
-                <!-- Campos condicionales -->
-                <VCol cols="12" :class="criterio.includes('metadatos')?'':'d-none'">
-                              <VRow no-gutters >
-                                <VCol cols="12">
-                                  <VRow no-gutters>
-                                    <!-- 👉 Email -->
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-                                      <label for="metadatos">Metadatos</label>
-                                    </VCol>
-
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-                                    <VCombobox
-                                        disabled
-                                        v-model="metadatos"
-                                        multiple
-                                        chips
-                                        :items="metadatosItems"
-                                        variant="outlined"
-                                        label=""
-                                        persistent-hint
-                                        :menu-props="{ maxHeight: '300' }"
-                                        v-model:search-input="searchMetadatos"
-                                        hide-selected
-                                        :hide-no-data="false"
-                                        hint=""
-                                      />
-
-                                    </VCol>
-                                  </VRow>
-                                </VCol>
-                              </VRow>
-                </VCol>
-                <VCol cols="12" :class="criterio.includes('trazabilidads')?'':'d-none'">
-                              <VRow no-gutters >
-                                <VCol cols="6">
-                                  <VRow no-gutters>
-                                    <!-- 👉 Email -->
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-                                      <label for="email">Países</label>
-                                    </VCol>
-
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-
-                                      <VCombobox
-                                        disabled
-                                        v-model="selectedItem"
-                                        :items="countryList"
-                                        class="pr-1"
-                                        chips
-                                        clearable
-                                        :menu-props="{ maxHeight: '300' }"
-                                      />
-                                    </VCol>
-                                  </VRow>
-                                </VCol>
-                                <VCol cols="6">
-                                  <VRow no-gutters>
-                                    <!-- 👉 Email -->
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-                                      <label for="email">Ciudades</label>
-                                    </VCol>
-
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-
-                                      <VCombobox
-                                        disabled
-                                        v-model="selectedItemCiudad"
-                                        multiple
-                                        chips
-                                        :items="cityList"
-                                        v-model:search-input="searchCiudades"
-                                        :hide-no-data="false"
-                                        :menu-props="{ maxHeight: '300' }"
-                                        class="custom-combobox-ciudad"
-                                        :disabled="loadingPanel"
-                                      />
-
-                                      
-                                    </VCol>
-                                  </VRow>
-                                </VCol>
-                              </VRow>
-                </VCol>
-                <VCol cols="12" :class="criterio.includes('dispositivos')?'':'d-none'">
-                              <VRow no-gutters >
-                                <VCol cols="12">
-                                  <VRow no-gutters>
-                                    <!-- 👉 Email -->
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-                                      <label for="email">Dispositivos</label>
-                                    </VCol>
-
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-                                      <VSelect
-                                        disabled
-                                        v-model="selectItemDispositivos"
-                                        :items="selectItemsListDispositivos"
-                                        item-title="title"
-                                        item-value="value"
-                                        class="pr-1"
-                                        
-                                        multiple
-                                        clearable
-                                      >
-                                        <template #selection="{ item }">
-                                          <VChip>
-                                            <VAvatar>
-                                              <VIcon color="" :icon="item.raw.avatar" />
-                                            </VAvatar>
-                                            <span>{{ item.title }}</span>
-                                          </VChip>
-                                        </template>
-                                      </VSelect>
-                                    </VCol>
-                                  </VRow>
-                                </VCol>
-                              </VRow>
-                </VCol>
-                <VCol cols="12" :class="criterio.includes('plataforma')?'':'d-none'">
-                              <VRow no-gutters >
-                                <VCol cols="6 pt-2">
-                                  <VRow no-gutters>
-                                    <!-- 👉 Email -->
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-                                      <label for="navegador">Sistema operativo</label>
-                                    </VCol>
-
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-                                      <VSelect
-                                      disabled
-                                        v-model="selectItemSO"
-                                        :items="selectItemsListSO"
-                                        item-title="title"
-                                        item-value="value"
-                                        class="pr-1"
-                                        
-                                        multiple
-                                        clearable
-                                      >
-                                        <template #selection="{ item }">
-                                          <VChip>
-                                            <VAvatar>
-                                              <VIcon color="" :icon="item.raw.avatar" />
-                                            </VAvatar>
-                                            <span>{{ item.title }}</span>
-                                          </VChip>
-                                        </template>
-                                      </VSelect>
-                                    </VCol>
-                                  </VRow>
-                                </VCol>
-                                <VCol cols="6 pt-2">
-                                  <VRow no-gutters>
-                                    <!-- 👉 Email -->
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-                                      <label for="navegador">Navegador</label>
-                                    </VCol>
-
-                                    <VCol
-                                      cols="12"
-                                      md="12"
-                                    >
-                                      <VSelect
-                                      disabled
-                                        v-model="selectItemNavegador"
-                                        :items="selectItemsListNavegador"
-                                        item-title="title"
-                                        item-value="value"
-                                        class="pr-1"
-                                        chips
-                                        multiple
-                                        clearable
-                                      />
-                                      
-                                    </VCol>
-                                  </VRow>
-                                </VCol>
-                              </VRow>
-               </VCol>
-
-          </VCol>
-
-              
-      <!-- Columna derecha para estadísticas -->
-      <VCol cols="3">
-            <VCard class="bg-light-success">
-              <VCardText>
-                <h3 class="text-h6 mb-4">Total de usuarios</h3>
-                <div class="d-flex align-center">
-                  <VIcon
-                    size="32"
-                    icon="mdi-account-group"
-                    color="success"
-                    class="me-2"
-                  />
-                  <div>
-                    <div class="text-h4 font-weight-bold text-center">
-                      {{ formattedUserCount }}
-                    </div>
-                  </div>
-                </div>
-              </VCardText>
-            </VCard>
-          </VCol>
-        </VRow>
-
-      <!-- Vista de modo personalizado -->
-      <VRow v-else>
-        <VCol cols="12">
-          <VSnackbar
-            v-model="snackbar.show"
-            :color="snackbar.color"
-            :timeout="2000"
-            location="top"
-          >
-            {{ snackbar.text }}
-          </VSnackbar>
-
-          <!-- Campo de búsqueda y botones -->
-          <VRow justify="space-between" class="mb-4">
-            <VCol cols="4">
-              <VTextField 
-                append-inner-icon="tabler-user-search" 
-                @input="filtrarUsuarios" 
-                v-model="filterLocal" 
-                label="Buscar usuarios dentro del listado"
-                density="compact"
-                :disabled="!hasUsers"
-              />
-            </VCol>
-            <VCol cols="auto">
-              <div class="d-flex gap-3 flex-wrap">
-                <VBtn 
-                  color="info" 
-                  @click="handleExport" 
-                  size="small"
-                  :disabled="!hasUsers"
-                >
-                  Descargar Usuarios<VIcon end icon="tabler-download" />
-                </VBtn>
-                <VBtn 
+          </VCardText>
+        </VCard>
+      </VCol>
+      <!-- Tarjeta de Target/Usuarios -->
+      <VCol cols="12" disabled>
+          <VCard>
+            <VCardTitle class="pa-4">
+              <VChip color="primary" label size="large" class="px-4 py-2 text-uppercase">
+                Target / Usuarios
+              </VChip>
+            </VCardTitle>
+            <VCardText>
+              <div class="d-flex justify-start mb-4">
+                <VSwitch
+                  v-model="modoPersonalizado"
+                  color="primary"
+                  label="Modo Personalizado"
+                  hide-details
                   disabled
-                  color="success" 
-                  @click="handleAddUser" 
-                  size="small"
-                  
-                >
-                  Añadir usuarios<VIcon end icon="mdi-account-plus" />
-                </VBtn>
-                <VBtn 
-                  disabled
-                  color="primary" 
-                  @click="triggerFileInput" 
-                  size="small"
-                  :loading="isUploading"
-                >
-                  Importar CSV<VIcon end icon="mdi-file-upload" />
-                </VBtn>
-                <input
-                  disabled
-                  ref="fileInput"
-                  type="file"
-                  accept=".csv"
-                  style="display: none"
-                  @change="handleFileChange"
                 />
               </div>
-            </VCol>
-          </VRow>
-          
-          <VCol cls="12">
-            <VIcon size="20" icon="mdi-info" /> Usuarios con cuenta existente en la web.
-          </VCol>
-          <!-- Lista de usuarios (visible solo cuando hay usuarios) -->
-          <div v-if="hasUsers">
-            <VList lines="two">
-              <VListItem
-                v-for="user in currentUsers"
-                :key="user.wylexId"
-                border
-              >
-                <VListItemTitle>
-                  {{ user.firstname || user.first_name }} {{ user.lastname || user.last_name }}
-                </VListItemTitle>
-                <VListItemSubtitle class="mt-1">
-                  <span class="text-xs text-disabled">{{ user.email }}</span>
-                </VListItemSubtitle>
-                <template #append>
-                  <VBtn
-                    disabled
-                    icon
-                    size="x-small"
-                    color="error"
-                    variant="text"
-                    @click="handleDeleteUser(user.wylexId)"
-                  >
-                    <VIcon size="22" icon="tabler-trash" />
-                  </VBtn>
-                </template>
-              </VListItem>
-            </VList>
 
-            <!-- Paginación -->
-            <div class="d-flex justify-center mt-4">
-              <VBtn 
-                variant="tonal" 
-                @click="currentPageLocal--" 
-                :disabled="currentPageLocal <= 1" 
-                size="small" 
-                color="primary"
-              >
-                <VIcon start icon="tabler-arrow-left" /> Anterior
-              </VBtn>
-              <VBtn 
-                variant="tonal" 
-                @click="currentPageLocal++" 
-                :disabled="currentPageLocal >= totalPages" 
-                size="small" 
-                color="primary" 
-                class="ms-3"
-              >
-                Siguiente <VIcon end icon="tabler-arrow-right" />
-              </VBtn>
-            </div>
-          </div>
+              <!-- Contenido que cambia según el switch -->
+              <VRow v-if="!modoPersonalizado">
+                <!-- Columna izquierda para filtros -->
+                <VCol cols="9">
+                  <h3 class="text-h5 mb-4">Filtrar en la plataforma</h3>
 
-          <!-- Mensaje cuando no hay usuarios -->
-          <div v-else class="text-center pa-4">
-            <p class="text-medium-emphasis">No hay usuarios cargados. Por favor, importa un archivo CSV para comenzar.</p>
-          </div>
+                  <!-- Tabla de criterios -->
+                  <VTable density="compact" class="border-transparent mb-4 ">
+                    <tbody>
+                      <tr>
+                        <td class="border-transparent">
+                          <VCheckbox
+                            disabled
+                            v-model="criterio"
+                            :label="criterioList[0].title"
+                            :value="criterioList[0].value"
+                          />
+                        </td>
+                        <td class="border-transparent">
+                          <VCheckbox
+                            disabled
+                            v-model="criterio"
+                            :label="criterioList[1].title"
+                            :value="criterioList[1].value"
+                          />
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="border-transparent">
+                          <VCheckbox
+                            disabled
+                            v-model="criterio"
+                            :label="criterioList[2].title"
+                            :value="criterioList[2].value"
+                          />
+                        </td>
+                        <td class="border-transparent">
+                          <VCheckbox
+                            disabled
+                            v-model="criterio"
+                            :label="criterioList[3].title"
+                            :value="criterioList[3].value"
+                          />
+                        </td>
+                      </tr>
+                    </tbody>
+                  </VTable>
 
-          <!-- Modal de búsqueda -->
-          <VDialog v-model="showSearchDialog" max-width="800px">
-            <VCard>
-              <VCardTitle>Buscar Usuarios</VCardTitle>
-              <VCardText>
-                <VTextField
-                  v-model="searchQuery"
-                  @input="handleSearch"
-                  label="Buscar por nombre, correo o teléfono (mínimo 4 caracteres)"
-                  append-inner-icon="tabler-search"
-                  :loading="isSearching"
-                />
-                
-                <VTable v-if="searchResults.length > 0">
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Correo</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="user in searchResults" :key="user.wylexId">
-                      <td>{{ user.first_name }} {{ user.last_name }}</td>
-                      <td>{{ user.email }}</td>
-                      <td>
-                        <VBtn
-                          size="small"
-                          color="primary"
-                          @click="handleAddSpecificUser(user)"
-                          :loading="loadingAdd"
-                        >
-                          Agregar
-                        </VBtn>
-                      </td>
-                    </tr>
-                  </tbody>
-                </VTable>
-              </VCardText>
-              <VCardActions>
-                <VSpacer />
-                <VBtn
-                  color="primary"
-                  text
-                  @click="closeSearchDialog"
+                      <!-- Campos condicionales -->
+                      <VCol cols="12" :class="criterio.includes('metadatos')?'':'d-none'">
+                                    <VRow no-gutters >
+                                      <VCol cols="12">
+                                        <VRow no-gutters>
+                                          <!-- 👉 Email -->
+                                          <VCol
+                                            cols="12"
+                                            md="12"
+                                          >
+                                            <label for="metadatos">Metadatos</label>
+                                          </VCol>
+
+                                          <VCol
+                                            cols="12"
+                                            md="12"
+                                          >
+                                          <VCombobox
+                                              disabled
+                                              v-model="metadatos"
+                                              multiple
+                                              chips
+                                              :items="metadatosItems"
+                                              variant="outlined"
+                                              label=""
+                                              persistent-hint
+                                              :menu-props="{ maxHeight: '300' }"
+                                              v-model:search-input="searchMetadatos"
+                                              hide-selected
+                                              :hide-no-data="false"
+                                              hint=""
+                                            />
+
+                                          </VCol>
+                                        </VRow>
+                                      </VCol>
+                                    </VRow>
+                      </VCol>
+                      <VCol cols="12" :class="criterio.includes('trazabilidads')?'':'d-none'">
+                                    <VRow no-gutters >
+                                      <VCol cols="6">
+                                        <VRow no-gutters>
+                                          <!-- 👉 Email -->
+                                          <VCol
+                                            cols="12"
+                                            md="12"
+                                          >
+                                            <label for="email">Países</label>
+                                          </VCol>
+
+                                          <VCol
+                                            cols="12"
+                                            md="12"
+                                          >
+
+                                            <VCombobox
+                                              disabled
+                                              v-model="selectedItem"
+                                              :items="countryList"
+                                              class="pr-1"
+                                              chips
+                                              clearable
+                                              :menu-props="{ maxHeight: '300' }"
+                                            />
+                                          </VCol>
+                                        </VRow>
+                                      </VCol>
+                                      <VCol cols="6">
+                                        <VRow no-gutters>
+                                          <!-- 👉 Email -->
+                                          <VCol
+                                            cols="12"
+                                            md="12"
+                                          >
+                                            <label for="email">Ciudades</label>
+                                          </VCol>
+
+                                          <VCol
+                                            cols="12"
+                                            md="12"
+                                          >
+
+                                            <VCombobox
+                                              disabled
+                                              v-model="selectedItemCiudad"
+                                              multiple
+                                              chips
+                                              :items="cityList"
+                                              v-model:search-input="searchCiudades"
+                                              :hide-no-data="false"
+                                              :menu-props="{ maxHeight: '300' }"
+                                              class="custom-combobox-ciudad"
+                                              :disabled="loadingPanel"
+                                            />
+
+                                            
+                                          </VCol>
+                                        </VRow>
+                                      </VCol>
+                                    </VRow>
+                      </VCol>
+                      <VCol cols="12" :class="criterio.includes('dispositivos')?'':'d-none'">
+                                    <VRow no-gutters >
+                                      <VCol cols="12">
+                                        <VRow no-gutters>
+                                          <!-- 👉 Email -->
+                                          <VCol
+                                            cols="12"
+                                            md="12"
+                                          >
+                                            <label for="email">Dispositivos</label>
+                                          </VCol>
+
+                                          <VCol
+                                            cols="12"
+                                            md="12"
+                                          >
+                                            <VSelect
+                                              disabled
+                                              v-model="selectItemDispositivos"
+                                              :items="selectItemsListDispositivos"
+                                              item-title="title"
+                                              item-value="value"
+                                              class="pr-1"
+                                              
+                                              multiple
+                                              clearable
+                                            >
+                                              <template #selection="{ item }">
+                                                <VChip>
+                                                  <VAvatar>
+                                                    <VIcon color="" :icon="item.raw.avatar" />
+                                                  </VAvatar>
+                                                  <span>{{ item.title }}</span>
+                                                </VChip>
+                                              </template>
+                                            </VSelect>
+                                          </VCol>
+                                        </VRow>
+                                      </VCol>
+                                    </VRow>
+                      </VCol>
+                      <VCol cols="12" :class="criterio.includes('plataforma')?'':'d-none'">
+                                    <VRow no-gutters >
+                                      <VCol cols="6 pt-2">
+                                        <VRow no-gutters>
+                                          <!-- 👉 Email -->
+                                          <VCol
+                                            cols="12"
+                                            md="12"
+                                          >
+                                            <label for="navegador">Sistema operativo</label>
+                                          </VCol>
+
+                                          <VCol
+                                            cols="12"
+                                            md="12"
+                                          >
+                                            <VSelect
+                                            disabled
+                                              v-model="selectItemSO"
+                                              :items="selectItemsListSO"
+                                              item-title="title"
+                                              item-value="value"
+                                              class="pr-1"
+                                              
+                                              multiple
+                                              clearable
+                                            >
+                                              <template #selection="{ item }">
+                                                <VChip>
+                                                  <VAvatar>
+                                                    <VIcon color="" :icon="item.raw.avatar" />
+                                                  </VAvatar>
+                                                  <span>{{ item.title }}</span>
+                                                </VChip>
+                                              </template>
+                                            </VSelect>
+                                          </VCol>
+                                        </VRow>
+                                      </VCol>
+                                      <VCol cols="6 pt-2">
+                                        <VRow no-gutters>
+                                          <!-- 👉 Email -->
+                                          <VCol
+                                            cols="12"
+                                            md="12"
+                                          >
+                                            <label for="navegador">Navegador</label>
+                                          </VCol>
+
+                                          <VCol
+                                            cols="12"
+                                            md="12"
+                                          >
+                                            <VSelect
+                                            disabled
+                                              v-model="selectItemNavegador"
+                                              :items="selectItemsListNavegador"
+                                              item-title="title"
+                                              item-value="value"
+                                              class="pr-1"
+                                              chips
+                                              multiple
+                                              clearable
+                                            />
+                                            
+                                          </VCol>
+                                        </VRow>
+                                      </VCol>
+                                    </VRow>
+                    </VCol>
+
+                </VCol>
+
+                    
+            <!-- Columna derecha para estadísticas -->
+            <VCol cols="3">
+                  <VCard class="bg-light-success">
+                    <VCardText>
+                      <h3 class="text-h6 mb-4">Total de usuarios</h3>
+                      <div class="d-flex align-center">
+                        <VIcon
+                          size="32"
+                          icon="mdi-account-group"
+                          color="success"
+                          class="me-2"
+                        />
+                        <div>
+                          <div class="text-h4 font-weight-bold text-center">
+                            {{ formattedUserCount }}
+                          </div>
+                        </div>
+                      </div>
+                    </VCardText>
+                  </VCard>
+                </VCol>
+              </VRow>
+
+            <!-- Vista de modo personalizado -->
+            <VRow v-else>
+              <VCol cols="12">
+                <VSnackbar
+                  v-model="snackbar.show"
+                  :color="snackbar.color"
+                  :timeout="2000"
+                  location="top"
                 >
-                  Cerrar
-                </VBtn>
-              </VCardActions>
-            </VCard>
-          </VDialog>
-        </VCol>
-      </VRow>
-    </VCardText>
-  </VCard>
+                  {{ snackbar.text }}
+                </VSnackbar>
 
-</VCol>
+                <!-- Campo de búsqueda y botones -->
+                <VRow justify="space-between" class="mb-4">
+                  <VCol cols="4">
+                    <VTextField 
+                      append-inner-icon="tabler-user-search" 
+                      @input="filtrarUsuarios" 
+                      v-model="filterLocal" 
+                      label="Buscar usuarios dentro del listado"
+                      density="compact"
+                      :disabled="!hasUsers"
+                    />
+                  </VCol>
+                  <VCol cols="auto">
+                    <div class="d-flex gap-3 flex-wrap">
+                      <VBtn 
+                        color="info" 
+                        @click="handleExport" 
+                        size="small"
+                        :disabled="!hasUsers"
+                      >
+                        Descargar Usuarios<VIcon end icon="tabler-download" />
+                      </VBtn>
+                      <VBtn 
+                        disabled
+                        color="success" 
+                        @click="handleAddUser" 
+                        size="small"
+                        
+                      >
+                        Añadir usuarios<VIcon end icon="mdi-account-plus" />
+                      </VBtn>
+                      <VBtn 
+                        disabled
+                        color="primary" 
+                        @click="triggerFileInput" 
+                        size="small"
+                        :loading="isUploading"
+                      >
+                        Importar CSV<VIcon end icon="mdi-file-upload" />
+                      </VBtn>
+                      <input
+                        disabled
+                        ref="fileInput"
+                        type="file"
+                        accept=".csv"
+                        style="display: none"
+                        @change="handleFileChange"
+                      />
+                    </div>
+                  </VCol>
+                </VRow>
+                
+                <VCol cls="12">
+                  <VIcon size="20" icon="mdi-info" /> Usuarios con cuenta existente en la web.
+                </VCol>
+                <!-- Lista de usuarios (visible solo cuando hay usuarios) -->
+                <div v-if="hasUsers">
+                  <VList lines="two">
+                    <VListItem
+                      v-for="user in currentUsers"
+                      :key="user.wylexId"
+                      border
+                    >
+                      <VListItemTitle>
+                        {{ user.firstname || user.first_name }} {{ user.lastname || user.last_name }}
+                      </VListItemTitle>
+                      <VListItemSubtitle class="mt-1">
+                        <span class="text-xs text-disabled">{{ user.email }}</span>
+                      </VListItemSubtitle>
+                      <template #append>
+                        <VBtn
+                          disabled
+                          icon
+                          size="x-small"
+                          color="error"
+                          variant="text"
+                          @click="handleDeleteUser(user.wylexId)"
+                        >
+                          <VIcon size="22" icon="tabler-trash" />
+                        </VBtn>
+                      </template>
+                    </VListItem>
+                  </VList>
 
+                  <!-- Paginación -->
+                  <div class="d-flex justify-center mt-4">
+                    <VBtn 
+                      variant="tonal" 
+                      @click="currentPageLocal--" 
+                      :disabled="currentPageLocal <= 1" 
+                      size="small" 
+                      color="primary"
+                    >
+                      <VIcon start icon="tabler-arrow-left" /> Anterior
+                    </VBtn>
+                    <VBtn 
+                      variant="tonal" 
+                      @click="currentPageLocal++" 
+                      :disabled="currentPageLocal >= totalPages" 
+                      size="small" 
+                      color="primary" 
+                      class="ms-3"
+                    >
+                      Siguiente <VIcon end icon="tabler-arrow-right" />
+                    </VBtn>
+                  </div>
+                </div>
+
+                <!-- Mensaje cuando no hay usuarios -->
+                <div v-else class="text-center pa-4">
+                  <p class="text-medium-emphasis">No hay usuarios cargados. Por favor, importa un archivo CSV para comenzar.</p>
+                </div>
+
+                <!-- Modal de búsqueda -->
+                <VDialog v-model="showSearchDialog" max-width="800px">
+                  <VCard>
+                    <VCardTitle>Buscar Usuarios</VCardTitle>
+                    <VCardText>
+                      <VTextField
+                        v-model="searchQuery"
+                        @input="handleSearch"
+                        label="Buscar por nombre, correo o teléfono (mínimo 4 caracteres)"
+                        append-inner-icon="tabler-search"
+                        :loading="isSearching"
+                      />
+                      
+                      <VTable v-if="searchResults.length > 0">
+                        <thead>
+                          <tr>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="user in searchResults" :key="user.wylexId">
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                              <VBtn
+                                size="small"
+                                color="primary"
+                                @click="handleAddSpecificUser(user)"
+                                :loading="loadingAdd"
+                              >
+                                Agregar
+                              </VBtn>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </VTable>
+                    </VCardText>
+                    <VCardActions>
+                      <VSpacer />
+                      <VBtn
+                        color="primary"
+                        text
+                        @click="closeSearchDialog"
+                      >
+                        Cerrar
+                      </VBtn>
+                    </VCardActions>
+                  </VCard>
+                </VDialog>
+              </VCol>
+            </VRow>
+          </VCardText>
+        </VCard>
+
+      </VCol>
     </VRow>
 
   
