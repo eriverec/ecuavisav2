@@ -1,11 +1,11 @@
 <script setup>
 import { getPaisConfig } from "@core/libs/campaigns/config";
-import { useRouter } from 'vue-router';
-const router = useRouter()
 import debounce from 'lodash/debounce';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
+import { useRouter } from 'vue-router';
+const router = useRouter()
 const moment = extendMoment(Moment);
     moment.locale('es', [esLocale]);
 
@@ -605,7 +605,7 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                             <div>
                               <div style="font-size:10px" class="pt-2 text-primary" v-if="c.type_local != 'server'"><VIcon size="10" icon="mdi-warning" /> No guardado</div>
                               <div class="active-opacity">
-                                <h6 class="text-base text-medium-emphasis font-weight-semibold">
+                                <h6 class="text-base font-weight-semibold text-with-custom-truncate" >
                                   {{ c.campaignTitle }}
                                 </h6>
                                 <span class="text-disabled" style="font-size: 12px;">{{ moment(c.created_at).format("YYYY-MM-DD, HH:mm:ss") }}</span>
@@ -834,5 +834,13 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
     justify-content: flex-start;
     gap: 0;
     padding-left: 5px;
+}
+.text-with-custom-truncate{
+  width: 300px;
+  break-inside: initial;
+  white-space: break-spaces;
+  line-height: 1.1;
+  padding-top: 10px;
+  padding-bottom: 5px;
 }
 </style>
