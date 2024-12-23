@@ -221,23 +221,32 @@
           <VCardText>
             <VRow>
               <!-- Escoge sección -->
-              <VCol cols="6">
-                <VRow no-gutters>
-                  <VCol cols="12" md="12">
-                    <label for="tipocontenido">Escoge una sección</label>
-                  </VCol>
-                  <VCol cols="12" md="12">
-                    <VSelect
-                      v-model="selectItemVisibilidad"
-                      :items="selectItemsListVisibilidad"
-                      chips
-                      clearable
-                      label=""
-                      @update:model-value="handleSectionChange"
-                    />
-                  </VCol>
-                </VRow>
-              </VCol>
+            <VCol cols="6">
+              <VRow no-gutters>
+                <VCol cols="12" md="12">
+                  <label for="tipocontenido">Escoge una sección</label>
+                </VCol>
+                <VCol cols="12" md="12">
+                  <VSelect
+                    v-model="selectItemVisibilidad"
+                    :items="selectItemsListVisibilidad"
+                    chips
+                    clearable
+                    label=""
+                    @update:model-value="handleSectionChange"
+                  />
+                </VCol>
+                <!-- Campo para URL cuando se selecciona "Otro" -->
+                <VCol v-if="selectItemVisibilidad === 'other'" cols="12" md="12" class="mt-2">
+                  <VTextField
+                    v-model="otherSectionUrl"
+                    label="URL específico"
+                    placeholder="https://www.ecuavisa.com/mi-url"
+                    hide-details
+                  />
+                </VCol>
+              </VRow>
+            </VCol>
 
               <!-- Posición -->
               <VCol cols="6">
@@ -953,18 +962,26 @@ const fetchCategorias = async () => {
   }
 };
 
-//nuevos campos de visibilidad en web
+//CAMPOS VISIBILIDAD EN WEB
 const selectedVisibilityOptions = ref([]);
 const specificUrl = ref('');
 const showSectionOptions = ref(false);
+const otherSectionUrl = ref('');
+
 
 // Función para manejar el cambio de sección
 const handleSectionChange = (value) => {
-  showSectionOptions.value = value && value !== 'all';
+
+  showSectionOptions.value = value && !['all', 'other', 'Home'].includes(value);
+  
   // Resetear valores cuando se cambia la sección
   selectedVisibilityOptions.value = [];
   specificUrl.value = '';
+  if (value !== 'other') {
+    otherSectionUrl.value = '';
+  }
 };
+  
 
 // Función para manejar el cambio en la opción de URL específica
 const handleUrlOptionChange = (checked) => {
@@ -980,7 +997,7 @@ const handleUrlOptionChange = (checked) => {
 
 
 
-//fin campos
+//FIN CAMPOS
 
 const descripcionCampania = ref('');
 
@@ -998,7 +1015,7 @@ const selectItemVisibilidad = ref([]);
 // ]);
 
 const selectItemsListVisibilidad = ref([
-  { title: 'Todo el sitio', value: 'all', avatar: '' },
+{ title: 'Todo el sitio', value: 'all', avatar: '' },
   { title: 'Lo-ultimo', value: 'Lo-ultimo', avatar: '' },
   { title: 'Noticias', value: 'Noticias', avatar: '' },
   { title: 'Mundo', value: 'Mundo', avatar: '' },
@@ -1008,6 +1025,7 @@ const selectItemsListVisibilidad = ref([
   { title: 'Tendencias', value: 'Tendencias', avatar: '' },
   { title: 'La Noticia a Fondo', value: 'la-noticia-a-fondo', avatar: '' },
   { title: 'Home', value: 'Home', avatar: '' },
+  { title: 'Otro', value: 'other', avatar: '' },
 ]);
 
 const selectItemDispositivos = ref([]);
@@ -1284,10 +1302,129 @@ function validarFormulario() {
   return true;
 }
 
+// const onComplete = async () => {
+//   if (!validarFormulario()) return;
+
+//   const visibilitySection = {
+//     name: selectItemVisibilidad.value,
+//     params: {
+//       landing: selectedVisibilityOptions.value.includes('landing'),
+//       root: selectedVisibilityOptions.value.includes('root'),
+//       subsection: selectedVisibilityOptions.value.includes('subsection'),
+//       all: selectedVisibilityOptions.value.includes('all')
+//     },
+//     specificUrl: {
+//       enabled: selectedVisibilityOptions.value.includes('enabled'),
+//       url: selectedVisibilityOptions.value.includes('enabled') ? specificUrl.value : ''
+//     }
+//   };
+  
+
+//   const jsonEnviar = {
+//     "campaignTitle": nombreCampania.value,
+//     "description": descripcionCampania.value,
+//     "type": languages.value,
+//     "criterial": {
+//       "visibilitySection": selectItemVisibilidad.value === 'all' ? 'all' : visibilitySection,
+//       "country": selectedItem.value || -1,
+//       "city": selectedItemCiudad.value?.includes('Todas las ciudades') ? 
+//         -1 : 
+//         selectedItemCiudad.value?.length > 0 ? selectedItemCiudad.value.join(',') : -1,
+//       "so": selectItemSO.value?.length > 0 ? selectItemSO.value.join(',') : null,
+//       "dispositivo": selectItemDispositivos.value?.length > 0 ? selectItemDispositivos.value.join(',') : null,
+//       "metadato": metadatos.value?.length > 0 ? metadatos.value.join(',') : null,
+//       "navegador": selectItemNavegador.value?.length > 0 ? selectItemNavegador.value.join(',') : null
+//     },
+//     "coleccion": criterio.value.join(','),
+//     "position": posicion.value.join(","),
+//     "participantes": modoPersonalizado.value ? "personalizado" : "filtrado",
+//     "otroValor": dataUsuarios.value?.total || 0,
+//     // "userId": modoPersonalizado.value ? 
+//     //   (filteredUsers.value?.map(user => user.wylexId) || []) : 
+//     //   (dataUsuarios.value?.userIds || []),
+//     "userId": modoPersonalizado.value ? userIds.value : (dataUsuarios.value?.userIds || []),
+//     "userIdRemove": [],
+//     "userIdAdd": [],
+//     "statusCampaign": true,
+//     "urls": {
+//       "url": linkAds.value || "#",
+//       "img": {
+//         "escritorio": linkImageEscritorio.value || "",
+//         "mobile": linkImageMobile.value || ""
+//       },
+//       "html": codigoExternoModel.value || ""
+//     },
+//     "campaignSlug": slugify(nombreCampania.value),
+//     // "tempCampaignId": tempCampaignId.value // Incluimos el ID temporal
+//   };
+
+//   try {
+//     loadingPanel.value = true;
+//     const response = await fetch('https://ads-service.vercel.app/campaign/create', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify(jsonEnviar)
+//     });
+
+//     const data = await response.json();
+    
+//     if (data.resp) {
+//       snackbar.value = {
+//         show: true,
+//         text: 'Campaña creada exitosamente',
+//         color: 'success'
+//       };
+//       setTimeout(() => {
+//         router.push('/apps/campaigns/list');
+//       }, 2000);
+//     } else {
+//       snackbar.value = {
+//         show: true,
+//         text: "Error al crear la campaña: " + (data.error || 'Error desconocido'),
+//         color: 'error'
+//       };
+//     }
+//   } catch (error) {
+//     console.error("Error al crear la campaña:", error);
+//     snackbar.value = {
+//       show: true,
+//       text: "Error al crear la campaña",
+//       color: 'error'
+//     };
+//   } finally {
+//     loadingPanel.value = false;
+//   }
+// }
+
 const onComplete = async () => {
   if (!validarFormulario()) return;
 
-  const visibilitySection = {
+let visibilitySection;
+
+if (selectItemVisibilidad.value === 'other') {
+  visibilitySection = {
+    name: 'other',
+    params: {},
+    specificUrl: {
+      enabled: true,
+      url: otherSectionUrl.value
+    }
+  };
+} else if (selectItemVisibilidad.value === 'Home') {
+  visibilitySection = {
+    name: 'Home',
+    params: {},
+    specificUrl: {
+      enabled: true,
+      url: 'https://www.ecuavisa.com'  // URL predefinida para Home
+    }
+  };
+} else if (selectItemVisibilidad.value === 'all') {
+  visibilitySection = 'all';
+} else {
+  visibilitySection = {
     name: selectItemVisibilidad.value,
     params: {
       landing: selectedVisibilityOptions.value.includes('landing'),
@@ -1300,13 +1437,13 @@ const onComplete = async () => {
       url: selectedVisibilityOptions.value.includes('enabled') ? specificUrl.value : ''
     }
   };
-
+}
   const jsonEnviar = {
     "campaignTitle": nombreCampania.value,
     "description": descripcionCampania.value,
     "type": languages.value,
     "criterial": {
-      "visibilitySection": selectItemVisibilidad.value === 'all' ? 'all' : visibilitySection,
+      "visibilitySection": visibilitySection,
       "country": selectedItem.value || -1,
       "city": selectedItemCiudad.value?.includes('Todas las ciudades') ? 
         -1 : 
@@ -1320,9 +1457,6 @@ const onComplete = async () => {
     "position": posicion.value.join(","),
     "participantes": modoPersonalizado.value ? "personalizado" : "filtrado",
     "otroValor": dataUsuarios.value?.total || 0,
-    // "userId": modoPersonalizado.value ? 
-    //   (filteredUsers.value?.map(user => user.wylexId) || []) : 
-    //   (dataUsuarios.value?.userIds || []),
     "userId": modoPersonalizado.value ? userIds.value : (dataUsuarios.value?.userIds || []),
     "userIdRemove": [],
     "userIdAdd": [],
@@ -1336,7 +1470,6 @@ const onComplete = async () => {
       "html": codigoExternoModel.value || ""
     },
     "campaignSlug": slugify(nombreCampania.value),
-    // "tempCampaignId": tempCampaignId.value // Incluimos el ID temporal
   };
 
   try {
@@ -1377,7 +1510,7 @@ const onComplete = async () => {
   } finally {
     loadingPanel.value = false;
   }
-}
+};
 
 const errorMessages = computed(() => numeroRules.map(rule => rule(numeroOtroUsuarios.value)).filter(Boolean));
 // const hasErrors = computed(() => errorMessages.value.length > 0);
