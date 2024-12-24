@@ -2083,6 +2083,7 @@ async function handleExport() {
                     <VCardText>
                       <VTextField
                         v-model="searchQuery"
+                        :disabled="loadingPanel"
                         @input="buscarUsuariosDebounced"
                         @click:clear="buscarUsuariosDebounced"
                         label="Buscar por nombre, correo o teléfono (mínimo 4 caracteres)."
@@ -2178,6 +2179,7 @@ async function handleExport() {
           <VTextField
             clearable
             v-model="searchQuery"
+            :disabled="loadingPanel"
             @input="buscarUsuariosDebounced"
             @click:clear="buscarUsuariosDebounced"
             label="Buscar por nombre o email (mínimo 4 caracteres)"
