@@ -12,6 +12,32 @@
         size="64"
       />
     </VOverlay>
+    <!-- Dialog -->
+
+    <VDialog
+      persistent
+      v-model="loadingPanelDialog"
+      width="300"
+    >
+      <VCard
+        color="primary"
+        width="300"
+      >
+        <VCardText class="pt-3">
+          <div class="text-center mb-2" style="line-height: 1.2;">
+            No cierre la pestaña, espere por favor
+          </div>
+          <VProgressLinear
+            indeterminate
+            color="white"
+            class="mb-0"
+          />
+          <div class="text-center mt-2" style="line-height: 1.2;font-size: 10px;">
+            {{textLoadingPanelDialog}}
+          </div>
+        </VCardText>
+      </VCard>
+    </VDialog>
 
     <!-- Snackbar -->
     <VSnackbar
@@ -1026,24 +1052,82 @@ const handleUrlOptionChange = (checked) => {
   }
 };
 
-
-
 //FIN CAMPOS
+
+// DIVISIÓN LOTES
+const loadingPanelDialog = ref(false);
+const textLoadingPanelDialog = ref("Procesando..");
+const itemsModificados = ref(false);
+
+function dividirEnLotes(array, batchSize = 1000) { // Reducimos el tamaño por defecto
+  if (!array || !Array.isArray(array)) {
+    console.warn('dividirEnLotes: entrada inválida', array);
+    return [];
+  }
+  try {
+    const lotes = [];
+    for (let i = 0; i < array.length; i += batchSize) {
+      const lote = array.slice(i, i + batchSize);
+      if (lote && lote.length > 0) {
+        lotes.push(lote);
+      }
+    }
+    return lotes;
+  } catch (error) {
+    console.error('Error en dividirEnLotes:', error);
+    return [];
+  }
+}
+
+const compressList = (list) => {
+  if (!list) {
+    console.warn('compressList: lista undefined o null');
+    return '';
+  }
+  if (!Array.isArray(list)) {
+    console.warn('compressList: entrada no es un array', list);
+    return '';
+  }
+  console.log('compressList - tamaño de lista:', list.length); // Debug
+  return list.join(',');
+};
+
+async function createCampaign(jsonEnviar) {
+  try {
+    // Reducimos el tamaño del lote a 1000 para evitar payload too large
+    const response = await fetch('https://ads-service.vercel.app/campaign/create', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Origin': window.location.origin
+      },
+      mode: 'cors', // Explícitamente establecemos el modo CORS
+      credentials: 'omit', // Omitimos credenciales para evitar problemas de CORS
+      body: JSON.stringify(jsonEnviar)
+    });
+
+    if (!response.ok) {
+      if (response.status === 413) {
+        throw new Error('El tamaño de los datos es demasiado grande');
+      }
+      throw new Error(`Error en la respuesta del servidor: ${response.status}`);
+    }
+
+    const data = await response.json();
+    return data;
+
+  } catch (error) {
+    console.error("Error al crear la campaña:", error);
+    return null;
+  }
+}
+
+// FIN DIVISÓN LOTES
 
 const descripcionCampania = ref('');
 
 const selectItemVisibilidad = ref([]);
-// const selectItemsListVisibilidad = ref([
-//   { title:'Todo el sitio', value: 'all', avatar:"" },
-//   { title:'Lo-ultimo', value: 'Lo-ultimo', avatar:"" },
-//   { title:'Noticias', value: 'Noticias', avatar:"" },
-//   { title:'Mundo', value: 'Mundo', avatar:"" },
-//   { title:'Estadio', value: 'Mundo', avatar:"" },
-//   { title:'Entretenimiento', value: 'Entretenimiento', avatar:"" },
-//   { title:'Programas', value: 'Programas', avatar:"" },
-//   { title:'Tendencias', value: 'Tendencias', avatar:"" },
-//   { title:'Home', value: 'Home', avatar:"" },
-// ]);
 
 const selectItemsListVisibilidad = ref([
 { title: 'Todo el sitio', value: 'all', avatar: '' },
@@ -1244,38 +1328,37 @@ async function getMetadatos(){
 }
 
 
-async function getUsuarios(){
-  var ciudad = -1;
-  var pais = -1;
-  var criterioTemp = criterio.value;
+async function getUsuarios() {
+  try {
+    var ciudad = -1;
+    var pais = -1;
+    var criterioTemp = criterio.value;
 
-  var so_temp = null;
-  var dispositivo_temp = null;
-  var navegador_temp = null;
-  var metadato = null;
+    var so_temp = null;
+    var dispositivo_temp = null;
+    var navegador_temp = null;
+    var metadato = null;
 
-  if(criterioTemp.includes("metadatos") || criterioTemp.includes("trazabilidads")){
-    pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
-    ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
-    ciudad = (ciudad=="Todas las ciudades"?-1:ciudad);
-  }
+    if (criterioTemp.includes("metadatos") || criterioTemp.includes("trazabilidads")) {
+      pais = (selectedItem.value).length > 0 ? selectedItem.value : -1;
+      ciudad = (selectedItemCiudad.value).length > 0 ? selectedItemCiudad.value : -1;
+      ciudad = (ciudad == "Todas las ciudades" ? -1 : ciudad);
+    }
 
-  if(criterioTemp.includes("metadatos")){
-    metadato = metadatos.value || null;
-  }
+    if (criterioTemp.includes("metadatos")) {
+      metadato = metadatos.value || null;
+    }
 
-  if(criterioTemp.includes("dispositivos")){
-    dispositivo_temp = selectItemDispositivos.value || null;
-  }
+    if (criterioTemp.includes("dispositivos")) {
+      dispositivo_temp = selectItemDispositivos.value || null;
+    }
 
-  if(criterioTemp.includes("plataforma")){
-    so_temp = selectItemSO.value || null;
-    navegador_temp = selectItemNavegador.value || null;
-  }
-  
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    var raw = JSON.stringify({
+    if (criterioTemp.includes("plataforma")) {
+      so_temp = selectItemSO.value || null;
+      navegador_temp = selectItemNavegador.value || null;
+    }
+
+    const requestData = {
       "metadato": metadato,
       "criterio": criterioTemp,
       "pais": pais,
@@ -1283,22 +1366,63 @@ async function getUsuarios(){
       "navegador": navegador_temp,
       "os": so_temp,
       "dispositivo": dispositivo_temp
+    };
+
+    console.log('Datos a enviar:', requestData);
+
+    const response = await fetch('https://ads-service.vercel.app/campaign/v2/usuarios/get/user/total', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestData)
     });
 
-        var requestOptions = {
-            method: 'POST',
-            headers: myHeaders,
-            body: raw,
-            redirect: 'follow'
-        };
-    //console.log('data enviar ',raw);    
-    const send = await fetch('https://ads-service.vercel.app/campaign/v2/usuarios/get/user/total', requestOptions);
-    const respuesta = await send.json();    
-    //console.log('resp',respuesta);    
-    dataUsuarios.value =respuesta;
-    console.log('data total',dataUsuarios.value);
+    if (!response.ok) {
+      throw new Error(`Error en la petición: ${response.status}`);
+    }
 
-  
+    const respuesta = await response.json();
+    
+    if (!respuesta) {
+      throw new Error('No se recibieron datos del servidor');
+    }
+
+    // Generar array de IDs si no viene en la respuesta
+    if (!respuesta.userIds && respuesta.total > 0) {
+      console.log('Generando array de userIds basado en el total');
+      // Generar un array secuencial del 1 al total
+      respuesta.userIds = Array.from({ length: respuesta.total }, (_, i) => i + 1);
+    }
+
+    dataUsuarios.value = respuesta;
+
+    console.log('Datos de usuarios obtenidos:', {
+      total: dataUsuarios.value?.total || 0,
+      userIdsLength: dataUsuarios.value?.userIds?.length || 0,
+      muestra: dataUsuarios.value?.userIds?.slice(0, 5) || [] // Mostrar los primeros 5 IDs
+    });
+
+    if (!dataUsuarios.value?.userIds || dataUsuarios.value.userIds.length === 0) {
+      throw new Error('No se encontraron usuarios que cumplan con los criterios seleccionados');
+    }
+
+    await generarOtrosValores();
+
+    return true;
+
+  } catch (error) {
+    console.error("Error en getUsuarios:", error);
+    dataUsuarios.value = { total: 0, userIds: [] };
+    snackbar.value = {
+      show: true,
+      text: error.message || "Error al obtener usuarios",
+      color: 'error'
+    };
+    return false;
+  } finally {
+    loadingPanel.value = false;
+  }
 }
 
 // actualizar numero de usuarios
@@ -1356,10 +1480,34 @@ function validarFormulario() {
   return true;
 }
 
-// const onComplete = async () => {
-//   if (!validarFormulario()) return;
 
-//   const visibilitySection = {
+// const onComplete = async () => {
+// if (!validarFormulario()) return;
+
+// let visibilitySection;
+
+// if (selectItemVisibilidad.value === 'other') {
+//   visibilitySection = {
+//     name: 'other',
+//     params: {},
+//     specificUrl: {
+//       enabled: true,
+//       url: otherSectionUrl.value
+//     }
+//   };
+// } else if (selectItemVisibilidad.value === 'Home') {
+//   visibilitySection = {
+//     name: 'Home',
+//     params: {},
+//     specificUrl: {
+//       enabled: true,
+//       url: 'https://www.ecuavisa.com'  // URL predefinida para Home
+//     }
+//   };
+// } else if (selectItemVisibilidad.value === 'all') {
+//   visibilitySection = 'all';
+// } else {
+//   visibilitySection = {
 //     name: selectItemVisibilidad.value,
 //     params: {
 //       landing: selectedVisibilityOptions.value.includes('landing'),
@@ -1372,14 +1520,13 @@ function validarFormulario() {
 //       url: selectedVisibilityOptions.value.includes('enabled') ? specificUrl.value : ''
 //     }
 //   };
-  
-
+// }
 //   const jsonEnviar = {
 //     "campaignTitle": nombreCampania.value,
 //     "description": descripcionCampania.value,
 //     "type": languages.value,
 //     "criterial": {
-//       "visibilitySection": selectItemVisibilidad.value === 'all' ? 'all' : visibilitySection,
+//       "visibilitySection": visibilitySection,
 //       "country": selectedItem.value || -1,
 //       "city": selectedItemCiudad.value?.includes('Todas las ciudades') ? 
 //         -1 : 
@@ -1393,9 +1540,6 @@ function validarFormulario() {
 //     "position": posicion.value.join(","),
 //     "participantes": modoPersonalizado.value ? "personalizado" : "filtrado",
 //     "otroValor": dataUsuarios.value?.total || 0,
-//     // "userId": modoPersonalizado.value ? 
-//     //   (filteredUsers.value?.map(user => user.wylexId) || []) : 
-//     //   (dataUsuarios.value?.userIds || []),
 //     "userId": modoPersonalizado.value ? userIds.value : (dataUsuarios.value?.userIds || []),
 //     "userIdRemove": [],
 //     "userIdAdd": [],
@@ -1409,7 +1553,6 @@ function validarFormulario() {
 //       "html": codigoExternoModel.value || ""
 //     },
 //     "campaignSlug": slugify(nombreCampania.value),
-//     // "tempCampaignId": tempCampaignId.value // Incluimos el ID temporal
 //   };
 
 //   try {
@@ -1450,124 +1593,167 @@ function validarFormulario() {
 //   } finally {
 //     loadingPanel.value = false;
 //   }
-// }
+// };
 
-const onComplete = async () => {
-  if (!validarFormulario()) return;
-
-let visibilitySection;
-
-if (selectItemVisibilidad.value === 'other') {
-  visibilitySection = {
-    name: 'other',
-    params: {},
-    specificUrl: {
-      enabled: true,
-      url: otherSectionUrl.value
-    }
-  };
-} else if (selectItemVisibilidad.value === 'Home') {
-  visibilitySection = {
-    name: 'Home',
-    params: {},
-    specificUrl: {
-      enabled: true,
-      url: 'https://www.ecuavisa.com'  // URL predefinida para Home
-    }
-  };
-} else if (selectItemVisibilidad.value === 'all') {
-  visibilitySection = 'all';
-} else {
-  visibilitySection = {
-    name: selectItemVisibilidad.value,
-    params: {
-      landing: selectedVisibilityOptions.value.includes('landing'),
-      root: selectedVisibilityOptions.value.includes('root'),
-      subsection: selectedVisibilityOptions.value.includes('subsection'),
-      all: selectedVisibilityOptions.value.includes('all')
-    },
-    specificUrl: {
-      enabled: selectedVisibilityOptions.value.includes('enabled'),
-      url: selectedVisibilityOptions.value.includes('enabled') ? specificUrl.value : ''
-    }
-  };
-}
-  const jsonEnviar = {
-    "campaignTitle": nombreCampania.value,
-    "description": descripcionCampania.value,
-    "type": languages.value,
-    "criterial": {
-      "visibilitySection": visibilitySection,
-      "country": selectedItem.value || -1,
-      "city": selectedItemCiudad.value?.includes('Todas las ciudades') ? 
-        -1 : 
-        selectedItemCiudad.value?.length > 0 ? selectedItemCiudad.value.join(',') : -1,
-      "so": selectItemSO.value?.length > 0 ? selectItemSO.value.join(',') : null,
-      "dispositivo": selectItemDispositivos.value?.length > 0 ? selectItemDispositivos.value.join(',') : null,
-      "metadato": metadatos.value?.length > 0 ? metadatos.value.join(',') : null,
-      "navegador": selectItemNavegador.value?.length > 0 ? selectItemNavegador.value.join(',') : null
-    },
-    "coleccion": criterio.value.join(','),
-    "position": posicion.value.join(","),
-    "participantes": modoPersonalizado.value ? "personalizado" : "filtrado",
-    "otroValor": dataUsuarios.value?.total || 0,
-    "userId": modoPersonalizado.value ? userIds.value : (dataUsuarios.value?.userIds || []),
-    "userIdRemove": [],
-    "userIdAdd": [],
-    "statusCampaign": true,
-    "urls": {
-      "url": linkAds.value || "#",
-      "img": {
-        "escritorio": linkImageEscritorio.value || "",
-        "mobile": linkImageMobile.value || ""
-      },
-      "html": codigoExternoModel.value || ""
-    },
-    "campaignSlug": slugify(nombreCampania.value),
-  };
-
+async function onComplete() {
+  if (!validarFormulario()) {
+    return;
+  }
   try {
-    loadingPanel.value = true;
-    const response = await fetch('https://ads-service.vercel.app/campaign/create', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(jsonEnviar)
-    });
+    loadingPanelDialog.value = true;
+    textLoadingPanelDialog.value = `Procesando..`;
 
-    const data = await response.json();
-    
-    if (data.resp) {
-      snackbar.value = {
-        show: true,
-        text: 'Campaña creada exitosamente',
-        color: 'success'
+    let visibilitySection;
+
+    if (selectItemVisibilidad.value === 'other') {
+      visibilitySection = {
+        name: 'other',
+        params: {},
+        specificUrl: {
+          enabled: true,
+          url: otherSectionUrl.value
+        }
       };
-      setTimeout(() => {
-        router.push('/apps/campaigns/list');
-      }, 2000);
+    } else if (selectItemVisibilidad.value === 'Home') {
+      visibilitySection = {
+        name: 'Home',
+        params: {},
+        specificUrl: {
+          enabled: true,
+          url: 'https://www.ecuavisa.com'  // URL predefinida para Home
+        }
+      };
+    } else if (selectItemVisibilidad.value === 'all') {
+      visibilitySection = 'all';
     } else {
-      snackbar.value = {
-        show: true,
-        text: "Error al crear la campaña: " + (data.error || 'Error desconocido'),
-        color: 'error'
+      visibilitySection = {
+        name: selectItemVisibilidad.value,
+        params: {
+          landing: selectedVisibilityOptions.value.includes('landing'),
+          root: selectedVisibilityOptions.value.includes('root'),
+          subsection: selectedVisibilityOptions.value.includes('subsection'),
+          all: selectedVisibilityOptions.value.includes('all')
+        },
+        specificUrl: {
+          enabled: selectedVisibilityOptions.value.includes('enabled'),
+          url: selectedVisibilityOptions.value.includes('enabled') ? specificUrl.value : ''
+        }
       };
     }
-  } catch (error) {
-    console.error("Error al crear la campaña:", error);
+
+    const jsonEnviar = {
+      "campaignTitle": nombreCampania.value,
+      "description": descripcionCampania.value,
+      "type": languages.value,
+      "criterial": {
+        "visibilitySection": visibilitySection,
+        "country": selectedItem.value || -1,
+        "city": selectedItemCiudad.value?.includes('Todas las ciudades') ? 
+          -1 : 
+          selectedItemCiudad.value?.length > 0 ? selectedItemCiudad.value.join(',') : -1,
+        "so": selectItemSO.value?.length > 0 ? selectItemSO.value.join(',') : null,
+        "dispositivo": selectItemDispositivos.value?.length > 0 ? selectItemDispositivos.value.join(',') : null,
+        "metadato": metadatos.value?.length > 0 ? metadatos.value.join(',') : null,
+        "navegador": selectItemNavegador.value?.length > 0 ? selectItemNavegador.value.join(',') : null
+      },
+      "coleccion": criterio.value.join(','),
+      "position": posicion.value.join(","),
+      "participantes": modoPersonalizado.value ? "personalizado" : "filtrado",
+      "otroValor": dataUsuarios.value?.total || 0,
+      "userId": modoPersonalizado.value ? userIds.value : (dataUsuarios.value?.userIds || []),
+      "userIdRemove": [],
+      "userIdAdd": [],
+      "statusCampaign": true,
+      "urls": {
+        "url": linkAds.value || "#",
+        "img": {
+          "escritorio": linkImageEscritorio.value || "",
+          "mobile": linkImageMobile.value || ""
+        },
+        "html": codigoExternoModel.value || ""
+      },
+      "campaignSlug": slugify(nombreCampania.value),
+    };
+
+    const userIdsLocal = modoPersonalizado.value ? userIds.value : (dataUsuarios.value?.userIds || []);
+
+    if ((modoPersonalizado.value && !itemsModificados.value) || 
+        (modoPersonalizado.value && itemsModificados.value) || 
+        (!modoPersonalizado.value && !itemsModificados.value)) {
+
+      // Usamos un tamaño de lote más pequeño
+      const lotesUsuarios = dividirEnLotes(userIdsLocal, 1000); 
+      const tamanioUsers = userIdsLocal.length;
+      
+      console.log(`Procesando ${tamanioUsers} usuarios en ${lotesUsuarios.length} lotes`);
+
+      // Enviamos el primer lote con la configuración inicial
+      jsonEnviar["userId"] = [];
+      jsonEnviar["userIdCompress"] = compressList(lotesUsuarios[0]);
+      let respCampaign = await createCampaign(jsonEnviar);
+
+      if (!respCampaign) {
+        throw new Error('Error al crear la campaña inicial');
+      }
+
+      let totalProcesados = lotesUsuarios[0].length;
+      textLoadingPanelDialog.value = `Procesando ${totalProcesados} de ${tamanioUsers} usuarios..`;
+
+      // Procesamos el resto de lotes
+      for (let i = 1; i < lotesUsuarios.length; i++) {
+        const loteActual = lotesUsuarios[i];
+        
+        const jsonLote = {
+          _id: respCampaign._id,
+          userId: [],
+          userIdCompress: compressList(loteActual)
+        };
+
+        const respLote = await createCampaign(jsonLote);
+        
+        if (!respLote) {
+          throw new Error(`Error al procesar el lote ${i + 1}`);
+        }
+
+        totalProcesados += loteActual.length;
+        textLoadingPanelDialog.value = `Procesando ${totalProcesados} de ${tamanioUsers} usuarios..`;
+        
+        // Pequeña pausa entre lotes para evitar sobrecarga
+        await new Promise(resolve => setTimeout(resolve, 100));
+      }
+    } else {
+      jsonEnviar["userId"] = [];
+      jsonEnviar["userIdCompress"] = "";
+      let respCampaign = await createCampaign(jsonEnviar);
+      
+      if (!respCampaign) {
+        throw new Error('Error al crear la campaña sin usuarios');
+      }
+    }
+
     snackbar.value = {
       show: true,
-      text: "Error al crear la campaña",
+      text: 'Campaña creada exitosamente',
+      color: 'success'
+    };
+
+    setTimeout(() => {
+      router.push('/apps/campaigns/list');
+      loadingPanelDialog.value = false;
+    }, 1000);
+
+  } catch (error) {
+    console.error("Error:", error);
+    loadingPanelDialog.value = false;
+    snackbar.value = {
+      show: true,
+      text: error.message || "Error al crear la campaña",
       color: 'error'
     };
-  } finally {
-    loadingPanel.value = false;
   }
-};
+}
 
 const errorMessages = computed(() => numeroRules.map(rule => rule(numeroOtroUsuarios.value)).filter(Boolean));
-// const hasErrors = computed(() => errorMessages.value.length > 0);
 
 function compareByTitle(a, b) {
   if (a.title === "Todas las ciudades") {
