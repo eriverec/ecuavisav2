@@ -750,57 +750,59 @@
             </VBtn>
           </div>
 
-          <!-- Modal de búsqueda -->
-          <VDialog v-model="showSearchDialog" max-width="800px">
-            <VCard>
-              <VCardTitle>Buscar Usuarios</VCardTitle>
-              <VCardText>
-                <VTextField
-                  v-model="searchQuery"
-                  @input="handleSearch"
-                  label="Buscar por nombre, correo o teléfono (mínimo 4 caracteres)"
-                  append-inner-icon="tabler-search"
-                  :loading="isSearching"
-                />
-                
-                <VTable v-if="searchResults.length > 0">
-                  <thead>
-                    <tr>
-                      <th>Nombre</th>
-                      <th>Correo</th>
-                      <th>Acciones</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="user in searchResults" :key="user.wylexId">
-                      <td>{{ user.first_name }} {{ user.last_name }}</td>
-                      <td>{{ user.email }}</td>
-                      <td>
-                        <VBtn
-                          size="small"
-                          color="primary"
-                          @click="handleAddSpecificUser(user)"
-                          :loading="loadingAdd"
-                        >
-                          Agregar
-                        </VBtn>
-                      </td>
-                    </tr>
-                  </tbody>
-                </VTable>
-              </VCardText>
-              <VCardActions>
-                <VSpacer />
-                <VBtn
-                  color="primary"
-                  text
-                  @click="closeSearchDialog"
-                >
-                  Cerrar
-                </VBtn>
-              </VCardActions>
-            </VCard>
-          </VDialog>
+           <!-- Modal de búsqueda -->
+           <VDialog v-model="showSearchDialog" max-width="800px">
+                  <VCard>
+                    <VCardTitle>Buscar Usuarios</VCardTitle>
+                    <VCardText>
+                      <VTextField
+                        v-model="searchQuery"
+                        :disabled="loadingPanel"
+                        @input="buscarUsuariosDebounced"
+                        @click:clear="buscarUsuariosDebounced"
+                        label="Buscar por nombre, correo o teléfono (mínimo 4 caracteres)."
+                        append-inner-icon="tabler-search"
+                        :loading="isSearching"
+                      />
+                      
+                      <VTable v-if="searchResults.length > 0">
+                        <thead>
+                          <tr>
+                            <th>Nombre</th>
+                            <th>Correo</th>
+                            <th>Acciones</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr v-for="user in searchResults" :key="user.wylexId">
+                            <td>{{ user.first_name }} {{ user.last_name }}</td>
+                            <td>{{ user.email }}</td>
+                            <td>
+                              <VBtn
+                                size="small"
+                                color="primary"
+                                @click="handleAddSpecificUser(user)"
+                                :loading="loadingAdd"
+                              >
+                                Agregar
+                              </VBtn>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </VTable>
+                    </VCardText>
+                    <VCardActions>
+                      <VSpacer />
+                      <VBtn
+                        color="primary"
+                        text
+                        @click="closeSearchDialog"
+                      >
+                        Cerrar
+                      </VBtn>
+                    </VCardActions>
+                  </VCard>
+                </VDialog>
         </VCol>
       </VRow>
     </VCardText>
@@ -837,7 +839,7 @@
         </VCardTitle>
 
         <VCardText>
-          <VTextField
+          <!--<VTextField
             v-model="searchQuery"
             label="Buscar por nombre o email (mínimo 4 caracteres)"
             prepend-inner-icon="mdi-magnify"
@@ -845,6 +847,17 @@
             clearable
             class="mb-4"
             @input="handleSearch"
+          />-->
+
+          <VTextField
+            clearable
+            v-model="searchQuery"
+            :disabled="loadingPanel"
+            @input="buscarUsuariosDebounced"
+            @click:clear="buscarUsuariosDebounced"
+            label="Buscar por nombre o email (mínimo 4 caracteres)"
+            append-inner-icon="tabler-search"
+            :loading="isSearching"
           />
 
           <VList lines="two" v-if="searchResults.length > 0">
@@ -923,6 +936,7 @@
   
 <script setup>
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
+import debounce from 'lodash/debounce';
 import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import 'vue3-form-wizard/dist/style.css';
@@ -1825,6 +1839,20 @@ async function handleSearch() {
     loadingPanel.value = false
   }
 }
+
+// Función para realizar la consulta
+const buscarUsuarios = async () => {
+  try {
+    const query = searchQuery.value?.toLowerCase();
+    await handleSearch(query); // Pasamos el término de búsqueda
+  } catch (error) {
+    console.error("Error en buscarUsuarios:", error);
+    return null;
+  }
+};
+
+// Crear una función con debounce
+const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retraso
 
 // Función para agregar usuario desde la búsqueda
 function handleAddSpecificUser(user) {
