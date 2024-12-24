@@ -1,6 +1,7 @@
 <script setup>
   import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
-import { computed, ref, watch } from 'vue';
+import debounce from 'lodash/debounce';
+import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import 'vue3-form-wizard/dist/style.css';
 
@@ -59,18 +60,26 @@ import 'vue3-form-wizard/dist/style.css';
     }
   };
 
-  //nuevos campos de visibilidad en web
+  //CAMPOS VISIBILIDAD EN WEB
   const selectedVisibilityOptions = ref([]);
   const specificUrl = ref('');
   const showSectionOptions = ref(false);
+  const otherSectionUrl = ref('');
+
 
   // Función para manejar el cambio de sección
   const handleSectionChange = (value) => {
-    showSectionOptions.value = value && value !== 'all';
+
+    showSectionOptions.value = value && !['all', 'other', 'Home'].includes(value);
+    
     // Resetear valores cuando se cambia la sección
     selectedVisibilityOptions.value = [];
     specificUrl.value = '';
+    if (value !== 'other') {
+      otherSectionUrl.value = '';
+    }
   };
+    
 
   // Función para manejar el cambio en la opción de URL específica
   const handleUrlOptionChange = (checked) => {
@@ -84,9 +93,7 @@ import 'vue3-form-wizard/dist/style.css';
     }
   };
 
-
-
-  //fin campos de visibilidad
+  //FIN CAMPOS
 
   const descripcionCampania = ref('');
 
@@ -114,6 +121,7 @@ import 'vue3-form-wizard/dist/style.css';
     { title: 'Tendencias', value: 'Tendencias', avatar: '' },
     { title: 'La Noticia a Fondo', value: 'la-noticia-a-fondo', avatar: '' },
     { title: 'Home', value: 'Home', avatar: '' },
+    { title: 'Otro', value: 'other', avatar: '' },
   ]);
 
   const selectItemDispositivos = ref([]);
@@ -223,6 +231,29 @@ import 'vue3-form-wizard/dist/style.css';
     searchQuery.value = '' // Limpiar búsqueda anterior
     searchResults.value = [] // Limpiar resultados anteriores
     userModalOpen.value = true
+  }
+
+  // Función para verificar si un usuario ya está agregado
+  function isUserAdded(user) {
+    return filteredUsers.value.some(u => u.wylexId === user.wylexId);
+  }
+
+  // Función para descargar el CSV de ejemplo
+  function downloadExample() {
+    const csvContent = `id,firstname,last_name,email
+  107407,monica del rocio,torres guallpa,torresguallpa.1234@gmail.com
+  100931,Amanda,Alvarado,electroautosgye@gmail.com
+  76804,Sergio,Chacon,juvenalchacon72@gmail.com`;
+
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'ejemplo_usuarios.csv';
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
   }
 
   async function getMetadatos(){
@@ -420,26 +451,50 @@ import 'vue3-form-wizard/dist/style.css';
       loadingPanelDialog.value = true;
       textLoadingPanelDialog.value = `Procesando..`;
 
-      const visibilitySection = {
-        name: selectItemVisibilidad.value,
-        params: {
-          landing: selectedVisibilityOptions.value.includes('landing'),
-          root: selectedVisibilityOptions.value.includes('root'),
-          subsection: selectedVisibilityOptions.value.includes('subsection'),
-          all: selectedVisibilityOptions.value.includes('all')
-        },
-        specificUrl: {
-          enabled: selectedVisibilityOptions.value.includes('enabled'),
-          url: selectedVisibilityOptions.value.includes('enabled') ? specificUrl.value : ''
-        }
-      };
+      let visibilitySection;
+
+      if (selectItemVisibilidad.value === 'other') {
+        visibilitySection = {
+          name: 'other',
+          params: {},
+          specificUrl: {
+            enabled: true,
+            url: otherSectionUrl.value
+          }
+        };
+      } else if (selectItemVisibilidad.value === 'Home') {
+        visibilitySection = {
+          name: 'Home',
+          params: {},
+          specificUrl: {
+            enabled: true,
+            url: 'https://www.ecuavisa.com'  // URL predefinida para Home
+          }
+        };
+      } else if (selectItemVisibilidad.value === 'all') {
+        visibilitySection = 'all';
+      } else {
+        visibilitySection = {
+          name: selectItemVisibilidad.value,
+          params: {
+            landing: selectedVisibilityOptions.value.includes('landing'),
+            root: selectedVisibilityOptions.value.includes('root'),
+            subsection: selectedVisibilityOptions.value.includes('subsection'),
+            all: selectedVisibilityOptions.value.includes('all')
+          },
+          specificUrl: {
+            enabled: selectedVisibilityOptions.value.includes('enabled'),
+            url: selectedVisibilityOptions.value.includes('enabled') ? specificUrl.value : ''
+          }
+        };
+      }
 
       const jsonEnviar = {
         "campaignTitle": nombreCampania.value,
         "description": descripcionCampania.value,
         "type": languages.value,
         "criterial": {
-          "visibilitySection": selectItemVisibilidad.value === 'all' ? 'all' : visibilitySection,
+          "visibilitySection": visibilitySection,
           "country": selectedItem.value || -1,
           "city": selectedItemCiudad.value?.includes('Todas las ciudades') ? 
             -1 : 
@@ -802,244 +857,258 @@ import 'vue3-form-wizard/dist/style.css';
 
 
   const filterLocal = ref('');
-  const currentPageLocal = ref(1);
-  // const timeoutId = ref(null);
-  const filteredUsers = ref([]);
-  const userIds = ref([]); // Nuevo array para guardar solo los IDs
+const currentPageLocal = ref(1);
+// const timeoutId = ref(null);
+const filteredUsers = ref([]);
+const userIds = ref([]); // Nuevo array para guardar solo los IDs
 
-  const showSearchDialog = ref(false);
-  const searchQuery = ref('');
-  const searchResults = ref([]);
-  const isSearching = ref(false);
-  const searchTimeout = ref(null);
-  const loadingAdd = ref(false);
-  const snackbar = ref({
-    show: false,
-    text: '',
-    color: 'success'
-  });
+const showSearchDialog = ref(false);
+const searchQuery = ref('');
+const searchResults = ref([]);
+const isSearching = ref(false);
+const searchTimeout = ref(null);
+const loadingAdd = ref(false);
+const snackbar = ref({
+  show: false,
+  text: '',
+  color: 'success'
+});
 
-  const isUploading = ref(false);
-  const fileInput = ref(null);
+const isUploading = ref(false);
+const fileInput = ref(null);
 
-  // Función para la búsqueda
-  // async function handleSearch() {
-  //   if (searchQuery.value.length < 4) return
+// Función para la búsqueda
+// async function handleSearch() {
+//   if (searchQuery.value.length < 4) return
 
-  //   isSearching.value = true
-  //   try {
-  //     const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${encodeURIComponent(searchQuery.value)}`)
-  //     const data = await response.json()
-      
-  //     if (data.resp) {
-  //       searchResults.value = data.data
-  //     } else {
-  //       searchResults.value = []
-  //     }
-  //   } catch (error) {
-  //     console.error('Error en búsqueda:', error)
-  //     searchResults.value = []
-  //   } finally {
-  //     isSearching.value = false
-  //   }
-  // }
+//   isSearching.value = true
+//   try {
+//     const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${encodeURIComponent(searchQuery.value)}`)
+//     const data = await response.json()
+    
+//     if (data.resp) {
+//       searchResults.value = data.data
+//     } else {
+//       searchResults.value = []
+//     }
+//   } catch (error) {
+//     console.error('Error en búsqueda:', error)
+//     searchResults.value = []
+//   } finally {
+//     isSearching.value = false
+//   }
+// }
 
-  async function handleSearch() {
-    if (searchQuery.value.length < 4) return
+async function handleSearch(query) {
+  if (query.length < 4) return
 
-    loadingPanel.value = true
-    try {
-      const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${encodeURIComponent(searchQuery.value)}`)
-      const data = await response.json()
-      
-      if (data.resp) {
-        searchResults.value = data.data
-        snackbar.value = {
-          show: true,
-          text: `Se encontraron ${data.data.length} resultados`,
-          color: 'info'
-        }
-      } else {
-        searchResults.value = []
-        snackbar.value = {
-          show: true,
-          text: 'No se encontraron resultados',
-          color: 'warning'
-        }
+  loadingPanel.value = true
+  try {
+    const response = await fetch(`https://ads-service.vercel.app/busqueda/user/?s=${encodeURIComponent(query)}`)
+    const data = await response.json()
+    
+    if (data.resp) {
+      searchResults.value = data.data
+      snackbar.value = {
+        show: true,
+        text: `Se encontraron ${data.data.length} resultados`,
+        color: 'info'
       }
-    } catch (error) {
-      console.error('Error en búsqueda:', error)
+    } else {
       searchResults.value = []
       snackbar.value = {
         show: true,
-        text: 'Error al realizar la búsqueda',
-        color: 'error'
-      }
-    } finally {
-      loadingPanel.value = false
-    }
-  }
-
-  // Función para agregar usuario desde la búsqueda
-  function handleAddSpecificUser(user) {
-    // Verificar si ya existe
-    if (!filteredUsers.value.some(u => u.wylexId === user.wylexId)) {
-      filteredUsers.value.push(user)
-      userIds.value.push(user.wylexId)
-      
-      snackbar.value = {
-        show: true,
-        text: 'Usuario agregado exitosamente',
-        color: 'success'
+        text: 'No se encontraron resultados',
+        color: 'warning'
       }
     }
+  } catch (error) {
+    console.error('Error en búsqueda:', error)
+    searchResults.value = []
+    snackbar.value = {
+      show: true,
+      text: 'Error al realizar la búsqueda',
+      color: 'error'
+    }
+  } finally {
+    loadingPanel.value = false
   }
+}
 
-  // computed properties
-  const totalPages = computed(() => {
-    return Math.ceil(filteredUsers.value.length / 10); // 10 usuarios por página
-  });
+// Función para realizar la consulta
+const buscarUsuarios = async () => {
+  try {
+    const query = searchQuery.value?.toLowerCase();
+    await handleSearch(query); // Pasamos el término de búsqueda
+  } catch (error) {
+    console.error("Error en buscarUsuarios:", error);
+    return null;
+  }
+};
 
-  const currentUsers = computed(() => {
-    const search = filterLocal.value.toLowerCase()
-    let filtered = filteredUsers.value
+// Crear una función con debounce
+const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retraso
+
+// Función para agregar usuario desde la búsqueda
+function handleAddSpecificUser(user) {
+  // Verificar si ya existe
+  if (!filteredUsers.value.some(u => u.wylexId === user.wylexId)) {
+    filteredUsers.value.push(user)
+    userIds.value.push(user.wylexId)
     
-    if (search) {
-      filtered = filtered.filter(user => {
-        const fullName = `${user.first_name || ''} ${user.last_name || ''}`.toLowerCase()
-        const email = (user.email || '').toLowerCase()
-        return fullName.includes(search) || email.includes(search)
-      })
-    }
-    
-    const start = (currentPageLocal.value - 1) * 10
-    return filtered.slice(start, start + 10)
-  })
-
-  // para controlar la visibilidad de elementos
-  const hasUsers = computed(() => {
-    return filteredUsers.value && filteredUsers.value.length > 0;
-  });
-
-  // Función para manejar el click en el botón de importar
-  function triggerFileInput() {
-    if (fileInput.value) {
-      fileInput.value.click();
+    snackbar.value = {
+      show: true,
+      text: 'Usuario agregado exitosamente',
+      color: 'success'
     }
   }
+}
 
-  // Función actualizada para manejar el CSV
-  async function handleFileChange(event) {
-    const file = event.target.files[0]
-    if (!file) return
+// computed properties
+const totalPages = computed(() => {
+  return Math.ceil(filteredUsers.value.length / 10); // 10 usuarios por página
+});
 
-    if (!file.name.endsWith('.csv')) {
-      snackbar.value = {
-        show: true,
-        text: 'Por favor, selecciona un archivo CSV',
-        color: 'error'
-      }
-      event.target.value = ''
-      return
+const currentUsers = computed(() => {
+  const search = filterLocal.value.toLowerCase()
+  let filtered = filteredUsers.value
+  
+  if (search) {
+    filtered = filtered.filter(user => {
+      const fullName = `${user.first_name || ''} ${user.last_name || ''}`.toLowerCase()
+      const email = (user.email || '').toLowerCase()
+      return fullName.includes(search) || email.includes(search)
+    })
+  }
+  
+  const start = (currentPageLocal.value - 1) * 10
+  return filtered.slice(start, start + 10)
+})
+
+// para controlar la visibilidad de elementos
+const hasUsers = computed(() => {
+  return filteredUsers.value && filteredUsers.value.length > 0;
+});
+
+// Función para manejar el click en el botón de importar
+function triggerFileInput() {
+  if (fileInput.value) {
+    fileInput.value.click();
+  }
+}
+
+// Función actualizada para manejar el CSV
+async function handleFileChange(event) {
+  const file = event.target.files[0]
+  if (!file) return
+
+  if (!file.name.endsWith('.csv')) {
+    snackbar.value = {
+      show: true,
+      text: 'Por favor, selecciona un archivo CSV',
+      color: 'error'
     }
+    event.target.value = ''
+    return
+  }
 
-    loadingPanel.value = true
-    try {
-      const Papa = (await import('papaparse')).default;
+  loadingPanel.value = true
+  try {
+    const Papa = (await import('papaparse')).default;
 
-      Papa.parse(file, {
-        header: true,
-        complete: (results) => {
-          try {
-            if (!results.data || !results.data.length) {
-              throw new Error('El archivo está vacío')
-            }
+    Papa.parse(file, {
+      header: true,
+      complete: (results) => {
+        try {
+          if (!results.data || !results.data.length) {
+            throw new Error('El archivo está vacío')
+          }
 
-            const validUsers = results.data
-              .filter(row => row.id && row.id.trim() !== '')
-              .map(row => ({
-                wylexId: parseInt(row.id),
-                firstname: row.firstname || '',
-                last_name: row.last_name || '',
-                email: row.email || ''
-              }))
-              .filter(user => !isNaN(user.wylexId))
+          const validUsers = results.data
+            .filter(row => row.id && row.id.trim() !== '')
+            .map(row => ({
+              wylexId: parseInt(row.id),
+              firstname: row.firstname || '',
+              last_name: row.last_name || '',
+              email: row.email || ''
+            }))
+            .filter(user => !isNaN(user.wylexId))
 
-            if (validUsers.length === 0) {
-              throw new Error('No se encontraron usuarios válidos')
-            }
+          if (validUsers.length === 0) {
+            throw new Error('No se encontraron usuarios válidos')
+          }
 
-            filteredUsers.value = validUsers
-            userIds.value = validUsers.map(user => user.wylexId)
+          filteredUsers.value = validUsers
+          userIds.value = validUsers.map(user => user.wylexId)
 
-            snackbar.value = {
-              show: true,
-              text: `${validUsers.length} usuarios cargados exitosamente`,
-              color: 'success'
-            }
-          } catch (error) {
-            snackbar.value = {
-              show: true,
-              text: error.message,
-              color: 'error'
-            }
+          snackbar.value = {
+            show: true,
+            text: `${validUsers.length} usuarios cargados exitosamente`,
+            color: 'success'
+          }
+        } catch (error) {
+          snackbar.value = {
+            show: true,
+            text: error.message,
+            color: 'error'
           }
         }
-      })
-    } catch (error) {
-      snackbar.value = {
-        show: true,
-        text: `Error: ${error.message}`,
-        color: 'error'
       }
-    } finally {
-      loadingPanel.value = false
-      event.target.value = ''
+    })
+  } catch (error) {
+    snackbar.value = {
+      show: true,
+      text: `Error: ${error.message}`,
+      color: 'error'
     }
+  } finally {
+    loadingPanel.value = false
+    event.target.value = ''
   }
-  // Función de exportación actualizada
-  async function handleExport() {
-    if (!hasUsers.value) return;
+}
+// Función de exportación actualizada
+async function handleExport() {
+  if (!hasUsers.value) return;
 
-    try {
-      loadingPanel.value = true;
-      const Papa = (await import('papaparse')).default;
-      
-      const csvData = Papa.unparse({
-        fields: ['id', 'firstname', 'last_name', 'email'],
-        data: filteredUsers.value.map(user => ({
-          id: user.wylexId,
-          firstname: user.firstname || user.first_name || '',
-          last_name: user.lastname || user.last_name || '',
-          email: user.email || ''
-        }))
-      });
+  try {
+    loadingPanel.value = true;
+    const Papa = (await import('papaparse')).default;
+    
+    const csvData = Papa.unparse({
+      fields: ['id', 'firstname', 'last_name', 'email'],
+      data: filteredUsers.value.map(user => ({
+        id: user.wylexId,
+        firstname: user.firstname || user.first_name || '',
+        last_name: user.lastname || user.last_name || '',
+        email: user.email || ''
+      }))
+    });
 
-      const blob = new Blob([csvData], { type: 'text/csv' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `usuarios_campana_${slugify(nombreCampania.value)}_${new Date().toISOString()}.csv`;
-      document.body.appendChild(a);
-      a.click();
-      window.URL.revokeObjectURL(url);
-      document.body.removeChild(a);
+    const blob = new Blob([csvData], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `usuarios_campana_${slugify(nombreCampania.value)}_${new Date().toISOString()}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    document.body.removeChild(a);
 
-      snackbar.value = {
-        show: true,
-        text: 'Usuarios exportados exitosamente',
-        color: 'success'
-      };
-    } catch (error) {
-      snackbar.value = {
-        show: true,
-        text: 'Error al exportar usuarios',
-        color: 'error'
-      };
-    } finally {
-      loadingPanel.value = false;
-    }
+    snackbar.value = {
+      show: true,
+      text: 'Usuarios exportados exitosamente',
+      color: 'success'
+    };
+  } catch (error) {
+    snackbar.value = {
+      show: true,
+      text: 'Error al exportar usuarios',
+      color: 'error'
+    };
+  } finally {
+    loadingPanel.value = false;
   }
+}
 
   /****************************************************************/
   /****************************************************************/
@@ -1472,9 +1541,9 @@ import 'vue3-form-wizard/dist/style.css';
               Visibilidad en la web
             </VChip>
           </VCardTitle>
-          <VCardSubtitle>
+          <!-- <VCardSubtitle>
             <VIcon size="20" icon="mdi-info" /> Cambiar la posición puede afectar la lectura de las métricas en una campaña ya existente.
-          </VCardSubtitle>
+          </VCardSubtitle> -->
           <VCardText>
             <VRow>
               <!-- Escoge sección -->
@@ -1491,6 +1560,15 @@ import 'vue3-form-wizard/dist/style.css';
                       clearable
                       label=""
                       @update:model-value="handleSectionChange"
+                    />
+                  </VCol>
+                  <!-- Campo para URL cuando se selecciona "Otro" -->
+                  <VCol v-if="selectItemVisibilidad === 'other'" cols="12" md="12" class="mt-2">
+                    <VTextField
+                      v-model="otherSectionUrl"
+                      label="URL específico"
+                      placeholder="https://www.ecuavisa.com/mi-url"
+                      hide-details
                     />
                   </VCol>
                 </VRow>
@@ -1935,30 +2013,30 @@ import 'vue3-form-wizard/dist/style.css';
                 <!-- Lista de usuarios (visible solo cuando hay usuarios) -->
                 <div v-if="hasUsers">
                   <VList lines="two">
-              <VListItem
-                v-for="user in currentUsers"
-                :key="user.wylexId"
-                border
-              >
-                <VListItemTitle>
-                  {{ user.firstname || user.first_name }} {{ user.lastname || user.last_name }}
-                </VListItemTitle>
-                <VListItemSubtitle class="mt-1">
-                  <span class="text-xs text-disabled">{{ user.email }}</span>
-                </VListItemSubtitle>
-                <template #append>
-                  <VBtn
-                    icon
-                    size="x-small"
-                    color="error"
-                    variant="text"
-                    @click="handleDeleteUser(user.wylexId)"
-                  >
-                    <VIcon size="22" icon="tabler-trash" />
-                  </VBtn>
-                </template>
-              </VListItem>
-            </VList>
+                    <VListItem
+                      v-for="user in currentUsers"
+                      :key="user.wylexId"
+                      border
+                    >
+                      <VListItemTitle>
+                        {{ user.firstname || user.first_name }} {{ user.lastname || user.last_name }}
+                      </VListItemTitle>
+                      <VListItemSubtitle class="mt-1">
+                        <span class="text-xs text-disabled">{{ user.email }}</span>
+                      </VListItemSubtitle>
+                      <template #append>
+                        <VBtn
+                          icon
+                          size="x-small"
+                          color="error"
+                          variant="text"
+                          @click="handleDeleteUser(user.wylexId)"
+                        >
+                          <VIcon size="22" icon="tabler-trash" />
+                        </VBtn>
+                      </template>
+                    </VListItem>
+                  </VList>
 
                   <!-- Paginación -->
                   <div class="d-flex justify-center mt-4">
@@ -1986,7 +2064,16 @@ import 'vue3-form-wizard/dist/style.css';
 
                 <!-- Mensaje cuando no hay usuarios -->
                 <div v-else class="text-center pa-4">
-                  <p class="text-medium-emphasis">No hay usuarios cargados. Por favor, importa un archivo CSV para comenzar.</p>
+                  <p class="text-medium-emphasis mb-4">No hay usuarios cargados. Por favor, importa un archivo CSV para comenzar.</p>
+                  <VBtn
+                    color="info"
+                    variant="outlined"
+                    size="small"
+                    @click="downloadExample"
+                    prepend-icon="mdi-file-download"
+                  >
+                    Descargar CSV de ejemplo
+                  </VBtn>
                 </div>
 
                 <!-- Modal de búsqueda -->
@@ -1996,8 +2083,9 @@ import 'vue3-form-wizard/dist/style.css';
                     <VCardText>
                       <VTextField
                         v-model="searchQuery"
-                        @input="handleSearch"
-                        label="Buscar por nombre, correo o teléfono (mínimo 4 caracteres)"
+                        @input="buscarUsuariosDebounced"
+                        @click:clear="buscarUsuariosDebounced"
+                        label="Buscar por nombre, correo o teléfono (mínimo 4 caracteres)."
                         append-inner-icon="tabler-search"
                         :loading="isSearching"
                       />
@@ -2076,7 +2164,7 @@ import 'vue3-form-wizard/dist/style.css';
         </VCardTitle>
 
         <VCardText>
-          <VTextField
+          <!-- <VTextField
             v-model="searchQuery"
             label="Buscar por nombre o email (mínimo 4 caracteres)"
             prepend-inner-icon="mdi-magnify"
@@ -2084,6 +2172,17 @@ import 'vue3-form-wizard/dist/style.css';
             clearable
             class="mb-4"
             @input="handleSearch"
+          /> -->
+
+          
+          <VTextField
+            clearable
+            v-model="searchQuery"
+            @input="buscarUsuariosDebounced"
+            @click:clear="buscarUsuariosDebounced"
+            label="Buscar por nombre o email (mínimo 4 caracteres)"
+            append-inner-icon="tabler-search"
+            :loading="isSearching"
           />
 
           <VList lines="two" v-if="searchResults.length > 0">
@@ -2094,6 +2193,13 @@ import 'vue3-form-wizard/dist/style.css';
             >
               <VListItemTitle>
                 {{ user.first_name }} {{ user.last_name }}
+                <VIcon
+                  v-if="isUserAdded(user)"
+                  color="success"
+                  class="ms-2"
+                  icon="mdi-check-circle"
+                  size="small"
+                />
               </VListItemTitle>
               <VListItemSubtitle class="mt-1">
                 <span class="text-xs text-disabled">{{ user.email }}</span>
@@ -2103,8 +2209,9 @@ import 'vue3-form-wizard/dist/style.css';
                   color="primary"
                   size="small"
                   @click="handleAddSpecificUser(user)"
+                  :disabled="isUserAdded(user)"
                 >
-                  Agregar
+                  {{ isUserAdded(user) ? 'Agregado' : 'Agregar' }}
                 </VBtn>
               </template>
             </VListItem>

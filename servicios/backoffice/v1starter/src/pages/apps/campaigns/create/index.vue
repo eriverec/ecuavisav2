@@ -687,30 +687,30 @@
           <!-- Lista de usuarios (visible solo cuando hay usuarios) -->
           <div v-if="hasUsers">
             <VList lines="two">
-        <VListItem
-          v-for="user in currentUsers"
-          :key="user.wylexId"
-          border
-        >
-          <VListItemTitle>
-            {{ user.firstname || user.first_name }} {{ user.lastname || user.last_name }}
-          </VListItemTitle>
-          <VListItemSubtitle class="mt-1">
-            <span class="text-xs text-disabled">{{ user.email }}</span>
-          </VListItemSubtitle>
-          <template #append>
-            <VBtn
-              icon
-              size="x-small"
-              color="error"
-              variant="text"
-              @click="handleDeleteUser(user.wylexId)"
-            >
-              <VIcon size="22" icon="tabler-trash" />
-            </VBtn>
-          </template>
-        </VListItem>
-      </VList>
+              <VListItem
+                v-for="user in currentUsers"
+                :key="user.wylexId"
+                border
+              >
+                <VListItemTitle>
+                  {{ user.firstname || user.first_name }} {{ user.lastname || user.last_name }}
+                </VListItemTitle>
+                <VListItemSubtitle class="mt-1">
+                  <span class="text-xs text-disabled">{{ user.email }}</span>
+                </VListItemSubtitle>
+                <template #append>
+                  <VBtn
+                    icon
+                    size="x-small"
+                    color="error"
+                    variant="text"
+                    @click="handleDeleteUser(user.wylexId)"
+                  >
+                    <VIcon size="22" icon="tabler-trash" />
+                  </VBtn>
+                </template>
+              </VListItem>
+            </VList>
 
             <!-- Paginación -->
             <div class="d-flex justify-center mt-4">

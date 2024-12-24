@@ -59,18 +59,26 @@ import 'vue3-form-wizard/dist/style.css';
     }
   };
 
-  //nuevos campos de visibilidad en web
+  //CAMPOS VISIBILIDAD EN WEB
   const selectedVisibilityOptions = ref([]);
   const specificUrl = ref('');
   const showSectionOptions = ref(false);
+  const otherSectionUrl = ref('');
+
 
   // Función para manejar el cambio de sección
   const handleSectionChange = (value) => {
-    showSectionOptions.value = value && value !== 'all';
+
+    showSectionOptions.value = value && !['all', 'other', 'Home'].includes(value);
+    
     // Resetear valores cuando se cambia la sección
     selectedVisibilityOptions.value = [];
     specificUrl.value = '';
+    if (value !== 'other') {
+      otherSectionUrl.value = '';
+    }
   };
+    
 
   // Función para manejar el cambio en la opción de URL específica
   const handleUrlOptionChange = (checked) => {
@@ -84,9 +92,7 @@ import 'vue3-form-wizard/dist/style.css';
     }
   };
 
-
-
-  //fin campos
+  //FIN CAMPOS
 
   const descripcionCampania = ref('');
 
@@ -114,6 +120,7 @@ import 'vue3-form-wizard/dist/style.css';
     { title: 'Tendencias', value: 'Tendencias', avatar: '' },
     { title: 'La Noticia a Fondo', value: 'la-noticia-a-fondo', avatar: '' },
     { title: 'Home', value: 'Home', avatar: '' },
+    { title: 'Otro', value: 'other', avatar: '' },
   ]);
 
   const selectItemDispositivos = ref([]);
@@ -420,26 +427,50 @@ import 'vue3-form-wizard/dist/style.css';
       loadingPanelDialog.value = true;
       textLoadingPanelDialog.value = `Procesando..`;
 
-      const visibilitySection = {
-        name: selectItemVisibilidad.value,
-        params: {
-          landing: selectedVisibilityOptions.value.includes('landing'),
-          root: selectedVisibilityOptions.value.includes('root'),
-          subsection: selectedVisibilityOptions.value.includes('subsection'),
-          all: selectedVisibilityOptions.value.includes('all')
-        },
-        specificUrl: {
-          enabled: selectedVisibilityOptions.value.includes('enabled'),
-          url: selectedVisibilityOptions.value.includes('enabled') ? specificUrl.value : ''
-        }
-      };
+      let visibilitySection;
+
+      if (selectItemVisibilidad.value === 'other') {
+        visibilitySection = {
+          name: 'other',
+          params: {},
+          specificUrl: {
+            enabled: true,
+            url: otherSectionUrl.value
+          }
+        };
+      } else if (selectItemVisibilidad.value === 'Home') {
+        visibilitySection = {
+          name: 'Home',
+          params: {},
+          specificUrl: {
+            enabled: true,
+            url: 'https://www.ecuavisa.com'  // URL predefinida para Home
+          }
+        };
+      } else if (selectItemVisibilidad.value === 'all') {
+        visibilitySection = 'all';
+      } else {
+        visibilitySection = {
+          name: selectItemVisibilidad.value,
+          params: {
+            landing: selectedVisibilityOptions.value.includes('landing'),
+            root: selectedVisibilityOptions.value.includes('root'),
+            subsection: selectedVisibilityOptions.value.includes('subsection'),
+            all: selectedVisibilityOptions.value.includes('all')
+          },
+          specificUrl: {
+            enabled: selectedVisibilityOptions.value.includes('enabled'),
+            url: selectedVisibilityOptions.value.includes('enabled') ? specificUrl.value : ''
+          }
+        };
+      }
 
       const jsonEnviar = {
         "campaignTitle": nombreCampania.value,
         "description": descripcionCampania.value,
         // "type": languages.value,
         "criterial": {
-          "visibilitySection": selectItemVisibilidad.value === 'all' ? 'all' : visibilitySection,
+          "visibilitySection": visibilitySection,
           // "country": selectedItem.value || -1,
           // "city": selectedItemCiudad.value?.includes('Todas las ciudades') ? 
             // -1 : 
@@ -1525,6 +1556,15 @@ import 'vue3-form-wizard/dist/style.css';
                       clearable
                       label=""
                       @update:model-value="handleSectionChange"
+                    />
+                  </VCol>
+                  <!-- Campo para URL cuando se selecciona "Otro" -->
+                  <VCol v-if="selectItemVisibilidad === 'other'" cols="12" md="12" class="mt-2">
+                    <VTextField
+                      v-model="otherSectionUrl"
+                      label="URL específico"
+                      placeholder="https://www.ecuavisa.com/mi-url"
+                      hide-details
                     />
                   </VCol>
                 </VRow>
