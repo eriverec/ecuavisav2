@@ -108,7 +108,46 @@
                   </VCol>
                 </VRow>
               </VCol>
-  
+            <!-- Rango de fechas de campaña -->
+              <VCol cols="12">
+                <VRow no-gutters>
+                  <VCol cols="12" md="12">
+                    <label class="mb-2 d-block">Período de la campaña</label>
+                  </VCol>
+                  <VCol cols="12" md="12">
+                    <AppDateTimePicker
+                      prepend-inner-icon="tabler-calendar"
+                      density="compact"
+                      :show-current="true"
+                      @on-change="handleDateRangeChange"
+                      :config="{
+                        position: 'auto right',
+                        mode: 'range',
+                        altFormat: 'F j, Y',
+                        dateFormat: 'Y-m-d',
+                        defaultDate: [
+                          dateRange.start,
+                          dateRange.end
+                        ],
+                        maxDate: '2025-12-31',
+                        showMonths: 2,
+                        locale: {
+                          rangeSeparator: ' al ',
+                          firstDayOfWeek: 1,
+                          months: {
+                            shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                            longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+                          }
+                        },
+                        noCalendar: false,
+                        enableTime: false,
+                        wrap: true
+                      }"
+                    />
+                  </VCol>
+                </VRow>
+              </VCol>
+
               <!-- Campo de descripción -->
               <VCol cols="12">
                 <VRow no-gutters>
@@ -126,6 +165,8 @@
                   </VCol>
                 </VRow>
               </VCol>
+
+              
             </VRow>
           </VCardText>
         </VCard>
@@ -963,6 +1004,7 @@
 <script setup>
 import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
 import debounce from 'lodash/debounce';
+import Moment from 'moment';
 import { computed, ref, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import 'vue3-form-wizard/dist/style.css';
@@ -1025,7 +1067,6 @@ const specificUrl = ref('');
 const showSectionOptions = ref(false);
 const otherSectionUrl = ref('');
 
-
 // Función para manejar el cambio de sección
 const handleSectionChange = (value) => {
 
@@ -1039,7 +1080,6 @@ const handleSectionChange = (value) => {
   }
 };
   
-
 // Función para manejar el cambio en la opción de URL específica
 const handleUrlOptionChange = (checked) => {
   if (checked) {
@@ -1122,8 +1162,30 @@ async function createCampaign(jsonEnviar) {
     return null;
   }
 }
-
 // FIN DIVISÓN LOTES
+
+//RANGO FECHAS
+
+const fechaInicio = ref(null)
+const fechaFin = ref(null)
+
+// Para el rango de fechas
+const dateRange = ref({
+  start: Moment().startOf('month').format('YYYY-MM-DD'),
+  end: Moment().format('YYYY-MM-DD')
+})
+
+// Para manejar el cambio de fechas
+const handleDateRangeChange = (dates) => {
+  if (dates && dates.length === 2) {
+    dateRange.value = {
+      start: Moment(dates[0]).format('YYYY-MM-DD'),
+      end: Moment(dates[1]).format('YYYY-MM-DD')
+    }
+  }
+}
+
+//FIN RANGO
 
 const descripcionCampania = ref('');
 
@@ -1462,6 +1524,17 @@ function validarFormulario() {
     return false;
   }
 
+   // Validación de fechas
+  if (!dateRange.value.start || !dateRange.value.end) {
+    alert("Debe seleccionar el período de la campaña");
+    return false;
+  }
+
+  if (Moment(dateRange.value.end).isBefore(dateRange.value.start)) {
+    alert("La fecha de fin no puede ser anterior a la fecha de inicio");
+    return false;
+  }
+
   if (!languages.value) {
     alert("El tipo de contenido es obligatorio");
     return false;
@@ -1644,6 +1717,8 @@ async function onComplete() {
     const jsonEnviar = {
       "campaignTitle": nombreCampania.value,
       "description": descripcionCampania.value,
+      "fechai": dateRange.value.start, 
+      "fechaf": dateRange.value.end,   
       "type": languages.value,
       "criterial": {
         "visibilitySection": visibilitySection,
