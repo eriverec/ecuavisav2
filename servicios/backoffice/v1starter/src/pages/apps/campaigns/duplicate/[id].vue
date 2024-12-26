@@ -1,9 +1,16 @@
 <script setup>
   import { useCategoriasListStore } from "@/views/apps/categorias/useCategoriasListStore";
+import { parseISO } from 'date-fns';
 import debounce from 'lodash/debounce';
+import { extendMoment } from 'moment-range';
+import Moment from 'moment-timezone';
+import esLocale from "moment/locale/es";
 import { computed, onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import 'vue3-form-wizard/dist/style.css';
+const moment = extendMoment(Moment);
+    moment.locale('es', [esLocale]);
+moment.tz.setDefault('America/Guayaquil');
 
   const userModalOpen = ref(false)
 
@@ -442,6 +449,31 @@ import 'vue3-form-wizard/dist/style.css';
     }
   }
 
+  //RANGO FECHAS
+
+  const fechaInicio = ref(Moment().startOf('month').format('YYYY-MM-DD'))
+  const fechaFin = ref(Moment().format('YYYY-MM-DD'))
+
+  const fechaIFModel = ref([parseISO(fechaInicio.value), parseISO(fechaFin.value)])
+
+  // Para el rango de fechas
+  const dateRange = ref({
+    start: fechaInicio.value,
+    end: fechaFin.value
+  })
+
+  // Para manejar el cambio de fechas
+  const handleDateRangeChange = (dates) => {
+    if (dates && dates.length === 2) {
+      dateRange.value = {
+        start: Moment(dates[0]).format('YYYY-MM-DD'),
+        end: Moment(dates[1]).format('YYYY-MM-DD')
+      }
+    }
+  }
+
+  //FIN RANGO FECHAS
+
   async function onComplete() {
 
     if (!validarFormulario()) {
@@ -492,6 +524,8 @@ import 'vue3-form-wizard/dist/style.css';
       const jsonEnviar = {
         "campaignTitle": nombreCampania.value,
         "description": descripcionCampania.value,
+        "fechai": dateRange.value.start, 
+        "fechaf": dateRange.value.end,   
         "type": languages.value,
         "criterial": {
           "visibilitySection": visibilitySection,
@@ -1206,6 +1240,14 @@ async function handleExport() {
       linkImageMobile.value = cloneCampaign?.urls?.img.mobile;
     }
 
+    if(cloneCampaign?.fechai){
+      fechaIFModel.value = [parseISO(moment(cloneCampaign?.fechai, "YYYY-MM-DD HH:mm:ss").format('YYYY-MM-DD')), parseISO(moment(cloneCampaign?.fechaf, "YYYY-MM-DD HH:mm:ss").format('YYYY-MM-DD'))]
+      dateRange.value = {
+        start: Moment(cloneCampaign?.fechai, "YYYY-MM-DD HH:mm:ss").format('YYYY-MM-DD'),
+        end: Moment(cloneCampaign?.fechaf, "YYYY-MM-DD HH:mm:ss").format('YYYY-MM-DD')
+      }
+    }
+
     // selectItemVisibilidad.value = cloneCampaign?.criterial?.visibilitySection;
     if(isObject(cloneCampaign?.criterial?.visibilitySection)){
       selectItemVisibilidad.value = cloneCampaign?.criterial?.visibilitySection?.name;
@@ -1401,6 +1443,47 @@ async function handleExport() {
                       chips
                       clearable
                       label=""
+                    />
+                  </VCol>
+                </VRow>
+              </VCol>
+
+              <!-- Rango de fechas de campaña -->
+              <VCol cols="12">
+                <VRow no-gutters>
+                  <VCol cols="12" md="12">
+                    <label class="mb-2 d-block">Período de la campaña</label>
+                  </VCol>
+                  <VCol cols="12" md="12">
+                    <AppDateTimePicker
+                      prepend-inner-icon="tabler-calendar"
+                      density="compact"
+                      :show-current="true"
+                      v-model="fechaIFModel"
+                      @on-change="handleDateRangeChange"
+                      :config="{
+                        position: 'auto right',
+                        mode: 'range',
+                        altFormat: 'F j, Y',
+                        dateFormat: 'Y-m-d',
+                        defaultDate: [
+                          dateRange.start,
+                          dateRange.end
+                        ],
+                        maxDate: '2025-12-31',
+                        showMonths: 2,
+                        locale: {
+                          rangeSeparator: ' al ',
+                          firstDayOfWeek: 1,
+                          months: {
+                            shorthand: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                            longhand: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre']
+                          }
+                        },
+                        noCalendar: false,
+                        enableTime: false,
+                        wrap: true
+                      }"
                     />
                   </VCol>
                 </VRow>
