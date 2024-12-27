@@ -1,5 +1,7 @@
 <script>
 import DailyStats from '@/pages/apps/campaigns/audit/daily_stats.vue'
+import DeviceStats from '@/pages/apps/campaigns/audit/device_stats.vue'
+
 import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js"
 
 import { hexToRgb } from '@layouts/utils'
@@ -21,8 +23,10 @@ export default {
   components: {
     VueApexCharts,
     TabGroupTable,
-    DailyStats
+    DailyStats,
+    DeviceStats
   },
+
 
   setup() {
     const route = useRoute()
@@ -737,71 +741,7 @@ export default {
 <!-- Tab Métricas -->
 <VWindowItem value="metricas">
     <VRow>
-      <!-- grafico impresiones y clicks general -->
-      <!-- <VCol cols="12" md="6">
-        <VCard class="px-0 py-0 pb-4">
-          <VCardItem class="header_card_item pb-0">
-            <div class="d-flex pr-0" style="justify-content: space-between;">
-              <div class="descripcion">
-                <VCardTitle>Gráficos de eventos</VCardTitle>
-                <small class="mt-3">Información en porcentajes de la campaña</small>
-              </div>
-            </div>
-            <VDivider class="my-5" />
-          </VCardItem>
-
-          <div v-if="loadingMetrics" class="text-center py-8">
-            <VProgressCircular indeterminate color="primary" />
-            <div class="mt-4">Cargando métricas...</div>
-          </div>
-
-          <div v-else>
-            <VueApexCharts 
-              v-if="resolveDeviceTimeLine.series.length > 0" 
-              :options="resolveDeviceTimeLine.options" 
-              :series="resolveDeviceTimeLine.series" 
-              :height="400" 
-              width="100%" 
-            />
-            <div class="px-4 text-center py-8" v-else>
-              No existen datos para esta campaña
-            </div>
-          </div>
-        </VCard>
-      </VCol> -->
-
-      <!-- <VCol cols="12" md="6">
-        <VCard class="px-0 py-0 pb-4">
-          <VCardItem class="header_card_item pb-0">
-            <div class="d-flex pr-0" style="justify-content: space-between;">
-              <div class="descripcion">
-                <VCardTitle>Comparativa de eventos</VCardTitle>
-                <small class="mt-3">Comparación con otras campañas</small>
-              </div>
-            </div>
-            <VDivider class="my-5" />
-          </VCardItem>
-
-          <div v-if="loadingMetrics" class="text-center py-8">
-            <VProgressCircular indeterminate color="primary" />
-            <div class="mt-4">Cargando comparativa...</div>
-          </div>
-
-          <div v-else>
-            <VueApexCharts 
-              v-if="resolveChart_2.series[0].data.length > 0" 
-              :options="resolveChart_2.options" 
-              :series="resolveChart_2.series" 
-              :height="400"
-              width="100%" 
-            />
-            <div class="px-4 text-center py-8" v-else>
-              No hay datos disponibles para comparar
-            </div>
-          </div>
-        </VCard>
-      </VCol> -->
-
+  
       <!-- comparacion diaria -->
       <VCol cols="12" md="12">
       <VCard class="px-0 py-0 pb-4">
@@ -810,6 +750,14 @@ export default {
           @loading="loadingMetrics = $event"
         />
       </VCard>
+    </VCol>
+
+    <!-- grafico dispositivos -->
+    <VCol cols="12" md="6">
+      <DeviceStats 
+        :campaignId="id"
+        @loading="loadingMetrics = $event"
+      />
     </VCol>
 
       <VCol cols="12">
