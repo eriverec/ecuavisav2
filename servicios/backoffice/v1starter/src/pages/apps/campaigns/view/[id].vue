@@ -1,5 +1,7 @@
 <script>
+import DailyStats from '@/pages/apps/campaigns/audit/daily_stats.vue'
 import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js"
+
 import { hexToRgb } from '@layouts/utils'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
@@ -18,16 +20,21 @@ const valoresHoy = useSelectValueCalendar()
 export default {
   components: {
     VueApexCharts,
-    TabGroupTable  
+    TabGroupTable,
+    DailyStats
   },
 
   setup() {
     const route = useRoute()
+    const loadingMetrics = ref(false)
+    
     return {
       id: route.params.id,
-      moment
+      moment,
+      loadingMetrics
     }
   },
+  
   data() {
     return {
       showContentDialog: false,
@@ -494,6 +501,9 @@ export default {
 
   },
 
+  //comparacion diaria
+
+  
   async mounted() {
     console.log('ID en mounted:', this.id)
     await this.obtenerDetalles()
@@ -537,6 +547,35 @@ export default {
               </div>
               
               <VList v-else class="transparent-list">
+                 <!-- Estado -->
+                 <VListItem>
+                  <template v-slot:prepend>
+                    <VIcon color="primary" icon="mdi-checkbox-marked-circle-outline" size="24" />
+                  </template>
+                  <VListItemTitle class="font-weight-bold text-body-1">Estado</VListItemTitle>
+                  <VListItemSubtitle class="mt-1">
+                    <VChip
+                      :color="suggestion.statusCampaign ? 'success' : 'error'"
+                      size="small"
+                    >
+                      {{ suggestion.statusCampaign ? 'Activo' : 'Inactivo' }}
+                    </VChip>
+                  </VListItemSubtitle>
+                </VListItem>
+
+                <VDivider />
+
+                <!-- Período de campaña -->
+                <VListItem>
+                  <template v-slot:prepend>
+                    <VIcon color="primary" icon="mdi-calendar-range" size="24" />
+                  </template>
+                  <VListItemTitle class="font-weight-bold text-body-1">Período de campaña</VListItemTitle>
+                  <VListItemSubtitle class="mt-1">{{ formatDate(suggestion.fechai) }} hasta {{ formatDate(suggestion.fechaf) }}</VListItemSubtitle>
+                </VListItem>
+
+                <VDivider />
+
                 <!-- Título -->
                 <VListItem>
                   <template v-slot:prepend>
@@ -668,21 +707,7 @@ export default {
 
                 <VDivider />
 
-                <!-- Estado -->
-                <VListItem>
-                  <template v-slot:prepend>
-                    <VIcon color="primary" icon="mdi-checkbox-marked-circle-outline" size="24" />
-                  </template>
-                  <VListItemTitle class="font-weight-bold text-body-1">Estado</VListItemTitle>
-                  <VListItemSubtitle class="mt-1">
-                    <VChip
-                      :color="suggestion.statusCampaign ? 'success' : 'error'"
-                      size="small"
-                    >
-                      {{ suggestion.statusCampaign ? 'Activo' : 'Inactivo' }}
-                    </VChip>
-                  </VListItemSubtitle>
-                </VListItem>
+               
 
                 <VDivider />
 
@@ -712,7 +737,8 @@ export default {
 <!-- Tab Métricas -->
 <VWindowItem value="metricas">
     <VRow>
-      <VCol cols="12" md="6">
+      <!-- grafico impresiones y clicks general -->
+      <!-- <VCol cols="12" md="6">
         <VCard class="px-0 py-0 pb-4">
           <VCardItem class="header_card_item pb-0">
             <div class="d-flex pr-0" style="justify-content: space-between;">
@@ -742,9 +768,9 @@ export default {
             </div>
           </div>
         </VCard>
-      </VCol>
+      </VCol> -->
 
-      <VCol cols="12" md="6">
+      <!-- <VCol cols="12" md="6">
         <VCard class="px-0 py-0 pb-4">
           <VCardItem class="header_card_item pb-0">
             <div class="d-flex pr-0" style="justify-content: space-between;">
@@ -774,7 +800,17 @@ export default {
             </div>
           </div>
         </VCard>
-      </VCol>
+      </VCol> -->
+
+      <!-- comparacion diaria -->
+      <VCol cols="12" md="12">
+      <VCard class="px-0 py-0 pb-4">
+        <DailyStats 
+          :campaignId="id"
+          @loading="loadingMetrics = $event"
+        />
+      </VCard>
+    </VCol>
 
       <VCol cols="12">
         <div class="descripcion">
