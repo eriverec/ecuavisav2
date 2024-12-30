@@ -890,7 +890,7 @@ import { useTheme } from 'vuetify';
       </VCard>
     </VDialog>
     <!-- Control Panel -->
-    <VCard class="mb-4" v-if="currentTab != 2">
+    <VCard class="mb-4" v-if="currentTab != 0">
       <VCardText>
         <div class="d-flex justify-content-between gap-1 flex-column">
           <div class="d-flex align-start flex-wrap gap-4 w-100">
@@ -952,7 +952,7 @@ import { useTheme } from 'vuetify';
       v-model="currentTab"
       class="v-tabs-pill mb-5"
     >
-    <VTab>Últimas noticias</VTab>
+      <VTab>Últimas noticias</VTab>
       <VTab>Listado de artículo</VTab>
       <VTab>Estadística</VTab>
     </VTabs>
