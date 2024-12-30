@@ -21,15 +21,15 @@
             hide-details
           />
           <VBtn
-            icon
-            variant="text"
+            variant="outlined"
             color="primary"
-            size="large"
+            size="small"
+            prepend-icon="tabler-download"
             :loading="downloadingData"
             @click="downloadData"
             class="ml-2"
           >
-            <VIcon icon="tabler-download" />
+          Descargar datos
             <VTooltip activator="parent" location="top">
               Descargar datos
             </VTooltip>
