@@ -1,12 +1,12 @@
 <script setup>
-  import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
   import tabGroupTable from '@/views/apps/campaigns/tabGroupTable.vue';
-  import { hexToRgb } from '@layouts/utils';
-  import VueApexCharts from 'vue3-apexcharts';
-  import { useTheme } from 'vuetify';
-  import Moment from 'moment';
-  import { extendMoment } from 'moment-range';
-  import esLocale from "moment/locale/es";
+import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
+import { hexToRgb } from '@layouts/utils';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
 
@@ -739,7 +739,7 @@
 
     <VRow>
       <VCol class="mt-0" cols="12" md="6" lg="8" >
-        <VCard class="px-2 py-2">
+        <VCard class="px-2 py-2 elevation-0">
           <VTabs v-model="currentTabSectionData" class="" >
             <VTab class="" >Análisis de campañas</VTab>
             <VTab class=" " >Análisis agrupada</VTab>

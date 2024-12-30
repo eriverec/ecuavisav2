@@ -3,7 +3,7 @@
     <!-- Métricas Cards -->
     <VRow class="px-4 pt-4">
       <VCol cols="12" md="4">
-        <VCard class="mb-4">
+        <VCard class="mb-4 elevation-0 border">
           <VCardTitle class="py-2 px-4 text-center" style="background-color: #f2f2f2;">
             CLICS
             <VTooltip location="top">
@@ -31,7 +31,7 @@
       </VCol>
 
       <VCol cols="12" md="4">
-        <VCard class="mb-4">
+        <VCard class="mb-4 elevation-0 border">
           <VCardTitle class="py-2 px-4 text-center" style="background-color: #f2f2f2;">
             CTR
             <VTooltip location="top">
@@ -58,7 +58,7 @@
       </VCol>
 
       <VCol cols="12" md="4">
-        <VCard class="mb-4">
+        <VCard class="mb-4 elevation-0 border">
           <VCardTitle class="py-2 px-4 text-center" style="background-color: #f2f2f2;">
             IMPRESIONES
             <VTooltip location="top">
@@ -85,11 +85,11 @@
       </VCol>
     </VRow>
 
-
+    <VDivider class="mt-5" />
 
     <!-- Gráfico -->
     <VCol cols="12">
-      <VCard>
+      <VCard class=" elevation-0">
         <VCardItem>
           <div class="d-flex flex-column w-100">
             <div class="d-flex justify-space-between align-center mb-4">

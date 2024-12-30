@@ -744,20 +744,23 @@ export default {
   
       <!-- comparacion diaria -->
       <VCol cols="12" md="12">
-      <VCard class="px-0 py-0 pb-4">
-        <DailyStats 
-          :campaignId="id"
-          @loading="loadingMetrics = $event"
-        />
-      </VCard>
-    </VCol>
+        <VCard class="px-0 py-0 pb-4 elevation-0">
+          <DailyStats 
+            :campaignId="id"
+            @loading="loadingMetrics = $event"
+          />
+        </VCard>
+        <VDivider />
+      </VCol>
 
     <!-- grafico dispositivos -->
-    <VCol cols="12" md="6">
+    <VCol cols="12" md="12">
       <DeviceStats 
         :campaignId="id"
         @loading="loadingMetrics = $event"
       />
+      
+      <VDivider />
     </VCol>
 
       <VCol cols="12">

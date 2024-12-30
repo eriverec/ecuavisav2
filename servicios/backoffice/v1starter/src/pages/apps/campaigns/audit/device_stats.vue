@@ -1,6 +1,6 @@
 # device_stats.vue
 <template>
-  <VCard class="px-0 py-0 pb-4">
+  <VCard class="px-0 py-0 pb-4 elevation-0">
     <VCardItem class="header_card_item pb-0">
       <div class="d-flex pr-0" style="justify-content: space-between;">
         <div class="descripcion">
