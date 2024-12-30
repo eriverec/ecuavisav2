@@ -1,6 +1,5 @@
 # Logs
 /src/@iconify/icons-bundle.js
-yarn.lock
 logs
 *.log
 npm-debug.log*
