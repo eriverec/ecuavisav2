@@ -1,10 +1,10 @@
 <script setup>
   import all_pages from '@/views/apps/radar/all_pages.vue';
-  import { useRoute, useRouter } from 'vue-router';
-  import { ref, computed, onMounted } from 'vue'
-  import Moment from 'moment';
-  import { extendMoment } from 'moment-range';
-  import esLocale from "moment/locale/es";
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+import { computed, onMounted, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
@@ -294,9 +294,9 @@
 
 
   // INICIO DE GRÁFICOS
-  import VueApexCharts from 'vue3-apexcharts';
   import { hexToRgb } from '@layouts/utils';
-  import { useTheme } from 'vuetify';
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
   const isLoading = ref(false);
   const uniqueKey = ref(0);
 
@@ -952,12 +952,17 @@
       v-model="currentTab"
       class="v-tabs-pill mb-5"
     >
+    <VTab>Últimas noticias</VTab>
       <VTab>Listado de artículo</VTab>
       <VTab>Estadística</VTab>
-      <VTab>Últimas noticias</VTab>
     </VTabs>
 
     <VWindow v-model="currentTab">
+      <VWindowItem
+        :key="2"
+      >
+        <all_pages/>
+      </VWindowItem>
       <VWindowItem
         :key="0"
       >
@@ -1122,11 +1127,6 @@
             </VCard>
           </VCol>
         </VRow>
-      </VWindowItem>
-      <VWindowItem
-        :key="2"
-      >
-        <all_pages/>
       </VWindowItem>
     </VWindow>
             
