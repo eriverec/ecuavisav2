@@ -1,4 +1,3 @@
-# device_stats.vue
 <template>
   <VCard class="px-0 py-0 pb-4 elevation-0">
     <VCardItem class="header_card_item pb-0">
@@ -24,14 +23,14 @@
             variant="outlined"
             color="primary"
             size="small"
-            prepend-icon="tabler-download"
+            prepend-icon="mdi-account-arrow-down-outline"
             :loading="downloadingData"
             @click="downloadData"
             class="ml-2"
           >
-          Descargar datos
+          Descargar
             <VTooltip activator="parent" location="top">
-              Descargar datos
+              Descargar datos de usuarios
             </VTooltip>
           </VBtn>
         </div>
@@ -110,7 +109,6 @@ const dateRange = ref({
 const showClicks = ref(true)
 const showViews = ref(true)
 
-// Función para descargar datos
 const downloadData = async () => {
   downloadingData.value = true
   try {
@@ -308,7 +306,7 @@ watch(() => props.campaignId, (newId) => {
 //  checkboxes
 watch([showClicks, showViews], () => {
   if (!showClicks.value && !showViews.value) {
-    // Si ambos están desactivados, activar uno por defecto
+    // activar uno por defecto
     showViews.value = true
     return
   }

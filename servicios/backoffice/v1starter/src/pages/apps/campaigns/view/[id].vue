@@ -1,6 +1,9 @@
 <script>
+import AgeStats from '@/pages/apps/campaigns/audit/age_stats.vue'
 import DailyStats from '@/pages/apps/campaigns/audit/daily_stats.vue'
 import DeviceStats from '@/pages/apps/campaigns/audit/device_stats.vue'
+import LocationStats from '@/pages/apps/campaigns/audit/location_stats.vue'
+import SectionStats from '@/pages/apps/campaigns/audit/section_stats.vue'
 
 import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js"
 
@@ -21,11 +24,14 @@ const valoresHoy = useSelectValueCalendar()
 
 export default {
   components: {
-    VueApexCharts,
-    TabGroupTable,
-    DailyStats,
-    DeviceStats
-  },
+  VueApexCharts,
+  TabGroupTable,
+  DailyStats,
+  DeviceStats,
+  AgeStats,
+  SectionStats,
+  LocationStats
+},
 
 
   setup() {
@@ -753,15 +759,45 @@ export default {
         <VDivider />
       </VCol>
 
-    <!-- grafico dispositivos -->
+      <VRow class="match-height">
+  <!-- grafico dispositivos -->
+  <VCol cols="12" md="6">
+    <DeviceStats 
+      :campaignId="id"
+      @loading="loadingMetrics = $event"
+    />
+  </VCol>
+
+  <!-- Estadísticas por ubicación -->
+  <VCol cols="12" md="6">
+    <LocationStats 
+      :campaignId="id"
+      :dateRange="{
+        start: moment(fecha.i),
+        end: moment(fecha.f)
+      }"
+    />
+  </VCol>
+</VRow>
+
+    <!-- grafico edades -->
     <VCol cols="12" md="12">
-      <DeviceStats 
+      <AgeStats 
         :campaignId="id"
         @loading="loadingMetrics = $event"
       />
-      
+    </VCol>
+
+    <!-- grafico secciones -->
+    <VCol cols="12" md="12">
+      <SectionStats 
+        :campaignId="id"
+        @loading="loadingMetrics = $event"
+      />
       <VDivider />
     </VCol>
+
+    
 
       <VCol cols="12">
         <div class="descripcion">
@@ -988,5 +1024,21 @@ export default {
 .content-preview {
   width: 100%;
   overflow-x: hidden;
+}
+
+.match-height {
+  display: flex;
+  flex-wrap: wrap;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.match-height > [class*='col'] {
+  display: flex;
+  flex-direction: column;
+}
+
+.match-height > [class*='col'] > .v-card {
+  flex: 1 1 auto;
 }
 </style>
