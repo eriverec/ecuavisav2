@@ -57,10 +57,10 @@ import { useTheme } from 'vuetify';
 
   const valoresHoy = useSelectValueCalendar(); //DEFAULT HOY
   const fecha = ref({
-    i: valoresHoy.i,
-    f: valoresHoy.f,
-    title: "hoy"
-  });
+  i: moment(),
+  f: moment(),
+  title: "hoy"
+});
 
   const props = defineProps({
     dataCampaigns: Object,
@@ -442,7 +442,7 @@ watch(() => props.dataCampaigns, {
 	<section>
 		<VRow>
 			<VCol class="mt-0" cols="12" md="12" lg="12" >
-				<VCard class="px-2 py-0">
+				<VCard class="px-0 py-0" flat elevation="0">
 					<VCardItem class="header_card_item py-0 pt-4 align-start">
               <div class="d-flex pr-0" style="justify-content: space-between;">
                 <div class="descripcion">
@@ -507,7 +507,8 @@ watch(() => props.dataCampaigns, {
 
               <VDivider class="my-5" />
             
-              <VTable class="text-no-wrap invoice-list-table" :disabled="disabledViewList">
+              <VTable class="text-no-wrap invoice-list-table custom-dark-table">
+
                 <!-- 👉 Table head -->
                 <thead class="text-uppercase">
                   <tr>
@@ -647,3 +648,24 @@ watch(() => props.dataCampaigns, {
 		</VRow>
 	</section>
 </template>
+
+<style>
+.custom-dark-table {
+  --v-theme-surface: transparent;
+}
+
+.custom-dark-table th {
+  color: rgb(var(--v-theme-on-surface));
+  font-weight: 600;
+}
+
+.custom-dark-table td {
+  color: rgb(var(--v-theme-on-surface));
+  opacity: 0.87;
+}
+
+.bg-ecuavisa {
+  background: transparent !important;
+  border-radius: 8px;
+}
+</style>

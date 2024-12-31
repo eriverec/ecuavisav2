@@ -1,86 +1,88 @@
 <template>
-  <VCard class="px-0 py-0 pb-4">
-    <VCardItem class="header_card_item pb-0">
-      <div class="d-flex pr-0" style="justify-content: space-between;">
-        <div class="descripcion">
-          <VCardTitle>Estadísticas por Edad</VCardTitle>
-          <small class="mt-3">Distribución de interacciones por rango de edad</small>
-        </div>
-        <div class="d-flex align-center gap-4">
-          <VCheckbox
-            v-model="showClicks"
-            label="Clicks"
-            color="primary"
-            hide-details
-          />
-          <VCheckbox
-            v-model="showViews"
-            label="Impresiones"
-            color="primary"
-            hide-details
-          />
-          <VBtn
-            color="primary"
-            variant="outlined"
-            size="small"
-            :loading="downloadingData"
-            @click="downloadData"
-            class="ml-2"
-          >
-            <VIcon icon="mdi-account-arrow-down-outline" size="18" class="mr-2"/>
-            Descargar
-          </VBtn>
-       
-        </div>
-      </div>
-      <VDivider class="my-5" />
-    </VCardItem>
-
-    <!-- Selector de fechas -->
-    <VCol cols="12" md="6" class="px-4">
-      <div class="date-picker-wrapper pl-4" style="width: 100%;">
+  <div class="stats-container">
+    <div class="d-flex align-center justify-space-between mb-6">
+      <div class="date-picker-wrapper" style="width: calc(100% - 48px);">
         <AppDateTimePicker 
           prepend-inner-icon="tabler-calendar" 
-          density="compact"
+          density="comfortable"
+          style="max-width: 300px;"
           :show-current="true"
           @on-change="handleDateChange"
           :config="{
             position: 'auto right',
             mode: 'range',
-            altFormat: 'F j, Y',
+            altFormat: 'Y-MM-DD',
             dateFormat: 'Y-m-d',
-            defaultDate: [today, today],
+            defaultDate: [dateRange.start, dateRange.end],
             maxDate: 'today',
             showMonths: 1,
             locale: {
-              rangeSeparator: ' al ',
+              rangeSeparator: ' - ',
               firstDayOfWeek: 1
             }
           }"
+          class="date-picker-compact"
         />
       </div>
-    </VCol>
+      <VBtn
+        icon
+        variant="text"
+        size="large"
+        :loading="downloadingData"
+        @click="downloadData"
+        class="download-btn"
+      >
+        <VIcon icon="tabler-download" size="24" color="grey-darken-1" />
+        <VTooltip activator="parent" location="top">Descargar datos</VTooltip>
+      </VBtn>
+    </div>
 
-    <!-- Loading state -->
+    <div class="d-flex justify-center align-center gap-6 mb-6">
+      <VBtn
+        variant="text"
+        :color="showClicks ? 'primary' : 'grey'"
+        @click="showClicks = !showClicks"
+        class="filter-btn"
+      >
+        <VIcon 
+          :icon="showClicks ? 'tabler-mouse-filled' : 'tabler-mouse'" 
+          size="20" 
+          class="me-2"
+        />
+        Clicks
+      </VBtn>
+      <VBtn
+        variant="text"
+        :color="showViews ? 'primary' : 'grey'"
+        @click="showViews = !showViews"
+        class="filter-btn"
+      >
+        <VIcon 
+          :icon="showViews ? 'tabler-eye-filled' : 'tabler-eye'" 
+          size="20" 
+          class="me-2"
+        />
+        Impresiones
+      </VBtn>
+    </div>
+
     <div v-if="loading" class="text-center py-8">
       <VProgressCircular indeterminate color="primary" />
       <div class="mt-4">Cargando estadísticas...</div>
     </div>
-
-    <!-- Chart -->
-    <VCardText v-else>
+    <div v-else>
       <VueApexCharts
         v-if="chartData.series.length > 0"
         :options="chartData.options"
         :series="chartData.series"
-        :height="400"
+        :height="300"
         width="100%"
       />
       <div v-else class="text-center py-8">
         No hay datos disponibles para el período seleccionado
       </div>
-    </VCardText>
-  </VCard>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -98,56 +100,77 @@ const props = defineProps({
 const emit = defineEmits(['loading'])
 const loading = ref(false)
 const downloadingData = ref(false)
-const today = new Date()
-const dateRange = ref({
-  start: today,
-  end: today
-})
-
 const showClicks = ref(true)
 const showViews = ref(true)
 
-
 const colors = {
-  total: '#9C88E4',
   preview: '#B8A5FF',
   click: '#8471CE'
 }
+
+const formatDate = (date) => {
+  const d = new Date(date)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+const today = new Date()
+const dateRange = ref({
+  start: formatDate(today),
+  end: formatDate(today)
+})
 
 const chartData = ref({
   series: [],
   options: {
     chart: {
       type: 'bar',
-      height: 400,
+      height: 300,
       toolbar: {
         show: false
       },
-      stacked: true
+      stacked: true,
+      background: 'transparent'
     },
     plotOptions: {
       bar: {
         borderRadius: 4,
         horizontal: false,
-        columnWidth: '55%',
+        columnWidth: '40%',
       }
     },
     colors: [colors.preview, colors.click],
     dataLabels: {
       enabled: true,
+      style: {
+        colors: ['#666666']
+      },
       formatter: function(val) {
         return val
       }
     },
     xaxis: {
       categories: [],
-      title: {
-        text: 'Rango de Edad'
+      labels: {
+        rotate: -45,
+        trim: false,
+        style: {
+          colors: '#666666'
+        }
       }
     },
     yaxis: {
+      labels: {
+        style: {
+          colors: '#666666'
+        }
+      },
       title: {
-        text: 'Total de Interacciones'
+        text: 'Total de Interacciones',
+        style: {
+          color: '#666666',
+          fontFamily: 'Public Sans, sans-serif',
+          fontSize: '15px'
+        }
       }
     },
     fill: {
@@ -161,27 +184,13 @@ const chartData = ref({
       }
     },
     legend: {
-      position: 'bottom',
-      horizontalAlign: 'center'
+      show: false
+    },
+    theme: {
+      mode: 'dark'
     }
   }
 })
-
-const formatDate = (date) => {
-  const d = new Date(date)
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-}
-
-const handleDateChange = async (dates) => {
-  if (!dates || !dates[0] || !dates[1]) return
-  
-  dateRange.value = {
-    start: dates[0],
-    end: dates[1]
-  }
-  
-  await fetchData()
-}
 
 const processChartData = (data) => {
   const categories = data.map(item => item.rango)
@@ -204,15 +213,26 @@ const processChartData = (data) => {
   return { categories, series }
 }
 
+const handleDateChange = async (dates) => {
+  if (!dates || !dates[0] || !dates[1]) return
+  
+  dateRange.value = {
+    start: formatDate(dates[0]),
+    end: formatDate(dates[1])
+  }
+  
+  await fetchData()
+}
+
 const fetchData = async () => {
   loading.value = true
   emit('loading', true)
   
   try {
-    const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-edades/${props.campaignId}`, {
+    const response = await axios.get(`http://localhost:8080/grafico/stats-edades/${props.campaignId}`, {
       params: {
-        fechai: formatDate(dateRange.value.start),
-        fechaf: formatDate(dateRange.value.end),
+        fechai: dateRange.value.start,
+        fechaf: dateRange.value.end,
         page: 1,
         limit: 500000
       }
@@ -244,10 +264,10 @@ const fetchData = async () => {
 const downloadData = async () => {
   downloadingData.value = true
   try {
-    const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-edades/btn-descargar/${props.campaignId}`, {
+    const response = await axios.get(`http://localhost:8080/grafico/stats-edades/btn-descargar/${props.campaignId}`, {
       params: {
-        fechai: formatDate(dateRange.value.start),
-        fechaf: formatDate(dateRange.value.end),
+        fechai: dateRange.value.start,
+        fechaf: dateRange.value.end,
         page: 1,
         limit: 500000
       }
@@ -301,6 +321,12 @@ const downloadData = async () => {
   }
 }
 
+watch(() => props.campaignId, (newId) => {
+  if (newId) {
+    fetchData()
+  }
+}, { immediate: true })
+
 watch([showClicks, showViews], () => {
   if (!showClicks.value && !showViews.value) {
     showViews.value = true
@@ -308,12 +334,6 @@ watch([showClicks, showViews], () => {
   }
   fetchData()
 })
-
-watch(() => props.campaignId, (newId) => {
-  if (newId) {
-    fetchData()
-  }
-}, { immediate: true })
 
 onMounted(() => {
   if (props.campaignId) {
@@ -323,11 +343,36 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.text-red {
-  color: #EA5455;
+.stats-container {
+  padding: 1rem;
 }
 
-.text-green {
-  color: #28C76F;
+.date-picker-compact :deep(.v-field__input) {
+  font-size: 0.875rem;
+  min-height: 40px;
+}
+
+.date-picker-compact :deep(.v-field) {
+  border-radius: 4px;
+  min-height: 40px;
+}
+
+.filter-btn {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  height: 36px;
+}
+
+.download-btn {
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+  height: 40px;
+  width: 40px;
+}
+
+.download-btn:hover {
+  opacity: 1;
+  background: transparent !important;
 }
 </style>

@@ -1,15 +1,13 @@
 <template>
   <div>
-    <!-- Métricas Cards -->
     <VRow class="px-4 pt-4">
       <VCol cols="12" md="4">
         <VCard class="mb-4 elevation-0 border">
-          <VCardTitle class="py-2 px-4 text-center" style="background-color: #f2f2f2;">
-            CLICS
+          <VCardTitle class="py-2 px-4 text-center bg-surface">
+            CLICKS
             <VTooltip location="top">
               <template #activator="{ props }">
-                <VIcon v-bind="props" icon="mdi-information" size="x-small" color="#b3b3b3" class="ml-1"></VIcon>
-
+                <VIcon v-bind="props" icon="mdi-information" size="x-small" color="medium-emphasis" class="ml-1"></VIcon>
               </template>
               <span>explicación sobre clics</span>
             </VTooltip>
@@ -17,7 +15,7 @@
           <VDivider />
           <VCardText class="d-flex flex-column justify-center align-center pa-6 text-center">
             <h3 class="text-h3 mb-4">{{ totalClicks }}</h3>
-            <div v-if="clicksTrend !== null" :class="['d-flex align-center gap-1', clicksTrend < 0 ? 'text-red' : 'text-green']">
+            <div v-if="clicksTrend !== null" :class="['d-flex align-center gap-1', clicksTrend < 0 ? 'text-error' : 'text-success']">
               <VIcon size="small" :icon="clicksTrend < 0 ? 'tabler-arrow-down' : 'tabler-arrow-up'" />
               <span class="text-caption">
                 {{ Math.abs(clicksTrend) }}% vs mes anterior
@@ -32,11 +30,11 @@
 
       <VCol cols="12" md="4">
         <VCard class="mb-4 elevation-0 border">
-          <VCardTitle class="py-2 px-4 text-center" style="background-color: #f2f2f2;">
+          <VCardTitle class="py-2 px-4 text-center bg-surface">
             CTR
             <VTooltip location="top">
               <template #activator="{ props }">
-                <VIcon v-bind="props" icon="mdi-information" size="x-small" color="#b3b3b3" class="ml-1"></VIcon>
+                <VIcon v-bind="props" icon="mdi-information" size="x-small" color="medium-emphasis" class="ml-1"></VIcon>
               </template>
               <span>explicación sobre CTR</span>
             </VTooltip>
@@ -44,7 +42,7 @@
           <VDivider />
           <VCardText class="d-flex flex-column justify-center align-center pa-6 text-center">
             <h3 class="text-h3 mb-4">{{ ctrPercentage }}%</h3>
-            <div v-if="ctrTrend !== null" :class="['d-flex align-center gap-1', ctrTrend < 0 ? 'text-red' : 'text-green']">
+            <div v-if="ctrTrend !== null" :class="['d-flex align-center gap-1', ctrTrend < 0 ? 'text-error' : 'text-success']">
               <VIcon size="small" :icon="ctrTrend < 0 ? 'tabler-arrow-down' : 'tabler-arrow-up'" />
               <span class="text-caption">
                 {{ Math.abs(ctrTrend) }}% vs mes anterior
@@ -59,11 +57,11 @@
 
       <VCol cols="12" md="4">
         <VCard class="mb-4 elevation-0 border">
-          <VCardTitle class="py-2 px-4 text-center" style="background-color: #f2f2f2;">
+          <VCardTitle class="py-2 px-4 text-center bg-surface">
             IMPRESIONES
             <VTooltip location="top">
               <template #activator="{ props }">
-                <VIcon v-bind="props" icon="mdi-information" size="x-small" color="#b3b3b3" class="ml-1"></VIcon>
+                <VIcon v-bind="props" icon="mdi-information" size="x-small" color="medium-emphasis" class="ml-1"></VIcon>
               </template>
               <span>explicación sobre impresiones</span>
             </VTooltip>
@@ -71,7 +69,7 @@
           <VDivider />
           <VCardText class="d-flex flex-column justify-center align-center pa-6 text-center">
             <h3 class="text-h3 mb-4">{{ totalImpressions }}</h3>
-            <div v-if="impressionsTrend !== null" :class="['d-flex align-center gap-1', impressionsTrend < 0 ? 'text-red' : 'text-green']">
+            <div v-if="impressionsTrend !== null" :class="['d-flex align-center gap-1', impressionsTrend < 0 ? 'text-error' : 'text-success']">
               <VIcon size="small" :icon="impressionsTrend < 0 ? 'tabler-arrow-down' : 'tabler-arrow-up'" />
               <span class="text-caption">
                 {{ Math.abs(impressionsTrend) }}% vs mes anterior
@@ -87,15 +85,35 @@
 
     <VDivider class="mt-5" />
 
-    <!-- Gráfico -->
     <VCol cols="12">
-      <VCard class=" elevation-0">
+      <VCard class="elevation-0">
         <VCardItem>
           <div class="d-flex flex-column w-100">
             <div class="d-flex justify-space-between align-center mb-4">
-              <div class="descripcion">
-                <VCardTitle>Métricas de Campaña</VCardTitle>
-                <small class="text-medium-emphasis">Evolución de clicks e impresiones en un rango de fecha específico</small>
+              <div class="date-picker-wrapper" style="width: calc(100% - 48px);">
+                <!-- <VCardTitle>Evolución de interacciones</VCardTitle>
+                <small class="text-medium-emphasis">Clicks e impresiones en un rango de fecha específico</small> -->
+                <AppDateTimePicker 
+                    prepend-inner-icon="tabler-calendar" 
+                    density="compact"
+                    style="max-width: 300px;"
+                    :show-current="true"
+                    @on-change="handleDateChange"
+                    :config="{
+                      position: 'auto right',
+                      mode: 'range',
+                      altFormat: 'F j, Y',
+                      dateFormat: 'Y-m-d',
+                      defaultDate: [formatInitialDate(today), formatInitialDate(today)],
+                      maxDate: 'today',
+                      showMonths: 1,
+                      locale: {
+                        rangeSeparator: ' al ',
+                        firstDayOfWeek: 1
+                      }
+                    }"
+                  />
+             
               </div>
               <div class="d-flex gap-2">
                 <VBtn
@@ -119,40 +137,37 @@
               </div>
             </div>
 
-            <!-- Selector de fechas -->
             <VCol cols="12" md="6" class="px-0">
               <div class="date-picker-wrapper" style="width: 100%;">
-                <AppDateTimePicker 
-                  prepend-inner-icon="tabler-calendar" 
-                  density="compact"
-                  :show-current="true"
-                  @on-change="handleDateChange"
-                  :config="{
-                    position: 'auto right',
-                    mode: 'range',
-                    altFormat: 'F j, Y',
-                    dateFormat: 'Y-m-d',
-                    defaultDate: [today, today],
-                    maxDate: 'today',
-                    showMonths: 1,
-                    locale: {
-                      rangeSeparator: ' al ',
-                      firstDayOfWeek: 1
-                    }
-                  }"
-                />
+                <!-- <AppDateTimePicker 
+                    prepend-inner-icon="tabler-calendar" 
+                    density="compact"
+                    :show-current="true"
+                    @on-change="handleDateChange"
+                    :config="{
+                      position: 'auto right',
+                      mode: 'range',
+                      altFormat: 'F j, Y',
+                      dateFormat: 'Y-m-d',
+                      defaultDate: [formatInitialDate(today), formatInitialDate(today)],
+                      maxDate: 'today',
+                      showMonths: 1,
+                      locale: {
+                        rangeSeparator: ' al ',
+                        firstDayOfWeek: 1
+                      }
+                    }"
+                  /> -->
               </div>
             </VCol>
           </div>
         </VCardItem>
 
-        <!-- Loading state -->
         <div v-if="loading" class="text-center py-8">
           <VProgressCircular indeterminate color="primary" />
-          <div class="mt-4">Cargando estadísticas...</div>
+          <div class="mt-4 text-medium-emphasis">Cargando estadísticas...</div>
         </div>
 
-        <!-- Chart -->
         <VCardText v-else>
           <VueApexCharts
             v-if="chartData.series[0].data.length > 0"
@@ -162,7 +177,7 @@
             width="100%"
             ref="chartRef"
           />
-          <div v-else class="text-center py-8">
+          <div v-else class="text-center py-8 text-medium-emphasis">
             No hay datos disponibles para el período seleccionado
           </div>
         </VCardText>
@@ -173,7 +188,7 @@
 
 <script setup>
 import axios from 'axios'
-import { computed, onMounted, ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import VueApexCharts from 'vue3-apexcharts'
 
 const props = defineProps({
@@ -191,14 +206,15 @@ const statsData = ref({
   preview: []
 })
 
-// Fecha inicial: día actual
 const today = new Date()
+const formatInitialDate = (date) => {
+  return new Date(date.getFullYear(), date.getMonth(), date.getDate())
+}
 const dateRange = ref({
-  start: today,
-  end: today
+  start: formatInitialDate(today),
+  end: formatInitialDate(today)
 })
 
-// calculo de metricas
 const totalClicks = computed(() => {
   if (!statsData.value?.data?.click) return 0
   return statsData.value.data.click.reduce((sum, item) => sum + item.total, 0)
@@ -214,12 +230,10 @@ const ctrPercentage = computed(() => {
   return Math.round((totalClicks.value / totalImpressions.value) * 100)
 })
 
-// Tendencias calculadas
 const clicksTrend = ref(null)
 const ctrTrend = ref(null)
 const impressionsTrend = ref(null)
 
-// Función para obtener datos del mes anterior
 const fetchPreviousPeriodData = async (startDate, endDate) => {
   const previousStart = new Date(startDate)
   const previousEnd = new Date(endDate)
@@ -242,7 +256,6 @@ const fetchPreviousPeriodData = async (startDate, endDate) => {
   }
 }
 
-// Función para calcular tendencias
 const calculateTrends = (currentData, previousData) => {
   if (!previousData?.data) {
     clicksTrend.value = null
@@ -261,29 +274,17 @@ const calculateTrends = (currentData, previousData) => {
     impressions: (previousData.data?.preview || []).reduce((sum, item) => sum + item.total, 0)
   }
 
-  // tendencia de clicks
-  if (previousTotals.clicks === 0) {
-    clicksTrend.value = 100
-  } else {
-    clicksTrend.value = Math.round(((currentTotals.clicks - previousTotals.clicks) / previousTotals.clicks) * 100)
-  }
+  clicksTrend.value = previousTotals.clicks === 0 ? 100 : 
+    Math.round(((currentTotals.clicks - previousTotals.clicks) / previousTotals.clicks) * 100)
 
-  // tendencia de impresiones
-  if (previousTotals.impressions === 0) {
-    impressionsTrend.value = 100
-  } else {
-    impressionsTrend.value = Math.round(((currentTotals.impressions - previousTotals.impressions) / previousTotals.impressions) * 100)
-  }
+  impressionsTrend.value = previousTotals.impressions === 0 ? 100 :
+    Math.round(((currentTotals.impressions - previousTotals.impressions) / previousTotals.impressions) * 100)
 
-  // tendencia de CTR
   const currentCTR = currentTotals.impressions > 0 ? (currentTotals.clicks / currentTotals.impressions) * 100 : 0
   const previousCTR = previousTotals.impressions > 0 ? (previousTotals.clicks / previousTotals.impressions) * 100 : 0
   
-  if (previousCTR === 0) {
-    ctrTrend.value = 100
-  } else {
-    ctrTrend.value = Math.round(((currentCTR - previousCTR) / previousCTR) * 100)
-  }
+  ctrTrend.value = previousCTR === 0 ? 100 :
+    Math.round(((currentCTR - previousCTR) / previousCTR) * 100)
 }
 
 const chartData = ref({
@@ -303,12 +304,11 @@ const chartData = ref({
     chart: {
       height: 400,
       type: 'line',
-      zoom: {
-        enabled: false
-      },
-      toolbar: {
-        show: false
-      }
+      zoom: { enabled: false },
+      toolbar: { show: false },
+      foreColor: '#e4e6f4ad',
+      fontFamily: 'Public Sans, sans-serif',
+      fontSize: '15px'
     },
     stroke: {
       curve: 'smooth',
@@ -317,6 +317,9 @@ const chartData = ref({
     colors: ['#7367F0', '#28C76F'],
     markers: {
       size: 4,
+      colors: ['#7367F0', '#28C76F'],
+      strokeColors: 'var(--v-background)',
+      strokeWidth: 2,
       hover: {
         size: 6
       }
@@ -326,7 +329,12 @@ const chartData = ref({
       categories: [],
       labels: {
         rotate: -45,
-        rotateAlways: false
+        rotateAlways: false,
+        style: {
+          fontSize: '15px',
+          colors: 'var(--v-medium-emphasis)',
+          fontFamily: 'Public Sans, sans-serif'
+        }
       },
       axisBorder: {
         show: false
@@ -337,31 +345,44 @@ const chartData = ref({
     },
     yaxis: {
       title: {
-        text: 'Cantidad'
+        text: 'Cantidad',
+        style: {
+          color: 'var(--v-medium-emphasis)',
+          fontFamily: 'Public Sans, sans-serif',
+          fontSize: '15px'
+        }
+      },
+      labels: {
+        style: {
+          colors: 'var(--v-medium-emphasis)',
+          fontFamily: 'Public Sans, sans-serif',
+          fontSize: '15px',
+        }
       }
     },
     tooltip: {
+      theme: 'system',
       shared: true,
       intersect: false,
       y: {
-        formatter: (value) => value.toFixed(0)
+        formatter: value => value.toFixed(0)
       }
     },
     grid: {
-      borderColor: '#f1f1f1'
+      borderColor: 'var(--v-border-color)',
+      row: {
+        colors: ['transparent', '#ffffff'],
+        opacity: 0.5
+      }
     },
     legend: {
-      position: 'top'
+      position: 'top',
+      labels: {
+        colors: 'var(--v-medium-emphasis)'
+      }
     }
   }
 })
-
-const formatDateToDisplay = (date) => {
-  const day = date.getDate()
-  const monthNames = ['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic']
-  const month = monthNames[date.getMonth()]
-  return `${day} ${month}`
-}
 
 const formatDate = (date) => {
   const d = new Date(date)
@@ -383,7 +404,6 @@ const fetchData = async () => {
   loading.value = true
   emit('loading', true)
   try {
-    // datos actuales
     const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-diario/${props.campaignId}`, {
       params: {
         fechai: formatDate(dateRange.value.start),
@@ -394,13 +414,8 @@ const fetchData = async () => {
     })
     
     if (response.data.resp && response.data.data) {
-      // datos del periodo anterior
       const previousPeriodData = await fetchPreviousPeriodData(dateRange.value.start, dateRange.value.end)
-      
-      // Calcular tendencias
       calculateTrends(response.data.data, previousPeriodData)
-      
-      // Actualizar datos actuales
       statsData.value = response.data
       updateChartData(response.data.data)
     }
@@ -413,119 +428,31 @@ const fetchData = async () => {
 }
 
 const updateChartData = (data) => {
-  console.log('Datos recibidos:', data);
+  if (!data?.click || !data?.preview) return
 
-  if (!data?.click || !data?.preview) {
-    console.error('Datos inválidos:', data);
-    return;
-  }
-  
-  try {
-   
-    const allDates = [...new Set([
-      ...data.click.map(item => item.date),
-      ...data.preview.map(item => item.date)
-    ])].sort();
+  const allDates = [...new Set([
+    ...data.click.map(item => item.date),
+    ...data.preview.map(item => item.date)
+  ])].sort()
 
-    console.log('Fechas disponibles:', allDates);
+  const formattedDates = allDates.map(date => {
+    const [year, month, day] = date.split('-')
+    return `${day} ${['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][parseInt(month) - 1]}`
+  })
 
-    const formattedDates = allDates.map(date => {
-      const [year, month, day] = date.split('-');
-      return `${day} ${['ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic'][parseInt(month) - 1]}`;
-    });
+  const clickData = allDates.map(date => {
+    const found = data.click.find(item => item.date === date)
+    return found ? found.total : 0
+  })
 
-    const clickData = allDates.map(date => {
-      const found = data.click.find(item => item.date === date);
-      return found ? found.total : 0;
-    });
+  const previewData = allDates.map(date => {
+    const found = data.preview.find(item => item.date === date)
+    return found ? found.total : 0
+  })
 
-    const previewData = allDates.map(date => {
-      const found = data.preview.find(item => item.date === date);
-      return found ? found.total : 0;
-    });
-
-    console.log('Datos procesados:', { dates: formattedDates, clicks: clickData, previews: previewData });
-
-    chartData.value = {
-      series: [
-        {
-          name: 'Clicks',
-          type: 'line',
-          data: clickData
-        },
-        {
-          name: 'Impresiones',
-          type: 'line',
-          data: previewData
-        }
-      ],
-      options: {
-        chart: {
-          height: 400,
-          type: 'line',
-          zoom: { enabled: false },
-          toolbar: { show: false }
-        },
-        dataLabels: {
-          enabled: true
-        },
-        stroke: {
-          width: 2,
-          curve: 'smooth'
-        },
-        colors: ['#7367F0', '#28C76F'],
-        markers: {
-          size: 4,
-          colors: ['#7367F0', '#28C76F'],
-          strokeColors: '#fff',
-          strokeWidth: 2,
-          hover: {
-            size: 6
-          }
-        },
-        grid: {
-          borderColor: '#f1f1f1',
-          row: {
-            colors: ['transparent', 'transparent'],
-            opacity: 0.5
-          }
-        },
-        xaxis: {
-          categories: formattedDates,
-          labels: {
-            rotate: -45,
-            rotateAlways: false,
-            style: {
-              fontSize: '12px'
-            }
-          },
-          axisBorder: { show: true },
-          axisTicks: { show: true }
-        },
-        yaxis: {
-          title: {
-            text: 'Cantidad'
-          },
-          min: 0
-        },
-        tooltip: {
-          shared: true,
-          intersect: false,
-          y: {
-            formatter: function (value) {
-              return value.toFixed(0);
-            }
-          }
-        },
-        legend: {
-          position: 'top',
-          horizontalAlign: 'center'
-        }
-      }
-    };
-  } catch (error) {
-    console.error('Error al actualizar el gráfico:', error);
-  }
+  chartData.value.series[0].data = clickData
+  chartData.value.series[1].data = previewData
+  chartData.value.options.xaxis.categories = formattedDates
 }
 
 const downloadChart = () => {
@@ -538,7 +465,7 @@ const downloadChart = () => {
   }
 }
 
-// Función para descargar reporte detallado
+// Funciones de descarga
 const downloadDetailedReport = async () => {
   try {
     const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-diario/btn-descargar/${props.campaignId}`, {
@@ -548,7 +475,7 @@ const downloadDetailedReport = async () => {
         page: 1,
         limit: 5000
       }
-    });
+    })
 
     if (response.data.resp && response.data.data) {
       const csvData = response.data.data.map(item => ({
@@ -558,30 +485,27 @@ const downloadDetailedReport = async () => {
         email: item.user.email,
         first_name: item.user.first_name,
         last_name: item.user.last_name
-      }));
+      }))
 
- 
-      const headers = ['created_at_campaign', 'type', 'wylexId', 'email', 'first_name', 'last_name'];
+      const headers = ['created_at_campaign', 'type', 'wylexId', 'email', 'first_name', 'last_name']
       const csvContent = [
         headers.join(','),
         ...csvData.map(row => headers.map(header => `"${row[header]}"`).join(','))
-      ].join('\n');
+      ].join('\n')
 
-   
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.setAttribute('download', `reporte_general_${formatDate(new Date())}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.setAttribute('download', `reporte_general_${formatDate(new Date())}.csv`)
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
     }
   } catch (error) {
-    console.error('Error al descargar el reporte detallado:', error);
+    console.error('Error al descargar el reporte detallado:', error)
   }
-};
+}
 
-// Función para descargar reporte agrupado por tipo (clics e impresiones)
 const downloadGroupedReport = async () => {
   try {
     const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-diario/btn-descargar/${props.campaignId}`, {
@@ -591,12 +515,11 @@ const downloadGroupedReport = async () => {
         page: 1,
         limit: 5000
       }
-    });
+    })
 
     if (response.data.resp && response.data.data) {
-      // Agrupar por wylexId y type
       const groupedData = response.data.data.reduce((acc, item) => {
-        const key = `${item.user.wylexId}-${item.type}`;
+        const key = `${item.user.wylexId}-${item.type}`
         if (!acc[key]) {
           acc[key] = {
             wylexId: item.user.wylexId,
@@ -605,13 +528,12 @@ const downloadGroupedReport = async () => {
             last_name: item.user.last_name,
             type: item.type,
             dates: []
-          };
+          }
         }
-        acc[key].dates.push(new Date(item.created_at_campaign).toLocaleString());
-        return acc;
-      }, {});
+        acc[key].dates.push(new Date(item.created_at_campaign).toLocaleString())
+        return acc
+      }, {})
 
-     
       const csvData = Object.values(groupedData).map(item => ({
         type: item.type,
         wylexId: item.wylexId,
@@ -619,28 +541,26 @@ const downloadGroupedReport = async () => {
         first_name: item.first_name,
         last_name: item.last_name,
         interaction_dates: item.dates.join('; ')
-      }));
+      }))
 
-
-      const headers = ['type', 'wylexId', 'email', 'first_name', 'last_name', 'interaction_dates'];
+      const headers = ['type', 'wylexId', 'email', 'first_name', 'last_name', 'interaction_dates']
       const csvContent = [
         headers.join(','),
         ...csvData.map(row => headers.map(header => `"${row[header]}"`).join(','))
-      ].join('\n');
+      ].join('\n')
 
-   
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const link = document.createElement('a');
-      link.href = URL.createObjectURL(blob);
-      link.setAttribute('download', `reporte_agrupado_por_tipo_${formatDate(new Date())}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      link.href = URL.createObjectURL(blob)
+      link.setAttribute('download', `reporte_agrupado_por_tipo_${formatDate(new Date())}.csv`)
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
     }
   } catch (error) {
-    console.error('Error al descargar el reporte agrupado:', error);
+    console.error('Error al descargar el reporte agrupado:', error)
   }
-};
+}
 
 watch(() => props.campaignId, (newId) => {
   if (newId) {
@@ -656,11 +576,15 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.text-red {
-  color: #EA5455;
+.text-error {
+  color: var(--v-error-base);
 }
 
-.text-green {
-  color: #28C76F;
+.text-success {
+  color: var(--v-success-base);
+}
+
+:deep(.v-card) {
+  border-color: var(--v-border-color);
 }
 </style>

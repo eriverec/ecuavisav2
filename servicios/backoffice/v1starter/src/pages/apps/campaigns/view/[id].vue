@@ -548,6 +548,7 @@ export default {
 
 
       <VWindow v-model="activeTab" class="mt-6">
+        <!-- Tab Resumen -->
         <VWindowItem value="resumen">
           <div class="d-flex justify-center">
             <div style="width: 800px;">
@@ -744,72 +745,116 @@ export default {
             </div>
           </div>
         </VWindowItem>
-<!-- Tab Métricas -->
-<VWindowItem value="metricas">
-    <VRow>
-  
-      <!-- comparacion diaria -->
-      <VCol cols="12" md="12">
-        <VCard class="px-0 py-0 pb-4 elevation-0">
-          <DailyStats 
-            :campaignId="id"
-            @loading="loadingMetrics = $event"
-          />
-        </VCard>
-        <VDivider />
-      </VCol>
 
-      <VRow class="match-height">
-  <!-- grafico dispositivos -->
-  <VCol cols="12" md="6">
-    <DeviceStats 
-      :campaignId="id"
-      @loading="loadingMetrics = $event"
-    />
-  </VCol>
+        <!-- Tab Métricas -->
+        <VWindowItem value="metricas">
+            <VContainer fluid class="pa-4">
+              <!-- Comparación diaria -->
+              <VCard class="mb-6">
+                <VCardTitle class="d-flex justify-space-between align-center px-6 py-4">
+                  <div>
+                    <div class="text-h6 font-weight-medium">Evolución de interacciones</div>
+                    <div class="text-subtitle-2 text-medium-emphasis">Clicks e impresiones en un rango de fecha específico</div>
+                  
+                  </div>
+                </VCardTitle>
+                <VCardText class="pt-4 pb-6">
+                  <DailyStats 
+                    :campaignId="id"
+                    @loading="loadingMetrics = $event"
+                  />
+                </VCardText>
+              </VCard>
 
-  <!-- Estadísticas por ubicación -->
-  <VCol cols="12" md="6">
-    <LocationStats 
-      :campaignId="id"
-      :dateRange="{
-        start: moment(fecha.i),
-        end: moment(fecha.f)
-      }"
-    />
-  </VCol>
-</VRow>
+              <!-- Dispositivos y Ubicación -->
+              <VRow>
+                <VCol cols="12" md="6">
+                  <VCard class="h-100">
+                    <VCardTitle class="d-flex justify-space-between align-center px-6 py-4">
+                      <div>
+                        <div class="text-h6 font-weight-medium">Dispositivos</div>
+                        <div class="text-subtitle-2 text-medium-emphasis">Distribución por tipo de dispositivo</div>
+                      </div>
+                    </VCardTitle>
+                    <VCardText class="pt-4 pb-6">
+                      <DeviceStats 
+                        :campaignId="id"
+                        @loading="loadingMetrics = $event"
+                      />
+                    </VCardText>
+                  </VCard>
+                </VCol>
 
-    <!-- grafico edades -->
-    <VCol cols="12" md="12">
-      <AgeStats 
-        :campaignId="id"
-        @loading="loadingMetrics = $event"
-      />
-    </VCol>
+                <VCol cols="12" md="6">
+                  <VCard class="h-100">
+                    <VCardTitle class="d-flex justify-space-between align-center px-6 py-4">
+                      <div>
+                        <div class="text-h6 font-weight-medium">Ubicaciones</div>
+                        <div class="text-subtitle-2 text-medium-emphasis">Estadísticas por ubicación</div>
+                      </div>
+                    </VCardTitle>
+                    <VCardText class="pt-4 pb-6">
+                      <LocationStats 
+                        :campaignId="id"
+                        :dateRange="{
+                          start: moment(fecha.i),
+                          end: moment(fecha.f)
+                        }"
+                      />
+                    </VCardText>
+                  </VCard>
+                </VCol>
+              </VRow>
 
-    <!-- grafico secciones -->
-    <VCol cols="12" md="12">
-      <SectionStats 
-        :campaignId="id"
-        @loading="loadingMetrics = $event"
-      />
-      <VDivider />
-    </VCol>
+              <!-- Edades -->
+              <VCard class="my-6">
+                <VCardTitle class="d-flex justify-space-between align-center px-6 py-4">
+                  <div>
+                    <div class="text-h6 font-weight-medium">Distribución por Edades</div>
+                    <div class="text-subtitle-2 text-medium-emphasis">Análisis demográfico por edad</div>
+                  </div>
+                </VCardTitle>
+                <VCardText class="pt-4 pb-6">
+                  <AgeStats 
+                    :campaignId="id"
+                    @loading="loadingMetrics = $event"
+                  />
+                </VCardText>
+              </VCard>
 
-    
+              <!-- Secciones -->
+              <VCard class="mb-6">
+                <VCardTitle class="d-flex justify-space-between align-center px-6 py-4">
+                  <div>
+                    <div class="text-h6 font-weight-medium">Metadatos / Secciones</div>
+                    <div class="text-subtitle-2 text-medium-emphasis">Análisis por las secciones y subsecciones más visitadas en la campaña</div>
+                  </div>
+                </VCardTitle>
+                <VCardText class="pt-4 pb-6">
+                  <SectionStats 
+                    :campaignId="id"
+                    @loading="loadingMetrics = $event"
+                  />
+                </VCardText>
+              </VCard>
 
-      <VCol cols="12">
-        <div class="descripcion">
-                <VCardTitle>Listado de URLs visitadas</VCardTitle>
-        </div>
-        <TabGroupTable 
-        :dataCampaigns="campaignsList"
-        :key="campaignsList[0]?.value" 
-      />
-      </VCol>
-    </VRow>
-  </VWindowItem>
+              <!-- URLs visitadas -->
+              <VCard>
+                <VCardTitle class="d-flex justify-space-between align-center px-6 py-4">
+                  <div>
+                    <div class="text-h6 font-weight-medium">Listado de enlaces visitados</div>
+                    <div class="text-subtitle-2 text-medium-emphasis">en un rango de fecha específico</div>
+                  </div>
+                </VCardTitle>
+                <VCardText class="pt-4 pb-6">
+                  <TabGroupTable 
+                    :dataCampaigns="campaignsList"
+                    :key="campaignsList[0]?.value" 
+                  />
+                </VCardText>
+              </VCard>
+            </VContainer>
+          </VWindowItem>
 
       </VWindow>
     </div>
@@ -858,6 +903,32 @@ export default {
 </template>
 
 <style scoped>
+
+.v-card {
+  border-radius: 8px;
+  box-shadow: 0 4px 18px -4px rgba(0, 0, 0, 0.1) !important;
+}
+
+.v-card-title {
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+.text-h6 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.text-subtitle-2 {
+  color: rgb(var(--v-theme-on-surface-variant));
+  font-size: 0.875rem;
+  font-weight: 400;
+  line-height: 1.25rem;
+  letter-spacing: 0.0178571429em;
+}
+
+.v-card-text {
+  padding: 20px 24px;
+}
 .fill-width {
   width: 100%;
   min-height: 100vh;
@@ -872,7 +943,7 @@ export default {
 
 .v-list-item {
   padding: 16px;
-  background: white;
+  /* background: white; */
 }
 
 .content-preview {

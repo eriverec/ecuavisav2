@@ -1,75 +1,76 @@
 <template>
-  <VCard class="px-0 py-0 pb-4">
-    <VCardItem class="header_card_item pb-0">
-      <div class="d-flex pr-0" style="justify-content: space-between;">
-        <div class="descripcion">
-          <!-- <VCardTitle class="text-h5 font-weight-semibold">Estadísticas por Intereses</VCardTitle>
-          <div class="mt-2 text-medium-emphasis">Distribución de interacciones por sección | Intereses</div> -->
-          <VCardTitle>Estadísticas por Intereses</VCardTitle>
-          <small class="mt-3">Distribución de interacciones por sección | Intereses</small>
-        </div>
-        <div class="d-flex align-center gap-4">
-          <VCheckbox
-            v-model="showClicks"
-            label="Clicks"
-            color="primary"
-            hide-details
-          />
-          <VCheckbox
-            v-model="showViews"
-            label="Impresiones"
-            color="primary"
-            hide-details
-          />
-          <!-- <VBtn
-            color="primary"
-            variant="outlined"
-            size="small"
-            :loading="downloadingData"
-            @click="downloadData"
-            class="ml-2"
-          >
-            <VIcon icon="tabler-download" size="18" class="mr-2"/>
-            Descargar
-          </VBtn> -->
-        </div>
-      </div>
-      <VDivider class="my-5" />
-    </VCardItem>
-
-    <!-- Selector de fechas -->
-    <VCol cols="12" md="6" class="px-4">
-      <div class="date-picker-wrapper pl-4" style="width: 100%;">
+  <div class="stats-container">
+    <div class="d-flex align-center justify-space-between mb-6">
+      <div class="date-picker-wrapper" style="width: calc(100% - 48px);">
         <AppDateTimePicker 
           prepend-inner-icon="tabler-calendar" 
-          density="compact"
+          density="comfortable"
+          style="max-width: 300px;"
           :show-current="true"
           @on-change="handleDateChange"
           :config="{
             position: 'auto right',
             mode: 'range',
-            altFormat: 'F j, Y',
+            altFormat: 'Y-MM-DD',
             dateFormat: 'Y-m-d',
-            defaultDate: [today, today],
+            defaultDate: [dateRange.start, dateRange.end],
             maxDate: 'today',
             showMonths: 1,
             locale: {
-              rangeSeparator: ' al ',
+              rangeSeparator: ' - ',
               firstDayOfWeek: 1
             }
           }"
+          class="date-picker-compact"
         />
       </div>
-    </VCol>
+      <VBtn
+        icon
+        variant="text"
+        size="large"
+        :loading="downloadingData"
+        @click="downloadData"
+        class="download-btn"
+      >
+        <VIcon icon="tabler-download" size="24" color="grey-darken-1" />
+        <VTooltip activator="parent" location="top">Descargar datos</VTooltip>
+      </VBtn>
+    </div>
 
-    <!-- Loading state -->
+    <div class="d-flex justify-center align-center gap-6 mb-6">
+      <VBtn
+        variant="text"
+        :color="showClicks ? 'primary' : 'grey'"
+        @click="showClicks = !showClicks"
+        class="filter-btn"
+      >
+        <VIcon 
+          :icon="showClicks ? 'tabler-mouse-filled' : 'tabler-mouse'" 
+          size="20" 
+          class="me-2"
+        />
+        Clicks
+      </VBtn>
+      <VBtn
+        variant="text"
+        :color="showViews ? 'primary' : 'grey'"
+        @click="showViews = !showViews"
+        class="filter-btn"
+      >
+        <VIcon 
+          :icon="showViews ? 'tabler-eye-filled' : 'tabler-eye'" 
+          size="20" 
+          class="me-2"
+        />
+        Impresiones
+      </VBtn>
+    </div>
+
     <div v-if="loading" class="text-center py-8">
       <VProgressCircular indeterminate color="primary" />
       <div class="mt-4">Cargando estadísticas...</div>
     </div>
-
-    <!-- Chart -->
-    <VCardText v-else>
+    <div v-else>
       <VueApexCharts
         v-if="chartData.series.length > 0"
         :options="chartData.options"
@@ -80,8 +81,8 @@
       <div v-else class="text-center py-8">
         No hay datos disponibles para el período seleccionado
       </div>
-    </VCardText>
-  </VCard>
+    </div>
+  </div>
 </template>
 
 <script setup>
@@ -99,20 +100,24 @@ const props = defineProps({
 const emit = defineEmits(['loading'])
 const loading = ref(false)
 const downloadingData = ref(false)
-const today = new Date()
-const dateRange = ref({
-  start: today,
-  end: today
-})
-
 const showClicks = ref(true)
 const showViews = ref(true)
 
-
 const colors = {
-  impressions: '#7BD5F5', 
-  clicks: '#4FB5E6'     
+  preview: '#7BD5F5',
+  click: '#4FB5E6'
 }
+
+const formatDate = (date) => {
+  const d = new Date(date)
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
+}
+
+const today = new Date()
+const dateRange = ref({
+  start: formatDate(today),
+  end: formatDate(today)
+})
 
 const chartData = ref({
   series: [],
@@ -120,10 +125,11 @@ const chartData = ref({
     chart: {
       type: 'bar',
       height: 350,
-      stacked: true,
       toolbar: {
         show: false
       },
+      stacked: true,
+      background: 'transparent'
     },
     plotOptions: {
       bar: {
@@ -133,11 +139,14 @@ const chartData = ref({
         distributed: false,
         rangeBarOverlap: true,
         rangeBarGroupRows: false
-      },
+      }
     },
-    colors: [colors.impressions, colors.clicks],
+    colors: [colors.preview, colors.click],
     dataLabels: {
       enabled: true,
+      style: {
+        colors: ['#666666']
+      },
       formatter: function(val) {
         return val
       }
@@ -148,30 +157,19 @@ const chartData = ref({
     },
     xaxis: {
       categories: [],
-      title: {
-        text: 'Total de Interacciones',
-        style: {
-          fontSize: '14px',
-          fontFamily: 'Inter, sans-serif',
-          fontWeight: 500
-        }
-      },
       labels: {
         style: {
-          fontSize: '12px',
-          fontFamily: 'Inter, sans-serif'
+          colors: '#666666'
         }
       }
     },
     yaxis: {
-      title: {
-        text: '',
-      },
       labels: {
         style: {
           fontSize: '14px',
           fontFamily: 'Inter, sans-serif',
-          fontWeight: 600
+          fontWeight: 600,
+          colors: '#666666'
         },
         maxWidth: 300,
         trim: false,
@@ -179,6 +177,9 @@ const chartData = ref({
           return value.length > 40 ? value.substr(0, 37) + '...' : value;
         }
       }
+    },
+    fill: {
+      opacity: 1
     },
     tooltip: {
       y: {
@@ -188,35 +189,13 @@ const chartData = ref({
       }
     },
     legend: {
-      position: 'bottom',
-      horizontalAlign: 'center',
-      fontSize: '13px',
-      fontFamily: 'Inter, sans-serif',
-      labels: {
-        colors: '#555'
-      }
+      show: false
     },
-    fill: {
-      opacity: 1
+    theme: {
+      mode: 'dark'
     }
   }
 })
-
-const formatDate = (date) => {
-  const d = new Date(date)
-  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`
-}
-
-const handleDateChange = async (dates) => {
-  if (!dates || !dates[0] || !dates[1]) return
-  
-  dateRange.value = {
-    start: dates[0],
-    end: dates[1]
-  }
-  
-  await fetchData()
-}
 
 const processChartData = (data) => {
   const firstPathsMap = new Map()
@@ -260,15 +239,26 @@ const processChartData = (data) => {
   return { categories, series }
 }
 
+const handleDateChange = async (dates) => {
+  if (!dates || !dates[0] || !dates[1]) return
+  
+  dateRange.value = {
+    start: formatDate(dates[0]),
+    end: formatDate(dates[1])
+  }
+  
+  await fetchData()
+}
+
 const fetchData = async () => {
   loading.value = true
   emit('loading', true)
   
   try {
-    const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-secciones/${props.campaignId}`, {
+    const response = await axios.get(`http://localhost:8080/grafico/stats-secciones/${props.campaignId}`, {
       params: {
-        fechai: formatDate(dateRange.value.start),
-        fechaf: formatDate(dateRange.value.end),
+        fechai: dateRange.value.start,
+        fechaf: dateRange.value.end,
         page: 1,
         limit: 500000
       }
@@ -297,54 +287,51 @@ const fetchData = async () => {
   }
 }
 
-// const downloadData = async () => {
-//   downloadingData.value = true
-//   try {
-//     const response = await axios.get(`http://localhost:8080/grafico/stats-secciones/btn-descargar/${props.campaignId}`, {
-//       params: {
-//         fechai: formatDate(dateRange.value.start),
-//         fechaf: formatDate(dateRange.value.end),
-//         page: 1,
-//         limit: 500000
-//       }
-//     })
+const downloadData = async () => {
+  downloadingData.value = true
+  try {
+    const response = await axios.get(`http://localhost:8080/grafico/stats-secciones/btn-descargar/${props.campaignId}`, {
+      params: {
+        fechai: dateRange.value.start,
+        fechaf: dateRange.value.end,
+        page: 1,
+        limit: 500000
+      }
+    })
 
-//     if (response.data.resp && response.data.data) {
-//       const csvRows = []
+    if (response.data.resp && response.data.data) {
+      const csvRows = []
+      csvRows.push(['Sección', 'Tipo', 'URL', 'Total'].join(','))
       
-//       // Headers
-//       csvRows.push(['Sección', 'Tipo', 'URL', 'Total'].join(','))
-      
-//       // Process data
-//       response.data.data.forEach(section => {
-//         section.groupedByType.forEach(typeGroup => {
-//           typeGroup.items.forEach(item => {
-//             csvRows.push([
-//               `"${section.firstPath}"`,
-//               `"${typeGroup.type}"`,
-//               `"${item.url}"`,
-//               item.total
-//             ].join(','))
-//           })
-//         })
-//       })
+      response.data.data.forEach(section => {
+        section.groupedByType.forEach(typeGroup => {
+          typeGroup.items.forEach(item => {
+            csvRows.push([
+              `"${section.firstPath}"`,
+              `"${typeGroup.type}"`,
+              `"${item.url}"`,
+              item.total
+            ].join(','))
+          })
+        })
+      })
 
-//       const csvContent = csvRows.join('\n')
-//       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-//       const link = document.createElement('a')
-//       const currentDate = formatDate(new Date())
-//       link.href = URL.createObjectURL(blob)
-//       link.setAttribute('download', `stats_secciones_${currentDate}.csv`)
-//       document.body.appendChild(link)
-//       link.click()
-//       document.body.removeChild(link)
-//     }
-//   } catch (error) {
-//     console.error('Error al descargar los datos:', error)
-//   } finally {
-//     downloadingData.value = false
-//   }
-// }
+      const csvContent = csvRows.join('\n')
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+      const link = document.createElement('a')
+      const currentDate = formatDate(new Date())
+      link.href = URL.createObjectURL(blob)
+      link.setAttribute('download', `stats_secciones_${currentDate}.csv`)
+      document.body.appendChild(link)
+      link.click()
+      document.body.removeChild(link)
+    }
+  } catch (error) {
+    console.error('Error al descargar los datos:', error)
+  } finally {
+    downloadingData.value = false
+  }
+}
 
 watch([showClicks, showViews], () => {
   if (!showClicks.value && !showViews.value) {
@@ -368,11 +355,36 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.text-red {
-  color: #EA5455;
+.stats-container {
+  padding: 1rem;
 }
 
-.text-green {
-  color: #28C76F;
+.date-picker-compact :deep(.v-field__input) {
+  font-size: 0.875rem;
+  min-height: 40px;
+}
+
+.date-picker-compact :deep(.v-field) {
+  border-radius: 4px;
+  min-height: 40px;
+}
+
+.filter-btn {
+  text-transform: none;
+  letter-spacing: normal;
+  font-weight: 400;
+  height: 36px;
+}
+
+.download-btn {
+  opacity: 0.75;
+  transition: opacity 0.2s ease;
+  height: 40px;
+  width: 40px;
+}
+
+.download-btn:hover {
+  opacity: 1;
+  background: transparent !important;
 }
 </style>

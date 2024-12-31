@@ -7,32 +7,47 @@ const props = defineProps({
   campaignId: {
     type: String,
     required: true
-  },
-  dateRange: {
-    type: Object,
-    default: () => ({
-      start: moment().subtract(30, 'days'),
-      end: moment()
-    })
   }
 })
 
 const locationData = ref([])
 const isLoading = ref(true)
 const expandedPanel = ref([0])
+const today = moment().format('YYYY-MM-DD')
+const dateRange = ref([today, today])
+
+const getCountryCode = (countryName) => {
+  const countryMap = {
+    'United States': 'us',
+    'United Kingdom': 'gb',
+    'Spain': 'es',
+    'Mexico': 'mx',
+    'Colombia': 'co',
+    'Argentina': 'ar',
+    'Chile': 'cl',
+    'Peru': 'pe',
+    'Ecuador': 'ec',
+    'Venezuela': 've',
+    'Brazil': 'br'
+  }
+  return countryMap[countryName] || countryName.slice(0, 2).toLowerCase()
+}
+
+const handleDateChange = (dates) => {
+  dateRange.value = dates
+  fetchData()
+}
 
 const fetchData = async () => {
   try {
     isLoading.value = true
+    const [startDate, endDate] = dateRange.value
     const response = await fetch(
-      `https://ads-service.vercel.app/grafico/stats-paises-ciudades/${props.campaignId}?` + 
-      `fechai=${props.dateRange.start.format('YYYY-MM-DD')}&` +
-      `fechaf=${props.dateRange.end.format('YYYY-MM-DD')}&` +
-      'page=1&limit=500000'
+      `http://localhost:8080/grafico/stats-paises-ciudades/${props.campaignId}?` + 
+      `fechai=${startDate}&fechaf=${endDate}&page=1&limit=500000`
     )
     const data = await response.json()
     
-    // Procesar y agrupar los datos por país y ciudad
     const groupedData = data.consulta.reduce((acc, item) => {
       if (!acc[item.pais]) {
         acc[item.pais] = {
@@ -73,15 +88,13 @@ const fetchData = async () => {
 
 const downloadCityData = async (country, city) => {
   try {
+    const [startDate, endDate] = dateRange.value
     const response = await fetch(
-      `https://ads-service.vercel.app/grafico/stats-paises-ciudades/btn-descargar/${props.campaignId}?` + 
-      `fechai=${props.dateRange.start.format('YYYY-MM-DD')}&` +
-      `fechaf=${props.dateRange.end.format('YYYY-MM-DD')}&` +
-      'page=1&limit=500000'
+      `http://localhost:8080/grafico/stats-paises-ciudades/btn-descargar/${props.campaignId}?` + 
+      `fechai=${startDate}&fechaf=${endDate}&page=1&limit=500000`
     )
     const data = await response.json()
     
-    // Filtrar datos por país y ciudad
     const filteredData = data.consulta.filter(
       item => item.pais === country && item.ciudad === city.name
     )
@@ -103,7 +116,7 @@ const downloadCityData = async (country, city) => {
       total: item.total,
       pais: item.pais,
       ciudad: item.ciudad,
-      userId: item.user.wylexId,
+      userId: item.user._id,
       first_name: item.user.first_name,
       last_name: item.user.last_name,
       email: item.user.email,
@@ -126,53 +139,71 @@ const downloadCityData = async (country, city) => {
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
-    document.body.removeChild(link)
   } catch (error) {
     console.error('Error downloading data:', error)
   }
 }
 
-watch(() => [props.campaignId, props.dateRange], () => {
+watch(() => props.campaignId, () => {
   fetchData()
 }, { immediate: true })
-
 </script>
 
-<template>
-  <VCard variant="text" class="pa-0">
-    <VCardTitle class="d-flex justify-space-between align-center pa-4">
-      <span>Estadísticas por Ubicación</span>
-    </VCardTitle>
 
-    <VCardText class="location-stats-container">
+<template>
+  <div class="location-stats py-4">
+    <div class="d-flex justify-space-between align-center  mb-4">
+      <div class="date-picker-wrapper" style="width: calc(100% - 48px);">
+        <AppDateTimePicker 
+        prepend-inner-icon="tabler-calendar" 
+          density="comfortable"
+          style="max-width: 300px;"
+          :show-current="true"
+          @on-change="handleDateChange"
+          :config="{
+            position: 'auto right',
+            mode: 'range',
+            altFormat: 'F j, Y',
+            dateFormat: 'Y-m-d',
+            defaultDate: [today, today],
+            maxDate: 'today',
+            showMonths: 1,
+            locale: {
+              rangeSeparator: ' al ',
+              firstDayOfWeek: 1
+            }
+          }"
+        />
+      </div>
+    </div>
+
+    <div class="location-stats-container">
       <div v-if="isLoading" class="d-flex justify-center align-center py-4">
         <VProgressCircular indeterminate color="primary" />
       </div>
       
       <div v-else class="location-stats-scroll">
-        <VExpansionPanels variant="accordion" v-model="expandedPanel">
+        <VExpansionPanels v-model="expandedPanel">
           <VExpansionPanel
             v-for="country in locationData"
             :key="country.country"
+            class="location-panel"
           >
             <VExpansionPanelTitle class="d-flex flex-wrap justify-space-between gap-4">
               <div class="d-flex align-center">
                 <VAvatar
                   class="me-3"
                   size="34"
-                  :image="`https://www.countryflagicons.com/FLAT/64/${
-                    country.country === 'United States' ? 'US' :
-                    country.country === 'United Kingdom' ? 'GB' :
-                    country.country.slice(0, 2).toUpperCase()
-                  }.png`"
+                  :image="`https://hatscripts.github.io/circle-flags/flags/${getCountryCode(country.country).toLowerCase()}.svg`"
                 />
-                {{ country.country }}
+                <span class="country-name">{{ country.country }}</span>
               </div>
               <div class="d-flex align-center">
                 <VChip
                   label
                   color="primary"
-                  class="me-2"
+                  variant="tonal"
+                  class="me-2 cities-chip"
                 >
                   {{ country.totalCities }} {{ country.totalCities === 1 ? 'Ciudad' : 'Ciudades' }}
                 </VChip>
@@ -180,79 +211,115 @@ watch(() => [props.campaignId, props.dateRange], () => {
             </VExpansionPanelTitle>
 
             <VExpansionPanelText>
-              <div class="border rounded">
-                <VTable hover>
-                  <thead>
-                    <tr>
-                      <th>Ciudad</th>
-                      <th class="text-center">Clicks</th>
-                      <th class="text-center">Impresiones</th>
-                      <th class="text-center">Descargar usuarios</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr v-for="city in country.cities" :key="city.name">
-                      <td>{{ city.name }}</td>
-                      <td class="text-center">
-                        <VChip
-                          label
-                          :color="city.clicks > 0 ? 'success' : 'grey'"
-                          size="small"
-                        >
-                          {{ city.clicks }}
-                        </VChip>
-                      </td>
-                      <td class="text-center">
-                        <VChip
-                          label
-                          :color="city.views > 0 ? 'warning' : 'grey'"
-                          size="small"
-                        >
-                          {{ city.views }}
-                        </VChip>
-                      </td>
-                      <td class="text-center">
-                        <VBtn
-                          icon
-                          size="small"
-                          color="primary"
-                          variant="text"
-                          @click="downloadCityData(country.country, city)"
-                        >
-                          <VIcon>mdi-account-arrow-down-outline</VIcon>
-                        </VBtn>
-                      </td>
-                    </tr>
-                  </tbody>
-                </VTable>
-              </div>
+              <VTable hover class="stats-table">
+                <thead>
+                  <tr>
+                    <th>Ciudad</th>
+                    <th class="text-center">Clicks</th>
+                    <th class="text-center">Impresiones</th>
+                    <th class="text-center">Descargar usuarios</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr v-for="city in country.cities" :key="city.name">
+                    <td>{{ city.name }}</td>
+                    <td class="text-center">
+                      <VChip
+                        label
+                        :color="city.clicks > 0 ? 'success' : 'grey'"
+                        size="small"
+                        variant="tonal"
+                      >
+                        {{ city.clicks }}
+                      </VChip>
+                    </td>
+                    <td class="text-center">
+                      <VChip
+                        label
+                        :color="city.views > 0 ? 'warning' : 'grey'"
+                        size="small"
+                        variant="tonal"
+                      >
+                        {{ city.views }}
+                      </VChip>
+                    </td>
+                    <td class="text-center">
+                      <VBtn
+                        icon
+                        size="small"
+                        color="primary"
+                        variant="text"
+                        @click.stop="downloadCityData(country.country, city)"
+                      >
+                        <VIcon>mdi-account-arrow-down-outline</VIcon>
+                      </VBtn>
+                    </td>
+                  </tr>
+                </tbody>
+              </VTable>
             </VExpansionPanelText>
           </VExpansionPanel>
         </VExpansionPanels>
       </div>
-    </VCardText>
-  </VCard>
+    </div>
+  </div>
 </template>
 
 <style scoped>
-.border {
-  border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important;
-  border-radius: 6px;
-}
-
-.v-expansion-panel {
-  margin-bottom: 8px !important;
+.location-stats {
+  height: 100%;
 }
 
 .location-stats-container {
   height: 100%;
-  padding: 0;
 }
 
 .location-stats-scroll {
-  height: calc(100vh - 350px); 
+  height: calc(100vh - 350px);
   overflow-y: auto;
-  padding: 0;
+}
+
+.location-panel {
+  margin-bottom: 8px !important;
+  background: transparent !important;
+  border: 1px solid rgba(var(--v-border-color), 0.12) !important;
+}
+
+:deep(.v-expansion-panel-title) {
+  padding: 16px !important;
+}
+
+.country-name {
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.cities-chip {
+  font-weight: 500;
+}
+
+.stats-table {
+  background: transparent !important;
+}
+
+:deep(.stats-table th) {
+  font-weight: 600 !important;
+  color: rgb(var(--v-theme-on-surface)) !important;
+  background: rgba(var(--v-theme-surface-variant), 0.1) !important;
+}
+
+:deep(.stats-table td) {
+  color: rgb(var(--v-theme-on-surface)) !important;
+}
+
+:deep(.v-theme--dark) {
+  .location-panel {
+    border-color: rgba(255, 255, 255, 0.12) !important;
+  }
+  
+  .stats-table th {
+    background: rgba(255, 255, 255, 0.05) !important;
+  }
 }
 
 .location-stats-scroll::-webkit-scrollbar {
@@ -260,27 +327,16 @@ watch(() => [props.campaignId, props.dateRange], () => {
 }
 
 .location-stats-scroll::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: rgba(var(--v-theme-surface-variant), 0.1);
   border-radius: 4px;
 }
 
 .location-stats-scroll::-webkit-scrollbar-thumb {
-  background: #888;
+  background: rgba(var(--v-theme-primary), 0.3);
   border-radius: 4px;
 }
 
 .location-stats-scroll::-webkit-scrollbar-thumb:hover {
-  background: #555;
-}
-
-:deep(.v-card) {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-}
-
-:deep(.v-card-text) {
-  flex-grow: 1;
-  padding: 0;
+  background: rgba(var(--v-theme-primary), 0.5);
 }
 </style>
