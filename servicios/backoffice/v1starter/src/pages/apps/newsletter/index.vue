@@ -77,19 +77,21 @@ async function resolveSubs(data){
     const usuariosFinal = [];
     for(let i in usuarios){
         let id = usuarios[i].id;
-        const usuario = await fetch(`https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id=${id}`)
-        .then(result => {return result.json()})
-        .catch(error => console.log(error));
-        let dataUsuario = {
-            wylexId: usuario.wylexId,
-            created_at: usuario.created_at,
-            first_name: usuario.first_name,
-            last_name: usuario.last_name,
-            phone_number: usuario.phone_number,
-            email: usuario.email,
-            site: usuario.site
-        };
-        usuariosFinal.push(dataUsuario);
+        if(id){
+          const usuario = await fetch(`https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id=${id}`)
+          .then(result => {return result.json()})
+          .catch(error => console.log(error));
+          let dataUsuario = {
+              wylexId: usuario.wylexId,
+              created_at: usuario.created_at,
+              first_name: usuario.first_name,
+              last_name: usuario.last_name,
+              phone_number: usuario.phone_number,
+              email: usuario.email,
+              site: usuario.site
+          };
+          usuariosFinal.push(dataUsuario);
+        }
     }
     usuariosSuscritos.value = usuariosFinal;
     subsTableVisible.value = true;

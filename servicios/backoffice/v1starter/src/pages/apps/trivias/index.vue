@@ -416,6 +416,9 @@ async function mostrarRespuestasUsuarios (idTrivia, nombre){
 
 
 async function mostrarNombreUsuario(id, index){
+    if(!id){
+        return null;
+    }
     const dataUser = await fetch('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id=' + id);
     const dataUserJson = await dataUser.json();
     respuestasUsuarios.value[index].nombre = dataUserJson.first_name + ' ' + dataUserJson.last_name;

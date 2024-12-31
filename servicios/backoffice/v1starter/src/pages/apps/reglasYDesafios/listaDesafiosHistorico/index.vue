@@ -54,6 +54,9 @@ const currentPageDesafiosUser = ref(1);
 
 
 async function onClickDesafiosUser(id){
+  if(!id){
+      return null;
+  }
   const dataUser = await fetch('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id=' + id);
   const dataUserJson = await dataUser.json();
   userSelected.value.nombre = dataUserJson.first_name + ' ' + dataUserJson.last_name;
@@ -94,6 +97,9 @@ const handlePaginationClick = async () => {
 };
 
 async function mostrarNombreUsuario(id, index){
+    if(!id){
+        return null;
+    }
     const dataUser = await fetch('https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id=' + id);
     const dataUserJson = await dataUser.json();
     dataDesafios.value[index].nombre = dataUserJson.first_name + ' ' + dataUserJson.last_name;

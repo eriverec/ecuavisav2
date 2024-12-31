@@ -403,6 +403,9 @@ const idToDelete = ref('');
 
 async function viewUserData(semana) {
   const userId = semana.userId;
+  if(!userId){
+      return null;
+  }
   datosUsuarioLoading.value[userId.toString()] = true;
   var myHeaders = new Headers();
   myHeaders.append("Content-Type", "application/json");

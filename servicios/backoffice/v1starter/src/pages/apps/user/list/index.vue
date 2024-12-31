@@ -1033,6 +1033,9 @@ const updateSortDesc = (sortDesc) => {
 
 //  ------------- DELETE 
 async function onConfirmUsersDeleteActive (id){
+  if(!id){
+      return null;
+  }
   await fetch("https://data.mongodb-api.com/app/backoffice1-usyys/endpoint/id?id="+id)
   .then(response => response.json())
         .then(data => {
