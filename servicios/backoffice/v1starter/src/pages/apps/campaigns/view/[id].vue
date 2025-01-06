@@ -932,7 +932,7 @@ export default {
 .fill-width {
   width: 100%;
   min-height: 100vh;
-  background-color: rgb(var(--v-theme-surface));
+  /* background-color: rgb(var(--v-theme-surface)); */
 }
 
 .transparent-list {

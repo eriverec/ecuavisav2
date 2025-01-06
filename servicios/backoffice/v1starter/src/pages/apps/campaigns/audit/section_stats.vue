@@ -32,8 +32,8 @@
         @click="downloadData"
         class="download-btn"
       >
-        <VIcon icon="tabler-download" size="24" color="grey-darken-1" />
-        <VTooltip activator="parent" location="top">Descargar datos</VTooltip>
+        <VIcon icon="mdi-account-arrow-down-outline" size="24" color="grey-darken-1" />
+        <VTooltip activator="parent" location="top">Descargar usuarios</VTooltip>
       </VBtn>
     </div>
 
@@ -134,7 +134,7 @@ const chartData = ref({
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: '15%',
+        barHeight: '35%',
         borderRadius: [4, 4, 4, 4],
         distributed: false,
         rangeBarOverlap: true,
@@ -143,14 +143,14 @@ const chartData = ref({
     },
     colors: [colors.preview, colors.click],
     dataLabels: {
-      enabled: true,
-      style: {
-        colors: ['#666666']
-      },
-      formatter: function(val) {
-        return val
-      }
-    },
+  enabled: true,
+  style: {
+    colors: ['#666666']
+  },
+  formatter: function(val) {
+    return val !== null ? val : '';
+  }
+},
     stroke: {
       width: 0,
       colors: ['transparent']
@@ -174,7 +174,8 @@ const chartData = ref({
         maxWidth: 300,
         trim: false,
         formatter: function(value) {
-          return value.length > 40 ? value.substr(0, 37) + '...' : value;
+          if (!value) return ''
+          return String(value).length > 40 ? String(value).substr(0, 37) + '...' : String(value)
         }
       }
     },
@@ -197,75 +198,105 @@ const chartData = ref({
   }
 })
 
-const processChartData = (data) => {
-  const firstPathsMap = new Map()
+const processSectionsData = (sections, subsections) => {
+  const statsMap = new Map()
   
-  data.forEach(item => {
-    item.groupedByType.forEach(typeGroup => {
-      const path = item.firstPath
-      if (!firstPathsMap.has(path)) {
-        firstPathsMap.set(path, {
-          preview: 0,
-          click: 0
-        })
+  // secciones primarias
+  sections
+    .filter(item => item.firstPath && item.firstPath !== 'null')
+    .forEach(item => {
+      const path = item.firstPath;
+      if (!statsMap.has(path)) {
+        statsMap.set(path, { preview: null, click: null });
       }
       
-      const stats = firstPathsMap.get(path)
-      if (typeGroup.type === 'preview') {
-        stats.preview += typeGroup.total
-      } else if (typeGroup.type === 'click') {
-        stats.click += typeGroup.total
-      }
-    })
-  })
+      item.groupedByType.forEach(typeGroup => {
+        const stats = statsMap.get(path);
+        if (typeGroup.type === 'preview' && typeGroup.total > 0) {
+          stats.preview = (stats.preview || 0) + typeGroup.total;
+        } else if (typeGroup.type === 'click' && typeGroup.total > 0) {
+          stats.click = (stats.click || 0) + typeGroup.total;
+        }
+      });
+    });
 
-  const categories = Array.from(firstPathsMap.keys())
-  const series = []
+  // subsecciones
+  subsections
+    .filter(item => item.subseccion && item.subseccion !== 'null')
+    .forEach(item => {
+      const path = item.subseccion;
+      if (!statsMap.has(path)) {
+        statsMap.set(path, { preview: null, click: null });
+      }
+
+      item.groupedByType.forEach(typeGroup => {
+        const stats = statsMap.get(path);
+        if (typeGroup.type === 'preview' && typeGroup.total > 0) {
+          stats.preview = (stats.preview || 0) + typeGroup.total;
+        } else if (typeGroup.type === 'click' && typeGroup.total > 0) {
+          stats.click = (stats.click || 0) + typeGroup.total;
+        }
+      });
+    });
+
+  const categories = Array.from(statsMap.keys());
+  const series = [];
 
   if (showViews.value) {
     series.push({
       name: 'Impresiones',
-      data: categories.map(path => firstPathsMap.get(path).preview)
-    })
+      data: categories.map(path => {
+        const value = statsMap.get(path).preview;
+        return value !== null ? value : null;
+      })
+    });
   }
 
   if (showClicks.value) {
     series.push({
       name: 'Clicks',
-      data: categories.map(path => firstPathsMap.get(path).click)
-    })
+      data: categories.map(path => {
+        const value = statsMap.get(path).click;
+        return value !== null ? value : null;
+      })
+    });
   }
 
-  return { categories, series }
-}
-
-const handleDateChange = async (dates) => {
-  if (!dates || !dates[0] || !dates[1]) return
-  
-  dateRange.value = {
-    start: formatDate(dates[0]),
-    end: formatDate(dates[1])
-  }
-  
-  await fetchData()
-}
+  return { categories, series };
+};
 
 const fetchData = async () => {
   loading.value = true
   emit('loading', true)
   
   try {
-    const response = await axios.get(`http://localhost:8080/grafico/stats-secciones/${props.campaignId}`, {
-      params: {
-        fechai: dateRange.value.start,
-        fechaf: dateRange.value.end,
-        page: 1,
-        limit: 500000
-      }
-    })
+    const [sectionsResponse, subsectionsResponse] = await Promise.all([
+      axios.get(`https://ads-service.vercel.app/grafico/stats-secciones/${props.campaignId}`, {
+        params: {
+          fechai: dateRange.value.start,
+          fechaf: dateRange.value.end,
+          page: 1,
+          limit: 500000
+        }
+      }),
+      axios.get(`https://ads-service.vercel.app/grafico/stats-subsecciones/${props.campaignId}`, {
+        params: {
+          fechai: dateRange.value.start,
+          fechaf: dateRange.value.end,
+          page: 1,
+          limit: 500000
+        }
+      })
+    ])
 
-    if (response.data.resp && response.data.data) {
-      const { categories, series } = processChartData(response.data.data)
+    console.log('Sections Response:', sectionsResponse.data)
+    console.log('Subsections Response:', subsectionsResponse.data)
+    
+    if (sectionsResponse.data.resp && subsectionsResponse.data.resp) {
+      const { categories, series } = processSectionsData(
+        sectionsResponse.data.data,
+        subsectionsResponse.data.data
+      )
       
       chartData.value = {
         ...chartData.value,
@@ -280,58 +311,25 @@ const fetchData = async () => {
       }
     }
   } catch (error) {
-    console.error('Error fetching section stats:', error)
+    console.error('Error fetching stats:', error)
   } finally {
     loading.value = false
     emit('loading', false)
   }
 }
 
-const downloadData = async () => {
-  downloadingData.value = true
-  try {
-    const response = await axios.get(`http://localhost:8080/grafico/stats-secciones/btn-descargar/${props.campaignId}`, {
-      params: {
-        fechai: dateRange.value.start,
-        fechaf: dateRange.value.end,
-        page: 1,
-        limit: 500000
-      }
-    })
-
-    if (response.data.resp && response.data.data) {
-      const csvRows = []
-      csvRows.push(['Sección', 'Tipo', 'URL', 'Total'].join(','))
-      
-      response.data.data.forEach(section => {
-        section.groupedByType.forEach(typeGroup => {
-          typeGroup.items.forEach(item => {
-            csvRows.push([
-              `"${section.firstPath}"`,
-              `"${typeGroup.type}"`,
-              `"${item.url}"`,
-              item.total
-            ].join(','))
-          })
-        })
-      })
-
-      const csvContent = csvRows.join('\n')
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
-      const link = document.createElement('a')
-      const currentDate = formatDate(new Date())
-      link.href = URL.createObjectURL(blob)
-      link.setAttribute('download', `stats_secciones_${currentDate}.csv`)
-      document.body.appendChild(link)
-      link.click()
-      document.body.removeChild(link)
-    }
-  } catch (error) {
-    console.error('Error al descargar los datos:', error)
-  } finally {
-    downloadingData.value = false
+const handleDateChange = async (dates) => {
+  if (!dates || !dates[0] || !dates[1]) return
+  
+  dateRange.value = {
+    start: formatDate(dates[0]),
+    end: formatDate(dates[1])
   }
+  
+  await fetchData()
 }
+
+
 
 watch([showClicks, showViews], () => {
   if (!showClicks.value && !showViews.value) {
@@ -352,6 +350,92 @@ onMounted(() => {
     fetchData()
   }
 })
+
+const downloadData = async () => {
+  downloadingData.value = true
+  try {
+    const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-subsecciones/btn-descargar/${props.campaignId}`, {
+      params: {
+        fechai: dateRange.value.start,
+        fechaf: dateRange.value.end,
+        page: 1,
+        limit: 500000
+      }
+    });
+
+    if (response.data.resp && response.data.data) {
+      const userStats = new Map();
+
+      response.data.data.forEach(item => {
+        const key = `${item.user.wylexId}-${item.subseccion || 'noticias'}`;
+        
+        if (!userStats.has(key)) {
+          userStats.set(key, {
+            wylexId: item.user.wylexId,
+            first_name: item.user.first_name || '',
+            last_name: item.user.last_name || '',
+            email: item.user.email || '',
+            phone_number: item.user.phone_number || '',
+            metadato: item.subseccion || 'noticias',
+            views: 0,
+            clicks: 0
+          });
+        }
+
+        const stats = userStats.get(key);
+        if (item.type === 'preview') {
+          stats.views += item.total;
+        } else if (item.type === 'click') {
+          stats.clicks += item.total;
+        }
+      });
+
+      const csvRows = [];
+      csvRows.push([
+        'ID Wylex',
+        'Nombre',
+        'Apellido',
+        'Email',
+        'Teléfono',
+        'Sección/Subsección',
+        'Total Impresiones',
+        'Total Clicks'
+      ].join(','));
+
+      userStats.forEach(stat => {
+        csvRows.push([
+          `"${stat.wylexId}"`,
+          `"${stat.first_name}"`,
+          `"${stat.last_name}"`,
+          `"${stat.email}"`,
+          `"${stat.phone_number}"`,
+          `"${stat.metadato}"`,
+          stat.views,
+          stat.clicks
+        ].join(','));
+      });
+
+      const csvContent = csvRows.join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const link = document.createElement('a');
+      
+      // Formato de nombre de archivo con rango de fechas
+      const startDateFormatted = dateRange.value.start.split('-').join('');
+      const endDateFormatted = dateRange.value.end.split('-').join('');
+      const fileName = `stats_secciones_${startDateFormatted}_${endDateFormatted}.csv`;
+
+      link.href = URL.createObjectURL(blob);
+      link.setAttribute('download', fileName);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  } catch (error) {
+    console.error('Error al descargar los datos:', error);
+  } finally {
+    downloadingData.value = false;
+  }
+};
 </script>
 
 <style scoped>

@@ -229,7 +229,7 @@ const fetchData = async () => {
   emit('loading', true)
   
   try {
-    const response = await axios.get(`http://localhost:8080/grafico/stats-edades/${props.campaignId}`, {
+    const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-edades/${props.campaignId}`, {
       params: {
         fechai: dateRange.value.start,
         fechaf: dateRange.value.end,
@@ -264,7 +264,7 @@ const fetchData = async () => {
 const downloadData = async () => {
   downloadingData.value = true
   try {
-    const response = await axios.get(`http://localhost:8080/grafico/stats-edades/btn-descargar/${props.campaignId}`, {
+    const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-edades/btn-descargar/${props.campaignId}`, {
       params: {
         fechai: dateRange.value.start,
         fechaf: dateRange.value.end,

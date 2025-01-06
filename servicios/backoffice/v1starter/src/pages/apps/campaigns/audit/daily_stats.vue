@@ -9,7 +9,7 @@
               <template #activator="{ props }">
                 <VIcon v-bind="props" icon="mdi-information" size="x-small" color="medium-emphasis" class="ml-1"></VIcon>
               </template>
-              <span>explicación sobre clics</span>
+              <span>Total de clicks en el rango de fechas seleccionado</span>
             </VTooltip>
           </VCardTitle>
           <VDivider />
@@ -36,7 +36,7 @@
               <template #activator="{ props }">
                 <VIcon v-bind="props" icon="mdi-information" size="x-small" color="medium-emphasis" class="ml-1"></VIcon>
               </template>
-              <span>explicación sobre CTR</span>
+              <span>Pocentaje de número de clics que recibe un anuncio en relación al número de veces que se muestra</span>
             </VTooltip>
           </VCardTitle>
           <VDivider />
@@ -63,7 +63,7 @@
               <template #activator="{ props }">
                 <VIcon v-bind="props" icon="mdi-information" size="x-small" color="medium-emphasis" class="ml-1"></VIcon>
               </template>
-              <span>explicación sobre impresiones</span>
+              <span>Total de impresiones en el rango de fechas seleccionado</span>
             </VTooltip>
           </VCardTitle>
           <VDivider />
@@ -169,27 +169,32 @@
         </div>
 
         <VCardText v-else>
-          <VueApexCharts
-            v-if="chartData.series[0].data.length > 0"
-            :options="chartData.options"
-            :series="chartData.series"
-            :height="400"
-            width="100%"
-            ref="chartRef"
-          />
-          <div v-else class="text-center py-8 text-medium-emphasis">
-            No hay datos disponibles para el período seleccionado
-          </div>
-        </VCardText>
+  <VueApexCharts
+    v-if="series[0].data.length > 0"
+    height="350"
+    :options="chartOptions"
+    :series="series"
+  />
+  
+  <div v-else class="text-center py-8 text-medium-emphasis">
+    No hay datos disponibles para el período seleccionado
+  </div>
+</VCardText>
       </VCard>
     </VCol>
   </div>
 </template>
 
 <script setup>
-import axios from 'axios'
-import { computed, onMounted, ref, watch } from 'vue'
-import VueApexCharts from 'vue3-apexcharts'
+import axios from 'axios';
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+import { computed, onMounted, ref, watch } from 'vue';
+import VueApexCharts from 'vue3-apexcharts';
+
+const moment = extendMoment(Moment);
+moment.locale('es', [esLocale]);
 
 const props = defineProps({
   campaignId: {
@@ -287,102 +292,116 @@ const calculateTrends = (currentData, previousData) => {
     Math.round(((currentCTR - previousCTR) / previousCTR) * 100)
 }
 
-const chartData = ref({
-  series: [
-    {
-      name: 'Clicks',
-      type: 'line',
-      data: []
-    },
-    {
-      name: 'Impresiones',
-      type: 'line',
-      data: []
-    }
-  ],
-  options: {
-    chart: {
-      height: 400,
-      type: 'line',
-      zoom: { enabled: false },
-      toolbar: { show: false },
-      foreColor: '#e4e6f4ad',
-      fontFamily: 'Public Sans, sans-serif',
-      fontSize: '15px'
-    },
-    stroke: {
-      curve: 'smooth',
-      width: 2
-    },
-    colors: ['#7367F0', '#28C76F'],
-    markers: {
-      size: 4,
-      colors: ['#7367F0', '#28C76F'],
-      strokeColors: 'var(--v-background)',
-      strokeWidth: 2,
-      hover: {
-        size: 6
-      }
-    },
+const chartOptions = ref({
+  chart: {
+    height: 400,
+    type: 'line',
+    zoom: { enabled: false },
+    toolbar: { show: false },
+    background: 'transparent',
+    fontFamily: 'Public Sans, sans-serif',
+  },
+  grid: {
+    show: true,
+    borderColor: 'rgba(200, 200, 200, 0.2)',
+    strokeDashArray: 5,
     xaxis: {
-      type: 'category',
-      categories: [],
-      labels: {
-        rotate: -45,
-        rotateAlways: false,
-        style: {
-          fontSize: '15px',
-          colors: 'var(--v-medium-emphasis)',
-          fontFamily: 'Public Sans, sans-serif'
-        }
-      },
-      axisBorder: {
-        show: false
-      },
-      axisTicks: {
-        show: false
+      lines: {
+        show: true
       }
     },
     yaxis: {
-      title: {
-        text: 'Cantidad',
-        style: {
-          color: 'var(--v-medium-emphasis)',
-          fontFamily: 'Public Sans, sans-serif',
-          fontSize: '15px'
-        }
+      lines: {
+        show: true
+      }
+    },
+    padding: {
+      top: 10,
+      right: 10,
+      bottom: 10,
+      left: 10
+    }
+  },
+  stroke: {
+    curve: 'smooth',
+    width: 3
+  },
+  colors: ['#7367F0', '#28C76F'],
+  markers: {
+    size: 6,
+    strokeColors: '#282b3c',
+    strokeWidth: 3,
+    hover: {
+      size: 8
+    }
+  },
+  xaxis: {
+    type: 'category',
+    categories: [],
+    labels: {
+      style: {
+        colors: '#CBD5E1',
+        fontSize: '12px'
       },
-      labels: {
-        style: {
-          colors: 'var(--v-medium-emphasis)',
-          fontFamily: 'Public Sans, sans-serif',
-          fontSize: '15px',
-        }
+      rotate: -45,
+      rotateAlways: false
+    },
+    axisBorder: {
+      show: false
+    },
+    axisTicks: {
+      show: false
+    }
+  },
+  yaxis: {
+    labels: {
+      style: {
+        colors: '#CBD5E1',
+        fontSize: '12px'
       }
     },
-    tooltip: {
-      theme: 'system',
-      shared: true,
-      intersect: false,
-      y: {
-        formatter: value => value.toFixed(0)
-      }
-    },
-    grid: {
-      borderColor: 'var(--v-border-color)',
-      row: {
-        colors: ['transparent', '#ffffff'],
-        opacity: 0.5
-      }
-    },
-    legend: {
-      position: 'top',
-      labels: {
-        colors: 'var(--v-medium-emphasis)'
+    title: {
+      text: 'Cantidad',
+      style: {
+        color: '#CBD5E1',
+        fontSize: '13px',
+        fontWeight: 500
       }
     }
+  },
+  tooltip: {
+    theme: 'dark',
+    shared: true,
+    intersect: false,
+    y: {
+      formatter: value => value.toFixed(0)
+    }
+  },
+  legend: {
+    position: 'top',
+    horizontalAlign: 'left',
+    labels: {
+      colors: '#CBD5E1'
+    },
+    markers: {
+      radius: 12,
+      width: 12,
+      height: 12
+    }
   }
-})
+});
+
+const series = ref([
+  {
+    name: 'Clicks',
+    data: []
+  },
+  {
+    name: 'Impresiones',
+    data: []
+  }
+]);
+
 
 const formatDate = (date) => {
   const d = new Date(date)
@@ -427,6 +446,10 @@ const fetchData = async () => {
   }
 }
 
+
+// watch(() => dataChart_1.value, (newData) => { ... })
+
+// La actualización de los datos del gráfico ya está manejada en la función updateChartData
 const updateChartData = (data) => {
   if (!data?.click || !data?.preview) return
 
@@ -450,9 +473,25 @@ const updateChartData = (data) => {
     return found ? found.total : 0
   })
 
-  chartData.value.series[0].data = clickData
-  chartData.value.series[1].data = previewData
-  chartData.value.options.xaxis.categories = formattedDates
+  series.value = [
+    {
+      name: 'Clicks',
+      data: clickData
+    },
+    {
+      name: 'Impresiones',
+      data: previewData
+    }
+  ]
+
+ 
+  chartOptions.value = {
+    ...chartOptions.value,
+    xaxis: {
+      ...chartOptions.value.xaxis,
+      categories: formattedDates
+    }
+  }
 }
 
 const downloadChart = () => {
@@ -573,6 +612,8 @@ onMounted(() => {
     fetchData()
   }
 })
+
+
 </script>
 
 <style scoped>

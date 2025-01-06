@@ -43,7 +43,7 @@ const fetchData = async () => {
     isLoading.value = true
     const [startDate, endDate] = dateRange.value
     const response = await fetch(
-      `http://localhost:8080/grafico/stats-paises-ciudades/${props.campaignId}?` + 
+      `https://ads-service.vercel.app/grafico/stats-paises-ciudades/${props.campaignId}?` + 
       `fechai=${startDate}&fechaf=${endDate}&page=1&limit=500000`
     )
     const data = await response.json()
@@ -90,7 +90,7 @@ const downloadCityData = async (country, city) => {
   try {
     const [startDate, endDate] = dateRange.value
     const response = await fetch(
-      `http://localhost:8080/grafico/stats-paises-ciudades/btn-descargar/${props.campaignId}?` + 
+      `https://ads-service.vercel.app/grafico/stats-paises-ciudades/btn-descargar/${props.campaignId}?` + 
       `fechai=${startDate}&fechaf=${endDate}&page=1&limit=500000`
     )
     const data = await response.json()
