@@ -726,9 +726,8 @@ const buscarUsuariosDebounced = debounce(buscarUsuarios, 500); // 500ms de retra
                           </div>
                         </td>
 
-                        <td class="text-medium-emphasis active-opacity"
-                          style="width: 3.5rem;" >
-                          <span class="text-xs pl-2">
+                        <td class="text-medium-emphasis active-opacity text-with-custom-truncate pl-2" style="width: 220px;text-align: left;" >
+                          <span class="text-xs">
                             {{ c.description }}
                           </span>
                         </td>

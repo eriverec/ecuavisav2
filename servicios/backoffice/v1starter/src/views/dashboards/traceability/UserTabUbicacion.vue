@@ -31,7 +31,7 @@ async function fetchData() {
     );
     const data = await response.json();
     // orderDirection.value = orderDirection.value === 'desc' ? 'desc' : 'asc'
-    cities.value = Array.from(data.data);
+    cities.value = Array.from(data.data).filter((ub) => ub.country);
   } catch (error) {
     console.error(error);
     isLoading.value = false;
