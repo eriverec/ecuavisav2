@@ -548,203 +548,215 @@ export default {
 
 
       <VWindow v-model="activeTab" class="mt-6">
+       
         <!-- Tab Resumen -->
-        <VWindowItem value="resumen">
-          <div class="d-flex justify-center">
-            <div style="width: 800px;">
-              <div v-if="isLoadingContent" class="text-center py-8">
-                <VProgressCircular indeterminate color="primary" />
-                <div class="mt-4">Cargando datos, espere...</div>
-              </div>
-              
-              <VList v-else class="transparent-list">
-                 <!-- Estado -->
-                 <VListItem>
-                  <template v-slot:prepend>
-                    <VIcon color="primary" icon="mdi-checkbox-marked-circle-outline" size="24" />
-                  </template>
-                  <VListItemTitle class="font-weight-bold text-body-1">Estado</VListItemTitle>
-                  <VListItemSubtitle class="mt-1">
-                    <VChip
+<VWindowItem value="resumen">
+  <div class="d-flex justify-center">
+    <div style="width: 800px;">
+      <div v-if="isLoadingContent" class="text-center py-8">
+        <VProgressCircular indeterminate color="primary" />
+        <div class="mt-4">Cargando datos, espere...</div>
+      </div>
+      
+      <VList v-else class="transparent-list">
+        
+        <!-- Estado y Posición -->
+        <div class="d-flex">
+          <div class="w-50">
+            <VListItem>
+              <template v-slot:prepend>
+                <VIcon color="primary" icon="mdi-checkbox-marked-circle-outline" size="24" />
+              </template>
+              <div>
+                <VListItemTitle class="font-weight-bold text-body-1">Estado </VListItemTitle>
+                <VListItemSubtitle class="mt-1">
+                  <VChip
                       :color="suggestion.statusCampaign ? 'success' : 'error'"
                       size="small"
                     >
                       {{ suggestion.statusCampaign ? 'Activo' : 'Inactivo' }}
                     </VChip>
-                  </VListItemSubtitle>
-                </VListItem>
 
-                <VDivider />
-
-                <!-- Período de campaña -->
-                <VListItem>
-                  <template v-slot:prepend>
-                    <VIcon color="primary" icon="mdi-calendar-range" size="24" />
-                  </template>
-                  <VListItemTitle class="font-weight-bold text-body-1">Período de campaña</VListItemTitle>
-                  <VListItemSubtitle class="mt-1">{{ formatDate(suggestion.fechai) }} hasta {{ formatDate(suggestion.fechaf) }}</VListItemSubtitle>
-                </VListItem>
-
-                <VDivider />
-
-                <!-- Título -->
-                <VListItem>
-                  <template v-slot:prepend>
-                    <VIcon color="primary" icon="mdi-format-title" size="24" />
-                  </template>
-                  <VListItemTitle class="font-weight-bold text-body-1">Título</VListItemTitle>
-                  <VListItemSubtitle class="mt-1">{{ suggestion.campaignTitle }}</VListItemSubtitle>
-                </VListItem>
-
-                <VDivider />
-
-                <!-- Descripción -->
-                <VListItem>
-                  <template v-slot:prepend>
-                    <VIcon color="primary" icon="mdi-text-long" size="24" />
-                  </template>
-                  <VListItemTitle class="font-weight-bold text-body-1">Descripción</VListItemTitle>
-                  <VListItemSubtitle class="mt-1">{{ suggestion.description }}</VListItemSubtitle>
-                </VListItem>
-
-                <VDivider />
-
-                <!-- Tipo de Contenido -->
-                <VListItem>
-                  <template v-slot:prepend>
-                    <VIcon color="primary" icon="mdi-file-code-outline" size="24" />
-                  </template>
-                  
-                  <VListItemTitle class="font-weight-bold text-body-1">
-                    Tipo de Contenido
-                    <VBtn
-                      icon
-                      variant="text"
-                      size="small"
-                      @click="showContentDialog = true"
-                    >
-                      <VIcon
-                        color="info"
-                        icon="mdi-eye"
-                        size="18"
-                        class="ms-2"
-                      />
-                    </VBtn>
-
-                    <VDialog
-                      v-model="showContentDialog"
-                      :scrim="true"
-                      width="400"
-                    >
-                      <VCard class="content-preview-card">
-                        <VCardTitle class="dialog-title pa-4">
-                          <div class="text-center text-h6 font-weight-bold w-100">Contenido</div>
-                          <VBtn
-                            icon
-                            variant="text"
-                            size="small"
-                            @click="showContentDialog = false"
-                            class="close-button"
-                          >
-                            <VIcon>mdi-close</VIcon>
-                          </VBtn>
-                        </VCardTitle>
-
-                        <VCardText class="pa-4">
-                          <div v-if="suggestion.type === 'html'" class="content-preview">
-                            <div v-html="suggestion.urls.html"></div>
-                          </div>
-                          <div v-else-if="suggestion.urls.img">
-                            <img 
-                              :src="suggestion.urls.img.escritorio" 
-                              alt="Contenido"
-                              class="preview-image"
-                            />
-                          </div>
-                        </VCardText>
-                      </VCard>
-                    </VDialog>
-                  </VListItemTitle>
-                  
-                  <VListItemSubtitle class="mt-1">{{ suggestion.type }}</VListItemSubtitle>
-                </VListItem>
-
-                <VDivider />
-
-                <!-- Sección -->
-                <VListItem>
-                  <template v-slot:prepend>
-                    <VIcon color="primary" icon="mdi-view-dashboard-outline" size="24" />
-                  </template>
-                  <VListItemTitle class="font-weight-bold text-body-1">Sección</VListItemTitle>
-                  <VListItemSubtitle class="mt-1">{{ suggestion.criterial.visibilitySection.name }}</VListItemSubtitle>
-                </VListItem>
-
-                <VDivider />
-
-                <!-- País/Ciudad (condicional) -->
-                <template v-if="suggestion.participantes === 'filtrado'">
-                  <VListItem>
-                    <template v-slot:prepend>
-                      <VIcon color="primary" icon="mdi-map-marker-radius" size="24" />
-                    </template>
-                    <VListItemTitle class="font-weight-bold text-body-1">País / Ciudad</VListItemTitle>
-                    <VListItemSubtitle class="mt-1">
-                      <span>{{ getPaisTexto(suggestion.criterial.country) }}</span>
-                      <span> / </span>
-                      <span>{{ getCiudadTexto(suggestion.criterial.city) }}</span>
-                    </VListItemSubtitle>
-                  </VListItem>
-                  <VDivider />
-                </template>
-
-                <!-- Posición -->
-                <VListItem>
-                  <template v-slot:prepend>
-                    <VIcon color="primary" icon="mdi-crosshairs-gps" size="24" />
-                  </template>
-                  <VListItemTitle class="font-weight-bold text-body-1">
-                    Posición
-                    <VIcon
-                      color="info"
-                      icon="mdi-magnify"
-                      size="18"
-                      class="ms-2 cursor-pointer"
-                      @click="showPositionDialog"
-                    />
-                  </VListItemTitle>
-                  <VListItemSubtitle class="mt-1">{{ suggestion.position }}</VListItemSubtitle>
-                </VListItem>
-
-                <VDivider />
-
-               
-
-                <VDivider />
-
-                <!-- Fecha de Creación -->
-                <VListItem>
-                  <template v-slot:prepend>
-                    <VIcon color="primary" icon="mdi-calendar" size="24" />
-                  </template>
-                  <VListItemTitle class="font-weight-bold text-body-1">Fecha de Creación</VListItemTitle>
-                  <VListItemSubtitle class="mt-1">{{ formatDate(suggestion.created_at) }}</VListItemSubtitle>
-                </VListItem>
-
-                <VDivider />
-
-                <!-- Total Usuarios -->
-                <VListItem>
-                  <template v-slot:prepend>
-                    <VIcon color="primary" icon="mdi-account-group" size="24" />
-                  </template>
-                  <VListItemTitle class="font-weight-bold text-body-1">Total Usuarios</VListItemTitle>
-                  <VListItemSubtitle class="mt-1">{{ suggestion.userIdSize }}</VListItemSubtitle>
-                </VListItem>
-              </VList>
-            </div>
+                </VListItemSubtitle>
+              </div>
+            </VListItem>
           </div>
-        </VWindowItem>
+          <VDivider vertical />
+          <div class="w-50">
+            <VListItem>
+              <template v-slot:prepend>
+                <VIcon color="primary" icon="mdi-crosshairs-gps" size="24" />
+              </template>
+              <div>
+                <VListItemTitle  class="font-weight-bold text-body-1">
+                  Posición
+                  <VIcon
+                    color="info"
+                    icon="mdi-magnify"
+                    size="18"
+                    class="ms-2 cursor-pointer"
+                    @click="showPositionDialog"
+                  />
+                </VListItemTitle>
+                <VListItemSubtitle class="mt-1">{{ suggestion.position }}</VListItemSubtitle>
+              </div>
+            </VListItem>
+          </div>
+        </div>
+
+       <VDivider />
+
+        <!-- Período de campaña y Fecha de Creación -->
+        <div class="d-flex">
+          <div class="w-50">
+            <VListItem>
+              <template v-slot:prepend>
+                <VIcon color="primary" icon="mdi-calendar-range" size="24" />
+              </template>
+              <div>
+                <VListItemTitle class="font-weight-bold text-body-1">Período de campaña</VListItemTitle>
+                <VListItemSubtitle class="mt-1">{{ formatDate(suggestion.fechai) }} hasta {{ formatDate(suggestion.fechaf) }}</VListItemSubtitle>
+              </div>
+            </VListItem>
+          </div>
+          <VDivider vertical />
+          <div class="w-50">
+            <VListItem>
+              <template v-slot:prepend>
+                <VIcon color="primary" icon="mdi-calendar" size="24" />
+              </template>
+              <div>
+                <VListItemTitle class="font-weight-bold text-body-1">Fecha de Creación</VListItemTitle>
+                <VListItemSubtitle class="mt-1">{{ formatDate(suggestion.created_at) }}</VListItemSubtitle>
+              </div>
+            </VListItem>
+          </div>
+        </div>
+
+        <VDivider />
+
+         <!-- Título -->
+         <VListItem>
+          <template v-slot:prepend>
+            <VIcon color="primary" icon="mdi-format-title" size="24" />
+          </template>
+          <VListItemTitle class="font-weight-bold text-body-1">Título</VListItemTitle>
+          <VListItemSubtitle class="mt-1">{{ suggestion.campaignTitle }}</VListItemSubtitle>
+        </VListItem>
+
+        <VDivider />
+
+        <!-- Descripción -->
+        <VListItem>
+          <template v-slot:prepend>
+            <VIcon color="primary" icon="mdi-text-long" size="24" />
+          </template>
+          <VListItemTitle class="font-weight-bold text-body-1">Descripción</VListItemTitle>
+          <VListItemSubtitle class="mt-1">{{ suggestion.description }}</VListItemSubtitle>
+        </VListItem>
+
+        <VDivider />
+
+        <!-- País/Ciudad (condicional) -->
+        <template v-if="suggestion.participantes === 'filtrado'">
+          <VListItem>
+            <template v-slot:prepend>
+              <VIcon color="primary" icon="mdi-map-marker-radius" size="24" />
+            </template>
+            <VListItemTitle class="font-weight-bold text-body-1">País / Ciudad</VListItemTitle>
+            <VListItemSubtitle class="mt-1">
+              <span>{{ getPaisTexto(suggestion.criterial.country) }}</span>
+              <span> / </span>
+              <span>{{ getCiudadTexto(suggestion.criterial.city) }}</span>
+            </VListItemSubtitle>
+          </VListItem>
+          <VDivider />
+        </template>
+
+        <!-- Tipo de Contenido y Sección -->
+        <div class="d-flex">
+          <div class="w-50">
+            <VListItem>
+              <template v-slot:prepend>
+                <VIcon color="primary" icon="mdi-file-code-outline" size="24" />
+              </template>
+              <div>
+                <VListItemTitle class="font-weight-bold text-body-1">
+                  Tipo de Contenido
+                  <VIcon
+                    color="info"
+                    icon="mdi-eye"
+                    size="18"
+                    class="ms-2 cursor-pointer"
+                    @click="showContentDialog = true"
+                  />
+                </VListItemTitle>
+                <VListItemSubtitle class="mt-1">{{ suggestion.type }}</VListItemSubtitle>
+              </div>
+            </VListItem>
+          </div>
+          <VDivider vertical />
+          <div class="w-50">
+            <VListItem>
+              <template v-slot:prepend>
+                <VIcon color="primary" icon="mdi-view-dashboard-outline" size="24" />
+              </template>
+              <div>
+                <VListItemTitle class="font-weight-bold text-body-1">Sección</VListItemTitle>
+                <VListItemSubtitle class="mt-1">{{ suggestion.criterial.visibilitySection.name }}</VListItemSubtitle>
+              </div>
+            </VListItem>
+          </div>
+        </div>
+
+        <!-- Diálogo de contenido -->
+        <VDialog
+          v-model="showContentDialog"
+          :scrim="true"
+          width="400"
+        >
+          <VCard class="content-preview-card">
+            <VCardTitle class="dialog-title pa-4">
+              <div class="text-center text-h6 font-weight-bold w-100">Contenido</div>
+              <VBtn
+                icon
+                variant="text"
+                size="small"
+                @click="showContentDialog = false"
+                class="close-button"
+              >
+                <VIcon>mdi-close</VIcon>
+              </VBtn>
+            </VCardTitle>
+            <VCardText class="pa-4">
+              <div v-if="suggestion.type === 'html'" class="content-preview">
+                <div v-html="suggestion.urls.html"></div>
+              </div>
+              <div v-else-if="suggestion.urls.img">
+                <img 
+                  :src="suggestion.urls.img.escritorio" 
+                  alt="Contenido"
+                  class="preview-image"
+                />
+              </div>
+            </VCardText>
+          </VCard>
+        </VDialog>
+
+        <VDivider />
+
+        <!-- Total Usuarios -->
+        <VListItem>
+          <template v-slot:prepend>
+            <VIcon color="primary" icon="mdi-account-group" size="24" />
+          </template>
+          <VListItemTitle class="font-weight-bold text-body-1">Total Usuarios</VListItemTitle>
+          <VListItemSubtitle class="mt-1">{{ suggestion.userIdSize }}</VListItemSubtitle>
+        </VListItem>
+      </VList>
+    </div>
+  </div>
+</VWindowItem>
 
         <!-- Tab Métricas -->
         <VWindowItem value="metricas">
@@ -899,6 +911,8 @@ export default {
     </VCardText>
   </VCard>
 </VDialog>
+
+
   </section>
 </template>
 
