@@ -157,7 +157,7 @@ async function getCampaigns(page = 1, limit = 10, s = null) {
 
 
 const handlePaginationClick = async () => {
-  if(!disabledPagination.value) return false;
+  if(totalRegistros.value == 1) return false;
   disabledPagination.value = true
   await getCampaigns(currentPage.value)
   disabledPagination.value = false

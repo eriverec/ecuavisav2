@@ -187,7 +187,7 @@ async function getCampaigns(page = 1, limit= 10, s= null){
 
 // Función para manejar el cambio de paginación
 const handlePaginationClick = async () => {
-  if(!disabledPagination.value) return false;
+  if(totalRegistros.value == 1) return false;
   // Aquí puedes realizar las acciones que deseas cuando se hace clic en la paginación
   // console.log('Se hizo clic en la paginación'+currentPage.value);
   disabledPagination.value = true;
