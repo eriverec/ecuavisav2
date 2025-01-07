@@ -563,6 +563,8 @@ moment.tz.setDefault('America/Guayaquil');
 
       const userIdsLocal = modoPersonalizado.value ? userIds.value : ( dataUsuarios.value?.userIds || [] );
 
+      // console.log('modoPersonalizado',modoPersonalizado.value);
+      // console.log('itemsModificados',itemsModificados.value);
       if(
         (modoPersonalizado.value && !itemsModificados.value) || 
         (modoPersonalizado.value && itemsModificados.value) || 

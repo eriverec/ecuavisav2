@@ -1752,12 +1752,10 @@ async function onComplete() {
 
     const userIdsLocal = modoPersonalizado.value ? userIds.value : (dataUsuarios.value?.userIds || []);
 
-    if ((modoPersonalizado.value && !itemsModificados.value) || 
-        (modoPersonalizado.value && itemsModificados.value) || 
-        (!modoPersonalizado.value && !itemsModificados.value)) {
+    if (modoPersonalizado.value) {
 
       // Usamos un tamaño de lote más pequeño
-      const lotesUsuarios = dividirEnLotes(userIdsLocal, 1000); 
+      const lotesUsuarios = dividirEnLotes(userIdsLocal, 6000); 
       const tamanioUsers = userIdsLocal.length;
       
       console.log(`Procesando ${tamanioUsers} usuarios en ${lotesUsuarios.length} lotes`);
@@ -1800,7 +1798,6 @@ async function onComplete() {
       jsonEnviar["userId"] = [];
       jsonEnviar["userIdCompress"] = "";
       let respCampaign = await createCampaign(jsonEnviar);
-      
       if (!respCampaign) {
         throw new Error('Error al crear la campaña sin usuarios');
       }
