@@ -439,6 +439,11 @@ const resolveChart_2 = computed(() => {
 <template>
   <section>
     <VRow>
+
+      <!-- Nuevo componente estadoListCampaigns -->
+      <VCol class="mt-0" cols="12">
+        <estadoListCampaigns />
+      </VCol>
      
       <VCol class="mt-0" cols="12">
         <VCard class="px-0 py-0 pb-4 v-card--flat v-theme--light v-card--border v-card--density-default v-card--variant-elevated">
@@ -481,11 +486,6 @@ const resolveChart_2 = computed(() => {
           />
           <div class="px-4" v-if="resolveChart_2.series.length < 1">No existen datos</div>
         </VCard>
-      </VCol>
-
-      <!-- Nuevo componente estadoListCampaigns -->
-      <VCol class="mt-0" cols="12">
-        <estadoListCampaigns />
       </VCol>
 
       <!-- Panel principal de análisis - Ahora ocupa todo el ancho -->
