@@ -1,5 +1,4 @@
 <script setup>
-import moment from 'moment'
 import { ref, watch } from 'vue'
 import { VAvatar, VBtn, VChip, VExpansionPanel, VExpansionPanels, VExpansionPanelText, VExpansionPanelTitle, VTable } from 'vuetify/components'
 
@@ -7,14 +6,18 @@ const props = defineProps({
   campaignId: {
     type: String,
     required: true
+  },
+  dateRange: {
+    type: Object,
+    required: true
   }
 })
 
 const locationData = ref([])
 const isLoading = ref(true)
 const expandedPanel = ref([0])
-const today = moment().format('YYYY-MM-DD')
-const dateRange = ref([today, today])
+// const today = moment().format('YYYY-MM-DD')
+// const dateRange = ref([today, today])
 
 const getCountryCode = (countryName) => {
   const countryMap = {
@@ -33,18 +36,17 @@ const getCountryCode = (countryName) => {
   return countryMap[countryName] || countryName.slice(0, 2).toLowerCase()
 }
 
-const handleDateChange = (dates) => {
-  dateRange.value = dates
-  fetchData()
-}
+// const handleDateChange = (dates) => {
+//   dateRange.value = dates
+//   fetchData()
+// }
 
 const fetchData = async () => {
   try {
     isLoading.value = true
-    const [startDate, endDate] = dateRange.value
     const response = await fetch(
       `https://ads-service.vercel.app/grafico/stats-paises-ciudades/${props.campaignId}?` + 
-      `fechai=${startDate}&fechaf=${endDate}&page=1&limit=500000`
+      `fechai=${props.dateRange.start}&fechaf=${props.dateRange.end}&page=1&limit=500000`
     )
     const data = await response.json()
     
@@ -88,10 +90,9 @@ const fetchData = async () => {
 
 const downloadCityData = async (country, city) => {
   try {
-    const [startDate, endDate] = dateRange.value
     const response = await fetch(
       `https://ads-service.vercel.app/grafico/stats-paises-ciudades/btn-descargar/${props.campaignId}?` + 
-      `fechai=${startDate}&fechaf=${endDate}&page=1&limit=500000`
+      `fechai=${props.dateRange.start}&fechaf=${props.dateRange.end}&page=1&limit=500000`
     )
     const data = await response.json()
     
@@ -147,6 +148,11 @@ const downloadCityData = async (country, city) => {
 watch(() => props.campaignId, () => {
   fetchData()
 }, { immediate: true })
+
+watch(() => props.dateRange, () => {
+  fetchData()
+}, { deep: true })
+
 </script>
 
 
@@ -154,7 +160,7 @@ watch(() => props.campaignId, () => {
   <div class="location-stats py-4">
     <div class="d-flex justify-space-between align-center  mb-4">
       <div class="date-picker-wrapper" style="width: calc(100% - 48px);">
-        <AppDateTimePicker 
+        <!-- <AppDateTimePicker 
         prepend-inner-icon="tabler-calendar" 
           density="comfortable"
           style="max-width: 300px;"
@@ -173,7 +179,7 @@ watch(() => props.campaignId, () => {
               firstDayOfWeek: 1
             }
           }"
-        />
+        /> -->
       </div>
     </div>
 

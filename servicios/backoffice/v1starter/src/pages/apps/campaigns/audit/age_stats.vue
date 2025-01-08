@@ -2,7 +2,7 @@
   <div class="stats-container">
     <div class="d-flex align-center justify-space-between mb-6">
       <div class="date-picker-wrapper" style="width: calc(100% - 48px);">
-        <AppDateTimePicker 
+        <!-- <AppDateTimePicker 
           prepend-inner-icon="tabler-calendar" 
           density="comfortable"
           style="max-width: 300px;"
@@ -22,7 +22,7 @@
             }
           }"
           class="date-picker-compact"
-        />
+        /> -->
       </div>
       <VBtn
         icon
@@ -93,6 +93,10 @@ import VueApexCharts from 'vue3-apexcharts'
 const props = defineProps({
   campaignId: {
     type: String,
+    required: true
+  },
+  dateRange: {
+    type: Object,
     required: true
   }
 })
@@ -213,16 +217,16 @@ const processChartData = (data) => {
   return { categories, series }
 }
 
-const handleDateChange = async (dates) => {
-  if (!dates || !dates[0] || !dates[1]) return
+// const handleDateChange = async (dates) => {
+//   if (!dates || !dates[0] || !dates[1]) return
   
-  dateRange.value = {
-    start: formatDate(dates[0]),
-    end: formatDate(dates[1])
-  }
+//   dateRange.value = {
+//     start: formatDate(dates[0]),
+//     end: formatDate(dates[1])
+//   }
   
-  await fetchData()
-}
+//   await fetchData()
+// }
 
 const fetchData = async () => {
   loading.value = true
@@ -231,8 +235,8 @@ const fetchData = async () => {
   try {
     const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-edades/${props.campaignId}`, {
       params: {
-        fechai: dateRange.value.start,
-        fechaf: dateRange.value.end,
+        fechai: props.dateRange.start,
+        fechaf: props.dateRange.end,
         page: 1,
         limit: 500000
       }
@@ -266,8 +270,8 @@ const downloadData = async () => {
   try {
     const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-edades/btn-descargar/${props.campaignId}`, {
       params: {
-        fechai: dateRange.value.start,
-        fechaf: dateRange.value.end,
+        fechai: props.dateRange.start,
+        fechaf: props.dateRange.end,
         page: 1,
         limit: 500000
       }
@@ -326,6 +330,12 @@ watch(() => props.campaignId, (newId) => {
     fetchData()
   }
 }, { immediate: true })
+
+watch(() => props.dateRange, (newRange) => {
+  if (newRange) {
+    fetchData()
+  }
+}, { deep: true })
 
 watch([showClicks, showViews], () => {
   if (!showClicks.value && !showViews.value) {

@@ -2,7 +2,7 @@
   <div class="stats-container">
     <div class="d-flex align-center justify-space-between mb-6">
       <div class="date-picker-wrapper" style="width: calc(100% - 48px);">
-        <AppDateTimePicker 
+        <!-- <AppDateTimePicker 
           prepend-inner-icon="tabler-calendar" 
           density="comfortable"
           style="max-width: 300px;"
@@ -22,7 +22,7 @@
             }
           }"
           class="date-picker-compact"
-        />
+        /> -->
       </div>
       <VBtn
         icon
@@ -93,6 +93,10 @@ import VueApexCharts from 'vue3-apexcharts'
 const props = defineProps({
   campaignId: {
     type: String,
+    required: true
+  },
+  dateRange: {
+    type: Object,
     required: true
   }
 })
@@ -273,16 +277,16 @@ const fetchData = async () => {
     const [sectionsResponse, subsectionsResponse] = await Promise.all([
       axios.get(`https://ads-service.vercel.app/grafico/stats-secciones/${props.campaignId}`, {
         params: {
-          fechai: dateRange.value.start,
-          fechaf: dateRange.value.end,
+          fechai: props.dateRange.start,
+          fechaf: props.dateRange.end,
           page: 1,
           limit: 500000
         }
       }),
       axios.get(`https://ads-service.vercel.app/grafico/stats-subsecciones/${props.campaignId}`, {
         params: {
-          fechai: dateRange.value.start,
-          fechaf: dateRange.value.end,
+          fechai: props.dateRange.start,
+          fechaf: props.dateRange.end,
           page: 1,
           limit: 500000
         }
@@ -318,16 +322,16 @@ const fetchData = async () => {
   }
 }
 
-const handleDateChange = async (dates) => {
-  if (!dates || !dates[0] || !dates[1]) return
+// const handleDateChange = async (dates) => {
+//   if (!dates || !dates[0] || !dates[1]) return
   
-  dateRange.value = {
-    start: formatDate(dates[0]),
-    end: formatDate(dates[1])
-  }
+//   dateRange.value = {
+//     start: formatDate(dates[0]),
+//     end: formatDate(dates[1])
+//   }
   
-  await fetchData()
-}
+//   await fetchData()
+// }
 
 
 
@@ -345,6 +349,12 @@ watch(() => props.campaignId, (newId) => {
   }
 }, { immediate: true })
 
+watch(() => props.dateRange, (newRange) => {
+  if (newRange) {
+    fetchData()
+  }
+}, { deep: true })
+
 onMounted(() => {
   if (props.campaignId) {
     fetchData()
@@ -352,21 +362,27 @@ onMounted(() => {
 })
 
 const downloadData = async () => {
-  downloadingData.value = true
-  try {
-    const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-subsecciones/btn-descargar/${props.campaignId}`, {
-      params: {
-        fechai: dateRange.value.start,
-        fechaf: dateRange.value.end,
-        page: 1,
-        limit: 500000
-      }
-    });
+  if (!props.dateRange?.start || !props.dateRange?.end) {
+    console.error('Rango de fechas no válido');
+    return;
+  }
 
-    if (response.data.resp && response.data.data) {
+  downloadingData.value = true;
+  try {
+    
+    const url = new URL(`https://ads-service.vercel.app/grafico/stats-subsecciones/btn-descargar/${props.campaignId}`);
+    url.searchParams.append('fechai', props.dateRange.start);
+    url.searchParams.append('fechaf', props.dateRange.end);
+    url.searchParams.append('page', '1');
+    url.searchParams.append('limit', '500000');
+
+    const response = await fetch(url);
+    const data = await response.json(); 
+
+    if (data.resp && data.data) {
       const userStats = new Map();
 
-      response.data.data.forEach(item => {
+      data.data.forEach(item => {
         const key = `${item.user.wylexId}-${item.subseccion || 'noticias'}`;
         
         if (!userStats.has(key)) {
@@ -419,9 +435,9 @@ const downloadData = async () => {
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
       
-      // Formato de nombre de archivo con rango de fechas
-      const startDateFormatted = dateRange.value.start.split('-').join('');
-      const endDateFormatted = dateRange.value.end.split('-').join('');
+     
+      const startDateFormatted = props.dateRange.start.split('-').join('');
+      const endDateFormatted = props.dateRange.end.split('-').join('');
       const fileName = `stats_secciones_${startDateFormatted}_${endDateFormatted}.csv`;
 
       link.href = URL.createObjectURL(blob);

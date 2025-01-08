@@ -93,7 +93,7 @@
               <div class="date-picker-wrapper" style="width: calc(100% - 48px);">
                 <!-- <VCardTitle>Evolución de interacciones</VCardTitle>
                 <small class="text-medium-emphasis">Clicks e impresiones en un rango de fecha específico</small> -->
-                <AppDateTimePicker 
+                <!-- <AppDateTimePicker 
                     prepend-inner-icon="tabler-calendar" 
                     density="compact"
                     style="max-width: 300px;"
@@ -112,8 +112,7 @@
                         firstDayOfWeek: 1
                       }
                     }"
-                  />
-             
+                  /> -->
               </div>
               <div class="d-flex gap-2">
                 <VBtn
@@ -199,6 +198,10 @@ moment.locale('es', [esLocale]);
 const props = defineProps({
   campaignId: {
     type: String,
+    required: true
+  },
+  dateRange: {
+    type: Object,
     required: true
   }
 })
@@ -425,8 +428,8 @@ const fetchData = async () => {
   try {
     const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-diario/${props.campaignId}`, {
       params: {
-        fechai: formatDate(dateRange.value.start),
-        fechaf: formatDate(dateRange.value.end),
+        fechai: props.dateRange.start,
+        fechaf: props.dateRange.end,
         page: 1,
         limit: 500000
       }
@@ -446,8 +449,6 @@ const fetchData = async () => {
   }
 }
 
-
-// watch(() => dataChart_1.value, (newData) => { ... })
 
 // La actualización de los datos del gráfico ya está manejada en la función updateChartData
 const updateChartData = (data) => {
@@ -509,8 +510,8 @@ const downloadDetailedReport = async () => {
   try {
     const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-diario/btn-descargar/${props.campaignId}`, {
       params: {
-        fechai: formatDate(dateRange.value.start),
-        fechaf: formatDate(dateRange.value.end),
+        fechai: props.dateRange.start,
+        fechaf: props.dateRange.end,
         page: 1,
         limit: 5000
       }
@@ -549,8 +550,8 @@ const downloadGroupedReport = async () => {
   try {
     const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-diario/btn-descargar/${props.campaignId}`, {
       params: {
-        fechai: formatDate(dateRange.value.start),
-        fechaf: formatDate(dateRange.value.end),
+        fechai: props.dateRange.start,
+        fechaf: props.dateRange.end,
         page: 1,
         limit: 5000
       }
@@ -606,6 +607,12 @@ watch(() => props.campaignId, (newId) => {
     fetchData()
   }
 }, { immediate: true })
+
+watch(() => props.dateRange, (newRange) => {
+  if (newRange) {
+    fetchData()
+  }
+}, { deep: true })
 
 onMounted(() => {
   if (props.campaignId) {

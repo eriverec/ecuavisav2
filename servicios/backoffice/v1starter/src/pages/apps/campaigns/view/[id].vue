@@ -4,6 +4,7 @@ import DailyStats from '@/pages/apps/campaigns/audit/daily_stats.vue'
 import DeviceStats from '@/pages/apps/campaigns/audit/device_stats.vue'
 import LocationStats from '@/pages/apps/campaigns/audit/location_stats.vue'
 import SectionStats from '@/pages/apps/campaigns/audit/section_stats.vue'
+import TabGroupTable from '@/pages/apps/campaigns/audit/urls_stats.vue'
 
 import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js"
 
@@ -14,7 +15,7 @@ import esLocale from "moment/locale/es"
 import { useRoute } from 'vue-router'
 import VueApexCharts from 'vue3-apexcharts'
 import { useTheme } from 'vuetify'
-import TabGroupTable from './tabGroupTable.vue'
+// import TabGroupTable from './tabGroupTable.vue'
 
 
 const moment = extendMoment(Moment)
@@ -72,6 +73,13 @@ export default {
       },
       limit: valoresHoy.limit,
 
+      //fechas compartidas 
+      sharedDateRange: {
+        start: moment().format('YYYY-MM-DD'),
+        end: moment().format('YYYY-MM-DD')
+      },
+
+
       suggestion: {
   _id: "",
   campaignTitle: "",
@@ -106,7 +114,7 @@ export default {
   type: "",
   position: "",
   created_at: ""
-},
+     },
   
     loadingDownloadTable: [],
     loadingDownloadTableEnCurso: false,
@@ -368,6 +376,15 @@ export default {
       return city === -1 ? 'Todas las ciudades' : city
     },
 
+    handleSharedDateChange(dates) {
+      if (!dates || !dates[0] || !dates[1]) return
+      
+      this.sharedDateRange = {
+        start: moment(dates[0]).format('YYYY-MM-DD'),
+        end: moment(dates[1]).format('YYYY-MM-DD')
+      }
+    },
+
     async getDetallesCampaign() {
       try {
         console.log('Intentando obtener datos para ID:', this.id)
@@ -550,221 +567,249 @@ export default {
       <VWindow v-model="activeTab" class="mt-6">
        
         <!-- Tab Resumen -->
-<VWindowItem value="resumen">
-  <div class="d-flex justify-center">
-    <div style="width: 800px;">
-      <div v-if="isLoadingContent" class="text-center py-8">
-        <VProgressCircular indeterminate color="primary" />
-        <div class="mt-4">Cargando datos, espere...</div>
-      </div>
-      
-      <VList v-else class="transparent-list">
-        
-        <!-- Estado y Posición -->
-        <div class="d-flex">
-          <div class="w-50">
-            <VListItem>
-              <template v-slot:prepend>
-                <VIcon color="primary" icon="mdi-checkbox-marked-circle-outline" size="24" />
-              </template>
-              <div>
-                <VListItemTitle class="font-weight-bold text-body-1">Estado </VListItemTitle>
-                <VListItemSubtitle class="mt-1">
-                  <VChip
-                      :color="suggestion.statusCampaign ? 'success' : 'error'"
-                      size="small"
-                    >
-                      {{ suggestion.statusCampaign ? 'Activo' : 'Inactivo' }}
-                    </VChip>
-
-                </VListItemSubtitle>
+        <VWindowItem value="resumen">
+          <div class="d-flex justify-center">
+            <div style="width: 800px;">
+              <div v-if="isLoadingContent" class="text-center py-8">
+                <VProgressCircular indeterminate color="primary" />
+                <div class="mt-4">Cargando datos, espere...</div>
               </div>
-            </VListItem>
+              
+              <VList v-else class="transparent-list">
+                
+                <!-- Estado y Posición -->
+                <div class="d-flex">
+                  <div class="w-50">
+                    <VListItem>
+                      <template v-slot:prepend>
+                        <VIcon color="primary" icon="mdi-checkbox-marked-circle-outline" size="24" />
+                      </template>
+                      <div>
+                        <VListItemTitle class="font-weight-bold text-body-1">Estado </VListItemTitle>
+                        <VListItemSubtitle class="mt-1">
+                          <VChip
+                              :color="suggestion.statusCampaign ? 'success' : 'error'"
+                              size="small"
+                            >
+                              {{ suggestion.statusCampaign ? 'Activo' : 'Inactivo' }}
+                            </VChip>
+
+                        </VListItemSubtitle>
+                      </div>
+                    </VListItem>
+                  </div>
+                  <VDivider vertical />
+                  <div class="w-50">
+                    <VListItem>
+                      <template v-slot:prepend>
+                        <VIcon color="primary" icon="mdi-crosshairs-gps" size="24" />
+                      </template>
+                      <div>
+                        <VListItemTitle  class="font-weight-bold text-body-1">
+                          Posición
+                          <VIcon
+                            color="info"
+                            icon="mdi-magnify"
+                            size="18"
+                            class="ms-2 cursor-pointer"
+                            @click="showPositionDialog"
+                          />
+                        </VListItemTitle>
+                        <VListItemSubtitle class="mt-1">{{ suggestion.position }}</VListItemSubtitle>
+                      </div>
+                    </VListItem>
+                  </div>
+                </div>
+
+              <VDivider />
+
+                <!-- Período de campaña y Fecha de Creación -->
+                <div class="d-flex">
+                  <div class="w-50">
+                    <VListItem>
+                      <template v-slot:prepend>
+                        <VIcon color="primary" icon="mdi-calendar-range" size="24" />
+                      </template>
+                      <div>
+                        <VListItemTitle class="font-weight-bold text-body-1">Período de campaña</VListItemTitle>
+                        <VListItemSubtitle class="mt-1">{{ formatDate(suggestion.fechai) }} hasta {{ formatDate(suggestion.fechaf) }}</VListItemSubtitle>
+                      </div>
+                    </VListItem>
+                  </div>
+                  <VDivider vertical />
+                  <div class="w-50">
+                    <VListItem>
+                      <template v-slot:prepend>
+                        <VIcon color="primary" icon="mdi-calendar" size="24" />
+                      </template>
+                      <div>
+                        <VListItemTitle class="font-weight-bold text-body-1">Fecha de Creación</VListItemTitle>
+                        <VListItemSubtitle class="mt-1">{{ formatDate(suggestion.created_at) }}</VListItemSubtitle>
+                      </div>
+                    </VListItem>
+                  </div>
+                </div>
+
+                <VDivider />
+
+                <!-- Título -->
+                <VListItem>
+                  <template v-slot:prepend>
+                    <VIcon color="primary" icon="mdi-format-title" size="24" />
+                  </template>
+                  <VListItemTitle class="font-weight-bold text-body-1">Título</VListItemTitle>
+                  <VListItemSubtitle class="mt-1">{{ suggestion.campaignTitle }}</VListItemSubtitle>
+                </VListItem>
+
+                <VDivider />
+
+                <!-- Descripción -->
+                <VListItem>
+                  <template v-slot:prepend>
+                    <VIcon color="primary" icon="mdi-text-long" size="24" />
+                  </template>
+                  <VListItemTitle class="font-weight-bold text-body-1">Descripción</VListItemTitle>
+                  <VListItemSubtitle class="mt-1">{{ suggestion.description }}</VListItemSubtitle>
+                </VListItem>
+
+                <VDivider />
+
+                <!-- País/Ciudad (condicional) -->
+                <template v-if="suggestion.participantes === 'filtrado'">
+                  <VListItem>
+                    <template v-slot:prepend>
+                      <VIcon color="primary" icon="mdi-map-marker-radius" size="24" />
+                    </template>
+                    <VListItemTitle class="font-weight-bold text-body-1">País / Ciudad</VListItemTitle>
+                    <VListItemSubtitle class="mt-1">
+                      <span>{{ getPaisTexto(suggestion.criterial.country) }}</span>
+                      <span> / </span>
+                      <span>{{ getCiudadTexto(suggestion.criterial.city) }}</span>
+                    </VListItemSubtitle>
+                  </VListItem>
+                  <VDivider />
+                </template>
+
+                <!-- Tipo de Contenido y Sección -->
+                <div class="d-flex">
+                  <div class="w-50">
+                    <VListItem>
+                      <template v-slot:prepend>
+                        <VIcon color="primary" icon="mdi-file-code-outline" size="24" />
+                      </template>
+                      <div>
+                        <VListItemTitle class="font-weight-bold text-body-1">
+                          Tipo de Contenido
+                          <VIcon
+                            color="info"
+                            icon="mdi-eye"
+                            size="18"
+                            class="ms-2 cursor-pointer"
+                            @click="showContentDialog = true"
+                          />
+                        </VListItemTitle>
+                        <VListItemSubtitle class="mt-1">{{ suggestion.type }}</VListItemSubtitle>
+                      </div>
+                    </VListItem>
+                  </div>
+                  <VDivider vertical />
+                  <div class="w-50">
+                    <VListItem>
+                      <template v-slot:prepend>
+                        <VIcon color="primary" icon="mdi-view-dashboard-outline" size="24" />
+                      </template>
+                      <div>
+                        <VListItemTitle class="font-weight-bold text-body-1">Sección</VListItemTitle>
+                        <VListItemSubtitle class="mt-1">{{ suggestion.criterial.visibilitySection.name }}</VListItemSubtitle>
+                      </div>
+                    </VListItem>
+                  </div>
+                </div>
+
+                <!-- Diálogo de contenido -->
+                <VDialog
+                  v-model="showContentDialog"
+                  :scrim="true"
+                  width="400"
+                >
+                  <VCard class="content-preview-card">
+                    <VCardTitle class="dialog-title pa-4">
+                      <div class="text-center text-h6 font-weight-bold w-100">Contenido</div>
+                      <VBtn
+                        icon
+                        variant="text"
+                        size="small"
+                        @click="showContentDialog = false"
+                        class="close-button"
+                      >
+                        <VIcon>mdi-close</VIcon>
+                      </VBtn>
+                    </VCardTitle>
+                    <VCardText class="pa-4">
+                      <div v-if="suggestion.type === 'html'" class="content-preview">
+                        <div v-html="suggestion.urls.html"></div>
+                      </div>
+                      <div v-else-if="suggestion.urls.img">
+                        <img 
+                          :src="suggestion.urls.img.escritorio" 
+                          alt="Contenido"
+                          class="preview-image"
+                        />
+                      </div>
+                    </VCardText>
+                  </VCard>
+                </VDialog>
+
+                <VDivider />
+
+                <!-- Total Usuarios -->
+                <VListItem>
+                  <template v-slot:prepend>
+                    <VIcon color="primary" icon="mdi-account-group" size="24" />
+                  </template>
+                  <VListItemTitle class="font-weight-bold text-body-1">Total Usuarios</VListItemTitle>
+                  <VListItemSubtitle class="mt-1">{{ suggestion.userIdSize }}</VListItemSubtitle>
+                </VListItem>
+              </VList>
+            </div>
           </div>
-          <VDivider vertical />
-          <div class="w-50">
-            <VListItem>
-              <template v-slot:prepend>
-                <VIcon color="primary" icon="mdi-crosshairs-gps" size="24" />
-              </template>
-              <div>
-                <VListItemTitle  class="font-weight-bold text-body-1">
-                  Posición
-                  <VIcon
-                    color="info"
-                    icon="mdi-magnify"
-                    size="18"
-                    class="ms-2 cursor-pointer"
-                    @click="showPositionDialog"
-                  />
-                </VListItemTitle>
-                <VListItemSubtitle class="mt-1">{{ suggestion.position }}</VListItemSubtitle>
-              </div>
-            </VListItem>
-          </div>
-        </div>
-
-       <VDivider />
-
-        <!-- Período de campaña y Fecha de Creación -->
-        <div class="d-flex">
-          <div class="w-50">
-            <VListItem>
-              <template v-slot:prepend>
-                <VIcon color="primary" icon="mdi-calendar-range" size="24" />
-              </template>
-              <div>
-                <VListItemTitle class="font-weight-bold text-body-1">Período de campaña</VListItemTitle>
-                <VListItemSubtitle class="mt-1">{{ formatDate(suggestion.fechai) }} hasta {{ formatDate(suggestion.fechaf) }}</VListItemSubtitle>
-              </div>
-            </VListItem>
-          </div>
-          <VDivider vertical />
-          <div class="w-50">
-            <VListItem>
-              <template v-slot:prepend>
-                <VIcon color="primary" icon="mdi-calendar" size="24" />
-              </template>
-              <div>
-                <VListItemTitle class="font-weight-bold text-body-1">Fecha de Creación</VListItemTitle>
-                <VListItemSubtitle class="mt-1">{{ formatDate(suggestion.created_at) }}</VListItemSubtitle>
-              </div>
-            </VListItem>
-          </div>
-        </div>
-
-        <VDivider />
-
-         <!-- Título -->
-         <VListItem>
-          <template v-slot:prepend>
-            <VIcon color="primary" icon="mdi-format-title" size="24" />
-          </template>
-          <VListItemTitle class="font-weight-bold text-body-1">Título</VListItemTitle>
-          <VListItemSubtitle class="mt-1">{{ suggestion.campaignTitle }}</VListItemSubtitle>
-        </VListItem>
-
-        <VDivider />
-
-        <!-- Descripción -->
-        <VListItem>
-          <template v-slot:prepend>
-            <VIcon color="primary" icon="mdi-text-long" size="24" />
-          </template>
-          <VListItemTitle class="font-weight-bold text-body-1">Descripción</VListItemTitle>
-          <VListItemSubtitle class="mt-1">{{ suggestion.description }}</VListItemSubtitle>
-        </VListItem>
-
-        <VDivider />
-
-        <!-- País/Ciudad (condicional) -->
-        <template v-if="suggestion.participantes === 'filtrado'">
-          <VListItem>
-            <template v-slot:prepend>
-              <VIcon color="primary" icon="mdi-map-marker-radius" size="24" />
-            </template>
-            <VListItemTitle class="font-weight-bold text-body-1">País / Ciudad</VListItemTitle>
-            <VListItemSubtitle class="mt-1">
-              <span>{{ getPaisTexto(suggestion.criterial.country) }}</span>
-              <span> / </span>
-              <span>{{ getCiudadTexto(suggestion.criterial.city) }}</span>
-            </VListItemSubtitle>
-          </VListItem>
-          <VDivider />
-        </template>
-
-        <!-- Tipo de Contenido y Sección -->
-        <div class="d-flex">
-          <div class="w-50">
-            <VListItem>
-              <template v-slot:prepend>
-                <VIcon color="primary" icon="mdi-file-code-outline" size="24" />
-              </template>
-              <div>
-                <VListItemTitle class="font-weight-bold text-body-1">
-                  Tipo de Contenido
-                  <VIcon
-                    color="info"
-                    icon="mdi-eye"
-                    size="18"
-                    class="ms-2 cursor-pointer"
-                    @click="showContentDialog = true"
-                  />
-                </VListItemTitle>
-                <VListItemSubtitle class="mt-1">{{ suggestion.type }}</VListItemSubtitle>
-              </div>
-            </VListItem>
-          </div>
-          <VDivider vertical />
-          <div class="w-50">
-            <VListItem>
-              <template v-slot:prepend>
-                <VIcon color="primary" icon="mdi-view-dashboard-outline" size="24" />
-              </template>
-              <div>
-                <VListItemTitle class="font-weight-bold text-body-1">Sección</VListItemTitle>
-                <VListItemSubtitle class="mt-1">{{ suggestion.criterial.visibilitySection.name }}</VListItemSubtitle>
-              </div>
-            </VListItem>
-          </div>
-        </div>
-
-        <!-- Diálogo de contenido -->
-        <VDialog
-          v-model="showContentDialog"
-          :scrim="true"
-          width="400"
-        >
-          <VCard class="content-preview-card">
-            <VCardTitle class="dialog-title pa-4">
-              <div class="text-center text-h6 font-weight-bold w-100">Contenido</div>
-              <VBtn
-                icon
-                variant="text"
-                size="small"
-                @click="showContentDialog = false"
-                class="close-button"
-              >
-                <VIcon>mdi-close</VIcon>
-              </VBtn>
-            </VCardTitle>
-            <VCardText class="pa-4">
-              <div v-if="suggestion.type === 'html'" class="content-preview">
-                <div v-html="suggestion.urls.html"></div>
-              </div>
-              <div v-else-if="suggestion.urls.img">
-                <img 
-                  :src="suggestion.urls.img.escritorio" 
-                  alt="Contenido"
-                  class="preview-image"
-                />
-              </div>
-            </VCardText>
-          </VCard>
-        </VDialog>
-
-        <VDivider />
-
-        <!-- Total Usuarios -->
-        <VListItem>
-          <template v-slot:prepend>
-            <VIcon color="primary" icon="mdi-account-group" size="24" />
-          </template>
-          <VListItemTitle class="font-weight-bold text-body-1">Total Usuarios</VListItemTitle>
-          <VListItemSubtitle class="mt-1">{{ suggestion.userIdSize }}</VListItemSubtitle>
-        </VListItem>
-      </VList>
-    </div>
-  </div>
-</VWindowItem>
+        </VWindowItem>
 
         <!-- Tab Métricas -->
         <VWindowItem value="metricas">
             <VContainer fluid class="pa-4">
-              <!-- Comparación diaria -->
+
               <VCard class="mb-6">
                 <VCardTitle class="d-flex justify-space-between align-center px-6 py-4">
                   <div>
+                    <div class="text-h6 font-weight-medium">Rango de fechas</div>
+                  </div>
+                  <AppDateTimePicker 
+                    prepend-inner-icon="tabler-calendar" 
+                    density="comfortable"
+                    style="max-width: 300px;"
+                    :show-current="true"
+                    @on-change="handleSharedDateChange"
+                    :config="{
+                      position: 'auto right',
+                      mode: 'range',
+                      altFormat: 'F j, Y',
+                      dateFormat: 'Y-m-d',
+                      defaultDate: [sharedDateRange.start, sharedDateRange.end],
+                      maxDate: 'today',
+                      showMonths: 1,
+                      locale: {
+                        rangeSeparator: ' al ',
+                        firstDayOfWeek: 1
+                      }
+                    }"
+                  />
+                </VCardTitle>
+              </VCard>
+              <!-- Comparación diaria -->
+              <VCard class="mb-6">
+                <VCardTitle class="d-flex justify-space-between align-center px-6 py-4">
+                   <div class="charts-container">
                     <div class="text-h6 font-weight-medium">Evolución de interacciones</div>
                     <div class="text-subtitle-2 text-medium-emphasis">Clicks e impresiones en un rango de fecha específico</div>
                   
@@ -773,6 +818,7 @@ export default {
                 <VCardText class="pt-4 pb-6">
                   <DailyStats 
                     :campaignId="id"
+                    :dateRange="sharedDateRange"
                     @loading="loadingMetrics = $event"
                   />
                 </VCardText>
@@ -792,6 +838,7 @@ export default {
                       <DeviceStats 
                         :campaignId="id"
                         @loading="loadingMetrics = $event"
+                        :dateRange="sharedDateRange"
                       />
                     </VCardText>
                   </VCard>
@@ -808,10 +855,7 @@ export default {
                     <VCardText class="pt-4 pb-6">
                       <LocationStats 
                         :campaignId="id"
-                        :dateRange="{
-                          start: moment(fecha.i),
-                          end: moment(fecha.f)
-                        }"
+                        :dateRange="sharedDateRange"
                       />
                     </VCardText>
                   </VCard>
@@ -829,6 +873,7 @@ export default {
                 <VCardText class="pt-4 pb-6">
                   <AgeStats 
                     :campaignId="id"
+                    :dateRange="sharedDateRange"
                     @loading="loadingMetrics = $event"
                   />
                 </VCardText>
@@ -845,6 +890,7 @@ export default {
                 <VCardText class="pt-4 pb-6">
                   <SectionStats 
                     :campaignId="id"
+                    :dateRange="sharedDateRange"
                     @loading="loadingMetrics = $event"
                   />
                 </VCardText>
@@ -861,6 +907,7 @@ export default {
                 <VCardText class="pt-4 pb-6">
                   <TabGroupTable 
                     :dataCampaigns="campaignsList"
+                    :dateRange="sharedDateRange"
                     :key="campaignsList[0]?.value" 
                   />
                 </VCardText>

@@ -2,7 +2,7 @@
   <div class="stats-container">
     <div class="d-flex align-center justify-space-between mb-6">
       <div class="date-picker-wrapper" style="width: calc(100% - 48px);">
-        <AppDateTimePicker 
+        <!-- <AppDateTimePicker 
           prepend-inner-icon="tabler-calendar" 
           density="comfortable"
           style="max-width: 300px;"
@@ -22,7 +22,7 @@
             }
           }"
           class="date-picker-compact"
-        />
+        /> -->
       </div>
       <VBtn
         icon
@@ -94,6 +94,10 @@ import VueApexCharts from 'vue3-apexcharts'
   campaignId: {
     type: String,
     required: true
+  },
+  dateRange: {
+    type: Object,
+    required: true
   }
  })
  
@@ -119,8 +123,8 @@ import VueApexCharts from 'vue3-apexcharts'
   try {
     const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-diario/btn-descargar/${props.campaignId}`, {
       params: {
-        fechai: dateRange.value.start,
-        fechaf: dateRange.value.end,
+        fechai: props.dateRange.start,
+        fechaf: props.dateRange.end,
         page: 1,
         limit: 5000
       }
@@ -266,8 +270,8 @@ import VueApexCharts from 'vue3-apexcharts'
   try {
     const response = await axios.get(`https://ads-service.vercel.app/grafico/stats-dispositivos/${props.campaignId}`, {
       params: {
-        fechai: dateRange.value.start,
-        fechaf: dateRange.value.end,
+        fechai: props.dateRange.start,
+        fechaf: props.dateRange.end,
         page: 1,
         limit: 500000
       }
@@ -292,6 +296,12 @@ import VueApexCharts from 'vue3-apexcharts'
     emit('loading', false)
   }
  }
+
+ watch(() => props.dateRange, (newRange) => {
+  if (newRange) {
+    fetchData()
+  }
+}, { deep: true })
  
  watch(() => props.campaignId, (newId) => {
   if (newId) {
