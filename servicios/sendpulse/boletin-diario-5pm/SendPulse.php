@@ -24,13 +24,15 @@ class SendPulse {
 	private $ctrFunciones;
 	private $contadorSolicitudes;
 	private $jsonPDF;
+	private $dominio;
 
 	function __construct(){
 		$this->typeProyect =  "Production"; //Production - Guzzle
+		$this->dominio =  "https://phpstack-1011861-5163349.cloudwaysapps.com";
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 5,
 			"folder" => "boletin-diario-5pm",
-			"folderPrimary" => ($this->typeProyect == "Production" ? "sendpulse/sendpulsev3": "sendpulse"),
+			"folderPrimary" => ($this->typeProyect == "Production" ? "": "sendpulse"),
 			"typeProyect" => $this->typeProyect
 		));
 		$this->jsonPDF = [];
@@ -502,7 +504,7 @@ class SendPulse {
     }
 
     private function getURLVerNavegador(){
-		$link = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/email.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter.'';
+		$link = $this->dominio . '/navigatorview/email.php?lista='.$this->listaUsuario.'&titulo='.$this->nombreNeswletter.'';
 		return '<label style="display:none">'.$this->descripcion.'. Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label><a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none; color:#000" href="'.$link.'">Quiero ver en mi navegador</a>';
     }
 
@@ -538,24 +540,22 @@ class SendPulse {
 
 		$bloque_noticias = "";
 		foreach ($notas[0] as $key => $nota) { 
-			$bloque_noticias .= $this->getTemplatePHP($nota, "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/portada.php"); 
+			$bloque_noticias .= $this->getTemplatePHP($nota, $this->dominio . "/template/boletin-diario/portada.php"); 
 		}
 		$bodyGenerar = str_replace("{{ bloque_noticias }}", $bloque_noticias, $htmlTemplate);
 
-
 		$bloque_2_verticales = "";
 		// foreach ($notas[1] as $key => $nota) { 
-		$bloque_2_verticales .= $this->getTemplatePHP($notas[1], "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/2-notas.php"); 
+		$bloque_2_verticales .= $this->getTemplatePHP($notas[1], $this->dominio . "/template/boletin-diario/2-notas.php"); 
 		// }
 		$bodyGenerar = str_replace("{{ bloque_2_verticales }}", $bloque_2_verticales, $bodyGenerar);
 
 
 		$bloque_2_horizontales = "";
 		// foreach ($notas[1] as $key => $nota) { 
-		$bloque_2_horizontales .= $this->getTemplatePHP($notas[2], "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/template/boletin-diario/2-notas-abajo.php"); 
+		$bloque_2_horizontales .= $this->getTemplatePHP($notas[2], $this->dominio . "/template/boletin-diario/2-notas-abajo.php"); 
 		// }
 		$bodyGenerar = str_replace("{{ bloque_2_horizontales }}", $bloque_2_horizontales, $bodyGenerar);
-		
 
 		$bodyGenerar = str_replace("{{contador_notas}}", count($notas) , $bodyGenerar);
 		$bodyGenerar = str_replace("{{date}}", $this->fechaFormateada , $bodyGenerar);
