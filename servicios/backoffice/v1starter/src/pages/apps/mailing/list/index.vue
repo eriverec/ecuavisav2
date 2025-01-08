@@ -11,6 +11,7 @@ const configSnackbar = ref({
   model:false
 });
 
+const dominioExterno = ref('https://phpstack-1011861-5163349.cloudwaysapps.com');
 const currentTab = ref('tab-lista');
 const isDialogVisibleDelete = ref(false);
 const isDialogVisiblePreview = ref(false);
@@ -48,32 +49,32 @@ const linkForzadoList = ref([
   {
     "id":"66146103d6d9f2e80323e95e",
     "name":"Última hora",
-    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-ultimahora/forzado.php"
+    "forzado": dominioExterno.value+"/boletin-ultimahora/forzado.php"
   },
   {
     "id":"660f09cc2a53044cbb5c3495",
     "name":"Estadio",
-    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-estadio/forzado.php"
+    "forzado":dominioExterno.value+"/boletin-estadio/forzado.php"
   },
   {
     "id":"66043d5421c9f3dc3c353987",
     "name":"Gente",
-    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-entretenimiento/forzado.php"
+    "forzado":dominioExterno.value+"/boletin-entretenimiento/forzado.php"
   },
   {
     "id":"64f9f5225c4a279b69ff2ac8",
     "name":"Boletín diario 7am",
-    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-diario/forzado.php"
+    "forzado":dominioExterno.value+"/boletin-diario/forzado.php"
   },
   {
     "id":"64f9f5455c4a279b69ff2aca",
     "name":"Newsletter Opinión",
-    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/opinion/forzado.php"
+    "forzado":dominioExterno.value+"/opinion/forzado.php"
   },
   {
     "id":"655e5a43de6d5e1206632e25",
     "name":"Boletín diario 5pm",
-    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-diario-5pm/forzado.php"
+    "forzado":dominioExterno.value+"/boletin-diario-5pm/forzado.php"
   }
 ]);
 
@@ -208,7 +209,7 @@ const eliminarRegistro = async (id) => {
 // Función para manejar el cambio de paginación
 const previewNeswletterIframe = async (preview) => {
   isDialogVisiblePreview.value = true;
-  iframePreview.value = preview;
+  iframePreview.value = dominioExterno.value+preview;
 };
 
 const eliminarRegistroSi = async () => {

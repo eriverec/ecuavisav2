@@ -4,6 +4,7 @@ class Ctrfunciones {
 	public $typeProyect;
 	public $folder;
 	public $folderPrimary;
+	private $dominio;
 
 	function __construct($list = array()){
 		$valoresFecto = array(
@@ -18,6 +19,7 @@ class Ctrfunciones {
     	$this->folder = $resultado["folder"];
     	$this->folderPrimary = $resultado["folderPrimary"];
     	$this->typeProyect = $resultado["typeProyect"];
+		$this->dominio =  "https://phpstack-1011861-5163349.cloudwaysapps.com";
 	}
 
 	public function validarAcceso($data) {
@@ -338,7 +340,7 @@ class Ctrfunciones {
 
 		// Construye la URL completa
 		$urlActual = $protocolo . "://" . $host . $uri;
-	    $src_url = $this->typeProyect == "Production"?'https://estadisticas.ecuavisa.com/sites/gestor/Tools/'.$this->folderPrimary.'/'.$this->folder.'/img/'.$currentYear.'/'.$currentMonth.'/'.$imageName:'../../'.$this->folderPrimary.'/'.$this->folder.'/img/'.$currentYear.'/'.$currentMonth.'/'.$imageName;//$imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
+	    $src_url = $this->typeProyect == "Production"?$this->dominio.'/'.$this->folderPrimary.'/'.$this->folder.'/img/'.$currentYear.'/'.$currentMonth.'/'.$imageName:'../../'.$this->folderPrimary.'/'.$this->folder.'/img/'.$currentYear.'/'.$currentMonth.'/'.$imageName;//$imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
 	    return $src_url; //. "?v=" . $this->generarNumeroRandom();
 	}
 

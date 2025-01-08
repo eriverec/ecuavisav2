@@ -4,7 +4,7 @@ use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 class SendPulse
 {
-
+	private $dominio;
 	private $token;
 	private $sender_email;
 	private $sender_name;
@@ -30,10 +30,11 @@ class SendPulse
 		require '../funciones/Ctrfunciones.php';
 
 		$this->typeProyect =  "Production"; //Production - Guzzle
+		$this->dominio =  "https://phpstack-1011861-5163349.cloudwaysapps.com";
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 5,
 			"folder" => "boletin-estadio", // Guardado de img y json
-			"folderPrimary" => ($this->typeProyect == "Production" ? "sendpulse/sendpulsev3" : "sendpulse"),
+			"folderPrimary" => ($this->typeProyect == "Production" ? "" : "sendpulse"),
 			"typeProyect" => $this->typeProyect
 		));
 
@@ -528,10 +529,10 @@ class SendPulse
 
 	private function getURLVerNavegador()
 	{
-		$link = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/email.php?lista=' . $this->listaUsuario . '&titulo=' . $this->nombreNeswletter . '&';
+		$link = $this->dominio.'/navigatorview/email.php?lista=' . $this->listaUsuario . '&titulo=' . $this->nombreNeswletter . '&';
 		$view = '<a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none;color:#000;padding-right: 10px;" href="' . $link . '">Quiero ver en mi navegador</a>';
-		$pdf = '<a title="Exportar Newsletter a PDF" target="blank_" style="display:none;text-decoration:none;color:#000;padding-left: 10px;" href="https://pruebasecuavisa.phpdemo.site/sendpulse/opinion/pdf.php?id=' . $this->idPDF . '">Guardar como PDF</a>';
-
+		//$pdf = '<a title="Exportar Newsletter a PDF" target="blank_" style="display:none;text-decoration:none;color:#000;padding-left: 10px;" href="https://pruebasecuavisa.phpdemo.site/sendpulse/opinion/pdf.php?id=' . $this->idPDF . '">Guardar como PDF</a>';
+		$pdf = '';
 		return '<label style="display:none">' . $this->descripcion . '. Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label>' . $view . $pdf;
 		// return '<label style="display:none">'.$this->descripcion.'. Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy.</label><a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none; color:#000" href="'.$link.'">Quiero ver en mi navegador</a>';
 	}

@@ -23,16 +23,18 @@ dataHorariosModel.value = [
 
 const horarios = ref([]);
 
+const dominioExterno = ref('https://phpstack-1011861-5163349.cloudwaysapps.com');
+
 const linkForzadoList = ref([
   {
     "id":"66146103d6d9f2e80323e95e",
     "name":"Última hora",
-    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/boletin-ultimahora/forzado.php"
+    "forzado": dominioExterno.value +"boletin-ultimahora/forzado.php"
   },
   {
     "id":"64f9f5455c4a279b69ff2aca",
     "name":"Newsletter Opinión",
-    "forzado":"https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3/opinion/forzado.php"
+    "forzado": dominioExterno.value +"opinion/forzado.php"
   }
 ]);
 
@@ -490,7 +492,7 @@ const iframePreview = ref('');
 
 const onPreview = async (preview) => {
   isDialogVisiblePreview.value = true;
-  iframePreview.value = preview;
+  iframePreview.value = dominioExterno.value+preview;
 };
 
 
