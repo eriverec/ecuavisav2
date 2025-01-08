@@ -492,11 +492,16 @@ const resolveChart_2 = computed(() => {
       <VCol class="mt-0" cols="12">
         <VCard class="px-2 py-2 elevation-0">
           <VTabs v-model="currentTabSectionData" class="">
-            <VTab>Análisis de campañas</VTab>
-            <VTab>Análisis agrupada</VTab>
+            <VTab>Análisis de eventos de campañas segmentadas por URL</VTab>
+            <VTab>Top de URLs visitadas</VTab>
+            
           </VTabs>
           <VDivider />
           <VWindow v-model="currentTabSectionData">
+           
+            <VWindowItem>
+              <tabGroupTable :dataCampaigns="dataCampaigns"/>
+            </VWindowItem>
             <VWindowItem>
               <VCardItem class="header_card_item py-0 pt-4 align-start">
                 <div class="d-flex pr-0" style="justify-content: space-between;">
@@ -551,7 +556,7 @@ const resolveChart_2 = computed(() => {
                   </div>
                 </div>
                 <VDivider class="my-5" />
-                <div class="item-limit">
+                <!-- <div class="item-limit">
                   <label>Mostrar</label>
                   <VSelect 
                     style="min-width: 90px;"
@@ -565,7 +570,7 @@ const resolveChart_2 = computed(() => {
                     single-line
                   />
                   <label>registros</label>
-                </div>
+                </div> -->
                 <VTable class="text-no-wrap invoice-list-table" :disabled="disabledViewList">
                   <thead class="text-uppercase">
                     <tr>
@@ -628,9 +633,6 @@ const resolveChart_2 = computed(() => {
                 <VPagination class="mt-5" v-model="currentPage" :length="totalPages" :total-visible="7" />
                 <br>
               </div>
-            </VWindowItem>
-            <VWindowItem>
-              <tabGroupTable :dataCampaigns="dataCampaigns"/>
             </VWindowItem>
           </VWindow>
         </VCard>

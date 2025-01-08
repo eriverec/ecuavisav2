@@ -1,11 +1,13 @@
 <script setup>
   import { useSelectCalendar, useSelectValueCalendar } from "@/views/apps/otros/useSelectCalendar.js";
-import AppDateRange from '@core/components/AppDateRange.vue';
-import { hexToRgb } from '@layouts/utils';
-import Moment from 'moment';
-import { extendMoment } from 'moment-range';
-import esLocale from "moment/locale/es";
-import { useTheme } from 'vuetify';
+  import AppDateRange from '@core/components/AppDateRange.vue'
+  import tabGroupTable from '@/views/apps/campaigns/tabGroupTable.vue';
+  import { hexToRgb } from '@layouts/utils';
+  import VueApexCharts from 'vue3-apexcharts';
+  import { useTheme } from 'vuetify';
+  import Moment from 'moment';
+  import { extendMoment } from 'moment-range';
+  import esLocale from "moment/locale/es";
 
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
@@ -450,7 +452,7 @@ import { useTheme } from 'vuetify';
                   </div>
               </div>
               <VDivider class="my-5" />
-              <!-- <div class="item-limit">
+              <div class="item-limit">
                 <label>Mostrar</label>
                 <VSelect style="min-width: 90px;"
                   v-model="selectedOptionperPage"
@@ -463,7 +465,7 @@ import { useTheme } from 'vuetify';
                   single-line
                 />
                 <label>registros</label>
-              </div> -->
+              </div>
               <VTable class="text-no-wrap invoice-list-table" :disabled="disabledViewList">
                 <!-- 👉 Table head -->
                 <thead class="text-uppercase">
