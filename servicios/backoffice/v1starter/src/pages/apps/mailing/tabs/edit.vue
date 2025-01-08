@@ -29,12 +29,12 @@ const linkForzadoList = ref([
   {
     "id":"66146103d6d9f2e80323e95e",
     "name":"Última hora",
-    "forzado": dominioExterno.value +"boletin-ultimahora/forzado.php"
+    "forzado": dominioExterno.value +"/boletin-ultimahora/forzado.php"
   },
   {
     "id":"64f9f5455c4a279b69ff2aca",
     "name":"Newsletter Opinión",
-    "forzado": dominioExterno.value +"opinion/forzado.php"
+    "forzado": dominioExterno.value +"/opinion/forzado.php"
   }
 ]);
 
