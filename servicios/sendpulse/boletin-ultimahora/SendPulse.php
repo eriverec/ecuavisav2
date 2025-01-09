@@ -24,12 +24,14 @@ class SendPulse
 	private $contadorSolicitudes;
 	private $jsonPDF;
 	private $idPDF;
+	private $dominio;
 
 	function __construct()
 	{
 		require '../funciones/Ctrfunciones.php';
 
 		$this->typeProyect =  "Production"; //Production - Guzzle
+		$this->dominio =  "https://phpstack-1011861-5163349.cloudwaysapps.com";
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 5,
 			"folder" => "boletin-ultimahora", // Guardado de img y json
@@ -528,7 +530,7 @@ class SendPulse
 
 	private function getURLVerNavegador()
 	{
-		$link = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/navigatorview/email.php?lista=' . $this->listaUsuario . '&titulo=' . $this->nombreNeswletter . '&';
+		$link = $this->dominio.'/navigatorview/email.php?lista=' . $this->listaUsuario . '&titulo=' . $this->nombreNeswletter . '&';
 		$view = '<a title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy." target="blank_" style="text-decoration:none;color:#000;padding-right: 10px;" href="' . $link . '">Quiero ver en mi navegador</a>';
 		$pdf = '<a title="Exportar Newsletter a PDF" target="blank_" style="display:none;text-decoration:none;color:#000;padding-left: 10px;" href="https://pruebasecuavisa.phpdemo.site/sendpulse/opinion/pdf.php?id=' . $this->idPDF . '">Guardar como PDF</a>';
 

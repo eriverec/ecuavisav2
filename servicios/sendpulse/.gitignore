@@ -3,3 +3,4 @@ vendor
 img
 opinion/archivos/*.json
 boletin-diario/archivos/*.json
+boletin-ultimahora/archivos/*.json
