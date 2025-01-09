@@ -12,8 +12,8 @@ class Email_preview{
 	private $dominio;
 
     function __construct(){
+		$this->dominio = "https://phpstack-1011861-5163349.cloudwaysapps.com";
         $this->sndplstoken = $this->init_token();
-		$this->dominio =  "https://phpstack-1011861-5163349.cloudwaysapps.com";
     }
 
     private function init_token(){
@@ -32,6 +32,7 @@ class Email_preview{
         $response = curl_exec($curl);
 
         curl_close($curl);
+        // echo $response.$this->dominio.'/getApi.php';
         return $response;
     }
 
@@ -52,7 +53,7 @@ class Email_preview{
     private function httpsGet($url = ""){
         // consulta los detalles de la campaña seleccionada  
         $cpDetailsUrl = $url; 
-        $bearer2 = 'Authorization: Bearer '.$this->sndplstoken ;
+        $bearer2 = 'Authorization: Bearer '.$this->sndplstoken;
         $curl2 = curl_init();
         curl_setopt_array($curl2, array(
           CURLOPT_URL => $cpDetailsUrl,
@@ -105,6 +106,8 @@ class Email_preview{
         $limit = 75;
         $offset = 0 * $limit;
         $CampaignList = $this->getSendPulseCampaigns($offset, $limit);
+        // return json_encode($CampaignList);
+
         $idCampaign = $this->getIdCampaign($CampaignList);
 
         $bandera = 0;
