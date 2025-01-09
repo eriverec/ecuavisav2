@@ -23,7 +23,8 @@ dataHorariosModel.value = [
 
 const horarios = ref([]);
 
-const dominioExterno = ref('https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3');
+// const dominioExterno = ref('https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/sendpulsev3');
+const dominioExterno = ref('https://phpstack-1011861-5163349.cloudwaysapps.com');
 
 const linkForzadoList = ref([
   {
