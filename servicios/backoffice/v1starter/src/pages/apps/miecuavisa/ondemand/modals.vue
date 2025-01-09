@@ -51,7 +51,7 @@
 
                 <VCol cols="12">
                   <VSwitch class="" v-model="modal.region" inset label="Región" />
-
+                  <span class="text-disabled text-sm ">Selecciona el país y la ciudad donde se mostrará el modal a los usuarios.</span>
                 </VCol>
 
 
@@ -61,38 +61,70 @@
 
 
 
-                <VRow v-if="modal.region">
+              <VRow v-if="modal.region">
 
-                  <VCol cols="6">
+                <VCol cols="6">
 
-                    <VCombobox label="País" chips v-model="modal.selectedCountry" :items="countries"
-                      item-title="country" item-value="countryCode" :hide-no-data="false"
-                      :menu-props="{ maxHeight: '300' }" @update:model-value="updateCities(index)" return-object
-                      clearable />
+                  <VCombobox label="País" chips v-model="modal.selectedCountry" :items="countries" item-title="country"
+                    item-value="countryCode" :hide-no-data="false" :menu-props="{ maxHeight: '300' }"
+                    @update:model-value="updateCities(index)" return-object clearable />
 
-                  </VCol>
+                </VCol>
 
-                  <VCol cols="6">
+                <VCol cols="6">
 
-                    <!-- Modifica el VCombobox de Ciudad así: -->
-                    <VCombobox label="Ciudad" closable-chips clear-icon="tabler-circle-x" chips multiple
-                      v-model="modal.selectedCities" :items="modal.availableCities" item-title="city" item-value="city"
-                      :hide-no-data="false" :menu-props="{ maxHeight: '300' }" :disabled="!modal.selectedCountry"
-                      return-object clearable @update:model-value="handleCityChange(index)" />
-                  </VCol>
-                </VRow>
-                
-                <VRow>
-                  <VCol cols="2">
-                    <VBtn color="error" variant="text" @click="deleteModal(index)">
-                      <VIcon start icon="tabler-trash" />Eliminar
-                    </VBtn>
-                  </VCol>
-
-                </VRow>
+                  <!-- Modifica el VCombobox de Ciudad así: -->
+                  <VCombobox label="Ciudad" closable-chips clear-icon="tabler-circle-x" chips multiple
+                    v-model="modal.selectedCities" :items="modal.availableCities" item-title="city" item-value="city"
+                    :hide-no-data="false" :menu-props="{ maxHeight: '300' }" :disabled="!modal.selectedCountry"
+                    return-object clearable @update:model-value="handleCityChange(index)" />
+                </VCol>
 
 
 
+              </VRow>
+
+              <VRow class="mt-5">
+                <VCol cols="12">
+                  <VSwitch class="displaynex" v-model="modal.estadoHorario" inset label="Horario" />
+                  <span class="text-disabled text-sm ">Puedes seleccionar el horario en el que se mostrará el modal.</span>
+                </VCol>
+
+              </VRow>
+
+
+              <VRow class="pt-4" v-if="modal.estadoHorario">
+
+
+                <VCol cols="3">
+                  <VTextField v-model="modal.hInicio" label="Hora de inicio" type="time" suffix="Tiempo" />
+                </VCol>
+                <VCol cols="3">
+                  <VTextField v-model="modal.hFin" label="Hora de fin" type="time" suffix="Tiempo" />
+                </VCol>
+
+              </VRow>
+
+              <VRow class="mt-5">
+                <VCol cols="12">
+                  <div class=" gap-5">
+                    <VSwitch class="displaynex" v-model="modal.persistencia" inset label="Persistencia" />
+                    <span class="text-disabled text-sm ">El modal permanece fija en web</span>
+
+                  </div>
+
+                </VCol>
+
+              </VRow>
+
+              <VRow>
+                <VCol cols="2">
+                  <VBtn color="error" variant="text" @click="deleteModal(index)">
+                    <VIcon start icon="tabler-trash" />Eliminar
+                  </VBtn>
+                </VCol>
+
+              </VRow>
 
             </VCardText>
           </VCard>
@@ -170,7 +202,11 @@ const fetchData = async () => {
       const modalData = {
         estado: modal.estado === "true",
         region: modal.region === "true",
+        persistencia: modal.persistencia === "true",
+        estadoHorario: modal.estadoHorario === "true",
         titulo: modal.titulo,
+        hInicio: modal.hInicio,
+        hFin: modal.hFin,
         contenido: modal.contenido,
         url: modal.url || [],
         selectedCountry: modal.paisCode ? {
@@ -216,7 +252,11 @@ const addModal = () => {
   modals.value.push({
     estado: false,
     region: false,
+    estadoHorario: false,
+    persistencia: false,
     titulo: '',
+    hInicio: '',
+    hFin: '',
     contenido: '',
     url: [],
     selectedCountry: null,
@@ -263,7 +303,11 @@ const updateData = async () => {
     modals: modals.value.map(modal => ({
       estado: modal.estado ? "true" : "false",
       region: modal.region ? "true" : "false",
+      persistencia: modal.persistencia ? "true" : "false",
+      estadoHorario: modal.estadoHorario ? "true" : "false",
       titulo: modal.titulo,
+      hInicio: modal.hInicio,
+      hFin: modal.hFin,
       contenido: modal.contenido,
       url: modal.url,
       paisCode: modal.selectedCountry?.countryCode || '',
