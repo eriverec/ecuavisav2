@@ -2,40 +2,53 @@
 const NewRadio = document.createElement('script');
 NewRadio.src = 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_radio.js';
 NewRadio.async = true;
+NewRadio.onload = function() {
+  console.log('Script de radio cargado');
+  console.log('Variable horario_envivo_radio:', typeof horario_envivo_radio !== 'undefined' ? 'disponible' : 'no disponible');
+  if (ECUAVISA_EC.login()) {
+    eventRadioManager();
+  }
+};
+NewRadio.onerror = function() {
+  console.error('Error al cargar el script de radio');
+};
 document.head.appendChild(NewRadio);
 
 
 /*codigo-manager*/
 function eventRadioManager() {
-  // const apiUrl = "https://api-configuracion.vercel.app/web/horarioRadio";
-  const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioRadio";
-  // const fechaActual = new Date();
-  // const diaSemana = fechaActual.getDay();
-  // const horaActual = fechaActual.getHours();
-  // const minutosActuales = fechaActual.getMinutes();
   const diasSemanaTexto = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-
+  
   const fechaActual = new Date();
-  fechaActual.setUTCHours(fechaActual.getUTCHours() - 5); // Ajustar a la zona horaria de UTC-5 (Ecuador).
+  fechaActual.setUTCHours(fechaActual.getUTCHours() - 5);
   const diaSemana = fechaActual.getUTCDay();
-  const horaActual = (fechaActual.getUTCHours());
-  const minutosActuales = (fechaActual.getUTCMinutes());
+  const horaActual = fechaActual.getUTCHours();
+  const minutosActuales = fechaActual.getUTCMinutes();
 
-  // console.log(`${horaActual}:${minutosActuales} audio`);
+  let intentos = 0;
+  const maxIntentos = 10;
+
+  function esperarDatos() {
+    if (typeof horario_envivo_radio !== 'undefined') {
+      console.log('Datos de radio encontrados, procediendo con fetchHorario');
+      fetchHorario();
+    } else {
+      intentos++;
+      if (intentos < maxIntentos) {
+        console.log(`Esperando datos de radio... intento ${intentos}`);
+        setTimeout(esperarDatos, 1000);
+      } else {
+        console.error('No se pudieron cargar los datos de radio después de varios intentos');
+      }
+    }
+  }
 
   async function fetchHorario() {
     try {
-      // Verificamos que la variable de radio exista
-      if (typeof horario_envivo_radio === 'undefined') {
-        console.error('Error: No se ha cargado el archivo de radio correctamente');
-        return;
-      }
-  
-      const response = horario_envivo_radio;
-      const data = response;
+      const data = horario_envivo_radio;
       const forzado = data.forzado.estado;
       const htmlIframe = data.html.value;
-  
+
       if (!forzado) {
         console.log("forzado:", forzado);
         for (const dia of data.horarios) {
@@ -45,7 +58,7 @@ function eventRadioManager() {
             let programasHoy = [];
 
             for (const hora of dia.horas) {
-              if (hora.estadoHorario) { //validamos si la hora esta activa
+              if (hora.estadoHorario) {
                 const inicioHora = parseInt(hora.inicio.split(":")[0]);
                 const inicioMinutos = parseInt(hora.inicio.split(":")[1]);
 
@@ -64,7 +77,6 @@ function eventRadioManager() {
             const txtPrograma = document.querySelector('.title_programa_text');
             const txtBase = document.querySelector('#no_transmision__');
             const audio = document.querySelector('.contenedor_embed_radio');
-
 
             if (programasHoy.length > 0) {
               console.log("Programas activo:");
@@ -87,22 +99,18 @@ function eventRadioManager() {
                 if (audio) {
                   audio.style.display = 'block';
                   audio.innerHTML = htmlIframe;
-                  // Obtener el elemento <div> con el atributo data-id
                   var divdataid = document.querySelector('[data-id="643823bbf3b3410854ba942b"]');
 
                   if (divdataid) {
-                    // Obtener el elemento <script> dentro del <div>
                     var scriptElement = divdataid.querySelector('script');
                     var scriptSrc = scriptElement.getAttribute('src');
                     var resultElement = document.createElement('script');
                     resultElement.setAttribute('src', scriptSrc);
                     document.body.appendChild(resultElement);
                   }
-
                 }
               });
             } else {
-
               console.log("No hay programas activos en este momento.");
               if (txtEscuchando || txtPrograma) {
                 txtEscuchando.innerHTML = '';
@@ -167,13 +175,12 @@ function eventRadioManager() {
         console.log("forzado:", forzado);
       }
     } catch (error) {
-      console.error("Error al obtener los datos:", error);
+      console.error("Error al procesar los datos:", error);
     }
   }
 
-  // Llamar a la función para obtener y procesar los datos
-  fetchHorario();
-
+  // Iniciamos el proceso de espera
+  esperarDatos();
 }
 
 ////////////////////////FUNCION QUE ABARCA EL PROCESO DEL ENVIVO Y EL ENVIVO QUITO
