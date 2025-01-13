@@ -25,21 +25,17 @@ function eventRadioManager() {
 
   async function fetchHorario() {
     try {
-      // Verificamos que la variable de radio exista
-      if (typeof horario_envivo_radio === 'undefined') {
-        console.error('Error: No se ha cargado el archivo de radio correctamente');
-        return;
-      }
-  
+      // const response = await fetch(apiUrl);
       const response = horario_envivo_radio;
-      const data = response;
+      const data = await response.json();
       const forzado = data.forzado.estado;
       const htmlIframe = data.html.value;
-  
+
       if (!forzado) {
         console.log("forzado:", forzado);
         for (const dia of data.horarios) {
-          if (dia.estadoDia && dia.dia === diaSemana) {
+          // console.log('dia.dia:',dia.dia);
+          if (dia.estadoDia && dia.dia === diaSemana) { //validamos si el dia esta activo
             console.log(`Día ${dia.dia} (${diasSemanaTexto[dia.dia]}):`);
 
             let programasHoy = [];
