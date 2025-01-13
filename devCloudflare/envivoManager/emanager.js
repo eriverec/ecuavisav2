@@ -1,3 +1,10 @@
+/*nueva-radio*/
+const NewRadio = document.createElement('script');
+NewRadio.src = 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_radio.js';
+NewRadio.async = true;
+document.head.appendChild(NewRadio);
+
+
 /*codigo-manager*/
 function eventRadioManager() {
   // const apiUrl = "https://api-configuracion.vercel.app/web/horarioRadio";
