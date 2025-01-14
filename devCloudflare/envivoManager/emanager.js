@@ -1,10 +1,10 @@
-/*nueva-radio*/
+/*NEW RADIO*/
 const NewRadio = document.createElement('script');
 NewRadio.src = 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_radio.js';
 NewRadio.async = true;
 NewRadio.onload = function() {
-  console.log('Script de radio cargado');
-  console.log('Variable horario_envivo_radio:', typeof horario_envivo_radio !== 'undefined' ? 'disponible' : 'no disponible');
+  // console.log('Script de radio cargado');
+  // console.log('Variable horario_envivo_radio:', typeof horario_envivo_radio !== 'undefined' ? 'disponible' : 'no disponible');
   if (ECUAVISA_EC.login()) {
     eventRadioManager();
   }
@@ -14,8 +14,13 @@ NewRadio.onerror = function() {
 };
 document.head.appendChild(NewRadio);
 
+/*NEW EnVivo QUITO*/
+const NewQuito = document.createElement('script');
+NewQuito.src = 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_quito.js';
+NewQuito.async = true;
+document.head.appendChild(NewQuito);
 
-/*codigo-manager*/
+/*Código manager Radio*/
 function eventRadioManager() {
   const diasSemanaTexto = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
   
@@ -605,6 +610,58 @@ if (ECUAVISA_EC.login()) {
 
 // eventRadioManager();
 
+
+
+/*** NUEVA FUNCION QUITO ***/
+
+// function eventoEnvivoManagerQuito() {
+//   const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad');
+//   const title_programa_quito = document.querySelector('.title_programa_quito');
+//   const playerembed_quito = document.querySelector('#playerembed_quito');
+//   const fondito__quito = document.querySelector('#fondito__quito');
+//   const tiempoEsperaEnvivo = 120000;
+
+//   async function fetchHorarioEnvivoQuito() {
+//     try {
+//  
+//       if (typeof horario_envivo_quito === 'undefined') {
+//         throw new Error('No se han cargado los datos de Quito');
+//       }
+
+//       const data = horario_envivo_quito;
+      
+//       procesosHorarioEnvivo({
+//         data: data,
+//         apiUrl: null,
+//         enVivoRedy: null,
+//         textIndicador: null,
+//         btnTelcomunidad: btnTelcomunidad_quito,
+//         btnTelevistazo7pm: null,
+//         title_programa: title_programa_quito,
+//         playerembed: playerembed_quito,
+//         fondito__: fondito__quito,
+//       });
+
+//       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
+//       return true;
+//     } catch (error) {
+//       console.error('Error al obtener los datos de Quito:', error);
+//       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
+//       return null;
+//     }
+//   }
+
+//   // Llamar a la función para obtener y procesar los datos inicialmente
+//   fetchHorarioEnvivoQuito();
+// }
+
+// if(ECUAVISA_EC.verificarURLActual({ url: "https://www.ecuavisa.com/envivo/quito" })){ // Solo se ejecuta en la página de envivo quito
+//   setTimeout(() => {
+//     eventoEnvivoManagerQuito();
+//   }, 300);
+// }
+
+/*** FIN NUEVO QUITO ***/
 
 
 /* +++++++++++++++++++++
