@@ -509,7 +509,8 @@ function eventoEnvivoManager() {
       const variableRespaldo = {"html":{"value":"<iframe id=\"vrudo\" class=\"vrudo\" src=\"//rudo.video/live/ecuavisa\" width=\"600\" height=\"338\" allowfullscreen=\"true\" frameborder=\"0\" scrolling=\"no\" allow=\"autoplay; fullscreen\"></iframe>","estadoHtml":false},"forzado":{"estado":false,"titulo":"En Vivo","label":"En Vivo"},"horarios":[{"dia":0,"estadoDia":true,"horas":[{"tituloPrograma":"PolÃ­ticamente Correcto","estadoHorario":true,"inicio":"10:30","fin":"11:30"},{"tituloPrograma":"Spiderman 2","estadoHorario":true,"inicio":"15:00","fin":"17:00"},{"tituloPrograma":"Ride Along 2","estadoHorario":true,"inicio":"17:00","fin":"19:00"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:00"}]}]};
       
       try {
-        const apiUrlRespaldo = `${ECUAVISA_EC.URL.dominioTemporal}horario/normal.php`;
+        // const apiUrlRespaldo = `${ECUAVISA_EC.URL.dominioTemporal}horario/normal.php`;
+        const apiUrlRespaldo = horario_envivo;
         const response = await fetch(apiUrlRespaldo, {
           method: 'GET',
           headers: {
