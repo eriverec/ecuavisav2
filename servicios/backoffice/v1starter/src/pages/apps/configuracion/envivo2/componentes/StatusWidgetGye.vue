@@ -9,11 +9,11 @@ const props = defineProps({
   },
   pollInterval: {
     type: Number,
-    default: 1000
+    default: 2000 
   },
   maxAttempts: {
     type: Number,
-    default: 30
+    default: 30   
   }
 });
 
@@ -44,27 +44,13 @@ const loadConfiguracion = async (url, noCache = true) => {
 };
 
 const compareData = (oldData, newData) => {
-  // Comparación específica
-  const relevantOld = {
-    forzado: oldData?.forzado,
-    horarios: oldData?.horarios,
-    html: oldData?.html
-  };
-  
-  const relevantNew = {
-    forzado: newData?.forzado,
-    horarios: newData?.horarios,
-    html: newData?.html
-  };
-
-  return !isEqual(relevantOld, relevantNew);
+  return !isEqual(oldData, newData);
 };
 
 const startMonitoring = async () => {
   attempts.value = 0;
   
   try {
-    //  estado inicial
     currentData.value = await loadConfiguracion(props.assetUrl, false);
     
     emit('progress', {
@@ -73,7 +59,6 @@ const startMonitoring = async () => {
       progress: 33
     });
 
-    // Iniciar verificación
     checkInterval.value = setInterval(async () => {
       try {
         attempts.value++;
@@ -86,10 +71,9 @@ const startMonitoring = async () => {
 
         const newData = await loadConfiguracion(props.assetUrl, true);
         const hasChanges = compareData(currentData.value, newData);
-        console.log('Cambios detectados:', hasChanges);
 
         if (hasChanges) {
-          console.log('Actualizando con nuevos datos');
+          console.log('Cambios detectados');
           stopMonitoring();
           emit('progress', {
             step: 3,

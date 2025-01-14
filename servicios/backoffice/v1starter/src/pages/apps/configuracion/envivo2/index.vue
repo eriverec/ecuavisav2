@@ -440,8 +440,8 @@ onMounted(async () => {
   <StatusMonitor
   ref="statusMonitor"
   asset-url="https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_guayaquil.js"
-  :poll-interval="1000"
-  :max-attempts="20"
+  :poll-interval="2000" 
+  :max-attempts="30"    
   @progress="handleProgress"
   @success="handleSuccess"
   @error="handleError"
