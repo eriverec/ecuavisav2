@@ -483,104 +483,41 @@ function eventoEnvivoManager() {
   }
 }
 
+/*** NUEVA FUNCION QUITO ***/
+
 function eventoEnvivoManagerQuito() {
-  // const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivoQuito";
-  const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioEnvivoQuito";
-  // const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad_quito');
   const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad');
   const title_programa_quito = document.querySelector('.title_programa_quito');
   const playerembed_quito = document.querySelector('#playerembed_quito');
   const fondito__quito = document.querySelector('#fondito__quito');
   const tiempoEsperaEnvivo = 120000;
 
-  async function fetchHorarioEnvivoRespaldo() {
-    const variableRespaldo = {"html":{"value":"<iframe id=\"vrudo\" class=\"vrudo\" src=\"//rudo.video/live/ecuavisaqo\" width=\"600\" height=\"338\" allowfullscreen=\"true\" frameborder=\"0\" scrolling=\"no\" allow=\"autoplay; fullscreen\"></iframe>"},"forzado":{"estado":false,"titulo":"En vivo","label":"En Vivo"},"horarios":[{"dia":0,"estadoDia":false,"horas":[{"tituloPrograma":"Políticamente Correcto","estadoHorario":true,"inicio":"10:30","fin":"11:30"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:00"}]},{"dia":1,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":2,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":3,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":4,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":5,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":6,"estadoDia":false,"horas":[{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"19:30"}]}]};
-    
-    try{
-      const apiUrlRespaldo = `${ECUAVISA_EC.URL.dominioTemporal}horario/quito.php`;
-      const response = await fetch(apiUrlRespaldo, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        timeout: 8000 // 8 segundos (en milisegundos)
-      });
-
-      if (!response.ok) {
-          console.error(`Error: Código de estado ${response.status}`);
-          return variableRespaldo;
-      }
-      const data = await response.json();
-      return data;
-    }catch(error){
-      console.log(error);
-      return variableRespaldo;
-    }
-  }
-
   async function fetchHorarioEnvivoQuito() {
-    try{
-      const response = await fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        timeout: 8000 // 8 segundos (en milisegundos)
-      });
-
-      if (!response.ok) {
-          console.error(`Error: Código de estado ${response.status}`);
-          const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
-          
-          procesosHorarioEnvivo({
-            data: responseRespaldoData,
-            apiUrl,
-            enVivoRedy: null,
-            textIndicador:null,
-            btnTelcomunidad: btnTelcomunidad_quito,
-            btnTelevistazo7pm: null,
-            title_programa:title_programa_quito,
-            playerembed:playerembed_quito,
-            fondito__:fondito__quito,
-          });
-
-          setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo); //comentado 23/octubre/2023 - 11:50AM
-          return null;
+    try {
+ 
+      if (typeof horario_envivo_quito === 'undefined') {
+        throw new Error('No se han cargado los datos de Quito');
       }
 
-      const data = await response.json();
+      const data = horario_envivo_quito;
       
       procesosHorarioEnvivo({
         data: data,
-        apiUrl,
+        apiUrl: null,
         enVivoRedy: null,
-        textIndicador:null,
+        textIndicador: null,
         btnTelcomunidad: btnTelcomunidad_quito,
         btnTelevistazo7pm: null,
-        title_programa:title_programa_quito,
-        playerembed:playerembed_quito,
-        fondito__:fondito__quito,
+        title_programa: title_programa_quito,
+        playerembed: playerembed_quito,
+        fondito__: fondito__quito,
       });
 
-      setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo); //comentado 23/octubre/2023 - 11:50AM
+      setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
       return true;
-    }catch(error){
-      const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
-
-      procesosHorarioEnvivo({
-        data: responseRespaldoData,
-        apiUrl,
-        enVivoRedy: null,
-        textIndicador:null,
-        btnTelcomunidad: btnTelcomunidad_quito,
-        btnTelevistazo7pm: null,
-        title_programa:title_programa_quito,
-        playerembed:playerembed_quito,
-        fondito__:fondito__quito,
-      });
-
-      console.log(error);
-      setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo); //comentado 23/octubre/2023 - 11:50AM
+    } catch (error) {
+      console.error('Error al obtener los datos de Quito:', error);
+      setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
       return null;
     }
   }
@@ -589,13 +526,128 @@ function eventoEnvivoManagerQuito() {
   fetchHorarioEnvivoQuito();
 }
 
-eventoEnvivoManager();
-
 if(ECUAVISA_EC.verificarURLActual({ url: "https://www.ecuavisa.com/envivo/quito" })){ // Solo se ejecuta en la página de envivo quito
   setTimeout(() => {
     eventoEnvivoManagerQuito();
   }, 300);
 }
+
+/*** FIN NUEVO QUITO ***/
+
+
+// function eventoEnvivoManagerQuito() {
+//   // const apiUrl = "https://api-configuracion.vercel.app/web/horarioEnvivoQuito";
+//   const apiUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/envivo/config.php?api=web&key=horarioEnvivoQuito";
+//   // const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad_quito');
+//   const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad');
+//   const title_programa_quito = document.querySelector('.title_programa_quito');
+//   const playerembed_quito = document.querySelector('#playerembed_quito');
+//   const fondito__quito = document.querySelector('#fondito__quito');
+//   const tiempoEsperaEnvivo = 120000;
+
+//   async function fetchHorarioEnvivoRespaldo() {
+//     const variableRespaldo = {"html":{"value":"<iframe id=\"vrudo\" class=\"vrudo\" src=\"//rudo.video/live/ecuavisaqo\" width=\"600\" height=\"338\" allowfullscreen=\"true\" frameborder=\"0\" scrolling=\"no\" allow=\"autoplay; fullscreen\"></iframe>"},"forzado":{"estado":false,"titulo":"En vivo","label":"En Vivo"},"horarios":[{"dia":0,"estadoDia":false,"horas":[{"tituloPrograma":"Políticamente Correcto","estadoHorario":true,"inicio":"10:30","fin":"11:30"},{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"20:00"}]},{"dia":1,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":2,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":3,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":4,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":5,"estadoDia":true,"horas":[{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"05:55","fin":"07:00"},{"tituloPrograma":"Televistazo en la comunidad","estadoHorario":true,"inicio":"07:30","fin":"09:00"},{"tituloPrograma":"Santa Diabla","estadoHorario":false,"inicio":"15:30","fin":"17:00"},{"tituloPrograma":"La mujer en el espejo","estadoHorario":false,"inicio":"17:00","fin":"18:00"}]},{"dia":6,"estadoDia":false,"horas":[{"tituloPrograma":"Televistazo 19h00","estadoHorario":true,"inicio":"19:00","fin":"19:30"}]}]};
+    
+//     try{
+//       const apiUrlRespaldo = `${ECUAVISA_EC.URL.dominioTemporal}horario/quito.php`;
+//       const response = await fetch(apiUrlRespaldo, {
+//         method: 'GET',
+//         headers: {
+//           'Content-Type': 'application/json'
+//         },
+//         timeout: 8000 // 8 segundos (en milisegundos)
+//       });
+
+//       if (!response.ok) {
+//           console.error(`Error: Código de estado ${response.status}`);
+//           return variableRespaldo;
+//       }
+//       const data = await response.json();
+//       return data;
+//     }catch(error){
+//       console.log(error);
+//       return variableRespaldo;
+//     }
+//   }
+
+//   async function fetchHorarioEnvivoQuito() {
+//     try{
+//       const response = await fetch(apiUrl, {
+//         method: 'GET',
+//         headers: {
+//           'Content-Type': 'application/json'
+//         },
+//         timeout: 8000 // 8 segundos (en milisegundos)
+//       });
+
+//       if (!response.ok) {
+//           console.error(`Error: Código de estado ${response.status}`);
+//           const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
+          
+//           procesosHorarioEnvivo({
+//             data: responseRespaldoData,
+//             apiUrl,
+//             enVivoRedy: null,
+//             textIndicador:null,
+//             btnTelcomunidad: btnTelcomunidad_quito,
+//             btnTelevistazo7pm: null,
+//             title_programa:title_programa_quito,
+//             playerembed:playerembed_quito,
+//             fondito__:fondito__quito,
+//           });
+
+//           setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo); //comentado 23/octubre/2023 - 11:50AM
+//           return null;
+//       }
+
+//       const data = await response.json();
+      
+//       procesosHorarioEnvivo({
+//         data: data,
+//         apiUrl,
+//         enVivoRedy: null,
+//         textIndicador:null,
+//         btnTelcomunidad: btnTelcomunidad_quito,
+//         btnTelevistazo7pm: null,
+//         title_programa:title_programa_quito,
+//         playerembed:playerembed_quito,
+//         fondito__:fondito__quito,
+//       });
+
+//       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo); //comentado 23/octubre/2023 - 11:50AM
+//       return true;
+//     }catch(error){
+//       const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
+
+//       procesosHorarioEnvivo({
+//         data: responseRespaldoData,
+//         apiUrl,
+//         enVivoRedy: null,
+//         textIndicador:null,
+//         btnTelcomunidad: btnTelcomunidad_quito,
+//         btnTelevistazo7pm: null,
+//         title_programa:title_programa_quito,
+//         playerembed:playerembed_quito,
+//         fondito__:fondito__quito,
+//       });
+
+//       console.log(error);
+//       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo); //comentado 23/octubre/2023 - 11:50AM
+//       return null;
+//     }
+//   }
+
+//   // Llamar a la función para obtener y procesar los datos inicialmente
+//   fetchHorarioEnvivoQuito();
+// }
+
+// eventoEnvivoManager();
+
+// if(ECUAVISA_EC.verificarURLActual({ url: "https://www.ecuavisa.com/envivo/quito" })){ // Solo se ejecuta en la página de envivo quito
+//   setTimeout(() => {
+//     eventoEnvivoManagerQuito();
+//   }, 300);
+// }
 
 
 if (ECUAVISA_EC.login()) {
@@ -608,60 +660,12 @@ if (ECUAVISA_EC.login()) {
   }
 }
 
-// eventRadioManager();
+
+
+// eventRadioManager(); // esto ya estaba comentado desde antes del 13
 
 
 
-/*** NUEVA FUNCION QUITO ***/
-
-// function eventoEnvivoManagerQuito() {
-//   const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad');
-//   const title_programa_quito = document.querySelector('.title_programa_quito');
-//   const playerembed_quito = document.querySelector('#playerembed_quito');
-//   const fondito__quito = document.querySelector('#fondito__quito');
-//   const tiempoEsperaEnvivo = 120000;
-
-//   async function fetchHorarioEnvivoQuito() {
-//     try {
-//  
-//       if (typeof horario_envivo_quito === 'undefined') {
-//         throw new Error('No se han cargado los datos de Quito');
-//       }
-
-//       const data = horario_envivo_quito;
-      
-//       procesosHorarioEnvivo({
-//         data: data,
-//         apiUrl: null,
-//         enVivoRedy: null,
-//         textIndicador: null,
-//         btnTelcomunidad: btnTelcomunidad_quito,
-//         btnTelevistazo7pm: null,
-//         title_programa: title_programa_quito,
-//         playerembed: playerembed_quito,
-//         fondito__: fondito__quito,
-//       });
-
-//       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
-//       return true;
-//     } catch (error) {
-//       console.error('Error al obtener los datos de Quito:', error);
-//       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
-//       return null;
-//     }
-//   }
-
-//   // Llamar a la función para obtener y procesar los datos inicialmente
-//   fetchHorarioEnvivoQuito();
-// }
-
-// if(ECUAVISA_EC.verificarURLActual({ url: "https://www.ecuavisa.com/envivo/quito" })){ // Solo se ejecuta en la página de envivo quito
-//   setTimeout(() => {
-//     eventoEnvivoManagerQuito();
-//   }, 300);
-// }
-
-/*** FIN NUEVO QUITO ***/
 
 
 /* +++++++++++++++++++++
