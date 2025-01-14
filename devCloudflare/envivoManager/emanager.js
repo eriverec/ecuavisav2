@@ -510,19 +510,22 @@ function eventoEnvivoManager() {
       
       try {
         const apiUrlRespaldo = `${ECUAVISA_EC.URL.dominioTemporal}horario/normal.php`;
-        const response = await fetch(apiUrlRespaldo, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          timeout: 8000
-        });
+        // const response = await fetch(apiUrlRespaldo, {
+        //   method: 'GET',
+        //   headers: {
+        //     'Content-Type': 'application/json'
+        //   },
+        //   timeout: 8000
+        // });
+        const response = horario_envivo;
 
-        if (!response.ok) {
+        // if (!response.ok) {
+          if (!response) {
           console.error(`Error: Código de estado ${response.status}`);
           return variableRespaldo;
         }
-        const data = await response.json();
+        // const data = await response.json();
+        const data = horario_envivo;
         return data;
       } catch(error) {
         console.log(error);
