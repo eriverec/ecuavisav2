@@ -524,12 +524,12 @@ function eventoEnvivoManager() {
           console.error(`Error: Código de estado ${response.status}`);
           return variableRespaldo;
         }
-        // const data = await response.json();
-        const data = horario_envivo;
+        const data = await response.json();
         return data;
       } catch(error) {
         console.log(error);
-        return variableRespaldo;
+        // return variableRespaldo;
+        return horario_envivo;
       }
     }
 
@@ -538,7 +538,8 @@ function eventoEnvivoManager() {
         // primero intenta obtener los datos del archivo JS
         if (typeof horario_envivo === 'undefined') {
           console.log('No se encontraron datos del horario, usando respaldo...');
-          const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
+          // const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
+          const responseRespaldoData = horario_envivo;
           
           procesosHorarioEnvivo({
             data: responseRespaldoData,
