@@ -532,9 +532,9 @@ function eventoEnvivoManager() {
 
     async function fetchHorarioEnvivo() {
       try {
-        // Primero intenta obtener los datos del archivo JS
-        if (typeof horario_envivo_guayaquil === 'undefined') {
-          console.log('No se encontraron datos de Guayaquil, usando respaldo...');
+        // primero intenta obtener los datos del archivo JS
+        if (typeof horario_envivo === 'undefined') {
+          console.log('No se encontraron datos del horario, usando respaldo...');
           const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
           
           procesosHorarioEnvivo({
@@ -553,7 +553,7 @@ function eventoEnvivoManager() {
           return null;
         }
 
-        const data = horario_envivo_guayaquil;
+        const data = horario_envivo;
         
         procesosHorarioEnvivo({
           data: data,
@@ -590,7 +590,7 @@ function eventoEnvivoManager() {
       }
     }
 
-    // Llamar a la función para obtener y procesar los datos inicialmente
+    // Llama a la función para obtener y procesar los datos inicialmente
     fetchHorarioEnvivo();
   } catch (error) {
     console.log(error);
