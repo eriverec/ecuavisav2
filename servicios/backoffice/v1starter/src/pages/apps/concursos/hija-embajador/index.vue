@@ -721,7 +721,7 @@ const eliminarRegistroSi = async () => {
               prepend-icon="tabler-screen-share"
               @click="downloadSearch"
             >
-              <span style="cursor:pointer" class="px-0 py-p m-0">Exportar búsqueda</span>
+              <span style="cursor:pointer" class="px-0 py-p m-0">Exportar usuarios</span>
             </VBtn>
             <small class="px-0 py-1 text-disabled" v-if="isFullLoading">
               Exportando {{ docsExportNumberLength.tamanioActual }} / {{ docsExportNumberLength.tamanioTotal }} registros
