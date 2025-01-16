@@ -43,6 +43,20 @@ export default [
       { title: 'Desafío a la Fama', to: 'apps-votos-detalle' },
       { title: 'Click click boom', to: 'apps-concursos' },
       { title: 'Gavilanes', to: 'apps-concursos-gavilanes' },
+      {
+        title: 'Hija del embajador',
+        to: null
+        // children: [
+          // {
+          //   title: 'Usuarios registrados',
+          //   to: 'apps-concursos-hija-embajador',
+          // },
+          // {
+          //   title: 'Analítica',
+          //   to: null,
+          // },
+        // ],
+      }
       // { title: 'Ecuavisa', to: 'apps-concursos-ecuavisa' },
 
     ],
