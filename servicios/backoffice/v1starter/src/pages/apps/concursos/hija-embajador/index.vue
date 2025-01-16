@@ -325,8 +325,6 @@ import esLocale from "moment/locale/es";
         usersFull.value.push(newItem);
       });
 
-      console.log("usersFull.value", usersFull.value)
-
       docsExportNumberLength.value.tamanioActual = usersFull.value.length;
       docsExportNumberLength.value.tamanioTotal = totalUser;
 
