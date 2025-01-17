@@ -45,17 +45,17 @@ export default [
       { title: 'Gavilanes', to: 'apps-concursos-gavilanes' },
       {
         title: 'Hija del embajador',
-        to: null
-        // children: [
-          // {
-          //   title: 'Usuarios registrados',
-          //   to: 'apps-concursos-hija-embajador',
-          // },
-          // {
-          //   title: 'Analítica',
-          //   to: null,
-          // },
-        // ],
+        to: null,
+        children: [
+          {
+            title: 'Usuarios registrados',
+            to: 'apps-concursos-hija-embajador',
+          },
+          {
+            title: 'Analítica',
+            to: 'apps-concursos-hija-embajador-metricas',
+          },
+        ],
       }
       // { title: 'Ecuavisa', to: 'apps-concursos-ecuavisa' },
 

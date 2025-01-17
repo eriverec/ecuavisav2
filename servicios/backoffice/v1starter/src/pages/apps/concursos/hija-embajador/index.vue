@@ -926,9 +926,9 @@ const eliminarRegistroSi = async () => {
   </section>
 </template>
 <style lang="scss">
-  .app-user-search-filter {
-    /*inline-size: 31.6rem;*/
-  }
+  // .app-user-search-filter {
+  //   inline-size: 31.6rem;
+  // }
 
   .text-capitalize {
     text-transform: capitalize;

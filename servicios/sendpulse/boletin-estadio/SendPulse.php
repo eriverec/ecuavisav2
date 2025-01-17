@@ -409,6 +409,53 @@ class SendPulse
 		return $tokenSendPulse["token"];
 	}
 
+	private function formatearDescripcion($texto, $longitudMaxima = 290) {
+		// Verificar si la descripción está vacía o no válida
+		if (empty($texto) || !is_string($texto)) {
+			return ''; // Retorna una cadena vacía en caso de que no haya texto válido
+		}
+		// Eliminar etiquetas <img>
+		$textoFormateado = preg_replace('/<img[^>]+\>/i', '', $texto);
+	
+		// Truncar texto asegurando que no corte palabras ni etiquetas
+		if (strlen(strip_tags($textoFormateado)) > $longitudMaxima) {
+			$textoCortado = substr($textoFormateado, 0, $longitudMaxima);
+			
+			// Asegurar que no corte palabras
+			$ultimaEspacio = strrpos($textoCortado, ' ');
+			$textoCortado = substr($textoCortado, 0, $ultimaEspacio) . '...';
+	
+			// Cerrar etiquetas abiertas
+			$textoFormateado = $this->closeHtmlTags($textoCortado);
+		}
+	
+		// Reemplazar estilo en etiquetas <a>
+		$textoFinal = str_replace('<a ', '<a style="color: #444;" ', $textoFormateado);
+	
+		return $textoFinal;
+	}
+
+
+	private function closeHtmlTags($html) {
+		// Encontrar todas las etiquetas abiertas y cerradas
+		preg_match_all('/<([a-z]+)(?: .*)?(?<!\/)>/iU', $html, $tagsAbiertos);
+		preg_match_all('/<\/([a-z]+)>/iU', $html, $tagsCerrados);
+	
+		// Comparar etiquetas abiertas con cerradas
+		$tagsAbiertos = $tagsAbiertos[1];
+		$tagsCerrados = $tagsCerrados[1];
+	
+		// Identificar etiquetas no cerradas
+		$tagsSinCerrar = array_diff($tagsAbiertos, $tagsCerrados);
+	
+		// Cerrar etiquetas no cerradas en orden inverso
+		foreach (array_reverse($tagsSinCerrar) as $tag) {
+			$html .= "</$tag>";
+		}
+	
+		return $html;
+	}
+
 	private function getNoticiaT($value)
 	{
 		// $value = $channel->item;
@@ -446,9 +493,10 @@ class SendPulse
 		$tituloSubseccion = $primeraParte;
 
 		$descripcion = isset($value->description->__text) ? $value->description->__text : "";
-		$descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
-		$descripcion = substr($descripcion_formateado, 0, 290) . '...';
-		$descripcionFinal = str_replace('<a ', '<a style="color: #444;" ', $descripcion);
+		// $descripcion_formateado = preg_replace('/<img[^>]+\>/i', '', $descripcion);
+		// $descripcion = substr($descripcion_formateado, 0, 290) . '...';
+		// $descripcionFinal = str_replace('<a ', '<a style="color: #444;" ', $descripcion);
+		$descripcionFinal = $this->formatearDescripcion($descripcion);
 		$noticias[] = [
 			"titulo" => $value->title,
 			"link" => $value->link,

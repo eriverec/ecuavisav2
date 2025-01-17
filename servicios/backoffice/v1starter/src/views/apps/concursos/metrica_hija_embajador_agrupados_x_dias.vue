@@ -1,0 +1,446 @@
+<script setup>
+
+import { hexToRgb } from '@layouts/utils';
+import { parseISO } from 'date-fns';
+import { extendMoment } from 'moment-range';
+import Moment from 'moment-timezone';
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
+
+const configSnackbar = ref({
+    message: "Datos guardados",
+    type: "success",
+    model: false
+});
+
+const loadingGrafico = ref(false)
+const moment = extendMoment(Moment);
+// Establecer la zona horaria por defecto
+moment.tz.setDefault('America/Guayaquil');
+
+moment.lang('es', {
+        months: 'Enero_Febrero_Marzo_Abril_Mayo_Junio_Julio_Agosto_Septiembre_Octubre_Noviembre_Diciembre'.split('_'),
+        monthsShort: 'Ene._Feb._Mar_Abr._May_Jun_Jul._Ago_Sept._Oct._Nov._Dec.'.split('_'),
+        weekdays: 'Domingo_Lunes_Martes_Miercoles_Jueves_Viernes_Sabado'.split('_'),
+        weekdaysShort: 'Dom._Lun._Mar._Mier._Jue._Vier._Sab.'.split('_'),
+        weekdaysMin: 'Do_Lu_Ma_Mi_Ju_Vi_Sa'.split('_')
+    }
+);
+
+moment.locale('es');
+
+// Función para convertir el timestamp a la zona horaria deseada
+const convertirTimestamp = (timestamp) => {
+    return moment.tz(timestamp, 'America/Guayaquil');
+};
+
+const dataRegistrosChartViews = ref([]);
+const loadingData = ref(false);
+
+// 👉 Colors variables
+const colorVariables = themeColors => {
+  const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
+  const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`
+  const themeBorderColor = `rgba(${hexToRgb(String(themeColors.variables['border-color']))},${themeColors.variables['border-opacity']})`
+  const themePrimaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['high-emphasis-opacity']})`
+
+  return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
+}
+
+const vuetifyTheme = useTheme();
+
+/*GRÁFICO DE PIE*/
+
+
+/*COMBO SELECT PERPAGE*/
+
+
+async function getChartLineTimeViews(options = {}) {
+  try {
+    const { fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')) } = options;
+    var response = await fetch(`https://usuarios-backoffice.vercel.app/campaign-landings/metricas-agrupadas-por-dias/hija_embajador?fechai=${fechai}&fechaf=${fechaf}&limit=50000`);
+    const data = await response.json();
+
+    if(data.resp){
+      dataRegistrosChartViews.value = data.data.campania;
+    }
+  } catch (error) {
+    configSnackbar.value = {
+        message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+        type: "error",
+        model: true
+    };
+    return console.error(error.message);
+  }
+}
+
+const resolveDeviceTimeLine = computed(() => {
+    const { themeBorderColor, themeDisabledTextColor, themeSecondaryTextColor, themePrimaryTextColor } = colorVariables(vuetifyTheme.current.value);
+    const currentTheme = vuetifyTheme.current.value.colors
+    const variableTheme = vuetifyTheme.current.value.variables
+    const labelSuccessColor = `rgba(${hexToRgb(currentTheme.success)},0.2)`
+    const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
+
+  const chartColors = {
+    donut: {
+      series1: currentTheme.success,
+      series2: '#28c76fb3',
+      series3: '#28c76f80',
+      series4: labelSuccessColor,
+    },
+  }
+
+  let dataRaw = Array.from(dataRegistrosChartViews.value);
+
+  const transformedData = {};
+  dataRaw.forEach(item => {
+    if (!transformedData["hija_embajador"]) {
+        transformedData["hija_embajador"] = {
+            name: "hija_embajador",
+            data: []
+        };
+    }
+    transformedData["hija_embajador"].data.push([
+        // moment(item.fecha).add(1, 'days').valueOf(),
+        moment(item.date).valueOf(),
+        item.total
+    ]);
+  });
+
+  const result = Object.values(transformedData);
+
+  const options = {
+    chart: {
+      parentHeightOffset: 0,
+      type: 'area',
+      stacked: false,
+      height: 285,
+      zoom: {
+        enabled: false
+      },
+      toolbar: {
+        show: false
+      }
+    },
+    // labels: categoriesRaw,
+    // dataLabels: {
+    //   enabled: true
+    // },
+    colors: [
+      "#173F5F",
+      "#00fa9a", // Verde medio
+      "#7365ed",
+      "#ff69b4", // Rosa claro
+      "#000f08",
+      "#32cd32", // Verde esmeralda
+      "#136f63", // Naranja claro
+      "#ffd700", // Amarillo
+      "#ff4500", // Rojo oscuro
+      "#ff0000", // Rojo
+      "#ff8c00", // Naranja oscuro
+      "#ffff00", // Amarillo
+      "#8b4513", // Marrón
+      "#0000ff", // Azul
+      "#8a2be2", // Azul violeta
+      "#ffa500", // Naranja
+      "#ffd800", // Amarillo intenso
+      "#ff1493", // Rosa brillante
+      "#9932cc", // Púrpura
+      "#ff8c00", // Naranja oscuro
+      "#8b008b", // Magenta oscuro
+      "#8a2be2", // Azul violeta
+    ],
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shadeIntensity: 1,
+        inverseColors: false,
+        opacityFrom: 0.45,
+        opacityTo: 0.05,
+        stops: [20, 100, 100, 100]
+      },
+    },
+    yaxis: {
+      title: {
+        text: 'Cantidad de usuarios registrados',
+        style: {
+          color: headingColor,
+          useSeriesColors: false
+        }
+      },
+      labels: {
+        style: {
+          // colors: headingColor,
+          colors: headingColor,
+          useSeriesColors: false
+        },
+        offsetX: 0,
+        formatter: function (val) {
+          return (val).toFixed(0);
+        },
+      },
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false
+      }
+    },
+    xaxis: {
+        type: 'datetime',
+        tickAmount: result[0].data.length - 1,
+        // min: new Date("01/01/2014").getTime(),
+        // max: new Date("01/07/2014").getTime(),
+        tooltip: {
+            enabled: false, // Desactiva el resaltado en el eje X
+        },
+        labels: {
+            style: {
+                // colors: headingColor,
+                colors: headingColor,
+                useSeriesColors: false
+            },
+            rotate: -15,
+            rotateAlways: true,
+            formatter: function (val, timestamp) {
+                const fechaTimeZone = convertirTimestamp(timestamp).format("DD MMM YYYY");
+                // console.log(fechaTimeZone, timestamp)
+                return fechaTimeZone;
+            }
+        }
+    },
+    tooltip: {
+        // y: {
+        //     formatter: function (val) {
+        //     return val + " Ventas"
+        //     }
+        // },
+        theme: false,
+        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+            // console.log(w)
+            // series[seriesIndex]
+            // console.log(w.globals.categoryLabels[dataPointIndex])
+            //${w.config.series[seriesIndex].name}
+            const timestamp = w.globals.labels[dataPointIndex];
+            const fechaTimeZone = convertirTimestamp(timestamp).format("DD MMM YYYY");
+            return `<div class="tooltip-content">
+                <div class="tooltip-body">
+                <div class="tooltip-title">
+                    La hija del embajador
+                </div>
+                <div class="tooltip-subtitle">
+                  ${fechaTimeZone} <!-- Muestra la fecha -->
+                </div>
+                <div class="tooltip-data-flex">
+                    <div class="tooltip-data-title">
+                    Registrados
+                    </div>
+                    <div class="tooltip-data-value">
+                    ${series[seriesIndex][dataPointIndex]} Usuario(s)
+                    </div>
+                </div>
+                </div>
+            </div>`
+        }
+    },
+    dataLabels: {
+        enabled: true,
+        formatter(val) {
+            if(val > 0){
+                return `${val} usuario(s)`
+            }
+            return ``
+        },
+    },
+    // stroke: {
+    //     show: false,
+    //     curve: 'straight',
+    // },
+    legend: {
+        position: 'top',
+        horizontalAlign: 'left',
+        labels: { colors: themeSecondaryTextColor },
+        markers: {
+            offsetY: 1,
+            offsetX: -3,
+        },
+        itemMargin: {
+            vertical: 3,
+            horizontal: 10,
+        },
+    },
+  }
+
+  return {
+    series: result, options: options
+  };
+});
+
+
+/**************** CONFIGURACION DEL CAMPO FECHA ***********************/
+/*********************************************************************/
+const limiteDaysDate = ref(5);
+const fechaFin = moment().format("YYYY-MM-DD");
+const fechaInicio = moment().subtract(limiteDaysDate.value, 'days').format("YYYY-MM-DD");
+
+const fecha = ref({
+    inicio: fechaInicio,
+    fin: fechaFin
+});
+
+const optionsDefaultDate = {
+    fechasModel: [parseISO(fechaInicio), parseISO(fechaFin)],
+    fechasVModel: [parseISO(fechaFin)],
+    fechasVConfig: {
+        position: 'auto right',
+        mode: 'single',
+        minDate: parseISO(fechaFin),
+        altFormat: 'd F j, Y',
+        dateFormat: 'l, j \\d\\e F \\d\\e Y',
+        valueFormat: 'd-m-Y',
+        reactive: true
+    },
+    fechai: fechaInicio,
+    fechaV: fechaFin,
+    fechaf: fechaFin
+};
+
+const fechaIFModel = ref(optionsDefaultDate)
+
+const existeFecha = ref(true);
+
+async function obtenerFechas(selectedDates, dateStr, instance) {
+    if (selectedDates.length > 1) {
+        const diferenciaDias = moment(selectedDates[1]).diff(moment(selectedDates[0]), 'days');
+        
+        if(diferenciaDias > limiteDaysDate.value){
+            fechaIFModel.value["fechasModel"] = [parseISO(fecha.value.inicio), parseISO(fecha.value.fin)];
+            fechaIFModel.value["fechasVModel"] = [parseISO(fecha.value.inicio)];
+            configSnackbar.value = {    
+                message: `El rango de fechas debe ser de ${limiteDaysDate.value} dias o menos.`,
+                type: "error",
+                model: true
+            };
+            return console.error(`El rango de fechas debe ser de ${limiteDaysDate.value} dias o menos.`);
+        }else{
+            existeFecha.value = true;
+            fechaIFModel.value.fechai = moment(selectedDates[0]).format('DD-MM-YYYY');
+            fechaIFModel.value.fechaf = moment(selectedDates[1]).format('DD-MM-YYYY'); 
+            fecha.value.inicio = moment(fechaIFModel.value.fechai, "DD-MM-YYYY").format('YYYY-MM-DD');
+            fecha.value.fin = moment(fechaIFModel.value.fechaf, "DD-MM-YYYY").format('YYYY-MM-DD');
+
+            await getChartLineTimeViews({
+                fechai: fecha.value.inicio,
+                fechaf: fecha.value.fin
+            });
+        }
+
+    }else{
+        if (selectedDates.length === 1) {
+            // Calcula el rango máximo permitido
+            const maxRangeDate = moment(selectedDates[0]).add(limiteDaysDate.value, 'days').toDate();
+            fechaIFModel.value.fechasVConfig["maxDate"] = maxRangeDate; // Limita el rango de selección
+        }
+
+        if(selectedDates.length == 2){
+            fechaIFModel.value.fechasVConfig["minDate"] = selectedDates[1];
+            fechaIFModel.value.fechasVModel = [selectedDates[1]];
+            existeFecha.value = true;
+        }
+
+        if(selectedDates.length == 0){
+            existeFecha.value = false;
+        }
+    }
+
+    
+
+}
+
+/*********************************************************************/
+/**************** CONFIGURACION DEL CAMPO FECHA ***********************/
+
+onMounted(async () =>{
+    loadingData.value = true;
+    loadingGrafico.value = false
+
+    await getChartLineTimeViews({
+        fechai: fecha.value.inicio,
+        fechaf: fecha.value.fin
+    });
+
+    loadingData.value = false;
+    loadingGrafico.value = true
+})
+</script>
+
+<template>
+  <section>
+    <VSnackbar 
+      v-model="configSnackbar.model" 
+      location="top end" 
+      variant="flat" 
+      :timeout="configSnackbar.timeout || 2000" 
+      :color="configSnackbar.type">
+        {{ configSnackbar.message }}
+    </VSnackbar>
+    <VCard>
+        <VCardItem>
+            <VCardTitle>
+                Usuarios registrados agrupados por fecha
+            </VCardTitle>
+            <VCardSubtitle class="text-wrap" style="word-break: break-all;">
+                Diseñada para mostrar la cantidad de usuarios registrados, organizados de acuerdo con la fecha de registro. Esta vista permite analizar el comportamiento de registro de los usuarios dentro de un rango específico, con la restricción de seleccionar únicamente un intervalo máximo de {{limiteDaysDate}} días. Esto facilita el enfoque en periodos más acotados y detallados, permitiendo identificar patrones o tendencias específicas en los registros diarios.
+            </VCardSubtitle>
+            <template #append>
+                <AppDateTimePicker 
+                    clearable
+                    class="bg-white"
+                    style="width: 19rem;"
+                    label="Fecha de inicio y fin del curso" 
+                    prepend-inner-icon="tabler-calendar" 
+                    density="compact" 
+                    v-model="fechaIFModel.fechasModel"
+                    show-current=true 
+                    @on-change="obtenerFechas" 
+                    :config="{
+                        position: 'auto right',
+                        mode: 'range',
+                        altFormat: 'd F j, Y',
+                        maxDate: new Date,
+                        dateFormat: 'l, j \\d\\e F \\d\\e Y',
+                        valueFormat: 'd-m-Y',
+                        reactive: true
+                    }" />
+            </template>
+        </VCardItem>
+
+        <VCardText>
+            <VueApexCharts v-if="loadingGrafico" :options="resolveDeviceTimeLine.options" :series="resolveDeviceTimeLine.series" :height="285" width="100%" />
+            <div v-else class="py-4">
+                Cargando datos...
+            </div>
+        </VCardText>
+    </VCard>
+  </section>
+</template>
+
+<style>
+  .apexcharts-legend-series{
+    transition: 1s ease all;
+    padding: 5px;
+    border-radius: 7px;
+  }
+  .apexcharts-legend-series:hover{
+    background-color: #e9e9ea;
+  }
+
+  .item-limit{
+    max-width: 210px;
+    display: flex;
+    font-size: 15px;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 10px;
+  }
+</style>
