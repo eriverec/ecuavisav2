@@ -1,4 +1,5 @@
 <script setup>
+import { isEqual } from 'lodash';
 import { computed, onMounted, ref } from "vue";
 import StatusMonitor from './componentes/StatusWidgetGye.vue';
 
@@ -59,24 +60,42 @@ const handleProgress = ({ step, progress }) => {
   }
 };
 
+const horariosOriginal = ref([]);
+const estadoRawOriginal = ref({ estado: false, titulo: "", label: "" });
+const embedRawOriginal = ref({ value: "", estadoHtml: false });
+
+// computed para ver cambios
+const hayCambiosHorarios = computed(() => {
+    return !isEqual(horarios.value, horariosOriginal.value);
+});
+
+const hayForzadoCambios = computed(() => {
+    return !isEqual(estadoRaw.value, estadoRawOriginal.value);
+});
+
+const hayEmbedCambios = computed(() => {
+    return !isEqual(embedRaw.value, embedRawOriginal.value);
+});
+
 const handleSuccess = async (newData) => {
   try {
-    console.log('Actualizando datos locales con:', newData);
-    
     if (newData?.forzado) {
       estado.value = newData.forzado.estado;
       estadoRaw.value = { ...newData.forzado };
+      estadoRawOriginal.value = JSON.parse(JSON.stringify(newData.forzado));
     }
     
     if (Array.isArray(newData?.horarios)) {
       horarios.value = JSON.parse(JSON.stringify(newData.horarios));
       horariosRaw.value = JSON.parse(JSON.stringify(newData.horarios));
+      horariosOriginal.value = JSON.parse(JSON.stringify(newData.horarios));
     }
     
     if (newData?.html) {
       codigo.value = newData.html.value || "";
       estadoHtml.value = newData.html.estadoHtml || false;
       embedRaw.value = { ...newData.html };
+      embedRawOriginal.value = JSON.parse(JSON.stringify(newData.html));
     }
 
     // Mostrar mensaje de éxito
@@ -159,18 +178,22 @@ async function getConfig() {
     
     estado.value = config.forzado?.estado || false;
     estadoRaw.value = config.forzado || { estado: false, titulo: "", label: "" };
+    estadoRawOriginal.value = JSON.parse(JSON.stringify(estadoRaw.value));
+    
     horarios.value = Array.isArray(config.horarios) ? [...config.horarios] : [];
     horariosRaw.value = Array.isArray(config.horarios) ? [...config.horarios] : [];
+    horariosOriginal.value = JSON.parse(JSON.stringify(horarios.value));
+    
     codigo.value = config.html?.value || "";
     estadoHtml.value = config.html?.estadoHtml || false;
     embedRaw.value = config.html || { value: "", estadoHtml: false };
+    embedRawOriginal.value = JSON.parse(JSON.stringify(embedRaw.value));
 
   } catch (error) {
     console.error('Error al obtener configuración:', error);
   }
   isLoading.value = false;
 }
-
 const transformDataForNewEndpoint = (data) => {
   return {
     data_string: {
@@ -512,14 +535,7 @@ onMounted(async () => {
 			</div>
 		</VNavigationDrawer>
 
-		<!-- <VSnackbar
-			v-model="success"
-			color="success"
-			transition="scale-transition"
-			location="top center"
-		>
-			<h3>Se ha guardado la configuración exitosamente</h3>
-		</VSnackbar> -->
+	
 		<VTabs v-model="currentTab" class="v-tabs-pill">
 			<VTab value="tab-config">Configuración de Horarios</VTab>
 			<VTab value="tab-forzado">Player Forzado</VTab>
@@ -574,15 +590,23 @@ onMounted(async () => {
 										Añadir día
 									</VBtn>
 
-									<VBtn
-										rounded="pill"
-										color="success"
-										class="boton-fija"
-										@click="enviar()"
-									>
-										<VIcon size="30" icon="tabler-device-floppy"></VIcon>
-									</VBtn>
-
+									<div class="d-inline-block boton-fija" v-if="currentTab === 'tab-config'">
+										<VBtn
+											rounded="pill"
+											color="success"
+											@click="enviar"
+											:disabled="!hayCambiosHorarios"
+										>
+											<VIcon size="30" icon="tabler-device-floppy"></VIcon>
+										</VBtn>
+										<VTooltip 
+											activator="parent"
+											location="top"
+											:open-on-hover="!hayCambiosHorarios"
+										>
+											No hay cambios que guardar
+										</VTooltip>
+									</div>
 									<!-- <VBtn
 										rounded="pill"
 										class="boton-reset"
@@ -842,7 +866,22 @@ onMounted(async () => {
 										/>
 									</div>
 									<div style="margin-left: 2rem">
-										<VBtn color="primary" @click="enviarForzado"> Enviar </VBtn>
+										<div class="d-inline-block">
+											<VBtn 
+												color="primary" 
+												@click="enviarForzado"
+												:disabled="!hayForzadoCambios"
+											>
+												ENVIAR
+											</VBtn>
+											<VTooltip 
+												activator="parent"
+												location="top"
+												:open-on-hover="!hayForzadoCambios"
+											>
+												No hay cambios que guardar
+											</VTooltip>
+										</div>
 									</div>
 								</div>
 							</VCol>
@@ -889,30 +928,24 @@ onMounted(async () => {
 										auto-grow
 									/>
 								</div>
-								<VBtn color="primary" @click="enviarEmbed"> Enviar </VBtn>
+								<div class="d-inline-block">
+									<VBtn 
+										color="primary" 
+										@click="enviarEmbed"
+										:disabled="!hayEmbedCambios"
+									>
+										ENVIAR
+									</VBtn>
+									<VTooltip 
+										activator="parent"
+										location="top"
+										:open-on-hover="!hayEmbedCambios"
+									>
+										No hay cambios que guardar
+									</VTooltip>
+								</div>
 							</VCol>
-							<!-- <VCol cols="12"  style="display: flex; align-items: center;" >
-                            
-                            <div>
-                                <span>Estado: </span>
-                            </div>
-                            <div style="margin-left: 2rem;">
-                                <VChip :color="embedRaw.estadoHtml == true ? 'success' : 'warning'" class="mr-4" >{{ embedRaw.estadoHtml == true ? 'Activo' : 'Inactivo' }} </VChip>
-                            </div>    
-                            <div style="display: flex; margin: 1rem;">
-                                <div>
-                                <VSwitch
-                                    v-model="estadoHtml"
-                                    color="success"
-                                    :label="estadoHtml == true ? 'Activo' : 'Inactivo'"
-                                />
-                                </div>
-                                <div style="margin-left: 2rem;">
-                                    
-                                </div>
-                            </div>
-
-                        </VCol> -->
+							
 						</VRow>
 					</VCardText>
 				</VCard>

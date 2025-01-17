@@ -1,4 +1,5 @@
 <script setup>
+import { isEqual } from 'lodash';
 import { computed, onMounted, ref } from "vue";
 import StatusMonitor from './componentes/StatusWidget.vue';
 
@@ -73,24 +74,39 @@ const handleProgress = ({ step, progress }) => {
   }
 };
 
-const handleSuccess = async (newData) => {
-  try {
-    if (newData.forzado) {
-      estado.value = newData.forzado.estado;
-      estadoRaw.value = newData.forzado;
-    }
-    
-    if (Array.isArray(newData.horarios)) {
-      horarios.value = [...newData.horarios];
-      horariosRaw.value = [...newData.horarios];
-    }
-    
-    if (newData.html) {
-      codigo.value = newData.html.value;
-      estadoHtml.value = newData.html.estadoHtml;
-      embedRaw.value = newData.html;
-    }
+//computed para ver cambios
+const estadoRawOriginal = ref({ estado: false, titulo: "", label: "" });
+const embedRawOriginal = ref({ value: "", estadoHtml: false });
+const horariosOriginal = ref([]);
 
+
+const hayCambiosHorarios = computed(() => {
+    return !isEqual(horarios.value, horariosOriginal.value);
+});
+
+const hayForzadoCambios = computed(() => {
+    return !isEqual(estadoRaw.value, estadoRawOriginal.value);
+});
+
+const hayEmbedCambios = computed(() => {
+    return !isEqual(embedRaw.value, embedRawOriginal.value);
+});
+
+const handleSuccess = async (newData) => {
+    try {
+        if (newData.forzado) {
+            estadoRawOriginal.value = JSON.parse(JSON.stringify(newData.forzado));
+        }
+        
+        if (Array.isArray(newData.horarios)) {
+            horarios.value = JSON.parse(JSON.stringify(newData.horarios));
+            horariosRaw.value = JSON.parse(JSON.stringify(newData.horarios));
+            horariosOriginal.value = JSON.parse(JSON.stringify(newData.horarios));
+        }
+        
+        if (newData.html) {
+            embedRawOriginal.value = JSON.parse(JSON.stringify(newData.html));
+        }
     // mensaje de éxito con +tiempo
     loadingMessage.value = 'Actualización completada con éxito';
     loadingSubMessage.value = '';
@@ -101,10 +117,11 @@ const handleSuccess = async (newData) => {
 
     isLoadingAction.value = false;
   } catch (error) {
-    console.error('Error actualizando datos locales:', error);
-    handleError(error);
-  }
+        console.error('Error actualizando datos locales:', error);
+        handleError(error);
+    }
 };
+
 
 const handleTimeout = () => {
   isLoadingAction.value = false;
@@ -143,13 +160,21 @@ async function getConfig() {
 
     console.log('Configuración cargada:', config);
     
+    // Estado forzado
     estado.value = config.forzado?.estado || false;
     estadoRaw.value = config.forzado || { estado: false, titulo: "", label: "" };
+    estadoRawOriginal.value = JSON.parse(JSON.stringify(estadoRaw.value));
+    
+    // Horarios
     horarios.value = Array.isArray(config.horarios) ? [...config.horarios] : [];
     horariosRaw.value = Array.isArray(config.horarios) ? [...config.horarios] : [];
+    horariosOriginal.value = JSON.parse(JSON.stringify(horarios.value));
+    
+    // Código embed
     codigo.value = config.html?.value || "";
     estadoHtml.value = config.html?.estadoHtml || false;
     embedRaw.value = config.html || { value: "", estadoHtml: false };
+    embedRawOriginal.value = JSON.parse(JSON.stringify(embedRaw.value));
 
   } catch (error) {
     console.error('Error al obtener configuración:', error);
@@ -438,24 +463,6 @@ onMounted(async () => {
   />
 
 
-    <!-- Snackbar de éxito -->
-    <!-- <VSnackbar
-      v-model="showSuccessMessage"
-      color="success"
-      location="top"
-      timeout="3000"
-    >
-      <div class="d-flex align-center">
-        <VIcon
-          icon="tabler-check-circle"
-          size="24"
-          class="me-2"
-        ></VIcon>
-        <span>Cambios guardados exitosamente. Actualizando página...</span>
-      </div>
-    </VSnackbar> -->
-
-
     <VBtn v-if="rol== 'administrador'"
       icon
       size="small"
@@ -565,22 +572,24 @@ onMounted(async () => {
                         <VSelect v-model="diaSelected" :items="diasDisponibles" :disabled="diasDisponibles.length===0" label="Día de la semana" />
                         </VCol>    
                         <VCol cols="6" class="d-flex gap-4">
+                          <div class="d-inline-block boton-fija" v-if="currentTab === 'tab-config'">
                             <VBtn
-                            color="primary"
-                            @click="addDia()"
-                            :disabled="diasDisponibles.length===0 || !diaSelected"
+                                rounded="pill"
+                                color="success"
+                                @click="enviar"
+                                :disabled="!hayCambiosHorarios"
                             >
-                            Añadir día
+                                <VIcon size="30" icon="tabler-device-floppy"></VIcon>
                             </VBtn>
+                            <VTooltip 
+                                activator="parent"
+                                location="top"
+                                :open-on-hover="!hayCambiosHorarios"
+                            >
+                                No hay cambios que guardar
+                            </VTooltip>
+                        </div>
 
-                            <VBtn
-                            rounded="pill"
-                            color="success"
-                            class="boton-fija"
-                            @click="enviar()"                                 
-                            >
-                            <VIcon size="30" icon="tabler-device-floppy"></VIcon>
-                            </VBtn>
                         </VCol>  
                     
                     </VCol>
@@ -737,10 +746,23 @@ onMounted(async () => {
                                 />
                                 </div>
                                 <div style="margin-left: 2rem;">
-                                    <VBtn color="primary" @click="enviarForzado" >
-                                        Enviar
-                                    </VBtn>
-                                </div>
+                                  <div class="d-inline-block">
+                                      <VBtn 
+                                          color="primary" 
+                                          @click="enviarForzado"
+                                          :disabled="!hayForzadoCambios"
+                                      >
+                                          ENVIAR
+                                      </VBtn>
+                                      <VTooltip 
+                                          activator="parent"
+                                          location="top"
+                                          :open-on-hover="!hayForzadoCambios"
+                                      >
+                                          No hay cambios que guardar
+                                      </VTooltip>
+                                  </div>
+                              </div>
                             </div>
                         </VCol>
 
@@ -763,43 +785,33 @@ onMounted(async () => {
             <VCard class="mt-5" title="Embed player" subtitle="Proporciona el código HTML del reproductor que presentará embebido en la seccion de audio">	
                 <VCardText class="py-4 gap-0 w-100">	
                     <VRow> 
-                        <VCol cols="12" style="display: flex; flex-wrap: wrap; align-items: center;">
-                            <div style="width: 100%; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-2">
-                                <VTextarea
-                                    v-model="embedRaw.value"
-                                    label="Código"
-                                    placeholder="Escriba el código html del reproductor..."
-                                    class="ms-0 me-1 chat-list-search"
-                                    auto-grow
-                                />
-
-                            </div>
-                            <VBtn color="primary" @click="enviarEmbed" >
-                                Enviar
-                            </VBtn>     
-                        </VCol>
-                        <!-- <VCol cols="12"  style="display: flex; align-items: center;" >
-                            
-                            <div>
-                                <span>Estado: </span>
-                            </div>
-                            <div style="margin-left: 2rem;">
-                                <VChip :color="embedRaw.estadoHtml == true ? 'success' : 'warning'" class="mr-4" >{{ embedRaw.estadoHtml == true ? 'Activo' : 'Inactivo' }} </VChip>
-                            </div>    
-                            <div style="display: flex; margin: 1rem;">
-                                <div>
-                                <VSwitch
-                                    v-model="estadoHtml"
-                                    color="success"
-                                    :label="estadoHtml == true ? 'Activo' : 'Inactivo'"
-                                />
-                                </div>
-                                <div style="margin-left: 2rem;">
-                                    
-                                </div>
-                            </div>
-
-                        </VCol> -->
+                      <VCol cols="12" style="display: flex; flex-wrap: wrap; align-items: center;">
+                          <div style="width: 100%; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-2">
+                              <VTextarea
+                                  v-model="embedRaw.value"
+                                  label="Código"
+                                  placeholder="Escriba el código html del reproductor..."
+                                  class="ms-0 me-1 chat-list-search"
+                                  auto-grow
+                              />
+                          </div>
+                          <div class="d-inline-block">
+                              <VBtn 
+                                  color="primary" 
+                                  @click="enviarEmbed"
+                                  :disabled="!hayEmbedCambios"
+                              >
+                                  ENVIAR
+                              </VBtn>
+                              <VTooltip 
+                                  activator="parent"
+                                  location="top"
+                                  :open-on-hover="!hayEmbedCambios"
+                              >
+                                  No hay cambios que guardar
+                              </VTooltip>
+                          </div>
+                      </VCol>
                     </VRow>
                 </VCardText>
             </VCard>
@@ -817,13 +829,13 @@ onMounted(async () => {
 </template>
 
 <style>
-    .boton-fija{
-        position: fixed;
-        bottom: 0;
-        right: 0;
-        margin: 30px;
-        z-index: 9999;
-    }
+  .boton-fija {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 30px;
+  z-index: 9999;
+}
     .app-custom {
   .customizer-section {
     padding: 1.25rem;

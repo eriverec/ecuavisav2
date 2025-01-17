@@ -1,4 +1,5 @@
 <script setup>
+import { isEqual } from 'lodash';
 import { computed, onMounted, ref } from "vue";
 import StatusMonitor from './componentes/StatusWidgetRadio.vue';
 
@@ -7,6 +8,9 @@ const loadingSubMessage = ref('');
 const estadoSend = ref(false);
 const estado = ref(false);
 const estadoRaw = ref({ estado: false, titulo: "", label: "" });
+const estadoRawOriginal = ref({ estado: false, titulo: "", label: "" });
+const horariosOriginal = ref([]);
+const embedRawOriginal = ref({ value: "", estadoHtml: false });
 const router = useRouter();
 const isLoading = ref(false);
 const currentTab = ref("tab-detalles");
@@ -73,23 +77,38 @@ const handleProgress = ({ step, progress }) => {
   }
 };
 
+// Computed properties para verificar cambios
+const hayCambiosHorarios = computed(() => {
+    return !isEqual(horarios.value, horariosOriginal.value);
+});
+
+const hayForzadoCambios = computed(() => {
+    // Comparación más específica para el player forzado
+    return !isEqual(estadoRaw.value.estado, estadoRawOriginal.value.estado) ||
+           !isEqual(estadoRaw.value.titulo, estadoRawOriginal.value.titulo) ||
+           !isEqual(estadoRaw.value.label, estadoRawOriginal.value.label);
+});
+
+const hayEmbedCambios = computed(() => {
+    // Comparación específica para el código del reproductor
+    return !isEqual(embedRaw.value.value, embedRawOriginal.value.value);
+});
+
 const handleSuccess = async (newData) => {
-  try {
-    if (newData.forzado) {
-      estado.value = newData.forzado.estado;
-      estadoRaw.value = newData.forzado;
-    }
-    
-    if (Array.isArray(newData.horarios)) {
-      horarios.value = [...newData.horarios];
-      horariosRaw.value = [...newData.horarios];
-    }
-    
-    if (newData.html) {
-      codigo.value = newData.html.value;
-      estadoHtml.value = newData.html.estadoHtml;
-      embedRaw.value = newData.html;
-    }
+    try {
+        if (newData.forzado) {
+            estadoRawOriginal.value = JSON.parse(JSON.stringify(newData.forzado));
+        }
+        
+        if (Array.isArray(newData.horarios)) {
+            horariosOriginal.value = JSON.parse(JSON.stringify(newData.horarios));
+        }
+        
+        if (newData.html) {
+            embedRawOriginal.value = JSON.parse(JSON.stringify(newData.html));
+        }
+
+
 
     loadingMessage.value = 'Actualización completada con éxito';
     loadingSubMessage.value = '';
@@ -99,9 +118,9 @@ const handleSuccess = async (newData) => {
     
     isLoadingAction.value = false;
   } catch (error) {
-    console.error('Error actualizando datos locales:', error);
-    handleError(error);
-  }
+        console.error('Error actualizando datos locales:', error);
+        handleError(error);
+    }
 };
 
 const handleTimeout = () => {
@@ -138,11 +157,16 @@ async function getConfig() {
     
     estado.value = config.forzado?.estado || false;
     estadoRaw.value = config.forzado || { estado: false, titulo: "", label: "" };
+    estadoRawOriginal.value = JSON.parse(JSON.stringify(estadoRaw.value));
+    
     horarios.value = Array.isArray(config.horarios) ? [...config.horarios] : [];
     horariosRaw.value = Array.isArray(config.horarios) ? [...config.horarios] : [];
+    horariosOriginal.value = JSON.parse(JSON.stringify(horarios.value));
+    
     codigo.value = config.html?.value || "";
     estadoHtml.value = config.html?.estadoHtml || false;
     embedRaw.value = config.html || { value: "", estadoHtml: false };
+    embedRawOriginal.value = JSON.parse(JSON.stringify(embedRaw.value));
 
   } catch (error) {
     console.error('Error al obtener configuración:', error);
@@ -369,6 +393,9 @@ onMounted(async () => {
     console.error('Error en la inicialización:', error);
   }
 });
+
+
+
 </script>
 
 <template>
@@ -684,11 +711,24 @@ onMounted(async () => {
                                     />
                                 </div>
                                 <div style="margin-left: 2rem;">
-                                    <VBtn color="primary" @click="enviarForzado">
-                                        Enviar
-                                    </VBtn>
-                                </div>
-                            </div>
+                                  <div class="d-inline-block">
+                                  <VBtn 
+                                      color="primary" 
+                                      @click="enviarForzado"
+                                      :disabled="!hayForzadoCambios"
+                                  >
+                                      ENVIAR
+                                  </VBtn>
+                                  <VTooltip 
+                                      activator="parent"
+                                      location="top"
+                                      :open-on-hover="!hayForzadoCambios"
+                                  >
+                                      No hay cambios que guardar
+                                  </VTooltip>
+                              </div>
+</div>
+                   </div>
                         </VCol>
 
                         <VCol cols="12" style="display: flex; align-items: center;">
@@ -710,72 +750,117 @@ onMounted(async () => {
             <VCard class="mt-5" title="Embed player" subtitle="Proporciona el código HTML del reproductor que presentará embebido en la seccion de audio">	
                 <VCardText class="py-4 gap-0 w-100">	
                     <VRow> 
-                        <VCol cols="12" style="display: flex; flex-wrap: wrap; align-items: center;">
-                            <div style="width: 100%; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-2">
-                                <VTextarea
-                                    v-model="embedRaw.value"
-                                    label="Código"
-                                    placeholder="Escriba el código html del reproductor..."
-                                    class="ms-0 me-1 chat-list-search"
-                                    auto-grow
-                                />
-                            </div>
-                            <VBtn color="primary" @click="enviarEmbed">
-                                Enviar
-                            </VBtn>     
-                        </VCol>
+                      <VCol cols="12" style="display: flex; flex-wrap: wrap; align-items: center;">
+    <div style="width: 100%; margin-top: 1rem; margin-bottom: 1rem;" class="d-flex flex-row gap-2">
+        <VTextarea
+            v-model="embedRaw.value"
+            label="Código"
+            placeholder="Escriba el código html del reproductor..."
+            class="ms-0 me-1 chat-list-search"
+            auto-grow
+        />
+    </div>
+    <div class="d-inline-block">
+    <VBtn 
+        color="primary" 
+        class="text-uppercase"
+        @click="enviarEmbed"
+        :disabled="!hayEmbedCambios"
+    >
+        ENVIAR
+    </VBtn>
+    <VTooltip 
+        activator="parent"
+        location="top"
+        :open-on-hover="!hayEmbedCambios"
+    >
+        No hay cambios que guardar
+    </VTooltip>
+</div>
+</VCol>
                     </VRow>
                 </VCardText>
             </VCard>
         </VWindowItem>
     </VWindow>
+   
+    <div class="d-inline-block boton-fija" v-if="currentTab === 'tab-config'">
+        <VBtn
+            rounded="pill"
+            color="success"
+            @click="enviar"
+            :disabled="!hayCambiosHorarios"
+        >
+            <VIcon size="30" icon="tabler-device-floppy"></VIcon>
+        </VBtn>
+        <VTooltip 
+            activator="parent"
+            location="top"
+            :open-on-hover="!hayCambiosHorarios"
+        >
+            No hay cambios que guardar
+        </VTooltip>
+    </div>
 
-    <VBtn
-        rounded="pill"
-        color="success"
-        class="boton-fija"
-        @click="enviar()"
-    >
-        <VIcon size="30" icon="tabler-device-floppy"></VIcon>
-    </VBtn>
 </section>
 </template>
 
-<style>
-.boton-fija {
-    position: fixed;
-    bottom: 0;
-    right: 0;
-    margin: 30px;
-    z-index: 9999;
+<style>.boton-fija {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  margin: 30px;
+  z-index: 9999;
 }
 
-.app-custom .customizer-section {
+.app-custom {
+  .customizer-section {
     padding: 1.25rem;
-}
+  }
 
-.app-custom .custom-heading {
+  .custom-heading {
     padding-block: 0.875rem;
     padding-inline: 1.25rem;
-}
+  }
 
-.app-custom .v-navigation-drawer__content {
+  .v-navigation-drawer__content {
     display: flex;
     flex-direction: column;
+  }
 }
 
 .app-custom-toggler {
-    position: fixed !important;
-    inset-block-start: 60%;
-    inset-inline-end: 0;
-    transform: translateY(-50%);
-}
+  position: fixed !important;
+  inset-block-start: 60%;
+  inset-inline-end: 0;
+  transform: translateY(-50%);
 
-.app-custom-toggler:active {
+  &:active {
     transform: translateY(-50%) !important;
+  }
 }
 
 .guarda {
-    color: #ffffff;
+  color: #ffffff;
 }
+
+
+.v-tooltip > .v-overlay__content {
+    background: rgba(0, 0, 0, 0.8) !important;
+    color: white !important;
+    padding: 5px 8px !important;
+    border-radius: 4px !important;
+    font-size: 12px !important;
+}
+
+.v-tooltip {
+    z-index: 10000 !important;
+}
+
+.v-expansion-panel {
+    box-shadow: none !important;
+    /* border: 1px solid rgba(var(--v-border-color), var(--v-border-opacity)) !important; */
+}
+
+
 </style>
