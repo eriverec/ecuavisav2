@@ -653,6 +653,8 @@ function eventoEnvivoManagerQuito() {
   
   let estadoForzadoAnterior = null;
   let programaActualId = null;
+  let intentosMaximos = 10;
+  let intentos = 0;
 
   function aplicarForzado(data) {
     console.log('Aplicando transmisión forzada');
@@ -672,7 +674,6 @@ function eventoEnvivoManagerQuito() {
       fondito__quito.style.display = 'none';
     }
 
-    // Ocultar botón de Telecomunidad durante forzado
     if (btnTelcomunidad_quito) {
       btnTelcomunidad_quito.style.display = 'none';
     }
@@ -769,46 +770,72 @@ function eventoEnvivoManagerQuito() {
 
     return programaActual;
   }
+  async function obtenerDatosActualizados() {
+    return new Promise((resolve, reject) => {
+      const verificarScript = () => {
+        // Intentar obtener los datos más recientes
+        if (typeof window.horario_envivo_quito !== 'undefined') {
+          console.log('Datos actualizados obtenidos');
+          resolve(window.horario_envivo_quito);
+        } else {
+          intentos++;
+          if (intentos < intentosMaximos) {
+            console.log(`Esperando datos... intento ${intentos}`);
+            setTimeout(verificarScript, 1000);
+          } else {
+            reject(new Error('No se pudieron obtener los datos después de varios intentos'));
+          }
+        }
+      };
+
+      verificarScript();
+    });
+  }
 
   async function fetchHorarioEnvivoQuito() {
     try {
-      if (typeof horario_envivo_quito === 'undefined') {
-        throw new Error('No se han cargado los datos de Quito');
-      }
-
-      const data = horario_envivo_quito;
+      // Obtener datos actualizados en cada ciclo
+      const data = await obtenerDatosActualizados();
       const estadoForzadoActual = data.forzado.estado;
+
+      console.log('Estado forzado actual:', estadoForzadoActual);
+      console.log('Estado forzado anterior:', estadoForzadoAnterior);
 
       // Verificar primero si hay forzado activo
       if (estadoForzadoActual) {
-        // Si hay un cambio de estado o es la primera vez
-        if (estadoForzadoAnterior !== estadoForzadoActual) {
-          console.log('Activando transmisión forzada');
-          aplicarForzado(data);
-        }
+        // Siempre aplicar el forzado si está activo, incluso si no hubo cambio de estado
+        aplicarForzado(data);
+        console.log('Forzado activo aplicado');
       } else {
-        // Si no hay forzado, verificar si acabamos de salir del modo forzado
+        // Si no hay forzado, verificar la programación normal
         if (estadoForzadoAnterior !== estadoForzadoActual) {
           console.log('Desactivando transmisión forzada');
-          verificarProgramaActual(data);
-        } else {
-          // Verificación rutinaria de la programación normal
-          verificarProgramaActual(data);
+          limpiarInterfaz();
         }
+        verificarProgramaActual(data);
       }
 
       estadoForzadoAnterior = estadoForzadoActual;
-      setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
-      return true;
+
     } catch (error) {
-      console.error('Error al obtener los datos de Quito:', error);
+      console.error('Error al obtener los datos:', error);
+    } finally {
+      // Programar siguiente verificación
       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
-      return null;
     }
   }
 
-  // Iniciar el proceso de monitoreo
-  fetchHorarioEnvivoQuito();
+  // Esperar a que el script se cargue antes de iniciar
+  setTimeout(() => {
+    console.log('Iniciando monitoreo de horarios Quito');
+    fetchHorarioEnvivoQuito();
+  }, 1000);
+}
+
+// Inicializar el manager
+if (window.location.pathname === '/envivo/quito') {
+  console.log('Página de Quito detectada, iniciando manager...');
+  eventoEnvivoManagerQuito();
 }
 
 /*** FIN NUEVO QUITO ***/
