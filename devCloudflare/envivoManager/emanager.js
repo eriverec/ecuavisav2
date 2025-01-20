@@ -653,6 +653,24 @@ function eventoEnvivoManagerQuito() {
   
   let estadoForzadoAnterior = null;
   let programaActualId = null;
+  let scriptCargado = false;
+
+  // Mostrar estado inicial mientras se carga el script
+  function mostrarEstadoInicial() {
+    console.log('Mostrando estado inicial');
+    if (fondito__quito) {
+      fondito__quito.style.display = 'block';
+    }
+    if (title_programa_quito) {
+      title_programa_quito.style.display = 'none';
+    }
+    if (playerembed_quito) {
+      playerembed_quito.style.display = 'none';
+    }
+    if (btnTelcomunidad_quito) {
+      btnTelcomunidad_quito.style.display = 'none';
+    }
+  }
 
   function aplicarForzado(data) {
     console.log('Aplicando transmisión forzada');
@@ -734,11 +752,10 @@ function eventoEnvivoManagerQuito() {
       null;
 
     if (programaActualNuevoId !== programaActualId) {
-      console.log('Cambio de programa detectado');
       programaActualId = programaActualNuevoId;
 
       if (programaActual) {
-        console.log('Iniciando nuevo programa:', programaActual.tituloPrograma);
+        console.log('Iniciando programa:', programaActual.tituloPrograma);
         if (title_programa_quito) {
           title_programa_quito.innerHTML = programaActual.tituloPrograma;
           title_programa_quito.style.display = 'block';
@@ -768,7 +785,7 @@ function eventoEnvivoManagerQuito() {
 
     return programaActual;
   }
- 
+
   function procesarDatos(data) {
     if (!data) return;
 
@@ -777,7 +794,6 @@ function eventoEnvivoManagerQuito() {
 
     // Verificar primero si hay forzado activo
     if (estadoForzadoActual) {
-      // Siempre aplicar el forzado si está activo
       aplicarForzado(data);
     } else {
       // Si no hay forzado, verificar la programación normal
@@ -791,7 +807,7 @@ function eventoEnvivoManagerQuito() {
     estadoForzadoAnterior = estadoForzadoActual;
   }
 
-  async function verificarActualizaciones() {
+  function verificarActualizaciones() {
     try {
       if (typeof window.horario_envivo_quito !== 'undefined') {
         procesarDatos(window.horario_envivo_quito);
@@ -799,22 +815,26 @@ function eventoEnvivoManagerQuito() {
     } catch (error) {
       console.error('Error al procesar datos:', error);
     } finally {
-      // Siempre programar la siguiente verificación
       setTimeout(verificarActualizaciones, tiempoEsperaEnvivo);
     }
   }
 
-  // Función para esperar a que el script se cargue inicialmente
   function esperarCargaInicial() {
-    if (typeof window.horario_envivo_quito !== 'undefined') {
-      console.log('Script de horarios cargado, iniciando verificaciones');
-      verificarActualizaciones();
-    } else {
-      console.log('Esperando carga del script...');
-      setTimeout(esperarCargaInicial, 1000);
+    if (!scriptCargado) {
+      if (typeof window.horario_envivo_quito !== 'undefined') {
+        console.log('Script de horarios cargado, iniciando verificaciones');
+        scriptCargado = true;
+        verificarActualizaciones();
+      } else {
+        console.log('Esperando carga del script...');
+        setTimeout(esperarCargaInicial, 1000);
+      }
     }
   }
 
+  // Mostrar estado inicial inmediatamente
+  mostrarEstadoInicial();
+  
   // Iniciar el proceso de espera
   console.log('Iniciando monitoreo de horarios Quito');
   esperarCargaInicial();
