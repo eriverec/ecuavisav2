@@ -603,58 +603,13 @@ function eventoEnvivoManager() {
 }
 
 /*** NUEVA FUNCION QUITO ***/
-// function eventoEnvivoManagerQuito() {
-//   const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad');
-//   const title_programa_quito = document.querySelector('.title_programa_quito');
-//   const playerembed_quito = document.querySelector('#playerembed_quito');
-//   const fondito__quito = document.querySelector('#fondito__quito');
-//   // const tiempoEsperaEnvivo = 120000;
-//   const tiempoEsperaEnvivo = 60000;
-
-//   async function fetchHorarioEnvivoQuito() {
-//     try {
-//       if (typeof horario_envivo_quito === 'undefined') {
-//         throw new Error('No se han cargado los datos de Quito');
-//       }
-
-//       const data = horario_envivo_quito;
-      
-//       procesosHorarioEnvivo({
-//         data: data,
-//         apiUrl: null,
-//         enVivoRedy: null,
-//         textIndicador: null,
-//         btnTelcomunidad: btnTelcomunidad_quito,
-//         btnTelevistazo7pm: null,
-//         title_programa: title_programa_quito,
-//         playerembed: playerembed_quito,
-//         fondito__: fondito__quito,
-//       });
-
-//       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
-//       return true;
-//     } catch (error) {
-//       console.error('Error al obtener los datos de Quito:', error);
-//       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
-//       return null;
-//     }
-//   }
-
-//   // Llamar a la función para obtener y procesar los datos inicialmente
-//   fetchHorarioEnvivoQuito();
-// }
-
-
 function eventoEnvivoManagerQuito() {
   const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad');
   const title_programa_quito = document.querySelector('.title_programa_quito');
   const playerembed_quito = document.querySelector('#playerembed_quito');
   const fondito__quito = document.querySelector('#fondito__quito');
-  // Cambiamos el intervalo a 1 segundo para una actualización más frecuente
-  const tiempoEsperaEnvivo = 1000;
-  
-  // Variable para almacenar el estado anterior del forzado
-  let estadoForzadoAnterior = null;
+  // const tiempoEsperaEnvivo = 120000;
+  const tiempoEsperaEnvivo = 60000;
 
   async function fetchHorarioEnvivoQuito() {
     try {
@@ -664,31 +619,18 @@ function eventoEnvivoManagerQuito() {
 
       const data = horario_envivo_quito;
       
-      // Verificar si el estado del forzado ha cambiado
-      const estadoForzadoActual = data.forzado.estado;
-      
-      // Si hay un cambio en el estado del forzado o es la primera ejecución
-      if (estadoForzadoActual !== estadoForzadoAnterior) {
-        console.log('Cambio detectado en el estado del forzado:', estadoForzadoActual);
-        
-        // Actualizar inmediatamente la interfaz
-        procesosHorarioEnvivo({
-          data: data,
-          apiUrl: null,
-          enVivoRedy: null,
-          textIndicador: null,
-          btnTelcomunidad: btnTelcomunidad_quito,
-          btnTelevistazo7pm: null,
-          title_programa: title_programa_quito,
-          playerembed: playerembed_quito,
-          fondito__: fondito__quito,
-        });
-        
-        // Actualizar el estado anterior
-        estadoForzadoAnterior = estadoForzadoActual;
-      }
+      procesosHorarioEnvivo({
+        data: data,
+        apiUrl: null,
+        enVivoRedy: null,
+        textIndicador: null,
+        btnTelcomunidad: btnTelcomunidad_quito,
+        btnTelevistazo7pm: null,
+        title_programa: title_programa_quito,
+        playerembed: playerembed_quito,
+        fondito__: fondito__quito,
+      });
 
-      // Programar la siguiente verificación
       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
       return true;
     } catch (error) {
@@ -698,7 +640,7 @@ function eventoEnvivoManagerQuito() {
     }
   }
 
-  // Iniciar el proceso de monitoreo
+  // Llamar a la función para obtener y procesar los datos inicialmente
   fetchHorarioEnvivoQuito();
 }
 
