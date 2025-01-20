@@ -655,9 +655,8 @@ function eventoEnvivoManagerQuito() {
   let programaActualId = null;
   let scriptCargado = false;
 
-  // Mostrar estado inicial mientras se carga el script
   function mostrarEstadoInicial() {
-    console.log('Mostrando estado inicial');
+    console.log('Mostrando estado inicial mientras se cargan los datos...');
     if (fondito__quito) {
       fondito__quito.style.display = 'block';
     }
@@ -673,130 +672,62 @@ function eventoEnvivoManagerQuito() {
   }
 
   function aplicarForzado(data) {
-    console.log('Aplicando transmisión forzada');
+    console.log('Aplicando transmisión forzada con datos:', {
+      titulo: data.forzado.titulo,
+      html: data.html.value ? 'presente' : 'ausente'
+    });
+    
     const dataTitulo = data.forzado.titulo;
     
     if (title_programa_quito) {
+      console.log('Actualizando título a:', dataTitulo);
       title_programa_quito.innerHTML = dataTitulo;
       title_programa_quito.style.display = 'block';
+    } else {
+      console.log('Elemento title_programa_quito no encontrado');
     }
     
     if (playerembed_quito) {
+      console.log('Actualizando player embed');
       playerembed_quito.style.display = 'block';
       playerembed_quito.innerHTML = data.html.value;
+    } else {
+      console.log('Elemento playerembed_quito no encontrado');
     }
     
     if (fondito__quito) {
+      console.log('Ocultando fondito');
       fondito__quito.style.display = 'none';
+    } else {
+      console.log('Elemento fondito__quito no encontrado');
     }
 
     if (btnTelcomunidad_quito) {
       btnTelcomunidad_quito.style.display = 'none';
     }
-  }
-
-  function limpiarInterfaz() {
-    console.log('Limpiando interfaz - No hay programa activo');
-    if (title_programa_quito) {
-      title_programa_quito.innerHTML = '';
-      title_programa_quito.style.display = 'none';
-    }
-    if (playerembed_quito) {
-      playerembed_quito.style.display = 'none';
-      if (playerembed_quito.querySelector('iframe')) {
-        playerembed_quito.querySelector('iframe').remove();
-      }
-    }
-    if (fondito__quito) {
-      fondito__quito.style.display = 'block';
-    }
-    if (btnTelcomunidad_quito) {
-      btnTelcomunidad_quito.style.display = 'none';
-    }
-  }
-
-  function verificarProgramaActual(data) {
-    const fechaActual = new Date();
-    fechaActual.setUTCHours(fechaActual.getUTCHours() - 5);
-    const diaSemana = fechaActual.getUTCDay();
-    const horaActual = fechaActual.getUTCHours();
-    const minutosActuales = fechaActual.getUTCMinutes();
-
-    const dia = data.horarios.find(e => e.dia === diaSemana && e.estadoDia);
-    
-    if (!dia) {
-      console.log('No hay programación para este día');
-      limpiarInterfaz();
-      return null;
-    }
-
-    let programaActual = null;
-    for (const hora of dia.horas) {
-      if (!hora.estadoHorario) continue;
-
-      const [inicioHora, inicioMinutos] = hora.inicio.split(":").map(Number);
-      const [finHora, finMinutos] = hora.fin.split(":").map(Number);
-
-      const dentroDelHorario =
-        (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) &&
-        (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos));
-
-      if (dentroDelHorario) {
-        programaActual = hora;
-        break;
-      }
-    }
-
-    const programaActualNuevoId = programaActual ? 
-      `${programaActual.tituloPrograma}-${programaActual.inicio}-${programaActual.fin}` : 
-      null;
-
-    if (programaActualNuevoId !== programaActualId) {
-      programaActualId = programaActualNuevoId;
-
-      if (programaActual) {
-        console.log('Iniciando programa:', programaActual.tituloPrograma);
-        if (title_programa_quito) {
-          title_programa_quito.innerHTML = programaActual.tituloPrograma;
-          title_programa_quito.style.display = 'block';
-        }
-        if (playerembed_quito) {
-          playerembed_quito.style.display = 'block';
-          if (programaActual.iframe) {
-            playerembed_quito.innerHTML = programaActual.iframe;
-          } else {
-            playerembed_quito.innerHTML = data.html.value;
-          }
-        }
-        if (fondito__quito) {
-          fondito__quito.style.display = 'none';
-        }
-
-        if (btnTelcomunidad_quito) {
-          btnTelcomunidad_quito.style.display = 
-            programaActual.tituloPrograma === "Televistazo en la comunidad" ? 
-            "block" : "none";
-        }
-      } else {
-        console.log('No hay programa activo en este momento');
-        limpiarInterfaz();
-      }
-    }
-
-    return programaActual;
   }
 
   function procesarDatos(data) {
-    if (!data) return;
+    if (!data) {
+      console.log('No hay datos para procesar');
+      return;
+    }
+
+    console.log('Procesando datos:', {
+      forzadoEstado: data.forzado.estado,
+      forzadoTitulo: data.forzado.titulo,
+      tieneHTML: !!data.html.value
+    });
 
     const estadoForzadoActual = data.forzado.estado;
-    console.log('Estado forzado actual:', estadoForzadoActual);
+    console.log('Estado forzado actual:', estadoForzadoActual, 'Estado anterior:', estadoForzadoAnterior);
 
     // Verificar primero si hay forzado activo
     if (estadoForzadoActual) {
+      console.log('Forzado activo detectado, aplicando...');
       aplicarForzado(data);
     } else {
-      // Si no hay forzado, verificar la programación normal
+      console.log('No hay forzado activo, verificando programación normal');
       if (estadoForzadoAnterior !== estadoForzadoActual) {
         console.log('Desactivando transmisión forzada');
         limpiarInterfaz();
@@ -809,8 +740,14 @@ function eventoEnvivoManagerQuito() {
 
   function verificarActualizaciones() {
     try {
+      console.log('Verificando actualizaciones...');
       if (typeof window.horario_envivo_quito !== 'undefined') {
-        procesarDatos(window.horario_envivo_quito);
+        console.log('Datos encontrados en window.horario_envivo_quito');
+        const datos = window.horario_envivo_quito;
+        console.log('Estado del forzado:', datos.forzado.estado);
+        procesarDatos(datos);
+      } else {
+        console.log('window.horario_envivo_quito no está definido');
       }
     } catch (error) {
       console.error('Error al procesar datos:', error);
@@ -820,13 +757,15 @@ function eventoEnvivoManagerQuito() {
   }
 
   function esperarCargaInicial() {
+    console.log('Verificando disponibilidad del script...');
     if (!scriptCargado) {
       if (typeof window.horario_envivo_quito !== 'undefined') {
-        console.log('Script de horarios cargado, iniciando verificaciones');
+        console.log('Script de horarios encontrado, iniciando verificaciones');
+        console.log('Datos iniciales:', window.horario_envivo_quito);
         scriptCargado = true;
         verificarActualizaciones();
       } else {
-        console.log('Esperando carga del script...');
+        console.log('Script aún no disponible, reintentando...');
         setTimeout(esperarCargaInicial, 1000);
       }
     }
@@ -840,8 +779,9 @@ function eventoEnvivoManagerQuito() {
   esperarCargaInicial();
 }
 
-// Inicializar el manager solo en la página de Quito
+// Verificar que estamos en la página correcta
 if (window.location.pathname === '/envivo/quito') {
+  console.log('Página de Quito detectada, iniciando manager...');
   eventoEnvivoManagerQuito();
 }
 
