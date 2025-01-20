@@ -608,7 +608,8 @@ function eventoEnvivoManagerQuito() {
   const title_programa_quito = document.querySelector('.title_programa_quito');
   const playerembed_quito = document.querySelector('#playerembed_quito');
   const fondito__quito = document.querySelector('#fondito__quito');
-  const tiempoEsperaEnvivo = 120000;
+  // const tiempoEsperaEnvivo = 120000;
+  const tiempoEsperaEnvivo = 60000;
 
   async function fetchHorarioEnvivoQuito() {
     try {
