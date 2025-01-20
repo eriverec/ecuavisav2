@@ -375,6 +375,7 @@ function procesosHorarioEnvivo(json = {}){
     return null;
   }
 }
+
 ////////////////////////FUNCION QUE ABARCA EL PROCESO DEL ENVIVO Y EL ENVIVO QUITO
 
 //funcion anterior envivo
@@ -652,8 +653,9 @@ function eventoEnvivoManagerQuito() {
   
   let currentDataQuito = null;
   let monitoringIntervalQuito = null;
+  let scheduleCheckInterval = null;
 
-  // Función para obtener el contenido del script de forma segura
+  // obtener el contenido del script
   function fetchScriptContent() {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -662,7 +664,6 @@ function eventoEnvivoManagerQuito() {
       xhr.onload = function() {
         if (xhr.status === 200) {
           try {
-            // Evaluar el contenido de forma segura
             const evalScript = new Function(xhr.responseText + '; return horario_envivo_quito;');
             const result = evalScript();
             resolve(result);
@@ -679,21 +680,70 @@ function eventoEnvivoManagerQuito() {
     });
   }
 
+  // Función para verificar si un programa está dentro de su horario
+  function checkProgramSchedule(data) {
+    const fechaActual = new Date();
+    fechaActual.setUTCHours(fechaActual.getUTCHours() - 5); // Ajuste a hora Ecuador
+    const diaSemana = fechaActual.getUTCDay();
+    const horaActual = fechaActual.getUTCHours();
+    const minutosActuales = fechaActual.getUTCMinutes();
+
+    // Si está en modo forzado, retornar los datos tal cual
+    if (data.forzado && data.forzado.estado) {
+      return data;
+    }
+
+    // Clonar los datos para no modificar el original
+    const processedData = JSON.parse(JSON.stringify(data));
+    
+    // Buscar el día actual en los horarios
+    const diaActual = processedData.horarios.find(d => d.dia === diaSemana);
+    if (diaActual && diaActual.estadoDia) {
+      let programaActivo = false;
+      
+      // Verificar cada hora programada
+      diaActual.horas.forEach(hora => {
+        if (!hora.estadoHorario) return;
+
+        const [inicioHora, inicioMinutos] = hora.inicio.split(":").map(Number);
+        const [finHora, finMinutos] = hora.fin.split(":").map(Number);
+
+        const dentroDelHorario = (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) &&
+                                (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos));
+
+        if (dentroDelHorario) {
+          programaActivo = true;
+        }
+      });
+
+      if (!programaActivo) {
+        // Si no hay programa activo, modificar el estado
+        processedData.horarios = processedData.horarios.map(d => ({
+          ...d,
+          estadoDia: d.dia === diaSemana ? false : d.estadoDia
+        }));
+      }
+    }
+
+    return processedData;
+  }
+
   async function fetchHorarioEnvivoQuito() {
     try {
-      // Obtener datos nuevos
       const newData = await fetchScriptContent();
       
       if (!newData) {
         throw new Error('No se han podido obtener los datos de Quito');
       }
 
+      const processedData = checkProgramSchedule(newData);
+
       // Verificar si hay cambios en los datos
-      if (!currentDataQuito || JSON.stringify(currentDataQuito) !== JSON.stringify(newData)) {
-        currentDataQuito = newData;
+      if (!currentDataQuito || JSON.stringify(currentDataQuito) !== JSON.stringify(processedData)) {
+        currentDataQuito = processedData;
         
         procesosHorarioEnvivo({
-          data: newData,
+          data: processedData,
           apiUrl: null,
           enVivoRedy: null,
           textIndicador: null,
@@ -710,22 +760,29 @@ function eventoEnvivoManagerQuito() {
     } catch (error) {
       console.error('Error al obtener los datos de Quito:', error);
     } finally {
-      // Programar la siguiente verificación
+      // Programar la siguiente verificación rápida para forzado
       if (monitoringIntervalQuito) {
         clearTimeout(monitoringIntervalQuito);
       }
       monitoringIntervalQuito = setTimeout(fetchHorarioEnvivoQuito, 1000);
+
+      // Verificación adicional de horarios cada 30 segundos
+      if (!scheduleCheckInterval) {
+        scheduleCheckInterval = setInterval(fetchHorarioEnvivoQuito, 300000);
+      }
     }
   }
 
-  // Limpiar el intervalo cuando se desmonte la página
+  // Limpiar intervalos
   window.addEventListener('unload', () => {
     if (monitoringIntervalQuito) {
       clearTimeout(monitoringIntervalQuito);
     }
+    if (scheduleCheckInterval) {
+      clearInterval(scheduleCheckInterval);
+    }
   });
 
-  // Iniciar el monitoreo
   fetchHorarioEnvivoQuito();
 }
 
