@@ -1,5 +1,5 @@
 <script setup>
-
+import { logAction } from '@/middleware/activityLogger';
 import { hexToRgb } from '@layouts/utils';
 import { parseISO } from 'date-fns';
 import { extendMoment } from 'moment-range';
@@ -114,7 +114,7 @@ const resolveDeviceTimeLine = computed(() => {
       parentHeightOffset: 0,
       type: 'area',
       stacked: false,
-      height: 285,
+      height: 320,
       zoom: {
         enabled: false
       },
@@ -358,7 +358,242 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
 }
 
 /*********************************************************************/
-/**************** CONFIGURACION DEL CAMPO FECHA ***********************/
+/**************** FIN DE CONFIGURACION DEL CAMPO FECHA ***********************/
+
+
+/*********************************************************************/
+/**************** INICIO DE CONFIGURACION DESCARGA ***********************/
+/*********************************************************************/
+  const isFullLoading = ref(false);
+  const urlApiExport = ref("");
+  const urlTitleExport = ref("usuarios_hija_embajador");
+
+  const headersGlobal = ref({
+    _id: "_id",
+    wylexId: "wylexId",
+    site: "site",
+    site_id: "site_id",
+    email: "email",
+    first_name: "first_name",
+    last_name: "last_name",
+    avatar: "avatar",
+    logged_at: "logged_at",
+    logged_at_site: "logged_at_site",
+    updated_at: "updated_at",
+    validated_at: "validated_at",
+    banned_at: "banned_at",
+    country: "country",
+    phone_prefix: "phone_prefix",
+    phone_number: "phone_number",
+    gender: "gender",
+    birth_date: "birth_date",
+    identification_type: "identification_type",
+    identification_number: "identification_number",
+    newsletter_opt_in: "newsletter_opt_in",
+    provider: "provider",
+    platform: "platform",
+    created_in_os: "created_in_os",
+    created_at: "created_at",
+    created_at_campaign:"created_at_campaign",
+    ciudad:"ciudad",
+    telefono:"telefono",
+    // birthDate:"birthDate"
+  });
+  
+  async function downloadSearch() {
+    try {
+      // loadingUsuarios.value = true;
+      isFullLoading.value=true;
+      await fetchFullUsers();
+      isFullLoading.value=false;
+      // loadingUsuarios.value = false;
+
+      let doc = [];
+      doc = usersFull.value
+      var title = `${urlTitleExport.value}`;
+
+      logAction('descarga-completa-usuarios-hija-embajador'); 
+
+      exportCSVFile(headersGlobal.value, eliminarDuplicadosPorWylexId(doc), title);
+
+    } catch (error) {
+        console.log(error)
+        configSnackbar.value = {
+            message: "No se pudo recuperar los datos de usuario, recargue de nuevo.",
+            type: "error",
+            model: true
+        };
+        isFullLoading.value=false;
+        // loadingUsuarios.value = false;
+        return false;
+    }
+  };
+
+  const docsExportNumberLength = ref({
+    tamanioActual : 0,
+    tamanioTotal : 0
+  });
+
+  const usersFull = ref([]);
+
+  async function getUsuariosExportar(page = 1, limit = 10) {
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      urlApiExport.value = `https://usuarios-backoffice.vercel.app/campaign-landings/all-users/hija_embajador?fechai=${fecha.value.inicio}&fechaf=${fecha.value.fin}`;
+      urlTitleExport.value = "usuarios_hija_embajador_por_fecha";
+
+      var response = await fetch(`${urlApiExport.value}&page=${page}&limit=${limit}`, requestOptions);
+      
+      const data = await response.json();
+
+      if(data.resp){
+        return data;
+      }else{
+        configSnackbar.value = {
+            message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+            type: "error",
+            model: true
+        };
+        return null;
+      }
+    } catch (error) {
+      configSnackbar.value = {
+          message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
+      console.error(error.message);
+      return null;
+    }
+  }
+
+  function eliminarDuplicadosPorWylexId(array) {
+      const vistos = new Set();
+      return array.filter(item => {
+          if (vistos.has(item.wylexId)) {
+              return false; // Eliminar duplicado
+          } else {
+              vistos.add(item.wylexId);
+              return true; // Mantener el primer encuentro
+          }
+      });
+  }
+
+  async function fetchFullUsers(){
+
+    docsExportNumberLength.value = {
+      tamanioActual : 0,
+      tamanioTotal : 0
+    };
+
+    usersFull.value = [];
+
+    var pages = 1;
+    while(true){
+      const res = await getUsuariosExportar(
+        pages,
+        500
+      );
+
+      const array = res.data;
+      const totalUser = res.total;
+
+      array.forEach((registro) => {
+        const item = registro.user;
+        let newItem = {}; // Nuevo objeto para cada elemento de array
+        // Recorremos las claves de headers
+        for (let key in headersGlobal.value) {
+          // Verificamos si la clave existe en item y la agregamos al nuevo objeto
+          if (item.hasOwnProperty(key)) {
+            newItem[key] = item[key];
+          }else{
+            if(key == "created_at_campaign"){
+              newItem[key] = registro.created_at_campaign;
+            }else{
+              newItem[key] = "";
+            }
+          }
+        }
+        // Agregamos el nuevo objeto a usersFull.value
+        usersFull.value.push(newItem);
+      });
+
+      docsExportNumberLength.value.tamanioActual = usersFull.value.length;
+      docsExportNumberLength.value.tamanioTotal = totalUser;
+
+      usersFull.value.sort((a, b) => moment(b.created_at_campaign, 'DD/MM/YYYY-HH:mm:ss').diff(moment(a.created_at_campaign, 'DD/MM/YYYY-HH:mm:ss')));
+
+      pages++;
+
+      if(array.length < 1){
+        break;
+      }
+    }
+
+    return true;
+  };
+
+  function convertToCSV(objArray) {
+    var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+    var str = "";
+
+    for (var i = 0; i < array.length; i++) {
+      var line = "";
+      for (var index in array[i]) {
+        if (line != "") line += ",";
+
+        line += array[i][index];
+      }
+
+      str += line + "\r\n";
+    }
+
+    return str;
+  }
+
+  function exportCSVFile(headers, items, fileTitle) {
+    if (headers && items[0].wylexId !== "wylexId") {
+      items.unshift(headers);
+    }
+
+    // Convert Object to JSON
+    var jsonObject = JSON.stringify(items);
+
+    var csv = convertToCSV(jsonObject);
+
+    var exportedFilenmae = fileTitle + ".csv" || "export.csv";
+
+    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    if (navigator.msSaveBlob) {
+      // IE 10+
+      navigator.msSaveBlob(blob, exportedFilenmae);
+    } else {
+      var link = document.createElement("a");
+      if (link.download !== undefined) {
+        // feature detection
+        // Browsers that support HTML5 download attribute
+        var url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", exportedFilenmae);
+        link.style.visibility = "hidden";
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+      }
+    }
+  }
+
+/*********************************************************************/
+/**************** FIN DE CONFIGURACION DESCARGA ***********************/
+/*********************************************************************/
 
 onMounted(async () =>{
     loadingData.value = true;
@@ -390,10 +625,11 @@ onMounted(async () =>{
                 Usuarios registrados agrupados por fecha
             </VCardTitle>
             <VCardSubtitle class="text-wrap" style="word-break: break-all;">
-                Diseñada para mostrar la cantidad de usuarios registrados, organizados de acuerdo con la fecha de registro. Esta vista permite analizar el comportamiento de registro de los usuarios dentro de un rango específico, con la restricción de seleccionar únicamente un intervalo máximo de {{limiteDaysDate}} días. Esto facilita el enfoque en periodos más acotados y detallados, permitiendo identificar patrones o tendencias específicas en los registros diarios.
+                Diseñada para mostrar la cantidad de usuarios registrados, organizados de acuerdo con la fecha de registro. Esta vista permite analizar el comportamiento de registro de los usuarios dentro de un rango específico, con la restricción de seleccionar únicamente un intervalo máximo de {{limiteDaysDate}} días.
             </VCardSubtitle>
             <template #append>
-                <AppDateTimePicker 
+                <div class="d-flex align-center gap-4">
+                  <AppDateTimePicker 
                     clearable
                     class="bg-white"
                     style="width: 19rem;"
@@ -412,11 +648,29 @@ onMounted(async () =>{
                         valueFormat: 'd-m-Y',
                         reactive: true
                     }" />
+                    <div class="app-user-search-filter d-flex align-top justify-content-flex-end flex-wrap flex-column gap-0">
+                      <!-- 👉 Export button -->
+                      <VBtn
+                        :loading="isFullLoading"
+                        :disabled="isFullLoading || loadingUsuarios"
+                        variant="tonal"
+                        color="success"
+                        prepend-icon="tabler-screen-share"
+                        @click="downloadSearch"
+                      >
+                        <span style="cursor:pointer" class="px-0 py-p m-0">Exportar</span>
+                      </VBtn>
+                      <small class="px-0 py-1 text-disabled" v-if="isFullLoading">
+                        Exportando {{ docsExportNumberLength.tamanioActual }} / {{ docsExportNumberLength.tamanioTotal }} registros
+                      </small> 
+                    </div>
+                </div>
             </template>
         </VCardItem>
 
         <VCardText>
-            <VueApexCharts v-if="loadingGrafico" :options="resolveDeviceTimeLine.options" :series="resolveDeviceTimeLine.series" :height="285" width="100%" />
+            <div class="h5"> Mostrando datos de: {{ fecha.inicio }} - {{ fecha.fin }}</div>
+            <VueApexCharts v-if="loadingGrafico" :options="resolveDeviceTimeLine.options" :series="resolveDeviceTimeLine.series" :height="320" width="100%" />
             <div v-else class="py-4">
                 Cargando datos...
             </div>

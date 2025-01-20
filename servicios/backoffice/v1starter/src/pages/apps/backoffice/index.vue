@@ -15,15 +15,11 @@ const noData = ref(false);
 const deleteShowGestores = ref({});
 const isGestoresDeleteConfirmVisible = ref(false);
 const roles = [
-  {title: "Administrador",
-    value:  "administrador"},
-    {title: "Redacción",
-    value:  "redaccion"},
-    {title: "Webmaster",
-    value:  "webmaster"},
-    {title: "Visor",
-    value:  "visor"},
-   
+  {title: "Administrador",value:  "administrador"},
+  {title: "Redacción",value:  "redaccion"},
+  {title: "Webmaster",value:  "webmaster"},
+  {title: "Visor",value:  "visor"},
+  {title: "Marketing",value:  "marketing"},
 ]
 async function getGestores(){
     isLoading.value = true;

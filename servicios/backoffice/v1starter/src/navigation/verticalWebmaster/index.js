@@ -36,6 +36,20 @@ export default [
       children: [
         { title: 'Click click boom', to: 'apps-concursos' },
         { title: 'Gavilanes', to: 'apps-concursos-gavilanes' },
+        {
+          title: 'Hija del embajador',
+          to: null,
+          children: [
+            {
+              title: 'Usuarios registrados',
+              to: 'apps-concursos-hija-embajador',
+            },
+            {
+              title: 'Analítica',
+              to: 'apps-concursos-hija-embajador-metricas',
+            },
+          ],
+        }
       //   // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },
       ],
     },

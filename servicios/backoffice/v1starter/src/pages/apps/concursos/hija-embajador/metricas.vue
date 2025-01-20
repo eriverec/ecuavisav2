@@ -12,7 +12,7 @@ import metrica_hija_embajador_agrupados_x_horas from '@/views/apps/concursos/met
       <metrica_hija_embajador_agrupados_x_dias />
     </VCol>
 
-    <VCol cols="12" md="12" class="d-none">
+    <VCol cols="12" md="12">
       <metrica_hija_embajador_agrupados_x_horas />
     </VCol>
 
