@@ -1,11 +1,14 @@
 <script setup>
 import { logAction } from '@/middleware/activityLogger';
+import { useDateStore } from '@/views/apps/concursos/stores/dateStore_hija_embajador.js';
 import { hexToRgb } from '@layouts/utils';
 import { parseISO } from 'date-fns';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
+
+const dateStore = useDateStore()
 
 const configSnackbar = ref({
     message: "Datos guardados",
@@ -541,6 +544,25 @@ const isFullLoading = ref(false);
 /*********************************************************************/
 /**************** FIN DE CONFIGURACION DESCARGA ***********************/
 /*********************************************************************/
+
+watchEffect(async () => {
+  if (dateStore.selectedDate) {
+    // Aquí puedes usar la nueva fecha
+    const selectedDates = dateStore.selectedDate;
+    existeFecha.value = true;
+    fechaIFModel.value.fechai = moment(selectedDates, "YYYY-MM-DD").format('DD-MM-YYYY');
+    fechaIFModel.value.fechaf = moment(selectedDates, "YYYY-MM-DD").format('DD-MM-YYYY'); 
+    fecha.value.inicio = moment(fechaIFModel.value.fechai, "DD-MM-YYYY").format('YYYY-MM-DD');
+    fecha.value.fin = moment(fechaIFModel.value.fechaf, "DD-MM-YYYY").format('YYYY-MM-DD');
+
+    await getChartLineTimeViews({
+        fechai: fecha.value.inicio,
+        fechaf: fecha.value.fin
+    });
+
+    console.log('Fecha actualizada:', selectedDates)
+  }
+})
 </script>
 
 <template>

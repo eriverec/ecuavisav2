@@ -1,11 +1,14 @@
 <script setup>
 import { logAction } from '@/middleware/activityLogger';
+import { useDateStore } from '@/views/apps/concursos/stores/dateStore_hija_embajador.js';
 import { hexToRgb } from '@layouts/utils';
 import { parseISO } from 'date-fns';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
+
+const dateStore = useDateStore()
 
 const configSnackbar = ref({
     message: "Datos guardados",
@@ -607,6 +610,21 @@ onMounted(async () =>{
     loadingData.value = false;
     loadingGrafico.value = true
 })
+
+const eventClick = function(event, chartContext, opts) {
+    // console.log(event, chartContext, opts)
+    // console.log(opts.dataPointIndex)
+    // console.log(opts.config.xaxis.categories)
+    if(opts.dataPointIndex > -1){
+      // console.log(opts.config.xaxis.categories[opts.dataPointIndex])
+      const fechaTimeZone = convertirTimestamp(opts.config.series[0]["data"][opts.dataPointIndex][0]).format("YYYY-MM-DD");
+      dateStore.setDate(fechaTimeZone)
+    }
+    // const category = config.xaxis.categories[dataPointIndex];
+    // const value = config.series[seriesIndex].data[dataPointIndex];
+    // console.log(`Clicked on ${category} with value ${value}`);
+    // Aquí puedes añadir tu lógica personalizada al hacer click en un punto
+  }
 </script>
 
 <template>
@@ -670,7 +688,7 @@ onMounted(async () =>{
 
         <VCardText>
             <div class="h5"> Mostrando datos de: {{ fecha.inicio }} - {{ fecha.fin }}</div>
-            <VueApexCharts v-if="loadingGrafico" :options="resolveDeviceTimeLine.options" :series="resolveDeviceTimeLine.series" :height="320" width="100%" />
+            <VueApexCharts v-if="loadingGrafico" :options="resolveDeviceTimeLine.options" :series="resolveDeviceTimeLine.series" :height="320" width="100%" @click="eventClick" />
             <div v-else class="py-4">
                 Cargando datos...
             </div>
