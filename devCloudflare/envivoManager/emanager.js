@@ -655,28 +655,6 @@ function eventoEnvivoManagerQuito() {
   let programaActualId = null;
   let scriptCargado = false;
 
-  // Primero, cargar el script de manera dinámica
-  function cargarScript() {
-    console.log('Intentando cargar el script de Quito...');
-    return new Promise((resolve, reject) => {
-      const script = document.createElement('script');
-      script.src = 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_quito.js';
-      script.async = true;
-      
-      script.onload = () => {
-        console.log('Script cargado exitosamente');
-        resolve();
-      };
-      
-      script.onerror = () => {
-        console.error('Error al cargar el script');
-        reject();
-      };
-      
-      document.head.appendChild(script);
-    });
-  }
-
   function mostrarEstadoInicial() {
     console.log('Mostrando estado inicial mientras se cargan los datos...');
     if (fondito__quito) {
@@ -693,18 +671,62 @@ function eventoEnvivoManagerQuito() {
     }
   }
 
-  // El resto de las funciones (aplicarForzado, procesarDatos, etc.) se mantienen igual...
+  function aplicarForzado(data) {
+    console.log('Aplicando transmisión forzada:', data.forzado);
+    const dataTitulo = data.forzado.titulo;
+    
+    if (title_programa_quito) {
+      console.log('Actualizando título a:', dataTitulo);
+      title_programa_quito.innerHTML = dataTitulo;
+      title_programa_quito.style.display = 'block';
+    }
+    
+    if (playerembed_quito) {
+      console.log('Actualizando player embed');
+      playerembed_quito.style.display = 'block';
+      playerembed_quito.innerHTML = data.html.value;
+    }
+    
+    if (fondito__quito) {
+      fondito__quito.style.display = 'none';
+    }
+
+    if (btnTelcomunidad_quito) {
+      btnTelcomunidad_quito.style.display = 'none';
+    }
+  }
+
+  function procesarDatos(data) {
+    if (!data) {
+      console.log('No hay datos para procesar');
+      return;
+    }
+
+    const estadoForzadoActual = data.forzado.estado;
+    console.log('Procesando datos - Estado forzado:', estadoForzadoActual);
+
+    if (estadoForzadoActual) {
+      console.log('Forzado activo detectado, aplicando cambios...');
+      aplicarForzado(data);
+    } else {
+      console.log('No hay forzado activo');
+      if (estadoForzadoAnterior !== estadoForzadoActual) {
+        console.log('Cambio en estado de forzado detectado');
+        limpiarInterfaz();
+        verificarProgramaActual(data);
+      } else {
+        verificarProgramaActual(data);
+      }
+    }
+
+    estadoForzadoAnterior = estadoForzadoActual;
+  }
 
   function verificarActualizaciones() {
     try {
-      // Intentar acceder a la variable global de múltiples formas
-      const datos = window.horario_envivo_quito || window['horario_envivo_quito'];
-      
-      if (datos) {
-        console.log('Datos encontrados:', datos);
-        procesarDatos(datos);
-      } else {
-        console.log('Esperando datos...');
+      if (window.horario_envivo_quito) {
+        console.log('Verificando datos actualizados');
+        procesarDatos(window.horario_envivo_quito);
       }
     } catch (error) {
       console.error('Error al procesar datos:', error);
@@ -713,29 +735,35 @@ function eventoEnvivoManagerQuito() {
     }
   }
 
-  // Inicializar todo el proceso
-  async function inicializar() {
-    console.log('Iniciando proceso completo...');
-    mostrarEstadoInicial();
+  // Nueva función para esperar los datos
+  function esperarDatos() {
+    let intentos = 0;
+    const maxIntentos = 30; // 30 segundos máximo de espera
     
-    try {
-      // Esperar a que el script se cargue
-      await cargarScript();
-      
-      // Dar un pequeño tiempo para que los datos se inicialicen
-      setTimeout(() => {
-        console.log('Iniciando verificaciones periódicas...');
+    const interval = setInterval(() => {
+      console.log('Verificando disponibilidad de datos...');
+      if (window.horario_envivo_quito) {
+        console.log('Datos encontrados, iniciando procesamiento');
+        clearInterval(interval);
         verificarActualizaciones();
-      }, 500);
-      
-    } catch (error) {
-      console.error('Error en la inicialización:', error);
-      // Si falla, mostrar el estado por defecto
-      mostrarEstadoInicial();
-    }
+      } else {
+        intentos++;
+        if (intentos >= maxIntentos) {
+          console.log('Tiempo de espera agotado, mostrando estado por defecto');
+          clearInterval(interval);
+          mostrarEstadoInicial();
+        }
+      }
+    }, 1000);
   }
 
-  // Iniciar todo el proceso
+  // Inicializar
+  function inicializar() {
+    console.log('Iniciando manager de Quito');
+    mostrarEstadoInicial();
+    esperarDatos();
+  }
+
   inicializar();
 }
 
@@ -744,7 +772,6 @@ if (window.location.pathname === '/envivo/quito') {
   console.log('Página de Quito detectada, iniciando manager...');
   eventoEnvivoManagerQuito();
 }
-
 /*** FIN NUEVO QUITO ***/
 
 // eventoEnvivoManager();
