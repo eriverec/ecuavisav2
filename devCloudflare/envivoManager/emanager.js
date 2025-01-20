@@ -653,8 +653,6 @@ function eventoEnvivoManagerQuito() {
   
   let estadoForzadoAnterior = null;
   let programaActualId = null;
-  let intentosMaximos = 10;
-  let intentos = 0;
 
   function aplicarForzado(data) {
     console.log('Aplicando transmisión forzada');
@@ -770,71 +768,60 @@ function eventoEnvivoManagerQuito() {
 
     return programaActual;
   }
-  async function obtenerDatosActualizados() {
-    return new Promise((resolve, reject) => {
-      const verificarScript = () => {
-        // Intentar obtener los datos más recientes
-        if (typeof window.horario_envivo_quito !== 'undefined') {
-          console.log('Datos actualizados obtenidos');
-          resolve(window.horario_envivo_quito);
-        } else {
-          intentos++;
-          if (intentos < intentosMaximos) {
-            console.log(`Esperando datos... intento ${intentos}`);
-            setTimeout(verificarScript, 1000);
-          } else {
-            reject(new Error('No se pudieron obtener los datos después de varios intentos'));
-          }
-        }
-      };
+ 
+  function procesarDatos(data) {
+    if (!data) return;
 
-      verificarScript();
-    });
+    const estadoForzadoActual = data.forzado.estado;
+    console.log('Estado forzado actual:', estadoForzadoActual);
+
+    // Verificar primero si hay forzado activo
+    if (estadoForzadoActual) {
+      // Siempre aplicar el forzado si está activo
+      aplicarForzado(data);
+    } else {
+      // Si no hay forzado, verificar la programación normal
+      if (estadoForzadoAnterior !== estadoForzadoActual) {
+        console.log('Desactivando transmisión forzada');
+        limpiarInterfaz();
+      }
+      verificarProgramaActual(data);
+    }
+
+    estadoForzadoAnterior = estadoForzadoActual;
   }
 
-  async function fetchHorarioEnvivoQuito() {
+  async function verificarActualizaciones() {
     try {
-      // Obtener datos actualizados en cada ciclo
-      const data = await obtenerDatosActualizados();
-      const estadoForzadoActual = data.forzado.estado;
-
-      console.log('Estado forzado actual:', estadoForzadoActual);
-      console.log('Estado forzado anterior:', estadoForzadoAnterior);
-
-      // Verificar primero si hay forzado activo
-      if (estadoForzadoActual) {
-        // Siempre aplicar el forzado si está activo, incluso si no hubo cambio de estado
-        aplicarForzado(data);
-        console.log('Forzado activo aplicado');
-      } else {
-        // Si no hay forzado, verificar la programación normal
-        if (estadoForzadoAnterior !== estadoForzadoActual) {
-          console.log('Desactivando transmisión forzada');
-          limpiarInterfaz();
-        }
-        verificarProgramaActual(data);
+      if (typeof window.horario_envivo_quito !== 'undefined') {
+        procesarDatos(window.horario_envivo_quito);
       }
-
-      estadoForzadoAnterior = estadoForzadoActual;
-
     } catch (error) {
-      console.error('Error al obtener los datos:', error);
+      console.error('Error al procesar datos:', error);
     } finally {
-      // Programar siguiente verificación
-      setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
+      // Siempre programar la siguiente verificación
+      setTimeout(verificarActualizaciones, tiempoEsperaEnvivo);
     }
   }
 
-  // Esperar a que el script se cargue antes de iniciar
-  setTimeout(() => {
-    console.log('Iniciando monitoreo de horarios Quito');
-    fetchHorarioEnvivoQuito();
-  }, 1000);
+  // Función para esperar a que el script se cargue inicialmente
+  function esperarCargaInicial() {
+    if (typeof window.horario_envivo_quito !== 'undefined') {
+      console.log('Script de horarios cargado, iniciando verificaciones');
+      verificarActualizaciones();
+    } else {
+      console.log('Esperando carga del script...');
+      setTimeout(esperarCargaInicial, 1000);
+    }
+  }
+
+  // Iniciar el proceso de espera
+  console.log('Iniciando monitoreo de horarios Quito');
+  esperarCargaInicial();
 }
 
-// Inicializar el manager
+// Inicializar el manager solo en la página de Quito
 if (window.location.pathname === '/envivo/quito') {
-  console.log('Página de Quito detectada, iniciando manager...');
   eventoEnvivoManagerQuito();
 }
 
