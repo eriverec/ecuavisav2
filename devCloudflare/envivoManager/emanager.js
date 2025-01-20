@@ -644,17 +644,131 @@ function eventoEnvivoManager() {
 //   fetchHorarioEnvivoQuito();
 // }
 
-
 function eventoEnvivoManagerQuito() {
   const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad');
   const title_programa_quito = document.querySelector('.title_programa_quito');
   const playerembed_quito = document.querySelector('#playerembed_quito');
   const fondito__quito = document.querySelector('#fondito__quito');
-  // Cambiamos el intervalo a 1 segundo para una actualización más frecuente
   const tiempoEsperaEnvivo = 1000;
   
-  // Variable para almacenar el estado anterior del forzado
   let estadoForzadoAnterior = null;
+  let programaActualId = null;
+
+  function aplicarForzado(data) {
+    console.log('Aplicando transmisión forzada');
+    const dataTitulo = data.forzado.titulo;
+    
+    if (title_programa_quito) {
+      title_programa_quito.innerHTML = dataTitulo;
+      title_programa_quito.style.display = 'block';
+    }
+    
+    if (playerembed_quito) {
+      playerembed_quito.style.display = 'block';
+      playerembed_quito.innerHTML = data.html.value;
+    }
+    
+    if (fondito__quito) {
+      fondito__quito.style.display = 'none';
+    }
+
+    // Ocultar botón de Telecomunidad durante forzado
+    if (btnTelcomunidad_quito) {
+      btnTelcomunidad_quito.style.display = 'none';
+    }
+  }
+
+  function limpiarInterfaz() {
+    console.log('Limpiando interfaz - No hay programa activo');
+    if (title_programa_quito) {
+      title_programa_quito.innerHTML = '';
+      title_programa_quito.style.display = 'none';
+    }
+    if (playerembed_quito) {
+      playerembed_quito.style.display = 'none';
+      if (playerembed_quito.querySelector('iframe')) {
+        playerembed_quito.querySelector('iframe').remove();
+      }
+    }
+    if (fondito__quito) {
+      fondito__quito.style.display = 'block';
+    }
+    if (btnTelcomunidad_quito) {
+      btnTelcomunidad_quito.style.display = 'none';
+    }
+  }
+
+  function verificarProgramaActual(data) {
+    const fechaActual = new Date();
+    fechaActual.setUTCHours(fechaActual.getUTCHours() - 5);
+    const diaSemana = fechaActual.getUTCDay();
+    const horaActual = fechaActual.getUTCHours();
+    const minutosActuales = fechaActual.getUTCMinutes();
+
+    const dia = data.horarios.find(e => e.dia === diaSemana && e.estadoDia);
+    
+    if (!dia) {
+      console.log('No hay programación para este día');
+      limpiarInterfaz();
+      return null;
+    }
+
+    let programaActual = null;
+    for (const hora of dia.horas) {
+      if (!hora.estadoHorario) continue;
+
+      const [inicioHora, inicioMinutos] = hora.inicio.split(":").map(Number);
+      const [finHora, finMinutos] = hora.fin.split(":").map(Number);
+
+      const dentroDelHorario =
+        (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) &&
+        (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos));
+
+      if (dentroDelHorario) {
+        programaActual = hora;
+        break;
+      }
+    }
+
+    const programaActualNuevoId = programaActual ? 
+      `${programaActual.tituloPrograma}-${programaActual.inicio}-${programaActual.fin}` : 
+      null;
+
+    if (programaActualNuevoId !== programaActualId) {
+      console.log('Cambio de programa detectado');
+      programaActualId = programaActualNuevoId;
+
+      if (programaActual) {
+        console.log('Iniciando nuevo programa:', programaActual.tituloPrograma);
+        if (title_programa_quito) {
+          title_programa_quito.innerHTML = programaActual.tituloPrograma;
+          title_programa_quito.style.display = 'block';
+        }
+        if (playerembed_quito) {
+          playerembed_quito.style.display = 'block';
+          if (programaActual.iframe) {
+            playerembed_quito.innerHTML = programaActual.iframe;
+          } else {
+            playerembed_quito.innerHTML = data.html.value;
+          }
+        }
+        if (fondito__quito) {
+          fondito__quito.style.display = 'none';
+        }
+
+        if (btnTelcomunidad_quito) {
+          btnTelcomunidad_quito.style.display = 
+            programaActual.tituloPrograma === "Televistazo en la comunidad" ? 
+            "block" : "none";
+        }
+      } else {
+        console.log('No hay programa activo en este momento');
+        limpiarInterfaz();
+      }
+    }
+
+    return programaActual;
+  }
 
   async function fetchHorarioEnvivoQuito() {
     try {
@@ -663,32 +777,27 @@ function eventoEnvivoManagerQuito() {
       }
 
       const data = horario_envivo_quito;
-      
-      // Verificar si el estado del forzado ha cambiado
       const estadoForzadoActual = data.forzado.estado;
-      
-      // Si hay un cambio en el estado del forzado o es la primera ejecución
-      if (estadoForzadoActual !== estadoForzadoAnterior) {
-        console.log('Cambio detectado en el estado del forzado:', estadoForzadoActual);
-        
-        // Actualizar inmediatamente la interfaz
-        procesosHorarioEnvivo({
-          data: data,
-          apiUrl: null,
-          enVivoRedy: null,
-          textIndicador: null,
-          btnTelcomunidad: btnTelcomunidad_quito,
-          btnTelevistazo7pm: null,
-          title_programa: title_programa_quito,
-          playerembed: playerembed_quito,
-          fondito__: fondito__quito,
-        });
-        
-        // Actualizar el estado anterior
-        estadoForzadoAnterior = estadoForzadoActual;
+
+      // Verificar primero si hay forzado activo
+      if (estadoForzadoActual) {
+        // Si hay un cambio de estado o es la primera vez
+        if (estadoForzadoAnterior !== estadoForzadoActual) {
+          console.log('Activando transmisión forzada');
+          aplicarForzado(data);
+        }
+      } else {
+        // Si no hay forzado, verificar si acabamos de salir del modo forzado
+        if (estadoForzadoAnterior !== estadoForzadoActual) {
+          console.log('Desactivando transmisión forzada');
+          verificarProgramaActual(data);
+        } else {
+          // Verificación rutinaria de la programación normal
+          verificarProgramaActual(data);
+        }
       }
 
-      // Programar la siguiente verificación
+      estadoForzadoAnterior = estadoForzadoActual;
       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
       return true;
     } catch (error) {
