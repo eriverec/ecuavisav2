@@ -653,8 +653,35 @@ function eventoEnvivoManagerQuito() {
   let currentDataQuito = null;
   let monitoringIntervalQuito = null;
 
+  // Función para recargar el script de Quito
+  function reloadQuitoScript() {
+    return new Promise((resolve, reject) => {
+      // Eliminar el script existente si existe
+      const existingScript = document.querySelector('script[src*="envivo_quito.js"]');
+      if (existingScript) {
+        existingScript.remove();
+      }
+
+      // Crear y cargar el nuevo script
+      const newScript = document.createElement('script');
+      newScript.src = 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_quito.js';
+      newScript.async = true;
+      
+      newScript.onload = () => {
+        // Esperar un breve momento para asegurar que la variable se actualice
+        setTimeout(() => resolve(), 100);
+      };
+      newScript.onerror = reject;
+      
+      document.head.appendChild(newScript);
+    });
+  }
+
   async function fetchHorarioEnvivoQuito() {
     try {
+      // Recargar el script para obtener los datos más recientes
+      await reloadQuitoScript();
+
       if (typeof horario_envivo_quito === 'undefined') {
         throw new Error('No se han cargado los datos de Quito');
       }
@@ -678,11 +705,10 @@ function eventoEnvivoManagerQuito() {
         });
       }
 
-      // Programar la siguiente verificación
-      monitoringIntervalQuito = setTimeout(fetchHorarioEnvivoQuito, 1000); // 1 segundo
     } catch (error) {
       console.error('Error al obtener los datos de Quito:', error);
-      // En caso de error, reintentamos en 1 segundo
+    } finally {
+      // Programar la siguiente verificación
       monitoringIntervalQuito = setTimeout(fetchHorarioEnvivoQuito, 1000);
     }
   }
@@ -697,7 +723,6 @@ function eventoEnvivoManagerQuito() {
   // Iniciar el monitoreo
   fetchHorarioEnvivoQuito();
 }
-
 
 /*** FIN NUEVO QUITO ***/
 
