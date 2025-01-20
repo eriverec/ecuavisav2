@@ -653,41 +653,29 @@ function eventoEnvivoManagerQuito() {
   let currentDataQuito = null;
   let monitoringIntervalQuito = null;
 
-  // Función para recargar el script de Quito
-  function reloadQuitoScript() {
-    return new Promise((resolve, reject) => {
-      // Eliminar el script existente si existe
-      const existingScript = document.querySelector('script[src*="envivo_quito.js"]');
-      if (existingScript) {
-        existingScript.remove();
-      }
-
-      // Crear y cargar el nuevo script
-      const newScript = document.createElement('script');
-      newScript.src = 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_quito.js';
-      newScript.async = true;
-      
-      newScript.onload = () => {
-        // Esperar un breve momento para asegurar que la variable se actualice
-        setTimeout(() => resolve(), 100);
-      };
-      newScript.onerror = reject;
-      
-      document.head.appendChild(newScript);
-    });
+  // Función para obtener el contenido del script
+  async function fetchScriptContent() {
+    try {
+      const response = await fetch('https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_quito.js');
+      const scriptContent = await response.text();
+      // Extraer el objeto de la declaración const
+      const objectContent = scriptContent.replace('const horario_envivo_quito = ', '').replace(';', '');
+      return JSON.parse(objectContent);
+    } catch (error) {
+      console.error('Error al obtener el contenido del script:', error);
+      return null;
+    }
   }
 
   async function fetchHorarioEnvivoQuito() {
     try {
-      // Recargar el script para obtener los datos más recientes
-      await reloadQuitoScript();
-
-      if (typeof horario_envivo_quito === 'undefined') {
-        throw new Error('No se han cargado los datos de Quito');
+      // Obtener datos nuevos directamente del script
+      const newData = await fetchScriptContent();
+      
+      if (!newData) {
+        throw new Error('No se han podido obtener los datos de Quito');
       }
 
-      const newData = horario_envivo_quito;
-      
       // Verificar si hay cambios en los datos
       if (!currentDataQuito || JSON.stringify(currentDataQuito) !== JSON.stringify(newData)) {
         currentDataQuito = newData;
@@ -723,7 +711,6 @@ function eventoEnvivoManagerQuito() {
   // Iniciar el monitoreo
   fetchHorarioEnvivoQuito();
 }
-
 /*** FIN NUEVO QUITO ***/
 
 // eventoEnvivoManager();
