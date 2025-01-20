@@ -603,199 +603,45 @@ function eventoEnvivoManager() {
 }
 
 /*** NUEVA FUNCION QUITO ***/
-// function eventoEnvivoManagerQuito() {
-//   const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad');
-//   const title_programa_quito = document.querySelector('.title_programa_quito');
-//   const playerembed_quito = document.querySelector('#playerembed_quito');
-//   const fondito__quito = document.querySelector('#fondito__quito');
-//   // const tiempoEsperaEnvivo = 120000;
-//   const tiempoEsperaEnvivo = 60000;
-
-//   async function fetchHorarioEnvivoQuito() {
-//     try {
-//       if (typeof horario_envivo_quito === 'undefined') {
-//         throw new Error('No se han cargado los datos de Quito');
-//       }
-
-//       const data = horario_envivo_quito;
-      
-//       procesosHorarioEnvivo({
-//         data: data,
-//         apiUrl: null,
-//         enVivoRedy: null,
-//         textIndicador: null,
-//         btnTelcomunidad: btnTelcomunidad_quito,
-//         btnTelevistazo7pm: null,
-//         title_programa: title_programa_quito,
-//         playerembed: playerembed_quito,
-//         fondito__: fondito__quito,
-//       });
-
-//       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
-//       return true;
-//     } catch (error) {
-//       console.error('Error al obtener los datos de Quito:', error);
-//       setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
-//       return null;
-//     }
-//   }
-
-//   // Llamar a la función para obtener y procesar los datos inicialmente
-//   fetchHorarioEnvivoQuito();
-// }
-
 function eventoEnvivoManagerQuito() {
   const btnTelcomunidad_quito = document.querySelector('#btnTelcomunidad');
   const title_programa_quito = document.querySelector('.title_programa_quito');
   const playerembed_quito = document.querySelector('#playerembed_quito');
   const fondito__quito = document.querySelector('#fondito__quito');
-  const tiempoEsperaEnvivo = 1000;
-  
-  let estadoForzadoAnterior = null;
-  let programaActualId = null;
+  // const tiempoEsperaEnvivo = 120000;
+  const tiempoEsperaEnvivo = 60000;
 
-  function mostrarEstadoInicial() {
-    console.log('Mostrando estado inicial mientras se cargan los datos...');
-    if (fondito__quito) {
-      fondito__quito.style.display = 'block';
-    }
-    if (title_programa_quito) {
-      title_programa_quito.style.display = 'none';
-    }
-    if (playerembed_quito) {
-      playerembed_quito.style.display = 'none';
-    }
-    if (btnTelcomunidad_quito) {
-      btnTelcomunidad_quito.style.display = 'none';
-    }
-  }
-
-  function aplicarForzado(data) {
-    console.log('Intentando aplicar forzado:', data);
-    const dataTitulo = data.forzado.titulo;
-    
-    if (title_programa_quito) {
-      console.log('Actualizando título a:', dataTitulo);
-      title_programa_quito.innerHTML = dataTitulo;
-      title_programa_quito.style.display = 'block';
-    }
-    
-    if (playerembed_quito) {
-      console.log('Actualizando player embed');
-      playerembed_quito.style.display = 'block';
-      playerembed_quito.innerHTML = data.html.value;
-
-      // Si hay un iframe dentro del player, asegurarse de que se cargue correctamente
-      const iframe = playerembed_quito.querySelector('iframe');
-      if (iframe) {
-        console.log('Iframe encontrado, configurando...');
-        iframe.addEventListener('load', () => {
-          console.log('Iframe cargado correctamente');
-        });
-      }
-    }
-    
-    if (fondito__quito) {
-      fondito__quito.style.display = 'none';
-    }
-
-    if (btnTelcomunidad_quito) {
-      btnTelcomunidad_quito.style.display = 'none';
-    }
-  }
-
-  function procesarDatos(data) {
-    console.log('Procesando datos:', data);
-    if (!data) {
-      console.log('No hay datos para procesar');
-      return;
-    }
-
-    const estadoForzadoActual = data.forzado.estado;
-    console.log('Estado de forzado actual:', estadoForzadoActual);
-    console.log('Datos de forzado:', data.forzado);
-
-    if (estadoForzadoActual) {
-      console.log('Forzado activo detectado, aplicando...');
-      aplicarForzado(data);
-    } else {
-      console.log('No hay forzado activo, verificando programación normal');
-      if (estadoForzadoAnterior !== estadoForzadoActual) {
-        console.log('Cambio en estado de forzado detectado');
-        limpiarInterfaz();
-        verificarProgramaActual(data);
-      } else {
-        verificarProgramaActual(data);
-      }
-    }
-
-    estadoForzadoAnterior = estadoForzadoActual;
-  }
-
-  function verificarActualizaciones() {
+  async function fetchHorarioEnvivoQuito() {
     try {
-      console.log('Verificando actualizaciones...');
-      // Intentamos acceder a los datos de múltiples formas
-      const datos = window.horario_envivo_quito || window['horario_envivo_quito'];
-      
-      if (datos) {
-        console.log('Datos encontrados en verificación:', datos);
-        procesarDatos(datos);
-      } else {
-        console.log('Datos no disponibles en esta verificación');
+      if (typeof horario_envivo_quito === 'undefined') {
+        throw new Error('No se han cargado los datos de Quito');
       }
-    } catch (error) {
-      console.error('Error al procesar datos:', error);
-    } finally {
-      setTimeout(verificarActualizaciones, tiempoEsperaEnvivo);
-    }
-  }
 
-  // Función para observar cambios en el script
-  function observarScript() {
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.type === 'childList') {
-          mutation.addedNodes.forEach((node) => {
-            if (node.tagName === 'SCRIPT' && node.src.includes('envivo_quito.js')) {
-              console.log('Script de Quito detectado, esperando carga...');
-              node.addEventListener('load', () => {
-                console.log('Script de Quito cargado, iniciando verificaciones...');
-                setTimeout(verificarActualizaciones, 1000);
-              });
-            }
-          });
-        }
+      const data = horario_envivo_quito;
+      
+      procesosHorarioEnvivo({
+        data: data,
+        apiUrl: null,
+        enVivoRedy: null,
+        textIndicador: null,
+        btnTelcomunidad: btnTelcomunidad_quito,
+        btnTelevistazo7pm: null,
+        title_programa: title_programa_quito,
+        playerembed: playerembed_quito,
+        fondito__: fondito__quito,
       });
-    });
 
-    observer.observe(document.head, { childList: true, subtree: true });
-  }
-
-  // Inicializar
-  function inicializar() {
-    console.log('Iniciando manager de Quito');
-    mostrarEstadoInicial();
-    
-    // Si el script ya está cargado, iniciar verificaciones
-    if (window.horario_envivo_quito) {
-      console.log('Datos ya disponibles, iniciando verificaciones...');
-      verificarActualizaciones();
-    } else {
-      console.log('Esperando carga del script...');
-      observarScript();
-      // Iniciar verificaciones después de un tiempo razonable de todas formas
-      setTimeout(verificarActualizaciones, 2000);
+      setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
+      return true;
+    } catch (error) {
+      console.error('Error al obtener los datos de Quito:', error);
+      setTimeout(fetchHorarioEnvivoQuito, tiempoEsperaEnvivo);
+      return null;
     }
   }
 
-  inicializar();
-}
-
-// Solo iniciar en la página de Quito
-if (window.location.pathname === '/envivo/quito') {
-  console.log('Página de Quito detectada, iniciando manager...');
-  eventoEnvivoManagerQuito();
+  // Llamar a la función para obtener y procesar los datos inicialmente
+  fetchHorarioEnvivoQuito();
 }
 
 
