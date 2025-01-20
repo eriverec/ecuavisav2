@@ -653,14 +653,25 @@ function eventoEnvivoManagerQuito() {
   let currentDataQuito = null;
   let monitoringIntervalQuito = null;
 
-  // Función para obtener el contenido del script
+  // Función para obtener el contenido del script de forma segura
   async function fetchScriptContent() {
     try {
       const response = await fetch('https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_quito.js');
       const scriptContent = await response.text();
-      // Extraer el objeto de la declaración const
-      const objectContent = scriptContent.replace('const horario_envivo_quito = ', '').replace(';', '');
-      return JSON.parse(objectContent);
+
+      // Evaluar el contenido del script de forma segura
+      const scriptEl = document.createElement('script');
+      scriptEl.textContent = scriptContent;
+      document.head.appendChild(scriptEl);
+      
+      // Esperar un momento para asegurar que la variable se haya definido
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Obtener los datos de la variable global
+      if (typeof horario_envivo_quito !== 'undefined') {
+        return horario_envivo_quito;
+      }
+      return null;
     } catch (error) {
       console.error('Error al obtener el contenido del script:', error);
       return null;
@@ -669,7 +680,7 @@ function eventoEnvivoManagerQuito() {
 
   async function fetchHorarioEnvivoQuito() {
     try {
-      // Obtener datos nuevos directamente del script
+      // Obtener datos nuevos
       const newData = await fetchScriptContent();
       
       if (!newData) {
@@ -697,6 +708,9 @@ function eventoEnvivoManagerQuito() {
       console.error('Error al obtener los datos de Quito:', error);
     } finally {
       // Programar la siguiente verificación
+      if (monitoringIntervalQuito) {
+        clearTimeout(monitoringIntervalQuito);
+      }
       monitoringIntervalQuito = setTimeout(fetchHorarioEnvivoQuito, 1000);
     }
   }
@@ -711,6 +725,7 @@ function eventoEnvivoManagerQuito() {
   // Iniciar el monitoreo
   fetchHorarioEnvivoQuito();
 }
+
 /*** FIN NUEVO QUITO ***/
 
 // eventoEnvivoManager();
