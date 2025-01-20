@@ -654,24 +654,29 @@ function eventoEnvivoManagerQuito() {
   let monitoringIntervalQuito = null;
 
   // Función para obtener el contenido del script de forma segura
-  async function fetchScriptContent() {
-    try {
-      const response = await fetch('https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_quito.js' + '?t=' + new Date().getTime());
-      const scriptContent = await response.text();
+  function fetchScriptContent() {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_quito.js?' + new Date().getTime(), true);
       
-      // Crear una función temporal para evaluar el contenido
-      const tempFn = new Function(`
-        let tempData;
-        const horario_envivo_quito = ${scriptContent.split('=')[1].trim()}
-        tempData = horario_envivo_quito;
-        return tempData;
-      `);
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          try {
+            // Evaluar el contenido de forma segura
+            const evalScript = new Function(xhr.responseText + '; return horario_envivo_quito;');
+            const result = evalScript();
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          }
+        } else {
+          reject(new Error('Error al cargar el script'));
+        }
+      };
       
-      return tempFn();
-    } catch (error) {
-      console.error('Error al obtener el contenido del script:', error);
-      return null;
-    }
+      xhr.onerror = () => reject(new Error('Error de red'));
+      xhr.send();
+    });
   }
 
   async function fetchHorarioEnvivoQuito() {
@@ -723,6 +728,7 @@ function eventoEnvivoManagerQuito() {
   // Iniciar el monitoreo
   fetchHorarioEnvivoQuito();
 }
+
 /*** FIN NUEVO QUITO ***/
 
 // eventoEnvivoManager();
