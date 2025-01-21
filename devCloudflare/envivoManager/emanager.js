@@ -653,8 +653,8 @@ function eventoEnvivoManagerQuito() {
   
   let currentDataQuito = null;
   let monitoringIntervalQuito = null;
-  let scheduleCheckInterval = null;
 
+  // Función para obtener el contenido del script de forma segura
   function fetchScriptContent() {
     return new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
@@ -679,27 +679,25 @@ function eventoEnvivoManagerQuito() {
     });
   }
 
-  function checkProgramSchedule(data) {
+  // Función para verificar y procesar el horario actual
+  function procesarHorarioActual() {
     const fechaActual = new Date();
     fechaActual.setUTCHours(fechaActual.getUTCHours() - 5); // Ajuste a hora Ecuador
     const diaSemana = fechaActual.getUTCDay();
     const horaActual = fechaActual.getUTCHours();
     const minutosActuales = fechaActual.getUTCMinutes();
 
-    // Si está en modo forzado, retornar los datos tal cual
-    if (data.forzado && data.forzado.estado) {
-      return data;
+    if (!currentDataQuito) return;
+
+    // Si está en modo forzado, no procesar horarios
+    if (currentDataQuito.forzado && currentDataQuito.forzado.estado) {
+      return;
     }
 
-    // Clonar los datos para no modificar el original
-    const processedData = JSON.parse(JSON.stringify(data));
-    
-    // Estado por defecto: no hay programa activo
-    let programaActivo = false;
-    let programaActual = null;
-
-    const diaActual = processedData.horarios.find(d => d.dia === diaSemana);
+    const diaActual = currentDataQuito.horarios.find(d => d.dia === diaSemana);
     if (diaActual && diaActual.estadoDia) {
+      let programaEncontrado = false;
+
       for (const hora of diaActual.horas) {
         if (!hora.estadoHorario) continue;
 
@@ -711,31 +709,39 @@ function eventoEnvivoManagerQuito() {
         const finEnMinutos = finHora * 60 + finMinutos;
 
         if (horaActualEnMinutos >= inicioEnMinutos && horaActualEnMinutos < finEnMinutos) {
-          programaActivo = true;
-          programaActual = hora;
+          programaEncontrado = true;
+          
+          // Actualizar interfaz con el programa actual
+          procesosHorarioEnvivo({
+            data: currentDataQuito,
+            apiUrl: null,
+            enVivoRedy: null,
+            textIndicador: null,
+            btnTelcomunidad: btnTelcomunidad_quito,
+            btnTelevistazo7pm: null,
+            title_programa: title_programa_quito,
+            playerembed: playerembed_quito,
+            fondito__: fondito__quito,
+          });
           break;
         }
       }
-    }
 
-    // Modificar el estado según si hay programa activo o no
-    if (!programaActivo) {
-      // No hay programa activo: limpiar todo
-      processedData.html.value = "";
-      if (title_programa_quito) title_programa_quito.style.display = 'none';
-      if (playerembed_quito) playerembed_quito.style.display = 'none';
-      if (fondito__quito) fondito__quito.style.display = 'block';
-    } else if (programaActual) {
-      // Hay programa activo: configurar para el programa actual
-      if (title_programa_quito) {
-        title_programa_quito.innerHTML = programaActual.tituloPrograma;
-        title_programa_quito.style.display = 'block';
+      // Si no hay programa activo, limpiar la interfaz
+      if (!programaEncontrado) {
+        if (title_programa_quito) {
+          title_programa_quito.innerHTML = '';
+          title_programa_quito.style.display = 'none';
+        }
+        if (playerembed_quito) {
+          playerembed_quito.style.display = 'none';
+          playerembed_quito.innerHTML = '';
+        }
+        if (fondito__quito) {
+          fondito__quito.style.display = 'block';
+        }
       }
-      if (playerembed_quito) playerembed_quito.style.display = 'block';
-      if (fondito__quito) fondito__quito.style.display = 'none';
     }
-
-    return programaActivo ? processedData : null;
   }
 
   async function fetchHorarioEnvivoQuito() {
@@ -746,15 +752,14 @@ function eventoEnvivoManagerQuito() {
         throw new Error('No se han podido obtener los datos de Quito');
       }
 
-      // Procesar los datos considerando los horarios
-      const processedData = checkProgramSchedule(newData);
-
-      // Verificar si hay cambios en los datos
-      if (processedData && (!currentDataQuito || JSON.stringify(currentDataQuito) !== JSON.stringify(processedData))) {
-        currentDataQuito = processedData;
+      // Solo actualizar si hay cambios en los datos o es forzado
+      if (!currentDataQuito || 
+          JSON.stringify(currentDataQuito) !== JSON.stringify(newData) ||
+          (newData.forzado && newData.forzado.estado)) {
         
+        currentDataQuito = newData;
         procesosHorarioEnvivo({
-          data: processedData,
+          data: newData,
           apiUrl: null,
           enVivoRedy: null,
           textIndicador: null,
@@ -764,35 +769,22 @@ function eventoEnvivoManagerQuito() {
           playerembed: playerembed_quito,
           fondito__: fondito__quito,
         });
-
         console.log('Datos actualizados:', new Date().toLocaleTimeString());
       }
 
     } catch (error) {
       console.error('Error al obtener los datos de Quito:', error);
-    } finally {
-      if (monitoringIntervalQuito) {
-        clearTimeout(monitoringIntervalQuito);
-      }
-      monitoringIntervalQuito = setTimeout(fetchHorarioEnvivoQuito, 1000);
-
-      if (!scheduleCheckInterval) {
-        scheduleCheckInterval = setInterval(fetchHorarioEnvivoQuito, 30000);
-      }
     }
   }
 
-  window.addEventListener('unload', () => {
-    if (monitoringIntervalQuito) {
-      clearTimeout(monitoringIntervalQuito);
-    }
-    if (scheduleCheckInterval) {
-      clearInterval(scheduleCheckInterval);
-    }
-  });
+  // Iniciar los intervalos de verificación
+  setInterval(procesarHorarioActual, 30000); // Verificar horarios cada 30 segundos
+  setInterval(fetchHorarioEnvivoQuito, 1000); // Verificar cambios forzados cada segundo
 
+  // Ejecutar verificación inicial
   fetchHorarioEnvivoQuito();
 }
+
 /*** FIN NUEVO QUITO ***/
 
 // eventoEnvivoManager();
