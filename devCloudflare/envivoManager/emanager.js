@@ -498,112 +498,317 @@ function procesosHorarioEnvivo(json = {}) {
 
 /** NUEVA FUNCION GUAYAQUIL ***/
 
+// function eventoEnvivoManager() {
+//   try {
+//     const enVivoRedy = document.querySelector('.enVivoRedy');
+//     const textIndicador = document.querySelector('.enVivoRedy .liveIndicator .enVivoText');
+//     const btnTelcomunidad = document.querySelector('#btnTelcomunidad');
+//     const btnTelevistazo7pm = document.querySelector('#btnTelevistazo7pm');
+//     const title_programa = document.querySelector('.title_programa');
+//     const playerembed = document.querySelector('#playerembed');
+//     const fondito__ = document.querySelector('#fondito__');
+//     const tiempoEsperaEnvivo = 120000;
+
+//     async function fetchHorarioEnvivoRespaldo() {
+//       const variableRespaldo = { "html": { "value": "<iframe id=\"vrudo\" class=\"vrudo\" src=\"//rudo.video/live/ecuavisa\" width=\"600\" height=\"338\" allowfullscreen=\"true\" frameborder=\"0\" scrolling=\"no\" allow=\"autoplay; fullscreen\"></iframe>", "estadoHtml": false }, "forzado": { "estado": false, "titulo": "En Vivo", "label": "En Vivo" }, "horarios": [{ "dia": 0, "estadoDia": true, "horas": [{ "tituloPrograma": "PolÃ­ticamente Correcto", "estadoHorario": true, "inicio": "10:30", "fin": "11:30" }, { "tituloPrograma": "Spiderman 2", "estadoHorario": true, "inicio": "15:00", "fin": "17:00" }, { "tituloPrograma": "Ride Along 2", "estadoHorario": true, "inicio": "17:00", "fin": "19:00" }, { "tituloPrograma": "Televistazo 19h00", "estadoHorario": true, "inicio": "19:00", "fin": "20:00" }] }] };
+
+//       try {
+//         const apiUrlRespaldo = `${ECUAVISA_EC.URL.dominioTemporal}horario/normal.php`;
+//         // const response = await fetch(apiUrlRespaldo, {
+//         //   method: 'GET',
+//         //   headers: {
+//         //     'Content-Type': 'application/json'
+//         //   },
+//         //   timeout: 8000
+//         // });
+//         const response = horario_envivo;
+
+//         // if (!response.ok) {
+//         if (!response) {
+//           console.error(`Error: Código de estado ${response.status}`);
+//           return variableRespaldo;
+//         }
+//         const data = await response.json();
+//         return data;
+//       } catch (error) {
+//         console.log(error);
+//         // return variableRespaldo;
+//         return horario_envivo;
+//       }
+//     }
+
+//     async function fetchHorarioEnvivo() {
+//       try {
+//         // primero intenta obtener los datos del archivo JS
+//         if (typeof horario_envivo === 'undefined') {
+//           console.log('No se encontraron datos del horario, usando respaldo...');
+//           // const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
+//           const responseRespaldoData = horario_envivo;
+
+//           procesosHorarioEnvivo({
+//             data: responseRespaldoData,
+//             apiUrl: null,
+//             enVivoRedy,
+//             textIndicador,
+//             btnTelcomunidad,
+//             btnTelevistazo7pm,
+//             title_programa,
+//             playerembed,
+//             fondito__,
+//           });
+
+//           setTimeout(fetchHorarioEnvivo, tiempoEsperaEnvivo);
+//           return null;
+//         }
+
+//         const data = horario_envivo;
+
+//         procesosHorarioEnvivo({
+//           data: data,
+//           apiUrl: null,
+//           enVivoRedy,
+//           textIndicador,
+//           btnTelcomunidad,
+//           btnTelevistazo7pm,
+//           title_programa,
+//           playerembed,
+//           fondito__,
+//         });
+
+//         setTimeout(fetchHorarioEnvivo, tiempoEsperaEnvivo);
+//         return true;
+//       } catch (error) {
+//         console.error('Error al obtener los datos:', error);
+//         const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
+
+//         procesosHorarioEnvivo({
+//           data: responseRespaldoData,
+//           apiUrl: null,
+//           enVivoRedy,
+//           textIndicador,
+//           btnTelcomunidad,
+//           btnTelevistazo7pm,
+//           title_programa,
+//           playerembed,
+//           fondito__,
+//         });
+
+//         setTimeout(fetchHorarioEnvivo, tiempoEsperaEnvivo);
+//         return null;
+//       }
+//     }
+
+//     // Llama a la función para obtener y procesar los datos inicialmente
+//     fetchHorarioEnvivo();
+//   } catch (error) {
+//     console.log(error);
+//     return null;
+//   }
+// }
+
 function eventoEnvivoManager() {
-  try {
-    const enVivoRedy = document.querySelector('.enVivoRedy');
-    const textIndicador = document.querySelector('.enVivoRedy .liveIndicator .enVivoText');
-    const btnTelcomunidad = document.querySelector('#btnTelcomunidad');
-    const btnTelevistazo7pm = document.querySelector('#btnTelevistazo7pm');
-    const title_programa = document.querySelector('.title_programa');
-    const playerembed = document.querySelector('#playerembed');
-    const fondito__ = document.querySelector('#fondito__');
-    const tiempoEsperaEnvivo = 120000;
+  const enVivoRedy = document.querySelector('.enVivoRedy');
+  const textIndicador = document.querySelector('.enVivoRedy .liveIndicator .enVivoText');
+  const btnTelcomunidad = document.querySelector('#btnTelcomunidad');
+  const btnTelevistazo7pm = document.querySelector('#btnTelevistazo7pm');
+  const title_programa = document.querySelector('.title_programa');
+  const playerembed = document.querySelector('#playerembed');
+  const fondito__ = document.querySelector('#fondito__');
 
-    async function fetchHorarioEnvivoRespaldo() {
-      const variableRespaldo = { "html": { "value": "<iframe id=\"vrudo\" class=\"vrudo\" src=\"//rudo.video/live/ecuavisa\" width=\"600\" height=\"338\" allowfullscreen=\"true\" frameborder=\"0\" scrolling=\"no\" allow=\"autoplay; fullscreen\"></iframe>", "estadoHtml": false }, "forzado": { "estado": false, "titulo": "En Vivo", "label": "En Vivo" }, "horarios": [{ "dia": 0, "estadoDia": true, "horas": [{ "tituloPrograma": "PolÃ­ticamente Correcto", "estadoHorario": true, "inicio": "10:30", "fin": "11:30" }, { "tituloPrograma": "Spiderman 2", "estadoHorario": true, "inicio": "15:00", "fin": "17:00" }, { "tituloPrograma": "Ride Along 2", "estadoHorario": true, "inicio": "17:00", "fin": "19:00" }, { "tituloPrograma": "Televistazo 19h00", "estadoHorario": true, "inicio": "19:00", "fin": "20:00" }] }] };
+  let currentDataGye = null;
+  let lastFetchTime = 0;
+  const FETCH_COOLDOWN = 1000;
 
-      try {
-        const apiUrlRespaldo = `${ECUAVISA_EC.URL.dominioTemporal}horario/normal.php`;
-        // const response = await fetch(apiUrlRespaldo, {
-        //   method: 'GET',
-        //   headers: {
-        //     'Content-Type': 'application/json'
-        //   },
-        //   timeout: 8000
-        // });
-        const response = horario_envivo;
+  function fetchScriptContent() {
+    return new Promise((resolve, reject) => {
+      const currentTime = Date.now();
 
-        // if (!response.ok) {
-        if (!response) {
-          console.error(`Error: Código de estado ${response.status}`);
-          return variableRespaldo;
-        }
-        const data = await response.json();
-        return data;
-      } catch (error) {
-        console.log(error);
-        // return variableRespaldo;
-        return horario_envivo;
+      if (currentTime - lastFetchTime < FETCH_COOLDOWN) {
+        resolve(currentDataGye);
+        return;
       }
-    }
 
-    async function fetchHorarioEnvivo() {
-      try {
-        // primero intenta obtener los datos del archivo JS
-        if (typeof horario_envivo === 'undefined') {
-          console.log('No se encontraron datos del horario, usando respaldo...');
-          // const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
-          const responseRespaldoData = horario_envivo;
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_guayaquil.js?' + currentTime, true);
 
-          procesosHorarioEnvivo({
-            data: responseRespaldoData,
-            apiUrl: null,
-            enVivoRedy,
-            textIndicador,
-            btnTelcomunidad,
-            btnTelevistazo7pm,
-            title_programa,
-            playerembed,
-            fondito__,
-          });
-
-          setTimeout(fetchHorarioEnvivo, tiempoEsperaEnvivo);
-          return null;
+      xhr.onload = function() {
+        if (xhr.status === 200) {
+          try {
+            const evalScript = new Function(xhr.responseText + '; return horario_envivo;');
+            const result = evalScript();
+            lastFetchTime = currentTime;
+            resolve(result);
+          } catch (error) {
+            reject(error);
+          }
+        } else {
+          reject(new Error('Error al cargar el script'));
         }
+      };
 
-        const data = horario_envivo;
-
-        procesosHorarioEnvivo({
-          data: data,
-          apiUrl: null,
-          enVivoRedy,
-          textIndicador,
-          btnTelcomunidad,
-          btnTelevistazo7pm,
-          title_programa,
-          playerembed,
-          fondito__,
-        });
-
-        setTimeout(fetchHorarioEnvivo, tiempoEsperaEnvivo);
-        return true;
-      } catch (error) {
-        console.error('Error al obtener los datos:', error);
-        const responseRespaldoData = await fetchHorarioEnvivoRespaldo();
-
-        procesosHorarioEnvivo({
-          data: responseRespaldoData,
-          apiUrl: null,
-          enVivoRedy,
-          textIndicador,
-          btnTelcomunidad,
-          btnTelevistazo7pm,
-          title_programa,
-          playerembed,
-          fondito__,
-        });
-
-        setTimeout(fetchHorarioEnvivo, tiempoEsperaEnvivo);
-        return null;
-      }
-    }
-
-    // Llama a la función para obtener y procesar los datos inicialmente
-    fetchHorarioEnvivo();
-  } catch (error) {
-    console.log(error);
-    return null;
+      xhr.onerror = () => reject(new Error('Error de red'));
+      xhr.send();
+    });
   }
+
+  function procesarHorarioActual() {
+    const fechaActual = new Date();
+    fechaActual.setUTCHours(fechaActual.getUTCHours() - 5);
+    const diaSemana = fechaActual.getUTCDay();
+    const horaActual = fechaActual.getUTCHours();
+    const minutosActuales = fechaActual.getUTCMinutes();
+
+    if (!currentDataGye) return;
+
+    // Si está en modo forzado, mostrar título y contenido forzado
+    if (currentDataGye.forzado && currentDataGye.forzado.estado) {
+      const dataTitulo = currentDataGye.forzado.titulo;
+      const datalabel = currentDataGye.forzado.label;
+
+      if (title_programa) {
+        title_programa.innerHTML = dataTitulo;
+        title_programa.style.display = 'block';
+      }
+
+      if (textIndicador) {
+        textIndicador.innerHTML = datalabel;
+      }
+
+      if (playerembed && fondito__) {
+        playerembed.style.display = 'block';
+        fondito__.style.display = "none";
+      }
+
+      if (enVivoRedy) { 
+        enVivoRedy.style.display = 'flex'; 
+      }
+      return;
+    }
+
+    const diaActual = currentDataGye.horarios.find(d => d.dia === diaSemana);
+    if (diaActual && diaActual.estadoDia) {
+      let programaEncontrado = false;
+
+      for (const hora of diaActual.horas) {
+        if (!hora.estadoHorario) continue;
+
+        const [inicioHora, inicioMinutos] = hora.inicio.split(":").map(Number);
+        const [finHora, finMinutos] = hora.fin.split(":").map(Number);
+
+        const horaActualEnMinutos = horaActual * 60 + minutosActuales;
+        const inicioEnMinutos = inicioHora * 60 + inicioMinutos;
+        const finEnMinutos = finHora * 60 + finMinutos;
+
+        if (horaActualEnMinutos >= inicioEnMinutos && horaActualEnMinutos < finEnMinutos) {
+          programaEncontrado = true;
+          
+          if (title_programa) {
+            title_programa.innerHTML = hora.tituloPrograma;
+            title_programa.style.display = 'block';
+          }
+
+          if (hora.tituloPrograma === "Televistazo en la comunidad") {
+            if (btnTelcomunidad) {
+              btnTelcomunidad.style.display = "block";
+            }
+          }
+
+          if (hora.tituloPrograma === "Televistazo 7PM") {
+            if (btnTelevistazo7pm) {
+              btnTelevistazo7pm.style.display = "block";
+            }
+          }
+
+          if (fondito__) {
+            fondito__.style.display = "none";
+          }
+
+          if (enVivoRedy) {
+            enVivoRedy.style.display = 'flex';
+          }
+
+          if (playerembed) {
+            playerembed.style.display = 'block';
+            if (!playerembed.querySelector('iframe')) {
+              const iframeContent = hora.iframe || currentDataGye.html.value;
+              playerembed.innerHTML = iframeContent;
+              if (typeof paramUserVideo === 'function') {
+                paramUserVideo();
+              }
+            }
+          }
+          break;
+        }
+      }
+
+      if (!programaEncontrado) {
+        limpiarInterfaz();
+      }
+    }
+  }
+
+  function limpiarInterfaz() {
+    if (title_programa) {
+      title_programa.innerHTML = '';
+      title_programa.style.display = 'none';
+    }
+    if (playerembed) {
+      playerembed.style.display = 'none';
+      playerembed.innerHTML = '';
+    }
+    if (fondito__) {
+      fondito__.style.display = 'block';
+    }
+    if (enVivoRedy) {
+      enVivoRedy.style.display = 'none';
+    }
+    if (btnTelcomunidad) {
+      btnTelcomunidad.style.display = "none";
+    }
+    if (btnTelevistazo7pm) {
+      btnTelevistazo7pm.style.display = "none";
+    }
+  }
+
+  async function fetchHorarioEnvivo() {
+    try {
+      const newData = await fetchScriptContent();
+
+      if (!newData) {
+        throw new Error('No se han podido obtener los datos de Guayaquil');
+      }
+
+      const hayCambios = !currentDataGye ||
+        JSON.stringify(currentDataGye) !== JSON.stringify(newData);
+
+      if (hayCambios) {
+        currentDataGye = newData;
+        // Mantener compatibilidad con procesosHorarioEnvivo
+        procesosHorarioEnvivo({
+          data: newData,
+          apiUrl: null,
+          enVivoRedy,
+          textIndicador,
+          btnTelcomunidad,
+          btnTelevistazo7pm,
+          title_programa,
+          playerembed,
+          fondito__,
+        });
+        procesarHorarioActual();
+      }
+
+    } catch (error) {
+      console.error('Error al obtener los datos de Guayaquil:', error);
+    }
+  }
+
+  // intervalos de verificación
+  setInterval(procesarHorarioActual, 30000); // Verificar horarios cada 30 segundos
+  setInterval(fetchHorarioEnvivo, 1000); // Verificar cambios cada segundo
+
+  // Ejecutar verificación inicial
+  fetchHorarioEnvivo();
 }
 
 /*** NUEVA FUNCION QUITO ***/
