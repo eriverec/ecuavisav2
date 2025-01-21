@@ -652,19 +652,27 @@ function eventoEnvivoManagerQuito() {
   const fondito__quito = document.querySelector('#fondito__quito');
   
   let currentDataQuito = null;
-  let monitoringIntervalQuito = null;
+  let lastFetchTime = 0;
+  const FETCH_COOLDOWN = 1000;
 
-  // Función para obtener el contenido del script de forma segura
   function fetchScriptContent() {
     return new Promise((resolve, reject) => {
+      const currentTime = Date.now();
+      
+      if (currentTime - lastFetchTime < FETCH_COOLDOWN) {
+        resolve(currentDataQuito);
+        return;
+      }
+
       const xhr = new XMLHttpRequest();
-      xhr.open('GET', 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_quito.js?' + new Date().getTime(), true);
+      xhr.open('GET', 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_quito.js?' + currentTime, true);
       
       xhr.onload = function() {
         if (xhr.status === 200) {
           try {
             const evalScript = new Function(xhr.responseText + '; return horario_envivo_quito;');
             const result = evalScript();
+            lastFetchTime = currentTime;
             resolve(result);
           } catch (error) {
             reject(error);
@@ -679,18 +687,21 @@ function eventoEnvivoManagerQuito() {
     });
   }
 
-  // Función para verificar y procesar el horario actual
   function procesarHorarioActual() {
     const fechaActual = new Date();
-    fechaActual.setUTCHours(fechaActual.getUTCHours() - 5); // Ajuste a hora Ecuador
+    fechaActual.setUTCHours(fechaActual.getUTCHours() - 5);
     const diaSemana = fechaActual.getUTCDay();
     const horaActual = fechaActual.getUTCHours();
     const minutosActuales = fechaActual.getUTCMinutes();
 
     if (!currentDataQuito) return;
 
-    // Si está en modo forzado, no procesar horarios
+    // Si está en modo forzado, mostrar título y contenido forzado
     if (currentDataQuito.forzado && currentDataQuito.forzado.estado) {
+      if (title_programa_quito) {
+        title_programa_quito.innerHTML = currentDataQuito.forzado.titulo;
+        title_programa_quito.style.display = 'block';
+      }
       return;
     }
 
@@ -710,37 +721,31 @@ function eventoEnvivoManagerQuito() {
 
         if (horaActualEnMinutos >= inicioEnMinutos && horaActualEnMinutos < finEnMinutos) {
           programaEncontrado = true;
-          
-          // Actualizar interfaz con el programa actual
-          procesosHorarioEnvivo({
-            data: currentDataQuito,
-            apiUrl: null,
-            enVivoRedy: null,
-            textIndicador: null,
-            btnTelcomunidad: btnTelcomunidad_quito,
-            btnTelevistazo7pm: null,
-            title_programa: title_programa_quito,
-            playerembed: playerembed_quito,
-            fondito__: fondito__quito,
-          });
+          if (title_programa_quito) {
+            title_programa_quito.innerHTML = hora.tituloPrograma;
+            title_programa_quito.style.display = 'block';
+          }
           break;
         }
       }
 
-      // Si no hay programa activo, limpiar la interfaz
       if (!programaEncontrado) {
-        if (title_programa_quito) {
-          title_programa_quito.innerHTML = '';
-          title_programa_quito.style.display = 'none';
-        }
-        if (playerembed_quito) {
-          playerembed_quito.style.display = 'none';
-          playerembed_quito.innerHTML = '';
-        }
-        if (fondito__quito) {
-          fondito__quito.style.display = 'block';
-        }
+        limpiarInterfaz();
       }
+    }
+  }
+
+  function limpiarInterfaz() {
+    if (title_programa_quito) {
+      title_programa_quito.innerHTML = '';
+      title_programa_quito.style.display = 'none';
+    }
+    if (playerembed_quito) {
+      playerembed_quito.style.display = 'none';
+      playerembed_quito.innerHTML = '';
+    }
+    if (fondito__quito) {
+      fondito__quito.style.display = 'block';
     }
   }
 
@@ -752,11 +757,10 @@ function eventoEnvivoManagerQuito() {
         throw new Error('No se han podido obtener los datos de Quito');
       }
 
-      // Solo actualizar si hay cambios en los datos o es forzado
-      if (!currentDataQuito || 
-          JSON.stringify(currentDataQuito) !== JSON.stringify(newData) ||
-          (newData.forzado && newData.forzado.estado)) {
-        
+      const hayCambios = !currentDataQuito || 
+                        JSON.stringify(currentDataQuito) !== JSON.stringify(newData);
+
+      if (hayCambios) {
         currentDataQuito = newData;
         procesosHorarioEnvivo({
           data: newData,
@@ -769,6 +773,8 @@ function eventoEnvivoManagerQuito() {
           playerembed: playerembed_quito,
           fondito__: fondito__quito,
         });
+
+        // Solo logear cambios reales
         console.log('Datos actualizados:', new Date().toLocaleTimeString());
       }
 
@@ -779,7 +785,7 @@ function eventoEnvivoManagerQuito() {
 
   // Iniciar los intervalos de verificación
   setInterval(procesarHorarioActual, 30000); // Verificar horarios cada 30 segundos
-  setInterval(fetchHorarioEnvivoQuito, 1000); // Verificar cambios forzados cada segundo
+  setInterval(fetchHorarioEnvivoQuito, 1000); // Verificar cambios cada segundo
 
   // Ejecutar verificación inicial
   fetchHorarioEnvivoQuito();
