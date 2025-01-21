@@ -30,328 +30,171 @@ document.head.appendChild(NewGuayaquil);
 
 /*Código MANAGER RADIO*/
 
-// function eventRadioManager() {
-//   const diasSemanaTexto = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
-  
-//   const fechaActual = new Date();
-//   fechaActual.setUTCHours(fechaActual.getUTCHours() - 5);
-//   const diaSemana = fechaActual.getUTCDay();
-//   const horaActual = fechaActual.getUTCHours();
-//   const minutosActuales = fechaActual.getUTCMinutes();
-
-//   let intentos = 0;
-//   const maxIntentos = 10;
-
-//   function esperarDatos() {
-//     if (typeof horario_envivo_radio !== 'undefined') {
-//       console.log('Datos de radio encontrados, procediendo con fetchHorario');
-//       fetchHorario();
-//     } else {
-//       intentos++;
-//       if (intentos < maxIntentos) {
-//         console.log(`Esperando datos de radio... intento ${intentos}`);
-//         setTimeout(esperarDatos, 1000);
-//       } else {
-//         console.error('No se pudieron cargar los datos de radio después de varios intentos');
-//       }
-//     }
-//   }
-
-//   async function fetchHorario() {
-//     try {
-//       const data = horario_envivo_radio;
-//       const forzado = data.forzado.estado;
-//       const htmlIframe = data.html.value;
-
-//       if (!forzado) {
-//         console.log("forzado:", forzado);
-//         for (const dia of data.horarios) {
-//           if (dia.estadoDia && dia.dia === diaSemana) {
-//             console.log(`Día ${dia.dia} (${diasSemanaTexto[dia.dia]}):`);
-
-//             let programasHoy = [];
-
-//             for (const hora of dia.horas) {
-//               if (hora.estadoHorario) {
-//                 const inicioHora = parseInt(hora.inicio.split(":")[0]);
-//                 const inicioMinutos = parseInt(hora.inicio.split(":")[1]);
-
-//                 const finHora = parseInt(hora.fin.split(":")[0]);
-//                 const finMinutos = parseInt(hora.fin.split(":")[1]);
-
-//                 if (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) {
-//                   if (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos)) {
-//                     programasHoy.push(hora.tituloPrograma);
-//                   }
-//                 }
-//               }
-//             }
-
-//             const txtEscuchando = document.querySelector('.title_estas_escuchando');
-//             const txtPrograma = document.querySelector('.title_programa_text');
-//             const txtBase = document.querySelector('#no_transmision__');
-//             const audio = document.querySelector('.contenedor_embed_radio');
-
-//             if (programasHoy.length > 0) {
-//               console.log("Programas activo:");
-//               const BO_par = document.querySelector('#parent_radio');
-//               if (BO_par) { BO_par.style.display = 'block'; }
-
-//               programasHoy.forEach(programa => {
-//                 console.log(`  ${programa}`);
-
-//                 if (txtEscuchando || txtPrograma) {
-//                   txtEscuchando.innerHTML = `Estás escuchando`;
-//                   txtPrograma.innerHTML = programa;
-//                 }
-
-//                 if (txtBase) {
-//                   txtBase.innerHTML = '';
-//                   txtBase.style.display = "none";
-//                 }
-
-//                 if (audio) {
-//                   audio.style.display = 'block';
-//                   audio.innerHTML = htmlIframe;
-//                   var divdataid = document.querySelector('[data-id="643823bbf3b3410854ba942b"]');
-
-//                   if (divdataid) {
-//                     var scriptElement = divdataid.querySelector('script');
-//                     var scriptSrc = scriptElement.getAttribute('src');
-//                     var resultElement = document.createElement('script');
-//                     resultElement.setAttribute('src', scriptSrc);
-//                     document.body.appendChild(resultElement);
-//                   }
-//                 }
-//               });
-//             } else {
-//               console.log("No hay programas activos en este momento.");
-//               if (txtEscuchando || txtPrograma) {
-//                 txtEscuchando.innerHTML = '';
-//                 txtPrograma.innerHTML = '';
-//               }
-
-//               if (txtBase) {
-//                 txtBase.style.display = "block";
-//                 txtBase.innerHTML = `Aquí encontrarás una opción para acceder a toda la programación informativa Audio En vivo: Contacto Directo (6:55), Televistazo en la Comunidad (5:55-7:30), Televistazo (13:00-19:00).`;
-//               }
-
-//               if (audio) {
-//                 audio.style.display = 'none';
-//                 audio.innerHTML = '';
-//               }
-//             }
-//           }
-//         }
-//       } else {
-//         const dataTitulo = data.forzado.titulo;
-//         const datalabel = data.forzado.label;
-//         const txtEscuchando = document.querySelector('.title_estas_escuchando');
-//         const txtPrograma = document.querySelector('.title_programa_text');
-//         const txtBase = document.querySelector('#no_transmision__');
-//         const audio = document.querySelector('.contenedor_embed_radio');
-
-//         const BO_par = document.querySelector('#parent_radio');
-//         const BO_parTxt = document.querySelector('#parent_radio .enVivoText');
-
-//         if (txtEscuchando || txtPrograma) {
-//           txtEscuchando.innerHTML = `Estás escuchando`;
-//           txtPrograma.innerHTML = dataTitulo;
-//         }
-
-//         if (txtBase) {
-//           txtBase.innerHTML = '';
-//           txtBase.style.display = "none";
-//         }
-
-//         // if (audio) { audio.style.display = 'block'; }
-
-//         if (audio) {
-//           audio.style.display = 'block';
-//           audio.innerHTML = htmlIframe;
-//           // Obtener el elemento <div> con el atributo data-id
-//           var divdataid = document.querySelector('[data-id="643823bbf3b3410854ba942b"]');
-
-//           if (divdataid) {
-//             // Obtener el elemento <script> dentro del <div>
-//             var scriptElement = divdataid.querySelector('script');
-//             var scriptSrc = scriptElement.getAttribute('src');
-//             var resultElement = document.createElement('script');
-//             resultElement.setAttribute('src', scriptSrc);
-//             document.body.appendChild(resultElement);
-//           }
-
-//         }
-
-//         if (BO_par) { BO_par.style.display = 'block' }
-//         if (BO_parTxt) { BO_parTxt.textContent = datalabel }
-
-//         console.log("forzado:", forzado);
-//       }
-//     } catch (error) {
-//       console.error("Error al procesar los datos:", error);
-//     }
-//   }
-
-//   // Iniciamos el proceso de espera
-//   esperarDatos();
-// }
-
-
-
 function eventRadioManager() {
-  const txtEscuchando = document.querySelector('.title_estas_escuchando');
-  const txtPrograma = document.querySelector('.title_programa_text');
-  const txtBase = document.querySelector('#no_transmision__');
-  const audio = document.querySelector('.contenedor_embed_radio');
+  const diasSemanaTexto = ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"];
   
-  let currentDataRadio = null;
-  let lastFetchTime = 0;
-  const FETCH_COOLDOWN = 1000;
+  const fechaActual = new Date();
+  fechaActual.setUTCHours(fechaActual.getUTCHours() - 5);
+  const diaSemana = fechaActual.getUTCDay();
+  const horaActual = fechaActual.getUTCHours();
+  const minutosActuales = fechaActual.getUTCMinutes();
 
-  function fetchScriptContent() {
-    return new Promise((resolve, reject) => {
-      const currentTime = Date.now();
-      
-      if (currentTime - lastFetchTime < FETCH_COOLDOWN) {
-        resolve(currentDataRadio);
-        return;
-      }
+  let intentos = 0;
+  const maxIntentos = 10;
 
-      const xhr = new XMLHttpRequest();
-      xhr.open('GET', 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_radio.js?' + currentTime, true);
-      
-      xhr.onload = function() {
-        if (xhr.status === 200) {
-          try {
-            const evalScript = new Function(xhr.responseText + '; return horario_envivo_radio;');
-            const result = evalScript();
-            lastFetchTime = currentTime;
-            resolve(result);
-          } catch (error) {
-            reject(error);
-          }
-        } else {
-          reject(new Error('Error al cargar el script'));
-        }
-      };
-      
-      xhr.onerror = () => reject(new Error('Error de red'));
-      xhr.send();
-    });
-  }
-
-  function procesarHorarioActual() {
-    const fechaActual = new Date();
-    fechaActual.setUTCHours(fechaActual.getUTCHours() - 5);
-    const diaSemana = fechaActual.getUTCDay();
-    const horaActual = fechaActual.getUTCHours();
-    const minutosActuales = fechaActual.getUTCMinutes();
-
-    if (!currentDataRadio) return;
-
-    // Si está en modo forzado
-    if (currentDataRadio.forzado?.estado) {
-      const dataTitulo = currentDataRadio.forzado.titulo;
-      if (txtEscuchando || txtPrograma) {
-        txtEscuchando.innerHTML = 'Estás escuchando';
-        txtPrograma.innerHTML = dataTitulo;
-      }
-      if (txtBase) {
-        txtBase.style.display = "none";
-        txtBase.innerHTML = '';
-      }
-      if (audio) {
-        audio.style.display = 'block';
-        audio.innerHTML = currentDataRadio.html.value;
-      }
-      return;
-    }
-
-    // Procesar horario normal
-    const diaActual = currentDataRadio.horarios.find(d => d.dia === diaSemana && d.estadoDia);
-    if (diaActual) {
-      let programaEncontrado = false;
-
-      for (const hora of diaActual.horas) {
-        if (!hora.estadoHorario) continue;
-
-        const [inicioHora, inicioMinutos] = hora.inicio.split(":").map(Number);
-        const [finHora, finMinutos] = hora.fin.split(":").map(Number);
-
-        const horaActualEnMinutos = horaActual * 60 + minutosActuales;
-        const inicioEnMinutos = inicioHora * 60 + inicioMinutos;
-        const finEnMinutos = finHora * 60 + finMinutos;
-
-        if (horaActualEnMinutos >= inicioEnMinutos && horaActualEnMinutos < finEnMinutos) {
-          programaEncontrado = true;
-          if (txtEscuchando || txtPrograma) {
-            txtEscuchando.innerHTML = 'Estás escuchando';
-            txtPrograma.innerHTML = hora.tituloPrograma;
-          }
-          if (txtBase) {
-            txtBase.style.display = "none";
-            txtBase.innerHTML = '';
-          }
-          if (audio) {
-            audio.style.display = 'block';
-            audio.innerHTML = currentDataRadio.html.value;
-          }
-          break;
-        }
-      }
-
-      if (!programaEncontrado) {
-        limpiarInterfaz();
-      }
+  function esperarDatos() {
+    if (typeof horario_envivo_radio !== 'undefined') {
+      console.log('Datos de radio encontrados, procediendo con fetchHorario');
+      fetchHorario();
     } else {
-      limpiarInterfaz();
+      intentos++;
+      if (intentos < maxIntentos) {
+        console.log(`Esperando datos de radio... intento ${intentos}`);
+        setTimeout(esperarDatos, 1000);
+      } else {
+        console.error('No se pudieron cargar los datos de radio después de varios intentos');
+      }
     }
   }
 
-  function limpiarInterfaz() {
-    if (txtEscuchando || txtPrograma) {
-      txtEscuchando.innerHTML = '';
-      txtPrograma.innerHTML = '';
-    }
-    if (txtBase) {
-      txtBase.style.display = "block";
-      txtBase.innerHTML = 'Aquí encontrarás una opción para acceder a toda la programación informativa Audio En vivo: Contacto Directo (6:55), Televistazo en la Comunidad (5:55-7:30), Televistazo (13:00-19:00).';
-    }
-    if (audio) {
-      audio.style.display = 'none';
-      audio.innerHTML = '';
-    }
-  }
-
-  async function actualizarHorarioRadio() {
+  async function fetchHorario() {
     try {
-      const newData = await fetchScriptContent();
-      
-      if (!newData) {
-        throw new Error('No se han podido obtener los datos de Radio');
+      const data = horario_envivo_radio;
+      const forzado = data.forzado.estado;
+      const htmlIframe = data.html.value;
+
+      if (!forzado) {
+        console.log("forzado:", forzado);
+        for (const dia of data.horarios) {
+          if (dia.estadoDia && dia.dia === diaSemana) {
+            console.log(`Día ${dia.dia} (${diasSemanaTexto[dia.dia]}):`);
+
+            let programasHoy = [];
+
+            for (const hora of dia.horas) {
+              if (hora.estadoHorario) {
+                const inicioHora = parseInt(hora.inicio.split(":")[0]);
+                const inicioMinutos = parseInt(hora.inicio.split(":")[1]);
+
+                const finHora = parseInt(hora.fin.split(":")[0]);
+                const finMinutos = parseInt(hora.fin.split(":")[1]);
+
+                if (horaActual > inicioHora || (horaActual === inicioHora && minutosActuales >= inicioMinutos)) {
+                  if (horaActual < finHora || (horaActual === finHora && minutosActuales < finMinutos)) {
+                    programasHoy.push(hora.tituloPrograma);
+                  }
+                }
+              }
+            }
+
+            const txtEscuchando = document.querySelector('.title_estas_escuchando');
+            const txtPrograma = document.querySelector('.title_programa_text');
+            const txtBase = document.querySelector('#no_transmision__');
+            const audio = document.querySelector('.contenedor_embed_radio');
+
+            if (programasHoy.length > 0) {
+              console.log("Programas activo:");
+              const BO_par = document.querySelector('#parent_radio');
+              if (BO_par) { BO_par.style.display = 'block'; }
+
+              programasHoy.forEach(programa => {
+                console.log(`  ${programa}`);
+
+                if (txtEscuchando || txtPrograma) {
+                  txtEscuchando.innerHTML = `Estás escuchando`;
+                  txtPrograma.innerHTML = programa;
+                }
+
+                if (txtBase) {
+                  txtBase.innerHTML = '';
+                  txtBase.style.display = "none";
+                }
+
+                if (audio) {
+                  audio.style.display = 'block';
+                  audio.innerHTML = htmlIframe;
+                  var divdataid = document.querySelector('[data-id="643823bbf3b3410854ba942b"]');
+
+                  if (divdataid) {
+                    var scriptElement = divdataid.querySelector('script');
+                    var scriptSrc = scriptElement.getAttribute('src');
+                    var resultElement = document.createElement('script');
+                    resultElement.setAttribute('src', scriptSrc);
+                    document.body.appendChild(resultElement);
+                  }
+                }
+              });
+            } else {
+              console.log("No hay programas activos en este momento.");
+              if (txtEscuchando || txtPrograma) {
+                txtEscuchando.innerHTML = '';
+                txtPrograma.innerHTML = '';
+              }
+
+              if (txtBase) {
+                txtBase.style.display = "block";
+                txtBase.innerHTML = `Aquí encontrarás una opción para acceder a toda la programación informativa Audio En vivo: Contacto Directo (6:55), Televistazo en la Comunidad (5:55-7:30), Televistazo (13:00-19:00).`;
+              }
+
+              if (audio) {
+                audio.style.display = 'none';
+                audio.innerHTML = '';
+              }
+            }
+          }
+        }
+      } else {
+        const dataTitulo = data.forzado.titulo;
+        const datalabel = data.forzado.label;
+        const txtEscuchando = document.querySelector('.title_estas_escuchando');
+        const txtPrograma = document.querySelector('.title_programa_text');
+        const txtBase = document.querySelector('#no_transmision__');
+        const audio = document.querySelector('.contenedor_embed_radio');
+
+        const BO_par = document.querySelector('#parent_radio');
+        const BO_parTxt = document.querySelector('#parent_radio .enVivoText');
+
+        if (txtEscuchando || txtPrograma) {
+          txtEscuchando.innerHTML = `Estás escuchando`;
+          txtPrograma.innerHTML = dataTitulo;
+        }
+
+        if (txtBase) {
+          txtBase.innerHTML = '';
+          txtBase.style.display = "none";
+        }
+
+        // if (audio) { audio.style.display = 'block'; }
+
+        if (audio) {
+          audio.style.display = 'block';
+          audio.innerHTML = htmlIframe;
+          // Obtener el elemento <div> con el atributo data-id
+          var divdataid = document.querySelector('[data-id="643823bbf3b3410854ba942b"]');
+
+          if (divdataid) {
+            // Obtener el elemento <script> dentro del <div>
+            var scriptElement = divdataid.querySelector('script');
+            var scriptSrc = scriptElement.getAttribute('src');
+            var resultElement = document.createElement('script');
+            resultElement.setAttribute('src', scriptSrc);
+            document.body.appendChild(resultElement);
+          }
+
+        }
+
+        if (BO_par) { BO_par.style.display = 'block' }
+        if (BO_parTxt) { BO_parTxt.textContent = datalabel }
+
+        console.log("forzado:", forzado);
       }
-
-      const hayCambios = !currentDataRadio || 
-                        JSON.stringify(currentDataRadio) !== JSON.stringify(newData);
-
-      if (hayCambios) {
-        currentDataRadio = newData;
-        procesarHorarioActual();
-      }
-
     } catch (error) {
-      console.error('Error al obtener los datos de Radio:', error);
-      limpiarInterfaz();
+      console.error("Error al procesar los datos:", error);
     }
   }
 
-  // Configurar intervalos de verificación
-  setInterval(procesarHorarioActual, 30000); // Verificar horarios cada 30 segundos
-  setInterval(actualizarHorarioRadio, 1000); // Verificar cambios cada segundo
-
-  // Ejecutar verificación inicial
-  actualizarHorarioRadio();
+  // Iniciamos el proceso de espera
+  esperarDatos();
 }
 
 ////////////////////////FUNCION QUE ABARCA EL PROCESO DEL ENVIVO Y EL ENVIVO QUITO
