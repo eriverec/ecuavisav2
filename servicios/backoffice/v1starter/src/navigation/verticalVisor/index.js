@@ -5,6 +5,15 @@ export default [
       icon: { icon: 'tabler-smart-home' },
     },
     {
+      title: 'Suscripciones',
+      icon: { icon: 'tabler-rosette-discount-check' },
+      children: [
+        { title: 'Usuarios', to: 'apps-suscriptores-usuarios' },
+        { title: 'Transacciones', to: 'apps-suscriptores-transacciones' },
+        { title: 'Analítica', to: 'apps-suscriptores-analitica' },
+      ],
+    },
+    {
       title: 'NewsLetter',
       to: { name: 'apps-mailing-tabs-edit' },
       icon: { icon: 'tabler-mail' },
@@ -16,10 +25,10 @@ export default [
     children: [
       // { title: 'Lista de Usuarios', to: 'apps-trazabilidad-list' },
       // { title: 'Visitas', to: 'apps-visitas-list' },
-      { title: 'Permanencia', to: 'apps-trazabilidad-permanencia' },
+      //{ title: 'Permanencia', to: 'apps-trazabilidad-permanencia' },
       // { title: 'Metadatos', to: 'apps-metadatos' },
       // { title: 'Dispositivos', to: 'apps-dispositivos' },
-      // { title: 'Recomendaciones', to: 'apps-recomendaciones' },
+       { title: 'Recomendaciones', to: 'apps-recomendaciones' },
 
       // modulos por salir
       //{ title: 'Trazabilidad usuarios', to: 'apps-trazabilidad-users' },

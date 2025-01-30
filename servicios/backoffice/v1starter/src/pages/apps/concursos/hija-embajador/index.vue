@@ -941,7 +941,6 @@ const eliminarRegistroSi = async () => {
   .bg-white .v-field{
     background-color: rgb(var(--v-theme-surface));
     border-radius: 6px;
-
   }
 
   .justify-content-flex-end{
