@@ -1,4 +1,5 @@
 <script setup>
+import { usePaqueteStore } from '@/views/apps/suscripciones/paqueteStore';
 import axios from 'axios';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -6,7 +7,6 @@ import esLocale from "moment/locale/es";
 import { ref } from 'vue';
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
-import { usePaqueteStore } from '@/views/apps/suscripciones/paqueteStore';
 const dominio = "https://ecuavisa-suscripciones.vercel.app";
 
 const { idPaquete } = usePaqueteStore();
@@ -57,7 +57,7 @@ async function descargarReporte() {
     const endpoint = 'https://servicios-ecuavisa-suscripciones.vercel.app/backoffice-grafico/descargar/pagos-realizados-agrupados-por-mes';
     const params = {
       idPaquete: idPaquete.value,
-      anio: '2024',
+      anio: selectModelAnio.value,
       page: 1,
       limit: 100,
     };
@@ -122,6 +122,12 @@ watch(selectRefPaquete, (active) => {
   }
 });
 
+watch(selectModelAnio, (value) => {
+  if (value) {
+    getDataGrafico();
+  }
+});
+
 async function getPaquetes(page = 1, limit = 10) {
   try {
     paqueteModelLoading.value = true;
@@ -166,7 +172,7 @@ async function getDataGrafico(json = {}) {
 
     const response = await axios.get(`${dominio}/backoffice-grafico/pagos-realizados-agrupados-por-mes`, {
       params: {
-        anio: '2024',
+        anio: selectModelAnio.value,
         idPaquete: idPaquete.value
       }
     });
@@ -216,7 +222,7 @@ const getAreaChartSplineConfig = themeColors => {
     const mes = mesesDelAnio[i];
     const data_temp = dataGrafico.value.find(e => e.mes_text.toLowerCase() == mes.toLowerCase());
     if (data_temp) {
-      seriesTemp.push(data_temp.sumPago);
+      seriesTemp.push(parseFloat(data_temp.sumPago).toFixed(2));
     } else {
       seriesTemp.push(0);
     }
@@ -261,7 +267,7 @@ const getAreaChartSplineConfig = themeColors => {
       dataLabels: {
         enabled: false,
         formatter(val) {
-          return `${val} $`
+          return `${parseFloat(val).toFixed(2)} $`
         },
       },
       stroke: {
@@ -380,7 +386,7 @@ onMounted( () => {
           <VCardText>
             <div class="p-0 mt-0 mb-3 d-flex align-items-center flex-wrap gap-3">
               <VCombobox v-model="selectModelAnio" :items="selectAnio" label="Filtro de año"
-                :menu-props="{ maxHeight: '300' }" class="d-none" />
+                :menu-props="{ maxHeight: '300' }" class="" />
               <VSelect class="d-none" style="width: 275px;" v-model:menu="selectRefPaquete"
                 no-data-text="No existen paquetes que mostrar" append-icon="mdi-refresh" @click:append="getPaquetes"
                 :disabled="paqueteModelLoading" item-text="title" item-value="value" v-model="selectModelPaquete"
