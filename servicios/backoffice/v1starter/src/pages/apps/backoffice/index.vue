@@ -20,6 +20,7 @@ const roles = [
   {title: "Webmaster",value:  "webmaster"},
   {title: "Visor",value:  "visor"},
   {title: "Marketing",value:  "marketing"},
+  {title: "Audiencias",value:  "audiencia"},
 ]
 async function getGestores(){
     isLoading.value = true;

@@ -1,5 +1,6 @@
 <script setup>
 import navItemsA from '@/navigation/vertical';
+import navItemsVA from '@/navigation/verticalAudiencia';
 import navItemsM from '@/navigation/verticalMarketing';
 import navItemsR from '@/navigation/verticalRedaccion';
 import navItemsV from '@/navigation/verticalVisor';
@@ -71,6 +72,8 @@ if(rol== 'administrador'){
   return navItemsR;  
 }else if(rol== 'marketing'){
   return navItemsM;
+}else if(rol== 'audiencia'){
+  return navItemsVA;
 }else{
   return navItemsV;
 }

@@ -13,7 +13,7 @@
             <div class="p-0 d-flex flex-column align-items-start">
               <VCardTitle>
                 <!-- Por año y mes. -->
-                Ventas de paquetes agrupadas<br> por mes el 2024.
+                Ventas de paquetes agrupadas<br> por mes el {{ modelAnio }}.
               </VCardTitle>
               <VCardSubtitle>
                 Se muestran el total de de paquetes contratados <br> y el total de ingresos de cada mes.
@@ -29,8 +29,8 @@
 
           <VCardText>
             <div class="p-0 mt-0 mb-3 d-flex align-items-center flex-wrap gap-3">
-              <VCombobox v-model="selectModelAnio" :items="selectAnio" label="Filtro de año"
-                :menu-props="{ maxHeight: '300' }" class="d-none" />
+              <VCombobox v-model="modelAnio" :items="selectAnio" label="Filtro de año"
+                :menu-props="{ maxHeight: '300' }" />
 
             </div>
             <div v-if="isLoading">Cargando datos...</div>
@@ -50,10 +50,13 @@
 </template>
 
 <script setup>
-import axios from 'axios'
-import Chart from 'chart.js/auto'
-import { onMounted, ref, watch } from 'vue'
-import { usePaqueteStore } from '@/views/apps/suscripciones/paqueteStore'
+import { usePaqueteStore } from '@/views/apps/suscripciones/paqueteStore';
+import axios from 'axios';
+import Chart from 'chart.js/auto';
+import { default as moment } from 'moment';
+import 'moment/locale/es';
+import { onMounted, ref, watch } from 'vue';
+moment.locale('es')
 
 const chart = ref(null)
 const chartInstance = ref(null)
@@ -63,6 +66,8 @@ const aniosDisponibles = ref([])
 const { idPaquete } = usePaqueteStore()
 const datosVacios = ref(false)
 const mensajeError = ref('')
+const modelAnio = ref(2024);
+const selectAnio = ref([2025, 2024, 2023, 2022]);
 
 // Generar años disponibles (año actual y los 2 años anteriores)
 const generarAniosDisponibles = () => {
@@ -78,7 +83,7 @@ const obtenerDatos = async () => {
     const response = await axios.get(`${dominio.value}backoffice-grafico/pagos-realizados-agrupados-por-mes`, {
       params: {
         idPaquete: idPaquete.value,
-        anio: '2024'
+        anio: modelAnio.value
       }
     })
     if (response.data.resp && Array.isArray(response.data.data)) {
@@ -151,6 +156,7 @@ onMounted(() => {
 })
 
 watch(idPaquete, actualizarGrafico)
+watch(modelAnio, actualizarGrafico)
 
 
 

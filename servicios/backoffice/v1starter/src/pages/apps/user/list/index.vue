@@ -253,7 +253,7 @@ const fetchUsers = () => {
 
 const authorizedCheck = () => {
     let rol = localStorage.getItem('role');
-    if(rol !== 'administrador' && rol !== 'webmaster'){
+    if(rol !== 'administrador' && rol !== 'webmaster' && rol !== 'audiencia'){
         router.push({ path: '/pages/errors/not-authorized' })
     }
 }
