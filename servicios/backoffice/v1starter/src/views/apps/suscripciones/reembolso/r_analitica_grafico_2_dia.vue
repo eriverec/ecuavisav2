@@ -213,8 +213,8 @@ import esLocale from "moment/locale/es";
 
   // GRAFICO
   import { hexToRgb } from '@layouts/utils';
-  import VueApexCharts from 'vue3-apexcharts';
-  import { useTheme } from 'vuetify';
+import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
 
   // 👉 Colors variables
   const colorVariables = themeColors => {
@@ -762,14 +762,15 @@ import esLocale from "moment/locale/es";
           </VCardItem>
 
           <VCardText>
-            <div class="p-0 mt-0 mb-3 d-flex align-items-center flex-wrap gap-3">
-              <VCombobox
+            <VCombobox
+              class="mb-4"
                 v-model="selectModelAnio" 
                 :items="selectAnio"
                 label="Filtro de año" 
                 :menu-props="{ maxHeight: '300' }"
-                class="d-none"
               />
+            <div class="p-0 mt-0 mb-3 d-flex align-items-center flex-nowarp gap-3">
+              
               <VSelect
                 style="width: 45px;"
                 v-model="selectModelMes" 
