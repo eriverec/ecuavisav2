@@ -33,6 +33,8 @@
 
           <VCardText>
             <div class="pb-5 mt-0 mb-3 d-flex align-items-center flex-wrap gap-3">
+              <VCombobox v-model="anioModel" :items="selectAnio" label="Filtro de año"
+                :menu-props="{ maxHeight: '300' }" class="" />
                       <VSelect class="mb-3"
                           v-model="selectedMonth"
                           :items="months"
@@ -63,10 +65,10 @@
 </template>
 
 <script>
+import { usePaqueteStore } from '@/views/apps/suscripciones/paqueteStore';
 import axios from 'axios';
 import Chart from 'chart.js/auto';
 import { onMounted, ref, watch } from 'vue';
-import { usePaqueteStore } from '@/views/apps/suscripciones/paqueteStore';
 
 export default {
   name: 'PagosGrafico',
@@ -90,7 +92,8 @@ export default {
     ];
 
     const apiDomain = 'https://ecuavisa-suscripciones.vercel.app';
-    const anio = 2024;
+    const anioModel = ref(2024);
+    const selectAnio = [2025, 2024, 2023, 2022];
     const { idPaquete } = usePaqueteStore();
     const datosVacios = ref(false);
     const mensajeError = ref('');
@@ -101,7 +104,7 @@ export default {
       try {
         const response = await axios.get(`${apiDomain}/backoffice-grafico/pagos-realizados-agrupados-por-mes-anio`, {
           params: {
-            anio,
+            anio: anioModel.value,
             mes: selectedMonth.value.toString().padStart(2, '0'),
             idPaquete: idPaquete.value,
           }
@@ -198,7 +201,7 @@ async function descargarReporte() {
 
     const response = await axios.get(`${apiDomain}/backoffice-grafico/descargar/pagos-realizados-agrupados-por-mes-anio`, {
       params: {
-        anio,
+        anio: anioModel.value,
         mes: selectedMonth.value.toString().padStart(2, '0'),
         idPaquete: idPaquete.value,
 
@@ -256,7 +259,16 @@ function descargarArchivo(content, filename) {
       fetchData();
     });
 
+    watch(anioModel, (value) => {
+      if(value){
+        fetchData();
+      }
+      
+    });
+
     return {
+      anioModel,
+      selectAnio,
       chartCanvas,
       selectedMonth,
       datosVacios,
