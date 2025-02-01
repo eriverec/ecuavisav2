@@ -1,4 +1,5 @@
 <script setup>
+import enviroment_component from '@/views/apps/servicios-node/enviroment_component.vue';
 import { integerValidator, requiredValidator } from '@validators'
   import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
@@ -17,6 +18,7 @@ import esLocale from "moment/locale/es";
   const totalRegistros = ref(0);
   const totalPaginado = ref(0);
   const dataServices = ref([]);
+  const dataServicesCopyComplete = ref([]);
   const dataServicesTable = ref([]);
   const loadingServices = ref(false);
   /**
@@ -135,43 +137,58 @@ import esLocale from "moment/locale/es";
     //   const result = {
     //     "resp": true,
     //     "data": {
-    //         "repos": [
+    //       "repos": [
+    //         {
+    //           "remoteUrl": "git@github.com:redyman/prueba-crud-assets.git",
+    //           "branch": "main",
+    //           "path": "/www/wwwroot/micro-servicio-node/prueba-crud-assets",
+    //           "services": [
     //             {
-    //                 "remoteUrl": "git@github.com:redyman/prueba-crud-assets.git",
-    //                 "branch": "main",
-    //                 "path": "/www/wwwroot/micro-servicio-node/prueba-crud-assets",
-    //                 "services": [
-    //                     {
-    //                         "id": 27010,
-    //                         "name": "servicio_1",
-    //                         "path": "servicio_1",
-    //                         "ssl": false,
-    //                         "port": 27010,
-    //                         "watchPaths": [
-    //                             "servicio_1/"
-    //                         ],
-    //                         "init": "api/index.js",
-    //                         "domain": "3.90.78.123"
-    //                     },
-    //                     {
-    //                         "id": 27011,
-    //                         "name": "servicio_2",
-    //                         "path": "servicio_2",
-    //                         "port": 27011,
-    //                         "ssl": false,
-    //                         "domain": "3.90.78.123",
-    //                         "init": "api/index.js",
-    //                         "watchPaths": [
-    //                             "servicio_2/"
-    //                         ]
-    //                     }
-    //                 ]
+    //               "id": 27012,
+    //               "path": "mail",
+    //               "port": 27012,
+    //               "name": "Servicio email 2",
+    //               "ssl": false,
+    //               "init": "index.js",
+    //               "domain": "3.90.78.123",
+    //               "watchPaths": [
+    //                 "mail/"
+    //               ],
+    //               "branch": "main"
     //             }
-    //         ]
+    //           ]
+    //         },
+    //         {
+    //           "path": "/www/wwwroot/micro-servicio-node/Usuarios",
+    //           "remoteUrl": "git@github.com:Ecuavisa-Services/Usuarios.git",
+    //           "branch": "main",
+    //           "services": [
+    //             {
+    //               "id": 27010,
+    //               "path": "servicio-DPSTools",
+    //               "port": 27010,
+    //               "name": "DPS Tools Servicio",
+    //               "ssl": false,
+    //               "init": "index.js",
+    //               "domain": "3.90.78.123",
+    //               "watchPaths": [
+    //                 "servicio-DPSTools/"
+    //               ],
+    //               "environmentVariables": [
+    //                 {
+    //                   "key":"MONGODB_URI",
+    //                   "value":"mongodb+srv://redyman:Ecuavisa2023.@backupusersdata.cbozr4l.mongodb.net/?retryWrites=true&w=majority"
+    //                 }
+    //               ]
+    //             }
+    //           ]
+    //         }
+    //       ]
     //     }
     // };
 
-      dataServices.value = result.data.repos;
+      dataServices.value = JSON.parse(JSON.stringify(result.data.repos));
+      dataServicesCopyComplete.value = JSON.parse(JSON.stringify(result.data.repos));
       selectRepos.value = ["Todos los repositorios", ...itemsModelRepos(result.data.repos)];
       selectSSH.value = itemsModelSSH(result.data.repos);
 
@@ -254,8 +271,8 @@ import esLocale from "moment/locale/es";
   const modelMain = ref('main');
   const modelPuerto = ref("");
   const selectPuerto = ref([]);
-  const modelSSL = ref(false);
-  const modelDomain = ref("3.90.78.123");
+  const modelSSL = ref(true);
+  const modelDomain = ref("");
   const modelInit = ref("api/index.js");
   const modelName = ref("");
   const modelPath = ref("");
@@ -301,7 +318,8 @@ import esLocale from "moment/locale/es";
               for (const message of messages) {
                   if (message.startsWith('data: ')) {
                       try {
-                          const data = JSON.parse(message.slice(6));
+                          const jsonString = message.length < 6 ? message : message.slice(6);
+                          const data = jsonString.trim() ? JSON.parse(jsonString) : null;
 
                           if(data.type == 'info'){
                             respSaveServiceTitle.value = data.message;
@@ -345,11 +363,11 @@ import esLocale from "moment/locale/es";
                           respSaveService.value.push({
                             message: 'Error parsing message:'+ e
                           });
-                          configSnackbar.value = {
-                              message: "Existe un error en las respuestas del servidor.",
-                              type: "error",
-                              model: true
-                          };
+                          // configSnackbar.value = {
+                          //     message: "Existe un error en las respuestas del servidor.",
+                          //     type: "error",
+                          //     model: true
+                          // };
                       }
                   }
               }
@@ -366,16 +384,6 @@ import esLocale from "moment/locale/es";
     }
 
     const onSubmit = async () => {
-      // const validPort = await textFieldRefModelPuerto.value?.validate();
-      // if (Object.keys(validPort).length > 0) {
-      //   configSnackbar.value = {
-      //       message: "Error, el campo Puerto no es el correcto.",
-      //       type: "error",
-      //       model: true
-      //   };
-      //   return true;
-      // }
-
       if(!modelPuerto.value){
         configSnackbar.value = {
             message: "Error, el campo Puerto es obligatorio.",
@@ -430,6 +438,17 @@ import esLocale from "moment/locale/es";
         return true;
       }
 
+      if(accion.value == 'create'){
+        await addService();
+      }
+
+      if(accion.value == 'update'){
+        await updateService();
+      }
+      return true;
+    }
+
+    const addService = async () => {
       const remoteUrl = modelSSH.value;
       const branch = modelMain.value;
       const name = modelName.value;
@@ -439,26 +458,23 @@ import esLocale from "moment/locale/es";
       const ssl = modelSSL.value;
       const port = modelPuerto.value;
 
-      // const ejempResp = {
-      //   name:"prueba"
-      // }
+      
+      const environmentVariables = variablesEnvironment.value;
 
-      // setInterval(function(){
-      //   respSaveService.value.push(ejempResp);
-      //   const element = consoleRef.value
-      //   element.scrollTop = element.scrollHeight
-      // }, 1000);
       
       visibleConsole.value = true;
       loadingServices.value = true;
 
-      await createService({remoteUrl, branch, name, path, init, domain, ssl, port});
+      await createService({remoteUrl, branch, name, path, init, domain, ssl, port, environmentVariables});
       await listarServiciosNode();
 
       loadingServices.value = false;
       dialogAddServices.value = false;
+    }
 
-      return true;
+    const addServiceShowModal = async () => {
+      accion.value = 'create';
+      dialogAddServices.value = true;
     }
   /**
    * Fin variables formulario validador
@@ -530,32 +546,502 @@ import esLocale from "moment/locale/es";
   };
   /**Fin eliminar registro */
 
-  
+  const disabledModelPuerto = ref(false);
+  const disabledModelPath = ref(false);
+
+  function restoreVariables(){
+    disabledModelPath.value = false;
+    visibleConsole.value = false;
+    disabledModelPuerto.value = false;
+    loadingServices.value = false;
+    modelSSH.value = "";
+    modelMain.value = "";
+    modelName.value = "";
+    modelPath.value = "";
+    modelInit.value = "api/index.js";
+    modelDomain.value = "";
+    modelSSL.value = false;
+    modelPuerto.value = "";
+
+    respSaveService.value = [];
+    respSaveServiceFinal.value = false;
+    respSaveServiceTitle.value = "Enviando...";
+    idService.value = null;
+    variablesEnvironment.value = [];
+  }
 
   /**
    * Inicio watch modalAddServices
    */
 
   watch(() => dialogAddServices.value, (newValue) => {
-    if(newValue){
-      visibleConsole.value = false;
-      loadingServices.value = false;
-      modelSSH.value = "";
-      modelMain.value = "";
-      modelName.value = "";
-      modelPath.value = "";
-      modelInit.value = "api/index.js";
-      modelDomain.value = "3.90.78.123";
-      modelSSL.value = false;
-      modelPuerto.value = "";
-
-      respSaveService.value = [];
-      respSaveServiceFinal.value = false;
-      respSaveServiceTitle.value = "Enviando...";
+    if(!newValue){
+      restoreVariables();
     }
   })
   /**
    * Fin watch modalAddServices
+   */
+
+   /**
+   * Inicio Redeploy
+   */
+    const dialogRedeployServices = ref(false);
+
+    watch(() => dialogRedeployServices.value, (newValue) => {
+      if(newValue == false){
+        visibleConsole.value = false;
+        loadingServices.value = false;
+        respSaveServiceFinal.value = false;
+        respSaveServiceTitle.value = "Enviando...";
+      }
+    })
+
+    async function redeployService(id) {
+      dialogRedeployServices.value = true;
+      loadingServices.value = true;
+      try {
+          const response = await fetch('http://3.90.78.123:3000/backoffice/redeploy-service-with-progress/', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  // Incluir token si es necesario
+                  'Authorization': 'Bearer 3CUAVISaNhWVCRNPofjXtWMk1D99LOoFzMf6LfoNlkiN8dGDkd' 
+              },
+              body: JSON.stringify({
+                id: id
+              })
+          });
+
+          const reader = response.body.getReader();
+          const decoder = new TextDecoder();
+
+          while (true) {
+              const { value, done } = await reader.read();
+              if (done) {
+                respSaveServiceFinal.value = true;
+                break;
+              }
+              
+              const text = decoder.decode(value);
+              const messages = text.split('\n\n').filter(Boolean);
+
+              for (const message of messages) {
+                  if (message.startsWith('data: ')) {
+                      try {
+                          const jsonString = message.length < 6 ? message : message.slice(6);
+                          const data = jsonString.trim() ? JSON.parse(jsonString) : null;
+
+                          if(data.type == 'info'){
+                            respSaveServiceTitle.value = data.message;
+                          }else if(data.type == 'progress'){
+                            if(data.stage == 'start' || data.stage == 'installing'){
+                              respSaveServiceTitle.value = data.output;
+                            }else{
+                              respSaveServiceTitle.value = `Ejecutando: [${data?.command}]`;
+                              respSaveService.value.push({
+                                message: data?.output
+                              });
+                            }
+                          }else if(data.type == 'completed'){
+                            respSaveServiceTitle.value = data.output;
+                            respSaveService.value.push({
+                              message: data.output
+                            });
+                          }else if(data.type == 'success'){
+                            respSaveServiceFinal.value = true;
+                          }else{
+                            if(data.type == 'error'){
+                              console.error('Error:', data);
+                              configSnackbar.value = {
+                                  message: "Existe un error en las respuestas del servidor..."+ JSON.stringify(data),
+                                  type: "error",
+                                  model: true
+                              };
+
+                              respSaveService.value.push({
+                                message: data.message
+                              });
+                            }else{
+                              respSaveService.value.push({
+                                message: data.output
+                              });
+                            }
+                            
+                          }
+                      } catch (e) {
+                          console.log('Error parsing message:', e);
+                          respSaveService.value.push({
+                            message: 'Error parsing message:'+ e
+                          });
+                          // configSnackbar.value = {
+                          //     message: "Existe un error en las respuestas del servidor.",
+                          //     type: "error",
+                          //     model: true
+                          // };
+                      }
+                  }
+              }
+          }
+
+          configSnackbar.value = {
+              message: "Redeploy completado.",
+              type: "success",
+              model: true
+          };
+
+          loadingServices.value = false;
+          
+      } catch (error) {
+          console.error('Error en la conexión:', error);
+          configSnackbar.value = {
+              message: "Existe un error en la conexión." + error,
+              type: "error",
+              model: true
+          };
+          return null;
+      }
+    }
+  
+  /**
+   * Fin Redeploy
+   */
+
+   /**
+   * Inicio Edit Services
+   */
+   function isValidIP(ip) {
+      // Regex para validar IPv4
+      const ipv4Regex = /^(\d{1,3}\.){3}\d{1,3}$/;
+
+      if (!ipv4Regex.test(ip)) return false;
+
+      // Validar que cada octeto esté entre 0-255
+      return ip.split('.').every(num => {
+          const n = parseInt(num);
+          return n >= 0 && n <= 255;
+      });
+  }
+
+   const accion = ref('create');
+   const dialogEditServices = ref(false);
+
+    async function viewModalUpdate(id){
+      accion.value = 'update';
+      const service = dataServices.value
+      .flatMap(item => item.services) // Aplanar el array de servicios
+      .find(s => s.id == id); // Encontrar el servicio con el id especificado
+
+      const repo = dataServices.value.find(item =>
+        item.services.some(s => s.id == id) // Verifica si el servicio está en este repo
+      );
+
+      idService.value = id;
+      modelSSH.value = repo.remoteUrl;
+      modelMain.value = repo.branch;
+      modelName.value = service.name;
+      modelPath.value = service.path;
+      modelInit.value = service.init;
+      modelDomain.value = service.domain.includes("https://") ? service.domain.replace("https://",'').split('/')[1] : service.domain.replace("http://",'');
+      modelSSL.value = service.ssl;
+      modelPuerto.value = service.port;
+
+      disabledModelPuerto.value = true;
+      disabledModelPath.value = true;
+
+      if(service.environmentVariables){
+        variablesEnvironment.value = service.environmentVariables;
+      }
+
+      if(!service){
+        configSnackbar.value = {
+            message: "No existe servicio que modificar",
+            type: "error",
+            model: true
+        };
+        return false;
+      }
+
+      dialogAddServices.value = true;
+
+    }
+
+    async function updateService() {
+      try {
+        if(!modelPuerto.value){
+          configSnackbar.value = {
+              message: "Error, el campo Puerto es obligatorio.",
+              type: "error",
+              model: true
+          };
+          return true;
+        }
+
+        if(!modelMain.value){
+          configSnackbar.value = {
+              message: "Error, el campo Branch es obligatorio.",
+              type: "error",
+              model: true
+          };
+          return true;
+        }
+
+        if(!modelName.value){
+          configSnackbar.value = {
+              message: "Error, el campo Nombre es obligatorio.",
+              type: "error",
+              model: true
+          };
+          return true;
+        }
+
+        if(!modelPath.value){
+          configSnackbar.value = {
+              message: "Error, el campo para el nombre de la carpeta principal es obligatorio.",
+              type: "error",
+              model: true
+          };
+          return true;
+        }
+
+        if(!modelInit.value){
+          configSnackbar.value = {
+              message: "Error, el campo de Inicio de su application, es obligatorio.",
+              type: "error",
+              model: true
+          };
+          return true;
+        }
+
+        if(!modelDomain.value){
+          configSnackbar.value = {
+              message: "Error, el campo para el nombre del dominio es obligatorio.",
+              type: "error",
+              model: true
+          };
+          return true;
+        }
+
+        const id = idService.value;
+        const remoteUrl = modelSSH.value;
+        const branch = modelMain.value;
+        const name = modelName.value;
+        const path = modelPath.value.replace(/^\/|\/$/g, '');
+        const init = modelInit.value.replace(/^\/|\/$/g, '');
+        const domain = modelDomain.value;
+        const ssl = modelSSL.value;
+        const port = modelPuerto.value;
+        const environmentVariables = variablesEnvironment.value;
+
+        const serviceData = {remoteUrl, branch, name, path, init, domain, ssl, port, id, environmentVariables};
+
+        loadingServices.value = true;
+        visibleConsole.value = true;
+      
+        const response = await fetch('http://3.90.78.123:3000/backoffice/update-service-with-progress/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                // Incluir token si es necesario
+                'Authorization': 'Bearer 3CUAVISaNhWVCRNPofjXtWMk1D99LOoFzMf6LfoNlkiN8dGDkd' 
+            },
+            body: JSON.stringify(serviceData)
+        });
+
+        const reader = response.body.getReader();
+        const decoder = new TextDecoder();
+
+        while (true) {
+            const { value, done } = await reader.read();
+            if (done) {
+              respSaveServiceFinal.value = true;
+              break;
+            }
+            
+            const text = decoder.decode(value);
+            const messages = text.split('\n\n').filter(Boolean);
+
+            for (const message of messages) {
+                if (message.startsWith('data: ')) {
+                    try {
+                        // const data = JSON.parse(message.length < 6 ? message : message.slice(6));
+                        const jsonString = message.length < 6 ? message : message.slice(6);
+                        const data = jsonString.trim() ? JSON.parse(jsonString) : null;
+
+                        if(data){
+                          if(data.type == 'info'){
+                            respSaveServiceTitle.value = data.message;
+                          }else if(data.type == 'progress'){
+                            if(data.stage == 'start' || data.stage == 'installing'){
+                              respSaveServiceTitle.value = data.output;
+                            }else{
+                              respSaveServiceTitle.value = `Ejecutando: [${data?.command}]`;
+                              respSaveService.value.push({
+                                message: data?.output
+                              });
+                            }
+                          }else if(data.type == 'completed'){
+                            respSaveServiceTitle.value = data.output;
+                            respSaveService.value.push({
+                              message: data.output
+                            });
+                          }else if(data.type == 'success'){
+                            respSaveServiceFinal.value = true;
+                          }else{
+                            if(data.type == 'error'){
+                              console.error('Error:', data);
+                              configSnackbar.value = {
+                                  message: "Existe un error en las respuestas del servidor..."+ JSON.stringify(data),
+                                  type: "error",
+                                  model: true
+                              };
+
+                              respSaveService.value.push({
+                                message: data.message
+                              });
+                            }else{
+                              respSaveService.value.push({
+                                message: data.output
+                              });
+                            }
+                          }
+                        }
+                    } catch (e) {
+                        console.log('Error parsing message:', e);
+                        respSaveService.value.push({
+                          message: 'Error parsing message:'+ e
+                        });
+                        // configSnackbar.value = {
+                        //     message: "Existe un error en las respuestas del servidor.",
+                        //     type: "error",
+                        //     model: true
+                        // };
+                    }
+                }
+            }
+        }
+
+        await listarServiciosNode();
+        loadingServices.value = true;
+        dialogAddServices.value = false;
+      } catch (error) {
+          console.error('Error en la conexión:', error);
+          configSnackbar.value = {
+              message: "Existe un error en la conexión." + error,
+              type: "error",
+              model: true
+          };
+          return null;
+      }
+    }
+
+    watch(modelPath, (value) => {
+      if(value && accion.value != 'update'){
+        modelDomain.value = value;
+      }
+    });
+
+    watch(modelDomain, (value) => {
+      if (value) {
+        const cleanedValue = (value).replace(/[^a-zA-Z0-9-.]/g, '').toLowerCase(); // Solo permite letras y números
+        if (cleanedValue != value.toLowerCase()) { // Solo actualiza si el valor cambió
+          modelDomain.value = cleanedValue;
+        }
+        modelSSL.value = !isValidIP(value);
+      }
+    });
+
+    /**
+    * Fin Edit Services
+    */
+
+    /**
+   * Inicio Find Folder
+   */
+
+  const modalDialogFindFolder = ref(false);
+  const dataFoldersServices = ref([]);
+  const listFolderWithSSH = ref([]);
+
+  const listPathServices = async () => {
+    disabledModelPath.value = true;
+    try {
+      var myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+
+      var requestOptions = {
+        method: 'GET',
+        headers: myHeaders,
+        redirect: 'follow'
+      };
+
+      const response = await fetch("http://3.90.78.123:3000/backoffice/list-services-status", requestOptions);
+      const result = await response.json();
+
+      dataFoldersServices.value = result.data.services;
+      disabledModelPath.value = false;
+      return true;
+    } catch (error) {
+      console.log(error)
+      configSnackbar.value = {
+          message: "No se pudo recuperar los servicios node, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
+      disabledModelPath.value = false;
+      return null;
+    }
+  }
+
+  const findFolderServices = async () => {
+    try {
+      listFolderWithSSH.value = [];
+      if(modelSSH.value){
+        modalDialogFindFolder.value = true;
+        const nameRepo = modelSSH.value.split('/')[1].split(".")[0];
+        for(var i in dataFoldersServices.value){
+          if(dataFoldersServices.value[i].relative_path.split("/")[0] === nameRepo && dataFoldersServices.value[i].information_service.status == false){
+            listFolderWithSSH.value.push(dataFoldersServices.value[i]);
+          }
+        }
+      }
+    } catch (error) {
+      console.log(error)
+      configSnackbar.value = {
+          message: "No se pudo recuperar los servicios node, recargue de nuevo.",
+          type: "error",
+          model: true
+      };
+      return null;
+    }
+  }
+
+  const selectFolderServices = (service) => {
+    modelPath.value = service.name_path;
+    modalDialogFindFolder.value = false;
+  }
+
+  /**
+   * Fin Find Folder
+   */
+
+   /**
+   * Inicio Component Environment
+   */
+
+   const variablesEnvironment = ref([])
+
+  //  const tuArrayDeVariables = [
+  //   { key: 'API_KEY', value: 'abc123' },
+  //   { key: 'API_URL', value: 'https://api.ejemplo.com' }
+  // ]
+
+  // Opcional: recibir las variables actualizadas
+  const handleVariablesUpdate = (newVars) => {
+    console.log('Variables actualizadas:', newVars)
+  }
+  /**
+   * Fin Component Environment
    */
 
   /**
@@ -564,10 +1050,13 @@ import esLocale from "moment/locale/es";
 
   onMounted(async () => {
     await listarServiciosNode();
+    await listPathServices();
   });
   /**
    * Fin onMounted
    */
+
+  
 </script>
 
 <template>
@@ -612,16 +1101,18 @@ import esLocale from "moment/locale/es";
       </VCard>
     </VDialog>
 
+    <!-- Dialog Agregar/Editar Servicio -->
     <VDialog
       v-model="dialogAddServices"
       persistent
+      scrollable
       class="v-dialog-sm"
     >
 
       <!-- Dialog Content -->
-      <VCard title="Agregar servicio">
-        <VCardText>
-          <VForm v-if="!visibleConsole">
+      <VCard :title="accion == 'create' ? 'Agregar servicio' : 'Editar servicio'">
+        <VCardText class="px-3">
+          <VForm v-if="!visibleConsole" class="mb-4">
             <VRow>
               <VCol cols="12" sm="12" lg="12" >
                 <label for="">SSH(Remote URL)</label>
@@ -674,7 +1165,7 @@ import esLocale from "moment/locale/es";
                 <label for="">Seleccione un puerto</label>
                 <VSelect
                   style="min-width: 100%;"
-                  :disabled="loadingServices"
+                  :disabled="loadingServices || disabledModelPuerto"
                   class="bg-white"
                   v-model="modelPuerto"
                   density="compact"
@@ -683,9 +1174,9 @@ import esLocale from "moment/locale/es";
                 />
               </VCol>
               <VCol cols="12" sm="12" lg="12" >
-                <label for="">Nombre de la carpeta principal</label>
+                <label for="">Nombre de la carpeta existente del servicio</label>
                 <VTextField
-                  :disabled="loadingServices"
+                  :disabled="loadingServices || disabledModelPath"
                   class="pl-0 classs-path"
                   clearable
                   v-model="modelPath"
@@ -701,6 +1192,22 @@ import esLocale from "moment/locale/es";
                       /> {{modelSSH.split(':')[1].split('/')[1].split('.')[0]}}/
                   </div>
                 </template>
+                <!-- append-->
+                <template #append>
+                  <div class="d-flex align-center demo-space-x" >
+                    <VBtn
+                      class="px-0 py-0 mx-0 my-0"
+                      variant="plain"
+                      color="secondary"
+                      :disabled="modelSSH ? false : true"
+                      icon="tabler-folder-search" @click="findFolderServices"/>
+                      <VBtn
+                        class="px-0 py-0 mx-0 my-0"
+                        variant="plain"
+                        color="secondary"
+                        icon="tabler-refresh" @click="listPathServices"/>
+                  </div>
+                </template>
                 </VTextField>
               </VCol>
               <VCol cols="12" sm="12" lg="6" >
@@ -713,16 +1220,41 @@ import esLocale from "moment/locale/es";
                 />
               </VCol>
               <VCol cols="12" sm="12" lg="6" >
-                <label for="">Dominio o dirección ip</label>
+                <label for="">Ruta del servicio</label>
                 <VTextField
                   :disabled="loadingServices"
                   clearable
                   v-model="modelDomain"
-                  placeholder="3.90.78.123"
-                />
+                  placeholder="ruta-servicio">
+
+                  <!-- Prepend inner-->
+                  <template #prepend-inner>
+                    <div class="d-flex align-center" >
+                        /
+                    </div>
+                  </template>
+                </VTextField>
               </VCol>
             </VRow>
           </VForm>
+          <VDivider v-if="!visibleConsole"/>
+          <VExpansionPanels v-if="!visibleConsole" class="mt-4">
+            <VExpansionPanel key="1">
+              <VExpansionPanelTitle>
+                <VIcon
+                    :size="22"
+                    icon="tabler-settings"
+                    class="mr-2"
+                  /> Variables de entorno
+              </VExpansionPanelTitle>
+              <VExpansionPanelText >
+                <enviroment_component 
+                  :initial-variables="variablesEnvironment"
+                  @update:variables="(newVars) => variablesEnvironment = newVars"
+                />
+              </VExpansionPanelText>
+            </VExpansionPanel>
+          </VExpansionPanels>
         </VCardText>
 
         <VCardText v-if="visibleConsole">
@@ -781,6 +1313,137 @@ import esLocale from "moment/locale/es";
       </VCard>
     </VDialog>
 
+    <!-- Dialog Redeploy Servicio -->
+    <VDialog
+      v-model="dialogRedeployServices"
+      persistent
+      class="v-dialog-sm"
+    >
+
+      <!-- Dialog Content -->
+      <VCard title="Redeploy servicio">
+
+        <VCardText>
+          <VRow>
+            <VCol cols="12" sm="12" lg="12" >
+              <div v-if="!respSaveServiceFinal">
+                <div class="d-flex align-center ">
+                  <div class="progress-spinner"></div>
+                  <span class="ml-2 text-capitalize">{{respSaveServiceTitle}}</span>
+                </div>
+                <small>
+                  Por favor, espera un momento, no cierre esta ventana. 
+                  <VIcon
+                      :size="22"
+                      icon="tabler-alert-triangle"
+                      class="ml-1"
+                      color="warning"
+                    />
+                </small>
+              </div>
+              <div class="d-flex align-center d-none" v-else>
+                <VIcon
+                    :size="32"
+                    icon="tabler-check"
+                    class="mr-2"
+                    color="success"
+                  />
+                <span class="ml-2">Proceso finalizado con éxito</span>
+              </div>
+            </VCol>
+          </VRow>
+          <div ref="consoleRef" class="console-service v-theme--dark px-3  py-3">
+            <VRow>
+              <VCol cols="12" sm="12" lg="12" v-for="(resp, index) of respSaveService" :key="index">
+                <div class="details-console">
+                  {{resp.message}}
+                </div>
+              </VCol>
+            </VRow>
+          </div>
+        </VCardText>
+
+        <VCardText class="d-flex justify-end gap-3 flex-wrap">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            :disabled="loadingServices"
+            @click="dialogRedeployServices = false"
+          >
+            Cerrar
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
+
+    <!-- Dialog buscar Servicio -->
+    <VDialog
+      v-model="modalDialogFindFolder"
+      persistent
+      scrollable
+      class="v-dialog-sm"
+    >
+
+      <VCard title="Buscar servicio">
+
+        <VCardText style="height: 500px;">
+          <VRow>
+            <VCol cols="12" sm="12" lg="12" >
+              
+              <VList lines="two">
+                  <VListSubheader inset>
+                    {{ modelSSH }}
+                  </VListSubheader>
+
+                  <VListItem
+                    v-for="(service, index) of listFolderWithSSH"
+                    :key="index"
+                    :title="service.name_path"
+                    :subtitle="service.relative_path"
+                  >
+                    <template #prepend>
+                      <VAvatar
+                        color="secondary"
+                        variant="tonal"
+                      >
+                        <VIcon
+                          :size="26"
+                          icon="tabler-folder"
+                        />
+                      </VAvatar>
+                    </template>
+
+                    <template #append>
+                      <VBtn
+                        title="Click para seleccionar carpeta"
+                        variant="tonal"
+                        size="small"
+                        color="success"
+                        icon="tabler-plus"
+                        @click="selectFolderServices(service)"
+                      />
+                    </template>
+                  </VListItem>
+
+                </VList>
+              
+            </VCol>
+          </VRow>
+        </VCardText>
+
+        <VCardText class="d-flex justify-end gap-3 flex-wrap">
+          <VBtn
+            color="secondary"
+            variant="tonal"
+            :disabled="loadingServices"
+            @click="modalDialogFindFolder = false"
+          >
+            Cerrar
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
+
     <VRow>
       <VCol cols="12" sm="12" lg="12" >
         <h1 class="mb-4">Servicios NodeJS activos AWS</h1>
@@ -830,7 +1493,7 @@ import esLocale from "moment/locale/es";
               variant="tonal"
               color="success"
               prepend-icon="tabler-circle-plus"
-              @click="dialogAddServices = true"
+              @click="addServiceShowModal()"
             >
               <span style="cursor:pointer" class="px-0 py-p m-0">Crear servicio</span>
             </VBtn>
@@ -869,15 +1532,15 @@ import esLocale from "moment/locale/es";
                       />
                       <VMenu activator="parent">
                         <VList density="compact">
-                          <VListItem href="#" disabled>
+                          <VListItem href="#" @click="redeployService(service.id)">
                             <VIcon size="22" class="mr-1" icon="mdi-refresh" />
                             Redeploy
                           </VListItem>
-                          <VListItem href="#" disabled>
+                          <VListItem href="#" @click="viewModalUpdate(service.id)">
                             <VIcon size="22" class="mr-1" icon="mdi-pencil" />
                             Editar servicio
                           </VListItem>
-                          <VListItem :href="service.ssl ? 'https://' : 'http://' + service.domain + ':' + service.port" target="_blank">
+                          <VListItem :href="(service.domain.includes('https://') ? service.domain : (service.domain + ':' + service.port) )" target="_blank">
                             <VIcon size="22" class="mr-1" icon="tabler-link" />
                             Visitar
                           </VListItem>
@@ -925,7 +1588,7 @@ import esLocale from "moment/locale/es";
                       />
                   </VBtn>
                   <div class="estado-certificado" v-else>
-                    SSL: <VChip size="x-small" :color="service.ssl ? 'success' : 'error'">{{service.ssl ? 'Si' : 'No'}}</VChip>
+                    SSL: <VChip size="x-small" :color="service.ssl ? 'success' : 'error'">{{service.ssl ? 'Activo' : 'Inactivo'}}</VChip>
                   </div>
                 </div>
 

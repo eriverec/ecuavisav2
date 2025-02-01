@@ -3,6 +3,7 @@
   import { extendMoment } from 'moment-range';
   import esLocale from "moment/locale/es";
   import { parseISO } from 'date-fns';
+  import axios from 'axios';
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
 
@@ -212,7 +213,7 @@
         redirect: 'follow'
       };
 
-      var response = await fetch(`${urlApiExport.value}?page=${page}&limit=${limit}&fechai=${fechas.value.fechai}&fechaf=${fechas.value.fechaf}`, requestOptions);
+      var response = await fetch(`${urlApiExport.value}?page=${page}&limit=${limit}&fechai=${fechas.value.fechai}&fechaf=${fechas.value.fechaf}&idPaquete=${selectedPaquete.value}`, requestOptions);
       
       const data = await response.json();
 
@@ -340,6 +341,29 @@
     }
   };
   // FIN DESCARGAR
+
+  const selectedPaquete = ref("651c9d012ff9fa09a75e6c16");
+  const paquetes = ref([]);
+  const loading = ref(true);
+
+  const fetchPaquetes = async () => {
+    try {
+      const response = await axios.get('https://ecuavisa-suscripciones.vercel.app/paquete/backoffice/display-all');
+      if (response.data.resp && Array.isArray(response.data.data)) {
+        paquetes.value = response.data.data;
+      } else {
+        console.error('Formato de respuesta inesperado:', response.data);
+      }
+    } catch (error) {
+      console.error('Error al obtener los paquetes:', error);
+    } finally {
+      loading.value = false;
+    }
+  };
+
+  onMounted(async () => {
+    await fetchPaquetes();
+  });
 </script>
 
 <template>
@@ -375,6 +399,16 @@
           <VCardText>
             <div class="d-flex align-top justify-content-flex-end flex-wrap flex-column gap-0 mb-5">
               
+              <VSelect
+                v-model="selectedPaquete"
+                :items="paquetes"
+                item-title="nombre"
+                item-value="_id"
+                label="Seleccionar paquete"
+                :loading="loading"
+                class="mb-5"
+              />
+
               <VCombobox 
                 class="d-none"
                 v-model="comboFechaModel" 
