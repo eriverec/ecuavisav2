@@ -8,6 +8,7 @@ import esLocale from "moment/locale/es";
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
   moment.tz.setDefault('America/Guayaquil');
+  const dominio_g = "https://services.ecuavisa.com/git-puller";
 
   /**
    * Inicio variables para paginado
@@ -132,7 +133,7 @@ import esLocale from "moment/locale/es";
         redirect: 'follow'
       };
 
-      const response = await fetch("http://3.90.78.123:3000/backoffice/list-services", requestOptions);
+      const response = await fetch(dominio_g + "/backoffice/list-services", requestOptions);
       const result = await response.json();
     //   const result = {
     //     "resp": true,
@@ -217,7 +218,7 @@ import esLocale from "moment/locale/es";
    */
    const getAllPort = async () => {
     try {
-        const response = await fetch('http://3.90.78.123:3000/backoffice/list-ports', {
+        const response = await fetch(dominio_g + '/backoffice/list-ports', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -292,7 +293,7 @@ import esLocale from "moment/locale/es";
 
     async function createService(serviceData) {
       try {
-          const response = await fetch('http://3.90.78.123:3000/backoffice/create-service-with-progress/', {
+          const response = await fetch(dominio_g + '/backoffice/create-service-with-progress/', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
@@ -517,7 +518,7 @@ import esLocale from "moment/locale/es";
         var myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
 
-        const response = await fetch('http://3.90.78.123:3000/backoffice/delete-service/', {
+        const response = await fetch(dominio_g + '/backoffice/delete-service/', {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -601,7 +602,7 @@ import esLocale from "moment/locale/es";
       dialogRedeployServices.value = true;
       loadingServices.value = true;
       try {
-          const response = await fetch('http://3.90.78.123:3000/backoffice/redeploy-service-with-progress/', {
+          const response = await fetch(dominio_g + '/backoffice/redeploy-service-with-progress/', {
               method: 'POST',
               headers: {
                   'Content-Type': 'application/json',
@@ -838,7 +839,7 @@ import esLocale from "moment/locale/es";
         loadingServices.value = true;
         visibleConsole.value = true;
       
-        const response = await fetch('http://3.90.78.123:3000/backoffice/update-service-with-progress/', {
+        const response = await fetch(dominio_g + '/backoffice/update-service-with-progress/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -975,7 +976,7 @@ import esLocale from "moment/locale/es";
         redirect: 'follow'
       };
 
-      const response = await fetch("http://3.90.78.123:3000/backoffice/list-services-status", requestOptions);
+      const response = await fetch(dominio_g + "/backoffice/list-services-status", requestOptions);
       const result = await response.json();
 
       dataFoldersServices.value = result.data.services;
@@ -1211,7 +1212,7 @@ import esLocale from "moment/locale/es";
                 </VTextField>
               </VCol>
               <VCol cols="12" sm="12" lg="6" >
-                <label for="">Inicio de su application</label>
+                <label for="" class="lh-1 mb-2">Inicio de su application o comando npm</label>
                 <VTextField
                   :disabled="loadingServices"
                   clearable
@@ -1219,8 +1220,8 @@ import esLocale from "moment/locale/es";
                   placeholder=" ejm.(api/index.js)"
                 />
               </VCol>
-              <VCol cols="12" sm="12" lg="6" >
-                <label for="">Ruta del servicio</label>
+              <VCol cols="12" sm="12" lg="6">
+                <label for="" class="mb-4 d-block">Ruta del servicio</label>
                 <VTextField
                   :disabled="loadingServices"
                   clearable
@@ -1699,6 +1700,11 @@ import esLocale from "moment/locale/es";
       border-top: 2px solid #2f3349;
       border-radius: 50%;
       animation: spin 1s linear infinite;
+  }
+
+  .lh-1 {
+      line-height: 1;
+      display: block;
   }
 
   @keyframes spin {
