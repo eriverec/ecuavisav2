@@ -1300,8 +1300,8 @@ function paginaEnvivo() {
   document.getElementById("programacion").insertAdjacentHTML("beforebegin",
     `<div id="boton_eventos">
       <div id="cont-botones">
-        <a href="/envivo" class="btn-gye activo"> En Vivo </a>
-        <a href="/envivo/enventos" class="btn-quito"> Eventos</a>
+        <a href="/envivo" class="btn-gye activo">En Vivo</a>
+        <a href="/envivo/enventos" class="btn-quito">Rueda de prensa</a>
       </div>
     </div>`
   );
@@ -1309,13 +1309,16 @@ function paginaEnvivo() {
 
 function paginaEventos() {
   document.querySelector(".bloque_envivo_evento").innerHTML += `
+  <div id="boton_eventos">
+      <div id="cont-botones">
+        <a href="/envivo" class="btn-gye ">En Vivo</a>
+        <a href="/envivo/enventos" class="btn-quito activo">Rueda de prensa</a>
+      </div>
+    </div>
   <div id="programacion_eventos" style="margin: 20px 0;">
-    <h1 class="title_programa_eventos">En vivo</h1>
+    <h1 class="title_programa_eventos">Rueda de prensa</h1>
     <div id="playerembed_eventos" style="display: block; margin: auto; text-align: center; visibility: visible;">
-      <iframe id="vrudo" class="vrudo" src="https://rudo.video/live/ecuavisa?dXNlcj0xNTcyODA=" width="600" height="338"
-        allowfullscreen="true" frameborder="0" scrolling="no" allow="autoplay; fullscreen"
-        data-gtm-yt-inspected-10="true"
-        title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy."></iframe>
+        <iframe id="vrudo" class="vrudo" src="//rudo.video/live/ecuavisaqo" width="600" height="338" allowfullscreen="true" frameborder="0" scrolling="no" allow="autoplay; fullscreen"></iframe>
     </div>
   </div>`;
 
@@ -1325,7 +1328,7 @@ function paginaEventos() {
 const rutaActual = window.location.pathname;
 setTimeout(() => {
 
-  if (rutaActual === '/envivo/eventos') {
+  if (rutaActual === '/envivo/rueda-de-prensas') {
 
   } else if (rutaActual === '/envivo') {
 
