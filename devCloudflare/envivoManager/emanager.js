@@ -631,7 +631,7 @@ function eventoEnvivoManager() {
       const xhr = new XMLHttpRequest();
       xhr.open('GET', 'https://cdn-ecuavisa.pages.dev/envivo/assets-dynamic/envivo_guayaquil.js?' + currentTime, true);
 
-      xhr.onload = function() {
+      xhr.onload = function () {
         if (xhr.status === 200) {
           try {
             const evalScript = new Function(xhr.responseText + '; return horario_envivo;');
@@ -679,8 +679,8 @@ function eventoEnvivoManager() {
         fondito__.style.display = "none";
       }
 
-      if (enVivoRedy) { 
-        enVivoRedy.style.display = 'flex'; 
+      if (enVivoRedy) {
+        enVivoRedy.style.display = 'flex';
       }
       return;
     }
@@ -701,7 +701,7 @@ function eventoEnvivoManager() {
 
         if (horaActualEnMinutos >= inicioEnMinutos && horaActualEnMinutos < finEnMinutos) {
           programaEncontrado = true;
-          
+
           if (title_programa) {
             title_programa.innerHTML = hora.tituloPrograma;
             title_programa.style.display = 'block';
@@ -1292,3 +1292,45 @@ setTimeout(() => {
 //   eventModal();
 // });
 
+
+
+
+/* FUNCION PARA EL EVENTO DE PRENDA DE LIGAPRO */
+function paginaEnvivo() {
+  document.getElementById("programacion").insertAdjacentHTML("beforebegin",
+    `<div id="boton_eventos">
+      <div id="cont-botones">
+        <a href="/envivo" class="btn-gye activo"> En Vivo </a>
+        <a href="/envivo/enventos" class="btn-quito"> Eventos</a>
+      </div>
+    </div>`
+  );
+}
+
+function paginaEventos() {
+  document.querySelector(".bloque_envivo_evento").innerHTML += `
+  <div id="programacion_eventos" style="margin: 20px 0;">
+    <h1 class="title_programa_eventos">En vivo</h1>
+    <div id="playerembed_eventos" style="display: block; margin: auto; text-align: center; visibility: visible;">
+      <iframe id="vrudo" class="vrudo" src="https://rudo.video/live/ecuavisa?dXNlcj0xNTcyODA=" width="600" height="338"
+        allowfullscreen="true" frameborder="0" scrolling="no" allow="autoplay; fullscreen"
+        data-gtm-yt-inspected-10="true"
+        title="Ecuavisa | Últimas Noticias del Ecuador y del mundo hoy."></iframe>
+    </div>
+  </div>`;
+
+}
+
+
+const rutaActual = window.location.pathname;
+setTimeout(() => {
+
+  if (rutaActual === '/envivo/eventos') {
+
+  } else if (rutaActual === '/envivo') {
+
+  } else {
+
+  }
+
+}, 1000);
