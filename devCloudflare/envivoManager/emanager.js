@@ -1329,7 +1329,7 @@ setTimeout(() => {
   if (rutaActual === '/envivo/rueda-de-prensa') {
     paginaEventos();
   } else if (rutaActual === '/envivo') {
-    // paginaEnvivo();
+    paginaEnvivo();
   } else {
     console.log("nada de nada");
   }
