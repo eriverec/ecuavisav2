@@ -1316,7 +1316,7 @@ function paginaEventos() {
       </div>
     </div>
   <div id="programacion_eventos" style="margin: 20px 0;">
-    <h1 class="title_programa_eventos">GALA EL PRO</h1>
+    <h1 class="title_programa_eventos">Sexta edición gala el pro</h1>
     <div id="playerembed_eventos" style="display: block; margin: auto; text-align: center; visibility: visible;">
         <iframe id="vrudo" class="vrudo" src="//rudo.video/live/ecuavisaqo" width="600" height="338" allowfullscreen="true" frameborder="0" scrolling="no" allow="autoplay; fullscreen"></iframe>
     </div>
