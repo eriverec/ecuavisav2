@@ -1325,9 +1325,9 @@ function paginaEventos() {
 }
 
 
-const rutaActual = window.location.pathname;
 setTimeout(() => {
-
+  
+  const rutaActual = window.location.pathname;
   if (rutaActual === '/envivo/rueda-de-prensas') {
     paginaEventos();
   } else if (rutaActual === '/envivo') {
