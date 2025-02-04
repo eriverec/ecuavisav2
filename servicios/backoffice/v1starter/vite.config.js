@@ -55,8 +55,20 @@ export default defineConfig(({ mode }) => {
     },
   },
   build: {
-    ssrEmitAssets: true,  // Reduce carga en la memoria
-    chunkSizeWarningLimit: 5000,
+    minify: "esbuild",
+    terserOptions: {
+      compress: {
+        drop_console: true, // Elimina console.log para reducir tamaño
+        drop_debugger: true
+      }
+    },
+    rollupOptions: {
+      output: {
+        inlineDynamicImports: true
+      }
+    },
+    ssrEmitAssets: true,
+    chunkSizeWarningLimit: 15000
   },
   optimizeDeps: {
     exclude: ['vuetify'],
