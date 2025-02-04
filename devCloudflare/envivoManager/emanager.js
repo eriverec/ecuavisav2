@@ -1301,7 +1301,7 @@ function paginaEnvivo() {
     `<div id="boton_eventos">
       <div id="cont-botones">
         <a href="/envivo" class="btn-gye activo">En Vivo</a>
-        <a href="/envivo/enventos" class="btn-quito">Rueda de prensa</a>
+        <a href="/envivo/rueda-de-prensas" class="btn-quito">Rueda de prensa</a>
       </div>
     </div>`
   );
@@ -1312,7 +1312,7 @@ function paginaEventos() {
   <div id="boton_eventos">
       <div id="cont-botones">
         <a href="/envivo" class="btn-gye ">En Vivo</a>
-        <a href="/envivo/enventos" class="btn-quito activo">Rueda de prensa</a>
+        <a href="/envivo/rueda-de-prensas" class="btn-quito activo">Rueda de prensa</a>
       </div>
     </div>
   <div id="programacion_eventos" style="margin: 20px 0;">
