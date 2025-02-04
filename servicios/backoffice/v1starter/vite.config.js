@@ -55,6 +55,7 @@ export default defineConfig(({ mode }) => {
     },
   },
   build: {
+    ssrEmitAssets: true,  // Reduce carga en la memoria
     chunkSizeWarningLimit: 5000,
   },
   optimizeDeps: {
