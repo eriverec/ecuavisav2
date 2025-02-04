@@ -1328,11 +1328,8 @@ setTimeout(() => {
   const rutaActual = window.location.pathname;
   if (rutaActual === '/envivo/rueda-de-prensa') {
     paginaEventos();
-    console.log("paginaEventos");
   } else if (rutaActual === '/envivo') {
     // paginaEnvivo();
-    console.log("paginaEnvivo");
-
   } else {
     console.log("nada de nada");
   }
