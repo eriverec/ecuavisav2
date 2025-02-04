@@ -1301,7 +1301,7 @@ function paginaEnvivo() {
     `<div id="boton_eventos">
       <div id="cont-botones">
         <a href="/envivo" class="btn-gye activo">En Vivo</a>
-        <a href="/envivo/rueda-de-prensa" class="btn-quito">Rueda de prensa</a>
+        <a href="/envivo/rueda-de-prensa" class="btn-quito">Gala el Pro</a>
       </div>
     </div>`
   );
@@ -1312,11 +1312,11 @@ function paginaEventos() {
   <div id="boton_eventos">
       <div id="cont-botones">
         <a href="/envivo" class="btn-gye ">En Vivo</a>
-        <a href="/envivo/rueda-de-prensa" class="btn-quito activo">Rueda de prensa</a>
+        <a href="/envivo/rueda-de-prensa" class="btn-quito activo">Gala el Pro</a>
       </div>
     </div>
   <div id="programacion_eventos" style="margin: 20px 0;">
-    <h1 class="title_programa_eventos">Rueda de prensa</h1>
+    <h1 class="title_programa_eventos">GALA EL PRO</h1>
     <div id="playerembed_eventos" style="display: block; margin: auto; text-align: center; visibility: visible;">
         <iframe id="vrudo" class="vrudo" src="//rudo.video/live/ecuavisaqo" width="600" height="338" allowfullscreen="true" frameborder="0" scrolling="no" allow="autoplay; fullscreen"></iframe>
     </div>
