@@ -1306,7 +1306,7 @@ import esLocale from "moment/locale/es";
             :disabled="loadingServices"
             @click="dialogAddServices = false"
           >
-            No, Cerrar
+            Cancelar
           </VBtn>
           <VBtn @click="onSubmit" :loading="loadingServices" :disabled="loadingServices">
             Si, guardar

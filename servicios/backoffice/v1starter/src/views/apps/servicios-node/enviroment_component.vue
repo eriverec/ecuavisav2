@@ -95,7 +95,10 @@ const removeEnvVariable = (index) => {
 const emit = defineEmits(['update:variables'])
 
 // Observar cambios en las variables locales
-watch(localEnvVariables, (newVars) => {
-  emit('update:variables', newVars)
-}, { deep: true })
+watch(
+  () => [...localEnvVariables.value], // Clonar la referencia para evitar referencia reactiva
+  (newVars) => {
+    emit('update:variables', JSON.parse(JSON.stringify(newVars))) // Romper reactividad interna
+  }
+)
   </script>
