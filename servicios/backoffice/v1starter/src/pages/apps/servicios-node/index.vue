@@ -1213,7 +1213,7 @@ import esLocale from "moment/locale/es";
                 </VTextField>
               </VCol>
               <VCol cols="12" sm="12" lg="6" >
-                <label for="" class="lh-1 mb-2">Inicio de su application o comando npm</label>
+                <label for="" class="">Inicio de su aplicación o npm</label>
                 <VTextField
                   :disabled="loadingServices"
                   clearable
@@ -1222,7 +1222,7 @@ import esLocale from "moment/locale/es";
                 />
               </VCol>
               <VCol cols="12" sm="12" lg="6">
-                <label for="" class="mb-4 d-block">Ruta del servicio</label>
+                <label for="" class="">Ruta del servicio</label>
                 <VTextField
                   :disabled="loadingServices"
                   clearable
