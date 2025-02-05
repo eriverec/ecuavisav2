@@ -65,11 +65,33 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
     }
   }
 
+  const expreso_data = async function(){
+    try{
+      const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/competencias/radar-digital/el-universo/listar.php');
+      const dataResp = await response.json();
+      return dataResp.site;
+    }catch(error){
+      return null;
+    }
+  }
+
+const ecuavisa_data = async function(){
+  try{
+    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/competencias/radar-digital/el-universo/listar.php');
+    const dataResp = await response.json();
+    return dataResp.site;
+  }catch(error){
+    return null;
+  }
+}
+
   const principalData = async function(){
     try{
 
-      const primiciasList = await primicias_data() || [];;
+      const primiciasList = await primicias_data() || [];
       const elUniersoList = await el_universo_data() || [];
+      const expresoList = await expreso_data() || [];
+      const ecuavisaList = await ecuavisa_data() || [];
 
       for (let i = 0; i < primiciasList.length; i++) {
         primiciasList[i].sitio = "PRIMICIAS";
@@ -81,7 +103,17 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
         elUniersoList[i].color = "info";
       }
 
-      data.value = [...primiciasList, ...elUniersoList].sort((a, b) => {
+      for (let i = 0; i < expresoList.length; i++) {
+        expresoList[i].sitio = "EXPRESO";
+        expresoList[i].color = "error";
+      }
+
+      for (let i = 0; i < ecuavisaList.length; i++) {
+        ecuavisaList[i].sitio = "ECUAVISA";
+        ecuavisaList[i].color = "warning";
+      }
+
+      data.value = [...primiciasList, ...elUniersoList, ...expresoList, ...ecuavisaList].sort((a, b) => {
         const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
         const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
         return dateB - dateA; // Mayor a menor
@@ -193,8 +225,8 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
   })
 
   const processedData = computed(() => {
+    return data.value;
     const seen = new Map();
-    
     data.value.forEach(item => {
       const existing = seen.get(item.enlace);
       
@@ -208,8 +240,10 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
       }
     });
 
+    // console.log(data.value.filter(item => item.sitio === "EXPRESO"))
     // Devolvemos los valores únicos como un array
     return Array.from(seen.values());
+    
   });
 
   // const groupedData = computed(() => {

@@ -1172,6 +1172,7 @@ import esLocale from "moment/locale/es";
                   density="compact"
                   variant="outlined"
                   :items="selectPuerto"
+                  :menu-props="{ maxHeight: '400' }"
                 />
               </VCol>
               <VCol cols="12" sm="12" lg="12" >
