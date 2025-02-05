@@ -2296,6 +2296,7 @@ INICIO - BLOQUE - MUNDO
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .media_block {
     grid-template-columns: 3fr 1fr;
+    grid-gap: 20px;
   }
 
   .HOME_MENU_RD .lista-bloque-1x4 .noticias .article .text_block .headline a h2 {
