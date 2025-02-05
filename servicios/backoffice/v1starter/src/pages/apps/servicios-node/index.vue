@@ -375,11 +375,11 @@ import esLocale from "moment/locale/es";
           }
       } catch (error) {
           console.error('Error en la conexión:', error);
-          configSnackbar.value = {
-              message: "Existe un error en la conexión." + error,
-              type: "error",
-              model: true
-          };
+          // configSnackbar.value = {
+          //     message: "Existe un error en la conexión." + error,
+          //     type: "error",
+          //     model: true
+          // };
           return null;
       }
     }
