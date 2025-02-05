@@ -1309,17 +1309,9 @@ function paginaEnvivo() {
 
 function paginaEventos() {
   document.querySelector(".bloque_envivo_evento").innerHTML += `
-  <div id="boton_eventos">
-      <div id="cont-botones">
-        <a href="/envivo" class="btn-gye ">En Vivo</a>
-        <a href="/envivo/rueda-de-prensa" class="btn-quito activo">Gala El Pro</a>
-      </div>
-    </div>
+ 
   <div id="programacion_eventos" style="margin: 20px 0;">
-    <h1 class="title_programa_eventos">Sexta edición gala el pro</h1>
-    <div id="playerembed_eventos" style="display: block; margin: auto; text-align: center; visibility: visible;">
-        <iframe id="vrudo" class="vrudo" src="//rudo.video/live/ecuavisaqo" width="600" height="338" allowfullscreen="true" frameborder="0" scrolling="no" allow="autoplay; fullscreen"></iframe>
-    </div>
+    <img width="400" height="500" id="fondito__" src="https://estadisticas.ecuavisa.com/sites/default/files/2022-12/ecuavisacom.jpg" alt="claqueta" loading="lazy" fetchpriority="high">
   </div>`;
 
 }
@@ -1329,7 +1321,7 @@ setTimeout(() => {
   if (rutaActual === '/envivo/rueda-de-prensa') {
     paginaEventos();
   } else if (rutaActual === '/envivo') {
-    paginaEnvivo();
+    // paginaEnvivo();
   } else {
     console.log("nada de nada");
   }
