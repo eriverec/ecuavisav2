@@ -1,1 +1,0 @@
-import a from"./estadisticas_contenidos.a3ce5cec.js";import{o as e,c as s,w as t,a as o,e as r,V as c}from"./index.88d3c7f5.js";import"./VAlert.3e8ed100.js";import"./VTimelineItem.36b36f8a.js";const u={__name:"index",setup(i){return(n,_)=>(e(),s(c,null,{default:t(()=>[o(r,{cols:"12"},{default:t(()=>[o(a)]),_:1})]),_:1}))}};export{u as default};

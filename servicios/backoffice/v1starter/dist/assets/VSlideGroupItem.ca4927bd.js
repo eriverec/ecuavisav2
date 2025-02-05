@@ -1,1 +1,0 @@
-import{bI as r,bW as u,bX as a,bY as p}from"./index.88d3c7f5.js";const m=r()({name:"VSlideGroupItem",props:{...u()},emits:{"group:selected":t=>!0},setup(t,o){let{slots:l}=o;const e=a(t,p);return()=>{var s;return(s=l.default)==null?void 0:s.call(l,{isSelected:e.isSelected.value,select:e.select,toggle:e.toggle,selectedClass:e.selectedClass.value})}}});export{m as V};
