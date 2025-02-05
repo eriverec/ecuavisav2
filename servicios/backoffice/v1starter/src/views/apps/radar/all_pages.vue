@@ -1,9 +1,8 @@
 <script setup>
-  import { ref, computed, onMounted } from 'vue'
   import Moment from 'moment';
-  import { extendMoment } from 'moment-range';
-  import esLocale from "moment/locale/es";
-  import { reactive, watch } from 'vue';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
@@ -27,7 +26,7 @@
 
   const buscar_dato = ref(null)
   const selectedItemSitioWeb = ref(null)
-  const itemsSitioWeb = ref(["PRIMICIAS", "EL UNIVERSO"]);
+  const itemsSitioWeb = ref(["PRIMICIAS", "EL UNIVERSO", "EXPRESO", "ECUAVISA"]);
 
   const selectedItemSeccion = ref(null)
   const itemsSitioWebSeccion = ref([]);

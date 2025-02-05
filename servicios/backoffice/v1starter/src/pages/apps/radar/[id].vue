@@ -29,7 +29,7 @@ import { useRoute, useRouter } from 'vue-router';
   }
 
   // IDs válidos
-  const validIds = ["primicias", "el-universo"];
+  const validIds = ["primicias", "el-universo", "expreso", "ecuavisa"];
 
   const idsName = {
     "primicias": {
@@ -39,6 +39,14 @@ import { useRoute, useRouter } from 'vue-router';
     "el-universo": {
       title: "El Universo",
       url: "https://www.eluniverso.com/"
+    },
+    "expreso": {
+      title: "Expreso",
+      url: "https://www.expreso.ec/"
+    },
+    "ecuavisa": {
+      title: "Ecuavisa",
+      url: "https://www.ecuavisa.com/"
     },
   };
 
@@ -908,6 +916,7 @@ import { useTheme } from 'vuetify';
               density="compact" style="max-width: 300px" clearable />
 
               <VSelect
+                class="d-none"
                 :disabled="updateIntervalDisabled"
                 v-model="updateInterval"
                 :items="updateIntervals"
@@ -927,6 +936,7 @@ import { useTheme } from 'vuetify';
                 Última actualización: {{ lastUpdate }}
               </VChip>
               <VChip
+                class="d-none"
                 color="success"
                 size="small"
                 prepend-icon="tabler-clock"

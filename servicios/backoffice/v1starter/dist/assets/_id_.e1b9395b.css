@@ -1,0 +1,1 @@
+.rotate{animation:rotate 2s linear infinite}@keyframes rotate{0%{transform:rotate(0)}to{transform:rotate(360deg)}}.ms-4{color:gray}.ms-3{color:#7365f0}

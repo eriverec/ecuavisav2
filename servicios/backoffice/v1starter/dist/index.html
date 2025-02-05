@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="/icon-ecuavisa-v2.png" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administrador - Ecuavisa Data</title>
+
+  <!-- Open Graph / Facebook -->
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ecuavisadatav2.netlify.app/" />
+  <meta property="og:title" content="Administrador - Ecuavisa Data" />
+  <meta property="og:description" content="Administrador" />
+  <meta property="og:image" content="/cover-ecv.jpg" />
+
+  <link rel="stylesheet" type="text/css" href="/loader.css" />
+  <script type="module" crossorigin src="/assets/index.88d3c7f5.js"></script>
+  <link rel="stylesheet" href="/assets/index.7a3da0b8.css">
+</head>
+
+<body>
+  <div id="app">
+    <div id="loading-bg">
+      <div class="loading-logo">
+        <!-- <img src="/logo.png" alt="Logo" /> -->
+        <img src="/ecv-digital.svg" width="78" alt="Logo" />
+      </div>
+      <div class="loading">
+        <div class="effect-1 effects"></div>
+        <div class="effect-2 effects"></div>
+        <div class="effect-3 effects"></div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    const loaderColor = localStorage.getItem('Materio-initial-loader-bg') || '#FFFFFF'
+    const primaryColor = localStorage.getItem('Materio-initial-loader-color') || '#7367F0'
+
+    if (loaderColor)
+      document.documentElement.style.setProperty('--initial-loader-bg', loaderColor)
+    if (primaryColor)
+      document.documentElement.style.setProperty('--initial-loader-color', primaryColor)
+
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,1 @@
+import{_ as o}from"./elearning_grafico_1.56c6ae21.js";import{o as s,c as _,w as e,a,e as t,V as c}from"./index.88d3c7f5.js";import"./VSlideGroupItem.ca4927bd.js";const p={__name:"index",setup(r){return(l,m)=>(s(),_(c,null,{default:e(()=>[a(t,{cols:"12",md:"8"},{default:e(()=>[a(o)]),_:1}),a(t,{cols:"12",md:"4"},{default:e(()=>[a(o)]),_:1})]),_:1}))}};export{p as default};

@@ -1533,11 +1533,11 @@ import esLocale from "moment/locale/es";
                       />
                       <VMenu activator="parent">
                         <VList density="compact">
-                          <VListItem href="#" @click="redeployService(service.id)">
+                          <VListItem href="#" @click="redeployService(service.id)" :disabled="service.name == 'Backoffice'">
                             <VIcon size="22" class="mr-1" icon="mdi-refresh" />
                             Redeploy
                           </VListItem>
-                          <VListItem href="#" @click="viewModalUpdate(service.id)">
+                          <VListItem href="#" @click="viewModalUpdate(service.id)" :disabled="service.name == 'Backoffice'">
                             <VIcon size="22" class="mr-1" icon="mdi-pencil" />
                             Editar servicio
                           </VListItem>
@@ -1545,7 +1545,7 @@ import esLocale from "moment/locale/es";
                             <VIcon size="22" class="mr-1" icon="tabler-link" />
                             Visitar
                           </VListItem>
-                          <VListItem href="#" @click="eliminarRegistro(service.id)">
+                          <VListItem href="#" @click="eliminarRegistro(service.id)" :disabled="service.name == 'Backoffice'">
                             <VIcon size="22" class="mr-1" icon="mdi-trash" color="error" />
                             Eliminar servicio
                           </VListItem>

@@ -1,0 +1,1 @@
+import{a7 as s,bi as l,aL as n,ag as o,a9 as i,a as d}from"./index.88d3c7f5.js";const u=s({name:"VToolbarItems",props:l({variant:"text"}),setup(a,r){let{slots:t}=r;return n({VBtn:{color:o(a,"color"),height:"inherit",variant:o(a,"variant")}}),i(()=>{var e;return d("div",{class:"v-toolbar-items"},[(e=t.default)==null?void 0:e.call(t)])}),{}}});export{u as V};
