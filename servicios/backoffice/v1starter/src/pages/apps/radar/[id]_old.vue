@@ -1,13 +1,13 @@
 <script setup>
+  import all_pages from '@/views/apps/radar/all_pages.vue';
+import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import Moment from 'moment-timezone';
 import esLocale from "moment/locale/es";
 import { computed, onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-    const moment = extendMoment(Moment);
-    moment.locale('es', [esLocale]);
-    moment.tz.setDefault('America/Guayaquil');
+  const moment = extendMoment(Moment);
+  moment.locale('es', [esLocale]);
 
   const data = ref([])
   const searchTerm = ref('')
@@ -16,7 +16,7 @@ import { useRoute, useRouter } from 'vue-router';
 
   const itemsPagina = ref([]);
   const ultimasNoticias = ref([]);
-  const currentTab = ref(null)
+  const currentTab = ref(0)
 
   const lastUpdate = ref('--:--')
   const nextUpdate = ref(null)
@@ -40,7 +40,7 @@ import { useRoute, useRouter } from 'vue-router';
       title: "Primicias",
       url: "https://www.primicias.ec/"
     },
-    "el-expreso": {
+    "expreso": {
       title: "Expreso",
       url: "https://www.expreso.ec/"
     },
@@ -149,7 +149,6 @@ import { useRoute, useRouter } from 'vue-router';
         return acc
       }, {});
     }
-    
 
     return {
       'Últimas noticias': ultimasNoticias.value, 
@@ -189,9 +188,9 @@ import { useRoute, useRouter } from 'vue-router';
       // const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/modalondemand/radar/radarPrimicias.php')
       // const response = await fetch('https://bigdata.ecuavisa.com:10003/api/v1/BA/ObtenerPublicacion?baseUrl=https%3A%2F%2Fwww.primicias.ec&maxPaginas=1')
       const dataResp = await response.json();
-      // console.log(dataResp.filter(Boolean))
+      console.log(dataResp.filter(Boolean))
       data.value = unificarYFiltrarDuplicados(dataResp.filter(Boolean));
-      lastUpdate.value = moment(dataResp[0].timestamp).format("DD/MM/YYYY HH:mm");
+      lastUpdate.value = dataResp.startDate;
       nextUpdate.value = dataResp.nextRefresh;
 
       primeraCargaCronConfig.value = true;
@@ -205,7 +204,7 @@ import { useRoute, useRouter } from 'vue-router';
       });
 
       // Obtener los 20 primeros (en este caso es menos)
-      const top20Items = sortedItems.slice(0, 12);
+      const top20Items = sortedItems.slice(0, 20);
       // groupedData.value["Últimas noticias"] = top20Items;
       ultimasNoticias.value = top20Items;
 
@@ -921,7 +920,7 @@ import { useTheme } from 'vuetify';
       </VCard>
     </VDialog>
     <!-- Control Panel -->
-    <VCard class="mb-4" v-if="currentTab != 2">
+    <VCard class="mb-4" v-if="currentTab != 0">
       <VCardText>
         <div class="d-flex justify-content-between gap-1 flex-column">
           <div class="d-flex align-start flex-wrap gap-4 w-100">
@@ -985,12 +984,17 @@ import { useTheme } from 'vuetify';
       v-model="currentTab"
       class="v-tabs-pill mb-5"
     >
-      <VTab>Artículos</VTab>
+      <VTab>Últimas noticias</VTab>
+      <VTab>Listado de artículo</VTab>
       <VTab>Estadística</VTab>
-      <VTab class="d-none">Últimas noticias</VTab>
     </VTabs>
 
     <VWindow v-model="currentTab">
+      <VWindowItem
+        :key="2"
+      >
+        <all_pages/>
+      </VWindowItem>
       <VWindowItem
         :key="0"
       >
@@ -1048,45 +1052,63 @@ import { useTheme } from 'vuetify';
                   </tbody>
                 </VTable> -->
 
-                <div v-if="filterTableItems(items, vertical).length">
-                  <VRow>
-                    <VCol cols="12" sm="4" md="4" :lg="vertical == 'Últimas noticias' ? '2' : '4'" v-for="item in filterTableItems(items, vertical)">
-                      <div class="d-flex flex-column card-column">
-                        <a class="img" title="Ir a la página" :href="item.enlace" target="_blank" >
-                          <img
+                <VList lines="two">
+                  <div v-if="filterTableItems(items, vertical).length">
+                    <template v-for="item in filterTableItems(items, vertical)">
+                      <VListItem>
+                        <template #prepend>
+
+                          <VAvatar
                             v-if="item.picture"
-                            :src="replaceAmp(item.picture)"
-                            class="fixed-avatar rounded"
-                            
+                            :image="replaceAmp(item.picture)"
+                            size="64"
+                            rounded
                           />
                           <VIcon
                             v-else
                             icon="tabler-news"
-                            size="120"
+                            size="32"
                           />
-                        </a>
-                        <div class="text-vertical py-2 d-flex gap-2 align-center justify-space-between">
-                          <VChip size="x-small">
-                            {{ item.vertical.toUpperCase() }}
-                          </VChip>
-                          <VBtn title="Ir a la página" :href="item.enlace" target="_blank" color="primary" variant="tonal" size="small">
-                            <VIcon icon="tabler-external-link" /> Ir
+                          
+                        </template>
+
+                        <small style="font-size: 10px;" v-if="vertical == 'Últimas noticias'">Página: {{ item.vertical.toUpperCase() }}</small>
+                        <VTooltip location="top">
+                          <template v-slot:activator="{ props }">
+                            <VListItemTitle v-bind="props" class="text-truncate">
+                              {{ item.titulo }}
+                            </VListItemTitle>
+                          </template>
+                          <span>{{ item.titulo }}</span>
+                        </VTooltip>
+
+                        <VListItemSubtitle>
+                          <div class="d-flex gap-2 align-center">
+                            <span class="text-xs" title="Fecha de publicación">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
+                            <VChip v-if="item.subVertical" class="ml-2" size="small" color="success">{{ item.subVertical }}</VChip>
+                          </div>
+                          <div title="Autor" class="align-center mt-1" v-if="item.autor" style="font-size: 12px;">
+                            <VIcon
+                              icon="tabler-user"
+                              size="15"
+                            />
+                            <small style="margin-top: 5px">{{ item.autor }}</small>
+                          </div>
+                        </VListItemSubtitle>
+
+                        <template #append>
+                          <VBtn :href="item.enlace" target="_blank" icon variant="text" size="small">
+                            <VIcon icon="tabler-external-link" />
                           </VBtn>
-                        </div>
-                        <div class="d-flex gap-2 align-center otros-detalles py-2">
-                          <span class="text-xs" title="Fecha de publicación">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
-                          <VChip v-if="item.subVertical" class="ml-2" size="x-small" color="secondary">{{ item.subVertical }}</VChip>
-                        </div>
-                        <div class="h4 titulo">
-                          {{ item.titulo }}
-                        </div>
-                      </div>
-                    </VCol>
-                  </VRow>
-                </div>
-                <div v-else>
-                  <td colspan="4" class="no-results">No se encontraron resultados</td>
-                </div>
+                        </template>
+                      </VListItem>
+                    </template>
+
+                  </div>
+                  <div v-else>
+                    <td colspan="4" class="no-results">No se encontraron resultados</td>
+                  </div>
+                </VList>
 
               </VCardText>
 
@@ -1138,11 +1160,6 @@ import { useTheme } from 'vuetify';
           </VCol>
         </VRow>
       </VWindowItem>
-      <VWindowItem
-        :key="2"
-      >
-        
-      </VWindowItem>
     </VWindow>
             
 
@@ -1178,18 +1195,6 @@ td {
   /* border: 1px solid #ddd; */
   padding: 8px;
   text-align: left;
-}
-
-.fixed-avatar {
-    width: 100%;
-    height: 130px;
-    object-fit: cover;
-    object-position: center;
-}
-
-.h4.titulo {
-    font-size: 13px;
-    line-height: 1.3;
 }
 
 /* th {

@@ -50,16 +50,18 @@ import { useRoute, useRouter } from 'vue-router';
     },
   };
 
+  const idRouter = ref("el-expreso");
+
   // Verificar si el ID es válido
-  const idParamsEsValido = ref(validIds.includes(route.params.id));
+  const idParamsEsValido = ref(validIds.includes(idRouter.value));
 
   // Observa cambios en el parámetro `id` y redirige si no es válido
-  watch(() => route.params.id, (newId) => {
-    idParamsEsValido.value = validIds.includes(newId);
-    if (route.path.startsWith('/apps/radar/primicias') && !idParamsEsValido.value) {
-      router.replace('/404'); // Redirigir a la página 404
-    }
-  }, { immediate: true }); // Ejecutar también en la carga inicial
+  // watch(() => idRouter.value, (newId) => {
+  //   idParamsEsValido.value = validIds.includes(newId);
+  //   if (route.path.startsWith('/apps/radar/primicias') && !idParamsEsValido.value) {
+  //     router.replace('/404'); // Redirigir a la página 404
+  //   }
+  // }, { immediate: true }); // Ejecutar también en la carga inicial
 
   const primeraCargaCronConfig = ref(false);
 
@@ -174,6 +176,16 @@ import { useRoute, useRouter } from 'vue-router';
       grupo.articles.forEach((articulo) => {
         if (!enlacesUnicos.has(articulo.enlace)) {
           enlacesUnicos.add(articulo.enlace); // Registrar enlace
+
+          // Si subVertical está vacío o no definido, asignar "no definido"
+          if (!articulo.subVertical || articulo.subVertical.trim() === "") {
+            articulo.subVertical = "N/A";
+          }
+
+          if (!articulo.vertical || articulo.vertical.trim() === "") {
+            articulo.vertical = "N/A";
+          }
+
           resultado.articles.push(articulo); // Agregar artículo único
         }
       });
@@ -183,9 +195,12 @@ import { useRoute, useRouter } from 'vue-router';
     return resultado.articles;
   }
 
+
+  const loadingBtn = ref(false);
   const principalData = async function(){
     try{
-      const response = await fetch('https://services.ecuavisa.com/gestor/competencias/'+route.params.id+'/config.php?api=all')
+      loadingBtn.value = true;
+      const response = await fetch('https://services.ecuavisa.com/gestor/competencias/'+idRouter.value+'/config.php?api=all')
       // const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/modalondemand/radar/radarPrimicias.php')
       // const response = await fetch('https://bigdata.ecuavisa.com:10003/api/v1/BA/ObtenerPublicacion?baseUrl=https%3A%2F%2Fwww.primicias.ec&maxPaginas=1')
       const dataResp = await response.json();
@@ -212,8 +227,10 @@ import { useRoute, useRouter } from 'vue-router';
 
       itemsPagina.value = Object.keys(groupedData.value).map(e => e.toUpperCase());
       selectedItemPagina.value = itemsPagina.value.slice(0, 2);
+      loadingBtn.value = false;
       return true;
     }catch(error){
+      loadingBtn.value = false;
       return null;
     }
   }
@@ -287,7 +304,7 @@ import { useRoute, useRouter } from 'vue-router';
           redirect: 'follow'
       };
       //console.log('data enviar ',raw);    
-      const send = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/competencias/radar-digital/'+route.params.id+'/config.php', requestOptions);
+      const send = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/competencias/radar-digital/'+idRouter.value+'/config.php', requestOptions);
       const respuesta = await send.json();
 
       if(respuesta.resp){
@@ -927,12 +944,12 @@ import { useTheme } from 'vuetify';
           <div class="d-flex align-start flex-wrap gap-4 w-100">
             <div class="d-flex flex-column">
               <small>web</small>
-              <h3 style="line-height: 1.3;">{{idsName[route.params.id].title}}</h3>
+              <h3 style="line-height: 1.3;">{{idsName[idRouter].title}}</h3>
               <VChip size="x-small" color="primary">
                 {{ processedData.length }} Artículo(s)
               </VChip>
             </div> 
-            <VBtn :href="idsName[route.params.id].url" target="_blank" icon variant="text" size="small">
+            <VBtn :href="idsName[idRouter].url" target="_blank" icon variant="text" size="small">
               <VIcon icon="tabler-external-link" />
             </VBtn>
             <VTextField v-model="searchTerm" label="Buscar en todos los ártículos" prepend-inner-icon="tabler-search"
@@ -978,6 +995,11 @@ import { useTheme } from 'vuetify';
               :menu-props="{ maxHeight: '300' }"
             />
           </div>
+          <div class="content-btn mt-3">
+            <VBtn :loading="loadingBtn" title="Recargar datos" @click="principalData" target="_blank" color="primary" variant="tonal" size="small">
+              <VIcon icon="tabler-reload" /> Recargar datos
+            </VBtn>
+          </div>
         </div>
       </VCardText>
     </VCard>
@@ -994,7 +1016,7 @@ import { useTheme } from 'vuetify';
       <VWindowItem
         :key="0"
       >
-        <VRow v-if="selectedItemPagina">
+        <VRow v-if="selectedItemPagina" :class="loadingBtn ? 'disabled-card' : ''">
           <VCol cols="12" md="12" :lg="vertical != 'Últimas noticias'?6:12" v-for="(items, vertical) in filteredData" :key="vertical">
 
             <VCard>
@@ -1192,6 +1214,11 @@ td {
     line-height: 1.3;
 }
 
+.disabled-card {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
 /* th {
   background-color: #f2f2f2;
 } */
