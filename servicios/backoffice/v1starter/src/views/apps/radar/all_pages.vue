@@ -64,7 +64,7 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
           }
 
           if (!articulo.vertical || articulo.vertical.trim() === "") {
-            articulo.vertical = "N/A";
+            articulo.vertical = "Home";
           }
 
           resultado.articles.push(articulo); // Agregar artículo único

@@ -187,7 +187,7 @@ import { useRoute, useRouter } from 'vue-router';
           }
 
           if (!articulo.vertical || articulo.vertical.trim() === "") {
-            articulo.vertical = "N/A";
+            articulo.vertical = "Home";
           }
 
           resultado.articles.push(articulo); // Agregar artículo único
