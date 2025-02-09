@@ -5,6 +5,11 @@ export default [
       icon: { icon: 'tabler-smart-home' },
     },
     {
+      title: 'Últimas noticias', 
+      to: 'apps-radar-ultimas-noticias',
+      icon: { icon: 'tabler-radar' },
+    },
+    {
       title: 'Suscripciones',
       icon: { icon: 'tabler-rosette-discount-check' },
       children: [
