@@ -22,6 +22,7 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
     disabled: false
   });
 
+  const data = ref([])
 
   const buscar_dato = ref(null)
   const selectedItemSitioWeb = ref(null)
@@ -40,19 +41,12 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
   const updateIntervalDisabled = ref(false)
   const tableSearches = ref({})
 
-  const data = ref([])
-  const LOCAL_STORAGE_KEY = 'newsStorage';
-
-  function getDefaultDate() {
-    return moment('2025-01-01 12:00:00', 'YYYY-MM-DD HH:mm:ss');
-  }
-
   function replaceAmp(input) {
     return input.replace(/&amp;/g, "&");
   }
 
   function unificarYFiltrarDuplicados(data) {
-    const enlacesUnicos = new Set();
+    const enlacesUnicos = new Set(); // Para rastrear enlaces únicos
     const resultado = {
       total: 0,
       timestamp: new Date().toISOString(),
@@ -62,35 +56,72 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
     data.forEach((grupo) => {
       grupo.articles.forEach((articulo) => {
         if (!enlacesUnicos.has(articulo.enlace)) {
-          enlacesUnicos.add(articulo.enlace);
+          enlacesUnicos.add(articulo.enlace); // Registrar enlace
 
+          // Si subVertical está vacío o no definido, asignar "no definido"
           if (!articulo.subVertical || articulo.subVertical.trim() === "") {
-            articulo.subVertical = "Sin Categorizar";
+            articulo.subVertical = "N/A";
           }
 
           if (!articulo.vertical || articulo.vertical.trim() === "") {
             articulo.vertical = "Home";
           }
 
-          if (!articulo.fechaPublicacion) {
-            articulo.fechaPublicacion = getDefaultDate().format("DD/MM/YYYY HH:mm:ss");
-          }
-
-          resultado.articles.push(articulo);
+          resultado.articles.push(articulo); // Agregar artículo único
         }
       });
     });
 
-    resultado.total = resultado.articles.length;
+    resultado.total = resultado.articles.length; // Actualizar total
     return resultado.articles;
   }
 
-  async function fetchAndProcess(url) {
-    try {
-      const response = await fetch(url);
+  const primicias_data = async function(){
+    try{
+      const response = await fetch('https://services.ecuavisa.com/gestor/competencias/primicias/config.php?api=all');
       const dataResp = await response.json();
       return unificarYFiltrarDuplicados(dataResp.filter(Boolean));
-    } catch(error) {
+    }catch(error){
+      return null;
+    }
+  }
+
+  const el_universo_data = async function(){
+    try{
+      const response = await fetch('https://services.ecuavisa.com/gestor/competencias/el-universo/config.php?api=all');
+      const dataResp = await response.json();
+      return unificarYFiltrarDuplicados(dataResp.filter(Boolean));
+    }catch(error){
+      return null;
+    }
+  }
+
+  const expreso_data = async function(){
+    try{
+      const response = await fetch('https://services.ecuavisa.com/gestor/competencias/el-expreso/config.php?api=all');
+      const dataResp = await response.json();
+      return unificarYFiltrarDuplicados(dataResp.filter(Boolean));
+    }catch(error){
+      return null;
+    }
+  }
+
+  const ecuavisa_data = async function(){
+    try{
+      const response = await fetch('https://services.ecuavisa.com/gestor/competencias/ecuavisa/config.php?api=all');
+      const dataResp = await response.json();
+      return unificarYFiltrarDuplicados(dataResp.filter(Boolean));
+    }catch(error){
+      return null;
+    }
+  }
+
+  const el_comercio_data = async function(){
+    try{
+      const response = await fetch('https://services.ecuavisa.com/gestor/competencias/el-comercio/config.php?api=all');
+      const dataResp = await response.json();
+      return unificarYFiltrarDuplicados(dataResp.filter(Boolean));
+    }catch(error){
       return null;
     }
   }
@@ -98,76 +129,131 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
   const loadingBtn = ref(false);
 
   const principalData = async function(){
-    try {
+    try{
       loadingBtn.value = true;
-      
-      const [primiciasList, elUniersoList, expresoList, ecuavisaList, elComercioList] = await Promise.all([
-        fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/primicias/config.php?api=all'),
-        fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-universo/config.php?api=all'),
-        fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-expreso/config.php?api=all'),
-        fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/ecuavisa/config.php?api=all'),
-        fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-comercio/config.php?api=all')
-      ]);
+      const primiciasList = await primicias_data() || [];
+      const elUniersoList = await el_universo_data() || [];
+      const expresoList = await expreso_data() || [];
+      const ecuavisaList = await ecuavisa_data() || [];
+      const elComercioList = await el_comercio_data() || [];
 
-      const processArticles = (list, sitio, color) => {
-        return (list || []).map(item => ({
-          ...item,
-          sitio,
-          color,
-          fechaPublicacion: item.fechaPublicacion || getDefaultDate().format("DD/MM/YYYY HH:mm:ss")
-        }));
-      };
+      for (let i = 0; i < primiciasList.length; i++) {
+        primiciasList[i].sitio = "PRIMICIAS";
+        primiciasList[i].color = "primary";
+      }
 
-      const newData = [
-        ...processArticles(primiciasList, "PRIMICIAS", "primary"),
-        ...processArticles(elUniersoList, "EL UNIVERSO", "info"),
-        ...processArticles(expresoList, "EXPRESO", "error"),
-        ...processArticles(ecuavisaList, "ECUAVISA", "warning"),
-        ...processArticles(elComercioList, "EL COMERCIO", "success")
-      ];
+      for (let i = 0; i < elUniersoList.length; i++) {
+        elUniersoList[i].sitio = "EL UNIVERSO";
+        elUniersoList[i].color = "info";
+      }
 
-      const storedData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
-      
-      // Combinar nuevos datos con los almacenados
-      const combinedData = [...newData, ...storedData];
-      
-      // Eliminar duplicados usando un Map
-      const uniqueData = Array.from(new Map(combinedData.map(item => [item.enlace, item])).values());
-      
-      // Ordenar por fecha
-      const sortedData = uniqueData.sort((a, b) => {
+      for (let i = 0; i < expresoList.length; i++) {
+        expresoList[i].sitio = "EXPRESO";
+        expresoList[i].color = "error";
+      }
+
+      for (let i = 0; i < ecuavisaList.length; i++) {
+        ecuavisaList[i].sitio = "ECUAVISA";
+        ecuavisaList[i].color = "warning";
+      }
+
+      for (let i = 0; i < elComercioList.length; i++) {
+        elComercioList[i].sitio = "EL COMERCIO";
+        elComercioList[i].color = "success";
+      }
+
+      data.value = [...primiciasList, ...elUniersoList, ...expresoList, ...ecuavisaList, ...elComercioList].sort((a, b) => {
         const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
         const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
-        return dateB - dateA;
+        return dateB - dateA; // Mayor a menor
       });
 
-      // Actualizar data.value reactivamente
-      data.value = sortedData;
+      // lastUpdate.value = dataResp.startDate;
+      // nextUpdate.value = dataResp.nextRefresh;
+      // updateInterval.value = dataResp.minutes * 60;
 
-      // Guardar en localStorage
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data.value));
-      
-      // Forzar la actualización de filteredData
-      docDataProcess();
-      
+      // Ordenar por fecha de publicación (de mayor a menor)
+      // const sortedItems = data.value.sort((a, b) => {
+      //   const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+      //   const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+      //   return dateB - dateA; // Mayor a menor
+      // });
+
+      // Obtener los 20 primeros (en este caso es menos)
+      // const top20Items = sortedItems.slice(0, 20);
+      // groupedData.value["Últimas noticias"] = top20Items;
+      // ultimasNoticias.value = top20Items;
+
+
+      // itemsPagina.value = Object.keys(groupedData.value).map(e => e.toUpperCase());
+      // selectedItemPagina.value = itemsPagina.value.slice(0, 2);
       loadingBtn.value = false;
-    } catch(error) {
+      return true;
+    }catch(error){
       loadingBtn.value = false;
-      console.error('Error:', error);
+      return null;
     }
   }
 
+  function getUniqueVerticals(objeto = null) {
+      // Usamos un Set para evitar duplicados
+      const uniqueVerticals = new Set();
+
+      if(!objeto){
+        data.value.forEach(item => {
+            if (item.vertical) {
+                uniqueVerticals.add(item.vertical);
+            }
+        });
+      }else{
+        objeto.forEach(item => {
+            if (item.vertical) {
+                uniqueVerticals.add(item.vertical);
+            }
+        });
+      }
+      
+      // Convertimos el Set en un array para retornar
+      return Array.from(uniqueVerticals);
+  }
+
+  function getUniqueSubVerticals(objeto = null) {
+      // Usamos un Set para evitar duplicados
+      const uniqueVerticals = new Set();
+
+      if(!objeto){
+        data.value.forEach(item => {
+            if (item.subVertical) {
+                uniqueVerticals.add(item.subVertical);
+            }
+        });
+      }else{
+        objeto.forEach(item => {
+            if (item.subVertical) {
+                uniqueVerticals.add(item.subVertical);
+            }
+        });
+      }
+      
+
+      // Convertimos el Set en un array para retornar
+      return Array.from(uniqueVerticals);
+  }
+
   onMounted(async () => {
-    const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if(storedData) {
-      data.value = JSON.parse(storedData);
-    } else {
+    try {
       await principalData();
+
+      itemsSitioWebSeccion.value = getUniqueVerticals();
+      itemsSitioWebSubSeccion.value = getUniqueSubVerticals();
+      docDataProcess()
+      // filteredData.value = processedData.value;
+      // Llamado recurrente cada segundo
+      // timeoutId = setTimeout(() => checkRefreshTime(), 1000);
+    } catch (error) {
+      console.error('Error fetching data:', error)
     }
-    itemsSitioWebSeccion.value = getUniqueVerticals();
-    itemsSitioWebSubSeccion.value = getUniqueSubVerticals();
-    docDataProcess();
-  });
+  })
 
   watch(() => filtrosActivos.seccion, (newValue) => {
     click_btn_seccion.value = true;
@@ -231,51 +317,6 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
 
   // Lógica reactiva con debounce
   watch(filtrosActivos, docDataProcess);
-
-  function getUniqueVerticals(objeto = null) {
-      // Usamos un Set para evitar duplicados
-      const uniqueVerticals = new Set();
-
-      if(!objeto){
-        data.value.forEach(item => {
-            if (item.vertical) {
-                uniqueVerticals.add(item.vertical);
-            }
-        });
-      }else{
-        objeto.forEach(item => {
-            if (item.vertical) {
-                uniqueVerticals.add(item.vertical);
-            }
-        });
-      }
-      
-      // Convertimos el Set en un array para retornar
-      return Array.from(uniqueVerticals);
-  }
-
-  function getUniqueSubVerticals(objeto = null) {
-      // Usamos un Set para evitar duplicados
-      const uniqueVerticals = new Set();
-
-      if(!objeto){
-        data.value.forEach(item => {
-            if (item.subVertical) {
-                uniqueVerticals.add(item.subVertical);
-            }
-        });
-      }else{
-        objeto.forEach(item => {
-            if (item.subVertical) {
-                uniqueVerticals.add(item.subVertical);
-            }
-        });
-      }
-      
-
-      // Convertimos el Set en un array para retornar
-      return Array.from(uniqueVerticals);
-  }
 
   function docDataProcess(){
     clearTimeout(debounceTimeout.value);
@@ -422,62 +463,65 @@ import { computed, onMounted, reactive, ref, watch } from 'vue';
             <div class="board-content" :disabled="filtrosActivos.disabled">
               <div v-if="filteredData.length" :class="loadingBtn ? 'disabled-card' : ''">
                 <VRow>
-                  <VCol cols="12" v-for="(item, index) in filteredData" :key="item.enlace">
-                    <VCard class="mb-4">
-                      <VCardText class="d-flex align-center gap-4">
-                        <div class="img-content" style="min-width: 120px">
-                          <img
-                            v-if="item.picture"
-                            :src="replaceAmp(item.picture)"
-                            class="fixed-avatar rounded"
-                            style="width: 120px; height: 80px; object-fit: cover"
-                          />
-                          <VIcon v-else icon="tabler-news" size="40" />
-                        </div>
-                        
-                        <div class="d-flex flex-column w-100">
-                          <div class="d-flex justify-space-between align-center mb-2">
-                            <VChip variant="elevated" size="x-small" :color="item.color">
-                              {{ item.sitio }}
-                            </VChip>
-                            <span class="text-caption">{{ formatDate(item.fechaPublicacion) }}</span>
+                  <VCol cols="12" sm="4" md="4" lg="2"  v-for="(item, index) in filteredData">
+                      <div class="d-flex flex-column card-column">
+                        <a class="img img-link" title="Ir a la página" :href="item.enlace" target="_blank" >
+                          <div class="img-content">
+                            <img
+                              v-if="item.picture"
+                              :src="replaceAmp(item.picture)"
+                              class="fixed-avatar rounded"
+                              
+                            />
+                            <VIcon
+                              v-else
+                              icon="tabler-news"
+                              size="120"
+                            />
                           </div>
-                          
-                          <h4 class="text-h6 mb-2">{{ item.titulo }}</h4>
-                          
-                          <div class="d-flex justify-space-between align-center">
-                            <VChip size="x-small">{{ item.vertical }}</VChip>
-                            <VBtn :href="item.enlace" target="_blank" variant="tonal" size="small">
-                              <VIcon icon="tabler-external-link" /> Ver artículo
-                            </VBtn>
+                          <div class="sitio-web">
+                            <VChip variant="elevated" class="mb-2" size="x-small" label :color="item.color" style="font-size: 10px;">
+                              <VIcon
+                                start
+                                size="16"
+                                icon="tabler-world-www"
+                              /> 
+                                {{ item.sitio }}
+                              </VChip>
                           </div>
+                        </a>
+                        <div class="text-vertical py-2 d-flex gap-2 align-center justify-space-between">
+                          <VChip size="x-small">
+                            {{ item.vertical.toUpperCase() }}
+                          </VChip>
+                          <VBtn title="Ir a la página" :href="item.enlace" target="_blank" color="primary" variant="tonal" size="small">
+                            <VIcon icon="tabler-external-link" /> Ir
+                          </VBtn>
                         </div>
-                      </VCardText>
-                    </VCard>
+                        <div class="d-flex gap-2 align-center otros-detalles py-2">
+                          <span class="text-xs" title="Fecha de publicación">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
+                          <VChip v-if="item.subVertical" class="ml-2" size="x-small" color="secondary">{{ item.subVertical }}</VChip>
+                        </div>
+                        <div class="h4 titulo">
+                          {{ item.titulo }}
+                        </div>
+                      </div>
                   </VCol>
                 </VRow>
+              </div>
+              <div v-else>
+                <td colspan="4" class="no-results">No se encontraron resultados</td>
               </div>
             </div>
           </VCardText>
         </VCard>
       </VCol>
     </VRow>
+
   </section>
 </template>
 
 <style scoped>
-/* Mantener estilos existentes y agregar ajustes para lista */
-.fixed-avatar {
-  width: 120px;
-  height: 80px;
-  object-fit: cover;
-}
-
-.text-h6 {
-  font-size: 1.1rem;
-  line-height: 1.4;
-}
-
 .sectionprimicias .v-card-item {
   font-size: 24px;
 }
