@@ -148,64 +148,13 @@ import esLocale from "moment/locale/es";
 
       var requestOptions = {
         method: 'GET',
+        mode: 'cors',
         headers: myHeaders,
         redirect: 'follow'
       };
 
       const response = await fetch(dominio_g + "/backoffice/list-services", requestOptions);
       const result = await response.json();
-    //   const result = {
-    //     "resp": true,
-    //     "data": {
-    //       "repos": [
-    //         {
-    //           "remoteUrl": "git@github.com:redyman/prueba-crud-assets.git",
-    //           "branch": "main",
-    //           "path": "/www/wwwroot/micro-servicio-node/prueba-crud-assets",
-    //           "services": [
-    //             {
-    //               "id": 27012,
-    //               "path": "mail",
-    //               "port": 27012,
-    //               "name": "Servicio email 2",
-    //               "ssl": false,
-    //               "init": "index.js",
-    //               "domain": "3.90.78.123",
-    //               "watchPaths": [
-    //                 "mail/"
-    //               ],
-    //               "branch": "main"
-    //             }
-    //           ]
-    //         },
-    //         {
-    //           "path": "/www/wwwroot/micro-servicio-node/Usuarios",
-    //           "remoteUrl": "git@github.com:Ecuavisa-Services/Usuarios.git",
-    //           "branch": "main",
-    //           "services": [
-    //             {
-    //               "id": 27010,
-    //               "path": "servicio-DPSTools",
-    //               "port": 27010,
-    //               "name": "DPS Tools Servicio",
-    //               "ssl": false,
-    //               "init": "index.js",
-    //               "domain": "3.90.78.123",
-    //               "watchPaths": [
-    //                 "servicio-DPSTools/"
-    //               ],
-    //               "environmentVariables": [
-    //                 {
-    //                   "key":"MONGODB_URI",
-    //                   "value":"mongodb+srv://redyman:Ecuavisa2023.@backupusersdata.cbozr4l.mongodb.net/?retryWrites=true&w=majority"
-    //                 }
-    //               ]
-    //             }
-    //           ]
-    //         }
-    //       ]
-    //     }
-    // };
 
       dataServices.value = JSON.parse(JSON.stringify(result.data.repos));
       dataServicesCopyComplete.value = JSON.parse(JSON.stringify(result.data.repos));
@@ -239,6 +188,7 @@ import esLocale from "moment/locale/es";
     try {
         const response = await fetch(dominio_g + '/backoffice/list-ports', {
             method: 'GET',
+            mode: 'cors',
             headers: {
                 'Content-Type': 'application/json',
                 // Incluir token si es necesario
@@ -486,6 +436,7 @@ import esLocale from "moment/locale/es";
       loadingServices.value = true;
 
       await createService({remoteUrl, branch, name, path, init, domain, ssl, port, environmentVariables});
+      await sleep(15000);
       await listarServiciosNode();
 
       loadingServices.value = false;
@@ -550,6 +501,7 @@ import esLocale from "moment/locale/es";
         });
         const data = await response.json();
 
+        await sleep(15000);
         await listarServiciosNode();
         loadingServices.value = false;
         isDialogVisibleDelete.value = false;
@@ -941,6 +893,7 @@ import esLocale from "moment/locale/es";
             }
         }
 
+        await sleep(15000);
         await listarServiciosNode();
         loadingServices.value = true;
         dialogAddServices.value = false;
@@ -1093,6 +1046,9 @@ import esLocale from "moment/locale/es";
   /**
    * Inicio Btn cambiar status
    */
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
    const loadingBtnStatus = ref([]);
 
    async function btnStatusService(id, index, status = true) {
@@ -1115,13 +1071,15 @@ import esLocale from "moment/locale/es";
           const data = await response.json();
 
           if(data.resp){
-            loadingBtnStatus.value[index] = false;
+            await sleep(15000);
+            await listarServiciosNode();
             configSnackbar.value = {
                 message: "Proceso terminado",
                 type: "success",
                 model: true
             };
           }
+          loadingBtnStatus.value[index] = false;
           
           
       } catch (error) {
@@ -1617,22 +1575,33 @@ import esLocale from "moment/locale/es";
 
                 <template #append>
                   <div class="btn-acions d-flex gap-2 align-center">
-                    <VBtn
-                      :title="service.status ? 'Servicio Activo' : 'Servicio Inactivo'"
-                      size="small"
-                      variant="text"
-                      color="secondary"
-                      class="px-0 py-0 text-capitalize d-flex align-center flex-column"
-                      :loading="loadingBtnStatus[index]"
-                      @click="btnStatusService(service.port, index, service.status)"
+                    <!-- <VBadge 
+                      location="top start" 
+                      content="New" 
+                      class="px-0 py-0 font-VBadge-custom" 
+                      offset-x="3"
+                      offset-y="-7"
                     >
-                    <VIcon
-                        :size="22"
-                        :color="service.status ? 'success' : 'error'"
-                        :icon="!service.status ? 'tabler-player-pause' : 'tabler-player-play'"
-                      />
-                    <small>{{!service.status ? 'Iniciar' : 'Parar'}}</small>
-                  </VBtn>
+                      
+                    </VBadge> -->
+
+                    <VBtn
+                          :title="service.status ? 'Servicio Activo' : 'Servicio Inactivo'"
+                          size="small"
+                          variant="text"
+                          color="secondary"
+                          class="px-0 py-0 text-capitalize d-flex align-center flex-column"
+                          :loading="loadingBtnStatus[index]"
+                          @click="btnStatusService(service.port, index, service.status)"
+                        >
+                        <VIcon
+                            :size="22"
+                            :color="service.status ? 'success' : 'error'"
+                            :icon="!service.status ? 'tabler-player-pause' : 'tabler-player-play'"
+                          />
+                        <small>{{!service.status ? 'Iniciar' : 'Parar'}}</small>
+                      </VBtn>
+                    
                     <VBtn
                      title="Acciones sobre el servicio"
                      icon
@@ -1820,6 +1789,13 @@ import esLocale from "moment/locale/es";
   .lh-1 {
       line-height: 1;
       display: block;
+  }
+
+  .font-VBadge-custom .v-badge__badge {
+      font-size: 8px;
+      line-height: 1.3;
+      padding: 2px 4px;
+      height: 15px;
   }
 
   @keyframes spin {
