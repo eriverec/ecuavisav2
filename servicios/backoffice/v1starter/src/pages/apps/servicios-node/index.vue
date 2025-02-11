@@ -1588,9 +1588,9 @@ import esLocale from "moment/locale/es";
                     <VBtn
                           :title="service.status ? 'Servicio Activo' : 'Servicio Inactivo'"
                           size="small"
-                          variant="text"
+                          variant="tonal"
                           color="secondary"
-                          class="px-0 py-0 text-capitalize d-flex align-center flex-column"
+                          class="px-1 py-0 text-capitalize d-flex align-center flex-column"
                           :loading="loadingBtnStatus[index]"
                           @click="btnStatusService(service.port, index, service.status)"
                         >
