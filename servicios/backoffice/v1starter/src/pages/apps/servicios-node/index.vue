@@ -1064,18 +1064,7 @@ import esLocale from "moment/locale/es";
    * Fin Component Environment
    */
 
-  /**
-   * Inicio onMounted
-   */
-
-  onMounted(async () => {
-    await listarServiciosNode();
-    await listPathServices();
-  });
-  /**
-   * Fin onMounted
-   */
-
+   
 
   /**
    * Inicio Search
@@ -1098,6 +1087,70 @@ import esLocale from "moment/locale/es";
   /**
    * Fin Search
    */
+
+   
+
+  /**
+   * Inicio Btn cambiar status
+   */
+   const loadingBtnStatus = ref([]);
+
+   async function btnStatusService(id, index, status = true) {
+      loadingBtnStatus.value[index] = true;
+      // return index;
+      try {
+          const response = await fetch(dominio_g + '/backoffice/update-service-status/', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+                  // Incluir token si es necesario
+                  'Authorization': 'Bearer 3CUAVISaNhWVCRNPofjXtWMk1D99LOoFzMf6LfoNlkiN8dGDkd' 
+              },
+              body: JSON.stringify({
+                serviceId: id,
+                status: !status
+              })
+          });
+
+          const data = await response.json();
+
+          if(data.resp){
+            loadingBtnStatus.value[index] = false;
+            configSnackbar.value = {
+                message: "Proceso terminado",
+                type: "success",
+                model: true
+            };
+          }
+          
+          
+      } catch (error) {
+          console.error('Error en la conexión:', error);
+          loadingBtnStatus.value[index] = false;
+          configSnackbar.value = {
+              message: "Existe un error en la conexión." + error,
+              type: "error",
+              model: true
+          };
+          return null;
+      }
+    }
+  /**
+   * Fin Btn cambiar status
+   */
+
+  /**
+   * Inicio onMounted
+   */
+
+  onMounted(async () => {
+    await listarServiciosNode();
+    await listPathServices();
+  });
+  /**
+   * Fin onMounted
+   */
+
   
 </script>
 
@@ -1546,7 +1599,7 @@ import esLocale from "moment/locale/es";
         <VRow id="card_services" class="mt-1">
           <VCol v-for="(service, index) of resolveDataServicesTable" :key="index" cols="12" sm="6" lg="4" >
             <VCard class="v-card--flat border border-1 rounded">
-              <VCardItem class="header_card_item align-start pb-2">
+              <VCardItem class="header_card_item align-start pb-2 pt-5">
                 <div class="d-flex align-center">
                   <div class="image pb-2">
                     <VIcon
@@ -1563,9 +1616,26 @@ import esLocale from "moment/locale/es";
                 </div>
 
                 <template #append>
-                  <div class="btn-acions" title="Acciones sobre el servicio">
+                  <div class="btn-acions d-flex gap-2 align-center">
                     <VBtn
-                      icon
+                      :title="service.status ? 'Servicio Activo' : 'Servicio Inactivo'"
+                      size="small"
+                      variant="text"
+                      color="secondary"
+                      class="px-0 py-0 text-capitalize d-flex align-center flex-column"
+                      :loading="loadingBtnStatus[index]"
+                      @click="btnStatusService(service.port, index, service.status)"
+                    >
+                    <VIcon
+                        :size="22"
+                        :color="service.status ? 'success' : 'error'"
+                        :icon="!service.status ? 'tabler-player-pause' : 'tabler-player-play'"
+                      />
+                    <small>{{!service.status ? 'Iniciar' : 'Parar'}}</small>
+                  </VBtn>
+                    <VBtn
+                     title="Acciones sobre el servicio"
+                     icon
                       variant="plain"
                       color="default"
                       size="x-small"
@@ -1613,26 +1683,28 @@ import esLocale from "moment/locale/es";
                   </VChip>
                 </div>
 
-                <div class="repo-github-name pb-2">
-                  <VBtn
-                    v-if="!service.ssl"
-                    color="secondary"
-                    size="x-small"
-                    variant="text"
-                    class="px-0 py-0 text-decoration-underline text-capitalize"
-                    disabled
-                  >
-                  Activar certificado SSL
-                    <VIcon
-                        class=""
-                        end
-                        color="success"
-                        size="15"
-                        icon="mdi-power-standby"
-                      />
-                  </VBtn>
-                  <div class="estado-certificado" v-else>
-                    SSL: <VChip size="x-small" :color="service.ssl ? 'success' : 'error'">{{service.ssl ? 'Activo' : 'Inactivo'}}</VChip>
+                <div class="repo-github-name pb-2 d-flex align-center gap-2">
+                  <div class="btn-activar-ssl">
+                    <VBtn
+                      v-if="!service.ssl"
+                      color="secondary"
+                      size="x-small"
+                      variant="text"
+                      class="px-0 py-0 text-decoration-underline text-capitalize"
+                      disabled
+                    >
+                    Activar certificado SSL
+                      <VIcon
+                          class=""
+                          end
+                          color="success"
+                          size="15"
+                          icon="mdi-power-standby"
+                        />
+                    </VBtn>
+                    <div class="estado-certificado" v-else>
+                      SSL: <VChip size="x-small" :color="service.ssl ? 'success' : 'error'">{{service.ssl ? 'Activo' : 'Inactivo'}}</VChip>
+                    </div>
                   </div>
                 </div>
 

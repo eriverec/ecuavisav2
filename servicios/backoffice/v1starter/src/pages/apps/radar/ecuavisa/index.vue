@@ -178,12 +178,12 @@ import { useRoute, useRouter } from 'vue-router';
           enlacesUnicos.add(articulo.enlace); // Registrar enlace
 
           // Si subVertical está vacío o no definido, asignar "no definido"
-          if (!articulo.subVertical || articulo.subVertical.trim() === "") {
+          if (!articulo.subVertical || articulo.subVertical.trim() == "") {
             articulo.subVertical = "N/A";
           }
 
-          if (!articulo.vertical || articulo.vertical.trim() === "") {
-            articulo.vertical = "Home";
+          if (!articulo.vertical || articulo.vertical.trim() == "") {
+            articulo.vertical = "home";
           }
 
           resultado.articles.push(articulo); // Agregar artículo único
