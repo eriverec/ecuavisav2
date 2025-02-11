@@ -2,7 +2,7 @@
   <VDivider class="mb-4" />
   
   <VRow v-for="(envVar, index) in localEnvVariables" :key="`env-${index}`">
-    <VCol cols="12" sm="5" lg="5" class="px-2">
+    <VCol cols="5" sm="5" lg="5" class="px-2">
       <label>Key</label>
       <VTextField
         :model-value="envVar.key"
@@ -11,7 +11,7 @@
         @update:model-value="updateVariable(index, 'key', $event)"
       />
     </VCol>
-    <VCol cols="12" sm="7" lg="7" class="px-2">
+    <VCol cols="7" sm="7" lg="7" class="px-2">
       <VRow class="align-center">
         <VCol cols="10" sm="10" lg="10" class="px-0">
           <label>Value</label>

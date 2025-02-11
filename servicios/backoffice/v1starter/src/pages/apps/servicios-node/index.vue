@@ -1,7 +1,7 @@
 <script setup>
 import enviroment_component from '@/views/apps/servicios-node/enviroment_component.vue';
-import { integerValidator, requiredValidator } from '@validators'
-  import { extendMoment } from 'moment-range';
+import debounce from 'lodash/debounce';
+import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import esLocale from "moment/locale/es";
 
@@ -88,10 +88,10 @@ import esLocale from "moment/locale/es";
     }
   }
 
-  const servicesList = function(type="all", value = ""){
+  const servicesList = function(type="all", value = "", selector = "select"){
     try {
       const servicesAll = [];
-      if(type == "all"){
+      if(type == "all" || value == ""){
         for(var i in dataServices.value){
           const services = dataServices.value[i].services;
           for(var j in services){
@@ -100,7 +100,9 @@ import esLocale from "moment/locale/es";
           }
         }
         return servicesAll;
-      }else{
+      }
+
+      if(selector == "select"){
         for(var i in dataServices.value){
           if(dataServices.value[i].remoteUrl.includes(value)){
             const services = dataServices.value[i].services;
@@ -111,6 +113,23 @@ import esLocale from "moment/locale/es";
           }
         }
         return servicesAll;
+      }else if(selector == "search"){
+        const search = value.toLowerCase().replace(" ", "");
+        for(var i in dataServices.value){
+          const services = dataServices.value[i].services;
+          for(var j in services){
+            if(
+              services[j].name.toLowerCase().replace(" ", "").includes(search) || 
+              services[j].path.toLowerCase().replace(" ", "").includes(search)
+            ){
+              services[j]["pathPimary"] = dataServices.value[i].remoteUrl.split(':')[1];
+              servicesAll.push(services[j]);
+            }
+          }
+        }
+        return servicesAll;
+      }else{
+        return [];
       }
     } catch (error) {
       return [];
@@ -1057,6 +1076,28 @@ import esLocale from "moment/locale/es";
    * Fin onMounted
    */
 
+
+  /**
+   * Inicio Search
+   */
+   const buscarServices = async () => {
+      try {
+        const query = searchQuery.value?.toLowerCase();
+        const type = query ? "busqueda" : "all";
+        loadingServices.value = true;
+        dataServicesTable.value = servicesList(type, query, "search");
+        loadingServices.value = false;
+      } catch (error) {
+        console.error("Error en buscarServices:", error);
+        return null;
+      }
+    };
+
+    // Crear una función con debounce
+    const buscarServicesDebounced = debounce(buscarServices, 500); // 500ms de retraso
+  /**
+   * Fin Search
+   */
   
 </script>
 
@@ -1450,43 +1491,44 @@ import esLocale from "moment/locale/es";
       <VCol cols="12" sm="12" lg="12" >
         <h1 class="mb-4">Servicios NodeJS activos AWS</h1>
         <VCardText class="d-flex py-4 gap-4 px-0 flex-wrap" style="align-items: flex-start;" >
-          <div class="me-3 d-flex gap-4">
-            <VSelect
-              :disabled="loadingServices"
-              class="bg-white"
-              v-model="rowPerPage"
-              density="compact"
-              variant="outlined"
-              :items="[10, 20, 30, 50]"
-            />
-
-            <VSelect
-              style="min-width: 10rem;"
-              label="Repositorios"
-              :disabled="loadingServices"
-              class="bg-white"
-              v-model="modelRepos"
-              density="compact"
-              variant="outlined"
-              :items="selectRepos"
-            />
-
-            <VTextField
-              clearable
-              title="Buscar servicio"
-              :disabled="loadingServices"
-              class="bg-white"
-              v-model="searchQuery"
-              label="Buscar servicio"
-              prepend-inner-icon="mdi-magnify"
-              single-line
-              hide-details
-              @input="" 
-              @click:clear=""
-              style="min-width: 26rem;"
-            />
-    
-          </div>
+          <VRow>
+            <VCol cols="12" sm="12" lg="2" >
+              <VSelect
+                :disabled="loadingServices"
+                class="bg-white"
+                v-model="rowPerPage"
+                density="compact"
+                variant="outlined"
+                :items="[10, 20, 30, 50]"
+              />
+            </VCol>
+            <VCol cols="12" sm="12" lg="4" >
+              <VSelect
+                label="Repositorios"
+                :disabled="loadingServices"
+                class="bg-white"
+                v-model="modelRepos"
+                density="compact"
+                variant="outlined"
+                :items="selectRepos"
+              />
+            </VCol>
+            <VCol cols="12" sm="12" lg="6" >
+              <VTextField
+                clearable
+                title="Buscar servicio"
+                :disabled="loadingServices"
+                class="bg-white"
+                v-model="searchQuery"
+                label="Buscar servicio"
+                prepend-inner-icon="mdi-magnify"
+                single-line
+                hide-details
+                @input="buscarServicesDebounced" 
+                @click:clear="buscarServicesDebounced"
+              />
+            </VCol>
+            </VRow>
           <VSpacer />
 
           <div class="app-user-search-filter d-flex align-top justify-content-flex-end flex-wrap flex-column gap-0">
