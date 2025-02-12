@@ -393,6 +393,12 @@ const formatDate = (dateString) => {
                               </VChip>
                               <span class="text-caption">{{ formatDate(item.fechaPublicacion) }}</span>
                               <VChip size="x-small">{{ item.vertical }}</VChip>
+                              <div class="autor-ec" title="Autor">
+                                <VIcon icon="tabler-user" size="15" /> <small>{{ item.autor }}</small>
+                              </div>
+                              <div class="article-type-ec" title="Tipo de artículo">
+                                <VIcon icon="tabler-article" size="15" /> <small>{{ item.tipo }}</small>
+                              </div>
                             </div>
                             
                             <!-- Fila 2: título y botón -->

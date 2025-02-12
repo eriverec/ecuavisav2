@@ -1,4 +1,5 @@
 <script setup>
+import DynamicCardGrid from "@/views/apps/radar/template_card.vue";
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import esLocale from "moment/locale/es";
@@ -1074,40 +1075,7 @@ import { useTheme } from 'vuetify';
                 </VTable> -->
 
                 <div v-if="filterTableItems(items, vertical).length">
-                  <VRow>
-                    <VCol cols="12" sm="4" md="4" :lg="vertical == 'Últimas noticias' ? '2' : '4'" v-for="item in filterTableItems(items, vertical)">
-                      <div class="d-flex flex-column card-column">
-                        <a class="img" title="Ir a la página" :href="item.enlace" target="_blank" >
-                          <img
-                            v-if="item.picture"
-                            :src="replaceAmp(item.picture)"
-                            class="fixed-avatar rounded"
-                            
-                          />
-                          <VIcon
-                            v-else
-                            icon="tabler-news"
-                            size="120"
-                          />
-                        </a>
-                        <div class="text-vertical py-2 d-flex gap-2 align-center justify-space-between">
-                          <VChip size="x-small">
-                            {{ item.vertical.toUpperCase() }}
-                          </VChip>
-                          <VBtn title="Ir a la página" :href="item.enlace" target="_blank" color="primary" variant="tonal" size="small">
-                            <VIcon icon="tabler-external-link" /> Ir
-                          </VBtn>
-                        </div>
-                        <div class="d-flex gap-2 align-center otros-detalles py-2">
-                          <span class="text-xs" title="Fecha de publicación">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
-                          <VChip v-if="item.subVertical" class="ml-2" size="x-small" color="secondary">{{ item.subVertical }}</VChip>
-                        </div>
-                        <div class="h4 titulo">
-                          {{ item.titulo }}
-                        </div>
-                      </div>
-                    </VCol>
-                  </VRow>
+                  <DynamicCardGrid :items="filterTableItems(items, vertical)" :vertical="vertical" />
                 </div>
                 <div v-else>
                   <td colspan="4" class="no-results">No se encontraron resultados</td>
