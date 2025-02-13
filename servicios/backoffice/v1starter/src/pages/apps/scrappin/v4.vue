@@ -172,13 +172,11 @@ const saveToServer = async () => {
   console.log(JSON.stringify(previewJSON.value));
 
   try {
-    const response = await fetch('https://services.ecuavisa.com/gestor/competencias/scrappin/save-json.php', {
+    const response = await fetch('/api/gestor/competencias/scrappin/save-json.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      credentials: 'include', // Incluye credenciales
-      mode: 'cors', // Modo CORS explícito
       redirect: "follow",
       body: previewJSON.value
     })
@@ -458,7 +456,6 @@ onMounted(() => {
   min-width: 120px;
   font-weight: bold;
 }
-
 
 .save-button:hover {
   background-color: #45a049;
