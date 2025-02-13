@@ -197,6 +197,37 @@ const saveToServer = async () => {
 }
 
 
+const downloadJSON = () => {
+  try {
+    // Crear el contenido del archivo
+    const jsonString = JSON.stringify(replaceKeysInObject(originalJSON.value), null, 2)
+    const blob = new Blob([jsonString], { type: 'application/json' })
+
+    // Crear URL temporal
+    const url = window.URL.createObjectURL(blob)
+
+    // Crear elemento de descarga
+    const link = document.createElement('a')
+    link.href = url
+
+    // Generar nombre del archivo con fecha y hora
+    const date = new Date()
+    const fileName = `json_backup_${date.getFullYear()}${(date.getMonth() + 1).toString().padStart(2, '0')}${date.getDate().toString().padStart(2, '0')}_${date.getHours().toString().padStart(2, '0')}${date.getMinutes().toString().padStart(2, '0')}.json`
+
+    link.setAttribute('download', fileName)
+    document.body.appendChild(link)
+
+    // Simular clic y limpiar
+    link.click()
+    window.URL.revokeObjectURL(url)
+    document.body.removeChild(link)
+  } catch (error) {
+    console.error('Error al descargar el JSON:', error)
+    alert('Error al descargar el archivo')
+  }
+}
+
+
 onMounted(() => {
   fetchData()
 })
@@ -212,7 +243,7 @@ onMounted(() => {
           <div class="d-flex content-title flex-wrap">
             <div class="d-flex gap-3">
               <div class="d-flex flex-column">
-                Editor JSON Dinámico
+                Editor de Claves JSON
               </div>
             </div>
           </div>
@@ -221,8 +252,6 @@ onMounted(() => {
         <VCardText>
 
           <div class="json-editor">
-            <h2>Editor de Claves JSON</h2>
-
             <div v-if="isLoading" class="loading--">
               Cargando datos...
             </div>
@@ -260,15 +289,6 @@ onMounted(() => {
                   {{ showPreview ? 'Ocultar Vista Previa' : 'Mostrar Vista Previa' }}
                 </button>
 
-                <button @click="saveToServer" class="save-server-button" :disabled="isSaving"
-                  :class="{ 'saving': isSaving }">
-                  <span v-if="isSaving">Guardando...</span>
-                  <span v-else>Guardar en Servidor</span>
-                </button>
-
-                <button v-if="showSaveButton" @click="saveChanges" class="save-button">
-                  Guardar Cambios
-                </button>
               </div>
 
               <!-- Modal de Vista Previa -->
@@ -282,12 +302,26 @@ onMounted(() => {
                     <pre class="json-preview">{{ previewJSON }}</pre>
                   </div>
                   <div class="modal-footer">
-                    <button @click="copyToClipboard" class="copy-button"
+
+
+
+                    <VBtn size="small" @click="copyToClipboard" color="primary" variant="tonal"
                       :class="{ 'copied': copyStatus === 'Copiado!' }">
                       <span class="copy-icon">📋</span>
                       {{ copyStatus || 'Copiar JSON' }}
-                    </button>
-                    <button class="close-modal-button" @click="togglePreview">Cerrar</button>
+                    </VBtn>
+
+                    <VBtn size="small" color="secondary" variant="tonal" class="action-button download-button"
+                      @click="downloadJSON">
+                      Descargar JSON
+                    </VBtn>
+
+                    <VBtn @click="saveToServer" size="small" color="success" variant="tonal" class=""
+                      :disabled="isSaving" :class="{ 'saving': isSaving }">
+                      <span v-if="isSaving">Guardando...</span>
+                      <span v-else>Enviar</span>
+                    </VBtn>
+
                   </div>
                 </div>
               </div>
@@ -369,7 +403,7 @@ onMounted(() => {
   background: #222;
   color: #0f0;
   overflow: auto;
-  max-height: 300px;
+  max-height: 500px;
 }
 
 
@@ -569,7 +603,7 @@ onMounted(() => {
   color: #c62828;
   padding: 10px 20px;
   border-radius: 4px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   z-index: 1000;
   animation: slideIn 0.3s ease;
 }
@@ -579,6 +613,7 @@ onMounted(() => {
     transform: translateY(100%);
     opacity: 0;
   }
+
   to {
     transform: translateY(0);
     opacity: 1;

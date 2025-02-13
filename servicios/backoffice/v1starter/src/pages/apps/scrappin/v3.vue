@@ -128,7 +128,7 @@ const fetchData = async () => {
   error.value = null
   
   try {
-    const response = await axios.get('https://services.ecuavisa.com/gestor/competencias/mirrordt.php')
+    const response = await axios.get('https://services.ecuavisa.com/gestor/competencias/scrappin/mirrordt.php')
     jsonData.value = response.data
   } catch (e) {
     error.value = 'Error al cargar los datos: ' + e.message
