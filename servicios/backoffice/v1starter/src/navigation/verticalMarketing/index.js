@@ -24,11 +24,11 @@ export default [{
       // { title: 'Ecuavisa', to: 'apps-concursos-ecuavisa' },
 
     ],
-  },
-  {
-    title: 'Radar informativo',
+  },{
+    title: 'Radar Digital',
     icon: { icon: 'tabler-radar' },
     children: [
+      { title: 'Dashboard', to: 'apps-radar-home' },
       { title: 'Últimas noticias', to: 'apps-radar-ultimas-noticias' },
       { title: 'Ecuavisa', to: 'apps-radar-ecuavisa' },
       { title: 'Primicias', to: 'apps-radar-primicias' },

@@ -1,5 +1,4 @@
 <script setup>
-import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticias.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -103,6 +102,7 @@ async function agruparYFiltrarPorTiempo(data) {
 
   // Filtrar los registros con fecha_publicacion dentro de los últimos 30 minutos
   const datosFiltrados = data.filter(({ fechaPublicacion }) => {
+    console.log(fechaPublicacion, haceCincoMinutos)
     return moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isAfter(haceCincoMinutos);
   });
 
@@ -171,7 +171,6 @@ const principalData = async function(){
     lastUpdate.value = moment(sortedData[0].timestamp).format("DD/MM/YYYY HH:mm");
     const resultado = await agruparYFiltrarPorTiempo(sortedData);
     totalesSitios.value = resultado;
-    lastUpdate.value = moment(sortedData[0].timestamp).format("DD/MM/YYYY HH:mm");
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data.value));
     
     docDataProcess();
@@ -211,6 +210,7 @@ onMounted(async () => {
   itemsSitioWebSeccion.value = getUniqueVerticals();
   itemsSitioWebSubSeccion.value = getUniqueSubVerticals();
   docDataProcess();
+  obtenerHora();
 });
 
 watch(() => filtrosActivos.seccion, (newValue) => {
@@ -340,6 +340,21 @@ const paginatedData = computed(() => {
 });
 
 /** INICIO FIN PAGINADO DE PÁGINA **/
+
+/** INICIO RECARGA LA PÁGINA AUTOMÁTICA **/
+
+function obtenerHora() {
+  const horaActual = moment().format("HH:mm:ss");
+  console.log("Hora actual:", horaActual);
+
+  // Espera 5 minutos (300,000 ms) y luego ejecuta la función deseada
+  setTimeout(() => {
+    console.log("Han pasado 5 minutos. Ejecutando función...");
+    principalData(); // Llama a la función deseada
+    // window.location.reload(); // Si deseas recargar la página
+  }, (1000 * 60 * 5));
+}
+/** FIN RECARGA LA PÁGINA AUTOMÁTICA **/
 </script>
 
 <template>
@@ -391,26 +406,11 @@ const paginatedData = computed(() => {
                   </VChip>
                 </div>
               </div>
-              <div class="w-100 mt-4 flex justify-center" v-if="totalesSitios.length > 0">
-                <VRow class="flex justify-center">
-                  <VCol cols="5" class="">
-                    <VCard
-                      class="elevation-0 border rounded no-truncate"
-                      title="Nuevos artículos creados dentro de los últimos 30 minutos"
-                      subtitle="Agrupados por medios digitales"
-                    >
-                      <VCardText>
-                        <ApexChartExpenseRatio :data="totalesSitios" />
-                      </VCardText>
-                    </VCard>
-                  </VCol>
-                </VRow>
-              </div>
             </div>
           </VCardItem>
-          <!-- <VDivider /> -->
+          <VDivider />
           <VCardText>
-            <VRow class="mb-4">
+            <VRow class="mb-4 d-none">
               <VCol cols="12" md="12" lg="2" class="pb-0">
                 <div class="w-100 mt-4">
                   <VSelect
@@ -644,5 +644,3 @@ const paginatedData = computed(() => {
 }
 </style>
 
-
-                       
