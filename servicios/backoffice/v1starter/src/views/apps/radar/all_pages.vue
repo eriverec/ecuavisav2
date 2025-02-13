@@ -95,10 +95,12 @@ async function fetchAndProcess(url) {
 }
 
 const loadingBtn = ref(false);
+const totalesSitios = ref([]);
 
 const principalData = async function(){
   try {
     loadingBtn.value = true;
+    totalesSitios.value = [];
     
     const [primiciasList, elUniersoList, expresoList, ecuavisaList, elComercioList] = await Promise.all([
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/primicias/config.php?api=all'),
@@ -107,8 +109,16 @@ const principalData = async function(){
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/ecuavisa/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-comercio/config.php?api=all')
     ]);
+    
 
     const processArticles = (list, sitio, color) => {
+
+      totalesSitios.value.push({
+        total: list.length || 0,
+        color,
+        sitio
+      });
+
       return (list || []).map(item => ({
         ...item,
         sitio,
@@ -154,6 +164,23 @@ onMounted(async () => {
   const storedData = localStorage.getItem(LOCAL_STORAGE_KEY);
   if(storedData) {
     data.value = JSON.parse(storedData);
+    //Inicio hace el total de sitios
+    const resultado = Object.values(
+      data.value.reduce((acc, { sitio, color }) => {
+        const key = `${sitio}-${color}`;
+
+        if (!acc[key]) {
+          acc[key] = { sitio, color, total: 0 };
+        }
+
+        acc[key].total++;
+        return acc;
+      }, {})
+    );
+
+    totalesSitios.value = resultado;
+    //Fin hace el total de sitios
+
   } else {
     await principalData();
   }
@@ -278,6 +305,17 @@ const filteredData = computed(() => lastResults.value);
 const formatDate = (dateString) => {
   return moment(dateString, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm')
 }
+
+/** INICIO CREAR PAGINADO DE PÁGINA **/
+const currentPage = ref(1);
+const pageSize = ref(30); // Valor por defecto
+
+const paginatedData = computed(() => {
+  const start = (currentPage.value - 1) * pageSize.value;
+  return filteredData.value.slice(start, start + pageSize.value);
+});
+
+/** INICIO FIN PAGINADO DE PÁGINA **/
 </script>
 
 <template>
@@ -302,9 +340,19 @@ const formatDate = (dateString) => {
                   <div class="d-flex gap-2 align-center mt-2">
                     <small style="font-size: 10px;">Todas las páginas</small>
                     <VChip size="x-small" color="primary">
-                      {{filteredData.length}} Artículo(s)
+                      {{filteredData.length}} Artículo(s).
                     </VChip>
                   </div>
+                  
+                  <div class="d-flex align-center gap-2 mt-4">
+                      <div v-for="(item, index) in totalesSitios" :key="item.sitio" class="d-flex align-center">
+                        <small style="font-size: 10px;" class="me-1">{{item.sitio}}: </small>
+                        <VChip size="x-small" :color="item.color">
+                          {{item.total}} Artículo(s)
+                        </VChip>
+                        <small style="font-size: 15px;">{{totalesSitios.length > index + 1 ? ', ' : ''}}</small>
+                      </div>
+                    </div>
                   <div class="content-btn mt-3">
                     <VBtn :loading="loadingBtn" title="Recargar datos" @click="principalData" target="_blank" color="primary" variant="tonal" size="small">
                       <VIcon icon="tabler-reload" /> Recargar datos
@@ -317,7 +365,20 @@ const formatDate = (dateString) => {
           <VDivider />
           <VCardText>
             <VRow class="mb-4">
-              <VCol cols="12" md="12" :lg="12" class="pb-0">
+              <VCol cols="12" md="12" lg="2" class="pb-0">
+                <div class="w-100 mt-4">
+                  <VSelect
+                    v-model="pageSize"
+                    :items="[30, 100, 200, 500]"
+                    label="Registros por página"
+                    dense
+                    outlined
+                    class="mb-4"
+                  />
+
+                </div>
+              </VCol>
+              <VCol cols="12" md="12" lg="10" class="pb-0">
                 <div class="w-100 mt-4">
                   <VTextField 
                     v-model="filtrosActivos.busqueda" 
@@ -370,7 +431,7 @@ const formatDate = (dateString) => {
               <div class="board-content" :disabled="filtrosActivos.disabled">
                 <div v-if="filteredData.length" :class="loadingBtn ? 'disabled-card' : ''">
                   <VRow>
-                    <VCol cols="12" v-for="(item, index) in filteredData" :key="item.enlace">
+                    <VCol cols="12" v-for="(item, index) in paginatedData" :key="item.enlace">
                       <VCard class="article-card">
                         <VCardText class="d-flex align-center gap-2 py-1">
                           <!-- Imagen -->
@@ -420,7 +481,16 @@ const formatDate = (dateString) => {
                       </VCard>
                     </VCol>
                   </VRow>
+                  
+                      
+                  <VPagination
+                        class="mt-5"
+                        v-model="currentPage"
+                        :length="Math.ceil(filteredData.length / pageSize)"
+                        total-visible="5"
+                      />
                 </div>
+
               </div>
            
           </VCardText>
