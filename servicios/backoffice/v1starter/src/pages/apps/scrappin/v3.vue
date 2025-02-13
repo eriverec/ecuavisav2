@@ -231,10 +231,37 @@ const updateKey = (obj, oldKey, newKey) => {
     return
   }
 
-  // Crear nueva propiedad con el valor anterior
+  // Función recursiva para actualizar todas las claves coincidentes
+  const updateKeysRecursively = (data) => {
+    if (Array.isArray(data)) {
+      data.forEach(item => {
+        if (typeof item === 'object' && item !== null) {
+          if (item.hasOwnProperty(oldKey)) {
+            item[newKey] = item[oldKey]
+            delete item[oldKey]
+          }
+          updateKeysRecursively(item)
+        }
+      })
+    } else if (typeof data === 'object' && data !== null) {
+      Object.keys(data).forEach(key => {
+        if (typeof data[key] === 'object' && data[key] !== null) {
+          if (data[key].hasOwnProperty(oldKey)) {
+            data[key][newKey] = data[key][oldKey]
+            delete data[key][oldKey]
+          }
+          updateKeysRecursively(data[key])
+        }
+      })
+    }
+  }
+
+  // Actualizar la clave actual
   obj[newKey] = obj[oldKey]
-  // Eliminar propiedad anterior
   delete obj[oldKey]
+
+  // Actualizar todas las claves coincidentes en el JSON
+  updateKeysRecursively(jsonData.value)
 }
 
 const downloadJSON = () => {
