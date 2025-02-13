@@ -169,10 +169,8 @@ const saveToServer = async () => {
   isSaving.value = true
   saveError.value = null
 
-  console.log(JSON.stringify(previewJSON.value));
-
   try {
-    const response = await fetch('/api/gestor/competencias/scrappin/save-json.php', {
+    const response = await fetch('https://services.ecuavisa.com/gestor/competencias/scrappin/save-json.php', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

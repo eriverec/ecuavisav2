@@ -19,15 +19,15 @@ export default defineConfig(({ mode }) => {
 
   return {
 
-    server: {
-      proxy: {
-        '/api': {
-          target: 'https://services.ecuavisa.com',
-          changeOrigin: true,
-          rewrite: (path) => path.replace(/^\/api/, '')
-        }
-      }
-    },
+    // server: {
+    //   proxy: {
+    //     '/api': {
+    //       target: 'https://services.ecuavisa.com',
+    //       changeOrigin: true,
+    //       rewrite: (path) => path.replace(/^\/api/, '')
+    //     }
+    //   }
+    // },
     base: (env.BASE_URL || '/'),
     plugins: [
       vue(),
