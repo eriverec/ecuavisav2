@@ -308,7 +308,7 @@ const formatDate = (dateString) => {
 
 /** INICIO CREAR PAGINADO DE PÁGINA **/
 const currentPage = ref(1);
-const pageSize = ref(30); // Valor por defecto
+const pageSize = ref(20); // Valor por defecto
 
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value;
@@ -369,7 +369,7 @@ const paginatedData = computed(() => {
                 <div class="w-100 mt-4">
                   <VSelect
                     v-model="pageSize"
-                    :items="[30, 100, 200, 500]"
+                    :items="[20, 100, 200, 500]"
                     label="Registros por página"
                     dense
                     outlined
