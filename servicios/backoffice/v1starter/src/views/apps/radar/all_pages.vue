@@ -98,30 +98,30 @@ async function fetchAndProcess(url) {
 const loadingBtn = ref(false);
 const totalesSitios = ref([]);
 
-async function agruparYFiltrarPorTiempo(data) {
-  const haceCincoMinutos = moment(lastUpdate.value,"DD/MM/YYYY HH:mm").subtract(30, "minutes");
+// async function agruparYFiltrarPorTiempo(data) {
+//   const haceCincoMinutos = moment(lastUpdate.value,"DD/MM/YYYY HH:mm").subtract(30, "minutes");
 
-  // Filtrar los registros con fecha_publicacion dentro de los últimos 30 minutos
-  const datosFiltrados = data.filter(({ fechaPublicacion }) => {
-    return moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isAfter(haceCincoMinutos);
-  });
+//   // Filtrar los registros con fecha_publicacion dentro de los últimos 30 minutos
+//   const datosFiltrados = data.filter(({ fechaPublicacion }) => {
+//     return moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isAfter(haceCincoMinutos);
+//   });
 
-  // Agrupar por sitio y color
-  const resultado = Object.values(
-    datosFiltrados.reduce((acc, { sitio, color }) => {
-      const key = `${sitio}-${color}`;
+//   // Agrupar por sitio y color
+//   const resultado = Object.values(
+//     datosFiltrados.reduce((acc, { sitio, color }) => {
+//       const key = `${sitio}-${color}`;
 
-      if (!acc[key]) {
-        acc[key] = { sitio, color, total: 0 };
-      }
+//       if (!acc[key]) {
+//         acc[key] = { sitio, color, total: 0 };
+//       }
 
-      acc[key].total++;
-      return acc;
-    }, {})
-  );
+//       acc[key].total++;
+//       return acc;
+//     }, {})
+//   );
 
-  return resultado;
-}
+//   return resultado;
+// }
 
 const principalData = async function(){
   try {
@@ -168,9 +168,9 @@ const principalData = async function(){
 
     data.value = sortedData;
     //Inicio hace el total de sitios
-    lastUpdate.value = moment(sortedData[0].timestamp).format("DD/MM/YYYY HH:mm");
-    const resultado = await agruparYFiltrarPorTiempo(sortedData);
-    totalesSitios.value = resultado;
+    // lastUpdate.value = moment(sortedData[0].timestamp).format("DD/MM/YYYY HH:mm");
+    // const resultado = await agruparYFiltrarPorTiempo(sortedData);
+    // totalesSitios.value = resultado;
     lastUpdate.value = moment(sortedData[0].timestamp).format("DD/MM/YYYY HH:mm");
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(data.value));
     
@@ -391,7 +391,7 @@ const paginatedData = computed(() => {
                   </VChip>
                 </div>
               </div>
-              <div class="w-100 mt-4 flex justify-center" v-if="totalesSitios.length > 0">
+              <div class="w-100 mt-4 flex justify-center" v-if="data.length > 0">
                 <VRow class="flex justify-center">
                   <VCol cols="5" class="">
                     <VCard
@@ -400,7 +400,7 @@ const paginatedData = computed(() => {
                       subtitle="Agrupados por medios digitales"
                     >
                       <VCardText>
-                        <ApexChartExpenseRatio :data="totalesSitios" />
+                        <ApexChartExpenseRatio :data="data" :lastUpdate="lastUpdate" />
                       </VCardText>
                     </VCard>
                   </VCol>

@@ -4,9 +4,44 @@ import { defineProps } from "vue";
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
 
+import Moment from 'moment';
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
+
+const moment = extendMoment(Moment);
+moment.locale('es', [esLocale]);
+
 const props = defineProps({
   data: { type: Array, required: true },
+  lastUpdate: { type: String, required: true },
 });
+
+const totalesSitios = ref([]);
+
+async function agruparYFiltrarPorTiempo(data) {
+  const haceCincoMinutos = moment(props.lastUpdate,"DD/MM/YYYY HH:mm").subtract(30, "minutes");
+
+  // Filtrar los registros con fecha_publicacion dentro de los últimos 30 minutos
+  const datosFiltrados = data.filter(({ fechaPublicacion }) => {
+    return moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isAfter(haceCincoMinutos);
+  });
+
+  // Agrupar por sitio y color
+  const resultado = Object.values(
+    datosFiltrados.reduce((acc, { sitio, color }) => {
+      const key = `${sitio}-${color}`;
+
+      if (!acc[key]) {
+        acc[key] = { sitio, color, total: 0 };
+      }
+
+      acc[key].total++;
+      return acc;
+    }, {})
+  );
+
+  return resultado;
+}
 
 const vuetifyTheme = useTheme()
 
@@ -33,15 +68,15 @@ const getDonutChartConfig = themeColors => {
   }
 
   const { themeSecondaryTextColor, themePrimaryTextColor } = colorVariables(themeColors)
-  const totalValueLocal = props.data.reduce((sum, item) => sum + item.total, 0);
+  const totalValueLocal = totalesSitios.value.reduce((sum, item) => sum + item.total, 0);
   totalValue.value = totalValueLocal;
-  const series = props.data.map(item => item.total);
+  const series = totalesSitios.value.map(item => item.total);
   
   return {
     options: {
       stroke: { width: 0 },
-      labels: props.data.map(item => item.sitio),
-      colors: props.data.map(item => {
+      labels: totalesSitios.value.map(item => item.sitio),
+      colors: totalesSitios.value.map(item => {
         return donutColors[item.color];
       }),
       dataLabels: {
@@ -121,24 +156,30 @@ const getDonutChartConfig = themeColors => {
         },
       ],
     },
-    series:series
+    series
   }
 }
+
+onMounted(async () => {
+  const resultado = await agruparYFiltrarPorTiempo(props.data);
+  totalesSitios.value = resultado;
+});
 </script>
 
 <template>
   <div class="d-flex gap-2 mt-0 flex-column pb-3">
     <small style="font-size: 13px;">Medios digitales</small>
     <div class="d-flex align-center gap-2 mt-0 flex-wrap">
-      <div v-for="(item, index) in data" :key="item.sitio" class="d-flex align-center">
+      <div v-for="(item, index) in totalesSitios" :key="item.sitio" class="d-flex align-center">
         <VChip size="x-small" :color="item.color">
           {{item.sitio}}: {{item.total}} Artículo(s)
         </VChip>
-        <small style="font-size: 15px;">{{data.length > index + 1 ? ', ' : ''}}</small>
+        <small style="font-size: 15px;">{{totalesSitios.length > index + 1 ? ', ' : ''}}</small>
       </div>
     </div>
   </div>
   <VueApexCharts
+    v-if="totalesSitios.length > 0"
     type="donut"
     height="310"
     :options="expenseRationChartConfig.options"
