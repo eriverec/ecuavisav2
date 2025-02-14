@@ -5,9 +5,17 @@ export default [
       icon: { icon: 'tabler-smart-home' },
     },
     {
-      title: 'Últimas noticias', 
-      to: 'apps-radar-ultimas-noticias',
+      title: 'Radar Digital',
       icon: { icon: 'tabler-radar' },
+      children: [
+        { title: 'Dashboard', to: 'apps-radar-home' },
+        { title: 'Últimas noticias', to: 'apps-radar-ultimas-noticias' },
+        { title: 'Ecuavisa', to: 'apps-radar-ecuavisa' },
+        { title: 'Primicias', to: 'apps-radar-primicias' },
+        { title: 'El Expreso', to: 'apps-radar-el-expreso' },
+        { title: 'El Comercio', to: 'apps-radar-el-comercio' },
+        { title: 'El Universo', to: 'apps-radar-el-universo' },
+      ],
     },
     {
       title: 'Suscripciones',

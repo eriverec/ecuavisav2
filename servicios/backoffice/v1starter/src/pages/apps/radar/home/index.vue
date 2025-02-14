@@ -106,7 +106,7 @@ async function agruparYFiltrarPorTiempo(data) {
 
   // Filtrar los registros con fecha_publicacion dentro de los últimos 30 minutos
   const datosFiltrados = data.filter(({ fechaPublicacion }) => {
-    console.log(fechaPublicacion, haceCincoMinutos)
+    // console.log(fechaPublicacion, haceCincoMinutos)
     return moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isAfter(haceCincoMinutos);
   });
 
