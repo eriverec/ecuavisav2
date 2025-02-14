@@ -19,42 +19,32 @@ const props = defineProps({
 const totalesSitios = ref([]);
 
 async function agruparYFiltrarPorTiempo(data) {
-  const haceCincoMinutos = moment(props.lastUpdate,"DD/MM/YYYY HH:mm").subtract(30, "minutes");
+  const hoy = moment().startOf('day'); // Obtiene el inicio del día actual
 
-  // Lista de sitios esperados con sus colores
-  const sitiosEsperados = [
-    { sitio: "EXPRESO", color: "error" },
-    { sitio: "PRIMICIAS", color: "primary" },
-    { sitio: "EL UNIVERSO", color: "info" },
-    { sitio: "ECUAVISA", color: "warning" },
-    { sitio: "EL COMERCIO", color: "success" },
-  ];
+  // Filtrar los registros cuya fechaPublicacion sea de hoy
+  const datosFiltrados = data.filter(({ fechaPublicacion }) => {
+    // console.log(fechaPublicacion, moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(hoy))
+    return moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(hoy);
+  });
 
-  // Filtrar los registros cuya fechaPublicacion sea de haceCincoMinutos
-  const datosFiltrados = data.filter(({ fechaPublicacion }) =>
-    moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(haceCincoMinutos)
-  );
 
   // Agrupar por sitio y color
-  const agrupados = datosFiltrados.reduce((acc, { sitio, color }) => {
-    const key = `${sitio}-${color}`;
+  const resultado = Object.values(
+    datosFiltrados.reduce((acc, { sitio, color }) => {
+      const key = `${sitio}-${color}`;
 
-    if (!acc[key]) {
-      acc[key] = { sitio, color, total: 0 };
-    }
+      if (!acc[key]) {
+        acc[key] = { sitio, color, total: 0 };
+      }
 
-    acc[key].total++;
-    return acc;
-  }, {});
-
-  // Convertir a array y completar con sitios que faltan
-  const resultado = sitiosEsperados.map(({ sitio, color }) => {
-    const key = `${sitio}-${color}`;
-    return agrupados[key] || { sitio, color, total: 0 };
-  });
+      acc[key].total++;
+      return acc;
+    }, {})
+  );
 
   return resultado;
 }
+
 
 const vuetifyTheme = useTheme()
 

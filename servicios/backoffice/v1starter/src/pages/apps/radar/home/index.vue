@@ -336,7 +336,11 @@ const formatDate = (dateString) => {
 
 /** INICIO CREAR PAGINADO DE PÁGINA **/
 const currentPage = ref(1);
-const pageSize = ref(20); // Valor por defecto
+const pageSize = ref(100); // Valor por defecto
+
+watch(pageSize, () => {
+  currentPage.value = 1;
+});
 
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value;
@@ -419,7 +423,7 @@ function obtenerHora() {
                 <div class="w-100 mt-4">
                   <VSelect
                     v-model="pageSize"
-                    :items="[20, 100, 200, 500]"
+                    :items="[100, 200, 500]"
                     label="Registros por página"
                     dense
                     outlined

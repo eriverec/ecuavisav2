@@ -1,4 +1,5 @@
 <script setup>
+import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-dia.vue';
 import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticias.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
@@ -334,6 +335,10 @@ const formatDate = (dateString) => {
 const currentPage = ref(1);
 const pageSize = ref(20); // Valor por defecto
 
+watch(pageSize, () => {
+  currentPage.value = 1;
+});
+
 const paginatedData = computed(() => {
   const start = (currentPage.value - 1) * pageSize.value;
   return filteredData.value.slice(start, start + pageSize.value);
@@ -391,18 +396,33 @@ const paginatedData = computed(() => {
                   </VChip>
                 </div>
               </div>
-              <div class="w-100 mt-4 flex justify-center" v-if="data.length > 0">
+              <div class="w-100 mt-4 flex justify-center" v-if="filteredData.length > 0">
                 <VRow class="flex justify-center">
-                  <VCol cols="5" class="">
-                    <VCard
-                      class="elevation-0 border rounded no-truncate"
-                      title="Nuevos artículos creados dentro de los últimos 30 minutos"
-                      subtitle="Agrupados por medios digitales"
-                    >
-                      <VCardText>
-                        <ApexChartExpenseRatio :data="data" :lastUpdate="lastUpdate" />
-                      </VCardText>
-                    </VCard>
+                  <VCol cols="12" sm="8" lg="8" class="">
+                    <VRow class="flex justify-center">
+                      <VCol cols="12" sm="6" lg="6" class="">
+                        <VCard
+                          class="elevation-0 border rounded no-truncate"
+                          title="Artículos de hoy"
+                          subtitle="Agrupados por medios digitales según la fecha de publicación de los artículos"
+                        >
+                          <VCardText>
+                            <ApexChartPasteTotalDia :data="filteredData" :lastUpdate="lastUpdate" />
+                          </VCardText>
+                        </VCard>
+                      </VCol>
+                      <VCol cols="12" sm="6" lg="6" class="">
+                        <VCard
+                          class="elevation-0 border rounded no-truncate"
+                          title="Nuevos artículos creados dentro de los últimos 30 minutos"
+                          subtitle="Agrupados por medios digitales"
+                        >
+                          <VCardText>
+                            <ApexChartExpenseRatio :data="filteredData" :lastUpdate="lastUpdate" />
+                          </VCardText>
+                        </VCard>
+                      </VCol>
+                    </VRow>
                   </VCol>
                 </VRow>
               </div>
