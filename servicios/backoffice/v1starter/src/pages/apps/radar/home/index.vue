@@ -94,6 +94,10 @@ async function fetchAndProcess(url) {
   }
 }
 
+const currentDate = computed(() => {
+  return moment().format('DD/MM/YYYY');
+});
+
 const loadingBtn = ref(false);
 const totalesSitios = ref([]);
 
@@ -379,7 +383,7 @@ function obtenerHora() {
                   <div class="d-flex gap-2 align-center mt-2">
                     <small style="font-size: 10px;">Total de artículos</small>
                     <VChip size="x-small" color="primary">
-                      {{filteredData.length}} Artículo(s).
+                      {{filteredData.length}} Artículos desde las 00h00 de {{ currentDate }}
                     </VChip>
                   </div>
                   <div class="content-btn mt-3">
