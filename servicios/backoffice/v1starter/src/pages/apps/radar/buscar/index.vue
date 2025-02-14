@@ -173,7 +173,7 @@ const analizarSitio = async () => {
   resultados.value = null
 
   try {
-    const response = await axios.post('http://localhost:8080/analizar-sitio', {
+    const response = await axios.post('https://servicio-competencias.vercel.app/analizar-sitio', {
       url: url.value
     }, {
       headers: {
