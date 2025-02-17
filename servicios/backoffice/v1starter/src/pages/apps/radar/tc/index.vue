@@ -30,13 +30,9 @@ import { useRoute, useRouter } from 'vue-router';
   }
 
   // IDs válidos
-  const validIds = ["primicias", "el-universo", "expreso", "ecuavisa"];
+  const validIds = ["primicias", "el-universo", "expreso", "ecuavisa","tc"];
 
   const idsName = {
-    "el-comercio": {
-      title: "El Comercio",
-      url: "https://www.elcomercio.com.ec/"
-    },
     "el-universo": {
       title: "El Universo",
       url: "https://www.eluniverso.com/"
@@ -53,9 +49,13 @@ import { useRoute, useRouter } from 'vue-router';
       title: "Ecuavisa",
       url: "https://www.ecuavisa.com/"
     },
+    "tc": {
+      title: "TC Televisión",
+      url: "https://tctelevision.com/"
+    },
   };
 
-  const idRouter = ref("el-comercio");
+  const idRouter = ref("tc");
 
   // Verificar si el ID es válido
   const idParamsEsValido = ref(validIds.includes(idRouter.value));
@@ -200,6 +200,7 @@ import { useRoute, useRouter } from 'vue-router';
     return resultado.articles;
   }
 
+
   const loadingBtn = ref(false);
   const principalData = async function(){
     try{
@@ -208,7 +209,7 @@ import { useRoute, useRouter } from 'vue-router';
       // const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/modalondemand/radar/radarPrimicias.php')
       // const response = await fetch('https://bigdata.ecuavisa.com:10003/api/v1/BA/ObtenerPublicacion?baseUrl=https%3A%2F%2Fwww.primicias.ec&maxPaginas=1')
       const dataResp = await response.json();
-      console.log(dataResp.filter(Boolean))
+      // console.log(dataResp.filter(Boolean))
       data.value = unificarYFiltrarDuplicados(dataResp.filter(Boolean));
       lastUpdate.value = moment(dataResp.filter(Boolean)[0].timestamp).format("DD/MM/YYYY HH:mm");
       nextUpdate.value = dataResp.nextRefresh;
@@ -1184,12 +1185,12 @@ td {
     font-size: 13px;
     line-height: 1.3;
 }
+
 .disabled-card {
   pointer-events: none;
   cursor: default;
   opacity: 0.6;
 }
-
 /* th {
   background-color: #f2f2f2;
 } */

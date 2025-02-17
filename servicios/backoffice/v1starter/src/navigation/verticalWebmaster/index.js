@@ -29,6 +29,7 @@ export default [
         { title: 'El Expreso', to: 'apps-radar-el-expreso' },
         { title: 'El Comercio', to: 'apps-radar-el-comercio' },
         { title: 'El Universo', to: 'apps-radar-el-universo' },
+        { title: 'TC Televisión', to: 'apps-radar-tc' },
       ],
     },
   

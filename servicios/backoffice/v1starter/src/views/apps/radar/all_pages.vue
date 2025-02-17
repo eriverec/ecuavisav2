@@ -26,7 +26,7 @@ const filtrosActivos = reactive({
 
 const buscar_dato = ref(null)
 const selectedItemSitioWeb = ref(null)
-const itemsSitioWeb = ref(["PRIMICIAS", "EL UNIVERSO", "EXPRESO", "ECUAVISA","EL COMERCIO"]);
+const itemsSitioWeb = ref(["PRIMICIAS", "EL UNIVERSO", "EXPRESO", "ECUAVISA","EL COMERCIO", "TC TELEVISIÓN"]);
 
 const selectedItemSeccion = ref(null)
 const itemsSitioWebSeccion = ref([]);
@@ -129,12 +129,13 @@ const principalData = async function(){
     loadingBtn.value = true;
     totalesSitios.value = [];
     
-    const [primiciasList, elUniersoList, expresoList, ecuavisaList, elComercioList] = await Promise.all([
+    const [primiciasList, elUniersoList, expresoList, ecuavisaList, elComercioList, tcTelevisioList] = await Promise.all([
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/primicias/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-universo/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-expreso/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/ecuavisa/config.php?api=all'),
-      fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-comercio/config.php?api=all')
+      fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-comercio/config.php?api=all'),
+      fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/tc/config.php?api=all'),
     ]);
     
 
@@ -152,7 +153,8 @@ const principalData = async function(){
       ...processArticles(elUniersoList, "EL UNIVERSO", "info"),
       ...processArticles(expresoList, "EXPRESO", "error"),
       ...processArticles(ecuavisaList, "ECUAVISA", "warning"),
-      ...processArticles(elComercioList, "EL COMERCIO", "success")
+      ...processArticles(elComercioList, "EL COMERCIO", "success"),
+      ...processArticles(tcTelevisioList, "TC TELEVISIÓN", "info")
     ];
 
     const storedData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];

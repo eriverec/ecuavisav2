@@ -207,7 +207,7 @@ import { useRoute, useRouter } from 'vue-router';
       const dataResp = await response.json();
       console.log(dataResp.filter(Boolean))
       data.value = unificarYFiltrarDuplicados(dataResp.filter(Boolean));
-      lastUpdate.value = moment(dataResp[0].timestamp).format("DD/MM/YYYY HH:mm");
+      lastUpdate.value = moment(dataResp.filter(Boolean)[0].timestamp).format("DD/MM/YYYY HH:mm");
       nextUpdate.value = dataResp.nextRefresh;
 
       primeraCargaCronConfig.value = true;
