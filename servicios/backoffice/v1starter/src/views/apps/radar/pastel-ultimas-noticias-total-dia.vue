@@ -21,28 +21,41 @@ const totalesSitios = ref([]);
 async function agruparYFiltrarPorTiempo(data) {
   const hoy = moment().startOf('day'); // Obtiene el inicio del día actual
 
+  const sitiosEsperados = [
+    { sitio: "EXPRESO", color: "error" },
+    { sitio: "PRIMICIAS", color: "primary" },
+    { sitio: "EL UNIVERSO", color: "info" },
+    { sitio: "ECUAVISA", color: "warning" },
+    { sitio: "EL COMERCIO", color: "success" },
+    { sitio: "TC TELEVISIÓN", color: "info" },
+  ];
+
   // Filtrar los registros cuya fechaPublicacion sea de hoy
-  const datosFiltrados = data.filter(({ fechaPublicacion }) => {
-    // console.log(fechaPublicacion, moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(hoy))
-    return moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(hoy);
-  });
-
-
-  // Agrupar por sitio y color
-  const resultado = Object.values(
-    datosFiltrados.reduce((acc, { sitio, color }) => {
-      const key = `${sitio}-${color}`;
-
-      if (!acc[key]) {
-        acc[key] = { sitio, color, total: 0 };
-      }
-
-      acc[key].total++;
-      return acc;
-    }, {})
+  const datosFiltrados = data.filter(({ fechaPublicacion }) =>
+    moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(hoy)
   );
 
-  return resultado;
+  // Agrupar por sitio y color
+  const agrupados = datosFiltrados.reduce((acc, { sitio, color }) => {
+    const key = `${sitio}-${color}`;
+
+    if (!acc[key]) {
+      acc[key] = { sitio, color, total: 0 };
+    }
+
+    acc[key].total++;
+    return acc;
+  }, {});
+
+  // Convertir a array y completar con sitios que faltan
+  const resultado = sitiosEsperados.map(({ sitio, color }) => {
+    const key = `${sitio}-${color}`;
+    return agrupados[key] || { sitio, color, total: 0 };
+  });
+
+  return sitiosEsperados
+    .map(({ sitio, color }) => agrupados[`${sitio}-${color}`] || { sitio, color, total: 0 })
+    .sort((a, b) => b.total - a.total);;
 }
 
 

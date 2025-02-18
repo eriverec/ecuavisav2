@@ -28,6 +28,7 @@ async function agruparYFiltrarPorTiempo(data) {
     { sitio: "EL UNIVERSO", color: "info" },
     { sitio: "ECUAVISA", color: "warning" },
     { sitio: "EL COMERCIO", color: "success" },
+    { sitio: "TC TELEVISIÓN", color: "info" },
   ];
 
   // Filtrar los registros cuya fechaPublicacion sea de haceCincoMinutos
@@ -53,7 +54,10 @@ async function agruparYFiltrarPorTiempo(data) {
     return agrupados[key] || { sitio, color, total: 0 };
   });
 
-  return resultado;
+  // Convertir a array, completar sitios que falten y ordenar de mayor a menor
+  return sitiosEsperados
+    .map(({ sitio, color }) => agrupados[`${sitio}-${color}`] || { sitio, color, total: 0 })
+    .sort((a, b) => b.total - a.total);
 }
 
 const vuetifyTheme = useTheme()
