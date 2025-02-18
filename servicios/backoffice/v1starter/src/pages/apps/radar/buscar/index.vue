@@ -1,40 +1,42 @@
 <template>
   <div>
-
-    <VRow>
-      <VCol cols="12">
-        <VCard>
+    <VRow class="match-height">
+      <!-- Bloque Izquierdo -->
+      <VCol cols="12" md="6">
+        <VCard class="h-100">
           <VCardTitle>
-            <h4 class="text-h5 mb-0">Analizador de Sitios Web</h4>
+            <h4 class="text-h6 mb-0">Analizador de Sitios Web</h4>
           </VCardTitle>
 
           <VCardText>
-            <!-- Formulario de entrada -->
-            <VForm @submit.prevent="analizarSitio" class="mb-4">
-              <VRow>
-                <VCol cols="12">
-                  <div class="d-flex gap-2">
-                    <VTextField
-                      v-model="url"
-                      placeholder="Ingrese la URL del sitio a analizar (ej: https://www.eluniverso.com)"
-                      :rules="urlRules"
-                      :error-messages="errorMessage"
-                      hide-details="auto"
-                    />
-                    <VBtn
-                      type="submit"
-                      :loading="loading"
-                      :disabled="loading"
-                      color="primary"
-                    >
-                      {{ loading ? 'Analizando...' : 'ANALIZAR' }}
-                    </VBtn>
-                  </div>
-                </VCol>
-              </VRow>
+            <VForm @submit.prevent="analizarSitio">
+              <VTextField
+                v-model="url"
+                placeholder="Ingrese la URL del sitio a analizar (ej: https://www.eluniverso.com)"
+                :rules="urlRules"
+                :error-messages="errorMessage"
+                hide-details="auto"
+                class="mb-4"
+              />
+              <VBtn
+                type="submit"
+                :loading="loading"
+                :disabled="loading"
+                color="primary"
+                block
+              >
+                {{ loading ? 'Analizando...' : 'ANALIZAR' }}
+              </VBtn>
             </VForm>
+          </VCardText>
+        </VCard>
+      </VCol>
 
-            <!-- Alerta de error -->
+      <!-- Bloque Derecho -->
+      <VCol cols="12" md="6" v-if="resultados && !error">
+        <VCard class="h-100">
+          <VCardText>
+            <!-- Alertas -->
             <VAlert
               v-if="error"
               type="error"
@@ -43,23 +45,65 @@
               class="mb-4"
               @click:close="error = null"
             >
-              {{ error }}
+              <span class="text-caption">{{ error }}</span>
             </VAlert>
 
-            <!-- Resultados -->
-            <div v-if="resultados && !error">
-              <div class="d-flex flex-column mb-4">
-                <div class="text-body-1 text-medium-emphasis mb-1">
-                  Medio analizado: {{ resultados.source || url }}
-                </div>
-                <div class="d-flex align-items-center gap-2">
-                  <div class="text-body-1 text-medium-emphasis">Resultados del análisis</div>
-                  <div class="text-primary">{{ resultados.total }} artículos</div>
-                </div>
-              </div>
+            <VAlert
+              v-if="success"
+              type="success"
+              variant="tonal"
+              closable
+              class="mb-4"
+              @click:close="success = null"
+            >
+              <span class="text-caption">{{ success }}</span>
+            </VAlert>
 
-              <!-- Lista de artículos -->
-              <div class="article-list">
+            <VAlert
+              v-if="warning"
+              type="warning"
+              variant="tonal"
+              closable
+              class="mb-4"
+              @click:close="warning = null"
+            >
+              <span class="text-caption">{{ warning }}</span>
+            </VAlert>
+
+            <!-- Información del medio -->
+            <div class="d-flex justify-space-between align-center mb-4">
+              <div>
+                <h6 class="text-subtitle-1 mb-1">
+                  Medio analizado: {{ resultados.source || url }}
+                </h6>
+                <span class="text-caption text-medium-emphasis">
+                  Resultados del análisis: {{ resultados.total }} artículos
+                </span>
+              </div>
+              <VBtn
+                color="success"
+                :loading="guardando"
+                :disabled="guardando || error || success || warning"
+                @click="guardarMedio"
+              >
+                <VIcon
+                  start
+                  icon="tabler-device-floppy"
+                  size="18"
+                  class="me-2"
+                />
+                {{ guardando ? 'Guardando...' : 'GUARDAR MEDIO' }}
+              </VBtn>
+            </div>
+          </VCardText>
+        </VCard>
+      </VCol>
+    </VRow>
+
+    <!-- Lista de artículos abajo -->
+    <VRow v-if="resultados && !error">
+      <VCol cols="12">
+        <div class="article-list">
                 <div 
                   v-for="(articulo, index) in resultados.articles" 
                   :key="index"
@@ -138,9 +182,6 @@
                   </div>
                 </div>
               </div>
-            </div>
-          </VCardText>
-        </VCard>
       </VCol>
     </VRow>
   </div>
@@ -152,7 +193,10 @@ import { ref } from 'vue'
 
 const url = ref('')
 const loading = ref(false)
+const guardando = ref(false)
 const error = ref(null)
+const success = ref(null)
+const warning = ref(null)
 const resultados = ref(null)
 const errorMessage = ref('')
 
@@ -161,6 +205,22 @@ const urlRules = [
   v => /^(http|https):\/\/[^ "]+$/.test(v) || 'Ingrese una URL válida'
 ]
 
+// Función para resetear todo cuando se hace nuevo análisis
+const resetearTodo = () => {
+  error.value = null
+  success.value = null
+  warning.value = null
+  resultados.value = null
+  errorMessage.value = ''
+}
+
+// Función para limpiar solo mensajes
+const limpiarMensajes = () => {
+  error.value = null
+  success.value = null
+  warning.value = null
+}
+
 const analizarSitio = async () => {
   if (!urlRules.every(rule => rule(url.value) === true)) {
     error.value = 'Por favor ingrese una URL válida'
@@ -168,9 +228,7 @@ const analizarSitio = async () => {
   }
 
   loading.value = true
-  error.value = null
-  errorMessage.value = ''
-  resultados.value = null
+  resetearTodo() // Aquí reseteamos todo porque es nuevo análisis
 
   try {
     const response = await axios.post('https://servicio-competencias.vercel.app/analizar-sitio', {
@@ -190,6 +248,78 @@ const analizarSitio = async () => {
     loading.value = false
   }
 }
+
+const guardarMedio = async () => {
+  if (!resultados.value) return
+
+  guardando.value = true
+  limpiarMensajes() // Aquí solo limpiamos mensajes, mantenemos resultados
+
+  try {
+    const urlObj = new URL(url.value)
+    const nombreMedio = urlObj.hostname.replace('www.', '').split('.')[0]
+    
+    const pathSegments = urlObj.pathname.split('/')
+    let categoria = ''
+    
+    for (let i = 0; i < pathSegments.length; i++) {
+      const segment = pathSegments[i].toLowerCase()
+      if (segment && segment !== 'categoria' && segment !== 'category') {
+        categoria = segment
+        break
+      }
+    }
+
+    const key = categoria ? `${nombreMedio}-${categoria}` : nombreMedio
+
+    const bodyData = {
+      key: key,
+      medio: nombreMedio,
+      url: url.value,
+      consulta: {
+        title: "string",
+        link: "string",
+        imagen: "string",
+        category: "string",
+        date: "timestamp"
+      },
+      conversion: {
+        title: "titulo",
+        link: "url",
+        imagen: "img",
+        category: "vertical",
+        date: "fechaPublicacion",
+        author: "autor"
+      }
+    }
+
+    const response = await axios.post('https://servicio-competencias.vercel.app/scrapper-rule/create', bodyData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    // Verificar respuesta del servidor
+    if (response.data && response.data.resp === false) {
+      warning.value = `Esta guardado con el nombre "${response.data.key}"`
+      return
+    }
+
+    // Mensaje de éxito si todo sale bien
+    success.value = `Medio ${key} guardado exitosamente`
+  } catch (err) {
+    console.error('Error al guardar medio:', err)
+    if (err.response?.data?.mensaje) {
+      warning.value = `Esta guardado con el nombre "${err.response.data.key}"`
+    } else {
+      error.value = 'Error al guardar el medio. Por favor intente nuevamente.'
+    }
+  } finally {
+    guardando.value = false
+  }
+}
+
+
 </script>
 
 <style lang="scss" scoped>
@@ -217,6 +347,19 @@ const analizarSitio = async () => {
 
 .border-b {
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+.match-height {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.match-height > [class*='col'] {
+  display: flex;
+}
+
+.match-height .v-card {
+  width: 100%;
 }
 
 @media (max-width: 600px) {
