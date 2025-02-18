@@ -29,6 +29,7 @@ async function agruparYFiltrarPorTiempo(data) {
     { sitio: "ECUAVISA", color: "warning" },
     { sitio: "EL COMERCIO", color: "success" },
     { sitio: "TC TELEVISIÓN", color: "info" },
+    { sitio: "INFOBAE", color: "primary" },
   ];
 
   // Filtrar los registros cuya fechaPublicacion sea de haceCincoMinutos
@@ -98,7 +99,9 @@ const getDonutChartConfig = themeColors => {
       }),
       dataLabels: {
         enabled: true,
-        formatter: val => `${parseInt(val, 10)}%`,
+        formatter: val => {
+          return `${parseFloat(val).toFixed(2)} %`;
+        },
       },
       legend: {
         position: 'bottom',
@@ -120,7 +123,9 @@ const getDonutChartConfig = themeColors => {
               value: {
                 fontSize: '1.5rem',
                 color: themeSecondaryTextColor,
-                formatter: val => `${parseInt(val, 10)}`,
+                formatter: val => {
+                  return `${parseInt(val, 10)}`
+                },
               },
               total: {
                 show: true,
@@ -188,6 +193,17 @@ onMounted(async () => {
   const resultado = await agruparYFiltrarPorTiempo(props.data);
   totalesSitios.value = resultado;
 });
+// Identificador único basado en new Time 
+function generarIDHora(){
+  const ahora = new Date();
+  
+  const horas = ahora.getHours().toString().padStart(2, '0'); 
+  const minutos = ahora.getMinutes().toString().padStart(2, '0'); 
+  const segundos = ahora.getSeconds().toString().padStart(2, '0'); 
+  const milisegundos = ahora.getMilliseconds().toString().padStart(3, '0');
+
+  return `${horas}${minutos}${segundos}${milisegundos}`;
+}
 </script>
 
 <template>
@@ -204,7 +220,7 @@ onMounted(async () => {
   </div>
   <VueApexCharts
     v-if="totalesSitios.length > 0"
-    :key="totalesSitios.length"
+    :key="generarIDHora()"
     type="donut"
     height="310"
     :options="expenseRationChartConfig.options"

@@ -26,7 +26,7 @@ const filtrosActivos = reactive({
 
 const buscar_dato = ref(null)
 const selectedItemSitioWeb = ref(null)
-const itemsSitioWeb = ref(["PRIMICIAS", "EL UNIVERSO", "EXPRESO", "ECUAVISA","EL COMERCIO", "TC TELEVISIÓN"]);
+const itemsSitioWeb = ref(["PRIMICIAS", "EL UNIVERSO", "EXPRESO", "ECUAVISA","EL COMERCIO", "TC TELEVISIÓN","INFOBAE"]);
 
 const selectedItemSeccion = ref(null)
 const itemsSitioWebSeccion = ref([]);
@@ -129,13 +129,14 @@ const principalData = async function(){
     loadingBtn.value = true;
     totalesSitios.value = [];
     
-    const [primiciasList, elUniersoList, expresoList, ecuavisaList, elComercioList, tcTelevisioList] = await Promise.all([
+    const [primiciasList, elUniersoList, expresoList, ecuavisaList, elComercioList, tcTelevisioList, infobaeList] = await Promise.all([
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/primicias/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-universo/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-expreso/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/ecuavisa/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-comercio/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/tc/config.php?api=all'),
+      fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/infobae/config.php?api=all'),
     ]);
     
 
@@ -154,7 +155,8 @@ const principalData = async function(){
       ...processArticles(expresoList, "EXPRESO", "error"),
       ...processArticles(ecuavisaList, "ECUAVISA", "warning"),
       ...processArticles(elComercioList, "EL COMERCIO", "success"),
-      ...processArticles(tcTelevisioList, "TC TELEVISIÓN", "info")
+      ...processArticles(tcTelevisioList, "TC TELEVISIÓN", "info"),
+      ...processArticles(infobaeList, "INFOBAE", "primary"),
     ];
 
     const storedData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
