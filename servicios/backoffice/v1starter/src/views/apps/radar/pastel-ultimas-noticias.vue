@@ -30,6 +30,7 @@ async function agruparYFiltrarPorTiempo(data) {
     { sitio: "EL COMERCIO", color: "success" },
     { sitio: "TC TELEVISIÓN", color: "info" },
     { sitio: "INFOBAE", color: "primary" },
+    { sitio: "TELEAMAZONAS", color: "error" },
   ];
 
   // Filtrar los registros cuya fechaPublicacion sea de haceCincoMinutos
