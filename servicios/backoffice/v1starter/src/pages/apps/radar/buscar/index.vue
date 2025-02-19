@@ -4,7 +4,7 @@
       <!-- Bloque Izquierdo -->
       <VCol cols="12" md="6">
         <VCard class="h-100">
-          <VCardTitle>
+          <VCardTitle class="px-6 py-4">
             <h4 class="text-h6 mb-0">Analizador de Sitios Web</h4>
           </VCardTitle>
 
@@ -12,7 +12,7 @@
             <VForm @submit.prevent="analizarSitio">
               <VTextField
                 v-model="url"
-                placeholder="Ingrese la URL del sitio a analizar (ej: https://www.eluniverso.com)"
+                placeholder="Ingrese URL a analizar (ej: https://www.eluniverso.com)"
                 :rules="urlRules"
                 :error-messages="errorMessage"
                 hide-details="auto"
@@ -54,72 +54,123 @@
       </VCol>
 
       <!-- Bloque Derecho -->
-      <VCol cols="12" md="6" v-if="resultados && !error">
-        <VCard class="h-100">
-          <VCardText>
-            <!-- Alertas -->
-            <VAlert
-              v-if="error"
-              type="error"
-              variant="tonal"
-              closable
-              class="mb-4"
-              @click:close="error = null"
-            >
-              <span class="text-caption">{{ error }}</span>
-            </VAlert>
 
-            <VAlert
-              v-if="success"
-              type="success"
-              variant="tonal"
-              closable
-              class="mb-4"
-              @click:close="success = null"
-            >
-              <span class="text-caption">{{ success }}</span>
-            </VAlert>
+    <VCol cols="12" md="6">
+      <!-- Bloque de resultados de análisis -->
+      <VCard v-if="resultados && !error" class="h-100">
+        <VCardText>
+              <!-- Alertas -->
+    <VAlert
+      v-if="error"
+      type="error"
+      variant="tonal"
+      closable
+      class="mb-4 w-100"
+      @click:close="error = null"
+    >
+      <span class="text-caption">{{ error }}</span>
+    </VAlert>
 
-            <VAlert
-              v-if="warning"
-              type="warning"
-              variant="tonal"
-              closable
-              class="mb-4"
-              @click:close="warning = null"
-            >
-              <span class="text-caption">{{ warning }}</span>
-            </VAlert>
+    <VAlert
+      v-if="success"
+      type="success"
+      variant="tonal"
+      closable
+      class="mb-4 w-100"
+      @click:close="success = null"
+    >
+      <span class="text-caption">{{ success }}</span>
+    </VAlert>
 
-            <!-- Información del medio -->
-            <div class="d-flex justify-space-between align-center mb-4">
-              <div>
-                <h6 class="text-subtitle-1 mb-1">
-                  Medio analizado: {{ resultados.source || url }}
-                </h6>
-                <span class="text-caption text-medium-emphasis">
-                  Resultados del análisis: {{ resultados.total }} artículos
-                </span>
-              </div>
-              <VBtn
-                color="success"
-                :loading="guardando"
-                :disabled="guardando || error || success || warning"
-                @click="guardarMedio"
+    <VAlert
+      v-if="warning"
+      type="warning"
+      variant="tonal"
+      closable
+      class="mb-4 w-100"
+      @click:close="warning = null"
+    >
+      <span class="text-caption">{{ warning }}</span>
+    </VAlert>
+
+    <!-- Información del medio -->
+    <div class="d-flex flex-column flex-sm-row justify-space-between align-items-stretch gap-4 mb-4">
+      <div class="w-100">
+        <h6 class="text-subtitle-1 mb-1">
+          Medio analizado: {{ resultados.source || url }}
+        </h6>
+        <span class="text-caption text-medium-emphasis">
+          Resultados del análisis: {{ resultados.total }} artículos
+        </span>
+      </div>
+      <div class="d-flex justify-end w-100">
+        <VBtn
+          color="success"
+          :loading="guardando"
+          :disabled="guardando || error || success || warning || medioYaGuardado"
+          @click="guardarMedio"
+          class="px-6 w-100"
+        >
+          <VIcon
+            start
+            icon="tabler-device-floppy"
+            size="18"
+            class="me-2"
+          />
+          {{ guardando ? 'Guardando...' : 'GUARDAR MEDIO' }}
+        </VBtn>
+      </div>
+    </div>
+              </VCardText>
+      </VCard>
+
+      <!-- Listado de medios (se muestra solo cuando no hay resultados) -->
+      <VCard v-else-if="!resultados" class="h-100">
+        <VCardTitle class="px-6 py-4">
+                <h4 class="text-h6 mb-0">Medios guardados</h4>
+              </VCardTitle>
+
+        <VCardText>
+          <div v-if="loadingMedios" class="d-flex justify-center align-center pa-4">
+            <VProgressCircular indeterminate color="primary" />
+          </div>
+
+          <VList>
+              <VListItem
+                v-for="medio in medios"
+                :key="medio._id"
+                :title="medio.media_communication"
+                class="mb-2 border-b"
               >
-                <VIcon
-                  start
-                  icon="tabler-device-floppy"
-                  size="18"
-                  class="me-2"
-                />
-                {{ guardando ? 'Guardando...' : 'GUARDAR MEDIO' }}
-              </VBtn>
-            </div>
-          </VCardText>
-        </VCard>
-      </VCol>
-    </VRow>
+              <template v-slot:append>
+                <div class="d-flex gap-2">
+                  <VBtn
+                    icon
+                    variant="text"
+                    color="primary"
+                    :href="medio.url_communication"
+                    target="_blank"
+                    size="small"
+                  >
+                    <VIcon icon="tabler-external-link" size="18" />
+                  </VBtn>
+                  <VBtn
+                    icon
+                    variant="text"
+                    color="primary"
+                    @click="analizarMedioExistente(medio.url_communication)"
+                    size="small"
+                  >
+                    <VIcon icon="tabler-eye" size="18" />
+                  </VBtn>
+                </div>
+              </template>
+            </VListItem>
+          </VList>
+        </VCardText>
+      </VCard>
+    </VCol>
+</VRow>
 
     <!-- Lista de artículos abajo -->
     <VRow v-if="resultados && !error">
@@ -220,6 +271,9 @@ const success = ref(null)
 const warning = ref(null)
 const resultados = ref(null)
 const errorMessage = ref('')
+const medios = ref([])
+const loadingMedios = ref(false)
+const medioYaGuardado = ref(false) 
 
 const urlRules = [
   v => !!v || 'La URL es requerida',
@@ -235,6 +289,23 @@ const pegarURL = async () => {
     errorMessage.value = 'No se pudo acceder al portapapeles'
   }
 }
+
+// Función para cargar medios
+const cargarMedios = async () => {
+  loadingMedios.value = true
+  try {
+    const response = await axios.get('https://servicio-competencias.vercel.app/scrapper-rule/all?page=1&limit=100')
+    medios.value = response.data.data
+  } catch (err) {
+    console.error('Error al cargar medios:', err)
+  } finally {
+    loadingMedios.value = false
+  }
+}
+
+onMounted(() => {
+  cargarMedios()
+})
 
 // Función para resetear todo cuando se hace nuevo análisis
 const resetearTodo = () => {
@@ -252,6 +323,7 @@ const limpiarMensajes = () => {
   warning.value = null
 }
 
+// Función para analizar sitio nuevo
 const analizarSitio = async () => {
   if (!urlRules.every(rule => rule(url.value) === true)) {
     error.value = 'Por favor ingrese una URL válida'
@@ -259,7 +331,7 @@ const analizarSitio = async () => {
   }
 
   loading.value = true
-  resetearTodo() // Aquí reseteamos todo porque es nuevo análisis
+  resetearTodo() // Reseteamos todo porque es nuevo análisis
 
   try {
     const response = await axios.post('https://servicio-competencias.vercel.app/analizar-sitio', {
@@ -271,6 +343,12 @@ const analizarSitio = async () => {
     })
     
     resultados.value = response.data
+    verificarMedioGuardado(url.value) // Verificamos si el medio ya está guardado
+
+    // Si está guardado, mostramos una alerta
+    if (medioYaGuardado.value) {
+      warning.value = 'Este medio ya se encuentra registrado'
+    }
   } catch (err) {
     console.error('Error:', err)
     error.value = err.response?.data?.message || 
@@ -278,6 +356,44 @@ const analizarSitio = async () => {
   } finally {
     loading.value = false
   }
+}
+
+// Función para analizar un medio existente
+const analizarMedioExistente = async (url) => {
+  loading.value = true
+  resetearTodo() // Reseteamos todo porque es nuevo análisis
+
+  try {
+    const response = await axios.post('https://servicio-competencias.vercel.app/analizar-sitio', {
+      url: url
+    }, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    
+    resultados.value = response.data
+    verificarMedioGuardado(url) // Verificamos si el medio ya está guardado
+
+    // Como viene del listado, ya sabemos que está guardado
+    warning.value = 'Este medio ya se encuentra registrado'
+  } catch (err) {
+    console.error('Error:', err)
+    error.value = err.response?.data?.message || 
+                 'Error al analizar el sitio. Por favor intente nuevamente.'
+  } finally {
+    loading.value = false
+  }
+}
+
+// Función para verificar si un medio ya está guardado
+const verificarMedioGuardado = (urlActual) => {
+  const medioEncontrado = medios.value.find(medio => 
+    medio.url_communication === urlActual ||
+    urlActual.includes(medio.url_communication) ||
+    medio.url_communication.includes(urlActual)
+  )
+  medioYaGuardado.value = !!medioEncontrado
 }
 
 const guardarMedio = async () => {
@@ -332,7 +448,7 @@ const guardarMedio = async () => {
 
     // Verificar respuesta del servidor
     if (response.data && response.data.resp === false) {
-      warning.value = `Este medio ya se encuentra guardado. Encuéntralo con el nombre "${response.data.key}"`
+      warning.value = `Este medio ya se encuentra guardado con el nombre "${response.data.key}"`
       return
     }
 
@@ -403,4 +519,45 @@ const guardarMedio = async () => {
     }
   }
 }
+
+.match-height {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.match-height > [class*='col'] {
+  display: flex;
+}
+
+.match-height .v-card {
+  width: 100%;
+}
+
+.border-b {
+  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+}
+
+@media (max-width: 600px) {
+  .d-flex.flex-column.flex-sm-row {
+    gap: 16px;
+  }
+  .v-alert {
+    width: 100% !important;
+  }
+  
+  .v-btn {
+    width: 100% !important;
+  }
+  
+  .d-flex.flex-column.flex-sm-row {
+    gap: 16px;
+  }
+
+ 
+}
+.v-alert__content {
+    width: max-content!important;
+}
+
+
 </style>
