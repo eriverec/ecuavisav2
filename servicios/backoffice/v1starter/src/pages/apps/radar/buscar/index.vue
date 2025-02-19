@@ -142,86 +142,98 @@
 
     
        <!-- Listado de medios -->
-  <VCard v-else-if="!resultados" class="h-100">
-    <VCardTitle class="px-6 py-4">
-      <h4 class="text-h6 mb-0">Medios Registrados</h4>
-    </VCardTitle>
+       <VCard v-if="!resultados" class="h-100">
+  <VCardTitle class="px-6 py-4">
+    <h4 class="text-h6 mb-0">Medios Registrados</h4>
+  </VCardTitle>
 
-    <VCardText>
-      <div v-if="loadingMedios" class="d-flex justify-center align-center pa-4">
-        <VProgressCircular indeterminate color="primary" />
-      </div>
+  <VCardText>
+    <div v-if="loadingMedios" class="d-flex justify-center align-center pa-4">
+      <VProgressCircular indeterminate color="primary" />
+    </div>
 
-      <div v-else>
-        <VExpansionPanels>
-  <VExpansionPanel
-    v-for="(grupo, medio) in mediosAgrupados"
-    :key="medio"
-  >
-    <VExpansionPanelTitle>
-      <div class="d-flex align-center">
-        <span class="text-capitalize">{{ medio }}</span>
-        <VChip
-          color="grey-lighten-2"
-          size="x-small"
-          class="ms-2 custom-chip"
+    <div v-else>
+      <VExpansionPanels>
+        <VExpansionPanel
+          v-for="(grupo, medio) in mediosAgrupados"
+          :key="medio"
+          @click="handlePanelChange(medio)"
         >
-          {{ grupo.length }}
-        </VChip>
-      </div>
-    </VExpansionPanelTitle>
-    <VExpansionPanelText>
-      <VList>
-        <VListItem
-          v-for="item in grupo"
-          :key="item._id"
-          :title="formatearTitulo(item.key, item.media_communication)"
-          class="mb-2 border-b"
-        >
-          <template v-slot:append>
-            <div class="d-flex gap-2">
-              <VBtn
-                icon
-                variant="text"
-                color="primary"
-                :href="item.url_communication"
-                target="_blank"
-                size="small"
+          <VExpansionPanelTitle>
+            <div class="d-flex align-center">
+              <span class="text-capitalize">{{ medio }}</span>
+              <VChip
+                color="grey-lighten-2"
+                size="x-small"
+                class="ms-2 custom-chip"
               >
-                <VIcon icon="tabler-external-link" size="18" />
-              </VBtn>
-              <VBtn
-                icon
-                variant="text"
-                color="primary"
-                @click="analizarMedioExistente(item.url_communication)"
-                size="small"
-              >
-                <VIcon icon="tabler-eye" size="18" />
-              </VBtn>
+                {{ medioCounts[medio] || '...' }}
+              </VChip>
             </div>
-          </template>
-        </VListItem>
-      </VList>
-    </VExpansionPanelText>
-  </VExpansionPanel>
-</VExpansionPanels>
+          </VExpansionPanelTitle>
+          
+          <VExpansionPanelText>
+            <!-- Loading state -->
+            <div v-if="loadingMedioData[medio]" class="d-flex justify-center py-4">
+              <VProgressCircular indeterminate color="primary" />
+            </div>
+            
+            <!-- Data display -->
+            <VList v-else-if="mediosData[medio]">
+              <VListItem
+                v-for="item in mediosData[medio]"
+                :key="item._id"
+                :title="formatearTitulo(item.key, medio)"
+                class="mb-2 border-b"
+              >
+                <template v-slot:append>
+                  <div class="d-flex gap-2">
+                    <VBtn
+                      icon
+                      variant="text"
+                      color="primary"
+                      :href="item.url_communication"
+                      target="_blank"
+                      size="small"
+                    >
+                      <VIcon icon="tabler-external-link" size="18" />
+                    </VBtn>
+                    <VBtn
+                      icon
+                      variant="text"
+                      color="primary"
+                      @click="analizarMedioExistente(item.url_communication)"
+                      size="small"
+                    >
+                      <VIcon icon="tabler-zoom-scan" size="18" />
+                    </VBtn>
+                  </div>
+                </template>
+              </VListItem>
+            </VList>
+          </VExpansionPanelText>
+        </VExpansionPanel>
+      </VExpansionPanels>
 
-        <!-- Paginación -->
-        <div class="d-flex justify
--center mt-4">
-<VPagination
-    v-if="totalPages > 1"
-    v-model="currentPage"
+      <!-- Paginación principal -->
+      <div 
+  v-if="totalPages > 1" 
+  class="d-flex flex-column align-center mt-4 gap-2"
+>
+  <VPagination
+    :model-value="currentPage"
     :length="totalPages"
     :total-visible="5"
-    active-color="primary"
+    :disabled="loadingMedios"
     @update:model-value="cambiarPagina"
+    class="pagination-custom"
   />
-        </div>
-      </div>
-    </VCardText>
-  </VCard>
+</div>
+    </div>
+  </VCardText>
+</VCard>
+
+
     </VCol>
 </VRow>
 
@@ -327,6 +339,13 @@ const medios = ref([])
 const loadingMedios = ref(false)
 const medioYaGuardado = ref(false)
 
+const itemsPerPage = 10
+const currentPage = ref(1)
+const totalPages = ref(0)
+const mediosData = ref({}) // Datos por medio
+const loadingMedioData = ref({}) // Estado de carga por medio
+const medioCounts = ref({}) // Conteo real por medio
+
 
 const urlRules = [
   v => !!v || 'La URL es requerida',
@@ -335,9 +354,68 @@ const urlRules = [
 
 const mediosAgrupados = ref({})
 
-const itemsPerPage = 10 
-const currentPage = ref(1)
-const totalPages = ref(0)
+// Agregar estos refs al inicio
+const loadingMedioDetails = ref({}) // Para tracking del loading por medio
+const medioDetalles = ref({}) // Para almacenar los detalles de cada medio
+const medioPaginas = ref({}) // Para manejar la paginación por medio
+
+// Función para cargar los detalles de un medio específico
+const cargarDetallesMedio = async (medio, page = 1) => {
+  try {
+    loadingMedioDetails.value[medio] = true
+    console.log(`Cargando página ${page} del medio ${medio}`)
+
+    const response = await axios.get(`https://servicio-competencias.vercel.app/scrapper-rule/medio/${medio}`, {
+      params: {
+        page: page,
+        limit: itemsPerPage
+      }
+    })
+
+    console.log('Respuesta del servidor:', response.data)
+    
+    if (response.data && Array.isArray(response.data.data)) {
+      // Actualizar los detalles del medio
+      medioDetalles.value[medio] = response.data.data
+      
+      // Actualizar información de paginación para este medio
+      medioPaginas.value[medio] = {
+        currentPage: parseInt(response.data.page),
+        totalPages: Math.ceil(response.data.total / itemsPerPage),
+        total: response.data.total
+      }
+
+      console.log('Información de paginación actualizada:', medioPaginas.value[medio])
+    }
+  } catch (err) {
+    console.error(`Error al cargar detalles del medio ${medio}:`, err)
+    // En caso de error, inicializar con valores por defecto
+    medioDetalles.value[medio] = []
+    medioPaginas.value[medio] = {
+      currentPage: 1,
+      totalPages: 1,
+      total: 0
+    }
+  } finally {
+    loadingMedioDetails.value[medio] = false
+  }
+}
+
+// Función para manejar el cambio de página por medio
+const cambiarPaginaMedio = async (medio, newPage) => {
+  console.log(`Cambiando a página ${newPage} del medio ${medio}`)
+  if (medioPaginas.value[medio]?.currentPage !== newPage) {
+    await cargarDetallesMedio(medio, newPage)
+  }
+}
+
+// Función para manejar la expansión del acordeón
+const handleAccordionChange = async (medio, isOpen) => {
+  // Solo cargar si se está abriendo y no hay datos previos
+  if (isOpen && !medioDetalles.value[medio]) {
+    await cargarDetallesMedio(medio, 1)
+  }
+}
 
 
 const obtenerNombreMedio = (key) => {
@@ -355,79 +433,36 @@ const regresar = () => {
   // Resetear estados
   resetearTodo()
   url.value = ''
-  // Recargar la lista de medios
   cargarMedios(1)
 }
 
-// const cargarMedios = async (page = 1) => {
-//   loadingMedios.value = true
-//   try {
-//     console.log('Cargando medios página:', page)
-//     const response = await axios.get(`http://localhost:8088/scrapper-rule/all`, {
-//       params: {
-//         page: page,
-//         limit: itemsPerPage
-//       }
-//     })
-    
-//     console.log('Respuesta de cargar medios:', response.data)
-    
-//     if (response.data && Array.isArray(response.data.data)) {
-//       let gruposActuales = { ...mediosAgrupados.value }
-      
-//       response.data.data.forEach(item => {
-//         if (item && item.media_communication) {
-//           const nombreMedio = item.media_communication.trim().toLowerCase()
-//           if (!gruposActuales[nombreMedio]) {
-//             gruposActuales[nombreMedio] = []
-//           }
-//           // Verificar duplicados antes de agregar
-//           const itemExiste = gruposActuales[nombreMedio].some(
-//             existente => existente._id === item._id
-//           )
-//           if (!itemExiste) {
-//             gruposActuales[nombreMedio].push(item)
-//           }
-//         }
-//       })
-      
-//       mediosAgrupados.value = gruposActuales
-//       medios.value = [...medios.value, ...response.data.data]
-//       totalPages.value = Math.ceil(response.data.total / itemsPerPage)
-      
-//       console.log('Medios cargados:', medios.value.length)
-//       console.log('Grupos actualizados:', Object.keys(gruposActuales))
-//     }
-//   } catch (err) {
-//     console.error('Error al cargar medios:', err)
-//     console.error('Detalles del error:', err.response?.data)
-//   } finally {
-//     loadingMedios.value = false
-//   }
-// }
 
-const cargarMedios = async (page = 1) => {
+const cargarMedios = async (page) => {
   loadingMedios.value = true
+  mediosAgrupados.value = {} // Limpiar grupos actuales
+  
   try {
-    console.log('Cargando página:', page, 'con límite:', itemsPerPage)
-    
-    // Asegurarnos de que los parámetros se envíen correctamente
     const params = new URLSearchParams({
       page: page.toString(),
       limit: itemsPerPage.toString()
     })
     
+    console.log(`Cargando página ${page} con params:`, params.toString())
+    
     const response = await axios.get(
       `https://servicio-competencias.vercel.app/scrapper-rule/all?${params.toString()}`
     )
     
-    console.log('Respuesta completa:', response.data)
+    console.log('Datos recibidos:', response.data)
     
     if (response.data && Array.isArray(response.data.data)) {
-      // Reiniciar los grupos para cada página
-      const grupos = {}
+      // Resetear todos los estados
+      mediosData.value = {}
+      loadingMedioData.value = {}
+      medioCounts.value = {}
       
-      // Procesar solo los datos de la página actual
+      // Agrupar por media_communication
+      const grupos = {}
       response.data.data.forEach(item => {
         if (item && item.media_communication) {
           const nombreMedio = item.media_communication.trim().toLowerCase()
@@ -438,40 +473,84 @@ const cargarMedios = async (page = 1) => {
         }
       })
       
-      // Ordenar cada grupo
-      Object.keys(grupos).forEach(medio => {
-        grupos[medio].sort((a, b) => {
-          if (a.key === a.media_communication) return -1
-          if (b.key === b.media_communication) return 1
-          return a.key.localeCompare(b.key)
-        })
-      })
-      
-      // Actualizar estado
+      // Actualizar estados
       mediosAgrupados.value = grupos
-      medios.value = response.data.data
-      
-      // Calcular el total de páginas basado en el total de registros
-      const total = response.data.total || 0
-      totalPages.value = Math.ceil(total / itemsPerPage)
+      totalPages.value = Math.ceil(response.data.total / itemsPerPage)
       currentPage.value = page
       
-      console.log('Items en esta página:', response.data.data.length)
-      console.log('Total de registros:', total)
-      console.log('Total de páginas calculadas:', totalPages.value)
-      console.log('IDs de registros en esta página:', response.data.data.map(item => item._id))
+      // Cargar conteos para cada medio
+      Object.keys(grupos).forEach(medio => {
+        cargarConteoMedio(medio)
+      })
+      
+      console.log('Grupos actualizados:', Object.keys(grupos))
+      console.log('Total páginas:', totalPages.value)
     }
   } catch (err) {
     console.error('Error al cargar medios:', err)
-    console.error('Detalles del error:', err.response?.data)
+    mediosAgrupados.value = {}
   } finally {
     loadingMedios.value = false
   }
 }
 
-const cambiarPagina = (newPage) => {
-  console.log('Cambiando a página:', newPage)
-  cargarMedios(newPage)
+// Función de cambio de página simplificada y forzada
+const cambiarPagina = async (newPage) => {
+  console.log(`Forzando cambio a página ${newPage}`)
+  await cargarMedios(newPage)
+}
+
+const cargarConteoMedio = async (medio) => {
+  try {
+    const url = `https://servicio-competencias.vercel.app/scrapper-rule/medio/${medio}`
+    const response = await axios.get(url)
+    
+    if (response.data) {
+      medioCounts.value[medio] = response.data.total
+      console.log(`Conteo para ${medio}:`, response.data.total)
+    }
+  } catch (err) {
+    console.error(`Error al cargar conteo de ${medio}:`, err)
+  }
+}
+
+
+
+// Asegurar que onMounted cargue la primera página
+onMounted(async () => {
+  await cargarMedios(1)
+})
+
+// Función para cargar datos de un medio específico
+const cargarDatosMedio = async (medio) => {
+  try {
+    loadingMedioData.value[medio] = true
+    
+    const response = await axios.get(
+      `https://servicio-competencias.vercel.app/scrapper-rule/medio/${medio}`,
+      {
+        params: {
+          page: '1',
+          limit: '100' // Cargar todos los datos del medio
+        }
+      }
+    )
+    
+    if (response.data && Array.isArray(response.data.data)) {
+      mediosData.value[medio] = response.data.data
+      medioCounts.value[medio] = response.data.total // Actualizar el conteo
+    }
+  } catch (err) {
+    console.error(`Error al cargar datos del medio ${medio}:`, err)
+  } finally {
+    loadingMedioData.value[medio] = false
+  }
+}
+
+const handlePanelChange = async (medio) => {
+  if (!mediosData.value[medio]) {
+    await cargarDatosMedio(medio)
+  }
 }
 
 
@@ -843,5 +922,11 @@ onMounted(() => {
   padding: 0 6px !important;
 }
 
-
+.pagination-custom {
+  :deep(.v-pagination__item) {
+    min-width: 32px;
+    height: 32px;
+    font-size: 0.875rem;
+  }
+}
 </style>
