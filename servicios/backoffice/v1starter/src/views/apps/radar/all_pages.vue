@@ -26,7 +26,7 @@ const filtrosActivos = reactive({
 
 const buscar_dato = ref(null)
 const selectedItemSitioWeb = ref(null)
-const itemsSitioWeb = ref(["PRIMICIAS", "EL UNIVERSO", "EXPRESO", "ECUAVISA","EL COMERCIO", "TC TELEVISIÓN","INFOBAE"]);
+const itemsSitioWeb = ref(["PRIMICIAS", "EL UNIVERSO", "EXPRESO", "ECUAVISA","EL COMERCIO", "TC TELEVISIÓN","INFOBAE","TELEAMAZONAS"]);
 
 const selectedItemSeccion = ref(null)
 const itemsSitioWebSeccion = ref([]);
@@ -129,7 +129,7 @@ const principalData = async function(){
     loadingBtn.value = true;
     totalesSitios.value = [];
     
-    const [primiciasList, elUniersoList, expresoList, ecuavisaList, elComercioList, tcTelevisioList, infobaeList] = await Promise.all([
+    const [primiciasList, elUniersoList, expresoList, ecuavisaList, elComercioList, tcTelevisioList, infobaeList, teleamazonasList] = await Promise.all([
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/primicias/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-universo/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-expreso/config.php?api=all'),
@@ -137,6 +137,7 @@ const principalData = async function(){
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/el-comercio/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/tc/config.php?api=all'),
       fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/infobae/config.php?api=all'),
+      fetchAndProcess('https://services.ecuavisa.com/gestor/competencias/teleamazonas/config.php?api=all'),
     ]);
     
 
@@ -157,6 +158,7 @@ const principalData = async function(){
       ...processArticles(elComercioList, "EL COMERCIO", "success"),
       ...processArticles(tcTelevisioList, "TC TELEVISIÓN", "info"),
       ...processArticles(infobaeList, "INFOBAE", "primary"),
+      ...processArticles(teleamazonasList, "TELEAMAZONAS", "error"),
     ];
 
     const storedData = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
