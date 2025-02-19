@@ -17,7 +17,28 @@
                 :error-messages="errorMessage"
                 hide-details="auto"
                 class="mb-4"
-              />
+              >
+                <!-- Icono de resetear -->
+                <template v-slot:append-inner>
+                  <VIcon
+                    v-if="url"
+                    icon="tabler-x"
+                    size="18"
+                    class="cursor-pointer"
+                    @click="url = ''"
+                  />
+                </template>
+                
+                <!-- Icono de pegar -->
+                <template v-slot:append>
+                  <VIcon
+                    icon="tabler-clipboard"
+                    size="18"
+                    class="cursor-pointer"
+                    @click="pegarURL"
+                  />
+                </template>
+              </VTextField>
               <VBtn
                 type="submit"
                 :loading="loading"
@@ -205,6 +226,16 @@ const urlRules = [
   v => /^(http|https):\/\/[^ "]+$/.test(v) || 'Ingrese una URL válida'
 ]
 
+const pegarURL = async () => {
+  try {
+    const texto = await navigator.clipboard.readText()
+    url.value = texto
+  } catch (err) {
+    console.error('Error al pegar:', err)
+    errorMessage.value = 'No se pudo acceder al portapapeles'
+  }
+}
+
 // Función para resetear todo cuando se hace nuevo análisis
 const resetearTodo = () => {
   error.value = null
@@ -301,7 +332,7 @@ const guardarMedio = async () => {
 
     // Verificar respuesta del servidor
     if (response.data && response.data.resp === false) {
-      warning.value = `Esta guardado con el nombre "${response.data.key}"`
+      warning.value = `Este medio ya se encuentra guardado. Encuéntralo con el nombre "${response.data.key}"`
       return
     }
 
