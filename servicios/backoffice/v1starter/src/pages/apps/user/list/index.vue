@@ -1256,7 +1256,7 @@ const resolveFechaSelected = (fechas) => {
 
             <div class="d-flex align-init flex-wrap gap-2">
               <!-- 👉 Search  -->
-              <div class="d-none" style="width: 10rem">
+              <div style="width: 10rem">
                 <VTextField
                   v-model="searchQuery"
                   placeholder="Buscar..."
@@ -1264,10 +1264,10 @@ const resolveFechaSelected = (fechas) => {
                 />
               </div>
               <!-- 👉 Search button -->
-              <VBtn class="d-none" prepend-icon="tabler-search" @click="searchUsers"/>
+              <VBtn prepend-icon="tabler-search" @click="searchUsers"/>
               
               <!-- 👉 Reset button -->
-              <VBtn class="d-none" color="secondary" @click="reset"> Reiniciar </VBtn>
+              <VBtn color="secondary" @click="reset"> Reiniciar </VBtn>
               <!-- 👉 Export button -->
               <div class="d-flex flex-wrap flex-column d-none">
                 <VBtn               
@@ -1277,7 +1277,7 @@ const resolveFechaSelected = (fechas) => {
                   @click="downloadFull"
                   :loading="isFullLoading"
                   :disabled="disabledBtnExportAll"
-                  class="d-none"
+                  
                 >
                   <span>Exportar Todo</span>
                   <VTooltip 
@@ -1302,7 +1302,7 @@ const resolveFechaSelected = (fechas) => {
                 prepend-icon="tabler-screen-share"
                 @click="downloadSection"
                 :disabled="disabledBtnExportSection"
-                class="d-none"
+              
               >
                 Exportar sección
               </VBtn>
@@ -1314,7 +1314,7 @@ const resolveFechaSelected = (fechas) => {
                   @click="downloadSearch"
                   :loading="isSearchLoading"
                   :disabled="disabledBtnExportSearch"
-                  class="d-none"
+                
                 >
                   Exportar búsqueda
                 </VBtn>
