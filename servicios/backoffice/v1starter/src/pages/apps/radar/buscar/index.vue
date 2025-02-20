@@ -232,95 +232,198 @@
     </div>
   </VCardText>
 </VCard>
-
-
     </VCol>
 </VRow>
 
     <!-- Lista de artículos abajo -->
+
     <VRow v-if="resultados && !error">
-      <VCol cols="12">
-        <div class="article-list">
-                <div 
-                  v-for="(articulo, index) in resultados.articles" 
-                  :key="index"
-                  class="article-item"
-                >
-                  <div class="d-flex align-items-center gap-3 py-2 border-b">
-                    <!-- Imagen o icono -->
-                    <div class="article-image">
-                      <VImg
-                        v-if="articulo.image"
-                        :src="articulo.image"
-                        :alt="articulo.title"
-                        width="50"
-                        height="50"
-                        cover
-                        class="rounded"
-                      />
-                      <VIcon
-                        v-else
-                        icon="tabler-file-text"
-                        size="32"
-                        class="text-medium-emphasis"
-                      />
-                    </div>
-
-                    <!-- Contenido del artículo -->
-                    <div class="article-content flex-grow-1 min-w-0">
-                      <div class="d-flex align-items-center gap-2 mb-1">
-                        <VChip
-                          v-if="articulo.category"
-                          color="info"
-                          size="x-small"
-                          class="text-uppercase"
-                        >
-                          {{ articulo.category }}
-                        </VChip>
-                        <span class="text-caption text-medium-emphasis">
-                          {{ articulo.timestamp || '' }}
-                        </span>
-                      </div>
-
-                      <h6 class="text-subtitle-2 mb-1 text-truncate">{{ articulo.title }}</h6>
-                      
-                      <p v-if="articulo.summary" class="text-caption text-medium-emphasis mb-0 d-none d-sm-block text-truncate">
-                        {{ articulo.summary }}
-                      </p>
-                    </div>
-
-                    <!-- Botón Ver Artículo -->
-                    <div class="article-action">
-                      <VBtn
-                        v-if="articulo.link"
-                        :href="articulo.link"
-                        target="_blank"
-                        variant="text"
-                        size="small"
-                        color="primary"
-                        class="d-none d-sm-flex"
-                      >
-                        <VIcon start icon="tabler-external-link" size="16" />
-                        VER ARTÍCULO
-                      </VBtn>
-                      <VBtn
-                        v-if="articulo.link"
-                        :href="articulo.link"
-                        target="_blank"
-                        variant="text"
-                        size="small"
-                        color="primary"
-                        icon
-                        class="d-sm-none"
-                      >
-                        <VIcon icon="tabler-external-link" size="16" />
-                      </VBtn>
-                    </div>
+  <VCol cols="12">
+    <div class="article-list">
+      <div 
+        v-for="(articulo, index) in resultados.articles" 
+        :key="index"
+        class="article-item"
+      >
+        <div class="d-flex align-items-center gap-3 py-4 border-b">
+          <!-- Imagen con placeholder -->
+          <div class="article-image">
+            <div class="image-container rounded overflow-hidden">
+              <VImg
+                v-if="articulo.image"
+                :src="articulo.image"
+                :alt="articulo.title || 'Imagen del artículo'"
+                width="80"
+                height="80"
+                cover
+                class="rounded"
+              >
+                <template v-slot:placeholder>
+                  <div class="d-flex align-items-center justify-content-center h-100 bg-light">
+                    <VIcon
+                      icon="tabler-photo"
+                      size="24"
+                      class="text-medium-emphasis"
+                    />
                   </div>
-                </div>
+                </template>
+              </VImg>
+              <div
+                v-else
+                class="placeholder-image d-flex align-items-center justify-content-center bg-light h-100"
+              >
+                <VIcon
+                  icon="tabler-file-text"
+                  size="32"
+                  class="text-medium-emphasis"
+                />
               </div>
-      </VCol>
-    </VRow>
+            </div>
+          </div>
+
+          <!-- Contenido del artículo -->
+          <div class="article-content flex-grow-1 min-w-0">
+            <!-- Metadatos superiores -->
+            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
+              <!-- Categoría -->
+              <VChip
+                v-if="articulo.category"
+                color="info"
+                size="x-small"
+                class="text-uppercase"
+              >
+                {{ articulo.category }}
+              </VChip>
+              <VChip
+                v-else
+                color="grey-lighten-1"
+                size="x-small"
+                class="text-uppercase"
+              >
+                Sin categoría
+              </VChip>
+              
+              <!-- Fecha y Autor -->
+              <div class="d-flex align-items-center gap-2">
+                <span v-if="articulo.timestamp" class="text-caption text-medium-emphasis d-flex align-items-center">
+                  {{ formatearFecha(articulo.timestamp) }}
+                </span>
+                <span v-else class="text-caption text-medium-emphasis">
+                  Fecha no disponible
+                </span>
+
+                <span 
+                  v-if="getAuthorName(articulo.author)" 
+                  class="text-caption text-medium-emphasis d-flex align-items-center gap-1"
+                >
+                  <VIcon icon="tabler-user" size="14" />
+                  <template v-if="getAuthorLink(articulo.author)">
+                    <a 
+                      :href="getAuthorLink(articulo.author)"
+                      target="_blank"
+                      class="text-decoration-none text-primary"
+                    >
+                      {{ getAuthorName(articulo.author) }}
+                    </a>
+                  </template>
+                  <template v-else>
+                    {{ getAuthorName(articulo.author) }}
+                  </template>
+                </span>
+              </div>
+
+              <!-- Tags -->
+              <div v-if="articulo.tags" class="d-flex flex-wrap gap-1 ms-auto">
+                <VChip
+                  v-for="tag in getArticleTags(articulo.tags)"
+                  :key="tag"
+                  size="x-small"
+                  color="grey-lighten-3"
+                  variant="text"
+                  class="text-caption"
+                >
+                  {{ tag }}
+                </VChip>
+              </div>
+            </div>
+
+            <!-- Título y resumen -->
+            <div class="content-wrapper">
+              <h6 class="text-subtitle-1 mb-2 text-truncate" :title="articulo.title || 'Título no disponible'">
+                {{ articulo.title || 'Título no disponible' }}
+              </h6>
+              
+              <p 
+                v-if="validateSummary(articulo.summary)" 
+                class="text-body-2 text-medium-emphasis mb-2 d-none d-sm-block description-text"
+                :title="validateSummary(articulo.summary)"
+              >
+                {{ validateSummary(articulo.summary) }}
+              </p>
+              <p v-else class="text-body-2 text-medium-emphasis mb-2 d-none d-sm-block fst-italic">
+                Resumen no disponible
+              </p>
+
+              <!-- Tags o keywords si existen -->
+              <div v-if="articulo.tags && articulo.tags.length" class="d-flex flex-wrap gap-1 mt-2">
+                <VChip
+                  v-for="tag in articulo.tags"
+                  :key="tag"
+                  size="x-small"
+                  color="grey-lighten-3"
+                  class="text-caption"
+                >
+                  {{ tag }}
+                </VChip>
+              </div>
+            </div>
+          </div>
+
+          <!-- Acciones -->
+          <div class="article-action">
+            <VBtn
+              v-if="articulo.link"
+              :href="articulo.link"
+              target="_blank"
+              variant="solo"
+              size="small"
+              color="primary"
+              class="d-none d-sm-flex"
+            >
+              <VIcon start icon="tabler-external-link" size="16" class="me-1" />
+              VER ARTÍCULO
+            </VBtn>
+            <VBtn
+              v-if="articulo.link"
+              :href="articulo.link"
+              target="_blank"
+              variant="solo"
+              size="small"
+              color="primary"
+              icon
+              class="d-sm-none"
+            >
+              <VIcon icon="tabler-external-link" size="16" />
+            </VBtn>
+            <VBtn
+              v-else
+              disabled
+              variant="text"
+              size="small"
+              color="grey-lighten-1"
+              class="d-none d-sm-flex"
+            >
+              <VIcon start icon="tabler-link-off" size="16" class="me-1" />
+              NO DISPONIBLE
+            </VBtn>
+          </div>
+        </div>
+      </div>
+    </div>
+  </VCol>
+</VRow>
+  
+
   </div>
 </template>
 
@@ -354,7 +457,6 @@ const urlRules = [
 
 const mediosAgrupados = ref({})
 
-// Agregar estos refs al inicio
 const loadingMedioDetails = ref({}) // Para tracking del loading por medio
 const medioDetalles = ref({}) // Para almacenar los detalles de cada medio
 const medioPaginas = ref({}) // Para manejar la paginación por medio
@@ -494,7 +596,6 @@ const cargarMedios = async (page) => {
   }
 }
 
-// Función de cambio de página simplificada y forzada
 const cambiarPagina = async (newPage) => {
   console.log(`Forzando cambio a página ${newPage}`)
   await cargarMedios(newPage)
@@ -514,9 +615,6 @@ const cargarConteoMedio = async (medio) => {
   }
 }
 
-
-
-// Asegurar que onMounted cargue la primera página
 onMounted(async () => {
   await cargarMedios(1)
 })
@@ -552,8 +650,6 @@ const handlePanelChange = async (medio) => {
     await cargarDatosMedio(medio)
   }
 }
-
-
 
 const formatearTitulo = (key, medio) => {
   // Normalizar tanto el key como el medio para la comparación
@@ -726,7 +822,6 @@ const verificarMedioGuardado = (urlActual) => {
   }
 }
 
-
 const guardarMedio = async () => {
   if (!resultados.value) return
 
@@ -808,46 +903,144 @@ const guardarMedio = async () => {
   }
 }
 
-// onMounted(async () => {
-//   // Cargar primera página
-//   await cargarMedios(1)
-  
-//   // Si hay más páginas, cargarlas
-//   if (totalPages.value > 1) {
-//     for (let page = 2; page <= totalPages.value; page++) {
-//       await cargarMedios(page)
-//     }
-//   }
-// })
-
 onMounted(() => {
   cargarMedios(1)
 })
+
+// Función para obtener el nombre del autor del objeto
+const getAuthorName = (author) => {
+  if (!author) return '';
+  
+  // Si el autor es un string directo, retornarlo
+  if (typeof author === 'string') return author;
+  
+  // Si es un objeto con propiedad name
+  if (typeof author === 'object' && author.name) {
+    return author.name;
+  }
+  
+  // Si es un objeto pero está en formato string
+  if (typeof author === 'object' && typeof author.toString === 'function') {
+    try {
+      const authorObj = JSON.parse(author.toString());
+      return authorObj.name || '';
+    } catch (e) {
+      return author.toString();
+    }
+  }
+  
+  return '';
+}
+
+// Función para obtener el link del autor si existe
+const getAuthorLink = (author) => {
+  if (!author) return null;
+  
+  // Si es un objeto con propiedad link
+  if (typeof author === 'object' && author.link) {
+    return author.link;
+  }
+  
+  // Si es un objeto pero está en formato string
+  if (typeof author === 'object' && typeof author.toString === 'function') {
+    try {
+      const authorObj = JSON.parse(author.toString());
+      return authorObj.link || null;
+    } catch (e) {
+      return null;
+    }
+  }
+  
+  return null;
+}
+
+// Función para formatear la fecha de manera uniforme
+const formatearFecha = (timestamp) => {
+  if (!timestamp) return '';
+  
+  try {
+    const fecha = new Date(timestamp);
+    if (isNaN(fecha.getTime())) {
+      // Si no es una fecha válida, intentar parsear otros formatos comunes
+      const matches = timestamp.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      if (matches) {
+        fecha = new Date(`${matches[3]}-${matches[2]}-${matches[1]}`);
+      }
+    }
+    
+    // Si tenemos una fecha válida, formatearla
+    if (!isNaN(fecha.getTime())) {
+      return fecha.toLocaleDateString('es-ES', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit'
+      }).replace(',', '');
+    }
+    
+    // Si no se puede parsear, devolver el timestamp original
+    return timestamp;
+  } catch (e) {
+    return timestamp;
+  }
+}
+
+// Función para procesar los tags del artículo
+const getArticleTags = (tags) => {
+  if (!tags) return [];
+  
+  // Si tags es un string, intentar parsearlo como JSON
+  if (typeof tags === 'string') {
+    try {
+      return JSON.parse(tags);
+    } catch (e) {
+      return [tags]; // Si no es JSON válido, devolver como un solo tag
+    }
+  }
+  
+  // Si es un array, devolverlo directamente
+  if (Array.isArray(tags)) {
+    return tags;
+  }
+  
+  // Si es un objeto, convertir sus valores en un array
+  if (typeof tags === 'object') {
+    return Object.values(tags).filter(tag => tag);
+  }
+  
+  return [];
+}
+
+// Función para validar y limpiar el summary
+const validateSummary = (summary) => {
+  if (!summary) return '';
+  
+  // Verificar si el summary contiene el código de imageLoadError
+  if (summary.trim().startsWith('function imageLoadError')) {
+    return '';
+  }
+  
+  return summary;
+}
 
 </script>
 
 <style lang="scss" scoped>
 .article-list {
-  .article-item {
-    .article-image {
-      min-width: 50px;
-      width: 50px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .article-content {
-      min-width: 0; 
-    }
-
-    .article-action {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
+    .article-item {
+      .article-image {
+        min-width: 60px;
+        width: 60px;
+      }
+      
+      .article-content {
+        .text-subtitle-1 {
+          font-size: 0.875rem;
+        }
+      }
     }
   }
-}
 
 .border-b {
   border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
@@ -927,6 +1120,75 @@ onMounted(() => {
     min-width: 32px;
     height: 32px;
     font-size: 0.875rem;
+  }
+}
+
+.article-list {
+  .article-item {
+    transition: background-color 0.2s ease;
+    
+    &:hover {
+      background-color: rgba(var(--v-theme-primary), 0.05);
+    }
+
+    .article-image {
+      min-width: 80px;
+      width: 80px;
+      
+      .image-container {
+        aspect-ratio: 1;
+        overflow: hidden;
+      }
+      
+      .placeholder-image {
+        width: 100%;
+        height: 100%;
+        aspect-ratio: 1;
+        background-color: rgba(var(--v-theme-on-surface), 0.05);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        
+        .v-icon {
+          opacity: 0.5;
+        }
+      }
+    }
+
+    .article-content {
+      min-width: 0;
+      
+      .description-text {
+        display: -webkit-box;
+        // -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+
+    .article-action {
+      margin-left: auto;
+      display: flex;
+      align-items: center;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .article-list {
+    .article-item {
+      .article-image {
+        min-width: 60px;
+        width: 60px;
+      }
+      
+      .article-content {
+        .text-subtitle-1 {
+          font-size: 0.875rem;
+        }
+      }
+    }
   }
 }
 </style>
