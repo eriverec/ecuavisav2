@@ -1,6 +1,6 @@
 <script setup>
-import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-dia.vue';
-import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticias.vue';
+import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-diav2.vue';
+import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticiasv2.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -41,16 +41,18 @@ const selectedItemSitioWeb = ref(null)
 
 
 
-const itemsSitioWeb = ref([
-  "PRIMICIAS",
-  "EL UNIVERSO", 
-  "EXPRESO",
-  "ECUAVISA",
-  "EL COMERCIO",
-  "TC TELEVISIÓN",
-  "INFOBAE",
-  "TELEAMAZONAS"
-]);
+// const itemsSitioWeb = ref([
+//   "PRIMICIAS",
+//   "EL UNIVERSO", 
+//   "EXPRESO",
+//   "ECUAVISA",
+//   "EL COMERCIO",
+//   "TC TELEVISIÓN",
+//   "INFOBAE",
+//   "TELEAMAZONAS"
+// ]);
+
+const itemsSitioWeb = ref([]);
 
 
 const selectedItemSeccion = ref(null)
@@ -111,6 +113,33 @@ function unificarYFiltrarDuplicados(data) {
   return resultado.articles;
 }
 
+// Add a function to fetch and process site names
+async function loadSiteNames() {
+  try {
+    const response = await fetch('https://services.ecuavisa.com/gestor/competencias/generate_config.php');
+    const endpoints = await response.json();
+
+    // Process the site names from the endpoints
+    const siteNames = Object.keys(endpoints).map(key => {
+      const siteName = key.toUpperCase().replace(/-/g, ' ');
+      // Special cases handling
+      switch (siteName) {
+        case 'TC':
+          return 'TC TELEVISIÓN';
+        case 'EL EXPRESO':
+          return 'EXPRESO';
+        default:
+          return siteName;
+      }
+    });
+
+    // Update the itemsSitioWeb ref
+    itemsSitioWeb.value = siteNames;
+  } catch (error) {
+    console.error('Error loading site names:', error);
+  }
+}
+
 async function fetchAndProcess(url) {
   try {
     const response = await fetch(url);
@@ -149,6 +178,9 @@ const totalesSitios = ref([]);
 //   return resultado;
 // }
 
+// Add this array of available colors at the top with other constants
+const availableColors = ['primary', 'info', 'error', 'warning', 'success'];
+
 const principalData = async function () {
   try {
     loadingBtn.value = true;
@@ -158,27 +190,22 @@ const principalData = async function () {
     const configResponse = await fetch('https://services.ecuavisa.com/gestor/competencias/generate_config.php');
     const endpoints = await configResponse.json();
 
+    // Create dynamic siteConfig with random colors
+    const siteConfig = {};
+    Object.keys(endpoints).forEach((site, index) => {
+      const siteName = site.toUpperCase().replace(/-/g, ' ');
+      const colorIndex = index % availableColors.length;
+      siteConfig[siteName] = { color: availableColors[colorIndex] };
+    });
+
     // Create an array of promises for all endpoints
     const fetchPromises = Object.entries(endpoints).map(([key, url]) => fetchAndProcess(url));
-
-    // Wait for all requests to complete
     const results = await Promise.all(fetchPromises);
 
     // First, create a mapping object for display names
     const siteDisplayNames = {
       'TC': 'TC TELEVISIÓN',
       'EL EXPRESO': 'EXPRESO'
-    };
-
-    const siteConfig = {
-      'PRIMICIAS': { color: 'primary' },
-      'EL UNIVERSO': { color: 'info' },
-      'EL EXPRESO': { color: 'error' },
-      'ECUAVISA': { color: 'warning' },
-      'EL COMERCIO': { color: 'success' },
-      'TC': { color: 'info' },
-      'INFOBAE': { color: 'primary' },
-      'TELEAMAZONAS': { color: 'warning' }
     };
 
     const processArticles = (list, sitio, color) => {
@@ -257,6 +284,8 @@ onMounted(async () => {
   // } else {
   //   await principalData();
   // }
+
+  await loadSiteNames();
   await principalData();
   itemsSitioWebSeccion.value = getUniqueVerticals();
   itemsSitioWebSubSeccion.value = getUniqueSubVerticals();
@@ -342,13 +371,13 @@ function docDataProcess() {
     const secciones = filtrosActivos.seccion || [];
     const subseccion = filtrosActivos.subseccion || [];
 
-    if(!query && sitio.length === 0 && secciones.length === 0 && subseccion.length === 0){
+    if (!query && sitio.length === 0 && secciones.length === 0 && subseccion.length === 0) {
       lastResults.value = processedData.value;
-    }else{
+    } else {
       lastResults.value = processedData.value.filter(item => {
-        const matchesBusqueda = !query || 
-          item.vertical.toLowerCase().includes(query) || 
-          item.autor?.toLowerCase().includes(query) || 
+        const matchesBusqueda = !query ||
+          item.vertical.toLowerCase().includes(query) ||
+          item.autor?.toLowerCase().includes(query) ||
           item.titulo.toLowerCase().includes(query);
 
         // Modified site matching to handle display names
@@ -435,9 +464,9 @@ const paginatedData = computed(() => {
               </div>
               <div class="w-100 mt-4 flex justify-center" v-if="filteredData.length > 0">
                 <VRow class="flex justify-center">
-                  <VCol cols="12" sm="8" lg="8" class="">
+                  <VCol cols="12" sm="12" lg="12" class="">
                     <VRow class="flex justify-center">
-                      <VCol cols="12" sm="6" lg="6" class="">
+                      <VCol cols="12"  sm="12" lg="6" class="">
                         <VCard class="elevation-0 border rounded no-truncate" title="Artículos de hoy"
                           subtitle="Agrupados por medios digitales según la fecha de publicación de los artículos">
                           <VCardText>
@@ -445,7 +474,7 @@ const paginatedData = computed(() => {
                           </VCardText>
                         </VCard>
                       </VCol>
-                      <VCol cols="12" sm="6" lg="6" class="">
+                      <VCol cols="12" sm="12" lg="6" class="">
                         <VCard class="elevation-0 border rounded no-truncate"
                           title="Nuevos artículos creados dentro de los últimos 30 minutos"
                           subtitle="Agrupados por medios digitales">
