@@ -31,6 +31,7 @@ export default [
         { title: 'El Universo', to: 'apps-radar-el-universo' },
         { title: 'TC Televisión', to: 'apps-radar-tc' },
         { title: 'Infobae', to: 'apps-radar-infobae' },
+        { title: 'Teleamazonas', to: 'apps-radar-teleamazonas' },
       ],
     },
   
