@@ -423,6 +423,8 @@ const paginatedData = computed(() => {
   return filteredData.value.slice(start, start + pageSize.value);
 });
 
+const expandedKeywords = ref({});
+const chipColors = ['primary', 'secondary', 'success', 'info', 'warning'];
 /** INICIO FIN PAGINADO DE PÁGINA **/
 </script>
 
@@ -466,7 +468,7 @@ const paginatedData = computed(() => {
                 <VRow class="flex justify-center">
                   <VCol cols="12" sm="12" lg="12" class="">
                     <VRow class="flex justify-center">
-                      <VCol cols="12"  sm="12" lg="6" class="">
+                      <VCol cols="12" sm="12" lg="6" class="">
                         <VCard class="elevation-0 border rounded no-truncate" title="Artículos de hoy"
                           subtitle="Agrupados por medios digitales según la fecha de publicación de los artículos">
                           <VCardText>
@@ -534,7 +536,7 @@ const paginatedData = computed(() => {
                 <VRow>
                   <VCol cols="12" v-for="(item, index) in paginatedData" :key="item.enlace">
                     <VCard class="article-card">
-                      <VCardText class="d-flex align-center gap-2 py-1">
+                      <VCardText class="d-flex align-center gap-2 ">
                         <!-- Imagen -->
                         <div class="img-content">
                           <img v-if="item.picture" :src="replaceAmp(item.picture)" class="fixed-avatar rounded"
@@ -545,25 +547,54 @@ const paginatedData = computed(() => {
                         <!-- Contenido -->
                         <div class="article-content w-100">
                           <!-- Fila 1: medio, fecha y categoría -->
-                          <div class="article-meta d-flex align-center gap-2 mb-1">
-                            <VChip variant="elevated" size="x-small" :color="item.color">
-                              {{ item.sitio }}
-                            </VChip>
-                            <span class="text-caption">{{ formatDate(item.fechaPublicacion) }}</span>
-                            <VChip size="x-small">{{ item.vertical }}</VChip>
-                            <div class="autor-ec" title="Autor">
-                              <VIcon icon="tabler-user" size="15" /> <small>{{ item.autor }}</small>
+                          <div class=" mb-3 grupoTopInfo">
+                            <div class="article-meta d-flex align-center gap-2 mb-1">
+                              <VChip variant="elevated" size="x-small" :color="item.color">
+                                {{ item.sitio }}
+                              </VChip>
+                              <span class="text-caption">{{ formatDate(item.fechaPublicacion) }}</span>
+                              <VChip size="x-small">{{ item.vertical }}</VChip>
+                              <div class="autor-ec" title="Autor">
+                                <VIcon icon="tabler-user" size="15" /> <small>{{ item.autor }}</small>
+                              </div>
+                              <div class="article-type-ec" title="Tipo de artículo">
+                                <VIcon icon="tabler-article" size="15" /> <small>{{ item.tipo }}</small>
+                              </div>
                             </div>
-                            <div class="article-type-ec" title="Tipo de artículo">
-                              <VIcon icon="tabler-article" size="15" /> <small>{{ item.tipo }}</small>
+                            <div v-if="item.keywords">
+                              <VChip v-for="(keyword, index) in item.keywords.split(',').slice(0, 2)" :key="keyword"
+                                size="x-small" class="mr-2" variant="outlined" :color="item.color">
+                                {{ keyword.trim() }}
+                              </VChip>
+
+                              <VMenu v-if="item.keywords.split(',').length > 2" class="bloqueToogle"
+                                :close-on-content-click="false">
+                                <template v-slot:activator="{ props }">
+                                  <VChip size="x-small" variant="outlined" :color="item.color" v-bind="props">
+                                    +{{ item.keywords.split(',').length - 2 }}
+                                  </VChip>
+                                </template>
+                                <VList density="compact" class="pa-2">
+                                  <template v-for="keyword in item.keywords.split(',').slice(2)" :key="keyword">
+                                    <VChip size="x-small" variant="outlined" color="secondary" class="ma-1">
+                                      {{ keyword.trim() }}
+                                    </VChip>
+                                  </template>
+                                </VList>
+                              </VMenu>
+
+
+
+
                             </div>
+
                           </div>
 
                           <!-- Fila 2: título y botón -->
                           <div class="d-flex justify-space-between align-center gap-2">
                             <h4 class="article-title mb-0">{{ item.titulo }}</h4>
                             <VBtn :href="item.enlace" target="_blank" variant="tonal" size="x-small"
-                              class="px-2 py-1 ml-2 flex-shrink-0 botoncito">
+                              class=" ml-2 flex-shrink-0 botoncito">
                               <VIcon icon="tabler-external-link" size="16" class="mr-1" />
                               Ver artículo
                             </VBtn>
@@ -598,6 +629,12 @@ const paginatedData = computed(() => {
   align-items: center;
 }
 
+.v-menu .v-overlay__content>.v-card,
+.v-menu .v-overlay__content>.v-sheet,
+.v-menu .v-overlay__content>.v-list {
+  max-width: 300px;
+}
+
 .board-content {
   height: auto;
 }
@@ -606,6 +643,12 @@ const paginatedData = computed(() => {
 .article-card {
   border: 1px solid #eee;
 }
+
+
+.v-theme--dark.article-card {
+  border: 1px solid #5d5d5d69;
+}
+
 
 .article-card .v-card-text {
   padding: 8px 16px;
@@ -647,6 +690,30 @@ const paginatedData = computed(() => {
   pointer-events: none;
   cursor: default;
   opacity: 0.6;
+}
+
+.bloqueToogle .v-theme--light .text-secondary {
+  color: #2e2e2e !important;
+}
+
+.v-theme--light.v-menu .v-overlay__content>.v-card,
+.v-theme--light.v-menu .v-overlay__content>.v-sheet,
+.v-theme--light.v-menu .v-overlay__content>.v-list {
+  margin-top: 10px;
+  border: 1px solid #ddd;
+}
+
+.grupoTopInfo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@media (max-width: 991px) {
+  .grupoTopInfo {
+    flex-direction: column;
+    align-items: flex-start;
+  }
 }
 
 /* Ajustes responsivos */

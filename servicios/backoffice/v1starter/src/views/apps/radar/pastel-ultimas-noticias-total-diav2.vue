@@ -117,7 +117,7 @@ const getDonutChartConfig = themeColors => {
         pie: {
           donut: {
             labels: {
-              show: true,
+              show: false,
               name: {
                 fontSize: '1.5rem',
               },
@@ -127,7 +127,7 @@ const getDonutChartConfig = themeColors => {
                 formatter: val => `${parseInt(val, 10)}`,
               },
               total: {
-                show: true,
+                show: false,
                 fontSize: '1.5rem',
                 label: 'Total',
                 color: themePrimaryTextColor,
@@ -208,15 +208,15 @@ function generarIDHora() {
 
 <template>
   <div class="d-flex gap-2 mt-0 flex-column pb-3">
-    <small style="font-size: 13px;">Medios digitales</small>
-    <div class="d-flex align-center gap-2 mt-0 flex-wrap">
+    <!-- <small style="font-size: 13px;">Medios digitales</small> -->
+    <!-- <div class="d-flex align-center gap-2 mt-0 flex-wrap">
       <div v-for="(item, index) in totalesSitios" :key="item.sitio" class="d-flex align-center">
         <VChip size="x-small" :color="item.color">
           {{ item.sitio }}: {{ item.total }} Artículo(s)
         </VChip>
         <small style="font-size: 15px;">{{ totalesSitios.length > index + 1 ? ', ' : '' }}</small>
       </div>
-    </div>
+    </div> -->
   </div>
   <VueApexCharts v-if="totalesSitios.length > 0" :key="generarIDHora()" type="donut" height="310"
     :options="expenseRationChartConfig.options" :series="expenseRationChartConfig.series" />
