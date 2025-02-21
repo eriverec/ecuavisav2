@@ -153,7 +153,7 @@
     </div>
 
     <div v-else>
-      <VExpansionPanels>
+      <VExpansionPanels v-model="expandedPanels">
         <VExpansionPanel
           v-for="(grupo, medio) in mediosAgrupados"
           :key="medio"
@@ -173,12 +173,12 @@
           </VExpansionPanelTitle>
           
           <VExpansionPanelText>
-            <!-- Loading state -->
+            <!-- Estado de carga -->
             <div v-if="loadingMedioData[medio]" class="d-flex justify-center py-4">
               <VProgressCircular indeterminate color="primary" />
             </div>
             
-            <!-- Data display -->
+            <!-- Mostrar datos -->
             <VList v-else-if="mediosData[medio]">
               <VListItem
                 v-for="item in mediosData[medio]"
@@ -235,8 +235,7 @@
     </VCol>
 </VRow>
 
-    <!-- Lista de artículos abajo -->
-
+    <!-- Lista de artículos -->
     <VRow v-if="resultados && !error">
   <VCol cols="12">
     <div class="article-list">
@@ -245,16 +244,16 @@
         :key="index"
         class="article-item"
       >
-        <div class="d-flex align-items-center gap-3 py-4 border-b">
-          <!-- Imagen con placeholder -->
+        <div class="d-flex align-items-start gap-2 py-2 border-b">
+ 
           <div class="article-image">
             <div class="image-container rounded overflow-hidden">
               <VImg
                 v-if="articulo.image"
                 :src="articulo.image"
                 :alt="articulo.title || 'Imagen del artículo'"
-                width="80"
-                height="80"
+                width="50"
+                height="50"
                 cover
                 class="rounded"
               >
@@ -262,7 +261,7 @@
                   <div class="d-flex align-items-center justify-content-center h-100 bg-light">
                     <VIcon
                       icon="tabler-photo"
-                      size="24"
+                      size="20"
                       class="text-medium-emphasis"
                     />
                   </div>
@@ -270,11 +269,12 @@
               </VImg>
               <div
                 v-else
-                class="placeholder-image d-flex align-items-center justify-content-center bg-light h-100"
+                class="placeholder-image d-flex align-items-center justify-content-center bg-light"
+                style="height: 50px; width: 50px;"
               >
                 <VIcon
-                  icon="tabler-file-text"
-                  size="32"
+                  icon="tabler-photo"
+                  size="20"
                   class="text-medium-emphasis"
                 />
               </div>
@@ -283,138 +283,85 @@
 
           <!-- Contenido del artículo -->
           <div class="article-content flex-grow-1 min-w-0">
-            <!-- Metadatos superiores -->
-            <div class="d-flex flex-wrap align-items-center gap-2 mb-2">
-              <!-- Categoría -->
-              <VChip
-                v-if="articulo.category"
-                color="info"
-                size="x-small"
-                class="text-uppercase"
-              >
-                {{ articulo.category }}
-              </VChip>
-              <VChip
-                v-else
-                color="grey-lighten-1"
-                size="x-small"
-                class="text-uppercase"
-              >
-                Sin categoría
-              </VChip>
-              
-              <!-- Fecha y Autor -->
-              <div class="d-flex align-items-center gap-2">
-                <span v-if="articulo.timestamp" class="text-caption text-medium-emphasis d-flex align-items-center">
+
+             <!-- Metadatos en línea -->
+              <div class="metadata-container d-flex align-items-center flex-wrap gap-2">
+                <VChip
+                  v-if="articulo.category"
+                  color="info"
+                  size="x-small"
+                  class="text-uppercase metadata-item"
+                >
+                  {{ articulo.category }}
+                </VChip>
+                <VChip
+                  v-else
+                  color="grey-lighten-1"
+                  size="x-small"
+                  class="text-uppercase metadata-item"
+                >
+                  Sin categoría
+                </VChip>
+                
+                <span v-if="articulo.timestamp" class="text-caption text-medium-emphasis metadata-item">
                   {{ formatearFecha(articulo.timestamp) }}
                 </span>
-                <span v-else class="text-caption text-medium-emphasis">
+                <span v-else class="text-caption text-medium-emphasis metadata-item">
                   Fecha no disponible
                 </span>
 
                 <span 
                   v-if="getAuthorName(articulo.author)" 
-                  class="text-caption text-medium-emphasis d-flex align-items-center gap-1"
+                  class="text-caption text-medium-emphasis d-flex align-items-center gap-1 metadata-item"
                 >
-                  <VIcon icon="tabler-user" size="14" />
-                  <template v-if="getAuthorLink(articulo.author)">
-                    <a 
-                      :href="getAuthorLink(articulo.author)"
-                      target="_blank"
-                      class="text-decoration-none text-primary"
-                    >
-                      {{ getAuthorName(articulo.author) }}
-                    </a>
-                  </template>
-                  <template v-else>
-                    {{ getAuthorName(articulo.author) }}
-                  </template>
+                  <VIcon icon="tabler-user" size="12" />
+                  {{ getAuthorName(articulo.author) }}
                 </span>
+
+                <div v-if="articulo.tags" class="d-flex gap-1 metadata-item">
+                  <VChip
+                    v-for="tag in getArticleTags(articulo.tags).slice(0, 2)"
+                    :key="tag"
+                    size="x-small"
+                    color="grey-lighten-3"
+                    variant="text"
+                    class="text-caption"
+                  >
+                    {{ tag }}
+                  </VChip>
+                </div>
               </div>
 
-              <!-- Tags -->
-              <div v-if="articulo.tags" class="d-flex flex-wrap gap-1 ms-auto">
-                <VChip
-                  v-for="tag in getArticleTags(articulo.tags)"
-                  :key="tag"
-                  size="x-small"
-                  color="grey-lighten-3"
-                  variant="text"
-                  class="text-caption"
-                >
-                  {{ tag }}
-                </VChip>
-              </div>
-            </div>
-
-            <!-- Título y resumen -->
-            <div class="content-wrapper">
-              <h6 class="text-subtitle-1 mb-2 text-truncate" :title="articulo.title || 'Título no disponible'">
+              <!-- Título -->
+              <h6 class="text-subtitle-1 mb-1 text-truncate font-weight-medium titumovil" :title="articulo.title || 'Título no disponible'">
                 {{ articulo.title || 'Título no disponible' }}
               </h6>
-              
+
+              <!-- Resumen -->
               <p 
                 v-if="validateSummary(articulo.summary)" 
-                class="text-body-2 text-medium-emphasis mb-2 d-none d-sm-block description-text"
+                class="text-body-2 text-medium-emphasis mt-1 mb-0 d-none d-sm-block description-text"
                 :title="validateSummary(articulo.summary)"
               >
                 {{ validateSummary(articulo.summary) }}
               </p>
-              <p v-else class="text-body-2 text-medium-emphasis mb-2 d-none d-sm-block fst-italic">
+              <p v-else class="text-body-2 text-medium-emphasis mt-1 mb-0 d-none d-sm-block description-text fst-italic">
                 Resumen no disponible
               </p>
-
-              <!-- Tags o keywords si existen -->
-              <div v-if="articulo.tags && articulo.tags.length" class="d-flex flex-wrap gap-1 mt-2">
-                <VChip
-                  v-for="tag in articulo.tags"
-                  :key="tag"
-                  size="x-small"
-                  color="grey-lighten-3"
-                  class="text-caption"
-                >
-                  {{ tag }}
-                </VChip>
-              </div>
-            </div>
           </div>
 
-          <!-- Acciones -->
-          <div class="article-action">
+          <!-- Botón de acción -->
+          <div class="article-action ms-2">
             <VBtn
               v-if="articulo.link"
               :href="articulo.link"
               target="_blank"
-              variant="solo"
-              size="small"
-              color="primary"
-              class="d-none d-sm-flex"
-            >
-              <VIcon start icon="tabler-external-link" size="16" class="me-1" />
-              VER ARTÍCULO
-            </VBtn>
-            <VBtn
-              v-if="articulo.link"
-              :href="articulo.link"
-              target="_blank"
-              variant="solo"
+              variant="text"
               size="small"
               color="primary"
               icon
-              class="d-sm-none"
             >
               <VIcon icon="tabler-external-link" size="16" />
-            </VBtn>
-            <VBtn
-              v-else
-              disabled
-              variant="text"
-              size="small"
-              color="grey-lighten-1"
-              class="d-none d-sm-flex"
-            >
-              <VIcon start icon="tabler-link-off" size="16" class="me-1" />
-              NO DISPONIBLE
             </VBtn>
           </div>
         </div>
@@ -445,9 +392,12 @@ const medioYaGuardado = ref(false)
 const itemsPerPage = 10
 const currentPage = ref(1)
 const totalPages = ref(0)
-const mediosData = ref({}) // Datos por medio
-const loadingMedioData = ref({}) // Estado de carga por medio
+
 const medioCounts = ref({}) // Conteo real por medio
+
+const mediosData = ref({}) 
+const loadingMedioData = ref({}) 
+const expandedPanels = ref([]) 
 
 
 const urlRules = [
@@ -457,9 +407,9 @@ const urlRules = [
 
 const mediosAgrupados = ref({})
 
-const loadingMedioDetails = ref({}) // Para tracking del loading por medio
-const medioDetalles = ref({}) // Para almacenar los detalles de cada medio
-const medioPaginas = ref({}) // Para manejar la paginación por medio
+const loadingMedioDetails = ref({}) 
+const medioDetalles = ref({}) 
+const medioPaginas = ref({}) 
 
 // Función para cargar los detalles de un medio específico
 const cargarDetallesMedio = async (medio, page = 1) => {
@@ -538,10 +488,9 @@ const regresar = () => {
   cargarMedios(1)
 }
 
-
 const cargarMedios = async (page) => {
   loadingMedios.value = true
-  mediosAgrupados.value = {} // Limpiar grupos actuales
+  mediosAgrupados.value = {}
   
   try {
     const params = new URLSearchParams({
@@ -549,21 +498,11 @@ const cargarMedios = async (page) => {
       limit: itemsPerPage.toString()
     })
     
-    console.log(`Cargando página ${page} con params:`, params.toString())
-    
     const response = await axios.get(
       `https://servicio-competencias.vercel.app/scrapper-rule/all?${params.toString()}`
     )
     
-    console.log('Datos recibidos:', response.data)
-    
     if (response.data && Array.isArray(response.data.data)) {
-      // Resetear todos los estados
-      mediosData.value = {}
-      loadingMedioData.value = {}
-      medioCounts.value = {}
-      
-      // Agrupar por media_communication
       const grupos = {}
       response.data.data.forEach(item => {
         if (item && item.media_communication) {
@@ -575,18 +514,9 @@ const cargarMedios = async (page) => {
         }
       })
       
-      // Actualizar estados
       mediosAgrupados.value = grupos
       totalPages.value = Math.ceil(response.data.total / itemsPerPage)
       currentPage.value = page
-      
-      // Cargar conteos para cada medio
-      Object.keys(grupos).forEach(medio => {
-        cargarConteoMedio(medio)
-      })
-      
-      console.log('Grupos actualizados:', Object.keys(grupos))
-      console.log('Total páginas:', totalPages.value)
     }
   } catch (err) {
     console.error('Error al cargar medios:', err)
@@ -629,27 +559,30 @@ const cargarDatosMedio = async (medio) => {
       {
         params: {
           page: '1',
-          limit: '100' // Cargar todos los datos del medio
+          limit: itemsPerPage
         }
       }
     )
     
     if (response.data && Array.isArray(response.data.data)) {
       mediosData.value[medio] = response.data.data
-      medioCounts.value[medio] = response.data.total // Actualizar el conteo
+      medioCounts.value[medio] = response.data.total
     }
   } catch (err) {
     console.error(`Error al cargar datos del medio ${medio}:`, err)
+    mediosData.value[medio] = []
   } finally {
     loadingMedioData.value[medio] = false
   }
 }
-
+// Función para manejar la expansión del acordeón
 const handlePanelChange = async (medio) => {
+  // Si el panel se está expandiendo y no tenemos los datos
   if (!mediosData.value[medio]) {
     await cargarDatosMedio(medio)
   }
 }
+
 
 const formatearTitulo = (key, medio) => {
   // Normalizar tanto el key como el medio para la comparación
@@ -784,26 +717,19 @@ const analizarMedioExistente = async (url) => {
 
 const verificarMedioGuardado = (urlActual) => {
   try {
-    // Normalizar la URL actual
     const urlNormalizada = new URL(urlActual).toString().toLowerCase()
-    
-    // Encontrar coincidencia exacta o coincidencia de dominio base
     const medioEncontrado = medios.value.find(medio => {
       if (!medio.url_communication) return false
       
-      // Normalizar URL del medio guardado
       const urlMedio = new URL(medio.url_communication).toString().toLowerCase()
       
-      // Verificar coincidencia exacta
       if (urlNormalizada === urlMedio) {
         return true
       }
       
-      // Obtener dominios base para comparación
       const dominioActual = new URL(urlActual).hostname.replace('www.', '')
       const dominioMedio = new URL(medio.url_communication).hostname.replace('www.', '')
       
-      // Verificar si es exactamente el mismo dominio y la misma ruta base
       return dominioActual === dominioMedio && 
              urlNormalizada.includes(urlMedio)
     })
@@ -836,7 +762,7 @@ const guardarMedio = async () => {
     const bodyData = {
       key: key,
       medio: nombreMedio,
-      url: url.value,                    // Cambiado de url_communication a url
+      url: url.value,                   
       consulta: {
         title: "string",
         link: "string",
@@ -866,7 +792,6 @@ const guardarMedio = async () => {
 
     if (response.data) {
       if (response.data.resp === false) {
-        // Si el servidor indica un error
         if (response.data.error) {
           error.value = response.data.error
         } else {
@@ -875,13 +800,9 @@ const guardarMedio = async () => {
             'Este medio ya se encuentra guardado'
         }
       } else {
-        // Si se guardó exitosamente
         success.value = `Medio ${key} guardado exitosamente`
-        // Recargar la lista de medios
         await cargarMedios(1)
-        // Limpiar cualquier warning previo
         warning.value = null
-        // Resetear el flag de medio guardado
         medioYaGuardado.value = false
       }
     }
@@ -896,7 +817,7 @@ const guardarMedio = async () => {
     } else {
       error.value = 'Error al guardar el medio. Por favor intente nuevamente.'
     }
-    // Limpiar warning en caso de error
+
     warning.value = null
   } finally {
     guardando.value = false
@@ -910,16 +831,13 @@ onMounted(() => {
 // Función para obtener el nombre del autor del objeto
 const getAuthorName = (author) => {
   if (!author) return '';
-  
-  // Si el autor es un string directo, retornarlo
+
   if (typeof author === 'string') return author;
-  
-  // Si es un objeto con propiedad name
+
   if (typeof author === 'object' && author.name) {
     return author.name;
   }
   
-  // Si es un objeto pero está en formato string
   if (typeof author === 'object' && typeof author.toString === 'function') {
     try {
       const authorObj = JSON.parse(author.toString());
@@ -936,12 +854,11 @@ const getAuthorName = (author) => {
 const getAuthorLink = (author) => {
   if (!author) return null;
   
-  // Si es un objeto con propiedad link
+
   if (typeof author === 'object' && author.link) {
     return author.link;
   }
   
-  // Si es un objeto pero está en formato string
   if (typeof author === 'object' && typeof author.toString === 'function') {
     try {
       const authorObj = JSON.parse(author.toString());
@@ -961,7 +878,6 @@ const formatearFecha = (timestamp) => {
   try {
     const fecha = new Date(timestamp);
     if (isNaN(fecha.getTime())) {
-      // Si no es una fecha válida, intentar parsear otros formatos comunes
       const matches = timestamp.match(/(\d{2})\/(\d{2})\/(\d{4})/);
       if (matches) {
         fecha = new Date(`${matches[3]}-${matches[2]}-${matches[1]}`);
@@ -1027,94 +943,45 @@ const validateSummary = (summary) => {
 </script>
 
 <style lang="scss" scoped>
-.article-list {
-    .article-item {
-      .article-image {
-        min-width: 60px;
-        width: 60px;
-      }
-      
-      .article-content {
-        .text-subtitle-1 {
-          font-size: 0.875rem;
-        }
-      }
-    }
-  }
 
+// Variables
+$border-color: rgba(var(--v-border-color), var(--v-border-opacity));
+$background-color: rgb(var(--v-theme-background));
+$mobile-breakpoint: 600px;
+
+@mixin mobile {
+  @media (max-width: $mobile-breakpoint) {
+    @content;
+  }
+}
+
+@mixin no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+// Utilidades generales
 .border-b {
-  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
+  border-bottom: 1px solid $border-color;
 }
 
 .match-height {
   display: flex;
   flex-wrap: wrap;
-}
-
-.match-height > [class*='col'] {
-  display: flex;
-}
-
-.match-height .v-card {
-  width: 100%;
-}
-
-@media (max-width: 600px) {
-  .article-list {
-    .article-item {
-      .article-image {
-        min-width: 40px;
-        width: 40px;
-      }
-    }
-  }
-}
-
-.match-height {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-.match-height > [class*='col'] {
-  display: flex;
-}
-
-.match-height .v-card {
-  width: 100%;
-}
-
-.border-b {
-  border-bottom: 1px solid rgba(var(--v-border-color), var(--v-border-opacity));
-}
-
-@media (max-width: 600px) {
-  .d-flex.flex-column.flex-sm-row {
-    gap: 16px;
-  }
-  .v-alert {
-    width: 100% !important;
+  
+  > [class*='col'] {
+    display: flex;
   }
   
-  .v-btn {
-    width: 100% !important;
+  .v-card {
+    width: 100%;
   }
-  
-  .d-flex.flex-column.flex-sm-row {
-    gap: 16px;
-  }
-
- 
-}
-.v-alert__content {
-    width: max-content!important;
 }
 
-.custom-chip {
-  font-size: 0.5rem !important;
-  height: 16px !important;
-  padding: 0 6px !important;
-}
-
+// Componentes base
 .pagination-custom {
   :deep(.v-pagination__item) {
     min-width: 32px;
@@ -1123,70 +990,192 @@ const validateSummary = (summary) => {
   }
 }
 
-.article-list {
-  .article-item {
-    transition: background-color 0.2s ease;
+.custom-chip {
+  font-size: 0.5rem !important;
+  height: 16px !important;
+  padding: 0 6px !important;
+}
+
+.v-alert__content {
+  width: max-content !important;
+}
+
+.v-icon.size-18 {
+  font-size: 16px !important;
+}
+
+// Contenedor de metadatos
+.metadata-container {
+  display: flex;
+  align-items: center;
+  flex-wrap: nowrap !important;
+  gap: 8px !important;
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-bottom: 4px;
+  min-height: 20px;
+  @include no-scrollbar;
+
+  .metadata-item {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
     
-    &:hover {
-      background-color: rgba(var(--v-theme-primary), 0.05);
+    .v-chip {
+      height: 18px !important;
+      padding: 0 6px !important;
+    }
+  }
+
+  span.metadata-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    
+    .v-icon {
+      margin-right: 2px;
+    }
+  }
+
+  @include mobile {
+    gap: 6px !important;
+    
+    .metadata-item {
+      font-size: 0.65rem !important;
+      
+      .v-chip {
+        height: 16px !important;
+        padding: 0 4px !important;
+      }
+      
+      .v-icon {
+        font-size: 10px !important;
+      }
+    }
+    
+    .text-caption {
+      font-size: 0.65rem !important;
+    }
+  }
+}
+
+// Lista de artículos
+.article-list {
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+
+  .article-item {
+    .d-flex {
+      width: 100%;
+      min-width: 0;
     }
 
     .article-image {
-      min-width: 80px;
-      width: 80px;
+      min-width: 50px;
+      width: 50px;
       
       .image-container {
-        aspect-ratio: 1;
-        overflow: hidden;
+        height: 50px;
       }
-      
+
       .placeholder-image {
-        width: 100%;
-        height: 100%;
-        aspect-ratio: 1;
-        background-color: rgba(var(--v-theme-on-surface), 0.05);
+        border-radius: 4px;
         display: flex;
         align-items: center;
         justify-content: center;
+        background-color: $background-color;
         
         .v-icon {
-          opacity: 0.5;
+          opacity: 0.6;
         }
       }
     }
 
     .article-content {
       min-width: 0;
-      
-      .description-text {
-        display: -webkit-box;
-        // -webkit-line-clamp: 2;
-        -webkit-box-orient: vertical;
+      flex: 1;
+
+      .text-subtitle-1 {
+        font-size: 0.875rem;
+        line-height: 1.2;
+        margin-bottom: 4px;
+        width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      .text-caption {
+        font-size: 0.75rem;
+        line-height: 1;
+      }
+
+      .description-text {
+        font-size: 0.8125rem;
+        line-height: 1.3;
+        display: -webkit-box;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        width: 100%;
+      }
+
+      .v-chip {
+        height: 18px !important;
+        font-size: 0.675rem;
+        padding: 0 6px;
       }
     }
 
     .article-action {
-      margin-left: auto;
-      display: flex;
-      align-items: center;
+      flex-shrink: 0;
     }
   }
 }
 
-@media (max-width: 600px) {
+// Media queries móvil
+@include mobile {
+  .titumovil {
+    font-size: 0.75rem !important;
+  }
+
+  .d-flex.flex-column.flex-sm-row {
+    gap: 16px;
+  }
+
+  .v-alert,
+  .v-btn {
+    width: 100% !important;
+  }
+
   .article-list {
+    padding: 0;
+    
     .article-item {
-      .article-image {
-        min-width: 60px;
-        width: 60px;
+      .d-flex {
+        padding: 8px;
+        gap: 8px;
       }
-      
-      .article-content {
-        .text-subtitle-1 {
-          font-size: 0.875rem;
+
+      .article-image {
+        width: 40px;
+        min-width: 40px;
+        
+        .image-container {
+          height: 40px;
         }
+      }
+
+      .text-caption {
+        font-size: 0.7rem;
+      }
+
+      .v-chip {
+        height: 16px !important;
+        padding: 0 4px !important;
       }
     }
   }
