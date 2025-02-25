@@ -652,9 +652,62 @@ const analizarMedioExistente = async (url) => {
       }
     })
 
+
     resultados.value = response.data
     verificarMedioGuardado(url)
+
+
+    console.log("MEDIO GUARDADO");
     warning.value = 'Este medio ya se encuentra registrado'
+
+
+    loadingMetadata.value = true
+
+    // Process additional data in background
+    const articleLinks = response.data.articles.map(article => article.link).filter(Boolean)
+
+    // Don't await this call, let it run in background
+    axios.post(
+      'https://servicio-competencias.vercel.app/multiple-articles',
+      { urls: articleLinks },
+      { headers: { 'Content-Type': 'application/json' } }
+    ).then(multipleArticlesResponse => {
+      if (multipleArticlesResponse.data.resp && Array.isArray(multipleArticlesResponse.data.data)) {
+        const enrichedArticles = response.data.articles.map(article => {
+          const additionalData = multipleArticlesResponse.data.data.find(
+            item => item.url === article.link && item.success
+          )
+
+          if (additionalData?.article) {
+            return {
+              ...article,
+              tipo: additionalData.article.tipo || 'Tipo no disponible',
+              autor: additionalData.article.autor || 'Autor no disponible',
+              keywords: additionalData.article.keywords || 'keywords no disponibles',
+              metodo: additionalData.article.metodo || '',
+              seccion: additionalData.article.seccion || 'Seccion no disponible',
+              subseccion: additionalData.article.subseccion || '',
+              fechaPublicacion: additionalData.article.fechaPublicacion || 'Fecha no disponible'
+            }
+          }
+          return article
+        })
+
+        // Update the results with enriched data
+        resultados.value = {
+          ...response.data,
+          articles: enrichedArticles
+        }
+      }
+    }).catch(err => {
+      console.error('Error loading additional article data:', err)
+    }).finally(() => {
+      loadingMetadata.value = false
+    })
+
+    
+
+
   } catch (err) {
     console.error('Error:', err)
     error.value = err.response?.data?.message ||
@@ -915,6 +968,7 @@ $mobile-breakpoint: 600px;
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
