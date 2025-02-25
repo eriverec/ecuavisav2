@@ -133,10 +133,21 @@
               </VExpansionPanels>
 
               <!-- Paginación principal -->
-              <div v-if="totalPages > 1" class="d-flex flex-column align-center mt-4 gap-2">
-                <VPagination :model-value="currentPage" :length="totalPages" :total-visible="5"
-                  :disabled="loadingMedios" @update:model-value="cambiarPagina" class="pagination-custom" />
-              </div>
+             <!-- Paginación principal -->
+<div v-if="totalPages > 1" class="d-flex flex-column align-center mt-4 gap-2">
+  <div class="d-flex align-center justify-space-between w-100 mb-2">
+    <span class="text-caption">Mostrando página {{ currentPage }} de {{ totalPages }}</span>
+    <span class="text-caption">{{ Object.keys(mediosAgrupados).length }} medios por página</span>
+  </div>
+  <VPagination 
+  :model-value="currentPage"
+  :length="totalPages" 
+  :total-visible="5"
+  :disabled="loadingMedios" 
+  @update:model-value="cambiarPagina" 
+  color="primary"
+  class="pagination-custom" />
+</div>
             </div>
           </VCardText>
         </VCard>
@@ -282,7 +293,8 @@
   </div>
 </template>
 
-<script setup>import axios from 'axios'
+<script setup>
+import axios from 'axios'
 import { onMounted, ref } from 'vue'
 
 const url = ref('')
@@ -306,6 +318,10 @@ const medioCounts = ref({}) // Conteo real por medio
 const mediosData = ref({})
 const loadingMedioData = ref({})
 const expandedPanels = ref([])
+
+
+const blacklistsByMedia = ref({});
+const loadingBlacklist = ref(false);
 
 
 const urlRules = [
@@ -364,8 +380,15 @@ const cargarDetallesMedio = async (medio, page = 1) => {
 // Función para manejar el cambio de página por medio
 const cambiarPaginaMedio = async (medio, newPage) => {
   console.log(`Cambiando a página ${newPage} del medio ${medio}`)
-  if (medioPaginas.value[medio]?.currentPage !== newPage) {
-    await cargarDetallesMedio(medio, newPage)
+  if (!medioPaginas.value[medio] || medioPaginas.value[medio].currentPage !== newPage) {
+    loadingMedioData.value[medio] = true
+    try {
+      await cargarDatosMedio(medio, newPage)
+    } catch (error) {
+      console.error(`Error al cambiar página del medio ${medio}:`, error)
+    } finally {
+      loadingMedioData.value[medio] = false
+    }
   }
 }
 
@@ -396,35 +419,83 @@ const regresar = () => {
   cargarMedios(1)
 }
 
+
+// Función principal para cargar medios
 const cargarMedios = async (page) => {
   loadingMedios.value = true
   mediosAgrupados.value = {}
 
   try {
-    const params = new URLSearchParams({
-      page: page.toString(),
-      limit: itemsPerPage.toString()
-    })
-
-    const response = await axios.get(
-      `https://servicio-competencias.vercel.app/scrapper-rule/all?${params.toString()}`
+    // para conocer el total de medios
+    const countResponse = await axios.get(
+      'https://servicio-competencias.vercel.app/scrapper-rule/all',
+      {
+        params: {
+          page: '1',
+          limit: '1000' 
+        }
+      }
     )
-
-    if (response.data && Array.isArray(response.data.data)) {
-      const grupos = {}
-      response.data.data.forEach(item => {
+    
+    // Obtener la lista única de medios
+    const todosLosMedios = []
+    if (countResponse.data && Array.isArray(countResponse.data.data)) {
+      // Extraer los nombres de medios únicos
+      const mediosUnicos = new Set()
+      countResponse.data.data.forEach(item => {
         if (item && item.media_communication) {
-          const nombreMedio = item.media_communication.trim().toLowerCase()
-          if (!grupos[nombreMedio]) {
-            grupos[nombreMedio] = []
-          }
-          grupos[nombreMedio].push(item)
+          mediosUnicos.add(item.media_communication.trim().toLowerCase())
         }
       })
 
+      todosLosMedios.push(...Array.from(mediosUnicos).sort())
+    }
+    
+    // medios mostrar en esta página
+    const totalMedios = todosLosMedios.length
+    const mediosPorPagina = 10
+    const totalPaginas = Math.ceil(totalMedios / mediosPorPagina)
+    
+    // Calculamos medios a mostrar
+    const inicio = (page - 1) * mediosPorPagina
+    const fin = Math.min(inicio + mediosPorPagina, totalMedios)
+    const mediosEnEstaPagina = todosLosMedios.slice(inicio, fin)
+    
+    console.log(`Total medios: ${totalMedios}, Mostrando página ${page} con ${mediosEnEstaPagina.length} medios`)
+    
+   
+    const response = await axios.get(
+      'https://servicio-competencias.vercel.app/scrapper-rule/all',
+      {
+        params: {
+          page: '1',
+          limit: '1000' // De nuevo un número grande
+        }
+      }
+    )
+    
+    if (response.data && Array.isArray(response.data.data)) {
+      // Filtramos solo los medios que corresponden a esta página
+      const grupos = {}
+      
+      response.data.data.forEach(item => {
+        if (item && item.media_communication) {
+          const nombreMedio = item.media_communication.trim().toLowerCase()
+          
+          if (mediosEnEstaPagina.includes(nombreMedio)) {
+            if (!grupos[nombreMedio]) {
+              grupos[nombreMedio] = []
+            }
+            grupos[nombreMedio].push(item)
+          }
+        }
+      })
+      
       mediosAgrupados.value = grupos
-      totalPages.value = Math.ceil(response.data.total / itemsPerPage)
+      totalPages.value = totalPaginas
       currentPage.value = page
+      
+      console.log(`Paginación actualizada: página ${page} de ${totalPaginas}, mostrando ${Object.keys(grupos).length} medios`)
     }
   } catch (err) {
     console.error('Error al cargar medios:', err)
@@ -435,9 +506,11 @@ const cargarMedios = async (page) => {
 }
 
 const cambiarPagina = async (newPage) => {
-  console.log(`Forzando cambio a página ${newPage}`)
+  console.log(`Cambiando a página ${newPage}`)
+  currentPage.value = newPage
   await cargarMedios(newPage)
 }
+
 
 const cargarConteoMedio = async (medio) => {
   try {
@@ -458,16 +531,18 @@ onMounted(async () => {
 })
 
 // Función para cargar datos de un medio específico
-const cargarDatosMedio = async (medio) => {
+const cargarDatosMedio = async (medio, page = 1) => {
   try {
     loadingMedioData.value[medio] = true
 
+    console.log(`Cargando datos del medio ${medio}, página ${page}`)
+    
     const response = await axios.get(
       `https://servicio-competencias.vercel.app/scrapper-rule/medio/${medio}`,
       {
         params: {
-          page: '1',
-          limit: itemsPerPage
+          page: page.toString(),
+          limit: itemsPerPage.toString()
         }
       }
     )
@@ -475,6 +550,19 @@ const cargarDatosMedio = async (medio) => {
     if (response.data && Array.isArray(response.data.data)) {
       mediosData.value[medio] = response.data.data
       medioCounts.value[medio] = response.data.total
+      
+      // Actualizar información de paginación para este medio
+      if (!medioPaginas.value[medio]) {
+        medioPaginas.value[medio] = {}
+      }
+      
+      medioPaginas.value[medio] = {
+        currentPage: parseInt(page),
+        totalPages: Math.ceil(response.data.total / itemsPerPage),
+        total: response.data.total
+      }
+      
+      console.log(`Medio ${medio}: página ${page} de ${medioPaginas.value[medio].totalPages}, total: ${response.data.total}`)
     }
   } catch (err) {
     console.error(`Error al cargar datos del medio ${medio}:`, err)
@@ -485,7 +573,6 @@ const cargarDatosMedio = async (medio) => {
 }
 // Función para manejar la expansión del acordeón
 const handlePanelChange = async (medio) => {
-  // Si el panel se está expandiendo y no tenemos los datos
   if (!mediosData.value[medio]) {
     await cargarDatosMedio(medio)
   }
@@ -970,11 +1057,6 @@ const validateSummary = (summary) => {
 }
 
 
-// Agrega estas referencias al estado después de las referencias existentes (después de loadingMetadata)
-const blacklistsByMedia = ref({});
-const loadingBlacklist = ref(false);
-
-// Agrega estas funciones después de validateSummary
 // Función para cargar la blacklist de un medio específico
 const cargarBlacklist = async (dominio) => {
   try {
