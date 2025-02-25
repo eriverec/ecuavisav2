@@ -262,10 +262,15 @@
 
               <!-- Botón de acción -->
               <div class="article-action ms-2">
-                <VBtn v-if="articulo.link" :href="articulo.link" target="_blank" variant="text" size="small"
-                  color="primary" icon>
-                  <VIcon icon="tabler-external-link" size="16" />
-                </VBtn>
+                <!-- Botón omitir contenido -->
+                  <VBtn @click="omitirContenido(articulo)" variant="text" size="small" color="error" icon title="Omitir contenido">
+                    <VIcon icon="tabler-file-x" size="16" />
+                  </VBtn>
+                  
+                  <!-- Botón ver artículo -->
+                  <VBtn v-if="articulo.link" :href="articulo.link" target="_blank" variant="text" size="small" color="primary" icon title="Ver artículo">
+                    <VIcon icon="tabler-external-link" size="16" />
+                  </VBtn>
               </div>
             </div>
           </div>
@@ -629,6 +634,19 @@ const analizarSitio = async () => {
       loadingMetadata.value = false
     })
 
+    // Determinar el dominio para la blacklist
+    try {
+      const urlObj = new URL(url.value);
+      const dominio = urlObj.hostname.replace('www.', '').split('.')[0].toLowerCase();
+      
+      // Limpiar la caché de blacklist para este dominio y cargar fresca
+      blacklistsByMedia.value[dominio] = null;
+      
+      // Filtrar artículos en blacklist (esto incluye la carga de la blacklist)
+      await filtrarArticulosEnBlacklist();
+    } catch (err) {
+      console.error('Error al procesar la blacklist:', err);
+    }
 
   } catch (err) {
     console.error('Error:', err)
@@ -638,7 +656,6 @@ const analizarSitio = async () => {
     loading.value = false
   }
 }
-
 const analizarMedioExistente = async (url) => {
   loading.value = true
   resetearTodo()
@@ -705,8 +722,19 @@ const analizarMedioExistente = async (url) => {
       loadingMetadata.value = false
     })
 
-    
-
+    // Determinar el dominio para la blacklist
+    try {
+      const urlObj = new URL(url);
+      const dominio = urlObj.hostname.replace('www.', '').split('.')[0].toLowerCase();
+      
+      // Limpiar la caché de blacklist para este dominio
+      blacklistsByMedia.value[dominio] = null;
+      
+      // Filtrar artículos en blacklist (esto incluye la carga de la blacklist)
+      await filtrarArticulosEnBlacklist();
+    } catch (err) {
+      console.error('Error al procesar la blacklist:', err);
+    }
 
   } catch (err) {
     console.error('Error:', err)
@@ -716,7 +744,6 @@ const analizarMedioExistente = async (url) => {
     loading.value = false
   }
 }
-
 const verificarMedioGuardado = (urlActual) => {
   try {
     const urlNormalizada = new URL(urlActual).toString().toLowerCase()
@@ -941,6 +968,229 @@ const validateSummary = (summary) => {
 
   return summary;
 }
+
+
+// Agrega estas referencias al estado después de las referencias existentes (después de loadingMetadata)
+const blacklistsByMedia = ref({});
+const loadingBlacklist = ref(false);
+
+// Agrega estas funciones después de validateSummary
+// Función para cargar la blacklist de un medio específico
+const cargarBlacklist = async (dominio) => {
+  try {
+    loadingBlacklist.value = true;
+    const response = await axios.get(`https://services.ecuavisa.com/gestor/competencias/scrappin/utilidades/config.php?api=web&key=${dominio}`);
+    
+    console.log('Blacklist del medio:', response.data);
+    
+    if (response.data && response.data.blacklist) {
+      blacklistsByMedia.value[dominio] = response.data.blacklist;
+    } else {
+      blacklistsByMedia.value[dominio] = [];
+    }
+    
+    return blacklistsByMedia.value[dominio];
+  } catch (err) {
+    console.error(`Error al cargar la blacklist del medio ${dominio}:`, err);
+    blacklistsByMedia.value[dominio] = [];
+    return [];
+  } finally {
+    loadingBlacklist.value = false;
+  }
+};
+
+// Función para verificar si un artículo está en la blacklist
+const estaEnBlacklist = (articulo, dominio) => {
+  if (!blacklistsByMedia.value[dominio] || !Array.isArray(blacklistsByMedia.value[dominio])) {
+    return false;
+  }
+  
+  // Compara por URL o por título (ignora mayúsculas/minúsculas)
+  return blacklistsByMedia.value[dominio].some(item => {
+    // Comparación por link
+    if (item.link && articulo.link) {
+      const linkItem = item.link.toLowerCase().trim();
+      const linkArticulo = articulo.link.toLowerCase().trim();
+      
+      // Comparación exacta o si uno está contenido en el otro
+      if (linkItem === linkArticulo || linkItem.includes(linkArticulo) || linkArticulo.includes(linkItem)) {
+        return true;
+      }
+    }
+    
+    // Comparación por título
+    if (item.titulo && articulo.title) {
+      const tituloItem = item.titulo.toLowerCase().trim();
+      const tituloArticulo = articulo.title.toLowerCase().trim();
+      
+      if (tituloItem === tituloArticulo) {
+        return true;
+      }
+    }
+    
+    return false;
+  });
+};
+
+// Función para omitir contenido mejorada
+const omitirContenido = async (articulo) => {
+  try {
+    // Extraer el dominio de la URL para usarlo como key
+    const urlObj = new URL(articulo.link || url.value);
+    const dominio = urlObj.hostname.replace('www.', '').split('.')[0].toLowerCase();
+    
+    // Si no tenemos la blacklist de este medio, la cargamos
+    if (!blacklistsByMedia.value[dominio]) {
+      await cargarBlacklist(dominio);
+    }
+    
+    // Verificar si el artículo ya está en la blacklist (silenciosamente)
+    if (estaEnBlacklist(articulo, dominio)) {
+      console.log('Artículo ya está en blacklist, solo lo ocultamos');
+      // No mostramos mensaje, solo lo eliminamos de la lista actual
+    }
+    
+    // Preparar el nuevo item para la blacklist
+    const nuevoItem = {
+      titulo: articulo.title || 'Título no disponible',
+      link: articulo.link || url.value
+    };
+    
+    // Solo enviamos la petición si no está ya en la blacklist
+    if (!estaEnBlacklist(articulo, dominio)) {
+      let endpoint;
+      let payload;
+      
+      // Si ya existe una blacklist para este medio, usamos update
+      if (blacklistsByMedia.value[dominio] && blacklistsByMedia.value[dominio].length > 0) {
+        endpoint = 'https://services.ecuavisa.com/gestor/competencias/scrappin/utilidades/config.php?api=update';
+        
+        // Añadir el nuevo item a la blacklist existente
+        const blacklistActualizada = [...blacklistsByMedia.value[dominio], nuevoItem];
+        
+        payload = {
+          key: dominio,
+          estructura: {
+            blacklist: blacklistActualizada
+          }
+        };
+      } else {
+        // Si no existe, usamos insert
+        endpoint = 'https://services.ecuavisa.com/gestor/competencias/scrappin/utilidades/config.php?api=insert';
+        
+        payload = {
+          key: dominio,
+          estructura: {
+            blacklist: [nuevoItem]
+          }
+        };
+      }
+      
+      console.log('Omitiendo contenido:', payload);
+      console.log('Usando endpoint:', endpoint);
+      
+      const response = await axios.post(endpoint, payload, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      console.log('Respuesta del servidor:', response.data);
+      
+      // Actualizar la blacklist local para futuras verificaciones
+      if (!blacklistsByMedia.value[dominio]) {
+        blacklistsByMedia.value[dominio] = [];
+      }
+      blacklistsByMedia.value[dominio].push(nuevoItem);
+    }
+    
+    // Siempre eliminamos el artículo de la lista de resultados
+    if (resultados.value && resultados.value.articles) {
+      resultados.value.articles = resultados.value.articles.filter(a => 
+        a !== articulo // Comparamos la referencia directa del objeto
+      );
+      
+      // Actualizar el contador de resultados
+      if (resultados.value.total !== undefined) {
+        resultados.value.total = resultados.value.articles.length;
+      }
+    }
+    
+    // Mostrar mensaje de éxito (solo si realmente se añadió a la blacklist)
+    if (!estaEnBlacklist(articulo, dominio)) {
+      success.value = `Contenido omitido exitosamente`;
+      
+      // Limpiar el mensaje después de unos segundos
+      setTimeout(() => {
+        if (success.value) {
+          success.value = null;
+        }
+      }, 2000);
+    }
+    
+  } catch (err) {
+    console.error('Error al omitir contenido:', err);
+    error.value = 'Error al omitir contenido. Por favor intente nuevamente.';
+    
+    // Limpiar el mensaje de error después de unos segundos
+    setTimeout(() => {
+      if (error.value) {
+        error.value = null;
+      }
+    }, 2000);
+  }
+};
+
+// Función para filtrar artículos que están en blacklist
+const filtrarArticulosEnBlacklist = async () => {
+  if (!resultados.value || !resultados.value.articles || resultados.value.articles.length === 0) {
+    return;
+  }
+  
+  // Determinar el dominio del sitio actual
+  let dominio;
+  try {
+    // Intentar obtener dominio de la URL del primer artículo
+    if (resultados.value.articles[0] && resultados.value.articles[0].link) {
+      const urlObj = new URL(resultados.value.articles[0].link);
+      dominio = urlObj.hostname.replace('www.', '').split('.')[0].toLowerCase();
+    } else {
+      // Si no hay artículos con link, usar la URL actual
+      const urlObj = new URL(url.value);
+      dominio = urlObj.hostname.replace('www.', '').split('.')[0].toLowerCase();
+    }
+  } catch (err) {
+    console.error('Error al obtener el dominio:', err);
+    return;
+  }
+  
+  // Cargar la blacklist fresca desde el servidor (no usar caché)
+  await cargarBlacklist(dominio);
+  
+  // Si no hay blacklist, no hay nada que filtrar
+  if (!blacklistsByMedia.value[dominio] || blacklistsByMedia.value[dominio].length === 0) {
+    console.log('No hay blacklist para este medio, mostrando todos los artículos');
+    return;
+  }
+  
+  console.log(`Filtrando ${resultados.value.articles.length} artículos contra ${blacklistsByMedia.value[dominio].length} items en blacklist`);
+  
+  // Filtrar los artículos que están en la blacklist
+  const articulosOriginales = resultados.value.articles.length;
+  resultados.value.articles = resultados.value.articles.filter(articulo => {
+    const enBlacklist = estaEnBlacklist(articulo, dominio);
+    if (enBlacklist) {
+      console.log('Artículo filtrado por blacklist:', articulo.title || articulo.link);
+    }
+    return !enBlacklist;
+  });
+  
+  // Actualizar el contador si se filtraron artículos
+  if (resultados.value.articles.length !== articulosOriginales) {
+    resultados.value.total = resultados.value.articles.length;
+    console.log(`Se filtraron ${articulosOriginales - resultados.value.articles.length} artículos de la blacklist, quedan ${resultados.value.total}`);
+  }
+};
 
 </script>
 
