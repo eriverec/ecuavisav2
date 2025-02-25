@@ -682,44 +682,60 @@ const analizarSitio = async () => {
     // Process additional data in background
     const articleLinks = response.data.articles.map(article => article.link).filter(Boolean)
 
-    // Don't await this call, let it run in background
-    axios.post(
-      'https://servicio-competencias.vercel.app/multiple-articles',
-      { urls: articleLinks },
-      { headers: { 'Content-Type': 'application/json' } }
-    ).then(multipleArticlesResponse => {
-      if (multipleArticlesResponse.data.resp && Array.isArray(multipleArticlesResponse.data.data)) {
-        const enrichedArticles = response.data.articles.map(article => {
-          const additionalData = multipleArticlesResponse.data.data.find(
-            item => item.url === article.link && item.success
-          )
+    const batchSize = 10
+    const enrichedArticles = [...response.data.articles]
+    let processedCount = 0
 
-          if (additionalData?.article) {
-            return {
-              ...article,
-              tipo: additionalData.article.tipo || 'Tipo no disponible',
-              autor: additionalData.article.autor || 'Autor no disponible',
-              keywords: additionalData.article.keywords || 'keywords no disponibles',
-              metodo: additionalData.article.metodo || '',
-              seccion: additionalData.article.seccion || 'Seccion no disponible',
-              subseccion: additionalData.article.subseccion || '',
-              fechaPublicacion: additionalData.article.fechaPublicacion || 'Fecha no disponible'
+    // Process batches sequentially
+    for (let i = 0; i < articleLinks.length; i += batchSize) {
+      const batchLinks = articleLinks.slice(i, i + batchSize)
+      
+      try {
+        const batchResponse = await axios.post(
+          'https://servicio-competencias.vercel.app/multiple-articles',
+          { urls: batchLinks },
+          { headers: { 'Content-Type': 'application/json' } }
+        )
+
+        if (batchResponse.data.resp && Array.isArray(batchResponse.data.data)) {
+          batchResponse.data.data.forEach(additionalData => {
+            if (additionalData.success) {
+              const articleIndex = enrichedArticles.findIndex(article => article.link === additionalData.url)
+              if (articleIndex !== -1) {
+                enrichedArticles[articleIndex] = {
+                  ...enrichedArticles[articleIndex],
+                  tipo: additionalData.article?.tipo || 'Tipo no disponible',
+                  autor: additionalData.article?.autor || 'Autor no disponible',
+                  keywords: additionalData.article?.keywords || 'keywords no disponibles',
+                  metodo: additionalData.article?.metodo || '',
+                  seccion: additionalData.article?.seccion || 'Seccion no disponible',
+                  subseccion: additionalData.article?.subseccion || '',
+                  fechaPublicacion: additionalData.article?.fechaPublicacion || 'Fecha no disponible'
+                }
+              }
             }
-          }
-          return article
-        })
+          })
 
-        // Update the results with enriched data
-        resultados.value = {
-          ...response.data,
-          articles: enrichedArticles
+          // Update processed count
+          processedCount += batchResponse.data.data.length
+
+          // Update results after each batch with both processed and remaining articles
+          resultados.value = {
+            ...response.data,
+            articles: enrichedArticles.map((article, index) => {
+              if (index < processedCount) {
+                return article
+              }
+              // Keep original article data for unprocessed ones
+              return response.data.articles[index]
+            })
+          }
         }
+      } catch (err) {
+        console.error(`Error processing batch ${i / batchSize + 1}:`, err)
       }
-    }).catch(err => {
-      console.error('Error loading additional article data:', err)
-    }).finally(() => {
-      loadingMetadata.value = false
-    })
+    }
+
 
     // Determinar el dominio para la blacklist
     try {
@@ -741,6 +757,7 @@ const analizarSitio = async () => {
       'Error al analizar el sitio. Por favor intente nuevamente.'
   } finally {
     loading.value = false
+    loadingMetadata.value = false
   }
 }
 const analizarMedioExistente = async (url) => {
@@ -769,45 +786,60 @@ const analizarMedioExistente = async (url) => {
 
     // Process additional data in background
     const articleLinks = response.data.articles.map(article => article.link).filter(Boolean)
+    const batchSize = 10
+    const enrichedArticles = [...response.data.articles]
+    let processedCount = 0
 
-    // Don't await this call, let it run in background
-    axios.post(
-      'https://servicio-competencias.vercel.app/multiple-articles',
-      { urls: articleLinks },
-      { headers: { 'Content-Type': 'application/json' } }
-    ).then(multipleArticlesResponse => {
-      if (multipleArticlesResponse.data.resp && Array.isArray(multipleArticlesResponse.data.data)) {
-        const enrichedArticles = response.data.articles.map(article => {
-          const additionalData = multipleArticlesResponse.data.data.find(
-            item => item.url === article.link && item.success
-          )
+    // Process batches sequentially
+    for (let i = 0; i < articleLinks.length; i += batchSize) {
+      const batchLinks = articleLinks.slice(i, i + batchSize)
+      
+      try {
+        const batchResponse = await axios.post(
+          'https://servicio-competencias.vercel.app/multiple-articles',
+          { urls: batchLinks },
+          { headers: { 'Content-Type': 'application/json' } }
+        )
 
-          if (additionalData?.article) {
-            return {
-              ...article,
-              tipo: additionalData.article.tipo || 'Tipo no disponible',
-              autor: additionalData.article.autor || 'Autor no disponible',
-              keywords: additionalData.article.keywords || 'keywords no disponibles',
-              metodo: additionalData.article.metodo || '',
-              seccion: additionalData.article.seccion || 'Seccion no disponible',
-              subseccion: additionalData.article.subseccion || '',
-              fechaPublicacion: additionalData.article.fechaPublicacion || 'Fecha no disponible'
+        if (batchResponse.data.resp && Array.isArray(batchResponse.data.data)) {
+          batchResponse.data.data.forEach(additionalData => {
+            if (additionalData.success) {
+              const articleIndex = enrichedArticles.findIndex(article => article.link === additionalData.url)
+              if (articleIndex !== -1) {
+                enrichedArticles[articleIndex] = {
+                  ...enrichedArticles[articleIndex],
+                  tipo: additionalData.article?.tipo || 'Tipo no disponible',
+                  autor: additionalData.article?.autor || 'Autor no disponible',
+                  keywords: additionalData.article?.keywords || 'keywords no disponibles',
+                  metodo: additionalData.article?.metodo || '',
+                  seccion: additionalData.article?.seccion || 'Seccion no disponible',
+                  subseccion: additionalData.article?.subseccion || '',
+                  fechaPublicacion: additionalData.article?.fechaPublicacion || 'Fecha no disponible'
+                }
+              }
             }
-          }
-          return article
-        })
+          })
 
-        // Update the results with enriched data
-        resultados.value = {
-          ...response.data,
-          articles: enrichedArticles
+          // Update processed count
+          processedCount += batchResponse.data.data.length
+
+          // Update results after each batch with both processed and remaining articles
+          resultados.value = {
+            ...response.data,
+            articles: enrichedArticles.map((article, index) => {
+              if (index < processedCount) {
+                return article
+              }
+              // Keep original article data for unprocessed ones
+              return response.data.articles[index]
+            })
+          }
         }
+      } catch (err) {
+        console.error(`Error processing batch ${i / batchSize + 1}:`, err)
       }
-    }).catch(err => {
-      console.error('Error loading additional article data:', err)
-    }).finally(() => {
-      loadingMetadata.value = false
-    })
+    }
+
 
     // Determinar el dominio para la blacklist
     try {
@@ -829,6 +861,7 @@ const analizarMedioExistente = async (url) => {
       'Error al analizar el sitio. Por favor intente nuevamente.'
   } finally {
     loading.value = false
+    loadingMetadata.value = false
   }
 }
 const verificarMedioGuardado = (urlActual) => {
