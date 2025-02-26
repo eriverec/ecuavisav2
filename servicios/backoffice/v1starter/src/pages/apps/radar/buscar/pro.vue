@@ -200,10 +200,17 @@
 
                       <div v-else class=" gap-2 grupoTopInfo">
                         <div class="d-flex align-center gap-2">
-                          <span v-if="articulo.fechaPublicacion"
-                            class="text-caption text-medium-emphasis metadata-item">
-                            {{ formatearFecha(articulo.fechaPublicacion) }}
-                          </span>
+                          
+                          <span v-if="articulo.fechaPublicacion || articulo.timestamp" class="text-caption text-medium-emphasis metadata-item">
+                          <!-- Para El Telégrafo  -->
+                          <template v-if="articulo.source === 'El Telégrafo' || (articulo.link && articulo.link.includes('eltelegrafo'))">
+                              {{ obtenerFechaActual() }} {{ articulo.timestamp || articulo.fechaPublicacion }}
+                            </template>
+                          <!-- otros medios  -->
+                          <template v-else>
+                            {{ formatearFecha(articulo.fechaPublicacion || articulo.timestamp) }}
+                          </template>
+                        </span>
                           <VChip v-if="articulo.seccion" size="x-small">{{ articulo.seccion }}</VChip>
                           <div v-if="articulo.autor" class="autor-ec" title="Autor">
                             <VIcon icon="tabler-user" size="15" /> <small>{{ articulo.autor }}</small>
@@ -326,8 +333,25 @@ const loadingBlacklist = ref(false);
 
 const urlRules = [
   v => !!v || 'La URL es requerida',
-  v => /^(http|https):\/\/[^ "]+$/.test(v) || 'Ingrese una URL válida'
+  v => {
+   
+    const urlConProtocolo = /^(http|https):\/\//i.test(v) ? v : `https://${v}`;
+    return /^(http|https):\/\/[^ "]+$/.test(urlConProtocolo) || 'Ingrese una URL válida';
+  }
 ]
+
+// Función q asegura el  https:// en una url
+const asegurarHttps = (valor) => {
+  if (!valor) return valor;
+  
+  // Si ya comienza con http:// o https://, no hacer nada
+  if (/^(http|https):\/\//i.test(valor)) {
+    return valor;
+  }
+  
+  // Agregar https:// al inicio
+  return `https://${valor}`;
+}
 
 const mediosAgrupados = ref({})
 
@@ -631,7 +655,8 @@ const construirKey = (nombreMedio, path) => {
 const pegarURL = async () => {
   try {
     const texto = await navigator.clipboard.readText()
-    url.value = texto
+    // Aplicamos el asegurarHttps al texto pegado
+    url.value = asegurarHttps(texto)
   } catch (err) {
     console.error('Error al pegar:', err)
     errorMessage.value = 'No se pudo acceder al portapapeles'
@@ -652,7 +677,11 @@ const limpiarMensajes = () => {
   warning.value = null
 }
 
+
+
 const analizarSitio = async () => {
+  url.value = asegurarHttps(url.value)
+  
   if (!urlRules.every(rule => rule(url.value) === true)) {
     error.value = 'Por favor ingrese una URL válida'
     return
@@ -1020,6 +1049,15 @@ const getAuthorLink = (author) => {
   return null;
 }
 
+
+const obtenerFechaActual = () => {
+  const hoy = new Date();
+  const dia = String(hoy.getDate()).padStart(2, '0');
+  const mes = String(hoy.getMonth() + 1).padStart(2, '0');
+  const anio = hoy.getFullYear();
+  return `${dia}/${mes}/${anio}`;
+}
+
 // Función para formatear la fecha de manera uniforme
 const formatearFecha = (timestamp) => {
   if (!timestamp) return '';
@@ -1033,7 +1071,7 @@ const formatearFecha = (timestamp) => {
       }
     }
 
-    // Si tenemos una fecha válida, formatearla
+    // formatea si esvalida
     if (!isNaN(fecha.getTime())) {
       return fecha.toLocaleDateString('es-ES', {
         year: 'numeric',
@@ -1044,38 +1082,13 @@ const formatearFecha = (timestamp) => {
       }).replace(',', '');
     }
 
-    // Si no se puede parsear, devolver el timestamp original
+    
     return timestamp;
   } catch (e) {
     return timestamp;
   }
 }
 
-// Función para procesar los tags del artículo
-const getArticleTags = (tags) => {
-  if (!tags) return [];
-
-  // Si tags es un string, intentar parsearlo como JSON
-  if (typeof tags === 'string') {
-    try {
-      return JSON.parse(tags);
-    } catch (e) {
-      return [tags]; // Si no es JSON válido, devolver como un solo tag
-    }
-  }
-
-  // Si es un array, devolverlo directamente
-  if (Array.isArray(tags)) {
-    return tags;
-  }
-
-  // Si es un objeto, convertir sus valores en un array
-  if (typeof tags === 'object') {
-    return Object.values(tags).filter(tag => tag);
-  }
-
-  return [];
-}
 
 // Función para validar y limpiar el summary
 const validateSummary = (summary) => {
