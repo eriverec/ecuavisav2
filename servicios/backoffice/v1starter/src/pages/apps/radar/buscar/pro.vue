@@ -307,22 +307,22 @@
 
                             <!-- Keywords  -->
                             <div v-if="articulo.keywords">
-                              <VChip v-for="(keyword, index) in articulo.keywords.split(',').slice(0, 2)" :key="keyword"
+                              <VChip v-for="(keyword, index) in parseKeywords(articulo.keywords).slice(0, 2)" :key="index"
                                 size="x-small" class="mr-2" variant="outlined" color="secondary">
-                                {{ keyword.trim() }}
+                                {{ keyword }}
                               </VChip>
 
-                              <VMenu v-if="articulo.keywords.split(',').length > 2" class="bloqueToogle"
+                              <VMenu v-if="typeof articulo.keywords === 'string' && articulo.keywords.split(',').length > 2" class="bloqueToogle"
                                 :close-on-content-click="false">
                                 <template v-slot:activator="{ props }">
                                   <VChip size="x-small" variant="outlined" color="secondary" v-bind="props">
-                                    +{{ articulo.keywords.split(',').length - 2 }}
+                                    +{{ typeof articulo.keywords === 'string' ? articulo.keywords.split(',').length - 2 : 0 }}
                                   </VChip>
                                 </template>
                                 <VList density="compact" class="pa-2">
-                                  <template v-for="keyword in articulo.keywords.split(',').slice(2)" :key="keyword">
+                                  <template v-for="(keyword, index) in parseKeywords(articulo.keywords).slice(2)" :key="index">
                                     <VChip size="x-small" variant="outlined" color="secondary" class="ma-1">
-                                      {{ keyword.trim() }}
+                                      {{ keyword }}
                                     </VChip>
                                   </template>
                                 </VList>
@@ -1269,144 +1269,159 @@ const limpiarMensajes = () => {
 }
 
 const analizarSitio = async () => {
-  url.value = asegurarHttps(url.value)
-  
-  if (!urlRules.every(rule => rule(url.value) === true)) {
-    error.value = 'Por favor ingrese una URL válida'
-    return
-  }
-
-  loading.value = true
-  resetearTodo()
-
   try {
-    const response = await axios.post('https://servicio-competencias.vercel.app/analizar-sitio', {
-      url: url.value
-    }, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
-    })
-
-    resultados.value = response.data
-    verificarMedioGuardado(url.value)
-
-    if (medioYaGuardado.value) {
-      warning.value = 'Este medio ya se encuentra registrado'
-    }
-    loadingMetadata.value = true
-
-    const articleLinks = response.data.articles.map(article => article.link).filter(Boolean)
-
-    const batchSize = 10
-    const enrichedArticles = [...response.data.articles]
-    let processedCount = 0
-
-    // procesar batches secuencialmente
-    for (let i = 0; i < articleLinks.length; i += batchSize) {
-      const batchLinks = articleLinks.slice(i, i + batchSize)
-      
-      try {
-        const batchResponse = await axios.post(
-          'https://servicio-competencias.vercel.app/multiple-articles',
-          { urls: batchLinks },
-          { headers: { 'Content-Type': 'application/json' } }
-        )
-
-        if (batchResponse.data.resp && Array.isArray(batchResponse.data.data)) {
-          batchResponse.data.data.forEach(additionalData => {
-            if (additionalData.success) {
-              const articleIndex = enrichedArticles.findIndex(article => article.link === additionalData.url)
-              if (articleIndex !== -1) {
-                enrichedArticles[articleIndex] = {
-                  ...enrichedArticles[articleIndex],
-                  tipo: additionalData.article?.tipo || 'Tipo no disponible',
-                  autor: additionalData.article?.autor || 'Autor no disponible',
-                  keywords: additionalData.article?.keywords || 'keywords no disponibles',
-                  metodo: additionalData.article?.metodo || '',
-                  seccion: additionalData.article?.seccion || 'Seccion no disponible',
-                  subseccion: additionalData.article?.subseccion || '',
-                  fechaPublicacion: additionalData.article?.fechaPublicacion || 'Fecha no disponible'
-                }
-              }
-            }
-          })
-
-          processedCount += batchResponse.data.data.length
-
-          resultados.value = {
-            ...response.data,
-            articles: enrichedArticles.map((article, index) => {
-              if (index < processedCount) {
-                return article
-              }
-              return response.data.articles[index]
-            })
-          }
-        }
-
-        
-      } catch (err) {
-        console.error(`Error processing batch ${i / batchSize + 1}:`, err)
-      }
+    url.value = asegurarHttps(url.value)
+    
+    if (!urlRules.every(rule => rule(url.value) === true)) {
+      error.value = 'Por favor ingrese una URL válida'
+      return
     }
 
-    if (resultados.value && resultados.value.articles) {
-    resultados.value.articles.forEach(article => {
-      if (!article.source) {
-        // Extraer el dominio de la URL como source predeterminado
-        try {
-          if (article.link) {
-            const urlObj = new URL(article.link);
-            const hostname = urlObj.hostname;
-            let sourceName = hostname
-              .replace(/^www\./, '')
-              .split('.')
-              .slice(0, -1)
-              .join('.');
-            
-            // Formatear el nombre del medio
-            sourceName = sourceName.split(/[.-]/)
-              .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-              .join(' ');
-            
-            article.source = sourceName;
-          } else {
-            // Si no hay link, usar el dominio de la URL analizada
-            const urlObj = new URL(url.value);
-            const dominio = urlObj.hostname.replace(/^www\./, '').split('.')[0];
-            article.source = dominio.charAt(0).toUpperCase() + dominio.slice(1);
-          }
-        } catch (err) {
-          console.error('Error al extraer source del artículo:', err);
-          article.source = 'Desconocido';
-        }
-      }
-    });
-  }
-    // Después de completar el procesamiento, ordenar por fecha
-    if (resultados.value && resultados.value.articles && resultados.value.articles.length > 0) {
-      ordenarArticulosPorFecha(resultados.value.articles);
-    }
+    loading.value = true
+    resetearTodo()
 
-    // Determinar el dominio para la blacklist
     try {
-      const urlObj = new URL(url.value);
-      const dominio = urlObj.hostname.replace('www.', '').split('.')[0].toLowerCase();
-      
-      // Limpiar la caché de blacklist para este dominio y cargar fresca
-      blacklistsByMedia.value[dominio] = null;
-      
-      // Filtrar artículos en blacklist (esto incluye la carga de la blacklist)
-      await filtrarArticulosEnBlacklist();
-    } catch (err) {
-      console.error('Error al procesar la blacklist:', err);
-    }
+      const response = await axios.post('https://servicio-competencias.vercel.app/analizar-sitio', {
+        url: url.value
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
 
+      resultados.value = response.data
+      verificarMedioGuardado(url.value)
+
+      if (medioYaGuardado.value) {
+        warning.value = 'Este medio ya se encuentra registrado'
+      }
+      loadingMetadata.value = true
+
+      const articleLinks = response.data.articles.map(article => article.link).filter(Boolean)
+
+      const batchSize = 10
+      const enrichedArticles = [...response.data.articles]
+      let processedCount = 0
+
+      // procesar batches secuencialmente
+      for (let i = 0; i < articleLinks.length; i += batchSize) {
+        const batchLinks = articleLinks.slice(i, i + batchSize)
+        
+        try {
+          const batchResponse = await axios.post(
+            'https://servicio-competencias.vercel.app/multiple-articles',
+            { urls: batchLinks },
+            { headers: { 'Content-Type': 'application/json' } }
+          )
+
+          if (batchResponse.data.resp && Array.isArray(batchResponse.data.data)) {
+            batchResponse.data.data.forEach(additionalData => {
+              try {
+                if (additionalData.success) {
+                  const articleIndex = enrichedArticles.findIndex(article => 
+                    article && article.link && article.link === additionalData.url
+                  )
+                  if (articleIndex !== -1) {
+                    enrichedArticles[articleIndex] = {
+                      ...enrichedArticles[articleIndex],
+                      tipo: additionalData.article?.tipo || 'Tipo no disponible',
+                      autor: additionalData.article?.autor || 'Autor no disponible',
+                      keywords: additionalData.article?.keywords || 'keywords no disponibles',
+                      metodo: additionalData.article?.metodo || '',
+                      seccion: additionalData.article?.seccion || 'Seccion no disponible',
+                      subseccion: additionalData.article?.subseccion || '',
+                      fechaPublicacion: additionalData.article?.fechaPublicacion || 'Fecha no disponible'
+                    }
+                  }
+                }
+              } catch (err) {
+                console.warn('Error al procesar metadatos de artículo:', err);
+                // Continuar con el siguiente artículo
+              }
+            })
+
+            processedCount += batchResponse.data.data.length
+
+            resultados.value = {
+              ...response.data,
+              articles: enrichedArticles.map((article, index) => {
+                if (index < processedCount) {
+                  return article
+                }
+                return response.data.articles[index]
+              })
+            }
+          }
+
+          
+        } catch (err) {
+          console.error(`Error processing batch ${i / batchSize + 1}:`, err)
+        }
+      }
+
+      if (resultados.value && resultados.value.articles) {
+        resultados.value.articles.forEach(article => {
+          if (!article.source) {
+            // Extraer el dominio de la URL como source predeterminado
+            try {
+              if (article.link) {
+                const urlObj = new URL(article.link);
+                const hostname = urlObj.hostname;
+                let sourceName = hostname
+                  .replace(/^www\./, '')
+                  .split('.')
+                  .slice(0, -1)
+                  .join('.');
+                
+                // Formatear el nombre del medio
+                sourceName = sourceName.split(/[.-]/)
+                  .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+                  .join(' ');
+                
+                article.source = sourceName;
+              } else {
+                // Si no hay link, usar el dominio de la URL analizada
+                const urlObj = new URL(url.value);
+                const dominio = urlObj.hostname.replace(/^www\./, '').split('.')[0];
+                article.source = dominio.charAt(0).toUpperCase() + dominio.slice(1);
+              }
+            } catch (err) {
+              console.error('Error al extraer source del artículo:', err);
+              article.source = 'Desconocido';
+            }
+          }
+        });
+      }
+      // Después de completar el procesamiento, ordenar por fecha
+      if (resultados.value && resultados.value.articles && resultados.value.articles.length > 0) {
+        ordenarArticulosPorFecha(resultados.value.articles);
+      }
+
+      // Determinar el dominio para la blacklist
+      try {
+        const urlObj = new URL(url.value);
+        const dominio = urlObj.hostname.replace('www.', '').split('.')[0].toLowerCase();
+        
+        // Limpiar la caché de blacklist para este dominio y cargar fresca
+        blacklistsByMedia.value[dominio] = null;
+        
+        // Filtrar artículos en blacklist (esto incluye la carga de la blacklist)
+        await filtrarArticulosEnBlacklist();
+      } catch (err) {
+        console.error('Error al procesar la blacklist:', err);
+      }
+
+    } catch (err) {
+      console.error('Error:', err)
+      error.value = err.response?.data?.message ||
+        'Error al analizar el sitio. Por favor intente nuevamente.'
+    } finally {
+      loading.value = false
+      loadingMetadata.value = false
+    }
   } catch (err) {
-    console.error('Error:', err)
-    error.value = err.response?.data?.message ||
-      'Error al analizar el sitio. Por favor intente nuevamente.'
+    console.error('Error general en analizarSitio:', err)
+    error.value = 'Ocurrió un error inesperado. Por favor intente nuevamente.'
   } finally {
     loading.value = false
     loadingMetadata.value = false
@@ -1486,7 +1501,7 @@ const analizarMedioExistente = async (url) => {
     }
 
     if (resultados.value && resultados.value.articles) {
-    resultados.value.articles.forEach(article => {
+      resultados.value.articles.forEach(article => {
       if (!article.source) {
         // Extraer el dominio de la URL como source predeterminado
         try {
@@ -1548,55 +1563,72 @@ const analizarMedioExistente = async (url) => {
 
 // Función para ordenar artículos por fecha
 const ordenarArticulosPorFecha = (articles) => {
-  articles.forEach(article => {
-    if (!article.fechaPublicacion && !article.timestamp) {
-      // Si no tiene fecha, tratar de extraerla del contenido o url
-      try {
-        if (article.link) {
-          const urlPartes = article.link.split('/');
-          // Muchos medios tienen fechas en sus URLs
-          for (let i = 0; i < urlPartes.length; i++) {
-            // Buscar patrón de fecha YYYY/MM/DD
-            if (/^\d{4}\/\d{2}\/\d{2}$/.test(urlPartes[i] + '/' + urlPartes[i+1] + '/' + urlPartes[i+2])) {
-              article.fechaPublicacion = `${urlPartes[i]}-${urlPartes[i+1]}-${urlPartes[i+2]}`;
-              break;
+  if (!articles || !Array.isArray(articles)) {
+    console.warn('Se intentó ordenar artículos, pero no es un array válido');
+    return;
+  }
+  
+  try {
+    articles.forEach(article => {
+      if (!article) return;
+      
+      if (!article.fechaPublicacion && !article.timestamp) {
+        // Si no tiene fecha, tratar de extraerla del contenido o url
+        try {
+          if (article.link) {
+            const urlPartes = article.link.split('/');
+            // Muchos medios tienen fechas en sus URLs
+            for (let i = 0; i < urlPartes.length - 2; i++) {
+              // Buscar patrón de fecha YYYY/MM/DD
+              if (/^\d{4}$/.test(urlPartes[i]) && 
+                  /^\d{2}$/.test(urlPartes[i+1]) && 
+                  /^\d{2}$/.test(urlPartes[i+2])) {
+                article.fechaPublicacion = `${urlPartes[i]}-${urlPartes[i+1]}-${urlPartes[i+2]}`;
+                break;
+              }
             }
           }
+        } catch (e) {
+          console.warn('Error al extraer fecha de URL:', e);
         }
-      } catch (e) {
-        console.log('Error al extraer fecha de URL:', e);
       }
-    }
-  });
-  
-  articles.sort((a, b) => {
-    // Usar fechaPublicacion o timestamp para ordenar
-    let fechaA = a.fechaPublicacion || a.timestamp || '';
-    let fechaB = b.fechaPublicacion || b.timestamp || '';
+    });
     
-    // Si todavía no hay fechas, usar el orden original
-    if (!fechaA && !fechaB) return 0;
-    if (!fechaA) return 1;
-    if (!fechaB) return -1;
-    
-    // Si las fechas son strings con formato diferente, tratar de normalizarlas
-    try {
-      // Intentar convertir a objeto Date
-      const dateA = new Date(fechaA);
-      const dateB = new Date(fechaB);
+    articles.sort((a, b) => {
+      if (!a || !b) return 0;
       
-      // Verificar si las fechas son válidas
-      if (!isNaN(dateA) && !isNaN(dateB)) {
-        return dateB - dateA; // Orden descendente (más reciente primero)
-      } else {
-        // Si alguna fecha no es válida, intentar comparar como strings
-        return fechaB.localeCompare(fechaA);
+      // Usar fechaPublicacion o timestamp para ordenar
+      let fechaA = a.fechaPublicacion || a.timestamp || '';
+      let fechaB = b.fechaPublicacion || b.timestamp || '';
+      
+      // Si todavía no hay fechas, usar el orden original
+      if (!fechaA && !fechaB) return 0;
+      if (!fechaA) return 1;
+      if (!fechaB) return -1;
+      
+      // Si las fechas son strings con formato diferente, tratar de normalizarlas
+      try {
+        // Intentar convertir a objeto Date
+        const dateA = new Date(fechaA);
+        const dateB = new Date(fechaB);
+        
+        // Verificar si las fechas son válidas
+        if (!isNaN(dateA) && !isNaN(dateB)) {
+          return dateB - dateA; // Orden descendente (más reciente primero)
+        } else {
+          // Si alguna fecha no es válida, intentar comparar como strings
+          return String(fechaB).localeCompare(String(fechaA));
+        }
+      } catch (err) {
+        console.warn('Error al comparar fechas:', err);
+        // Cualquier error, mantener el orden original
+        return 0;
       }
-    } catch (err) {
-      // Cualquier error, usar comparación de strings
-      return fechaB.localeCompare(fechaA);
-    }
-  });
+    });
+  } catch (error) {
+    console.error('Error general al ordenar artículos por fecha:', error);
+    // No interrumpir el flujo de la aplicación
+  }
 }
 
 const verificarMedioGuardado = (urlActual) => {
@@ -1768,15 +1800,20 @@ const formatearFecha = (timestamp) => {
   if (!timestamp) return '';
 
   try {
-    const fecha = new Date(timestamp);
+    // Si no es un string, intentar convertirlo
+    const timestampStr = typeof timestamp !== 'string' ? String(timestamp) : timestamp;
+    
+    let fecha = new Date(timestampStr);
+    
     if (isNaN(fecha.getTime())) {
-      const matches = timestamp.match(/(\d{2})\/(\d{2})\/(\d{4})/);
+      // Intento formatos comunes de fecha
+      const matches = timestampStr.match(/(\d{2})\/(\d{2})\/(\d{4})/);
       if (matches) {
         fecha = new Date(`${matches[3]}-${matches[2]}-${matches[1]}`);
       }
     }
 
-    // formatea si esvalida
+    // formatea si es válida
     if (!isNaN(fecha.getTime())) {
       return fecha.toLocaleDateString('es-ES', {
         year: 'numeric',
@@ -1786,11 +1823,11 @@ const formatearFecha = (timestamp) => {
         minute: '2-digit'
       }).replace(',', '');
     }
-
     
-    return timestamp;
+    return timestampStr;
   } catch (e) {
-    return timestamp;
+    console.warn('Error al formatear fecha:', e);
+    return typeof timestamp === 'string' ? timestamp : '';
   }
 }
 
@@ -1799,11 +1836,31 @@ const validateSummary = (summary) => {
   if (!summary) return '';
 
   // Verificar si el summary contiene el código de imageLoadError
-  if (summary.trim().startsWith('function imageLoadError')) {
+  if (typeof summary === 'string' && summary.trim().startsWith('function imageLoadError')) {
     return '';
   }
 
   return summary;
+}
+
+// Utility function to safely handle keywords
+const parseKeywords = (keywords) => {
+  if (!keywords) return [];
+  
+  try {
+    if (typeof keywords === 'string') {
+      return keywords.split(',').map(k => k.trim()).filter(Boolean);
+    } else if (Array.isArray(keywords)) {
+      return keywords.map(k => typeof k === 'string' ? k.trim() : String(k)).filter(Boolean);
+    } else if (typeof keywords === 'object') {
+      // Try to convert object to string if possible
+      return [String(keywords)].filter(Boolean);
+    }
+  } catch (err) {
+    console.warn('Error parsing keywords:', err);
+  }
+  
+  return [];
 }
 
 // Función para cargar la blacklist de un medio específico
