@@ -1,10 +1,9 @@
 <template>
   <div>
-    <VRow class="match-height">   
+    <VRow class="match-height">
       <!-- Bloque Izquierdo -->
       <VCol cols="12" md="6">
-        <!-- Vista normal (cuando no hay medios seleccionados) -->
-        <VCard v-if="selectedMediaUrls.length === 0" class="h-100">
+        <VCard class="h-100">
           <VCardTitle class="px-6 py-4">
             <h4 class="text-h6 mb-0">Analizador de Sitios Web</h4>
           </VCardTitle>
@@ -29,58 +28,10 @@
             </VForm>
           </VCardText>
         </VCard>
-
-        <!-- Vista de medios seleccionados (cuando hay al menos uno) -->
-        <VCard v-else class="h-100">
-          <VCardTitle class="px-6 py-4">
-            <h4 class="text-h6 mb-0">Medios seleccionados ({{ selectedMediaUrls.length }})</h4>
-          </VCardTitle>
-
-          <VCardText>
-            <VList density="compact" class="bg-grey-lighten-5 rounded border mb-4">
-              <VListItem v-for="(selectedUrl, index) in selectedMediaUrls" :key="index">
-                <template v-slot:prepend>
-                  <VIcon icon="tabler-link" size="16" class="me-2 text-primary" />
-                </template>
-                <VListItemTitle class="text-caption text-truncate">
-                  {{ selectedUrl.name || selectedUrl.url }}
-                </VListItemTitle>
-                <template v-slot:append>
-                  <VBtn icon variant="text" density="compact" size="x-small" 
-                    @click="removeSelectedUrl(index)" color="error">
-                    <VIcon icon="tabler-x" size="16" />
-                  </VBtn>
-                </template>
-              </VListItem>
-            </VList>
-            
-            <!-- Botones para selección múltiple -->
-            <div class="d-flex flex-column gap-2">
-              <VBtn 
-                color="primary" 
-                :loading="isAnalyzingMultiple" 
-                :disabled="isAnalyzingMultiple || selectedMediaUrls.length === 0"
-                @click="analizarMediosSeleccionados"
-                block>
-                <VIcon start icon="tabler-analyze" size="18" class="me-2" />
-                {{ isAnalyzingMultiple ? `Analizando (${currentAnalysisIndex + 1}/${selectedMediaUrls.length})...` : 'ANALIZAR SELECCIONADOS' }}
-              </VBtn>
-              
-              <VBtn 
-                variant="outlined" 
-                color="error" 
-                @click="limpiarSeleccion"
-                :disabled="isAnalyzingMultiple"
-                block>
-                <VIcon start icon="tabler-trash" size="18" class="me-2" />
-                LIMPIAR SELECCIÓN
-              </VBtn>
-            </div>
-          </VCardText>
-        </VCard>
       </VCol>
 
       <!-- Bloque Derecho -->
+
       <VCol cols="12" md="6">
         <!-- Bloque de resultados de análisis -->
         <VCard v-if="resultados && !error" class="h-100">
@@ -143,25 +94,15 @@
             <div v-else>
               <VExpansionPanels v-model="expandedPanels">
                 <VExpansionPanel v-for="(grupo, medio) in mediosAgrupados" :key="medio"
-                    @click="handlePanelChange(medio)">
-                    <VExpansionPanelTitle>
-                      <div class="d-flex align-center w-100">
-                        <!-- Checkbox para seleccionar todos los medios de este grupo -->
-                    <VCheckbox
-                      :model-value="allUrlsInView[medio] ? allUrlsInView[medio].allSelected : false"
-                      @click.stop
-                      @change="(val) => seleccionarTodosItems(medio, val)"
-                      density="compact"
-                      hide-details
-                      color="primary"
-                      class="me-2"
-                    ></VCheckbox>
-                        <span class="text-capitalize">{{ medio }}</span>
-                        <VChip color="grey-lighten-2" size="x-small" class="ms-2 custom-chip">
-                          {{ medioCounts[medio] || '...' }}
-                        </VChip>
-                      </div>
-                    </VExpansionPanelTitle>
+                  @click="handlePanelChange(medio)">
+                  <VExpansionPanelTitle>
+                    <div class="d-flex align-center">
+                      <span class="text-capitalize">{{ medio }}</span>
+                      <VChip color="grey-lighten-2" size="x-small" class="ms-2 custom-chip">
+                        {{ medioCounts[medio] || '...' }}
+                      </VChip>
+                    </div>
+                  </VExpansionPanelTitle>
 
                   <VExpansionPanelText>
                     <!-- Estado de carga -->
@@ -169,55 +110,44 @@
                       <VProgressCircular indeterminate color="primary" />
                     </div>
 
-                 
                     <!-- Mostrar datos -->
-                      <VList v-else-if="mediosData[medio]">
-                        <VListItem v-for="item in mediosData[medio]" :key="item._id"
-                          :title="formatearTitulo(item.key, medio)" class="mb-2 border-b">
-                          <template v-slot:prepend>
-                            <VCheckbox
-                              v-model="item.selected"
-                              @click.stop
-                              @change="handleUrlSelection(item, medio)"
-                              density="compact"
-                              hide-details
-                              color="primary"
-                            ></VCheckbox>
-                          </template>
-                          <template v-slot:append>
-                            <div class="d-flex gap-2">
-                              <VBtn icon variant="text" color="primary" :href="item.url_communication" target="_blank"
-                                size="small">
-                                <VIcon icon="tabler-external-link" size="18" />
-                              </VBtn>
-                              <VBtn icon variant="text" color="primary"
-                                @click="analizarMedioExistente(item.url_communication)" size="small">
-                                <VIcon icon="tabler-zoom-scan" size="18" />
-                              </VBtn>
-                            </div>
-                          </template>
-                        </VListItem>
-                      </VList>
+                    <VList v-else-if="mediosData[medio]">
+                      <VListItem v-for="item in mediosData[medio]" :key="item._id"
+                        :title="formatearTitulo(item.key, medio)" class="mb-2 border-b">
+                        <template v-slot:append>
+                          <div class="d-flex gap-2">
+                            <VBtn icon variant="text" color="primary" :href="item.url_communication" target="_blank"
+                              size="small">
+                              <VIcon icon="tabler-external-link" size="18" />
+                            </VBtn>
+                            <VBtn icon variant="text" color="primary"
+                              @click="analizarMedioExistente(item.url_communication)" size="small">
+                              <VIcon icon="tabler-zoom-scan" size="18" />
+                            </VBtn>
+                          </div>
+                        </template>
+                      </VListItem>
+                    </VList>
                   </VExpansionPanelText>
                 </VExpansionPanel>
               </VExpansionPanels>
 
               <!-- Paginación principal -->
-           
-              <div v-if="totalPages > 1" class="d-flex flex-column align-center mt-4 gap-2">
-                <div class="d-flex align-center justify-space-between w-100 mb-2">
-                  <span class="text-caption">Mostrando página {{ currentPage }} de {{ totalPages }}</span>
-                  <span class="text-caption">{{ Object.keys(mediosAgrupados).length }} medios por página</span>
-                </div>
-                <VPagination 
-                :model-value="currentPage"
-                :length="totalPages" 
-                :total-visible="5"
-                :disabled="loadingMedios" 
-                @update:model-value="cambiarPagina" 
-                color="primary"
-                class="pagination-custom" />
-              </div>
+             <!-- Paginación principal -->
+<div v-if="totalPages > 1" class="d-flex flex-column align-center mt-4 gap-2">
+  <div class="d-flex align-center justify-space-between w-100 mb-2">
+    <span class="text-caption">Mostrando página {{ currentPage }} de {{ totalPages }}</span>
+    <span class="text-caption">{{ Object.keys(mediosAgrupados).length }} medios por página</span>
+  </div>
+  <VPagination 
+  :model-value="currentPage"
+  :length="totalPages" 
+  :total-visible="5"
+  :disabled="loadingMedios" 
+  @update:model-value="cambiarPagina" 
+  color="primary"
+  class="pagination-custom" />
+</div>
             </div>
           </VCardText>
         </VCard>
@@ -225,173 +155,149 @@
     </VRow>
 
     <!-- Lista de artículos -->
-        <VRow v-if="resultados && !error">
-          <VCol cols="12">
-            <div class="article-list">
-              <div v-for="(articulo, index) in resultados.articles" :key="index" class="article-item">
-                <div class="d-flex align-items-start gap-2 py-2 border-b">
+    <VRow v-if="resultados && !error">
+      <VCol cols="12">
+        <div class="article-list">
+          <div v-for="(articulo, index) in resultados.articles" :key="index" class="article-item">
+            <div class="d-flex align-items-start gap-2 py-2 border-b">
 
-                  <div class="article-image">
-                    <div class="image-container rounded overflow-hidden">
-                      <VImg v-if="articulo.image" :src="articulo.image" :alt="articulo.title || 'Imagen del artículo'"
-                        width="50" height="50" cover class="rounded">
-                        <template v-slot:placeholder>
-                          <div class="d-flex align-items-center justify-content-center h-100 bg-light">
-                            <VIcon icon="tabler-photo" size="20" class="text-medium-emphasis" />
-                          </div>
-                        </template>
-                      </VImg>
-                      <div v-else class="placeholder-image d-flex align-items-center justify-content-center bg-light"
-                        style="height: 50px; width: 50px;">
+              <div class="article-image">
+                <div class="image-container rounded overflow-hidden">
+                  <VImg v-if="articulo.image" :src="articulo.image" :alt="articulo.title || 'Imagen del artículo'"
+                    width="50" height="50" cover class="rounded">
+                    <template v-slot:placeholder>
+                      <div class="d-flex align-items-center justify-content-center h-100 bg-light">
                         <VIcon icon="tabler-photo" size="20" class="text-medium-emphasis" />
                       </div>
-                    </div>
-                  </div>
-
-                  <!-- Contenido del artículo -->
-                  <div class="article-content flex-grow-1 min-w-0">
-
-                    <!-- Metadatos en línea -->
-                    <div class="metadata-container gap-2">
-                      <div class="">
-                        <div class="article-meta d-flex align-center gap-2 mb-1">
-                          <!-- CHIP DEL MEDIO: color variable según el medio -->
-
-                       
-<VChip 
-  v-if="articulo.source || articulo.sourceName" 
-  size="x-small" 
-  class="text-uppercase metadata-item font-weight-bold"
-  :style="obtenerEstiloColorMedio(articulo.source || articulo.sourceName)"
->
-  {{ articulo.source || articulo.sourceName }}
-</VChip>
-                          <VChip v-else color="info" size="x-small" class="text-uppercase metadata-item">
-                            Medio no disponible
-                          </VChip>
-
-                          <!-- Indicador de carga -->
-                          <VChip v-if="loadingMetadata" size="x-small" color="grey">
-                            <VIcon start icon="tabler-loader-2" class="loading-spin" size="12" />
-                            Cargando...
-                          </VChip>
-
-                          <div v-else class="gap-2 grupoTopInfo">
-          <div class="d-flex align-center gap-2 flex-wrap">
-            <!-- Fecha -->
-            <span v-if="articulo.fechaPublicacion || articulo.timestamp" class="text-caption text-medium-emphasis metadata-item">
-              <!-- Para El Telégrafo  -->
-              <template v-if="articulo.source === 'El Telégrafo' || (articulo.link && articulo.link.includes('eltelegrafo'))">
-                {{ obtenerFechaActual() }} {{ articulo.timestamp || articulo.fechaPublicacion }}
-              </template>
-              <!-- otros medios  -->
-              <template v-else>
-                {{ formatearFecha(articulo.fechaPublicacion || articulo.timestamp) }}
-              </template>
-            </span>
-            
-            <!-- Categoría como chip pequeño -->
-            <VChip v-if="articulo.category" size="x-small">
-              {{ articulo.category }}
-            </VChip>
-            
-            <!-- Sección, Autor, Tipo -->
-            <VChip v-if="articulo.seccion" size="x-small">{{ articulo.seccion }}</VChip>
-            <div v-if="articulo.autor" class="autor-ec" title="Autor">
-              <VIcon icon="tabler-user" size="15" /> <small>{{ articulo.autor }}</small>
-            </div>
-            <div v-if="articulo.tipo" class="article-type-ec" title="Tipo de artículo">
-              <VIcon icon="tabler-article" size="15" /> <small>{{ articulo.tipo }}</small>
-            </div>
-          </div>
-
-                            <!-- Keywords  -->
-                            <div v-if="articulo.keywords">
-                              <VChip v-for="(keyword, index) in articulo.keywords.split(',').slice(0, 2)" :key="keyword"
-                                size="x-small" class="mr-2" variant="outlined" color="secondary">
-                                {{ keyword.trim() }}
-                              </VChip>
-
-                              <VMenu v-if="articulo.keywords.split(',').length > 2" class="bloqueToogle"
-                                :close-on-content-click="false">
-                                <template v-slot:activator="{ props }">
-                                  <VChip size="x-small" variant="outlined" color="secondary" v-bind="props">
-                                    +{{ articulo.keywords.split(',').length - 2 }}
-                                  </VChip>
-                                </template>
-                                <VList density="compact" class="pa-2">
-                                  <template v-for="keyword in articulo.keywords.split(',').slice(2)" :key="keyword">
-                                    <VChip size="x-small" variant="outlined" color="secondary" class="ma-1">
-                                      {{ keyword.trim() }}
-                                    </VChip>
-                                  </template>
-                                </VList>
-                              </VMenu>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-
-                    <!-- Título -->
-                    <h6 class="text-subtitle-1 mb-1 text-truncate font-weight-medium titumovil"
-                      :title="articulo.title || 'Título no disponible'">
-                      {{ articulo.title || 'Título no disponible' }}
-                    </h6>
-
-                    <!-- Resumen -->
-                    <p v-if="validateSummary(articulo.summary)"
-                      class="text-body-2 text-medium-emphasis mt-1 mb-0 d-none d-sm-block description-text"
-                      :title="validateSummary(articulo.summary)">
-                      {{ validateSummary(articulo.summary) }}
-                    </p>
-                    <p v-else
-                      class="text-body-2 text-medium-emphasis mt-1 mb-0 d-none d-sm-block description-text fst-italic">
-                      Resumen no disponible
-                    </p>
-                  </div>
-
-                  <!-- Botón de acción -->
-                  <div class="article-action ms-2">
-                    <!-- Botón omitir contenido -->
-                      <VBtn @click="omitirContenido(articulo)" variant="text" size="small" color="error" icon title="Omitir contenido">
-                        <VIcon icon="tabler-file-x" size="16" />
-                      </VBtn>
-                      
-                      <!-- Botón ver artículo -->
-                      <VBtn v-if="articulo.link" :href="articulo.link" target="_blank" variant="text" size="small" color="primary" icon title="Ver artículo">
-                        <VIcon icon="tabler-external-link" size="16" />
-                      </VBtn>
+                    </template>
+                  </VImg>
+                  <div v-else class="placeholder-image d-flex align-items-center justify-content-center bg-light"
+                    style="height: 50px; width: 50px;">
+                    <VIcon icon="tabler-photo" size="20" class="text-medium-emphasis" />
                   </div>
                 </div>
               </div>
-            </div>
-          </VCol>
-        </VRow>
-  </div>
 
-  <!-- Componente de notificación de progreso -->
-      <VSnackbar
-        v-model="showProgress"
-        :timeout="-1"
-        color="primary"
-        position="bottom"
-        variant="flat"
-        width="400"
-        class="progress-snackbar"
-      >
-        <div class="d-flex flex-column">
-          <div class="d-flex align-center justify-space-between mb-2">
-            <span class="font-weight-medium">{{ progressMessage }}</span>
-            <span class="font-weight-bold">{{ Math.round(progressPercent) }}%</span>
+              <!-- Contenido del artículo -->
+              <div class="article-content flex-grow-1 min-w-0">
+
+                <!-- Metadatos en línea -->
+                <div class="metadata-container gap-2">
+                  <div class="">
+
+                    <div class="article-meta d-flex align-center gap-2 mb-1">
+                      <VChip v-if="articulo.category" color="info" size="x-small" class="text-uppercase metadata-item">
+                        {{ articulo.category }}
+                      </VChip>
+                      <VChip v-else color="grey-lighten-1" size="x-small" class="text-uppercase metadata-item">
+                        Sin categoría
+                      </VChip>
+
+                      <VChip v-if="loadingMetadata" size="x-small" color="grey">
+                        <VIcon start icon="tabler-loader-2" class="loading-spin" size="12" />
+                        Cargando...
+                      </VChip>
+
+                      <div v-else class=" gap-2 grupoTopInfo">
+                        <div class="d-flex align-center gap-2">
+                          
+                          <span v-if="articulo.fechaPublicacion || articulo.timestamp" class="text-caption text-medium-emphasis metadata-item">
+                          <!-- Para El Telégrafo  -->
+                          <template v-if="articulo.source === 'El Telégrafo' || (articulo.link && articulo.link.includes('eltelegrafo'))">
+                              {{ obtenerFechaActual() }} {{ articulo.timestamp || articulo.fechaPublicacion }}
+                            </template>
+                          <!-- otros medios  -->
+                          <template v-else>
+                            {{ formatearFecha(articulo.fechaPublicacion || articulo.timestamp) }}
+                          </template>
+                        </span>
+                          <VChip v-if="articulo.seccion" size="x-small">{{ articulo.seccion }}</VChip>
+                          <div v-if="articulo.autor" class="autor-ec" title="Autor">
+                            <VIcon icon="tabler-user" size="15" /> <small>{{ articulo.autor }}</small>
+                          </div>
+                          <div v-if="articulo.tipo" class="article-type-ec" title="Tipo de artículo">
+                            <VIcon icon="tabler-article" size="15" /> <small>{{ articulo.tipo }}</small>
+                          </div>
+                        </div>
+
+
+                        <div v-if="articulo.keywords">
+                          <VChip v-for="(keyword, index) in articulo.keywords.split(',').slice(0, 2)" :key="keyword"
+                            size="x-small" class="mr-2" variant="outlined" color="secondary">
+                            {{ keyword.trim() }}
+                          </VChip>
+
+                          <VMenu v-if="articulo.keywords.split(',').length > 2" class="bloqueToogle"
+                            :close-on-content-click="false">
+                            <template v-slot:activator="{ props }">
+                              <VChip size="x-small" variant="outlined" color="secondary" v-bind="props">
+                                +{{ articulo.keywords.split(',').length - 2 }}
+                              </VChip>
+                            </template>
+                            <VList density="compact" class="pa-2">
+                              <template v-for="keyword in articulo.keywords.split(',').slice(2)" :key="keyword">
+                                <VChip size="x-small" variant="outlined" color="secondary" class="ma-1">
+                                  {{ keyword.trim() }}
+                                </VChip>
+                              </template>
+                            </VList>
+                          </VMenu>
+
+
+
+
+                        </div>
+                      </div>
+
+                    </div>
+
+
+                  </div>
+
+
+
+
+
+                </div>
+
+                <!-- Título -->
+                <h6 class="text-subtitle-1 mb-1 text-truncate font-weight-medium titumovil"
+                  :title="articulo.title || 'Título no disponible'">
+                  {{ articulo.title || 'Título no disponible' }}
+                </h6>
+
+                <!-- Resumen -->
+                <p v-if="validateSummary(articulo.summary)"
+                  class="text-body-2 text-medium-emphasis mt-1 mb-0 d-none d-sm-block description-text"
+                  :title="validateSummary(articulo.summary)">
+                  {{ validateSummary(articulo.summary) }}
+                </p>
+                <p v-else
+                  class="text-body-2 text-medium-emphasis mt-1 mb-0 d-none d-sm-block description-text fst-italic">
+                  Resumen no disponible
+                </p>
+              </div>
+
+              <!-- Botón de acción -->
+              <div class="article-action ms-2">
+                <!-- Botón omitir contenido -->
+                  <VBtn @click="omitirContenido(articulo)" variant="text" size="small" color="error" icon title="Omitir contenido">
+                    <VIcon icon="tabler-file-x" size="16" />
+                  </VBtn>
+                  
+                  <!-- Botón ver artículo -->
+                  <VBtn v-if="articulo.link" :href="articulo.link" target="_blank" variant="text" size="small" color="primary" icon title="Ver artículo">
+                    <VIcon icon="tabler-external-link" size="16" />
+                  </VBtn>
+              </div>
+            </div>
           </div>
-          <VProgressLinear
-            v-model="progressPercent"
-            color="white"
-            height="5"
-          ></VProgressLinear>
         </div>
-      </VSnackbar>
+      </VCol>
+    </VRow>
+
+
+  </div>
 </template>
 
 <script setup>
@@ -414,33 +320,16 @@ const itemsPerPage = 10
 const currentPage = ref(1)
 const totalPages = ref(0)
 
-const medioCounts = ref({}) 
+const medioCounts = ref({}) // Conteo real por medio
 
 const mediosData = ref({})
 const loadingMedioData = ref({})
 const expandedPanels = ref([])
 
+
 const blacklistsByMedia = ref({});
 const loadingBlacklist = ref(false);
 
-const selectedMediaUrls = ref([]) 
-const allUrlsInView = ref({}) 
-const isAnalyzingMultiple = ref(false) 
-const currentAnalysisIndex = ref(0)
-const multipleResults = ref([]) 
-
-const inicializarEstructuras = () => {
-  if (mediosAgrupados.value) {
-    Object.keys(mediosAgrupados.value).forEach(medio => {
-      if (!allUrlsInView.value[medio]) {
-        allUrlsInView.value[medio] = {
-          allSelected: false,
-          items: []
-        }
-      }
-    })
-  }
-}
 
 const urlRules = [
   v => !!v || 'La URL es requerida',
@@ -469,10 +358,6 @@ const mediosAgrupados = ref({})
 const loadingMedioDetails = ref({})
 const medioDetalles = ref({})
 const medioPaginas = ref({})
-
-const showProgress = ref(false)
-const progressMessage = ref('')
-const progressPercent = ref(0)
 
 // Función para cargar los detalles de un medio específico
 const cargarDetallesMedio = async (medio, page = 1) => {
@@ -538,6 +423,7 @@ const handleAccordionChange = async (medio, isOpen) => {
     await cargarDetallesMedio(medio, 1)
   }
 }
+
 
 const obtenerNombreMedio = (key) => {
   // Maneja tanto el formato con punto como con guión
@@ -635,9 +521,6 @@ const cargarMedios = async (page) => {
       
       console.log(`Paginación actualizada: página ${page} de ${totalPaginas}, mostrando ${Object.keys(grupos).length} medios`)
     }
-
-    inicializarEstructuras()
-    
   } catch (err) {
     console.error('Error al cargar medios:', err)
     mediosAgrupados.value = {}
@@ -651,6 +534,7 @@ const cambiarPagina = async (newPage) => {
   currentPage.value = newPage
   await cargarMedios(newPage)
 }
+
 
 const cargarConteoMedio = async (medio) => {
   try {
@@ -668,50 +552,15 @@ const cargarConteoMedio = async (medio) => {
 
 onMounted(async () => {
   await cargarMedios(1)
-  
-  // Inicializar estructuras para todos los medios cargados
-  inicializarEstructuras()
 })
 
-// Inicializar la estructura de selección cuando se cargan los datos del medio
-const initializeSelectionStructure = (medio) => {
-  console.log(`Inicializando estructura para medio: ${medio}`)
-  
-  // Asegurarse de que exista el objeto para este medio
-  if (!allUrlsInView.value[medio]) {
-    allUrlsInView.value[medio] = {
-      allSelected: false,
-      items: []
-    }
-  }
-  
-  // Inicializar la propiedad 'selected' en cada item si no existe
-  if (mediosData.value[medio]) {
-    mediosData.value[medio].forEach(item => {
-      // Usar Vue.set o asignar directamente si el valor no existe
-      if (item.selected === undefined) {
-        item.selected = false
-      }
-      
-      // Agregar a allUrlsInView si no existe
-      const existingItemIndex = allUrlsInView.value[medio].items.findIndex(i => i._id === item._id)
-      if (existingItemIndex === -1) {
-        allUrlsInView.value[medio].items.push({
-          _id: item._id,
-          url: item.url_communication,
-          name: formatearTitulo(item.key, medio),
-          selected: item.selected || false
-        })
-      }
-    })
-  }
-}
 // Función para cargar datos de un medio específico
 const cargarDatosMedio = async (medio, page = 1) => {
   try {
-    console.log(`Iniciando carga de datos para medio: ${medio}, página: ${page}`)
     loadingMedioData.value[medio] = true
 
+    console.log(`Cargando datos del medio ${medio}, página ${page}`)
+    
     const response = await axios.get(
       `https://servicio-competencias.vercel.app/scrapper-rule/medio/${medio}`,
       {
@@ -722,15 +571,9 @@ const cargarDatosMedio = async (medio, page = 1) => {
       }
     )
 
-    console.log(`Respuesta recibida para medio ${medio}:`, response.data)
-
     if (response.data && Array.isArray(response.data.data)) {
       mediosData.value[medio] = response.data.data
-      console.log(`Datos cargados para ${medio}:`, mediosData.value[medio].length)
       medioCounts.value[medio] = response.data.total
-      
-      // Inicializar la estructura de selección
-      initializeSelectionStructure(medio)
       
       // Actualizar información de paginación para este medio
       if (!medioPaginas.value[medio]) {
@@ -752,473 +595,38 @@ const cargarDatosMedio = async (medio, page = 1) => {
     loadingMedioData.value[medio] = false
   }
 }
-
-// Función para limpiar todas las selecciones
-const limpiarSeleccion = () => {
-  // Limpiar la lista de URLs seleccionadas
-  selectedMediaUrls.value = []
-  
-  // Desmarcar todos los checkboxes
-  Object.keys(allUrlsInView.value).forEach(medio => {
-    if (allUrlsInView.value[medio]) {
-      allUrlsInView.value[medio].allSelected = false
-      
-      if (allUrlsInView.value[medio].items) {
-        allUrlsInView.value[medio].items.forEach(item => {
-          item.selected = false
-        })
-      }
-    }
-    
-    // También actualizar en mediosData si existe
-    if (mediosData.value[medio]) {
-      mediosData.value[medio].forEach(item => {
-        item.selected = false
-      })
-    }
-  })
-}
-
-// Manejar la selección/deselección individual de un ítem
-const handleUrlSelection = (item, medio) => {
-  console.log(`Item seleccionado: ${item.key}, Medio: ${medio}, Estado: ${item.selected}`)
-  
-  // Si se selecciona
-  if (item.selected) {
-    // Verificar que no esté ya en la lista
-    const existeEnLista = selectedMediaUrls.value.some(
-      url => url._id === item._id && url.medio === medio
-    )
-    
-    if (!existeEnLista && item.url_communication) {
-      selectedMediaUrls.value.push({
-        _id: item._id,
-        url: item.url_communication,
-        name: formatearTitulo(item.key, medio),
-        medio: medio
-      })
-    }
-  } else {
-    // Si se deselecciona, quitar de la lista
-    selectedMediaUrls.value = selectedMediaUrls.value.filter(
-      url => !(url._id === item._id && url.medio === medio)
-    )
-  }
-  
-  // Verificar si todos los ítems del medio están seleccionados
-  if (mediosData.value[medio]) {
-    const todosSeleccionados = mediosData.value[medio].every(i => i.selected)
-    
-    // Actualizar el estado del checkbox general
-    if (!allUrlsInView.value[medio]) {
-      allUrlsInView.value[medio] = { allSelected: todosSeleccionados, items: [] }
-    } else {
-      allUrlsInView.value[medio].allSelected = todosSeleccionados
-    }
-  }
-}
-
-// Seleccionar o deseleccionar todos los items de un medio
-const seleccionarTodosItems = (medio, isSelected) => {
-  // Asegurarse de que isSelected sea un booleano
-  let shouldSelect = isSelected
-  
-  // Si es un objeto event, extraer el valor
-  if (typeof isSelected === 'object' && isSelected !== null) {
-    console.log('isSelected es un objeto:', isSelected)
-    shouldSelect = isSelected.target ? isSelected.target.checked : false
-  }
-  
-  console.log(`Seleccionando todos los items de ${medio}: ${shouldSelect}`)
-  
-  // Inicializar estructura si no existe
-  if (!allUrlsInView.value[medio]) {
-    allUrlsInView.value[medio] = {
-      allSelected: shouldSelect,
-      items: []
-    }
-  } else {
-    allUrlsInView.value[medio].allSelected = shouldSelect
-  }
-  
-  // Actualizar los items si ya están cargados
-  if (mediosData.value[medio] && mediosData.value[medio].length) {
-    console.log(`Actualizando ${mediosData.value[medio].length} items de ${medio}`)
-    
-    mediosData.value[medio].forEach(item => {
-      item.selected = shouldSelect
-    })
-    
-    // Actualizar seleccionados
-    if (shouldSelect) {
-      // Agregar items no duplicados
-      mediosData.value[medio].forEach(item => {
-        if (item.url_communication && !selectedMediaUrls.value.some(url => url._id === item._id)) {
-          selectedMediaUrls.value.push({
-            _id: item._id,
-            url: item.url_communication,
-            name: formatearTitulo(item.key, medio),
-            medio: medio
-          })
-        }
-      })
-    } else {
-      // Quitar todos los del medio
-      selectedMediaUrls.value = selectedMediaUrls.value.filter(url => url.medio !== medio)
-    }
-  } else {
-    console.log(`No hay datos cargados para el medio ${medio}`)
-  }
-}
-
-// Eliminar un URL seleccionado
-const removeSelectedUrl = (index) => {
-  const selectedItem = selectedMediaUrls.value[index]
-  
-  // Quitar de la lista de seleccionados
-  selectedMediaUrls.value.splice(index, 1)
-  
-  // Actualizar el estado en mediosData si existe
-  if (selectedItem.medio && mediosData.value[selectedItem.medio]) {
-    const item = mediosData.value[selectedItem.medio].find(i => i._id === selectedItem._id)
-    if (item) {
-      item.selected = false
-    }
-  }
-  
-  // Actualizar en allUrlsInView
-  if (selectedItem.medio && allUrlsInView.value[selectedItem.medio]) {
-    const itemInView = allUrlsInView.value[selectedItem.medio].items.find(i => i._id === selectedItem._id)
-    if (itemInView) {
-      itemInView.selected = false
-    }
-    
-    // Actualizar estado "todos seleccionados"
-    updateAllSelectedState(selectedItem.medio)
-  }
-}
-
-// Actualizar el estado de selección "todos" basado en selecciones individuales
-const updateAllSelectedState = (medio) => {
-  if (!allUrlsInView.value[medio] || !mediosData.value[medio]) return
-  
-  const allItems = mediosData.value[medio]
-  const allSelected = allItems.every(item => item.selected)
-  allUrlsInView.value[medio].allSelected = allSelected
-}
-
-// Analizar todos los medios seleccionados
-const analizarMediosSeleccionados = async () => {
-  if (selectedMediaUrls.value.length === 0) return
-  
-  isAnalyzingMultiple.value = true
-  currentAnalysisIndex.value = 0
-  multipleResults.value = []
-  
-  // Mostrar notificación de progreso
-  showProgress.value = true
-  progressPercent.value = 0
-  progressMessage.value = 'Preparando análisis...'
-  
-  try {
-    const totalMedios = selectedMediaUrls.value.length;
-    
-    // Analizar cada URL seleccionada secuencialmente
-    for (let i = 0; i < totalMedios; i++) {
-      currentAnalysisIndex.value = i
-      const selectedUrl = selectedMediaUrls.value[i]
-      
-      // Actualizar mensaje de progreso
-      progressMessage.value = `Analizando ${selectedUrl.name} (${i+1} de ${totalMedios})`;
-      progressPercent.value = (i / totalMedios) * 80; // Reservamos 80% para análisis principal
-      
-      try {
-        const response = await axios.post('https://servicio-competencias.vercel.app/analizar-sitio', {
-          url: selectedUrl.url
-        }, {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        
-        // Guardar este resultado
-        multipleResults.value.push({
-          url: selectedUrl.url,
-          name: selectedUrl.name,
-          data: response.data
-        })
-        
-        // Procesar metadatos adicionales si es necesario
-        if (response.data && response.data.articles) {
-          const articleLinks = response.data.articles.map(article => article.link).filter(Boolean)
-          const batchSize = 10
-          const totalBatches = Math.ceil(articleLinks.length / batchSize);
-          
-          progressMessage.value = `Enriqueciendo datos de ${selectedUrl.name}...`;
-          
-          for (let j = 0; j < articleLinks.length; j += batchSize) {
-            // Actualizar progreso para el enriquecimiento de datos
-            const batchNumber = Math.floor(j / batchSize) + 1;
-            const batchProgress = batchNumber / totalBatches;
-            const medioProgress = i / totalMedios;
-            progressPercent.value = 80 + (medioProgress * 20) + (batchProgress * (20 / totalMedios));
-            
-            const batchLinks = articleLinks.slice(j, j + batchSize)
-            
-            try {
-              const batchResponse = await axios.post(
-                'https://servicio-competencias.vercel.app/multiple-articles',
-                { urls: batchLinks },
-                { headers: { 'Content-Type': 'application/json' } }
-              )
-              
-              if (batchResponse.data.resp && Array.isArray(batchResponse.data.data)) {
-                const lastIndex = multipleResults.value.length - 1
-                
-                if (multipleResults.value[lastIndex] && multipleResults.value[lastIndex].data) {
-                  // Enriquecer los artículos con los metadatos adicionales
-                  batchResponse.data.data.forEach(additionalData => {
-                    if (additionalData.success) {
-                      const articleIndex = multipleResults.value[lastIndex].data.articles.findIndex(
-                        article => article.link === additionalData.url
-                      )
-                      
-                      if (articleIndex !== -1) {
-                        multipleResults.value[lastIndex].data.articles[articleIndex] = {
-                          ...multipleResults.value[lastIndex].data.articles[articleIndex],
-                          tipo: additionalData.article?.tipo || 'Tipo no disponible',
-                          autor: additionalData.article?.autor || 'Autor no disponible',
-                          keywords: additionalData.article?.keywords || 'keywords no disponibles',
-                          metodo: additionalData.article?.metodo || '',
-                          seccion: additionalData.article?.seccion || 'Seccion no disponible',
-                          subseccion: additionalData.article?.subseccion || '',
-                          fechaPublicacion: additionalData.article?.fechaPublicacion || 'Fecha no disponible'
-                        }
-                      }
-                    }
-                  })
-                }
-              }
-            } catch (err) {
-              console.error(`Error processing batch for ${selectedUrl.name}:`, err)
-            }
-          }
-        }
-      } catch (err) {
-        console.error(`Error al analizar URL ${selectedUrl.url}:`, err);
-        // Añadir incluso con error para mantener el orden
-        multipleResults.value.push({
-          url: selectedUrl.url,
-          name: selectedUrl.name,
-          error: err.response?.data?.message || 'Error al analizar este medio'
-        });
-      }
-    }
-    
-    // Actualizar progreso para la combinación final
-    progressMessage.value = 'Combinando resultados...';
-    progressPercent.value = 95;
-    
-    // Combinar resultados y mostrar en pantalla
-    combinarYMostrarResultados();
-    
-    // Completar progreso
-    progressMessage.value = 'Análisis completado';
-    progressPercent.value = 100;
-    
-    // Ocultar notificación después de un momento
-    setTimeout(() => {
-      showProgress.value = false;
-    }, 2000);
-  } catch (err) {
-    console.error('Error en el análisis múltiple:', err);
-    error.value = 'Error al procesar los medios seleccionados';
-    
-    // Actualizar notificación en caso de error
-    progressMessage.value = 'Error en el análisis';
-    setTimeout(() => {
-      showProgress.value = false;
-    }, 2000);
-  } finally {
-    isAnalyzingMultiple.value = false;
-  }
-}
-
-const obtenerEstiloColorMedio = (medio) => {
-  if (!medio) return { backgroundColor: '#757575', color: 'white', minWidth: '60px', textAlign: 'center' };
-  
-  const medioNormalizado = String(medio).toLowerCase().trim();
-  
-  // Mapeo de medios a colores específicos
-  const colorMap = {
-    'telegrafo': '#FB8C00',
-    'universo': '#1565C0',
-    'comercio': '#3F51B5',
-    'ecuavisa': '#009688',
-    'cnn': '#F44336',
-    'infobae': '#673AB7',
-    'extra': '#D50000',
-    'clarin': '#CDDC39'
-  };
-  
-  // Buscar coincidencia
-  let backgroundColor = '#757575'; // Color por defecto
-  
-  for (const [clave, color] of Object.entries(colorMap)) {
-    if (medioNormalizado.includes(clave)) {
-      backgroundColor = color;
-      break;
-    }
-  }
-  
-  // Si no hay coincidencia, asignar color por primera letra
-  if (backgroundColor === '#757575') {
-    const letraColores = [
-      '#9C27B0', '#FF5722', '#03A9F4', '#CDDC39', '#E91E63',
-      '#00BCD4', '#FFC107', '#8BC34A', '#673AB7', '#FFEB3B',
-      '#009688', '#FF9800', '#4CAF50', '#F44336', '#2196F3', '#3F51B5'
-    ];
-    
-    const indiceColor = medioNormalizado.charCodeAt(0) % letraColores.length;
-    backgroundColor = letraColores[indiceColor];
-  }
-  
-  const textColor = esColorOscuro(backgroundColor) ? 'white' : 'black';
-  
-  return {
-    backgroundColor: backgroundColor,
-    color: textColor,
-    minWidth: '60px',
-    textAlign: 'center',
-    fontWeight: 'bold'
-  };
-};
-
-const esColorOscuro = (hexColor) => {
-  // Convertir color hex a RGB
-  const r = parseInt(hexColor.slice(1, 3), 16);
-  const g = parseInt(hexColor.slice(3, 5), 16);
-  const b = parseInt(hexColor.slice(5, 7), 16);
-  
-  // Calcular luminosidad
-  const luminosidad = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-  
-  // Si la luminosidad es menor que 0.5, el color es oscuro
-  return luminosidad < 0.5;
-};
-
-// Combinar y mostrar los resultados del análisis múltiple
-const combinarYMostrarResultados = () => {
-  if (multipleResults.value.length === 0) return
-  
-  const combinado = {
-    source: 'Múltiples medios',
-    total: 0,
-    articles: []
-  }
-    multipleResults.value.forEach(result => {
-    if (result.data && result.data.articles) {
-      // Añadir identificación de la fuente a cada artículo
-      const articlesWithSource = result.data.articles.map(article => {
-        // Extraer nombre del medio de la URL si no existe
-        let sourceName = article.source;
-        
-        if (!sourceName) {
-          try {
-            if (article.link) {
-              const urlObj = new URL(article.link);
-              const hostname = urlObj.hostname;
-              sourceName = hostname
-                .replace(/^www\./, '')
-                .split('.')
-                .slice(0, -1)
-                .join('.');
-              
-              // Formatear el nombre del medio
-              sourceName = sourceName.split(/[.-]/)
-                .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-                .join(' ');
-            } else {
-              // Usar el nombre del medio de la selección
-              sourceName = result.name;
-            }
-          } catch (e) {
-            sourceName = result.name;
-          }
-        }
-        
-        return {
-          ...article,
-          sourceUrl: result.url,
-          sourceName: result.name,
-          // Preservar el source original o usar el nombre del medio
-          source: sourceName || result.name
-        };
-      });
-      
-      // Añadir al combinado
-      combinado.articles.push(...articlesWithSource);
-      combinado.total += articlesWithSource.length;
-    }
-  });
-  
-  // Ordenar por fecha de más reciente a más antigua
-  ordenarArticulosPorFecha(combinado.articles);
-  
-  // Mostrar los resultados
-  resultados.value = combinado;
-}
-
 // Función para manejar la expansión del acordeón
 const handlePanelChange = async (medio) => {
-  console.log(`Panel cambiado para medio: ${medio}`)
-  
-
-  if (!allUrlsInView.value[medio]) {
-    allUrlsInView.value[medio] = {
-      allSelected: false,
-      items: []
-    }
-  }
-  
-  // Cargar datos si no existen
-  if (!mediosData.value[medio] || !mediosData.value[medio].length) {
+  if (!mediosData.value[medio]) {
     await cargarDatosMedio(medio)
-  } else {
-    mediosData.value[medio].forEach(item => {
-      if (item.selected === undefined) {
-        item.selected = false
-      }
-    })
-    
-    initializeSelectionStructure(medio)
   }
 }
 
+
 const formatearTitulo = (key, medio) => {
+  // Normalizar tanto el key como el medio para la comparación
   const keyNorm = key.trim().toLowerCase()
   const medioNorm = medio.trim().toLowerCase()
 
   // Si es la página principal
   if (keyNorm === medioNorm) {
-    // Incluir el nombre del medio en el título
-    return capitalizar(medio) + ' - Principal'
+    return 'Principal'
   }
 
   // Si tiene un punto (formato con subcategorías)
   if (key.includes('.')) {
     const [, ...partes] = key.split('.')
-    return capitalizar(medio) + ' - ' + capitalizar(partes.join(' / '))
+    return capitalizar(partes.join(' / '))
   }
 
   // Para el formato con guiones
   if (key.startsWith(medio)) {
     const seccion = key.substring(medio.length).replace(/^[-.]/, '')
-    return capitalizar(medio) + ' - ' + capitalizar(seccion)
+    return capitalizar(seccion)
   }
 
   // Para otros casos
-  return capitalizar(medio) + ' - ' + capitalizar(key.replace(medio, '').replace(/^[-.]/, ''))
+  return capitalizar(key.replace(medio, '').replace(/^[-.]/, ''))
 }
 
 const capitalizar = (texto) => {
@@ -1247,6 +655,7 @@ const construirKey = (nombreMedio, path) => {
 const pegarURL = async () => {
   try {
     const texto = await navigator.clipboard.readText()
+    // Aplicamos el asegurarHttps al texto pegado
     url.value = asegurarHttps(texto)
   } catch (err) {
     console.error('Error al pegar:', err)
@@ -1268,6 +677,8 @@ const limpiarMensajes = () => {
   warning.value = null
 }
 
+
+
 const analizarSitio = async () => {
   url.value = asegurarHttps(url.value)
   
@@ -1288,6 +699,7 @@ const analizarSitio = async () => {
       }
     })
 
+    // Set initial results immediately
     resultados.value = response.data
     verificarMedioGuardado(url.value)
 
@@ -1296,13 +708,14 @@ const analizarSitio = async () => {
     }
     loadingMetadata.value = true
 
+    // Process additional data in background
     const articleLinks = response.data.articles.map(article => article.link).filter(Boolean)
 
     const batchSize = 10
     const enrichedArticles = [...response.data.articles]
     let processedCount = 0
 
-    // procesar batches secuencialmente
+    // Process batches sequentially
     for (let i = 0; i < articleLinks.length; i += batchSize) {
       const batchLinks = articleLinks.slice(i, i + batchSize)
       
@@ -1332,62 +745,26 @@ const analizarSitio = async () => {
             }
           })
 
+          // Update processed count
           processedCount += batchResponse.data.data.length
 
+          // Update results after each batch with both processed and remaining articles
           resultados.value = {
             ...response.data,
             articles: enrichedArticles.map((article, index) => {
               if (index < processedCount) {
                 return article
               }
+              // Keep original article data for unprocessed ones
               return response.data.articles[index]
             })
           }
         }
-
-        
       } catch (err) {
         console.error(`Error processing batch ${i / batchSize + 1}:`, err)
       }
     }
 
-    if (resultados.value && resultados.value.articles) {
-    resultados.value.articles.forEach(article => {
-      if (!article.source) {
-        // Extraer el dominio de la URL como source predeterminado
-        try {
-          if (article.link) {
-            const urlObj = new URL(article.link);
-            const hostname = urlObj.hostname;
-            let sourceName = hostname
-              .replace(/^www\./, '')
-              .split('.')
-              .slice(0, -1)
-              .join('.');
-            
-            // Formatear el nombre del medio
-            sourceName = sourceName.split(/[.-]/)
-              .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-              .join(' ');
-            
-            article.source = sourceName;
-          } else {
-            // Si no hay link, usar el dominio de la URL analizada
-            const urlObj = new URL(url.value);
-            const dominio = urlObj.hostname.replace(/^www\./, '').split('.')[0];
-            article.source = dominio.charAt(0).toUpperCase() + dominio.slice(1);
-          }
-        } catch (err) {
-          console.error('Error al extraer source del artículo:', err);
-          article.source = 'Desconocido';
-        }
-      }
-    });
-  }
-    // Después de completar el procesamiento, ordenar por fecha
-    if (resultados.value && resultados.value.articles && resultados.value.articles.length > 0) {
-      ordenarArticulosPorFecha(resultados.value.articles);
-    }
 
     // Determinar el dominio para la blacklist
     try {
@@ -1412,7 +789,6 @@ const analizarSitio = async () => {
     loadingMetadata.value = false
   }
 }
-
 const analizarMedioExistente = async (url) => {
   loading.value = true
   resetearTodo()
@@ -1426,19 +802,24 @@ const analizarMedioExistente = async (url) => {
       }
     })
 
+
     resultados.value = response.data
     verificarMedioGuardado(url)
+
 
     console.log("MEDIO GUARDADO");
     warning.value = 'Este medio ya se encuentra registrado'
 
+
     loadingMetadata.value = true
 
+    // Process additional data in background
     const articleLinks = response.data.articles.map(article => article.link).filter(Boolean)
     const batchSize = 10
     const enrichedArticles = [...response.data.articles]
     let processedCount = 0
 
+    // Process batches sequentially
     for (let i = 0; i < articleLinks.length; i += batchSize) {
       const batchLinks = articleLinks.slice(i, i + batchSize)
       
@@ -1468,14 +849,17 @@ const analizarMedioExistente = async (url) => {
             }
           })
 
+          // Update processed count
           processedCount += batchResponse.data.data.length
 
+          // Update results after each batch with both processed and remaining articles
           resultados.value = {
             ...response.data,
             articles: enrichedArticles.map((article, index) => {
               if (index < processedCount) {
                 return article
               }
+              // Keep original article data for unprocessed ones
               return response.data.articles[index]
             })
           }
@@ -1485,44 +869,8 @@ const analizarMedioExistente = async (url) => {
       }
     }
 
-    if (resultados.value && resultados.value.articles) {
-    resultados.value.articles.forEach(article => {
-      if (!article.source) {
-        // Extraer el dominio de la URL como source predeterminado
-        try {
-          if (article.link) {
-            const urlObj = new URL(article.link);
-            const hostname = urlObj.hostname;
-            let sourceName = hostname
-              .replace(/^www\./, '')
-              .split('.')
-              .slice(0, -1)
-              .join('.');
-            
-            // Formatear el nombre del medio
-            sourceName = sourceName.split(/[.-]/)
-              .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-              .join(' ');
-            
-            article.source = sourceName;
-          } else {
-            // Si no hay link, usar el dominio de la URL analizada
-            const urlObj = new URL(url);
-            const dominio = urlObj.hostname.replace(/^www\./, '').split('.')[0];
-            article.source = dominio.charAt(0).toUpperCase() + dominio.slice(1);
-          }
-        } catch (err) {
-          console.error('Error al extraer source del artículo:', err);
-          article.source = 'Desconocido';
-        }
-      }
-    });
-  }
 
-    if (resultados.value && resultados.value.articles && resultados.value.articles.length > 0) {
-      ordenarArticulosPorFecha(resultados.value.articles);
-    }
-
+    // Determinar el dominio para la blacklist
     try {
       const urlObj = new URL(url);
       const dominio = urlObj.hostname.replace('www.', '').split('.')[0].toLowerCase();
@@ -1545,60 +893,6 @@ const analizarMedioExistente = async (url) => {
     loadingMetadata.value = false
   }
 }
-
-// Función para ordenar artículos por fecha
-const ordenarArticulosPorFecha = (articles) => {
-  articles.forEach(article => {
-    if (!article.fechaPublicacion && !article.timestamp) {
-      // Si no tiene fecha, tratar de extraerla del contenido o url
-      try {
-        if (article.link) {
-          const urlPartes = article.link.split('/');
-          // Muchos medios tienen fechas en sus URLs
-          for (let i = 0; i < urlPartes.length; i++) {
-            // Buscar patrón de fecha YYYY/MM/DD
-            if (/^\d{4}\/\d{2}\/\d{2}$/.test(urlPartes[i] + '/' + urlPartes[i+1] + '/' + urlPartes[i+2])) {
-              article.fechaPublicacion = `${urlPartes[i]}-${urlPartes[i+1]}-${urlPartes[i+2]}`;
-              break;
-            }
-          }
-        }
-      } catch (e) {
-        console.log('Error al extraer fecha de URL:', e);
-      }
-    }
-  });
-  
-  articles.sort((a, b) => {
-    // Usar fechaPublicacion o timestamp para ordenar
-    let fechaA = a.fechaPublicacion || a.timestamp || '';
-    let fechaB = b.fechaPublicacion || b.timestamp || '';
-    
-    // Si todavía no hay fechas, usar el orden original
-    if (!fechaA && !fechaB) return 0;
-    if (!fechaA) return 1;
-    if (!fechaB) return -1;
-    
-    // Si las fechas son strings con formato diferente, tratar de normalizarlas
-    try {
-      // Intentar convertir a objeto Date
-      const dateA = new Date(fechaA);
-      const dateB = new Date(fechaB);
-      
-      // Verificar si las fechas son válidas
-      if (!isNaN(dateA) && !isNaN(dateB)) {
-        return dateB - dateA; // Orden descendente (más reciente primero)
-      } else {
-        // Si alguna fecha no es válida, intentar comparar como strings
-        return fechaB.localeCompare(fechaA);
-      }
-    } catch (err) {
-      // Cualquier error, usar comparación de strings
-      return fechaB.localeCompare(fechaA);
-    }
-  });
-}
-
 const verificarMedioGuardado = (urlActual) => {
   try {
     const urlNormalizada = new URL(urlActual).toString().toLowerCase()
@@ -1755,6 +1049,7 @@ const getAuthorLink = (author) => {
   return null;
 }
 
+
 const obtenerFechaActual = () => {
   const hoy = new Date();
   const dia = String(hoy.getDate()).padStart(2, '0');
@@ -1794,6 +1089,7 @@ const formatearFecha = (timestamp) => {
   }
 }
 
+
 // Función para validar y limpiar el summary
 const validateSummary = (summary) => {
   if (!summary) return '';
@@ -1805,6 +1101,7 @@ const validateSummary = (summary) => {
 
   return summary;
 }
+
 
 // Función para cargar la blacklist de un medio específico
 const cargarBlacklist = async (dominio) => {
@@ -1863,7 +1160,7 @@ const estaEnBlacklist = (articulo, dominio) => {
   });
 };
 
-// Función para omitir contenido 
+// Función para omitir contenido mejorada
 const omitirContenido = async (articulo) => {
   try {
     // Extraer el dominio de la URL para usarlo como key
@@ -2054,6 +1351,7 @@ $mobile-breakpoint: 600px;
     transform: rotate(360deg);
   }
 }
+
 
 .v-theme--light.v-menu .v-overlay__content>.v-card,
 .v-theme--light.v-menu .v-overlay__content>.v-sheet,
@@ -2304,16 +1602,6 @@ $mobile-breakpoint: 600px;
         padding: 0 4px !important;
       }
     }
-  }
-}
-
-.progress-snackbar {
-  left: 50% !important;
-  transform: translateX(-50%) !important;
-  
-  .v-snackbar__wrapper {
-    opacity: 1 !important;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2) !important;
   }
 }
 </style>
