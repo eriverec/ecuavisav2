@@ -227,6 +227,17 @@
     <!-- Lista de artículos -->
         <VRow v-if="resultados && !error">
           <VCol cols="12">
+            <!-- Notificación de nuevos artículos -->
+            <VAlert v-if="nuevosArticulos > 0" type="info" variant="tonal" closable class="mb-4 w-100" 
+                @click="verNuevosArticulos">
+              <div class="d-flex align-items-center justify-content-between">
+                <span>Hay {{ nuevosArticulos }} artículos nuevos</span>
+                <VBtn size="small" color="primary" variant="text" @click.stop="verNuevosArticulos">
+                  Ver nuevos artículos
+                </VBtn>
+              </div>
+            </VAlert>
+            
             <div class="article-list">
               <div v-for="(articulo, index) in resultados.articles" :key="index" class="article-item">
                 <div class="d-flex align-items-start gap-2 py-2 border-b">
@@ -367,6 +378,24 @@
               </div>
             </div>
           </VCol>
+					  <!-- Nueva sección para gráficos -->
+						<VCol cols="12" v-if="topKeywords.length > 0 || mediaDistribution.length > 0">
+							<VCard>
+								<VCardTitle>Análisis de Medios</VCardTitle>
+								<VCardText>
+										<VRow>
+												<!-- Grafico de Top 10 de Keywords -->
+												<VCol cols="12" md="6" v-if="topKeywords.length > 0">
+														<BarChart :chartData="topKeywords" />
+												</VCol>
+												<!-- Grafico de Distribucion de Medios -->
+												<VCol cols="12" md="6" v-if="mediaDistribution.length > 0">
+														<PieChart :chartData="mediaDistribution" />
+												</VCol>
+										</VRow>
+								</VCardText>
+							</VCard>
+						</VCol>
         </VRow>
   </div>
 
@@ -395,8 +424,24 @@
 </template>
 
 <script setup>
-import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import axios from 'axios';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import BarChart from './BarChart.vue'; // Importar componente de gráfico de barras
+import PieChart from './PieChart.vue'; // Importar componente de gráfico de pastel
+
+const intervalId = ref(null)
+const nuevosArticulos = ref(0)
+const actualizando = ref(false)
+
+// Crear una variable reactiva para el array de nuevos artículos
+const nuevosArticulosArray = ref([]);
+
+const topKeywords = ref([]);
+const mediaDistribution = ref([]);
+
+// variables para el filtro
+const filteredKeywords = ref([]);
+const allKeywords = ref([]);
 
 const url = ref('')
 const loading = ref(false)
@@ -428,6 +473,112 @@ const allUrlsInView = ref({})
 const isAnalyzingMultiple = ref(false) 
 const currentAnalysisIndex = ref(0)
 const multipleResults = ref([]) 
+
+// Utility function to safely handle keywords
+const parseKeywords = (keywords) => {
+  if (!keywords) return [];
+  
+  try {
+    if (typeof keywords === 'string') {
+      return keywords.split(',').map(k => k.trim()).filter(Boolean);
+    } else if (Array.isArray(keywords)) {
+      return keywords.map(k => typeof k === 'string' ? k.trim() : String(k)).filter(Boolean);
+    } else if (typeof keywords === 'object') {
+      // Try to convert object to string if possible
+      return [String(keywords)].filter(Boolean);
+    }
+  } catch (err) {
+    console.warn('Error parsing keywords:', err);
+  }
+  
+  return [];
+}
+
+// contar todas las keywords
+const countAllKeywords = (articles) => {
+    const keywords = [];
+    articles.forEach(article => {
+        const articleKeywords = parseKeywords(article.keywords);
+        keywords.push(...articleKeywords);
+    });
+    return keywords.length;
+};
+
+// Procesar Keywords y crear top 10
+const procesarKeywords = (articles) => {
+  if (!articles || !Array.isArray(articles) || articles.length === 0) {
+    console.warn('No hay artículos para procesar keywords');
+    return;
+  }
+
+  try {
+    const keywordFrequencies = {};
+
+    articles.forEach(article => {
+      if (article && article.keywords) {
+        const keywords = parseKeywords(article.keywords);
+        keywords.forEach(keyword => {
+          if (keyword) {
+            keywordFrequencies[keyword] = (keywordFrequencies[keyword] || 0) + 1;
+          }
+        });
+      }
+    });
+
+    // Ordenar por frecuencia
+    const sortedKeywords = Object.entries(keywordFrequencies)
+      .filter(([keyword]) => keyword && keyword.trim())
+      .sort(([, a], [, b]) => b - a);
+
+    // Tomar el top 10 y formatear para el gráfico de barras
+    topKeywords.value = sortedKeywords.slice(0, 10).map(([keyword, count]) => ({
+      label: keyword,
+      value: count,
+    }));
+
+    allKeywords.value = sortedKeywords.map(([keyword, count]) => ({
+      label: keyword,
+      value: count,
+    }));
+
+    console.log(`Procesadas ${allKeywords.value.length} keywords, top 10 keywords:`, topKeywords.value);
+  } catch (err) {
+    console.error('Error al procesar keywords:', err);
+  }
+};
+
+// Procesar Medios y crear distribución
+const procesarMedios = (articles) => {
+  if (!articles || !Array.isArray(articles) || articles.length === 0) {
+    console.warn('No hay artículos para procesar medios');
+    return;
+  }
+
+  try {
+    const mediaFrequencies = {};
+
+    articles.forEach(article => {
+      if (article) {
+        const source = article.source || article.sourceName;
+        if (source) {
+          mediaFrequencies[source] = (mediaFrequencies[source] || 0) + 1;
+        }
+      }
+    });
+
+    // Formatear para el gráfico de pastel
+    mediaDistribution.value = Object.entries(mediaFrequencies)
+      .filter(([media]) => media && media.trim())
+      .map(([media, count]) => ({
+        label: media,
+        value: count,
+      }));
+
+    console.log(`Procesados ${mediaDistribution.value.length} medios:`, mediaDistribution.value);
+  } catch (err) {
+    console.error('Error al procesar distribución de medios:', err);
+  }
+};
 
 const inicializarEstructuras = () => {
   if (mediosAgrupados.value) {
@@ -516,6 +667,8 @@ const cargarDetallesMedio = async (medio, page = 1) => {
   }
 }
 
+
+
 // Función para manejar el cambio de página por medio
 const cambiarPaginaMedio = async (medio, newPage) => {
   console.log(`Cambiando a página ${newPage} del medio ${medio}`)
@@ -556,7 +709,6 @@ const regresar = () => {
   url.value = ''
   cargarMedios(1)
 }
-
 
 // Función principal para cargar medios
 const cargarMedios = async (page) => {
@@ -978,23 +1130,27 @@ const analizarMediosSeleccionados = async () => {
                 if (multipleResults.value[lastIndex] && multipleResults.value[lastIndex].data) {
                   // Enriquecer los artículos con los metadatos adicionales
                   batchResponse.data.data.forEach(additionalData => {
-                    if (additionalData.success) {
-                      const articleIndex = multipleResults.value[lastIndex].data.articles.findIndex(
-                        article => article.link === additionalData.url
-                      )
-                      
-                      if (articleIndex !== -1) {
-                        multipleResults.value[lastIndex].data.articles[articleIndex] = {
-                          ...multipleResults.value[lastIndex].data.articles[articleIndex],
-                          tipo: additionalData.article?.tipo || 'Tipo no disponible',
-                          autor: additionalData.article?.autor || 'Autor no disponible',
-                          keywords: additionalData.article?.keywords || 'keywords no disponibles',
-                          metodo: additionalData.article?.metodo || '',
-                          seccion: additionalData.article?.seccion || 'Seccion no disponible',
-                          subseccion: additionalData.article?.subseccion || '',
-                          fechaPublicacion: additionalData.article?.fechaPublicacion || 'Fecha no disponible'
+                    try {
+                      if (additionalData.success) {
+                        const articleIndex = multipleResults.value[lastIndex].data.articles.findIndex(
+                          article => article && article.link === additionalData.url
+                        )
+                        
+                        if (articleIndex !== -1) {
+                          multipleResults.value[lastIndex].data.articles[articleIndex] = {
+                            ...multipleResults.value[lastIndex].data.articles[articleIndex],
+                            tipo: additionalData.article?.tipo || 'Tipo no disponible',
+                            autor: additionalData.article?.autor || 'Autor no disponible',
+                            keywords: additionalData.article?.keywords || 'keywords no disponibles',
+                            metodo: additionalData.article?.metodo || '',
+                            seccion: additionalData.article?.seccion || 'Seccion no disponible',
+                            subseccion: additionalData.article?.subseccion || '',
+                            fechaPublicacion: additionalData.article?.fechaPublicacion || 'Fecha no disponible'
+                          }
                         }
                       }
+                    } catch (err) {
+                      console.warn('Error procesando datos adicionales:', err);
                     }
                   })
                 }
@@ -1021,6 +1177,16 @@ const analizarMediosSeleccionados = async () => {
     
     // Combinar resultados y mostrar en pantalla
     combinarYMostrarResultados();
+    if (resultados.value) {
+      // Si hay resultados, limpiar el intervalo existente
+      if (intervalId.value) {
+        clearInterval(intervalId.value);
+      }
+      // Iniciar el intervalo de actualización
+      intervalId.value = setInterval(actualizarArticulos, 2 * 60 * 1000); // 2 minutos
+      // Llamar a actualizarArticulos inmediatamente
+      actualizarArticulos();
+    }
     
     // Completar progreso
     progressMessage.value = 'Análisis completado';
@@ -1116,10 +1282,13 @@ const combinarYMostrarResultados = () => {
     total: 0,
     articles: []
   }
-    multipleResults.value.forEach(result => {
+  
+  multipleResults.value.forEach(result => {
     if (result.data && result.data.articles) {
       // Añadir identificación de la fuente a cada artículo
       const articlesWithSource = result.data.articles.map(article => {
+        if (!article) return null;
+        
         // Extraer nombre del medio de la URL si no existe
         let sourceName = article.source;
         
@@ -1154,7 +1323,7 @@ const combinarYMostrarResultados = () => {
           // Preservar el source original o usar el nombre del medio
           source: sourceName || result.name
         };
-      });
+      }).filter(article => article !== null);
       
       // Añadir al combinado
       combinado.articles.push(...articlesWithSource);
@@ -1164,7 +1333,11 @@ const combinarYMostrarResultados = () => {
   
   // Ordenar por fecha de más reciente a más antigua
   ordenarArticulosPorFecha(combinado.articles);
-  
+
+  // Procesar las keywords y medios
+  procesarKeywords(combinado.articles);
+  procesarMedios(combinado.articles);
+
   // Mostrar los resultados
   resultados.value = combinado;
 }
@@ -1196,8 +1369,8 @@ const handlePanelChange = async (medio) => {
 }
 
 const formatearTitulo = (key, medio) => {
-  const keyNorm = key.trim().toLowerCase()
-  const medioNorm = medio.trim().toLowerCase()
+  const keyNorm = key?.trim().toLowerCase() || '';
+  const medioNorm = medio?.trim().toLowerCase() || '';
 
   // Si es la página principal
   if (keyNorm === medioNorm) {
@@ -1206,19 +1379,19 @@ const formatearTitulo = (key, medio) => {
   }
 
   // Si tiene un punto (formato con subcategorías)
-  if (key.includes('.')) {
+  if (key?.includes('.')) {
     const [, ...partes] = key.split('.')
     return capitalizar(medio) + ' - ' + capitalizar(partes.join(' / '))
   }
 
   // Para el formato con guiones
-  if (key.startsWith(medio)) {
+  if (key?.startsWith(medio)) {
     const seccion = key.substring(medio.length).replace(/^[-.]/, '')
     return capitalizar(medio) + ' - ' + capitalizar(seccion)
   }
 
   // Para otros casos
-  return capitalizar(medio) + ' - ' + capitalizar(key.replace(medio, '').replace(/^[-.]/, ''))
+  return capitalizar(medio) + ' - ' + capitalizar(key?.replace(medio, '').replace(/^[-.]/, '') || '')
 }
 
 const capitalizar = (texto) => {
@@ -1231,6 +1404,7 @@ const capitalizar = (texto) => {
     })
     .join(' ')
 }
+
 const construirKey = (nombreMedio, path) => {
   const cleanPath = path.replace(/^\/+|\/+$/g, '')
 
@@ -1255,11 +1429,26 @@ const pegarURL = async () => {
 }
 
 const resetearTodo = () => {
-  error.value = null
-  success.value = null
-  warning.value = null
-  resultados.value = null
-  errorMessage.value = ''
+  // Limpiar el intervalo si existe
+  if (intervalId.value) {
+    clearInterval(intervalId.value);
+    intervalId.value = null;
+  }
+  
+  // Restablecer valores
+  error.value = null;
+  success.value = null;
+  warning.value = null;
+  resultados.value = null;
+  errorMessage.value = '';
+  
+  // Restablecer gráficos
+  topKeywords.value = [];
+  mediaDistribution.value = [];
+  allKeywords.value = [];
+  filteredKeywords.value = [];
+  nuevosArticulos.value = 0;
+  nuevosArticulosArray.value = [];
 }
 
 const limpiarMensajes = () => {
@@ -1297,13 +1486,13 @@ const analizarSitio = async () => {
       }
       loadingMetadata.value = true
 
-      const articleLinks = response.data.articles.map(article => article.link).filter(Boolean)
+      const articleLinks = response.data.articles.map(article => article?.link).filter(Boolean)
 
       const batchSize = 10
       const enrichedArticles = [...response.data.articles]
       let processedCount = 0
 
-      // procesar batches secuencialmente
+      // Procesar batches secuencialmente
       for (let i = 0; i < articleLinks.length; i += batchSize) {
         const batchLinks = articleLinks.slice(i, i + batchSize)
         
@@ -1338,29 +1527,22 @@ const analizarSitio = async () => {
                 console.warn('Error al procesar metadatos de artículo:', err);
                 // Continuar con el siguiente artículo
               }
-            })
-
-            processedCount += batchResponse.data.data.length
-
-            resultados.value = {
-              ...response.data,
-              articles: enrichedArticles.map((article, index) => {
-                if (index < processedCount) {
-                  return article
-                }
-                return response.data.articles[index]
-              })
-            }
+            });
           }
-
-          
         } catch (err) {
-          console.error(`Error processing batch ${i / batchSize + 1}:`, err)
+          console.error(`Error al procesar lote ${i / batchSize + 1}:`, err)
         }
       }
 
+      resultados.value.articles = enrichedArticles
+      
+      loadingMetadata.value = false
+      
+      // Actualizar las fuentes si es necesario
       if (resultados.value && resultados.value.articles) {
         resultados.value.articles.forEach(article => {
+          if (!article) return;
+          
           if (!article.source) {
             // Extraer el dominio de la URL como source predeterminado
             try {
@@ -1392,12 +1574,22 @@ const analizarSitio = async () => {
           }
         });
       }
-      // Después de completar el procesamiento, ordenar por fecha
+
+      // Ordenar los artículos por fecha
       if (resultados.value && resultados.value.articles && resultados.value.articles.length > 0) {
         ordenarArticulosPorFecha(resultados.value.articles);
       }
 
-      // Determinar el dominio para la blacklist
+      // Procesar keywords y medios para los gráficos
+      procesarKeywords(resultados.value.articles);
+      procesarMedios(resultados.value.articles);
+
+      // Configurar la actualización automática
+      if (intervalId.value) {
+        clearInterval(intervalId.value);
+      }
+      intervalId.value = setInterval(actualizarArticulos, 2 * 60 * 1000); // 2 minutos
+
       try {
         const urlObj = new URL(url.value);
         const dominio = urlObj.hostname.replace('www.', '').split('.')[0].toLowerCase();
@@ -1412,19 +1604,15 @@ const analizarSitio = async () => {
       }
 
     } catch (err) {
-      console.error('Error:', err)
-      error.value = err.response?.data?.message ||
-        'Error al analizar el sitio. Por favor intente nuevamente.'
+      console.error('Error en el análisis:', err)
+      error.value = err.response?.data?.message || 'Error al analizar URL'
     } finally {
       loading.value = false
-      loadingMetadata.value = false
     }
   } catch (err) {
-    console.error('Error general en analizarSitio:', err)
-    error.value = 'Ocurrió un error inesperado. Por favor intente nuevamente.'
-  } finally {
+    console.error('Error en analizarSitio:', err)
+    error.value = 'Error inesperado'
     loading.value = false
-    loadingMetadata.value = false
   }
 }
 
@@ -1449,7 +1637,7 @@ const analizarMedioExistente = async (url) => {
 
     loadingMetadata.value = true
 
-    const articleLinks = response.data.articles.map(article => article.link).filter(Boolean)
+    const articleLinks = response.data.articles.map(article => article?.link).filter(Boolean)
     const batchSize = 10
     const enrichedArticles = [...response.data.articles]
     let processedCount = 0
@@ -1466,34 +1654,36 @@ const analizarMedioExistente = async (url) => {
 
         if (batchResponse.data.resp && Array.isArray(batchResponse.data.data)) {
           batchResponse.data.data.forEach(additionalData => {
-            if (additionalData.success) {
-              const articleIndex = enrichedArticles.findIndex(article => article.link === additionalData.url)
-              if (articleIndex !== -1) {
-                enrichedArticles[articleIndex] = {
-                  ...enrichedArticles[articleIndex],
-                  tipo: additionalData.article?.tipo || 'Tipo no disponible',
-                  autor: additionalData.article?.autor || 'Autor no disponible',
-                  keywords: additionalData.article?.keywords || 'keywords no disponibles',
-                  metodo: additionalData.article?.metodo || '',
-                  seccion: additionalData.article?.seccion || 'Seccion no disponible',
-                  subseccion: additionalData.article?.subseccion || '',
-                  fechaPublicacion: additionalData.article?.fechaPublicacion || 'Fecha no disponible'
+            try {
+              if (additionalData.success) {
+                const articleIndex = enrichedArticles.findIndex(article => 
+                  article && article.link === additionalData.url
+                );
+                
+                if (articleIndex !== -1) {
+                  enrichedArticles[articleIndex] = {
+                    ...enrichedArticles[articleIndex],
+                    tipo: additionalData.article?.tipo || 'Tipo no disponible',
+                    autor: additionalData.article?.autor || 'Autor no disponible',
+                    keywords: additionalData.article?.keywords || 'keywords no disponibles',
+                    metodo: additionalData.article?.metodo || '',
+                    seccion: additionalData.article?.seccion || 'Seccion no disponible',
+                    subseccion: additionalData.article?.subseccion || '',
+                    fechaPublicacion: additionalData.article?.fechaPublicacion || 'Fecha no disponible'
+                  };
                 }
               }
+            } catch (err) {
+              console.error('Error al procesar artículo:', err);
             }
-          })
+          });
 
-          processedCount += batchResponse.data.data.length
+          processedCount += batchResponse.data.data.length;
 
           resultados.value = {
             ...response.data,
-            articles: enrichedArticles.map((article, index) => {
-              if (index < processedCount) {
-                return article
-              }
-              return response.data.articles[index]
-            })
-          }
+            articles: enrichedArticles
+          };
         }
       } catch (err) {
         console.error(`Error processing batch ${i / batchSize + 1}:`, err)
@@ -1502,41 +1692,53 @@ const analizarMedioExistente = async (url) => {
 
     if (resultados.value && resultados.value.articles) {
       resultados.value.articles.forEach(article => {
-      if (!article.source) {
-        // Extraer el dominio de la URL como source predeterminado
-        try {
-          if (article.link) {
-            const urlObj = new URL(article.link);
-            const hostname = urlObj.hostname;
-            let sourceName = hostname
-              .replace(/^www\./, '')
-              .split('.')
-              .slice(0, -1)
-              .join('.');
-            
-            // Formatear el nombre del medio
-            sourceName = sourceName.split(/[.-]/)
-              .map(part => part.charAt(0).toUpperCase() + part.slice(1))
-              .join(' ');
-            
-            article.source = sourceName;
-          } else {
-            // Si no hay link, usar el dominio de la URL analizada
-            const urlObj = new URL(url);
-            const dominio = urlObj.hostname.replace(/^www\./, '').split('.')[0];
-            article.source = dominio.charAt(0).toUpperCase() + dominio.slice(1);
+        if (!article) return;
+        
+        if (!article.source) {
+          // Extraer el dominio de la URL como source predeterminado
+          try {
+            if (article.link) {
+              const urlObj = new URL(article.link);
+              const hostname = urlObj.hostname;
+              let sourceName = hostname
+                .replace(/^www\./, '')
+                .split('.')
+                .slice(0, -1)
+                .join('.');
+              
+              // Formatear el nombre del medio
+              sourceName = sourceName.split(/[.-]/)
+                .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+                .join(' ');
+              
+              article.source = sourceName;
+            } else {
+              // Si no hay link, usar el dominio de la URL analizada
+              const urlObj = new URL(url);
+              const dominio = urlObj.hostname.replace(/^www\./, '').split('.')[0];
+              article.source = dominio.charAt(0).toUpperCase() + dominio.slice(1);
+            }
+          } catch (err) {
+            console.error('Error al extraer source del artículo:', err);
+            article.source = 'Desconocido';
           }
-        } catch (err) {
-          console.error('Error al extraer source del artículo:', err);
-          article.source = 'Desconocido';
         }
-      }
-    });
-  }
+      });
+    }
 
     if (resultados.value && resultados.value.articles && resultados.value.articles.length > 0) {
       ordenarArticulosPorFecha(resultados.value.articles);
     }
+
+    // Procesar keywords y medios para los gráficos
+    procesarKeywords(resultados.value.articles);
+    procesarMedios(resultados.value.articles);
+    
+    // Configurar la actualización automática
+    if (intervalId.value) {
+      clearInterval(intervalId.value);
+    }
+    intervalId.value = setInterval(actualizarArticulos, 2 * 60 * 1000); // 2 minutos
 
     try {
       const urlObj = new URL(url);
@@ -1770,7 +1972,6 @@ const getAuthorName = (author) => {
 const getAuthorLink = (author) => {
   if (!author) return null;
 
-
   if (typeof author === 'object' && author.link) {
     return author.link;
   }
@@ -1841,26 +2042,6 @@ const validateSummary = (summary) => {
   }
 
   return summary;
-}
-
-// Utility function to safely handle keywords
-const parseKeywords = (keywords) => {
-  if (!keywords) return [];
-  
-  try {
-    if (typeof keywords === 'string') {
-      return keywords.split(',').map(k => k.trim()).filter(Boolean);
-    } else if (Array.isArray(keywords)) {
-      return keywords.map(k => typeof k === 'string' ? k.trim() : String(k)).filter(Boolean);
-    } else if (typeof keywords === 'object') {
-      // Try to convert object to string if possible
-      return [String(keywords)].filter(Boolean);
-    }
-  } catch (err) {
-    console.warn('Error parsing keywords:', err);
-  }
-  
-  return [];
 }
 
 // Función para cargar la blacklist de un medio específico
@@ -1996,12 +2177,16 @@ const omitirContenido = async (articulo) => {
     if (resultados.value && resultados.value.articles) {
       resultados.value.articles = resultados.value.articles.filter(a => 
         a !== articulo // Comparamos la referencia directa del objeto
-      );
+				);
       
       // Actualizar el contador de resultados
       if (resultados.value.total !== undefined) {
         resultados.value.total = resultados.value.articles.length;
       }
+      
+      // Actualizar los gráficos después de quitar el artículo
+      procesarKeywords(resultados.value.articles);
+      procesarMedios(resultados.value.articles);
     }
     
     // Mostrar mensaje de éxito (solo si realmente se añadió a la blacklist)
@@ -2066,6 +2251,8 @@ const filtrarArticulosEnBlacklist = async () => {
   // Filtrar los artículos que están en la blacklist
   const articulosOriginales = resultados.value.articles.length;
   resultados.value.articles = resultados.value.articles.filter(articulo => {
+    if (!articulo) return false;
+    
     const enBlacklist = estaEnBlacklist(articulo, dominio);
     if (enBlacklist) {
       console.log('Artículo filtrado por blacklist:', articulo.title || articulo.link);
@@ -2077,9 +2264,212 @@ const filtrarArticulosEnBlacklist = async () => {
   if (resultados.value.articles.length !== articulosOriginales) {
     resultados.value.total = resultados.value.articles.length;
     console.log(`Se filtraron ${articulosOriginales - resultados.value.articles.length} artículos de la blacklist, quedan ${resultados.value.total}`);
+    
+    // Actualizar gráficos después de filtrar
+    procesarKeywords(resultados.value.articles);
+    procesarMedios(resultados.value.articles);
   }
 };
 
+// Función para ver los nuevos artículos
+const verNuevosArticulos = () => {
+  if (nuevosArticulos.value > 0 && nuevosArticulosArray.value.length > 0) {
+    try {
+      console.log(`Añadiendo ${nuevosArticulos.value} artículos nuevos a la vista`);
+      
+      // Ordenar el array de nuevos artículos
+      ordenarArticulosPorFecha(nuevosArticulosArray.value);
+      
+      // Unir los arrays, los artículos nuevos con los existentes
+      resultados.value.articles = [...nuevosArticulosArray.value, ...resultados.value.articles];
+      
+      // Actualizar el contador
+      resultados.value.total = resultados.value.articles.length;
+      
+      // Actualizar los gráficos con los nuevos artículos
+      procesarKeywords(resultados.value.articles);
+      procesarMedios(resultados.value.articles);
+      
+      // Limpiar el array de nuevos artículos y el contador
+      nuevosArticulosArray.value = [];
+      nuevosArticulos.value = 0;
+    } catch (err) {
+      console.error('Error al mostrar nuevos artículos:', err);
+    }
+  }
+};
+
+// Función que sirve para agregar los artículos nuevos
+const addArticles = (newArticles) => {
+  if (!newArticles || !Array.isArray(newArticles) || newArticles.length === 0) return;
+  
+  try {
+    // Filtrar artículos válidos
+    const validArticles = newArticles.filter(article => article && article.link);
+    
+    if (validArticles.length === 0) return;
+    
+    // Verificar si los artículos ya existen, añadir solo los nuevos
+    validArticles.forEach(article => {
+      // Verificar si el artículo ya existe en el array principal
+      const existingIndex = resultados.value.articles.findIndex(
+        existingArticle => existingArticle && existingArticle.link === article.link
+      );
+      
+      // Verificar si ya está en el array de nuevos artículos
+      const existsInNew = nuevosArticulosArray.value.some(
+        newArticle => newArticle && newArticle.link === article.link
+      );
+      
+      // Solo añadir si es completamente nuevo
+      if (existingIndex === -1 && !existsInNew) {
+        nuevosArticulosArray.value.push(article);
+        nuevosArticulos.value++;
+      }
+    });
+    
+    console.log(`Se han encontrado ${nuevosArticulos.value} artículos nuevos`);
+  } catch (err) {
+    console.error('Error al añadir nuevos artículos:', err);
+  }
+};
+
+// Función para actualizar los artículos periódicamente
+const actualizarArticulos = async () => {
+  if (!resultados.value || actualizando.value) return;
+  
+  actualizando.value = true;
+  console.log('Actualizando artículos...');
+  
+  try {
+    // Si es un solo medio, obtener URL de resultados
+    const urlActual = resultados.value.source !== 'Múltiples medios' 
+      ? asegurarHttps(resultados.value.source.includes("http") ? resultados.value.source : url.value) 
+      : null;
+    
+    if (urlActual) {
+      // Realizar solicitud a la API para obtener los últimos artículos
+      const response = await axios.post('https://servicio-competencias.vercel.app/analizar-sitio', {
+        url: urlActual
+      }, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      
+      // Procesar los nuevos artículos
+      if (response.data && response.data.articles) {
+        // Enriquecer los artículos con metadatos básicos
+        response.data.articles.forEach(article => {
+          if (!article) return;
+          
+          if (!article.source) {
+            try {
+              if (article.link) {
+                const urlObj = new URL(article.link);
+                const hostname = urlObj.hostname;
+                article.source = hostname
+                  .replace(/^www\./, '')
+                  .split('.')
+                  .slice(0, -1)
+                  .join('.')
+                  .split(/[.-]/)
+                  .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+                  .join(' ');
+              }
+            } catch (err) {
+              console.warn('Error al asignar fuente a nuevo artículo:', err);
+            }
+          }
+        });
+        
+        // Llamar a la función para procesar los nuevos artículos
+        addArticles(response.data.articles);
+      }
+    } else {
+      // Si es múltiples medios
+      const urls = multipleResults.value.map(result => result.url).filter(Boolean);
+      
+      if (urls.length === 0) {
+        console.warn('No hay URLs para actualizar en múltiples medios');
+        return;
+      }
+      
+      for (const currentUrl of urls) {
+        try {
+          const newResponse = await axios.post(
+            'https://servicio-competencias.vercel.app/analizar-sitio',
+            { url: currentUrl },
+            { headers: { 'Content-Type': 'application/json' } }
+          );
+          
+          // Validar que hayan datos y artículos en la respuesta
+          if (newResponse.data && newResponse.data.articles && Array.isArray(newResponse.data.articles)) {
+            // Enriquecer los artículos con la fuente
+            newResponse.data.articles.forEach(article => {
+              if (!article) return;
+              
+              // Asignar la fuente si no la tiene
+              if (!article.source) {
+                try {
+                  // Obtener de la URL del artículo
+                  if (article.link) {
+                    const urlObj = new URL(article.link);
+                    const hostname = urlObj.hostname;
+                    article.source = hostname
+                      .replace(/^www\./, '')
+                      .split('.')
+                      .slice(0, -1)
+                      .join('.')
+                      .split(/[.-]/)
+                      .map(part => part.charAt(0).toUpperCase() + part.slice(1))
+                      .join(' ');
+                  } else {
+                    // Asignar del nombre del medio
+                    const mediaName = multipleResults.value.find(m => m.url === currentUrl)?.name;
+                    if (mediaName) {
+                      article.source = mediaName;
+                    }
+                  }
+                } catch (err) {
+                  console.warn('Error al asignar fuente a artículo de medio múltiple:', err);
+                }
+              }
+            });
+            
+            // Añadir los artículos al listado de nuevos
+            addArticles(newResponse.data.articles);
+          }
+        } catch (err) {
+          console.error(`Error al actualizar medio ${currentUrl}:`, err);
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Error al actualizar los artículos:', err);
+  } finally {
+    actualizando.value = false;
+  }
+};
+
+// Observar cambios en resultados para procesar los gráficos
+watch(() => resultados.value?.articles, (newArticles) => {
+  if (newArticles && newArticles.length > 0) {
+    procesarKeywords(newArticles);
+    procesarMedios(newArticles);
+  } else {
+    // Limpiar gráficos si no hay artículos
+    topKeywords.value = [];
+    mediaDistribution.value = [];
+  }
+}, { deep: true });
+
+// Limpiar el intervalo antes de desmontar el componente
+onBeforeUnmount(() => {
+  if (intervalId.value) {
+    clearInterval(intervalId.value);
+  }
+});
 </script>
 
 <style lang="scss" scoped>
