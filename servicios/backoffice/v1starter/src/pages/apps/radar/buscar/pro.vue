@@ -1340,6 +1340,8 @@ const combinarYMostrarResultados = () => {
 
   // Mostrar los resultados
   resultados.value = combinado;
+	// Agregar:
+console.log('JSON final con todos los artículos:', JSON.stringify(resultados.value));
 }
 
 // Función para manejar la expansión del acordeón
@@ -1764,6 +1766,7 @@ const analizarMedioExistente = async (url) => {
 }
 
 // Función para ordenar artículos por fecha
+// Función mejorada para ordenar artículos por fecha
 const ordenarArticulosPorFecha = (articles) => {
   if (!articles || !Array.isArray(articles)) {
     console.warn('Se intentó ordenar artículos, pero no es un array válido');
@@ -1774,6 +1777,7 @@ const ordenarArticulosPorFecha = (articles) => {
     articles.forEach(article => {
       if (!article) return;
       
+      // Priorizar fechaPublicacion del endpoint multiple-articles si existe
       if (!article.fechaPublicacion && !article.timestamp) {
         // Si no tiene fecha, tratar de extraerla del contenido o url
         try {
@@ -1796,37 +1800,62 @@ const ordenarArticulosPorFecha = (articles) => {
       }
     });
     
-    articles.sort((a, b) => {
-      if (!a || !b) return 0;
+    // Función auxiliar para convertir fechas a objetos Date para comparación
+    const getFechaComparable = (article) => {
+      if (!article) return new Date(0); // Fecha mínima por defecto
       
-      // Usar fechaPublicacion o timestamp para ordenar
-      let fechaA = a.fechaPublicacion || a.timestamp || '';
-      let fechaB = b.fechaPublicacion || b.timestamp || '';
+      let fechaStr = article.fechaPublicacion || article.timestamp || '';
+      if (!fechaStr) return new Date(0);
       
-      // Si todavía no hay fechas, usar el orden original
-      if (!fechaA && !fechaB) return 0;
-      if (!fechaA) return 1;
-      if (!fechaB) return -1;
-      
-      // Si las fechas son strings con formato diferente, tratar de normalizarlas
       try {
-        // Intentar convertir a objeto Date
-        const dateA = new Date(fechaA);
-        const dateB = new Date(fechaB);
+        // Detectar formato español DD/MM/YYYY HH:MM:SS
+        const spanishFormatRegex = /(\d{2})\/(\d{2})\/(\d{4})\s*(\d{2})?:?(\d{2})?:?(\d{2})?\s?(AM|PM)?/i;
+        const matches = fechaStr.match(spanishFormatRegex);
         
-        // Verificar si las fechas son válidas
-        if (!isNaN(dateA) && !isNaN(dateB)) {
-          return dateB - dateA; // Orden descendente (más reciente primero)
-        } else {
-          // Si alguna fecha no es válida, intentar comparar como strings
-          return String(fechaB).localeCompare(String(fechaA));
+        if (matches) {
+          // Reconstruir fecha en formato ISO para JS
+          const day = matches[1];
+          const month = matches[2];
+          const year = matches[3];
+          const hour = matches[4] || '00';
+          const minute = matches[5] || '00';
+          const second = matches[6] || '00';
+          const ampm = matches[7] || '';
+          
+          // Ajustar hora si es PM
+          let adjustedHour = parseInt(hour);
+          if (ampm && ampm.toUpperCase() === 'PM' && adjustedHour < 12) {
+            adjustedHour += 12;
+          } else if (ampm && ampm.toUpperCase() === 'AM' && adjustedHour === 12) {
+            adjustedHour = 0;
+          }
+          
+          // Crear fecha con formato ISO
+          return new Date(`${year}-${month}-${day}T${String(adjustedHour).padStart(2, '0')}:${minute}:${second}`);
         }
+        
+        // Intentar con el constructor normal de Date
+        const fecha = new Date(fechaStr);
+        if (!isNaN(fecha.getTime())) {
+          return fecha;
+        }
+        
+        // Si no se puede interpretar, usar la fecha actual para que no quede al final
+        return new Date();
       } catch (err) {
-        console.warn('Error al comparar fechas:', err);
-        // Cualquier error, mantener el orden original
-        return 0;
+        console.warn('Error al convertir fecha para ordenamiento:', err);
+        return new Date();
       }
+    };
+    
+    // Ordenar los artículos del más reciente al más antiguo
+    articles.sort((a, b) => {
+      const fechaA = getFechaComparable(a);
+      const fechaB = getFechaComparable(b);
+      return fechaB - fechaA; // Orden descendente (más reciente primero)
     });
+    
+    console.log(`Artículos ordenados por fecha: ${articles.length} artículos`);
   } catch (error) {
     console.error('Error general al ordenar artículos por fecha:', error);
     // No interrumpir el flujo de la aplicación
@@ -1996,7 +2025,7 @@ const obtenerFechaActual = () => {
   return `${dia}/${mes}/${anio}`;
 }
 
-// Función para formatear la fecha de manera uniforme
+// Función mejorada para formatear la fecha de manera uniforme
 const formatearFecha = (timestamp) => {
   if (!timestamp) return '';
 
@@ -2004,18 +2033,39 @@ const formatearFecha = (timestamp) => {
     // Si no es un string, intentar convertirlo
     const timestampStr = typeof timestamp !== 'string' ? String(timestamp) : timestamp;
     
-    let fecha = new Date(timestampStr);
+    // Detectar formato español DD/MM/YYYY HH:MM:SS
+    const spanishFormatRegex = /(\d{2})\/(\d{2})\/(\d{4})\s*(\d{2})?:?(\d{2})?:?(\d{2})?\s?(AM|PM)?/i;
+    const matches = timestampStr.match(spanishFormatRegex);
     
-    if (isNaN(fecha.getTime())) {
-      // Intento formatos comunes de fecha
-      const matches = timestampStr.match(/(\d{2})\/(\d{2})\/(\d{4})/);
-      if (matches) {
-        fecha = new Date(`${matches[3]}-${matches[2]}-${matches[1]}`);
+    let fecha;
+    if (matches) {
+      // Reconstruir fecha en formato ISO para JS
+      const day = matches[1];
+      const month = matches[2];
+      const year = matches[3];
+      const hour = matches[4] || '00';
+      const minute = matches[5] || '00';
+      const second = matches[6] || '00';
+      const ampm = matches[7] || '';
+      
+      // Ajustar hora si es PM
+      let adjustedHour = parseInt(hour);
+      if (ampm && ampm.toUpperCase() === 'PM' && adjustedHour < 12) {
+        adjustedHour += 12;
+      } else if (ampm && ampm.toUpperCase() === 'AM' && adjustedHour === 12) {
+        adjustedHour = 0;
       }
+      
+      // Crear fecha con formato ISO
+      fecha = new Date(`${year}-${month}-${day}T${String(adjustedHour).padStart(2, '0')}:${minute}:${second}`);
+    } else {
+      // Intentar con el constructor normal de Date
+      fecha = new Date(timestampStr);
     }
-
-    // formatea si es válida
+    
+    // Verificar si la fecha es válida
     if (!isNaN(fecha.getTime())) {
+      // Formatear con la hora incluida
       return fecha.toLocaleDateString('es-ES', {
         year: 'numeric',
         month: '2-digit',
@@ -2025,9 +2075,10 @@ const formatearFecha = (timestamp) => {
       }).replace(',', '');
     }
     
+    // Si todo falla, devolver el string original
     return timestampStr;
   } catch (e) {
-    console.warn('Error al formatear fecha:', e);
+    console.warn('Error al formatear fecha:', e, 'para timestamp:', timestamp);
     return typeof timestamp === 'string' ? timestamp : '';
   }
 }
@@ -2290,6 +2341,7 @@ const verNuevosArticulos = () => {
       procesarKeywords(resultados.value.articles);
       procesarMedios(resultados.value.articles);
       
+			console.log('Nuevos artículos agregados:', JSON.stringify(nuevosArticulosArray.value));
       // Limpiar el array de nuevos artículos y el contador
       nuevosArticulosArray.value = [];
       nuevosArticulos.value = 0;
@@ -2337,7 +2389,7 @@ const addArticles = (newArticles) => {
 // Función para actualizar los artículos periódicamente
 const actualizarArticulos = async () => {
   if (!resultados.value || actualizando.value) return;
-  
+  console.log('Actualizando artículos...', new Date().toLocaleString());
   actualizando.value = true;
   console.log('Actualizando artículos...');
   
@@ -2439,6 +2491,11 @@ const actualizarArticulos = async () => {
             
             // Añadir los artículos al listado de nuevos
             addArticles(newResponse.data.articles);
+
+						console.log(`Actualización completada. Encontrados ${nuevosArticulos.value} artículos nuevos.`);
+if (nuevosArticulos.value > 0) {
+  console.log(`Nuevos artículos pendientes de mostrar: ${nuevosArticulos.value}`);
+}
           }
         } catch (err) {
           console.error(`Error al actualizar medio ${currentUrl}:`, err);
@@ -2447,6 +2504,7 @@ const actualizarArticulos = async () => {
     }
   } catch (err) {
     console.error('Error al actualizar los artículos:', err);
+		
   } finally {
     actualizando.value = false;
   }
