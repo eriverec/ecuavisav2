@@ -141,28 +141,31 @@
             </div>
 
             <div v-else>
-              <VExpansionPanels v-model="expandedPanels">
+              <VExpansionPanels v-model="expandedPanels" @update:model-value="handleExpandedPanelsChange">
                 <VExpansionPanel v-for="(grupo, medio) in mediosAgrupados" :key="medio"
                     @click="handlePanelChange(medio)">
                     <VExpansionPanelTitle>
                       <div class="d-flex align-center w-100">
-                        <!-- Checkbox para seleccionar todos los medios de este grupo -->
-                    <VCheckbox
-                      :model-value="allUrlsInView[medio] ? allUrlsInView[medio].allSelected : false"
-                      @click.stop
-                      @change="(val) => seleccionarTodosItems(medio, val)"
-                      density="compact"
-                      hide-details
-                      color="primary"
-                      class="me-2"
-                    ></VCheckbox>
+                        <!-- Checkbox solo visible si hay datos -->
+                        <VCheckbox
+                          v-if="mediosData[medio] && mediosData[medio].length > 0"
+                          :model-value="allUrlsInView[medio] ? allUrlsInView[medio].allSelected : false"
+                          @click.stop
+                          @change="(val) => seleccionarTodosItems(medio, val)"
+                          density="compact"
+                          hide-details
+                          color="primary"
+                          class="me-2"
+                        ></VCheckbox>
+                        <!-- Espacio equivalente si no hay datos -->
+                        <div v-else class="me-2" style="width: 24px; height: 24px;"></div>
+                        
                         <span class="text-capitalize">{{ medio }}</span>
                         <VChip color="grey-lighten-2" size="x-small" class="ms-2 custom-chip">
                           {{ medioCounts[medio] || '...' }}
                         </VChip>
                       </div>
                     </VExpansionPanelTitle>
-
                   <VExpansionPanelText>
                     <!-- Estado de carga -->
                     <div v-if="loadingMedioData[medio]" class="d-flex justify-center py-4">
@@ -201,6 +204,8 @@
                   </VExpansionPanelText>
                 </VExpansionPanel>
               </VExpansionPanels>
+
+              
 
               <!-- Paginación principal -->
            
@@ -993,7 +998,7 @@ const seleccionarTodosItems = (medio, isSelected) => {
     allUrlsInView.value[medio].allSelected = shouldSelect
   }
   
-  // Actualizar los items si ya están cargados
+  // Actualizar los items solo si ya están cargados
   if (mediosData.value[medio] && mediosData.value[medio].length) {
     console.log(`Actualizando ${mediosData.value[medio].length} items de ${medio}`)
     
@@ -1019,7 +1024,12 @@ const seleccionarTodosItems = (medio, isSelected) => {
       selectedMediaUrls.value = selectedMediaUrls.value.filter(url => url.medio !== medio)
     }
   } else {
-    console.log(`No hay datos cargados para el medio ${medio}`)
+    console.log(`No hay datos cargados para el medio ${medio}, cargando primero...`)
+    cargarDatosMedio(medio).then(() => {
+      if (mediosData.value[medio] && mediosData.value[medio].length) {
+        seleccionarTodosItems(medio, shouldSelect)
+      }
+    })
   }
 }
 
@@ -1348,7 +1358,7 @@ console.log('JSON final con todos los artículos:', JSON.stringify(resultados.va
 const handlePanelChange = async (medio) => {
   console.log(`Panel cambiado para medio: ${medio}`)
   
-
+  // Inicializar la estructura si no existe
   if (!allUrlsInView.value[medio]) {
     allUrlsInView.value[medio] = {
       allSelected: false,
@@ -1356,7 +1366,12 @@ const handlePanelChange = async (medio) => {
     }
   }
   
-  // Cargar datos si no existen
+  // Verificar si el panel está expandido 
+  const isExpanded = Array.isArray(expandedPanels.value) 
+    ? expandedPanels.value.includes(medio) 
+    : expandedPanels.value === medio;
+  
+  // Cargar datos si no existen o si el panel está expandido
   if (!mediosData.value[medio] || !mediosData.value[medio].length) {
     await cargarDatosMedio(medio)
   } else {
@@ -1369,6 +1384,19 @@ const handlePanelChange = async (medio) => {
     initializeSelectionStructure(medio)
   }
 }
+
+
+const handleExpandedPanelsChange = async (newValue) => {
+  if (Array.isArray(newValue)) {
+    for (const medio of newValue) {
+      if (!mediosData.value[medio] || !mediosData.value[medio].length) {
+        await cargarDatosMedio(medio)
+      }
+    }
+  }
+}
+
+// console.log('Tipo de expandedPanels:', typeof expandedPanels.value, expandedPanels.value);
 
 const formatearTitulo = (key, medio) => {
   const keyNorm = key?.trim().toLowerCase() || '';
