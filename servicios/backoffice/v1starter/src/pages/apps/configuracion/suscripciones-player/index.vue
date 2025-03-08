@@ -127,7 +127,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import Draggable from 'vuedraggable';
 
 const isLoading = ref(false);
@@ -209,7 +209,7 @@ async function getConfig() {
   isLoading.value = true;
   try {
     const response = await fetch(
-      "https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/player/config2.php?api=web&key=premiunPlayer1"
+      "https://micuenta.ecuavisa.com/suscripciones/player/config2.php?api=web&key=premiunPlayer1"
     );
     const data = await response.json();
     players.value = data.players || [];
@@ -234,7 +234,7 @@ async function enviar() {
     };
 
     const response = await fetch(
-      "https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/player/config2.php?api=update",
+      "https://micuenta.ecuavisa.com/suscripciones/player/config2.php?api=update",
       {
         method: "POST",
         headers: {

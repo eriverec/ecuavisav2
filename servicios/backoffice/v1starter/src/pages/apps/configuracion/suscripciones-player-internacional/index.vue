@@ -215,7 +215,7 @@ async function getConfig() {
   isLoading.value = true;
   try {
     const response = await fetch(
-      "https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/player/config2.php?api=web&key=premiunPlayerInternacional"
+      "https://micuenta.ecuavisa.com/suscripciones/player/config2.php?api=web&key=premiunPlayerInternacional"
     );
     const data = await response.json();
     players.value = data.players || [];
@@ -240,7 +240,7 @@ async function enviar() {
     };
 
     const response = await fetch(
-      "https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/player/config2.php?api=update",
+      "https://micuenta.ecuavisa.com/suscripciones/player/config2.php?api=update",
       {
         method: "POST",
         headers: {

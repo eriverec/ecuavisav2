@@ -49,16 +49,16 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
 import axios from 'axios';
+import { onMounted, ref } from 'vue';
 
 // Variables reactivas
 const tiempoSegundos = ref('');
 const tiempoSegundosInt = ref('');
 
-const apiUrl = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones_tiempo_parametrizable/ajax/ajax_parametrizable.php';
+const apiUrl = 'https://micuenta.ecuavisa.com/suscripciones_tiempo_parametrizable/ajax/ajax_parametrizable.php';
 
-const apiUrlInter = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones_tiempo_parametrizable/ajax/ajax_parametrizable.php?id=2';
+const apiUrlInter = 'https://micuenta.ecuavisa.com/suscripciones_tiempo_parametrizable/ajax/ajax_parametrizable.php?id=2';
 
 const configSnackbar = ref({
   message: "Datos guardados",
@@ -119,7 +119,7 @@ const updateTime = async () => {
 
 const updateTimeInt = async () => {
   try {
-    const response = await axios.post('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones_tiempo_parametrizable/ajax/ajax_parametrizable.php', {
+    const response = await axios.post('https://micuenta.ecuavisa.com/suscripciones_tiempo_parametrizable/ajax/ajax_parametrizable.php', {
       id: 2, // Puedes ajustar este valor según lo que se necesite
       action: 'edit_time',
       tiempo_segundos: parseInt(tiempoSegundosInt.value),
