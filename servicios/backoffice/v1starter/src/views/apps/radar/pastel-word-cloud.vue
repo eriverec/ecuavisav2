@@ -27,6 +27,7 @@ const formatDate = (dateString) => {
   return moment(dateString, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm')
 }
 
+
 const debounceUpdate = () => {
   clearTimeout(updateTimeout);
   updateTimeout = setTimeout(() => {
