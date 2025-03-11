@@ -891,7 +891,7 @@ const formatearFecha = (timestamp) => {
   if (!timestamp) return '';
   
   try {
-    const fecha = new Date(timestamp);
+    let fecha = new Date(timestamp);
     if (isNaN(fecha.getTime())) {
       const matches = timestamp.match(/(\d{2})\/(\d{2})\/(\d{4})/);
       if (matches) {

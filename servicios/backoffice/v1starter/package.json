@@ -46,6 +46,7 @@
         "vuetify": "3.0.0",
         "vuetify-datetime-picker": "^2.1.1",
         "webfontloader": "^1.6.28",
+        "wordcloud": "^1.2.3",
         "xlsx": "^0.18.5"
     },
     "devDependencies": {

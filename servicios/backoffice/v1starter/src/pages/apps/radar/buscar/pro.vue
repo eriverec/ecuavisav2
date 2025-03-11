@@ -1,4 +1,5 @@
 <script setup>
+  import pastelWordCloud from '@/views/apps/radar/pastel-word-cloud.vue';
   import axios from 'axios';
   import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
   import BarChart from './BarChart.vue'; // Importar componente de gráfico de barras
@@ -12,11 +13,14 @@
   const nuevosArticulosArray = ref([]);
 
   const topKeywords = ref([]);
+  const topTags = ref([]);
   const mediaDistribution = ref([]);
 
   // variables para el filtro
   const filteredKeywords = ref([]);
+  const filteredTags = ref([]);
   const allKeywords = ref([]);
+  const allTags = ref([]);
 
   const url = ref('')
   const loading = ref(false)
@@ -64,6 +68,25 @@
       }
     } catch (err) {
       console.warn('Error parsing keywords:', err);
+    }
+    
+    return [];
+  }
+
+  const parseTags = (tags) => {
+    if (!tags) return [];
+    
+    try {
+      if (typeof tags === 'string') {
+        return tags.split(',').map(k => k.trim()).filter(Boolean);
+      } else if (Array.isArray(tags)) {
+        return tags.map(k => typeof k === 'string' ? k.trim() : String(k)).filter(Boolean);
+      } else if (typeof tags === 'object') {
+        // Try to convert object to string if possible
+        return [String(tags)].filter(Boolean);
+      }
+    } catch (err) {
+      console.warn('Error parsing tags:', err);
     }
     
     return [];
@@ -119,6 +142,49 @@
       console.log(`Procesadas ${allKeywords.value.length} keywords, top 10 keywords:`, topKeywords.value);
     } catch (err) {
       console.error('Error al procesar keywords:', err);
+    }
+  };
+
+  // Procesar Tags y crear top 10
+  const procesarTags = (articles) => {
+    if (!articles || !Array.isArray(articles) || articles.length === 0) {
+      console.warn('No hay artículos para procesar tag');
+      return;
+    }
+
+    try {
+      const tagFrequencies = {};
+
+      articles.forEach(article => {
+        if (article && article.tags) {
+          const tags = parseTags(article.tags);
+          tags.forEach(tag => {
+            if (tag) {
+              tagFrequencies[tag] = (tagFrequencies[tag] || 0) + 1;
+            }
+          });
+        }
+      });
+
+      // Ordenar por frecuencia
+      const sortedTags = Object.entries(tagFrequencies)
+        .filter(([tag]) => tag && tag.trim())
+        .sort(([, a], [, b]) => b - a);
+
+      // Tomar el top 10 y formatear para el gráfico de barras
+      topTags.value = sortedTags.slice(0, 10).map(([tag, count]) => ({
+        label: tag,
+        value: count,
+      }));
+
+      allTags.value = sortedTags.map(([tag, count]) => ({
+        label: tag,
+        value: count,
+      }));
+
+      console.log(`Procesadas ${allTags.value.length} tags, top 10 tags:`, topTags.value);
+    } catch (err) {
+      console.error('Error al procesar tags:', err);
     }
   };
 
@@ -721,12 +787,14 @@
                               ...multipleResults.value[lastIndex].data.articles[articleIndex],
                               tipo: additionalData.article?.tipo || 'Tipo no disponible',
                               autor: additionalData.article?.autor || 'Autor no disponible',
-                              keywords: additionalData.article?.keywords || 'keywords no disponibles',
+                              keywords: additionalData.article?.keywords || 'Keys no disp',
+                              tags: additionalData.article?.tags || 'tags no disponibles',
                               metodo: additionalData.article?.metodo || '',
                               seccion: additionalData.article?.seccion || 'Seccion no disponible',
                               subseccion: additionalData.article?.subseccion || '',
                               fechaPublicacion: additionalData.article?.fechaPublicacion || 'Fecha no disponible'
                             }
+                            console.log("additionalData.article?.tags", additionalData.article?.tags)
                           }
                         }
                       } catch (err) {
@@ -916,6 +984,7 @@
 
     // Procesar las keywords y medios
     procesarKeywords(combinado.articles);
+    procesarTags(combinado.articles);
     procesarMedios(combinado.articles);
 
     // Mostrar los resultados
@@ -1115,7 +1184,8 @@
                         ...enrichedArticles[articleIndex],
                         tipo: additionalData.article?.tipo || 'Tipo no disponible',
                         autor: additionalData.article?.autor || 'Autor no disponible',
-                        keywords: additionalData.article?.keywords || 'keywords no disponibles',
+                        keywords: additionalData.article?.keywords || 'Keys no disp',
+                        tags: additionalData.article?.tags || 'tags no disponibles',
                         metodo: additionalData.article?.metodo || '',
                         seccion: additionalData.article?.seccion || 'Seccion no disponible',
                         subseccion: additionalData.article?.subseccion || '',
@@ -1182,6 +1252,7 @@
 
         // Procesar keywords y medios para los gráficos
         procesarKeywords(resultados.value.articles);
+        procesarTags(resultados.value.articles);
         procesarMedios(resultados.value.articles);
 
         // Configurar la actualización automática
@@ -1265,7 +1336,8 @@
                       ...enrichedArticles[articleIndex],
                       tipo: additionalData.article?.tipo || 'Tipo no disponible',
                       autor: additionalData.article?.autor || 'Autor no disponible',
-                      keywords: additionalData.article?.keywords || 'keywords no disponibles',
+                      keywords: additionalData.article?.keywords || 'Keys no disp',
+                      tags: additionalData.article?.tags || 'tags no disponibles',
                       metodo: additionalData.article?.metodo || '',
                       seccion: additionalData.article?.seccion || 'Seccion no disponible',
                       subseccion: additionalData.article?.subseccion || '',
@@ -1332,6 +1404,7 @@
 
       // Procesar keywords y medios para los gráficos
       procesarKeywords(resultados.value.articles);
+      procesarTags(resultados.value.articles);
       procesarMedios(resultados.value.articles);
       
       // Configurar la actualización automática
@@ -1835,6 +1908,7 @@
         
         // Actualizar los gráficos después de quitar el artículo
         procesarKeywords(resultados.value.articles);
+        procesarTags(resultados.value.articles);
         procesarMedios(resultados.value.articles);
       }
       
@@ -1916,6 +1990,7 @@
       
       // Actualizar gráficos después de filtrar
       procesarKeywords(resultados.value.articles);
+      procesarTags(resultados.value.articles);
       procesarMedios(resultados.value.articles);
     }
   };
@@ -1937,6 +2012,7 @@
         
         // Actualizar los gráficos con los nuevos artículos
         procesarKeywords(resultados.value.articles);
+        procesarTags(resultados.value.articles);
         procesarMedios(resultados.value.articles);
         
         console.log('Nuevos artículos agregados:', JSON.stringify(nuevosArticulosArray.value));
@@ -2112,6 +2188,7 @@
   watch(() => resultados.value?.articles, (newArticles) => {
     if (newArticles && newArticles.length > 0) {
       procesarKeywords(newArticles);
+      procesarTags(newArticles);
       procesarMedios(newArticles);
     } else {
       // Limpiar gráficos si no hay artículos
@@ -2383,6 +2460,34 @@
       </VRow>
       <!-- Lista de artículos -->
       <VRow v-if="resultados && !error">
+        <!-- Nueva sección para gráficos -->
+        <VCol cols="12" v-if="topKeywords.length > 0 || mediaDistribution.length > 0">
+          <VCard v-if="topKeywords.length > 0" class="mb-3">
+            <VCardTitle class="pt-4 ml-2 mb-4">Análisis KeyWords mas usadas</VCardTitle>
+            <VCardText>
+                <VRow>
+                    <VCol cols="12">
+                      <pastelWordCloud :data="allKeywords" :dataTags="allTags" :dataListArticles="resultados.articles" />
+                    </VCol>
+                </VRow>
+            </VCardText>
+          </VCard>
+          <VCard>
+            <VCardTitle>Análisis de Medios</VCardTitle>
+            <VCardText>
+                <VRow>
+                    <!-- Grafico de Top 10 de Keywords -->
+                    <VCol cols="12" md="6" v-if="topKeywords.length > 0">
+                        <BarChart :chartData="topKeywords" />
+                    </VCol>
+                    <!-- Grafico de Distribucion de Medios -->
+                    <VCol cols="12" md="6" v-if="mediaDistribution.length > 0">
+                        <PieChart :chartData="mediaDistribution" />
+                    </VCol>
+                </VRow>
+            </VCardText>
+          </VCard>
+        </VCol>
         <VCol cols="12">
           <!-- Notificación de nuevos artículos -->
           <VAlert v-if="nuevosArticulos > 0" type="info" variant="tonal" closable class="mb-4 w-100" 
@@ -2532,24 +2637,6 @@
               </div>
             </div>
           </div>
-        </VCol>
-        <!-- Nueva sección para gráficos -->
-        <VCol cols="12" v-if="topKeywords.length > 0 || mediaDistribution.length > 0">
-          <VCard>
-            <VCardTitle>Análisis de Medios</VCardTitle>
-            <VCardText>
-                <VRow>
-                    <!-- Grafico de Top 10 de Keywords -->
-                    <VCol cols="12" md="6" v-if="topKeywords.length > 0">
-                        <BarChart :chartData="topKeywords" />
-                    </VCol>
-                    <!-- Grafico de Distribucion de Medios -->
-                    <VCol cols="12" md="6" v-if="mediaDistribution.length > 0">
-                        <PieChart :chartData="mediaDistribution" />
-                    </VCol>
-                </VRow>
-            </VCardText>
-          </VCard>
         </VCol>
       </VRow>
     </div>
