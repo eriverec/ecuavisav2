@@ -154,16 +154,20 @@ function normalizarValores() {
     // Paso 7: Normalizar los valores sobre 100
     const normalizedWords = top10Words.map(word => {
       let sizeLocal = ((word.value - min) / (max - min)) * 100;
-      if(sizeLocal < 15){
-        sizeLocal = getRandomInt(15, 40);
+      if (sizeLocal < 20) {
+        sizeLocal = getRandomInt(10, 34);
+      }else{
+        sizeLocal = getRandomInt(35, 70);
       }
       return ({
         text: word.label,
-        size: sizeLocal,
+        size: (sizeLocal).toFixed(2) * 1,
       });
     });
 
     // Retornar el resultado
+
+    console.log("normalizedWords", normalizedWords)
     return {
       promedio: average,
       p_normalizadas: normalizedWords,
