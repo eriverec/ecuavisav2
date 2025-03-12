@@ -140,8 +140,8 @@ function normalizarValores() {
     // Paso 7: Normalizar los valores sobre 100
     const normalizedWords = top10Words.map(word => {
       let sizeLocal = ((word.value - min) / (max - min)) * 100;
-      if(sizeLocal < 8){
-        sizeLocal = getRandomInt(10, 40);
+      if(sizeLocal < 15){
+        sizeLocal = getRandomInt(15, 40);
       }
       return ({
         text: word.label,
@@ -295,7 +295,7 @@ onMounted(() => {
               
             </div>
 
-            <VTextField v-model="isDialogVisibleChart1.data.search" :label="`Buscar en ${isDialogVisibleChart1.data.title}`"
+            <VTextField v-model="isDialogVisibleChart1.data.search" label="Buscar.."
               prepend-inner-icon="tabler-search" density="compact" style="max-width: 300px; padding: 0px 0;"
               clearable />
 
