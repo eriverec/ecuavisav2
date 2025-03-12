@@ -710,7 +710,7 @@ const fetchGeneral = async () => {
     // const data = await response.json();
     // dataGeneral.value = data;
 
-    const response = await axios.get('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime=10');
+    const response = await axios.get('https://micuenta.ecuavisa.com/realtimeService/show_v_3.php?groupTime=10');
     const apiData = response.data;
     dataGeneral.value = apiData;
 
@@ -735,7 +735,7 @@ const fetchGeneral = async () => {
 // Grafico Devise
 const fetchDevice = async () => {
   try{
-    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?device')
+    const response = await fetch('https://micuenta.ecuavisa.com/realtimeService/show_v_3.php?device')
     const data = await response.json();
     dataDevice.value = data.slice(0, 10);
     if (dataDevice.value.length > 0) {
@@ -753,7 +753,7 @@ const fetchDevice = async () => {
 
 const fetchConteov2 = async () => {
   try{
-    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupUsers')
+    const response = await fetch('https://micuenta.ecuavisa.com/realtimeService/show_v_3.php?groupUsers')
     const data = await response.json();
     sumV.value = data.length;
   }catch(error){
@@ -785,7 +785,7 @@ function contarSecuencial(inicio, fin, tiempoTotal) {
 
 const fetchEntries = async () => {
   try{
-    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?grouped=10')
+    const response = await fetch('https://micuenta.ecuavisa.com/realtimeService/show_v_3.php?grouped=10')
     const data = await response.json()
     entries.value = data;
     // console.log(entries.value);
@@ -816,7 +816,7 @@ const fetchEntries = async () => {
 // Grafico Metadatos
 const fetchMetadato = async () => {
   try{
-    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?metadato')
+    const response = await fetch('https://micuenta.ecuavisa.com/realtimeService/show_v_3.php?metadato')
     const data = await response.json();
     dataMetadato.value = data.slice(0, 10);
     // console.log(dataMetadato.value);
@@ -836,7 +836,7 @@ const fetchMetadato = async () => {
 // Grafico Section
 const fetchSection = async () => {
   try{
-    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?section')
+    const response = await fetch('https://micuenta.ecuavisa.com/realtimeService/show_v_3.php?section')
     const data = await response.json();
     dataSection.value = data.slice(0, 10);
     // console.log(dataMetadato.value);
@@ -856,7 +856,7 @@ const fetchSection = async () => {
 
 const fetchRegisters = async () => {
   try{
-    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?entries')
+    const response = await fetch('https://micuenta.ecuavisa.com/realtimeService/show_v_3.php?entries')
     const data = await response.json()
     registers.value = data;
   }catch(error){
@@ -872,7 +872,7 @@ const fetchRegisters = async () => {
 
 const resetEntries = async () => {
   try{
-    const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/reset.php')
+    const response = await fetch('https://micuenta.ecuavisa.com/Tools/realtimeService/reset.php')
     // const data = await response.json()
     console.log("se reseteó el módulo correctamente")
   }catch(error){
