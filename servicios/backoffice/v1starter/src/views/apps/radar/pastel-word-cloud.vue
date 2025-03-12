@@ -52,12 +52,26 @@ const generateWordCloud = () => {
     .attr("preserveAspectRatio", "xMidYMid meet"); // Mantiene el contenido centrado
 
   svg.selectAll("*").remove(); // Limpiar SVG antes de renderizar
+  // 🔥 Definir las rotaciones específicas para las primeras palabras
+  const rotations = [0, 10, -40, -10, -110]; // Las primeras 5 palabras con ángulos específicos
+  // 🔹 Escalar tamaños proporcionalmente
+  const maxSize = d3.max(words.value, d => d.size);
+  const minSize = d3.min(words.value, d => d.size);
+  const scaleSize = d3.scaleSqrt()
+    .domain([minSize, maxSize])
+    .range([10, width.value / 6]);
 
   cloud()
     .size([width.value, height.value])
-    .words(words.value.map(d => ({ ...d, size: d.size })))
+    .words(words.value.map((d, i) => {
+      const rotation = i < rotations.length ? rotations[i] : Math.floor(Math.random() * 121) - 60; 
+      return { ...d, size: d.size, rotate: rotation };
+    }))
+    // .words(words.value.map(d => ({ ...d, size: d.size })))
+    // .rotate(() => (Math.random() > 0.5 ? 0 : 90)) // Rotar 50% de las palabras
+    // .rotate(d =>  { return (~~(Math.random() * 6) - 3) * 30; })
+    .rotate(d => d.rotate)
     .padding(5)
-    .rotate(() => (Math.random() > 0.5 ? 0 : 90)) // Rotar 50% de las palabras
     .font("Impact")
     .fontSize(d => d.size)
     .on("end", (wordData) => {
