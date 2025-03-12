@@ -20,6 +20,8 @@
         "axios": "1.1.2",
         "axios-mock-adapter": "^1.21.2",
         "chart.js": "^3.9.1",
+        "d3": "^7.9.0",
+        "d3-cloud": "^1.2.7",
         "eslint-import-resolver-alias": "^1.1.2",
         "jsonwebtoken": "^9.0.2",
         "jwt-decode": "^3.1.2",

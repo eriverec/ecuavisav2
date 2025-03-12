@@ -1,7 +1,6 @@
 <script setup>
-import { onMounted, onUnmounted, ref } from "vue";
-import * as d3 from "d3";
-import cloud from "d3-cloud";
+import { onMounted, ref, watch } from "vue";
+import WordCloud from "wordcloud";  // Importamos la librería
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import esLocale from "moment/locale/es";
@@ -16,8 +15,8 @@ const props = defineProps({
 });
 
 const words = ref([]);
-const width = ref(window.innerWidth * 0.53);  // 90% del ancho de pantalla
-const height = ref(window.innerHeight * 0.53); // 50% de la altura de pantalla
+const width = ref(window.innerWidth * 0.53);  // 90% del ancho de la pantalla
+const height = ref(window.innerHeight * 0.53); // 50% de la altura de la pantalla
 const limitKeywords = ref(15);
 let updateTimeout = null; // Variable para manejar el debounce
 
@@ -40,67 +39,45 @@ const debounceUpdate = () => {
   }, 900); // Espera 500ms después del último cambio antes de actualizar
 };
 
+const generateWordCloud = () => {
+  const canvas = document.getElementById("wordCloudCanvas");
+
+  WordCloud(canvas, {
+    list: words.value.map(d => [d.text, d.size]),
+    gridSize: 15,
+    weightFactor: 3,
+    fontFamily: '"Public Sans", sans-serif, -apple-system, blinkmacsystemfont, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol"',
+    color: "random-dark",
+    backgroundColor: "#ffffff00",
+    rotateRatio: 0.5,
+    minSize: 20,
+    drawOutOfBound: false,
+
+    // 🔹 Agregamos sombra al texto
+    drawWord: (ctx, word, x, y, fontSize, options) => {
+      ctx.save();
+      ctx.shadowColor = "rgba(0, 0, 0, 0.5)"; // Color de sombra (negro semi-transparente)
+      ctx.shadowBlur = 5; // Suavidad de la sombra
+      ctx.shadowOffsetX = 3; // Desplazamiento en X
+      ctx.shadowOffsetY = 3; // Desplazamiento en Y
+
+      ctx.fillText(word, x, y); // Dibuja la palabra con sombra
+      ctx.restore();
+    },
+
+    click: function (event) {
+      clickKeyword(event[0]);
+    }
+  });
+};
+
+
+
 function getRandomInt(min, max) {
   min = Math.ceil(min); // Redondea hacia arriba (por si min es decimal)
   max = Math.floor(max); // Redondea hacia abajo (por si max es decimal)
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
-
-const generateWordCloud = () => {
-  const svg = d3.select("#wordCloud")
-    .attr("viewBox", `0 0 ${width.value} ${height.value}`)
-    .attr("preserveAspectRatio", "xMidYMid meet"); // Mantiene el contenido centrado
-
-  svg.selectAll("*").remove(); // Limpiar SVG antes de renderizar
-
-  cloud()
-    .size([width.value, height.value])
-    .words(words.value.map(d => ({ ...d, size: d.size })))
-    .padding(5)
-    .rotate(() => (Math.random() > 0.5 ? 0 : 90)) // Rotar 50% de las palabras
-    .font("Impact")
-    .fontSize(d => d.size)
-    .on("end", (wordData) => {
-      const g = svg.append("g")
-        .attr("transform", `translate(${width.value / 2}, ${height.value / 2})`); // 🔹 Siempre centrado
-
-      g.selectAll("text")
-        .data(wordData)
-        .enter()
-        .append("text")
-        .attr("font-size", d => d.size)
-        .attr("font-family", "Impact")
-        .attr("fill", () => d3.schemeCategory10[Math.floor(Math.random() * 10)]) // Colores aleatorios
-        .attr("text-anchor", "middle")
-        .attr("transform", d => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
-        .text(d => d.text)
-        .style("cursor", "pointer")
-        
-        // 🚀 Animación: Aumenta tamaño al hacer hover
-        .on("mouseover", function (event, d) {
-          d3.select(this)
-            .transition()
-            .duration(200) // Duración de la animación
-            .attr("font-size", d.size * 1.1) // Aumenta un 30% el tamaño
-            .attr("fill", "red"); // Opcional: cambia el color al pasar el mouse
-        })
-        
-        .on("mouseout", function (event, d) {
-          d3.select(this)
-            .transition()
-            .duration(200)
-            .attr("font-size", d.size) // Vuelve al tamaño original
-            .attr("fill", () => d3.schemeCategory10[Math.floor(Math.random() * 10)]); // Recupera su color original
-        })
-
-        .on("click", (event, d) => {
-          // alert(`Palabra seleccionada: ${d.text}`)
-          clickKeyword(d.text);
-      });
-    })
-    .start();
-};
-
 
 function normalizarValores() {
   try {
@@ -117,11 +94,15 @@ function normalizarValores() {
       value: word.value == 0 ? 10 : word.value, // Si value es 0, se convierte en 1
     }));
 
+    // console.log("adjustedWords", adjustedWords)
+
     // Paso 2: Ordenar de mayor a menor por 'value'
     adjustedWords.sort((a, b) => b.value - a.value);
 
     // Paso 3: Seleccionar solo las 15 primeras palabras
     const top10Words = adjustedWords.slice(0, limitKeywords.value);
+
+    // console.log("top10Words", top10Words)
 
     // Paso 4: Extraer los valores de 'value'
     const sizes = top10Words.map(word => word.value);
@@ -136,12 +117,12 @@ function normalizarValores() {
     const max = Math.max(...sizes);
     // console.log("min", min)
     // console.log("max", max)
+    // console.log("adjustedWords[0].value", top10Words[0].value)
 
-    // Paso 7: Normalizar los valores sobre 100
     const normalizedWords = top10Words.map(word => {
-      let sizeLocal = ((word.value - min) / (max - min)) * 100;
+      let sizeLocal = ((word.value - min) / (max - min)) * 25;
       if(sizeLocal < 8){
-        sizeLocal = getRandomInt(10, 40);
+        sizeLocal = getRandomInt(5, 18);
       }
       return ({
         text: word.label,
@@ -149,11 +130,9 @@ function normalizarValores() {
       });
     });
 
-    // Retornar el resultado
-    return {
-      promedio: average,
-      p_normalizadas: normalizedWords,
-    };
+    // console.log("normalizedWords", normalizedWords)
+
+    return { p_normalizadas: normalizedWords };
   } catch (e) {
     console.error(e);
     return null;
@@ -173,10 +152,22 @@ onMounted(() => {
   debounceUpdate();
 });
 
+// onMounted(() => {
+//   const wordsTem = normalizarValores();
+//   if (wordsTem) {
+//     // console.log(wordsTem)
+//     words.value = wordsTem.p_normalizadas;
+//     generateWordCloud();
+//   } else {
+//     alert("No se pudo crear el gráfico de palabras clave");
+//   }
+
+//   // window.addEventListener("resize", actualizarDimensiones);
+// });
+
 // onUnmounted(() => {
 //   window.removeEventListener("resize", actualizarDimensiones);
 // });
-
 // INICIO DE EVENTO CLICK GRAFICO 1
   const isDialogVisibleChart1 = ref({
     modal: false,
@@ -368,13 +359,12 @@ onMounted(() => {
         </VCardText>
       </VCard>
     </VDialog>
-
     <VRow>
-        <VCol cols="12" sm="8" lg="8">
-          <svg id="wordCloud"></svg>
+        <VCol cols="8">
+          <canvas id="wordCloudCanvas" :width="width" :height="height"></canvas>
         </VCol>
-        <VCol cols="12" sm="4" lg="4">
-          <div v-for="(keyword, index) of (props.data.slice(0, 8))" :key="index">
+        <VCol cols="4">
+          <div v-for="(keyword, index) of (props.data.slice(0, 7))" :key="index">
             <VListItem @click="clickKeyword(keyword.label)"  style="cursor:pointer;">
               <template #prepend>
                 <VAvatar
@@ -395,7 +385,7 @@ onMounted(() => {
               </VListItemSubtitle>
             </VListItem>
 
-            <VDivider v-if="index !== (props.data.slice(0, 8)).length - 1" />
+            <VDivider v-if="index !== (props.data.slice(0, 7)).length - 1" />
           </div>
         </VCol>
     </VRow>
@@ -403,12 +393,10 @@ onMounted(() => {
 </template>
 
 <style scoped>
-  svg#wordCloud {
-    display: block;
-    margin: auto;
-    width: 100%;
-    height: auto;
-  }
+canvas {
+  display: block;
+  margin: auto;
+}
 </style>
 <style scoped>
 .sectionprimicias .v-card-item {
