@@ -1,10 +1,10 @@
 <script setup>
-  import VueApexCharts from 'vue3-apexcharts'
-  import { useTheme } from 'vuetify'
+  import VueApexCharts from 'vue3-apexcharts';
+import { useTheme } from 'vuetify';
 
   import Moment from 'moment';
-  import { extendMoment } from 'moment-range';
-  import esLocale from "moment/locale/es";
+import { extendMoment } from 'moment-range';
+import esLocale from "moment/locale/es";
 
   const moment = extendMoment(Moment);
   moment.locale('es', [esLocale]);
@@ -115,7 +115,7 @@
 var intervalId = null;
 
 async function getChart() {
-  await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/realtimeService/show_v_3.php?groupTime`)
+  await fetch(`https://micuenta.ecuavisa.com/realtimeService/show_v_3.php?groupTime`)
     .then(response => response.json())
     .then(data => {
       dataChart.value = data;
