@@ -39,7 +39,7 @@ const etiquetasModel = ref('');
 
 const tituloModel = ref(null);
 const descripcionModel = ref(null);
-const thumbnailModel = ref("https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg");
+const thumbnailModel = ref("https://micuenta.ecuavisa.com/Recursos/ecuavisa.com.jpg");
 
 const idToEdit = ref('');
 
@@ -71,7 +71,7 @@ async function getEtiquetas(page = 1, limit= 10){
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/elearning/etiqueta/listar.php`, requestOptions);
+      var response = await fetch(`https://micuenta.ecuavisa.com/elearning/etiqueta/listar.php`, requestOptions);
       const data = await response.json();
       etiquetasItems.value = data;
       etiquetasModelLoading.value = false;
@@ -94,7 +94,7 @@ async function getCategorias(page = 1, limit= 10){
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/elearning/categoria/listar.php`, requestOptions);
+      var response = await fetch(`https://micuenta.ecuavisa.com/elearning/categoria/listar.php`, requestOptions);
       const data = await response.json();
       categoriasItems.value = data;
       categoriaModelLoading.value = false;
@@ -217,7 +217,7 @@ function resetForm(){
     idRudoModel.value = "";
     duracionModel.value = "";
     descripcionModel.value = "";
-    thumbnailModel.value = "https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg";
+    thumbnailModel.value = "https://micuenta.ecuavisa.com/Recursos/ecuavisa.com.jpg";
     duracionModel.value = "";
     etiquetasModel.value = "";
     categoriaModel.value = "";
@@ -249,7 +249,7 @@ async function onEdit(id){
     idRudoModel.value = data.idRudo;
     duracionModel.value = data.duracion;
     descripcionModel.value = data.descripcion;
-    thumbnailModel.value = "https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg";
+    thumbnailModel.value = "https://micuenta.ecuavisa.com/Recursos/ecuavisa.com.jpg";
     // thumbnailModel.value = data.thumbnail;
     etiquetasModel.value = data.etiquetas;
     categoriaModel.value = data.categoria;

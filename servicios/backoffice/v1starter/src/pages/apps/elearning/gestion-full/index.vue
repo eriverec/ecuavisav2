@@ -145,7 +145,7 @@ async function getEtiquetas(){
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/elearning/etiqueta/listar.php`, requestOptions);
+      var response = await fetch(`https://micuenta.ecuavisa.com/elearning/etiqueta/listar.php`, requestOptions);
       const data = await response.json();
       etiquetasItems.value = data;
       etiquetasModelLoading.value = false;
@@ -166,7 +166,7 @@ async function getCategorias(){
         redirect: 'follow'
       };
 
-      var response = await fetch(`https://estadisticas.ecuavisa.com/sites/gestor/Tools/elearning/categoria/listar.php`, requestOptions);
+      var response = await fetch(`https://micuenta.ecuavisa.com/elearning/categoria/listar.php`, requestOptions);
       const data = await response.json();
       categoriasItems.value = data;
       categoriaModelLoading.value = false;
@@ -618,7 +618,7 @@ const etiquetasVideoModel = ref('');
 
 const tituloVideoModel = ref(null);
 const descripcionVideoModel = ref(null);
-const thumbnailVideoModel = ref("https://estadisticas.ecuavisa.com/sites/gestor/Recursos/ecuavisa.com.jpg");
+const thumbnailVideoModel = ref("https://micuenta.ecuavisa.com/Recursos/ecuavisa.com.jpg");
 
 async function getDesafioVideos(){
   try {
