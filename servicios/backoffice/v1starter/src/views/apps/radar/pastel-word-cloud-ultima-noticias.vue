@@ -12,13 +12,12 @@ import esLocale from "moment/locale/es";
 const props = defineProps({
   data: { type: Array, required: true },  // Propiedad que recibe los datos
   dataTags: { type: Array, required: true },  // Propiedad que recibe los datos
-  dataListArticles: { type: Array, required: true },  // Propiedad que recibe los datos
-  limitKeywords: { type: String }  // Propiedad que recibe los datos
+  dataListArticles: { type: Array, required: true }  // Propiedad que recibe los datos
 });
 
 const words = ref([]);
 const width = ref(window.innerWidth * 0.53);  // 90% del ancho de pantalla
-const height = ref(window.innerHeight * 0.73); // 50% de la altura de pantalla
+const height = ref(window.innerHeight * 0.53); // 50% de la altura de pantalla
 const limitKeywords = ref(15);
 let updateTimeout = null; // Variable para manejar el debounce
 
@@ -160,12 +159,8 @@ function normalizarValores() {
       let sizeLocal = ((word.value - min) / (max - min)) * 100;
       if (sizeLocal < 20) {
         sizeLocal = getRandomInt(10, 34);
-      }else if( sizeLocal < 40){
-        sizeLocal = getRandomInt(35, 45);
-      }else if( sizeLocal < 50){
-        sizeLocal = getRandomInt(46, 55);
       }else{
-        sizeLocal = getRandomInt(56, 70);
+        sizeLocal = getRandomInt(35, 70);
       }
       return ({
         text: word.label,
@@ -175,7 +170,7 @@ function normalizarValores() {
 
     // Retornar el resultado
 
-    // console.log("normalizedWords", normalizedWords)
+    console.log("normalizedWords", normalizedWords)
     return {
       promedio: average,
       p_normalizadas: normalizedWords,
@@ -196,10 +191,9 @@ watch(() => props.data, debounceUpdate, { deep: true });
 watch(() => props.dataTags, debounceUpdate, { deep: true });
 
 onMounted(() => {
-  if(props.limitKeywords){
-    limitKeywords.value = props.limitKeywords * 1;
-  }
   // console.log("props.dataListArticles", props.dataListArticles)
+  // console.log("props.dataListArticles", JSON.stringify(props.dataListArticles, null, 2));
+
   debounceUpdate();
 });
 
@@ -242,18 +236,29 @@ onMounted(() => {
   const clickKeyword = (keyword) => {
       try {
           isDialogVisibleChart1.value.modal = true;
+          const listaNormalizada = props.dataListArticles.map(item => ({ ...item }));
           let objeto = [];
 
           // console.log("props.dataListArticles", props.dataListArticles)
 
           // Iterar sobre cada artículo en props.dataListArticles
-          Object.values(props.dataListArticles).forEach(article => {
-              // console.log("containsKeyword(article.keywords, keyword)", containsKeyword(article.keywords, keyword))
-              // console.log("containsKeyword(article.keywords, keyword) article.keywords", article.keywords, keyword)
+          for(var i in listaNormalizada){
+            const article = listaNormalizada[i];
+
+            if(article.keywords){
               if (article.hasOwnProperty("keywords") && containsKeyword(article.keywords, keyword)) {
                   objeto.push(article); // Agregar el artículo directamente si contiene la palabra clave
               }
-          });
+            }
+          }
+
+          // console.log("objeto", objeto)
+
+          // (props.dataListArticles).forEach(article => {
+          //     // console.log("containsKeyword(article.keywords, keyword)", containsKeyword(article.keywords, keyword))
+          //     // console.log("containsKeyword(article.keywords, keyword) article.keywords", article.keywords, keyword)
+              
+          // });
 
           // Limpiar la búsqueda anterior
 
@@ -268,10 +273,11 @@ onMounted(() => {
 
           // Actualizar título y mostrar el modal
           isDialogVisibleChart1.value.data.items = objeto;
+
           isDialogVisibleChart1.value.data.search = null;
           isDialogVisibleChart1.value.data.title = keyword.toUpperCase();
 
-          console.log("objeto",objeto);
+          // console.log("objeto",objeto);
           return objeto;
       } catch (error) {
           console.error("Error en clickKeyword:", error);
@@ -283,6 +289,7 @@ onMounted(() => {
   const filteredDataModalChart1 = computed(() => {
     if(!isDialogVisibleChart1.value.data.search){
       return isDialogVisibleChart1.value.data.items;
+      // return [];
     }
 
     const query = isDialogVisibleChart1.value.data.search.toLowerCase();

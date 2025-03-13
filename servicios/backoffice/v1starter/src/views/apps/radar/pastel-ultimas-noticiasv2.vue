@@ -21,7 +21,7 @@ const availableColors = ['primary', 'info', 'error', 'warning', 'success'];
 const totalesSitios = ref([]);
 
 async function agruparYFiltrarPorTiempo(data) {
-  const haceCincoMinutos = moment(props.lastUpdate,"DD/MM/YYYY HH:mm").subtract(30, "minutes");
+  const haceCincoMinutos = moment().subtract(30, "minutes");
 
   // Get unique sites from the data
   const uniqueSites = [...new Set(data.map(item => item.sitio))];
@@ -34,7 +34,10 @@ async function agruparYFiltrarPorTiempo(data) {
 
   // Filtrar los registros cuya fechaPublicacion sea de haceCincoMinutos
   const datosFiltrados = data.filter(({ fechaPublicacion }) =>
-    moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(haceCincoMinutos)
+    {
+      // console.log("fechaPublicacion", moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(haceCincoMinutos))
+      return moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(haceCincoMinutos);
+    }
   );
 
   // Agrupar por sitio y color
@@ -86,18 +89,41 @@ const getDonutChartConfig = themeColors => {
     success: '#28c76f',
   }
 
+  const customColors = [
+    '#ffe802',
+    '#836af9',
+    '#2c9aff',
+    '#ffcf5c',
+    '#4f5d70',
+    '#299aff',
+    '#d4e157',
+    '#28dac6',
+    '#9e69fd',
+    '#ff9800',
+    '#26c6da',
+    '#ff8131',
+    '#28c76f',
+    '#ffbd1f',
+    '#84d0ff',
+    '#edf1f4',
+    '#ff9f43',
+  ]
+
   const { themeSecondaryTextColor, themePrimaryTextColor } = colorVariables(themeColors)
   const totalValueLocal = totalesSitios.value.reduce((sum, item) => sum + item.total, 0);
   totalValue.value = totalValueLocal;
   const series = totalesSitios.value.map(item => item.total);
-  
+  const colors = totalesSitios.value.map((item, index) => {
+    if(customColors.length < index){
+      return customColors[index % customColors.length];
+    }
+    return customColors[index];
+  });
   return {
     options: {
       stroke: { width: 0 },
       labels: totalesSitios.value.map(item => item.sitio),
-      colors: totalesSitios.value.map(item => {
-        return donutColors[item.color];
-      }),
+      colors: colors,
       dataLabels: {
         enabled: true,
         formatter: val => {

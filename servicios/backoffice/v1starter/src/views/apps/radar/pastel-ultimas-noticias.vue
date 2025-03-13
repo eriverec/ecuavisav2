@@ -86,18 +86,44 @@ const getDonutChartConfig = themeColors => {
     success: '#28c76f',
   }
 
+  const customColors = [
+    '#ffe802',
+    '#836af9',
+    '#2c9aff',
+    '#ffcf5c',
+    '#4f5d70',
+    '#299aff',
+    '#d4e157',
+    '#28dac6',
+    '#9e69fd',
+    '#ff9800',
+    '#26c6da',
+    '#ff8131',
+    '#28c76f',
+    '#ffbd1f',
+    '#84d0ff',
+    '#edf1f4',
+    '#ff9f43',
+  ]
+
   const { themeSecondaryTextColor, themePrimaryTextColor } = colorVariables(themeColors)
   const totalValueLocal = totalesSitios.value.reduce((sum, item) => sum + item.total, 0);
   totalValue.value = totalValueLocal;
   const series = totalesSitios.value.map(item => item.total);
+  const colors = totalesSitios.value.map((item, index) => {
+    if(customColors.length < index){
+      return customColors[index % customColors.length];
+    }
+    return customColors[index];
+  });
+
+  console.log("series", series)
   
   return {
     options: {
       stroke: { width: 0 },
       labels: totalesSitios.value.map(item => item.sitio),
-      colors: totalesSitios.value.map(item => {
-        return donutColors[item.color];
-      }),
+      colors: colors,
       dataLabels: {
         enabled: true,
         formatter: val => {
@@ -208,7 +234,7 @@ function generarIDHora(){
 </script>
 
 <template>
-  <div class="d-flex gap-2 mt-0 flex-column pb-3">
+  <div class="d-flex gap-2 mt-0 flex-column pb-3" style="display:none!important">
     <small style="font-size: 13px;">Medios digitales</small>
     <div class="d-flex align-center gap-2 mt-0 flex-wrap">
       <div v-for="(item, index) in totalesSitios" :key="item.sitio" class="d-flex align-center">
