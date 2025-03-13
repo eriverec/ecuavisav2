@@ -67,8 +67,8 @@ const data = ref([])
 const LOCAL_STORAGE_KEY = 'newsStorage';
 
 const dateEndpoint = ref({
-  fechai: moment().format("YYYY-MM-DD"),
-  fechaf: moment().format("YYYY-MM-DD"),
+  fechai: moment().subtract(1, "days").format("YYYY-MM-DD"),
+  fechaf: moment().subtract(1, "days").format("YYYY-MM-DD")
 });
 
 function getDefaultDate() {
@@ -220,8 +220,8 @@ const principalData = async function(reset = false){
 
     if(reset){
       dateEndpoint.value = {
-        fechai: moment().format("YYYY-MM-DD"),
-        fechaf: moment().format("YYYY-MM-DD"),
+        fechai: moment().subtract(1, "days").format("YYYY-MM-DD"),
+        fechaf: moment().subtract(1, "days").format("YYYY-MM-DD"),
       };
 
       filtrosActivos.sitio = "0";
@@ -373,15 +373,16 @@ const paginatedData = computed(() => {
 
 /** INICIO FIN PAGINADO DE PÁGINA **/
 /** INICIO DATERANGE **/
-const fechaHoy = moment().format("YYYY-MM-DD");
-const fechaHoyFormated = moment().format("DD-MM-YYYY");
+const fechaHoy = moment().subtract(1, "days").format("YYYY-MM-DD");
+const fechaHoyLimit = moment().format("YYYY-MM-DD");
+const fechaHoyFormated = moment().subtract(1, "days").format("DD-MM-YYYY");
 const fechaIFModel = ref({
   fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
   fechasVModel: [parseISO(fechaHoy)],
   fechasVConfig: {
       position: 'auto left',
       mode: 'range',
-      maxDate: parseISO(fechaHoy),
+      maxDate: parseISO(fechaHoyLimit),
       altFormat: 'd F j, Y',
       dateFormat: 'l, j \\d\\e F \\d\\e Y',
       valueFormat: 'd-m-Y',
@@ -436,16 +437,16 @@ watch(() => filtrosActivos.sitio, async (newValue) => {
             <div class="d-flex content-title flex-wrap w-100">
               <div class="d-flex gap-3 justify-space-between w-100">
                 <div class="d-flex flex-column" style="line-height: 1.3;">
-                  Históricos de artículos, todos los medios de comunicación
+                  Históricos de artículos
                   <div class="d-flex gap-2 align-center mt-2">
                     <small style="font-size: 10px;">Total de artículos</small>
                     <VChip size="x-small" color="primary">
-                      {{filteredData.length}} Artículos desde {{dateEndpoint.fechai}} 00:00:00  hasta {{ dateEndpoint.fechaf }} 23:59:59:
+                      {{filteredData.length}} Artículos, desde {{dateEndpoint.fechai}} 00:00:00  Hasta {{ dateEndpoint.fechaf }} 23:59:59
                     </VChip>
                   </div>
                   <div class="content-btn mt-3">
                     <VBtn :loading="loadingBtn" title="Recargar datos" @click="principalData" target="_blank" color="primary" variant="tonal" size="small">
-                      <VIcon icon="tabler-reload" /> Reset filtros
+                      <VIcon icon="tabler-reload" /> Quitar filtros
                     </VBtn>
                   </div>
                 </div>
