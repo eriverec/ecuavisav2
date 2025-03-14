@@ -349,9 +349,9 @@ function eventLigaPro() {
                   </ul>
                   <div class="tab-content" id="myTabContent">
                       <div id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
-                          ${currentUrl === uLigaProTabla ? acumulada : currentUrl === uLigaProAcumulada ? acumulada : currentUrl === uLigaProTablaFase2 ? acumulada : ''}
+                       
                           <iframe title="ifr_Posiciones"
-                              src="${urlObj.subUrl.iframe}"
+                              src="https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/minapp/page/page.html?channel=deportes.futbol.ecuador&lang=es_LA&page=posiciones"
                               width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"
                               class=""></iframe>
                       </div>
