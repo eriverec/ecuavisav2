@@ -4,6 +4,7 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 import { computed, onMounted, reactive, ref, watch } from 'vue';
+import pastelWordCloud from '@/views/apps/radar/pastel-word-cloud.vue';
 
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
@@ -42,6 +43,11 @@ const lastUpdate = ref('--:--');
 const updateInterval = ref(300);
 const updateIntervalDisabled = ref(false)
 const tableSearches = ref({})
+
+const topKeywords = ref([]);
+const topTags = ref([]);
+const allKeywords = ref([]);
+const allTags = ref([]);
 
 const customColors = [
   '#ffe802',
@@ -213,6 +219,158 @@ function agruparPorAtributo(data, atributo) {
   }, {});
 }
 
+// contar todas las keywords
+const countAllKeywords = (articles) => {
+    const keywords = [];
+    articles.forEach(article => {
+        const articleKeywords = parseKeywords(article.keywords);
+        keywords.push(...articleKeywords);
+    });
+    return keywords.length;
+};
+
+// Procesar Keywords y crear top 10
+const procesarKeywords = (articles) => {
+  if (!articles || !Array.isArray(articles) || articles.length === 0) {
+    console.warn('No hay artículos para procesar keywords');
+    return;
+  }
+
+  try {
+    const keywordFrequencies = {};
+
+    articles.forEach(article => {
+      if (article && article.keywords) {
+        const keywords = parseKeywords(article.keywords);
+        keywords.forEach(keyword => {
+          if (keyword) {
+            keywordFrequencies[keyword] = (keywordFrequencies[keyword] || 0) + 1;
+          }
+        });
+      }
+    });
+
+    // Ordenar por frecuencia
+    const sortedKeywords = Object.entries(keywordFrequencies)
+      .filter(([keyword]) => keyword && keyword.trim())
+      .sort(([, a], [, b]) => b - a);
+
+    // Tomar el top 10 y formatear para el gráfico de barras
+    topKeywords.value = sortedKeywords.slice(0, 10).map(([keyword, count]) => ({
+      label: keyword,
+      value: count,
+    }));
+
+    allKeywords.value = sortedKeywords.map(([keyword, count]) => ({
+      label: keyword,
+      value: count,
+    }));
+
+    console.log(`Procesadas ${allKeywords.value.length} keywords, top 10 keywords:`, topKeywords.value);
+  } catch (err) {
+    console.error('Error al procesar keywords:', err);
+  }
+};
+
+const parseKeywords = (keywords) => {
+    if (!keywords) return [];
+    
+    try {
+      if (typeof keywords === 'string') {
+        return keywords.split(',').map(k => k.trim()).filter(Boolean);
+      } else if (Array.isArray(keywords)) {
+        return keywords.map(k => typeof k === 'string' ? k.trim() : String(k)).filter(Boolean);
+      } else if (typeof keywords === 'object') {
+        // Try to convert object to string if possible
+        return [String(keywords)].filter(Boolean);
+      }
+    } catch (err) {
+      console.warn('Error parsing keywords:', err);
+    }
+    
+    return [];
+  }
+
+  const parseTags = (tags) => {
+    if (!tags) return [];
+    
+    try {
+      if (typeof tags === 'string') {
+        return tags.split(',').map(k => k.trim()).filter(Boolean);
+      } else if (Array.isArray(tags)) {
+        return tags.map(k => typeof k === 'string' ? k.trim() : String(k)).filter(Boolean);
+      } else if (typeof tags === 'object') {
+        // Try to convert object to string if possible
+        return [String(tags)].filter(Boolean);
+      }
+    } catch (err) {
+      console.warn('Error parsing tags:', err);
+    }
+    
+    return [];
+  }
+
+// Procesar Tags y crear top 10
+const procesarTags = (articles) => {
+  if (!articles || !Array.isArray(articles) || articles.length === 0) {
+    console.warn('No hay artículos para procesar tag');
+    return;
+  }
+
+  try {
+    const tagFrequencies = {};
+
+    articles.forEach(article => {
+      if (article && article.tags) {
+        const tags = parseTags(article.tags);
+        tags.forEach(tag => {
+          if (tag) {
+            tagFrequencies[tag] = (tagFrequencies[tag] || 0) + 1;
+          }
+        });
+      }
+    });
+
+    // Ordenar por frecuencia
+    const sortedTags = Object.entries(tagFrequencies)
+      .filter(([tag]) => tag && tag.trim())
+      .sort(([, a], [, b]) => b - a);
+
+    // Tomar el top 10 y formatear para el gráfico de barras
+    topTags.value = sortedTags.slice(0, 10).map(([tag, count]) => ({
+      label: tag,
+      value: count,
+    }));
+
+    allTags.value = sortedTags.map(([tag, count]) => ({
+      label: tag,
+      value: count,
+    }));
+
+    console.log(`Procesadas ${allTags.value.length} tags, top 10 tags:`, topTags.value);
+  } catch (err) {
+    console.error('Error al procesar tags:', err);
+  }
+};
+
+function removeDuplicates(array, key) {
+  const seen = new Set();
+  return array.filter(item => {
+    let value = item[key];
+
+    // Normalizar la URL eliminando el protocolo (http:// o https://)
+    if (typeof value === "string") {
+      value = value.replace(/^https?:\/\//, ""); // Remueve el protocolo
+    }
+
+    if (seen.has(value)) {
+      return false; // Ya existe, lo descartamos
+    }
+    seen.add(value);
+    return true; // Es único, lo mantenemos
+  });
+}
+
 const principalData = async function(reset = false){
   try {
     loadingBtn.value = true;
@@ -292,6 +450,9 @@ const principalData = async function(reset = false){
     });
 
     data.value = sortedData;
+
+    procesarTags(sortedData);
+    procesarKeywords(sortedData);
     
     docDataProcess();
     
@@ -349,6 +510,9 @@ function docDataProcess(){
         return dateB - dateA;
       });
     }
+
+    procesarTags(lastResults.value);
+    procesarKeywords(lastResults.value);
   }, 300);
 }
 
@@ -441,7 +605,7 @@ watch(() => filtrosActivos.sitio, async (newValue) => {
                   <div class="d-flex gap-2 align-center mt-2">
                     <small style="font-size: 10px;">Total de artículos</small>
                     <VChip size="x-small" color="primary">
-                      {{filteredData.length}} Artículos, desde {{dateEndpoint.fechai}} 00:00:00  Hasta {{ dateEndpoint.fechaf }} 23:59:59
+                      {{filteredData.length}} Artículos, desde {{dateEndpoint.fechai}}  Hasta {{ dateEndpoint.fechaf }} 
                     </VChip>
                   </div>
                   <div class="content-btn mt-3">
@@ -534,6 +698,17 @@ watch(() => filtrosActivos.sitio, async (newValue) => {
               </Vrow>
 
               <div class="board-content" :disabled="filtrosActivos.disabled">
+                <VRow class="flex justify-center">
+                  <VCol cols="12" sm="12" lg="12" class="">
+                    <VCard
+                    title="Análisis KeyWords mas usadas"
+                     v-if="topKeywords.length > 0" class="elevation-0 border rounded no-truncate mb-3">
+                      <VCardText>
+                          <pastelWordCloud :limitKeywords="75" :data="allKeywords" :dataTags="allTags" :dataListArticles="filteredData" />
+                      </VCardText>
+                    </VCard>
+                  </VCol>
+                </VRow>
                 <div v-if="filteredData.length" :class="loadingBtn ? 'disabled-card' : ''">
                   <VRow>
                     <VCol cols="12" v-for="(item, index) in paginatedData" :key="item.enlace">

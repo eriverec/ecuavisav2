@@ -697,10 +697,199 @@ const paginatedData = computed(() => {
 const expandedKeywords = ref({});
 const chipColors = ['primary', 'secondary', 'success', 'info', 'warning'];
 /** INICIO FIN PAGINADO DE PÁGINA **/
+
+  // INICIO DE EVENTO CLICK GRAFICO 1
+  const isDialogVisibleKeyWords = ref({
+    modal: false,
+    search: null,
+    data:{
+      title: "",
+      items: []
+    }
+  })
+
+  const containsKeywordLocal = (keywords, keyword) => {
+      if (!keywords || !keyword) return false;
+
+      try {
+          let parsedKeywords = [];
+
+          if (typeof keywords === 'string') {
+              parsedKeywords = keywords.split(',').map(k => k.trim()).filter(Boolean);
+          } else if (Array.isArray(keywords)) {
+              parsedKeywords = keywords.map(k => typeof k === 'string' ? k.trim() : String(k)).filter(Boolean);
+          } else if (typeof keywords === 'object') {
+              parsedKeywords = [String(keywords)].filter(Boolean);
+          }
+
+          return parsedKeywords.includes(keyword.trim());
+      } catch (err) {
+          console.warn('Error parsing keywords:', err);
+          return false;
+      }
+  };
+
+
+  const clickKeywordLocal = (keyword) => {
+      try {
+          isDialogVisibleKeyWords.value.modal = true;
+          let objeto = [];
+
+          // console.log("props.dataListArticles", props.dataListArticles)
+
+          // Iterar sobre cada artículo en props.dataListArticles
+          Object.values(filteredData.value).forEach(article => {
+              // console.log("containsKeywordLocal(article.keywords, keyword)", containsKeywordLocal(article.keywords, keyword))
+              // console.log("containsKeywordLocal(article.keywords, keyword) article.keywords", article.keywords, keyword)
+              if (article.hasOwnProperty("keywords") && containsKeywordLocal(article.keywords, keyword)) {
+                  objeto.push(article); // Agregar el artículo directamente si contiene la palabra clave
+              }
+          });
+
+          // Limpiar la búsqueda anterior
+
+          // Ordenar los artículos por fecha de publicación (de más reciente a más antiguo)
+          // isDialogVisibleKeyWords.value.data.items = objeto.sort((a, b) => {
+
+          //     const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+          //     const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+
+          //     return dateB - dateA;
+          // });
+
+          // Actualizar título y mostrar el modal
+          isDialogVisibleKeyWords.value.data.items = objeto;
+          isDialogVisibleKeyWords.value.data.search = null;
+          isDialogVisibleKeyWords.value.data.title = keyword.toUpperCase();
+
+          console.log("objeto",objeto);
+          return objeto;
+      } catch (error) {
+          console.error("Error en clickKeywordLocal:", error);
+          return [];
+      }
+  };
+
+
+  const filteredDataModalKeyWord = computed(() => {
+    if(!isDialogVisibleKeyWords.value.data.search){
+      return isDialogVisibleKeyWords.value.data.items;
+    }
+
+    const query = isDialogVisibleKeyWords.value.data.search.toLowerCase();
+    return isDialogVisibleKeyWords.value.data.items.filter(item =>
+      item.title.toLowerCase().includes(query)
+    );
+  });
+
+  // FIN DE EVENTO CLICK GRAFICO 1
 </script>
 
 <template>
   <section class="sectionprimicias">
+    <VDialog
+        v-model="isDialogVisibleKeyWords.modal"
+        scrollable
+        max-width="650"
+      >
+
+      <!-- Dialog close btn -->
+      <DialogCloseBtn @click="isDialogVisibleKeyWords.modal = !isDialogVisibleKeyWords.modal" />
+
+      <!-- Dialog Content -->
+      <VCard>
+        <VCardItem >
+          <div class="d-flex content-title flex-wrap">
+            <div class="d-flex gap-3">
+              <div class="d-flex flex-column" style="line-height: 1.3;">
+                <h3 class="h2">
+                  {{ isDialogVisibleKeyWords.data.title }}
+                </h3>
+                <div class="d-flex gap-2 align-center mt-2">
+                  <small style="font-size: 10px;">Artículos</small>
+                  <VChip size="x-small" color="primary">
+                    {{ filteredDataModalKeyWord.length }} Artículo(s)
+                  </VChip>
+                </div>
+              </div>
+
+              
+            </div>
+
+            <VTextField v-model="isDialogVisibleKeyWords.data.search" label="Buscar.."
+              prepend-inner-icon="tabler-search" density="compact" style="max-width: 300px; padding: 0px 0;"
+              clearable />
+
+          </div>
+        </VCardItem>
+        <VCardText style="max-height: 550px;">
+          <VList lines="two" class="py-4">
+            <div v-if="filteredDataModalKeyWord.length">
+              <template v-for="item in filteredDataModalKeyWord">
+
+
+                  <VListItem>
+                    <template #prepend>
+
+                      <VAvatar
+                        v-if="item.picture"
+                        :image="replaceAmp(item.picture)"
+                        size="64"
+                        rounded
+                      />
+                      <VIcon
+                        v-else
+                        icon="tabler-news"
+                        size="32"
+                      />
+
+                    </template>
+                    <VChip v-if="item.sitio" class="mb-2" size="x-small" color="dark">{{ item.sitio.toUpperCase() }}</VChip>
+                    <VTooltip location="top">
+                      <template v-slot:activator="{ props }">
+                        <VListItemTitle v-bind="props" class="text-truncate">
+                          {{ item.title || item.titulo }}
+                        </VListItemTitle>
+                      </template>
+                      <span>{{ item.title || item.titulo }} }}</span>
+                    </VTooltip>
+                    <VListItemSubtitle>
+                      <div class="d-flex gap-2 align-center">
+                        <span class="text-xs">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
+                        <VChip v-if="item.subseccion" class="ml-2" size="small" color="success">{{ item.subseccion }}</VChip>
+                      </div>
+                      <small style="font-size: 10px;" v-if="seccion == 'Últimas noticias'">Página: {{ item.seccion }}</small>
+                      <div title="Autor" class="align-center mt-1" v-if="item.autor" style="font-size: 12px;">
+                        <VIcon
+                          icon="tabler-user"
+                          size="15"
+                        />
+                        <small style="margin-top: 5px">{{ item.autor }}</small>
+                      </div>
+                    </VListItemSubtitle>
+                    <template #append>
+                      <VBtn :href="item.link" target="_blank" icon variant="text" size="small">
+                        <VIcon icon="tabler-external-link" />
+                      </VBtn>
+                    </template>
+                  </VListItem>
+
+
+              </template>
+            </div>
+            <div v-else>
+              <td colspan="4" class="no-results">No se encontraron resultados</td>
+            </div>
+          </VList>
+        </VCardText>
+
+        <VCardText class="py-4">
+          <VBtn class="my-4" @click="isDialogVisibleKeyWords.modal = false">
+            Cerrar modal.
+          </VBtn>
+        </VCardText>
+      </VCard>
+    </VDialog>
     <VSnackbar v-model="snackbar.show" :color="snackbar.color" :timeout="snackbar.timeout" location="top end">
       {{ snackbar.text }}
     </VSnackbar>
@@ -844,7 +1033,7 @@ const chipColors = ['primary', 'secondary', 'success', 'info', 'warning'];
                               </div>
                             </div>
                             <div v-if="item.keywords">
-                              <VChip v-for="(keyword, index) in item.keywords.split(',').slice(0, 2)" :key="keyword"
+                              <VChip style="cursor: pointer;" @click="clickKeywordLocal(keyword)" v-for="(keyword, index) in item.keywords.split(',').slice(0, 2)" :key="keyword"
                                 size="x-small" class="mr-2" variant="outlined" :color="item.color">
                                 {{ keyword.trim() }}
                               </VChip>
@@ -858,16 +1047,12 @@ const chipColors = ['primary', 'secondary', 'success', 'info', 'warning'];
                                 </template>
                                 <VList density="compact" class="pa-2">
                                   <template v-for="keyword in item.keywords.split(',').slice(2)" :key="keyword">
-                                    <VChip size="x-small" variant="outlined" color="secondary" class="ma-1">
+                                    <VChip style="cursor: pointer;" @click="clickKeywordLocal(keyword)" size="x-small" variant="outlined" color="secondary" class="ma-1">
                                       {{ keyword.trim() }}
                                     </VChip>
                                   </template>
                                 </VList>
                               </VMenu>
-
-
-
-
                             </div>
 
                           </div>

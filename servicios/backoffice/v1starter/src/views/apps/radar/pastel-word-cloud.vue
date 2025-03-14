@@ -353,13 +353,14 @@ onMounted(() => {
                       />
 
                     </template>
+                    <VChip v-if="item.sitio" class="mb-2" size="x-small" color="dark">{{ item.sitio.toUpperCase() }}</VChip>
                     <VTooltip location="top">
                       <template v-slot:activator="{ props }">
                         <VListItemTitle v-bind="props" class="text-truncate">
-                          {{ item.title }}
+                          {{ item.title || item.titulo }}
                         </VListItemTitle>
                       </template>
-                      <span>{{ item.title }}</span>
+                      <span>{{ item.title || item.titulo }} }}</span>
                     </VTooltip>
                     <VListItemSubtitle>
                       <div class="d-flex gap-2 align-center">
