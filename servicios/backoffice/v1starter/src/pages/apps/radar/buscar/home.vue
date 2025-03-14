@@ -232,6 +232,25 @@ const totalesSitios = ref([]);
 // Add this array of available colors at the top with other constants
 const availableColors = ['primary', 'info', 'error', 'warning', 'success'];
 
+
+function removeDuplicates(array, key) {
+  const seen = new Set();
+  return array.filter(item => {
+    let value = item[key];
+
+    // Normalizar la URL eliminando el protocolo (http:// o https://)
+    if (typeof value === "string") {
+      value = value.replace(/^https?:\/\//, ""); // Remueve el protocolo
+    }
+
+    if (seen.has(value)) {
+      return false; // Ya existe, lo descartamos
+    }
+    seen.add(value);
+    return true; // Es único, lo mantenemos
+  });
+}
+
 const principalData = async function () {
   try {
     loadingBtn.value = true;
@@ -333,9 +352,9 @@ const principalData = async function () {
     });
 
     const combinedData = [...newData];
-    console.log("combinedData",combinedData)
 
-    const uniqueData = Array.from(new Map(combinedData.map(item => [item.link, item])).values());
+    const uniqueData = removeDuplicates(combinedData, "link");
+    // console.log("combinedData",combinedData[0])
 
     const sortedData = uniqueData.sort((a, b) => {
       const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
