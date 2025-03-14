@@ -237,7 +237,7 @@ function eventLigaPro() {
       subUrl: {
         name: "Posiciones Fase 1",
         agenda: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/htmlCenter/data/deportes/futbol/ecuador/pages/es/agenda.html",
-        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/page.html?channel=deportes.futbol.ecuador.posiciones&lang=es_LA&page=Fase_1",
+        iframe: "https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/minapp/page/page.html?channel=deportes.futbol.ecuador&lang=es_LA&page=posiciones",
       },
     },
     {
@@ -351,7 +351,7 @@ function eventLigaPro() {
                       <div id="Posiciones" role="tabpanel" aria-labelledby="Posiciones-tab">
                        
                           <iframe title="ifr_Posiciones"
-                              src="https://estadisticas.ecuavisa.com/sites/services/datafactory/html/v3/minapp/page/page.html?channel=deportes.futbol.ecuador&lang=es_LA&page=posiciones"
+                              src="${urlObj.subUrl.iframe}"
                               width="100%" height="700" scrolling="auto" style="width: 1px; min-width: 100%; *width: 100%;"
                               class=""></iframe>
                       </div>
