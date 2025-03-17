@@ -58,7 +58,7 @@ import { onMounted, ref } from 'vue';
 const numRedireccion = ref('');
 const tiempoSegundos = ref('');
 
-const apiUrl = 'https://estadisticas.ecuavisa.com/sites/gestor/Tools/en_vivo_num_redireccion/ajax/ajax_envivo.php';
+const apiUrl = 'https://micuenta.ecuavisa.com/en_vivo_num_redireccion/ajax/ajax_envivo.php';
 
 const configSnackbar = ref({
   message: "Datos guardados",
