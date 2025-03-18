@@ -348,7 +348,7 @@ const medios = ref([])
 const loadingMedios = ref(false)
 const medioYaGuardado = ref(false)
 
-const itemsPerPage = 10
+const itemsPerPage = 200
 const currentPage = ref(1)
 const totalPages = ref(0)
 

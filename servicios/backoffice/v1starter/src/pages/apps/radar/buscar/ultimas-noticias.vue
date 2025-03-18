@@ -484,7 +484,7 @@ const principalData = async function () {
             if(noticia.fechaPublicacion){
               noticia.fechaPublicacion = moment(noticia.fechaPublicacion, "DD/MM/YYYY HH:mm:ss").format("DD/MM/YYYY HH:mm:ss") || ""
             }else{
-              noticia.fechaPublicacion = ""
+              noticia.fechaPublicacion = moment().subtract(1, 'hour').format("DD/MM/YYYY HH:mm:ss")
             }
 
             
