@@ -419,7 +419,9 @@ const principalData = async function () {
       // console.log("results[i]", results[i]?.media_communication)
       if(results[0][i]?.articles){
         for(var j in results[0][i].articles){
-          allResults.push({...results[0][i]?.articles[j], media_communication: results[0][i]?.media_communication});
+          if(!results[0][i].articles[j].hasOwnProperty("getArticle")){
+            allResults.push({...results[0][i]?.articles[j], media_communication: results[0][i]?.media_communication});
+          }
         }
       }
     }
