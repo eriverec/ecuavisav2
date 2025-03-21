@@ -52,6 +52,9 @@ import PieChart from './PieChart.vue'; // Importar componente de gráfico de pas
   const currentAnalysisIndex = ref(0)
   const multipleResults = ref([]) 
 
+  // boton eliminar medioo
+  const showDeleteConfirmation = ref(false)
+  const medioToDelete = ref(null)
 
   // para el modal de advertencia de El Comercio
   const showComercioWarning = ref(false)
@@ -462,6 +465,56 @@ import PieChart from './PieChart.vue'; // Importar componente de gráfico de pas
       console.error(`Error al cargar conteo de ${medio}:`, err)
     }
   }
+
+  // funcion confirmar eliminar medio
+const mostrarConfirmacionEliminar = (medio, id) => {
+  medioToDelete.value = {
+    nombre: formatearTitulo(medio.key, obtenerNombreMedio(medio.key)),
+    id: id
+  }
+  showDeleteConfirmation.value = true
+}
+
+// Función para eliminar el medio
+const eliminarMedio = async () => {
+  if (!medioToDelete.value || !medioToDelete.value.id) return
+  
+  try {
+    loading.value = true
+    const response = await axios.delete(`https://servicio-competencias.vercel.app/scrapper-rule/delete/${medioToDelete.value.id}`)
+    
+    if (response.data && response.data.resp) {
+      success.value = `Medio "${medioToDelete.value.nombre}" eliminado exitosamente`
+      
+      // Resetear completamente las estructuras de datos
+      mediosAgrupados.value = {}
+      mediosData.value = {}
+      expandedPanels.value = []
+      allUrlsInView.value = {}
+      
+      await cargarMedios(1)
+      
+      if (currentPage.value > 1) {
+        await cargarMedios(currentPage.value)
+      }
+    } else {
+      error.value = 'Error al eliminar el medio'
+    }
+  } catch (err) {
+    console.error('Error al eliminar medio:', err)
+    error.value = 'Error al eliminar el medio'
+  } finally {
+    loading.value = false
+    showDeleteConfirmation.value = false
+    medioToDelete.value = null
+  }
+}
+
+// Función para cancelar la eliminación
+const cancelarEliminar = () => {
+  showDeleteConfirmation.value = false
+  medioToDelete.value = null
+}
 
   onMounted(async () => {
     await cargarMedios(1)
@@ -2530,6 +2583,11 @@ const ejecutarGuardadoDeMedio = async (datosGuardado) => {
                                   @click="analizarMedioExistente(item.url_communication)" size="small">
                                   <VIcon icon="tabler-zoom-scan" size="18" />
                                 </VBtn>
+                                <!--  botón de eliminar -->
+                                <VBtn icon variant="text" color="error"
+                                  @click.stop="mostrarConfirmacionEliminar(item, item._id)" size="small">
+                                  <VIcon icon="tabler-trash" size="18" />
+                                </VBtn>
                               </div>
                             </template>
                           </VListItem>
@@ -2772,6 +2830,37 @@ const ejecutarGuardadoDeMedio = async (datosGuardado) => {
   </VCard>
 </VDialog>
 
+<!-- Modal de confirmación para eliminar medio -->
+<VDialog v-model="showDeleteConfirmation" persistent max-width="400">
+  <VCard>
+    <VCardTitle class="text-h6 bg-error pa-4 text-white">
+      <VIcon icon="tabler-alert-triangle" class="me-2" />
+      Eliminar medio
+    </VCardTitle>
+    
+    <VCardText class="pt-4">
+      <p>¿Está seguro que desea eliminar el medio <b>"{{ medioToDelete?.nombre }}"</b>?</p>
+      <p class="text-body-2 text-medium-emphasis mt-2">
+        Esta acción no se puede deshacer.
+      </p>
+    </VCardText>
+    
+    <VCardActions class="pa-4">
+      <VRow>
+        <VCol cols="12" sm="6" class="pa-2">
+          <VBtn variant="outlined" color="secondary" block @click="cancelarEliminar">
+            CANCELAR
+          </VBtn>
+        </VCol>
+        <VCol cols="12" sm="6" class="pa-2">
+          <VBtn color="error" block @click="eliminarMedio" :loading="loading">
+            ELIMINAR
+          </VBtn>
+        </VCol>
+      </VRow>
+    </VCardActions>
+  </VCard>
+</VDialog>
   </section>
 </template>
 <style lang="scss" scoped>

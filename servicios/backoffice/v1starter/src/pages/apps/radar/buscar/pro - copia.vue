@@ -1,15 +1,14 @@
 <script setup>
   import pastelWordCloud from '@/views/apps/radar/pastel-word-cloud.vue';
-  import axios from 'axios';
-  import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
-  import BarChart from './BarChart.vue'; // Importar componente de gráfico de barras
-  import PieChart from './PieChart.vue'; // Importar componente de gráfico de pastel
+import axios from 'axios';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import BarChart from './BarChart.vue'; // Importar componente de gráfico de barras
+import PieChart from './PieChart.vue'; // Importar componente de gráfico de pastel
 
   const intervalId = ref(null)
   const nuevosArticulos = ref(0)
   const actualizando = ref(false)
 
-  // Crear una variable reactiva para el array de nuevos artículos
   const nuevosArticulosArray = ref([]);
 
   const topKeywords = ref([]);
@@ -52,6 +51,11 @@
   const isAnalyzingMultiple = ref(false) 
   const currentAnalysisIndex = ref(0)
   const multipleResults = ref([]) 
+
+
+  // para el modal de advertencia de El Comercio
+  const showComercioWarning = ref(false)
+  const comercioUrlsToSave = ref([])
 
   // Utility function to safely handle keywords
   const parseKeywords = (keywords) => {
@@ -1567,80 +1571,179 @@
   }
 
   const guardarMedio = async () => {
-    if (!resultados.value) return
+  if (!resultados.value) return
 
-    guardando.value = true
-    limpiarMensajes()
+  limpiarMensajes()
 
-    try {
-      const urlObj = new URL(url.value)
-      const nombreMedio = urlObj.hostname.replace('www.', '').split('.')[0]
-      const key = construirKey(nombreMedio, urlObj.pathname)
+  try {
+    const urlObj = new URL(url.value)
+    const nombreMedio = urlObj.hostname.replace('www.', '').split('.')[0]
+    const key = construirKey(nombreMedio, urlObj.pathname)
 
-      const bodyData = {
-        key: key,
-        medio: nombreMedio,
-        url: url.value,
-        consulta: {
-          title: "string",
-          link: "string",
-          imagen: "string",
-          category: "string",
-          date: "timestamp"
-        },
-        conversion: {
-          title: "titulo",
-          link: "url",
-          imagen: "img",
-          category: "vertical",
-          date: "fechaPublicacion",
-          author: "autor"
+    // Verificar si es El Comercio y tiene más de 2 categorías guardadas
+    if (esElComercio(url.value)) {
+      const paginasComercio = contarPaginasElComercio()
+      console.log(`Páginas de El Comercio detectadas: ${paginasComercio}`)
+      
+      // Si ya hay 2 o más páginas guardadas, mostrar advertencia
+      if (paginasComercio >= 2) {
+        // Guardar datos para usar si el usuario confirma
+        comercioUrlsToSave.value = {
+          key: key,
+          medio: nombreMedio,
+          url: url.value
         }
+        
+        // Mostrar modal de advertencia
+        showComercioWarning.value = true
+        return
       }
-
-      console.log('Enviando datos para guardar:', bodyData)
-
-      const response = await axios.post('https://servicio-competencias.vercel.app/scrapper-rule/create', bodyData, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-
-      console.log('Respuesta del servidor:', response.data)
-
-      if (response.data) {
-        if (response.data.resp === false) {
-          if (response.data.error) {
-            error.value = response.data.error
-          } else {
-            warning.value = response.data.key ?
-              `Este medio ya se encuentra guardado con el nombre "${response.data.key}"` :
-              'Este medio ya se encuentra guardado'
-          }
-        } else {
-          success.value = `Medio ${key} guardado exitosamente`
-          await cargarMedios(1)
-          warning.value = null
-          medioYaGuardado.value = false
-        }
-      }
-    } catch (err) {
-      console.error('Error al guardar medio:', err)
-      console.error('Detalles del error:', err.response?.data)
-
-      if (err.response?.data?.mensaje) {
-        error.value = err.response.data.mensaje
-      } else if (err.response?.data?.error) {
-        error.value = err.response.data.error
-      } else {
-        error.value = 'Error al guardar el medio. Por favor intente nuevamente.'
-      }
-
-      warning.value = null
-    } finally {
-      guardando.value = false
     }
+
+    // Si no es El Comercio o no supera el límite, continuar con el guardado normal
+    await ejecutarGuardadoDeMedio({
+      key: key,
+      medio: nombreMedio,
+      url: url.value
+    })
+  } catch (err) {
+    console.error('Error al guardar medio:', err)
+    console.error('Detalles del error:', err.response?.data)
+
+    if (err.response?.data?.mensaje) {
+      error.value = err.response.data.mensaje
+    } else if (err.response?.data?.error) {
+      error.value = err.response.data.error
+    } else {
+      error.value = 'Error al guardar el medio. Por favor intente nuevamente.'
+    }
+
+    warning.value = null
   }
+}
+
+// Función para verificar si la URL pertenece a El Comercio
+const esElComercio = (urlString) => {
+  try {
+    const url = new URL(urlString)
+    const hostname = url.hostname.toLowerCase()
+    return hostname.includes('elcomercio.com') || hostname.includes('comercio.pe')
+  } catch (err) {
+    console.error('Error al verificar si es El Comercio:', err)
+    return false
+  }
+}
+
+// Función para contar cuántas páginas de El Comercio están guardadas
+const contarPaginasElComercio = () => {
+  let contador = 0
+  
+  // Recorrer todos los medios cargados
+  Object.keys(mediosAgrupados.value).forEach(nombreMedio => {
+    if (nombreMedio.toLowerCase().includes('comercio')) {
+      const medioItems = mediosAgrupados.value[nombreMedio]
+      if (Array.isArray(medioItems)) {
+        contador += medioItems.length
+      }
+    }
+  })
+  
+  return contador
+}
+
+// Función para manejar la confirmación del modal
+const confirmarGuardadoComercio = async () => {
+  showComercioWarning.value = false
+  
+  if (comercioUrlsToSave.value) {
+    guardando.value = true
+    await ejecutarGuardadoDeMedio(comercioUrlsToSave.value)
+    comercioUrlsToSave.value = null
+    guardando.value = false
+  }
+}
+
+// Función para cancelar el guardado
+const cancelarGuardadoComercio = () => {
+  showComercioWarning.value = false
+  comercioUrlsToSave.value = null
+  warning.value = "Guardado cancelado para El Comercio"
+  
+  // Limpiar después de un tiempo
+  setTimeout(() => {
+    if (warning.value === "Guardado cancelado para El Comercio") {
+      warning.value = null
+    }
+  }, 3000)
+}
+
+// Función para ejecutar el guardado real del medio
+const ejecutarGuardadoDeMedio = async (datosGuardado) => {
+  guardando.value = true
+  
+  try {
+    const bodyData = {
+      key: datosGuardado.key,
+      medio: datosGuardado.medio,
+      url: datosGuardado.url,
+      consulta: {
+        title: "string",
+        link: "string",
+        imagen: "string",
+        category: "string",
+        date: "timestamp"
+      },
+      conversion: {
+        title: "titulo",
+        link: "url",
+        imagen: "img",
+        category: "vertical",
+        date: "fechaPublicacion",
+        author: "autor"
+      }
+    }
+
+    console.log('Enviando datos para guardar:', bodyData)
+
+    const response = await axios.post('https://servicio-competencias.vercel.app/scrapper-rule/create', bodyData, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+
+    console.log('Respuesta del servidor:', response.data)
+
+    if (response.data) {
+      if (response.data.resp === false) {
+        if (response.data.error) {
+          error.value = response.data.error
+        } else {
+          warning.value = response.data.key ?
+            `Este medio ya se encuentra guardado con el nombre "${response.data.key}"` :
+            'Este medio ya se encuentra guardado'
+        }
+      } else {
+        success.value = `Medio ${datosGuardado.key} guardado exitosamente`
+        await cargarMedios(1)
+        warning.value = null
+        medioYaGuardado.value = false
+      }
+    }
+  } catch (err) {
+    console.error('Error al guardar medio:', err)
+    console.error('Detalles del error:', err.response?.data)
+    
+    if (err.response?.data?.mensaje) {
+      error.value = err.response.data.mensaje
+    } else if (err.response?.data?.error) {
+      error.value = err.response.data.error
+    } else {
+      error.value = 'Error al guardar el medio. Por favor intente nuevamente.'
+    }
+  } finally {
+    guardando.value = false
+  }
+}
 
   onMounted(() => {
     cargarMedios(1)
@@ -2640,6 +2743,35 @@
         </VCol>
       </VRow>
     </div>
+
+<!-- Modal de advertencia para El Comercio -->
+<VDialog v-model="showComercioWarning" persistent max-width="500">
+  <VCard>
+    <VCardTitle class="text-h6 bg-warning pa-4 text-white">
+      <VIcon icon="tabler-alert-triangle" class="me-2" />
+      Advertencia: Restricciones en El Comercio
+    </VCardTitle>
+    
+    <VCardText class="pt-4">
+      <p>Este medio tiene varias restricciones y bloqueos en su sitio, lo que puede afectar la velocidad de consulta de información. Al agregar más páginas, la lectura de datos podría volverse más lenta y el proceso podría verse afectado, ya que se requiere más tiempo para cargar y procesar la información.</p>
+      
+      <p class="text-body-2 text-medium-emphasis mt-2">
+        ¿Desea continuar con el guardado a pesar de esta advertencia?
+      </p>
+    </VCardText>
+    
+    <VCardActions class="pb-4 px-4 d-flex justify-center">
+      <VBtn variant="outlined" color="secondary" class="mx-2" @click="cancelarGuardadoComercio">
+        CANCELAR
+      </VBtn>
+      
+      <VBtn color="success" class="mx-2" @click="confirmarGuardadoComercio" :loading="guardando">
+        CONTINUAR
+      </VBtn>
+    </VCardActions>
+  </VCard>
+</VDialog>
+
   </section>
 </template>
 <style lang="scss" scoped>
