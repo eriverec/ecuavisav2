@@ -16,6 +16,7 @@
     filtrosActivos: { type: Array, required: true },
     articulos: { type: Array, required: true },
     modoSimple: { type: Boolean, required: true, default:false },
+    selecteDisplay: { type: Boolean, required: true, default: true } 
   });
 
   const filteredData = ref([]);
@@ -518,6 +519,7 @@ function procesarKeywordsAndTags(articles){
                 item-title="title"
                 item-value="value"
                 return-object 
+                :class="!props.selecteDisplay ? 'd-none' : ''"
               />
             
               <VSelect 

@@ -71,6 +71,8 @@
       }
     );
 
+    // console.log("datosFiltrados", datosFiltrados)
+
     // Agrupar por sitio y color
     const agrupados = datosFiltrados.reduce((acc, { sitio }) => {
       const siteConfig = sitiosEsperados.find(s => s.sitio === sitio);
@@ -143,7 +145,7 @@
           enabled: true,
           formatter: val => {
             if(props.disabledAll){
-              return val+" Art.";
+              return val;
             }
             return val+" Artículos";
           },
