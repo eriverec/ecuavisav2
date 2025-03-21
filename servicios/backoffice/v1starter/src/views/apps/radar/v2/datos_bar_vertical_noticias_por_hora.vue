@@ -13,7 +13,10 @@
   const uniqueKey = ref(0);
 
   const props = defineProps({
-    articulos: { type: Array, required: true }
+    articulos: { type: Array, required: true },
+    disabledAll: { type: Boolean, required: true, default: false },
+    height: { type: String, required: true, default: 310 },
+    typeBar: { type: String, required: true, default: "horizontal" },
   });
 
   const availableColors = ['primary', 'info', 'error', 'warning', 'success'];
@@ -21,22 +24,22 @@
   const totalValue = ref(0);
   const customColors = [
     '#836af9',
-    '#ffe802',
-    '#2c9aff',
-    '#ffcf5c',
-    '#4f5d70',
-    '#299aff',
-    '#d4e157',
-    '#28dac6',
-    '#9e69fd',
-    '#ff9800',
-    '#26c6da',
-    '#ff8131',
-    '#28c76f',
-    '#ffbd1f',
-    '#84d0ff',
-    '#edf1f4',
-    '#ff9f43',
+    // '#ffe802',
+    // '#2c9aff',
+    // '#ffcf5c',
+    // '#4f5d70',
+    // '#299aff',
+    // '#d4e157',
+    // '#28dac6',
+    // '#9e69fd',
+    // '#ff9800',
+    // '#26c6da',
+    // '#ff8131',
+    // '#28c76f',
+    // '#ffbd1f',
+    // '#84d0ff',
+    // '#edf1f4',
+    // '#ff9f43',
   ]
 
   async function agruparYFiltrarPorTiempo(data, tiempo = "") {
@@ -54,9 +57,17 @@
     }));
 
     // Filtrar los registros cuya fechaPublicacion sea de tiempo
-    const datosFiltrados = data.filter(({ fechaPublicacion, sitio }) =>{
-        console.log("fechaPublicacion",fechaPublicacion,sitio, moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(tiempo))
-        return moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(tiempo);
+    // console.log("props.disabledAll", data.length)
+    const datosFiltrados = props.disabledAll ? data : data.filter(({ fechaPublicacion, sitio }) =>{
+        // console.log("fechaPublicacion",fechaPublicacion,sitio, moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(tiempo))
+        // if(sitio == "ecuavisa"){
+        //   console.log("fechaPublicacion_2",fechaPublicacion,sitio, moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(tiempo))
+        // }
+      
+        // return moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(tiempo);
+
+        const fechaSinSegundos = moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").startOf("minute");
+        return fechaSinSegundos.isSameOrAfter(moment(tiempo).startOf("minute"));
       }
     );
 
@@ -116,11 +127,12 @@
     });
 
     const seriesFormat = {
-        name: 'Artículos de hoy',
+        name: props.disabledAll ? "Artículos" : 'Artículos de hoy',
         data: series
     };
 
     const categoriesRaw = articulosLocal.value.map(item => item.sitio);
+    const rangoHora = getTimeRange();
 
     const options= {
         chart: {
@@ -130,6 +142,9 @@
         dataLabels: { 
           enabled: true,
           formatter: val => {
+            if(props.disabledAll){
+              return val+" Art.";
+            }
             return val+" Artículos";
           },
         },
@@ -138,7 +153,7 @@
           bar: {
             borderRadius: 0,
             barHeight: '30%',
-            horizontal: false,
+            horizontal: props.typeBar == "bar",
             startingShape: 'rounded',
           },
         },
@@ -165,13 +180,27 @@
           },
         },
         xaxis: {
+          title: {
+            text: props.disabledAll ? undefined : (`Desde ${rangoHora.inicio.hoy ? "" : rangoHora.inicio.fecha + "," } ${rangoHora.inicio.hora } hasta ${rangoHora.inicio.hoy ? "" : "Hoy," } ${rangoHora.final.hora }`),
+            style: {
+                fontSize: '11px',
+                fontFamily: 'Public Sans',
+                color: labelColor
+            }
+          },
           axisBorder: { show: false },
           axisTicks: { color: themeBorderColor },
           categories: categoriesRaw,
           labels: {
+            show: true,
             style: { colors: themeDisabledTextColor },
             formatter: function(value, timestamp, opts) {
-              return value.toUpperCase()
+              if(value){
+                return value.toString().toUpperCase();
+              }else{
+                return value;
+              }
+              
             }
           },
         },
@@ -215,6 +244,7 @@
       isLoading.value = true;
       const resultado = await agruparYFiltrarPorTiempo(props.articulos);
       articulosLocal.value = resultado;
+      model_select_hora.value = { title:"Hoy", value: moment().startOf('day')  };
       isLoading.value = false;
     }
   })
@@ -240,6 +270,22 @@
   /*
   @INICIO SELECTOR DE TIEMPO
   */
+  function getTimeRange() {
+    const momentValue = model_select_hora.value.value;
+    return {
+        inicio: {
+            hoy: (moment().format("YYYY-MM-DD") == momentValue.format("YYYY-MM-DD")),
+            hora: momentValue.format("hh:mm A"),
+            fecha: momentValue.format("YYYY-MM-DD")
+        },
+        final: {
+            hoy: true,
+            hora: moment().format("hh:mm A"),
+            fecha: moment().format("YYYY-MM-DD")
+        }
+    };
+  }
+
   const model_select_hora = ref({ title:"Hoy", value: moment().startOf('day')  });
   const items_select_hora = ref([
     { title:"Hoy", value: moment().startOf('day')  },
@@ -255,9 +301,8 @@
   watch(() => model_select_hora.value, async (newValue) => {
     if (newValue) {
       isLoading.value = true;
-      const resultado = await agruparYFiltrarPorTiempo(props.articulos, newValue);
+      const resultado = await agruparYFiltrarPorTiempo(props.articulos, newValue.value);
       articulosLocal.value = resultado;
-      console.log("resultado", resultado)
       isLoading.value = false;
     }
   })
@@ -269,11 +314,11 @@
 <template>
   <VRow>
     <VCol cols="12" md="12" :class="isLoading?'disabled':''">
-      <VCard>
-        <VCardItem class="header_card_item">
+      <VCard :class="props.disabledAll ? 'elevation-0 border rounded no-truncate' : ''">
+        <VCardItem class="header_card_item" v-if="!props.disabledAll">
           <div class="d-flex">
             <div class="descripcion">
-              <VCardTitle>Artículos de hoy</VCardTitle>
+              <VCardTitle>Artículos: {{model_select_hora.title}}</VCardTitle>
               <VCardSubtitle>
                 Agrupados por medios digitales según la fecha de publicación de los artículos
               </VCardSubtitle>
@@ -287,7 +332,9 @@
               v-model="model_select_hora"
               :items="items_select_hora"
               item-text="title"
+              item-title="title"
               item-value="value"
+              return-object 
             />
           </template>
         </VCardItem>
@@ -303,10 +350,22 @@
             v-if="articulosLocal.length > 0"
             :key="generarIDHora()"
             type="bar"
-            height="310"
+            :height="props.height * 1"
             :options="resolveData.options"
             :series="resolveData.series"
           />
+
+          <div class="d-flex gap-2 mt-0 flex-column pb-3" v-if="props.disabledAll">
+            <!-- <small style="font-size: 13px;">Medios digitales</small> -->
+            <div class="d-flex align-center gap-2 mt-0 flex-wrap">
+              <div v-for="(item, index) in articulosLocal" :key="item.sitio" class="d-flex align-center">
+                <VChip size="x-small" :color="item.color">
+                  {{item.sitio.toUpperCase()}}: {{item.total}} Artículo(s)
+                </VChip>
+                <small style="font-size: 15px;">{{articulosLocal.length > index + 1 ? ', ' : ''}}</small>
+              </div>
+            </div>
+          </div>
 
         </VCardText>
       </VCard>
