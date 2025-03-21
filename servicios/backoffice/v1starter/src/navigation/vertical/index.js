@@ -21,7 +21,7 @@ export default [
       { title: 'Dashboard', to: 'apps-radar-buscar-home' },
       { title: 'Últimas noticias', to: 'apps-radar-buscar-ultimas-noticias' },
       { title: 'Histórico', to: 'apps-radar-buscar-historico' },
-      // { title: 'Configuración', to: 'apps-radar-buscar-pro' },
+      { title: 'Configuración', to: 'apps-radar-buscar-pro' },
       // { title: 'Dashboard', to: 'apps-radar-home' },
       // { title: 'Últimas noticias', to: 'apps-radar-ultimas-noticias' },
       // { title: 'Ecuavisa', to: 'apps-radar-ecuavisa' },
