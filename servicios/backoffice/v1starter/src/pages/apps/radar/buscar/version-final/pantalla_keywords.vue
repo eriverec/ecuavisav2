@@ -1,13 +1,11 @@
 <script setup>
-import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/v2/datos_bar_vertical_noticias_por_hora.vue';
-import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal.vue';
 // import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-diav2.vue';
 // import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticiasv2.vue';
 import pastelWordCloud from '@/views/apps/radar/v2/pastel-word-cloud.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
-import { computed, onMounted, reactive, ref, watch } from 'vue';
+import { reactive, ref } from 'vue';
 
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
@@ -4590,6 +4588,49 @@ const allKeywords = ref([
    }
 ])
 
+const selectedTimeFilter = ref(moment().startOf('day'));
+
+const filteredKeywords = computed(() => {
+  if (!selectedTimeFilter.value || !allKeywords.value) {
+    return allKeywords.value;
+  }
+
+  return allKeywords.value.map(category => {
+    // Filtrar artículos por fecha de publicación
+    const filteredArticles = category.articles.filter(article => {
+      if (!article.fechaPublicacion) return false;
+      
+      const articleDate = moment(article.fechaPublicacion, 'DD/MM/YYYY HH:mm:ss');
+      return articleDate.isAfter(selectedTimeFilter.value);
+    });
+
+    // Devolver la categoría con artículos filtrados
+    return {
+      ...category,
+      articles: filteredArticles,
+      value: filteredArticles.length // Actualizar el contador
+    };
+  }).filter(category => category.articles.length > 0); // Eliminar categorías sin artículos
+});
+
+// Función para manejar el cambio de filtro de tiempo
+const handleTimeFilterChange = (newValue) => {
+  selectedTimeFilter.value = newValue;
+  
+  // Verificar si hay resultados después de aplicar el filtro
+  const hasResults = filteredKeywords.value.length > 0;
+  
+  // Mostrar notificación con información sobre los resultados
+  snackbar.value = {
+    show: true,
+    text: hasResults 
+      ? `Se encontraron ${filteredKeywords.value.length} categorías`
+      : `No se encontraron noticias para el filtro`,
+    color: hasResults ? 'success' : 'warning',
+    timeout: 4000
+  };
+};
+
 </script>
 
 <template>
@@ -4606,7 +4647,18 @@ const allKeywords = ref([
         <VCard
         title="Palabras clave más Relevantes" class="elevation-0 border rounded no-truncate mb-3">
           <VCardText>
-              <pastelWordCloud :limitKeywords="75" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
+    
+
+              <pastelWordCloud 
+                :limitKeywords="75" 
+                :data="filteredKeywords" 
+                :dataTags="allTags" 
+                :dataListArticles="dataAll"
+                :selectedTimeFilter="selectedTimeFilter"
+                @update:timeFilter="handleTimeFilterChange" 
+              />
+
+    
           </VCardText>
         </VCard>
       </VCol>
