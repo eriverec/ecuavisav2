@@ -34,13 +34,14 @@ const errors = ref({
   password: undefined,
 })
 const errorN = ref('');
-
+const isLoading = ref(false)
 const refVForm = ref()
 const email = ref('')
 const password = ref('')
 const rememberMe = ref(false)
 
 const login = () => {
+  isLoading.value = true;
   if(email.value == "admin@demo.com" && password.value == "EcuavisaBackoffice"){
     let userAbilities = [
         {
@@ -97,6 +98,8 @@ const login = () => {
     }
     console.error(e);
     
+  }).finally(() => {
+    isLoading.value = false // Set loading to false when login completes or fails
   })
 }
 }
@@ -216,8 +219,10 @@ const onSubmit = () => {
                 <VBtn
                   block
                   type="submit"
+                  :loading="isLoading"
+                  :disabled="isLoading"
                 >
-                  Iniciar sesión
+                {{ isLoading ? 'Iniciando...' : 'Iniciar sesión' }}
                 </VBtn>
                 <div style="margin-top: 1rem;">
                 <h5 >
