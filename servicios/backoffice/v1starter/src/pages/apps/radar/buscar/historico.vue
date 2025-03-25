@@ -1,10 +1,14 @@
 <script setup>
 import { parseISO } from 'date-fns';
+import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/v2/datos_bar_vertical_noticias_por_hora.vue';
+import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal.vue';
+// import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-diav2.vue';
+// import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticiasv2.vue';
+import pastelWordCloud from '@/views/apps/radar/v2/pastel-word-cloud.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 import { computed, onMounted, reactive, ref, watch } from 'vue';
-import pastelWordCloud from '@/views/apps/radar/pastel-word-cloud.vue';
 
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
@@ -17,37 +21,17 @@ const snackbar = ref({
 })
 
 const filtrosActivos = reactive({
-  busqueda: null,
-  sitio: null,
-  seccion: null,
-  subseccion: null,
+  busqueda: "",
+  sitio: [],
+  seccion: [],
+  subseccion: [],
   disabled: false
 });
 
-const buscar_dato = ref(null)
-const selectedItemSitioWeb = ref(null)
-const itemsSitioWeb = ref([{
-  title: "TODOS LOS MEDIOS",
-  value: "0"
-}]);
-
-const selectedItemSeccion = ref(null)
-const itemsSitioWebSeccion = ref([]);
-
-const selectedItemSubSeccion = ref(null)
-const itemsSitioWebSubSeccion = ref([]);
-
-const nextUpdate = ref(null)
-const horaActual = moment();
-const lastUpdate = ref('--:--');
-const updateInterval = ref(300);
-const updateIntervalDisabled = ref(false)
-const tableSearches = ref({})
-
-const topKeywords = ref([]);
-const topTags = ref([]);
-const allKeywords = ref([]);
-const allTags = ref([]);
+const lastUpdate = ref({
+  fechai: moment().startOf('day').format("YYYY-MM-DD HH:mm"),
+  fechaf: moment().format("YYYY-MM-DD HH:mm")
+})
 
 const customColors = [
   '#ffe802',
@@ -69,139 +53,61 @@ const customColors = [
   '#ff9f43',
 ]
 
-const data = ref([])
-const LOCAL_STORAGE_KEY = 'newsStorage';
+const loadingData = ref(false);
 
-const dateEndpoint = ref({
-  fechai: moment().subtract(1, "days").format("YYYY-MM-DD"),
-  fechaf: moment().subtract(1, "days").format("YYYY-MM-DD")
-});
-
-function getDefaultDate() {
-  return moment('2025-01-01 12:00:00', 'YYYY-MM-DD HH:mm:ss');
-}
-
-function replaceAmp(input) {
-  return input.replace(/&amp;/g, "&");
-}
-
-function unificarYFiltrarDuplicados(data) {
-  const enlacesUnicos = new Set();
-  const resultado = {
-    total: 0,
-    timestamp: new Date().toISOString(),
-    articles: []
-  };
-
-  data.forEach((articulo) => {
-    if (!enlacesUnicos.has(articulo.enlace)) {
-      enlacesUnicos.add(articulo.enlace);
-
-      if (!articulo.subvertical || articulo.subvertical.trim() === "") {
-        articulo.subvertical = "Sin Categorizar";
-      }
-
-      if (!articulo.vertical || articulo.vertical.trim() === "") {
-        articulo.vertical = "Home";
-      }
-
-      if (!articulo.fechapublicacion) {
-        articulo.fechapublicacion = getDefaultDate().format("DD/MM/YYYY HH:mm:ss");
-      }
-
-      resultado.articles.push(articulo);
-    }
-  });
-
-  // data.forEach((grupo) => {
-    
-  // });
-
-  resultado.total = resultado.articles.length;
-  return resultado.articles;
-}
-
+/*
+******* INICIO RECUPERAR ARTÍCULOS
+*/
 async function fetchAndProcess(url) {
   try {
     const response = await fetch(url);
     const dataResp = await response.json();
-    const data = dataResp.data;
-    return unificarYFiltrarDuplicados(data.filter(Boolean));
-  } catch(error) {
+
+    if(!dataResp.succeeded){
+      return null;
+    }
+
+    return dataResp.data
+
+    // console.log("dataResp", dataResp)
+    // // return unificarYFiltrarDuplicados(dataResp.filter(Boolean));
+    // return dataResp.map(e => {
+    //   if(e.articles){
+    //     return e;
+    //   }
+    // });
+  } catch (error) {
     return null;
   }
 }
 
-async function getMedios(){
-  try {
-    const response = await fetch("https://servicio-competencias.vercel.app/scrapper-rule/all?page=1&limit=1000&keys=_id,media_communication,key,url_communication");
-    const dataResp = await response.json();
+const dataAll = ref([]);
+const dataManipulable = ref([]);
 
-    if(dataResp.resp){
-      itemsSitioWeb.value = dataResp.data.map(e => {
-        return {
-          value: e.media_communication,
-          title: e.media_communication.toUpperCase(),
-        }
-      });
+function mergeVerticalsByLink(array) {
+  const grouped = {};
 
-      const uniqueData = Array.from(new Map(itemsSitioWeb.value.map(item => [item.value, item])).values());
-      itemsSitioWeb.value = [{
-        title:"TODOS LOS MEDIOS",
-        value: "0"
-      },...uniqueData];
-      return itemsSitioWeb.value;
-    }else{
-      snackbar.value = {
-        show: true,
-        text: `Error, no se pudo listar los medios del select, intente nuevamente`,
-        color: 'error'
-      }
-      return [];
+  array.forEach(item => {
+    let link = item.link;
+
+    // Normalizar la URL eliminando el protocolo (http:// o https://)
+    if (typeof link === "string") {
+      link = link.replace(/^https?:\/\//, ""); // Remueve el protocolo
     }
-    
-  } catch(error) {
-    snackbar.value = {
-      show: true,
-      text: `Error, no se pudo listar los medios del select, intente nuevamente`,
-      color: 'error'
+
+    if (!grouped[link]) {
+      grouped[link] = { ...item, verticalLocal: new Set(), subVerticalLocal: new Set() };
     }
-    console.error(error)
-    return [];
-  }
-}
 
-const currentDate = computed(() => {
-  return moment().format('DD/MM/YYYY');
-});
-
-const loadingBtn = ref(false);
-const totalesSitios = ref([]);
-
-async function agruparYFiltrarPorTiempo(data) {
-  const haceCincoMinutos = moment(lastUpdate.value,"DD/MM/YYYY HH:mm").subtract(30, "minutes");
-
-  // Filtrar los registros con fecha_publicacion dentro de los últimos 30 minutos
-  const datosFiltrados = data.filter(({ fechaPublicacion }) => {
-    // console.log(fechaPublicacion, haceCincoMinutos)
-    return moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isAfter(haceCincoMinutos);
+    if (item.verticalLocal) grouped[link].verticalLocal.add(item.verticalLocal);
+    if (item.subVerticalLocal) grouped[link].subVerticalLocal.add(item.subVerticalLocal);
   });
 
-  // Agrupar por sitio y color
-  const resultado = Object.values(
-    datosFiltrados.reduce((acc, { sitio, color }) => {
-      const key = `${sitio}-${color}`;
-
-      if (!acc[key]) {
-        acc[key] = { sitio, color, total: 0 };
-      }
-
-      acc[key].total++;
-      return acc;
-    }, {})
-  );
-
-  return resultado;
+  return Object.values(grouped).map(entry => ({
+    ...entry,
+    verticalLocal: Array.from(entry.verticalLocal).join(","),
+    subVerticalLocal: Array.from(entry.subVerticalLocal).join(",")
+  }));
 }
 
 function agruparPorAtributo(data, atributo) {
@@ -219,163 +125,56 @@ function agruparPorAtributo(data, atributo) {
   }, {});
 }
 
-// contar todas las keywords
-const countAllKeywords = (articles) => {
-    const keywords = [];
-    articles.forEach(article => {
-        const articleKeywords = parseKeywords(article.keywords);
-        keywords.push(...articleKeywords);
-    });
-    return keywords.length;
-};
-
-// Procesar Keywords y crear top 10
-const procesarKeywords = (articles) => {
-  if (!articles || !Array.isArray(articles) || articles.length === 0) {
-    console.warn('No hay artículos para procesar keywords');
-    return;
-  }
-
-  try {
-    const keywordFrequencies = {};
-
-    articles.forEach(article => {
-      if (article && article.keywords) {
-        const keywords = parseKeywords(article.keywords);
-        keywords.forEach(keyword => {
-          if (keyword) {
-            keywordFrequencies[keyword] = (keywordFrequencies[keyword] || 0) + 1;
-          }
-        });
-      }
-    });
-
-    // Ordenar por frecuencia
-    const sortedKeywords = Object.entries(keywordFrequencies)
-      .filter(([keyword]) => keyword && keyword.trim())
-      .sort(([, a], [, b]) => b - a);
-
-    // Tomar el top 10 y formatear para el gráfico de barras
-    topKeywords.value = sortedKeywords.slice(0, 10).map(([keyword, count]) => ({
-      label: keyword,
-      value: count,
-    }));
-
-    allKeywords.value = sortedKeywords.map(([keyword, count]) => ({
-      label: keyword,
-      value: count,
-    }));
-
-    console.log(`Procesadas ${allKeywords.value.length} keywords, top 10 keywords:`, topKeywords.value);
-  } catch (err) {
-    console.error('Error al procesar keywords:', err);
-  }
-};
-
-const parseKeywords = (keywords) => {
-    if (!keywords) return [];
-    
-    try {
-      if (typeof keywords === 'string') {
-        return keywords.split(',').map(k => k.trim()).filter(Boolean);
-      } else if (Array.isArray(keywords)) {
-        return keywords.map(k => typeof k === 'string' ? k.trim() : String(k)).filter(Boolean);
-      } else if (typeof keywords === 'object') {
-        // Try to convert object to string if possible
-        return [String(keywords)].filter(Boolean);
-      }
-    } catch (err) {
-      console.warn('Error parsing keywords:', err);
-    }
-    
-    return [];
-  }
-
-  const parseTags = (tags) => {
-    if (!tags) return [];
-    
-    try {
-      if (typeof tags === 'string') {
-        return tags.split(',').map(k => k.trim()).filter(Boolean);
-      } else if (Array.isArray(tags)) {
-        return tags.map(k => typeof k === 'string' ? k.trim() : String(k)).filter(Boolean);
-      } else if (typeof tags === 'object') {
-        // Try to convert object to string if possible
-        return [String(tags)].filter(Boolean);
-      }
-    } catch (err) {
-      console.warn('Error parsing tags:', err);
-    }
-    
-    return [];
-  }
-
-// Procesar Tags y crear top 10
-const procesarTags = (articles) => {
-  if (!articles || !Array.isArray(articles) || articles.length === 0) {
-    console.warn('No hay artículos para procesar tag');
-    return;
-  }
-
-  try {
-    const tagFrequencies = {};
-
-    articles.forEach(article => {
-      if (article && article.tags) {
-        const tags = parseTags(article.tags);
-        tags.forEach(tag => {
-          if (tag) {
-            tagFrequencies[tag] = (tagFrequencies[tag] || 0) + 1;
-          }
-        });
-      }
-    });
-
-    // Ordenar por frecuencia
-    const sortedTags = Object.entries(tagFrequencies)
-      .filter(([tag]) => tag && tag.trim())
-      .sort(([, a], [, b]) => b - a);
-
-    // Tomar el top 10 y formatear para el gráfico de barras
-    topTags.value = sortedTags.slice(0, 10).map(([tag, count]) => ({
-      label: tag,
-      value: count,
-    }));
-
-    allTags.value = sortedTags.map(([tag, count]) => ({
-      label: tag,
-      value: count,
-    }));
-
-    console.log(`Procesadas ${allTags.value.length} tags, top 10 tags:`, topTags.value);
-  } catch (err) {
-    console.error('Error al procesar tags:', err);
-  }
-};
-
-function removeDuplicates(array, key) {
-  const seen = new Set();
-  return array.filter(item => {
-    let value = item[key];
-
-    // Normalizar la URL eliminando el protocolo (http:// o https://)
-    if (typeof value === "string") {
-      value = value.replace(/^https?:\/\//, ""); // Remueve el protocolo
-    }
-
-    if (seen.has(value)) {
-      return false; // Ya existe, lo descartamos
-    }
-    seen.add(value);
-    return true; // Es único, lo mantenemos
-  });
+function limpiarEspacios(texto) {
+    return texto.replace(/\s*,\s*/g, ',');
 }
 
-const principalData = async function(reset = false){
+function extraerPaths(url) {
   try {
-    loadingBtn.value = true;
-    totalesSitios.value = [];
+    const urlObj = new URL(url);
+    const paths = urlObj.pathname.split('/').filter(Boolean); // Eliminar vacíos
 
+    let resultado = { primero: "", segundo: "", ultimo: "" };
+
+    if(url.includes("/rss/portada")){
+      resultado.primero = "PRINCIPAL";
+      resultado.segundo = "";
+      resultado.ultimo = "";
+      return resultado;
+    }
+
+    if (paths.length === 1) {
+      resultado.primero = paths[0].toUpperCase();
+    } else if (paths.length === 2) {
+      resultado.primero = paths[0].toUpperCase();
+      resultado.segundo = paths[1].toUpperCase();
+      resultado.ultimo = "";
+    } else if (paths.length >= 3) {
+      resultado.primero = paths[0].toUpperCase();
+      resultado.ultimo = paths[1].toUpperCase();
+      resultado.segundo = paths[paths.length - 1].toUpperCase();
+    }else{
+      resultado.primero = "PRINCIPAL";
+      resultado.segundo = "";
+      resultado.ultimo = "";
+    }
+
+    return resultado;
+  } catch (error) {
+    console.warn("URL inválida:", url);
+    return { primero: null, segundo: null, ultimo: null };
+  }
+}
+
+/*
+  INICIO ORACLE
+*/
+/*
+  FIN ORACLE
+*/
+
+const principalData = async function (reset = false) {
+  try {
     if(reset){
       dateEndpoint.value = {
         fechai: moment().subtract(1, "days").format("YYYY-MM-DD"),
@@ -403,140 +202,447 @@ const principalData = async function(reset = false){
       }
       return null;
     }
-    
-    const [medios_comunicacion] = await Promise.all([
-      fetchAndProcess(`https://bigdata.ecuavisa.com:10001/api/v1/radar?FECHA_DESDE=${dateEndpoint.value.fechai}&FECHA_HASTA=${dateEndpoint.value.fechaf}&origen=${filtrosActivos.sitio == 0 ? "" : filtrosActivos.sitio}`)
-    ]);
-    
-    const processArticles = (list, sitio, color) => {
-      return (list || []).map(item => ({
-        ...item,
-        sitio,
-        color,
-        fechaPublicacion: moment(item.fechapublicacion).format("DD/MM/YYYY HH:mm:ss") || getDefaultDate().format("DD/MM/YYYY HH:mm:ss")
-      }));
-    };
 
-    const datosAgrupados = agruparPorAtributo(medios_comunicacion, "origen");
+    const urlOracle = `https://bigdata.ecuavisa.com:10001/api/v1/radar?FECHA_DESDE=${dateEndpoint.value.fechai}&FECHA_HASTA=${dateEndpoint.value.fechaf}&origen=${filtrosActivos.sitio == 0 ? "" : filtrosActivos.sitio}`;
 
-    // Recorrer cada grupo de origen
+    filtrosActivos.busqueda = "";
+    filtrosActivos.sitio = [];
+    filtrosActivos.seccion = [];
+    filtrosActivos.subseccion = [];
+
+    loadingData.value = true;
+
+    const endpoints = [urlOracle];
+    // const endpoints = ["https://services.ecuavisa.com/gestor/competencias/scrappin/dinamico/config.php?api=all"];
+
+    // Create an array of promises for all endpoints
+    const fetchPromises = Object.entries(endpoints).map(([key, url]) => fetchAndProcess(url));
+    const results = await Promise.all(fetchPromises);
+    const allResults = [];
+
+    // console.log("results[[0]]", results[[0]].splice(0,3));
+
+    for(var i in results[[0]]){
+      const article = results[[0]][i];
+      allResults.push({
+        ...article, 
+        title: article.titulo,
+        link: article.enlace,
+        timestamp: "",
+        image: article.picture,
+        subcategory: "",
+        metodo: "",
+        seccion: "",
+        subseccion: "",
+        fechaPublicacion: moment(article.fechapublicacion).format("DD-MM-YYYY HH:mm:ss"),
+        media_communication: article.origen,
+        url_communication: "",
+        color: "",
+        sitio: article.origen,
+        subVertical: article.subvertical,
+        verticalLocal: article.vertical,
+        subVerticalLocal: article.subvertical
+      })
+    }
+
+    const datosAgrupados = agruparPorAtributo(allResults, "media_communication");
+
     let indiceColor = 0;
-
     const newData = [];
 
-    Object.entries(datosAgrupados).forEach(([origen, noticias]) => {
-        console.log(`Noticias de ${origen}:`);
+    Object.entries(datosAgrupados).forEach(([media_communication, noticias, url_communication]) => {
         indiceColor++;
         if(indiceColor > customColors.length - 1){
           indiceColor = 0;
         }
-
+        const notciasTemp = [];
         noticias.forEach(noticia => {
-            noticia.color = customColors[indiceColor]
-            noticia.sitio = origen
-            noticia.fechaPublicacion = moment(noticia.fechapublicacion).format("DD/MM/YYYY HH:mm:ss") || getDefaultDate().format("DD/MM/YYYY HH:mm:ss")
+            noticia.color = customColors[indiceColor];
+            noticia.sitio = media_communication;
+
+            if(noticia.keywords){
+              noticia.keywords = limpiarEspacios(noticia.keywords.toUpperCase());
+              noticia.tags = limpiarEspacios(noticia.tags.toUpperCase());
+            }else{
+              noticia.keywords = "";
+              noticia.tags = "";
+            }
+
+            if(!noticia.hasOwnProperty("getArticle")){
+              notciasTemp.push(noticia);
+            }
         });
 
-        newData.push(...noticias)
+        newData.push(...notciasTemp)
     });
-    const combinedData = [...newData];
-    
-    const uniqueData = Array.from(new Map(combinedData.map(item => [item.enlace, item])).values());
-    
+
+    const combinedData = newData;
+
+    const uniqueData = mergeVerticalsByLink(combinedData, "link");
+    // console.log("uniqueData", uniqueData.splice(0, 10))
+
     const sortedData = uniqueData.sort((a, b) => {
       const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
       const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
       return dateB - dateA;
     });
 
-    data.value = sortedData;
+    dataAll.value = sortedData;
+    dataManipulable.value = sortedData;
 
-    procesarTags(sortedData);
-    procesarKeywords(sortedData);
-    
-    docDataProcess();
-    
-    loadingBtn.value = false;
-  } catch(error) {
-    loadingBtn.value = false;
+    lastUpdate.value.fechai = dateEndpoint.value.fechai;
+    lastUpdate.value.fechaf = dateEndpoint.value.fechaf;
+
+    loadingData.value = false;
+    return true;
+  } catch (error) {
+    loadingData.value = false;
+    console.log('Error:', error);
     snackbar.value = {
       show: true,
-      text: `Error, no se pudo listar los medios, intente nuevamente`,
+      text: `Error en principalData. Intente nuevamente`,
       color: 'error'
     }
-    console.error('Error:', error);
+    return null;
   }
 }
+/*
+******* FIN RECUPERAR ARTÍCULOS
+*/
 
-onMounted(async () => {
-  filtrosActivos.sitio = "0";
-  await principalData();
-  await getMedios();
-});
+/*
+******* INICIO RECUPERAR SITIOS WEBS
+*/
+const itemsSitioWeb = ref([]);
 
+async function loadSiteNames() {
+  try {
+    const response = await fetch("https://servicio-competencias.vercel.app/scrapper-rule/all?page=1&limit=1000&keys=_id,media_communication,key,url_communication");
+    const dataResp = await response.json();
 
-const processedData = computed(() => {
-  return data.value;
-});
-
-let lastResults = ref([]);
-const debounceTimeout = ref(null);
-const click_btn_seccion = ref(false);
-
-watch(filtrosActivos, docDataProcess);
-
-function docDataProcess(){
-  clearTimeout(debounceTimeout.value);
-
-  debounceTimeout.value = setTimeout(() => {
-    const query = filtrosActivos.busqueda?.toLowerCase() || '';
-    const sitio = filtrosActivos.sitio || "0";
-    const secciones = filtrosActivos.seccion || [];
-    const subseccion = filtrosActivos.subseccion || [];
-
-    if(!query){
-      lastResults.value = processedData.value;
-    }else{
-      lastResults.value = processedData.value.filter(item => {
-        const matchesBusqueda = !query || 
-          item.vertical.toLowerCase().includes(query) || 
-          item.autor?.toLowerCase().includes(query) || 
-          item.enlace?.toLowerCase().includes(query) || 
-          item?.titulo?.toLowerCase().includes(query);
-        return matchesBusqueda;
-      }).sort((a, b) => {
-        const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
-        const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
-        return dateB - dateA;
+    // const dataResp = {
+    //   "resp": true,
+    //   "data": [
+    //   {
+    //   "_id": "67d9b104816d7703499f1e6f",
+    //   "key": "ecuavisa",
+    //   "url_communication": "https://www.ecuavisa.com/",
+    //   "media_communication": "ecuavisa"
+    //   },
+    //   {
+    //   "_id": "67d9a8b218e7e47e13531540",
+    //   "key": "infobae",
+    //   "url_communication": "https://www.infobae.com/america/",
+    //   "media_communication": "infobae"
+    //   },
+    //   {
+    //   "_id": "67d9a88e18e7e47e13531539",
+    //   "key": "tctelevision-video-tc-deportes",
+    //   "url_communication": "https://tctelevision.com/video/tc-deportes/",
+    //   "media_communication": "tctelevision"
+    //   },
+    //   {
+    //   "_id": "67d9a74a9bfb3d7f9e24ec3e",
+    //   "key": "tctelevision",
+    //   "url_communication": "https://tctelevision.com/",
+    //   "media_communication": "tctelevision"
+    //   },
+    //   {
+    //   "_id": "67d9a50fff24113a34723609",
+    //   "key": "expreso",
+    //   "url_communication": "https://www.expreso.ec/",
+    //   "media_communication": "expreso"
+    //   },
+    //   {
+    //   "_id": "67d9a498d004fa6fd131bf28",
+    //   "key": "primicias",
+    //   "url_communication": "https://www.primicias.ec/",
+    //   "media_communication": "primicias"
+    //   },
+    //   {
+    //   "_id": "67d9a4448dea2fecb65e6550",
+    //   "key": "ecuavisa-ultimas-noticias",
+    //   "url_communication": "https://www.ecuavisa.com/ultimas-noticias",
+    //   "media_communication": "ecuavisa"
+    //   },
+    //   {
+    //   "_id": "67d4ac8038147174a31ef3b5",
+    //   "key": "ecuavisa-deportes",
+    //   "url_communication": "https://www.ecuavisa.com/deportes",
+    //   "media_communication": "ecuavisa"
+    //   }
+    //   ],
+    //   "total": 8,
+    //   "limit": 1000,
+    //   "page": 1
+    // };
+    if(dataResp.resp){
+      itemsSitioWeb.value = dataResp.data.map(e => {
+        return {
+          value: e.media_communication,
+          title: e.media_communication.toUpperCase(),
+        }
       });
+
+      const uniqueData = Array.from(new Map(itemsSitioWeb.value.map(item => [item.value, item])).values());
+      itemsSitioWeb.value = uniqueData;
+      return itemsSitioWeb.value;
+    }else{
+      snackbar.value = {
+        show: true,
+        text: `Error, no se pudo listar los medios del select, intente nuevamente`,
+        color: 'error'
+      }
+      return [];
     }
+    
+  } catch(error) {
+    snackbar.value = {
+      show: true,
+      text: `Error, no se pudo listar los medios del select, intente nuevamente`,
+      color: 'error'
+    }
+    console.error(error)
+    return [];
+  }
+}
+/*
+******* FIN RECUPERAR SITIOS WEBS
+*/
 
-    procesarTags(lastResults.value);
-    procesarKeywords(lastResults.value);
-  }, 300);
+/*
+******* INICIO MANIPULAR DATOS
+*/
+const debounceTimeout = ref(null);
+
+// Filtrado de datos (sin debounce)
+const filteredData = computed(() => dataManipulable.value);
+
+const normalizeText = (text) => {
+  return text
+    ? text
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Elimina tildes
+        .replace(/\s+/g, "") // Reemplaza múltiples espacios por uno
+        .trim() // Elimina espacios al inicio y al final
+        .toLowerCase() // Convierte todo a minúsculas
+    : "";
+};
+
+const filteredFunction = function() {
+  const query = filtrosActivos.busqueda?.toLowerCase() || "";
+  const sitioValue = filtrosActivos.sitio || [];
+  const sitiosSeleccionados = sitioValue.map(e => e.value);
+  const secciones = filtrosActivos.seccion || [];
+  const subseccion = filtrosActivos.subseccion || [];
+
+  return dataAll.value
+    .filter(item => {
+      const matchesBusqueda = !query || normalizeText(item.titulo).includes(normalizeText(query));
+      const matchesBusquedaKeyWords = normalizeText(item.keywords).includes(normalizeText(query));
+      const matchesBusquedaAutor = normalizeText(item.autor).includes(normalizeText(query));
+
+      const matchesSitio = sitiosSeleccionados.length === 0 || sitiosSeleccionados.includes(item.sitio);
+      const verticalName = item.verticalLocal?.toUpperCase();
+      const subVerticalName = item.subVerticalLocal?.toUpperCase();
+      const matchesSecciones = secciones.length === 0 || secciones.includes(verticalName);
+      const matchesSubseccion = subseccion.length === 0 || subseccion.includes(subVerticalName);
+      return (matchesBusqueda || matchesBusquedaKeyWords || matchesBusquedaAutor) && matchesSitio && matchesSecciones && matchesSubseccion;
+    })
+    .sort((a, b) => {
+      const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+      const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+      return dateB - dateA; // Ordena de más reciente a más antiguo
+    });
+};
+
+watch(filtrosActivos, (newVal) => {
+  clearTimeout(debounceTimeout.value);
+  debounceTimeout.value = setTimeout(() => {
+    dataManipulable.value = filteredFunction() || [];
+    // procesarKeywordsAndTags(dataManipulable.value);
+    procesarKeywordsAndTags(dataManipulable.value);
+  }, 700);
+}, { immediate: true });
+
+/*
+******* FIN MANIPULAR DATOS
+*/
+
+/*
+******* INICIO FILTRO SECCIONES
+*/
+const itemsSitioWebSeccion = ref([]);
+function getUniqueVerticals(objeto = null) {
+  const uniqueVerticals = new Set();
+
+  const procesarItems = (items) => {
+    items.forEach(item => {
+      if (item.verticalLocal) {
+        // Dividir la cadena en múltiples verticales y agregar cada uno al Set
+        item.verticalLocal.split(",").forEach(vertical => {
+          const name = vertical.trim().toUpperCase();
+          if (name) {
+            uniqueVerticals.add(name);
+          }
+        });
+      }
+    });
+  };
+
+  if (!objeto) {
+    procesarItems(data.value);
+  } else {
+    procesarItems(objeto);
+  }
+
+  return Array.from(uniqueVerticals).sort((a, b) => a.localeCompare(b));
 }
 
-const filteredData = computed(() => lastResults.value);
 
-const formatDate = (dateString) => {
-  return moment(dateString, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm')
+/*
+******* FIN FILTRO SECCIONES
+*/
+
+/*
+******* INICIO FILTRO SUBSECCIONES
+*/
+const itemsSitioWebSubSeccion = ref([]);
+function getUniqueSubVerticals(objeto = null) {
+  const uniqueSubVerticals = new Set();
+
+  const procesarItems = (items) => {
+    items.forEach(item => {
+      if (item.subVerticalLocal) {
+        // Dividir la cadena en múltiples subvertical y agregar cada uno al Set
+        item.subVerticalLocal.split(",").forEach(subvertical => {
+          const name = subvertical.trim().toUpperCase();
+          if (name) {
+            uniqueSubVerticals.add(name);
+          }
+        });
+      }
+    });
+  };
+
+  if (!objeto) {
+    procesarItems(data.value);
+  } else {
+    procesarItems(objeto);
+  }
+
+  return Array.from(uniqueSubVerticals).sort((a, b) => a.localeCompare(b));
 }
 
-/** INICIO CREAR PAGINADO DE PÁGINA **/
-const currentPage = ref(1);
-const pageSize = ref(20); // Valor por defecto
+/*
+******* FIN FILTRO SUBSECCIONES
+*/
 
-watch(pageSize, () => {
-  currentPage.value = 1;
-});
+/*
+******* INICIO FILTRO pastelWordCloud
+*/
+const topKeywords = ref([]);
+const topTags = ref([]);
+const allKeywords = ref([]);
+const allTags = ref([]);
 
-const paginatedData = computed(() => {
-  const start = (currentPage.value - 1) * pageSize.value;
-  return filteredData.value.slice(start, start + pageSize.value);
-});
+const parseItems = (items) => {
+  if (!items) return [];
+  
+  try {
+    if (typeof items === 'string') {
+      return items.split(',').map(i => i.trim()).filter(Boolean);
+    } else if (Array.isArray(items)) {
+      return items.map(i => (typeof i === 'string' ? i.trim() : String(i))).filter(Boolean);
+    } else if (typeof items === 'object') {
+      return [String(items)].filter(Boolean);
+    }
+  } catch (err) {
+    console.error('Error al procesar items:', err);
+  }
+  
+  return [];
+};
 
-/** INICIO FIN PAGINADO DE PÁGINA **/
+const procesarItems = (articles, key) => {
+  if (!articles || !Array.isArray(articles) || articles.length === 0) {
+    console.error(`No hay artículos para procesar ${key}`);
+    return { topItems: [], allItems: [] };
+  }
+
+  try {
+    const itemData = {};
+
+    articles.forEach(article => {
+      if (article && article[key]) {
+        const items = parseItems(article[key]);
+        items.forEach(item => {
+          if (!itemData[item]) {
+            itemData[item] = { count: 0, articles: [] };
+          }
+          itemData[item].count += 1;
+          itemData[item].articles.push(article);
+        });
+      }
+    });
+
+    // Ordenar por frecuencia
+    const sortedItems = Object.entries(itemData)
+      .filter(([item]) => item && item.trim())
+      .sort(([, a], [, b]) => b.count - a.count);
+
+    // Formatear los datos
+    const topItems = sortedItems.slice(0, 10).map(([label, data]) => ({
+      label,
+      value: data.count,
+      articles: data.articles,
+    }));
+
+    const allItems = sortedItems.map(([label, data]) => ({
+      label,
+      value: data.count,
+      articles: data.articles,
+    }));
+
+    // console.log(`Procesadas ${allItems.length} ${key}, top 10 ${key}:`, topItems);
+
+    return { topItems, allItems };
+  } catch (err) {
+    console.error(`Error al procesar ${key}:`, err);
+  }
+};
+
+// Uso para keywords y tags
+
+// Wrappers específicos
+const procesarKeywords = (articles) => {
+  // procesarMetadatos(articles, 'keywords', topKeywords, allKeywords);
+  const resp = procesarItems(articles, 'keywords');
+  allKeywords.value = resp.allItems;
+  topKeywords.value = resp.topItems;
+}
+
+const procesarTags = (articles) => {
+  // procesarMetadatos(articles, 'tags', topTags, allTags);
+  const resp = procesarItems(articles, 'tags');
+  allTags.value = resp.allItems;
+  topTags.value = resp.topItems;
+}
+
+function procesarKeywordsAndTags(articles){
+  procesarKeywords(articles);
+  procesarTags(articles);
+}
+
+/*
+******* FIN FILTRO pastelWordCloud
+*/
+
 /** INICIO DATERANGE **/
+const dateEndpoint = ref({
+  fechai: moment().subtract(1, "days").format("YYYY-MM-DD"),
+  fechaf: moment().subtract(1, "days").format("YYYY-MM-DD")
+});
+
 const fechaHoy = moment().subtract(1, "days").format("YYYY-MM-DD");
 const fechaHoyLimit = moment().format("YYYY-MM-DD");
 const fechaHoyFormated = moment().subtract(1, "days").format("DD-MM-YYYY");
@@ -550,6 +656,7 @@ const fechaIFModel = ref({
       altFormat: 'd F j, Y',
       dateFormat: 'l, j \\d\\e F \\d\\e Y',
       valueFormat: 'd-m-Y',
+      maxRange: 7,
       reactive: true
   },
   fechai: fechaHoyFormated,
@@ -559,41 +666,52 @@ const fechaIFModel = ref({
 
 function obtenerFechas(selectedDates, dateStr, instance) {
     if (selectedDates.length > 1) {
-      dateEndpoint.value.fechai = moment(selectedDates[0]).format('YYYY-MM-DD');
-      dateEndpoint.value.fechaf = moment(selectedDates[1]).format('YYYY-MM-DD'); 
+      const startDate = moment(selectedDates[0]);
+      const endDate = moment(selectedDates[1]);
 
-      fechaIFModel.value.fechai = moment(selectedDates[0]).format('DD-MM-YYYY');
-      fechaIFModel.value.fechaf = moment(selectedDates[1]).format('DD-MM-YYYY'); 
-      currentPage.value = 1;
+      // Verificar que el rango no sea mayor a 7 días
+      if (endDate.diff(startDate, "days") > 7) {
+        fechaIFModel.value = {
+          fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
+          fechasVModel: [parseISO(fechaHoy)],
+          fechasVConfig: fechaIFModel.value.fechasVConfig,
+          fechai: fechaHoyFormated,
+          fechaV: fechaHoyFormated,
+          fechaf: fechaHoyFormated
+        }
+        alert("Solo puedes seleccionar un rango máximo de 7 días.");
+        return;
+      }
+
+      dateEndpoint.value.fechai = startDate.format('YYYY-MM-DD');
+      dateEndpoint.value.fechaf = endDate.format('YYYY-MM-DD'); 
+
+      fechaIFModel.value.fechai = startDate.format('DD-MM-YYYY');
+      fechaIFModel.value.fechaf = endDate.format('DD-MM-YYYY');
       principalData();
     }
-
-
 }
 /** INICIO FIN DATERANGE **/
-/** INICIO FILTRO DE SITIO **/
-watch(() => filtrosActivos.sitio, async (newValue) => {
-  // if (newValue.length > 0 && !itemsSitioWeb.value.includes(newValue.at(-1))) {
-  //   newValue.pop();
-  // }
-  currentPage.value = 1;
+
+onMounted(async () => {
   await principalData();
-  
-})
-/** INICIO FIN FILTRO DE SITIO **/
+  await loadSiteNames();
+
+  itemsSitioWebSeccion.value = getUniqueVerticals(dataAll.value);
+  itemsSitioWebSubSeccion.value = getUniqueSubVerticals(dataAll.value);
+});
+
 </script>
 
 <template>
-  <section class="sectionprimicias">
-    <VSnackbar
-      v-model="snackbar.show"
-      :color="snackbar.color"
-      :timeout="snackbar.timeout"
-      location="top end"
-    >
+  <section>
+    <VSnackbar 
+      v-model="snackbar.show" 
+      :color="snackbar.color" 
+      :timeout="snackbar.timeout" 
+      location="top end">
       {{ snackbar.text }}
     </VSnackbar>
-    
     <VRow>
       <VCol cols="12" md="12" lg="12">
         <VCard>
@@ -601,36 +719,57 @@ watch(() => filtrosActivos.sitio, async (newValue) => {
             <div class="d-flex content-title flex-wrap w-100">
               <div class="d-flex gap-3 justify-space-between w-100">
                 <div class="d-flex flex-column" style="line-height: 1.3;">
-                  Históricos de artículos
+                  <h4 class="title-principal">Históricos de artículos</h4>
                   <div class="d-flex gap-2 align-center mt-2">
-                    <small style="font-size: 10px;">Total de artículos</small>
+                    <small style="font-size: 10px;">Total de artículos procesados</small>
                     <VChip size="x-small" color="primary">
-                      {{filteredData.length}} Artículos, desde {{dateEndpoint.fechai}}  Hasta {{ dateEndpoint.fechaf }} 
+                      {{ dataAll.length }} Artículo(s).
                     </VChip>
                   </div>
                   <div class="content-btn mt-3">
-                    <VBtn :loading="loadingBtn" title="Recargar datos" @click="principalData" target="_blank" color="primary" variant="tonal" size="small">
-                      <VIcon icon="tabler-reload" /> Quitar filtros
+                    <VBtn :loading="loadingData" title="Recargar datos" @click="principalData" target="_blank"
+                      color="primary" variant="tonal" size="small">
+                      <VIcon icon="tabler-reload" /> Recargar datos
                     </VBtn>
                   </div>
+                </div>
+                <div class="d-flex align-center gap-2 flex-column ">
+                  <VChip color="primary" size="small" prepend-icon="tabler-clock">
+                    Datos: {{ lastUpdate.fechai }}, {{ lastUpdate.fechaf }}
+                  </VChip>
+                  <VChip class="d-none" color="success" size="small" prepend-icon="tabler-clock">
+                    Próxima actualización: {{ nextUpdate }}
+                  </VChip>
                 </div>
               </div>
             </div>
           </VCardItem>
-          <VDivider />
-          <VCardText>
-            <VRow class="mb-0">
-              <VCol cols="12" md="4" lg="3" class="pb-0">
+        </VCard>
+      </VCol>
+    </VRow>
+
+    <VRow>
+      <VCol cols="12" md="12" lg="12">
+        <VCard>
+          <VCardItem>
+            <VCardTitle>
+              <h4 class="text-h6 mb-0">
+                <VIcon
+                  icon="tabler-filter"
+                  size="32"
+                />
+                Filtros
+              </h4>
+            </VCardTitle>
+            <VRow>
+              <VCol cols="12" md="3" lg="3">
                 <div class="w-100 mt-4">
                   <label>Filtrar por sitio web</label>
-                  <VSelect
-                    v-model="filtrosActivos.sitio"
-                    :items="itemsSitioWeb"
-                    :menu-props="{ maxHeight: '300' }"
-                  />
+                  <VCombobox v-model="filtrosActivos.sitio" :items="itemsSitioWeb" multiple chips
+                    :menu-props="{ maxHeight: '300' }" />
                 </div>
               </VCol>
-              <VCol cols="12" md="8" lg="5" class="pb-0">
+              <VCol cols="12" md="5" lg="5" class="pb-0">
                 <div class="w-100 mt-4">
                   <label>Filtrar por Rango de publicación</label>
                   <AppDateTimePicker 
@@ -643,241 +782,56 @@ watch(() => filtrosActivos.sitio, async (newValue) => {
 
                 </div>
               </VCol>
-
-              <VCol cols="12" md="12" lg="4" class="pb-0">
+              <VCol cols="12" md="4" lg="4">
                 <div class="w-100 mt-4">
-                  <label>Buscar por título o enlace</label>
+                  <label>Buscar por, título, autor, sección, subsección</label>
                   <VTextField 
-                    v-model="filtrosActivos.busqueda" 
-                    prepend-inner-icon="tabler-search" 
+                    v-model="filtrosActivos.busqueda"
+                    prepend-inner-icon="tabler-search"
                     density="compact" 
-                    style="padding: 0px 0;"
+                    style="padding: 0px 0;" 
                     clearable 
                   />
                 </div>
               </VCol>
-              <VCol cols="12" md="4" :lg="4" class="d-none">
-                <div class="w-100 mt-4">
+              <VCol cols="12" md="4" lg="6" class="d-none">
+                <div class="w-100">
                   <label>Filtrar por Sección</label>
-                  <VCombobox
-                    v-model="filtrosActivos.seccion"
-                    :items="itemsSitioWebSeccion"
-                    multiple
-                    chips
-                    :menu-props="{ maxHeight: '300' }"
-                  />
+                  <VCombobox v-model="filtrosActivos.seccion" :items="itemsSitioWebSeccion" multiple chips
+                    :menu-props="{ maxHeight: '300' }" />
                 </div>
               </VCol>
-              <VCol cols="12" md="4" :lg="4" class="d-none">
-                <div class="w-100 mt-4">
+              <VCol cols="12" md="4" lg="6" class="d-none">
+                <div class="w-100">
                   <label>Filtrar por SubSección</label>
-                  <VCombobox
-                      v-model="filtrosActivos.subseccion"
-                      :items="itemsSitioWebSubSeccion"
-                      multiple
-                      chips
-                      :menu-props="{ maxHeight: '300' }"
-                    />
-                  </div>
-                </VCol>
-              </VRow>
-
-              <Vrow class="mb-4 px-0 mx-0">
-                <VCol cols="12" md="12" lg="2" class="pb-0 px-0">
-                  <div class="w-100 mt-4">
-                    <VSelect
-                      v-model="pageSize"
-                      :items="[100, 200, 500]"
-                      label="Registros por página"
-                      dense
-                      outlined
-                      class="mb-4"
-                    />
-                  </div>
-                </VCol>
-              </Vrow>
-
-              <div class="board-content" :disabled="filtrosActivos.disabled">
-                <VRow class="flex justify-center">
-                  <VCol cols="12" sm="12" lg="12" class="">
-                    <VCard
-                    title="Análisis KeyWords mas usadas"
-                     v-if="topKeywords.length > 0" class="elevation-0 border rounded no-truncate mb-3">
-                      <VCardText>
-                          <pastelWordCloud :limitKeywords="75" :data="allKeywords" :dataTags="allTags" :dataListArticles="filteredData" />
-                      </VCardText>
-                    </VCard>
-                  </VCol>
-                </VRow>
-                <div v-if="filteredData.length" :class="loadingBtn ? 'disabled-card' : ''">
-                  <VRow>
-                    <VCol cols="12" v-for="(item, index) in paginatedData" :key="item.enlace">
-                      <VCard class="article-card">
-                        <VCardText class="d-flex align-center gap-2 py-1">
-                          <!-- Imagen -->
-                          <div class="img-content">
-                            <img
-                              v-if="item.picture"
-                              :src="replaceAmp(item.picture)"
-                              class="fixed-avatar rounded"
-                              alt="Article image"
-                            />
-                            <VIcon v-else icon="tabler-news" size="40" />
-                          </div>
-                          
-                          <!-- Contenido -->
-                          <div class="article-content w-100">
-                            <!-- Fila 1: medio, fecha y categoría -->
-                            <div class="article-meta d-flex align-center gap-2 mb-1">
-                              <VChip variant="elevated" size="x-small" :color="item.color">
-                                {{ item.sitio }}
-                              </VChip>
-                              <span class="text-caption">{{ formatDate(item.fechaPublicacion) }}</span>
-                              <VChip size="x-small">{{ item.vertical }}</VChip>
-                              <div class="autor-ec" title="Autor">
-                                <VIcon icon="tabler-user" size="15" /> <small>{{ item.autor }}</small>
-                              </div>
-                              <div class="article-type-ec" title="Tipo de artículo">
-                                <VIcon icon="tabler-article" size="15" /> <small>{{ item.tipo }}</small>
-                              </div>
-                            </div>
-                            
-                            <!-- Fila 2: título y botón -->
-                            <div class="d-flex justify-space-between align-center gap-2">
-                              <h4 class="article-title mb-0">{{ item.titulo }}</h4>
-                              <VBtn 
-                                :href="item.enlace" 
-                                target="_blank" 
-                                variant="tonal" 
-                                size="x-small"
-                                class="px-2 py-1 ml-2 flex-shrink-0 botoncito"
-                              >
-                                <VIcon icon="tabler-external-link" size="16" class="mr-1" /> 
-                                Ver artículo
-                              </VBtn>
-                            </div>
-                          </div>
-                        </VCardText>
-                      </VCard>
-                    </VCol>
-                  </VRow>
-                  <VRow v-if="paginatedData.length == 0">
-                    <VCol cols="12" class="pt-3">
-                      Ningún dato corresponde a la fecha indicada
-                    </VCol>
-                  </VRow>
-                  
-                  <VPagination
-                        class="mt-5"
-                        v-model="currentPage"
-                        :length="Math.ceil(filteredData.length / pageSize)"
-                        total-visible="5"
-                      />
+                  <VCombobox v-model="filtrosActivos.subseccion" :items="itemsSitioWebSubSeccion" multiple chips
+                    :menu-props="{ maxHeight: '300' }" />
                 </div>
-
-              </div>
-           
-          </VCardText>
+              </VCol>
+            </VRow>
+          </VCardItem>
         </VCard>
+      </VCol>
+    </VRow>
+    <VRow>
+      <VCol cols="12" sm="12" lg="12">
+        <pastelWordCloud 
+          :selecteDisplay="false" 
+          :limitKeywords="75" 
+          :data="allKeywords" 
+          v-if="topKeywords.length > 0"
+        />
+      </VCol>
+    </VRow>
+    <VRow>
+      <VCol cols="12" md="12" lg="12">
+        <plantilla_articulos_estilo_principal :selecteDisplay="false" :articulos="filteredData" :filtrosActivos="filtrosActivos" />
       </VCol>
     </VRow>
   </section>
 </template>
-
 <style scoped>
-
-.sectionprimicias .v-card-item {
-  font-size: 24px;
-}
-
-.content-title {
-  justify-content: space-between;
-  align-items: center;
-}
-
-.board-content {
-  height: auto;
-}
-
-/* Estilos para las cards de artículos */
-.article-card {
-  border: 1px solid #eee;
-}
-
-.article-card .v-card-text {
-  padding: 8px 16px;
-}
-
-.img-content {
-  min-width: 50px;
-  width: 50px;
-}
-
-.fixed-avatar {
-  width: 50px;
-  height: 50px;
-  object-fit: cover;
-  object-position: center;
-}
-
-.article-content {
-  min-width: 0;
-}
-
-.article-meta {
-  font-size: 0.8rem;
-}
-
-.article-title {
-  font-size: 0.95rem;
-  line-height: 1.3;
-  margin: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-}
-
-/* Estado deshabilitado */
-.disabled-card {
-  pointer-events: none;
-  cursor: default;
-  opacity: 0.6;
-}
-
-/* Ajustes responsivos */
-@media (max-width: 600px) {
-  .img-content {
-    min-width: 30px;
-    width: 30px;
+  .title-principal{
+    font-size: 25px;
   }
-  
-  .fixed-avatar {
-    width: 30px;
-    height: 30px;
-  }
-  
-  .article-title {
-    font-size: 0.8rem;
-  }
-  
-  .article-card .v-card-text {
-    padding: 8px;
-  }
-
-  .text-caption {
-    font-size: 0.55rem !important;
-  
-}
-
-.v-chip.v-chip--size-x-small {
-    font-size: 0.55rem;
-
-}
-
-.botoncito {
-    font-size: 0.5rem!important;
-}
-}
 </style>
-
