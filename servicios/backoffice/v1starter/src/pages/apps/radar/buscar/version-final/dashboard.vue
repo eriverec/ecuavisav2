@@ -19,11 +19,6 @@ const snackbar = ref({
   timeout: 3000
 })
 
-const lastUpdate = ref({
-  fechai: moment().startOf('day').format("YYYY-MM-DD HH:mm"),
-  fechaf: moment().format("YYYY-MM-DD HH:mm")
-})
-
 const filtrosActivos = reactive({
   busqueda: "",
   sitio: [],
@@ -31,6 +26,11 @@ const filtrosActivos = reactive({
   subseccion: [],
   disabled: false
 });
+
+const lastUpdate = ref({
+  fechai: moment().startOf('day').format("YYYY-MM-DD HH:mm"),
+  fechaf: moment().format("YYYY-MM-DD HH:mm")
+})
 
 const customColors = [
   '#ffe802',
@@ -649,7 +649,7 @@ onMounted(async () => {
                   </div>
                 </div>
                 <div class="d-flex align-center gap-2 flex-column ">
-                  <VChip class="d-none" color="primary" size="small" prepend-icon="tabler-clock">
+                  <VChip color="primary" size="small" prepend-icon="tabler-clock">
                     Datos: {{ lastUpdate.fechai }}, {{ lastUpdate.fechaf }}
                   </VChip>
                   <VChip class="d-none" color="success" size="small" prepend-icon="tabler-clock">
@@ -662,15 +662,7 @@ onMounted(async () => {
         </VCard>
       </VCol>
     </VRow>
-    <VRow>
-      <VCol cols="12" md="12" lg="12">
-        <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
-      </VCol>
-      <VCol cols="12" sm="12" lg="12">
-        <pastelWordCloud v-if="topKeywords.length > 0" :limitKeywords="75" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
-      </VCol>
-    </VRow>
-    <VRow>
+    <VRow class="d-none">
       <VCol cols="12" md="12" lg="12">
         <VCard>
           <VCardItem>

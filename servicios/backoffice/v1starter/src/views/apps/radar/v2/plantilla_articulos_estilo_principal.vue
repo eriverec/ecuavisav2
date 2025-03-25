@@ -132,7 +132,7 @@
           // isDialogVisibleKeyWords.value.data.search = null;
           // isDialogVisibleKeyWords.value.data.title = keyword.toUpperCase();
 
-          console.log("objeto",objeto);
+          // console.log("objeto",objeto);
           return objeto;
       } catch (error) {
           console.error("Error en clickKeywordLocal:", error);
@@ -147,9 +147,9 @@
     }
 
     const query = isDialogVisibleKeyWords.value.data.search.toLowerCase();
-    return isDialogVisibleKeyWords.value.data.items.filter(item =>
-      item.title.toLowerCase().includes(query)
-    );
+    return isDialogVisibleKeyWords.value.data.items.filter(item =>{
+      return item.title.toLowerCase().includes(query) || item.sitio.toLowerCase().includes(query);
+    });
   });
 
   // FIN DE EVENTO CLICK GRAFICO 1
@@ -176,6 +176,26 @@
 
   /*
   FIN - FUNCIONALIDAD PAGINADO
+  */
+
+  /*
+  INICIO - FUNCIONALIDAD PAGINADO ModalKeyWord
+  */
+  
+  const currentPageModalKeyWord = ref(1);
+  const pageSizeModalKeyWord = ref(10); // Valor por defecto
+
+  watch(pageSizeModalKeyWord, () => {
+    currentPageModalKeyWord.value = 1;
+  });
+
+  const paginatedDataModalKeyWord = computed(() => {
+    const start = (currentPageModalKeyWord.value - 1) * pageSizeModalKeyWord.value;
+    return filteredDataModalKeyWord.value.slice(start, start + pageSizeModalKeyWord.value);
+  });
+
+  /*
+  FIN - FUNCIONALIDAD PAGINADOModalKeyWord
   */
 
   /*
@@ -221,10 +241,11 @@
   }
 
   const model_select_hora = ref({ title:"Todos", value: ""  });
+
   const items_select_hora = ref([
     { title:"Todos", value: ""  },
     { title:"Hoy", value: moment().startOf('day')  },
-    { title:"Hace 20 minutos", value: moment().subtract(20, "minutes")  },
+    { title:"Hace 5 minutos", value: moment().subtract(5, "minutes")  },
     { title:"Hace 30 minutos", value: moment().subtract(30, "minutes")  },
     { title:"Hace 1 hora", value: moment().subtract(1, "hours")  },
     { title:"Hace 3 horas", value: moment().subtract(3, "hours")  },
@@ -404,14 +425,23 @@ function procesarKeywordsAndTags(articles){
         </VCardItem>
         <VCardText style="max-height: 550px;">
           <VList lines="two" class="py-4">
+            <VListItem class="py-0">
+              <datos_bar_vertical_noticias_por_hora :articulos="isDialogVisibleKeyWords.data.items" :disabledAll="true" :height="190" />
+            </VListItem>
             <div v-if="filteredDataModalKeyWord.length">
-              <VListItem class="py-0">
-                <datos_bar_vertical_noticias_por_hora :articulos="filteredDataModalKeyWord" :disabledAll="true" :height="190" />
-              </VListItem>
+              <VSelect 
+                style="width: 170px;" 
+                v-model="pageSizeModalKeyWord" 
+                :items="[10, 20, 100, 200, 500]" 
+                label="Registros por página" 
+                dense 
+                outlined 
+                class="mb-2 mt-5 d-block" 
+              />
 
-              <template v-for="item in filteredDataModalKeyWord">
+              <template v-for="item in paginatedDataModalKeyWord">
 
-                  <VListItem>
+                  <VListItem class="article-card elevation-0 border-1 rounded no-truncate px-4 py-2 mb-3">
                     <template #prepend>
 
                       <VAvatar
@@ -440,14 +470,14 @@ function procesarKeywordsAndTags(articles){
                       <div class="d-flex gap-2 align-center">
                         <span class="text-xs">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
                         <VChip v-if="item.subseccion" class="ml-2" size="small" color="success">{{ item.subseccion }}</VChip>
-                      </div>
-                      <small style="font-size: 10px;" v-if="seccion == 'Últimas noticias'">Página: {{ item.seccion }}</small>
-                      <div title="Autor" class="align-center mt-1" v-if="item.autor" style="font-size: 12px;">
-                        <VIcon
-                          icon="tabler-user"
-                          size="15"
-                        />
-                        <small style="margin-top: 5px">{{ item.autor }}</small>
+                        <small style="font-size: 10px;" v-if="seccion == 'Últimas noticias'">Página: {{ item.seccion }}</small>
+                        <div title="Autor" class="align-center mt-1" v-if="item.autor" style="font-size: 12px;">
+                          <VIcon
+                            icon="tabler-user"
+                            size="15"
+                          />
+                          <small style="margin-top: 5px">{{ item.autor }}</small>
+                        </div>
                       </div>
                     </VListItemSubtitle>
                     <template #append>
@@ -459,6 +489,12 @@ function procesarKeywordsAndTags(articles){
 
 
               </template>
+              <VPagination 
+                class="mt-5" 
+                v-model="currentPageModalKeyWord" 
+                :length="Math.ceil(filteredDataModalKeyWord.length / pageSizeModalKeyWord)"
+                total-visible="5" 
+              />
             </div>
             <div v-else>
               <td colspan="4" class="no-results">No se encontraron resultados</td>
@@ -476,7 +512,7 @@ function procesarKeywordsAndTags(articles){
   <VRow>
     <VCol cols="12" md="12" lg="12" class="pb-0">
       <VCard :class="props.modoSimple ? 'article-card elevation-0 border-0 rounded no-truncate px-0' : ''">
-        <VCardItem :class="props.modoSimple ? 'header_card_item px-0' : ''">
+        <VCardItem :class="props.modoSimple ? 'header_card_item px-0 py-1' : ''">
           <div class="d-flex justify-space-between">
             <div class="descripcion"  v-if="!props.modoSimple">
               <VCardTitle>Listado de artículos</VCardTitle>

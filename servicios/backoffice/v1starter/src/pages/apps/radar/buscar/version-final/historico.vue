@@ -28,6 +28,11 @@ const filtrosActivos = reactive({
   disabled: false
 });
 
+const lastUpdate = ref({
+  fechai: moment().startOf('day').format("YYYY-MM-DD HH:mm"),
+  fechaf: moment().format("YYYY-MM-DD HH:mm")
+})
+
 const customColors = [
   '#ffe802',
   '#836af9',
@@ -284,6 +289,9 @@ const principalData = async function (reset = false) {
 
     dataAll.value = sortedData;
     dataManipulable.value = sortedData;
+
+    lastUpdate.value.fechai = dateEndpoint.value.fechai;
+    lastUpdate.value.fechaf = dateEndpoint.value.fechaf;
 
     loadingData.value = false;
     return true;
@@ -726,8 +734,8 @@ onMounted(async () => {
                   </div>
                 </div>
                 <div class="d-flex align-center gap-2 flex-column ">
-                  <VChip class="d-none" color="primary" size="small" prepend-icon="tabler-clock">
-                    Última actualización: {{ lastUpdate }}
+                  <VChip color="primary" size="small" prepend-icon="tabler-clock">
+                    Datos: {{ lastUpdate.fechai }}, {{ lastUpdate.fechaf }}
                   </VChip>
                   <VChip class="d-none" color="success" size="small" prepend-icon="tabler-clock">
                     Próxima actualización: {{ nextUpdate }}

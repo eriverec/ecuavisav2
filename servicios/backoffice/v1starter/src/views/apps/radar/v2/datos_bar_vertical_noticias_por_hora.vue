@@ -1,4 +1,5 @@
 <script setup>
+  import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal.vue';
   import VueApexCharts from 'vue3-apexcharts';
   import { hexToRgb } from '@layouts/utils';
   import { useTheme } from 'vuetify';
@@ -43,60 +44,59 @@
   ]
 
   async function agruparYFiltrarPorTiempo(data, tiempo = "") {
-    if(!tiempo){
-      tiempo = moment().startOf('day');
+    if (!tiempo) {
+      tiempo = moment().startOf("day");
     }
 
-    // Get unique sites from the data
-    const uniqueSites = [...new Set(data.map(item => item.sitio))];
-    
-    // Create dynamic sitiosEsperados
+    // Obtener sitios únicos de los datos
+    const uniqueSites = [...new Set(data.map((item) => item.sitio))];
+
+    // Crear configuración de colores para los sitios
     const sitiosEsperados = uniqueSites.map((sitio, index) => ({
       sitio,
-      color: customColors[index % customColors.length]
+      color: customColors[index % customColors.length],
     }));
 
     // Filtrar los registros cuya fechaPublicacion sea de tiempo
-    // console.log("props.disabledAll", data.length)
-    const datosFiltrados = props.disabledAll ? data : data.filter(({ fechaPublicacion, sitio }) =>{
-        // console.log("fechaPublicacion",fechaPublicacion,sitio, moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(tiempo))
-        // if(sitio == "ecuavisa"){
-        //   console.log("fechaPublicacion_2",fechaPublicacion,sitio, moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(tiempo))
-        // }
-      
-        // return moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").isSameOrAfter(tiempo);
+    const datosFiltrados = props.disabledAll
+      ? data
+      : data.filter(({ fechaPublicacion }) => {
+          const fechaSinSegundos = moment(
+            fechaPublicacion,
+            "DD/MM/YYYY HH:mm:ss"
+          ).startOf("minute");
+          return fechaSinSegundos.isSameOrAfter(moment(tiempo).startOf("minute"));
+        });
 
-        const fechaSinSegundos = moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").startOf("minute");
-        return fechaSinSegundos.isSameOrAfter(moment(tiempo).startOf("minute"));
-      }
-    );
+    // Agrupar por sitio y color, incluyendo la lista de artículos
+    const agrupados = datosFiltrados.reduce((acc, item) => {
+      const { sitio } = item;
+      const siteConfig = sitiosEsperados.find((s) => s.sitio === sitio);
 
-    // console.log("datosFiltrados", datosFiltrados)
-
-    // Agrupar por sitio y color
-    const agrupados = datosFiltrados.reduce((acc, { sitio }) => {
-      const siteConfig = sitiosEsperados.find(s => s.sitio === sitio);
       if (siteConfig) {
         const key = `${sitio}-${siteConfig.color}`;
         if (!acc[key]) {
-          acc[key] = { sitio, color: siteConfig.color, total: 0 };
+          acc[key] = {
+            sitio,
+            color: siteConfig.color,
+            total: 0,
+            articulos: [],
+          };
         }
         acc[key].total++;
+        acc[key].articulos.push(item); // Agregar el artículo a la lista
       }
       return acc;
     }, {});
 
-    // Convertir a array y completar con sitios que faltan
-    const resultado = sitiosEsperados.map(({ sitio, color }) => {
-      const key = `${sitio}-${color}`;
-      return agrupados[key] || { sitio, color, total: 0 };
-    });
-
     // Convertir a array, completar sitios que falten y ordenar de mayor a menor
     return sitiosEsperados
-      .map(({ sitio, color }) => agrupados[`${sitio}-${color}`] || { sitio, color, total: 0 })
+      .map(({ sitio, color }) =>
+        agrupados[`${sitio}-${color}`] || { sitio, color, total: 0, articulos: [] }
+      )
       .sort((a, b) => b.total - a.total);
   }
+
 
   const dataChart = ref([]);
   const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
@@ -113,6 +113,45 @@
     const labelColor = `rgba(${ hexToRgb(currentTheme['on-surface']) },${ variableTheme['disabled-opacity'] })`
     
     return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor, labelColor }
+  }
+
+  // INICIO DE EVENTO CLICK GRAFICO 1
+  const isDialogVisibleChart1 = ref({
+    modal: false,
+    search: null,
+    data:{
+      title: "",
+      items: []
+    }
+  })
+
+  const filteredDataModalChart1 = computed(() => {
+    if(!isDialogVisibleChart1.value.data.search){
+      return isDialogVisibleChart1.value.data.items;
+    }
+
+    const query = isDialogVisibleChart1.value.data.search.toLowerCase();
+    return isDialogVisibleChart1.value.data.items.filter(item =>{
+      return item.title.toLowerCase().includes(query) || item.sitio.toLowerCase().includes(query);
+    });
+  });
+
+  // FIN DE EVENTO CLICK GRAFICO 1
+
+  const eventClick = function(event, chartContext, opts) {
+    // console.log(event, chartContext, opts)
+    // console.log(opts.dataPointIndex)
+    // console.log(opts.config.xaxis.categories)
+    if(opts.dataPointIndex > -1){
+      isDialogVisibleChart1.value.modal = true;
+      const sitio = opts.config.xaxis.categories[opts.dataPointIndex];
+      const articulos = articulosLocal.value.find(e => e.sitio == sitio);
+      isDialogVisibleChart1.value.data.items = articulos.articulos;
+      isDialogVisibleChart1.value.data.search = null;
+      isDialogVisibleChart1.value.data.title = sitio.toUpperCase();
+      
+      // console.log(opts.config.xaxis.categories[opts.dataPointIndex])
+    }
   }
 
   const resolveData = computed(() => {
@@ -139,7 +178,17 @@
     const options= {
         chart: {
           parentHeightOffset: 0,
-          toolbar: { show: false }
+          toolbar: { show: false },
+          // events: {
+          //   selection: function(chartContext, { xaxis, yaxis }) {
+          //     // ...
+          //     alert()
+          //   },
+          //   click: function(event, chartContext, opts) {
+          //     alert()
+          //     // The last parameter opts contains additional information like `seriesIndex` and `dataPointIndex` for cartesian charts
+          //   }
+          // }
         },
         dataLabels: { 
           enabled: true,
@@ -187,13 +236,18 @@
             style: {
                 fontSize: '11px',
                 fontFamily: 'Public Sans',
-                color: labelColor
+                color: labelColor,
+                cssClass: 'apexcharts-xaxis-laber-cursor',
+                cursor:"pointer"
             }
           },
           axisBorder: { show: false },
           axisTicks: { color: themeBorderColor },
           categories: categoriesRaw,
           labels: {
+            style: {
+                cssClass: 'apexcharts-xaxis-laber-cursor'
+            },
             show: true,
             style: { colors: themeDisabledTextColor },
             formatter: function(value, timestamp, opts) {
@@ -291,7 +345,7 @@
   const model_select_hora = ref({ title:"Hoy", value: moment().startOf('day')  });
   const items_select_hora = ref([
     { title:"Hoy", value: moment().startOf('day')  },
-    { title:"Hace 20 minutos", value: moment().subtract(20, "minutes")  },
+    { title:"Hace 5 minutos", value: moment().subtract(5, "minutes")  },
     { title:"Hace 30 minutos", value: moment().subtract(30, "minutes")  },
     { title:"Hace 1 hora", value: moment().subtract(1, "hours")  },
     { title:"Hace 3 horas", value: moment().subtract(3, "hours")  },
@@ -314,6 +368,61 @@
 
 </script>
 <template>
+  <VDialog
+      v-model="isDialogVisibleChart1.modal"
+      scrollable
+      max-width="650"
+    >
+
+    <!-- Dialog close btn -->
+    <DialogCloseBtn @click="isDialogVisibleChart1.modal = !isDialogVisibleChart1.modal" />
+
+    <!-- Dialog Content -->
+    <VCard>
+      <VCardItem >
+        <div class="d-flex content-title flex-wrap">
+          <div class="d-flex gap-3">
+            <div class="d-flex flex-column" style="line-height: 1.3;">
+              <h3 class="h2">
+                {{ isDialogVisibleChart1.data.title }}
+              </h3>
+              <div class="d-flex gap-2 align-center mt-2">
+                <small style="font-size: 10px;">Artículos</small>
+                <VChip size="x-small" color="primary">
+                  {{ filteredDataModalChart1.length }} Artículo(s)
+                </VChip>
+              </div>
+            </div>
+
+            
+          </div>
+
+          <VTextField v-model="isDialogVisibleChart1.data.search" label="Buscar.."
+            prepend-inner-icon="tabler-search" density="compact" style="max-width: 300px; padding: 0px 0;"
+            clearable />
+
+        </div>
+      </VCardItem>
+      <VCardText style="max-height: 450px;">
+        <VList lines="two" class="py-4">
+          <div v-if="filteredDataModalChart1.length">
+            <VListItem class="py-0">
+              <plantilla_articulos_estilo_principal :modoSimple="true" :articulos="filteredDataModalChart1" :filtrosActivos="filtrosActivos" />
+            </VListItem>
+          </div>
+          <div v-else>
+            <td colspan="4" class="no-results">No se encontraron resultados</td>
+          </div>
+        </VList>
+      </VCardText>
+
+      <VCardText class="py-4">
+        <VBtn class="my-4" @click="isDialogVisibleChart1.modal = false">
+          Cerrar modal.
+        </VBtn>
+      </VCardText>
+    </VCard>
+  </VDialog>
   <VRow>
     <VCol cols="12" md="12" :class="isLoading?'disabled':''">
       <VCard :class="props.disabledAll ? 'elevation-0 border rounded no-truncate' : ''">
@@ -355,6 +464,7 @@
             :height="props.height * 1"
             :options="resolveData.options"
             :series="resolveData.series"
+            @click="eventClick"
           />
 
           <div class="d-flex gap-2 mt-0 flex-column pb-3" v-if="props.disabledAll">
@@ -375,3 +485,69 @@
     </VCol>
   </VRow>
 </template>
+
+<style scoped>
+  svg#wordCloud {
+    display: block;
+    margin: auto;
+    width: 100%;
+    height: auto;
+  }
+</style>
+<style scoped>
+.sectionprimicias .v-card-item {
+  font-size: 24px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+  height: 400px;
+  display: block;
+  overflow-y: auto;
+}
+
+.content-title {
+  justify-content: space-between;
+  align-items: center;
+}
+
+.board-content {
+  height: 500px;
+  overflow-y: auto;
+}
+
+th,
+td {
+  /* border: 1px solid #ddd; */
+  padding: 8px;
+  text-align: left;
+}
+
+.fixed-avatar {
+    width: 100%;
+    height: 130px;
+    object-fit: cover;
+    object-position: center;
+}
+
+.h4.titulo {
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+.apexcharts-xaxis-laber-cursor{
+  cursor: pointer;
+}
+
+.disabled-card {
+  pointer-events: none;
+  cursor: default;
+  opacity: 0.6;
+}
+
+/* th {
+  background-color: #f2f2f2;
+} */
+</style>

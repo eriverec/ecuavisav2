@@ -286,9 +286,9 @@ import esLocale from "moment/locale/es";
     }
 
     const query = isDialogVisibleChart1.value.data.search.toLowerCase();
-    return isDialogVisibleChart1.value.data.items.filter(item =>
-      item.title.toLowerCase().includes(query)
-    );
+    return isDialogVisibleChart1.value.data.items.filter(item =>{
+      return item.title.toLowerCase().includes(query) || item.sitio.toLowerCase().includes(query);
+    });
   });
 
   // FIN DE EVENTO CLICK GRAFICO 1
@@ -303,11 +303,34 @@ import esLocale from "moment/locale/es";
   /*
   INICIO SELECTOR DE TIEMPO
   */
+  const horaSelectedText = ref("");
+  function getTimeRange() {
+    const momentValue = model_select_hora.value.value;
+    if(!momentValue){
+      horaSelectedText.value = `Todos los datos`;
+      return true;
+    }
+    const horaSelectedTextLocal = {
+        inicio: {
+            hoy: (moment().format("YYYY-MM-DD") == momentValue.format("YYYY-MM-DD")),
+            hora: momentValue.format("hh:mm A"),
+            fecha: momentValue.format("YYYY-MM-DD")
+        },
+        final: {
+            hoy: true,
+            hora: moment().format("hh:mm A"),
+            fecha: moment().format("YYYY-MM-DD")
+        }
+    };
+    horaSelectedText.value = (`Desde ${horaSelectedTextLocal.inicio.hoy ? "" : horaSelectedTextLocal.inicio.fecha + "," } ${horaSelectedTextLocal.inicio.hora } hasta ${horaSelectedTextLocal.inicio.hoy ? "" : "Hoy," } ${horaSelectedTextLocal.final.hora }`);
+    return true;
+  }
+
   const model_select_hora = ref({ title:"Todos", value:""  });
   const items_select_hora = ref([
     { title:"Todos", value: ""  },
     { title:"Hoy", value: moment().startOf('day')  },
-    { title:"Hace 20 minutos", value: moment().subtract(20, "minutes")  },
+    { title:"Hace 5 minutos", value: moment().subtract(5, "minutes")  },
     { title:"Hace 30 minutos", value: moment().subtract(30, "minutes")  },
     { title:"Hace 1 hora", value: moment().subtract(1, "hours")  },
     { title:"Hace 3 horas", value: moment().subtract(3, "hours")  },
@@ -321,6 +344,7 @@ import esLocale from "moment/locale/es";
       const tiempo = newValue.value;
       const keywords = props.data;
       desagruparListadoArticulos(keywords, tiempo);
+      getTimeRange();
     }
   })
 
@@ -508,10 +532,10 @@ import esLocale from "moment/locale/es";
         </VCardItem>
         <VCardText style="max-height: 450px;">
           <VList lines="two" class="py-4">
+            <VListItem class="py-0">
+              <datos_bar_vertical_noticias_por_hora :articulos="isDialogVisibleChart1.data.items" :disabledAll="true" :height="190" />
+            </VListItem>
             <div v-if="filteredDataModalChart1.length">
-              <VListItem class="py-0">
-                <datos_bar_vertical_noticias_por_hora :articulos="filteredDataModalChart1" :disabledAll="true" :height="190" />
-              </VListItem>
               <VListItem class="py-0">
                 <plantilla_articulos_estilo_principal :modoSimple="true" :articulos="filteredDataModalChart1" :filtrosActivos="filtrosActivos" />
               </VListItem>
@@ -534,6 +558,7 @@ import esLocale from "moment/locale/es";
         <VCardTitle>Palabras clave más Relevante</VCardTitle>
         <VCardSubtitle>
           <!-- Agrupados por medios digitales según la fecha de publicación de los artículos -->
+          Palabras clave: {{horaSelectedText}}
         </VCardSubtitle>
 
         <template #append>
@@ -551,9 +576,9 @@ import esLocale from "moment/locale/es";
         </template>
       </VCardItem>
       <VCardText>
-        <VRow>
+        <VRow v-if="keywordsAndArticles.length > 0">
           <VCol cols="12" sm="8" lg="8">
-            <svg id="wordCloud"></svg>
+            <svg id="wordCloud" v-if="keywordsAndArticles.length > 0"></svg>
           </VCol>
           <VCol cols="12" sm="4" lg="4">
             <div v-for="(keyword, index) of (keywordsAndArticles.slice(0, 8))" :key="index">
@@ -579,6 +604,11 @@ import esLocale from "moment/locale/es";
 
               <VDivider v-if="index !== (keywordsAndArticles.slice(0, 8)).length - 1" />
             </div>
+          </VCol>
+        </VRow>
+        <VRow v-else>
+          <VCol cols="12" sm="12" lg="12">
+            No hay datos para mostrar en este rango
           </VCol>
         </VRow>
       </VCardText>
