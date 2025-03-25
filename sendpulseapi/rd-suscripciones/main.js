@@ -50,7 +50,7 @@ const ECUAVISA_EC = {
           try {
               const myHeadersLogin = new Headers();
               myHeadersLogin.append("Content-Type", "application/json");
-              const url = "https://ecuavisa-login-service.onrender.com/check/email";
+              const url = "https://micuenta.ecuavisa.com/loginservice/check/email";
               var requestOptions = {
                   method: 'POST',
                   headers: myHeadersLogin,
@@ -200,7 +200,7 @@ const ECUAVISA_EC = {
           try {
             const myHeadersLogin = new Headers();
             myHeadersLogin.append("Content-Type", "application/json");
-            var resp = await fetch(`https://ecuavisa-login-service.onrender.com/encrypt/user/ecuavisa`,{
+            var resp = await fetch(`https://micuenta.ecuavisa.com/loginservice/encrypt/user/ecuavisa`,{
               method: "POST",
               body: JSON.stringify({
                 email: email,
@@ -676,7 +676,7 @@ const ECUAVISA_EC = {
           get:"https://showandevents-service.vercel.app/",
           add:"https://showandevents-service.vercel.app/add/"
       },
-      loginService:"https://ecuavisa-login-service.onrender.com/",
+      loginService:"https://micuenta.ecuavisa.com/loginservice/",
       exportPDF:"https://ecuavisapdfs.phpdemo.site/",
       seguimientoTemaOld:"https://ecuavisa-seguimiento-tema.onrender.com/",
       seguimientoTema:"https://ecuavisa-temas.vercel.app/",
@@ -1062,7 +1062,7 @@ const ECUAVISA_EC = {
               var ins = this;
               var btnOld = btn.innerHTML;
               btn.innerHTML = "Enviado....";
-              var resp = fetch("https://ecuavisa-login-service.onrender.com/signIn", {
+              var resp = fetch("https://micuenta.ecuavisa.com/loginservice/signIn", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/x-www-form-urlencoded",
@@ -1312,7 +1312,7 @@ const ECUAVISA_EC = {
               var ins = this;
               var btnOld = btn.innerHTML;
               btn.innerHTML = "Enviado....";
-              var resp = fetch("https://ecuavisa-login-service.onrender.com/signIn", {
+              var resp = fetch("https://micuenta.ecuavisa.com/loginservice/signIn", {
                 method: "POST",
                 headers: {
                   "Content-Type": "application/x-www-form-urlencoded",

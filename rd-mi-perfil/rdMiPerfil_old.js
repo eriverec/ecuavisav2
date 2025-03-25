@@ -95,7 +95,7 @@ async function Token(){
     //   let email = result.email;
     //   let pass = result.password;
     //   let _id = result._id;
-    //   await fetch("https://ecuavisa-login-service.onrender.com/encrypt", {
+    //   await fetch("https://micuenta.ecuavisa.com/loginservice/encrypt", {
     //   method: "POST",
     //   headers: {
     //     "Content-Type": "application/x-www-form-urlencoded",
@@ -2089,7 +2089,7 @@ function cambiarNombre() {
   let last_name = document.getElementById("cambionape").value.trim() || '';
   
   //servicio render Luis
-  fetch("https://ecuavisa-login-service.onrender.com/update/name", {
+  fetch("https://micuenta.ecuavisa.com/loginservice/update/name", {
     method: "POST",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -2138,7 +2138,7 @@ function sendEmailPassReset() {
     return false;
   }
   //servicio render Luis
-  fetch("https://ecuavisa-login-service.onrender.com/forgotPassword", {
+  fetch("https://micuenta.ecuavisa.com/loginservice/forgotPassword", {
     method: "PUT",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",

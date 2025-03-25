@@ -250,7 +250,7 @@ function login() {
     }
 
     //servicio render Luis
-    fetch("https://ecuavisa-login-service.onrender.com/signIn", {
+    fetch("https://micuenta.ecuavisa.com/loginservice/signIn", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -368,7 +368,7 @@ var telefonoValido = false;
 //       console.log("Las contraseñas no coinciden");
 //     } else {
 //       //servicio render Luis
-//       fetch("https://ecuavisa-login-service.onrender.com/register", {
+//       fetch("https://micuenta.ecuavisa.com/loginservice/register", {
 //         method: "POST",
 //         headers: {
 //           "Content-Type": "application/x-www-form-urlencoded",
@@ -430,7 +430,7 @@ function sendEmailPassReset() {
     return false;
   }
   //servicio render Luis
-  fetch("https://ecuavisa-login-service.onrender.com/forgotPassword", {
+  fetch("https://micuenta.ecuavisa.com/loginservice/forgotPassword", {
     method: "PUT",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -538,7 +538,7 @@ eventBtnCont.addEventListener('click', function () {
   inputPrinEmail.setAttribute('style', 'opacity: 0.4;');
   inputBConi.setAttribute('style', 'opacity: 0.4;');
 
-  fetch("https://ecuavisa-login-service.onrender.com/check/email", {
+  fetch("https://micuenta.ecuavisa.com/loginservice/check/email", {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', },
     body: JSON.stringify({

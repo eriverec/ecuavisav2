@@ -8,7 +8,7 @@ const queryString = window.location.search;
  const urlParams = new URLSearchParams(queryString);
  tk = urlParams.get('tk');
 
-  fetch("https://ecuavisa-login-service.onrender.com/check", {
+  fetch("https://micuenta.ecuavisa.com/loginservice/check", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -20,7 +20,7 @@ const queryString = window.location.search;
       .then((response) => response.json())
       .then(async (result) => {
         //alert("Su contraseña se ha creado con exito!");
-        console.log("res",result);
+        // console.log("res",result);
         if(result.error){
         window.location = "https://www.ecuavisa.com"; 
         }
@@ -86,10 +86,10 @@ const queryString = window.location.search;
     //let token = localStorage.getItem('token');
     event.preventDefault();
     let pass = document.getElementById('pass').value;
-    console.log(tk);
+    // console.log(tk);
 
     
-    fetch("https://ecuavisa-login-service.onrender.com/resetPassword", {
+    fetch("https://micuenta.ecuavisa.com/loginservice/resetPassword", {
       method: "PUT",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",

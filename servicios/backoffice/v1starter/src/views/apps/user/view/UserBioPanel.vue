@@ -84,7 +84,7 @@ async function updatePass() {
         body: raw,
         redirect: 'follow'
       };
-      await fetch('https://ecuavisa-login-service.onrender.com/changePassword', requestOptions)
+      await fetch('https://micuenta.ecuavisa.com/loginservice/changePassword', requestOptions)
         .then(response => response.json())
         .then((result) => {
           //console.log('resultado',result.mensaje);
