@@ -1341,8 +1341,8 @@ const ECUAVISA_EC = {
             if (check.checked == true) {
               return {
                   resp:true, msj:[
-                      "https://ecuavisa-login-service.onrender.com/auth/google",
-                      "https://ecuavisa-login-service.onrender.com/auth/facebook"
+                      "https://micuenta.ecuavisa.com/loginservice/auth/google",
+                      "https://micuenta.ecuavisa.com/loginservice/auth/facebook"
                   ]
               }
             } else {

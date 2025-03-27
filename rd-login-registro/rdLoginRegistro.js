@@ -471,13 +471,13 @@ function validateLogSocials() {
     let btnGoogle = document.getElementById("aLogGoogle");
     btnGoogle.setAttribute(
       "href",
-      `https://ecuavisa-login-service.onrender.com/auth/google?nextpage=${redirection}`
+      `https://micuenta.ecuavisa.com/loginservice/auth/google?nextpage=${redirection}`
     ); //servicio render Luis
 
     let btnFacebook = document.getElementById("aLogFacebook");
     btnFacebook.setAttribute(
       "href",
-      `https://ecuavisa-login-service.onrender.com/auth/facebook?nextpage=${redirection}`
+      `https://micuenta.ecuavisa.com/loginservice/auth/facebook?nextpage=${redirection}`
     ); //servicio render Luis
   } else {
     alert("Acepte los términos y condiciones para continuar");
