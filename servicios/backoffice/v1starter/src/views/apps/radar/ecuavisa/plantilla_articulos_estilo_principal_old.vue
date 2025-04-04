@@ -1,5 +1,5 @@
 <script setup>
-  import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/v2/datos_bar_vertical_noticias_por_hora.vue';
+  import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/ecuavisa/datos_bar_vertical_noticias_por_hora.vue';
   import VueApexCharts from 'vue3-apexcharts';
   import { hexToRgb } from '@layouts/utils';
   import { useTheme } from 'vuetify';
@@ -13,6 +13,7 @@
   const isLoading = ref(false);
 
   const props = defineProps({
+    disabledChart: { type: String, default:"1" },
     filtrosActivos: { type: Array, required: true },
     articulos: { type: Array, required: true },
     modoSimple: { type: Boolean, required: true, default:false },
@@ -139,6 +140,7 @@
           return [];
       }
   };
+
 
   const filteredDataModalKeyWord = computed(() => {
     if(!isDialogVisibleKeyWords.value.data.search){
@@ -424,7 +426,7 @@ function procesarKeywordsAndTags(articles){
         </VCardItem>
         <VCardText style="max-height: 550px;">
           <VList lines="two" class="py-4">
-            <VListItem class="py-0">
+            <VListItem class="py-0" v-if="props.disabledChart == '1' ">
               <datos_bar_vertical_noticias_por_hora :articulos="isDialogVisibleKeyWords.data.items" :disabledAll="true" :height="190" />
             </VListItem>
             <div v-if="filteredDataModalKeyWord.length">
@@ -578,67 +580,95 @@ function procesarKeywordsAndTags(articles){
             <VCol cols="12" v-for="(item, index) in paginatedData" :key="item.enlace">
               <VCard class="article-card elevation-0 border rounded no-truncate">
                 <VCardText class="d-flex align-center gap-2 ">
-                  <!-- Imagen -->
-                  <div class="img-content">
-                    <img v-if="item.picture" :src="replaceAmp(item.picture)" class="fixed-avatar rounded"
-                      alt="Article image" />
-                    <VIcon v-else icon="tabler-news" size="40" />
-                  </div>
-
-                  <!-- Contenido -->
-                  <div class="article-content w-100">
-                    <!-- Fila 1: medio, fecha y categoría -->
-                    <div class=" mb-3 grupoTopInfo">
-                      <div class="article-meta d-flex align-center gap-2 mb-1">
-                        <VChip variant="elevated" size="x-small" :color="item.color">
-                          {{ item.sitio }}
-                        </VChip>
-                        <span class="text-caption">{{ formatDate(item.fechaPublicacion) }}</span>
-                        <VChip size="x-small">{{ item.vertical }}</VChip>
-                        <div class="autor-ec" title="Autor">
-                          <VIcon icon="tabler-user" size="15" /> <small>{{ item.autor }}</small>
-                        </div>
-                        <div class="article-type-ec" title="Tipo de artículo" v-if="!props.modoSimple">
-                          <VIcon icon="tabler-article" size="15" /> <small>{{ item.tipo }}</small>
-                        </div>
+                  <VRow>
+                    <VCol cols="12" md="8" lg="8" class="d-flex gap-3">
+                      <!-- Imagen -->
+                      <div class="img-content">
+                        <img v-if="item.picture" :src="replaceAmp(item.picture)" class="fixed-avatar rounded"
+                          alt="Article image" />
+                        <VIcon v-else icon="tabler-news" size="40" />
                       </div>
-                      <div v-if="item.keywords && !props.modoSimple">
-                        <VChip style="cursor: pointer;" @click="clickKeywordLocal(keyword)" v-for="(keyword, index) in item.keywords.split(',').slice(0, 2)" :key="keyword"
-                          size="x-small" class="mr-2" variant="outlined" :color="item.color">
-                          {{ keyword.trim() }}
-                        </VChip>
-
-                        <VMenu v-if="item.keywords.split(',').length > 2" class="bloqueToogle"
-                          :close-on-content-click="false">
-                          <template v-slot:activator="{ props }">
-                            <VChip size="x-small" variant="outlined" :color="item.color" v-bind="props">
-                              +{{ item.keywords.split(',').length - 2 }}
+                      <div class="atributos">
+                        <!-- Atributos -->
+                        <div class=" mb-1 grupoTopInfo">
+                          <div class="article-meta d-flex align-center gap-2 mb-1">
+                            <VChip variant="elevated" size="x-small" :color="item.color">
+                              {{ item.sitio }}
                             </VChip>
-                          </template>
-                          <VList density="compact" class="pa-2">
-                            <template v-for="keyword in item.keywords.split(',').slice(2)" :key="keyword">
-                              <VChip style="cursor: pointer;" @click="clickKeywordLocal(keyword)" size="x-small" variant="outlined" color="secondary" class="ma-1">
-                                {{ keyword.trim() }}
-                              </VChip>
-                            </template>
-                          </VList>
-                        </VMenu>
+                            <span class="text-caption">{{ formatDate(item.fechaPublicacion) }}</span>
+                            <VChip size="x-small">{{ item.vertical }}</VChip>
+                            <div class="autor-ec" title="Autor">
+                              <VIcon icon="tabler-user" size="15" /> <small>{{ item.autor }}</small>
+                            </div>
+                            <div class="article-type-ec" title="Tipo de artículo" v-if="!props.modoSimple">
+                              <VIcon icon="tabler-article" size="15" /> <small>{{ item.tipo }}</small>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Fin Atributos -->
+                        <h4 class="article-title mb-0">{{ item.titulo }}</h4>
+                        
+                        <div class="atributos-adicionales d-flex gap-1 flex-column">
+                          <span class="text-caption" v-if="item.hasOwnProperty('fechaModificacion')">
+                            Modification date:
+                            {{ item.fechaModificacion }}
+                          </span>
+                          <span class="text-caption" v-if="item.hasOwnProperty('title_characters_length')">
+                            Title characters length:
+                            {{ item.title_characters_length }}
+                          </span>
+                          <span class="text-caption" v-if="item.hasOwnProperty('title_words_length')">
+                            Title words length:
+                            {{ item.title_words_length }}
+                          </span>
+                          <span class="text-caption" v-if="item.hasOwnProperty('content_characters_length')">
+                            Content characters length:
+                            {{ item.content_characters_length }}
+                          </span>
+                          <span class="text-caption" v-if="item.hasOwnProperty('content_words_length')">
+                            Content words length:
+                            {{ item.content_words_length }}
+                          </span>
+                          <span class="text-caption" v-if="item.hasOwnProperty('subheadline_characters_length')">
+                            Subheadline characters length:
+                            {{ item.subheadline_characters_length }}
+                          </span>
+                          <span class="text-caption" v-if="item.hasOwnProperty('subheadline_words_length')">
+                            Subheadline words length:
+                            {{ item.subheadline_words_length }}
+                          </span>
+                          <span class="text-caption" v-if="item.hasOwnProperty('cutline_characters_length')">
+                            Cutline characters length:
+                            {{ item.cutline_characters_length }}
+                          </span>
+                          <span class="text-caption" v-if="item.hasOwnProperty('cutline_words_length')">
+                            Cutline words length:
+                            {{ item.cutline_words_length }}
+                          </span>
+                        </div>
                       </div>
-
-                    </div>
-
-                    <!-- Fila 2: título y botón -->
-                    <div class="d-flex justify-space-between align-center gap-2">
-                      <h4 class="article-title mb-0">{{ item.titulo }}</h4>
-                      <VBtn :href="item.enlace" target="_blank" variant="tonal" size="x-small"
-                        class=" ml-2 flex-shrink-0 botoncito">
-                        <VIcon icon="tabler-external-link" size="16" />
-                        <label v-if="!props.modoSimple">
-                          Ver artículo
-                        </label>
-                      </VBtn>
-                    </div>
-                  </div>
+                    </VCol>
+                    <VCol cols="12" md="4" lg="4">
+                      <div class="d-flex justify-start flex-column gap-2">
+                        <div class="d-flex justify-end flex-wrap gap-2" v-if="item.keywords && !props.modoSimple">
+                          <VChip style="cursor: pointer;" @click="clickKeywordLocal(keyword)" v-for="(keyword, index) in item.keywords.split(',')" :key="keyword"
+                            size="x-small" class="mr-2" variant="outlined" :color="item.color">
+                            {{ keyword.trim() }}
+                          </VChip>
+                        </div>
+                        
+                        <div class="d-flex justify-end">
+                          <VBtn :href="item.enlace" target="_blank" variant="tonal" size="x-small"
+                            class=" ml-2 flex-shrink-0 botoncito">
+                            <VIcon icon="tabler-external-link" size="16" />
+                            <label v-if="!props.modoSimple">
+                              Ver artículo
+                            </label>
+                          </VBtn>
+                        </div>
+                      </div>
+                    </VCol>
+                  </VRow>
                 </VCardText>
               </VCard>
             </VCol>

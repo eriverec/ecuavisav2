@@ -1,1196 +1,938 @@
 <script setup>
-import DynamicCardGrid from "@/views/apps/radar/template_card.vue";
+import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/ecuavisa/datos_bar_vertical_noticias_por_hora.vue';
+import plantilla_articulos_estilo_principal from '@/views/apps/radar/ecuavisa/plantilla_articulos_estilo_principal.vue';
+// import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-diav2.vue';
+// import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticiasv2.vue';
+import pastelWordCloud from '@/views/apps/radar/ecuavisa/pastel-word-cloud.vue';
+import Moment from 'moment';
 import { extendMoment } from 'moment-range';
-import Moment from 'moment-timezone';
 import esLocale from "moment/locale/es";
-import { computed, onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { computed, onMounted, reactive, ref, watch } from 'vue';
 
-    const moment = extendMoment(Moment);
-    moment.locale('es', [esLocale]);
-    moment.tz.setDefault('America/Guayaquil');
+const moment = extendMoment(Moment);
+moment.locale('es', [esLocale]);
 
-  const data = ref([])
-  const searchTerm = ref('')
-  const tableSearches = ref({})
-  const selectedItemPagina = ref(null)
+const snackbar = ref({
+  show: false,
+  text: '',
+  color: 'success',
+  timeout: 3000
+})
 
-  const itemsPagina = ref([]);
-  const ultimasNoticias = ref([]);
-  const currentTab = ref(null)
+const lastUpdate = ref({
+  fechai: moment().startOf('day').format("YYYY-MM-DD HH:mm"),
+  fechaf: moment().format("YYYY-MM-DD HH:mm")
+})
 
-  const lastUpdate = ref('--:--')
-  const nextUpdate = ref(null)
-  const horaActual = moment();
-  const route = useRoute();
-  const router = useRouter();
+const filtrosActivos = reactive({
+  busqueda: "",
+  sitio: [],
+  compare: [],
+  seccion: [],
+  subseccion: [],
+  autor: [],
+  tipoarticulo: [],
+  disabled: false,
+  orderby: {
+    value: "fechaPublicacion_desc",
+    title: "Fecha de publicación (más recientes primero)"
+  }
+});
 
-  function replaceAmp(input) {
-    return input.replace(/&amp;/g, "&");
+const customColors = [
+  '#ffe802',
+  '#836af9',
+  '#2c9aff',
+  '#ffcf5c',
+  '#4f5d70',
+  '#299aff',
+  '#d4e157',
+  '#28dac6',
+  '#9e69fd',
+  '#ff9800',
+  '#26c6da',
+  '#ff8131',
+  '#28c76f',
+  '#ffbd1f',
+  '#84d0ff',
+  '#edf1f4',
+  '#ff9f43',
+]
+
+const loadingData = ref(false);
+
+/*
+******* INICIO RECUPERAR ARTÍCULOS
+*/
+async function fetchAndProcess(url) {
+  try {
+    const response = await fetch(url);
+    const dataResp = await response.json();
+    // return unificarYFiltrarDuplicados(dataResp.filter(Boolean));
+    // return dataResp.map(e => {
+    //   if(e.articles){
+    //     return e;
+    //   }
+    // });
+    return {
+        media_communication:"ecuavisa",
+        url_communication:"https://www.ecuavisa.com",
+        articles:dataResp
+    }
+  } catch (error) {
+    return null;
+  }
+}
+
+const dataAll = ref([]);
+const dataManipulable = ref([]);
+
+function mergeVerticalsByLink(array) {
+  const grouped = {};
+
+  array.forEach(item => {
+    let link = item.link;
+
+    // Normalizar la URL eliminando el protocolo (http:// o https://)
+    if (typeof link === "string") {
+      link = link.replace(/^https?:\/\//, ""); // Remueve el protocolo
+    }
+
+    if (!grouped[link]) {
+      grouped[link] = { ...item, verticalLocal: new Set(), subVerticalLocal: new Set() };
+    }
+
+    if (item.verticalLocal) grouped[link].verticalLocal.add(item.verticalLocal);
+    if (item.subVerticalLocal) grouped[link].subVerticalLocal.add(item.subVerticalLocal);
+  });
+
+  return Object.values(grouped).map(entry => ({
+    ...entry,
+    verticalLocal: Array.from(entry.verticalLocal).join(","),
+    subVerticalLocal: Array.from(entry.subVerticalLocal).join(",")
+  }));
+}
+
+function agruparPorAtributo(data, atributo) {
+  if(!atributo){
+    return [];
   }
 
-  // IDs válidos
-  const validIds = ["primicias", "el-universo", "expreso", "ecuavisa"];
+  return data.reduce((agrupado, item) => {
+      const valor = item[atributo] || "";
+      if (!agrupado[valor]) {
+          agrupado[valor] = [];
+      }
+      agrupado[valor].push(item);
+      return agrupado;
+  }, {});
+}
 
-  const idsName = {
-    "el-universo": {
-      title: "El Universo",
-      url: "https://www.eluniverso.com/"
-    },
-    "primicias": {
-      title: "Primicias",
-      url: "https://www.primicias.ec/"
-    },
-    "el-expreso": {
-      title: "Expreso",
-      url: "https://www.expreso.ec/"
-    },
-    "ecuavisa": {
-      title: "Ecuavisa",
-      url: "https://www.ecuavisa.com/"
-    },
+function limpiarEspacios(texto) {
+    return texto.replace(/\s*,\s*/g, ',');
+}
+
+function extraerPaths(url) {
+  try {
+    const urlObj = new URL(url);
+    const paths = urlObj.pathname.split('/').filter(Boolean); // Eliminar vacíos
+
+    let resultado = { primero: "", segundo: "", ultimo: "" };
+
+    if(url.includes("/rss/portada")){
+      resultado.primero = "PRINCIPAL";
+      resultado.segundo = "";
+      resultado.ultimo = "";
+      return resultado;
+    }
+
+    if (paths.length === 1) {
+      resultado.primero = paths[0].toUpperCase();
+    } else if (paths.length === 2) {
+      resultado.primero = paths[0].toUpperCase();
+      resultado.segundo = paths[1].toUpperCase();
+      resultado.ultimo = "";
+    } else if (paths.length >= 3) {
+      resultado.primero = paths[0].toUpperCase();
+      resultado.ultimo = paths[1].toUpperCase();
+      resultado.segundo = paths[paths.length - 1].toUpperCase();
+    }else{
+      resultado.primero = "PRINCIPAL";
+      resultado.segundo = "";
+      resultado.ultimo = "";
+    }
+
+    return resultado;
+  } catch (error) {
+    console.warn("URL inválida:", url);
+    return { primero: null, segundo: null, ultimo: null };
+  }
+}
+
+const principalData = async function () {
+  try {
+    filtrosActivos.busqueda = "";
+    filtrosActivos.sitio = [];
+    filtrosActivos.compare = [];
+    filtrosActivos.seccion = [];
+    filtrosActivos.subseccion = [];
+    filtrosActivos.autor = [];
+    filtrosActivos.tipoarticulo = [];
+    filtrosActivos.orderby = {
+      value: "fechaPublicacion_desc",
+      title: "Fecha de publicación (más recientes primero)"
+    };
+
+    loadingData.value = true;
+
+    const endpoints = ["https://scrapping-ecuavisa.phpdemo.site/ecuavisa/listar.php"];
+
+    // Create an array of promises for all endpoints
+    const fetchPromises = Object.entries(endpoints).map(([key, url]) => fetchAndProcess(url));
+    const results = await Promise.all(fetchPromises);
+    const allResults = [];
+    if(results[0]?.articles){
+        for(var j in results[0].articles){
+            if(!results[0]?.articles[j].hasOwnProperty("getArticle")){
+            //Añadir url_communication a cada artículo
+            allResults.push({
+                ...results[0]?.articles[j], 
+                media_communication: results[0]?.media_communication,
+                url_communication: results[0]?.url_communication,
+            });
+            }
+        }
+    }
+
+    // console.log("allResults", allResults)
+
+    const datosAgrupados = agruparPorAtributo(allResults, "media_communication");
+
+    // Recorrer cada grupo de media_communication
+    let indiceColor = 0;
+
+    const newData = [];
+
+    Object.entries(datosAgrupados).forEach(([media_communication, noticias, url_communication]) => {
+        // console.log(`Noticias de ${media_communication}:`);
+        indiceColor++;
+        if(indiceColor > customColors.length - 1){
+          indiceColor = 0;
+        }
+
+        const notciasTemp = [];
+
+        noticias.forEach(noticia => {
+            noticia.color = customColors[indiceColor];
+            noticia.sitio = media_communication;
+
+            if(!noticia.titulo){
+              noticia.titulo = noticia.title;
+            }else if(!noticia.title){
+              noticia.title = noticia.titulo;
+            }
+            
+            noticia.enlace = noticia.link;
+            noticia.picture = noticia.image;
+            noticia.tags = noticia.tags;
+            noticia.tipo = noticia.tipo;
+            noticia.vertical = noticia.seccion;
+            noticia.subVertical = noticia.subseccion;
+            if(noticia.keywords){
+              noticia.keywords = limpiarEspacios(noticia.keywords.toUpperCase());
+              noticia.tags = limpiarEspacios(noticia.tags.toUpperCase());
+            }
+
+            noticia.verticalLocal = noticia.vertical;
+            noticia.subVerticalLocal = noticia.subVertical;
+
+            // console.log("noticia.keywords", noticia.keywords)
+
+            if(noticia.fechaPublicacion){
+              noticia.fechaPublicacion = moment(noticia.fechaPublicacion, "DD/MM/YYYY HH:mm:ss").format("DD/MM/YYYY HH:mm:ss") || ""
+            }else{
+              noticia.fechaPublicacion = moment().subtract(1, 'hour').format("DD/MM/YYYY HH:mm:ss")
+            }
+
+            if(!noticia.hasOwnProperty("getArticle")){
+              notciasTemp.push(noticia);
+            }
+            
+        });
+
+        newData.push(...notciasTemp)
+    });
+
+    const combinedData = [...newData];
+
+    const uniqueData = mergeVerticalsByLink(combinedData, "link");
+    // console.log("uniqueData", uniqueData.splice(0, 10))
+
+    const sortedData = uniqueData.sort((a, b) => {
+      const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+      const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+      return dateB - dateA;
+    });
+
+    dataAll.value = sortedData;
+    dataManipulable.value = sortedData;
+
+    lastUpdate.value.fechaf = moment(sortedData[0].fechaPublicacion, "DD/MM/YYYY HH:mm:ss").format("YYYY-MM-DD HH:mm");
+
+    loadingData.value = false;
+    return true;
+  } catch (error) {
+    loadingData.value = false;
+    console.log('Error:', error);
+    snackbar.value = {
+      show: true,
+      text: `Error en principalData. Intente nuevamente`,
+      color: 'error'
+    }
+    return null;
+  }
+}
+/*
+******* FIN RECUPERAR ARTÍCULOS
+*/
+
+/*
+******* INICIO RECUPERAR SITIOS WEBS
+*/
+const itemsSitioWeb = ref([]);
+
+async function loadSiteNames() {
+  try {
+    const response = await fetch("https://servicio-competencias.vercel.app/scrapper-rule/all?page=1&limit=1000&keys=_id,media_communication,key,url_communication");
+    const dataResp = await response.json();
+
+    // const dataResp = {
+    //   "resp": true,
+    //   "data": [
+    //   {
+    //   "_id": "67d9b104816d7703499f1e6f",
+    //   "key": "ecuavisa",
+    //   "url_communication": "https://www.ecuavisa.com/",
+    //   "media_communication": "ecuavisa"
+    //   },
+    //   {
+    //   "_id": "67d9a8b218e7e47e13531540",
+    //   "key": "infobae",
+    //   "url_communication": "https://www.infobae.com/america/",
+    //   "media_communication": "infobae"
+    //   },
+    //   {
+    //   "_id": "67d9a88e18e7e47e13531539",
+    //   "key": "tctelevision-video-tc-deportes",
+    //   "url_communication": "https://tctelevision.com/video/tc-deportes/",
+    //   "media_communication": "tctelevision"
+    //   },
+    //   {
+    //   "_id": "67d9a74a9bfb3d7f9e24ec3e",
+    //   "key": "tctelevision",
+    //   "url_communication": "https://tctelevision.com/",
+    //   "media_communication": "tctelevision"
+    //   },
+    //   {
+    //   "_id": "67d9a50fff24113a34723609",
+    //   "key": "expreso",
+    //   "url_communication": "https://www.expreso.ec/",
+    //   "media_communication": "expreso"
+    //   },
+    //   {
+    //   "_id": "67d9a498d004fa6fd131bf28",
+    //   "key": "primicias",
+    //   "url_communication": "https://www.primicias.ec/",
+    //   "media_communication": "primicias"
+    //   },
+    //   {
+    //   "_id": "67d9a4448dea2fecb65e6550",
+    //   "key": "ecuavisa-ultimas-noticias",
+    //   "url_communication": "https://www.ecuavisa.com/ultimas-noticias",
+    //   "media_communication": "ecuavisa"
+    //   },
+    //   {
+    //   "_id": "67d4ac8038147174a31ef3b5",
+    //   "key": "ecuavisa-deportes",
+    //   "url_communication": "https://www.ecuavisa.com/deportes",
+    //   "media_communication": "ecuavisa"
+    //   }
+    //   ],
+    //   "total": 8,
+    //   "limit": 1000,
+    //   "page": 1
+    // };
+    if(dataResp.resp){
+      itemsSitioWeb.value = dataResp.data.map(e => {
+        return {
+          value: e.media_communication,
+          title: e.media_communication.toUpperCase(),
+        }
+      });
+
+      const uniqueData = Array.from(new Map(itemsSitioWeb.value.map(item => [item.value, item])).values());
+      itemsSitioWeb.value = uniqueData;
+      return itemsSitioWeb.value;
+    }else{
+      snackbar.value = {
+        show: true,
+        text: `Error, no se pudo listar los medios del select, intente nuevamente`,
+        color: 'error'
+      }
+      return [];
+    }
+    
+  } catch(error) {
+    snackbar.value = {
+      show: true,
+      text: `Error, no se pudo listar los medios del select, intente nuevamente`,
+      color: 'error'
+    }
+    console.error(error)
+    return [];
+  }
+}
+/*
+******* FIN RECUPERAR SITIOS WEBS
+*/
+
+/*
+******* INICIO MANIPULAR DATOS
+*/
+const debounceTimeout = ref(null);
+
+// Filtrado de datos (sin debounce)
+const filteredData = computed(() => dataManipulable.value);
+
+const normalizeText = (text) => {
+  return text
+    ? text
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // Elimina tildes
+        .replace(/\s+/g, "") // Reemplaza múltiples espacios por uno
+        .trim() // Elimina espacios al inicio y al final
+        .toLowerCase() // Convierte todo a minúsculas
+    : "";
+};
+
+function ordenarLista(lista, criterio) {
+  // Mapeo de criterios a los campos reales en los objetos
+  const criteriosMap = {
+    fechaPublicacion_desc: { key: "fechaPublicacion", order: "desc" },
+    fechaPublicacion_asc: { key: "fechaPublicacion", order: "asc" },
+    fechaModificacion_desc: { key: "fechaModificacion", order: "desc" },
+    fechaModificacion_asc: { key: "fechaModificacion", order: "asc" },
+    caracteresContenido_desc: { key: "content_characters_length", order: "desc" },
+    caracteresContenido_asc: { key: "content_characters_length", order: "asc" },
+    palabrasContenido_desc: { key: "content_words_length", order: "desc" },
+    palabrasContenido_asc: { key: "content_words_length", order: "asc" },
+    palabrasTitulo_desc: { key: "title_words_length", order: "desc" },
+    palabrasTitulo_asc: { key: "title_words_length", order: "asc" },
+    caracteresTitulo_desc: { key: "title_characters_length", order: "desc" },
+    caracteresTitulo_asc: { key: "title_characters_length", order: "asc" }
   };
 
-  const idRouter = ref("ecuavisa");
-
-  // Verificar si el ID es válido
-  const idParamsEsValido = ref(validIds.includes(idRouter.value));
-
-  // Observa cambios en el parámetro `id` y redirige si no es válido
-  // watch(() => idRouter.value, (newId) => {
-  //   idParamsEsValido.value = validIds.includes(newId);
-  //   if (route.path.startsWith('/apps/radar/primicias') && !idParamsEsValido.value) {
-  //     router.replace('/404'); // Redirigir a la página 404
-  //   }
-  // }, { immediate: true }); // Ejecutar también en la carga inicial
-
-  const primeraCargaCronConfig = ref(false);
-
-  const updateInterval = ref(300)
-  const updateIntervalDisabled = ref(false)
-  const updateIntervals = [
-    { title: '5 minutos', value: 300 },
-    { title: '10 minutos', value: 60 * 10 },
-    { title: '15 minutos', value: 60 * 15 },
-  ]
-
-  const snackbar = ref({
-    show: false,
-    text: '',
-    color: 'success',
-    timeout: 3000
-  })
-
-  const filterTableItems = (items, vertical) => {
-    const tableSearch = tableSearches.value[vertical]?.toLowerCase() || ''
-    return tableSearch
-      ? items.filter(item => item.titulo?.toLowerCase().includes(tableSearch))
-      : items
+  // Validar si el criterio existe
+  if (!criteriosMap[criterio]) {
+    console.error("Criterio de ordenamiento no válido:", criterio);
+    return lista;
   }
 
-  const processedData = computed(() => {
-    const seen = new Map();
+  const { key, order } = criteriosMap[criterio];
+
+  return lista.sort((a, b) => {
+    let valorA = a[key] || 0;
+    let valorB = b[key] || 0;
+
+    // Si es una fecha, convertir a timestamp
+    if (key === "fechaPublicacion" || key === "fechaModificacion") {
+      valorA = moment(valorA, "DD/MM/YYYY HH:mm:ss");
+      valorB = moment(valorB, "DD/MM/YYYY HH:mm:ss");
+    }
+
+    return order === "asc" ? valorA - valorB : valorB - valorA;
+  });
+}
+
+const filteredFunction = function() {
+  const query = filtrosActivos.busqueda?.toLowerCase() || "";
+  const sitioValue = filtrosActivos.sitio || [];
+  const sitiosSeleccionados = sitioValue.map(e => e.value);
+  const secciones = filtrosActivos.seccion || [];
+  const subseccion = filtrosActivos.subseccion || [];
+  const autor = filtrosActivos.autor || [];
+  const tipoarticulo = filtrosActivos.tipoarticulo || [];
+  const compare = filtrosActivos.compare.map(e => normalizeText(e)) || [];
+
+  return dataAll.value
+    .filter(item => {
+      const matchesBusqueda = !query || normalizeText(item.titulo).includes(normalizeText(query));
+      const matchesBusquedaKeyWords = normalizeText(item.keywords).includes(normalizeText(query));
+      const matchesBusquedaAutor = normalizeText(item.autor).includes(normalizeText(query));
+      const matchesBusquedaEnlace = normalizeText(item.link).includes(normalizeText(query));
+
+      const matchesSitio = sitiosSeleccionados.length === 0 || sitiosSeleccionados.includes(item.sitio);
+      const verticalName = item.verticalLocal?.toUpperCase();
+      const subVerticalName = item.subVerticalLocal?.toUpperCase();
+      const autorName = item.autor?.toUpperCase();
+      const tipoarticuloName = item.tipo?.toUpperCase();
+      const compareName = normalizeText(item.link);
+      const matchesSecciones = secciones.length === 0 || secciones.includes(verticalName);
+      const matchesSubseccion = subseccion.length === 0 || subseccion.includes(subVerticalName);
+      const matchesAutor = autor.length === 0 || autor.includes(autorName);
+      const matchesTipoarticulo = tipoarticulo.length === 0 || tipoarticulo.includes(tipoarticuloName);
+      const matchesCompare = compare.length === 0 || compare.includes(compareName);
+      return (matchesBusqueda || matchesBusquedaKeyWords || matchesBusquedaAutor || matchesBusquedaEnlace) && matchesCompare && matchesSitio && matchesSecciones && matchesSubseccion && matchesAutor && matchesTipoarticulo;
+    })
+    .sort((a, b) => {
+      const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+      const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+      return dateB - dateA; // Ordena de más reciente a más antiguo
+    });
+};
+
+watch(filtrosActivos, (newVal) => {
+  clearTimeout(debounceTimeout.value);
+  debounceTimeout.value = setTimeout(() => {
     
-    data.value.forEach(item => {
-      const existing = seen.get(item.enlace);
-      
-      if (!existing || (existing.picture === null && item.picture !== null)) {
-        // Si no existe o si el existente tiene picture null y el actual no lo tiene, actualizamos
-        seen.set(item.enlace, {
-          ...item,
-          subVertical: item.subVertical === 'NN' ? '' : item.subVertical,
-          isDuplicate: false
+    const orderBy = newVal.orderby;
+    dataManipulable.value = ordenarLista(filteredFunction() || [], orderBy.value) || [];
+    // procesarKeywordsAndTags(dataManipulable.value);
+
+  }, 700);
+}, { immediate: true });
+
+/*
+******* FIN MANIPULAR DATOS
+*/
+
+/*
+******* INICIO FILTRO ORDERBY
+*/
+
+const items_select_order_by = ref([
+  { value: "fechaPublicacion_desc", title: "Fecha de publicación (más recientes primero)" },
+  { value: "fechaPublicacion_asc", title: "Fecha de publicación (más antiguos primero)" },
+  { value: "fechaModificacion_desc", title: "Fecha de modificación (más recientes primero)" },
+  { value: "fechaModificacion_asc", title: "Fecha de modificación (más antiguos primero)" },
+  { value: "caracteresContenido_desc", title: "Longitud del contenido (mayor a menor)" },
+  { value: "caracteresContenido_asc", title: "Longitud del contenido (menor a mayor)" },
+  { value: "palabrasContenido_desc", title: "Número de palabras en el contenido (mayor a menor)" },
+  { value: "palabrasContenido_asc", title: "Número de palabras en el contenido (menor a mayor)" },
+  { value: "palabrasTitulo_desc", title: "Número de palabras en el título (mayor a menor)" },
+  { value: "palabrasTitulo_asc", title: "Número de palabras en el título (menor a mayor)" },
+  { value: "caracteresTitulo_desc", title: "Longitud del título (mayor a menor)" },
+  { value: "caracteresTitulo_asc", title: "Longitud del título (menor a mayor)" }
+]);
+
+/*
+******* FIN FILTRO ORDERBY
+*/
+
+/*
+******* INICIO FILTRO SECCIONES
+*/
+const itemsSitioWebSeccion = ref([]);
+function getUniqueVerticals(objeto = null) {
+  const uniqueVerticals = new Set();
+
+  const procesarItems = (items) => {
+    items.forEach(item => {
+      if (item.verticalLocal) {
+        // Dividir la cadena en múltiples verticales y agregar cada uno al Set
+        item.verticalLocal.split(",").forEach(vertical => {
+          const name = vertical.trim().toUpperCase();
+          if (name) {
+            uniqueVerticals.add(name);
+          }
+        });
+      }
+    });
+  };
+
+  if (!objeto) {
+    procesarItems(data.value);
+  } else {
+    procesarItems(objeto);
+  }
+
+  return Array.from(uniqueVerticals).sort((a, b) => a.localeCompare(b));
+}
+
+
+/*
+******* FIN FILTRO SECCIONES
+*/
+
+/*
+******* INICIO FILTRO SUBSECCIONES
+*/
+const itemsSitioWebSubSeccion = ref([]);
+function getUniqueSubVerticals(objeto = null) {
+  const uniqueSubVerticals = new Set();
+
+  const procesarItems = (items) => {
+    items.forEach(item => {
+      if (item.subVerticalLocal) {
+        // Dividir la cadena en múltiples subvertical y agregar cada uno al Set
+        item.subVerticalLocal.split(",").forEach(subvertical => {
+          const name = subvertical.trim().toUpperCase();
+          if (name) {
+            uniqueSubVerticals.add(name);
+          }
+        });
+      }
+    });
+  };
+
+  if (!objeto) {
+    procesarItems(data.value);
+  } else {
+    procesarItems(objeto);
+  }
+
+  return Array.from(uniqueSubVerticals).sort((a, b) => a.localeCompare(b));
+}
+
+/*
+******* FIN FILTRO SUBSECCIONES
+*/
+
+/*
+******* INICIO FILTRO TIPO ARTÍCULO
+*/
+const itemsSitioWebTipoArticulo = ref([]);
+function getUniqueTipoArticulo(objeto = null) {
+  const uniqueTipoArticulo = new Set();
+
+  const procesarItems = (items) => {
+    items.forEach(item => {
+      if (item.tipo) {
+        // Dividir la cadena en múltiples tipo y agregar cada uno al Set
+        item.tipo.split(",").forEach(tipo => {
+          const name = tipo.trim().toUpperCase();
+          if (name) {
+            uniqueTipoArticulo.add(name);
+          }
+        });
+      }
+    });
+  };
+
+  if (!objeto) {
+    procesarItems(data.value);
+  } else {
+    procesarItems(objeto);
+  }
+
+  return Array.from(uniqueTipoArticulo).sort((a, b) => a.localeCompare(b));
+}
+
+/*
+******* FIN FILTRO TIPO ARTÍCULO
+*/
+
+/*
+******* INICIO FILTRO SUBSECCIONES
+*/
+const itemsSitioWebAutor = ref([]);
+function getUniqueAutor(objeto = null) {
+  const uniqueAutor = new Set();
+
+  const procesarItems = (items) => {
+    items.forEach(item => {
+      if (item.autor) {
+        // Dividir la cadena en múltiples autor y agregar cada uno al Set
+        item.autor.split(",").forEach(autor => {
+          const name = autor.trim().toUpperCase();
+          if (name) {
+            uniqueAutor.add(name);
+          }
+        });
+      }
+    });
+  };
+
+  if (!objeto) {
+    procesarItems(data.value);
+  } else {
+    procesarItems(objeto);
+  }
+
+  return Array.from(uniqueAutor).sort((a, b) => a.localeCompare(b));
+}
+
+/*
+******* FIN FILTRO SUBSECCIONES
+*/
+
+/*
+******* INICIO FILTRO pastelWordCloud
+*/
+const topKeywords = ref([]);
+const topTags = ref([]);
+const allKeywords = ref([]);
+const allTags = ref([]);
+
+const parseItems = (items) => {
+  if (!items) return [];
+  
+  try {
+    if (typeof items === 'string') {
+      return items.split(',').map(i => i.trim()).filter(Boolean);
+    } else if (Array.isArray(items)) {
+      return items.map(i => (typeof i === 'string' ? i.trim() : String(i))).filter(Boolean);
+    } else if (typeof items === 'object') {
+      return [String(items)].filter(Boolean);
+    }
+  } catch (err) {
+    console.warn('Error al procesar items:', err);
+  }
+  
+  return [];
+};
+
+const procesarItems = (articles, key) => {
+  if (!articles || !Array.isArray(articles) || articles.length === 0) {
+    console.warn(`No hay artículos para procesar ${key}`);
+    return { topItems: [], allItems: [] };
+  }
+
+  try {
+    const itemData = {};
+
+    articles.forEach(article => {
+      if (article && article[key]) {
+        const items = parseItems(article[key]);
+        items.forEach(item => {
+          if (!itemData[item]) {
+            itemData[item] = { count: 0, articles: [] };
+          }
+          itemData[item].count += 1;
+          itemData[item].articles.push(article);
         });
       }
     });
 
-    // Devolvemos los valores únicos como un array
-    return Array.from(seen.values());
-  });
+    // Ordenar por frecuencia
+    const sortedItems = Object.entries(itemData)
+      .filter(([item]) => item && item.trim())
+      .sort(([, a], [, b]) => b.count - a.count);
 
+    // Formatear los datos
+    const topItems = sortedItems.slice(0, 10).map(([label, data]) => ({
+      label,
+      value: data.count,
+      articles: data.articles,
+    }));
 
-  const groupedData = computed(() => {
-   return processedData.value.reduce((acc, item) => {
-     // if (!item.isDuplicate) {
-     //   if (!acc[item.vertical]) acc[item.vertical] = []
-     //   acc[item.vertical].push(item)
-     // }
-      if (!acc[item.vertical]) acc[item.vertical] = []
-      acc[item.vertical].push(item)
-      return acc
-   }, {})
-  })
+    const allItems = sortedItems.map(([label, data]) => ({
+      label,
+      value: data.count,
+      articles: data.articles,
+    }));
 
-  const groupedDataSubSeccion = computed(() => {
-   return processedData.value.reduce((acc, item) => {
-     // if (!item.isDuplicate) {
-     //   if (!acc[item.vertical]) acc[item.vertical] = []
-     //   acc[item.vertical].push(item)
-     // }
-      if (!acc[item.subVertical]) acc[item.subVertical] = []
-      acc[item.subVertical].push(item)
-      return acc
-   }, {})
-  })
+    // console.log(`Procesadas ${allItems.length} ${key}, top 10 ${key}:`, topItems);
 
-  const filteredData = computed(() => {
-    var objeto = [];
-
-    if (!searchTerm.value){
-      objeto =  Object.entries(groupedData.value).reduce((acc, [vertical, items]) => {
-        if (selectedItemPagina.value.includes(vertical.toUpperCase())){
-           acc[vertical] = items
-        }
-        return acc
-      }, {})
-    }else{
-      objeto = Object.entries(groupedData.value).reduce((acc, [vertical, items]) => {
-        const filtered = items.filter(item =>
-          item.titulo?.toLowerCase().includes(searchTerm.value?.toLowerCase() || '') || false
-        )
-        if (filtered.length) acc[vertical] = filtered
-        return acc
-      }, {});
-    }
-    
-
-    return {
-      'Últimas noticias': ultimasNoticias.value, 
-      ...objeto
-    };
-  })
-
-
-  const formatDate = (dateString) => {
-    return moment(dateString, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm')
+    return { topItems, allItems };
+  } catch (err) {
+    console.error(`Error al procesar ${key}:`, err);
   }
-
-  function unificarYFiltrarDuplicados(data) {
-    const enlacesUnicos = new Set(); // Para rastrear enlaces únicos
-    const resultado = {
-      total: 0,
-      timestamp: new Date().toISOString(),
-      articles: []
-    };
-
-    data.forEach((grupo) => {
-      grupo.articles.forEach((articulo) => {
-        if (!enlacesUnicos.has(articulo.enlace)) {
-          enlacesUnicos.add(articulo.enlace); // Registrar enlace
-
-          // Si subVertical está vacío o no definido, asignar "no definido"
-          if (!articulo.subVertical || articulo.subVertical.trim() == "") {
-            articulo.subVertical = "N/A";
-          }
-
-          if (!articulo.vertical || articulo.vertical.trim() == "") {
-            articulo.vertical = "home";
-          }
-
-          resultado.articles.push(articulo); // Agregar artículo único
-        }
-      });
-    });
-
-    resultado.total = resultado.articles.length; // Actualizar total
-    return resultado.articles;
-  }
-
-  
-  const loadingBtn = ref(false);
-  const principalData = async function(){
-    try{
-      loadingBtn.value = true;
-      const response = await fetch('https://services.ecuavisa.com/gestor/competencias/'+idRouter.value+'/config.php?api=all')
-      // const response = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/suscripciones/modalondemand/radar/radarPrimicias.php')
-      // const response = await fetch('https://bigdata.ecuavisa.com:10003/api/v1/BA/ObtenerPublicacion?baseUrl=https%3A%2F%2Fwww.primicias.ec&maxPaginas=1')
-      const dataResp = await response.json();
-      console.log(dataResp.filter(Boolean))
-      data.value = unificarYFiltrarDuplicados(dataResp.filter(Boolean));
-      lastUpdate.value = moment(dataResp.filter(Boolean)[0].timestamp).format("DD/MM/YYYY HH:mm");
-      nextUpdate.value = dataResp.nextRefresh;
-
-      primeraCargaCronConfig.value = true;
-      updateInterval.value = dataResp.minutes * 60;
-
-      // Ordenar por fecha de publicación (de mayor a menor)
-      const sortedItems = processedData.value.sort((a, b) => {
-        const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
-        const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
-        return dateB - dateA; // Mayor a menor
-      });
-
-      // Obtener los 20 primeros (en este caso es menos)
-      const top20Items = sortedItems.slice(0, 12);
-      // groupedData.value["Últimas noticias"] = top20Items;
-      ultimasNoticias.value = top20Items;
-
-
-      itemsPagina.value = Object.keys(groupedData.value).map(e => e.toUpperCase());
-      selectedItemPagina.value = itemsPagina.value.slice(0, 2);
-      loadingBtn.value = false;
-      return true;
-    }catch(error){
-      loadingBtn.value = false;
-      return null;
-    }
-  }
-
-
-  let timeoutId;
-
-  onMounted(async () => {
-    try {
-      await principalData();
-      // Llamado recurrente cada segundo
-      // timeoutId = setTimeout(() => checkRefreshTime(), 1000);
-    } catch (error) {
-      console.error('Error fetching data:', error)
-    }
-  })
-
-  watch(selectedItemPagina, (newValue) => {
-    if(newValue.length > 0 && !itemsPagina.value.includes(newValue.at(-1))){
-      newValue.pop();
-      selectedItemPagina.value = newValue;
-    }else{
-      uniqueKey.value = Date.now();
-    }
-    // return false;
-  })
-
-  async function checkRefreshTime() {
-      // Convertir strings a momentos
-      const refreshMinutes = (updateInterval.value + (1 * 60)) / 60;
-      const nextCronMoment = moment(nextUpdate.value);
-      const currentDateTimeMoment = moment();
-
-      // Calcular la diferencia en minutos entre la ejecución del cron y el tiempo actual
-      let minutesUntilNextExecution = 0;
-      if (nextCronMoment.isAfter(currentDateTimeMoment)) {
-          const diffInSeconds = nextCronMoment.diff(currentDateTimeMoment);
-          minutesUntilNextExecution = Math.floor(diffInSeconds / 60000);
-      }
-
-      // Comprobar si es hora de hacer el refresh
-      if (minutesUntilNextExecution <= refreshMinutes && minutesUntilNextExecution >= 0) {
-          // Si queremos detener el timeout en algún momento
-          clearTimeout(timeoutId);
-          // Hacer el refresh de la página
-          await principalData();
-          console.log("Es tiempo de hacer refresh")
-          // location.reload();
-      }
-  }
-
-  async function editCronUpdate() {
-    try{
-
-      if(primeraCargaCronConfig.value){
-        primeraCargaCronConfig.value = false;
-        return false;
-      }
-
-      var myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-
-      var raw = JSON.stringify({
-        "minutes": updateInterval.value / 60
-      });
-
-      var requestOptions = {
-          method: 'POST',
-          headers: myHeaders,
-          body: raw,
-          redirect: 'follow'
-      };
-      //console.log('data enviar ',raw);    
-      const send = await fetch('https://estadisticas.ecuavisa.com/sites/gestor/Tools/competencias/radar-digital/'+idRouter.value+'/config.php', requestOptions);
-      const respuesta = await send.json();
-
-      if(respuesta.resp){
-        snackbar.value = {
-          show: true,
-          text: `Intervalo actualizado a ${updateInterval.value / 60} minutos`,
-          color: 'success'
-        }
-        await principalData();
-      }else{
-        snackbar.value = {
-          show: true,
-          text: `Ocurrió un error, intente nuevamente`,
-          color: 'error'
-        }
-      }
-      
-      return true;
-    }catch(error){
-      snackbar.value = {
-          show: true,
-          text: `Ocurrió un error, intente nuevamente`,
-          color: 'error'
-        }
-      return null;
-    }
-  }
-
-  watch(updateInterval, async () => {
-    // Llamado recurrente cada segundo
-    updateIntervalDisabled.value = true;
-    await editCronUpdate();
-    updateIntervalDisabled.value = false;
-  })
-
-
-  // INICIO DE GRÁFICOS
-  import { hexToRgb } from '@layouts/utils';
-import VueApexCharts from 'vue3-apexcharts';
-import { useTheme } from 'vuetify';
-  const isLoading = ref(false);
-  const uniqueKey = ref(0);
-
-  const chartJsCustomColors = {
-    white: '#fff',
-    yellow: '#ffe802',
-    primary: '#836af9',
-    areaChartBlue: '#2c9aff',
-    barChartYellow: '#ffcf5c',
-    polarChartGrey: '#4f5d70',
-    polarChartInfo: '#299aff',
-    lineChartYellow: '#d4e157',
-    polarChartGreen: '#28dac6',
-    lineChartPrimary: '#9e69fd',
-    lineChartWarning: '#ff9800',
-    horizontalBarInfo: '#26c6da',
-    polarChartWarning: '#ff8131',
-    scatterChartGreen: '#28c76f',
-    warningShade: '#ffbd1f',
-    areaChartBlueLight: '#84d0ff',
-    areaChartGreyLight: '#edf1f4',
-    scatterChartWarning: '#ff9f43',
-  }
-
-  const isMobile = window.innerWidth <= 768;
-  const dateNowF = ref(moment().format("DD/MM/YYYY HH:mm:ss").toString());
-
-  // 👉 Colors variables
-  const colorVariables = themeColors => {
-    const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
-    const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`
-    const themeBorderColor = `rgba(${hexToRgb(String(themeColors.variables['border-color']))},${themeColors.variables['border-opacity']})`
-    const themePrimaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['high-emphasis-opacity']})`
-    
-    return { themeSecondaryTextColor, themeDisabledTextColor, themeBorderColor, themePrimaryTextColor }
-  }
-
-  function groupBySubVertical(data) {
-      // Crear un objeto para contar los totales por vertical
-      const groupedData = data.reduce((acc, item) => {
-          const subVertical = item.subVertical;
-          // Si la vertical no existe en el acumulador, inicializarla
-          if (!acc[subVertical] && selectedItemPagina.value.includes(item.vertical.toUpperCase())) {
-              acc[subVertical] = 0;
-          }
-          // Incrementar el contador de esa vertical
-          acc[subVertical]++;
-          return acc;
-      }, {});
-
-      // Convertir el objeto resultante en el formato deseado
-      return Object.keys(groupedData).map(key => ({
-          name: key.toUpperCase(),
-          total: groupedData[key]
-      }));
-  }
-
-  function groupByVertical(data) {
-      // Crear un objeto para contar los totales por vertical
-      const groupedData = data.reduce((acc, item) => {
-          const vertical = item.vertical;
-          // Si la vertical no existe en el acumulador, inicializarla
-          if (!acc[vertical]) {
-              acc[vertical] = 0;
-          }
-          // Incrementar el contador de esa vertical
-          acc[vertical]++;
-          return acc;
-      }, {});
-
-      // Convertir el objeto resultante en el formato deseado
-      return Object.keys(groupedData).map(key => ({
-          name: key.toUpperCase(),
-          total: groupedData[key]
-      }));
-  }
-
-  const vuetifyTheme = useTheme();
-
-  const { themeBorderColor, themeDisabledTextColor } = colorVariables(vuetifyTheme.current.value);
-
-  const resolveData = computed(() => {
-
-    var dataChart = groupByVertical(processedData.value);
-
-    dataChart = dataChart.filter(e=> selectedItemPagina.value.includes(e.name))
-
-    let dataRaw = Array.from(dataChart);
-    const seriesFormat = {
-        name: 'Artículos',
-        data: []
-    };
-
-    const categoriesRaw = [];
-    for (let i in dataRaw) {
-        let num = parseInt(dataRaw[i].total);
-        seriesFormat.data.push(num);
-        categoriesRaw.push(dataRaw[i].name);   
-    }
-
-    const options= {
-        chart: {
-          parentHeightOffset: 0,
-          toolbar: { show: false },
-          height: (seriesFormat.data.length > 0 && seriesFormat.data.length < 6)?300:300,
-          events: {
-            click: function(event, chartContext, opts) {
-              // alert()
-              // const category = config.xaxis.categories[dataPointIndex];
-              // const value = config.series[seriesIndex].data[dataPointIndex];
-              // console.log(`Clicked on ${category} with value ${value}`);
-              // Aquí puedes añadir tu lógica personalizada al hacer click en un punto
-            }
-          }
-        },
-        dataLabels: { 
-          enabled: true
-        },
-        colors: ['#00cfe8','#fdd835'],   
-        plotOptions: {
-          bar: {
-            borderRadius: 0,
-            barHeight: '30%',
-            horizontal: (
-              ((seriesFormat.data.length > 0 && seriesFormat.data.length < 2) || seriesFormat.data.length > 15 )
-              || isMobile
-            ),
-            startingShape: 'rounded',
-          },
-        },
-        grid: {
-          borderColor: themeBorderColor,
-          xaxis: {
-            lines: { show: true },
-          },
-          padding: {
-            top: -10,
-          },
-        },
-        yaxis: {
-          labels: {
-            style: { colors: themeDisabledTextColor },
-          },
-        },
-        xaxis: {
-          axisBorder: { show: false },
-          axisTicks: { color: themeBorderColor },
-          categories: categoriesRaw,
-          labels: {
-            style: { colors: themeDisabledTextColor },
-          },
-        },
-        minHeight: 300,
-      }
-
-
-    return {series: [seriesFormat], options: options, intereses: categoriesRaw};
-  });
-
-  /////
-
-  const resolveData_2 = computed(() => {
-
-    var dataChart = groupBySubVertical(processedData.value).filter(e => e.total > 0);
-
-
-    let dataRaw = Array.from(dataChart);
-
-    const seriesFormat = {
-        name: 'Artículos',
-        data: []
-    };
-
-    const categoriesRaw = [];
-    for (let i in dataRaw) {
-        let num = parseInt(dataRaw[i].total);
-        seriesFormat.data.push(num);
-        categoriesRaw.push(dataRaw[i].name);   
-    }
-
-    const heightChart = (seriesFormat.data.length > 0 && seriesFormat.data.length < 10)?400:800;
-
-    const options= {
-        chart: {
-          parentHeightOffset: 0,
-          toolbar: { show: false },
-          height: heightChart
-        },
-        dataLabels: { 
-          enabled: true
-        },
-        colors: [chartJsCustomColors.primary],   
-        plotOptions: {
-          bar: {
-            borderRadius: 0,
-            barHeight: '30%',
-            horizontal: (
-              ((seriesFormat.data.length > 0 && seriesFormat.data.length < 2) || seriesFormat.data.length > 10 )
-              || isMobile
-            ),
-            startingShape: 'rounded',
-          },
-        },
-        grid: {
-          borderColor: themeBorderColor,
-          xaxis: {
-            lines: { show: true },
-          },
-          padding: {
-            top: -10,
-          },
-        },
-        yaxis: {
-          labels: {
-            style: { colors: themeDisabledTextColor },
-          },
-        },
-        xaxis: {
-          axisBorder: { show: false },
-          axisTicks: { color: themeBorderColor },
-          categories: categoriesRaw,
-          labels: {
-            style: { colors: themeDisabledTextColor },
-          },
-        },
-        minHeight: 300,
-      }
-
-
-    return {series: [seriesFormat], options: options, intereses: categoriesRaw, height:heightChart};
-  });
-
-  watch(currentTab, (newValue) => {
-    uniqueKey.value = Date.now();
-  })
-
-  // FIN DE GRÁFICOS
-
-  // INICIO DE EVENTO CLICK GRAFICO 1
-  const isDialogVisibleChart1 = ref({
-    modal: false,
-    search: null,
-    data:{
-      title: "",
-      items: []
-    }
-  })
-
-  const eventClick = function(event, chartContext, opts) {
-    // console.log(event, chartContext, opts)
-    // console.log(opts.dataPointIndex)
-    // console.log(opts.config.xaxis.categories)
-    if(opts.dataPointIndex > -1){
-      console.log(opts.config.xaxis.categories[opts.dataPointIndex])
-      itemsForVertical(opts.config.xaxis.categories[opts.dataPointIndex])
-    }
-    // const category = config.xaxis.categories[dataPointIndex];
-    // const value = config.series[seriesIndex].data[dataPointIndex];
-    // console.log(`Clicked on ${category} with value ${value}`);
-    // Aquí puedes añadir tu lógica personalizada al hacer click en un punto
-  }
-
-  const itemsForVertical = (verticalChart) => {
-    try{
-      // var objeto =  Object.entries(groupedData.value).reduce((acc, [vertical, items]) => {
-      //   if (vertical.toUpperCase() == verticalChart.toUpperCase()){
-      //      acc[vertical.toUpperCase()] = items
-      //   }
-      //   return acc
-      // }, {})
-      var objeto = [];
-      Object.keys(groupedData.value).forEach(element => {
-        if (element.toUpperCase() == verticalChart.toUpperCase()){
-          objeto = groupedData.value[element]
-        }
-      })
-      isDialogVisibleChart1.value.data.search = null;
-
-      isDialogVisibleChart1.value.data.items = objeto.sort((a, b) => {
-        const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
-        const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
-        return dateB - dateA; // Mayor a menor
-      });
-
-      isDialogVisibleChart1.value.data.title = verticalChart;
-      isDialogVisibleChart1.value.modal = true;
-      console.log(objeto)
-      return objeto;
-    }catch(error){
-      return [];
-    }
-  }
-
-  const filteredDataModalChart1 = computed(() => {
-    if(!isDialogVisibleChart1.value.data.search){
-      return isDialogVisibleChart1.value.data.items;
-    }
-
-    const query = isDialogVisibleChart1.value.data.search.toLowerCase();
-    return isDialogVisibleChart1.value.data.items.filter(item =>
-      item.vertical.toLowerCase().includes(query) || 
-      item.autor.toLowerCase().includes(query) || 
-      item.titulo.toLowerCase().includes(query)
-    );
-  });
-
-  // FIN DE EVENTO CLICK GRAFICO 1
-
-  // INICIO DE EVENTO CLICK GRAFICO 2
-  const isDialogVisibleChart2 = ref({
-    modal: false,
-    search: null,
-    data:{
-      title: "",
-      items: []
-    }
-  })
-
-  const eventClick_2 = function(event, chartContext, opts) {
-    // console.log(event, chartContext, opts)
-    // console.log(opts.dataPointIndex)
-    if(opts.dataPointIndex > -1){
-      itemsForVertical_2(opts.config.xaxis.categories[opts.dataPointIndex])
-    }
-    // const category = config.xaxis.categories[dataPointIndex];
-    // const value = config.series[seriesIndex].data[dataPointIndex];
-    // console.log(`Clicked on ${category} with value ${value}`);
-    // Aquí puedes añadir tu lógica personalizada al hacer click en un punto
-  }
-
-  const itemsForVertical_2 = (verticalChart) => {
-    try{
-      // var objeto =  Object.entries(groupedData.value).reduce((acc, [vertical, items]) => {
-      //   if (vertical.toUpperCase() == verticalChart.toUpperCase()){
-      //      acc[vertical.toUpperCase()] = items
-      //   }
-      //   return acc
-      // }, {})
-      var objeto = [];
-      Object.keys(groupedDataSubSeccion.value).forEach(element => {
-        if (element.toUpperCase() == verticalChart.toUpperCase() || element.toUpperCase() == ""){
-          objeto = groupedDataSubSeccion.value[element]
-        }
-      })
-      isDialogVisibleChart2.value.data.search = null;
-      isDialogVisibleChart2.value.data.items = objeto.sort((a, b) => {
-        const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
-        const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
-        return dateB - dateA; // Mayor a menor
-      });
-      isDialogVisibleChart2.value.data.title = verticalChart;
-      isDialogVisibleChart2.value.modal = true;
-      // console.log(objeto)
-      return objeto;
-    }catch(error){
-      return [];
-    }
-  }
-
-  const filteredDataModalChart2 = computed(() => {
-    if(!isDialogVisibleChart2.value.data.search){
-      return isDialogVisibleChart2.value.data.items;
-    }
-
-    const query = isDialogVisibleChart2.value.data.search.toLowerCase();
-    return isDialogVisibleChart2.value.data.items.filter(item =>
-      item.vertical.toLowerCase().includes(query) || 
-      item.autor.toLowerCase().includes(query) || 
-      item.titulo.toLowerCase().includes(query)
-    );
-  });
-
-  // FIN DE EVENTO CLICK GRAFICO 2
+};
+
+// Uso para keywords y tags
+
+// Wrappers específicos
+const procesarKeywords = (articles) => {
+  // procesarMetadatos(articles, 'keywords', topKeywords, allKeywords);
+  const resp = procesarItems(articles, 'keywords');
+  allKeywords.value = resp.allItems;
+  topKeywords.value = resp.topItems;
+}
+
+const procesarTags = (articles) => {
+  // procesarMetadatos(articles, 'tags', topTags, allTags);
+  const resp = procesarItems(articles, 'tags');
+  allTags.value = resp.allItems;
+  topTags.value = resp.topItems;
+}
+
+function procesarKeywordsAndTags(articles){
+  procesarKeywords(articles);
+  procesarTags(articles);
+}
+
+/*
+******* FIN FILTRO pastelWordCloud
+*/
+
+onMounted(async () => {
+  await principalData();
+//   await loadSiteNames();
+
+  itemsSitioWebSeccion.value = getUniqueVerticals(dataAll.value);
+  itemsSitioWebSubSeccion.value = getUniqueSubVerticals(dataAll.value);
+  itemsSitioWebAutor.value = getUniqueAutor(dataAll.value);
+  itemsSitioWebTipoArticulo.value = getUniqueTipoArticulo(dataAll.value);
+
+  procesarKeywordsAndTags(dataAll.value);
+});
 
 </script>
 
 <template>
-  <section class="sectionprimicias">
-    <VSnackbar
-      v-model="snackbar.show"
-      :color="snackbar.color"
-      :timeout="snackbar.timeout"
-      location="top end"
-    >
+  <section>
+    <VSnackbar 
+      v-model="snackbar.show" 
+      :color="snackbar.color" 
+      :timeout="snackbar.timeout" 
+      location="top end">
       {{ snackbar.text }}
     </VSnackbar>
-    <VDialog
-      v-model="isDialogVisibleChart1.modal"
-      scrollable
-      max-width="650"
-    >
-
-      <!-- Dialog close btn -->
-      <DialogCloseBtn @click="isDialogVisibleChart1.modal = !isDialogVisibleChart1.modal" />
-
-      <!-- Dialog Content -->
-      <VCard>
-        <VCardItem >
-          <div class="d-flex content-title flex-wrap">
-            <div class="d-flex gap-3">
-              <div class="d-flex flex-column" style="line-height: 1.3;">
-                <h3 class="h2">
-                  {{ isDialogVisibleChart1.data.title }}
-                </h3>
-                <div class="d-flex gap-2 align-center mt-2">
-                  <small style="font-size: 10px;">Página</small>
-                  <VChip size="x-small" color="primary">
-                    {{ filteredDataModalChart1.length }} Artículo(s)
-                  </VChip>
-                </div>
-              </div>
-
-              
-            </div>
-
-            <VTextField v-model="isDialogVisibleChart1.data.search" :label="`Buscar en ${isDialogVisibleChart1.data.title}`"
-              prepend-inner-icon="tabler-search" density="compact" style="max-width: 300px; padding: 0px 0;"
-              clearable />
-
-          </div>
-
-          <small style="font-size: 13px;" v-if="vertical == 'Últimas noticias'">Información recopilada de todas las páginas</small>
-        </VCardItem>
-        <VCardText style="max-height: 550px;">
-          <VList lines="two" class="py-4">
-            <div v-if="filteredDataModalChart1.length">
-              <template v-for="item in filteredDataModalChart1">
-                <VListItem>
-                  <template #prepend>
-
-                    <VAvatar
-                      v-if="item.picture"
-                      :image="replaceAmp(item.picture)"
-                      size="64"
-                      rounded
-                    />
-                    <VIcon
-                      v-else
-                      icon="tabler-news"
-                      size="32"
-                    />
-
-                  </template>
-
-                  <VTooltip location="top">
-                    <template v-slot:activator="{ props }">
-                      <VListItemTitle v-bind="props" class="text-truncate">
-                        {{ item.titulo }}
-                      </VListItemTitle>
-                    </template>
-                    <span>{{ item.titulo }}</span>
-                  </VTooltip>
-
-                  <VListItemSubtitle>
-                    <div class="d-flex gap-2 align-center">
-                      <span class="text-xs">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
-                      <VChip v-if="item.subVertical" class="ml-2" size="small" color="success">{{ item.subVertical }}</VChip>
-                    </div>
-                    <small style="font-size: 10px;" v-if="vertical == 'Últimas noticias'">Página: {{ item.vertical }}</small>
-                    <div title="Autor" class="align-center mt-1" v-if="item.autor" style="font-size: 12px;">
-                      <VIcon
-                        icon="tabler-user"
-                        size="15"
-                      />
-                      <small style="margin-top: 5px">{{ item.autor }}</small>
-                    </div>
-                  </VListItemSubtitle>
-
-                  <template #append>
-                    <VBtn :href="item.enlace" target="_blank" icon variant="text" size="small">
-                      <VIcon icon="tabler-external-link" />
-                    </VBtn>
-                  </template>
-                </VListItem>
-              </template>
-
-            </div>
-            <div v-else>
-              <td colspan="4" class="no-results">No se encontraron resultados</td>
-            </div>
-          </VList>
-        </VCardText>
-
-        <VCardText class="py-4">
-          <VBtn class="my-4" @click="isDialogVisibleChart1.modal = false">
-            Cerrar modal.
-          </VBtn>
-        </VCardText>
-      </VCard>
-    </VDialog>
-    <VDialog
-      v-model="isDialogVisibleChart2.modal"
-      scrollable
-      max-width="650"
-    >
-
-      <!-- Dialog close btn -->
-      <DialogCloseBtn @click="isDialogVisibleChart2.modal = !isDialogVisibleChart2.modal" />
-
-      <!-- Dialog Content -->
-      <VCard>
-        <VCardItem >
-          <div class="d-flex content-title flex-wrap">
-            <div class="d-flex gap-3">
-              <div class="d-flex flex-column" style="line-height: 1.3;">
-                <h3 class="h2">
-                  {{ isDialogVisibleChart2.data.title }}
-                </h3>
-                <div class="d-flex gap-2 align-center mt-2">
-                  <small style="font-size: 10px;">Página</small>
-                  <VChip size="x-small" color="primary">
-                    {{ filteredDataModalChart2.length }} Artículo(s)
-                  </VChip>
-                </div>
-              </div>
-
-              
-            </div>
-
-            <VTextField v-model="isDialogVisibleChart2.data.search" :label="`Buscar en ${isDialogVisibleChart2.data.title}`"
-              prepend-inner-icon="tabler-search" density="compact" style="max-width: 300px; padding: 0px 0;"
-              clearable />
-
-          </div>
-
-          <small style="font-size: 13px;" v-if="vertical == 'Últimas noticias'">Información recopilada de todas las páginas</small>
-        </VCardItem>
-        <VCardText style="max-height: 550px;">
-          <VList lines="two" class="py-4">
-            <div v-if="filteredDataModalChart2.length">
-              <template v-for="item in filteredDataModalChart2">
-                <VListItem>
-                  <template #prepend>
-                    <VAvatar
-                      v-if="item.picture"
-                      :image="replaceAmp(item.picture)"
-                      size="64"
-                      rounded
-                    />
-                    <VIcon
-                      v-else
-                      icon="tabler-news"
-                      size="32"
-                    />
-                  </template>
-
-                  <VTooltip location="top">
-                    <template v-slot:activator="{ props }">
-                      <VListItemTitle v-bind="props" class="text-truncate">
-                        {{ item.titulo }}
-                      </VListItemTitle>
-                    </template>
-                    <span>{{ item.titulo }}</span>
-                  </VTooltip>
-
-                  <VListItemSubtitle>
-                    <div class="d-flex gap-2 align-center">
-                      <span class="text-xs">{{ formatDate(item.fechaPublicacion) || 'Sin fecha' }}</span>
-                      <VChip v-if="item.subVertical" class="ml-2" size="small" color="success">{{ item.subVertical }}</VChip>
-                    </div>
-                    <small style="font-size: 10px;" v-if="vertical == 'Últimas noticias'">Página: {{ item.vertical }}</small>
-                    <div title="Autor" class="align-center mt-1" v-if="item.autor" style="font-size: 12px;">
-                        <VIcon
-                          icon="tabler-user"
-                          size="15"
-                        />
-                        <small style="margin-top: 5px">{{ item.autor }}</small>
-                      </div>
-                  </VListItemSubtitle>
-
-                  <template #append>
-                    <VBtn :href="item.enlace" target="_blank" icon variant="text" size="small">
-                      <VIcon icon="tabler-external-link" />
-                    </VBtn>
-                  </template>
-                </VListItem>
-              </template>
-
-            </div>
-            <div v-else>
-              <td colspan="4" class="no-results">No se encontraron resultados</td>
-            </div>
-          </VList>
-        </VCardText>
-
-        <VCardText class="py-4">
-          <VBtn class="my-4" @click="isDialogVisibleChart1.modal = false">
-            Cerrar modal.
-          </VBtn>
-        </VCardText>
-      </VCard>
-    </VDialog>
-    <!-- Control Panel -->
-    <VCard class="mb-4" v-if="currentTab != 2">
-      <VCardText>
-        <div class="d-flex justify-content-between gap-1 flex-column">
-          <div class="d-flex align-start flex-wrap gap-4 w-100">
-            <div class="d-flex flex-column">
-              <small>web</small>
-              <h3 style="line-height: 1.3;">{{idsName[idRouter].title}}</h3>
-              <VChip size="x-small" color="primary">
-                {{ processedData.length }} Artículo(s)
-              </VChip>
-            </div> 
-            <VBtn :href="idsName[idRouter].url" target="_blank" icon variant="text" size="small">
-              <VIcon icon="tabler-external-link" />
-            </VBtn>
-            <VTextField v-model="searchTerm" label="Buscar en todos los ártículos" prepend-inner-icon="tabler-search"
-              density="compact" style="max-width: 300px" clearable />
-
-              <VSelect
-                class="d-none"
-                :disabled="updateIntervalDisabled"
-                v-model="updateInterval"
-                :items="updateIntervals"
-                label="Intervalo de actualización"
-                style="max-width: 200px"
-                density="compact"
-            />
-
-            <VSpacer />
-
-            <div class="d-flex align-center gap-2 flex-column">
-              <VChip
-                color="primary"
-                size="small"
-                prepend-icon="tabler-clock"
-              >
-                Última actualización: {{ lastUpdate }}
-              </VChip>
-              <VChip
-                class="d-none"
-                color="success"
-                size="small"
-                prepend-icon="tabler-clock"
-              >
-                Próxima actualización: {{ nextUpdate }}
-              </VChip>
-            </div>
-          </div>
-          <div class="w-100 mt-4 ">
-            <label>Filtrar por página</label>
-            <VCombobox
-              v-model="selectedItemPagina"
-              :items="itemsPagina"
-              multiple
-              chips
-              :menu-props="{ maxHeight: '300' }"
-            />
-          </div>
-          <div class="content-btn mt-3">
-            <VBtn :loading="loadingBtn" title="Recargar datos" @click="principalData" target="_blank" color="primary" variant="tonal" size="small">
-              <VIcon icon="tabler-reload" /> Recargar datos
-            </VBtn>
-          </div>
-        </div>
-      </VCardText>
-    </VCard>
-    <VTabs
-      v-model="currentTab"
-      class="v-tabs-pill mb-5"
-    >
-      <VTab>Artículos</VTab>
-      <VTab>Estadística</VTab>
-      <VTab class="d-none">Últimas noticias</VTab>
-    </VTabs>
-
-    <VWindow v-model="currentTab">
-      <VWindowItem
-        :key="0"
-      >
-        <VRow v-if="selectedItemPagina" :class="loadingBtn ? 'disabled-card' : ''">
-          <VCol cols="12" md="12" :lg="vertical != 'Últimas noticias'?6:12" v-for="(items, vertical) in filteredData" :key="vertical">
-
-            <VCard>
-
-              <VCardItem >
-                <div class="d-flex content-title flex-wrap">
-                  <div class="d-flex gap-3">
-                    <div class="d-flex flex-column" style="line-height: 1.3;">
-                      {{ vertical.toUpperCase() }}
-                      <div class="d-flex gap-2 align-center mt-2">
-                        <small style="font-size: 10px;" v-if="vertical != 'Últimas noticias'">Página</small>
-                        <VChip size="x-small" color="primary">
-                          {{ items.length }} Artículo(s)
-                        </VChip>
-                      </div>
-                    </div>
-
-                    
+    <VRow>
+      <VCol cols="12" md="12" lg="12">
+        <VCard>
+          <VCardItem>
+            <div class="d-flex content-title flex-wrap w-100">
+              <div class="d-flex gap-3 justify-space-between w-100">
+                <div class="d-flex flex-column" style="line-height: 1.3;">
+                  <h4 class="title-principal">Últimas noticias</h4>
+                  <div class="d-flex gap-2 align-center mt-2">
+                    <small style="font-size: 10px;">Total de artículos procesados</small>
+                    <VChip size="x-small" color="primary">
+                      {{ dataAll.length }} Artículo(s).
+                    </VChip>
                   </div>
-
-                  <VTextField v-model="tableSearches[vertical]" :label="`Buscar en ${vertical.toUpperCase()}`"
-                    prepend-inner-icon="tabler-search" density="compact" style="max-width: 300px; padding: 0px 0;"
-                    clearable />
-
+                  <div class="content-btn mt-3">
+                    <VBtn :loading="loadingData" title="Recargar datos" @click="principalData" target="_blank"
+                      color="primary" variant="tonal" size="small">
+                      <VIcon icon="tabler-reload" /> Recargar datos
+                    </VBtn>
+                  </div>
                 </div>
-
-                <small style="font-size: 13px;" v-if="vertical == 'Últimas noticias'">Información recopilada de todas las páginas.</small>
-              </VCardItem>
-
-              <VDivider />
-
-              <VCardText class="board-content">
-
-                <!-- <VTable class=" tableNavegacion mb-5" hover="true">
-                  <thead>
-                    <tr>
-                      <th>SubVertical</th>
-                      <th>Título</th>
-                      <th>Fecha</th>
-                    </tr>
-                  </thead>
-            
-                  <tbody>
-                    <tr v-for="item in items" :key="item.enlace">
-                      <td>{{ item.subVertical }}</td>
-                      <td>
-                        <a :href="item.enlace" target="_blank">{{ item.titulo }}</a>
-                      </td>
-                      <td>{{ formatDate(item.fechaPublicacion) }}</td>
-                    </tr>
-                  </tbody>
-                </VTable> -->
-
-                <div v-if="filterTableItems(items, vertical).length">
-                  <DynamicCardGrid :items="filterTableItems(items, vertical)" :vertical="vertical" />
+                <div class="d-flex align-center gap-2 flex-column ">
+                  <VChip class="d-none" color="primary" size="small" prepend-icon="tabler-clock">
+                    Datos: {{ lastUpdate.fechai }}, {{ lastUpdate.fechaf }}
+                  </VChip>
+                  <VChip class="d-none" color="success" size="small" prepend-icon="tabler-clock">
+                    Próxima actualización: {{ nextUpdate }}
+                  </VChip>
                 </div>
-                <div v-else>
-                  <td colspan="4" class="no-results">No se encontraron resultados</td>
-                </div>
-
-              </VCardText>
-
-
-
-
-            </VCard>
-
-          </VCol>
-        </VRow>
-      </VWindowItem>
-      <VWindowItem
-        :key="1"
-      >
-        <VRow v-if="selectedItemPagina">
-          <VCol cols="12" md="12" lg="12">
-            <VCard
-              title="Páginas"
-              subtitle="Número de artículos por página"
-            >
-              <VCardText>
-                <VueApexCharts
-                  :key="uniqueKey"
-                  :height="300"
-                  type="bar"
-                  :options="resolveData.options"
-                  :series="resolveData.series"
-                  @click="eventClick"
+              </div>
+            </div>
+          </VCardItem>
+        </VCard>
+      </VCol>
+    </VRow>
+    <!-- <VRow>
+      <VCol cols="12" md="12" lg="12">
+        <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
+      </VCol>
+      <VCol cols="12" sm="12" lg="12">
+        <pastelWordCloud v-if="topKeywords.length > 0" :limitKeywords="75" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
+      </VCol>
+    </VRow> -->
+    <VRow>
+      <VCol cols="12" md="12" lg="12">
+        <VCard>
+          <VCardItem>
+            <VCardTitle>
+              <h4 class="text-h6 mb-0">
+                <VIcon
+                  icon="tabler-filter"
+                  size="32"
                 />
-              </VCardText>
-            </VCard>
-          </VCol>
-          <VCol cols="12" md="12" lg="12">
-            <VCard
-              title="SubSecciones"
-              subtitle="Número de artículos por subsección"
-            >
-              <VCardText>
-                <VueApexCharts
-                  :key="uniqueKey"
-                  type="bar"
-                  :height="resolveData_2.height"
-                  @click="eventClick_2"
-                  :options="resolveData_2.options"
-                  :series="resolveData_2.series"
-                />
-              </VCardText>
-            </VCard>
-          </VCol>
-        </VRow>
-      </VWindowItem>
-      <VWindowItem
-        :key="2"
-      >
-        
-      </VWindowItem>
-    </VWindow>
-            
-
+                Filtros
+              </h4>
+            </VCardTitle>
+            <VRow>
+              <VCol cols="12" md="4" lg="4" class="d-none">
+                <div class="w-100 mt-4">
+                  <label>Filtrar por sitio web</label>
+                  <VCombobox v-model="filtrosActivos.sitio" :items="itemsSitioWeb" multiple chips
+                    :menu-props="{ maxHeight: '300' }" />
+                </div>
+              </VCol>
+              
+              <VCol cols="12" md="7" lg="7">
+                <div class="w-100 mt-2">
+                  <label>Buscar por, título, autor, sección, subsección, keywords</label>
+                  <VTextField 
+                    v-model="filtrosActivos.busqueda"
+                    prepend-inner-icon="tabler-search"
+                    density="compact" 
+                    style="padding: 0px 0;" 
+                    clearable 
+                  />
+                </div>
+              </VCol>
+              <VCol cols="12" md="5" lg="5">
+                <div class="w-100 mt-2">
+                  <label>Buscar varios enlaces y comparar</label>
+                  <VCombobox
+                    v-model="filtrosActivos.compare"
+                    multiple
+                    chips
+                    clearable
+                  />
+                </div>
+              </VCol>
+              <VCol cols="12" md="5" lg="5">
+                <div class="w-100">
+                  <label>Ordenar por:</label>
+                  <VSelect 
+                    v-model="filtrosActivos.orderby"
+                    :items="items_select_order_by"
+                    item-text="title"
+                    item-title="title"
+                    item-value="value"
+                    return-object
+                    :menu-props="{ maxHeight: '300' }"
+                  />
+                </div>
+              </VCol>
+              <VCol cols="12" md="7" lg="7">
+                <div class="w-100">
+                  <label>Filtrar por Autor</label>
+                  <VCombobox v-model="filtrosActivos.autor" :items="itemsSitioWebAutor" multiple chips
+                    :menu-props="{ maxHeight: '300' }" />
+                </div>
+              </VCol>
+              <VCol cols="12" md="4" lg="4">
+                <div class="w-100">
+                  <label>Filtrar por Sección</label>
+                  <VCombobox v-model="filtrosActivos.seccion" :items="itemsSitioWebSeccion" multiple chips
+                    :menu-props="{ maxHeight: '300' }" />
+                </div>
+              </VCol>
+              <VCol cols="12" md="4" lg="4">
+                <div class="w-100">
+                  <label>Filtrar por SubSección</label>
+                  <VCombobox v-model="filtrosActivos.subseccion" :items="itemsSitioWebSubSeccion" multiple chips
+                    :menu-props="{ maxHeight: '300' }" />
+                </div>
+              </VCol>
+              
+              <VCol cols="12" md="4" lg="4">
+                <div class="w-100">
+                  <label>Filtrar por tipo de artículo</label>
+                  <VCombobox v-model="filtrosActivos.tipoarticulo" :items="itemsSitioWebTipoArticulo" multiple chips
+                    :menu-props="{ maxHeight: '300' }" />
+                </div>
+              </VCol>
+            </VRow>
+          </VCardItem>
+        </VCard>
+      </VCol>
+    </VRow>
+    <VRow>
+      <VCol cols="12" md="12" lg="12">
+        <plantilla_articulos_estilo_principal disabledChart="0" :articulos="filteredData" :filtrosActivos="filtrosActivos" />
+      </VCol>
+    </VRow>
   </section>
 </template>
-
 <style scoped>
-.sectionprimicias .v-card-item {
-  font-size: 24px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-bottom: 2rem;
-  height: 400px;
-  display: block;
-  overflow-y: auto;
-}
-
-.content-title {
-  justify-content: space-between;
-  align-items: center;
-}
-
-.board-content {
-  height: 500px;
-  overflow-y: auto;
-}
-
-th,
-td {
-  /* border: 1px solid #ddd; */
-  padding: 8px;
-  text-align: left;
-}
-
-.fixed-avatar {
-    width: 100%;
-    height: 130px;
-    object-fit: cover;
-    object-position: center;
-}
-
-.h4.titulo {
-    font-size: 13px;
-    line-height: 1.3;
-}
-
-
-
-.disabled-card {
-  pointer-events: none;
-  cursor: default;
-  opacity: 0.6;
-}
-
-/* th {
-  background-color: #f2f2f2;
-} */
+  .title-principal{
+    font-size: 25px;
+  }
 </style>
