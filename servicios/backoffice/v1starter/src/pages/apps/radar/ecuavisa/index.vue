@@ -81,6 +81,8 @@ async function fetchAndProcess(url) {
           const newKey = key.toLowerCase();
           if(newKey == "notas_relacionadas" || newKey == "notas_recomendadas"){
             dataResp.data[i][newKey] = JSON.parse(value);
+          }else if(newKey == "fecha_publicacion" || newKey == "fecha_modificacion"){
+            dataResp.data[i][newKey] = moment(value).format("DD/MM/YYYY HH:mm:ss");
           }else{
             dataResp.data[i][newKey] = value;
           }
