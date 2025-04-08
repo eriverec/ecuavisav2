@@ -1,9 +1,10 @@
 <script setup>
-import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/ecuavisa/datos_bar_vertical_noticias_por_hora.vue';
+import { parseISO } from 'date-fns';
+// import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/ecuavisa/datos_bar_vertical_noticias_por_hora.vue';
 import plantilla_articulos_estilo_principal from '@/views/apps/radar/ecuavisa/plantilla_articulos_estilo_principal.vue';
 // import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-diav2.vue';
 // import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticiasv2.vue';
-import pastelWordCloud from '@/views/apps/radar/ecuavisa/pastel-word-cloud.vue';
+// import pastelWordCloud from '@/views/apps/radar/ecuavisa/pastel-word-cloud.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -74,6 +75,28 @@ async function fetchAndProcess(url) {
     //     return e;
     //   }
     // });
+    if(url.includes("GetEcuavisa")){
+      for(var i in dataResp.data){
+        Object.entries(dataResp.data[i]).forEach(([key, value]) => {
+          const newKey = key.toLowerCase();
+          if(newKey == "notas_relacionadas" || newKey == "notas_recomendadas"){
+            dataResp.data[i][newKey] = JSON.parse(value);
+          }else{
+            dataResp.data[i][newKey] = value;
+          }
+          
+        });
+      }
+
+      // console.log("dataResp.data", dataResp.data)
+
+      return {
+        media_communication:"ecuavisa",
+        url_communication:"https://www.ecuavisa.com",
+        articles:dataResp?.data || []
+      };
+    }
+
     return {
         media_communication:"ecuavisa",
         url_communication:"https://www.ecuavisa.com",
@@ -169,7 +192,7 @@ function extraerPaths(url) {
   }
 }
 
-const principalData = async function () {
+const principalData = async function (reset = false) {
   try {
     filtrosActivos.busqueda = "";
     filtrosActivos.sitio = [];
@@ -185,23 +208,53 @@ const principalData = async function () {
 
     loadingData.value = true;
 
-    const endpoints = ["https://scrapping-ecuavisa.phpdemo.site/ecuavisa/listar.php"];
+    let endpoints = [];
+
+    if(reset){
+      dateEndpoint.value = {
+        fechai: moment().subtract(0, "days").format("YYYY-MM-DD"),
+        fechaf: moment().subtract(0, "days").format("YYYY-MM-DD"),
+      };
+
+      fechaIFModel.value = {
+        fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
+        fechasVModel: [parseISO(fechaHoy)],
+        fechasVConfig: fechaIFModel.value.fechasVConfig,
+        fechai: fechaHoyFormated,
+        fechaV: fechaHoyFormated,
+        fechaf: fechaHoyFormated
+      }
+    }
+    
+    const dateEndpointValue = dateEndpoint.value;
+
+    if(!esFechaHoy(dateEndpointValue.fechai) || !esFechaHoy(dateEndpointValue.fechaf)){
+      endpoints.push("https://bigdata.ecuavisa.com:10001/api/v1/radar/GetEcuavisa?FECHA_DESDE=" + dateEndpointValue.fechai + "&FECHA_HASTA=" + dateEndpointValue.fechaf);
+    }
+    
+    if(esFechaHoy(dateEndpointValue.fechai) || esFechaHoy(dateEndpointValue.fechaf)){
+      endpoints.push("https://scrapping-ecuavisa.phpdemo.site/ecuavisa/listar.php");
+    }
+
+    // console.log("endpoints", endpoints);
 
     // Create an array of promises for all endpoints
     const fetchPromises = Object.entries(endpoints).map(([key, url]) => fetchAndProcess(url));
     const results = await Promise.all(fetchPromises);
     const allResults = [];
-    if(results[0]?.articles){
-        for(var j in results[0].articles){
-            if(!results[0]?.articles[j].hasOwnProperty("getArticle")){
+    for(var i in results){
+      if(results[i]?.articles){
+        for(var j in results[i].articles){
+            if(!results[i]?.articles[j].hasOwnProperty("getArticle")){
             //Añadir url_communication a cada artículo
             allResults.push({
-                ...results[0]?.articles[j], 
-                media_communication: results[0]?.media_communication,
-                url_communication: results[0]?.url_communication,
+                ...results[i]?.articles[j], 
+                media_communication: results[i]?.media_communication,
+                url_communication: results[i]?.url_communication,
             });
             }
         }
+      }
     }
 
     // console.log("allResults", allResults)
@@ -762,6 +815,90 @@ function procesarKeywordsAndTags(articles){
 }
 
 /*
+******* INICIO FILTRO rangofecha
+*/
+const utilizaFiltroFecha = ref(false);
+
+const dateEndpoint = ref({
+  fechai: moment().subtract(0, "days").format("YYYY-MM-DD"),
+  fechaf: moment().subtract(0, "days").format("YYYY-MM-DD")
+});
+
+const fechaHoy = moment().subtract(0, "days").format("YYYY-MM-DD");
+const fechaHoyLimit = moment().format("YYYY-MM-DD");
+const fechaHoyFormated = moment().subtract(0, "days").format("DD-MM-YYYY");
+
+/**
+ * Verifica si una fecha en formato 'YYYY-MM-DD' es hoy
+ * @param {string} fecha - Fecha en formato 'YYYY-MM-DD'
+ * @returns {boolean} - True si la fecha es hoy, false en caso contrario
+ */
+ function esFechaHoy(fecha) {
+    // Validar formato de entrada
+    if (!moment(fecha, 'YYYY-MM-DD', true).isValid()) {
+        throw new Error('Formato de fecha inválido. Use YYYY-MM-DD');
+    }
+    
+    // Comparar con la fecha actual
+    return moment(fecha).isSame(moment(), 'day');
+}
+
+const fechaIFModel = ref({
+  fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
+  fechasVModel: [parseISO(fechaHoy)],
+  fechasVConfig: {
+      position: 'auto left',
+      mode: 'range',
+      maxDate: parseISO(fechaHoyLimit),
+      altFormat: 'd F j, Y',
+      dateFormat: 'l, j \\d\\e F \\d\\e Y',
+      valueFormat: 'd-m-Y',
+      maxRange: 7,
+      reactive: true
+  },
+  fechai: fechaHoyFormated,
+  fechaV: fechaHoyFormated,
+  fechaf: fechaHoyFormated
+})
+
+function obtenerFechas(selectedDates, dateStr, instance) {
+    if (selectedDates.length > 1) {
+      const startDate = moment(selectedDates[0]);
+      const endDate = moment(selectedDates[1]);
+
+      // Verificar que el rango no sea mayor a 7 días
+      if (endDate.diff(startDate, "days") > 7) {
+        fechaIFModel.value = {
+          fechasModel: [parseISO(fechaHoy), parseISO(fechaHoy)],
+          fechasVModel: [parseISO(fechaHoy)],
+          fechasVConfig: fechaIFModel.value.fechasVConfig,
+          fechai: fechaHoyFormated,
+          fechaV: fechaHoyFormated,
+          fechaf: fechaHoyFormated
+        }
+        alert("Solo puedes seleccionar un rango máximo de 7 días.");
+        return;
+      }
+
+      dateEndpoint.value.fechai = startDate.format('YYYY-MM-DD');
+      dateEndpoint.value.fechaf = endDate.format('YYYY-MM-DD'); 
+
+      fechaIFModel.value.fechai = startDate.format('DD-MM-YYYY');
+      fechaIFModel.value.fechaf = endDate.format('DD-MM-YYYY');
+      principalData();
+
+      if(!esFechaHoy(dateEndpoint.value.fechai) && !esFechaHoy(dateEndpoint.value.fechaf)){
+        utilizaFiltroFecha.value = true;
+      }else{
+        utilizaFiltroFecha.value = false;
+      }
+    }
+}
+/*
+******* FIN FILTRO rangofecha
+*/
+
+/*
 ******* FIN FILTRO pastelWordCloud
 */
 
@@ -803,7 +940,7 @@ onMounted(async () => {
                     </VChip>
                   </div>
                   <div class="content-btn mt-3">
-                    <VBtn :loading="loadingData" title="Recargar datos" @click="principalData" target="_blank"
+                    <VBtn :loading="loadingData" title="Recargar datos" @click="principalData(true)" target="_blank"
                       color="primary" variant="tonal" size="small">
                       <VIcon icon="tabler-reload" /> Recargar datos
                     </VBtn>
@@ -845,6 +982,21 @@ onMounted(async () => {
               </h4>
             </VCardTitle>
             <VRow>
+              <VCol cols="12" md="12" lg="12" class="pb-0">
+                <div class="w-100 mt-4">
+                  <label>Filtrar por Rango de publicación</label>
+                  <AppDateTimePicker 
+                    prepend-inner-icon="tabler-calendar" 
+                    density="compact" 
+                    v-model="fechaIFModel.fechasModel"
+                    show-current=true 
+                    :disabled="loadingData"
+                    :loading="loadingData"
+                    @on-change="obtenerFechas" 
+                    :config="fechaIFModel.fechasVConfig" />
+
+                </div>
+              </VCol>
               <VCol cols="12" md="4" lg="4" class="d-none">
                 <div class="w-100 mt-4">
                   <label>Filtrar por sitio web</label>
@@ -926,7 +1078,7 @@ onMounted(async () => {
     </VRow>
     <VRow>
       <VCol cols="12" md="12" lg="12">
-        <plantilla_articulos_estilo_principal disabledChart="0" :articulos="filteredData" :filtrosActivos="filtrosActivos" />
+        <plantilla_articulos_estilo_principal :utilizaFiltroFecha="utilizaFiltroFecha" disabledChart="0" :articulos="filteredData" :filtrosActivos="filtrosActivos" />
       </VCol>
     </VRow>
   </section>

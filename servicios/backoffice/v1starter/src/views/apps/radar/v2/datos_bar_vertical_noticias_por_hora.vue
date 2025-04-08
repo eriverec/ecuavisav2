@@ -345,7 +345,7 @@
   const model_select_hora = ref({ title:"Hoy", value: moment().startOf('day')  });
   const items_select_hora = ref([
     { title:"Hoy", value: moment().startOf('day')  },
-    { title:"Hace 5 minutos", value: moment().subtract(5, "minutes")  },
+    { title:"Hace 15 minutos", value: moment().subtract(15, "minutes")  },
     { title:"Hace 30 minutos", value: moment().subtract(30, "minutes")  },
     { title:"Hace 1 hora", value: moment().subtract(1, "hours")  },
     { title:"Hace 3 horas", value: moment().subtract(3, "hours")  },

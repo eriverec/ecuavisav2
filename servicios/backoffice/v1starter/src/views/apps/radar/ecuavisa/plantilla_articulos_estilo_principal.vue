@@ -1,5 +1,5 @@
 <script setup>
-  import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/ecuavisa/datos_bar_vertical_noticias_por_hora.vue';
+  // import datos_bar_vertical_noticias_por_hora from '@/views/apps/radar/ecuavisa/datos_bar_vertical_noticias_por_hora.vue';
   import datos_bar_horizontal_content from '@/views/apps/radar/ecuavisa/datos_bar_horizontal_content.vue';
   import VueApexCharts from 'vue3-apexcharts';
   import { hexToRgb } from '@layouts/utils';
@@ -17,6 +17,7 @@
     disabledChart: { type: String, default:"1" },
     filtrosActivos: { type: Array, required: true },
     articulos: { type: Array, required: true },
+    utilizaFiltroFecha: { type: Boolean, required: true, default:false },
     modoSimple: { type: Boolean, required: true, default:false },
     selecteDisplay: { type: Boolean, required: true, default: true } 
   });
@@ -223,7 +224,7 @@
   */
   
   const currentPage = ref(1);
-  const pageSize = ref(21); // Valor por defecto
+  const pageSize = ref(18); // Valor por defecto
 
   watch(pageSize, () => {
     currentPage.value = 1;
@@ -582,7 +583,7 @@ const columnasPersonalizadas = {
     subheadline_words_length:"subheadline_words_length",
     image_caption_characters_length:"image_caption_characters_length",
     image_caption_words_length:"image_caption_words_length",
-    notas_relacionadas_length: "Cantidad de notas relacionadas"
+    notas_relacionadas_length: "notas_relacionadas_length"
 };
 
 // Columnas específicas a incluir
@@ -734,9 +735,9 @@ function descargarDatosModal() {
         </VCardItem>
         <VCardText style="max-height: 550px;">
           <VList lines="two" class="py-4">
-            <VListItem class="py-0" v-if="props.disabledChart == '1' ">
+            <!-- <VListItem class="py-0" v-if="props.disabledChart == '1' ">
               <datos_bar_vertical_noticias_por_hora :articulos="isDialogVisibleKeyWords.data.items" :disabledAll="true" :height="190" />
-            </VListItem>
+            </VListItem> -->
             <div v-if="filteredDataModalKeyWord.length">
               <div class="d-flex gap-2 justify-space-between mb-2 mt-5 flex-wrap flex-lg-nowrap">
                 <div>
@@ -883,13 +884,14 @@ function descargarDatosModal() {
                 item-title="title"
                 item-value="value"
                 return-object 
+                :disabled="props.utilizaFiltroFecha"
                 :class="!props.selecteDisplay ? 'd-none' : ''"
               />
             
               <VSelect 
                 style="min-width: 150px;" 
                 v-model="pageSize" 
-                :items="[21, 50, 100, 200, 500]" 
+                :items="[18, 50, 100, 200, 500]" 
                 label="Registros por página" 
                 dense 
                 outlined class="mb-4" 
@@ -910,9 +912,9 @@ function descargarDatosModal() {
         <VCardText v-if="paginatedData.length > 0" :class="props.modoSimple ? 'px-0' : ''">
           
           <VRow :disabled="isLoading">
-            <VCol cols="12" v-if="props.filtrosActivos?.sitio.length > 0">
+            <!-- <VCol cols="12" v-if="props.filtrosActivos?.sitio.length > 0">
               <datos_bar_vertical_noticias_por_hora :articulos="filteredData" :height="200" :disabledAll="true" />
-            </VCol>
+            </VCol> -->
             <VCol cols="12" md="6" lg="4" v-for="(item, index) in paginatedData" :key="item.enlace">
               <VCard class="article-card elevation-0 border rounded no-truncate">
                 <VCardText class="d-flex align-center gap-2 mt-0 px-0 py-0">
