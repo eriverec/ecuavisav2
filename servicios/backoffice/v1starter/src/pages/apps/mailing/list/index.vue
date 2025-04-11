@@ -183,11 +183,23 @@ async function getNewsletter(page = null, limit= 10){
       var totalRegistro = data.total;
       var limit = data.limit;
 
+      for(var i in data.data){
+        data.data[i]["prox_envio"] = calcularProximaEjecucion(data.data[i].config.horarioEjecucion)
+      }
+
+      // console.log("data.data", data.data)
+
+      data.data.sort((a, b) => {
+        const fechaA = moment(a.prox_envio, "DD MMM YYYY, hh:mm a");
+        const fechaB = moment(b.prox_envio, "DD MMM YYYY, hh:mm a");
+        return fechaA - fechaB; // ASC
+      });
+      
       dataNewsletter.value = data.data;
       totalRegistrosHtml.value = totalRegistro;
       totalRegistros.value = Math.ceil(totalRegistro / limit);
   } catch (error) {
-      return console.error(error.message);    
+    return console.error(error.message);
   }
 }
 
