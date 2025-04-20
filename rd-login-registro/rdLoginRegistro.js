@@ -250,7 +250,7 @@ function login() {
     }
 
     //servicio render Luis
-    fetch("https://micuenta.ecuavisa.com/loginservice/signIn", {
+    fetch("https://ecuavisa-login-service.onrender.com/signIn", {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
@@ -368,7 +368,7 @@ var telefonoValido = false;
 //       console.log("Las contraseñas no coinciden");
 //     } else {
 //       //servicio render Luis
-//       fetch("https://micuenta.ecuavisa.com/loginservice/register", {
+//       fetch("https://ecuavisa-login-service.onrender.com/register", {
 //         method: "POST",
 //         headers: {
 //           "Content-Type": "application/x-www-form-urlencoded",
@@ -430,7 +430,7 @@ function sendEmailPassReset() {
     return false;
   }
   //servicio render Luis
-  fetch("https://micuenta.ecuavisa.com/loginservice/forgotPassword", {
+  fetch("https://ecuavisa-login-service.onrender.com/forgotPassword", {
     method: "PUT",
     headers: {
       "Content-Type": "application/x-www-form-urlencoded",
@@ -471,13 +471,13 @@ function validateLogSocials() {
     let btnGoogle = document.getElementById("aLogGoogle");
     btnGoogle.setAttribute(
       "href",
-      `https://micuenta.ecuavisa.com/loginservice/auth/google?nextpage=${redirection}`
+      `https://ecuavisa-login-service.onrender.com/auth/google?nextpage=${redirection}`
     ); //servicio render Luis
 
     let btnFacebook = document.getElementById("aLogFacebook");
     btnFacebook.setAttribute(
       "href",
-      `https://micuenta.ecuavisa.com/loginservice/auth/facebook?nextpage=${redirection}`
+      `https://ecuavisa-login-service.onrender.com/auth/facebook?nextpage=${redirection}`
     ); //servicio render Luis
   } else {
     alert("Acepte los términos y condiciones para continuar");
@@ -538,7 +538,7 @@ eventBtnCont.addEventListener('click', function () {
   inputPrinEmail.setAttribute('style', 'opacity: 0.4;');
   inputBConi.setAttribute('style', 'opacity: 0.4;');
 
-  fetch("https://micuenta.ecuavisa.com/loginservice/check/email", {
+  fetch("https://ecuavisa-login-service.onrender.com/check/email", {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', },
     body: JSON.stringify({
