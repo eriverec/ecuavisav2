@@ -10,7 +10,7 @@ const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 moment.tz.setDefault('America/Guayaquil');
 
-const tipoModel = ref("Ver todos los registros");
+const tipoModel = ref("Por Fecha");
 const tipoItems = ref(null);
 
 // const limit = ref(10);
@@ -613,12 +613,12 @@ const eliminarRegistroSi = async () => {
             <VSelect :disabled="loadingUsuarios" class="bg-white" v-model="rowPerPage" density="compact"
               variant="outlined" :items="[10, 20, 30, 50]" />
 
-            <VSelect :disabled="loadingUsuarios" label="Tipo de búsqueda" item-text="title" style="min-width: 9rem;"
+            <VSelect :disabled="loadingUsuarios" label="Mostrar" item-text="title" style="min-width: 9rem;"
               item-value="value" class="bg-white" density="compact" v-model="tipoModel" variant="outlined"
-              :items="['Ver todos los registros', 'Por Fecha']" />
+              :items="['Todos los registros', 'Por Fecha']" />
 
             <AppDateTimePicker v-if="tipoModel == 'Por Fecha' && !loadingUsuarios" clearable class="bg-white"
-              style="width: 19rem;" label="Fecha de inicio y fin del curso" prepend-inner-icon="tabler-calendar"
+              style="width: 19rem;" label="Fecha de inicio y fin del concurso" prepend-inner-icon="tabler-calendar"
               density="compact" v-model="fechaIFModel.fechasModel" show-current=true @on-change="obtenerFechas" :config="{
                 position: 'auto right',
                 mode: 'range',

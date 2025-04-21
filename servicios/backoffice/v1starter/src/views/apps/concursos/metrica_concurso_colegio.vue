@@ -169,7 +169,7 @@ const resolveDeviceTimeLine = computed(() => {
     },
     yaxis: {
       title: {
-        text: 'Cantidad de usuarios registrados',
+        text: 'Votos de usuarios',
         style: {
           color: headingColor,
           useSeriesColors: false
@@ -240,10 +240,10 @@ const resolveDeviceTimeLine = computed(() => {
                 </div>
                 <div class="tooltip-data-flex">
                     <div class="tooltip-data-title">
-                    Registrados
+                    Número de votos
                     </div>
                     <div class="tooltip-data-value">
-                    ${series[seriesIndex][dataPointIndex]} Usuario(s)
+                    ${series[seriesIndex][dataPointIndex]} Voto(s)
                     </div>
                 </div>
                 </div>
@@ -379,6 +379,11 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
     id: "id",
     ip: "ip",
     created_at: "created_at",
+    video: "video",
+    ruc: "ruc",
+    colegio: "colegio",
+    ciudad:"ciudad",
+    link_youtube:"link_youtube",
     created_at_formated: "created_at_formated"
   });
   
@@ -480,6 +485,13 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
         }
 
         const array = res.data;
+        for(let ins of array){
+          ins.video = ins.details?.video;
+          ins.ruc = ins.details?.ruc;
+          ins.colegio = ins.details?.colegio;
+          ins.ciudad = ins.details?.ciudad;
+          ins.link_youtube = ins.details?.link_youtube;
+        }
         if (array.length === 0) break; // Si no hay más datos, salimos del bucle
 
         totalRegistros += array.length;
@@ -594,7 +606,7 @@ const eventClick = function(event, chartContext, opts) {
     <VCard>
         <VCardItem>
             <VCardTitle>
-                Usuarios registrados agrupados por fecha
+                Votos agrupados por fecha
             </VCardTitle>
             <!-- <VCardSubtitle class="text-wrap" style="word-break: break-all;">
                 Diseñada para mostrar la cantidad de usuarios registrados, organizados de acuerdo con la fecha de registro. Esta vista permite analizar el comportamiento de registro de los usuarios dentro de un rango específico, con la restricción de seleccionar únicamente un intervalo máximo de {{limiteDaysDate}} días.

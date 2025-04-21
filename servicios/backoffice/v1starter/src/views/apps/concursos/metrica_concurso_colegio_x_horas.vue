@@ -72,7 +72,7 @@ async function getChartLineTimeViews(options = {}) {
     }
   } catch (error) {
     configSnackbar.value = {
-        message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+        message: "No se pudo recuperar los votos, recargue de nuevo.",
         type: "error",
         model: true
     };
@@ -99,7 +99,7 @@ const resolveDeviceTimeLine = computed(() => {
   // Generar series a partir de los datos
   const series = [
     {
-      name: "Usuarios registrados",
+      name: "Votos registrados",
       data: dataRaw.map(item => item.total), // Extrae los valores de "total"
     }
   ];
@@ -167,7 +167,7 @@ const resolveDeviceTimeLine = computed(() => {
     },
     yaxis: {
       title: {
-        text: 'Cantidad de usuarios registrados',
+        text: 'Cantidad de votos registrados',
         style: { color: headingColor },
       },
       labels: {
@@ -191,7 +191,7 @@ const resolveDeviceTimeLine = computed(() => {
                     Registrados
                     </div>
                     <div class="tooltip-data-value">
-                    ${series[seriesIndex][dataPointIndex]} Usuario(s)
+                    ${series[seriesIndex][dataPointIndex]} Voto(s)
                     </div>
                 </div>
                 </div>
@@ -200,7 +200,7 @@ const resolveDeviceTimeLine = computed(() => {
     },
     dataLabels: {
       enabled: true,
-      formatter: val => (val > 0 ? `${val} usuario(s)` : ''),
+      formatter: val => (val > 0 ? `${val} voto(s)` : ''),
     },
     noData: {
       text: "No hay datos disponibles",
@@ -325,6 +325,11 @@ const isFullLoading = ref(false);
     id: "id",
     ip: "ip",
     created_at: "created_at",
+    video: "video",
+    ruc: "ruc",
+    colegio: "colegio",
+    ciudad:"ciudad",
+    link_youtube:"link_youtube",
     created_at_formated: "created_at_formated"
   });
   
@@ -386,7 +391,7 @@ const isFullLoading = ref(false);
         return data;
       }else{
         configSnackbar.value = {
-            message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+            message: "No se pudo recuperar los votos, recargue de nuevo.",
             type: "error",
             model: true
         };
@@ -394,7 +399,7 @@ const isFullLoading = ref(false);
       }
     } catch (error) {
       configSnackbar.value = {
-          message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+          message: "No se pudo recuperar los votos, recargue de nuevo.",
           type: "error",
           model: true
       };
@@ -426,6 +431,15 @@ const isFullLoading = ref(false);
         }
 
         const array = res.data;
+        
+        for(let ins of array){
+          ins.video = ins.details?.video;
+          ins.ruc = ins.details?.ruc;
+          ins.colegio = ins.details?.colegio;
+          ins.ciudad = ins.details?.ciudad;
+          ins.link_youtube = ins.details?.link_youtube;
+        }
+
         if (array.length === 0) break; // Si no hay más datos, salimos del bucle
 
         totalRegistros += array.length;
@@ -530,7 +544,7 @@ watchEffect(async () => {
     <VCard>
         <VCardItem>
             <VCardTitle>
-                Usuarios registrados por fecha agrupados por horas
+                Votos registrados por fecha agrupados por horas
             </VCardTitle>
             <!-- <VCardSubtitle class="text-wrap" style="word-break: break-all;">
                 Diseñada para mostrar la cantidad de usuarios registrados, organizados de acuerdo con la fecha de registro, agrupados por horas.
