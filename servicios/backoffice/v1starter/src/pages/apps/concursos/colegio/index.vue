@@ -17,7 +17,7 @@ const tipoItems = ref(null);
 // const page = ref(1);
 const totalRegistros = ref(0);
 const totalPaginado = ref(0);
-const dataUsuarios = ref([]);
+const dataParticipantes = ref([]);
 const currentPage = ref(1);
 const totalPage = ref(0);
 const rowPerPage = ref(10);
@@ -46,7 +46,7 @@ const videosItems = ref([]);
 const videosItemsCopy = ref([]);
 /*VIDEOS*/
 
-const loadingUsuarios = ref(false);
+const loadingModulo = ref(false);
 const fechaFin = moment().format("YYYY-MM-DD");
 const fechaInicio = moment().subtract(7, 'days').format("YYYY-MM-DD");
 
@@ -66,17 +66,23 @@ const urlTitleExport = ref("usuarios_hija_embajador");
 
 const headersGlobal = ref({
   _id: "_id",
-  ruc: "ruc",
-  titulo_video: "titulo_video",
-  colegio: "colegio",
-  ciudad: "ciudad",
-  // embebido_youtube: "embebido_youtube",
-  link_youtube: "link_youtube",
-  total_votos: "total_votos",
-  update_at: "update_at",
+  tipo: "concurso",
+  estado: "estado_registro",
+  updated_at: "updated_at",
   created_at: "created_at",
-  update_at_formated: "update_at_formated",
-  created_at_formated: "created_at_formated"
+  total_votos: "total_votos",
+  link_youtube: "link_youtube",
+  institucion_nombre: "institucion_nombre",
+  nombre_rector: "nombre_rector",
+  contacto_celular: "contacto_celular",
+  contacto_email: "contacto_email",
+  categoria: "categoria",
+  talento_nombre: "talento_nombre",
+  link_formulario_1: "link_formulario_1",
+  link_formulario_2: "link_formulario_2",
+  link_formulario_3: "link_formulario_3",
+  check_consentimiento: "check_consentimiento",
+  check_politica_privacidad: "check_politica_privacidad",
 });
 
 const optionsDefaultDate = {
@@ -104,18 +110,18 @@ watch(currentPage, async () => {
   if (currentPage.value > totalPage.value) {
     currentPage.value = totalPage.value
   }
-  await getUsuarios({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
+  await getParticipantes({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
 });
 
 watch(rowPerPage, async () => {
   currentPage.value = 1;
-  await getUsuarios({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
+  await getParticipantes({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
 });
 
 // 👉 Computing pagination data
 const paginationData = computed(() => {
-  const firstIndex = dataUsuarios.value.length ? (currentPage.value) * rowPerPage.value : 0
-  const lastIndex = dataUsuarios.value.length + (currentPage.value) * rowPerPage.value
+  const firstIndex = dataParticipantes.value.length ? (currentPage.value) * rowPerPage.value : 0
+  const lastIndex = dataParticipantes.value.length + (currentPage.value) * rowPerPage.value
 
   // return `Mostrando ${ firstIndex } de ${ lastIndex } de ${ totalRegistros.value } registros `
   // console.log(rowPerPage.value)
@@ -127,14 +133,15 @@ const paginationData = computed(() => {
 
 onMounted(async () => {
   // await getCursosAll();
-  await getUsuarios({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
+  await getParticipantes({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value, estado: estadoModel.value });
 });
 
-async function getUsuarios(json = {}) {
-  const { page = 1, limit = 10, fechai = "", fechaf = "", search = "" } = json
+async function getParticipantes(json = {}) {
+  let { page = 1, limit = 10, fechai = "", fechaf = "", search = "" } = json
   try {
-
-    loadingUsuarios.value = true;
+    let estado = estadoModel.value;
+    estado = estado === 'Todos' ? '' : `&estado=${estado}`;
+    loadingModulo.value = true;
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
@@ -147,11 +154,11 @@ async function getUsuarios(json = {}) {
     // var response = null;
 
     if (tipoModel.value == "Por Fecha") {
-      urlApiExport.value = `https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/listado?fechai=${fechai}&fechaf=${fechaf}&search=${search}`;
+      urlApiExport.value = `https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/listado?fechai=${fechai}&fechaf=${fechaf}&search=${search}${estado}`;
       urlTitleExport.value = "concurso_bandas_por_fecha";
       console.log(1)
     } else {
-      urlApiExport.value = `https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/listado?fechai=&fechaf=&search=${search}`;
+      urlApiExport.value = `https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/listado?fechai=&fechaf=&search=${search}${estado}`;
       urlTitleExport.value = "concurso_bandas";
       console.log(2)
     }
@@ -160,7 +167,7 @@ async function getUsuarios(json = {}) {
     const data = await response.json();
 
     if (data.resp) {
-      dataUsuarios.value = data.data;
+      dataParticipantes.value = data.data;
       totalRegistros.value = parseInt(data.total);
       totalPage.value = Math.ceil(parseInt(data.total) / parseInt(data.limit));
     } else {
@@ -169,17 +176,17 @@ async function getUsuarios(json = {}) {
         type: "error",
         model: true
       };
-      loadingUsuarios.value = false;
+      loadingModulo.value = false;
       return false;
     }
-    loadingUsuarios.value = false;
+    loadingModulo.value = false;
   } catch (error) {
     configSnackbar.value = {
       message: "No se pudo recuperar los usuarios, recargue de nuevo.",
       type: "error",
       model: true
     };
-    loadingUsuarios.value = false;
+    loadingModulo.value = false;
     return console.error(error.message);
   }
 }
@@ -196,7 +203,7 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
     fechaIFModel.value.fechaf = moment(selectedDates[1]).format('DD-MM-YYYY');
     fecha.value.inicio = moment(fechaIFModel.value.fechai, "DD-MM-YYYY").format('YYYY-MM-DD');
     fecha.value.fin = moment(fechaIFModel.value.fechaf, "DD-MM-YYYY").format('YYYY-MM-DD')
-    await getUsuarios({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
+    await getParticipantes({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
   }
 
   if (selectedDates.length == 2) {
@@ -208,7 +215,7 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
 
   if (selectedDates.length == 0) {
     existeFecha.value = false;
-    await getUsuarios({ page: currentPage.value, limit: rowPerPage.value, fechai: "", fechaf: "", search: modelSearch.value });
+    await getParticipantes({ page: currentPage.value, limit: rowPerPage.value, fechai: "", fechaf: "", search: modelSearch.value });
   }
 
 }
@@ -220,7 +227,7 @@ const docsExportNumberLength = ref({
 
 const usersFull = ref([]);
 
-async function getUsuariosExportar(page = 1, limit = 10) {
+async function getParticipantesExportar(page = 1, limit = 10) {
   try {
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
@@ -239,7 +246,7 @@ async function getUsuariosExportar(page = 1, limit = 10) {
       return data;
     } else {
       configSnackbar.value = {
-        message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+        message: "No se pudo recuperar los participantes, recargue de nuevo.",
         type: "error",
         model: true
       };
@@ -247,7 +254,7 @@ async function getUsuariosExportar(page = 1, limit = 10) {
     }
   } catch (error) {
     configSnackbar.value = {
-      message: "No se pudo recuperar los usuarios, recargue de nuevo.",
+      message: "No se pudo recuperar los participantes, recargue de nuevo.",
       type: "error",
       model: true
     };
@@ -268,7 +275,7 @@ function eliminarDuplicadosPorWylexId(array) {
   });
 }
 
-async function fetchFullUsers() {
+async function fetchFullRegistros() {
 
   docsExportNumberLength.value = {
     tamanioActual: 0,
@@ -279,7 +286,7 @@ async function fetchFullUsers() {
 
   var pages = 1;
   while (true) {
-    const res = await getUsuariosExportar(
+    const res = await getParticipantesExportar(
       pages,
       500
     );
@@ -290,17 +297,26 @@ async function fetchFullUsers() {
     array.forEach((item) => {
       let newItem = {};
       // Asignamos valores específicamente para cada cabecera
+      let estadoText = estadoItems.value;
+
       newItem._id = item._id || "";
-      newItem.ruc = item.ruc || "";
-      newItem.titulo_video = item.titulo_video || "";
-      newItem.colegio = item.colegio || "";
-      newItem.ciudad = item.ciudad || "";
-      // newItem.embebido_youtube = item.embebido_youtube || "";
-      newItem.link_youtube = item.link_youtube || "";
-      newItem.total_votos = item.total_votos || 0;
-      newItem.update_at = item.update_at || "";
+      newItem.concurso = item.tipo || "";
+      newItem.estado = estadoText.find(e => e.value == item.estado)?.title || "";
+      newItem.updated_at = item.updated_at || "";
       newItem.created_at = item.created_at || "";
-      newItem.update_at_formated = item.update_at_formated || "";
+      newItem.link_youtube = item.link_youtube || "";
+      newItem.institucion_nombre = item.institucion_nombre || "";
+      newItem.nombre_rector = item.nombre_rector || "";
+      newItem.contacto_celular = item.contacto_celular || "";
+      newItem.contacto_email = item.contacto_email || "";
+      newItem.categoria = item.categoria || "";
+      newItem.talento_nombre = item.talento_nombre || "";
+      newItem.link_formulario_1 = item.link_formulario_1 || "";
+      newItem.link_formulario_2 = item.link_formulario_2 || "";
+      newItem.link_formulario_3 = item.link_formulario_3 || "";
+      newItem.check_consentimiento = item.check_consentimiento == "Si" ? "Si" : "No" || "Si";
+      newItem.check_politica_privacidad = item.check_politica_privacidad == "Si" ? "Si" : "No" || "Si";
+      newItem.updated_at_formated = item.updated_at_formated || "";
       newItem.created_at_formated = item.created_at_formated || "";
       usersFull.value.push(newItem);
     });
@@ -317,28 +333,11 @@ async function fetchFullUsers() {
     }
   }
 
-  // for (let i = 1; i < pages + 1; i++) {
-  // {
-  //   todaBase: 1,
-  //   pageSize: rowPerPageExport.value,
-  //   page: i,
-  //   query: "",
-  //   provider: "",
-  //   news: "",
-  //   sort: (sortDesc.value?-1:1),
-  //   columnSort: "",
-  //   fechai: "",
-  //   fechaf: "",
-  // }
-
-
-  // }
-
   return true;
 };
 
 function convertToCSV(objArray) {
-  var array = typeof objArray != "object" ? JSON.parse(objArray) : objArray;
+  var array = typeof objArray !== "object" ? JSON.parse(objArray) : objArray;
   var str = "";
 
   for (var i = 0; i < array.length; i++) {
@@ -346,14 +345,17 @@ function convertToCSV(objArray) {
     for (var index in array[i]) {
       if (line != "") line += ",";
 
-      line += array[i][index];
+      // Escapamos comillas dobles y envolvemos el valor en comillas
+      let value = array[i][index] !== null ? array[i][index].toString() : "";
+      value = value.replace(/"/g, '""'); // Escapar comillas dobles
+      line += `"${value}"`; // Envolver valor
     }
-
     str += line + "\r\n";
   }
 
   return str;
 }
+
 
 function exportCSVFile(headers, items, fileTitle) {
   if (headers && items[0]._id !== "_id") {
@@ -417,7 +419,7 @@ function generateSlug(text) {
 async function downloadSearch() {
   try {
 
-    if (dataUsuarios.value.length < 1) {
+    if (dataParticipantes.value.length < 1) {
       configSnackbar.value = {
         message: "No hay datos que exportar.",
         type: "error",
@@ -425,11 +427,11 @@ async function downloadSearch() {
       };
       return false;
     }
-    // loadingUsuarios.value = true;
+    // loadingModulo.value = true;
     isFullLoading.value = true;
-    await fetchFullUsers();
+    await fetchFullRegistros();
     isFullLoading.value = false;
-    // loadingUsuarios.value = false;
+    // loadingModulo.value = false;
 
     let doc = [];
     doc = usersFull.value
@@ -442,12 +444,12 @@ async function downloadSearch() {
   } catch (error) {
     console.log(error)
     configSnackbar.value = {
-      message: "No se pudo recuperar los datos de usuario, recargue de nuevo.",
+      message: "No se pudo recuperar los datos de los participantes, recargue de nuevo {{downloadSearch}}.",
       type: "error",
       model: true
     };
     isFullLoading.value = false;
-    // loadingUsuarios.value = false;
+    // loadingModulo.value = false;
     return false;
   }
 };
@@ -455,7 +457,7 @@ async function downloadSearch() {
 watch(tipoModel, async () => {
   currentPage.value = 1;
   if (tipoModel.value) {
-    await getUsuarios({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
+    await getParticipantes({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
   }
 });
 
@@ -475,12 +477,12 @@ const buscarUsuarios = async () => {
     modelSearch.value = searchQuery.value?.toLowerCase();
     //disabledPagination.value = true;
     currentPage.value = 1;
-    await getUsuarios({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
+    await getParticipantes({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
     //disabledPagination.value = false;
   } catch (error) {
     console.error("Error en buscarUsuarios:", error);
     configSnackbar.value = {
-      message: "No se pudo recuperar los datos de usuario al realizar la búsqueda, recargue de nuevo.",
+      message: "No se pudo recuperar los datos de los participantes al realizar la búsqueda, recargue de nuevo.",
       type: "error",
       model: true
     };
@@ -540,7 +542,7 @@ const eliminarRegistroSi = async () => {
 
     if (data.resp) {
       currentPage.value = 1;
-      await getUsuarios({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
+      await getParticipantes({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
     } else {
       configSnackbar.value = {
         message: "No se pudo eliminar el registro, intente de nuevo",
@@ -576,6 +578,90 @@ const eliminarRegistroSi = async () => {
 // FIN CÓDIGO DE ELIMINAR
 /****************************************************************/
 /****************************************************************/
+
+/****************************************************************/
+/****************************************************************/
+// CÓDIGO PARA CAMBIAR EL ESTADO
+/****************************************************************/
+/****************************************************************/
+
+const btnEstadoModel = ref([]);
+const btnEstadoLoading = ref([]);
+const btnEstadoDisabled = ref(false);
+
+const actualizarEstado = async (id, status) => {
+  try {
+    const userBackoffice = JSON.parse(localStorage.getItem('userData'));
+    if (!id) {
+      configSnackbar.value = {
+        message: "Id no especificado para eliminar",
+        type: "error",
+        model: true
+      };
+      return false;
+    }
+
+    btnEstadoDisabled.value = true;
+    btnEstadoLoading.value[id] = true;
+    var myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const requestData = {
+      "status": status,
+      "user": userBackoffice.email || ''
+    };
+
+    var requestOptions = {
+      method: 'POST',
+      headers: myHeaders,
+      body: JSON.stringify(requestData),
+      redirect: 'follow'
+    };
+
+    var response = await fetch(`https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/update-status-concurso/${id}`, requestOptions);
+    const data = await response.json();
+
+    if (data.resp) {
+      currentPage.value = 1;
+      await getParticipantes({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
+    } else {
+      configSnackbar.value = {
+        message: "No se pudo eliminar el registro, intente de nuevo",
+        type: "error",
+        model: true
+      };
+    }
+
+    btnEstadoDisabled.value = false;
+    btnEstadoLoading.value[id] = false;
+    return true;
+  } catch (error) {
+    configSnackbar.value = {
+      message: "No se pudo eliminar el registro, intente de nuevo",
+      type: "error",
+      model: true
+    };
+
+    btnEstadoDisabled.value = false;
+    btnEstadoLoading.value[id] = false;
+
+    return console.error(error.message);
+  }
+};
+
+/****************************************************************/
+/****************************************************************/
+// FIN CÓDIGO PARA CAMBIAR EL ESTADO
+/****************************************************************/
+/****************************************************************/
+const estadoModel = ref('Todos');
+const estadoItems = ref([{title: 'Todos', value: 'Todos'}, {title: 'No revisado', value: '0'}, {title: 'Revisado, aprobado', value: '1'}, {title: 'Rechazado', value: '2'}]);
+watch(estadoModel, async () => {
+  currentPage.value = 1;
+  if (estadoModel.value) {
+    await getParticipantes({ page: currentPage.value, limit: rowPerPage.value, fechai: fecha.value.inicio, fechaf: fecha.value.fin, search: modelSearch.value });
+  }
+});
 </script>
 
 <template>
@@ -607,18 +693,23 @@ const eliminarRegistroSi = async () => {
     </VSnackbar>
     <VRow>
       <VCol cols="12" sm="12" lg="12">
-        <h1 class="mb-4">Registros del Concurso de Bandas</h1>
+        <h1>
+          Participantes, Intercolegial Viva La Paz
+        </h1>
+        <small class="mb-4 d-block">
+          "Intercolegial Viva La Paz"
+        </small>
         <VCardText class="d-flex py-4 gap-4 px-0 flex-wrap" style="align-items: flex-start;">
-          <div :class="'me-3 d-flex gap-4' + (isFullLoading ? ' disabled' : '')">
-            <VSelect :disabled="loadingUsuarios" class="bg-white" v-model="rowPerPage" density="compact"
+          <div :class="'me-3 d-flex gap-4 flex-wrap' + (isFullLoading ? ' disabled' : '')">
+            <VSelect :disabled="loadingModulo" class="bg-white" v-model="rowPerPage" density="compact"
               variant="outlined" :items="[10, 20, 30, 50]" />
 
-            <VSelect :disabled="loadingUsuarios" label="Mostrar" item-text="title" style="min-width: 9rem;"
+            <VSelect :disabled="loadingModulo" label="Mostrar" item-text="title" style="min-width: 9rem;"
               item-value="value" class="bg-white" density="compact" v-model="tipoModel" variant="outlined"
               :items="['Todos los registros', 'Por Fecha']" />
 
-            <AppDateTimePicker v-if="tipoModel == 'Por Fecha' && !loadingUsuarios" clearable class="bg-white"
-              style="width: 19rem;" label="Fecha de inicio y fin del concurso" prepend-inner-icon="tabler-calendar"
+            <AppDateTimePicker v-if="tipoModel == 'Por Fecha' && !loadingModulo" clearable class="bg-white"
+              style="width: 19rem;" label="Buscar por fecha de registro" prepend-inner-icon="tabler-calendar"
               density="compact" v-model="fechaIFModel.fechasModel" show-current=true @on-change="obtenerFechas" :config="{
                 position: 'auto right',
                 mode: 'range',
@@ -629,7 +720,24 @@ const eliminarRegistroSi = async () => {
                 reactive: true
               }" />
 
+            <VSelect :disabled="loadingModulo" label="Buscar por revisón" item-text="title" style="min-width: 9rem;"
+              item-value="value" class="bg-white" density="compact" v-model="estadoModel" variant="outlined"
+              :items="estadoItems" />
 
+            <VTextField
+                clearable
+                title="Buscar por agrupación"
+                :disabled="loadingModulo"
+                class="bg-white"
+                v-model="searchQuery"
+                label="Buscar por agrupación"
+                prepend-inner-icon="mdi-magnify"
+                single-line
+                hide-details
+                @input="buscarUsuariosDebounced" 
+                @click:clear="buscarUsuariosDebounced"
+                style="min-width: 16rem;"
+              />
 
           </div>
 
@@ -640,7 +748,10 @@ const eliminarRegistroSi = async () => {
 
 
             <!-- 👉 Export button -->
-            <VBtn :loading="isFullLoading" :disabled="isFullLoading || loadingUsuarios" variant="tonal" color="success"
+            <VBtn 
+            title="Exportar registros según los filtros aplicados"
+            :loading="isFullLoading" 
+            :disabled="isFullLoading || loadingModulo" variant="tonal" color="success"
               prepend-icon="tabler-screen-share" @click="downloadSearch">
               <span style="cursor:pointer" class="px-0 py-p m-0">Exportar</span>
             </VBtn>
@@ -665,23 +776,38 @@ const eliminarRegistroSi = async () => {
             <!-- 👉 table head -->
             <thead>
               <tr>
-                <th scope="col">
-                  Colegio
+                <th scope="col" title="Nombre de la unidad educativa">
+                  <div class="d-flex flex-column">
+                    Documentación revisada
+                    <div class="d-flex" style="align-items: center;">
+                      <VIcon icon="tabler-click" color="disabled" size="15" />
+                      <small class="text-disabled" style="line-height: 1;">Click para cambiar el estado</small>
+                    </div>
+                  </div>
                 </th>
-                <th scope="col">
-                  Titulo del video
+                <th scope="col" title="Nombre de la agrupación">
+                  Nombre de la agrupación
                 </th>
-                <th scope="col">
-                  Ruc
+                <th scope="col" title="Categoría: agrupación / solista">
+                  Categoría
                 </th>
-                <th scope="col">
-                  Ciudad
+                <th scope="col" title="Nombre de la unidad educativa">
+                  Unidad educativa
                 </th>
-                <th scope="col">
-                  Total de votos
+                <th scope="col" title="Número telefónico de contacto">
+                  Número telefónico
                 </th>
+                <th scope="col" title="E-mail de contacto">
+                  E-mail
+                </th>
+                <!-- <th scope="col" title="Link del DEMO(YouTube)">
+                  Link del DEMO(YouTube)
+                </th> -->
                 <th scope="col">
                   Fecha de registro
+                </th>
+                <th scope="col">
+                  Fecha de actualización
                 </th>
                 <th scope="col">
                   Acciones
@@ -689,43 +815,116 @@ const eliminarRegistroSi = async () => {
               </tr>
             </thead>
             <!-- 👉 table body -->
-            <tbody v-if="loadingUsuarios == false">
-              <tr v-for="registro in dataUsuarios" :key="registro._id" style="height: 3.75rem;">
+            <tbody v-if="loadingModulo == false">
+              <tr v-for="registro in dataParticipantes" :key="registro._id" style="height: 3.75rem;">
 
                 <td>
-                  <span class="text-base">{{ registro.colegio }}</span>
+                  <div class="d-flex flex-column gap-0 align-center py-2" title="Click para cambiar de estado">
+                    <VBtn
+                      v-model="btnEstadoModel[registro._id]"
+                      :loading="btnEstadoLoading[registro._id]"
+                      :disabled="btnEstadoDisabled"
+                      :icon="registro.estado == '1' ? 'tabler-toggle-right' : 'tabler-toggle-left'"
+                      :color="registro.estado == '1' ? 'success' : (registro.estado == '2' ? 'error' : 'warning')"
+                      variant="text"
+                      class="px-0 py-0 d-block"
+                      style="margin-bottom: -12px;"
+                      @click="actualizarEstado(registro._id, registro.estado == '1' ? '2' : '1')"
+                    />
+
+                    <small v-if="registro.estado == '0'">No revisado</small>
+                    <small v-if="registro.estado == '1'">Revisado, aprobado</small>
+                    <small v-if="registro.estado == '2'">Rechazado</small>
+                  </div>
                 </td>
 
                 <td>
-                  <span class="text-base">{{ registro.titulo_video }}</span>
+                  <span class="text-base">{{ registro.institucion_nombre }}</span>
                 </td>
 
                 <td>
-                  <span class="text-base">{{ registro.ruc }}</span>
+                  <span class="text-base">{{ registro.talento_nombre }}</span>
                 </td>
 
                 <td>
-                  <span class="text-base">{{ registro.ciudad }}</span>
+                  <span class="text-base">{{ registro.categoria }}</span>
                 </td>
 
                 <td>
-                  <VChip color="success" size="small">
-                    {{ registro.total_votos }}
-                  </VChip>
+                  <span class="text-base">{{ registro.contacto_celular }}</span>
                 </td>
+
+                <td>
+                  <span class="text-base">{{ registro.contacto_email }}</span>
+                </td>
+
+                <!-- <td>
+                  <span class="text-base">{{ registro.link_youtube }}</span>
+                </td> -->
 
                 <td>
                   <span class="text-base">{{ moment(registro.created_at).format("YYYY-MM-DD HH:mm:ss") }}</span>
                 </td>
 
+                <td>
+                  <span class="text-base">{{ moment(registro.updated_at).format("YYYY-MM-DD HH:mm:ss") }}</span>
+                </td>
+
 
                 <!-- 👉 Actions -->
                 <td class="text-center" style="width: 5rem;">
-
-
-                  <VBtn title="Eliminar registro" icon size="x-small" color="default" variant="text"
-                    v-model="idUserListModel[registro._id]" @click="eliminarRegistro(registro._id)">
-                    <VIcon size="22" icon="tabler-trash" />
+                  <VBtn
+                    icon
+                    variant="plain"
+                    color="default"
+                    size="x-small"
+                    :title="registro.institucion_nombre"
+                    v-model="idUserListModel[registro._id]"
+                  >
+                    <VIcon
+                      :size="22"
+                      icon="tabler-dots-vertical"
+                    />
+                    <VMenu activator="parent">
+                      <VList density="compact">
+                        <VListItem
+                          :href="registro.link_youtube"
+                          target="_blank"
+                        >
+                          <VIcon size="18" class="mr-1" icon="mdi-link" />
+                          Ver DEMO(YouTube) 
+                        </VListItem>
+                        <VListItem
+                          :href="registro.link_formulario_1"
+                          target="_blank"
+                        >
+                          <VIcon size="18" class="mr-1" icon="tabler-file-type-pdf" />
+                          Ver formulario 1
+                        </VListItem>
+                        <VListItem
+                          :href="registro.link_formulario_2"
+                          target="_blank"
+                        >
+                          <VIcon size="18" class="mr-1" icon="tabler-file-type-pdf" />
+                          Ver formulario 2
+                        </VListItem>
+                        <VListItem
+                          :href="registro.link_formulario_3"
+                          target="_blank"
+                        >
+                          <VIcon size="18" class="mr-1" icon="tabler-file-type-pdf" />
+                          Ver formulario 3
+                        </VListItem>
+                        <VDivider />
+                        <VListItem
+                          href="#"
+                          @click="eliminarRegistro(registro._id)"
+                        >
+                          <VIcon size="18" class="mr-1" color="error" icon="mdi-trash-can-outline" />
+                          Eliminar registro
+                        </VListItem>
+                      </VList>
+                    </VMenu>
                   </VBtn>
 
                   <VBtn disabled="true" icon size="x-small" color="default" variant="text" class="d-none">
@@ -743,17 +942,17 @@ const eliminarRegistroSi = async () => {
             </tbody>
 
             <!-- 👉 table footer  -->
-            <tfoot v-show="!dataUsuarios.length && loadingUsuarios == false">
+            <tfoot v-show="!dataParticipantes.length && loadingModulo == false">
               <tr>
-                <td colspan="7" class="text-center">
+                <td colspan="9" class="text-center">
                   No hay datos que mostrar
                 </td>
               </tr>
             </tfoot>
 
-            <tfoot v-show="loadingUsuarios">
+            <tfoot v-show="loadingModulo">
               <tr>
-                <td colspan="7" class="text-center">
+                <td colspan="9" class="text-center">
                   Cargando datos, por favor espere un momento...
                 </td>
               </tr>
