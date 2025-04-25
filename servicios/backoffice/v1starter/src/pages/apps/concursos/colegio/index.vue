@@ -697,7 +697,7 @@ watch(estadoModel, async () => {
           Participantes, Intercolegial Viva La Paz
         </h1>
         <small class="mb-4 d-block">
-          "Intercolegial Viva La Paz"
+          "Concurso Musical 2025"
         </small>
         <VCardText class="d-flex py-4 gap-4 px-0 flex-wrap" style="align-items: flex-start;">
           <div :class="'me-3 d-flex gap-4 flex-wrap' + (isFullLoading ? ' disabled' : '')">
