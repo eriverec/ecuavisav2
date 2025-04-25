@@ -48,6 +48,16 @@ export default [
             to: 'apps-concursos-hija-embajador-metricas',
           },
         ],
+      },
+      {
+        title: 'Intercolegial Viva La Paz',
+        to: null,
+        children: [
+          {
+            title: 'Registrados',
+            to: 'apps-concursos-colegio',
+          }
+        ],
       }
       // { title: 'Ecuavisa', to: 'apps-concursos-ecuavisa' },
 

@@ -70,7 +70,6 @@ const headersGlobal = ref({
   estado: "estado_registro",
   updated_at: "updated_at",
   created_at: "created_at",
-  total_votos: "total_votos",
   link_youtube: "link_youtube",
   institucion_nombre: "institucion_nombre",
   nombre_rector: "nombre_rector",
@@ -78,11 +77,13 @@ const headersGlobal = ref({
   contacto_email: "contacto_email",
   categoria: "categoria",
   talento_nombre: "talento_nombre",
-  link_formulario_1: "link_formulario_1",
-  link_formulario_2: "link_formulario_2",
-  link_formulario_3: "link_formulario_3",
+  link_formulario_1: "Consentimiento_parental_para_el_IVP",
+  link_formulario_2: "Autorizacion_de_uso_de_imagen_IVP",
+  link_formulario_3: "Autorizacion_de_la_Unidad_Educativa_para_el_IVP",
   check_consentimiento: "check_consentimiento",
   check_politica_privacidad: "check_politica_privacidad",
+  updated_at_formated:"updated_at_formated",
+  created_at_formated:"created_at_formated"
 });
 
 const optionsDefaultDate = {
@@ -314,8 +315,8 @@ async function fetchFullRegistros() {
       newItem.link_formulario_1 = item.link_formulario_1 || "";
       newItem.link_formulario_2 = item.link_formulario_2 || "";
       newItem.link_formulario_3 = item.link_formulario_3 || "";
-      newItem.check_consentimiento = item.check_consentimiento == "Si" ? "Si" : "No" || "Si";
-      newItem.check_politica_privacidad = item.check_politica_privacidad == "Si" ? "Si" : "No" || "Si";
+      newItem.check_consentimiento = item.check_consentimiento == "1" ? "Si" : "No" || "Si";
+      newItem.check_politica_privacidad = item.check_politica_privacidad == "1" ? "Si" : "No" || "Si";
       newItem.updated_at_formated = item.updated_at_formated || "";
       newItem.created_at_formated = item.created_at_formated || "";
       usersFull.value.push(newItem);
@@ -892,28 +893,28 @@ watch(estadoModel, async () => {
                           target="_blank"
                         >
                           <VIcon size="18" class="mr-1" icon="mdi-link" />
-                          Ver DEMO(YouTube) 
+                          Ver DEMO (YouTube) 
                         </VListItem>
                         <VListItem
                           :href="registro.link_formulario_1"
                           target="_blank"
                         >
                           <VIcon size="18" class="mr-1" icon="tabler-file-type-pdf" />
-                          Ver formulario 1
+                          Ver Consentimiento parental para el IVP
                         </VListItem>
                         <VListItem
                           :href="registro.link_formulario_2"
                           target="_blank"
                         >
                           <VIcon size="18" class="mr-1" icon="tabler-file-type-pdf" />
-                          Ver formulario 2
+                          Ver Autorización de uso de imagen IVP
                         </VListItem>
                         <VListItem
                           :href="registro.link_formulario_3"
                           target="_blank"
                         >
                           <VIcon size="18" class="mr-1" icon="tabler-file-type-pdf" />
-                          Ver formulario 3
+                          Ver Autorización de la Unidad Educativa para el IVP
                         </VListItem>
                         <VDivider />
                         <VListItem
