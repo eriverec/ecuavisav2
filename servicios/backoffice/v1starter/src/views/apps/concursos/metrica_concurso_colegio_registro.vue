@@ -1,6 +1,6 @@
 <script setup>
 import { logAction } from '@/middleware/activityLogger';
-import { useDateStore } from '@/views/apps/concursos/stores/dateStore_hija_embajador.js';
+import { useDateStore } from '@/views/apps/concursos/stores/dateStoreColegio.js';
 import { hexToRgb } from '@layouts/utils';
 import { parseISO } from 'date-fns';
 import { extendMoment } from 'moment-range';
@@ -61,18 +61,19 @@ const vuetifyTheme = useTheme();
 async function getChartLineTimeViews(options = {}) {
   try {
     const { fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')) } = options;
-    var response = await fetch(`https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/metricas-agrupadas-por-horas/0?tipo=VIVA LA PAZ&fechai=${fechai}&fechaf=${fechaf}&page=1&limit=10000`);
 
-    //https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/metricas-agrupadas-por-horas/0?tipo=VIVA LA PAZ&fechai=2025-04-14&fechaf=2025-04-14&page=1&limit=10000
+    var response = await fetch(`https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/metricas-agrupadas-por-dias-concurso/?tipo=VIVA LA PAZ&fechai=${fechai}&fechaf=${fechaf}&limit=10000`);
+
+    //https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/metricas-agrupadas-por-dias-concurso/?tipo=VIVA LA PAZ&fechai=2025-04-13&fechaf=2025-04-15&page=1&limit=10000
 
     const data = await response.json();
 
     if(data.resp){
-      dataRegistrosChartViews.value = data.data;
+      dataRegistrosChartViews.value = data.data.viva_la_paz;
     }
   } catch (error) {
     configSnackbar.value = {
-        message: "No se pudo recuperar los votos, recargue de nuevo.",
+        message: "No se pudo recuperar los usuarios, recargue de nuevo.",
         type: "error",
         model: true
     };
@@ -81,61 +82,80 @@ async function getChartLineTimeViews(options = {}) {
 }
 
 const resolveDeviceTimeLine = computed(() => {
-  const { themeBorderColor, themeDisabledTextColor, themeSecondaryTextColor, themePrimaryTextColor } = colorVariables(vuetifyTheme.current.value);
-  const currentTheme = vuetifyTheme.current.value.colors;
-  const variableTheme = vuetifyTheme.current.value.variables;
-  const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`;
+    const { themeBorderColor, themeDisabledTextColor, themeSecondaryTextColor, themePrimaryTextColor } = colorVariables(vuetifyTheme.current.value);
+    const currentTheme = vuetifyTheme.current.value.colors
+    const variableTheme = vuetifyTheme.current.value.variables
+    const labelSuccessColor = `rgba(${hexToRgb(currentTheme.success)},0.2)`
+    const headingColor = `rgba(${hexToRgb(currentTheme['on-background'])},${variableTheme['high-emphasis-opacity']})`
 
-  // Configuración de colores
   const chartColors = {
-    success: currentTheme.success,
-    primary: currentTheme.primary,
-    secondary: currentTheme.secondary,
-  };
+    donut: {
+      series1: currentTheme.success,
+      series2: '#28c76fb3',
+      series3: '#28c76f80',
+      series4: labelSuccessColor,
+    },
+  }
 
-  // Datos iniciales
   let dataRaw = Array.from(dataRegistrosChartViews.value);
 
-  // Generar series a partir de los datos
-  const series = [
-    {
-      name: "Votos registrados",
-      data: dataRaw.map(item => item.total), // Extrae los valores de "total"
+  const transformedData = {};
+  dataRaw.forEach(item => {
+    if (!transformedData["concurso"]) {
+        transformedData["concurso"] = {
+            name: "concurso",
+            data: []
+        };
     }
-  ];
+    transformedData["concurso"].data.push([
+        // moment(item.fecha).add(1, 'days').valueOf(),
+        moment(item.date).valueOf(),
+        item.total
+    ]);
+  });
 
-  // Opciones del gráfico
+  const result = Object.values(transformedData);
+
   const options = {
     chart: {
-      type: 'area',
-      height: 320,
       parentHeightOffset: 0,
-      zoom: { enabled: false },
-      toolbar: { show: false },
+      type: 'area',
+      stacked: false,
+      height: 320,
+      zoom: {
+        enabled: false
+      },
+      toolbar: {
+        show: false
+      }
     },
+    // labels: categoriesRaw,
+    // dataLabels: {
+    //   enabled: true
+    // },
     colors: [
-      "#ff1493", // Rosa brillante
-      "#9932cc", // Púrpura
-      "#ff8c00", // Naranja oscuro
-      "#8b008b", // Magenta oscuro
-      "#8a2be2", // Azul violeta
-      "#8a2be2", // Azul violeta
-      "#173F5F",
-      "#00fa9a", // Verde medio
-      "#7365ed",
-      "#ff69b4", // Rosa claro
-      "#000f08",
       "#32cd32", // Verde esmeralda
-      "#136f63", // Naranja claro
       "#ffd700", // Amarillo
       "#ff4500", // Rojo oscuro
       "#ff0000", // Rojo
       "#ff8c00", // Naranja oscuro
       "#ffff00", // Amarillo
+      "#173F5F",
+      "#00fa9a", // Verde medio
+      "#7365ed",
+      "#ff69b4", // Rosa claro
+      "#000f08",
+      "#136f63", // Naranja claro
       "#8b4513", // Marrón
       "#0000ff", // Azul
+      "#8a2be2", // Azul violeta
       "#ffa500", // Naranja
       "#ffd800", // Amarillo intenso
+      "#ff1493", // Rosa brillante
+      "#9932cc", // Púrpura
+      "#ff8c00", // Naranja oscuro
+      "#8b008b", // Magenta oscuro
+      "#8a2be2", // Azul violeta
     ],
     fill: {
       type: 'gradient',
@@ -144,88 +164,129 @@ const resolveDeviceTimeLine = computed(() => {
         inverseColors: false,
         opacityFrom: 0.45,
         opacityTo: 0.05,
-        stops: [20, 100, 100, 100],
-      },
-    },
-    xaxis: {
-      categories: dataRaw.map(item => item.rango), // Usa "rango" como categorías
-      labels: {
-        style: { colors: headingColor },
-        rotate: -15,
-        formatter: function (val) {
-          if(!val){
-            return "";
-          }
-          var rango = val.split('-');
-          var horaInicio = rango[0];
-          var horaFin = rango[1];
-          var horaInicioFormateada = horaInicio >= 0 && horaInicio < 12 ? `${horaInicio} AM` : `${horaInicio} PM`;
-          var horaFinFormateada = horaFin >= 0 && horaFin < 12 ? `${horaFin} AM` : `${horaFin} PM`;
-          return `${horaInicioFormateada} - ${horaFinFormateada}`; // Devuelve el texto que deseas mostrar en la etiqueta
-        },
+        stops: [20, 100, 100, 100]
       },
     },
     yaxis: {
       title: {
-        text: 'Cantidad de votos registrados',
-        style: { color: headingColor },
+        text: 'Registros',
+        style: {
+          color: headingColor,
+          useSeriesColors: false
+        }
       },
       labels: {
-        style: { colors: headingColor },
-        formatter: val => `${val.toFixed(0)}`,
+        style: {
+          // colors: headingColor,
+          colors: headingColor,
+          useSeriesColors: false
+        },
+        offsetX: 0,
+        formatter: function (val) {
+          return (val).toFixed(0);
+        },
       },
+      axisBorder: {
+        show: false,
+      },
+      axisTicks: {
+        show: false
+      }
+    },
+    xaxis: {
+        type: 'datetime',
+        tickAmount: result[0].data.length - 1,
+        // min: new Date("01/01/2014").getTime(),
+        // max: new Date("01/07/2014").getTime(),
+        tooltip: {
+            enabled: false, // Desactiva el resaltado en el eje X
+        },
+        labels: {
+            style: {
+                // colors: headingColor,
+                colors: headingColor,
+                useSeriesColors: false
+            },
+            rotate: -15,
+            rotateAlways: true,
+            formatter: function (val, timestamp) {
+                const fechaTimeZone = convertirTimestamp(timestamp).format("DD MMM YYYY");
+                // console.log(fechaTimeZone, timestamp)
+                return fechaTimeZone;
+            }
+        }
     },
     tooltip: {
-      theme: false,
-      custom: function({ series, seriesIndex, dataPointIndex, w }) {
-        return `<div class="tooltip-content">
+        // y: {
+        //     formatter: function (val) {
+        //     return val + " Ventas"
+        //     }
+        // },
+        theme: false,
+        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
+            // console.log(w)
+            // series[seriesIndex]
+            // console.log(w.globals.categoryLabels[dataPointIndex])
+            //${w.config.series[seriesIndex].name}
+            const timestamp = w.globals.labels[dataPointIndex];
+            const fechaTimeZone = convertirTimestamp(timestamp).format("DD MMM YYYY");
+            return `<div class="tooltip-content">
                 <div class="tooltip-body">
                 <div class="tooltip-title">
-                    Concurso de Bandas
+                     Registros
                 </div>
                 <div class="tooltip-subtitle">
-                  ${w.globals.categoryLabels[dataPointIndex]} <!-- Muestra la fecha -->
+                  ${fechaTimeZone} <!-- Muestra la fecha -->
                 </div>
                 <div class="tooltip-data-flex">
                     <div class="tooltip-data-title">
-                    Registrados
+                    Num. Registros
                     </div>
                     <div class="tooltip-data-value">
-                    ${series[seriesIndex][dataPointIndex]} Voto(s)
+                    ${series[seriesIndex][dataPointIndex]} Registro(s)
                     </div>
                 </div>
                 </div>
             </div>`
-      },
+        }
     },
     dataLabels: {
-      enabled: true,
-      formatter: val => (val > 0 ? `${val} voto(s)` : ''),
+        enabled: true,
+        formatter(val) {
+            if(val > 0){
+                return `${val} usuario(s)`
+            }
+            return ``
+        },
     },
-    noData: {
-      text: "No hay datos disponibles",
-      align: 'center',
-      verticalAlign: 'middle',
-      style: {
-        color: themeDisabledTextColor,
-        fontSize: '16px',
-      },
-    },
+    // stroke: {
+    //     show: false,
+    //     curve: 'straight',
+    // },
     legend: {
-      position: 'top',
-      horizontalAlign: 'left',
-      labels: { colors: themeSecondaryTextColor },
+        position: 'top',
+        horizontalAlign: 'left',
+        labels: { colors: themeSecondaryTextColor },
+        markers: {
+            offsetY: 1,
+            offsetX: -3,
+        },
+        itemMargin: {
+            vertical: 3,
+            horizontal: 10,
+        },
     },
+  }
+
+  return {
+    series: result, options: options
   };
-
-  return { series, options };
 });
-
 
 
 /**************** CONFIGURACION DEL CAMPO FECHA ***********************/
 /*********************************************************************/
-const limiteDaysDate = ref(0);
+const limiteDaysDate = ref(5);
 const fechaFin = moment().format("YYYY-MM-DD");
 const fechaInicio = moment().subtract(limiteDaysDate.value, 'days').format("YYYY-MM-DD");
 
@@ -256,24 +317,22 @@ const fechaIFModel = ref(optionsDefaultDate)
 const existeFecha = ref(true);
 
 async function obtenerFechas(selectedDates, dateStr, instance) {
-    console.log(selectedDates);
     if (selectedDates.length > 1) {
-      existeFecha.value = true;
-      fechaIFModel.value.fechai = moment(selectedDates[0]).format('DD-MM-YYYY');
-      fechaIFModel.value.fechaf = moment(selectedDates[1]).format('DD-MM-YYYY'); 
-      fecha.value.inicio = moment(fechaIFModel.value.fechai, "DD-MM-YYYY").format('YYYY-MM-DD');
-      fecha.value.fin = moment(fechaIFModel.value.fechaf, "DD-MM-YYYY").format('YYYY-MM-DD');
-
-      await getChartLineTimeViews({
-          fechai: fecha.value.inicio,
-          fechaf: fecha.value.fin
-      });
-
-    }else{
-        if (selectedDates.length === 1) {
-            // Calcula el rango máximo permitido
+        const diferenciaDias = moment(selectedDates[1]).diff(moment(selectedDates[0]), 'days');
+        
+        if(diferenciaDias > limiteDaysDate.value){
+            fechaIFModel.value["fechasModel"] = [parseISO(fecha.value.inicio), parseISO(fecha.value.fin)];
+            fechaIFModel.value["fechasVModel"] = [parseISO(fecha.value.inicio)];
+            configSnackbar.value = {    
+                message: `El rango de fechas debe ser de ${limiteDaysDate.value} dias o menos.`,
+                type: "error",
+                model: true
+            };
+            return console.error(`El rango de fechas debe ser de ${limiteDaysDate.value} dias o menos.`);
+        }else{
+            existeFecha.value = true;
             fechaIFModel.value.fechai = moment(selectedDates[0]).format('DD-MM-YYYY');
-            fechaIFModel.value.fechaf = moment(selectedDates[0]).format('DD-MM-YYYY'); 
+            fechaIFModel.value.fechaf = moment(selectedDates[1]).format('DD-MM-YYYY'); 
             fecha.value.inicio = moment(fechaIFModel.value.fechai, "DD-MM-YYYY").format('YYYY-MM-DD');
             fecha.value.fin = moment(fechaIFModel.value.fechaf, "DD-MM-YYYY").format('YYYY-MM-DD');
 
@@ -281,6 +340,13 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
                 fechai: fecha.value.inicio,
                 fechaf: fecha.value.fin
             });
+        }
+
+    }else{
+        if (selectedDates.length === 1) {
+            // Calcula el rango máximo permitido
+            const maxRangeDate = moment(selectedDates[0]).add(limiteDaysDate.value, 'days').toDate();
+            fechaIFModel.value.fechasVConfig["maxDate"] = maxRangeDate; // Limita el rango de selección
         }
 
         if(selectedDates.length == 2){
@@ -299,25 +365,13 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
 }
 
 /*********************************************************************/
-/**************** CONFIGURACION DEL CAMPO FECHA ***********************/
+/**************** FIN DE CONFIGURACION DEL CAMPO FECHA ***********************/
 
-onMounted(async () =>{
-    loadingData.value = true;
-    loadingGrafico.value = false
-
-    await getChartLineTimeViews({
-        fechai: fecha.value.inicio,
-        fechaf: fecha.value.fin
-    });
-
-    loadingData.value = false;
-    loadingGrafico.value = true
-})
 
 /*********************************************************************/
 /**************** INICIO DE CONFIGURACION DESCARGA ***********************/
 /*********************************************************************/
-const isFullLoading = ref(false);
+  const isFullLoading = ref(false);
   const urlApiExport = ref("");
   const urlTitleExport = ref("usuarios_concurso_bandas");
 
@@ -378,7 +432,6 @@ const isFullLoading = ref(false);
   });
 
   const usersFull = ref([]);
-  const estadoItems = ref([{title: 'Todos', value: 'Todos'}, {title: 'No revisado', value: '0'}, {title: 'Revisado, aprobado', value: '1'}, {title: 'Rechazado', value: '2'}]);
 
   async function getUsuariosExportar(page = 1, limit = 10) {
     try {
@@ -391,8 +444,8 @@ const isFullLoading = ref(false);
         redirect: 'follow'
       };
 
-      urlApiExport.value = `https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/exportar-metricas-listar-concurso-votos?tipo=VIVA LA PAZ&fechai=${fecha.value.inicio}&fechaf=${fecha.value.fin}`;
-      urlTitleExport.value = "usuarios_concurso_bandas_por_hora";
+      urlApiExport.value = `https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/exportar-metricas-agrupadas-por-dias-concurso?tipo=VIVA LA PAZ&fechai=${fecha.value.inicio}&fechaf=${fecha.value.fin}`;
+      urlTitleExport.value = "usuarios_concurso_bandas_por_fecha";
 
       var response = await fetch(`${urlApiExport.value}&page=${page}&limit=${limit}`, requestOptions);
       
@@ -402,7 +455,7 @@ const isFullLoading = ref(false);
         return data;
       }else{
         configSnackbar.value = {
-            message: "No se pudo recuperar los votos, recargue de nuevo.",
+            message: "No se pudo recuperar los usuarios, recargue de nuevo.",
             type: "error",
             model: true
         };
@@ -410,7 +463,7 @@ const isFullLoading = ref(false);
       }
     } catch (error) {
       configSnackbar.value = {
-          message: "No se pudo recuperar los votos, recargue de nuevo.",
+          message: "No se pudo recuperar los usuarios, recargue de nuevo.",
           type: "error",
           model: true
       };
@@ -422,6 +475,8 @@ const isFullLoading = ref(false);
   function eliminarDuplicadosPorWylexId(array) {
     return array; // Removemos esta función ya que no necesitamos eliminar duplicados por wylexId
   }
+
+  const estadoItems = ref([{title: 'Todos', value: 'Todos'}, {title: 'No revisado', value: '0'}, {title: 'Revisado, aprobado', value: '1'}, {title: 'Rechazado', value: '2'}]);
 
   async function fetchFullUsers(){
     docsExportNumberLength.value = {
@@ -442,7 +497,6 @@ const isFullLoading = ref(false);
         }
 
         const array = res.data;
-        
         array.forEach((item) => {
           let newItem = {};
           // Asignamos valores específicamente para cada cabecera
@@ -469,7 +523,6 @@ const isFullLoading = ref(false);
           newItem.created_at_formated = item.created_at_formated || "";
           usersFull.value.push(newItem);
         });
-
         if (array.length === 0) break; // Si no hay más datos, salimos del bucle
 
         totalRegistros += array.length;
@@ -498,75 +551,85 @@ const isFullLoading = ref(false);
   };
 
   function exportCSVFile(headers, items, fileTitle) {
-    // Crear array para CSV
-    let csvData = [];
+      // Crear array para CSV
+      let csvData = [];
 
-    // Agregar headers
-    csvData.push(Object.keys(headers));
+      // Agregar headers
+      csvData.push(Object.keys(headers));
 
-    // Agregar items
-    items.forEach(item => {
-        let row = [];
-        for (let key in headers) {
-            let value = item[key] !== undefined ? item[key] : '';
-            value = String(value);
+      // Agregar items
+      items.forEach(item => {
+          let row = [];
+          for (let key in headers) {
+              let value = item[key] !== undefined ? item[key] : '';
+              value = String(value);
 
-            // Escapar valores que contienen comas, saltos de línea o comillas
-            if (value.includes(',') || value.includes('\n') || value.includes('"')) {
-                value = `"${value.replace(/"/g, '""')}"`; // Doble las comillas internas
-            }
+              // Escapar valores que contienen comas, saltos de línea o comillas
+              if (value.includes(',') || value.includes('\n') || value.includes('"')) {
+                  value = `"${value.replace(/"/g, '""')}"`; // Doble las comillas internas
+              }
 
-            row.push(value);
-        }
-        csvData.push(row);
-    });
+              row.push(value);
+          }
+          csvData.push(row);
+      });
 
-    // Convertir a CSV
-    let csv = csvData.map(row => row.join(',')).join('\n');
+      // Convertir a CSV
+      let csv = csvData.map(row => row.join(',')).join('\n');
 
-    var exportedFilename = fileTitle + ".csv" || "export.csv";
+      var exportedFilename = fileTitle + ".csv" || "export.csv";
 
-    var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-    if (navigator.msSaveBlob) {
-        // IE 10+
-        navigator.msSaveBlob(blob, exportedFilename);
-    } else {
-        var link = document.createElement("a");
-        if (link.download !== undefined) {
-            // Browsers that support HTML5 download attribute
-            var url = URL.createObjectURL(blob);
-            link.setAttribute("href", url);
-            link.setAttribute("download", exportedFilename);
-            link.style.visibility = "hidden";
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-    }
-}
+      var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      if (navigator.msSaveBlob) {
+          // IE 10+
+          navigator.msSaveBlob(blob, exportedFilename);
+      } else {
+          var link = document.createElement("a");
+          if (link.download !== undefined) {
+              // Browsers that support HTML5 download attribute
+              var url = URL.createObjectURL(blob);
+              link.setAttribute("href", url);
+              link.setAttribute("download", exportedFilename);
+              link.style.visibility = "hidden";
+              document.body.appendChild(link);
+              link.click();
+              document.body.removeChild(link);
+          }
+      }
+  }
+
 
 /*********************************************************************/
 /**************** FIN DE CONFIGURACION DESCARGA ***********************/
 /*********************************************************************/
 
-watchEffect(async () => {
-  if (dateStore.selectedDate) {
-    // Aquí puedes usar la nueva fecha
-    const selectedDates = dateStore.selectedDate;
-    existeFecha.value = true;
-    fechaIFModel.value.fechai = moment(selectedDates, "YYYY-MM-DD").format('DD-MM-YYYY');
-    fechaIFModel.value.fechaf = moment(selectedDates, "YYYY-MM-DD").format('DD-MM-YYYY'); 
-    fecha.value.inicio = moment(fechaIFModel.value.fechai, "DD-MM-YYYY").format('YYYY-MM-DD');
-    fecha.value.fin = moment(fechaIFModel.value.fechaf, "DD-MM-YYYY").format('YYYY-MM-DD');
+onMounted(async () =>{
+    loadingData.value = true;
+    loadingGrafico.value = false
 
     await getChartLineTimeViews({
         fechai: fecha.value.inicio,
         fechaf: fecha.value.fin
     });
 
-    console.log('Fecha actualizada:', selectedDates)
-  }
+    loadingData.value = false;
+    loadingGrafico.value = true
 })
+
+const eventClick = function(event, chartContext, opts) {
+    // console.log(event, chartContext, opts)
+    // console.log(opts.dataPointIndex)
+    // console.log(opts.config.xaxis.categories)
+    if(opts.dataPointIndex > -1){
+      // console.log(opts.config.xaxis.categories[opts.dataPointIndex])
+      const fechaTimeZone = convertirTimestamp(opts.config.series[0]["data"][opts.dataPointIndex][0]).format("YYYY-MM-DD");
+      dateStore.setDate(fechaTimeZone)
+    }
+    // const category = config.xaxis.categories[dataPointIndex];
+    // const value = config.series[seriesIndex].data[dataPointIndex];
+    // console.log(`Clicked on ${category} with value ${value}`);
+    // Aquí puedes añadir tu lógica personalizada al hacer click en un punto
+  }
 </script>
 
 <template>
@@ -582,14 +645,14 @@ watchEffect(async () => {
     <VCard>
         <VCardItem>
             <VCardTitle>
-                Votos registrados por fecha agrupados por horas
+                Registros agrupados por fecha
             </VCardTitle>
             <!-- <VCardSubtitle class="text-wrap" style="word-break: break-all;">
-                Diseñada para mostrar la cantidad de usuarios registrados, organizados de acuerdo con la fecha de registro, agrupados por horas.
+                Diseñada para mostrar la cantidad de usuarios registrados, organizados de acuerdo con la fecha de registro. Esta vista permite analizar el comportamiento de registro de los usuarios dentro de un rango específico, con la restricción de seleccionar únicamente un intervalo máximo de {{limiteDaysDate}} días.
             </VCardSubtitle> -->
             <template #append>
-              <div class="d-flex align-center gap-4">
-                <AppDateTimePicker 
+                <div class="d-flex align-center gap-4">
+                  <AppDateTimePicker 
                     clearable
                     class="bg-white"
                     style="width: 19rem;"
@@ -601,14 +664,14 @@ watchEffect(async () => {
                     @on-change="obtenerFechas" 
                     :config="{
                         position: 'auto right',
-                        mode: 'single',
+                        mode: 'range',
                         altFormat: 'd F j, Y',
                         maxDate: new Date,
                         dateFormat: 'l, j \\d\\e F \\d\\e Y',
                         valueFormat: 'd-m-Y',
                         reactive: true
                     }" />
-                <div class="app-user-search-filter d-flex align-top justify-content-flex-end flex-wrap flex-column gap-0">
+                    <div class="app-user-search-filter d-flex align-top justify-content-flex-end flex-wrap flex-column gap-0">
                       <!-- 👉 Export button -->
                       <VBtn
                         :loading="isFullLoading"
@@ -624,13 +687,13 @@ watchEffect(async () => {
                         Exportando {{ docsExportNumberLength.tamanioActual }} / {{ docsExportNumberLength.tamanioTotal }} registros
                       </small> 
                     </div>
-              </div>
+                </div>
             </template>
         </VCardItem>
 
         <VCardText>
-            <div class="h5"> Mostrando: {{ fecha.inicio }}</div>
-            <VueApexCharts v-if="loadingGrafico" :options="resolveDeviceTimeLine.options" :series="resolveDeviceTimeLine.series" :height="320" width="100%" />
+            <div class="h5"> Mostrando datos de: {{ fecha.inicio }} - {{ fecha.fin }}</div>
+            <VueApexCharts v-if="loadingGrafico" :options="resolveDeviceTimeLine.options" :series="resolveDeviceTimeLine.series" :height="320" width="100%" @click="eventClick" />
             <div v-else class="py-4">
                 Cargando datos...
             </div>

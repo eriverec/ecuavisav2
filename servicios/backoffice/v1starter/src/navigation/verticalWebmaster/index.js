@@ -77,7 +77,11 @@ export default [
             {
               title: 'Registrados',
               to: 'apps-concursos-colegio',
-            }
+            },
+            {
+              title: 'Analítica',
+              to: 'apps-concursos-colegio-metricas',
+            },
           ],
         }
       //   // { title: 'View', to: { name: 'apps-user-view-id', params: { id: 21 } } },

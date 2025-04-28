@@ -62,9 +62,9 @@ async function getChartLineTimeViews(options = {}) {
   try {
     const { fechai = (moment().format('YYYY-MM-DD')), fechaf = (moment().format('YYYY-MM-DD')) } = options;
 
-    var response = await fetch(`https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/metricas-agrupadas-por-dias/0?tipo=Banda&fechai=${fechai}&fechaf=${fechaf}&limit=10000`);
+    var response = await fetch(`https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/metricas-agrupadas-por-dias/0?tipo=VIVA LA PAZ&fechai=${fechai}&fechaf=${fechaf}&limit=10000`);
 
-    //https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/metricas-agrupadas-por-dias/0?tipo=Banda&fechai=2025-04-13&fechaf=2025-04-15&page=1&limit=10000
+    //https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/metricas-agrupadas-por-dias/0?tipo=VIVA LA PAZ&fechai=2025-04-13&fechaf=2025-04-15&page=1&limit=10000
 
     const data = await response.json();
 
@@ -376,15 +376,25 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
   const urlTitleExport = ref("usuarios_concurso_bandas");
 
   const headersGlobal = ref({
-    id: "id",
-    ip: "ip",
+    _id: "_id",
+    concurso: "concurso",
+    estado: "estado_registro",
+    updated_at: "updated_at",
     created_at: "created_at",
-    video: "video",
-    ruc: "ruc",
-    colegio: "colegio",
-    ciudad:"ciudad",
-    link_youtube:"link_youtube",
-    created_at_formated: "created_at_formated"
+    link_youtube: "link_youtube",
+    institucion_nombre: "institucion_nombre",
+    nombre_rector: "nombre_rector",
+    contacto_celular: "contacto_celular",
+    contacto_email: "contacto_email",
+    categoria: "categoria",
+    talento_nombre: "talento_nombre",
+    link_formulario_1: "Consentimiento_parental_para_el_IVP",
+    link_formulario_2: "Autorizacion_de_uso_de_imagen_IVP",
+    link_formulario_3: "Autorizacion_de_la_Unidad_Educativa_para_el_IVP",
+    check_consentimiento: "check_consentimiento",
+    check_politica_privacidad: "check_politica_privacidad",
+    updated_at_formated:"updated_at_formated",
+    created_at_formated:"created_at_formated"
   });
   
   async function downloadSearch() {
@@ -422,6 +432,7 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
   });
 
   const usersFull = ref([]);
+  const estadoItems = ref([{title: 'Todos', value: 'Todos'}, {title: 'No revisado', value: '0'}, {title: 'Revisado, aprobado', value: '1'}, {title: 'Rechazado', value: '2'}]);
 
   async function getUsuariosExportar(page = 1, limit = 10) {
     try {
@@ -434,7 +445,7 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
         redirect: 'follow'
       };
 
-      urlApiExport.value = `https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/exportar-metricas-listar-concurso-votos?tipo=Banda&fechai=${fecha.value.inicio}&fechaf=${fecha.value.fin}`;
+      urlApiExport.value = `https://concursos-usuarios.vercel.app/concurso-bandas/backoffice/exportar-metricas-listar-concurso-votos?tipo=VIVA LA PAZ&fechai=${fecha.value.inicio}&fechaf=${fecha.value.fin}`;
       urlTitleExport.value = "usuarios_concurso_bandas_por_fecha";
 
       var response = await fetch(`${urlApiExport.value}&page=${page}&limit=${limit}`, requestOptions);
@@ -485,17 +496,36 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
         }
 
         const array = res.data;
-        for(let ins of array){
-          ins.video = ins.details?.video;
-          ins.ruc = ins.details?.ruc;
-          ins.colegio = ins.details?.colegio;
-          ins.ciudad = ins.details?.ciudad;
-          ins.link_youtube = ins.details?.link_youtube;
-        }
+        array.forEach((item) => {
+          let newItem = {};
+          // Asignamos valores específicamente para cada cabecera
+          let estadoText = estadoItems.value;
+
+          newItem._id = item._id || "";
+          newItem.concurso = item.tipo || "";
+          newItem.estado = estadoText.find(e => e.value == item.estado)?.title || "";
+          newItem.updated_at = item.updated_at || "";
+          newItem.created_at = item.created_at || "";
+          newItem.link_youtube = item.link_youtube || "";
+          newItem.institucion_nombre = item.institucion_nombre || "";
+          newItem.nombre_rector = item.nombre_rector || "";
+          newItem.contacto_celular = item.contacto_celular || "";
+          newItem.contacto_email = item.contacto_email || "";
+          newItem.categoria = item.categoria || "";
+          newItem.talento_nombre = item.talento_nombre || "";
+          newItem.link_formulario_1 = item.link_formulario_1 || "";
+          newItem.link_formulario_2 = item.link_formulario_2 || "";
+          newItem.link_formulario_3 = item.link_formulario_3 || "";
+          newItem.check_consentimiento = item.check_consentimiento == "1" ? "Si" : "No" || "Si";
+          newItem.check_politica_privacidad = item.check_politica_privacidad == "1" ? "Si" : "No" || "Si";
+          newItem.updated_at_formated = item.updated_at_formated || "";
+          newItem.created_at_formated = item.created_at_formated || "";
+          usersFull.value.push(newItem);
+        });
         if (array.length === 0) break; // Si no hay más datos, salimos del bucle
 
         totalRegistros += array.length;
-        usersFull.value = [...usersFull.value, ...array];
+        // usersFull.value = [...usersFull.value, ...array];
 
         docsExportNumberLength.value.tamanioActual = usersFull.value.length;
         docsExportNumberLength.value.tamanioTotal = res.total || totalRegistros;
@@ -522,43 +552,51 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
   function exportCSVFile(headers, items, fileTitle) {
     // Crear array para CSV
     let csvData = [];
-    
+
     // Agregar headers
     csvData.push(Object.keys(headers));
-    
+
     // Agregar items
     items.forEach(item => {
-      let row = [];
-      for (let key in headers) {
-        row.push(item[key] || '');
-      }
-      csvData.push(row);
+        let row = [];
+        for (let key in headers) {
+            let value = item[key] !== undefined ? item[key] : '';
+            value = String(value);
+
+            // Escapar valores que contienen comas, saltos de línea o comillas
+            if (value.includes(',') || value.includes('\n') || value.includes('"')) {
+                value = `"${value.replace(/"/g, '""')}"`; // Doble las comillas internas
+            }
+
+            row.push(value);
+        }
+        csvData.push(row);
     });
 
     // Convertir a CSV
     let csv = csvData.map(row => row.join(',')).join('\n');
 
-    var exportedFilenmae = fileTitle + ".csv" || "export.csv";
+    var exportedFilename = fileTitle + ".csv" || "export.csv";
 
     var blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
     if (navigator.msSaveBlob) {
-      // IE 10+
-      navigator.msSaveBlob(blob, exportedFilenmae);
+        // IE 10+
+        navigator.msSaveBlob(blob, exportedFilename);
     } else {
-      var link = document.createElement("a");
-      if (link.download !== undefined) {
-        // feature detection
-        // Browsers that support HTML5 download attribute
-        var url = URL.createObjectURL(blob);
-        link.setAttribute("href", url);
-        link.setAttribute("download", exportedFilenmae);
-        link.style.visibility = "hidden";
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      }
+        var link = document.createElement("a");
+        if (link.download !== undefined) {
+            // Browsers that support HTML5 download attribute
+            var url = URL.createObjectURL(blob);
+            link.setAttribute("href", url);
+            link.setAttribute("download", exportedFilename);
+            link.style.visibility = "hidden";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
     }
-  }
+}
+
 
 /*********************************************************************/
 /**************** FIN DE CONFIGURACION DESCARGA ***********************/

@@ -28,6 +28,10 @@ export default [{
           {
             title: 'Registrados',
             to: 'apps-concursos-colegio',
+          },
+          {
+            title: 'Analítica',
+            to: 'apps-concursos-colegio-metricas',
           }
         ],
       }
