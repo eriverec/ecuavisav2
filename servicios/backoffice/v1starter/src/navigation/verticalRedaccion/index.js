@@ -13,6 +13,46 @@ export default [
     ]
   },
   {
+    title: 'Concursos',
+    icon: { icon: 'tabler-balloon' },
+    // to: { name: 'apps-concursos' },
+    children: [
+      // { title: 'Desafío a la Fama', to: 'apps-votos-detalle' },
+      // { title: 'Click click boom', to: 'apps-concursos' },
+      // { title: 'Gavilanes', to: 'apps-concursos-gavilanes' },
+      // {
+      //   title: 'Hija del embajador',
+      //   to: null,
+      //   children: [
+      //     {
+      //       title: 'Usuarios registrados',
+      //       to: 'apps-concursos-hija-embajador',
+      //     },
+      //     {
+      //       title: 'Analítica',
+      //       to: 'apps-concursos-hija-embajador-metricas',
+      //     },
+      //   ],
+      // },
+      {
+        title: 'Intercolegial Viva La Paz',
+        to: null,
+        children: [
+          {
+            title: 'Registrados',
+            to: 'apps-concursos-colegio',
+          },
+          {
+            title: 'Analítica',
+            to: 'apps-concursos-colegio-metricas',
+          }
+        ],
+      }
+      // { title: 'Ecuavisa', to: 'apps-concursos-ecuavisa' },
+
+    ],
+  },
+  {
     title: 'Radar Digital',
     icon: { icon: 'tabler-radar' },
     children: [
