@@ -7,6 +7,57 @@ import PrincipalTab from './PrincipalTab.vue';
 const tabActual = ref('tab-lista')
 const isDialogVisible = ref(false)
 // const currentTab_fidelizacion = ref(0)
+
+const insetSwitch1 = ref(true);
+const disabledAndLoadingSwitch = ref(false);
+
+const fetchRadar = async (url, options = {}) => {
+  try {
+    disabledAndLoadingSwitch.value = true;
+    const res = await fetch(url, options);
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    console.error(error.message);
+    return null;
+  } finally {
+    disabledAndLoadingSwitch.value = false;
+  }
+};
+
+const getStatusRadar = () => fetchRadar(`https://services.ecuavisa.com/gestor/competencias/scrappin/dinamico/view-status-radar.php`);
+
+const setStatusRadar = (estado) => fetchRadar(`https://services.ecuavisa.com/gestor/competencias/scrappin/dinamico/main-switch.php`, {
+  method: 'POST',
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ estado }),
+});
+
+// watch(insetSwitch1, async (newVal, oldVal) => {
+//   if (newVal != null) {
+//     const resp = await setStatusRadar(newVal.toString());
+//     if (!resp?.resp) insetSwitch1.value = !newVal;
+//   }
+// });
+
+onMounted(async () => {
+  const status = await getStatusRadar();
+  insetSwitch1.value = status?.run ?? true;
+});
+
+const changeStatusRadar = async () => {
+    try {
+        const valor = insetSwitch1.value.toString();
+        const resp = await setStatusRadar(valor);
+        if (!resp?.resp){
+			insetSwitch1.value = !valor;
+			alert(resp?.message || "Ocurrió un error al intentar editar");
+		};
+    } catch (e) {
+        alert("Ocurrió un error al intentar editar")
+        return false;
+    }
+}
 </script>
 
 <template>
@@ -79,14 +130,14 @@ const isDialogVisible = ref(false)
 							<!-- $$$$$$$$$$$$$ tab3 $$$$$$$$$$$$$$ -->
 							<VWindowItem value="tab-tools">
 								<div class=" py-5 gap-4 align-items-center">   
-									<VCardTitle >Configura el horario de las transmisiones en vivo de ecuavisa.com </VCardTitle>
+									<VCardTitle >Activa el radar digital y gestiona los archivos de ecuavisa.com </VCardTitle>
 									<VCardSubtitle> Escoge el ítem que deseas configurar </VCardSubtitle>
 								</div>
 								<!-- content here -->
 								<VRow>
 									<VCol cols="12" lg="10" class="mx-auto my-8 align-items-center" >
 										<VRow>
-											<VCol cols="12" md="6" center >
+											<VCol cols="12" md="4" center >
 												<VCard  flat  border class=" cursor-pointer"  @click="$router.push({ name: 'apps-apicustom' })" >
 													<VCardText class="text-center">
 														<VAvatar rounded size="70" color="primary" variant="tonal" class="p-5 mb-2" >
@@ -105,7 +156,7 @@ const isDialogVisible = ref(false)
 												
 
 											</VCol>
-											<VCol cols="12" md="6" >
+											<VCol cols="12" md="4" >
 												<VCard  flat  border class=" cursor-pointer"  @click="clickButton">
 													<VCardText class="text-center">
 														<VAvatar rounded size="70" color="primary" variant="tonal" class="p-5 mb-2" >
@@ -119,6 +170,40 @@ const isDialogVisible = ref(false)
 														<VBtn size="small" variant="tonal"  >
 															abrir gestor
 														</VBtn>
+													</VCardText>
+												</VCard>
+											</VCol>
+											<VCol cols="12" md="4" >
+												<VCard  flat  border class="py-0">
+													<VCardText class="text-center pb-3 pt-5">
+														<VAvatar rounded size="70" color="primary" variant="tonal" class="p-5 mb-2" >
+															<VIcon icon="tabler-radar"  size="45" />
+														</VAvatar>
+														<h6 class="text-h6 my-3 mb-0">
+															Radar Digital
+														</h6>
+														    <!-- Dialog Activator -->
+
+															<div class="d-flex align-center flex-column">
+																<VSwitch
+																	@change="changeStatusRadar"
+																	v-model="insetSwitch1"
+																	inset
+																	:loading="disabledAndLoadingSwitch"
+																	:disabled="disabledAndLoadingSwitch"
+																	class="py-0"
+																	style="margin-bottom: -7px;"
+																/>
+																<small class="d-flex justify-center gap-2" style="line-height: 2;">
+																	Estado actual del radar: 
+																	<VChip color="primary" v-if="insetSwitch1.toString() == 'true'">
+																		Encendido
+																	</VChip>
+																	<VChip color="error" v-else>
+																		Apagado
+																	</VChip>
+																</small>
+															</div>
 													</VCardText>
 												</VCard>
 											</VCol>
