@@ -840,15 +840,15 @@ watch(estadoModel, async () => {
                 </td>
 
                 <td>
-                  <span class="text-base">{{ registro.institucion_nombre }}</span>
-                </td>
-
-                <td>
                   <span class="text-base">{{ registro.talento_nombre }}</span>
                 </td>
 
                 <td>
                   <span class="text-base">{{ registro.categoria }}</span>
+                </td>
+
+                <td>
+                  <span class="text-base">{{ registro.institucion_nombre }}</span>
                 </td>
 
                 <td>
