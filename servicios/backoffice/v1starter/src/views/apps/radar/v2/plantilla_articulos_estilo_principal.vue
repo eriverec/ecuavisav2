@@ -51,7 +51,7 @@
 
   const formatDate = (dateString) => {
     const date = moment(dateString, 'DD/MM/YYYY HH:mm:ss', true); // modo estricto
-    return date.isValid() ? date.format('DD/MM/YYYY HH:mm:ss') : 'Datos por procesar';
+    return date.isValid() ? date.format('DD/MM/YYYY HH:mm:ss') : 'Actualizando';
   }
 
   /*
