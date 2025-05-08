@@ -235,7 +235,7 @@ const principalData = async function () {
             if(noticia.fechaPublicacion){
               noticia.fechaPublicacion = moment(noticia.fechaPublicacion, "DD/MM/YYYY HH:mm:ss").format("DD/MM/YYYY HH:mm:ss") || ""
             }else{
-              noticia.fechaPublicacion = moment().subtract(1, 'hour').format("DD/MM/YYYY HH:mm:ss")
+              noticia.fechaPublicacion = "Sin fecha";
             }
 
             if(!noticia.hasOwnProperty("getArticle")){
@@ -253,8 +253,13 @@ const principalData = async function () {
     // console.log("uniqueData", uniqueData.splice(0, 10))
 
     const sortedData = uniqueData.sort((a, b) => {
-      const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
-      const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+      const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss", true);
+      const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss", true);
+
+      if (!dateA.isValid() && !dateB.isValid()) return 0;
+      if (!dateA.isValid()) return 1;
+      if (!dateB.isValid()) return -1;
+
       return dateB - dateA;
     });
 
@@ -418,10 +423,20 @@ const filteredFunction = function() {
       const matchesSubseccion = subseccion.length === 0 || subseccion.includes(subVerticalName);
       return (matchesBusqueda || matchesBusquedaKeyWords || matchesBusquedaAutor) && matchesSitio && matchesSecciones && matchesSubseccion;
     })
+    // .sort((a, b) => {
+    //   const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+    //   const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
+    //   return dateB - dateA; // Ordena de más reciente a más antiguo
+    // });
     .sort((a, b) => {
-      const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
-      const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss");
-      return dateB - dateA; // Ordena de más reciente a más antiguo
+      const dateA = moment(a.fechaPublicacion, "DD/MM/YYYY HH:mm:ss", true);
+      const dateB = moment(b.fechaPublicacion, "DD/MM/YYYY HH:mm:ss", true);
+
+      if (!dateA.isValid() && !dateB.isValid()) return 0;
+      if (!dateA.isValid()) return 1;
+      if (!dateB.isValid()) return -1;
+
+      return dateB - dateA;
     });
 };
 

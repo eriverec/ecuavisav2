@@ -59,14 +59,15 @@
 
     // Filtrar los registros cuya fechaPublicacion sea de tiempo
     const datosFiltrados = props.disabledAll
-      ? data
-      : data.filter(({ fechaPublicacion }) => {
-          const fechaSinSegundos = moment(
-            fechaPublicacion,
-            "DD/MM/YYYY HH:mm:ss"
-          ).startOf("minute");
-          return fechaSinSegundos.isSameOrAfter(moment(tiempo).startOf("minute"));
-        });
+    ? data
+    : data.filter(({ fechaPublicacion }) => {
+        const fecha = moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss", true); // modo estricto
+        if (!fecha.isValid()) return false;
+
+        const fechaSinSegundos = fecha.startOf("minute");
+        return fechaSinSegundos.isSameOrAfter(moment(tiempo).startOf("minute"));
+      });
+
 
     // Agrupar por sitio y color, incluyendo la lista de artículos
     const agrupados = datosFiltrados.reduce((acc, item) => {

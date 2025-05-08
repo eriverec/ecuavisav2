@@ -50,7 +50,8 @@
   }
 
   const formatDate = (dateString) => {
-    return moment(dateString, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm')
+    const date = moment(dateString, 'DD/MM/YYYY HH:mm:ss', true); // modo estricto
+    return date.isValid() ? date.format('DD/MM/YYYY HH:mm:ss') : 'Datos por procesar';
   }
 
   /*
@@ -273,6 +274,7 @@
       procesarKeywordsAndTags(filteredData.value);
       model_select_hora.value = { title:"Todos", value: ""  };
       isLoading.value = false;
+      currentPage.value = 1;
     }
   })
 

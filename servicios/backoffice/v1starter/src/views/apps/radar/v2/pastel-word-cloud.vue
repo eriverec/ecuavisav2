@@ -376,14 +376,16 @@ import esLocale from "moment/locale/es";
       }
 
       const datosFiltrados = uniqueArticles.filter(({ fechaPublicacion, sitio }) => {
-        if(fechaPublicacion){
-          const fechaSinSegundos = moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss").startOf("minute");
-          return fechaSinSegundos.isSameOrAfter(moment(tiempo).startOf("minute"));
-        }else{
-          return false;
+        if (fechaPublicacion) {
+          const fecha = moment(fechaPublicacion, "DD/MM/YYYY HH:mm:ss", true); // modo estricto
+          if (fecha.isValid()) {
+            const fechaSinSegundos = fecha.startOf("minute");
+            return fechaSinSegundos.isSameOrAfter(moment(tiempo).startOf("minute"));
+          }
         }
-        
+        return false;
       });
+
 
       procesarKeywords(datosFiltrados);
 
