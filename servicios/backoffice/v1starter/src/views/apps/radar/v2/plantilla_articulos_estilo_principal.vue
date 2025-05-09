@@ -261,6 +261,7 @@
       filteredData.value = resultado;
       procesarKeywordsAndTags(filteredData.value);
       isLoading.value = false;
+      currentPage.value = 1;
     }
   })
   /*
