@@ -5,7 +5,8 @@ export const useCategoriasListStore = defineStore("CategoriasListStore", {
   actions: {
     fetchCategorias() {
       return axios.get(
-        "https://estadisticas.ecuavisa.com/sites/gestor/Tools/Intereses/datareader.php"
+        // "https://estadisticas.ecuavisa.com/sites/gestor/Tools/Intereses/datareader.php"
+        "https://services.ecuavisa.com/Intereses/datareader.php"
       );
     },
 
