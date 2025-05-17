@@ -617,7 +617,7 @@ function eventoEnvivoManager() {
 
   let currentDataGye = null;
   let lastFetchTime = 0;
-  const FETCH_COOLDOWN = 30000;
+  const FETCH_COOLDOWN = 1000;
 
   function fetchScriptContent() {
     return new Promise((resolve, reject) => {
@@ -805,7 +805,7 @@ function eventoEnvivoManager() {
 
   // intervalos de verificación
   setInterval(procesarHorarioActual, 30000); // Verificar horarios cada 30 segundos
-  setInterval(fetchHorarioEnvivo, 30000); // cada 30sg
+  setInterval(fetchHorarioEnvivo, 1000); // Verificar cambios cada segundo
 
   // Ejecutar verificación inicial
   fetchHorarioEnvivo();
@@ -861,7 +861,7 @@ function eventoEnvivoManagerQuito() {
 
   let currentDataQuito = null;
   let lastFetchTime = 0;
-  const FETCH_COOLDOWN = 30000;
+  const FETCH_COOLDOWN = 1000;
 
   function fetchScriptContent() {
     return new Promise((resolve, reject) => {
@@ -991,7 +991,7 @@ function eventoEnvivoManagerQuito() {
 
   // intervalos de verificación
   setInterval(procesarHorarioActual, 30000); // Verificar horarios cada 30 segundos
-  setInterval(fetchHorarioEnvivoQuito, 30000); // cada 30sg
+  setInterval(fetchHorarioEnvivoQuito, 1000); // Verificar cambios cada segundo
 
   // Ejecutar verificación inicial
   fetchHorarioEnvivoQuito();
