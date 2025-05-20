@@ -7,86 +7,94 @@ date_default_timezone_set('America/Guayaquil');
 header('Content-type: application/json');
 header('Access-Control-Allow-Origin: *');
 
-if(strcasecmp($_SERVER['REQUEST_METHOD'], 'POST') != 0){
-    echo '{"resp":false,"message":"Solo es permitido consultas por POST!"}';
-    exit();
+if (strcasecmp($_SERVER['REQUEST_METHOD'], 'POST') != 0) {
+    echo json_encode([
+        "resp" => false,
+        "message" => "Solo se permiten consultas por POST"
+    ]);
+    exit;
 }
 
 $postdata = file_get_contents("php://input");
 $data = json_decode($postdata, true);
 
-function sendApiEmails($usuario) {
-    // URL de la API para obtener los usuarios filtrados
-    // $apiUrl = "https://mongo-users-drab.vercel.app/usuario/sendpulse/?fechai=2023-08-11";
-    // $apiUrl = "https://mongo-users-drab.vercel.app/usuario/sendpulse";
-    
-    // Obtener los usuarios filtrados
-    // $response = file_get_contents($apiUrl);
+// Validar si $data es válido
+if (!$data || !is_array($data)) {
+    echo json_encode([
+        "resp" => false,
+        "message" => "Datos JSON inválidos o vacíos"
+    ]);
+    exit;
+}
 
+function sendApiEmails($usuario)
+{
     $filteredUsers = [$usuario];
-    // Verificar si se obtuvo una respuesta válida
     if (!$filteredUsers) {
-        echo '{"resp":"Error al obtener los datos de la API."}';
-        exit();
+        return ["success" => false, "error" => "No se encontraron usuarios válidos"];
     }
-    // Tamaño del lote
-    $batchSize = 5000;
 
-    // Dividir los usuarios filtrados en lotes de 1000
+    $batchSize = 5000;
     $totalEmails = count($filteredUsers);
-    // Obtener el token de autenticación
     $token = getToken();
+
+    if (!$token) {
+        return ["success" => false, "error" => "Token inválido o no disponible"];
+    }
+
+    $results = [];
+
     for ($i = 0; $i < $totalEmails; $i += $batchSize) {
         $batch = array_slice($filteredUsers, $i, $batchSize);
-        // Array para almacenar los correos y sus datos
         $emailData = [];
-        // Recorrer los usuarios del lote actual y agregar los datos al array
-        foreach ($batch as $user) {
-            $email = $user['email'];
-            $firstName = $user['first_name'];
-            $lastName = $user['last_name'];
-            $createdAt = $user['created_at'];
 
-            $userData = [
-                'email' => $email,
+        foreach ($batch as $user) {
+            $emailData[] = [
+                'email' => $user['email'],
                 'variables' => [
-                    'Nombre' => $firstName,
-                    'Apellido' => $lastName,
-                    'created_at' => $createdAt
+                    'Nombre' => $user['first_name'],
+                    'Apellido' => $user['last_name'],
+                    'created_at' => $user['created_at']
                 ]
             ];
-            $emailData[] = $userData;
         }
-        
-        // Realizar el envío de correo del lote actual
-        return sendEmailsBatch($emailData, $token);
+
+        $response = sendEmailsBatch($emailData, $token);
+        $results[] = json_decode($response, true);
     }
+
+    return $results;
 }
 
-function getToken() {
-    // URL para obtener el token de autenticación
-    $tokenUrl = "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/token.php";
-    // Obtener el token
-    $token = file_get_contents($tokenUrl);
-    // Verificar si se obtuvo un token válido
-    if (!$token) {
-        echo "Error al obtener el token.";
-        return;
+function getToken()
+{
+    $tokenFile = __DIR__ . '/sendpulse/getApi.php';
+
+    if (!file_exists($tokenFile)) {
+        return null;
     }
-    return $token;
+
+    $token = file_get_contents($tokenFile);
+
+    if (!$token || empty(trim($token))) {
+        return null;
+    }
+
+    return trim($token);
 }
 
-function sendEmailsBatch($emails, $token) {
+function sendEmailsBatch($emails, $token)
+{
     $idListaSendpulse = "589349";
-    $listEmails = $idListaSendpulse;
-    $sendEmailsUrl = "https://api.sendpulse.com/addressbooks/{$listEmails}/emails";
-    
-    // Configurar la petición HTTP
+    $sendEmailsUrl = "https://api.sendpulse.com/addressbooks/{$idListaSendpulse}/emails";
+
     $headers = [
         "Content-Type: application/json",
         "Authorization: Bearer {$token}"
     ];
+
     $postData = json_encode(['emails' => $emails]);
+
     $options = [
         'http' => [
             'header' => implode("\r\n", $headers),
@@ -95,12 +103,18 @@ function sendEmailsBatch($emails, $token) {
             'ignore_errors' => true
         ]
     ];
-    // Realizar la petición HTTP
+
     $context = stream_context_create($options);
-    $response = file_get_contents($sendEmailsUrl, false, $context);
-    // Imprimir la respuesta en la consola
-    return $response;
+    return file_get_contents($sendEmailsUrl, false, $context);
 }
 
-echo '{"resp":true,"message":"Datos guardados correctamente", "respConsulta":'.sendApiEmails($data).', "usuarioEnviado": '.json_encode($data).'}';
-exit();
+// Ejecutar y devolver respuesta final
+$apiResult = sendApiEmails($data);
+
+echo json_encode([
+    "resp" => true,
+    "message" => "Datos guardados correctamente",
+    "respConsulta" => $apiResult,
+    "usuarioEnviado" => $data
+]);
+exit;

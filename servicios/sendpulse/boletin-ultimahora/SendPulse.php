@@ -31,7 +31,7 @@ class SendPulse
 		require '../funciones/Ctrfunciones.php';
 
 		$this->typeProyect =  "Production"; //Production - Guzzle
-		$this->dominio =  "https://phpstack-1011861-5163349.cloudwaysapps.com";
+		$this->dominio =  "https://services.ecuavisa.com/sendpulse";
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 5,
 			"folder" => "boletin-ultimahora", // Guardado de img y json
@@ -182,18 +182,21 @@ class SendPulse
 	private function getApiMethodGet($url)
 	{
 		$this->contadorSolicitudes++;
+		$noCacheHeaders = [
+			'Cache-Control' => 'no-cache, no-store, must-revalidate',
+			'Pragma' => 'no-cache',
+			'Expires' => '0'
+		];
+
 		if ($this->typeProyect != "Production") {
 			$client = new Client([
 				'verify' => 'C:/cacert.pem',
 			]);
 
-			$request = new Request('GET', $url);
+			$request = new Request('GET', $url, $noCacheHeaders);
 
 			$res = $client->sendAsync($request)->wait();
 
-			// echo $res->getBody();
-
-			// echo json_encode($res->getBody());
 			if ($res->getStatusCode() == 200) {
 				return $res->getBody();
 			} else {
@@ -201,6 +204,7 @@ class SendPulse
 			}
 		}
 
+		// Producción (cURL)
 		$curl = curl_init();
 		curl_setopt_array($curl, array(
 			CURLOPT_URL => $url,
@@ -211,6 +215,11 @@ class SendPulse
 			CURLOPT_FOLLOWLOCATION => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => 'GET',
+			CURLOPT_HTTPHEADER => [
+				'Cache-Control: no-cache, no-store, must-revalidate',
+				'Pragma: no-cache',
+				'Expires: 0'
+			]
 		));
 		$response = curl_exec($curl);
 		curl_close($curl);
@@ -1211,18 +1220,17 @@ class SendPulse
 	}
 
 
-	public function getAuthorName($idarticle)
-	{
-			$article = $this->getArticle($idarticle);
-			
-			foreach ($article->article->metadata->vocabulary as $item) {
-					if ($item->name === 'Ecv_Author') {
-							return $item->category->name;
-					}
-			}
-			
-			return null; // Retorna null si no se encuentra el autor
-	}
+	public function getAuthorName($idarticle){
+        $article = $this->getArticle($idarticle);
+        
+        foreach ($article->article->metadata->vocabulary ?? [] as $item) {
+            if (($item->name ?? null) === 'Ecv_Author') {
+                return $item->category->name ?? null;
+            }
+        }
+        
+        return null;
+    }
 
 
 
@@ -1327,7 +1335,7 @@ class SendPulse
 			}
 
 			echo '<div style="max-width: 500px;margin-left: auto;margin-right: auto;padding:30px">';
-			echo '<b>Subject: </b>' . $this->subject;
+			echo '<b>Subject:. </b>' . $this->subject;
 			echo '<br>';
 			echo '<b>Descripción: </b>' . $this->descripcion;
 			echo '<br>';
