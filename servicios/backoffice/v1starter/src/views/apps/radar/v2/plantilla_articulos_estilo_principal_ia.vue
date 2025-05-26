@@ -13,6 +13,7 @@
 
   const emit = defineEmits([
     'click:checkSelected',
+    'click:generateNotaIA',
   ])
 
   const snackbar = ref({
@@ -27,7 +28,8 @@
     articulos: { type: Array, required: true },
     modoSimple: { type: Boolean, required: true, default:false },
     selecteDisplay: { type: Boolean, required: true, default: true },
-    articulosSelected: { type: Array, required: true }
+    articulosSelected: { type: Array, required: true },
+    controlModalProcesarNotasIa: { type: Boolean, required: true }
   });
 
   const filteredData = ref([]);
@@ -486,7 +488,10 @@ const syncSelected_2 = (enlace, selected) => {
   emit('click:checkSelected', enlace, false);
 };
 
-const isDialogVisibleGenerate = ref(false)
+const funcionGenerarNotaIA = () => {
+  emit('click:generateNotaIA', props.articulosSelected, isDialogArticlesSelected);
+}
+
 
 </script>
 <template>
@@ -498,25 +503,6 @@ const isDialogVisibleGenerate = ref(false)
     >
       {{ snackbar.text }}
     </VSnackbar>
-    <!-- Dialog -->
-    <VDialog
-      v-model="isDialogVisibleGenerate"
-      width="300"
-    >
-      <VCard
-        color="primary"
-        width="300"
-      >
-        <VCardText class="pt-3">
-          Por favor, espere
-          <VProgressLinear
-            indeterminate
-            color="white"
-            class="mb-0"
-          />
-        </VCardText>
-      </VCard>
-    </VDialog>
     <VDialog
         v-model="isDialogArticlesSelected.modal"
         scrollable
@@ -565,7 +551,7 @@ const isDialogVisibleGenerate = ref(false)
                   class="mt-5 d-block" 
                 />
 
-              <VBtn @click="isDialogVisibleGenerate = true" :disabled="props.articulosSelected.length == 0" color="warning" class="text-black"> 
+              <VBtn @click="funcionGenerarNotaIA" :disabled="props.articulosSelected.length == 0" color="warning" class="text-black"> 
                 <div class="svg-icon-start mt-1">
                   <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 512 512" style="width: 20px; height: 20px; shape-rendering: geometricPrecision; text-rendering: geometricPrecision; image-rendering: optimizeQuality; fill-rule: evenodd; clip-rule: evenodd;">
                     <g>
@@ -863,9 +849,6 @@ const isDialogVisibleGenerate = ref(false)
                         <VChip size="x-small">{{ item.vertical }}</VChip>
                         <div class="autor-ec" title="Autor">
                           <VIcon icon="tabler-user" size="15" /> <small>{{ item.autor }}</small>
-                        </div>
-                        <div class="article-type-ec" title="Tipo de artículo" v-if="!props.modoSimple">
-                          <VIcon icon="tabler-article" size="15" /> <small>{{ item.tipo }}</small>
                         </div>
                       </div>
                       <div v-if="item.keywords && !props.modoSimple">
