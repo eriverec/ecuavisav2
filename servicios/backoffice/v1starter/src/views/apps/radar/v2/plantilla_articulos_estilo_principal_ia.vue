@@ -402,7 +402,7 @@ function procesarKeywordsAndTags(articles){
 */
 
   const currentPageModalArticlesSelected = ref(1);
-  const pageSizeModalArticlesSelected = ref(3); // Valor por defecto
+  const pageSizeModalArticlesSelected = ref(5); // Valor por defecto
 
   watch(pageSizeModalArticlesSelected, () => {
     currentPageModalArticlesSelected.value = 1;
@@ -451,7 +451,7 @@ const isDialogArticlesSelected = ref({
   }
 })
 
-const maximoNotasSelected = 5;
+const maximoNotasSelected = 4;
 const syncSelected = (enlace, selected) => {
   // Si el usuario intenta seleccionar (selected === true)
   if (selected) {
