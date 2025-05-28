@@ -152,10 +152,12 @@ onMounted(async()=>{
 
 					<template #append>
 						<VBtn
+							class="ml-2 rounded-sm"
 							:href="articleIA.dataOld[index].enlace"
 							target="_blank"
-							variant="text"
-							color="default"
+							variant="tonal"
+							size="x-small"
+							color="primary"
 							icon="tabler-link"
 						/>
 					</template>
