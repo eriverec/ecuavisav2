@@ -402,7 +402,7 @@ function procesarKeywordsAndTags(articles){
 */
 
   const currentPageModalArticlesSelected = ref(1);
-  const pageSizeModalArticlesSelected = ref(10); // Valor por defecto
+  const pageSizeModalArticlesSelected = ref(3); // Valor por defecto
 
   watch(pageSizeModalArticlesSelected, () => {
     currentPageModalArticlesSelected.value = 1;
@@ -489,9 +489,10 @@ const syncSelected_2 = (enlace, selected) => {
 };
 
 const funcionGenerarNotaIA = () => {
-  emit('click:generateNotaIA', props.articulosSelected, isDialogArticlesSelected);
+  emit('click:generateNotaIA', props.articulosSelected, isDialogArticlesSelected, btnLoading);
 }
 
+const btnLoading = ref(false);
 
 </script>
 <template>
@@ -551,7 +552,7 @@ const funcionGenerarNotaIA = () => {
                   class="mt-5 d-block" 
                 />
 
-              <VBtn @click="funcionGenerarNotaIA" :disabled="props.articulosSelected.length == 0" color="warning" class="text-black"> 
+              <VBtn @click="funcionGenerarNotaIA" :disabled="props.articulosSelected.length == 0 || btnLoading" :loading="btnLoading" color="warning" class="text-black"> 
                 <div class="svg-icon-start mt-1">
                   <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 512 512" style="width: 20px; height: 20px; shape-rendering: geometricPrecision; text-rendering: geometricPrecision; image-rendering: optimizeQuality; fill-rule: evenodd; clip-rule: evenodd;">
                     <g>
@@ -573,7 +574,14 @@ const funcionGenerarNotaIA = () => {
 
                   <VListItem class="article-card elevation-0 border-1 rounded no-truncate px-4 py-2 mb-3">
                     <template #prepend>
-                      <VCheckbox v-model="item.selected" @change="syncSelected_2(item.enlace, item.selected)" />
+                      <VBtn
+                        title="Eliminar nota seleccionada"
+                        color="error"
+                        icon="tabler-trash"
+                        size="x-small"
+                        class="mr-2"
+                        @click="syncSelected_2(item.enlace, false)"
+                      />
                       <VAvatar
                         v-if="item.picture"
                         :image="replaceAmp(item.picture)"
@@ -630,12 +638,6 @@ const funcionGenerarNotaIA = () => {
               <td colspan="4" class="no-results">No se encontraron resultados</td>
             </div>
           </VList>
-        </VCardText>
-
-        <VCardText class="py-4">
-          <VBtn class="my-4" @click="isDialogArticlesSelected.modal = false">
-            Cerrar modal
-          </VBtn>
         </VCardText>
       </VCard>
     </VDialog>

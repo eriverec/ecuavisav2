@@ -4,6 +4,10 @@ import { extendMoment } from "moment-range";
 import esLocale from "moment/locale/es";
 import plantilla_articulos_estilo_principal_ia from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal_ia.vue';
 import { computed, onMounted, reactive, ref, watch } from "vue";
+import lectorMD from './lectorMD.js';
+import { LocalStorageCRUD } from './LocalStorageCRUD.js';
+import { useRouter } from 'vue-router';
+const router = useRouter();
 
 const moment = extendMoment(Moment);
 moment.locale("es", [esLocale]);
@@ -721,6 +725,13 @@ function stripHtmlTags(str, limitWords = 100) {
  */
 async function getArticleContent(enlace) {
   try{
+    
+    const articleOld = LocalStorageCRUD.findArticleByURL(enlace);
+    if(articleOld){
+      const {keywords, titulo, content = null} = articleOld;
+      return {keywords, titulo, content};
+    }
+
     const response = await fetch(`https://servicio-competencias.vercel.app/get-article-content?url=${enlace}`);
 
     if (!response.ok) {
@@ -793,11 +804,13 @@ function dataSendPost(articulosSelected, allKeywords) {
  * @param {boolean} modalArticulosSelected - Indica si se está usando el modal de selección
  * @returns {Promise<void>}
  */
-async function funcionGenerarNotaIA(articulosSelected, modalArticulosSelected) {
+async function funcionGenerarNotaIA(articulosSelected, modalArticulosSelected, btnLoading) {
   try{
-    isDialogNotaIA.value.modal = true;
-    modalArticulosSelected.value.modal = false;
-    loadingIA.value = true;
+
+    btnLoading.value = true;
+    // loadingIA.value = true;
+    // isDialogNotaIA.value.modal = true;
+
     const artToString = JSON.stringify(articulosSelected);
     const jsonArticulos = JSON.parse(artToString);
 
@@ -820,131 +833,146 @@ async function funcionGenerarNotaIA(articulosSelected, modalArticulosSelected) {
     for (const articulo of jsonEnvio) {
       const contenido = await getArticleContent(articulo.enlace);
       if (contenido && contenido.content) {
-        contenidoArticulos.push(contenido);
+        const unificarObject = {
+          ...articulo,
+          ...contenido
+        }
+        contenidoArticulos.push(unificarObject);
       }
     }
 
     const allKeywords = contenidoArticulos.flatMap(item => item.keywords).filter((keyword, index, self) => self.indexOf(keyword) === index);
     const keywordsRandom = getRandomKeywords(allKeywords);
-
     const dataSend = dataSendPost(contenidoArticulos, keywordsRandom);
 
-    responseIA.value = dataSend;
-    const respAI = await generarNotaIA(dataSend);
+    // responseIA.value = dataSend;
+    // const respAI = await generarNotaIA(dataSend);
 
-    if(!respAI || !respAI.success){
-      snackbar.value = {
-        show: true,
-        text: `Error, no se pudo generar la nota con IA, intente nuevamente: ${respAI.message}`,
-        color: 'error'
-      }
-      return null;
-    }
-
-    console.log(respAI)
+    // if(!respAI || !respAI.success){
+    //   snackbar.value = {
+    //     show: true,
+    //     text: `Error, no se pudo generar la nota con IA, intente nuevamente: ${respAI.message}`,
+    //     color: 'error'
+    //   }
+    //   return null;
+    // }
 
     // await new Promise(resolve => setTimeout(resolve, 2000));
     //Respuesta exitosa
-    isDialogNotaIA.value.data.titulo = respAI.synthesizedArticle.title;
-    isDialogNotaIA.value.data.contenido = respAI.synthesizedArticle.content;
-    isDialogNotaIA.value.data.tags = respAI.synthesizedArticle.keywords;
-    isDialogNotaIA.value.data.headings = respAI.synthesizedArticle.headings;
-    isDialogNotaIA.value.data.metaDescription = respAI.synthesizedArticle.metaDescription;
-    isDialogNotaIA.value.data.readabilityScore = respAI.synthesizedArticle.readabilityScore;
-    isDialogNotaIA.value.data.wordCount = respAI.synthesizedArticle.wordCount;
+    // isDialogNotaIA.value.data.titulo = respAI.synthesizedArticle.title;
+    // isDialogNotaIA.value.data.contenido = respAI.synthesizedArticle.content;
+    // isDialogNotaIA.value.data.tags = respAI.synthesizedArticle.keywords;
+    // isDialogNotaIA.value.data.headings = respAI.synthesizedArticle.headings;
+    // isDialogNotaIA.value.data.metaDescription = respAI.synthesizedArticle.metaDescription;
+    // isDialogNotaIA.value.data.readabilityScore = respAI.synthesizedArticle.readabilityScore;
+    // isDialogNotaIA.value.data.wordCount = respAI.synthesizedArticle.wordCount;
 
     // Agregar objetos a una colección
-    LocalStorageCRUD.value.addToCollection({
-      id: generateId(),
-      title: respAI.synthesizedArticle.title,
-      keywords: respAI.synthesizedArticle.keywords,
-      content: respAI.synthesizedArticle.content,
-      headings: respAI.synthesizedArticle.headings,
-      metaDescription: respAI.synthesizedArticle.metaDescription,
-      readabilityScore: respAI.synthesizedArticle.readabilityScore,
-      wordCount: respAI.synthesizedArticle.wordCount
+    const idGenerateRandomArticle = LocalStorageCRUD.addToCollection({
+      id: "",
+      dataOld: contenidoArticulos,
+      dataSend: dataSend,
+      title: "",
+      keywords: "",
+      content: "",
+      headings: "",
+      metaDescription: "",
+      readabilityScore: "",
+      wordCount: "",
+      generateDate: moment().format("DD/MM/YYYY HH:mm:ss"),
+      generate: false
     });
 
     articulosSelected.value = [];
 
-    return respAI;
+    router.push('/apps/radar/ia/article/' + idGenerateRandomArticle);
+    modalArticulosSelected.value.modal = false;
+
+    return true;
   }catch(err){
     console.log(err);
+    snackbar.value = {
+      show: true,
+      text: `Error, no se pudo generar la nota con IA, intente nuevamente: ${JSON.stringify(err)}`,
+      color: 'error'
+    }
     return null;
   }finally{
-    loadingIA.value = false;
+    // loadingIA.value = false;
+    btnLoading.value = false;
   }
 }
 
 const responseIA = ref({})
 
-const generarNotaIA = async (dataSend) => {
-  try {
-    // return {
-    //     "success": true,
-    //     "synthesizedArticle": {
-    //         "content": "Barcelona SC se prepara para un cierre de mayo crucial, lidiando con rumores sobre prohibiciones de la FIFA mientras se enfoca en la Copa Libertadores y la Liga Pro. El vicepresidente administrativo del club, Galo Roggiero Avilés, ha desmentido categóricamente los rumores que circulan sobre una posible prohibición de la FIFA para contratar jugadores en junio. Estas afirmaciones, difundidas en redes sociales, generaron inquietud entre los aficionados toreros. Según Roggiero, el club ha estado gestionando este tipo de situaciones durante los últimos quince años, y aunque no deberían ser la norma, se han convertido en parte de la dinámica institucional.\n\n“Barcelona ha convivido con este tipo de situaciones durante los últimos quince años. Son problemas que, aunque no deberían ser normales, lamentablemente se han convertido en parte de la dinámica institucional del club”, manifestó Roggiero. El vicepresidente administrativo aseguró que la directiva ha estado cumpliendo con los pagos correspondientes y que no existe ningún impedimento legal concreto para planificar refuerzos para junio. “Como directiva, hemos venido cumpliendo con los pagos que corresponden en cada caso, y así lo seguiremos haciendo. Hoy no existe ningún impedimento legal concreto que nos impida planificar refuerzos para junio, y trabajamos con calma y responsabilidad para evitar que esto escale”, añadió.\n\nRoggiero también destacó el compromiso de la directiva no solo con resolver los problemas inmediatos, sino también con construir un futuro más ordenado para el club. \"Nuestro enfoque no solo está en resolver el presente, sino en construir un futuro más ordenado para Barcelona. Sabemos que no es una tarea sencilla, pero estamos comprometidos a dejar una base sólida para que las próximas directivas no enfrenten las mismas dificultades”. La aclaración del vicepresidente administrativo busca tranquilizar a la afición y asegurar que el club puede seguir adelante con sus planes de refuerzos para la segunda mitad de la temporada.\n\nEn el ámbito deportivo, Barcelona SC se encuentra inmerso en la fase de grupos de la Copa Libertadores 2025, donde comparte grupo con Independiente del Valle. El enfrentamiento entre ambos equipos ecuatorianos es crucial para sus aspiraciones de avanzar a los octavos de final. El partido de ida, disputado en el estadio Monumental Banco Pichincha, favoreció a los toreros con un solitario gol de Bryan Carabalí. El próximo encuentro, correspondiente a la fase de grupos, se jugará el 27 de mayo en el estadio Banco Guayaquil. Este partido será transmitido para Ecuador y Latinoamérica a través de la cadena ESPN y la plataforma de streaming Disney+. En Estados Unidos, beIN Sports tendrá los derechos de transmisión, mientras que en España, LaLiga+ será la encargada de llevar el encuentro a los aficionados.\n\nParalelamente, Barcelona SC se prepara para disputar la fecha 15 de la Liga Pro 2025, un torneo que se encuentra en su etapa intermedia y que definirá a los candidatos para el hexagonal final y los equipos que lucharán por evitar el descenso. El partido correspondiente a esta fecha será contra Aucas, el domingo 1 de junio, en el estadio Gonzalo Pozo Ripalda en Quito. La jornada 15 de la Liga Pro se jugará entre el viernes 30 de mayo y el lunes 2 de junio, con varios partidos importantes en el calendario. Entre ellos, destacan el Macará vs. Manta FC, Liga de Quito vs. Técnico Universitario, Delfín SC vs. Independiente del Valle, y Emelec vs. Orense SC. Esta fecha promete emociones intensas en cada uno de sus encuentros, ya que todos los equipos se juegan mucho, ya sea por clasificar a fases finales o alejarse del descenso.\n\nLa agenda de Barcelona SC se presenta desafiante, con compromisos tanto a nivel nacional como internacional. La directiva trabaja en varios frentes, desde la gestión de posibles sanciones hasta la planificación deportiva. La afición espera que el equipo pueda superar estos obstáculos y lograr sus objetivos en la Copa Libertadores y la Liga Pro.",
-    //         "headings": [
-    //             "Desmentido de la Prohibición de la FIFA",
-    //             "Enfrentamiento Clave en la Copa Libertadores",
-    //             "Liga Pro: Fecha 15 y Compromisos Nacionales",
-    //             "Gestión Integral y Desafíos Futuros"
-    //         ],
-    //         "keywords": [
-    //             "copa libertadores",
-    //             "fifa",
-    //             "emelec",
-    //             "barcelona sc",
-    //             "liga pro",
-    //             "sanciones fifa",
-    //             "futbol ecuatoriano",
-    //             "toreros"
-    //         ],
-    //         "metaDescription": "Barcelona SC enfrenta rumores de la FIFA mientras se prepara para duelos cruciales en la Copa Libertadores y la Liga Pro. ¿Qué dice la directiva? Todos los detalles aquí.",
-    //         "readabilityScore": "Fácil de leer - Nivel intermedio",
-    //         "title": "Barcelona SC: FIFA, Libertadores y Liga Pro en la Mira",
-    //         "wordCount": 765
-    //     },
-    //     "formattedContent": "# Barcelona SC: FIFA, Libertadores y Liga Pro en la Mira\n\n**Meta Description:** Barcelona SC enfrenta rumores de la FIFA mientras se prepara para duelos cruciales en la Copa Libertadores y la Liga Pro. ¿Qué dice la directiva? Todos los detalles aquí.\n\nBarcelona SC se prepara para un cierre de mayo crucial, lidiando con rumores sobre prohibiciones de la FIFA mientras se enfoca en la Copa Libertadores y la Liga Pro. El vicepresidente administrativo del club, Galo Roggiero Avilés, ha desmentido categóricamente los rumores que circulan sobre una posible prohibición de la FIFA para contratar jugadores en junio. Estas afirmaciones, difundidas en redes sociales, generaron inquietud entre los aficionados toreros. Según Roggiero, el club ha estado gestionando este tipo de situaciones durante los últimos quince años, y aunque no deberían ser la norma, se han convertido en parte de la dinámica institucional.\n\n“Barcelona ha convivido con este tipo de situaciones durante los últimos quince años. Son problemas que, aunque no deberían ser normales, lamentablemente se han convertido en parte de la dinámica institucional del club”, manifestó Roggiero. El vicepresidente administrativo aseguró que la directiva ha estado cumpliendo con los pagos correspondientes y que no existe ningún impedimento legal concreto para planificar refuerzos para junio. “Como directiva, hemos venido cumpliendo con los pagos que corresponden en cada caso, y así lo seguiremos haciendo. Hoy no existe ningún impedimento legal concreto que nos impida planificar refuerzos para junio, y trabajamos con calma y responsabilidad para evitar que esto escale”, añadió.\n\nRoggiero también destacó el compromiso de la directiva no solo con resolver los problemas inmediatos, sino también con construir un futuro más ordenado para el club. \"Nuestro enfoque no solo está en resolver el presente, sino en construir un futuro más ordenado para Barcelona. Sabemos que no es una tarea sencilla, pero estamos comprometidos a dejar una base sólida para que las próximas directivas no enfrenten las mismas dificultades”. La aclaración del vicepresidente administrativo busca tranquilizar a la afición y asegurar que el club puede seguir adelante con sus planes de refuerzos para la segunda mitad de la temporada.\n\nEn el ámbito deportivo, Barcelona SC se encuentra inmerso en la fase de grupos de la Copa Libertadores 2025, donde comparte grupo con Independiente del Valle. El enfrentamiento entre ambos equipos ecuatorianos es crucial para sus aspiraciones de avanzar a los octavos de final. El partido de ida, disputado en el estadio Monumental Banco Pichincha, favoreció a los toreros con un solitario gol de Bryan Carabalí. El próximo encuentro, correspondiente a la fase de grupos, se jugará el 27 de mayo en el estadio Banco Guayaquil. Este partido será transmitido para Ecuador y Latinoamérica a través de la cadena ESPN y la plataforma de streaming Disney+. En Estados Unidos, beIN Sports tendrá los derechos de transmisión, mientras que en España, LaLiga+ será la encargada de llevar el encuentro a los aficionados.\n\nParalelamente, Barcelona SC se prepara para disputar la fecha 15 de la Liga Pro 2025, un torneo que se encuentra en su etapa intermedia y que definirá a los candidatos para el hexagonal final y los equipos que lucharán por evitar el descenso. El partido correspondiente a esta fecha será contra Aucas, el domingo 1 de junio, en el estadio Gonzalo Pozo Ripalda en Quito. La jornada 15 de la Liga Pro se jugará entre el viernes 30 de mayo y el lunes 2 de junio, con varios partidos importantes en el calendario. Entre ellos, destacan el Macará vs. Manta FC, Liga de Quito vs. Técnico Universitario, Delfín SC vs. Independiente del Valle, y Emelec vs. Orense SC. Esta fecha promete emociones intensas en cada uno de sus encuentros, ya que todos los equipos se juegan mucho, ya sea por clasificar a fases finales o alejarse del descenso.\n\nLa agenda de Barcelona SC se presenta desafiante, con compromisos tanto a nivel nacional como internacional. La directiva trabaja en varios frentes, desde la gestión de posibles sanciones hasta la planificación deportiva. La afición espera que el equipo pueda superar estos obstáculos y lograr sus objetivos en la Copa Libertadores y la Liga Pro.\n\n---\n\n## Estructura Sugerida\n## Desmentido de la Prohibición de la FIFA\n\n## Enfrentamiento Clave en la Copa Libertadores\n\n## Liga Pro: Fecha 15 y Compromisos Nacionales\n\n## Gestión Integral y Desafíos Futuros\n\n---\n\n**📊 Estadísticas del Artículo:**\n- **Palabras:** 765\n- **Legibilidad:** Fácil de leer - Nivel intermedio\n- **Keywords:** copa libertadores, fifa, emelec, barcelona sc, liga pro, sanciones fifa, futbol ecuatoriano, toreros\n\n---\n*Artículo generado automáticamente mediante síntesis de contenido optimizada para SEO*",
-    //     "message": "Article synthesized successfully! Generated 765 words with 8 keywords."
-    // };
+// const generarNotaIA = async (dataSend) => {
+//   try {
+//     // return {
+//     //     "success": true,
+//     //     "synthesizedArticle": {
+//     //         "content": "Barcelona SC se prepara para un cierre de mayo crucial, lidiando con rumores sobre prohibiciones de la FIFA mientras se enfoca en la Copa Libertadores y la Liga Pro. El vicepresidente administrativo del club, Galo Roggiero Avilés, ha desmentido categóricamente los rumores que circulan sobre una posible prohibición de la FIFA para contratar jugadores en junio. Estas afirmaciones, difundidas en redes sociales, generaron inquietud entre los aficionados toreros. Según Roggiero, el club ha estado gestionando este tipo de situaciones durante los últimos quince años, y aunque no deberían ser la norma, se han convertido en parte de la dinámica institucional.\n\n“Barcelona ha convivido con este tipo de situaciones durante los últimos quince años. Son problemas que, aunque no deberían ser normales, lamentablemente se han convertido en parte de la dinámica institucional del club”, manifestó Roggiero. El vicepresidente administrativo aseguró que la directiva ha estado cumpliendo con los pagos correspondientes y que no existe ningún impedimento legal concreto para planificar refuerzos para junio. “Como directiva, hemos venido cumpliendo con los pagos que corresponden en cada caso, y así lo seguiremos haciendo. Hoy no existe ningún impedimento legal concreto que nos impida planificar refuerzos para junio, y trabajamos con calma y responsabilidad para evitar que esto escale”, añadió.\n\nRoggiero también destacó el compromiso de la directiva no solo con resolver los problemas inmediatos, sino también con construir un futuro más ordenado para el club. \"Nuestro enfoque no solo está en resolver el presente, sino en construir un futuro más ordenado para Barcelona. Sabemos que no es una tarea sencilla, pero estamos comprometidos a dejar una base sólida para que las próximas directivas no enfrenten las mismas dificultades”. La aclaración del vicepresidente administrativo busca tranquilizar a la afición y asegurar que el club puede seguir adelante con sus planes de refuerzos para la segunda mitad de la temporada.\n\nEn el ámbito deportivo, Barcelona SC se encuentra inmerso en la fase de grupos de la Copa Libertadores 2025, donde comparte grupo con Independiente del Valle. El enfrentamiento entre ambos equipos ecuatorianos es crucial para sus aspiraciones de avanzar a los octavos de final. El partido de ida, disputado en el estadio Monumental Banco Pichincha, favoreció a los toreros con un solitario gol de Bryan Carabalí. El próximo encuentro, correspondiente a la fase de grupos, se jugará el 27 de mayo en el estadio Banco Guayaquil. Este partido será transmitido para Ecuador y Latinoamérica a través de la cadena ESPN y la plataforma de streaming Disney+. En Estados Unidos, beIN Sports tendrá los derechos de transmisión, mientras que en España, LaLiga+ será la encargada de llevar el encuentro a los aficionados.\n\nParalelamente, Barcelona SC se prepara para disputar la fecha 15 de la Liga Pro 2025, un torneo que se encuentra en su etapa intermedia y que definirá a los candidatos para el hexagonal final y los equipos que lucharán por evitar el descenso. El partido correspondiente a esta fecha será contra Aucas, el domingo 1 de junio, en el estadio Gonzalo Pozo Ripalda en Quito. La jornada 15 de la Liga Pro se jugará entre el viernes 30 de mayo y el lunes 2 de junio, con varios partidos importantes en el calendario. Entre ellos, destacan el Macará vs. Manta FC, Liga de Quito vs. Técnico Universitario, Delfín SC vs. Independiente del Valle, y Emelec vs. Orense SC. Esta fecha promete emociones intensas en cada uno de sus encuentros, ya que todos los equipos se juegan mucho, ya sea por clasificar a fases finales o alejarse del descenso.\n\nLa agenda de Barcelona SC se presenta desafiante, con compromisos tanto a nivel nacional como internacional. La directiva trabaja en varios frentes, desde la gestión de posibles sanciones hasta la planificación deportiva. La afición espera que el equipo pueda superar estos obstáculos y lograr sus objetivos en la Copa Libertadores y la Liga Pro.",
+//     //         "headings": [
+//     //             "Desmentido de la Prohibición de la FIFA",
+//     //             "Enfrentamiento Clave en la Copa Libertadores",
+//     //             "Liga Pro: Fecha 15 y Compromisos Nacionales",
+//     //             "Gestión Integral y Desafíos Futuros"
+//     //         ],
+//     //         "keywords": [
+//     //             "copa libertadores",
+//     //             "fifa",
+//     //             "emelec",
+//     //             "barcelona sc",
+//     //             "liga pro",
+//     //             "sanciones fifa",
+//     //             "futbol ecuatoriano",
+//     //             "toreros"
+//     //         ],
+//     //         "metaDescription": "Barcelona SC enfrenta rumores de la FIFA mientras se prepara para duelos cruciales en la Copa Libertadores y la Liga Pro. ¿Qué dice la directiva? Todos los detalles aquí.",
+//     //         "readabilityScore": "Fácil de leer - Nivel intermedio",
+//     //         "title": "Barcelona SC: FIFA, Libertadores y Liga Pro en la Mira",
+//     //         "wordCount": 765
+//     //     },
+//     //     "formattedContent": "# Barcelona SC: FIFA, Libertadores y Liga Pro en la Mira\n\n**Meta Description:** Barcelona SC enfrenta rumores de la FIFA mientras se prepara para duelos cruciales en la Copa Libertadores y la Liga Pro. ¿Qué dice la directiva? Todos los detalles aquí.\n\nBarcelona SC se prepara para un cierre de mayo crucial, lidiando con rumores sobre prohibiciones de la FIFA mientras se enfoca en la Copa Libertadores y la Liga Pro. El vicepresidente administrativo del club, Galo Roggiero Avilés, ha desmentido categóricamente los rumores que circulan sobre una posible prohibición de la FIFA para contratar jugadores en junio. Estas afirmaciones, difundidas en redes sociales, generaron inquietud entre los aficionados toreros. Según Roggiero, el club ha estado gestionando este tipo de situaciones durante los últimos quince años, y aunque no deberían ser la norma, se han convertido en parte de la dinámica institucional.\n\n“Barcelona ha convivido con este tipo de situaciones durante los últimos quince años. Son problemas que, aunque no deberían ser normales, lamentablemente se han convertido en parte de la dinámica institucional del club”, manifestó Roggiero. El vicepresidente administrativo aseguró que la directiva ha estado cumpliendo con los pagos correspondientes y que no existe ningún impedimento legal concreto para planificar refuerzos para junio. “Como directiva, hemos venido cumpliendo con los pagos que corresponden en cada caso, y así lo seguiremos haciendo. Hoy no existe ningún impedimento legal concreto que nos impida planificar refuerzos para junio, y trabajamos con calma y responsabilidad para evitar que esto escale”, añadió.\n\nRoggiero también destacó el compromiso de la directiva no solo con resolver los problemas inmediatos, sino también con construir un futuro más ordenado para el club. \"Nuestro enfoque no solo está en resolver el presente, sino en construir un futuro más ordenado para Barcelona. Sabemos que no es una tarea sencilla, pero estamos comprometidos a dejar una base sólida para que las próximas directivas no enfrenten las mismas dificultades”. La aclaración del vicepresidente administrativo busca tranquilizar a la afición y asegurar que el club puede seguir adelante con sus planes de refuerzos para la segunda mitad de la temporada.\n\nEn el ámbito deportivo, Barcelona SC se encuentra inmerso en la fase de grupos de la Copa Libertadores 2025, donde comparte grupo con Independiente del Valle. El enfrentamiento entre ambos equipos ecuatorianos es crucial para sus aspiraciones de avanzar a los octavos de final. El partido de ida, disputado en el estadio Monumental Banco Pichincha, favoreció a los toreros con un solitario gol de Bryan Carabalí. El próximo encuentro, correspondiente a la fase de grupos, se jugará el 27 de mayo en el estadio Banco Guayaquil. Este partido será transmitido para Ecuador y Latinoamérica a través de la cadena ESPN y la plataforma de streaming Disney+. En Estados Unidos, beIN Sports tendrá los derechos de transmisión, mientras que en España, LaLiga+ será la encargada de llevar el encuentro a los aficionados.\n\nParalelamente, Barcelona SC se prepara para disputar la fecha 15 de la Liga Pro 2025, un torneo que se encuentra en su etapa intermedia y que definirá a los candidatos para el hexagonal final y los equipos que lucharán por evitar el descenso. El partido correspondiente a esta fecha será contra Aucas, el domingo 1 de junio, en el estadio Gonzalo Pozo Ripalda en Quito. La jornada 15 de la Liga Pro se jugará entre el viernes 30 de mayo y el lunes 2 de junio, con varios partidos importantes en el calendario. Entre ellos, destacan el Macará vs. Manta FC, Liga de Quito vs. Técnico Universitario, Delfín SC vs. Independiente del Valle, y Emelec vs. Orense SC. Esta fecha promete emociones intensas en cada uno de sus encuentros, ya que todos los equipos se juegan mucho, ya sea por clasificar a fases finales o alejarse del descenso.\n\nLa agenda de Barcelona SC se presenta desafiante, con compromisos tanto a nivel nacional como internacional. La directiva trabaja en varios frentes, desde la gestión de posibles sanciones hasta la planificación deportiva. La afición espera que el equipo pueda superar estos obstáculos y lograr sus objetivos en la Copa Libertadores y la Liga Pro.\n\n---\n\n## Estructura Sugerida\n## Desmentido de la Prohibición de la FIFA\n\n## Enfrentamiento Clave en la Copa Libertadores\n\n## Liga Pro: Fecha 15 y Compromisos Nacionales\n\n## Gestión Integral y Desafíos Futuros\n\n---\n\n**📊 Estadísticas del Artículo:**\n- **Palabras:** 765\n- **Legibilidad:** Fácil de leer - Nivel intermedio\n- **Keywords:** copa libertadores, fifa, emelec, barcelona sc, liga pro, sanciones fifa, futbol ecuatoriano, toreros\n\n---\n*Artículo generado automáticamente mediante síntesis de contenido optimizada para SEO*",
+//     //     "message": "Article synthesized successfully! Generated 765 words with 8 keywords."
+//     // };
 
-    const response = await fetch('https://ecuavisa-scrapping.vercel.app/ecuavisa-ai/synthesize', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(dataSend)
-    });
+//     const response = await fetch('https://ecuavisa-scrapping.vercel.app/ecuavisa-ai/synthesize', {
+//       method: 'POST',
+//       headers: {
+//         'Content-Type': 'application/json'
+//       },
+//       body: JSON.stringify(dataSend)
+//     });
 
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
+//     if (!response.ok) {
+//       throw new Error(`HTTP error! status: ${response.status}`);
+//     }
 
-    const data = await response.json();
+//     const data = await response.json();
 
-    if (!data.success) {
-      throw new Error(data);
-    }
+//     if (!data.success) {
+//       throw new Error(data);
+//     }
 
-    return data;
+//     return data;
     
-  } catch (error) {
-    console.error(error);
-    snackbar.value = {
-      show: true,
-      text: `Error, no se pudo generar la nota con IA, intente nuevamente`,
-      color: 'error'
-    }
-    return null;
-  }
-}
+//   } catch (error) {
+//     console.error(error);
+//     snackbar.value = {
+//       show: true,
+//       text: `Error, no se pudo generar la nota con IA, intente nuevamente`,
+//       color: 'error'
+//     }
+//     return null;
+//   }
+// }
 
 
 // Variable para el modal cuando se genera la nota.
 const isDialogNotaIA = ref({
   modal: false,
   data:{
+    id: "",
     titulo: "Titular de la nota generada con IA",
     contenido: 'Lorem Ipsum es simplemente el texto de relleno de las imprentas y archivos de texto. Lorem Ipsum ha sido el texto de relleno estándar de las industrias desde el año 1500, cuando un impresor (N. del T. persona que se dedica a la imprenta) desconocido usó una galería de textos y los mezcló de tal manera que logró hacer un libro de textos especimen. No sólo sobrevivió 500 años, sino que tambien ingresó como texto de relleno en documentos electrónicos, quedando esencialmente igual al original. Fue popularizado en los 60s con la creación de las hojas "Letraset", las cuales contenian pasajes de Lorem Ipsum, y más recientemente con software de autoedición, como por ejemplo Aldus PageMaker, el cual incluye versiones de Lorem Ipsum.',
     tags: ["keywords", "keywords2"],
@@ -958,84 +986,86 @@ const isDialogNotaIA = ref({
 //Localstorage crud
 
 // Generar un id unico
-function generateId() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}
+// function generateId() {
+//     return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+//         var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0x3 | 0x8);
+//         return v.toString(16);
+//     });
+// }
 
 // Colección reactiva
-const notasSEO = ref(JSON.parse(localStorage.getItem('notasSEO')) || []);
+// const notasSEO = ref(JSON.parse(localStorage.getItem('notasSEO')) || []);
+const notasSEO = ref([]);
 
-const LocalStorageCRUD = ref({
-  collection: notasSEO,
-  key: 'notasSEO',
-  // Sincroniza con localStorage
-  sync() {
-    notasSEO.value = JSON.parse(localStorage.getItem(this.key)) || [];
-  },
+// const LocalStorageCRUD = ref({
+//   collection: notasSEO,
+//   key: 'notasSEO',
+//   // Sincroniza con localStorage
+//   sync() {
+//     notasSEO.value = JSON.parse(localStorage.getItem(this.key)) || [];
+//   },
 
-  // Crear o reemplazar toda la colección
-  createCollection(key, dataArray) {
-    localStorage.setItem(key, JSON.stringify(dataArray));
-  },
+//   // Crear o reemplazar toda la colección
+//   createCollection(key, dataArray) {
+//     localStorage.setItem(key, JSON.stringify(dataArray));
+//   },
 
-  // Leer toda la colección
-  readCollection(key) {
-    const data = localStorage.getItem(key);
-    return data ? JSON.parse(data) : [];
-  },
+//   // Leer toda la colección
+//   readCollection(key) {
+//     const data = localStorage.getItem(key);
+//     return data ? JSON.parse(data) : [];
+//   },
 
-  // Agregar un nuevo objeto a la colección
-  addToCollection(newItem) {
-    const key = this.key;
-    const collection = this.readCollection(key);
-    collection.push(newItem);
-    this.createCollection(key, collection);
-    this.sync();
-    return true;
-  },
+//   // Agregar un nuevo objeto a la colección
+//   addToCollection(newItem) {
+//     const key = this.key;
+//     const collection = this.readCollection(key);
+//     collection.push(newItem);
+//     this.createCollection(key, collection);
+//     this.sync();
+//     return true;
+//   },
 
-  // Actualizar un objeto por su ID
-  updateById(id, newData) {
-    const key = this.key;
-    const collection = this.readCollection(key);
-    const index = collection.findIndex(item => item.id === id);
-    if (index === -1) return false;
+//   // Actualizar un objeto por su ID
+//   updateById(id, newData) {
+//     const key = this.key;
+//     const collection = this.readCollection(key);
+//     const index = collection.findIndex(item => item.id === id);
+//     if (index === -1) return false;
 
-    collection[index] = { ...collection[index], ...newData };
-    this.createCollection(key, collection);
-    this.sync();
-    return true;
-  },
+//     collection[index] = { ...collection[index], ...newData };
+//     this.createCollection(key, collection);
+//     this.sync();
+//     return true;
+//   },
 
-  // Eliminar objeto por ID dentro de la colección
-  deleteById(id) {
-    const key = this.key;
-    const collection = this.readCollection(key);
-    const filtered = collection.filter(item => item.id !== id);
-    this.createCollection(key, filtered);
-    this.sync();
-    return true;
-  },
+//   // Eliminar objeto por ID dentro de la colección
+//   deleteById(id) {
+//     const key = this.key;
+//     const collection = this.readCollection(key);
+//     const filtered = collection.filter(item => item.id !== id);
+//     this.createCollection(key, filtered);
+//     this.sync();
+//     return true;
+//   },
 
-  // Eliminar toda la colección
-  deleteCollection() {
-    const key = this.key;
-    localStorage.removeItem(key);
-    this.sync();
-    return true;
-  },
+//   // Eliminar toda la colección
+//   deleteCollection() {
+//     const key = this.key;
+//     localStorage.removeItem(key);
+//     this.sync();
+//     return true;
+//   },
 
-  // Verificar si existe la colección
-  exists(key) {
-    return localStorage.getItem(key) !== null;
-  }
-});
+//   // Verificar si existe la colección
+//   exists(key) {
+//     return localStorage.getItem(key) !== null;
+//   }
+// });
 
 const showNotaIA = (synthesizedArticle) => {
   isDialogNotaIA.value.modal = true;
+  isDialogNotaIA.value.data.id = synthesizedArticle.id;
   isDialogNotaIA.value.data.titulo = synthesizedArticle.title;
   isDialogNotaIA.value.data.contenido = synthesizedArticle.content;
   isDialogNotaIA.value.data.tags = synthesizedArticle.keywords;
@@ -1044,6 +1074,10 @@ const showNotaIA = (synthesizedArticle) => {
   isDialogNotaIA.value.data.readabilityScore = synthesizedArticle.readabilityScore;
   isDialogNotaIA.value.data.wordCount = synthesizedArticle.wordCount;
 }
+
+onMounted(async()=>{
+  notasSEO.value = JSON.parse(JSON.stringify(LocalStorageCRUD.readCollection('notasSEO')));
+})
 </script>
 
 <template>
@@ -1136,7 +1170,8 @@ const showNotaIA = (synthesizedArticle) => {
             </div>
           </div>
           <div v-if="isDialogNotaIA.data.titulo && !loadingIA">
-            {{ isDialogNotaIA.data.contenido }}
+            {{isDialogNotaIA.data.id}}
+            <div v-html="lectorMD(isDialogNotaIA.data.contenido)"></div>
           </div>
           <div v-else>
             <div v-if="loadingIA" class="skeleton-box" style="width:100%;"></div>
@@ -1222,7 +1257,7 @@ const showNotaIA = (synthesizedArticle) => {
           </VCardItem>
         </VCard>
       </VCol>
-      <VCol cols="12" md="12" lg="8">
+      <VCol cols="12" md="12" lg="9">
         <VRow>
           <VCol cols="12" md="12" lg="12">
             <VCard>
@@ -1293,7 +1328,7 @@ const showNotaIA = (synthesizedArticle) => {
           </VCol>
         </VRow>
       </VCol>
-      <VCol cols="12" md="12" lg="4">
+      <VCol cols="12" md="12" lg="3">
         <VCard>
             <VCardItem  class="mb-0 pb-2">
               <div class="d-flex content-title flex-wrap w-100">
@@ -1319,47 +1354,60 @@ const showNotaIA = (synthesizedArticle) => {
             <VCardItem class="py-0 pb-4">
               <VRow>
                 <VCol cols="12" md="12" lg="12">
-                  <VList lines="two">
+                  <VList lines="two" v-if="notasSEO.length > 0">
                     <VListItem
                       class="px-0"
                       v-for="notaIA in notasSEO"
                       :key="notaIA.id"
-                      :title="notaIA.title"
-                      :subtitle="notaIA.content.substring(0, 50) + '...'"
                     >
+                      <VListItemTitle class="text-truncate" :title="notaIA.title">
+                        <div v-if="notaIA.generate">
+                          {{ notaIA.title }}
+                        </div>
+                        <div v-else>
+                          <i>Nota no generada</i>
+                        </div>
+                      </VListItemTitle>
+                      <VListItemSubtitle>
+                        {{ notaIA.content.substring(0, 50) + '...' }}
+                      </VListItemSubtitle>
                       <template #prepend>
                           <VAvatar
-                            color="secondary"
+                            :color="notaIA.generate ? 'success' : 'secondary'"
                             variant="tonal"
                           >
                             <div class="svg-icon-start mt-1">
                                 <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 512 512" style="width: 25px; height: 25px; shape-rendering: geometricPrecision; text-rendering: geometricPrecision; image-rendering: optimizeQuality; fill-rule: evenodd; clip-rule: evenodd;">
                                   <g>
-                                    <path style="opacity:0.978" fill="#000000"
+                                    <path style="opacity:0.978" :fill="notaIA.generate ? '#000' : '#7b7981'"
                                       d="M -0.5,192.5 C -0.5,191.833 -0.5,191.167 -0.5,190.5C 28.0041,186.207 56.0041,179.707 83.5,171C 108.001,163.349 128.501,149.849 145,130.5C 160.188,107.957 170.521,83.2901 176,56.5C 179.885,38.7326 183.885,21.0659 188,3.5C 193.095,32.6418 200.095,61.3085 209,89.5C 217.959,118.435 235.125,140.935 260.5,157C 275.526,164.898 291.193,171.231 307.5,176C 330.487,181.728 353.487,187.062 376.5,192C 347.003,196.966 318.003,203.966 289.5,213C 261.252,222.018 239.085,238.851 223,263.5C 210.823,286.516 202.156,310.849 197,336.5C 193.785,351.12 190.785,365.786 188,380.5C 183.062,357.487 177.728,334.487 172,311.5C 166.455,290.176 157.455,270.509 145,252.5C 128.954,233.815 109.121,220.648 85.5,213C 57.3611,203.939 28.6944,197.106 -0.5,192.5 Z" />
                                   </g>
                                   <g>
-                                    <path style="opacity:0.965" fill="#000000"
+                                    <path style="opacity:0.965" :fill="notaIA.generate ? '#000' : '#7b7981'"
                                       d="M 511.5,387.5 C 511.5,387.833 511.5,388.167 511.5,388.5C 493.583,391.584 475.917,395.75 458.5,401C 435.14,407.753 418.64,422.253 409,444.5C 401.312,464.935 395.645,485.935 392,507.5C 388.133,489.034 383.467,470.701 378,452.5C 367.184,423.028 346.351,404.861 315.5,398C 300.891,394.412 286.224,391.078 271.5,388C 291.141,384.256 310.474,379.256 329.5,373C 353,364.833 368.833,349 377,325.5C 383.256,306.474 388.256,287.141 392,267.5C 395.591,287.53 400.591,307.197 407,326.5C 415.635,350.468 432.135,366.301 456.5,374C 474.599,379.608 492.932,384.108 511.5,387.5 Z" />
                                   </g>
                                 </svg>
                             </div>
                           </VAvatar>
-                        <VDivider />
                       </template>
 
                       <template #append>
-                        <VBtn
-                          @click="showNotaIA(notaIA)"
-                          variant="text"
-                          color="default"
-                          icon="tabler-info-circle"
-                        />
+                          <VBtn
+                            variant="text"
+                            :color="notaIA.generate ? 'default' : 'warning'"
+                            :to="{
+                              name: 'apps-radar-ia-article-id',
+                              params: { id: notaIA.id },
+                            }"
+                            :title="notaIA.generate ? 'Ver nota' : 'Generar nota'"
+                            :icon="notaIA.generate ? 'tabler-info-circle' : 'tabler-reload'"
+                          />
                         <VDivider />
                       </template>
                     </VListItem>
                     
                   </VList>
+                  <div v-else>No hay notas generadas con IA</div>
                 </VCol>
               </VRow>
             </VCardItem>
