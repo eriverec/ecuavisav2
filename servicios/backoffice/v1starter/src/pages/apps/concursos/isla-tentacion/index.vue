@@ -4,11 +4,10 @@ import { parseISO } from 'date-fns';
 import debounce from 'lodash/debounce';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
-import esLocale from "moment/locale/es";
 
 const moment = extendMoment(Moment);
-moment.locale('es', [esLocale]);
-moment.tz.setDefault('America/Guayaquil');
+// moment.locale('es', [esLocale]);
+// moment.tz.setDefault('America/Guayaquil');
 
 const tipoModel = ref("Ver todos los registros");
 
@@ -123,7 +122,7 @@ async function getRespuestas() {
       // Filtro por fecha
       if(tipoModel.value === "Por Fecha") {
         filteredData = filteredData.filter(item => {
-          const fechaItem = moment(item.fecha_participacion);
+          const fechaItem = moment.utc(item.fecha_participacion);
           const fechaInicioMoment = moment(fecha.value.inicio);
           const fechaFinMoment = moment(fecha.value.fin);
           return fechaItem.isBetween(fechaInicioMoment, fechaFinMoment, 'day', '[]');
@@ -131,7 +130,7 @@ async function getRespuestas() {
       }
 
       // Ordenar por fecha más reciente
-      filteredData.sort((a, b) => moment(b.fecha_participacion).diff(moment(a.fecha_participacion)));
+      filteredData.sort((a, b) => moment.utc(b.fecha_participacion).diff(moment(a.fecha_participacion)));
 
       // Paginación
       totalRegistros.value = filteredData.length;
@@ -258,7 +257,7 @@ async function fetchFullRespuestas(){
     docsExportNumberLength.value.tamanioTotal = totalRespuestas;
 
     // Ordenar por fecha más reciente
-    respuestasFull.value.sort((a, b) => moment(b["Fecha de Participación"]).diff(moment(a["Fecha de Participación"])));
+    respuestasFull.value.sort((a, b) => moment.utc(b["Fecha de Participación"]).diff(moment(a["Fecha de Participación"])));
   }
 
   return true;
@@ -398,7 +397,7 @@ function downloadUserResponses(usuario) {
       'Nombre': usuario.nombre,
       'Apellido': usuario.apellido,
       'Correo': usuario.email,
-      'Fecha de Participación': moment(usuario.fecha_participacion).format("DD/MM/YYYY HH:mm:ss"),
+      'Fecha de Participación': moment.utc(usuario.fecha_participacion).format("DD/MM/YYYY HH:mm:ss"),
       'Puntaje Total': usuario.puntaje_total,
       'Tipo de Resultado': capitalizeText(usuario.tipo_resultado)
     };
@@ -622,7 +621,7 @@ function downloadUserResponses(usuario) {
 
                   <!-- fecha de llenado -->
                   <td>
-                    <span class="text-base">{{ moment(respuesta.fecha_participacion).format("DD/MM/YYYY HH:mm:ss") }}</span>
+                    <span class="text-base">{{ moment.utc(respuesta.fecha_participacion).format("DD/MM/YYYY HH:mm:ss") }}</span>
                   </td>
 
                   <!-- puntaje -->
