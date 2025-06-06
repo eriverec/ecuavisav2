@@ -702,7 +702,7 @@ function downloadUserResponses(usuario) {
               prepend-icon="tabler-screen-share"
               @click="downloadSearch"
             >
-              <span style="cursor:pointer" class="px-0 py-p m-0">Exportar respuestas</span>
+              <span style="cursor:pointer" class="px-0 py-p m-0">Exportar listado</span>
             </VBtn>
             <small class="px-0 py-1 text-disabled" v-if="isFullLoading">
               Exportando {{ docsExportNumberLength.tamanioActual }} / {{ docsExportNumberLength.tamanioTotal }} registros
@@ -718,7 +718,7 @@ function downloadUserResponses(usuario) {
         <VCard class="mt-4 mb-4">
           <VCardTitle class="d-flex align-center">
             <VIcon class="me-2" icon="mdi-chart-bar" />
-            Distribución de Resultados
+            Gráfico de resultados
           </VCardTitle>
           <VCardText>
             <div v-if="loadingRespuestas" class="text-center py-8">
@@ -752,7 +752,7 @@ function downloadUserResponses(usuario) {
                     variant="text"
                     @click="downloadResultByType('curioso')"
                   >
-                    <VIcon size="18" icon="tabler-download" />
+                    <VIcon size="18" icon="tabler-user-down" />
                   </VBtn>
                 </div>
               </div>
@@ -782,7 +782,7 @@ function downloadUserResponses(usuario) {
                     variant="text"
                     @click="downloadResultByType('inquebrantable')"
                   >
-                    <VIcon size="18" icon="tabler-download" />
+                    <VIcon size="18" icon="tabler-user-down" />
                   </VBtn>
                 </div>
               </div>
@@ -812,7 +812,7 @@ function downloadUserResponses(usuario) {
                     variant="text"
                     @click="downloadResultByType('tentacion')"
                   >
-                    <VIcon size="18" icon="tabler-download" />
+                    <VIcon size="18" icon="tabler-user-down" />
                   </VBtn>
                 </div>
               </div>
