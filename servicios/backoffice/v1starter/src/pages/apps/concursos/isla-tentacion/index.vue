@@ -47,6 +47,13 @@ const headersExport = ref({
   tipo_resultado: "Tipo de Resultado"
 });
 
+// Variables para el gráfico
+const chartData = ref({
+  curioso: { count: 0, percentage: 0 },
+  inquebrantable: { count: 0, percentage: 0 },
+  tentacion: { count: 0, percentage: 0 }
+});
+
 const optionsDefaultDate = {
   fechasModel: [parseISO(fechaInicio), parseISO(fechaFin)],
   fechasVModel: [parseISO(fechaFin)],
@@ -72,7 +79,7 @@ const docsExportNumberLength = ref({
   tamanioTotal : 0
 });
 
-// 👉 watching current page
+
 watch(currentPage, async () => {
   if (currentPage.value > totalPage.value){
     currentPage.value = totalPage.value
@@ -98,6 +105,64 @@ const paginationData = computed(() => {
 onMounted(async () => {
   await getRespuestas();
 });
+
+// Función para calcular datos del gráfico
+async function calculateChartData() {
+  try {
+    const response = await fetch('https://services.ecuavisa.com/isla/config.php?api=all');
+    const data = await response.json();
+
+    if(Array.isArray(data)) {
+      let filteredData = [...data];
+      
+      // Aplicar los mismos filtros que en getRespuestas
+      if(modelSearch.value) {
+        filteredData = filteredData.filter(item => 
+          item.email.toLowerCase().includes(modelSearch.value.toLowerCase()) ||
+          item.nombre.toLowerCase().includes(modelSearch.value.toLowerCase()) ||
+          item.apellido.toLowerCase().includes(modelSearch.value.toLowerCase()) ||
+          item.tipo_resultado.toLowerCase().includes(modelSearch.value.toLowerCase())
+        );
+      }
+
+      if(tipoModel.value === "Por Fecha") {
+        filteredData = filteredData.filter(item => {
+          const fechaItem = moment.utc(item.fecha_participacion);
+          const fechaInicioMoment = moment(fecha.value.inicio);
+          const fechaFinMoment = moment(fecha.value.fin);
+          return fechaItem.isBetween(fechaInicioMoment, fechaFinMoment, 'day', '[]');
+        });
+      }
+
+      // Contar por tipo de resultado
+      const counts = {
+        curioso: filteredData.filter(item => item.tipo_resultado === 'curioso').length,
+        inquebrantable: filteredData.filter(item => item.tipo_resultado === 'inquebrantable').length,
+        tentacion: filteredData.filter(item => item.tipo_resultado === 'tentacion').length
+      };
+
+      const total = counts.curioso + counts.inquebrantable + counts.tentacion;
+
+      // Calcular porcentajes
+      chartData.value = {
+        curioso: { 
+          count: counts.curioso, 
+          percentage: total > 0 ? (counts.curioso / total) * 100 : 0 
+        },
+        inquebrantable: { 
+          count: counts.inquebrantable, 
+          percentage: total > 0 ? (counts.inquebrantable / total) * 100 : 0 
+        },
+        tentacion: { 
+          count: counts.tentacion, 
+          percentage: total > 0 ? (counts.tentacion / total) * 100 : 0 
+        }
+      };
+    }
+  } catch (error) {
+    console.error('Error calculating chart data:', error);
+  }
+}
 
 async function getRespuestas() {
   try {
@@ -139,6 +204,9 @@ async function getRespuestas() {
       const startIndex = (currentPage.value - 1) * rowPerPage.value;
       const endIndex = startIndex + rowPerPage.value;
       dataRespuestas.value = filteredData.slice(startIndex, endIndex);
+      
+      // Actualizar datos del gráfico
+      await calculateChartData();
       
     } else {
       configSnackbar.value = {
@@ -340,6 +408,83 @@ async function downloadSearch() {
       };
       isFullLoading.value = false;
       return false;
+  }
+}
+
+// Función para descargar CSV por tipo de resultado
+async function downloadResultByType(tipoResultado) {
+  try {
+    const response = await fetch('https://services.ecuavisa.com/isla/config.php?api=all');
+    const data = await response.json();
+
+    if(Array.isArray(data)) {
+      let filteredData = [...data];
+      
+      // Aplicar filtros actuales
+      if(modelSearch.value) {
+        filteredData = filteredData.filter(item => 
+          item.email.toLowerCase().includes(modelSearch.value.toLowerCase()) ||
+          item.nombre.toLowerCase().includes(modelSearch.value.toLowerCase()) ||
+          item.apellido.toLowerCase().includes(modelSearch.value.toLowerCase()) ||
+          item.tipo_resultado.toLowerCase().includes(modelSearch.value.toLowerCase())
+        );
+      }
+
+      if(tipoModel.value === "Por Fecha") {
+        filteredData = filteredData.filter(item => {
+          const fechaItem = moment.utc(item.fecha_participacion);
+          const fechaInicioMoment = moment(fecha.value.inicio);
+          const fechaFinMoment = moment(fecha.value.fin);
+          return fechaItem.isBetween(fechaInicioMoment, fechaFinMoment, 'day', '[]');
+        });
+      }
+
+      // Filtrar por tipo de resultado específico
+      const dataByType = filteredData.filter(item => item.tipo_resultado === tipoResultado);
+
+      if(dataByType.length === 0) {
+        configSnackbar.value = {
+          message: `No hay usuarios con resultado "${capitalizeText(tipoResultado)}" para exportar.`,
+          type: "warning",
+          model: true
+        };
+        return;
+      }
+
+      // Preparar datos para exportar
+      let exportData = [];
+      dataByType.forEach((registro) => {
+        let newItem = {};
+        for (let key in headersExport.value) {
+          if (registro.hasOwnProperty(key)) {
+            newItem[headersExport.value[key]] = registro[key];
+          } else {
+            newItem[headersExport.value[key]] = "";
+          }
+        }
+        exportData.push(newItem);
+      });
+
+      // Ordenar por fecha más reciente
+      exportData.sort((a, b) => moment.utc(b["Fecha de Participación"]).diff(moment(a["Fecha de Participación"])));
+
+      const title = `usuarios_${tipoResultado}_${moment().format("YYYY-MM-DD-HH-mm-ss")}`;
+      exportCSVFile(headersExport.value, exportData, title);
+
+      configSnackbar.value = {
+        message: `${dataByType.length} usuarios con resultado "${capitalizeText(tipoResultado)}" exportados exitosamente`,
+        type: "success",
+        model: true
+      };
+
+    }
+  } catch (error) {
+    console.error('Error downloading by type:', error);
+    configSnackbar.value = {
+      message: "Error al exportar usuarios por tipo de resultado",
+      type: "error",
+      model: true
+    };
   }
 }
 
@@ -568,6 +713,112 @@ function downloadUserResponses(usuario) {
         <small v-if="tipoModel == 'Por Fecha'" class="text-disabled">
           Se ha filtrado respuestas desde {{fechaIFModel.fechai}} hasta {{fechaIFModel.fechaf}} con un total de {{totalRegistros}} registros
         </small>
+
+        <!-- Gráfico de Barras Horizontal -->
+        <VCard class="mt-4 mb-4">
+          <VCardTitle class="d-flex align-center">
+            <VIcon class="me-2" icon="mdi-chart-bar" />
+            Distribución de Resultados
+          </VCardTitle>
+          <VCardText>
+            <div v-if="loadingRespuestas" class="text-center py-8">
+              <VProgressCircular indeterminate color="primary" />
+              <p class="mt-2 text-disabled">Cargando estadísticas...</p>
+            </div>
+            
+            <div v-else class="chart-container">
+              <!-- Curioso -->
+              <div class="chart-bar-item">
+                <div class="chart-bar-track">
+                  <div 
+                    class="chart-bar-fill"
+                    :style="{ 
+                      width: Math.max(chartData.curioso.percentage, 10) + '%',
+                      backgroundColor: getTipoResultadoColor('curioso')
+                    }"
+                  >
+                    <div class="chart-bar-content">
+                      <span class="chart-bar-label">{{ capitalizeText('curioso') }}</span>
+                      <span class="chart-bar-stats">{{ chartData.curioso.count }} usuarios ({{ chartData.curioso.percentage.toFixed(1) }}%)</span>
+                    </div>
+                  </div>
+                  <VBtn
+                    v-if="chartData.curioso.count > 0"
+                    title="Descargar usuarios con este resultado"
+                    class="chart-download-btn"
+                    icon
+                    size="small"
+                    color="default"
+                    variant="text"
+                    @click="downloadResultByType('curioso')"
+                  >
+                    <VIcon size="18" icon="tabler-download" />
+                  </VBtn>
+                </div>
+              </div>
+
+              <!-- Inquebrantable -->
+              <div class="chart-bar-item">
+                <div class="chart-bar-track">
+                  <div 
+                    class="chart-bar-fill"
+                    :style="{ 
+                      width: Math.max(chartData.inquebrantable.percentage, 10) + '%',
+                      backgroundColor: getTipoResultadoColor('inquebrantable')
+                    }"
+                  >
+                    <div class="chart-bar-content">
+                      <span class="chart-bar-label">{{ capitalizeText('inquebrantable') }}</span>
+                      <span class="chart-bar-stats">{{ chartData.inquebrantable.count }} usuarios ({{ chartData.inquebrantable.percentage.toFixed(1) }}%)</span>
+                    </div>
+                  </div>
+                  <VBtn
+                    v-if="chartData.inquebrantable.count > 0"
+                    title="Descargar usuarios con este resultado"
+                    class="chart-download-btn"
+                    icon
+                    size="small"
+                    color="default"
+                    variant="text"
+                    @click="downloadResultByType('inquebrantable')"
+                  >
+                    <VIcon size="18" icon="tabler-download" />
+                  </VBtn>
+                </div>
+              </div>
+
+              <!-- Tentación -->
+              <div class="chart-bar-item">
+                <div class="chart-bar-track">
+                  <div 
+                    class="chart-bar-fill"
+                    :style="{ 
+                      width: Math.max(chartData.tentacion.percentage, 10) + '%',
+                      backgroundColor: getTipoResultadoColor('tentacion')
+                    }"
+                  >
+                    <div class="chart-bar-content">
+                      <span class="chart-bar-label">{{ capitalizeText('tentacion') }}</span>
+                      <span class="chart-bar-stats">{{ chartData.tentacion.count }} usuarios ({{ chartData.tentacion.percentage.toFixed(1) }}%)</span>
+                    </div>
+                  </div>
+                  <VBtn
+                    v-if="chartData.tentacion.count > 0"
+                    title="Descargar usuarios con este resultado"
+                    class="chart-download-btn"
+                    icon
+                    size="small"
+                    color="default"
+                    variant="text"
+                    @click="downloadResultByType('tentacion')"
+                  >
+                    <VIcon size="18" icon="tabler-download" />
+                  </VBtn>
+                </div>
+              </div>
+            </div>
+          </VCardText>
+        </VCard>
         
         <VCard class="mt-1">
             <VTable class="text-no-wrap">
@@ -726,5 +977,119 @@ function downloadUserResponses(usuario) {
 .disabled {
   pointer-events: none;
   opacity: 0.6;
+}
+
+.chart-container {
+  padding: 1rem 0;
+}
+
+.chart-bar-item {
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.chart-bar-track {
+  background-color: rgba(var(--v-theme-on-surface), 0.08);
+  height: 60px;
+  border-radius: 8px;
+  overflow: visible;
+  position: relative;
+  border: 1px solid rgba(var(--v-theme-on-surface), 0.12);
+}
+
+.chart-bar-fill {
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.6s ease;
+  min-width: 120px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.chart-bar-content {
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  color: white;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+}
+
+.chart-bar-label {
+  font-weight: 600;
+  font-size: 0.875rem;
+  line-height: 1.2;
+  text-transform: capitalize;
+}
+
+.chart-bar-stats {
+  font-size: 0.75rem;
+  opacity: 0.9;
+  line-height: 1.2;
+}
+
+.chart-download-btn {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  // background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  z-index: 10;
+}
+
+//.chart-download-btn:hover {
+  //background-color: rgba(255, 255, 255, 1);
+//}
+
+@media (max-width: 768px) {
+  .chart-container {
+    padding: 0.5rem 0;
+  }
+  
+  .chart-bar-track {
+    height: 50px;
+  }
+  
+  .chart-bar-fill {
+    min-width: 100px;
+  }
+  
+  .chart-bar-content {
+    padding: 0 12px;
+  }
+  
+  .chart-bar-label {
+    font-size: 0.8rem;
+  }
+  
+  .chart-bar-stats {
+    font-size: 0.7rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .chart-bar-track {
+    height: 45px;
+  }
+  
+  .chart-bar-fill {
+    min-width: 90px;
+  }
+  
+  .chart-bar-content {
+    padding: 0 10px;
+  }
+  
+  .chart-bar-label {
+    font-size: 0.75rem;
+  }
+  
+  .chart-bar-stats {
+    font-size: 0.65rem;
+  }
 }
 </style>
