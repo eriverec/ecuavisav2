@@ -1,12 +1,12 @@
 <script setup>
-import plantilla_articulos_estilo_principal_ia from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal_ia.vue';
 import Moment from "moment";
 import { extendMoment } from "moment-range";
 import esLocale from "moment/locale/es";
+import plantilla_articulos_estilo_principal_ia from '@/views/apps/radar/v2/plantilla_articulos_estilo_principal_ia.vue';
 import { computed, onMounted, reactive, ref, watch } from "vue";
-import { useRouter } from 'vue-router';
 import lectorMD from './lectorMD.js';
 import { LocalStorageCRUD } from './LocalStorageCRUD.js';
+import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const moment = extendMoment(Moment);
@@ -781,7 +781,7 @@ function getRandomKeywords(allKeywords) {
  * @param {Array} allKeywords - Lista de todas las palabras clave
  * @returns {Object} Datos formateados para el envío
  */
-function dataSendPost(articulosSelected, allKeywords, style = 'informativo', tone = 'formal') {
+function dataSendPost(articulosSelected, allKeywords) {
   const jsonEnvio = articulosSelected.map(item => {
     const { titulo, content } = item;
     return {
@@ -793,8 +793,7 @@ function dataSendPost(articulosSelected, allKeywords, style = 'informativo', ton
   return {
     articles: jsonEnvio,
     keywords: allKeywords,
-    style: style,
-    tone: tone
+    tone: "formal"
   }
 }
 
@@ -805,7 +804,8 @@ function dataSendPost(articulosSelected, allKeywords, style = 'informativo', ton
  * @param {boolean} modalArticulosSelected - Indica si se está usando el modal de selección
  * @returns {Promise<void>}
  */
-async function funcionGenerarNotaIA(articulosSelected, modalArticulosSelected, btnLoading, selectedStyle, selectedTone)  {  try{
+async function funcionGenerarNotaIA(articulosSelected, modalArticulosSelected, btnLoading) {
+  try{
 
     btnLoading.value = true;
     // loadingIA.value = true;
@@ -843,7 +843,7 @@ async function funcionGenerarNotaIA(articulosSelected, modalArticulosSelected, b
 
     const allKeywords = contenidoArticulos.flatMap(item => item.keywords).filter((keyword, index, self) => self.indexOf(keyword) === index);
     const keywordsRandom = getRandomKeywords(allKeywords);
-    const dataSend = dataSendPost(contenidoArticulos, keywordsRandom, selectedStyle, selectedTone);
+    const dataSend = dataSendPost(contenidoArticulos, keywordsRandom);
 
     // responseIA.value = dataSend;
     // const respAI = await generarNotaIA(dataSend);
