@@ -811,15 +811,6 @@ async function funcionGenerarNotaIA(articulosSelected, modalArticulosSelected, b
     // loadingIA.value = true;
     // isDialogNotaIA.value.modal = true;
 
- //Obtener datos del usuario del localStorage
-    const userData = JSON.parse(localStorage.getItem('userData') || '{}');
-
-    //Validar que existan los datos del usuario
-if (!userData.email || !userData.fullName) {
-  console.warn('Datos de usuario incompletos:', userData);
-
-}
-
     const artToString = JSON.stringify(articulosSelected);
     const jsonArticulos = JSON.parse(artToString);
 
@@ -877,27 +868,20 @@ if (!userData.email || !userData.fullName) {
     // isDialogNotaIA.value.data.wordCount = respAI.synthesizedArticle.wordCount;
 
     // Agregar objetos a una colección
-    
-const idGenerateRandomArticle = LocalStorageCRUD.addToCollection({
-  id: "",
-  dataOld: contenidoArticulos,
-  dataSend: dataSend,
-  title: "",
-  keywords: "",
-  content: "",
-  headings: "",
-  metaDescription: "",
-  readabilityScore: "",
-  wordCount: "",
-  generateDate: moment().format("DD/MM/YYYY HH:mm:ss"),
-  generate: false,
-  // AGREGAR ESTOS CAMPOS: Datos del autor/usuario
-  author: {
-    email: userData.email || "",
-    fullName: userData.fullName || "",
-    role: userData.role || ""
-  }
-});
+    const idGenerateRandomArticle = LocalStorageCRUD.addToCollection({
+      id: "",
+      dataOld: contenidoArticulos,
+      dataSend: dataSend,
+      title: "",
+      keywords: "",
+      content: "",
+      headings: "",
+      metaDescription: "",
+      readabilityScore: "",
+      wordCount: "",
+      generateDate: moment().format("DD/MM/YYYY HH:mm:ss"),
+      generate: false
+    });
 
     articulosSelected.value = [];
 

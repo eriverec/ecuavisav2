@@ -578,7 +578,6 @@ const isDragOver = ref(false);
 
 const userData = ref({});
 
-
 // Función para obtener preview del contenido
 const getContentPreview = () => {
 	if (!articleIA.value?.content) return '';
@@ -602,12 +601,11 @@ const handleImageSelect = (event) => {
 	const file = event.target.files[0];
 	if (file && file.type.startsWith('image/')) {
 		const reader = new FileReader();
-		reader.onload = async (e) => {
+		reader.onload = (e) => {
 			selectedImage.value = e.target.result;
 			// Guardar en el artículo
-		
-articleIA.value.selectedImage = e.target.result;
-await saveArticle(articleIA.value);
+			articleIA.value.selectedImage = e.target.result;
+			LocalStorageCRUD.updateById(idArticleIA.value, articleIA.value);
 		};
 		reader.readAsDataURL(file);
 	}
@@ -620,12 +618,11 @@ const handleDrop = (event) => {
 	const files = event.dataTransfer.files;
 	if (files.length > 0 && files[0].type.startsWith('image/')) {
 		const reader = new FileReader();
-		reader.onload = async (e) => {
+		reader.onload = (e) => {
 			selectedImage.value = e.target.result;
 			// Guardar en el artículo
-		
-articleIA.value.selectedImage = e.target.result;
-await saveArticle(articleIA.value);
+			articleIA.value.selectedImage = e.target.result;
+			LocalStorageCRUD.updateById(idArticleIA.value, articleIA.value);
 		};
 		reader.readAsDataURL(files[0]);
 	}
@@ -706,219 +703,51 @@ const generarNotaIA = async (dataSend) => {
   }
 }
 
-// Función para guardar/actualizar en la API v3
-const saveToAPI = async (articleData) => {
-  try {
-    const response = await fetch('https://services.ecuavisa.com/gestor/competencias/ia/api-v3.php?api=insert', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        key: idArticleIA.value,
-        estructura: articleData,
-        folder: 'notas'
-      })
-    });
+onMounted(async()=>{
+  articleIA.value = JSON.parse(JSON.stringify(LocalStorageCRUD.findById(idArticleIA.value)));
 
-    const result = await response.json();
-    
-    if (!result.success) {
-      // Si falla el insert, intentar con update
-      const updateResponse = await fetch('https://services.ecuavisa.com/gestor/competencias/ia/api-v3.php?api=update', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          key: idArticleIA.value,
-          estructura: articleData,
-          folder: 'notas'
-        })
-      });
-      
-      const updateResult = await updateResponse.json();
-      if (updateResult.success) {
-        console.log('Artículo actualizado en API v3');
-      }
-    } else {
-      console.log('Artículo guardado en API v3');
-    }
-  } catch (error) {
-    console.error('Error al guardar en API v3:', error);
-    // No mostrar error al usuario para no interrumpir la funcionalidad actual
+  // Cargar userData del localStorage
+  userData.value = JSON.parse(localStorage.getItem('userData') || '{}');
+
+  if(!articleIA.value?.dataSend){
+	LocalStorageCRUD.deleteById(idArticleIA.value)
+    router.push('/apps/radar/ia/')
+    return;
   }
-};
-
-// Función auxiliar para guardar en localStorage y API v3
-const saveArticle = async (articleData) => {
-  try {
-    // Guardar en localStorage (respaldo)
-    LocalStorageCRUD.updateById(idArticleIA.value, articleData);
-    
-    // Guardar en API v3 (principal)
-    await saveToAPI(articleData);
-    
-    console.log('Artículo guardado en ambas fuentes');
-  } catch (error) {
-    console.error('Error al guardar artículo:', error);
-  }
-};
-
-
-/**
- * Obtiene los datos del artículo desde el API v3
- * @param {string} articleId - ID del artículo a obtener
- * @returns {Promise<{data: Object|null, source: string}>} Datos del artículo y fuente
- */
-const getArticleFromAPI = async (articleId) => {
-  try {
-    console.log('Intentando cargar artículo desde API:', articleId);
-    const response = await fetch(`https://services.ecuavisa.com/gestor/competencias/ia/api-v3.php?api=web&key=${articleId}&folder=notas`);
-    
-    if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
-    }
-
-    const result = await response.json();
-    console.log('Respuesta del API:', result);
-    
-    if (result.success && result.data) {
-      console.log('Datos encontrados en API');
-      return { data: result.data, source: 'api' };
-    } else {
-      console.log('API no tiene datos, intentando localStorage...');
-      throw new Error(result.message || 'No se encontró en API');
-    }
-    
-  } catch (error) {
-    console.error('Error al obtener artículo desde API:', error.message);
-    console.log('Fallback: Cargando desde localStorage...');
-    
-    // Fallback a localStorage
-    const localData = LocalStorageCRUD.findById(articleId);
-    if (localData) {
-      console.log(' Datos encontrados en localStorage');
-      return { data: localData, source: 'localStorage' };
-    } else {
-      console.log('No encontrado en localStorage tampoco');
-      return { data: null, source: 'none' };
-    }
-  }
-};
-
-onMounted(async() => {
-  loadingIA.value = true;
   
-  try {
-    // Cargar userData del localStorage
-    userData.value = JSON.parse(localStorage.getItem('userData') || '{}');
+  if(!articleIA.value?.generate){
+	const respAI = await generarNotaIA(articleIA.value.dataSend);
+	if(respAI){
+		articleIA.value.generate = true;
+		articleIA.value["title"] = respAI.synthesizedArticle.title;
+		articleIA.value["content"] = respAI.synthesizedArticle.content;
+		articleIA.value["keywords"] = respAI.synthesizedArticle.keywords;
+		articleIA.value["headings"] = respAI.synthesizedArticle.headings;
+		articleIA.value["metaDescription"] = respAI.synthesizedArticle.metaDescription;
+		articleIA.value["readabilityScore"] = respAI.synthesizedArticle.readabilityScore;
+		articleIA.value["wordCount"] = respAI.synthesizedArticle.wordCount;
+		// Agregar fecha de generación si no existe
+		if (!articleIA.value.generateDate) {
+	articleIA.value["generateDate"] = moment().format('YYYY-MM-DD HH:mm:ss');
+}
+		LocalStorageCRUD.updateById(idArticleIA.value, articleIA.value);
+	}else{
+		snackbar.value = {
+			show: true,
+			text: `Error, no se pudo generar la nota con IA, intente recargar la página: ${JSON.stringify(respAI)}`,
+			color: 'error'
+		}
+	}
 
-    // Intentar cargar artículo
-    console.log('Cargando artículo con ID:', idArticleIA.value);
-    const result = await getArticleFromAPI(idArticleIA.value);
-    
-    if (!result.data) {
-      console.log('No se encontró artículo en ninguna fuente');
-      snackbar.value = {
-        show: true,
-        text: 'Artículo no encontrado',
-        color: 'error'
-      };
-      router.push('/apps/radar/ia/');
-      return;
-    }
-
-    // Asignar datos
-    articleIA.value = result.data;
-    
-    // Mostrar mensaje según la fuente
-    if (result.source === 'api') {
-      console.log('Artículo cargado desde API v3');
-    //   snackbar.value = {
-    //     show: true,
-    //     text: 'Datos cargados desde servidor',
-    //     color: 'success',
-    //     timeout: 2000
-    //   };
-    } else if (result.source === 'localStorage') {
-      console.log(' Artículo cargado desde localStorage (fallback)');
-    //   snackbar.value = {
-    //     show: true,
-    //     text: 'Datos cargados desde cache local (sin conexión al servidor)',
-    //     color: 'warning',
-    //     timeout: 3000
-    //   };
-    }
-
-    // Verificar que tenga dataSend
-    if (!articleIA.value?.dataSend) {
-      console.log('Artículo sin dataSend');
-    //   snackbar.value = {
-    //     show: true,
-    //     text: 'Datos del artículo incompletos',
-    //     color: 'error'
-    //   };
-      if (result.source === 'localStorage') {
-        LocalStorageCRUD.deleteById(idArticleIA.value);
-      }
-      router.push('/apps/radar/ia/');
-      return;
-    }
-    
-    // Cargar imagen guardada si existe
-    if (articleIA.value.selectedImage) {
-      selectedImage.value = articleIA.value.selectedImage;
-    }
-    
-    // Si no está generado, generar con IA
-    if (!articleIA.value?.generate) {
-      console.log('Generando contenido con IA...');
-      const respAI = await generarNotaIA(articleIA.value.dataSend);
-      
-      if (respAI && respAI.success) {
-        articleIA.value.generate = true;
-        articleIA.value.title = respAI.synthesizedArticle.title;
-        articleIA.value.content = respAI.synthesizedArticle.content;
-        articleIA.value.keywords = respAI.synthesizedArticle.keywords;
-        articleIA.value.headings = respAI.synthesizedArticle.headings;
-        articleIA.value.metaDescription = respAI.synthesizedArticle.metaDescription;
-        articleIA.value.readabilityScore = respAI.synthesizedArticle.readabilityScore;
-        articleIA.value.wordCount = respAI.synthesizedArticle.wordCount;
-        
-        // Agregar fecha de generación si no existe
-        if (!articleIA.value.generateDate) {
-          articleIA.value.generateDate = moment().format('DD/MM/YYYY HH:mm:ss');
-        }
-        
-        await saveArticle(articleIA.value);
-        console.log('Contenido generado y guardado');
-      } else {
-        console.log('Error al generar contenido con IA');
-        // snackbar.value = {
-        //   show: true,
-        //   text: `Error al generar la nota con IA: ${respAI?.message || 'Error desconocido'}`,
-        //   color: 'error'
-        // };
-      }
-    } else {
-      console.log('Artículo ya generado previamente');
-    }
-    
-  } catch (error) {
-    console.error('Error en onMounted:', error);
-    // snackbar.value = {
-    //   show: true,
-    //   text: 'Error al cargar el artículo',
-    //   color: 'error'
-    // };
-    router.push('/apps/radar/ia/');
-  } finally {
-    loadingIA.value = false;
+	// Cargar imagen guardada si existe
+if (articleIA.value.selectedImage) {
+	selectedImage.value = articleIA.value.selectedImage;
+}
+	loadingIA.value = false;
+  }else{
+	loadingIA.value = false;
   }
-});
-
-
+})
 </script>
 
 <style scoped>
