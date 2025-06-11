@@ -555,7 +555,7 @@ function getTipoResultadoColor(tipo) {
     case 'curioso':
       return '#311f5d'; // Tonalidad base
     case 'inquebrantable':
-      return '#4eb0cd'; // Tonalidad más clara
+      return '#37503c'; // Tonalidad más clara
     case 'tentacion':
       return '#771a26'; // Tonalidad rojo
     default:
