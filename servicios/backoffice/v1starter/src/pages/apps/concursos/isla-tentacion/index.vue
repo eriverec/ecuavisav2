@@ -253,6 +253,32 @@ async function obtenerFechas(selectedDates, dateStr, instance) {
     }
 }
 
+// Función para mapear términos del backend a términos de visualización
+function mapTipoResultadoVisual(tipo) {
+  const mapping = {
+    'curioso': 'ojo alegre',
+    'inquebrantable': 'agua bendita',
+    'tentacion': 'tentacion' // mantener igual
+  };
+  return mapping[tipo] || tipo;
+}
+
+// Función para capitalizar texto con mapeo visual
+function capitalizeTextWithMapping(text) {
+  const mappedText = mapTipoResultadoVisual(text);
+  return mappedText.charAt(0).toUpperCase() + mappedText.slice(1);
+}
+
+// Función para hacer replace en datos de CSV
+function replaceTermsForCSV(data) {
+  if (typeof data === 'string') {
+    return data
+      .replace(/\bcurioso\b/gi, 'ojo alegre')
+      .replace(/\binquebrantable\b/gi, 'agua bendita');
+  }
+  return data;
+}
+
 async function getRespuestasExportar() {
   try {
     const response = await fetch('https://services.ecuavisa.com/isla/config.php?api=all');
@@ -313,7 +339,12 @@ async function fetchFullRespuestas(){
       // Recorremos las claves de headers
       for (let key in headersExport.value) {
         if (registro.hasOwnProperty(key)) {
-          newItem[headersExport.value[key]] = registro[key];
+          // Aplicar replace si es el campo tipo_resultado
+          if (key === 'tipo_resultado') {
+            newItem[headersExport.value[key]] = replaceTermsForCSV(registro[key]);
+          } else {
+            newItem[headersExport.value[key]] = registro[key];
+          }
         } else {
           newItem[headersExport.value[key]] = "";
         }
@@ -444,20 +475,23 @@ async function downloadResultByType(tipoResultado) {
 
       if(dataByType.length === 0) {
         configSnackbar.value = {
-          message: `No hay usuarios con resultado "${capitalizeText(tipoResultado)}" para exportar.`,
+          message: `No hay usuarios con resultado "${capitalizeTextWithMapping(tipoResultado)}" para exportar.`,
           type: "warning",
           model: true
         };
         return;
       }
-
-      // Preparar datos para exportar
       let exportData = [];
       dataByType.forEach((registro) => {
         let newItem = {};
         for (let key in headersExport.value) {
           if (registro.hasOwnProperty(key)) {
-            newItem[headersExport.value[key]] = registro[key];
+            // Aplicar replace si es el campo tipo_resultado
+            if (key === 'tipo_resultado') {
+              newItem[headersExport.value[key]] = replaceTermsForCSV(registro[key]);
+            } else {
+              newItem[headersExport.value[key]] = registro[key];
+            }
           } else {
             newItem[headersExport.value[key]] = "";
           }
@@ -468,11 +502,11 @@ async function downloadResultByType(tipoResultado) {
       // Ordenar por fecha más reciente
       exportData.sort((a, b) => moment.utc(b["Fecha de Participación"]).diff(moment(a["Fecha de Participación"])));
 
-      const title = `usuarios_${tipoResultado}_${moment().format("YYYY-MM-DD-HH-mm-ss")}`;
+      const title = `usuarios_${mapTipoResultadoVisual(tipoResultado).replace(' ', '_')}_${moment().format("YYYY-MM-DD-HH-mm-ss")}`;
       exportCSVFile(headersExport.value, exportData, title);
 
       configSnackbar.value = {
-        message: `${dataByType.length} usuarios con resultado "${capitalizeText(tipoResultado)}" exportados exitosamente`,
+        message: `${dataByType.length} usuarios con resultado "${capitalizeTextWithMapping(tipoResultado)}" exportados exitosamente`,
         type: "success",
         model: true
       };
@@ -544,7 +578,7 @@ function downloadUserResponses(usuario) {
       'Correo': usuario.email,
       'Fecha de Participación': moment.utc(usuario.fecha_participacion).format("DD/MM/YYYY HH:mm:ss"),
       'Puntaje Total': usuario.puntaje_total,
-      'Tipo de Resultado': capitalizeText(usuario.tipo_resultado)
+      'Tipo de Resultado': replaceTermsForCSV(usuario.tipo_resultado) 
     };
 
     // Agregar las 8 preguntas con sus respuestas
@@ -738,7 +772,7 @@ function downloadUserResponses(usuario) {
                     }"
                   >
                     <div class="chart-bar-content">
-                      <span class="chart-bar-label">{{ capitalizeText('curioso') }}</span>
+                      <span class="chart-bar-label">{{ capitalizeTextWithMapping('curioso') }}</span>
                       <span class="chart-bar-stats">{{ chartData.curioso.count }} usuarios ({{ chartData.curioso.percentage.toFixed(1) }}%)</span>
                     </div>
                   </div>
@@ -768,7 +802,7 @@ function downloadUserResponses(usuario) {
                     }"
                   >
                     <div class="chart-bar-content">
-                      <span class="chart-bar-label">{{ capitalizeText('inquebrantable') }}</span>
+                      <span class="chart-bar-label">{{ capitalizeTextWithMapping('inquebrantable') }}</span>
                       <span class="chart-bar-stats">{{ chartData.inquebrantable.count }} usuarios ({{ chartData.inquebrantable.percentage.toFixed(1) }}%)</span>
                     </div>
                   </div>
@@ -798,7 +832,7 @@ function downloadUserResponses(usuario) {
                     }"
                   >
                     <div class="chart-bar-content">
-                      <span class="chart-bar-label">{{ capitalizeText('tentacion') }}</span>
+                      <span class="chart-bar-label">{{ capitalizeTextWithMapping('tentacion') }}</span>
                       <span class="chart-bar-stats">{{ chartData.tentacion.count }} usuarios ({{ chartData.tentacion.percentage.toFixed(1) }}%)</span>
                     </div>
                   </div>
@@ -891,7 +925,7 @@ function downloadUserResponses(usuario) {
                       :style="{ backgroundColor: getTipoResultadoColor(respuesta.tipo_resultado), color: 'white' }"
                       size="small"
                     >
-                      {{ capitalizeText(respuesta.tipo_resultado) }}
+                      {{ capitalizeTextWithMapping(respuesta.tipo_resultado) }}
                     </VChip>
                   </td>
 
