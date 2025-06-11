@@ -533,38 +533,60 @@ const btnLoading = ref(false);
       <!-- Dialog Content -->
       <VCard>
         <VCardItem >
-          <div class="d-flex content-title flex-wrap">
-            <div class="d-flex gap-3">
-              <div class="d-flex flex-column" style="line-height: 1.3;">
-                <h3 class="h2">
-                  Artículos seleccionados
-                </h3>
-                <div class="d-flex gap-2 align-center mt-2">
-                  <VChip size="x-small" color="primary">
-                    {{ filteredDataModalArticlesSelected.length }} Artículo(s)
-                  </VChip>
-                </div>
-              </div>
+  <div class="d-flex content-title flex-wrap">
+    <div class="d-flex gap-3">
+      <div class="d-flex flex-column" style="line-height: 1.3;">
+        <h3 class="h2">
+          Artículos seleccionados
+        </h3>
+        <div class="d-flex gap-2 align-center mt-2">
+          <VChip size="x-small" color="primary">
+            {{ filteredDataModalArticlesSelected.length }} Artículo(s)
+          </VChip>
+        </div>
+      </div>
+    </div>
 
-              
-            </div>
+    <div class="d-flex align-center gap-3">
+      <VBtn 
+        @click="funcionGenerarNotaIA" 
+        :disabled="props.articulosSelected.length == 0 || btnLoading" 
+        :loading="btnLoading" 
+        color="warning" 
+        class="text-black"
+        size="large"
+      > 
+        <div class="svg-icon-start mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 512 512" style="width: 20px; height: 20px; shape-rendering: geometricPrecision; text-rendering: geometricPrecision; image-rendering: optimizeQuality; fill-rule: evenodd; clip-rule: evenodd;">
+            <g>
+              <path style="opacity:0.978" fill="#000000"
+                d="M -0.5,192.5 C -0.5,191.833 -0.5,191.167 -0.5,190.5C 28.0041,186.207 56.0041,179.707 83.5,171C 108.001,163.349 128.501,149.849 145,130.5C 160.188,107.957 170.521,83.2901 176,56.5C 179.885,38.7326 183.885,21.0659 188,3.5C 193.095,32.6418 200.095,61.3085 209,89.5C 217.959,118.435 235.125,140.935 260.5,157C 275.526,164.898 291.193,171.231 307.5,176C 330.487,181.728 353.487,187.062 376.5,192C 347.003,196.966 318.003,203.966 289.5,213C 261.252,222.018 239.085,238.851 223,263.5C 210.823,286.516 202.156,310.849 197,336.5C 193.785,351.12 190.785,365.786 188,380.5C 183.062,357.487 177.728,334.487 172,311.5C 166.455,290.176 157.455,270.509 145,252.5C 128.954,233.815 109.121,220.648 85.5,213C 57.3611,203.939 28.6944,197.106 -0.5,192.5 Z" />
+            </g>
+            <g>
+              <path style="opacity:0.965" fill="#000000"
+                d="M 511.5,387.5 C 511.5,387.833 511.5,388.167 511.5,388.5C 493.583,391.584 475.917,395.75 458.5,401C 435.14,407.753 418.64,422.253 409,444.5C 401.312,464.935 395.645,485.935 392,507.5C 388.133,489.034 383.467,470.701 378,452.5C 367.184,423.028 346.351,404.861 315.5,398C 300.891,394.412 286.224,391.078 271.5,388C 291.141,384.256 310.474,379.256 329.5,373C 353,364.833 368.833,349 377,325.5C 383.256,306.474 388.256,287.141 392,267.5C 395.591,287.53 400.591,307.197 407,326.5C 415.635,350.468 432.135,366.301 456.5,374C 474.599,379.608 492.932,384.108 511.5,387.5 Z" />
+            </g>
+          </svg>
+        </div>
+        <span>Generar nota con IA</span>
+      </VBtn>
 
-            <VTextField class="d-none" v-model="isDialogArticlesSelected.data.search" label="Buscar.."
-              prepend-inner-icon="tabler-search" density="compact" style="max-width: 300px; padding: 0px 0;"
-              clearable />
-
-          </div>
-        </VCardItem>
+      <VTextField class="d-none" v-model="isDialogArticlesSelected.data.search" label="Buscar.."
+        prepend-inner-icon="tabler-search" density="compact" style="max-width: 300px; padding: 0px 0;"
+        clearable />
+    </div>
+  </div>
+</VCardItem>
         <VCardText style="max-height: 550px;">
   <VList lines="two" class="py-4">
     <div v-if="filteredDataModalArticlesSelected.length">
       
       <!-- Sección de configuración de IA -->
-      <VCard variant="outlined" class="mb-4">
+      <VCard class="mb-4" style="border: 1px solid #e0e0e0;">
         <VCardItem>
           <VCardTitle class="text-h6 mb-3">
             <VIcon icon="tabler-settings" class="mr-2" />
-            Configuración de IA
+            Parámetros para generación de contenido
           </VCardTitle>
         </VCardItem>
         <VCardText>
@@ -597,54 +619,12 @@ const btnLoading = ref(false);
         </VCardText>
       </VCard>
 
-      <!-- Controles superiores -->
-      <div class="d-flex gap-2 align-end justify-space-between mb-3">
-        <VSelect 
-          style="max-width: 170px;" 
-          v-model="pageSizeModalArticlesSelected" 
-          :items="[5, 10, 20]" 
-          label="Registros por página" 
-          dense 
-          outlined 
-          class="mt-5 d-block" 
-        />
-
-        <VBtn 
-          @click="funcionGenerarNotaIA" 
-          :disabled="props.articulosSelected.length == 0 || btnLoading" 
-          :loading="btnLoading" 
-          color="warning" 
-          class="text-black"
-          size="large"
-        > 
-          <div class="svg-icon-start mt-1">
-            <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 512 512" style="width: 20px; height: 20px; shape-rendering: geometricPrecision; text-rendering: geometricPrecision; image-rendering: optimizeQuality; fill-rule: evenodd; clip-rule: evenodd;">
-              <g>
-                <path style="opacity:0.978" fill="#000000"
-                  d="M -0.5,192.5 C -0.5,191.833 -0.5,191.167 -0.5,190.5C 28.0041,186.207 56.0041,179.707 83.5,171C 108.001,163.349 128.501,149.849 145,130.5C 160.188,107.957 170.521,83.2901 176,56.5C 179.885,38.7326 183.885,21.0659 188,3.5C 193.095,32.6418 200.095,61.3085 209,89.5C 217.959,118.435 235.125,140.935 260.5,157C 275.526,164.898 291.193,171.231 307.5,176C 330.487,181.728 353.487,187.062 376.5,192C 347.003,196.966 318.003,203.966 289.5,213C 261.252,222.018 239.085,238.851 223,263.5C 210.823,286.516 202.156,310.849 197,336.5C 193.785,351.12 190.785,365.786 188,380.5C 183.062,357.487 177.728,334.487 172,311.5C 166.455,290.176 157.455,270.509 145,252.5C 128.954,233.815 109.121,220.648 85.5,213C 57.3611,203.939 28.6944,197.106 -0.5,192.5 Z" />
-              </g>
-              <g>
-                <path style="opacity:0.965" fill="#000000"
-                  d="M 511.5,387.5 C 511.5,387.833 511.5,388.167 511.5,388.5C 493.583,391.584 475.917,395.75 458.5,401C 435.14,407.753 418.64,422.253 409,444.5C 401.312,464.935 395.645,485.935 392,507.5C 388.133,489.034 383.467,470.701 378,452.5C 367.184,423.028 346.351,404.861 315.5,398C 300.891,394.412 286.224,391.078 271.5,388C 291.141,384.256 310.474,379.256 329.5,373C 353,364.833 368.833,349 377,325.5C 383.256,306.474 388.256,287.141 392,267.5C 395.591,287.53 400.591,307.197 407,326.5C 415.635,350.468 432.135,366.301 456.5,374C 474.599,379.608 492.932,384.108 511.5,387.5 Z" />
-              </g>
-            </svg>
-          </div>
-          <span>Generar nota con IA</span>
-        </VBtn>
-      </div>
+     
 
       <!-- Lista de artículos -->
       <template v-for="item in paginatedDataModalArticlesSelected">
         <VListItem class="article-card elevation-0 border-1 rounded no-truncate px-4 py-2 mb-3">
           <template #prepend>
-            <VBtn
-              title="Eliminar nota seleccionada"
-              color="error"
-              icon="tabler-trash"
-              size="x-small"
-              class="mr-2"
-              @click="syncSelected_2(item.enlace, false)"
-            />
             <VAvatar
               v-if="item.picture"
               :image="replaceAmp(item.picture)"
@@ -681,9 +661,23 @@ const btnLoading = ref(false);
             </div>
           </VListItemSubtitle>
           <template #append>
-            <VBtn :href="item.link" target="_blank" icon variant="text" size="small">
-              <VIcon icon="tabler-external-link" />
-            </VBtn>
+            <div class="d-flex gap-1 align-center">
+              <VBtn
+                title="Eliminar nota seleccionada"
+                color="error"
+                icon="tabler-trash"
+                size="small"
+                variant="text"
+                @click="syncSelected_2(item.enlace, false)"
+              />
+              <VBtn 
+                :href="item.link" 
+                target="_blank" 
+                icon="tabler-external-link"
+                variant="text" 
+                size="small"
+              />
+            </div>
           </template>
         </VListItem>
       </template>
