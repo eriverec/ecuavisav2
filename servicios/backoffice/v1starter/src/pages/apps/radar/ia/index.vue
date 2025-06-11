@@ -678,6 +678,35 @@ watch(filtrosActivos, (newVal) => {
 
 //Fin filtrado de datos
 
+
+/**
+ * Obtiene las notas generadas con IA desde el API v3
+ * @returns {Promise<Array>} Lista de notas generadas con IA
+ */
+async function getNotasIAFromAPI() {
+  try {
+    const response = await fetch('https://services.ecuavisa.com/gestor/competencias/ia/api-v3.php?api=all&folder=notas');
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    
+    if (result.success && result.data) {
+      return result.data;
+    } else {
+      console.warn('API no devolvió datos válidos:', result);
+      return [];
+    }
+    
+  } catch (error) {
+    console.error('Error al obtener notas IA desde API:', error);
+    // Fallback a localStorage si falla el API
+    return JSON.parse(JSON.stringify(LocalStorageCRUD.readCollection('notasSEO')));
+  }
+}
+
 onMounted(async () => {
   loadingData.value = true;
   await loadSiteNames();
@@ -687,6 +716,10 @@ onMounted(async () => {
   itemsVertical.value = getUniqueVerticalsCat(dataAll.value);
 
   procesarKeywordsAndTags(dataAll.value);
+  
+  // Cargar notas IA desde el API
+  notasSEO.value = await getNotasIAFromAPI();
+  
   loadingData.value = false;
 });
 
@@ -1371,58 +1404,64 @@ onMounted(async()=>{
               <VRow>
                 <VCol cols="12" md="12" lg="12">
                   <VList lines="two" v-if="notasSEO.length > 0">
-                    <VListItem
-                      class="px-0"
-                      v-for="notaIA in notasSEO"
-                      :key="notaIA.id"
-                    >
-                      <VListItemTitle class="text-truncate" :title="notaIA.title">
-                        <div v-if="notaIA.generate">
-                          {{ notaIA.title }}
-                        </div>
-                        <div v-else>
-                          <i>Nota no generada</i>
-                        </div>
-                      </VListItemTitle>
-                      <VListItemSubtitle>
-                        {{ notaIA.content.substring(0, 50) + '...' }}
-                      </VListItemSubtitle>
-                      <template #prepend>
-                          <VAvatar
-                            :color="notaIA.generate ? 'success' : 'secondary'"
-                            variant="tonal"
-                          >
-                            <div class="svg-icon-start mt-1">
-                                <svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 512 512" style="width: 25px; height: 25px; shape-rendering: geometricPrecision; text-rendering: geometricPrecision; image-rendering: optimizeQuality; fill-rule: evenodd; clip-rule: evenodd;">
-                                  <g>
-                                    <path style="opacity:0.978" :fill="notaIA.generate ? '#000' : '#7b7981'"
-                                      d="M -0.5,192.5 C -0.5,191.833 -0.5,191.167 -0.5,190.5C 28.0041,186.207 56.0041,179.707 83.5,171C 108.001,163.349 128.501,149.849 145,130.5C 160.188,107.957 170.521,83.2901 176,56.5C 179.885,38.7326 183.885,21.0659 188,3.5C 193.095,32.6418 200.095,61.3085 209,89.5C 217.959,118.435 235.125,140.935 260.5,157C 275.526,164.898 291.193,171.231 307.5,176C 330.487,181.728 353.487,187.062 376.5,192C 347.003,196.966 318.003,203.966 289.5,213C 261.252,222.018 239.085,238.851 223,263.5C 210.823,286.516 202.156,310.849 197,336.5C 193.785,351.12 190.785,365.786 188,380.5C 183.062,357.487 177.728,334.487 172,311.5C 166.455,290.176 157.455,270.509 145,252.5C 128.954,233.815 109.121,220.648 85.5,213C 57.3611,203.939 28.6944,197.106 -0.5,192.5 Z" />
-                                  </g>
-                                  <g>
-                                    <path style="opacity:0.965" :fill="notaIA.generate ? '#000' : '#7b7981'"
-                                      d="M 511.5,387.5 C 511.5,387.833 511.5,388.167 511.5,388.5C 493.583,391.584 475.917,395.75 458.5,401C 435.14,407.753 418.64,422.253 409,444.5C 401.312,464.935 395.645,485.935 392,507.5C 388.133,489.034 383.467,470.701 378,452.5C 367.184,423.028 346.351,404.861 315.5,398C 300.891,394.412 286.224,391.078 271.5,388C 291.141,384.256 310.474,379.256 329.5,373C 353,364.833 368.833,349 377,325.5C 383.256,306.474 388.256,287.141 392,267.5C 395.591,287.53 400.591,307.197 407,326.5C 415.635,350.468 432.135,366.301 456.5,374C 474.599,379.608 492.932,384.108 511.5,387.5 Z" />
-                                  </g>
-                                </svg>
-                            </div>
-                          </VAvatar>
-                      </template>
+  <VListItem
+    class="px-0"
+    v-for="notaIA in notasSEO"
+    :key="notaIA.id"
+  >
+    <VListItemTitle class="text-truncate" :title="notaIA.title">
+      <div v-if="notaIA.generate">
+        {{ notaIA.title }}
+      </div>
+      <div v-else>
+        <i>Nota no generada</i>
+      </div>
+    </VListItemTitle>
+    <VListItemSubtitle>
+      <div class="d-flex flex-column gap-1">
+        <span class="text-caption">
+          {{ notaIA.generateDate ? moment(notaIA.generateDate, 'DD/MM/YYYY HH:mm:ss').format('DD/MM/YYYY HH:mm') : 'Sin fecha' }}
+        </span>
+        <span class="text-caption" v-if="notaIA.author?.fullName">
+          Autor: {{ notaIA.author.fullName }}
+        </span>
+      </div>
+    </VListItemSubtitle>
+    <template #prepend>
+      <VAvatar
+        :color="notaIA.generate ? 'success' : 'secondary'"
+        variant="tonal"
+      >
+        <div class="svg-icon-start mt-1">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="width: 25px; height: 25px; shape-rendering: geometricPrecision; text-rendering: geometricPrecision; image-rendering: optimizeQuality; fill-rule: evenodd; clip-rule: evenodd;">
+            <g>
+              <path style="opacity:0.978" :fill="notaIA.generate ? '#000' : '#7b7981'"
+                d="M -0.5,192.5 C -0.5,191.833 -0.5,191.167 -0.5,190.5C 28.0041,186.207 56.0041,179.707 83.5,171C 108.001,163.349 128.501,149.849 145,130.5C 160.188,107.957 170.521,83.2901 176,56.5C 179.885,38.7326 183.885,21.0659 188,3.5C 193.095,32.6418 200.095,61.3085 209,89.5C 217.959,118.435 235.125,140.935 260.5,157C 275.526,164.898 291.193,171.231 307.5,176C 330.487,181.728 353.487,187.062 376.5,192C 347.003,196.966 318.003,203.966 289.5,213C 261.252,222.018 239.085,238.851 223,263.5C 210.823,286.516 202.156,310.849 197,336.5C 193.785,351.12 190.785,365.786 188,380.5C 183.062,357.487 177.728,334.487 172,311.5C 166.455,290.176 157.455,270.509 145,252.5C 128.954,233.815 109.121,220.648 85.5,213C 57.3611,203.939 28.6944,197.106 -0.5,192.5 Z" />
+            </g>
+            <g>
+              <path style="opacity:0.965" :fill="notaIA.generate ? '#000' : '#7b7981'"
+                d="M 511.5,387.5 C 511.5,387.833 511.5,388.167 511.5,388.5C 493.583,391.584 475.917,395.75 458.5,401C 435.14,407.753 418.64,422.253 409,444.5C 401.312,464.935 395.645,485.935 392,507.5C 388.133,489.034 383.467,470.701 378,452.5C 367.184,423.028 346.351,404.861 315.5,398C 300.891,394.412 286.224,391.078 271.5,388C 291.141,384.256 310.474,379.256 329.5,373C 353,364.833 368.833,349 377,325.5C 383.256,306.474 388.256,287.141 392,267.5C 395.591,287.53 400.591,307.197 407,326.5C 415.635,350.468 432.135,366.301 456.5,374C 474.599,379.608 492.932,384.108 511.5,387.5 Z" />
+            </g>
+          </svg>
+        </div>
+      </VAvatar>
+    </template>
 
-                      <template #append>
-                          <VBtn
-                            variant="text"
-                            :color="notaIA.generate ? 'default' : 'warning'"
-                            :to="{
-                              name: 'apps-radar-ia-article-id',
-                              params: { id: notaIA.id },
-                            }"
-                            :title="notaIA.generate ? 'Ver nota' : 'Generar nota'"
-                            :icon="notaIA.generate ? 'tabler-info-circle' : 'tabler-reload'"
-                          />
-                        <VDivider />
-                      </template>
-                    </VListItem>
-                    
-                  </VList>
+    <template #append>
+      <VBtn
+        variant="text"
+        :color="notaIA.generate ? 'default' : 'warning'"
+        :to="{
+          name: 'apps-radar-ia-article-id',
+          params: { id: notaIA.id },
+        }"
+        :title="notaIA.generate ? 'Ver nota' : 'Generar nota'"
+        :icon="notaIA.generate ? 'tabler-info-circle' : 'tabler-reload'"
+      />
+      <VDivider />
+    </template>
+  </VListItem>
+</VList>
                   <div v-else>No hay notas generadas con IA</div>
                 </VCol>
               </VRow>
