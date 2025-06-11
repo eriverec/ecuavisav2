@@ -17,6 +17,152 @@
 
 		<VRow v-if="articleIA?.dataSend">
 			<VCol cols="12" md="4" lg="4">
+				
+				<!-- Notas utilizadas -->
+				<VCard class="mb-4">
+				<VCardItem>
+					<VCardTitle class="d-flex flex-wrap gap-2 align-center">
+					Notas utilizadas
+					</VCardTitle>
+					<VCardSubtitle>
+					Articulos utilizados para generar esta nota
+					</VCardSubtitle>
+				</VCardItem>
+				<VCardText>
+					<!-- Tags -->
+					<div class="d-flex gap-2 align-center mt-2 flex-wrap mb-3">
+					<small>Tags:</small>
+					<VChip size="x-small" color="primary" v-for="item in articleIA.dataSend.keywords">
+						{{ item }}
+					</VChip>
+					</div>
+					<VDivider />
+					
+					<!-- Lista de artículos -->
+					<VList lines="two">
+					<VListItem
+						v-if="articleIA"
+						class="px-0"
+						v-for="(notaIA, index) in articleIA.dataSend.articles"
+						:key="index"
+					>
+						<VListItemTitle class="text-truncate" :title="notaIA.title">
+						{{ notaIA.title }}
+						</VListItemTitle>
+						<VListItemSubtitle>
+						{{ notaIA.content.substring(0, 50) + '...' }}
+						</VListItemSubtitle>
+						<template #prepend>
+						<VAvatar
+							color="secondary"
+							variant="tonal"
+						>
+							<VIcon icon="tabler-file-text" />
+						</VAvatar>
+						</template>
+
+						<template #append>
+						<VBtn
+							class="ml-2 rounded-sm"
+							:href="articleIA.dataOld[index].enlace"
+							target="_blank"
+							variant="tonal"
+							size="x-small"
+							color="primary"
+							icon="tabler-link"
+						/>
+						</template>
+					</VListItem>
+					<VDivider />
+					</VList>
+					
+					<!-- Detalles de nota -->
+					<div class="mt-4">
+					<h4 class="text-h6 mb-3">Detalles de nota creada</h4>
+					
+					<!-- Tono -->
+					<div class="d-flex gap-2 align-center mt-2 flex-wrap mb-3">
+						<small>Tono:</small>
+						<VChip 
+						v-if="loadingIA" 
+						size="x-small" 
+						color="warning" 
+						class="skeleton-box" 
+						style="width:80px;"
+						>
+						</VChip>
+						<VChip 
+						v-else 
+						size="x-small" 
+						color="warning"
+						>
+						{{ articleIA.dataSend?.tone || 'No especificado' }}
+						</VChip>
+					</div>
+					
+					<!-- Estilo -->
+					<div class="d-flex gap-2 align-center mt-2 flex-wrap mb-3">
+						<small>Estilo:</small>
+						<VChip 
+						v-if="loadingIA" 
+						size="x-small" 
+						color="warning" 
+						class="skeleton-box" 
+						style="width:100px;"
+						>
+						</VChip>
+						<VChip 
+						v-else 
+						size="x-small" 
+						color="warning"
+						>
+						{{ articleIA.dataSend?.style || 'No especificado' }}
+						</VChip>
+					</div>
+					
+					<!-- Conteo de palabras -->
+					<div class="d-flex gap-2 align-center mt-2 flex-wrap mb-3">
+						<small>Conteo de palabras:</small>
+						<VChip 
+						v-if="loadingIA" 
+						size="x-small" 
+						color="orange" 
+						class="skeleton-box" 
+						style="width:60px;"
+						>
+						</VChip>
+						<VChip 
+						v-else 
+						size="x-small" 
+						color="orange"
+						>
+						{{ articleIA.wordCount || 0 }} palabras
+						</VChip>
+					</div>
+					
+					<!-- Autor -->
+					<div class="d-flex gap-2 align-center mt-2 flex-wrap mb-3">
+						<small>Autor:</small>
+						<VChip 
+						v-if="loadingIA" 
+						size="x-small" 
+						color="orange" 
+						class="skeleton-box" 
+						style="width:120px;"
+						>
+						</VChip>
+						<VChip 
+						v-else 
+						size="x-small" 
+						color="orange"
+						>
+						{{ userData?.email || 'No disponible' }}
+						</VChip>
+					</div>
+					</div>
+				</VCardText>
+				</VCard>
+
 				<!-- Previsualización Móvil -->
 				<VCard class="mb-4">
 					<VCardItem>
@@ -165,62 +311,7 @@
 					</VCardText>
 				</VCard>
 
-				<!-- Notas utilizadas  -->
-				<VCard>
-					<VCardItem>
-						<VCardTitle class="d-flex flex-wrap gap-2 align-center">
-							Notas utilizadas
-						</VCardTitle>
-						<VCardSubtitle>
-							Articulos utilizados para generar esta nota
-						</VCardSubtitle>
-					</VCardItem>
-					<VCardText>
-						<div class="d-flex gap-2 align-center mt-2 flex-wrap mb-3">
-							<small>Tags:</small>
-							<VChip size="x-small" color="primary" v-for="item in articleIA.dataSend.keywords">
-								{{ item }}
-							</VChip>
-						</div>
-						<VDivider />
-						<VList lines="two">
-							<VListItem
-								v-if="articleIA"
-								class="px-0"
-								v-for="(notaIA, index) in articleIA.dataSend.articles"
-								:key="index"
-							>
-								<VListItemTitle class="text-truncate" :title="notaIA.title">
-									{{ notaIA.title }}
-								</VListItemTitle>
-								<VListItemSubtitle>
-									{{ notaIA.content.substring(0, 50) + '...' }}
-								</VListItemSubtitle>
-								<template #prepend>
-									<VAvatar
-										color="secondary"
-										variant="tonal"
-									>
-										<VIcon icon="tabler-file-text" />
-									</VAvatar>
-								</template>
-
-								<template #append>
-									<VBtn
-										class="ml-2 rounded-sm"
-										:href="articleIA.dataOld[index].enlace"
-										target="_blank"
-										variant="tonal"
-										size="x-small"
-										color="primary"
-										icon="tabler-link"
-									/>
-								</template>
-							</VListItem>
-							<VDivider />
-						</VList>
-					</VCardText>
-				</VCard>
+			
 			</VCol>
 
 			<VCol cols="12" md="8" lg="8">
@@ -485,6 +576,8 @@ const articleIA = ref({});
 const selectedImage = ref(null);
 const isDragOver = ref(false);
 
+const userData = ref({});
+
 // Función para obtener preview del contenido
 const getContentPreview = () => {
 	if (!articleIA.value?.content) return '';
@@ -612,6 +705,10 @@ const generarNotaIA = async (dataSend) => {
 
 onMounted(async()=>{
   articleIA.value = JSON.parse(JSON.stringify(LocalStorageCRUD.findById(idArticleIA.value)));
+
+  // Cargar userData del localStorage
+  userData.value = JSON.parse(localStorage.getItem('userData') || '{}');
+
   if(!articleIA.value?.dataSend){
 	LocalStorageCRUD.deleteById(idArticleIA.value)
     router.push('/apps/radar/ia/')
