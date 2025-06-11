@@ -156,7 +156,7 @@
 						size="x-small" 
 						color="orange"
 						>
-						{{ userData?.email || 'No disponible' }}
+						 {{ articleIA.author?.email || userData?.email || 'No disponible' }}
 						</VChip>
 					</div>
 					</div>
