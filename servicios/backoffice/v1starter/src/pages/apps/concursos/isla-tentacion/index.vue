@@ -555,7 +555,7 @@ function getTipoResultadoColor(tipo) {
     case 'curioso':
       return '#311f5d'; // Tonalidad base
     case 'inquebrantable':
-      return '#4a2f7a'; // Tonalidad más clara
+      return '#4eb0cd'; // Tonalidad más clara
     case 'tentacion':
       return '#771a26'; // Tonalidad rojo
     default:
@@ -888,7 +888,7 @@ function downloadUserResponses(usuario) {
                     <div class="d-flex align-center">
                       <VAvatar
                         variant="tonal"
-                        :style="{ backgroundColor: getTipoResultadoColor(respuesta.tipo_resultado) + '20', color: getTipoResultadoColor(respuesta.tipo_resultado) }"
+                       :style="{ backgroundColor: getTipoResultadoColor(respuesta.tipo_resultado), color: 'white'}"
                         class="me-3"
                         size="38"
                       > 
@@ -998,6 +998,8 @@ function downloadUserResponses(usuario) {
 .text-capitalize {
   text-transform: capitalize;
 }
+
+.v-theme--dark 
 
 .bg-white .v-field{
   background-color: rgb(var(--v-theme-surface));
