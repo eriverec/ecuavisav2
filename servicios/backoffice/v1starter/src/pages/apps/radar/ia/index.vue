@@ -52,7 +52,9 @@ const customColors = [
 ]
 // Fin de opciones de inicio
 
-// Optener artículos
+localStorage.removeItem('notasSEO');
+
+// Obtener artículos
 /**
  * Limpia los espacios en blanco alrededor de las comas en un texto.
  * @param {string} texto - Texto a limpiar
