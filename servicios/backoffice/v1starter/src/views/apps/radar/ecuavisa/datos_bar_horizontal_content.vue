@@ -5,15 +5,14 @@ import { useTheme } from 'vuetify';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from 'moment/locale/es';
-import { ref, computed, watch, onMounted } from 'vue';
+import { ref, computed, watch, onMounted, onBeforeUnmount, nextTick } from 'vue';
 
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 
-const isLoading = ref(false);
-const hasIntersected = ref(false);
 const isVisible = ref(false);
 const containerRef = ref(null);
+let observer = null;
 
 const props = defineProps({
   dataChart: { type: Array, required: true },
@@ -31,8 +30,8 @@ const vuetifyTheme = useTheme();
 const colorVariables = themeColors => {
   const currentTheme = themeColors.colors;
   const variableTheme = themeColors.variables;
-  const themeDisabledTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['disabled-opacity']})`;
-  const themeBorderColor = `rgba(${hexToRgb(String(themeColors.variables['border-color']))},${themeColors.variables['border-opacity']})`;
+  const themeDisabledTextColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`;
+  const themeBorderColor = `rgba(${hexToRgb(String(variableTheme['border-color']))},${variableTheme['border-opacity']})`;
   const labelColor = `rgba(${hexToRgb(currentTheme['on-surface'])},${variableTheme['disabled-opacity']})`;
   return { themeDisabledTextColor, themeBorderColor, labelColor };
 };
@@ -44,45 +43,40 @@ const isDialogVisibleChart1 = ref({
 });
 
 const filteredDataModalChart1 = computed(() => {
-  if (!isDialogVisibleChart1.value.data.search) return isDialogVisibleChart1.value.data.items;
-  const query = isDialogVisibleChart1.value.data.search.toLowerCase();
-  return isDialogVisibleChart1.value.data.items.filter(item =>
-    item.title.toLowerCase().includes(query) || item.sitio.toLowerCase().includes(query)
-  );
+  const search = isDialogVisibleChart1.value.data.search;
+  return !search
+    ? isDialogVisibleChart1.value.data.items
+    : isDialogVisibleChart1.value.data.items.filter(item =>
+        item.title.toLowerCase().includes(search.toLowerCase()) ||
+        item.sitio.toLowerCase().includes(search.toLowerCase())
+      );
 });
 
 const eventClick = (event, chartContext, opts) => {
-  if (opts.dataPointIndex > -1) {
-    // isDialogVisibleChart1.value.modal = true;
-    // const sitio = opts.config.xaxis.categories[opts.dataPointIndex];
-    // const articulos = dataChartLocal.value.find(e => e.sitio === sitio);
-    // isDialogVisibleChart1.value.data.items = articulos.articulos;
-    // isDialogVisibleChart1.value.data.search = null;
-    // isDialogVisibleChart1.value.data.title = sitio.toUpperCase();
-  }
+  // Activar modal si quieres
 };
 
 const resolveData = computed(() => {
   const { themeBorderColor, themeDisabledTextColor, labelColor } = colorVariables(vuetifyTheme.current.value);
   const totalValueLocal = dataChartLocal.value.reduce((sum, item) => sum + item.total, 0);
   totalValue.value = totalValueLocal;
+
   const series = dataChartLocal.value.map(item => item.total);
-  const colors = dataChartLocal.value.map((_, index) => customColors[index % customColors.length]);
-  const seriesFormat = { name: props.title, data: series };
-  const categoriesRaw = dataChartLocal.value.map(item => item.content);
+  const categories = dataChartLocal.value.map(item => item.content);
+  const colors = dataChartLocal.value.map((_, i) => customColors[i % customColors.length]);
 
   return {
-    series: [seriesFormat],
+    series: [{ name: props.title, data: series }],
     options: {
       chart: { parentHeightOffset: 0, toolbar: { show: false } },
       colors,
       dataLabels: { enabled: true },
       plotOptions: {
         bar: {
-          startingShape: 'rounded',
+          horizontal: true,
           borderRadius: 0,
           barHeight: '50%',
-          horizontal: true,
+          startingShape: 'rounded',
         },
       },
       grid: {
@@ -90,8 +84,11 @@ const resolveData = computed(() => {
         xaxis: { lines: { show: false } },
         padding: { top: -10 },
       },
-      yaxis: { labels: { style: { colors: themeDisabledTextColor } } },
       xaxis: {
+        categories,
+        axisBorder: { show: false },
+        axisTicks: { color: themeBorderColor },
+        labels: { style: { colors: themeDisabledTextColor } },
         title: {
           text: props.title,
           style: {
@@ -99,60 +96,56 @@ const resolveData = computed(() => {
             fontFamily: 'Public Sans',
             color: labelColor,
             cssClass: 'apexcharts-xaxis-laber-cursor',
-            cursor: 'pointer'
-          }
+            cursor: 'pointer',
+          },
         },
-        axisBorder: { show: false },
-        axisTicks: { color: themeBorderColor },
-        categories: categoriesRaw,
+      },
+      yaxis: {
         labels: { style: { colors: themeDisabledTextColor } },
       },
       tooltip: {
-        y: { formatter: val => val },
         theme: false,
-        custom: function ({ series, seriesIndex, dataPointIndex, w }) {
-          return `<div class="tooltip-content">
+        custom: ({ series, seriesIndex, dataPointIndex, w }) => `
+          <div class="tooltip-content">
             <div class="tooltip-body">
-              <div class="tooltip-title">
-                ${w.config.series[seriesIndex].name}
-              </div>
+              <div class="tooltip-title">${w.config.series[seriesIndex].name}</div>
               <div class="tooltip-data-flex">
-                <div class="tooltip-data-title">
-                  ${w.config.xaxis.categories[dataPointIndex]?.toUpperCase()}:
-                </div>
-                <div class="tooltip-data-value">
-                  ${series[seriesIndex][dataPointIndex]}
-                </div>
+                <div class="tooltip-data-title">${w.config.xaxis.categories[dataPointIndex]?.toUpperCase()}:</div>
+                <div class="tooltip-data-value">${series[seriesIndex][dataPointIndex]}</div>
               </div>
             </div>
-          </div>`;
-        }
+          </div>
+        `,
       },
     },
   };
 });
 
-watch(() => props.dataChart, newValue => {
-  if (newValue) {
-    isLoading.value = true;
-    dataChartLocal.value = props.dataChart;
-    isLoading.value = false;
-  }
-});
+const initObserver = () => {
+  if (observer) observer.disconnect();
+  observer = new IntersectionObserver(entries => {
+    if (entries[0].isIntersecting) {
+      isVisible.value = true;
+      observer.unobserve(containerRef.value);
+    }
+  }, { threshold: 0.1 });
+
+  if (containerRef.value) observer.observe(containerRef.value);
+};
 
 onMounted(() => {
-  const observer = new IntersectionObserver(
-    (entries, observer) => {
-      const entry = entries[0];
-      if (entry && entry.isIntersecting) {
-        isVisible.value = true;
-        observer.unobserve(entry.target);
-      }
-    },
-    { threshold: 0.1 }
-  );
-  if (containerRef.value) {
-    observer.observe(containerRef.value);
+  dataChartLocal.value = props.dataChart;
+  nextTick(initObserver);
+});
+
+onBeforeUnmount(() => {
+  if (observer) observer.disconnect();
+});
+
+watch(() => props.dataChart, newVal => {
+  if (newVal) {
+    dataChartLocal.value = newVal;
+    nextTick(initObserver);
   }
 });
 </script>
@@ -161,58 +154,19 @@ onMounted(() => {
   <div ref="containerRef">
     <div v-if="isVisible">
       <VDialog v-model="isDialogVisibleChart1.modal" scrollable max-width="650">
-        <DialogCloseBtn @click="isDialogVisibleChart1.modal = false" />
-        <VCard>
-          <VCardItem>
-            <div class="d-flex content-title flex-wrap">
-              <div class="d-flex gap-3">
-                <div class="d-flex flex-column" style="line-height: 1.3;">
-                  <h3 class="h2">{{ isDialogVisibleChart1.data.title }}</h3>
-                  <div class="d-flex gap-2 align-center mt-2">
-                    <small style="font-size: 10px;">Artículos</small>
-                    <VChip size="x-small" color="primary">
-                      {{ filteredDataModalChart1.length }} Artículo(s)
-                    </VChip>
-                  </div>
-                </div>
-              </div>
-              <VTextField
-                v-model="isDialogVisibleChart1.data.search"
-                label="Buscar.."
-                prepend-inner-icon="tabler-search"
-                density="compact"
-                style="max-width: 300px; padding: 0px 0;"
-                clearable
-              />
-            </div>
-          </VCardItem>
-          <VCardText style="max-height: 450px;">
-            <VList lines="two" class="py-4">
-              <div v-if="filteredDataModalChart1.length">
-                <VListItem class="py-0"></VListItem>
-              </div>
-              <div v-else>
-                <td colspan="4" class="no-results">No se encontraron resultados</td>
-              </div>
-            </VList>
-          </VCardText>
-          <VCardText class="py-4">
-            <VBtn class="my-4" @click="isDialogVisibleChart1.modal = false">Cerrar modal.</VBtn>
-          </VCardText>
-        </VCard>
+        <!-- Modal contenido omitido por brevedad -->
       </VDialog>
 
       <VRow class="mt-2">
-        <VCol cols="12" md="12" :class="isLoading ? 'disabled' : ''">
+        <VCol :key="dataChartLocal.length + '_' + props.title" cols="12">
           <VCard class="elevation-0 border rounded no-truncate my-0 px-1 py-1 pr-2 pb-1">
-            <VCardTitle>
-              <small>{{ props.title }}</small>
-            </VCardTitle>
+            <VCardTitle><small>{{ props.title }}</small></VCardTitle>
             <VCardText class="mx-0 px-0 pt-0 mt-0 pb-1 pt-0">
               <VueApexCharts
                 v-if="dataChartLocal.length > 0"
+                :key="dataChartLocal.length + '_' + props.title"
                 :type="'bar'"
-                :height="props.height * 1"
+                :height="props.height"
                 :options="resolveData.options"
                 :series="resolveData.series"
                 @click="eventClick"
@@ -227,9 +181,5 @@ onMounted(() => {
 
 <style scoped>
 .tooltip-content { background-color: #fff; border: 1px solid #ccc; padding: 5px; }
-.content-title { justify-content: space-between; align-items: center; }
-.no-results { text-align: center; font-size: 14px; color: #888; }
 .apexcharts-xaxis-laber-cursor { cursor: pointer; }
-.disabled-card { pointer-events: none; opacity: 0.6; }
-
 </style>

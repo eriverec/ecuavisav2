@@ -1048,10 +1048,19 @@ class SendPulse
 				if ($value->name == "Imagen_Newsletter") {
 					$content[] = '
 						<a style="text-decoration:none;color: black;font-family: Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;" href="' . $getFristNota["link"] . '">
-							<img width="200" style="width:100%;height:auto" src="' . $value->remoteContent->href . '" alt="Imagen principal">
-				    </a><div class="autorNewletter" style="font-size: 12px;padding-top: 10px;padding-left: 50px;padding-right: 50px;font-family: Lucida Grande, Lucida Sans Unicode, Lucida Sans, Geneva, Verdana, sans-serif;"> '. 
-						mb_strtoupper($authorName, 'UTF-8') .'</div>
-						<div class="autorNewletter" style="padding-bottom: 20px;padding-top: 3px;padding-left: 50px;padding-right: 50px;font-family: Lucida Grande, Lucida Sans Unicode, Lucida Sans, Geneva, Verdana, sans-serif;font-weight: 400;"> Editor de Deportes</div>';
+								<img width="200" style="width:100%;height:auto" src="' . $value->remoteContent->href . '" alt="Imagen principal">
+						</a>
+						<table cellpadding="0" cellspacing="0" border="0" style="width:100%;padding:20px 50px 5px 50px;font-family:Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;">
+							<tr>
+								<td style="width:50px;" valign="top">
+								<img alt="user placeholder" src="https://services.ecuavisa.com/imagenes/Intersect8732ty8.png" width="50" height="50" style="border-radius:50%; display:block;">
+								</td>
+								<td style="padding-left:10px; vertical-align:top; padding:5px 0px 10px 16px">
+									<div style="font-size:12px; font-weight:bold; color:#444;"><strong>' . mb_strtoupper($authorName, "UTF-8") . '</strong></div>
+									<div style="font-size:13px; font-weight:400; color:#444;">Editor de Deportes</div>
+								</td>
+							</tr>
+						</table>';
 				}
 
 				/*if ($value->name == "Image") {
