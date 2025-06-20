@@ -29,7 +29,7 @@ class SendPulse
 	{
 		require '../funciones/Ctrfunciones.php';
 
-		$this->typeProyect =  "Production"; //Production - Guzzle
+		$this->typeProyect =  "Guzzle"; //Production - Guzzle
 		$this->dominio =  "https://phpstack-1011861-5163349.cloudwaysapps.com";
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 5,
@@ -1053,7 +1053,7 @@ class SendPulse
 						<table cellpadding="0" cellspacing="0" border="0" style="width:100%;padding:20px 50px 5px 50px;font-family:Lucida Grande,Lucida Sans Unicode,Lucida Sans,Geneva,Verdana,sans-serif;">
 							<tr>
 								<td style="width:50px;" valign="top">
-								<img alt="user placeholder" src="https://services.ecuavisa.com/imagenes/Intersect8732ty8.png" width="50" height="50" style="border-radius:50%; display:block;">
+								<img alt="user placeholder" src="https://services.ecuavisa.com/imagenes/8745yh8tb4hvg.png" width="50" height="50" style="border-radius:50%; display:block;">
 								</td>
 								<td style="padding-left:10px; vertical-align:top; padding:5px 0px 10px 16px">
 									<div style="font-size:12px; font-weight:bold; color:#444;"><strong>' . mb_strtoupper($authorName, "UTF-8") . '</strong></div>
