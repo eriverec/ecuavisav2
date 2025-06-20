@@ -29,7 +29,7 @@ class SendPulse
 	{
 		require '../funciones/Ctrfunciones.php';
 
-		$this->typeProyect =  "Guzzle"; //Production - Guzzle
+		$this->typeProyect =  "Production"; //Production - Guzzle
 		$this->dominio =  "https://phpstack-1011861-5163349.cloudwaysapps.com";
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 5,
