@@ -30,7 +30,7 @@ class SendPulse
 		require '../funciones/Ctrfunciones.php';
 
 		$this->typeProyect =  "Production"; //Production - Guzzle
-		$this->dominio =  "https://phpstack-1011861-5163349.cloudwaysapps.com";
+		$this->dominio =  "https://services.ecuavisa.com/sendpulse";
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 5,
 			"folder" => "boletin-estadio", // Guardado de img y json
@@ -85,7 +85,7 @@ class SendPulse
 			} else {
 				$this->listaUsuario = $this->dataJsonNewsletter->data->config->addressbook->value;
 			}
-
+			
 			$this->token = $this->initToken();
 			if (!isset($this->token)) {
 				echo json_encode(["resp" => false, "mensaje" => "Error 005 - Acceso no permitido, no se pudo crear token"]);
@@ -1437,6 +1437,7 @@ class SendPulse
 			$notas = $template[1];
 			$nombreNeswletter = $this->nombreNeswletter;
 			$list_id = $this->listaUsuario;
+			// $list_id = $this->listaUsuario;
 
 			// Obtener longitud del texto en bytes
 			$tamanoBytes = strlen($bodyContent);
