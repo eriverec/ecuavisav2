@@ -1,3 +1,9 @@
+
+.banner_fijos_rd_desktop article img {
+  object-fit: cover;
+  height: auto;
+}
+
 /* CINTILLO - INICIO */
 
 .title_seccion .c_azul_celeste_Mobile {

@@ -86,3 +86,32 @@ function mostrarProgramacion() {
 
 // Iniciar el ciclo de verificación
 // mostrarProgramacion();
+
+function onPageLoad(callback) {
+  if (document.readyState === 'complete') {
+      // La página ya está cargada
+      callback();
+  } else {
+      // Espera a que la carga termine
+      window.addEventListener('load', callback);
+  }
+}
+
+onPageLoad(() => {
+  setTimeout(() => {
+      
+      document.querySelectorAll('.signed-out #iter-content-wrapper')?.forEach(article => {
+          article.style.visibility = 'visible';
+      });
+
+  }, 500);
+
+  setTimeout(() => {
+      const elementvrudo = document.querySelectorAll('.vrudo');
+      if (elementvrudo.length > 0) {
+          elementvrudo.forEach(el => {
+              el.removeAttribute('style');
+          });
+      }
+  }, 2000);
+});
