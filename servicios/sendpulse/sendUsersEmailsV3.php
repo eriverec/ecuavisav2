@@ -85,7 +85,7 @@ function getToken()
 
 function sendEmailsBatch($emails, $token)
 {
-    $idListaSendpulse = "589349";
+    $idListaSendpulse = "659525";
     $sendEmailsUrl = "https://api.sendpulse.com/addressbooks/{$idListaSendpulse}/emails";
 
     $headers = [
