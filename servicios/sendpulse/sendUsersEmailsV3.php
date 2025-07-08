@@ -68,20 +68,18 @@ function sendApiEmails($usuario)
 
 function getToken()
 {
-    $tokenFile = __DIR__ . '/sendpulse/getApi.php';
+    $url = 'https://micuenta.ecuavisa.com/sendpulse/getApi.php'; // Asegúrate de usar la URL pública correcta
 
-    if (!file_exists($tokenFile)) {
-        return null;
-    }
+    // Realizar una petición HTTP a la URL
+    $token = @file_get_contents($url);
 
-    $token = file_get_contents($tokenFile);
-
-    if (!$token || empty(trim($token))) {
+    if ($token === false || empty(trim($token))) {
         return null;
     }
 
     return trim($token);
 }
+
 
 function sendEmailsBatch($emails, $token)
 {
