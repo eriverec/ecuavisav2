@@ -260,6 +260,7 @@ function procesosHorarioEnvivo(json = {}) {
 
               if (enVivoRedy) {
                 enVivoRedy.style.display = 'flex';
+                enVivoRedy.style.opacity = '1';
               }
               // console.log("programa", programa)
               if (programa === "Televistazo en la comunidad") {
@@ -369,7 +370,7 @@ function procesosHorarioEnvivo(json = {}) {
         playerembed.style.display = 'block';
         fondito__.style.display = "none";
       }
-      if (enVivoRedy) { enVivoRedy.style.display = 'flex'; }
+      if (enVivoRedy) { enVivoRedy.style.display = 'flex'; enVivoRedy.style.opacity = '1'; }
 
       console.log("Forzado:", forzado);
     }
@@ -681,6 +682,8 @@ function eventoEnvivoManager() {
 
       if (enVivoRedy) {
         enVivoRedy.style.display = 'flex';
+        enVivoRedy.style.opacity = '1';
+
       }
       return;
     }
@@ -725,6 +728,7 @@ function eventoEnvivoManager() {
 
           if (enVivoRedy) {
             enVivoRedy.style.display = 'flex';
+            enVivoRedy.style.opacity = '1';
           }
 
           if (playerembed) {
