@@ -693,11 +693,11 @@ watch(estadoModel, async () => {
     <VRow>
       <VCol cols="12" sm="12" lg="12">
         <h1>
-          Participantes, Intercolegial Viva La Paz
+          Registrados, gamers
         </h1>
-        <small class="mb-4 d-block">
-          "Concurso Musical 2025"
-        </small>
+        <!-- <small class="mb-4 d-block">
+          "Formulario de registro Juegos"
+        </small> -->
         <VCardText class="d-flex py-4 gap-4 px-0 flex-wrap" style="align-items: flex-start;">
           <div :class="'me-3 d-flex gap-4 flex-wrap' + (isFullLoading ? ' disabled' : '')">
             <VSelect :disabled="loadingModulo" class="bg-white" v-model="rowPerPage" density="compact"
