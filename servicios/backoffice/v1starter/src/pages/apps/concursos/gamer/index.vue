@@ -63,8 +63,8 @@ const configSnackbar = ref({
 
 const urlApiExport = ref("");
 const urlTitleExport = ref("usuarios_gamer");
-// const dominioPrincipal = "https://concursos-usuarios.vercel.app/formulario-gamers";
-const dominioPrincipal = "http://localhost:8080/formulario-gamers/";
+const dominioPrincipal = "https://concursos-usuarios.vercel.app/formulario-gamers";
+// const dominioPrincipal = "http://localhost:8080/formulario-gamers/";
 
 const headersGlobal = ref({
   _id: "_id",
@@ -78,6 +78,7 @@ const headersGlobal = ref({
   contacto_celular: "contacto_celular",
   contacto_email: "contacto_email",
   genero: "genero",
+  ciudad: "ciudad",
   edad: "edad",
   check_consentimiento: "check_consentimiento",
   check_politica_apto_juegos: "check_politica_apto_juegos",
@@ -311,6 +312,7 @@ async function fetchFullRegistros() {
       newItem.contacto_celular = item.contacto_celular || "";
       newItem.contacto_email = item.contacto_email || "";
       newItem.genero = item.genero || "";
+      newItem.ciudad = item.ciudad || "";
       newItem.edad = item.edad || "";
       newItem.check_consentimiento = item.check_consentimiento == "1" ? "Si" : "No" || "Si";
       newItem.check_politica_apto_juegos = item.check_politica_apto_juegos == "1" ? "Si" : "No" || "Si";
