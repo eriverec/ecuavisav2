@@ -891,7 +891,7 @@ watch(estadoModel, async () => {
                           target="_blank"
                         >
                           <VIcon size="18" class="mr-1" icon="mdi-link" />
-                          Ver DEMO (YouTube) 
+                          Ver DEMO (YouTube o Drive) 
                         </VListItem>
                         <VDivider />
                         <VListItem
