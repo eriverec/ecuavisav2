@@ -1,0 +1,122 @@
+/* menu */
+.enVivoRedy,
+.Layout-Breaking,
+.navDesktop {
+  display: none !important;
+}
+
+#ly-header.container{
+  margin-bottom: 0 !important;
+}
+
+.ly-header-redy {
+  background-color: #011F29 !important;
+}
+
+.ly-header-redy .new-menu-sticky {
+  background: #011F29 !important;
+}
+
+.parent-bsc {
+  padding: 50px;
+}
+
+.contenido-central {
+  background: #000;
+}
+
+.bsc-beneficios {
+  width: 500px;
+  text-align: center;
+  display: block;
+  margin: auto;
+  margin-top: -8rem;
+}
+
+.bsc-brochure {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 50px;
+  margin-top: 6rem;
+
+}
+
+.bsc-tarj-socio {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  margin-top: 10rem;
+}
+
+.bsc-final {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+  margin-top: 10rem;
+}
+
+
+.bscf-izq {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+.bscf-izq img {
+  margin-bottom: 2rem;
+}
+
+body {
+  background-image: url(assets/fondo.webp);
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.bsc-footer {
+  text-align: center;
+  margin: 3rem;
+}
+
+.img-per-mobile {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .bsc-beneficios {
+    width: 20rem;
+    margin-top: -6rem;
+  }
+
+  .bsc-brochure {
+    grid-template-columns: 1fr;
+    margin-top: 2rem;
+  }
+
+  .bsc-tarj-socio {
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: 4rem;
+  }
+
+  .bsc-final {
+    grid-template-columns: 1fr;
+
+  }
+
+  .bscf-izq {
+    margin-top: -10rem;
+  }
+
+  .img-bottom {
+    padding: 0px 6rem;
+  }
+
+  .img-per-mobile {
+    display: block;
+  }
+
+
+  .img-per-desk {
+    display: none;
+  }
+}
