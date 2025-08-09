@@ -49,7 +49,7 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 30px;
-  margin-top: 10rem;
+  margin-top: 6rem;
 }
 
 .bsc-final {
@@ -108,7 +108,7 @@ body {
 
   .bsc-final {
     grid-template-columns: 1fr;
-
+    margin-top: 5rem;
   }
 
   .bscf-izq {
@@ -116,7 +116,7 @@ body {
   }
 
   .img-bottom {
-    padding: 0px 6rem;
+    padding: 0px 4rem;
   }
 
   .img-per-mobile {
