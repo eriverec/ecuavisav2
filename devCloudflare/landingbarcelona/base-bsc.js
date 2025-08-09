@@ -84,16 +84,16 @@ function iniciarContenidoSocioMobile() {
 
       const contertHTML = `
    <section class="bsc-portada">
-  <img class="bsc-portada" width="100%" fetchpriority="high" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/portadamobile.webp" alt="ecuavisa">
+  <img class="bsc-portada" width="100%" fetchpriority="high" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/mobile/portadamobile.webp" alt="ecuavisa">
 
-  <img class="bsc-beneficios" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/bene-mobile.webp" alt="ecuavisa">
+  <img class="bsc-beneficios" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/mobile/bene-mobile.webp" alt="ecuavisa">
   
 </section>
 
 <div class="parent-bsc container">
 
   <section class="bsc-brochure">
-    <img width="100%" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/bro-global.webp" alt="ecuavisa">
+    <img width="100%" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/mobile/bro-global.webp" alt="ecuavisa">
   </section>
 
 
@@ -115,7 +115,7 @@ function iniciarContenidoSocioMobile() {
       <img width="100%" class="img-top" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/comomeopuedo.webp" alt="ecuavisa">
       <img width="100%" class="img-center" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/visitabsc.webp" alt="ecuavisa">
       <a href="https://sociosbsc.com.ec/" target="_blank">
-        <img width="100%" class="img-bottom" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/codigoqr.webp" alt="ecuavisa">
+        <img width="100%" class="img-bottom" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/mobile/codigoQRm.webp" alt="ecuavisa">
       </a>
 
     </div>
