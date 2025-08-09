@@ -1,10 +1,12 @@
 const contenidoSocio = document.querySelector('.contenido-socio');
+const contenidoSocioMobile = document.querySelector('.contenido-socio-mobile');
+
 
 function iniciarContenidoSocio() {
 
     try {
         if (!contenidoSocio) {
-            console.error('No se encontró el elemento');
+            console.error('No se encontró el elemento desktop');
             return false;
         }
 
@@ -72,14 +74,85 @@ function iniciarContenidoSocio() {
 
 }
 
+function iniciarContenidoSocioMobile() {
+
+  try {
+      if (!contenidoSocioMobile) {
+          console.error('No se encontró el elemento mobile');
+          return false;
+      }
+
+      const contertHTML = `
+   <section class="bsc-portada">
+  <img class="bsc-portada" width="100%" fetchpriority="high" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/portadamobile.webp" alt="ecuavisa">
+
+  <img class="bsc-beneficios" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/bene-mobile.webp" alt="ecuavisa">
+  
+</section>
+
+<div class="parent-bsc container">
+
+  <section class="bsc-brochure">
+    <img width="100%" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/bro-global.webp" alt="ecuavisa">
+  </section>
+
+
+  <section class="bsc-tarj-socio">
+    <img width="100%" loading="lazy" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-amarillo.webp" alt="ecuavisa">
+    <img width="100%" loading="lazy" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-bronce.webp" alt="ecuavisa">
+
+    <img width="100%" loading="lazy" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-plata.webp" alt="ecuavisa">
+    <img width="100%" loading="lazy" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-oro.webp" alt="ecuavisa">
+
+
+
+  </section>
+
+  <section class="bsc-final">
+    <img width="100%" loading="lazy" class="img-per-mobile" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/felipe-mobile.webp" alt="ecuavisa">
+
+    <div class="bscf-izq">
+      <img width="100%" class="img-top" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/comomeopuedo.webp" alt="ecuavisa">
+      <img width="100%" class="img-center" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/visitabsc.webp" alt="ecuavisa">
+      <a href="https://sociosbsc.com.ec/" target="_blank">
+        <img width="100%" class="img-bottom" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/codigoqr.webp" alt="ecuavisa">
+      </a>
+
+    </div>
+
+    <img width="100%" class="img-per-desk" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/personaje.webp" alt="ecuavisa">
+
+
+
+  </section>
+
+  <section class="bsc-footer">
+    <img src="https://ecuavisav2.pages.dev/landingbarcelona/assets/ecuavisa-barcelona.webp" width="200px" alt="ecuavisa">
+  </section>
+</div>
+
+
+
+      `;
+
+
+      contenidoSocioMobile.innerHTML = contertHTML;
+  } catch (error) {
+      console.log("Error", e);
+      return "";
+  }
+
+}
+
 function getPrincipal() {
     try {
-        if (!contenidoSocio) {
-            console.error('No se encontró el elemento');
-            return false;
+        if (contenidoSocio) {
+            iniciarContenidoSocio();
         }
 
-        iniciarContenidoSocio();
+        if (contenidoSocioMobile) {
+            iniciarContenidoSocioMobile();
+        }
 
     } catch (e) {
         console.log("Error", e);
@@ -88,6 +161,3 @@ function getPrincipal() {
 }
 
 getPrincipal();
-setInterval(() => {
-}, 500);
-

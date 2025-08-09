@@ -5,7 +5,7 @@
   display: none !important;
 }
 
-.contenido-socio{
+.contenido-socio, .contenido-socio-mobile{
   min-height: 60rem;
 }
 
