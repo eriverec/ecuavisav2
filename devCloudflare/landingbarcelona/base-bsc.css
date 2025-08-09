@@ -5,6 +5,10 @@
   display: none !important;
 }
 
+.contenido-socio{
+  min-height: 60rem;
+}
+
 #ly-header.container{
   margin-bottom: 0 !important;
 }
@@ -91,6 +95,10 @@ body {
   .bsc-brochure {
     grid-template-columns: 1fr;
     margin-top: 2rem;
+  }
+
+  .contenido-socio{
+    min-height: 40rem;
   }
 
   .bsc-tarj-socio {
