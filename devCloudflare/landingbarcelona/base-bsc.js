@@ -39,8 +39,7 @@ function iniciarContenidoSocio() {
     </section>
 
     <section class="bsc-final">
-      <img width="100%" loading="lazy" class="img-per-mobile" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/felipe-mobile.webp" alt="ecuavisa">
-
+    
       <div class="bscf-izq">
         <img width="100%" class="img-top" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/comomeopuedo.webp" alt="ecuavisa">
         <img width="100%" class="img-center" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/visitabsc.webp" alt="ecuavisa">
@@ -96,33 +95,23 @@ function iniciarContenidoSocioMobile() {
     <img width="100%" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/mobile/bro-global.webp" alt="ecuavisa">
   </section>
 
-
   <section class="bsc-tarj-socio">
     <img width="100%" loading="lazy" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-amarillo.webp" alt="ecuavisa">
     <img width="100%" loading="lazy" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-bronce.webp" alt="ecuavisa">
-
     <img width="100%" loading="lazy" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-plata.webp" alt="ecuavisa">
     <img width="100%" loading="lazy" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-oro.webp" alt="ecuavisa">
-
-
-
   </section>
 
   <section class="bsc-final">
-    <img width="100%" loading="lazy" class="img-per-mobile" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/felipe-mobile.webp" alt="ecuavisa">
+    <img width="100%" loading="lazy" class="img-per-mobile" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/mobile/felipe21.webp" alt="ecuavisa">
 
     <div class="bscf-izq">
-      <img width="100%" class="img-top" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/comomeopuedo.webp" alt="ecuavisa">
-      <img width="100%" class="img-center" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/visitabsc.webp" alt="ecuavisa">
+      <img width="100%" class="img-top" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/mobile/como-me-puedo.webp" alt="ecuavisa">
+      <img width="100%" class="img-center" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/mobile/visita-nuestra-web.webp" alt="ecuavisa">
       <a href="https://sociosbsc.com.ec/" target="_blank">
         <img width="100%" class="img-bottom" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/mobile/codigoQRm.webp" alt="ecuavisa">
       </a>
-
     </div>
-
-    <img width="100%" class="img-per-desk" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/personaje.webp" alt="ecuavisa">
-
-
 
   </section>
 
@@ -130,9 +119,6 @@ function iniciarContenidoSocioMobile() {
     <img src="https://ecuavisav2.pages.dev/landingbarcelona/assets/ecuavisa-barcelona.webp" width="200px" alt="ecuavisa">
   </section>
 </div>
-
-
-
       `;
 
 
