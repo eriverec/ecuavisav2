@@ -10,7 +10,7 @@ function iniciarContenidoSocio() {
 
         const contertHTML = `
      <section class="bsc-portada">
-    <img class="bsc-portada" width="100%"  src="https://ecuavisav2.pages.dev/landingbarcelona/assets/portada.webp" alt="ecuavisa">
+    <img class="bsc-portada" width="100%" fetchpriority="high" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/portada.webp" alt="ecuavisa">
 
     <img class="bsc-beneficios" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/beneficiossc.webp" alt="ecuavisa">
     
