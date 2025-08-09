@@ -26,18 +26,18 @@ function iniciarContenidoSocio() {
   
   
     <section class="bsc-tarj-socio">
-      <img width="100%" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-amarillo.webp" alt="ecuavisa">
-      <img width="100%" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-bronce.webp" alt="ecuavisa">
+      <img width="100%" loading="lazy" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-amarillo.webp" alt="ecuavisa">
+      <img width="100%" loading="lazy" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-bronce.webp" alt="ecuavisa">
   
-      <img width="100%" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-plata.webp" alt="ecuavisa">
-      <img width="100%" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-oro.webp" alt="ecuavisa">
+      <img width="100%" loading="lazy" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-plata.webp" alt="ecuavisa">
+      <img width="100%" loading="lazy" class="img-brochure" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/cen-oro.webp" alt="ecuavisa">
   
   
   
     </section>
 
     <section class="bsc-final">
-      <img width="100%" class="img-per-mobile" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/felipe-mobile.webp" alt="ecuavisa">
+      <img width="100%" loading="lazy" class="img-per-mobile" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/felipe-mobile.webp" alt="ecuavisa">
 
       <div class="bscf-izq">
         <img width="100%" class="img-top" src="https://ecuavisav2.pages.dev/landingbarcelona/assets/comomeopuedo.webp" alt="ecuavisa">
