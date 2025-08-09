@@ -87,7 +87,7 @@ function getPrincipal() {
     }
 }
 
+getPrincipal();
 setInterval(() => {
-    getPrincipal();
 }, 500);
 
