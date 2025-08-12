@@ -12,7 +12,7 @@ class Email_preview{
 	private $dominio;
 
     function __construct(){
-		$this->dominio = "https://phpstack-1011861-5163349.cloudwaysapps.com";
+		$this->dominio = "https://services.ecuavisa.com/sendpulse";
         $this->sndplstoken = $this->init_token();
     }
 

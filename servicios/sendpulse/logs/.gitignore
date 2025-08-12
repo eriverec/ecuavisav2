@@ -1,0 +1,6 @@
+# Logs
+vendor
+img
+opinion/archivos/*.json
+boletin-diario/archivos/*.json
+json/*.json

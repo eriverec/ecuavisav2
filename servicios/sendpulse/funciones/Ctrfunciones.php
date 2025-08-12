@@ -19,7 +19,7 @@ class Ctrfunciones {
     	$this->folder = $resultado["folder"];
     	$this->folderPrimary = $resultado["folderPrimary"];
     	$this->typeProyect = $resultado["typeProyect"];
-		$this->dominio =  "https://phpstack-1011861-5163349.cloudwaysapps.com";
+		$this->dominio =  "https://services.ecuavisa.com/sendpulse";
 	}
 
 	public function validarAcceso($data) {
@@ -352,7 +352,7 @@ class Ctrfunciones {
         return base64_encode($html);
     }
 
-	public function createJSONPHP($data = array(), $idUnico){
+	public function createJSONPHP($data = array(), $idUnico = ""){
 		$valoresFecto = array(
 			"fechaFormateada" => "",
 			"data" => array(),

@@ -1,7 +1,8 @@
 <?php
 require '../funciones/Ctrfunciones.php';
-
 require '../vendor/autoload.php';
+require __DIR__ . '/../logs/app/controllers/LogToFile.php';
+
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 class SendPulse {
@@ -25,10 +26,12 @@ class SendPulse {
 	private $contadorSolicitudes;
 	private $jsonPDF;
 	private $dominio;
+	private $log;
 
 	function __construct(){
+		$this->log = new LogToFile();
 		$this->typeProyect =  "Production"; //Production - Guzzle
-		$this->dominio =  "https://phpstack-1011861-5163349.cloudwaysapps.com";
+		$this->dominio =  "https://services.ecuavisa.com/sendpulse";
 		$this->ctrFunciones = new Ctrfunciones(array(
 			"desfaseMinutosMax" => 5,
 			"folder" => "boletin-diario-5pm",
@@ -270,7 +273,7 @@ class SendPulse {
 
 	private function initToken(){
 		date_default_timezone_set('America/Guayaquil');
-		$this->logToFile("Consumo de token", array("accion" => "Init token"));
+		// $this->logToFile("Consumo de token", array("accion" => "Init token"));
     	// Ruta al archivo JSON
 
     	$tokenSendPulse = [
@@ -332,20 +335,35 @@ class SendPulse {
     	return $this->token;
     }
 
-    private function logToFile($functionName, $data) {
+    private function logToFile($data = array()) {
 	    // Obtener la fecha y hora actual en el formato deseado
 	    $fechaHoraActual = date('Y-m-d H:i:s');
-	    // Obtener la información del cliente (dirección IP y agente de usuario)
-	    $clienteInfo = $_SERVER['REMOTE_ADDR'] . ' - ' . $_SERVER['HTTP_USER_AGENT'];
-	    // Obtener el resultado de print_r con la opción return y eliminar los saltos de línea
-	    $dataAsString = str_replace(array("\r", "\n"), '', print_r($data, true));
-	    // Construir el mensaje de registro
-	    $logMessage = "[$fechaHoraActual] [$clienteInfo] [$functionName]: $dataAsString\n";
-	    // Ruta del archivo de registro (puedes cambiarla según tus necesidades)
-	    // $archivoLog = $this->archivoLog;
-	    $archivoLog = 'boletin_log.txt';
-	    // Guardar el mensaje de registro en el archivo
-	    file_put_contents($archivoLog, $logMessage, FILE_APPEND);
+	    // // Obtener la información del cliente (dirección IP y agente de usuario)
+	    $ip = $_SERVER['REMOTE_ADDR'];
+	    $agente = $_SERVER['HTTP_USER_AGENT'];
+
+	    // // Obtener el resultado de print_r con la opción return y eliminar los saltos de línea
+	    // $dataAsString = str_replace(array("\r", "\n"), '', print_r($data, true));
+	    // // Construir el mensaje de registro
+	    // $logMessage = "[$fechaHoraActual] [$clienteInfo] [$functionName]: $dataAsString\n";
+	    // // Ruta del archivo de registro (puedes cambiarla según tus necesidades)
+	    // // $archivoLog = $this->archivoLog;
+	    // $archivoLog = 'boletin_log.txt';
+	    // // Guardar el mensaje de registro en el archivo
+	    // file_put_contents($archivoLog, $logMessage, FILE_APPEND);
+
+		return $this->log->add([
+			"ip"=>$ip,
+			"user_agent"=> $agente,
+			"action"=> $data["action"] ?? "",
+			"datetime"=> $fechaHoraActual,
+			"file"=> "boletin-diario-5pm.json",
+			"campaign"=>"Boletín Diario 5PM",
+			"campaign_title"=> $data["campaign_title"] ?? "",
+			"description"=> $data["description"] ?? "",
+			"send_method" => $data["send_method"] ?? "",
+			"type" => $data["type"] ?? ""
+		]);
 	}
 
 	private function UTMLinks($id, $link){
@@ -693,15 +711,28 @@ class SendPulse {
         		echo json_encode($respuestaJson);
         		
 				if(isset($resp->id)){
-					$this->logToFile("Crear campaña a SendPulse", array("accion" => "Crear campaña"));
+					// $this->logToFile("Crear campaña a SendPulse", array("accion" => "Crear campaña"));
 					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
 		    			"enviado" => true
 		    		]);
-
+					$this->logToFile([
+						"action"=> "create_campaign",
+						"campaign_title"=> $this->nombreNeswletter,
+						"description"=> "Campaña creada correctamente",
+						"send_method" => "automático",
+						"type" => "success"
+					]);
 				}else{
 					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
 		    			"error" => $respuestaJson
 		    		]);
+					$this->logToFile([
+						"action"=> "create_campaign",
+						"campaign_title"=> $this->nombreNeswletter,
+						"description"=> "Error al crear campaña - " . json_encode($respuestaJson),
+						"send_method" => "automático",
+						"type" => "error"
+					]);
 				}
 				// echo json_encode(["resp"=>true, "message"=>"Newsletter creado."]);
 	        	exit();
@@ -765,6 +796,14 @@ class SendPulse {
 			echo '</div>';
 
 			echo $bodyContent;
+
+			$this->logToFile([
+				"action"=> "view_campaign",
+				"campaign_title"=> "",
+				"description"=> "Vista del boletín diario 5pm",
+				"send_method" => "manual",
+				"type" => "success"
+			]);
 			exit();
 
 		} catch (Exception $e) {
@@ -806,14 +845,29 @@ class SendPulse {
         		echo json_encode($respuestaJson);
         		
 				if(isset($resp->id)){
-					$this->logToFile("Crear campaña a SendPulse", array("accion" => "Crear campaña"));
+					// $this->logToFile("Crear campaña a SendPulse", array("accion" => "Crear campaña"));
 					// $updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
 		    		// 	"enviado" => true
 		    		// ]);
+					$this->logToFile([
+						"action"=> "create_campaign",
+						"campaign_title"=> $this->nombreNeswletter,
+						"description"=> "Campaña creada correctamente",
+						"send_method" => "manual",
+						"type" => "success"
+					]);
 				}else{
 					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
 		    			"error" => $respuestaJson
 		    		]);
+
+					$this->logToFile([
+						"action"=> "create_campaign",
+						"campaign_title"=> $this->nombreNeswletter,
+						"description"=> "Error al crear campaña - " . json_encode($respuestaJson),
+						"send_method" => "manual",
+						"type" => "error"
+					]);
 				}
 				// echo json_encode(["resp"=>true, "message"=>"Newsletter creado."]);
 	        	exit();
