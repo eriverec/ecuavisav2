@@ -157,11 +157,11 @@ async function getParticipantes(json = {}) {
 
     if (tipoModel.value == "Por Fecha") {
       urlApiExport.value = `${dominioPrincipal}/backoffice/listado?fechai=${fechai}&fechaf=${fechaf}&search=${search}${estado}`;
-      urlTitleExport.value = "concurso_bandas_por_fecha";
+      urlTitleExport.value = "concurso_GAMER_por_fecha";
       console.log(1)
     } else {
       urlApiExport.value = `${dominioPrincipal}/backoffice/listado?fechai=&fechaf=&search=${search}${estado}`;
-      urlTitleExport.value = "concurso_bandas";
+      urlTitleExport.value = "concurso_GAMER";
       console.log(2)
     }
 
