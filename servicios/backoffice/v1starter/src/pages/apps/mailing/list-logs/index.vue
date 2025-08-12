@@ -802,6 +802,55 @@ const onClickNotas = (notas) => {
     }
 };
 
+const cortarStringConEtiquetas = (string, numPalabras) => {
+  let palabrasContadas = 0;
+  let resultado = '';
+  let dentroEtiqueta = false;
+  let palabraActual = '';
+
+  for (let i = 0; i < string.length; i++) {
+    const char = string[i];
+
+    if (char === '<') {
+      dentroEtiqueta = true;
+    }
+
+    if (dentroEtiqueta) {
+      // Añadimos el caracter a resultado directamente
+      resultado += char;
+      if (char === '>') {
+        dentroEtiqueta = false;
+        palabraActual = ''; // reiniciamos palabra actual al salir de etiqueta
+      }
+    } else {
+      // Estamos fuera de etiqueta: construir palabra
+      if (char === ' ' || char === '\n' || char === '\t') {
+        // Espacio: palabra terminada
+        if (palabraActual.length > 0) {
+          palabrasContadas++;
+          if (palabrasContadas > numPalabras) break;
+          resultado += palabraActual + char;
+          palabraActual = '';
+        } else {
+          // Espacios múltiples consecutivos, agregarlos
+          resultado += char;
+        }
+      } else {
+        // Construyendo palabra
+        palabraActual += char;
+      }
+    }
+  }
+
+  // Si terminó el string o se rompió por límite, añadir palabra actual si cabe
+  if (palabrasContadas < numPalabras && palabraActual.length > 0) {
+    palabrasContadas++;
+    if (palabrasContadas <= numPalabras) resultado += palabraActual;
+  }
+
+  return resultado.trim();
+};
+
 
 
 
@@ -847,7 +896,7 @@ const onClickNotas = (notas) => {
 								<h4 class="mb-1" style="line-height: 1.2;">
 									{{ item?.titulo }}
 								</h4>
-								<div class="text-muted mb-1" style="font-size: 12px;" v-html="item?.descripcion"></div>
+								<div class="text-muted mb-1" style="font-size: 12px;" v-html="cortarStringConEtiquetas(item?.descripcion, 20)"></div>
 								<VBtn
 									variant="tonal"
 									color="primary"
