@@ -362,7 +362,10 @@ class SendPulse {
 			"campaign_title"=> $data["campaign_title"] ?? "",
 			"description"=> $data["description"] ?? "",
 			"send_method" => $data["send_method"] ?? "",
-			"type" => $data["type"] ?? ""
+			"type" => $data["type"] ?? "",
+			"subject" => $this->subject ?? "",
+			"resp" => $data["resp"] ?? [],
+			"notas" => $data["notas"] ?? []
 		]);
 	}
 
@@ -719,7 +722,9 @@ class SendPulse {
 						"campaign_title"=> $this->nombreNeswletter,
 						"description"=> "Campaña creada correctamente",
 						"send_method" => "automático",
-						"type" => "success"
+						"type" => "success",
+						"resp" => $respuestaJson,
+						"notas" => $notas
 					]);
 
 					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
@@ -734,9 +739,11 @@ class SendPulse {
 					$this->logToFile([
 						"action"=> "create_campaign",
 						"campaign_title"=> $this->nombreNeswletter,
-						"description"=> "Error al crear campaña - " . json_encode($respuestaJson),
+						"description"=> "Error al crear campaña",
 						"send_method" => "automático",
-						"type" => "error"
+						"type" => "error",
+						"resp" => $respuestaJson,
+						"notas" => $notas
 					]);
 
 				}
@@ -809,8 +816,25 @@ class SendPulse {
 				"campaign_title"=> "",
 				"description"=> "Vista del boletín diario",
 				"send_method" => "manual",
-				"type" => "success"
+				"type" => "success",
+				"resp" => []
 			]);
+
+			// $this->logToFile([
+			// 	"action"=> "create_campaign",
+			// 	"campaign_title"=> "Ecuavisa Informa 7AM 2025-08-12, 11:26:34",
+			// 	"description"=> "Error al crear campaña",
+			// 	"send_method" => "manual",
+			// 	"type" => "error",
+			// 	"resp" => [
+			// 		"respSendPulse"=>[
+			// 			"message"=>"You have exceeded your monthly limit", 
+			// 			"error_code"=>708
+			// 		],
+			// 		"resp"=>false,
+			// 		"fecha"=>"2025-08-12 11:24:21"
+			// 	]
+			// ]);
 			exit();
 
 		} catch (Exception $e) {
@@ -861,19 +885,24 @@ class SendPulse {
 						"campaign_title"=> $this->nombreNeswletter,
 						"description"=> "Campaña creada correctamente",
 						"send_method" => "manual",
-						"type" => "success"
+						"type" => "success",
+						"resp" => $respuestaJson,
+						"notas" => $notas
 					]);
 				}else{
 					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
 		    			"error" => $respuestaJson
 		    		]);
+					
 
 					$this->logToFile([
 						"action"=> "create_campaign",
 						"campaign_title"=> $this->nombreNeswletter,
-						"description"=> "Error al crear campaña - " . json_encode($respuestaJson),
+						"description"=> "Error al crear campaña",
 						"send_method" => "manual",
-						"type" => "error"
+						"type" => "error",
+						"resp" => $respuestaJson,
+						"notas" => $notas
 					]);
 				}
 				// echo json_encode(["resp"=>true, "message"=>"Newsletter creado."]);

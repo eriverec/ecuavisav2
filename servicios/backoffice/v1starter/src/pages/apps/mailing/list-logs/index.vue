@@ -77,6 +77,7 @@ const headersGlobal = ref({
 	description: "description",
 	send_method: "send_method",
 	type: "type",
+	cantidad_notas: "cantidad_notas",
 });
 
 const optionsDefaultDate = {
@@ -153,7 +154,7 @@ onMounted(async () => {
 });
 
 async function getLogs(json = {}) {
-	let { page = 1, limit = 10, fechai = "", fechaf = "", search = "" } = json;
+	let { page = 1, limit = 10, fechai = "", fechaf = "", search = "", newsletter = "", type = "" } = json;
 	try {
 		let estado = estadoModel.value;
 		estado = estado === "Todos" ? "" : `&estado=${estado}`;
@@ -170,10 +171,10 @@ async function getLogs(json = {}) {
 		// var response = null;
 
 		if (tipoModel.value == "Por Fecha") {
-			urlApiExport.value = `${dominioPrincipal}?fechai=${fechai}&fechaf=${fechaf}&search=${search}${estado}`;
+			urlApiExport.value = `${dominioPrincipal}?fechai=${fechai}&fechaf=${fechaf}&search=${search}${estado}&newsletter=${newsletter}&type=${type}`;
 			urlTitleExport.value = "logs_por_fecha";
 		} else {
-			urlApiExport.value = `${dominioPrincipal}?fechai=&fechaf=&search=${search}${estado}`;
+			urlApiExport.value = `${dominioPrincipal}?fechai=&fechaf=&search=${search}${estado}&newsletter=${newsletter}&type=${type}`;
 			urlTitleExport.value = "logs";
 		}
 
@@ -322,6 +323,7 @@ async function fetchFullRegistros() {
 			newItem.description = item.description || "";
 			newItem.send_method = item.send_method || "";
 			newItem.type = item.type || "";
+			newItem.cantidad_notas = funcNotas(item.notas || []) || 0;
 			usersFull.value.push(newItem);
 		});
 
@@ -717,10 +719,160 @@ watch(estadoModel, async () => {
 		});
 	}
 });
+
+
+// Filtros extras
+
+const modelFilterNewsletter = ref('Todos los registros');
+watch(modelFilterNewsletter, async () => {
+	currentPage.value = 1;
+	if (modelFilterNewsletter.value) {
+		await getLogs({
+			page: currentPage.value,
+			limit: rowPerPage.value,
+			fechai: fecha.value.inicio,
+			fechaf: fecha.value.fin,
+			newsletter: modelFilterNewsletter.value == 'Todos los registros' ? '' : modelFilterNewsletter.value,
+			search: modelSearch.value,
+		});
+	}
+});
+
+const modelFilterType = ref('Todos los registros');
+watch(modelFilterType, async () => {
+	currentPage.value = 1;
+	if (modelFilterType.value) {
+		await getLogs({
+			page: currentPage.value,
+			limit: rowPerPage.value,
+			fechai: fecha.value.inicio,
+			fechaf: fecha.value.fin,
+			search: modelSearch.value,
+			type: modelFilterType.value == 'Todos los registros' ? '' : modelFilterType.value,
+		});
+	}
+});
+
+// Funciones extras
+const funcNotas = (notas) => {
+	try {
+		const notasArray = Array.isArray(notas) ? notas : Object.values(notas);
+		const total = notasArray.reduce((acc, nota) => {
+			return acc + nota.length;
+		}, 0);
+		return total;
+	} catch (error) {
+		return 0;
+	}
+}
+
+//Modal
+
+const isDialogVisibleNotas = ref({
+	modal: false,
+	data: [],
+});
+
+const onClickNotas = (notas) => {
+    try {
+        const notasArray = Array.isArray(notas) ? notas : Object.values(notas);
+
+        // total sumando la longitud de cada sub-array
+        const total = notasArray.reduce((acc, nota) => {
+            return acc + nota.length;
+        }, 0);
+
+        // Aquí aplano para que listado sea solo un array plano con todos los objetos
+        const listado = notasArray.flat();
+
+        isDialogVisibleNotas.value.modal = true;
+        isDialogVisibleNotas.value.data = listado;
+
+        return {
+            total,
+            listado
+        };
+    } catch (error) {
+        return {
+            total: 0,
+            listado: []
+        };
+    } finally {
+        isDialogVisibleNotas.value.modal = true;
+    }
+};
+
+
+
+
 </script>
 
 <template>
 	<section>
+		<VDialog
+			v-model="isDialogVisibleNotas.modal"
+			scrollable
+			max-width="650"
+		>
+
+		<!-- Dialog close btn -->
+		<DialogCloseBtn @click="isDialogVisibleNotas.modal = !isDialogVisibleNotas.modal" />
+
+		<!-- Dialog Content -->
+		<VCard>
+			<VCardItem >
+				<div class="d-flex content-title flex-wrap">
+					<h2 class="mb-3 d-flex flex-wrap gap-2 text-black">
+						Notas recuperadas
+					</h2>
+				</div>
+			</VCardItem>
+			<VCardText>
+			<div class="d-flex flex-column mb-3" style="line-height: 1.3;max-height: 550px;">
+				<VRow>
+					<VCol cols="12" md="12" lg="12" v-for="item in isDialogVisibleNotas.data" :key="item">
+						<VCard class="d-flex flex-row border" outlined elevation="0">
+							
+							<!-- Imagen -->
+							<VImg
+								:src="item?.image"
+								width="75"
+								class="rounded-l-lg notas-col-1"
+								cover
+								style="width: 20px"
+							></VImg>
+
+							<!-- Contenido -->
+							<VCardText class="flex-grow-1 pa-2 pl-4 notas-col-2">
+								<h4 class="mb-1" style="line-height: 1.2;">
+									{{ item?.titulo }}
+								</h4>
+								<div class="text-muted mb-1" style="font-size: 12px;" v-html="item?.descripcion"></div>
+								<VBtn
+									variant="tonal"
+									color="primary"
+									:href="item?.link"
+									target="_blank"
+									size="small"
+								>
+									Ir a la nota
+									<VIcon icon="tabler-arrow-right" />
+								</VBtn>
+							</VCardText>
+						</VCard>
+					</VCol>
+				</VRow>
+			</div>
+			
+			</VCardText>
+
+			<VCardText class="py-4">
+				<VBtn class="my-4" @click="isDialogVisibleNotas.modal = false">
+					Cerrar modal
+				</VBtn>
+			</VCardText>
+		</VCard>
+		</VDialog>
 		<VDialog v-model="isDialogVisibleDelete" persistent class="v-dialog-sm">
 			<!-- Dialog close btn -->
 			<DialogCloseBtn @click="isDialogVisibleDelete = !isDialogVisibleDelete" />
@@ -844,6 +996,36 @@ watch(estadoModel, async () => {
 						/>
 					</div>
 
+					<div
+						:class="
+							'me-3 d-flex gap-4 flex-wrap' + (isFullLoading ? ' disabled' : '')
+						"
+					>
+						<VSelect
+							:disabled="loadingModulo"
+							class="bg-white"
+							v-model="modelFilterNewsletter"
+							density="compact"
+							variant="outlined"
+							label="Filtrar por newsletter"
+							:items="['Todos los registros', 'boletin-opinion.json', 'boletin-estadio.json', 'boletin-ultimahora.json', 'boletin-entretenimiento.json', 'boletin-diario-5pm.json', 'boletin-diario.json']"
+						/>
+
+						<VSelect
+							:disabled="loadingModulo"
+							label="Tipo de respuesta"
+							item-text="title"
+							style="min-width: 9rem"
+							item-value="value"
+							class="bg-white"
+							density="compact"
+							v-model="modelFilterType"
+							variant="outlined"
+							:items="['Todos los registros', 'success', 'error']"
+						/>
+
+					</div>
+
 					<VSpacer />
 
 					<div
@@ -906,10 +1088,13 @@ watch(estadoModel, async () => {
 								<th scope="col">Respuesta</th>
 								<th scope="col">Fecha del registro</th>
 								<th scope="col" title="Nombres">Acción</th>
-								<th scope="col" title="Apellidos">IP</th>
+								<!-- <th scope="col" title="Apellidos">IP</th> -->
 								<th scope="col" title="Edad">Newsletter</th>
 								<th scope="col" title="E-mail de contacto">
 									Nombre de la campaña
+								</th>
+								<th scope="col" title="E-mail de contacto">
+								Cantidad de notas
 								</th>
 								<!-- <th scope="col" title="Link del DEMO(YouTube)">
                   Link del DEMO(YouTube)
@@ -975,14 +1160,14 @@ watch(estadoModel, async () => {
 												<VIcon size="22" icon="tabler-info-circle" />
 											</VBtn>
 										</template>
-										<span>{{ registro?.description }}</span>
+										<div v-html="registro?.description"></div>
 									</VTooltip>
 									<span class="text-base">{{ registro?.action == "view_campaign" ? "Vista previa" : registro?.action }}</span>
 								</td>
 
-								<td>
+								<!-- <td>
 									<span class="text-base">{{ registro?.ip }}</span>
-								</td>
+								</td> -->
 
 								<td>
 									<span class="text-base">{{ registro?.campaign }}</span>
@@ -990,6 +1175,22 @@ watch(estadoModel, async () => {
 
 								<td>
 									<span class="text-base">{{ registro?.campaign_title }}</span>
+								</td>
+
+								<td>
+									<span class="text-base">
+										{{ funcNotas(registro?.notas) }}
+										<VBtn
+											title="Ver notas"
+											:loading="isFullLoading"
+											:disabled="isFullLoading || loadingModulo"
+											variant="tonal"
+											color="success"
+											icon="tabler-info-circle"
+											size="small"
+											@click="onClickNotas(registro?.notas)"
+										/>
+									</span>
 								</td>
 
 								<td>
@@ -1056,5 +1257,13 @@ watch(estadoModel, async () => {
 
 .justify-content-flex-end {
 	justify-content: flex-end;
+}
+
+.notas-col-2 {
+	max-width: 400px;
+}
+
+.notas-col-1{
+	max-width:100%
 }
 </style>

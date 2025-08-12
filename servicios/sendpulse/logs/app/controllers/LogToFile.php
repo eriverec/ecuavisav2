@@ -91,7 +91,15 @@ class LogToFile {
     /**
      * Listar registros con paginado, filtro por fechas y ordenamiento descendente por fecha
      */
-    public function listar(int $page = 1, int $limit = 10, ?string $fechai = null, ?string $fechaf = null, ?string $newsletter = null, ?string $search = null) {
+    public function listar(
+        int $page = 1, 
+        int $limit = 10, 
+        ?string $fechai = null, 
+        ?string $fechaf = null, 
+        ?string $newsletter = null, 
+        ?string $search = null, 
+        ?string $type = null
+    ) {
         $archivos = $this->listarArchivos();
         $registros = [];
 
@@ -110,15 +118,6 @@ class LogToFile {
             }
         }
 
-        // Búsqueda de coincidencias en campos campaign y campaign_title
-        if ($search) {
-            $registros = array_filter($registros, function ($item) use ($search) {
-                return (stripos($item['campaign'] ?? '', $search) !== false)
-                    || (stripos($item['campaign_title'] ?? '', $search) !== false)
-                    || (stripos($item['type'] ?? '', $search) !== false)
-                    || (stripos($item['action'] ?? '', $search) !== false);
-            });
-        }
         $registros = array_unique($registros, SORT_REGULAR);
 
         // Filtro por rango de fechas si aplica
@@ -130,6 +129,23 @@ class LogToFile {
                 if (!isset($item['datetime'])) return false;
                 $ts = strtotime($item['datetime']);
                 return $ts >= $fechaiTime && $ts <= $fechafTime;
+            });
+        }
+
+        // Búsqueda de coincidencias en campos campaign y campaign_title
+        if ($search) {
+            $registros = array_filter($registros, function ($item) use ($search) {
+                return (stripos($item['campaign'] ?? '', $search) !== false)
+                    || (stripos($item['campaign_title'] ?? '', $search) !== false)
+                    || (stripos($item['type'] ?? '', $search) !== false)
+                    || (stripos($item['action'] ?? '', $search) !== false);
+            });
+        }
+
+        // Filtro por tipo si aplica
+        if ($type) {
+            $registros = array_filter($registros, function ($item) use ($type) {
+                return $item['type'] == $type;
             });
         }
 
@@ -157,7 +173,13 @@ class LogToFile {
     }
 
 
-    public function sendEmail($newsletter, $error = ""){
+    public function sendEmail($newsletter, $description = "", $subject = "", $respError = "", $campaign_title = ""){
+        $errorArray = $respError;
+        $respSendPulse = (array) $errorArray['respSendPulse'] ?? [];
+        $codError = $respSendPulse['error_code'] ?? "";
+        $messageError = $respSendPulse['message'] ?? "";
+        $fecha = $errorArray['fecha'] ?? "";
+        
         $templateHTML = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
             <html dir="ltr" xmlns="http://www.w3.org/1999/xhtml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="es">
             <head>
@@ -191,7 +213,7 @@ class LogToFile {
                 line-height:0;
                 mso-hide:all;
             }
-            @media only screen and (max-width:600px) {p, ul li, ol li, a { line-height:150%!important } h1, h2, h3, h1 a, h2 a, h3 a { line-height:120%!important } h1 { font-size:36px!important; text-align:left } h2 { font-size:26px!important; text-align:left } h3 { font-size:20px!important; text-align:left }      .co p, .co ul li, .co ol li, .co a { font-size:14px!important }   *[class="gmail-fix"] { display:none!important }   .cl, .cl h1, .cl h2, .cl h3 { text-align:left!important }    .cf table, .cg, .ch { width:100%!important } .cc table, .cd table, .ce table, .cc, .ce, .cd { width:100%!important; max-width:600px!important }      .bv { padding-bottom:20px!important }                                                   }
+            @media only screen and (max-width:600px) {p, ul li, ol li, a { line-height:150%!important } h1, h2, h3, h1 a, h2 a, h3 a { line-height:120%!important } h1 { font-size:36px!important; text-align:left } h2 { font-size:26px!important; text-align:left } h3 { font-size:20px!important; text-align:left }      .co p, .co ul li, .co ol li, .co a { font-size:14px!important }   *[class="gmail-fix"] { display:none!important }        .cc table, .cd table, .ce table, .cc, .ce, .cd { width:100%!important; max-width:600px!important }  .adapt-img { width:100%!important; height:auto!important }                                                         }
             @media screen and (max-width:384px) {.mail-message-content { width:414px!important } }</style>
             </head>
             <body style="width:100%;font-family:arial, helvetica, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0">
@@ -200,78 +222,30 @@ class LogToFile {
                             <v:fill type="tile" color="#fafafa"></v:fill>
                         </v:background>
                     <![endif]-->
-            <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat:repeat;background-position:center top;background-color:#FAFAFA">
+            <table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;padding:0;Margin:0;width:100%;height:100%;background-repeat:repeat;background-position:center top;background-color:#FAFAFA;">
                 <tr>
-                <td valign="top" style="padding:0;Margin:0">
+                <td valign="top" style="padding-top:25px;padding-bottom:25px">
                 <table class="cc" cellspacing="0" cellpadding="0" align="center" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%">
                     <tr>
                     <td align="center" style="padding:0;Margin:0">
-                    <table class="co" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:transparent;width:600px" cellspacing="0" cellpadding="0" align="center" role="none">
+                    <table class="co" cellspacing="0" cellpadding="0" align="center" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#ffffff;width:500px" role="none">
                         <tr>
                         <td align="left" style="Margin:0;padding-bottom:5px;padding-top:20px;padding-left:20px;padding-right:20px">
-                        <table width="100%" cellspacing="0" cellpadding="0" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                        <table cellpadding="0" cellspacing="0" width="100%" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                             <tr>
-                            <td valign="top" align="center" style="padding:0;Margin:0;width:560px">
-                            <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                            <td align="center" valign="top" style="padding:0;Margin:0;width:560px">
+                            <table cellpadding="0" cellspacing="0" width="100%" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                 <tr>
-                                <td align="right" style="padding:0;Margin:0"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#666666;font-size:14px"></p></td>
+                                <td align="left" style="padding:0;Margin:0;padding-top:20px"><h1 style="Margin:0;line-height:30px;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;font-size:25px;font-style:normal;font-weight:bold;color:#e74c3c;text-align:center">Error de envío de Newsletter</h1><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#e74c3c;font-size:14px;display:none"><br></p></td>
                                 </tr>
-                            </table></td>
-                            </tr>
-                        </table></td>
-                        </tr>
-                    </table></td>
-                    </tr>
-                </table>
-                <table cellpadding="0" cellspacing="0" class="cc" align="center" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%">
-                    <tr>
-                    <td align="center" style="padding:0;Margin:0">
-                    <table class="co" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#FFFFFF;width:600px">
-                        <tr>
-                        <td align="left" style="padding:0;Margin:0;padding-top:20px;padding-left:20px;padding-right:20px">
-                        <table width="100%" cellspacing="0" cellpadding="0" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                            <tr>
-                            <td valign="top" align="center" style="padding:0;Margin:0;width:560px">
-                            <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                 <tr>
-                                <td align="center" style="padding:0;Margin:0;font-size:0px"><img class="adapt-img" src="https://services.ecuavisa.com/gestor/2025/logo-ecuavisa-200-x-200.png" alt="" style="display:block;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;width:57px" width="57"></td>
+                                <td align="center" style="padding:0;Margin:0;padding-top:5px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#666666;font-size:14px">Se ha detectado un problema que requiere atención</p><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#666666;font-size:14px;display:none"><br></p></td>
                                 </tr>
-                            </table></td>
-                            </tr>
-                        </table></td>
-                        </tr>
-                        <tr>
-                        <td class="esdev-adapt-off" align="left" style="padding:0;Margin:0;padding-top:20px;padding-left:20px;padding-right:20px">
-                        <table class="esdev-mso-table" cellspacing="0" cellpadding="0" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;width:560px">
-                            <tr>
-                            <td class="esdev-mso-td" valign="top" style="padding:0;Margin:0">
-                            <table class="cg" cellspacing="0" cellpadding="0" align="left" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:left">
                                 <tr>
-                                <td class="bv" align="left" style="padding:0;Margin:0;width:300px">
-                                <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
+                                <td align="center" style="padding:20px;Margin:0;font-size:0">
+                                <table border="0" width="100%" height="100%" cellpadding="0" cellspacing="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                     <tr>
-                                    <td align="right" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px;font-size:0px">
-                                    <table width="15%" height="100%" cellspacing="0" cellpadding="0" border="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                        <tr>
-                                        <td style="padding:0;Margin:0;border-bottom:3px solid #2927b9;background:none 0% 0% repeat scroll #00000000;height:1px;width:100%;margin:0px"></td>
-                                        </tr>
-                                    </table></td>
-                                    </tr>
-                                </table></td>
-                                </tr>
-                            </table></td>
-                            <td class="esdev-mso-td" valign="top" style="padding:0;Margin:0">
-                            <table class="ch" cellspacing="0" cellpadding="0" align="right" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;float:right">
-                                <tr>
-                                <td align="left" style="padding:0;Margin:0;width:300px">
-                                <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                    <tr>
-                                    <td align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:5px;font-size:0px">
-                                    <table width="15%" height="100%" cellspacing="0" cellpadding="0" border="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
-                                        <tr>
-                                        <td style="padding:0;Margin:0;border-bottom:3px solid #333333;background:#00000000 none repeat scroll 0% 0%;height:1px;width:100%;margin:0px"></td>
-                                        </tr>
-                                    </table></td>
+                                    <td style="padding:0;Margin:0;border-bottom:1px solid #cccccc;background:unset;height:0px;width:100%;margin:0px"></td>
                                     </tr>
                                 </table></td>
                                 </tr>
@@ -279,25 +253,48 @@ class LogToFile {
                             </tr>
                         </table></td>
                         </tr>
-                    </table></td>
-                    </tr>
-                </table>
-                <table class="cc" cellspacing="0" cellpadding="0" align="center" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;table-layout:fixed !important;width:100%">
-                    <tr>
-                    <td align="center" style="padding:0;Margin:0">
-                    <table class="co" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#FFFFFF;width:600px">
                         <tr>
-                        <td align="left" style="padding:0;Margin:0;padding-top:20px;padding-left:20px;padding-right:20px">
+                        <td align="left" style="padding:0;Margin:0;padding-left:20px;padding-right:20px;padding-bottom:40px">
                         <table width="100%" cellspacing="0" cellpadding="0" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                             <tr>
                             <td valign="top" align="center" style="padding:0;Margin:0;width:560px">
                             <table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px">
                                 <tr>
-                                <td class="cl" align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:10px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">No se pudo completar el envío programado para el newsletter.<br></p></td>
+                                <td align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:20px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:22.5px;color:#666666;font-size:15px">Estimado/a,</p><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:22.5px;color:#666666;font-size:15px">Te informamos que ha ocurrido un error durante el intento de envío de una campaña de marketing programada en nuestro sistema.</p></td>
                                 </tr>
+                            </table></td>
+                            </tr>
+                            <tr>
+                            <td valign="top" align="center" style="padding:0;Margin:0;width:560px">
+                            <table width="100%" cellspacing="0" cellpadding="0" bgcolor="#fdf2f2" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:separate;border-spacing:0px;background-color:#fdf2f2;border-radius:10px" role="presentation">
                                 <tr>
-                                <td align="left" style="padding:0;Margin:0;padding-top:5px;padding-bottom:20px"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">Estimado/a,</p><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">Te informamos que ha ocurrido un error durante el intento de envío de una campaña de marketing programada en nuestro sistema.</p><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><br></p><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><br></p><h3 style="Margin:0;line-height:22.8px;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;font-size:19px;font-style:normal;font-weight:bold;color:#ff0000">
-                                Detalles del Error:</h3><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">Campaña: <strong>'.$newsletter.'</strong></p><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px">Mensaje de error: <strong>'.$error.'</strong></p><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><br></p><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:21px;color:#333333;font-size:14px"><br>Saludos,<br></p></td>
+                                <td align="left" style="padding:25px;Margin:0"><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:24px;color:#721c24;font-size:16px"><strong>Motivo</strong></p><p style="Margin:0;-webkit-text-size-adjust:none;-ms-text-size-adjust:none;mso-line-height-rule:exactly;font-family:arial, helvetica, sans-serif;line-height:22.5px;color:#721c24;font-size:15px">'.$messageError.' <strong>Cod. '.$codError.'</strong></p></td>
+                                </tr>
+                            </table></td>
+                            </tr>
+                            <tr>
+                            <td valign="top" align="center" style="padding:0;Margin:0;width:560px">
+                            <table width="100%" cellspacing="0" cellpadding="0" bgcolor="#f8f9fa" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:separate;border-spacing:0px;background-color:#f8f9fa;border-radius:10px;margin-top:20px" role="presentation">
+                                <tr>
+                                <td align="left" style="Margin:0;padding-bottom:15px;padding-top:25px;padding-left:25px;padding-right:25px">
+                                <table cellpadding="0" cellspacing="0" width="100%" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;border:none" class=" cke_show_border" role="presentation">
+                                    <tr style="border-bottom:1px solid #e9ecef">
+                                    <td style="padding:0;Margin:0;border:none;color:#495057;padding-top:15px;padding-bottom:15px;font-size:15px" width="30%"><strong>Fecha y Hora:</strong></td>
+                                    <td style="padding:0;Margin:0;border:none;padding-top:15px;padding-bottom:15px;font-size:14px" width="70%">'.$fecha.'</td>
+                                    </tr>
+                                    <tr style="border-bottom:1px solid #e9ecef">
+                                    <td style="padding:0;Margin:0;border:none;color:#495057;padding-top:15px;padding-bottom:15px;font-size:15px" width="30%"><strong>Subject:</strong></td>
+                                    <td style="padding:0;Margin:0;border:none;padding-top:15px;padding-bottom:15px;font-family:arial, helvetica, sans-serif;font-size:14px" width="70%">'.$subject.'</td>
+                                    </tr>
+                                    <tr style="border-bottom:1px solid #e9ecef">
+                                    <td style="padding:0;Margin:0;border:none;color:#495057;padding-top:15px;padding-bottom:15px;font-size:15px" width="30%"><strong>Nombre:</strong></td>
+                                    <td style="padding:0;Margin:0;border:none;padding-top:15px;padding-bottom:15px;font-family:arial, helvetica, sans-serif;font-size:14px" width="70%">'.$newsletter.'</td>
+                                    </tr>
+                                    <tr>
+                                    <td style="padding:0;Margin:0;border:none;color:#495057;padding-top:15px;padding-bottom:15px;font-size:15px" width="30%"><strong>Cod. Error:</strong></td>
+                                    <td style="padding:0;Margin:0;border:none;padding-top:15px;padding-bottom:15px;font-family:arial, helvetica, sans-serif;font-size:14px" width="70%">'.$codError.'</td>
+                                    </tr>
+                                </table></td>
                                 </tr>
                             </table></td>
                             </tr>
@@ -310,32 +307,41 @@ class LogToFile {
             </table>
             </div>
             </body>
-        </html>';
+            </html>';
 
         return $this->https->getApiMethodPost("https://email-sendpulse.vercel.app/sendpulse", array(
             "sesionState" => "OK",
             "emailData" => $templateHTML, //Correo
-            "emailFrom" => "gholguin@ecuavisa.com", // correo De
-            "emailTo" => "everai@ecuavisa.com",
+            "emailFrom" => "ecuavisainforma@ecuavisa.com", // correo De
+            "emailTo" => "everai@ecuavisa.com, crojano@ecuavisa.com, gholguin@ecuavisa.com, jbarahona@ecuavisa.com",
+            // "emailTo" => "crojano@ecuavisa.com",
             "subject" => "Error al crear la campaña de sendpulse, ".$newsletter,
-            "CCVisible" => "cmoreno@ecuavisa.com, aarmas@ecuavisa.com, croura@ecuavisa.com, mjaramillob@ecuavisa.com, xcabrera@ecuavisa.com, jbarahona@ecuavisa.com, lguzman@ecuavisa.com, bpilozo@ecuavisa.com, crojano@ecuavisa.com"
-        ));
+            "CCVisible" => "aarmas@ecuavisa.com, mjaramillob@ecuavisa.com, xcabrera@ecuavisa.com, lguzman@ecuavisa.com, bpilozo@ecuavisa.com, dmaggi@ecuavisa.com"
+        )); //croura@ecuavisa.com, cmoreno@ecuavisa.com, 
     }
 
     public function envioEmailNuevoRegistro($registro){
         if($registro['action'] == "create_campaign" && $registro['type'] == "error"){
-            $resp = $this->sendEmail($registro['campaign'], $registro['description']);
+            $campaign = $registro['campaign'] ?? "";
+            $description = $registro['description'] ?? "";
+            $subject = $registro['subject'] ?? "";
+            $respError = $registro['resp'] ?? "";
+            $campaign_title = $registro['campaign_title'] ?? "";
+            $resp = $this->sendEmail($campaign, $description, $subject, $respError, $campaign_title);
             return $this->add([
-                "ip" => $registro['ip'],
-                "user_agent" => $registro['user_agent'],
+                "ip" => $registro['ip'] ?? "",
+                "user_agent" => $registro['user_agent'] ?? "",
                 "action" => "send_email",
-                "datetime" => $registro['datetime'],
-                "file" => $registro['file'],
-                "campaign" => $registro['campaign'],
-                "campaign_title" => $registro['campaign_title'],
-                "description" => $registro['description'],
+                "datetime" => $registro['datetime'] ?? "",
+                "file" => $registro['file'] ?? "",
+                "campaign" => $registro['campaign'] ?? "",
+                "campaign_title" => $registro['campaign_title'] ?? "",
+                "description" => $registro['description'] ?? "",
                 "send_method" => "automático",
-                "type" => "success"
+                "type" => "success",
+                "subject" => $subject,
+                "resp" => $registro['resp'] ?? [],
+                "notas" => $registro['notas'] ?? []
             ]);
         }
 

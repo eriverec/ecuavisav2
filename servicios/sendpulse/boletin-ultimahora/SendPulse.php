@@ -129,7 +129,10 @@ class SendPulse
 			"campaign_title"=> $data["campaign_title"] ?? "",
 			"description"=> $data["description"] ?? "",
 			"send_method" => $data["send_method"] ?? "",
-			"type" => $data["type"] ?? ""
+			"type" => $data["type"] ?? "",
+			"resp" => $data["resp"] ?? [],
+			"subject" => $this->subject ?? "",
+			"notas" => $data["notas"] ?? []
 		]);
 	}
 
@@ -1372,7 +1375,8 @@ class SendPulse
 				"campaign_title"=> "",
 				"description"=> "Vista del boletín diario",
 				"send_method" => "manual",
-				"type" => "success"
+				"type" => "success",
+				"resp" => []
 			]);
 			exit();
 		} catch (Exception $e) {
@@ -1458,7 +1462,9 @@ class SendPulse
 						"campaign_title"=> $this->nombreNeswletter,
 						"description"=> "Campaña creada correctamente",
 						"send_method" => "automático",
-						"type" => "success"
+						"type" => "success",
+						"resp" => $respuestaJson,
+						"notas" => $notas
 					]);
 				} else {
 					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/" . $this->dataJsonNewsletter->data->_id, [
@@ -1470,7 +1476,9 @@ class SendPulse
 						"campaign_title"=> $this->nombreNeswletter,
 						"description"=> "Error al crear campaña - " . json_encode($respuestaJson),
 						"send_method" => "automático",
-						"type" => "error"
+						"type" => "error",
+						"resp" => $respuestaJson,
+						"notas" => $notas
 					]);
 				}
 				// echo json_encode(["resp"=>true, "message"=>"Newsletter creado."]);
@@ -1535,7 +1543,9 @@ class SendPulse
 						"campaign_title"=> $this->nombreNeswletter,
 						"description"=> "Campaña creada correctamente",
 						"send_method" => "manual",
-						"type" => "success"
+						"type" => "success",
+						"resp" => $respuestaJson,
+						"notas" => $notas
 					]);
 				} else {
 					$updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/" . $this->dataJsonNewsletter->data->_id, [
@@ -1547,7 +1557,9 @@ class SendPulse
 						"campaign_title"=> $this->nombreNeswletter,
 						"description"=> "Error al crear campaña - " . json_encode($respuestaJson),
 						"send_method" => "manual",
-						"type" => "error"
+						"type" => "error",
+						"resp" => $respuestaJson,
+						"notas" => $notas
 					]);
 				}
 				// echo json_encode(["resp"=>true, "message"=>"Newsletter creado."]);

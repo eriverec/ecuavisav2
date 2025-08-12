@@ -16,7 +16,8 @@ class Log {
             $fechaf = isset($_GET["fechaf"]) ? $_GET["fechaf"] : null;
             $newsletter = isset($_GET["newsletter"]) ? $_GET["newsletter"] : null;
             $search = isset($_GET["search"]) ? $_GET["search"] : null;
-            return $this->logToFile->listar($page, $limit, $fechai, $fechaf, $newsletter, $search);
+            $type = isset($_GET["type"]) ? $_GET["type"] : null;
+            return $this->logToFile->listar($page, $limit, $fechai, $fechaf, $newsletter, $search, $type);
         } catch (Exception $e) {
             return ["error" => $e->getMessage()];
         }
