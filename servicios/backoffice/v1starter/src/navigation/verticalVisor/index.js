@@ -33,10 +33,19 @@ export default [
         { title: 'Analítica', to: 'apps-suscriptores-analitica' },
       ],
     },
+    // {
+    //   title: 'NewsLetter',
+    //   to: { name: 'apps-mailing-tabs-edit' },
+    //   icon: { icon: 'tabler-mail' },
+    // },
+
     {
-      title: 'NewsLetter',
-      to: { name: 'apps-mailing-tabs-edit' },
+      title: 'Newsletter',
       icon: { icon: 'tabler-mail' },
+      children: [
+        { title: 'Editar Newsletter', to: 'apps-mailing-tabs-edit' },
+        { title: 'Alertas de newsletters', to: 'apps-mailing-list-logs' }
+      ],
     },
   
   {
