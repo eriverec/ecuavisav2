@@ -78,6 +78,7 @@ const headersGlobal = ref({
   apellidos: "apellidos",
   contacto_celular: "contacto_celular",
   contacto_email: "contacto_email",
+  cliente_netlife: "cliente_netlife",
   genero: "genero",
   ciudad: "ciudad",
   edad: "edad",
@@ -312,6 +313,7 @@ async function fetchFullRegistros() {
       newItem.apellidos = item.apellidos || "";
       newItem.contacto_celular = item.contacto_celular || "";
       newItem.contacto_email = item.contacto_email || "";
+      newItem.cliente_netlife = item.cliente_netlife || "";
       newItem.genero = item.genero || "";
       newItem.ciudad = item.ciudad || "";
       newItem.edad = item.edad || "";
@@ -812,15 +814,18 @@ watch(estadoModel, async () => {
                 <th scope="col" title="E-mail de contacto">
                   E-mail
                 </th>
+                 <th scope="col" title="Cliente Netlife">
+                  Cliente
+                </th>
                 <!-- <th scope="col" title="Link del DEMO(YouTube)">
                   Link del DEMO(YouTube)
                 </th> -->
                 <th scope="col">
                   Fecha de registro
                 </th>
-                <th scope="col">
+                <!-- <th scope="col">
                   Fecha de actualización
-                </th>
+                </th> -->
                 <th scope="col">
                   Acciones
                 </th>
@@ -870,6 +875,10 @@ watch(estadoModel, async () => {
                   <span class="text-base">{{ registro.contacto_email }}</span>
                 </td>
 
+                <td>
+                  <span class="text-base">{{ registro.cliente_netlife }}</span>
+                </td>
+
                 <!-- <td>
                   <span class="text-base">{{ registro.link_youtube }}</span>
                 </td> -->
@@ -878,9 +887,9 @@ watch(estadoModel, async () => {
                   <span class="text-base">{{ moment(registro.created_at).format("YYYY-MM-DD HH:mm:ss") }}</span>
                 </td>
 
-                <td>
+                <!-- <td>
                   <span class="text-base">{{ moment(registro.updated_at).format("YYYY-MM-DD HH:mm:ss") }}</span>
-                </td>
+                </td> -->
 
 
                 <!-- 👉 Actions -->

@@ -75,6 +75,8 @@ const themeColors = computed(() => colorVariables(vuetifyTheme.current.value))
 // Configuración del gráfico usando colores del theme
 const chartOptions = computed(() => {
   const colors = themeColors.value
+  const groupedData = groupDataByDate(chartRawData.value)
+  const categories = groupedData.map(item => moment.utc(item.date).format('DD/MM'))
   
   return {
     chart: {
@@ -109,9 +111,9 @@ const chartOptions = computed(() => {
       }
     },
     xaxis: {
-      type: 'datetime',
+      type: 'category',
+      categories: categories,
       labels: {
-        format: 'dd/MM',
         style: {
           fontSize: '12px',
           colors: colors.themePrimaryTextColor
@@ -209,10 +211,7 @@ const chartData = computed(() => {
   return {
     series: [{
       name: 'Registros',
-      data: groupedData.map(item => ({
-        x: item.date,
-        y: item.count
-      }))
+      data: groupedData.map(item => item.count)
     }]
   }
 })
@@ -222,7 +221,8 @@ function groupDataByDate(data) {
   const grouped = {}
   
   data.forEach(item => {
-    const date = moment(item.created_at).format('YYYY-MM-DD')
+    // Usar moment para parsear la fecha y obtener la fecha en formato YYYY-MM-DD en UTC
+    const date = moment.utc(item.created_at).format('YYYY-MM-DD')
     if (!grouped[date]) {
       grouped[date] = 0
     }
@@ -232,7 +232,8 @@ function groupDataByDate(data) {
   // Convertir objeto a array y ordenar por fecha
   return Object.entries(grouped)
     .map(([date, count]) => ({
-      date: new Date(date).getTime(),
+      // Usar moment.utc para crear el timestamp y evitar problemas de zona horaria
+      date: moment.utc(date).valueOf(),
       count
     }))
     .sort((a, b) => a.date - b.date)
