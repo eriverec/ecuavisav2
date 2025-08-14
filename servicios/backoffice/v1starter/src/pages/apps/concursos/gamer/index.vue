@@ -5,7 +5,7 @@ import debounce from 'lodash/debounce';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import esLocale from "moment/locale/es";
-
+import ChartRandom from '../../../../views/apps/concursos/metrica_random.vue' // Ajusta la ruta según tu estructura
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
 moment.tz.setDefault('America/Guayaquil');
@@ -771,6 +771,20 @@ watch(estadoModel, async () => {
         }}</b> , desde {{ fechaIFModel.fechai }} hasta {{ fechaIFModel.fechaf }} con un total de {{ totalRegistros }}
           registros
         </small>
+
+
+        
+        <ChartRandom
+          ref="chartRef"
+          :fecha-inicio="fecha.inicio"
+          :fecha-fin="fecha.fin"
+          :tipo-model="tipoModel"
+          :model-search="modelSearch"
+          :estado-model="estadoModel"
+          :dominio-principal="dominioPrincipal"
+          @show-snackbar="showSnackbar"
+        />
+
 
         <VCard class="mt-1">
           <VTable class="text-no-wrap">
