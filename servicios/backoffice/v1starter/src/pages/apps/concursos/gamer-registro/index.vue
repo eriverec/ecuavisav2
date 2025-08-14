@@ -5,6 +5,7 @@ import debounce from 'lodash/debounce';
 import { extendMoment } from 'moment-range';
 import Moment from 'moment-timezone';
 import esLocale from "moment/locale/es";
+import RegistrosChart from '../../../../views/apps/concursos/metrica_netlife.vue' // Ajusta la ruta según tu estructura
 
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
@@ -695,6 +696,7 @@ watch(estadoModel, async () => {
     <VRow>
       <VCol cols="12" sm="12" lg="12">
         <h1>Listado de registro gamers</h1>
+        
         <!-- <small class="mb-4 d-block">
           "Formulario de registro Juegos"
         </small> -->
@@ -770,7 +772,18 @@ watch(estadoModel, async () => {
           registros
         </small>
 
-        <VCard class="mt-1">
+        <RegistrosChart
+          ref="chartRef"
+          :fecha-inicio="fecha.inicio"
+          :fecha-fin="fecha.fin"
+          :tipo-model="tipoModel"
+          :model-search="modelSearch"
+          :estado-model="estadoModel"
+          :dominio-principal="dominioPrincipal"
+          @show-snackbar="showSnackbar"
+        />
+
+        <VCard class="mt-4">
           <VTable class="text-no-wrap">
             <!-- 👉 table head -->
             <thead>
