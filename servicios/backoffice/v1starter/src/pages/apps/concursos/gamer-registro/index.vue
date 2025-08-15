@@ -908,14 +908,7 @@ watch(estadoModel, async () => {
                           <VIcon size="18" class="mr-1" icon="mdi-link" />
                           Ver DEMO (YouTube o Drive) 
                         </VListItem>
-                        <VDivider />
-                        <VListItem
-                          href="#"
-                          @click="eliminarRegistro(registro._id)"
-                        >
-                          <VIcon size="18" class="mr-1" color="error" icon="mdi-trash-can-outline" />
-                          Eliminar registro
-                        </VListItem>
+                       
                       </VList>
                     </VMenu>
                   </VBtn>
