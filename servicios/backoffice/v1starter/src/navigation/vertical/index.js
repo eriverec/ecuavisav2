@@ -93,7 +93,7 @@ export default [
           }
         ],
       },
-      { title: 'Netlife Gaming', to: 'apps-concursos-gamer-registro' },
+      { title: 'Netlife Gaming', to: 'apps-concursos-gamer' },
       // { title: 'Ecuavisa', to: 'apps-concursos-ecuavisa' },
 
     ],
