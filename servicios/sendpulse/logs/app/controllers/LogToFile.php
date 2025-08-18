@@ -316,7 +316,7 @@ class LogToFile {
             "emailTo" => "everai@ecuavisa.com, crojano@ecuavisa.com, gholguin@ecuavisa.com, jbarahona@ecuavisa.com",
             // "emailTo" => "crojano@ecuavisa.com",
             "subject" => "Error al crear la campaña de sendpulse, ".$newsletter,
-            "CCVisible" => "aarmas@ecuavisa.com, mjaramillob@ecuavisa.com, xcabrera@ecuavisa.com, lguzman@ecuavisa.com, bpilozo@ecuavisa.com, dmaggi@ecuavisa.com"
+            "CCVisible" => "aarmas@ecuavisa.com, mjaramillob@ecuavisa.com, xcabrera@ecuavisa.com, dmaggi@ecuavisa.com, mcarrascom@ecuavisa.com, mguaman@ecuavisa.com, dmaestre@ecuavisa.com, ddelacueva@ecuavisa.com, lguzman@ecuavisa.com, bpilozo@ecuavisa.com, dmaggi@ecuavisa.com"
         )); //croura@ecuavisa.com, cmoreno@ecuavisa.com, 
     }
 

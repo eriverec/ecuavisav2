@@ -555,6 +555,25 @@ class SendPulse {
 		}
 
 		echo json_encode(["resp" => false, "mensaje" => "Error 011 - No hay datos que mostrar"]);
+
+		if($_SERVER['REQUEST_METHOD'] == 'POST'){ //Solo se ejecuta cuando se vaya a crear o forzar un envío
+			$getFecha = date("Y-m-d, H:i:s", time());
+			$this->logToFile([				
+				"action"=> "create_campaign",
+				"campaign_title"=> $this->nombreNeswletter,
+				"description"=> "Error al crear campaña",
+				"send_method" => "manual",
+				"type" => "error",
+				"resp" => [
+					"respSendPulse"=>[
+						"message"=>"No data (No hay artículos disponibles)", 
+						"error_code"=>8
+					],
+					"resp"=>false,
+					"fecha"=>$getFecha,
+				]
+			]);
+		}
 		exit();
     }
 
@@ -771,7 +790,7 @@ class SendPulse {
 			$notas = $template[1];
 
 			if(count($notas[0]) < 1){
-				echo json_encode(["resp" => false, "mensaje" => "Hay un erro no hay notas en la api"]);
+				echo json_encode(["resp" => false, "mensaje" => "Hay un error no hay notas en la api"]);
 				exit();
 			}
 

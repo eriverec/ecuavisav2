@@ -105,12 +105,15 @@ watch(currentPage, async () => {
 	if (currentPage.value > totalPage.value) {
 		currentPage.value = totalPage.value;
 	}
+	const type = modelFilterType.value == 'Todos los registros' ? '' : modelFilterType.value;
 	await getLogs({
 		page: currentPage.value,
 		limit: rowPerPage.value,
 		fechai: fecha.value.inicio,
 		fechaf: fecha.value.fin,
 		search: modelSearch.value,
+		newsletter: modelFilterNewsletter.value == 'Todos los registros' ? '' : modelFilterNewsletter.value,
+		type
 	});
 });
 
@@ -122,6 +125,8 @@ watch(rowPerPage, async () => {
 		fechai: fecha.value.inicio,
 		fechaf: fecha.value.fin,
 		search: modelSearch.value,
+		newsletter: modelFilterNewsletter.value == 'Todos los registros' ? '' : modelFilterNewsletter.value,
+		type: modelFilterType.value == 'Todos los registros' ? '' : modelFilterType.value,
 	});
 });
 
@@ -733,6 +738,7 @@ watch(modelFilterNewsletter, async () => {
 			fechai: fecha.value.inicio,
 			fechaf: fecha.value.fin,
 			newsletter: modelFilterNewsletter.value == 'Todos los registros' ? '' : modelFilterNewsletter.value,
+			type: modelFilterType.value == 'Todos los registros' ? '' : modelFilterType.value,
 			search: modelSearch.value,
 		});
 	}
@@ -748,6 +754,7 @@ watch(modelFilterType, async () => {
 			fechai: fecha.value.inicio,
 			fechaf: fecha.value.fin,
 			search: modelSearch.value,
+			newsletter: modelFilterNewsletter.value == 'Todos los registros' ? '' : modelFilterNewsletter.value,
 			type: modelFilterType.value == 'Todos los registros' ? '' : modelFilterType.value,
 		});
 	}
