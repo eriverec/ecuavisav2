@@ -34,7 +34,8 @@ export default [{
             to: 'apps-concursos-colegio-metricas',
           }
         ],
-      }
+      },
+      { title: 'Netlife Gaming', to: 'apps-concursos-gamer' },
       // { title: 'Ecuavisa', to: 'apps-concursos-ecuavisa' },
 
     ],
