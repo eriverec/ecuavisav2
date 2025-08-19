@@ -66,15 +66,16 @@ export default [
 
     ],
   },    
-    // {
-    //   title: 'Concursos',
-    //   icon: { icon: 'tabler-balloon' },
-    //   // to: { name: 'apps-concursos' },
-    //   children: [
-    //     { title: 'Click click boom', to: 'apps-concursos' },
-    //     { title: 'Gavilanes', to: 'apps-concursos-gavilanes' },
-    //   ],
-    // },
+    {
+      title: 'Concursos',
+      icon: { icon: 'tabler-balloon' },
+      // to: { name: 'apps-concursos' },
+      children: [
+        // { title: 'Click click boom', to: 'apps-concursos' },
+        // { title: 'Gavilanes', to: 'apps-concursos-gavilanes' },
+        { title: 'Netlife Gaming', to: 'apps-concursos-gamer' },
+      ],
+    },
     
   
   ]
