@@ -1318,7 +1318,7 @@ function paginaEnvivo() {
     `<div id="boton_eventos" style="display: block;">
       <div id="cont-botones">
         <a href="/envivo" class="btn-gye activo">EN VIVO</a>
-        <a href="/envivo/rueda-de-prensa" class="btn-quito">FLASH INFORMATIVO</a>
+        <a href="/envivo/quito" class="btn-quito">FLASH INFORMATIVO</a>
       </div>
     </div>`
   );
