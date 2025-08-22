@@ -1317,8 +1317,8 @@ function paginaEnvivo() {
   programacionElement.insertAdjacentHTML("beforebegin",
     `<div id="boton_eventos" style="display: block;">
       <div id="cont-botones">
-        <a href="/envivo" class="btn-gye activo">EN VIVO</a>
-        <a href="/envivo/quito" class="btn-quito">FLASH INFORMATIVO</a>
+      <a href="/envivo/quito" class="btn-quito">FLASH INFORMATIVO</a>
+        <a href="/envivo" class="btn-gye activo">ECUAVISA SPORTS</a>
       </div>
     </div>`
   );
