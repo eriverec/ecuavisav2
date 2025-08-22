@@ -1298,36 +1298,91 @@ setTimeout(() => {
 
 
 
-
+// --
 /* FUNCION PARA EL EVENTO DE PRENDA DE LIGAPRO */
 function paginaEnvivo() {
-  document.getElementById("programacion").insertAdjacentHTML("beforebegin",
-    `<div id="boton_eventos">
+  const programacionElement = document.getElementById("programacion");
+  
+  // Verificar que el elemento existe antes de manipularlo
+  if (!programacionElement) {
+    console.error("Elemento 'programacion' no encontrado");
+    return;
+  }
+
+  // Verificar que no exista ya el elemento para evitar duplicados
+  if (document.getElementById("boton_eventos")) {
+    return;
+  }
+
+  programacionElement.insertAdjacentHTML("beforebegin",
+    `<div id="boton_eventos" style="display: block;">
       <div id="cont-botones">
-        <a href="/envivo" class="btn-gye activo">En Vivo</a>
-        <a href="/envivo/rueda-de-prensa" class="btn-quito">Gala El Pro</a>
+        <a href="/envivo" class="btn-gye activo">EN VIVO</a>
+        <a href="/envivo/rueda-de-prensa" class="btn-quito">FLASH INFORMATIVO</a>
       </div>
     </div>`
   );
 }
 
 function paginaEventos() {
-  document.querySelector(".bloque_envivo_evento").innerHTML += `
- 
-  <div id="programacion_eventos" style="margin: 20px 0;">
-    <img width="400" height="500" id="fondito__" src="https://estadisticas.ecuavisa.com/sites/default/files/2022-12/ecuavisacom.jpg" alt="claqueta" loading="lazy" fetchpriority="high">
-  </div>`;
-
-}
-
-setTimeout(() => {
-  const rutaActual = window.location.pathname;
-  if (rutaActual === '/envivo/rueda-de-prensa') {
-    paginaEventos();
-  } else if (rutaActual === '/envivo') {
-    // paginaEnvivo();
-  } else {
-    console.log("nada de nada");
+  const bloqueEnvivo = document.querySelector(".bloque_envivo_evento");
+  
+  // Verificar que el elemento existe
+  if (!bloqueEnvivo) {
+    console.error("Elemento '.bloque_envivo_evento' no encontrado");
+    return;
   }
 
-}, 1000);
+  // Verificar que no exista ya el elemento para evitar duplicados
+  if (document.getElementById("programacion_eventos")) {
+    return;
+  }
+
+  bloqueEnvivo.innerHTML += `
+    <div id="programacion_eventos" style="margin: 20px 0;">
+      <img width="400" height="500" id="fondito__" 
+           src="https://estadisticas.ecuavisa.com/sites/default/files/2022-12/ecuavisacom.jpg" 
+           alt="claqueta" loading="lazy" fetchpriority="high">
+    </div>`;
+}
+
+// Función para mostrar el botón de eventos
+function mostrarBotonEventos() {
+  const botonEventos = document.getElementById("boton_eventos");
+  if (botonEventos) {
+    botonEventos.style.display = "block";
+  }
+}
+
+// Función para inicializar cuando el DOM esté listo
+function inicializarPagina() {
+  const rutaActual = window.location.pathname;
+  
+  console.log("Ruta actual:", rutaActual); // Para debugging
+  
+  switch (rutaActual) {
+    case '/envivo/quito':
+      // paginaEnvivo();
+      // mostrarBotonEventos();
+      break;
+    case '/envivo':
+      // paginaEnvivo();
+      // mostrarBotonEventos();
+      break;
+    default:
+      console.log("Ruta no reconocida:", rutaActual);
+      // Ocultar el botón en otras rutas si existe
+      const botonEventos = document.getElementById("boton_eventos");
+      if (botonEventos) {
+        botonEventos.style.display = "none";
+      }
+  }
+}
+
+// Esperar a que el DOM esté completamente cargado
+document.addEventListener('DOMContentLoaded', function() {
+  inicializarPagina();
+});
+
+// Fallback con setTimeout para casos donde DOMContentLoaded ya pasó
+setTimeout(inicializarPagina, 500);
