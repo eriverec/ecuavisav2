@@ -42,6 +42,8 @@ import VueApexCharts from 'vue3-apexcharts';
 // Hook del theme de Vuetify
 const vuetifyTheme = useTheme()
 
+const TIMEZONE = 'America/Guayaquil'
+
 // Función para obtener colores del theme
 const colorVariables = (themeColors) => {
   const themeSecondaryTextColor = `rgba(${hexToRgb(themeColors.colors['on-surface'])},${themeColors.variables['medium-emphasis-opacity']})`
@@ -76,7 +78,7 @@ const themeColors = computed(() => colorVariables(vuetifyTheme.current.value))
 const chartOptions = computed(() => {
   const colors = themeColors.value
   const groupedData = groupDataByDate(chartRawData.value)
-  const categories = groupedData.map(item => moment.utc(item.date).format('DD/MM'))
+  const categories = groupedData.map(item => moment(item.date).tz(TIMEZONE).format('DD/MM'))
   
   return {
     chart: {
@@ -222,7 +224,7 @@ function groupDataByDate(data) {
   
   data.forEach(item => {
     // Usar moment para parsear la fecha y obtener la fecha en formato YYYY-MM-DD en UTC
-    const date = moment.utc(item.created_at).format('YYYY-MM-DD')
+    const date = moment.tz(item.created_at, TIMEZONE).format('YYYY-MM-DD')
     if (!grouped[date]) {
       grouped[date] = 0
     }
@@ -233,7 +235,7 @@ function groupDataByDate(data) {
   return Object.entries(grouped)
     .map(([date, count]) => ({
       // Usar moment.utc para crear el timestamp y evitar problemas de zona horaria
-      date: moment.utc(date).valueOf(),
+      date: moment.tz(date, 'YYYY-MM-DD', TIMEZONE).valueOf(),
       count
     }))
     .sort((a, b) => a.date - b.date)
