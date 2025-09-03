@@ -62,7 +62,8 @@ export default [
             to: 'apps-concursos-colegio-metricas',
           }
         ],
-      }
+      },
+      { title: 'Wow', to: 'apps-concursos-wow' },
       // { title: 'Ecuavisa', to: 'apps-concursos-ecuavisa' },
 
     ],
