@@ -1545,7 +1545,7 @@ class SendPulse
 				echo json_encode($respuestaJson);
 
 				if (isset($resp->id)) {
-					$this->logToFile("Crear campaña a SendPulse", array("accion" => "Crear campaña"));
+					//$this->logToFile("Crear campaña a SendPulse", array("accion" => "Crear campaña"));
 					// $updateNewsletter = $this->getApiMethodPost("https://ads-service.vercel.app/newsletter/update/".$this->dataJsonNewsletter->data->_id, [
 					// 	"enviado" => true
 					// ]);
