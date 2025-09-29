@@ -621,12 +621,12 @@ onMounted(async () => {
 });
 
 function obtenerHora() {
-  // Espera 5 minutos (300,000 ms) y luego ejecuta la función deseada
+  // Espera 2 minutos (300,000 ms) y luego ejecuta la función deseada
   setTimeout(() => {
-    console.log("Han pasado 5 minutos. Ejecutando función...");
+    console.log("Han pasado 2 minutos. Ejecutando función...");
     principalData(); // Llama a la función deseada
     // window.location.reload(); // Si deseas recargar la página
-  }, (1000 * 60 * 5));
+  }, (1000 * 60 * 2));
 }
 
 </script>
