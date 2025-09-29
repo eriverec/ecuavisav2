@@ -173,15 +173,18 @@ const principalData = async function () {
     const results = await Promise.all(fetchPromises);
     const allResults = [];
     for(var i in results[[0]]){
-      if(results[0][i]?.articles){
-        for(var j in results[0][i].articles){
-          if(!results[0][i]?.articles[j].hasOwnProperty("getArticle")){
-            //Añadir url_communication a cada artículo
-            allResults.push({
-              ...results[0][i]?.articles[j], 
-              media_communication: results[0][i]?.media_communication,
-              url_communication: results[0][i]?.url_communication,
-            });
+      const {media_communication = ""} = results[0][i];
+      if(!["nytimes","elpais", "cnnespanol"].includes(media_communication)){
+        if(results[0][i]?.articles){
+          for(var j in results[0][i].articles){
+            if(!results[0][i]?.articles[j].hasOwnProperty("getArticle")){
+              //Añadir url_communication a cada artículo
+              allResults.push({
+                ...results[0][i]?.articles[j], 
+                media_communication: results[0][i]?.media_communication,
+                url_communication: results[0][i]?.url_communication,
+              });
+            }
           }
         }
       }

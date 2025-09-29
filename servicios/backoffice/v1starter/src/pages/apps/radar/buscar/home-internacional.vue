@@ -174,7 +174,7 @@ const principalData = async function () {
     const allResults = [];
     for(var i in results[[0]]){
       const {media_communication = ""} = results[0][i];
-      if(["infobae"].includes(media_communication)){
+      if(["infobae","nytimes","elpais", "cnnespanol"].includes(media_communication)){
         if(results[0][i]?.articles){
           for(var j in results[0][i].articles){
             if(!results[0][i]?.articles[j].hasOwnProperty("getArticle")){
