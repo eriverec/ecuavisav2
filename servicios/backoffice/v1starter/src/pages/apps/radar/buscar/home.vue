@@ -157,6 +157,13 @@ function extraerPaths(url) {
   }
 }
 
+const normalize = (val) => {
+  if (Array.isArray(val)) {
+    return val.join(",");
+  }
+  return val; // ya es string
+};
+
 const principalData = async function () {
   try {
     filtrosActivos.busqueda = "";
@@ -223,8 +230,11 @@ const principalData = async function () {
             noticia.vertical = noticia.seccion;
             noticia.subVertical = noticia.subseccion;
             if(noticia.keywords){
-              noticia.keywords = limpiarEspacios(noticia.keywords.toUpperCase());
-              noticia.tags = limpiarEspacios(noticia.tags.toUpperCase());
+              let {keywords = "", tags = ""} = noticia;
+              keywords = normalize(keywords);
+              tags = normalize(tags);
+              noticia.keywords = limpiarEspacios(keywords.toUpperCase());
+              noticia.tags = limpiarEspacios(tags.toUpperCase());
             }
 
             if(noticia.url_communication){
@@ -673,6 +683,12 @@ function obtenerHora() {
             </div>
           </VCardItem>
         </VCard>
+      </VCol>
+    </VRow>
+    
+    <VRow>
+      <VCol cols="12" md="12" lg="12">
+        <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
       </VCol>
     </VRow>
     <VRow class="d-none">

@@ -261,8 +261,11 @@ const principalData = async function (reset = false) {
             noticia.sitio = media_communication;
 
             if(noticia.keywords){
-              noticia.keywords = limpiarEspacios(noticia.keywords.toUpperCase());
-              noticia.tags = limpiarEspacios(noticia.tags.toUpperCase());
+              let {keywords = "", tags = ""} = noticia;
+              keywords = normalize(keywords);
+              tags = normalize(tags);
+              noticia.keywords = limpiarEspacios(keywords.toUpperCase());
+              noticia.tags = limpiarEspacios(tags.toUpperCase());
             }else{
               noticia.keywords = "";
               noticia.tags = "";

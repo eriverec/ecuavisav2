@@ -360,6 +360,9 @@ async function loadSiteNames() {
           value: e.media_communication,
           title: e.media_communication.toUpperCase(),
         }
+      }).filter(e => {
+        const { value = "" } = e;
+        return !["nytimes","elpais", "cnnespanol"].includes(value);
       });
 
       const uniqueData = Array.from(new Map(itemsSitioWeb.value.map(item => [item.value, item])).values());
