@@ -11,7 +11,7 @@ class Ctrfunciones {
 			"desfaseMinutosMax" => 15,
 			"folder" => "opinion",
 			"folderPrimary" => "sendpulsev",
-			"typeProyect" => "Production",
+			"typeProyect" => "Production", //Guzzle - Production
 		);
 		// Fusionar el array por defecto con el array proporcionado
     	$resultado = array_merge($valoresFecto, $list);
@@ -245,103 +245,105 @@ class Ctrfunciones {
 	    return $minutosTranscurridos;
 	}
 
-    public function cropImagen($url = "", $newWidth = 600, $newHeight = 400, $compress= 75, $verticalPosition = 'arriba') {
-	    if($url == ""){
-	    	return "";
-	    }
-	    // $imagePath = './img/'.$this->folder.'/'; // Ruta donde se guardarán las imágenes
-    	$imagePath = './img/';
-	    // Obtener la fecha actual
-	    $currentDate = date("Y/m/d");
-	    $currentYear = date("Y");
-	    $currentMonth = date("m");
-
-	    // Crear carpetas si no existen
-	    if (!file_exists($imagePath)) {
-	        mkdir($imagePath);
-	    }
-
-	    if (!file_exists($imagePath . $currentYear)) {
-	        mkdir($imagePath . $currentYear);
-	    }
-	    if (!file_exists($imagePath . $currentYear . '/' . $currentMonth)) {
-	        mkdir($imagePath . $currentYear . '/' . $currentMonth);
-	    }
-
-	    // Obtener el nombre de la imagen a partir de la URL
-	    $imageName = basename($url);
-	    $imageFilePath = $imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
-	    // Verificar si la imagen ya existe en la ruta
-	    if (file_exists($imageFilePath)) {
-	    	unlink($imageFilePath); // Eliminar la imagen si existe
-	    }
-
-	    // Verificar si la imagen ya existe en la ruta
-	    if (!file_exists($imageFilePath)) {
-	        // La imagen no existe, crearla a partir de la URL
-	        $image = imagecreatefromstring(file_get_contents($url));
-	        $originalWidth = imagesx($image);
-	        $originalHeight = imagesy($image);
-
-	        // Calcular el factor de zoom para ajustar la imagen dentro del área sin dejar fondo negro
-	        $zoomFactor = max($newWidth / $originalWidth, $newHeight / $originalHeight);
-
-	        // Calcular las dimensiones finales de la imagen con el zoom
-	        $finalWidth = $originalWidth * $zoomFactor;
-	        $finalHeight = $originalHeight * $zoomFactor;
-
-	        // Crear una imagen en blanco del tamaño requerido para aplicar el recorte y zoom
-	        $cropped_image = imagecreatetruecolor($newWidth, $newHeight);
-
-	        // Calcular las coordenadas para centrar el recorte horizontal
-	        $start_x = ($finalWidth - $newWidth) / -2;
-
-	        // Calcular las coordenadas para el recorte vertical
-	        if ($verticalPosition === 'arriba') {
-	            $start_y = 0;
-	        } elseif ($verticalPosition === 'abajo') {
-	            $start_y = $finalHeight - $newHeight;
-	        } else {
-	            // Vertical centrada (valor por defecto)
-	            $start_y = ($finalHeight - $newHeight) / 2;
-	        }
-
-	        // Copiar y recortar la imagen con el zoom aplicado
-	        $start_x = intval($start_x);
-	        $start_y = intval($start_y);
-	        $finalWidth = intval($finalWidth);
-	        $finalHeight = intval($finalHeight);
-	        imagecopyresampled($cropped_image, $image, $start_x, $start_y, 0, 0, $finalWidth, $finalHeight, $originalWidth, $originalHeight);
-
-	        // Obtener la extensión de la imagen
-	        $extension = strtolower(pathinfo($imageFilePath, PATHINFO_EXTENSION));
-
-	        // Comprimir y guardar la imagen en la ruta especificada según su extensión
-	        if ($extension === 'jpg' || $extension === 'jpeg') {
-	            imagejpeg($cropped_image, $imageFilePath, $compress); // Calidad JPEG: 75 (valor entre 0 y 100)
-	        } elseif ($extension === 'png') {
-	            imagepng($cropped_image, $imageFilePath);
-	        }
-
-	        // Liberar memoria
-	        imagedestroy($image);
-	        imagedestroy($cropped_image);
-	    }
-
-	    // Obtener la nueva URL de la imagen
-	    // Verifica si se está utilizando HTTPS
-		$protocolo = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http";
-
-		// Obtiene el nombre del host (localhost en este caso)
-		$host = $_SERVER['HTTP_HOST'];
-
-		// Obtiene la ruta relativa del archivo actual
-		$uri = $_SERVER['REQUEST_URI'];
-
-		// Construye la URL completa
-		$urlActual = $protocolo . "://" . $host . $uri;
-	    $src_url = $this->typeProyect == "Production"?$this->dominio.'/'.$this->folder.'/img/'.$currentYear.'/'.$currentMonth.'/'.$imageName:'../../'.$this->folderPrimary.'/'.$this->folder.'/img/'.$currentYear.'/'.$currentMonth.'/'.$imageName;//$imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
-	    return $src_url; //. "?v=" . $this->generarNumeroRandom();
+    public function cropImagen($url = "", $newWidth = 600, $newHeight = 400, $compress = 75, $verticalPosition = 'arriba') {
+		if($url == ""){
+			return "";
+		}
+		
+		$imagePath = './img/';
+		$currentDate = date("Y/m/d");
+		$currentYear = date("Y");
+		$currentMonth = date("m");
+	
+		// Crear carpetas si no existen (tu código existente)
+		if (!file_exists($imagePath)) {
+			mkdir($imagePath);
+		}
+		if (!file_exists($imagePath . $currentYear)) {
+			mkdir($imagePath . $currentYear);
+		}
+		if (!file_exists($imagePath . $currentYear . '/' . $currentMonth)) {
+			mkdir($imagePath . $currentYear . '/' . $currentMonth);
+		}
+	
+		// Obtener el nombre de la imagen
+		$imageName = basename($url);
+		$imageFilePath = $imagePath . $currentYear . '/' . $currentMonth . '/' . $imageName;
+		
+		// Verificar si la imagen ya existe
+		if (file_exists($imageFilePath)) {
+			unlink($imageFilePath);
+		}
+	
+		if (!file_exists($imageFilePath)) {
+			// Configurar contexto con User-Agent
+			$context = stream_context_create([
+				'http' => [
+					'method' => 'GET',
+					'header' => "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36\r\n"
+				]
+			]);
+	
+			try {
+				// Descargar imagen con contexto
+				$imageData = file_get_contents($url, false, $context);
+				
+				if ($imageData === false) {
+					throw new Exception("No se pudo descargar la imagen");
+				}
+	
+				$image = imagecreatefromstring($imageData);
+				
+				// Resto de tu código de procesamiento de imagen...
+				$originalWidth = imagesx($image);
+				$originalHeight = imagesy($image);
+	
+				$zoomFactor = max($newWidth / $originalWidth, $newHeight / $originalHeight);
+				$finalWidth = $originalWidth * $zoomFactor;
+				$finalHeight = $originalHeight * $zoomFactor;
+	
+				$cropped_image = imagecreatetruecolor($newWidth, $newHeight);
+	
+				// Cálculo de coordenadas...
+				$start_x = ($finalWidth - $newWidth) / -2;
+	
+				if ($verticalPosition === 'arriba') {
+					$start_y = 0;
+				} elseif ($verticalPosition === 'abajo') {
+					$start_y = $finalHeight - $newHeight;
+				} else {
+					$start_y = ($finalHeight - $newHeight) / 2;
+				}
+	
+				$start_x = intval($start_x);
+				$start_y = intval($start_y);
+				$finalWidth = intval($finalWidth);
+				$finalHeight = intval($finalHeight);
+				
+				imagecopyresampled($cropped_image, $image, $start_x, $start_y, 0, 0, $finalWidth, $finalHeight, $originalWidth, $originalHeight);
+	
+				$extension = strtolower(pathinfo($imageFilePath, PATHINFO_EXTENSION));
+	
+				if ($extension === 'jpg' || $extension === 'jpeg') {
+					imagejpeg($cropped_image, $imageFilePath, $compress);
+				} elseif ($extension === 'png') {
+					imagepng($cropped_image, $imageFilePath);
+				}
+	
+				imagedestroy($image);
+				imagedestroy($cropped_image);
+	
+			} catch (Exception $e) {
+				// Manejar el error adecuadamente
+				error_log("Error al procesar imagen: " . $e->getMessage());
+				return ""; // o una imagen por defecto
+			}
+		}
+	
+		// Resto de tu código para generar la URL...
+		$src_url = $this->typeProyect == "Production" ? $this->dominio.'/'.$this->folder.'/img/'.$currentYear.'/'.$currentMonth.'/'.$imageName : '../../'.$this->folderPrimary.'/'.$this->folder.'/img/'.$currentYear.'/'.$currentMonth.'/'.$imageName;
+		
+		return $src_url;
 	}
 
     public function base64ToHTML($base64){
