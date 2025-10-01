@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Forzar Envio Newsletter</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <style>
+        * {
+            font-family: 'Archivo';
+        }
+
+        .code_terminal {
+            display: block;
+            padding: 20px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            margin-top: 10px;
+            max-width: 500px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+        <title>Botón y Respuesta PHP</title>
+        <script>
+            function ejecutarOpinion() {
+                document.getElementById("respuestaDiv_opinion").innerHTML = "enviando...";
+                var xhr = new XMLHttpRequest();
+                xhr.open("GET", "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/opinion/opinion_ecuavisa_2023_08_cr.php", true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        document.getElementById("respuestaDiv_opinion").innerHTML = xhr.responseText;
+                    }
+                };
+                xhr.send();
+            }
+
+            function ejecutarSendNewsletter() {
+                document.getElementById("respuestaDiv_send").innerHTML = "Enviando...";
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "https://estadisticas.ecuavisa.com/sites/gestor/Tools/sendpulse/boletin-diario/boletin_ecuavisa_2023_07_cr.php", true);
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4 && xhr.status === 200) {
+                        document.getElementById("respuestaDiv_send").innerHTML = xhr.responseText;
+                    }
+                };
+                xhr.send();
+            }
+        </script>
+    </head>
+
+    <body>
+        <div class="container mt-5">
+            <div class="row"> 
+                <div class="col-md-6 col-sm-12 mb-3" >
+                    <div class="container card" style="background: #D5F5E3;">
+                        <!-- <div class="update_List mb-5 mt-5">
+                            <h3>Actualizar la lista de sendpulse</h3>
+                            <button class="btn btn-success" onclick="ejecutarPHP()">Actualizar</button>
+                            <code class="code_terminal" id="respuestaDiv">Da clic en el boton actualizar</code>
+                        </div> -->
+                        
+                        <div class="send_newsletter mb-5 mt-5">
+                            <h3>Enviar Boletín Diario</h3>
+                            <button class="btn btn-outline-success" onclick="ejecutarSendNewsletter()">Enviar</button>
+                            <code class="code_terminal" id="respuestaDiv_send">Da clic en el boton enviar</code>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12" >
+                    <div class="container card" style="background:#FDEBD0;">
+                        <div class="send_newsletter mb-5 mt-5">
+                            <h3>Enviar Boletín Opinión</h3>
+                            <button class="btn btn btn-outline-primary" onclick="ejecutarOpinion()">Enviar</button>
+                            <code class="code_terminal" id="respuestaDiv_opinion">Da clic en el boton enviar</code>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+    </body>
+
+    </html>
+
+
+</body>
+
+</html>
