@@ -421,6 +421,13 @@ const debounceTimeout = ref(null);
 // Filtrado de datos (sin debounce)
 const filteredData = computed(() => dataManipulable.value);
 
+const normalize = (val) => {
+  if (Array.isArray(val)) {
+    return val.join(",");
+  }
+  return val; // ya es string
+};
+
 const normalizeText = (text) => {
   return text
     ? text
