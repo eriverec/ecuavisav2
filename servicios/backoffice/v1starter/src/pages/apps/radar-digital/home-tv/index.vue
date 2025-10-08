@@ -8,17 +8,17 @@ import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
 import { computed, onMounted, reactive, ref, watch } from 'vue';
-import {
-  injectionKeyIsVerticalNavHovered,
-  useLayouts,
-} from '@layouts'
+// import {
+//   injectionKeyIsVerticalNavHovered,
+//   useLayouts,
+// } from '@layouts'
 
-const {
-  isVerticalNavCollapsed: isCollapsed,
-  isLessThanOverlayNavBreakpoint,
-  isVerticalNavMini,
-  isAppRtl,
-} = useLayouts()
+// const {
+//   isVerticalNavCollapsed: isCollapsed,
+//   isLessThanOverlayNavBreakpoint,
+//   isVerticalNavMini,
+//   isAppRtl,
+// } = useLayouts()
 
 const moment = extendMoment(Moment);
 moment.locale('es', [esLocale]);
@@ -645,7 +645,7 @@ async function initModulo(){
 onMounted(async () => {
   await initModulo();
   obtenerHora();
-  isCollapsed.value = true;
+  // isCollapsed.value = true;
   const elemento = document.getElementById('content-padre')
   if (elemento) {
     const y = elemento.getBoundingClientRect().top + window.scrollY - 80 // 👈 resta 20px
@@ -767,12 +767,12 @@ function obtenerHora() {
           <VCol cols="12" sm="12" lg="12">
           </VCol>
           <VCol cols="12" md="12" lg="12">
-            <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
+            
           </VCol>
         </VRow>
       </VCol>
       <VCol cols="12" md="7" lg="7">
-        <plantilla_articulos_estilo_principal :articulos="filteredData" :filtrosActivos="filtrosActivos" :modoSimple="true" />
+        
       </VCol>
     </VRow>
   </section>

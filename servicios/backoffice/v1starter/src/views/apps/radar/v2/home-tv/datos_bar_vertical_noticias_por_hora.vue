@@ -196,7 +196,7 @@
             if(props.disabledAll){
               return val;
             }
-            return val+" Artículos";
+            return val;
           },
         },
         colors: colors,   
