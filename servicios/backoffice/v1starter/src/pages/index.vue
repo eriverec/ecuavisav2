@@ -2,6 +2,7 @@
 import { useUserListStore } from "@/views/apps/user/useUserListStore";
 import UserTabUbicacion from '@/views/dashboards/traceability/UserTabUbicacion.vue';
 
+import { useRouter } from 'vue-router'
 import { hexToRgb } from '@layouts/utils';
 import VueApexCharts from 'vue3-apexcharts';
 import { useTheme } from 'vuetify';
@@ -915,6 +916,15 @@ const toggleRealtime = () => {
     juntas();
   }
 };
+const router = useRouter()
+
+onMounted(() => {
+  if(rol == 'radar'){
+    router.push({ name: 'apps-radar-digital-home-tv' });
+  }
+})
+
+
 onUnmounted(() => {
   clearInterval(intervalId)
 })

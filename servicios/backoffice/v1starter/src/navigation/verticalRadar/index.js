@@ -1,12 +1,12 @@
 export default [
   {
-    title: 'Dashboard',
-    to: { name: 'apps-radar-buscar-home' },
+    title: 'Dashboard TV',
+    to: { name: 'apps-radar-digital-home-tv' },
     icon: { icon: 'tabler-radar' },
   },
   {
     title: 'Últimas noticias',
-    to: { name: 'apps-radar-buscar-ultimas-noticias' },
+    to: { name: 'apps-radar-digital' },
     icon: { icon: 'tabler-book' },
   },
   {
