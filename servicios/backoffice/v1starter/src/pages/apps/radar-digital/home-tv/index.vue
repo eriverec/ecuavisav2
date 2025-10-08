@@ -4,7 +4,6 @@ import plantilla_articulos_estilo_principal from '@/views/apps/radar/v2/home-tv/
 // import ApexChartPasteTotalDia from '@/views/apps/radar/pastel-ultimas-noticias-total-diav2.vue';
 // import ApexChartExpenseRatio from '@/views/apps/radar/pastel-ultimas-noticiasv2.vue';
 
-import pastelWordCloud from '@/views/apps/radar/v2/home-tv/pastel-word-cloud.vue';
 import Moment from 'moment';
 import { extendMoment } from 'moment-range';
 import esLocale from "moment/locale/es";
@@ -766,10 +765,9 @@ function obtenerHora() {
       <VCol cols="12" md="5" lg="5">
         <VRow>
           <VCol cols="12" sm="12" lg="12">
-            <pastelWordCloud v-if="topKeywords.length > 0" :limitKeywords="125" :data="allKeywords" :dataTags="allTags" :dataListArticles="dataAll" />
           </VCol>
           <VCol cols="12" md="12" lg="12">
-            
+            <datos_bar_vertical_noticias_por_hora :articulos="dataAll" :disabledAll="false" :height="310" />
           </VCol>
         </VRow>
       </VCol>

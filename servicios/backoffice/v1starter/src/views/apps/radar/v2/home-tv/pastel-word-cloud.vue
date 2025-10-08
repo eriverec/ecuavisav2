@@ -94,7 +94,7 @@ import esLocale from "moment/locale/es";
           .attr("text-anchor", "middle")
           .attr("transform", d => `translate(${d.x}, ${d.y}) rotate(${d.rotate})`)
           .text(d => d.text)
-          .style("cursor", "pointer")
+          // .style("cursor", "pointer")
           
           // 🚀 Animación: Aumenta tamaño al hacer hover
           .on("mouseover", function (event, d) {
@@ -113,10 +113,10 @@ import esLocale from "moment/locale/es";
               .attr("fill", () => d3.schemeCategory10[Math.floor(Math.random() * 10)]); // Recupera su color original
           })
 
-          .on("click", (event, d) => {
+          // .on("click", (event, d) => {
             // alert(`Palabra seleccionada: ${d.text}`)
             // clickKeyword(d.text);
-        });
+        // });
       })
       .start();
   };
